@@ -58,14 +58,18 @@ public class TMLCCodeGeneration	{
 
 	public String title;
 
-	private String applicationName;
 	private String CR = "\n";
 	private String CR2 = "\n\n";
 	private String TAB = "\t";
 	private String TAB2 = "\t\t";
 	private String TAB3 = "\t\t\t";
 	private String TAB4 = "\t\t\t\t";
+	private String SP = " ";
+	private String SC = ";";
+
 	private TMLMapping tmap;
+	private TMLModeling tmlm;
+	private String applicationName;
 	private String headerString;
 	private String programString;
 	private String initString;
@@ -89,9 +93,22 @@ public class TMLCCodeGeneration	{
 		commElts = new ArrayList<TMLElement>();
 	}
 
-	public void toTextFormat( TMLMapping _tmap )	{
+	public void toTextFormat( TMLMapping _tmap /*, TMLModeling _tmlm*/ )	{
 
 		tmap = _tmap;
+		/*tmlm = _tmlm;*/
+
+		/*if( tmlm != null )	{
+		ArrayList<TMLChannel> channelsList = tmlm.getChannels();
+		for( TMLChannel ch: channelsList )	{
+			TraceManager.addDev( "Reference object of channel " + ch.getName() + ": " + ch.getReferenceObject() );
+		}
+		}
+		else	{
+			TraceManager.addDev( "Is null!" );
+			System.exit(0);
+		}*/
+
 		ArrayList<TMLTask> mappedTasks = tmap.getMappedTasks();
 		ArrayList<TMLElement> commElts = tmap.getMappedCommunicationElement();
 
@@ -206,15 +223,13 @@ public class TMLCCodeGeneration	{
 																	 "The TURTLE Analysis contains several errors",
 																	 "Syntax analysis failed",
 																	 JOptionPane.INFORMATION_MESSAGE );*/
+		Scheduler scheduler = new Scheduler( Scheduler.JAIR );
 		programString += "#include " + "\"" + applicationName + ".h\"" + CR +
 							"int (*operation[NUM_OPS])();" + CR +
 							"bool (*fire_rule[NUM_OPS])();" + CR +
 							"SIG_TYPE sig[NUM_SIGS]={{0}};" + CR2 +
 							"/******** " + applicationName + "_final function *********/" + CR +
 							"int " + applicationName + "_final(void)	{" + CR +
-							"bool valid_signal = false;" + CR +
-							"bool blocked = true;" + CR +
-							"int status = 0;" + CR2 +
 							"register_operations();" + CR +
 							"register_fire_rules();" + CR +
 							"signal_to_buffer_init();" + CR +
@@ -223,20 +238,7 @@ public class TMLCCodeGeneration	{
 							"sig[feed_out].f=true;" + CR +
 							"sig[src_out].f=true;" + CR +
 							"/********* OPs scheduler ***************/" + CR +
-							TAB + "while( !exit_rule() )	{" + CR +
-							TAB2 + "for( int n_op = 0; n_op < NUM_OPS; ++n_op )	{" + CR +
-							TAB3 + "valid_signal = (*fire_rule[n_op])();" + CR +
-							TAB3 + "if( valid_signal )	{" + CR +
-							TAB4 + "status = (*operation[n_op])();" + CR + 
-							TAB4 + "blocked = false;" + CR +
-   						TAB3 + "}" + CR +
-							TAB2 + "}" + CR +
-							TAB2 + "if( blocked )	{" + CR +
-							TAB3 + "printf(\"ERROR: the system got blocked, no new signals\\n\");" + CR +
-							TAB3 + "return 1;" + CR +
-							TAB2 + "}" + CR +
-							TAB2 + "blocked = true;" + CR +
-							TAB + "}" + CR +
+							scheduler.getCode() + CR +
 							"cleanup_operations_context();" + CR + "}" + CR2;
 		generateOperations();
 		registerOperations();
@@ -307,21 +309,216 @@ public class TMLCCodeGeneration	{
 		String functionName = "int op_" + XOD + "()\t{" + CR +
 													getTaskAttributes( fTask ) + CR +
 													"static int size;" + CR +
-													updateInSignals( xTask ) + CR2;
-		String exec_code = generateCodeFromActivity( fTask.getActivityDiagram() );
+													updateInSignals( xTask ) + CR;
+		//no need to re-invent the wheel, re-use the code from TMLTextSpecification
+		String exec_code = makeBehavior( fTask, fTask.getActivityDiagram().getFirst() );
 		String endCode =	updateOutSignals( xTask ) + CR +
 											"return status;" + CR +
 											"}" + CR2;
 		return functionName + exec_code + endCode;
 	}
 
-	private String generateCodeFromActivity( TMLActivity ad )	{
+	private String makeBehavior( TMLTask task, TMLActivityElement elt ) {
 
-		for( int i = 0; i < ad.nElements(); i++ )	{
-			TraceManager.addDev( "Element: " + ad.get(i).toString() );
+		String code, code1, code2;
+		TMLForLoop tmlfl;
+		TMLActivityElementChannel tmlch;
+		TMLActivityElementEvent tmlevt;
+		TMLSendRequest tmlreq;
+		TMLEvent evt;
+		TMLRandom random;
+		int i;
+		String tmp1, tmp2;
+		
+		if( elt instanceof TMLStartState )	{
+			return makeBehavior( task, elt.getNextElement(0) );
 		}
-
-		return "";
+		else if( elt instanceof TMLStopState )	{
+			return "";			
+		} else if( elt instanceof TMLExecI ) {	//ignored
+			//code = "EXECI" + SP + modifyString(((TMLExecI)elt).getAction()) + CR;
+			return /*code +*/ makeBehavior( task, elt.getNextElement(0) );
+			
+		} else if( elt instanceof TMLExecIInterval )	{	//ignored
+			//code = "EXECI" + SP + modifyString(((TMLExecIInterval)elt).getMinDelay()) + SP + modifyString(((TMLExecIInterval)elt).getMaxDelay()) + CR;
+			return /*code +*/ makeBehavior( task, elt.getNextElement(0) );
+			
+		} else if( elt instanceof TMLExecC )	{	//ignored
+			//code = "EXECC" + SP + modifyString(((TMLExecC)elt).getAction()) + CR;
+			return /*code +*/ makeBehavior( task, elt.getNextElement(0) );
+			
+		} else if( elt instanceof TMLExecCInterval ) {	//ignored
+			//code = "EXECC" + SP + modifyString(((TMLExecCInterval)elt).getMinDelay()) + SP + modifyString(((TMLExecCInterval)elt).getMaxDelay()) + CR;
+			return /*code +*/ makeBehavior( task, elt.getNextElement(0) );
+			
+		} else if( elt instanceof TMLDelay )	{	//ignored
+			/*tmp1 = ((TMLDelay)elt).getMinDelay();
+			tmp2 = ((TMLDelay)elt).getMaxDelay();
+			if (tmp1.compareTo(tmp2) == 0) {
+				code = "DELAY" + SP + modifyString(((TMLDelay)elt).getMinDelay()) + SP + modifyString(((TMLDelay)elt).getUnit()) + CR;
+			} else {
+				code = "DELAY" + SP + modifyString(((TMLDelay)elt).getMinDelay()) + SP + modifyString(((TMLDelay)elt).getMaxDelay()) + SP + modifyString(((TMLDelay)elt).getUnit()) + CR;
+			}*/
+			return /*code +*/ makeBehavior(task, elt.getNextElement(0));
+			
+		} else if( elt instanceof TMLForLoop )	{
+			tmlfl = (TMLForLoop)elt;
+			code = "for(" + tmlfl.getInit() + SC + SP;
+			code += tmlfl.getCondition() + SC + SP;
+			code += tmlfl.getIncrement() + ")" + TAB + "{" + CR;
+			code += makeBehavior(task, elt.getNextElement(0));
+			return code + "}" + CR + makeBehavior(task, elt.getNextElement(1));
+		
+		} else if( elt instanceof TMLRandom )	{	//ignored
+			/*random = (TMLRandom)elt;
+			code = "RANDOM" + SP + modifyString(""+random.getFunctionId()) + SP;
+			code += modifyString(random.getVariable()) + SP;
+			code += modifyString(random.getMinValue()) + SP;
+			code += modifyString(random.getMaxValue()) + CR;*/
+			return /*code +*/ makeBehavior(task, elt.getNextElement(0));
+			
+		} else if( elt instanceof TMLActionState )	{
+			code = modifyString( ((TMLActivityElementWithAction)elt).getAction() ) + SC + CR;
+			return code + makeBehavior( task, elt.getNextElement(0) );
+			
+		} else if( elt instanceof TMLWriteChannel )	{
+			tmlch = (TMLActivityElementChannel)elt;
+			code = "WRITE ";
+			for(int k=0; k<tmlch.getNbOfChannels(); k++) {
+				code = code + tmlch.getChannel(k).getName() + SP;
+			}
+			code = code + modifyString(tmlch.getNbOfSamples()) + CR;
+			return code + makeBehavior(task, elt.getNextElement(0));
+			
+		} else if( elt instanceof TMLReadChannel ) {
+			tmlch = (TMLActivityElementChannel)elt;
+			code = "READ " + tmlch.getChannel(0).getName() + SP + modifyString(tmlch.getNbOfSamples()) + CR;
+			return code + makeBehavior(task, elt.getNextElement(0));
+			
+		} else if( elt instanceof TMLSendEvent ) {
+			tmlevt = (TMLActivityElementEvent)elt;
+			code = "sig[ " + tmlevt.getEvent().getName().split("__")[1] + " ] = sig.[ " + tmlevt.getEvent().getName().split("__")[3] + " ]" + SC + CR;
+			code += "sig[ " + tmlevt.getEvent().getName().split("__")[1] + " ].f = true" + SC + CR;
+			return code + makeBehavior(task, elt.getNextElement(0));
+			
+		} else if( elt instanceof TMLWaitEvent ) {
+			tmlevt = (TMLActivityElementEvent)elt;
+			code = "sig[ " + tmlevt.getEvent().getName().split("__")[1] + " ].f = false" + SC + CR;
+			return code + makeBehavior(task, elt.getNextElement(0));
+			
+		} else if( elt instanceof TMLNotifiedEvent ) {
+			tmlevt = (TMLActivityElementEvent)elt;
+			code = "NOTIFIED " + tmlevt.getEvent().getName() + " " + tmlevt.getVariable() + CR;
+			return code + makeBehavior(task, elt.getNextElement(0));
+			
+		} else if( elt instanceof TMLSendRequest ) {
+			tmlreq = (TMLSendRequest)elt;
+			code = "REQUEST " + tmlreq.getRequest().getName() + " " + tmlreq.getAllParams(" ") + CR;
+			return code + makeBehavior(task, elt.getNextElement(0));
+			
+		}  else if( elt instanceof TMLSequence ) {
+			code = "";
+			for(i=0; i<elt.getNbNext(); i++) {
+				code += makeBehavior(task, elt.getNextElement(i));
+			}
+			return code;
+		} else if( elt instanceof TMLChoice ) {
+			TMLChoice choice = (TMLChoice)elt;
+			code = "";
+			if (choice.getNbGuard() !=0 ) {
+				code1 = "";
+				int index1 = choice.getElseGuard(), index2 = choice.getAfterGuard();
+				int nb = Math.max(choice.nbOfNonDeterministicGuard(), choice.nbOfStochasticGuard());
+				if (nb > 0) {
+					// Assumed to be a non deterministic choice
+					code += "RAND" + CR;
+				}
+				nb = 0;
+        for(i=0; i<choice.getNbGuard(); i++) {
+					if (i != index2) {
+						if (choice.isNonDeterministicGuard(i)) {
+							code2 = "" + (int)(Math.floor(100/choice.getNbGuard()));
+							nb ++;
+						} else if (choice.isStochasticGuard(i)){
+							code2 = prepareString(choice.getStochasticGuard(i));
+							nb ++;
+						} else {
+							code2 = modifyString(choice.getGuard(i));
+							code2 = Conversion.replaceAllChar(code2, '[', "(");
+							code2 = Conversion.replaceAllChar(code2, ']', ")");
+						}
+						//TraceManager.addDev("guard = " + code1 + " i=" + i);
+						if (nb != 0) {
+							/*if (choice.isNonDeterministicGuard(i)) {
+								code = "CASERAND 50";
+							} else {
+								code = "CASERAND " + prepareString(choice.getStochasticGuard(i));
+								
+							}*/
+							//nb ++;
+							if (i != index1) {
+								code += "CASERAND " + code2 + CR;
+								code += makeBehavior(task, elt.getNextElement(i));
+								code += "ENDCASERAND" + CR;
+							}
+						} else {
+							if (i==0) {
+								code += "IF " + code2;
+							} else {
+								if (i != index1) {
+									code += "ORIF " + code2;
+								} else {
+									code += "ELSE";
+								}
+							}
+							code += CR + makeBehavior(task, elt.getNextElement(i));
+						}
+					}
+                }
+				if (nb > 0) {
+					// Assumed to be a non deterministic choice
+					code += "ENDRAND" + CR;
+				} else {
+					code += "ENDIF" + CR;
+				}
+				if (index2 != -1) {
+					code += makeBehavior(task, elt.getNextElement(index2));
+				}
+            }
+			return code;
+			
+		} else if( elt instanceof TMLSelectEvt ) {
+			code = "SELECTEVT" + CR;
+			for( i = 0; i < elt.getNbNext(); i++ ) {
+				try {
+				tmlevt = (TMLActivityElementEvent)(elt.getNextElement(i));
+				code += "CASE ";
+				code += tmlevt.getEvent().getName() + " " + tmlevt.getAllParams(" ") + CR;
+				code += makeBehavior(task, elt.getNextElement(i).getNextElement(0));
+				code += "ENDCASE" + CR;
+				} catch (Exception e) {
+					TraceManager.addError("Non-event receiving following a select event operator");
+				}
+			}
+			code += "ENDSELECTEVT" + CR;
+			return code;
+			
+		} else if( elt instanceof TMLRandomSequence ) {
+			code = "RANDOMSEQ" + CR;
+			for(i=0; i<elt.getNbNext(); i++) {
+				code += "SEQ" + CR;
+				code += makeBehavior(task, elt.getNextElement(i));
+				code += "ENDSEQ" + CR;
+			}
+			code += "ENDRANDOMSEQ" + CR;
+			return code;
+		} else {
+			if( elt == null ) {
+				return "";
+			}
+			TraceManager.addDev("Unrecognized element: " + elt);
+			return makeBehavior(task, elt.getNextElement(0));
+		}
 	}
 
 	private String generateSDROperation( Operation op, TMLTask xTask, TMLTask fTask )	{
@@ -382,7 +579,7 @@ public class TMLCCodeGeneration	{
 				}
 			}
 		}
-		return attributesList;
+		return attributesList.substring( 0, attributesList.length() - 1 );	//remove last CR
 	}
 
 	private String updateOutSignals( TMLTask task )	{
@@ -557,6 +754,14 @@ public class TMLCCodeGeneration	{
 			}
 		}
 		return list;
+	}
+
+	private static String prepareString(String s) {
+		return s.replaceAll("\\s", "");
+	}
+	
+	public static String modifyString(String s) {
+		return prepareString(s);
 	}
 
 	public String toString()	{
