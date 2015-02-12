@@ -62,58 +62,60 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     
     private String name;
 		private String dataFlowType = "VOID";
+		private String associatedEvent = "VOID";
     private TType type1, type2, type3, type4, type5;
     private boolean isFinite, isBlocking, isOrigin;
     private String maxInFIFO, widthSamples;
 	
-	private boolean isLossy;
-	private int lossPercentage;
-	private int maxNbOfLoss; //-1 means no max
+		private boolean isLossy;
+		private int lossPercentage;
+		private int maxNbOfLoss; //-1 means no max
 
     public boolean data;
 
     
     
     // Panel1
-    private JTextField nameText, maxText, widthText;
+    private JTextField nameText, maxText, widthText, associatedEventJT;
     private JComboBox typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
     private JComboBox origin, finite, blocking, dfType;
-	private JLabel lossPercentageLabel, maxNbOfLossLabel;
-	private int portIndex;
+		private JLabel lossPercentageLabel, maxNbOfLossLabel;
+		private int portIndex;
     private Vector origins, finites, blockings, portTypes, types1, types2, types3, types4, types5;
-	private Vector<String> types;
+		private Vector<String> types;
     
-	// Robustness
-	private JCheckBox isLossyBox;
-	private JTextField lossPercentageText, maxNbOfLossText;
+		// Robustness
+		private JCheckBox isLossyBox;
+		private JTextField lossPercentageText, maxNbOfLossText;
 	
 	
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
 
-    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType ) {
+    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent ) {
         super(f, title, true);
         frame = f;
         
         name = _name;
-		portIndex = _portIndex;
+				portIndex = _portIndex;
         type1 = _type1; type2 = _type2; type3 = _type3; type4 = _type4; type5 = _type5;
 		
-		types = _types;
+				types = _types;
         
         data = false;
         
 				dataFlowType = _dataFlowType;
+				associatedEvent = _associatedEvent;
         maxInFIFO = _maxInFIFO;
-		widthSamples = _widthSamples;
-		isOrigin = _isOrigin;
+				widthSamples = _widthSamples;
+				isOrigin = _isOrigin;
         isFinite = _isFinite;
         isBlocking = _isBlocking;
 		
-		isLossy = _isLossy;
-		lossPercentage = _lossPercentage;
-		maxNbOfLoss = _maxNbOfLoss;
+				isLossy = _isLossy;
+				lossPercentage = _lossPercentage;
+				maxNbOfLoss = _maxNbOfLoss;
         
         myInitComponents();
         initComponents();
@@ -228,17 +230,17 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         panel1.add(nameText, c1);
 		
 		// Type of port
-		c1.gridwidth = 1;
+				c1.gridwidth = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("Type:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         typePort = new JComboBox(portTypes);
         typePort.setSelectedIndex(portIndex);
-		typePort.addActionListener(this);
+				typePort.addActionListener(this);
         panel1.add(typePort, c1);
 		
-		c1.gridwidth = 1;
+				c1.gridwidth = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("Origin:"), c1);
@@ -385,6 +387,17 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         panel2.add( dfType, c2);
         
         c2.gridwidth = 1;
+				if( associatedEvent.equals( "VOID" ) || associatedEvent.equals( "" ) )	{
+        	associatedEventJT = new JTextField( "", 15 );
+				}
+				else	{
+        	associatedEventJT = new JTextField( associatedEvent, 15 );
+				}
+        panel2.add(new JLabel("Associate to event"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        panel2.add( associatedEventJT, c2 );
+
+        c2.gridwidth = 1;
         c2.fill = GridBagConstraints.HORIZONTAL;
         c2.anchor = GridBagConstraints.CENTER;
         panel2.add(new JLabel("Blocking?"), c2);
@@ -515,11 +528,16 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     public void closeDialog() {
         data = true;
 				dataFlowType = (String)dfType.getItemAt( dfType.getSelectedIndex() );
+				associatedEvent = (String)associatedEventJT.getText();
         dispose();
     }
 
 		public String getDataFlowType()	{
 			return dataFlowType;
+		}
+
+		public String getAssociatedEvent()	{
+			return associatedEvent;
 		}
     
     public void cancelDialog() {
@@ -549,7 +567,8 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 			typeList3.setEnabled(true);
 			typeList4.setEnabled(true);  
 			typeList5.setEnabled(true);
-			
+			dfType.setEnabled(false)	;
+			associatedEventJT.setEnabled( false );
 			if (origin.getSelectedIndex() == 0) {
 				blocking.setEnabled(true);
 				finite.setEnabled(true);
@@ -573,6 +592,8 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 			typeList3.setEnabled(true);
 			typeList4.setEnabled(true);  
 			typeList5.setEnabled(true);
+			dfType.setEnabled(false)	;
+			associatedEventJT.setEnabled( false );
 			blocking.setEnabled(false);
 			if (origin.getSelectedIndex() == 0) {
 				blocking.setSelectedIndex(1);
