@@ -53,14 +53,16 @@ import myutil.*;
 public class Signal	{
 
 	public String CR = "\n";
-	private String code = "struct SIG_TYPE	{" + CR +
-												"bool f; // new signal flag=1" + CR +
-												"int  woff; // write offset" + CR +
-												"int  roff; // read offset" + CR +
-												"void *pBuff; // pointer to buffer" + CR +
-												"};	typedef struct SIG_TYPE SIG_TYPE;";
+	public String SC = ";";
+	private String status = "bool f" + SC + CR;
+	private String writeOffset = "int woff" + SC + CR;
+	private String readOffset = "int roff" + SC + CR;
+	private String buffPointer = "void *pBuff" + SC + CR;
+	
+	private String code = "";
 	
 	public Signal()	{
+		code = "struct SIG_TYPE	{" + CR + status + writeOffset + readOffset + buffPointer + "};	typedef struct SIG_TYPE SIG_TYPE;";
 	}
 
 	public String toString()	{
