@@ -414,11 +414,13 @@ public class GTURTLEModeling {
 		TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
 		spec.toTextFormat( tmap );	//TMLMapping
 
-		TMLCCodeGeneration myCode = new TMLCCodeGeneration( _title, "test", mgui.frame );
+		String applicationName = tmap.getMappedTasks().get(0).getName().split("__")[0];
+
+		TMLCCodeGeneration myCode = new TMLCCodeGeneration( _title, applicationName, mgui.frame );
 		myCode.toTextFormat( tmap /*, tmlm*/ ); //tmlm is null
 
 		try {
-		    myCode.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, "test" );
+		    myCode.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, applicationName );
 		}
 		catch( Exception e ) {
 		    TraceManager.addError( "Application C files could not be saved: " + e.getMessage() );

@@ -145,6 +145,7 @@ public class TMLCCodeGeneration	{
 		String s = 	"/**** prototypes *****/" + CR +
 								"extern int " + applicationName + "_final(void);" + CR +
 								"extern void " + applicationName + "_final_init();" + CR +
+								"extern boolean exit_rule(void);" + CR +
 								"extern void register_operations(void);" + CR +
 								"extern void register_fire_rules(void);" + CR +
 								"extern void signal_to_buffer_init();" + CR +
@@ -233,10 +234,9 @@ public class TMLCCodeGeneration	{
 							"register_operations();" + CR +
 							"register_fire_rules();" + CR +
 							"signal_to_buffer_init();" + CR +
-							"init_operations_context();" + CR +
+							"init_operations_context();" + CR2 +
 							"/********* INIT PREX OPs signals ********/" + CR +
-							"sig[feed_out].f=true;" + CR +
-							"sig[src_out].f=true;" + CR +
+							initPrexOperations() + CR +
 							"/********* OPs scheduler ***************/" + CR +
 							scheduler.getCode() + CR +
 							"cleanup_operations_context();" + CR + "}" + CR2;
@@ -244,6 +244,12 @@ public class TMLCCodeGeneration	{
 		registerOperations();
 		fireRules();
 		registerFireRules();
+		exitRule();
+	}
+
+	private String initPrexOperations()	{
+		
+		return "sig[feed_out].f=true;" + CR + "sig[src_out].f=true;" + CR;
 	}
 
 	//From the list of mapped tasks, built the list of operations. For SDR operations, only F_ tasks are considered.
@@ -661,7 +667,12 @@ public class TMLCCodeGeneration	{
 			String XOD = op.getName();
 			programString += TAB + "fire_rule[" + XOD + "] = " + "fr_" + XOD + ";" + CR;
 		}
-		programString += "}";
+		programString += "}" + CR2;
+	}
+
+	private void exitRule()	{
+		programString += 	"bool exit_rule(void)\t{" + CR +
+											"return; " + CR + "}";
 	}
 
 	private void generateInitProgram( ArrayList<TMLTask> mappedTasks )	{
