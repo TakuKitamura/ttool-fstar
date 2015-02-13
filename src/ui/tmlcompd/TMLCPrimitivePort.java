@@ -77,6 +77,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected String commName;
 
     protected boolean isLossy;
+    protected boolean isPostex = false;
+    protected boolean isPrex = false;
     protected int lossPercentage;
     protected int maxNbOfLoss; //-1 means no max
 
@@ -416,12 +418,14 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             otherTypes = tgc.getAllRecords();
         }
 
-        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent );
+        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex );
         jda.setSize(350, 700);
         GraphicLib.centerOnParent(jda);
         jda.show(); // blocked until dialog has been closed
 				dataFlowType = jda.getDataFlowType();
 				associatedEvent = jda.getAssociatedEvent();
+				isPrex = jda.isChannelPrex();
+				isPostex = jda.isChannelPostex();
 				TraceManager.addDev( "The Data flow type is: " + dataFlowType );
 				TraceManager.addDev( "The Associated event is: " + associatedEvent );
 
@@ -488,6 +492,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         sb.append("\" maxSamples=\"" + maxSamples);
         sb.append("\" widthSamples=\"" + widthSamples);
         sb.append("\" isLossy=\"" + isLossy);
+        sb.append("\" isPrex=\"" + isPrex);
+        sb.append("\" isPostex=\"" + isPostex);
         sb.append("\" lossPercentage=\"" + lossPercentage);
         sb.append("\" maxNbOfLoss=\"" + maxNbOfLoss);
         sb.append("\" dataFlowType=\"" + dataFlowType);
@@ -570,6 +576,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                                     dataFlowType = elt.getAttribute("dataFlowType");
                                     associatedEvent = elt.getAttribute("associatedEvent");
                                     isLossy = (elt.getAttribute("isLossy").compareTo("true") ==0);
+                                    isPrex = (elt.getAttribute("isPrex").compareTo("true") ==0);
+                                    isPostex = (elt.getAttribute("isPostex").compareTo("true") ==0);
                                 } catch (Exception e) {
                                     lossPercentage = 0;
                                     maxNbOfLoss = -1;

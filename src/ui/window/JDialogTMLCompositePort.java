@@ -67,7 +67,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     private boolean isFinite, isBlocking, isOrigin;
     private String maxInFIFO, widthSamples;
 	
-		private boolean isLossy;
+		private boolean isLossy, isPrex, isPostex;
 		private int lossPercentage;
 		private int maxNbOfLoss; //-1 means no max
 
@@ -85,7 +85,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 		private Vector<String> types;
     
 		// Robustness
-		private JCheckBox isLossyBox;
+		private JCheckBox isLossyBox, isPrexCB, isPostexCB;
 		private JTextField lossPercentageText, maxNbOfLossText;
 	
 	
@@ -93,7 +93,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     private JButton closeButton;
     private JButton cancelButton;
 
-    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent ) {
+    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex ) {
         super(f, title, true);
         frame = f;
         
@@ -112,7 +112,9 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 				isOrigin = _isOrigin;
         isFinite = _isFinite;
         isBlocking = _isBlocking;
-		
+				
+				isPrex = _isPrex;
+				isPostex = _isPostex;
 				isLossy = _isLossy;
 				lossPercentage = _lossPercentage;
 				maxNbOfLoss = _maxNbOfLoss;
@@ -398,6 +400,18 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         panel2.add( associatedEventJT, c2 );
 
         c2.gridwidth = 1;
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+				isPrexCB = new JCheckBox("Prex");
+				isPrexCB.setSelected( isPrex );
+        panel2.add( isPrexCB, c2 );
+
+        c2.gridwidth = 1;
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+				isPostexCB = new JCheckBox("Postex");
+				isPostexCB.setSelected( isPostex );
+        panel2.add( isPostexCB, c2 );
+
+        c2.gridwidth = 1;
         c2.fill = GridBagConstraints.HORIZONTAL;
         c2.anchor = GridBagConstraints.CENTER;
         panel2.add(new JLabel("Blocking?"), c2);
@@ -529,6 +543,13 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         data = true;
 				dataFlowType = (String)dfType.getItemAt( dfType.getSelectedIndex() );
 				associatedEvent = (String)associatedEventJT.getText();
+				isPrex = isPrexCB.isSelected();
+				isPostex = isPostexCB.isSelected();
+				if( isPrex && isPostex )	{
+					JOptionPane.showMessageDialog( frame, "A channel cannot be marked as both prex and postex", "Error",
+																				 JOptionPane.INFORMATION_MESSAGE );
+					return;
+				}
         dispose();
     }
 
@@ -569,6 +590,8 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 			typeList5.setEnabled(true);
 			dfType.setEnabled(false)	;
 			associatedEventJT.setEnabled( false );
+			isPrexCB.setEnabled(false);
+			isPostexCB.setEnabled(false);
 			if (origin.getSelectedIndex() == 0) {
 				blocking.setEnabled(true);
 				finite.setEnabled(true);
@@ -594,6 +617,8 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 			typeList5.setEnabled(true);
 			dfType.setEnabled(false)	;
 			associatedEventJT.setEnabled( false );
+			isPrexCB.setEnabled(false);
+			isPostexCB.setEnabled(false);
 			blocking.setEnabled(false);
 			if (origin.getSelectedIndex() == 0) {
 				blocking.setSelectedIndex(1);
@@ -644,6 +669,14 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     public boolean isBlocking() {
            return (blocking.getSelectedIndex() == 0);
     }
+
+		public boolean isChannelPrex()	{
+			return isPrex;
+		}
+
+		public boolean isChannelPostex()	{
+			return isPostex;
+		}
 	
 	 public int getPortType() {
 		 return typePort.getSelectedIndex();
