@@ -1890,6 +1890,9 @@ public class GTMLModeling  {
         TraceManager.addDev("Making mapping");
         makeMapping();  //fills map
 
+	TraceManager.addDev("Making TMLCPLib");
+	makeTMLCPLib();
+
         //TraceManager.addDev("<--- TML modeling:");
         //TraceManager.addDev("TML: " + tmlm.toString());
         //TraceManager.addDev("End of TML modeling --->");
@@ -2755,6 +2758,35 @@ public class GTMLModeling  {
             }
         }
     }   //End of method
+
+
+    private void makeTMLCPLib() {
+	if (nodesToTakeIntoAccount == null) {
+            components = tmlap.tmlap.getComponentList();
+        } else {
+            components = nodesToTakeIntoAccount;
+        }
+        ListIterator iterator = components.listIterator();
+
+        TGComponent tgc;
+        ArrayList<TMLArchiArtifact> artifacts;
+        ArrayList<TMLArchiCommunicationArtifact> artifactscomm;
+        ArrayList<TMLArchiEventArtifact> artifactsEvt;
+        HwNode node;
+        TMLTask task;
+        TMLElement elt;
+        String s;
+
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+	    if (tgc instanceof TMLArchiCPNode) {
+		TMLCPLib tmlcplib = new TMLCPLib(tgc.getName(), tgc);
+		map.addTMLCPLib(tmlcplib);
+		// Handling mapped artifacts
+		
+	    }
+	}
+    }
 
     private void makeMapping() {
         if (nodesToTakeIntoAccount == null) {
