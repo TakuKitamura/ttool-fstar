@@ -86,8 +86,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
     protected boolean conflict = false;
     protected String conflictMessage;
-		protected String dataFlowType = "VOID";
-		protected String associatedEvent = "VOID";
+    protected String dataFlowType = "VOID";
+    protected String associatedEvent = "VOID";
 
     public TMLCPrimitivePort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -422,12 +422,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         jda.setSize(350, 700);
         GraphicLib.centerOnParent(jda);
         jda.show(); // blocked until dialog has been closed
-				dataFlowType = jda.getDataFlowType();
-				associatedEvent = jda.getAssociatedEvent();
-				isPrex = jda.isChannelPrex();
-				isPostex = jda.isChannelPostex();
-				TraceManager.addDev( "The Data flow type is: " + dataFlowType );
-				TraceManager.addDev( "The Associated event is: " + associatedEvent );
+        dataFlowType = jda.getDataFlowType();
+        associatedEvent = jda.getAssociatedEvent();
+        isPrex = jda.isChannelPrex();
+        isPostex = jda.isChannelPostex();
+        TraceManager.addDev( "The Data flow type is: " + dataFlowType );
+        TraceManager.addDev( "The Associated event is: " + associatedEvent );
 
         if (jda.hasNewData()) {
             try {
