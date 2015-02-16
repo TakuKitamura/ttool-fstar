@@ -57,7 +57,7 @@ import myutil.*;
 
 public class JDialogTMLCompositePort extends javax.swing.JDialog implements ActionListener {
 	
-    private JPanel panel1, panel2, panel3;
+    private JPanel panel1, panel2, panel3, panel4;
     private Frame frame;
     
     private String name;
@@ -198,8 +198,10 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c2 = new GridBagConstraints();
-		GridBagLayout gridbag3 = new GridBagLayout();
+				GridBagLayout gridbag3 = new GridBagLayout();
         GridBagConstraints c3 = new GridBagConstraints();
+        GridBagConstraints c4 = new GridBagConstraints();
+				GridBagLayout gridbag4 = new GridBagLayout();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -260,7 +262,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 		// parameters
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Parameters "));
+        panel2.setBorder(new javax.swing.border.TitledBorder("Formal Verification & Simulation Parameters "));
         panel2.setPreferredSize(new Dimension(300, 300));
 		c2.gridwidth = 1;
         c2.gridheight = 1;
@@ -373,11 +375,24 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 		}
         panel2.add(typeList5, c2);
 
+				// Code generation
+        panel4 = new JPanel();
+        panel4.setLayout( gridbag4 );
+        panel4.setBorder( new javax.swing.border.TitledBorder("Code generation ") );
+        panel4.setPreferredSize( new Dimension(300, 300) );
+				c4.gridwidth = 1;
+        c4.gridheight = 1;
+        c4.weighty = 1.0;
+        c4.weightx = 1.0;
+        c4.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c4.fill = GridBagConstraints.BOTH;
+        c4.gridheight = 3;
+        panel4.add( new JLabel(" "), c4 );
         c2.gridwidth = 1;
         c2.fill = GridBagConstraints.HORIZONTAL;
         c2.anchor = GridBagConstraints.CENTER;
-        panel2.add(new JLabel("Dataflow type"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        panel4.add(new JLabel("Dataflow type"), c2);
+        c4.gridwidth = GridBagConstraints.REMAINDER; //end row
         dfType = new JComboBox( dataFlowTypes );
 				if( dataFlowType.equals( "VOID" ) || dataFlowType.equals( "" ) )	{
 					dfType.setSelectedIndex( 0 );
@@ -386,30 +401,30 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 					dfType.setSelectedIndex( dataFlowTypes.indexOf( dataFlowType ) );
 				}
 				dfType.addActionListener(this);
-        panel2.add( dfType, c2);
+        panel4.add( dfType, c4);
         
-        c2.gridwidth = 1;
+        c4.gridwidth = 1;
 				if( associatedEvent.equals( "VOID" ) || associatedEvent.equals( "" ) )	{
         	associatedEventJT = new JTextField( "", 15 );
 				}
 				else	{
         	associatedEventJT = new JTextField( associatedEvent, 15 );
 				}
-        panel2.add(new JLabel("Associate to event"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        panel2.add( associatedEventJT, c2 );
+        panel4.add( new JLabel("Associate to event"), c4 );
+        c4.gridwidth = GridBagConstraints.REMAINDER; //end row
+        panel4.add( associatedEventJT, c4 );
 
-        c2.gridwidth = 1;
+        c4.gridwidth = 1;
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
 				isPrexCB = new JCheckBox("Prex");
 				isPrexCB.setSelected( isPrex );
-        panel2.add( isPrexCB, c2 );
+        panel4.add( isPrexCB, c4 );
 
-        c2.gridwidth = 1;
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c4.gridwidth = 1;
+        c4.gridwidth = GridBagConstraints.REMAINDER; //end row
 				isPostexCB = new JCheckBox("Postex");
 				isPostexCB.setSelected( isPostex );
-        panel2.add( isPostexCB, c2 );
+        panel4.add( isPostexCB, c4 );
 
         c2.gridwidth = 1;
         c2.fill = GridBagConstraints.HORIZONTAL;
@@ -505,7 +520,9 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         
         c.add(panel1, c0);
         c.add(panel2, c0);
-		 c.add(panel3, c0);
+		 		c.add(panel4, c0);
+		 		c.add(panel3, c0);
+
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
