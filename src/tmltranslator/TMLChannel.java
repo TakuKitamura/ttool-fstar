@@ -45,6 +45,7 @@
 
 package tmltranslator;
 
+import java.util.*;
 
 
 public class TMLChannel extends TMLCommunicationElement {
@@ -57,20 +58,66 @@ public class TMLChannel extends TMLCommunicationElement {
     private int type;
     private int max;
 
-    protected TMLTask origin, destination;
+    // Used on for 1 -> 1 channel
+    protected TMLTask origin, destination; 
+
+    // Used for 1 -> many channel, or for many -> 1 channel
+    protected ArrayList<TMLTask> originTasks, destinationTasks;
+    protected ArrayList<TMLPort> originPorts, destinationPorts;
+
 
     private int priority;
 
 
     public TMLChannel(String name, Object reference) {
         super(name, reference);
+	originTasks = new ArrayList<TMLTask>();
+	destinationTasks = new ArrayList<TMLTask>();
+	originPorts = new ArrayList<TMLPort>();
+	destinationPorts = new ArrayList<TMLPort>();
     }
 
+
+    // Complex channels
+    public boolean isBasicChannel() {
+	return (originTasks.size() == 0);
+    }
+
+    public void addTaskPort(TMLTask _task, TMLPort _port, boolean isOrigin) {
+	if (isOrigin) {
+	    originTasks.add(_task);
+	    originPorts.add(_port);
+	} else {
+	    destinationTasks.add(_task);
+	    destinationPorts.add(_port);
+	}
+    }
+
+    public ArrayList<TMLTask> getOriginTasks() {
+	return originTasks;
+    }
+
+    public ArrayList<TMLTask> getDestinationTasks() {
+	return destinationTasks;
+    }
+
+    public ArrayList<TMLPort> getOriginPorts() {
+	return originPorts;
+    }
+
+    public ArrayList<TMLPort> getDestinationPorts() {
+	return destinationPorts;
+    }
+
+
+
+
+    // Basic channels
     public void setTasks(TMLTask _origin, TMLTask _destination) {
         origin = _origin;
         destination = _destination;
     }
-
+  
     public TMLTask getOriginTask() {
         return origin;
     }
