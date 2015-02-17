@@ -658,16 +658,10 @@ public class TMLTextSpecification {
                 return -1;
             }
 
-            if (!((_split.length > 5) && (_split.length < 8))) {
-                error = "A channel must be declared with only 5 or 6 parameters, and not " + (_split.length - 1) ;
+            if (!((_split.length < 9))) {
+                error = "A channel must be declared with at least 7, and not: " + (_split.length - 1) ;
                 addError(0, _lineNb, 0, error);
                 return -1;
-            }
-
-            if (_split.length == 7) {
-                dec = 1;
-            } else {
-                dec = 0;
             }
 
             if (!checkParameter("CHANNEL", _split, 1, 0, _lineNb)) {
@@ -682,20 +676,35 @@ public class TMLTextSpecification {
                 return -1;
             }
 
-            if (_split.length == 7) {
-                if (!checkParameter("CHANNEL", _split, 4, 1, _lineNb)) {
-                    return -1;
-                }
-            }
+	    // Max nb of elements?
+	    try {
+                    tmp = Integer.decode(_split[4]).intValue();
+		    dec = 1;
+	    } catch (Exception e) {dec = 0; tmp=8;}
 
 
-            if (!checkParameter("CHANNEL", _split, 4 + dec, 0, _lineNb)) {
+	    TraceManager.addDev("Checking OUT");
+	    // "OUT" keyword?
+	     if (!checkParameter("CHANNEL", _split, 4+dec, 10, _lineNb)) {
                 return -1;
             }
 
-            if (!checkParameter("CHANNEL", _split, 5 + dec, 0, _lineNb)) {
-                return -1;
-            }
+	      TraceManager.addDev("Checking other params of channels");
+	     int indexOfIN = -1;
+	     for(i=5+dec; i<_split.length; i++) {
+		 if (!checkParameter("CHANNEL", _split, i, 0, _lineNb)) {
+		     return -1;
+		 }
+		 if (_split[i].compareTo("IN") == 0) {
+		     indexOfIN = i;
+		 }
+	     }
+
+	     if (indexOfIN == -1) {
+		 error = "\"IN\" keyword is missing";
+		 addError(0, _lineNb, 0, error);
+		 return -1;
+	     }
 
             if (tmlm.getChannelByName(_split[1]) != null) {
                 error = "Duplicate definition of channel " + _split[1];
@@ -713,28 +722,29 @@ public class TMLTextSpecification {
                 tmp = Integer.decode(_split[3]).intValue();
             } catch (Exception e) {tmp = 4;}
             ch.setSize(tmp);
+	    ch.setMax(tmp);
 
-            if (_split.length == 7) {
-                try {
-                    tmp = Integer.decode(_split[4]).intValue();
-                } catch (Exception e) {tmp = 8;}
-                //TraceManager.addDev("Setting max to" + tmp);
-                ch.setMax(tmp);
-            }
+	    for(i=5+dec; i<_split.length; i++) {
+		if (i != indexOfIN) {
+		    t1 = tmlm.getTMLTaskByName(_split[i]);
+		    if (t1 == null) {
+			t1 = new TMLTask(_split[i], null, null);
+			//TraceManager.addDev("New task:" + _split[4+dec]);
+		    }
+		    ch.addTaskPort(t1, null, (i<indexOfIN));
+		}
+		
+	    }
 
-            t1 = tmlm.getTMLTaskByName(_split[4+dec]);
-            if (t1 == null) {
-                t1 = new TMLTask(_split[4+dec], null, null);
-                //TraceManager.addDev("New task:" + _split[4+dec]);
-                tmlm.addTask(t1);
-            }
-            t2 = tmlm.getTMLTaskByName(_split[5+dec]);
-            if (t2 == null) {
-                t2 = new TMLTask(_split[5+dec], null, null);
-                //TraceManager.addDev("New task:" + _split[5+dec]);
-                tmlm.addTask(t2);
-            }
-            ch.setTasks(t1, t2);
+	    ch.toBasicIfPossible();
+
+	    if (!(ch.isBasicChannel())) {
+		if (ch.isBadComplexChannel()) {
+		    error = "A complex channel must be \"1 -> many\" of \"many -> 1\"";
+		    addError(0, _lineNb, 0, error);
+		    return -1;
+		}
+	    }
             tmlm.addChannel(ch);
         } // CHANNEL
 
@@ -2433,6 +2443,11 @@ public class TMLTextSpecification {
                 break;
             case 9:
                 if (!isANegativeOrPositiveNumeral(_split[_parameter])) {
+                    err = true;
+                }
+                break;
+	    case 10:
+                if (!(_split[_parameter].compareTo("OUT") == 0)) {
                     err = true;
                 }
                 break;

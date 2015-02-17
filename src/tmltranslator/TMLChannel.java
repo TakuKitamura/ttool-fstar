@@ -60,6 +60,7 @@ public class TMLChannel extends TMLCommunicationElement {
 
     // Used on for 1 -> 1 channel
     protected TMLTask origin, destination; 
+    protected TMLPort originPort, destinationPort; // Not used by the simulator
 
     // Used for 1 -> many channel, or for many -> 1 channel
     protected ArrayList<TMLTask> originTasks, destinationTasks;
@@ -81,6 +82,31 @@ public class TMLChannel extends TMLCommunicationElement {
     // Complex channels
     public boolean isBasicChannel() {
 	return (originTasks.size() == 0);
+    }
+
+    public boolean isBadComplexChannel() {
+	if ((originTasks.size() == 1) && (destinationTasks.size() >= 1)) {
+	    return false;
+	}
+
+	if ((destinationTasks.size() == 1) && (originTasks.size() >= 1)) {
+	    return false;
+	}
+
+	return true;
+    }
+
+    public void toBasicIfPossible() {
+	if ((originTasks.size() ==1) && (destinationTasks.size() ==1)) {
+	    origin = originTasks.get(0);
+	    destination = destinationTasks.get(0);
+	    originPort = originPorts.get(0);
+	    destinationPort = destinationPorts.get(0);
+	    originTasks = new ArrayList<TMLTask>();
+	    destinationTasks = new ArrayList<TMLTask>();
+	    originPorts = new ArrayList<TMLPort>();
+	    destinationPorts = new ArrayList<TMLPort>();
+	}
     }
 
     public void addTaskPort(TMLTask _task, TMLPort _port, boolean isOrigin) {
@@ -117,6 +143,11 @@ public class TMLChannel extends TMLCommunicationElement {
         origin = _origin;
         destination = _destination;
     }
+
+    public void setPorts(TMLPort _origin, TMLPort _destination) {
+	originPort = _origin;
+	destinationPort = _destination;
+    }
   
     public TMLTask getOriginTask() {
         return origin;
@@ -124,6 +155,14 @@ public class TMLChannel extends TMLCommunicationElement {
 
     public TMLTask getDestinationTask() {
         return destination;
+    }
+
+    public TMLPort getOriginPort() {
+	return originPort;
+    }
+
+    public TMLPort getDestinationPort() {
+	return destinationPort;
     }
 
     public void setPriority(int _priority) {

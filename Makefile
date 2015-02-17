@@ -95,12 +95,12 @@ basicsvnapvrille:
 	svn --username apvrille commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java
 
-myrelease: basic launcher ttooljar
+myrelease: basic launcher ttooljar 
 
 basic:
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java	
 
-jar: launcher ttooljar
+jar: launcher ttooljar tiftranslator tmltranslator rundse remotesimulator
 
 ttooljar:
 	rm -f $(TTOOL_BIN)/$(TTOOL_BINARY)
