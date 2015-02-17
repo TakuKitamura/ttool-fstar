@@ -196,12 +196,33 @@ public class TMLTextSpecification {
                 if (!ch.isInfinite()) {
                     sb += SP + ch.getMax();
                 }
-                sb += SP + ch.getOriginTask().getName() + SP + ch.getDestinationTask().getName() + CR;
+                sb += SP + "OUT" + SP + ch.getOriginTask().getName() + SP + "IN" + SP + ch.getDestinationTask().getName() + CR;
 
                 if (ch.isLossy()) {
                     sb += "LOSSYCHANNEL" + SP + ch.getName() + SP + ch.getLossPercentage() + SP + ch.getMaxNbOfLoss() + CR;
                 }
-            }
+            } else {
+		sb += "CHANNEL" + SP + ch.getName() + SP + TMLChannel.getStringType(ch.getType()) + SP + ch.getSize();
+                if (!ch.isInfinite()) {
+                    sb += SP + ch.getMax();
+                }
+
+		
+		sb += SP + "OUT";
+		for (TMLTask task: ch.getOriginTasks()) {
+		    sb += SP + task.getName();
+		}
+		sb += SP + "IN";
+		for (TMLTask task: ch.getDestinationTasks()) {
+		    sb += SP + task.getName();
+		}
+		sb += CR;
+		
+
+		if (ch.isLossy()) {
+                    sb += "LOSSYCHANNEL" + SP + ch.getName() + SP + ch.getLossPercentage() + SP + ch.getMaxNbOfLoss() + CR;
+                }
+	    }
         }
         sb+= CR;
 
