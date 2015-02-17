@@ -136,8 +136,6 @@ public class TMLChannel extends TMLCommunicationElement {
     }
 
 
-
-
     // Basic channels
     public void setTasks(TMLTask _origin, TMLTask _destination) {
         origin = _origin;

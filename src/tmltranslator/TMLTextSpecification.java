@@ -658,7 +658,7 @@ public class TMLTextSpecification {
                 return -1;
             }
 
-            if (!((_split.length < 9))) {
+            if (!((_split.length < 8))) {
                 error = "A channel must be declared with at least 7, and not: " + (_split.length - 1) ;
                 addError(0, _lineNb, 0, error);
                 return -1;
