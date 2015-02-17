@@ -53,6 +53,7 @@ import javax.swing.event.*;
 import myutil.*;
 
 import tmltranslator.*;
+import ui.tmlcompd.*;
 
 public class TMLCCodeGeneration	{
 
@@ -93,21 +94,10 @@ public class TMLCCodeGeneration	{
 		commElts = new ArrayList<TMLElement>();
 	}
 
-	public void toTextFormat( TMLMapping _tmap /*, TMLModeling _tmlm*/ )	{
+	public void toTextFormat( TMLMapping _tmap , TMLModeling _tmlm )	{
 
 		tmap = _tmap;
-		/*tmlm = _tmlm;*/
-
-		/*if( tmlm != null )	{
-		ArrayList<TMLChannel> channelsList = tmlm.getChannels();
-		for( TMLChannel ch: channelsList )	{
-			TraceManager.addDev( "Reference object of channel " + ch.getName() + ": " + ch.getReferenceObject() );
-		}
-		}
-		else	{
-			TraceManager.addDev( "Is null!" );
-			System.exit(0);
-		}*/
+		tmlm = _tmlm;
 
 		ArrayList<TMLTask> mappedTasks = tmap.getMappedTasks();
 		ArrayList<TMLElement> commElts = tmap.getMappedCommunicationElement();
@@ -163,6 +153,14 @@ public class TMLCCodeGeneration	{
 		String s = 	"/**** Instructions *****/" + CR;
 		for( String s1: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
 			s += "extern FEP_CONTEXT " + s1 + ";" + CR;
+		}
+		s += CR;
+		for( String s1: getTaskNamePerMappedUnit( "MAPPER", mappedTasks ) )	{
+			s += "extern MAPPER_CONTEXT " + s1 + ";" + CR;
+		}
+		s += CR;
+		for( String s1: getTaskNamePerMappedUnit( "INTL", mappedTasks ) )	{
+			s += "extern INTL_CONTEXT " + s1 + ";" + CR;
 		}
 		s += CR;
 		return s;
@@ -249,7 +247,18 @@ public class TMLCCodeGeneration	{
 
 	private String initPrexOperations()	{
 		
-		return "sig[feed_out].f=true;" + CR + "sig[src_out].f=true;" + CR;
+		String s = "";
+		ArrayList<TMLPort> prexList = new ArrayList<TMLPort>();
+		for( TMLChannel ch: tmlm.getChannels() )	{
+			TMLPort originPort = ch.getOriginPort();
+			if( originPort.isPrex() )	{
+				prexList.add( originPort );
+			}
+		}
+		for( TMLPort port: prexList )	{
+			s += "sig[ " + port.getName() +" ].f = true;" + CR;
+		}
+		return s;
 	}
 
 	//From the list of mapped tasks, built the list of operations. For SDR operations, only F_ tasks are considered.
@@ -671,8 +680,20 @@ public class TMLCCodeGeneration	{
 	}
 
 	private void exitRule()	{
+		
+		String s = "";
+		ArrayList<TMLPort> postexList = new ArrayList<TMLPort>();
+		for( TMLChannel ch: tmlm.getChannels() )	{
+			TMLPort destinationPort = ch.getDestinationPort();
+			if( destinationPort.isPostex() )	{
+				postexList.add( destinationPort );
+			}
+		}
+		for( TMLPort port: postexList )	{
+			s += "( sig[ " + port.getName() +" ].f == true ) &&";
+		}
 		programString += 	"bool exit_rule(void)\t{" + CR +
-											"return; " + CR + "}";
+											"return " + s.substring( 0, s.length() - 3 ) + SC + CR + "}";
 	}
 
 	private void generateInitProgram( ArrayList<TMLTask> mappedTasks )	{
@@ -691,6 +712,14 @@ public class TMLCCodeGeneration	{
 			initString += "FEP_CONTEXT " + s + ";" + CR;
 		}
 		initString += CR;
+		for( String s: getTaskNamePerMappedUnit( "MAPPER", mappedTasks ) )	{
+			initString += "MAPPER_CONTEXT " + s + ";" + CR;
+		}
+		initString += CR;
+		for( String s: getTaskNamePerMappedUnit( "INTL", mappedTasks ) )	{
+			initString += "INTL_CONTEXT " + s + ";" + CR;
+		}
+		initString += CR;
 
 		initString += "/**** init buffers ****/" + CR +
 									"void " + applicationName + "_final_init()\t{" + CR + "}" + CR +
@@ -706,41 +735,56 @@ public class TMLCCodeGeneration	{
 			}
 		}
 
-		TMLTask task;
-		for( Operation op: SDRoperations )	{
-			XOD = op.getName();
-			task = op.getSDRTasks().get( Operation.X_TASK );
+		//TMLTask task;
+		for( TMLTask task: getTasksPerMappedUnit( "FEP", mappedTasks ) )	{
+			XOD = task.getName().split("__")[1];
 			if( XOD.contains( "CWP" ) || XOD.contains( "cwp" ) )	{
 				CwpMEC cwp = new CwpMEC( XOD, task.getID0(), task.getOD0(), "" );
 				init_code = cwp.getInitCode();
 			}
-			if( XOD.contains( "CWM" ) || XOD.contains( "cwm" ) )	{
+			else if( XOD.contains( "CWM" ) || XOD.contains( "cwm" ) )	{
 				CwmMEC cwm = new CwmMEC( XOD, task.getID0(), task.getOD0(), "" );
 				init_code = cwm.getInitCode();
 			}
-			if( XOD.contains( "CWA" ) || XOD.contains( "cwa" ) )	{
+			else if( XOD.contains( "CWA" ) || XOD.contains( "cwa" ) )	{
 				CwaMEC cwa = new CwaMEC( XOD, task.getID0(), task.getOD0(), "" );
 				init_code = cwa.getInitCode();
 			}
-			if( XOD.contains( "CWL" ) || XOD.contains( "cwl" ) )	{
+			else if( XOD.contains( "CWL" ) || XOD.contains( "cwl" ) )	{
 				CwlMEC cwl = new CwlMEC( XOD, task.getID0(), task.getOD0(), "" );
 				init_code = cwl.getInitCode();
 			}
-			if( XOD.contains( "SUM" ) || XOD.contains( "sum" ) )	{
+			else if( XOD.contains( "SUM" ) || XOD.contains( "sum" ) )	{
 				SumMEC sum = new SumMEC( XOD, task.getID0(), task.getOD0(), "" );
 				init_code = sum.getInitCode();
 			}
-			if( XOD.contains( "FFT" ) || XOD.contains( "fft" ) )	{
+			else if( XOD.contains( "FFT" ) || XOD.contains( "fft" ) )	{
 				FftMEC fft = new FftMEC( XOD, task.getID0(), task.getOD0(), "" );
 				init_code = fft.getInitCode();
 			}
 			initString += init_code + CR;
 			init_code = "";
 		}
+		for( TMLTask task: getTasksPerMappedUnit( "INTL", mappedTasks ) )	{
+			XOD = task.getName().split("__")[1];
+			InterleaverMEC intl = new InterleaverMEC( XOD, task.getID0(), task.getOD0(), "" );
+			initString += intl.getInitCode() + CR;
+		}
+		for( TMLTask task: getTasksPerMappedUnit( "MAPPER", mappedTasks ) )	{
+			XOD = task.getName().split("__")[1];
+			MapperMEC mapp = new MapperMEC( XOD, task.getID0(), task.getOD0(), "" );
+			initString += mapp.getInitCode() + CR;
+		}
 
 		initString += "/**** init contexts ****/" + CR +
 									"void init_operations_context(void)\t{" + CR;
 		for( String s: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
+			initString += TAB + "init_" + s + "();" + CR;
+		}
+		for( String s: getTaskNamePerMappedUnit( "MAPPER", mappedTasks ) )	{
+			initString += TAB + "init_" + s + "();" + CR;
+		}
+		for( String s: getTaskNamePerMappedUnit( "INTL", mappedTasks ) )	{
 			initString += TAB + "init_" + s + "();" + CR;
 		}
 		initString += "}" + CR2;
@@ -749,6 +793,12 @@ public class TMLCCodeGeneration	{
 		initString += "void cleanup_operations_context( void )\t{" + CR;
 		for( String s: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
 			initString += TAB + "fep_ctx_cleanup( &" + s + " );" + CR;
+		}
+		for( String s: getTaskNamePerMappedUnit( "MAPPER", mappedTasks ) )	{
+			initString += TAB + "mapper_ctx_cleanup( &" + s + " );" + CR;
+		}
+		for( String s: getTaskNamePerMappedUnit( "INTL", mappedTasks ) )	{
+			initString += TAB + "intl_ctx_cleanup( &" + s + " );" + CR;
 		}
 		initString += "}";
 	}
@@ -762,6 +812,19 @@ public class TMLCCodeGeneration	{
 			if( hwNode.getName().contains( mappedUnit.toUpperCase() ) || hwNode.getName().contains( mappedUnit.toLowerCase() ) )	{
 				String XOP = task.getName().split( "__" )[1];
 				list.add( XOP );
+			}
+		}
+		return list;
+	}
+
+	private ArrayList<TMLTask> getTasksPerMappedUnit( String mappedUnit, ArrayList<TMLTask> mappedTasks )	{
+
+		ArrayList<TMLTask> list = new ArrayList<TMLTask>();
+
+		for( TMLTask task: mappedTasks )	{
+			HwNode hwNode = tmap.getHwNodeOf( task );
+			if( hwNode.getName().contains( mappedUnit.toUpperCase() ) || hwNode.getName().contains( mappedUnit.toLowerCase() ) )	{
+				list.add( task );
 			}
 		}
 		return list;
