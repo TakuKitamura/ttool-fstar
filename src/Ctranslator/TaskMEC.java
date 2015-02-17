@@ -54,6 +54,7 @@ import myutil.*;
 public abstract class TaskMEC	{
 
 	public String CR = "\n";
+	public String TAB = "\t";
 	public String node_type = new String();
 	public String inst_type = new String();
 	public String inst_decl = new String();
