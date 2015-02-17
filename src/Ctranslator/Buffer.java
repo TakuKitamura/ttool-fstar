@@ -56,14 +56,13 @@ public abstract class Buffer	{
 	public String TAB = "\t";
 	public String SP = " ";
 	public String SC = ";";
+	public String POINTER = "*";
 
 	protected String code = "VOID";
 	protected String name = "BUFFER_TYPE";
-	protected String length = "int" + SP + "bl" + SC;
-	protected String baseAddress = "char*" + SP + "b" + SC;
 	
 	public Buffer()	{
-		code = "struct" + SP + name + TAB + "{" + CR + length + CR + baseAddress + CR + "}" + SC;
+		code = "struct" + SP + name + TAB + "{" + CR + "}" + SC;
 	}
 	
 	public String toString()	{

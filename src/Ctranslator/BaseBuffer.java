@@ -37,7 +37,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class Buffer
+   * Class BaseBuffer
    * Creation: 11/02/2014
    * @version 1.0 11/02/2014
    * @author Andrea ENRICI
@@ -50,20 +50,20 @@ import java.util.*;
 import java.nio.*;
 import myutil.*;
 
-public class MMBuffer extends Buffer	{
+public class BaseBuffer extends Buffer	{
 
-	public String CR = "\n";
-	public String SP = " ";
-	public String SC = ";";
+	protected String base_address;
+	protected int base_address_value;
 
-	protected String name = "MM_BUFF_TYPE";
-	
-	public MMBuffer()	{
-		super();
+	public BaseBuffer( String _name, String _type, int _base_address_value )	{
+		name = _name;
+		base_address_value = _base_address_value;
+		base_address = _type + SP + POINTER + "base_address" + SP + "=" + SP + base_address_value + SC;
 	}
-	
-	public String toString()	{
+
+	public String getCode()	{
+		code = "struct" + SP + name + TAB + "{" + CR + base_address + CR + "}" + SC;
 		return code;
 	}
-
+	
 }	//End of class

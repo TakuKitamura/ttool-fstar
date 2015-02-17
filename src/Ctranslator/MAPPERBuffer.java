@@ -50,28 +50,28 @@ import java.util.*;
 import java.nio.*;
 import myutil.*;
 
-public class MAPPERBuffer extends Buffer	{
+public class MAPPERBuffer extends BaseBuffer	{
 
-	public String CR = "\n";
-	public String TAB = "\t";
-	public String SP = " ";
-	public String SC = ";";
-
-	protected String name = "MAPPER_BUFF_TYPE";
 	protected String num_samples; 
-	protected String symmetrical;
+	protected int num_samples_value;
+	protected int bits_per_symbol_value;
 	protected String bits_per_symbol;
-	protected String base_address;
-
+	protected String symmetrical;
+	protected int symmetrical_value;
 	
-	public MAPPERBuffer( int _num_samples, int _base_address, int _bits_per_symbol, boolean _symmetrical )	{
+	public MAPPERBuffer( String _name, String _type, int _base_address_value, int _num_samples_value, int _bits_per_symbol_value, int _symmetrical_value )	{
+		super( _name, _type, _base_address_value );
+		num_samples_value = _num_samples_value;
+		num_samples = "int" + SP + "num_samples" + SP + "=" + SP + num_samples_value;
+		bits_per_symbol_value = _bits_per_symbol_value;
+		bits_per_symbol = "int" + SP + "bits_per_symbol" + SP + "=" + SP + bits_per_symbol_value + SC;
+		symmetrical_value = _symmetrical_value;
+		symmetrical = "bool" + SP + "symmetrical" + SP + "=" + SP + symmetrical_value + SC;
+	}
 
-		num_samples = "int" + SP + "num_samples" + SP + "=" + SP + String.valueOf( _num_samples ) + SC;
-		base_address = "int" + SP + "base_address" + SP + "=" + SP + String.valueOf( _base_address ) + SC;
-		bits_per_symbol = "int" + SP + "bits_per_symbol" + SP + "=" + SP + String.valueOf( _bits_per_symbol ) + SC;
-		symmetrical = "bool" + SP + "symmetrical" + SP + "=" + SP + String.valueOf( _symmetrical ) + SC;
-
+	public String getCode()	{
 		code = "struct" + SP + name + TAB + "{" + CR + num_samples + CR + symmetrical + CR + bits_per_symbol + CR + base_address + CR + "}" + SC;
+		return code;
 	}
 	
 	public String toString()	{

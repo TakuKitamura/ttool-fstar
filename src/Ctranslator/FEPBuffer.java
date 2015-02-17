@@ -50,25 +50,21 @@ import java.util.*;
 import java.nio.*;
 import myutil.*;
 
-public class FEPBuffer extends Buffer	{
+public class FEPBuffer extends BaseBuffer	{
 
-	public String CR = "\n";
-	public String TAB = "\t";
-	public String SP = " ";
-	public String SC = ";";
 
-	protected String name = "FEP_BUFF_TYPE";
 	protected String length = "int" + SP + "bl" + SC;
 	protected String baseAddress = "int" + SP + "b" + SC;
 	protected String bank = "int" + SP + "q" + SC;
 	protected String dataType = "int" + SP + "t" + SC;
 
 	
-	public FEPBuffer()	{
+	public FEPBuffer( String _type, int _base_address_value )	{
+		super( "FEP_BUFF_TYPE", _type, _base_address_value );
 		code = "struct" + SP + name + TAB + "{" + CR + length + CR + baseAddress + CR + bank + CR + dataType + CR + "}" + SC;
 	}
 	
-	public String toString()	{
+	public String getCode()	{
 		return code;
 	}
 
