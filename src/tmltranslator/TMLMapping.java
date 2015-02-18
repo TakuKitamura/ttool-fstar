@@ -126,8 +126,6 @@ public class TMLMapping {
             }
         }
 
-
-
         if (!tmla.hasBus()) {
             bus = new HwBus("defaultBus");
             tmla.addHwNode(bus);
@@ -600,5 +598,10 @@ public class TMLMapping {
         }
 
         return tmla.getArchitectureComplexity();
+    }
+
+
+    public void removeForksAndJoins() {
+	tmlm.removeForksAndJoins();
     }
 }

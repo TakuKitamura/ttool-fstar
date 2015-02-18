@@ -175,6 +175,7 @@ public class TMLTextSpecification {
     }
 
     public String toTextFormat(TMLModeling tmlm) {
+	tmlm.removeForksAndJoins();
         tmlm.sortByName();
         spec = makeDeclarations(tmlm);
         spec += makeTasks(tmlm);

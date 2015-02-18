@@ -157,6 +157,14 @@ public class TMLChannel extends TMLCommunicationElement {
 	return true;
     }
 
+    public boolean isAForkChannel() {
+	return ((originTasks.size() == 1) && (destinationTasks.size() >= 1));
+    }
+
+    public boolean isAJoinChannel() {
+	return ((destinationTasks.size() == 1) && (originTasks.size() >= 1));
+    }
+
     public void toBasicIfPossible() {
 	if ((originTasks.size() ==1) && (destinationTasks.size() ==1)) {
 	    originTask = originTasks.get(0);
@@ -194,6 +202,13 @@ public class TMLChannel extends TMLCommunicationElement {
 
     public ArrayList<TMLPort> getDestinationPorts() {
 	return destinationPorts;
+    }
+
+    public void removeComplexInformations() {
+	originTasks = new ArrayList<TMLTask>();
+	destinationTasks = new ArrayList<TMLTask>();
+	originPorts = new ArrayList<TMLPort>();
+	destinationPorts = new ArrayList<TMLPort>();
     }
 
 

@@ -49,85 +49,85 @@
 package tmltranslator;
 
 public class TMLAttribute extends DIPLOElement {
-    
+
     public TMLType type;
     public String name = "";
     public String initialValue = "";
     private String instanceName = "";
-    
+
     public TMLAttribute( String _name, String _instanceName, TMLType _type, String _initialValue ) {
         this.name = _name;
-		this.instanceName = _instanceName;
+        this.instanceName = _instanceName;
         this.type = _type;
-		this.initialValue = _initialValue;
+        this.initialValue = _initialValue;
     }
-    
+
     public TMLAttribute( String _name, String _instanceName, TMLType _type ) {
         this.name = _name;
-		this.instanceName = _instanceName;
+        this.instanceName = _instanceName;
         this.type = _type;
-		this.initialValue = "NULL";
-    } 
+        this.initialValue = "NULL";
+    }
 
     public TMLAttribute( String _name, TMLType _type ) {
         this.name = _name;
-		this.instanceName = "NO_NAME";
+        this.instanceName = "NO_NAME";
         this.type = _type;
-		this.initialValue = "NULL";
+        this.initialValue = "NULL";
     }
 
     public TMLAttribute( String _name ) {
-  		this.name = _name;
-			this.instanceName = "NO_NAME";
-			this.type = new TMLType( TMLType.OTHER );
-			this.initialValue = "NULL";
+        this.name = _name;
+        this.instanceName = "NO_NAME";
+        this.type = new TMLType( TMLType.OTHER );
+        this.initialValue = "NULL";
     }
 
-		public String getInstanceName()	{
-			return instanceName;
-		}
-    
+    public String getInstanceName()     {
+        return instanceName;
+    }
+
     public String getName() {
-      return name;
+        return name;
     }
-    
-    public TMLType getType() {
-           return type;
-    }
-	
-		public boolean isNat() {
-			return (type.getType() == TMLType.NATURAL);
-		}
-	
-		public boolean isBool() {
-			return (type.getType() ==  TMLType.BOOLEAN);
-		}
-    
-    public String getInitialValue() {
-      return initialValue;
-    }
-    
-		public String toString() {
-    	return instanceName + "." + name + ":" + type.toString() + "=" + initialValue;
-    }
-    
-    public boolean hasInitialValue() {
-      return ((initialValue != null) && (initialValue.length() > 0));
-    }
-	
-		public String getDefaultInitialValue() {
-			if (isNat()) {
-				return "0";
-			} else {
-				if (isBool()) {
-					return "false";
-				}
-			}
-			return "unknown";
-		}
 
-		public boolean equals( TMLAttribute _other )	{
-			
-			return ( (name.equals( _other.getName() )) && ( initialValue.equals( _other.getInitialValue() )) && (type.equals( _other.getType() )) );
-		}
+    public TMLType getType() {
+        return type;
+    }
+
+    public boolean isNat() {
+        return (type.getType() == TMLType.NATURAL);
+    }
+
+    public boolean isBool() {
+        return (type.getType() ==  TMLType.BOOLEAN);
+    }
+
+    public String getInitialValue() {
+        return initialValue;
+    }
+
+    public String toString() {
+        return instanceName + "." + name + ":" + type.toString() + "=" + initialValue;
+    }
+
+    public boolean hasInitialValue() {
+        return ((initialValue != null) && (initialValue.length() > 0));
+    }
+
+    public String getDefaultInitialValue() {
+        if (isNat()) {
+            return "0";
+        } else {
+            if (isBool()) {
+                return "false";
+            }
+        }
+        return "unknown";
+    }
+
+    public boolean equals( TMLAttribute _other )        {
+
+        return ( (name.equals( _other.getName() )) && ( initialValue.equals( _other.getInitialValue() )) && (type.equals( _other.getType() )) );
+    }
 }//End of class

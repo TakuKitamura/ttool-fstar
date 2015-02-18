@@ -1389,4 +1389,180 @@ public class TMLModeling {
     }
 
 
+    public void removeForksAndJoins() {
+        removeForks();
+        removeJoins();
+    }
+
+    // Channels with one origin and several destinations
+    // Add a task at sending side
+    // Channel is tranformed into something else ...
+    public void removeForks() {
+        // Create new basic channels and tasks
+        ArrayList<TMLChannel> newChannels = new ArrayList<TMLChannel>();
+        for(TMLChannel channel: channels) {
+            if (channel.isAForkChannel()) {
+                removeFork(channel, newChannels);
+            }
+        }
+
+        for(TMLChannel chan: newChannels) {
+            addChannel(chan);
+        }
+    }
+
+    public void removeFork(TMLChannel _ch, ArrayList<TMLChannel> _newChannels) {
+        int i;
+
+        // Create the new task and its activity diagram
+        TMLTask forkTask = new TMLTask("FORKTASK__" + _ch.getName(), _ch.getReferenceObject(), null);
+	TMLActivity forkActivity = forkTask.getActivityDiagram();
+        addTask(forkTask);
+
+        // Create the new (basic) channels. The first branch of the fork is reused, others are created
+        int nb = _ch.getDestinationTasks().size();
+        TMLChannel[] chans = new TMLChannel[nb];
+        for(i=0; i<nb; i++) {
+            chans[i] = new TMLChannel("FORKCHANNEL__" + i + "__" + _ch.getName(), _ch.getReferenceObject());
+            chans[i].setTasks(forkTask, _ch.getDestinationTasks().get(i));
+            chans[i].setPorts(new TMLPort("FORKPORTORIGIN__" + i + "__" + _ch.getName(), _ch.getReferenceObject()), _ch.getDestinationPorts().get(i));
+            chans[i].setType(_ch.getType());
+            chans[i].setMax(_ch.getMax());
+            chans[i].setSize(_ch.getSize());
+            _newChannels.add(chans[i]);
+        }
+
+	// Modify the activity diagram of tasks making a read in destination channels
+	// Modify the channel of red operators to the new channels!
+	for(i=0; i<nb; i++) {
+	    _ch.getDestinationTasks().get(i).replaceReadChannelWith(_ch, chans[i]);
+	}
+
+
+        // Transform the original channel into a basic channel
+        _ch.setTasks(_ch.getOriginTasks().get(0), forkTask);
+        _ch.setPorts(_ch.getOriginPorts().get(0), new TMLPort("FORKPORTDESTINATION__" + _ch.getName(), _ch.getReferenceObject()));
+        _ch.removeComplexInformations();
+
+        // Make the activity diagram of the fork task
+        TMLStartState start = new TMLStartState("startOfFork", null);
+	forkActivity.setFirst(start);
+	TMLStopState stop = new TMLStopState("stopOfFork", null);
+	forkActivity.addElement(stop);
+        TMLForLoop junction = new TMLForLoop("junctionOfFork", null);
+	junction.setInit("i=0");
+	junction.setCondition("i==1");
+	junction.setIncrement("i=i");
+	TMLAttribute attr = new TMLAttribute("i", "i", new TMLType(TMLType.NATURAL), "0");
+	forkTask.addAttribute(attr);
+	forkActivity.addElement(junction);
+        TMLReadChannel read = new TMLReadChannel("ReadOfFork", null);
+	forkActivity.addElement(read);
+        read.addChannel(_ch);
+        read.setNbOfSamples("1");
+
+        TMLWriteChannel []writes = new TMLWriteChannel[nb];
+        for(i=0; i<nb; i++) {
+            writes[i] = new TMLWriteChannel("WriteOfFork__" + i, null);
+            writes[i].addChannel(chans[i]);
+            writes[i].setNbOfSamples("1");
+	    forkActivity.addElement(writes[i]);
+        }
+
+        start.addNext(junction);
+        junction.addNext(read);
+        read.addNext(writes[0]);
+        for(i=0; i<nb-1; i++) {
+            writes[i].addNext(writes[i+1]);
+        }
+        writes[nb-1].addNext(stop);
+
+	
+    }
+
+    // Channels with severals origins and one destination
+    // Add a task at receiving side
+    // Channel is tranformed into something else ...
+    public void removeJoins() {
+        // Create new basic channels and tasks
+        ArrayList<TMLChannel> newChannels = new ArrayList<TMLChannel>();
+        for(TMLChannel channel: channels) {
+            if (channel.isAJoinChannel()) {
+                removeJoin(channel, newChannels);
+            }
+        }
+
+        for(TMLChannel chan: newChannels) {
+            addChannel(chan);
+        }
+    }
+
+    public void removeJoin(TMLChannel _ch, ArrayList<TMLChannel> _newChannels) {
+        int i;
+
+        // Create the new task and its activity diagram
+        TMLTask joinTask = new TMLTask("JOINTASK__" + _ch.getName(), _ch.getReferenceObject(), null);
+	TMLActivity joinActivity = joinTask.getActivityDiagram();
+        addTask(joinTask);
+
+        // Create the new (basic) channels. The last branch of the join is reused, others are created
+        int nb = _ch.getOriginTasks().size();
+        TMLChannel[] chans = new TMLChannel[nb];
+        for(i=0; i<nb; i++) {
+            chans[i] = new TMLChannel("JOINCHANNEL__" + i + "__" + _ch.getName(), _ch.getReferenceObject());
+            chans[i].setTasks(_ch.getOriginTasks().get(i), joinTask);
+            chans[i].setPorts(_ch.getOriginPorts().get(i), new TMLPort("JOINPORTDESTINATION__" + i + "__" + _ch.getName(), _ch.getReferenceObject()));
+            chans[i].setType(_ch.getType());
+            chans[i].setMax(_ch.getMax());
+            chans[i].setSize(_ch.getSize());
+            _newChannels.add(chans[i]);
+        }
+
+	// Modify the activity diagram of tasks making a write in origin channels
+	// Modify the channel of write operators to the new channels!
+	for(i=0; i<nb; i++) {
+	    _ch.getOriginTasks().get(i).replaceWriteChannelWith(_ch, chans[i]);
+	}
+
+
+        // Transform the original channel into a basic channel
+        _ch.setTasks(joinTask, _ch.getDestinationTasks().get(0));
+        _ch.setPorts(new TMLPort("JOINPORTORIGIN__" + _ch.getName(), _ch.getReferenceObject()), _ch.getDestinationPorts().get(0));
+        _ch.removeComplexInformations();
+
+        // Make the activity diagram of the fork task
+        TMLStartState start = new TMLStartState("startOfJoin", null);
+	joinActivity.setFirst(start);
+	TMLStopState stop = new TMLStopState("stopOfJoin", null);
+	joinActivity.addElement(stop);
+	TMLForLoop junction = new TMLForLoop("junctionOfJoin", null);
+	junction.setInit("i=0");
+	junction.setCondition("i==1");
+	junction.setIncrement("i=i");
+	TMLAttribute attr = new TMLAttribute("i", "i", new TMLType(TMLType.NATURAL), "0");
+	joinTask.addAttribute(attr);
+	joinActivity.addElement(junction);
+        TMLWriteChannel write = new TMLWriteChannel("WriteOfJoin", null);
+	joinActivity.addElement(write);
+        write.addChannel(_ch);
+        write.setNbOfSamples("1");
+
+        TMLReadChannel []reads = new TMLReadChannel[nb];
+        for(i=0; i<nb; i++) {
+            reads[i] = new TMLReadChannel("ReadOfJoin__" + i, null);
+            reads[i].addChannel(chans[i]);
+            reads[i].setNbOfSamples("1");
+	    joinActivity.addElement(reads[i]);
+        }
+
+	// Nexts
+        start.addNext(junction);
+        junction.addNext(reads[0]);
+        write.addNext(stop);
+        for(i=0; i<nb-1; i++) {
+            reads[i].addNext(reads[i+1]);
+        }
+        reads[nb-1].addNext(write);
+    }
+
 }

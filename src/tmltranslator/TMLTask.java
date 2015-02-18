@@ -61,7 +61,7 @@ public class TMLTask extends TMLElement {
 
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass);
-	//TraceManager.addDev("Creating new TMLTask:" + name);
+        //TraceManager.addDev("Creating new TMLTask:" + name);
         activity = new TMLActivity(name+"activity_diagram", referenceToActivityDiagram);
         attributes = new ArrayList<TMLAttribute>();
     }
@@ -273,6 +273,14 @@ public class TMLTask extends TMLElement {
             activity.computeCorrespondance(_correspondance);
         }
 
+    }
+
+    public void replaceReadChannelWith(TMLChannel oldChan, TMLChannel newChan) {
+	activity.replaceReadChannelWith(oldChan, newChan);
+    }
+
+    public void replaceWriteChannelWith(TMLChannel oldChan, TMLChannel newChan) {
+	activity.replaceWriteChannelWith(oldChan, newChan);
     }
 
 }
