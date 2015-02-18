@@ -722,7 +722,16 @@ public class GTMLModeling  {
                                     if (port1.isLossy()) {
                                         channel.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
                                     }
-
+																		
+																		//complex channels are used only for transformation towards the simulator
+																		TMLPort tmlport1, tmlport2;
+																		tmlport1 = new TMLPort( port1.getPortName(), port1 );
+																		tmlport1.setPrex( port1.isPrex() );
+																		tmlport1.setPostex( port1.isPostex() );
+																		tmlport2 = new TMLPort( port2.getPortName(), port2 );
+																		tmlport2.setPrex( port2.isPrex() );
+																		tmlport2.setPostex( port2.isPostex() );
+																		channel.setPorts( tmlport1, tmlport2 );
                                     tmlm.addChannel(channel);
                                     listE.addCor(channel, tgc);
                                     TraceManager.addDev("Adding channel " + channel.getName());
@@ -809,6 +818,8 @@ public class GTMLModeling  {
                                 for(j=0; j<portstome.size(); j++) {
                                     port = (TMLCPrimitivePort)(portstome.get(j));
                                     tmlport = new TMLPort(port.getPortName(), port);
+																		tmlport.setPrex( port.isPrex() );
+																		tmlport.setPostex( port.isPostex() );
                                     tt2 = tmlm.getTMLTaskByName(makeName(port, port.getFather().getValue()));
                                     channel.addTaskPort(tt2, tmlport, port.isOrigin());
                                 }
