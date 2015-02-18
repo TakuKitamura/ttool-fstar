@@ -417,7 +417,7 @@ public class GTURTLEModeling {
 		String applicationName = tmap.getMappedTasks().get(0).getName().split("__")[0];
 
 		TMLCCodeGeneration myCode = new TMLCCodeGeneration( _title, applicationName, mgui.frame );
-		myCode.toTextFormat( tmap /*, tmlm*/ ); //tmlm is null
+		myCode.toTextFormat( tmap, tmap.getTMLModeling() );
 
 		try {
 		    myCode.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, applicationName );
