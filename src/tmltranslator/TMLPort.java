@@ -45,11 +45,30 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator;
 
-
+import ui.tmlcompd.*;
 
 public class TMLPort extends TMLElement {
     
+		boolean prex;
+		boolean postex;
+
     public TMLPort(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
+
+		public void setPrex( boolean _prex )	{
+			prex = _prex;
+		}
+
+		public boolean isPrex()	{
+			return prex;
+		}
+
+		public void setPostex( boolean _postex )	{
+			postex = _postex;
+		}
+
+		public boolean isPostex()	{
+			return postex;
+		}
 }
