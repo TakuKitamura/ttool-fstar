@@ -67,16 +67,23 @@ public class TMLCCodeGeneration	{
 	private String TAB4 = "\t\t\t\t";
 	private String SP = " ";
 	private String SC = ";";
+	private String COLON = ",";
 
 	private TMLMapping tmap;
 	private TMLModeling tmlm;
 	private String applicationName;
+	private String mainFile;
 	private String headerString;
 	private String programString;
 	private String initString;
 	private ArrayList<TMLTask> mappedTasks;
 	private ArrayList<TMLElement> commElts;
 	private ArrayList<Operation> operationsList = new ArrayList<Operation>();
+	private int nonSDRoperationsCounter = 0;
+	private int SDRoperationsCounter = 0;
+	private int signalsCounter = 0;
+	private ArrayList<String> signalsList = new ArrayList<String>();
+
 	public JFrame frame; //Main Frame
 
 	public TMLCCodeGeneration( String _title, String _applicationName, JFrame _frame )	{
@@ -104,12 +111,39 @@ public class TMLCCodeGeneration	{
 
 		//Generate the C code
 		makeOperationsList( mappedTasks );
+		generateMainFile();
 		generateHeaderFile( mappedTasks );
 		generateCProgram();
 		generateInitProgram( mappedTasks );
 	}
 
-	public void generateHeaderFile( ArrayList<TMLTask> mappedTasks )	{
+	private void generateMainFile()	{
+		mainFile = "#include \"" + applicationName + "\".h" + CR2;
+		mainFile += "int main(void)\t{" + CR +
+								TAB + "int status=0;" + CR +
+								TAB + "char *src_out_dat;" + CR +
+								TAB + "char *dma1_out_dat;" + CR +
+								TAB + "int g_r_size = 10240;" + CR +
+								TAB + "int g_Ns = 1024;" + CR +
+								TAB + "int g_Fi = 593;" + CR +
+								TAB + "int g_Li = 116;" + CR2 +
+								TAB + "src_out_dat = (char*) calloc(g_r_size*4, 1);" + CR +
+								TAB + "if( src_out_dat == NULL ) exit(1);" + CR +
+								TAB2 + "dma1_out_dat = (char*) calloc(4, 1);" + CR +
+								TAB + "if( dma1_out_dat == NULL ) exit(1);" + CR +
+								TAB2 + "FILE *source = fopen(\"date_demo.dat\", \"r\");" + CR +
+								TAB + "if( source != NULL ){ " + CR +
+								TAB2 + "fread(src_out_dat, 1, g_r_size*4, source);" + CR +
+								TAB2 + "fclose(source);" + CR +
+ 								TAB + "} else printf(\"ERROR input file does not exist!\\n\");" + CR +
+								TAB + applicationName + "_init( (char*)src_out_dat, (char*)dma1_out_dat, g_r_size, g_Ns , g_Fi, g_Li );" + CR +
+								TAB + "status = " + applicationName + "();" + CR +
+								TAB + "printf(\"score %d \", *(uint32_t*)dma1_out_dat );" + CR +
+								TAB + "free(src_out_dat);" + CR +
+								"}";
+	}
+
+	private void generateHeaderFile( ArrayList<TMLTask> mappedTasks )	{
 
 		headerString += libraries();
 		headerString += prototypes();
@@ -126,8 +160,7 @@ public class TMLCCodeGeneration	{
 							"#include <stdint.h>" + CR +
 							"#include <embb/fep.h>" + CR +
 							"#include <embb/memory.h>" + CR +
-							"#include <embb/intl.h>" + CR +
-							"#include \"eMIMO.h\"" + CR2;
+							"#include <embb/intl.h>" + CR2;
 		return s;
 	}
 
@@ -135,7 +168,7 @@ public class TMLCCodeGeneration	{
 		String s = 	"/**** prototypes *****/" + CR +
 								"extern int " + applicationName + "_final(void);" + CR +
 								"extern void " + applicationName + "_final_init();" + CR +
-								"extern boolean exit_rule(void);" + CR +
+								"extern bool exit_rule(void);" + CR +
 								"extern void register_operations(void);" + CR +
 								"extern void register_fire_rules(void);" + CR +
 								"extern void signal_to_buffer_init();" + CR +
@@ -152,15 +185,15 @@ public class TMLCCodeGeneration	{
 	private String instructions( ArrayList<TMLTask> mappedTasks )	{
 		String s = 	"/**** Instructions *****/" + CR;
 		for( String s1: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
-			s += "extern FEP_CONTEXT " + s1 + ";" + CR;
+			s += "extern embb_fep_context " + s1 + ";" + CR;
 		}
 		s += CR;
 		for( String s1: getTaskNamePerMappedUnit( "MAPPER", mappedTasks ) )	{
-			s += "extern MAPPER_CONTEXT " + s1 + ";" + CR;
+			s += "extern embb_mapper_context " + s1 + ";" + CR;
 		}
 		s += CR;
 		for( String s1: getTaskNamePerMappedUnit( "INTL", mappedTasks ) )	{
-			s += "extern INTL_CONTEXT " + s1 + ";" + CR;
+			s += "extern embb_intl_context " + s1 + ";" + CR;
 		}
 		s += CR;
 		return s;
@@ -185,7 +218,7 @@ public class TMLCCodeGeneration	{
 				"NUM_SIGS };" + CR2 +
 				"enum ops_enu	{" + CR +
 				opsList + CR + /* list of comma separated tasks*/
-				"NUM_SIGS };" + CR2;
+				"NUM_OPS };" + CR2;
 		
 		return s;
 	}
@@ -203,7 +236,9 @@ public class TMLCCodeGeneration	{
 				task = op.getSDRTasks().get( Operation.X_TASK );
 			}
 			if( task.getWriteChannels().size() > 0 )	{
+				signalsList.add( task.getWriteChannels().toString().split("__")[1] );
 				s += task.getWriteChannels().toString().split("__")[1] + ",\n";
+				signalsCounter++;
 			}
 		}
 		return s.substring( 0, s.length()-1 );
@@ -282,6 +317,7 @@ public class TMLCCodeGeneration	{
 				}
 				else	{	//it is a non-SDR operation
 					operationsList.add( new Operation( task ) );
+					nonSDRoperationsCounter++;
 				}
 			}
 		}
@@ -292,6 +328,7 @@ public class TMLCCodeGeneration	{
 				String xTaskName = xTask.getName().split( "__" )[1].split( "X_" )[1];
 				if( xTaskName.equals( fTaskName ) )	{
 					operationsList.add( new Operation( fTask, xTask ) );
+					SDRoperationsCounter++;
 				}
 			}
 		}
@@ -316,6 +353,11 @@ public class TMLCCodeGeneration	{
 				programString += generateSDROperation( op, xTask, fTask );
 			}
 		}
+		/*DmaMEC myDMA = new DmaMEC( "dma", "ctx_TAB_to_FEP_RX1", "0x123", "0x456", "256", "NULL" );
+		TraceManager.addDev( myDMA.getExecCode() );
+		TraceManager.addDev( myDMA.getInitCode() );
+		TraceManager.addDev( myDMA.getCleanupCode() );
+		System.exit(0);*/
 	}
 
 	private String generateNONSDROperation( Operation op, TMLTask xTask, TMLTask fTask )	{
@@ -722,21 +764,21 @@ public class TMLCCodeGeneration	{
 
 		initString += "/**** instructions ****/" + CR;
 		for( String s: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
-			initString += "FEP_CONTEXT " + s + ";" + CR;
+			initString += "embb_fep_context " + s + ";" + CR;
 		}
 		initString += CR;
 		for( String s: getTaskNamePerMappedUnit( "MAPPER", mappedTasks ) )	{
-			initString += "MAPPER_CONTEXT " + s + ";" + CR;
+			initString += "embb_mapper_context " + s + ";" + CR;
 		}
 		initString += CR;
 		for( String s: getTaskNamePerMappedUnit( "INTL", mappedTasks ) )	{
-			initString += "INTL_CONTEXT " + s + ";" + CR;
+			initString += "embb_intl_context " + s + ";" + CR;
 		}
 		initString += CR;
 
 		initString += "/**** init buffers ****/" + CR +
-									"void " + applicationName + "_final_init()\t{" + CR + "}" + CR +
-									"void signal_to_buffer_init()\t{" + CR + "}" + CR2;
+									"void " + applicationName + "_final_init()\t{" + CR + "}" + CR2;
+		initString += initializeSignals() + CR;
 
 		initString += "/**** init code ****/" + CR;
 
@@ -815,6 +857,17 @@ public class TMLCCodeGeneration	{
 		}
 		initString += "}";
 	}
+
+	private String initializeSignals()	{
+		String s = "void signal_to_buffer_init()\t{" + CR;
+		for( int i = 0; i < signalsCounter; i++ )	{
+			s += TAB + "sig[" + String.valueOf(i) + "].f = false;" + CR;
+			s += TAB + "sig[" + String.valueOf(i) + "].roff = false;" + CR;
+			s += TAB + "sig[" + String.valueOf(i) + "].woff = false;" + CR;
+			s += TAB + "sig[" + String.valueOf(i) + "].pBuff = false;" + CR2;
+		}
+		return s + "}" + SC + CR;
+	}
 	
 	private ArrayList<String> getTaskNamePerMappedUnit( String mappedUnit, ArrayList<TMLTask> mappedTasks )	{
 
@@ -858,6 +911,7 @@ public class TMLCCodeGeneration	{
 	public void saveFile( String path, String filename ) throws FileException {
 		
 		TraceManager.addUser( "Saving C files in " + path + filename );
+		FileUtils.saveFile( path + "main.c", mainFile );
 		FileUtils.saveFile( path + filename + ".h", headerString );
 		FileUtils.saveFile( path + filename + ".c", programString );
 		FileUtils.saveFile( path + filename + "_init.c", initString );
