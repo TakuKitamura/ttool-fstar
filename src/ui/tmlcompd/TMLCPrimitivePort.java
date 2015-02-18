@@ -763,5 +763,17 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             }
         }
     }
+	
+	public String getDataFlowType()	{
+		return dataFlowType;
+	}
+
+	public boolean isPrex()	{
+		return isPrex;
+	}
+
+	public boolean isPostex()	{
+		return isPostex;
+	}
 
 }
