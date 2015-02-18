@@ -338,4 +338,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         return "Priority = " + priority;
     }
 
+    public String getMappedMemory() {
+	return mappedMemory;
+    }
+
 }

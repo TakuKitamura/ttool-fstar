@@ -2888,14 +2888,21 @@ public class GTMLModeling  {
         TMLTask task;
         TMLElement elt;
         String s;
+	TMLArchiCPNode cp;
 
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             if (tgc instanceof TMLArchiCPNode) {
+		cp = (TMLArchiCPNode)tgc;
                 TMLCPLib tmlcplib = new TMLCPLib(tgc.getName(), tgc);
                 map.addTMLCPLib(tmlcplib);
-                // Handling mapped artifacts
+		tmlcplib.setMappedUnits(cp.getMappedUnits());
 
+                // Handling mapped artifacts
+		for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {
+		    TMLCPLibArtifact arti = new TMLCPLibArtifact(artifact.getName(), artifact, artifact.getReferenceCommunicationName(), artifact.getPortName(), artifact.getMappedMemory());
+		    tmlcplib.addArtifact(arti);
+		}
             }
         }
     }

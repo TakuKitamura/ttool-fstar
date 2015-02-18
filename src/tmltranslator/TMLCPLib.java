@@ -65,7 +65,7 @@ public class TMLCPLib extends TMLElement {
         init();
     }
 
-    private void setMappedUnits(Vector<String> _mappedUnits) {
+    public void setMappedUnits(Vector<String> _mappedUnits) {
 	mappedUnits = _mappedUnits;
     }
 
