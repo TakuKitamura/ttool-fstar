@@ -538,35 +538,48 @@ public class TMLCCodeGeneration	{
 
 	private String generateSDROperation( Operation op, TMLTask xTask, TMLTask fTask )	{
 		
+		//For SDR operations the xTask is used to retrieve the mapped unit
 		String exec_code = "";
 		String XOD = op.getName();
 		String functionName = "int op_" + XOD + "()\t{" + CR +
 													getTaskAttributes( fTask ) + CR +
 													"static int size;" + CR +
 													updateInSignals( xTask ) + CR2;
-		if( XOD.contains( "CWP" ) || XOD.contains( "cwp" ) )	{
-			CwpMEC cwp = new CwpMEC( XOD, "", "", "" );
-			exec_code = cwp.getExecCode();
+		
+		String mappedHwUnit = tmap.getHwNodeOf( xTask ).getName();
+		if( mappedHwUnit.contains( "FEP" ) )	{
+			if( XOD.contains( "CWP" ) || XOD.contains( "cwp" ) )	{
+				CwpMEC cwp = new CwpMEC( XOD, "", "", "" );
+				exec_code = cwp.getExecCode();
+			}
+			if( XOD.contains( "CWM" ) || XOD.contains( "cwm" ) )	{
+				CwmMEC cwm = new CwmMEC( XOD, "", "", "" );
+				exec_code = cwm.getExecCode();
+			}
+			if( XOD.contains( "CWA" ) || XOD.contains( "cwa" ) )	{
+				CwaMEC cwa = new CwaMEC( XOD, "", "", "" );
+				exec_code = cwa.getExecCode();
+			}
+			if( XOD.contains( "CWL" ) || XOD.contains( "cwl" ) )	{
+				CwlMEC cwl = new CwlMEC( XOD, "", "", "" );
+				exec_code = cwl.getExecCode();
+			}
+			if( XOD.contains( "SUM" ) || XOD.contains( "sum" ) )	{
+				SumMEC sum = new SumMEC( XOD, "", "", "" );
+				exec_code = sum.getExecCode();
+			}
+			if( XOD.contains( "FFT" ) || XOD.contains( "fft" ) )	{
+				FftMEC fft = new FftMEC( XOD, "", "", "" );
+				exec_code = fft.getExecCode();
+			}
 		}
-		if( XOD.contains( "CWM" ) || XOD.contains( "cwm" ) )	{
-			CwmMEC cwm = new CwmMEC( XOD, "", "", "" );
-			exec_code = cwm.getExecCode();
+		else if( mappedHwUnit.contains( "MAPPER" ) )	{
+			MapperMEC mapp = new MapperMEC( XOD, "", "", "" );
+			exec_code = mapp.getExecCode();
 		}
-		if( XOD.contains( "CWA" ) || XOD.contains( "cwa" ) )	{
-			CwaMEC cwa = new CwaMEC( XOD, "", "", "" );
-			exec_code = cwa.getExecCode();
-		}
-		if( XOD.contains( "CWL" ) || XOD.contains( "cwl" ) )	{
-			CwlMEC cwl = new CwlMEC( XOD, "", "", "" );
-			exec_code = cwl.getExecCode();
-		}
-		if( XOD.contains( "SUM" ) || XOD.contains( "sum" ) )	{
-			SumMEC sum = new SumMEC( XOD, "", "", "" );
-			exec_code = sum.getExecCode();
-		}
-		if( XOD.contains( "FFT" ) || XOD.contains( "fft" ) )	{
-			FftMEC fft = new FftMEC( XOD, "", "", "" );
-			exec_code = fft.getExecCode();
+		else if( mappedHwUnit.contains( "INTL" ) )	{
+			InterleaverMEC intl = new InterleaverMEC( XOD, "", "", "" );
+			exec_code = intl.getExecCode();
 		}
 		String endCode =	updateOutSignals( xTask ) + CR +
 											"return status;" + CR +
