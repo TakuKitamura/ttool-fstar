@@ -45,6 +45,8 @@
 
 package tmltranslator;
 
+import myutil.*;
+
 import java.util.*;
 
 
@@ -59,7 +61,7 @@ public class TMLChannel extends TMLCommunicationElement {
     private int max;
 
     // Used on for 1 -> 1 channel
-    protected TMLTask origin, destination; 
+    protected TMLTask originTask, destinationTask; 
     protected TMLPort originPort, destinationPort; // Not used by the simulator
 
     // Used for 1 -> many channel, or for many -> 1 channel
@@ -78,6 +80,65 @@ public class TMLChannel extends TMLCommunicationElement {
 	destinationPorts = new ArrayList<TMLPort>();
     }
 
+
+    public boolean hasDestinationTask(TMLTask t) {
+	if (destinationTask == t) {
+	    return true;
+	}
+
+	for(TMLTask task: destinationTasks) {
+	    if (task == t) {
+		return true;
+	    }
+	}
+
+	return false;
+    } 
+
+    public boolean hasOriginTask(TMLTask t) {
+	TraceManager.addDev("t=" + t + " origin task=" + originTask);
+	if (originTask != null) {
+	    TraceManager.addDev("t=" + t.getName() + "| origin task=" + originTask.getName() + "|");
+	}
+	if (originTask == t) {
+	    return true;
+	}
+
+	for(TMLTask task: originTasks) {
+	    TraceManager.addDev("t=" + t + " origins task=" + task);
+	    if (task == t) {
+		return true;
+	    }
+	}
+
+	TraceManager.addDev("Returning false");
+
+	return false;
+    } 
+
+    public String getNameOfDestinationTasks() {
+	if (destinationTask != null) {
+	    return destinationTask.getName();
+	}
+
+	String ret = "";
+	for(TMLTask task: destinationTasks) {
+	    ret += " " + task.getName();
+	}
+	return ret.trim();
+    }
+
+    public String getNameOfOriginTasks() {
+	if (originTask != null) {
+	    return originTask.getName();
+	}
+
+	String ret = "";
+	for(TMLTask task: originTasks) {
+	    ret += " " + task.getName();
+	}
+	return ret.trim();
+    }
 
     // Complex channels
     public boolean isBasicChannel() {
@@ -98,8 +159,8 @@ public class TMLChannel extends TMLCommunicationElement {
 
     public void toBasicIfPossible() {
 	if ((originTasks.size() ==1) && (destinationTasks.size() ==1)) {
-	    origin = originTasks.get(0);
-	    destination = destinationTasks.get(0);
+	    originTask = originTasks.get(0);
+	    destinationTask = destinationTasks.get(0);
 	    originPort = originPorts.get(0);
 	    destinationPort = destinationPorts.get(0);
 	    originTasks = new ArrayList<TMLTask>();
@@ -138,8 +199,8 @@ public class TMLChannel extends TMLCommunicationElement {
 
     // Basic channels
     public void setTasks(TMLTask _origin, TMLTask _destination) {
-        origin = _origin;
-        destination = _destination;
+        originTask = _origin;
+        destinationTask = _destination;
     }
 
     public void setPorts(TMLPort _origin, TMLPort _destination) {
@@ -148,11 +209,11 @@ public class TMLChannel extends TMLCommunicationElement {
     }
   
     public TMLTask getOriginTask() {
-        return origin;
+        return originTask;
     }
 
     public TMLTask getDestinationTask() {
-        return destination;
+        return destinationTask;
     }
 
     public TMLPort getOriginPort() {
@@ -251,4 +312,5 @@ public class TMLChannel extends TMLCommunicationElement {
         }
         return false;
     }
+    
 }

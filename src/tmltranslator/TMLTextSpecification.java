@@ -658,8 +658,8 @@ public class TMLTextSpecification {
                 return -1;
             }
 
-            if (!((_split.length < 8))) {
-                error = "A channel must be declared with at least 7, and not: " + (_split.length - 1) ;
+            if (!((_split.length > 7))) {
+                error = "A channel must be declared with at least 7 parameters, and not: " + (_split.length - 1) ;
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -683,13 +683,13 @@ public class TMLTextSpecification {
 	    } catch (Exception e) {dec = 0; tmp=8;}
 
 
-	    TraceManager.addDev("Checking OUT");
+	    //TraceManager.addDev("Checking OUT");
 	    // "OUT" keyword?
 	     if (!checkParameter("CHANNEL", _split, 4+dec, 10, _lineNb)) {
                 return -1;
             }
 
-	      TraceManager.addDev("Checking other params of channels");
+	     //TraceManager.addDev("Checking other params of channels");
 	     int indexOfIN = -1;
 	     for(i=5+dec; i<_split.length; i++) {
 		 if (!checkParameter("CHANNEL", _split, i, 0, _lineNb)) {
@@ -1223,8 +1223,8 @@ public class TMLTextSpecification {
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
-            if (ch.getDestinationTask() != task ){
-                error = "READ operations must be done only in destination task. Should be in task: " + ch.getDestinationTask().getName();
+            if (!(ch.hasDestinationTask(task))){
+                error = "READ operations must be done only in destination task(s). Should be in task(s): " + ch.getNameOfDestinationTasks();
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1263,23 +1263,28 @@ public class TMLTextSpecification {
                 return -1;
             }
 
+	    TraceManager.addDev("Handling write channel 1");
             TMLWriteChannel tmlwch = new TMLWriteChannel(_split[1], null);
             for(int k=0; k<_split.length-2; k++) {
+		TraceManager.addDev("Handling write channel 1.1");
                 ch = tmlm.getChannelByName(_split[1+k]);
                 if (ch == null ){
                     error = "Undeclared channel: " +  _split[1+k];
                     addError(0, _lineNb, 0, error);
                     return -1;
                 }
-                if (ch.getOriginTask() != task ){
-                    error = "WRITE operations must be done only in origin task. Should be in task: " + ch.getOriginTask().getName();
+		TraceManager.addDev("Handling write channel 1.2 for task: " + task.getName());
+                if (!(ch.hasOriginTask(task))){		    
+		    error = "WRITE operations must be done only in origin task(s). Should be in task(s): " + ch.getNameOfOriginTasks();		    
                     addError(0, _lineNb, 0, error);
                     return -1;
                 }
+		TraceManager.addDev("Handling write channel 1.3");
 
                 tmlwch.addChannel(ch);
             }
 
+	    TraceManager.addDev("Handling write channel 2");
             tmlwch.setNbOfSamples(_split[2]);
             task.getActivityDiagram().addElement(tmlwch);
             tmlae.addNext(tmlwch);
