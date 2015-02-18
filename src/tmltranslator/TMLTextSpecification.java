@@ -729,6 +729,7 @@ public class TMLTextSpecification {
 		    t1 = tmlm.getTMLTaskByName(_split[i]);
 		    if (t1 == null) {
 			t1 = new TMLTask(_split[i], null, null);
+			tmlm.addTask(t1);
 			//TraceManager.addDev("New task:" + _split[4+dec]);
 		    }
 		    ch.addTaskPort(t1, null, (i<indexOfIN));
@@ -1263,28 +1264,28 @@ public class TMLTextSpecification {
                 return -1;
             }
 
-	    TraceManager.addDev("Handling write channel 1");
+	    //TraceManager.addDev("Handling write channel 1");
             TMLWriteChannel tmlwch = new TMLWriteChannel(_split[1], null);
             for(int k=0; k<_split.length-2; k++) {
-		TraceManager.addDev("Handling write channel 1.1");
+		//TraceManager.addDev("Handling write channel 1.1");
                 ch = tmlm.getChannelByName(_split[1+k]);
                 if (ch == null ){
                     error = "Undeclared channel: " +  _split[1+k];
                     addError(0, _lineNb, 0, error);
                     return -1;
                 }
-		TraceManager.addDev("Handling write channel 1.2 for task: " + task.getName());
+		//TraceManager.addDev("Handling write channel 1.2 for task: " + task.getName());
                 if (!(ch.hasOriginTask(task))){		    
 		    error = "WRITE operations must be done only in origin task(s). Should be in task(s): " + ch.getNameOfOriginTasks();		    
                     addError(0, _lineNb, 0, error);
                     return -1;
                 }
-		TraceManager.addDev("Handling write channel 1.3");
+		//TraceManager.addDev("Handling write channel 1.3");
 
                 tmlwch.addChannel(ch);
             }
 
-	    TraceManager.addDev("Handling write channel 2");
+	    //TraceManager.addDev("Handling write channel 2");
             tmlwch.setNbOfSamples(_split[2]);
             task.getActivityDiagram().addElement(tmlwch);
             tmlae.addNext(tmlwch);

@@ -61,7 +61,7 @@ public class TMLTask extends TMLElement {
 
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass);
-	TraceManager.addDev("Creating new TMLTask:" + name);
+	//TraceManager.addDev("Creating new TMLTask:" + name);
         activity = new TMLActivity(name+"activity_diagram", referenceToActivityDiagram);
         attributes = new ArrayList<TMLAttribute>();
     }

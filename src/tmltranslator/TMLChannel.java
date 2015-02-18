@@ -96,16 +96,16 @@ public class TMLChannel extends TMLCommunicationElement {
     } 
 
     public boolean hasOriginTask(TMLTask t) {
-	TraceManager.addDev("t=" + t + " origin task=" + originTask);
+	/*TraceManager.addDev("t=" + t + " origin task=" + originTask);
 	if (originTask != null) {
 	    TraceManager.addDev("t=" + t.getName() + "| origin task=" + originTask.getName() + "|");
-	}
+	    }*/
 	if (originTask == t) {
 	    return true;
 	}
 
 	for(TMLTask task: originTasks) {
-	    TraceManager.addDev("t=" + t + " origins task=" + task);
+	    //TraceManager.addDev("t=" + t + " origins task=" + task);
 	    if (task == t) {
 		return true;
 	    }
