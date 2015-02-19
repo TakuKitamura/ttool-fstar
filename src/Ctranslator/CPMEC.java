@@ -69,6 +69,18 @@ public abstract class CPMEC	{
 		node_type = "1";
 	}
 
+	public String getExecCode()	{
+		return exec_code;
+	}
+
+	public String getInitCode()	{
+		return init_code;
+	}
+
+	public String getCleanupCode()	{
+		return cleanup_code;
+	}
+
 	public String toString()	{
 		return node_type + CR + inst_decl + CR + inst_type + CR + buff_type + CR + buff_init + CR + exec_code + CR + init_code + CR + messages_code + CR + attributes_code + CR + cleanup_code;
 	}

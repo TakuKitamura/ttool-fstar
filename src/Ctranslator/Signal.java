@@ -62,7 +62,8 @@ public class Signal	{
 	private String code = "";
 	
 	public Signal()	{
-		code = "struct SIG_TYPE	{" + CR + status + writeOffset + readOffset + buffPointer + "};	typedef struct SIG_TYPE SIG_TYPE;";
+		code = 	"struct SIG_TYPE	{" + CR + status + writeOffset + readOffset + buffPointer + "};" + CR +
+						"typedef struct SIG_TYPE SIG_TYPE;";
 	}
 
 	public String toString()	{

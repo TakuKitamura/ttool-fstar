@@ -47,44 +47,20 @@
 package Ctranslator;
 
 import java.util.*;
-//import Ctranslator.*;
 
 public class CpuLoadMEC extends CPMEC	{
 
+	protected String addr = "";
+
 	public CpuLoadMEC()	{
-		node_type = "FEP";
-		inst_type = "SUM";
-		inst_decl = "FEP_CONTEXT";
-		buff_type = "FEP_BUFF_TYPE";
-		buff_init = "= {/*l,b,q,t*/};";
-		exec_code = "/*firm instruction*/" + CR +
-			" fep_set_qx(&$XOP$,((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->q);" + CR +
-			"/*start execution*/" + CR +
-			"fep_start(&$XOP$);" + CR;
-		
-		init_code ="/***** INIT $XOP$ *******/" + CR +
-			"void init_$XOP$(void){" + CR +
-			" fep_ctx_init(&$XOP$,0);" + CR +
-			" // initialize context" + CR +
-			" fep_set_op(&$XOP$,FEP_OP_MOV);" + CR +
-			" fep_set_r(&$XOP$, /*USER TODO*/);" + CR +
-			" fep_set_l(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_bx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_qx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_wx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_tx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_sx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_nx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_mx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_px(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_dx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_vrx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_vix(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_sma(&$XOP$,2);" + CR +
-			" fep_set_qs(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->q);" + CR +
-			" fep_set_bs(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->b);" + CR +
-			"}" + CR;
-		cleanup_code = "fep_ctx_cleanup(&$XOP$);";
+		node_type = "CPU";
+		inst_type = "LOAD";
+		inst_decl = "VOID";
+		buff_type = "MM_BUFF_TYPE";
+		buff_init = "VOID";
+		exec_code = "embb_mem_read_32( uint32_t " + addr + " );";
+		init_code = "VOID";
+		cleanup_code = "VOID";
 	}
 
 }	//End of class

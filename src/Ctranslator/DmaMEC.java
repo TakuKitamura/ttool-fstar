@@ -47,31 +47,28 @@
 package Ctranslator;
 
 import java.util.*;
-//import Ctranslator.*;
 
-/* This is the code from Jair MEC. It refers to old drivers. So far I am just interested in the proof of concepts of generating
- * code. */
 public class DmaMEC extends CPMEC	{
 
-	public DmaMEC()	{
+	protected String src_dev = "NULL";
+	protected String dma_dev;
 
+	public DmaMEC( String name, String ctx, String src_address, String dst_address, String data_amount, String dst_dev )	{
+
+		dma_dev = dst_dev;
 		node_type = "DMA";
-		inst_type = "I2M";
-		inst_decl = "DMA_CONTEXT";
+		inst_type = "VOID";
+		inst_decl = "EMBB_DMA_CONTEXT";
 		buff_type = "MM_BUFF_TYPE";
-		buff_init = "= {/*bl*/,$OD0$_dat};";
+		buff_init = "VOID";
 		exec_code = "/*firm instruction*/" + CR +
-			" dma_set_loc(&$XOP$, sig[$ID0$].roff * (((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->t+1) + ((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->b + ((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->q * FEP_QSIZE );" + CR +
-			" dma_set_mem(&$XOP$, sig[$OD0$].woff*4 + ((MM_BUFF_TYPE*)sig[$OD0$].pBuff)->b);" + CR +
-			" dma_set_bsize(&$XOP$, ((MM_BUFF_TYPE*)sig[$OD0$].pBuff)->bl );" + CR +
-			"dma_start_i2m(&$XOP$);" + CR;	
-			init_code = "/***** INIT $XOP$ I2M*******/" + CR +
-			"void init_$XOP$(void){" + CR +
-			" dma_ctx_init(&$XOP$, 0);" + CR +
-			" /* initialize context*/" + CR +
-			" dma_set_mem(&$XOP$, ((MM_BUFF_TYPE*)sig[$OD0$].pBuff)->b);" + CR +
-			"}" + CR;
-		cleanup_code = "dma_ctx_cleanup(&$XOP$);";
+								"embb_dma_start(&" + ctx + ", " + src_address + ", " + dst_address + ", " + data_amount + ");" + CR;	
+
+		init_code = "/***** INIT DMA*******/" + CR +
+								"void init_"  + name + "( void )\t{" + CR +
+								"embb_dma_ctx_init(&" + ctx + ", &" + dma_dev + ", &" + dst_dev + ", &" + src_dev + ");" + CR +
+								"}" + CR;
+		cleanup_code = "embb_dma_ctx_cleanup(&" + ctx + ");";
 	}
 
 }	//End of class

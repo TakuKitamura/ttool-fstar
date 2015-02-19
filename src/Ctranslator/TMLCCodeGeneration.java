@@ -71,6 +71,7 @@ public class TMLCCodeGeneration	{
 
 	private TMLMapping tmap;
 	private TMLModeling tmlm;
+	private TMLArchitecture tmla;
 	private String applicationName;
 	private String mainFile;
 	private String headerString;
@@ -101,10 +102,11 @@ public class TMLCCodeGeneration	{
 		commElts = new ArrayList<TMLElement>();
 	}
 
-	public void toTextFormat( TMLMapping _tmap , TMLModeling _tmlm )	{
+	public void toTextFormat( TMLMapping _tmap , TMLModeling _tmlm, TMLArchitecture _tmla )	{
 
 		tmap = _tmap;
 		tmlm = _tmlm;
+		tmla = _tmla;
 
 		ArrayList<TMLTask> mappedTasks = tmap.getMappedTasks();
 		ArrayList<TMLElement> commElts = tmap.getMappedCommunicationElement();
@@ -147,7 +149,8 @@ public class TMLCCodeGeneration	{
 
 		headerString += libraries();
 		headerString += prototypes();
-		headerString += buffers();
+		headerString += variablesInMainFile();
+		headerString += buffers( true );
 		headerString += instructions( mappedTasks );
 		headerString += signals();
 		headerString += variables();
@@ -177,13 +180,56 @@ public class TMLCCodeGeneration	{
 		return s;
 	}
 
-	private String buffers()	{
-		String s = "/**** Buffers *****/" + CR2;
+	private String variablesInMainFile()	{
+		String s = "extern int g_r_size;" + CR +
+								"extern int g_Ns;" + CR +
+								"extern int g_Fi" + CR +
+								"extern int g_Li" + CR +
+								"extern char *src_out_dat;" + CR +
+								"extern char *dma1_out_dat;" + CR2;
+		return s;
+	}
+
+	private String buffers( boolean declaration )	{
+
+		TMLTask xTask, fTask;
+		String s = "/**** Buffers *****/" + CR;
+		for( Operation op: operationsList )	{
+			if( op.getType() == Operation.SDR )	{
+				xTask = op.getSDRTasks().get( Operation.X_TASK );
+				fTask = op.getSDRTasks().get( Operation.F_TASK );
+				String name = tmap.getHwNodeOf( xTask ).getName();
+				if( name.contains( "FEP" ) )	{
+					if( declaration )	{
+						s += "extern FEP_BUFFER_TYPE " + "buff_" + xTask.getName().split("__")[1] + ";" + CR;
+					}
+					else	{
+						s += "FEP_BUFFER_TYPE " + "buff_" + xTask.getName().split("__")[1] + ";" + CR;
+					}
+				}
+				else if( name.contains( "MAPPER" ) )	{
+					if( declaration )	{
+						s += "extern MAPPER_BUFFER_TYPE " + "buff_" + xTask.getName().split("__")[1] + ";" + CR;
+					}
+					else	{
+						s += "MAPPER_BUFFER_TYPE " + "buff_" + xTask.getName().split("__")[1] + ";" + CR;
+					}
+				}
+				else if( name.contains( "INTL" ) )	{
+					if( declaration )	{
+						s += "extern INTL_BUFFER_TYPE" + "buff_" + xTask.getName().split("__")[1] + ";" + CR;
+					}
+					else	{
+						s += "INTL_BUFFER_TYPE" + "buff_" + xTask.getName().split("__")[1] + ";" + CR;
+					}
+				}
+			}
+		}
 		return s;
 	}
 
 	private String instructions( ArrayList<TMLTask> mappedTasks )	{
-		String s = 	"/**** Instructions *****/" + CR;
+		String s = 	CR + "/**** Instructions *****/" + CR;
 		for( String s1: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
 			s += "extern embb_fep_context " + s1 + ";" + CR;
 		}
@@ -758,9 +804,15 @@ public class TMLCCodeGeneration	{
 
 		initString += "#include \"" + applicationName + "_final.h\"" + CR2;
 
-		initString += "/**** variables ****/" + CR2;
+		initString += "/**** variables ****/" + CR2 +
+									"int g_r_size = 10240;" + CR +
+									"int g_Ns = 1024;" + CR +
+									"int g_Fi = 593;" + CR +
+									"int g_Li = 116;" + CR +
+									"char *src_out_dat;" + CR +
+									"char *dma1_out_dat;" + CR2;
 		
-		initString += "/**** buffers ****/" + CR2;
+		initString += buffers( false ) + CR2;
 
 		initString += "/**** instructions ****/" + CR;
 		for( String s: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
@@ -776,8 +828,8 @@ public class TMLCCodeGeneration	{
 		}
 		initString += CR;
 
-		initString += "/**** init buffers ****/" + CR +
-									"void " + applicationName + "_final_init()\t{" + CR + "}" + CR2;
+		initString += initializeApplication() + CR2;
+
 		initString += initializeSignals() + CR;
 
 		initString += "/**** init code ****/" + CR;
@@ -856,6 +908,13 @@ public class TMLCCodeGeneration	{
 			initString += TAB + "intl_ctx_cleanup( &" + s + " );" + CR;
 		}
 		initString += "}";
+	}
+
+	private String initializeApplication()	{
+
+		String s = "void " + applicationName + "_final_init()\t{" + CR;
+		s += "}" + CR2;
+		return s;
 	}
 
 	private String initializeSignals()	{

@@ -64,22 +64,22 @@ public class InterleaverMEC extends TaskMEC	{
 		init_code ="/***** INIT " + XOP + " *******/" + CR +
 			"void init_" + XOP + "( void )\t{" + CR + TAB +
 			"intl_ctx_init(/* TODO */);" + CR + TAB +
-			"intl_set_sv( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_arm( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_re( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_se( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_fe( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_pbo( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_pbi( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_widm1( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_biof( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_boof( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_fz( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_fo( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_iof( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_oof( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_pof( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"intl_set_lenm1( ((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_sv( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_arm( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_re( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_se( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_fe( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_pbo( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_pbi( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_widm1( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_biof( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_boof( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_fz( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_fo( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_iof( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_oof( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_pof( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"intl_set_lenm1( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
 			"}" + CR;
 		cleanup_code = "intl_ctx_cleanup( /*TODO*/ );";
 	}

@@ -54,7 +54,7 @@ public class FftMEC extends TaskMEC	{
 	public FftMEC( String XOP, String ID0, String OD0, String BTC )	{
 		node_type = "FEP";
 		inst_type = "FFT";
-		inst_decl = "FEP_CONTEXT";
+		inst_decl = "embb_fep_context";
 		buff_type = "FEP_BUFF_TYPE";
 		buff_init = "= {/*l,b,q,t*/};";
 		exec_code = "/*firm instruction*/" + CR +

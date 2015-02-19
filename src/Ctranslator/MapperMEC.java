@@ -64,17 +64,17 @@ public class MapperMEC extends TaskMEC	{
 		init_code ="/***** INIT " + XOP + " *******/" + CR +
 			"void init_" + XOP + "( void )\t{" + CR + TAB +
 			"mapper_ctx_init(/* TODO */);" + CR + TAB +
-			"mapper_set_lenm1( ((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_lba( ((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_oba( ((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_iba( ((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_mult( ((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_men( ((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_sym( ((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_bpsm1( ((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_m( ((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_n( ((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_s( ((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"mapper_set_lenm1( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"mapper_set_lba( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"mapper_set_oba( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"mapper_set_iba( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"mapper_set_mult( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"mapper_set_men( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"mapper_set_sym( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"mapper_set_bpsm1( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"mapper_set_m( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"mapper_set_n( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
+			"mapper_set_s( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
 			"}" + CR;
 		cleanup_code = "mapper_ctx_cleanup(/* TODO */);";
 	}
