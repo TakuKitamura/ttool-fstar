@@ -328,6 +328,10 @@ public class TMLMapping {
 	mappedCPLibs.add(_tmlcplib);
     }
 
+		public ArrayList<TMLCPLib> getMappedTMLCPLibs()	{
+			return mappedCPLibs;
+		}	
+
     public void addTaskToHwExecutionNode(TMLTask _task, HwExecutionNode _hwnode) {
         onnodes.add(_hwnode);
         mappedtasks.add(_task);
