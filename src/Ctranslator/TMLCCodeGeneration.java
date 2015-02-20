@@ -84,6 +84,7 @@ public class TMLCCodeGeneration	{
 	private int SDRoperationsCounter = 0;
 	private int signalsCounter = 0;
 	private ArrayList<String> signalsList = new ArrayList<String>();
+	private ArrayList<TMLCPLib> mappedCPLibs;
 
 	public JFrame frame; //Main Frame
 
@@ -102,11 +103,13 @@ public class TMLCCodeGeneration	{
 		commElts = new ArrayList<TMLElement>();
 	}
 
-	public void toTextFormat( TMLMapping _tmap , TMLModeling _tmlm, TMLArchitecture _tmla )	{
+	public void toTextFormat( TMLMapping _tmap )	{
 
 		tmap = _tmap;
-		tmlm = _tmlm;
-		tmla = _tmla;
+		tmlm = _tmap.getTMLModeling();
+		tmla = _tmap.getTMLArchitecture();
+		mappedCPLibs = _tmap.getMappedTMLCPLibs();
+
 
 		ArrayList<TMLTask> mappedTasks = tmap.getMappedTasks();
 		ArrayList<TMLElement> commElts = tmap.getMappedCommunicationElement();
@@ -176,6 +179,7 @@ public class TMLCCodeGeneration	{
 								"extern void register_fire_rules(void);" + CR +
 								"extern void signal_to_buffer_init();" + CR +
 								"extern void init_operations_context(void);" + CR +
+								"extern void init_CPs_context(void);" + CR +
 								"extern void cleanup_operations_context(void);" + CR2;
 		return s;
 	}
@@ -313,13 +317,15 @@ public class TMLCCodeGeneration	{
 							"register_operations();" + CR +
 							"register_fire_rules();" + CR +
 							"signal_to_buffer_init();" + CR +
-							"init_operations_context();" + CR2 +
+							"init_operations_context();" + CR +
+							"init_CPs_context();" + CR2 +
 							"/********* INIT PREX OPs signals ********/" + CR +
 							initPrexOperations() + CR +
 							"/********* OPs scheduler ***************/" + CR +
 							scheduler.getCode() + CR +
 							"cleanup_operations_context();" + CR + "}" + CR2;
 		generateOperations();
+		generateCommunicationPatterns();
 		registerOperations();
 		fireRules();
 		registerFireRules();
@@ -399,11 +405,6 @@ public class TMLCCodeGeneration	{
 				programString += generateSDROperation( op, xTask, fTask );
 			}
 		}
-		/*DmaMEC myDMA = new DmaMEC( "dma", "ctx_TAB_to_FEP_RX1", "0x123", "0x456", "256", "NULL" );
-		TraceManager.addDev( myDMA.getExecCode() );
-		TraceManager.addDev( myDMA.getInitCode() );
-		TraceManager.addDev( myDMA.getCleanupCode() );
-		System.exit(0);*/
 	}
 
 	private String generateNONSDROperation( Operation op, TMLTask xTask, TMLTask fTask )	{
@@ -716,6 +717,34 @@ public class TMLCCodeGeneration	{
 		return s;
 	}
 
+	private void generateCommunicationPatterns()	{
+		
+		String functionName, exec_code = "", endCode, s;
+		for( TMLCPLib cplib: mappedCPLibs )	{
+			functionName = "int op_" + cplib.getName() + "()\t{" + CR +
+													//getTaskAttributes( fTask ) + CR +
+													"static int size;" + CR;
+													//updateInSignals( xTask ) + CR;
+			s = cplib.getMappedUnits().get(0);
+			if( s.split("\\.")[0].equals( "CP_Store" ) )	{
+				CpuStoreMEC myMEC = new CpuStoreMEC();
+				exec_code = myMEC.getExecCode();
+			}
+			if( s.split("\\.")[0].equals( "CP_Load" ) )	{
+				CpuLoadMEC myMEC = new CpuLoadMEC();
+				exec_code = myMEC.getExecCode();
+			}
+			if( s.split("\\.")[0].contains( "DMA" ) )	{
+				DmaMEC myMEC = new DmaMEC();
+				exec_code = myMEC.getExecCode();
+			}
+			endCode =	/*updateOutSignals( xTask ) +*/ CR +
+								"return status;" + CR +
+											"}" + CR2;
+			programString += functionName + exec_code + endCode;
+		}
+	}
+
 	private void registerOperations()	{
 
 		programString += "void register_operations( void )\t{" + CR;
@@ -883,6 +912,8 @@ public class TMLCCodeGeneration	{
 			initString += mapp.getInitCode() + CR;
 		}
 
+		generateInitRoutinesForCPs();
+
 		initString += "/**** init contexts ****/" + CR +
 									"void init_operations_context(void)\t{" + CR;
 		for( String s: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
@@ -896,6 +927,18 @@ public class TMLCCodeGeneration	{
 		}
 		initString += "}" + CR2;
 
+		//Init Communication Patterns. Only DMA transfers need init code
+		initString += "/**** init CPs ****/" + CR +
+									"void init_CPs_context(void)\t{" + CR;
+		for( TMLCPLib cplib: mappedCPLibs )	{
+			String s = cplib.getMappedUnits().get(0);
+			if( s.split("\\.")[0].contains( "DMA" ) )	{
+				initString += TAB + "init_" + cplib.getName() + "();" + CR;
+			}
+		}
+		initString += "}" + CR2;
+
+		//Clean-up context routines
 		initString += "/**** cleanup contexts ****/" + CR;
 		initString += "void cleanup_operations_context( void )\t{" + CR;
 		for( String s: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
@@ -910,6 +953,18 @@ public class TMLCCodeGeneration	{
 		initString += "}";
 	}
 
+	private void generateInitRoutinesForCPs()	{
+
+		for( TMLCPLib cplib: mappedCPLibs )	{
+			String s = cplib.getMappedUnits().get(0);
+			if( s.split("\\.")[0].contains( "DMA" ) )	{
+				initString += "void init_" + cplib.getName() + "()\t{" + CR;
+				DmaMEC myMEC = new DmaMEC();
+				initString += myMEC.getInitCode() + "}" + CR2;
+			}
+		}
+	}
+
 	private String initializeApplication()	{
 
 		String s = "void " + applicationName + "_final_init()\t{" + CR;
@@ -921,9 +976,9 @@ public class TMLCCodeGeneration	{
 		String s = "void signal_to_buffer_init()\t{" + CR;
 		for( int i = 0; i < signalsCounter; i++ )	{
 			s += TAB + "sig[" + String.valueOf(i) + "].f = false;" + CR;
-			s += TAB + "sig[" + String.valueOf(i) + "].roff = false;" + CR;
-			s += TAB + "sig[" + String.valueOf(i) + "].woff = false;" + CR;
-			s += TAB + "sig[" + String.valueOf(i) + "].pBuff = false;" + CR2;
+			s += TAB + "sig[" + String.valueOf(i) + "].roff = /*USER TO DO*/;" + CR;
+			s += TAB + "sig[" + String.valueOf(i) + "].woff = /*USER TO DO*/;" + CR;
+			s += TAB + "sig[" + String.valueOf(i) + "].pBuff = /*USER TO DO*/;" + CR2;
 		}
 		return s + "}" + SC + CR;
 	}
