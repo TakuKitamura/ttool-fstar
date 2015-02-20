@@ -54,17 +54,33 @@ public class TMLCPLibArtifact extends TMLElement {
     public String taskName;
     public String portName;
     public String memoryName;
+		public int priority;
 
-    public TMLCPLibArtifact(String _name, Object _referenceObject, String _taskName, String _portName, String _memoryName) {
+    public TMLCPLibArtifact(String _name, Object _referenceObject, String _taskName, String _portName, String _memoryName, int _priority) {
         super( _name, _referenceObject );
         taskName = _taskName;
-	portName = _portName;
-	memoryName = _memoryName;
+				portName = _portName;
+				memoryName = _memoryName;
+				priority = _priority;
     }
 
     public TMLCPLibArtifact() {
         super( "DefaultCP", null );     //no reference to any object in the default constructor
     }
 
- 
+	public String getTaskName()	{
+		return taskName;
+	}
+
+	public String getPortName()	{
+		return portName;
+	}
+
+	public String getMemoryName()	{
+		return memoryName;
+	}
+
+	public int getPriority()	{
+		return priority;
+	}
 }       //End of the class
