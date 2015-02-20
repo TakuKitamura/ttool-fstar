@@ -58,7 +58,7 @@ public class CpuLoadMEC extends CPMEC	{
 		inst_decl = "VOID";
 		buff_type = "MM_BUFF_TYPE";
 		buff_init = "VOID";
-		exec_code = "embb_mem_read_32( uint32_t " + addr + " );";
+		exec_code = "embb_mem_read_32( (uint32_t) /*USER TO DO: ADDRESS*/ );";
 		init_code = "VOID";
 		cleanup_code = "VOID";
 	}

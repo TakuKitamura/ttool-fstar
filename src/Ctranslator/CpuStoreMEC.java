@@ -50,8 +50,8 @@ import java.util.*;
 
 public class CpuStoreMEC extends CPMEC	{
 
-	protected String addr = "";
-	protected String word = "";
+	/*protected String addr = "";
+	protected String word = "";*/
 
 	public CpuStoreMEC()	{
 		node_type = "CPU";
@@ -59,7 +59,7 @@ public class CpuStoreMEC extends CPMEC	{
 		inst_decl = "VOID";
 		buff_type = "MM_BUFF_TYPE";
 		buff_init = "VOID";
-		exec_code = "embb_mem_write_32( uint32_t " + addr + ", uint32_t " + word + ");";
+		exec_code = "embb_mem_write_32( (uint32_t) /*USER TO DO: ADDRESS*/, (uint32_t) /*USER TO DO: WORD*/ );";
 		init_code = "VOID";
 		cleanup_code = "VOID";
 	}

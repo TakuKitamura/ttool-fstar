@@ -53,22 +53,16 @@ public class DmaMEC extends CPMEC	{
 	protected String src_dev = "NULL";
 	protected String dma_dev;
 
-	public DmaMEC( String name, String ctx, String src_address, String dst_address, String data_amount, String dst_dev )	{
+	public DmaMEC()	{
 
-		dma_dev = dst_dev;
 		node_type = "DMA";
 		inst_type = "VOID";
 		inst_decl = "EMBB_DMA_CONTEXT";
 		buff_type = "MM_BUFF_TYPE";
 		buff_init = "VOID";
-		exec_code = "/*firm instruction*/" + CR +
-								"embb_dma_start(&" + ctx + ", " + src_address + ", " + dst_address + ", " + data_amount + ");" + CR;	
-
-		init_code = "/***** INIT DMA*******/" + CR +
-								"void init_"  + name + "( void )\t{" + CR +
-								"embb_dma_ctx_init(&" + ctx + ", &" + dma_dev + ", &" + dst_dev + ", &" + src_dev + ");" + CR +
-								"}" + CR;
-		cleanup_code = "embb_dma_ctx_cleanup(&" + ctx + ");";
+		exec_code = "embb_dma_start( /*USER TO DO: CTX*/, /*USER TO DO: SRC_ADDRESS*/, /*USER TO DO: DST_ADDRESS*/, /*USER TO DO: NUM_SAMPLES */ );" + CR;	
+		init_code = "embb_dma_ctx_init( /*USER TO DO: CTX*/, /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, /*USER TO DO: SRC_DEV*/ );" + CR;
+		cleanup_code = "embb_dma_ctx_cleanup( /*USER TO DO: CTX*/ );";
 	}
 
 }	//End of class

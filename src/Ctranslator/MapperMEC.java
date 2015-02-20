@@ -63,7 +63,7 @@ public class MapperMEC extends TaskMEC	{
 	
 		init_code ="/***** INIT " + XOP + " *******/" + CR +
 			"void init_" + XOP + "( void )\t{" + CR + TAB +
-			"mapper_ctx_init(/* TODO */);" + CR + TAB +
+			"mapper_ctx_init(/*USER TODO*/);" + CR + TAB +
 			"mapper_set_lenm1( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
 			"mapper_set_lba( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
 			"mapper_set_oba( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
@@ -76,7 +76,7 @@ public class MapperMEC extends TaskMEC	{
 			"mapper_set_n( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
 			"mapper_set_s( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
 			"}" + CR;
-		cleanup_code = "mapper_ctx_cleanup(/* TODO */);";
+		cleanup_code = "mapper_ctx_cleanup(/*USER TODO*/);";
 	}
 
 }	//End of class

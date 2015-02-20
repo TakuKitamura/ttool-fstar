@@ -63,7 +63,7 @@ public class InterleaverMEC extends TaskMEC	{
 	
 		init_code ="/***** INIT " + XOP + " *******/" + CR +
 			"void init_" + XOP + "( void )\t{" + CR + TAB +
-			"intl_ctx_init(/* TODO */);" + CR + TAB +
+			"intl_ctx_init(/*USER TODO*/);" + CR + TAB +
 			"intl_set_sv( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
 			"intl_set_arm( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
 			"intl_set_re( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
@@ -81,7 +81,7 @@ public class InterleaverMEC extends TaskMEC	{
 			"intl_set_pof( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
 			"intl_set_lenm1( (((INTL_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
 			"}" + CR;
-		cleanup_code = "intl_ctx_cleanup( /*TODO*/ );";
+		cleanup_code = "intl_ctx_cleanup( /*USER TODO*/ );";
 	}
 
 }	//End of class
