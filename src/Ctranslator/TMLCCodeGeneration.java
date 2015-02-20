@@ -110,6 +110,31 @@ public class TMLCCodeGeneration	{
 		tmla = _tmap.getTMLArchitecture();
 		mappedCPLibs = _tmap.getMappedTMLCPLibs();
 
+		for( TMLCPLib tmlcplib: mappedCPLibs )	{
+			TraceManager.addDev( "CPLIB " + tmlcplib.getName() );
+			for( TMLCPLibArtifact artifact: tmlcplib.getArtifacts() )	{
+				TraceManager.addDev( "Artifact: " + artifact.getName() );
+				TraceManager.addDev( "----------" + artifact.getTaskName() );
+				TraceManager.addDev( "----------" + artifact.getPortName() );
+				TraceManager.addDev( "----------" + artifact.getMemoryName() );
+				TraceManager.addDev( "----------" + artifact.getPriority() );
+			}
+		}
+		for( TMLChannel ch: tmlm.getChannels() )	{
+			TraceManager.addDev( "channel: " + ch.getName() );
+			if( ch.isBasicChannel() )	{
+				TraceManager.addDev( "Basic channel" );
+				//from the channel I get the ports and from above I get the port, the priority and the CP
+			}
+			else	{
+				TraceManager.addDev( ch.getOriginTasks().toString() );
+				TraceManager.addDev( ch.getDestinationTasks().toString() );
+				TraceManager.addDev( ch.getOriginPorts().toString() );
+				TraceManager.addDev( ch.getDestinationPorts().toString() );
+			}
+		}
+		System.exit(0);
+
 
 		ArrayList<TMLTask> mappedTasks = tmap.getMappedTasks();
 		ArrayList<TMLElement> commElts = tmap.getMappedCommunicationElement();
