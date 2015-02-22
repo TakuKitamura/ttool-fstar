@@ -51,6 +51,10 @@ import java.awt.event.*;
 
 import myutil.*;
 
+import java.util.ArrayList;
+
+import ui.window.JDialogSearchBox;
+
 public class TDiagramMouseManager implements MouseListener, MouseMotionListener  {
 
 	private TDiagramPanel tdp;
@@ -82,6 +86,8 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 	private CDElement [] cde;
 	private boolean isOut;
 
+	//store selected components
+	private ArrayList selectedMultiComponents=new ArrayList<String>();
 
 	// Constructor
 	public TDiagramMouseManager(TDiagramPanel _tdp) {
@@ -337,6 +343,51 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 	public void mouseClicked(MouseEvent e) {
 		//System.out.println("MouseClick: " + e.getClickCount());
 
+
+		//author:huytruong
+		//add component's value into list by clicking on component and holding Ctrl 
+		if ((e.getButton() == MouseEvent.BUTTON1) && e.isControlDown()){
+			tgc = tdp.componentPointed();
+			//int s[] = {e.getX(), e.getY()};
+			
+			if (  tdp.j == null){
+				//selComponents.add(s);
+
+				selectedMultiComponents.add(tgc.getValue());
+				
+				System.out.println("cac component da select : " + selectedMultiComponents.toString());
+			}
+			else {
+				if (tdp.j.isShowing())
+				{
+					tdp.j.addValueListKeyword(tgc.getValue());	
+					selectedMultiComponents.clear();
+				}
+				else{
+					selectedMultiComponents.add(tgc.getValue());
+					tdp.j.removeValueListKeyword();
+				}
+			}
+		}else
+			selectedMultiComponents.clear();
+			// clear the list when release Ctrl and click
+			
+		
+
+		//open a Search Dialog with seleted component's value
+		if (tdp.mode == TDiagramPanel.NORMAL && e.isAltDown()) {
+			byte info = tdp.hoveredComponent(e.getX(), e.getY());
+			
+			if (info > 1) {
+				tgc = tdp.componentHovered();
+				String search = tgc.getValue();
+				selectedMultiComponents.add(search);
+				tdp.j = new JDialogSearchBox(tdp.getGUI().getFrame(),"Search Box", selectedMultiComponents);
+			}
+		}
+		//--
+		
+
 		if (tdp.mode == TDiagramPanel.SELECTED_COMPONENTS) {
 			if ((e.getClickCount() == 1) && (e.getButton() == MouseEvent.BUTTON1)){
 				tdp.mode = TDiagramPanel.NORMAL;
@@ -581,5 +632,12 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 		}
 
 
+	}
+	//author: huytruong
+	public ArrayList getSelectComponents(){
+		return selectedMultiComponents	;
+	}
+	public void removeSelectedComponentFromList(){
+		this.selectedMultiComponents.clear();
 	}
 }

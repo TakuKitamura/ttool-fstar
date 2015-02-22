@@ -116,6 +116,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected TGComponent componentPopup;
     protected TToolBar ttb;
     protected TGComponent fatherOfRemoved;
+    //author:huytruong
+    protected TGComponent componentHovered;
 
     // popupmenus
     protected ActionListener menuAL;
@@ -123,12 +125,16 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected JPopupMenu componentMenu;
     protected JPopupMenu selectedMenu;
     protected int popupX, popupY;
-    protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide;
+    protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide,search;
     protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex;
     protected JMenuItem breakpoint;
     protected JMenuItem paste, insertLibrary, upX, upY, downX, downY;
     protected JMenuItem cut, copy, saveAsLibrary, captureSelected;
-
+    //author:huytruong
+    //search dialog
+    protected JDialogSearchBox j;
+    //--
+    
     // Main window
     protected MainGUI mgui;
 
@@ -680,6 +686,49 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         selectedConnectingPoint = p;
     }
 
+    //author: huytruong
+    public byte hoveredComponent(int x, int y) {
+        TGComponent tgc, tgcTmp;
+        //int state;
+        //boolean b = false;
+        boolean hoveredElementFound = false;
+        byte info = 0;
+        
+        
+        TGComponent tmp = componentHovered;
+        componentHovered = null;
+        Iterator iterator = componentList.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            //state = tgc.getState();
+            tgcTmp = tgc.isOnMeHL(x, y);
+            if (tgcTmp != null) {
+                if (!hoveredElementFound) {
+                    componentHovered = tgcTmp;
+                    tgc.setState(TGState.POINTER_ON_ME);
+                    hoveredElementFound = true;
+                    info = 2;
+                } else {
+                    tgc.setState(TGState.NORMAL);
+                }
+            } else {
+                tgc.setState(TGState.NORMAL);
+            }
+        }
+        
+        if (tmp != componentHovered) {
+            info ++;
+        }
+        
+        return info;
+    }
+
+    //author:huytruong
+    public TGComponent componentHovered(){
+        return componentHovered;
+    }
+    //--
 
     // Highlighting elements
 
@@ -1388,6 +1437,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         componentMenu.add(checkMasterMutex);
         componentMenu.add(breakpoint);
 
+        //author: huytruong
+        componentMenu.add(search);
+
         tgc.addActionToPopupMenu(componentMenu, menuAL, x, y);
     }
 
@@ -1481,6 +1533,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         breakpoint = new JMenuItem("Add / remove breakpoint");
         breakpoint.addActionListener(menuAL);
+
+        search = new JMenuItem("External Search");
+        search.addActionListener(menuAL);
 
         // Diagram Menu
 
@@ -1680,6 +1735,23 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
         }
 
+        //author: huytruong
+        //event for selecting "search" option in popup menu
+        if (e.getSource() == search){
+          
+            ArrayList<String> search =  tdmm.getSelectComponents();
+            String query = "";
+            for (String s :search){
+                query = query + " + "+ s;
+            }
+            //create a new dialog 
+            j = new JDialogSearchBox(this.getGUI().getFrame(),"Search Box", tdmm.getSelectComponents());
+            tdmm.removeSelectedComponentFromList();
+            //j.show();
+            return;
+        }
+        //--
+
         if (e.getSource() == upX) {
             maxX += increment;
             updateSize();
@@ -1771,6 +1843,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void setComponentPopupMenu() {
+
+        //author: huytruong
+        search.setEnabled(true);
+
+
         if (!componentPointed.isRemovable()) {
             remove.setEnabled(false);
         } else {

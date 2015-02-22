@@ -60,11 +60,11 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /home/enrici/TURTLE/uppaal/spec.xml"/>
 
-<LastOpenFile data="/home/enrici/TURTLE/modeling/prova2.xml"/>
+<LastOpenFile data="/home/hrua/Downloads/stuxnet_6_12_split.xml"/>
 
 
 
-<LastWindowAttributes x="699" y="122" width="1719" height="1201" max="true" />
+<LastWindowAttributes x="518" y="51" width="790" height="594" max="false" />
 
 
 </TURTLECONFIGURATION>

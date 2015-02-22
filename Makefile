@@ -13,7 +13,7 @@ TAR = tar
 GZIP = gzip -9 -f
 DEBUG  = -g
 CLASSPATH = -classpath
-CLASSPATH = -sourcepath
+SOURCEPATH = -sourcepath
 PACKAGE = avatartranslator avatartranslator/toexecutable avatartranslator/directsimulation avatartranslator/tocppsim avatartranslator/touppaal avatartranslator/toturtle avatartranslator/toproverif avatartranslator/totpn automata compiler/tmlparser vcd nc ddtranslator launcher myutil tpndescription sddescription sdtranslator tepe translator tmltranslator tmltranslator/tmlcp tmltranslator/toautomata tmltranslator/tosystemc  tmltranslator/tomappingsystemc tmltranslator/tomappingsystemc2 tmltranslator/tomappingsystemc3 tmltranslator/touppaal tmltranslator/toturtle translator/tojava translator/tosimujava translator/totpn translator/touppaal  ui ui/avatarbd ui/avatardd ui/avatarsmd ui/avatarrd ui/avatarpd ui/avatarcd ui/avatarad ui/ad ui/cd ui/oscd ui/osad ui/dd ui/ebrdd ui/file ui/graph ui/iod ui/ncdd ui/procsd ui/prosmdui/prosmd/util ui/tmlad ui/tmlcd ui/tmldd ui/tmlcomp ui/req ui/sd ui/tree ui/ucd ui/window tmltranslator tmltranslator/toturtle req/ebrdd tmltranslator/tosystemc tmatrix proverifspec uppaaldesc fr/inria/oasis/vercors/cttool/model remotesimulation
 BUILDER = builder.jar
 BUILD_INFO = build.txt
@@ -98,7 +98,7 @@ basicsvnapvrille:
 myrelease: basic launcher ttooljar 
 
 basic:
-	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java	
+	$(JAVAC) $(SOURCEPATH) $(TTOOL_SRC) $(CLASSPATH) $(TTOOL_BIN)/jsoup-1.8.1.jar $(TTOOL_SRC)/*.java	
 
 jar: launcher ttooljar tiftranslator tmltranslator rundse remotesimulator
 
