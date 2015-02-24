@@ -1,1 +1,2 @@
 Main-Class: Main
+Class-Path: ./jsoup-1.8.1.jar 

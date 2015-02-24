@@ -134,6 +134,29 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         g.drawString(typeName, x + textX , y + textY + 20);
         g.setFont(f);
 
+        // Link to selected memory
+	Color c = g.getColor();
+        if (c == ColorManager.POINTER_ON_ME_0) {
+            TDiagramPanel tdp = getTDiagramPanel();
+            TGComponent tgc;
+            if (tdp != null) {
+                if (mappedMemory.length() > 0) {
+                    ListIterator iterator = tdp.getComponentList().listIterator();
+                    while(iterator.hasNext()) {
+                        tgc = (TGComponent)(iterator.next());
+                        if (tgc instanceof TMLArchiMemoryNode) {
+                            //TraceManager.addDev("Testing |" + tgc.getName() + "|  vs | " + s + "|");
+                            if (tgc.getName().compareTo(mappedMemory) == 0) {
+                                //TraceManager.addDev("Ok");
+                                GraphicLib.dashedLine(g, getX() + getWidth()/2, getY() + getHeight()/2, tgc.getX() + tgc.getWidth()/2, tgc.getY() + tgc.getHeight()/2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 
     public void setValue(String val, Graphics g) {
@@ -339,7 +362,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
     }
 
     public String getMappedMemory() {
-	return mappedMemory;
+        return mappedMemory;
     }
 
 }

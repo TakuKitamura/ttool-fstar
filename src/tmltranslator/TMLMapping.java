@@ -589,7 +589,6 @@ public class TMLMapping {
         }
 
         return list;
-
     }
 
     public TMLMapping cloneMappingArchitecture() {
@@ -606,6 +605,8 @@ public class TMLMapping {
 
 
     public void removeForksAndJoins() {
-	tmlm.removeForksAndJoins();
+	// Remove the CPLib with new tasks, channels, HW components
+	
     }
+
 }

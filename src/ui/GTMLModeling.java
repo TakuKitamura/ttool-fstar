@@ -2892,6 +2892,7 @@ public class GTMLModeling  {
 
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
+	    //TraceManager.addDev("---------------- tgc=" + tgc);
             if (tgc instanceof TMLArchiCPNode) {
 		cp = (TMLArchiCPNode)tgc;
                 TMLCPLib tmlcplib = new TMLCPLib(tgc.getName(), tgc);
@@ -2902,6 +2903,7 @@ public class GTMLModeling  {
 		for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {
 		    TMLCPLibArtifact arti = new TMLCPLibArtifact(artifact.getName(), artifact, artifact.getValue(), artifact.getPortName(), artifact.getMappedMemory(), artifact.getPriority() );
 		    tmlcplib.addArtifact(arti);
+		    //TraceManager.addDev("Adding CP artifact:" + arti);
 		}
             }
         }
