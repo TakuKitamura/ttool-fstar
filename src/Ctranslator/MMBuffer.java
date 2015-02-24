@@ -49,22 +49,30 @@ package Ctranslator;
 import java.util.*;
 import java.nio.*;
 import myutil.*;
+import tmltranslator.*;
 
 public class MMBuffer extends BaseBuffer	{
 
 	protected int num_samples;
 	protected String num_samples_value;
+	public static final String DECLARATION = "struct MM_BUFFER_TYPE {\n\tint num_samples;\n\tint base_address;\n};";
 
-	public MMBuffer( String _name, String _type, int _base_address_value, int _num_samples_value )	{
+	/*public MMBuffer( String _name, String _type, int _base_address_value, int _num_samples_value )	{
 		super( _name, _type, _base_address_value );
 		num_samples_value = _num_samples_value;
 		num_samples = "int" + SP + "num_samples" + SP + "=" + SP + num_samples_value;
-		/*base_address_value = _base_address_value;
+		base_address_value = _base_address_value;
 		base_address = _type + SP + POINTER + "base_address" + SP "=" + SP + base_address_value + SC
-		code = "struct" + SP + name + TAB + "{" + CR + num_samples + CR + base_address + CR + "}" + SC;*/
+		code = "struct" + SP + name + TAB + "{" + CR + num_samples + CR + base_address + CR + "}" + SC;
+	}*/
+
+	public MMBuffer( String _name, TMLTask _task )	{
+		type = "MM_BUFFER_TYPE";
+		name = _name;
+		task = _task;
 	}
 
-	public String getCode()	{
+	@Override public String getCode()	{
 		code = "struct" + SP + name + TAB + "{" + CR + num_samples + CR + base_address + CR + "}" + SC;
 		return code;
 	}

@@ -55,13 +55,13 @@ public class BaseBuffer extends Buffer	{
 	protected String base_address;
 	protected int base_address_value;
 
-	public BaseBuffer( String _name, String _type, int _base_address_value )	{
+	/*public BaseBuffer( String _name, String _type, int _base_address_value )	{
 		name = _name;
 		base_address_value = _base_address_value;
 		base_address = _type + SP + POINTER + "base_address" + SP + "=" + SP + base_address_value + SC;
-	}
+	}*/
 
-	public String getCode()	{
+	@Override public String getCode()	{
 		code = "struct" + SP + name + TAB + "{" + CR + base_address + CR + "}" + SC;
 		return code;
 	}

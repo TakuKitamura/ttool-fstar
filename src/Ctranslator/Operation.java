@@ -89,7 +89,11 @@ public class Operation	{
 	}
 
 	public String getName()	{
-		return name;
+		return "F_" + name;
+	}
+
+	public String getContextName()	{
+		return "X_" + name;
 	}
 
 	public int getType()	{

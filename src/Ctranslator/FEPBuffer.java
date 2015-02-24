@@ -49,6 +49,7 @@ package Ctranslator;
 import java.util.*;
 import java.nio.*;
 import myutil.*;
+import tmltranslator.*;
 
 public class FEPBuffer extends BaseBuffer	{
 
@@ -57,15 +58,18 @@ public class FEPBuffer extends BaseBuffer	{
 	protected String baseAddress = "int" + SP + "b" + SC;
 	protected String bank = "int" + SP + "q" + SC;
 	protected String dataType = "int" + SP + "t" + SC;
+	public static final String DECLARATION = "struct FEP_BUFFER_TYPE {\n\tint num_samples;\n\tint base_ddress;\n\tint bank;\n\tint type;\n};";
 
 	
-	public FEPBuffer( String _type, int _base_address_value )	{
+	/*public FEPBuffer( String _type, int _base_address_value )	{
 		super( "FEP_BUFF_TYPE", _type, _base_address_value );
 		code = "struct" + SP + name + TAB + "{" + CR + length + CR + baseAddress + CR + bank + CR + dataType + CR + "}" + SC;
+	}*/
+
+	public FEPBuffer( String _name, TMLTask _task )	{
+		type = "FEP_BUFFER_TYPE";
+		name = _name;
+		task = _task;
 	}
 	
-	public String getCode()	{
-		return code;
-	}
-
 }	//End of class

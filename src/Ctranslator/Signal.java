@@ -49,25 +49,51 @@ package Ctranslator;
 import java.util.*;
 import java.nio.*;
 import myutil.*;
+import tmltranslator.*;
 
 public class Signal	{
 
 	public String CR = "\n";
 	public String SC = ";";
-	private String status = "bool f" + SC + CR;
-	private String writeOffset = "int woff" + SC + CR;
-	private String readOffset = "int roff" + SC + CR;
-	private String buffPointer = "void *pBuff" + SC + CR;
 	
-	private String code = "";
+	private String status_s = "bool f" + SC + CR;
+	private boolean status = false;
+
+	private String writeOffset_s = "int woff" + SC + CR;
+	private int writeOffset;
+
+	private String readOffset_s = "int roff" + SC + CR;
+	private int readOffset;
+
+	private String buffPointer_s = "void *pBuff" + SC + CR;
+	private Buffer buffPointer = null;
 	
+	public static final String DECLARATION = "struct SIG_TYPE	{\n\tbool f;\n\tint woff;\n\tint roff;\n\tvoid *pBuff;\n};\ntypedef struct SIG_TYPE SIG_TYPE;";
+
+	private TMLPort port;
+	private String name;
+	private TMLCPLibArtifact artifact;
+	
+	public Signal( String _name, TMLPort _port, TMLCPLibArtifact _artifact )	{
+		port = _port;
+		name = _name;
+		artifact = _artifact;
+	}
+
 	public Signal()	{
-		code = 	"struct SIG_TYPE	{" + CR + status + writeOffset + readOffset + buffPointer + "};" + CR +
-						"typedef struct SIG_TYPE SIG_TYPE;";
+		port = null;
 	}
 
 	public String toString()	{
-		return code;
+		return DECLARATION;
+	}
+
+	public String getName()	{
+		return name;
+	}
+
+	public TMLCPLibArtifact getArtifact()	{
+		return artifact;
 	}
 
 }	//End of class

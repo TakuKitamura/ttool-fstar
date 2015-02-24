@@ -49,6 +49,7 @@ package Ctranslator;
 import java.util.*;
 import java.nio.*;
 import myutil.*;
+import tmltranslator.*;
 
 public abstract class Buffer	{
 
@@ -59,7 +60,10 @@ public abstract class Buffer	{
 	public String POINTER = "*";
 
 	protected String code = "VOID";
-	protected String name = "BUFFER_TYPE";
+	protected String name = "";
+	protected String type = "";
+
+	protected TMLTask task;
 	
 	public Buffer()	{
 		code = "struct" + SP + name + TAB + "{" + CR + "}" + SC;
@@ -69,4 +73,19 @@ public abstract class Buffer	{
 		return code;
 	}
 
+	public String getName()	{
+		return name;
+	}
+
+	public String getType()	{
+		return type;
+	}
+
+	public String getCode()	{
+		return code;
+	}
+
+	public TMLTask getTask()	{
+		return task;
+	}
 }	//End of class
