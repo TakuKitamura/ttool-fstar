@@ -190,7 +190,6 @@ public class TMLCCodeGeneration	{
 				TraceManager.addDev( "is complex channel" );
 			}
 		}
-		System.exit(0);
 	}
 
 	private void makeSignalsList()	{
@@ -479,7 +478,6 @@ public class TMLCCodeGeneration	{
 				programString += generateNONSDROperation( op, xTask, fTask );
 			}*/
 		}
-		//System.exit(0);
 	}
 
 	/*private String generateNONSDROperation( Operation op, TMLTask xTask, TMLTask fTask )	{
