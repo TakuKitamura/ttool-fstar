@@ -66,6 +66,7 @@ public abstract class TMLArchiNode extends TGCWithInternalComponent implements S
     public final static int TRANSFER = 1;
     public final static int CONTROLLER = 2;
     public final static int OTHER = 3;  //for CPNodes
+		protected String MECType = "VOID";
 
     public TMLArchiNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -88,5 +89,9 @@ public abstract class TMLArchiNode extends TGCWithInternalComponent implements S
     public int getClockRatio(){
         return clockRatio;
     }
+
+		public String getMECType()	{
+			return MECType;
+		}
 
 }

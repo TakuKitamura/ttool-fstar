@@ -49,8 +49,9 @@ package ui.window;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-//import javax.swing.event.*;
-//import java.util.*;
+import ui.*;
+import ui.tmlcd.*;
+import java.util.*;
 
 import ui.*;
 
@@ -61,9 +62,11 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	
 	private boolean regularClose;
 	
-	private JPanel panel2;
+	private JPanel panel2, panel4;
 	private Frame frame;
 	private TMLArchiCPUNode node;
+
+	private String MECType = "VOID";
 	
 	
 	// Panel1
@@ -71,7 +74,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	
 	// Panel2
 	protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles, taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime;
-	protected JComboBox schedulingPolicy;
+	protected JComboBox schedulingPolicy, MECTypeCB;
 	
 	
 	// Main Panel
@@ -79,10 +82,11 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	private JButton cancelButton;
 	
 	/** Creates new form  */
-	public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node) {
+	public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, String _MECType) {
 		super(_frame, _title, true);
 		frame = _frame;
 		node = _node;
+		MECType = _MECType;
 		
 		initComponents();
 		myInitComponents();
@@ -97,9 +101,11 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		GridBagLayout gridbag0 = new GridBagLayout();
 		GridBagLayout gridbag1 = new GridBagLayout();
 		GridBagLayout gridbag2 = new GridBagLayout();
+		GridBagLayout gridbag4 = new GridBagLayout();
 		GridBagConstraints c0 = new GridBagConstraints();
 		//GridBagConstraints c1 = new GridBagConstraints();
 		GridBagConstraints c2 = new GridBagConstraints();
+		GridBagConstraints c4 = new GridBagConstraints();
 		
 		setFont(new Font("Helvetica", Font.PLAIN, 14));
 		c.setLayout(gridbag0);
@@ -209,13 +215,47 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
 		clockRatio = new JTextField(""+node.getClockRatio(), 15);
 		panel2.add(clockRatio, c2);
-		
+
+		// Code generation
+		panel4 = new JPanel();
+    panel4.setLayout( gridbag2 );
+    panel4.setBorder( new javax.swing.border.TitledBorder("Code generation ") );
+    panel4.setPreferredSize( new Dimension(400, 300) );
+		c4.gridwidth = 1;
+    c4.gridheight = 1;
+    c4.weighty = 1.0;
+    c4.weightx = 1.0;
+    c4.fill = GridBagConstraints.HORIZONTAL;
+    c4.gridheight = 3;
+    panel4.add( new JLabel(" "), c2 );
+    c2.gridwidth = 1;
+    c2.fill = GridBagConstraints.HORIZONTAL;
+    c2.anchor = GridBagConstraints.CENTER;
+		panel4.add(new JLabel("Model Extension Construct type"), c2);
+        
+    c4.gridwidth = GridBagConstraints.REMAINDER; //end row
+		Vector<String> MECTypes = new Vector<String>();
+		MECTypes.add("FEP");
+		MECTypes.add("MAPPER");
+		MECTypes.add("INTL");
+		MECTypes.add("ADAIF");
+    MECTypeCB = new JComboBox( MECTypes );
+		if( MECType.equals( "VOID" ) || MECType.equals( "" ) )	{
+			MECTypeCB.setSelectedIndex( 0 );
+		}
+		else	{
+			MECTypeCB.setSelectedIndex( MECTypes.indexOf( MECType ) );
+		}
+		MECTypeCB.addActionListener(this);
+    panel4.add( MECTypeCB, c4);
+        
 		// main panel;
 		c0.gridheight = 10;
 		c0.weighty = 1.0;
 		c0.weightx = 1.0;
 		c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 		c.add(panel2, c0);
+		c.add(panel4, c0);
 		
 		c0.gridwidth = 1;
 		c0.gridheight = 1;
@@ -250,6 +290,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	
 	public void closeDialog() {
 		regularClose = true;
+		MECType = (String)MECTypeCB.getItemAt( MECTypeCB.getSelectedIndex() );
 		dispose();
 	}
 	
@@ -315,6 +356,10 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	
 	public int getSchedulingPolicy() {
 		return schedulingPolicy.getSelectedIndex();
+	}
+
+	public String getMECType()	{
+		return MECType;
 	}
 	
 	

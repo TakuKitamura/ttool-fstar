@@ -568,7 +568,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 						mappedUnitsSL.add( sb.toString().substring( 0, sb.length() - 2 ) );
 					}
 					else	{	//only transfer instances can be mapped on more than one architecture unit 
-            JOptionPane.showMessageDialog( frame, "More than one architecture unit seleted for mapping",
+            JOptionPane.showMessageDialog( frame, "More than one architecture unit selected for mapping",
 																					"Error", JOptionPane.INFORMATION_MESSAGE );
             return;
 					}

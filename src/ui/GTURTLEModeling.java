@@ -128,7 +128,7 @@ import proverifspec.*;
 
 import req.ebrdd.*;
 
-import Ctranslator.*;
+import tmltranslator.ctranslator.*;
 
 //Communication Pattern javaCC parser
 //import compiler.tmlCPparser.*;

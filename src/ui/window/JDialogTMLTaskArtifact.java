@@ -62,9 +62,11 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
     private boolean regularClose;
 	private boolean emptyList = false;
     
-    private JPanel panel2;
+    private JPanel panel2, panel3;
     private Frame frame;
     private TMLArchiArtifact artifact;
+		private String operation = "VOID";
+		private String MECType = "VOID";
     
     //protected JTextField taskName;
 	protected JComboBox referenceTaskName, priority, operationsListCB;
@@ -74,10 +76,12 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogTMLTaskArtifact(Frame _frame, String _title, TMLArchiArtifact _artifact) {
+    public JDialogTMLTaskArtifact(Frame _frame, String _title, TMLArchiArtifact _artifact, String _operation, String _MECType) {
         super(_frame, _title, true);
         frame = _frame;
         artifact = _artifact;
+				operation = _operation;
+				MECType = _MECType;
         
         initComponents();
         myInitComponents();
@@ -92,9 +96,11 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagLayout gridbag3 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
+        GridBagConstraints c3 = new GridBagConstraints();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -138,14 +144,50 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
 		priority.setSelectedIndex(artifact.getPriority());
 		panel2.add(priority, c1);
 		
-    panel2.add(new JLabel("Operation:"), c2);
-    c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+		panel3 = new JPanel();
+		panel3.setLayout(gridbag3);
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation"));
+		panel3.setPreferredSize(new Dimension(350, 250));
+		c3.gridwidth = 1;
+    c3.gridheight = 1;
+    c3.weighty = 1.0;
+    c3.weightx = 1.0;
+    c3.fill = GridBagConstraints.HORIZONTAL;
+    c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+
+    panel3.add(new JLabel("Operation:"), c3);
+    c3.gridwidth = GridBagConstraints.REMAINDER; //end row
 		Vector<String> operationsListS = new Vector<String>();
-		operationsListS.add( "CWA" );
-		operationsListS.add( "CWM" );
+		int indexOp = 0;
+		if( MECType.equals( "FEP" ) )	{
+			operationsListS.add( "CWA" );
+			operationsListS.add( "CWM" );
+			operationsListS.add( "CWL" );
+			operationsListS.add( "SUM" );
+			operationsListS.add( "FFT" );
+			indexOp = operationsListS.indexOf( operation );
+		}
+		else if( MECType.equals( "MAPPER" ) )	{
+			operationsListS.add( "MapperOperation" );
+			indexOp = operationsListS.indexOf( operation );
+		}
+		else if( MECType.equals( "INTL" ) )	{
+			operationsListS.add( "INTLOperation" );
+			indexOp = operationsListS.indexOf( operation );
+		}
+		else if( MECType.equals( "ADAIF" ) )	{
+			operationsListS.add( "ADAIFOperation" );
+			indexOp = operationsListS.indexOf( operation );
+		}
     operationsListCB = new JComboBox( operationsListS );
-		operationsListCB.setSelectedIndex( 0 );
-		panel2.add( operationsListCB, c1 );
+		if( operation.equals( "VOID" ) || operation.equals( "" ) )	{
+			operationsListCB.setSelectedIndex( 0 );
+		}
+		else	{
+			if( indexOp == -1 )	{ indexOp = 0; }
+			operationsListCB.setSelectedIndex( indexOp  );
+		}
+		panel3.add( operationsListCB, c3 );
 
 		/*c1.gridwidth = 1;
         c1.gridheight = 1;
@@ -165,6 +207,7 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c.add(panel2, c0);
+        c.add(panel3, c0);
         
         c0.gridwidth = 1;
         c0.gridheight = 1;
@@ -199,6 +242,7 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
     
     public void closeDialog() {
         regularClose = true;
+				operation = (String)operationsListCB.getItemAt( operationsListCB.getSelectedIndex() );
         dispose();
     }
     
@@ -235,6 +279,10 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
 		return priority.getSelectedIndex();
 	}
 	
+	public String getOperation() {
+		return operation;
+	}
+
 	public int indexOf(Vector<String> _list, String name) {
 		int i = 0;
 		for(String s : _list) {

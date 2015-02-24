@@ -55,6 +55,7 @@ import org.w3c.dom.*;
 import myutil.*;
 import ui.*;
 import ui.window.*;
+import tmltranslator.ctranslator.*;
 
 public class TMLArchiArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
     protected int lineLength = 5;
@@ -68,8 +69,11 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 	
     protected String oldValue = "";
     protected String referenceTaskName = "referenceToTask";
-	protected String taskName = "name";
-	protected int priority = 0; // Between 0 and 10
+		protected String taskName = "name";
+		protected int priority = 0; // Between 0 and 10
+		protected String operation = "VOID";
+
+		private String fatherMECType = "";
     
     public TMLArchiArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -96,6 +100,10 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 	
 	public int getPriority() {
 		return priority;
+	}
+
+	public String getOperation() {
+		return operation;
 	}
     
     public void internalDrawing(Graphics g) {
@@ -152,10 +160,13 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 		String tmp;
 		boolean error = false;
 		
-		JDialogTMLTaskArtifact dialog = new JDialogTMLTaskArtifact(frame, "Setting artifact attributes", this);
+		fatherMECType = ((TMLArchiNode)father).getMECType();
+		TraceManager.addDev( "Father: " + father.getClass().toString() + " with MEC " + ((TMLArchiNode)father).getMECType() );
+		JDialogTMLTaskArtifact dialog = new JDialogTMLTaskArtifact(frame, "Setting artifact attributes", this, operation, fatherMECType);
 		dialog.setSize(400, 350);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+    GraphicLib.centerOnParent(dialog);
+  	dialog.show(); // blocked until dialog has been closed
+		operation = dialog.getOperation();
         
 		if (!dialog.isRegularClose()) {
 			return false;
@@ -220,8 +231,10 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info value=\"" + value + "\" taskName=\"" + taskName + "\" referenceTaskName=\"");
         sb.append(referenceTaskName);
-		sb.append("\" priority=\"");
-		sb.append(priority);
+				sb.append("\" priority=\"");
+				sb.append(priority);
+				sb.append("\" operation=\"");
+				sb.append(operation);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -256,6 +269,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 								if (elt != null) {
 									priority = Integer.decode(prio).intValue();
 								}
+								operation = elt.getAttribute("operation");
                             }
                             if (svalue != null) {
                                 value = svalue;
@@ -296,6 +310,39 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 	
 	public String getAttributes() {
 		return "Priority = " + priority;
+	}
+
+	public TaskMEC getMECofTask()	{
+		if( fatherMECType.equals( "FEP" ) )	{
+			if( operation.equals( "CWM" ) )	{
+				return new CwmMEC( "", "", "", "" );
+			}
+			else if( operation.equals( "CWL" ) )	{
+				return new CwlMEC( "", "", "", "" );
+			}
+			else if( operation.equals( "CWA" ) )	{
+				return new CwaMEC( "", "", "", "");
+			}
+			else if( operation.equals( "CWP" ) )	{
+				return new CwpMEC( "", "", "", "" );
+			}
+			else if( operation.equals( "FFT" ) )	{
+				return new FftMEC( "", "", "", "" );
+			}
+			else if( operation.equals( "SUM" ) )	{
+				return new SumMEC( "", "", "", "" );
+			}
+		}
+		else if( fatherMECType.equals( "MAPPER" ) )	{
+			return null;
+		}
+		else if( fatherMECType.equals( "INTL" )	)	{
+			return null;
+		}
+		else if( fatherMECType.equals( "ADAIF" ) )	{
+			return null;
+		}
+		return null;
 	}
     
     /*public Vector getListOfATG() {

@@ -183,6 +183,14 @@ public class TMLCPActivityDiagram  extends TMLElement {
         return elements;
     }
 
+		public void addElements( ArrayList<TMLCPElement> _nexts )	{
+			elements = new ArrayList<TMLCPElement>( _nexts );
+		}
+
+		/*public void addElement( TMLCPElement _elem )	{
+			elements.add( _elem );
+		}*/
+
     public boolean contains(TMLCPElement elt) {
         return elements.contains(elt);
     }

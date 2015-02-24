@@ -187,10 +187,12 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         int tmp;
         String tmpName;
 
-        JDialogCPUNode dialog = new JDialogCPUNode(frame, "Setting CPU attributes", this);
+        JDialogCPUNode dialog = new JDialogCPUNode(frame, "Setting CPU attributes", this, MECType );
         dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
+				MECType = dialog.getMECType();
+				TraceManager.addDev( "MECType: " + MECType );
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -475,6 +477,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         sb.append(" execiTime=\"" + execiTime + "\"");
         sb.append(" execcTime=\"" + execcTime + "\"");
         sb.append(" clockRatio=\"" + clockRatio + "\"");
+        sb.append(" MECType=\"" + MECType + "\"");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -538,6 +541,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                                 if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
                                 }
+                                MECType = elt.getAttribute("MECType");
                                 if ((elt.getAttribute("sliceTime") != null) &&  (elt.getAttribute("sliceTime").length() > 0)){
                                     sliceTime = Integer.decode(elt.getAttribute("sliceTime")).intValue();
                                 }
@@ -621,6 +625,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         attr += "Branch. pred. misrate (in %) = " + branchingPredictionPenalty + "\n";
         attr += "Cache miss (in %) = " + cacheMiss + "\n";
         attr += "Clock ratio = " + clockRatio + "\n";
+				attr += "MECType = " + MECType + "\n";
         return attr;
 
     }
