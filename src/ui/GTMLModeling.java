@@ -2895,7 +2895,7 @@ public class GTMLModeling  {
 	    //TraceManager.addDev("---------------- tgc=" + tgc);
             if (tgc instanceof TMLArchiCPNode) {
 		cp = (TMLArchiCPNode)tgc;
-                TMLCPLib tmlcplib = new TMLCPLib(tgc.getName(), tgc);
+                TMLCPLib tmlcplib = new TMLCPLib(tgc.getName(), cp.getReference(), tgc);
                 map.addTMLCPLib(tmlcplib);
 		tmlcplib.setMappedUnits(cp.getMappedUnits());
 

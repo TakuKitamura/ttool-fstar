@@ -54,9 +54,12 @@ public class TMLCPLib extends TMLElement {
     private ArrayList<TMLCPLibArtifact> artifacts;
     private Vector<String> mappedUnits = new Vector<String>();
 
+    private String typeName;
 
-    public TMLCPLib( String _name, Object _referenceObject ) {
+
+    public TMLCPLib(String _name, String _typeName, Object _referenceObject ) {
         super( _name, _referenceObject );
+	typeName = _typeName;
         init();
     }
 
@@ -84,5 +87,15 @@ public class TMLCPLib extends TMLElement {
     public Vector<String> getMappedUnits() {
 	return mappedUnits;
     }
+    
+    public String getTypeName() {
+	return typeName;
+    }
+
+    public boolean isDMATransfer() {
+	return typeName.compareTo("DMA_transfer") == 0;
+    }
+
+
 
 }       //End of the class

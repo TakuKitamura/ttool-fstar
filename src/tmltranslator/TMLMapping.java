@@ -47,6 +47,7 @@
 package tmltranslator;
 
 import java.util.*;
+import myutil.*;
 
 
 public class TMLMapping {
@@ -604,8 +605,34 @@ public class TMLMapping {
     }
 
 
-    public void removeForksAndJoins() {
+    public void handleCPs() {
 	// Remove the CPLib with new tasks, channels, HW components
+	
+
+	handleCPDMA();
+	
+	
+    }
+
+    private void handleCPDMA() {
+	TraceManager.addDev("\n\n**** HANDLING CPs:");
+
+	for(TMLCPLib cp: mappedCPLibs) {
+	    //TraceManager.addDev(" Found cp:" + cp.getName() + " ref=" + cp.getTypeName());
+	    if (cp.isDMATransfer()) {
+		TraceManager.addDev(" Found cp store:" + cp.getName() + "::" + cp.getTypeName());
+		handleCPDMA(cp);
+	    }
+	}
+    }
+
+    private void handleCPDMA(TMLCPLib _cp) {
+	for(TMLCPLibArtifact arti: _cp.getArtifacts()) {
+	    handleCPDMAArtifact(_cp, arti);
+	}
+    }
+
+    private void handleCPDMAArtifact(TMLCPLib _cp, TMLCPLibArtifact _arti) {
 	
     }
 
