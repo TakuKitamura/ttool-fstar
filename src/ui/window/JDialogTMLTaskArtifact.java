@@ -67,7 +67,7 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
     private TMLArchiArtifact artifact;
     
     //protected JTextField taskName;
-	protected JComboBox referenceTaskName, priority;
+	protected JComboBox referenceTaskName, priority, operationsListCB;
 	
     // Main Panel
     private JButton closeButton;
@@ -132,10 +132,21 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
 		for(int i=0; i<11; i++) {
 			list.add(""+i);
 		}
+    panel2.add(new JLabel("Priority:"), c2);
+    c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		priority = new JComboBox(list);
 		priority.setSelectedIndex(artifact.getPriority());
 		panel2.add(priority, c1);
 		
+    panel2.add(new JLabel("Operation:"), c2);
+    c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+		Vector<String> operationsListS = new Vector<String>();
+		operationsListS.add( "CWA" );
+		operationsListS.add( "CWM" );
+    operationsListCB = new JComboBox( operationsListS );
+		operationsListCB.setSelectedIndex( 0 );
+		panel2.add( operationsListCB, c1 );
+
 		/*c1.gridwidth = 1;
         c1.gridheight = 1;
         c1.weighty = 1.0;
