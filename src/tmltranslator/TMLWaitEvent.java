@@ -53,9 +53,9 @@ public class TMLWaitEvent extends TMLActivityElementEvent {
     public TMLWaitEvent(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
-	
-	public String toString() {
-		return "Wait event: " + event.getName() + "(" + getAllParams() +")";
-	}
+    
+    public String toString() {
+	return "Wait event: " + event.getName() + "(" + getAllParams() +")";
+    }
     
 }

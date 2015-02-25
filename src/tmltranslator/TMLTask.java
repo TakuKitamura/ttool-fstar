@@ -283,4 +283,8 @@ public class TMLTask extends TMLElement {
 	activity.replaceWriteChannelWith(oldChan, newChan);
     }
 
+    public void addSendEventAfterWriteIn(TMLChannel chan, TMLEvent evt, String action) {
+	activity.addSendEventAfterWriteIn(chan, evt, action);
+    }
+
 }

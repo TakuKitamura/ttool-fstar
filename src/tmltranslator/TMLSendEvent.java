@@ -53,9 +53,9 @@ public class TMLSendEvent extends TMLActivityElementEvent {
     public TMLSendEvent(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
-	
-	public String toString() {
-		return "Send event:" + event.getName() + "(" + getAllParams() +")";
-	}
+    
+    public String toString() {
+	return "Send event:" + event.getName() + "(" + getAllParams() +")";
+    }
     
 }

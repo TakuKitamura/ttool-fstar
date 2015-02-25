@@ -96,6 +96,17 @@ public class TMLCPLib extends TMLElement {
 	return typeName.compareTo("DMA_transfer") == 0;
     }
 
+    public String getUnitByName(String id) {
+	id = "." + id + " : ";
+	for(String s: mappedUnits) {
+	    if (s.indexOf(id) > -1) {
+		return s.substring(s.indexOf(":")+1, s.length()).trim();
+	    }
+	}
+	return null;
+	
+    }
+
 
 
 }       //End of the class

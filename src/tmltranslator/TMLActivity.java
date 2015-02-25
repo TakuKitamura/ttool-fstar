@@ -428,5 +428,38 @@ public class TMLActivity extends TMLElement {
         }
     }
 
+    public void addSendEventAfterWriteIn(TMLChannel chan, TMLEvent evt, String action) {
+	TMLActivityElement ae;
+	TMLWriteChannel twc;
+	int cpt = 0;
+
+	Vector<TMLSendEvent> newElements = new Vector<TMLSendEvent>();
+
+	for(int i=0; i<elements.size(); i++) {
+            ae = (TMLActivityElement)(elements.elementAt(i));
+	    if (ae instanceof TMLWriteChannel) {
+		twc = (TMLWriteChannel)ae;
+		for (int j = 0; j<twc.getNbOfChannels(); j++) {
+		    if (twc.getChannel(j) == chan) {
+			TMLSendEvent send = new TMLSendEvent("SendEvt" + cpt, ae.getReferenceObject());
+			send.setEvent(evt);
+			Vector nexts = ae.getNexts();
+			for (Object o: nexts) {
+			    send.addNext((TMLActivityElement)o);
+			}
+			newElements.add(send);
+			send.addParam(action);
+			ae.clearNexts();
+			ae.addNext(send);
+		    }
+		}
+	    }
+	}
+
+	for(TMLSendEvent s: newElements) {
+	    elements.add(s);
+	}
+    }
+
 
 }

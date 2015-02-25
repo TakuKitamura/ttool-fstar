@@ -494,6 +494,18 @@ public class TMLModeling {
         return null;
     }
 
+    public TMLChannel getChannelByDestinationPortName(String _portName) {
+        TMLChannel ch;
+        ListIterator iterator = channels.listIterator();
+        while(iterator.hasNext()) {
+            ch = (TMLChannel)(iterator.next());
+            if (ch.hasDestinationPort(_portName) != null) {
+                return ch;
+            }
+        }
+        return null;
+    }
+
     public TMLEvent getEventByName(String _name) {
         TMLEvent evt;
         ListIterator iterator = events.listIterator();
@@ -1390,6 +1402,9 @@ public class TMLModeling {
 
 
     public void removeForksAndJoins() {
+	TraceManager.addDev("\n\n**** Remove forks and joins\n");
+	//Exception e = new Exception(); e.printStackTrace();
+
         removeForks();
         removeJoins();
     }

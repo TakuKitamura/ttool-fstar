@@ -605,11 +605,25 @@ public class TMLMapping {
     }
 
 
+
+    public void removeForksAndJoins() {
+	if (tmlm != null) {
+	    tmlm.removeForksAndJoins();
+	}
+
+	// We map the forked tasks to their origin node,and the join to their destination node
+    }
+
     public void handleCPs() {
 	// Remove the CPLib with new tasks, channels, HW components
 	
 
 	handleCPDMA();
+
+	// Handle ports of forks / joins not mapped on local memories
+	// 
+
+	mappedCPLibs = new ArrayList<TMLCPLib>();
 	
 	
     }
@@ -633,7 +647,134 @@ public class TMLMapping {
     }
 
     private void handleCPDMAArtifact(TMLCPLib _cp, TMLCPLibArtifact _arti) {
+	// Find all the channel with the artifact
+	TMLChannel chan = tmlm.getChannelByDestinationPortName(_arti.portName);
+	if (chan == null) {
+	    TraceManager.addDev("DMA_transfer/ Unknown channel with in port=" + _arti.portName);
+	    return;
+	}
+
+	TraceManager.addDev("DMA_transfer/ Found channel=" + chan);
+
+	if (chan.getNbOfDestinationPorts() > 1) {
+	    TraceManager.addDev("DMA_transfer/ Channel has too many ports (must have only one)");
+	}
+
+	if (!(chan.isBasicChannel())) {
+	    TraceManager.addDev("DMA_transfer/ Only basic channel is accepted");
+	}
+
+	String DMAController = _cp.getUnitByName("DMA_Controller_1");
 	
+	if (DMAController == null) {
+	    TraceManager.addDev("DMA_transfer/ Unknown DMA controller in CP");
+	}
+
+	TraceManager.addDev("DMA controller=|" + DMAController + "|");
+	HwExecutionNode node = getHwExecutionNodeByName(DMAController);
+	if (node == null) {
+	    TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + DMAController);
+	}
+	
+
+	// At each origin: We write in a new local channel in a NBRNBW fashion
+	// This new channel is mapped on Src_Storage_Instance_1
+	// Then, we send an event to a new DMA task mapped
+	// The DMa task read elements from the src mem and writes on the destination mem.
+	
+	// -> The old channel is thus transformed into two new channels
+
+
+	// New DMATask
+	TMLTask dmaTask = new TMLTask("DMATask__" + chan.getName(), chan, null);	
+	tmlm.addTask(dmaTask);
+	TMLChannel fromOriginToDMA = new TMLChannel("toDMATask__" + chan.getName(), chan);
+	tmlm.addChannel(fromOriginToDMA);
+	TMLPort portInDMA = new TMLPort("portToDMATask__" + chan.getName(), chan);
+	TMLPort portOutDMA = new TMLPort("portfromDMATask__" + chan.getName(), chan);
+	
+	TMLTask origin = chan.getOriginTask();
+	TMLTask destination = chan.getDestinationTask();
+	fromOriginToDMA.setTasks(origin, dmaTask);
+	fromOriginToDMA.setPorts(chan.getOriginPort(), portInDMA);
+
+	chan.setPorts(portOutDMA, chan.getDestinationPort());
+
+	// In the origin task, we change all writing to "chan" to "fromOriginToDMA"
+	origin.replaceWriteChannelWith(chan, fromOriginToDMA);
+	TMLEvent toDMA = new TMLEvent("toDMA" +  chan.getName(), chan, 1, false);
+	tmlm.addEvent(toDMA);	
+	toDMA.addParam(new TMLType(TMLType.NATURAL));
+	toDMA.setTasks(origin, dmaTask);
+	origin.addSendEventAfterWriteIn(fromOriginToDMA, toDMA, "size");
+	
+
+	// We need to create the activity diagram of DMATask
+	// We wait for the wait event. Then, we read/write one by one until we have read size
+	TMLActivity activity = dmaTask.getActivityDiagram();
+	TMLStartState start = new TMLStartState("startOfDMA", null);
+	activity.setFirst(start);
+	TMLStopState mainStop = new TMLStopState("mainStopOfDMA", null);
+	activity.addElement(mainStop);
+	TMLStopState stop = new TMLStopState("stopOfDMA", null);
+	activity.addElement(stop);
+	TMLStopState stopWrite = new TMLStopState("stopOfWrite", null);
+	activity.addElement(stopWrite);
+	TMLWaitEvent wait = new TMLWaitEvent("waitEvtInDMA", null);
+	wait.setEvent(toDMA);
+	wait.addParam("size");
+	TMLForLoop mainLoop = new TMLForLoop("mainLoopOfDMA", null);
+	mainLoop.setInit("i=0");
+	mainLoop.setCondition("i==1");
+	mainLoop.setIncrement("i=i");
+	activity.addElement(mainLoop);
+	TMLForLoop loop = new TMLForLoop("loopOfDMA", null);
+	loop.setInit("j=size");
+	loop.setCondition("j==0");
+	loop.setIncrement("j = j-1");
+	activity.addElement(loop);
+	TMLAttribute attri = new TMLAttribute("i", "i", new TMLType(TMLType.NATURAL), "0");
+	dmaTask.addAttribute(attri);
+	TMLAttribute attrj = new TMLAttribute("j", "j", new TMLType(TMLType.NATURAL), "0");
+	dmaTask.addAttribute(attrj);
+	TMLAttribute attrsize = new TMLAttribute("size", "size", new TMLType(TMLType.NATURAL), "0");
+	dmaTask.addAttribute(attrsize);
+	
+        TMLWriteChannel write = new TMLWriteChannel("WriteOfDMA", null);
+	activity.addElement(write);
+        write.addChannel(chan);
+        write.setNbOfSamples("1");
+	TMLReadChannel read = new TMLReadChannel("ReadOfDMA", null);
+	read.addChannel(fromOriginToDMA);
+	read.setNbOfSamples("1");
+	activity.addElement(read);
+
+	activity.setFirst(start);
+	start.addNext(mainLoop);
+	mainLoop.addNext(wait);
+	mainLoop.addNext(mainStop);
+	wait.addNext(loop);
+	loop.addNext(read);
+	loop.addNext(stop);
+	read.addNext(write);
+	write.addNext(stopWrite);
+	
+ 	// All mapping to be done
+	// Map DMA task to the DMA nod eof the CPLib
+	addTaskToHwExecutionNode(dmaTask, node);
+       
+
+	
+				      
+
+    }
+
+    public String getMappedTasksString() {
+	String tasks = "";
+	for(TMLTask task: mappedtasks) {
+	    tasks += task.getName() + " ";
+	}
+	return tasks;
     }
 
 }

@@ -140,6 +140,43 @@ public class TMLChannel extends TMLCommunicationElement {
 	return ret.trim();
     }
 
+    public int getNbOfDestinationPorts() {
+	if (isBasicChannel()) {
+	    if (destinationPort != null) {
+		return 1;
+	    } else {
+		return 0;
+	    }
+	}
+
+	if (destinationPorts == null) {
+	    return 0;
+	}
+
+	return destinationPorts.size();
+    }
+
+    public TMLPort hasDestinationPort(String name) {
+	if (destinationPort != null) {
+	    if (destinationPort.getName().compareTo(name) ==0) {
+		return destinationPort;
+	    }
+	}
+
+	if (destinationPorts == null) {
+	    return null;
+	}
+
+	for (TMLPort port: destinationPorts) {
+	    if (port.getName().compareTo(name) ==0) {
+		return destinationPort;
+	    }
+	}
+
+	return null;
+	
+    }
+
     // Complex channels
     public boolean isBasicChannel() {
 	return (originTasks.size() == 0);

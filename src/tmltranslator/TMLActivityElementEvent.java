@@ -67,23 +67,23 @@ public abstract class TMLActivityElementEvent extends TMLActivityElement {
     public TMLEvent getEvent() {
         return event;
     }
-    
+
     public void setVariable(String _variable) {
-      variable = _variable;
+        variable = _variable;
     }
-    
+
     public String getVariable() {
-      return variable;
+        return variable;
     }
-    
+
     public void addParam(String _param) {
         datas.add(_param);
     }
-    
+
     public int getNbOfParams() {
         return datas.size();
     }
-    
+
     public String getParam(int _index) {
         if (_index < getNbOfParams()) {
             return (String)(datas.elementAt(_index));
@@ -91,25 +91,25 @@ public abstract class TMLActivityElementEvent extends TMLActivityElement {
             return null;
         }
     }
-	
-	public void setParam(String _param, int _index) {
-		datas.setElementAt(_param, _index);
-	}
-	
-	public String getAllParams() {
-		return getAllParams(",");
-	}
-	
-	public String getAllParams(String separator) {
-		String s = "";
-		for(int i=0; i<getNbOfParams(); i++) {
-			if (i != 0) {
-				s+= separator;
-			}
-			s += TMLTextSpecification.modifyString(getParam(i));
-		}
-		return s;
-	}
-    
+
+    public void setParam(String _param, int _index) {
+        datas.setElementAt(_param, _index);
+    }
+
+    public String getAllParams() {
+        return getAllParams(",");
+    }
+
+    public String getAllParams(String separator) {
+        String s = "";
+        for(int i=0; i<getNbOfParams(); i++) {
+            if (i != 0) {
+                s+= separator;
+            }
+            s += TMLTextSpecification.modifyString(getParam(i));
+        }
+        return s;
+    }
+
 
 }

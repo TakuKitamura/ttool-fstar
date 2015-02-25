@@ -85,6 +85,8 @@ public class TML2MappingSystemC {
 
     public TML2MappingSystemC(TMLMapping _tmlmapping) {
         tmlmapping = _tmlmapping;
+	tmlmapping.handleCPs();
+	tmlmapping.removeForksAndJoins();
         tmlmapping.makeMinimumMapping();
         tepeTranslator = new  SystemCTEPE(new ArrayList<TEPE>(), this);
     }
@@ -99,6 +101,8 @@ public class TML2MappingSystemC {
 
     public TML2MappingSystemC(TMLMapping _tmlmapping, ArrayList<EBRDD> _ebrdds, ArrayList<TEPE> _tepes) {
         tmlmapping = _tmlmapping;
+	tmlmapping.handleCPs();
+	tmlmapping.removeForksAndJoins();
         //ebrdds = _ebrdds;
         tmlmapping.makeMinimumMapping();
         tepeTranslator = new  SystemCTEPE(_tepes, this);
@@ -121,6 +125,7 @@ public class TML2MappingSystemC {
         debug = _debug;
         optimize = _optimize;
         tmlmapping.removeAllRandomSequences();
+	tmlmapping.handleCPs();
         tmlmodeling = tmlmapping.getTMLModeling();
         tasks = new ArrayList<MappedSystemCTask>();
         //generateSystemCTasks();
@@ -302,8 +307,8 @@ public class TML2MappingSystemC {
                 }
                 declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\"," + channel.getSize() + ",";
                 TraceManager.addDev("Channel: " + channel.getName());
-                //TraceManager.addDev("Channel origin node: " + channel.getOriginTask().getName() + " dest node: " + channel.getDestinationTask().getName());
-                TraceManager.addDev( "the list of mapped tasks: " + tmlmapping.getMappedTasks().toString() );
+                TraceManager.addDev("Channel origin node: " + channel.getOriginTask().getName() + " dest node: " + channel.getDestinationTask().getName());
+                TraceManager.addDev( "the list of mapped tasks: " + tmlmapping.getMappedTasksString());
                 declaration+= determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()), tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem) + param + "," + channel.getPriority();
                 if (channel.isLossy() && channel.getType()!=TMLChannel.NBRNBW) declaration += "," + channel.getLossPercentage() + "," + channel.getMaxNbOfLoss();
                 declaration += ")"+ SCCR;
@@ -604,6 +609,7 @@ public class TML2MappingSystemC {
         //first called with Maping:getCommunicationNodes
         LinkedList<HwCommunicationNode> nodesToExplore;
         TraceManager.addDev("No of comm nodes " + commNodes.size());
+	 TraceManager.addDev("startNode=" + startNode);
         boolean busExploreMode = ((depth & 1) == 0);
         //if (depth % 2 == 0){
         if(busExploreMode){
