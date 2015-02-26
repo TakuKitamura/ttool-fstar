@@ -660,8 +660,8 @@ public class GTMLModeling  {
 
                         if (portstome.size() == 1) {
                             port2 = (TMLCPrimitivePort)(portstome.get(0));
-			    alreadyConsidered.add(port1);
-			    alreadyConsidered.add(port2);
+                            alreadyConsidered.add(port1);
+                            alreadyConsidered.add(port2);
 
                             String []text1 = port1.getPortName().split(",");
                             String []text2 = port2.getPortName().split(",");
@@ -722,16 +722,16 @@ public class GTMLModeling  {
                                     if (port1.isLossy()) {
                                         channel.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
                                     }
-																		
-																		//complex channels are used only for transformation towards the simulator
-																		TMLPort tmlport1, tmlport2;
-																		tmlport1 = new TMLPort( port1.getPortName(), port1 );
-																		tmlport1.setPrex( port1.isPrex() );
-																		tmlport1.setPostex( port1.isPostex() );
-																		tmlport2 = new TMLPort( port2.getPortName(), port2 );
-																		tmlport2.setPrex( port2.isPrex() );
-																		tmlport2.setPostex( port2.isPostex() );
-																		channel.setPorts( tmlport1, tmlport2 );
+
+                                    //complex channels are used only for transformation towards the simulator
+                                    TMLPort tmlport1, tmlport2;
+                                    tmlport1 = new TMLPort( port1.getPortName(), port1 );
+                                    tmlport1.setPrex( port1.isPrex() );
+                                    tmlport1.setPostex( port1.isPostex() );
+                                    tmlport2 = new TMLPort( port2.getPortName(), port2 );
+                                    tmlport2.setPrex( port2.isPrex() );
+                                    tmlport2.setPostex( port2.isPostex() );
+                                    channel.setPorts( tmlport1, tmlport2 );
                                     tmlm.addChannel(channel);
                                     listE.addCor(channel, tgc);
                                     TraceManager.addDev("Adding channel " + channel.getName());
@@ -740,7 +740,7 @@ public class GTMLModeling  {
                         } else {
                             // Complex channel "1 -> many"
                             TMLCPrimitivePort port;
-			    
+
 
                             // Only one channel per port
                             if (port1.getPortName().indexOf(",") != -1) {
@@ -770,11 +770,11 @@ public class GTMLModeling  {
                             }
 
                             // Correspondance table
-			    alreadyConsidered.add(port1);
+                            alreadyConsidered.add(port1);
                             addToTable(makeName(port1, port1.getFather().getValue()) + "/" + port1.getPortName(), name);
                             for(j=0; j<portstome.size(); j++) {
                                 port = (TMLCPrimitivePort)(portstome.get(j));
-				alreadyConsidered.add(port);
+                                alreadyConsidered.add(port);
                                 addToTable(makeName(port, port.getFather().getValue()) + "/" + port.getPortName(), name);
                             }
 
@@ -818,8 +818,8 @@ public class GTMLModeling  {
                                 for(j=0; j<portstome.size(); j++) {
                                     port = (TMLCPrimitivePort)(portstome.get(j));
                                     tmlport = new TMLPort(port.getPortName(), port);
-																		tmlport.setPrex( port.isPrex() );
-																		tmlport.setPostex( port.isPostex() );
+                                    tmlport.setPrex( port.isPrex() );
+                                    tmlport.setPostex( port.isPostex() );
                                     tt2 = tmlm.getTMLTaskByName(makeName(port, port.getFather().getValue()));
                                     channel.addTaskPort(tt2, tmlport, port.isOrigin());
                                 }
@@ -875,7 +875,7 @@ public class GTMLModeling  {
                         TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
                     }
 
-                    if ( (portstome.size() < 1) || (portstome.size() > 3) ) {
+                    if (portstome.size() < 1) {
                         String msg = "port " + port1.getPortName() + " is not correctly connected";
                         CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
                         ce.setTDiagramPanel(tmlcdp.tmlctdp);
@@ -883,99 +883,107 @@ public class GTMLModeling  {
                         checkingErrors.add(ce);
                         throw new MalformedTMLDesignException(msg);
                     }
-                    port2 = (TMLCPrimitivePort)(portstome.get(0));
 
-                    String []text1 = port1.getPortName().split(",");
-                    String []text2 = port2.getPortName().split(",");
+                    for (int kk=0; kk<portstome.size(); kk++) {
+                        port2 = (TMLCPrimitivePort)(portstome.get(kk));
 
-                    /*for (i=0; i<text1.length; i++) {
-                      TraceManager.addDev("text1[" + i + "] = " + text1[i]);
-                      }
+                        String []text1 = port1.getPortName().split(",");
+                        String []text2 = port2.getPortName().split(",");
 
-                      for (i=0; i<text2.length; i++) {
-                      TraceManager.addDev("text2[" + i + "] = " + text2[i]);
-                      }*/
+                        /*for (i=0; i<text1.length; i++) {
+                          TraceManager.addDev("text1[" + i + "] = " + text1[i]);
+                          }
 
-                    for (j=0; j<Math.min(text1.length, text2.length); j++) {
-                        name1 = text1[j].trim();
-                        name2 = text2[j].trim();
-                        //TraceManager.addDev("name1=" + name1 + " name2=" + name2);
-                        name = makeName(port1, name1) + "__" + makeName(port2, name2);
+                          for (i=0; i<text2.length; i++) {
+                          TraceManager.addDev("text2[" + i + "] = " + text2[i]);
+                          }*/
 
-                        TraceManager.addDev("Adding to table : " + makeName(port1, port1.getFather().getValue()) + "/" + name1);
-                        addToTable(makeName(port1, port1.getFather().getValue()) + "/" + name1, name);
-                        TraceManager.addDev("Adding to table : " + makeName(port2, port2.getFather().getValue()) + "/" + name2);
-                        addToTable(makeName(port2, port2.getFather().getValue()) + "/" + name2, name);
+                        for (j=0; j<Math.min(text1.length, text2.length); j++) {
+                            name1 = text1[j].trim();
+                            name2 = text2[j].trim();
+                            //TraceManager.addDev("name1=" + name1 + " name2=" + name2);
+			    if (kk == 0) {
+				name = makeName(port1, name1) + "__" + makeName(port2, name2);
+			    } else {
+				name = makeName(port1, name1) + "__" + makeName(port2, name2) + "__FORK" + kk;
+			    }
 
-                        if (port1.isFinite()) {
-                            event = new TMLEvent(name, port1, port1.getMax(), port1.isBlocking());
-                        } else {
-                            event = new TMLEvent(name, port1, -1, port1.isBlocking());
-                        }
-                        for(i=0; i<port1.getNbMaxAttribute(); i++) {
-                            tt = port1.getParamAt(i);
-                            if ((tt != null) && (tt.getType() != TType.NONE)) {
-                                if (tt.getType() == TType.OTHER) {
-                                    // Record
-                                    // Search for the record
-                                    record = tmlc.getRecordNamed(tt.getTypeOther());
-                                    if (record == null) {
-                                        String msg = " event " + name + " is declared as using an unknown type: " + tt.getTypeOther();
-                                        CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
-                                        ce.setTDiagramPanel(tmlcdp.tmlctdp);
-                                        ce.setTGComponent(tgc);
-                                        checkingErrors.add(ce);
-                                        throw new MalformedTMLDesignException(msg);
-                                    } else {
-                                        for(int k=0; k<record.getAttributes().size(); k++) {
-                                            ta = (TAttribute)(record.getAttributes().get(k));
-                                            if (ta.getType() == TAttribute.NATURAL) {
-                                                tmlt = new TMLType(TMLType.NATURAL);
-                                            } else if (ta.getType() == TAttribute.BOOLEAN) {
-                                                tmlt = new TMLType(TMLType.BOOLEAN);
-                                            } else {
-                                                tmlt = new TMLType(TMLType.OTHER);
-                                            }
-                                            event.addParam(tmlt);
-                                        }
-                                    }
-                                } else {
-                                    tmlt = new TMLType(tt.getType());
-                                    event.addParam(tmlt);
-                                }
-                                //TraceManager.addDev("Event " + event.getName() + " add param");
-                            }
-                        }
+                            TraceManager.addDev("Adding to table : " + makeName(port1, port1.getFather().getValue()) + "/" + name1);
+                            addToTable(makeName(port1, port1.getFather().getValue()) + "/" + name1, name);
+                            TraceManager.addDev("Adding to table : " + makeName(port2, port2.getFather().getValue()) + "/" + name2);
+                            addToTable(makeName(port2, port2.getFather().getValue()) + "/" + name2, name);
 
-                        if (tmlm.hasSameEventName(event)) {
-                            if (tmlm.hasAlmostSimilarEvent(event)) {
-                                String msg = " event " + name + " is declared several times differently";
-                                CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
-                                ce.setTDiagramPanel(tmlcdp.tmlctdp);
-                                ce.setTGComponent(tgc);
-                                checkingErrors.add(ce);
-                                throw new MalformedTMLDesignException(msg);
+                            if (port1.isFinite()) {
+                                event = new TMLEvent(name, port1, port1.getMax(), port1.isBlocking());
                             } else {
-                                TraceManager.addDev("Same evt : not added");
+                                event = new TMLEvent(name, port1, -1, port1.isBlocking());
                             }
-                        } else {
-                            tt1 = tmlm.getTMLTaskByName(makeName(port1, port1.getFather().getValue()));
-                            tt2 = tmlm.getTMLTaskByName(makeName(port2, port2.getFather().getValue()));
-                            TraceManager.addDev("Tasks of event: t1=" + tt1.getName() + " t2=" + tt2.getName());
-                            event.setTasks(tt1, tt2);
+                            for(i=0; i<port1.getNbMaxAttribute(); i++) {
+                                tt = port1.getParamAt(i);
+                                if ((tt != null) && (tt.getType() != TType.NONE)) {
+                                    if (tt.getType() == TType.OTHER) {
+                                        // Record
+                                        // Search for the record
+                                        record = tmlc.getRecordNamed(tt.getTypeOther());
+                                        if (record == null) {
+                                            String msg = " event " + name + " is declared as using an unknown type: " + tt.getTypeOther();
+                                            CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                                            ce.setTDiagramPanel(tmlcdp.tmlctdp);
+                                            ce.setTGComponent(tgc);
+                                            checkingErrors.add(ce);
+                                            throw new MalformedTMLDesignException(msg);
+                                        } else {
+                                            for(int k=0; k<record.getAttributes().size(); k++) {
+                                                ta = (TAttribute)(record.getAttributes().get(k));
+                                                if (ta.getType() == TAttribute.NATURAL) {
+                                                    tmlt = new TMLType(TMLType.NATURAL);
+                                                } else if (ta.getType() == TAttribute.BOOLEAN) {
+                                                    tmlt = new TMLType(TMLType.BOOLEAN);
+                                                } else {
+                                                    tmlt = new TMLType(TMLType.OTHER);
+                                                }
+                                                event.addParam(tmlt);
+                                            }
+                                        }
+                                    } else {
+                                        tmlt = new TMLType(tt.getType());
+                                        event.addParam(tmlt);
+                                    }
+                                    //TraceManager.addDev("Event " + event.getName() + " add param");
+                                }
+                            }
 
-                            if (port1.isLossy()) {
-                                event.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
+                            if (tmlm.hasSameEventName(event)) {
+                                if (tmlm.hasAlmostSimilarEvent(event)) {
+                                    String msg = " event " + name + " is declared several times differently";
+                                    CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                                    ce.setTDiagramPanel(tmlcdp.tmlctdp);
+                                    ce.setTGComponent(tgc);
+                                    checkingErrors.add(ce);
+                                    throw new MalformedTMLDesignException(msg);
+                                } else {
+                                    TraceManager.addDev("Same evt : not added");
+                                }
+                            } else {
+                                tt1 = tmlm.getTMLTaskByName(makeName(port1, port1.getFather().getValue()));
+                                tt2 = tmlm.getTMLTaskByName(makeName(port2, port2.getFather().getValue()));
+                                TraceManager.addDev("Tasks of event: t1=" + tt1.getName() + " t2=" + tt2.getName());
+                                event.setTasks(tt1, tt2);
+
+                                if (port1.isLossy()) {
+                                    event.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
+                                }
+                                tmlm.addEvent(event);
+                                listE.addCor(event, tgc);
+                                TraceManager.addDev("Adding event " + event.getName());
                             }
-                            tmlm.addEvent(event);
-                            listE.addCor(event, tgc);
-                            TraceManager.addDev("Adding event " + event.getName());
                         }
                     }
                 }
             }
         }
     }
+
 
     private void addTMLCRequests() throws MalformedTMLDesignException {
         TGComponent tgc;
@@ -1561,6 +1569,7 @@ public class GTMLModeling  {
                 } else {
                     tmlsendevent = new TMLSendEvent("send event", tgc);
                     tmlsendevent.setEvent(event);
+		    
                     for(int i=0; i<((TMLADSendEvent)tgc).realNbOfParams(); i++) {
                         tmp = modifyString(((TMLADSendEvent)tgc).getRealParamValue(i));
                         Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
@@ -2888,23 +2897,23 @@ public class GTMLModeling  {
         TMLTask task;
         TMLElement elt;
         String s;
-	TMLArchiCPNode cp;
+        TMLArchiCPNode cp;
 
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
-	    //TraceManager.addDev("---------------- tgc=" + tgc);
+            //TraceManager.addDev("---------------- tgc=" + tgc);
             if (tgc instanceof TMLArchiCPNode) {
-		cp = (TMLArchiCPNode)tgc;
+                cp = (TMLArchiCPNode)tgc;
                 TMLCPLib tmlcplib = new TMLCPLib(tgc.getName(), cp.getReference(), tgc);
                 map.addTMLCPLib(tmlcplib);
-		tmlcplib.setMappedUnits(cp.getMappedUnits());
+                tmlcplib.setMappedUnits(cp.getMappedUnits());
 
                 // Handling mapped artifacts
-		for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {
-		    TMLCPLibArtifact arti = new TMLCPLibArtifact(artifact.getName(), artifact, artifact.getValue(), artifact.getPortName(), artifact.getMappedMemory(), artifact.getPriority() );
-		    tmlcplib.addArtifact(arti);
-		    //TraceManager.addDev("Adding CP artifact:" + arti);
-		}
+                for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {
+                    TMLCPLibArtifact arti = new TMLCPLibArtifact(artifact.getName(), artifact, artifact.getValue(), artifact.getPortName(), artifact.getMappedMemory(), artifact.getPriority() );
+                    tmlcplib.addArtifact(arti);
+                    //TraceManager.addDev("Adding CP artifact:" + arti);
+                }
             }
         }
     }

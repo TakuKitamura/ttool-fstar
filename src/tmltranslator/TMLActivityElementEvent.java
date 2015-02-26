@@ -55,9 +55,19 @@ public abstract class TMLActivityElementEvent extends TMLActivityElement {
                                // 0: no event
                                // >0: nb of event in the list
 
+    protected ArrayList<TMLEvent> events;
+
     public TMLActivityElementEvent(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         datas = new Vector();
+    }
+
+    public boolean hasEvents() {
+	return events != null;
+    }
+
+    public ArrayList<TMLEvent> getEvents() {
+	return events;
     }
 
     public void setEvent(TMLEvent _event) {

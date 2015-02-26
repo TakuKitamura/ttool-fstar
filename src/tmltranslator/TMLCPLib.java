@@ -96,6 +96,10 @@ public class TMLCPLib extends TMLElement {
 	return typeName.compareTo("DMA_transfer") == 0;
     }
 
+    public boolean isDoubleDMATransfer() {
+	return typeName.compareTo("Double_DMA_transfer") == 0;
+    }
+
     public String getUnitByName(String id) {
 	id = "." + id + " : ";
 	for(String s: mappedUnits) {

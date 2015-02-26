@@ -128,6 +128,22 @@ public class TMLChannel extends TMLCommunicationElement {
 	return ret.trim();
     }
 
+    public TMLTask getOriginTask(int index) {
+	return originTasks.get(index);
+    }
+
+    public TMLTask getDestinationTask(int index) {
+	return destinationTasks.get(index);
+    }
+
+    public TMLPort getOriginPort(int index) {
+	return originPorts.get(index);
+    }
+
+    public TMLPort getDestinationPort(int index) {
+	return destinationPorts.get(index);
+    }
+
     public String getNameOfOriginTasks() {
 	if (originTask != null) {
 	    return originTask.getName();
@@ -157,8 +173,11 @@ public class TMLChannel extends TMLCommunicationElement {
     }
 
     public TMLPort hasDestinationPort(String name) {
+	//TraceManager.addDev("Searching for dest port=" + name);
 	if (destinationPort != null) {
+	    //TraceManager.addDev("Dest port1=" + destinationPort.getName());
 	    if (destinationPort.getName().compareTo(name) ==0) {
+		//TraceManager.addDev("Found1");
 		return destinationPort;
 	    }
 	}
@@ -168,11 +187,13 @@ public class TMLChannel extends TMLCommunicationElement {
 	}
 
 	for (TMLPort port: destinationPorts) {
+	    //TraceManager.addDev("Dest portm=" + port.getName());
 	    if (port.getName().compareTo(name) ==0) {
-		return destinationPort;
+		//TraceManager.addDev("Foundm");
+		return port;
 	    }
 	}
-
+	//TraceManager.addDev("Not found");
 	return null;
 	
     }
@@ -180,6 +201,13 @@ public class TMLChannel extends TMLCommunicationElement {
     // Complex channels
     public boolean isBasicChannel() {
 	return (originTasks.size() == 0);
+    }
+
+    public void removeComplexInformation() {
+	originTasks = new ArrayList<TMLTask>();
+	destinationTasks = new ArrayList<TMLTask>();
+	originPorts = new ArrayList<TMLPort>();
+	destinationPorts = new ArrayList<TMLPort>();
     }
 
     public boolean isBadComplexChannel() {
@@ -200,6 +228,10 @@ public class TMLChannel extends TMLCommunicationElement {
 
     public boolean isAJoinChannel() {
 	return ((destinationTasks.size() == 1) && (originTasks.size() >= 1));
+    }
+
+    public boolean isAJoinChannel(int nbOfOrigins) {
+	return ((destinationTasks.size() == 1) && (originTasks.size() == nbOfOrigins));
     }
 
     public void toBasicIfPossible() {

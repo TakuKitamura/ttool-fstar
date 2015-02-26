@@ -644,6 +644,58 @@ public class TMLModeling {
         return (TMLRequest)(ll.get(0));
     }
 
+    public LinkedList getChannelsToMe(TMLTask task) {
+        TMLChannel chan;
+
+        LinkedList ll = new LinkedList();
+
+        // Must search each task for SendRequest operator, check the request for destination class
+        ListIterator iterator= getListIteratorChannels();
+
+        while (iterator.hasNext()) {
+            chan = (TMLChannel)(iterator.next());
+            if (chan.hasDestinationTask(task)) {
+                ll.add(chan);
+            }
+        }
+
+        return ll;
+    }
+
+    public TMLChannel getChannelToMe(TMLTask task) {
+        LinkedList ll = getChannelsToMe(task);
+        if ((ll == null) || (ll.size() == 0)) {
+            return null;
+        }
+        return (TMLChannel)(ll.get(0));
+    }
+
+    public LinkedList getChannelsFromMe(TMLTask task) {
+        TMLChannel chan;
+
+        LinkedList ll = new LinkedList();
+
+        // Must search each task for SendRequest operator, check the request for destination class
+        ListIterator iterator= getListIteratorChannels();
+
+        while (iterator.hasNext()) {
+            chan = (TMLChannel)(iterator.next());
+            if (chan.hasOriginTask(task)) {
+                ll.add(chan);
+            }
+        }
+
+        return ll;
+    }
+
+    public TMLChannel getChannelFromMe(TMLTask task) {
+        LinkedList ll = getChannelsFromMe(task);
+        if ((ll == null) || (ll.size() == 0)) {
+            return null;
+        }
+        return (TMLChannel)(ll.get(0));
+    }
+
     public void prefixAllNamesWith(String _prefix) {
         for(TMLChannel channel: channels) {
             channel.prefixName(_prefix);
@@ -696,6 +748,11 @@ public class TMLModeling {
                 tasks.add(task);
             }
         }
+    }
+
+
+    public void removeChannel(TMLChannel ch) {
+	channels.remove(ch);
     }
 
     public void sortByName() {

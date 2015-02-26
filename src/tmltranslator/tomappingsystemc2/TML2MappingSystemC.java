@@ -306,9 +306,9 @@ public class TML2MappingSystemC {
                     param= "";
                 }
                 declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\"," + channel.getSize() + ",";
-                TraceManager.addDev("Channel: " + channel.getName());
-                TraceManager.addDev("Channel origin node: " + channel.getOriginTask().getName() + " dest node: " + channel.getDestinationTask().getName());
-                TraceManager.addDev( "the list of mapped tasks: " + tmlmapping.getMappedTasksString());
+                //TraceManager.addDev("Channel: " + channel.getName());
+                //TraceManager.addDev("Channel origin node: " + channel.getOriginTask().getName() + " dest node: " + channel.getDestinationTask().getName());
+                //TraceManager.addDev( "the list of mapped tasks: " + tmlmapping.getMappedTasksString());
                 declaration+= determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()), tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem) + param + "," + channel.getPriority();
                 if (channel.isLossy() && channel.getType()!=TMLChannel.NBRNBW) declaration += "," + channel.getLossPercentage() + "," + channel.getMaxNbOfLoss();
                 declaration += ")"+ SCCR;
@@ -568,14 +568,14 @@ public class TML2MappingSystemC {
         for( HwNode node: tmlmapping.getTMLArchitecture().getHwNodes() )        {
             if( node instanceof HwCommunicationNode )   {
                 commNodes.add((HwCommunicationNode) node);
-                TraceManager.addDev( "Inserted: " + ((HwCommunicationNode)node).getName() );
+                //TraceManager.addDev( "Inserted: " + ((HwCommunicationNode)node).getName() );
             }
         }
         if( startNode == null ) {
             TraceManager.addDev( "NULL REFERENCE" );
         }
         else    {
-            TraceManager.addDev( "startNode: " + startNode.getName() );
+            //TraceManager.addDev( "startNode: " + startNode.getName() );
         }
         HwMemory memory = getMemConnectedToBusChannelMapped( commNodes, null, commElemToRoute );
         if( memory == null )    {
