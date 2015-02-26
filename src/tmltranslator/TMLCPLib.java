@@ -100,6 +100,10 @@ public class TMLCPLib extends TMLElement {
 	return typeName.compareTo("Double_DMA_transfer") == 0;
     }
 
+    public boolean isMemoryCopy() {
+	return typeName.compareTo("CP_Memory_Copy") == 0;
+    }
+
     public String getUnitByName(String id) {
 	id = "." + id + " : ";
 	for(String s: mappedUnits) {

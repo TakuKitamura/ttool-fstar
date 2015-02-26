@@ -343,6 +343,14 @@ public class TMLMapping {
         mappedcommelts.add(_elt);
     }
 
+    public void removeCommMapping(TMLElement _elt) {
+	int index;
+	while((index = mappedcommelts.indexOf(_elt)) > -1) {
+	    oncommnodes.remove(index);
+	    mappedcommelts.remove(index);
+	}
+    }
+
     public TMLModeling getTMLModeling() {
         return tmlm;
     }
@@ -654,33 +662,30 @@ public class TMLMapping {
 
     public void handleCPs() {
         // Remove the CPLib with new tasks, channels, HW components
+	TraceManager.addDev("\n\n**** HANDLING CPs:");
 
+        for(TMLCPLib cp: mappedCPLibs) {
+            //TraceManager.addDev(" Found cp:" + cp.getName() + " ref=" + cp.getTypeName());
+            if (cp.isDMATransfer()) {
+                TraceManager.addDev(" Found cp DMA:" + cp.getName() + "::" + cp.getTypeName());
+                handleCPDMA(cp);
+            }
+            if (cp.isDoubleDMATransfer()) {
+                TraceManager.addDev(" Found cp Double DMA:" + cp.getName() + "::" + cp.getTypeName());
+                handleCPDoubleDMA(cp);
+            }
+	    if (cp.isMemoryCopy()) {
+		TraceManager.addDev(" Found cp Memory Copy:" + cp.getName() + "::" + cp.getTypeName());
+                handleCPMemoryCopy(cp);
+	    }
+        }
 
-        handleCPDMA();
-
-        // Handle ports of forks / joins not mapped on local memories
-        //
-
+        // Remove CPs
         mappedCPLibs = new ArrayList<TMLCPLib>();
 
 
     }
 
-    private void handleCPDMA() {
-        TraceManager.addDev("\n\n**** HANDLING CPs:");
-
-        for(TMLCPLib cp: mappedCPLibs) {
-            //TraceManager.addDev(" Found cp:" + cp.getName() + " ref=" + cp.getTypeName());
-            if (cp.isDMATransfer()) {
-                TraceManager.addDev(" Found cp store:" + cp.getName() + "::" + cp.getTypeName());
-                handleCPDMA(cp);
-            }
-            if (cp.isDoubleDMATransfer()) {
-                TraceManager.addDev(" Found cp store:" + cp.getName() + "::" + cp.getTypeName());
-                handleCPDoubleDMA(cp);
-            }
-        }
-    }
 
     private void handleCPDMA(TMLCPLib _cp) {
         for(TMLCPLibArtifact arti: _cp.getArtifacts()) {
@@ -692,6 +697,12 @@ public class TMLMapping {
 	TraceManager.addDev(" Found double DMA cp:" + _cp.getName() + " ref=" + _cp.getTypeName());
         for(TMLCPLibArtifact arti: _cp.getArtifacts()) {
             handleCPDoubleDMAArtifact(_cp, arti);
+        }
+    }
+
+    private void handleCPMemoryCopy(TMLCPLib _cp) {
+        for(TMLCPLibArtifact arti: _cp.getArtifacts()) {
+            handleCPMemoryCopyArtifact(_cp, arti);
         }
     }
 
@@ -1077,6 +1088,148 @@ public class TMLMapping {
 	// Remove olf channel from TMLModeling
 	//tmlm.removeChannel(chan);
 	chan.removeComplexInformation();
+    }
+
+    private void handleCPMemoryCopyArtifact(TMLCPLib _cp, TMLCPLibArtifact _arti) {
+	// Find all the channel with the artifact
+        TMLChannel chan = tmlm.getChannelByDestinationPortName(_arti.portName);
+        if (chan == null) {
+            TraceManager.addDev("MemCPY/ Unknown channel with in port=" + _arti.portName);
+            return;
+        }
+
+        TraceManager.addDev("MemCPY/ Found channel=" + chan);
+
+        if (chan.getNbOfDestinationPorts() > 1) {
+            TraceManager.addDev("MemCPY/ Channel has too many ports (must have only one)");
+	    return;
+        }
+
+        if (!(chan.isBasicChannel())) {
+            TraceManager.addDev("MemCPY/ Only basic channel is accepted");
+	    return;
+        }
+
+	// CPU
+        String CPUController = _cp.getUnitByName("CPU_Controller");
+        if (CPUController == null) {
+            TraceManager.addDev("MemCPY/ Unknown CPU controller in CP");
+	    return;
+        }
+        TraceManager.addDev("CPU controller=|" + CPUController + "|");
+        HwExecutionNode node = getHwExecutionNodeByName(CPUController);
+        if (node == null) {
+            TraceManager.addDev("MemCPY/ Unknown Hw Execution Node: " + CPUController);
+	    return;
+        }
+
+	// SRC MEM
+	String SrcStorageInstance = _cp.getUnitByName("Src_Storage_Instance");
+        if (SrcStorageInstance == null) {
+            TraceManager.addDev("MemCPY/ Unknown SrcStorageInstance in CP");
+	    return;
+        }
+        HwMemory mem1 = tmla.getHwMemoryByName(SrcStorageInstance);
+        if (mem1 == null) {
+            TraceManager.addDev("MemCPY/ Unknown Hw Execution Node: " + SrcStorageInstance);
+	    return;
+        }
+
+	// DST MEM
+	String DstStorageInstance = _cp.getUnitByName("Dst_Storage_Instance");
+        if (DstStorageInstance == null) {
+            TraceManager.addDev("MemCPY/ Unknown DstStorageInstance in CP");
+	    return;
+        }
+        HwMemory mem2 = tmla.getHwMemoryByName(DstStorageInstance);
+        if (mem2 == null) {
+            TraceManager.addDev("MemCPY/ Unknown Hw Execution Node: " + DstStorageInstance);
+	    return;
+        }
+
+	// The current chan is unmapped, and mapped to the destination memory
+	removeCommMapping(chan);
+	addCommToHwCommNode(chan, mem2);
+	
+
+	// We create a new Task mapped on CPUController, with a new channel
+	TMLTask origin = chan.getOriginTask();
+	TMLTask ctrl = new TMLTask("MemCpyController__" + chan.getName(), chan, null);
+	tmlm.addTask(ctrl);
+	addTaskToHwExecutionNode(ctrl, node);
+	TMLChannel fromOriginToCTRL = new TMLChannel("toCTRL__" + chan.getName(), chan);
+	addCommToHwCommNode(fromOriginToCTRL, mem1);
+	fromOriginToCTRL.setType(TMLChannel.NBRNBW);
+	fromOriginToCTRL.setSize(chan.getSize());
+	fromOriginToCTRL.setTasks(chan.getOriginTask(), ctrl);
+        tmlm.addChannel(fromOriginToCTRL);
+
+	// Reworking chan
+	chan.setTasks(ctrl, chan.getDestinationTask());
+
+	// Reworking origin task
+	origin.replaceWriteChannelWith(chan, fromOriginToCTRL);
+        TMLEvent toCTRL = new TMLEvent("toCTRL__" +  chan.getName(), chan, 1, false);
+        tmlm.addEvent(toCTRL);
+        toCTRL.addParam(new TMLType(TMLType.NATURAL));
+        toCTRL.setTasks(origin, ctrl);
+        origin.addSendEventAfterWriteIn(fromOriginToCTRL, toCTRL, "size");
+
+	// We need to create the CTRL task-> infinite loop, waiting for the origin signal, and then making the mem cpy
+	TMLActivity activity = ctrl.getActivityDiagram();
+        TMLStartState start = new TMLStartState("startOfCTRL", null);
+        activity.setFirst(start);
+        TMLStopState mainStop = new TMLStopState("mainStopOfCTRL", null);
+        activity.addElement(mainStop);
+        TMLStopState stop = new TMLStopState("stopOfCTRL", null);
+        activity.addElement(stop);
+        TMLStopState stopWrite = new TMLStopState("stopOfWrite", null);
+        activity.addElement(stopWrite);
+        TMLWaitEvent wait = new TMLWaitEvent("waitEvtInCTRL", null);
+        wait.setEvent(toCTRL);
+        wait.addParam("size");
+	activity.addElement(wait);
+        TMLForLoop mainLoop = new TMLForLoop("mainLoopOfCTRL", null);
+        mainLoop.setInit("i=0");
+        mainLoop.setCondition("i==1");
+        mainLoop.setIncrement("i=i");
+        activity.addElement(mainLoop);
+        TMLForLoop loop = new TMLForLoop("loopOfCTRL", null);
+        loop.setInit("j=size");
+        loop.setCondition("j==0");
+        loop.setIncrement("j = j-1");
+        activity.addElement(loop);
+        TMLAttribute attri = new TMLAttribute("i", "i", new TMLType(TMLType.NATURAL), "0");
+        ctrl.addAttribute(attri);
+        TMLAttribute attrj = new TMLAttribute("j", "j", new TMLType(TMLType.NATURAL), "0");
+        ctrl.addAttribute(attrj);
+        TMLAttribute attrsize = new TMLAttribute("size", "size", new TMLType(TMLType.NATURAL), "0");
+        ctrl.addAttribute(attrsize);
+
+        TMLWriteChannel write = new TMLWriteChannel("WriteOfCTRL", null);
+        activity.addElement(write);
+        write.addChannel(chan);
+        write.setNbOfSamples("1");
+        TMLReadChannel read = new TMLReadChannel("ReadOfCTRL", null);
+        read.addChannel(fromOriginToCTRL);
+        read.setNbOfSamples("1");
+        activity.addElement(read);
+
+        activity.setFirst(start);
+        start.addNext(mainLoop);
+        mainLoop.addNext(wait);
+        mainLoop.addNext(mainStop);
+        wait.addNext(loop);
+        loop.addNext(read);
+        loop.addNext(stop);
+        read.addNext(write);
+        write.addNext(stopWrite);
+	
+
+	
+
+	
+	
     }
 
 }
