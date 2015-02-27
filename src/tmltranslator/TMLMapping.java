@@ -740,6 +740,32 @@ public class TMLMapping {
 	    return;
         }
 
+	// SRC MEM
+	String SrcStorageInstance = _cp.getUnitByName("Src_Storage_Instance_1");
+        if (SrcStorageInstance == null) {
+            TraceManager.addDev("DMA_transfer/ Unknown SrcStorageInstance in CP");
+	    return;
+        }
+        HwMemory mem1 = tmla.getHwMemoryByName(SrcStorageInstance);
+        if (mem1 == null) {
+            TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + SrcStorageInstance);
+	    return;
+        }
+
+	// DST MEM
+	String DstStorageInstance = _cp.getUnitByName("Dst_Storage_Instance_1");
+        if (DstStorageInstance == null) {
+            TraceManager.addDev("DMA_transfer/ Unknown DstStorageInstance in CP");
+	    return;
+        }
+        HwMemory mem2 = tmla.getHwMemoryByName(DstStorageInstance);
+        if (mem2 == null) {
+            TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + DstStorageInstance);
+	    return;
+        }
+
+	
+
 
         // At each origin: We write in a new local channel in a NBRNBW fashion
         // This new channel is mapped on Src_Storage_Instance_1
@@ -748,11 +774,17 @@ public class TMLMapping {
 
         // -> The old channel is thus transformed into two new channels
 
+	// The current chan is unmapped, and mapped to the destination memory
+	removeCommMapping(chan);
+	addCommToHwCommNode(chan, mem2);
 
         // New DMATask
         TMLTask dmaTask = new TMLTask("DMATask__" + chan.getName(), chan, null);
         tmlm.addTask(dmaTask);
         TMLChannel fromOriginToDMA = new TMLChannel("toDMATask__" + chan.getName(), chan);
+	addCommToHwCommNode(fromOriginToDMA, mem1);
+	fromOriginToDMA.setType(TMLChannel.NBRNBW);
+	fromOriginToDMA.setSize(chan.getSize());
         tmlm.addChannel(fromOriginToDMA);
         TMLPort portInDMA = new TMLPort("portToDMATask__" + chan.getName(), chan);
         TMLPort portOutDMA = new TMLPort("portfromDMATask__" + chan.getName(), chan);
@@ -830,6 +862,7 @@ public class TMLMapping {
         addTaskToHwExecutionNode(dmaTask, node);
 
 
+
     }
 
     public String getMappedTasksString() {
@@ -888,6 +921,56 @@ public class TMLMapping {
             TraceManager.addDev("Double_DMA_transfer/ Unknown Hw Execution Node2: " + DMAController2);
         }
 
+	// SRC MEM
+	String SrcStorageInstance1 = _cp.getUnitByName("Src_Storage_Instance_1");
+        if (SrcStorageInstance1 == null) {
+            TraceManager.addDev("DMA_transfer/ Unknown SrcStorageInstance1 in CP");
+	    return;
+        }
+        HwMemory mem11 = tmla.getHwMemoryByName(SrcStorageInstance1);
+        if (mem11 == null) {
+            TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + SrcStorageInstance1);
+	    return;
+        }
+
+	String SrcStorageInstance2 = _cp.getUnitByName("Src_Storage_Instance_2");
+        if (SrcStorageInstance2 == null) {
+            TraceManager.addDev("DMA_transfer/ Unknown SrcStorageInstance2 in CP");
+	    return;
+        }
+        HwMemory mem12 = tmla.getHwMemoryByName(SrcStorageInstance2);
+        if (mem12 == null) {
+            TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + SrcStorageInstance2);
+	    return;
+        }
+
+	// DST MEM
+	String DstStorageInstance1 = _cp.getUnitByName("Dst_Storage_Instance_1");
+        if (DstStorageInstance1 == null) {
+            TraceManager.addDev("DMA_transfer/ Unknown DstStorageInstance1 in CP");
+	    return;
+        }
+        HwMemory mem21 = tmla.getHwMemoryByName(DstStorageInstance1);
+        if (mem21 == null) {
+            TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + DstStorageInstance1);
+	    return;
+        }
+
+	String DstStorageInstance2 = _cp.getUnitByName("Dst_Storage_Instance_2");
+        if (DstStorageInstance2 == null) {
+            TraceManager.addDev("DMA_transfer/ Unknown DstStorageInstance2 in CP");
+	    return;
+        }
+        HwMemory mem22 = tmla.getHwMemoryByName(DstStorageInstance2);
+        if (mem22 == null) {
+            TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + DstStorageInstance2);
+	    return;
+        }
+
+	// The current chan is unmapped, and mapped to the destination memory
+	removeCommMapping(chan);
+	addCommToHwCommNode(chan, mem22);
+
 	// For each DMA transfer: we make one task.
 	// An event is sent from the origin task to the DMA task to inform about the fact to make the DMA transfer
 	// Also, DMA tasks communicate by event to inform whether they should make a transfer or not
@@ -897,11 +980,15 @@ public class TMLMapping {
 	TMLTask dmaTask2 = new TMLTask("DMATask2__" + chan.getName(), chan, null);
         tmlm.addTask(dmaTask1);
         TMLChannel fromOriginToDMA1 = new TMLChannel("toDMATask1__" + chan.getName(), chan);
+	addCommToHwCommNode(fromOriginToDMA1, mem11);
 	fromOriginToDMA1.setType(TMLChannel.NBRNBW);
+	fromOriginToDMA1.setSize(chan.getSize());
         tmlm.addChannel(fromOriginToDMA1);
 	TMLChannel fromDMA1ToDestination = new TMLChannel("fromDMATask1__" + chan.getName(), chan);
-	fromOriginToDMA1.setType(TMLChannel.NBRNBW);
-        tmlm.addChannel(fromDMA1ToDestination);
+	addCommToHwCommNode(fromDMA1ToDestination, mem21);
+	fromDMA1ToDestination.setType(TMLChannel.NBRNBW);
+	fromDMA1ToDestination.setSize(chan.getSize());
+	tmlm.addChannel(fromDMA1ToDestination);
         TMLPort portInDMA1 = new TMLPort("portToDMATask1__" + chan.getName(), chan);
         TMLPort portOutDMA1 = new TMLPort("portfromDMATask1__" + chan.getName(), chan);
 	TMLPort portIn1DestinationTask = new TMLPort("portfromDMATask1__" + chan.getName(), chan);
@@ -996,6 +1083,9 @@ public class TMLMapping {
         
         tmlm.addTask(dmaTask2);
         TMLChannel fromOriginToDMA2 = new TMLChannel("toDMATask2__" + chan.getName(), chan);
+	addCommToHwCommNode(fromOriginToDMA2, mem21);
+	fromOriginToDMA2.setType(TMLChannel.NBRNBW);
+	fromOriginToDMA2.setSize(chan.getSize());
         tmlm.addChannel(fromOriginToDMA2);
 	TMLChannel fromDMA2ToDestination = chan;
 	/*= new TMLChannel("fromDMATask2__" + chan.getName(), chan);
