@@ -1,5 +1,6 @@
 package myutil;
 
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -11,6 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import org.jsoup.nodes.Document;
+import myutil.TraceManager;
 
 public class GoogleSearch {
 	
@@ -69,9 +71,9 @@ public class GoogleSearch {
 				if (descelement.size()!=0)
 					desc = descelement.first().text();
 				
-				System.out.println("Title: --> "+title);
-				System.out.println("url: --> "+url);
-				System.out.println("Decription: --> "+desc);
+				//TraceManager.addDev("Title: --> "+title);
+				//TraceManager.addDev("url: --> "+url);
+				//TraceManager.addDev("Decription: --> "+desc);
 				
 				 gs.setTitle(title);
 				 gs.setUrl(url);
@@ -159,13 +161,13 @@ public class GoogleSearch {
 	            }
             
             
-	            System.out.println("title-->"+title);
-	            System.out.println("url-->"+url);
-	            System.out.println("desc-->"+desc);
-	            System.out.println("author-->"+authors);
-	            System.out.println("cited number-->"+citedNumber);
-	            System.out.println("cited link-->"+citedLinks);
-	            System.out.println("related link-->"+related);
+	            //TraceManager.addDev("title-->"+title);
+	            //TraceManager.addDev("url-->"+url);
+	            //TraceManager.addDev("desc-->"+desc);
+	            //TraceManager.addDev("author-->"+authors);
+	            //TraceManager.addDev("cited number-->"+citedNumber);
+	            //TraceManager.addDev("cited link-->"+citedLinks);
+	            //TraceManager.addDev("related link-->"+related);
 	            
 	            gs.authors=authors;
 	            gs.title=title;

@@ -21,12 +21,15 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import myutil.GoogleSearch;
+import myutil.GraphicLib;
 
 import java.lang.Object;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import myutil.GraphicLib;
+
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.*;
@@ -77,6 +80,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     public JDialogSearchBox(Frame _frame, String _title, ArrayList<String> l) {
     	 //super(_frame, _title, true);
          initComponents();
+         GraphicLib.centerOnParent(this);
          String s="";
          for (int i =0; i< l.size(); i++){
         	 addValueListKeyword(l.get(i));
@@ -374,7 +378,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     	DefaultTableModel model = (DefaultTableModel) this.resultTable.getModel();
     	int rowindex = resultTable.getSelectedRow();
     	int id =0;
-    	System.out.println(rowindex);
+    	
     	if(rowindex >=0)
     		id= (int) resultTable.getValueAt(rowindex, 0);
 	    	GoogleSearch selected=null;
@@ -432,8 +436,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     
     public void putGoogleToTable(ArrayList<GoogleSearch> a)
     {
-    	System.out.println(rows.size());
-    	System.out.println(a.size());
     	int i = this.rows.size()+1;
     	for (GoogleSearch gs : a){
     		this.rows.add(new Object[]{i, gs,"Google"});

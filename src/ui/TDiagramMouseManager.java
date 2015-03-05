@@ -54,6 +54,7 @@ import myutil.*;
 import java.util.ArrayList;
 
 import ui.window.JDialogSearchBox;
+import myutil.TraceManager;
 
 public class TDiagramMouseManager implements MouseListener, MouseMotionListener  {
 
@@ -355,7 +356,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 
 				selectedMultiComponents.add(tgc.getValue());
 				
-				System.out.println("cac component da select : " + selectedMultiComponents.toString());
+				//TraceManager.addDev("Selected components: " + selectedMultiComponents.toString());
 			}
 			else {
 				if (tdp.j.isShowing())
