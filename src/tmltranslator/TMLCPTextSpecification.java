@@ -884,7 +884,6 @@ public class TMLCPTextSpecification {
 //				switch( token )	{
 //					case "fork":	{	//ERROR: no nested forks
 //						TraceManager.addDev( "ERROR: ENCOUNTERED NESTED FORK!" );
-//						System.exit(0);
 //					break;
 //					}
 //					case "join":	{	//End of branch, regardless if coming from main or choice exploration
@@ -902,7 +901,6 @@ public class TMLCPTextSpecification {
 //								if( fromChoice )	{	//ERROR: no nested choices
 //									TraceManager.addDev( "ERROR: ENCOUNTERED JUNCTION IN FORK WHILE COMING FROM CHOICE!" );
 //									exit = true;
-//									//System.exit(0);
 //								}
 //								else	{
 //									branchSb += CR + TAB2 + LOOP + loopCounter + CR + TAB2;
@@ -918,7 +916,6 @@ public class TMLCPTextSpecification {
 //								if( fromChoice )	{
 //									TraceManager.addDev( "ERROR: ENCOUNTERED NESTED FORK!" );
 //									exit = true;
-//									//System.exit(0);
 //								}
 //								else	{
 //									fromMain = false;
@@ -936,7 +933,6 @@ public class TMLCPTextSpecification {
 //					case "stop":	{	//ERROR: fork must always terminate with a join
 //						TraceManager.addDev( "ERROR: ENCOUNTERED STOP BEFORE JOIN!" );
 //						exit = true;
-//						//System.exit(0);
 //					break;
 //					}
 //					default:	{	//Found a sequence/activity diagram, continue to explore
@@ -1008,7 +1004,6 @@ public class TMLCPTextSpecification {
 //						if( fromMain )	{
 //							TraceManager.addDev( "ERROR: ENCOUNTERED JOIN IN CHOICE WHILE COMING FROM MAIN!" );
 //							exit = true;
-//							//System.exit(0);
 //						}
 //						else if( fromFJ )	{
 //							currentElemToPass = currentElem;
@@ -1024,7 +1019,6 @@ public class TMLCPTextSpecification {
 //							if( nextElem.substring(0,6).equals("choice") )	{	//ensure the name starts with choice
 //								TraceManager.addDev( "ENCOUNTERED NESTED CHOICE WHILE COMING FROM CHOICE!" );
 //								exit = true;
-//								//System.exit(0);
 //							}
 //						}
 //					break;
@@ -1043,7 +1037,6 @@ public class TMLCPTextSpecification {
 //						if( fromFJ )	{
 //							TraceManager.addDev( "ERROR: ENCOUNTERED NESTED CHOICE WHILE COMING FROM FJ!" );
 //							exit = true;
-//							//System.exit(0);
 //						}
 //						else if( fromMain )	{
 //							String temp = branchSb.substring( 0, branchSb.length() - 2 );	//Remove trailing semicolon
@@ -1060,7 +1053,6 @@ public class TMLCPTextSpecification {
 //				if( nextElem.equals( "ERROR" ) )	{
 //					TraceManager.addDev( "ERROR WHEN GENERATING TML CODE in exploreChoiceBranches: " + nextElem );
 //					exit = true;
-//					//System.exit(0);
 //				}
 //				currentElem = nextElem; 	//advance to next connector
 //				nextElem = getNextElem();
