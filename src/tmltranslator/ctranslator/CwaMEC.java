@@ -51,60 +51,59 @@ import java.util.*;
 
 public class CwaMEC extends TaskMEC	{
 
-	public CwaMEC( String XOP, String ID0, String OD0, String BTC )	{
+	public CwaMEC( String XOP, String ID0, String ID1, String OD0, String BTC )	{
 
 		node_type = "FEP";
 		inst_type = "CWA";
 		inst_decl = "FEP_CONTEXT";
 		buff_type = "FEP_BUFF_TYPE";
 		buff_init = "= {/*l,b,q,t*/};";
-		exec_code = "/*firm instruction*/" + CR +
-			" fep_set_l(&$XOP$, ((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->l);" + CR +
-			" fep_set_qx(&$XOP$,((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->q);" + CR +
-			" fep_set_bx(&$XOP$,sig[$ID0$].roff + ((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->b);" + CR +
-			" fep_set_tx(&$XOP$,((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->t);" + CR +
-			" fep_set_qy(&$XOP$,((FEP_BUFF_TYPE*)sig[$ID1$].pBuff)->q);" + CR +
-			" fep_set_by(&$XOP$,sig[$ID1$].roff + ((FEP_BUFF_TYPE*)sig[$ID1$].pBuff)->b);" + CR +
-			" fep_set_ty(&$XOP$,((FEP_BUFF_TYPE*)sig[$ID1$].pBuff)->t);" + CR +
-			" fep_set_qz(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->q);" + CR +
-			" fep_set_bz(&$XOP$,sig[$OD0$].woff + ((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->b);" + CR +
-			" fep_set_tz(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->t);" + CR +
-			"/*start execution*/" + CR +
-			"fep_start(&$XOP$);" + CR;
+		exec_code = "/*firm instruction*/" + CR + TAB +
+			"fep_set_l(&"+ XOP + ", ((FEP_BUFF_TYPE*)sig["+ ID0 + "].pBuff)->l);" + CR + TAB +
+			"fep_set_qx(&"+ XOP + ",((FEP_BUFF_TYPE*)sig["+ ID0 + "].pBuff)->q);" + CR + TAB +
+			"fep_set_bx(&"+ XOP + ",sig["+ ID0 + "].roff + ((FEP_BUFF_TYPE*)sig["+ ID0 + "].pBuff)->b);" + CR + TAB +
+			"fep_set_tx(&"+ XOP + ",((FEP_BUFF_TYPE*)sig["+ ID0 + "].pBuff)->t);" + CR + TAB +
+			"fep_set_qy(&"+ XOP + ",((FEP_BUFF_TYPE*)sig["+ ID1 + "].pBuff)->q);" + CR + TAB +
+			"fep_set_by(&"+ XOP + ",sig["+ ID1 + "].roff + ((FEP_BUFF_TYPE*)sig["+ ID1 + "].pBuff)->b);" + CR + TAB +
+			"fep_set_ty(&"+ XOP + ",((FEP_BUFF_TYPE*)sig["+ ID1 + "].pBuff)->t);" + CR + TAB +
+			"fep_set_qz(&"+ XOP + ",((FEP_BUFF_TYPE*)sig["+ OD0 + "].pBuff)->q);" + CR + TAB +
+			"fep_set_bz(&"+ XOP + ",sig["+ OD0 + "].woff + ((FEP_BUFF_TYPE*)sig["+ OD0 + "].pBuff)->b);" + CR + TAB +
+			"fep_set_tz(&"+ XOP + ",((FEP_BUFF_TYPE*)sig["+ OD0 + "].pBuff)->t);" + CR + TAB +
+			"/*start execution*/" + CR + TAB +
+			"fep_start(&"+ XOP + ");" + CR;
 		
-		init_code ="/***** INIT $XOP$ *******/" + CR +
-			"void init_$XOP$(void){" + CR +
-			" fep_ctx_init(&$XOP$,0);" + CR +
-			" // initialize context" + CR +
-			" fep_set_op(&$XOP$,FEP_OP_CWA );" + CR +
-			" fep_set_l(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->l);" + CR +
-			" fep_set_wx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_sx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_nx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_mx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_px(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_dx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_vrx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_vix(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_wy(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_sy(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_ny(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_my(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_py(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_dy(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_vry(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_viy(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_qz(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->q);" + CR +
-			" fep_set_bz(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->b);" + CR +
-			" fep_set_tz(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->t);" + CR +
-			" fep_set_wz(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_ri(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_sz(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_nz(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_mz(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_sma(&$XOP$,1);" + CR +
+		init_code ="/***** INIT "+ XOP + " *******/" + CR +
+			"void init_"+ XOP + "(void){" + CR + TAB +
+			"fep_ctx_init(&"+ XOP + ",0);" + CR + TAB +
+			"// initialize context" + CR + TAB +
+			"fep_set_op(&"+ XOP + ",FEP_OP_CWA );" + CR + TAB +
+			"fep_set_wx(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_sx(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_nx(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_mx(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_px(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_dx(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_vrx(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_vix(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_wy(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_sy(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_ny(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_my(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_py(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_dy(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_vry(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_viy(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_qz(&"+ XOP + ",((FEP_BUFF_TYPE*)sig["+ OD0 + "].pBuff)->q);" + CR + TAB +
+			"fep_set_bz(&"+ XOP + ",((FEP_BUFF_TYPE*)sig["+ OD0 + "].pBuff)->b);" + CR + TAB +
+			"fep_set_tz(&"+ XOP + ",((FEP_BUFF_TYPE*)sig["+ OD0 + "].pBuff)->t);" + CR + TAB +
+			"fep_set_wz(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_ri(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_sz(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_nz(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_mz(&"+ XOP + ",(uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_sma(&"+ XOP + ",1);" + CR + TAB +
 			"}" + CR;
-		cleanup_code = "fep_ctx_cleanup(&$XOP$);";
+		cleanup_code = "fep_ctx_cleanup(&"+ XOP + ");";
 	}
 
 }	//End of class

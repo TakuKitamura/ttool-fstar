@@ -366,7 +366,7 @@ public class TMLCCodeGeneration	{
 								TAB2 + "fclose(source);" + CR +
  								TAB + "} else printf(\"ERROR input file does not exist!\\n\");" + CR +
 								TAB + applicationName + "_init( (char*)src_out_dat, (char*)dma1_out_dat, g_r_size, g_Ns , g_Fi, g_Li );" + CR +
-								TAB + "status = " + applicationName + "_final();" + CR +
+								TAB + "status = " + applicationName + "_exec();" + CR +
 								TAB + "printf(\"score %d \", *(uint32_t*)dma1_out_dat );" + CR +
 								TAB + "free(src_out_dat);" + CR +
 								"}";
@@ -417,8 +417,8 @@ public class TMLCCodeGeneration	{
 
 	private String prototypes()	{
 		String s = 	"/**** prototypes *****/" + CR +
-								"extern int " + applicationName + "_final(void);" + CR +
-								"extern void " + applicationName + "_final_init();" + CR +
+								"extern int " + applicationName + "_exec(void);" + CR +
+								"extern void " + applicationName + "_exec_init();" + CR +
 								"extern bool exit_rule(void);" + CR +
 								"extern void register_operations(void);" + CR +
 								"extern void register_fire_rules(void);" + CR +
@@ -582,8 +582,8 @@ public class TMLCCodeGeneration	{
 							"int (*operation[NUM_OPS])();" + CR +
 							"bool (*fire_rule[NUM_OPS])();" + CR +
 							"SIG_TYPE sig[NUM_SIGS]={{0}};" + CR2 +
-							"/******** " + applicationName + "_final function *********/" + CR +
-							"int " + applicationName + "_final(void)	{" + CR +
+							"/******** " + applicationName + "_exec function *********/" + CR +
+							"int " + applicationName + "_exec(void)	{" + CR +
 							"register_operations();" + CR +
 							"register_fire_rules();" + CR +
 							"signal_to_buffer_init();" + CR +
@@ -876,7 +876,7 @@ public class TMLCCodeGeneration	{
 				exec_code = cwm.getExecCode();
 			}
 			if( XOD.contains( "CWA" ) || XOD.contains( "cwa" ) )	{
-				CwaMEC cwa = new CwaMEC( XOD, ID0, OD0, "" );
+				CwaMEC cwa = new CwaMEC( XOD, ID0, "", OD0, "" );
 				exec_code = cwa.getExecCode();
 			}
 			if( XOD.contains( "CWL" ) || XOD.contains( "cwl" ) )	{
@@ -1093,7 +1093,7 @@ public class TMLCCodeGeneration	{
 		String init_code = "";
 		String XOD = "";
 
-		initString += "#include \"" + applicationName + "_final.h\"" + CR2;
+		initString += "#include \"" + applicationName + "_exec.h\"" + CR2;
 
 		initString += "/**** variables ****/" + CR2 +
 									"int g_r_size = 10240;" + CR +
@@ -1148,7 +1148,7 @@ public class TMLCCodeGeneration	{
 				init_code = cwm.getInitCode();
 			}
 			else if( XOD.contains( "CWA" ) || XOD.contains( "cwa" ) )	{
-				CwaMEC cwa = new CwaMEC( XOD, task.getID0(), task.getOD0(), "" );
+				CwaMEC cwa = new CwaMEC( XOD, task.getID0(), "", task.getOD0(), "" );
 				init_code = cwa.getInitCode();
 			}
 			else if( XOD.contains( "CWL" ) || XOD.contains( "cwl" ) )	{
@@ -1243,7 +1243,7 @@ public class TMLCCodeGeneration	{
 
 	private String initializeApplication()	{
 
-		String s = "void " + applicationName + "_final_init()\t{" + CR;
+		String s = "void " + applicationName + "_exec_init()\t{" + CR;
 
 			for( Buffer buff: buffersList )	{
 				s += TAB + buff.getName() + SP + "=" + SP;
