@@ -49,8 +49,9 @@ import ui.tmlcompd.*;
 
 public class TMLPort extends TMLElement {
 
-    boolean prex;
-    boolean postex;
+    private boolean prex;
+    private boolean postex;
+		private String associatedEvent;
 
     public TMLPort(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -71,4 +72,12 @@ public class TMLPort extends TMLElement {
     public boolean isPostex()   {
         return postex;
     }
+
+		public void setAssociatedEvent( String _eventName )	{
+			associatedEvent = _eventName;
+		}
+
+		public String getAssociatedEvent()	{
+			return associatedEvent;
+		}
 }

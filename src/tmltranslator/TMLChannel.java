@@ -397,4 +397,18 @@ public class TMLChannel extends TMLCommunicationElement {
         return false;
     }
     
+		/*@Override public boolean equals( Object o )	{
+			if( !( o instanceof TMLChannel ) )	{
+				return false;
+			}
+			TMLChannel ch = (TMLChannel)o;
+			if( ch.isBasicChannel() )	{
+				return ch.getOriginPort().equals()
+			}
+			else if( ch.isAJoinChannel() )	{
+			}
+			else if( ch.isAForkChannel()	)	{
+			}
+			return false;
+		}*/
 }

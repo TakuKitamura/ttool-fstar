@@ -73,6 +73,8 @@ public class Signal	{
 	private TMLPort port;
 	private String name;
 	private TMLCPLibArtifact artifact;
+	private TMLChannel channel;
+	private TMLEvent event;
 	
 	public Signal( String _name, TMLPort _port, TMLCPLibArtifact _artifact )	{
 		port = _port;
@@ -80,12 +82,41 @@ public class Signal	{
 		artifact = _artifact;
 	}
 
-	public Signal()	{
-		port = null;
+	public Signal( TMLChannel _ch, TMLEvent _evt )	{
+		channel = _ch;
+		event = _evt;
+		if( _ch.isBasicChannel() )	{
+			name = "SIGNAL__" + _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[3];
+		}
+		else if( _ch.isAForkChannel() )	{
+			name = "SIGNAL__" + _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[2] + "__" + _ch.getName().split("__")[3];
+		}
+		else if( _ch.isAJoinChannel() )	{
+			name = "SIGNAL__" + _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[2] + "__" + _ch.getName().split("__")[3];
+		}
+	}
+
+	public boolean isAssociatedToTMLChannel( TMLChannel _ch )	{
+		if( _ch.isBasicChannel() )	{
+			String signalName = name.split("SIGNAL__")[1];
+			String channelName = _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[3];
+			return signalName.equals( channelName );
+		}
+		else if( _ch.isAForkChannel() )	{
+			String signalName = name.split("SIGNAL__")[1];
+			String channelName = _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[2] + "__" + _ch.getName().split("__")[3];
+			return signalName.equals( channelName );
+		}
+		else if( _ch.isAJoinChannel() )	{
+			String signalName = name.split("SIGNAL__")[1];
+			String channelName = _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[2] + "__" + _ch.getName().split("__")[3];
+			return signalName.equals( channelName );
+		}
+		return false;
 	}
 
 	public String toString()	{
-		return DECLARATION;
+		return name;
 	}
 
 	public String getName()	{
@@ -94,6 +125,14 @@ public class Signal	{
 
 	public TMLCPLibArtifact getArtifact()	{
 		return artifact;
+	}
+
+	public TMLChannel getTMLChannel()	{
+		return channel;
+	}
+
+	public TMLEvent getTMLEvent()	{
+		return event;
 	}
 
 }	//End of class

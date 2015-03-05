@@ -51,7 +51,7 @@ import java.nio.*;
 import myutil.*;
 import tmltranslator.*;
 
-public abstract class Buffer	{
+public class Buffer	{
 
 	public String CR = "\n";
 	public String TAB = "\t";
@@ -64,13 +64,30 @@ public abstract class Buffer	{
 	protected String type = "";
 
 	protected TMLTask task;
+	protected TMLPort port;
+	protected TMLCPLibArtifact artifact;
 	
 	public Buffer()	{
 		code = "struct" + SP + name + TAB + "{" + CR + "}" + SC;
 	}
+
+	public Buffer( TMLPort _port )	{
+		port = _port;
+		name = "BUFFER__" + port.getName();
+	}
 	
 	public String toString()	{
-		return code;
+		if( port != null )	{
+			if( artifact != null )	{
+				return "BUFFER__" + port.getName() + " mapped onto " + artifact.getMemoryName();
+			}
+			else	{
+				return "BUFFER__" + port.getName();
+			}
+		}
+		else	{
+			return code;
+		}
 	}
 
 	public String getName()	{
@@ -87,5 +104,13 @@ public abstract class Buffer	{
 
 	public TMLTask getTask()	{
 		return task;
+	}
+
+	public void addMappingArtifact( TMLCPLibArtifact _artifact )	{
+		artifact = _artifact;
+	}
+
+	public TMLCPLibArtifact getMappingArtifact()	{
+		return artifact;
 	}
 }	//End of class

@@ -60,32 +60,69 @@ public class Operation	{
 	public static final int X_TASK = 1;
 	private int type;
 	private String name = "";
-	private TMLTask task1;
-	private TMLTask task2;
+	private TMLTask fTask;
+	private TMLTask xTask;
+	private boolean prex;
+	private boolean postex;
+	private Signal inSignal;
+	private Signal outSignal;
+	private Buffer inBuffer;
+	private Buffer outBuffer;
+	private HwNode xHwNode;
+	private HwNode fHwNode;
 
+
+	//Constructor for non-SDR operations
 	public Operation( TMLTask _task )	{
 		name = _task.getName().split( "__" )[1];
-		task1 = _task;
-		task2 = null;
+		fTask = _task;
+		xTask = null;
 		type = 0;	//NONSDR
 	}
-
+	
+	//Constructor for SDR operations, before the introduction of signals
 	public Operation( TMLTask _task1, TMLTask _task2 )	{	//First pass the F task
 		name = _task1.getName().split( "__" )[1].split( "F_" )[1];
-		task1 = _task1;
-		task2 = _task2;
+		fTask = _task1;
+		xTask = _task2;
+		type = 1;	//SDR
+	}
+
+	//Constructor for SDR operations with input (READ channels and events) and output (WRITE channels and events) signals
+	public Operation( TMLTask _xTask, TMLTask _fTask, HwNode _xHwNode, HwNode _fHwNode, Signal _inSignal, Signal _outSignal, Buffer _inBuffer, Buffer _outBuffer )	{	//First pass the F task
+		name = _xTask.getName().split( "__" )[1].split( "F_" )[1];
+		fTask = _xTask;
+		xTask = _fTask;
+		xHwNode = _xHwNode;
+		fHwNode = _fHwNode;
+		inSignal = _inSignal;
+		outSignal = _outSignal;
+		inBuffer = _inBuffer;
+		outBuffer = _outBuffer;
 		type = 1;	//SDR
 	}
 
 	public TMLTask getNONSDRTask()	{
-		return task1;
+		return fTask;
+	}
+
+	public TMLTask getXTask()	{
+		return xTask;
+	}
+
+	public TMLTask getFTask()	{
+		return fTask;
 	}
 
 	public ArrayList<TMLTask> getSDRTasks()	{
 		ArrayList<TMLTask> tasks = new ArrayList<TMLTask>();
-		tasks.add( task1 );
-		tasks.add( task2 );
+		tasks.add( fTask );
+		tasks.add( xTask );
 		return tasks;
+	}
+
+	public boolean isSDRoperation()	{
+		return ( type == Operation.SDR );
 	}
 
 	public String getName()	{
@@ -100,8 +137,41 @@ public class Operation	{
 		return type;
 	}
 
+	public Signal getInSignal()	{
+		return inSignal;
+	}
+
+	public Signal getOutSignal()	{
+		return outSignal;
+	}
+
+	public void setInBuffer( Buffer _inBuffer)	{
+		inBuffer = _inBuffer;
+	}
+
+	public void setOutBuffer( Buffer _outBuffer)	{
+		outBuffer = _outBuffer;
+	}
+
+	public Buffer getInBuffer()	{
+		return inBuffer;
+	}
+
+	public Buffer getOutBuffer()	{
+		return outBuffer;
+	}
+
 	public String toString()	{
-		return name;
+		if( ( inSignal != null ) && ( outSignal != null ) )	{
+			return "OPERATION " + name + "\n\t" + inSignal.getName() + "\n\t" + outSignal.getName() + "\n\t" + xHwNode.getName() + "\n\t" + fHwNode.getName() + "\n\t" + inBuffer.toString() + "\n\t" + outBuffer.toString();
+		}
+		else if( inSignal == null )	{
+			return "OPERATION " + name + "\n\t" + outSignal.getName() + "\n\t" + xHwNode.getName() + "\n\t" + fHwNode.getName() + "\n\t" + outBuffer.toString();
+		}
+		else if( outSignal == null )	{
+			return "OPERATION " + name + "\n\t" + inSignal.getName() + "\n\t" + xHwNode.getName() + "\n\t" + fHwNode.getName() + "\n\t" + inBuffer.toString();
+		}
+		return "void OPERATION";
 	}
 
 }	//End of class

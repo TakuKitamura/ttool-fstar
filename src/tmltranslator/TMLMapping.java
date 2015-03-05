@@ -1322,4 +1322,59 @@ public class TMLMapping {
 	
     }
 
-}
+		public void linkTasks2TMLChannels()	{
+
+			ListIterator iterator;
+			if( tmlm != null )	{
+				iterator = tmlm.getTasks().listIterator();
+				while( iterator.hasNext() )	{
+					TMLTask task = (TMLTask)( iterator.next() );
+					for( TMLReadChannel readCh: task.getReadChannels() )	{
+						String readChName = readCh.toString().split(": ")[1];
+						for( TMLChannel ch: tmlm.getChannels() )	{
+							if( ch.getName().equals( readChName ) )	{
+								task.addTMLChannel( ch );
+								task.addReadTMLChannel( ch );
+							}
+						}
+					}
+					for( TMLWriteChannel writeCh: task.getWriteChannels() )	{
+						String writeChName = writeCh.toString().split(": ")[1];
+						for( TMLChannel ch: tmlm.getChannels() )	{
+							if( ch.getName().equals( writeChName ) )	{
+								task.addTMLChannel( ch );
+								task.addWriteTMLChannel( ch );
+							}
+						}
+					}
+				}
+			}
+		}
+
+		public void linkTasks2TMLEvents()	{
+
+			ListIterator iterator;
+			if( tmlm != null )	{
+				iterator = tmlm.getTasks().listIterator();
+				while( iterator.hasNext() )	{
+					TMLTask task = (TMLTask)( iterator.next() );
+					for( TMLSendEvent sendEvt: task.getSendEvents() )	{
+						String sendEvtName = sendEvt.toString().split(":")[1].split("\\(")[0];
+						for( TMLEvent evt: tmlm.getEvents() )	{
+							if( evt.getName().equals( sendEvtName ) )	{
+								task.addTMLEvent( evt );
+							}
+						}
+					}
+					for( TMLWaitEvent waitEvt: task.getWaitEvents() )	{
+						String waitEvtName = waitEvt.toString().split(":")[1].split("\\(")[0];
+						for( TMLEvent evt: tmlm.getEvents() )	{
+							if( evt.getName().equals( waitEvtName ) )	{
+								task.addTMLEvent( evt );
+							}
+						}
+					}
+				}
+			}
+		}
+}	//End of class

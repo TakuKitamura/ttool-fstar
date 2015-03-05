@@ -776,4 +776,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 		return isPostex;
 	}
 
+	public String getAssociatedEvent()	{
+		return associatedEvent;
+	}
+
 }

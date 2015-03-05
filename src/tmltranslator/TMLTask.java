@@ -57,6 +57,10 @@ public class TMLTask extends TMLElement {
     private ArrayList<TMLAttribute> attributes;
     private boolean mustExit = false;
     private int priority;
+		private HashSet<TMLChannel> channelsList;
+		private HashSet<TMLChannel> readTMLChannelsList;
+		private HashSet<TMLChannel> writeTMLChannelsList;
+		private HashSet<TMLEvent> eventsList;
 
 
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
@@ -64,6 +68,10 @@ public class TMLTask extends TMLElement {
         //TraceManager.addDev("Creating new TMLTask:" + name);
         activity = new TMLActivity(name+"activity_diagram", referenceToActivityDiagram);
         attributes = new ArrayList<TMLAttribute>();
+				channelsList = new HashSet<TMLChannel>();
+				readTMLChannelsList = new HashSet<TMLChannel>();
+				writeTMLChannelsList = new HashSet<TMLChannel>();
+				eventsList = new HashSet<TMLEvent>();
     }
 
     public void setRequested(boolean _b) {
@@ -139,6 +147,7 @@ public class TMLTask extends TMLElement {
         return null;
     }
 
+		//For SDR operations only 1 channel
     public ArrayList<TMLReadChannel> getReadChannels()  {
 
         ArrayList<TMLReadChannel> list = new ArrayList<TMLReadChannel>();
@@ -151,6 +160,7 @@ public class TMLTask extends TMLElement {
         return list;
     }
 
+		//For SDR operations, only 1 channel
     public ArrayList<TMLWriteChannel> getWriteChannels()        {
 
         ArrayList<TMLWriteChannel> list = new ArrayList<TMLWriteChannel>();
@@ -158,6 +168,28 @@ public class TMLTask extends TMLElement {
             if( getActivityDiagram().get(i) instanceof TMLWriteChannel )        {
                 list.add( (TMLWriteChannel) getActivityDiagram().get(i) );
                 //TraceManager.addDev( "Element: " + task.getActivityDiagram().get(i).toString() );
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<TMLSendEvent> getSendEvents()  {
+
+        ArrayList<TMLSendEvent> list = new ArrayList<TMLSendEvent>();
+        for( int i = 0; i < getActivityDiagram().nElements(); i++ )     {
+            if( getActivityDiagram().get(i) instanceof TMLSendEvent ) {
+            	list.add( (TMLSendEvent) getActivityDiagram().get(i) );
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<TMLWaitEvent> getWaitEvents()  {
+
+        ArrayList<TMLWaitEvent> list = new ArrayList<TMLWaitEvent>();
+        for( int i = 0; i < getActivityDiagram().nElements(); i++ )     {
+            if( getActivityDiagram().get(i) instanceof TMLWaitEvent ) {
+            	list.add( (TMLWaitEvent) getActivityDiagram().get(i) );
             }
         }
         return list;
@@ -286,5 +318,36 @@ public class TMLTask extends TMLElement {
     public void addSendEventAfterWriteIn(TMLChannel chan, TMLEvent evt, String action) {
 	activity.addSendEventAfterWriteIn(chan, evt, action);
     }
+	
+	public void addTMLChannel( TMLChannel _ch )	{
+		channelsList.add( _ch );
+	}
 
+	public void addReadTMLChannel( TMLChannel _ch )	{
+		readTMLChannelsList.add( _ch );
+	}
+
+	public void addWriteTMLChannel( TMLChannel _ch )	{
+		writeTMLChannelsList.add( _ch );
+	}
+
+	public ArrayList<TMLChannel> getTMLChannels()	{
+		return new ArrayList<TMLChannel>( channelsList );
+	}
+
+	public ArrayList<TMLChannel> getReadTMLChannels()	{
+		return new ArrayList<TMLChannel>( readTMLChannelsList );
+	}
+
+	public ArrayList<TMLChannel> getWriteTMLChannels()	{
+		return new ArrayList<TMLChannel>( writeTMLChannelsList );
+	}
+
+	public void addTMLEvent( TMLEvent _evt )	{
+		eventsList.add( _evt );
+	}
+
+	public ArrayList<TMLEvent> getTMLEvents()	{
+		return new ArrayList<TMLEvent>( eventsList );
+	}
 }

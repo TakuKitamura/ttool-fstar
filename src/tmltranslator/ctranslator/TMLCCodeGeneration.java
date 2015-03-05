@@ -89,6 +89,7 @@ public class TMLCCodeGeneration	{
 	private ArrayList<TMLPort> postexList = new ArrayList<TMLPort>();
 	private ArrayList<TMLPort> prexList = new ArrayList<TMLPort>();
 	private ArrayList<Buffer> buffersList = new ArrayList<Buffer>();
+	private ArrayList<Buffer> buffersList2 = new ArrayList<Buffer>();
 
 	public JFrame frame; //Main Frame
 
@@ -110,6 +111,8 @@ public class TMLCCodeGeneration	{
 	public void toTextFormat( TMLMapping _tmap )	{
 
 		tmap = _tmap;
+		tmap.linkTasks2TMLChannels();
+		tmap.linkTasks2TMLEvents();
 		tmlm = _tmap.getTMLModeling();
 		tmla = _tmap.getTMLArchitecture();
 		mappedCPLibs = _tmap.getMappedTMLCPLibs();
@@ -118,10 +121,30 @@ public class TMLCCodeGeneration	{
 		ArrayList<TMLTask> mappedTasks = tmap.getMappedTasks();
 		ArrayList<TMLElement> commElts = tmap.getMappedCommunicationElement();
 
-		//Generate the data structures
-		makeOperationsList( mappedTasks );
+		//Create the data structures
+		makeSignalsList();									//make the signals associated to operations, based on the tasks of operations
+
+		for( Signal sig: signalsList2 )	{
+			TraceManager.addDev( sig.toString() );
+		}
+
+		makeOperationsList( mappedTasks );	//make the list of operations based on the tasks in the app model
+
+		for( Operation op: operationsList )	{
+			TraceManager.addDev( op.toString() );
+		}
+
 		makeBuffersList();
-		makeSignalsList();
+
+		/*for( TMLCPLib cplib: mappedCPLibs )	{
+			if( cplib.getArtifacts().size() == 1 )	{
+				TraceManager.addDev( "----------" + cplib.getArtifacts().get(0).getPortName() );
+			}
+		}*/
+
+		for( Buffer buff: buffersList2 )	{
+			TraceManager.addDev( buff.toString() );
+		}
 
 		//Generate the C code
 		generateMainFile();
@@ -130,12 +153,16 @@ public class TMLCCodeGeneration	{
 		generateInitProgram( mappedTasks );
 	}
 
+/**********************************************************************************
+ * 																CREATION OF DATA STRUCTURE PART
+ *********************************************************************************/
 	//From the list of mapped tasks, built the list of operations. For SDR operations, only F_ tasks are considered.
 	private void makeOperationsList( ArrayList<TMLTask> mappedTasks )	{
 
 		ArrayList<TMLTask> SDRXtasks = new ArrayList<TMLTask>();
 		ArrayList<TMLTask> SDRFtasks = new ArrayList<TMLTask>();
-
+		Buffer inBuffer, outBuffer;
+		Signal inSignal, outSignal;
 		String[] s;
 
 		for( TMLTask task: mappedTasks )	{
@@ -155,18 +182,90 @@ public class TMLCCodeGeneration	{
 				}
 			}
 		}
-		//Now I need to couple the tasks for SDRtasks
+		//Now couple the tasks to create SDRoperations
 		for( TMLTask fTask: SDRFtasks )	{
 			String fTaskName = fTask.getName().split( "__" )[1].split( "F_" )[1];
 			for( TMLTask xTask: SDRXtasks )	{
 				String xTaskName = xTask.getName().split( "__" )[1].split( "X_" )[1];
 				if( xTaskName.equals( fTaskName ) )	{
-					operationsList.add( new Operation( fTask, xTask ) );
+					//Mind that signals are based on channels NOT on events!
+					inSignal = retrieveInSignal( xTask );	//is null for Source operation
+					outSignal = retrieveOutSignal( xTask);	//is null for Sink operation
+
+					//Get the ports of channels and associated them to buffers
+					if( xTask.getReadTMLChannels().size() > 0 )	{
+						inBuffer = createInBuffer( xTask.getReadTMLChannels().get(0) );	//null for Source
+					}
+					else	{
+						inBuffer = null;
+					}
+					if( xTask.getWriteTMLChannels().size() > 0 )	{
+						outBuffer = createOutBuffer( xTask.getWriteTMLChannels().get(0) );	//null for Sink
+					}
+					else	{
+						outBuffer = null;
+					}
+					
+					//Add operation to the list
+					operationsList.add( new Operation( fTask, xTask, tmap.getHwNodeOf( xTask ), tmap.getHwNodeOf( fTask ), inSignal, outSignal, inBuffer, outBuffer ) );
 					SDRoperationsCounter++;
 				}
 			}
 		}
-		TraceManager.addDev( "OperationsList: " + operationsList.toString() );
+	}
+
+	//Create the inBuffer form the port of the read channel associated to the xTask
+	private Buffer createInBuffer( TMLChannel readChannel )	{
+	
+		if( readChannel.isBasicChannel() )	{
+			return new Buffer( readChannel.getDestinationPort() );
+		}
+		else if( readChannel.isAForkChannel() )	{
+			return new Buffer( readChannel.getDestinationPorts().get(0) );
+		}
+		else if( readChannel.isAJoinChannel() )	{
+			return new Buffer( readChannel.getDestinationPorts().get(0) );
+		}
+		return null;
+	}
+
+	//Create the inBuffer form the port of the write channel associated to the xTask
+	private Buffer createOutBuffer( TMLChannel writeChannel )	{
+	
+		if( writeChannel.isBasicChannel() )	{
+			return new Buffer( writeChannel.getOriginPort() );
+		}
+		else if( writeChannel.isAForkChannel() )	{
+			return new Buffer( writeChannel.getOriginPorts().get(0) );
+		}
+		else if( writeChannel.isAJoinChannel() )	{
+			return new Buffer( writeChannel.getOriginPorts().get(0) );
+		}
+		return null;
+	}
+
+	private Signal retrieveInSignal( TMLTask task )	{
+
+		for( TMLChannel ch: task.getReadTMLChannels() )	{
+			for( Signal sig: signalsList2 )	{
+				if( sig.getTMLChannel().getName().equals( ch.getName() ) )	{
+					return sig;
+				}
+			}
+		}
+		return null;
+	}
+
+	private Signal retrieveOutSignal( TMLTask task )	{
+
+		for( TMLChannel ch: task.getWriteTMLChannels() )	{
+			for( Signal sig: signalsList2 )	{
+				if( sig.isAssociatedToTMLChannel( ch ) )	{
+					return sig;
+				}
+			}
+		}
+		return null;
 	}
 
 	private void makeBuffersList()	{
@@ -174,25 +273,72 @@ public class TMLCCodeGeneration	{
 		ArrayList<TMLPort> portsList = new ArrayList<TMLPort>();
 		for( TMLChannel ch: tmlm.getChannels() )	{
 			if( ch.isBasicChannel() )	{
-				TMLPort originPort = ch.getOriginPort();
-				TraceManager.addDev( "Origin Port: " + originPort.getName() );
+				buffersList2.add( new Buffer( ch.getOriginPort() ) );	
+				buffersList2.add( new Buffer( ch.getDestinationPort() ) );	
 			}
-			else	{
-				TraceManager.addDev( "is complex channel" );
+			else if( ch.isAForkChannel() )	{
+				buffersList2.add( new Buffer( ch.getOriginPorts().get(0) ) );	
+				for( TMLPort port: ch.getDestinationPorts() )	{
+					buffersList2.add( new Buffer( port ) );
+				}
+			}
+			else if( ch.isAJoinChannel() )	{
+				for( TMLPort port: ch.getOriginPorts() )	{
+					buffersList2.add( new Buffer( port ) );
+				}
+				buffersList2.add( new Buffer( ch.getDestinationPorts().get(0) ) );	
 			}
 		}
-		for( TMLChannel ch: tmlm.getChannels() )	{
-			if( ch.isBasicChannel() )	{
-				TMLPort destinationPort = ch.getDestinationPort();
-				TraceManager.addDev( "Destination Port: " + destinationPort.getName() );
-			}
-			else	{
-				TraceManager.addDev( "is complex channel" );
+		for( TMLCPLib cplib: mappedCPLibs )	{
+			if( cplib.getArtifacts().size() == 1 )	{
+				String mappedPortName = cplib.getArtifacts().get(0).getPortName();	//only one mapped port per CP
+				//TraceManager.addDev( mappedPortName );
+				for( Buffer buff: buffersList2 )	{
+					if( buff.getName().split("BUFFER__")[1].equals( mappedPortName ) )	{
+						//TraceManager.addDev( "Buffer " + buff.getName() + " matches mapped port " + mappedPortName );
+						buff.addMappingArtifact( cplib.getArtifacts().get(0) );
+					}
+				}
 			}
 		}
 	}
 
+	//Associate signals to operations and at the same time add signals to signalsList. Only works for SDR operations (so far)
 	private void makeSignalsList()	{
+		
+		String signalName = "";
+		for( TMLChannel ch: tmlm.getChannels() )	{
+			if( ch.isBasicChannel() )	{
+				String associatedEvtName = ch.getOriginPort().getAssociatedEvent();
+				for( TMLEvent evt: tmlm.getEvents() )	{
+					String evtName = evt.getName().split("__")[1];
+					if( evtName.equals( associatedEvtName ) )	{
+						signalsList2.add( new Signal( ch, evt ) );
+						break;
+					}
+				}
+			}
+			else if( ch.isAForkChannel() )	{
+				String associatedEvtName = ch.getOriginPort(0).getAssociatedEvent();
+				for( TMLEvent evt: tmlm.getEvents() )	{
+					String evtName = evt.getName().split("__")[1];
+					if( evtName.equals( associatedEvtName ) )	{
+						signalsList2.add( new Signal( ch, evt ) );
+						break;
+					}
+				}
+			}
+			else if( ch.isAJoinChannel() )	{
+				String associatedEvtName = ch.getDestinationPorts().get(0).getAssociatedEvent();
+				for( TMLEvent evt: tmlm.getEvents() )	{
+					String evtName = evt.getName().split("__")[3];
+					if( evtName.equals( associatedEvtName ) )	{
+						signalsList2.add( new Signal( ch, evt ) );
+						break;
+					}
+				}
+			}
+		}
 		return;
 	}
 
@@ -231,14 +377,20 @@ public class TMLCCodeGeneration	{
 		//Fill the the prex and postex lists
 		for( TMLChannel ch: tmlm.getChannels() )	{
 			TMLPort originPort = ch.getOriginPort();
-			if( originPort.isPrex() )	{
-				prexList.add( originPort );
+			TraceManager.addDev( "CHANNEL: " + ch.getName() + " IS BASIC CHANNEL: " + ch.isBasicChannel() );
+			//TraceManager.addDev( "**** ORIGIN PORT: " + originPort.getName() );
+			if( ch.isBasicChannel() )	{
+				if( originPort.isPrex() )	{
+					prexList.add( originPort );
+				}
 			}
 		}
 		for( TMLChannel ch: tmlm.getChannels() )	{
 			TMLPort destinationPort = ch.getDestinationPort();
-			if( destinationPort.isPostex() )	{
-				postexList.add( destinationPort );
+			if( ch.isBasicChannel() )	{
+				if( destinationPort.isPostex() )	{
+					postexList.add( destinationPort );
+				}
 			}
 		}
 		headerString += libraries();
@@ -365,7 +517,7 @@ public class TMLCCodeGeneration	{
 
 		String opsList = "";
 		String s = "";
-		Signal sig = new Signal();
+		//Signal sig = new Signal();
 
 		for( Operation op: operationsList )	{
 			opsList += op.getName() + ",\n";
@@ -753,7 +905,12 @@ public class TMLCCodeGeneration	{
 			exec_code = adaif.getExecCode();
 		}
 		if( OD0.equals("") )	{	//the postex
-			endCode = "sig[" + postexList.get(0).getName() + "].f = true;" + CR;
+			if( postexList.size() > 0 )	{
+				endCode = "sig[" + postexList.get(0).getName() + "].f = true;" + CR;
+			}
+			else	{
+				endCode = CR;
+			}
 		}
 		else	{
 			endCode = "sig[" + OD0 + "].f = true;" + CR;
@@ -923,8 +1080,12 @@ public class TMLCCodeGeneration	{
 		for( TMLPort port: postexList )	{
 			s += "( sig[ " + port.getName() +" ].f == true ) &&";
 		}
-		programString += 	"bool exit_rule(void)\t{" + CR +
-											"return " + s.substring( 0, s.length() - 3 ) + SC + CR + "}";
+		if( s.length() > 3 )	{
+			programString += 	"bool exit_rule(void)\t{" + CR + "return " + s.substring( 0, s.length() - 3 ) + SC + CR + "}";
+		}
+		else	{
+			programString += 	"bool exit_rule(void)\t{" + CR + "return " + s + SC + CR + "}";
+		}
 	}
 
 	private void generateInitProgram( ArrayList<TMLTask> mappedTasks )	{
