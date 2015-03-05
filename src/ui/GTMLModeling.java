@@ -59,6 +59,7 @@ import ui.tmlsd.*;
 import tmltranslator.*;
 import tmltranslator.tmlcp.*;
 import myutil.*;
+import tmltranslator.ctranslator.*;
 
 public class GTMLModeling  {
     private TMLDesignPanel tmldp;
@@ -728,9 +729,11 @@ public class GTMLModeling  {
                                     tmlport1 = new TMLPort( port1.getPortName(), port1 );
                                     tmlport1.setPrex( port1.isPrex() );
                                     tmlport1.setPostex( port1.isPostex() );
+																		tmlport1.setAssociatedEvent( port1.getAssociatedEvent() );
                                     tmlport2 = new TMLPort( port2.getPortName(), port2 );
                                     tmlport2.setPrex( port2.isPrex() );
                                     tmlport2.setPostex( port2.isPostex() );
+																		tmlport2.setAssociatedEvent( port2.getAssociatedEvent() );
                                     channel.setPorts( tmlport1, tmlport2 );
                                     tmlm.addChannel(channel);
                                     listE.addCor(channel, tgc);
@@ -814,12 +817,14 @@ public class GTMLModeling  {
                                 TMLPort tmlport;
                                 tt1 = tmlm.getTMLTaskByName(makeName(port1, port1.getFather().getValue()));
                                 tmlport = new TMLPort(port1.getPortName(), port1);
+																tmlport.setAssociatedEvent( port1.getAssociatedEvent() );
                                 channel.addTaskPort(tt1, tmlport, true);
                                 for(j=0; j<portstome.size(); j++) {
                                     port = (TMLCPrimitivePort)(portstome.get(j));
                                     tmlport = new TMLPort(port.getPortName(), port);
                                     tmlport.setPrex( port.isPrex() );
                                     tmlport.setPostex( port.isPostex() );
+																		tmlport.setAssociatedEvent( port.getAssociatedEvent() );
                                     tt2 = tmlm.getTMLTaskByName(makeName(port, port.getFather().getValue()));
                                     channel.addTaskPort(tt2, tmlport, port.isOrigin());
                                 }
@@ -2376,7 +2381,6 @@ public class GTMLModeling  {
             checkingErrors.add( ce );
             throw new MalformedTMLDesignException( msg );
             /*TraceManager.addDev( "ERROR: two diagrams have the same name!" );
-              System.exit(0);
               return new tmltranslator.tmlcp.TMLCPActivityDiagram( "ERROR", panel );*/
         }
         else {
@@ -2506,7 +2510,6 @@ public class GTMLModeling  {
             checkingErrors.add( ce );
             throw new MalformedTMLDesignException( msg );
             /*TraceManager.addDev( "ERROR: two diagrams have the same name!" );
-              System.exit(0);
               return new tmltranslator.tmlcp.TMLCPSequenceDiagram( "ERROR", panel );*/
         }
         else {
@@ -2805,6 +2808,13 @@ public class GTMLModeling  {
                 artifacts = ((TMLArchiNode)(tgc)).getAllTMLArchiArtifacts();
                 for(TMLArchiArtifact artifact:artifacts) {
                     s = artifact.getReferenceTaskName() + "__" + artifact.getTaskName();
+										TraceManager.addDev( "Exploring " + s );
+										TaskMEC p = artifact.getMECofTask();
+										String op = artifact.getOperation();
+										if( p != null )	{
+											TraceManager.addDev( "MEC of task " + s + " is " + p.toString() );
+											TraceManager.addDev( "Operation: " + op );
+										}
                     s = s.replaceAll("\\s", "");
                     //TraceManager.addDev("name=" + s);
                     ttask = tmlm.getTMLTaskByName(s);
@@ -2944,6 +2954,11 @@ public class GTMLModeling  {
                 for( TMLArchiArtifact artifact:artifacts ) {
                     //TraceManager.addDev("Exploring artifact " + artifact.getValue());
                     s = artifact.getReferenceTaskName();
+										TaskMEC p = artifact.getMECofTask();
+										if( p != null )	{
+											TraceManager.addDev( "MEC of Task " + s + " is " + p.toString() );
+										}
+
                     TraceManager.addDev("1) Trying to get task named:" + s);
                     s = s.replaceAll("\\s", "");
                     TraceManager.addDev("2) Trying to get task named:" + s);

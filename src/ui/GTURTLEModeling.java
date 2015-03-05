@@ -411,22 +411,31 @@ public class GTURTLEModeling {
 
 	public boolean generateCcode( String _title )	{
 
-		TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
-		spec.toTextFormat( tmap );	//TMLMapping
-
+		if( tmap == null )	{
+			TraceManager.addDev( "TMAP is empty" );
+			JOptionPane.showMessageDialog(mgui.frame, "C code is only generated from an architecture diagram with mapping information",
+                                                  "Error in C code generation",
+                                                  JOptionPane.INFORMATION_MESSAGE);
+			return false;
+		}
 		String applicationName = tmap.getMappedTasks().get(0).getName().split("__")[0];
-
 		TMLCCodeGeneration myCode = new TMLCCodeGeneration( _title, applicationName, mgui.frame );
 		myCode.toTextFormat( tmap );
-
 		try {
-		    myCode.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, applicationName );
+				if( ConfigurationTTool.CcodeDirectory.equals("") )	{
+					JOptionPane.showMessageDialog(mgui.frame, "No directory for C code generation found in config.xml. The C code cannot be generated.", "Error in C code generation", JOptionPane.INFORMATION_MESSAGE);
+					return false;
+				}
+				else 	{
+			    myCode.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, applicationName );
+					JOptionPane.showMessageDialog(mgui.frame, "The application C code has been successfully generated in: " + ConfigurationTTool.CcodeDirectory + "/", "C code generation successful", JOptionPane.INFORMATION_MESSAGE);
+				}
 		}
 		catch( Exception e ) {
 		    TraceManager.addError( "Application C files could not be saved: " + e.getMessage() );
 		    return false;
 		}
-		return true;	/* temporary, just to check functionality */
+		return true;
 	}
 	
     public boolean generateTMLTxt( String _title ) {

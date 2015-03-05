@@ -4028,7 +4028,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if( file != null ) {
 					path = file.getAbsolutePath();
         }
-        TraceManager.addDev("Generating C code: " + path );
         if( gtm.generateCcode( path ) ) {
 					return ConfigurationTTool.CcodeDirectory;
         }

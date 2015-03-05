@@ -313,6 +313,8 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 	}
 
 	public TaskMEC getMECofTask()	{
+
+		TraceManager.addDev( "Inside getMECofTask, fatherMECType: " + fatherMECType );
 		if( fatherMECType.equals( "FEP" ) )	{
 			if( operation.equals( "CWM" ) )	{
 				return new CwmMEC( "", "", "", "" );
