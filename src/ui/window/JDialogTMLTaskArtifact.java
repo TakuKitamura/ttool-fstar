@@ -55,7 +55,7 @@ import java.util.*;
 import ui.*;
 
 import ui.tmldd.*;
-
+import myutil.*;
 
 public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements ActionListener  {
     
@@ -159,6 +159,7 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
     c3.gridwidth = GridBagConstraints.REMAINDER; //end row
 		Vector<String> operationsListS = new Vector<String>();
 		int indexOp = 0;
+		TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
 		if( MECType.equals( "FEP" ) )	{
 			operationsListS.add( "CWA" );
 			operationsListS.add( "CWP" );
@@ -184,6 +185,9 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
 			String tmp = (String)(referenceTaskName.getSelectedItem());
 			operationsListS.add( tmp.split("::")[1] );
 			indexOp = operationsListS.indexOf( operation );
+		}
+		else	{
+			operationsListS.add("No MEC selected");
 		}
     operationsListCB = new JComboBox( operationsListS );
 		if( operation.equals( "VOID" ) || operation.equals( "" ) )	{
