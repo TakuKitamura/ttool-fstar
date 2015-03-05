@@ -99,7 +99,6 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	private void initComponents() {
 		Container c = getContentPane();
 		GridBagLayout gridbag0 = new GridBagLayout();
-		GridBagLayout gridbag1 = new GridBagLayout();
 		GridBagLayout gridbag2 = new GridBagLayout();
 		GridBagLayout gridbag4 = new GridBagLayout();
 		GridBagConstraints c0 = new GridBagConstraints();
@@ -215,26 +214,27 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
 		clockRatio = new JTextField(""+node.getClockRatio(), 15);
 		panel2.add(clockRatio, c2);
-
+		
 		// Code generation
 		panel4 = new JPanel();
-    panel4.setLayout( gridbag2 );
-    panel4.setBorder( new javax.swing.border.TitledBorder("Code generation ") );
+    panel4.setLayout( gridbag4 );
+    panel4.setBorder( new javax.swing.border.TitledBorder("Code generation") );
     panel4.setPreferredSize( new Dimension(400, 300) );
 		c4.gridwidth = 1;
     c4.gridheight = 1;
     c4.weighty = 1.0;
     c4.weightx = 1.0;
     c4.fill = GridBagConstraints.HORIZONTAL;
+		/*c4.fill = GridBagConstraints.BOTH;
     c4.gridheight = 3;
-    panel4.add( new JLabel(" "), c2 );
-    c2.gridwidth = 1;
-    c2.fill = GridBagConstraints.HORIZONTAL;
-    c2.anchor = GridBagConstraints.CENTER;
-		panel4.add(new JLabel("Model Extension Construct type"), c2);
-        
+    panel4.add( new JLabel(" "), c4 );
+    c4.gridwidth = 1;
+    c4.fill = GridBagConstraints.HORIZONTAL;
+    c4.anchor = GridBagConstraints.CENTER;*/
+		panel4.add(new JLabel("Embb Model Extension Construct:"), c4);
     c4.gridwidth = GridBagConstraints.REMAINDER; //end row
 		Vector<String> MECTypes = new Vector<String>();
+		MECTypes.add("CPU");
 		MECTypes.add("FEP");
 		MECTypes.add("MAPPER");
 		MECTypes.add("INTL");
@@ -254,6 +254,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		c0.weighty = 1.0;
 		c0.weightx = 1.0;
 		c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c0.fill = GridBagConstraints.BOTH;
 		c.add(panel2, c0);
 		c.add(panel4, c0);
 		

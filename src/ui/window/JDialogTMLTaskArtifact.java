@@ -113,12 +113,12 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
         panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
         panel2.setPreferredSize(new Dimension(350, 250));
         
-		c1.gridwidth = 1;
+				c1.gridwidth = 1;
         c1.gridheight = 1;
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Task:"), c2);
+        panel2.add(new JLabel("Task:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllNonMappedTMLTaskNames((TMLArchiDiagramPanel)(artifact.getTDiagramPanel()), artifact.getReferenceTaskName(), artifact.getTaskName());
 		int index = 0;
@@ -138,8 +138,9 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
 		for(int i=0; i<11; i++) {
 			list.add(""+i);
 		}
-    panel2.add(new JLabel("Priority:"), c2);
-    c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+    c1.gridwidth = 1;//GridBagConstraints.REMAINDER; //end row
+    panel2.add(new JLabel("Priority:"), c1);
+    //c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		priority = new JComboBox(list);
 		priority.setSelectedIndex(artifact.getPriority());
 		panel2.add(priority, c1);
@@ -153,14 +154,14 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
     c3.weighty = 1.0;
     c3.weightx = 1.0;
     c3.fill = GridBagConstraints.HORIZONTAL;
-    c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-
+    //c3.gridwidth = GridBagConstraints.REMAINDER; //end row
     panel3.add(new JLabel("Operation:"), c3);
     c3.gridwidth = GridBagConstraints.REMAINDER; //end row
 		Vector<String> operationsListS = new Vector<String>();
 		int indexOp = 0;
 		if( MECType.equals( "FEP" ) )	{
 			operationsListS.add( "CWA" );
+			operationsListS.add( "CWP" );
 			operationsListS.add( "CWM" );
 			operationsListS.add( "CWL" );
 			operationsListS.add( "SUM" );
@@ -177,6 +178,11 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
 		}
 		else if( MECType.equals( "ADAIF" ) )	{
 			operationsListS.add( "ADAIFOperation" );
+			indexOp = operationsListS.indexOf( operation );
+		}
+		else if( MECType.equals( "CPU" ) )	{
+			String tmp = (String)(referenceTaskName.getSelectedItem());
+			operationsListS.add( tmp.split("::")[1] );
 			indexOp = operationsListS.indexOf( operation );
 		}
     operationsListCB = new JComboBox( operationsListS );
@@ -206,6 +212,7 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+				c0.fill = GridBagConstraints.BOTH;
         c.add(panel2, c0);
         c.add(panel3, c0);
         
