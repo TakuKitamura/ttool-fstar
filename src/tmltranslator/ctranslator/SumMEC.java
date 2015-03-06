@@ -57,34 +57,36 @@ public class SumMEC extends TaskMEC	{
 		inst_decl = "FEP_CONTEXT";
 		buff_type = "FEP_BUFF_TYPE";
 		buff_init = "= {/*l,b,q,t*/};";
-		exec_code = "/*firm instruction*/" + CR +
-			" fep_set_qx(&$XOP$,((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->q);" + CR +
-			"/*start execution*/" + CR +
-			"fep_start(&$XOP$);" + CR;
+		exec_code = "/*firm instruction*/" + CR + TAB +
+			"fep_set_qx(&" + XOP + "_ctx, ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->q);" + CR + TAB +
+			"/*start execution*/" + CR + TAB +
+			"fep_start(&" + XOP + ");" + CR;
 		
-		init_code ="/***** INIT $XOP$ *******/" + CR +
-			"void init_$XOP$(void){" + CR +
-			" fep_ctx_init(&$XOP$,0);" + CR +
-			" // initialize context" + CR +
-			" fep_set_op(&$XOP$,FEP_OP_MOV);" + CR +
-			" fep_set_r(&$XOP$, /*USER TODO*/);" + CR +
-			" fep_set_l(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_bx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_qx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_wx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_tx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_sx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_nx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_mx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_px(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_dx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_vrx(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_vix(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_sma(&$XOP$,2);" + CR +
-			" fep_set_qs(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->q);" + CR +
-			" fep_set_bs(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->b);" + CR +
+		init_code ="/***** INIT " + XOP + "_ctx *******/" + CR +
+			"void init_" + XOP + "(void){" + CR + TAB +
+			"fep_ctx_init(&" + XOP + "_ctx, (uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"// initialize context" + CR + TAB +
+			"fep_set_op(&" + XOP + "_ctx, FEP_OP_MOV);" + CR + TAB +
+			"// X vector configuration => Zk=Y[Xi]" + CR + TAB +
+			"fep_set_r(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_l(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_bx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_qx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_wx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_tx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_sx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_nx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_mx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_px(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_dx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_vrx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_vix(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"// Operation configuration" + CR + TAB +
+			"fep_set_sma(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_qs(&" + XOP + "_ctx, ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->q);" + CR + TAB +
+			"fep_set_bs(&" + XOP + "_ctx, ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->b);" + CR + TAB +
 			"}" + CR;
-		cleanup_code = "fep_ctx_cleanup(&$XOP$);";
+		cleanup_code = "fep_ctx_cleanup(&" + XOP + "_ctx);";
 	}
 
 }	//End of class
