@@ -61,6 +61,7 @@ public class TMLTask extends TMLElement {
 		private HashSet<TMLChannel> readTMLChannelsList;
 		private HashSet<TMLChannel> writeTMLChannelsList;
 		private HashSet<TMLEvent> eventsList;
+		private String mappedOperation;
 
 
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
@@ -349,5 +350,13 @@ public class TMLTask extends TMLElement {
 
 	public ArrayList<TMLEvent> getTMLEvents()	{
 		return new ArrayList<TMLEvent>( eventsList );
+	}
+
+	public void addMappedOperation( String _operation )	{
+		mappedOperation = _operation;
+	}
+
+	public String getMappedOperation()	{
+		return mappedOperation;
 	}
 }

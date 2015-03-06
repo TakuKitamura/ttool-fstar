@@ -326,7 +326,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 				return new CwlMEC( "", "", "", "" );
 			}
 			else if( operation.equals( "CWA" ) )	{
-				return new CwaMEC( "", "", "", "");
+				return new CwaMEC( "", "", "", "", "");
 			}
 			else if( operation.equals( "CWP" ) )	{
 				return new CwpMEC( "", "", "", "" );

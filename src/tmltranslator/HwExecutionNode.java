@@ -46,7 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package tmltranslator;
 
 import java.util.*;
-
+import tmltranslator.ctranslator.*;
 
 public abstract class HwExecutionNode extends HwNode  {
     protected int maximumNbOfTasks;
@@ -56,6 +56,8 @@ public abstract class HwExecutionNode extends HwNode  {
 	
 	public static final int DEFAULT_EXECC_TIME = 1;
 	public int execcTime = DEFAULT_EXECC_TIME;
+
+	private TaskMEC mec;
  
     public HwExecutionNode(String _name) {
 		super(_name);
@@ -69,6 +71,10 @@ public abstract class HwExecutionNode extends HwNode  {
 	
 	public int getExeccTime() {
 		return execcTime;
+	}
+
+	public void addMECToHwExecutionNode( TaskMEC _mec )	{
+		mec = _mec;
 	}
  
 }

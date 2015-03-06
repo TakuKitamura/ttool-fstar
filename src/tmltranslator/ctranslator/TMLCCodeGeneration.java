@@ -130,9 +130,9 @@ public class TMLCCodeGeneration	{
 
 		makeOperationsList( mappedTasks );	//make the list of operations based on the tasks in the app model
 
-		for( Operation op: operationsList )	{
+		/*for( Operation op: operationsList )	{
 			TraceManager.addDev( op.toString() );
-		}
+		}*/
 
 		makeBuffersList();
 
@@ -166,6 +166,7 @@ public class TMLCCodeGeneration	{
 		String[] s;
 
 		for( TMLTask task: mappedTasks )	{
+			TraceManager.addDev( "Mapped Operation of taks " + task.getName() + " is: " + task.getMappedOperation() );
 			String taskName = task.getName().split( "__" )[1];
 			s = taskName.split( "X_" );
 			if( s.length > 1 )	{	//we are splitting an eXecution task
@@ -496,18 +497,18 @@ public class TMLCCodeGeneration	{
 	private String instructions( ArrayList<TMLTask> mappedTasks )	{
 		String s = 	CR + "/**** Instructions *****/" + CR;
 		for( String s1: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
-			s += "extern embb_fep_context " + s1 + ";" + CR;
+			s += "extern embb_fep_context " + s1 + "_ctx;" + CR;
 		}
 		s += CR;
 		for( String s1: getTaskNamePerMappedUnit( "MAPPER", mappedTasks ) )	{
-			s += "extern embb_mapper_context " + s1 + ";" + CR;
+			s += "extern embb_mapper_context " + s1 + "_ctx;" + CR;
 		}
 		s += CR;
 		for( String s1: getTaskNamePerMappedUnit( "INTL", mappedTasks ) )	{
-			s += "extern embb_intl_context " + s1 + ";" + CR;
+			s += "extern embb_intl_context " + s1 + "_ctx;" + CR;
 		}
 		for( String s1: getTaskNamePerMappedUnit( "ADAIF", mappedTasks ) )	{
-			s += "extern embb_adaif_context " + s1 + ";" + CR;
+			s += "extern embb_adaif_context " + s1 + "_ctx;" + CR;
 		}
 		s += CR;
 		return s;
@@ -1107,18 +1108,18 @@ public class TMLCCodeGeneration	{
 
 		initString += "/**** instructions ****/" + CR;
 		for( String s: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
-			initString += "embb_fep_context " + s + ";" + CR;
+			initString += "embb_fep_context " + s + "_ctx;" + CR;
 		}
 		initString += CR;
 		for( String s: getTaskNamePerMappedUnit( "MAPPER", mappedTasks ) )	{
-			initString += "embb_mapper_context " + s + ";" + CR;
+			initString += "embb_mapper_context " + s + "_ctx;" + CR;
 		}
 		initString += CR;
 		for( String s: getTaskNamePerMappedUnit( "INTL", mappedTasks ) )	{
-			initString += "embb_intl_context " + s + ";" + CR;
+			initString += "embb_intl_context " + s + "_ctx;" + CR;
 		}
 		for( String s: getTaskNamePerMappedUnit( "ADAIF", mappedTasks ) )	{
-			initString += "embb_adaif_context " + s + ";" + CR;
+			initString += "embb_adaif_context " + s + "_ctx;" + CR;
 		}
 		initString += CR;
 
@@ -1215,16 +1216,16 @@ public class TMLCCodeGeneration	{
 		initString += "/**** cleanup contexts ****/" + CR;
 		initString += "void cleanup_operations_context( void )\t{" + CR;
 		for( String s: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
-			initString += TAB + "fep_ctx_cleanup( &" + s + " );" + CR;
+			initString += TAB + "fep_ctx_cleanup( &" + s + "_ctx );" + CR;
 		}
 		for( String s: getTaskNamePerMappedUnit( "MAPPER", mappedTasks ) )	{
-			initString += TAB + "mapper_ctx_cleanup( &" + s + " );" + CR;
+			initString += TAB + "mapper_ctx_cleanup( &" + s + "_ctx );" + CR;
 		}
 		for( String s: getTaskNamePerMappedUnit( "INTL", mappedTasks ) )	{
-			initString += TAB + "intl_ctx_cleanup( &" + s + " );" + CR;
+			initString += TAB + "intl_ctx_cleanup( &" + s + "_ctx );" + CR;
 		}
 		for( String s: getTaskNamePerMappedUnit( "ADAIF", mappedTasks ) )	{
-			initString += TAB + "adaif_ctx_cleanup( &" + s + " );" + CR;
+			initString += TAB + "adaif_ctx_cleanup( &" + s + "_ctx );" + CR;
 		}
 		initString += "}";
 	}
