@@ -828,7 +828,7 @@ public class TMLMapping {
         activity.addElement(mainLoop);
         TMLForLoop loop = new TMLForLoop("loopOfDMA", null);
         loop.setInit("j=size");
-        loop.setCondition("j==0");
+        loop.setCondition("j>0");
         loop.setIncrement("j = j-1");
         activity.addElement(loop);
         TMLAttribute attri = new TMLAttribute("i", "i", new TMLType(TMLType.NATURAL), "0");
@@ -1040,7 +1040,7 @@ public class TMLMapping {
         activity1.addElement(mainLoop1);
         TMLForLoop loop1 = new TMLForLoop("loopOfDMA", null);
         loop1.setInit("j=size");
-        loop1.setCondition("j==0");
+        loop1.setCondition("j>0");
         loop1.setIncrement("j = j-1");
         activity1.addElement(loop1);
         TMLAttribute attri1 = new TMLAttribute("i", "i", new TMLType(TMLType.NATURAL), "0");
@@ -1139,7 +1139,7 @@ public class TMLMapping {
         activity2.addElement(mainLoop2);
         TMLForLoop loop2 = new TMLForLoop("loopOfDMA", null);
         loop2.setInit("j=size");
-        loop2.setCondition("j==0");
+        loop2.setCondition("j>0");
         loop2.setIncrement("j = j-1");
         activity2.addElement(loop2);
         TMLAttribute attri2 = new TMLAttribute("i", "i", new TMLType(TMLType.NATURAL), "0");
@@ -1286,7 +1286,7 @@ public class TMLMapping {
         activity.addElement(mainLoop);
         TMLForLoop loop = new TMLForLoop("loopOfCTRL", null);
         loop.setInit("j=size");
-        loop.setCondition("j==0");
+        loop.setCondition("j>0");
         loop.setIncrement("j = j-1");
         activity.addElement(loop);
         TMLAttribute attri = new TMLAttribute("i", "i", new TMLType(TMLType.NATURAL), "0");
