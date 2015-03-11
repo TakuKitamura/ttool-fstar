@@ -344,11 +344,11 @@ public class TMLMapping {
     }
 
     public void removeCommMapping(TMLElement _elt) {
-	int index;
-	while((index = mappedcommelts.indexOf(_elt)) > -1) {
-	    oncommnodes.remove(index);
-	    mappedcommelts.remove(index);
-	}
+        int index;
+        while((index = mappedcommelts.indexOf(_elt)) > -1) {
+            oncommnodes.remove(index);
+            mappedcommelts.remove(index);
+        }
     }
 
     public TMLModeling getTMLModeling() {
@@ -662,7 +662,7 @@ public class TMLMapping {
 
     public void handleCPs() {
         // Remove the CPLib with new tasks, channels, HW components
-	TraceManager.addDev("\n\n**** HANDLING CPs:");
+        TraceManager.addDev("\n\n**** HANDLING CPs:");
 
         for(TMLCPLib cp: mappedCPLibs) {
             //TraceManager.addDev(" Found cp:" + cp.getName() + " ref=" + cp.getTypeName());
@@ -674,10 +674,10 @@ public class TMLMapping {
                 TraceManager.addDev(" Found cp Double DMA:" + cp.getName() + "::" + cp.getTypeName());
                 handleCPDoubleDMA(cp);
             }
-	    if (cp.isMemoryCopy()) {
-		TraceManager.addDev(" Found cp Memory Copy:" + cp.getName() + "::" + cp.getTypeName());
+            if (cp.isMemoryCopy()) {
+                TraceManager.addDev(" Found cp Memory Copy:" + cp.getName() + "::" + cp.getTypeName());
                 handleCPMemoryCopy(cp);
-	    }
+            }
         }
 
         // Remove CPs
@@ -694,7 +694,7 @@ public class TMLMapping {
     }
 
     private void handleCPDoubleDMA(TMLCPLib _cp) {
-	TraceManager.addDev(" Found double DMA cp:" + _cp.getName() + " ref=" + _cp.getTypeName());
+        TraceManager.addDev(" Found double DMA cp:" + _cp.getName() + " ref=" + _cp.getTypeName());
         for(TMLCPLibArtifact arti: _cp.getArtifacts()) {
             handleCPDoubleDMAArtifact(_cp, arti);
         }
@@ -718,53 +718,53 @@ public class TMLMapping {
 
         if (chan.getNbOfDestinationPorts() > 1) {
             TraceManager.addDev("DMA_transfer/ Channel has too many ports (must have only one)");
-	    return;
+            return;
         }
 
         if (!(chan.isBasicChannel())) {
             TraceManager.addDev("DMA_transfer/ Only basic channel is accepted");
-	    return;
+            return;
         }
 
         String DMAController = _cp.getUnitByName("DMA_Controller_1");
 
         if (DMAController == null) {
             TraceManager.addDev("DMA_transfer/ Unknown DMA controller in CP");
-	    return;
+            return;
         }
 
         TraceManager.addDev("DMA controller=|" + DMAController + "|");
         HwExecutionNode node = getHwExecutionNodeByName(DMAController);
         if (node == null) {
             TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + DMAController);
-	    return;
+            return;
         }
 
-	// SRC MEM
-	String SrcStorageInstance = _cp.getUnitByName("Src_Storage_Instance_1");
+        // SRC MEM
+        String SrcStorageInstance = _cp.getUnitByName("Src_Storage_Instance_1");
         if (SrcStorageInstance == null) {
             TraceManager.addDev("DMA_transfer/ Unknown SrcStorageInstance in CP");
-	    return;
+            return;
         }
         HwMemory mem1 = tmla.getHwMemoryByName(SrcStorageInstance);
         if (mem1 == null) {
             TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + SrcStorageInstance);
-	    return;
+            return;
         }
 
-	// DST MEM
-	String DstStorageInstance = _cp.getUnitByName("Dst_Storage_Instance_1");
+        // DST MEM
+        String DstStorageInstance = _cp.getUnitByName("Dst_Storage_Instance_1");
         if (DstStorageInstance == null) {
             TraceManager.addDev("DMA_transfer/ Unknown DstStorageInstance in CP");
-	    return;
+            return;
         }
         HwMemory mem2 = tmla.getHwMemoryByName(DstStorageInstance);
         if (mem2 == null) {
             TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + DstStorageInstance);
-	    return;
+            return;
         }
 
-	
+
 
 
         // At each origin: We write in a new local channel in a NBRNBW fashion
@@ -774,17 +774,17 @@ public class TMLMapping {
 
         // -> The old channel is thus transformed into two new channels
 
-	// The current chan is unmapped, and mapped to the destination memory
-	removeCommMapping(chan);
-	addCommToHwCommNode(chan, mem2);
+        // The current chan is unmapped, and mapped to the destination memory
+        removeCommMapping(chan);
+        addCommToHwCommNode(chan, mem2);
 
         // New DMATask
         TMLTask dmaTask = new TMLTask("DMATask__" + chan.getName(), chan, null);
         tmlm.addTask(dmaTask);
         TMLChannel fromOriginToDMA = new TMLChannel("toDMATask__" + chan.getName(), chan);
-	addCommToHwCommNode(fromOriginToDMA, mem1);
-	fromOriginToDMA.setType(TMLChannel.NBRNBW);
-	fromOriginToDMA.setSize(chan.getSize());
+        addCommToHwCommNode(fromOriginToDMA, mem1);
+        fromOriginToDMA.setType(TMLChannel.NBRNBW);
+        fromOriginToDMA.setSize(chan.getSize());
         tmlm.addChannel(fromOriginToDMA);
         TMLPort portInDMA = new TMLPort("portToDMATask__" + chan.getName(), chan);
         TMLPort portOutDMA = new TMLPort("portfromDMATask__" + chan.getName(), chan);
@@ -820,10 +820,10 @@ public class TMLMapping {
         TMLWaitEvent wait = new TMLWaitEvent("waitEvtInDMA", null);
         wait.setEvent(toDMA);
         wait.addParam("size");
-	activity.addElement(wait);
+        activity.addElement(wait);
         TMLForLoop mainLoop = new TMLForLoop("mainLoopOfDMA", null);
         mainLoop.setInit("i=0");
-        mainLoop.setCondition("i==1");
+        mainLoop.setCondition("i==0");
         mainLoop.setIncrement("i=i");
         activity.addElement(mainLoop);
         TMLForLoop loop = new TMLForLoop("loopOfDMA", null);
@@ -885,17 +885,17 @@ public class TMLMapping {
 
         if (chan.getNbOfDestinationPorts() > 1) {
             TraceManager.addDev("Double_DMA_transfer/ Channel has too many destination ports (must have only one)");
-	    return;
+            return;
         }
 
         if (chan.isBasicChannel()) {
             TraceManager.addDev("Double_DMA_transfer/ Only join channel is accepted");
-	    return;
+            return;
         }
 
         if (!(chan.isAJoinChannel(2))) {
             TraceManager.addDev("Double_DMA_transfer/ Only join channel with 2 origins is accepted");
-	    return;
+            return;
         }
 
         String DMAController1 = _cp.getUnitByName("DMA_Controller_1");
@@ -903,12 +903,12 @@ public class TMLMapping {
 
         if (DMAController1 == null) {
             TraceManager.addDev("Double_DMA_transfer/ Unknown DMA controller1 in CP");
-	    return;
+            return;
         }
 
         if (DMAController2 == null) {
             TraceManager.addDev("Double_DMA_transfer/ Unknown DMA controller2 in CP");
-	    return;
+            return;
         }
 
         HwExecutionNode node1 = getHwExecutionNodeByName(DMAController1);
@@ -921,84 +921,84 @@ public class TMLMapping {
             TraceManager.addDev("Double_DMA_transfer/ Unknown Hw Execution Node2: " + DMAController2);
         }
 
-	// SRC MEM
-	String SrcStorageInstance1 = _cp.getUnitByName("Src_Storage_Instance_1");
+        // SRC MEM
+        String SrcStorageInstance1 = _cp.getUnitByName("Src_Storage_Instance_1");
         if (SrcStorageInstance1 == null) {
             TraceManager.addDev("DMA_transfer/ Unknown SrcStorageInstance1 in CP");
-	    return;
+            return;
         }
         HwMemory mem11 = tmla.getHwMemoryByName(SrcStorageInstance1);
         if (mem11 == null) {
             TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + SrcStorageInstance1);
-	    return;
+            return;
         }
 
-	String SrcStorageInstance2 = _cp.getUnitByName("Src_Storage_Instance_2");
+        String SrcStorageInstance2 = _cp.getUnitByName("Src_Storage_Instance_2");
         if (SrcStorageInstance2 == null) {
             TraceManager.addDev("DMA_transfer/ Unknown SrcStorageInstance2 in CP");
-	    return;
+            return;
         }
         HwMemory mem12 = tmla.getHwMemoryByName(SrcStorageInstance2);
         if (mem12 == null) {
             TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + SrcStorageInstance2);
-	    return;
+            return;
         }
 
-	// DST MEM
-	String DstStorageInstance1 = _cp.getUnitByName("Dst_Storage_Instance_1");
+        // DST MEM
+        String DstStorageInstance1 = _cp.getUnitByName("Dst_Storage_Instance_1");
         if (DstStorageInstance1 == null) {
             TraceManager.addDev("DMA_transfer/ Unknown DstStorageInstance1 in CP");
-	    return;
+            return;
         }
         HwMemory mem21 = tmla.getHwMemoryByName(DstStorageInstance1);
         if (mem21 == null) {
             TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + DstStorageInstance1);
-	    return;
+            return;
         }
 
-	String DstStorageInstance2 = _cp.getUnitByName("Dst_Storage_Instance_2");
+        String DstStorageInstance2 = _cp.getUnitByName("Dst_Storage_Instance_2");
         if (DstStorageInstance2 == null) {
             TraceManager.addDev("DMA_transfer/ Unknown DstStorageInstance2 in CP");
-	    return;
+            return;
         }
         HwMemory mem22 = tmla.getHwMemoryByName(DstStorageInstance2);
         if (mem22 == null) {
             TraceManager.addDev("DMA_transfer/ Unknown Hw Execution Node: " + DstStorageInstance2);
-	    return;
+            return;
         }
 
-	// The current chan is unmapped, and mapped to the destination memory
-	removeCommMapping(chan);
-	addCommToHwCommNode(chan, mem22);
+        // The current chan is unmapped, and mapped to the destination memory
+        removeCommMapping(chan);
+        addCommToHwCommNode(chan, mem22);
 
-	// For each DMA transfer: we make one task.
-	// An event is sent from the origin task to the DMA task to inform about the fact to make the DMA transfer
-	// Also, DMA tasks communicate by event to inform whether they should make a transfer or not
+        // For each DMA transfer: we make one task.
+        // An event is sent from the origin task to the DMA task to inform about the fact to make the DMA transfer
+        // Also, DMA tasks communicate by event to inform whether they should make a transfer or not
 
-	// New DMATask1
+        // New DMATask1
         TMLTask dmaTask1 = new TMLTask("DMATask1__" + chan.getName(), chan, null);
-	TMLTask dmaTask2 = new TMLTask("DMATask2__" + chan.getName(), chan, null);
+        TMLTask dmaTask2 = new TMLTask("DMATask2__" + chan.getName(), chan, null);
         tmlm.addTask(dmaTask1);
         TMLChannel fromOriginToDMA1 = new TMLChannel("toDMATask1__" + chan.getName(), chan);
-	addCommToHwCommNode(fromOriginToDMA1, mem11);
-	fromOriginToDMA1.setType(TMLChannel.NBRNBW);
-	fromOriginToDMA1.setSize(chan.getSize());
+        addCommToHwCommNode(fromOriginToDMA1, mem11);
+        fromOriginToDMA1.setType(TMLChannel.NBRNBW);
+        fromOriginToDMA1.setSize(chan.getSize());
         tmlm.addChannel(fromOriginToDMA1);
-	TMLChannel fromDMA1ToDestination = new TMLChannel("fromDMATask1__" + chan.getName(), chan);
-	addCommToHwCommNode(fromDMA1ToDestination, mem21);
-	fromDMA1ToDestination.setType(TMLChannel.NBRNBW);
-	fromDMA1ToDestination.setSize(chan.getSize());
-	tmlm.addChannel(fromDMA1ToDestination);
+        TMLChannel fromDMA1ToDestination = new TMLChannel("fromDMATask1__" + chan.getName(), chan);
+        addCommToHwCommNode(fromDMA1ToDestination, mem21);
+        fromDMA1ToDestination.setType(TMLChannel.NBRNBW);
+        fromDMA1ToDestination.setSize(chan.getSize());
+        tmlm.addChannel(fromDMA1ToDestination);
         TMLPort portInDMA1 = new TMLPort("portToDMATask1__" + chan.getName(), chan);
         TMLPort portOutDMA1 = new TMLPort("portfromDMATask1__" + chan.getName(), chan);
-	TMLPort portIn1DestinationTask = new TMLPort("portfromDMATask1__" + chan.getName(), chan);
+        TMLPort portIn1DestinationTask = new TMLPort("portfromDMATask1__" + chan.getName(), chan);
 
         TMLTask origin1 = chan.getOriginTask(0);
         TMLTask destination1 = chan.getDestinationTask(0);
         fromOriginToDMA1.setTasks(origin1, dmaTask1);
         fromOriginToDMA1.setPorts(chan.getOriginPort(0), portInDMA1);
-	fromDMA1ToDestination.setTasks(dmaTask1, destination1);
-	fromDMA1ToDestination.setPorts(portOutDMA1, portIn1DestinationTask);
+        fromDMA1ToDestination.setTasks(dmaTask1, destination1);
+        fromDMA1ToDestination.setPorts(portOutDMA1, portIn1DestinationTask);
 
 
         // In the origin task, we change all writing to "chan" to "fromOriginToDMA"
@@ -1009,13 +1009,13 @@ public class TMLMapping {
         toDMA1.setTasks(origin1, dmaTask1);
         origin1.addSendEventAfterWriteIn(fromOriginToDMA1, toDMA1, "size");
 
-	// We need two events between DMATasks
-	TMLEvent interdma1 = new TMLEvent("fromDMA1ToDMA2" +  chan.getName(), chan, 1, false);
+        // We need two events between DMATasks
+        TMLEvent interdma1 = new TMLEvent("fromDMA1ToDMA2" +  chan.getName(), chan, 1, false);
         tmlm.addEvent(interdma1);
-	interdma1.setTasks(dmaTask1, dmaTask2);
-	TMLEvent interdma2 = new TMLEvent("fromDMA2ToDMA1" +  chan.getName(), chan, 1, false);
+        interdma1.setTasks(dmaTask1, dmaTask2);
+        TMLEvent interdma2 = new TMLEvent("fromDMA2ToDMA1" +  chan.getName(), chan, 1, false);
         tmlm.addEvent(interdma2);
-	interdma2.setTasks(dmaTask1, dmaTask2);
+        interdma2.setTasks(dmaTask1, dmaTask2);
 
 
         // We need to create the activity diagram of DMATask
@@ -1032,10 +1032,10 @@ public class TMLMapping {
         TMLWaitEvent wait1 = new TMLWaitEvent("waitEvtInDMA1", null);
         wait1.setEvent(toDMA1);
         wait1.addParam("size");
-	activity1.addElement(wait1);
+        activity1.addElement(wait1);
         TMLForLoop mainLoop1 = new TMLForLoop("mainLoopOfDMA1", null);
         mainLoop1.setInit("i=0");
-        mainLoop1.setCondition("i==1");
+        mainLoop1.setCondition("i==0");
         mainLoop1.setIncrement("i=i");
         activity1.addElement(mainLoop1);
         TMLForLoop loop1 = new TMLForLoop("loopOfDMA", null);
@@ -1059,13 +1059,13 @@ public class TMLMapping {
         read1.setNbOfSamples("1");
         activity1.addElement(read1);
 
-	TMLWaitEvent waitFromOtherDMA1 = new TMLWaitEvent("waitEvtInDMA1_fromOtherDMA", null);
+        TMLWaitEvent waitFromOtherDMA1 = new TMLWaitEvent("waitEvtInDMA1_fromOtherDMA", null);
         waitFromOtherDMA1.setEvent(interdma2);
-	activity1.addElement(waitFromOtherDMA1);
+        activity1.addElement(waitFromOtherDMA1);
 
-	TMLSendEvent notifyOtherDMA1 = new TMLSendEvent("notifyEvtInDMA1_toOtherDMA", null);
+        TMLSendEvent notifyOtherDMA1 = new TMLSendEvent("notifyEvtInDMA1_toOtherDMA", null);
         notifyOtherDMA1.setEvent(interdma1);
-	activity1.addElement(notifyOtherDMA1);
+        activity1.addElement(notifyOtherDMA1);
 
         activity1.setFirst(start1);
         start1.addNext(mainLoop1);
@@ -1074,32 +1074,32 @@ public class TMLMapping {
         wait1.addNext(loop1);
         loop1.addNext(read1);
         loop1.addNext(notifyOtherDMA1);
-	notifyOtherDMA1.addNext(waitFromOtherDMA1);
-	waitFromOtherDMA1.addNext(stop1);
+        notifyOtherDMA1.addNext(waitFromOtherDMA1);
+        waitFromOtherDMA1.addNext(stop1);
         read1.addNext(write1);
         write1.addNext(stopWrite1);
 
-	// New DMATask2
-        
+        // New DMATask2
+
         tmlm.addTask(dmaTask2);
         TMLChannel fromOriginToDMA2 = new TMLChannel("toDMATask2__" + chan.getName(), chan);
-	addCommToHwCommNode(fromOriginToDMA2, mem21);
-	fromOriginToDMA2.setType(TMLChannel.NBRNBW);
-	fromOriginToDMA2.setSize(chan.getSize());
+        addCommToHwCommNode(fromOriginToDMA2, mem21);
+        fromOriginToDMA2.setType(TMLChannel.NBRNBW);
+        fromOriginToDMA2.setSize(chan.getSize());
         tmlm.addChannel(fromOriginToDMA2);
-	TMLChannel fromDMA2ToDestination = chan;
-	/*= new TMLChannel("fromDMATask2__" + chan.getName(), chan);
-	  tmlm.addChannel(fromDMA2ToDestination);*/
-	
+        TMLChannel fromDMA2ToDestination = chan;
+        /*= new TMLChannel("fromDMATask2__" + chan.getName(), chan);
+          tmlm.addChannel(fromDMA2ToDestination);*/
+
         TMLPort portInDMA2 = new TMLPort("portToDMATask2__" + chan.getName(), chan);
         TMLPort portOutDMA2 = new TMLPort("portfromDMATask2__" + chan.getName(), chan);
-	TMLPort portIn2DestinationTask = new TMLPort("portfromDMATask2__" + chan.getName(), chan);
+        TMLPort portIn2DestinationTask = new TMLPort("portfromDMATask2__" + chan.getName(), chan);
 
         TMLTask origin2 = chan.getOriginTask(1);
         fromOriginToDMA2.setTasks(origin2, dmaTask2);
         fromOriginToDMA2.setPorts(chan.getOriginPort(1), portInDMA2);
-	fromDMA2ToDestination.setTasks(dmaTask2, destination1);
-	fromDMA2ToDestination.setPorts(portOutDMA2, portIn2DestinationTask);
+        fromDMA2ToDestination.setTasks(dmaTask2, destination1);
+        fromDMA2ToDestination.setPorts(portOutDMA2, portIn2DestinationTask);
 
 
         // In the origin task, we change all writing to "chan" to "fromOriginToDMA"
@@ -1125,16 +1125,16 @@ public class TMLMapping {
         TMLWaitEvent wait2 = new TMLWaitEvent("waitEvtInDMA2", null);
         wait2.setEvent(toDMA2);
         wait2.addParam("size");
-	activity2.addElement(wait2);
-	TMLSendEvent notifyOtherDMA2 = new TMLSendEvent("notifyEvtInDMA2_toOtherDMA", null);
+        activity2.addElement(wait2);
+        TMLSendEvent notifyOtherDMA2 = new TMLSendEvent("notifyEvtInDMA2_toOtherDMA", null);
         notifyOtherDMA2.setEvent(interdma2);
-	activity2.addElement(notifyOtherDMA2);
-	TMLWaitEvent waitFromOtherDMA2 = new TMLWaitEvent("waitEvtInDMA2_fromOtherDMA", null);
+        activity2.addElement(notifyOtherDMA2);
+        TMLWaitEvent waitFromOtherDMA2 = new TMLWaitEvent("waitEvtInDMA2_fromOtherDMA", null);
         waitFromOtherDMA2.setEvent(interdma1);
-	activity2.addElement(waitFromOtherDMA2);
+        activity2.addElement(waitFromOtherDMA2);
         TMLForLoop mainLoop2 = new TMLForLoop("mainLoopOfDMA2", null);
         mainLoop2.setInit("i=0");
-        mainLoop2.setCondition("i==1");
+        mainLoop2.setCondition("i==0");
         mainLoop2.setIncrement("i=i");
         activity2.addElement(mainLoop2);
         TMLForLoop loop2 = new TMLForLoop("loopOfDMA", null);
@@ -1163,25 +1163,25 @@ public class TMLMapping {
         mainLoop2.addNext(wait2);
         mainLoop2.addNext(mainStop2);
         wait2.addNext(waitFromOtherDMA2);
-	waitFromOtherDMA2.addNext(loop2);
-        loop2.addNext(read2);	
+        waitFromOtherDMA2.addNext(loop2);
+        loop2.addNext(read2);
         loop2.addNext(notifyOtherDMA2);
-	notifyOtherDMA2.addNext(stop2);
+        notifyOtherDMA2.addNext(stop2);
         read2.addNext(write2);
         write2.addNext(stopWrite2);
 
         // All mapping to be done
         // Map DMA task to the DMA nod eof the CPLib
         addTaskToHwExecutionNode(dmaTask1, node1);
-	addTaskToHwExecutionNode(dmaTask2, node2);
-	
-	// Remove olf channel from TMLModeling
-	//tmlm.removeChannel(chan);
-	chan.removeComplexInformation();
+        addTaskToHwExecutionNode(dmaTask2, node2);
+
+        // Remove olf channel from TMLModeling
+        //tmlm.removeChannel(chan);
+        chan.removeComplexInformation();
     }
 
     private void handleCPMemoryCopyArtifact(TMLCPLib _cp, TMLCPLibArtifact _arti) {
-	// Find all the channel with the artifact
+        // Find all the channel with the artifact
         TMLChannel chan = tmlm.getChannelByDestinationPortName(_arti.portName);
         if (chan == null) {
             TraceManager.addDev("MemCPY/ Unknown channel with in port=" + _arti.portName);
@@ -1192,81 +1192,81 @@ public class TMLMapping {
 
         if (chan.getNbOfDestinationPorts() > 1) {
             TraceManager.addDev("MemCPY/ Channel has too many ports (must have only one)");
-	    return;
+            return;
         }
 
         if (!(chan.isBasicChannel())) {
             TraceManager.addDev("MemCPY/ Only basic channel is accepted");
-	    return;
+            return;
         }
 
-	// CPU
+        // CPU
         String CPUController = _cp.getUnitByName("CPU_Controller");
         if (CPUController == null) {
             TraceManager.addDev("MemCPY/ Unknown CPU controller in CP");
-	    return;
+            return;
         }
         TraceManager.addDev("CPU controller=|" + CPUController + "|");
         HwExecutionNode node = getHwExecutionNodeByName(CPUController);
         if (node == null) {
             TraceManager.addDev("MemCPY/ Unknown Hw Execution Node: " + CPUController);
-	    return;
+            return;
         }
 
-	// SRC MEM
-	String SrcStorageInstance = _cp.getUnitByName("Src_Storage_Instance");
+        // SRC MEM
+        String SrcStorageInstance = _cp.getUnitByName("Src_Storage_Instance");
         if (SrcStorageInstance == null) {
             TraceManager.addDev("MemCPY/ Unknown SrcStorageInstance in CP");
-	    return;
+            return;
         }
         HwMemory mem1 = tmla.getHwMemoryByName(SrcStorageInstance);
         if (mem1 == null) {
             TraceManager.addDev("MemCPY/ Unknown Hw Execution Node: " + SrcStorageInstance);
-	    return;
+            return;
         }
 
-	// DST MEM
-	String DstStorageInstance = _cp.getUnitByName("Dst_Storage_Instance");
+        // DST MEM
+        String DstStorageInstance = _cp.getUnitByName("Dst_Storage_Instance");
         if (DstStorageInstance == null) {
             TraceManager.addDev("MemCPY/ Unknown DstStorageInstance in CP");
-	    return;
+            return;
         }
         HwMemory mem2 = tmla.getHwMemoryByName(DstStorageInstance);
         if (mem2 == null) {
             TraceManager.addDev("MemCPY/ Unknown Hw Execution Node: " + DstStorageInstance);
-	    return;
+            return;
         }
 
-	// The current chan is unmapped, and mapped to the destination memory
-	removeCommMapping(chan);
-	addCommToHwCommNode(chan, mem2);
-	
+        // The current chan is unmapped, and mapped to the destination memory
+        removeCommMapping(chan);
+        addCommToHwCommNode(chan, mem2);
 
-	// We create a new Task mapped on CPUController, with a new channel
-	TMLTask origin = chan.getOriginTask();
-	TMLTask ctrl = new TMLTask("MemCpyController__" + chan.getName(), chan, null);
-	tmlm.addTask(ctrl);
-	addTaskToHwExecutionNode(ctrl, node);
-	TMLChannel fromOriginToCTRL = new TMLChannel("toCTRL__" + chan.getName(), chan);
-	addCommToHwCommNode(fromOriginToCTRL, mem1);
-	fromOriginToCTRL.setType(TMLChannel.NBRNBW);
-	fromOriginToCTRL.setSize(chan.getSize());
-	fromOriginToCTRL.setTasks(chan.getOriginTask(), ctrl);
+
+        // We create a new Task mapped on CPUController, with a new channel
+        TMLTask origin = chan.getOriginTask();
+        TMLTask ctrl = new TMLTask("MemCpyController__" + chan.getName(), chan, null);
+        tmlm.addTask(ctrl);
+        addTaskToHwExecutionNode(ctrl, node);
+        TMLChannel fromOriginToCTRL = new TMLChannel("toCTRL__" + chan.getName(), chan);
+        addCommToHwCommNode(fromOriginToCTRL, mem1);
+        fromOriginToCTRL.setType(TMLChannel.NBRNBW);
+        fromOriginToCTRL.setSize(chan.getSize());
+        fromOriginToCTRL.setTasks(chan.getOriginTask(), ctrl);
         tmlm.addChannel(fromOriginToCTRL);
 
-	// Reworking chan
-	chan.setTasks(ctrl, chan.getDestinationTask());
+        // Reworking chan
+        chan.setTasks(ctrl, chan.getDestinationTask());
 
-	// Reworking origin task
-	origin.replaceWriteChannelWith(chan, fromOriginToCTRL);
+        // Reworking origin task
+        origin.replaceWriteChannelWith(chan, fromOriginToCTRL);
         TMLEvent toCTRL = new TMLEvent("toCTRL__" +  chan.getName(), chan, 1, false);
         tmlm.addEvent(toCTRL);
         toCTRL.addParam(new TMLType(TMLType.NATURAL));
         toCTRL.setTasks(origin, ctrl);
         origin.addSendEventAfterWriteIn(fromOriginToCTRL, toCTRL, "size");
 
-	// We need to create the CTRL task-> infinite loop, waiting for the origin signal, and then making the mem cpy
-	TMLActivity activity = ctrl.getActivityDiagram();
+        // We need to create the CTRL task-> infinite loop, waiting for the origin signal, and then making the mem cpy
+        TMLActivity activity = ctrl.getActivityDiagram();
         TMLStartState start = new TMLStartState("startOfCTRL", null);
         activity.setFirst(start);
         TMLStopState mainStop = new TMLStopState("mainStopOfCTRL", null);
@@ -1278,10 +1278,10 @@ public class TMLMapping {
         TMLWaitEvent wait = new TMLWaitEvent("waitEvtInCTRL", null);
         wait.setEvent(toCTRL);
         wait.addParam("size");
-	activity.addElement(wait);
+        activity.addElement(wait);
         TMLForLoop mainLoop = new TMLForLoop("mainLoopOfCTRL", null);
         mainLoop.setInit("i=0");
-        mainLoop.setCondition("i==1");
+        mainLoop.setCondition("i==0");
         mainLoop.setIncrement("i=i");
         activity.addElement(mainLoop);
         TMLForLoop loop = new TMLForLoop("loopOfCTRL", null);
@@ -1314,67 +1314,67 @@ public class TMLMapping {
         loop.addNext(stop);
         read.addNext(write);
         write.addNext(stopWrite);
-	
 
-	
 
-	
-	
+
+
+
+
     }
 
-		public void linkTasks2TMLChannels()	{
+    public void linkTasks2TMLChannels() {
 
-			ListIterator iterator;
-			if( tmlm != null )	{
-				iterator = tmlm.getTasks().listIterator();
-				while( iterator.hasNext() )	{
-					TMLTask task = (TMLTask)( iterator.next() );
-					for( TMLReadChannel readCh: task.getReadChannels() )	{
-						String readChName = readCh.toString().split(": ")[1];
-						for( TMLChannel ch: tmlm.getChannels() )	{
-							if( ch.getName().equals( readChName ) )	{
-								task.addTMLChannel( ch );
-								task.addReadTMLChannel( ch );
-							}
-						}
-					}
-					for( TMLWriteChannel writeCh: task.getWriteChannels() )	{
-						String writeChName = writeCh.toString().split(": ")[1];
-						for( TMLChannel ch: tmlm.getChannels() )	{
-							if( ch.getName().equals( writeChName ) )	{
-								task.addTMLChannel( ch );
-								task.addWriteTMLChannel( ch );
-							}
-						}
-					}
-				}
-			}
-		}
+        ListIterator iterator;
+        if( tmlm != null )      {
+            iterator = tmlm.getTasks().listIterator();
+            while( iterator.hasNext() ) {
+                TMLTask task = (TMLTask)( iterator.next() );
+                for( TMLReadChannel readCh: task.getReadChannels() )    {
+                    String readChName = readCh.toString().split(": ")[1];
+                    for( TMLChannel ch: tmlm.getChannels() )    {
+                        if( ch.getName().equals( readChName ) ) {
+                            task.addTMLChannel( ch );
+                            task.addReadTMLChannel( ch );
+                        }
+                    }
+                }
+                for( TMLWriteChannel writeCh: task.getWriteChannels() ) {
+                    String writeChName = writeCh.toString().split(": ")[1];
+                    for( TMLChannel ch: tmlm.getChannels() )    {
+                        if( ch.getName().equals( writeChName ) )        {
+                            task.addTMLChannel( ch );
+                            task.addWriteTMLChannel( ch );
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-		public void linkTasks2TMLEvents()	{
+    public void linkTasks2TMLEvents()   {
 
-			ListIterator iterator;
-			if( tmlm != null )	{
-				iterator = tmlm.getTasks().listIterator();
-				while( iterator.hasNext() )	{
-					TMLTask task = (TMLTask)( iterator.next() );
-					for( TMLSendEvent sendEvt: task.getSendEvents() )	{
-						String sendEvtName = sendEvt.toString().split(":")[1].split("\\(")[0];
-						for( TMLEvent evt: tmlm.getEvents() )	{
-							if( evt.getName().equals( sendEvtName ) )	{
-								task.addTMLEvent( evt );
-							}
-						}
-					}
-					for( TMLWaitEvent waitEvt: task.getWaitEvents() )	{
-						String waitEvtName = waitEvt.toString().split(":")[1].split("\\(")[0];
-						for( TMLEvent evt: tmlm.getEvents() )	{
-							if( evt.getName().equals( waitEvtName ) )	{
-								task.addTMLEvent( evt );
-							}
-						}
-					}
-				}
-			}
-		}
-}	//End of class
+        ListIterator iterator;
+        if( tmlm != null )      {
+            iterator = tmlm.getTasks().listIterator();
+            while( iterator.hasNext() ) {
+                TMLTask task = (TMLTask)( iterator.next() );
+                for( TMLSendEvent sendEvt: task.getSendEvents() )       {
+                    String sendEvtName = sendEvt.toString().split(":")[1].split("\\(")[0];
+                    for( TMLEvent evt: tmlm.getEvents() )       {
+                        if( evt.getName().equals( sendEvtName ) )       {
+                            task.addTMLEvent( evt );
+                        }
+                    }
+                }
+                for( TMLWaitEvent waitEvt: task.getWaitEvents() )       {
+                    String waitEvtName = waitEvt.toString().split(":")[1].split("\\(")[0];
+                    for( TMLEvent evt: tmlm.getEvents() )       {
+                        if( evt.getName().equals( waitEvtName ) )       {
+                            task.addTMLEvent( evt );
+                        }
+                    }
+                }
+            }
+        }
+    }
+}       //End of class
