@@ -1523,7 +1523,7 @@ public class TMLModeling {
 	forkActivity.addElement(stop);
         TMLForLoop junction = new TMLForLoop("junctionOfFork", null);
 	junction.setInit("i=0");
-	junction.setCondition("i==1");
+	junction.setCondition("i<1");
 	junction.setIncrement("i=i");
 	TMLAttribute attr = new TMLAttribute("i", "i", new TMLType(TMLType.NATURAL), "0");
 	forkTask.addAttribute(attr);
@@ -1609,7 +1609,7 @@ public class TMLModeling {
 	joinActivity.addElement(stop);
 	TMLForLoop junction = new TMLForLoop("junctionOfJoin", null);
 	junction.setInit("i=0");
-	junction.setCondition("i==1");
+	junction.setCondition("i<1");
 	junction.setIncrement("i=i");
 	TMLAttribute attr = new TMLAttribute("i", "i", new TMLType(TMLType.NATURAL), "0");
 	joinTask.addAttribute(attr);
