@@ -64,7 +64,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     // Other
     JButton genrtlotos, genlotos, genuppaal, gendesign;
     JButton checkcode, simulation, validation;
-    JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genC, genjava, nc;
+    JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genC, genjava, nc,externalSearch;
 
     JTextField search;
 
@@ -246,7 +246,12 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         }
 
         addSeparator();
-
+	
+	//@author : Huy TRUONG
+	//add external search button into menu bar
+	externalSearch = add(mgui.actions[TGUIAction.ACT_EXTERNAL_SEARCH]);
+	externalSearch.addMouseListener(mgui.mouseHandler);
+	//--
 
         if ((ConfigurationTTool.ExternalCommand1.length() > 0) && (ConfigurationTTool.ExternalCommand1Host.length() > 0)) {
             button = add(mgui.actions[TGUIAction.EXTERNAL_ACTION_1]);

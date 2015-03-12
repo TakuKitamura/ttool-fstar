@@ -548,7 +548,12 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 414;
+    //Action for the external Search 
+    //@author Huy TRUONG.
+    public static final int ACT_EXTERNAL_SEARCH = 414;
+    //--
+
+    public static final int NB_ACTION = 415;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -654,6 +659,9 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GEN_PROVERIF] = new TAction("gen_proverif-command", "Generate ProVerif Code", IconManager.imgic34, IconManager.imgic35, "Generate ProVerif specification",  "Generates a ProVerif specification from AVATAR diagrams", '0');
         actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
         actions[ACT_SIMU_JAVA] = new TAction("gen_simujava-command", "Java-based simulation", IconManager.imgic38, IconManager.imgic39, "JAVA-based simualtion",  "Simulate diagrams using Java language", 0);
+//@author: Huy TRUONG
+//action for button External Search
+        actions[ACT_EXTERNAL_SEARCH] = new TAction("external_search-command", "External Search", IconManager.imgic5113, IconManager.imgic5113, "External Search",  "External Search Interface", 0);
         actions[ACT_GEN_SYSTEMC] = new TAction("gen_systemc-command", "Generate simulation code", IconManager.imgic61, IconManager.imgic61, "Generate code for simulation",  "Generates code for simulation", 0);
         actions[ACT_SIMU_SYSTEMC] = new TAction("simu_systemc", "Interactive Simulation", IconManager.imgic61, IconManager.imgic61, "Interactive simulation",  "Interactive simulation ", 0);
         actions[ACT_GEN_TMLTXT] = new TAction("gen_tmltxt-command", "Generate TML / TMAP in text format", IconManager.imgic66, IconManager.imgic66, "Generate TML / TMAP in text format",  "Generates TML / TMAP code in text format from TML Design diagrams", 0);

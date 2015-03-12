@@ -610,7 +610,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             if (mainBar != null) {
                 mainBar.activateSearch(true);
             }
-
+	    //@author: Huy TRUONG
+	    actions[TGUIAction.ACT_EXTERNAL_SEARCH].setEnabled(true);
+	    //--
             break;
         case MODEL_OK:
             actions[TGUIAction.ACT_SAVE_TIF].setEnabled(true);
@@ -2922,6 +2924,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
           mainDesignTabbedPane.setSelectedIndex(mainDesignTabbedPane.getTabCount() - 1);
           }*/
     }
+
+    //@author: Huy TRUONG
+    //open a new External Search Dialog
+    public void showExternalSearch(){
+	JDialogSearchBox jsb = new JDialogSearchBox(frame,"External Search", new ArrayList());
+    }
+    //--
 
     public void aboutVersion() {
         /*JOptionPane.showMessageDialog(frame,
@@ -7479,6 +7488,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             lastDiag();
         } else if (command.equals(actions[TGUIAction.ACT_ABOUT].getActionCommand())) {
             aboutVersion();
+	} 
+	//@author: Huy TRUONG.
+	//open a external search box for ACT_EXTERNAL_SEARCH
+	else if (command.equals(actions[TGUIAction.ACT_EXTERNAL_SEARCH].getActionCommand())) {
+	    showExternalSearch();
+	//--
+
         } else if (command.equals(actions[TGUIAction.ACT_TTOOL_CONFIGURATION].getActionCommand())) {
             showTToolConfiguration();
         } else if (command.equals(actions[TGUIAction.ACT_TURTLE_WEBSITE].getActionCommand())) {
