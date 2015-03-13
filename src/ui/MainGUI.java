@@ -2959,15 +2959,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void aboutTURTLE() {
-        BrowserControl.startBrowerToURL("http://labsoc.comelec.enst.fr/ttool/");
+        BrowserControl.startBrowerToURL("http://ttool.telecom-paristech.fr/");
     }
 
     public void helpTURTLE() {
-        BrowserControl.startBrowerToURL("http://labsoc.comelec.enst.fr/tool/support.html");
+        BrowserControl.startBrowerToURL("http://ttool.telecom-paristech.fr/avatar.html");
     }
 
     public void helpDIPLODOCUS() {
-        BrowserControl.startBrowerToURL("http://labsoc.comelec.enst.fr/tool/diplodocus.html");
+        BrowserControl.startBrowerToURL("http://ttool.telecom-paristech.fr/diplodocus.html");
     }
 
     public void oneClickLOTOSRG() {
