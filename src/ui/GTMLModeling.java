@@ -2809,12 +2809,8 @@ public class GTMLModeling  {
                 for(TMLArchiArtifact artifact:artifacts) {
                     s = artifact.getReferenceTaskName() + "__" + artifact.getTaskName();
 										TraceManager.addDev( "Exploring " + s );
-										TaskMEC p = artifact.getMECofTask();
-										String op = artifact.getOperation();
-										/*if( p != null )	{
-											TraceManager.addDev( "MEC of task " + s + " is " + p.toString() );
-											TraceManager.addDev( "Operation: " + op );
-										}*/
+										/*TaskMEC p = artifact.getMECofTask();
+										String op = artifact.getOperation();*/
                     s = s.replaceAll("\\s", "");
                     //TraceManager.addDev("name=" + s);
                     ttask = tmlm.getTMLTaskByName(s);
@@ -2955,11 +2951,8 @@ public class GTMLModeling  {
                     //TraceManager.addDev("Exploring artifact " + artifact.getValue());
                     s = artifact.getReferenceTaskName();
 										TaskMEC mec = artifact.getMECofTask();
+										TraceManager.addDev( "Artifact.getMECOfTask: " + mec );
 										String op = artifact.getOperation();
-										/*if( mec != null )	{
-											TraceManager.addDev( "MEC of Task " + s + " is " + mec.toString() );
-											TraceManager.addDev( "Operation: " + op );
-										}*/
                     TraceManager.addDev("1) Trying to get task named:" + s);
                     s = s.replaceAll("\\s", "");
                     TraceManager.addDev("2) Trying to get task named:" + s);
@@ -2970,8 +2963,10 @@ public class GTMLModeling  {
 											if( op != null )	{
 												task.addMappedOperation( op );
 											}
-											map.addTaskToHwExecutionNode(task, (HwExecutionNode)node);
 											((HwExecutionNode)node).addMECToHwExecutionNode( mec );
+											map.addTaskToHwExecutionNode(task, (HwExecutionNode)node);
+											TraceManager.addDev( "TaskMEC from class: " + node.getTaskMEC() );
+											TraceManager.addDev( "TaskMEC from DS: " + map.getHwNodeOf( task ).getTaskMEC() );
                     } else {
                         TraceManager.addDev("Null task");
                     }

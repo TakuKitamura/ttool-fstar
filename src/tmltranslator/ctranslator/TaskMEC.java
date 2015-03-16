@@ -81,7 +81,7 @@ public abstract class TaskMEC	{
 	}
 
 	public String toString()	{
-		return node_type + CR + inst_decl + CR + inst_type + CR + buff_type + CR + buff_init + CR + exec_code + CR + init_code + CR + cleanup_code;
+		return node_type;// + CR + inst_decl + CR + inst_type + CR + buff_type + CR + buff_init + CR + exec_code + CR + init_code + CR + cleanup_code;
 	}
 
 	public void saveFile( String path, String filename ) throws FileException {

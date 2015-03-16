@@ -47,6 +47,9 @@
 package tmltranslator.ctranslator;;
 
 import java.util.*;
+import java.io.PrintWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.nio.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -54,6 +57,7 @@ import myutil.*;
 
 import tmltranslator.*;
 import ui.tmlcompd.*;
+import ui.ConfigurationTTool;
 
 public class TMLCCodeGeneration	{
 
@@ -90,6 +94,9 @@ public class TMLCCodeGeneration	{
 	private ArrayList<TMLPort> prexList = new ArrayList<TMLPort>();
 	private ArrayList<Buffer> buffersList = new ArrayList<Buffer>();
 	private ArrayList<Buffer> buffersList2 = new ArrayList<Buffer>();
+
+	private String fileName = ConfigurationTTool.CcodeDirectory;
+	PrintWriter outputStream;
 
 	public JFrame frame; //Main Frame
 
@@ -130,9 +137,13 @@ public class TMLCCodeGeneration	{
 
 		makeOperationsList( mappedTasks );	//make the list of operations based on the tasks in the app model
 
-		/*for( Operation op: operationsList )	{
+		openDebugFile();
+
+		for( Operation op: operationsList )	{
 			TraceManager.addDev( op.toString() );
-		}*/
+			appendToDebugFile( op.toString() + CR );
+		}
+		closeDebugFile();
 
 		makeBuffersList();
 
@@ -1321,4 +1332,24 @@ public class TMLCCodeGeneration	{
 		FileUtils.saveFile( path + filename + ".c", programString );
 		FileUtils.saveFile( path + filename + "_init.c", initString );
 	}
+
+	private void openDebugFile()	{
+		outputStream = null;
+		try	{
+			outputStream = new PrintWriter( new FileOutputStream( fileName, true ) );
+		}
+		catch( FileNotFoundException e )	{
+			System.out.println( "Error opening file " + fileName );
+			System.exit(0);
+		}
+	}
+
+	private void appendToDebugFile( String s )	{
+		outputStream.println( s );
+	}
+
+	private void closeDebugFile()	{
+		outputStream.close();
+	}
+
 }	//End of class

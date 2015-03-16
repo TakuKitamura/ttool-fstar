@@ -46,13 +46,15 @@ knowledge of the CeCILL license and that you accept its terms.
 package tmltranslator;
 
 import java.util.*;
+import tmltranslator.ctranslator.*;
 
 
 public abstract class HwNode extends DIPLOElement  {
 	public static final int DEFAULT_CLOCK_RATIO = 1;
 	
-    protected int maximumNbOfMappedElement;
+	protected int maximumNbOfMappedElement;
 	protected String name;
+	protected TaskMEC mec;
 	
 	public int clockRatio = DEFAULT_CLOCK_RATIO; /* 2 means 1 cycle out of 2, etc. */ 
  
@@ -62,6 +64,14 @@ public abstract class HwNode extends DIPLOElement  {
 	
 	public String getName() {
 		return name;
+	}
+
+	public void addMECToHwExecutionNode( TaskMEC _mec )	{
+		mec = _mec;
+	}
+
+	public TaskMEC getTaskMEC()	{
+		return mec;
 	}
  
 }

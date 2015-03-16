@@ -163,13 +163,33 @@ public class Operation	{
 
 	public String toString()	{
 		if( ( inSignal != null ) && ( outSignal != null ) )	{
-			return "OPERATION " + name + "\n\t" + inSignal.getName() + "\n\t" + outSignal.getName() + "\n\t" + xHwNode.getName() + "\n\t" + fHwNode.getName() + "\n\t" + inBuffer.toString() + "\n\t" + outBuffer.toString();
+			return 	"OPERATION " + name + "\n\t" +
+							"inSignal: " + inSignal.getName() + "\n\t" +
+							"outSignal: " + outSignal.getName() + "\n\t" +
+							"X task HwExecutionNode: " + xHwNode.getName() + "\n\t" +
+							"X task MEC: " + xHwNode.getTaskMEC().toString() + "\n\t" +
+							"F task HwExecutionNode: " + fHwNode.getName() + "\n\t" +
+							"F task MEC: " + fHwNode.getTaskMEC().toString() + "\n\t" +
+							"inBuffer: " + inBuffer.toString() + "\n\t" + 
+							"outBuffer: " + outBuffer.toString();
 		}
 		else if( inSignal == null )	{
-			return "OPERATION " + name + "\n\t" + outSignal.getName() + "\n\t" + xHwNode.getName() + "\n\t" + fHwNode.getName() + "\n\t" + outBuffer.toString();
+			return 	"OPERATION " + name + "\n\t" +
+							"outSignal: " + outSignal.getName() + "\n\t" +
+							"X task HwExecutionNode: " + xHwNode.getName() + "\n\t" +
+							"X task MEC: " + xHwNode.getTaskMEC().toString() + "\n\t" +
+							"F task HwExecutionNode: " + fHwNode.getName() + "\n\t" +
+							"F task MEC: " + fHwNode.getTaskMEC().toString() + "\n\t" +
+							"outBuffer: " + outBuffer.toString();
 		}
 		else if( outSignal == null )	{
-			return "OPERATION " + name + "\n\t" + inSignal.getName() + "\n\t" + xHwNode.getName() + "\n\t" + fHwNode.getName() + "\n\t" + inBuffer.toString();
+			return 	"OPERATION " + name + "\n\t" +
+							"inSignal: " + inSignal.getName() + "\n\t" +
+							"X task HwExecutionNode: " + xHwNode.getName() + "\n\t" +
+							"X task MEC: " + xHwNode.getTaskMEC().toString() + "\n\t" +
+							"F task HwExecutionNode: " + fHwNode.getName() + "\n\t" +
+							"F task MEC: " + fHwNode.getTaskMEC().toString() + "\n\t" +
+							"inBuffer: " + inBuffer.toString();
 		}
 		return "void OPERATION";
 	}

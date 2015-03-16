@@ -339,13 +339,16 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 			}
 		}
 		else if( fatherMECType.equals( "MAPPER" ) )	{
-			return null;
+			return new MapperMEC( "", "", "", "" );
 		}
 		else if( fatherMECType.equals( "INTL" )	)	{
-			return null;
+				return new InterleaverMEC( "", "", "", "" );
 		}
 		else if( fatherMECType.equals( "ADAIF" ) )	{
-			return null;
+			return new AdaifMEC( "", "", "", "" );
+		}
+		else if( fatherMECType.equals( "CPU" ) )	{
+			return new CPUMEC();
 		}
 		return null;
 	}

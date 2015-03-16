@@ -75,6 +75,7 @@ import ui.sd.*;
 import ui.ucd.*;
 import ui.tree.*;
 import ui.window.*;
+import ui.ConfigurationTTool;
 
 // AVATAR
 import ui.avatardd.*;
