@@ -57,10 +57,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.JFrame;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTable;
+import javax.swing.text.*;
 
 import myutil.GoogleSearch;
 import myutil.GraphicLib;
@@ -69,29 +66,26 @@ import java.lang.Object;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import myutil.GraphicLib;
 
 
-import javax.swing.table.AbstractTableModel;
-import javax.swing.*;
 
 //import javax.swing.event.*;
 import java.util.*;
 
 import myutil.TableSorter;
-
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.DefaultTableCellRenderer;
 
+import myutil.CheckConnection;
 
+//TODO : change display to tab.
+//TODO: decorate the text box
+//TODO : click on Search does not change status immediately
 public class JDialogSearchBox extends javax.swing.JFrame  {
-    
+    public static final String bold= "bold";
+    public static final String normal = "normal";
 	private javax.swing.JList ListKeywords;
     private javax.swing.JCheckBox databaseCb;
-    private javax.swing.JTextArea detailText;
+    private javax.swing.JTextPane detailText;
     private javax.swing.JCheckBox googleCb;
     private javax.swing.JCheckBox googleScholarCb;
     private javax.swing.JScrollPane jScrollPane1;
@@ -116,6 +110,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     int searchGoogleScholar;
     ArrayList<GoogleSearch> resultDatabase;
     int searchDatabase;
+
     
     private ArrayList<Object[]> rows;
     /** Creates new form  */
@@ -147,7 +142,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         googleScholarCb = new javax.swing.JCheckBox();
         databaseCb = new javax.swing.JCheckBox();
         jScrollPane3 = new javax.swing.JScrollPane();
-        detailText = new javax.swing.JTextArea();
+        StyledDocument doc =  new DefaultStyledDocument();
+        detailText = new javax.swing.JTextPane(doc);
         jScrollPane4 = new javax.swing.JScrollPane();
         resultTable = new javax.swing.JTable();
         listModel = new DefaultListModel();
@@ -156,6 +152,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+
+
         
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
         searchGoogle=0;
@@ -180,9 +178,15 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         databaseCb.setText("Database");
 
-        detailText.setColumns(20);
-        detailText.setLineWrap(true);
-        detailText.setRows(5);
+        detailText.setBounds(0,0,20,5);
+        detailText.setEditable(false);
+
+
+
+
+        //detailText.setColumns(20);
+        //detailText.setLineWrap(true);
+        //detailText.setRows(5);
         jScrollPane3.setViewportView(detailText);
 
         resultTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -289,12 +293,9 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         
         searchBt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-					searchBtActionPerformed(evt);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                jLabel5.setText("The crawler is running ....");
+				searchBtActionPerformed(evt);
+
             }
         });
         
@@ -319,7 +320,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         resultTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				// TODO Auto-generated method stub	
 				selectrow(e);
 			}
 		});
@@ -335,10 +335,10 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         	    	  try {
 						d.browse(uri);
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+                          JOptionPane.showMessageDialog(null, "URL is invalid", "Warning",
+                                  JOptionPane.WARNING_MESSAGE);
 					}
-        	    	  
+
         	      }
         	        //see below
         	       
@@ -346,14 +346,12 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         });
         pack();
     }//
-    
-    protected void open(URI uri) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	private void removeBtActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+
+
+	private void removeBtActionPerformed(java.awt.event.ActionEvent evt) {
+        this.jLabel5.setText("Ready");
+        this.jLabel5.updateUI();
     	int index = this.ListKeywords.getSelectedIndex();
         listModel.remove(index);
         
@@ -369,7 +367,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         
         int size = listModel.getSize();
 
-        if (size == 0) { //Nobody's left, disable firing.
+        if (size == 0) {
             this.removeBt.setEnabled(false);
 
         } else { //Select an index.
@@ -383,46 +381,122 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         }
     }        
     
-    private void searchBtActionPerformed(java.awt.event.ActionEvent evt) throws UnsupportedEncodingException, IOException {                                         
-        // TODO add your handling code here:
-    	this.jLabel5.setText("The crawler is running ....");
-    	ArrayList<GoogleSearch> resultGoogle=null;
-    	ArrayList<GoogleSearch> resultGoogleScholar=null;
-    	int id;
-    	 rows=new ArrayList<Object[]>();
-    	String query = this.searchBox.getText();
-    	if (query != ""){
-    		if (this.searchGoogle==1)
-    			resultGoogle = GoogleSearch.getGoogleResult(this.searchBox.getText());
-    		if (this.searchGoogleScholar==1)
-    			resultGoogleScholar= GoogleSearch.getGoogleScholarResult(this.searchBox.getText());
-    	}
-    	DefaultTableModel model = (DefaultTableModel) this.resultTable.getModel();
-    	model.setRowCount(0);
-    	this.detailText.setText("");
-    	if (resultGoogleScholar!=null)
-    		putGoogleScholarToTable(resultGoogleScholar);
-    	if (resultGoogle!=null)
-    		putGoogleToTable(resultGoogle);
-    	for (Object[] o :rows)
-    	{
-			id = (int) (o[0]);
-    		GoogleSearch gs = (GoogleSearch)(o[1]);
-    		String source = (String)(o[2]);
-    		model.addRow(new Object[]{id,gs.getTitle(),gs.getAuthors(),gs.getUrl(),source});
-    	}
-    	this.jLabel5.setText("Finished");
-    }    
+    private void searchBtActionPerformed(java.awt.event.ActionEvent evt)  {
+
+        //reset content of table
+        DefaultTableModel model = (DefaultTableModel) this.resultTable.getModel();
+        model.setRowCount(0);
+        this.detailText.setText("");
+        this.detailText.updateUI();
+
+        // ensure there is at least the resources for crawling.
+        if (this.searchGoogle == 0 && this.searchGoogleScholar == 0 && this.searchDatabase == 0) {
+            JOptionPane.showMessageDialog(null, "Please select the resource to search","Warning",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+
+        int id;
+        rows = new ArrayList<Object[]>();
+
+        // check internet connection before crawling from google or google scholar
+        Boolean internetConnectionAvailable = null;
+        if (this.searchGoogle == 1 || this.searchGoogleScholar == 1) {
+            internetConnectionAvailable = CheckConnection.checkInternetConnection();
+            if (internetConnectionAvailable) {
+
+                ArrayList<GoogleSearch> resultGoogle = null;
+                ArrayList<GoogleSearch> resultGoogleScholar = null;
+
+
+                //get the content of searhBox
+                String query = this.searchBox.getText();
+                if (query != "") {
+                    if (this.searchGoogle == 1) {
+                        jLabel5.setText("Retrieving data from Google");
+                        jLabel5.updateUI();
+                        resultGoogle = GoogleSearch.getGoogleResult(this.searchBox.getText());
+                        jLabel5.setText("Done");
+                        jLabel5.updateUI();
+                        if (resultGoogle == null) {
+                            JOptionPane.showMessageDialog(null, "Can't get the result from Google\n"
+                                    , "Retrieving data is failed",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }else if (resultGoogle != null) {
+
+                            if(resultGoogle.get(0).getTitle() == GoogleSearch.IOEx) {
+                                JOptionPane.showMessageDialog(null, "Can't connect to Google\n " +
+                                                "Please check the internet connection","Connection Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                            } else {
+                                putGoogleToTable(resultGoogle);
+                            }
+                        }
+                    }
+
+                    if (this.searchGoogleScholar == 1) {
+                        jLabel5.setText("Retrieving data from Google Scholar");
+                        jLabel5.updateUI();
+                        resultGoogleScholar = GoogleSearch.getGoogleScholarResult(this.searchBox.getText());
+                        jLabel5.setText("Done");
+                        jLabel5.updateUI();
+                        if (resultGoogleScholar == null) {
+                            JOptionPane.showMessageDialog(null, "Can't get the result from Google Scholar \n"
+                                    , "Retrieving data is failed",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }else if (resultGoogleScholar != null) {
+                            if (resultGoogleScholar.get(0).getTitle() == GoogleSearch.IOEx) {
+                                JOptionPane.showMessageDialog(null, "Can't connect to Google Scholar\n " +
+                                                "Please check the internet connection","Connection Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                            } else {
+                                putGoogleScholarToTable(resultGoogleScholar);
+                            }
+                        }
+                    }
+                }
+
+
+
+
+            }else{
+                JOptionPane.showMessageDialog(null, "No internet connection",
+                               "Connection Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+
+        //TODO : cralwer data from DB, must check the connection.
+        if (this.searchDatabase ==1) {
+            this.jLabel5.setText("Retrieving data from DB");
+            this.repaint();
+            for (long i = 1; i < 100000000; i++) ;
+        }
+
+
+
+
+        //Show table
+        for (Object[] o : rows) {
+            id = (Integer) (o[0]);
+            GoogleSearch gs = (GoogleSearch) (o[1]);
+            String source = (String) (o[2]);
+            model.addRow(new Object[]{id, gs.getTitle(), gs.getAuthors(), gs.getUrl(), source});
+        }
+        this.jLabel5.setText("Finished");
+        this.jLabel5.updateUI();
+
+    }
     
-    private void selectrow(ListSelectionEvent evt) {                                         
-        // TODO add your handling code here:
+    private void selectrow(ListSelectionEvent evt) {
+
     	
     	DefaultTableModel model = (DefaultTableModel) this.resultTable.getModel();
     	int rowindex = resultTable.getSelectedRow();
     	int id =0;
     	
     	if(rowindex >=0)
-    		id= (int) resultTable.getValueAt(rowindex, 0);
+    		id= (Integer) resultTable.getValueAt(rowindex, 0);
 	    	GoogleSearch selected=null;
 	    	for (Object[] o : this.rows){
 	    		if (o[0].equals(id)){
@@ -433,22 +507,25 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 	    	presentDataInDetail(selected);
     }    
     
-    private void googleCbActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+    private void googleCbActionPerformed(java.awt.event.ActionEvent evt) {
+        this.jLabel5.setText("Ready");
+        this.jLabel5.updateUI();
     	if (this.googleCb.isSelected())
     		this.searchGoogle=1;
     	else this.searchGoogle=0;
     }    
     
-    private void googleScholarCbActionPerformed(java.awt.event.ActionEvent evt) {                                                
-        // TODO add your handling code here:
+    private void googleScholarCbActionPerformed(java.awt.event.ActionEvent evt) {
+        this.jLabel5.setText("Ready");
+        this.jLabel5.updateUI();
     	if (this.googleScholarCb.isSelected())
     		this.searchGoogleScholar=1;
     	else this.searchGoogleScholar=0;
     }                                               
 
-    private void databaseCbActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
+    private void databaseCbActionPerformed(java.awt.event.ActionEvent evt) {
+        this.jLabel5.setText("Ready");
+        this.jLabel5.updateUI();
     	if (this.databaseCb.isSelected())
     		this.searchDatabase=1;
     	else this.searchDatabase=0;
@@ -495,17 +572,26 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     }
     
     public void presentDataInDetail(GoogleSearch gs){
-    	if (gs != null)
+
+        if (gs != null)
     	{
-	    	String detail = gs.getTitle()+"\n\n";
-	    	detail = detail + gs.getAuthors()+"\n";
-	    	detail = detail + gs.getUrl()+"\n";
-	    	detail = detail + gs.getCitedNumber()+"\n\n\n";
-	    	
-	    	detail = detail + gs.getDesc()+"\n";
+
+            String detail = "";
+            if (gs.getTitle()!=null)
+                detail = detail+ gs.getTitle()+"\n";
+            if (gs.getAuthors()!=null)
+	    	    detail = detail + gs.getAuthors()+"\n";
+            if (gs.getUrl()!=null)
+	    	    detail = detail + gs.getUrl()+"\n";
+            if (gs.getCitedNumber()!=null)
+	    	    detail = detail + gs.getCitedNumber()+"\n";
+            if (gs.getDesc()!=null)
+	    	    detail = detail + gs.getDesc()+"\n";
 	    	
 	    	this.detailText.setText(detail);
     	}
+
+
     }
     
     

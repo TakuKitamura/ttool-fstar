@@ -66,15 +66,17 @@ public class GoogleSearch {
 	public static final String google = "http://www.google.com/search?hl=en&q=";
 	public static final String googleScholar="http://scholar.google.com/scholar?ht=en&q=";
 	
+	public static final String ENCODING_ERROR = "encodeding_error";
+	public static final String IOEx = "IOExeption";
 	
-	public static final ArrayList<GoogleSearch> getGoogleResult(String search) throws UnsupportedEncodingException, IOException{
+	public static final ArrayList<GoogleSearch> getGoogleResult(String search) {
 		ArrayList<GoogleSearch> r = new ArrayList<GoogleSearch>();
 		
 		String title="" ;
 		String url ="" ;
 		String desc="";
 		GoogleSearch gs;
-		
+		try{		
 		Document doc = Jsoup.connect(google + URLEncoder.encode(search, charset)).userAgent(userAgent).get();
 		
 		//System.out.println(doc.toString());
@@ -128,22 +130,35 @@ public class GoogleSearch {
 			}
 		}
 		return r;
+		}catch (NullPointerException e) {
+			return null;
+		}catch (UnsupportedEncodingException e){
+			gs = new GoogleSearch();
+			gs.setTitle(ENCODING_ERROR);
+			r.add(gs);
+			return r;
+		}catch (IOException e){
+			gs = new GoogleSearch();
+			gs.setTitle(IOEx);
+			r.add(gs);
+			return r;
+		}
 	}
 	
 	
-	public static final ArrayList<GoogleSearch> getGoogleScholarResult(String search) throws UnsupportedEncodingException, IOException{
-		try{
+	public static final ArrayList<GoogleSearch> getGoogleScholarResult(String search){
+		
 		ArrayList<GoogleSearch> r = new ArrayList<GoogleSearch>();
 		String title="";
 		String url="";
 		String desc="";
 		String authors="";
 		String citedNumber="";
-        String citedLinks="";
-        String related="";
+        	String citedLinks="";
+        	String related="";
         
-        GoogleSearch gs;
-		
+        	GoogleSearch gs;
+		try{
 		//SSystem.out.println("call this");
 		Document doc = Jsoup.connect(googleScholar + URLEncoder.encode(search, charset)).userAgent(userAgent).get();
 		
@@ -227,6 +242,16 @@ public class GoogleSearch {
 		return r;
 		}catch (NullPointerException e) {
 			return null;
+		}catch (UnsupportedEncodingException e){
+			gs = new GoogleSearch();	
+			gs.setTitle(ENCODING_ERROR);
+			r.add(gs);
+			return r;
+		}catch (IOException e){
+			gs = new GoogleSearch();	
+			gs.setTitle(IOEx);
+			r.add(gs);
+			return r;
 		}
 	}
 	
@@ -243,6 +268,7 @@ public class GoogleSearch {
 	
 	public GoogleSearch(){
 	}
+
 
 	public String getTitle() {
 		return title;
