@@ -92,6 +92,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	
 	private Vector<String> mappableArchUnitsSL;
 	private Vector<String> sdInstancesSL;
+	private Vector<String> cpMECsSL;
 	
 	private int indexListCPsNames = 0;
 	
@@ -114,18 +115,25 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private JButton downButton;
 	private JButton removeButton;
 	private JScrollPane scrollPane;
+
+	//Panel3, code generation
+	private JPanel panel3;
+	private JComboBox cpMECsCB;
+	private JList cpMECsList;
+	private String cpMEC;
 	
 	// Main Panel
 	private JButton closeButton;
 	private JButton cancelButton;
 	
 	/** Creates new form  */
-	public JDialogReferenceCP( JFrame _frame,  String _title, TMLArchiCPNode _cp, Vector<String> _mappedUnits, String _name ) {
+	public JDialogReferenceCP( JFrame _frame,  String _title, TMLArchiCPNode _cp, Vector<String> _mappedUnits, String _name, String _cpMEC ) {
 	
 	super( _frame, _title, true );
 	frame = _frame;
 	cp = _cp;
 	name = _name;
+	cpMEC = _cpMEC;
 	
 	if( _mappedUnits.size() > 0 )	{
 		//the validity of _mappedUnits is checked when initializing components
@@ -183,7 +191,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel2.setLayout(gridbag2);
 			panel2.setBorder(new javax.swing.border.TitledBorder("Managing mapping"));
 			panel2.setPreferredSize(new Dimension(325, 250));
-			
+
 			// first line panel1
 			c1.weighty = 1.0;
 			c1.weightx = 1.0;
@@ -239,7 +247,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel1.add(new JLabel(" "), c1);
 			
 			sdInstancesSL = new Vector<String>();
-			createListsOfInstances(); // Create the array lists of HashSet listInstancesHash, sdControllerInstances, sdStorageInstances and sdTransferInstances
+			// Create the array lists of HashSet listInstancesHash, sdControllerInstances, sdStorageInstances and sdTransferInstances
+			createListsOfInstances();
 			if( sdInstancesSL.size() == 0 )	{	//protect against the case of a CP with no SDs
 				sdInstancesSL.add( EMPTY_INSTANCES_LIST );
 			}
@@ -260,15 +269,9 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			
 			mappableArchUnitsSL = new Vector<String>();	//the string list used in the architecture units combo box
 
-			//TraceManager.addDev( "BEFORE checkValidity: " + sdInstancesSL.get(0) + " from ComboBox: " + sdInstancesCB.getItemAt( 0 ) );
 			checkValidityOfMappedUnits();	
-			//TraceManager.addDev( "AFTER checkValidity: " + sdInstancesSL.get(0) + " from ComboBox: " + sdInstancesCB.getItemAt( 0 ) );
 
-			//TraceManager.addDev( "BEFORE makeListOfMappableArchUnits: " + sdInstancesSL.get(0) + " from ComboBox: " + sdInstancesCB.getItemAt( 0 ) );
-			//TraceManager.addDev( "before: " + mappableArchUnitsSL.toString() );
 			makeListOfMappableArchUnitsSL();
-			//TraceManager.addDev( "after: " + mappableArchUnitsSL.toString() );
-			//TraceManager.addDev( "AFTER makeListOfMappableArchUnits: " + sdInstancesSL.get(0) + " from ComboBox: " + sdInstancesCB.getItemAt( 0 ) );
 			
 			//nineth line panel1
 			mappableArchUnitsJL = new JList( mappableArchUnitsSL );
@@ -331,6 +334,41 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			removeButton = new JButton("Remove unit");
 			removeButton.addActionListener(this);
 			panel2.add(removeButton, c2);
+
+			//panel3, code generation
+			panel3 = new JPanel();
+			panel3.setLayout(gridbag3);
+			panel3.setBorder(new javax.swing.border.TitledBorder("Code generation"));
+			panel3.setPreferredSize(new Dimension(325, 250));
+			c3.weighty = 1.0;
+			c3.weightx = 1.0;
+			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+			c3.fill = GridBagConstraints.BOTH;
+			c3.gridheight = 3;
+			panel3.add(new JLabel(" "), c3);
+			
+			c3.gridwidth = 1;
+			c3.gridheight = 1;
+			c3.weighty = 1.0;
+			c3.weightx = 1.0;
+			c3.anchor = GridBagConstraints.CENTER;
+			c3.fill = GridBagConstraints.HORIZONTAL;
+			c3.anchor = GridBagConstraints.CENTER;
+			panel3.add( new JLabel( "Model Extension Construct:" ), c3 );
+			cpMECsSL = new Vector<String>();
+			cpMECsSL.add( "Memory Copy" );
+			cpMECsSL.add( "Single DMA" );
+			cpMECsSL.add( "Double DMA" );
+			cpMECsCB = new JComboBox( cpMECsSL );
+			if( cpMEC.equals( "VOID" ) || cpMEC.equals( "" ) )	{
+				cpMECsCB.setSelectedIndex( 0 );
+			}
+			else	{
+				cpMECsCB.setSelectedIndex( cpMECsSL.indexOf( cpMEC ) );
+			}
+			cpMECsCB.addActionListener( this );
+			cpMECsCB.setMinimumSize( new Dimension(150, 50) );
+			panel3.add( cpMECsCB, c3 );
 			
 			// main panel;
 			c0.gridwidth = 1;
@@ -342,6 +380,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c.add(panel1, c0);
 			c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 			c.add(panel2, c0);
+			c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+			c.add(panel3, c0);
 			
 			c0.gridwidth = 1;
 			c0.gridheight = 1;
@@ -771,6 +811,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			regularClose = true;
 			cancelled = false;
 			name = nameOfCP.getText();
+			cpMEC = (String)cpMECsCB.getSelectedItem();
 			dispose();
 		}
 		
@@ -998,6 +1039,10 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private void unfreezeAllComboBoxes()	{
 		sdInstancesCB.addActionListener( this );	
 		communicationPatternsCB.addActionListener( this );
+	}
+
+	public String getCPMEC()	{
+		return cpMEC;
 	}
 		
 }	//End of class

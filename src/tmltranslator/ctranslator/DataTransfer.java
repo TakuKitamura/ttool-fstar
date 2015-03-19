@@ -89,7 +89,7 @@ public class DataTransfer	{
 		}
 	}
 
-	public TMLCPLib getCPLib()	{
+	public TMLCPLib getTMLCPLib()	{
 		return tmlcplib;
 	}
 

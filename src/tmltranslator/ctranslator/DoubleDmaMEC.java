@@ -37,7 +37,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class CpuMemoryCopy, Model Extension Construct (MEC) class for a Embb memory copy transfer
+   * Class DoubleDmaMEC, Model Extension Construct (MEC) class for a double DMA data transfer
    * Creation: 05/02/2014
    * @version 1.0 05/02/2014
    * @author Andrea ENRICI
@@ -48,21 +48,21 @@ package tmltranslator.ctranslator;;
 
 import java.util.*;
 
-public class CpuMemoryCopyMEC extends CPMEC	{
+public class DoubleDmaMEC extends CPMEC	{
 
-	public static final String Context = "embb_cpu_context";
-	public static final String Ctx_cleanup = "cpu_ctx_cleanup";
+	public static final String Context = "embb_dma_context";
+	public static final String Ctx_cleanup = "dma_ctx_cleanup";
 
-	public CpuMemoryCopyMEC()	{
-		node_type = "CpuMemoryCopy";
-		inst_type = "MEMORY_COPY";
-		inst_decl = "VOID";
+	public DoubleDmaMEC()	{
+
+		node_type = "DoubleDmaMEC";
+		inst_type = "VOID";
+		inst_decl = "EMBB_DMA_CONTEXT";
 		buff_type = "MM_BUFF_TYPE";
 		buff_init = "VOID";
-
-		exec_code = TAB + "embb_memcpy_start( /*USER TO DO*/ );" + CR;	
-		init_code = TAB + "embb_memcpy_ctx_init( /*USER TO DO*/ );" + CR;
-		cleanup_code = TAB + "embb_memcpy_ctx_cleanup( /*USER TO DO*/ );";
+		exec_code = TAB + "embb_dma_start( /*USER TO DO: CTX*/, /*USER TO DO: SRC_ADDRESS*/, /*USER TO DO: DST_ADDRESS*/, /*USER TO DO: NUM_SAMPLES */ );" + CR;	
+		init_code = TAB + "embb_dma_ctx_init( /*USER TO DO: CTX*/, /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, /*USER TO DO: SRC_DEV*/ );" + CR;
+		cleanup_code = TAB + "embb_dma_ctx_cleanup( /*USER TO DO: CTX*/ );";
 	}
 
 }	//End of class

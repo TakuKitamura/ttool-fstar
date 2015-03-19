@@ -37,7 +37,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class DmaMEC, Model Extension Construct (MEC) class for a DMA data transfer
+   * Class SingleDmaMEC, Model Extension Construct (MEC) class for a single DMA data transfer
    * Creation: 05/02/2014
    * @version 1.0 05/02/2014
    * @author Andrea ENRICI
@@ -48,14 +48,14 @@ package tmltranslator.ctranslator;;
 
 import java.util.*;
 
-public class DmaMEC extends CPMEC	{
+public class SingleDmaMEC extends CPMEC	{
 
-	protected String src_dev = "NULL";
-	protected String dma_dev;
+	public static final String Context = "embb_dma_context";
+	public static final String Ctx_cleanup = "dma_ctx_cleanup";
 
-	public DmaMEC()	{
+	public SingleDmaMEC()	{
 
-		node_type = "DMA";
+		node_type = "SingleDmaMEC";
 		inst_type = "VOID";
 		inst_decl = "EMBB_DMA_CONTEXT";
 		buff_type = "MM_BUFF_TYPE";

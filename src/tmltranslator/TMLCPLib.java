@@ -48,18 +48,20 @@ package tmltranslator;
 
 import java.util.*;
 import myutil.*;
+import tmltranslator.ctranslator.*;
 
 public class TMLCPLib extends TMLElement {
 
     private ArrayList<TMLCPLibArtifact> artifacts;
     private Vector<String> mappedUnits = new Vector<String>();
-
+		private CPMEC cpMEC;
     private String typeName;
 
 
-    public TMLCPLib(String _name, String _typeName, Object _referenceObject ) {
+    public TMLCPLib(String _name, String _typeName, Object _referenceObject, CPMEC _cpMEC ) {
         super( _name, _referenceObject );
-	typeName = _typeName;
+				typeName = _typeName;
+				cpMEC = _cpMEC;
         init();
     }
 
@@ -105,16 +107,16 @@ public class TMLCPLib extends TMLElement {
     }
 
     public String getUnitByName(String id) {
-	id = "." + id + " : ";
-	for(String s: mappedUnits) {
-	    if (s.indexOf(id) > -1) {
-		return s.substring(s.indexOf(":")+1, s.length()).trim();
-	    }
-	}
-	return null;
-	
-    }
+			id = "." + id + " : ";
+			for(String s: mappedUnits) {
+	  		if (s.indexOf(id) > -1) {
+					return s.substring(s.indexOf(":")+1, s.length()).trim();
+				}
+			}
+			return null;
+		}
 
-
-
+		public CPMEC getCPMEC()	{
+			return cpMEC;
+		}
 }       //End of the class
