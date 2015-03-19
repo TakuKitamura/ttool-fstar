@@ -70,10 +70,7 @@ public class Scheduler	{
 
 	public Scheduler( int type )	{
 
-		code =	"bool valid_signal = false;" + CR +
-						"bool blocked = true;" + CR +
-						"int status = 0;" + CR2 +
-						TAB + "while( !exit_rule() )	{" + CR +
+		code =	TAB + "while( !exit_rule() )	{" + CR +
 						TAB2 + "for( int n_op = 0; n_op < NUM_OPS; ++n_op )	{" + CR +
 						TAB3 + "valid_signal = (*fire_rule[n_op])();" + CR +
 						TAB3 + "if( valid_signal )	{" + CR +

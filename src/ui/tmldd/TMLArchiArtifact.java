@@ -102,9 +102,9 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 		return priority;
 	}
 
-	public String getOperation() {
+	/*public String getOperation() {
 		return operation;
-	}
+	}*/
     
     public void internalDrawing(Graphics g) {
         
@@ -315,7 +315,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 		return "Priority = " + priority;
 	}
 
-	public TaskMEC getMECofTask()	{
+	public OperationMEC getOperationMECOfTask()	{
 
 		TraceManager.addDev( "Inside getMECofTask, fatherMECType: " + fatherMECType );
 		if( fatherMECType.equals( "FEP" ) )	{
@@ -339,6 +339,26 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 			}
 		}
 		else if( fatherMECType.equals( "MAPPER" ) )	{
+			return new MappOperationMEC( "", "", "", "" );
+		}
+		else if( fatherMECType.equals( "INTL" )	)	{
+				return new IntlOperationMEC( "", "", "", "" );
+		}
+		else if( fatherMECType.equals( "ADAIF" ) )	{
+			return new AdaifOperationMEC( "", "", "", "" );
+		}
+		else if( fatherMECType.equals( "CPU" ) )	{
+			return new CpuOperationMEC( "", "", "", "" );
+		}
+		return null;
+	}
+
+	public ArchUnitMEC getArchUnitMEC()	{
+
+		if( fatherMECType.equals( "FEP" ) )	{
+			return new FepMEC( "", "", "", "" );
+		}
+		else if( fatherMECType.equals( "MAPPER" ) )	{
 			return new MapperMEC( "", "", "", "" );
 		}
 		else if( fatherMECType.equals( "INTL" )	)	{
@@ -348,7 +368,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 			return new AdaifMEC( "", "", "", "" );
 		}
 		else if( fatherMECType.equals( "CPU" ) )	{
-			return new CPUMEC();
+			return new CpuMEC();
 		}
 		return null;
 	}

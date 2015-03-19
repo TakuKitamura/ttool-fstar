@@ -37,7 +37,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class DmaMEC, Model Extension Construct (MEC) class for a DMA data transfer
+   * Class MapperMEC, Model Extension Construct (MEC) class for Embb Mapper operations
    * Creation: 05/02/2014
    * @version 1.0 05/02/2014
    * @author Andrea ENRICI
@@ -47,22 +47,20 @@
 package tmltranslator.ctranslator;;
 
 import java.util.*;
+//import Ctranslator.*;
 
-public class DmaMEC extends CPMEC	{
+public class FepMEC extends ArchUnitMEC	{
 
-	protected String src_dev = "NULL";
-	protected String dma_dev;
+	public static final String Context = "embb_fep_context";
+	public static final String Ctx_cleanup = "fep_ctx_cleanup";
 
-	public DmaMEC()	{
+	public FepMEC( String XOP, String ID0, String OD0, String BTC )	{
 
-		node_type = "DMA";
-		inst_type = "VOID";
-		inst_decl = "EMBB_DMA_CONTEXT";
-		buff_type = "MM_BUFF_TYPE";
-		buff_init = "VOID";
-		exec_code = TAB + "embb_dma_start( /*USER TO DO: CTX*/, /*USER TO DO: SRC_ADDRESS*/, /*USER TO DO: DST_ADDRESS*/, /*USER TO DO: NUM_SAMPLES */ );" + CR;	
-		init_code = TAB + "embb_dma_ctx_init( /*USER TO DO: CTX*/, /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, /*USER TO DO: SRC_DEV*/ );" + CR;
-		cleanup_code = TAB + "embb_dma_ctx_cleanup( /*USER TO DO: CTX*/ );";
+		node_type = "FEP";
+		inst_type = "FEP";
+		inst_decl = "FEP_CONTEXT";
+		buff_type = "FEP_BUFF_TYPE";
+		buff_init = "= {/*l,b,q,t*/};";
 	}
 
 }	//End of class

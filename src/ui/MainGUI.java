@@ -3349,7 +3349,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 						}
 						else {
 							if( !automatic ) {
-								JOptionPane.showMessageDialog( frame, "The CP design contains several errors", "Syntax analysis failed",
+								JOptionPane.showMessageDialog( frame, "The Communication Patterns design contains several errors", "Syntax analysis failed",
 																								JOptionPane.INFORMATION_MESSAGE );
 							}
 						}

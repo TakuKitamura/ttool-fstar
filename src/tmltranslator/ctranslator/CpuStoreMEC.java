@@ -59,8 +59,5 @@ public class CpuStoreMEC extends CPMEC	{
 		inst_decl = "VOID";
 		buff_type = "MM_BUFF_TYPE";
 		buff_init = "VOID";
-		exec_code = "embb_mem_write_32( (uint32_t) /*USER TO DO: ADDRESS*/, (uint32_t) /*USER TO DO: WORD*/ );";
-		init_code = "VOID";
-		cleanup_code = "VOID";
 	}
 }	//End of class

@@ -365,4 +365,12 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         return mappedMemory;
     }
 
+		public String getEndAddress()	{
+			return endAddress;
+		}
+
+		public String getStartAddress()	{
+			return startAddress;
+		}
+
 }

@@ -64,7 +64,7 @@ public class Operation	{
 	private TMLTask xTask;
 	private boolean prex;
 	private boolean postex;
-	private Signal inSignal;
+	private ArrayList<Signal> inSignals = new ArrayList<Signal>();
 	private Signal outSignal;
 	private Buffer inBuffer;
 	private Buffer outBuffer;
@@ -72,14 +72,6 @@ public class Operation	{
 	private HwNode fHwNode;
 
 
-	//Constructor for non-SDR operations
-	public Operation( TMLTask _task )	{
-		name = _task.getName().split( "__" )[1];
-		fTask = _task;
-		xTask = null;
-		type = 0;	//NONSDR
-	}
-	
 	//Constructor for SDR operations, before the introduction of signals
 	public Operation( TMLTask _task1, TMLTask _task2 )	{	//First pass the F task
 		name = _task1.getName().split( "__" )[1].split( "F_" )[1];
@@ -89,13 +81,13 @@ public class Operation	{
 	}
 
 	//Constructor for SDR operations with input (READ channels and events) and output (WRITE channels and events) signals
-	public Operation( TMLTask _xTask, TMLTask _fTask, HwNode _xHwNode, HwNode _fHwNode, Signal _inSignal, Signal _outSignal, Buffer _inBuffer, Buffer _outBuffer )	{	//First pass the F task
+	public Operation( TMLTask _xTask, TMLTask _fTask, HwNode _xHwNode, HwNode _fHwNode, ArrayList<Signal> _inSignals, Signal _outSignal, Buffer _inBuffer, Buffer _outBuffer )	{	//First pass the F task
 		name = _xTask.getName().split( "__" )[1].split( "F_" )[1];
 		fTask = _xTask;
 		xTask = _fTask;
 		xHwNode = _xHwNode;
 		fHwNode = _fHwNode;
-		inSignal = _inSignal;
+		inSignals = _inSignals;
 		outSignal = _outSignal;
 		inBuffer = _inBuffer;
 		outBuffer = _outBuffer;
@@ -130,15 +122,19 @@ public class Operation	{
 	}
 
 	public String getContextName()	{
-		return "X_" + name;
+		return "X_" + name + "_ctx";
 	}
 
 	public int getType()	{
 		return type;
 	}
 
-	public Signal getInSignal()	{
-		return inSignal;
+	public ArrayList<Signal> getInSignals()	{
+		return inSignals;
+	}
+
+	public void setInSignals( ArrayList<Signal> _list )	{
+		inSignals = _list;
 	}
 
 	public Signal getOutSignal()	{
@@ -161,37 +157,80 @@ public class Operation	{
 		return outBuffer;
 	}
 
+	public String getFireRuleCondition()	{
+		
+		StringBuffer frCondition = new StringBuffer();
+
+		if( ( inSignals.size() != 0 ) && ( outSignal != null ) )	{
+			for( Signal sig: inSignals )	{
+				frCondition.append( "( sig[ " + sig.getName() + " ].f ) &&" );
+			}
+			if( outSignal.isAJoinSignal() )	{	//get the port name associated to the current xTask
+				ArrayList<TMLTask> tasksList = outSignal.getTMLChannel().getOriginTasks();
+				for( int i = 0; i < tasksList.size(); i++ )	{
+					if( tasksList.get(i).getName().equals( xTask.getName() ) )	{
+						frCondition.append( " ( !sig[ " + outSignal.getTMLChannel().getOriginPorts().get(i).getName() + " ].f )" );
+					}
+				}
+			}
+			else	{
+				frCondition.append( " ( !sig[ " + outSignal.getName() + " ].f )" );
+			}
+		}
+		else if( inSignals.size() == 0 )	{	//prex Operation
+			frCondition.append( "( !sig[ " + outSignal.getName() + " ].f )" );
+		}
+		else if( outSignal == null )	{	//postex Operation
+			if( inSignals.size() > 1 )	{	//the fire rule condition is given by the logical AND of all input ports of the join signal
+				for( Signal sig: inSignals )	{
+					frCondition.append( " ( sig[ " + sig.getName() + " ].f ) &&" );
+				}
+				frCondition = new StringBuffer( frCondition.toString().substring( 0, frCondition.length() - 3 ) );
+				//frCondition = temp + ")";
+			}
+			else	{
+				frCondition.append( "( sig[ " + inSignals.get(0).getName() + " ].f )" );
+			}
+		}
+		return frCondition.toString();
+	}
+
 	public String toString()	{
-		if( ( inSignal != null ) && ( outSignal != null ) )	{
-			return 	"OPERATION " + name + "\n\t" +
-							"inSignal: " + inSignal.getName() + "\n\t" +
-							"outSignal: " + outSignal.getName() + "\n\t" +
+		String s = "";
+		if( ( inSignals.size() != 0 ) && ( outSignal != null ) )	{
+			s = "OPERATION " + name + "\n\t";
+			for( Signal sig: inSignals )	{
+				s += "inSignal: " + sig.getName() + "\n\t";
+			}
+			s +=		"outSignal: " + outSignal.getName() + "\n\t" +
 							"X task HwExecutionNode: " + xHwNode.getName() + "\n\t" +
-							"X task MEC: " + xHwNode.getTaskMEC().toString() + "\n\t" +
+							"X task MEC: " + xHwNode.getArchUnitMEC().toString() + "\n\t" +
 							"F task HwExecutionNode: " + fHwNode.getName() + "\n\t" +
-							"F task MEC: " + fHwNode.getTaskMEC().toString() + "\n\t" +
+							"F task MEC: " + fHwNode.getArchUnitMEC().toString() + "\n\t" +
 							"inBuffer: " + inBuffer.toString() + "\n\t" + 
 							"outBuffer: " + outBuffer.toString();
 		}
-		else if( inSignal == null )	{
-			return 	"OPERATION " + name + "\n\t" +
+		else if( inSignals.size() == 0 )	{
+			s =			"OPERATION " + name + "\n\t" +
 							"outSignal: " + outSignal.getName() + "\n\t" +
 							"X task HwExecutionNode: " + xHwNode.getName() + "\n\t" +
-							"X task MEC: " + xHwNode.getTaskMEC().toString() + "\n\t" +
+							"X task MEC: " + xHwNode.getArchUnitMEC().toString() + "\n\t" +
 							"F task HwExecutionNode: " + fHwNode.getName() + "\n\t" +
-							"F task MEC: " + fHwNode.getTaskMEC().toString() + "\n\t" +
+							"F task MEC: " + fHwNode.getArchUnitMEC().toString() + "\n\t" +
 							"outBuffer: " + outBuffer.toString();
 		}
 		else if( outSignal == null )	{
-			return 	"OPERATION " + name + "\n\t" +
-							"inSignal: " + inSignal.getName() + "\n\t" +
-							"X task HwExecutionNode: " + xHwNode.getName() + "\n\t" +
-							"X task MEC: " + xHwNode.getTaskMEC().toString() + "\n\t" +
+			s = "OPERATION " + name + "\n\t";
+			for( Signal sig: inSignals )	{
+				s += "inSignal: " + sig.getName() + "\n\t";
+			}
+			s += 		"X task HwExecutionNode: " + xHwNode.getName() + "\n\t" +
+							"X task MEC: " + xHwNode.getArchUnitMEC().toString() + "\n\t" +
 							"F task HwExecutionNode: " + fHwNode.getName() + "\n\t" +
-							"F task MEC: " + fHwNode.getTaskMEC().toString() + "\n\t" +
+							"F task MEC: " + fHwNode.getArchUnitMEC().toString() + "\n\t" +
 							"inBuffer: " + inBuffer.toString();
 		}
-		return "void OPERATION";
+		return s;
 	}
 
 }	//End of class

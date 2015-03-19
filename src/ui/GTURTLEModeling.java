@@ -413,23 +413,45 @@ public class GTURTLEModeling {
 	public boolean generateCcode( String _title )	{
 
 		if( tmap == null )	{
-			TraceManager.addDev( "TMAP is empty" );
-			JOptionPane.showMessageDialog(mgui.frame, "C code is only generated from an architecture diagram with mapping information",
-                                                  "Error in C code generation",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(mgui.frame, "C code is only generated from an architecture diagram with mapping information", "Code generation failed", JOptionPane.INFORMATION_MESSAGE);
 			return false;
 		}
 		String applicationName = tmap.getMappedTasks().get(0).getName().split("__")[0];
-		TMLCCodeGeneration myCode = new TMLCCodeGeneration( _title, applicationName, mgui.frame );
-		myCode.toTextFormat( tmap );
+		TMLCCodeGeneration Ccode = new TMLCCodeGeneration( _title, applicationName, mgui.frame );
+		Ccode.toTextFormat( tmap );
 		try {
 				if( ConfigurationTTool.CcodeDirectory.equals("") )	{
-					JOptionPane.showMessageDialog(mgui.frame, "No directory for C code generation found in config.xml. The C code cannot be generated.", "Error in C code generation", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(mgui.frame, "No directory for C code generation found in config.xml. The C code cannot be generated.", "Code generation failed", JOptionPane.INFORMATION_MESSAGE);
 					return false;
 				}
 				else 	{
-			    myCode.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, applicationName );
-					JOptionPane.showMessageDialog(mgui.frame, "The application C code has been successfully generated in: " + ConfigurationTTool.CcodeDirectory + "/", "C code generation successful", JOptionPane.INFORMATION_MESSAGE);
+        	CheckingError ce;
+        	int type;
+        	TGComponent tgc;
+					if( Ccode.hasErrors() )	{
+            for( TMLCCodeGenerationError error: Ccode.getErrors() ) {
+							if( error.type == TMLCCodeGenerationError.ERROR_STRUCTURE ) {
+								type = CheckingError.STRUCTURE_ERROR;
+							}
+							else {
+								type = CheckingError.BEHAVIOR_ERROR;
+							}
+							ce = new CheckingError( type, error.message );
+							tgc = listE.getTG( error.element );
+							if ( tgc != null ) {
+								ce.setTDiagramPanel( tgc.getTDiagramPanel() );
+								ce.setTGComponent( tgc );
+							}
+							ce.setTMLTask( error.task );
+							checkingErrors.add( ce );
+            }
+						JOptionPane.showMessageDialog(mgui.frame, "The system design contains several errors: the application C code could not be generated", "Code generation failed", JOptionPane.INFORMATION_MESSAGE);
+					return false;
+					}
+					else	{
+				    Ccode.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, applicationName );
+						JOptionPane.showMessageDialog(mgui.frame, "The application C code has been successfully generated in: " + ConfigurationTTool.CcodeDirectory + "/", "C code generation successful", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 		}
 		catch( Exception e ) {

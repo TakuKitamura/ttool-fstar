@@ -49,7 +49,10 @@ package tmltranslator.ctranslator;;
 import java.util.*;
 //import Ctranslator.*;
 
-public class MapperMEC extends TaskMEC	{
+public class MapperMEC extends ArchUnitMEC	{
+
+	public static final String Context = "embb_mapper_context";
+	public static final String Ctx_cleanup = "mapper_ctx_cleanup";
 
 	public MapperMEC( String XOP, String ID0, String OD0, String BTC )	{
 
@@ -58,25 +61,6 @@ public class MapperMEC extends TaskMEC	{
 		inst_decl = "MAP_CONTEXT";
 		buff_type = "MAPPER_BUFF_TYPE";
 		buff_init = "= {/*l,b,q,t*/};";
-		exec_code = "/*start execution*/" + CR +
-								"mapper_start(&" + XOP + ");" + CR;
-	
-		init_code ="/***** INIT " + XOP + " *******/" + CR +
-			"void init_" + XOP + "( void )\t{" + CR + TAB +
-			"mapper_ctx_init(/*USER TODO*/);" + CR + TAB +
-			"mapper_set_lenm1( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_lba( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_oba( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_iba( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_mult( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_men( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_sym( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_bpsm1( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_m( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_n( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"mapper_set_s( (((MAPPER_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address), (uint64_t)/*USER TODO*/ );" + CR + TAB +
-			"}" + CR;
-		cleanup_code = "mapper_ctx_cleanup(/*USER TODO*/);";
 	}
 
 }	//End of class

@@ -2809,7 +2809,7 @@ public class GTMLModeling  {
                 for(TMLArchiArtifact artifact:artifacts) {
                     s = artifact.getReferenceTaskName() + "__" + artifact.getTaskName();
 										TraceManager.addDev( "Exploring " + s );
-										/*TaskMEC p = artifact.getMECofTask();
+										/*ArchUnitMEC p = artifact.getMECofTask();
 										String op = artifact.getOperation();*/
                     s = s.replaceAll("\\s", "");
                     //TraceManager.addDev("name=" + s);
@@ -2950,9 +2950,9 @@ public class GTMLModeling  {
                 for( TMLArchiArtifact artifact:artifacts ) {
                     //TraceManager.addDev("Exploring artifact " + artifact.getValue());
                     s = artifact.getReferenceTaskName();
-										TaskMEC mec = artifact.getMECofTask();
-										TraceManager.addDev( "Artifact.getMECOfTask: " + mec );
-										String op = artifact.getOperation();
+										ArchUnitMEC mec = artifact.getArchUnitMEC();
+										OperationMEC op = artifact.getOperationMECOfTask();
+										//TraceManager.addDev( "Creating mapping DS: " + op );
                     TraceManager.addDev("1) Trying to get task named:" + s);
                     s = s.replaceAll("\\s", "");
                     TraceManager.addDev("2) Trying to get task named:" + s);
@@ -2961,12 +2961,10 @@ public class GTMLModeling  {
                     task = tmlm.getTMLTaskByName(s);
                     if (task != null) {
 											if( op != null )	{
-												task.addMappedOperation( op );
+												task.addOperationMEC( op );
 											}
 											((HwExecutionNode)node).addMECToHwExecutionNode( mec );
 											map.addTaskToHwExecutionNode(task, (HwExecutionNode)node);
-											TraceManager.addDev( "TaskMEC from class: " + node.getTaskMEC() );
-											TraceManager.addDev( "TaskMEC from DS: " + map.getHwNodeOf( task ).getTaskMEC() );
                     } else {
                         TraceManager.addDev("Null task");
                     }

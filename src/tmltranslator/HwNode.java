@@ -54,7 +54,7 @@ public abstract class HwNode extends DIPLOElement  {
 	
 	protected int maximumNbOfMappedElement;
 	protected String name;
-	protected TaskMEC mec;
+	protected ArchUnitMEC mec;
 	
 	public int clockRatio = DEFAULT_CLOCK_RATIO; /* 2 means 1 cycle out of 2, etc. */ 
  
@@ -66,11 +66,11 @@ public abstract class HwNode extends DIPLOElement  {
 		return name;
 	}
 
-	public void addMECToHwExecutionNode( TaskMEC _mec )	{
+	public void addMECToHwExecutionNode( ArchUnitMEC _mec )	{
 		mec = _mec;
 	}
 
-	public TaskMEC getTaskMEC()	{
+	public ArchUnitMEC getArchUnitMEC()	{
 		return mec;
 	}
  

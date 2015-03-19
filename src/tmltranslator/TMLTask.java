@@ -46,8 +46,8 @@
 package tmltranslator;
 
 import myutil.*;
-
 import java.util.*;
+import tmltranslator.ctranslator.*;
 
 
 public class TMLTask extends TMLElement {
@@ -61,7 +61,7 @@ public class TMLTask extends TMLElement {
 		private HashSet<TMLChannel> readTMLChannelsList;
 		private HashSet<TMLChannel> writeTMLChannelsList;
 		private HashSet<TMLEvent> eventsList;
-		private String mappedOperation;
+		private OperationMEC operationMEC;
 
 
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
@@ -216,7 +216,7 @@ public class TMLTask extends TMLElement {
         }
     }
 
-    public String getXOD()      {
+    public String getTaskName()      {
         return getName().split( "__" )[1];
     }
 
@@ -352,11 +352,11 @@ public class TMLTask extends TMLElement {
 		return new ArrayList<TMLEvent>( eventsList );
 	}
 
-	public void addMappedOperation( String _operation )	{
-		mappedOperation = _operation;
+	public void addOperationMEC( OperationMEC _operationMEC )	{
+		operationMEC = _operationMEC;
 	}
 
-	public String getMappedOperation()	{
-		return mappedOperation;
+	public OperationMEC getOperationMEC()	{
+		return operationMEC;
 	}
 }

@@ -37,22 +37,21 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class CPMEC, Model Extension Construct (MEC) class for Communication Patterns
-   * Creation: 06/02/2014
-   * @version 1.0 06/02/2014
+   * Class ArchUnitMEC, Model Extension Construct (MEC) class for architecture units
+   * Creation: 05/02/2014
+   * @version 1.0 05/02/2014
    * @author Andrea ENRICI
    * @see
    */
 
-package tmltranslator.ctranslator;;
+package tmltranslator.ctranslator;
 
 import java.util.*;
 import java.nio.*;
 import myutil.*;
-//import Ctranslator.*;
 
-public abstract class CPMEC	{
-	
+public abstract class ArchUnitMEC	{
+
 	public String CR = "\n";
 	public String TAB = "\t";
 	public String node_type = new String();
@@ -60,36 +59,29 @@ public abstract class CPMEC	{
 	public String inst_decl = new String();
 	public String buff_type = new String();
 	public String buff_init = new String();
-	public String init_code = new String();
+	/*public String init_code = new String();
 	public String exec_code = new String();
-	public String messages_code = new String();
-	public String attributes_code = new String();
-	public String cleanup_code = new String();
-
-	public CPMEC()	{
+	public String cleanup_code = new String();*/
+	
+	public String ID0 = new String();
+	public String OD0 = new String();
+	public String XOP = new String();
+	public String BTC = new String();
+	
+	public ArchUnitMEC()	{
 		node_type = "1";
 	}
 
-	public String getExecCode()	{
+	/*public String getExecCode()	{
 		return exec_code;
 	}
 
 	public String getInitCode()	{
 		return init_code;
-	}
-
-	public String getCleanupCode()	{
-		return cleanup_code;
-	}
+	}*/
 
 	public String toString()	{
-		return node_type + CR + inst_decl + CR + inst_type + CR + buff_type + CR + buff_init + CR + exec_code + CR + init_code + CR + messages_code + CR + attributes_code + CR + cleanup_code;
-	}
-
-	public void saveFile( String path, String filename ) throws FileException {
-		
-		TraceManager.addUser( "Saving C CP file in " + path + filename );
-		FileUtils.saveFile( path + filename, this.toString() );
+		return node_type;// + CR + inst_decl + CR + inst_type + CR + buff_type + CR + buff_init + CR + exec_code + CR + init_code + CR + cleanup_code;
 	}
 
 }	//End of class

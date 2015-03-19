@@ -37,7 +37,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class TaskMEC, Model Extension Construct (MEC) class for tasks
+   * Class OperationMEC, Model Extension Construct (MEC) class for operations
    * Creation: 05/02/2014
    * @version 1.0 05/02/2014
    * @author Andrea ENRICI
@@ -50,26 +50,24 @@ import java.util.*;
 import java.nio.*;
 import myutil.*;
 
-public abstract class TaskMEC	{
+public abstract class OperationMEC	{
 
-	public String CR = "\n";
-	public String TAB = "\t";
-	public String node_type = new String();
-	public String inst_type = new String();
-	public String inst_decl = new String();
-	public String buff_type = new String();
-	public String buff_init = new String();
-	public String init_code = new String();
-	public String exec_code = new String();
-	public String cleanup_code = new String();
+	protected String CR = "\n";
+	protected String TAB = "\t";
+	protected String name = new String();
+	protected String init_code = new String();
+	protected String exec_code = new String();
+	protected String cleanup_code = new String();
 	
-	public String ID0 = new String();
-	public String OD0 = new String();
-	public String XOP = new String();
-	public String BTC = new String();
+	protected String ID0 = new String();
+	protected String OD0 = new String();
+	protected String XOP = new String();
+	protected String BTC = new String();
+
+	public ArchUnitMEC archUnitMEC;
 	
-	public TaskMEC()	{
-		node_type = "1";
+	public OperationMEC()	{
+		name = "OperationMEC";
 	}
 
 	public String getExecCode()	{
@@ -81,12 +79,7 @@ public abstract class TaskMEC	{
 	}
 
 	public String toString()	{
-		return node_type;// + CR + inst_decl + CR + inst_type + CR + buff_type + CR + buff_init + CR + exec_code + CR + init_code + CR + cleanup_code;
+		return name;
 	}
 
-	public void saveFile( String path, String filename ) throws FileException {
-		
-		TraceManager.addUser( "Saving C CP file in " + path + filename );
-		FileUtils.saveFile( path + filename, this.toString() );
-	}
 }	//End of class

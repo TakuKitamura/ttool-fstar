@@ -37,7 +37,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class CPUMEC, Model Extension Construct (MEC) class for Embb non-cachable CPU operation
+   * Class CpuMEC, Model Extension Construct (MEC) class for Embb non-cachable CPU operation
    * Creation: 05/02/2014
    * @version 1.0 05/02/2014
    * @author Andrea ENRICI
@@ -48,19 +48,16 @@ package tmltranslator.ctranslator;;
 
 import java.util.*;
 
-public class CPUMEC extends TaskMEC	{
+public class CpuMEC extends ArchUnitMEC	{
 
 	protected String addr = "";
 
-	public CPUMEC()	{
+	public CpuMEC()	{
 		node_type = "CPU";
 		inst_type = "CPUoperation";
 		inst_decl = "VOID";
 		buff_type = "MM_BUFF_TYPE";
 		buff_init = "VOID";
-		exec_code = "embb_mem_read_32( (uint32_t) /*USER TO DO: ADDRESS*/ );";
-		init_code = "VOID";
-		cleanup_code = "VOID";
 	}
 
 }	//End of class
