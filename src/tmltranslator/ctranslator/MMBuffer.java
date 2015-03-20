@@ -53,6 +53,7 @@ import tmltranslator.*;
 
 public class MMBuffer extends BaseBuffer	{
 
+	public static final String Context = "embb_mainmemory_context";
 	protected int num_samples;
 	protected String num_samples_value;
 	public static final String DECLARATION = "struct MM_BUFFER_TYPE {\n\tint num_samples;\n\tint base_address;\n};";

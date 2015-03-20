@@ -51,8 +51,9 @@ import java.nio.*;
 import myutil.*;
 import tmltranslator.*;
 
-public class MAPPERBuffer extends BaseBuffer	{
+public class MapperBuffer extends BaseBuffer	{
 
+	public static final String Context = "embb_mapper_context";
 	protected String num_samples; 
 	protected int num_samples_value;
 	protected int bits_per_symbol_value;
@@ -61,7 +62,7 @@ public class MAPPERBuffer extends BaseBuffer	{
 	protected int symmetrical_value;
 	public static final String DECLARATION = "struct MAPPER_BUFFER_TYPE {\n\tint num_samples;\n\tint base_address;\n};";
 	
-	/*public MAPPERBuffer( String _name, String _type, int _base_address_value, int _num_samples_value, int _bits_per_symbol_value, int _symmetrical_value )	{
+	/*public MapperBuffer( String _name, String _type, int _base_address_value, int _num_samples_value, int _bits_per_symbol_value, int _symmetrical_value )	{
 		super( _name, _type, _base_address_value );
 		num_samples_value = _num_samples_value;
 		num_samples = "int" + SP + "num_samples" + SP + "=" + SP + num_samples_value;
@@ -71,7 +72,7 @@ public class MAPPERBuffer extends BaseBuffer	{
 		symmetrical = "bool" + SP + "symmetrical" + SP + "=" + SP + symmetrical_value + SC;
 	}*/
 
-	public MAPPERBuffer( String _name, TMLTask _task )	{
+	public MapperBuffer( String _name, TMLTask _task )	{
 		type = "MAPPER_BUFFER_TYPE";
 		name = _name;
 		task = _task;
@@ -82,8 +83,4 @@ public class MAPPERBuffer extends BaseBuffer	{
 		return code;
 	}
 	
-	public String toString()	{
-		return code;
-	}
-
 }	//End of class

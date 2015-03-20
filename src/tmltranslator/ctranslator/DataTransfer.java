@@ -147,7 +147,7 @@ public class DataTransfer	{
 
 	public String toString()	{
 		
-		StringBuffer s  = new StringBuffer( "DATA TRANSFER " + name + "\n" );
+		StringBuffer s  = new StringBuffer( "DATA TRANSFER " + name + "\n\t" );
 		for( Signal sig: inSignals )	{
 			s.append( "inSignal: " + sig.getName() + "\n\t" );
 		}

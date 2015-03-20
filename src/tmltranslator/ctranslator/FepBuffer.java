@@ -37,7 +37,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class FEPBuffer
+   * Class FepBuffer
    * Creation: 11/02/2014
    * @version 1.0 11/02/2014
    * @author Andrea ENRICI
@@ -51,7 +51,7 @@ import java.nio.*;
 import myutil.*;
 import tmltranslator.*;
 
-public class FEPBuffer extends BaseBuffer	{
+public class FepBuffer extends BaseBuffer	{
 
 
 	protected String length = "int" + SP + "bl" + SC;
@@ -61,12 +61,12 @@ public class FEPBuffer extends BaseBuffer	{
 	public static final String DECLARATION = "struct FEP_BUFFER_TYPE {\n\tint num_samples;\n\tint base_ddress;\n\tint bank;\n\tint type;\n};";
 
 	
-	/*public FEPBuffer( String _type, int _base_address_value )	{
+	/*public FepBuffer( String _type, int _base_address_value )	{
 		super( "FEP_BUFF_TYPE", _type, _base_address_value );
 		code = "struct" + SP + name + TAB + "{" + CR + length + CR + baseAddress + CR + bank + CR + dataType + CR + "}" + SC;
 	}*/
 
-	public FEPBuffer( String _name, TMLTask _task )	{
+	public FepBuffer( String _name, TMLTask _task )	{
 		type = "FEP_BUFFER_TYPE";
 		name = _name;
 		task = _task;

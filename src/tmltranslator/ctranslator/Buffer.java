@@ -53,6 +53,8 @@ import tmltranslator.*;
 
 public class Buffer	{
 
+	public static final String Context = "";
+
 	public String CR = "\n";
 	public String TAB = "\t";
 	public String SP = " ";
@@ -86,7 +88,7 @@ public class Buffer	{
 			}
 		}
 		else	{
-			return code;
+			return name + SP + type;
 		}
 	}
 

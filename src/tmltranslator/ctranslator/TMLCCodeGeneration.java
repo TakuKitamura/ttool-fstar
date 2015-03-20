@@ -150,7 +150,6 @@ public class TMLCCodeGeneration	{
 			TraceManager.addDev( op.toString() );
 			appendToDebugFile( op.toString() + CR );
 		}
-		makeBuffersList();
 		for( Buffer buff: buffersList )	{
 			TraceManager.addDev( buff.toString() );
 			appendToDebugFile( buff.toString() + CR );
@@ -204,20 +203,10 @@ public class TMLCCodeGeneration	{
 				if( xTaskName.equals( fTaskName ) )	{
 					//Mind that signals are based on channels NOT on events!
 					inSignals = getInSignals( xTask );	//is null for Source operation
-					outSignal = getOutSignal( xTask);	//is null for Sink operation
+					outSignal = getOutSignal( xTask );	//is null for Sink operation
 					//Get the ports of channels and associated them to buffers
-					if( xTask.getReadTMLChannels().size() > 0 )	{
-						inBuffer = createInBuffer( xTask.getReadTMLChannels().get(0) );	//null for Source
-					}
-					else	{
-						inBuffer = null;
-					}
-					if( xTask.getWriteTMLChannels().size() > 0 )	{
-						outBuffer = createOutBuffer( xTask.getWriteTMLChannels().get(0) );	//null for Sink
-					}
-					else	{
-						outBuffer = null;
-					}
+					inBuffer = createInBuffer( xTask, tmap.getHwNodeOf( xTask ) );	//null for Source
+					outBuffer = createOutBuffer( xTask, tmap.getHwNodeOf( xTask ) );	//null for Sink
 					operationsList.add( new Operation( fTask, xTask, tmap.getHwNodeOf( xTask ), tmap.getHwNodeOf( fTask ), inSignals, outSignal, inBuffer, outBuffer ) );
 					SDRoperationsCounter++;
 				}
@@ -226,31 +215,111 @@ public class TMLCCodeGeneration	{
 	}
 
 	//Create the inBuffer form the port of the read channel associated to the xTask
-	private Buffer createInBuffer( TMLChannel readChannel )	{
+	private Buffer createInBuffer( TMLTask xTask, HwNode node )	{
 	
-		if( readChannel.isBasicChannel() )	{
-			return new Buffer( readChannel.getDestinationPort() );
-		}
-		else if( readChannel.isAForkChannel() )	{
-			return new Buffer( readChannel.getDestinationPorts().get(0) );
-		}
-		else if( readChannel.isAJoinChannel() )	{
-			return new Buffer( readChannel.getDestinationPorts().get(0) );
+		if( xTask.getReadTMLChannels().size() > 0 )	{
+			TMLChannel readChannel = xTask.getReadTMLChannels().get(0);
+			ArchUnitMEC mec = node.getArchUnitMEC();
+			Buffer buff = new Buffer();
+			int i;
+			if( readChannel.isBasicChannel() )	{
+				if( mec instanceof FepMEC )	{
+					buff = new FepBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
+					}
+				else if( mec instanceof MapperMEC )	{
+					buff = new MapperBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
+				}
+				else if( mec instanceof InterleaverMEC )	{
+					buff = new MMBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
+				}
+				else if( mec instanceof AdaifMEC )	{
+					buff = new MMBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
+				}
+				else if( mec instanceof CpuMEC )	{
+					buff = new MMBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
+				}
+				buffersList.add( buff );
+				return buff;
+			}
+			else	{
+				for( i = 0; i < readChannel.getDestinationTasks().size(); i++ )	{
+					if( readChannel.getDestinationTasks().get(i).getName().equals( xTask.getName() ) )	{
+						break;
+					}
+				}
+				if( mec instanceof FepMEC )	{
+					buff = new FepBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
+					}
+				else if( mec instanceof MapperMEC )	{
+					buff = new MapperBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
+				}
+				else if( mec instanceof InterleaverMEC )	{
+					buff = new MMBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
+				}
+				else if( mec instanceof AdaifMEC )	{
+					buff = new MMBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
+				}
+				else if( mec instanceof CpuMEC )	{
+					buff = new MMBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
+				}
+				buffersList.add( buff );
+				return buff;
+			}
 		}
 		return null;
 	}
 
 	//Create the inBuffer form the port of the write channel associated to the xTask
-	private Buffer createOutBuffer( TMLChannel writeChannel )	{
+	private Buffer createOutBuffer( TMLTask xTask, HwNode node )	{
 	
-		if( writeChannel.isBasicChannel() )	{
-			return new Buffer( writeChannel.getOriginPort() );
-		}
-		else if( writeChannel.isAForkChannel() )	{
-			return new Buffer( writeChannel.getOriginPorts().get(0) );
-		}
-		else if( writeChannel.isAJoinChannel() )	{
-			return new Buffer( writeChannel.getOriginPorts().get(0) );
+		if( xTask.getWriteTMLChannels().size() > 0 )	{
+			TMLChannel writeChannel = xTask.getWriteTMLChannels().get(0);
+			ArchUnitMEC mec = node.getArchUnitMEC();
+			Buffer buff = new Buffer();
+			int i;
+			if( writeChannel.isBasicChannel() )	{
+				if( mec instanceof FepMEC )	{
+					buff = new FepBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
+				}
+				else if( mec instanceof MapperMEC )	{
+					buff = new MapperBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
+				}
+				else if( mec instanceof InterleaverMEC )	{
+					buff = new MMBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
+				}
+				else if( mec instanceof AdaifMEC )	{
+					buff = new MMBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
+				}
+				else if( mec instanceof CpuMEC )	{
+					buff = new MMBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
+				}
+				buffersList.add( buff );
+				return buff;
+			}
+			else	{
+				for( i = 0; i < writeChannel.getOriginTasks().size(); i++ )	{
+					if( writeChannel.getOriginTasks().get(i).getName().equals( xTask.getName() ) )	{
+						break;
+					}
+				}
+				if( mec instanceof FepMEC )	{
+					buff = new FepBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
+				}
+				else if( mec instanceof MapperMEC )	{
+					buff = new MapperBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
+				}
+				else if( mec instanceof InterleaverMEC )	{
+					buff = new MMBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
+				}
+				else if( mec instanceof AdaifMEC )	{
+					buff = new MMBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
+				}
+				else if( mec instanceof CpuMEC )	{
+					buff = new MMBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
+				}
+				buffersList.add( buff );
+				return buff;
+			}
 		}
 		return null;
 	}
@@ -268,7 +337,6 @@ public class TMLCCodeGeneration	{
 					sigChannel = sig.getTMLChannel();
 					if( sigChannel.isBasicChannel() )	{
 						if( sigChannel.getOriginPort().getName().equals( originPort.getName() ) )	{
-							//return sig;
 							sigsList.add( sig );
 						}
 					}
@@ -280,7 +348,6 @@ public class TMLCCodeGeneration	{
 					sigChannel = sig.getTMLChannel();
 					if( sigChannel.isAForkChannel() )	{
 						if( sigChannel.getOriginPorts().get(0).getName().equals( originPort.getName() ) )	{
-							//return sig;
 							sigsList.add( sig );
 						}
 					}
@@ -359,41 +426,6 @@ public class TMLCCodeGeneration	{
 		return null;
 	}
 
-	private void makeBuffersList()	{
-
-		ArrayList<TMLPort> portsList = new ArrayList<TMLPort>();
-		for( TMLChannel ch: tmlm.getChannels() )	{
-			if( ch.isBasicChannel() )	{
-				buffersList.add( new Buffer( ch.getOriginPort() ) );	
-				buffersList.add( new Buffer( ch.getDestinationPort() ) );	
-			}
-			else if( ch.isAForkChannel() )	{
-				buffersList.add( new Buffer( ch.getOriginPorts().get(0) ) );	
-				for( TMLPort port: ch.getDestinationPorts() )	{
-					buffersList.add( new Buffer( port ) );
-				}
-			}
-			else if( ch.isAJoinChannel() )	{
-				for( TMLPort port: ch.getOriginPorts() )	{
-					buffersList.add( new Buffer( port ) );
-				}
-				buffersList.add( new Buffer( ch.getDestinationPorts().get(0) ) );	
-			}
-		}
-		for( TMLCPLib cplib: mappedCPLibs )	{
-			if( cplib.getArtifacts().size() == 1 )	{
-				String mappedPortName = cplib.getArtifacts().get(0).getPortName();	//only one mapped port per CP
-				//TraceManager.addDev( mappedPortName );
-				for( Buffer buff: buffersList )	{
-					if( buff.getName().split("BUFFER__")[1].equals( mappedPortName ) )	{
-						//TraceManager.addDev( "Buffer " + buff.getName() + " matches mapped port " + mappedPortName );
-						buff.addMappingArtifact( cplib.getArtifacts().get(0) );
-					}
-				}
-			}
-		}
-	}
-
 	private void makeDataTransfersList()	{
 
 		ArrayList<Signal> inSignals;
@@ -405,7 +437,6 @@ public class TMLCCodeGeneration	{
 				String memoryName = cplib.getArtifacts().get(0).getMemoryName();	//only one mapped port per CP
 				String taskName = cplib.getArtifacts().get(0).getTaskName();	//only one mapped port per CP
 				Object o = cplib.getArtifacts().get(0).getReferenceObject();
-				//TraceManager.addDev( "CPLIB " + cplib.getName() + "\n\tportName: " + portName + "\n\tmemoryName: " + memoryName + "\n\ttaskName:" + taskName );
 				inSignals = getDTInSignals( portName );
 				DataTransfer dt = new DataTransfer( cplib, inSignals, null );	//outSignals are added later
 				dataTransfersList.add( dt );
@@ -428,13 +459,6 @@ public class TMLCCodeGeneration	{
 				op.setInSignals( newInSignalsList );
 				newInSignalsList = new ArrayList<Signal>();
 			}
-		}
-		/*for( Signal sig: signalsList )	{
-			TraceManager.addDev( sig.getName() );
-		}*/
-		TraceManager.addDev( "*****************************************" );
-		for( Operation op: operationsList )	{
-			TraceManager.addDev( op.toString() );
 		}
 	}
 
@@ -607,7 +631,6 @@ public class TMLCCodeGeneration	{
 				}
 			}
 		}
-		TraceManager.addDev( "foundPrex = " + foundPrex );
 		if( !foundPrex )	{
 			addError( "No suitable channel has been marked as prex", TMLCCodeGenerationError.ERROR_STRUCTURE );
 		}
@@ -659,6 +682,7 @@ public class TMLCCodeGeneration	{
 
 		TMLTask xTask, fTask;
 		ArchUnitMEC taskMEC;
+		Buffer inBuff, outBuff;
 		StringBuffer buffersString = new StringBuffer( "/**** Buffers *****/" + CR );
 		StringBuffer instructionsString = new StringBuffer( "/**** Operations Instructions *****/" + CR );
 
@@ -666,21 +690,32 @@ public class TMLCCodeGeneration	{
 			if( op.getType() == Operation.SDR )	{
 				xTask = op.getSDRTasks().get( Operation.X_TASK );
 				fTask = op.getSDRTasks().get( Operation.F_TASK );
-				taskMEC = tmap.getHwNodeOf( xTask ).getArchUnitMEC();
-				if( taskMEC instanceof FepMEC )	{
-					FEPBuffer fepBuff = new FEPBuffer( "buff_" + xTask.getName().split("__")[1], xTask );
-					if( declaration )	{
-						buffersString.append( "extern" + SP + fepBuff.getType() + SP + fepBuff.getName() + ";" + CR );
-						instructionsString.append( "extern" + SP + FepMEC.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
+				inBuff = op.getInBuffer();
+				outBuff = op.getOutBuffer();
+				if( declaration )	{
+					if( inBuff != null )	{
+						buffersString.append( "extern" + SP + inBuff.getType() + SP + inBuff.getName() + ";" + CR );
+						instructionsString.append( "extern" + SP + inBuff.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
 					}
-					else	{
-						buffersString.append( fepBuff.getType() + SP + fepBuff.getName() + ";" + CR );
-						instructionsString.append( FepMEC.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
+					if( outBuff != null )	{
+						buffersString.append( "extern" + SP + outBuff.getType() + SP + outBuff.getName() + ";" + CR );
+						instructionsString.append( "extern" + SP + outBuff.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
 					}
-					//buffersList.add( fepBuff );
 				}
-				else if( taskMEC instanceof MapperMEC )	{
-					MAPPERBuffer mappBuff = new MAPPERBuffer( "buff_" + xTask.getName().split("__")[1], xTask );
+				else	{
+					if( inBuff != null )	{
+						buffersString.append( inBuff.getType() + SP + inBuff.getName() + ";" + CR );
+						instructionsString.append( inBuff.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
+					}
+					if( outBuff != null )	{
+						buffersString.append( outBuff.getType() + SP + outBuff.getName() + ";" + CR );
+						instructionsString.append( outBuff.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
+					}
+				}
+			}
+		}
+				/*else if( taskMEC instanceof MapperMEC )	{
+					MapperBuffer mappBuff = new MapperBuffer( "buff_" + xTask.getName().split("__")[1], xTask );
 					if( declaration )	{
 						buffersString.append( "extern" + SP + mappBuff.getType() + SP + mappBuff.getName() + ";" + CR );
 						instructionsString.append( "extern" + SP + MapperMEC.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
@@ -689,7 +724,6 @@ public class TMLCCodeGeneration	{
 						buffersString.append( mappBuff.getType() + SP + mappBuff.getName() + ";" + CR );
 						instructionsString.append( MapperMEC.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
 					}
-					//buffersList.add( mappBuff );
 				}
 				else if( taskMEC instanceof InterleaverMEC )	{
 					MMBuffer mmBuff = new MMBuffer( "buff_" + xTask.getName().split("__")[1], xTask );
@@ -701,7 +735,6 @@ public class TMLCCodeGeneration	{
 						buffersString.append( mmBuff.getType() + SP + mmBuff.getName() + ";" + CR );
 						instructionsString.append( InterleaverMEC.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
 					}
-					//buffersList.add( mmBuff );
 				}
 				else if( taskMEC instanceof AdaifMEC )	{
 					MMBuffer mmBuff = new MMBuffer( "buff_" + xTask.getName().split("__")[1], xTask );
@@ -713,10 +746,8 @@ public class TMLCCodeGeneration	{
 						buffersString.append( mmBuff.getType() + SP + mmBuff.getName() + ";" + CR );
 						instructionsString.append( AdaifMEC.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
 					}
-					//buffersList.add( mmBuff );
 				}
-			}
-		}
+			}*/
 		instructionsString.append( CR2 + "/**** Data Transfers Instructions ****/" + CR );
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
@@ -764,8 +795,8 @@ public class TMLCCodeGeneration	{
 
 	private String generateCodeForVariables()	{
 		StringBuffer s = new StringBuffer( "/**** variables *****/" + CR + "extern SIG_TYPE sig[];" + CR2 );
-		s.append( FEPBuffer.DECLARATION + CR2 );
-		s.append( MAPPERBuffer.DECLARATION + CR2 );
+		s.append( FepBuffer.DECLARATION + CR2 );
+		s.append( MapperBuffer.DECLARATION + CR2 );
 		s.append( MMBuffer.DECLARATION + CR2 + "#endif" );
 		return s.toString();
 	}
@@ -975,7 +1006,6 @@ public class TMLCCodeGeneration	{
 		for( DataTransfer dt: dataTransfersList )	{
 			cplib = dt.getTMLCPLib();
 			if( cplib.getArtifacts().size() == 1 )	{
-				TraceManager.addDev( "----------" + cplib.getArtifacts().get(0).getPortName() );
 			}
 			programString.append( "int op_" + cplib.getName() + "()\t{" + CR );
 			
@@ -1191,7 +1221,6 @@ public class TMLCCodeGeneration	{
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
 			CPMEC cpMEC = tmlcplib.getCPMEC();
-			TraceManager.addDev( "cpMEC from tmlcplib " + cpMEC );
 			if( cpMEC instanceof CpuMemoryCopyMEC )	{
 				initFileString.append( TAB + CpuMemoryCopyMEC.Ctx_cleanup + "( &" + tmlcplib.getName() + "_ctx );" + CR );
 			}
