@@ -91,19 +91,6 @@ public class TMLCCodeGeneration	{
 	private ArrayList<Buffer> buffersList = new ArrayList<Buffer>();
 	private ArrayList<DataTransfer> dataTransfersList = new ArrayList<DataTransfer>();
 
-	private final String WRONG_ORIGIN_CHANNEL = "is not declared as an origin channel of the task";
-	private final String WRONG_DESTINATION_CHANNEL = "is not declared as a destination channel of the task";
-	private final String WRONG_ORIGIN_EVENT = "is not declared as an origin event of the task";
-	private final String WRONG_DESTINATION_EVENT = "is not declared as a destination event of the task";
-	private final String WRONG_ORIGIN_REQUEST = "is not declared as an origin request of the task";
-	private final String SYNTAX_ERROR = "syntax error";
-	private final String WRONG_VARIABLE_IDENTIFIER = "forbidden variable's name";
-	private final String VARIABLE_ERROR = "variable is not used according to its type";
-	private final String UNDECLARED_VARIABLE = "unknown variable";
-	private final String WRONG_VARIABLE_TYPE = "incorrect variable type";
-	private final String SYNTAX_ERROR_VARIABLE_EXPECTED = "syntax error (variable expected)";
-	private final String TIME_UNIT_ERROR = "unknown time unit";
-
 	private ArrayList<TMLCCodeGenerationError> errors;
 	private ArrayList<TMLCCodeGenerationError> warnings;
 
@@ -137,6 +124,7 @@ public class TMLCCodeGeneration	{
 		ArrayList<TMLTask> mappedTasks = tmap.getMappedTasks();
 		ArrayList<TMLElement> commElts = tmap.getMappedCommunicationElement();
 
+
 		//Create the data structures for signals, buffers, operations and data transfers
 		openDebugFile();
 		makeSignalsList();	//make the signals associated to operations, based on the tasks of operations
@@ -146,10 +134,6 @@ public class TMLCCodeGeneration	{
 			appendToDebugFile( sig.toString() + CR );
 		}
 		makeOperationsList( mappedTasks );	//make the list of operations based on the tasks in the app model
-		for( Operation op: operationsList )	{
-			TraceManager.addDev( op.toString() );
-			appendToDebugFile( op.toString() + CR );
-		}
 		for( Buffer buff: buffersList )	{
 			TraceManager.addDev( buff.toString() );
 			appendToDebugFile( buff.toString() + CR );
@@ -158,6 +142,10 @@ public class TMLCCodeGeneration	{
 		for( DataTransfer dt: dataTransfersList )	{
 		 		TraceManager.addDev( dt.toString() );
 				appendToDebugFile( dt.toString() );
+		}
+		for( Operation op: operationsList )	{
+			TraceManager.addDev( op.toString() );
+			appendToDebugFile( op.toString() + CR );
 		}
 		closeDebugFile();
 
@@ -182,7 +170,6 @@ public class TMLCCodeGeneration	{
 		String[] s;
 
 		for( TMLTask task: mappedTasks )	{
-			TraceManager.addDev( "Mapped Operation of taks " + task.getName() + " is: " + task.getOperationMEC() );
 			String taskName = task.getName().split( "__" )[1];
 			s = taskName.split( "X_" );
 			if( s.length > 1 )	{	//we are splitting an eXecution task
@@ -456,6 +443,32 @@ public class TMLCCodeGeneration	{
 					newInSignalsList.add( newSig );	//to be substitued to the inSignals of op
 					signalsList.add( newSig );
 				}
+				Buffer inBuff = op.getInBuffer();
+				Buffer outBuff = op.getOutBuffer();
+				String portName = "buff_" + dt.getTMLCPLib().getArtifacts().get(0).getPortName();
+				String startAddress = dt.getTMLCPLib().getArtifacts().get(0).getStartAddress();
+				String endAddress = dt.getTMLCPLib().getArtifacts().get(0).getEndAddress();
+				TraceManager.addDev( "startAddress from artifact " + dt.getTMLCPLib().getArtifacts().get(0).getName() + " is = " + startAddress );
+				TraceManager.addDev( "endAddress from artifact " + dt.getTMLCPLib().getArtifacts().get(0).getName() + " is = " + endAddress );
+				if( inBuff != null )	{
+					//TraceManager.addDev( "Trying to match " + portName + " and " + inBuff.getName() );
+					if( inBuff.getName().equals( portName ) )	{
+						inBuff.setStartAddress( startAddress );
+						inBuff.setEndAddress( endAddress );
+						//TraceManager.addDev( "Operation " + op.getName() + " inBuffer = " + inBuff.getName() + " mapped port: " + portName );
+						dt.setOutBuffer( inBuff );	//Careful with which is IN and which is OUT!
+					}
+				}
+				if( outBuff != null )	{
+					//String portName = "buff_" + dt.getTMLCPLib().getArtifacts().get(0).getPortName();
+					//TraceManager.addDev( "Trying to match " + portName + " and " + outBuff.getName() );
+					if( outBuff.getName().equals( portName ) )	{
+						outBuff.setStartAddress( startAddress );
+						outBuff.setEndAddress( endAddress );
+						//TraceManager.addDev( "Operation " + op.getName() + " outBuffer = " + outBuff.getName() + " mapped port: " + portName );
+						dt.setInBuffer( inBuff );	//Careful with which is IN and which is OUT!
+					}
+				}
 				op.setInSignals( newInSignalsList );
 				newInSignalsList = new ArrayList<Signal>();
 			}
@@ -518,36 +531,6 @@ public class TMLCCodeGeneration	{
 					signalsList.add( new Signal( tmlch ) );
 				}
 			}
-			/*if( ch.isBasicChannel() )	{
-				String associatedEvtName = ch.getOriginPort().getAssociatedEvent();
-				for( TMLEvent evt: tmlm.getEvents() )	{
-					String evtName = evt.getName().split("__")[1];
-					if( evtName.equals( associatedEvtName ) )	{
-						signalsList.add( new Signal( ch, evt ) );
-						break;
-					}
-				}
-			}
-			else if( ch.isAForkChannel() )	{
-				String associatedEvtName = ch.getOriginPort(0).getAssociatedEvent();
-				for( TMLEvent evt: tmlm.getEvents() )	{
-					String evtName = evt.getName().split("__")[1];
-					if( evtName.equals( associatedEvtName ) )	{
-						signalsList.add( new Signal( ch, evt ) );
-						break;
-					}
-				}
-			}
-			else if( ch.isAJoinChannel() )	{	//Basic signals must be created in order for the SDF scheduler to work
-				String associatedEvtName = ch.getDestinationPorts().get(0).getAssociatedEvent();
-				for( TMLEvent evt: tmlm.getEvents() )	{
-					String evtName = evt.getName().split("__")[3];
-					if( evtName.equals( associatedEvtName ) )	{
-						signalsList.add( new Signal( ch, evt ) );
-						break;
-					}
-				}
-			}*/
 		}
 		return;
 	}
@@ -604,39 +587,35 @@ public class TMLCCodeGeneration	{
 				originPort = ch.getOriginPort();
 				if( originPort.isPrex() )	{
 					prexList.add( originPort );
-					foundPrex = true;
+					//foundPrex = true;
+				}
+				destinationPort = ch.getDestinationPort();
+				if( destinationPort.isPostex() )	{
+					postexList.add( destinationPort );
+					//foundPostex = true;
 				}
 			}
 			if( ch.isAForkChannel() )	{
 				originPort = ch.getOriginPorts().get(0);
 				if( originPort.isPrex() )	{
 					prexList.add( originPort );
-					foundPrex = true;
-				}
-			}
-		}
-		for( TMLChannel ch: tmlm.getChannels() )	{
-			if( ch.isBasicChannel() )	{
-				destinationPort = ch.getDestinationPort();
-				if( destinationPort.isPostex() )	{
-					postexList.add( destinationPort );
-					foundPostex = true;
+					//foundPrex = true;
 				}
 			}
 			if( ch.isAJoinChannel() )	{
 				destinationPort = ch.getDestinationPorts().get(0);
 				if( destinationPort.isPostex() )	{
 					postexList.add( destinationPort );
-					foundPostex = true;
+					//foundPostex = true;
 				}
 			}
 		}
-		if( !foundPrex )	{
+		/*if( !foundPrex )	{
 			addError( "No suitable channel has been marked as prex", TMLCCodeGenerationError.ERROR_STRUCTURE );
 		}
 		if( !foundPostex )	{
 			addError( "No suitable channel has been marked as postex", TMLCCodeGenerationError.ERROR_STRUCTURE );
-		}
+		}*/
 	}
 
 	private String generateCodeForLibraries()	{
@@ -1346,23 +1325,6 @@ public class TMLCCodeGeneration	{
 
 	private void closeDebugFile()	{
 		outputStream.close();
-	}
-
-  public void addError( String message, int type )	{
-		TMLCCodeGenerationError error = new TMLCCodeGenerationError( type );
-		error.message = message;
-		errors.add( error );
-	}
-
-  public ArrayList<TMLCCodeGenerationError> getErrors() {
-		return errors;
-	}
-
-	public boolean hasErrors()	{
-		if( errors.size() > 0 )	{
-			return true;
-		}
-		return false;
 	}
 
 }	//End of class

@@ -154,8 +154,12 @@ public class DataTransfer	{
 		for( Signal sig: outSignals )	{
 			s.append( "outSignal: " + sig.getName() + "\n\t" );
 		}
-		/*s.append( "inBuffer: " + inBuffer.toString() + "\n\t" );
-		s.append( "outBuffer: " + outBuffer.toString() );*/
+		if( inBuffer != null )	{
+			s.append( "inBuffer: " + inBuffer.toString() + "\n\t" );
+		}
+		if( outBuffer != null )	{
+			s.append( "outBuffer: " + outBuffer.toString() );
+		}
 	return s.toString();
 	}
 

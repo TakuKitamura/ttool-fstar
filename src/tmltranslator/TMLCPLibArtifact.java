@@ -51,17 +51,23 @@ import tmltranslator.tmlcp.*;
 import myutil.*;
 
 public class TMLCPLibArtifact extends TMLElement {
+
     public String taskName;
     public String portName;
     public String memoryName;
     public int priority;
+		private String endAddress;
+		private String startAddress;
 
-    public TMLCPLibArtifact(String _name, Object _referenceObject, String _taskName, String _portName, String _memoryName, int _priority) {
+
+    public TMLCPLibArtifact(String _name, Object _referenceObject, String _taskName, String _portName, String _memoryName, int _priority, String _endAddress, String _startAddress ) {
         super( _name, _referenceObject );
         taskName = _taskName;
         portName = _portName;
         memoryName = _memoryName;
         priority = _priority;
+				endAddress = _endAddress;
+				startAddress = _startAddress;
     }
 
     public TMLCPLibArtifact() {
@@ -83,4 +89,12 @@ public class TMLCPLibArtifact extends TMLElement {
     public int getPriority()    {
         return priority;
     }
+
+		public String getStartAddress()	{
+			return startAddress;
+		}
+
+		public String getEndAddress()	{
+			return endAddress;
+		}
 }       //End of the class

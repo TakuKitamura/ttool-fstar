@@ -57,6 +57,7 @@ public class Buffer	{
 
 	public String CR = "\n";
 	public String TAB = "\t";
+	public String TAB2 = "\t\t";
 	public String SP = " ";
 	public String SC = ";";
 	public String POINTER = "*";
@@ -68,6 +69,9 @@ public class Buffer	{
 	protected TMLTask task;
 	protected TMLPort port;
 	protected TMLCPLibArtifact artifact;
+
+	protected String startAddress;
+	protected String endAddress;
 	
 	public Buffer()	{
 		code = "struct" + SP + name + TAB + "{" + CR + "}" + SC;
@@ -88,7 +92,7 @@ public class Buffer	{
 			}
 		}
 		else	{
-			return name + SP + type;
+			return name + SP + type + CR + TAB2 + "startAddress = " + startAddress + CR + TAB2 + "endAddress = " + endAddress;
 		}
 	}
 
@@ -114,5 +118,13 @@ public class Buffer	{
 
 	public TMLCPLibArtifact getMappingArtifact()	{
 		return artifact;
+	}
+
+	public void setStartAddress( String _startAddress )	{
+		startAddress = _startAddress;
+	}
+
+	public void setEndAddress( String _endAddress )	{
+		endAddress = _endAddress;
 	}
 }	//End of class

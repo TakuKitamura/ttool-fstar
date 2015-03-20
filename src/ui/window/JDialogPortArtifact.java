@@ -268,7 +268,22 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				mappedMemory = (String) memory.getItemAt( memory.getSelectedIndex() );
 				startAddress = (String) startAddressTF.getText();
 				endAddress = (String) endAddressTF.getText();
-				//mappedPort = (String) referenceCommunicationName.getItemAt( .getSelectedIndex() );
+				if( startAddress.length() <= 2 )	{
+					JOptionPane.showMessageDialog( frame, "Please enter a valid start address", "Badly formatted parameter", JOptionPane.INFORMATION_MESSAGE );
+					return;
+				}
+				if( endAddress.length() <= 2 )	{
+					JOptionPane.showMessageDialog( frame, "Please enter a valid end address", "Badly formatted parameter", JOptionPane.INFORMATION_MESSAGE );
+					return;
+				}
+				if( !( startAddress.substring(0,2).equals("0x") || startAddress.substring(0,2).equals("0X") ) )	{
+					JOptionPane.showMessageDialog( frame, "Start address must be expressed in hexadecimal", "Badly formatted parameter", JOptionPane.INFORMATION_MESSAGE );
+					return;
+				}
+				if( !( endAddress.substring(0,2).equals("0x") || endAddress.substring(0,2).equals("0X") ) )	{
+					JOptionPane.showMessageDialog( frame, "End address must be expressed in hexadecimal", "Badly formatted parameter", JOptionPane.INFORMATION_MESSAGE );
+					return;
+				}
         dispose();
     }
 
