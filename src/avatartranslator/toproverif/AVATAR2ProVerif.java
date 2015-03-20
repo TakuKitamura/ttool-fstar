@@ -147,6 +147,18 @@ public class AVATAR2ProVerif {
         return "";
     }
 
+    private String makeLetActionFromBlockParam(String _block, String _param, String known) {
+        String tmp = makeAttrName(_block, _param);
+        String tmpH = declarations.get(tmp);
+        if (tmpH == null) {
+            declarations.put(tmp, tmp);
+            tmp = "let " + tmp + " =" + known + " in \n";
+            return tmp;
+        }
+
+        return "";
+    }
+
     private void addDeclarationsFromList(int startIndex, String[] list, String result) {
         String tmp, blockName, paramName;
         String tmp1;
@@ -761,6 +773,8 @@ public class AVATAR2ProVerif {
         p.processName = "starting__";
         LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
 
+	HashMap<String, String> pubs = new HashMap<String, String>();
+
         //LinkedList<String> createdVariables = new LinkedList<String>();
         String[] list;
         String blockName, paramName;
@@ -780,7 +794,13 @@ public class AVATAR2ProVerif {
                         blockName = tmp.substring(0, index).trim();
                         paramName = tmp.substring(index+1, tmp.length());
 
-                        action += makeActionFromBlockParam(blockName, paramName);
+			String known = pubs.get(blockName + "__" + paramName);
+			if (known != null) {
+			    action += makeLetActionFromBlockParam(blockName, paramName, known);
+			} else {
+			    action += makeActionFromBlockParam(blockName, paramName);
+			}
+			TraceManager.addDev("Adding action=" + action);
                         addDeclarationsFromList(1, list, makeAttrName(blockName, paramName));
                     }
                 }
@@ -822,6 +842,8 @@ public class AVATAR2ProVerif {
                         if (index != -1) {
                             privK = tmp2.substring(0, index).trim();
                             pubK = tmp2.substring(index+1, tmp2.length()).trim();
+
+			    pubs.put(blockName + "__" + pubK, pubK);
 
                             action += makeActionFromBlockParam(blockName, privK);
 
