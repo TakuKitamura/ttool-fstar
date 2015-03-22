@@ -351,22 +351,21 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 			tgc = tdp.componentPointed();
 			//int s[] = {e.getX(), e.getY()};
 			
-			if (  tdp.j == null){
+			if ( null == tdp.mgui.searchBox || ! tdp.mgui.searchBox.isShowing()){
 				//selComponents.add(s);
 
 				selectedMultiComponents.add(tgc.getValue());
-				
 				//TraceManager.addDev("Selected components: " + selectedMultiComponents.toString());
 			}
 			else {
-				if (tdp.j.isShowing())
+				if (tdp.mgui.searchBox.isShowing())
 				{
-					tdp.j.addValueListKeyword(tgc.getValue());	
+                    tdp.mgui.searchBox.addValueListKeyword(tgc.getValue());
 					selectedMultiComponents.clear();
 				}
 				else{
 					selectedMultiComponents.add(tgc.getValue());
-					tdp.j.removeValueListKeyword();
+                    tdp.mgui.searchBox.removeValueListKeyword();
 				}
 			}
 		}else
@@ -376,6 +375,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 		
 
 		//open a Search Dialog with seleted component's value
+        //TODO: bug : add value with alt when searchbox is opend and have values
 		if (tdp.mode == TDiagramPanel.NORMAL && e.isAltDown()) {
 			byte info = tdp.hoveredComponent(e.getX(), e.getY());
 			
@@ -383,7 +383,13 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 				tgc = tdp.componentHovered();
 				String search = tgc.getValue();
 				selectedMultiComponents.add(search);
-				tdp.j = new JDialogSearchBox(tdp.getGUI().getFrame(),"Search Box", selectedMultiComponents);
+                if (tdp.mgui.searchBox==null)
+                    tdp.mgui.searchBox = new JDialogSearchBox(tdp.getGUI().getFrame(),"Search Box", selectedMultiComponents);
+                else {
+                    tdp.mgui.searchBox.addValueListKeyword(search);
+                    tdp.mgui.searchBox.show();
+                }
+
 			}
 		}
 		//--

@@ -123,6 +123,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public Container framePanel; //Main pane
     public Container panelForTab, panelForTree; //panelForAnalysisTab; //panelForDesignTab;
     public JSplitPane split;
+   
 
 
 
@@ -146,11 +147,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     //Menubar
     private JMenuBarTurtle jmenubarturtle;
+    
+ 
 
     // Annex windows
     JFrameCode javaframe;
     JFrameBird birdframe;
     private boolean hasChanged = false;
+
+    //@autho: Huy TRUONG
+    public JDialogSearchBox searchBox;
+    //--
 
     //public final static boolean analysis = false;
 
@@ -2927,9 +2934,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     //@author: Huy TRUONG
     //open a new External Search Dialog
+    //TODO: add selected values into search box
     public void showExternalSearch(){
-	JDialogSearchBox jsb = new JDialogSearchBox(frame,"External Search", new ArrayList());
+        if (null == this.searchBox){
+            if (getCurrentTDiagramPanel().tdmm.getSelectComponents().size()==0)
+                this.searchBox = new JDialogSearchBox(frame, "External Search", new ArrayList<String>());
+            else
+                this.searchBox = new JDialogSearchBox(frame, "External Search", getCurrentTDiagramPanel().tdmm.getSelectComponents());
+        }
+        else {
+            this.searchBox.show();
+        }
     }
+
+
     //--
 
     public void aboutVersion() {

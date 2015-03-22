@@ -1744,8 +1744,17 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             for (String s :search){
                 query = query + " + "+ s;
             }
-            //create a new dialog 
-            j = new JDialogSearchBox(this.getGUI().getFrame(),"Search Box", tdmm.getSelectComponents());
+            //create a new dialog
+            if (mgui.searchBox==null) {
+                mgui.searchBox = new JDialogSearchBox(this.getGUI().getFrame(), "Search Box", tdmm.getSelectComponents());
+
+            }else{
+                for (String s : search)
+                    mgui.searchBox.addValueListKeyword(s);
+                if (! mgui.searchBox.isShowing())
+                    mgui.searchBox.show();
+                mgui.searchBox.repaint();
+            }
             tdmm.removeSelectedComponentFromList();
             //j.show();
             return;

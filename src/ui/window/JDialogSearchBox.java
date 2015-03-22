@@ -344,12 +344,34 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         	       
         	  }
         });
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                WindowClosing(evt);
+            }
+        });
         pack();
     }//
 
+    //clear everything when closing
+    //TODO: bug: clear values when closing, in order to display new value for the next open
+    private void WindowClosing(WindowEvent evt) {
+        System.out.println("deo ");
+        //this.initComponents();
+      // this.searchBox.setText("");
+      //  DefaultTableModel model = (DefaultTableModel) this.resultTable.getModel();
+     //  model.setRowCount(0);
+     //   this.detailText.setText("");
+    //    this.ListKeywords.removeAll();
+     //   this.listModel.removeAllElements();
+    //    this.databaseCb.setSelected(false);
+     //   this.googleCb.setSelected(false);
+     //   this.googleScholarCb.setSelected(false);
+     //   this.dispose();
+    }
 
 
-	private void removeBtActionPerformed(java.awt.event.ActionEvent evt) {
+    private void removeBtActionPerformed(java.awt.event.ActionEvent evt) {
         this.jLabel5.setText("Ready");
         this.jLabel5.updateUI();
     	int index = this.ListKeywords.getSelectedIndex();
