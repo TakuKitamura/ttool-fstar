@@ -177,7 +177,7 @@ public class TMLArchiDMANode extends TMLArchiCommunicationNode implements Swallo
 		int tmp;
 		String tmpName;
         
-		JDialogDMANode dialog = new JDialogDMANode(frame, "Setting Memory attributes", this);
+		JDialogDMANode dialog = new JDialogDMANode(frame, "Setting DMA attributes", this);
 		dialog.setSize(400, 300);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
