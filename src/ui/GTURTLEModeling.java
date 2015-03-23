@@ -417,10 +417,12 @@ public class GTURTLEModeling {
    	TGComponent tgc;
 		String applicationName;
 		TMLCCodeGeneration Ccode;
+
 		if( tmap == null )	{
 			JOptionPane.showMessageDialog(mgui.frame, "C code is only generated from an architecture diagram with mapping information", "Code generation failed", JOptionPane.INFORMATION_MESSAGE);
 			return false;
 		}
+		TraceManager.addDev( "ABOUT TO CHECK ERRORS FOR CODE GENERATION" );
 		TMLCCodeGenerationSyntaxCheck syntax = new TMLCCodeGenerationSyntaxCheck( tmap, tmap.getTMLModeling(), tmap.getTMLArchitecture() );
 		syntax.check();
 		if( syntax.hasErrors() )	{

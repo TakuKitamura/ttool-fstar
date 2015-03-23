@@ -49,6 +49,7 @@ package tmltranslator.ctranslator;;
 
 import tmltranslator.*;
 import java.util.*;
+import myutil.*;
 
 public class TMLCCodeGenerationSyntaxCheck {
     
@@ -96,10 +97,18 @@ public class TMLCCodeGenerationSyntaxCheck {
 			checkForPrexAndPostexChannels();
 		}
 
+		//valid prex ports are:
+		//	origin port of a basic channel
+		//	origin port of a fork channel
+		//valid postex ports are:
+		//	destination port of a basic channel
+		//	destination port of a join channel
+		//anything else raises an error
 		private void checkForPrexAndPostexChannels()	{
 
 			boolean foundPrex = false, foundPostex = false;
-			TMLPort originPort, destinationPort;
+			TMLPort originPort = new TMLPort( "noName", null );
+			TMLPort destinationPort = new TMLPort( "noName", null );
 
 			//Fill the the prex and postex lists
 			for( TMLChannel ch: tmlm.getChannels() )	{
@@ -107,30 +116,52 @@ public class TMLCCodeGenerationSyntaxCheck {
 					originPort = ch.getOriginPort();
 					destinationPort = ch.getDestinationPort();
 					if( originPort.isPrex() )	{
-						//also check that the task has no input channel(s)
-						if( ch.getOriginTask().getReadTMLChannels().size() > 0 )	{
-							addError( "The selected channel cannot be marked as prex. Task " + ch.getOriginTask().getName() + " has input channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
+						if( ch.getOriginTask().getReadChannels().size() > 0 )	{
+							addError( "Channel " + ch.getName() + " cannot be marked as prex. Task " + ch.getOriginTask().getName() + " has input channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
 						}
 						foundPrex = true;
 					}
 					if( destinationPort.isPostex() )	{
+						if( ch.getDestinationTask().getWriteChannels().size() > 0 )	{
+							addError( "Channel " + ch.getName() + " cannot be marked as postex. Task " + ch.getDestinationTask().getName() + " has output channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
+						}
 						foundPostex = true;
 					}
 				}
 				if( ch.isAForkChannel() )	{
 					originPort = ch.getOriginPorts().get(0);
 					if( originPort.isPrex() )	{
-						if( ch.getOriginTask().getReadTMLChannels().size() > 0 )	{
-							addError( "The selected channel cannot be marked as prex. Task " + ch.getOriginTask().getName() + " has input channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
+						if( ch.getOriginTasks().get(0).getReadChannels().size() > 0 )	{
+							addError( "Channel " + ch.getName() + " cannot be marked as prex. Task " + ch.getOriginTask().getName() + " has input channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
 						}
 						foundPrex = true;
 					}
+					for( TMLPort port: ch.getDestinationPorts() )	{	//check all destination ports: they cannot be marked as postex
+						if( port.isPostex() )	{
+							addError( "Port " + port.getName() + " belongs to a fork channel: it cannot be marked as postex.", TMLCCodeGenerationError.ERROR_STRUCTURE );
+						}
+					}
 				}
 				if( ch.isAJoinChannel() )	{
+					originPort = ch.getOriginPorts().get(0);
 					destinationPort = ch.getDestinationPorts().get(0);
 					if( destinationPort.isPostex() )	{
+						if( ch.getDestinationTasks().get(0).getWriteChannels().size() > 0 )	{
+							addError( "Channel " + ch.getName() + " cannot be marked as postex. Task " + ch.getDestinationTask().getName() + " has output channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
+						}
 						foundPostex = true;
 					}
+					for( TMLPort port: ch.getOriginPorts() )	{	//check all origin ports: they cannot be marked as prex
+						if( port.isPrex() )	{
+							addError( "Port " + port.getName() + " belongs to a join channel: it cannot be marked as prex.", TMLCCodeGenerationError.ERROR_STRUCTURE );
+						}
+					}
+				}
+				if( originPort.isPostex() )	{
+						addError( "Port " + originPort.getName() + " cannot be marked as postex.", TMLCCodeGenerationError.ERROR_STRUCTURE );
+				}
+				if( destinationPort.isPrex() )	{
+						addError( "Port " + destinationPort.getName() + " cannot be marked as postex.", TMLCCodeGenerationError.ERROR_STRUCTURE );
 				}
 			}
 			if( !foundPrex )	{
