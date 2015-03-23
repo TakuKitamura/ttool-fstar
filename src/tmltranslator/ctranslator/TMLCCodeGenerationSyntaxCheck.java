@@ -117,13 +117,13 @@ public class TMLCCodeGenerationSyntaxCheck {
 					destinationPort = ch.getDestinationPort();
 					if( originPort.isPrex() )	{
 						if( ch.getOriginTask().getReadChannels().size() > 0 )	{
-							addError( "Channel " + ch.getName() + " cannot be marked as prex. Task " + ch.getOriginTask().getName() + " has input channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
+							addError( "Port " + originPort.getName() + " cannot be marked as prex. Task " + ch.getOriginTask().getName() + " has input channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
 						}
 						foundPrex = true;
 					}
 					if( destinationPort.isPostex() )	{
 						if( ch.getDestinationTask().getWriteChannels().size() > 0 )	{
-							addError( "Channel " + ch.getName() + " cannot be marked as postex. Task " + ch.getDestinationTask().getName() + " has output channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
+							addError( "Port " + destinationPort.getName() + " cannot be marked as postex. Task " + ch.getDestinationTask().getName() + " has output channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
 						}
 						foundPostex = true;
 					}
@@ -132,7 +132,7 @@ public class TMLCCodeGenerationSyntaxCheck {
 					originPort = ch.getOriginPorts().get(0);
 					if( originPort.isPrex() )	{
 						if( ch.getOriginTasks().get(0).getReadChannels().size() > 0 )	{
-							addError( "Channel " + ch.getName() + " cannot be marked as prex. Task " + ch.getOriginTask().getName() + " has input channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
+							addError( "Port " + originPort.getName() + " cannot be marked as prex. Task " + ch.getOriginTask().getName() + " has input channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
 						}
 						foundPrex = true;
 					}
@@ -147,7 +147,7 @@ public class TMLCCodeGenerationSyntaxCheck {
 					destinationPort = ch.getDestinationPorts().get(0);
 					if( destinationPort.isPostex() )	{
 						if( ch.getDestinationTasks().get(0).getWriteChannels().size() > 0 )	{
-							addError( "Channel " + ch.getName() + " cannot be marked as postex. Task " + ch.getDestinationTask().getName() + " has output channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
+							addError( "Port " + destinationPort.getName() + " cannot be marked as postex. Task " + ch.getDestinationTask().getName() + " has output channels", TMLCCodeGenerationError.ERROR_STRUCTURE );
 						}
 						foundPostex = true;
 					}
