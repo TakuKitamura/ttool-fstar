@@ -50,7 +50,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 //import javax.swing.event.*;
-//import java.util.*;
+import java.util.*;
 
 import ui.*;
 
@@ -61,7 +61,7 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
     
     private boolean regularClose;
     
-    private JPanel panel2;
+    private JPanel panel2, panel3;
     private Frame frame;
     private TMLArchiMemoryNode node;
     
@@ -71,17 +71,22 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
 	
 	// Panel2
     protected JTextField byteDataSize, clockRatio;
-	
+
+		//Panel3: code generation
+		protected int bufferType = 0;	//it is the index in the ArrayList of String
+		protected JComboBox bufferTypesCB;
+		protected Vector<String> bufferTypesListS = new Vector<String>();
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogMemoryNode(Frame _frame, String _title, TMLArchiMemoryNode _node) {
+    public JDialogMemoryNode( Frame _frame, String _title, TMLArchiMemoryNode _node, int _bufferType ) {
         super(_frame, _title, true);
         frame = _frame;
         node = _node;
+				bufferType = _bufferType;
         
         initComponents();
         myInitComponents();
@@ -96,9 +101,11 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagLayout gridbag3 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
+        GridBagConstraints c3 = new GridBagConstraints();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -110,6 +117,16 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Memory attributes"));
         panel2.setPreferredSize(new Dimension(300, 200));
+
+        panel3 = new JPanel();
+        panel3.setLayout(gridbag3);
+        panel3.setBorder(new javax.swing.border.TitledBorder("Code generation"));
+        panel3.setPreferredSize(new Dimension(300, 200));
+				bufferTypesListS.add( "FepBuffer" );
+				bufferTypesListS.add( "MapperBuffer" );
+				bufferTypesListS.add( "AdaifBuffer" );
+				bufferTypesListS.add( "InterleaverBuffer" );
+				bufferTypesListS.add( "MainMemoryBuffer" );
         
 		c1.gridwidth = 1;
         c1.gridheight = 1;
@@ -139,13 +156,26 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         clockRatio = new JTextField(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
+
+				//code generation
+				c3.gridwidth = 1;
+        c3.gridheight = 1;
+        c3.weighty = 1.0;
+        c3.weightx = 1.0;
+  		  panel3.add(new JLabel("Buffer type:"), c3);
+	    	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+    		bufferTypesCB = new JComboBox( bufferTypesListS );
+				bufferTypesCB.setSelectedIndex( bufferType  );
+				panel3.add( bufferTypesCB, c3 );
         
         // main panel;
         c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+				c0.fill = GridBagConstraints.BOTH;
         c.add(panel2, c0);
+        c.add(panel3, c0);
         
         c0.gridwidth = 1;
         c0.gridheight = 1;
@@ -180,6 +210,7 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
     
     public void closeDialog() {
         regularClose = true;
+				bufferType = bufferTypesCB.getSelectedIndex();
         dispose();
     }
     
@@ -202,5 +233,9 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
 	 public String getClockRatio() {
         return clockRatio.getText();
     }
+	
+	public int getBufferType()	{
+		return bufferType;
+	}
     
 }

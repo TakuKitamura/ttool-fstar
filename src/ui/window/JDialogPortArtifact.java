@@ -155,6 +155,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		}
 		
 		TraceManager.addDev("Got communications");
+
 		
     referenceCommunicationName = new JComboBox(portsList);
 		if( mappedPort.equals( "VOID" ) || mappedPort.equals( "" ) )	{
@@ -202,17 +203,60 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		endAddressTF = new JTextField( endAddress, 5 );
 		panel2.add( new JLabel( "End address = "),  c2 );
 		panel2.add( endAddressTF, c1 );
-		/*c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Name:"), c2);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        taskName = new JTextField(artifact.getTaskName(), 30);
-        taskName.setEditable(true);
-        taskName.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(taskName, c1);*/
+
+		/*panel3 = new JPanel();
+		panel3.setLayout(gridbag3);
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation"));
+		panel3.setPreferredSize(new Dimension(350, 250));
+		c3.gridwidth = 1;
+    c3.gridheight = 1;
+    c3.weighty = 1.0;
+    c3.weightx = 1.0;
+    c3.fill = GridBagConstraints.HORIZONTAL;
+    //c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+    panel3.add(new JLabel("Operation:"), c3);
+    c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+		Vector<String> operationsListS = new Vector<String>();
+		int indexOp = 0;
+		TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
+		if( MECType.equals( "FEP" ) )	{
+			operationsListS.add( "CWA" );
+			operationsListS.add( "CWP" );
+			operationsListS.add( "CWM" );
+			operationsListS.add( "CWL" );
+			operationsListS.add( "SUM" );
+			operationsListS.add( "FFT" );
+			indexOp = operationsListS.indexOf( operation );
+		}
+		else if( MECType.equals( "MAPPER" ) )	{
+			operationsListS.add( "MapperOperation" );
+			indexOp = operationsListS.indexOf( operation );
+		}
+		else if( MECType.equals( "INTL" ) )	{
+			operationsListS.add( "INTLOperation" );
+			indexOp = operationsListS.indexOf( operation );
+		}
+		else if( MECType.equals( "ADAIF" ) )	{
+			operationsListS.add( "ADAIFOperation" );
+			indexOp = operationsListS.indexOf( operation );
+		}
+		else if( MECType.equals( "CPU" ) )	{
+			String tmp = (String)(referenceTaskName.getSelectedItem());
+			operationsListS.add( tmp.split("::")[1] );
+			indexOp = operationsListS.indexOf( operation );
+		}
+		else	{
+			operationsListS.add("No MEC selected");
+		}
+    operationsListCB = new JComboBox( operationsListS );
+		if( operation.equals( "VOID" ) || operation.equals( "" ) )	{
+			operationsListCB.setSelectedIndex( 0 );
+		}
+		else	{
+			if( indexOp == -1 )	{ indexOp = 0; }
+			operationsListCB.setSelectedIndex( indexOp  );
+		}
+		panel3.add( operationsListCB, c3 );*/
         
         // main panel;
         c0.gridheight = 10;

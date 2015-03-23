@@ -59,11 +59,19 @@ import ui.window.*;
 import tmltranslator.*;
 
 public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes {
+
+		public static final int FepBuffer = 0;
+		public static final int MapperBuffer = 1;
+		public static final int AdaifBuffer = 2;
+		public static final int InterleaverBuffer = 3;
+		public static final int MainMemoryBuffer = 4;
+
     private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;
     private int derivationy = 3;
     private String stereotype = "MEMORY";
+		private int bufferType = 0;
 	
 	private int byteDataSize = HwMemory.DEFAULT_BYTE_DATA_SIZE;
     
@@ -176,10 +184,11 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
 		int tmp;
 		String tmpName;
         
-		JDialogMemoryNode dialog = new JDialogMemoryNode(frame, "Setting Memory attributes", this);
+		JDialogMemoryNode dialog = new JDialogMemoryNode(frame, "Setting Memory attributes", this, bufferType );
 		dialog.setSize(400, 300);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+		GraphicLib.centerOnParent(dialog);
+		dialog.show(); // blocked until dialog has been closed
+		bufferType = dialog.getBufferType();
         
 		if (!dialog.isRegularClose()) {
 			return false;
@@ -246,8 +255,9 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
         sb.append("\" />\n");
-		sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
-		sb.append(" clockRatio=\"" + clockRatio + "\" ");
+				sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
+				sb.append(" clockRatio=\"" + clockRatio + "\" ");
+				sb.append(" bufferType=\"" + bufferType + "\" ");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -285,9 +295,12 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
                             }
 							
 							if (elt.getTagName().equals("attributes")) {
-                                byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
+								byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
 								if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
 									clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
+								}
+								if ((elt.getAttribute("bufferType") != null) &&  (elt.getAttribute("bufferType").length() > 0)){
+									bufferType = Integer.decode(elt.getAttribute("bufferType")).intValue();
 								}
                             }
                         }
@@ -314,6 +327,10 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
 	  
 		public int getComponentType()	{
 			return STORAGE;
+		}
+
+		public int getBufferType()	{
+			return bufferType;
 		}
     
 }
