@@ -54,11 +54,12 @@ import tmltranslator.*;
 public class FepBuffer extends BaseBuffer	{
 
 
+	public static final String DECLARATION = "struct FEP_BUFFER_TYPE {\n\tint num_samples;\n\tint base_ddress;\n\tint bank;\n\tint type;\n};";
 	protected String length = "int" + SP + "bl" + SC;
 	protected String baseAddress = "int" + SP + "b" + SC;
 	protected String bank = "int" + SP + "q" + SC;
 	protected String dataType = "int" + SP + "t" + SC;
-	public static final String DECLARATION = "struct FEP_BUFFER_TYPE {\n\tint num_samples;\n\tint base_ddress;\n\tint bank;\n\tint type;\n};";
+	private String Context = "embb_fep_context";
 
 	
 	/*public FepBuffer( String _type, int _base_address_value )	{
@@ -66,10 +67,22 @@ public class FepBuffer extends BaseBuffer	{
 		code = "struct" + SP + name + TAB + "{" + CR + length + CR + baseAddress + CR + bank + CR + dataType + CR + "}" + SC;
 	}*/
 
+	public String getContext()	{
+		return Context;
+	}
+
 	public FepBuffer( String _name, TMLTask _task )	{
 		type = "FEP_BUFFER_TYPE";
 		name = _name;
 		task = _task;
 	}
 	
+	@Override public String getInitCode()	{
+		StringBuffer s = new StringBuffer();
+		s.append( TAB + name + ".length = /* USER TO DO */;" + CR );
+		s.append( TAB + name + ".baseAddress = " + startAddress + SC + CR );
+		s.append( TAB + name + ".bank = /* USER TO DO */;" + CR );
+		s.append( TAB + name + ".dataType = /* USER TO DO */;" + CR );
+		return s.toString();
+	}
 }	//End of class

@@ -53,8 +53,6 @@ import tmltranslator.*;
 
 public class Buffer	{
 
-	public static final String Context = "";
-
 	public String CR = "\n";
 	public String TAB = "\t";
 	public String TAB2 = "\t\t";
@@ -65,30 +63,30 @@ public class Buffer	{
 	protected String code = "VOID";
 	protected String name = "";
 	protected String type = "";
-
 	protected TMLTask task;
 	protected TMLPort port;
 	protected TMLCPLibArtifact artifact;
-
-	protected String startAddress;
-	protected String endAddress;
+	protected String startAddress = "/* USER TO DO */";
+	protected String endAddress = "/* USER TO DO*/";
 	
+	private String Context = "";
+
 	public Buffer()	{
 		code = "struct" + SP + name + TAB + "{" + CR + "}" + SC;
 	}
 
 	public Buffer( TMLPort _port )	{
 		port = _port;
-		name = "BUFFER__" + port.getName();
+		name = "buff__" + port.getName();
 	}
 	
 	public String toString()	{
 		if( port != null )	{
 			if( artifact != null )	{
-				return "BUFFER__" + port.getName() + " mapped onto " + artifact.getMemoryName();
+				return "buff__" + port.getName() + " mapped onto " + artifact.getMemoryName();
 			}
 			else	{
-				return "BUFFER__" + port.getName();
+				return "buff__" + port.getName();
 			}
 		}
 		else	{
@@ -126,5 +124,15 @@ public class Buffer	{
 
 	public void setEndAddress( String _endAddress )	{
 		endAddress = _endAddress;
+	}
+
+	public String getInitCode()	{
+		StringBuffer s = new StringBuffer();
+		s.append( TAB + name + ".baseAddress = " + startAddress + SC + CR );
+		return s.toString();
+	}
+
+	public String getContext()	{
+		return Context;
 	}
 }	//End of class

@@ -54,6 +54,7 @@ public class BaseBuffer extends Buffer	{
 
 	protected String base_address;
 	protected int base_address_value;
+	private String Context = "embb_mapper_context";
 
 	/*public BaseBuffer( String _name, String _type, int _base_address_value )	{
 		name = _name;
@@ -61,9 +62,19 @@ public class BaseBuffer extends Buffer	{
 		base_address = _type + SP + POINTER + "base_address" + SP + "=" + SP + base_address_value + SC;
 	}*/
 
+	public String getContext()	{
+		return Context;
+	}
+
 	@Override public String getCode()	{
 		code = "struct" + SP + name + TAB + "{" + CR + base_address + CR + "}" + SC;
 		return code;
+	}
+
+	@Override public String getInitCode()	{
+		StringBuffer s = new StringBuffer();
+		s.append( TAB + name + ".baseAddress = " + startAddress + SC + CR );
+		return s.toString();
 	}
 	
 }	//End of class

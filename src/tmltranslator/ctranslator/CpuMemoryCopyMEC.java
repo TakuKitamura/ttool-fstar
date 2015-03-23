@@ -53,16 +53,16 @@ public class CpuMemoryCopyMEC extends CPMEC	{
 	public static final String Context = "embb_cpu_context";
 	public static final String Ctx_cleanup = "cpu_ctx_cleanup";
 
-	public CpuMemoryCopyMEC()	{
+	public CpuMemoryCopyMEC( String ctxName )	{
 		node_type = "CpuMemoryCopy";
 		inst_type = "MEMORY_COPY";
 		inst_decl = "VOID";
 		buff_type = "MM_BUFF_TYPE";
 		buff_init = "VOID";
 
-		exec_code = TAB + "embb_memcpy_start( /*USER TO DO*/ );" + CR;	
-		init_code = TAB + "embb_memcpy_ctx_init( /*USER TO DO*/ );" + CR;
-		cleanup_code = TAB + "embb_memcpy_ctx_cleanup( /*USER TO DO*/ );";
+		exec_code = TAB + "embb_memcpy_start(&" + ctxName + ");" + CR;	
+		init_code = TAB + "embb_memcpy_ctx_init(&" + ctxName + ");" + CR;
+		cleanup_code = TAB + "embb_memcpy_ctx_cleanup(&" + ctxName + ");";
 	}
 
 }	//End of class

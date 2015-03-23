@@ -53,16 +53,16 @@ public class DoubleDmaMEC extends CPMEC	{
 	public static final String Context = "embb_dma_context";
 	public static final String Ctx_cleanup = "dma_ctx_cleanup";
 
-	public DoubleDmaMEC()	{
+	public DoubleDmaMEC( String ctxName )	{
 
 		node_type = "DoubleDmaMEC";
 		inst_type = "VOID";
 		inst_decl = "EMBB_DMA_CONTEXT";
 		buff_type = "MM_BUFF_TYPE";
 		buff_init = "VOID";
-		exec_code = TAB + "embb_dma_start( /*USER TO DO: CTX*/, /*USER TO DO: SRC_ADDRESS*/, /*USER TO DO: DST_ADDRESS*/, /*USER TO DO: NUM_SAMPLES */ );" + CR;	
-		init_code = TAB + "embb_dma_ctx_init( /*USER TO DO: CTX*/, /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, /*USER TO DO: SRC_DEV*/ );" + CR;
-		cleanup_code = TAB + "embb_dma_ctx_cleanup( /*USER TO DO: CTX*/ );";
+		exec_code = TAB + "embb_dma_start(&" + ctxName + ", /*USER TO DO: SRC_ADDRESS*/, /*USER TO DO: DST_ADDRESS*/, /*USER TO DO: NUM_SAMPLES */ );" + CR;	
+		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, /*USER TO DO: SRC_DEV*/ );" + CR;
+		cleanup_code = TAB + "embb_dma_ctx_cleanup(&" + ctxName + ");";
 	}
 
 }	//End of class

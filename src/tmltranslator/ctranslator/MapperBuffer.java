@@ -53,7 +53,6 @@ import tmltranslator.*;
 
 public class MapperBuffer extends BaseBuffer	{
 
-	public static final String Context = "embb_mapper_context";
 	protected String num_samples; 
 	protected int num_samples_value;
 	protected int bits_per_symbol_value;
@@ -61,6 +60,7 @@ public class MapperBuffer extends BaseBuffer	{
 	protected String symmetrical;
 	protected int symmetrical_value;
 	public static final String DECLARATION = "struct MAPPER_BUFFER_TYPE {\n\tint num_samples;\n\tint base_address;\n};";
+	private String Context = "embb_mapper_context";
 	
 	/*public MapperBuffer( String _name, String _type, int _base_address_value, int _num_samples_value, int _bits_per_symbol_value, int _symmetrical_value )	{
 		super( _name, _type, _base_address_value );
@@ -78,9 +78,23 @@ public class MapperBuffer extends BaseBuffer	{
 		task = _task;
 	}
 
+	public String getContext()	{
+		return Context;
+	}
+
 	@Override public String getCode()	{
 		code = "struct" + SP + name + TAB + "{" + CR + num_samples + CR + symmetrical + CR + bits_per_symbol + CR + base_address + CR + "}" + SC;
 		return code;
+	}
+
+	@Override public String getInitCode()	{
+		StringBuffer s = new StringBuffer();
+		s.append( TAB + name + ".length = /* USER TO DO */;" + CR );
+		s.append( TAB + name + ".baseAddress = " + startAddress + SC + CR );
+		s.append( TAB + name + ".num_samples = /* USER TO DO */;" + CR );
+		s.append( TAB + name + ".bits_per_symbol = /* USER TO DO */;" + CR );
+		s.append( TAB + name + ".simmetrical_value = /* USER TO DO */;" + CR );
+		return s.toString();
 	}
 	
 }	//End of class

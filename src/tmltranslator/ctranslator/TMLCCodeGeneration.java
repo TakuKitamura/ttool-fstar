@@ -130,7 +130,7 @@ public class TMLCCodeGeneration	{
 		makeSignalsList();	//make the signals associated to operations, based on the tasks of operations
 
 		for( Signal sig: signalsList )	{
-			TraceManager.addDev( sig.getName() );
+			TraceManager.addDev( "Signal: " + sig.getName() );
 			appendToDebugFile( sig.toString() + CR );
 		}
 		makeOperationsList( mappedTasks );	//make the list of operations based on the tasks in the app model
@@ -640,9 +640,9 @@ public class TMLCCodeGeneration	{
 								"extern void register_operations(void);" + CR +
 								"extern void register_dataTransfers(void);" + CR +
 								"extern void register_fire_rules(void);" + CR +
-								"extern void signal_to_buffer_init();" + CR +
-								"extern void init_operations_context(void);" + CR +
-								"extern void init_CPs_context(void);" + CR +
+								"extern void signals_init();" + CR +
+								"extern void init_operations(void);" + CR +
+								"extern void init_CPs(void);" + CR +
 								"extern void cleanup_operations_context(void);" + CR2;
 		return s;
 	}
@@ -674,59 +674,25 @@ public class TMLCCodeGeneration	{
 				if( declaration )	{
 					if( inBuff != null )	{
 						buffersString.append( "extern" + SP + inBuff.getType() + SP + inBuff.getName() + ";" + CR );
-						instructionsString.append( "extern" + SP + inBuff.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
+						instructionsString.append( "extern" + SP + inBuff.getContext() + SP + fTask.getTaskName() + "_ctx;" + CR );
 					}
 					if( outBuff != null )	{
 						buffersString.append( "extern" + SP + outBuff.getType() + SP + outBuff.getName() + ";" + CR );
-						instructionsString.append( "extern" + SP + outBuff.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
+						instructionsString.append( "extern" + SP + outBuff.getContext() + SP + fTask.getTaskName() + "_ctx;" + CR );
 					}
 				}
 				else	{
 					if( inBuff != null )	{
 						buffersString.append( inBuff.getType() + SP + inBuff.getName() + ";" + CR );
-						instructionsString.append( inBuff.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
+						instructionsString.append( inBuff.getContext() + SP + fTask.getTaskName() + "_ctx;" + CR );
 					}
 					if( outBuff != null )	{
 						buffersString.append( outBuff.getType() + SP + outBuff.getName() + ";" + CR );
-						instructionsString.append( outBuff.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
+						instructionsString.append( outBuff.getContext() + SP + fTask.getTaskName() + "_ctx;" + CR );
 					}
 				}
 			}
 		}
-				/*else if( taskMEC instanceof MapperMEC )	{
-					MapperBuffer mappBuff = new MapperBuffer( "buff_" + xTask.getName().split("__")[1], xTask );
-					if( declaration )	{
-						buffersString.append( "extern" + SP + mappBuff.getType() + SP + mappBuff.getName() + ";" + CR );
-						instructionsString.append( "extern" + SP + MapperMEC.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
-					}
-					else	{
-						buffersString.append( mappBuff.getType() + SP + mappBuff.getName() + ";" + CR );
-						instructionsString.append( MapperMEC.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
-					}
-				}
-				else if( taskMEC instanceof InterleaverMEC )	{
-					MMBuffer mmBuff = new MMBuffer( "buff_" + xTask.getName().split("__")[1], xTask );
-					if( declaration )	{
-						buffersString.append( "extern" + SP + mmBuff.getType() + SP + mmBuff.getName() + ";" + CR );
-						instructionsString.append( "extern" + SP + InterleaverMEC.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
-					}
-					else	{
-						buffersString.append( mmBuff.getType() + SP + mmBuff.getName() + ";" + CR );
-						instructionsString.append( InterleaverMEC.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
-					}
-				}
-				else if( taskMEC instanceof AdaifMEC )	{
-					MMBuffer mmBuff = new MMBuffer( "buff_" + xTask.getName().split("__")[1], xTask );
-					if( declaration )	{
-						buffersString.append( "extern" + SP + mmBuff.getType() + SP + mmBuff.getName() + ";" + CR );
-						instructionsString.append( "extern" + SP + AdaifMEC.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
-					}
-					else	{
-						buffersString.append( mmBuff.getType() + SP + mmBuff.getName() + ";" + CR );
-						instructionsString.append( AdaifMEC.Context + SP + fTask.getTaskName() + "_ctx;" + CR );
-					}
-				}
-			}*/
 		instructionsString.append( CR2 + "/**** Data Transfers Instructions ****/" + CR );
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
@@ -800,9 +766,9 @@ public class TMLCCodeGeneration	{
 							"register_operations();" + CR + TAB +
 							"register_dataTransfers();" + CR + TAB +
 							"register_fire_rules();" + CR + TAB +
-							"signal_to_buffer_init();" + CR + TAB +
-							"init_operations_context();" + CR + TAB +
-							"init_CPs_context();" + CR2 + TAB +
+							"signals_init();" + CR + TAB +
+							"init_operations();" + CR + TAB +
+							"init_CPs();" + CR2 + TAB +
 							"/********* INIT PREX OPs signals ********/" + CR +
 							generateCodeToInitPrexOperations() + CR + TAB +
 							"/********* OPERATIONS scheduling ***************/" + CR + TAB +
@@ -980,26 +946,29 @@ public class TMLCCodeGeneration	{
 	private void generateCodeForCommunicationPatterns()	{
 		
 		String s;
-		TMLCPLib cplib;
+		TMLCPLib tmlcplib;
 
 		for( DataTransfer dt: dataTransfersList )	{
-			cplib = dt.getTMLCPLib();
-			if( cplib.getArtifacts().size() == 1 )	{
+			tmlcplib = dt.getTMLCPLib();
+			if( tmlcplib.getArtifacts().size() == 1 )	{
 			}
-			programString.append( "int op_" + cplib.getName() + "()\t{" + CR );
+			programString.append( "int op_" + tmlcplib.getName() + "()\t{" + CR );
 			
 			for( Signal sig: dt.getInSignals() )	{
 				programString.append( TAB + "sig[ " + sig.getName() + " ].f = false;" + CR );
 			}
-
-			s = cplib.getMappedUnits().get(0);
-			if( s.split("\\.")[0].equals( "Memory_Copy" ) )	{
-				CpuMemoryCopyMEC myMEC = new CpuMemoryCopyMEC();
-				programString.append( myMEC.getExecCode() );
+			CPMEC cpMEC = tmlcplib.getCPMEC();
+			if( cpMEC instanceof CpuMemoryCopyMEC )	{
+				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( tmlcplib.getName() + "_ctx" );
+				programString.append( mec.getExecCode() );
 			}
-			if( s.split("\\.")[0].contains( "DMA" ) )	{
-				SingleDmaMEC myMEC = new SingleDmaMEC();
-				programString.append( myMEC.getExecCode() );
+			if( cpMEC instanceof SingleDmaMEC )	{
+				SingleDmaMEC mec = new SingleDmaMEC( tmlcplib.getName() + "_ctx" );
+				programString.append( mec.getExecCode() );
+			}
+			if( cpMEC instanceof DoubleDmaMEC )	{
+				DoubleDmaMEC mec = new DoubleDmaMEC( tmlcplib.getName() + "_ctx" );
+				programString.append( mec.getExecCode() );
 			}
 
 			for( Signal sig: dt.getOutSignals() )	{
@@ -1163,12 +1132,10 @@ public class TMLCCodeGeneration	{
 		initFileString.append( "}" + CR2 );
 
 		//Init Communication Patterns. Only DMA transfers need init code
-		initFileString.append( "/**** init CPs ****/" + CR + "void init_CPs_context(void)\t{" + CR );
-		for( TMLCPLib cplib: mappedCPLibs )	{
-			String s = cplib.getMappedUnits().get(0);
-			if( s.split("\\.")[0].contains( "DMA" ) )	{
-				initFileString.append( TAB + "init_" + cplib.getName() + "();" + CR );
-			}
+		initFileString.append( "/**** init CPs ****/" + CR + "void init_CPs(void)\t{" + CR );
+		for( DataTransfer dt: dataTransfersList )	{
+			TMLCPLib tmlcplib = dt.getTMLCPLib();
+			initFileString.append( TAB + "init_" + tmlcplib.getName() + "();" + CR );
 		}
 		initFileString.append( "}" + CR2 );
 
@@ -1220,17 +1187,17 @@ public class TMLCCodeGeneration	{
 			CPMEC cpMEC = tmlcplib.getCPMEC();
 			if( cpMEC instanceof CpuMemoryCopyMEC )	{
 				initFileString.append( "void init_" + tmlcplib.getName() + "()\t{" + CR );
-				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC();
+				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( tmlcplib.getName() + "_ctx" );
 				initFileString.append( TAB + mec.getInitCode() + "}" + CR2 );
 			}
 			if( cpMEC instanceof SingleDmaMEC )	{
 				initFileString.append( "void init_" + tmlcplib.getName() + "()\t{" + CR );
-				SingleDmaMEC mec = new SingleDmaMEC();
+				SingleDmaMEC mec = new SingleDmaMEC( tmlcplib.getName() + "_ctx" );
 				initFileString.append( TAB + mec.getInitCode() + "}" + CR2 );
 			}
 			if( cpMEC instanceof DoubleDmaMEC )	{
 				initFileString.append( "void init_" + tmlcplib.getName() + "()\t{" + CR );
-				DoubleDmaMEC mec = new DoubleDmaMEC();
+				DoubleDmaMEC mec = new DoubleDmaMEC( tmlcplib.getName() + "_ctx" );
 				initFileString.append( TAB + mec.getInitCode() + "}" + CR2 );
 			}
 		}
@@ -1241,7 +1208,7 @@ public class TMLCCodeGeneration	{
 		String s = "void " + applicationName + "_exec_init()\t{" + CR;
 
 		for( Buffer buff: buffersList )	{
-			s += TAB + buff.getName() + SP + "=" + SP + "{/* USER TO DO*/, /* USER TO DO*/, /* USER TO DO*/};" + CR;
+			s += buff.getInitCode() + CR;// + SP + "=" + SP + "{/* USER TO DO: */, /* USER TO DO*/, /* USER TO DO*/};" + CR;
 		}
 
 		s += "}" + CR2;
@@ -1249,14 +1216,35 @@ public class TMLCCodeGeneration	{
 	}
 
 	private String initializeSignals()	{
-		String s = "void signal_to_buffer_init()\t{" + CR;
-		for( int i = 0; i < signalsCounter; i++ )	{
-			s += TAB + "sig[" + signalsList.get(i) + "].f = false;" + CR;
-			s += TAB + "sig[" + signalsList.get(i) + "].roff = /*USER TO DO*/;" + CR;
-			s += TAB + "sig[" + signalsList.get(i) + "].woff = /*USER TO DO*/;" + CR;
-			s += TAB + "sig[" + signalsList.get(i) + "].pBuff = /*USER TO DO*/;" + CR2;
+
+		StringBuffer s = new StringBuffer( "void signals_init()\t{" + CR );
+		for( Signal sig: signalsList )	{
+			s.append( TAB + "sig[" + sig.getName() + "].f = false;" + CR );
+			//s.append( TAB + "sig[" + sig.getName() + "].roff = /*USER TO DO*/;" + CR );
+			//s.append( TAB + "sig[" + sig.getName() + "].woff = /*USER TO DO*/;" + CR );
+			Buffer buff = getBufferFromSignal( sig );
+			if( buff != null )	{
+				s.append( TAB + "sig[" + sig.getName() + "].pBuff = (" + buff.getType() + "*)" + SP + buff.getName() + SC + CR2 );
+			}
+			else	{
+				s.append( TAB + "sig[" + sig.getName() + "].pBuff = /* USER TO DO */" + SC + CR2 );
+			}
 		}
-		return s + "}" + SC + CR;
+		return s.toString() + "}" + CR;
+	}
+
+	private Buffer getBufferFromSignal( Signal sig )	{
+
+		String sigName = sig.getName();
+		if( sigName.contains( "_CP" ) )	{	//filter out trailing _CP for CP's signals
+			sigName = sigName.split( "_CP" )[0];
+		}
+		for( Buffer buff: buffersList )	{
+			if( buff.getName().equals( "buff_" + sigName ) )	{
+				return buff;
+			}
+		}
+		return null;
 	}
 
 	//for code generation scheduling, transform a join channel into a set of basic channels

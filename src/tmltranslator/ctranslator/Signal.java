@@ -89,7 +89,7 @@ public class Signal	{
 		}
 	}
 
-	public Signal( TMLChannel _ch, TMLEvent _evt )	{
+	/*public Signal( TMLChannel _ch, TMLEvent _evt )	{
 		channel = _ch;
 		event = _evt;
 		if( _ch.isBasicChannel() )	{
@@ -103,7 +103,7 @@ public class Signal	{
 		else if( _ch.isAJoinChannel() )	{
 			name = "SIGNAL__" + _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[2] + "__" + _ch.getName().split("__")[3];
 		}
-	}
+	}*/
 
 	public String toString()	{
 		return getName();
