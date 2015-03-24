@@ -69,8 +69,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
   private TMLArchiPortArtifact artifact;
   private String mappedMemory = "VOID"; 
 	protected JComboBox referenceCommunicationName, priority, memoryCB;
-	protected JTextField startAddressTF, endAddressTF, sampleLengthTF, bankTF, dataTypeTF;
-	protected String startAddress, endAddress, mappedPort, sampleLength, bank, dataType;
+	protected JTextField baseAddressTF, endAddressTF, sampleLengthTF, bankTF, dataTypeTF, numSamplesTF, symbolBaseAddressTF, bitsPerSymbolTF;
+	protected String baseAddress, endAddress, mappedPort, sampleLength, bank, dataType, numSamples, symbolBaseAddress, bitsPerSymbol;
 	
   // Main Panel
   private JButton closeButton;
@@ -81,12 +81,12 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	private int bufferType;
     
     /** Creates new form  */
-    public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory, String _startAddress, String _endAddress, String _mappedPort ) {
+    public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory, String _baseAddress, String _endAddress, String _mappedPort ) {
         super(_frame, _title, true);
         frame = _frame;
         artifact = _artifact;
 				mappedMemory = _mappedMemory;
-				startAddress = _startAddress;
+				baseAddress = _baseAddress;
 				endAddress = _endAddress;
 				mappedPort = _mappedPort;
         
@@ -252,41 +252,84 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 	private void makeFepBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
-				sampleLengthTF = new JTextField( sampleLength, 5 );
-				panel3.add( new JLabel( "Sample length = "),  c2 );
-				c1.gridwidth = GridBagConstraints.REMAINDER;
-				sampleLengthTF = new JTextField( sampleLength, 5 );
-				panel3.add( sampleLengthTF, c1 );
-				//
-				startAddressTF = new JTextField( startAddress, 5 );
-				panel3.add( new JLabel( "Start address = "),  c2 );
-				c1.gridwidth = GridBagConstraints.REMAINDER;
-				startAddressTF = new JTextField( startAddress, 5 );
-				panel3.add( startAddressTF, c1 );
-				//
-				bankTF = new JTextField( bank, 5 );
-				panel3.add( new JLabel( "Bank = "),  c2 );
-				c1.gridwidth = GridBagConstraints.REMAINDER;
-				bankTF = new JTextField( bank, 5 );
-				panel3.add( bankTF, c1 );
-				//
-				dataTypeTF = new JTextField( dataType, 5 );
-				panel3.add( new JLabel( "Data type = "),  c2 );
-				c1.gridwidth = GridBagConstraints.REMAINDER;
-				dataTypeTF = new JTextField( dataType, 5 );
-				panel3.add( dataTypeTF, c1 );
+		c2.anchor = GridBagConstraints.LINE_START;
+		sampleLengthTF = new JTextField( sampleLength, 5 );
+		panel3.add( new JLabel( "Number of samples = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		sampleLengthTF = new JTextField( sampleLength, 5 );
+		panel3.add( sampleLengthTF, c1 );
+		//
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel3.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel3.add( baseAddressTF, c1 );
+		//
+		bankTF = new JTextField( bank, 5 );
+		panel3.add( new JLabel( "Bank = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		bankTF = new JTextField( bank, 5 );
+		panel3.add( bankTF, c1 );
+		//
+		dataTypeTF = new JTextField( dataType, 5 );
+		panel3.add( new JLabel( "Data type = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		dataTypeTF = new JTextField( dataType, 5 );
+		panel3.add( dataTypeTF, c1 );
 	}
 
 	private void makeMapperBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+		c2.anchor = GridBagConstraints.LINE_START;
+		makeMainMemoryBufferPanel( c1, c2 );
 	}
 
 	private void makeAdaifBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+		c2.anchor = GridBagConstraints.LINE_START;
+		makeMainMemoryBufferPanel( c1, c2 );
 	}
 
 	private void makeInterleaverBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesTF = new JTextField( numSamples, 5 );
+		panel3.add( new JLabel( "Number of samples = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		numSamplesTF = new JTextField( numSamples, 5 );
+		panel3.add( numSamplesTF, c1 );
+		//
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel3.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel3.add( baseAddressTF, c1 );
+		//
+		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
+		panel3.add( new JLabel( "Number of bits/symbol = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
+		panel3.add( bitsPerSymbolTF, c1 );
+		//
+		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
+		panel3.add( new JLabel( "Symbol base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
+		panel3.add( symbolBaseAddressTF, c1 );
 	}
 
 	private void makeMainMemoryBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+		
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesTF = new JTextField( numSamples, 5 );
+		panel3.add( new JLabel( "Number of samples = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		numSamplesTF = new JTextField( numSamples, 5 );
+		panel3.add( numSamplesTF, c1 );
+		//
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel3.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel3.add( baseAddressTF, c1 );
 	}
 
 		private int getBufferTypeFromSelectedMemory( String mappedMemory )	{
@@ -425,15 +468,15 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		private boolean handleClosureWhenSelectedFepBuffer()	{
 			
-			startAddress = (String) startAddressTF.getText();
-			if( startAddress.length() <= 2 && startAddress.length() > 0 )	{
+			baseAddress = (String) baseAddressTF.getText();
+			if( baseAddress.length() <= 2 && baseAddress.length() > 0 )	{
 				JOptionPane.showMessageDialog( frame, "Please enter a valid start address", "Badly formatted parameter",
 																				JOptionPane.INFORMATION_MESSAGE );
 				return false;
 			}
-			if( startAddress.length() > 2 )	{
-				if( !( startAddress.substring(0,2).equals("0x") || startAddress.substring(0,2).equals("0X") ) )	{
-					JOptionPane.showMessageDialog( frame, "Start address must be expressed in hexadecimal", "Badly formatted parameter",
+			if( baseAddress.length() > 2 )	{
+				if( !( baseAddress.substring(0,2).equals("0x") || baseAddress.substring(0,2).equals("0X") ) )	{
+					JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
 																					JOptionPane.INFORMATION_MESSAGE );
 					return false;
 				}
@@ -468,7 +511,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		}
 
 		public String getStartAddress()	{
-			return startAddress;
+			return baseAddress;
 		}
 
 		public String getEndAddress()	{
