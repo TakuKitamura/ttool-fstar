@@ -53,8 +53,8 @@ import javax.swing.*;
 import java.util.*;
 
 import ui.*;
-
 import ui.tmldd.*;
+import tmltranslator.ctranslator.*;
 
 import myutil.*;
 
@@ -69,8 +69,10 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
   private TMLArchiPortArtifact artifact;
   private String mappedMemory = "VOID"; 
 	protected JComboBox referenceCommunicationName, priority, memoryCB;
-	protected JTextField baseAddressTF, endAddressTF, sampleLengthTF, bankTF, dataTypeTF, numSamplesTF, symbolBaseAddressTF, bitsPerSymbolTF;
+	protected JTextField baseAddressTF, endAddressTF, numSamplesTF, symbolBaseAddressTF, bitsPerSymbolTF;
 	protected String baseAddress, endAddress, mappedPort, sampleLength, bank, dataType, numSamples, symbolBaseAddress, bitsPerSymbol;
+	protected JComboBox dataTypeCB, bankCB;
+	//protected Vector<String> dataTypeList = new Vector<String>();
 	
   // Main Panel
   private JButton closeButton;
@@ -252,12 +254,14 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 	private void makeFepBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
+		//FepBuffer FepBuffer = new FepBuffer( "noName", null );
+
 		c2.anchor = GridBagConstraints.LINE_START;
-		sampleLengthTF = new JTextField( sampleLength, 5 );
+		numSamplesTF = new JTextField( sampleLength, 5 );
 		panel3.add( new JLabel( "Number of samples = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		sampleLengthTF = new JTextField( sampleLength, 5 );
-		panel3.add( sampleLengthTF, c1 );
+		numSamplesTF = new JTextField( sampleLength, 5 );
+		panel3.add( numSamplesTF, c1 );
 		//
 		baseAddressTF = new JTextField( baseAddress, 5 );
 		panel3.add( new JLabel( "Base address = "),  c2 );
@@ -265,17 +269,15 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		baseAddressTF = new JTextField( baseAddress, 5 );
 		panel3.add( baseAddressTF, c1 );
 		//
-		bankTF = new JTextField( bank, 5 );
-		panel3.add( new JLabel( "Bank = "),  c2 );
+		bankCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.banksList ) ) );
+		panel3.add( new JLabel( "Bank number = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		bankTF = new JTextField( bank, 5 );
-		panel3.add( bankTF, c1 );
+		panel3.add( bankCB, c1 );
 		//
-		dataTypeTF = new JTextField( dataType, 5 );
+		dataTypeCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.dataTypeList ) ) );
 		panel3.add( new JLabel( "Data type = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		dataTypeTF = new JTextField( dataType, 5 );
-		panel3.add( dataTypeTF, c1 );
+		panel3.add( dataTypeCB, c1 );
 	}
 
 	private void makeMapperBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
@@ -490,37 +492,28 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
     }
 
 		private boolean handleClosureWhenSelectedFepBuffer()	{
-			
-			boolean errorInStartAddress = checkStartAddress();
-			//boolean errorInNumSamples = checkNumSamples();
-			boolean errorInBank = checkBank();
-			//boolean errorInDataType = checkDataType();
-			
-			return errorInStartAddress && errorInBank;
+
+			return checkBaseAddress() && checkNumSamples();
 		}
 
 		private boolean handleClosureWhenSelectedMapperBuffer()	{
 
-			boolean errorInStartAddress = checkStartAddress();
-			return errorInStartAddress;
+			return checkBaseAddress() && checkNumSamples();
 		}
 
 		private boolean handleClosureWhenSelectedAdaifBuffer()	{
 
-			boolean errorInStartAddress = checkStartAddress();
-			return errorInStartAddress;
+			return checkBaseAddress() && checkNumSamples();
 		}
 
 		private boolean handleClosureWhenSelectedInterleaverBuffer()	{
 
-			boolean errorInStartAddress = checkStartAddress();
-			return errorInStartAddress;
+			return checkBaseAddress() && checkNumSamples() && checkNumBitsPerSymbol() && checkSymbolBaseAddress();
 		}
 
 		private boolean handleClosureWhenSelectedMainMemoryBuffer()	{
 
-			boolean errorInStartAddress = checkStartAddress();
-			return errorInStartAddress;
+			return checkBaseAddress() && checkNumSamples();
 		}
 
 		public String getMappedPort()	{
@@ -619,11 +612,11 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	return true;
 	}
 
-	private boolean checkStartAddress()	{
+	private boolean checkBaseAddress()	{
 
 		baseAddress = (String) baseAddressTF.getText();
 		if( baseAddress.length() <= 2 && baseAddress.length() > 0 )	{
-			JOptionPane.showMessageDialog( frame, "Please enter a valid start address", "Badly formatted parameter",
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
@@ -637,23 +630,46 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	return true;
 	}
     
-	private boolean checkBank()	{
+	private boolean checkNumSamples()	{
 
 		String regex = "[0-9]+";
-		bank = (String) bankTF.getText();
-		if( !bank.matches( regex ) )	{
-			JOptionPane.showMessageDialog( frame, "The bank number must be expressed as a natural", "Badly formatted parameter",
+		numSamples = (String) numSamplesTF.getText();
+		if( !numSamples.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of samples must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
-		else	{
-			int bankNum = Integer.parseInt( bank );
-			if( !( bankNum >= 0 && bankNum <= 4 ) )	{
-				JOptionPane.showMessageDialog( frame, "Fep memory banks range from 0 to 4", "Badly formatted parameter",
+		return true;
+	}
+
+	private boolean checkNumBitsPerSymbol()	{
+
+		String regex = "[0-9]+";
+		bitsPerSymbol = (String) bitsPerSymbolTF.getText();
+		if( !bitsPerSymbol.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of bits/samples must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean checkSymbolBaseAddress()	{
+
+		symbolBaseAddress = (String) symbolBaseAddressTF.getText();
+		if( symbolBaseAddress.length() <= 2 && symbolBaseAddress.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid symbol base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( symbolBaseAddress.length() > 2 )	{
+			if( !( symbolBaseAddress.substring(0,2).equals("0x") || symbolBaseAddress.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Symbol base address must be expressed in hexadecimal", "Badly formatted parameter",
 																				JOptionPane.INFORMATION_MESSAGE );
 				return false;
 			}
 		}
 	return true;
 	}
-}
+
+}	//End of class

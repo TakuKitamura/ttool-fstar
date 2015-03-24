@@ -55,10 +55,14 @@ public class FepBuffer extends BaseBuffer	{
 
 
 	public static final String DECLARATION = "struct FEP_BUFFER_TYPE {\n\tint num_samples;\n\tint base_ddress;\n\tint bank;\n\tint type;\n};";
+	public static final String[] dataTypeList = { "int8", "int16", "cpx16", "cpx32" };
+	public static final String[] banksList = { "0", "1", "2", "3" };
+	
 	protected String length = "int" + SP + "bl" + SC;
 	protected String baseAddress = "int" + SP + "b" + SC;
 	protected String bank = "int" + SP + "q" + SC;
 	protected String dataType = "int" + SP + "t" + SC;
+	
 	private String Context = "embb_fep_context";
 
 	
@@ -76,6 +80,15 @@ public class FepBuffer extends BaseBuffer	{
 		name = _name;
 		task = _task;
 	}
+
+	/*public static final Vector<String> getDataTypeList()	{
+
+		dataTypeList.add("int8");
+		dataTypeList.add("int16");
+		dataTypeList.add("cpx16");
+		dataTypeList.add("cpx32");
+		return dataTypeList;
+	}*/
 	
 	@Override public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
