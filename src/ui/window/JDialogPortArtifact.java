@@ -61,20 +61,24 @@ import myutil.*;
 
 public class JDialogPortArtifact extends javax.swing.JDialog implements ActionListener  {
     
-    private boolean regularClose;
+	private boolean regularClose;
 	private boolean emptyList = false;
     
-    private JPanel panel2;
-    private Frame frame;
-    private TMLArchiPortArtifact artifact;
-   private String mappedMemory = "VOID"; 
-	protected JComboBox referenceCommunicationName, priority, memory;
-	protected JTextField startAddressTF, endAddressTF;
-	protected String startAddress, endAddress, mappedPort;
+  private JPanel panel2;
+  private Frame frame;
+  private TMLArchiPortArtifact artifact;
+  private String mappedMemory = "VOID"; 
+	protected JComboBox referenceCommunicationName, priority, memoryCB;
+	protected JTextField startAddressTF, endAddressTF, sampleLengthTF, bankTF, dataTypeTF;
+	protected String startAddress, endAddress, mappedPort, sampleLength, bank, dataType;
 	
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
+  // Main Panel
+  private JButton closeButton;
+  private JButton cancelButton;
+
+	//Code generation
+	private JPanel panel3;
+	private int bufferType;
     
     /** Creates new form  */
     public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory, String _startAddress, String _endAddress, String _mappedPort ) {
@@ -121,6 +125,11 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
         panel2.setPreferredSize(new Dimension(650, 350));
+
+        panel3 = new JPanel();
+        panel3.setLayout(gridbag2);
+        panel3.setBorder(new javax.swing.border.TitledBorder("Buffer attributes"));
+        panel3.setPreferredSize(new Dimension(650, 350));
         
 		c1.gridwidth = 1;
         c1.gridheight = 1;
@@ -185,98 +194,117 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			}
 		}
 
-		memory = new JComboBox( memoryList );
+		memoryCB = new JComboBox( memoryList );
 		if( mappedMemory.equals( "VOID" ) || mappedMemory.equals( "" ) )	{
-			memory.setSelectedIndex( 0 );
+			memoryCB.setSelectedIndex( 0 );
 		}
 		else	{
-			memory.setSelectedIndex( memoryList.indexOf( mappedMemory ) );
+			memoryCB.setSelectedIndex( memoryList.indexOf( mappedMemory ) );
 		}
 		panel2.add( new JLabel( "Memory: "),  c2 );
-		panel2.add( memory, c1 );
+		memoryCB.addActionListener(this);
+		panel2.add( memoryCB, c1 );
 
-		startAddressTF = new JTextField( startAddress, 5 );
-		panel2.add( new JLabel( "Start address = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel2.add( startAddressTF, c1 );
+		bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
 
-		endAddressTF = new JTextField( endAddress, 5 );
-		panel2.add( new JLabel( "End address = "),  c2 );
-		panel2.add( endAddressTF, c1 );
+		switch( bufferType )	{
+			case TMLArchiMemoryNode.FepBuffer:	
+				makeFepBufferPanel( c1, c2 );
+				break;
+			case TMLArchiMemoryNode.MapperBuffer:	
+				makeMapperBufferPanel( c1, c2 );
+				break;
+			case TMLArchiMemoryNode.AdaifBuffer:	
+				makeAdaifBufferPanel( c1, c2 );
+				break;
+			case TMLArchiMemoryNode.InterleaverBuffer:	
+				makeInterleaverBufferPanel( c1, c2 );
+				break;
+			case TMLArchiMemoryNode.MainMemoryBuffer:	
+				makeMainMemoryBufferPanel( c1, c2 );
+				break;
+			default:	//the main memory buffer 
+				makeMapperBufferPanel( c1, c2 );
+				break;
+		}
 
-		/*panel3 = new JPanel();
-		panel3.setLayout(gridbag3);
-		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation"));
-		panel3.setPreferredSize(new Dimension(350, 250));
-		c3.gridwidth = 1;
-    c3.gridheight = 1;
-    c3.weighty = 1.0;
-    c3.weightx = 1.0;
-    c3.fill = GridBagConstraints.HORIZONTAL;
-    //c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-    panel3.add(new JLabel("Operation:"), c3);
-    c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-		Vector<String> operationsListS = new Vector<String>();
-		int indexOp = 0;
-		TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
-		if( MECType.equals( "FEP" ) )	{
-			operationsListS.add( "CWA" );
-			operationsListS.add( "CWP" );
-			operationsListS.add( "CWM" );
-			operationsListS.add( "CWL" );
-			operationsListS.add( "SUM" );
-			operationsListS.add( "FFT" );
-			indexOp = operationsListS.indexOf( operation );
+		// main panel;
+		c0.gridheight = 10;
+		c0.weighty = 1.0;
+		c0.weightx = 1.0;
+		c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c0.fill = GridBagConstraints.BOTH;
+		c.add( panel2, c0 );
+		c.add( panel3, c0 );
+
+		c0.gridwidth = 1;
+		c0.gridheight = 1;
+		c0.fill = GridBagConstraints.HORIZONTAL;
+		closeButton = new JButton("Save and Close", IconManager.imgic25);
+		//closeButton.setPreferredSize(new Dimension(600, 50));
+		closeButton.addActionListener(this);
+		c.add(closeButton, c0);
+		c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+		cancelButton = new JButton("Cancel", IconManager.imgic27);
+		cancelButton.addActionListener(this);
+		c.add(cancelButton, c0);
+  }
+
+	private void makeFepBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+
+				sampleLengthTF = new JTextField( sampleLength, 5 );
+				panel3.add( new JLabel( "Sample length = "),  c2 );
+				c1.gridwidth = GridBagConstraints.REMAINDER;
+				sampleLengthTF = new JTextField( sampleLength, 5 );
+				panel3.add( sampleLengthTF, c1 );
+				//
+				startAddressTF = new JTextField( startAddress, 5 );
+				panel3.add( new JLabel( "Start address = "),  c2 );
+				c1.gridwidth = GridBagConstraints.REMAINDER;
+				startAddressTF = new JTextField( startAddress, 5 );
+				panel3.add( startAddressTF, c1 );
+				//
+				bankTF = new JTextField( bank, 5 );
+				panel3.add( new JLabel( "Bank = "),  c2 );
+				c1.gridwidth = GridBagConstraints.REMAINDER;
+				bankTF = new JTextField( bank, 5 );
+				panel3.add( bankTF, c1 );
+				//
+				dataTypeTF = new JTextField( dataType, 5 );
+				panel3.add( new JLabel( "Data type = "),  c2 );
+				c1.gridwidth = GridBagConstraints.REMAINDER;
+				dataTypeTF = new JTextField( dataType, 5 );
+				panel3.add( dataTypeTF, c1 );
+	}
+
+	private void makeMapperBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+	}
+
+	private void makeAdaifBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+	}
+
+	private void makeInterleaverBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+	}
+
+	private void makeMainMemoryBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+	}
+
+		private int getBufferTypeFromSelectedMemory( String mappedMemory )	{
+			
+			LinkedList componentList = artifact.getTDiagramPanel().getComponentList();
+			Vector<String> list = new Vector<String>();
+			
+			for( int k = 0; k < componentList.size(); k++ )	{
+				if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
+					TMLArchiMemoryNode memoryNode = (TMLArchiMemoryNode)componentList.get(k);
+					TraceManager.addDev( "Comparing " + memoryNode.getName() + " with " + mappedMemory );
+					if( memoryNode.getName().equals( mappedMemory ) )	{
+						return memoryNode.getBufferType();
+					}
+				}
+			}
+			return 0;	//default: the main memory buffer
 		}
-		else if( MECType.equals( "MAPPER" ) )	{
-			operationsListS.add( "MapperOperation" );
-			indexOp = operationsListS.indexOf( operation );
-		}
-		else if( MECType.equals( "INTL" ) )	{
-			operationsListS.add( "INTLOperation" );
-			indexOp = operationsListS.indexOf( operation );
-		}
-		else if( MECType.equals( "ADAIF" ) )	{
-			operationsListS.add( "ADAIFOperation" );
-			indexOp = operationsListS.indexOf( operation );
-		}
-		else if( MECType.equals( "CPU" ) )	{
-			String tmp = (String)(referenceTaskName.getSelectedItem());
-			operationsListS.add( tmp.split("::")[1] );
-			indexOp = operationsListS.indexOf( operation );
-		}
-		else	{
-			operationsListS.add("No MEC selected");
-		}
-    operationsListCB = new JComboBox( operationsListS );
-		if( operation.equals( "VOID" ) || operation.equals( "" ) )	{
-			operationsListCB.setSelectedIndex( 0 );
-		}
-		else	{
-			if( indexOp == -1 )	{ indexOp = 0; }
-			operationsListCB.setSelectedIndex( indexOp  );
-		}
-		panel3.add( operationsListCB, c3 );*/
-        
-        // main panel;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c.add(panel2, c0);
-        
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
-    }
     
     public void	actionPerformed(ActionEvent evt)  {
        /* if (evt.getSource() == typeBox) {
@@ -287,6 +315,9 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		
 		if (evt.getSource() == referenceCommunicationName) {
 			selectPriority();
+		}
+		if( evt.getSource() == memoryCB )	{
+			updateBufferPanel();
 		}
         
         
@@ -299,6 +330,60 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
             cancelDialog();
         }
     }
+
+	private void updateBufferPanel()	{
+
+		GridBagConstraints c1 = new GridBagConstraints();
+		GridBagConstraints c2 = new GridBagConstraints();
+
+		c1.gridwidth = 1;
+		c1.gridheight = 1;
+		c1.weighty = 1.0;
+		c1.weightx = 1.0;
+		c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+
+		bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
+
+		switch( bufferType )	{
+			case TMLArchiMemoryNode.FepBuffer:	
+				panel3.removeAll();
+				makeFepBufferPanel( c1, c2 );
+				panel3.revalidate();
+				panel3.repaint();
+				break;
+			case TMLArchiMemoryNode.MapperBuffer:	
+				panel3.removeAll();
+				makeMapperBufferPanel( c1, c2 );
+				panel3.revalidate();
+				panel3.repaint();
+				break;
+			case TMLArchiMemoryNode.AdaifBuffer:	
+				panel3.removeAll();
+				makeAdaifBufferPanel( c1, c2 );
+				panel3.revalidate();
+				panel3.repaint();
+				break;
+			case TMLArchiMemoryNode.InterleaverBuffer:	
+				panel3.removeAll();
+				makeInterleaverBufferPanel( c1, c2 );
+				panel3.revalidate();
+				panel3.repaint();
+				break;
+			case TMLArchiMemoryNode.MainMemoryBuffer:	
+				panel3.removeAll();
+				makeMainMemoryBufferPanel( c1, c2 );
+				panel3.revalidate();
+				panel3.repaint();
+				break;
+			default:	//the main memory buffer 
+				panel3.removeAll();
+				makeFepBufferPanel( c1, c2 );
+				panel3.revalidate();
+				panel3.repaint();
+				break;
+		}
+	}
 	
 	
 	public void selectPriority() {
@@ -308,32 +393,71 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	}
     
     public void closeDialog() {
+
         regularClose = true;
-				mappedMemory = (String) memory.getItemAt( memory.getSelectedIndex() );
-				startAddress = (String) startAddressTF.getText();
-				endAddress = (String) endAddressTF.getText();
-				if( startAddress.length() <= 2 && startAddress.length() > 0 )	{
-					JOptionPane.showMessageDialog( frame, "Please enter a valid start address", "Badly formatted parameter", JOptionPane.INFORMATION_MESSAGE );
-					return;
-				}
-				if( endAddress.length() <= 2 && endAddress.length() > 0 )	{
-					JOptionPane.showMessageDialog( frame, "Please enter a valid end address", "Badly formatted parameter", JOptionPane.INFORMATION_MESSAGE );
-					return;
-				}
-				if( startAddress.length() > 2 )	{
-					if( !( startAddress.substring(0,2).equals("0x") || startAddress.substring(0,2).equals("0X") ) )	{
-						JOptionPane.showMessageDialog( frame, "Start address must be expressed in hexadecimal", "Badly formatted parameter", JOptionPane.INFORMATION_MESSAGE );
-						return;
-					}
-				}
-				if( endAddress.length() > 2 )	{
-					if( !( endAddress.substring(0,2).equals("0x") || endAddress.substring(0,2).equals("0X") ) )	{
-						JOptionPane.showMessageDialog( frame, "End address must be expressed in hexadecimal", "Badly formatted parameter", JOptionPane.INFORMATION_MESSAGE );
-						return;
-					}
+				mappedMemory = (String) memoryCB.getItemAt( memoryCB.getSelectedIndex() );
+				bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
+				switch ( bufferType )	{
+					case TMLArchiMemoryNode.FepBuffer:	
+						if( !handleClosureWhenSelectedFepBuffer() )	{
+							return;	//there was an error
+						}
+						break;
+					case TMLArchiMemoryNode.MapperBuffer:	
+						if( !handleClosureWhenSelectedMapperBuffer() )	{
+							return;	//there was an error
+						}
+						break;
+					/*case TMLArchiMemoryNode.AdaifBuffer:	
+						break;
+					case TMLArchiMemoryNode.InterleaverBuffer:	
+						break;
+					case TMLArchiMemoryNode.MainMemoryBuffer:	
+						break;*/
+					default:	//the main memory buffer 
+						if( !handleClosureWhenSelectedFepBuffer() )	{
+							return;	//there was an error
+						}
+						break;
 				}
         dispose();
     }
+
+		private boolean handleClosureWhenSelectedFepBuffer()	{
+			
+			startAddress = (String) startAddressTF.getText();
+			if( startAddress.length() <= 2 && startAddress.length() > 0 )	{
+				JOptionPane.showMessageDialog( frame, "Please enter a valid start address", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+			if( startAddress.length() > 2 )	{
+				if( !( startAddress.substring(0,2).equals("0x") || startAddress.substring(0,2).equals("0X") ) )	{
+					JOptionPane.showMessageDialog( frame, "Start address must be expressed in hexadecimal", "Badly formatted parameter",
+																					JOptionPane.INFORMATION_MESSAGE );
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private boolean handleClosureWhenSelectedMapperBuffer()	{
+
+				endAddress = (String) endAddressTF.getText();
+				if( endAddress.length() <= 2 && endAddress.length() > 0 )	{
+					JOptionPane.showMessageDialog( frame, "Please enter a valid end address", "Badly formatted parameter",
+																						JOptionPane.INFORMATION_MESSAGE );
+					return false;
+				}
+				if( endAddress.length() > 2 )	{
+					if( !( endAddress.substring(0,2).equals("0x") || endAddress.substring(0,2).equals("0X") ) )	{
+						JOptionPane.showMessageDialog( frame, "End address must be expressed in hexadecimal", "Badly formatted parameter",
+																						JOptionPane.INFORMATION_MESSAGE );
+						return false;
+					}
+				}
+			return true;
+		}
 
 		public String getMappedPort()	{
 			return mappedPort;
