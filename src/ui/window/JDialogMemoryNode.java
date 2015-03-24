@@ -53,8 +53,8 @@ import javax.swing.*;
 import java.util.*;
 
 import ui.*;
-
 import ui.tmldd.*;
+import tmltranslator.ctranslator.*;
 
 
 public class JDialogMemoryNode extends javax.swing.JDialog implements ActionListener  {
@@ -75,7 +75,6 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
 		//Panel3: code generation
 		protected int bufferType = 0;	//it is the index in the ArrayList of String
 		protected JComboBox bufferTypesCB;
-		protected Vector<String> bufferTypesListS = new Vector<String>();
     
     // Main Panel
     private JButton closeButton;
@@ -122,11 +121,6 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         panel3.setLayout(gridbag3);
         panel3.setBorder(new javax.swing.border.TitledBorder("Code generation"));
         panel3.setPreferredSize(new Dimension(300, 200));
-				bufferTypesListS.add( "FepBuffer" );
-				bufferTypesListS.add( "MapperBuffer" );
-				bufferTypesListS.add( "AdaifBuffer" );
-				bufferTypesListS.add( "InterleaverBuffer" );
-				bufferTypesListS.add( "MainMemoryBuffer" );
         
 		c1.gridwidth = 1;
         c1.gridheight = 1;
@@ -164,7 +158,7 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         c3.weightx = 1.0;
   		  panel3.add(new JLabel("Buffer type:"), c3);
 	    	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-    		bufferTypesCB = new JComboBox( bufferTypesListS );
+    		bufferTypesCB = new JComboBox( new Vector<String>( Arrays.asList( Buffer.bufferTypesList ) ) );
 				bufferTypesCB.setSelectedIndex( bufferType  );
 				panel3.add( bufferTypesCB, c3 );
         

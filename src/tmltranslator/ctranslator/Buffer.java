@@ -53,6 +53,8 @@ import tmltranslator.*;
 
 public class Buffer	{
 
+	public static final String[] bufferTypesList = { "FEP buffer", "MAPPER buffer", "ADAIF buffer", "INTERLEAVER Buffer", "MAIN MEMORY buffer" };
+
 	public String CR = "\n";
 	public String TAB = "\t";
 	public String TAB2 = "\t\t";

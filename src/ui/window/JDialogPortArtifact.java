@@ -130,7 +130,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
         panel3 = new JPanel();
         panel3.setLayout(gridbag2);
-        panel3.setBorder(new javax.swing.border.TitledBorder("Buffer attributes"));
+        panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: buffer attributes"));
         panel3.setPreferredSize(new Dimension(650, 350));
         
 		c1.gridwidth = 1;
