@@ -385,7 +385,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c1.weightx = 1.0;
 		c1.fill = GridBagConstraints.HORIZONTAL;
     c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-
+		
+		flushBuffersStrings();
 		bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
 
 		switch( bufferType )	{
@@ -427,6 +428,19 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				break;
 		}
 	}
+
+	private void flushBuffersStrings()	{
+	
+		baseAddress = "";
+		endAddress = "";
+		mappedPort = "";
+		sampleLength = "";
+		bank = "";
+		dataType = "";
+		numSamples = "";
+		symbolBaseAddress = "";
+		bitsPerSymbol = "";
+	}
 	
 	
 	public void selectPriority() {
@@ -443,23 +457,32 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				switch ( bufferType )	{
 					case TMLArchiMemoryNode.FepBuffer:	
 						if( !handleClosureWhenSelectedFepBuffer() )	{
-							return;	//there was an error
+							return;
 						}
 						break;
 					case TMLArchiMemoryNode.MapperBuffer:	
 						if( !handleClosureWhenSelectedMapperBuffer() )	{
-							return;	//there was an error
+							return;
 						}
 						break;
-					/*case TMLArchiMemoryNode.AdaifBuffer:	
+					case TMLArchiMemoryNode.AdaifBuffer:	
+						if( !handleClosureWhenSelectedAdaifBuffer() )	{
+							return;
+						}
 						break;
 					case TMLArchiMemoryNode.InterleaverBuffer:	
+						if( !handleClosureWhenSelectedInterleaverBuffer() )	{
+							return;
+						}
 						break;
 					case TMLArchiMemoryNode.MainMemoryBuffer:	
-						break;*/
+						if( !handleClosureWhenSelectedMainMemoryBuffer() )	{
+							return;
+						}
+						break;
 					default:	//the main memory buffer 
 						if( !handleClosureWhenSelectedFepBuffer() )	{
-							return;	//there was an error
+							return;
 						}
 						break;
 				}
@@ -468,38 +491,32 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		private boolean handleClosureWhenSelectedFepBuffer()	{
 			
-			baseAddress = (String) baseAddressTF.getText();
-			if( baseAddress.length() <= 2 && baseAddress.length() > 0 )	{
-				JOptionPane.showMessageDialog( frame, "Please enter a valid start address", "Badly formatted parameter",
-																				JOptionPane.INFORMATION_MESSAGE );
-				return false;
-			}
-			if( baseAddress.length() > 2 )	{
-				if( !( baseAddress.substring(0,2).equals("0x") || baseAddress.substring(0,2).equals("0X") ) )	{
-					JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
-																					JOptionPane.INFORMATION_MESSAGE );
-					return false;
-				}
-			}
-			return true;
+			boolean errorInStartAddress = checkStartAddress();
+			return errorInStartAddress;
 		}
 
 		private boolean handleClosureWhenSelectedMapperBuffer()	{
 
-				endAddress = (String) endAddressTF.getText();
-				if( endAddress.length() <= 2 && endAddress.length() > 0 )	{
-					JOptionPane.showMessageDialog( frame, "Please enter a valid end address", "Badly formatted parameter",
-																						JOptionPane.INFORMATION_MESSAGE );
-					return false;
-				}
-				if( endAddress.length() > 2 )	{
-					if( !( endAddress.substring(0,2).equals("0x") || endAddress.substring(0,2).equals("0X") ) )	{
-						JOptionPane.showMessageDialog( frame, "End address must be expressed in hexadecimal", "Badly formatted parameter",
-																						JOptionPane.INFORMATION_MESSAGE );
-						return false;
-					}
-				}
-			return true;
+			boolean errorInStartAddress = checkStartAddress();
+			return errorInStartAddress;
+		}
+
+		private boolean handleClosureWhenSelectedAdaifBuffer()	{
+
+			boolean errorInStartAddress = checkStartAddress();
+			return errorInStartAddress;
+		}
+
+		private boolean handleClosureWhenSelectedInterleaverBuffer()	{
+
+			boolean errorInStartAddress = checkStartAddress();
+			return errorInStartAddress;
+		}
+
+		private boolean handleClosureWhenSelectedMainMemoryBuffer()	{
+
+			boolean errorInStartAddress = checkStartAddress();
+			return errorInStartAddress;
 		}
 
 		public String getMappedPort()	{
@@ -578,6 +595,42 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	
 	public int getPriority() {
 		return priority.getSelectedIndex();
+	}
+
+	private boolean checkEndAddress()	{
+
+		endAddress = (String) endAddressTF.getText();
+		if( endAddress.length() <= 2 && endAddress.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid end address", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( endAddress.length() > 2 )	{
+			if( !( endAddress.substring(0,2).equals("0x") || endAddress.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "End address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+	return true;
+	}
+
+	private boolean checkStartAddress()	{
+
+		baseAddress = (String) baseAddressTF.getText();
+		if( baseAddress.length() <= 2 && baseAddress.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid start address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddress.length() > 2 )	{
+			if( !( baseAddress.substring(0,2).equals("0x") || baseAddress.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+	return true;
 	}
     
 }
