@@ -492,7 +492,11 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		private boolean handleClosureWhenSelectedFepBuffer()	{
 			
 			boolean errorInStartAddress = checkStartAddress();
-			return errorInStartAddress;
+			//boolean errorInNumSamples = checkNumSamples();
+			boolean errorInBank = checkBank();
+			//boolean errorInDataType = checkDataType();
+			
+			return errorInStartAddress && errorInBank;
 		}
 
 		private boolean handleClosureWhenSelectedMapperBuffer()	{
@@ -633,4 +637,23 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	return true;
 	}
     
+	private boolean checkBank()	{
+
+		String regex = "[0-9]+";
+		bank = (String) bankTF.getText();
+		if( !bank.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The bank number must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		else	{
+			int bankNum = Integer.parseInt( bank );
+			if( !( bankNum >= 0 && bankNum <= 4 ) )	{
+				JOptionPane.showMessageDialog( frame, "Fep memory banks range from 0 to 4", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+	return true;
+	}
 }
