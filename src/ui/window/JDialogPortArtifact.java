@@ -634,6 +634,11 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		String regex = "[0-9]+";
 		numSamples = (String) numSamplesTF.getText();
+		if( Integer.parseInt( numSamples ) == 0 )	{
+			JOptionPane.showMessageDialog( frame, "The number of samples must be greater than 0", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
 		if( !numSamples.matches( regex ) )	{
 			JOptionPane.showMessageDialog( frame, "The number of samples must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
@@ -646,6 +651,11 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		String regex = "[0-9]+";
 		bitsPerSymbol = (String) bitsPerSymbolTF.getText();
+		if( Integer.parseInt( bitsPerSymbol ) == 0 )	{
+			JOptionPane.showMessageDialog( frame, "The number of bits/samples must be greater than 0", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
 		if( !bitsPerSymbol.matches( regex ) )	{
 			JOptionPane.showMessageDialog( frame, "The number of bits/samples must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
