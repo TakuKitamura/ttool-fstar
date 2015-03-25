@@ -80,8 +80,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     private static String unitCycle = "1";
 
     private static String[] simus = { "SystemC Simulator - LabSoC version",
-                                      "C++ Simulator - LabSoc version",
-                                      "C++ Simulator with Communication Patterns" };
+                                      "C++ Simulator - LabSoc version" };
     private static int selectedItem = 1;
 
     protected static String pathCode;
