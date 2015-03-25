@@ -58,16 +58,16 @@ public class TMLCPLibArtifact extends TMLElement {
     public int priority;
 		private String endAddress;
 		private String startAddress;
+		private ArrayList<String> bufferParameters;
 
 
-    public TMLCPLibArtifact(String _name, Object _referenceObject, String _taskName, String _portName, String _memoryName, int _priority, String _endAddress, String _startAddress ) {
+    public TMLCPLibArtifact(String _name, Object _referenceObject, String _taskName, String _portName, String _memoryName, int _priority, ArrayList<String> _bufferParameters ) {
         super( _name, _referenceObject );
         taskName = _taskName;
         portName = _portName;
         memoryName = _memoryName;
         priority = _priority;
-				endAddress = _endAddress;
-				startAddress = _startAddress;
+				bufferParameters = _bufferParameters;
     }
 
     public TMLCPLibArtifact() {
@@ -96,5 +96,9 @@ public class TMLCPLibArtifact extends TMLElement {
 
 		public String getEndAddress()	{
 			return endAddress;
+		}
+
+		public ArrayList<String> getBufferParameters()	{
+			return bufferParameters;
 		}
 }       //End of the class

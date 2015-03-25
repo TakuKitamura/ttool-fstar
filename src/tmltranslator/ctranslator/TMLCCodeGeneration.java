@@ -134,6 +134,7 @@ public class TMLCCodeGeneration	{
 			appendToDebugFile( sig.toString() + CR );
 		}
 		makeOperationsList( mappedTasks );	//make the list of operations based on the tasks in the app model
+		addMappingParametersToBuffers();
 		for( Buffer buff: buffersList )	{
 			TraceManager.addDev( buff.toString() );
 			appendToDebugFile( buff.toString() + CR );
@@ -413,6 +414,21 @@ public class TMLCCodeGeneration	{
 		return null;
 	}
 
+	private void addMappingParametersToBuffers()	{
+		
+		for( TMLCPLib tmlcplib: mappedCPLibs )	{
+			ArrayList<String> bufferParameters = tmlcplib.getArtifacts().get(0).getBufferParameters();
+			String portName = tmlcplib.getArtifacts().get(0).getPortName();
+			for( Buffer buff: buffersList )	{
+				if( buff.getName().equals( "buff_" + portName ) )	{
+					buff.addMappingParameters( bufferParameters );
+				}
+			}
+			
+		}
+		System.exit(0);
+	}
+
 	private void makeDataTransfersList()	{
 
 		ArrayList<Signal> inSignals;
@@ -421,8 +437,6 @@ public class TMLCCodeGeneration	{
 		for( TMLCPLib cplib: mappedCPLibs )	{
 			if( cplib.getArtifacts().size() == 1 )	{
 				String portName = cplib.getArtifacts().get(0).getPortName();	//only one mapped port per CP
-				String memoryName = cplib.getArtifacts().get(0).getMemoryName();	//only one mapped port per CP
-				String taskName = cplib.getArtifacts().get(0).getTaskName();	//only one mapped port per CP
 				Object o = cplib.getArtifacts().get(0).getReferenceObject();
 				inSignals = getDTInSignals( portName );
 				DataTransfer dt = new DataTransfer( cplib, inSignals, null );	//outSignals are added later

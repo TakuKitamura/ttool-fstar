@@ -60,12 +60,6 @@ import tmltranslator.*;
 
 public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes {
 
-		public static final int FepBuffer = 0;
-		public static final int MapperBuffer = 1;
-		public static final int AdaifBuffer = 2;
-		public static final int InterleaverBuffer = 3;
-		public static final int MainMemoryBuffer = 4;
-
     private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;

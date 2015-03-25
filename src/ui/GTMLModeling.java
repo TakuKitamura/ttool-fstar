@@ -2917,7 +2917,7 @@ public class GTMLModeling  {
 
                 // Handling mapped artifacts
                 for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {
-                    TMLCPLibArtifact arti = new TMLCPLibArtifact(artifact.getName(), artifact, artifact.getValue(), artifact.getPortName(), artifact.getMappedMemory(), artifact.getPriority(), artifact.getEndAddress(), artifact.getStartAddress() );
+                    TMLCPLibArtifact arti = new TMLCPLibArtifact(artifact.getName(), artifact, artifact.getValue(), artifact.getPortName(), artifact.getMappedMemory(), artifact.getPriority(), artifact.getBufferParameters() );
                     tmlcplib.addArtifact(arti);
                     //TraceManager.addDev("Adding CP artifact:" + arti);
                 }

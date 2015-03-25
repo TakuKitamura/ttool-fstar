@@ -55,6 +55,7 @@ import org.w3c.dom.*;
 import myutil.*;
 import ui.*;
 import ui.window.*;
+import tmltranslator.ctranslator.*;
 
 public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
     protected int lineLength = 5;
@@ -269,28 +270,28 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 				if( !bufferType.equals( "" ) && !bufferType.equals( "noBuffer" ) )	{
         	sb.append("\" bufferType=\"" + bufferType );
 					switch( Integer.parseInt( bufferType ) )	{
-						case TMLArchiMemoryNode.FepBuffer:
+						case Buffer.FepBuffer:
     	    		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
       	  		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
         			sb.append("\" bank=\"" + bufferParameters.get(3) );
         			sb.append("\" dataType=\"" + bufferParameters.get(4) );
 							break;
-						case TMLArchiMemoryNode.MapperBuffer:	
+						case Buffer.MapperBuffer:	
   	      		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
     	    		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
 							TraceManager.addDev( "I am writing the parameters to XML" );
 						break;
-						case TMLArchiMemoryNode.AdaifBuffer:	
+						case Buffer.AdaifBuffer:	
         			sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
         			sb.append("\" numSamples=\"" + bufferParameters.get(2) );
 							break;
-						case TMLArchiMemoryNode.InterleaverBuffer:	
+						case Buffer.InterleaverBuffer:	
     	    		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
       	  		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
         			sb.append("\" bitsPerSymbol=\"" + bufferParameters.get(3) );
         			sb.append("\" symbolBaseAddress=\"" + bufferParameters.get(4) );
 							break;
-						case TMLArchiMemoryNode.MainMemoryBuffer:	
+						case Buffer.MainMemoryBuffer:	
   	      		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
     	    		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
 							break;
@@ -340,27 +341,27 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                                 bufferType = elt.getAttribute("bufferType");
 																bufferParameters.add( bufferType );
 																switch( Integer.parseInt( bufferType ) )	{
-																	case TMLArchiMemoryNode.FepBuffer:
+																	case Buffer.FepBuffer:
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 												        		bufferParameters.add( elt.getAttribute( "bank" ) );
 												        		bufferParameters.add( elt.getAttribute( "dataType" ) );
 																		break;
-																	case TMLArchiMemoryNode.MapperBuffer:	
+																	case Buffer.MapperBuffer:	
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 																		break;
-																	case TMLArchiMemoryNode.AdaifBuffer:	
+																	case Buffer.AdaifBuffer:	
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 																		break;
-																	case TMLArchiMemoryNode.InterleaverBuffer:	
+																	case Buffer.InterleaverBuffer:	
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 												        		bufferParameters.add( elt.getAttribute( "bitsPerSymbol" ) );
 												        		bufferParameters.add( elt.getAttribute( "symbolBaseAddress" ) );
 																		break;
-																	case TMLArchiMemoryNode.MainMemoryBuffer:	
+																	case Buffer.MainMemoryBuffer:	
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 																		break;

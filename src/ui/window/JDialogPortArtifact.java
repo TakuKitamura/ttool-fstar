@@ -217,7 +217,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		}
 
 		switch( bufferType )	{
-			case TMLArchiMemoryNode.FepBuffer:	
+			case Buffer.FepBuffer:	
 				if( loadBufferParameters )	{
 					baseAddress = bufferParameters.get(1);
 					numSamples = bufferParameters.get(2);
@@ -226,21 +226,21 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				}
 				makeFepBufferPanel( c1, c2 );
 				break;
-			case TMLArchiMemoryNode.MapperBuffer:	
+			case Buffer.MapperBuffer:	
 				if( loadBufferParameters )	{
 					baseAddress = bufferParameters.get(1);
 					numSamples = bufferParameters.get(2);
 				}
 				makeMapperBufferPanel( c1, c2 );
 				break;
-			case TMLArchiMemoryNode.AdaifBuffer:	
+			case Buffer.AdaifBuffer:	
 				if( loadBufferParameters )	{
 					baseAddress = bufferParameters.get(1);
 					numSamples = bufferParameters.get(2);
 				}
 				makeAdaifBufferPanel( c1, c2 );
 				break;
-			case TMLArchiMemoryNode.InterleaverBuffer:	
+			case Buffer.InterleaverBuffer:	
 				if( loadBufferParameters )	{
 					baseAddress = bufferParameters.get(1);
 					numSamples = bufferParameters.get(2);
@@ -249,7 +249,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				}
 				makeInterleaverBufferPanel( c1, c2 );
 				break;
-			case TMLArchiMemoryNode.MainMemoryBuffer:	
+			case Buffer.MainMemoryBuffer:	
 				if( loadBufferParameters )	{
 					baseAddress = bufferParameters.get(1);
 					numSamples = bufferParameters.get(2);
@@ -435,31 +435,31 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
 
 		switch( bufferType )	{
-			case TMLArchiMemoryNode.FepBuffer:	
+			case Buffer.FepBuffer:	
 				panel3.removeAll();
 				makeFepBufferPanel( c1, c2 );
 				panel3.revalidate();
 				panel3.repaint();
 				break;
-			case TMLArchiMemoryNode.MapperBuffer:	
+			case Buffer.MapperBuffer:	
 				panel3.removeAll();
 				makeMapperBufferPanel( c1, c2 );
 				panel3.revalidate();
 				panel3.repaint();
 				break;
-			case TMLArchiMemoryNode.AdaifBuffer:	
+			case Buffer.AdaifBuffer:	
 				panel3.removeAll();
 				makeAdaifBufferPanel( c1, c2 );
 				panel3.revalidate();
 				panel3.repaint();
 				break;
-			case TMLArchiMemoryNode.InterleaverBuffer:	
+			case Buffer.InterleaverBuffer:	
 				panel3.removeAll();
 				makeInterleaverBufferPanel( c1, c2 );
 				panel3.revalidate();
 				panel3.repaint();
 				break;
-			case TMLArchiMemoryNode.MainMemoryBuffer:	
+			case Buffer.MainMemoryBuffer:	
 				panel3.removeAll();
 				makeMainMemoryBufferPanel( c1, c2 );
 				panel3.revalidate();
@@ -498,27 +498,27 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				mappedMemory = (String) memoryCB.getItemAt( memoryCB.getSelectedIndex() );
 				bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
 				switch ( bufferType )	{
-					case TMLArchiMemoryNode.FepBuffer:	
+					case Buffer.FepBuffer:	
 						if( !handleClosureWhenSelectedFepBuffer() )	{
 							return;
 						}
 						break;
-					case TMLArchiMemoryNode.MapperBuffer:	
+					case Buffer.MapperBuffer:	
 						if( !handleClosureWhenSelectedMapperBuffer() )	{
 							return;
 						}
 						break;
-					case TMLArchiMemoryNode.AdaifBuffer:	
+					case Buffer.AdaifBuffer:	
 						if( !handleClosureWhenSelectedAdaifBuffer() )	{
 							return;
 						}
 						break;
-					case TMLArchiMemoryNode.InterleaverBuffer:	
+					case Buffer.InterleaverBuffer:	
 						if( !handleClosureWhenSelectedInterleaverBuffer() )	{
 							return;
 						}
 						break;
-					case TMLArchiMemoryNode.MainMemoryBuffer:	
+					case Buffer.MainMemoryBuffer:	
 						if( !handleClosureWhenSelectedMainMemoryBuffer() )	{
 							return;
 						}
@@ -731,27 +731,27 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		ArrayList<String> params = new ArrayList<String>();
 		params.add( String.valueOf( bufferType ) );
 		switch( bufferType )	{
-			case TMLArchiMemoryNode.FepBuffer:
+			case Buffer.FepBuffer:
 				params.add( baseAddress );
 				params.add( numSamples );
 				params.add( (String)bankCB.getSelectedItem() );
 				params.add( (String)dataTypeCB.getSelectedItem() );
 				break;
-			case TMLArchiMemoryNode.MapperBuffer:	
+			case Buffer.MapperBuffer:	
 				params.add( baseAddress );
 				params.add( numSamples );
 				break;
-			case TMLArchiMemoryNode.AdaifBuffer:	
+			case Buffer.AdaifBuffer:	
 				params.add( baseAddress );
 				params.add( numSamples );
 				break;
-			case TMLArchiMemoryNode.InterleaverBuffer:	
+			case Buffer.InterleaverBuffer:	
 				params.add( baseAddress );
 				params.add( numSamples );
 				params.add( bitsPerSymbol );
 				params.add( symbolBaseAddress );
 				break;
-			case TMLArchiMemoryNode.MainMemoryBuffer:	
+			case Buffer.MainMemoryBuffer:	
 				params.add( baseAddress );
 				params.add( numSamples );
 				break;

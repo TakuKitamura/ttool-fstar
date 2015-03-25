@@ -54,6 +54,11 @@ import tmltranslator.*;
 public class Buffer	{
 
 	public static final String[] bufferTypesList = { "FEP buffer", "MAPPER buffer", "ADAIF buffer", "INTERLEAVER Buffer", "MAIN MEMORY buffer" };
+	public static final int FepBuffer = 0;
+	public static final int MapperBuffer = 1;
+	public static final int AdaifBuffer = 2;
+	public static final int InterleaverBuffer = 3;
+	public static final int MainMemoryBuffer = 4;
 
 	public String CR = "\n";
 	public String TAB = "\t";
@@ -70,6 +75,7 @@ public class Buffer	{
 	protected TMLCPLibArtifact artifact;
 	protected String startAddress = "/* USER TO DO */";
 	protected String endAddress = "/* USER TO DO*/";
+	protected ArrayList<String> mappingParameters;
 	
 	private String Context = "";
 
@@ -136,5 +142,9 @@ public class Buffer	{
 
 	public String getContext()	{
 		return Context;
+	}
+
+	public void addMappingParameters( ArrayList<String> params )	{
+		mappingParameters = params;
 	}
 }	//End of class
