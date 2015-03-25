@@ -72,6 +72,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
     protected String typeName = "port";
     protected String startAddress = "";
     protected String endAddress = "";
+		protected ArrayList<String> bufferParameters = new ArrayList<String>();
+		protected String bufferType = "noBuffer";
     protected int priority = 5; // Between 0 and 10
 
     public TMLArchiPortArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -186,13 +188,13 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         String tmp;
         boolean error = false;
 
-        JDialogPortArtifact dialog = new JDialogPortArtifact(frame, "Setting port artifact attributes", this, mappedMemory, startAddress, endAddress, value );
+        JDialogPortArtifact dialog = new JDialogPortArtifact(frame, "Setting port artifact attributes", this, mappedMemory, bufferParameters, value );
         dialog.setSize(700, 600);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
         mappedMemory = dialog.getMappedMemory();
-        startAddress = dialog.getStartAddress();
-        endAddress = dialog.getEndAddress();
+        bufferParameters = dialog.getBufferParameters();
+				bufferType = bufferParameters.get(0);
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -263,8 +265,44 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
           sb.append(priority);*/
         sb.append("\" typeName=\"" + typeName);
         sb.append("\" mappedMemory=\"" + mappedMemory );
-        sb.append("\" startAddress=\"" + startAddress );
-        sb.append("\" endAddress=\"" + endAddress );
+				TraceManager.addDev( "After mapped memory in translateExtraParam" );
+				if( !bufferType.equals( "" ) && !bufferType.equals( "noBuffer" ) )	{
+        	sb.append("\" bufferType=\"" + bufferType );
+					switch( Integer.parseInt( bufferType ) )	{
+						case TMLArchiMemoryNode.FepBuffer:
+    	    		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
+      	  		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
+        			sb.append("\" bank=\"" + bufferParameters.get(3) );
+        			sb.append("\" dataType=\"" + bufferParameters.get(4) );
+							break;
+						case TMLArchiMemoryNode.MapperBuffer:	
+  	      		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
+    	    		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
+							TraceManager.addDev( "I am writing the parameters to XML" );
+						break;
+						case TMLArchiMemoryNode.AdaifBuffer:	
+        			sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
+        			sb.append("\" numSamples=\"" + bufferParameters.get(2) );
+							break;
+						case TMLArchiMemoryNode.InterleaverBuffer:	
+    	    		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
+      	  		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
+        			sb.append("\" bitsPerSymbol=\"" + bufferParameters.get(3) );
+        			sb.append("\" symbolBaseAddress=\"" + bufferParameters.get(4) );
+							break;
+						case TMLArchiMemoryNode.MainMemoryBuffer:	
+  	      		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
+    	    		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
+							break;
+						default:	//the main memory buffer 
+        			sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
+        			sb.append("\" numSamples=\"" + bufferParameters.get(2) );
+	        		sb.append("\" bank=\"" + bufferParameters.get(3) );
+  	      		sb.append("\" dataType=\"" + bufferParameters.get(4) );
+							break;
+					}
+				}
+        //sb.append("\" endAddress=\"" + endAddress );
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -297,8 +335,43 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                                 sreferenceCommunication = elt.getAttribute("referenceCommunicationName");
                                 stype = elt.getAttribute("typeName");
                                 mappedMemory = elt.getAttribute("mappedMemory");
-                                startAddress = elt.getAttribute("startAddress");
-                                endAddress = elt.getAttribute("endAddress");
+																if( (elt.getAttribute("bufferType") != null) &&  (elt.getAttribute("bufferType").length() > 0) )	{
+																TraceManager.addDev( "After mapped memory in loadExtraParam" );
+                                bufferType = elt.getAttribute("bufferType");
+																bufferParameters.add( bufferType );
+																switch( Integer.parseInt( bufferType ) )	{
+																	case TMLArchiMemoryNode.FepBuffer:
+												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
+												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
+												        		bufferParameters.add( elt.getAttribute( "bank" ) );
+												        		bufferParameters.add( elt.getAttribute( "dataType" ) );
+																		break;
+																	case TMLArchiMemoryNode.MapperBuffer:	
+												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
+												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
+																		break;
+																	case TMLArchiMemoryNode.AdaifBuffer:	
+												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
+												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
+																		break;
+																	case TMLArchiMemoryNode.InterleaverBuffer:	
+												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
+												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
+												        		bufferParameters.add( elt.getAttribute( "bitsPerSymbol" ) );
+												        		bufferParameters.add( elt.getAttribute( "symbolBaseAddress" ) );
+																		break;
+																	case TMLArchiMemoryNode.MainMemoryBuffer:	
+												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
+												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
+																		break;
+																	default:	//the main memory buffer 
+												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
+												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
+												        		bufferParameters.add( elt.getAttribute( "bank" ) );
+												        		bufferParameters.add( elt.getAttribute( "dataType" ) );
+																		break;
+																}
+																}
                                 //prio = elt.getAttribute("priority");
                             }
                             if (svalue != null) {
@@ -371,6 +444,10 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 
 		public String getStartAddress()	{
 			return startAddress;
+		}
+
+		public ArrayList<String> getBufferParameters()	{
+			return bufferParameters;
 		}
 
 }

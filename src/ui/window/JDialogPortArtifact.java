@@ -70,9 +70,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
   private String mappedMemory = "VOID"; 
 	protected JComboBox referenceCommunicationName, priority, memoryCB;
 	protected JTextField baseAddressTF, endAddressTF, numSamplesTF, symbolBaseAddressTF, bitsPerSymbolTF;
-	protected String baseAddress, endAddress, mappedPort, sampleLength, bank, dataType, numSamples, symbolBaseAddress, bitsPerSymbol;
+	protected String baseAddress, endAddress, mappedPort, sampleLength, numSamples, symbolBaseAddress, bitsPerSymbol, bank, dataType;
 	protected JComboBox dataTypeCB, bankCB;
-	//protected Vector<String> dataTypeList = new Vector<String>();
 	
   // Main Panel
   private JButton closeButton;
@@ -81,15 +80,16 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	//Code generation
 	private JPanel panel3;
 	private int bufferType;
+	private boolean loadBufferParameters = false;
+	private ArrayList<String> bufferParameters = new ArrayList<String>();
     
     /** Creates new form  */
-    public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory, String _baseAddress, String _endAddress, String _mappedPort ) {
+    public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory, ArrayList<String> _bufferParameters, String _mappedPort ) {
         super(_frame, _title, true);
         frame = _frame;
         artifact = _artifact;
 				mappedMemory = _mappedMemory;
-				baseAddress = _baseAddress;
-				endAddress = _endAddress;
+				bufferParameters = _bufferParameters;
 				mappedPort = _mappedPort;
         
 		TraceManager.addDev("init components");
@@ -207,25 +207,62 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		memoryCB.addActionListener(this);
 		panel2.add( memoryCB, c1 );
 
-		bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
+		if( bufferParameters == null )	{
+			bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
+			loadBufferParameters = false;
+		}
+		else	{
+			bufferType = Integer.parseInt( bufferParameters.get(0) );
+			loadBufferParameters = true;
+		}
 
 		switch( bufferType )	{
 			case TMLArchiMemoryNode.FepBuffer:	
+				if( loadBufferParameters )	{
+					baseAddress = bufferParameters.get(1);
+					numSamples = bufferParameters.get(2);
+					bank = bufferParameters.get(3);
+					dataType = bufferParameters.get(4);
+				}
 				makeFepBufferPanel( c1, c2 );
 				break;
 			case TMLArchiMemoryNode.MapperBuffer:	
+				if( loadBufferParameters )	{
+					baseAddress = bufferParameters.get(1);
+					numSamples = bufferParameters.get(2);
+				}
 				makeMapperBufferPanel( c1, c2 );
 				break;
 			case TMLArchiMemoryNode.AdaifBuffer:	
+				if( loadBufferParameters )	{
+					baseAddress = bufferParameters.get(1);
+					numSamples = bufferParameters.get(2);
+				}
 				makeAdaifBufferPanel( c1, c2 );
 				break;
 			case TMLArchiMemoryNode.InterleaverBuffer:	
+				if( loadBufferParameters )	{
+					baseAddress = bufferParameters.get(1);
+					numSamples = bufferParameters.get(2);
+					bitsPerSymbol = bufferParameters.get(3);
+					symbolBaseAddress = bufferParameters.get(4);
+				}
 				makeInterleaverBufferPanel( c1, c2 );
 				break;
 			case TMLArchiMemoryNode.MainMemoryBuffer:	
+				if( loadBufferParameters )	{
+					baseAddress = bufferParameters.get(1);
+					numSamples = bufferParameters.get(2);
+				}
 				makeMainMemoryBufferPanel( c1, c2 );
 				break;
 			default:	//the main memory buffer 
+				if( loadBufferParameters )	{
+					baseAddress = bufferParameters.get(1);
+					numSamples = bufferParameters.get(2);
+					bank = bufferParameters.get(3);
+					dataType = bufferParameters.get(4);
+				}
 				makeMapperBufferPanel( c1, c2 );
 				break;
 		}
@@ -272,11 +309,17 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		bankCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.banksList ) ) );
 		panel3.add( new JLabel( "Bank number = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( bank != null )	{
+			bankCB.setSelectedIndex( Integer.parseInt( bank ) );
+		}
 		panel3.add( bankCB, c1 );
 		//
 		dataTypeCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.dataTypeList ) ) );
 		panel3.add( new JLabel( "Data type = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( dataType != null )	{
+			dataTypeCB.setSelectedIndex( Integer.parseInt( dataType ) );
+		}
 		panel3.add( dataTypeCB, c1 );
 	}
 
@@ -437,8 +480,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		endAddress = "";
 		mappedPort = "";
 		sampleLength = "";
-		bank = "";
-		dataType = "";
 		numSamples = "";
 		symbolBaseAddress = "";
 		bitsPerSymbol = "";
@@ -634,6 +675,9 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		String regex = "[0-9]+";
 		numSamples = (String) numSamplesTF.getText();
+		if( !( numSamples.length() > 0 ) )	{
+			return true;
+		}
 		if( Integer.parseInt( numSamples ) == 0 )	{
 			JOptionPane.showMessageDialog( frame, "The number of samples must be greater than 0", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
@@ -680,6 +724,45 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			}
 		}
 	return true;
+	}
+
+	public ArrayList<String> getBufferParameters()	{
+
+		ArrayList<String> params = new ArrayList<String>();
+		params.add( String.valueOf( bufferType ) );
+		switch( bufferType )	{
+			case TMLArchiMemoryNode.FepBuffer:
+				params.add( baseAddress );
+				params.add( numSamples );
+				params.add( (String)bankCB.getSelectedItem() );
+				params.add( (String)dataTypeCB.getSelectedItem() );
+				break;
+			case TMLArchiMemoryNode.MapperBuffer:	
+				params.add( baseAddress );
+				params.add( numSamples );
+				break;
+			case TMLArchiMemoryNode.AdaifBuffer:	
+				params.add( baseAddress );
+				params.add( numSamples );
+				break;
+			case TMLArchiMemoryNode.InterleaverBuffer:	
+				params.add( baseAddress );
+				params.add( numSamples );
+				params.add( bitsPerSymbol );
+				params.add( symbolBaseAddress );
+				break;
+			case TMLArchiMemoryNode.MainMemoryBuffer:	
+				params.add( baseAddress );
+				params.add( numSamples );
+				break;
+			default:	//the main memory buffer 
+				params.add( baseAddress );
+				params.add( numSamples );
+				params.add( (String)bankCB.getSelectedItem() );
+				params.add( (String)dataTypeCB.getSelectedItem() );
+				break;
+		}
+		return params;
 	}
 
 }	//End of class
