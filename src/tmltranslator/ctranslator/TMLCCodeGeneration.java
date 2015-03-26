@@ -426,7 +426,6 @@ public class TMLCCodeGeneration	{
 			}
 			
 		}
-		System.exit(0);
 	}
 
 	private void makeDataTransfersList()	{
@@ -756,7 +755,10 @@ public class TMLCCodeGeneration	{
 		StringBuffer s = new StringBuffer( "/**** variables *****/" + CR + "extern SIG_TYPE sig[];" + CR2 );
 		s.append( FepBuffer.DECLARATION + CR2 );
 		s.append( MapperBuffer.DECLARATION + CR2 );
-		s.append( MMBuffer.DECLARATION + CR2 + "#endif" );
+		//s.append( AdaifBuffer.DECLARATION + CR2 );
+		s.append( MMBuffer.DECLARATION + CR2 );
+		//s.append( MainMemoryBuffer.DECLARATION + CR2 );
+		s.append( "#endif" );
 		return s.toString();
 	}
 
@@ -1058,7 +1060,7 @@ public class TMLCCodeGeneration	{
 		
 		String init_code = "";
 		String XOD = "";
-		initFileString.append( "#include \"" + applicationName + "_exec.h\"" + CR2 );
+		initFileString.append( "#include \"" + applicationName + ".h\"" + CR2 );
 		initFileString.append( "/**** variables ****/" + CR2 +
 									"int g_r_size = 10240;" + CR +
 									"int g_Ns = 1024;" + CR +
@@ -1302,11 +1304,14 @@ public class TMLCCodeGeneration	{
 
 	public void saveFile( String path, String filename ) throws FileException {
 		
+		TMLCCodeGenerationMakefile make = new TMLCCodeGenerationMakefile( applicationName );
+
 		TraceManager.addUser( "Saving C files in " + path + filename );
 		FileUtils.saveFile( path + "main.c", mainFileString.toString() );
 		FileUtils.saveFile( path + filename + ".h", headerString.toString() );
 		FileUtils.saveFile( path + filename + ".c", programString.toString() );
 		FileUtils.saveFile( path + filename + "_init.c", initFileString.toString() );
+		FileUtils.saveFile( path + "Makefile", make.getCode() );
 	}
 
 	private void openDebugFile()	{
