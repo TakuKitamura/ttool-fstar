@@ -59,6 +59,7 @@ public class TMLCCodeGenerationSyntaxCheck {
 		private TMLMapping tmap;
 		private TMLModeling tmlm;
 		private TMLArchitecture tmla;
+		private ArrayList<TMLCPLib> mappedCPLibs;
 
     public final static int ERROR_STRUCTURE = 0;
     public final static int WARNING_STRUCTURE = 1;   
@@ -74,6 +75,7 @@ public class TMLCCodeGenerationSyntaxCheck {
 			tmap = _tmap;
 			tmlm = _tmlm;
 			tmla = _tmla;
+			mappedCPLibs = _tmap.getMappedTMLCPLibs();
     }
 
 	  public void addError( String message, int type )	{
@@ -95,6 +97,7 @@ public class TMLCCodeGenerationSyntaxCheck {
 
 		public void check()	{
 			checkForPrexAndPostexChannels();
+			checkForCPsAssociatedToForkChannels();	//so far we do not handle CPs associated to ports that are part of a fork channel
 		}
 
 		//valid prex ports are:
@@ -171,4 +174,24 @@ public class TMLCCodeGenerationSyntaxCheck {
 				addError( "No suitable channel in the application diagram has been marked as postex", TMLCCodeGenerationError.ERROR_STRUCTURE );
 			}
 		}
+
+		private void checkForCPsAssociatedToForkChannels()	{
+			
+			for( TMLCPLib cplib: mappedCPLibs )	{
+				if( cplib.getArtifacts().size() == 1 )	{
+					String portName = cplib.getArtifacts().get(0).getPortName();
+					for( TMLChannel channel: tmlm.getChannels() )	{
+						if( channel.isAForkChannel() )	{
+							for( TMLPort port: channel.getDestinationPorts() )	{
+								if( port.getName().equals( portName ) )	{
+										addError( "Port " + portName + " is part of a fork channel. It cannot be mapped to a CP.",
+															TMLCCodeGenerationError.ERROR_STRUCTURE );
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
 }	//End of class
