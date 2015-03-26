@@ -79,9 +79,9 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 	//Code generation
 	private JPanel panel3;
-	private int bufferType;
+	private int bufferType = 0;
 	private boolean loadBufferParameters = false;
-	private ArrayList<String> bufferParameters = new ArrayList<String>();
+	private ArrayList<String> bufferParameters;
     
     /** Creates new form  */
     public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory, ArrayList<String> _bufferParameters, String _mappedPort ) {
@@ -207,7 +207,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		memoryCB.addActionListener(this);
 		panel2.add( memoryCB, c1 );
 
-		if( bufferParameters == null )	{
+		if( bufferParameters.size() == 0 )	{
 			bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
 			loadBufferParameters = false;
 		}
