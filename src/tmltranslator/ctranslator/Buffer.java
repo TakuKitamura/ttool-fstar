@@ -73,7 +73,7 @@ public class Buffer	{
 	protected TMLTask task;
 	protected TMLPort port;
 	protected TMLCPLibArtifact artifact;
-	protected String startAddress = "/* USER TO DO */";
+	protected String baseAddress = "/* USER TO DO */";
 	protected String endAddress = "/* USER TO DO*/";
 	protected ArrayList<String> mappingParameters;
 	
@@ -98,7 +98,7 @@ public class Buffer	{
 			}
 		}
 		else	{
-			return name + SP + type + CR + TAB2 + "startAddress = " + startAddress + CR + TAB2 + "endAddress = " + endAddress;
+			return name + SP + type + CR + TAB2 + "baseAddress = " + baseAddress + CR + TAB2 + "endAddress = " + endAddress;
 		}
 	}
 
@@ -126,8 +126,8 @@ public class Buffer	{
 		return artifact;
 	}
 
-	public void setStartAddress( String _startAddress )	{
-		startAddress = _startAddress;
+	public void setStartAddress( String _baseAddress )	{
+		baseAddress = _baseAddress;
 	}
 
 	public void setEndAddress( String _endAddress )	{
@@ -136,7 +136,7 @@ public class Buffer	{
 
 	public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
-		s.append( TAB + name + ".baseAddress = " + startAddress + SC + CR );
+		s.append( TAB + name + ".baseAddress = " + baseAddress + SC + CR );
 		return s.toString();
 	}
 

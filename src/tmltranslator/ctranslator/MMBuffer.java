@@ -54,18 +54,11 @@ import tmltranslator.*;
 public class MMBuffer extends BaseBuffer	{
 
 	public static final String DECLARATION = "extern struct MM_BUFFER_TYPE {\n\tint num_samples;\n\tint base_address;\n};";
+
 	protected int num_samples;
 	protected String num_samples_value;
+	
 	private String Context = "embb_mainmemory_context";
-
-	/*public MMBuffer( String _name, String _type, int _base_address_value, int _num_samples_value )	{
-		super( _name, _type, _base_address_value );
-		num_samples_value = _num_samples_value;
-		num_samples = "int" + SP + "num_samples" + SP + "=" + SP + num_samples_value;
-		base_address_value = _base_address_value;
-		base_address = _type + SP + POINTER + "base_address" + SP "=" + SP + base_address_value + SC
-		code = "struct" + SP + name + TAB + "{" + CR + num_samples + CR + base_address + CR + "}" + SC;
-	}*/
 
 	public MMBuffer( String _name, TMLTask _task )	{
 		type = "MM_BUFFER_TYPE";
@@ -85,7 +78,7 @@ public class MMBuffer extends BaseBuffer	{
 	@Override public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
 		s.append( TAB + name + ".num_samples = /* USER TO DO */;" + CR );
-		s.append( TAB + name + ".baseAddress = " + startAddress + SC + CR );
+		s.append( TAB + name + ".baseAddress = " + baseAddress + SC + CR );
 		return s.toString();
 	}
 	

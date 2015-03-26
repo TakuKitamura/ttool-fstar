@@ -73,7 +73,7 @@ public class BaseBuffer extends Buffer	{
 
 	@Override public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
-		s.append( TAB + name + ".baseAddress = " + startAddress + SC + CR );
+		s.append( TAB + name + ".baseAddress = " + baseAddress + SC + CR );
 		return s.toString();
 	}
 	

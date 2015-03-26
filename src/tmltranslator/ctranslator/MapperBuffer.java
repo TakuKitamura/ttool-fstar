@@ -53,26 +53,18 @@ import tmltranslator.*;
 
 public class MapperBuffer extends BaseBuffer	{
 
+	public static final String DECLARATION = "extern struct MAPPER_BUFFER_TYPE {\n\tint num_samples;\n\tint base_address;\n\tint num_bits_per_symbol;\n\tint symbol_base_address;\n\tbool symmetrical_value;\n};";
+	public static final String[] symmetricalValues = { "OFF" , "ON" };
+	
 	protected String num_samples; 
 	protected int num_samples_value;
 	protected int bits_per_symbol_value;
 	protected String bits_per_symbol;
 	protected String symmetrical;
 	protected int symmetrical_value;
-	public static final String DECLARATION = "extern struct MAPPER_BUFFER_TYPE {\n\tint num_samples;\n\tint base_address;\n};";
-	public static final String[] symmetricalValues = { "ON" , "OFF" };
+	
 	private String Context = "embb_mapper_context";
 	
-	/*public MapperBuffer( String _name, String _type, int _base_address_value, int _num_samples_value, int _bits_per_symbol_value, int _symmetrical_value )	{
-		super( _name, _type, _base_address_value );
-		num_samples_value = _num_samples_value;
-		num_samples = "int" + SP + "num_samples" + SP + "=" + SP + num_samples_value;
-		bits_per_symbol_value = _bits_per_symbol_value;
-		bits_per_symbol = "int" + SP + "bits_per_symbol" + SP + "=" + SP + bits_per_symbol_value + SC;
-		symmetrical_value = _symmetrical_value;
-		symmetrical = "bool" + SP + "symmetrical" + SP + "=" + SP + symmetrical_value + SC;
-	}*/
-
 	public MapperBuffer( String _name, TMLTask _task )	{
 		type = "MAPPER_BUFFER_TYPE";
 		name = _name;
@@ -91,7 +83,7 @@ public class MapperBuffer extends BaseBuffer	{
 	@Override public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
 		s.append( TAB + name + ".length = /* USER TO DO */;" + CR );
-		s.append( TAB + name + ".baseAddress = " + startAddress + SC + CR );
+		s.append( TAB + name + ".baseAddress = " + baseAddress + SC + CR );
 		s.append( TAB + name + ".num_samples = /* USER TO DO */;" + CR );
 		s.append( TAB + name + ".bits_per_symbol = /* USER TO DO */;" + CR );
 		s.append( TAB + name + ".simmetrical_value = /* USER TO DO */;" + CR );

@@ -54,7 +54,7 @@ public class MappOperationMEC extends OperationMEC	{
 	public MappOperationMEC( String XOP, String ID0, String OD0, String BTC )	{
 		name = "MapperOperationMEC";
 		exec_code = "/*firm instruction*/" + CR + TAB +
-			"fep_set_qx(&" + XOP + "_ctx, ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->q);" + CR + TAB +
+			"fep_set_qx(&" + XOP + ", ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->q);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
 			"fep_start(&" + XOP + ");" + CR;
 		

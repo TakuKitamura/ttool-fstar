@@ -63,7 +63,7 @@ public class CwlMEC extends OperationMEC	{
 			"fep_set_bz(&" + _ctxName + ", sig[" + OD0 + "].woff + ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->b);" + CR + TAB +
 			"fep_set_tz(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->t);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
-			"fep_start(&" + _ctxName + "_ctx);" + CR;
+			"fep_start(&" + _ctxName + ");" + CR;
 	
 		init_code ="/***** INIT " + _ctxName + " *******/" + CR +
 			"void init_" + _ctxName + "(void){" + CR + TAB +

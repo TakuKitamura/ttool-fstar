@@ -65,12 +65,6 @@ public class FepBuffer extends BaseBuffer	{
 	
 	private String Context = "embb_fep_context";
 
-	
-	/*public FepBuffer( String _type, int _base_address_value )	{
-		super( "FEP_BUFF_TYPE", _type, _base_address_value );
-		code = "struct" + SP + name + TAB + "{" + CR + length + CR + baseAddress + CR + bank + CR + dataType + CR + "}" + SC;
-	}*/
-
 	public String getContext()	{
 		return Context;
 	}
@@ -81,19 +75,10 @@ public class FepBuffer extends BaseBuffer	{
 		task = _task;
 	}
 
-	/*public static final Vector<String> getDataTypeList()	{
-
-		dataTypeList.add("int8");
-		dataTypeList.add("int16");
-		dataTypeList.add("cpx16");
-		dataTypeList.add("cpx32");
-		return dataTypeList;
-	}*/
-	
 	@Override public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
 		s.append( TAB + name + ".length = /* USER TO DO */;" + CR );
-		s.append( TAB + name + ".baseAddress = " + startAddress + SC + CR );
+		s.append( TAB + name + ".baseAddress = " + baseAddress + SC + CR );
 		s.append( TAB + name + ".bank = /* USER TO DO */;" + CR );
 		s.append( TAB + name + ".dataType = /* USER TO DO */;" + CR );
 		return s.toString();
