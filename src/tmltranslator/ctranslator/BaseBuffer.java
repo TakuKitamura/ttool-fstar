@@ -56,12 +56,6 @@ public class BaseBuffer extends Buffer	{
 	protected int base_address_value;
 	private String Context = "embb_mapper_context";
 
-	/*public BaseBuffer( String _name, String _type, int _base_address_value )	{
-		name = _name;
-		base_address_value = _base_address_value;
-		base_address = _type + SP + POINTER + "base_address" + SP + "=" + SP + base_address_value + SC;
-	}*/
-
 	public String getContext()	{
 		return Context;
 	}
@@ -73,14 +67,19 @@ public class BaseBuffer extends Buffer	{
 
 	@Override public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
-		s.append( TAB + name + ".baseAddress = " + baseAddress + SC + CR );
+		s.append( TAB + name + ".base_address = /* USER TO DO */;" + CR );
 		return s.toString();
 	}
 	
 	public String toString()	{
 
 		StringBuffer s = new StringBuffer( super.toString() );
-		s.append( TAB2 + "baseAddress = " + baseAddress + SC + CR );
+		if( bufferParameters != null )	{
+			s.append( TAB2 + "base_address = " + bufferParameters.get(1) + SC + CR );
+		}
+		else	{
+			s.append( TAB2 + "base_address = /* USER TO DO */;" + CR );
+		}
 		return s.toString();
 	}
 }	//End of class

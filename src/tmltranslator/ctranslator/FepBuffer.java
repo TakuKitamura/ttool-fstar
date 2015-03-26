@@ -76,21 +76,30 @@ public class FepBuffer extends BaseBuffer	{
 	}
 
 	@Override public String getInitCode()	{
+
 		StringBuffer s = new StringBuffer();
-		s.append( TAB + name + ".length = /* USER TO DO */;" + CR );
-		s.append( TAB + name + ".baseAddress = " + baseAddress + SC + CR );
-		s.append( TAB + name + ".bank = /* USER TO DO */;" + CR );
-		s.append( TAB + name + ".dataType = /* USER TO DO */;" + CR );
+		if( bufferParameters != null )	{
+			s.append( TAB + name + ".num_samples = " + bufferParameters.get(1) + SC + CR );
+			s.append( TAB + name + ".base_address = " + bufferParameters.get(2) + SC + CR );
+			s.append( TAB + name + ".bank = " + bufferParameters.get(3) + SC + CR );
+			s.append( TAB + name + ".data_type = " + bufferParameters.get(4) + SC + CR );		
+		}
+		else	{
+			s.append( TAB + name + ".num_samples = /* USER TO DO */;" + CR );
+			s.append( TAB + name + ".base_address = /* USER TO DO */;" + CR );
+			s.append( TAB + name + ".bank = /* USER TO DO */;" + CR );
+			s.append( TAB + name + ".data_type = /* USER TO DO */;" + CR );
+		}
 		return s.toString();
 	}
 
 	public String toString()	{
 
 		StringBuffer s = new StringBuffer( super.toString() );
-		s.append( TAB2 + "length = /* USER TO DO */;" + CR );
-		s.append( TAB2 + "baseAddress = " + baseAddress + SC + CR );
+		s.append( TAB2 + "num_samples = /* USER TO DO */;" + CR );
+		s.append( TAB2 + "base_address = /* USER TO DO */;" + CR );
 		s.append( TAB2 + "bank = /* USER TO DO */;" + CR );
-		s.append( TAB2 + "dataType = /* USER TO DO */;" + CR );
+		s.append( TAB2 + "data_type = /* USER TO DO */;" + CR );
 		return s.toString();
 	}
 }	//End of class

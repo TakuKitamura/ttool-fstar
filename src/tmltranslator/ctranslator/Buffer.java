@@ -75,7 +75,7 @@ public class Buffer	{
 	protected TMLCPLibArtifact artifact;
 	protected String baseAddress = "/* USER TO DO */";
 	protected String endAddress = "/* USER TO DO*/";
-	protected ArrayList<String> mappingParameters;
+	protected ArrayList<String> bufferParameters;
 	
 	private String Context = "";
 
@@ -146,6 +146,6 @@ public class Buffer	{
 	}
 
 	public void addMappingParameters( ArrayList<String> params )	{
-		mappingParameters = params;
+		bufferParameters = params;
 	}
 }	//End of class

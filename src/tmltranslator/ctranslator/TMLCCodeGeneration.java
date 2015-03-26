@@ -659,12 +659,12 @@ public class TMLCCodeGeneration	{
 	private String generateCodeForPrototypes()	{
 		String s = 	"/**** prototypes *****/" + CR +
 								"extern int " + applicationName + "_exec(void);" + CR +
-								"extern void buffers_init(void);" + CR +
+								"extern void init_buffers(void);" + CR +
 								"extern bool exit_rule(void);" + CR +
 								"extern void register_operations(void);" + CR +
 								"extern void register_dataTransfers(void);" + CR +
 								"extern void register_fire_rules(void);" + CR +
-								"extern void signals_init();" + CR +
+								"extern void init_signals();" + CR +
 								"extern void init_operations(void);" + CR +
 								"extern void init_CPs(void);" + CR +
 								"extern void cleanup_operations_context(void);" + CR2;
@@ -808,8 +808,8 @@ public class TMLCCodeGeneration	{
 							"register_operations();" + CR + TAB +
 							"register_dataTransfers();" + CR + TAB +
 							"register_fire_rules();" + CR + TAB +
-							"buffers_init();" + CR + TAB +
-							"signals_init();" + CR + TAB +
+							"init_buffers();" + CR + TAB +
+							"init_signals();" + CR + TAB +
 							"init_operations();" + CR + TAB +
 							"init_CPs();" + CR2 + TAB +
 							"/********* INIT PREX OPs signals ********/" + CR +
@@ -1096,8 +1096,8 @@ public class TMLCCodeGeneration	{
 									"char *src_out_dat;" + CR +
 									"char *dma1_out_dat;" + CR2 );		
 		initFileString.append( buffersAndInstructionsDeclaration( false ) + CR2 );
-		initFileString.append( CR + initializeApplication() + CR2 );
-		initFileString.append( initializeSignals() + CR );
+		generateCodeToInitializeBuffers();
+		generateCodeToInitializeSignals();
 		initFileString.append( "/**** init code ****/" + CR );
 
 		//Only for SDR operations
@@ -1246,34 +1246,32 @@ public class TMLCCodeGeneration	{
 		}
 	}
 
-	private String initializeApplication()	{
+	private void generateCodeToInitializeBuffers()	{
 
-		StringBuffer s = new StringBuffer( "void buffers_init()\t{" + CR );
+		initFileString.append( "void init_buffers()\t{" + CR );
 
 		for( Buffer buff: buffersList )	{
-			s.append( buff.getInitCode() + CR );
+			initFileString.append( buff.getInitCode() + CR );
 		}
 
-		s.append( "}" + CR );
-		return s.toString();
+		initFileString.append( "}" + CR2 );
 	}
 
-	private String initializeSignals()	{
+	private void generateCodeToInitializeSignals()	{
 
-		StringBuffer s = new StringBuffer( "void signals_init()\t{" + CR );
+		initFileString.append( "void init_signals()\t{" + CR );
 		for( Signal sig: signalsList )	{
-			s.append( TAB + "sig[" + sig.getName() + "].f = false;" + CR );
-			s.append( TAB + "sig[" + sig.getName() + "].roff = /*USER TO DO*/;" + CR );
-			s.append( TAB + "sig[" + sig.getName() + "].woff = /*USER TO DO*/;" + CR );
+			initFileString.append( TAB + "sig[" + sig.getName() + "].f = false;" + CR );
+			initFileString.append( TAB + "sig[" + sig.getName() + "].roff = /*USER TO DO*/;" + CR );
+			initFileString.append( TAB + "sig[" + sig.getName() + "].woff = /*USER TO DO*/;" + CR );
 			Buffer buff = getBufferFromSignal( sig );
 			if( buff != null )	{
-				s.append( TAB + "sig[" + sig.getName() + "].pBuff = (" + buff.getType() + "*)" + SP + buff.getName() + SC + CR2 );
+				initFileString.append( TAB + "sig[" + sig.getName() + "].pBuff = (" + buff.getType() + "*)" + SP + buff.getName() + SC + CR2 );
 			}
 			else	{
-				s.append( TAB + "sig[" + sig.getName() + "].pBuff = /* USER TO DO */" + SC + CR2 );
+				initFileString.append( TAB + "sig[" + sig.getName() + "].pBuff = /* USER TO DO */" + SC + CR2 );
 			}
 		}
-		return s.toString() + "}" + CR;
 	}
 
 	private Buffer getBufferFromSignal( Signal sig )	{

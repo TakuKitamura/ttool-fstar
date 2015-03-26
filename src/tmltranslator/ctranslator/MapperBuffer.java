@@ -82,8 +82,8 @@ public class MapperBuffer extends BaseBuffer	{
 
 	@Override public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
-		s.append( TAB + name + ".length = /* USER TO DO */;" + CR );
-		s.append( TAB + name + ".baseAddress = " + baseAddress + SC + CR );
+		s.append( TAB + name + ".num_samples = /* USER TO DO */;" + CR );
+		s.append( TAB + name + ".base_ddress = /* USER TO DO */;" + CR );
 		s.append( TAB + name + ".num_samples = /* USER TO DO */;" + CR );
 		s.append( TAB + name + ".bits_per_symbol = /* USER TO DO */;" + CR );
 		s.append( TAB + name + ".simmetrical_value = /* USER TO DO */;" + CR );
@@ -93,11 +93,20 @@ public class MapperBuffer extends BaseBuffer	{
 	public String toString()	{
 
 		StringBuffer s = new StringBuffer( super.toString() );
-		s.append( TAB2 + "length = /* USER TO DO */;" + CR );
-		s.append( TAB2 + "baseAddress = " + baseAddress + SC + CR );
-		s.append( TAB2 + "num_samples = /* USER TO DO */;" + CR );
-		s.append( TAB2 + "bits_per_symbol = /* USER TO DO */;" + CR );
-		s.append( TAB2 + "symmetrical_value = /* USER TO DO */;" + CR );
+		if( bufferParameters != null )	{
+			s.append( TAB2 + "num_samples = " + bufferParameters.get(1) + SC + CR );
+			s.append( TAB2 + "bases_address = " + bufferParameters.get(2) + SC + CR );
+			s.append( TAB2 + "num_samples = "+ bufferParameters.get(3) + SC + CR );
+			s.append( TAB2 + "bits_per_symbol = " + bufferParameters.get(4) + SC + CR );
+			s.append( TAB2 + "symmetrical_value = " + bufferParameters.get(5) + SC + CR );
+		}
+		else	{
+			s.append( TAB2 + "num_samples = /* USER TO DO */;" + CR );
+			s.append( TAB2 + "base_address = /* USER TO DO */;" + CR );
+			s.append( TAB2 + "num_samples = /* USER TO DO */;" + CR );
+			s.append( TAB2 + "bits_per_symbol = /* USER TO DO */;" + CR );
+			s.append( TAB2 + "symmetrical_value = /* USER TO DO */;" + CR );
+		}
 		return s.toString();
 	}
 	
