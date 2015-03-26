@@ -457,29 +457,25 @@ public class TMLCCodeGeneration	{
 					newInSignalsList.add( newSig );	//to be substitued to the inSignals of op
 					signalsList.add( newSig );
 				}
-				Buffer inBuff = op.getInBuffer();
-				Buffer outBuff = op.getOutBuffer();
+				Buffer inBuff = op.getInBuffer();	//the operation inBuffer is the dataTransfer outBuffer
 				String portName = "buff_" + dt.getTMLCPLib().getArtifacts().get(0).getPortName();
-				if( inBuff != null )	{
-					//TraceManager.addDev( "Trying to match " + portName + " and " + inBuff.getName() );
+				if( inBuff != null )	{	//the port mapped on the CP is associated to the CP output buffer
 					if( inBuff.getName().equals( portName ) )	{
-						/*inBuff.setStartAddress( startAddress );
-						inBuff.setEndAddress( endAddress );*/
-						//TraceManager.addDev( "Operation " + op.getName() + " inBuffer = " + inBuff.getName() + " mapped port: " + portName );
-						dt.setOutBuffer( inBuff );	//Careful with which is IN and which is OUT!
+						dt.setOutBuffer( inBuff );
 					}
 				}
-				if( outBuff != null )	{
-					//TraceManager.addDev( "Trying to match " + portName + " and " + outBuff.getName() );
-					if( outBuff.getName().equals( portName ) )	{
-						/*outBuff.setStartAddress( startAddress );
-						outBuff.setEndAddress( endAddress );*/
-						//TraceManager.addDev( "Operation " + op.getName() + " outBuffer = " + outBuff.getName() + " mapped port: " + portName );
-						dt.setInBuffer( inBuff );	//Careful with which is IN and which is OUT!
+			}
+			op.setInSignals( newInSignalsList );
+			newInSignalsList = new ArrayList<Signal>();
+		}
+		for( DataTransfer dt: dataTransfersList )	{
+			for( Signal inSignal: dt.getInSignals() )	{	//for each in signal corresponds an inBuffer
+				String buffName = "buff_" + inSignal.getName();
+				for( Buffer buff: buffersList )	{
+					if( buff.getName().equals( buffName ) )	{
+						dt.addInBuffer( buff );
 					}
 				}
-				op.setInSignals( newInSignalsList );
-				newInSignalsList = new ArrayList<Signal>();
 			}
 		}
 	}
@@ -497,6 +493,25 @@ public class TMLCCodeGeneration	{
 				return op;
 			}
 			counter = 0;
+		}
+		return null;
+	}
+
+	private Operation getOperationWithSameOutputSignals( ArrayList<Signal> outSignals )	{
+		
+		int counter = 0;
+		for( Operation op: operationsList )	{
+			Signal sig = op.getOutSignal();	//operations have one and only one outSignal
+			if( sig != null){
+			TraceManager.addDev( "Checking if signal " + sig.getName() + " is contained in " + outSignals.toString() );
+			if( outSignals.contains( sig ) )	{
+				counter++;
+			}
+			if( counter == outSignals.size() )	{
+				return op;
+			}
+			counter = 0;
+		}
 		}
 		return null;
 	}

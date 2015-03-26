@@ -62,20 +62,20 @@ public class DataTransfer	{
 
 	private int type;
 	private String name = "";
-	private Buffer inBuffer;
+	private ArrayList<Buffer> inBuffers;
 	private Buffer outBuffer;
 	private TMLCPLib tmlcplib;
 	private ArrayList<Signal> outSignals;
 	private ArrayList<Signal> inSignals;
 
-	public DataTransfer( TMLCPLib _tmlcplib, Buffer _inBuffer, Buffer _outBuffer, ArrayList<Signal> _inSignals, ArrayList<Signal> _outSignals )	{
+	/*public DataTransfer( TMLCPLib _tmlcplib, ArrayList<Buffer> _inBuffers, Buffer _outBuffer, ArrayList<Signal> _inSignals, ArrayList<Signal> _outSignals )	{
 		name = _tmlcplib.getName();
 		tmlcplib = _tmlcplib;
 		inSignals = _inSignals;
 		outSignals = _outSignals;
-		inBuffer = _inBuffer;
+		inBuffers = _inBuffers;
 		outBuffer = _outBuffer;
-	}
+	}*/
 
 	public DataTransfer( TMLCPLib _tmlcplib, ArrayList<Signal> _inSignals, ArrayList<Signal> _outSignals )	{
 		name = _tmlcplib.getName();
@@ -87,6 +87,11 @@ public class DataTransfer	{
 		else	{
 			outSignals = _outSignals;
 		}
+		init();
+	}
+
+	private void init()	{
+		inBuffers = new ArrayList<Buffer>();
 	}
 
 	public TMLCPLib getTMLCPLib()	{
@@ -117,12 +122,20 @@ public class DataTransfer	{
 		outSignals.add( _outSignal );
 	}
 
-	public void setInBuffer( Buffer _inBuffer)	{
-		inBuffer = _inBuffer;
+	public void addInSignal( Signal _inSignal )	{
+		inSignals.add( _inSignal );
 	}
 
-	public Buffer getInBuffer()	{
-		return inBuffer;
+	/*public void setInBuffer( Buffer _inBuffer)	{
+		inBuffer = _inBuffer;
+	}*/
+
+	public void addInBuffer( Buffer _inBuffer )	{
+		inBuffers.add( _inBuffer );
+	}
+
+	public ArrayList<Buffer> getInBuffers()	{
+		return inBuffers;
 	}
 
 	public void setOutBuffer( Buffer _outBuffer)	{
@@ -154,8 +167,8 @@ public class DataTransfer	{
 		for( Signal sig: outSignals )	{
 			s.append( "outSignal: " + sig.getName() + "\n\t" );
 		}
-		if( inBuffer != null )	{
-			s.append( "inBuffer: " + inBuffer.toString() + "\n\t" );
+		for( Buffer buff: inBuffers )	{
+			s.append( "inBuffer: " + buff.toString() + "\n\t" );
 		}
 		if( outBuffer != null )	{
 			s.append( "outBuffer: " + outBuffer.toString() );
