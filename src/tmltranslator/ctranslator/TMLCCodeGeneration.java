@@ -685,27 +685,41 @@ public class TMLCCodeGeneration	{
 				inBuff = op.getInBuffer();
 				outBuff = op.getOutBuffer();
 				if( declaration )	{
-					if( inBuff != null )	{
-						buffersString.append( "extern" + SP + inBuff.getType() + SP + inBuff.getName() + ";" + CR );
-						instructionsString.append( "extern" + SP + inBuff.getContext() + SP + fTask.getTaskName() + "_ctx;" + CR );
-					}
-					if( outBuff != null )	{
+					if( inBuff == null )	{	//for source operation
 						buffersString.append( "extern" + SP + outBuff.getType() + SP + outBuff.getName() + ";" + CR );
 						instructionsString.append( "extern" + SP + outBuff.getContext() + SP + fTask.getTaskName() + "_ctx;" + CR );
 					}
+					else	{
+						if( outBuff == null )	{	//for sink operation
+							buffersString.append( "extern" + SP + inBuff.getType() + SP + inBuff.getName() + ";" + CR );
+							instructionsString.append( "extern" + SP + inBuff.getContext() + SP + fTask.getTaskName() + "_ctx;" + CR );
+						}
+						else	{	//for all the remaining operations
+							buffersString.append( "extern" + SP + inBuff.getType() + SP + inBuff.getName() + ";" + CR );
+							instructionsString.append( "extern" + SP + inBuff.getContext() + SP + fTask.getTaskName() + "_ctx;" + CR );
+						}
+					}
 				}
 				else	{
-					if( inBuff != null )	{
-						buffersString.append( inBuff.getType() + SP + inBuff.getName() + ";" + CR );
-						instructionsString.append( inBuff.getContext() + SP + fTask.getTaskName() + "_ctx;" + CR );
-					}
-					if( outBuff != null )	{
+					if( inBuff == null )	{	//for source operation
 						buffersString.append( outBuff.getType() + SP + outBuff.getName() + ";" + CR );
 						instructionsString.append( outBuff.getContext() + SP + fTask.getTaskName() + "_ctx;" + CR );
+					}
+					else	{
+						if( outBuff == null )	{	//for sink operation
+							buffersString.append( inBuff.getType() + SP + inBuff.getName() + ";" + CR );
+							instructionsString.append( inBuff.getContext() + SP + fTask.getTaskName() + "_ctx;" + CR );
+						}
+						else	{	//for all the remaining operations
+							buffersString.append( inBuff.getType() + SP + inBuff.getName() + ";" + CR );
+							instructionsString.append( inBuff.getContext() + SP + fTask.getTaskName() + "_ctx;" + CR );
+						}
 					}
 				}
 			}
 		}
+		TraceManager.addDev( instructionsString.toString() );
+		//System.exit(0);
 		instructionsString.append( CR2 + "/**** Data Transfers Instructions ****/" + CR );
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
