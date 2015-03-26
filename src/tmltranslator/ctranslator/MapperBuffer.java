@@ -59,7 +59,8 @@ public class MapperBuffer extends BaseBuffer	{
 	protected String bits_per_symbol;
 	protected String symmetrical;
 	protected int symmetrical_value;
-	public static final String DECLARATION = "struct MAPPER_BUFFER_TYPE {\n\tint num_samples;\n\tint base_address;\n};";
+	public static final String DECLARATION = "extern struct MAPPER_BUFFER_TYPE {\n\tint num_samples;\n\tint base_address;\n};";
+	public static final String[] symmetricalValues = { "ON" , "OFF" };
 	private String Context = "embb_mapper_context";
 	
 	/*public MapperBuffer( String _name, String _type, int _base_address_value, int _num_samples_value, int _bits_per_symbol_value, int _symmetrical_value )	{

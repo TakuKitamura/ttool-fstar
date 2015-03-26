@@ -276,7 +276,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         			sb.append("\" bank=\"" + bufferParameters.get(3) );
         			sb.append("\" dataType=\"" + bufferParameters.get(4) );
 							break;
-						case Buffer.MapperBuffer:	
+						case Buffer.InterleaverBuffer:	
   	      		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
     	    		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
 							TraceManager.addDev( "I am writing the parameters to XML" );
@@ -285,11 +285,12 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         			sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
         			sb.append("\" numSamples=\"" + bufferParameters.get(2) );
 							break;
-						case Buffer.InterleaverBuffer:	
+						case Buffer.MapperBuffer:	
     	    		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
       	  		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
         			sb.append("\" bitsPerSymbol=\"" + bufferParameters.get(3) );
         			sb.append("\" symbolBaseAddress=\"" + bufferParameters.get(4) );
+        			sb.append("\" symmetricalValue=\"" + bufferParameters.get(5) );
 							break;
 						case Buffer.MainMemoryBuffer:	
   	      		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
@@ -347,7 +348,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 												        		bufferParameters.add( elt.getAttribute( "bank" ) );
 												        		bufferParameters.add( elt.getAttribute( "dataType" ) );
 																		break;
-																	case Buffer.MapperBuffer:	
+																	case Buffer.InterleaverBuffer:	
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 																		break;
@@ -355,11 +356,12 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 																		break;
-																	case Buffer.InterleaverBuffer:	
+																	case Buffer.MapperBuffer:	
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 												        		bufferParameters.add( elt.getAttribute( "bitsPerSymbol" ) );
 												        		bufferParameters.add( elt.getAttribute( "symbolBaseAddress" ) );
+												        		bufferParameters.add( elt.getAttribute( "symmetricalValue" ) );
 																		break;
 																	case Buffer.MainMemoryBuffer:	
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );

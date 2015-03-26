@@ -69,9 +69,10 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
   private TMLArchiPortArtifact artifact;
   private String mappedMemory = "VOID"; 
 	protected JComboBox referenceCommunicationName, priority, memoryCB;
-	protected JTextField baseAddressTF, endAddressTF, numSamplesTF, symbolBaseAddressTF, bitsPerSymbolTF;
-	protected String baseAddress, endAddress, mappedPort, sampleLength, numSamples, symbolBaseAddress, bitsPerSymbol, bank, dataType;
-	protected JComboBox dataTypeCB, bankCB;
+	protected JTextField baseAddressTF, numSamplesTF, symbolBaseAddressTF, bitsPerSymbolTF;
+	protected String baseAddress, mappedPort, sampleLength, numSamples, symbolBaseAddress, bitsPerSymbol;
+	protected String bank, dataType, symmetricalValue;
+	protected JComboBox dataTypeCB, bankCB, symmetricalValueCB;
 	
   // Main Panel
   private JButton closeButton;
@@ -226,12 +227,12 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				}
 				makeFepBufferPanel( c1, c2 );
 				break;
-			case Buffer.MapperBuffer:	
+			case Buffer.InterleaverBuffer:	
 				if( loadBufferParameters )	{
 					baseAddress = bufferParameters.get(1);
 					numSamples = bufferParameters.get(2);
 				}
-				makeMapperBufferPanel( c1, c2 );
+				makeInterleaverBufferPanel( c1, c2 );
 				break;
 			case Buffer.AdaifBuffer:	
 				if( loadBufferParameters )	{
@@ -240,14 +241,15 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				}
 				makeAdaifBufferPanel( c1, c2 );
 				break;
-			case Buffer.InterleaverBuffer:	
+			case Buffer.MapperBuffer:	
 				if( loadBufferParameters )	{
 					baseAddress = bufferParameters.get(1);
 					numSamples = bufferParameters.get(2);
 					bitsPerSymbol = bufferParameters.get(3);
 					symbolBaseAddress = bufferParameters.get(4);
+					symmetricalValue = bufferParameters.get(5);
 				}
-				makeInterleaverBufferPanel( c1, c2 );
+				makeMapperBufferPanel( c1, c2 );
 				break;
 			case Buffer.MainMemoryBuffer:	
 				if( loadBufferParameters )	{
@@ -263,7 +265,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 					bank = bufferParameters.get(3);
 					dataType = bufferParameters.get(4);
 				}
-				makeMapperBufferPanel( c1, c2 );
+				makeFepBufferPanel( c1, c2 );
 				break;
 		}
 
@@ -318,12 +320,12 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		panel3.add( new JLabel( "Data type = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		if( dataType != null )	{
-			dataTypeCB.setSelectedIndex( Integer.parseInt( dataType ) );
+			dataTypeCB.setSelectedItem( dataType );
 		}
 		panel3.add( dataTypeCB, c1 );
 	}
 
-	private void makeMapperBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+	private void makeInterleaverBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 		c2.anchor = GridBagConstraints.LINE_START;
 		makeMainMemoryBufferPanel( c1, c2 );
 	}
@@ -333,32 +335,36 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		makeMainMemoryBufferPanel( c1, c2 );
 	}
 
-	private void makeInterleaverBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+	private void makeMapperBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
 		c2.anchor = GridBagConstraints.LINE_START;
 		numSamplesTF = new JTextField( numSamples, 5 );
 		panel3.add( new JLabel( "Number of samples = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		numSamplesTF = new JTextField( numSamples, 5 );
 		panel3.add( numSamplesTF, c1 );
 		//
 		baseAddressTF = new JTextField( baseAddress, 5 );
 		panel3.add( new JLabel( "Base address = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		baseAddressTF = new JTextField( baseAddress, 5 );
 		panel3.add( baseAddressTF, c1 );
 		//
 		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
 		panel3.add( new JLabel( "Number of bits/symbol = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
 		panel3.add( bitsPerSymbolTF, c1 );
 		//
 		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
 		panel3.add( new JLabel( "Symbol base address = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
 		panel3.add( symbolBaseAddressTF, c1 );
+		//
+		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
+		panel3.add( new JLabel( "Symmetrical value = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( symmetricalValue != null )	{
+			symmetricalValueCB.setSelectedItem( symmetricalValue );
+		}
+		panel3.add( symmetricalValueCB, c1 );
 	}
 
 	private void makeMainMemoryBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
@@ -477,12 +483,12 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	private void flushBuffersStrings()	{
 	
 		baseAddress = "";
-		endAddress = "";
 		mappedPort = "";
 		sampleLength = "";
 		numSamples = "";
 		symbolBaseAddress = "";
 		bitsPerSymbol = "";
+		symmetricalValue = "";
 	}
 	
 	
@@ -537,7 +543,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			return checkBaseAddress() && checkNumSamples();
 		}
 
-		private boolean handleClosureWhenSelectedMapperBuffer()	{
+		private boolean handleClosureWhenSelectedInterleaverBuffer()	{
 
 			return checkBaseAddress() && checkNumSamples();
 		}
@@ -547,8 +553,9 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			return checkBaseAddress() && checkNumSamples();
 		}
 
-		private boolean handleClosureWhenSelectedInterleaverBuffer()	{
-
+		private boolean handleClosureWhenSelectedMapperBuffer()	{
+			
+			symmetricalValue = (String)symmetricalValueCB.getSelectedItem();
 			return checkBaseAddress() && checkNumSamples() && checkNumBitsPerSymbol() && checkSymbolBaseAddress();
 		}
 
@@ -567,10 +574,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		public String getStartAddress()	{
 			return baseAddress;
-		}
-
-		public String getEndAddress()	{
-			return endAddress;
 		}
 
     public void cancelDialog() {
@@ -635,24 +638,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		return priority.getSelectedIndex();
 	}
 
-	private boolean checkEndAddress()	{
-
-		endAddress = (String) endAddressTF.getText();
-		if( endAddress.length() <= 2 && endAddress.length() > 0 )	{
-			JOptionPane.showMessageDialog( frame, "Please enter a valid end address", "Badly formatted parameter",
-																				JOptionPane.INFORMATION_MESSAGE );
-			return false;
-		}
-		if( endAddress.length() > 2 )	{
-			if( !( endAddress.substring(0,2).equals("0x") || endAddress.substring(0,2).equals("0X") ) )	{
-				JOptionPane.showMessageDialog( frame, "End address must be expressed in hexadecimal", "Badly formatted parameter",
-																				JOptionPane.INFORMATION_MESSAGE );
-				return false;
-			}
-		}
-	return true;
-	}
-
 	private boolean checkBaseAddress()	{
 
 		baseAddress = (String) baseAddressTF.getText();
@@ -695,6 +680,9 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		String regex = "[0-9]+";
 		bitsPerSymbol = (String) bitsPerSymbolTF.getText();
+		if( !( bitsPerSymbol.length() > 0 ) )	{
+			return true;
+		}
 		if( Integer.parseInt( bitsPerSymbol ) == 0 )	{
 			JOptionPane.showMessageDialog( frame, "The number of bits/samples must be greater than 0", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
@@ -737,7 +725,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				params.add( (String)bankCB.getSelectedItem() );
 				params.add( (String)dataTypeCB.getSelectedItem() );
 				break;
-			case Buffer.MapperBuffer:	
+			case Buffer.InterleaverBuffer:	
 				params.add( baseAddress );
 				params.add( numSamples );
 				break;
@@ -745,11 +733,12 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				params.add( baseAddress );
 				params.add( numSamples );
 				break;
-			case Buffer.InterleaverBuffer:	
+			case Buffer.MapperBuffer:	
 				params.add( baseAddress );
 				params.add( numSamples );
 				params.add( bitsPerSymbol );
 				params.add( symbolBaseAddress );
+				params.add( symmetricalValue );
 				break;
 			case Buffer.MainMemoryBuffer:	
 				params.add( baseAddress );

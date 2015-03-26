@@ -54,7 +54,7 @@ import tmltranslator.*;
 public class FepBuffer extends BaseBuffer	{
 
 
-	public static final String DECLARATION = "struct FEP_BUFFER_TYPE {\n\tint num_samples;\n\tint base_ddress;\n\tint bank;\n\tint type;\n};";
+	public static final String DECLARATION = "extern struct FEP_BUFFER_TYPE {\n\tint num_samples;\n\tint base_ddress;\n\tint bank;\n\tint type;\n};";
 	public static final String[] dataTypeList = { "int8", "int16", "cpx16", "cpx32" };
 	public static final String[] banksList = { "0", "1", "2", "3" };
 	
