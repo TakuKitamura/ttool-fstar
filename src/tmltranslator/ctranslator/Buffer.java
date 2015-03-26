@@ -98,7 +98,8 @@ public class Buffer	{
 			}
 		}
 		else	{
-			return name + SP + type + CR + TAB2 + "baseAddress = " + baseAddress + CR + TAB2 + "endAddress = " + endAddress;
+			String s = type + SP + "BUFFER" + SP + name + CR;
+			return s;//name + SP + type + CR + TAB2 + "baseAddress = " + baseAddress + CR + TAB2 + "endAddress = " + endAddress;
 		}
 	}
 

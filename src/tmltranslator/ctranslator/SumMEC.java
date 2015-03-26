@@ -53,7 +53,7 @@ public class SumMEC extends OperationMEC	{
 
 	public SumMEC( String _ctxName, String ID0, String OD0, String BTC )	{
 		name = "Sum MEC";
-		exec_code = "/*firm instruction*/" + CR + TAB +
+		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
 			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->q);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
 			"fep_start(&" + _ctxName + ");" + CR;

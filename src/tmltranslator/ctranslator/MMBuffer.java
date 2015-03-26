@@ -81,5 +81,12 @@ public class MMBuffer extends BaseBuffer	{
 		s.append( TAB + name + ".baseAddress = " + baseAddress + SC + CR );
 		return s.toString();
 	}
-	
+
+	public String toString()	{
+
+		StringBuffer s = new StringBuffer( super.toString() );
+		s.append( TAB2 + "num_samples = /* USER TO DO */;" + CR );
+		s.append( TAB2 + "baseAddress = " + baseAddress + SC + CR );
+		return s.toString();
+	}	
 }	//End of class

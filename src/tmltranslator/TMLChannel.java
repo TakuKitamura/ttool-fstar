@@ -68,7 +68,10 @@ public class TMLChannel extends TMLCommunicationElement {
     protected ArrayList<TMLTask> originTasks, destinationTasks;
     protected ArrayList<TMLPort> originPorts, destinationPorts;
 
-
+		private String TAB = "\t";
+		private String TAB2 = "\t\t";
+		private String CR = "\n";
+		private String SP = " ";
     private int priority;
 
 
@@ -396,5 +399,33 @@ public class TMLChannel extends TMLCommunicationElement {
         }
         return false;
     }
+	
+	public String toString()	{
+
+		String s = TAB + "CHANNEL" + SP + name + CR;
+		if( isBasicChannel() )	{
+			s += TAB2 + "Origin task: " + originTask.getName() + CR;
+			s += TAB2 + "Origin port: " + originPort.getName() + CR;
+			s += TAB2 + "Destination task: " + destinationTask.getName() + CR;
+			s += TAB2 + "Destination port: " + destinationPort.getName() + CR;
+		}
+		if( isAForkChannel() )	{
+			s += TAB2 + "Origin task: " + originTasks.get(0).getName() + CR;
+			s += TAB2 + "Origin port: " + originPorts.get(0).getName() + CR;
+			for( int i = 0; i < destinationTasks.size(); i++ )	{
+				s += TAB2 + "Destination task: "  +destinationTasks.get(i).getName() + CR;
+				s += TAB2 + "Destination port: " + destinationPorts.get(i).getName() + CR;
+			}
+		}
+		if( isAJoinChannel() )	{
+			for( int i = 0; i < originTasks.size(); i++ )	{
+				s += TAB2 + "Origin task: " + originTasks.get(i).getName() + CR;
+				s += TAB2 + "Origin port: " + originPorts.get(i).getName() + CR;
+			}
+			s += TAB2 + "Destination task: " + destinationTasks.get(0).getName() + CR;
+			s += TAB2 + "Destination port: " + destinationPorts.get(0).getName() + CR;
+		}
+		return s;
+	}
 		
 }

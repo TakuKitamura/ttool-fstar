@@ -77,4 +77,10 @@ public class BaseBuffer extends Buffer	{
 		return s.toString();
 	}
 	
+	public String toString()	{
+
+		StringBuffer s = new StringBuffer( super.toString() );
+		s.append( TAB2 + "baseAddress = " + baseAddress + SC + CR );
+		return s.toString();
+	}
 }	//End of class

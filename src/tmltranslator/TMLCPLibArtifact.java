@@ -56,8 +56,6 @@ public class TMLCPLibArtifact extends TMLElement {
     public String portName;
     public String memoryName;
     public int priority;
-		private String endAddress;
-		private String startAddress;
 		private ArrayList<String> bufferParameters;
 
 
@@ -89,14 +87,6 @@ public class TMLCPLibArtifact extends TMLElement {
     public int getPriority()    {
         return priority;
     }
-
-		public String getStartAddress()	{
-			return startAddress;
-		}
-
-		public String getEndAddress()	{
-			return endAddress;
-		}
 
 		public ArrayList<String> getBufferParameters()	{
 			return bufferParameters;

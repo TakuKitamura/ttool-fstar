@@ -106,25 +106,18 @@ public class Signal	{
 	}*/
 
 	public String toString()	{
-		return getName();
+		
+		String s = "";
+		s += "SIGNAL " + name + CR + channel.toString();
+		return s;
 	}
 
 	public String getName()	{
-		if( isBasicSignal() )	{
-			return name;
-		}
-		else if( isAForkSignal() )	{
-			return name;
-		}
 		return name;
 	}
 
 	public void setName( String _name )	{
 		name = _name;
-	}
-
-	public String getSignalName()	{
-		return name;
 	}
 
 	public TMLChannel getTMLChannel()	{

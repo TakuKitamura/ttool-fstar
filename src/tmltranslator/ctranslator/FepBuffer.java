@@ -83,4 +83,14 @@ public class FepBuffer extends BaseBuffer	{
 		s.append( TAB + name + ".dataType = /* USER TO DO */;" + CR );
 		return s.toString();
 	}
+
+	public String toString()	{
+
+		StringBuffer s = new StringBuffer( super.toString() );
+		s.append( TAB2 + "length = /* USER TO DO */;" + CR );
+		s.append( TAB2 + "baseAddress = " + baseAddress + SC + CR );
+		s.append( TAB2 + "bank = /* USER TO DO */;" + CR );
+		s.append( TAB2 + "dataType = /* USER TO DO */;" + CR );
+		return s.toString();
+	}
 }	//End of class

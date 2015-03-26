@@ -54,7 +54,7 @@ public class CwmMEC extends OperationMEC	{
 	public CwmMEC( String _ctxName, String ID0, String OD0, String BTC )	{
 
 		name = "Component Wise Multiplication MEC";
-		exec_code = "/*firm instruction*/" + CR +
+		exec_code = TAB + "/*firm instruction*/" + CR +
 			"fep_set_l(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->l);" + CR +
 			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->q);" + CR +
 			"fep_set_bx(&" + _ctxName + ", sig[" + ID0 + "].roff + ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->b);" + CR +

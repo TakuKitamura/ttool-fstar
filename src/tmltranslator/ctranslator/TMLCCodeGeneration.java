@@ -130,13 +130,13 @@ public class TMLCCodeGeneration	{
 		makeSignalsList();	//make the signals associated to operations, based on the tasks of operations
 
 		for( Signal sig: signalsList )	{
-			TraceManager.addDev( "Signal: " + sig.getName() );
-			appendToDebugFile( sig.toString() + CR );
+			TraceManager.addDev( sig.toString() + CR );
+			appendToDebugFile( sig.toString() + CR2 );
 		}
 		makeOperationsList( mappedTasks );	//make the list of operations based on the tasks in the app model
 		addMappingParametersToBuffers();
 		for( Buffer buff: buffersList )	{
-			TraceManager.addDev( buff.toString() );
+			TraceManager.addDev( buff.toString() + CR );
 			appendToDebugFile( buff.toString() + CR );
 		}
 		makeDataTransfersList();
@@ -144,6 +144,7 @@ public class TMLCCodeGeneration	{
 		 		TraceManager.addDev( dt.toString() );
 				appendToDebugFile( dt.toString() );
 		}
+		appendToDebugFile( "\n" );
 		for( Operation op: operationsList )	{
 			TraceManager.addDev( op.toString() );
 			appendToDebugFile( op.toString() + CR );
@@ -459,25 +460,20 @@ public class TMLCCodeGeneration	{
 				Buffer inBuff = op.getInBuffer();
 				Buffer outBuff = op.getOutBuffer();
 				String portName = "buff_" + dt.getTMLCPLib().getArtifacts().get(0).getPortName();
-				String startAddress = dt.getTMLCPLib().getArtifacts().get(0).getStartAddress();
-				String endAddress = dt.getTMLCPLib().getArtifacts().get(0).getEndAddress();
-				TraceManager.addDev( "startAddress from artifact " + dt.getTMLCPLib().getArtifacts().get(0).getName() + " is = " + startAddress );
-				TraceManager.addDev( "endAddress from artifact " + dt.getTMLCPLib().getArtifacts().get(0).getName() + " is = " + endAddress );
 				if( inBuff != null )	{
 					//TraceManager.addDev( "Trying to match " + portName + " and " + inBuff.getName() );
 					if( inBuff.getName().equals( portName ) )	{
-						inBuff.setStartAddress( startAddress );
-						inBuff.setEndAddress( endAddress );
+						/*inBuff.setStartAddress( startAddress );
+						inBuff.setEndAddress( endAddress );*/
 						//TraceManager.addDev( "Operation " + op.getName() + " inBuffer = " + inBuff.getName() + " mapped port: " + portName );
 						dt.setOutBuffer( inBuff );	//Careful with which is IN and which is OUT!
 					}
 				}
 				if( outBuff != null )	{
-					//String portName = "buff_" + dt.getTMLCPLib().getArtifacts().get(0).getPortName();
 					//TraceManager.addDev( "Trying to match " + portName + " and " + outBuff.getName() );
 					if( outBuff.getName().equals( portName ) )	{
-						outBuff.setStartAddress( startAddress );
-						outBuff.setEndAddress( endAddress );
+						/*outBuff.setStartAddress( startAddress );
+						outBuff.setEndAddress( endAddress );*/
 						//TraceManager.addDev( "Operation " + op.getName() + " outBuffer = " + outBuff.getName() + " mapped port: " + portName );
 						dt.setInBuffer( inBuff );	//Careful with which is IN and which is OUT!
 					}
@@ -648,7 +644,7 @@ public class TMLCCodeGeneration	{
 	private String generateCodeForPrototypes()	{
 		String s = 	"/**** prototypes *****/" + CR +
 								"extern int " + applicationName + "_exec(void);" + CR +
-								"extern void " + applicationName + "_exec_init();" + CR +
+								"extern void buffers_init(void);" + CR +
 								"extern bool exit_rule(void);" + CR +
 								"extern void register_operations(void);" + CR +
 								"extern void register_dataTransfers(void);" + CR +
@@ -719,7 +715,7 @@ public class TMLCCodeGeneration	{
 			}
 		}
 		TraceManager.addDev( instructionsString.toString() );
-		//System.exit(0);
+		TraceManager.addDev( applicationName );
 		instructionsString.append( CR2 + "/**** Data Transfers Instructions ****/" + CR );
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
@@ -767,6 +763,7 @@ public class TMLCCodeGeneration	{
 
 	private String generateCodeForVariables()	{
 		StringBuffer s = new StringBuffer( "/**** variables *****/" + CR + "extern SIG_TYPE sig[];" + CR2 );
+		s.append( "/**** Buffers ****/" );
 		s.append( FepBuffer.DECLARATION + CR2 );
 		s.append( MapperBuffer.DECLARATION + CR2 );
 		//s.append( AdaifBuffer.DECLARATION + CR2 );
@@ -796,6 +793,7 @@ public class TMLCCodeGeneration	{
 							"register_operations();" + CR + TAB +
 							"register_dataTransfers();" + CR + TAB +
 							"register_fire_rules();" + CR + TAB +
+							"buffers_init();" + CR + TAB +
 							"signals_init();" + CR + TAB +
 							"init_operations();" + CR + TAB +
 							"init_CPs();" + CR2 + TAB +
@@ -1235,14 +1233,14 @@ public class TMLCCodeGeneration	{
 
 	private String initializeApplication()	{
 
-		String s = "void " + applicationName + "_exec_init()\t{" + CR;
+		StringBuffer s = new StringBuffer( "void buffers_init()\t{" + CR );
 
 		for( Buffer buff: buffersList )	{
-			s += buff.getInitCode() + CR;// + SP + "=" + SP + "{/* USER TO DO: */, /* USER TO DO*/, /* USER TO DO*/};" + CR;
+			s.append( buff.getInitCode() + CR );
 		}
 
-		s += "}" + CR2;
-		return s;
+		s.append( "}" + CR );
+		return s.toString();
 	}
 
 	private String initializeSignals()	{
@@ -1250,8 +1248,8 @@ public class TMLCCodeGeneration	{
 		StringBuffer s = new StringBuffer( "void signals_init()\t{" + CR );
 		for( Signal sig: signalsList )	{
 			s.append( TAB + "sig[" + sig.getName() + "].f = false;" + CR );
-			//s.append( TAB + "sig[" + sig.getName() + "].roff = /*USER TO DO*/;" + CR );
-			//s.append( TAB + "sig[" + sig.getName() + "].woff = /*USER TO DO*/;" + CR );
+			s.append( TAB + "sig[" + sig.getName() + "].roff = /*USER TO DO*/;" + CR );
+			s.append( TAB + "sig[" + sig.getName() + "].woff = /*USER TO DO*/;" + CR );
 			Buffer buff = getBufferFromSignal( sig );
 			if( buff != null )	{
 				s.append( TAB + "sig[" + sig.getName() + "].pBuff = (" + buff.getType() + "*)" + SP + buff.getName() + SC + CR2 );

@@ -89,5 +89,16 @@ public class MapperBuffer extends BaseBuffer	{
 		s.append( TAB + name + ".simmetrical_value = /* USER TO DO */;" + CR );
 		return s.toString();
 	}
+
+	public String toString()	{
+
+		StringBuffer s = new StringBuffer( super.toString() );
+		s.append( TAB2 + "length = /* USER TO DO */;" + CR );
+		s.append( TAB2 + "baseAddress = " + baseAddress + SC + CR );
+		s.append( TAB2 + "num_samples = /* USER TO DO */;" + CR );
+		s.append( TAB2 + "bits_per_symbol = /* USER TO DO */;" + CR );
+		s.append( TAB2 + "symmetrical_value = /* USER TO DO */;" + CR );
+		return s.toString();
+	}
 	
 }	//End of class
