@@ -815,7 +815,7 @@ public class TMLCCodeGeneration	{
 		
 		StringBuffer s = new StringBuffer();
 		for( TMLPort port: prexList )	{
-			s.append( TAB + "sig[ " + port.getName() +" ].f = true;" + CR );
+			s.append( TAB + "sig[ " + port.getName() +" ].f = false;" + CR );
 		}
 		return s.toString();
 	}
