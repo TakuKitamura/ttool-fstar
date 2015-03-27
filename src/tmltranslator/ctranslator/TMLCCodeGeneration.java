@@ -134,7 +134,7 @@ public class TMLCCodeGeneration	{
 			appendToDebugFile( sig.toString() + CR2 );
 		}
 		makeOperationsList( mappedTasks );	//make the list of operations based on the tasks in the app model
-		addMappingParametersToBuffers();
+		setMappingParametersToBuffers();
 		for( Buffer buff: buffersList )	{
 			TraceManager.addDev( buff.toString() + CR );
 			appendToDebugFile( buff.toString() + CR );
@@ -415,14 +415,14 @@ public class TMLCCodeGeneration	{
 		return null;
 	}
 
-	private void addMappingParametersToBuffers()	{
+	private void setMappingParametersToBuffers()	{
 		
 		for( TMLCPLib tmlcplib: mappedCPLibs )	{
 			ArrayList<String> bufferParameters = tmlcplib.getArtifacts().get(0).getBufferParameters();
 			String portName = tmlcplib.getArtifacts().get(0).getPortName();
 			for( Buffer buff: buffersList )	{
 				if( buff.getName().equals( "buff_" + portName ) )	{
-					buff.addMappingParameters( bufferParameters );
+					buff.setMappingParameters( bufferParameters );
 				}
 			}
 			
@@ -564,9 +564,9 @@ public class TMLCCodeGeneration	{
  *********************************************************************************/
 
 	private void generateMainFile()	{
-		mainFileString.append( "#include \"" + applicationName + "\".h" + CR2 );
-		mainFileString.append( "int main(void)\t{" + CR +
-								TAB + "int status=0;" + CR +
+		mainFileString.append( "#include \"" + applicationName + ".h\"" + CR2 );
+		mainFileString.append( "int main(void)\t{" + CR + "/* USER TO DO */" +
+								/*TAB + "int status = 0;" + CR +
 								TAB + "char *src_out_dat;" + CR +
 								TAB + "char *dma1_out_dat;" + CR +
 								TAB + "int g_r_size = 10240;" + CR +
@@ -582,10 +582,10 @@ public class TMLCCodeGeneration	{
 								TAB2 + "fread(src_out_dat, 1, g_r_size*4, source);" + CR +
 								TAB2 + "fclose(source);" + CR +
  								TAB + "} else printf(\"ERROR input file does not exist!\\n\");" + CR +
-								TAB + applicationName + "_init( (char*)src_out_dat, (char*)dma1_out_dat, g_r_size, g_Ns , g_Fi, g_Li );" + CR +
+								TAB + applicationName + "_init( (char*)src_out_dat, (char*)dma1_out_dat, g_r_size, g_Ns , g_Fi, g_Li );" + CR +*/
 								TAB + "status = " + applicationName + "_exec();" + CR +
-								TAB + "printf(\"score %d \", *(uint32_t*)dma1_out_dat );" + CR +
-								TAB + "free(src_out_dat);" + CR +
+								/*TAB + "printf(\"score %d \", *(uint32_t*)dma1_out_dat );" + CR +
+								TAB + "free(src_out_dat);" + CR +*/
 								"}" );
 	}
 
@@ -594,7 +594,7 @@ public class TMLCCodeGeneration	{
 		getPrexAndPostexChannels();
 		headerString.append( generateCodeForLibraries() );
 		headerString.append( generateCodeForPrototypes() );
-		headerString.append( variablesInMainFile() );
+		//headerString.append( variablesInMainFile() );
 		headerString.append( buffersAndInstructionsDeclaration( true ) );
 		headerString.append( generateCodeForSignals() );
 		headerString.append( generateCodeForVariables() );
@@ -664,14 +664,15 @@ public class TMLCCodeGeneration	{
 								"extern void register_operations(void);" + CR +
 								"extern void register_dataTransfers(void);" + CR +
 								"extern void register_fire_rules(void);" + CR +
-								"extern void init_signals();" + CR +
+								"extern void init_signals(void);" + CR +
 								"extern void init_operations(void);" + CR +
 								"extern void init_CPs(void);" + CR +
-								"extern void cleanup_operations_context(void);" + CR2;
+								"extern void cleanup_operations_context(void);" + CR +
+								"extern void cleanup_CPs_context(void);" + CR2;
 		return s;
 	}
 
-	private String variablesInMainFile()	{
+	/*private String variablesInMainFile()	{
 		String s = 	"extern int g_r_size;" + CR +
 								"extern int g_Ns;" + CR +
 								"extern int g_Fi" + CR +
@@ -679,7 +680,7 @@ public class TMLCCodeGeneration	{
 								"extern char *src_out_dat;" + CR +
 								"extern char *dma1_out_dat;" + CR2;
 		return s;
-	}
+	}*/
 
 	private String buffersAndInstructionsDeclaration( boolean declaration )	{
 
@@ -729,8 +730,6 @@ public class TMLCCodeGeneration	{
 				}
 			}
 		}
-		TraceManager.addDev( instructionsString.toString() );
-		TraceManager.addDev( applicationName );
 		instructionsString.append( CR2 + "/**** Data Transfers Instructions ****/" + CR );
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
@@ -772,13 +771,16 @@ public class TMLCCodeGeneration	{
 		for( Operation op: operationsList )	{
 			s.append( op.getName() + ",\n" );
 		}
+		for( DataTransfer dt: dataTransfersList )	{
+			s.append( dt.getName() + ",\n" );
+		}
 		s.append( "NUM_OPS };" + CR2 );
 		return s.toString();
 	}
 
 	private String generateCodeForVariables()	{
 		StringBuffer s = new StringBuffer( "/**** variables *****/" + CR + "extern SIG_TYPE sig[];" + CR2 );
-		s.append( "/**** Buffers ****/" );
+		s.append( "/**** Buffers ****/" + CR );
 		s.append( FepBuffer.DECLARATION + CR2 );
 		s.append( MapperBuffer.DECLARATION + CR2 );
 		//s.append( AdaifBuffer.DECLARATION + CR2 );
@@ -816,7 +818,9 @@ public class TMLCCodeGeneration	{
 							generateCodeToInitPrexOperations() + CR + TAB +
 							"/********* OPERATIONS scheduling ***************/" + CR + TAB +
 							scheduler.getCode() + CR + TAB +
-							"cleanup_operations_context();" + CR + "}" + CR2 );
+							"cleanup_operations_context();" + CR + TAB +
+							"cleanup_CPs_context();" + CR + TAB +
+							"return status;" + "}" + CR2 );
 		generateCodeForOperations();
 		generateCodeForCommunicationPatterns();
 		generateCodeToRegisterOperations();
@@ -1088,13 +1092,13 @@ public class TMLCCodeGeneration	{
 		String init_code = "";
 		String XOD = "";
 		initFileString.append( "#include \"" + applicationName + ".h\"" + CR2 );
-		initFileString.append( "/**** variables ****/" + CR2 +
+		initFileString.append( "/**** variables ****/" + CR2 /*+
 									"int g_r_size = 10240;" + CR +
 									"int g_Ns = 1024;" + CR +
 									"int g_Fi = 593;" + CR +
 									"int g_Li = 116;" + CR +
 									"char *src_out_dat;" + CR +
-									"char *dma1_out_dat;" + CR2 );		
+									"char *dma1_out_dat;" + CR2*/ );		
 		initFileString.append( buffersAndInstructionsDeclaration( false ) + CR2 );
 		generateCodeToInitializeBuffers();
 		generateCodeToInitializeSignals();

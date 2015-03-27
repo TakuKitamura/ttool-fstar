@@ -52,18 +52,10 @@ import myutil.*;
 
 public class BaseBuffer extends Buffer	{
 
+	public static final int baseAddressIndex = 1;
 	protected String base_address;
 	protected int base_address_value;
 	private String Context = "embb_mapper_context";
-
-	public String getContext()	{
-		return Context;
-	}
-
-	@Override public String getCode()	{
-		code = "struct" + SP + name + TAB + "{" + CR + base_address + CR + "}" + SC;
-		return code;
-	}
 
 	@Override public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
@@ -75,7 +67,7 @@ public class BaseBuffer extends Buffer	{
 
 		StringBuffer s = new StringBuffer( super.toString() );
 		if( bufferParameters != null )	{
-			s.append( TAB2 + "base_address = " + bufferParameters.get(1) + SC + CR );
+			s.append( TAB2 + "base_address = " + bufferParameters.get( baseAddressIndex ) + SC + CR );
 		}
 		else	{
 			s.append( TAB2 + "base_address = /* USER TO DO */;" + CR );

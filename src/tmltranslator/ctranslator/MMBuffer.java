@@ -53,10 +53,19 @@ import tmltranslator.*;
 
 public class MMBuffer extends BaseBuffer	{
 
-	public static final String DECLARATION = "extern struct MM_BUFFER_TYPE {\n\tint num_samples;\n\tint base_address;\n};";
+	//public static final String DECLARATION = "extern struct MM_BUFFER_TYPE {\n\tint num_samples;\n\tint* base_address;\n};";
+	public static final int numSamplesIndex = 1;
+	public static final int baseAddressIndex = 2;
 
-	protected int num_samples;
-	protected String num_samples_value;
+	protected static String numSamplesValue = USER_TO_DO;
+	protected static final String numSamplesType = "uint8_t";
+	
+	protected static String baseAddressValue = USER_TO_DO;
+	protected static final String baseAddressType = "uint32_t*";
+	
+	public static final String DECLARATION = "extern struct MM_BUFFER_TYPE {" + CR + TAB +
+																						numSamplesType + SP + "num_samples" + SC + CR + TAB +
+																						baseAddressType + SP + "base_address" + SC + CR + "};";
 	
 	private String Context = "embb_mainmemory_context";
 
@@ -66,33 +75,31 @@ public class MMBuffer extends BaseBuffer	{
 		task = _task;
 	}
 
-	public String getContext()	{
-		return Context;
-	}
-
-	@Override public String getCode()	{
-		code = "struct" + SP + name + TAB + "{" + CR + num_samples + CR + base_address + CR + "}" + SC;
-		return code;
-	}
-
 	@Override public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
-		s.append( TAB + name + ".num_samples = /* USER TO DO */;" + CR );
-		s.append( TAB + name + ".base_address = /* USER TO DO */;" + CR );
+		if( bufferParameters != null )	{
+			retrieveBufferParameters();
+		}
+		s.append( TAB + name + ".num_samples = " + numSamplesValue + SC + CR );
+		s.append( TAB + name + ".base_address = " + baseAddressValue + SC + CR );
 		return s.toString();
 	}
 
 	public String toString()	{
 
 		StringBuffer s = new StringBuffer( super.toString() );
-		if( bufferParameters != null )	{
-			s.append( TAB2 + "num_samples = " + bufferParameters.get(1) + SC + CR );
-			s.append( TAB2 + "base_address = " + bufferParameters.get(2) + SC + CR );
-		}
-		else	{
-			s.append( TAB2 + "num_samples = /* USER TO DO */" + SC + CR );
-			s.append( TAB2 + "base_address = /* USER TO DO */" + SC + CR );
-		}
+		s.append( TAB2 + "num_samples = " + numSamplesValue + SC + CR );
+		s.append( TAB2 + "base_address = " + baseAddressValue + SC + CR );
 		return s.toString();
 	}	
+
+	private void retrieveBufferParameters()	{
+
+		if( bufferParameters.get( numSamplesIndex ).length() > 0 )	{
+			numSamplesValue = bufferParameters.get( numSamplesIndex );
+		}
+		if( bufferParameters.get( baseAddressIndex ).length() > 0 )	{
+			baseAddressValue = bufferParameters.get( baseAddressIndex );
+		}
+	}
 }	//End of class

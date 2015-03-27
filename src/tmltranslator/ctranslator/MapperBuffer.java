@@ -53,15 +53,35 @@ import tmltranslator.*;
 
 public class MapperBuffer extends BaseBuffer	{
 
-	public static final String DECLARATION = "extern struct MAPPER_BUFFER_TYPE {\n\tint num_samples;\n\tint base_address;\n\tint num_bits_per_symbol;\n\tint symbol_base_address;\n\tbool symmetrical_value;\n};";
+	//public static final String DECLARATION = "extern struct MAPPER_BUFFER_TYPE {\n\tint num_samples;\n\tint* base_address;\n\tint num_bits_per_symbol;\n\tint* symbol_base_address;\n\tbool symmetrical_value;\n};";
 	public static final String[] symmetricalValues = { "OFF" , "ON" };
+	public static final int numSamplesIndex = 1;
+	public static final int baseAddressIndex = 2;
+	public static final int bitsPerSymbolIndex = 3;
+	public static final int symbolAddressIndex = 4;
+	public static final int symmetricalIndex = 5;
 	
-	protected String num_samples; 
-	protected int num_samples_value;
-	protected int bits_per_symbol_value;
-	protected String bits_per_symbol;
-	protected String symmetrical;
-	protected int symmetrical_value;
+	protected static String numSamplesValue = USER_TO_DO;
+	protected static final String numSamplesType = "uint8_t";
+	
+	protected static String baseAddressValue = USER_TO_DO;
+	protected static final String baseAddressType = "uint32_t*";
+	
+	protected static String bitsPerSymbolValue = USER_TO_DO;
+	protected static final String bitsPerSymbolType = "uint8_t";
+	
+	protected static String symbolAddressValue = USER_TO_DO;
+	protected static final String symbolAddressType = "uint16_t*";
+
+	protected static String symmetricalValue = USER_TO_DO;
+	protected static final String symmetricalValueType = "bool";
+
+	public static final String DECLARATION = "extern struct MAPPER_BUFFER_TYPE {" + CR + TAB +
+																						numSamplesType + SP + "num_samples" + SC + CR + TAB +
+																						baseAddressType + SP + "base_address" + SC + CR + TAB +
+																						bitsPerSymbolType + SP + "num_bits_symbol" + SC + CR + TAB +
+																						symbolAddressType + SP + "symbol_base_address" + SC + CR + TAB +
+																						symmetricalValueType + SP + "symmetrical_value" + SC + CR + "};";
 	
 	private String Context = "embb_mapper_context";
 	
@@ -71,43 +91,46 @@ public class MapperBuffer extends BaseBuffer	{
 		task = _task;
 	}
 
-	public String getContext()	{
-		return Context;
-	}
-
-	@Override public String getCode()	{
-		code = "struct" + SP + name + TAB + "{" + CR + num_samples + CR + symmetrical + CR + bits_per_symbol + CR + base_address + CR + "}" + SC;
-		return code;
-	}
-
 	@Override public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
-		s.append( TAB + name + ".num_samples = /* USER TO DO */;" + CR );
-		s.append( TAB + name + ".base_ddress = /* USER TO DO */;" + CR );
-		s.append( TAB + name + ".num_samples = /* USER TO DO */;" + CR );
-		s.append( TAB + name + ".bits_per_symbol = /* USER TO DO */;" + CR );
-		s.append( TAB + name + ".simmetrical_value = /* USER TO DO */;" + CR );
+		if( bufferParameters != null )	{
+			retrieveBufferParameters();
+		}
+		s.append( TAB + name + ".num_samples = " + numSamplesValue + SC + CR );
+		s.append( TAB + name + ".base_address = " + baseAddressValue + SC + CR );
+		s.append( TAB + name + ".num_bits_per_symbol = " + bitsPerSymbolValue + SC + CR );
+		s.append( TAB + name + ".symbol_base_address = " + symbolAddressValue + SC + CR );
+		s.append( TAB + name + ".symmetrical_value = " + symmetricalValue + SC + CR );
 		return s.toString();
 	}
 
 	public String toString()	{
 
 		StringBuffer s = new StringBuffer( super.toString() );
-		if( bufferParameters != null )	{
-			s.append( TAB2 + "num_samples = " + bufferParameters.get(1) + SC + CR );
-			s.append( TAB2 + "bases_address = " + bufferParameters.get(2) + SC + CR );
-			s.append( TAB2 + "num_samples = "+ bufferParameters.get(3) + SC + CR );
-			s.append( TAB2 + "bits_per_symbol = " + bufferParameters.get(4) + SC + CR );
-			s.append( TAB2 + "symmetrical_value = " + bufferParameters.get(5) + SC + CR );
-		}
-		else	{
-			s.append( TAB2 + "num_samples = /* USER TO DO */;" + CR );
-			s.append( TAB2 + "base_address = /* USER TO DO */;" + CR );
-			s.append( TAB2 + "num_samples = /* USER TO DO */;" + CR );
-			s.append( TAB2 + "bits_per_symbol = /* USER TO DO */;" + CR );
-			s.append( TAB2 + "symmetrical_value = /* USER TO DO */;" + CR );
-		}
+		s.append( TAB2 + "num_samples = " + numSamplesValue + SC + CR );
+		s.append( TAB2 + "base_address = " + baseAddressValue + SC + CR );
+		s.append( TAB2 + "num_bits_per_symbol = " + bitsPerSymbolValue + SC + CR );
+		s.append( TAB2 + "symbol_base_address = " + bitsPerSymbolValue + SC + CR );
+		s.append( TAB2 + "symmetrical_value = " + symmetricalValue + SC + CR );
 		return s.toString();
 	}
 	
+	private void retrieveBufferParameters()	{
+
+		if( bufferParameters.get( numSamplesIndex ).length() > 0 )	{
+			numSamplesValue = bufferParameters.get( numSamplesIndex );
+		}
+		if( bufferParameters.get( baseAddressIndex ).length() > 0 )	{
+			baseAddressValue = bufferParameters.get( baseAddressIndex );
+		}
+		if( bufferParameters.get( bitsPerSymbolIndex ).length() > 0 )	{
+			bitsPerSymbolValue = bufferParameters.get( bitsPerSymbolIndex );
+		}
+		if( bufferParameters.get( symbolAddressIndex ).length() > 0 )	{
+			symbolAddressValue = bufferParameters.get( symbolAddressIndex );
+		}
+		if( bufferParameters.get( symmetricalIndex ).length() > 0 )	{
+		symmetricalValue = String.valueOf( ( new Vector<String>( Arrays.asList( symmetricalValues ))).indexOf( bufferParameters.get( symmetricalIndex )));
+		}
+	}
 }	//End of class

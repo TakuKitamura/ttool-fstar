@@ -195,7 +195,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         dialog.show(); // blocked until dialog has been closed
         mappedMemory = dialog.getMappedMemory();
         bufferParameters = dialog.getBufferParameters();
-				bufferType = bufferParameters.get(0);
+				bufferType = bufferParameters.get( Buffer.bufferTypeIndex );
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -262,49 +262,44 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info value=\"" + value + "\" portName=\"" + portName + "\" referenceCommunicationName=\"");
         sb.append(referenceCommunicationName);
-        /*sb.append("\" priority=\"");
-          sb.append(priority);*/
         sb.append("\" typeName=\"" + typeName);
         sb.append("\" mappedMemory=\"" + mappedMemory );
-				TraceManager.addDev( "After mapped memory in translateExtraParam" );
 				if( !bufferType.equals( "" ) && !bufferType.equals( "noBuffer" ) )	{
         	sb.append("\" bufferType=\"" + bufferType );
 					switch( Integer.parseInt( bufferType ) )	{
 						case Buffer.FepBuffer:
-    	    		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
-      	  		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
-        			sb.append("\" bank=\"" + bufferParameters.get(3) );
-        			sb.append("\" dataType=\"" + bufferParameters.get(4) );
+    	    		sb.append("\" baseAddress=\"" + bufferParameters.get( FepBuffer.baseAddressIndex ) );
+      	  		sb.append("\" numSamples=\"" + bufferParameters.get( FepBuffer.numSamplesIndex ) );
+        			sb.append("\" bank=\"" + bufferParameters.get( FepBuffer.bankIndex ) );
+        			sb.append("\" dataType=\"" + bufferParameters.get( FepBuffer.dataTypeIndex ) );
 							break;
 						case Buffer.InterleaverBuffer:	
-  	      		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
-    	    		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
-							TraceManager.addDev( "I am writing the parameters to XML" );
+  	      		sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
+    	    		sb.append("\" numSamples=\"" + bufferParameters.get( MMBuffer.numSamplesIndex ) );
 						break;
 						case Buffer.AdaifBuffer:	
-        			sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
-        			sb.append("\" numSamples=\"" + bufferParameters.get(2) );
+        			sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
+        			sb.append("\" numSamples=\"" + bufferParameters.get( MMBuffer.numSamplesIndex ) );
 							break;
 						case Buffer.MapperBuffer:	
-    	    		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
-      	  		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
-        			sb.append("\" bitsPerSymbol=\"" + bufferParameters.get(3) );
-        			sb.append("\" symbolBaseAddress=\"" + bufferParameters.get(4) );
-        			sb.append("\" symmetricalValue=\"" + bufferParameters.get(5) );
+    	    		sb.append("\" baseAddress=\"" + bufferParameters.get( MapperBuffer.baseAddressIndex ) );
+      	  		sb.append("\" numSamples=\"" + bufferParameters.get( MapperBuffer.numSamplesIndex ) );
+        			sb.append("\" bitsPerSymbol=\"" + bufferParameters.get( MapperBuffer.bitsPerSymbolIndex ) );
+        			sb.append("\" symbolBaseAddress=\"" + bufferParameters.get( MapperBuffer.symbolAddressIndex ) );
+        			sb.append("\" symmetricalValue=\"" + bufferParameters.get( MapperBuffer.symmetricalIndex ) );
 							break;
 						case Buffer.MainMemoryBuffer:	
-  	      		sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
-    	    		sb.append("\" numSamples=\"" + bufferParameters.get(2) );
+  	      		sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
+    	    		sb.append("\" numSamples=\"" + bufferParameters.get( MMBuffer.numSamplesIndex ) );
 							break;
-						default:	//the main memory buffer 
-        			sb.append("\" baseAddress=\"" + bufferParameters.get(1) );
-        			sb.append("\" numSamples=\"" + bufferParameters.get(2) );
-	        		sb.append("\" bank=\"" + bufferParameters.get(3) );
-  	      		sb.append("\" dataType=\"" + bufferParameters.get(4) );
+						default:	//the fep buffer 
+        			sb.append("\" baseAddress=\"" + bufferParameters.get( FepBuffer.baseAddressIndex ) );
+        			sb.append("\" numSamples=\"" + bufferParameters.get( FepBuffer.numSamplesIndex ) );
+	        		sb.append("\" bank=\"" + bufferParameters.get( FepBuffer.bankIndex ) );
+  	      		sb.append("\" dataType=\"" + bufferParameters.get( FepBuffer.dataTypeIndex ) );
 							break;
 					}
 				}
-        //sb.append("\" endAddress=\"" + endAddress );
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -338,7 +333,6 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                                 stype = elt.getAttribute("typeName");
                                 mappedMemory = elt.getAttribute("mappedMemory");
 																if( (elt.getAttribute("bufferType") != null) &&  (elt.getAttribute("bufferType").length() > 0) )	{
-																TraceManager.addDev( "After mapped memory in loadExtraParam" );
                                 bufferType = elt.getAttribute("bufferType");
 																bufferParameters.add( bufferType );
 																switch( Integer.parseInt( bufferType ) )	{

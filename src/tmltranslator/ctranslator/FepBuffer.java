@@ -54,20 +54,32 @@ import tmltranslator.*;
 public class FepBuffer extends BaseBuffer	{
 
 
-	public static final String DECLARATION = "extern struct FEP_BUFFER_TYPE {\n\tint num_samples;\n\tint base_ddress;\n\tint bank;\n\tint type;\n};";
 	public static final String[] dataTypeList = { "int8", "int16", "cpx16", "cpx32" };
 	public static final String[] banksList = { "0", "1", "2", "3" };
+	public static final int numSamplesIndex = 1;
+	public static final int baseAddressIndex = 2;
+	public static final int bankIndex = 3;
+	public static final int dataTypeIndex = 4;
 	
-	protected String length = "int" + SP + "bl" + SC;
-	protected String baseAddress = "int" + SP + "b" + SC;
-	protected String bank = "int" + SP + "q" + SC;
-	protected String dataType = "int" + SP + "t" + SC;
+	protected String numSamplesValue = USER_TO_DO;
+	protected static final String numSamplesType = "uint8_t";
+	
+	protected static String baseAddressValue = USER_TO_DO;
+	protected static final String baseAddressType = "uint32_t*";
+	
+	protected static String bankValue = USER_TO_DO;
+	protected static final String bankType = "uint8_t";
+	
+	protected static String dataTypeValue = USER_TO_DO;
+	protected static final String dataTypeType = "uint8_t";
+
+	public static final String DECLARATION = "extern struct FEP_BUFFER_TYPE {" + CR + TAB +
+																						numSamplesType + SP + "num_samples" + SC + CR + TAB +
+																						baseAddressType + SP + "base_address" + SC + CR + TAB +
+																						bankType + SP + "bank" + SC + CR + TAB +
+																						dataTypeType + SP + "type" + SC + CR + "};";
 	
 	private String Context = "embb_fep_context";
-
-	public String getContext()	{
-		return Context;
-	}
 
 	public FepBuffer( String _name, TMLTask _task )	{
 		type = "FEP_BUFFER_TYPE";
@@ -79,27 +91,38 @@ public class FepBuffer extends BaseBuffer	{
 
 		StringBuffer s = new StringBuffer();
 		if( bufferParameters != null )	{
-			s.append( TAB + name + ".num_samples = " + bufferParameters.get(1) + SC + CR );
-			s.append( TAB + name + ".base_address = " + bufferParameters.get(2) + SC + CR );
-			s.append( TAB + name + ".bank = " + bufferParameters.get(3) + SC + CR );
-			s.append( TAB + name + ".data_type = " + bufferParameters.get(4) + SC + CR );		
+			retrieveBufferParameters();
 		}
-		else	{
-			s.append( TAB + name + ".num_samples = /* USER TO DO */;" + CR );
-			s.append( TAB + name + ".base_address = /* USER TO DO */;" + CR );
-			s.append( TAB + name + ".bank = /* USER TO DO */;" + CR );
-			s.append( TAB + name + ".data_type = /* USER TO DO */;" + CR );
-		}
+		s.append( TAB + name + ".num_samples = " + numSamplesValue + SC + CR );
+		s.append( TAB + name + ".base_address = " + baseAddressValue + SC + CR );
+		s.append( TAB + name + ".bank = " + bankValue + SC + CR );
+		s.append( TAB + name + ".data_type = " + dataTypeValue + SC + CR );
 		return s.toString();
 	}
 
 	public String toString()	{
 
 		StringBuffer s = new StringBuffer( super.toString() );
-		s.append( TAB2 + "num_samples = /* USER TO DO */;" + CR );
-		s.append( TAB2 + "base_address = /* USER TO DO */;" + CR );
-		s.append( TAB2 + "bank = /* USER TO DO */;" + CR );
-		s.append( TAB2 + "data_type = /* USER TO DO */;" + CR );
+		s.append( TAB2 + "num_samples = " + numSamplesValue + SC + CR );
+		s.append( TAB2 + "base_address = " + baseAddressValue + SC + CR );
+		s.append( TAB2 + "bank = " + bankValue + SC + CR );
+		s.append( TAB2 + "data_type = " + dataTypeValue + SC + CR );
 		return s.toString();
+	}
+
+	private void retrieveBufferParameters()	{
+
+		if( bufferParameters.get( numSamplesIndex ).length() > 0 )	{
+			numSamplesValue = bufferParameters.get( numSamplesIndex );
+		}
+		if( bufferParameters.get( baseAddressIndex ).length() > 0 )	{
+			baseAddressValue = bufferParameters.get( baseAddressIndex );
+		}
+		if( bufferParameters.get( bankIndex ).length() > 0 )	{
+			bankValue = bufferParameters.get( bankIndex );
+		}
+		if( bufferParameters.get( dataTypeIndex ).length() > 0 )	{
+			dataTypeValue = String.valueOf(( new Vector<String>( Arrays.asList( dataTypeList ))).indexOf( bufferParameters.get( dataTypeIndex )));
+		}
 	}
 }	//End of class

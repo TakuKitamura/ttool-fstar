@@ -213,57 +213,57 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			loadBufferParameters = false;
 		}
 		else	{
-			bufferType = Integer.parseInt( bufferParameters.get(0) );
+			bufferType = Integer.parseInt( bufferParameters.get( Buffer.bufferTypeIndex ) );
 			loadBufferParameters = true;
 		}
 
 		switch( bufferType )	{
 			case Buffer.FepBuffer:	
 				if( loadBufferParameters )	{
-					baseAddress = bufferParameters.get(1);
-					numSamples = bufferParameters.get(2);
-					bank = bufferParameters.get(3);
-					dataType = bufferParameters.get(4);
+					baseAddress = bufferParameters.get( FepBuffer.baseAddressIndex );
+					numSamples = bufferParameters.get( FepBuffer.numSamplesIndex );
+					bank = bufferParameters.get( FepBuffer.bankIndex );
+					dataType = bufferParameters.get( FepBuffer.dataTypeIndex );
 				}
 				makeFepBufferPanel( c1, c2 );
 				break;
 			case Buffer.InterleaverBuffer:	
 				if( loadBufferParameters )	{
-					baseAddress = bufferParameters.get(1);
-					numSamples = bufferParameters.get(2);
+					baseAddress = bufferParameters.get( MMBuffer.baseAddressIndex );
+					numSamples = bufferParameters.get( MMBuffer.numSamplesIndex );
 				}
 				makeInterleaverBufferPanel( c1, c2 );
 				break;
 			case Buffer.AdaifBuffer:	
 				if( loadBufferParameters )	{
-					baseAddress = bufferParameters.get(1);
-					numSamples = bufferParameters.get(2);
+					baseAddress = bufferParameters.get( MMBuffer.baseAddressIndex );
+					numSamples = bufferParameters.get( MMBuffer.numSamplesIndex );
 				}
 				makeAdaifBufferPanel( c1, c2 );
 				break;
 			case Buffer.MapperBuffer:	
 				if( loadBufferParameters )	{
-					baseAddress = bufferParameters.get(1);
-					numSamples = bufferParameters.get(2);
-					bitsPerSymbol = bufferParameters.get(3);
-					symbolBaseAddress = bufferParameters.get(4);
-					symmetricalValue = bufferParameters.get(5);
+					baseAddress = bufferParameters.get( MapperBuffer.baseAddressIndex );
+					numSamples = bufferParameters.get( MapperBuffer.numSamplesIndex );
+					bitsPerSymbol = bufferParameters.get( MapperBuffer.bitsPerSymbolIndex );
+					symbolBaseAddress = bufferParameters.get( MapperBuffer.symbolAddressIndex );
+					symmetricalValue = bufferParameters.get( MapperBuffer.symmetricalIndex );
 				}
 				makeMapperBufferPanel( c1, c2 );
 				break;
 			case Buffer.MainMemoryBuffer:	
 				if( loadBufferParameters )	{
-					baseAddress = bufferParameters.get(1);
-					numSamples = bufferParameters.get(2);
+					baseAddress = bufferParameters.get( MMBuffer.baseAddressIndex );
+					numSamples = bufferParameters.get( MMBuffer.numSamplesIndex );
 				}
 				makeMainMemoryBufferPanel( c1, c2 );
 				break;
-			default:	//the main memory buffer 
+			default:	//the fep buffer 
 				if( loadBufferParameters )	{
-					baseAddress = bufferParameters.get(1);
-					numSamples = bufferParameters.get(2);
-					bank = bufferParameters.get(3);
-					dataType = bufferParameters.get(4);
+					baseAddress = bufferParameters.get( FepBuffer.baseAddressIndex );
+					numSamples = bufferParameters.get( FepBuffer.numSamplesIndex );
+					bank = bufferParameters.get( FepBuffer.bankIndex );
+					dataType = bufferParameters.get( FepBuffer.dataTypeIndex );
 				}
 				makeFepBufferPanel( c1, c2 );
 				break;
@@ -663,13 +663,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		if( !( numSamples.length() > 0 ) )	{
 			return true;
 		}
-		if( Integer.parseInt( numSamples ) == 0 )	{
-			JOptionPane.showMessageDialog( frame, "The number of samples must be greater than 0", "Badly formatted parameter",
+		if( !numSamples.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of samples must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
-		if( !numSamples.matches( regex ) )	{
-			JOptionPane.showMessageDialog( frame, "The number of samples must be expressed as a natural", "Badly formatted parameter",
+		if( Integer.parseInt( numSamples ) == 0 )	{
+			JOptionPane.showMessageDialog( frame, "The number of samples must be greater than 0", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}

@@ -60,13 +60,15 @@ public class Buffer	{
 	public static final int InterleaverBuffer = 3;
 	public static final int MainMemoryBuffer = 4;
 
-	public String CR = "\n";
-	public String TAB = "\t";
-	public String TAB2 = "\t\t";
-	public String SP = " ";
-	public String SC = ";";
-	public String POINTER = "*";
+	public static final int bufferTypeIndex = 0;
 
+	public static String CR = "\n";
+	public static String TAB = "\t";
+	public static String TAB2 = "\t\t";
+	public static String SP = " ";
+	public static String SC = ";";
+
+	protected static String USER_TO_DO = "/*USER TO DO */";
 	protected String code = "VOID";
 	protected String name = "";
 	protected String type = "";
@@ -111,10 +113,6 @@ public class Buffer	{
 		return type;
 	}
 
-	public String getCode()	{
-		return code;
-	}
-
 	public TMLTask getTask()	{
 		return task;
 	}
@@ -145,7 +143,7 @@ public class Buffer	{
 		return Context;
 	}
 
-	public void addMappingParameters( ArrayList<String> params )	{
+	public void setMappingParameters( ArrayList<String> params )	{
 		bufferParameters = params;
 	}
 }	//End of class
