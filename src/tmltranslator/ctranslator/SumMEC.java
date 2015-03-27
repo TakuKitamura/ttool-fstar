@@ -54,7 +54,7 @@ public class SumMEC extends OperationMEC	{
 	public SumMEC( String _ctxName, String ID0, String OD0, String BTC )	{
 		name = "Sum MEC";
 		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
-			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->q);" + CR + TAB +
+			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->bank);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
 			"fep_start(&" + _ctxName + ");" + CR;
 		
@@ -79,8 +79,8 @@ public class SumMEC extends OperationMEC	{
 			"fep_set_vix(&" + _ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
 			"// Operation configuration" + CR + TAB +
 			"fep_set_sma(&" + _ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_qs(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->q);" + CR + TAB +
-			"fep_set_bs(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->b);" + CR + TAB +
+			"fep_set_qs(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->bank);" + CR + TAB +
+			"fep_set_bs(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address);" + CR + TAB +
 			"}" + CR;
 		cleanup_code = "fep_ctx_cleanup(&" + _ctxName + ");";
 	}
