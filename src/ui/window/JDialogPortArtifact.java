@@ -69,8 +69,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
   private TMLArchiPortArtifact artifact;
   private String mappedMemory = "VOID"; 
 	protected JComboBox referenceCommunicationName, priority, memoryCB;
-	protected JTextField baseAddressTF, numSamplesTF, symbolBaseAddressTF, bitsPerSymbolTF;
-	protected String baseAddress, mappedPort, sampleLength, numSamples, symbolBaseAddress, bitsPerSymbol;
+	protected JTextField baseAddressTF, numSamplesTF, bitOffsetFirstSymbolTF, bitsPerSymbolTF;
+	protected String baseAddress, mappedPort, sampleLength, numSamples, bitOffsetFirstSymbol, bitsPerSymbol;
 	protected String bank, dataType, symmetricalValue;
 	protected JComboBox dataTypeCB, bankCB, symmetricalValueCB;
 	
@@ -251,7 +251,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 					baseAddress = bufferParameters.get( MapperBuffer.baseAddressIndex );
 					numSamples = bufferParameters.get( MapperBuffer.numSamplesIndex );
 					bitsPerSymbol = bufferParameters.get( MapperBuffer.bitsPerSymbolIndex );
-					symbolBaseAddress = bufferParameters.get( MapperBuffer.symbolAddressIndex );
+					bitOffsetFirstSymbol = bufferParameters.get( MapperBuffer.bitOffsetFirstSymbolIndex );
 					symmetricalValue = bufferParameters.get( MapperBuffer.symmetricalIndex );
 				}
 				makeMapperBufferPanel( c1, c2 );
@@ -372,10 +372,10 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel3.add( bitsPerSymbolTF, c1 );
 		//
-		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
-		panel3.add( new JLabel( "Symbol base address = "),  c2 );
+		bitOffsetFirstSymbolTF = new JTextField( bitOffsetFirstSymbol, 5 );
+		panel3.add( new JLabel( "Bit offset of first symbol = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( symbolBaseAddressTF, c1 );
+		panel3.add( bitOffsetFirstSymbolTF, c1 );
 		//
 		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
 		panel3.add( new JLabel( "Symmetrical value = "),  c2 );
@@ -402,10 +402,10 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel4.add( bitsPerSymbolTF, c1 );
 		//
-		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
-		panel4.add( new JLabel( "Symbol base address = "),  c2 );
+		bitOffsetFirstSymbolTF = new JTextField( bitOffsetFirstSymbol, 5 );
+		panel4.add( new JLabel( "Bit offset of first symbol = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( symbolBaseAddressTF, c1 );
+		panel4.add( bitOffsetFirstSymbolTF, c1 );
 		//
 		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
 		panel4.add( new JLabel( "Symmetrical value = "),  c2 );
@@ -432,10 +432,10 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel5.add( bitsPerSymbolTF, c1 );
 		//
-		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
-		panel5.add( new JLabel( "Symbol base address = "),  c2 );
+		bitOffsetFirstSymbolTF = new JTextField( bitOffsetFirstSymbol, 5 );
+		panel5.add( new JLabel( "Bit offset of first symbol = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( symbolBaseAddressTF, c1 );
+		panel5.add( bitOffsetFirstSymbolTF, c1 );
 		//
 		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
 		panel5.add( new JLabel( "Symmetrical value = "),  c2 );
@@ -492,10 +492,10 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel3.add( bitsPerSymbolTF, c1 );
 		//
-		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
-		panel3.add( new JLabel( "Symbol base address = "),  c2 );
+		bitOffsetFirstSymbolTF = new JTextField( bitOffsetFirstSymbol, 5 );
+		panel3.add( new JLabel( "Bit offset of first symbol = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( symbolBaseAddressTF, c1 );
+		panel3.add( bitOffsetFirstSymbolTF, c1 );
 		//
 		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
 		panel3.add( new JLabel( "Symmetrical value = "),  c2 );
@@ -522,10 +522,10 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel4.add( bitsPerSymbolTF, c1 );
 		//
-		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
-		panel4.add( new JLabel( "Symbol base address = "),  c2 );
+		bitOffsetFirstSymbolTF = new JTextField( bitOffsetFirstSymbol, 5 );
+		panel4.add( new JLabel( "Bit offset of first symbol = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( symbolBaseAddressTF, c1 );
+		panel4.add( bitOffsetFirstSymbolTF, c1 );
 		//
 		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
 		panel4.add( new JLabel( "Symmetrical value = "),  c2 );
@@ -552,10 +552,10 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel5.add( bitsPerSymbolTF, c1 );
 		//
-		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
-		panel5.add( new JLabel( "Symbol base address = "),  c2 );
+		bitOffsetFirstSymbolTF = new JTextField( bitOffsetFirstSymbol, 5 );
+		panel5.add( new JLabel( "Bit offset of first symbol = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( symbolBaseAddressTF, c1 );
+		panel5.add( bitOffsetFirstSymbolTF, c1 );
 		//
 		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
 		panel5.add( new JLabel( "Symmetrical value = "),  c2 );
@@ -706,7 +706,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		mappedPort = "";
 		sampleLength = "";
 		numSamples = "";
-		symbolBaseAddress = "";
+		bitOffsetFirstSymbol = "";
 		bitsPerSymbol = "";
 		symmetricalValue = "";
 	}
@@ -918,15 +918,15 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	
 	private boolean checkSymbolBaseAddress()	{
 
-		symbolBaseAddress = (String) symbolBaseAddressTF.getText();
-		if( symbolBaseAddress.length() <= 2 && symbolBaseAddress.length() > 0 )	{
+		bitOffsetFirstSymbol = (String) bitOffsetFirstSymbolTF.getText();
+		if( bitOffsetFirstSymbol.length() <= 2 && bitOffsetFirstSymbol.length() > 0 )	{
 			JOptionPane.showMessageDialog( frame, "Please enter a valid symbol base address", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
-		if( symbolBaseAddress.length() > 2 )	{
-			if( !( symbolBaseAddress.substring(0,2).equals("0x") || symbolBaseAddress.substring(0,2).equals("0X") ) )	{
-				JOptionPane.showMessageDialog( frame, "Symbol base address must be expressed in hexadecimal", "Badly formatted parameter",
+		if( bitOffsetFirstSymbol.length() > 2 )	{
+			if( !( bitOffsetFirstSymbol.substring(0,2).equals("0x") || bitOffsetFirstSymbol.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Bit offset of first symbol must be expressed in hexadecimal", "Badly formatted parameter",
 																				JOptionPane.INFORMATION_MESSAGE );
 				return false;
 			}
@@ -957,7 +957,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				params.add( baseAddress );
 				params.add( numSamples );
 				params.add( bitsPerSymbol );
-				params.add( symbolBaseAddress );
+				params.add( bitOffsetFirstSymbol );
 				params.add( symmetricalValue );
 				break;
 			case Buffer.MainMemoryBuffer:	

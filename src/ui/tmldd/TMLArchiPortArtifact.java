@@ -285,7 +285,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
     	    		sb.append("\" baseAddress=\"" + bufferParameters.get( MapperBuffer.baseAddressIndex ) );
       	  		sb.append("\" numSamples=\"" + bufferParameters.get( MapperBuffer.numSamplesIndex ) );
         			sb.append("\" bitsPerSymbol=\"" + bufferParameters.get( MapperBuffer.bitsPerSymbolIndex ) );
-        			sb.append("\" symbolBaseAddress=\"" + bufferParameters.get( MapperBuffer.symbolAddressIndex ) );
+        			sb.append("\" bitOffsetFirstSymbol=\"" + bufferParameters.get( MapperBuffer.bitOffsetFirstSymbolIndex ) );
         			sb.append("\" symmetricalValue=\"" + bufferParameters.get( MapperBuffer.symmetricalIndex ) );
 							break;
 						case Buffer.MainMemoryBuffer:	
@@ -354,7 +354,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 												        		bufferParameters.add( elt.getAttribute( "bitsPerSymbol" ) );
-												        		bufferParameters.add( elt.getAttribute( "symbolBaseAddress" ) );
+												        		bufferParameters.add( elt.getAttribute( "bitOffsetFirstSymbol" ) );
 												        		bufferParameters.add( elt.getAttribute( "symmetricalValue" ) );
 																		break;
 																	case Buffer.MainMemoryBuffer:	

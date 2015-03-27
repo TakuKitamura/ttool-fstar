@@ -57,7 +57,7 @@ public class MapperBuffer extends BaseBuffer	{
 	public static final int numSamplesIndex = 1;
 	public static final int baseAddressIndex = 2;
 	public static final int bitsPerSymbolIndex = 3;
-	public static final int symbolAddressIndex = 4;
+	public static final int bitOffsetFirstSymbolIndex = 4;
 	public static final int symmetricalIndex = 5;
 	
 	protected static String numSamplesValue = USER_TO_DO;
@@ -69,8 +69,8 @@ public class MapperBuffer extends BaseBuffer	{
 	protected static String bitsPerSymbolValue = USER_TO_DO;
 	protected static final String bitsPerSymbolType = "uint8_t";
 	
-	protected static String symbolAddressValue = USER_TO_DO;
-	protected static final String symbolAddressType = "uint16_t*";
+	protected static String bitOffsetFirstSymbolValue = USER_TO_DO;
+	protected static final String bitOffsetFirstSymbolType = "uint16_t*";
 
 	protected static String symmetricalValue = USER_TO_DO;
 	protected static final String symmetricalValueType = "bool";
@@ -79,7 +79,7 @@ public class MapperBuffer extends BaseBuffer	{
 																						numSamplesType + SP + "num_symbols" + SC + CR + TAB +
 																						baseAddressType + SP + "base_address" + SC + CR + TAB +
 																						bitsPerSymbolType + SP + "num_bits_symbol" + SC + CR + TAB +
-																						symbolAddressType + SP + "symbol_base_address" + SC + CR + TAB +
+																						bitOffsetFirstSymbolType + SP + "bit_offset_first_symbol" + SC + CR + TAB +
 																						symmetricalValueType + SP + "symmetrical_value" + SC + CR + "};";
 	
 	private String Context = "embb_mapper_context";
@@ -98,7 +98,7 @@ public class MapperBuffer extends BaseBuffer	{
 		s.append( TAB + name + ".num_symbols = " + numSamplesValue + SC + CR );
 		s.append( TAB + name + ".base_address = " + baseAddressValue + SC + CR );
 		s.append( TAB + name + ".num_bits_per_symbol = " + bitsPerSymbolValue + SC + CR );
-		s.append( TAB + name + ".symbol_base_address = " + symbolAddressValue + SC + CR );
+		s.append( TAB + name + ".bit_offset_first_symbol = " + bitOffsetFirstSymbolValue + SC + CR );
 		s.append( TAB + name + ".symmetrical_value = " + symmetricalValue + SC + CR );
 		return s.toString();
 	}
@@ -109,7 +109,7 @@ public class MapperBuffer extends BaseBuffer	{
 		s.append( TAB2 + "num_symbols = " + numSamplesValue + SC + CR );
 		s.append( TAB2 + "base_address = " + baseAddressValue + SC + CR );
 		s.append( TAB2 + "num_bits_per_symbol = " + bitsPerSymbolValue + SC + CR );
-		s.append( TAB2 + "symbol_base_address = " + bitsPerSymbolValue + SC + CR );
+		s.append( TAB2 + "bit_offset_first_symbol = " + bitsPerSymbolValue + SC + CR );
 		s.append( TAB2 + "symmetrical_value = " + symmetricalValue + SC + CR );
 		return s.toString();
 	}
@@ -125,8 +125,8 @@ public class MapperBuffer extends BaseBuffer	{
 		if( bufferParameters.get( bitsPerSymbolIndex ).length() > 0 )	{
 			bitsPerSymbolValue = bufferParameters.get( bitsPerSymbolIndex );
 		}
-		if( bufferParameters.get( symbolAddressIndex ).length() > 0 )	{
-			symbolAddressValue = bufferParameters.get( symbolAddressIndex );
+		if( bufferParameters.get( bitOffsetFirstSymbolIndex ).length() > 0 )	{
+			bitOffsetFirstSymbolValue = bufferParameters.get( bitOffsetFirstSymbolIndex );
 		}
 		if( bufferParameters.get( symmetricalIndex ).length() > 0 )	{
 		symmetricalValue = String.valueOf( ( new Vector<String>( Arrays.asList( symmetricalValues ))).indexOf( bufferParameters.get( symmetricalIndex )));
