@@ -79,7 +79,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
   private JButton cancelButton;
 
 	//Code generation
-	private JPanel panel3;
+	private JPanel panel3, panel4, panel5;
+	private JTabbedPane tabbedPane;
 	private int bufferType = 0;
 	private boolean loadBufferParameters = false;
 	private ArrayList<String> bufferParameters;
@@ -133,6 +134,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
         panel3.setLayout(gridbag2);
         panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: buffer attributes"));
         panel3.setPreferredSize(new Dimension(650, 350));
+				
+				tabbedPane = new JTabbedPane();
         
 		c1.gridwidth = 1;
         c1.gridheight = 1;
@@ -276,7 +279,12 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 		c0.fill = GridBagConstraints.BOTH;
 		c.add( panel2, c0 );
-		c.add( panel3, c0 );
+		if( ( bufferType == Buffer.MapperBuffer ) || ( bufferType == Buffer.InterleaverBuffer ) )	{
+			c.add( tabbedPane, c0 );
+		}
+		else	{
+			c.add( panel3, c0 );
+		}
 
 		c0.gridwidth = 1;
 		c0.gridheight = 1;
@@ -326,20 +334,28 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	}
 
 	private void makeInterleaverBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
-		c2.anchor = GridBagConstraints.LINE_START;
-		makeMainMemoryBufferPanel( c1, c2 );
-	}
 
-	private void makeAdaifBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
-		c2.anchor = GridBagConstraints.LINE_START;
-		makeMainMemoryBufferPanel( c1, c2 );
-	}
+		GridBagLayout gridbag2 = new GridBagLayout();
 
-	private void makeMapperBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+  	panel3 = new JPanel();
+		panel3.setLayout(gridbag2);
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: input buffer attributes"));
+		panel3.setPreferredSize(new Dimension(650, 350));
 
+  	panel4 = new JPanel();
+		panel4.setLayout(gridbag2);
+		panel4.setBorder(new javax.swing.border.TitledBorder("Code generation: output buffer attributes"));
+		panel4.setPreferredSize(new Dimension(650, 350));
+
+  	panel5 = new JPanel();
+		panel5.setLayout(gridbag2);
+		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Permutation Table attributes"));
+		panel5.setPreferredSize(new Dimension(650, 350));
+		
+		//Data In panel
 		c2.anchor = GridBagConstraints.LINE_START;
 		numSamplesTF = new JTextField( numSamples, 5 );
-		panel3.add( new JLabel( "Number of samples = "),  c2 );
+		panel3.add( new JLabel( "Number of symbols = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel3.add( numSamplesTF, c1 );
 		//
@@ -365,6 +381,191 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			symmetricalValueCB.setSelectedItem( symmetricalValue );
 		}
 		panel3.add( symmetricalValueCB, c1 );
+
+		//Data Out panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesTF = new JTextField( numSamples, 5 );
+		panel4.add( new JLabel( "Number of symbols = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( numSamplesTF, c1 );
+		//
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel4.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( baseAddressTF, c1 );
+		//
+		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
+		panel4.add( new JLabel( "Number of bits/symbol = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( bitsPerSymbolTF, c1 );
+		//
+		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
+		panel4.add( new JLabel( "Symbol base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( symbolBaseAddressTF, c1 );
+		//
+		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
+		panel4.add( new JLabel( "Symmetrical value = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( symmetricalValue != null )	{
+			symmetricalValueCB.setSelectedItem( symmetricalValue );
+		}
+		panel4.add( symmetricalValueCB, c1 );
+
+		//Permutation Table panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesTF = new JTextField( numSamples, 5 );
+		panel5.add( new JLabel( "Number of symbols = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( numSamplesTF, c1 );
+		//
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel5.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( baseAddressTF, c1 );
+		//
+		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
+		panel5.add( new JLabel( "Number of bits/symbol = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( bitsPerSymbolTF, c1 );
+		//
+		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
+		panel5.add( new JLabel( "Symbol base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( symbolBaseAddressTF, c1 );
+		//
+		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
+		panel5.add( new JLabel( "Symmetrical value = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( symmetricalValue != null )	{
+			symmetricalValueCB.setSelectedItem( symmetricalValue );
+		}
+		panel5.add( symmetricalValueCB, c1 );
+
+		tabbedPane.addTab( "Data In", panel3 );
+		tabbedPane.addTab( "Data Out", panel4 );
+		tabbedPane.addTab( "Permutation Table", panel5 );
+		tabbedPane.setSelectedIndex(0);
+	}
+
+	private void makeAdaifBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+		c2.anchor = GridBagConstraints.LINE_START;
+		makeMainMemoryBufferPanel( c1, c2 );
+	}
+
+	private void makeMapperBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+
+		GridBagLayout gridbag2 = new GridBagLayout();
+
+  	panel3 = new JPanel();
+		panel3.setLayout(gridbag2);
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: input buffer attributes"));
+		panel3.setPreferredSize(new Dimension(650, 350));
+
+  	panel4 = new JPanel();
+		panel4.setLayout(gridbag2);
+		panel4.setBorder(new javax.swing.border.TitledBorder("Code generation: output buffer attributes"));
+		panel4.setPreferredSize(new Dimension(650, 350));
+
+  	panel5 = new JPanel();
+		panel5.setLayout(gridbag2);
+		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Look Up Table attributes"));
+		panel5.setPreferredSize(new Dimension(650, 350));
+		
+		//Data In panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesTF = new JTextField( numSamples, 5 );
+		panel3.add( new JLabel( "Number of symbols = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( numSamplesTF, c1 );
+		//
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel3.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( baseAddressTF, c1 );
+		//
+		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
+		panel3.add( new JLabel( "Number of bits/symbol = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( bitsPerSymbolTF, c1 );
+		//
+		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
+		panel3.add( new JLabel( "Symbol base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( symbolBaseAddressTF, c1 );
+		//
+		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
+		panel3.add( new JLabel( "Symmetrical value = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( symmetricalValue != null )	{
+			symmetricalValueCB.setSelectedItem( symmetricalValue );
+		}
+		panel3.add( symmetricalValueCB, c1 );
+
+		//Data Out panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesTF = new JTextField( numSamples, 5 );
+		panel4.add( new JLabel( "Number of symbols = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( numSamplesTF, c1 );
+		//
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel4.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( baseAddressTF, c1 );
+		//
+		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
+		panel4.add( new JLabel( "Number of bits/symbol = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( bitsPerSymbolTF, c1 );
+		//
+		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
+		panel4.add( new JLabel( "Symbol base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( symbolBaseAddressTF, c1 );
+		//
+		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
+		panel4.add( new JLabel( "Symmetrical value = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( symmetricalValue != null )	{
+			symmetricalValueCB.setSelectedItem( symmetricalValue );
+		}
+		panel4.add( symmetricalValueCB, c1 );
+
+		//Look Up Table panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesTF = new JTextField( numSamples, 5 );
+		panel5.add( new JLabel( "Number of symbols = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( numSamplesTF, c1 );
+		//
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel5.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( baseAddressTF, c1 );
+		//
+		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
+		panel5.add( new JLabel( "Number of bits/symbol = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( bitsPerSymbolTF, c1 );
+		//
+		symbolBaseAddressTF = new JTextField( symbolBaseAddress, 5 );
+		panel5.add( new JLabel( "Symbol base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( symbolBaseAddressTF, c1 );
+		//
+		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
+		panel5.add( new JLabel( "Symmetrical value = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( symmetricalValue != null )	{
+			symmetricalValueCB.setSelectedItem( symmetricalValue );
+		}
+		panel5.add( symmetricalValueCB, c1 );
+
+		tabbedPane.addTab( "Data In", panel3 );
+		tabbedPane.addTab( "Data Out", panel4 );
+		tabbedPane.addTab( "Look Up Table", panel5 );
+		tabbedPane.setSelectedIndex(0);
 	}
 
 	private void makeMainMemoryBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
@@ -443,39 +644,53 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		switch( bufferType )	{
 			case Buffer.FepBuffer:	
 				panel3.removeAll();
+				tabbedPane.removeAll();
 				makeFepBufferPanel( c1, c2 );
 				panel3.revalidate();
 				panel3.repaint();
+				tabbedPane.add( "Data", panel3 );
 				break;
 			case Buffer.MapperBuffer:	
-				panel3.removeAll();
+				cleanPanels();
 				makeMapperBufferPanel( c1, c2 );
-				panel3.revalidate();
-				panel3.repaint();
+				revalidateAndRepaintPanels();
+				tabbedPane.addTab( "Data In", panel3 );
+				tabbedPane.addTab( "Data Out", panel4 );
+				tabbedPane.addTab( "Look Up Table", panel5 );
+				tabbedPane.setSelectedIndex(0);
 				break;
 			case Buffer.AdaifBuffer:	
 				panel3.removeAll();
+				tabbedPane.removeAll();
 				makeAdaifBufferPanel( c1, c2 );
 				panel3.revalidate();
 				panel3.repaint();
+				tabbedPane.add( "Data", panel3 );
 				break;
-			case Buffer.InterleaverBuffer:	
-				panel3.removeAll();
+			case Buffer.InterleaverBuffer:
+				cleanPanels();
 				makeInterleaverBufferPanel( c1, c2 );
-				panel3.revalidate();
-				panel3.repaint();
+				revalidateAndRepaintPanels();
+				tabbedPane.addTab( "Data In", panel3 );
+				tabbedPane.addTab( "Data Out", panel4 );
+				tabbedPane.addTab( "Permutation Table", panel5 );
+				tabbedPane.setSelectedIndex(0);
 				break;
 			case Buffer.MainMemoryBuffer:	
 				panel3.removeAll();
+				tabbedPane.removeAll();
 				makeMainMemoryBufferPanel( c1, c2 );
 				panel3.revalidate();
 				panel3.repaint();
+				tabbedPane.add( "Data", panel3 );
 				break;
 			default:	//the main memory buffer 
 				panel3.removeAll();
+				tabbedPane.removeAll();
 				makeFepBufferPanel( c1, c2 );
 				panel3.revalidate();
 				panel3.repaint();
+				tabbedPane.add( "Data", panel3 );
 				break;
 		}
 	}
@@ -752,6 +967,24 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				break;
 		}
 		return params;
+	}
+
+	private void cleanPanels()	{
+		panel3.removeAll();
+		panel4.removeAll();
+		panel5.removeAll();
+		tabbedPane.removeAll();
+	}
+
+	private void revalidateAndRepaintPanels()	{
+		panel3.revalidate();
+		panel3.repaint();
+		panel4.revalidate();
+		panel4.repaint();
+		panel5.revalidate();
+		panel5.repaint();
+		/*tabbedPaned.revalidate();
+		tabbePaned.repaint();*/
 	}
 
 }	//End of class

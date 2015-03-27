@@ -54,35 +54,32 @@ public class IntlOperationMEC extends OperationMEC	{
 	public IntlOperationMEC( String ctxName, String ID0, String OD0, String BTC )	{
 		name = "InterleaverOperationMEC";
 		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
-			"fep_set_qx(&" + ctxName + ", ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->q);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
-			"fep_start(&" + ctxName + ");" + CR;
+			"intl_start(&" + ctxName + ");" + CR;
 		
 		init_code ="/***** INIT " + ctxName + " *******/" + CR +
-			"void init_" + ctxName + "(void){" + CR + TAB +
-			"fep_ctx_init(&" + ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB +
+			"intl_ctx_init(&" + ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
 			"// initialize context" + CR + TAB +
-			"fep_set_op(&" + ctxName + ", FEP_OP_MOV);" + CR + TAB +
-			"// X vector configuration => Zk=Y[Xi]" + CR + TAB +
-			"fep_set_r(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_l(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_bx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_qx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_wx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_tx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_sx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_nx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_mx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_px(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_dx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_vrx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_vix(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"// Operation configuration" + CR + TAB +
-			"fep_set_sma(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_qs(&" + ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->q);" + CR + TAB +
-			"fep_set_bs(&" + ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->b);" + CR + TAB +
+			"intl_set_op(&" + ctxName + ", FEP_OP_MOV);" + CR + TAB +
+			"intl_set_sv( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_arm( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_re( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_se( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_fe( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_pbo( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_pbi( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_widm1( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_biof( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_boof( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_fz( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_fo( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_iof( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_oof( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_pof( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_lenm1( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
 			"}" + CR;
-		cleanup_code = "fep_ctx_cleanup(&" + ctxName + ");";
+		cleanup_code = "intl_ctx_cleanup(&" + ctxName + ");";
 	}
 
 }	//End of class
