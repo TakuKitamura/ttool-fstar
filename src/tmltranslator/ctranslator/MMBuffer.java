@@ -102,4 +102,8 @@ public class MMBuffer extends BaseBuffer	{
 			baseAddressValue = bufferParameters.get( baseAddressIndex );
 		}
 	}
+
+	public String getContext()	{
+		return Context;
+	}
 }	//End of class

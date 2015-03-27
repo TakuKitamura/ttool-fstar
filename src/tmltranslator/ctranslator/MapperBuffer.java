@@ -133,4 +133,8 @@ public class MapperBuffer extends BaseBuffer	{
 		symmetricalValue = String.valueOf( ( new Vector<String>( Arrays.asList( symmetricalValues ))).indexOf( bufferParameters.get( symmetricalIndex )));
 		}
 	}
+
+	public String getContext()	{
+		return Context;
+	}
 }	//End of class

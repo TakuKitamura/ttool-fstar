@@ -74,4 +74,8 @@ public class BaseBuffer extends Buffer	{
 		}
 		return s.toString();
 	}
+
+	public String getContext()	{
+		return Context;
+	}
 }	//End of class

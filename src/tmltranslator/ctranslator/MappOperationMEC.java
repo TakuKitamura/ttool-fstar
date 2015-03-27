@@ -51,38 +51,38 @@ import java.util.*;
 
 public class MappOperationMEC extends OperationMEC	{
 
-	public MappOperationMEC( String XOP, String ID0, String OD0, String BTC )	{
+	public MappOperationMEC( String ctxName, String ID0, String OD0, String BTC )	{
 		name = "MapperOperationMEC";
 		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
-			"fep_set_qx(&" + XOP + ", ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->q);" + CR + TAB +
+			"fep_set_qx(&" + ctxName + ", ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->q);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
-			"fep_start(&" + XOP + ");" + CR;
+			"fep_start(&" + ctxName + ");" + CR;
 		
-		init_code ="/***** INIT " + XOP + "_ctx *******/" + CR +
-			"void init_" + XOP + "(void){" + CR + TAB +
-			"fep_ctx_init(&" + XOP + "_ctx, (uint64_t) /*USER TODO: value*/);" + CR + TAB +
+		init_code ="/***** INIT " + ctxName + " *******/" + CR +
+			"void init_" + ctxName + "(void){" + CR + TAB +
+			"fep_ctx_init(&" + ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
 			"// initialize context" + CR + TAB +
-			"fep_set_op(&" + XOP + "_ctx, FEP_OP_MOV);" + CR + TAB +
+			"fep_set_op(&" + ctxName + ", FEP_OP_MOV);" + CR + TAB +
 			"// X vector configuration => Zk=Y[Xi]" + CR + TAB +
-			"fep_set_r(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_l(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_bx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_qx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_wx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_tx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_sx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_nx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_mx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_px(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_dx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_vrx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_vix(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_r(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_l(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_bx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_qx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_wx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_tx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_sx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_nx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_mx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_px(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_dx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_vrx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_vix(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
 			"// Operation configuration" + CR + TAB +
-			"fep_set_sma(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_qs(&" + XOP + "_ctx, ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->q);" + CR + TAB +
-			"fep_set_bs(&" + XOP + "_ctx, ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->b);" + CR + TAB +
+			"fep_set_sma(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"fep_set_qs(&" + ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->q);" + CR + TAB +
+			"fep_set_bs(&" + ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->b);" + CR + TAB +
 			"}" + CR;
-		cleanup_code = "fep_ctx_cleanup(&" + XOP + "_ctx);";
+		cleanup_code = "fep_ctx_cleanup(&" + ctxName + ");";
 	}
 
 }	//End of class

@@ -125,4 +125,8 @@ public class FepBuffer extends BaseBuffer	{
 			dataTypeValue = String.valueOf(( new Vector<String>( Arrays.asList( dataTypeList ))).indexOf( bufferParameters.get( dataTypeIndex )));
 		}
 	}
+
+	public String getContext()	{
+		return Context;
+	}
 }	//End of class

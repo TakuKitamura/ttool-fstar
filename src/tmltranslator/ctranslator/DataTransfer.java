@@ -158,6 +158,10 @@ public class DataTransfer	{
 		return s.toString().substring( 0, s.length() - 3 );
 	}
 
+	public String getContextName()	{
+		return getTMLCPLib().getName() + "_ctx";
+	}
+
 	public String toString()	{
 		
 		StringBuffer s  = new StringBuffer( "DATA TRANSFER " + name + "\n\t" );
