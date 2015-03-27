@@ -136,6 +136,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
         panel3.setPreferredSize(new Dimension(650, 350));
 				
 				tabbedPane = new JTabbedPane();
+		  	panel4 = new JPanel();
+  			panel5 = new JPanel();
         
 		c1.gridwidth = 1;
         c1.gridheight = 1;
@@ -279,12 +281,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 		c0.fill = GridBagConstraints.BOTH;
 		c.add( panel2, c0 );
-		if( ( bufferType == Buffer.MapperBuffer ) || ( bufferType == Buffer.InterleaverBuffer ) )	{
-			c.add( tabbedPane, c0 );
+		if( ( bufferType == Buffer.MainMemoryBuffer ) || ( bufferType == Buffer.FepBuffer ) || ( bufferType == Buffer.AdaifBuffer) )	{
+      panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: buffer attributes"));
+			tabbedPane.removeAll();
+			tabbedPane.addTab( "Data", panel3 );
+			tabbedPane.setSelectedIndex(0);
 		}
-		else	{
-			c.add( panel3, c0 );
-		}
+		c.add( tabbedPane, c0 );
 
 		c0.gridwidth = 1;
 		c0.gridheight = 1;
@@ -301,7 +304,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 	private void makeFepBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
-		//FepBuffer FepBuffer = new FepBuffer( "noName", null );
+     panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: buffer attributes"));
 
 		c2.anchor = GridBagConstraints.LINE_START;
 		numSamplesTF = new JTextField( sampleLength, 5 );
@@ -570,6 +573,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 	private void makeMainMemoryBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 		
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: buffer attributes"));
+
 		c2.anchor = GridBagConstraints.LINE_START;
 		numSamplesTF = new JTextField( numSamples, 5 );
 		panel3.add( new JLabel( "Number of samples = "),  c2 );
@@ -648,7 +653,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				makeFepBufferPanel( c1, c2 );
 				panel3.revalidate();
 				panel3.repaint();
-				tabbedPane.add( "Data", panel3 );
+				tabbedPane.addTab( "Data", panel3 );
 				break;
 			case Buffer.MapperBuffer:	
 				cleanPanels();
@@ -665,7 +670,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				makeAdaifBufferPanel( c1, c2 );
 				panel3.revalidate();
 				panel3.repaint();
-				tabbedPane.add( "Data", panel3 );
+				tabbedPane.addTab( "Data", panel3 );
 				break;
 			case Buffer.InterleaverBuffer:
 				cleanPanels();
@@ -682,7 +687,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				makeMainMemoryBufferPanel( c1, c2 );
 				panel3.revalidate();
 				panel3.repaint();
-				tabbedPane.add( "Data", panel3 );
+				tabbedPane.addTab( "Data", panel3 );
 				break;
 			default:	//the main memory buffer 
 				panel3.removeAll();
@@ -690,7 +695,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				makeFepBufferPanel( c1, c2 );
 				panel3.revalidate();
 				panel3.repaint();
-				tabbedPane.add( "Data", panel3 );
+				tabbedPane.addTab( "Data", panel3 );
 				break;
 		}
 	}
