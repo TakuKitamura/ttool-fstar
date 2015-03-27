@@ -3529,6 +3529,58 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return adp.getAllSignals(name);
     }
 
+    public String[] getAllOutEvents() {
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) {
+            return null;
+        }
+
+        if (!(tp instanceof TMLComponentDesignPanel)) {
+            return null;
+        }
+        TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
+
+        String name =  getCurrentTDiagramPanel().getName();
+
+        return tmlcomp.getAllOutEvents(name);
+    }
+
+    public String[] getAllInEvents() {
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) {return null;}
+        if (!(tp instanceof TMLComponentDesignPanel)) {return null;}
+        TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
+	String name =  getCurrentTDiagramPanel().getName();
+	return tmlcomp.getAllInEvents(name);
+    }
+
+    public String[] getAllOutChannels() {
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) {return null;}
+        if (!(tp instanceof TMLComponentDesignPanel)) {return null;}
+        TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
+	String name =  getCurrentTDiagramPanel().getName();
+	return tmlcomp.getAllOutChannels(name);
+    }
+
+    public String[] getAllInChannels() {
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) {return null;}
+        if (!(tp instanceof TMLComponentDesignPanel)) {return null;}
+        TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
+	String name =  getCurrentTDiagramPanel().getName();
+	return tmlcomp.getAllInChannels(name);
+    }
+
+    public String[] getAllOutRequests() {
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) {return null;}
+        if (!(tp instanceof TMLComponentDesignPanel)) {return null;}
+        TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
+	String name =  getCurrentTDiagramPanel().getName();
+	return tmlcomp.getAllOutRequests(name);
+    }
+
     public Vector getAllTimers() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {
