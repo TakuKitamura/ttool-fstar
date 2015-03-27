@@ -54,35 +54,27 @@ public class MappOperationMEC extends OperationMEC	{
 	public MappOperationMEC( String ctxName, String ID0, String OD0, String BTC )	{
 		name = "MapperOperationMEC";
 		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
-			"fep_set_qx(&" + ctxName + ", ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->q);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
-			"fep_start(&" + ctxName + ");" + CR;
+			"mapper_start(&" + ctxName + ");" + CR;
 		
 		init_code ="/***** INIT " + ctxName + " *******/" + CR +
-			"void init_" + ctxName + "(void){" + CR + TAB +
-			"fep_ctx_init(&" + ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB +
+			"mapper_ctx_init(&" + ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
 			"// initialize context" + CR + TAB +
-			"fep_set_op(&" + ctxName + ", FEP_OP_MOV);" + CR + TAB +
-			"// X vector configuration => Zk=Y[Xi]" + CR + TAB +
-			"fep_set_r(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_l(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_bx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_qx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_wx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_tx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_sx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_nx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_mx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_px(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_dx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_vrx(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_vix(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"// Operation configuration" + CR + TAB +
-			"fep_set_sma(&" + ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_qs(&" + ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->q);" + CR + TAB +
-			"fep_set_bs(&" + ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->b);" + CR + TAB +
+			"mapper_set_op(&" + ctxName + ", MAPPER_OP_MOV );" + CR + TAB +
+			"mapper_set_lenm1( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_lba( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_oba( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_iba( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_mult( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_men( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_sym( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_bpsm1( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_m( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_n( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_s( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
 			"}" + CR;
-		cleanup_code = "fep_ctx_cleanup(&" + ctxName + ");";
+		cleanup_code = "mapper_ctx_cleanup(&" + ctxName + ");";
 	}
 
 }	//End of class

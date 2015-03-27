@@ -53,7 +53,6 @@ import tmltranslator.*;
 
 public class MapperBuffer extends BaseBuffer	{
 
-	//public static final String DECLARATION = "extern struct MAPPER_BUFFER_TYPE {\n\tint num_samples;\n\tint* base_address;\n\tint num_bits_per_symbol;\n\tint* symbol_base_address;\n\tbool symmetrical_value;\n};";
 	public static final String[] symmetricalValues = { "OFF" , "ON" };
 	public static final int numSamplesIndex = 1;
 	public static final int baseAddressIndex = 2;
@@ -77,7 +76,7 @@ public class MapperBuffer extends BaseBuffer	{
 	protected static final String symmetricalValueType = "bool";
 
 	public static final String DECLARATION = "extern struct MAPPER_BUFFER_TYPE {" + CR + TAB +
-																						numSamplesType + SP + "num_samples" + SC + CR + TAB +
+																						numSamplesType + SP + "num_symbols" + SC + CR + TAB +
 																						baseAddressType + SP + "base_address" + SC + CR + TAB +
 																						bitsPerSymbolType + SP + "num_bits_symbol" + SC + CR + TAB +
 																						symbolAddressType + SP + "symbol_base_address" + SC + CR + TAB +
@@ -96,7 +95,7 @@ public class MapperBuffer extends BaseBuffer	{
 		if( bufferParameters != null )	{
 			retrieveBufferParameters();
 		}
-		s.append( TAB + name + ".num_samples = " + numSamplesValue + SC + CR );
+		s.append( TAB + name + ".num_symbols = " + numSamplesValue + SC + CR );
 		s.append( TAB + name + ".base_address = " + baseAddressValue + SC + CR );
 		s.append( TAB + name + ".num_bits_per_symbol = " + bitsPerSymbolValue + SC + CR );
 		s.append( TAB + name + ".symbol_base_address = " + symbolAddressValue + SC + CR );
@@ -107,7 +106,7 @@ public class MapperBuffer extends BaseBuffer	{
 	public String toString()	{
 
 		StringBuffer s = new StringBuffer( super.toString() );
-		s.append( TAB2 + "num_samples = " + numSamplesValue + SC + CR );
+		s.append( TAB2 + "num_symbols = " + numSamplesValue + SC + CR );
 		s.append( TAB2 + "base_address = " + baseAddressValue + SC + CR );
 		s.append( TAB2 + "num_bits_per_symbol = " + bitsPerSymbolValue + SC + CR );
 		s.append( TAB2 + "symbol_base_address = " + bitsPerSymbolValue + SC + CR );
