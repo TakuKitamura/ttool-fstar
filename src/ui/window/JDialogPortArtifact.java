@@ -73,6 +73,28 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	protected String baseAddress, mappedPort, sampleLength, numSamples, bitOffsetFirstSymbol, bitsPerSymbol;
 	protected String bank, dataType, symmetricalValue;
 	protected JComboBox dataTypeCB, bankCB, symmetricalValueCB;
+
+	//Intl Data In
+	protected JTextField numSamplesDataInIntl_TF, baseAddressDataInIntl_TF, bitsPerSymbolDataInIntl_TF, bitOffsetFirstSymbolDataInIntl_TF;
+	protected String numSamplesDataInIntl, baseAddressDataInIntl, bitsPerSymbolDataInIntl, bitOffsetFirstSymbolDataInIntl, symmetricalValueDataInIntl;
+	protected JComboBox symmetricalValueDataInIntl_CB;
+	//Intl Data Out
+	protected JTextField baseAddressDataOutIntl_TF, numSamplesDataOutIntl_TF;
+	protected String baseAddressDataOutIntl, numSamplesDataOutIntl;
+	//Intl Perm
+	protected JTextField numSamplesPermIntl_TF, baseAddressPermIntl_TF;
+	protected String numSamplesPermIntl, baseAddressPermIntl;
+
+	//Mapper Data In
+	protected JTextField baseAddressDataInMapp_TF, numSamplesDataInMapp_TF, bitsPerSymbolDataInMapp_TF, bitOffsetFirstSymbolDataInMapp_TF;
+	protected String baseAddressDataInMapp, numSamplesDataInMapp, bitsPerSymbolDataInMapp, bitOffsetFirstSymbolDataInMapp, symmetricalValueDataInMapp;
+	protected JComboBox symmetricalValueDataInMapp_CB;
+	//Mapper Data Out
+	protected JTextField baseAddressDataOutMapp_TF, numSamplesDataOutMapp_TF;
+	protected String baseAddressDataOutMapp, numSamplesDataOutMapp;
+	//Mapper LUT
+	protected JTextField numSamplesLUTMapp_TF, baseAddressLUTMapp_TF;
+	protected String numSamplesLUTMapp, baseAddressLUTMapp;
 	
   // Main Panel
   private JButton closeButton;
@@ -357,93 +379,58 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		
 		//Data In panel
 		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesTF = new JTextField( numSamples, 5 );
+		numSamplesDataInIntl_TF = new JTextField( numSamplesDataInIntl, 5 );
 		panel3.add( new JLabel( "Number of symbols = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( numSamplesTF, c1 );
+		panel3.add( numSamplesDataInIntl_TF, c1 );
 		//
-		baseAddressTF = new JTextField( baseAddress, 5 );
+		baseAddressDataInIntl_TF = new JTextField( baseAddressDataInIntl, 5 );
 		panel3.add( new JLabel( "Base address = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( baseAddressTF, c1 );
+		panel3.add( baseAddressDataInIntl_TF, c1 );
 		//
-		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
+		bitsPerSymbolDataInIntl_TF = new JTextField( bitsPerSymbolDataInIntl, 5 );
 		panel3.add( new JLabel( "Number of bits/symbol = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( bitsPerSymbolTF, c1 );
+		panel3.add( bitsPerSymbolDataInIntl_TF, c1 );
 		//
-		bitOffsetFirstSymbolTF = new JTextField( bitOffsetFirstSymbol, 5 );
+		bitOffsetFirstSymbolDataInIntl_TF = new JTextField( bitOffsetFirstSymbolDataInIntl, 5 );
 		panel3.add( new JLabel( "Bit offset of first symbol = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( bitOffsetFirstSymbolTF, c1 );
+		panel3.add( bitOffsetFirstSymbolDataInIntl_TF, c1 );
 		//
-		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
+		symmetricalValueDataInIntl_CB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
 		panel3.add( new JLabel( "Symmetrical value = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		if( symmetricalValue != null )	{
-			symmetricalValueCB.setSelectedItem( symmetricalValue );
+		if( symmetricalValueDataInIntl != null )	{
+			symmetricalValueDataInIntl_CB.setSelectedItem( symmetricalValueDataInIntl );
 		}
-		panel3.add( symmetricalValueCB, c1 );
+		panel3.add( symmetricalValueDataInIntl_CB, c1 );
 
 		//Data Out panel
 		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesTF = new JTextField( numSamples, 5 );
+		numSamplesDataOutIntl_TF = new JTextField( numSamplesDataOutIntl, 5 );
 		panel4.add( new JLabel( "Number of symbols = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( numSamplesTF, c1 );
+		panel4.add( numSamplesDataOutIntl_TF, c1 );
 		//
-		baseAddressTF = new JTextField( baseAddress, 5 );
+		baseAddressDataOutIntl_TF = new JTextField( baseAddressDataOutIntl, 5 );
 		panel4.add( new JLabel( "Base address = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( baseAddressTF, c1 );
+		panel4.add( baseAddressDataOutIntl_TF, c1 );
 		//
-		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
-		panel4.add( new JLabel( "Number of bits/symbol = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( bitsPerSymbolTF, c1 );
-		//
-		bitOffsetFirstSymbolTF = new JTextField( bitOffsetFirstSymbol, 5 );
-		panel4.add( new JLabel( "Bit offset of first symbol = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( bitOffsetFirstSymbolTF, c1 );
-		//
-		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
-		panel4.add( new JLabel( "Symmetrical value = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		if( symmetricalValue != null )	{
-			symmetricalValueCB.setSelectedItem( symmetricalValue );
-		}
-		panel4.add( symmetricalValueCB, c1 );
-
 		//Permutation Table panel
 		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesTF = new JTextField( numSamples, 5 );
+		numSamplesPermIntl_TF = new JTextField( numSamplesPermIntl, 5 );
 		panel5.add( new JLabel( "Number of symbols = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( numSamplesTF, c1 );
+		panel5.add( numSamplesPermIntl_TF, c1 );
 		//
-		baseAddressTF = new JTextField( baseAddress, 5 );
+		baseAddressPermIntl_TF = new JTextField( baseAddressPermIntl, 5 );
 		panel5.add( new JLabel( "Base address = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( baseAddressTF, c1 );
+		panel5.add( baseAddressPermIntl_TF, c1 );
 		//
-		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
-		panel5.add( new JLabel( "Number of bits/symbol = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( bitsPerSymbolTF, c1 );
-		//
-		bitOffsetFirstSymbolTF = new JTextField( bitOffsetFirstSymbol, 5 );
-		panel5.add( new JLabel( "Bit offset of first symbol = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( bitOffsetFirstSymbolTF, c1 );
-		//
-		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
-		panel5.add( new JLabel( "Symmetrical value = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		if( symmetricalValue != null )	{
-			symmetricalValueCB.setSelectedItem( symmetricalValue );
-		}
-		panel5.add( symmetricalValueCB, c1 );
 
 		tabbedPane.addTab( "Data In", panel3 );
 		tabbedPane.addTab( "Data Out", panel4 );
@@ -477,93 +464,58 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		
 		//Data In panel
 		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesTF = new JTextField( numSamples, 5 );
+		numSamplesDataInMapp_TF = new JTextField( numSamplesDataInMapp, 5 );
 		panel3.add( new JLabel( "Number of symbols = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( numSamplesTF, c1 );
+		panel3.add( numSamplesDataInMapp_TF, c1 );
 		//
-		baseAddressTF = new JTextField( baseAddress, 5 );
+		baseAddressDataInMapp_TF = new JTextField( baseAddressDataInMapp, 5 );
 		panel3.add( new JLabel( "Base address = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( baseAddressTF, c1 );
+		panel3.add( baseAddressDataInMapp_TF, c1 );
 		//
-		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
+		bitsPerSymbolDataInMapp_TF = new JTextField( bitsPerSymbolDataInMapp, 5 );
 		panel3.add( new JLabel( "Number of bits/symbol = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( bitsPerSymbolTF, c1 );
+		panel3.add( bitsPerSymbolDataInMapp_TF, c1 );
 		//
-		bitOffsetFirstSymbolTF = new JTextField( bitOffsetFirstSymbol, 5 );
+		bitOffsetFirstSymbolDataInMapp_TF = new JTextField( bitOffsetFirstSymbolDataInMapp, 5 );
 		panel3.add( new JLabel( "Bit offset of first symbol = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( bitOffsetFirstSymbolTF, c1 );
+		panel3.add( bitOffsetFirstSymbolDataInMapp_TF, c1 );
 		//
-		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
+		symmetricalValueDataInMapp_CB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
 		panel3.add( new JLabel( "Symmetrical value = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		if( symmetricalValue != null )	{
-			symmetricalValueCB.setSelectedItem( symmetricalValue );
+		if( symmetricalValueDataInMapp != null )	{
+			symmetricalValueDataInMapp_CB.setSelectedItem( symmetricalValueDataInMapp );
 		}
-		panel3.add( symmetricalValueCB, c1 );
+		panel3.add( symmetricalValueDataInMapp_CB, c1 );
 
 		//Data Out panel
 		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesTF = new JTextField( numSamples, 5 );
+		numSamplesDataOutMapp_TF = new JTextField( numSamplesDataOutMapp, 5 );
 		panel4.add( new JLabel( "Number of symbols = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( numSamplesTF, c1 );
+		panel4.add( numSamplesDataOutMapp_TF, c1 );
 		//
-		baseAddressTF = new JTextField( baseAddress, 5 );
+		baseAddressDataOutMapp_TF = new JTextField( baseAddressDataOutMapp, 5 );
 		panel4.add( new JLabel( "Base address = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( baseAddressTF, c1 );
+		panel4.add( baseAddressDataOutMapp_TF, c1 );
 		//
-		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
-		panel4.add( new JLabel( "Number of bits/symbol = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( bitsPerSymbolTF, c1 );
-		//
-		bitOffsetFirstSymbolTF = new JTextField( bitOffsetFirstSymbol, 5 );
-		panel4.add( new JLabel( "Bit offset of first symbol = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( bitOffsetFirstSymbolTF, c1 );
-		//
-		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
-		panel4.add( new JLabel( "Symmetrical value = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		if( symmetricalValue != null )	{
-			symmetricalValueCB.setSelectedItem( symmetricalValue );
-		}
-		panel4.add( symmetricalValueCB, c1 );
-
 		//Look Up Table panel
 		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesTF = new JTextField( numSamples, 5 );
+		numSamplesLUTMapp_TF = new JTextField( numSamplesLUTMapp, 5 );
 		panel5.add( new JLabel( "Number of symbols = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( numSamplesTF, c1 );
+		panel5.add( numSamplesLUTMapp_TF, c1 );
 		//
-		baseAddressTF = new JTextField( baseAddress, 5 );
+		baseAddressLUTMapp_TF = new JTextField( baseAddressLUTMapp, 5 );
 		panel5.add( new JLabel( "Base address = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( baseAddressTF, c1 );
+		panel5.add( baseAddressLUTMapp_TF, c1 );
 		//
-		bitsPerSymbolTF = new JTextField( bitsPerSymbol, 5 );
-		panel5.add( new JLabel( "Number of bits/symbol = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( bitsPerSymbolTF, c1 );
-		//
-		bitOffsetFirstSymbolTF = new JTextField( bitOffsetFirstSymbol, 5 );
-		panel5.add( new JLabel( "Bit offset of first symbol = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( bitOffsetFirstSymbolTF, c1 );
-		//
-		symmetricalValueCB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
-		panel5.add( new JLabel( "Symmetrical value = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		if( symmetricalValue != null )	{
-			symmetricalValueCB.setSelectedItem( symmetricalValue );
-		}
-		panel5.add( symmetricalValueCB, c1 );
 
 		tabbedPane.addTab( "Data In", panel3 );
 		tabbedPane.addTab( "Data Out", panel4 );
@@ -765,6 +717,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		private boolean handleClosureWhenSelectedInterleaverBuffer()	{
 
+			// need to add the code to check for all 3 tabs
 			return checkBaseAddress() && checkNumSamples();
 		}
 
@@ -775,6 +728,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		private boolean handleClosureWhenSelectedMapperBuffer()	{
 			
+			// need to add the code to check for all 3 tabs
 			symmetricalValue = (String)symmetricalValueCB.getSelectedItem();
 			return checkBaseAddress() && checkNumSamples() && checkNumBitsPerSymbol() && checkSymbolBaseAddress();
 		}
