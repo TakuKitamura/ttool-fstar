@@ -551,9 +551,10 @@ public class TGUIAction extends AbstractAction {
     //Action for the external Search 
     //@author Huy TRUONG.
     public static final int ACT_EXTERNAL_SEARCH = 414;
+    public static final int ACT_INTERNAL_SEARCH = 415;
     //--
 
-    public static final int NB_ACTION = 415;
+    public static final int NB_ACTION = 416;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -660,8 +661,10 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
         actions[ACT_SIMU_JAVA] = new TAction("gen_simujava-command", "Java-based simulation", IconManager.imgic38, IconManager.imgic39, "JAVA-based simualtion",  "Simulate diagrams using Java language", 0);
 //@author: Huy TRUONG
-//action for button External Search
+//action for button External Search and Internal Sarch
         actions[ACT_EXTERNAL_SEARCH] = new TAction("external_search-command", "External Search", IconManager.imgic5113, IconManager.imgic5113, "External Search",  "External Search Interface", 0);
+        actions[ACT_INTERNAL_SEARCH] = new TAction("internal_search-command", "Internal Search", IconManager.imgic5114, IconManager.imgic5114, "Internal Search",  "Internal Search Interface", 0);
+//--
         actions[ACT_GEN_SYSTEMC] = new TAction("gen_systemc-command", "Generate simulation code", IconManager.imgic61, IconManager.imgic61, "Generate code for simulation",  "Generates code for simulation", 0);
         actions[ACT_SIMU_SYSTEMC] = new TAction("simu_systemc", "Interactive Simulation", IconManager.imgic61, IconManager.imgic61, "Interactive simulation",  "Interactive simulation ", 0);
         actions[ACT_GEN_TMLTXT] = new TAction("gen_tmltxt-command", "Generate TML / TMAP in text format", IconManager.imgic66, IconManager.imgic66, "Generate TML / TMAP in text format",  "Generates TML / TMAP code in text format from TML Design diagrams", 0);
@@ -714,7 +717,7 @@ public class TGUIAction extends AbstractAction {
 
 
         actions[ACT_SCREEN_CAPTURE] = new TAction("screen-capture", "Screen capture", IconManager.imgic338, IconManager.imgic339, "Screen capture",  "Capture the screen", 0);
-        actions[ACT_TTOOL_WINDOW_CAPTURE] = new TAction("tool-window-capture", "Main window capture", IconManager.imgic338, IconManager.imgic339, "Main window capture",  "Capture the main window", 0);
+        actions[ACT_TTOOL_WINDOW_CAPTURE] = new TAction("tool-window-capture", "00 window capture", IconManager.imgic338, IconManager.imgic339, "Main window capture",  "Capture the main window", 0);
         actions[ACT_DIAGRAM_CAPTURE] = new TAction("diagram-capture", "Diagram capture", IconManager.imgic338, IconManager.imgic339, "Diagram capture",  "Capture the currenlty opened diagram", 0);
         actions[ACT_SVG_DIAGRAM_CAPTURE] = new TAction("svg-diagram-capture", "Diagram capture (SVG)", IconManager.imgic338, IconManager.imgic339, "Diagram capture (SVG)",  "Capture the currenlty opened diagram in svg format", 0);
         actions[ACT_ALL_DIAGRAM_CAPTURE] = new TAction("all-diagram-capture", "All diagram capture", IconManager.imgic338, IconManager.imgic339, "All diagram capture",  "Capture the currenlty opened set of diagram (analysis, design, etc.)", 0);

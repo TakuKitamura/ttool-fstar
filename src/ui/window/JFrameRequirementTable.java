@@ -211,8 +211,8 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	private void makeJScrollPane(LinkedList<TGComponent> list, JTabbedPane tab, String title) {
 		RequirementsTableModel rtm = new RequirementsTableModel(list, pts);
 		TableSorter sorterRTM = new TableSorter(rtm);
-		JTable jtableRTM = new JTable(sorterRTM);
-		sorterRTM.setTableHeader(jtableRTM.getTableHeader());
+        JTable jtableRTM = new JTable(sorterRTM);
+        sorterRTM.setTableHeader(jtableRTM.getTableHeader());
 		
 		for(int i=0; i<pts.length; i++) {
 			((jtableRTM.getColumnModel()).getColumn(i)).setPreferredWidth((pts[i].y)*50);

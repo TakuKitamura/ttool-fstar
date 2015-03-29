@@ -345,15 +345,15 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 		//System.out.println("MouseClick: " + e.getClickCount());
 
 
-		//author:huytruong
+		//author:Huy TRUONG
 		//add component's value into list by clicking on component and holding Ctrl 
 		if ((e.getButton() == MouseEvent.BUTTON1) && e.isControlDown()){
 			tgc = tdp.componentPointed();
-			//int s[] = {e.getX(), e.getY()};
-			
-			if ( null == tdp.mgui.searchBox || ! tdp.mgui.searchBox.isShowing()){
-				//selComponents.add(s);
 
+            //set text of seach field on menubar
+            tdp.mgui.getMainBar().search.setText(tgc.getValue());
+
+			if ( null == tdp.mgui.searchBox || ! tdp.mgui.searchBox.isShowing()){
 				selectedMultiComponents.add(tgc.getValue());
 				//TraceManager.addDev("Selected components: " + selectedMultiComponents.toString());
 			}
@@ -375,7 +375,6 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 		
 
 		//open a Search Dialog with seleted component's value
-        //TODO: bug : add value with alt when searchbox is opend and have values
 		if (tdp.mode == TDiagramPanel.NORMAL && e.isAltDown()) {
 			byte info = tdp.hoveredComponent(e.getX(), e.getY());
 			
@@ -383,11 +382,18 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 				tgc = tdp.componentHovered();
 				String search = tgc.getValue();
 				selectedMultiComponents.add(search);
-                if (tdp.mgui.searchBox==null)
-                    tdp.mgui.searchBox = new JDialogSearchBox(tdp.getGUI().getFrame(),"Search Box", selectedMultiComponents);
+                if (tdp.mgui.searchBox==null ) {
+                    tdp.mgui.searchBox = new JDialogSearchBox(tdp.getGUI().getFrame(), "Search Box", selectedMultiComponents, this);
+                }
                 else {
-                    tdp.mgui.searchBox.addValueListKeyword(search);
-                    tdp.mgui.searchBox.show();
+                    if (tdp.mgui.searchBox.isShowing()) {
+                        tdp.mgui.searchBox.addValueListKeyword(search);
+                        tdp.mgui.searchBox.show();
+                    } else{
+                        tdp.mgui.searchBox=null;
+                        tdp.mgui.searchBox = new JDialogSearchBox(tdp.getGUI().getFrame(), "Search Box", selectedMultiComponents, this);
+
+                    }
                 }
 
 			}
@@ -644,6 +650,9 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 	public ArrayList getSelectComponents(){
 		return selectedMultiComponents	;
 	}
+    public void clearSelectComponents(){
+        this.selectedMultiComponents.clear();
+    }
 	public void removeSelectedComponentFromList(){
 		this.selectedMultiComponents.clear();
 	}

@@ -64,7 +64,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     // Other
     JButton genrtlotos, genlotos, genuppaal, gendesign;
     JButton checkcode, simulation, validation;
-    JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genC, genjava, nc,externalSearch;
+    JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genC, genjava, nc,externalSearch,internalSearch;
 
     JTextField search;
 
@@ -247,11 +247,6 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
         addSeparator();
 	
-	//@author : Huy TRUONG
-	//add external search button into menu bar
-	externalSearch = add(mgui.actions[TGUIAction.ACT_EXTERNAL_SEARCH]);
-	externalSearch.addMouseListener(mgui.mouseHandler);
-	//--
 
         if ((ConfigurationTTool.ExternalCommand1.length() > 0) && (ConfigurationTTool.ExternalCommand1Host.length() > 0)) {
             button = add(mgui.actions[TGUIAction.EXTERNAL_ACTION_1]);
@@ -274,6 +269,38 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         search.setEnabled(false);
         add(search);
         search.addActionListener(this);
+
+        search.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent documentEvent) {
+                if (search.getText().length()>0){
+                    internalSearch.setEnabled(true);
+                }else
+                    internalSearch.setEnabled(false);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent documentEvent) {
+                if (search.getText().length()>0){
+                    internalSearch.setEnabled(true);
+                }else
+                    internalSearch.setEnabled(false);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent documentEvent) {
+
+            }
+        });
+
+        //@author : Huy TRUONG
+        //add external search button into menu bar
+        internalSearch = add(mgui.actions[TGUIAction.ACT_INTERNAL_SEARCH]);
+        internalSearch.addMouseListener(mgui.mouseHandler);
+        externalSearch = add(mgui.actions[TGUIAction.ACT_EXTERNAL_SEARCH]);
+        externalSearch.addMouseListener(mgui.mouseHandler);
+
+        //--
 
 
     }

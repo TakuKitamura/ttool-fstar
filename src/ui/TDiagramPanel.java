@@ -1738,25 +1738,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //author: huytruong
         //event for selecting "search" option in popup menu
         if (e.getSource() == search){
-          
-            ArrayList<String> search =  tdmm.getSelectComponents();
-            String query = "";
-            for (String s :search){
-                query = query + " + "+ s;
-            }
-            //create a new dialog
-            if (mgui.searchBox==null) {
-                mgui.searchBox = new JDialogSearchBox(this.getGUI().getFrame(), "Search Box", tdmm.getSelectComponents());
-
-            }else{
-                for (String s : search)
-                    mgui.searchBox.addValueListKeyword(s);
-                if (! mgui.searchBox.isShowing())
-                    mgui.searchBox.show();
-                mgui.searchBox.repaint();
-            }
-            tdmm.removeSelectedComponentFromList();
-            //j.show();
+            mgui.showExternalSearch();
             return;
         }
         //--
@@ -3874,6 +3856,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
     }
+
+
 
 
 }

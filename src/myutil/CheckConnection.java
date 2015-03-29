@@ -1,7 +1,4 @@
-package myutil;
-import java.io.IOException;
-import java.net.*;
-import java.lang.Runtime;
+
 
 /**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
@@ -49,6 +46,10 @@ import java.lang.Runtime;
  * @see
  */
 
+package myutil;
+import java.io.IOException;
+import java.net.*;
+import java.lang.Runtime;
 
 
 public final class CheckConnection {
@@ -58,11 +59,12 @@ public final class CheckConnection {
 
     private static final String default_url_1 = "google.com";
     private static final String default_url_2 = "http://ttool.telecom-paristech.fr";
+    private static final String default_ip= "8.8.8.8";
 
 
     public static final boolean checkInternetConnection()  {
         try {
-            if (checkConnectionWithAddr(default_url_1) && checkConnectionWithURL(default_url_2)) {
+            if (checkConnectionWithAddr(default_url_1) && checkConnectionWithAddr(default_ip)) {
                 return Boolean.TRUE;
             }else{
                 return Boolean.FALSE;

@@ -149,7 +149,7 @@ public class IconManager {
     public static ImageIcon imgic5060, imgic5062, imgic5064, imgic5066;
 
     public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
-    public static ImageIcon imgic5110, imgic5112, imgic5113;;
+    public static ImageIcon imgic5110, imgic5112, imgic5113,imgic5114;
 
     // Delegate ports image removed, by Solange
     //public static ImageIcon imgic2102;
@@ -565,7 +565,8 @@ public class IconManager {
     private static String icon5108 = "images/method.gif";
     private static String icon5110 = "images/invariant.gif";
     private static String icon5112 = "images/invariantbig.gif";
-    private static String icon5113 = "images/toolbarButtonGraphics/general/Zoom16.gif";
+    private static String icon5113 = "images/toolbarButtonGraphics/general/Search16_E.gif";
+    private static String icon5114 = "images/toolbarButtonGraphics/general/Search16_I.gif";
 
     public IconManager() {
 
@@ -957,6 +958,7 @@ public class IconManager {
         imgic5110 = getIcon(icon5110);
         imgic5112 = getIcon(icon5112);
         imgic5113 = getIcon(icon5113);
+        imgic5114 = getIcon(icon5114);
     }
 
 } // Class

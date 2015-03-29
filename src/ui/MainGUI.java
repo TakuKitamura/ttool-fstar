@@ -618,7 +618,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 mainBar.activateSearch(true);
             }
 	    //@author: Huy TRUONG
-	    actions[TGUIAction.ACT_EXTERNAL_SEARCH].setEnabled(true);
+	        actions[TGUIAction.ACT_EXTERNAL_SEARCH].setEnabled(true);
+            //disable when there is no text in search textfield
+            actions[TGUIAction.ACT_INTERNAL_SEARCH].setEnabled(false);
 	    //--
             break;
         case MODEL_OK:
@@ -886,6 +888,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
 
+    //@author: Huy TRUONG
+    public JToolBarMainTurtle getMainBar(){
+        return this.mainBar;
+    }
+    //--
 
     private void activeActions(boolean b) {
         for(int i=0; i<TGUIAction.NB_ACTION; i++) {
@@ -2934,17 +2941,35 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     //@author: Huy TRUONG
     //open a new External Search Dialog
-    //TODO: add selected values into search box
     public void showExternalSearch(){
-        if (null == this.searchBox){
-            if (getCurrentTDiagramPanel().tdmm.getSelectComponents().size()==0)
-                this.searchBox = new JDialogSearchBox(frame, "External Search", new ArrayList<String>());
-            else
-                this.searchBox = new JDialogSearchBox(frame, "External Search", getCurrentTDiagramPanel().tdmm.getSelectComponents());
+        String textSearchField = mainBar.search.getText();
+        ArrayList<String> listSearch = new ArrayList<String>();
+
+        if (null == this.searchBox) {
+            if (getCurrentTDiagramPanel().tdmm.getSelectComponents().size() == 0) {
+                listSearch.add(textSearchField);
+            }
+            else{
+                listSearch = getCurrentTDiagramPanel().tdmm.getSelectComponents();
+                listSearch.add(0,textSearchField);
+
+            }
+            this.searchBox = new JDialogSearchBox(frame, "External Search", listSearch,getCurrentTDiagramPanel().tdmm);
+
         }
         else {
-            this.searchBox.show();
+            if (this.searchBox.isShowing()) {
+                this.searchBox.show();
+            }
+            else {
+                this.searchBox = null;
+                showExternalSearch();
+            }
         }
+    }
+
+    public void doInternalSearch(){
+        search(mainBar.search.getText());
     }
 
 
@@ -4615,9 +4640,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         String s = gtm.showDTA();
         if (s != null) {
             JOptionPane.showMessageDialog(frame,
-                                          "The DTA could not be displayed: " + s,
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The DTA could not be displayed: " + s,
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -4789,9 +4814,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 return;
             }
             JOptionPane.showMessageDialog(frame,
-                                          "The capture was correctly performed and saved in " + file.getAbsolutePath(),
-                                          "Save in svg format ok",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The capture was correctly performed and saved in " + file.getAbsolutePath(),
+                    "Save in svg format ok",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -4837,9 +4862,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
 
         JOptionPane.showMessageDialog(frame,
-                                      "All diagrams were sucessfully captured",
-                                      "Capture ok",
-                                      JOptionPane.INFORMATION_MESSAGE);
+                "All diagrams were sucessfully captured",
+                "Capture ok",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void selectedCapture() {
@@ -4901,9 +4926,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             return;
         }
         JOptionPane.showMessageDialog(frame,
-                                      "The capture was correctly performed",
-                                      "Screen capture ok",
-                                      JOptionPane.INFORMATION_MESSAGE);
+                "The capture was correctly performed",
+                "Screen capture ok",
+                JOptionPane.INFORMATION_MESSAGE);
         return;
     }
 
@@ -5414,7 +5439,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean isTMLCPCreated(int index, String s) {
-        return isTMLCPCreated(((TURTLEPanel)(tabs.elementAt(index))), s);
+        return isTMLCPCreated(((TURTLEPanel) (tabs.elementAt(index))), s);
     }
 
     public boolean isTMLCPCreated(TURTLEPanel tp, String s) {
@@ -5431,15 +5456,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // IOD, SD
 
     public boolean isSDCreated(int index, String s) {
-        return isSDCreated(((TURTLEPanel)(tabs.elementAt(index))), s);
+        return isSDCreated(((TURTLEPanel) (tabs.elementAt(index))), s);
     }
 
     public boolean isIODCreated(int index, String s) {
-        return isIODCreated(((TURTLEPanel)(tabs.elementAt(index))), s);
+        return isIODCreated(((TURTLEPanel) (tabs.elementAt(index))), s);
     }
 
     public boolean isProActiveSMDCreated(int index, String s) {
-        return isProActiveSMDCreated(((TURTLEPanel)(tabs.elementAt(index))), s);
+        return isProActiveSMDCreated(((TURTLEPanel) (tabs.elementAt(index))), s);
     }
 
     public boolean isSDCreated(TURTLEPanel tp, String s) {
@@ -5531,7 +5556,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // TMLCP
 
     public boolean createTMLCPSequenceDiagram(int index, String s) {
-        return createTMLCPSequenceDiagram((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createTMLCPSequenceDiagram((TURTLEPanel) (tabs.elementAt(index)), s);
     }
 
     public boolean createTMLCPSequenceDiagram(TURTLEPanel tp, String s) {
@@ -5569,7 +5594,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
     public boolean createTMLCPDiagram(int index, String s) {
-        return createTMLCPDiagram((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createTMLCPDiagram((TURTLEPanel) (tabs.elementAt(index)), s);
     }
 
     public boolean createTMLCPDiagram(TURTLEPanel tp, String s) {
@@ -5763,7 +5788,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createUseCaseDiagram(int index, String s) {
-        return createUseCaseDiagram((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createUseCaseDiagram((TURTLEPanel) (tabs.elementAt(index)), s);
     }
 
     public boolean createUniqueUseCaseDiagram(TURTLEPanel tp, String s) {
@@ -5802,7 +5827,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createAvatarCD(int index, String s) {
-        return createAvatarCD((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createAvatarCD((TURTLEPanel) (tabs.elementAt(index)), s);
     }
 
     public boolean createUniqueAvatarCD(TURTLEPanel tp, String s) {
@@ -5838,7 +5863,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createAvatarAD(int index, String s) {
-        return createAvatarAD((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createAvatarAD((TURTLEPanel) (tabs.elementAt(index)), s);
     }
 
     public boolean createUniqueAvatarAD(TURTLEPanel tp, String s) {
@@ -6840,7 +6865,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (index > tabs.size()-2) {
             return;
         }
-        requestMoveTabFromTo(index, index+1);
+        requestMoveTabFromTo(index, index + 1);
         changeMade(null, -1);
     }
 
@@ -7381,7 +7406,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void toggleInternalComment() {
         TDiagramPanel tdp = getCurrentTDiagramPanel();
         if (tdp != null) {
-            tdp.setInternalCommentVisible((tdp.getInternalCommentVisible() +1 )% 3);
+            tdp.setInternalCommentVisible((tdp.getInternalCommentVisible() + 1) % 3);
             tdp.checkAllMySize();
             tdp.repaint();
             changeMade(tdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
@@ -7392,7 +7417,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TDiagramPanel tdp = getCurrentTDiagramPanel();
         if (tdp != null){
             //TraceManager.addDev("Toggle attributes");
-            tdp.setAttributes((tdp.getAttributeState() +1 )% 3);
+            tdp.setAttributes((tdp.getAttributeState() + 1) % 3);
             tdp.checkAllMySize();
             tdp.repaint();
             changeMade(tdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
@@ -7559,11 +7584,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         } else if (command.equals(actions[TGUIAction.ACT_ABOUT].getActionCommand())) {
             aboutVersion();
 	} 
-	//@author: Huy TRUONG.
-	//open a external search box for ACT_EXTERNAL_SEARCH
-	else if (command.equals(actions[TGUIAction.ACT_EXTERNAL_SEARCH].getActionCommand())) {
-	    showExternalSearch();
-	//--
+        //@author: Huy TRUONG.
+        //open a external search box for ACT_EXTERNAL_SEARCH
+        else if (command.equals(actions[TGUIAction.ACT_EXTERNAL_SEARCH].getActionCommand())) {
+            showExternalSearch();}
+        else if (command.equals(actions[TGUIAction.ACT_INTERNAL_SEARCH].getActionCommand())) {
+            doInternalSearch();
+        //--
 
         } else if (command.equals(actions[TGUIAction.ACT_TTOOL_CONFIGURATION].getActionCommand())) {
             showTToolConfiguration();
@@ -8488,6 +8515,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         }
 
+
+
         private JMenuItem createMenuItem(String s) {
             JMenuItem item = new JMenuItem(s);
             item.setActionCommand(s);
@@ -8585,6 +8614,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     }
                 }
             };
+
+
     }
 
 
