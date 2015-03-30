@@ -1325,8 +1325,10 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
                 if (asyncPanel != null) {
                     asyncPanel.revalidate();
-                    comboFIFOs.revalidate();
-                    comboFIFOs.repaint();
+		    if (comboFIFOs != null) {
+			comboFIFOs.revalidate();
+			comboFIFOs.repaint();
+		    }
                 }
 
 
