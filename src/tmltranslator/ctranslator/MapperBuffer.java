@@ -51,7 +51,7 @@ import java.nio.*;
 import myutil.*;
 import tmltranslator.*;
 
-public class MapperBuffer extends BaseBuffer	{
+public class MapperBuffer extends Buffer	{
 
 	public static final String[] symmetricalValues = { "OFF" , "ON" };
 	public static final int numSamplesIndex = 1;

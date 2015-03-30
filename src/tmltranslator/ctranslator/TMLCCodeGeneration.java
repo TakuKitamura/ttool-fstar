@@ -219,13 +219,13 @@ public class TMLCCodeGeneration	{
 					buff = new MapperBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
 				}
 				else if( mec instanceof InterleaverMEC )	{
-					buff = new MMBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
+					buff = new InterleaverBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
 				}
 				else if( mec instanceof AdaifMEC )	{
 					buff = new MMBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
 				}
 				else if( mec instanceof CpuMEC )	{
-					buff = new MMBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
+					buff = new BaseBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
 				}
 				buffersList.add( buff );
 				return buff;
@@ -243,13 +243,13 @@ public class TMLCCodeGeneration	{
 					buff = new MapperBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
 				}
 				else if( mec instanceof InterleaverMEC )	{
-					buff = new MMBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
+					buff = new InterleaverBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
 				}
 				else if( mec instanceof AdaifMEC )	{
 					buff = new MMBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
 				}
 				else if( mec instanceof CpuMEC )	{
-					buff = new MMBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
+					buff = new BaseBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
 				}
 				buffersList.add( buff );
 				return buff;
@@ -274,13 +274,13 @@ public class TMLCCodeGeneration	{
 					buff = new MapperBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
 				}
 				else if( mec instanceof InterleaverMEC )	{
-					buff = new MMBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
+					buff = new InterleaverBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
 				}
 				else if( mec instanceof AdaifMEC )	{
 					buff = new MMBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
 				}
 				else if( mec instanceof CpuMEC )	{
-					buff = new MMBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
+					buff = new BaseBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
 				}
 				buffersList.add( buff );
 				return buff;
@@ -298,13 +298,13 @@ public class TMLCCodeGeneration	{
 					buff = new MapperBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
 				}
 				else if( mec instanceof InterleaverMEC )	{
-					buff = new MMBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
+					buff = new InterleaverBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
 				}
 				else if( mec instanceof AdaifMEC )	{
 					buff = new MMBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
 				}
 				else if( mec instanceof CpuMEC )	{
-					buff = new MMBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
+					buff = new BaseBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
 				}
 				buffersList.add( buff );
 				return buff;
@@ -786,9 +786,9 @@ public class TMLCCodeGeneration	{
 		s.append( "/**** Buffers ****/" + CR );
 		s.append( FepBuffer.DECLARATION + CR2 );
 		s.append( MapperBuffer.DECLARATION + CR2 );
-		//s.append( AdaifBuffer.DECLARATION + CR2 );
+		s.append( InterleaverBuffer.DECLARATION + CR2 );
 		s.append( MMBuffer.DECLARATION + CR2 );
-		//s.append( MainMemoryBuffer.DECLARATION + CR2 );
+		s.append( BaseBuffer.DECLARATION + CR2 );
 		s.append( "#endif" );
 		return s.toString();
 	}

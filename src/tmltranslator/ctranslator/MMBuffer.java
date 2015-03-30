@@ -51,7 +51,7 @@ import java.nio.*;
 import myutil.*;
 import tmltranslator.*;
 
-public class MMBuffer extends BaseBuffer	{
+public class MMBuffer extends Buffer	{
 
 	//public static final String DECLARATION = "extern struct MM_BUFFER_TYPE {\n\tint num_samples;\n\tint* base_address;\n};";
 	public static final int numSamplesIndex = 1;

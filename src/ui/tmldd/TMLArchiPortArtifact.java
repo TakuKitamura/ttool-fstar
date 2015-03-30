@@ -274,8 +274,18 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         			sb.append("\" dataType=\"" + bufferParameters.get( FepBuffer.dataTypeIndex ) );
 							break;
 						case Buffer.InterleaverBuffer:	
-  	      		sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
-    	    		sb.append("\" numSamples=\"" + bufferParameters.get( MMBuffer.numSamplesIndex ) );
+							//data in
+	        		sb.append( "\" packedBinaryInIntl=\"" + bufferParameters.get( InterleaverBuffer.packedBinaryInIntlIndex ) );
+	        		sb.append( "\" widthIntl=\"" + bufferParameters.get( InterleaverBuffer.widthIntlIndex ) );
+	        		sb.append( "\" bitInOffsetIntl=\"" + bufferParameters.get( InterleaverBuffer.bitInOffsetIntlIndex ) );
+	        		sb.append( "\" inputOffsetIntl=\"" + bufferParameters.get( InterleaverBuffer.inputOffsetIntlIndex ) );
+							//data out
+	        		sb.append( "\" packedBinaryOutIntl=\"" + bufferParameters.get( InterleaverBuffer.packedBinaryOutIntlIndex ) );
+	        		sb.append( "\" bitOutOffsetIntl=\"" + bufferParameters.get( InterleaverBuffer.bitOutOffsetIntlIndex ) );
+	        		sb.append( "\" outputOffsetIntl=\"" + bufferParameters.get( InterleaverBuffer.outputOffsetIntlIndex ) );
+							//permutation table
+	        		sb.append( "\" offsetPermIntl=\"" + bufferParameters.get( InterleaverBuffer.offsetPermIntlIndex) );
+	        		sb.append( "\" lengthPermIntl=\"" + bufferParameters.get( InterleaverBuffer.lengthPermIntlIndex) );
 						break;
 						case Buffer.AdaifBuffer:	
         			sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
@@ -290,7 +300,6 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 							break;
 						case Buffer.MainMemoryBuffer:	
   	      		sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
-    	    		sb.append("\" numSamples=\"" + bufferParameters.get( MMBuffer.numSamplesIndex ) );
 							break;
 						default:	//the fep buffer 
         			sb.append("\" baseAddress=\"" + bufferParameters.get( FepBuffer.baseAddressIndex ) );
@@ -343,8 +352,18 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 												        		bufferParameters.add( elt.getAttribute( "dataType" ) );
 																		break;
 																	case Buffer.InterleaverBuffer:	
-												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
-												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
+																		//data in
+	        													bufferParameters.add( elt.getAttribute( "packedBinaryInIntl" ) );
+	        													bufferParameters.add( elt.getAttribute( "widthIntl" ) );
+	        													bufferParameters.add( elt.getAttribute( "bitInOffsetIntl" ) );
+	        													bufferParameters.add( elt.getAttribute( "inputOffsetIntl" ) );
+																		//data out
+																		bufferParameters.add( elt.getAttribute( "packedBinaryOutIntl" ) );
+																		bufferParameters.add( elt.getAttribute( "bitOutOffsetIntl" ) );
+																		bufferParameters.add( elt.getAttribute( "outputOffsetIntl" ) );
+																		//permutation table
+												        		bufferParameters.add( elt.getAttribute( "offsetPermIntl" ) );
+												        		bufferParameters.add( elt.getAttribute( "lengthPermIntl" ) );
 																		break;
 																	case Buffer.AdaifBuffer:	
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
@@ -359,7 +378,6 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 																		break;
 																	case Buffer.MainMemoryBuffer:	
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
-												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 																		break;
 																	default:	//the main memory buffer 
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );

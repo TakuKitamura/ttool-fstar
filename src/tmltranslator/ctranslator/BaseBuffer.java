@@ -49,13 +49,25 @@ package tmltranslator.ctranslator;;
 import java.util.*;
 import java.nio.*;
 import myutil.*;
+import tmltranslator.*;
 
 public class BaseBuffer extends Buffer	{
 
 	public static final int baseAddressIndex = 1;
-	protected String base_address;
-	protected int base_address_value;
+
+	protected static String baseAddressValue = USER_TO_DO;
+	protected static final String baseAddressType = "uint32_t*";
+	
 	private String Context = "embb_mapper_context";
+
+	public static final String DECLARATION = "extern struct BASE_BUFFER_TYPE {" + CR + TAB +
+																						baseAddressType + SP + "base_address" + SC + CR + "};";
+
+	public BaseBuffer( String _name, TMLTask _task )	{
+		type = "FEP_BUFFER_TYPE";
+		name = _name;
+		task = _task;
+	}
 
 	@Override public String getInitCode()	{
 		StringBuffer s = new StringBuffer();

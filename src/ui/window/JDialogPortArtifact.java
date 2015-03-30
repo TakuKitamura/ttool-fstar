@@ -68,6 +68,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
   private Frame frame;
   private TMLArchiPortArtifact artifact;
   private String mappedMemory = "VOID"; 
+
 	protected JComboBox referenceCommunicationName, priority, memoryCB;
 	protected JTextField baseAddressTF, numSamplesTF, bitOffsetFirstSymbolTF, bitsPerSymbolTF;
 	protected String baseAddress, mappedPort, sampleLength, numSamples, bitOffsetFirstSymbol, bitsPerSymbol;
@@ -75,15 +76,18 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	protected JComboBox dataTypeCB, bankCB, symmetricalValueCB;
 
 	//Intl Data In
-	protected JTextField numSamplesDataInIntl_TF, baseAddressDataInIntl_TF, bitsPerSymbolDataInIntl_TF, bitOffsetFirstSymbolDataInIntl_TF;
-	protected String numSamplesDataInIntl, baseAddressDataInIntl, bitsPerSymbolDataInIntl, bitOffsetFirstSymbolDataInIntl, symmetricalValueDataInIntl;
-	protected JComboBox symmetricalValueDataInIntl_CB;
+	protected JTextField widthIntl_TF, bitInOffsetIntl_TF, inputOffsetIntl_TF;
+	protected String widthIntl, bitInOffsetIntl, inputOffsetIntl, packedBinaryInIntl;
+	protected JComboBox packedBinaryInIntl_CB;
+
 	//Intl Data Out
-	protected JTextField baseAddressDataOutIntl_TF, numSamplesDataOutIntl_TF;
-	protected String baseAddressDataOutIntl, numSamplesDataOutIntl;
+	protected JTextField bitOutOffsetIntl_TF, outputOffsetIntl_TF;
+	protected JComboBox packedBinaryOutIntl_CB;
+	protected String packedBinaryOutIntl, bitOutOffsetIntl, outputOffsetIntl;
+
 	//Intl Perm
-	protected JTextField numSamplesPermIntl_TF, baseAddressPermIntl_TF;
-	protected String numSamplesPermIntl, baseAddressPermIntl;
+	protected JTextField lengthPermIntl_TF, offsetPermIntl_TF;
+	protected String lengthPermIntl, offsetPermIntl;
 
 	//Mapper Data In
 	protected JTextField baseAddressDataInMapp_TF, numSamplesDataInMapp_TF, bitsPerSymbolDataInMapp_TF, bitOffsetFirstSymbolDataInMapp_TF;
@@ -145,7 +149,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
         
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
@@ -256,8 +259,18 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				break;
 			case Buffer.InterleaverBuffer:	
 				if( loadBufferParameters )	{
-					baseAddress = bufferParameters.get( MMBuffer.baseAddressIndex );
-					numSamples = bufferParameters.get( MMBuffer.numSamplesIndex );
+					//data in
+					packedBinaryInIntl = bufferParameters.get( InterleaverBuffer.packedBinaryInIntlIndex );
+					widthIntl = bufferParameters.get( InterleaverBuffer.widthIntlIndex );
+					bitInOffsetIntl = bufferParameters.get( InterleaverBuffer.bitInOffsetIntlIndex );
+					inputOffsetIntl = bufferParameters.get( InterleaverBuffer.inputOffsetIntlIndex );
+					//data out
+					packedBinaryOutIntl = bufferParameters.get( InterleaverBuffer.packedBinaryOutIntlIndex );
+					bitOutOffsetIntl = bufferParameters.get( InterleaverBuffer.bitOutOffsetIntlIndex );
+					outputOffsetIntl = bufferParameters.get( InterleaverBuffer.outputOffsetIntlIndex );
+					//permutation table
+					lengthPermIntl = bufferParameters.get( InterleaverBuffer.lengthPermIntlIndex );
+					offsetPermIntl = bufferParameters.get( InterleaverBuffer.offsetPermIntlIndex );
 				}
 				makeInterleaverBufferPanel( c1, c2 );
 				break;
@@ -281,7 +294,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			case Buffer.MainMemoryBuffer:	
 				if( loadBufferParameters )	{
 					baseAddress = bufferParameters.get( MMBuffer.baseAddressIndex );
-					numSamples = bufferParameters.get( MMBuffer.numSamplesIndex );
 				}
 				makeMainMemoryBufferPanel( c1, c2 );
 				break;
@@ -362,75 +374,80 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		GridBagLayout gridbag2 = new GridBagLayout();
 
-  	panel3 = new JPanel();
+  	panel3 = new JPanel();	//data in
 		panel3.setLayout(gridbag2);
 		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: input buffer attributes"));
 		panel3.setPreferredSize(new Dimension(650, 350));
 
-  	panel4 = new JPanel();
+  	panel4 = new JPanel();	//data out
 		panel4.setLayout(gridbag2);
 		panel4.setBorder(new javax.swing.border.TitledBorder("Code generation: output buffer attributes"));
 		panel4.setPreferredSize(new Dimension(650, 350));
 
-  	panel5 = new JPanel();
+  	panel5 = new JPanel();	//permutation table
 		panel5.setLayout(gridbag2);
 		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Permutation Table attributes"));
 		panel5.setPreferredSize(new Dimension(650, 350));
 		
 		//Data In panel
 		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesDataInIntl_TF = new JTextField( numSamplesDataInIntl, 5 );
-		panel3.add( new JLabel( "Number of symbols = "),  c2 );
+		packedBinaryInIntl_CB = new JComboBox( Buffer.onOffVector );
+		panel3.add( new JLabel( "Packed binary input mode = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( numSamplesDataInIntl_TF, c1 );
-		//
-		baseAddressDataInIntl_TF = new JTextField( baseAddressDataInIntl, 5 );
-		panel3.add( new JLabel( "Base address = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( baseAddressDataInIntl_TF, c1 );
-		//
-		bitsPerSymbolDataInIntl_TF = new JTextField( bitsPerSymbolDataInIntl, 5 );
-		panel3.add( new JLabel( "Number of bits/symbol = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( bitsPerSymbolDataInIntl_TF, c1 );
-		//
-		bitOffsetFirstSymbolDataInIntl_TF = new JTextField( bitOffsetFirstSymbolDataInIntl, 5 );
-		panel3.add( new JLabel( "Bit offset of first symbol = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( bitOffsetFirstSymbolDataInIntl_TF, c1 );
-		//
-		symmetricalValueDataInIntl_CB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
-		panel3.add( new JLabel( "Symmetrical value = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		if( symmetricalValueDataInIntl != null )	{
-			symmetricalValueDataInIntl_CB.setSelectedItem( symmetricalValueDataInIntl );
+		if( packedBinaryInIntl != null )	{
+			packedBinaryInIntl_CB.setSelectedItem( packedBinaryInIntl );
 		}
-		panel3.add( symmetricalValueDataInIntl_CB, c1 );
+		panel3.add( packedBinaryInIntl_CB, c1 );
+		//
+		widthIntl_TF = new JTextField( widthIntl, 5 );
+		panel3.add( new JLabel( "Sample width = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( widthIntl_TF, c1 );
+		//
+		bitInOffsetIntl_TF = new JTextField( bitInOffsetIntl, 5 );
+		panel3.add( new JLabel( "Bit input offset = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( bitInOffsetIntl_TF, c1 );
+		//
+		inputOffsetIntl_TF = new JTextField( inputOffsetIntl, 5 );
+		panel3.add( new JLabel( "Offset of first input sample = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( inputOffsetIntl_TF, c1 );
+		//
 
 		//Data Out panel
 		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesDataOutIntl_TF = new JTextField( numSamplesDataOutIntl, 5 );
-		panel4.add( new JLabel( "Number of symbols = "),  c2 );
+		packedBinaryOutIntl_CB = new JComboBox( Buffer.onOffVector );
+		panel4.add( new JLabel( "Packed binary output mode = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( numSamplesDataOutIntl_TF, c1 );
+		if( packedBinaryOutIntl != null )	{
+			packedBinaryOutIntl_CB.setSelectedItem( packedBinaryOutIntl );
+		}
+		panel4.add( packedBinaryOutIntl_CB, c1 );
 		//
-		baseAddressDataOutIntl_TF = new JTextField( baseAddressDataOutIntl, 5 );
-		panel4.add( new JLabel( "Base address = "),  c2 );
+		bitOutOffsetIntl_TF = new JTextField( bitOutOffsetIntl, 5 );
+		panel4.add( new JLabel( "Bit output offset = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( baseAddressDataOutIntl_TF, c1 );
+		panel4.add( bitOutOffsetIntl_TF, c1 );
 		//
+		c2.anchor = GridBagConstraints.LINE_START;
+		outputOffsetIntl_TF = new JTextField( outputOffsetIntl, 5 );
+		panel4.add( new JLabel( "Offset of first output sample = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( outputOffsetIntl_TF, c1 );
+
 		//Permutation Table panel
 		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesPermIntl_TF = new JTextField( numSamplesPermIntl, 5 );
-		panel5.add( new JLabel( "Number of symbols = "),  c2 );
+		offsetPermIntl_TF = new JTextField( offsetPermIntl, 5 );
+		panel5.add( new JLabel( "Offset = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( numSamplesPermIntl_TF, c1 );
+		panel5.add( offsetPermIntl_TF, c1 );
 		//
-		baseAddressPermIntl_TF = new JTextField( baseAddressPermIntl, 5 );
-		panel5.add( new JLabel( "Base address = "),  c2 );
+		c2.anchor = GridBagConstraints.LINE_START;
+		lengthPermIntl_TF = new JTextField( lengthPermIntl, 5 );
+		panel5.add( new JLabel( "Length = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( baseAddressPermIntl_TF, c1 );
-		//
+		panel5.add( lengthPermIntl_TF, c1 );
 
 		tabbedPane.addTab( "Data In", panel3 );
 		tabbedPane.addTab( "Data Out", panel4 );
@@ -528,11 +545,11 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: buffer attributes"));
 
 		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesTF = new JTextField( numSamples, 5 );
+		/*numSamplesTF = new JTextField( numSamples, 5 );
 		panel3.add( new JLabel( "Number of samples = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		numSamplesTF = new JTextField( numSamples, 5 );
-		panel3.add( numSamplesTF, c1 );
+		panel3.add( numSamplesTF, c1 );*/
 		//
 		baseAddressTF = new JTextField( baseAddress, 5 );
 		panel3.add( new JLabel( "Base address = "),  c2 );
@@ -718,7 +735,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		private boolean handleClosureWhenSelectedInterleaverBuffer()	{
 
 			// need to add the code to check for all 3 tabs
-			return checkBaseAddress() && checkNumSamples();
+			return checkDI_Intl() && checkDO_Intl() && CheckPerm_Intl();
 		}
 
 		private boolean handleClosureWhenSelectedAdaifBuffer()	{
@@ -735,7 +752,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		private boolean handleClosureWhenSelectedMainMemoryBuffer()	{
 
-			return checkBaseAddress() && checkNumSamples();
+			return checkBaseAddress();
 		}
 
 		public String getMappedPort()	{
@@ -829,7 +846,137 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		}
 	return true;
 	}
-    
+			
+	private boolean checkDI_Intl()	{
+
+	
+		String regex = "[0-9]+";
+		widthIntl = (String)widthIntl_TF.getText();
+		bitInOffsetIntl = (String)bitInOffsetIntl_TF.getText();
+		inputOffsetIntl = (String)inputOffsetIntl_TF.getText();
+		packedBinaryInIntl = (String)packedBinaryInIntl_CB.getSelectedItem();
+
+		if( !( widthIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !widthIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The samples widthmust be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( !( bitInOffsetIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !bitInOffsetIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The bit input offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( !( inputOffsetIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !inputOffsetIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The bit intput offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean checkDO_Intl()	{
+
+		//check bitOutOffset and outOffset
+		packedBinaryOutIntl = (String)packedBinaryOutIntl_CB.getSelectedItem();
+		bitOutOffsetIntl = 	(String)bitOutOffsetIntl_TF.getText();
+		outputOffsetIntl = (String)outputOffsetIntl_TF.getText();
+		String regex = "[0-9]+";
+
+		if( !( bitOutOffsetIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !bitOutOffsetIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The bit output offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		// check output offset
+		if( !( outputOffsetIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !outputOffsetIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The output offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean CheckPerm_Intl()	{
+
+		String regex = "[0-9]+";
+		offsetPermIntl = (String) offsetPermIntl_TF.getText();
+		lengthPermIntl = (String) lengthPermIntl_TF.getText();
+		//check first entry offset
+		if( !( offsetPermIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !offsetPermIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		//check permutation table length
+		if( !( lengthPermIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !lengthPermIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The length must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( Integer.parseInt( lengthPermIntl ) == 0 )	{
+			JOptionPane.showMessageDialog( frame, "The length must be greater than 0", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		return true;
+	}
+
+	/*private boolean checkNumSamples_Intl()	{
+
+		String regex = "[0-9]+";
+		numSamplesDataInIntl = (String) numSamplesDataInIntl_TF.getText();
+		numSamplesDataOutIntl = (String) numSamplesDataOutIntl_TF.getText();
+
+		if( !( numSamplesDataInIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !numSamplesDataInIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The Data In number of samples must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( Integer.parseInt( numSamplesDataInIntl ) == 0 )	{
+			JOptionPane.showMessageDialog( frame, "The Data In number of samples must be greater than 0", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( !( numSamplesDataOutIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !numSamplesDataOutIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The Data Out number of samples must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( Integer.parseInt( numSamplesDataOutIntl ) == 0 )	{
+			JOptionPane.showMessageDialog( frame, "The Data Out number of samples must be greater than 0", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		return true;
+	}*/
+
 	private boolean checkNumSamples()	{
 
 		String regex = "[0-9]+";
@@ -849,6 +996,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		}
 		return true;
 	}
+
 
 	private boolean checkNumBitsPerSymbol()	{
 
@@ -900,10 +1048,20 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				params.add( (String)dataTypeCB.getSelectedItem() );
 				break;
 			case Buffer.InterleaverBuffer:	
-				params.add( baseAddress );
-				params.add( numSamples );
+				//data in
+				params.add( InterleaverBuffer.packedBinaryInIntlIndex, packedBinaryInIntl );
+				params.add( InterleaverBuffer.widthIntlIndex, widthIntl );
+				params.add( InterleaverBuffer.bitInOffsetIntlIndex, bitInOffsetIntl );
+				params.add( InterleaverBuffer.inputOffsetIntlIndex, inputOffsetIntl );
+				//data out
+				params.add( InterleaverBuffer.packedBinaryOutIntlIndex, packedBinaryOutIntl );
+				params.add( InterleaverBuffer.bitOutOffsetIntlIndex, bitOutOffsetIntl );
+				params.add( InterleaverBuffer.outputOffsetIntlIndex, outputOffsetIntl );
+				//permutation table
+				params.add( InterleaverBuffer.offsetPermIntlIndex, offsetPermIntl );
+				params.add( InterleaverBuffer.lengthPermIntlIndex, lengthPermIntl );
 				break;
-			case Buffer.AdaifBuffer:	
+			case Buffer.AdaifBuffer:
 				params.add( baseAddress );
 				params.add( numSamples );
 				break;
@@ -916,7 +1074,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				break;
 			case Buffer.MainMemoryBuffer:	
 				params.add( baseAddress );
-				params.add( numSamples );
 				break;
 			default:	//the main memory buffer 
 				params.add( baseAddress );

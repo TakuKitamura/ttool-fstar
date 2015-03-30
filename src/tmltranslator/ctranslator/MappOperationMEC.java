@@ -61,18 +61,23 @@ public class MappOperationMEC extends OperationMEC	{
 			"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB +
 			"mapper_ctx_init(&" + ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
 			"// initialize context" + CR + TAB +
-			"mapper_set_op(&" + ctxName + ", MAPPER_OP_MOV );" + CR + TAB +
-			"mapper_set_lenm1( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"mapper_set_lba( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"mapper_set_oba( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"mapper_set_iba( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"mapper_set_mult( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"mapper_set_men( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"mapper_set_sym( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"mapper_set_bpsm1( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"mapper_set_m( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"mapper_set_n( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"mapper_set_s( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_sv( /* USER TO DO: value */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_arm( /* USER TO DO: value */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_arm( /* USER TO DO: value */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_re( /* USER TO DO: value */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_se( /* USER TO DO: value */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_fe( /* USER TO DO: value */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_pbo( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->packed_binary_output_mode), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_pbi( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->packed_binary_input_mode), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_widm1( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->samples_width), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_biof( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->bit_input_offset), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_boof( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->bit_output_offset), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_fz( /* USER TO DO: value */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_fo( /* USER TO DO: value */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_iof( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->output_offset), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_oof( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->input_offset), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_pof( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->permutation_offset), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"mapper_set_lenm1( (((MAPPER_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->permutation_length), (uint64_t) /* USER TODO: value */);" + CR + TAB +
 			"}" + CR;
 		cleanup_code = "mapper_ctx_cleanup(&" + ctxName + ");";
 	}

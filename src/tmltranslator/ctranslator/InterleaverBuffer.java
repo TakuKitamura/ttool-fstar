@@ -51,36 +51,63 @@ import java.nio.*;
 import myutil.*;
 import tmltranslator.*;
 
-public class InterleaverBuffer extends BaseBuffer	{
+public class InterleaverBuffer extends Buffer	{
 
 	public static final String[] symmetricalValues = { "OFF" , "ON" };
-	public static final int numSamplesIndex = 1;
-	public static final int baseAddressIndex = 2;
-	public static final int bitsPerSymbolIndex = 3;
-	public static final int symbolAddressIndex = 4;
-	public static final int symmetricalIndex = 5;
+	//data in
+	public static final int packedBinaryInIntlIndex = 1;
+	public static final int widthIntlIndex = 2;
+	public static final int bitInOffsetIntlIndex = 3;
+	public static final int inputOffsetIntlIndex = 4;
+	//data out
+	public static final int packedBinaryOutIntlIndex = 5;
+	public static final int bitOutOffsetIntlIndex = 6;
+	public static final int outputOffsetIntlIndex = 7;
+	//permutation table
+	public static final int offsetPermIntlIndex = 8;
+	public static final int lengthPermIntlIndex = 9;
 	
-	protected static String numSamplesValue = USER_TO_DO;
-	protected static final String numSamplesType = "uint8_t";
+	public static String packedBinaryInIntlValue;
+	public static String packedBinaryInIntlType = "bool";
 	
-	protected static String baseAddressValue = USER_TO_DO;
-	protected static final String baseAddressType = "uint32_t*";
+	public static String widthIntlValue;
+	public static String widthIntlType = "uint8_t";
 	
-	protected static String bitsPerSymbolValue = USER_TO_DO;
-	protected static final String bitsPerSymbolType = "uint8_t";
+	public static String bitInOffsetIntlValue;
+	public static String bitInOffsetIntlType = "uint8_t";
 	
-	protected static String symbolAddressValue = USER_TO_DO;
-	protected static final String symbolAddressType = "uint16_t*";
-
-	protected static String symmetricalValue = USER_TO_DO;
-	protected static final String symmetricalValueType = "bool";
+	public static String inputOffsetIntlValue;
+	public static String inputOffsetIntlType = "uint16_t";
+	
+	//data out
+	public static String packedBinaryOutIntlValue;
+	public static String packedBinaryOutIntlType = "bool";
+	
+	public static String bitOutOffsetIntlValue;
+	public static String bitOutOffsetIntlType = "uint8_t";
+	
+	public static String outputOffsetIntlValue;
+	public static String outputOffsetIntlType = "uint16_t";
+	
+	//permutation table
+	public static String offsetPermIntlValue;
+	public static String offsetPermIntlType = "uint16_t";
+	
+	public static String lengthPermIntlValue;
+	public static String lengthPermIntlType = "uint16_t";
 
 	public static final String DECLARATION = "extern struct INTERLEAVER_BUFFER_TYPE {" + CR + TAB +
-																						numSamplesType + SP + "num_symbols" + SC + CR + TAB +
-																						baseAddressType + SP + "base_address" + SC + CR + TAB +
-																						bitsPerSymbolType + SP + "num_bits_symbol" + SC + CR + TAB +
-																						symbolAddressType + SP + "symbol_base_address" + SC + CR + TAB +
-																						symmetricalValueType + SP + "symmetrical_value" + SC + CR + "};";
+																						packedBinaryInIntlType + SP + "packed_binary_input_mode" + SC + CR + TAB +
+																						widthIntlType + SP + "sample_width" + SC + CR + TAB +
+																						bitInOffsetIntlType + SP + "bit_input_offset" + SC + CR + TAB +
+																						inputOffsetIntlType + SP + "input_offset" + SC + CR + TAB +
+																						//data out
+																						packedBinaryOutIntlType + SP + "packed_binary_output_mode" + SC + CR + TAB +
+																						bitOutOffsetIntlType + SP + "bit_output_offset" + SC + CR + TAB +
+																						outputOffsetIntlType + SP + "output_offset" + SC + CR + TAB +
+																						//permutation table
+																						offsetPermIntlType + SP + "permutation_offset" + SC + CR + TAB + 
+																						lengthPermIntlType + SP + "permutation_length" + SC + CR + "};";
 	
 	private String Context = "embb_mapper_context";
 	
@@ -95,41 +122,65 @@ public class InterleaverBuffer extends BaseBuffer	{
 		if( bufferParameters != null )	{
 			retrieveBufferParameters();
 		}
-		s.append( TAB + name + ".num_symbols = " + numSamplesValue + SC + CR );
-		s.append( TAB + name + ".base_address = " + baseAddressValue + SC + CR );
-		s.append( TAB + name + ".num_bits_per_symbol = " + bitsPerSymbolValue + SC + CR );
-		s.append( TAB + name + ".symbol_base_address = " + symbolAddressValue + SC + CR );
-		s.append( TAB + name + ".symmetrical_value = " + symmetricalValue + SC + CR );
+		s.append( TAB + name + ".packed_binary_input_mode = " + packedBinaryInIntlValue + SC + CR );
+		s.append( TAB + name + ".sample_width = " + SP + widthIntlValue + SC + CR );
+		s.append( TAB + name + ".bit_input_offset = " + SP + bitInOffsetIntlValue + SC + CR );
+		s.append( TAB + name + ".input_offset = " + SP + inputOffsetIntlValue + SC + CR );
+		//data out
+		s.append( TAB + name + ".packed_binary_output_mode = " + SP + packedBinaryOutIntlValue + SC + CR );
+		s.append( TAB + name + ".bit_output_offset = " + SP + bitOutOffsetIntlValue + SC + CR );
+		s.append( TAB + name + ".output_offset = " + SP + outputOffsetIntlValue + SC + CR );
+		//permutation table
+		s.append( TAB + name + ".permutation_offset = " + SP + offsetPermIntlValue + SC + CR ); 
+		s.append( TAB + name + ".permutation_length = " + SP + lengthPermIntlValue + SC + CR );
 		return s.toString();
 	}
 
 	public String toString()	{
 
 		StringBuffer s = new StringBuffer( super.toString() );
-		s.append( TAB2 + "num_symbols = " + numSamplesValue + SC + CR );
-		s.append( TAB2 + "base_address = " + baseAddressValue + SC + CR );
-		s.append( TAB2 + "num_bits_per_symbol = " + bitsPerSymbolValue + SC + CR );
-		s.append( TAB2 + "symbol_base_address = " + bitsPerSymbolValue + SC + CR );
-		s.append( TAB2 + "symmetrical_value = " + symmetricalValue + SC + CR );
+		s.append( TAB2 + ".packed_binary_input_mode = " + packedBinaryInIntlValue + SC + CR );
+		s.append( TAB2 + ".sample_width = " + SP + widthIntlValue + SC + CR );
+		s.append( TAB2 + ".bit_input_offset = " + SP + bitInOffsetIntlValue + SC + CR );
+		s.append( TAB2 + ".input_offset = " + SP + inputOffsetIntlValue + SC + CR );
+		//data out
+		s.append( TAB2 + ".packed_binary_output_mode = " + SP + packedBinaryOutIntlValue + SC + CR );
+		s.append( TAB2 + ".bit_output_offset = " + SP + bitOutOffsetIntlValue + SC + CR );
+		s.append( TAB2 + ".output_offset = " + SP + outputOffsetIntlValue + SC + CR );
+		//permutation table
+		s.append( TAB2 + ".permutation_offset = " + SP + offsetPermIntlValue + SC + CR ); 
+		s.append( TAB2 + ".permutation_length = " + SP + lengthPermIntlValue + SC + CR );
 		return s.toString();
 	}
 	
 	private void retrieveBufferParameters()	{
 
-		if( bufferParameters.get( numSamplesIndex ).length() > 0 )	{
-			numSamplesValue = bufferParameters.get( numSamplesIndex );
+		if( bufferParameters.get( packedBinaryInIntlIndex ).length() > 0 )	{
+			packedBinaryInIntlValue = String.valueOf((new Vector<String>( Arrays.asList( Buffer.onOffVector  ))).indexOf( bufferParameters.get( packedBinaryInIntlIndex )));
 		}
-		if( bufferParameters.get( baseAddressIndex ).length() > 0 )	{
-			baseAddressValue = bufferParameters.get( baseAddressIndex );
+		if( bufferParameters.get( widthIntlIndex ).length() > 0 )	{
+			widthIntlValue = bufferParameters.get( widthIntlIndex );
 		}
-		if( bufferParameters.get( bitsPerSymbolIndex ).length() > 0 )	{
-			bitsPerSymbolValue = bufferParameters.get( bitsPerSymbolIndex );
+		if( bufferParameters.get( bitInOffsetIntlIndex ).length() > 0 )	{
+			bitInOffsetIntlValue = bufferParameters.get( bitInOffsetIntlIndex );
 		}
-		if( bufferParameters.get( symbolAddressIndex ).length() > 0 )	{
-			symbolAddressValue = bufferParameters.get( symbolAddressIndex );
+		if( bufferParameters.get( inputOffsetIntlIndex ).length() > 0 )	{
+			inputOffsetIntlValue = bufferParameters.get( inputOffsetIntlIndex );
 		}
-		if( bufferParameters.get( symmetricalIndex ).length() > 0 )	{
-		symmetricalValue = String.valueOf( ( new Vector<String>( Arrays.asList( symmetricalValues ))).indexOf( bufferParameters.get( symmetricalIndex )));
+		if( bufferParameters.get( packedBinaryOutIntlIndex ).length() > 0 )	{
+			packedBinaryOutIntlValue = String.valueOf((new Vector<String>( Arrays.asList( Buffer.onOffVector  ))).indexOf( bufferParameters.get( packedBinaryOutIntlIndex )));
+		}
+		if( bufferParameters.get( bitOutOffsetIntlIndex ).length() > 0 )	{
+			bitOutOffsetIntlValue = bufferParameters.get( bitOutOffsetIntlIndex );
+		}
+		if( bufferParameters.get( outputOffsetIntlIndex ).length() > 0 )	{
+			outputOffsetIntlValue = bufferParameters.get( outputOffsetIntlIndex );
+		}
+		if( bufferParameters.get( offsetPermIntlIndex ).length() > 0 )	{
+			offsetPermIntlValue = bufferParameters.get( offsetPermIntlIndex );
+		}
+		if( bufferParameters.get( lengthPermIntlIndex ).length() > 0 )	{
+			lengthPermIntlValue = bufferParameters.get( lengthPermIntlIndex );
 		}
 	}
 

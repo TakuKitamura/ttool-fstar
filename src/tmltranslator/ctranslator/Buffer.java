@@ -54,6 +54,7 @@ import tmltranslator.*;
 public class Buffer	{
 
 	public static final String[] bufferTypesList = { "FEP buffer", "MAPPER buffer", "ADAIF buffer", "INTERLEAVER Buffer", "MAIN MEMORY buffer" };
+	public static final String[] onOffVector = { "ON", "OFF" };
 	public static final int FepBuffer = 0;
 	public static final int MapperBuffer = 1;
 	public static final int AdaifBuffer = 2;

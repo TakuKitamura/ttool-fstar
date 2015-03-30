@@ -51,7 +51,7 @@ import java.nio.*;
 import myutil.*;
 import tmltranslator.*;
 
-public class FepBuffer extends BaseBuffer	{
+public class FepBuffer extends Buffer	{
 
 
 	public static final String[] dataTypeList = { "int8", "int16", "cpx16", "cpx32" };
