@@ -64,13 +64,13 @@ public class FepBuffer extends Buffer	{
 	protected String numSamplesValue = USER_TO_DO;
 	protected static final String numSamplesType = "uint8_t";
 	
-	protected static String baseAddressValue = USER_TO_DO;
+	protected String baseAddressValue = USER_TO_DO;
 	protected static final String baseAddressType = "uint32_t*";
 	
-	protected static String bankValue = USER_TO_DO;
+	protected String bankValue = USER_TO_DO;
 	protected static final String bankType = "uint8_t";
 	
-	protected static String dataTypeValue = USER_TO_DO;
+	protected String dataTypeValue = USER_TO_DO;
 	protected static final String dataTypeType = "uint8_t";
 
 	public static final String DECLARATION = "extern struct FEP_BUFFER_TYPE {" + CR + TAB +

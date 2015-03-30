@@ -67,33 +67,33 @@ public class InterleaverBuffer extends Buffer	{
 	public static final int offsetPermIntlIndex = 8;
 	public static final int lengthPermIntlIndex = 9;
 	
-	public static String packedBinaryInIntlValue;
+	public String packedBinaryInIntlValue = USER_TO_DO;
 	public static String packedBinaryInIntlType = "bool";
 	
-	public static String widthIntlValue;
+	public String widthIntlValue = USER_TO_DO;
 	public static String widthIntlType = "uint8_t";
 	
-	public static String bitInOffsetIntlValue;
+	public String bitInOffsetIntlValue = USER_TO_DO;
 	public static String bitInOffsetIntlType = "uint8_t";
 	
-	public static String inputOffsetIntlValue;
+	public String inputOffsetIntlValue = USER_TO_DO;
 	public static String inputOffsetIntlType = "uint16_t";
 	
 	//data out
-	public static String packedBinaryOutIntlValue;
+	public String packedBinaryOutIntlValue = USER_TO_DO;
 	public static String packedBinaryOutIntlType = "bool";
 	
-	public static String bitOutOffsetIntlValue;
+	public String bitOutOffsetIntlValue = USER_TO_DO;
 	public static String bitOutOffsetIntlType = "uint8_t";
 	
-	public static String outputOffsetIntlValue;
+	public String outputOffsetIntlValue = USER_TO_DO;
 	public static String outputOffsetIntlType = "uint16_t";
 	
 	//permutation table
-	public static String offsetPermIntlValue;
+	public String offsetPermIntlValue = USER_TO_DO;
 	public static String offsetPermIntlType = "uint16_t";
 	
-	public static String lengthPermIntlValue;
+	public String lengthPermIntlValue = USER_TO_DO;
 	public static String lengthPermIntlType = "uint16_t";
 
 	public static final String DECLARATION = "extern struct INTERLEAVER_BUFFER_TYPE {" + CR + TAB +

@@ -57,10 +57,10 @@ public class MMBuffer extends Buffer	{
 	public static final int numSamplesIndex = 1;
 	public static final int baseAddressIndex = 2;
 
-	protected static String numSamplesValue = USER_TO_DO;
+	protected String numSamplesValue = USER_TO_DO;
 	protected static final String numSamplesType = "uint8_t";
 	
-	protected static String baseAddressValue = USER_TO_DO;
+	protected String baseAddressValue = USER_TO_DO;
 	protected static final String baseAddressType = "uint32_t*";
 	
 	public static final String DECLARATION = "extern struct MM_BUFFER_TYPE {" + CR + TAB +

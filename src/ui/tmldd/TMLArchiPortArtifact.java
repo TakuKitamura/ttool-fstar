@@ -292,11 +292,15 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         			sb.append("\" numSamples=\"" + bufferParameters.get( MMBuffer.numSamplesIndex ) );
 							break;
 						case Buffer.MapperBuffer:	
-    	    		sb.append("\" baseAddress=\"" + bufferParameters.get( MapperBuffer.baseAddressIndex ) );
-      	  		sb.append("\" numSamples=\"" + bufferParameters.get( MapperBuffer.numSamplesIndex ) );
-        			sb.append("\" bitsPerSymbol=\"" + bufferParameters.get( MapperBuffer.bitsPerSymbolIndex ) );
-        			sb.append("\" bitOffsetFirstSymbol=\"" + bufferParameters.get( MapperBuffer.bitOffsetFirstSymbolIndex ) );
-        			sb.append("\" symmetricalValue=\"" + bufferParameters.get( MapperBuffer.symmetricalIndex ) );
+							//data in
+      	  		sb.append("\" numSamplesDataInMapp=\"" + bufferParameters.get( MapperBuffer.numSamplesDataInMappIndex ) );
+    	    		sb.append("\" baseAddressDataInMapp=\"" + bufferParameters.get( MapperBuffer.baseAddressDataInMappIndex ) );
+        			sb.append("\" bitsPerSymbolDataInMapp=\"" + bufferParameters.get( MapperBuffer.bitsPerSymbolDataInMappIndex ) );
+        			sb.append("\" symmetricalValueDataInMapp=\"" + bufferParameters.get( MapperBuffer.symmetricalValueDataInMappIndex ) );
+							//data out
+        			sb.append("\" baseAddressDataOutMapp=\"" + bufferParameters.get( MapperBuffer.baseAddressDataOutMappIndex ) );
+							//Look-up Table
+        			sb.append("\" baseAddressLUTMapp=\"" + bufferParameters.get( MapperBuffer.baseAddressLUTMappIndex ) );
 							break;
 						case Buffer.MainMemoryBuffer:	
   	      		sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
@@ -370,11 +374,15 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 																		break;
 																	case Buffer.MapperBuffer:	
-												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
-												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
-												        		bufferParameters.add( elt.getAttribute( "bitsPerSymbol" ) );
-												        		bufferParameters.add( elt.getAttribute( "bitOffsetFirstSymbol" ) );
-												        		bufferParameters.add( elt.getAttribute( "symmetricalValue" ) );
+																		//data in
+												        		bufferParameters.add( elt.getAttribute( "numSamplesDataInMapp" ) );
+												        		bufferParameters.add( elt.getAttribute( "baseAddressDataInMapp" ) );
+												        		bufferParameters.add( elt.getAttribute( "bitsPerSymbolDataInMapp" ) );
+												        		bufferParameters.add( elt.getAttribute( "symmetricalValueDataInMapp" ) );
+																		//data out
+											        			bufferParameters.add( elt.getAttribute( "baseAddressDataOutMapp" ) );
+																		//Look-up Table
+											        			bufferParameters.add( elt.getAttribute( "baseAddressLUTMapp" ) );
 																		break;
 																	case Buffer.MainMemoryBuffer:	
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );

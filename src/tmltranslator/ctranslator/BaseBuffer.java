@@ -55,7 +55,7 @@ public class BaseBuffer extends Buffer	{
 
 	public static final int baseAddressIndex = 1;
 
-	protected static String baseAddressValue = USER_TO_DO;
+	protected String baseAddressValue = USER_TO_DO;
 	protected static final String baseAddressType = "uint32_t*";
 	
 	private String Context = "embb_mapper_context";

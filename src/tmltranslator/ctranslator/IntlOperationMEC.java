@@ -47,7 +47,6 @@
 package tmltranslator.ctranslator;;
 
 import java.util.*;
-//import Ctranslator.*;
 
 public class IntlOperationMEC extends OperationMEC	{
 
@@ -61,23 +60,17 @@ public class IntlOperationMEC extends OperationMEC	{
 			"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB +
 			"intl_ctx_init(&" + ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
 			"// initialize context" + CR + TAB +
-			"intl_set_op(&" + ctxName + ", FEP_OP_MOV);" + CR + TAB +
-			"intl_set_sv( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_arm( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_re( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_se( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_fe( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_pbo( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_pbi( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_widm1( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_biof( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_boof( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_fz( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_fo( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_iof( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_oof( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_pof( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"intl_set_lenm1( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_lenm1( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->num_symbols), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_lba( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->lut_base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_oba( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->output_base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_iba( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->input_base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_mult( /* USER TO DO */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_men( /* USER TO DO */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_sym( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->symmetrical_value), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_bpsm1( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->num_bits_per_symbol), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_m( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_n( /* USER TO DO */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
+			"intl_set_s( /* USER TO DO */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
 			"}" + CR;
 		cleanup_code = "intl_ctx_cleanup(&" + ctxName + ");";
 	}

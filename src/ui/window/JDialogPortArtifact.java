@@ -70,8 +70,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
   private String mappedMemory = "VOID"; 
 
 	protected JComboBox referenceCommunicationName, priority, memoryCB;
-	protected JTextField baseAddressTF, numSamplesTF, bitOffsetFirstSymbolTF, bitsPerSymbolTF;
-	protected String baseAddress, mappedPort, sampleLength, numSamples, bitOffsetFirstSymbol, bitsPerSymbol;
+	protected JTextField baseAddressTF, numSamplesTF, bitsPerSymbolTF;
+	protected String baseAddress, mappedPort, sampleLength, numSamples, bitsPerSymbol;
 	protected String bank, dataType, symmetricalValue;
 	protected JComboBox dataTypeCB, bankCB, symmetricalValueCB;
 
@@ -90,15 +90,15 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	protected String lengthPermIntl, offsetPermIntl;
 
 	//Mapper Data In
-	protected JTextField baseAddressDataInMapp_TF, numSamplesDataInMapp_TF, bitsPerSymbolDataInMapp_TF, bitOffsetFirstSymbolDataInMapp_TF;
-	protected String baseAddressDataInMapp, numSamplesDataInMapp, bitsPerSymbolDataInMapp, bitOffsetFirstSymbolDataInMapp, symmetricalValueDataInMapp;
+	protected JTextField baseAddressDataInMapp_TF, numSamplesDataInMapp_TF, bitsPerSymbolDataInMapp_TF;
+	protected String baseAddressDataInMapp, numSamplesDataInMapp, bitsPerSymbolDataInMapp, symmetricalValueDataInMapp;
 	protected JComboBox symmetricalValueDataInMapp_CB;
 	//Mapper Data Out
-	protected JTextField baseAddressDataOutMapp_TF, numSamplesDataOutMapp_TF;
-	protected String baseAddressDataOutMapp, numSamplesDataOutMapp;
+	protected JTextField baseAddressDataOutMapp_TF;
+	protected String baseAddressDataOutMapp;
 	//Mapper LUT
-	protected JTextField numSamplesLUTMapp_TF, baseAddressLUTMapp_TF;
-	protected String numSamplesLUTMapp, baseAddressLUTMapp;
+	protected JTextField baseAddressLUTMapp_TF;
+	protected String baseAddressLUTMapp;
 	
   // Main Panel
   private JButton closeButton;
@@ -283,11 +283,15 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				break;
 			case Buffer.MapperBuffer:	
 				if( loadBufferParameters )	{
-					baseAddress = bufferParameters.get( MapperBuffer.baseAddressIndex );
-					numSamples = bufferParameters.get( MapperBuffer.numSamplesIndex );
-					bitsPerSymbol = bufferParameters.get( MapperBuffer.bitsPerSymbolIndex );
-					bitOffsetFirstSymbol = bufferParameters.get( MapperBuffer.bitOffsetFirstSymbolIndex );
-					symmetricalValue = bufferParameters.get( MapperBuffer.symmetricalIndex );
+					//data in
+					numSamplesDataInMapp = bufferParameters.get( MapperBuffer.numSamplesDataInMappIndex );
+					baseAddressDataInMapp = bufferParameters.get( MapperBuffer.baseAddressDataInMappIndex );
+					bitsPerSymbolDataInMapp = bufferParameters.get( MapperBuffer.bitsPerSymbolDataInMappIndex );
+					symmetricalValueDataInMapp = bufferParameters.get( MapperBuffer.symmetricalValueDataInMappIndex );
+					//data out
+					baseAddressDataOutMapp = bufferParameters.get( MapperBuffer.baseAddressDataOutMappIndex );
+					//look-up table
+					baseAddressLUTMapp = bufferParameters.get( MapperBuffer.baseAddressLUTMappIndex );
 				}
 				makeMapperBufferPanel( c1, c2 );
 				break;
@@ -496,11 +500,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel3.add( bitsPerSymbolDataInMapp_TF, c1 );
 		//
-		bitOffsetFirstSymbolDataInMapp_TF = new JTextField( bitOffsetFirstSymbolDataInMapp, 5 );
-		panel3.add( new JLabel( "Bit offset of first symbol = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel3.add( bitOffsetFirstSymbolDataInMapp_TF, c1 );
-		//
 		symmetricalValueDataInMapp_CB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
 		panel3.add( new JLabel( "Symmetrical value = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
@@ -510,24 +509,12 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		panel3.add( symmetricalValueDataInMapp_CB, c1 );
 
 		//Data Out panel
-		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesDataOutMapp_TF = new JTextField( numSamplesDataOutMapp, 5 );
-		panel4.add( new JLabel( "Number of symbols = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel4.add( numSamplesDataOutMapp_TF, c1 );
-		//
 		baseAddressDataOutMapp_TF = new JTextField( baseAddressDataOutMapp, 5 );
 		panel4.add( new JLabel( "Base address = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel4.add( baseAddressDataOutMapp_TF, c1 );
 		//
 		//Look Up Table panel
-		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesLUTMapp_TF = new JTextField( numSamplesLUTMapp, 5 );
-		panel5.add( new JLabel( "Number of symbols = "),  c2 );
-		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel5.add( numSamplesLUTMapp_TF, c1 );
-		//
 		baseAddressLUTMapp_TF = new JTextField( baseAddressLUTMapp, 5 );
 		panel5.add( new JLabel( "Base address = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
@@ -671,11 +658,30 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 	private void flushBuffersStrings()	{
 	
+		//interleaver
+		widthIntl = "";
+		bitInOffsetIntl = "";
+		inputOffsetIntl = "";
+		packedBinaryInIntl = "";
+		packedBinaryOutIntl = "";
+		bitOutOffsetIntl = "";
+		outputOffsetIntl = "";
+		lengthPermIntl = "";
+		offsetPermIntl = "";
+
+		//mapper
+		baseAddressDataInMapp = "";
+		numSamplesDataInMapp = "";
+		bitsPerSymbolDataInMapp = "";
+		symmetricalValueDataInMapp = "";
+		baseAddressDataOutMapp = "";
+		baseAddressLUTMapp = "";
+
+		//other buffers
 		baseAddress = "";
 		mappedPort = "";
 		sampleLength = "";
 		numSamples = "";
-		bitOffsetFirstSymbol = "";
 		bitsPerSymbol = "";
 		symmetricalValue = "";
 	}
@@ -728,30 +734,22 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
     }
 
 		private boolean handleClosureWhenSelectedFepBuffer()	{
-
 			return checkBaseAddress() && checkNumSamples();
 		}
 
 		private boolean handleClosureWhenSelectedInterleaverBuffer()	{
-
-			// need to add the code to check for all 3 tabs
 			return checkDI_Intl() && checkDO_Intl() && CheckPerm_Intl();
 		}
 
 		private boolean handleClosureWhenSelectedAdaifBuffer()	{
-
 			return checkBaseAddress() && checkNumSamples();
 		}
 
 		private boolean handleClosureWhenSelectedMapperBuffer()	{
-			
-			// need to add the code to check for all 3 tabs
-			symmetricalValue = (String)symmetricalValueCB.getSelectedItem();
-			return checkBaseAddress() && checkNumSamples() && checkNumBitsPerSymbol() && checkSymbolBaseAddress();
+			return checkDI_Mapper() && checkDO_Mapper() && checkLUT_Mapper();
 		}
 
 		private boolean handleClosureWhenSelectedMainMemoryBuffer()	{
-
 			return checkBaseAddress();
 		}
 
@@ -846,10 +844,84 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		}
 	return true;
 	}
+
+	private boolean checkLUT_Mapper()	{
+
+		baseAddressLUTMapp = (String) baseAddressLUTMapp_TF.getText();
+		if( baseAddressLUTMapp.length() <= 2 && baseAddressLUTMapp.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddressLUTMapp.length() > 2 )	{
+			if( !( baseAddressLUTMapp.substring(0,2).equals("0x") || baseAddressLUTMapp.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean checkDI_Mapper()	{
+
+		numSamplesDataInMapp = (String)numSamplesDataInMapp_TF.getText();
+		baseAddressDataInMapp = (String)baseAddressDataInMapp_TF.getText();
+		bitsPerSymbolDataInMapp = (String)bitsPerSymbolDataInMapp_TF.getText();
+		symmetricalValueDataInMapp = (String)symmetricalValueDataInMapp_CB.getSelectedItem();
+		String regex = "[0-9]+";
+
+		if( baseAddressDataInMapp.length() <= 2 && baseAddressDataInMapp.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddressDataInMapp.length() > 2 )	{
+			if( !( baseAddressDataInMapp.substring(0,2).equals("0x") || baseAddressDataInMapp.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+		if( !( numSamplesDataInMapp.length() > 0 ) )	{
+			return true;
+		}
+		if( !numSamplesDataInMapp.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of bits/symbol must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( !( bitsPerSymbolDataInMapp.length() > 0 ) )	{
+			return true;
+		}
+		if( !bitsPerSymbolDataInMapp.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of bits/symbol must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		return true;
+	}
+
+	private boolean checkDO_Mapper()	{
+
+		baseAddressDataOutMapp = (String)baseAddressDataOutMapp_TF.getText();
+		if( baseAddressDataOutMapp.length() <= 2 && baseAddressDataOutMapp.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddressDataOutMapp.length() > 2 )	{
+			if( !( baseAddressDataOutMapp.substring(0,2).equals("0x") || baseAddressDataOutMapp.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+		return true;
+	}
 			
 	private boolean checkDI_Intl()	{
 
-	
 		String regex = "[0-9]+";
 		widthIntl = (String)widthIntl_TF.getText();
 		bitInOffsetIntl = (String)bitInOffsetIntl_TF.getText();
@@ -860,7 +932,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			return true;
 		}
 		if( !widthIntl.matches( regex ) )	{
-			JOptionPane.showMessageDialog( frame, "The samples widthmust be expressed as a natural", "Badly formatted parameter",
+			JOptionPane.showMessageDialog( frame, "The samples width must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
@@ -1018,24 +1090,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		return true;
 	}
 	
-	private boolean checkSymbolBaseAddress()	{
-
-		bitOffsetFirstSymbol = (String) bitOffsetFirstSymbolTF.getText();
-		if( bitOffsetFirstSymbol.length() <= 2 && bitOffsetFirstSymbol.length() > 0 )	{
-			JOptionPane.showMessageDialog( frame, "Please enter a valid symbol base address", "Badly formatted parameter",
-																			JOptionPane.INFORMATION_MESSAGE );
-			return false;
-		}
-		if( bitOffsetFirstSymbol.length() > 2 )	{
-			if( !( bitOffsetFirstSymbol.substring(0,2).equals("0x") || bitOffsetFirstSymbol.substring(0,2).equals("0X") ) )	{
-				JOptionPane.showMessageDialog( frame, "Bit offset of first symbol must be expressed in hexadecimal", "Badly formatted parameter",
-																				JOptionPane.INFORMATION_MESSAGE );
-				return false;
-			}
-		}
-	return true;
-	}
-
 	public ArrayList<String> getBufferParameters()	{
 
 		ArrayList<String> params = new ArrayList<String>();
@@ -1061,16 +1115,20 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				params.add( InterleaverBuffer.offsetPermIntlIndex, offsetPermIntl );
 				params.add( InterleaverBuffer.lengthPermIntlIndex, lengthPermIntl );
 				break;
-			case Buffer.AdaifBuffer:
+			case Buffer.BaseBuffer:
 				params.add( baseAddress );
 				params.add( numSamples );
 				break;
 			case Buffer.MapperBuffer:	
-				params.add( baseAddress );
-				params.add( numSamples );
-				params.add( bitsPerSymbol );
-				params.add( bitOffsetFirstSymbol );
-				params.add( symmetricalValue );
+				//data in
+				params.add( MapperBuffer.numSamplesDataInMappIndex, numSamplesDataInMapp );
+				params.add( MapperBuffer.baseAddressDataInMappIndex, baseAddressDataInMapp );
+				params.add( MapperBuffer.bitsPerSymbolDataInMappIndex, bitsPerSymbolDataInMapp );
+				params.add( MapperBuffer.symmetricalValueDataInMappIndex, symmetricalValueDataInMapp );
+				//data out
+				params.add( MapperBuffer.baseAddressDataOutMappIndex, baseAddressDataOutMapp );
+				//look-up table
+				params.add( MapperBuffer.baseAddressLUTMappIndex, baseAddressLUTMapp );
 				break;
 			case Buffer.MainMemoryBuffer:	
 				params.add( baseAddress );

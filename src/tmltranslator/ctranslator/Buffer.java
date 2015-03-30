@@ -60,6 +60,7 @@ public class Buffer	{
 	public static final int AdaifBuffer = 2;
 	public static final int InterleaverBuffer = 3;
 	public static final int MainMemoryBuffer = 4;
+	public static final int BaseBuffer = 5;
 
 	public static final int bufferTypeIndex = 0;
 
