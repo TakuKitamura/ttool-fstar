@@ -1534,6 +1534,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 	while(ite.hasNext()) {
 	    TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
 	    terms[i] = port.getPortName();
+	    i ++;
 	}
 	
 	return terms;
@@ -1552,6 +1553,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 	while(ite.hasNext()) {
 	    TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
 	    terms[i] = port.getPortName();
+	    i ++;
 	}
 	
 	return terms;
@@ -1570,6 +1572,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 	while(ite.hasNext()) {
 	    TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
 	    terms[i] = port.getPortName();
+	    i++;
 	}
 	
 	return terms;
@@ -1588,6 +1591,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 	while(ite.hasNext()) {
 	    TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
 	    terms[i] = port.getPortName();
+	    i ++;
 	}
 	
 	return terms;
@@ -1606,6 +1610,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 	while(ite.hasNext()) {
 	    TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
 	    terms[i] = port.getPortName();
+	    i++;
 	}
 	
 	return terms;

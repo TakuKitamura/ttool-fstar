@@ -230,11 +230,11 @@ public class TMLADWaitEvent extends TGCWithoutInternalComponent implements Check
         }
 
 	ArrayList<String []> help = new ArrayList<String []>();
-	String[] allOutEvents = tdp.getMGUI().getAllInEvents();
-	help.add(allOutEvents);
+	String[] allInEvents = tdp.getMGUI().getAllInEvents();
+	help.add(allInEvents);
 
         JDialogMultiString jdms = new JDialogMultiString(frame, "Setting event's properties", nParam+1, labels, values, help);
-        jdms.setSize(350, 300);
+        jdms.setSize(450, 300);
         GraphicLib.centerOnParent(jdms);
         jdms.show(); // blocked until dialog has been closed
 

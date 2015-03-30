@@ -1,54 +1,55 @@
 /**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
-ludovic.apvrille AT enst.fr
+   ludovic.apvrille AT enst.fr
 
-This software is a computer program whose purpose is to allow the 
-edition of TURTLE analysis, design and deployment diagrams, to 
-allow the generation of RT-LOTOS or Java code from this diagram, 
-and at last to allow the analysis of formal validation traces 
-obtained from external tools, e.g. RTL from LAAS-CNRS and CADP 
-from INRIA Rhone-Alpes.
+   This software is a computer program whose purpose is to allow the
+   edition of TURTLE analysis, design and deployment diagrams, to
+   allow the generation of RT-LOTOS or Java code from this diagram,
+   and at last to allow the analysis of formal validation traces
+   obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+   from INRIA Rhone-Alpes.
 
-This software is governed by the CeCILL  license under French law and
-abiding by the rules of distribution of free software.  You can  use, 
-modify and/ or redistribute the software under the terms of the CeCILL
-license as circulated by CEA, CNRS and INRIA at the following URL
-"http://www.cecill.info". 
+   This software is governed by the CeCILL  license under French law and
+   abiding by the rules of distribution of free software.  You can  use,
+   modify and/ or redistribute the software under the terms of the CeCILL
+   license as circulated by CEA, CNRS and INRIA at the following URL
+   "http://www.cecill.info".
 
-As a counterpart to the access to the source code and  rights to copy,
-modify and redistribute granted by the license, users are provided only
-with a limited warranty  and the software's author,  the holder of the
-economic rights,  and the successive licensors  have only  limited
-liability. 
+   As a counterpart to the access to the source code and  rights to copy,
+   modify and redistribute granted by the license, users are provided only
+   with a limited warranty  and the software's author,  the holder of the
+   economic rights,  and the successive licensors  have only  limited
+   liability.
 
-In this respect, the user's attention is drawn to the risks associated
-with loading,  using,  modifying and/or developing or reproducing the
-software by the user in light of its specific status of free software,
-that may mean  that it is complicated to manipulate,  and  that  also
-therefore means  that it is reserved for developers  and  experienced
-professionals having in-depth computer knowledge. Users are therefore
-encouraged to load and test the software's suitability as regards their
-requirements in conditions enabling the security of their systems and/or 
-data to be ensured and,  more generally, to use and operate it in the 
-same conditions as regards security. 
+   In this respect, the user's attention is drawn to the risks associated
+   with loading,  using,  modifying and/or developing or reproducing the
+   software by the user in light of its specific status of free software,
+   that may mean  that it is complicated to manipulate,  and  that  also
+   therefore means  that it is reserved for developers  and  experienced
+   professionals having in-depth computer knowledge. Users are therefore
+   encouraged to load and test the software's suitability as regards their
+   requirements in conditions enabling the security of their systems and/or
+   data to be ensured and,  more generally, to use and operate it in the
+   same conditions as regards security.
 
-The fact that you are presently reading this means that you have had
-knowledge of the CeCILL license and that you accept its terms.
+   The fact that you are presently reading this means that you have had
+   knowledge of the CeCILL license and that you accept its terms.
 
-/**
- * Class TMLADWriteChannel
- * Action of writting data in channel
- * Creation: 17/11/2005
- * @version 1.0 17/11/2005
- * @author Ludovic APVRILLE
- * @see
- */
+   /**
+   * Class TMLADWriteChannel
+   * Action of writting data in channel
+   * Creation: 17/11/2005
+   * @version 1.0 17/11/2005
+   * @author Ludovic APVRILLE
+   * @see
+   */
 
 package ui.tmlad;
 
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.*;
+import java.util.*;
 
 import org.w3c.dom.*;
 
@@ -62,34 +63,34 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
     protected int textY =  15;
     protected int arc = 5;
     protected int linebreak = 10;
-    
+
     protected String channelName = "ch";
     protected String nbOfSamples= "1";
-	
-	protected int stateOfError = 0; // Not yet checked
-    
+
+    protected int stateOfError = 0; // Not yet checked
+
     public TMLADWriteChannel(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
+
         width = 30;
         height = 20;
         minWidth = 30;
-        
+
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
-        
+
         moveable = true;
         editable = true;
         removable = true;
-        
+
         makeValue();
         name = "write channel";
-        
+
         myImageIcon = IconManager.imgic900;
     }
-    
+
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -99,108 +100,120 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
             //updateConnectingPoints();
         }
         //g.drawRoundRect(x, y, width, height, arc, arc);
-		
-				if (stateOfError > 0)  {
-			Color c = g.getColor();
-			switch(stateOfError) {
-			case ErrorHighlight.OK:
-				g.setColor(ColorManager.TML_PORT_CHANNEL);
-				break;
-			default:
-				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-			}
-			// Making the polygon
-			int [] px1 = {x, x+width-linebreak, x+width, x+width-linebreak, x};
-			int [] py1 = {y, y, y+(height/2), y+height, y+height};
-			g.fillPolygon(px1, py1, 5);
-			g.setColor(c);
-		}
-		
+
+        if (stateOfError > 0)  {
+            Color c = g.getColor();
+            switch(stateOfError) {
+            case ErrorHighlight.OK:
+                g.setColor(ColorManager.TML_PORT_CHANNEL);
+                break;
+            default:
+                g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+            }
+            // Making the polygon
+            int [] px1 = {x, x+width-linebreak, x+width, x+width-linebreak, x};
+            int [] py1 = {y, y, y+(height/2), y+height, y+height};
+            g.fillPolygon(px1, py1, 5);
+            g.setColor(c);
+        }
+
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-		
-		int x1 = x + 1;
-		int y1 = y + 1;
-		int height1 = height;
-		int width1 = width;
-		Color c = g.getColor();
-		g.setColor(ColorManager.TML_PORT_CHANNEL);
-		g.drawLine(x1, y1, x1+width1-linebreak, y1);
+
+        int x1 = x + 1;
+        int y1 = y + 1;
+        int height1 = height;
+        int width1 = width;
+        Color c = g.getColor();
+        g.setColor(ColorManager.TML_PORT_CHANNEL);
+        g.drawLine(x1, y1, x1+width1-linebreak, y1);
         g.drawLine(x1, y1+height1, x1+width1-linebreak, y1+height1);
         g.drawLine(x1, y1, x1, y1+height1);
         g.drawLine(x1+width1-linebreak, y1, x1+width1, y1+height1/2);
         g.drawLine(x1+width1-linebreak, y1+height1, x1+width1, y1+height1/2);
-		g.setColor(c);
-		
+        g.setColor(c);
+
         g.drawLine(x, y, x+width-linebreak, y);
         g.drawLine(x, y+height, x+width-linebreak, y+height);
         g.drawLine(x, y, x, y+height);
         g.drawLine(x+width-linebreak, y, x+width, y+height/2);
         g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
-        
+
         g.drawString("chl", x+(width-w) / 2, y);
         g.drawString(value, x + (width - w) / 2 , y + textY);
-		
+
     }
-    
+
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
         }
-        
+
         if ((int)(Line2D.ptSegDistSq(x+(width/2), y-lineLength, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
-			return this;	
-		}
-        
+            return this;
+        }
+
         return null;
     }
-    
+
     public void makeValue() {
         value = channelName + "(" + nbOfSamples + ")";
     }
-    
+
     /*public String getChannelName() {
-        return channelName;
-    }*/
-	
-	public String[] getChannelsByName() {
-		//int nbOfChannels = Conversion.nbChar(channelName, ',') + 1;
-		String tmp = Conversion.replaceAllChar(channelName, ' ', "");
-		String[] channels = tmp.split(",");
-		return channels;
-	}
-	
-	public String getChannelName(int _index) {
-		return  getChannelsByName()[_index];
-	}
-    
+      return channelName;
+      }*/
+
+    public String[] getChannelsByName() {
+        //int nbOfChannels = Conversion.nbChar(channelName, ',') + 1;
+        String tmp = Conversion.replaceAllChar(channelName, ' ', "");
+        String[] channels = tmp.split(",");
+        return channels;
+    }
+
+    public String getChannelName(int _index) {
+        return  getChannelsByName()[_index];
+    }
+
     public String getSamplesValue() {
         return nbOfSamples;
     }
-    
+
     public String getAction() {
         return value;
     }
-    
+
     public boolean editOndoubleClick(JFrame frame) {
-        
-        JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
-        jdts.setSize(350, 300);
-        GraphicLib.centerOnParent(jdts);
-        jdts.show(); // blocked until dialog has been closed
-        
-        if (jdts.hasBeenSet() && (jdts.hasValidString())) {
-           channelName = jdts.getString1();
-           nbOfSamples = jdts.getString2();
-           
-           makeValue();
-           return true;
+	String [] labels = new String[2];
+        String [] values = new String[2];
+        labels[0] = "Channel name";
+        values[0] = channelName;
+	labels[1] = "Nb of samples";
+        values[1] = nbOfSamples;
+	
+        ArrayList<String []> help = new ArrayList<String []>();
+	String[] allOutChannels = tdp.getMGUI().getAllOutChannels();
+	help.add(allOutChannels);
+	
+
+        //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
+	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 2, labels, values, help);
+        jdms.setSize(450, 300);
+        GraphicLib.centerOnParent(jdms);
+        jdms.show(); // blocked until dialog has been closed
+
+        if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
+            channelName = jdms.getString(0);
+            nbOfSamples = jdms.getString(1);
+
+            makeValue();
+            return true;
         }
-        
+
         return false;
-         
+
     }
-    
+
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data channelName=\"");
@@ -211,18 +224,18 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
         sb.append("</extraparam>\n");
         return new String(sb);
     }
-    
+
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro *** " + getId());
         try {
-            
+
             NodeList nli;
             Node n1, n2;
             Element elt;
-            
+
             //System.out.println("Loading Synchronization gates");
             //System.out.println(nl.toString());
-            
+
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
@@ -236,29 +249,29 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
                             if (elt.getTagName().equals("Data")) {
                                 channelName = elt.getAttribute("channelName");
                                 nbOfSamples = elt.getAttribute("nbOfSamples");
-                            }   
+                            }
                         }
                     }
                 }
             }
-            
+
         } catch (Exception e) {
             throw new MalformedModelingException();
         }
         makeValue();
     }
-    
+
 
     public int getType() {
         return TGComponentManager.TMLAD_WRITE_CHANNEL;
     }
-    
+
     public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_TMLAD;
-    }  
-	
-	public void setStateAction(int _stateAction) {
-		stateOfError = _stateAction;
-	}
-    
+        return TGComponentManager.CONNECTOR_TMLAD;
+    }
+
+    public void setStateAction(int _stateAction) {
+        stateOfError = _stateAction;
+    }
+
 }

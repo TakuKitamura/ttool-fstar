@@ -166,7 +166,7 @@ public class JDialogMultiString extends javax.swing.JDialog implements ActionLis
                         helps[i] = new JComboBox(tmp);
                         panel1.add(helps[i], c1);
 			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-			inserts[i] = new JButton("Add");
+			inserts[i] = new JButton("Use");
 			inserts[i].addActionListener(this);
 			panel1.add(inserts[i], c1);
                     }
