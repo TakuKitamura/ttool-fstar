@@ -48,6 +48,8 @@
 
 package tmltranslator;
 
+import myutil.*;
+
 public class TMLAttribute extends DIPLOElement {
 
     public TMLType type;
@@ -74,6 +76,13 @@ public class TMLAttribute extends DIPLOElement {
         this.instanceName = "NO_NAME";
         this.type = _type;
         this.initialValue = "NULL";
+    }
+
+    public TMLAttribute( String _name, TMLType _type, String _initialValue ) {
+        this.name = _name;
+        this.instanceName = "NO_NAME";
+        this.type = _type;
+        this.initialValue = _initialValue;
     }
 
     public TMLAttribute( String _name ) {
@@ -126,8 +135,31 @@ public class TMLAttribute extends DIPLOElement {
         return "unknown";
     }
 
-    public boolean equals( TMLAttribute _other )        {
-
-        return ( (name.equals( _other.getName() )) && ( initialValue.equals( _other.getInitialValue() )) && (type.equals( _other.getType() )) );
+    @Override public boolean equals( Object o )        {
+			if( !(o instanceof TMLAttribute ) )	{
+				return false;
+			}
+			else	{
+				TMLAttribute attr = (TMLAttribute)o;
+				return ( name.equals( attr.getName() ) && ( type.equals( attr.getType()) ) );
+			}
+      //return ( (name.equals( _other.getName() )) && ( initialValue.equals( _other.getInitialValue() )) && (type.equals( _other.getType() )) );
     }
+
+		@Override public int hashCode()	{
+			int result = 17;
+			if( name == null )	{
+				result = 31 * result;
+			}
+			else	{
+				result = 31 * result + name.hashCode();
+			}
+			if( type == null )	{
+				result = 31 * result;
+			}
+			else	{
+				result = 31 * result + type.hashCode();
+			}
+			return result;
+		}
 }//End of class

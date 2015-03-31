@@ -67,6 +67,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     private String stereotype = "CP";
     private String reference="";
     private Vector<String> mappedUnits = new Vector<String>();
+    private Vector<String> assignedAttributes = new Vector<String>();
 		private String cpMEC = "VOID";
 		private String completeName;
 
@@ -197,7 +198,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         String errors = "";
         String tmpName;
 
-        JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Setting CP attributes", this, mappedUnits, name, cpMEC );
+        JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Setting CP attributes", this, mappedUnits, name, cpMEC, assignedAttributes );
         dialog.setSize( 700, 550 );
         GraphicLib.centerOnParent( dialog );
         dialog.show(); // blocked until dialog has been closed
@@ -205,6 +206,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         name = dialog.getNodeName();
         mappedUnits = dialog.getMappedUnits();
 				cpMEC = dialog.getCPMEC();
+				assignedAttributes = dialog.getAssignedAttributes();
 
         if( !dialog.isRegularClose() )  {
             return false;
@@ -252,6 +254,10 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
             sb.append( "<mappingInfo " + "CPname=\"" + secondPart[0] + "\" instanceName=\"" + secondPart[1] +
                        "\" architectureUnit=\"" + firstPart[1] + "\" />\n" );
         }
+        for( String s: assignedAttributes )    {
+            String[] tokens = s.split( " " );
+            sb.append( "<mappedAttributes " + "type=\"" + tokens[0] + "\" name=\"" + tokens[1] + "\" value=\"" + tokens[3].substring(0,tokens[3].length()-1) + "\" />\n" );
+        }
         sb.append("</extraparam>\n");
         return new String(sb);
     }
@@ -267,6 +273,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
             String sstereotype = null, snodeName = null;
 
             mappedUnits.removeAllElements();
+						assignedAttributes.removeAllElements();
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
@@ -296,6 +303,13 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
                                 String instanceName = elt.getAttribute( "instanceName" ) ;
                                 String architectureUnit = elt.getAttribute( "architectureUnit" ) ;
                                 mappedUnits.add( reference + "." + instanceName + " : " + architectureUnit );
+                            }
+                            if( elt.getTagName().equals("mappedAttributes")) {
+                                String attributeType = elt.getAttribute( "type" );
+                                String attributeName = elt.getAttribute( "name" );
+                                String attributeValue = elt.getAttribute( "value" );
+                                assignedAttributes.add( attributeType + " " + attributeName + " = " + attributeValue + ";" );
+                                //assignedAttributes.add( new TMLAttribute( attributeName, attributeValue );
                             }
                         }
                     }

@@ -50,7 +50,7 @@ import java.util.*;
 
 public class CpuMemoryCopyMEC extends CPMEC	{
 
-	public static final String Context = "embb_cpu_context";
+	public static final String Context = "embb_memcpy_context";
 	public static final String Ctx_cleanup = "cpu_ctx_cleanup";
 
 	public CpuMemoryCopyMEC( String ctxName )	{

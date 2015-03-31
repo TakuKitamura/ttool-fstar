@@ -66,6 +66,8 @@ public abstract class CPMEC	{
 	public String attributes_code = new String();
 	public String cleanup_code = new String();
 
+	public static final String[] cpTypes = { "Memory Copy", "Single DMA", "Double DMA" };
+
 	public CPMEC()	{
 		node_type = "1";
 	}

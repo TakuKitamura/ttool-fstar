@@ -78,7 +78,10 @@ public class TMLType {
     }
     
     
-    public int getType() { return type;}
+    public int getType()	{
+			return type;
+		}
+
     public String getTypeOther() { return typeOther;}
     
     public void setType(int _type) { type = _type;};
@@ -152,9 +155,20 @@ public class TMLType {
         return getStringType(type);
   }
 
-	public boolean equals( TMLType _other )	{
-		
-		return ( type == _other.getType() );
+	public boolean equals( Object o )	{
+		if( !( o instanceof TMLType ) )	{
+			return false;
+		}
+		else	{
+			TMLType tt = (TMLType)o;
+			return ( getType() == tt.getType() );
+		}
+	}
+
+	@Override public int hashCode()	{
+		int result = 17;
+		result = 31 * result + type;
+		return result;
 	}
     
 }	//End of class

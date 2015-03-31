@@ -59,6 +59,9 @@ import ui.tmldd.*;
 import ui.tmlsd.*;
 import ui.tmlcp.*;
 import ui.avatarbd.*;
+import tmltranslator.ctranslator.*;
+import tmltranslator.tmlcp.*;
+import tmltranslator.*;
 import myutil.*;
 
 
@@ -92,7 +95,6 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	
 	private Vector<String> mappableArchUnitsSL;
 	private Vector<String> sdInstancesSL;
-	private Vector<String> cpMECsSL;
 	
 	private int indexListCPsNames = 0;
 	
@@ -116,8 +118,27 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private JButton removeButton;
 	private JScrollPane scrollPane;
 
-	//Panel3, code generation
+	private JPanel panel12;
+	private JPanel panel34;
+
+	//Panel3: assign a value to CP attributes
 	private JPanel panel3;
+	private JButton assignButton;
+	private JComboBox attributesList_CB;
+	private JTextField attributesValue_TF;
+	private Vector<String> attributesVector;
+	
+	//Panel4: assign a value to CP attributes
+	private JPanel panel4;
+	private JScrollPane scrollPaneAttributes;
+	private JList scrollPaneAttributes_JL;
+	private Vector<String> assignedAttributes;
+	private JButton removeAttributeButton;
+
+	private JTabbedPane tabbedPane;
+
+	//Panel5, code generation
+	private JPanel panel5;
 	private JComboBox cpMECsCB;
 	private JList cpMECsList;
 	private String cpMEC;
@@ -127,7 +148,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private JButton cancelButton;
 	
 	/** Creates new form  */
-	public JDialogReferenceCP( JFrame _frame,  String _title, TMLArchiCPNode _cp, Vector<String> _mappedUnits, String _name, String _cpMEC ) {
+	public JDialogReferenceCP( JFrame _frame,  String _title, TMLArchiCPNode _cp, Vector<String> _mappedUnits, String _name, String _cpMEC, Vector<String> _assignedAttributes ) {
 	
 	super( _frame, _title, true );
 	frame = _frame;
@@ -135,14 +156,21 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	name = _name;
 	cpMEC = _cpMEC;
 	
-	if( _mappedUnits.size() > 0 )	{
-		//the validity of _mappedUnits is checked when initializing components
+	if( _mappedUnits.size() > 0 )	{	//the validity of _mappedUnits is checked when initializing components
 		mappedUnitsSL = new Vector<String>();	//take into account the elements already mapped
 		mappedUnitsSL.addAll( 0, _mappedUnits );
 		emptyListOfMappedUnits = false;
 	}
 	else	{
 		mappedUnitsSL = new Vector<String>();
+	}
+
+	if( _assignedAttributes.size() > 0 )	{	//the validity of _assignedAttributes is checked when initializing components
+		assignedAttributes = new Vector<String>();
+		assignedAttributes.addAll( 0, _assignedAttributes );
+	}
+	else	{
+		assignedAttributes = new Vector<String>();
 	}
 	
 	initComponents();
@@ -176,6 +204,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			GridBagConstraints c2 = new GridBagConstraints();
 			GridBagConstraints c3 = new GridBagConstraints();
 			GridBagConstraints c4 = new GridBagConstraints();
+			GridBagConstraints c5 = new GridBagConstraints();
 			
 			setFont(new Font("Helvetica", Font.PLAIN, 14));
 			c.setLayout(gridbag0);
@@ -184,13 +213,28 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			
 			panel1 = new JPanel();
 			panel1.setLayout(gridbag1);
-			panel1.setBorder(new javax.swing.border.TitledBorder("CP attributes"));
+			panel1.setBorder(new javax.swing.border.TitledBorder("CP structure"));
 			panel1.setPreferredSize(new Dimension(325, 250));
 			
 			panel2 = new JPanel();
 			panel2.setLayout(gridbag2);
-			panel2.setBorder(new javax.swing.border.TitledBorder("Managing mapping"));
+			panel2.setBorder(new javax.swing.border.TitledBorder("Managing structure"));
 			panel2.setPreferredSize(new Dimension(325, 250));
+
+			panel12 = new JPanel();
+			panel34 = new JPanel();
+
+			panel3 = new JPanel();
+			panel3.setLayout(gridbag3);
+			panel3.setBorder(new javax.swing.border.TitledBorder("CP attributes"));
+			panel3.setPreferredSize(new Dimension(325, 250));
+			
+			panel4 = new JPanel();
+			panel4.setLayout(gridbag4);
+			panel4.setBorder(new javax.swing.border.TitledBorder("Managing attributes"));
+			panel4.setPreferredSize(new Dimension(325, 250));
+
+			tabbedPane = new JTabbedPane();
 
 			// first line panel1
 			c1.weighty = 1.0;
@@ -335,40 +379,124 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			removeButton.addActionListener(this);
 			panel2.add(removeButton, c2);
 
-			//panel3, code generation
-			panel3 = new JPanel();
-			panel3.setLayout(gridbag3);
-			panel3.setBorder(new javax.swing.border.TitledBorder("Code generation"));
-			panel3.setPreferredSize(new Dimension(325, 250));
+			//panel3
 			c3.weighty = 1.0;
 			c3.weightx = 1.0;
 			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
 			c3.fill = GridBagConstraints.BOTH;
 			c3.gridheight = 3;
-			panel3.add(new JLabel(" "), c3);
+			panel3.add( new JLabel(" "), c3 );
 			
+			// second line panel3
 			c3.gridwidth = 1;
 			c3.gridheight = 1;
 			c3.weighty = 1.0;
 			c3.weightx = 1.0;
-			c3.anchor = GridBagConstraints.CENTER;
+			c3.anchor = GridBagConstraints.LINE_START;
 			c3.fill = GridBagConstraints.HORIZONTAL;
-			c3.anchor = GridBagConstraints.CENTER;
-			panel3.add( new JLabel( "Model Extension Construct:" ), c3 );
-			cpMECsSL = new Vector<String>();
-			cpMECsSL.add( "Memory Copy" );
-			cpMECsSL.add( "Single DMA" );
-			cpMECsSL.add( "Double DMA" );
-			cpMECsCB = new JComboBox( cpMECsSL );
+			
+			//get the attributes from the selected CP
+			String selectedCPName = (String)communicationPatternsCB.getSelectedItem();
+			TraceManager.addDev( "The selected CP has index: " + getIndexOfSelectedCP() );
+			ArrayList<TMLCP> tmlcpsList = new ArrayList<TMLCP>();
+
+			for( TMLCommunicationPatternPanel panel: listCPs )	{
+				GTMLModeling gtmlm = new GTMLModeling( panel, true );
+				TMLCP tmlcp = gtmlm.translateToTMLCPDataStructure( panel.getName() );
+				tmlcpsList.add( tmlcp );
+			}
+			HashSet<TMLAttribute> attributesHS = new HashSet<TMLAttribute>();
+			attributesVector = new Vector<String>();
+			//get the attributes of all SDs
+			for( TMLCPSequenceDiagram sd: tmlcpsList.get( getIndexOfSelectedCP() ).getCPSequenceDiagrams() )	{
+				for( TMLAttribute attr: sd.getAttributes() )	{
+					attributesHS.add( attr );
+				}
+			}
+			for( TMLAttribute attr: attributesHS )	{
+				attributesVector.add( attr.getType() + " " + attr.getName() );
+			}
+
+			if( assignedAttributes.size() > 0 )	{
+				filterOutAssignedAttributes( attributesVector );
+			}
+			panel3.add( new JLabel("Attribute:"), c3 );
+			attributesList_CB = new JComboBox( attributesVector );
+			attributesList_CB.addActionListener(this);
+			panel3.add( attributesList_CB, c3 );
+
+			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+			c3.fill = GridBagConstraints.BOTH;
+			c3.gridheight = 3;
+			panel3.add( new JLabel(" "), c3 );
+
+			panel3.add( new JLabel("Value:"), c3 );
+			attributesValue_TF = new JTextField( "", 5 );
+			attributesValue_TF.setMinimumSize( new Dimension(150, 50) );
+			panel3.add( attributesValue_TF, c3 );
+
+			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+			c3.fill = GridBagConstraints.BOTH;
+			c3.gridheight = 3;
+			panel3.add( new JLabel(" "), c3 );	//adds some vertical space in between two JLabels
+
+			assignButton = new JButton("Assign value");
+			assignButton.addActionListener(this);
+			panel3.add( assignButton, c3 );
+
+			//panel4
+			scrollPaneAttributes_JL = new JList( assignedAttributes );
+			scrollPaneAttributes_JL.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			scrollPaneAttributes_JL.addListSelectionListener(this);
+			scrollPaneAttributes = new JScrollPane( scrollPaneAttributes_JL );
+			scrollPaneAttributes.setSize(300, 250);
+			c4.gridwidth = GridBagConstraints.REMAINDER; //end row
+			c4.fill = GridBagConstraints.BOTH;
+			c4.gridheight = 5;
+			c4.weighty = 10.0;
+			c4.weightx = 10.0;
+			panel4.add( scrollPaneAttributes, c4 );
+			c4.weighty = 1.0;
+			c4.weightx = 1.0;
+			c4.fill = GridBagConstraints.BOTH;
+			c4.gridheight = 1;
+			panel4.add(new JLabel(""), c4);
+			// third line panel2
+			c4.gridwidth = GridBagConstraints.REMAINDER; //end row
+			c4.fill = GridBagConstraints.HORIZONTAL;
+			removeAttributeButton = new JButton("Remove attribute");
+			removeAttributeButton.addActionListener(this);
+			panel4.add(removeAttributeButton, c4);
+
+			//panel5, code generation
+			panel5 = new JPanel();
+			panel5.setLayout(gridbag3);
+			panel5.setBorder(new javax.swing.border.TitledBorder("Code generation"));
+			panel5.setPreferredSize(new Dimension(325, 250));
+			c5.weighty = 1.0;
+			c5.weightx = 1.0;
+			c5.gridwidth = GridBagConstraints.REMAINDER; //end row
+			c5.fill = GridBagConstraints.BOTH;
+			c5.gridheight = 3;
+			panel5.add(new JLabel(" "), c5);
+			
+			c5.gridwidth = 1;
+			c5.gridheight = 1;
+			c5.weighty = 1.0;
+			c5.weightx = 1.0;
+			c5.fill = GridBagConstraints.HORIZONTAL;
+			c5.anchor = GridBagConstraints.LINE_START;
+			panel5.add( new JLabel( "Model Extension Construct:" ), c5 );
+			cpMECsCB = new JComboBox( new Vector<String>( Arrays.asList( CPMEC.cpTypes ) ) );
 			if( cpMEC.equals( "VOID" ) || cpMEC.equals( "" ) )	{
 				cpMECsCB.setSelectedIndex( 0 );
 			}
 			else	{
-				cpMECsCB.setSelectedIndex( cpMECsSL.indexOf( cpMEC ) );
+				cpMECsCB.setSelectedIndex( new Vector<String>( Arrays.asList( CPMEC.cpTypes ) ).indexOf( cpMEC ) );
 			}
 			cpMECsCB.addActionListener( this );
 			cpMECsCB.setMinimumSize( new Dimension(150, 50) );
-			panel3.add( cpMECsCB, c3 );
+			panel5.add( cpMECsCB, c5 );
 			
 			// main panel;
 			c0.gridwidth = 1;
@@ -376,12 +504,31 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c0.weighty = 1.0;
 			c0.weightx = 1.0;
 			c0.fill = GridBagConstraints.BOTH;
-			
-			c.add(panel1, c0);
+			//c.add(panel1, c0);
 			c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-			c.add(panel2, c0);
+			//c.add(panel2, c0);
+			panel12.add( panel1, c0 );
+			panel12.add( panel2, c0 );
+			panel12.add( panel5, c0 );
+
+			tabbedPane.addTab( "Structure", panel12 );
+
+			c0.gridwidth = 1;
+			c0.gridheight = 10;
+			c0.weighty = 1.0;
+			c0.weightx = 1.0;
+			c0.fill = GridBagConstraints.BOTH;
+			//c.add(panel3, c0);
 			c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-			c.add(panel3, c0);
+			//c.add(panel4, c0);
+			panel34.add( panel3, c0 );
+			panel34.add( panel4, c0 );
+
+			tabbedPane.addTab( "Attributes", panel34 );
+			tabbedPane.setSelectedIndex(0);
+			c.add( tabbedPane, c0 );
+
+			//c.add(panel5, c0);
 			
 			c0.gridwidth = 1;
 			c0.gridheight = 1;
@@ -544,6 +691,12 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			//String command = evt.getActionCommand();
 			
 			// Compare the action command to the known actions.
+			if( evt.getSource() == assignButton )  {
+				assignValueToAttribute();
+			}
+			if( evt.getSource() == removeAttributeButton )  {
+				removeAssignedAttribute();
+			}
 			if( evt.getSource() == closeButton )  {
 				closeDialog();
 			}
@@ -806,6 +959,53 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			}
 			sdInstancesSL = new Vector<String>( newList );
 		}
+
+		private void assignValueToAttribute()	{
+
+			String attrType = ((String)attributesList_CB.getSelectedItem()).split(" ")[0];
+			String attrName = ((String)attributesList_CB.getSelectedItem()).split(" ")[1];
+			int indexToDelete = attributesVector.indexOf( attrType + " " + attrName );
+			if( indexToDelete != -1 )	{
+				String assignement = attrType + " " + attrName + " = " + attributesValue_TF.getText() + ";";
+				assignedAttributes.add( assignement );
+
+				//update JComboBox
+				Vector<String> newList = new Vector<String>( attributesVector );
+				newList.remove( indexToDelete );
+				attributesList_CB.removeAllItems();
+				for( String s: newList )	{
+					attributesList_CB.addItem( s );
+				}
+				attributesVector = new Vector<String>( newList );
+
+				//clear text
+				attributesValue_TF.setText("");
+
+				//update scrollPaneAttributes
+				scrollPaneAttributes_JL.setListData( assignedAttributes );
+			}
+		}
+
+		private void removeAssignedAttribute()	{
+			
+			if( assignedAttributes.size() > 0 )	{
+				int indexToRemove = scrollPaneAttributes_JL.getSelectedIndex();
+				String attr = assignedAttributes.get( indexToRemove );
+				assignedAttributes.remove( indexToRemove );
+				scrollPaneAttributes_JL.setListData( assignedAttributes );
+
+				// attribute must be put back in list of attributes to be mapped...
+				String s = attr.split( " = " )[0];
+				Vector<String> newList = new Vector<String>( attributesVector );
+				newList.add( s );
+
+				attributesList_CB.removeAllItems();
+				for( String st: newList )	{
+					attributesList_CB.addItem( st );
+				}
+				attributesVector = new Vector<String>( newList );
+			}
+		}
 		
 		public void closeDialog() {
 			regularClose = true;
@@ -951,7 +1151,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 							LinkedList componentsList = panel.getComponentList();
 							for( int k = 0; k < componentsList.size(); k++ )	{
 								TGComponent elem = (TGComponent) componentsList.get(k);
-								if( elem instanceof TMLSDInstance )	{
+								if( elem instanceof ui.tmlsd.TMLSDInstance )	{
 									sdInstancesNames.add( elem.getName() );
 									if( elem instanceof TMLSDStorageInstance )	{
 										sdStorageInstances_local.add( elem.getName() );
@@ -1043,6 +1243,24 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 	public String getCPMEC()	{
 		return cpMEC;
+	}
+
+	private void filterOutAssignedAttributes( Vector<String> attributesVector )	{
+		
+		ArrayList<Integer> indexList = new ArrayList<Integer>();
+		for( String s: assignedAttributes )	{
+			String token = s.split( " = " )[0];
+			if( attributesVector.contains( token ) )	{
+				indexList.add( attributesVector.indexOf( token ) );
+			}
+		}
+		for( Integer index: indexList )	{
+			attributesVector.remove( (int)index );
+		}
+	}
+
+	public Vector<String> getAssignedAttributes()	{
+		return assignedAttributes;
 	}
 		
 }	//End of class
