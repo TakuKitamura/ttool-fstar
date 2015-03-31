@@ -56,6 +56,7 @@ import myutil.*;
 import tmltranslator.*;
 import ui.tmlcompd.*;
 import ui.ConfigurationTTool;
+import ui.*;
 
 public class TMLCCodeGeneration	{
 
@@ -72,37 +73,47 @@ public class TMLCCodeGeneration	{
 	private String COLON = ",";
 
 	private TMLMapping tmap;
+	private TMLCP tmlcp;
 	private TMLModeling tmlm;
 	private TMLArchitecture tmla;
 	private String applicationName;
-	private StringBuffer mainFileString = new StringBuffer();
-	private StringBuffer headerString = new StringBuffer();
-	private StringBuffer programString = new StringBuffer();
-	private StringBuffer initFileString = new StringBuffer();
+	private StringBuffer mainFileString;
+	private StringBuffer headerString;
+	private StringBuffer programString;
+	private StringBuffer initFileString;
 	private ArrayList<TMLTask> mappedTasks;
 	private ArrayList<TMLElement> commElts;
-	private ArrayList<Operation> operationsList = new ArrayList<Operation>();
-	private int SDRoperationsCounter = 0;
-	private int signalsCounter = 0;
-	private ArrayList<Signal> signalsList = new ArrayList<Signal>();
+	private ArrayList<Operation> operationsList;
+	private int SDRoperationsCounter;
+	private int signalsCounter;
+	private ArrayList<Signal> signalsList;
 	private ArrayList<TMLCPLib> mappedCPLibs;
-	private ArrayList<TMLPort> postexList = new ArrayList<TMLPort>();
-	private ArrayList<TMLPort> prexList = new ArrayList<TMLPort>();
-	private ArrayList<Buffer> buffersList = new ArrayList<Buffer>();
-	private ArrayList<DataTransfer> dataTransfersList = new ArrayList<DataTransfer>();
+	private ArrayList<TMLPort> postexList;
+	private ArrayList<TMLPort> prexList;
+	private ArrayList<Buffer> buffersList;
+	private ArrayList<DataTransfer> dataTransfersList;
+	private ArrayList<TMLCommunicationPatternPanel> tmlcpps;
+	private ArrayList<TMLCP> tmlcpsList;
 
 	private ArrayList<TMLCCodeGenerationError> errors;
 	private ArrayList<TMLCCodeGenerationError> warnings;
 
-	private String debugFileName = ConfigurationTTool.CcodeDirectory + "/debugFile.txt";
+	private String debugFileName;
 	PrintWriter outputStream;
 
 	public JFrame frame; //Main Frame
 
-	public TMLCCodeGeneration( String _title, String _applicationName, JFrame _frame )	{
+	public TMLCCodeGeneration( String _title, String _applicationName, JFrame _frame, ArrayList<TMLCommunicationPatternPanel> _tmlcpps, TMLMapping _tmap )	{
 		title = _title;
 		applicationName = _applicationName;
 		frame = _frame;
+		tmap = _tmap;
+		tmlcpps = _tmlcpps;
+		tmap.linkTasks2TMLChannels();
+		tmap.linkTasks2TMLEvents();
+		tmlm = _tmap.getTMLModeling();
+		tmla = _tmap.getTMLArchitecture();
+		mappedCPLibs = _tmap.getMappedTMLCPLibs();
 		init();
 	}
 
@@ -110,23 +121,30 @@ public class TMLCCodeGeneration	{
 		mappedTasks = new ArrayList<TMLTask>();
 		commElts = new ArrayList<TMLElement>();
 		errors = new ArrayList<TMLCCodeGenerationError>();
+		mainFileString = new StringBuffer();
+		headerString = new StringBuffer();
+		programString = new StringBuffer();
+		initFileString = new StringBuffer();
+		operationsList = new ArrayList<Operation>();
+		SDRoperationsCounter = 0;
+		signalsCounter = 0;
+		signalsList = new ArrayList<Signal>();
+		postexList = new ArrayList<TMLPort>();
+		prexList = new ArrayList<TMLPort>();
+		buffersList = new ArrayList<Buffer>();
+		dataTransfersList = new ArrayList<DataTransfer>();
+		debugFileName = ConfigurationTTool.CcodeDirectory + "/debugFile.txt";
+		tmlcpsList = new ArrayList<TMLCP>();
 	}
 
-	public void toTextFormat( TMLMapping _tmap )	{
-
-		tmap = _tmap;
-		tmap.linkTasks2TMLChannels();
-		tmap.linkTasks2TMLEvents();
-		tmlm = _tmap.getTMLModeling();
-		tmla = _tmap.getTMLArchitecture();
-		mappedCPLibs = _tmap.getMappedTMLCPLibs();
+	public void toTextFormat()	{
 
 		ArrayList<TMLTask> mappedTasks = tmap.getMappedTasks();
 		ArrayList<TMLElement> commElts = tmap.getMappedCommunicationElement();
 
-
 		//Create the data structures for signals, buffers, operations and data transfers
 		openDebugFile();
+		makeCommunicationPatternsList();	
 		makeSignalsList();	//make the signals associated to operations, based on the tasks of operations
 
 		for( Signal sig: signalsList )	{
@@ -439,8 +457,13 @@ public class TMLCCodeGeneration	{
 				String portName = cplib.getArtifacts().get(0).getPortName();	//only one mapped port per CP
 				Object o = cplib.getArtifacts().get(0).getReferenceObject();
 				inSignals = getDTInSignals( portName );
-				DataTransfer dt = new DataTransfer( cplib, inSignals, null );	//outSignals are added later
-				dataTransfersList.add( dt );
+				String cpName = cplib.getName().split("::")[1];
+				for( TMLCP tmlcp: tmlcpsList )	{
+					if( tmlcp.getName().equals( cpName ) )	{
+						DataTransfer dt = new DataTransfer( cplib, tmlcp, inSignals, null );	//outSignals are added later
+						dataTransfersList.add( dt );
+					}
+				}
 			}
 		}
 
@@ -538,6 +561,15 @@ public class TMLCCodeGeneration	{
 			}
 		}
 		return sigsList;
+	}
+
+	private void makeCommunicationPatternsList()	{
+
+		for( TMLCommunicationPatternPanel panel: tmlcpps )	{
+			GTMLModeling gtmlm = new GTMLModeling( panel, true );
+			TMLCP tmlcp = gtmlm.translateToTMLCPDataStructure( panel.getName() );
+			tmlcpsList.add( tmlcp );
+		}
 	}
 
 	//Associate signals to operations and at the same time add signals to signalsList. Only works for SDR operations (so far)

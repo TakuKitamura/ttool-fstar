@@ -60,7 +60,7 @@ public class SingleDmaMEC extends CPMEC	{
 		inst_decl = "EMBB_DMA_CONTEXT";
 		buff_type = "MM_BUFF_TYPE";
 		buff_init = "VOID";
-		exec_code = TAB + "embb_dma_start(&" + ctxName + ", /*USER TO DO: SRC_ADDRESS*/, /*USER TO DO: DST_ADDRESS*/, /*USER TO DO: NUM_SAMPLES */ );" + CR;	
+		exec_code = TAB + "embb_dma_start(&" + ctxName + ", (uintptr_t) /*USER TO DO: SRC_ADDRESS*/, (uintptr_t) /*USER TO DO: DST_ADDRESS*/, /*USER TO DO: NUM_SAMPLES */ );" + CR;	
 		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, /*USER TO DO: SRC_DEV*/ );" + CR;
 		cleanup_code = TAB + "embb_dma_ctx_cleanup(&" + ctxName +");";
 	}

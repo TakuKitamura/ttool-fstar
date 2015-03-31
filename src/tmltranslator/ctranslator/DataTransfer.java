@@ -65,21 +65,14 @@ public class DataTransfer	{
 	private ArrayList<Buffer> inBuffers;
 	private Buffer outBuffer;
 	private TMLCPLib tmlcplib;
+	private TMLCP tmlcp;
 	private ArrayList<Signal> outSignals;
 	private ArrayList<Signal> inSignals;
 
-	/*public DataTransfer( TMLCPLib _tmlcplib, ArrayList<Buffer> _inBuffers, Buffer _outBuffer, ArrayList<Signal> _inSignals, ArrayList<Signal> _outSignals )	{
+	public DataTransfer( TMLCPLib _tmlcplib, TMLCP _tmlcp, ArrayList<Signal> _inSignals, ArrayList<Signal> _outSignals )	{
 		name = _tmlcplib.getName();
 		tmlcplib = _tmlcplib;
-		inSignals = _inSignals;
-		outSignals = _outSignals;
-		inBuffers = _inBuffers;
-		outBuffer = _outBuffer;
-	}*/
-
-	public DataTransfer( TMLCPLib _tmlcplib, ArrayList<Signal> _inSignals, ArrayList<Signal> _outSignals )	{
-		name = _tmlcplib.getName();
-		tmlcplib = _tmlcplib;
+		tmlcp = _tmlcp;
 		inSignals = _inSignals;
 		if( _outSignals == null )	{
 			outSignals = new ArrayList<Signal>();
@@ -175,7 +168,10 @@ public class DataTransfer	{
 			s.append( "inBuffer: " + buff.toString() + "\n\t" );
 		}
 		if( outBuffer != null )	{
-			s.append( "outBuffer: " + outBuffer.toString() );
+			s.append( "outBuffer: " + outBuffer.toString() + "\n\t" );
+		}
+		if( tmlcp != null )	{
+			s.append( "TMLCP: " + tmlcp.toString() );
 		}
 	return s.toString();
 	}

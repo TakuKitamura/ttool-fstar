@@ -2029,9 +2029,9 @@ public class GTMLModeling  {
     }
 
 
-    public TMLCP translateToTMLCPDataStructure()        {
+    public TMLCP translateToTMLCPDataStructure( String _cpName )        {
 
-        tmlcp = new TMLCP();
+        tmlcp = new TMLCP( _cpName );
         checkingErrors = new Vector();
         warnings = new Vector();
         //listE = new CorrespondanceTGElement();
@@ -2910,8 +2910,7 @@ public class GTMLModeling  {
             //TraceManager.addDev("---------------- tgc=" + tgc);
             if (tgc instanceof TMLArchiCPNode) {
                 cp = (TMLArchiCPNode)tgc;
-								TraceManager.addDev( "FROM GTMLModeling, cpMEC: " + cp.getCPMEC() );
-                TMLCPLib tmlcplib = new TMLCPLib(tgc.getName(), cp.getReference(), tgc, cp.getCPMEC());
+                TMLCPLib tmlcplib = new TMLCPLib( cp.getCompleteName(), cp.getReference(), tgc, cp.getCPMEC());
                 map.addTMLCPLib(tmlcplib);
                 tmlcplib.setMappedUnits(cp.getMappedUnits());
 

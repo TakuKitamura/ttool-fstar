@@ -64,8 +64,8 @@ public class TMLCP extends TMLElement {
         init();
     }
 
-    public TMLCP() {
-        super( "DefaultCP", null );     //no reference to any object in the default constructor
+    public TMLCP( String _name ) {
+        super( _name, null );     //no reference to any object in the default constructor
         init();
     }
 

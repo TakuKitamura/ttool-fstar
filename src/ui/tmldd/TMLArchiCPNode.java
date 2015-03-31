@@ -68,6 +68,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     private String reference="";
     private Vector<String> mappedUnits = new Vector<String>();
 		private String cpMEC = "VOID";
+		private String completeName;
 
     public TMLArchiCPNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -122,6 +123,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         g.drawString(ster, x + (width - w)/2, y + textY1);
         g.setFont(f);
         String val = name + "::" + reference;
+				completeName = val;
         w  = g.getFontMetrics().stringWidth(val);
         g.drawString(val, x + (width - w)/2, y + textY2);
 
@@ -381,4 +383,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 			}
 			return null;
 		}
+
+	public String getCompleteName()	{
+		return completeName;
+	}
 }

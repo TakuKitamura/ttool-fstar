@@ -442,20 +442,26 @@ public class GTURTLEModeling {
 				ce.setTMLTask( error.task );
 				checkingErrors.add( ce );
 			}
-			JOptionPane.showMessageDialog(mgui.frame, "The system design contains several errors: the application C code could not be generated", "Code generation failed", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog( 	mgui.frame,
+																			"The system design contains several errors: the application C code could not be generated",
+																			"Code generation failed", JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
 		applicationName = tmap.getMappedTasks().get(0).getName().split("__")[0];
-		Ccode = new TMLCCodeGeneration( _title, applicationName, mgui.frame );
-		Ccode.toTextFormat( tmap );
+		Ccode = new TMLCCodeGeneration( _title, applicationName, mgui.frame, mgui.getAllTMLCP(), tmap );
+		Ccode.toTextFormat();
 		try {
 				if( ConfigurationTTool.CcodeDirectory.equals("") )	{
-					JOptionPane.showMessageDialog(mgui.frame, "No directory for C code generation found in config.xml. The C code cannot be generated.", "Code generation failed", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(	mgui.frame,
+																					"No directory for C code generation found in config.xml. The C code cannot be generated.",
+																					"Code generation failed", JOptionPane.INFORMATION_MESSAGE );
 					return false;
 				}
 				else 	{
 			    Ccode.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, applicationName );
-					JOptionPane.showMessageDialog(mgui.frame, "The application C code has been successfully generated in: " + ConfigurationTTool.CcodeDirectory + "/", "C code generation successful", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog( 	mgui.frame, "The application C code has been successfully generated in: "
+																					+ ConfigurationTTool.CcodeDirectory + "/", "C code generation successful",
+																					JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 		catch( Exception e ) {
@@ -6524,7 +6530,7 @@ public class GTURTLEModeling {
 		tm = null;
 		tmState = 1;
 		//tmlcp is the data structure for a CP corresponding to the graphical description with diagrams
-		tmlcp = gtmlm.translateToTMLCPDataStructure();
+		tmlcp = gtmlm.translateToTMLCPDataStructure( tmlcpp.getName() );
 		//tmlcp.toString();
 		/*TraceManager.addDev( "I AM ABOUT TO GENERATE THE TMLtxt CODE!" );
 		mgui.generateTMLTxt();	//Now generating the TMLtxt code
@@ -6540,7 +6546,7 @@ public class GTURTLEModeling {
 		
 		if( (checkingErrors != null) && (checkingErrors.size() > 0) )	{
 			//analyzeErrors();
-			//warnings = gtmlm.getCheckingWarnings();
+			
 			return false;
 		}
 		/*else {
