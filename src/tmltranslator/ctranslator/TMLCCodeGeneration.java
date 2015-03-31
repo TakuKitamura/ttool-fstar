@@ -1034,9 +1034,8 @@ public class TMLCCodeGeneration	{
 		for( DataTransfer dt: dataTransfersList )	{
 			tmlcplib = dt.getTMLCPLib();
 			ctxName = dt.getContextName();
-			if( tmlcplib.getArtifacts().size() == 1 )	{
-			}
-			programString.append( "int op_" + tmlcplib.getName() + "()\t{" + CR );
+			String name = tmlcplib.getName().split("::")[0];
+			programString.append( "int op_" + name + "()\t{" + CR );
 			
 			for( Signal sig: dt.getInSignals() )	{
 				programString.append( TAB + "sig[ " + sig.getName() + " ].f = false;" + CR );
@@ -1219,7 +1218,8 @@ public class TMLCCodeGeneration	{
 		initFileString.append( "/**** init CPs ****/" + CR + "void init_CPs(void)\t{" + CR );
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
-			initFileString.append( TAB + "init_" + tmlcplib.getName() + "();" + CR );
+			String name = tmlcplib.getName().split("::")[0];
+			initFileString.append( TAB + "init_" + name + "();" + CR );
 		}
 		initFileString.append( "}" + CR2 );
 
@@ -1270,18 +1270,19 @@ public class TMLCCodeGeneration	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
 			CPMEC cpMEC = tmlcplib.getCPMEC();
 			String ctxName = dt.getContextName();
+			String name = tmlcplib.getName().split("::")[0];
 			if( cpMEC instanceof CpuMemoryCopyMEC )	{
-				initFileString.append( "void init_" + tmlcplib.getName() + "()\t{" + CR );
+				initFileString.append( "void init_" + name + "()\t{" + CR );
 				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName );
 				initFileString.append( TAB + mec.getInitCode() + "}" + CR2 );
 			}
 			if( cpMEC instanceof SingleDmaMEC )	{
-				initFileString.append( "void init_" + tmlcplib.getName() + "()\t{" + CR );
+				initFileString.append( "void init_" + name + "()\t{" + CR );
 				SingleDmaMEC mec = new SingleDmaMEC( ctxName );
 				initFileString.append( TAB + mec.getInitCode() + "}" + CR2 );
 			}
 			if( cpMEC instanceof DoubleDmaMEC )	{
-				initFileString.append( "void init_" + tmlcplib.getName() + "()\t{" + CR );
+				initFileString.append( "void init_" + name + "()\t{" + CR );
 				DoubleDmaMEC mec = new DoubleDmaMEC( ctxName );
 				initFileString.append( TAB + mec.getInitCode() + "}" + CR2 );
 			}

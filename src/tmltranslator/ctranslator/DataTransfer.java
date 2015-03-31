@@ -92,7 +92,7 @@ public class DataTransfer	{
 	}
 
 	public String getName()	{
-		return name;
+		return name.split("::")[0];
 	}
 
 	public int getType()	{
@@ -152,7 +152,7 @@ public class DataTransfer	{
 	}
 
 	public String getContextName()	{
-		return getTMLCPLib().getName() + "_ctx";
+		return getTMLCPLib().getName().split("::")[0] + "_ctx";
 	}
 
 	public String toString()	{
