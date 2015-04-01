@@ -2910,9 +2910,10 @@ public class GTMLModeling  {
             //TraceManager.addDev("---------------- tgc=" + tgc);
             if (tgc instanceof TMLArchiCPNode) {
                 cp = (TMLArchiCPNode)tgc;
-                TMLCPLib tmlcplib = new TMLCPLib( cp.getCompleteName(), cp.getReference(), tgc, cp.getCPMEC());
+                TMLCPLib tmlcplib = new TMLCPLib( cp.getCompleteName(), cp.getReference(), tgc, cp.getCPMEC() );
                 map.addTMLCPLib(tmlcplib);
                 tmlcplib.setMappedUnits(cp.getMappedUnits());
+								tmlcplib.setAssignedAttributes( cp.getAssignedAttributes() );
 
                 // Handling mapped artifacts
                 for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {

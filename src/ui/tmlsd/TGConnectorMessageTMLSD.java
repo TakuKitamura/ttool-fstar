@@ -148,7 +148,7 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
         	values[i+1] = params[i];
       }
          
-      JDialogMultiString jdms = new JDialogMultiString( frame, "Setting message properties", nParam+1, labels, values );
+      JDialogMultiStringCP jdms = new JDialogMultiStringCP( frame, "Setting message properties", nParam+1, labels, values );
       jdms.setSize( 350, 300 );
       GraphicLib.centerOnParent(jdms);
       jdms.show(); // blocked until dialog has been closed

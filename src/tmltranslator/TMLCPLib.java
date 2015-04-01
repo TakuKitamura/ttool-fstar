@@ -56,6 +56,7 @@ public class TMLCPLib extends TMLElement {
     private Vector<String> mappedUnits = new Vector<String>();
 		private CPMEC cpMEC;
     private String typeName;
+		private Vector<String> assignedAttributes;
 
 
     public TMLCPLib(String _name, String _typeName, Object _referenceObject, CPMEC _cpMEC ) {
@@ -70,8 +71,8 @@ public class TMLCPLib extends TMLElement {
         init();
     }
 
-    public void setMappedUnits(Vector<String> _mappedUnits) {
-	mappedUnits = _mappedUnits;
+    public void setMappedUnits( Vector<String> _mappedUnits ) {
+			mappedUnits = _mappedUnits;
     }
 
     private void init() {
@@ -119,4 +120,12 @@ public class TMLCPLib extends TMLElement {
 		public CPMEC getCPMEC()	{
 			return cpMEC;
 		}
+	
+	public void setAssignedAttributes( Vector<String> _assignedAttributes )	{
+		assignedAttributes = _assignedAttributes;
+	}
+
+	public Vector<String> getAssignedAttributes()	{
+		return assignedAttributes;
+	}
 }       //End of the class

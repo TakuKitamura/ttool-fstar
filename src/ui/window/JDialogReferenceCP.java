@@ -1039,6 +1039,10 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			cancelled = false;
 			name = nameOfCP.getText();
 			cpMEC = (String)cpMECsCB.getSelectedItem();
+			if( attributesVector.size() > 0 )	{	//there are still parameters which must be assigned a value
+				JOptionPane.showMessageDialog( frame, "Please assign a value to all attributes", "Error", JOptionPane.INFORMATION_MESSAGE );
+				return;
+			}
 			dispose();
 		}
 		
@@ -1277,17 +1281,19 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		ArrayList<Integer> indexList = new ArrayList<Integer>();
 		for( String s: assignedAttributes )	{
 			String token = s.split( " = " )[0];
-			if( attributesVector.contains( token ) )	{
-				indexList.add( attributesVector.indexOf( token ) );
+			for( Iterator<String> iterator = attributesVector.iterator(); iterator.hasNext(); ) {
+				String s1 = iterator.next();
+				if( token.equals( s1 ) ) {
+					iterator.remove();
+				}
 			}
-		}
-		for( Integer index: indexList )	{
-			attributesVector.remove( (int)index );
 		}
 	}
 
 	public Vector<String> getAssignedAttributes()	{
+		//before returning attributes I should sort them according to the cpMEC
 		return assignedAttributes;
 	}
+
 		
 }	//End of class

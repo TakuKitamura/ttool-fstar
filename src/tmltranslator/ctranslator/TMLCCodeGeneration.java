@@ -1027,13 +1027,15 @@ public class TMLCCodeGeneration	{
 
 	private void generateCodeForCommunicationPatterns()	{
 		
-		String s;
+		String s, destinationAddress, sourceAddress, size, destinationAddress1, sourceAddress1, size1, destinationAddress2, sourceAddress2, size2;
 		TMLCPLib tmlcplib;
 		String ctxName;
+		Vector<String> attributes;
 
 		for( DataTransfer dt: dataTransfersList )	{
 			tmlcplib = dt.getTMLCPLib();
 			ctxName = dt.getContextName();
+			attributes = tmlcplib.getAssignedAttributes();
 			String name = tmlcplib.getName().split("::")[0];
 			programString.append( "int op_" + name + "()\t{" + CR );
 			
@@ -1041,16 +1043,28 @@ public class TMLCCodeGeneration	{
 				programString.append( TAB + "sig[ " + sig.getName() + " ].f = false;" + CR );
 			}
 			CPMEC cpMEC = tmlcplib.getCPMEC();
+			TraceManager.addDev( "CPMEC: " + cpMEC + "\n" + attributes.toString() );
 			if( cpMEC instanceof CpuMemoryCopyMEC )	{
 				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName );
 				programString.append( mec.getExecCode() );
 			}
 			if( cpMEC instanceof SingleDmaMEC )	{
-				SingleDmaMEC mec = new SingleDmaMEC( ctxName );
+				destinationAddress = attributes.get( SingleDmaMEC.destinationAddressIndex );
+				sourceAddress = attributes.get( SingleDmaMEC.sourceAddressIndex );
+				size = attributes.get( SingleDmaMEC.sizeIndex );
+				SingleDmaMEC mec = new SingleDmaMEC( ctxName, destinationAddress, sourceAddress, size );
+				//SingleDmaMEC mec = new SingleDmaMEC( ctxName );
 				programString.append( mec.getExecCode() );
 			}
 			if( cpMEC instanceof DoubleDmaMEC )	{
-				DoubleDmaMEC mec = new DoubleDmaMEC( ctxName );
+				destinationAddress1 = attributes.get( DoubleDmaMEC.destinationAddress1Index );
+				sourceAddress1 = attributes.get( DoubleDmaMEC.sourceAddress1Index );
+				size1 = attributes.get( DoubleDmaMEC.size1Index );
+				destinationAddress2 = attributes.get( DoubleDmaMEC.destinationAddress2Index );
+				sourceAddress2 = attributes.get( DoubleDmaMEC.sourceAddress2Index );
+				size2 = attributes.get( DoubleDmaMEC.size2Index );
+				DoubleDmaMEC mec = new DoubleDmaMEC( ctxName, destinationAddress1, sourceAddress1, size1, destinationAddress2, sourceAddress2, size2 );
+				//DoubleDmaMEC mec = new DoubleDmaMEC( ctxName );
 				programString.append( mec.getExecCode() );
 			}
 

@@ -401,4 +401,102 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 	public String getCompleteName()	{
 		return completeName;
 	}
+
+	public Vector<String> getAssignedAttributes()	{
+
+		//attributes must first be parsed and assigned to the correct position within array, in order to be correctly retrieved
+		Vector<String> vectorToReturn;
+		switch( cpMEC )	{
+			case CPMEC.MemoryCopy:
+				TraceManager.addDev( "Returning assignedAttributes as memory copy" );
+				vectorToReturn = assignedAttributes;
+			break;
+			case CPMEC.SingleDMA:
+				vectorToReturn = sortAttributesForSingleDMA();
+			break;
+			case CPMEC.DoubleDMA:
+				vectorToReturn = sortAttributesForDoubleDMA();
+			break;
+			default:
+				TraceManager.addDev( "ERROR in returning assignedAttributes" );
+				vectorToReturn = assignedAttributes;
+			break;
+		}
+		return vectorToReturn;
+	}
+
+	private Vector<String> sortAttributesForSingleDMA()	{
+		
+		Vector<String> newVector = new Vector<String>( assignedAttributes );
+		for( String s: assignedAttributes )	{
+			if( s.contains( SingleDmaMEC.destinationAddress ) )	{
+				newVector.set( SingleDmaMEC.destinationAddressIndex, getAttributeValue(s) );
+			}
+			if( s.contains( SingleDmaMEC.sourceAddress ) )	{
+				newVector.set( SingleDmaMEC.sourceAddressIndex, getAttributeValue(s) );
+			}
+			if( s.contains( SingleDmaMEC.size ) )	{
+				newVector.set( SingleDmaMEC.sizeIndex, getAttributeValue(s) );
+			}
+			if( s.contains( SingleDmaMEC.counter ) )	{
+				newVector.set( SingleDmaMEC.counterIndex, getAttributeValue(s) );
+			}
+			if( s.contains( SingleDmaMEC.ID1 ) )	{
+				newVector.set( SingleDmaMEC.ID1Index, getAttributeValue(s) );
+			}
+			if( s.contains( SingleDmaMEC.bytesToTransfer ) )	{
+				newVector.set( SingleDmaMEC.bytesToTransferIndex, getAttributeValue(s) );
+			}
+		}
+		return newVector;
+	}
+
+	private Vector<String> sortAttributesForDoubleDMA()	{
+		
+		Vector<String> newVector = new Vector<String>( assignedAttributes );
+		for( String s: assignedAttributes )	{
+			if( s.contains( DoubleDmaMEC.destinationAddress1 ) )	{
+				newVector.set( DoubleDmaMEC.destinationAddress1Index, getAttributeValue(s) );
+			}
+			if( s.contains( DoubleDmaMEC.sourceAddress1 ) )	{
+				newVector.set( DoubleDmaMEC.sourceAddress1Index, getAttributeValue(s) );
+			}
+			if( s.contains( DoubleDmaMEC.size1 ) )	{
+				newVector.set( DoubleDmaMEC.size1Index, getAttributeValue(s) );
+			}
+			if( s.contains( DoubleDmaMEC.counter1 ) )	{
+				newVector.set( DoubleDmaMEC.counter1Index, getAttributeValue(s) );
+			}
+			if( s.contains( DoubleDmaMEC.ID1 ) )	{
+				newVector.set( DoubleDmaMEC.ID1Index, getAttributeValue(s) );
+			}
+			if( s.contains( DoubleDmaMEC.bytesToTransfer1 ) )	{
+				newVector.set( DoubleDmaMEC.bytesToTransfer1Index, getAttributeValue(s) );
+			}
+			if( s.contains( DoubleDmaMEC.destinationAddress2 ) )	{
+				newVector.set( DoubleDmaMEC.destinationAddress2Index, getAttributeValue(s) );
+			}
+			if( s.contains( DoubleDmaMEC.sourceAddress2 ) )	{
+				newVector.set( DoubleDmaMEC.sourceAddress2Index, getAttributeValue(s) );
+			}
+			if( s.contains( DoubleDmaMEC.size2 ) )	{
+				newVector.set( DoubleDmaMEC.size2Index, getAttributeValue(s) );
+			}
+			if( s.contains( DoubleDmaMEC.counter2 ) )	{
+				newVector.set( DoubleDmaMEC.counter2Index, getAttributeValue(s) );
+			}
+			if( s.contains( DoubleDmaMEC.ID12 ) )	{
+				newVector.set( DoubleDmaMEC.ID12Index, getAttributeValue(s) );
+			}
+			if( s.contains( DoubleDmaMEC.bytesToTransfer2 ) )	{
+				newVector.set( DoubleDmaMEC.bytesToTransfer2Index, getAttributeValue(s) );
+			}
+		}
+		return newVector;
+	}
+
+	private String getAttributeValue( String assignement )	{
+		String s = assignement.split(" = ")[1];
+		return s.substring(0, s.length()-1);	//remove trailing semi-colon
+	}
 }
