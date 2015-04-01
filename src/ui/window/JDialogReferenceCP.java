@@ -118,7 +118,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private JButton removeButton;
 	private JScrollPane scrollPane;
 
-	private JPanel panel12;
+	private JPanel panel125;
 	private JPanel panel34;
 
 	//Panel3: assign a value to CP attributes
@@ -199,6 +199,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			GridBagLayout gridbag2 = new GridBagLayout();
 			GridBagLayout gridbag3 = new GridBagLayout();
 			GridBagLayout gridbag4 = new GridBagLayout();
+			GridBagLayout gridbag5 = new GridBagLayout();
 			GridBagConstraints c0 = new GridBagConstraints();
 			GridBagConstraints c1 = new GridBagConstraints();
 			GridBagConstraints c2 = new GridBagConstraints();
@@ -221,7 +222,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel2.setBorder(new javax.swing.border.TitledBorder("Managing structure"));
 			panel2.setPreferredSize(new Dimension(325, 250));
 
-			panel12 = new JPanel();
+			panel125 = new JPanel();
 			panel34 = new JPanel();
 
 			panel3 = new JPanel();
@@ -233,6 +234,11 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel4.setLayout(gridbag4);
 			panel4.setBorder(new javax.swing.border.TitledBorder("Managing attributes"));
 			panel4.setPreferredSize(new Dimension(325, 250));
+
+			panel5 = new JPanel();
+			panel5.setLayout(gridbag5);
+			panel5.setBorder(new javax.swing.border.TitledBorder("Code generation"));
+			panel5.setPreferredSize(new Dimension(325, 250));
 
 			tabbedPane = new JTabbedPane();
 
@@ -469,10 +475,6 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel4.add(removeAttributeButton, c4);
 
 			//panel5, code generation
-			panel5 = new JPanel();
-			panel5.setLayout(gridbag3);
-			panel5.setBorder(new javax.swing.border.TitledBorder("Code generation"));
-			panel5.setPreferredSize(new Dimension(325, 250));
 			c5.weighty = 1.0;
 			c5.weightx = 1.0;
 			c5.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -499,19 +501,19 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel5.add( cpMECsCB, c5 );
 			
 			// main panel;
-			c0.gridwidth = 1;
-			c0.gridheight = 10;
+			c0.gridwidth = 1;	//num columns
+			c0.gridheight = 20;	//num rows
 			c0.weighty = 1.0;
 			c0.weightx = 1.0;
 			c0.fill = GridBagConstraints.BOTH;
 			//c.add(panel1, c0);
-			c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+			//c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 			//c.add(panel2, c0);
-			panel12.add( panel1, c0 );
-			panel12.add( panel2, c0 );
-			panel12.add( panel5, c0 );
+			panel125.add( panel1, c0 );
+			panel125.add( panel2, c0 );
+			panel125.add( panel5, c0 );
 
-			tabbedPane.addTab( "Structure", panel12 );
+			tabbedPane.addTab( "Structure", panel125 );
 
 			c0.gridwidth = 1;
 			c0.gridheight = 10;
@@ -962,27 +964,52 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 		private void assignValueToAttribute()	{
 
-			String attrType = ((String)attributesList_CB.getSelectedItem()).split(" ")[0];
-			String attrName = ((String)attributesList_CB.getSelectedItem()).split(" ")[1];
-			int indexToDelete = attributesVector.indexOf( attrType + " " + attrName );
-			if( indexToDelete != -1 )	{
-				String assignement = attrType + " " + attrName + " = " + attributesValue_TF.getText() + ";";
-				assignedAttributes.add( assignement );
-
-				//update JComboBox
-				Vector<String> newList = new Vector<String>( attributesVector );
-				newList.remove( indexToDelete );
-				attributesList_CB.removeAllItems();
-				for( String s: newList )	{
-					attributesList_CB.addItem( s );
+			String attrValue = attributesValue_TF.getText();
+			if( attrValue.length() > 0 )	{
+				String natRegex = "[0-9]+";
+				String boolRegex = "true|TRUE|false|FALSE";
+				String attrType = ((String)attributesList_CB.getSelectedItem()).split(" ")[0];
+				if( attrType.equals( "int" ) )	{
+					if( !attrValue.matches( natRegex ) )	{
+						JOptionPane.showMessageDialog( frame, "Attribute is of type integer", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+						return;
+					}
 				}
-				attributesVector = new Vector<String>( newList );
+				if( attrType.equals( "bool" ) )	{
+					if( !attrValue.matches( boolRegex ) )	{
+						JOptionPane.showMessageDialog( frame, "Attribute is of type boolean", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+						return;
+					}
+				}
+	
+				String attrName = ((String)attributesList_CB.getSelectedItem()).split(" ")[1];
+				int indexToDelete = attributesVector.indexOf( attrType + " " + attrName );
+				if( indexToDelete != -1 )	{
+					String assignement = attrType + " " + attrName + " = " + attrValue + ";";
+					assignedAttributes.add( assignement );
 
-				//clear text
-				attributesValue_TF.setText("");
-
-				//update scrollPaneAttributes
-				scrollPaneAttributes_JL.setListData( assignedAttributes );
+					//update JComboBox
+					Vector<String> newList = new Vector<String>( attributesVector );
+					newList.remove( indexToDelete );
+					attributesList_CB.removeAllItems();
+					for( String s: newList )	{
+						attributesList_CB.addItem( s );
+					}
+					attributesVector = new Vector<String>( newList );
+	
+					//clear text
+					attributesValue_TF.setText("");
+	
+					//update scrollPaneAttributes
+					scrollPaneAttributes_JL.setListData( assignedAttributes );
+				}
+			}
+			else	{
+						JOptionPane.showMessageDialog( frame, "Please enter a value for the selected attribute", "No value for attribute",
+																				JOptionPane.INFORMATION_MESSAGE );
+						return;
 			}
 		}
 
