@@ -1732,7 +1732,14 @@ public class GTMLModeling  {
                             checkingErrors.add(ce);
                             ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         }
-                    }
+                    } else {
+			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADNotifiedEvent)tgc).getEventName() + " is an unknown event");
+                            ce.setTMLTask(tmltask);
+                            ce.setTDiagramPanel(tadp);
+                            ce.setTGComponent(tgc);
+                            checkingErrors.add(ce);
+                            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+		    }
                 } else {
                     event.setNotified(true);
                     tmlnotifiedevent = new TMLNotifiedEvent("notified event", tgc);
@@ -1763,7 +1770,14 @@ public class GTMLModeling  {
                             ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                             checkingErrors.add(ce);
                         }
-                    }
+                    } else {
+			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent)tgc).getEventName() + " is an unknown event");
+                            ce.setTMLTask(tmltask);
+                            ce.setTDiagramPanel(tadp);
+                            ce.setTGComponent(tgc);
+                            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                            checkingErrors.add(ce);
+		    }
                 } else {
                     //TraceManager.addDev("Nb of param of event:" + event.getNbOfParams());
                     tmlwaitevent = new TMLWaitEvent("wait event", tgc);

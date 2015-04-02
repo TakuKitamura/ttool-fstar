@@ -174,7 +174,7 @@ public class TMLSyntaxChecking {
 
                 if (elt instanceof TMLWaitEvent) {
                     evt = ((TMLWaitEvent)elt).getEvent();
-                    //TraceManager.addDev("wait evt= " + evt.getName() + " task=" + t.getName() + " destination=" + evt.getDestinationTask().getName());
+                    TraceManager.addDev("wait evt= " + evt.getName() + " task=" + t.getName() + " destination=" + evt.getDestinationTask().getName());
                     if (evt.getDestinationTask() != t) {
                         addError(t, elt, evt.getName() + ": " + WRONG_DESTINATION_EVENT, TMLError.ERROR_BEHAVIOR);
                     }
