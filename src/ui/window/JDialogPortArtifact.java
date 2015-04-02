@@ -157,7 +157,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
         panel3 = new JPanel();
         panel3.setLayout(gridbag2);
-        panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: buffer attributes"));
+        panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
         panel3.setPreferredSize(new Dimension(650, 350));
 				
 				tabbedPane = new JTabbedPane();
@@ -320,7 +320,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c0.fill = GridBagConstraints.BOTH;
 		c.add( panel2, c0 );
 		if( ( bufferType == Buffer.MainMemoryBuffer ) || ( bufferType == Buffer.FepBuffer ) || ( bufferType == Buffer.AdaifBuffer) )	{
-      panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: buffer attributes"));
+      panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
 			tabbedPane.removeAll();
 			tabbedPane.addTab( "Data", panel3 );
 			tabbedPane.setSelectedIndex(0);
@@ -342,7 +342,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 	private void makeFepBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
-     panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: buffer attributes"));
+     panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
 
 		c2.anchor = GridBagConstraints.LINE_START;
 		numSamplesTF = new JTextField( sampleLength, 5 );
@@ -380,17 +380,17 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
   	panel3 = new JPanel();	//data in
 		panel3.setLayout(gridbag2);
-		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: input buffer attributes"));
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: input buffer configuration"));
 		panel3.setPreferredSize(new Dimension(650, 350));
 
   	panel4 = new JPanel();	//data out
 		panel4.setLayout(gridbag2);
-		panel4.setBorder(new javax.swing.border.TitledBorder("Code generation: output buffer attributes"));
+		panel4.setBorder(new javax.swing.border.TitledBorder("Code generation: output buffer configuration"));
 		panel4.setPreferredSize(new Dimension(650, 350));
 
   	panel5 = new JPanel();	//permutation table
 		panel5.setLayout(gridbag2);
-		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Permutation Table attributes"));
+		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Permutation Table configuration"));
 		panel5.setPreferredSize(new Dimension(650, 350));
 		
 		//Data In panel
@@ -470,17 +470,17 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
   	panel3 = new JPanel();
 		panel3.setLayout(gridbag2);
-		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: input buffer attributes"));
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: input buffer configuration"));
 		panel3.setPreferredSize(new Dimension(650, 350));
 
   	panel4 = new JPanel();
 		panel4.setLayout(gridbag2);
-		panel4.setBorder(new javax.swing.border.TitledBorder("Code generation: output buffer attributes"));
+		panel4.setBorder(new javax.swing.border.TitledBorder("Code generation: output buffer configuration"));
 		panel4.setPreferredSize(new Dimension(650, 350));
 
   	panel5 = new JPanel();
 		panel5.setLayout(gridbag2);
-		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Look Up Table attributes"));
+		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Look Up Table configuration"));
 		panel5.setPreferredSize(new Dimension(650, 350));
 		
 		//Data In panel
@@ -529,14 +529,14 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 	private void makeMainMemoryBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 		
-		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: buffer attributes"));
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
 
 		c2.anchor = GridBagConstraints.LINE_START;
-		/*numSamplesTF = new JTextField( numSamples, 5 );
+		numSamplesTF = new JTextField( numSamples, 5 );
 		panel3.add( new JLabel( "Number of samples = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		numSamplesTF = new JTextField( numSamples, 5 );
-		panel3.add( numSamplesTF, c1 );*/
+		panel3.add( numSamplesTF, c1 );
 		//
 		baseAddressTF = new JTextField( baseAddress, 5 );
 		panel3.add( new JLabel( "Base address = "),  c2 );
@@ -750,7 +750,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		}
 
 		private boolean handleClosureWhenSelectedMainMemoryBuffer()	{
-			return checkBaseAddress();
+			return checkBaseAddress() && checkNumSamples();
 		}
 
 		public String getMappedPort()	{
@@ -1131,7 +1131,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				params.add( MapperBuffer.baseAddressLUTMappIndex, baseAddressLUTMapp );
 				break;
 			case Buffer.MainMemoryBuffer:	
-				params.add( baseAddress );
+				params.add( MMBuffer.numSamplesIndex, numSamples );
+				params.add( MMBuffer.baseAddressIndex, baseAddress );
 				break;
 			default:	//the main memory buffer 
 				params.add( baseAddress );

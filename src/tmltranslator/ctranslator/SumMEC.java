@@ -51,18 +51,18 @@ import java.util.*;
 
 public class SumMEC extends OperationMEC	{
 
-	public SumMEC( String _ctxName, String ID0, String OD0, String BTC )	{
+	public SumMEC( String _ctxName, String inSignalName, String outSignalName, String BTC )	{
 		name = "Sum MEC";
 		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
-			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->bank);" + CR + TAB +
+			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + inSignalName + "].pBuff)->bank);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
 			"fep_start(&" + _ctxName + ");" + CR;
 		
 		init_code = 
 			"void init_" + _ctxName + "(void){" + CR + TAB +
-			"fep_init(&" + _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_init(&" + _ctxName + ", (uintprt_t) fep_mss );" + CR + TAB +
 			"// initialize context" + CR + TAB +
-			"fep_set_op(&" + _ctxName + ", FEP_OP_MOV);" + CR + TAB +
+			"fep_set_op(&" + _ctxName + ", FEP_OP_SUM );" + CR + TAB +
 			"// X vector configuration => Zk=Y[Xi]" + CR + TAB +
 			"fep_set_r(&" + _ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
 			"fep_set_l(&" + _ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
@@ -79,8 +79,8 @@ public class SumMEC extends OperationMEC	{
 			"fep_set_vix(&" + _ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
 			"// Operation configuration" + CR + TAB +
 			"fep_set_sma(&" + _ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_qs(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->bank);" + CR + TAB +
-			"fep_set_bs(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->base_address);" + CR + TAB +
+			"fep_set_qs(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + outSignalName + "].pBuff)->bank);" + CR + TAB +
+			"fep_set_bs(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR + TAB +
 			"}" + CR;
 		cleanup_code = "fep_ctx_cleanup(&" + _ctxName + ");";
 	}

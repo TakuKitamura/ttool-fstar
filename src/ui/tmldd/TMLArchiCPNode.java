@@ -387,7 +387,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 
 		public CPMEC getCPMEC()	{
 			if( cpMEC.equals( "Memory Copy" ) )	{
-				return new CpuMemoryCopyMEC( "voidCtxName" );
+				return new CpuMemoryCopyMEC( "voidCtxName", "", "", "", "" );
 			}
 			if( cpMEC.equals( "Single DMA" ) )	{
 				return new SingleDmaMEC( "voidCtxName" );

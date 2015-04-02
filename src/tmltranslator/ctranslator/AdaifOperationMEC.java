@@ -53,11 +53,11 @@ public class AdaifOperationMEC extends OperationMEC	{
 
 	public AdaifOperationMEC( String ctxName, String ID0, String OD0, String BTC )	{
 		name = "AdaifOperationMEC";
-		exec_code = CR + TAB + "adaif_start(&);" + CR;
+		exec_code = CR + TAB + "adaif_start(&" + ctxName + ");" + CR;
 	
 		init_code =
 			"void init_" + ctxName + "( void )\t{" + CR + TAB +
-			"adaif_ctx_init(/*USER TODO*/);" + CR + TAB +
+			"adaif_ctx_init(&" + ctxName + ", (uintptr_t) adaif_mss );" + CR + TAB +
 			"adaif_set_tdd(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
 			"adaif_set_st(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
 			"adaif_set_ldt0(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +

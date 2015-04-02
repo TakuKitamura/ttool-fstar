@@ -91,7 +91,7 @@ public class MapperBuffer extends Buffer	{
 																						baseAddressDataOutMappType + SP + "output_base_address" + SC + CR + TAB +
 																						baseAddressLUTMappType + SP + "lut_base_address" + SC + CR + "}";
 	
-	private String Context = "embb_mapper_context";
+	private String Context = "MAPPER_CONTEXT";
 	
 	public MapperBuffer( String _name, TMLTask _task )	{
 		type = "MAPPER_BUFFER_TYPE";

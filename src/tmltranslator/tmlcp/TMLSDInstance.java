@@ -102,14 +102,6 @@ public class TMLSDInstance extends TMLElement  {
         return events;
     }
 
-    /*public void addEvent( TMLSDEvent _event )   {
-        events.add( _event );
-	}*/
-
-    /*public void addVariable( TMLAttribute _attr )       {
-        globalVariables.add( _attr );
-    }*/
-
     public void addAttribute( TMLAttribute _attribute ) {       //used by the graphical 2 TMLTxt compiler
         globalVariables.add( _attribute );
     }
@@ -191,8 +183,6 @@ public class TMLSDInstance extends TMLElement  {
                 }
             }
         }
-        String errorMessage = "TMLCOMPILER ERROR: variable " + _name + " in diagram " + this.name + " is not initialized";
-        //throw new UninitializedVariableException( errorMessage );
     }
 
     public ArrayList<TMLSDMessage> getMessages()        {

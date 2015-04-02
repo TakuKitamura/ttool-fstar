@@ -55,7 +55,8 @@ public class TMLType {
     // type
     public final static int NATURAL = 1;
     public final static int BOOLEAN = 2;
-    public final static int OTHER = 3;
+    public final static int ADDRESS = 3;
+    public final static int OTHER = 4;
     
     private int type;
     private String typeOther;
@@ -93,6 +94,8 @@ public class TMLType {
             return 	NATURAL;
         } else if (s.equals("BOOLEAN")) {
             return 	BOOLEAN;
+        } else if (s.equals("ADDRESS")) {
+            return ADDRESS;
         } else if (s.equals("NAT")) {
             return 	NATURAL;
         } else if (s.equals("INT")) {
@@ -112,6 +115,8 @@ public class TMLType {
                 return "nat";
             case BOOLEAN:
                 return "bool";
+						case ADDRESS:
+								return "addr";
             case OTHER:
                 return "Other";
             default:
@@ -144,6 +149,8 @@ public class TMLType {
                 return "int";
             case BOOLEAN:
                 return "bool";
+						case ADDRESS:
+								return "addr";
             case OTHER:
                 return "other";
             default:

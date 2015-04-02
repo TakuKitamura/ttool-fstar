@@ -51,7 +51,7 @@ import java.util.*;
 
 public class FepMEC extends ArchUnitMEC	{
 
-	public static final String Context = "embb_fep_context";
+	public static final String Context = "FEP_CONTEXT";
 	public static final String Ctx_cleanup = "fep_ctx_cleanup";
 
 	public FepMEC( String XOP, String ID0, String OD0, String BTC )	{
@@ -60,7 +60,6 @@ public class FepMEC extends ArchUnitMEC	{
 		inst_type = "FEP";
 		inst_decl = "FEP_CONTEXT";
 		buff_type = "FEP_BUFF_TYPE";
-		buff_init = "= {/*l,b,q,t*/};";
 	}
 
 }	//End of class

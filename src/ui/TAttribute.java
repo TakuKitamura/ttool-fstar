@@ -69,10 +69,11 @@ public class TAttribute {
     public final static int INGATE = 3;
     public final static int BOOLEAN = 4;
     public final static int OTHER = 5;
-	public final static int QUEUE_NAT = 6;
-	public final static int ARRAY_NAT = 7;
-	public final static int INTEGER = 8;
-	public final static int TIMER = 9;
+		public final static int QUEUE_NAT = 6;
+		public final static int ARRAY_NAT = 7;
+		public final static int INTEGER = 8;
+		public final static int TIMER = 9;
+    public final static int ADDRESS = 10;
 	
 	// Confidentiality verififcation
     public final static int NOT_VERIFIED = 0;
@@ -201,6 +202,8 @@ public class TAttribute {
         switch(type) {
             case NATURAL:
                 return value.matches("\\d*");
+            case ADDRESS:
+                return value.matches("\\d*");
             case BOOLEAN:
                 //System.out.println("Evaluation boolean");
                 return ((value.equals("true")) || (value.equals("false")) || (value.equals("")));
@@ -266,6 +269,8 @@ public class TAttribute {
     public static int getType(String s) {
         if (s.equals("Natural")) {
             return 	NATURAL;
+        } else if (s.equals("Address")) {
+            return 	ADDRESS;
         } else if (s.equals("Boolean")) {
             return 	BOOLEAN;
         }else if (s.equals("Gate")) {
@@ -323,6 +328,8 @@ public class TAttribute {
         switch(type) {
             case NATURAL:
                 return "Natural";
+						case ADDRESS:
+								return "Address";
             case BOOLEAN:
                 return "Boolean";
             case GATE:
@@ -352,10 +359,12 @@ public class TAttribute {
                 return "int";
             case BOOLEAN:
                 return "bool";
-			case TIMER:
+						case TIMER:
                 return "Timer";
-			case NATURAL:
+						case NATURAL:
                 return "int";
+						case ADDRESS:
+									return "addr";
             default:
                 return "unknown";
         }

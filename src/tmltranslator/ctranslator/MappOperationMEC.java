@@ -59,7 +59,7 @@ public class MappOperationMEC extends OperationMEC	{
 		
 		init_code ="/***** INIT " + ctxName + " *******/" + CR +
 			"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB +
-			"mapper_ctx_init(&" + ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"mapper_ctx_init(&" + ctxName + ", (uintptr_t) mapper_mss );" + CR + TAB +
 			"// initialize context" + CR + TAB +
 			"mapper_set_sv( /* USER TO DO: value */, (uint64_t) /* USER TODO: value */);" + CR + TAB +
 			"mapper_set_arm( /* USER TO DO: value */, (uint64_t) /* USER TODO: value */);" + CR + TAB +

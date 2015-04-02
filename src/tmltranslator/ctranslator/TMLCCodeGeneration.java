@@ -1045,7 +1045,7 @@ public class TMLCCodeGeneration	{
 			CPMEC cpMEC = tmlcplib.getCPMEC();
 			TraceManager.addDev( "CPMEC: " + cpMEC + "\n" + attributes.toString() );
 			if( cpMEC instanceof CpuMemoryCopyMEC )	{
-				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName );
+				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName, "", "", "", "" );
 				programString.append( mec.getExecCode() );
 			}
 			if( cpMEC instanceof SingleDmaMEC )	{
@@ -1053,7 +1053,6 @@ public class TMLCCodeGeneration	{
 				sourceAddress = attributes.get( SingleDmaMEC.sourceAddressIndex );
 				size = attributes.get( SingleDmaMEC.sizeIndex );
 				SingleDmaMEC mec = new SingleDmaMEC( ctxName, destinationAddress, sourceAddress, size );
-				//SingleDmaMEC mec = new SingleDmaMEC( ctxName );
 				programString.append( mec.getExecCode() );
 			}
 			if( cpMEC instanceof DoubleDmaMEC )	{
@@ -1064,7 +1063,6 @@ public class TMLCCodeGeneration	{
 				sourceAddress2 = attributes.get( DoubleDmaMEC.sourceAddress2Index );
 				size2 = attributes.get( DoubleDmaMEC.size2Index );
 				DoubleDmaMEC mec = new DoubleDmaMEC( ctxName, destinationAddress1, sourceAddress1, size1, destinationAddress2, sourceAddress2, size2 );
-				//DoubleDmaMEC mec = new DoubleDmaMEC( ctxName );
 				programString.append( mec.getExecCode() );
 			}
 
@@ -1141,6 +1139,7 @@ public class TMLCCodeGeneration	{
 		
 		String init_code = "";
 		String ctxName;
+		String inSignalName, outSignalName;
 		initFileString.append( "#include \"" + applicationName + ".h\"" + CR2 );
 		initFileString.append( "/**** variables ****/" + CR2 /*+
 									"int g_r_size = 10240;" + CR +
@@ -1162,41 +1161,57 @@ public class TMLCCodeGeneration	{
 				OperationMEC xTaskOperation = xTask.getOperationMEC();
 				OperationMEC fTaskOperation = fTask.getOperationMEC();
 				ctxName = op.getContextName();
+				if( op.getInSignals().size() > 0 )	{
+					inSignalName = op.getInSignals().get(0).getName();
+				}
+				else	{
+					inSignalName = "noInSignal";
+				}
+				if( op.getOutSignal() != null )	{
+					outSignalName = op.getOutSignal().getName();
+				}
+				else	{
+					outSignalName = "noOutSignal";
+				}
 				if( xTaskOperation instanceof CwpMEC )	{
-					CwpMEC cwp = new CwpMEC( ctxName, xTask.getID0(), xTask.getOD0(), "" );
+					CwpMEC cwp = new CwpMEC( ctxName, inSignalName, outSignalName, "" );
 					init_code = cwp.getInitCode();
 				}
 				else if( xTaskOperation instanceof CwmMEC )	{
-					CwmMEC cwm = new CwmMEC( ctxName, xTask.getID0(), xTask.getOD0(), "" );
+					CwmMEC cwm = new CwmMEC( ctxName, inSignalName, outSignalName, "" );
 					init_code = cwm.getInitCode();
 				}
 				else if( xTaskOperation instanceof CwaMEC )	{
-					CwaMEC cwa = new CwaMEC( ctxName, xTask.getID0(), "", xTask.getOD0(), "" );
+					CwaMEC cwa = new CwaMEC( ctxName, inSignalName, "", outSignalName, "" );
 					init_code = cwa.getInitCode();
 				}
 				else if( xTaskOperation instanceof CwlMEC )	{
-					CwlMEC cwl = new CwlMEC( ctxName, xTask.getID0(), xTask.getOD0(), "" );
+					CwlMEC cwl = new CwlMEC( ctxName, inSignalName, outSignalName, "" );
 					init_code = cwl.getInitCode();
 				}
 				else if( xTaskOperation instanceof SumMEC )	{
-					SumMEC sum = new SumMEC( ctxName, xTask.getID0(), xTask.getOD0(), "" );
+					SumMEC sum = new SumMEC( ctxName, inSignalName, outSignalName, "" );
 					init_code = sum.getInitCode();
 				}
 				else if( xTaskOperation instanceof FftMEC )	{
-					FftMEC fft = new FftMEC( ctxName, xTask.getID0(), xTask.getOD0(), "" );
+					FftMEC fft = new FftMEC( ctxName, inSignalName, outSignalName, "" );
 					init_code = fft.getInitCode();
 				}
 				else if( xTaskOperation instanceof IntlOperationMEC )	{
-					IntlOperationMEC intl = new IntlOperationMEC( ctxName, xTask.getID0(), xTask.getOD0(), "" );
+					IntlOperationMEC intl = new IntlOperationMEC( ctxName, inSignalName, outSignalName, "" );
 					initFileString.append( intl.getInitCode() + CR );
 				}
 				else if( xTaskOperation instanceof MappOperationMEC )	{
-					MappOperationMEC mapp = new MappOperationMEC( ctxName, xTask.getID0(), xTask.getOD0(), "" );
+					MappOperationMEC mapp = new MappOperationMEC( ctxName, inSignalName, outSignalName, "" );
 					initFileString.append( mapp.getInitCode() + CR );
 				}
 				else if( xTaskOperation instanceof AdaifOperationMEC )	{
-					AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName, xTask.getID0(), xTask.getOD0(), "" );
+					AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName, inSignalName, outSignalName, "" );
 					initFileString.append( adaif.getInitCode() + CR );
+				}
+				else if( xTaskOperation instanceof CpuOperationMEC )	{
+					CpuOperationMEC cpu = new CpuOperationMEC( ctxName, inSignalName, outSignalName, "" );
+					initFileString.append( cpu.getInitCode() + CR );
 				}
 			initFileString.append( init_code + CR );
 			init_code = "";
@@ -1287,7 +1302,7 @@ public class TMLCCodeGeneration	{
 			String name = tmlcplib.getName().split("::")[0];
 			if( cpMEC instanceof CpuMemoryCopyMEC )	{
 				initFileString.append( "void init_" + name + "()\t{" + CR );
-				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName );
+				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName, "", "", "", "" );
 				initFileString.append( TAB + mec.getInitCode() + "}" + CR2 );
 			}
 			if( cpMEC instanceof SingleDmaMEC )	{

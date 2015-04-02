@@ -2502,13 +2502,13 @@ public class GTMLModeling  {
     private tmltranslator.tmlcp.TMLCPSequenceDiagram createSequenceDiagramDataStructure( ui.tmlsd.TMLSDPanel panel,
                                                                                          ArrayList<String> names )      throws MalformedTMLDesignException {
 
-        Vector attributes;
+        Vector<TAttribute> attributes;
         int index1;
         int index2;
         TGComponent[] components;
         TMLType type;
         String toParse;
-        Object attribute;
+        TAttribute attribute;
         TGConnectorMessageTMLSD connector;
         TMLSDMessage message;
         tmltranslator.tmlcp.TMLSDInstance instance;
@@ -2543,20 +2543,18 @@ public class GTMLModeling  {
                     attributes = storage.getAttributes();
                     for( index1 = 0; index1 < attributes.size(); index1++ )     {       // an attribute is a variable declaration
                         attribute = attributes.get( index1 );
-                        toParse = attribute.toString();
-                        tokens = toParse.split( delims );
-                        if( tokens[ tokens.length - 1 ].equals("Natural") )       {
+                        if( attribute.getType() == TAttribute.NATURAL )       {
                             type = new TMLType( TMLType.NATURAL );
                         }
                         else {
-                            if( tokens[ tokens.length - 1 ].equals("Boolean") )   {
+                            if( attribute.getType() == TAttribute.BOOLEAN )   {
                                 type = new TMLType( TMLType.BOOLEAN );
                             }
-                            else        {
-                                type = new TMLType( TMLType.OTHER );  //other type
+                            else	{
+                                type = new TMLType( TMLType.ADDRESS );
                             }
                         }
-                        instance.addAttribute( new TMLAttribute( tokens[1], storage.getName(), type, tokens[2] ) );     //name, instanceName, type, initial value
+                        instance.addAttribute( new TMLAttribute( attribute.getId(), storage.getName(), type, attribute.getInitialValue() ) );
                     }
                     if( storage.getNumberInternalComponents() > 0 )     {       // action states are stored as internal components of an instance
                         components = storage.getInternalComponents();
@@ -2572,14 +2570,18 @@ public class GTMLModeling  {
                     attributes = controller.getAttributes();
                     for( index1 = 0; index1 < attributes.size(); index1++ )     {       // an attribute is a variable declaration
                         attribute = attributes.get( index1 );
-                        toParse = attribute.toString();
-                        tokens = toParse.split( delims );
-                        if( tokens[ tokens.length - 1 ].equals("Natural") )       { type = new TMLType( TMLType.NATURAL );        }
-                        else {
-                            if( tokens[ tokens.length - 1 ].equals("Boolean") )   {       type = new TMLType( TMLType.BOOLEAN );  }
-                            else        {       type = new TMLType( TMLType.OTHER );  /*other type*/  }
+                        if( attribute.getType() == TAttribute.NATURAL )       {
+                            type = new TMLType( TMLType.NATURAL );
                         }
-                        instance.addAttribute( new TMLAttribute( tokens[1], controller.getName(), type, tokens[2] ) );  //name, instanceName, type, initial value
+                        else {
+                            if( attribute.getType() == TAttribute.BOOLEAN )   {
+                                type = new TMLType( TMLType.BOOLEAN );
+                            }
+                            else	{
+                                type = new TMLType( TMLType.ADDRESS );
+                            }
+                        }
+                        instance.addAttribute( new TMLAttribute( attribute.getId(), controller.getName(), type, attribute.getInitialValue() ) );
                     }
                     if( controller.getNumberInternalComponents() > 0 )  {       //Action states are stored as internal components of an instance
                         components = controller.getInternalComponents();
@@ -2595,14 +2597,18 @@ public class GTMLModeling  {
                     attributes = transfer.getAttributes();
                     for( index1 = 0; index1 < attributes.size(); index1++ )     {       // an attribute is a variable declaration
                         attribute = attributes.get( index1 );
-                        toParse = attribute.toString();
-                        tokens = toParse.split( delims );
-                        if( tokens[ tokens.length-1 ].equals("Natural") )       {       type = new TMLType( TMLType.NATURAL );  }
-                        else {
-                            if( tokens[ tokens.length-1 ].equals("Boolean") )   {       type = new TMLType( TMLType.BOOLEAN );  }
-                            else        {       type = new TMLType( TMLType.OTHER );  /*other type*/  }
+                        if( attribute.getType() == TAttribute.NATURAL )       {
+                            type = new TMLType( TMLType.NATURAL );
                         }
-                        instance.addAttribute( new TMLAttribute( tokens[1], transfer.getName(), type, tokens[2] ) );    //name, instanceName, type, initial value
+                        else {
+                            if( attribute.getType() == TAttribute.BOOLEAN )   {
+                                type = new TMLType( TMLType.BOOLEAN );
+                            }
+                            else	{
+                                type = new TMLType( TMLType.ADDRESS );
+                            }
+                        }
+                        instance.addAttribute( new TMLAttribute( attribute.getId(), transfer.getName(), type, attribute.getInitialValue() ) );
                     }
                     if( transfer.getNumberInternalComponents() > 0 )    {       //Action states are stored as internal components of an instance
                         components = transfer.getInternalComponents();

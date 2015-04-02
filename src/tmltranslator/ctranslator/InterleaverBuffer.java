@@ -109,7 +109,7 @@ public class InterleaverBuffer extends Buffer	{
 																						offsetPermIntlType + SP + "permutation_offset" + SC + CR + TAB + 
 																						lengthPermIntlType + SP + "permutation_length" + SC + CR + "};";
 	
-	private String Context = "embb_mapper_context";
+	private String Context = "INTL_CONTEXT";
 	
 	public InterleaverBuffer( String _name, TMLTask _task )	{
 		type = "INTERLEAVER_BUFFER_TYPE";

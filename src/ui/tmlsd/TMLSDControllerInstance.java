@@ -117,6 +117,7 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
 		jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
 		jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
+		jda.addType(TAttribute.getStringType(TAttribute.ADDRESS), true);
 		
 /*		Vector<String> records = ( (TMLComponentTaskDiagramPanel )(tdp)).getAllRecords(this);
 		for( String s: records ) {

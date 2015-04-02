@@ -53,36 +53,11 @@ public class CpuOperationMEC extends OperationMEC	{
 
 	public CpuOperationMEC( String XOP, String ID0, String OD0, String BTC )	{
 		name = "CpuOperationMEC";
-		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
-			"fep_set_qx(&" + XOP + "_ctx, ((FEP_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->q);" + CR + TAB +
-			"/*start execution*/" + CR + TAB +
-			"fep_start(&" + XOP + ");" + CR;
+		exec_code = TAB + CR + TAB + "/* USER TO DO */" + CR;
 		
 		init_code ="/***** INIT " + XOP + "_ctx *******/" + CR +
-			"void init_" + XOP + "(void){" + CR + TAB +
-			"fep_ctx_init(&" + XOP + "_ctx, (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"// initialize context" + CR + TAB +
-			"fep_set_op(&" + XOP + "_ctx, FEP_OP_MOV);" + CR + TAB +
-			"// X vector configuration => Zk=Y[Xi]" + CR + TAB +
-			"fep_set_r(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_l(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_bx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_qx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_wx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_tx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_sx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_nx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_mx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_px(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_dx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_vrx(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_vix(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"// Operation configuration" + CR + TAB +
-			"fep_set_sma(&" + XOP + "_ctx, (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_qs(&" + XOP + "_ctx, ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->q);" + CR + TAB +
-			"fep_set_bs(&" + XOP + "_ctx, ((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->b);" + CR + TAB +
-			"}" + CR;
-		cleanup_code = "fep_ctx_cleanup(&" + XOP + "_ctx);";
+			"void init_" + XOP + "(void){" + CR + TAB + "/* USER TO DO */";
+		cleanup_code = "/* USER TO DO */";
 	}
 
 }	//End of class

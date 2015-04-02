@@ -112,6 +112,10 @@ public class TMLAttribute extends DIPLOElement {
         return (type.getType() ==  TMLType.BOOLEAN);
     }
 
+    public boolean isAddress() {
+        return (type.getType() ==  TMLType.ADDRESS);
+    }
+
     public String getInitialValue() {
         return initialValue;
     }

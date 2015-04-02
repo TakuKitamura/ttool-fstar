@@ -51,7 +51,7 @@ import java.util.*;
 
 public class InterleaverMEC extends ArchUnitMEC	{
 
-	public static final String Context = "embb_intl_context";
+	public static final String Context = "INTL_CONTEXT";
 	public static final String Ctx_cleanup = "intl_ctx_cleanup";
 
 	public InterleaverMEC( String XOP, String ID0, String OD0, String BTC )	{

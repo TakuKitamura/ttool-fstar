@@ -58,7 +58,7 @@ public class IntlOperationMEC extends OperationMEC	{
 		
 		init_code ="/***** INIT " + ctxName + " *******/" + CR +
 			"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB +
-			"intl_ctx_init(&" + ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"intl_ctx_init(&" + ctxName + ", (uintptr_t) intl_mss );" + CR + TAB +
 			"// initialize context" + CR + TAB +
 			"intl_set_lenm1( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->num_symbols), (uint64_t) /* USER TODO: value */);" + CR + TAB +
 			"intl_set_lba( (((INTL_BUFF_TYPE*)sig[" + ID0 + "].pBuff)->lut_base_address), (uint64_t) /* USER TODO: value */);" + CR + TAB +

@@ -51,7 +51,7 @@ import java.util.*;
 
 public class MapperMEC extends ArchUnitMEC	{
 
-	public static final String Context = "embb_mapper_context";
+	public static final String Context = "MAPPER_CONTEXT";
 	public static final String Ctx_cleanup = "mapper_ctx_cleanup";
 
 	public MapperMEC( String XOP, String ID0, String OD0, String BTC )	{

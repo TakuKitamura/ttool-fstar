@@ -303,6 +303,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         			sb.append("\" baseAddressLUTMapp=\"" + bufferParameters.get( MapperBuffer.baseAddressLUTMappIndex ) );
 							break;
 						case Buffer.MainMemoryBuffer:	
+  	      		sb.append("\" numSamples=\"" + bufferParameters.get( MMBuffer.numSamplesIndex ) );
   	      		sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
 							break;
 						default:	//the fep buffer 
@@ -385,6 +386,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 											        			bufferParameters.add( elt.getAttribute( "baseAddressLUTMapp" ) );
 																		break;
 																	case Buffer.MainMemoryBuffer:	
+												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 																		break;
 																	default:	//the main memory buffer 

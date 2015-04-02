@@ -118,7 +118,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private JButton removeButton;
 	private JScrollPane scrollPane;
 
-	private JPanel panel125;
+	private JPanel panel12;
 	private JPanel panel34;
 
 	//Panel3: assign a value to CP attributes
@@ -200,6 +200,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			GridBagLayout gridbag3 = new GridBagLayout();
 			GridBagLayout gridbag4 = new GridBagLayout();
 			GridBagLayout gridbag5 = new GridBagLayout();
+			GridBagLayout gridbag125 = new GridBagLayout();
 			GridBagConstraints c0 = new GridBagConstraints();
 			GridBagConstraints c1 = new GridBagConstraints();
 			GridBagConstraints c2 = new GridBagConstraints();
@@ -215,15 +216,23 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel1 = new JPanel();
 			panel1.setLayout(gridbag1);
 			panel1.setBorder(new javax.swing.border.TitledBorder("CP structure"));
-			panel1.setPreferredSize(new Dimension(325, 250));
+			panel1.setPreferredSize(new Dimension(325, 350));
 			
 			panel2 = new JPanel();
 			panel2.setLayout(gridbag2);
 			panel2.setBorder(new javax.swing.border.TitledBorder("Managing structure"));
-			panel2.setPreferredSize(new Dimension(325, 250));
+			panel2.setPreferredSize(new Dimension(325, 350));
 
-			panel125 = new JPanel();
+			panel5 = new JPanel();
+			panel5.setLayout(gridbag5);
+			panel5.setBorder(new javax.swing.border.TitledBorder("Code generation"));
+			panel5.setPreferredSize(new Dimension(200, 80));
+
+			panel12 = new JPanel();
+			panel12.setPreferredSize(new Dimension(700, 1000));
+
 			panel34 = new JPanel();
+			panel34.setPreferredSize(new Dimension(700, 1000));
 
 			panel3 = new JPanel();
 			panel3.setLayout(gridbag3);
@@ -234,11 +243,6 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel4.setLayout(gridbag4);
 			panel4.setBorder(new javax.swing.border.TitledBorder("Managing attributes"));
 			panel4.setPreferredSize(new Dimension(325, 250));
-
-			panel5 = new JPanel();
-			panel5.setLayout(gridbag5);
-			panel5.setBorder(new javax.swing.border.TitledBorder("Code generation"));
-			panel5.setPreferredSize(new Dimension(325, 250));
 
 			tabbedPane = new JTabbedPane();
 
@@ -263,7 +267,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel1.add(new JLabel("Name:"), c1);
 			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 			nameOfCP = new JTextField( name );
-			nameOfCP.setMinimumSize( new Dimension(150, 50) );
+			nameOfCP.setPreferredSize( new Dimension(150, 30) );
 			panel1.add( nameOfCP, c1 );
 			
 			//fouth line panel1
@@ -287,7 +291,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 				communicationPatternsCB.setSelectedIndex(0);
 			}
 			communicationPatternsCB.addActionListener( this );
-			communicationPatternsCB.setMinimumSize( new Dimension(150, 50) );
+			communicationPatternsCB.setPreferredSize( new Dimension(150, 30) );
 			panel1.add( communicationPatternsCB, c1 );
 			
 			//sixth line panel1
@@ -308,7 +312,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			sdInstancesCB = new JComboBox( sdInstancesSL );
 			sdInstancesCB.setSelectedIndex( 0 );
 			sdInstancesCB.addActionListener( this );
-			sdInstancesCB.setMinimumSize( new Dimension(150, 50) );
+			sdInstancesCB.setPreferredSize( new Dimension(150, 30) );
 			panel1.add( sdInstancesCB, c1 );
 			
 			//eigth line panel1
@@ -402,26 +406,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c3.fill = GridBagConstraints.HORIZONTAL;
 			
 			//get the attributes from the selected CP
-			String selectedCPName = (String)communicationPatternsCB.getSelectedItem();
-			TraceManager.addDev( "The selected CP has index: " + getIndexOfSelectedCP() );
-			ArrayList<TMLCP> tmlcpsList = new ArrayList<TMLCP>();
-
-			for( TMLCommunicationPatternPanel panel: listCPs )	{
-				GTMLModeling gtmlm = new GTMLModeling( panel, true );
-				TMLCP tmlcp = gtmlm.translateToTMLCPDataStructure( panel.getName() );
-				tmlcpsList.add( tmlcp );
-			}
-			HashSet<TMLAttribute> attributesHS = new HashSet<TMLAttribute>();
-			attributesVector = new Vector<String>();
-			//get the attributes of all SDs
-			for( TMLCPSequenceDiagram sd: tmlcpsList.get( getIndexOfSelectedCP() ).getCPSequenceDiagrams() )	{
-				for( TMLAttribute attr: sd.getAttributes() )	{
-					attributesHS.add( attr );
-				}
-			}
-			for( TMLAttribute attr: attributesHS )	{
-				attributesVector.add( attr.getType() + " " + attr.getName() );
-			}
+			createAttributesVector();
+			TraceManager.addDev( "attributesVector:\n" + attributesVector.toString() );
 
 			if( assignedAttributes.size() > 0 )	{
 				filterOutAssignedAttributes( attributesVector );
@@ -438,7 +424,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 			panel3.add( new JLabel("Value:"), c3 );
 			attributesValue_TF = new JTextField( "", 5 );
-			attributesValue_TF.setMinimumSize( new Dimension(150, 50) );
+			attributesValue_TF.setPreferredSize( new Dimension(150, 30) );
 			panel3.add( attributesValue_TF, c3 );
 
 			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -474,14 +460,6 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			removeAttributeButton.addActionListener(this);
 			panel4.add(removeAttributeButton, c4);
 
-			//panel5, code generation
-			c5.weighty = 1.0;
-			c5.weightx = 1.0;
-			c5.gridwidth = GridBagConstraints.REMAINDER; //end row
-			c5.fill = GridBagConstraints.BOTH;
-			c5.gridheight = 3;
-			panel5.add(new JLabel(" "), c5);
-			
 			c5.gridwidth = 1;
 			c5.gridheight = 1;
 			c5.weighty = 1.0;
@@ -506,14 +484,10 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c0.weighty = 1.0;
 			c0.weightx = 1.0;
 			c0.fill = GridBagConstraints.BOTH;
-			//c.add(panel1, c0);
-			//c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-			//c.add(panel2, c0);
-			panel125.add( panel1, c0 );
-			panel125.add( panel2, c0 );
-			panel125.add( panel5, c0 );
+			panel12.add( panel1, c0 );
+			panel12.add( panel2, c0 );
 
-			tabbedPane.addTab( "Structure", panel125 );
+			tabbedPane.addTab( "Structure", panel12 );
 
 			c0.gridwidth = 1;
 			c0.gridheight = 10;
@@ -527,21 +501,21 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel34.add( panel4, c0 );
 
 			tabbedPane.addTab( "Attributes", panel34 );
+			tabbedPane.addTab( "Code generation", panel5 );
 			tabbedPane.setSelectedIndex(0);
 			c.add( tabbedPane, c0 );
 
-			//c.add(panel5, c0);
 			
 			c0.gridwidth = 1;
 			c0.gridheight = 1;
 			c0.fill = GridBagConstraints.VERTICAL;
 			closeButton = new JButton("Save and Close", IconManager.imgic25);
-			closeButton.setPreferredSize(new Dimension(600, 50));
+			closeButton.setPreferredSize(new Dimension(200, 50));
 			closeButton.addActionListener(this);
 			c.add(closeButton, c0);
 			c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 			cancelButton = new JButton("Cancel", IconManager.imgic27);
-			cancelButton.setPreferredSize(new Dimension(600, 50));
+			cancelButton.setPreferredSize(new Dimension(200, 50));
 			cancelButton.addActionListener(this);
 			c.add(cancelButton, c0);
 		}
@@ -1039,10 +1013,10 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			cancelled = false;
 			name = nameOfCP.getText();
 			cpMEC = (String)cpMECsCB.getSelectedItem();
-			if( attributesVector.size() > 0 )	{	//there are still parameters which must be assigned a value
+			/*if( attributesVector.size() > 0 )	{	//there are still parameters which must be assigned a value
 				JOptionPane.showMessageDialog( frame, "Please assign a value to all attributes", "Error", JOptionPane.INFORMATION_MESSAGE );
 				return;
-			}
+			}*/
 			dispose();
 		}
 		
@@ -1293,6 +1267,32 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	public Vector<String> getAssignedAttributes()	{
 		//before returning attributes I should sort them according to the cpMEC
 		return assignedAttributes;
+	}
+
+	private void createAttributesVector()	{
+
+		String selectedCPName = (String)communicationPatternsCB.getSelectedItem();
+		int index = getIndexOfSelectedCP();
+		TraceManager.addDev( "The selected CP has index: " + index );
+		if( index >= 0 )	{
+			ArrayList<TMLCP> tmlcpsList = new ArrayList<TMLCP>();
+			for( TMLCommunicationPatternPanel panel: listCPs )	{
+				GTMLModeling gtmlm = new GTMLModeling( panel, true );
+				TMLCP tmlcp = gtmlm.translateToTMLCPDataStructure( panel.getName() );
+				tmlcpsList.add( tmlcp );
+			}
+			HashSet<TMLAttribute> attributesHS = new HashSet<TMLAttribute>();
+			attributesVector = new Vector<String>();
+			//get the attributes of all SDs
+			for( TMLCPSequenceDiagram sd: tmlcpsList.get( index ).getCPSequenceDiagrams() )	{
+				for( TMLAttribute attr: sd.getAttributes() )	{
+					attributesHS.add( attr );
+				}
+			}
+			for( TMLAttribute attr: attributesHS )	{
+				attributesVector.add( attr.getType() + " " + attr.getName() );
+			}
+		}
 	}
 
 		
