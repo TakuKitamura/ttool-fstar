@@ -6338,6 +6338,7 @@ public class GTURTLEModeling {
             return false;
         }
 	avatarspec = att.generateAvatarSpec();
+	TraceManager.addDev("Avatar spec:" + avatarspec);
 	return true;
     }
 

@@ -252,8 +252,8 @@ public class AttackTreePanelTranslator {
 
                             att.setOriginNode(node1);
                             att.addDestinationNode(node2);
-			    
-			    if (node1.getResultingAttack() != null) {
+
+                            if (node1.getResultingAttack() != null) {
                                 // Already a resulting attack -> error
                                 CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Too many resulting attacks");
                                 ce.setTGComponent(tgc1);
@@ -281,15 +281,93 @@ public class AttackTreePanelTranslator {
 
     public AvatarSpecification generateAvatarSpec() {
         AvatarSpecification as = new AvatarSpecification("spec from attack trees", atp);
-        // One block per attacknode
+        // One block per attacknode to receive the attack
         // One block per attack -> syncho
         // One mast block with all channels declared at that level
         AvatarBlock mainBlock = new AvatarBlock("MainBlock", null);
         as.addBlock(mainBlock);
 
-	
+        // Make block for attacks
+        makeAttackBlocks(as, mainBlock);
+        // Make relations for attacks
+
+
 
         return as;
+    }
+
+    private void makeAttackBlocks(AvatarSpecification _as, AvatarBlock _main) {
+        int attackID = 0;
+        for(Attack attack: at.getAttacks()) {
+            // Make the block
+            AvatarBlock ab = new AvatarBlock(attack.getName() + attackID, listE.getTG(attack));
+            _as.addBlock(ab);
+            //ab.setFather(_main);
+            avatartranslator.AvatarSignal sigAttack = new avatartranslator.AvatarSignal("accept__" + attack.getName() + attackID, AvatarSignal.IN, (Object)(listE.getTG(attack)));
+            ab.addSignal(sigAttack);
+            avatartranslator.AvatarSignal stopAttack = new avatartranslator.AvatarSignal("acceptStopAttack__" + attack.getName() + attackID, AvatarSignal.IN, listE.getTG(attack));
+            ab.addSignal(stopAttack);
+            avatartranslator.AvatarSignal sigAttackMain = new avatartranslator.AvatarSignal("make__" + attack.getName() + attackID, AvatarSignal.IN, listE.getTG(attack));
+            _main.addSignal(sigAttackMain);
+            avatartranslator.AvatarSignal stopAttackMain = new avatartranslator.AvatarSignal("stopAttack__" + attack.getName() + attackID, AvatarSignal.IN, listE.getTG(attack));
+            _main.addSignal(stopAttackMain);
+
+            makeAttackBlockSMD(ab, sigAttack, stopAttack, listE.getTG(attack));
+
+            // Add the relations
+            AvatarRelation ar = new AvatarRelation("main_to_" + attack.getName() + attackID, _main, ab, listE.getTG(attack));
+            ar.setAsynchronous(false);
+            ar.setPrivate(true);
+            ar.setBroadcast(false);
+            _as.addRelation(ar);
+
+            attackID ++;
+        }
+    }
+
+    private void makeAttackBlockSMD(AvatarBlock _ab, avatartranslator.AvatarSignal _sigAttack, avatartranslator.AvatarSignal _sigStop, Object _ref) {
+        AvatarStateMachine asm = _ab.getStateMachine();
+
+        AvatarStartState start = new AvatarStartState("start", _ref);
+        AvatarState mainState = new AvatarState("main", _ref, false);
+        AvatarState mainStop = new AvatarState("myStop", _ref, false);
+        AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingAttack", _sigAttack, _ref);
+        AvatarActionOnSignal getStop = new AvatarActionOnSignal("GettingStop", _sigStop, _ref);
+
+        asm.addElement(start);
+        asm.setStartState(start);
+        asm.addElement(mainState);
+        asm.addElement(mainStop);
+        asm.addElement(getMake);
+        asm.addElement(getStop);
+
+
+        AvatarTransition at = new AvatarTransition("at1", _ref);
+        asm.addElement(at);
+        start.addNext(at);
+        at.addNext(mainState);
+
+        at = new AvatarTransition("at2", _ref);
+        asm.addElement(at);
+        mainState.addNext(at);
+        at.addNext(getMake);
+
+        at = new AvatarTransition("at3", _ref);
+        asm.addElement(at);
+        getMake.addNext(at);
+        at.addNext(mainState);
+
+        at = new AvatarTransition("at4", _ref);
+        asm.addElement(at);
+        mainState.addNext(at);
+        at.addNext(getStop);
+
+        at = new AvatarTransition("at5", _ref);
+        asm.addElement(at);
+        getStop.addNext(at);
+        at.addNext(mainStop);
+
+
     }
 
 

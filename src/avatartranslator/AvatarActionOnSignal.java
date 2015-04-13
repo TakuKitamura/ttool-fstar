@@ -51,69 +51,69 @@ import myutil.*;
 
 
 public class AvatarActionOnSignal extends AvatarStateMachineElement {
-	private AvatarSignal signal;
-	private LinkedList<String> values; // Attribute name
-	
+    private AvatarSignal signal;
+    private LinkedList<String> values; // Attribute name
+
     public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject) {
         super(_name, _referenceObject);
-		signal = _signal;
-		values = new LinkedList<String>();
+        signal = _signal;
+        values = new LinkedList<String>();
     }
-	
-	public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject, boolean _isCheckable) {
+
+    public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject, boolean _isCheckable) {
         super(_name, _referenceObject, _isCheckable);
-		signal = _signal;
-		values = new LinkedList<String>();
+        signal = _signal;
+        values = new LinkedList<String>();
     }
-	
-	public AvatarSignal getSignal() {
-		return signal;
-	}
-	
-	public void addValue(String _val) {
-		values.add(_val);
-	}
-	
-	public LinkedList<String> getValues() {
-		return values;
-	}
-	
-	public int getNbOfValues() {
-		return values.size();
-	}
-	
-	public String getValue(int _index) {
-		return values.get(_index);
-	}
-	
-	public boolean isSending() {
-		return signal.isOut();
-	}
-	
-	public boolean isReceiving() {
-		return signal.isIn();
-	}
-	
-	public AvatarActionOnSignal basicCloneMe() {
-		//TraceManager.addDev("I HAVE BEEN CLONED: " + this);
-		AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "__clone", getSignal(), getReferenceObject(), isCheckable());
-		for(int i=0; i<getNbOfValues(); i++) {
-			aaos.addValue(getValue(i));
-		}
-		
-		return aaos;
-	}
-	
-	public String getExtendedName() {
-		return getName() + ":" + getSignal().getName();
-	}
-	
-	public String getNiceName() {
-		if (signal.isIn()) {
-			return "Receiving signal " + signal.getName();
-		} else {
-			return "Sending signal " + signal.getName();
-		}
-	}
-    
+
+    public AvatarSignal getSignal() {
+        return signal;
+    }
+
+    public void addValue(String _val) {
+        values.add(_val);
+    }
+
+    public LinkedList<String> getValues() {
+        return values;
+    }
+
+    public int getNbOfValues() {
+        return values.size();
+    }
+
+    public String getValue(int _index) {
+        return values.get(_index);
+    }
+
+    public boolean isSending() {
+        return signal.isOut();
+    }
+
+    public boolean isReceiving() {
+        return signal.isIn();
+    }
+
+    public AvatarActionOnSignal basicCloneMe() {
+        //TraceManager.addDev("I HAVE BEEN CLONED: " + this);
+        AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "__clone", getSignal(), getReferenceObject(), isCheckable());
+        for(int i=0; i<getNbOfValues(); i++) {
+            aaos.addValue(getValue(i));
+        }
+
+        return aaos;
+    }
+
+    public String getExtendedName() {
+        return getName() + ":" + getSignal().getName();
+    }
+
+    public String getNiceName() {
+        if (signal.isIn()) {
+            return "Receiving signal " + signal.getName();
+        } else {
+            return "Sending signal " + signal.getName();
+        }
+    }
+
 }

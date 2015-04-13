@@ -80,10 +80,15 @@ public class AttackTree {
 	return sb.toString();
     }
 
+    public ArrayList<Attack> getAttacks() {
+	return attacks;
+    }
+
     // Checks:
     // Sequence nodes have attacks which are ordered
     // Time value is positive in before and after
     public boolean checkSyntax() {
+	return true;
     }
  
 }

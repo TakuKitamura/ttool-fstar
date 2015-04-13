@@ -49,18 +49,18 @@ import java.util.*;
 
 
 public class AvatarStartState extends AvatarStateMachineElement {
-	
-	
+
+
     public AvatarStartState(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
-	
-	public AvatarStateMachineElement basicCloneMe() {
-		return new AvatarStartState(getName(), getReferenceObject());
-	}
-	
-	public String getNiceName() {
-		return "Start state";
-	}
-    
+
+    public AvatarStateMachineElement basicCloneMe() {
+        return new AvatarStartState(getName(), getReferenceObject());
+    }
+
+    public String getNiceName() {
+        return "Start state";
+    }
+
 }
