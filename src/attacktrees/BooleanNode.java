@@ -50,8 +50,8 @@ import java.util.*;
 
 public abstract class BooleanNode extends AttackNode{ 
     
-    public BooleanNode(String _name) {
-	super(_name);
+    public BooleanNode(String _name, Object _referenceObject) {
+	super(_name, _referenceObject);
     }
     
     

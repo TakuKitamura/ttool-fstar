@@ -51,8 +51,8 @@ import java.util.*;
 public abstract class TimeNode extends AttackNode{ 
     protected int time;
 
-    public TimeNode(String _name, int _time) {
-	super(_name);
+    public TimeNode(String _name, Object _objectReference, int _time) {
+	super(_name, _objectReference);
 	time = _time;
     }
     

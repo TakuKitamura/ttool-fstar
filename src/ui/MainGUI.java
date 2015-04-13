@@ -3178,7 +3178,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 ret = true;
                 if (!automatic) {
                     JOptionPane.showMessageDialog(frame,
-                                                  "0 error, " + getCheckingWarnings().size() + " warning(s). )",
+                                                  "0 error, " + getCheckingWarnings().size() + " warning(s)",
                                                   "Syntax analysis successful on attack tree",
                                                   JOptionPane.INFORMATION_MESSAGE);
                 }

@@ -52,10 +52,21 @@ public class Attack {
     private AttackNode originNode; // If no origin node -> leaf attack
     private ArrayList<AttackNode> destinationNodes;
     private String name;
+    private Object referenceObject;
+    private boolean isRoot;
     
-    public Attack(String _name) {
+    public Attack(String _name, Object _referenceObject) {
 	name = _name;
+	referenceObject = _referenceObject;
 	destinationNodes = new ArrayList<AttackNode>();
+    }
+
+    public boolean isRoot() {
+	return isRoot;
+    }
+
+    public void setRoot(boolean _root) {
+	isRoot = _root;
     }
     
     public void setOriginNode(AttackNode _node) {
@@ -64,6 +75,10 @@ public class Attack {
 
     public void addDestinationNode(AttackNode _node) {
 	destinationNodes.add(_node);
+    }
+
+    public String getName() {
+	return name;
     }
     
 }

@@ -50,8 +50,9 @@ import java.util.*;
 
 public class ANDNode extends BooleanNode { 
     
-    public ANDNode(String _name) {
-	super(_name);
+    public ANDNode(String _name, Object _referenceObject) {
+	super(_name, _referenceObject);
+	type = "AND";
     }
     
     

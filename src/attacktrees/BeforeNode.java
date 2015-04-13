@@ -50,8 +50,9 @@ import java.util.*;
 
 public class BeforeNode extends TimeNode { 
 
-    public BeforeNode(String _name, int _time) {
-	super(_name, _time);
+    public BeforeNode(String _name, Object _referenceObject, int _time) {
+	super(_name, _referenceObject, _time);
+	type = "BEFORE";
     }
     
 }

@@ -48,10 +48,11 @@ package attacktrees;
 import java.util.*;
 
 
-public class SequenceNode extends Node { 
+public class SequenceNode extends AttackNode { 
     
-    public SequenceNode(String _name) {
-	super(_name);
+    public SequenceNode(String _name, Object _referenceObject) {
+	super(_name, _referenceObject);
+	type = "SEQUENCE";
     }
     
 }

@@ -70,5 +70,20 @@ public class AttackTree {
 	attacks.add(_attack);
     }
     
+
+    public String toString() {
+	StringBuffer sb = new StringBuffer();
+	sb.append("List of nodes:");
+	for(AttackNode an: nodes) {
+	    sb.append("  " + an.toString() + "\n");
+	}
+	return sb.toString();
+    }
+
+    // Checks:
+    // Sequence nodes have attacks which are ordered
+    // Time value is positive in before and after
+    public boolean checkSyntax() {
+    }
  
 }

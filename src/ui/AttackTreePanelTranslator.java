@@ -52,11 +52,12 @@ import ui.atd.*;
 import attacktrees.*;
 //import translator.*;
 import ui.window.*;
+import avatartranslator.*;
 
 
 public class AttackTreePanelTranslator {
 
-
+    protected AttackTree at;
     protected AttackTreePanel atp;
     protected Vector checkingErrors, warnings;
     protected CorrespondanceTGElement listE; // usual list
@@ -89,152 +90,349 @@ public class AttackTreePanelTranslator {
     }
 
     public AttackTree translateToAttackTreeDataStructure() {
-      
-        AttackTree at = new AttackTree("AttackTree", atp);
 
-        
-	for(TDiagramPanel panel: atp.panels) {
-	    if (panel instanceof AttackTreeDiagramPanel) {
-		translate((AttackTreeDiagramPanel)panel);
-	    }
-	}
+        at = new AttackTree("AttackTree", atp);
 
-	return at;
-        
+
+        for(TDiagramPanel panel: atp.panels) {
+            if (panel instanceof AttackTreeDiagramPanel) {
+                translate((AttackTreeDiagramPanel)panel);
+            }
+        }
+
+
+        TraceManager.addDev("AT=" + at.toString());
+        return at;
+
     }
 
     public void translate(AttackTreeDiagramPanel atdp) {
+        LinkedList<TGComponent> allComponents = (LinkedList<TGComponent>)(atdp.getAllComponentList());
+
+        int nodeID = 0;
+
+        //Create attacks, nodes
+        for(TGComponent comp: allComponents) {
+            if (comp instanceof ATDAttack) {
+                ATDAttack atdatt = (ATDAttack)comp;
+                Attack att = new Attack(atdatt.getValue(), atdatt);
+                att.setRoot(atdatt.isRootAttack());
+                at.addAttack(att);
+                listE.addCor(att, comp);
+            }
+            if (comp instanceof ATDConstraint) {
+                ATDConstraint cons = (ATDConstraint)comp;
+                nodeID ++;
+
+                //OR
+                if (cons.isOR()) {
+                    ORNode ornode = new ORNode("OR__" + nodeID, cons);
+                    at.addNode(ornode);
+                    listE.addCor(ornode, comp);
+
+                    //AND
+                } else if (cons.isAND()) {
+                    ANDNode andnode = new ANDNode("AND__" + nodeID, cons);
+                    at.addNode(andnode);
+                    listE.addCor(andnode, comp);
+
+                    //SEQUENCE
+                } else if (cons.isSequence()) {
+                    SequenceNode seqnode = new SequenceNode("SEQUENCE__" + nodeID, cons);
+                    at.addNode(seqnode);
+                    listE.addCor(seqnode, comp);
+
+                    //BEFORE
+                } else if (cons.isBefore()) {
+                    String eq = cons.getEquation();
+                    int time;
+                    try {
+                        time = Integer.decode(eq).intValue();
+                        BeforeNode befnode = new BeforeNode("BEFORE__" + nodeID, cons, time);
+                        at.addNode(befnode);
+                        listE.addCor(befnode, comp);
+                    } catch (Exception e) {
+                        CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Invalid time in before node");
+                        ce.setTGComponent(comp);
+                        ce.setTDiagramPanel(atdp);
+                        addCheckingError(ce);
+                    }
+
+                    //AFTER
+                } else if (cons.isAfter()) {
+                    String eq = cons.getEquation();
+                    int time;
+                    try {
+                        time = Integer.decode(eq).intValue();
+                        BeforeNode befnode = new BeforeNode("AFTER__" + nodeID, cons, time);
+                        at.addNode(befnode);
+                        listE.addCor(befnode, comp);
+                    } catch (Exception e) {
+                        CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Invalid time in after node");
+                        ce.setTGComponent(comp);
+                        ce.setTDiagramPanel(atdp);
+                        addCheckingError(ce);
+                    }
+
+                }  else {
+                    CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Invalid attack node");
+                    ce.setTGComponent(comp);
+                    ce.setTDiagramPanel(atdp);
+                    addCheckingError(ce);
+                }
+
+
+            }
+
+
+        }
+
+        // Making connections between nodes&attacks
+        TGComponent tgc1, tgc2;
+        for(TGComponent comp: allComponents) {
+            if (comp instanceof ATDAttackConnector) {
+                ATDAttackConnector con = (ATDAttackConnector)(comp);
+                tgc1 = atdp.getComponentToWhichBelongs(con.getTGConnectingPointP1());
+                tgc2 = atdp.getComponentToWhichBelongs(con.getTGConnectingPointP2());
+                if ( ((tgc1 instanceof ATDAttack) || (tgc1 instanceof ATDConstraint)) &&
+                     ((tgc2 instanceof ATDAttack) || (tgc2 instanceof ATDConstraint)) ) {
+                    try {
+                        // We must transpose this into attack -> node or node -> attack
+
+                        // Attack -> attack
+                        if ((tgc1 instanceof ATDAttack) && (tgc2 instanceof ATDAttack)) {
+                            // We link the two attacks with an "and" node
+                            Attack at1 = (Attack)(listE.getObject(tgc1));
+                            Attack at2 = (Attack)(listE.getObject(tgc2));
+                            nodeID ++;
+                            ANDNode andnode = new ANDNode("ANDBetweenAttacks__" + nodeID + "__" + at1.getName() + "__" + at2.getName(), tgc1);
+                            at.addNode(andnode);
+                            listE.addCor(andnode, comp);
+                            at1.addDestinationNode(andnode);
+                            at2.setOriginNode(andnode);
+                            andnode.addInputAttack(at1, new Integer("0"));
+                            andnode.setResultingAttack(at2);
+
+
+                            // Attack -> node
+                        } else if ((tgc1 instanceof ATDAttack) && (tgc2 instanceof ATDConstraint)) {
+                            Attack at1 = (Attack)(listE.getObject(tgc1));
+                            AttackNode node1 = (AttackNode)(listE.getObject(tgc2));
+                            at1.addDestinationNode(node1);
+                            String val = comp.getValue().trim();
+                            if (val.length() == 0) {
+                                val = "0";
+                            }
+                            node1.addInputAttack(at1, new Integer(val));
+
+                            // Node -> attack
+                        } else if ((tgc1 instanceof ATDConstraint) && (tgc2 instanceof ATDAttack)) {
+                            Attack at1 = (Attack)(listE.getObject(tgc2));
+                            AttackNode node1 = (AttackNode)(listE.getObject(tgc1));
+                            at1.setOriginNode(node1);
+                            if (node1.getResultingAttack() != null) {
+                                // Already a resulting attack -> error
+                                CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Too many resulting attacks");
+                                ce.setTGComponent(tgc1);
+                                ce.setTDiagramPanel(atdp);
+                                addCheckingError(ce);
+                            } else {
+                                node1.setResultingAttack(at1);
+                            }
+
+                            // Node -> Node
+                        } else if ((tgc1 instanceof ATDConstraint) && (tgc2 instanceof ATDConstraint)) {
+                            AttackNode node1 = (AttackNode)(listE.getObject(tgc1));
+                            AttackNode node2 = (AttackNode)(listE.getObject(tgc2));
+                            // Make fake attack
+                            Attack att = new Attack("Attack__from_" + node1.getName() + "_to_" + node2.getName(), tgc1);
+                            att.setRoot(false);
+                            at.addAttack(att);
+                            listE.addCor(att, comp);
+
+                            att.setOriginNode(node1);
+                            att.addDestinationNode(node2);
+			    
+			    if (node1.getResultingAttack() != null) {
+                                // Already a resulting attack -> error
+                                CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Too many resulting attacks");
+                                ce.setTGComponent(tgc1);
+                                ce.setTDiagramPanel(atdp);
+                                addCheckingError(ce);
+                            } else {
+                                node1.setResultingAttack(att);
+                            }
+
+                            node2.addInputAttack(att, new Integer(0));
+                        }
+
+                    } catch (Exception e) {
+                        CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Badly formed connector");
+                        ce.setTGComponent(comp);
+                        ce.setTDiagramPanel(atdp);
+                        addCheckingError(ce);
+                    }
+                }
+            }
+        }
+
     }
 
 
-  
+    public AvatarSpecification generateAvatarSpec() {
+        AvatarSpecification as = new AvatarSpecification("spec from attack trees", atp);
+        // One block per attacknode
+        // One block per attack -> syncho
+        // One mast block with all channels declared at that level
+        AvatarBlock mainBlock = new AvatarBlock("MainBlock", null);
+        as.addBlock(mainBlock);
 
-   
+	
+
+        return as;
+    }
+
+
+
+
+
 
     /*public void createBlocks(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
-        AvatarBlock ab;
-        Vector v;
-        TAttribute a;
-        int i;
-        AvatarAttribute aa;
-        ui.AvatarMethod uiam;
-        ui.AvatarSignal uias;
-        avatartranslator.AvatarMethod atam;
-        avatartranslator.AvatarSignal atas;
-        TGComponent tgc1, tgc2;
-        Vector types;
+      AvatarBlock ab;
+      Vector v;
+      TAttribute a;
+      int i;
+      AvatarAttribute aa;
+      ui.AvatarMethod uiam;
+      ui.AvatarSignal uias;
+      avatartranslator.AvatarMethod atam;
+      avatartranslator.AvatarSignal atas;
+      TGComponent tgc1, tgc2;
+      Vector types;
 
-        for(AvatarBDBlock block: _blocks) {
-            ab = new AvatarBlock(block.getBlockName(), block);
-            _as.addBlock(ab);
-            listE.addCor(ab, block);
-            block.setAVATARID(ab.getID());
+      for(AvatarBDBlock block: _blocks) {
+      ab = new AvatarBlock(block.getBlockName(), block);
+      _as.addBlock(ab);
+      listE.addCor(ab, block);
+      block.setAVATARID(ab.getID());
 
-            // Create attributes
-            v = block.getAttributeList();
-            for(i=0; i<v.size(); i++) {
-                a = (TAttribute)(v.elementAt(i));
-                if (a.getType() == TAttribute.INTEGER){
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.NATURAL){
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.BOOLEAN) {
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.TIMER) {
-                    addRegularAttribute(ab, a, "");
-                } else {
-                    // other
-                    //TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
-                    types = adp.getAvatarBDPanel().getAttributesOfDataType(a.getTypeOther());
-                    if (types == null) {
-                        CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + a.getTypeOther() + " used in " + ab.getName());
-                        ce.setAvatarBlock(ab);
-                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                        addCheckingError(ce);
-                        return;
-                    } else {
-                        if (types.size() ==0) {
-                            CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Data type definition must contain at least one attribute:  " + ab.getName());
-                            ce.setAvatarBlock(ab);
-                            ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                            addCheckingError(ce);
-                        } else {
-                            for(int j=0; j<types.size(); j++) {
-                                addRegularAttribute(ab, (TAttribute)(types.elementAt(j)), a.getId() + "__");
-                            }
-                        }
-                    }
+      // Create attributes
+      v = block.getAttributeList();
+      for(i=0; i<v.size(); i++) {
+      a = (TAttribute)(v.elementAt(i));
+      if (a.getType() == TAttribute.INTEGER){
+      addRegularAttribute(ab, a, "");
+      } else if (a.getType() == TAttribute.NATURAL){
+      addRegularAttribute(ab, a, "");
+      } else if (a.getType() == TAttribute.BOOLEAN) {
+      addRegularAttribute(ab, a, "");
+      } else if (a.getType() == TAttribute.TIMER) {
+      addRegularAttribute(ab, a, "");
+      } else {
+      // other
+      //TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
+      types = adp.getAvatarBDPanel().getAttributesOfDataType(a.getTypeOther());
+      if (types == null) {
+      CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + a.getTypeOther() + " used in " + ab.getName());
+      ce.setAvatarBlock(ab);
+      ce.setTDiagramPanel(adp.getAvatarBDPanel());
+      addCheckingError(ce);
+      return;
+      } else {
+      if (types.size() ==0) {
+      CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Data type definition must contain at least one attribute:  " + ab.getName());
+      ce.setAvatarBlock(ab);
+      ce.setTDiagramPanel(adp.getAvatarBDPanel());
+      addCheckingError(ce);
+      } else {
+      for(int j=0; j<types.size(); j++) {
+      addRegularAttribute(ab, (TAttribute)(types.elementAt(j)), a.getId() + "__");
+      }
+      }
+      }
 
-                }
-            }
+      }
+      }
 
-            // Create methods
-            v = block.getMethodList();
-            for(i=0; i<v.size(); i++) {
-                uiam = (AvatarMethod)(v.get(i));
-                atam = new avatartranslator.AvatarMethod(uiam.getId(), uiam);
-                atam.setImplementationProvided(uiam.isImplementationProvided());
-                ab.addMethod(atam);
-                makeParameters(ab, atam, uiam);
-                makeReturnParameters(ab, block, atam, uiam);
-            }
-            // Create signals
-            v = block.getSignalList();
-            for(i=0; i<v.size(); i++) {
-                uias = (AvatarSignal)(v.get(i));
+      // Create methods
+      v = block.getMethodList();
+      for(i=0; i<v.size(); i++) {
+      uiam = (AvatarMethod)(v.get(i));
+      atam = new avatartranslator.AvatarMethod(uiam.getId(), uiam);
+      atam.setImplementationProvided(uiam.isImplementationProvided());
+      ab.addMethod(atam);
+      makeParameters(ab, atam, uiam);
+      makeReturnParameters(ab, block, atam, uiam);
+      }
+      // Create signals
+      v = block.getSignalList();
+      for(i=0; i<v.size(); i++) {
+      uias = (AvatarSignal)(v.get(i));
 
-                if (uias.getInOut() == uias.IN) {
-                    atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.IN, uias);
-                } else {
-                    atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.OUT, uias);
-                }
-                ab.addSignal(atas);
-                makeParameters(ab, atas, uias);
-            }
+      if (uias.getInOut() == uias.IN) {
+      atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.IN, uias);
+      } else {
+      atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.OUT, uias);
+      }
+      ab.addSignal(atas);
+      makeParameters(ab, atas, uias);
+      }
 
-            // Put global code
-            ab.addGlobalCode(block.getGlobalCode());
+      // Put global code
+      ab.addGlobalCode(block.getGlobalCode());
 
-        }
+      }
 
-        // Make block hierarchy
-        for(AvatarBlock block: _as.getListOfBlocks()) {
-            tgc1 = listE.getTG(block);
-            if ((tgc1 != null) && (tgc1.getFather() != null)) {
-                tgc2 = tgc1.getFather();
-                ab = listE.getAvatarBlock(tgc2);
-                if (ab != null) {
-                    block.setFather(ab);
-                }
-            }
-        }
-	}*/
+      // Make block hierarchy
+      for(AvatarBlock block: _as.getListOfBlocks()) {
+      tgc1 = listE.getTG(block);
+      if ((tgc1 != null) && (tgc1.getFather() != null)) {
+      tgc2 = tgc1.getFather();
+      ab = listE.getAvatarBlock(tgc2);
+      if (ab != null) {
+      block.setFather(ab);
+      }
+      }
+      }
+      }*/
 
-   
+
     /*}
 
-        //TraceManager.addDev("Size of vector:" + v.size());
-        for(i=0; i<v.size(); i++) {
-            aa = _ab.getAvatarAttributeWithName((String)(v.get(i)));
-            if (aa == null) {
-                CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + _name + " in signal expression: " + _idOperator);
-                ce.setAvatarBlock(_ab);
-                ce.setTDiagramPanel(_tdp);
-                ce.setTGComponent(_tgc);
-                addCheckingError(ce);
-                return ;
-            } else {
-                //TraceManager.addDev("-> Adding attr in action on signal in block " + _ab.getName() + ":" + _name + "__" + tatmp.getId());
-                _aaos.addValue((String)(v.get(i)));
-            }
+    //TraceManager.addDev("Size of vector:" + v.size());
+    for(i=0; i<v.size(); i++) {
+    aa = _ab.getAvatarAttributeWithName((String)(v.get(i)));
+    if (aa == null) {
+    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + _name + " in signal expression: " + _idOperator);
+    ce.setAvatarBlock(_ab);
+    ce.setTDiagramPanel(_tdp);
+    ce.setTGComponent(_tgc);
+    addCheckingError(ce);
+    return ;
+    } else {
+    //TraceManager.addDev("-> Adding attr in action on signal in block " + _ab.getName() + ":" + _name + "__" + tatmp.getId());
+    _aaos.addValue((String)(v.get(i)));
+    }
+    }
+
+
+    }*/
+
+
+    private void addCheckingError(CheckingError ce) {
+        if (checkingErrors == null) {
+            checkingErrors = new Vector();
         }
+        checkingErrors.addElement(ce);
+    }
 
+    private void addWarning(CheckingError ce) {
+        if (warnings == null) {
+            warnings = new Vector();
+        }
+        warnings.addElement(ce);
+    }
 
-	}*/
-
-   
-
-          
 
 
 }

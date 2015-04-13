@@ -51,19 +51,46 @@ import java.util.*;
 public abstract class AttackNode { 
     private Attack resultingAttack; // If no resulting attack -> error!
     private ArrayList<Attack> inputAttacks;
+    private ArrayList<Integer> inputValues;
     private String name;
+    protected String type = "";
+    protected Object referenceObject;
     
-    public AttackNode(String _name) {
+    public AttackNode(String _name, Object _referenceObject) {
 	name = _name;
+	referenceObject = _referenceObject;
 	inputAttacks = new ArrayList<Attack>();
+	inputValues = new ArrayList<Integer>();
     }
+
+    public String getName() { return name;}
     
     public void setResultingAttack(Attack _attack) {
 	resultingAttack = _attack;
     }
 
-    public void addInputAttack(Attack _attack) {
+    public Attack getResultingAttack() {
+	return resultingAttack;
+    }
+
+    public void addInputAttack(Attack _attack, Integer _val) {
 	inputAttacks.add(_attack);
+	inputValues.add(_val);
+    }
+
+    public String toString() {
+	String ret = name + "/" + type + " Incoming attacks: ";
+	for (Attack att: inputAttacks) {
+	    ret += att.getName() + " ";
+	}
+
+	if (resultingAttack == null) {
+	    ret += " No resulting attack";
+	} else {
+	    ret += " Resulting attack:" + resultingAttack.getName();
+	}
+	
+	return ret;
     }
     
 }

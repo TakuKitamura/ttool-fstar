@@ -591,6 +591,10 @@ public class GTURTLEModeling {
     }
 
     public boolean generateUPPAALFromAVATAR(String _path) {
+	if (avatarspec == null) {
+	    TraceManager.addDev("Null avatar spec");
+	    return false;
+	}
         avatar2uppaal = new AVATAR2UPPAAL(avatarspec);
         //tml2uppaal.setChoiceDeterministic(choices);
         //tml2uppaal.setSizeInfiniteFIFO(_size);
@@ -6333,6 +6337,7 @@ public class GTURTLEModeling {
 	if ((checkingErrors != null) && (checkingErrors.size() > 0)){
             return false;
         }
+	avatarspec = att.generateAvatarSpec();
 	return true;
     }
 
