@@ -49,7 +49,7 @@ import java.util.*;
 
 
 public class TMLActivityElement extends TMLElement{
-    protected Vector nexts;
+    protected Vector<TMLActivityElement> nexts;
 
     public TMLActivityElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -81,7 +81,7 @@ public class TMLActivityElement extends TMLElement{
         nexts.removeElementAt(index);
     }
 
-    public Vector getNexts() {
+    public Vector<TMLActivityElement> getNexts() {
         return nexts;
     }
 

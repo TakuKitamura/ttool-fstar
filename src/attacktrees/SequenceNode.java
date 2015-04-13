@@ -36,43 +36,22 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLForLoop
- * Creation: 23/11/2005
- * @version 1.0 23/11/2005
+ * Class SequenceNode
+ * Creation: 13/04/2015
+ * @version 1.0 13/04/2015
  * @author Ludovic APVRILLE
  * @see
  */
 
-package tmltranslator;
+package attacktrees;
+
+import java.util.*;
 
 
-public class TMLForLoop extends TMLActivityElement {
-    //next #0 -> loop
-    //next #1 -> after loop
+public class SequenceNode extends Node { 
     
-    private String init, condition, increment;
-
-    private boolean isInfinite;
-    
-    public TMLForLoop(String _name, Object _referenceObject) {
-         super(_name, _referenceObject);   
+    public SequenceNode(String _name) {
+	super(_name);
     }
     
-    public void setInit(String _init) { init = _init; }
-    public void setCondition(String _condition) { condition = _condition; }
-    public void setIncrement(String _increment) { increment = _increment; }
-    
-    public String getInit() { return init;}
-    public String getCondition() { return condition;}
-    public String getIncrement() { return increment;}
-
-    public void setInfinite(boolean b) {
-	isInfinite = b;
-    }
-
-    public boolean isInfinite() {
-	return isInfinite;
-    }
-    
- 
 }

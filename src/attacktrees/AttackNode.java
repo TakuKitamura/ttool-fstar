@@ -36,43 +36,34 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLForLoop
- * Creation: 23/11/2005
- * @version 1.0 23/11/2005
+ * Class AttackNode
+ * Creation: 10/04/2015
+ * @version 1.0 10/04/2015
  * @author Ludovic APVRILLE
  * @see
  */
 
-package tmltranslator;
+package attacktrees;
+
+import java.util.*;
 
 
-public class TMLForLoop extends TMLActivityElement {
-    //next #0 -> loop
-    //next #1 -> after loop
+public abstract class AttackNode { 
+    private Attack resultingAttack; // If no resulting attack -> error!
+    private ArrayList<Attack> inputAttacks;
+    private String name;
     
-    private String init, condition, increment;
-
-    private boolean isInfinite;
-    
-    public TMLForLoop(String _name, Object _referenceObject) {
-         super(_name, _referenceObject);   
+    public AttackNode(String _name) {
+	name = _name;
+	inputAttacks = new ArrayList<Attack>();
     }
     
-    public void setInit(String _init) { init = _init; }
-    public void setCondition(String _condition) { condition = _condition; }
-    public void setIncrement(String _increment) { increment = _increment; }
-    
-    public String getInit() { return init;}
-    public String getCondition() { return condition;}
-    public String getIncrement() { return increment;}
-
-    public void setInfinite(boolean b) {
-	isInfinite = b;
+    public void setResultingAttack(Attack _attack) {
+	resultingAttack = _attack;
     }
 
-    public boolean isInfinite() {
-	return isInfinite;
+    public void addInputAttack(Attack _attack) {
+	inputAttacks.add(_attack);
     }
     
- 
 }

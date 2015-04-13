@@ -63,44 +63,44 @@ public abstract class TURTLEPanel implements GenericTree {
     public Vector<TDiagramPanel> panels;
     protected ChangeListener cl;
     protected TDiagramPanel tdp;
-    
+
     public TURTLEPanel(MainGUI _mgui) {
         mgui = _mgui;
         toolbars = new Vector();
         panels = new Vector();
     }
-    
+
     public abstract void init();
     public abstract String saveHeaderInXml();
     public abstract String saveTailInXml();
-    
+
     public TDiagramPanel panelAt(int index) {
         return (TDiagramPanel)(panels.elementAt(index));
     }
-    
+
     public boolean hasTDiagramPanel(TDiagramPanel _tdp) {
-    	for(int i=0; i<panels.size(); i++) {
-    		if (panels.get(i) == _tdp) {
-    			return true;
-    		}
-    	}
-    	
-    	return false;
+        for(int i=0; i<panels.size(); i++) {
+            if (panels.get(i) == _tdp) {
+                return true;
+            }
+        }
+
+        return false;
     }
-	
-	public void getAllCheckableTGComponent(ArrayList<TGComponent> _list) {
-		for(int i=0; i<panels.size(); i++) {
-			panelAt(i).getAllCheckableTGComponent(_list);
-		}
-	}
-    
+
+    public void getAllCheckableTGComponent(ArrayList<TGComponent> _list) {
+        for(int i=0; i<panels.size(); i++) {
+            panelAt(i).getAllCheckableTGComponent(_list);
+        }
+    }
+
     public void removeElementAt(int index) {
         panels.removeElementAt(index);
         toolbars.removeElementAt(index);
     }
-    
+
     public StringBuffer saveInXML() {
-        
+
         TDiagramPanel tdp;
         StringBuffer sb = new StringBuffer();
         sb.append(saveHeaderInXml());
@@ -118,39 +118,39 @@ public abstract class TURTLEPanel implements GenericTree {
         sb.append(saveTailInXml());
         return sb;
     }
-    
+
     public StringBuffer saveInXML(int indexOfDiagram) {
-        
+
         TDiagramPanel tdp;
         StringBuffer sb = new StringBuffer();
         sb.append(saveHeaderInXml());
         StringBuffer s;
-        
+
         tdp = (TDiagramPanel)(panels.elementAt(indexOfDiagram));
         s = tdp.saveInXML();
         if (s == null) {
-        	System.out.println("Null diagram");
-        	return null;
+            System.out.println("Null diagram");
+            return null;
         }
         sb.append(s);
         sb.append("\n\n");
-        
+
         sb.append(saveTailInXml());
         return sb;
     }
-    
+
     public String toString() {
         return "TURTLE Modeling";
     }
-    
+
     public int getChildCount() {
         return panels.size();
     }
-    
+
     public Object getChild(int index) {
         return panels.elementAt(index);
     }
-    
+
     public int getIndexOfChild(Object child) {
         int index = panels.indexOf(child);
         if (index > -1) {
@@ -159,10 +159,10 @@ public abstract class TURTLEPanel implements GenericTree {
         return panels.size();
     }
 
-	public Vector<TDiagramPanel> getPanels()	{
-		return panels;
-	}
-    
+    public Vector<TDiagramPanel> getPanels()    {
+        return panels;
+    }
+
     public boolean nameInUse(String s) {
         for(int i = 0; i<tabbedPane.getTabCount(); i++) {
             if (tabbedPane.getTitleAt(i).compareTo(s) == 0) {
@@ -171,12 +171,12 @@ public abstract class TURTLEPanel implements GenericTree {
         }
         return false;
     }
-    
+
     public String generateNameIfInUse(String s) {
         if (!nameInUse(s)) {
             return s;
         }
-        
+
         String tmp;
         for(int i=0; i<100000; i++) {
             tmp = s + "_" + i;
@@ -184,19 +184,19 @@ public abstract class TURTLEPanel implements GenericTree {
                 return tmp;
             }
         }
-        return null; 
+        return null;
     }
-    
+
     public void requestRemoveTab(int index) {
         if (index >= panels.size()) {
             return;
         }
-        
+
         panels.removeElementAt(index);
         tabbedPane.remove(index);
         mgui.changeMade(null, -1);
     }
-    
+
     public void requestMoveRightTab(int index) {
         //System.out.println("Move right");
         if (index > panels.size()-2) {
@@ -205,7 +205,7 @@ public abstract class TURTLEPanel implements GenericTree {
         requestMoveTabFromTo(index, index+1);
         mgui.changeMade(null, -1);
     }
-    
+
     public void requestMoveLeftTab(int index) {
         //System.out.println("Move left");
         if (index < 1) {
@@ -214,9 +214,9 @@ public abstract class TURTLEPanel implements GenericTree {
         requestMoveTabFromTo(index, index-1);
         mgui.changeMade(null, -1);
     }
-    
+
     public void requestMoveTabFromTo(int src, int dst) {
-        
+
         // Get all the properties
         Component comp = tabbedPane.getComponentAt(src);
         String label = tabbedPane.getTitleAt(src);
@@ -228,13 +228,13 @@ public abstract class TURTLEPanel implements GenericTree {
         int mnemonicLoc = tabbedPane.getDisplayedMnemonicIndexAt(src);
         Color fg = tabbedPane.getForegroundAt(src);
         Color bg = tabbedPane.getBackgroundAt(src);
-        
+
         // Remove the tab
         tabbedPane.remove(src);
-        
+
         // Add a new tab
         tabbedPane.insertTab(label, icon, comp, tooltip, dst);
-        
+
         // Restore all properties
         tabbedPane.setDisabledIconAt(dst, iconDis);
         tabbedPane.setEnabledAt(dst, enabled);
@@ -242,14 +242,14 @@ public abstract class TURTLEPanel implements GenericTree {
         tabbedPane.setDisplayedMnemonicIndexAt(dst, mnemonicLoc);
         tabbedPane.setForegroundAt(dst, fg);
         tabbedPane.setBackgroundAt(dst, bg);
-        
+
         Object o = panels.elementAt(src);
         panels.removeElementAt(src);
         panels.insertElementAt((TDiagramPanel)o, dst);
-        
+
         tabbedPane.setSelectedIndex(dst);
     }
-    
+
     public void requestRenameTab(int index) {
         String s = (String)JOptionPane.showInputDialog(mgui.frame, "TTool modeling:", "Name=", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, tabbedPane.getTitleAt(index));
         if ((s != null) && (s.length() > 0)){
@@ -261,101 +261,101 @@ public abstract class TURTLEPanel implements GenericTree {
             }
         }
     }
-    
+
     public boolean removeEnabled(int index) {
         return false;
     }
-    
+
     public boolean renameEnabled(int index) {
         return false;
     }
-    
+
     public boolean isUCDEnabled() {
         return false;
     }
-	
-	public boolean isSDEnabled() {
+
+    public boolean isSDEnabled() {
         return false;
     }
-    
+
     public boolean isReqEnabled() {
         return false;
     }
-    
+
     public boolean isProSMDEnabled() {
         return false;
     }
-	
-	public boolean isATDEnabled() {
+
+    public boolean isATDEnabled() {
         return false;
     }
-	
-	public boolean isAvatarRDEnabled() {
+
+    public boolean isAvatarRDEnabled() {
         return false;
     }
-	
-	public boolean isAvatarPDEnabled() {
+
+    public boolean isAvatarPDEnabled() {
         return false;
     }
-    
+
     public boolean isAvatarCDEnabled() {
         return false;
     }
-    
+
     public boolean isAvatarADEnabled() {
         return false;
     }
-    
+
     public boolean isAvatarMADEnabled() {
         return false;
     }
-    
-     public boolean isDiplodocusMethodologyEnabled() {
+
+    public boolean isDiplodocusMethodologyEnabled() {
         return false;
     }
-	
-	public MainGUI getMainGUI() {
-		return mgui;
-	}
-	
-	public void resetAllDIPLOIDs() {
-		for(int i=0; i<panels.size(); i++) {
-			panelAt(i).resetAllDIPLOIDs();
-		}
-	}
-	
-	public void searchForText(String text, Vector<Object> elements) {
-		if (panelAt(0) != null) {
-			String s = saveHeaderInXml().toLowerCase();
-			if (s.indexOf(text) >= 0) {
-				elements.add(this);
-				/*CheckingError ce = new CheckingError(CheckingError.INFO, "Diagram");
-				ce.setTDiagramPanel(this.panelAt(0));
-				elements.add(ce);*/
-			}
-		}
-		
-		
-		for(TDiagramPanel tdp: panels) {
-    		tdp.searchForText(text, elements);
-    	}
-	}
-	
-	public boolean supportUppaalFormalVerification() {
-		return false;
-	}
-	
-	public boolean supportLotosFormalVerification() {
-		return false;
-	}
-	
-	public boolean supportCPPSimulation() {
-		return false;
-	}
-	
-	public boolean supportTMLGeneration() {
-		return false;
-	}
-	
-    
+
+    public MainGUI getMainGUI() {
+        return mgui;
+    }
+
+    public void resetAllDIPLOIDs() {
+        for(int i=0; i<panels.size(); i++) {
+            panelAt(i).resetAllDIPLOIDs();
+        }
+    }
+
+    public void searchForText(String text, Vector<Object> elements) {
+        if (panelAt(0) != null) {
+            String s = saveHeaderInXml().toLowerCase();
+            if (s.indexOf(text) >= 0) {
+                elements.add(this);
+                /*CheckingError ce = new CheckingError(CheckingError.INFO, "Diagram");
+                  ce.setTDiagramPanel(this.panelAt(0));
+                  elements.add(ce);*/
+            }
+        }
+
+
+        for(TDiagramPanel tdp: panels) {
+            tdp.searchForText(text, elements);
+        }
+    }
+
+    public boolean supportUppaalFormalVerification() {
+        return false;
+    }
+
+    public boolean supportLotosFormalVerification() {
+        return false;
+    }
+
+    public boolean supportCPPSimulation() {
+        return false;
+    }
+
+    public boolean supportTMLGeneration() {
+        return false;
+    }
+
+
 }

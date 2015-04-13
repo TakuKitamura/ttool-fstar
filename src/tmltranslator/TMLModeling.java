@@ -1637,4 +1637,10 @@ public class TMLModeling {
         reads[nb-1].addNext(write);
     }
 
+    public void removeEmptyInfiniteLoop() {
+	for(TMLTask task: tasks) {
+	    task.removeEmptyInfiniteLoop();
+	}
+    }
+
 }

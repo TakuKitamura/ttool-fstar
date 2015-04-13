@@ -1217,6 +1217,10 @@ public class AvatarDesignPanelTranslator {
 
                                 if (!isAVariableAssignation(s)) {
                                     // Method call
+				    int index2 = s.indexOf(";");
+				    if (index2 != -1) {
+					makeError(error, tdp, _ab, tgc, "transition action", s);
+				    }
                                     s = modifyStringMethodCall(s, _ab.getName());
                                     if(!_ab.isAValidMethodCall(s)) {
                                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed transition method call: " + s);
@@ -1400,6 +1404,7 @@ public class AvatarDesignPanelTranslator {
         if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
             return _input;
         }
+
 
         String s = _input.substring(index0+1, index1).trim();
         String output = "";

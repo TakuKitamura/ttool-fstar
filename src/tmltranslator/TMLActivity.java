@@ -52,7 +52,7 @@ import myutil.*;
 
 public class TMLActivity extends TMLElement {
     private TMLActivityElement first;
-    private Vector elements;
+    private Vector<TMLActivityElement> elements;
 
 
     public TMLActivity(String name, Object reference) {
@@ -459,6 +459,30 @@ public class TMLActivity extends TMLElement {
 	for(TMLSendEvent s: newElements) {
 	    elements.add(s);
 	}
+    }
+
+    public void removeEmptyInfiniteLoop() {
+	TMLForLoop loop = null;
+	for(TMLActivityElement elt: elements) {
+	    if (elt instanceof TMLForLoop) {
+		if (((TMLForLoop)elt).isInfinite()) {
+		    loop = (TMLForLoop)elt;
+		    break;
+		}
+	    }
+	}
+	if (loop != null) {
+	    TMLActivityElement next = (loop.getNexts()).get(0);
+	    if ((next == null) || (next instanceof TMLStopState)) {
+		//Replace the element pointing to the infinite loop to the element at getNext(0)
+		for(TMLActivityElement elt: elements) {
+		    elt.setNewNext(loop, next);
+		}
+
+	    }
+	    removeEmptyInfiniteLoop();
+	}
+
     }
 
 
