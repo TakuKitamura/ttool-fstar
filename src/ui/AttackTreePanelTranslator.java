@@ -289,7 +289,9 @@ public class AttackTreePanelTranslator {
 
         // Make block for attacks
         makeAttackBlocks(as, mainBlock);
-        // Make relations for attacks
+	
+	// Make blocks for nodes
+	makeAttackNodeBlocks(as, mainBlock);
 
 
 
@@ -307,9 +309,9 @@ public class AttackTreePanelTranslator {
             ab.addSignal(sigAttack);
             avatartranslator.AvatarSignal stopAttack = new avatartranslator.AvatarSignal("acceptStopAttack__" + attack.getName() + attackID, AvatarSignal.IN, listE.getTG(attack));
             ab.addSignal(stopAttack);
-            avatartranslator.AvatarSignal sigAttackMain = new avatartranslator.AvatarSignal("make__" + attack.getName() + attackID, AvatarSignal.IN, listE.getTG(attack));
+            avatartranslator.AvatarSignal sigAttackMain = new avatartranslator.AvatarSignal("make__" + attack.getName() + attackID, AvatarSignal.OUT, listE.getTG(attack));
             _main.addSignal(sigAttackMain);
-            avatartranslator.AvatarSignal stopAttackMain = new avatartranslator.AvatarSignal("stopAttack__" + attack.getName() + attackID, AvatarSignal.IN, listE.getTG(attack));
+            avatartranslator.AvatarSignal stopAttackMain = new avatartranslator.AvatarSignal("stopAttack__" + attack.getName() + attackID, AvatarSignal.OUT, listE.getTG(attack));
             _main.addSignal(stopAttackMain);
 
             makeAttackBlockSMD(ab, sigAttack, stopAttack, listE.getTG(attack));
@@ -319,6 +321,8 @@ public class AttackTreePanelTranslator {
             ar.setAsynchronous(false);
             ar.setPrivate(true);
             ar.setBroadcast(false);
+	    ar.addSignals(sigAttackMain, sigAttack);
+	    ar.addSignals(stopAttackMain, stopAttack);
             _as.addRelation(ar);
 
             attackID ++;
@@ -370,6 +374,9 @@ public class AttackTreePanelTranslator {
 
     }
 
+
+     private void makeAttackNodeBlocks(AvatarSpecification _as, AvatarBlock _main) {
+     }
 
 
 
