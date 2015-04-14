@@ -80,5 +80,9 @@ public class Attack {
     public String getName() {
 	return name;
     }
+
+    public boolean isLeaf() {
+	return (originNode == null);
+    }
     
 }

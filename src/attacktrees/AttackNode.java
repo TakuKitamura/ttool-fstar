@@ -63,6 +63,20 @@ public abstract class AttackNode {
 	inputValues = new ArrayList<Integer>();
     }
 
+    // At least one input and one output
+    public boolean isWellFormed() {
+	if (resultingAttack == null) {
+	    return false;
+	}
+
+	if (inputAttacks.size() < 1) {
+	    return false;
+	}
+
+	return true;
+
+    }
+
     public String getName() { return name;}
     
     public void setResultingAttack(Attack _attack) {
@@ -71,6 +85,10 @@ public abstract class AttackNode {
 
     public Attack getResultingAttack() {
 	return resultingAttack;
+    }
+
+    public ArrayList<Attack> getInputAttacks() {
+	return inputAttacks;
     }
 
     public void addInputAttack(Attack _attack, Integer _val) {

@@ -84,9 +84,15 @@ public class AttackTree {
 	return attacks;
     }
 
+    public ArrayList<AttackNode> getAttackNodes() {
+	return nodes;
+    }
+
     // Checks:
     // Sequence nodes have attacks which are ordered
     // Time value is positive in before and after
+    // Attack name is unique
+    // Node name is unique
     public boolean checkSyntax() {
 	return true;
     }
