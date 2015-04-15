@@ -37,9 +37,9 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class FEPContext, the context data structure for the FEP PSS in Embb
-   * Creation: 12/02/2014
-   * @version 1.0 12/02/2014
+   * Class BaseBuffer
+   * Creation: 11/02/2014
+   * @version 1.0 11/02/2014
    * @author Andrea ENRICI
    * @see
    */
@@ -48,19 +48,62 @@ package tmltranslator.ctranslator;;
 
 import java.util.*;
 import java.nio.*;
-import javax.swing.*;
-import javax.swing.event.*;
 import myutil.*;
-
 import tmltranslator.*;
 
-public class FEPContext extends Context	{
+public class AdaifBuffer extends Buffer	{
 
-	public FEPContext()	{
+	public static final int numSamplesIndex = 1;
+	public static final int baseAddressIndex = 2;
 
-		declaration = "struct embb_dma_context_s";
-		code =	"VOID";
+	protected String numSamplesValue = USER_TO_DO;
+	protected static final String numSamplesType = "uint8_t";
+	
+	protected String baseAddressValue = USER_TO_DO;
+	protected static final String baseAddressType = "uint32_t*";
+	
+	public static final String DECLARATION = "struct ADAIF_BUFFER_TYPE {" + CR + TAB +
+																						numSamplesType + SP + "num_samples" + SC + CR + TAB +
+																						baseAddressType + SP + "base_address" + SC + CR + "}" + SC + CR2 +
+																						"typedef ADAIF_BUFFER_TYPE ADAIF_BUFFER_TYPE" + SC + CR;
+	
+	private String Context = "embb_mainmemory_context";
 
+	public AdaifBuffer( String _name, TMLTask _task )	{
+		type = "ADAIF_BUFFER_TYPE";
+		name = _name;
+		task = _task;
 	}
 
-}
+	@Override public String getInitCode()	{
+		StringBuffer s = new StringBuffer();
+		if( bufferParameters != null )	{
+			retrieveBufferParameters();
+		}
+		s.append( TAB + name + ".num_samples = " + "(" + numSamplesType + ")" + numSamplesValue + SC + CR );
+		s.append( TAB + name + ".base_address = " + "(" + baseAddressType + ")" + baseAddressValue + SC + CR );
+		return s.toString();
+	}
+
+	public String toString()	{
+
+		StringBuffer s = new StringBuffer( super.toString() );
+		s.append( TAB2 + "num_samples = " + numSamplesValue + SC + CR );
+		s.append( TAB2 + "base_address = " + baseAddressValue + SC + CR );
+		return s.toString();
+	}	
+
+	private void retrieveBufferParameters()	{
+
+		if( bufferParameters.get( numSamplesIndex ).length() > 0 )	{
+			numSamplesValue = bufferParameters.get( numSamplesIndex );
+		}
+		if( bufferParameters.get( baseAddressIndex ).length() > 0 )	{
+			baseAddressValue = bufferParameters.get( baseAddressIndex );
+		}
+	}
+
+	public String getContext()	{
+		return Context;
+	}
+}	//End of class

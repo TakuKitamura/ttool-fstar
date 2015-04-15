@@ -65,6 +65,7 @@ public class Buffer	{
 	public static final int bufferTypeIndex = 0;
 
 	public static String CR = "\n";
+	public static String CR2 = "\n\n";
 	public static String TAB = "\t";
 	public static String TAB2 = "\t\t";
 	public static String SP = " ";

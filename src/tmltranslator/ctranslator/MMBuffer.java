@@ -53,7 +53,6 @@ import tmltranslator.*;
 
 public class MMBuffer extends Buffer	{
 
-	//public static final String DECLARATION = "extern struct MM_BUFFER_TYPE {\n\tint num_samples;\n\tint* base_address;\n};";
 	public static final int numSamplesIndex = 1;
 	public static final int baseAddressIndex = 2;
 
@@ -63,9 +62,10 @@ public class MMBuffer extends Buffer	{
 	protected String baseAddressValue = USER_TO_DO;
 	protected static final String baseAddressType = "uint32_t*";
 	
-	public static final String DECLARATION = "extern struct MM_BUFFER_TYPE {" + CR + TAB +
+	public static final String DECLARATION = "struct MM_BUFFER_TYPE {" + CR + TAB +
 																						numSamplesType + SP + "num_samples" + SC + CR + TAB +
-																						baseAddressType + SP + "base_address" + SC + CR + "};";
+																						baseAddressType + SP + "base_address" + SC + CR + "}" + SC + CR2 +
+																						"typedef MM_BUFFER_TYPE MM_BUFFER_TYPE" + SC + CR;
 	
 	private String Context = "embb_mainmemory_context";
 
@@ -80,8 +80,8 @@ public class MMBuffer extends Buffer	{
 		if( bufferParameters != null )	{
 			retrieveBufferParameters();
 		}
-		s.append( TAB + name + ".num_samples = " + numSamplesValue + SC + CR );
-		s.append( TAB + name + ".base_address = " + baseAddressValue + SC + CR );
+		s.append( TAB + name + ".num_samples = " + "(" + numSamplesType + ")" + numSamplesValue + SC + CR );
+		s.append( TAB + name + ".base_address = " + "(" + baseAddressType + ")" + baseAddressValue + SC + CR );
 		return s.toString();
 	}
 

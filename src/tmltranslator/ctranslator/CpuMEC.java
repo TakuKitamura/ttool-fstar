@@ -56,7 +56,7 @@ public class CpuMEC extends ArchUnitMEC	{
 		node_type = "CPU";
 		inst_type = "CPUoperation";
 		inst_decl = "VOID";
-		buff_type = "MM_BUFF_TYPE";
+		buff_type = "MM_BUFFER_TYPE";
 		buff_init = "VOID";
 	}
 

@@ -50,33 +50,27 @@ import java.util.*;
 
 public class SingleDmaMEC extends CPMEC	{
 
-	public static final String Context = "embb_dma_context";
+	public static final String Context = "EMBB_CONTEXT";
 	public static final String Ctx_cleanup = "dma_ctx_cleanup";
 
-	public static final int MaxParameters = 6;
+	public static final int MaxParameters = 3;
 	public static final int destinationAddressIndex = 0;
 	public static final int sourceAddressIndex = 1;
-	public static final int sizeIndex = 2;
-	public static final int counterIndex = 3;
-	public static final int ID1Index = 4;
-	public static final int bytesToTransferIndex = 5;
+	public static final int counterIndex = 2;
 
 	public static final String destinationAddress = "destinationAddress";
 	public static final String sourceAddress = "sourceAddress";
-	public static final String size = "size";
 	public static final String counter = "counter";
-	public static final String ID1 = "ID1";
-	public static final String bytesToTransfer = "bytesToTransfer";
 
 	public SingleDmaMEC( String ctxName )	{
 
 		node_type = "SingleDmaMEC";
 		inst_type = "VOID";
 		inst_decl = "EMBB_DMA_CONTEXT";
-		buff_type = "MM_BUFF_TYPE";
+		buff_type = "MM_BUFFER_TYPE";
 		buff_init = "VOID";
 		exec_code = TAB + "embb_dma_start(&" + ctxName + ", (uintptr_t) /*USER TO DO: SRC_ADDRESS*/, (uintptr_t) /*USER TO DO: DST_ADDRESS*/, /*USER TO DO: NUM_SAMPLES */ );" + CR;	
-		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, /*USER TO DO: SRC_DEV*/ );" + CR;
+		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, NULL );" + CR;
 		cleanup_code = TAB + "embb_dma_ctx_cleanup(&" + ctxName +");";
 	}
 	
@@ -85,10 +79,10 @@ public class SingleDmaMEC extends CPMEC	{
 		node_type = "SingleDmaMEC";
 		inst_type = "VOID";
 		inst_decl = "EMBB_DMA_CONTEXT";
-		buff_type = "MM_BUFF_TYPE";
+		buff_type = "MM_BUFFER_TYPE";
 		buff_init = "VOID";
 		exec_code = TAB + "embb_dma_start(&" + ctxName + ", (uintptr_t) " + sourceAddress + ", (uintptr_t) " + destinationAddress + ", (size_t) " + size + " );" + CR;	
-		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, /*USER TO DO: SRC_DEV*/ );" + CR;
+		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, NULL );" + CR;
 		cleanup_code = TAB + "embb_dma_ctx_cleanup(&" + ctxName +");";
 	}
 

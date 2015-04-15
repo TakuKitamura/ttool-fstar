@@ -49,24 +49,24 @@ package tmltranslator.ctranslator;;
 import java.util.*;
 //import Ctranslator.*;
 
-public class CwaMEC extends OperationMEC	{
+public class CwaMEC extends FepOperationMEC	{
 
-	public CwaMEC( String _ctxName, String inSignalName, String ID1, String outSignalName, String BTC )	{
+	public CwaMEC( String _ctxName, String inSignalName, String ID1, String outSignalName )	{
 
 		name = "Component Wise Addition MEC";
 		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
-			"fep_set_l(&"+ _ctxName + ", ((FEP_BUFF_TYPE*)sig["+ inSignalName + "].pBuff)->l);" + CR + TAB +
-			"fep_set_qx(&"+ _ctxName + ", ((FEP_BUFF_TYPE*)sig["+ inSignalName + "].pBuff)->bank);" + CR + TAB +
-			"fep_set_bx(&"+ _ctxName + ", sig["+ inSignalName + "].roff + ((FEP_BUFF_TYPE*)sig["+ inSignalName + "].pBuff)->base_address);" + CR + TAB +
-			"fep_set_tx(&"+ _ctxName + ", ((FEP_BUFF_TYPE*)sig["+ inSignalName + "].pBuff)->data_type);" + CR + TAB +
-			"fep_set_qy(&"+ _ctxName + ", ((FEP_BUFF_TYPE*)sig["+ ID1 + "].pBuff)->bank);" + CR + TAB +
-			"fep_set_by(&"+ _ctxName + ", sig["+ ID1 + "].roff + ((FEP_BUFF_TYPE*)sig["+ ID1 + "].pBuff)->base_address);" + CR + TAB +
-			"fep_set_ty(&"+ _ctxName + ", ((FEP_BUFF_TYPE*)sig["+ ID1 + "].pBuff)->data_type);" + CR + TAB +
-			"fep_set_qz(&"+ _ctxName + ", ((FEP_BUFF_TYPE*)sig["+ outSignalName + "].pBuff)->bank);" + CR + TAB +
-			"fep_set_bz(&"+ _ctxName + ", sig["+ outSignalName + "].woff + ((FEP_BUFF_TYPE*)sig["+ outSignalName + "].pBuff)->base_address);" + CR + TAB +
-			"fep_set_tz(&"+ _ctxName + ", ((FEP_BUFF_TYPE*)sig["+ outSignalName + "].pBuff)->data_type);" + CR + TAB +
+			"fep_set_l(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ inSignalName + "].pBuff)->num_samples);" + CR + TAB +
+			"fep_set_qx(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ inSignalName + "].pBuff)->bank);" + CR + TAB +
+			"fep_set_bx(&"+ _ctxName + ", sig["+ inSignalName + "].roff + ((FEP_BUFFER_TYPE*)sig["+ inSignalName + "].pBuff)->base_address);" + CR + TAB +
+			"fep_set_tx(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ inSignalName + "].pBuff)->data_type);" + CR + TAB +
+			"fep_set_qy(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ ID1 + "].pBuff)->bank);" + CR + TAB +
+			"fep_set_by(&"+ _ctxName + ", sig["+ ID1 + "].roff + ((FEP_BUFFER_TYPE*)sig["+ ID1 + "].pBuff)->base_address);" + CR + TAB +
+			"fep_set_ty(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ ID1 + "].pBuff)->data_type);" + CR + TAB +
+			"fep_set_qz(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ outSignalName + "].pBuff)->bank);" + CR + TAB +
+			"fep_set_bz(&"+ _ctxName + ", sig["+ outSignalName + "].woff + ((FEP_BUFFER_TYPE*)sig["+ outSignalName + "].pBuff)->base_address);" + CR + TAB +
+			"fep_set_tz(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ outSignalName + "].pBuff)->data_type);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
-			"fep_start(&"+ _ctxName + ");" + CR;
+			"fep_do(&"+ _ctxName + ");" + CR;
 		
 		init_code ="/***** INIT "+ _ctxName + " *******/" + CR +
 			"void init_"+ _ctxName + "(void){" + CR + TAB +
@@ -74,34 +74,34 @@ public class CwaMEC extends OperationMEC	{
 			"// initialize context" + CR + TAB +
 			"fep_set_op(&"+ _ctxName + ", FEP_OP_CWA );" + CR + TAB +
 			"// X vector configuration => Zk=Y[Xi]" + CR + TAB +
-			"fep_set_wx(&"+ _ctxName + ",  (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_sx(&"+ _ctxName + ",  (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_nx(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_mx(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_px(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_dx(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_vrx(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_vix(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_wx(&"+ _ctxName + ",  (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_sx(&"+ _ctxName + ",  (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_nx(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_mx(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_px(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_dx(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_vrx(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_vix(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
 			"// Y vector configuration" + CR + TAB +
-			"fep_set_wy(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_sy(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_ny(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_my(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_py(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_dy(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_vry(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_viy(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_wy(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_sy(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_ny(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_my(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_py(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_dy(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_vry(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_viy(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
 			"// Z vector addressing configuration" + CR + TAB +
-			"fep_set_qz(&"+ _ctxName + ", ((FEP_BUFF_TYPE*)sig["+ outSignalName + "].pBuff)->bank);" + CR + TAB +
-			"fep_set_bz(&"+ _ctxName + ", ((FEP_BUFF_TYPE*)sig["+ outSignalName + "].pBuff)->base_address);" + CR + TAB +
-			"fep_set_tz(&"+ _ctxName + ", ((FEP_BUFF_TYPE*)sig["+ outSignalName + "].pBuff)->data_type);" + CR + TAB +
-			"fep_set_wz(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_ri(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_sz(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_nz(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
-			"fep_set_mz(&"+ _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
+			"fep_set_qz(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ outSignalName + "].pBuff)->bank);" + CR + TAB +
+			"fep_set_bz(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ outSignalName + "].pBuff)->base_address);" + CR + TAB +
+			"fep_set_tz(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ outSignalName + "].pBuff)->data_type);" + CR + TAB +
+			"fep_set_wz(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_ri(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_sz(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_nz(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_mz(&"+ _ctxName + ", (uint64_t) /*USER TODO: VALUE*/);" + CR + TAB +
 			"// Operation configuration" + CR + TAB +
-			"fep_set_sma(&"+ _ctxName + ", (uint64_t) /* USER TODO: value*/);" + CR + TAB +
+			"fep_set_sma(&"+ _ctxName + ", (uint64_t) /* USER TODO: VALUE*/);" + CR + TAB +
 			"}" + CR;
 		cleanup_code = "fep_ctx_cleanup(&"+ _ctxName + "_ctx);";
 	}

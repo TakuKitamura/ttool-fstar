@@ -51,13 +51,15 @@ import java.util.*;
 
 public class CpuOperationMEC extends OperationMEC	{
 
-	public CpuOperationMEC( String XOP, String ID0, String OD0, String BTC )	{
+
+	public CpuOperationMEC( String ctxName, String ID0, String OD0 )	{
 		name = "CpuOperationMEC";
 		exec_code = TAB + CR + TAB + "/* USER TO DO */" + CR;
 		
-		init_code ="/***** INIT " + XOP + "_ctx *******/" + CR +
-			"void init_" + XOP + "(void){" + CR + TAB + "/* USER TO DO */";
+		init_code =	"/***** INIT " + ctxName + " *******/" + CR +
+								"void init_" + ctxName + "(void){" + CR + TAB + "/* USER TO DO */" + CR + "}";
 		cleanup_code = "/* USER TO DO */";
+		context = "EMBB_CONTEXT";
 	}
 
 }	//End of class

@@ -70,18 +70,19 @@ public class Operation	{
 	private Buffer outBuffer;
 	private HwNode xHwNode;
 	private HwNode fHwNode;
-
+	private boolean isPrex;
+	private boolean isPostex;
 
 	//Constructor for SDR operations, before the introduction of signals
-	public Operation( TMLTask _task1, TMLTask _task2 )	{	//First pass the F task
+	/*public Operation( TMLTask _task1, TMLTask _task2 )	{	//First pass the F task
 		name = _task1.getName().split( "__" )[1].split( "F_" )[1];
 		fTask = _task1;
 		xTask = _task2;
 		type = 1;	//SDR
-	}
+	}*/
 
 	//Constructor for SDR operations with input (READ channels and events) and output (WRITE channels and events) signals
-	public Operation( TMLTask _xTask, TMLTask _fTask, HwNode _xHwNode, HwNode _fHwNode, ArrayList<Signal> _inSignals, Signal _outSignal, Buffer _inBuffer, Buffer _outBuffer )	{	//First pass the F task
+	public Operation( TMLTask _xTask, TMLTask _fTask, HwNode _xHwNode, HwNode _fHwNode, ArrayList<Signal> _inSignals, Signal _outSignal, Buffer _inBuffer, Buffer _outBuffer, boolean _isPrex, boolean _isPostex )	{	//First pass the F task
 		name = _xTask.getName().split( "__" )[1].split( "F_" )[1];
 		fTask = _xTask;
 		xTask = _fTask;
@@ -91,6 +92,8 @@ public class Operation	{
 		outSignal = _outSignal;
 		inBuffer = _inBuffer;
 		outBuffer = _outBuffer;
+		isPrex = _isPrex;
+		isPostex = _isPostex;
 		type = 1;	//SDR
 	}
 
@@ -157,6 +160,14 @@ public class Operation	{
 		return outBuffer;
 	}
 
+	public boolean isPrex()	{
+		return isPrex;
+	}
+
+	public boolean isPostex()	{
+		return isPostex;
+	}
+
 	public String getFireRuleCondition()	{
 		
 		StringBuffer frCondition = new StringBuffer();
@@ -186,7 +197,6 @@ public class Operation	{
 					frCondition.append( " ( sig[ " + sig.getName() + " ].f ) &&" );
 				}
 				frCondition = new StringBuffer( frCondition.toString().substring( 0, frCondition.length() - 3 ) );
-				//frCondition = temp + ")";
 			}
 			else	{
 				frCondition.append( "( sig[ " + inSignals.get(0).getName() + " ].f )" );
@@ -196,9 +206,8 @@ public class Operation	{
 	}
 
 	public String toString()	{
-		String s = "";
+		String s = "OPERATION " + name + "\n\t" + "isPrex: " + isPrex + "\n\t" + "isPostex: " + isPostex + "\n\t";
 		if( ( inSignals.size() != 0 ) && ( outSignal != null ) )	{
-			s = "OPERATION " + name + "\n\t";
 			for( Signal sig: inSignals )	{
 				s += "inSignal: " + sig.getName() + "\n\t";
 			}
@@ -211,7 +220,7 @@ public class Operation	{
 							"outBuffer: " + outBuffer.toString();
 		}
 		else if( inSignals.size() == 0 )	{
-			s =			"OPERATION " + name + "\n\t" +
+			s +=			//"OPERATION " + name + "\n\t" +
 							"outSignal: " + outSignal.getName() + "\n\t" +
 							"X task HwExecutionNode: " + xHwNode.getName() + "\n\t" +
 							"X task MEC: " + xHwNode.getArchUnitMEC().toString() + "\n\t" +
@@ -220,7 +229,7 @@ public class Operation	{
 							"outBuffer: " + outBuffer.toString();
 		}
 		else if( outSignal == null )	{
-			s = "OPERATION " + name + "\n\t";
+			//s = "OPERATION " + name + "\n\t";
 			for( Signal sig: inSignals )	{
 				s += "inSignal: " + sig.getName() + "\n\t";
 			}

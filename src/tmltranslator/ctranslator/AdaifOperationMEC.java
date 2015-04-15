@@ -51,9 +51,10 @@ import java.util.*;
 
 public class AdaifOperationMEC extends OperationMEC	{
 
-	public AdaifOperationMEC( String ctxName, String ID0, String OD0, String BTC )	{
+
+	public AdaifOperationMEC( String ctxName, String ID0, String OD0 )	{
 		name = "AdaifOperationMEC";
-		exec_code = CR + TAB + "adaif_start(&" + ctxName + ");" + CR;
+		exec_code = "adaif_do(&" + ctxName + ");" + CR;
 	
 		init_code =
 			"void init_" + ctxName + "( void )\t{" + CR + TAB +
@@ -90,6 +91,7 @@ public class AdaifOperationMEC extends OperationMEC	{
 			"adaif_set_data(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
 			"}" + CR;
 		cleanup_code = TAB + "adaif_ctx_cleanup( /*USER TODO*/ );";
+		context = "ADAIF_CONTEXT";
 	}
 
 }	//End of class

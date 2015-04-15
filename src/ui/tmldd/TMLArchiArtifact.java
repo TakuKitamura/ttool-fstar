@@ -320,35 +320,35 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 		TraceManager.addDev( "Inside getMECofTask, fatherMECType: " + fatherMECType );
 		if( fatherMECType.equals( "FEP" ) )	{
 			if( operation.equals( "CWM" ) )	{
-				return new CwmMEC( "", "", "", "" );
+				return new CwmMEC( "", "", "" );
 			}
 			else if( operation.equals( "CWL" ) )	{
-				return new CwlMEC( "", "", "", "" );
+				return new CwlMEC( "", "", "" );
 			}
 			else if( operation.equals( "CWA" ) )	{
-				return new CwaMEC( "", "", "", "", "");
+				return new CwaMEC( "", "", "", "" );
 			}
 			else if( operation.equals( "CWP" ) )	{
-				return new CwpMEC( "", "", "", "" );
+				return new CwpMEC( "", "", "" );
 			}
 			else if( operation.equals( "FFT" ) )	{
-				return new FftMEC( "", "", "", "" );
+				return new FftMEC( "", "", "" );
 			}
 			else if( operation.equals( "SUM" ) )	{
-				return new SumMEC( "", "", "", "" );
+				return new SumMEC( "", "", "" );
 			}
 		}
 		else if( fatherMECType.equals( "MAPPER" ) )	{
-			return new MappOperationMEC( "", "", "", "" );
+			return new MappOperationMEC( "", "", "" );
 		}
 		else if( fatherMECType.equals( "INTL" )	)	{
-				return new IntlOperationMEC( "", "", "", "" );
+				return new IntlOperationMEC( "", "", "" );
 		}
 		else if( fatherMECType.equals( "ADAIF" ) )	{
-			return new AdaifOperationMEC( "", "", "", "" );
+			return new AdaifOperationMEC( "", "", "" );
 		}
 		else if( fatherMECType.equals( "CPU" ) )	{
-			return new CpuOperationMEC( "", "", "", "" );
+			return new CpuOperationMEC( "", "", "" );
 		}
 		return null;
 	}
@@ -356,16 +356,16 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 	public ArchUnitMEC getArchUnitMEC()	{
 
 		if( fatherMECType.equals( "FEP" ) )	{
-			return new FepMEC( "", "", "", "" );
+			return new FepMEC( "", "", "" );
 		}
 		else if( fatherMECType.equals( "MAPPER" ) )	{
-			return new MapperMEC( "", "", "", "" );
+			return new MapperMEC( "", "", "" );
 		}
 		else if( fatherMECType.equals( "INTL" )	)	{
-				return new InterleaverMEC( "", "", "", "" );
+				return new InterleaverMEC( "", "", "" );
 		}
 		else if( fatherMECType.equals( "ADAIF" ) )	{
-			return new AdaifMEC( "", "", "", "" );
+			return new AdaifMEC( "", "", "" );
 		}
 		else if( fatherMECType.equals( "CPU" ) )	{
 			return new CpuMEC();

@@ -70,7 +70,7 @@ public class MapperBuffer extends Buffer	{
 
 
 	public static int symmetricalValueDataInMappIndex = 4;
-	protected String symmetricalValueDataInMapp = USER_TO_DO;
+	protected String symmetricalValueDataInMappValue = USER_TO_DO;
 	protected static final String symmetricalValueDataInMappType = "bool";
 
 	//data out
@@ -83,13 +83,14 @@ public class MapperBuffer extends Buffer	{
 	protected String baseAddressLUTMappValue = USER_TO_DO;
 	public static final String baseAddressLUTMappType = "uint16_t*";
 	
-	public static final String DECLARATION = "extern struct MAPPER_BUFFER_TYPE {" + CR + TAB +
+	public static final String DECLARATION = "struct MAPPER_BUFFER_TYPE {" + CR + TAB +
 																						numSamplesDataInMappType + SP + "num_symbols" + SC + CR + TAB +
 																						baseAddressDataInMappType + SP + "input_base_address" + SC + CR + TAB +
-																						bitsPerSymbolDataInMappType + SP + "num_bits_symbol" + SC + CR + TAB +
+																						bitsPerSymbolDataInMappType + SP + "num_bits_per_symbol" + SC + CR + TAB +
 																						symmetricalValueDataInMappType + SP + "symmetrical_value" + SC + CR + TAB +
 																						baseAddressDataOutMappType + SP + "output_base_address" + SC + CR + TAB +
-																						baseAddressLUTMappType + SP + "lut_base_address" + SC + CR + "}";
+																						baseAddressLUTMappType + SP + "lut_base_address" + SC + CR + "}" + SC + CR2 +
+																						"typedef MAPPER_BUFFER_TYPE MAPPER_BUFFER_TYPE" + SC;
 	
 	private String Context = "MAPPER_CONTEXT";
 	
@@ -104,12 +105,12 @@ public class MapperBuffer extends Buffer	{
 		if( bufferParameters != null )	{
 			retrieveBufferParameters();
 		}
-		s.append( TAB + name + ".num_symbols = " + numSamplesDataInMappValue + SC + CR );
-		s.append( TAB + name + ".input_base_address = " + baseAddressDataInMappValue + SC + CR );
-		s.append( TAB + name + ".num_bits_per_symbol = " + bitsPerSymbolDataInMappValue + SC + CR );
-		s.append( TAB + name + ".symmetrical_value = " + symmetricalValueDataInMapp + SC + CR );
-		s.append( TAB + name + ".output_base_address = " + baseAddressDataOutMappValue + SC + CR );
-		s.append( TAB + name + ".lut_base_address = " + baseAddressLUTMappValue + SC + CR );
+		s.append( TAB + name + ".num_symbols = " + "(" + numSamplesDataInMappType + ")" + numSamplesDataInMappValue + SC + CR );
+		s.append( TAB + name + ".input_base_address = " + "(" + baseAddressDataInMappType + ")" + baseAddressDataInMappValue + SC + CR );
+		s.append( TAB + name + ".num_bits_per_symbol = " + "(" + bitsPerSymbolDataInMappType + ")" + bitsPerSymbolDataInMappValue + SC + CR );
+		s.append( TAB + name + ".symmetrical_value = " + "(" + symmetricalValueDataInMappType + ")" + symmetricalValueDataInMappValue + SC + CR );
+		s.append( TAB + name + ".output_base_address = " + "(" + baseAddressDataOutMappType + ")" + baseAddressDataOutMappValue + SC + CR );
+		s.append( TAB + name + ".lut_base_address = " + "(" + baseAddressLUTMappType + ")" + baseAddressLUTMappValue + SC + CR );
 		return s.toString();
 	}
 
@@ -119,7 +120,7 @@ public class MapperBuffer extends Buffer	{
 		s.append( TAB2 + "num_symbols = " + numSamplesDataInMappValue + SC + CR );
 		s.append( TAB2 + "input_base_address = " + baseAddressDataInMappValue + SC + CR );
 		s.append( TAB2 + "num_bits_per_symbol = " + bitsPerSymbolDataInMappValue + SC + CR );
-		s.append( TAB2 + "symmetrical_value = " + symmetricalValueDataInMapp + SC + CR );
+		s.append( TAB2 + "symmetrical_value = " + symmetricalValueDataInMappValue + SC + CR );
 		s.append( TAB2 + "output_base_address = " + baseAddressDataOutMappValue + SC + CR );
 		s.append( TAB2 + "lut_base_address = " + baseAddressLUTMappValue + SC + CR );
 		return s.toString();
@@ -137,7 +138,7 @@ public class MapperBuffer extends Buffer	{
 			bitsPerSymbolDataInMappValue = bufferParameters.get( bitsPerSymbolDataInMappIndex );
 		}
 		if( bufferParameters.get( symmetricalValueDataInMappIndex ).length() > 0 )	{
-			symmetricalValueDataInMapp = String.valueOf( ( new Vector<String>( Arrays.asList( symmetricalValues ))).indexOf( bufferParameters.get( symmetricalValueDataInMappIndex )));
+			symmetricalValueDataInMappValue = String.valueOf( ( new Vector<String>( Arrays.asList( symmetricalValues ))).indexOf( bufferParameters.get( symmetricalValueDataInMappIndex )));
 		}
 		if( bufferParameters.get( baseAddressDataOutMappIndex ).length() > 0 )	{
 			baseAddressDataOutMappValue = bufferParameters.get( baseAddressDataOutMappIndex );

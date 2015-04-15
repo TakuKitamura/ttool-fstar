@@ -51,15 +51,15 @@ import java.util.*;
 
 public class AdaifMEC extends ArchUnitMEC	{
 
-	public static final String Context = "embb_adaif_context";
+	public static final String Context = "ADAIF_CONTEXT";
 	public static final String Ctx_cleanup = "adaif_ctx_cleanup";
 
-	public AdaifMEC( String XOP, String ID0, String OD0, String BTC )	{
+	public AdaifMEC( String XOP, String ID0, String OD0 )	{
 
 		node_type = "ADAIF";
 		inst_type = "ADAIF";
 		inst_decl = "ADAIF_CONTEXT";
-		buff_type = "ADAIF_BUFF_TYPE";
+		buff_type = "ADAIF_BUFFER_TYPE";
 		buff_init = "= {/*l,b,q,t*/};";
 	}
 

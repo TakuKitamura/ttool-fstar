@@ -58,11 +58,11 @@ public abstract class OperationMEC	{
 	protected String init_code = new String();
 	protected String exec_code = new String();
 	protected String cleanup_code = new String();
+	protected String context = new String();
 	
 	protected String ID0 = new String();
 	protected String OD0 = new String();
 	protected String XOP = new String();
-	protected String BTC = new String();
 
 	public ArchUnitMEC archUnitMEC;
 	
@@ -76,6 +76,10 @@ public abstract class OperationMEC	{
 
 	public String getInitCode()	{
 		return init_code;
+	}
+
+	public String getContext()	{
+		return context;
 	}
 
 	public String toString()	{

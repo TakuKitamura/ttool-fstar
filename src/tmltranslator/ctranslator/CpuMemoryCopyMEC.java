@@ -50,14 +50,14 @@ import java.util.*;
 
 public class CpuMemoryCopyMEC extends CPMEC	{
 
-	public static final String Context = "embb_memcpy_context";
+	public static final String Context = "EMBB_CONTEXT";
 	public static final String Ctx_cleanup = "embb_ctx_cleanup";
 
 	public CpuMemoryCopyMEC( String ctxName, String pssBaseAddress, String offset, String  ddrAddress, String size )	{
 		node_type = "CpuMemoryCopy";
 		inst_type = "MEMORY_COPY";
 		inst_decl = "VOID";
-		buff_type = "MM_BUFF_TYPE";
+		buff_type = "MM_BUFFER_TYPE";
 		buff_init = "VOID";
 
 		exec_code = TAB + CR + TAB +

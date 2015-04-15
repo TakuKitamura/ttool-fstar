@@ -69,7 +69,7 @@ public class TMLCCodeGenerationMakefile	{
 		"#In order to compile wpd, please define EMBB_INSTALL, either as an environment" + CR +
 		"# variable or as a Makefile variable by uncommenting and editing the following" + CR +
 		"# line:" + CR +
-		" EMBB_INSTALL	= /home/enrici/libembb" + CR +
+		" EMBB_INSTALL	= /home/enrici/libembb2" + CR +
 		"# where <someplace> is the full path of the directory in which you installed" + CR +
 		"# libembb. $(EMBB_INSTALL)/include shall contain embb/fep.h and" + CR +
 		"# $(EMBB_INSTALL)/lib shall contain libembb.so and libembbemu.so" + CR +
@@ -104,9 +104,7 @@ public class TMLCCodeGenerationMakefile	{
 		"\trm -rf $(OBJS)" + CR2 +
 		"ultraclean:" + CR +
 		"\trm -rf $(OBJS) $(EXECS)" + CR +
-		"endif" + CR +
-		"	);" + CR +
-		"	}" );
+		"endif" );
 	}
 	
 	public String getCode()	{

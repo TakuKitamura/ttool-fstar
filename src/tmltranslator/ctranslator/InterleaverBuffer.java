@@ -96,7 +96,7 @@ public class InterleaverBuffer extends Buffer	{
 	public String lengthPermIntlValue = USER_TO_DO;
 	public static String lengthPermIntlType = "uint16_t";
 
-	public static final String DECLARATION = "extern struct INTERLEAVER_BUFFER_TYPE {" + CR + TAB +
+	public static final String DECLARATION = "struct INTERLEAVER_BUFFER_TYPE {" + CR + TAB +
 																						packedBinaryInIntlType + SP + "packed_binary_input_mode" + SC + CR + TAB +
 																						widthIntlType + SP + "sample_width" + SC + CR + TAB +
 																						bitInOffsetIntlType + SP + "bit_input_offset" + SC + CR + TAB +
@@ -107,7 +107,8 @@ public class InterleaverBuffer extends Buffer	{
 																						outputOffsetIntlType + SP + "output_offset" + SC + CR + TAB +
 																						//permutation table
 																						offsetPermIntlType + SP + "permutation_offset" + SC + CR + TAB + 
-																						lengthPermIntlType + SP + "permutation_length" + SC + CR + "};";
+																						lengthPermIntlType + SP + "permutation_length" + SC + CR + "}" + SC + CR2 +
+																						"typedef INTERLEAVER_BUFFER_TYPE INTERLEAVER_BUFFER_TYPE" + SC + CR;
 	
 	private String Context = "INTL_CONTEXT";
 	

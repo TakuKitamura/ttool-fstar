@@ -54,12 +54,12 @@ public class FepMEC extends ArchUnitMEC	{
 	public static final String Context = "FEP_CONTEXT";
 	public static final String Ctx_cleanup = "fep_ctx_cleanup";
 
-	public FepMEC( String XOP, String ID0, String OD0, String BTC )	{
+	public FepMEC( String XOP, String ID0, String OD0 )	{
 
 		node_type = "FEP";
 		inst_type = "FEP";
 		inst_decl = "FEP_CONTEXT";
-		buff_type = "FEP_BUFF_TYPE";
+		buff_type = "FEP_BUFFER_TYPE";
 	}
 
 }	//End of class

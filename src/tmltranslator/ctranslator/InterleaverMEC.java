@@ -54,12 +54,12 @@ public class InterleaverMEC extends ArchUnitMEC	{
 	public static final String Context = "INTL_CONTEXT";
 	public static final String Ctx_cleanup = "intl_ctx_cleanup";
 
-	public InterleaverMEC( String XOP, String ID0, String OD0, String BTC )	{
+	public InterleaverMEC( String XOP, String ID0, String OD0 )	{
 
 		node_type = "INTERLEAVER";
 		inst_type = "INTL";
 		inst_decl = "INTL_CONTEXT";
-		buff_type = "INTL_BUFF_TYPE";
+		buff_type = "INTL_BUFFER_TYPE";
 		buff_init = "= {/*l,b,q,t*/};";
 	}
 

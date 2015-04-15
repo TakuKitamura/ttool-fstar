@@ -53,7 +53,6 @@ import tmltranslator.*;
 
 public class FepBuffer extends Buffer	{
 
-
 	public static final String[] dataTypeList = { "int8", "int16", "cpx16", "cpx32" };
 	public static final String[] banksList = { "0", "1", "2", "3" };
 	public static final int numSamplesIndex = 1;
@@ -73,13 +72,14 @@ public class FepBuffer extends Buffer	{
 	protected String dataTypeValue = USER_TO_DO;
 	protected static final String dataTypeType = "uint8_t";
 
-	public static final String DECLARATION = "extern struct FEP_BUFFER_TYPE {" + CR + TAB +
+	public static final String DECLARATION = "struct FEP_BUFFER_TYPE {" + CR + TAB +
 																						numSamplesType + SP + "num_samples" + SC + CR + TAB +
 																						baseAddressType + SP + "base_address" + SC + CR + TAB +
 																						bankType + SP + "bank" + SC + CR + TAB +
-																						dataTypeType + SP + "type" + SC + CR + "};";
+																						dataTypeType + SP + "data_type" + SC + CR + "}" + SC + CR2 +
+																						"typedef FEP_BUFFER_TYPE FEP_BUFFER_TYPE" + SC;
 	
-	private String Context = "embb_fep_context";
+	private String Context = "FEP_CONTEXT";
 
 	public FepBuffer( String _name, TMLTask _task )	{
 		type = "FEP_BUFFER_TYPE";
@@ -93,10 +93,10 @@ public class FepBuffer extends Buffer	{
 		if( bufferParameters != null )	{
 			retrieveBufferParameters();
 		}
-		s.append( TAB + name + ".num_samples = " + numSamplesValue + SC + CR );
-		s.append( TAB + name + ".base_address = " + baseAddressValue + SC + CR );
-		s.append( TAB + name + ".bank = " + bankValue + SC + CR );
-		s.append( TAB + name + ".data_type = " + dataTypeValue + SC + CR );
+		s.append( TAB + name + ".num_samples = " + "(" + numSamplesType + ")" + numSamplesValue + SC + CR );
+		s.append( TAB + name + ".base_address = " + "(" + baseAddressType + ")" + baseAddressValue + SC + CR );
+		s.append( TAB + name + ".bank = " + "(" + bankType + ")" + bankValue + SC + CR );
+		s.append( TAB + name + ".data_type = " + "(" + dataTypeType + ")" + dataTypeValue + SC + CR );
 		return s.toString();
 	}
 

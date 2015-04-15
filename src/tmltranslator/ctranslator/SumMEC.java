@@ -47,16 +47,15 @@
 package tmltranslator.ctranslator;;
 
 import java.util.*;
-//import Ctranslator.*;
 
-public class SumMEC extends OperationMEC	{
+public class SumMEC extends FepOperationMEC	{
 
-	public SumMEC( String _ctxName, String inSignalName, String outSignalName, String BTC )	{
+	public SumMEC( String _ctxName, String inSignalName, String outSignalName )	{
 		name = "Sum MEC";
 		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
-			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + inSignalName + "].pBuff)->bank);" + CR + TAB +
+			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->bank);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
-			"fep_start(&" + _ctxName + ");" + CR;
+			"fep_do(&" + _ctxName + ");" + CR;
 		
 		init_code = 
 			"void init_" + _ctxName + "(void){" + CR + TAB +
@@ -79,8 +78,8 @@ public class SumMEC extends OperationMEC	{
 			"fep_set_vix(&" + _ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
 			"// Operation configuration" + CR + TAB +
 			"fep_set_sma(&" + _ctxName + ", (uint64_t) /* USER TODO: value */);" + CR + TAB +
-			"fep_set_qs(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + outSignalName + "].pBuff)->bank);" + CR + TAB +
-			"fep_set_bs(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR + TAB +
+			"fep_set_qs(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->bank);" + CR + TAB +
+			"fep_set_bs(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR + TAB +
 			"}" + CR;
 		cleanup_code = "fep_ctx_cleanup(&" + _ctxName + ");";
 	}

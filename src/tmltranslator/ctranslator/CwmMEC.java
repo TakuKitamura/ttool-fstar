@@ -49,21 +49,21 @@ package tmltranslator.ctranslator;;
 import java.util.*;
 //import Ctranslator.*;
 
-public class CwmMEC extends OperationMEC	{
+public class CwmMEC extends FepOperationMEC	{
 
-	public CwmMEC( String _ctxName, String inSignalName, String outSignalName, String BTC )	{
+	public CwmMEC( String _ctxName, String inSignalName, String outSignalName )	{
 
 		name = "Component Wise Multiplication MEC";
 		exec_code = TAB + "/*firm instruction*/" + CR +
-			"fep_set_l(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + inSignalName + "].pBuff)->l);" + CR +
-			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + inSignalName + "].pBuff)->bank);" + CR +
-			"fep_set_bx(&" + _ctxName + ", sig[" + inSignalName + "].roff + ((FEP_BUFF_TYPE*)sig[" + inSignalName + "].pBuff)->base_address);" + CR +
-			"fep_set_tx(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + inSignalName + "].pBuff)->data_type);" + CR +
-			"fep_set_qz(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + outSignalName + "].pBuff)->bank);" + CR +
-			"fep_set_bz(&" + _ctxName + ", sig[" + outSignalName + "].woff + ((FEP_BUFF_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR +
-			"fep_set_tz(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + outSignalName + "].pBuff)->data_type);" + CR +
+			"fep_set_l(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->num_samples);" + CR +
+			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->bank);" + CR +
+			"fep_set_bx(&" + _ctxName + ", sig[" + inSignalName + "].roff + ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->base_address);" + CR +
+			"fep_set_tx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->data_type);" + CR +
+			"fep_set_qz(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->bank);" + CR +
+			"fep_set_bz(&" + _ctxName + ", sig[" + outSignalName + "].woff + ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR +
+			"fep_set_tz(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->data_type);" + CR +
 			"/*start execution*/" + CR +
-			"fep_start(&" + _ctxName + ");" + CR;
+			"fep_do(&" + _ctxName + ");" + CR;
 	
 		init_code ="/***** INIT " + _ctxName + " *******/" + CR +
 			"void init_" + _ctxName + "(void){" + CR + TAB +
@@ -92,9 +92,9 @@ public class CwmMEC extends OperationMEC	{
 			"fep_set_vry(&" + _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
 			"fep_set_dy(&" + _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
 			"// Z vector addressing configuration" + CR + TAB +
-			"fep_set_qz(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + outSignalName + "].pBuff)->bank);" + CR + TAB +
-			"fep_set_bz(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR + TAB +
-			"fep_set_tz(&" + _ctxName + ", ((FEP_BUFF_TYPE*)sig[" + outSignalName + "].pBuff)->data_type);" + CR + TAB +
+			"fep_set_qz(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->bank);" + CR + TAB +
+			"fep_set_bz(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR + TAB +
+			"fep_set_tz(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->data_type);" + CR + TAB +
 			"fep_set_wz(&" + _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
 			"fep_set_ri(&" + _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +
 			"fep_set_sz(&" + _ctxName + ", (uint64_t) /*USER TODO: value*/);" + CR + TAB +

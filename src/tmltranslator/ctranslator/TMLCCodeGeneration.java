@@ -188,6 +188,7 @@ public class TMLCCodeGeneration	{
 		Signal outSignal;
 		ArrayList<Signal> inSignals;
 		String[] s;
+		boolean[] prexPostexList = new boolean[2];
 
 		for( TMLTask task: mappedTasks )	{
 			String taskName = task.getName().split( "__" )[1];
@@ -209,16 +210,58 @@ public class TMLCCodeGeneration	{
 				String xTaskName = xTask.getName().split( "__" )[1].split( "X_" )[1];
 				if( xTaskName.equals( fTaskName ) )	{
 					//Mind that signals are based on channels NOT on events!
+					TraceManager.addDev( "TASK " + xTask.getName() );
+					//TraceManager.addDev( xTask.getTMLChannels().toString() );
+					prexPostexList = getPrexPostex( xTask );
 					inSignals = getInSignals( xTask );	//is null for Source operation
 					outSignal = getOutSignal( xTask );	//is null for Sink operation
 					//Get the ports of channels and associated them to buffers
 					inBuffer = createInBuffer( xTask, tmap.getHwNodeOf( xTask ) );	//null for Source
 					outBuffer = createOutBuffer( xTask, tmap.getHwNodeOf( xTask ) );	//null for Sink
-					operationsList.add( new Operation( fTask, xTask, tmap.getHwNodeOf( xTask ), tmap.getHwNodeOf( fTask ), inSignals, outSignal, inBuffer, outBuffer ) );
+					operationsList.add( new Operation( fTask, xTask, tmap.getHwNodeOf( xTask ), tmap.getHwNodeOf( fTask ), inSignals, outSignal, inBuffer, outBuffer, prexPostexList[0], prexPostexList[1] ) );
 					SDRoperationsCounter++;
 				}
 			}
 		}
+	}
+
+	private boolean[] getPrexPostex( TMLTask xTask )	{
+		
+		boolean[] list = new boolean[2];
+
+		for( TMLChannel ch: xTask.getWriteTMLChannels() )	{	//perche testa tutti i canali
+			if( ch.isBasicChannel() )	{
+				if( ch.getOriginPort().isPrex() )	{
+					list[0] = true;
+					list[1] = false;
+					return list;
+				}
+			}
+			if( ch.isAForkChannel() )	{
+				if( ch.getOriginPorts().get(0).isPrex() )	{
+					list[0] = true;
+					list[1] = false;
+					return list;
+				}
+			}
+		}
+		for( TMLChannel ch: xTask.getReadTMLChannels() )	{	//perche testa tutti i canali
+			if( ch.isBasicChannel() )	{
+				if( ch.getDestinationPort().isPostex() )	{
+					list[0] = false;
+					list[1] = true;
+					return list;
+				}
+			}
+			if( ch.isAJoinChannel() )	{
+				if( ch.getDestinationPorts().get(0).isPostex() )	{
+					list[0] = false;
+					list[1] = true;
+					return list;
+				}
+			}
+		}
+		return list;
 	}
 
 	//Create the inBuffer form the port of the read channel associated to the xTask
@@ -243,7 +286,7 @@ public class TMLCCodeGeneration	{
 					buff = new MMBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
 				}
 				else if( mec instanceof CpuMEC )	{
-					buff = new BaseBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
+					buff = new MMBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
 				}
 				buffersList.add( buff );
 				return buff;
@@ -267,7 +310,7 @@ public class TMLCCodeGeneration	{
 					buff = new MMBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
 				}
 				else if( mec instanceof CpuMEC )	{
-					buff = new BaseBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
+					buff = new MMBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
 				}
 				buffersList.add( buff );
 				return buff;
@@ -298,7 +341,7 @@ public class TMLCCodeGeneration	{
 					buff = new MMBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
 				}
 				else if( mec instanceof CpuMEC )	{
-					buff = new BaseBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
+					buff = new MMBuffer( "buff_" + writeChannel.getOriginPort().getName(), xTask );
 				}
 				buffersList.add( buff );
 				return buff;
@@ -322,7 +365,7 @@ public class TMLCCodeGeneration	{
 					buff = new MMBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
 				}
 				else if( mec instanceof CpuMEC )	{
-					buff = new BaseBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
+					buff = new MMBuffer( "buff_" + writeChannel.getOriginPorts().get(i).getName(), xTask );
 				}
 				buffersList.add( buff );
 				return buff;
@@ -597,39 +640,18 @@ public class TMLCCodeGeneration	{
 
 	private void generateMainFile()	{
 		mainFileString.append( "#include \"" + applicationName + ".h\"" + CR2 );
-		mainFileString.append( "int main(void)\t{" + CR + "/* USER TO DO */" +
-								/*TAB + "int status = 0;" + CR +
-								TAB + "char *src_out_dat;" + CR +
-								TAB + "char *dma1_out_dat;" + CR +
-								TAB + "int g_r_size = 10240;" + CR +
-								TAB + "int g_Ns = 1024;" + CR +
-								TAB + "int g_Fi = 593;" + CR +
-								TAB + "int g_Li = 116;" + CR2 +
-								TAB + "src_out_dat = (char*) calloc(g_r_size*4, 1);" + CR +
-								TAB + "if( src_out_dat == NULL ) exit(1);" + CR +
-								TAB2 + "dma1_out_dat = (char*) calloc(4, 1);" + CR +
-								TAB + "if( dma1_out_dat == NULL ) exit(1);" + CR +
-								TAB2 + "FILE *source = fopen(\"date_demo.dat\", \"r\");" + CR +
-								TAB + "if( source != NULL ){ " + CR +
-								TAB2 + "fread(src_out_dat, 1, g_r_size*4, source);" + CR +
-								TAB2 + "fclose(source);" + CR +
- 								TAB + "} else printf(\"ERROR input file does not exist!\\n\");" + CR +
-								TAB + applicationName + "_init( (char*)src_out_dat, (char*)dma1_out_dat, g_r_size, g_Ns , g_Fi, g_Li );" + CR +*/
-								TAB + "status = " + applicationName + "_exec();" + CR +
-								/*TAB + "printf(\"score %d \", *(uint32_t*)dma1_out_dat );" + CR +
-								TAB + "free(src_out_dat);" + CR +*/
-								"}" );
+		mainFileString.append( 	"int main(void)\t{" + CR + TAB + "/* USER TO DO */" +
+														CR + TAB + "int status = " + applicationName + "_exec();" + CR + "}" );
 	}
 
 	private void generateHeaderFile( ArrayList<TMLTask> mappedTasks )	{
 
 		getPrexAndPostexChannels();
 		headerString.append( generateCodeForLibraries() );
+		headerString.append( generateCodeForCustomTypes() );
 		headerString.append( generateCodeForPrototypes() );
-		//headerString.append( variablesInMainFile() );
 		headerString.append( buffersAndInstructionsDeclaration( true ) );
 		headerString.append( generateCodeForSignals() );
-		headerString.append( generateCodeForVariables() );
 	}
 
 	private void getPrexAndPostexChannels()	{
@@ -643,35 +665,25 @@ public class TMLCCodeGeneration	{
 				originPort = ch.getOriginPort();
 				if( originPort.isPrex() )	{
 					prexList.add( originPort );
-					//foundPrex = true;
 				}
 				destinationPort = ch.getDestinationPort();
 				if( destinationPort.isPostex() )	{
 					postexList.add( destinationPort );
-					//foundPostex = true;
 				}
 			}
 			if( ch.isAForkChannel() )	{
 				originPort = ch.getOriginPorts().get(0);
 				if( originPort.isPrex() )	{
 					prexList.add( originPort );
-					//foundPrex = true;
 				}
 			}
 			if( ch.isAJoinChannel() )	{
 				destinationPort = ch.getDestinationPorts().get(0);
 				if( destinationPort.isPostex() )	{
 					postexList.add( destinationPort );
-					//foundPostex = true;
 				}
 			}
 		}
-		/*if( !foundPrex )	{
-			addError( "No suitable channel has been marked as prex", TMLCCodeGenerationError.ERROR_STRUCTURE );
-		}
-		if( !foundPostex )	{
-			addError( "No suitable channel has been marked as postex", TMLCCodeGenerationError.ERROR_STRUCTURE );
-		}*/
 	}
 
 	private String generateCodeForLibraries()	{
@@ -683,8 +695,7 @@ public class TMLCCodeGeneration	{
 							"#include <embb/intl.h>" + CR +
 							"#include <embb/mapper.h>" + CR +
 							"#include <embb/adaif.h>" + CR +
-							"#include <embb/memory.h>" + CR + 
-							"#include <embb/dma.h>" + CR2;
+							"#include <embb/memory.h>" + CR2;
 		return s;
 	}
 
@@ -704,16 +715,6 @@ public class TMLCCodeGeneration	{
 		return s;
 	}
 
-	/*private String variablesInMainFile()	{
-		String s = 	"extern int g_r_size;" + CR +
-								"extern int g_Ns;" + CR +
-								"extern int g_Fi" + CR +
-								"extern int g_Li" + CR +
-								"extern char *src_out_dat;" + CR +
-								"extern char *dma1_out_dat;" + CR2;
-		return s;
-	}*/
-
 	private String buffersAndInstructionsDeclaration( boolean declaration )	{
 
 		TMLTask xTask, fTask;
@@ -730,35 +731,36 @@ public class TMLCCodeGeneration	{
 				inBuff = op.getInBuffer();
 				outBuff = op.getOutBuffer();
 				ctxName = op.getContextName();
+				OperationMEC xTaskOperation = xTask.getOperationMEC();
 				if( declaration )	{
 					if( inBuff == null )	{	//for source operation
 						buffersString.append( "extern" + SP + outBuff.getType() + SP + outBuff.getName() + SC + CR );
-						instructionsString.append( "extern" + SP + outBuff.getContext() + SP + ctxName + SC + CR );
+						instructionsString.append( "extern" + SP + xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
 					}
 					else	{
 						if( outBuff == null )	{	//for sink operation
 							buffersString.append( "extern" + SP + inBuff.getType() + SP + inBuff.getName() + SC + CR );
-							instructionsString.append( "extern" + SP + inBuff.getContext() + SP + ctxName + SC + CR );
+							instructionsString.append( "extern" + SP + xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
 						}
 						else	{	//for all the remaining operations
 							buffersString.append( "extern" + SP + inBuff.getType() + SP + inBuff.getName() + SC + CR );
-							instructionsString.append( "extern" + SP + inBuff.getContext() + SP + ctxName + SC + CR );
+							instructionsString.append( "extern" + SP + xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
 						}
 					}
 				}
 				else	{
 					if( inBuff == null )	{	//for source operation
 						buffersString.append( outBuff.getType() + SP + outBuff.getName() + SC + CR );
-						instructionsString.append( outBuff.getContext() + SP + ctxName + SC + CR );
+						instructionsString.append( xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
 					}
 					else	{
 						if( outBuff == null )	{	//for sink operation
 							buffersString.append( inBuff.getType() + SP + inBuff.getName() + SC + CR );
-							instructionsString.append( inBuff.getContext() + SP + ctxName + SC + CR );
+							instructionsString.append( xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
 						}
 						else	{	//for all the remaining operations
 							buffersString.append( inBuff.getType() + SP + inBuff.getName() + SC + CR );
-							instructionsString.append( inBuff.getContext() + SP + ctxName + SC + CR );
+							instructionsString.append( xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
 						}
 					}
 				}
@@ -797,9 +799,9 @@ public class TMLCCodeGeneration	{
 
 	private String generateCodeForSignals()	{
 
-		StringBuffer s = new StringBuffer( CR2 + "/********* SIGNAL TYPE ***************/" + CR + Signal.DECLARATION + CR2 + "enum sigs_enu	{" + CR );
+		StringBuffer s = new StringBuffer( CR2 + "enum sigs_enu	{" + CR );
 		for( Signal sig: signalsList )	{
-			s.append( sig.getName() + CR );
+			s.append( sig.getName() + "," + CR );
 		}
 		s.append( "NUM_SIGS };" + CR2 + "enum ops_enu	{" + CR );
 
@@ -809,19 +811,20 @@ public class TMLCCodeGeneration	{
 		for( DataTransfer dt: dataTransfersList )	{
 			s.append( dt.getName() + ",\n" );
 		}
-		s.append( "NUM_OPS };" + CR2 );
+		s.append( "NUM_OPS };" + CR2 + "#endif" );
 		return s.toString();
 	}
 
-	private String generateCodeForVariables()	{
-		StringBuffer s = new StringBuffer( "/**** variables *****/" + CR + "extern SIG_TYPE sig[];" + CR2 );
+	private String generateCodeForCustomTypes()	{
+		StringBuffer s = new StringBuffer();
+		s.append( Signal.DECLARATION + CR2 );
 		s.append( "/**** Buffers ****/" + CR );
 		s.append( FepBuffer.DECLARATION + CR2 );
 		s.append( MapperBuffer.DECLARATION + CR2 );
 		s.append( InterleaverBuffer.DECLARATION + CR2 );
 		s.append( MMBuffer.DECLARATION + CR2 );
-		s.append( BaseBuffer.DECLARATION + CR2 );
-		s.append( "#endif" );
+		s.append( AdaifBuffer.DECLARATION + CR );
+		s.append( "extern SIG_TYPE sig[];" + CR2 );
 		return s.toString();
 	}
 
@@ -850,9 +853,10 @@ public class TMLCCodeGeneration	{
 							"init_operations();" + CR + TAB +
 							"init_CPs();" + CR2 + TAB +
 							"/********* INIT PREX OPs signals ********/" + CR +
-							generateCodeToInitPrexOperations() + CR + TAB +
+							generateCodeToInitPrexOperation() + CR + TAB +
 							"/********* OPERATIONS scheduling ***************/" + CR + TAB +
 							scheduler.getCode() + CR + TAB +
+							//generateCodeForSinkOperation() + CR + TAB +
 							"cleanup_operations_context();" + CR + TAB +
 							"cleanup_CPs_context();" + CR + TAB +
 							"return status;" + CR + "}" + CR2 );
@@ -865,15 +869,31 @@ public class TMLCCodeGeneration	{
 		generateCodeForExitRule();
 	}
 
-	private String generateCodeToInitPrexOperations()	{
+	private String generateCodeToInitPrexOperation()	{
 		
 		StringBuffer s = new StringBuffer();
 		for( TMLPort port: prexList )	{
 			s.append( TAB + "sig[ " + port.getName() +" ].f = false;" + CR );
 		}
+		/*for( Operation op: operationsList )	{
+			if( op.isPrex() )	{
+				s.append( TAB + "op_" + op.getName() + "()" + SC + CR );
+			}
+		}*/
 		return s.toString();
 	}
 
+	private String generateCodeForSinkOperation()	{
+
+		StringBuffer s = new StringBuffer();
+		for( Operation op: operationsList )	{
+			if( op.isPostex() )	{
+				s.append( "op_" + op.getName() + "()" + SC );
+				break;
+			}
+		}
+		return s.toString();
+	}
 
 	private void generateCodeForOperations()	{ //generate the code for the execution operations
 		
@@ -912,39 +932,39 @@ public class TMLCCodeGeneration	{
 		}
 		
 		if( xTaskOperation instanceof CwpMEC )	{
-			CwpMEC cwp = new CwpMEC( ctxName, signalInName, signalOutName, "" );
+			CwpMEC cwp = new CwpMEC( ctxName, signalInName, signalOutName );
 			code.append( cwp.getExecCode() );
 		}
 		else if( xTaskOperation instanceof CwmMEC )	{
-			CwmMEC cwm = new CwmMEC( ctxName, signalInName, signalOutName, "" );
+			CwmMEC cwm = new CwmMEC( ctxName, signalInName, signalOutName );
 			code.append( cwm.getExecCode() );
 		}
 		else if( xTaskOperation instanceof CwaMEC )	{
-			CwaMEC cwa = new CwaMEC( ctxName, signalInName, "", signalOutName, "" );
+			CwaMEC cwa = new CwaMEC( ctxName, signalInName, "", signalOutName );
 			code.append( cwa.getExecCode() );
 		}
 		else if( xTaskOperation instanceof CwlMEC )	{
-			CwlMEC cwl = new CwlMEC( ctxName, signalInName, signalOutName, "" );
+			CwlMEC cwl = new CwlMEC( ctxName, signalInName, signalOutName );
 			code.append( cwl.getExecCode() );
 		}
 		else if( xTaskOperation instanceof SumMEC )	{
-			SumMEC sum = new SumMEC( ctxName, signalInName, signalOutName, "" );
+			SumMEC sum = new SumMEC( ctxName, signalInName, signalOutName );
 			code.append( sum.getExecCode() );
 		}
 		else if( xTaskOperation instanceof FftMEC )	{
-			FftMEC fft = new FftMEC( ctxName, signalInName, signalOutName, "" );
+			FftMEC fft = new FftMEC( ctxName, signalInName, signalOutName );
 			code.append( fft.getExecCode() );
 		}
 		else if( xTaskOperation instanceof MappOperationMEC )	{
-			MappOperationMEC mapp = new MappOperationMEC( ctxName, signalInName, signalOutName, "" );
+			MappOperationMEC mapp = new MappOperationMEC( ctxName, signalInName, signalOutName );
 			code.append( mapp.getExecCode() );
 		}
 		else if( xTaskOperation instanceof IntlOperationMEC )	{
-			IntlOperationMEC intl = new IntlOperationMEC( ctxName, signalInName, signalOutName, "" );
+			IntlOperationMEC intl = new IntlOperationMEC( ctxName, signalInName, signalOutName );
 			code.append( intl.getExecCode() );
 		}
 		else if( xTaskOperation instanceof AdaifOperationMEC )	{
-			AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName, signalInName, signalOutName, "" );
+			AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName, signalInName, signalOutName );
 			code.append( adaif.getExecCode() );
 		}
 
@@ -1027,7 +1047,10 @@ public class TMLCCodeGeneration	{
 
 	private void generateCodeForCommunicationPatterns()	{
 		
-		String s, destinationAddress, sourceAddress, size, destinationAddress1, sourceAddress1, size1, destinationAddress2, sourceAddress2, size2;
+		String s;
+		String destinationAddress, sourceAddress, counter;
+		String destinationAddress1, sourceAddress1, counter1;
+		String destinationAddress2, sourceAddress2, counter2;
 		TMLCPLib tmlcplib;
 		String ctxName;
 		Vector<String> attributes;
@@ -1051,18 +1074,18 @@ public class TMLCCodeGeneration	{
 			if( cpMEC instanceof SingleDmaMEC )	{
 				destinationAddress = attributes.get( SingleDmaMEC.destinationAddressIndex );
 				sourceAddress = attributes.get( SingleDmaMEC.sourceAddressIndex );
-				size = attributes.get( SingleDmaMEC.sizeIndex );
-				SingleDmaMEC mec = new SingleDmaMEC( ctxName, destinationAddress, sourceAddress, size );
+				counter = attributes.get( SingleDmaMEC.counterIndex );
+				SingleDmaMEC mec = new SingleDmaMEC( ctxName, destinationAddress, sourceAddress, counter );
 				programString.append( mec.getExecCode() );
 			}
 			if( cpMEC instanceof DoubleDmaMEC )	{
 				destinationAddress1 = attributes.get( DoubleDmaMEC.destinationAddress1Index );
 				sourceAddress1 = attributes.get( DoubleDmaMEC.sourceAddress1Index );
-				size1 = attributes.get( DoubleDmaMEC.size1Index );
+				counter1 = attributes.get( DoubleDmaMEC.counter1Index );
 				destinationAddress2 = attributes.get( DoubleDmaMEC.destinationAddress2Index );
 				sourceAddress2 = attributes.get( DoubleDmaMEC.sourceAddress2Index );
-				size2 = attributes.get( DoubleDmaMEC.size2Index );
-				DoubleDmaMEC mec = new DoubleDmaMEC( ctxName, destinationAddress1, sourceAddress1, size1, destinationAddress2, sourceAddress2, size2 );
+				counter2 = attributes.get( DoubleDmaMEC.counter2Index );
+				DoubleDmaMEC mec = new DoubleDmaMEC( ctxName, destinationAddress1, sourceAddress1, counter1, destinationAddress2, sourceAddress2, counter2 );
 				programString.append( mec.getExecCode() );
 			}
 
@@ -1141,13 +1164,7 @@ public class TMLCCodeGeneration	{
 		String ctxName;
 		String inSignalName, outSignalName;
 		initFileString.append( "#include \"" + applicationName + ".h\"" + CR2 );
-		initFileString.append( "/**** variables ****/" + CR2 /*+
-									"int g_r_size = 10240;" + CR +
-									"int g_Ns = 1024;" + CR +
-									"int g_Fi = 593;" + CR +
-									"int g_Li = 116;" + CR +
-									"char *src_out_dat;" + CR +
-									"char *dma1_out_dat;" + CR2*/ );		
+		initFileString.append( "/**** variables ****/" + CR2 );		
 		initFileString.append( buffersAndInstructionsDeclaration( false ) + CR2 );
 		generateCodeToInitializeBuffers();
 		generateCodeToInitializeSignals();
@@ -1174,43 +1191,43 @@ public class TMLCCodeGeneration	{
 					outSignalName = "noOutSignal";
 				}
 				if( xTaskOperation instanceof CwpMEC )	{
-					CwpMEC cwp = new CwpMEC( ctxName, inSignalName, outSignalName, "" );
+					CwpMEC cwp = new CwpMEC( ctxName, inSignalName, outSignalName );
 					init_code = cwp.getInitCode();
 				}
 				else if( xTaskOperation instanceof CwmMEC )	{
-					CwmMEC cwm = new CwmMEC( ctxName, inSignalName, outSignalName, "" );
+					CwmMEC cwm = new CwmMEC( ctxName, inSignalName, outSignalName );
 					init_code = cwm.getInitCode();
 				}
 				else if( xTaskOperation instanceof CwaMEC )	{
-					CwaMEC cwa = new CwaMEC( ctxName, inSignalName, "", outSignalName, "" );
+					CwaMEC cwa = new CwaMEC( ctxName, inSignalName, "", outSignalName );
 					init_code = cwa.getInitCode();
 				}
 				else if( xTaskOperation instanceof CwlMEC )	{
-					CwlMEC cwl = new CwlMEC( ctxName, inSignalName, outSignalName, "" );
+					CwlMEC cwl = new CwlMEC( ctxName, inSignalName, outSignalName );
 					init_code = cwl.getInitCode();
 				}
 				else if( xTaskOperation instanceof SumMEC )	{
-					SumMEC sum = new SumMEC( ctxName, inSignalName, outSignalName, "" );
+					SumMEC sum = new SumMEC( ctxName, inSignalName, outSignalName );
 					init_code = sum.getInitCode();
 				}
 				else if( xTaskOperation instanceof FftMEC )	{
-					FftMEC fft = new FftMEC( ctxName, inSignalName, outSignalName, "" );
+					FftMEC fft = new FftMEC( ctxName, inSignalName, outSignalName );
 					init_code = fft.getInitCode();
 				}
 				else if( xTaskOperation instanceof IntlOperationMEC )	{
-					IntlOperationMEC intl = new IntlOperationMEC( ctxName, inSignalName, outSignalName, "" );
+					IntlOperationMEC intl = new IntlOperationMEC( ctxName, inSignalName, outSignalName );
 					initFileString.append( intl.getInitCode() + CR );
 				}
 				else if( xTaskOperation instanceof MappOperationMEC )	{
-					MappOperationMEC mapp = new MappOperationMEC( ctxName, inSignalName, outSignalName, "" );
+					MappOperationMEC mapp = new MappOperationMEC( ctxName, inSignalName, outSignalName );
 					initFileString.append( mapp.getInitCode() + CR );
 				}
 				else if( xTaskOperation instanceof AdaifOperationMEC )	{
-					AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName, inSignalName, outSignalName, "" );
+					AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName, inSignalName, outSignalName );
 					initFileString.append( adaif.getInitCode() + CR );
 				}
 				else if( xTaskOperation instanceof CpuOperationMEC )	{
-					CpuOperationMEC cpu = new CpuOperationMEC( ctxName, inSignalName, outSignalName, "" );
+					CpuOperationMEC cpu = new CpuOperationMEC( ctxName, inSignalName, outSignalName );
 					initFileString.append( cpu.getInitCode() + CR );
 				}
 			initFileString.append( init_code + CR );
@@ -1334,16 +1351,15 @@ public class TMLCCodeGeneration	{
 		initFileString.append( "void init_signals()\t{" + CR );
 		for( Signal sig: signalsList )	{
 			initFileString.append( TAB + "sig[" + sig.getName() + "].f = false;" + CR );
-			initFileString.append( TAB + "sig[" + sig.getName() + "].roff = /*USER TO DO*/;" + CR );
-			initFileString.append( TAB + "sig[" + sig.getName() + "].woff = /*USER TO DO*/;" + CR );
 			Buffer buff = getBufferFromSignal( sig );
 			if( buff != null )	{
-				initFileString.append( TAB + "sig[" + sig.getName() + "].pBuff = (" + buff.getType() + "*)" + SP + buff.getName() + SC + CR2 );
+				initFileString.append( TAB + "sig[" + sig.getName() + "].pBuff = (" + buff.getType() + "*)" + SP + "&" + buff.getName() + SC + CR2 );
 			}
 			else	{
 				initFileString.append( TAB + "sig[" + sig.getName() + "].pBuff = /* USER TO DO */" + SC + CR2 );
 			}
 		}
+		initFileString.append( "}" + CR2 );
 	}
 
 	private Buffer getBufferFromSignal( Signal sig )	{

@@ -298,6 +298,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			case Buffer.MainMemoryBuffer:	
 				if( loadBufferParameters )	{
 					baseAddress = bufferParameters.get( MMBuffer.baseAddressIndex );
+					numSamples = bufferParameters.get( MMBuffer.numSamplesIndex );
 				}
 				makeMainMemoryBufferPanel( c1, c2 );
 				break;
@@ -1116,8 +1117,12 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				params.add( InterleaverBuffer.lengthPermIntlIndex, lengthPermIntl );
 				break;
 			case Buffer.BaseBuffer:
-				params.add( baseAddress );
 				params.add( numSamples );
+				params.add( baseAddress );
+				break;
+			case Buffer.AdaifBuffer:
+				params.add( numSamples );
+				params.add( baseAddress );
 				break;
 			case Buffer.MapperBuffer:	
 				//data in

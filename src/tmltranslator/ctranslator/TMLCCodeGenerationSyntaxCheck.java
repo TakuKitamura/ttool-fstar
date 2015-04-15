@@ -98,6 +98,7 @@ public class TMLCCodeGenerationSyntaxCheck {
 		public void check()	{
 			checkForPrexAndPostexChannels();
 			checkForCPsAssociatedToForkChannels();	//so far we do not handle CPs associated to ports that are part of a fork channel
+			checkForXFTasks();
 		}
 
 		//valid prex ports are:
@@ -141,7 +142,7 @@ public class TMLCCodeGenerationSyntaxCheck {
 					}
 					for( TMLPort port: ch.getDestinationPorts() )	{	//check all destination ports: they cannot be marked as postex
 						if( port.isPostex() )	{
-							addError( "Port " + port.getName() + " belongs to a fork channel: it cannot be marked as postex.", TMLCCodeGenerationError.ERROR_STRUCTURE );
+							addError( "Port " + port.getName() + " belongs to a fork channel: it cannot be marked as postex", TMLCCodeGenerationError.ERROR_STRUCTURE );
 						}
 					}
 				}
@@ -156,15 +157,15 @@ public class TMLCCodeGenerationSyntaxCheck {
 					}
 					for( TMLPort port: ch.getOriginPorts() )	{	//check all origin ports: they cannot be marked as prex
 						if( port.isPrex() )	{
-							addError( "Port " + port.getName() + " belongs to a join channel: it cannot be marked as prex.", TMLCCodeGenerationError.ERROR_STRUCTURE );
+							addError( "Port " + port.getName() + " belongs to a join channel: it cannot be marked as prex", TMLCCodeGenerationError.ERROR_STRUCTURE );
 						}
 					}
 				}
 				if( originPort.isPostex() )	{
-						addError( "Port " + originPort.getName() + " cannot be marked as postex.", TMLCCodeGenerationError.ERROR_STRUCTURE );
+						addError( "Port " + originPort.getName() + " cannot be marked as postex", TMLCCodeGenerationError.ERROR_STRUCTURE );
 				}
 				if( destinationPort.isPrex() )	{
-						addError( "Port " + destinationPort.getName() + " cannot be marked as postex.", TMLCCodeGenerationError.ERROR_STRUCTURE );
+						addError( "Port " + destinationPort.getName() + " cannot be marked as postex", TMLCCodeGenerationError.ERROR_STRUCTURE );
 				}
 			}
 			if( !foundPrex )	{
@@ -184,11 +185,43 @@ public class TMLCCodeGenerationSyntaxCheck {
 						if( channel.isAForkChannel() )	{
 							for( TMLPort port: channel.getDestinationPorts() )	{
 								if( port.getName().equals( portName ) )	{
-										addError( "Port " + portName + " is part of a fork channel. It cannot be mapped to a CP.",
+										addError( "Port " + portName + " is part of a fork channel. It cannot be mapped to a CP",
 															TMLCCodeGenerationError.ERROR_STRUCTURE );
 								}
 							}
 						}
+					}
+				}
+			}
+		}
+
+		private void checkForXFTasks()	{	//check that the Operations have been correctly modeled with X and F tasks
+
+			HashSet<String> xTasksList = new HashSet<String>();
+			HashSet<String> fTasksList = new HashSet<String>();
+
+			for( TMLTask task: tmlm.getTasks() )	{
+				if( task.getTaskName().length() > 2 )	{
+					String name = task.getTaskName();
+					String prefix = task.getTaskName().substring(0,2);
+					if( prefix.equals( "X_" ) )	{
+						xTasksList.add( name.substring( 2, name.length() ) );
+					}
+					else if( prefix.equals( "F_" ) )	{
+						fTasksList.add( name.substring( 2, name.length() ) );
+					}
+					else	{
+						addError( "Task " + task.getTaskName() + " has a not a valid name: no X_ or F_ prefix has been detected", TMLCCodeGenerationError.ERROR_STRUCTURE );
+					}
+				}
+				else	{
+					addError( "Task " + task.getTaskName() + " has a not a valid name (too short)", TMLCCodeGenerationError.ERROR_STRUCTURE );
+				}
+			}
+			if( ( xTasksList.size() > 0 ) && ( fTasksList.size() > 0 ) )	{
+				for( String name: xTasksList )	{
+					if( !fTasksList.contains( name ) )	{
+						addError( "F task for operation " + name + " has not been instantiated", TMLCCodeGenerationError.ERROR_STRUCTURE );
 					}
 				}
 			}

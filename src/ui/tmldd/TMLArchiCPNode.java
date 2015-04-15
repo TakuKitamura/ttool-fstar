@@ -435,17 +435,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 			if( s.contains( SingleDmaMEC.sourceAddress ) )	{
 				newVector.set( SingleDmaMEC.sourceAddressIndex, getAttributeValue(s) );
 			}
-			if( s.contains( SingleDmaMEC.size ) )	{
-				newVector.set( SingleDmaMEC.sizeIndex, getAttributeValue(s) );
-			}
 			if( s.contains( SingleDmaMEC.counter ) )	{
 				newVector.set( SingleDmaMEC.counterIndex, getAttributeValue(s) );
-			}
-			if( s.contains( SingleDmaMEC.ID1 ) )	{
-				newVector.set( SingleDmaMEC.ID1Index, getAttributeValue(s) );
-			}
-			if( s.contains( SingleDmaMEC.bytesToTransfer ) )	{
-				newVector.set( SingleDmaMEC.bytesToTransferIndex, getAttributeValue(s) );
 			}
 		}
 		return newVector;
@@ -461,17 +452,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 			if( s.contains( DoubleDmaMEC.sourceAddress1 ) )	{
 				newVector.set( DoubleDmaMEC.sourceAddress1Index, getAttributeValue(s) );
 			}
-			if( s.contains( DoubleDmaMEC.size1 ) )	{
-				newVector.set( DoubleDmaMEC.size1Index, getAttributeValue(s) );
-			}
 			if( s.contains( DoubleDmaMEC.counter1 ) )	{
 				newVector.set( DoubleDmaMEC.counter1Index, getAttributeValue(s) );
-			}
-			if( s.contains( DoubleDmaMEC.ID1 ) )	{
-				newVector.set( DoubleDmaMEC.ID1Index, getAttributeValue(s) );
-			}
-			if( s.contains( DoubleDmaMEC.bytesToTransfer1 ) )	{
-				newVector.set( DoubleDmaMEC.bytesToTransfer1Index, getAttributeValue(s) );
 			}
 			if( s.contains( DoubleDmaMEC.destinationAddress2 ) )	{
 				newVector.set( DoubleDmaMEC.destinationAddress2Index, getAttributeValue(s) );
@@ -479,17 +461,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 			if( s.contains( DoubleDmaMEC.sourceAddress2 ) )	{
 				newVector.set( DoubleDmaMEC.sourceAddress2Index, getAttributeValue(s) );
 			}
-			if( s.contains( DoubleDmaMEC.size2 ) )	{
-				newVector.set( DoubleDmaMEC.size2Index, getAttributeValue(s) );
-			}
 			if( s.contains( DoubleDmaMEC.counter2 ) )	{
 				newVector.set( DoubleDmaMEC.counter2Index, getAttributeValue(s) );
-			}
-			if( s.contains( DoubleDmaMEC.ID12 ) )	{
-				newVector.set( DoubleDmaMEC.ID12Index, getAttributeValue(s) );
-			}
-			if( s.contains( DoubleDmaMEC.bytesToTransfer2 ) )	{
-				newVector.set( DoubleDmaMEC.bytesToTransfer2Index, getAttributeValue(s) );
 			}
 		}
 		return newVector;

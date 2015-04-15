@@ -64,14 +64,14 @@ public class BaseBuffer extends Buffer	{
 																						baseAddressType + SP + "base_address" + SC + CR + "};";
 
 	public BaseBuffer( String _name, TMLTask _task )	{
-		type = "FEP_BUFFER_TYPE";
+		type = "BASE_BUFFER_TYPE";
 		name = _name;
 		task = _task;
 	}
 
 	@Override public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
-		s.append( TAB + name + ".base_address = /* USER TO DO */;" + CR );
+		s.append( TAB + name + ".base_address = " + "(" + baseAddressType + ")" + baseAddressValue + ";" + CR );
 		return s.toString();
 	}
 	

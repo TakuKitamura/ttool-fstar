@@ -59,16 +59,10 @@ public class Signal	{
 	private String status_s = "bool f" + SC + CR;
 	private boolean status = false;
 
-	private String writeOffset_s = "int woff" + SC + CR;
-	private int writeOffset;
-
-	private String readOffset_s = "int roff" + SC + CR;
-	private int readOffset;
-
 	private String buffPointer_s = "void *pBuff" + SC + CR;
 	private Buffer buffPointer = null;
 	
-	public static final String DECLARATION = "struct SIG_TYPE	{\n\tbool f;\n\tint woff;\n\tint roff;\n\tvoid *pBuff;\n};\ntypedef struct SIG_TYPE SIG_TYPE;";
+	public static final String DECLARATION = "struct SIG_TYPE	{\n\tbool f;\n\tvoid *pBuff;\n};\n\ntypedef struct SIG_TYPE SIG_TYPE;";
 
 	private String name;
 	private TMLChannel channel;
@@ -77,11 +71,9 @@ public class Signal	{
 	public Signal( TMLChannel _ch )	{
 		channel = _ch;
 		if( _ch.isBasicChannel() )	{
-			//name = "SIGNAL__" + _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[3];
 			name = _ch.getOriginPort().getName();		//return the name of the source port of the channel
 		}
 		else if( _ch.isAForkChannel() )	{
-			//name = "SIGNAL__" + _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[2] + "__" + _ch.getName().split("__")[3];
 			name = _ch.getOriginPorts().get(0).getName();		//return the name of the source port of the channel
 		}
 		else if( _ch.isAJoinChannel() )	{

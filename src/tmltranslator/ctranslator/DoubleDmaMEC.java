@@ -50,45 +50,33 @@ import java.util.*;
 
 public class DoubleDmaMEC extends CPMEC	{
 
-	public static final String Context = "embb_dma_context";
+	public static final String Context = "EMBB_CONTEXT";
 	public static final String Ctx_cleanup = "dma_ctx_cleanup";
 
-	public static final int MaxParameters = 12;
+	public static final int MaxParameters = 6;
 	public static final int destinationAddress1Index = 0;
 	public static final int sourceAddress1Index = 1;
-	public static final int size1Index = 2;
-	public static final int counter1Index = 3;
-	public static final int ID1Index = 4;
-	public static final int bytesToTransfer1Index = 5;
-	public static final int destinationAddress2Index = 6;
-	public static final int sourceAddress2Index = 7;
-	public static final int size2Index = 8;
-	public static final int counter2Index = 9;
-	public static final int ID12Index = 10;
-	public static final int bytesToTransfer2Index = 11;
+	public static final int counter1Index = 2;
+	public static final int destinationAddress2Index = 3;
+	public static final int sourceAddress2Index = 4;
+	public static final int counter2Index = 5;
 
 	public static final String destinationAddress1 = "destinationAddress1";
 	public static final String sourceAddress1 = "sourceAddress1";
-	public static final String size1 = "size1";
 	public static final String counter1 = "counter1";
-	public static final String ID1 = "ID1";
-	public static final String bytesToTransfer1 = "bytesToTransfer1";
 	public static final String destinationAddress2 = "destinationAddress2";
 	public static final String sourceAddress2 = "sourceAddress2";
-	public static final String size2 = "size2";
 	public static final String counter2 = "counter2";
-	public static final String ID12 = "ID12";
-	public static final String bytesToTransfer2 = "bytesToTransfer2";
 
 	public DoubleDmaMEC( String ctxName )	{
 
 		node_type = "DoubleDmaMEC";
 		inst_type = "VOID";
 		inst_decl = "EMBB_DMA_CONTEXT";
-		buff_type = "MM_BUFF_TYPE";
+		buff_type = "MM_BUFFER_TYPE";
 		buff_init = "VOID";
 		exec_code = TAB + "embb_dma_start(&" + ctxName + ", /*USER TO DO: SRC_ADDRESS*/, /*USER TO DO: DST_ADDRESS*/, /*USER TO DO: NUM_SAMPLES */ );" + CR;	
-		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, /*USER TO DO: SRC_DEV*/ );" + CR;
+		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, NULL );" + CR;
 		cleanup_code = TAB + "embb_dma_ctx_cleanup(&" + ctxName + ");";
 	}
 
@@ -97,12 +85,12 @@ public class DoubleDmaMEC extends CPMEC	{
 		node_type = "DoubleDmaMEC";
 		inst_type = "VOID";
 		inst_decl = "EMBB_DMA_CONTEXT";
-		buff_type = "MM_BUFF_TYPE";
+		buff_type = "MM_BUFFER_TYPE";
 		buff_init = "VOID";
 		exec_code = TAB + "embb_dma_start(&" + ctxName + ", (uintptr_t) " + sourceAddress1 + ", (uintptr_t) " + destinationAddress1 + ", (size_t) " + size1 + " );" + CR;	
 		exec_code += TAB + "embb_dma_start(&" + ctxName + ", (uintptr_t) " + sourceAddress2 + ", (uintptr_t) " + destinationAddress2 + ", (size_t) " + size2 + " );" + CR;	
-		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, /*USER TO DO: SRC_DEV*/ );" + CR;
-		init_code += TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, /*USER TO DO: SRC_DEV*/ );" + CR;
+		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, NULL );" + CR;
+		init_code += TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, NULL );" + CR;
 		cleanup_code = TAB + "embb_dma_ctx_cleanup(&" + ctxName + ");";
 	}
 

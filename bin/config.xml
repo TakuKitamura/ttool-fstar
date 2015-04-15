@@ -7,16 +7,16 @@
 <RG2TLSAPath data="/packages/RT-LOTOS.0.12/bin/rg2tlsa" />
 <RGSTRAPPath data="/packages/RT-LOTOS.0.12/bin/rgstrap" />
 <!--DOTTYPath data="/usr/bin/dot" /-->
-<DOTTYPath data="/usr/bin/dotty" />
+<DOTTYPath data="/bin/dotty" />
 <DOTTYHost data="localhost" />
 <AldebaranHost data="localhost" />
-<AldebaranPath data="/packages/cadp/com/aldebaran" />
-<BcgioPath data="/packages/cadp/bin.iX86/bcg_io" />
-<BcgminPath data="/packages/cadp/bin.iX86/bcg_min" />
-<BisimulatorPath data="/packages/cadp/com/bcg_open" />
-<BcgmergePath data="/packages/cadp/com/bcg_merge" />
-<CaesarPath data="/packages/cadp/bin.iX86/caesar" />
-<CaesarOpenPath data="/packages/cadp/com/caesar.open" />
+<AldebaranPath data="/home/enrici/cadp/com/aldebaran" />
+<BcgioPath data="/home/enrici/cadp/bin.iX86/bcg_io" />
+<BcgminPath data="/home/enrici/cadp/bin.iX86/bcg_min" />
+<BisimulatorPath data="/home/enrici/cadp/com/bcg_open" />
+<BcgmergePath data="/home/enrici/cadp/com/bcg_merge" />
+<CaesarPath data="/home/enrici/cadp/bin.iX86/caesar" />
+<CaesarOpenPath data="/home/enrici/cadp/com/caesar.open" />
 <FILEPath data="/home/enrici/TURTLE/modeling" />
 <LIBPath data="/home/enrici/TURTLE/lib" />
 <IMGPath data="/home/enrici/TURTLE/figure" />
@@ -38,6 +38,7 @@
 <SystemCCodeExecuteCommand data="/home/enrici/TURTLE/simulators/c++2/run.x -ovcd /home/enrici/TURTLE/simulators/c++2/vcddump.vcd" />
 <SystemCCodeInteractiveExecuteCommand data="/home/enrici/TURTLE/simulators/c++2/run.x -server" />
 <TMLCodeDirectory data="/home/enrici/TURTLE/tmlcode" />
+<CcodeDirectory data="/home/enrici/TURTLE/Ccode" />
 <GTKWavePath data="/usr/bin/gtkwave" />
 <VCDPath data="/home/enrici/TURTLE/vcd/" />
 <UPPAALCodeDirectory data="/home/enrici/TURTLE/uppaal/" />
@@ -60,16 +61,7 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /home/enrici/TURTLE/uppaal/spec.xml"/>
 
-<LastOpenFile data="/home/hrua/stuxnet.xml"/>
-
-
-
-<LastWindowAttributes x="32" y="60" width="1333" height="595" max="false" />
-
-
+<LastOpenFile data="/home/enrici/embb/trunk/baseband/docs/andreae/Zigbee/models/MYZigbee_final.xml"/>
+<LastWindowAttributes x="-1" y="27" width="1368" height="742" max="true" />
+<LastWindowAttributes x="-1" y="0" width="1368" height="769" max="true" />
 </TURTLECONFIGURATION>
-
-
-
-
-

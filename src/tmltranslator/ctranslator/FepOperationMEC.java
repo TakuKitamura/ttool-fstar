@@ -37,7 +37,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class ArchUnitMEC, Model Extension Construct (MEC) class for architecture units
+   * Class FepOperationMEC, Model Extension Construct (MEC) class for Fep operations
    * Creation: 05/02/2014
    * @version 1.0 05/02/2014
    * @author Andrea ENRICI
@@ -50,37 +50,12 @@ import java.util.*;
 import java.nio.*;
 import myutil.*;
 
-public abstract class ArchUnitMEC	{
+public abstract class FepOperationMEC extends OperationMEC	{
 
-	public String CR = "\n";
-	public String TAB = "\t";
-	public String node_type = new String();
-	public String inst_type = new String();
-	public String inst_decl = new String();
-	public String buff_type = new String();
-	public String buff_init = new String();
-	/*public String init_code = new String();
-	public String exec_code = new String();
-	public String cleanup_code = new String();*/
-	
-	public String ID0 = new String();
-	public String OD0 = new String();
-	public String XOP = new String();
-	
-	public ArchUnitMEC()	{
-		node_type = "1";
-	}
 
-	/*public String getExecCode()	{
-		return exec_code;
-	}
-
-	public String getInitCode()	{
-		return init_code;
-	}*/
-
-	public String toString()	{
-		return node_type;// + CR + inst_decl + CR + inst_type + CR + buff_type + CR + buff_init + CR + exec_code + CR + init_code + CR + cleanup_code;
+	public FepOperationMEC()	{
+		name = "FepOperationMEC";
+		context = "FEP_CONTEXT";
 	}
 
 }	//End of class

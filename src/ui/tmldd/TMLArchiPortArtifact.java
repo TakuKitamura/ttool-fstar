@@ -288,8 +288,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 	        		sb.append( "\" lengthPermIntl=\"" + bufferParameters.get( InterleaverBuffer.lengthPermIntlIndex) );
 						break;
 						case Buffer.AdaifBuffer:	
-        			sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
         			sb.append("\" numSamples=\"" + bufferParameters.get( MMBuffer.numSamplesIndex ) );
+        			sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
 							break;
 						case Buffer.MapperBuffer:	
 							//data in
@@ -371,8 +371,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 												        		bufferParameters.add( elt.getAttribute( "lengthPermIntl" ) );
 																		break;
 																	case Buffer.AdaifBuffer:	
-												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
+												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 																		break;
 																	case Buffer.MapperBuffer:	
 																		//data in
