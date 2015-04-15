@@ -950,9 +950,12 @@ public class AVATAR2ProVerif {
         AvatarStateMachine asm = ab.getStateMachine();
         AvatarStartState ass = asm.getStartState();
 
-        macs.clear();
 
-        makeBlockProcesses(ab, asm, ass.getNext(0), p, tmpprocesses, states, null);
+        macs.clear();
+	
+	if (ass != null) {
+	    makeBlockProcesses(ab, asm, ass.getNext(0), p, tmpprocesses, states, null);
+	}
     }
 
     public void makeBlockProcesses(AvatarBlock _block, AvatarStateMachine _asm, AvatarStateMachineElement _asme, ProVerifProcess _p, LinkedList<ProVerifProcess> _processes, LinkedList<AvatarState> _states, String _choiceInfo) {

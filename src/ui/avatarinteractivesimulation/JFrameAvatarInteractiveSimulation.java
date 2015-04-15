@@ -113,7 +113,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     //List of transactions
 
     private JList listPendingTransactions;
-    private TGComponent selectedComponentForTransaction;
+    private TGComponent selectedComponentForTransaction1, selectedComponentForTransaction2;
     private AvatarSimulationBlock previousBlock;
 
     private int invokedLater = 0;
@@ -268,7 +268,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             Vector<AvatarSimulationPendingTransaction> ll = (Vector<AvatarSimulationPendingTransaction>)(ass.getPendingTransitions().clone());
 
             listPendingTransactions.clearSelection();
-            selectedComponentForTransaction = null;
+            selectedComponentForTransaction1 = null;
+	    selectedComponentForTransaction2 = null;
             if (ll != null) {
                 listPendingTransactions.setListData(ll);
                 int random = (int)(Math.floor((Math.random()*ll.size())));
@@ -1210,7 +1211,9 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         if (avspec.getReferenceObject() instanceof AvatarDesignPanel) {
             ((AvatarDesignPanel)(avspec.getReferenceObject())).resetMetElements();
 
-        }
+        } else if (avspec.getReferenceObject() instanceof AttackTreePanel) {
+	    ((AttackTreePanel)(avspec.getReferenceObject())).resetMetElements();
+	}
     }
 
     public void updateMetElements() {
@@ -1395,7 +1398,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     public boolean isSelectedComponentFromTransaction(TGComponent _tgc) {
         if (isVisible()) {
-            return _tgc == selectedComponentForTransaction;
+            return (_tgc == selectedComponentForTransaction1) || (_tgc == selectedComponentForTransaction2);
         }
         return false;
     }
@@ -1762,11 +1765,14 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         if (index > -1) {
             try {
                 AvatarSimulationPendingTransaction aspt = (AvatarSimulationPendingTransaction)(listPendingTransactions.getSelectedValue());
-                selectedComponentForTransaction = (TGComponent)(aspt.elementToExecute.getReferenceObject());
-                if ((selectedComponentForTransaction == null) && (aspt.linkedTransaction != null)) {
+                selectedComponentForTransaction1 = (TGComponent)(aspt.elementToExecute.getReferenceObject());
+                if ((selectedComponentForTransaction1 == null) && (aspt.linkedTransaction != null)) {
                     //TraceManager.addDev("Adding reference object: " + aspt.linkedTransaction.elementToExecute.getReferenceObject());
-                    selectedComponentForTransaction = (TGComponent)(aspt.linkedTransaction.elementToExecute.getReferenceObject());
-                }
+                    selectedComponentForTransaction1 = (TGComponent)(aspt.linkedTransaction.elementToExecute.getReferenceObject());
+		    selectedComponentForTransaction2 = null;
+                } else if (aspt.linkedTransaction != null) {
+		    selectedComponentForTransaction2 = (TGComponent)(aspt.linkedTransaction.elementToExecute.getReferenceObject());
+		}
                 if (!(busyMode == AvatarSpecificationSimulation.GATHER) && !(busyMode == AvatarSpecificationSimulation.EXECUTE)) {
                     ass.setIndexSelectedTransaction(listPendingTransactions.getSelectedIndex());
                 }
@@ -1782,7 +1788,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 }
             } catch (Exception ex){
                 TraceManager.addDev("Exception selected component");
-                selectedComponentForTransaction = null;
+                selectedComponentForTransaction1 = null;
+		selectedComponentForTransaction2 = null;
                 if (openDiagram.isSelected()) {
                     if ((previousBlock != null) &&  (animate.isSelected())){
                         mgui.openAVATARSMD(previousBlock.getName());
@@ -1794,7 +1801,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 }
             }
         } else {
-            selectedComponentForTransaction = null;
+            selectedComponentForTransaction1 = null;
+	    selectedComponentForTransaction2 = null;
             if ((previousBlock != null) && (animate.isSelected())) {
                 if (openDiagram.isSelected()) {
                     mgui.openAVATARSMD(previousBlock.getName());

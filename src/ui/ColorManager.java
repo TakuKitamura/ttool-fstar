@@ -132,7 +132,8 @@ public class ColorManager {
     public static final Color IOD_REFERENCE = new Color(216, 187, 249);
 
 
-    public static  Color ATD_BLOCK = new Color(196, 232, 195);
+    //public static  Color ATD_BLOCK = new Color(196, 232, 195);
+     public static  Color ATD_BLOCK = new Color(218, 218, 218);
     public static  Color ATD_ATTACK = new Color(214, 187, 158);
     public static  Color ATD_ROOT_ATTACK = new Color(243, 131, 10);
     public static  Color ATD_CONSTRAINT = new Color(191, 153, 161);

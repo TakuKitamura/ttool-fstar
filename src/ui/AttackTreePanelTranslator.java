@@ -110,19 +110,19 @@ public class AttackTreePanelTranslator {
         LinkedList<TGComponent> allComponents = (LinkedList<TGComponent>)(atdp.getAllComponentList());
 
         int nodeID = 0;
-	TGComponent father;
+        TGComponent father;
 
         //Create attacks, nodes
         for(TGComponent comp: allComponents) {
             if (comp instanceof ATDAttack) {
                 ATDAttack atdatt = (ATDAttack)comp;
-		Attack att;
-		String value = atdatt.getValue();
-		father = atdatt.getFather();
-		if ((father != null) && (father instanceof ATDBlock)) {
-		    value = ((ATDBlock)father).getNodeName() + "__" + value;
-		    
-		}
+                Attack att;
+                String value = atdatt.getValue();
+                father = atdatt.getFather();
+                if ((father != null) && (father instanceof ATDBlock)) {
+                    value = ((ATDBlock)father).getNodeName() + "__" + value;
+
+                }
                 att = new Attack(value, atdatt);
                 att.setRoot(atdatt.isRootAttack());
                 at.addAttack(att);
@@ -143,6 +143,12 @@ public class AttackTreePanelTranslator {
                     ANDNode andnode = new ANDNode("AND__" + nodeID, cons);
                     at.addNode(andnode);
                     listE.addCor(andnode, comp);
+
+                    //XOR
+                } else if (cons.isXOR()) {
+                    XORNode xornode = new XORNode("XOR__" + nodeID, cons);
+                    at.addNode(xornode);
+                    listE.addCor(xornode, comp);
 
                     //SEQUENCE
                 } else if (cons.isSequence()) {
@@ -172,9 +178,9 @@ public class AttackTreePanelTranslator {
                     int time;
                     try {
                         time = Integer.decode(eq).intValue();
-                        BeforeNode befnode = new BeforeNode("AFTER__" + nodeID, cons, time);
-                        at.addNode(befnode);
-                        listE.addCor(befnode, comp);
+                        AfterNode aftnode = new AfterNode("AFTER__" + nodeID, cons, time);
+                        at.addNode(aftnode);
+                        listE.addCor(aftnode, comp);
                     } catch (Exception e) {
                         CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Invalid time in after node");
                         ce.setTGComponent(comp);
@@ -271,7 +277,11 @@ public class AttackTreePanelTranslator {
                                 node1.setResultingAttack(att);
                             }
 
-                            node2.addInputAttack(att, new Integer(0));
+                            String val = comp.getValue().trim();
+                            if (val.length() == 0) {
+                                val = "0";
+                            }
+                            node2.addInputAttack(att, new Integer(val));
                         }
 
                     } catch (Exception e) {
@@ -295,8 +305,8 @@ public class AttackTreePanelTranslator {
         AvatarBlock mainBlock = new AvatarBlock("MainBlock", null);
         as.addBlock(mainBlock);
 
-	// Declare all attacks
-	declareAllAttacks(as, mainBlock);
+        // Declare all attacks
+        declareAllAttacks(as, mainBlock);
 
         // Make block for attacks
         makeLeafAttackBlocks(as, mainBlock);
@@ -310,24 +320,24 @@ public class AttackTreePanelTranslator {
     }
 
     private void declareAllAttacks(AvatarSpecification _as, AvatarBlock _main) {
-	AvatarRelation ar = new AvatarRelation("MainRelation", _main, _main, null);
-	ar.setAsynchronous(false);
-	ar.setPrivate(true);
-	ar.setBroadcast(false);
-	
-	_as.addRelation(ar);
-	for(Attack attack: at.getAttacks()) {
-	    avatartranslator.AvatarSignal makeAttack = new avatartranslator.AvatarSignal("make__" + attack.getName(), AvatarSignal.IN, (Object)(listE.getTG(attack)));
-	    _main.addSignal(makeAttack);
-	    avatartranslator.AvatarSignal stopMakeAttack = new avatartranslator.AvatarSignal("makeStop__" + attack.getName(), AvatarSignal.IN, listE.getTG(attack));
-	    _main.addSignal(stopMakeAttack);
-	    avatartranslator.AvatarSignal acceptAttack = new avatartranslator.AvatarSignal("accept__" + attack.getName(), AvatarSignal.OUT, listE.getTG(attack));
-	    _main.addSignal(acceptAttack);
-	    avatartranslator.AvatarSignal stopAcceptAttack = new avatartranslator.AvatarSignal("acceptStop__" + attack.getName(), AvatarSignal.OUT, listE.getTG(attack));
-	    _main.addSignal(stopAcceptAttack);
-	    ar.addSignals(makeAttack, acceptAttack);
-	    ar.addSignals(stopMakeAttack, stopAcceptAttack);
-	}
+        AvatarRelation ar = new AvatarRelation("MainRelation", _main, _main, null);
+        ar.setAsynchronous(false);
+        ar.setPrivate(true);
+        ar.setBroadcast(false);
+
+        _as.addRelation(ar);
+        for(Attack attack: at.getAttacks()) {
+            avatartranslator.AvatarSignal makeAttack = new avatartranslator.AvatarSignal("make__" + attack.getName(), AvatarSignal.OUT, (Object)(listE.getTG(attack)));
+            _main.addSignal(makeAttack);
+            avatartranslator.AvatarSignal stopMakeAttack = new avatartranslator.AvatarSignal("makeStop__" + attack.getName(), AvatarSignal.IN, listE.getTG(attack));
+            _main.addSignal(stopMakeAttack);
+            avatartranslator.AvatarSignal acceptAttack = new avatartranslator.AvatarSignal("accept__" + attack.getName(), AvatarSignal.IN, listE.getTG(attack));
+            _main.addSignal(acceptAttack);
+            avatartranslator.AvatarSignal stopAcceptAttack = new avatartranslator.AvatarSignal("acceptStop__" + attack.getName(), AvatarSignal.OUT, listE.getTG(attack));
+            _main.addSignal(stopAcceptAttack);
+            ar.addSignals(makeAttack, acceptAttack);
+            ar.addSignals(stopMakeAttack, stopAcceptAttack);
+        }
     }
 
     private void makeLeafAttackBlocks(AvatarSpecification _as, AvatarBlock _main) {
@@ -338,41 +348,44 @@ public class AttackTreePanelTranslator {
                 _as.addBlock(ab);
                 ab.setFather(_main);
 
-		avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("make__" + attack.getName());
-		avatartranslator.AvatarSignal stopAttack = _main.getAvatarSignalWithName("makeStop__" + attack.getName());
-		
-		if ((sigAttack != null) && (stopAttack != null)) {
-			makeAttackBlockSMD(ab, sigAttack, stopAttack, listE.getTG(attack));
-		}
-               
-            } else if (attack.isRoot()) {
-		// Make the block
+                avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("make__" + attack.getName());
+                avatartranslator.AvatarSignal stopAttack = _main.getAvatarSignalWithName("makeStop__" + attack.getName());
+
+                if ((sigAttack != null) && (stopAttack != null)) {
+                    makeAttackBlockSMD(ab, sigAttack, stopAttack, listE.getTG(attack));
+                }
+
+            } else if (attack.isFinal()) {
+                // Make the block
                 AvatarBlock ab = new AvatarBlock(attack.getName(), listE.getTG(attack));
                 _as.addBlock(ab);
                 ab.setFather(_main);
 
-		avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("accept__" + attack.getName());
-		avatartranslator.AvatarSignal stopAttack = _main.getAvatarSignalWithName("acceptStop__" + attack.getName());
-                
+                avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("accept__" + attack.getName());
+                avatartranslator.AvatarSignal stopAttack = _main.getAvatarSignalWithName("acceptStop__" + attack.getName());
+
                 makeAttackBlockSMD(ab, sigAttack, stopAttack, listE.getTG(attack));
 
-	    }
+            }
         }
     }
 
     private void makeAttackBlockSMD(AvatarBlock _ab, avatartranslator.AvatarSignal _sigAttack, avatartranslator.AvatarSignal _sigStop, Object _ref) {
+	Object _ref1 = _ref;
+	_ref = null;
         AvatarStateMachine asm = _ab.getStateMachine();
 
         AvatarStartState start = new AvatarStartState("start", _ref);
         AvatarState mainState = new AvatarState("main", _ref, false);
-        AvatarState mainStop = new AvatarState("myStop", _ref, false);
-        AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingAttack", _sigAttack, _ref);
+	AvatarState performedState = new AvatarState("main", _ref1, true);
+        AvatarState mainStop = new AvatarState("stop", _ref, false);
+        AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingAttack", _sigAttack, _ref1);
         AvatarActionOnSignal getStop = new AvatarActionOnSignal("GettingStop", _sigStop, _ref);
 
         asm.addElement(start);
         asm.setStartState(start);
         asm.addElement(mainState);
-        asm.addElement(mainStop);
+	asm.addElement(performedState);
         asm.addElement(getMake);
         asm.addElement(getStop);
 
@@ -390,6 +403,11 @@ public class AttackTreePanelTranslator {
         at = new AvatarTransition("at3", _ref);
         asm.addElement(at);
         getMake.addNext(at);
+        at.addNext(performedState);
+
+	at = new AvatarTransition("backToMain", _ref);
+        asm.addElement(at);
+        performedState.addNext(at);
         at.addNext(mainState);
 
         at = new AvatarTransition("at4", _ref);
@@ -406,53 +424,515 @@ public class AttackTreePanelTranslator {
 
 
     private void makeAttackNodeBlocks(AvatarSpecification _as, AvatarBlock _main) {
-	Attack att;
+        Attack att;
 
-	for(AttackNode node: at.getAttackNodes()) {
-	    if (node.isWellFormed()) {
-		// Make the block
+        for(AttackNode node: at.getAttackNodes()) {
+            if (node.isWellFormed()) {
+                // Make the block
                 AvatarBlock ab = new AvatarBlock(node.getName(), listE.getTG(node));
                 _as.addBlock(ab);
                 ab.setFather(_main);
 
-		if (node instanceof ANDNode) {
-		    makeANDNode(_as, _main, ab, (ANDNode)node, listE.getTG(node));
-		}
-	    }
-	}
+                if (node instanceof ANDNode) {
+                    makeANDNode(_as, _main, ab, (ANDNode)node, listE.getTG(node));
+                } else if (node instanceof ORNode) {
+                    makeORNode(_as, _main, ab, (ORNode)node, listE.getTG(node));
+                } else if (node instanceof XORNode) {
+                    makeXORNode(_as, _main, ab, (XORNode)node, listE.getTG(node));
+                } else if (node instanceof SequenceNode) {
+                    makeSequenceNode(_as, _main, ab, (SequenceNode)node, listE.getTG(node));
+                } else if (node instanceof AfterNode) {
+                    makeAfterNode(_as, _main, ab, (AfterNode)node, listE.getTG(node));
+                } else if (node instanceof BeforeNode) {
+                    makeBeforeNode(_as, _main, ab, (BeforeNode)node, listE.getTG(node));
+                }
+            }
+        }
     }
 
 
-    private void makeANDNode(AvatarSpecification _as, AvatarBlock _main, AvatarBlock _ab, ANDNode node, Object _ref) {
-	AvatarStateMachine asm = _ab.getStateMachine();
+    private void makeANDNode(AvatarSpecification _as, AvatarBlock _main, AvatarBlock _ab, ANDNode _node, Object _ref) {
+	Object _ref1 = _ref;
+	_ref = null;
+        AvatarStateMachine asm = _ab.getStateMachine();
 
-	// Basic machine
-	AvatarStartState start = new AvatarStartState("start", _ref);
+        // Basic machine
+        AvatarStartState start = new AvatarStartState("start", _ref);
         AvatarState mainState = new AvatarState("main", _ref, false);
-	AvatarState endState = new AvatarState("end", _ref, false);
-	AvatarState overallState = new AvatarState("overall", _ref, false);
-        AvatarState mainStop = new AvatarState("myStop", _ref, false);
-	asm.addElement(start);
+        AvatarState endState = new AvatarState("end", _ref, false);
+        AvatarState overallState = new AvatarState("overall", _ref, false);
+        asm.addElement(start);
         asm.setStartState(start);
         asm.addElement(mainState);
-	asm.addElement(endState);
-	asm.addElement(overallState);
-        asm.addElement(mainStop);
-	AvatarTransition at = new AvatarTransition("at1", _ref);
+        asm.addElement(endState);
+        asm.addElement(overallState);
+        AvatarTransition atF = new AvatarTransition("at1", _ref);
+        asm.addElement(atF);
+        start.addNext(atF);
+        atF.addNext(mainState);
+        String finalGuard = "";
+        for(Attack att: _node.getInputAttacks()) {
+            AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ref);
+            if (finalGuard.length() ==0) {
+                finalGuard += "(" + att.getName() + "__performed == true)";
+            } else {
+                finalGuard += " && (" + att.getName() + "__performed == true)";
+            }
+            _ab.addAttribute(aa);
+            atF.addAction(att.getName() + "__performed = false");
+
+            avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
+            AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
+            asm.addElement(acceptAttack);
+            AvatarTransition at = new AvatarTransition("at_toInputAttack", _ref);
+            asm.addElement(at);
+            mainState.addNext(at);
+            at.addNext(acceptAttack);
+            at.setGuard("["+att.getName() + "__performed == false]");
+            at = new AvatarTransition("at_fromInputAttack", _ref);
+            at.addAction(att.getName() + "__performed = true");
+            asm.addElement(at);
+            acceptAttack.addNext(at);
+            at.addNext(mainState);
+
+
+        }
+
+        // Adding resulting attack
+        AvatarTransition at = new AvatarTransition("at_toEnd", _ref);
+        asm.addElement(at);
+        mainState.addNext(at);
+        at.addNext(endState);
+        at.setGuard("[" + finalGuard + "]");
+
+        Attack resulting = _node.getResultingAttack();
+        avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("make__" + resulting.getName());
+        AvatarActionOnSignal resultingAttack = new AvatarActionOnSignal("ResultingAttack", sigAttack, _ref1);
+        asm.addElement(resultingAttack);
+        at = new AvatarTransition("at_toResultingAttack", _ref);
+        asm.addElement(at);
+        endState.addNext(at);
+        at.addNext(resultingAttack);
+        at = new AvatarTransition("at_Overall", _ref);
+        asm.addElement(at);
+        resultingAttack.addNext(at);
+        at.addNext(overallState);
+
+    }
+
+
+    private void makeORNode(AvatarSpecification _as, AvatarBlock _main, AvatarBlock _ab, ORNode _node, Object _ref) {
+	Object _ref1 = _ref;
+	_ref = null;
+        AvatarStateMachine asm = _ab.getStateMachine();
+
+        // Basic machine
+        AvatarStartState start = new AvatarStartState("start", _ref);
+        AvatarState mainState = new AvatarState("main", _ref, false);
+        AvatarState endState = new AvatarState("end", _ref, false);
+        AvatarState overallState = new AvatarState("overall", _ref, false);
+        asm.addElement(start);
+        asm.setStartState(start);
+        asm.addElement(mainState);
+        asm.addElement(endState);
+        asm.addElement(overallState);
+
+        AvatarTransition atF = new AvatarTransition("at1", _ref);
+        asm.addElement(atF);
+        start.addNext(atF);
+        atF.addNext(mainState);
+        String finalGuard = "";
+        for(Attack att: _node.getInputAttacks()) {
+            AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ref);
+            if (finalGuard.length() ==0) {
+                finalGuard += "(" + att.getName() + "__performed == true)";
+            } else {
+                finalGuard += " || (" + att.getName() + "__performed == true)";
+            }
+            _ab.addAttribute(aa);
+            atF.addAction(att.getName() + "__performed = false");
+
+            // From Main
+            avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
+            AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
+            asm.addElement(acceptAttack);
+            AvatarTransition at = new AvatarTransition("at_toInputAttack", _ref);
+            asm.addElement(at);
+            mainState.addNext(at);
+            at.addNext(acceptAttack);
+            at.setGuard("["+att.getName() + "__performed == false]");
+            at = new AvatarTransition("at_fromInputAttack", _ref);
+            at.addAction(att.getName() + "__performed = true");
+            asm.addElement(at);
+            acceptAttack.addNext(at);
+            at.addNext(mainState);
+
+            // Link from End
+            acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
+            asm.addElement(acceptAttack);
+            at = new AvatarTransition("at_toInputAttack", _ref);
+            asm.addElement(at);
+            endState.addNext(at);
+            at.addNext(acceptAttack);
+            at.setGuard("["+att.getName() + "__performed == false]");
+            at = new AvatarTransition("at_fromInputAttack", _ref);
+            at.addAction(att.getName() + "__performed = true");
+            asm.addElement(at);
+            acceptAttack.addNext(at);
+            at.addNext(endState);
+
+            // Link from Overall
+            acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
+            asm.addElement(acceptAttack);
+            at = new AvatarTransition("at_toInputAttack", _ref);
+            asm.addElement(at);
+            overallState.addNext(at);
+            at.addNext(acceptAttack);
+            at.setGuard("["+att.getName() + "__performed == false]");
+            at = new AvatarTransition("at_fromInputAttack", _ref);
+            at.addAction(att.getName() + "__performed = true");
+            asm.addElement(at);
+            acceptAttack.addNext(at);
+            at.addNext(overallState);
+
+
+        }
+
+
+	// Adding resulting attack
+        AvatarTransition at = new AvatarTransition("at_toEnd", _ref);
+        asm.addElement(at);
+        mainState.addNext(at);
+        at.addNext(endState);
+        at.setGuard("[" + finalGuard + "]");
+
+        Attack resulting = _node.getResultingAttack();
+        avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("make__" + resulting.getName());
+        AvatarActionOnSignal resultingAttack = new AvatarActionOnSignal("ResultingAttack", sigAttack, _ref1);
+        asm.addElement(resultingAttack);
+        at = new AvatarTransition("at_toResultingAttack", _ref);
+        asm.addElement(at);
+        endState.addNext(at);
+        at.addNext(resultingAttack);
+        at = new AvatarTransition("at_Overall", _ref);
+        asm.addElement(at);
+        resultingAttack.addNext(at);
+        at.addNext(overallState);
+
+    }
+
+
+    private void makeXORNode(AvatarSpecification _as, AvatarBlock _main, AvatarBlock _ab, XORNode _node, Object _ref) {
+	Object _ref1 = _ref;
+	_ref = null;
+        AvatarStateMachine asm = _ab.getStateMachine();
+
+        // Basic machine
+        AvatarStartState start = new AvatarStartState("start", _ref);
+        AvatarState mainState = new AvatarState("main", _ref, false);
+	AvatarState stoppingAll = new AvatarState("stoppingAll", _ref, false);
+        AvatarState endState = new AvatarState("end", _ref, false);
+        AvatarState overallState = new AvatarState("overall", _ref, false);
+        asm.addElement(start);
+        asm.setStartState(start);
+        asm.addElement(mainState);
+        asm.addElement(endState);
+        asm.addElement(overallState);
+	asm.addElement(stoppingAll);
+
+	
+        AvatarTransition atF = new AvatarTransition("at1", _ref);
+        asm.addElement(atF);
+        start.addNext(atF);
+        atF.addNext(mainState);
+        String finalGuard = "oneDone == true";
+	String toEndGuard = "";
+	AvatarAttribute oneDone = new AvatarAttribute("oneDone", AvatarType.BOOLEAN, _ref);
+	_ab.addAttribute(oneDone);
+	atF.addAction("oneDone = false");
+        for(Attack att: _node.getInputAttacks()) {
+            AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ref);
+            _ab.addAttribute(aa);
+            atF.addAction(att.getName() + "__performed = false");
+	    if (toEndGuard.length() ==0) {
+                toEndGuard += "(" + att.getName() + "__performed == true)";
+            } else {
+                toEndGuard += " && (" + att.getName() + "__performed == true)";
+            }
+            // From Main
+            avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
+            AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
+            asm.addElement(acceptAttack);
+            AvatarTransition at = new AvatarTransition("at_toInputAttack", _ref);
+            asm.addElement(at);
+            mainState.addNext(at);
+            at.addNext(acceptAttack);
+            at.setGuard("[("+att.getName() + "__performed == false) && (oneDone == false)]");
+            at = new AvatarTransition("at_fromInputAttack", _ref);
+            at.addAction(att.getName() + "__performed = true");
+	    at.addAction("oneDone = true");
+            asm.addElement(at);
+            acceptAttack.addNext(at);
+            at.addNext(mainState);
+
+            // Link from stoppingAll
+	    sigAtt = _main.getAvatarSignalWithName("acceptStop__" + att.getName());
+            acceptAttack = new AvatarActionOnSignal("StopAttack", sigAtt, _ref);
+            asm.addElement(acceptAttack);
+            at = new AvatarTransition("at_toInputAttack", _ref);
+            asm.addElement(at);
+            stoppingAll.addNext(at);
+            at.addNext(acceptAttack);
+            at.setGuard("["+att.getName() + "__performed == false]");
+            at = new AvatarTransition("at_fromInputAttack", _ref);
+            at.addAction(att.getName() + "__performed = true");
+            asm.addElement(at);
+            acceptAttack.addNext(at);
+            at.addNext(stoppingAll);
+
+         }
+
+	// Adding link to stopping all
+	AvatarTransition at = new AvatarTransition("at_toStoppingAll", _ref);
+        asm.addElement(at);
+        mainState.addNext(at);
+        at.addNext(stoppingAll);
+        at.setGuard("[" + finalGuard + "]");
+
+
+        // Adding resulting attack
+        at = new AvatarTransition("at_toEnd", _ref);
+        asm.addElement(at);
+        stoppingAll.addNext(at);
+        at.addNext(endState);
+        at.setGuard("[" + toEndGuard + "]");
+
+        Attack resulting = _node.getResultingAttack();
+        avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("make__" + resulting.getName());
+        AvatarActionOnSignal resultingAttack = new AvatarActionOnSignal("ResultingAttack", sigAttack, _ref1);
+        asm.addElement(resultingAttack);
+        at = new AvatarTransition("at_toResultingAttack", _ref);
+        asm.addElement(at);
+        endState.addNext(at);
+        at.addNext(resultingAttack);
+        at = new AvatarTransition("at_Overall", _ref);
+        asm.addElement(at);
+        resultingAttack.addNext(at);
+        at.addNext(overallState);
+
+    }
+
+
+
+    private void makeSequenceNode(AvatarSpecification _as, AvatarBlock _main, AvatarBlock _ab, SequenceNode _node, Object _ref) {
+	Object _ref1 = _ref;
+	_ref = null;
+        AvatarStateMachine asm = _ab.getStateMachine();
+        _node.orderAttacks();
+
+        // Basic machine
+        AvatarStartState start = new AvatarStartState("start", _ref);
+        AvatarState mainState = new AvatarState("main", _ref, false);
+        AvatarState endState = new AvatarState("end", _ref, false);
+        AvatarState overallState = new AvatarState("overall", _ref, false);
+        asm.addElement(start);
+        asm.setStartState(start);
+        asm.addElement(mainState);
+        asm.addElement(endState);
+        asm.addElement(overallState);
+
+
+        AvatarTransition at = new AvatarTransition("at", _ref);
         asm.addElement(at);
         start.addNext(at);
         at.addNext(mainState);
-	
-	// Adding resulting attack
-	
+
+        AvatarState previousState = mainState;
+
+        // Chaining accept attacks
+        for(Attack att: _node.getInputAttacks()) {
+            AvatarState state = new AvatarState("state__" + att.getName(), _ref);
+            asm.addElement(state);
+            avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
+            AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
+            asm.addElement(acceptAttack);
+
+            at = new AvatarTransition("at", _ref);
+            asm.addElement(at);
+            previousState.addNext(at);
+            at.addNext(acceptAttack);
+            at = new AvatarTransition("at", _ref);
+            asm.addElement(at);
+            acceptAttack.addNext(at);
+            at.addNext(state);
+            previousState = state;
+        }
+
+        at = new AvatarTransition("at", _ref);
+        asm.addElement(at);
+        previousState.addNext(at);
+        at.addNext(endState);
 
 
-	// Computing accept attacks
-	
+        // Performing resulting attack
+        Attack resulting = _node.getResultingAttack();
+        avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("make__" + resulting.getName());
+        AvatarActionOnSignal resultingAttack = new AvatarActionOnSignal("ResultingAttack", sigAttack, _ref1);
+        asm.addElement(resultingAttack);
+        at = new AvatarTransition("at_toResultingAttack", _ref);
+        asm.addElement(at);
+        endState.addNext(at);
+        at.addNext(resultingAttack);
+        at = new AvatarTransition("at_Overall", _ref);
+        asm.addElement(at);
+        resultingAttack.addNext(at);
+        at.addNext(overallState);
+    }
 
-	
+    private void makeAfterNode(AvatarSpecification _as, AvatarBlock _main, AvatarBlock _ab, AfterNode _node, Object _ref) {
+	Object _ref1 = _ref;
+	_ref = null;
+        AvatarStateMachine asm = _ab.getStateMachine();
+        _node.orderAttacks();
 
-	
+        // Basic machine
+        AvatarStartState start = new AvatarStartState("start", _ref);
+        AvatarState mainState = new AvatarState("main", _ref, false);
+        AvatarState endState = new AvatarState("end", _ref, false);
+        AvatarState overallState = new AvatarState("overall", _ref, false);
+        asm.addElement(start);
+        asm.setStartState(start);
+        asm.addElement(mainState);
+        asm.addElement(endState);
+        asm.addElement(overallState);
+
+
+        AvatarTransition at = new AvatarTransition("at", _ref);
+        asm.addElement(at);
+        start.addNext(at);
+        at.addNext(mainState);
+
+        AvatarState previousState = mainState;
+
+        // Chaining accept attacks
+        int cpt = 0;
+        for(Attack att: _node.getInputAttacks()) {
+            AvatarState state = new AvatarState("state__" + att.getName(), _ref);
+            asm.addElement(state);
+            avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
+            AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
+            asm.addElement(acceptAttack);
+
+            at = new AvatarTransition("at", _ref);
+            asm.addElement(at);
+            previousState.addNext(at);
+            at.addNext(acceptAttack);
+            if (cpt > 0) {
+                at.setDelays("" + _node.getTime(), "" + _node.getTime());
+            }
+            at = new AvatarTransition("at", _ref);
+            asm.addElement(at);
+            acceptAttack.addNext(at);
+            at.addNext(state);
+            previousState = state;
+            cpt ++;
+        }
+
+        at = new AvatarTransition("at", _ref);
+        asm.addElement(at);
+        previousState.addNext(at);
+        at.addNext(endState);
+
+
+        // Performing resulting attack
+        Attack resulting = _node.getResultingAttack();
+        avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("make__" + resulting.getName());
+        AvatarActionOnSignal resultingAttack = new AvatarActionOnSignal("ResultingAttack", sigAttack, _ref1);
+        asm.addElement(resultingAttack);
+        at = new AvatarTransition("at_toResultingAttack", _ref);
+        asm.addElement(at);
+        endState.addNext(at);
+        at.addNext(resultingAttack);
+        at = new AvatarTransition("at_Overall", _ref);
+        asm.addElement(at);
+        resultingAttack.addNext(at);
+        at.addNext(overallState);
+    }
+
+    private void makeBeforeNode(AvatarSpecification _as, AvatarBlock _main, AvatarBlock _ab, BeforeNode _node, Object _ref) {
+	Object _ref1 = _ref;
+	_ref = null;
+        AvatarStateMachine asm = _ab.getStateMachine();
+        _node.orderAttacks();
+
+        // Basic machine
+        AvatarStartState start = new AvatarStartState("start", _ref);
+        AvatarState mainState = new AvatarState("main", _ref, false);
+        AvatarState endState = new AvatarState("end", _ref, false);
+        AvatarState overallState = new AvatarState("overall", _ref, false);
+        AvatarState timeout = new AvatarState("timeout", _ref, false);
+        asm.addElement(start);
+        asm.setStartState(start);
+        asm.addElement(mainState);
+        asm.addElement(endState);
+        asm.addElement(overallState);
+        asm.addElement(timeout);
+
+
+        AvatarTransition at = new AvatarTransition("at", _ref);
+        asm.addElement(at);
+        start.addNext(at);
+        at.addNext(mainState);
+
+        AvatarState previousState = mainState;
+
+        // Chaining accept attacks
+        int cpt = 0;
+        for(Attack att: _node.getInputAttacks()) {
+            AvatarState state = new AvatarState("state__" + att.getName(), _ref);
+            asm.addElement(state);
+            avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
+            AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
+            asm.addElement(acceptAttack);
+
+            at = new AvatarTransition("at", _ref);
+            asm.addElement(at);
+            previousState.addNext(at);
+            at.addNext(acceptAttack);
+            if (cpt > 0) {
+                at = new AvatarTransition("at_totimeout", _ref);
+                asm.addElement(at);
+                previousState.addNext(at);
+                at.addNext(timeout);
+                at.setDelays("" + _node.getTime(), "" + _node.getTime());
+            }
+            at = new AvatarTransition("at", _ref);
+            asm.addElement(at);
+            acceptAttack.addNext(at);
+            at.addNext(state);
+            previousState = state;
+            cpt ++;
+        }
+
+        at = new AvatarTransition("at", _ref);
+        asm.addElement(at);
+        previousState.addNext(at);
+        at.addNext(endState);
+
+
+        // Performing resulting attack
+        Attack resulting = _node.getResultingAttack();
+        avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("make__" + resulting.getName());
+        AvatarActionOnSignal resultingAttack = new AvatarActionOnSignal("ResultingAttack", sigAttack, _ref1);
+        asm.addElement(resultingAttack);
+        at = new AvatarTransition("at_toResultingAttack", _ref);
+        asm.addElement(at);
+        endState.addNext(at);
+        at.addNext(resultingAttack);
+        at = new AvatarTransition("at_Overall", _ref);
+        asm.addElement(at);
+        resultingAttack.addNext(at);
+        at.addNext(overallState);
     }
 
 

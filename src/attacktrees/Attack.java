@@ -84,5 +84,13 @@ public class Attack {
     public boolean isLeaf() {
 	return (originNode == null);
     }
+
+    public boolean isFinal() {
+	if (destinationNodes.size() == 0) {
+	    return true;
+	}
+
+	return false;
+    }
     
 }

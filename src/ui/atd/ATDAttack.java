@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class ATDAttack extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes {
+public class ATDAttack extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes, CheckableAccessibility {
     private int textY1 = 3;
     private int textY2 = 3;
 

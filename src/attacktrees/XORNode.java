@@ -36,7 +36,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TimeNode
+ * Class ORNode
  * Creation: 13/04/2015
  * @version 1.0 13/04/2015
  * @author Ludovic APVRILLE
@@ -48,16 +48,12 @@ package attacktrees;
 import java.util.*;
 
 
-public abstract class TimeNode extends AttackNode{ 
-    protected int time;
-
-    public TimeNode(String _name, Object _objectReference, int _time) {
-	super(_name, _objectReference);
-	time = _time;
+public class XORNode extends BooleanNode { 
+    
+    public XORNode(String _name, Object _referenceObject) {
+	super(_name, _referenceObject);
+	type = "XOR";
     }
-
-    public int getTime() {
-	return time;
-    }
+    
     
 }

@@ -210,6 +210,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public final static byte EDIT_PROVERIF_OK = 46;
     public final static byte AVATAR_SYNTAXCHECKING_OK = 47;
     public final static byte PANEL_CHANGED = 48;
+     public final static byte ATTACKTREE_SYNTAXCHECKING_OK = 49;
 
     public final static int INCREMENT = 10;
 
@@ -667,6 +668,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(true);
             actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS].setEnabled(true);
             actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(true);
+            break;
+	case ATTACKTREE_SYNTAXCHECKING_OK:
+            actions[TGUIAction.ACT_AVATAR_SIM].setEnabled(true);
+            actions[TGUIAction.ACT_AVATAR_FV_UPPAAL].setEnabled(true);
+            actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(false);
+            actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS].setEnabled(false);
+            actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(false);
             break;
         case REQ_OK:
             //actions[TGUIAction.ACT_VIEW_MATRIX].setEnabled(true);
@@ -3174,7 +3182,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             AttackTreePanel atp = (AttackTreePanel) tp;
             b = gtm.translateAttackTreePanel(atp);
             if (b) {
-                setMode(MainGUI.AVATAR_SYNTAXCHECKING_OK);
+		setMode(MainGUI.ATTACKTREE_SYNTAXCHECKING_OK);
                 ret = true;
                 if (!automatic) {
                     JOptionPane.showMessageDialog(frame,

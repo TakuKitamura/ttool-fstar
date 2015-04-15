@@ -110,5 +110,26 @@ public abstract class AttackNode {
 	
 	return ret;
     }
+
+    // Order attacks according to the Integer value
+    public void orderAttacks() {
+	ArrayList<Attack> newAttacks = new ArrayList<Attack>();
+	ArrayList<Integer> newInputValues = new ArrayList<Integer>();
+
+	for(Integer i: inputValues) {
+	    newInputValues.add(i);
+	}
+
+	// sort newInputValues
+	Collections.sort(newInputValues);
+
+	for(Integer i: newInputValues) {
+	    int index = inputValues.indexOf(i);
+	    newAttacks.add(inputAttacks.get(index));
+	}
+
+	inputAttacks = newAttacks;
+	inputValues = newInputValues;	
+    }
     
 }

@@ -60,7 +60,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
     private int textY1 = 5;
     //private int textY2 = 30;
 
-    public static final String[] STEREOTYPES = {"<<OR>>", "<<AND>>", "<<SEQUENCE>>", "<<BEFORE>>", "<<AFTER>>"};
+    public static final String[] STEREOTYPES = {"<<OR>>", "<<XOR>>", "<<AND>>", "<<SEQUENCE>>", "<<BEFORE>>", "<<AFTER>>"};
 
     protected String oldValue = "";
 
@@ -237,20 +237,24 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
 	return (value.compareTo(STEREOTYPES[0]) == 0);
     }
 
-    public boolean isAND() {
+    public boolean isXOR() {
 	return (value.compareTo(STEREOTYPES[1]) == 0);
     }
 
-    public boolean isSequence() {
+    public boolean isAND() {
 	return (value.compareTo(STEREOTYPES[2]) == 0);
     }
 
-    public boolean isBefore() {
+    public boolean isSequence() {
 	return (value.compareTo(STEREOTYPES[3]) == 0);
     }
 
-    public boolean isAfter() {
+    public boolean isBefore() {
 	return (value.compareTo(STEREOTYPES[4]) == 0);
+    }
+
+    public boolean isAfter() {
+	return (value.compareTo(STEREOTYPES[5]) == 0);
     }
 
     protected String translateExtraParam() {
