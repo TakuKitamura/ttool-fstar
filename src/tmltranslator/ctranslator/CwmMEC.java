@@ -55,6 +55,7 @@ public class CwmMEC extends FepOperationMEC	{
 
 		name = "Component Wise Multiplication MEC";
 		exec_code = TAB + "/*firm instruction*/" + CR +
+			"int status;" + CR + TAB +
 			"fep_set_l(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->num_samples);" + CR +
 			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->bank);" + CR +
 			"fep_set_bx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->base_address);" + CR +
@@ -63,7 +64,7 @@ public class CwmMEC extends FepOperationMEC	{
 			"fep_set_bz(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR +
 			"fep_set_tz(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->data_type);" + CR +
 			"/*start execution*/" + CR +
-			"fep_do(&" + _ctxName + ");" + CR;
+			"status = fep_do(&" + _ctxName + ");" + CR;
 	
 		init_code ="/***** INIT " + _ctxName.split("_ctx")[0] + " *******/" + CR +
 			"void init_" + _ctxName.split("_ctx")[0] + "(void){" + CR + TAB +

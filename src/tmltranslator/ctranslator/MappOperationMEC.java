@@ -47,16 +47,15 @@
 package tmltranslator.ctranslator;;
 
 import java.util.*;
-//import Ctranslator.*;
 
 public class MappOperationMEC extends OperationMEC	{
 
-
 	public MappOperationMEC( String ctxName, String ID0, String OD0 )	{
 		name = "MapperOperationMEC";
-		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
-			"/*start execution*/" + CR + TAB +
-			"mapper_do(&" + ctxName + ");" + CR;
+		exec_code = TAB + CR + TAB + "/*start execution*/" + CR + TAB +
+								"int status;" + CR + TAB +
+								"mapper_start(&" + ctxName + ");" + CR + TAB +
+								"status = mapper_wait(&" + ctxName + ");" + CR;
 		
 		init_code ="/***** INIT " + ctxName.split("_ctx")[0] + " *******/" + CR +
 			"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB +

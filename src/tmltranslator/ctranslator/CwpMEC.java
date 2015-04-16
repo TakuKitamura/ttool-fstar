@@ -55,6 +55,7 @@ public class CwpMEC extends FepOperationMEC	{
 
 		name = "Component Wise Product MEC";
 		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
+			"int status;" + CR + TAB +
 			"fep_set_l(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->num_samples);" + CR + TAB +
 			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->bank);" + CR + TAB +
 			"fep_set_bx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->base_address);" + CR + TAB +
@@ -63,7 +64,7 @@ public class CwpMEC extends FepOperationMEC	{
 			"fep_set_bz(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR + TAB +
 			"fep_set_tz(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->data_type);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
-			"fep_do(&" + _ctxName + ");" + CR;
+			"status = fep_do(&" + _ctxName + ");" + CR;
 	
 		init_code ="/***** INIT " + _ctxName.split("_ctx")[0] + " *******/" + CR +
 			"void init_" + _ctxName.split("_ctx")[0] + "(void){" + CR + TAB +

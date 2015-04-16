@@ -53,9 +53,10 @@ public class IntlOperationMEC extends OperationMEC	{
 
 	public IntlOperationMEC( String ctxName, String ID0, String OD0 )	{
 		name = "InterleaverOperationMEC";
-		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
-			"/*start execution*/" + CR + TAB +
-			"intl_do(&" + ctxName + ");" + CR;
+		exec_code = TAB + "/*start execution*/" + CR + TAB +
+								"int status;" + CR + TAB +
+								"intl_start(&" + ctxName + ");" + CR + TAB +
+								"status = intl_wait(&" + ctxName + ");" + CR;
 		
 		init_code ="/***** INIT " + ctxName.split("_ctx")[0] + " *******/" + CR +
 			"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB +

@@ -54,7 +54,9 @@ public class AdaifOperationMEC extends OperationMEC	{
 
 	public AdaifOperationMEC( String ctxName, String ID0, String OD0 )	{
 		name = "AdaifOperationMEC";
-		exec_code = "adaif_do(&" + ctxName + ");" + CR;
+		exec_code = TAB + "int status;" + CR + TAB +
+								"adaif_wait(&" + ctxName + ");" + CR + TAB +
+								"status = adaif_wait(&" + ctxName + ");" + CR;
 	
 		init_code =
 			"void init_" + ctxName.split("_ctx")[0] + "( void )\t{" + CR + TAB +

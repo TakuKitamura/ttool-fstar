@@ -696,10 +696,10 @@ public class TMLCCodeGeneration	{
 							"#include <embb/mapper.h>" + CR +
 							"#include <embb/adaif.h>" + CR +
 							"#include <embb/memory.h>" + CR2 +
-							"char fep_mss[0x10000];" + CR +
-							"char adaif_mss[0x10000];" + CR +
-							"char intl_mss[0x10000];" + CR +
-							"char mapper_mss[0x10000];" + CR2;
+							"extern char fep_mss[];" + CR +
+							"extern char adaif_mss[];" + CR +
+							"extern char intl_mss[];" + CR +
+							"extern char mapper_mss[];" + CR2;
 		return s;
 	}
 
@@ -809,6 +809,14 @@ public class TMLCCodeGeneration	{
 		for( Signal sig: signalsList )	{
 			s.append( sig.getName() + "," + CR );
 		}
+		s.append( postexList.get(0).getName() + "," + CR );
+		/*for( Operation op: operationsList )	{
+			if( op.isPostex() )	{
+				TraceManager.addDev( "OPERATION: " + op.getName() );
+				TraceManager.addDev( "\t\tinSignal = " + op.getInSignals().get(0).getName() );
+			}
+		}
+		System.exit(0);*/
 		s.append( "NUM_SIGS };" + CR2 + "enum ops_enu	{" + CR );
 
 		for( Operation op: operationsList )	{
@@ -908,18 +916,20 @@ public class TMLCCodeGeneration	{
 
 		for( Operation op: operationsList )	{
 			if( op.getType() == Operation.SDR )	{
-				programString.append( generateSDROperation( op, op.getSDRTasks().get( Operation.X_TASK ), op.getSDRTasks().get( Operation.F_TASK ) ) );
+				programString.append( generateSDROperation( op ) );
 			}
 		}
 	}
 
-	private String generateSDROperation( Operation op, TMLTask xTask, TMLTask fTask )	{
+	private String generateSDROperation( Operation op )	{
 		
 		//For SDR operations the xTask is used to retrieve the mapped unit
 		String signalOutName = "";
 		String signalInName = "";
-		String ctxName = op.getContextName();
 		StringBuffer code = new StringBuffer();
+		String ctxName = op.getContextName();
+		TMLTask xTask = op.getSDRTasks().get( Operation.X_TASK );	
+		TMLTask fTask =	op.getSDRTasks().get( Operation.F_TASK );
 
 		OperationMEC xTaskOperation = xTask.getOperationMEC();
 
@@ -930,7 +940,10 @@ public class TMLCCodeGeneration	{
 			signalInName += sig.getName();
 		}
 
-		code.append( "int op_" + op.getName() + "()\t{" + CR + getTaskAttributes( fTask ) + CR );
+		code.append( "int op_" + op.getName() + "()\t{" + CR /*+ getTaskAttributes( fTask )*/ + CR );
+		if( op.isPrex() )	{
+			code.append( TAB + "int status = 0;" + CR );
+		}
 
 		//Mark input signals as false
 		for( Signal sig: op.getInSignals() )	{
@@ -1067,6 +1080,7 @@ public class TMLCCodeGeneration	{
 			attributes = tmlcplib.getAssignedAttributes();
 			String name = tmlcplib.getName().split("::")[0];
 			programString.append( "int op_" + name + "()\t{" + CR );
+			programString.append( TAB + "int status = 0;" + CR );
 			
 			for( Signal sig: dt.getInSignals() )	{
 				programString.append( TAB + "sig[ " + sig.getName() + " ].f = false;" + CR );
@@ -1075,14 +1089,14 @@ public class TMLCCodeGeneration	{
 			TraceManager.addDev( "CPMEC: " + cpMEC + "\n" + attributes.toString() );
 			if( cpMEC instanceof CpuMemoryCopyMEC )	{
 				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName, "", "", "", "" );
-				programString.append( mec.getExecCode() );
+				programString.append( "/*" + mec.getExecCode() + "*/" );
 			}
 			if( cpMEC instanceof SingleDmaMEC )	{
 				destinationAddress = attributes.get( SingleDmaMEC.destinationAddressIndex );
 				sourceAddress = attributes.get( SingleDmaMEC.sourceAddressIndex );
 				counter = attributes.get( SingleDmaMEC.counterIndex );
 				SingleDmaMEC mec = new SingleDmaMEC( ctxName, destinationAddress, sourceAddress, counter );
-				programString.append( mec.getExecCode() );
+				programString.append( "/*" + mec.getExecCode() + "*/" );
 			}
 			if( cpMEC instanceof DoubleDmaMEC )	{
 				destinationAddress1 = attributes.get( DoubleDmaMEC.destinationAddress1Index );
@@ -1092,7 +1106,7 @@ public class TMLCCodeGeneration	{
 				sourceAddress2 = attributes.get( DoubleDmaMEC.sourceAddress2Index );
 				counter2 = attributes.get( DoubleDmaMEC.counter2Index );
 				DoubleDmaMEC mec = new DoubleDmaMEC( ctxName, destinationAddress1, sourceAddress1, counter1, destinationAddress2, sourceAddress2, counter2 );
-				programString.append( mec.getExecCode() );
+				programString.append( "/*" + mec.getExecCode() + "*/" );
 			}
 
 			for( Signal sig: dt.getOutSignals() )	{
@@ -1171,6 +1185,10 @@ public class TMLCCodeGeneration	{
 		String inSignalName, outSignalName;
 		initFileString.append( "#include \"" + applicationName + ".h\"" + CR2 );
 		initFileString.append( "/**** variables ****/" + CR2 );		
+		initFileString.append( "char fep_mss[0x10000];" + CR );
+		initFileString.append( "char adaif_mss[0x10000];" + CR );
+		initFileString.append( "char intl_mss[0x10000];" + CR );
+		initFileString.append( "char mapper_mss[0x10000];" + CR );
 		initFileString.append( buffersAndInstructionsDeclaration( false ) + CR2 );
 		generateCodeToInitializeBuffers();
 		generateCodeToInitializeSignals();
@@ -1245,7 +1263,7 @@ public class TMLCCodeGeneration	{
 
 		generateInitRoutinesForCPs();
 
-		initFileString.append( "/**** init contexts ****/" + CR + "void init_operations_context(void)\t{" + CR );
+		initFileString.append( "/**** init contexts ****/" + CR + "void init_operations(void)\t{" + CR );
 		for( Operation op: operationsList )	{
 			if( op.getType() == Operation.SDR )	{
 				TMLTask xTask = op.getSDRTasks().get( Operation.X_TASK );
