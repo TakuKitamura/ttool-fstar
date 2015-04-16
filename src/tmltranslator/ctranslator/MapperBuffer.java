@@ -62,7 +62,7 @@ public class MapperBuffer extends Buffer	{
 
 	public static final int baseAddressDataInMappIndex = 2;
 	protected String baseAddressDataInMappValue = USER_TO_DO;
-	public static final String baseAddressDataInMappType = "uint16_t*";
+	public static final String baseAddressDataInMappType = "uint16_t";
 
 	public static final int bitsPerSymbolDataInMappIndex = 3;
 	protected String bitsPerSymbolDataInMappValue = USER_TO_DO;
@@ -76,12 +76,12 @@ public class MapperBuffer extends Buffer	{
 	//data out
 	public static final int baseAddressDataOutMappIndex = 5;
 	protected String baseAddressDataOutMappValue = USER_TO_DO;
-	public static final String baseAddressDataOutMappType = "uint16_t*";
+	public static final String baseAddressDataOutMappType = "uint16_t";
 	
 	//Look up table
 	public static final int baseAddressLUTMappIndex = 6;
 	protected String baseAddressLUTMappValue = USER_TO_DO;
-	public static final String baseAddressLUTMappType = "uint16_t*";
+	public static final String baseAddressLUTMappType = "uint16_t";
 	
 	public static final String DECLARATION = "struct MAPPER_BUFFER_TYPE {" + CR + TAB +
 																						numSamplesDataInMappType + SP + "num_symbols" + SC + CR + TAB +

@@ -695,7 +695,11 @@ public class TMLCCodeGeneration	{
 							"#include <embb/intl.h>" + CR +
 							"#include <embb/mapper.h>" + CR +
 							"#include <embb/adaif.h>" + CR +
-							"#include <embb/memory.h>" + CR2;
+							"#include <embb/memory.h>" + CR2 +
+							"char fep_mss[0x10000];" + CR +
+							"char adaif_mss[0x10000];" + CR +
+							"char intl_mss[0x10000];" + CR +
+							"char mapper_mss[0x10000];" + CR2;
 		return s;
 	}
 
@@ -744,6 +748,7 @@ public class TMLCCodeGeneration	{
 						}
 						else	{	//for all the remaining operations
 							buffersString.append( "extern" + SP + inBuff.getType() + SP + inBuff.getName() + SC + CR );
+							buffersString.append( "extern" + SP + outBuff.getType() + SP + outBuff.getName() + SC + CR );
 							instructionsString.append( "extern" + SP + xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
 						}
 					}
@@ -760,6 +765,7 @@ public class TMLCCodeGeneration	{
 						}
 						else	{	//for all the remaining operations
 							buffersString.append( inBuff.getType() + SP + inBuff.getName() + SC + CR );
+							buffersString.append( outBuff.getType() + SP + outBuff.getName() + SC + CR );
 							instructionsString.append( xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
 						}
 					}
@@ -1178,6 +1184,8 @@ public class TMLCCodeGeneration	{
 				OperationMEC xTaskOperation = xTask.getOperationMEC();
 				OperationMEC fTaskOperation = fTask.getOperationMEC();
 				ctxName = op.getContextName();
+				/*TraceManager.addDev( "OPERATION: " + op.getName() );
+				TraceManager.addDev( "\t\t\tContext name: " + ctxName );*/
 				if( op.getInSignals().size() > 0 )	{
 					inSignalName = op.getInSignals().get(0).getName();
 				}
@@ -1292,7 +1300,7 @@ public class TMLCCodeGeneration	{
 			}
 		}
 		initFileString.append( "}" + CR2 );
-		initFileString.append( "void cleanup_CPs_context( void )\t{" + CR );
+		initFileString.append( "void cleanup_CPs_context( void )\t{" + CR + "/*" );
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
 			CPMEC cpMEC = tmlcplib.getCPMEC();
@@ -1307,7 +1315,7 @@ public class TMLCCodeGeneration	{
 				initFileString.append( TAB + DoubleDmaMEC.Ctx_cleanup + "( &" + ctxName + " );" + CR );
 			}
 		}
-		initFileString.append( "}" + CR );
+		initFileString.append( "*/\n}" + CR );
 	}
 
 	private void generateInitRoutinesForCPs()	{
@@ -1320,17 +1328,17 @@ public class TMLCCodeGeneration	{
 			if( cpMEC instanceof CpuMemoryCopyMEC )	{
 				initFileString.append( "void init_" + name + "()\t{" + CR );
 				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName, "", "", "", "" );
-				initFileString.append( TAB + mec.getInitCode() + "}" + CR2 );
+				initFileString.append( "//" + TAB + mec.getInitCode() + "}" + CR2 );
 			}
 			if( cpMEC instanceof SingleDmaMEC )	{
 				initFileString.append( "void init_" + name + "()\t{" + CR );
 				SingleDmaMEC mec = new SingleDmaMEC( ctxName );
-				initFileString.append( TAB + mec.getInitCode() + "}" + CR2 );
+				initFileString.append( "//" + TAB + mec.getInitCode() + "}" + CR2 );
 			}
 			if( cpMEC instanceof DoubleDmaMEC )	{
 				initFileString.append( "void init_" + name + "()\t{" + CR );
 				DoubleDmaMEC mec = new DoubleDmaMEC( ctxName );
-				initFileString.append( TAB + mec.getInitCode() + "}" + CR2 );
+				initFileString.append( "//" + TAB + mec.getInitCode() + "}" + CR2 );
 			}
 		}
 	}

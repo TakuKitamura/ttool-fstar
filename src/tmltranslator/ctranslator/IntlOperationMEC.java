@@ -57,21 +57,27 @@ public class IntlOperationMEC extends OperationMEC	{
 			"/*start execution*/" + CR + TAB +
 			"intl_do(&" + ctxName + ");" + CR;
 		
-		init_code ="/***** INIT " + ctxName + " *******/" + CR +
+		init_code ="/***** INIT " + ctxName.split("_ctx")[0] + " *******/" + CR +
 			"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB +
 			"intl_ctx_init(&" + ctxName + ", (uintptr_t) intl_mss );" + CR + TAB +
 			"// initialize context" + CR + TAB +
-			"intl_set_lenm1( (((INTL_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->num_symbols), (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_lba( (((INTL_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->lut_base_address), (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_oba( (((INTL_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->output_base_address), (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_iba( (((INTL_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->input_base_address), (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_mult( /* USER TO DO */, (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_men( /* USER TO DO */, (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_sym( (((INTL_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->symmetrical_VALUE), (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_bpsm1( (((INTL_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->num_bits_per_symbol), (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_m( (((INTL_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->base_address), (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_n( /* USER TO DO */, (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_s( /* USER TO DO */, (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"intl_set_sv(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"intl_set_arm(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"intl_set_arm(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"intl_set_re(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"intl_set_se(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"intl_set_fe(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"intl_set_pbo(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->packed_binary_output_mode));" + CR + TAB +
+			"intl_set_pbi(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->packed_binary_input_mode));" + CR + TAB +
+			"intl_set_widm1(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->samples_width));" + CR + TAB +
+			"intl_set_biof(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->bit_input_offset));" + CR + TAB +
+			"intl_set_boof(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->bit_output_offset));" + CR + TAB +
+			"intl_set_fz(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"intl_set_fo(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"intl_set_iof(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->output_offset));" + CR + TAB +
+			"intl_set_oof(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->input_offset));" + CR + TAB +
+			"intl_set_pof(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->permutation_offset));" + CR + TAB +
+			"intl_set_lenm1(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->permutation_length));" + CR + TAB +
 			"}" + CR;
 		cleanup_code = "intl_ctx_cleanup(&" + ctxName + ");";
 		context = "INTL_CONTEXT";

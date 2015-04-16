@@ -57,38 +57,38 @@ public class AdaifOperationMEC extends OperationMEC	{
 		exec_code = "adaif_do(&" + ctxName + ");" + CR;
 	
 		init_code =
-			"void init_" + ctxName + "( void )\t{" + CR + TAB +
+			"void init_" + ctxName.split("_ctx")[0] + "( void )\t{" + CR + TAB +
 			"adaif_ctx_init(&" + ctxName + ", (uintptr_t) adaif_mss );" + CR + TAB +
-			"adaif_set_tdd(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_st(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_ldt0(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_ldr0(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_ldt1(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_ldr1(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_ldt2(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_ldr2(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_ldt3(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_ldr3(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_startt0(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_stopt0(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_startr0(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_stopr0(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_startt1(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_stopt1(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_startr1(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_stopr1(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_startt2(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_stopt2(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_startr2(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_stopr2(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_startt3(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_stopt3(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_startr3(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_stopr3(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_op(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_src(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_dst(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
-			"adaif_set_data(&" + ctxName + ", (uint64_t) /*USER TO DO: VALUE*/);" + CR + TAB +
+			"adaif_set_tdd(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_st(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_ldt0(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_ldr0(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_ldt1(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_ldr1(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_ldt2(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_ldr2(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_ldt3(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_ldr3(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_startt0(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_stopt0(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_startr0(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_stopr0(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_startt1(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_stopt1(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_startr1(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_stopr1(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_startt2(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_stopt2(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_startr2(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_stopr2(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_startt3(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_stopt3(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_startr3(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_stopr3(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_op(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_src(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_dst(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"adaif_set_data(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
 			"}" + CR;
 		cleanup_code = TAB + "adaif_ctx_cleanup( /*USER TODO*/ );";
 		context = "ADAIF_CONTEXT";

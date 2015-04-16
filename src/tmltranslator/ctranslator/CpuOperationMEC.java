@@ -56,8 +56,8 @@ public class CpuOperationMEC extends OperationMEC	{
 		name = "CpuOperationMEC";
 		exec_code = TAB + CR + TAB + "/* USER TO DO */" + CR;
 		
-		init_code =	"/***** INIT " + ctxName + " *******/" + CR +
-								"void init_" + ctxName + "(void){" + CR + TAB + "/* USER TO DO */" + CR + "}";
+		init_code =	"/***** INIT " + ctxName.split("_ctx")[0] + " *******/" + CR +
+								"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB + "/* USER TO DO */" + CR + "}";
 		cleanup_code = "/* USER TO DO */";
 		context = "EMBB_CONTEXT";
 	}

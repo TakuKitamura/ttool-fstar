@@ -98,7 +98,7 @@ public class InterleaverBuffer extends Buffer	{
 
 	public static final String DECLARATION = "struct INTERLEAVER_BUFFER_TYPE {" + CR + TAB +
 																						packedBinaryInIntlType + SP + "packed_binary_input_mode" + SC + CR + TAB +
-																						widthIntlType + SP + "sample_width" + SC + CR + TAB +
+																						widthIntlType + SP + "samples_width" + SC + CR + TAB +
 																						bitInOffsetIntlType + SP + "bit_input_offset" + SC + CR + TAB +
 																						inputOffsetIntlType + SP + "input_offset" + SC + CR + TAB +
 																						//data out
@@ -123,17 +123,17 @@ public class InterleaverBuffer extends Buffer	{
 		if( bufferParameters != null )	{
 			retrieveBufferParameters();
 		}
-		s.append( TAB + name + ".packed_binary_input_mode = " + packedBinaryInIntlValue + SC + CR );
-		s.append( TAB + name + ".sample_width = " + SP + widthIntlValue + SC + CR );
-		s.append( TAB + name + ".bit_input_offset = " + SP + bitInOffsetIntlValue + SC + CR );
-		s.append( TAB + name + ".input_offset = " + SP + inputOffsetIntlValue + SC + CR );
+		s.append( TAB + name + ".packed_binary_input_mode = " + "(" + packedBinaryInIntlType + ")" + packedBinaryInIntlValue + SC + CR );
+		s.append( TAB + name + ".samples_width = " + SP + "(" + widthIntlType + ")" + widthIntlValue + SC + CR );
+		s.append( TAB + name + ".bit_input_offset = " + SP + "(" + bitInOffsetIntlType + ")" + bitInOffsetIntlValue + SC + CR );
+		s.append( TAB + name + ".input_offset = " + SP + "(" + inputOffsetIntlType + ")" + inputOffsetIntlValue + SC + CR );
 		//data out
-		s.append( TAB + name + ".packed_binary_output_mode = " + SP + packedBinaryOutIntlValue + SC + CR );
-		s.append( TAB + name + ".bit_output_offset = " + SP + bitOutOffsetIntlValue + SC + CR );
-		s.append( TAB + name + ".output_offset = " + SP + outputOffsetIntlValue + SC + CR );
+		s.append( TAB + name + ".packed_binary_output_mode = " + SP + "(" + packedBinaryOutIntlType + ")" + packedBinaryOutIntlValue + SC + CR );
+		s.append( TAB + name + ".bit_output_offset = " + SP + "(" + bitOutOffsetIntlType + ")" + bitOutOffsetIntlValue + SC + CR );
+		s.append( TAB + name + ".output_offset = " + SP + "(" + outputOffsetIntlType + ")" + outputOffsetIntlValue + SC + CR );
 		//permutation table
-		s.append( TAB + name + ".permutation_offset = " + SP + offsetPermIntlValue + SC + CR ); 
-		s.append( TAB + name + ".permutation_length = " + SP + lengthPermIntlValue + SC + CR );
+		s.append( TAB + name + ".permutation_offset = " + SP + "(" + offsetPermIntlType + ")" + offsetPermIntlValue + SC + CR ); 
+		s.append( TAB + name + ".permutation_length = " + SP + "(" + lengthPermIntlType + ")" + lengthPermIntlValue + SC + CR );
 		return s.toString();
 	}
 
@@ -141,7 +141,7 @@ public class InterleaverBuffer extends Buffer	{
 
 		StringBuffer s = new StringBuffer( super.toString() );
 		s.append( TAB2 + ".packed_binary_input_mode = " + packedBinaryInIntlValue + SC + CR );
-		s.append( TAB2 + ".sample_width = " + SP + widthIntlValue + SC + CR );
+		s.append( TAB2 + ".samples_width = " + SP + widthIntlValue + SC + CR );
 		s.append( TAB2 + ".bit_input_offset = " + SP + bitInOffsetIntlValue + SC + CR );
 		s.append( TAB2 + ".input_offset = " + SP + inputOffsetIntlValue + SC + CR );
 		//data out

@@ -64,7 +64,7 @@ public class FepBuffer extends Buffer	{
 	protected static final String numSamplesType = "uint8_t";
 	
 	protected String baseAddressValue = USER_TO_DO;
-	protected static final String baseAddressType = "uint32_t*";
+	protected static final String baseAddressType = "uint64_t";
 	
 	protected String bankValue = USER_TO_DO;
 	protected static final String bankType = "uint8_t";

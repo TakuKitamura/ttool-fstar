@@ -71,15 +71,15 @@ public class Buffer	{
 	public static String SP = " ";
 	public static String SC = ";";
 
-	protected static String USER_TO_DO = "/*USER TO DO */";
+	protected static String USER_TO_DO = "/* USER TODO: VALUE */";
 	protected String code = "VOID";
 	protected String name = "";
 	protected String type = "";
 	protected TMLTask task;
 	protected TMLPort port;
 	protected TMLCPLibArtifact artifact;
-	protected String baseAddress = "/* USER TO DO */";
-	protected String endAddress = "/* USER TO DO*/";
+	protected String baseAddress = "/* USER TODO: VALUE */";
+	protected String endAddress = "/* USER TODO: VALUE */";
 	protected ArrayList<String> bufferParameters;
 	
 	private String Context = "";
