@@ -381,7 +381,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 			if (info > 1) {
 				tgc = tdp.componentHovered();
 				String search = tgc.getValue();
-				selectedMultiComponents.add(search);
+
                 if (tdp.mgui.searchBox==null ) {
                     tdp.mgui.searchBox = new JDialogSearchBox(tdp.getGUI().getFrame(), "Search Box", selectedMultiComponents, this);
                 }

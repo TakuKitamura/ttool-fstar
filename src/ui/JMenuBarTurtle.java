@@ -595,7 +595,11 @@ public	class JMenuBarTurtle extends JMenuBar	{
 			menuItem.addMouseListener(mgui.mouseHandler);
 			menuItem.setToolTipText(ConfigurationTTool.ExternalCommand2);
         }
-        
+
+        menuItem = tool.add(mgui.actions[TGUIAction.ACT_EXTERNAL_SEARCH]);
+        menuItem.addMouseListener(mgui.mouseHandler);
+
+
         // HELP
 		menuItem = help.add(mgui.actions[TGUIAction.ACT_TTOOL_CONFIGURATION]);
         menuItem.addMouseListener(mgui.mouseHandler);

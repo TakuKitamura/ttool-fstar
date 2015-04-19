@@ -48,13 +48,13 @@ package ui.window;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import java.io.File;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import javax.swing.text.*;
 
 import myutil.GoogleSearch;
@@ -72,8 +72,9 @@ import java.util.*;
 import javax.swing.table.DefaultTableModel;
 
 import myutil.CheckConnection;
+import myutil.Message;
+import myutil.Client;
 import ui.TDiagramMouseManager;
-import ui.TDiagramPanel;
 
 //TODO : change display to tab.
 //TODO: decorate the text box
@@ -81,6 +82,8 @@ import ui.TDiagramPanel;
 public class JDialogSearchBox extends javax.swing.JFrame  {
     public static final String bold= "bold";
     public static final String normal = "normal";
+    public static String default_address = "localhost";
+    public static int default_port = 9999;
 
 	private javax.swing.JList ListKeywords;
     private javax.swing.JComboBox combobox_Score;
@@ -89,6 +92,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     private javax.swing.JCheckBox databaseCb;
     private javax.swing.JTextPane detailText_db;
     private javax.swing.JTextPane detailText_google;
+    private javax.swing.JTextPane detailText_googleScholar;
     private javax.swing.JCheckBox googleCb;
     private javax.swing.JCheckBox googleScholarCb;
     private javax.swing.JButton jButton_Setting;
@@ -101,27 +105,36 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     private javax.swing.JLabel jLabel_Year;
     private javax.swing.JPanel jPanel_DBTab;
     private javax.swing.JPanel jPanel_GoogleTab;
+    private javax.swing.JPanel jPanel_GoogleScholarTab;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JButton removeBt;
     private javax.swing.JTable resultTable_db;
     private javax.swing.JTable resultTable_google;
+    private javax.swing.JTable resultTable_googleScholar;
     //private TableSorter resultTable_google;
     private javax.swing.JTextField searchBox;
     private javax.swing.JButton searchBt;
 
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
-    private JTextField addressDB;
+    private JTextField jTextaddressDB;
 
     private String search;
 
-    private TableSorter abc;
+    private TableSorter sortTable;
+    private TableSorter sortTable1;
+    private String dbaddress;
+    private int dbport;
+
+
 
 
 
@@ -135,7 +148,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     TDiagramMouseManager tdmm ;
     
-    private ArrayList<Object[]> rows;
+    private ArrayList<Object[]> rowsGoogle;
+    private ArrayList<Object[]> rowsGoogleScholar;
     /** Creates new form  */
     public JDialogSearchBox(Frame _frame, String _title, ArrayList<String> l, TDiagramMouseManager tdmm) {
     	 //super(_frame, _title, true);
@@ -167,8 +181,10 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jScrollPane3 = new javax.swing.JScrollPane();
         StyledDocument doc =  new DefaultStyledDocument();
         detailText_google = new javax.swing.JTextPane(doc);
+        detailText_googleScholar = new javax.swing.JTextPane(doc);
         jScrollPane4 = new javax.swing.JScrollPane();
         resultTable_google = new javax.swing.JTable();
+        resultTable_googleScholar = new javax.swing.JTable();
         listModel = new DefaultListModel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -176,10 +192,10 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
 
-        abc = new TableSorter();
+        sortTable = new TableSorter();
+        sortTable1 = new TableSorter();
 
-
-
+        jPanel_GoogleScholarTab = new javax.swing.JPanel();
         jPanel_GoogleTab = new javax.swing.JPanel();
         jPanel_DBTab = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
@@ -195,16 +211,24 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         resultTable_db = new JTable();
         jScrollPane5= new JScrollPane();
         jScrollPane7= new JScrollPane();
-        addressDB = new JTextField();
+        jScrollPane8= new JScrollPane();
+        jScrollPane9= new JScrollPane();
+        jTextaddressDB = new JTextField();
+
+        dbaddress = default_address;
+        dbport = default_port;
+
+
+        jTextaddressDB.setText(dbaddress + ":" + dbport);
 
         
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE );
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
         searchGoogle=0;
         searchGoogle = 0;
         searchDatabase =0;
-        rows=new ArrayList<Object[]>();
-
+        rowsGoogle=new ArrayList<Object[]>();
+        rowsGoogleScholar=new ArrayList<Object[]>();
 
         jLabel_System.setText("System");
         jLabel_Score.setText("Score");
@@ -229,34 +253,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         databaseCb.setText("Database");
 
-        detailText_google.setBounds(0, 0, 20, 5);
-        detailText_google.setEditable(false);
-        jScrollPane3.setViewportView(detailText_google);
-
-
-        resultTable_google = new JTable(abc);
-
-
-
-
-        resultTable_google.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{}, new String[]{
-                "No", "Title", "Author", "Link", "Source"}) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        });
-        resultTable_google.setSelectionMode(
-                ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        
-        jScrollPane4.setViewportView(resultTable_google);
-        
-        resultTable_google.getColumnModel().getColumn(0).setMaxWidth(40);
-        resultTable_google.getColumnModel().getColumn(4).setMaxWidth(120);
-
-        abc.setTableHeader(resultTable_google.getTableHeader());
-
         jLabel1.setText("Keywords");
         jLabel3.setText("Search Box");
         jLabel4.setText("Results");
@@ -275,6 +271,32 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         this.combobox_System.setEnabled(false);
         this.combobox_Score.setEnabled(false);
         this.combobox_Year.setEnabled(false);
+
+        //--------------------------------------------------------
+
+        detailText_google.setBounds(0, 0, 20, 5);
+        detailText_google.setEditable(false);
+        jScrollPane3.setViewportView(detailText_google);
+        resultTable_google = new JTable(sortTable);
+
+
+        resultTable_google.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{}, new String[]{
+                "No", "Title", "Author", "Link", "Source"}) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        });
+        resultTable_google.setSelectionMode(
+                ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        
+        jScrollPane4.setViewportView(resultTable_google);
+        
+        resultTable_google.getColumnModel().getColumn(0).setMaxWidth(40);
+        resultTable_google.getColumnModel().getColumn(4).setMaxWidth(120);
+
+        sortTable.setTableHeader(resultTable_google.getTableHeader());
 
         javax.swing.GroupLayout jPanel_GoogleTabLayout = new javax.swing.GroupLayout(jPanel_GoogleTab);
         jPanel_GoogleTab.setLayout(jPanel_GoogleTabLayout);
@@ -295,6 +317,54 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         );
 
         jTabbedPane2.addTab("Google", jPanel_GoogleTab);
+
+
+    ///
+        detailText_googleScholar.setBounds(0, 0, 20, 5);
+        detailText_googleScholar.setEditable(false);
+        jScrollPane8.setViewportView(detailText_googleScholar);
+        resultTable_googleScholar = new JTable(sortTable1);
+
+
+        resultTable_googleScholar.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{}, new String[]{
+                "No", "Title", "Author", "Link", "Source"}) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        });
+        resultTable_googleScholar.setSelectionMode(
+                ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+
+        jScrollPane9.setViewportView(resultTable_googleScholar);
+
+        resultTable_googleScholar.getColumnModel().getColumn(0).setMaxWidth(40);
+        resultTable_googleScholar.getColumnModel().getColumn(4).setMaxWidth(120);
+
+        sortTable1.setTableHeader(resultTable_googleScholar.getTableHeader());
+
+        javax.swing.GroupLayout jPanel_GoogleScholarTabLayout = new javax.swing.GroupLayout(jPanel_GoogleScholarTab);
+        jPanel_GoogleScholarTab.setLayout(jPanel_GoogleScholarTabLayout);
+
+        GroupLayout.ParallelGroup groupScholar = jPanel_GoogleScholarTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
+        jPanel_GoogleScholarTabLayout.setHorizontalGroup(
+                jPanel_GoogleScholarTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 729, Short.MAX_VALUE)
+                        .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+        jPanel_GoogleScholarTabLayout.setVerticalGroup(
+                jPanel_GoogleScholarTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel_GoogleScholarTabLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Google Scholar", jPanel_GoogleScholarTab);
+
+    /////
 
         resultTable_db.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{}, new String[]{
@@ -331,11 +401,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         jTabbedPane2.addTab("Database CVE", jPanel_DBTab);
 
-        combobox_System.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All", "Linux/Unix", "Windows", "Others" }));
+        combobox_System.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"All", "Linux/Unix", "Windows", "Others"}));
 
-        combobox_Year.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All", "5-7", "7-8", "8-9" }));
+        combobox_Year.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"All", "5-7", "7-8", "8-9"}));
 
-        combobox_Score.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All", "Last year", "Last 5 years", "Last 10 years" }));
+        combobox_Score.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"All", "Last year", "Last 5 years", "Last 10 years"}));
 
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -444,35 +514,41 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                 checkandsetSearchBt();
             }
 
-            public void checkandsetSearchBt(){
-                if (searchBox.getText().length()<=0){
+            public void checkandsetSearchBt() {
+                if (searchBox.getText().length() <= 0) {
                     searchBt.setEnabled(false);
-                }else
+                } else
                     searchBt.setEnabled(true);
             }
         });
 
         searchBt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-				searchBtActionPerformed(evt);
+                searchBtActionPerformed(evt);
 
             }
         });
         
         googleCb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
+                if (googleCb.isSelected() && ListKeywords.getModel().getSize()>0)
+                    searchBt.setEnabled(true);
                 googleCbActionPerformed(evt);
             }
         });
         
         databaseCb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
+                if (databaseCb.isSelected() && ListKeywords.getModel().getSize()>0)
+                    searchBt.setEnabled(true);
                 databaseCbActionPerformed(evt);
             }
         });
         
         googleScholarCb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
+                if (googleScholarCb.isSelected() && ListKeywords.getModel().getSize()>0)
+                    searchBt.setEnabled(true);
                 googleScholarCbActionPerformed(evt);
             }
         });
@@ -480,7 +556,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         resultTable_google.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                selectrow(e);
+                selectrow(e, rowsGoogle,resultTable_google,detailText_google);
             }
         });
         resultTable_google.addMouseListener(new MouseAdapter() {
@@ -499,7 +575,33 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                     }
 
                 }
-                //see below
+
+            }
+        });
+
+        resultTable_googleScholar.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                selectrow(e, rowsGoogleScholar,resultTable_googleScholar,detailText_googleScholar);
+            }
+        });
+
+        resultTable_googleScholar.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int row = resultTable_googleScholar.getSelectedRow();
+                int col = resultTable_googleScholar.getSelectedColumn();
+                if (col == 3) {
+                    String st = (String) resultTable_googleScholar.getValueAt(row, col);
+                    URI uri = URI.create(st);
+                    Desktop d = Desktop.getDesktop();
+                    try {
+                        d.browse(uri);
+                    } catch (IOException e1) {
+                        JOptionPane.showMessageDialog(null, "URL is invalid", "Warning",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+
+                }
 
             }
         });
@@ -519,7 +621,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         ListKeywords.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
-                if (((JList)listSelectionEvent.getSource()).getSelectedIndex()!=-1)
+                if (((JList) listSelectionEvent.getSource()).getSelectedIndex() != -1)
                     removeBt.setEnabled(true);
                 else
                     removeBt.setEnabled(false);
@@ -527,27 +629,72 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         });
 
         jButton_Setting.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Object[] options = { "OK", "CANCEL" };
+          public void actionPerformed(java.awt.event.ActionEvent evt) {
+              final JComponent[] inputs = new JComponent[]{
+                      new JLabel("Address"),
+                      jTextaddressDB
+              };
 
-                final JComponent[] inputs = new JComponent[] {
-                        new JLabel("Address"),
-                        addressDB
-                };
-                JOptionPane.showOptionDialog(null,inputs, "Setup the address of database",
-                        JOptionPane.DEFAULT_OPTION,  JOptionPane.PLAIN_MESSAGE,
-                        null, options, options[0]);
-                //maJOptionPane.showMessageDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
+              JOptionPane joptionpane = new JOptionPane();
+              int i = joptionpane.showOptionDialog(null, inputs, "Setup the address of database",
+                      joptionpane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                      null, new Object[]{"OK", "Cancel"}, "OK");
+              if (i == joptionpane.OK_OPTION) {
+                  while (! (jTextaddressDB.getText().contains(":") && jTextaddressDB.getText().split(":").length == 2)) {
+                      JOptionPane.showMessageDialog(null, "Address:Port", "Wrong format",
+                              JOptionPane.WARNING_MESSAGE);
+                      i = joptionpane.showOptionDialog(null, inputs, "Setup the address of database",
+                              joptionpane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                              null, new Object[]{"OK", "Cancel"}, "OK");
+                  }
+              } else if (i == joptionpane.CLOSED_OPTION) {
+              }
+          }
+      }
 
-                //jButton_SettingActionPerformed(evt);
+        );
+
+            jButton_Statistic.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    doStatistic();
+                }
+            });
+
+        jTextaddressDB.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent documentEvent) {
 
             }
+
+            @Override
+            public void removeUpdate(DocumentEvent documentEvent) {
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent documentEvent) {
+
+            }
+
+            public boolean isAddressDBFormatted() {
+                if (jTextaddressDB.getText().contains(":") && jTextaddressDB.getText().split(":").length == 2)
+                    return true;
+                return false;
+            }
         });
+
+        jTabbedPane2.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                detailText_db.setDocument(new DefaultStyledDocument());
+                detailText_google.setDocument(new DefaultStyledDocument());
+            }
+        });
+
         pack();
     }//
 
-    //clear everything when closing
-    //TODO: bug: clear values when closing, in order to display new value for the next open
     private void WindowClosing(WindowEvent evt) {
         tdmm.clearSelectComponents();
         this.dispose();
@@ -564,11 +711,19 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             listModel.remove(index);
 
             String query = "";
+            //first value
+            if (this.listModel.getSize() > 0){
+                String element = (String) this.listModel.elementAt(0);
+                String value = splitAndConcat(element);
+                query = value;
+            }
 
-            if (this.listModel.getSize() > 0)
-                query = (String) this.listModel.elementAt(0);
             for (int i = 1; i < this.listModel.getSize(); i++) {
-                query = query + " + " + (String) this.listModel.elementAt(i);
+
+                String element = (String) this.listModel.elementAt(i);
+                String value = splitAndConcat(element);
+
+                query = query + " + " + value; //(String) this.listModel.elementAt(i);
             }
 
             this.searchBox.setText(query);
@@ -607,15 +762,18 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                 searchBt.setEnabled(false);
 
                 //reset content of table
-                DefaultTableModel model = (DefaultTableModel) resultTable_google.getModel();
-                model.setRowCount(0);
+                DefaultTableModel modelGoogle = (DefaultTableModel) resultTable_google.getModel();
+                DefaultTableModel modelGoogleScholar = (DefaultTableModel) resultTable_googleScholar.getModel();
+                modelGoogle.setRowCount(0);
+                modelGoogleScholar.setRowCount(0);
                 detailText_google.setText("");
-
+                detailText_googleScholar.setText("");
 
                 // ensure there is at least the resources for crawling.
 
                 int id;
-                rows = new ArrayList<Object[]>();
+                rowsGoogle = new ArrayList<Object[]>();
+                rowsGoogleScholar = new ArrayList<Object[]>();
 
                 // check internet connection before crawling from google or google scholar
                 Boolean internetConnectionAvailable = null;
@@ -625,8 +783,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
                         ArrayList<GoogleSearch> resultGoogle = null;
                         ArrayList<GoogleSearch> resultGoogleScholar = null;
-
-
                         //get the content of searhBox
                         String query = searchBox.getText();
                         if (query != "") {
@@ -650,7 +806,9 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                         jLabel5.setText("Failed to retrieving data from Google");
                                     } else {
                                         putGoogleToTable(resultGoogle);
+                                        showtable(rowsGoogle,modelGoogle,0);
                                     }
+
                                 }
                             }
 
@@ -673,6 +831,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                         jLabel5.setText("Failed to retrieving data from Google Scholar");
                                     } else {
                                         putGoogleScholarToTable(resultGoogleScholar);
+                                        showtable(rowsGoogleScholar, modelGoogleScholar,1);
                                     }
                                 }
                             }
@@ -696,38 +855,48 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                     for (long i = 1; i < 100000000; i++) ;
                 }
 
-
-
-
-                //Show table
-                for (Object[] o : rows) {
-                    id = (Integer) (o[0]);
-                    GoogleSearch gs = (GoogleSearch) (o[1]);
-                    String source = (String) (o[2]);
-                    model.addRow(new Object[]{id, gs.getTitle(), gs.getAuthors(), gs.getUrl(), source});
-                }
-                searchBt.setEnabled(true);
-                jLabel5.setText("Finished");
             }
         });
         t.start();
     }
-    
-    private void selectrow(ListSelectionEvent evt) {
-    	DefaultTableModel model = (DefaultTableModel) this.resultTable_google.getModel();
-    	int rowindex = resultTable_google.getSelectedRow();
+
+    public void showtable(ArrayList<Object[]> list, DefaultTableModel model,int index){
+        int id=0;
+        for (Object[] o : list) {
+            id = (Integer) (o[0]);
+            GoogleSearch gs = (GoogleSearch) (o[1]);
+            String source = (String) (o[2]);
+            model.addRow(new Object[]{id, gs.getTitle(), gs.getAuthors(), gs.getUrl(), source});
+        }
+
+        if (index ==0 ){
+            jTabbedPane2.setTitleAt(index, "Google" + "(" + model.getRowCount() + ")");
+        }
+        else if (index ==1 ){
+            jTabbedPane2.setTitleAt(index, "Google Scholar" + "(" + model.getRowCount() + ")");
+        }
+        else if (index ==2 ){
+            jTabbedPane2.setTitleAt(index, "Database" + "(" + model.getRowCount() + ")");
+        }
+        searchBt.setEnabled(true);
+        jLabel5.setText("Finished");
+        jTabbedPane2.updateUI();
+    }
+
+    private void selectrow(ListSelectionEvent evt,ArrayList<Object[]> rows,JTable resultTable,JTextPane textpane) {
+    	int rowindex = resultTable.getSelectedRow();
     	int id =0;
     	
     	if(rowindex >=0)
-    		id= (Integer) resultTable_google.getValueAt(rowindex, 0);
+    		id= (Integer) resultTable.getValueAt(rowindex, 0);
 	    	GoogleSearch selected=null;
-	    	for (Object[] o : this.rows){
+	    	for (Object[] o : rows){
 	    		if (o[0].equals(id)){
 	    			selected=(GoogleSearch)o[1];
 	    			break;
 	    		}
 	    	}
-	    	presentDataInDetail(selected);
+	    	presentDataInDetail(selected,textpane);
     }    
     
     private void googleCbActionPerformed(java.awt.event.ActionEvent evt) {
@@ -774,13 +943,16 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         	String query = "";
         	
         	if (this.listModel.getSize()>0)
-        		query = (String) this.listModel.elementAt(0);
+                query = splitAndConcat((String) this.listModel.elementAt(0));
+                System.out.println(query);
     	    	for (int i=1; i< this.listModel.getSize(); i++ ){
                     if (query != "")
-    	    		    query= query + " + " + (String) this.listModel.elementAt(i);
+    	    		    query= query + " + " + splitAndConcat((String) this.listModel.elementAt(i));
                     else
-                        query = (String) this.listModel.elementAt(i);
+                        query = splitAndConcat((String) this.listModel.elementAt(i));
     	    	}
+
+            System.out.println(query);
     	    	
         	this.searchBox.setText(query);
         }
@@ -794,23 +966,23 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     
     public void putGoogleToTable(ArrayList<GoogleSearch> a)
     {
-    	int i = this.rows.size()+1;
+    	int i = this.rowsGoogle.size()+1;
     	for (GoogleSearch gs : a){
-    		this.rows.add(new Object[]{i, gs,"Google"});
+    		this.rowsGoogle.add(new Object[]{i, gs,"Google"});
     		i=i+1;
     	}
     }
     
     public void putGoogleScholarToTable(ArrayList<GoogleSearch> a)
     {
-    	int i = this.rows.size()+1;
+    	int i = this.rowsGoogleScholar.size()+1;
     	for (GoogleSearch gs : a){
-    		rows.add(new Object[]{i, gs,"GoogleScholar"});
+            rowsGoogleScholar.add(new Object[]{i, gs,"GoogleScholar"});
     		i=i+1;
     	}
     }
     
-    public void presentDataInDetail(GoogleSearch gs){
+    public void presentDataInDetail(GoogleSearch gs, JTextPane textPane){
 
         if (gs != null)
     	{
@@ -826,14 +998,64 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 	    	    detail = detail + gs.getCitedNumber()+"\n";
             if (gs.getDesc()!=null)
 	    	    detail = detail + gs.getDesc()+"\n";
-	    	
-	    	this.detailText_google.setText(detail);
+
+            textPane.setText(detail);
     	}
+    }
+
+    //==========================================
+    //database functions
+
+    public void doStatistic() {
+        BufferedImage img= null;
+        try {
+            img = ImageIO.read(new File("test.jpg"));
+            ImageIcon icon=new ImageIcon(img);
+            JFrame frame=new JFrame();
+            frame.setLayout(new FlowLayout());
+            frame.setSize(200,300);
+            JLabel lbl=new JLabel();
+            lbl.setIcon(icon);
+            frame.add(lbl);
+            frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void doQueryDB(){
+        Message msg = new Message();
+        msg.setCmd(Message.CMD_SEARCH);
+        ArrayList<String> option = new ArrayList<>();
+        ArrayList<String> values = new ArrayList<>();
+        option.add("System");
+        values.add(this.combobox_System.getSelectedItem().toString());
+        option.add(this.combobox_Year.getSelectedItem().toString());
+        option.add(this.combobox_Score.getSelectedItem().toString());
     }
 
     //TODO: implement function to get database.
     public void getResultFromDatabase(){
 
+    }
+
+    /**
+     *
+     * @param input: a string without space and words are seperated by uper character.
+     * @return a splited, then concaternated with space.
+     */
+    public String splitAndConcat(String input){
+        String[] splitValue = input.split("(?=\\p{Lu})");
+        String value = "";
+        if (splitValue.length>0){
+            value = splitValue[0];
+            for (int i =1 ; i < splitValue.length; i ++ ){
+                value = value + " " + splitValue[i];
+            }
+        }
+        return value;
     }
     
     
