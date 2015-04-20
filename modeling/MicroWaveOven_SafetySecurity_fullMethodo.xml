@@ -4933,8 +4933,8 @@ or by a maintenance station
 <MainCode value=""/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
-<Ignored value="" />
+<Validated value="RemotelyControlledMicrowave;MicroWaveOven;WirelessInterface;RemoteControl;" />
+<Ignored value="ObserverProp1;Door;Magnetron;Controller;ControlPanel;Bell;" />
 
 <CONNECTOR type="5002" id="2523" >
 <cdparam x="770" y="461" />
@@ -5143,7 +5143,7 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="301" id="2591" >
-<cdparam x="125" y="225" />
+<cdparam x="121" y="181" />
 <sizeparam width="586" height="80" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
@@ -5151,6 +5151,7 @@ or by a maintenance station
 #Authenticity RemoteControl.SendingRemoteOrder.msg1 WirelessInterface.gotWirelessOrder.msg2
 
 #InitialSystemKnowledge RemoteControl.PSK WirelessInterface.PSK
+
 " />
 <TGConnectingPoint num="0" id="2583" />
 <TGConnectingPoint num="1" id="2584" />
@@ -9104,8 +9105,8 @@ or by a maintenance station
 <cdparam x="516" y="268" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from List of all parameters of an Avatar SMD transition to UML Note" value="null" />
-<P1  x="531" y="250" id="4361" />
-<P2  x="607" y="233" id="4424" />
+<P1  x="508" y="119" id="4354" />
+<P2  x="660" y="162" id="4424" />
 <AutomaticDrawing  data="false" />
 </CONNECTOR>
 <CONNECTOR type="5102" id="4358" >
@@ -9118,8 +9119,8 @@ or by a maintenance station
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="4356" >
 <father id="4358" num="0" />
-<cdparam x="290" y="180" />
-<sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="340" y="118" />
+<sizeparam width="168" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -9133,6 +9134,10 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<actions value="msg1.data = duration" />
+<actions value="msg1 = sencrypt(msg1, PSK)" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -9146,8 +9151,8 @@ or by a maintenance station
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="4363" >
 <father id="4365" num="0" />
-<cdparam x="363" y="249" />
-<sizeparam width="168" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="364" y="248" />
+<sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -9161,8 +9166,8 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<actions value="msg1.data = duration" />
-<actions value="msg1 = sencrypt(msg1, PSK)" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -9273,7 +9278,7 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="301" id="4429" >
-<cdparam x="607" y="216" />
+<cdparam x="660" y="145" />
 <sizeparam width="251" height="35" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />

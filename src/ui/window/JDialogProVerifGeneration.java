@@ -383,12 +383,17 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                             jta.append(re+"\n");
                         }
 
-                        jta.append("\nSatisfied Authenticity:\n----------------\n");
+                        jta.append("\nSatisfied Strong Authenticity:\n----------------\n");
                         for(String re: pvoa.getSatisfiedAuthenticity()) {
                             jta.append(re+"\n");
                         }
 
-                        jta.append("\nNon Satisfied Authenticity:\n----------------\n");
+			jta.append("\nSatisfied Weak Authenticity:\n----------------\n");
+                        for(String re: pvoa.getSatisfiedWeakAuthenticity()) {
+                            jta.append(re+"\n");
+                        }
+
+                        jta.append("\nNon Satisfied Strong Authenticity:\n----------------\n");
                         for(String re: pvoa.getNonSatisfiedAuthenticity()) {
                             jta.append(re+"\n");
                         }

@@ -323,7 +323,8 @@ public class AVATAR2ProVerif {
                         TraceManager.addDev("name1" + tmps[1]);
 
                         try {
-                            spec.addToGlobalSpecification("query evinj:authenticity__" + p1 + "__" + cpt + "(" + name1 + ") ==> evinj:authenticity__" + p0 + "__" + cpt + "(" + name0 + ").\n");
+                            //spec.addToGlobalSpecification("query evinj:authenticity__" + p1 + "__" + cpt + "(" + name1 + ") ==> evinj:authenticity__" + p0 + "__" + cpt + "(" + name0 + ").\n");
+			    spec.addToGlobalSpecification("query evinj:authenticity__" + p1 + "__" + cpt + "(m__93482) ==> evinj:authenticity__" + p0 + "__" + cpt + "(m__93482).\n");
                         } catch (Exception e) {
                             TraceManager.addDev("\n\n*** Error on pragma:" + pragma + ": " + e.getMessage());
                         }
