@@ -57,6 +57,7 @@ import ui.*;
 import ui.window.*;
 
 import tmltranslator.*;
+import tmltranslator.ctranslator.*;
 
 public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent, WithAttributes {
     private int textY1 = 15;
@@ -192,7 +193,8 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
 				MECType = dialog.getMECType();
-				TraceManager.addDev( "MECType: " + MECType );
+				TraceManager.addDev( "after JDialog " + MECType );
+				TraceManager.addDev( "after JDialog " + MECType.getIndex() );
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -477,7 +479,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         sb.append(" execiTime=\"" + execiTime + "\"");
         sb.append(" execcTime=\"" + execcTime + "\"");
         sb.append(" clockRatio=\"" + clockRatio + "\"");
-        sb.append(" MECType=\"" + MECType + "\"");
+        sb.append(" MECType=\"" + MECType.getIndex() + "\"");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -541,7 +543,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                                 if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
                                 }
-                                MECType = elt.getAttribute("MECType");
+                                MECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("MECType") ) );
                                 if ((elt.getAttribute("sliceTime") != null) &&  (elt.getAttribute("sliceTime").length() > 0)){
                                     sliceTime = Integer.decode(elt.getAttribute("sliceTime")).intValue();
                                 }
@@ -625,7 +627,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         attr += "Branch. pred. misrate (in %) = " + branchingPredictionPenalty + "\n";
         attr += "Cache miss (in %) = " + cacheMiss + "\n";
         attr += "Clock ratio = " + clockRatio + "\n";
-				attr += "MECType = " + MECType + "\n";
+				attr += "MECType = " + MECType.getIndex() + "\n";
         return attr;
 
     }

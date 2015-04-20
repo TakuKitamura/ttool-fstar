@@ -45,6 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator;
 
+import tmltranslator.ctranslator.*;
 import java.util.*;
 
 
@@ -63,6 +64,7 @@ public class HwCPU extends HwExecutionNode  {
 	public static final int DEFAULT_CACHE_MISS = 5;
 	public static final int DEFAULT_SCHEDULING = BASIC_ROUND_ROBIN;
 	public static final int DEFAULT_SLICE_TIME = 10000; // in microseconds
+	public static final ArchUnitMEC DEFAULT_MODEL_EXTENSION_CONSTRUCT = new CpuMEC();
 	
 	public int nbOfCores = DEFAULT_NB_OF_CORES; // Should be equal or greater than 1
 	public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // Should be greater than 0
@@ -74,6 +76,7 @@ public class HwCPU extends HwExecutionNode  {
 	public int cacheMiss = DEFAULT_CACHE_MISS; // Percentage: between 0 and 100
 	public int schedulingPolicy = DEFAULT_SCHEDULING;
 	public int sliceTime = DEFAULT_SLICE_TIME;
+	public ArchUnitMEC MEC = DEFAULT_MODEL_EXTENSION_CONSTRUCT;
 	
 	
     public HwCPU(String _name) {

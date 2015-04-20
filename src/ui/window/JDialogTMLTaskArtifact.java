@@ -53,8 +53,9 @@ import javax.swing.*;
 import java.util.*;
 
 import ui.*;
-
 import ui.tmldd.*;
+import tmltranslator.ctranslator.*;
+
 import myutil.*;
 
 public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements ActionListener  {
@@ -66,7 +67,7 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
     private Frame frame;
     private TMLArchiArtifact artifact;
 		private String operation = "VOID";
-		private String MECType = "VOID";
+		private ArchUnitMEC MECType;
     
     //protected JTextField taskName;
 	protected JComboBox referenceTaskName, priority, operationsListCB;
@@ -76,7 +77,7 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogTMLTaskArtifact(Frame _frame, String _title, TMLArchiArtifact _artifact, String _operation, String _MECType) {
+    public JDialogTMLTaskArtifact(Frame _frame, String _title, TMLArchiArtifact _artifact, String _operation, ArchUnitMEC _MECType) {
         super(_frame, _title, true);
         frame = _frame;
         artifact = _artifact;
@@ -160,28 +161,23 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
 		Vector<String> operationsListS = new Vector<String>();
 		int indexOp = 0;
 		TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
-		if( MECType.equals( "FEP" ) )	{
-			operationsListS.add( "CWA" );
-			operationsListS.add( "CWP" );
-			operationsListS.add( "CWM" );
-			operationsListS.add( "CWL" );
-			operationsListS.add( "SUM" );
-			operationsListS.add( "FFT" );
+		if( MECType instanceof FepMEC )	{
+			operationsListS = FepMEC.operationsList;
 			indexOp = operationsListS.indexOf( operation );
 		}
-		else if( MECType.equals( "MAPPER" ) )	{
-			operationsListS.add( "MapperOperation" );
+		else if( MECType instanceof MapperMEC )	{
+			operationsListS.add( MapperMEC.Operation );
 			indexOp = operationsListS.indexOf( operation );
 		}
-		else if( MECType.equals( "INTL" ) )	{
-			operationsListS.add( "INTLOperation" );
+		else if( MECType instanceof InterleaverMEC )	{
+			operationsListS.add( InterleaverMEC.Operation );
 			indexOp = operationsListS.indexOf( operation );
 		}
-		else if( MECType.equals( "ADAIF" ) )	{
-			operationsListS.add( "ADAIFOperation" );
+		else if( MECType instanceof AdaifMEC )	{
+			operationsListS.add( AdaifMEC.Operation );
 			indexOp = operationsListS.indexOf( operation );
 		}
-		else if( MECType.equals( "CPU" ) )	{
+		else if( MECType instanceof CpuMEC )	{
 			String tmp = (String)(referenceTaskName.getSelectedItem());
 			operationsListS.add( tmp.split("::")[1] );
 			indexOp = operationsListS.indexOf( operation );

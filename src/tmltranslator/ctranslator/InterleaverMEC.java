@@ -53,14 +53,15 @@ public class InterleaverMEC extends ArchUnitMEC	{
 
 	public static final String Context = "INTL_CONTEXT";
 	public static final String Ctx_cleanup = "intl_ctx_cleanup";
+	public static final String Operation = "Interleaver operation";
 
-	public InterleaverMEC( String XOP, String ID0, String OD0 )	{
+	public InterleaverMEC()	{
 
-		node_type = "INTERLEAVER";
-		inst_type = "INTL";
-		inst_decl = "INTL_CONTEXT";
-		buff_type = "INTL_BUFFER_TYPE";
-		buff_init = "= {/*l,b,q,t*/};";
+		index = 2;
+		context = "INTL_CONTEXT";
+		initCtxRoutine = "intl_ctx_init";
+		localMemoryPointer = "intl_mss";
+		ctxCleanupRoutine = "intl_ctx_cleanup";
 	}
 
 }	//End of class

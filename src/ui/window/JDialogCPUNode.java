@@ -52,11 +52,11 @@ import javax.swing.*;
 import ui.*;
 import ui.tmlcd.*;
 import java.util.*;
-
+import tmltranslator.ctranslator.*;
 import ui.*;
-
 import ui.tmldd.*;
 
+import myutil.*;
 
 public class JDialogCPUNode extends javax.swing.JDialog implements ActionListener  {
 	
@@ -66,7 +66,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	private Frame frame;
 	private TMLArchiCPUNode node;
 
-	private String MECType = "VOID";
+	private ArchUnitMEC MECType;
 	
 	
 	// Panel1
@@ -82,7 +82,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	private JButton cancelButton;
 	
 	/** Creates new form  */
-	public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, String _MECType) {
+	public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType) {
 		super(_frame, _title, true);
 		frame = _frame;
 		node = _node;
@@ -233,18 +233,12 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
     c4.anchor = GridBagConstraints.CENTER;*/
 		panel4.add(new JLabel("Embb Model Extension Construct:"), c4);
     c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-		Vector<String> MECTypes = new Vector<String>();
-		MECTypes.add("CPU");
-		MECTypes.add("FEP");
-		MECTypes.add("MAPPER");
-		MECTypes.add("INTL");
-		MECTypes.add("ADAIF");
-    MECTypeCB = new JComboBox( MECTypes );
-		if( MECType.equals( "VOID" ) || MECType.equals( "" ) )	{
+    MECTypeCB = new JComboBox( ArchUnitMEC.Types );
+		if( MECType == null )	{
 			MECTypeCB.setSelectedIndex( 0 );
 		}
 		else	{
-			MECTypeCB.setSelectedIndex( MECTypes.indexOf( MECType ) );
+			MECTypeCB.setSelectedIndex( MECType.getIndex() );
 		}
 		MECTypeCB.addActionListener(this);
     panel4.add( MECTypeCB, c4);
@@ -291,7 +285,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	
 	public void closeDialog() {
 		regularClose = true;
-		MECType = (String)MECTypeCB.getItemAt( MECTypeCB.getSelectedIndex() );
+		MECType = ArchUnitMEC.Types.get( MECTypeCB.getSelectedIndex() );
 		dispose();
 	}
 	
@@ -359,7 +353,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		return schedulingPolicy.getSelectedIndex();
 	}
 
-	public String getMECType()	{
+	public ArchUnitMEC getMECType()	{
 		return MECType;
 	}
 	

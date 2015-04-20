@@ -51,15 +51,24 @@ import java.util.*;
 
 public class FepMEC extends ArchUnitMEC	{
 
-	public static final String Context = "FEP_CONTEXT";
 	public static final String Ctx_cleanup = "fep_ctx_cleanup";
 
-	public FepMEC( String XOP, String ID0, String OD0 )	{
+	private static String[] opArr = { "CWA", "CWP", "CWM", "CWL", "SUM", "FFT" };
+	public static final Vector<String> operationsList = new Vector<String>( Arrays.asList( opArr ) );
+	public static final int CWAIndex = 0;
+	public static final int CWPndex = 1;
+	public static final int CWMIndex = 2;
+	public static final int CWLIndex = 3;
+	public static final int SUMIndex = 4;
+	public static final int FFTIndex = 5;
 
-		node_type = "FEP";
-		inst_type = "FEP";
-		inst_decl = "FEP_CONTEXT";
-		buff_type = "FEP_BUFFER_TYPE";
+	public FepMEC()	{
+
+		index = 1;
+		context = "FEP_CONTEXT";
+		initCtxRoutine = "fep_ctx_init";
+		localMemoryPointer = "fep_mss";
+		ctxCleanupRoutine = "fep_ctx_cleanup";
 	}
 
 }	//End of class

@@ -73,7 +73,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 		protected int priority = 0; // Between 0 and 10
 		protected String operation = "VOID";
 
-		private String fatherMECType = "VOID";
+		private ArchUnitMEC fatherArchUnitMECType;
     
     public TMLArchiArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -160,9 +160,9 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 		String tmp;
 		boolean error = false;
 		
-		fatherMECType = ((TMLArchiNode)father).getMECType();
+		fatherArchUnitMECType = ((TMLArchiNode)father).getMECType();
 		TraceManager.addDev( "Father: " + father.getClass().toString() + " with MEC " + ((TMLArchiNode)father).getMECType() );
-		JDialogTMLTaskArtifact dialog = new JDialogTMLTaskArtifact(frame, "Setting artifact attributes", this, operation, fatherMECType);
+		JDialogTMLTaskArtifact dialog = new JDialogTMLTaskArtifact(frame, "Setting artifact attributes", this, operation, fatherArchUnitMECType);
 		dialog.setSize(400, 350);
     GraphicLib.centerOnParent(dialog);
   	dialog.show(); // blocked until dialog has been closed
@@ -229,16 +229,16 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<info value=\"" + value + "\" taskName=\"" + taskName + "\" referenceTaskName=\"");
-        sb.append(referenceTaskName);
-				sb.append("\" priority=\"");
-				sb.append(priority);
-				sb.append("\" operation=\"");
-				sb.append(operation);
-				sb.append("\" fatherComponentMECType=\"");
-				sb.append(fatherMECType);
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
+        sb.append( "<info value=\"" + value + "\" taskName=\"" + taskName + "\" referenceTaskName=\"" );
+        sb.append( referenceTaskName );
+				sb.append( "\" priority=\"" );
+				sb.append( priority );
+				sb.append( "\" operation=\"" );
+				sb.append( operation );
+				sb.append( "\" fatherComponentMECType=\"" );
+				sb.append( fatherArchUnitMECType.getIndex() );
+        sb.append( "\" />\n" );
+        sb.append( "</extraparam>\n" );
         return new String(sb);
     }
     
@@ -272,7 +272,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 									priority = Integer.decode(prio).intValue();
 								}
 								operation = elt.getAttribute("operation");
-								fatherMECType = elt.getAttribute("fatherComponentMECType");
+								fatherArchUnitMECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("fatherComponentMECType") ) );
                             }
                             if (svalue != null) {
                                 value = svalue;
@@ -317,8 +317,8 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 
 	public OperationMEC getOperationMECOfTask()	{
 
-		TraceManager.addDev( "Inside getMECofTask, fatherMECType: " + fatherMECType );
-		if( fatherMECType.equals( "FEP" ) )	{
+		TraceManager.addDev( "Inside getMECofTask, fatherArchUnitMECType: " + fatherArchUnitMECType );
+		if( fatherArchUnitMECType instanceof FepMEC )	{
 			if( operation.equals( "CWM" ) )	{
 				return new CwmMEC( "", "", "" );
 			}
@@ -338,81 +338,39 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 				return new SumMEC( "", "", "" );
 			}
 		}
-		else if( fatherMECType.equals( "MAPPER" ) )	{
+		else if( fatherArchUnitMECType instanceof MapperMEC )	{
 			return new MappOperationMEC( "", "", "" );
 		}
-		else if( fatherMECType.equals( "INTL" )	)	{
+		else if( fatherArchUnitMECType instanceof InterleaverMEC	)	{
 				return new IntlOperationMEC( "", "", "" );
 		}
-		else if( fatherMECType.equals( "ADAIF" ) )	{
+		else if( fatherArchUnitMECType instanceof AdaifMEC )	{
 			return new AdaifOperationMEC( "", "", "" );
 		}
-		else if( fatherMECType.equals( "CPU" ) )	{
+		else if( fatherArchUnitMECType instanceof CpuMEC )	{
 			return new CpuOperationMEC( "", "", "" );
 		}
 		return null;
 	}
 
 	public ArchUnitMEC getArchUnitMEC()	{
-
-		if( fatherMECType.equals( "FEP" ) )	{
-			return new FepMEC( "", "", "" );
+		return fatherArchUnitMECType;
+		/*if( fatherArchUnitMECType instanceof FepMEC )	{
+			return new FepMEC();
 		}
-		else if( fatherMECType.equals( "MAPPER" ) )	{
-			return new MapperMEC( "", "", "" );
+		else if( fatherArchUnitMECType instanceof MapperMEC )	{
+			return new MapperMEC();
 		}
-		else if( fatherMECType.equals( "INTL" )	)	{
-				return new InterleaverMEC( "", "", "" );
+		else if( fatherArchUnitMECType instanceof InterleaverMEC )	{
+				return new InterleaverMEC();
 		}
-		else if( fatherMECType.equals( "ADAIF" ) )	{
-			return new AdaifMEC( "", "", "" );
+		else if( fatherArchUnitMECType instanceof AdaifMEC )	{
+			return new AdaifMEC();
 		}
-		else if( fatherMECType.equals( "CPU" ) )	{
+		else if( fatherArchUnitMECType instanceof CpuMEC )	{
 			return new CpuMEC();
 		}
-		return null;
+		return null;*/
 	}
-    
-    /*public Vector getListOfATG() {
-        Vector v = new Vector();
-        DesignPanel dp = tdp.getGUI().getDesignPanel(value);
-        
-        if (dp == null) {
-            return v;
-        }
-        
-        //System.out.println("DesignPanel ok");
-        LinkedList ll = dp.tcdp.getComponentList();
-        ListIterator iterator = ll.listIterator();
-        TGComponent tgc;
-        TCDTClass tc;
-        ArtifactTClassGate atg;
-        Vector listGates;
-        int i;
-        TAttribute ta;
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TCDTClass) {
-                tc = (TCDTClass)tgc;
-                //System.out.println("Found class = " + tc.getClassName());
-                listGates = tc.getGates();
-                for(i=0; i<listGates.size(); i++) {
-                    ta = (TAttribute)(listGates.elementAt(i));
-                    if (ta.getAccess() == TAttribute.PUBLIC) {
-                        // Verify if it is already involved in a synchronization internal to the component
-                        if (!dp.tcdp.isASynchronizedGate(ta)) {
-                            atg = new ArtifactTClassGate(value, tc.getClassName(), ta.getId());
-                            v.add(atg);
-                        }
-                    }
-                }
-            }
-        }
-        
-        return v;
-        
-    }*/
-    
     
 }

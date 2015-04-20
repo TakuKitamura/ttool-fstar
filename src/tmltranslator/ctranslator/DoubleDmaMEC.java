@@ -80,6 +80,18 @@ public class DoubleDmaMEC extends CPMEC	{
 		cleanup_code = TAB + "embb_dma_ctx_cleanup(&" + ctxName + ");";
 	}
 
+	public DoubleDmaMEC( String ctxName, ArchUnitMEC archMEC )	{
+
+		node_type = "DoubleDmaMEC";
+		inst_type = "VOID";
+		inst_decl = "EMBB_DMA_CONTEXT";
+		buff_type = "MM_BUFFER_TYPE";
+		buff_init = "VOID";
+		exec_code = TAB + "embb_dma_start(&" + ctxName + ", /*USER TO DO: SRC_ADDRESS*/, /*USER TO DO: DST_ADDRESS*/, /*USER TO DO: NUM_SAMPLES */ );" + CR;	
+		init_code = TAB + archMEC.getCtxInitCode() + "(&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
+		cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName + ");";
+	}
+
 	public DoubleDmaMEC( String ctxName, String destinationAddress1, String sourceAddress1, String size1, String destinationAddress2, String sourceAddress2, String size2 )	{
 
 		node_type = "DoubleDmaMEC";

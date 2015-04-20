@@ -773,30 +773,44 @@ public class TMLCCodeGeneration	{
 			}
 		}
 		instructionsString.append( CR2 + "/**** Data Transfers Instructions ****/" + CR );
+		ArchUnitMEC archMEC = new CpuMEC();
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
-			CPMEC mec = tmlcplib.getCPMEC();
+			CPMEC cpMEC = tmlcplib.getCPMEC();
 			ctxName = dt.getContextName();
-			if( mec instanceof CpuMemoryCopyMEC )	{
+			if( cpMEC instanceof CpuMemoryCopyMEC )	{
 				if( declaration )	{
-					instructionsString.append( "extern" + SP + CpuMemoryCopyMEC.Context + SP + ctxName + SC + CR );
+					instructionsString.append( "extern" + SP + archMEC.getContext() + SP + ctxName + SC + CR );
 				}
-				else	{	instructionsString.append( CpuMemoryCopyMEC.Context + SP + ctxName + SC + CR );	}
+				else	{	instructionsString.append( archMEC.getContext() + SP + ctxName + SC + CR );	}
 			}
-			if( mec instanceof SingleDmaMEC )	{
+			if( cpMEC instanceof SingleDmaMEC )	{
+				for( String s: tmlcplib.getMappedUnits() )	{
+					if( s.contains( "DMA_Controller" ) )	{
+						String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
+						archMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
+						break;
+					}
+				}
 				if( declaration )	{
-					instructionsString.append( "extern" + SP + SingleDmaMEC.Context + SP + ctxName + SC + CR );
+					instructionsString.append( "extern" + SP + archMEC.getContext() + SP + ctxName + SC + CR );
 				}
 				else	{
-					instructionsString.append( SingleDmaMEC.Context + SP + ctxName + SC + CR );
+					instructionsString.append( archMEC.getContext() + SP + ctxName + SC + CR );
 				}
 			}
-			if( mec instanceof DoubleDmaMEC )	{
-				if( declaration )	{
-					instructionsString.append( "extern" + SP + DoubleDmaMEC.Context + SP + ctxName + SC + CR );
-				}
-				else	{
-					instructionsString.append( DoubleDmaMEC.Context + SP + ctxName + SC + CR );
+			if( cpMEC instanceof DoubleDmaMEC )	{
+				for( String s: tmlcplib.getMappedUnits() )	{
+					if( s.contains( "DMA_Controller" ) )	{
+						String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
+						archMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
+						if( declaration )	{
+							instructionsString.append( "extern" + SP + archMEC.getContext() + SP + ctxName + SC + CR );
+						}
+						else	{
+							instructionsString.append( archMEC.getContext() + SP + ctxName + SC + CR );
+						}
+					}
 				}
 			}
 		}
@@ -810,13 +824,6 @@ public class TMLCCodeGeneration	{
 			s.append( sig.getName() + "," + CR );
 		}
 		s.append( postexList.get(0).getName() + "," + CR );
-		/*for( Operation op: operationsList )	{
-			if( op.isPostex() )	{
-				TraceManager.addDev( "OPERATION: " + op.getName() );
-				TraceManager.addDev( "\t\tinSignal = " + op.getInSignals().get(0).getName() );
-			}
-		}
-		System.exit(0);*/
 		s.append( "NUM_SIGS };" + CR2 + "enum ops_enu	{" + CR );
 
 		for( Operation op: operationsList )	{
@@ -941,7 +948,7 @@ public class TMLCCodeGeneration	{
 		}
 
 		code.append( "int op_" + op.getName() + "()\t{" + CR /*+ getTaskAttributes( fTask )*/ + CR );
-		if( op.isPrex() )	{
+		if( op.isPrex() || op.isPostex() )	{
 			code.append( TAB + "int status = 0;" + CR );
 		}
 
@@ -1338,6 +1345,9 @@ public class TMLCCodeGeneration	{
 
 	private void generateInitRoutinesForCPs()	{
 
+		ArchUnitMEC archMEC = new CpuMEC();
+		ArrayList<ArchUnitMEC> archMECList = new ArrayList<ArchUnitMEC>();
+
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
 			CPMEC cpMEC = tmlcplib.getCPMEC();
@@ -1349,14 +1359,29 @@ public class TMLCCodeGeneration	{
 				initFileString.append( "//" + TAB + mec.getInitCode() + "}" + CR2 );
 			}
 			if( cpMEC instanceof SingleDmaMEC )	{
+				for( String s: tmlcplib.getMappedUnits() )	{
+					if( s.contains( "DMA_Controller" ) )	{
+						String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
+						archMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
+						break;
+					}
+				}
 				initFileString.append( "void init_" + name + "()\t{" + CR );
-				SingleDmaMEC mec = new SingleDmaMEC( ctxName );
-				initFileString.append( "//" + TAB + mec.getInitCode() + "}" + CR2 );
+				SingleDmaMEC mec = new SingleDmaMEC( ctxName, archMEC );
+				initFileString.append( TAB + mec.getInitCode() + "}" + CR2 );
 			}
 			if( cpMEC instanceof DoubleDmaMEC )	{
 				initFileString.append( "void init_" + name + "()\t{" + CR );
-				DoubleDmaMEC mec = new DoubleDmaMEC( ctxName );
-				initFileString.append( "//" + TAB + mec.getInitCode() + "}" + CR2 );
+				for( String s: tmlcplib.getMappedUnits() )	{	//there are two DMA_controllers
+					if( s.contains( "DMA_Controller" ) )	{
+						String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
+						archMEC = tmla.getHwCPUByName( dmaUnit ).MEC ;
+						//TraceManager.addDev( "DoubleDmaTransfer, archMEC: " + archMEC );
+						DoubleDmaMEC mec = new DoubleDmaMEC( ctxName, archMEC );
+						initFileString.append( TAB + mec.getInitCode() );
+					}
+				}
+				initFileString.append( "}" + CR2 );
 			}
 		}
 	}

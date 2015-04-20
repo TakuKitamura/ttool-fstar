@@ -287,6 +287,17 @@ public class TMLArchitecture {
         return null;
     }
 
+    public HwCPU getHwCPUByName(String _name) {
+        for(HwNode node: hwnodes) {
+            if (node.getName().equals(_name)) {
+                if (node instanceof HwCPU) {
+                    return (HwCPU)node;
+                }
+            }
+        }
+        return null;
+    }
+
     public HwBus getHwBusByName(String _name) {
         for(HwNode node: hwnodes) {
             if (node.getName().equals(_name)) {

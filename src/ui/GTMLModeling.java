@@ -2172,6 +2172,7 @@ public class GTMLModeling  {
                     cpu.execiTime = node.getExeciTime();
                     cpu.execcTime = node.getExeccTime();
                     cpu.clockRatio = node.getClockRatio();
+										cpu.MEC = node.getMECType();
                     listE.addCor(cpu, node);
                     archi.addHwNode(cpu);
                     TraceManager.addDev("CPU node added: " + cpu.getName());

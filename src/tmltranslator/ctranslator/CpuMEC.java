@@ -53,11 +53,8 @@ public class CpuMEC extends ArchUnitMEC	{
 	protected String addr = "";
 
 	public CpuMEC()	{
-		node_type = "CPU";
-		inst_type = "CPUoperation";
-		inst_decl = "VOID";
-		buff_type = "MM_BUFFER_TYPE";
-		buff_init = "VOID";
+		index = 0;
+		context = "EMBB_CONTEXT";
 	}
 
 }	//End of class

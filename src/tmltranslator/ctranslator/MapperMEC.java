@@ -53,14 +53,15 @@ public class MapperMEC extends ArchUnitMEC	{
 
 	public static final String Context = "MAPPER_CONTEXT";
 	public static final String Ctx_cleanup = "mapper_ctx_cleanup";
+	public static final String Operation = "Mapper operation";
 
-	public MapperMEC( String XOP, String ID0, String OD0 )	{
+	public MapperMEC()	{
 
-		node_type = "MAPPER";
-		inst_type = "MAP";
-		inst_decl = "MAP_CONTEXT";
-		buff_type = "MAPPER_BUFFER_TYPE";
-		buff_init = "= {/*l,b,q,t*/};";
+		index = 3;
+		context = "MAPPER_CONTEXT";
+		initCtxRoutine = "mapper_ctx_init";
+		localMemoryPointer = "mapper_mss";
+		ctxCleanupRoutine = "mapper_ctx_cleanup";
 	}
 
 }	//End of class

@@ -52,35 +52,40 @@ import myutil.*;
 
 public abstract class ArchUnitMEC	{
 
+	private static ArchUnitMEC[] typesArr = { new CpuMEC(), new FepMEC(), new InterleaverMEC(), new MapperMEC(), new AdaifMEC() };
+	public static final Vector<ArchUnitMEC> Types = new Vector<ArchUnitMEC>( Arrays.asList( typesArr ) );
+	public static final int CpuMECIndex = 0;
+	public static final int FepMECIndex = 1;
+	public static final int InterleaverMECIndex = 2;
+	public static final int MapperMECIndex = 3;
+	public static final int AdaifMECIndex = 4;
+
 	public String CR = "\n";
 	public String TAB = "\t";
-	public String node_type = new String();
-	public String inst_type = new String();
-	public String inst_decl = new String();
-	public String buff_type = new String();
-	public String buff_init = new String();
-	/*public String init_code = new String();
-	public String exec_code = new String();
-	public String cleanup_code = new String();*/
+	protected int index;
+	protected String initCtxRoutine;
+	protected String ctxCleanupRoutine;
+	protected String localMemoryPointer;
+	protected String context = "EMBB_CONTEXT";
 	
-	public String ID0 = new String();
-	public String OD0 = new String();
-	public String XOP = new String();
-	
-	public ArchUnitMEC()	{
-		node_type = "1";
+	public int getIndex()	{
+		return index;
 	}
 
-	/*public String getExecCode()	{
-		return exec_code;
+	public String getContext()	{
+		return context;
 	}
 
-	public String getInitCode()	{
-		return init_code;
-	}*/
+	public String getCtxInitCode()	{
+		return initCtxRoutine;
+	}
 
-	public String toString()	{
-		return node_type;// + CR + inst_decl + CR + inst_type + CR + buff_type + CR + buff_init + CR + exec_code + CR + init_code + CR + cleanup_code;
+	public String getCtxCleanupCode()	{
+		return ctxCleanupRoutine;
+	}
+
+	public String getLocalMemoryPointer()	{
+		return localMemoryPointer;
 	}
 
 }	//End of class

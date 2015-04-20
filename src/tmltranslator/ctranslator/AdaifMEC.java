@@ -53,14 +53,15 @@ public class AdaifMEC extends ArchUnitMEC	{
 
 	public static final String Context = "ADAIF_CONTEXT";
 	public static final String Ctx_cleanup = "adaif_ctx_cleanup";
+	public static final String Operation = "Adaif operation";
 
-	public AdaifMEC( String XOP, String ID0, String OD0 )	{
+	public AdaifMEC()	{
 
-		node_type = "ADAIF";
-		inst_type = "ADAIF";
-		inst_decl = "ADAIF_CONTEXT";
-		buff_type = "ADAIF_BUFFER_TYPE";
-		buff_init = "= {/*l,b,q,t*/};";
+		index = 4;
+		context = "ADAIF_CONTEXT";
+		initCtxRoutine = "adaif_ctx_init";
+		localMemoryPointer = "adaif_mss";
+		ctxCleanupRoutine = "adaif_ctx_cleanup";
 	}
 
 }	//End of class
