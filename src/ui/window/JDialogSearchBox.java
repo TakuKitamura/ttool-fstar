@@ -72,8 +72,8 @@ import java.util.*;
 import javax.swing.table.DefaultTableModel;
 
 import myutil.CheckConnection;
-import myutil.Message;
-import myutil.Client;
+//import myutil.Message;
+//import myutil.Client;
 import ui.TDiagramMouseManager;
 
 //TODO : change display to tab.
