@@ -1026,14 +1026,14 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     }
 
     public void doQueryDB(){
-        Message msg = new Message();
+       /* Message msg = new Message();
         msg.setCmd(Message.CMD_SEARCH);
         ArrayList<String> option = new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();
         option.add("System");
         values.add(this.combobox_System.getSelectedItem().toString());
         option.add(this.combobox_Year.getSelectedItem().toString());
-        option.add(this.combobox_Score.getSelectedItem().toString());
+        option.add(this.combobox_Score.getSelectedItem().toString());*/
     }
 
     //TODO: implement function to get database.
