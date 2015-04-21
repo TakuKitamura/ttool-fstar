@@ -58,6 +58,8 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 
     private boolean isCheckable;
 
+    private boolean isHidden = false;
+
     public AvatarStateMachineElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         nexts = new LinkedList<AvatarStateMachineElement>();
@@ -89,6 +91,15 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
         }
         return null;
     }
+
+    public void setHidden(boolean _b) {
+	isHidden = _b;
+    }
+
+    public boolean isHidden() {
+	return isHidden;
+    }
+
 
     public void setState(AvatarState _as) {
         myState = _as;

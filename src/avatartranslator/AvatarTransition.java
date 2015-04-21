@@ -71,6 +71,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
         guard = _guard;
     }
 
+
     public void addGuard(String _g) {
         guard = "(" + guard + ") and (" + _g + ")";
     }

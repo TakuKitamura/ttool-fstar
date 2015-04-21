@@ -879,7 +879,10 @@ public class AvatarSpecificationSimulation  {
                         tr.isSilent = true;
                         return tr;
                     }
-                }
+                } else if (atr.isHidden()) {
+		    tr.isSilent = true;
+		    return tr;
+		}
                 // State entering?
             } else if (((tr.elementToExecute instanceof AvatarState) ||  (tr.elementToExecute instanceof AvatarStopState)) && (executeStateEntering)) {
                 if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
@@ -887,7 +890,10 @@ public class AvatarSpecificationSimulation  {
                     tr.isSilent = true;
                     return tr;
                 }
-            }
+            } else if (tr.elementToExecute.isHidden()) {
+		tr.isSilent = true;
+		return tr;
+	    }
         }
 
         return null;
