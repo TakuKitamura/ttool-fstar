@@ -113,19 +113,19 @@ public class DoubleDmaMEC extends CPMEC	{
 
 		switch( transferType )	{
 			case CPMEC.mem2IP:
-				exec_code = TAB + "embb_mem2ip(&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", /*USER TODO: *SRC */, " + sizeString + " );" + CR;	
-				init_code = TAB + archMEC.getCtxInitCode() + "(&" + ctxName + ", " + "(uintptr_t) " + memoryBaseAddress + " );" + CR;
+				exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", /*USER TODO: *SRC */, " + sizeString + " );" + CR;	
+				init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) " + memoryBaseAddress + " );" + CR;
 				cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName + ");";
 			break;
 			case CPMEC.IP2mem:
-				exec_code = TAB + "embb_ip2mem( /* USER TODO: *DST */, &" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", " + sizeString + " );" + CR;	
-				init_code = TAB + archMEC.getCtxInitCode() + "(&" + ctxName + ", " + "(uintptr_t) " + memoryBaseAddress + " );" + CR;
+				exec_code = TAB + "embb_ip2mem( /* USER TODO: *DST */, (EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", " + sizeString + " );" + CR;	
+				init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) " + memoryBaseAddress + " );" + CR;
 				cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName + ");";
 			break;
 			case CPMEC.IP2IP:
-				exec_code = TAB + "embb_ip2ip(&" + ctxName + "_0, (uintptr_t) " + memoryBaseAddress + ", &" + ctxName + "_1, (uintptr_t) " + memoryBaseAddress + ", " + sizeString + " );" + CR;	
-				init_code = TAB + archMEC.getCtxInitCode() + "(&" + ctxName + "_0, " + "(uintptr_t) " + memoryBaseAddress + " );" + CR;
-				init_code += TAB + archMEC.getCtxInitCode() + "(&" + ctxName + "_1, " + "(uintptr_t) " + memoryBaseAddress + " );" + CR;
+				exec_code = TAB + "embb_ip2ip((EMBB_CONTEXT *)&" + ctxName + "_0, (uintptr_t) " + memoryBaseAddress + ", (EMBB_CONTEXT *)&" + ctxName + "_1, (uintptr_t) " + memoryBaseAddress + ", " + sizeString + " );" + CR;	
+				init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + "_0, " + "(uintptr_t) " + memoryBaseAddress + " );" + CR;
+				init_code += TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + "_1, " + "(uintptr_t) " + memoryBaseAddress + " );" + CR;
 				cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName + "_0);";
 				cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName + "_1);";
 			break;
