@@ -47,11 +47,9 @@
 package tmltranslator.ctranslator;;
 
 import java.util.*;
+import myutil.*;
 
 public class SingleDmaMEC extends CPMEC	{
-
-	public static final String Context = "EMBB_CONTEXT";
-	public static final String Ctx_cleanup = "dma_ctx_cleanup";
 
 	public static final int MaxParameters = 3;
 	public static final int destinationAddressIndex = 0;
@@ -62,6 +60,8 @@ public class SingleDmaMEC extends CPMEC	{
 	public static final String sourceAddress = "sourceAddress";
 	public static final String counter = "counter";
 
+	private String memoryBaseAddress = "0";
+
 	public SingleDmaMEC( String ctxName )	{
 
 		node_type = "SingleDmaMEC";
@@ -71,32 +71,78 @@ public class SingleDmaMEC extends CPMEC	{
 		buff_init = "VOID";
 	}
 
-	public SingleDmaMEC( String ctxName, ArchUnitMEC archMEC )	{
+	public SingleDmaMEC( String ctxName, ArchUnitMEC archMEC, int srcMemoryType, int dstMemoryType, int transferType, String sizeString )	{
 
 		node_type = "SingleDmaMEC";
 		inst_type = "VOID";
 		inst_decl = "EMBB_DMA_CONTEXT";
 		buff_type = "MM_BUFFER_TYPE";
 		buff_init = "VOID";
-		exec_code = TAB + "embb_dma_start(&" + ctxName + ", (uintptr_t) /*USER TO DO: SRC_ADDRESS*/, (uintptr_t) /*USER TO DO: DST_ADDRESS*/, /*USER TO DO: NUM_SAMPLES */ );" + CR;	
-		init_code = TAB + archMEC.getCtxInitCode() + "(&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
-		cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";
+
+		switch( srcMemoryType )	{
+			case Buffer.FepBuffer:
+				memoryBaseAddress = "fep_mss";
+				break;
+			case Buffer.AdaifBuffer:
+				memoryBaseAddress = "adaif_mss";
+			break;
+			case Buffer.InterleaverBuffer:
+				memoryBaseAddress = "intl_mss";
+			break;
+			case Buffer.MapperBuffer:
+				memoryBaseAddress = "mapper_mss";
+			break;
+			case Buffer.MainMemoryBuffer:
+				memoryBaseAddress = "0";
+			break;
+			default:
+				memoryBaseAddress = "0";
+			break;
+		}
+
+		switch( transferType )	{
+			case CPMEC.mem2IP:
+				exec_code = TAB + "embb_mem2ip(&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", /*USER TODO: *SRC */, " + sizeString + " );" + CR;
+				init_code = TAB + archMEC.getCtxInitCode() + "(&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
+				cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";
+			break;
+			case CPMEC.IP2mem:
+				exec_code = TAB + "embb_ip2mem( /* USER TODO: *DST */, &" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", " + sizeString + " );" + CR;	
+				init_code = TAB + archMEC.getCtxInitCode() + "(&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
+				cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";
+			break;
+			case CPMEC.IP2IP:
+				exec_code = TAB + "embb_ip2ip(&" + ctxName + "_0, (uintptr_t) " + memoryBaseAddress + ", &" + ctxName + "_1, (uintptr_t) " + memoryBaseAddress + ", " + sizeString + " );" + CR;	
+				init_code = TAB + archMEC.getCtxInitCode() + "(&" + ctxName + "_0, " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
+				init_code += TAB + archMEC.getCtxInitCode() + "(&" + ctxName + "_1, " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
+				cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +"_0);";
+				cleanup_code += TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +"_1);";
+			break;
+			default:
+				exec_code = TAB + "embb_mem2ip(&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", /*USER TODO: *SRC */, " + sizeString + " );" + CR;
+			break;
+		}
+
 	}
 	
-	public SingleDmaMEC( String ctxName, String destinationAddress, String sourceAddress, String size )	{
-
-		node_type = "SingleDmaMEC";
-		inst_type = "VOID";
-		inst_decl = "EMBB_DMA_CONTEXT";
-		buff_type = "MM_BUFFER_TYPE";
-		buff_init = "VOID";
-		exec_code = TAB + "embb_dma_start(&" + ctxName + ", (uintptr_t) " + sourceAddress + ", (uintptr_t) " + destinationAddress + ", (size_t) " + size + " );" + CR;	
-		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, NULL );" + CR;
-		cleanup_code = TAB + "embb_dma_ctx_cleanup(&" + ctxName +");";
-	}
+//	public SingleDmaMEC( String ctxName, String destinationAddress, String sourceAddress, String size )	{
+//
+//		node_type = "SingleDmaMEC";
+//		inst_type = "VOID";
+//		inst_decl = "EMBB_DMA_CONTEXT";
+//		buff_type = "MM_BUFFER_TYPE";
+//		buff_init = "VOID";
+//		exec_code = TAB + "embb_dma_start(&" + ctxName + ", (uintptr_t) " + sourceAddress + ", (uintptr_t) " + destinationAddress + ", (size_t) " + size + " );" + CR;	
+//		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, NULL );" + CR;
+//		cleanup_code = TAB + "embb_dma_ctx_cleanup(&" + ctxName +");";
+//	}
 
 	public String getInitCode()	{
 		return init_code;
+	}
+
+	public String getCleanupCode()	{
+		return cleanup_code;
 	}
 
 }	//End of class

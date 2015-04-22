@@ -62,7 +62,7 @@ public class Signal	{
 	private String buffPointer_s = "void *pBuff" + SC + CR;
 	private Buffer buffPointer = null;
 	
-	public static final String DECLARATION = "struct SIG_TYPE	{\n\tbool f;\n\tvoid *pBuff;\n};\n\ntypedef struct SIG_TYPE SIG_TYPE;";
+	public static final String DECLARATION = "struct SIG_TYPE	{\n\tbool f;\n\tvoid *pBuff;\n};\n\ntypedef struct SIG_TYPE SIG_TYPE;\nextern SIG_TYPE sig[];\n\n";
 
 	private String name;
 	private TMLChannel channel;

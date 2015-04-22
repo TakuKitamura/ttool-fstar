@@ -46,13 +46,16 @@ knowledge of the CeCILL license and that you accept its terms.
 package tmltranslator;
 
 import java.util.*;
+import tmltranslator.ctranslator.*;
 
 
 public class HwMemory extends HwCommunicationNode  {
 	
 	public static final int DEFAULT_BYTE_DATA_SIZE = 4;
-	
-    public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
+	public static final int DEFAULT_BUFFER_TYPE = 0;
+
+	public int BufferType = DEFAULT_BUFFER_TYPE;
+	public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
  
     public HwMemory(String _name) {
 		super(_name);

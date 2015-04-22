@@ -2254,6 +2254,7 @@ public class GTMLModeling  {
                     memory = new HwMemory(memorynode.getName());
                     memory.byteDataSize = memorynode.getByteDataSize();
                     memory.clockRatio = memorynode.getClockRatio();
+										memory.BufferType = memorynode.getBufferType();
                     listE.addCor(memory, memorynode);
                     archi.addHwNode(memory);
                     TraceManager.addDev("Memory node added:" + memory.getName());
@@ -2935,6 +2936,7 @@ public class GTMLModeling  {
                 map.addTMLCPLib(tmlcplib);
                 tmlcplib.setMappedUnits(cp.getMappedUnits());
 								tmlcplib.setAssignedAttributes( cp.getAssignedAttributes() );
+								tmlcplib.setTransferTypes( cp.getTransferTypes() );
 
                 // Handling mapped artifacts
                 for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {

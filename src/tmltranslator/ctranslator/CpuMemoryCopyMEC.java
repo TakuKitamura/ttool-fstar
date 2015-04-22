@@ -70,4 +70,21 @@ public class CpuMemoryCopyMEC extends CPMEC	{
 		cleanup_code = TAB + "embb_memcpy_ctx_cleanup(&" + ctxName + ");";
 	}
 
+	public CpuMemoryCopyMEC( String pssBaseAddress, String offset, String ddrAddress, String size )	{
+		node_type = "CpuMemoryCopy";
+		inst_type = "MEMORY_COPY";
+		inst_decl = "VOID";
+		buff_type = "MM_BUFFER_TYPE";
+		buff_init = "VOID";
+
+		exec_code = TAB + CR + TAB +
+								"int i = 0;" + CR + TAB +
+								"int k = 0;" + CR + TAB +
+								"for( i = 0 ;i < " + size + "; i += 4, k++ )\t{" + CR + TAB +
+								TAB + "cpu_mem_write_32( " + pssBaseAddress + " + " + offset + " + i, " + ddrAddress + "[k] );" + CR + TAB + "}" + CR;
+
+		//init_code = TAB + "embb_memcpy_ctx_init(&" + ctxName + ");" + CR;
+		//cleanup_code = TAB + "embb_memcpy_ctx_cleanup(&" + ctxName + ");";
+	}
+
 }	//End of class

@@ -67,9 +67,17 @@ public abstract class CPMEC	{
 	public String cleanup_code = new String();
 
 	public static final String[] cpTypes = { "Memory Copy", "Single DMA", "Double DMA" };
+	public static final String[] transferTypes = { "memory to IP core", "IP core to IP core", "IP core to memory" };
 	public static final String SingleDMA = "Single DMA";
 	public static final String DoubleDMA = "Double DMA";
 	public static final String MemoryCopy = "Memory Copy";
+	public static final int mem2IP = 0;
+	public static final int IP2IP = 1;
+	public static final int IP2mem = 2;
+
+	public static final String dmaController = "DMA_Controller";
+	public static final String sourceStorage = "Src_Storage_Instance";
+	public static final String destinationStorage = "Dst_Storage_Instance";
 
 	public CPMEC()	{
 		node_type = "1";

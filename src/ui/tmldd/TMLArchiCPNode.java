@@ -69,6 +69,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     private Vector<String> mappedUnits = new Vector<String>();
     private Vector<String> assignedAttributes = new Vector<String>();
 		private String cpMEC = "VOID";
+		private int transferType1 = -1;
+		private int transferType2 = -1;
 		private String completeName;
 
     public TMLArchiCPNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -198,7 +200,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         String errors = "";
         String tmpName;
 
-        JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Setting CP attributes", this, mappedUnits, name, cpMEC, assignedAttributes );
+        JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Setting CP attributes", this, mappedUnits, name, cpMEC, assignedAttributes, transferType1, transferType2 );
         dialog.setSize( 700, 550 );
         GraphicLib.centerOnParent( dialog );
         dialog.show(); // blocked until dialog has been closed
@@ -206,6 +208,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         name = dialog.getNodeName();
         mappedUnits = dialog.getMappedUnits();
 				cpMEC = dialog.getCPMEC();
+				transferType1 = dialog.getTransferTypes().get(0);
+				transferType2 = dialog.getTransferTypes().get(1);
 				assignedAttributes = dialog.getAssignedAttributes();
 
         if( !dialog.isRegularClose() )  {
@@ -244,7 +248,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name + "\" cpMEC=\"" + cpMEC );
+        sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name + "\" cpMEC=\"" + cpMEC + "\" transferType1=\"" + String.valueOf(transferType1) + "\" transferType2=\"" + String.valueOf(transferType2) );
         sb.append("\" />\n");
         sb.append("<attributes reference=\"" + reference + "\" ");
         sb.append("/>\n");
@@ -288,6 +292,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
                                 sstereotype = elt.getAttribute("stereotype");
                                 snodeName = elt.getAttribute("nodeName");
 																cpMEC = elt.getAttribute( "cpMEC" );
+																transferType1 = Integer.parseInt(elt.getAttribute( "transferType1" ) );
+																transferType2 = Integer.parseInt(elt.getAttribute( "transferType2" ) );
                             }
                             if (sstereotype != null) {
                                 stereotype = sstereotype;
@@ -471,5 +477,12 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 	private String getAttributeValue( String assignement )	{
 		String s = assignement.split(" = ")[1];
 		return s.substring(0, s.length()-1);	//remove trailing semi-colon
+	}
+
+	public ArrayList<Integer> getTransferTypes()	{
+		ArrayList<Integer> transferTypes = new ArrayList<Integer>();
+		transferTypes.add( transferType1 );
+		transferTypes.add( transferType2 );
+		return transferTypes;
 	}
 }

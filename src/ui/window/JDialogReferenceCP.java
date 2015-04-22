@@ -139,22 +139,25 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 	//Panel5, code generation
 	private JPanel panel5;
-	private JComboBox cpMECsCB;
+	private JComboBox cpMECsCB, transferTypeCB1, transferTypeCB2;
 	private JList cpMECsList;
 	private String cpMEC;
+	private int transferType1, transferType2;
 	
 	// Main Panel
 	private JButton closeButton;
 	private JButton cancelButton;
 	
 	/** Creates new form  */
-	public JDialogReferenceCP( JFrame _frame,  String _title, TMLArchiCPNode _cp, Vector<String> _mappedUnits, String _name, String _cpMEC, Vector<String> _assignedAttributes ) {
+	public JDialogReferenceCP( JFrame _frame,  String _title, TMLArchiCPNode _cp, Vector<String> _mappedUnits, String _name, String _cpMEC, Vector<String> _assignedAttributes, int _transferType1, int _transferType2 ) {
 	
 	super( _frame, _title, true );
 	frame = _frame;
 	cp = _cp;
 	name = _name;
 	cpMEC = _cpMEC;
+	transferType1 = _transferType1;
+	transferType2 = _transferType2;
 	
 	if( _mappedUnits.size() > 0 )	{	//the validity of _mappedUnits is checked when initializing components
 		mappedUnitsSL = new Vector<String>();	//take into account the elements already mapped
@@ -477,6 +480,47 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			cpMECsCB.addActionListener( this );
 			cpMECsCB.setMinimumSize( new Dimension(150, 50) );
 			panel5.add( cpMECsCB, c5 );
+			//
+			c5.gridwidth = GridBagConstraints.REMAINDER; //end row
+			panel5.add(new JLabel(""), c5);
+			c5.gridwidth = 1;
+			c5.gridheight = 1;
+			c5.weighty = 1.0;
+			c5.weightx = 1.0;
+			c5.fill = GridBagConstraints.HORIZONTAL;
+			c5.anchor = GridBagConstraints.LINE_START;
+			panel5.add( new JLabel( "DMA Transfer Type 1:" ), c5 );
+			transferTypeCB1 = new JComboBox( new Vector<String>( Arrays.asList( CPMEC.transferTypes ) ) );
+			if( transferType1 == -1 )	{
+				transferTypeCB1.setSelectedIndex( 0 );
+			}
+			else	{
+				transferTypeCB1.setSelectedIndex( transferType1 );
+			}
+			transferTypeCB1.addActionListener( this );
+			transferTypeCB1.setMinimumSize( new Dimension(150, 50) );
+			panel5.add( transferTypeCB1, c5 );
+			//
+			c5.gridwidth = GridBagConstraints.REMAINDER; //end row
+			panel5.add(new JLabel(""), c5);
+			c5.gridwidth = 1;
+			c5.gridheight = 1;
+			c5.weighty = 1.0;
+			c5.weightx = 1.0;
+			c5.fill = GridBagConstraints.HORIZONTAL;
+			c5.anchor = GridBagConstraints.LINE_START;
+			panel5.add( new JLabel( "DMA Transfer Type 2:" ), c5 );
+			transferTypeCB2 = new JComboBox( new Vector<String>( Arrays.asList( CPMEC.transferTypes ) ) );
+			if( transferType2 == -1 )	{
+				transferTypeCB2.setSelectedIndex( 0 );
+			}
+			else	{
+				transferTypeCB2.setSelectedIndex( transferType2 );
+			}
+			transferTypeCB2.addActionListener( this );
+			transferTypeCB2.setMinimumSize( new Dimension(150, 50) );
+			panel5.add( transferTypeCB2, c5 );
+			enableDisableTransferTypeCBs();
 			
 			// main panel;
 			c0.gridwidth = 1;	//num columns
@@ -494,9 +538,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c0.weighty = 1.0;
 			c0.weightx = 1.0;
 			c0.fill = GridBagConstraints.BOTH;
-			//c.add(panel3, c0);
 			c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-			//c.add(panel4, c0);
 			panel34.add( panel3, c0 );
 			panel34.add( panel4, c0 );
 
@@ -718,7 +760,32 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			else if( evt.getSource() == scrollPane )	{
 				manageScrollPaneButtons();
 			}
+			else if( evt.getSource() == cpMECsCB )	{
+				enableDisableTransferTypeCBs();
+			}
 		}	//End of method
+
+		private void enableDisableTransferTypeCBs()	{
+
+			if( cpMECsCB.getSelectedIndex() == 0 )	{	//selected memoryCopy
+				transferTypeCB1.setEnabled(false);
+				transferTypeCB2.setEnabled(false);
+				transferType1 = 0;
+				transferType2 = 0;
+			}
+			else if( cpMECsCB.getSelectedIndex() == 1 )	{	//selected SingleDma
+				transferTypeCB1.setEnabled(true);
+				transferType1 = 0;
+				transferTypeCB2.setEnabled(false);
+				transferType2 = 0;
+			}
+			else if( cpMECsCB.getSelectedIndex() == 2 )	{	//selected DoubleDma
+				transferTypeCB1.setEnabled(true);
+				transferType1 = 0;
+				transferTypeCB2.setEnabled(true);
+				transferType2 = 0;
+			}
+		}
 		
 		private void mapInstance() {
 
@@ -1013,10 +1080,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			cancelled = false;
 			name = nameOfCP.getText();
 			cpMEC = (String)cpMECsCB.getSelectedItem();
-			/*if( attributesVector.size() > 0 )	{	//there are still parameters which must be assigned a value
-				JOptionPane.showMessageDialog( frame, "Please assign a value to all attributes", "Error", JOptionPane.INFORMATION_MESSAGE );
-				return;
-			}*/
+			transferType1 = Arrays.asList( CPMEC.transferTypes ).indexOf( (String)transferTypeCB1.getSelectedItem() );
+			transferType2 = Arrays.asList( CPMEC.transferTypes ).indexOf( (String)transferTypeCB2.getSelectedItem() );
 			dispose();
 		}
 		
@@ -1295,5 +1360,11 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		}
 	}
 
+	public ArrayList<Integer> getTransferTypes()	{
+		ArrayList<Integer> transferTypes = new ArrayList<Integer>();
+		transferTypes.add( transferType1 );
+		transferTypes.add( transferType2 );
+		return transferTypes;
+	}
 		
 }	//End of class

@@ -57,6 +57,7 @@ public class TMLCPLib extends TMLElement {
 		private CPMEC cpMEC;
     private String typeName;
 		private Vector<String> assignedAttributes;
+		private ArrayList<Integer> transferTypes;
 
 
     public TMLCPLib(String _name, String _typeName, Object _referenceObject, CPMEC _cpMEC ) {
@@ -127,5 +128,13 @@ public class TMLCPLib extends TMLElement {
 
 	public Vector<String> getAssignedAttributes()	{
 		return assignedAttributes;
+	}
+
+	public void setTransferTypes( ArrayList<Integer> _transferTypes )	{
+		transferTypes = _transferTypes;
+	}
+
+	public ArrayList<Integer> getTransferTypes()	{
+		return transferTypes;
 	}
 }       //End of the class
