@@ -125,6 +125,7 @@ public class AttackTreePanelTranslator {
                 }
                 att = new Attack(value, atdatt);
                 att.setRoot(atdatt.isRootAttack());
+                att.setEnabled(atdatt.isEnabled());
                 at.addAttack(att);
                 listE.addCor(att, comp);
             }
@@ -334,16 +335,16 @@ public class AttackTreePanelTranslator {
             ar.addSignals(makeAttack, acceptAttack);
             ar.addSignals(stopMakeAttack, stopAcceptAttack);
 
-	    // If attack is not leaf: add the intermediate action to activate the intermediate leaf
-	    if (!attack.isLeaf()) {
-		avatartranslator.AvatarSignal nodeDone = new avatartranslator.AvatarSignal("nodeDone__" + attack.getName(), AvatarSignal.OUT, (Object)(listE.getTG(attack)));
-		_main.addSignal(nodeDone);
-		avatartranslator.AvatarSignal activateAttack = new avatartranslator.AvatarSignal("activate__" + attack.getName(), AvatarSignal.IN, listE.getTG(attack));
-		_main.addSignal(activateAttack);
-		ar.addSignals(nodeDone, activateAttack);
-		
-	    }
-	    
+            // If attack is not leaf: add the intermediate action to activate the intermediate leaf
+            if (!attack.isLeaf()) {
+                avatartranslator.AvatarSignal nodeDone = new avatartranslator.AvatarSignal("nodeDone__" + attack.getName(), AvatarSignal.OUT, (Object)(listE.getTG(attack)));
+                _main.addSignal(nodeDone);
+                avatartranslator.AvatarSignal activateAttack = new avatartranslator.AvatarSignal("activate__" + attack.getName(), AvatarSignal.IN, listE.getTG(attack));
+                _main.addSignal(activateAttack);
+                ar.addSignals(nodeDone, activateAttack);
+
+            }
+
         }
     }
 
@@ -359,7 +360,7 @@ public class AttackTreePanelTranslator {
                 avatartranslator.AvatarSignal stopAttack = _main.getAvatarSignalWithName("makeStop__" + attack.getName());
 
                 if ((sigAttack != null) && (stopAttack != null)) {
-                    makeAttackBlockSMD(ab, sigAttack, stopAttack, listE.getTG(attack));
+                    makeAttackBlockSMD(ab, sigAttack, stopAttack, attack.isEnabled(), listE.getTG(attack));
                 }
 
             } else {
@@ -370,141 +371,276 @@ public class AttackTreePanelTranslator {
 
                 avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("make__" + attack.getName());
                 avatartranslator.AvatarSignal stopAttack = _main.getAvatarSignalWithName("makeStop__" + attack.getName());
-		avatartranslator.AvatarSignal activateAttack = _main.getAvatarSignalWithName("activate__" + attack.getName());
+                avatartranslator.AvatarSignal activateAttack = _main.getAvatarSignalWithName("activate__" + attack.getName());
 
-                makeIntermediateAttackBlockSMD(ab, sigAttack, stopAttack, activateAttack, listE.getTG(attack));
+                makeIntermediateAttackBlockSMD(ab, sigAttack, stopAttack, activateAttack, attack.isEnabled(), listE.getTG(attack));
 
-		// Intermediate attack
-            } 
+                // Intermediate attack
+            }
         }
     }
 
 
-    private void makeAttackBlockSMD(AvatarBlock _ab, avatartranslator.AvatarSignal _sigAttack, avatartranslator.AvatarSignal _sigStop, Object _ref) {
+    private void makeAttackBlockSMD(AvatarBlock _ab, avatartranslator.AvatarSignal _sigAttack, avatartranslator.AvatarSignal _sigStop, boolean isEnabled, Object _ref) {
         Object _ref1 = _ref;
         _ref = null;
         AvatarStateMachine asm = _ab.getStateMachine();
 
-        AvatarStartState start = new AvatarStartState("start", _ref);
-        AvatarState mainState = new AvatarState("main", _ref, false);
-        AvatarState performedState = new AvatarState("main", _ref1, true);
-        AvatarState mainStop = new AvatarState("stop", _ref, false);
-        AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingAttack", _sigAttack, _ref1);
-        AvatarActionOnSignal getStop = new AvatarActionOnSignal("GettingStop", _sigStop, _ref);
+        if (isEnabled) {
 
-        asm.addElement(start);
-        asm.setStartState(start);
-        asm.addElement(mainState);
-        asm.addElement(performedState);
-        asm.addElement(getMake);
-        asm.addElement(getStop);
+            AvatarStartState start = new AvatarStartState("start", _ref);
+            AvatarState mainState = new AvatarState("main", _ref, false);
+            AvatarState performedState = new AvatarState("main", _ref1, true);
+            AvatarState mainStop = new AvatarState("stop", _ref, false);
+            AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingAttack", _sigAttack, _ref1);
+            AvatarActionOnSignal getStop = new AvatarActionOnSignal("GettingStop", _sigStop, _ref);
+
+            asm.addElement(start);
+            asm.setStartState(start);
+            asm.addElement(mainState);
+            asm.addElement(performedState);
+            asm.addElement(getMake);
+            asm.addElement(getStop);
 
 
-        AvatarTransition at = new AvatarTransition("at1", _ref);
-        asm.addElement(at);
-        start.addNext(at);
-        at.addNext(mainState);
+            AvatarTransition at = new AvatarTransition("at1", _ref);
+            asm.addElement(at);
+            start.addNext(at);
+            at.addNext(mainState);
 
-        at = new AvatarTransition("at2", _ref);
-        asm.addElement(at);
-        mainState.addNext(at);
-        at.addNext(getMake);
+            at = new AvatarTransition("at2", _ref);
+            asm.addElement(at);
+            mainState.addNext(at);
+            at.addNext(getMake);
 
-        at = new AvatarTransition("at3", _ref);
-        asm.addElement(at);
-        getMake.addNext(at);
-        at.addNext(performedState);
+            at = new AvatarTransition("at3", _ref);
+            asm.addElement(at);
+            getMake.addNext(at);
+            at.addNext(performedState);
 
-        at = new AvatarTransition("backToMain", _ref);
-        asm.addElement(at);
-        performedState.addNext(at);
-        at.addNext(mainState);
+            at = new AvatarTransition("backToMain", _ref);
+            asm.addElement(at);
+            performedState.addNext(at);
+            at.addNext(mainState);
 
-        at = new AvatarTransition("at4", _ref);
-        asm.addElement(at);
-        mainState.addNext(at);
-        at.addNext(getStop);
+            at = new AvatarTransition("at4", _ref);
+            asm.addElement(at);
+            mainState.addNext(at);
+            at.addNext(getStop);
 
-        at = new AvatarTransition("at5", _ref);
-        asm.addElement(at);
-        getStop.addNext(at);
-        at.addNext(mainStop);
+            at = new AvatarTransition("at5", _ref);
+            asm.addElement(at);
+            getStop.addNext(at);
+            at.addNext(mainStop);
+
+        } else {
+
+            AvatarStartState start = new AvatarStartState("start", _ref);
+            AvatarState mainState = new AvatarState("main", _ref, false);
+            AvatarState mainStop = new AvatarState("stop", _ref, false);
+            AvatarActionOnSignal getStop = new AvatarActionOnSignal("GettingStop", _sigStop, _ref);
+
+            asm.addElement(start);
+            asm.setStartState(start);
+            asm.addElement(mainState);
+            asm.addElement(getStop);
+
+
+            AvatarTransition at = new AvatarTransition("at1", _ref);
+            asm.addElement(at);
+            start.addNext(at);
+            at.addNext(mainState);
+
+            at = new AvatarTransition("at4", _ref);
+            asm.addElement(at);
+            mainState.addNext(at);
+            at.addNext(getStop);
+
+            at = new AvatarTransition("at5", _ref);
+            asm.addElement(at);
+            getStop.addNext(at);
+            at.addNext(mainStop);
+        }
 
     }
 
-    private void makeIntermediateAttackBlockSMD(AvatarBlock _ab, avatartranslator.AvatarSignal _sigAttack, avatartranslator.AvatarSignal _sigStop, avatartranslator.AvatarSignal _sigActivate, Object _ref) {
+    private void makeIntermediateAttackBlockSMD(AvatarBlock _ab, avatartranslator.AvatarSignal _sigAttack, avatartranslator.AvatarSignal _sigStop, avatartranslator.AvatarSignal _sigActivate, boolean isEnabled, Object _ref) {
         Object _ref1 = _ref;
         _ref = null;
         AvatarStateMachine asm = _ab.getStateMachine();
 
-        AvatarStartState start = new AvatarStartState("start", _ref);
-	AvatarState activateState = new AvatarState("activate", _ref, false);
-        AvatarState mainState = new AvatarState("main", _ref, false);
-	AvatarState activatedState = new AvatarState("main", _ref1, true);
-        AvatarState performedState = new AvatarState("main", _ref, false);
-        AvatarState mainStop = new AvatarState("stop", _ref, false);
-        AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingAttack", _sigAttack, _ref1);
-        AvatarActionOnSignal getStop = new AvatarActionOnSignal("GettingStop", _sigStop, _ref);
-	AvatarActionOnSignal getActivate = new AvatarActionOnSignal("GettingStop", _sigActivate, _ref1);
+        if (isEnabled) {
 
-        asm.addElement(start);
-        asm.setStartState(start);
-	asm.addElement(activateState);
-	asm.addElement(activatedState);
-        asm.addElement(mainState);
-        asm.addElement(performedState);
-        asm.addElement(getMake);
-        asm.addElement(getStop);
-	asm.addElement(getActivate);
+            AvatarStartState start = new AvatarStartState("start", _ref);
+            AvatarState activateState = new AvatarState("activate", _ref, false);
+            AvatarState mainState = new AvatarState("main", _ref, false);
+            AvatarState activatedState = new AvatarState("main", _ref1, true);
+            AvatarState performedState = new AvatarState("main", _ref, false);
+            AvatarState mainStop = new AvatarState("stop", _ref, false);
+            AvatarState stopBeforeActivate = new AvatarState("stopBeforeActivate", _ref, false);
+            AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingAttack", _sigAttack, _ref1);
+            AvatarActionOnSignal getStop = new AvatarActionOnSignal("GettingStop", _sigStop, _ref);
+            AvatarActionOnSignal getStopInitial = new AvatarActionOnSignal("GettingInitialStop", _sigStop, _ref);
+            AvatarActionOnSignal getActivate = new AvatarActionOnSignal("GettingActivate", _sigActivate, _ref1);
+            AvatarActionOnSignal getActivateAfterStop = new AvatarActionOnSignal("GettingActivateAfterStop", _sigActivate, _ref1);
+
+            asm.addElement(start);
+            asm.setStartState(start);
+            asm.addElement(activateState);
+            asm.addElement(activatedState);
+            asm.addElement(mainState);
+            asm.addElement(stopBeforeActivate);
+            asm.addElement(performedState);
+            asm.addElement(getMake);
+            asm.addElement(getStop);
+            asm.addElement(getStopInitial);
+            asm.addElement(getActivate);
+            asm.addElement(getActivateAfterStop);
 
 
-        AvatarTransition at = new AvatarTransition("at1", _ref);
-        asm.addElement(at);
-        start.addNext(at);
-        at.addNext(activateState);
+            AvatarTransition at = new AvatarTransition("at1", _ref);
+            asm.addElement(at);
+            start.addNext(at);
+            at.addNext(activateState);
 
-	at = new AvatarTransition("at1_act", _ref);
-        asm.addElement(at);
-        activateState.addNext(at);
-        at.addNext(getActivate);
+            at = new AvatarTransition("at1_act", _ref);
+            asm.addElement(at);
+            activateState.addNext(at);
+            at.addNext(getActivate);
 
-	at = new AvatarTransition("at1_performed", _ref);
-        asm.addElement(at);
-        getActivate.addNext(at);
-        at.addNext(activatedState);
+            at = new AvatarTransition("at1_performed", _ref);
+            asm.addElement(at);
+            getActivate.addNext(at);
+            at.addNext(activatedState);
 
-	at = new AvatarTransition("at2_main", _ref);
-        asm.addElement(at);
-        activatedState.addNext(at);
-        at.addNext(mainState);
-	at.setHidden(true);
-	
+            at = new AvatarTransition("at2_main", _ref);
+            asm.addElement(at);
+            activatedState.addNext(at);
+            at.addNext(mainState);
+            at.setHidden(true);
 
-        at = new AvatarTransition("at2", _ref);
-        asm.addElement(at);
-        mainState.addNext(at);
-        at.addNext(getMake);
 
-        at = new AvatarTransition("at3", _ref);
-        asm.addElement(at);
-        getMake.addNext(at);
-        at.addNext(performedState);
+            at = new AvatarTransition("at2", _ref);
+            asm.addElement(at);
+            mainState.addNext(at);
+            at.addNext(getMake);
 
-        at = new AvatarTransition("backToMain", _ref);
-        asm.addElement(at);
-        performedState.addNext(at);
-        at.addNext(mainState);
+            at = new AvatarTransition("at3", _ref);
+            asm.addElement(at);
+            getMake.addNext(at);
+            at.addNext(performedState);
 
-        at = new AvatarTransition("at4", _ref);
-        asm.addElement(at);
-        mainState.addNext(at);
-        at.addNext(getStop);
+            at = new AvatarTransition("backToMain", _ref);
+            asm.addElement(at);
+            performedState.addNext(at);
+            at.addNext(mainState);
 
-        at = new AvatarTransition("at5", _ref);
-        asm.addElement(at);
-        getStop.addNext(at);
-        at.addNext(mainStop);
+            at = new AvatarTransition("at4", _ref);
+            asm.addElement(at);
+            mainState.addNext(at);
+            at.addNext(getStop);
 
+            at = new AvatarTransition("at5", _ref);
+            asm.addElement(at);
+            getStop.addNext(at);
+            at.addNext(mainStop);
+
+            // Stop before activate
+            at = new AvatarTransition("at6", _ref);
+            asm.addElement(at);
+            activateState.addNext(at);
+            at.addNext(getStopInitial);
+
+            at = new AvatarTransition("at7", _ref);
+            asm.addElement(at);
+            getStopInitial.addNext(at);
+            at.addNext(stopBeforeActivate);
+
+            at = new AvatarTransition("at8", _ref);
+            asm.addElement(at);
+            stopBeforeActivate.addNext(at);
+            at.addNext(getActivateAfterStop);
+
+            at = new AvatarTransition("at9", _ref);
+            asm.addElement(at);
+            getActivateAfterStop.addNext(at);
+            at.addNext(mainStop);
+        } else {
+            AvatarStartState start = new AvatarStartState("start", _ref);
+            AvatarState activateState = new AvatarState("activate", _ref, false);
+            AvatarState mainState = new AvatarState("main", _ref, false);
+            AvatarState activatedState = new AvatarState("main", _ref1, true);
+            AvatarState mainStop = new AvatarState("stop", _ref, false);
+            AvatarState stopBeforeActivate = new AvatarState("stopBeforeActivate", _ref, false);
+            AvatarActionOnSignal getStop = new AvatarActionOnSignal("GettingStop", _sigStop, _ref);
+            AvatarActionOnSignal getStopInitial = new AvatarActionOnSignal("GettingInitialStop", _sigStop, _ref);
+            AvatarActionOnSignal getActivate = new AvatarActionOnSignal("GettingActivate", _sigActivate, _ref1);
+            AvatarActionOnSignal getActivateAfterStop = new AvatarActionOnSignal("GettingActivateAfterStop", _sigActivate, _ref1);
+
+            asm.addElement(start);
+            asm.setStartState(start);
+            asm.addElement(activateState);
+            asm.addElement(activatedState);
+            asm.addElement(mainState);
+            asm.addElement(stopBeforeActivate);
+            asm.addElement(getStop);
+            asm.addElement(getStopInitial);
+            asm.addElement(getActivate);
+            asm.addElement(getActivateAfterStop);
+
+
+            AvatarTransition at = new AvatarTransition("at1", _ref);
+            asm.addElement(at);
+            start.addNext(at);
+            at.addNext(activateState);
+
+            at = new AvatarTransition("at1_act", _ref);
+            asm.addElement(at);
+            activateState.addNext(at);
+            at.addNext(getActivate);
+
+            at = new AvatarTransition("at1_performed", _ref);
+            asm.addElement(at);
+            getActivate.addNext(at);
+            at.addNext(activatedState);
+
+            at = new AvatarTransition("at2_main", _ref);
+            asm.addElement(at);
+            activatedState.addNext(at);
+            at.addNext(mainState);
+            at.setHidden(true);
+
+            at = new AvatarTransition("at4", _ref);
+            asm.addElement(at);
+            mainState.addNext(at);
+            at.addNext(getStop);
+
+            at = new AvatarTransition("at5", _ref);
+            asm.addElement(at);
+            getStop.addNext(at);
+            at.addNext(mainStop);
+
+            // Stop before activate
+            at = new AvatarTransition("at6", _ref);
+            asm.addElement(at);
+            activateState.addNext(at);
+            at.addNext(getStopInitial);
+
+            at = new AvatarTransition("at7", _ref);
+            asm.addElement(at);
+            getStopInitial.addNext(at);
+            at.addNext(stopBeforeActivate);
+
+            at = new AvatarTransition("at8", _ref);
+            asm.addElement(at);
+            stopBeforeActivate.addNext(at);
+            at.addNext(getActivateAfterStop);
+
+            at = new AvatarTransition("at9", _ref);
+            asm.addElement(at);
+            getActivateAfterStop.addNext(at);
+            at.addNext(mainStop);
+        }
     }
 
 
@@ -555,7 +691,7 @@ public class AttackTreePanelTranslator {
         asm.addElement(atF);
         start.addNext(atF);
         atF.addNext(mainState);
-	atF.setHidden(true);
+        atF.setHidden(true);
         String finalGuard = "";
         for(Attack att: _node.getInputAttacks()) {
             AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ref);
@@ -566,7 +702,7 @@ public class AttackTreePanelTranslator {
             }
             _ab.addAttribute(aa);
             atF.addAction(att.getName() + "__performed = false");
-	    
+
 
             avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
             AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
@@ -581,7 +717,7 @@ public class AttackTreePanelTranslator {
             asm.addElement(at);
             acceptAttack.addNext(at);
             at.addNext(mainState);
-	    at.setHidden(true);
+            at.setHidden(true);
         }
 
         // Adding resulting attack
@@ -727,7 +863,7 @@ public class AttackTreePanelTranslator {
 
 
         AvatarTransition atF = new AvatarTransition("at1", _ref);
-	atF.setHidden(true);
+        atF.setHidden(true);
         asm.addElement(atF);
         start.addNext(atF);
         atF.addNext(mainState);
@@ -756,39 +892,39 @@ public class AttackTreePanelTranslator {
             at.setGuard("[("+att.getName() + "__performed == false) && (oneDone == false)]");
             at = new AvatarTransition("at_fromInputAttack", _ref);
             at.addAction(att.getName() + "__performed = true");
-	    at.setHidden(true);
+            at.setHidden(true);
             at.addAction("oneDone = true");
             asm.addElement(at);
             acceptAttack.addNext(at);
             at.addNext(mainState);
 
             // Link from stoppingAll
-	    //           if (att.isLeaf()) {
-                // Leaf attack -> must make a stop
-                sigAtt = _main.getAvatarSignalWithName("acceptStop__" + att.getName());
-                acceptAttack = new AvatarActionOnSignal("StopAttack", sigAtt, _ref1);
-                asm.addElement(acceptAttack);
-                at = new AvatarTransition("at_toInputAttack_leaf", _ref);
-                asm.addElement(at);
-                stoppingAll.addNext(at);
-                at.addNext(acceptAttack);
-                at.setGuard("["+att.getName() + "__performed == false]");
-                at = new AvatarTransition("at_fromInputAttack", _ref);
-                at.addAction(att.getName() + "__performed = true");
-		at.setHidden(true);
-                asm.addElement(at);
-                acceptAttack.addNext(at);
-                at.addNext(stoppingAll);
-		//           } else {
-                // Generated attack-> must set performed to true.
-		/*		at = new AvatarTransition("at_toInputAttack", _ref);
-		stoppingAll.addNext(at);
-		asm.addElement(at);
-		at.addNext(stoppingAll);
-                at.setGuard("["+att.getName() + "__performed == false]");
-		at.addAction(att.getName() + "__performed = true");
-		at.setHidden(true);*/
-		//          }
+            //           if (att.isLeaf()) {
+            // Leaf attack -> must make a stop
+            sigAtt = _main.getAvatarSignalWithName("acceptStop__" + att.getName());
+            acceptAttack = new AvatarActionOnSignal("StopAttack", sigAtt, _ref1);
+            asm.addElement(acceptAttack);
+            at = new AvatarTransition("at_toInputAttack_leaf", _ref);
+            asm.addElement(at);
+            stoppingAll.addNext(at);
+            at.addNext(acceptAttack);
+            at.setGuard("["+att.getName() + "__performed == false]");
+            at = new AvatarTransition("at_fromInputAttack", _ref);
+            at.addAction(att.getName() + "__performed = true");
+            at.setHidden(true);
+            asm.addElement(at);
+            acceptAttack.addNext(at);
+            at.addNext(stoppingAll);
+            //           } else {
+            // Generated attack-> must set performed to true.
+            /*          at = new AvatarTransition("at_toInputAttack", _ref);
+                        stoppingAll.addNext(at);
+                        asm.addElement(at);
+                        at.addNext(stoppingAll);
+                        at.setGuard("["+att.getName() + "__performed == false]");
+                        at.addAction(att.getName() + "__performed = true");
+                        at.setHidden(true);*/
+            //          }
 
         }
 

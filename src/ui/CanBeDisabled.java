@@ -36,71 +36,18 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class Attack
- * Creation: 10/04/2015
- * @version 1.0 10/04/2015
+ * Class CanBeDisabled
+ * Components that can be enabled/disabled with a mouse click
+ * Creation: 22/04/2015
+ * @version 1.0 22/04/2015
  * @author Ludovic APVRILLE
  * @see
  */
 
-package attacktrees;
 
-import java.util.*;
+package ui;
 
-
-public class Attack { 
-    private AttackNode originNode; // If no origin node -> leaf attack
-    private ArrayList<AttackNode> destinationNodes;
-    private String name;
-    private Object referenceObject;
-    private boolean isRoot;
-    private boolean isEnabled = true;
-    
-    
-    public Attack(String _name, Object _referenceObject) {
-	name = _name;
-	referenceObject = _referenceObject;
-	destinationNodes = new ArrayList<AttackNode>();
-    }
-
-    public boolean isRoot() {
-	return isRoot;
-    }
-
-    public void setRoot(boolean _root) {
-	isRoot = _root;
-    }
-
-    public boolean isEnabled() {
-	return isEnabled;
-    }
-
-    public void setEnabled(boolean _enabled) {
-	isEnabled = _enabled;
-    }
-    
-    public void setOriginNode(AttackNode _node) {
-	originNode = _node;
-    }
-
-    public void addDestinationNode(AttackNode _node) {
-	destinationNodes.add(_node);
-    }
-
-    public String getName() {
-	return name;
-    }
-
-    public boolean isLeaf() {
-	return (originNode == null);
-    }
-
-    public boolean isFinal() {
-	if (destinationNodes.size() == 0) {
-	    return true;
-	}
-
-	return false;
-    }
-    
+public interface CanBeDisabled  {
+    public boolean isEnabled();
+    public void setEnabled(boolean _enabled);
 }

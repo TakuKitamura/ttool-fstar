@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class ATDAttack extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes, CheckableAccessibility {
+public class ATDAttack extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes, CheckableAccessibility, CanBeDisabled {
     private int textY1 = 3;
     private int textY2 = 3;
 
@@ -183,11 +183,16 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         // Core of the attack
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
-        if (isRootAttack) {
-            g.setColor(ColorManager.ATD_ROOT_ATTACK);
+        if (isEnabled()) {
+            if (isRootAttack) {
+                g.setColor(ColorManager.ATD_ROOT_ATTACK);
+            } else {
+                g.setColor(ColorManager.ATD_ATTACK);
+            }
         } else {
-            g.setColor(ColorManager.ATD_ATTACK);
+            g.setColor(ColorManager.ATD_ATTACK_DISABLED);
         }
+
         g.fill3DRect(x+1, y+1, width-1, height-1, true);
         g.setColor(c);
 
@@ -235,6 +240,17 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
                     //TraceManager.addDev("w=" + w + " val=" + (2*textX + width) + "h=" + h + " height=" + height + " zoom=" + tdp.getZoom() + " Font=" + f0);
                 }
             }
+
+	    if (!isEnabled()) {
+		String val = "disabled";
+		w = g.getFontMetrics().stringWidth(val);
+		int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+		g.setFont(f.deriveFont(Font.ITALIC));
+		g.drawString(val, x + (width - w - 5), y + height - 2);
+	    }
+
+	    
+	    
         } else {
             //TraceManager.addDev("-------------------------------------------------- Cannot display text of attack");
         }

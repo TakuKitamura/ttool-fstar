@@ -5586,6 +5586,7 @@ public class GTURTLEModeling {
             boolean breakpoint = false;
             boolean hidden = false;
             boolean masterMutex = false;
+	    boolean enable = true;
 
             for(i=0; i<nl.getLength(); i++) {
                 n = nl.item(i);
@@ -5611,6 +5612,8 @@ public class GTURTLEModeling {
                         myValue = elt.getAttribute("value");
                     } else if (elt.getTagName().equals("hidden")) {
                         hidden = elt.getAttribute("value").equals("true");
+		    } else if (elt.getTagName().equals("enabled")) {
+                        enable = elt.getAttribute("value").equals("true");
                     } else if (elt.getTagName().equals("TGConnectingPoint")) {
                         x = Integer.decode(elt.getAttribute("num")).intValue();
                         y = Integer.decode(elt.getAttribute("id")).intValue() + decId;
@@ -5696,6 +5699,7 @@ public class GTURTLEModeling {
             }
 
             tgc.setHidden(hidden);
+	    tgc.setEnabled(enable);
 
             /*if (tgc instanceof TCDTObject) {
               TraceManager.addDev("Loading " + myValue);

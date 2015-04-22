@@ -125,7 +125,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected JPopupMenu componentMenu;
     protected JPopupMenu selectedMenu;
     protected int popupX, popupY;
-    protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide,search;
+    protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide,search, enableDisable;
     protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex;
     protected JMenuItem breakpoint;
     protected JMenuItem paste, insertLibrary, upX, upY, downX, downY;
@@ -134,7 +134,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     //search dialog
     protected JDialogSearchBox j;
     //--
-    
+
     // Main window
     protected MainGUI mgui;
 
@@ -693,12 +693,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //boolean b = false;
         boolean hoveredElementFound = false;
         byte info = 0;
-        
-        
+
+
         TGComponent tmp = componentHovered;
         componentHovered = null;
         Iterator iterator = componentList.listIterator();
-        
+
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             //state = tgc.getState();
@@ -716,11 +716,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 tgc.setState(TGState.NORMAL);
             }
         }
-        
+
         if (tmp != componentHovered) {
             info ++;
         }
-        
+
         return info;
     }
 
@@ -1420,6 +1420,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         componentMenu.add(clone);
         componentMenu.add(bringFront);
         componentMenu.add(bringBack);
+	componentMenu.add(enableDisable);
         componentMenu.add(makeSquare);
         componentMenu.addSeparator();
         componentMenu.add(attach);
@@ -1488,6 +1489,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         clone = new JMenuItem("Clone");
         clone.addActionListener(menuAL);
+
+	enableDisable = new JMenuItem("Enable/Disable");
+        enableDisable.addActionListener(menuAL);
 
         bringFront = new JMenuItem("Bring to front");
         bringFront.addActionListener(menuAL);
@@ -1592,6 +1596,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         if (e.getSource() == clone) {
             cloneComponent(componentPopup.getTopFather());
+            repaint();
+            return;
+        }
+	
+	if (e.getSource() == enableDisable) {
+	    componentPopup.setEnabled(!componentPopup.isEnabled());
+	    getGUI().changeMade(this, CHANGE_VALUE_COMPONENT);
             repaint();
             return;
         }
@@ -1859,6 +1870,16 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             //}
         } else {
             clone.setEnabled(false);
+        }
+
+	if (componentPointed instanceof CanBeDisabled) {
+            /*if (componentPointed.hasFather()) {
+              clone.setEnabled(false);
+              } else {*/
+            enableDisable.setEnabled(true);
+            //}
+        } else {
+            enableDisable.setEnabled(false);
         }
 
         if (componentPointed instanceof SwallowedTGComponent) {

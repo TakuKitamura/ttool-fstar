@@ -138,6 +138,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     protected TGComponent selectedInternalComponent;
 
     // characteristics
+    protected boolean enabled = true;
     protected boolean moveable;
     protected boolean removable;
     protected boolean multieditable = false;
@@ -211,6 +212,15 @@ public abstract class TGComponent implements CDElement, GenericTree {
     public abstract void internalDrawing(Graphics g);
     public abstract TGComponent isOnMe(int _x, int _y);
     public abstract void setState(int s);
+
+
+    public void setEnabled(boolean _enabled) {
+	enabled = _enabled;
+    }
+
+    public boolean isEnabled() {
+	return enabled;
+    }
 
     // Internal component operations
     public void setFather(TGComponent _father) {
@@ -2703,6 +2713,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
         sb.append(translateCDParam());
         sb.append(translateSizeParam());
         sb.append(translateHidden());
+	if (this instanceof CanBeDisabled) {
+	    sb.append(translateEnabled());
+	}
         sb.append(translateCDRectangleParam());
         sb.append(translateNameValue());
         sb.append(translateConnectingPoints());
@@ -2743,6 +2756,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
         sb.append("\" minDesiredWidth=\"" + minDesiredWidth + "\" minDesiredHeight=\"" + minDesiredHeight);
         sb.append("\" />\n");
         return new String(sb);
+    }
+
+    protected String translateEnabled() {
+	return "<enabled value=\"" + enabled + "\" />\n";
     }
 
     protected String translateHidden() {
