@@ -4,6 +4,7 @@
    andrea.enrici AT enstr.fr
 
    This software is a computer program whose purpose is to allow the
+		cleanup_code = TAB + "embb_memcpy_ctx_cleanup(&" + ctxName + ");";
    edition of TURTLE analysis, design and deployment diagrams, to
    allow the generation of RT-LOTOS or Java code from this diagram,
    and at last to allow the analysis of formal validation traces
@@ -53,38 +54,32 @@ public class CpuMemoryCopyMEC extends CPMEC	{
 	public static final String Context = "EMBB_CONTEXT";
 	public static final String Ctx_cleanup = "embb_ctx_cleanup";
 
-	public CpuMemoryCopyMEC( String ctxName, String pssBaseAddress, String offset, String  ddrAddress, String size )	{
+	public static final int MaxParameters = 3;
+	public static final int destinationAddressIndex = 0;
+	public static final int sourceAddressIndex = 1;
+	public static final int counterIndex = 2;
+
+	private String memoryBaseAddress = "0";
+
+	public CpuMemoryCopyMEC( String ctxName, ArchUnitMEC archMEC, String sizeString )	{
+	//public CpuMemoryCopyMEC( String ctxName, String pssBaseAddress, String offset, String  ddrAddress, String size )	{
 		node_type = "CpuMemoryCopy";
 		inst_type = "MEMORY_COPY";
 		inst_decl = "VOID";
 		buff_type = "MM_BUFFER_TYPE";
 		buff_init = "VOID";
 
-		exec_code = TAB + CR + TAB +
+		/*exec_code = TAB + CR + TAB +
 								"int i = 0;" + CR + TAB +
 								"int k = 0;" + CR + TAB +
 								"for( i = 0 ;i < " + size + "; i += 4, k++ )\t{" + CR + TAB +
 								TAB + "cpu_mem_write_32( " + pssBaseAddress + " + " + offset + " + i, " + ddrAddress + "[k] );" + CR + TAB + "}" + CR;
 
 		init_code = TAB + "embb_memcpy_ctx_init(&" + ctxName + ");" + CR;
-		cleanup_code = TAB + "embb_memcpy_ctx_cleanup(&" + ctxName + ");";
-	}
-
-	public CpuMemoryCopyMEC( String pssBaseAddress, String offset, String ddrAddress, String size )	{
-		node_type = "CpuMemoryCopy";
-		inst_type = "MEMORY_COPY";
-		inst_decl = "VOID";
-		buff_type = "MM_BUFFER_TYPE";
-		buff_init = "VOID";
-
-		exec_code = TAB + CR + TAB +
-								"int i = 0;" + CR + TAB +
-								"int k = 0;" + CR + TAB +
-								"for( i = 0 ;i < " + size + "; i += 4, k++ )\t{" + CR + TAB +
-								TAB + "cpu_mem_write_32( " + pssBaseAddress + " + " + offset + " + i, " + ddrAddress + "[k] );" + CR + TAB + "}" + CR;
-
-		//init_code = TAB + "embb_memcpy_ctx_init(&" + ctxName + ");" + CR;
-		//cleanup_code = TAB + "embb_memcpy_ctx_cleanup(&" + ctxName + ");";
+		cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";*/
+		exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", /*USER TODO: *SRC */, " + sizeString + " );" + CR;
+		init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
+		cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";
 	}
 
 }	//End of class

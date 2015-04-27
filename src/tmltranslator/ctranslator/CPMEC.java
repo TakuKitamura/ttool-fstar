@@ -68,9 +68,14 @@ public abstract class CPMEC	{
 
 	public static final String[] cpTypes = { "Memory Copy", "Single DMA", "Double DMA" };
 	public static final String[] transferTypes = { "memory to IP core", "IP core to IP core", "IP core to memory" };
+
 	public static final String SingleDMA = "Single DMA";
 	public static final String DoubleDMA = "Double DMA";
 	public static final String MemoryCopy = "Memory Copy";
+	public static final int SingleDmaMEC = 0;
+	public static final int DoubleDmaMEC = 1;
+	public static final int CpuMemoryCopyMEC = 2;
+
 	public static final int mem2IP = 0;
 	public static final int IP2IP = 1;
 	public static final int IP2mem = 2;

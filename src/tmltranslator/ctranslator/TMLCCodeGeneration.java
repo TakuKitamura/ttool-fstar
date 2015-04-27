@@ -770,63 +770,71 @@ public class TMLCCodeGeneration	{
 			}
 		}
 		instructionsString.append( CR2 + "/**** Data Transfers Instructions ****/" + CR );
-		ArchUnitMEC dmaArchMEC = new CpuMEC();
+		ArchUnitMEC archMEC = new CpuMEC();
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
-			CPMEC cpMEC = tmlcplib.getCPMEC();
+			int cpMECType = tmlcplib.getCPMECType();
 			ctxName = dt.getContextName();
-			if( cpMEC instanceof SingleDmaMEC )	{
+			if( cpMECType == CPMEC.CpuMemoryCopyMEC )	{
+				if( declaration )	{
+					instructionsString.append( "extern" + SP + archMEC.getContext() + SP + ctxName + SC + CR );
+				}
+				else	{
+					instructionsString.append( archMEC.getContext() + SP + ctxName + SC + CR );
+				}
+			}
+			if( cpMECType == CPMEC.SingleDmaMEC )	{
 				int transferType = tmlcplib.getTransferTypes().get(0);
 			for( String s: tmlcplib.getMappedUnits() )	{
 					if( s.contains( CPMEC.dmaController ) )	{
 						String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
-						dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
+						archMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
 						break;
 					}
 				}
 				if( declaration )	{
 					if( transferType == CPMEC.IP2IP )	{	//there are two contexts to declare
-						instructionsString.append( "extern" + SP + dmaArchMEC.getContext() + SP + ctxName + "_1" + SC + CR );
-						instructionsString.append( "extern" + SP + dmaArchMEC.getContext() + SP + ctxName + "_0" + SC + CR );
+						instructionsString.append( "extern" + SP + archMEC.getContext() + SP + ctxName + "_1" + SC + CR );
+						instructionsString.append( "extern" + SP + archMEC.getContext() + SP + ctxName + "_0" + SC + CR );
 					}
 					else	{
-						instructionsString.append( "extern" + SP + dmaArchMEC.getContext() + SP + ctxName + SC + CR );
+						instructionsString.append( "extern" + SP + archMEC.getContext() + SP + ctxName + SC + CR );
 					}
 				}
 				else	{
 					if( transferType == CPMEC.IP2IP )	{	//there are two contexts to declare
-						instructionsString.append( dmaArchMEC.getContext() + SP + ctxName + "_0" + SC + CR );
-						instructionsString.append( dmaArchMEC.getContext() + SP + ctxName + "_1" + SC + CR );
+						instructionsString.append( archMEC.getContext() + SP + ctxName + "_0" + SC + CR );
+						instructionsString.append( archMEC.getContext() + SP + ctxName + "_1" + SC + CR );
 					}
 					else	{
-						instructionsString.append( dmaArchMEC.getContext() + SP + ctxName + SC + CR );
+						instructionsString.append( archMEC.getContext() + SP + ctxName + SC + CR );
 					}
 				}
 			}
-			if( cpMEC instanceof DoubleDmaMEC )	{
+			if( cpMECType == CPMEC.DoubleDmaMEC )	{
 				int suffix = 0;
 				for( String s: tmlcplib.getMappedUnits() )	{
 					ArrayList<Integer> transferTypes = tmlcplib.getTransferTypes();
 					if( s.contains( CPMEC.dmaController ) )	{
 						int transferType = tmlcplib.getTransferTypes().get(suffix);
 						String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
-						dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
+						archMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
 						if( declaration )	{
 							if( transferType == CPMEC.IP2IP )	{	//there are two contexts to declare
-								instructionsString.append( "extern" + SP + dmaArchMEC.getContext() + SP + ctxName + "_" + String.valueOf(suffix) + "_0" + SC + CR );
-								instructionsString.append( "extern" + SP + dmaArchMEC.getContext() + SP + ctxName + "_" + String.valueOf(suffix) + "_1" + SC + CR );
+								instructionsString.append( "extern" + SP + archMEC.getContext() + SP + ctxName + "_" + String.valueOf(suffix) + "_0" + SC + CR );
+								instructionsString.append( "extern" + SP + archMEC.getContext() + SP + ctxName + "_" + String.valueOf(suffix) + "_1" + SC + CR );
 							}
 							else	{
-								instructionsString.append( "extern" + SP + dmaArchMEC.getContext() + SP + ctxName + "_" + String.valueOf(suffix) + SC + CR );
+								instructionsString.append( "extern" + SP + archMEC.getContext() + SP + ctxName + "_" + String.valueOf(suffix) + SC + CR );
 							}
 						}
 						else	{
 							if( transferType == CPMEC.IP2IP )	{	//there are two contexts to declare
-								instructionsString.append( dmaArchMEC.getContext() + SP + ctxName + "_" + String.valueOf(suffix) + "_0" + SC + CR );
-								instructionsString.append( dmaArchMEC.getContext() + SP + ctxName + "_" + String.valueOf(suffix) + "_1" + SC + CR );
+								instructionsString.append( archMEC.getContext() + SP + ctxName + "_" + String.valueOf(suffix) + "_0" + SC + CR );
+								instructionsString.append( archMEC.getContext() + SP + ctxName + "_" + String.valueOf(suffix) + "_1" + SC + CR );
 							}
 							else	{
-								instructionsString.append( dmaArchMEC.getContext() + SP + ctxName + "_" + String.valueOf(suffix) + SC + CR );
+								instructionsString.append( archMEC.getContext() + SP + ctxName + "_" + String.valueOf(suffix) + SC + CR );
 							}
 						}
 						suffix++;
@@ -1105,12 +1113,13 @@ public class TMLCCodeGeneration	{
 			for( Signal sig: dt.getInSignals() )	{
 				programString.append( TAB + "sig[ " + sig.getName() + " ].f = false;" + CR );
 			}
-			CPMEC cpMEC = tmlcplib.getCPMEC();
-			if( cpMEC instanceof CpuMemoryCopyMEC )	{
-				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( "", "", "", "" );
+			int cpMECType = tmlcplib.getCPMECType();
+			if( cpMECType == CPMEC.CpuMemoryCopyMEC )	{
+				counter = attributes.get( CpuMemoryCopyMEC.counterIndex );
+				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName, new CpuMEC(), counter );	//mem2ip
 				programString.append( mec.getExecCode() );
 			}
-			if( cpMEC instanceof SingleDmaMEC )	{
+			if( cpMECType == CPMEC.SingleDmaMEC )	{
 				int transferType = tmlcplib.getTransferTypes().get(0);
 				for( String s1: tmlcplib.getMappedUnits() )	{
 					if( s1.contains( CPMEC.dmaController ) )	{
@@ -1130,7 +1139,7 @@ public class TMLCCodeGeneration	{
 				SingleDmaMEC mec = new SingleDmaMEC( ctxName, dmaArchMEC, srcMemoryType, dstMemoryType, transferType, counter );
 				programString.append( mec.getExecCode() );
 			}
-			if( cpMEC instanceof DoubleDmaMEC )	{
+			if( cpMECType == CPMEC.DoubleDmaMEC )	{
 				ArrayList<Integer> transferTypes = tmlcplib.getTransferTypes();
 				ArrayList<String> sizes = new ArrayList<String>();
 				sizes.add( attributes.get( DoubleDmaMEC.counter1Index ) );
@@ -1341,7 +1350,7 @@ public class TMLCCodeGeneration	{
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
 			String name = tmlcplib.getName().split("::")[0];
-			if( !( tmlcplib.getCPMEC() instanceof CpuMemoryCopyMEC ) )	{	//No need to create init routine for memory copy transfers
+			if( !( tmlcplib.getCPMECType() == CPMEC.CpuMemoryCopyMEC ) )	{	//No need to create init routine for memory copy transfers
 				initFileString.append( TAB + "init_" + name + "();" + CR );
 			}
 		}
@@ -1374,9 +1383,9 @@ public class TMLCCodeGeneration	{
 		ArchUnitMEC dmaArchMEC = new CpuMEC();
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
-			CPMEC cpMEC = tmlcplib.getCPMEC();
+			int cpMECType = tmlcplib.getCPMECType();
 			ctxName = dt.getContextName();
-			if( cpMEC instanceof SingleDmaMEC )	{
+			if( cpMECType == CPMEC.SingleDmaMEC )	{
 				int transferType = tmlcplib.getTransferTypes().get(0);
 				for( String s: tmlcplib.getMappedUnits() )	{
 					if( s.contains( CPMEC.dmaController ) )	{
@@ -1393,7 +1402,7 @@ public class TMLCCodeGeneration	{
 					initFileString.append( TAB2 + dmaArchMEC.getCtxCleanupCode() + "(&" + ctxName +");" + CR );
 				}
 			}
-			if( cpMEC instanceof DoubleDmaMEC )	{
+			if( cpMECType == CPMEC.DoubleDmaMEC )	{
 				int suffix = 0;
 				for( String s: tmlcplib.getMappedUnits() )	{	//there are two DMA_controllers
 					if( s.contains( CPMEC.dmaController ) )	{
@@ -1422,10 +1431,10 @@ public class TMLCCodeGeneration	{
 
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
-			CPMEC cpMEC = tmlcplib.getCPMEC();
+			int cpMECType = tmlcplib.getCPMECType();
 			String ctxName = dt.getContextName();
 			String name = tmlcplib.getName().split("::")[0];
-			if( cpMEC instanceof SingleDmaMEC )	{
+			if( cpMECType == CPMEC.SingleDmaMEC )	{
 				int transferType = tmlcplib.getTransferTypes().get(0);
 				for( String s: tmlcplib.getMappedUnits() )	{
 					if( s.contains( CPMEC.dmaController ) )	{
@@ -1443,7 +1452,7 @@ public class TMLCCodeGeneration	{
 					initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + ", (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR + "}" + CR2 );
 				}
 			}
-			if( cpMEC instanceof DoubleDmaMEC )	{
+			if( cpMECType == CPMEC.DoubleDmaMEC )	{
 				initFileString.append( "void init_" + name + "()\t{" + CR );
 				int suffix = 0;
 				for( String s: tmlcplib.getMappedUnits() )	{	//there are two DMA_controllers

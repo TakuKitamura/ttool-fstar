@@ -391,17 +391,17 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         return mappedUnits;
     }
 
-		public CPMEC getCPMEC()	{
+		public int getCPMEC()	{
 			if( cpMEC.equals( "Memory Copy" ) )	{
-				return new CpuMemoryCopyMEC( "voidCtxName", "", "", "", "" );
+				return CPMEC.CpuMemoryCopyMEC;
 			}
 			if( cpMEC.equals( "Single DMA" ) )	{
-				return new SingleDmaMEC( "voidCtxName" );
+				return CPMEC.SingleDmaMEC;
 			}
 			if( cpMEC.equals( "Double DMA" ) )	{
-				return new DoubleDmaMEC( "voidCtxName" );
+				return CPMEC.DoubleDmaMEC;
 			}
-			return null;
+			return -1;
 		}
 
 	public String getCompleteName()	{

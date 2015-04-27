@@ -54,16 +54,16 @@ public class TMLCPLib extends TMLElement {
 
     private ArrayList<TMLCPLibArtifact> artifacts;
     private Vector<String> mappedUnits = new Vector<String>();
-		private CPMEC cpMEC;
+		private int cpMECType;
     private String typeName;
 		private Vector<String> assignedAttributes;
 		private ArrayList<Integer> transferTypes;
 
 
-    public TMLCPLib(String _name, String _typeName, Object _referenceObject, CPMEC _cpMEC ) {
+    public TMLCPLib(String _name, String _typeName, Object _referenceObject, int _cpMECType ) {
         super( _name, _referenceObject );
 				typeName = _typeName;
-				cpMEC = _cpMEC;
+				cpMECType = _cpMECType;
         init();
     }
 
@@ -118,8 +118,8 @@ public class TMLCPLib extends TMLElement {
 			return null;
 		}
 
-		public CPMEC getCPMEC()	{
-			return cpMEC;
+		public int getCPMECType()	{
+			return cpMECType;
 		}
 	
 	public void setAssignedAttributes( Vector<String> _assignedAttributes )	{
