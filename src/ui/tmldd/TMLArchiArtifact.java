@@ -271,7 +271,12 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 								}
 								operation = elt.getAttribute("operation");
 								if( (elt.getAttribute("fatherComponentMECType") != null) &&  (elt.getAttribute("fatherComponentMECType").length() > 0) )	{
-									fatherArchUnitMECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("fatherComponentMECType") ) );
+									if( elt.getAttribute("fatherComponentMECType").length() > 1 )	{
+										fatherArchUnitMECType = ArchUnitMEC.Types.get(0);
+									}
+									else	{
+										fatherArchUnitMECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("fatherComponentMECType") ) );
+									}
 								}
                             }
                             if (svalue != null) {
@@ -315,41 +320,41 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 		return "Priority = " + priority;
 	}
 
-	public OperationMEC getOperationMECOfTask()	{
+	public int getOperationType()	{
 
 		if( fatherArchUnitMECType instanceof FepMEC )	{
 			if( operation.equals( "CWM" ) )	{
-				return new CwmMEC( "", "", "" );
+				return FepOperationMEC.CwmMEC;
 			}
 			else if( operation.equals( "CWL" ) )	{
-				return new CwlMEC( "", "", "" );
+				return FepOperationMEC.CwlMEC;
 			}
 			else if( operation.equals( "CWA" ) )	{
-				return new CwaMEC( "", "", "", "" );
+				return FepOperationMEC.CwaMEC;
 			}
 			else if( operation.equals( "CWP" ) )	{
-				return new CwpMEC( "", "", "" );
+				return FepOperationMEC.CwpMEC;
 			}
 			else if( operation.equals( "FFT" ) )	{
-				return new FftMEC( "", "", "" );
+				return FepOperationMEC.FftMEC;
 			}
 			else if( operation.equals( "SUM" ) )	{
-				return new SumMEC( "", "", "" );
+				return FepOperationMEC.SumMEC;
 			}
 		}
 		else if( fatherArchUnitMECType instanceof MapperMEC )	{
-			return new MappOperationMEC( "", "", "" );
+			return OperationMEC.MappOperationMEC;
 		}
 		else if( fatherArchUnitMECType instanceof InterleaverMEC	)	{
-				return new IntlOperationMEC( "", "", "" );
+				return OperationMEC.IntlOperationMEC;
 		}
 		else if( fatherArchUnitMECType instanceof AdaifMEC )	{
-			return new AdaifOperationMEC( "", "", "" );
+			return OperationMEC.AdaifOperationMEC;
 		}
 		else if( fatherArchUnitMECType instanceof CpuMEC )	{
-			return new CpuOperationMEC( "", "", "" );
+			return OperationMEC.CpuOperationMEC;
 		}
-		return null;
+		return -1;
 	}
 
 	public ArchUnitMEC getArchUnitMEC()	{

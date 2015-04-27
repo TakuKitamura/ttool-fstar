@@ -542,7 +542,12 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
                                 }
                                 if ((elt.getAttribute("MECType") != null) &&  (elt.getAttribute("MECType").length() > 0)){
-                                	MECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("MECType") ) );
+																	if( elt.getAttribute("MECType").length() > 1 )	{	//old format
+                                		MECType = ArchUnitMEC.Types.get(0);
+																	}
+																	else	{
+                                		MECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("MECType") ) );
+																	}
 																}
                                 if ((elt.getAttribute("sliceTime") != null) &&  (elt.getAttribute("sliceTime").length() > 0)){
                                     sliceTime = Integer.decode(elt.getAttribute("sliceTime")).intValue();
