@@ -4159,15 +4159,23 @@ public String generateTMLTxt() {
 }
 
 public String generateCcode() {
+
     String path = ConfigurationTTool.FILEPath;
     if( file != null ) {
         path = file.getAbsolutePath();
     }
-    if( gtm.generateCcode( path ) ) {
-        return ConfigurationTTool.CcodeDirectory;
-    }
+		JDialogCCodeGeneration jgen = new JDialogCCodeGeneration( frame, this, "Application code generation and compilation",
+																															ConfigurationTTool.SystemCHost, ConfigurationTTool.CcodeDirectory,
+																															"make -C " + ConfigurationTTool.CcodeDirectory,
+																															ConfigurationTTool.SystemCCodeExecuteCommand,
+																															ConfigurationTTool.SystemCCodeInteractiveExecuteCommand,
+																															ConfigurationTTool.GGraphPath );
+		jgen.setSize(500, 750);
+		GraphicLib.centerOnParent(jgen);
+		jgen.setVisible(true);
+		//dtree.toBeUpdated();
+    gtm.generateCcode( path );
     return null;
-    //TraceManager.addDev("Done");
 }
 
 public void generateDesign() {
