@@ -55,15 +55,9 @@ public abstract class CPMEC	{
 	
 	public String CR = "\n";
 	public String TAB = "\t";
-	public String node_type = new String();
-	public String inst_type = new String();
-	public String inst_decl = new String();
-	public String buff_type = new String();
-	public String buff_init = new String();
+
 	public String init_code = new String();
 	public String exec_code = new String();
-	public String messages_code = new String();
-	public String attributes_code = new String();
 	public String cleanup_code = new String();
 
 	public static final String[] cpTypes = { "Memory Copy", "Single DMA", "Double DMA" };
@@ -84,10 +78,6 @@ public abstract class CPMEC	{
 	public static final String sourceStorage = "Src_Storage_Instance";
 	public static final String destinationStorage = "Dst_Storage_Instance";
 
-	public CPMEC()	{
-		node_type = "1";
-	}
-
 	public String getExecCode()	{
 		return exec_code;
 	}
@@ -98,16 +88,6 @@ public abstract class CPMEC	{
 
 	public String getCleanupCode()	{
 		return cleanup_code;
-	}
-
-	public String toString()	{
-		return node_type;
-	}
-
-	public void saveFile( String path, String filename ) throws FileException {
-		
-		TraceManager.addUser( "Saving C CP file in " + path + filename );
-		FileUtils.saveFile( path + filename, this.toString() );
 	}
 
 }	//End of class

@@ -183,6 +183,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			index = 0;//indexOf(list, artifact.getFullValue());
 			//parse each entry of list. Entry is in format AppName::chIn__chOut
 			for( String s: list )	{
+				TraceManager.addDev( "Parsing: " + s );
 				String[] temp1 = s.split("__");
 				String[] temp2 = temp1[0].split( "::" );
 				String chOut = temp2[0] + "::" + temp1[1];

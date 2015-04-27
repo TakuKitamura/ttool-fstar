@@ -62,22 +62,7 @@ public class SingleDmaMEC extends CPMEC	{
 
 	private String memoryBaseAddress = "0";
 
-	public SingleDmaMEC( String ctxName )	{
-
-		node_type = "SingleDmaMEC";
-		inst_type = "VOID";
-		inst_decl = "EMBB_DMA_CONTEXT";
-		buff_type = "MM_BUFFER_TYPE";
-		buff_init = "VOID";
-	}
-
 	public SingleDmaMEC( String ctxName, ArchUnitMEC archMEC, int srcMemoryType, int dstMemoryType, int transferType, String sizeString )	{
-
-		node_type = "SingleDmaMEC";
-		inst_type = "VOID";
-		inst_decl = "EMBB_DMA_CONTEXT";
-		buff_type = "MM_BUFFER_TYPE";
-		buff_init = "VOID";
 
 		switch( srcMemoryType )	{
 			case Buffer.FepBuffer:
@@ -123,14 +108,6 @@ public class SingleDmaMEC extends CPMEC	{
 			break;
 		}
 
-	}
-	
-	public String getInitCode()	{
-		return init_code;
-	}
-
-	public String getCleanupCode()	{
-		return cleanup_code;
 	}
 
 }	//End of class

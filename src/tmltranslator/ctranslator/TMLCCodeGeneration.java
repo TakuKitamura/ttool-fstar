@@ -148,23 +148,23 @@ public class TMLCCodeGeneration	{
 		makeSignalsList();	//make the signals associated to operations, based on the tasks of operations
 
 		for( Signal sig: signalsList )	{
-			TraceManager.addDev( sig.toString() + CR );
+			//TraceManager.addDev( sig.toString() + CR );
 			appendToDebugFile( sig.toString() + CR2 );
 		}
 		makeOperationsList( mappedTasks );	//make the list of operations based on the tasks in the app model
 		setMappingParametersToBuffers();
 		for( Buffer buff: buffersList )	{
-			TraceManager.addDev( buff.toString() + CR );
+			//TraceManager.addDev( buff.toString() + CR );
 			appendToDebugFile( buff.toString() + CR );
 		}
 		makeDataTransfersList();
 		for( DataTransfer dt: dataTransfersList )	{
-		 		TraceManager.addDev( dt.toString() );
+		 		//TraceManager.addDev( dt.toString() );
 				appendToDebugFile( dt.toString() );
 		}
 		appendToDebugFile( "\n" );
 		for( Operation op: operationsList )	{
-			TraceManager.addDev( op.toString() );
+			//TraceManager.addDev( op.toString() );
 			appendToDebugFile( op.toString() + CR );
 		}
 		closeDebugFile();
@@ -732,38 +732,38 @@ public class TMLCCodeGeneration	{
 				inBuff = op.getInBuffer();
 				outBuff = op.getOutBuffer();
 				ctxName = op.getContextName();
-				OperationMEC xTaskOperation = xTask.getOperationMEC();
+				int xTaskOperationType = xTask.getOperationType();
 				if( declaration )	{
 					if( inBuff == null )	{	//for source operation
 						buffersString.append( "extern" + SP + outBuff.getType() + SP + outBuff.getName() + SC + CR );
-						instructionsString.append( "extern" + SP + xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
+						instructionsString.append( "extern" + SP + OperationMEC.ContextList.get( xTaskOperationType ) + SP + ctxName + SC + CR );
 					}
 					else	{
 						if( outBuff == null )	{	//for sink operation
 							buffersString.append( "extern" + SP + inBuff.getType() + SP + inBuff.getName() + SC + CR );
-							instructionsString.append( "extern" + SP + xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
+							instructionsString.append( "extern" + SP + OperationMEC.ContextList.get( xTaskOperationType ) + SP + ctxName + SC + CR );
 						}
 						else	{	//for all the remaining operations
 							buffersString.append( "extern" + SP + inBuff.getType() + SP + inBuff.getName() + SC + CR );
 							buffersString.append( "extern" + SP + outBuff.getType() + SP + outBuff.getName() + SC + CR );
-							instructionsString.append( "extern" + SP + xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
+							instructionsString.append( "extern" + SP + OperationMEC.ContextList.get( xTaskOperationType ) + SP + ctxName + SC + CR );
 						}
 					}
 				}
 				else	{
 					if( inBuff == null )	{	//for source operation
 						buffersString.append( outBuff.getType() + SP + outBuff.getName() + SC + CR );
-						instructionsString.append( xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
+						instructionsString.append( OperationMEC.ContextList.get( xTaskOperationType ) + SP + ctxName + SC + CR );
 					}
 					else	{
 						if( outBuff == null )	{	//for sink operation
 							buffersString.append( inBuff.getType() + SP + inBuff.getName() + SC + CR );
-							instructionsString.append( xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
+							instructionsString.append( OperationMEC.ContextList.get( xTaskOperationType ) + SP + ctxName + SC + CR );
 						}
 						else	{	//for all the remaining operations
 							buffersString.append( inBuff.getType() + SP + inBuff.getName() + SC + CR );
 							buffersString.append( outBuff.getType() + SP + outBuff.getName() + SC + CR );
-							instructionsString.append( xTask.getOperationMEC().getContext() + SP + ctxName + SC + CR );
+							instructionsString.append( OperationMEC.ContextList.get( xTaskOperationType ) + SP + ctxName + SC + CR );
 						}
 					}
 				}
@@ -961,7 +961,7 @@ public class TMLCCodeGeneration	{
 		TMLTask xTask = op.getSDRTasks().get( Operation.X_TASK );	
 		TMLTask fTask =	op.getSDRTasks().get( Operation.F_TASK );
 
-		OperationMEC xTaskOperation = xTask.getOperationMEC();
+		int xTaskOperationType = xTask.getOperationType();
 
 		if( op.getOutSignal() != null )	{
 			signalOutName = op.getOutSignal().getName();
@@ -980,40 +980,40 @@ public class TMLCCodeGeneration	{
 			code.append( TAB + "sig[" + sig.getName() + "].f = false;" + CR );
 		}
 		
-		if( xTaskOperation instanceof CwpMEC )	{
+		if( xTaskOperationType == FepOperationMEC.CwpMEC )	{
 			CwpMEC cwp = new CwpMEC( ctxName, signalInName, signalOutName );
 			code.append( cwp.getExecCode() );
 		}
-		else if( xTaskOperation instanceof CwmMEC )	{
+		else if( xTaskOperationType == FepOperationMEC.CwmMEC )	{
 			CwmMEC cwm = new CwmMEC( ctxName, signalInName, signalOutName );
 			code.append( cwm.getExecCode() );
 		}
-		else if( xTaskOperation instanceof CwaMEC )	{
+		else if( xTaskOperationType == FepOperationMEC.CwaMEC )	{
 			CwaMEC cwa = new CwaMEC( ctxName, signalInName, "", signalOutName );
 			code.append( cwa.getExecCode() );
 		}
-		else if( xTaskOperation instanceof CwlMEC )	{
+		else if( xTaskOperationType == FepOperationMEC.CwlMEC )	{
 			CwlMEC cwl = new CwlMEC( ctxName, signalInName, signalOutName );
 			code.append( cwl.getExecCode() );
 		}
-		else if( xTaskOperation instanceof SumMEC )	{
+		else if( xTaskOperationType == FepOperationMEC.SumMEC )	{
 			SumMEC sum = new SumMEC( ctxName, signalInName, signalOutName );
 			code.append( sum.getExecCode() );
 		}
-		else if( xTaskOperation instanceof FftMEC )	{
+		else if( xTaskOperationType == FepOperationMEC.FftMEC )	{
 			FftMEC fft = new FftMEC( ctxName, signalInName, signalOutName );
 			code.append( fft.getExecCode() );
 		}
-		else if( xTaskOperation instanceof MappOperationMEC )	{
+		else if( xTaskOperationType == OperationMEC.MappOperationMEC )	{
 			MappOperationMEC mapp = new MappOperationMEC( ctxName, signalInName, signalOutName );
 			code.append( mapp.getExecCode() );
 		}
-		else if( xTaskOperation instanceof IntlOperationMEC )	{
+		else if( xTaskOperationType == OperationMEC.IntlOperationMEC )	{
 			IntlOperationMEC intl = new IntlOperationMEC( ctxName, signalInName, signalOutName );
 			code.append( intl.getExecCode() );
 		}
-		else if( xTaskOperation instanceof AdaifOperationMEC )	{
-			AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName, signalInName, signalOutName );
+		else if( xTaskOperationType == OperationMEC.AdaifOperationMEC )	{
+			AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName );
 			code.append( adaif.getExecCode() );
 		}
 
@@ -1250,8 +1250,8 @@ public class TMLCCodeGeneration	{
 		initFileString.append( "/**** variables ****/" + CR2 );		
 		initFileString.append( "char fep_mss[0x10000];" + CR );
 		initFileString.append( "char adaif_mss[0x10000];" + CR );
-		initFileString.append( "char intl_mss[0x10000];" + CR );
-		initFileString.append( "char mapper_mss[0x10000];" + CR );
+		initFileString.append( "char intl_mss[0x41000];" + CR );
+		initFileString.append( "char mapper_mss[0x8000];" + CR );
 		initFileString.append( buffersAndInstructionsDeclaration( false ) + CR2 );
 		generateCodeToInitializeBuffers();
 		generateCodeToInitializeSignals();
@@ -1262,8 +1262,8 @@ public class TMLCCodeGeneration	{
 			if( op.getType() == Operation.SDR )	{
 				TMLTask xTask = op.getSDRTasks().get( Operation.X_TASK );
 				TMLTask fTask = op.getSDRTasks().get( Operation.X_TASK );
-				OperationMEC xTaskOperation = xTask.getOperationMEC();
-				OperationMEC fTaskOperation = fTask.getOperationMEC();
+				int xTaskOperationType = xTask.getOperationType();
+				int fTaskOperationType = fTask.getOperationType();
 				ctxName = op.getContextName();
 				if( op.getInSignals().size() > 0 )	{
 					inSignalName = op.getInSignals().get(0).getName();
@@ -1277,43 +1277,43 @@ public class TMLCCodeGeneration	{
 				else	{
 					outSignalName = "noOutSignal";
 				}
-				if( xTaskOperation instanceof CwpMEC )	{
+				if( xTaskOperationType == FepOperationMEC.CwpMEC )	{
 					CwpMEC cwp = new CwpMEC( ctxName, inSignalName, outSignalName );
 					init_code = cwp.getInitCode();
 				}
-				else if( xTaskOperation instanceof CwmMEC )	{
+				else if( xTaskOperationType == FepOperationMEC.CwmMEC )	{
 					CwmMEC cwm = new CwmMEC( ctxName, inSignalName, outSignalName );
 					init_code = cwm.getInitCode();
 				}
-				else if( xTaskOperation instanceof CwaMEC )	{
+				else if( xTaskOperationType == FepOperationMEC.CwaMEC )	{
 					CwaMEC cwa = new CwaMEC( ctxName, inSignalName, "", outSignalName );
 					init_code = cwa.getInitCode();
 				}
-				else if( xTaskOperation instanceof CwlMEC )	{
+				else if( xTaskOperationType == FepOperationMEC.CwlMEC )	{
 					CwlMEC cwl = new CwlMEC( ctxName, inSignalName, outSignalName );
 					init_code = cwl.getInitCode();
 				}
-				else if( xTaskOperation instanceof SumMEC )	{
+				else if( xTaskOperationType == FepOperationMEC.SumMEC )	{
 					SumMEC sum = new SumMEC( ctxName, inSignalName, outSignalName );
 					init_code = sum.getInitCode();
 				}
-				else if( xTaskOperation instanceof FftMEC )	{
+				else if( xTaskOperationType == FepOperationMEC.FftMEC )	{
 					FftMEC fft = new FftMEC( ctxName, inSignalName, outSignalName );
 					init_code = fft.getInitCode();
 				}
-				else if( xTaskOperation instanceof IntlOperationMEC )	{
+				else if( xTaskOperationType == OperationMEC.IntlOperationMEC )	{
 					IntlOperationMEC intl = new IntlOperationMEC( ctxName, inSignalName, outSignalName );
 					initFileString.append( intl.getInitCode() + CR );
 				}
-				else if( xTaskOperation instanceof MappOperationMEC )	{
+				else if( xTaskOperationType == OperationMEC.MappOperationMEC )	{
 					MappOperationMEC mapp = new MappOperationMEC( ctxName, inSignalName, outSignalName );
 					initFileString.append( mapp.getInitCode() + CR );
 				}
-				else if( xTaskOperation instanceof AdaifOperationMEC )	{
-					AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName, inSignalName, outSignalName );
+				else if( xTaskOperationType == OperationMEC.AdaifOperationMEC )	{
+					AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName );
 					initFileString.append( adaif.getInitCode() + CR );
 				}
-				else if( xTaskOperation instanceof CpuOperationMEC )	{
+				else if( xTaskOperationType == OperationMEC.CpuOperationMEC )	{
 					CpuOperationMEC cpu = new CpuOperationMEC( ctxName, inSignalName, outSignalName );
 					initFileString.append( cpu.getInitCode() + CR );
 				}

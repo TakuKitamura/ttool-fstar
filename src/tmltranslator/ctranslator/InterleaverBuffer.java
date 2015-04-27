@@ -37,7 +37,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class FEPBuffer
+   * Class InterleaverBuffer
    * Creation: 11/02/2014
    * @version 1.0 11/02/2014
    * @author Andrea ENRICI

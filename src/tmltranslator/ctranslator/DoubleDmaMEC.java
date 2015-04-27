@@ -50,9 +50,6 @@ import java.util.*;
 
 public class DoubleDmaMEC extends CPMEC	{
 
-	public static final String Context = "EMBB_CONTEXT";
-	public static final String Ctx_cleanup = "dma_ctx_cleanup";
-
 	public static final int MaxParameters = 6;
 	public static final int destinationAddress1Index = 0;
 	public static final int sourceAddress1Index = 1;
@@ -70,25 +67,7 @@ public class DoubleDmaMEC extends CPMEC	{
 
 	private String memoryBaseAddress = "0";
 
-	public DoubleDmaMEC( String ctxName )	{
-
-		node_type = "DoubleDmaMEC";
-		inst_type = "VOID";
-		inst_decl = "EMBB_DMA_CONTEXT";
-		buff_type = "MM_BUFFER_TYPE";
-		buff_init = "VOID";
-		exec_code = TAB + "embb_dma_start(&" + ctxName + ", /*USER TO DO: SRC_ADDRESS*/, /*USER TO DO: DST_ADDRESS*/, /*USER TO DO: NUM_SAMPLES */ );" + CR;	
-		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, NULL );" + CR;
-		cleanup_code = TAB + "embb_dma_ctx_cleanup(&" + ctxName + ");";
-	}
-
 	public DoubleDmaMEC( String ctxName, ArchUnitMEC archMEC, int srcMemoryType, int dstMemoryType, int transferType, String sizeString )	{
-
-		node_type = "DoubleDmaMEC";
-		inst_type = "VOID";
-		inst_decl = "EMBB_DMA_CONTEXT";
-		buff_type = "MM_BUFFER_TYPE";
-		buff_init = "VOID";
 
 		switch( srcMemoryType )	{
 			case Buffer.FepBuffer:
@@ -131,19 +110,5 @@ public class DoubleDmaMEC extends CPMEC	{
 			break;
 		}
 	}
-
-//	public DoubleDmaMEC( String ctxName, String destinationAddress1, String sourceAddress1, String size1, String destinationAddress2, String sourceAddress2, String size2 )	{
-//
-//		node_type = "DoubleDmaMEC";
-//		inst_type = "VOID";
-//		inst_decl = "EMBB_DMA_CONTEXT";
-//		buff_type = "MM_BUFFER_TYPE";
-//		buff_init = "VOID";
-//		exec_code = TAB + "embb_dma_start(&" + ctxName + ", (uintptr_t) " + sourceAddress1 + ", (uintptr_t) " + destinationAddress1 + ", (size_t) " + size1 + " );" + CR;	
-//		exec_code += TAB + "embb_dma_start(&" + ctxName + ", (uintptr_t) " + sourceAddress2 + ", (uintptr_t) " + destinationAddress2 + ", (size_t) " + size2 + " );" + CR;	
-//		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, NULL );" + CR;
-//		init_code += TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, NULL );" + CR;
-//		cleanup_code = TAB + "embb_dma_ctx_cleanup(&" + ctxName + ");";
-//	}
 
 }	//End of class

@@ -52,6 +52,12 @@ import myutil.*;
 
 public abstract class FepOperationMEC extends OperationMEC	{
 
+	public static final int CwmMEC = 0;
+	public static final int CwlMEC = 1;
+	public static final int CwaMEC = 2;
+	public static final int CwpMEC = 3;
+	public static final int FftMEC = 4;
+	public static final int SumMEC = 5;
 
 	public FepOperationMEC()	{
 		name = "FepOperationMEC";

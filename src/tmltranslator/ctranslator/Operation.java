@@ -73,14 +73,6 @@ public class Operation	{
 	private boolean isPrex;
 	private boolean isPostex;
 
-	//Constructor for SDR operations, before the introduction of signals
-	/*public Operation( TMLTask _task1, TMLTask _task2 )	{	//First pass the F task
-		name = _task1.getName().split( "__" )[1].split( "F_" )[1];
-		fTask = _task1;
-		xTask = _task2;
-		type = 1;	//SDR
-	}*/
-
 	//Constructor for SDR operations with input (READ channels and events) and output (WRITE channels and events) signals
 	public Operation( TMLTask _xTask, TMLTask _fTask, HwNode _xHwNode, HwNode _fHwNode, ArrayList<Signal> _inSignals, Signal _outSignal, Buffer _inBuffer, Buffer _outBuffer, boolean _isPrex, boolean _isPostex )	{	//First pass the F task
 		name = _xTask.getName().split( "__" )[1].split( "F_" )[1];
@@ -220,8 +212,7 @@ public class Operation	{
 							"outBuffer: " + outBuffer.toString();
 		}
 		else if( inSignals.size() == 0 )	{
-			s +=			//"OPERATION " + name + "\n\t" +
-							"outSignal: " + outSignal.getName() + "\n\t" +
+			s +=		"outSignal: " + outSignal.getName() + "\n\t" +
 							"X task HwExecutionNode: " + xHwNode.getName() + "\n\t" +
 							"X task MEC: " + xHwNode.getArchUnitMEC().toString() + "\n\t" +
 							"F task HwExecutionNode: " + fHwNode.getName() + "\n\t" +
@@ -229,7 +220,6 @@ public class Operation	{
 							"outBuffer: " + outBuffer.toString();
 		}
 		else if( outSignal == null )	{
-			//s = "OPERATION " + name + "\n\t";
 			for( Signal sig: inSignals )	{
 				s += "inSignal: " + sig.getName() + "\n\t";
 			}

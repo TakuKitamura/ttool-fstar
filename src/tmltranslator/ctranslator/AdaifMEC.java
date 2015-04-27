@@ -51,7 +51,6 @@ import java.util.*;
 
 public class AdaifMEC extends ArchUnitMEC	{
 
-	public static final String Context = "ADAIF_CONTEXT";
 	public static final String Ctx_cleanup = "adaif_ctx_cleanup";
 	public static final String Operation = "Adaif operation";
 

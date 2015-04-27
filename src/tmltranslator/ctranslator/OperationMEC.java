@@ -52,6 +52,15 @@ import myutil.*;
 
 public abstract class OperationMEC	{
 
+	public static final int MappOperationMEC = 0;
+	public static final int IntlOperationMEC = 1;
+	public static final int AdaifOperationMEC = 2;
+	public static final int CpuOperationMEC = 3;
+	public static final int FepOperationMEC = 4;
+
+	private static final String[] contextArray = { "MAPPER_CONTEXT", "INTL_CONTEXT", "ADAIF_CONTEXT", "EMBB_CONTEXT", "FEP_CONTEXT" };
+	public static final ArrayList<String> ContextList = new ArrayList( Arrays.asList( contextArray ) );
+
 	protected String CR = "\n";
 	protected String TAB = "\t";
 	protected String name = new String();

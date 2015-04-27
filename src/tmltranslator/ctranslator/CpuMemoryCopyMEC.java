@@ -51,9 +51,6 @@ import java.util.*;
 
 public class CpuMemoryCopyMEC extends CPMEC	{
 
-	public static final String Context = "EMBB_CONTEXT";
-	public static final String Ctx_cleanup = "embb_ctx_cleanup";
-
 	public static final int MaxParameters = 3;
 	public static final int destinationAddressIndex = 0;
 	public static final int sourceAddressIndex = 1;
@@ -62,11 +59,6 @@ public class CpuMemoryCopyMEC extends CPMEC	{
 	private String memoryBaseAddress = "0";
 
 	public CpuMemoryCopyMEC( String ctxName, ArchUnitMEC archMEC, String sizeString )	{
-		node_type = "CpuMemoryCopy";
-		inst_type = "MEMORY_COPY";
-		inst_decl = "VOID";
-		buff_type = "MM_BUFFER_TYPE";
-		buff_init = "VOID";
 
 		exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", /*USER TODO: *SRC */, " + sizeString + " );" + CR;
 		init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;

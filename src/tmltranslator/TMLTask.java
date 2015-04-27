@@ -61,7 +61,7 @@ public class TMLTask extends TMLElement {
     private HashSet<TMLChannel> readTMLChannelsList;
     private HashSet<TMLChannel> writeTMLChannelsList;
     private HashSet<TMLEvent> eventsList;
-    private OperationMEC operationMEC;
+    private int operationType;
 
 
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
@@ -352,12 +352,12 @@ public class TMLTask extends TMLElement {
         return new ArrayList<TMLEvent>( eventsList );
     }
 
-    public void addOperationMEC( OperationMEC _operationMEC )   {
-        operationMEC = _operationMEC;
+    public void addOperationType( int _operationType )   {
+        operationType = _operationType;
     }
 
-    public OperationMEC getOperationMEC()       {
-        return operationMEC;
+    public int getOperationType()       {
+        return operationType;
     }
 
     public void removeEmptyInfiniteLoop() {

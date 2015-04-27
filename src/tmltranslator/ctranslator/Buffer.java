@@ -88,10 +88,10 @@ public class Buffer	{
 		code = "struct" + SP + name + TAB + "{" + CR + "}" + SC;
 	}
 
-	public Buffer( TMLPort _port )	{
+	/*public Buffer( TMLPort _port )	{
 		port = _port;
 		name = "buff__" + port.getName();
-	}
+	}*/
 	
 	public String toString()	{
 		if( port != null )	{

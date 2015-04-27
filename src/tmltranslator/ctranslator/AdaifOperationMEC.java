@@ -52,7 +52,7 @@ import java.util.*;
 public class AdaifOperationMEC extends OperationMEC	{
 
 
-	public AdaifOperationMEC( String ctxName, String ID0, String OD0 )	{
+	public AdaifOperationMEC( String ctxName )	{
 		name = "AdaifOperationMEC";
 		exec_code = TAB + "int status;" + CR + TAB +
 								"adaif_wait(&" + ctxName + ");" + CR + TAB +

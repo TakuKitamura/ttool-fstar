@@ -62,6 +62,7 @@ public abstract class ArchUnitMEC	{
 
 	public String CR = "\n";
 	public String TAB = "\t";
+
 	protected int index;
 	protected String initCtxRoutine;
 	protected String ctxCleanupRoutine;
