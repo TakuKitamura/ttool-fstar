@@ -193,8 +193,6 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
 				MECType = dialog.getMECType();
-				TraceManager.addDev( "after JDialog " + MECType );
-				TraceManager.addDev( "after JDialog " + MECType.getIndex() );
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -479,7 +477,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         sb.append(" execiTime=\"" + execiTime + "\"");
         sb.append(" execcTime=\"" + execcTime + "\"");
         sb.append(" clockRatio=\"" + clockRatio + "\"");
-        sb.append(" MECType=\"" + MECType.getIndex() + "\"");
+				sb.append(" MECType=\"" + MECType.getIndex() + "\"");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -543,7 +541,9 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                                 if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
                                 }
-                                MECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("MECType") ) );
+                                if ((elt.getAttribute("MECType") != null) &&  (elt.getAttribute("MECType").length() > 0)){
+                                	MECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("MECType") ) );
+																}
                                 if ((elt.getAttribute("sliceTime") != null) &&  (elt.getAttribute("sliceTime").length() > 0)){
                                     sliceTime = Integer.decode(elt.getAttribute("sliceTime")).intValue();
                                 }

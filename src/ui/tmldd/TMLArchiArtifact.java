@@ -73,7 +73,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 		protected int priority = 0; // Between 0 and 10
 		protected String operation = "VOID";
 
-		private ArchUnitMEC fatherArchUnitMECType;
+		private ArchUnitMEC fatherArchUnitMECType = new CpuMEC();
     
     public TMLArchiArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -161,7 +161,6 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 		boolean error = false;
 		
 		fatherArchUnitMECType = ((TMLArchiNode)father).getMECType();
-		TraceManager.addDev( "Father: " + father.getClass().toString() + " with MEC " + ((TMLArchiNode)father).getMECType() );
 		JDialogTMLTaskArtifact dialog = new JDialogTMLTaskArtifact(frame, "Setting artifact attributes", this, operation, fatherArchUnitMECType);
 		dialog.setSize(400, 350);
     GraphicLib.centerOnParent(dialog);
@@ -235,8 +234,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 				sb.append( priority );
 				sb.append( "\" operation=\"" );
 				sb.append( operation );
-				sb.append( "\" fatherComponentMECType=\"" );
-				sb.append( fatherArchUnitMECType.getIndex() );
+				sb.append( "\" fatherComponentMECType=\"" + fatherArchUnitMECType.getIndex() );
         sb.append( "\" />\n" );
         sb.append( "</extraparam>\n" );
         return new String(sb);
@@ -272,7 +270,9 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 									priority = Integer.decode(prio).intValue();
 								}
 								operation = elt.getAttribute("operation");
-								fatherArchUnitMECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("fatherComponentMECType") ) );
+								if( (elt.getAttribute("fatherComponentMECType") != null) &&  (elt.getAttribute("fatherComponentMECType").length() > 0) )	{
+									fatherArchUnitMECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("fatherComponentMECType") ) );
+								}
                             }
                             if (svalue != null) {
                                 value = svalue;
@@ -317,7 +317,6 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 
 	public OperationMEC getOperationMECOfTask()	{
 
-		TraceManager.addDev( "Inside getMECofTask, fatherArchUnitMECType: " + fatherArchUnitMECType );
 		if( fatherArchUnitMECType instanceof FepMEC )	{
 			if( operation.equals( "CWM" ) )	{
 				return new CwmMEC( "", "", "" );
@@ -355,22 +354,6 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 
 	public ArchUnitMEC getArchUnitMEC()	{
 		return fatherArchUnitMECType;
-		/*if( fatherArchUnitMECType instanceof FepMEC )	{
-			return new FepMEC();
-		}
-		else if( fatherArchUnitMECType instanceof MapperMEC )	{
-			return new MapperMEC();
-		}
-		else if( fatherArchUnitMECType instanceof InterleaverMEC )	{
-				return new InterleaverMEC();
-		}
-		else if( fatherArchUnitMECType instanceof AdaifMEC )	{
-			return new AdaifMEC();
-		}
-		else if( fatherArchUnitMECType instanceof CpuMEC )	{
-			return new CpuMEC();
-		}
-		return null;*/
 	}
     
 }

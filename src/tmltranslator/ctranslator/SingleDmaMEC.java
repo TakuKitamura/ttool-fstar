@@ -125,18 +125,6 @@ public class SingleDmaMEC extends CPMEC	{
 
 	}
 	
-//	public SingleDmaMEC( String ctxName, String destinationAddress, String sourceAddress, String size )	{
-//
-//		node_type = "SingleDmaMEC";
-//		inst_type = "VOID";
-//		inst_decl = "EMBB_DMA_CONTEXT";
-//		buff_type = "MM_BUFFER_TYPE";
-//		buff_init = "VOID";
-//		exec_code = TAB + "embb_dma_start(&" + ctxName + ", (uintptr_t) " + sourceAddress + ", (uintptr_t) " + destinationAddress + ", (size_t) " + size + " );" + CR;	
-//		init_code = TAB + "embb_dma_ctx_init(&" + ctxName + ", /*USER TO DO: DMA_DEVICE*/, /*USER TO DO: DST_DEV*/, NULL );" + CR;
-//		cleanup_code = TAB + "embb_dma_ctx_cleanup(&" + ctxName +");";
-//	}
-
 	public String getInitCode()	{
 		return init_code;
 	}

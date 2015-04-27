@@ -62,21 +62,12 @@ public class CpuMemoryCopyMEC extends CPMEC	{
 	private String memoryBaseAddress = "0";
 
 	public CpuMemoryCopyMEC( String ctxName, ArchUnitMEC archMEC, String sizeString )	{
-	//public CpuMemoryCopyMEC( String ctxName, String pssBaseAddress, String offset, String  ddrAddress, String size )	{
 		node_type = "CpuMemoryCopy";
 		inst_type = "MEMORY_COPY";
 		inst_decl = "VOID";
 		buff_type = "MM_BUFFER_TYPE";
 		buff_init = "VOID";
 
-		/*exec_code = TAB + CR + TAB +
-								"int i = 0;" + CR + TAB +
-								"int k = 0;" + CR + TAB +
-								"for( i = 0 ;i < " + size + "; i += 4, k++ )\t{" + CR + TAB +
-								TAB + "cpu_mem_write_32( " + pssBaseAddress + " + " + offset + " + i, " + ddrAddress + "[k] );" + CR + TAB + "}" + CR;
-
-		init_code = TAB + "embb_memcpy_ctx_init(&" + ctxName + ");" + CR;
-		cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";*/
 		exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", /*USER TODO: *SRC */, " + sizeString + " );" + CR;
 		init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
 		cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";

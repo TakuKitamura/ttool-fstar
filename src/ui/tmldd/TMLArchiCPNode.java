@@ -291,9 +291,11 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
                             if (elt.getTagName().equals("info")) {
                                 sstereotype = elt.getAttribute("stereotype");
                                 snodeName = elt.getAttribute("nodeName");
-																cpMEC = elt.getAttribute( "cpMEC" );
-																transferType1 = Integer.parseInt(elt.getAttribute( "transferType1" ) );
-																transferType2 = Integer.parseInt(elt.getAttribute( "transferType2" ) );
+																if( ( elt.getAttribute("cpMEC") != null ) && ( elt.getAttribute("cpMEC").length() > 0 ) )	{
+																	cpMEC = elt.getAttribute( "cpMEC" );
+																	transferType1 = Integer.parseInt(elt.getAttribute( "transferType1" ) );
+																	transferType2 = Integer.parseInt(elt.getAttribute( "transferType2" ) );
+																}
                             }
                             if (sstereotype != null) {
                                 stereotype = sstereotype;
