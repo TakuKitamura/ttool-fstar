@@ -101,7 +101,7 @@ public class AttackTreePanelTranslator {
         }
 
 
-        TraceManager.addDev("AT=" + at.toString());
+        //TraceManager.addDev("AT=" + at.toString());
         return at;
 
     }

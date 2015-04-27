@@ -163,7 +163,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         jp1.add(stateA, c1);
         stateA.setSelected(stateAChecked);
 
-	stateL = new JCheckBox("Leads to");
+        stateL = new JCheckBox("Leads to");
         stateL.addActionListener(this);
         stateL.setToolTipText("Study the fact that, if accessed,  a given state is eventually followed by another one");
         jp1.add(stateL, c1);
@@ -259,7 +259,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         deadlockAChecked = deadlockA.isSelected();
         stateEChecked = stateE.isSelected();
         stateAChecked = stateA.isSelected();
-	stateLChecked = stateL.isSelected();
+        stateLChecked = stateL.isSelected();
         customChecked = custom.isSelected();
         generateTraceChecked = generateTrace.isSelected();
         showDetailsChecked = showDetails.isSelected();
@@ -362,44 +362,47 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 }
             }
 
-	    if (stateL.isSelected() && (mode != NOT_STARTED)) {
+            if (stateL.isSelected() && (mode != NOT_STARTED)) {
                 ArrayList<String> list = mgui.gtm.getUPPAALQueries(tp);
-		String s1, s2, name1, name2, query1, query2;
-		int index1, index2;
+                String s1, s2, name1, name2, query1, query2;
+                int index1, index2;
                 if ((list != null) && (list.size() > 0)){
-		    for(int i=0; i<list.size()-1; i++) {
-			for(int j=i+1; j<list.size(); j++) {
-			    s1 = list.get(i);
-			    s2 = list.get(j);
-			    index1 = s1.indexOf('$');
-			    index2 = s2.indexOf('$');
-			    if ((index1 != -1) && (index2 != -1) && (mode != NOT_STARTED)) {
-				name1 = s1.substring(index1+1, s1.length());
-				query1 = s1.substring(0, index1);
-				name2 = s2.substring(index2+1, s2.length());
-				query2 = s2.substring(0, index2);
-				jta.append("\nLeads to: " + name1 + "--> " + name2 + "\n");
-				workQuery(query1 + " --> " + query2, fn, trace_id, rshc);
-				trace_id++;
-				jta.append("\nLeads to: " + name2 + "--> " + name1 + "\n");
-				workQuery(query2 + " --> " + query1, fn, trace_id, rshc);
-				trace_id++;
-			    }else {
-				jta.append("A component could not be studied (internal error)\n");
-			    }
-			}
-		    }
-                    for(String s: list) {
-                        index = s.indexOf('$');
-                        if ((index != -1) && (mode != NOT_STARTED)) {
-                            name = s.substring(index+1, s.length());
-                            query = s.substring(0, index);
-                            //jta.append("\n--------------------------------------------\n");
-                            jta.append("\nLeads to: " + name + "\n");
-                            workQuery("A<> " + query, fn, trace_id, rshc);
-                            trace_id++;
-                        } else {
-                            jta.append("A component could not be studied (internal error)\n");
+                    for(int i=0; i<list.size()-1; i++) {
+                        for(int j=i+1; j<list.size(); j++) {
+                            s1 = list.get(i);
+                            s2 = list.get(j);
+                            index1 = s1.indexOf('$');
+                            index2 = s2.indexOf('$');
+                            //TraceManager.addDev("\n******\n\n\n");
+                            //TraceManager.addDev("s1=" + s1 + "\ns2=" + s2);
+                            if ((index1 != -1) && (index2 != -1) && (mode != NOT_STARTED)) {
+                                name1 = s1.substring(index1+1, s1.length());
+                                query1 = s1.substring(0, index1);
+                                name2 = s2.substring(index2+1, s2.length());
+                                query2 = s2.substring(0, index2);
+                                //TraceManager.addDev("name1=" + name1 + "\nname2=" + name2);
+                                //TraceManager.addDev("query1=" + s1 + "\nquery2=" + s2);
+                                if ((name1.compareTo(name2) != 0) && (name1.length() > 0) && (name2.length() > 0)) {
+				    if (!(showDetails.isSelected())) {
+					int indexName = name1.indexOf(":");
+					if (indexName != -1) {
+					    name1 = name1.substring(indexName+1, name1.length()).trim();
+					}
+					indexName = name2.indexOf(":");
+					if (indexName != -1) {
+					    name2 = name2.substring(indexName+1, name2.length()).trim();
+					}
+				    }
+                                    jta.append("\nLeads to: " + name1 + "--> " + name2 + "\n");
+                                    workQuery(query1 + " --> " + query2, fn, trace_id, rshc);
+                                    trace_id++;
+                                    jta.append("\nLeads to: " + name2 + "--> " + name1 + "\n");
+                                    workQuery(query2 + " --> " + query1, fn, trace_id, rshc);
+                                    trace_id++;
+                                }
+                            }else {
+                                jta.append("A component could not be studied (internal error)\n");
+                            }
                         }
                     }
                 } else {
@@ -450,6 +453,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     }
 
     private void workQuery(String query, String fn, int trace_id, RshClient rshc) throws LauncherException {
+
+        //TraceManager.addDev("Working on query: " + query);
+
         String cmd1, data;
         if(showDetails.isSelected()) {
             jta.append("-> " + query + "\n");
@@ -530,7 +536,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             deadlockA.setEnabled(true);
             stateE.setEnabled(true);
             stateA.setEnabled(true);
-	    stateL.setEnabled(true);
+            stateL.setEnabled(true);
             //customText.setEnabled(true);
             customText.setEnabled(custom.isSelected());
             generateTrace.setEnabled(true);
@@ -555,7 +561,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             deadlockA.setEnabled(false);
             stateE.setEnabled(false);
             stateA.setEnabled(false);
-	    stateL.setEnabled(false);
+            stateL.setEnabled(false);
             customText.setEnabled(false);
             generateTrace.setEnabled(false);
             showDetails.setEnabled(false);
@@ -572,7 +578,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             deadlockA.setEnabled(false);
             stateE.setEnabled(false);
             stateA.setEnabled(false);
-	    stateL.setEnabled(false);
+            stateL.setEnabled(false);
             customText.setEnabled(false);
             generateTrace.setEnabled(false);
             showDetails.setEnabled(false);
