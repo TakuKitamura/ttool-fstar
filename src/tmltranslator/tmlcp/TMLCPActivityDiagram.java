@@ -319,7 +319,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
         int id = 0;
         TMLCPActivityDiagram diag;
 
-        TraceManager.addDev("Splitting AD: " + getName());
+        //TraceManager.addDev("Splitting AD: " + getName());
 
         // For each junction, we create a new AD
         ArrayList<TMLCPJunction> junctions = new ArrayList<TMLCPJunction>();
@@ -334,7 +334,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
                 diag.setStartElement(start);
                 diag.addTMLCPElement(start);
                 refs.put((TMLCPJunction)elt, diag);
-                TraceManager.addDev("Adding a new diag named: " + diag.getName());
+                //TraceManager.addDev("Adding a new diag named: " + diag.getName());
             }
         }
 
@@ -404,7 +404,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
         }
 
         for(TMLCPElement elt: originInOld.getNextElements()) {
-            TraceManager.addDev("Exploring elt (0):" + elt.getName());
+            //TraceManager.addDev("Exploring elt (0):" + elt.getName());
             if (elt instanceof TMLCPJunction) {
                 // Must replace the junction by a ref to an AD
                 TMLCPActivityDiagram toAD = refs.get((TMLCPJunction)elt);
@@ -412,7 +412,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
                 newDiag.addTMLCPElement(ref);
                 originInNew.setNextElement(ref);
             } else {
-                TraceManager.addDev("Exploring elt (1):" + elt.getName());
+                //TraceManager.addDev("Exploring elt (1):" + elt.getName());
                 if (originInOld != originInNew) {
                     originInNew.addNextElement(elt);
                 }

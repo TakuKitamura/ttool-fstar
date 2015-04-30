@@ -233,7 +233,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
     c4.anchor = GridBagConstraints.CENTER;*/
 		panel4.add(new JLabel("Embb Model Extension Construct:"), c4);
     c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-    MECTypeCB = new JComboBox( ArchUnitMEC.Types );
+    MECTypeCB = new JComboBox( ArchUnitMEC.stringTypes );
 		if( MECType == null )	{
 			MECTypeCB.setSelectedIndex( 0 );
 		}

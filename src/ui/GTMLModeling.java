@@ -2052,7 +2052,7 @@ public class GTMLModeling  {
 
         if( tmlcpp != null )    {
             try {
-                TraceManager.addDev( "Making Communication Pattern data structure to check the syntax" );
+                //TraceManager.addDev( "Making Communication Pattern data structure to check the syntax" );
                 makeCPDataStructure();  //fill the data structure tmlcp
             }
             catch( MalformedTMLDesignException mtmlde ) {
@@ -2060,7 +2060,7 @@ public class GTMLModeling  {
             }
         }
 
-        TraceManager.addDev( "About to check the syntax of CPs" );
+        //TraceManager.addDev( "About to check the syntax of CPs" );
         TMLCPSyntaxChecking syntax = new TMLCPSyntaxChecking( tmlcp );
         syntax.checkSyntax();
         //Takes the data structure tmlcp passed to the constructor and checks the syntax of the components of a cp. If there are errors (these
@@ -2346,14 +2346,10 @@ public class GTMLModeling  {
             //TraceManager.addDev( "PANEL number: " + panelCounter + " " + panelList.get( panelCounter ) );
         }
 
-        TraceManager.addDev( "Before correcting references. The list of ADs contains: " + tmlcp.getCPActivityDiagrams().toString() );
         tmlcp.correctReferences(); //Update references to the right activity and sequence diagrams
-        TraceManager.addDev( "After correcting references and before splitting ADs. The list of ADs contains: " + tmlcp.getCPActivityDiagrams().toString() );
         //tmlcp.generateNexts(); // Add nexts elements to CPElements
         //tmlcp.removeADConnectors(); // Remove connectors since nexts have been filled
         tmlcp.splitADs(); // Splitting ADs so as to remove junctions -> new ADs are introduced for each junction inside an AD
-        TraceManager.addDev( "After splitting ADs. OriginalCP:" + tmlcp.toString() );
-        TraceManager.addDev( "After splitting ADs. The list of ADs contains: " + tmlcp.getMainCP().toString() + tmlcp.getCPActivityDiagrams().toString() );
 
         /*for( TMLCPSequenceDiagram seqDiag: tmlcp.getCPSequenceDiagrams() )      {
           TraceManager.addDev( "**********" );
@@ -2625,7 +2621,7 @@ public class GTMLModeling  {
             for(j = 0; j < elemList.size(); j++ )  {
                 elem = (TGComponent) elemList.get(j);
                 if( elem instanceof TGConnectorMessageTMLSD )   {
-                    TraceManager.addDev("Analyzing message:" + elem);
+                    //TraceManager.addDev("Analyzing message:" + elem);
                     connector = (TGConnectorMessageTMLSD) elemList.get(j);
                     String sender = connector.getTGConnectingPointP1().getFather().getName();
                     String receiver = connector.getTGConnectingPointP2().getFather().getName();
@@ -2633,12 +2629,12 @@ public class GTMLModeling  {
                     message = new TMLSDMessage( connector.getName(), sender, receiver, connector.getY(), connector, connector.getParams() );
                     for( tmltranslator.tmlcp.TMLSDInstance tempInstance: SD.getInstances() )    {
                         if( tempInstance.getName().equals( sender ) )   {
-                            TraceManager.addDev( "Adding message " + message.toString() + " to instance " + tempInstance.toString() );
+                            //TraceManager.addDev( "Adding message " + message.toString() + " to instance " + tempInstance.toString() );
                             tempInstance.addMessage( message, TMLSDEvent.SEND_MESSAGE_EVENT );
                             //break;
                         }
                         if( tempInstance.getName().equals( receiver ) )   {
-                            TraceManager.addDev( "Adding message " + message.toString() + " to instance " + tempInstance.toString() );
+                            //TraceManager.addDev( "Adding message " + message.toString() + " to instance " + tempInstance.toString() );
                             tempInstance.addMessage( message, TMLSDEvent.RECEIVE_MESSAGE_EVENT );
                             //break;
                         }

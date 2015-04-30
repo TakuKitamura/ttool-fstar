@@ -52,6 +52,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
+import java.io.*;
 
 import myutil.*;
 import ui.interactivesimulation.*;
@@ -95,8 +96,6 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
 
     int mode;
 
-
-
     //components
     protected JTextArea jta;
     protected JButton start;
@@ -106,65 +105,34 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
     protected JRadioButton exe, exeint, exeformal;
     protected ButtonGroup exegroup;
     protected JLabel gen, comp;
-    protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int, exe2formal;
+    protected JTextField code1, code2, compiler1, exe1, exe2, exe3, exe2int, exe2formal;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
     protected JCheckBox removeCppFiles, removeXFiles, debugmode, optimizemode;
     protected JComboBox versionSimulator;
 
-    //EBRDD
-    /*private static Vector validated, ignored;
-      private Vector val, ign;
-      private JList listIgnored;
-      private JList listValidated;
-      private JButton allValidated;
-      private JButton addOneValidated;
-      private JButton addOneIgnored;
-      private JButton allIgnored;
-      private JPanel panele1, panele2, panele3, panele4, panel5, panel6;*/
-
-
-    //TEPED
-    /*private static Vector validatedTepe, ignoredTepe;
-    private Vector valTepe, ignTepe;
-    private JList listIgnoredTepe;
-    private JList listValidatedTepe;
-    private JButton allValidatedTepe;
-    private JButton addOneValidatedTepe;
-    private JButton addOneIgnoredTepe;
-    private JButton allIgnoredTepe;
-    private JPanel panele1Tepe, panele2Tepe, panele3Tepe, panele4Tepe, panel5Tepe, panel6Tepe;*/
-
-
-
-
     private Thread t;
     private boolean go = false;
-    //private ProcessThread pt;
     private boolean hasError = false;
     protected boolean startProcess = false;
-
-    //private TURTLE2Java t2j;
 
     private String hostSystemC;
 
     protected RshClient rshc;
 
-    // Automatic modes
-    public final static int MANUAL = 0;
-    public final static int ONE_TRACE = 1;
-    public final static int ANIMATION = 2;
-    public final static int FORMAL_VERIFICATION = 3;
-
     private int automatic;
     private boolean wasClosed = false;
 
+		private GTURTLEModeling gtm;
+
 
     /** Creates new form  */
-    public JDialogCCodeGeneration(Frame f, MainGUI _mgui, String title, String _hostSystemC, String _pathCode, String _pathCompiler, String _pathExecute, String _pathInteractiveExecute, String _graphPath ) {
+    public JDialogCCodeGeneration(Frame f, MainGUI _mgui, String title, String _hostSystemC, String _pathCode, String _pathCompiler, String _pathExecute, String _pathInteractiveExecute, String _graphPath, GTURTLEModeling _gtm ) {
+
         super(f, title, true);
 
         mgui = _mgui;
+				gtm = _gtm;
 
         if (pathCode == null) {
             pathCode = _pathCode;
@@ -192,48 +160,16 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
                 pathFormalExecute += " -explo";
             }
         }
-
         hostSystemC = _hostSystemC;
-
-        //automatic = _automatic;
-
-        makeLists();
-
         initComponents();
         myInitComponents();
         pack();
-
-        //getGlassPane().addMouseListener( new MouseAdapter() {});
         getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         if (automatic > 0) {
             startProcess();
         }
     }
-
-    protected void makeLists() {
-       /* if (validatedTepe == null) {
-            validatedTepe = new Vector();
-        }
-
-        if (ignoredTepe == null) {
-            ignoredTepe = new Vector();
-        }
-
-        valTepe = new Vector();
-        ignTepe = new Vector();
-
-        ArrayList<AvatarPDPanel> al = mgui.getAllAvatarPDPanels();
-
-        for(AvatarPDPanel panel: al) {
-            if(validatedTepe.contains(panel)) {
-                valTepe.add(panel);
-            } else {
-                ignTepe.add(panel);
-            }
-        }*/
-    }
-
 
     protected void myInitComponents() {
         mode = NOT_STARTED;
@@ -247,7 +183,6 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         jp1 = new JTabbedPane();
 
@@ -281,7 +216,6 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 
         gen = new JLabel(textSysC1);
-        //genJava.addActionListener(this);
         jp01.add(gen, c01);
 
         code1 = new JTextField(pathCode, 100);
@@ -290,15 +224,7 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
         jp01.add(new JLabel(" "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 
-        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-        /*jp01.add(new JLabel("1 time unit = "), c01);
-
-        unitcycle = new JTextField(unitCycle, 10);
-        jp01.add(unitcycle, c01);
-
-        jp01.add(new JLabel("cycle"), c01);*/
-
-        removeCppFiles = new JCheckBox("Remove old .h / .c  files");
+        removeCppFiles = new JCheckBox("Remove old .h, .c, .o  files");
         removeCppFiles.setSelected(true);
         jp01.add(removeCppFiles, c01);
 
@@ -316,7 +242,7 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
 
         jp01.add(new JLabel(" "), c01);
 
-        jp1.add("Generate code", jp01);
+        jp1.add("Synthesize code", jp01);
 
         // Panel 02
         c02.gridheight = 1;
@@ -396,7 +322,7 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
         if (automatic == 0) {
-            jta.append("Select options and then, click on 'start' to launch SystemC code generation / compilation\n");
+            jta.append("Select options and then, click on 'start' to launch C code compilation\n\n");
         }
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
@@ -503,113 +429,112 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
     }
 
     public void run() {
+
         String cmd;
         String data;
-
-
         hasError = false;
 
         try {
-
-            if (automatic > 0) {
-
-                generateCode();
-                testGo();
-                compileCode();
-                testGo();
-                executeSimulation();
-
-            } else {
-
-
-                // Code generation
-                if (jp1.getSelectedIndex() == 0) {
-                    generateCode();
-                }
-
-                testGo();
-
-
-                // Compilation
-                if (jp1.getSelectedIndex() == 1) {
-                    compileCode();
-
-                }
-
-                if (jp1.getSelectedIndex() == 2) {
-                    executeSimulation();
-                }
-
-                if ((hasError == false) && (jp1.getSelectedIndex() < 2)) {
-                    jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
-                }
-
+					if (automatic > 0)	{
+						hasError = generateCode();
+						testGo();
+						compileCode();
+						testGo();
+					}
+					else	{
+						if( jp1.getSelectedIndex() == 0 )	{	//Code generation
+							hasError = generateCode();
+						}
+						testGo();
+						// Compilation
+						if( jp1.getSelectedIndex() == 1 )	{
+							compileCode();
+						}
+						if( ( hasError == false ) && ( jp1.getSelectedIndex() < 1 ) )	{
+							jp1.setSelectedIndex( jp1.getSelectedIndex() + 1 );
             }
-
-        } catch (InterruptedException ie) {
-            jta.append("Interrupted\n");
-        }
-
-        jta.append("\n\nReady to process next command\n");
-
-        checkMode();
+					}
+				}
+				catch( InterruptedException ie )	{
+					jta.append("Process interrupted!\n");
+				}
+				jta.append("\n\nReady to process next command...\n");
+				
+				checkMode();
         setButtons();
     }
 
-    private void generateCode() throws InterruptedException {
+    private boolean generateCode() throws InterruptedException {
+
         String list;
         int cycle = 0;
+				boolean error = false;
 
-
-        jta.append("Generating SystemC code\n");
-
-        if (removeCppFiles.isSelected()) {
-            jta.append("Removing all old h files\n");
-            list = FileUtils.deleteFiles(code1.getText(), ".h");
-            if (list.length() == 0) {
-                jta.append("No files were deleted\n");
-            } else {
-                jta.append("Files deleted:\n" + list + "\n");
-            }
-            jta.append("Removing all old source files\n");
-            list = FileUtils.deleteFiles(code1.getText(), ".c");
-            if (list.length() == 0) {
-                jta.append("No files were deleted\n");
-            } else {
-                jta.append("Files deleted:\n" + list + "\n");
-            }
+        jta.append( "Generating C code...\n\n" );
+        if( removeCppFiles.isSelected() )	{
+					jta.append( "Removing all .h files...\n" );
+					list = FileUtils.deleteFiles( code1.getText(), ".h" );
+          if( list.length() == 0 )	{
+          	jta.append("No files were deleted\n");
+          }
+					else	{
+						jta.append("Files deleted:\n" + list + "\n");
+					}
+					jta.append("\nRemoving all .c files...\n");
+					list = FileUtils.deleteFiles( code1.getText(), ".c" );
+					if( list.length() == 0 )	{
+						jta.append( "No files were deleted\n" );
+					}
+					else	{
+						jta.append("Files deleted:\n" + list + "\n");
+					}
+					jta.append("\nRemoving all .o files...\n");
+					list = FileUtils.deleteFiles( code1.getText(), ".o" );
+					if( list.length() == 0 )	{
+						jta.append( "No files were deleted\n" );
+					}
+					else	{
+						jta.append( "Files deleted:\n" + list + "\n" );
+          }
         }
-
         if (removeXFiles.isSelected()) {
-            jta.append("Removing all old x files\n");
-            list = FileUtils.deleteFiles(code1.getText(), ".x");
-            if (list.length() == 0) {
-                jta.append("No files were deleted\n");
-            } else {
-                jta.append("Files deleted:\n" + list + "\n");
-            }
+          jta.append( "\nRemoving all .x files...\n" );
+          list = FileUtils.deleteFiles( code1.getText(), ".x" );
+          if( list.length() == 0 )	{
+						jta.append("No files were deleted\n");
+          }
+					else	{
+						jta.append("Files deleted:\n" + list + "\n");
+          }
         }
-
         testGo();
-
-        try {
-            unitCycle = unitcycle.getText();
-            cycle = Integer.valueOf(unitCycle).intValue();
-        } catch (Exception e) {
-            jta.append("Wrong number of cycles: " + unitcycle.getText());
-            jta.append("Aborting");
-            jta.append("\n\nReady to process next command\n");
-            checkMode();
-            setButtons();
-            return;
-        }
-
+    		error = gtm.generateCcode( code1.getText() );
+				if( !error )	{
+					File dir = new File( code1.getText() );
+					StringBuffer s = new StringBuffer();
+					jta.append( "\nSource files successfully generated:\n" );
+					for( File f: dir.listFiles() )	{
+						try	{
+							if( f.getCanonicalPath().contains(".c") || f.getCanonicalPath().contains(".h") )	{
+								s.append( f.getCanonicalPath() + "\n" );
+							}
+						}
+						catch( IOException ioe )	{
+            	jta.append("Error: " + ioe.getMessage() + "\n");
+            	mode = STOPPED;
+            	setButtons();
+							return true;
+						}
+					}
+					jta.append( s.toString() );
+				}
+				return error;
     }   //End of method generateCode()
 
     public void compileCode() throws InterruptedException {
         String cmd = compiler1.getText();
 
-        jta.append("Compiling SystemC code with command: \n" + cmd + "\n");
+        jta.append("Compiling C code with command: \n" + cmd + "\n");
 
         rshc = new RshClient(hostSystemC);
         // Assuma data are on the remote host
@@ -619,75 +544,23 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
             jta.append("Compilation done\n");
         } catch (LauncherException le) {
             jta.append("Error: " + le.getMessage() + "\n");
-            mode =      STOPPED;
+            mode = STOPPED;
             setButtons();
             return;
         } catch (Exception e) {
-            mode =      STOPPED;
+            mode = STOPPED;
             setButtons();
             return;
         }
     }
 
+    protected void processCmd( String cmd, JTextArea _jta ) throws LauncherException	{
 
-    public void executeSimulation() throws InterruptedException {
-
-        if (hasError) {
-            jta.append("Simulation not executed: error");
-            return;
-        }
-        int toDo = automatic;
-        if (toDo == 0) {
-            if (exe.isSelected()) {
-                toDo = ONE_TRACE;
-            } else if (exeint.isSelected()) {
-                toDo = ANIMATION;
-            } else {
-                toDo = FORMAL_VERIFICATION;
-            }
-        }
-        String cmd;
-        switch(toDo) {
-        case ONE_TRACE:
-            executeSimulationCmd(exe2.getText(), "Generating one simulation trace");
-            break;
-        case ANIMATION:
-            dispose();
-            mgui.interactiveSimulationSystemC(getPathInteractiveExecute());
-            break;
-        case FORMAL_VERIFICATION:
-            executeSimulationCmd(exe2formal.getText(), "Running formal verification");
-            break;
-        }
-    }
-
-    public void executeSimulationCmd(String cmd, String text) throws InterruptedException {
-
-        try {
-            jta.append(text + " with command: \n" + cmd + "\n");
-            rshc = new RshClient(hostSystemC);
-            // It assumes that data are on the remote host
-            // Command
-            processCmd(cmd, jta);
-            jta.append("Execution done\n");
-        } catch (LauncherException le) {
-            jta.append("Error: " + le.getMessage() + "\n");
-            mode =      STOPPED;
-            setButtons();
-            return;
-        } catch (Exception e) {
-            mode =      STOPPED;
-            setButtons();
-            return;
-        }
-    }
-
-    protected void processCmd(String cmd, JTextArea _jta) throws LauncherException {
-        rshc.setCmd(cmd);
-        String s = null;
-        rshc.sendProcessRequest();
-        rshc.fillJTA(_jta);
-        return;
+			rshc.setCmd( cmd );
+			String s = null;
+			rshc.sendProcessRequest();
+			rshc.fillJTA( _jta );
+			return;
     }
 
     protected void checkMode() {
@@ -701,7 +574,6 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
                 start.setEnabled(true);
                 stop.setEnabled(false);
                 close.setEnabled(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 getGlassPane().setVisible(false);
                 break;
             case STARTED:
@@ -709,7 +581,6 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
                 stop.setEnabled(true);
                 close.setEnabled(false);
                 getGlassPane().setVisible(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 break;
             case STOPPED:
             default:
@@ -734,10 +605,6 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
 
     public void setError() {
         hasError = true;
-    }
-
-    public boolean isInteractiveSimulationSelected() {
-        return (startProcess && interactiveSimulationSelected);
     }
 
     public String getPathInteractiveExecute() {

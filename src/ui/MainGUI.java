@@ -4169,12 +4169,12 @@ public String generateCcode() {
 																															"make -C " + ConfigurationTTool.CcodeDirectory,
 																															ConfigurationTTool.SystemCCodeExecuteCommand,
 																															ConfigurationTTool.SystemCCodeInteractiveExecuteCommand,
-																															ConfigurationTTool.GGraphPath );
+																															ConfigurationTTool.GGraphPath, gtm );
 		jgen.setSize(500, 750);
 		GraphicLib.centerOnParent(jgen);
 		jgen.setVisible(true);
 		//dtree.toBeUpdated();
-    gtm.generateCcode( path );
+    //gtm.generateCcode( path );
     return null;
 }
 

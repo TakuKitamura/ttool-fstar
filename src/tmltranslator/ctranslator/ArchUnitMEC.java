@@ -54,6 +54,8 @@ public abstract class ArchUnitMEC	{
 
 	private static ArchUnitMEC[] typesArr = { new CpuMEC(), new FepMEC(), new InterleaverMEC(), new MapperMEC(), new AdaifMEC() };
 	public static final Vector<ArchUnitMEC> Types = new Vector<ArchUnitMEC>( Arrays.asList( typesArr ) );
+	private static String[] stringTypesArr = { "CPU", "FEP", "INTL", "MAPP", "ADAIF" };
+	public static final Vector<String> stringTypes = new Vector<String>( Arrays.asList( stringTypesArr ) );
 	public static final int CpuMECIndex = 0;
 	public static final int FepMECIndex = 1;
 	public static final int InterleaverMECIndex = 2;

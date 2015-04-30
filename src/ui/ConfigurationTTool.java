@@ -1034,7 +1034,7 @@ public class ConfigurationTTool {
     private static void CcodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
-            CcodeDirectory = elt.getAttribute("data");
+            CcodeDirectory = elt.getAttribute("data") + "/";
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

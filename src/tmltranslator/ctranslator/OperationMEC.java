@@ -57,8 +57,14 @@ public abstract class OperationMEC	{
 	public static final int AdaifOperationMEC = 2;
 	public static final int CpuOperationMEC = 3;
 	public static final int FepOperationMEC = 4;
+	public static final int CwmMEC = FepOperationMEC + 1;
+	public static final int CwaMEC = FepOperationMEC + 2;
+	public static final int CwlMEC = FepOperationMEC + 3;
+	public static final int CwpMEC = FepOperationMEC + 4;
+	public static final int SumMEC = FepOperationMEC + 5;
+	public static final int FftMEC = FepOperationMEC + 6;
 
-	private static final String[] contextArray = { "MAPPER_CONTEXT", "INTL_CONTEXT", "ADAIF_CONTEXT", "EMBB_CONTEXT", "FEP_CONTEXT" };
+	private static final String[] contextArray = { "MAPPER_CONTEXT", "INTL_CONTEXT", "ADAIF_CONTEXT", "EMBB_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT" };
 	public static final ArrayList<String> ContextList = new ArrayList( Arrays.asList( contextArray ) );
 
 	protected String CR = "\n";

@@ -69,7 +69,7 @@ public class TMLCCodeGenerationMakefile	{
 		"#In order to compile wpd, please define EMBB_INSTALL, either as an environment" + CR +
 		"# variable or as a Makefile variable by uncommenting and editing the following" + CR +
 		"# line:" + CR +
-		" EMBB_INSTALL	= /home/enrici/libembb2" + CR +
+		" EMBB_INSTALL	= /home/libembb2" + CR +
 		"# where <someplace> is the full path of the directory in which you installed" + CR +
 		"# libembb. $(EMBB_INSTALL)/include shall contain embb/fep.h and" + CR +
 		"# $(EMBB_INSTALL)/lib shall contain libembb.so and libembbemu.so" + CR +
@@ -89,7 +89,7 @@ public class TMLCCodeGenerationMakefile	{
 		"EMBBLIBDIR	= $(EMBB_INSTALL)/lib" + CR +
 		"OBJS	= $(patsubst %.c,%.o,$(wildcard *.c))" + CR +
 		"HRDS	= $(wildcard *.h)" + CR +
-		"EXECS	= waveform" + CR2 +
+		"EXECS	= waveform.x" + CR2 +
 		"print-%:" + CR +
 		"\t@echo '$(OBJS)'" + CR2 +
 		"all: $(EXECS)" + CR2 +

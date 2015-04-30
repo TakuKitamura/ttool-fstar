@@ -423,9 +423,8 @@ public class GTURTLEModeling {
 
         if( tmap == null )      {
             JOptionPane.showMessageDialog(mgui.frame, "C code is only generated from an architecture diagram with mapping information", "Code generation failed", JOptionPane.INFORMATION_MESSAGE);
-            return false;
+            return true;
         }
-        TraceManager.addDev( "ABOUT TO CHECK ERRORS FOR CODE GENERATION" );
         TMLCCodeGenerationSyntaxCheck syntax = new TMLCCodeGenerationSyntaxCheck( tmap, tmap.getTMLModeling(), tmap.getTMLArchitecture() );
         syntax.check();
         if( syntax.hasErrors() )        {
@@ -448,7 +447,7 @@ public class GTURTLEModeling {
             JOptionPane.showMessageDialog(      mgui.frame,
                                                 "The system design contains several errors: the application C code could not be generated",
                                                 "Code generation failed", JOptionPane.INFORMATION_MESSAGE );
-            return false;
+            return true;
         }
         applicationName = tmap.getMappedTasks().get(0).getName().split("__")[0];
         Ccode = new TMLCCodeGeneration( _title, applicationName, mgui.frame, mgui.getAllTMLCP(), tmap );
@@ -458,20 +457,20 @@ public class GTURTLEModeling {
                 JOptionPane.showMessageDialog(  mgui.frame,
                                                 "No directory for C code generation found in config.xml. The C code cannot be generated.",
                                                 "Code generation failed", JOptionPane.INFORMATION_MESSAGE );
-                return false;
+                return true;
             }
             else        {
                 Ccode.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, applicationName );
-                JOptionPane.showMessageDialog(  mgui.frame, "The application C code has been successfully generated in: "
+                /*JOptionPane.showMessageDialog(  mgui.frame, "The application C code has been successfully generated in: "
                                                 + ConfigurationTTool.CcodeDirectory + "/", "C code generation successful",
-                                                JOptionPane.INFORMATION_MESSAGE);
+                                                JOptionPane.INFORMATION_MESSAGE);*/
             }
         }
         catch( Exception e ) {
             TraceManager.addError( "Application C files could not be saved: " + e.getMessage() );
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public boolean generateTMLTxt( String _title ) {

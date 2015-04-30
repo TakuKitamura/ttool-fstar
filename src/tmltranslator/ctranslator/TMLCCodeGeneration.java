@@ -733,6 +733,7 @@ public class TMLCCodeGeneration	{
 				outBuff = op.getOutBuffer();
 				ctxName = op.getContextName();
 				int xTaskOperationType = xTask.getOperationType();
+				//TraceManager.addDev( "Task: " + xTask.getName() + " with operationType: " + xTaskOperationType );
 				if( declaration )	{
 					if( inBuff == null )	{	//for source operation
 						buffersString.append( "extern" + SP + outBuff.getType() + SP + outBuff.getName() + SC + CR );
@@ -1277,45 +1278,61 @@ public class TMLCCodeGeneration	{
 				else	{
 					outSignalName = "noOutSignal";
 				}
-				if( xTaskOperationType == FepOperationMEC.CwpMEC )	{
-					CwpMEC cwp = new CwpMEC( ctxName, inSignalName, outSignalName );
-					init_code = cwp.getInitCode();
-				}
-				else if( xTaskOperationType == FepOperationMEC.CwmMEC )	{
-					CwmMEC cwm = new CwmMEC( ctxName, inSignalName, outSignalName );
-					init_code = cwm.getInitCode();
-				}
-				else if( xTaskOperationType == FepOperationMEC.CwaMEC )	{
-					CwaMEC cwa = new CwaMEC( ctxName, inSignalName, "", outSignalName );
-					init_code = cwa.getInitCode();
-				}
-				else if( xTaskOperationType == FepOperationMEC.CwlMEC )	{
-					CwlMEC cwl = new CwlMEC( ctxName, inSignalName, outSignalName );
-					init_code = cwl.getInitCode();
-				}
-				else if( xTaskOperationType == FepOperationMEC.SumMEC )	{
-					SumMEC sum = new SumMEC( ctxName, inSignalName, outSignalName );
-					init_code = sum.getInitCode();
-				}
-				else if( xTaskOperationType == FepOperationMEC.FftMEC )	{
-					FftMEC fft = new FftMEC( ctxName, inSignalName, outSignalName );
-					init_code = fft.getInitCode();
-				}
-				else if( xTaskOperationType == OperationMEC.IntlOperationMEC )	{
-					IntlOperationMEC intl = new IntlOperationMEC( ctxName, inSignalName, outSignalName );
-					initFileString.append( intl.getInitCode() + CR );
-				}
-				else if( xTaskOperationType == OperationMEC.MappOperationMEC )	{
-					MappOperationMEC mapp = new MappOperationMEC( ctxName, inSignalName, outSignalName );
-					initFileString.append( mapp.getInitCode() + CR );
-				}
-				else if( xTaskOperationType == OperationMEC.AdaifOperationMEC )	{
-					AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName );
-					initFileString.append( adaif.getInitCode() + CR );
-				}
-				else if( xTaskOperationType == OperationMEC.CpuOperationMEC )	{
-					CpuOperationMEC cpu = new CpuOperationMEC( ctxName, inSignalName, outSignalName );
-					initFileString.append( cpu.getInitCode() + CR );
+				switch( xTaskOperationType )	{
+					case OperationMEC.CwpMEC:
+						CwpMEC cwp = new CwpMEC( ctxName, inSignalName, outSignalName );
+						init_code = cwp.getInitCode();
+						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
+					break;
+					case OperationMEC.CwmMEC:
+						CwmMEC cwm = new CwmMEC( ctxName, inSignalName, outSignalName );
+						init_code = cwm.getInitCode();
+						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
+					break;
+					case OperationMEC.CwaMEC:
+						CwaMEC cwa = new CwaMEC( ctxName, inSignalName, "", outSignalName );
+						init_code = cwa.getInitCode();
+						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
+					break;
+					case OperationMEC.CwlMEC:
+						CwlMEC cwl = new CwlMEC( ctxName, inSignalName, outSignalName );
+						init_code = cwl.getInitCode();
+						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
+					break;
+					case OperationMEC.SumMEC:
+						SumMEC sum = new SumMEC( ctxName, inSignalName, outSignalName );
+						init_code = sum.getInitCode();
+						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
+					break;
+					case OperationMEC.FftMEC:
+						FftMEC fft = new FftMEC( ctxName, inSignalName, outSignalName );
+						init_code = fft.getInitCode();
+						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
+					break;
+					case OperationMEC.IntlOperationMEC:
+						IntlOperationMEC intl = new IntlOperationMEC( ctxName, inSignalName, outSignalName );
+						init_code = intl.getInitCode();
+						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
+					break;
+					case OperationMEC.MappOperationMEC:
+						MappOperationMEC mapp = new MappOperationMEC( ctxName, inSignalName, outSignalName );
+						init_code = mapp.getInitCode();
+						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
+					break;
+					case OperationMEC.AdaifOperationMEC:
+						AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName );
+						init_code = adaif.getInitCode();
+						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
+					break;
+					case OperationMEC.CpuOperationMEC:
+						CpuOperationMEC cpu = new CpuOperationMEC( ctxName, inSignalName, outSignalName );
+						init_code = cpu.getInitCode();
+						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
+					break;
+					default:
+						TraceManager.addDev( "Operation type not found for: " + xTask.getName() + ". It has value: " + xTaskOperationType );
+						System.exit(0);
+					break;
 				}
 			initFileString.append( init_code + CR );
 			init_code = "";
@@ -1571,6 +1588,7 @@ public class TMLCCodeGeneration	{
 	public void saveFile( String path, String filename ) throws FileException {
 		
 		TMLCCodeGenerationMakefile make = new TMLCCodeGenerationMakefile( applicationName );
+		path = path.substring( 0, path.length()-1 );
 
 		TraceManager.addUser( "Saving C files in " + path + filename );
 		FileUtils.saveFile( path + "main.c", mainFileString.toString() );

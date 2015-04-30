@@ -115,11 +115,9 @@ public class TMLCPSyntaxChecking {
 
         //Checking the other ActivityDiagrams
         ArrayList<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
-        //TraceManager.addDev( "The list of ADs contains: " + listADs.toString() );
         for( TMLCPActivityDiagram diag: listADs )       {
             currentListOfElements = diag.getElements();
             checkStartState( currentListOfElements, diag );
-            TraceManager.addDev( "DIAGRAM UNDER EXAMINATION IS: " + diag.getName() );
             checkDisconnectedSubParts( currentListOfElements, diag );
             checkDiagramsBetweenForkAndJoin( currentListOfElements, diag );
         }
@@ -137,23 +135,19 @@ public class TMLCPSyntaxChecking {
           if( elem instanceof tmltranslator.tmlcp.TMLCPChoice ) {
           ArrayList<String> guards = ( (tmltranslator.tmlcp.TMLCPChoice)elem ).getGuards();
           listElementsToCheck.add( ((tmltranslator.tmlcp.TMLCPChoice)elem).getName() );
-          //TraceManager.addDev( "PRINTING GUARDS: " + guards.toString() );
           }
           if( elem instanceof tmltranslator.tmlcp.TMLCPFork )   {
           //ArrayList<String> guards = ( (tmltranslator.tmlcp.TMLCPFork)elem ).getGuards();
           listElementsToCheck.add( ((tmltranslator.tmlcp.TMLCPFork)elem).getName() );
-          //TraceManager.addDev( "PRINTING GUARDS: " + guards.toString() );
           }
           if( elem instanceof tmltranslator.tmlcp.TMLCPJoin )   {
           //ArrayList<String> guards = ( (tmltranslator.tmlcp.TMLCPFork)elem ).getGuards();
           listElementsToCheck.add( ((tmltranslator.tmlcp.TMLCPJoin)elem).getName() );
-          //TraceManager.addDev( "PRINTING GUARDS: " + guards.toString() );
           }
           }
 
           for( String s: listElementsToCheck )  {
           if( !listConnectorsStartEndNames.contains(s) )        {
-          //TraceManager.addDev( "Diagram " + s + " in diagram " + mainCP.getName() " is not connected" );
           addError( "Element <<" + s + ">> in diagram <<" + mainCP.getName() + ">> is not connected", TMLCPError.ERROR_STRUCTURE );
           }
           }*/
@@ -164,7 +158,6 @@ public class TMLCPSyntaxChecking {
 
         int startCounter = 0;
         for( TMLCPElement elem: diag.getElements() )    {
-            //TraceManager.addDev( "ELEMENT in AD: " + elem );
             if( elem instanceof TMLCPStart )    {
                 startCounter++;
             }
@@ -233,13 +226,10 @@ public class TMLCPSyntaxChecking {
     private TMLCPJoin explorePath( TMLCPElement element )       {
 
         TMLCPJoin joinNode = new TMLCPJoin( element.toString(), element );
-        //TraceManager.addDev( "explorePath from element " + element.toString() );
         if( element instanceof TMLCPJoin )      {       //stop condition
-            //TraceManager.addDev( "returning from explorePath with element " + element.toString() );
             joinNode = (TMLCPJoin) element;
         }
         else if( (element instanceof TMLCPRefSD) || (element instanceof TMLCPRefAD) )   {
-            //TraceManager.addDev( "continuing in explorePath with element " + element.getNextElements().get(0).toString() );
             joinNode = explorePath( element.getNextElements().get(0) );
         }
         else    {
@@ -302,13 +292,9 @@ public class TMLCPSyntaxChecking {
                     }
                     checkChoiceGuards( listSDs, variableList, localListOfSDDiagrams, diag.getName() );
                     //check if they have been declared in the instances of a SD diagram
-                    TraceManager.addDev( "AD DIAGRAM " + diag.getName() );
-                    TraceManager.addDev( "variableList: " + variableList.toString() );
-                    TraceManager.addDev( "localListOfSDDiagrams: " + localListOfSDDiagrams.toString() );
                     localListOfSDDiagrams = new ArrayList<String>();
                     variableList = new HashSet();
                     /*for( TMLCPSequenceDiagram diagram: listSDDiagrams )       {
-                      TraceManager.addDev( "NAME OF DIAGRAM: " + listSDDiagrams.toString() );
                       ArrayList<TMLAttribute> listAttributes = diagram.getAttributes();
                       for( TMLAttribute attr: listAttributes )  {
                       if( !variableList.contains( attr.getName() ) )    {
@@ -322,7 +308,6 @@ public class TMLCPSyntaxChecking {
             }
             for( String s: listDiagramNames )   {
                 if( !listConnectorsStartEndNames.contains(s) )  {
-                    //TraceManager.addDev( "Diagram " + s + " is not connected in diagram " + diag.getName() );
                     addError( "Diagram <<" + s + ">> in diagram <<" + diag.getName() + ">> is not connected", TMLCPError.ERROR_STRUCTURE );
                 }
             }
@@ -339,8 +324,6 @@ public class TMLCPSyntaxChecking {
             for( TMLCPSequenceDiagram sdDiagram: listSDs )      {
                 if( sdDiagram.getName().equals( s ) )   {
                     attributeList = sdDiagram.getAttributes();
-                    TraceManager.addDev( "In diagram: " + diagName + "found SD diagram " + sdDiagram.getName()
-                                         + " with corresponding attributes " + attributeList.toString() );
                 }
             }
         }
@@ -373,19 +356,15 @@ public class TMLCPSyntaxChecking {
         for( TMLSDAction action: actions )      {
             String[] array = action.toString().split("=");
             String temp = array[0].replaceAll("\\s+","");
-            //TraceManager.addDev( "CHECKING ACTIONS: " + temp + " of length " + temp.length() );
             for( TMLAttribute attribute: attributes )   {
-                //TraceManager.addDev( "PRINTING ATTRIBUTE NAMES: " + attribute.getName() );
                 if( attribute.getName().equals( temp ) )        {
                     if( attribute.isBool() )    {
                         parsing( "assbool", action.toString(), attributes );
-                        //TraceManager.addDev( "Found that the action is on a boolean variable: " + temp );
                         //exists = true;
                         break;
                     }
                     if( attribute.isNat() )     {
                         parsing( "assnat", action.toString(), attributes );
-                        //TraceManager.addDev( "Found that the action is on a natural variable: " + temp );
                         //exists = true;
                         break;
                     }
@@ -468,7 +447,6 @@ public class TMLCPSyntaxChecking {
                 hash.add( instance.getName() );
             }
             else        {
-                //TraceManager.addDev( "Error double instance name " + instance.getName() + " in diagram " + diag.getName()  );
                 addError( "Instance <<" + instance.getName() + ">> is declared multiple times in diagram <<" + diag.getName() + ">>",
                           TMLCPError.ERROR_STRUCTURE );
             }
@@ -547,7 +525,6 @@ public class TMLCPSyntaxChecking {
         SimpleNode root;
 
         // First parsing
-        TraceManager.addDev("-------- Parsing of " + (parseCmd + " " + action));
         parser = new TMLExprParser(new StringReader(parseCmd + " " + action));
         try {
             //System.out.println("\nParsing :" + parseCmd + " " + action);
@@ -610,7 +587,6 @@ public class TMLCPSyntaxChecking {
 
         // Tree analysis: if the tree contains a variable, then, this variable has not been declared
         ArrayList<String> vars = root.getVariables();
-        TraceManager.addDev( "PRINTING VARS IN PARSING(): " + vars.toString() );
 				
 				//Do not raise a syntax error when variables appear in actions
 				ArrayList<String> boolAttrNamesList = new ArrayList<String>();	//a list of the boolean attribute names
