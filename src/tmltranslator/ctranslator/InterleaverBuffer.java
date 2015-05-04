@@ -96,6 +96,8 @@ public class InterleaverBuffer extends Buffer	{
 	public String lengthPermIntlValue = USER_TO_DO;
 	public static String lengthPermIntlType = "uint16_t";
 
+	private static final int maxParameters = 9;
+
 	public static final String DECLARATION = "struct INTERLEAVER_BUFFER_TYPE {" + CR + TAB +
 																						packedBinaryInIntlType + SP + "packed_binary_input_mode" + SC + CR + TAB +
 																						widthIntlType + SP + "samples_width" + SC + CR + TAB +
@@ -156,32 +158,34 @@ public class InterleaverBuffer extends Buffer	{
 	
 	private void retrieveBufferParameters()	{
 
-		if( bufferParameters.get( packedBinaryInIntlIndex ).length() > 0 )	{
-			packedBinaryInIntlValue = String.valueOf((new Vector<String>( Arrays.asList( Buffer.onOffVector  ))).indexOf( bufferParameters.get( packedBinaryInIntlIndex )));
-		}
-		if( bufferParameters.get( widthIntlIndex ).length() > 0 )	{
-			widthIntlValue = bufferParameters.get( widthIntlIndex );
-		}
-		if( bufferParameters.get( bitInOffsetIntlIndex ).length() > 0 )	{
-			bitInOffsetIntlValue = bufferParameters.get( bitInOffsetIntlIndex );
-		}
-		if( bufferParameters.get( inputOffsetIntlIndex ).length() > 0 )	{
-			inputOffsetIntlValue = bufferParameters.get( inputOffsetIntlIndex );
-		}
-		if( bufferParameters.get( packedBinaryOutIntlIndex ).length() > 0 )	{
-			packedBinaryOutIntlValue = String.valueOf((new Vector<String>( Arrays.asList( Buffer.onOffVector  ))).indexOf( bufferParameters.get( packedBinaryOutIntlIndex )));
-		}
-		if( bufferParameters.get( bitOutOffsetIntlIndex ).length() > 0 )	{
-			bitOutOffsetIntlValue = bufferParameters.get( bitOutOffsetIntlIndex );
-		}
-		if( bufferParameters.get( outputOffsetIntlIndex ).length() > 0 )	{
-			outputOffsetIntlValue = bufferParameters.get( outputOffsetIntlIndex );
-		}
-		if( bufferParameters.get( offsetPermIntlIndex ).length() > 0 )	{
-			offsetPermIntlValue = bufferParameters.get( offsetPermIntlIndex );
-		}
-		if( bufferParameters.get( lengthPermIntlIndex ).length() > 0 )	{
-			lengthPermIntlValue = bufferParameters.get( lengthPermIntlIndex );
+		if( bufferParameters.size() == maxParameters )	{
+			if( bufferParameters.get( packedBinaryInIntlIndex ).length() > 0 )	{
+				packedBinaryInIntlValue = String.valueOf((new Vector<String>( Arrays.asList( Buffer.onOffVector  ))).indexOf( bufferParameters.get( packedBinaryInIntlIndex )));
+			}
+			if( bufferParameters.get( widthIntlIndex ).length() > 0 )	{
+				widthIntlValue = bufferParameters.get( widthIntlIndex );
+			}
+			if( bufferParameters.get( bitInOffsetIntlIndex ).length() > 0 )	{
+				bitInOffsetIntlValue = bufferParameters.get( bitInOffsetIntlIndex );
+			}
+			if( bufferParameters.get( inputOffsetIntlIndex ).length() > 0 )	{
+				inputOffsetIntlValue = bufferParameters.get( inputOffsetIntlIndex );
+			}
+			if( bufferParameters.get( packedBinaryOutIntlIndex ).length() > 0 )	{
+				packedBinaryOutIntlValue = String.valueOf((new Vector<String>( Arrays.asList( Buffer.onOffVector  ))).indexOf( bufferParameters.get( packedBinaryOutIntlIndex )));
+			}
+			if( bufferParameters.get( bitOutOffsetIntlIndex ).length() > 0 )	{
+				bitOutOffsetIntlValue = bufferParameters.get( bitOutOffsetIntlIndex );
+			}
+			if( bufferParameters.get( outputOffsetIntlIndex ).length() > 0 )	{
+				outputOffsetIntlValue = bufferParameters.get( outputOffsetIntlIndex );
+			}
+			if( bufferParameters.get( offsetPermIntlIndex ).length() > 0 )	{
+				offsetPermIntlValue = bufferParameters.get( offsetPermIntlIndex );
+			}
+			if( bufferParameters.get( lengthPermIntlIndex ).length() > 0 )	{
+				lengthPermIntlValue = bufferParameters.get( lengthPermIntlIndex );
+			}
 		}
 	}
 

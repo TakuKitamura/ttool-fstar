@@ -61,11 +61,11 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /home/enrici/TURTLE/uppaal/spec.xml"/>
 
-<LastOpenFile data="/home/enrici/embb/trunk/baseband/docs/andreae/Zigbee/models/MYZigbee_final.xml"/>
+<LastOpenFile data="/home/enrici/embb/trunk/baseband/docs/andreae/Zigbee/models/Zigbee.xml"/>
 
 
 
-<LastWindowAttributes x="-1" y="27" width="1368" height="742" max="true" />
+<LastWindowAttributes x="0" y="27" width="1366" height="741" max="true" />
 
 
 </TURTLECONFIGURATION>

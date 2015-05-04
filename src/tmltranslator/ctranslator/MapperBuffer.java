@@ -82,6 +82,8 @@ public class MapperBuffer extends Buffer	{
 	public static final int baseAddressLUTMappIndex = 6;
 	protected String baseAddressLUTMappValue = USER_TO_DO;
 	public static final String baseAddressLUTMappType = "uint16_t";
+
+	private static final int maxParameters = 6;;
 	
 	public static final String DECLARATION = "struct MAPPER_BUFFER_TYPE {" + CR + TAB +
 																						numSamplesDataInMappType + SP + "num_symbols" + SC + CR + TAB +
@@ -128,23 +130,25 @@ public class MapperBuffer extends Buffer	{
 	
 	private void retrieveBufferParameters()	{
 
-		if( bufferParameters.get( numSamplesDataInMappIndex ).length() > 0 )	{
-			numSamplesDataInMappValue = bufferParameters.get( numSamplesDataInMappIndex );
-		}
-		if( bufferParameters.get( baseAddressDataInMappIndex ).length() > 0 )	{
-			baseAddressDataInMappValue = bufferParameters.get( baseAddressDataInMappIndex );
-		}
-		if( bufferParameters.get( bitsPerSymbolDataInMappIndex ).length() > 0 )	{
-			bitsPerSymbolDataInMappValue = bufferParameters.get( bitsPerSymbolDataInMappIndex );
-		}
-		if( bufferParameters.get( symmetricalValueDataInMappIndex ).length() > 0 )	{
-			symmetricalValueDataInMappValue = String.valueOf( ( new Vector<String>( Arrays.asList( symmetricalValues ))).indexOf( bufferParameters.get( symmetricalValueDataInMappIndex )));
-		}
-		if( bufferParameters.get( baseAddressDataOutMappIndex ).length() > 0 )	{
-			baseAddressDataOutMappValue = bufferParameters.get( baseAddressDataOutMappIndex );
-		}
-		if( bufferParameters.get( baseAddressLUTMappIndex ).length() > 0 )	{
-			baseAddressLUTMappValue = bufferParameters.get( baseAddressLUTMappIndex );
+		if( bufferParameters.size() == maxParameters )	{
+			if( bufferParameters.get( numSamplesDataInMappIndex ).length() > 0 )	{
+				numSamplesDataInMappValue = bufferParameters.get( numSamplesDataInMappIndex );
+			}
+			if( bufferParameters.get( baseAddressDataInMappIndex ).length() > 0 )	{
+				baseAddressDataInMappValue = bufferParameters.get( baseAddressDataInMappIndex );
+			}
+			if( bufferParameters.get( bitsPerSymbolDataInMappIndex ).length() > 0 )	{
+				bitsPerSymbolDataInMappValue = bufferParameters.get( bitsPerSymbolDataInMappIndex );
+			}
+			if( bufferParameters.get( symmetricalValueDataInMappIndex ).length() > 0 )	{
+				symmetricalValueDataInMappValue = String.valueOf( ( new Vector<String>( Arrays.asList( symmetricalValues ))).indexOf( bufferParameters.get( symmetricalValueDataInMappIndex )));
+			}
+			if( bufferParameters.get( baseAddressDataOutMappIndex ).length() > 0 )	{
+				baseAddressDataOutMappValue = bufferParameters.get( baseAddressDataOutMappIndex );
+			}
+			if( bufferParameters.get( baseAddressLUTMappIndex ).length() > 0 )	{
+				baseAddressLUTMappValue = bufferParameters.get( baseAddressLUTMappIndex );
+			}
 		}
 	}
 

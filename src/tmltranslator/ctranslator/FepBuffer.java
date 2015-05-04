@@ -72,6 +72,8 @@ public class FepBuffer extends Buffer	{
 	protected String dataTypeValue = USER_TO_DO;
 	protected static final String dataTypeType = "uint8_t";
 
+	private static final int maxParameters = 4;
+
 	public static final String DECLARATION = "struct FEP_BUFFER_TYPE {" + CR + TAB +
 																						numSamplesType + SP + "num_samples" + SC + CR + TAB +
 																						baseAddressType + SP + "base_address" + SC + CR + TAB +
@@ -112,17 +114,19 @@ public class FepBuffer extends Buffer	{
 
 	private void retrieveBufferParameters()	{
 
-		if( bufferParameters.get( numSamplesIndex ).length() > 0 )	{
-			numSamplesValue = bufferParameters.get( numSamplesIndex );
-		}
-		if( bufferParameters.get( baseAddressIndex ).length() > 0 )	{
-			baseAddressValue = bufferParameters.get( baseAddressIndex );
-		}
-		if( bufferParameters.get( bankIndex ).length() > 0 )	{
-			bankValue = bufferParameters.get( bankIndex );
-		}
-		if( bufferParameters.get( dataTypeIndex ).length() > 0 )	{
-			dataTypeValue = String.valueOf(( new Vector<String>( Arrays.asList( dataTypeList ))).indexOf( bufferParameters.get( dataTypeIndex )));
+		if( bufferParameters.size() == maxParameters )	{
+			if( bufferParameters.get( numSamplesIndex ).length() > 0 )	{
+				numSamplesValue = bufferParameters.get( numSamplesIndex );
+			}
+			if( bufferParameters.get( baseAddressIndex ).length() > 0 )	{
+				baseAddressValue = bufferParameters.get( baseAddressIndex );
+			}
+			if( bufferParameters.get( bankIndex ).length() > 0 )	{
+				bankValue = bufferParameters.get( bankIndex );
+			}
+			if( bufferParameters.get( dataTypeIndex ).length() > 0 )	{
+				dataTypeValue = String.valueOf(( new Vector<String>( Arrays.asList( dataTypeList ))).indexOf( bufferParameters.get( dataTypeIndex )));
+			}
 		}
 	}
 

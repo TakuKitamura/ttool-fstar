@@ -534,33 +534,35 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
     public void compileCode() throws InterruptedException {
         String cmd = compiler1.getText();
 
-        jta.append("Compiling C code with command: \n" + cmd + "\n");
+        jta.append("Compiling C code with command: \n" + cmd + "\n****\n");
 
         rshc = new RshClient(hostSystemC);
         // Assuma data are on the remote host
         // Command
         try {
             processCmd(cmd, jta);
-            jta.append("Compilation done\n");
-        } catch (LauncherException le) {
-            jta.append("Error: " + le.getMessage() + "\n");
-            mode = STOPPED;
-            setButtons();
-            return;
-        } catch (Exception e) {
+        } catch( Exception e ) {
+            jta.append("**** ERROR ****\n" + e.getMessage() + "\n");
             mode = STOPPED;
             setButtons();
             return;
         }
     }
 
-    protected void processCmd( String cmd, JTextArea _jta ) throws LauncherException	{
+    protected void processCmd( String cmd, JTextArea _jta ) throws Exception	{
 
-			rshc.setCmd( cmd );
-			String s = null;
-			rshc.sendProcessRequest();
-			rshc.fillJTA( _jta );
-			return;
+			String s;
+			Process p;
+			p = Runtime.getRuntime().exec( cmd );
+			BufferedReader br = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
+			while( ( s = br.readLine() ) != null )	{
+				_jta.append( s + "\n" );
+			}
+			p.waitFor();
+			p.destroy();
+			if( p.exitValue() != 0 )	{
+				throw new Exception( "Make exit status: " + p.exitValue() );
+			}
     }
 
     protected void checkMode() {

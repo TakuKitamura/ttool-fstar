@@ -1096,11 +1096,8 @@ public class TMLCCodeGeneration	{
 	private void generateCodeForCommunicationPatterns()	{
 		
 		int srcMemoryType = 0, dstMemoryType = 0;
-		String destinationAddress, sourceAddress, counter;
-		String destinationAddress1, sourceAddress1, counter1;
-		String destinationAddress2, sourceAddress2, counter2;
 		TMLCPLib tmlcplib;
-		String s, ctxName;
+		String s, ctxName, counter;
 		Vector<String> attributes;
 		ArchUnitMEC dmaArchMEC = new CpuMEC();
 
@@ -1116,7 +1113,8 @@ public class TMLCCodeGeneration	{
 			}
 			int cpMECType = tmlcplib.getCPMECType();
 			if( cpMECType == CPMEC.CpuMemoryCopyMEC )	{
-				counter = attributes.get( CpuMemoryCopyMEC.counterIndex );
+				TraceManager.addDev( "attributes contains " + attributes.size() + " elements!" );
+				counter = (attributes.size() == 0 ) ? "/* USER TODO */" : attributes.get( CpuMemoryCopyMEC.counterIndex );
 				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName, new CpuMEC(), counter );	//mem2ip
 				programString.append( mec.getExecCode() );
 			}
@@ -1136,15 +1134,15 @@ public class TMLCCodeGeneration	{
 						dstMemoryType = tmla.getHwMemoryByName( memoryUnit ).BufferType;
 					}
 				}
-				counter = attributes.get( SingleDmaMEC.counterIndex );
+				counter = (attributes.size() == 0 ) ? "/* USER TODO */" : attributes.get( SingleDmaMEC.counterIndex );
 				SingleDmaMEC mec = new SingleDmaMEC( ctxName, dmaArchMEC, srcMemoryType, dstMemoryType, transferType, counter );
 				programString.append( mec.getExecCode() );
 			}
 			if( cpMECType == CPMEC.DoubleDmaMEC )	{
 				ArrayList<Integer> transferTypes = tmlcplib.getTransferTypes();
 				ArrayList<String> sizes = new ArrayList<String>();
-				sizes.add( attributes.get( DoubleDmaMEC.counter1Index ) );
-				sizes.add( attributes.get( DoubleDmaMEC.counter2Index ) );
+				sizes.add( (attributes.size() == 0 ) ? "/* USER TODO */" : attributes.get( DoubleDmaMEC.counter1Index ) );
+				sizes.add( (attributes.size() == 0 ) ? "/* USER TODO */" : attributes.get( DoubleDmaMEC.counter2Index ) );
 				for( int i = 0; i < 2; i++ )	{
 					DoubleDmaMEC mec = getDoubleDmaMEC( tmlcplib, i, ctxName, sizes, transferTypes );
 					programString.append( mec.getExecCode() );
@@ -1282,56 +1280,42 @@ public class TMLCCodeGeneration	{
 					case OperationMEC.CwpMEC:
 						CwpMEC cwp = new CwpMEC( ctxName, inSignalName, outSignalName );
 						init_code = cwp.getInitCode();
-						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
 					break;
 					case OperationMEC.CwmMEC:
 						CwmMEC cwm = new CwmMEC( ctxName, inSignalName, outSignalName );
 						init_code = cwm.getInitCode();
-						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
 					break;
 					case OperationMEC.CwaMEC:
 						CwaMEC cwa = new CwaMEC( ctxName, inSignalName, "", outSignalName );
 						init_code = cwa.getInitCode();
-						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
 					break;
 					case OperationMEC.CwlMEC:
 						CwlMEC cwl = new CwlMEC( ctxName, inSignalName, outSignalName );
 						init_code = cwl.getInitCode();
-						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
 					break;
 					case OperationMEC.SumMEC:
 						SumMEC sum = new SumMEC( ctxName, inSignalName, outSignalName );
 						init_code = sum.getInitCode();
-						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
 					break;
 					case OperationMEC.FftMEC:
 						FftMEC fft = new FftMEC( ctxName, inSignalName, outSignalName );
 						init_code = fft.getInitCode();
-						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
 					break;
 					case OperationMEC.IntlOperationMEC:
 						IntlOperationMEC intl = new IntlOperationMEC( ctxName, inSignalName, outSignalName );
 						init_code = intl.getInitCode();
-						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
 					break;
 					case OperationMEC.MappOperationMEC:
 						MappOperationMEC mapp = new MappOperationMEC( ctxName, inSignalName, outSignalName );
 						init_code = mapp.getInitCode();
-						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
 					break;
 					case OperationMEC.AdaifOperationMEC:
 						AdaifOperationMEC adaif = new AdaifOperationMEC( ctxName );
 						init_code = adaif.getInitCode();
-						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
 					break;
 					case OperationMEC.CpuOperationMEC:
 						CpuOperationMEC cpu = new CpuOperationMEC( ctxName, inSignalName, outSignalName );
 						init_code = cpu.getInitCode();
-						TraceManager.addDev( "Operation type :" + xTaskOperationType + " for " + xTask.getName() );
-					break;
-					default:
-						TraceManager.addDev( "Operation type not found for: " + xTask.getName() + ". It has value: " + xTaskOperationType );
-						System.exit(0);
 					break;
 				}
 			initFileString.append( init_code + CR );
