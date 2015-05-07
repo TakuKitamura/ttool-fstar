@@ -60,9 +60,6 @@ public class CwmMEC extends FepOperationMEC	{
 			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->bank);" + CR +
 			"fep_set_bx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->base_address);" + CR +
 			"fep_set_tx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->data_type);" + CR +
-			"fep_set_qz(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->bank);" + CR +
-			"fep_set_bz(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR +
-			"fep_set_tz(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->data_type);" + CR +
 			"/*start execution*/" + CR +
 			"status = fep_do(&" + _ctxName + ");" + CR;
 	

@@ -54,7 +54,6 @@ public class SumMEC extends FepOperationMEC	{
 		name = "Sum MEC";
 		exec_code = TAB + "/*firm instruction*/" + CR + TAB +
 			"int status;" + CR + TAB +
-			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->bank);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
 			"status = fep_do(&" + _ctxName + ");" + CR;
 		

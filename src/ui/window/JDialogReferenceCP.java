@@ -1330,7 +1330,6 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	}
 
 	public Vector<String> getAssignedAttributes()	{
-		//before returning attributes I should sort them according to the cpMEC
 		return assignedAttributes;
 	}
 

@@ -49,7 +49,6 @@ package ui.window;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-//import javax.swing.event.*;
 import java.util.*;
 
 import ui.*;
@@ -250,13 +249,11 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		switch( bufferType )	{
 			case Buffer.FepBuffer:	
-				if( loadBufferParameters )	{
-					baseAddress = bufferParameters.get( FepBuffer.baseAddressIndex );
-					numSamples = bufferParameters.get( FepBuffer.numSamplesIndex );
-					bank = bufferParameters.get( FepBuffer.bankIndex );
-					dataType = bufferParameters.get( FepBuffer.dataTypeIndex );
-				}
-				makeFepBufferPanel( c1, c2 );
+				/*numSamplesTF = new JTextField( "", 5 );
+				baseAddressTF = new JTextField( "", 5 );
+				bankCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.banksList ) ) );
+				dataTypeCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.dataTypeList ) ) );*/
+				panel3 = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				break;
 			case Buffer.InterleaverBuffer:	
 				if( loadBufferParameters )	{
@@ -304,13 +301,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				makeMainMemoryBufferPanel( c1, c2 );
 				break;
 			default:	//the fep buffer 
-				if( loadBufferParameters )	{
-					baseAddress = bufferParameters.get( FepBuffer.baseAddressIndex );
-					numSamples = bufferParameters.get( FepBuffer.numSamplesIndex );
-					bank = bufferParameters.get( FepBuffer.bankIndex );
-					dataType = bufferParameters.get( FepBuffer.dataTypeIndex );
-				}
-				makeFepBufferPanel( c1, c2 );
+				panel3 = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				break;
 		}
 
@@ -342,21 +333,19 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c.add(cancelButton, c0);
   }
 
-	private void makeFepBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+	/*private void makeFepBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
-     panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
+    panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
 
 		c2.anchor = GridBagConstraints.LINE_START;
-		numSamplesTF = new JTextField( sampleLength, 5 );
+		numSamplesTF = new JTextField( numSamples, 5 );
 		panel3.add( new JLabel( "Number of samples = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		numSamplesTF = new JTextField( sampleLength, 5 );
 		panel3.add( numSamplesTF, c1 );
 		//
 		baseAddressTF = new JTextField( baseAddress, 5 );
 		panel3.add( new JLabel( "Base address = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		baseAddressTF = new JTextField( baseAddress, 5 );
 		panel3.add( baseAddressTF, c1 );
 		//
 		bankCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.banksList ) ) );
@@ -374,7 +363,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			dataTypeCB.setSelectedItem( dataType );
 		}
 		panel3.add( dataTypeCB, c1 );
-	}
+	}*/
 
 	private void makeInterleaverBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
@@ -606,11 +595,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		switch( bufferType )	{
 			case Buffer.FepBuffer:	
-				panel3.removeAll();
+				//panel3.removeAll();
 				tabbedPane.removeAll();
-				makeFepBufferPanel( c1, c2 );
-				panel3.revalidate();
-				panel3.repaint();
+				/*numSamplesTF = new JTextField( "", 5 );
+				baseAddressTF = new JTextField( "", 5 );
+				bankCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.banksList ) ) );
+				dataTypeCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.dataTypeList ) ) );*/
+				panel3 = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 			case Buffer.MapperBuffer:	
@@ -648,11 +639,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 			default:	//the main memory buffer 
-				panel3.removeAll();
-				tabbedPane.removeAll();
-				makeFepBufferPanel( c1, c2 );
-				panel3.revalidate();
-				panel3.repaint();
+				//panel3.removeAll();
+				/*tabbedPane.removeAll();
+				numSamplesTF = new JTextField( "", 5 );
+				baseAddressTF = new JTextField( "", 5 );
+				bankCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.banksList ) ) );
+				dataTypeCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.dataTypeList ) ) );*/
+				panel3 = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 		}
@@ -702,7 +695,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
 				switch ( bufferType )	{
 					case Buffer.FepBuffer:	
-						if( !handleClosureWhenSelectedFepBuffer() )	{
+						if( !FepBuffer.closePanel( frame ) )	{
 							return;
 						}
 						break;
@@ -727,17 +720,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 						}
 						break;
 					default:	//the main memory buffer 
-						if( !handleClosureWhenSelectedFepBuffer() )	{
+						if( !FepBuffer.closePanel( frame ) )	{
 							return;
 						}
 						break;
 				}
         dispose();
     }
-
-		private boolean handleClosureWhenSelectedFepBuffer()	{
-			return checkBaseAddress() && checkNumSamples();
-		}
 
 		private boolean handleClosureWhenSelectedInterleaverBuffer()	{
 			return checkDI_Intl() && checkDO_Intl() && CheckPerm_Intl();
@@ -1016,41 +1005,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		return true;
 	}
 
-	/*private boolean checkNumSamples_Intl()	{
-
-		String regex = "[0-9]+";
-		numSamplesDataInIntl = (String) numSamplesDataInIntl_TF.getText();
-		numSamplesDataOutIntl = (String) numSamplesDataOutIntl_TF.getText();
-
-		if( !( numSamplesDataInIntl.length() > 0 ) )	{
-			return true;
-		}
-		if( !numSamplesDataInIntl.matches( regex ) )	{
-			JOptionPane.showMessageDialog( frame, "The Data In number of samples must be expressed as a natural", "Badly formatted parameter",
-																			JOptionPane.INFORMATION_MESSAGE );
-			return false;
-		}
-		if( Integer.parseInt( numSamplesDataInIntl ) == 0 )	{
-			JOptionPane.showMessageDialog( frame, "The Data In number of samples must be greater than 0", "Badly formatted parameter",
-																			JOptionPane.INFORMATION_MESSAGE );
-			return false;
-		}
-		if( !( numSamplesDataOutIntl.length() > 0 ) )	{
-			return true;
-		}
-		if( !numSamplesDataOutIntl.matches( regex ) )	{
-			JOptionPane.showMessageDialog( frame, "The Data Out number of samples must be expressed as a natural", "Badly formatted parameter",
-																			JOptionPane.INFORMATION_MESSAGE );
-			return false;
-		}
-		if( Integer.parseInt( numSamplesDataOutIntl ) == 0 )	{
-			JOptionPane.showMessageDialog( frame, "The Data Out number of samples must be greater than 0", "Badly formatted parameter",
-																			JOptionPane.INFORMATION_MESSAGE );
-			return false;
-		}
-		return true;
-	}*/
-
 	private boolean checkNumSamples()	{
 
 		String regex = "[0-9]+";
@@ -1098,10 +1052,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		params.add( String.valueOf( bufferType ) );
 		switch( bufferType )	{
 			case Buffer.FepBuffer:
-				params.add( baseAddress );
-				params.add( numSamples );
-				params.add( (String)bankCB.getSelectedItem() );
-				params.add( (String)dataTypeCB.getSelectedItem() );
+				FepBuffer.getBufferParameters( params );
 				break;
 			case Buffer.InterleaverBuffer:	
 				//data in
@@ -1140,11 +1091,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				params.add( MMBuffer.numSamplesIndex, numSamples );
 				params.add( MMBuffer.baseAddressIndex, baseAddress );
 				break;
-			default:	//the main memory buffer 
-				params.add( baseAddress );
-				params.add( numSamples );
-				params.add( (String)bankCB.getSelectedItem() );
-				params.add( (String)dataTypeCB.getSelectedItem() );
+			default:	//the main memory buffer
+				FepBuffer.getBufferParameters( params );
 				break;
 		}
 		return params;
@@ -1164,8 +1112,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		panel4.repaint();
 		panel5.revalidate();
 		panel5.repaint();
-		/*tabbedPaned.revalidate();
-		tabbePaned.repaint();*/
 	}
 
 }	//End of class

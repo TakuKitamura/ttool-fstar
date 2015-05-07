@@ -48,6 +48,11 @@ package tmltranslator.ctranslator;;
 
 import java.util.*;
 import java.nio.*;
+import org.w3c.dom.Element;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
 import myutil.*;
 import tmltranslator.*;
 
@@ -55,10 +60,10 @@ public class FepBuffer extends Buffer	{
 
 	public static final String[] dataTypeList = { "int8", "int16", "cpx16", "cpx32" };
 	public static final String[] banksList = { "0", "1", "2", "3" };
-	public static final int numSamplesIndex = 1;
-	public static final int baseAddressIndex = 2;
-	public static final int bankIndex = 3;
-	public static final int dataTypeIndex = 4;
+	public static final int NUM_SAMPLES_INDEX = 1;
+	public static final int BASE_ADDRESS_INDEX = 2;
+	public static final int BANK_INDEX = 3;
+	public static final int DATA_TYPE_INDEX = 4;
 	
 	protected String numSamplesValue = USER_TO_DO;
 	protected static final String numSamplesType = "uint8_t";
@@ -82,6 +87,11 @@ public class FepBuffer extends Buffer	{
 																						"typedef FEP_BUFFER_TYPE FEP_BUFFER_TYPE" + SC;
 	
 	private String Context = "FEP_CONTEXT";
+	
+	private static JTextField numSamplesTF = new JTextField( "", 5 );
+	private static JTextField baseAddressTF = new JTextField( "", 5 );
+	private static JComboBox bankCB = new JComboBox( new Vector<String>( Arrays.asList( banksList ) ) );
+	private static JComboBox dataTypeCB = new JComboBox( new Vector<String>( Arrays.asList( dataTypeList ) ) );
 
 	public FepBuffer( String _name, TMLTask _task )	{
 		type = "FEP_BUFFER_TYPE";
@@ -115,17 +125,17 @@ public class FepBuffer extends Buffer	{
 	private void retrieveBufferParameters()	{
 
 		if( bufferParameters.size() == maxParameters )	{
-			if( bufferParameters.get( numSamplesIndex ).length() > 0 )	{
-				numSamplesValue = bufferParameters.get( numSamplesIndex );
+			if( bufferParameters.get( NUM_SAMPLES_INDEX ).length() > 0 )	{
+				numSamplesValue = bufferParameters.get( NUM_SAMPLES_INDEX );
 			}
-			if( bufferParameters.get( baseAddressIndex ).length() > 0 )	{
-				baseAddressValue = bufferParameters.get( baseAddressIndex );
+			if( bufferParameters.get( BASE_ADDRESS_INDEX ).length() > 0 )	{
+				baseAddressValue = bufferParameters.get( BASE_ADDRESS_INDEX );
 			}
-			if( bufferParameters.get( bankIndex ).length() > 0 )	{
-				bankValue = bufferParameters.get( bankIndex );
+			if( bufferParameters.get( BANK_INDEX ).length() > 0 )	{
+				bankValue = bufferParameters.get( BANK_INDEX );
 			}
-			if( bufferParameters.get( dataTypeIndex ).length() > 0 )	{
-				dataTypeValue = String.valueOf(( new Vector<String>( Arrays.asList( dataTypeList ))).indexOf( bufferParameters.get( dataTypeIndex )));
+			if( bufferParameters.get( DATA_TYPE_INDEX ).length() > 0 )	{
+				dataTypeValue = String.valueOf(( new Vector<String>( Arrays.asList( dataTypeList ))).indexOf( bufferParameters.get( DATA_TYPE_INDEX )));
 			}
 		}
 	}
@@ -133,4 +143,128 @@ public class FepBuffer extends Buffer	{
 	public String getContext()	{
 		return Context;
 	}
+
+	public static String appendBufferParameters( ArrayList<String> buffer )	{
+
+		StringBuffer sb = new StringBuffer();
+   	sb.append("\" bufferType=\"" + Integer.toString( Buffer.FepBuffer ) );
+		if( buffer.size() == maxParameters+1 )	{	//because the first parameter is the bufferType
+			sb.append("\" baseAddress=\"" + buffer.get( BASE_ADDRESS_INDEX ) );
+  	  sb.append("\" numSamples=\"" + buffer.get( NUM_SAMPLES_INDEX ) );
+    	sb.append("\" bank=\"" + buffer.get( BANK_INDEX ) );
+	    sb.append("\" dataType=\"" + buffer.get( DATA_TYPE_INDEX ) );
+		}
+		else	{
+			sb.append("\" baseAddress=\"" + SP );
+  	  sb.append("\" numSamples=\"" + SP );
+    	sb.append("\" bank=\"" + SP );
+	    sb.append("\" dataType=\"" + SP );
+		}
+		return sb.toString();
+	}
+
+	public static ArrayList<String> buildBufferParameters( Element elt )	{
+
+		ArrayList<String> buffer = new ArrayList<String>();
+		buffer.add( 0, Integer.toString( Buffer.FepBuffer ) );
+		buffer.add( NUM_SAMPLES_INDEX, elt.getAttribute( "numSamples" ) );
+		buffer.add( BASE_ADDRESS_INDEX, elt.getAttribute( "baseAddress" ) );
+		buffer.add( BANK_INDEX, elt.getAttribute( "bank" ) );
+		buffer.add( DATA_TYPE_INDEX, elt.getAttribute( "dataType" ) );
+		return buffer;
+	}
+	
+	public static JPanel makePanel( boolean loadBufferParameters, GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+
+		String baseAddress = "", numSamples = "", bank = "", dataType = "";
+
+		GridBagLayout gridbag2 = new GridBagLayout();
+
+
+		JPanel panel = new JPanel();
+		panel.setLayout( gridbag2 );
+		panel.setBorder( new javax.swing.border.TitledBorder("Code generation: memory configuration"));
+		panel.setPreferredSize( new Dimension(650, 350) );
+
+		if( loadBufferParameters )	{
+			baseAddress = bufferParameters.get( BASE_ADDRESS_INDEX );
+			numSamples = bufferParameters.get( NUM_SAMPLES_INDEX );
+			bank = bufferParameters.get( BANK_INDEX );
+			dataType = bufferParameters.get( DATA_TYPE_INDEX );
+		}
+
+    panel.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
+
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesTF.setText( numSamples );
+		panel.add( new JLabel( "Number of samples = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel.add( numSamplesTF, c1 );
+		//
+		baseAddressTF.setText( baseAddress );
+		panel.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel.add( baseAddressTF, c1 );
+		//
+		panel.add( new JLabel( "Bank number = "),  c2 );
+		if( bank != null && !bank.equals("") )	{
+			bankCB.setSelectedIndex( Integer.parseInt( bank ) );
+		}
+		else	{
+			bankCB.setSelectedIndex(0);
+		}
+		panel.add( bankCB, c1 );
+		//
+		panel.add( new JLabel( "Data type = "),  c2 );
+		if( dataType != null && !dataType.equals("") )	{
+			dataTypeCB.setSelectedItem( dataType );
+		}
+		else	{
+			dataTypeCB.setSelectedIndex(0);
+		}
+		panel.add( dataTypeCB, c1 );
+		return panel;
+	}
+
+	public static boolean closePanel( Frame frame )	{
+
+		String baseAddress = (String) baseAddressTF.getText();
+		if( baseAddress.length() <= 2 && baseAddress.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddress.length() > 2 )	{
+			if( !( baseAddress.substring(0,2).equals("0x") || baseAddress.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+		String regex = "[0-9]+";
+		String numSamples = (String) numSamplesTF.getText();
+		if( !numSamples.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of samples must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( Integer.parseInt( numSamples ) == 0 )	{
+			JOptionPane.showMessageDialog( frame, "The number of samples must be greater than 0", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( !( numSamples.length() > 0 ) )	{
+			return true;
+		}
+		return true;
+	}
+
+	public static void getBufferParameters( ArrayList<String> params )	{
+		
+		params.add( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
+		params.add( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
+		params.add( BANK_INDEX, (String)bankCB.getSelectedItem() );
+		params.add( DATA_TYPE_INDEX, (String)dataTypeCB.getSelectedItem() );
+	}
+
 }	//End of class

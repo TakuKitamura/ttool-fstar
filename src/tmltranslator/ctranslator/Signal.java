@@ -53,17 +53,14 @@ import tmltranslator.*;
 
 public class Signal	{
 
+	public static final String DECLARATION = "struct SIG_TYPE	{\n\tbool f;\n\tvoid *pBuff;\n};\n\ntypedef struct SIG_TYPE SIG_TYPE;\nextern SIG_TYPE sig[];\n\n";
+	public static final String USERTODO = "/* USER TODO: signal */";
+
 	public String CR = "\n";
 	public String SC = ";";
 	
-	private String status_s = "bool f" + SC + CR;
 	private boolean status = false;
-
-	private String buffPointer_s = "void *pBuff" + SC + CR;
 	private Buffer buffPointer = null;
-	
-	public static final String DECLARATION = "struct SIG_TYPE	{\n\tbool f;\n\tvoid *pBuff;\n};\n\ntypedef struct SIG_TYPE SIG_TYPE;\nextern SIG_TYPE sig[];\n\n";
-
 	private String name;
 	private TMLChannel channel;
 	private TMLEvent event;

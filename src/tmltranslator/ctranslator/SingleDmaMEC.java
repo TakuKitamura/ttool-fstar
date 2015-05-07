@@ -107,7 +107,23 @@ public class SingleDmaMEC extends CPMEC	{
 				exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", /*USER TODO: *SRC */, " + sizeString + " );" + CR;
 			break;
 		}
+	}
 
+	public static Vector<String> sortAttributes( Vector<String> assignedAttributes )	{
+		
+		Vector<String> newVector = new Vector<String>( assignedAttributes );
+		for( String s: assignedAttributes )	{
+			if( s.contains( destinationAddress ) )	{
+				newVector.set( destinationAddressIndex, getAttributeValue(s) );
+			}
+			if( s.contains( sourceAddress ) )	{
+				newVector.set( sourceAddressIndex, getAttributeValue(s) );
+			}
+			if( s.contains( counter ) )	{
+				newVector.set( counterIndex, getAttributeValue(s) );
+			}
+		}
+		return newVector;
 	}
 
 }	//End of class

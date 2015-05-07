@@ -56,13 +56,34 @@ public class CpuMemoryCopyMEC extends CPMEC	{
 	public static final int sourceAddressIndex = 1;
 	public static final int counterIndex = 2;
 
-	private String memoryBaseAddress = "0";
+	public static final String destinationAddress = "destinationAddress";
+	public static final String sourceAddress = "sourceAddress";
+	public static final String counter = "samplesToLoad";
+
+	private String memoryBaseAddress = "embb_mss";
 
 	public CpuMemoryCopyMEC( String ctxName, ArchUnitMEC archMEC, String sizeString )	{
 
 		exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", /*USER TODO: *SRC */, " + sizeString + " );" + CR;
 		init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
 		cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";
+	}
+
+	public static Vector<String> sortAttributes( Vector<String> assignedAttributes )	{
+		
+		Vector<String> newVector = new Vector<String>( assignedAttributes );
+		for( String s: assignedAttributes )	{
+			if( s.contains( destinationAddress ) )	{
+				newVector.set( destinationAddressIndex, getAttributeValue(s) );
+			}
+			if( s.contains( sourceAddress ) )	{
+				newVector.set( sourceAddressIndex, getAttributeValue(s) );
+			}
+			if( s.contains( counter ) )	{
+				newVector.set( counterIndex, getAttributeValue(s) );
+			}
+		}
+		return newVector;
 	}
 
 }	//End of class

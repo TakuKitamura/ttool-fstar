@@ -90,4 +90,10 @@ public abstract class CPMEC	{
 		return cleanup_code;
 	}
 
+	// Get the value of an attribute from the TMLCP artifact string
+	protected static String getAttributeValue( String assignement )	{
+		String s = assignement.split(" = ")[1];
+		return s.substring(0, s.length()-1);	//remove trailing semi-colon
+	}
+
 }	//End of class

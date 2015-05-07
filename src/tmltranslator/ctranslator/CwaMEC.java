@@ -63,9 +63,6 @@ public class CwaMEC extends FepOperationMEC	{
 			"fep_set_qy(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ ID1 + "].pBuff)->bank);" + CR + TAB +
 			"fep_set_by(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ ID1 + "].pBuff)->base_address);" + CR + TAB +
 			"fep_set_ty(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ ID1 + "].pBuff)->data_type);" + CR + TAB +
-			"fep_set_qz(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ outSignalName + "].pBuff)->bank);" + CR + TAB +
-			"fep_set_bz(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ outSignalName + "].pBuff)->base_address);" + CR + TAB +
-			"fep_set_tz(&"+ _ctxName + ", ((FEP_BUFFER_TYPE*)sig["+ outSignalName + "].pBuff)->data_type);" + CR + TAB +
 			"/*start execution*/" + CR + TAB +
 			"status = fep_do(&"+ _ctxName + ");" + CR;
 		

@@ -1113,7 +1113,7 @@ public class TMLCCodeGeneration	{
 			}
 			int cpMECType = tmlcplib.getCPMECType();
 			if( cpMECType == CPMEC.CpuMemoryCopyMEC )	{
-				TraceManager.addDev( "attributes contains " + attributes.size() + " elements!" );
+				TraceManager.addDev( "Attributes for memory copy:\n\t" + attributes.toString() );
 				counter = (attributes.size() == 0 ) ? "/* USER TODO */" : attributes.get( CpuMemoryCopyMEC.counterIndex );
 				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName, new CpuMEC(), counter );	//mem2ip
 				programString.append( mec.getExecCode() );
@@ -1134,6 +1134,7 @@ public class TMLCCodeGeneration	{
 						dstMemoryType = tmla.getHwMemoryByName( memoryUnit ).BufferType;
 					}
 				}
+				TraceManager.addDev( "Attributes for DMA:\n\t" + attributes.toString() );
 				counter = (attributes.size() == 0 ) ? "/* USER TODO */" : attributes.get( SingleDmaMEC.counterIndex );
 				SingleDmaMEC mec = new SingleDmaMEC( ctxName, dmaArchMEC, srcMemoryType, dstMemoryType, transferType, counter );
 				programString.append( mec.getExecCode() );
@@ -1244,7 +1245,7 @@ public class TMLCCodeGeneration	{
 		
 		String init_code = "";
 		String ctxName;
-		String inSignalName, outSignalName;
+		String inSignalName = Signal.USERTODO, outSignalName = Signal.USERTODO;
 		initFileString.append( "#include \"" + applicationName + ".h\"" + CR2 );
 		initFileString.append( "/**** variables ****/" + CR2 );		
 		initFileString.append( "char fep_mss[0x10000];" + CR );
@@ -1267,14 +1268,8 @@ public class TMLCCodeGeneration	{
 				if( op.getInSignals().size() > 0 )	{
 					inSignalName = op.getInSignals().get(0).getName();
 				}
-				else	{
-					inSignalName = "noInSignal";
-				}
 				if( op.getOutSignal() != null )	{
 					outSignalName = op.getOutSignal().getName();
-				}
-				else	{
-					outSignalName = "noOutSignal";
 				}
 				switch( xTaskOperationType )	{
 					case OperationMEC.CwpMEC:
@@ -1320,6 +1315,8 @@ public class TMLCCodeGeneration	{
 				}
 			initFileString.append( init_code + CR );
 			init_code = "";
+			inSignalName = Signal.USERTODO;
+			outSignalName = Signal.USERTODO;
 			}
 		}
 

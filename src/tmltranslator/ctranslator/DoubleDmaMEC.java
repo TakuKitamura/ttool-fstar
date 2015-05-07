@@ -111,4 +111,30 @@ public class DoubleDmaMEC extends CPMEC	{
 		}
 	}
 
+	public static Vector<String> sortAttributes( Vector<String> assignedAttributes )	{
+		
+		Vector<String> newVector = new Vector<String>( assignedAttributes );
+		for( String s: assignedAttributes )	{
+			if( s.contains( destinationAddress1 ) )	{
+				newVector.set( destinationAddress1Index, getAttributeValue(s) );
+			}
+			if( s.contains( sourceAddress1 ) )	{
+				newVector.set( sourceAddress1Index, getAttributeValue(s) );
+			}
+			if( s.contains( counter1 ) )	{
+				newVector.set( counter1Index, getAttributeValue(s) );
+			}
+			if( s.contains( destinationAddress2 ) )	{
+				newVector.set( destinationAddress2Index, getAttributeValue(s) );
+			}
+			if( s.contains( sourceAddress2 ) )	{
+				newVector.set( sourceAddress2Index, getAttributeValue(s) );
+			}
+			if( s.contains( counter2 ) )	{
+				newVector.set( counter2Index, getAttributeValue(s) );
+			}
+		}
+		return newVector;
+	}
+
 }	//End of class

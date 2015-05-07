@@ -189,12 +189,14 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         String tmp;
         boolean error = false;
 
+				TraceManager.addDev( "bufferParameters before: " + bufferParameters.toString() );
         JDialogPortArtifact dialog = new JDialogPortArtifact(frame, "Setting port artifact attributes", this, mappedMemory, bufferParameters, value );
         dialog.setSize(700, 600);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
         mappedMemory = dialog.getMappedMemory();
         bufferParameters = dialog.getBufferParameters();
+				TraceManager.addDev( "bufferParameters after: " + bufferParameters.toString() );
 				bufferType = bufferParameters.get( Buffer.bufferTypeIndex );
 
         if (!dialog.isRegularClose()) {
@@ -265,15 +267,12 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         sb.append("\" typeName=\"" + typeName);
         sb.append("\" mappedMemory=\"" + mappedMemory );
 				if( !bufferType.equals( "" ) && !bufferType.equals( "noBuffer" ) )	{
-        	sb.append("\" bufferType=\"" + bufferType );
 					switch( Integer.parseInt( bufferType ) )	{
 						case Buffer.FepBuffer:
-    	    		sb.append("\" baseAddress=\"" + bufferParameters.get( FepBuffer.baseAddressIndex ) );
-      	  		sb.append("\" numSamples=\"" + bufferParameters.get( FepBuffer.numSamplesIndex ) );
-        			sb.append("\" bank=\"" + bufferParameters.get( FepBuffer.bankIndex ) );
-        			sb.append("\" dataType=\"" + bufferParameters.get( FepBuffer.dataTypeIndex ) );
+							sb.append( FepBuffer.appendBufferParameters( bufferParameters ) );
 							break;
 						case Buffer.InterleaverBuffer:	
+        			sb.append("\" bufferType=\"" + bufferType );
 							//data in
 	        		sb.append( "\" packedBinaryInIntl=\"" + bufferParameters.get( InterleaverBuffer.packedBinaryInIntlIndex ) );
 	        		sb.append( "\" widthIntl=\"" + bufferParameters.get( InterleaverBuffer.widthIntlIndex ) );
@@ -288,10 +287,13 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 	        		sb.append( "\" lengthPermIntl=\"" + bufferParameters.get( InterleaverBuffer.lengthPermIntlIndex) );
 						break;
 						case Buffer.AdaifBuffer:	
+							sb.append( AdaifBuffer.appendBufferParameters( bufferParameters ) );
+        			/*sb.append("\" bufferType=\"" + bufferType );
         			sb.append("\" numSamples=\"" + bufferParameters.get( MMBuffer.numSamplesIndex ) );
-        			sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
+        			sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );*/
 							break;
 						case Buffer.MapperBuffer:	
+        			sb.append("\" bufferType=\"" + bufferType );
 							//data in
       	  		sb.append("\" numSamplesDataInMapp=\"" + bufferParameters.get( MapperBuffer.numSamplesDataInMappIndex ) );
     	    		sb.append("\" baseAddressDataInMapp=\"" + bufferParameters.get( MapperBuffer.baseAddressDataInMappIndex ) );
@@ -303,14 +305,12 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         			sb.append("\" baseAddressLUTMapp=\"" + bufferParameters.get( MapperBuffer.baseAddressLUTMappIndex ) );
 							break;
 						case Buffer.MainMemoryBuffer:	
+        			sb.append("\" bufferType=\"" + bufferType );
   	      		sb.append("\" numSamples=\"" + bufferParameters.get( MMBuffer.numSamplesIndex ) );
   	      		sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
 							break;
 						default:	//the fep buffer 
-        			sb.append("\" baseAddress=\"" + bufferParameters.get( FepBuffer.baseAddressIndex ) );
-        			sb.append("\" numSamples=\"" + bufferParameters.get( FepBuffer.numSamplesIndex ) );
-	        		sb.append("\" bank=\"" + bufferParameters.get( FepBuffer.bankIndex ) );
-  	      		sb.append("\" dataType=\"" + bufferParameters.get( FepBuffer.dataTypeIndex ) );
+							sb.append( FepBuffer.appendBufferParameters( bufferParameters ) );
 							break;
 					}
 				}
@@ -348,15 +348,17 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                                 mappedMemory = elt.getAttribute("mappedMemory");
 																if( (elt.getAttribute("bufferType") != null) &&  (elt.getAttribute("bufferType").length() > 0) )	{
                                 bufferType = elt.getAttribute("bufferType");
-																bufferParameters.add( bufferType );
+																//bufferParameters.add( bufferType );
 																switch( Integer.parseInt( bufferType ) )	{
 																	case Buffer.FepBuffer:
-												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
+																		bufferParameters = FepBuffer.buildBufferParameters( elt );
+												        		/*bufferParameters.add( FepBuffer.baseAddressIndex, elt.getAttribute( "baseAddress" ) );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 												        		bufferParameters.add( elt.getAttribute( "bank" ) );
-												        		bufferParameters.add( elt.getAttribute( "dataType" ) );
+												        		bufferParameters.add( elt.getAttribute( "dataType" ) );*/
 																		break;
 																	case Buffer.InterleaverBuffer:	
+																		bufferParameters.add( bufferType );
 																		//data in
 	        													bufferParameters.add( elt.getAttribute( "packedBinaryInIntl" ) );
 	        													bufferParameters.add( elt.getAttribute( "widthIntl" ) );
@@ -371,10 +373,13 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 												        		bufferParameters.add( elt.getAttribute( "lengthPermIntl" ) );
 																		break;
 																	case Buffer.AdaifBuffer:	
+																		AdaifBuffer.buildBufferParameters( elt );
+																		/*bufferParameters.add( bufferType );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
-												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
+												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );*/
 																		break;
 																	case Buffer.MapperBuffer:	
+																		bufferParameters.add( bufferType );
 																		//data in
 												        		bufferParameters.add( elt.getAttribute( "numSamplesDataInMapp" ) );
 												        		bufferParameters.add( elt.getAttribute( "baseAddressDataInMapp" ) );
@@ -386,10 +391,12 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 											        			bufferParameters.add( elt.getAttribute( "baseAddressLUTMapp" ) );
 																		break;
 																	case Buffer.MainMemoryBuffer:	
+																		bufferParameters.add( bufferType );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 																		break;
 																	default:	//the main memory buffer 
+																		bufferParameters.add( bufferType );
 												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
 												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
 												        		bufferParameters.add( elt.getAttribute( "bank" ) );

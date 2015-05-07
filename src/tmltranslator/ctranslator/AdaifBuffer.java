@@ -48,13 +48,15 @@ package tmltranslator.ctranslator;;
 
 import java.util.*;
 import java.nio.*;
+import org.w3c.dom.Element;
+
 import myutil.*;
 import tmltranslator.*;
 
 public class AdaifBuffer extends Buffer	{
 
-	public static final int numSamplesIndex = 1;
-	public static final int baseAddressIndex = 2;
+	public static final int NUM_SAMPLES_INDEX = 1;
+	public static final int BASE_ADDRESS_INDEX = 2;
 
 	protected String numSamplesValue = USER_TO_DO;
 	protected static final String numSamplesType = "uint8_t";
@@ -68,6 +70,8 @@ public class AdaifBuffer extends Buffer	{
 																						"typedef ADAIF_BUFFER_TYPE ADAIF_BUFFER_TYPE" + SC + CR;
 	
 	private String Context = "embb_mainmemory_context";
+
+	private static final int maxParameters = 2;
 
 	public AdaifBuffer( String _name, TMLTask _task )	{
 		type = "ADAIF_BUFFER_TYPE";
@@ -95,15 +99,39 @@ public class AdaifBuffer extends Buffer	{
 
 	private void retrieveBufferParameters()	{
 
-		if( bufferParameters.get( numSamplesIndex ).length() > 0 )	{
-			numSamplesValue = bufferParameters.get( numSamplesIndex );
+		if( bufferParameters.get( NUM_SAMPLES_INDEX ).length() > 0 )	{
+			numSamplesValue = bufferParameters.get( NUM_SAMPLES_INDEX );
 		}
-		if( bufferParameters.get( baseAddressIndex ).length() > 0 )	{
-			baseAddressValue = bufferParameters.get( baseAddressIndex );
+		if( bufferParameters.get( BASE_ADDRESS_INDEX ).length() > 0 )	{
+			baseAddressValue = bufferParameters.get( BASE_ADDRESS_INDEX );
 		}
 	}
 
 	public String getContext()	{
 		return Context;
+	}
+
+	public static String appendBufferParameters( ArrayList<String> buffer )	{
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("\" bufferType=\"" + Integer.toString( Buffer.AdaifBuffer ) );
+		if( buffer.size() == maxParameters+1 )	{	//because the first parameter is the bufferType
+			sb.append("\" numSamples=\"" + buffer.get( NUM_SAMPLES_INDEX ) );
+  	  sb.append("\" baseAddress=\"" + buffer.get( BASE_ADDRESS_INDEX ) );
+		}
+		else	{
+			sb.append("\" numSamples=\"" + SP );
+  	  sb.append("\" baseAddress=\"" + SP );
+		}
+		return sb.toString();
+	}
+
+	public static ArrayList<String> buildBufferParameters( Element elt )	{
+
+		ArrayList<String> buffer = new ArrayList<String>();
+		buffer.add( 0, Integer.toString( Buffer.AdaifBuffer ) );
+		buffer.add( NUM_SAMPLES_INDEX, elt.getAttribute( "numSamples" ) );
+		buffer.add( BASE_ADDRESS_INDEX, elt.getAttribute( "baseAddress" ) );
+		return buffer;
 	}
 }	//End of class
