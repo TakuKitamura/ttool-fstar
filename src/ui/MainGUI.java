@@ -6683,7 +6683,7 @@ public void paneAction(ChangeEvent e) {
             paneDeployAction(e);
         }
 
-        if ((getCurrentTURTLEPanel() instanceof AvatarDesignPanel) || (getCurrentTURTLEPanel() instanceof AvatarRequirementPanel) || (getCurrentTURTLEPanel() instanceof AttackTreePanel)) {
+        if ((getCurrentTURTLEPanel() instanceof AvatarDesignPanel) || (getCurrentTURTLEPanel() instanceof AvatarRequirementPanel) || (getCurrentTURTLEPanel() instanceof AttackTreePanel) || (getCurrentTURTLEPanel() instanceof ADDPanel)) {
             mainBar.showAvatarActions(true);
         } else if ((getCurrentTURTLEPanel() instanceof TMLDesignPanel) || (getCurrentTURTLEPanel() instanceof TMLComponentDesignPanel) || (getCurrentTURTLEPanel() instanceof TMLArchiPanel)){
             mainBar.showDiplodocusActions(true);
