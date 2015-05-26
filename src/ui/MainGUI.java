@@ -148,6 +148,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     //Menubar
     private JMenuBarTurtle jmenubarturtle;
 
+    // Communication key
+    private String sk;
 
 
     // Annex windows
@@ -313,6 +315,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     }
 
+    public void setKey(String _sk) {
+	sk = _sk;
+	RshClient.sk = sk;
+    }
+
+    public String getKey() {
+	return sk;
+    }
 
 
     public boolean isAvatarOn() {

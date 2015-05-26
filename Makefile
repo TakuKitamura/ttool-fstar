@@ -24,6 +24,7 @@ LAUNCHER_BINARY = launcher.jar
 TIFTRANSLATOR_BINARY = tiftranslator.jar
 TMLTRANSLATOR_BINARY = tmltranslator.jar
 JSOUP_BINARY = jsoup-1.8.1.jar
+COMMON_CODEC_BINARY = commons-codec-1.10.jar
 RUNDSE_BINARY = rundse.jar
 REMOTESIMULATOR_BINARY = simulationcontrol.jar
 RUNDSE_BINARY = rundse.jar
@@ -100,7 +101,7 @@ basicsvnapvrille:
 myrelease: basic launcher ttooljar 
 
 basic:
-	$(JAVAC) $(SOURCEPATH) $(TTOOL_SRC) $(CLASSPATH) $(TTOOL_BIN)/jsoup-1.8.1.jar $(TTOOL_SRC)/*.java	
+	$(JAVAC) $(SOURCEPATH) $(TTOOL_SRC) $(CLASSPATH) $(TTOOL_BIN)/$(JSOUP_BINARY):$(TTOOL_BIN)/$(COMMON_CODEC_BINARY) $(TTOOL_SRC)/*.java	
 
 jar: launcher ttooljar tiftranslator tmltranslator rundse remotesimulator
 
@@ -227,7 +228,7 @@ stdrelease:
 	cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin
 	cp $(TTOOL_BIN)/configuration.gcf $(TTOOL_TARGET)/bin
 	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
-	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_TARGET)/bin	
+	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_TARGET)/bin	
 
 # Basic release
 	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfv $(TTOOL_STD_RELEASE)/release.tar *; $(GZIP) -9 $(TTOOL_STD_RELEASE)/release.tar; mv $(TTOOL_STD_RELEASE)/release.tar.gz $(TTOOL_STD_RELEASE)/release.tgz
