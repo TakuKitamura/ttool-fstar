@@ -54,11 +54,8 @@ import java.lang.Runtime;
 
 public final class CheckConnection {
     // TODO: input: URL or IPADRESS in STRING FORMAT. //should return true or false
-    public static final int KO_RESOLVE_DOMAIN = 1;
-    public static final int OK_DEFAULT_URL = 2;
 
     private static final String default_url_1 = "google.com";
-    private static final String default_url_2 = "http://ttool.telecom-paristech.fr";
     private static final String default_ip= "8.8.8.8";
 
 
@@ -77,7 +74,7 @@ public final class CheckConnection {
     }
 
     public static final boolean checkConnectionWithAddr(String addr) throws IOException, InterruptedException {
-        Process ping = Runtime.getRuntime().exec("ping -c 1 " + addr);
+        Process ping = Runtime.getRuntime().exec("ping -c 2 " + addr);
         int returnVal = ping.waitFor();
         boolean reachable = (returnVal == 0);
         return reachable;

@@ -79,26 +79,16 @@ public class GoogleSearch {
 		try{		
 		Document doc = Jsoup.connect(google + URLEncoder.encode(search, charset)).userAgent(userAgent).get();
 		
-		//System.out.println(doc.toString());
-		
-//		Element error = doc.select("span.gs_red").first();
-//		if (error.text().contains("Did you mean:")){
-//			String newrequest = "http://scholar.google.com" + doc.select("a.gs_pda").first().attr("href");
-//			doc = Jsoup.connect(newrequest).userAgent(userAgent).get();
-//		}	
-		
 		//get list of search result, each result begin with tag <li class="g">
 		Elements articles = doc.select("li.g");
-		//System.out.println(articles.toString());
-		
-		
+
 		if (articles.size()!=0){
 			for (Element l : articles){
 				gs = new GoogleSearch();
 				
 				//convert an article to a html in order to using parser again.
 				String htmlArticle = l.toString();
-				Document docArticle = Jsoup.parse(htmlArticle);
+				Document docArticle = Jsoup.parse(htmlArticle,charset);
 				
 				//get first tag <a href=....>
 				
@@ -147,34 +137,30 @@ public class GoogleSearch {
 	
 	
 	public static final ArrayList<GoogleSearch> getGoogleScholarResult(String search){
-		
 		ArrayList<GoogleSearch> r = new ArrayList<GoogleSearch>();
 		String title="";
 		String url="";
 		String desc="";
 		String authors="";
 		String citedNumber="";
-        	String citedLinks="";
-        	String related="";
+		String citedLinks="";
+		String related="";
         
-        	GoogleSearch gs;
+		GoogleSearch gs;
 		try{
-		//SSystem.out.println("call this");
-		Document doc = Jsoup.connect(googleScholar + URLEncoder.encode(search, charset)).userAgent(userAgent).get();
-		
-		//System.out.println(doc.toString());
+			Document doc = Jsoup.connect(googleScholar + URLEncoder.encode(search, charset)).userAgent(userAgent).get();
+
 		//get list of search result, each result begin with tag <li class="g">
-		Element error = doc.select("span.gs_red").first();
-		if (error.text().contains("Did you mean:")){
-			String newrequest = "http://scholar.google.com" + doc.select("a.gs_pda").first().attr("href");
-			doc = Jsoup.connect(newrequest).userAgent(userAgent).get();
-		}	
+			Element error = doc.select("span.gs_red").first();
+			if (error != null) {
+				if (error.text().contains("Did you mean:")) {
+					String newrequest = "http://scholar.google.com" + doc.select("a.gs_pda").first().attr("href");
+					doc = Jsoup.connect(newrequest).userAgent(userAgent).get();
+				}
+			}
 		
-		Elements articles = doc.select("div.gs_ri");
-		
-		//System.out.println("=================================");
-		//System.out.println(articles.toString());
-		
+			Elements articles = doc.select("div.gs_ri");
+
 			if(articles.size()!=0){
 			for (Element l : articles){
 				gs = new GoogleSearch();
@@ -182,7 +168,7 @@ public class GoogleSearch {
 				//convert an article to a html in order to using parser again.
 				String htmlArticle = l.toString();
 			
-				Document docArticle = Jsoup.parse(htmlArticle);
+				Document docArticle = Jsoup.parse(htmlArticle,charset);
 	//			
 	//			//get first tag <a href=....>
 				
@@ -219,16 +205,17 @@ public class GoogleSearch {
 	                	}
 	                }
 	            }
-            
-            
+
 	            //TraceManager.addDev("title-->"+title);
-	            //TraceManager.addDev("url-->"+url);
+				//TraceManager.addDev("url-->"+url);
 	            //TraceManager.addDev("desc-->"+desc);
 	            //TraceManager.addDev("author-->"+authors);
 	            //TraceManager.addDev("cited number-->"+citedNumber);
 	            //TraceManager.addDev("cited link-->"+citedLinks);
 	            //TraceManager.addDev("related link-->"+related);
-	            
+
+
+
 	            gs.authors=authors;
 	            gs.title=title;
 	            gs.url=url;
