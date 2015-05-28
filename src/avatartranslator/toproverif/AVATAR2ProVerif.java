@@ -1271,9 +1271,19 @@ public class AVATAR2ProVerif {
                     }
 
                 } else if (AvatarSpecification.isABasicVariableSettingString(tmp)) {
-                    TraceManager.addDev("Found function: " + tmp);
+                    TraceManager.addDev("Found variable setting: " + tmp);
                     addLineNoEnd(p, "let " + tmp + " in ");
-                }
+                } else {
+		    TraceManager.addDev("Assignment expression: " + tmp);
+		    int index = tmp.indexOf("=");
+		    if (index > -1) {
+			String var = tmp.substring(0, index).trim();
+			if (var.length() > 0) { 
+			    addLine(p, "new " + var);
+			}
+		    }
+		   
+		}
             }
 
             makeBlockProcesses(_block, _asm, _asme.getNext(0), p, _processes, _states, null);
