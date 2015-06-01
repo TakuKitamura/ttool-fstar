@@ -76,6 +76,8 @@ import myutil.CheckConnection;
 //import myutil.Message;
 //import myutil.Client;
 import myutil.externalSearch.Record;
+import ui.ConfigurationTTool;
+import ui.MalformedConfigurationException;
 import ui.TDiagramMouseManager;
 import myutil.externalSearch.Message;
 import myutil.externalSearch.Client;
@@ -180,6 +182,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         removeBt = new javax.swing.JButton();
         searchBt = new javax.swing.JButton();
         searchBox = new javax.swing.JTextField();
+        final int maxlength = 100;
         googleCb = new javax.swing.JCheckBox();
         googleScholarCb = new javax.swing.JCheckBox();
         databaseCb = new javax.swing.JCheckBox();
@@ -224,8 +227,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         dbport = default_port;
 
 
-        jTextaddressDB.setText(dbaddress + ":" + dbport);
-
+        //jTextaddressDB.setText(dbaddress + ":" + dbport);
+        jTextaddressDB.setText(ConfigurationTTool.ExternalServer);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -251,6 +254,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         searchBt.setText("Search");
 
         searchBox.setText("Key words");
+
 
         googleCb.setText("Google");
 
@@ -508,6 +512,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             }
         });
 
+
         searchBox.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent documentEvent) {
@@ -525,7 +530,10 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             }
 
             public void checkandsetSearchBt() {
-                if (searchBox.getText().length() <= 0) {
+                if (searchBox.getText().length() <= 0 || searchBox.getText().length() > maxlength ) {
+                    if (searchBox.getText().length() > maxlength )
+                        JOptionPane.showMessageDialog(null, "The input is too long.", "Warning",
+                                JOptionPane.WARNING_MESSAGE);
                     searchBt.setEnabled(false);
                 } else
                     searchBt.setEnabled(true);
@@ -633,8 +641,9 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                     msg.addKeywordMessage(st);
 
                     Client cl = new Client();
-                    //Message returnMsg = cl.send(msg);
-                    Message returnMsg  = new Message(Message.RESULT_DETAIL);
+                    Message returnMsg = cl.send(msg);
+                    //Message returnMsg  = new Message(Message.RESULT_DETAIL);
+
                     Record r = (Record)cl.parserAnswerMessage(returnMsg);
                     printDetailRecord(r);
                 }
@@ -675,14 +684,21 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
               JOptionPane joptionpane = new JOptionPane();
               int i = joptionpane.showOptionDialog(null, inputs, "Setup the address of database",
                       joptionpane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
-                      null, new Object[]{"OK", "Cancel"}, "OK");
+                      null, new Object[]{"Save", "Cancel"}, "OK");
               if (i == joptionpane.OK_OPTION) {
                   while (! (jTextaddressDB.getText().contains(":") && jTextaddressDB.getText().split(":").length == 2)) {
                       JOptionPane.showMessageDialog(null, "Address:Port", "Wrong format",
                               JOptionPane.WARNING_MESSAGE);
                       i = joptionpane.showOptionDialog(null, inputs, "Setup the address of database",
                               joptionpane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
-                              null, new Object[]{"OK", "Cancel"}, "OK");
+                              null, new Object[]{"Save", "Cancel"}, "OK");
+                  }
+                  ConfigurationTTool.ExternalServer=jTextaddressDB.getText();
+
+                  try {
+                      ConfigurationTTool.saveConfiguration();
+                  } catch (MalformedConfigurationException e) {
+                      e.printStackTrace();
                   }
               } else if (i == joptionpane.CLOSED_OPTION) {
               }
@@ -910,13 +926,12 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                     //msg.addKeywordMessage(searchBox.getText());
                     //create client
                     Client client = new Client();
-                    Message msg1 = new Message(Message.RESULT_SEARCH);
-                    //Message returnMsg = client.send(msg1);
+                    //Message msg1 = new Message(Message.RESULT_SEARCH);
+                    Message returnMsg = client.send(msg);
 
                     //Message msg1 = new Message(Message.RESULT_SEARCH);
 
-                    //System.out.print("truoc khi vao parser");
-                    ArrayList<Record> re =  (ArrayList<Record>)client.parserAnswerMessage(msg1);
+                    ArrayList<Record> re =  (ArrayList<Record>)client.parserAnswerMessage(returnMsg);
                     putDBToTable(re);
                     showtable(rowsDB, modelDB,2);
 
@@ -1041,21 +1056,17 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     public void addValueListKeyword(String st){
         if  (! this.listModel.contains(st)){
         	this.listModel.addElement(st);
-        	
+
         	String query = "";
-        	
+
         	if (this.listModel.getSize()>0)
                 query = splitAndConcat((String) this.listModel.elementAt(0));
-                System.out.println(query);
     	    	for (int i=1; i< this.listModel.getSize(); i++ ){
                     if (query != "")
     	    		    query= query + " + " + splitAndConcat((String) this.listModel.elementAt(i));
                     else
                         query = splitAndConcat((String) this.listModel.elementAt(i));
     	    	}
-
-            System.out.println(query);
-    	    	
         	this.searchBox.setText(query);
         }
     	

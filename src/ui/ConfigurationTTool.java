@@ -145,6 +145,8 @@ public class ConfigurationTTool {
 	public static String LastWindowAttributesMax="";
     
     public static String fileName = "";
+
+	public static String ExternalServer="";
     
     public static void makeDefaultConfiguration() {
     	//System.out.println(Paths.get("").toAbsolutePath().toString());
@@ -214,6 +216,31 @@ public class ConfigurationTTool {
                 }
             }
         }
+        //---------------------------------------------
+        index0 = data.indexOf("ExternalServer");
+
+        //sb.append("data = " + data + " ConfigurationTTool.LastOpenFile=" + ConfigurationTTool.LastOpenFile);
+
+        if (index0 > -1) {
+            index1 = data.indexOf('"', index0);
+            if (index1 > -1) {
+                index2 = data.indexOf('"', index1 + 1);
+                if (index2 > -1) {
+                    tmp = data.substring(index2, data.length());
+                    data = data.substring(0, index1+1) + ConfigurationTTool.ExternalServer+ tmp;
+                    //sb.append("data = " + data);
+                    write = true;
+					/*try {
+					FileOutputStream fos = new FileOutputStream(f);
+					fos.write(data.getBytes());
+					fos.close();
+					} catch (Exception e) {
+					throw new  MalformedConfigurationException("Saving file failed");
+					}*/
+                }
+            }
+        }
+        //--------------------------
 		
 		index0 = data.indexOf("LastWindowAttributes");
 		if (index0 > -1) {
@@ -400,6 +427,9 @@ public class ConfigurationTTool {
 		sb.append("LastWindowAttributesWidth: " + LastWindowAttributesWidth + "\n");
 		sb.append("LastWindowAttributesHeight: " + LastWindowAttributesHeight + "\n");
 		sb.append("LastWindowAttributesMax: " + LastWindowAttributesMax + "\n");
+		
+		//Huy Truong
+		sb.append("ExternalServer " + ExternalServer + "\n"); 
 		
 		return sb.toString();
         
@@ -649,6 +679,10 @@ public class ConfigurationTTool {
 			nl = doc.getElementsByTagName("LastWindowAttributes");
 			if (nl.getLength() > 0)
 				LastWindowAttributes(nl);
+			
+			nl = doc.getElementsByTagName("ExternalServer");
+			if (nl.getLength() >0)
+				ExternalServer(nl);
 			
 			
         } catch (Exception e) {
@@ -1283,6 +1317,18 @@ public class ConfigurationTTool {
 			LastWindowAttributesWidth = elt.getAttribute("width");
 			LastWindowAttributesHeight = elt.getAttribute("height");
 			LastWindowAttributesMax = elt.getAttribute("max");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+
+    private static void ExternalServer(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element) (nl.item(0));
+            ExternalServer = elt.getAttribute("data");
+            if (ExternalServer == "")
+                ExternalServer = "localhost:9999";
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

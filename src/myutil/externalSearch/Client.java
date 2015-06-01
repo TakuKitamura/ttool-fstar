@@ -14,6 +14,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 
 
@@ -38,7 +40,11 @@ public class Client {
         } else if (cmd.equals(Message.RESULT_SEARCH)) {
             ArrayList<Record> lrecord = new ArrayList<>();
             try {
-                byte[] encoded = Files.readAllBytes(Paths.get("/home/trhuy/Downloads/02-51-34.xml"));
+                //byte[] encoded = Files.readAllBytes(Paths.get("/home/trhuy/Downloads/02-51-34.xml"));
+
+
+                byte[] encoded = (byte[])answerMsg.getContent().get(0);
+
                 String resultxml = new String(encoded, "UTF-8");
 
                 Document doc = Jsoup.parse(resultxml);
@@ -61,7 +67,8 @@ public class Client {
         } else if (cmd.equals(Message.RESULT_DETAIL)) {
             Record r = new Record();
             try {
-                byte[] encoded = Files.readAllBytes(Paths.get("/home/trhuy/Downloads/02-40-06.xml"));
+                //byte[] encoded = Files.readAllBytes(Paths.get("/home/trhuy/Downloads/02-40-06.xml"));
+                byte[] encoded = (byte[])answerMsg.getContent().get(0);
                 String resultxml = new String(encoded, "UTF-8");
 
                 Document doc = Jsoup.parse(resultxml);
@@ -114,10 +121,9 @@ public class Client {
         } else if (cmd.equals(Message.RESULT_STATISTIC)) {
             //show picture
             //Use a function to convert binary to image
-            ArrayList<Object> resultContent = new ArrayList();
-            resultContent = answerMsg.getContent();
-            byte[] imgByte = (byte[]) resultContent.get(0);
-            Message.convertByteToImage(imgByte);
+            byte[] encoded = (byte[]) answerMsg.getContent().get(0);
+
+            return (Object)encoded;
 
             //Call Huy's function to load Image
         } else System.out.print(Message.ERR_CMD2);
@@ -134,12 +140,17 @@ public class Client {
     }
 
     public Message send(Message msg){
+        SSLSocket sslClient = null;
         try {
-            Socket client = new Socket(dbaddr,dpport);
+           // Socket client = new Socket(dbaddr,dpport);
+            SSLSocketFactory sslSocketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+            sslClient = (SSLSocket)sslSocketFactory.createSocket("LocalHost",12345);
+
+            sslClient.setEnabledCipherSuites(sslClient.getSupportedCipherSuites());
             System.out.println("Client has been created successfully!");
 
-            ObjectOutputStream outputStream = new ObjectOutputStream(client.getOutputStream());
-            ObjectInputStream inputStream = new ObjectInputStream(client.getInputStream());
+            ObjectOutputStream outputStream = new ObjectOutputStream(sslClient.getOutputStream());
+            ObjectInputStream inputStream = new ObjectInputStream(sslClient.getInputStream());
 
             outputStream.writeObject(msg);
 
@@ -154,7 +165,7 @@ public class Client {
 
             outputStream.close();
             inputStream.close();
-            client.close();
+            sslClient.close();
             return answerMsg;
 
         } catch (UnknownHostException e) {

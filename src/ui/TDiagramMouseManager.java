@@ -344,6 +344,31 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 	public void mouseClicked(MouseEvent e) {
 		//System.out.println("MouseClick: " + e.getClickCount());
 
+		//open a Search Dialog with seleted component's value
+		if ( (e.getButton() == MouseEvent.BUTTON1) && e.isAltDown()) {
+			byte info = tdp.hoveredComponent(e.getX(), e.getY());
+			System.out.print (info);
+			if (info > 1) {
+				tgc = tdp.componentHovered();
+				String search = tgc.getValue();
+
+				if (tdp.mgui.searchBox==null ) {
+					tdp.mgui.searchBox = new JDialogSearchBox(tdp.getGUI().getFrame(), "Search Box", selectedMultiComponents, this);
+				}
+				else {
+					if (tdp.mgui.searchBox.isShowing()) {
+						tdp.mgui.searchBox.addValueListKeyword(search);
+						tdp.mgui.searchBox.show();
+					} else{
+						tdp.mgui.searchBox=null;
+						tdp.mgui.searchBox = new JDialogSearchBox(tdp.getGUI().getFrame(), "Search Box", selectedMultiComponents, this);
+
+					}
+				}
+
+			}
+		}
+
 
 		//author:Huy TRUONG
 		//add component's value into list by clicking on component and holding Ctrl 
@@ -372,32 +397,9 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 			selectedMultiComponents.clear();
 			// clear the list when release Ctrl and click
 			
-		
 
-		//open a Search Dialog with seleted component's value
-		if (tdp.mode == TDiagramPanel.NORMAL && e.isAltDown()) {
-			byte info = tdp.hoveredComponent(e.getX(), e.getY());
-			
-			if (info > 1) {
-				tgc = tdp.componentHovered();
-				String search = tgc.getValue();
 
-                if (tdp.mgui.searchBox==null ) {
-                    tdp.mgui.searchBox = new JDialogSearchBox(tdp.getGUI().getFrame(), "Search Box", selectedMultiComponents, this);
-                }
-                else {
-                    if (tdp.mgui.searchBox.isShowing()) {
-                        tdp.mgui.searchBox.addValueListKeyword(search);
-                        tdp.mgui.searchBox.show();
-                    } else{
-                        tdp.mgui.searchBox=null;
-                        tdp.mgui.searchBox = new JDialogSearchBox(tdp.getGUI().getFrame(), "Search Box", selectedMultiComponents, this);
 
-                    }
-                }
-
-			}
-		}
 		//--
 		
 
