@@ -8301,6 +8301,8 @@ public void actionPerformed(ActionEvent evt)  {
         actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_STOP_STATE);
     } else if (command.equals(actions[TGUIAction.TMLCP_JUNCTION].getActionCommand())) {
         actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_JUNCTION);
+    } else if (command.equals(actions[TGUIAction.TMLCP_FOR_LOOP].getActionCommand())) {
+        actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_FOR_LOOP);
     } else if (command.equals(actions[TGUIAction.TMLSD_EDIT].getActionCommand())) {
         actionOnButton(TGComponentManager.EDIT, -1);
     } else if (command.equals(actions[TGUIAction.TMLSD_MESSAGE_ASYNC].getActionCommand())) {

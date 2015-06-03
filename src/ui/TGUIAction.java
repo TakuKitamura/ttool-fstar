@@ -228,6 +228,7 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLCP_STOP = 385;
     public static final int TMLCP_CHOICE = 386;
     public static final int TMLCP_JUNCTION = 387;
+    public static final int TMLCP_FOR_LOOP = 416;
 
     public static final int TMLSD_STORAGE_INSTANCE = 388;
     public static final int TMLSD_CONTROLLER_INSTANCE = 396;
@@ -554,7 +555,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_INTERNAL_SEARCH = 415;
     //--
 
-    public static final int NB_ACTION = 416;
+    public static final int NB_ACTION = 417;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -930,6 +931,7 @@ public class TGUIAction extends AbstractAction {
         actions[TMLCP_START] = new TAction("add-tmlcp-start", "Add Start state", IconManager.imgic222, IconManager.imgic222, "Start", "Add a start state to the currently opened communication pattern diagram", 0);
         actions[TMLCP_STOP] = new TAction("add-tmlcp-stop", "Add Stop", IconManager.imgic210, IconManager.imgic210, "Stop", "Add a termination state to the currently opened communication pattern diagram", 0);
         actions[TMLCP_JUNCTION] = new TAction("add-tmlcp-junction", "Add Junction", IconManager.imgic212, IconManager.imgic212, "Junction", "Add a junction with three inputs to the currently opened communication pattern diagram", 0);
+	actions[TMLCP_FOR_LOOP] = new TAction("add-tmlcp-forloop", "Add loop", IconManager.imgic912, IconManager.imgic912, "Loop", "Add a for loop to the currently opened communication pattern diagram", 0);
 
         actions[TMLSD_EDIT] = new TAction("edit-tmlsd-diagram", "Edit CP-SD diagram", IconManager.imgic100, IconManager.imgic101, "Edit The sequence diagram of  communication patterns", "Make it possible to edit the currently opened communication pattern sequence diagram", 0);
         actions[TMLSD_MESSAGE_ASYNC] = new TAction("add-tmlsd-messageasync", "Add async msg", IconManager.imgic202, IconManager.imgic202, "Asynchronous msg", "Add an asynchronous message between two components of the currently opened communication pattern sequence diagram", 0);

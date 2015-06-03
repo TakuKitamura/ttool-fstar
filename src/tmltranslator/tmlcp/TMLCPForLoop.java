@@ -1,7 +1,6 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
-ludovic.apvrille AT telecom-paristech.fr
-andrea.enrici AT telecom-paristech.fr
+ludovic.apvrille AT enst.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -37,54 +36,43 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class TMLCPChoice
-* Creation: 18/02/2014
-* @version 1.0 18/02/2014
-* @author Ludovic APVRILLE, Andrea ENRICI
-* @see
-*/
+ * Class TMLForLoop
+ * Creation: 03/06/2015
+ * @version 1.0 03/06/2015
+ * @author Ludovic APVRILLE
+ * @see
+ */
 
 package tmltranslator.tmlcp;
 
-import java.util.*;
 
+public class TMLForLoop extends TMLCPElement {
+    //next #0 -> loop
+    //next #1 -> after loop
+    
+    private String init, condition, increment;
 
-import myutil.*;
-
-//The method is not very suited for the language, I should come back later...
-public class TMLCPChoice extends TMLCPElement  {
-    private ArrayList<String> guards;
-	
-    public TMLCPChoice(String _name, ArrayList<String> _guards, Object _referenceObject) {
-        super(_name, _referenceObject);
-        this.guards = _guards;
+    //private boolean isInfinite;
+    
+    public TMLForLoop(String _name, Object _referenceObject) {
+         super(_name, _referenceObject);   
     }
     
-/*    public void addGuard( String _guard ) {
-        nexts.add( new TMLCPElement( _guard, null ) );
-    }*/
-
-    public void addGuard(String _guard) {
-	if (guards == null) {
-	    guards = new ArrayList<String>();
-	}
-	guards.add(_guard);
-    }
+    public void setInit(String _init) { init = _init; }
+    public void setCondition(String _condition) { condition = _condition; }
+    public void setIncrement(String _increment) { increment = _increment; }
     
-    public ArrayList<String> getGuards() {
-    	return this.guards;
+    public String getInit() { return init;}
+    public String getCondition() { return condition;}
+    public String getIncrement() { return increment;}
+
+    /*public void setInfinite(boolean b) {
+	isInfinite = b;
     }
 
+    public boolean isInfinite() {
+	return isInfinite;
+	}*/
     
-
-    public String toString() {
-	String s = "\t+ " + toShortString();
-	int i = 0;
-	for(TMLCPElement elt: nexts) {
-	    s += "\t\t->" + guards.get(i) + " " + elt.toShortString();
-	    i ++;
-	}
-	return s;
-    }
-
+ 
 }
