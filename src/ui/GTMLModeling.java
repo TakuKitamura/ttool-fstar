@@ -2374,6 +2374,7 @@ public class GTMLModeling  {
         tmltranslator.tmlcp.TMLCPConnector TMLCPconnector;
         tmltranslator.tmlcp.TMLCPRefAD refAD;
         tmltranslator.tmlcp.TMLCPRefSD refSD;
+	tmltranslator.tmlcp.TMLCPForLoop loop;
 
         /*if (tmladp == null) {
           String msg = tmlto.getValue() + " has no activity diagram";
@@ -2441,6 +2442,15 @@ public class GTMLModeling  {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
                     fork = new tmltranslator.tmlcp.TMLCPFork( compID, component );
                     AD.addTMLCPElement( fork );
+                }
+		if( component instanceof ui.tmlcp.TMLCPForLoop )   {
+                    //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
+                    loop = new tmltranslator.tmlcp.TMLCPForLoop( compID, component );
+                    AD.addTMLCPElement( loop );
+		    loop.setInit(((ui.tmlcp.TMLCPForLoop)(component)).getInit());
+		    loop.setCondition(((ui.tmlcp.TMLCPForLoop)(component)).getCondition());
+		    loop.setIncrement(((ui.tmlcp.TMLCPForLoop)(component)).getIncrement());
+		    
                 }
                 if( component instanceof ui.tmlcp.TMLCPChoice ) {
                     //TraceManager.addDev( k + component.getName() + "\t" + component.getValue() + "\t" + component.getY());

@@ -36,7 +36,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLForLoop
+ * Class TMLCPForLoop
  * Creation: 03/06/2015
  * @version 1.0 03/06/2015
  * @author Ludovic APVRILLE
@@ -46,7 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package tmltranslator.tmlcp;
 
 
-public class TMLForLoop extends TMLCPElement {
+public class TMLCPForLoop extends TMLCPElement {
     //next #0 -> loop
     //next #1 -> after loop
     
@@ -54,7 +54,7 @@ public class TMLForLoop extends TMLCPElement {
 
     //private boolean isInfinite;
     
-    public TMLForLoop(String _name, Object _referenceObject) {
+    public TMLCPForLoop(String _name, Object _referenceObject) {
          super(_name, _referenceObject);   
     }
     
