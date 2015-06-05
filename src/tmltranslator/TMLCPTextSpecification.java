@@ -387,7 +387,7 @@ public class TMLCPTextSpecification {
 
         sb.append(parseElement2(currentElement, met));
 
-        return sb.toString() + TAB + "><";
+        return sb.toString() + CR + TAB + "><";
     }
 
     private String parseElement2(TMLCPElement currentElement, ArrayList<TMLCPElement> met) {
@@ -407,8 +407,8 @@ public class TMLCPTextSpecification {
 	met.add(currentElement);
 
 	if (currentElement instanceof TMLCPStop) {
-	    return "";
-	    //return( TAB + "><" );
+	    //return "";
+	    return( TAB + "><" );
 	}
 
 	if (currentElement instanceof TMLCPFork) {
@@ -426,46 +426,10 @@ public class TMLCPTextSpecification {
 
 		
 	String ret = parseSequence(currentElement);
-	ret += SEQUENCE_OP;
+	//ret += SEQUENCE_OP;
 	ret += parseElement2(currentElement.getNextElements().get(0), met);
 	return ret;
 	
-	
-	/*ArrayList<TMLCPElement> nextElements;
-	      
-	      while( (!(currentElement instanceof TMLCPStop)) && (currentElement != null)) {
-            nextElements = currentElement.getNextElements();
-
-            if (currentElement instanceof TMLCPFork) {
-                sbFork = new StringBuffer();
-                currentElement = parseFork2( nextElements );     // currentElement is the closing join, use attribute sbFork
-                sb.append( sbFork.toString() );
-                sbFork.setLength(0);
-            } else if (currentElement instanceof ) {
-
-
-
-            }else if( nextElements.size() > 1 )       {       // currentElement is a fork node
-                sbFork = new StringBuffer();
-                sb.append(currentElement = parseFork( nextElements );     // currentElement is the closing join, use attribute sbFork
-                sb.append( sbFork.toString() );
-                sbFork.setLength(0);
-            }
-            else        {       // currentElement is either a refToDiag or a junction
-                if( isAJunction( currentElement ) )     {
-                    String s = ( (TMLCPRefAD) currentElement ).getName();
-                    sb.append( s + ";" + CR );
-                }
-                else    {
-                    sb.append( parseSequence( currentElement ) );
-                }
-            }
-            currentElement = currentElement.getNextElements().get(0);
-
-
-
-	    }*/
-
     }
 
     private String parseChoice2(TMLCPChoice choice, ArrayList<TMLCPElement> met)  {
@@ -476,7 +440,7 @@ public class TMLCPTextSpecification {
 	int index = 0;
 
 	for( TMLCPElement element: branches )   {
-	    sb.append( CR + TAB2 + guards.get(index) + SP );
+	    sb.append( CR + TAB2 + guards.get(index) + SP);
 	    sb.append(parseElement2(element, met));
 	    index ++;
 	}
@@ -530,6 +494,9 @@ public class TMLCPTextSpecification {
 	
 	return sb.toString();
     }
+
+
+
 
     private String makeSingleActivityDiagram( TMLCPActivityDiagram ad ) {
 
