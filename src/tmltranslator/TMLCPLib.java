@@ -54,16 +54,16 @@ public class TMLCPLib extends TMLElement {
 
     private ArrayList<TMLCPLibArtifact> artifacts;
     private Vector<String> mappedUnits = new Vector<String>();
-		private int cpMECType;
+    private int cpMECType;
     private String typeName;
-		private Vector<String> assignedAttributes;
-		private ArrayList<Integer> transferTypes;
+    private Vector<String> assignedAttributes;
+    private ArrayList<Integer> transferTypes;
 
 
     public TMLCPLib(String _name, String _typeName, Object _referenceObject, int _cpMECType ) {
         super( _name, _referenceObject );
-				typeName = _typeName;
-				cpMECType = _cpMECType;
+        typeName = _typeName;
+        cpMECType = _cpMECType;
         init();
     }
 
@@ -73,68 +73,68 @@ public class TMLCPLib extends TMLElement {
     }
 
     public void setMappedUnits( Vector<String> _mappedUnits ) {
-			mappedUnits = _mappedUnits;
+        mappedUnits = _mappedUnits;
     }
 
     private void init() {
-	artifacts = new  ArrayList<TMLCPLibArtifact>();
+        artifacts = new  ArrayList<TMLCPLibArtifact>();
     }
 
     public void addArtifact(TMLCPLibArtifact _arti) {
-	artifacts.add(_arti);
+        artifacts.add(_arti);
     }
 
     public ArrayList<TMLCPLibArtifact> getArtifacts() {
-	return artifacts;
+        return artifacts;
     }
 
     public Vector<String> getMappedUnits() {
-	return mappedUnits;
+        return mappedUnits;
     }
-    
+
     public String getTypeName() {
-	return typeName;
+        return typeName;
     }
 
     public boolean isDMATransfer() {
-	return typeName.compareTo("DMA_transfer") == 0;
+        return typeName.compareTo("DMA_transfer") == 0;
     }
 
     public boolean isDoubleDMATransfer() {
-	return typeName.compareTo("Double_DMA_transfer") == 0;
+        return typeName.compareTo("Double_DMA_transfer") == 0;
     }
 
     public boolean isMemoryCopy() {
-	return typeName.compareTo("CP_Memory_Copy") == 0;
+        return typeName.compareTo("CP_Memory_Copy") == 0;
     }
 
     public String getUnitByName(String id) {
-			id = "." + id + " : ";
-			for(String s: mappedUnits) {
-	  		if (s.indexOf(id) > -1) {
-					return s.substring(s.indexOf(":")+1, s.length()).trim();
-				}
-			}
-			return null;
-		}
+        id = "." + id + " : ";
+        for(String s: mappedUnits) {
+            if (s.indexOf(id) > -1) {
+                return s.substring(s.indexOf(":")+1, s.length()).trim();
+            }
+        }
+        return null;
+    }
 
-		public int getCPMECType()	{
-			return cpMECType;
-		}
-	
-	public void setAssignedAttributes( Vector<String> _assignedAttributes )	{
-		assignedAttributes = _assignedAttributes;
-	}
+    public int getCPMECType()   {
+        return cpMECType;
+    }
 
-	public Vector<String> getAssignedAttributes()	{
-		return assignedAttributes;
-	}
+    public void setAssignedAttributes( Vector<String> _assignedAttributes )     {
+        assignedAttributes = _assignedAttributes;
+    }
 
-	public void setTransferTypes( ArrayList<Integer> _transferTypes )	{
-		transferTypes = _transferTypes;
-	}
+    public Vector<String> getAssignedAttributes()       {
+        return assignedAttributes;
+    }
 
-	public ArrayList<Integer> getTransferTypes()	{
-		return transferTypes;
-	}
+    public void setTransferTypes( ArrayList<Integer> _transferTypes )   {
+        transferTypes = _transferTypes;
+    }
+
+    public ArrayList<Integer> getTransferTypes()        {
+        return transferTypes;
+    }
 }       //End of the class

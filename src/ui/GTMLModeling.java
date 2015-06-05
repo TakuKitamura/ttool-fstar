@@ -729,11 +729,11 @@ public class GTMLModeling  {
                                     tmlport1 = new TMLPort( port1.getPortName(), port1 );
                                     tmlport1.setPrex( port1.isPrex() );
                                     tmlport1.setPostex( port1.isPostex() );
-																		tmlport1.setAssociatedEvent( port1.getAssociatedEvent() );
+                                    tmlport1.setAssociatedEvent( port1.getAssociatedEvent() );
                                     tmlport2 = new TMLPort( port2.getPortName(), port2 );
                                     tmlport2.setPrex( port2.isPrex() );
                                     tmlport2.setPostex( port2.isPostex() );
-																		tmlport2.setAssociatedEvent( port2.getAssociatedEvent() );
+                                    tmlport2.setAssociatedEvent( port2.getAssociatedEvent() );
                                     channel.setPorts( tmlport1, tmlport2 );
                                     tmlm.addChannel(channel);
                                     listE.addCor(channel, tgc);
@@ -817,14 +817,14 @@ public class GTMLModeling  {
                                 TMLPort tmlport;
                                 tt1 = tmlm.getTMLTaskByName(makeName(port1, port1.getFather().getValue()));
                                 tmlport = new TMLPort(port1.getPortName(), port1);
-																tmlport.setAssociatedEvent( port1.getAssociatedEvent() );
+                                tmlport.setAssociatedEvent( port1.getAssociatedEvent() );
                                 channel.addTaskPort(tt1, tmlport, true);
                                 for(j=0; j<portstome.size(); j++) {
                                     port = (TMLCPrimitivePort)(portstome.get(j));
                                     tmlport = new TMLPort(port.getPortName(), port);
                                     tmlport.setPrex( port.isPrex() );
                                     tmlport.setPostex( port.isPostex() );
-																		tmlport.setAssociatedEvent( port.getAssociatedEvent() );
+                                    tmlport.setAssociatedEvent( port.getAssociatedEvent() );
                                     tt2 = tmlm.getTMLTaskByName(makeName(port, port.getFather().getValue()));
                                     channel.addTaskPort(tt2, tmlport, port.isOrigin());
                                 }
@@ -907,11 +907,11 @@ public class GTMLModeling  {
                             name1 = text1[j].trim();
                             name2 = text2[j].trim();
                             //TraceManager.addDev("name1=" + name1 + " name2=" + name2);
-			    if (kk == 0) {
-				name = makeName(port1, name1) + "__" + makeName(port2, name2);
-			    } else {
-				name = makeName(port1, name1) + "__" + makeName(port2, name2) + "__FORK" + kk;
-			    }
+                            if (kk == 0) {
+                                name = makeName(port1, name1) + "__" + makeName(port2, name2);
+                            } else {
+                                name = makeName(port1, name1) + "__" + makeName(port2, name2) + "__FORK" + kk;
+                            }
 
                             TraceManager.addDev("Adding to table : " + makeName(port1, port1.getFather().getValue()) + "/" + name1);
                             addToTable(makeName(port1, port1.getFather().getValue()) + "/" + name1, name);
@@ -1574,7 +1574,7 @@ public class GTMLModeling  {
                 } else {
                     tmlsendevent = new TMLSendEvent("send event", tgc);
                     tmlsendevent.setEvent(event);
-		    
+
                     for(int i=0; i<((TMLADSendEvent)tgc).realNbOfParams(); i++) {
                         tmp = modifyString(((TMLADSendEvent)tgc).getRealParamValue(i));
                         Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
@@ -1733,13 +1733,13 @@ public class GTMLModeling  {
                             ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         }
                     } else {
-			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADNotifiedEvent)tgc).getEventName() + " is an unknown event");
-                            ce.setTMLTask(tmltask);
-                            ce.setTDiagramPanel(tadp);
-                            ce.setTGComponent(tgc);
-                            checkingErrors.add(ce);
-                            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
-		    }
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADNotifiedEvent)tgc).getEventName() + " is an unknown event");
+                        ce.setTMLTask(tmltask);
+                        ce.setTDiagramPanel(tadp);
+                        ce.setTGComponent(tgc);
+                        checkingErrors.add(ce);
+                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                    }
                 } else {
                     event.setNotified(true);
                     tmlnotifiedevent = new TMLNotifiedEvent("notified event", tgc);
@@ -1771,13 +1771,13 @@ public class GTMLModeling  {
                             checkingErrors.add(ce);
                         }
                     } else {
-			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent)tgc).getEventName() + " is an unknown event");
-                            ce.setTMLTask(tmltask);
-                            ce.setTDiagramPanel(tadp);
-                            ce.setTGComponent(tgc);
-                            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
-                            checkingErrors.add(ce);
-		    }
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent)tgc).getEventName() + " is an unknown event");
+                        ce.setTMLTask(tmltask);
+                        ce.setTDiagramPanel(tadp);
+                        ce.setTGComponent(tgc);
+                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        checkingErrors.add(ce);
+                    }
                 } else {
                     //TraceManager.addDev("Nb of param of event:" + event.getNbOfParams());
                     tmlwaitevent = new TMLWaitEvent("wait event", tgc);
@@ -2172,7 +2172,7 @@ public class GTMLModeling  {
                     cpu.execiTime = node.getExeciTime();
                     cpu.execcTime = node.getExeccTime();
                     cpu.clockRatio = node.getClockRatio();
-										cpu.MEC = node.getMECType();
+                    cpu.MEC = node.getMECType();
                     listE.addCor(cpu, node);
                     archi.addHwNode(cpu);
                     TraceManager.addDev("CPU node added: " + cpu.getName());
@@ -2254,7 +2254,7 @@ public class GTMLModeling  {
                     memory = new HwMemory(memorynode.getName());
                     memory.byteDataSize = memorynode.getByteDataSize();
                     memory.clockRatio = memorynode.getClockRatio();
-										memory.BufferType = memorynode.getBufferType();
+                    memory.BufferType = memorynode.getBufferType();
                     listE.addCor(memory, memorynode);
                     archi.addHwNode(memory);
                     TraceManager.addDev("Memory node added:" + memory.getName());
@@ -2374,7 +2374,7 @@ public class GTMLModeling  {
         tmltranslator.tmlcp.TMLCPConnector TMLCPconnector;
         tmltranslator.tmlcp.TMLCPRefAD refAD;
         tmltranslator.tmlcp.TMLCPRefSD refSD;
-	tmltranslator.tmlcp.TMLCPForLoop loop;
+        tmltranslator.tmlcp.TMLCPForLoop loop;
 
         /*if (tmladp == null) {
           String msg = tmlto.getValue() + " has no activity diagram";
@@ -2443,14 +2443,14 @@ public class GTMLModeling  {
                     fork = new tmltranslator.tmlcp.TMLCPFork( compID, component );
                     AD.addTMLCPElement( fork );
                 }
-		if( component instanceof ui.tmlcp.TMLCPForLoop )   {
+                if( component instanceof ui.tmlcp.TMLCPForLoop )   {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
                     loop = new tmltranslator.tmlcp.TMLCPForLoop( compID, component );
                     AD.addTMLCPElement( loop );
-		    loop.setInit(((ui.tmlcp.TMLCPForLoop)(component)).getInit());
-		    loop.setCondition(((ui.tmlcp.TMLCPForLoop)(component)).getCondition());
-		    loop.setIncrement(((ui.tmlcp.TMLCPForLoop)(component)).getIncrement());
-		    
+                    loop.setInit(((ui.tmlcp.TMLCPForLoop)(component)).getInit());
+                    loop.setCondition(((ui.tmlcp.TMLCPForLoop)(component)).getCondition());
+                    loop.setIncrement(((ui.tmlcp.TMLCPForLoop)(component)).getIncrement());
+
                 }
                 if( component instanceof ui.tmlcp.TMLCPChoice ) {
                     //TraceManager.addDev( k + component.getName() + "\t" + component.getValue() + "\t" + component.getY());
@@ -2558,7 +2558,7 @@ public class GTMLModeling  {
                             if( attribute.getType() == TAttribute.BOOLEAN )   {
                                 type = new TMLType( TMLType.BOOLEAN );
                             }
-                            else	{
+                            else        {
                                 type = new TMLType( TMLType.ADDRESS );
                             }
                         }
@@ -2585,7 +2585,7 @@ public class GTMLModeling  {
                             if( attribute.getType() == TAttribute.BOOLEAN )   {
                                 type = new TMLType( TMLType.BOOLEAN );
                             }
-                            else	{
+                            else        {
                                 type = new TMLType( TMLType.ADDRESS );
                             }
                         }
@@ -2612,7 +2612,7 @@ public class GTMLModeling  {
                             if( attribute.getType() == TAttribute.BOOLEAN )   {
                                 type = new TMLType( TMLType.BOOLEAN );
                             }
-                            else	{
+                            else        {
                                 type = new TMLType( TMLType.ADDRESS );
                             }
                         }
@@ -2836,7 +2836,7 @@ public class GTMLModeling  {
                 artifacts = ((TMLArchiNode)(tgc)).getAllTMLArchiArtifacts();
                 for(TMLArchiArtifact artifact:artifacts) {
                     s = artifact.getReferenceTaskName() + "__" + artifact.getTaskName();
-										TraceManager.addDev( "Exploring " + s );
+                    TraceManager.addDev( "Exploring " + s );
                     s = s.replaceAll("\\s", "");
                     ttask = tmlm.getTMLTaskByName(s);
                     if (ttask != null) {
@@ -2937,8 +2937,8 @@ public class GTMLModeling  {
                 TMLCPLib tmlcplib = new TMLCPLib( cp.getCompleteName(), cp.getReference(), tgc, cp.getCPMEC() );
                 map.addTMLCPLib(tmlcplib);
                 tmlcplib.setMappedUnits(cp.getMappedUnits());
-								tmlcplib.setAssignedAttributes( cp.getAssignedAttributes() );
-								tmlcplib.setTransferTypes( cp.getTransferTypes() );
+                tmlcplib.setAssignedAttributes( cp.getAssignedAttributes() );
+                tmlcplib.setTransferTypes( cp.getTransferTypes() );
 
                 // Handling mapped artifacts
                 for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {
@@ -2976,8 +2976,8 @@ public class GTMLModeling  {
                 for( TMLArchiArtifact artifact:artifacts ) {
                     //TraceManager.addDev("Exploring artifact " + artifact.getValue());
                     s = artifact.getReferenceTaskName();
-										ArchUnitMEC mec = artifact.getArchUnitMEC();
-										int operationType = artifact.getOperationType();
+                    ArchUnitMEC mec = artifact.getArchUnitMEC();
+                    int operationType = artifact.getOperationType();
                     TraceManager.addDev("1) Trying to get task named:" + s);
                     s = s.replaceAll("\\s", "");
                     TraceManager.addDev("2) Trying to get task named:" + s);
@@ -2985,11 +2985,11 @@ public class GTMLModeling  {
                     TraceManager.addDev("3) Trying to get task named:" + s);
                     task = tmlm.getTMLTaskByName(s);
                     if (task != null) {
-											if( operationType != -1 )	{
-												task.addOperationType( operationType );
-											}
-											((HwExecutionNode)node).addMECToHwExecutionNode( mec );
-											map.addTaskToHwExecutionNode(task, (HwExecutionNode)node);
+                        if( operationType != -1 )       {
+                            task.addOperationType( operationType );
+                        }
+                        ((HwExecutionNode)node).addMECToHwExecutionNode( mec );
+                        map.addTaskToHwExecutionNode(task, (HwExecutionNode)node);
                     } else {
                         TraceManager.addDev("Null task");
                     }

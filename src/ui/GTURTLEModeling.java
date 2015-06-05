@@ -152,10 +152,12 @@ public class GTURTLEModeling {
     private AVATAR2ProVerif avatar2proverif;
     private boolean optimizeAvatar;
     private int tmState; // 0:generated, 1: to be generated from mapping, 2: to be generated from TML modeling
+    
     private TMLModeling tmlm;
     private TMLMapping artificialtmap;
     private TMLMapping tmap;
     private TMLCP tmlcp;
+    
     private RequirementModeling rm;
     private NCStructure ncs;
     private MainGUI mgui;
@@ -475,6 +477,21 @@ public class GTURTLEModeling {
 
     public boolean generateTMLTxt( String _title ) {
 
+
+	 //This branch is activated if doing the syntax check from the architecture panel.
+         //It generates the text TML for the architecture and the application + mapping information
+	if (tmap != null) {
+	    TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
+	    spec.toTextFormat( tmap );      //TMLMapping
+	    try {
+		spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
+	    }
+	    catch( Exception e ) {
+		TraceManager.addError( "Files could not be saved: " + e.getMessage() );
+		return false;
+	    }
+	}
+
         if( tmlcp != null )     {       //Use the data structure filled by translateToTML... and pass it to the appropriate toTextFormat()
             TraceManager.addError( "About to generate the TMLText for CPs" );
             TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
@@ -514,8 +531,8 @@ public class GTURTLEModeling {
                 TraceManager.addError( "Writing TMLText for CPs, file could not be saved: " + e.getMessage() );
                 return false;
             }
-        }
-        else    {
+
+        } else if (tmap == null) {
             //This branch is activated if doing the syntax check from the application panel.
             //It only generates the application TML text
             if( tmap == null ) {
@@ -529,19 +546,8 @@ public class GTURTLEModeling {
                     return false;
                 }
             }
-            //This branch is activated if doing the syntax check from the architecture panel.
-            //It generates the text TML for the architecture and the application + mapping information
-            else {
-                TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
-                spec.toTextFormat( tmap );      //TMLMapping
-                try {
-                    spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
-                }
-                catch( Exception e ) {
-                    TraceManager.addError( "Files could not be saved: " + e.getMessage() );
-                    return false;
-                }
-            }
+	    
+            
         }
         return true;    //temporary, just to check functionality
     }
@@ -6403,9 +6409,17 @@ public class GTURTLEModeling {
 
     }
 
+    private void nullifyTMLModeling() {
+	tmlm = null;
+	artificialtmap = null;
+	tmap = null;
+	tmlcp = null;
+    }
+
 
     public boolean translateTMLDesign(Vector tasksToTakeIntoAccount, TMLDesignPanel tmldp, boolean optimize) {
-        ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
+        nullifyTMLModeling();
+	ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
         warnings = new Vector();
         mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
 
@@ -6455,6 +6469,7 @@ public class GTURTLEModeling {
     }
 
     public boolean translateTMLComponentDesign(Vector componentsToTakeIntoAccount, TMLComponentDesignPanel tmlcdp, boolean optimize) {
+	nullifyTMLModeling();
         ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
         warnings = new Vector();
         mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
@@ -6525,7 +6540,8 @@ public class GTURTLEModeling {
 
 
         gtmlm.setNodes(nodesToTakeIntoAccount); //simply transforms the parameter from a Vector to LinkedList
-        tmlm = null;
+        nullifyTMLModeling();
+	tmlm = null;
         tm = null;
         tmState = 1;
         tmap = gtmlm.translateToTMLMapping();
@@ -6569,6 +6585,7 @@ public class GTURTLEModeling {
         tmlm = null;
         tm = null;
         tmState = 1;
+	nullifyTMLModeling();
         //tmlcp is the data structure for a CP corresponding to the graphical description with diagrams
         tmlcp = gtmlm.translateToTMLCPDataStructure( tmlcpp.getName() );
         //tmlcp.toString();
