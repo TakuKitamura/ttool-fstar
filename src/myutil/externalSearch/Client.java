@@ -27,8 +27,8 @@ import org.jsoup.parser.Parser;
 import org.jsoup.nodes.Document;
 
 public class Client {
-    public static String dbaddr="localhost";
-    public static int dpport=9999;
+    //public static String dbaddr="localhost";
+    //public static int dpport=9999;
     public  Object parserAnswerMessage(Message answerMsg) {
         //Analyse the message from the server,
         //Depends on the cmd, we can determine the values
@@ -39,13 +39,20 @@ public class Client {
             return null;
         } else if (cmd.equals(Message.RESULT_SEARCH)) {
             ArrayList<Record> lrecord = new ArrayList<>();
-            try {
+
+           // try {
                 //byte[] encoded = Files.readAllBytes(Paths.get("/home/trhuy/Downloads/02-51-34.xml"));
 
+                //ArrayList<Object> res = new ArrayList();
+                //res = answerMsg.getContent();
+                //System.out.println("\n"+res);
 
-                byte[] encoded = (byte[])answerMsg.getContent().get(0);
 
-                String resultxml = new String(encoded, "UTF-8");
+                //byte[] encoded = (byte[])answerMsg.getContent().get(0);
+
+                String resultxml = (String)answerMsg.getContent().get(0);
+
+                //System.out.print(resultxml);
 
                 Document doc = Jsoup.parse(resultxml);
                 for (Element e : doc.select("Row")) {
@@ -59,17 +66,20 @@ public class Client {
                     r.setSummary(e_des.text());
                     lrecord.add(r);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+           // } catch (IOException e) {
+               // e.printStackTrace();
+           // }
             //System.out.println(lrecord.toArray());
             return (Object)lrecord;
+
+
         } else if (cmd.equals(Message.RESULT_DETAIL)) {
             Record r = new Record();
-            try {
+           // try {
                 //byte[] encoded = Files.readAllBytes(Paths.get("/home/trhuy/Downloads/02-40-06.xml"));
-                byte[] encoded = (byte[])answerMsg.getContent().get(0);
-                String resultxml = new String(encoded, "UTF-8");
+//                /byte[] encoded = (byte[])answerMsg.getContent().get(0);
+                String resultxml = (String)answerMsg.getContent().get(0);
+                //String resultxml = new String(encoded, "UTF-8");
 
                 Document doc = Jsoup.parse(resultxml);
                 for (Element e : doc.select("Row")) {
@@ -111,10 +121,12 @@ public class Client {
                     r.setLink(link.text());
 
 
+                    System.out.print(r.toString());
+
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+           // } catch (IOException e) {
+            //    e.printStackTrace();
+            //}
 
             return (Object)r;
 
@@ -139,12 +151,12 @@ public class Client {
         return requestMsg;
     }
 
-    public Message send(Message msg){
+    public Message send(Message msg, String server, int port){
         SSLSocket sslClient = null;
         try {
-           // Socket client = new Socket(dbaddr,dpport);
+            //Socket client = new Socket(dbaddr,dpport);
             SSLSocketFactory sslSocketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
-            sslClient = (SSLSocket)sslSocketFactory.createSocket("LocalHost",12345);
+            sslClient = (SSLSocket)sslSocketFactory.createSocket(server,port);
 
             sslClient.setEnabledCipherSuites(sslClient.getSupportedCipherSuites());
             System.out.println("Client has been created successfully!");

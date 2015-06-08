@@ -33,13 +33,13 @@ import javax.imageio.ImageIO;
 
 public class Message implements Serializable {
 
-    public static String PIC_SRC = "test2.png";
-    public static String PIC_DES = "clonetest2.png";
-    public static String ERR_CMD = "Message command is empty";
-    public static String ERR_CMD2 = "Wrong message command";
+    public static String PIC_SRC = "server_visualisation.png";
+    public static String PIC_DES = "client_visualisation.png";
+    public static String ERR_CMD = "Message command is empty\n";
+    public static String ERR_CMD2 = "Wrong message command\n";
 
-    public static String SUC_CREATE_REQ_MESSAGE = "The request message is created ";
-    public static String SUC_CREATE_ANS_MESSAGE = "The answer message is created ";
+    public static String SUC_CREATE_REQ_MESSAGE = "The request message is created\n";
+    public static String SUC_CREATE_ANS_MESSAGE = "The answer message is created\n";
 
 
 
@@ -206,8 +206,4 @@ public class Message implements Serializable {
 
         else System.out.print("Image can't not be created!");
     }
-
-
-
-
 }

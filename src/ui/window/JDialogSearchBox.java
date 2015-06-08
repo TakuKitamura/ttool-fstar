@@ -49,6 +49,7 @@ package ui.window;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -56,25 +57,17 @@ import java.io.File;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
-
 import myutil.GoogleSearch;
 import myutil.GraphicLib;
-
 import java.lang.Object;
 import java.awt.Desktop;
-import java.lang.reflect.Array;
 import java.net.URI;
-
 import myutil.TableSorter;
-
-//import javax.swing.event.*;
 import java.util.*;
-
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.html.HTMLDocument;
 
 import myutil.CheckConnection;
-//import myutil.Message;
-//import myutil.Client;
 import myutil.externalSearch.Record;
 import ui.ConfigurationTTool;
 import ui.MalformedConfigurationException;
@@ -88,8 +81,14 @@ import myutil.externalSearch.Client;
 public class JDialogSearchBox extends javax.swing.JFrame  {
     public static final String bold= "bold";
     public static final String normal = "normal";
-    public static String default_address = "localhost";
-    public static int default_port = 9999;
+
+    public static final String GOOGLE="Google";
+    public static final String GOOGLE_SCHOLAR = "Google Scholar";
+    public static final String DB = "Database";
+    public static final String ERROR_URL_INVALID = "URL is invalid";
+    public static final String SETUP_ADDRESS_DB = "Setup the address of database";
+    public static final int MAXLENGTH_INPUT = 100;
+    public static final String ERROR_INPUT_TOO_LONG="The input is too long.";
 
 	private javax.swing.JList ListKeywords;
     private javax.swing.JComboBox combobox_Score;
@@ -103,9 +102,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     private javax.swing.JCheckBox googleScholarCb;
     private javax.swing.JButton jButton_Setting;
     private javax.swing.JButton jButton_Statistic;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel_Status;
     private javax.swing.JLabel jLabel_System;
     private javax.swing.JLabel jLabel_Score;
     private javax.swing.JLabel jLabel_Year;
@@ -129,8 +126,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     private javax.swing.JTextField searchBox;
     private javax.swing.JButton searchBt;
 
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel_Keyword;
+    private javax.swing.JLabel jLabel_Result;
     private JTextField jTextaddressDB;
 
     private String search;
@@ -168,8 +165,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
          for (int i =0; i< l.size(); i++){
         	 addValueListKeyword(l.get(i));
          }
-
-        // this.setLocationRelativeTo(_frame);
          pack();
 
          this.setVisible(true);
@@ -182,23 +177,22 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         removeBt = new javax.swing.JButton();
         searchBt = new javax.swing.JButton();
         searchBox = new javax.swing.JTextField();
-        final int maxlength = 100;
         googleCb = new javax.swing.JCheckBox();
         googleScholarCb = new javax.swing.JCheckBox();
         databaseCb = new javax.swing.JCheckBox();
         jScrollPane3 = new javax.swing.JScrollPane();
-        StyledDocument doc =  new DefaultStyledDocument();
+        //StyledDocument doc =  new DefaultStyledDocument();
+        StyledDocument doc = new HTMLDocument();
         detailText_google = new javax.swing.JTextPane(doc);
         detailText_googleScholar = new javax.swing.JTextPane(doc);
         jScrollPane4 = new javax.swing.JScrollPane();
         resultTable_google = new javax.swing.JTable();
         resultTable_googleScholar = new javax.swing.JTable();
         listModel = new DefaultListModel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jLabel_Keyword = new javax.swing.JLabel();
+
+        jLabel_Result = new javax.swing.JLabel();
+        jLabel_Status = new javax.swing.JLabel();
 
         sortTable = new TableSorter();
         sortTable1 = new TableSorter();
@@ -223,12 +217,20 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jScrollPane9= new JScrollPane();
         jTextaddressDB = new JTextField();
 
-        dbaddress = default_address;
-        dbport = default_port;
+        String SYSTEM_LIST[] = {"all", "linux", "windows", "others"};
+        String TIME_LIST[]= {"all", "last year", "last 5 years", "last 10 years"};
+        String SCORE_LIST[] = {"all", "5-7", "7-8", "8-9"};
+        String COLUMNTITLE_G[] ={"No", "Title", "Link"} ;
+        String COLUMNTITLE_GS[]= {"No", "Title", "Author", "Link"};
+        String COLUMNTITLE_DB[]= {"No", "ID CVE", "Title"};
 
+        detailText_google.setContentType("text/html");
+        detailText_db.setContentType("text/html");
+        detailText_googleScholar.setContentType("text/html");
 
-        //jTextaddressDB.setText(dbaddress + ":" + dbport);
         jTextaddressDB.setText(ConfigurationTTool.ExternalServer);
+        dbaddress = jTextaddressDB.getText().split(":")[0];
+        dbport = Integer.parseInt(jTextaddressDB.getText().split(":")[1]);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -256,19 +258,16 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         searchBox.setText("Key words");
 
 
-        googleCb.setText("Google");
+        googleCb.setText(GOOGLE);
 
-        googleScholarCb.setText("Google Scholar");
+        googleScholarCb.setText(GOOGLE_SCHOLAR);
 
-        databaseCb.setText("Database");
+        databaseCb.setText(DB);
 
-        jLabel1.setText("Keywords");
-        jLabel3.setText("Search Box");
-        jLabel4.setText("Results");
-        jLabel5.setText("Status");
-        jLabel2.setText("Year");
-        jLabel3.setText("Score");
-
+        jLabel_Keyword.setText("Keywords");
+        //jLabel3.setText("Search Box");
+        jLabel_Result.setText("Results");
+        jLabel_Status.setText("Status");
         jButton_Setting.setText("Setting");
 
         jButton_Statistic.setText("Statistic");
@@ -292,23 +291,20 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         resultTable_google = new JTable(sortTable);
 
 
-        resultTable_google.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{}, new String[]{
-                "No", "Title", "Link"}) {
+        resultTable_google.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, COLUMNTITLE_G) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         });
-        resultTable_google.setSelectionMode(
-                ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        resultTable_google.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jScrollPane4.setViewportView(resultTable_google);
 
         resultTable_google.getColumnModel().getColumn(0).setMaxWidth(40);
-       //resultTable_google.getColumnModel().getColumn(2).setMaxWidth(400);
+
         resultTable_google.getColumnModel().getColumn(2).setMinWidth(400);
-        //resultTable_google.getColumnModel().getColumn(2).setMaxWidth(120);
+
 
         sortTable.setTableHeader(resultTable_google.getTableHeader());
 
@@ -330,7 +326,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))
         );
 
-        jTabbedPane2.addTab("Google", jPanel_GoogleTab);
+        jTabbedPane2.addTab(GOOGLE, jPanel_GoogleTab);
 
 
     ///
@@ -340,21 +336,17 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         resultTable_googleScholar = new JTable(sortTable1);
 
 
-        resultTable_googleScholar.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{}, new String[]{
-                "No", "Title", "Author", "Link"}) {
+        resultTable_googleScholar.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, COLUMNTITLE_GS) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         });
-        resultTable_googleScholar.setSelectionMode(
-                ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        resultTable_googleScholar.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jScrollPane9.setViewportView(resultTable_googleScholar);
 
         resultTable_googleScholar.getColumnModel().getColumn(0).setMaxWidth(40);
-        //resultTable_googleScholar.getColumnModel().getColumn(4).setMaxWidth(120);
 
         sortTable1.setTableHeader(resultTable_googleScholar.getTableHeader());
 
@@ -376,20 +368,17 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                 .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))
         );
 
-        jTabbedPane2.addTab("Google Scholar", jPanel_GoogleScholarTab);
+        jTabbedPane2.addTab(GOOGLE_SCHOLAR, jPanel_GoogleScholarTab);
 
     /////
 
-        resultTable_db.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{}, new String[]{
-                "No", "ID CVE", "Title"}) {
+        resultTable_db.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, COLUMNTITLE_DB) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         });
-        resultTable_db.setSelectionMode(
-                ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        resultTable_db.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jScrollPane5.setViewportView(resultTable_db);
         resultTable_db.getColumnModel().getColumn(0).setMaxWidth(40);
@@ -413,13 +402,13 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                 .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))
         );
 
-        jTabbedPane2.addTab("Database CVE", jPanel_DBTab);
+        jTabbedPane2.addTab(DB, jPanel_DBTab);
 
-        combobox_System.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"All", "Linux/Unix", "Windows", "Others"}));
+        combobox_System.setModel(new javax.swing.DefaultComboBoxModel(SYSTEM_LIST));
 
-        combobox_Year.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"All", "5-7", "7-8", "8-9"}));
+        combobox_Year.setModel(new javax.swing.DefaultComboBoxModel(TIME_LIST));
 
-        combobox_Score.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"All", "Last year", "Last 5 years", "Last 10 years"}));
+        combobox_Score.setModel(new javax.swing.DefaultComboBoxModel(SCORE_LIST));
 
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -449,8 +438,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                         .addComponent(jButton_Statistic, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel2)
-                                                        .addComponent(jLabel3)
+                                                        .addComponent(jLabel_Score)
+                                                        .addComponent(jLabel_Year)
                                                         .addComponent(jLabel_System))
                                                 .addGap(37, 37, 37)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -458,7 +447,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                         .addComponent(combobox_Year, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addComponent(combobox_System, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel5)
+                                                .addComponent(jLabel_Status)
                                                 .addGap(0, 0, Short.MAX_VALUE))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addComponent(searchBox)
@@ -490,11 +479,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                 .addGap(35, 35, 35)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(combobox_Score, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel2))
+                                                        .addComponent(jLabel_Score))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(combobox_Year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel3))))
+                                                        .addComponent(jLabel_Year))))
                                 .addGap(24, 24, 24)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -502,7 +491,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jTabbedPane2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel5)
+                                .addComponent(jLabel_Status)
                                 .addGap(6, 6, 6))
         );
 
@@ -530,13 +519,22 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             }
 
             public void checkandsetSearchBt() {
-                if (searchBox.getText().length() <= 0 || searchBox.getText().length() > maxlength ) {
-                    if (searchBox.getText().length() > maxlength )
-                        JOptionPane.showMessageDialog(null, "The input is too long.", "Warning",
+
+
+
+                if (searchBox.getText().length() <= 0 || searchBox.getText().length() > MAXLENGTH_INPUT) {
+                    if (searchBox.getText().length() > MAXLENGTH_INPUT)
+                        JOptionPane.showMessageDialog(null, ERROR_INPUT_TOO_LONG, "Warning",
                                 JOptionPane.WARNING_MESSAGE);
                     searchBt.setEnabled(false);
                 } else
                     searchBt.setEnabled(true);
+
+                if ( ! isPrintableString(searchBox.getText())) {
+                    JOptionPane.showMessageDialog(null, "Not printable character", "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                    searchBt.setEnabled(false);
+                }
             }
         });
 
@@ -580,15 +578,17 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         resultTable_google.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 int row = resultTable_google.getSelectedRow();
-                int col = resultTable_google.getSelectedColumn();
-                if (col == 2) {
-                    String st = (String) resultTable_google.getValueAt(row, col);
+                //int col = resultTable_google.getSelectedColumn();
+
+                //if (col == 2) {
+                if (e.getClickCount() == 2) {
+                    String st = (String) resultTable_google.getValueAt(row, 2);
                     URI uri = URI.create(st);
                     Desktop d = Desktop.getDesktop();
                     try {
                         d.browse(uri);
                     } catch (IOException e1) {
-                        JOptionPane.showMessageDialog(null, "URL is invalid", "Warning",
+                        JOptionPane.showMessageDialog(null, ERROR_URL_INVALID, "Warning",
                                 JOptionPane.WARNING_MESSAGE);
                     }
 
@@ -608,14 +608,15 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             public void mouseClicked(MouseEvent e) {
                 int row = resultTable_googleScholar.getSelectedRow();
                 int col = resultTable_googleScholar.getSelectedColumn();
-                if (col == 3) {
-                    String st = (String) resultTable_googleScholar.getValueAt(row, col);
+
+                if (e.getClickCount() == 2) {
+                    String st = (String) resultTable_googleScholar.getValueAt(row, 3);
                     URI uri = URI.create(st);
                     Desktop d = Desktop.getDesktop();
                     try {
                         d.browse(uri);
                     } catch (IOException e1) {
-                        JOptionPane.showMessageDialog(null, "URL is invalid", "Warning",
+                        JOptionPane.showMessageDialog(null, ERROR_URL_INVALID, "Warning",
                                 JOptionPane.WARNING_MESSAGE);
                     }
 
@@ -633,18 +634,20 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         resultTable_db.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 int row = resultTable_db.getSelectedRow();
-                int col = resultTable_db.getSelectedColumn();
-                if (col == 2) {
-                    String st = (String) resultTable_db.getValueAt(row, col);
+                //int col = resultTable_db.getSelectedColumn();
 
-                    Message msg = new Message(Message.CMD_DETAIL)   ;
+                if (e.getClickCount() == 2) {
+                    String st = (String) resultTable_db.getValueAt(row, 1);
+
+                    Message msg = new Message(Message.CMD_DETAIL);
                     msg.addKeywordMessage(st);
 
-                    Client cl = new Client();
-                    Message returnMsg = cl.send(msg);
+                    //Client cl = new Client();
+                    Message returnMsg = sendMessage(msg);
                     //Message returnMsg  = new Message(Message.RESULT_DETAIL);
 
-                    Record r = (Record)cl.parserAnswerMessage(returnMsg);
+                    //Record r = (Record)cl.parserAnswerMessage(returnMsg);
+                    Record r = (Record) parserMessage(returnMsg);
                     printDetailRecord(r);
                 }
 
@@ -675,35 +678,44 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         });
 
         jButton_Setting.addActionListener(new java.awt.event.ActionListener() {
-          public void actionPerformed(java.awt.event.ActionEvent evt) {
-              final JComponent[] inputs = new JComponent[]{
-                      new JLabel("Address"),
-                      jTextaddressDB
-              };
+                                              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                                  final JComponent[] inputs = new JComponent[]{
+                                                          new JLabel("Address"),
+                                                          jTextaddressDB
+                                                  };
 
-              JOptionPane joptionpane = new JOptionPane();
-              int i = joptionpane.showOptionDialog(null, inputs, "Setup the address of database",
-                      joptionpane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
-                      null, new Object[]{"Save", "Cancel"}, "OK");
-              if (i == joptionpane.OK_OPTION) {
-                  while (! (jTextaddressDB.getText().contains(":") && jTextaddressDB.getText().split(":").length == 2)) {
-                      JOptionPane.showMessageDialog(null, "Address:Port", "Wrong format",
-                              JOptionPane.WARNING_MESSAGE);
-                      i = joptionpane.showOptionDialog(null, inputs, "Setup the address of database",
-                              joptionpane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
-                              null, new Object[]{"Save", "Cancel"}, "OK");
-                  }
-                  ConfigurationTTool.ExternalServer=jTextaddressDB.getText();
+                                                  JOptionPane joptionpane = new JOptionPane();
+                                                  int i = joptionpane.showOptionDialog(null, inputs, SETUP_ADDRESS_DB,
+                                                          joptionpane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                                                          null, new Object[]{"Save", "Cancel"}, "OK");
+                                                  if (i == joptionpane.OK_OPTION) {
+                                                      // while (! (jTextaddressDB.getText().contains(":") && jTextaddressDB.getText().split(":").length == 2 && isNum(jTextaddressDB.getText().split(":")[1]))) {
+                                                      while (!isAddressDBFormatted()) {
+                                                          JOptionPane.showMessageDialog(null, "Address:Port", "Wrong format",
+                                                                  JOptionPane.WARNING_MESSAGE);
+                                                          i = joptionpane.showOptionDialog(null, inputs, SETUP_ADDRESS_DB,
+                                                                  joptionpane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                                                                  null, new Object[]{"Save", "Cancel"}, "OK");
+                                                      }
+                                                      ConfigurationTTool.ExternalServer = jTextaddressDB.getText();
 
-                  try {
-                      ConfigurationTTool.saveConfiguration();
-                  } catch (MalformedConfigurationException e) {
-                      e.printStackTrace();
-                  }
-              } else if (i == joptionpane.CLOSED_OPTION) {
-              }
-          }
-      }
+                                                      try {
+                                                          ConfigurationTTool.saveConfiguration();
+                                                      } catch (MalformedConfigurationException e) {
+                                                          e.printStackTrace();
+                                                      }
+                                                  } else if (i == joptionpane.CLOSED_OPTION) {
+                                                  }
+                                              }
+
+                                              public boolean isAddressDBFormatted() {
+                                                  if (jTextaddressDB.getText().contains(":")
+                                                          && jTextaddressDB.getText().split(":").length == 2
+                                                          && isNum(jTextaddressDB.getText().split(":")[1]))
+                                                      return true;
+                                                  return false;
+                                              }
+                                          }
 
         );
 
@@ -730,18 +742,13 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
             }
 
-            public boolean isAddressDBFormatted() {
-                if (jTextaddressDB.getText().contains(":") && jTextaddressDB.getText().split(":").length == 2)
-                    return true;
-                return false;
-            }
         });
 
         jTabbedPane2.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
-                detailText_db.setDocument(new DefaultStyledDocument());
-                detailText_google.setDocument(new DefaultStyledDocument());
+                //detailText_db.setDocument(new HTMLDocument());
+                //detailText_google.setDocument(new HTMLDocument());
             }
         });
 
@@ -753,15 +760,22 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         this.dispose();
     }
 
+    public Message sendMessage(Message msg){
+        Client cl = new Client();
+        return cl.send(msg,dbaddress,dbport);
+    }
 
-
+    public Object parserMessage(Message msg){
+        Client cl = new Client();
+        return cl.parserAnswerMessage(msg);
+    }
 
     private void ListKeywordsComponentAdded(java.awt.event.ContainerEvent evt) {
         this.removeBt.setEnabled(true);
     }
 
     private void removeBtActionPerformed(java.awt.event.ActionEvent evt) {
-        this.jLabel5.setText("Ready");
+        this.jLabel_Status.setText("Ready");
         if (listModel.getSize()!=0){
             int index = this.ListKeywords.getSelectedIndex();
             listModel.remove(index);
@@ -806,9 +820,9 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     private void searchBtActionPerformed(java.awt.event.ActionEvent evt)  {
 
         //reset Tab title
-        jTabbedPane2.setTitleAt(0, "Google");
-        jTabbedPane2.setTitleAt(1, "Google Scholar");
-        jTabbedPane2.setTitleAt(2, "Database");
+        jTabbedPane2.setTitleAt(0, GOOGLE);
+        jTabbedPane2.setTitleAt(1, GOOGLE_SCHOLAR);
+        jTabbedPane2.setTitleAt(2, DB);
 
 
 
@@ -821,7 +835,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                jLabel5.setText("The crawler is running ....");
+                jLabel_Status.setText("The crawler is running ....");
                 searchBt.setEnabled(false);
 
                 //reset content of table
@@ -855,23 +869,23 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                         String query = searchBox.getText();
                         if (query != "") {
                             if (searchGoogle == 1) {
-                                jLabel5.setText("Retrieving data from Google");
+                                jLabel_Status.setText("Retrieving data from Google");
 
                                 resultGoogle = GoogleSearch.getGoogleResult(searchBox.getText());
-                                jLabel5.setText("Done");
+                                jLabel_Status.setText("Done");
 
                                 if (resultGoogle == null) {
                                     JOptionPane.showMessageDialog(null, "Can't get the result from Google\n"
                                             , "Retrieving data is failed",
                                             JOptionPane.ERROR_MESSAGE);
-                                    jLabel5.setText("Failed to retrieving data from Google");
+                                    jLabel_Status.setText("Failed to retrieving data from Google");
                                 }else if (resultGoogle != null) {
 
                                     if(resultGoogle.get(0).getTitle() == GoogleSearch.IOEx) {
                                         JOptionPane.showMessageDialog(null, "Can connect to Google\n " +
                                                         "Please check the internet connection","Connection Error",
                                                 JOptionPane.ERROR_MESSAGE);
-                                        jLabel5.setText("Failed to retrieving data from Google");
+                                        jLabel_Status.setText("Failed to retrieving data from Google");
                                     } else {
                                         putGoogleToTable(resultGoogle);
                                         showtable(rowsGoogle,modelGoogle,0);
@@ -881,22 +895,22 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                             }
 
                             if (searchGoogleScholar == 1) {
-                                jLabel5.setText("Retrieving data from Google Scholar");
-                                //jLabel5.updateUI();
+                                jLabel_Status.setText("Retrieving data from Google Scholar");
+                                //jLabel_Status.updateUI();
                                 resultGoogleScholar = GoogleSearch.getGoogleScholarResult(searchBox.getText());
-                                jLabel5.setText("Done");
-                                //jLabel5.updateUI();
+                                jLabel_Status.setText("Done");
+                                //jLabel_Status.updateUI();
                                 if (resultGoogleScholar == null) {
                                     JOptionPane.showMessageDialog(null, "Cannot get the result from Google Scholar \n"
                                             , "Retrieving data is failed",
                                             JOptionPane.ERROR_MESSAGE);
-                                    jLabel5.setText("Failed to retrieving data from Google Scholar");
+                                    jLabel_Status.setText("Failed to retrieving data from Google Scholar");
                                 }else if (resultGoogleScholar != null) {
                                     if (resultGoogleScholar.get(0).getTitle() == GoogleSearch.IOEx) {
                                         JOptionPane.showMessageDialog(null, "Can't connect to Google Scholar\n " +
                                                         "Please check the internet connection","Connection Error",
                                                 JOptionPane.ERROR_MESSAGE);
-                                        jLabel5.setText("Failed to retrieving data from Google Scholar");
+                                        jLabel_Status.setText("Failed to retrieving data from Google Scholar");
                                     } else {
                                         putGoogleScholarToTable(resultGoogleScholar);
                                         showtable(rowsGoogleScholar, modelGoogleScholar,1);
@@ -907,7 +921,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
 
                     }else{
-                        jLabel5.setText("Failed to connect to resource ");
+                        jLabel_Status.setText("Failed to connect to resource");
                         JOptionPane.showMessageDialog(null, "Cannot connect to Google",
                                 "Connection Error",
                                 JOptionPane.ERROR_MESSAGE);
@@ -917,30 +931,43 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
                 //TODO : cralwer data from DB, must check the connection.
                 if (searchDatabase ==1) {
-                    jLabel5.setText("Retrieving data from DB");
+                    jLabel_Status.setText("Retrieving data from DB");
                     Message msg = new Message(Message.CMD_SEARCH);
-                    msg.addOptionValueMessage(Message.OPTION_YEAR,(String)combobox_Year.getSelectedItem());
+
+                    //Message msg = new Message(Message.CMD_DETAIL);
+                    //msg.addKeywordMessage("CVE-2013-0001");
+
+                    /*ArrayList<String> options = new ArrayList();
+                    ArrayList<String> values = new ArrayList();
+
+                    options.add("keyword");
+                    options.add("year");
+                    options.add("system");
+                    options.add(Message.OPTION_NUMBER);
+
+                    values.add("Stuxnet");
+                    values.add("2014");
+                    values.add("windows");
+                    values.add("10");
+                    msg.createRequestMessage(Message.CMD_SEARCH, options, values);*/
+                    msg.addKeywordMessage(searchBox.getText());
+                    msg.addOptionValueMessage(Message.OPTION_YEAR, "2014");
+                    msg.addOptionValueMessage(Message.OPTION_SYSTEM, (String) combobox_System.getSelectedItem());
                     //msg.addOptionValueMessage(Message.OPTION_SCORE,(String)combobox_Score.getSelectedItem());
-                    //msg.addOptionValueMessage(Message.OPTION_SYSTEM,(String)combobox_System.getSelectedItem());
-                    //msg.addOptionValueMessage(Message.OPTION_NUMBER, Integer.toString(10));
-                    //msg.addKeywordMessage(searchBox.getText());
+
+                   msg.addOptionValueMessage(Message.OPTION_NUMBER, Integer.toString(10));
+
                     //create client
-                    Client client = new Client();
+                    //Client client = new Client();
                     //Message msg1 = new Message(Message.RESULT_SEARCH);
-                    Message returnMsg = client.send(msg);
+                    Message returnMsg = sendMessage(msg);
 
                     //Message msg1 = new Message(Message.RESULT_SEARCH);
 
-                    ArrayList<Record> re =  (ArrayList<Record>)client.parserAnswerMessage(returnMsg);
+                    ArrayList<Record> re = (ArrayList<Record>)parserMessage(returnMsg);
                     putDBToTable(re);
                     showtable(rowsDB, modelDB,2);
 
-                    try {
-                       // Message rtMsg = client.send(msg);
-                        //ArrayList<Record> = client.parserAnswerMessage(rtMsg);
-                    }catch (Exception e){
-                        System.out.println("Loi");
-                    }
                 }
 
             }
@@ -955,8 +982,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             for (Object[] o : list) {
                 id = (Integer) (o[0]);
                 GoogleSearch gs = (GoogleSearch) (o[1]);
-                //String source = (String) (o[2]);
-                //model.addRow(new Object[]{id, gs.getTitle(), gs.getAuthors(), gs.getUrl(), source});
                 if (index == 0)
                     model.addRow(new Object[]{id, gs.getTitle(), gs.getUrl()});
                 else if (index == 1)
@@ -973,16 +998,16 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
 
         if (index ==0 ){
-            jTabbedPane2.setTitleAt(index, "Google" + " [" + model.getRowCount() + "]");
+            jTabbedPane2.setTitleAt(index, GOOGLE + " [" + model.getRowCount() + "]");
         }
         else if (index ==1 ){
-            jTabbedPane2.setTitleAt(index, "Google Scholar" + " [" + model.getRowCount() + "]");
+            jTabbedPane2.setTitleAt(index, GOOGLE_SCHOLAR + " [" + model.getRowCount() + "]");
         }
         else if (index ==2 ){
-            jTabbedPane2.setTitleAt(index, "Database" + " [" + model.getRowCount() + "]");
+            jTabbedPane2.setTitleAt(index, DB + " [" + model.getRowCount() + "]");
         }
         searchBt.setEnabled(true);
-        jLabel5.setText("Finished");
+        jLabel_Status.setText("Finished");
         //jTabbedPane2.updateUI();
     }
 
@@ -1000,41 +1025,41 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                         break;
                     }
                 }
-                presentDataInDetail(selected, 0,textpane);
+                if (typeObject==0)
+                    presentDataInDetail(selected, 0,textpane);
+                else
+                    presentDataInDetail(selected, 1,textpane);
             }else{
-                    Record selected=null;
-                    for (Object[] o : rows){
-                        if (o[0].equals(id)){
-                            selected=(Record)o[1];
-                            break;
-                        }
+                Record selected=null;
+                for (Object[] o : rows){
+                    if (o[0].equals(id)){
+                        selected=(Record)o[1];
+                        break;
                     }
-                    presentDataInDetail(selected,2,  textpane);
+                }
+                presentDataInDetail(selected,2,  textpane);
             }
-
-
-
     }    
     
     private void googleCbActionPerformed(java.awt.event.ActionEvent evt) {
-        this.jLabel5.setText("Ready");
-        this.jLabel5.updateUI();
+        this.jLabel_Status.setText("Ready");
+        this.jLabel_Status.updateUI();
     	if (this.googleCb.isSelected())
     		this.searchGoogle=1;
     	else this.searchGoogle=0;
     }    
     
     private void googleScholarCbActionPerformed(java.awt.event.ActionEvent evt) {
-        this.jLabel5.setText("Ready");
-        this.jLabel5.updateUI();
+        this.jLabel_Status.setText("Ready");
+        this.jLabel_Status.updateUI();
     	if (this.googleScholarCb.isSelected())
     		this.searchGoogleScholar=1;
     	else this.searchGoogleScholar=0;
     }                                               
 
     private void databaseCbActionPerformed(java.awt.event.ActionEvent evt) {
-        this.jLabel5.setText("Ready");
-        this.jLabel5.updateUI();
+        this.jLabel_Status.setText("Ready");
+        this.jLabel_Status.updateUI();
     	if (this.databaseCb.isSelected()) {
             this.searchDatabase = 1;
             this.jButton_Setting.setEnabled(true);
@@ -1105,19 +1130,35 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     }
 
     private void printDetailRecord(Record r){
-
-        //String detail = r.getSummary();
-        this.detailText_db.setText(r.toString());
+        if (r!=null)
+            this.detailText_db.setText(formatOutput_DB_DETAIL(r));
     }
 
 
-
-
     public void presentDataInDetail(Object obj, int typeObject, JTextPane textPane){
+
+        textPane.setContentType("text/html");
+        if (typeObject ==0){
+            GoogleSearch gs =  (GoogleSearch)obj;
+            if (gs!=null)
+                textPane.setText(formatOutput_Google(gs));
+        }
+        if (typeObject ==1){
+            GoogleSearch gs =  (GoogleSearch)obj;
+            if(gs!=null)
+                textPane.setText(formatOutput_GoogleScholar(gs));
+        }
+        if (typeObject == 2){
+            Record r = (Record)obj;
+            if (r!=null) {
+                    textPane.setText(formatOutput_DB_SHORT(r));
+            }
+        }
+    }
+
+    public void presentDataInDetail1(Object obj, int typeObject, JTextPane textPane){
         StyledDocument  doc = textPane.getStyledDocument();
         textPane.setText("");
-
-
 
         SimpleAttributeSet bold = new SimpleAttributeSet();
         StyleConstants.setBold(bold, true);
@@ -1191,8 +1232,10 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             }
         }else{
             Record r = (Record)obj;
-            String detail = r.getSummary();
-            textPane.setText(detail);
+            if (r!=null) {
+                String detail = r.getSummary();
+                textPane.setText(detail);
+            }
         }
 
     }
@@ -1203,37 +1246,45 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     public void doStatistic() {
         BufferedImage img= null;
         try {
-            img = ImageIO.read(new File("test.jpg"));
-            ImageIcon icon=new ImageIcon(img);
-            JFrame frame=new JFrame();
-            frame.setLayout(new FlowLayout());
-            frame.setSize(200,300);
-            JLabel lbl=new JLabel();
-            lbl.setIcon(icon);
-            frame.add(lbl);
-            frame.setVisible(true);
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            //img = ImageIO.read(new File("test.jpg"));
+            Message msg = new Message(Message.CMD_STATISTIC);
+            ArrayList<String> options = new ArrayList<>();
+            ArrayList<String> values = new ArrayList<>();
+            options.add(Message.CMD_STATISTIC);
+
+
+            String arguments = searchBox.getText();
+            String[] argument = arguments.split(" ");
+
+            for (int i = 0; i < argument.length; i++) {
+                //System.out.println(argument[i]);
+                values.add(argument[i]);
+            }
+            msg.setOptions(options);
+            msg.setValues(values);
+
+
+            Message ret = sendMessage(msg);
+            byte[] b = (byte[])parserMessage(ret);
+            if(b != null){
+                ByteArrayInputStream in = new ByteArrayInputStream(b);
+                img =  ImageIO.read(in);
+                ImageIcon icon=new ImageIcon(img);
+                JFrame frame=new JFrame();
+                frame.setLayout(new FlowLayout());
+                frame.setSize(200,300);
+                JLabel lbl=new JLabel();
+                lbl.setIcon(icon);
+                frame.add(lbl);
+                frame.setVisible(true);
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public void doQueryDB(){
-       /* Message msg = new Message();
-        msg.setCmd(Message.CMD_SEARCH);
-        ArrayList<String> option = new ArrayList<>();
-        ArrayList<String> values = new ArrayList<>();
-        option.add("System");
-        values.add(this.combobox_System.getSelectedItem().toString());
-        option.add(this.combobox_Year.getSelectedItem().toString());
-        option.add(this.combobox_Score.getSelectedItem().toString());*/
-    }
-
-    //TODO: implement function to get database.
-    public void getResultFromDatabase(){
-
-    }
 
     /**
      *
@@ -1251,6 +1302,94 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         }
         return value;
     }
-    
+
+
+    public boolean isNum(String str){
+        try{
+            Integer.parseInt(str);
+            return true;
+        }catch (NumberFormatException e){
+            return false;
+        }
+    }
+
+    public String formatOutput_GoogleScholar (GoogleSearch gs){
+        String html = "<html>" +
+                "<title>"+gs.getTitle()+"</title>" +
+                "<body style=\"font-size: 14pt\">" +
+                "   <b>Title :  </b>" + gs.getTitle() + "<br>" +
+                "   <b>Author: </b>" + gs.getAuthors() + "<br>" +
+                "   <b>Link :  </b><u>" + gs.getUrl() + "</u><br>" +
+                "   <b>Cited : </b>" + gs.getCitedNumber() + "<br>"+
+                "   <b>Description : </b>" + gs.getDesc() + "<br>"+
+                "</body>"+
+                "</html>";
+        return html;
+    }
+    public String formatOutput_Google (GoogleSearch gs){
+        String html = "<html>" +
+                "<title>"+gs.getTitle()+"</title>" +
+                "<body style=\"font-size: 14pt\">" +
+                "   <b>Title :  </b>" + gs.getTitle() + "<br>" +
+                "   <b>Link :  </b><u><i>" + gs.getUrl() + "</i></u><br>" +
+                "   <b>Description : </b>" + gs.getDesc() + "<br>"+
+                "</body>"+
+                "</html>";
+        return html;
+    }
+
+    public String formatOutput_DB_SHORT (Record r){
+        String html = "<html>" +
+                "<body  style=\"font-size: 14pt\">" +
+                "   <b>Title:  </b>" + r.getName() + "<br>" +
+                "   <b>ID : </b>" + r.getCve_id() + "<br>"+
+                "   <b>Summary : </b>" + r.getSummary() + "<br>"+
+                "</body>"+
+                "</html>";
+        return html;
+    }
+
+    public String formatOutput_DB_DETAIL (Record r){
+        String html = "<html>" +
+                "<body  style=\"font-size: 14pt\">" +
+                "   <b>Title:  </b>" + r.getName() + "<br>" +
+                "   <b>CVE ID : </b>" + r.getCve_id() + "<br>"+
+                "   <b>CWE ID : </b>" + r.getCwe_id() + "<br>"+
+                "   <b>Link : </b>" + r.getLink() + "<br>"+
+                "   <b>Public date:  </b>" + r.getPub_date() + "<br>" +
+                "   <b>Modification date : </b>" + r.getMod_date() + "<br>"+
+                "   <b>Gen_date : </b>" + r.getGen_date() + "<br>"+
+                "   <b>Score:  </b>" + r.getScore() + "<br>" +
+                "   <b>ID : </b>" + r.getCve_id() + "<br>"+
+                "   <b>Confidentiality impact : </b>" + r.getConfidentiality_impact() + "<br>"+
+                "   <b>Integrity impact:  </b>" + r.getIntegrity_impact() + "<br>" +
+                "   <b>Availability impact : </b>" + r.getAvailability_impact() + "<br>"+
+                "   <b>Summary : </b>" + r.getSummary() + "<br>"+
+                "</body>"+
+                "</html>";
+        return html;
+    }
+
+    public boolean isPrintableChar( char c ) {
+        Character.UnicodeBlock block = Character.UnicodeBlock.of( c );
+        return (!Character.isISOControl(c)) &&
+                c != KeyEvent.CHAR_UNDEFINED &&
+                block != null &&
+                block != Character.UnicodeBlock.SPECIALS;
+    }
+
+    public boolean isPrintableString(String s){
+        if (s==null)
+            return false;
+        else{
+            int l = s.length();
+            for (int i = 0; i < l; i++) {
+                if (isPrintableChar(s.charAt(i)) == false) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
     
 }
