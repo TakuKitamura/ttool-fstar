@@ -182,13 +182,13 @@ public class File_management {
 
             // System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
             NodeList nList = doc.getElementsByTagName("entry");
-
+            
             for (int temp = 0; temp < nList.getLength(); temp++) {
 
                 Node nNode = nList.item(temp);
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-
+ 
                     Element eElement = (Element) nNode;
 
                     //System.out.println("Vuln id : " + eElement.getAttribute("id"));
@@ -247,17 +247,12 @@ public class File_management {
                     } else {
                         list_cwe_id.add("not available");
                     }
-                    if (eElement.getElementsByTagName("vuln:product").item(0) != null) {
-                        list_soft_name.add(eElement.getElementsByTagName("vuln:product").item(0).getTextContent());
-                    } else {
-                        list_cwe_id.add("not available");
-                    }
-
+                    
                     NodeList nList1 = eElement.getElementsByTagName("vuln:references");
+                    
                     for (int i = 0; i < nList1.getLength(); i++) {
 
                         list_ref_cve.add(eElement.getAttribute("id"));
-                        list_soft_cve.add(eElement.getAttribute("id"));
 
                         if (eElement.getElementsByTagName("vuln:references").item(i) != null) {
                             list_ref_type.add(eElement.getElementsByTagName("vuln:references").item(i).getAttributes().getNamedItem("reference_type").getNodeValue());
@@ -278,16 +273,42 @@ public class File_management {
                         }
 
                     }
+                    
+                    NodeList nList2 = eElement.getElementsByTagName("vuln:product");
+                    
+                    for (int j = 0; j < nList2.getLength(); j++) {
 
+                        list_soft_cve.add(eElement.getAttribute("id"));
+
+                        if (eElement.getElementsByTagName("vuln:product").item(j) != null) {
+                            list_soft_name.add(eElement.getElementsByTagName("vuln:product").item(j).getTextContent());
+                        } else {
+                            list_soft_name.add("not available");
+                        }     
+                    }
+                    
                     list_pub_date.add(eElement.getElementsByTagName("vuln:published-datetime").item(0).getTextContent());
                     list_mod_date.add(eElement.getElementsByTagName("vuln:last-modified-datetime").item(0).getTextContent());
                     list_sum.add(eElement.getElementsByTagName("vuln:summary").item(0).getTextContent());
 
                 }
             }
-
+            
+            System.out.println(list_id.size());
+            System.out.println(list_ref_type.size());
+            System.out.println(list_soft_name.size());
+            System.out.println(list_id.get(list_id.size()-1));
+            System.out.println(list_ref_cve.get(list_ref_cve.size()-1));
+            System.out.println(list_soft_cve.get(list_soft_cve.size()-1));
+            
+            PreparedStatement preparedStmt = database.getconn().prepareStatement("INSERT INTO VULNERABILITIES(CVE_ID,PUB_DATE,MOD_DATE,SCORE,ACCESS_VECTOR,ACCESS_COMPLEXITY,AUTHENTICATION,CONFIDENTIALITY_IMPACT,INTEGRITY_IMPACT,AVAILABILITY_IMPACT,GEN_DATE,CWE_ID,SUMMARY)" + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?, ?)");
+            PreparedStatement preparedStmt1 = database.getconn().prepareStatement("INSERT INTO REFERENCESS(CVE_ID,REF_TYPE,SOURCE,LINK)" + "VALUES ( ?, ?, ?, ?)");
+            PreparedStatement preparedStmt2 = database.getconn().prepareStatement("INSERT INTO SOFTWARES(CVE_ID,NAME)" + "VALUES ( ?, ?)");
+            
+            System.out.println("Inserting " + list_id.size() + " data into VULNERABILITIES table ...");
+            
             for (int i = 0; i < list_id.size(); i++) {
-                PreparedStatement preparedStmt = database.getconn().prepareStatement("INSERT INTO VULNERABILITIES(CVE_ID,PUB_DATE,MOD_DATE,SCORE,ACCESS_VECTOR,ACCESS_COMPLEXITY,AUTHENTICATION,CONFIDENTIALITY_IMPACT,INTEGRITY_IMPACT,AVAILABILITY_IMPACT,GEN_DATE,CWE_ID,SUMMARY)" + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?, ?)");
+                
                 preparedStmt.setString(1, list_id.get(i));
                 preparedStmt.setString(2, list_pub_date.get(i));
                 preparedStmt.setString(3, list_mod_date.get(i));
@@ -303,25 +324,32 @@ public class File_management {
                 preparedStmt.setString(13, list_sum.get(i));
                 preparedStmt.executeUpdate();
             }
-
+            
+            System.out.println("Inserting " + list_ref_type.size() + " data into REFERENCESS table ...");
+            
             for (int d = 0; d < list_ref_type.size(); d++) {
-                PreparedStatement preparedStmt1 = database.getconn().prepareStatement("INSERT INTO REFERENCESS(CVE_ID,REF_TYPE,SOURCE,LINK)" + "VALUES ( ?, ?, ?, ?)");
+                
                 preparedStmt1.setString(1, list_ref_cve.get(d));
                 preparedStmt1.setString(2, list_ref_type.get(d));
                 preparedStmt1.setString(3, list_ref_source.get(d));
                 preparedStmt1.setString(4, list_ref_link.get(d));
                 preparedStmt1.executeUpdate();
-
             }
 
+            System.out.println("Inserting " + list_soft_name.size() + " data into SOFTWARES table ...");
+            
             for (int f = 0; f < list_soft_name.size(); f++) {
-                PreparedStatement preparedStmt2 = database.getconn().prepareStatement("INSERT INTO SOFTWARES(CVE_ID,NAME)" + "VALUES ( ?, ?)");
+                
                 preparedStmt2.setString(1, list_soft_cve.get(f));
                 preparedStmt2.setString(2, list_soft_name.get(f));
                 preparedStmt2.executeUpdate();
             }
 
-            System.out.println("Records inserted in the database: " + list_id.size());
+            preparedStmt.close();
+            preparedStmt1.close();
+            preparedStmt2.close();
+            
+            System.out.println("Number of vulnerabilities inserted in the database: " + list_id.size());
             System.out.println();
             database.setTotalRecordsInDatabase(database.getTotalRecordsInDatabase() + list_id.size());
         } catch (ParserConfigurationException | SAXException | IOException | DOMException | SQLException | NumberFormatException e) {

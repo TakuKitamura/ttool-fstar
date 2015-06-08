@@ -34,9 +34,10 @@ public class WebCrawler {
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, IOException, AWTException, Exception {
 
         String FileNames[] = {
+            "nvdcve-2.0-2012.xml",
             "nvdcve-2.0-2013.xml",
-            "nvdcve-2.0-2014.xml",
-            "nvdcve-2.0-2015.xml"
+	    "nvdcve-2.0-2014.xml"
+        //    "nvdcve-2.0-2015.xml"
         };
         //Database_creation database = new Database_creation();
         database = new Database_creation();

@@ -99,27 +99,27 @@ private web.crawler.Database_creation database;
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*                      Construct query                          */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
-        /* Select columes from the tables                                */
-        querySQL = "SELECT SOFTWARES.CVE_ID, SOFTWARES.\"NAME\", VULNERABILITIES.SUMMARY \n"
-                + "FROM ROOT.SOFTWARES \n\tINNER JOIN ROOT.VULNERABILITIES \n"
-                + "\t\tON SOFTWARES.CVE_ID = VULNERABILITIES.CVE_ID \n";
+        
+        /* Select columes from the tables                                */        
+        querySQL = "SELECT SOFTWARES.CVE_ID, SOFTWARES.\"NAME\", VULNERABILITIES.SUMMARY "
+                + "FROM ROOT.SOFTWARES INNER JOIN ROOT.VULNERABILITIES "
+                + "ON SOFTWARES.CVE_ID = VULNERABILITIES.CVE_ID ";
         /*  Including the arguments in the query                         */
         querySQL += "WHERE VULNERABILITIES.SUMMARY LIKE ? "
-                + "AND SOFTWARES.CVE_ID LIKE ? "
-                + "AND SOFTWARES.\"NAME\" LIKE ? \n"
+                + "AND VULNERABILITIES.CVE_ID LIKE ? "
+                + "AND SOFTWARES.\"NAME\" LIKE ? "
                 + "FETCH FIRST ? ROWS ONLY";
-
-        System.out.println(querySQL);
+        
+        //System.out.println(querySQL);
         
         PreparedStatement prep = this.database.getconn().prepareStatement(querySQL);
-        
         prep.setString(1, "%"+query.get(0)+"%"); 
         prep.setString(2, "%"+query.get(1)+"%"); 
         prep.setString(3, "%"+query.get(2)+"%"); 
         prep.setInt(4,Integer.valueOf(query.get(3))); 
         
         rs = prep.executeQuery();
-        
+               
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
         //String xmlcontent = StoreResultsInFile(rs);
@@ -156,9 +156,9 @@ private web.crawler.Database_creation database;
                  + "\tINNER JOIN ROOT.VULNERABILITIES \n"
                  + "\t\tON REFERENCESS.CVE_ID = VULNERABILITIES.CVE_ID \n";
         /*  Including the keywords in the query                          */
-        querySQL += "WHERE SOFTWARES.CVE_ID LIKE ?";
+        querySQL += "WHERE VULNERABILITIES.CVE_ID LIKE ?";
         
-        System.out.println(querySQL);
+        //System.out.println(querySQL);
         
         PreparedStatement prep = this.database.getconn().prepareStatement(querySQL);
         
