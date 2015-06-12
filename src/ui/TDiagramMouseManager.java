@@ -347,7 +347,6 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 		//open a Search Dialog with seleted component's value
 		if ( (e.getButton() == MouseEvent.BUTTON1) && e.isAltDown()) {
 			byte info = tdp.hoveredComponent(e.getX(), e.getY());
-			System.out.print (info);
 			if (info > 1) {
 				tgc = tdp.componentHovered();
 				String search = tgc.getValue();

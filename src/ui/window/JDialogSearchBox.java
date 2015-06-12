@@ -53,7 +53,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import java.io.File;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
@@ -94,6 +93,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     private javax.swing.JComboBox combobox_Score;
     private javax.swing.JComboBox combobox_System;
     private javax.swing.JComboBox combobox_Year;
+    private javax.swing.JComboBox combobox_Diagram;
     private javax.swing.JCheckBox databaseCb;
     private javax.swing.JTextPane detailText_db;
     private javax.swing.JTextPane detailText_google;
@@ -125,6 +125,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     //private TableSorter resultTable_google;
     private javax.swing.JTextField searchBox;
     private javax.swing.JButton searchBt;
+    private javax.swing.JButton drawBt;
 
     private javax.swing.JLabel jLabel_Keyword;
     private javax.swing.JLabel jLabel_Result;
@@ -142,11 +143,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
 
     private DefaultListModel listModel;
-    ArrayList<GoogleSearch> resultGoogle;
+    //ArrayList<GoogleSearch> resultGoogle;
     int searchGoogle;
-    ArrayList<GoogleSearch> resultGoogleScholar;
+    //ArrayList<GoogleSearch> resultGoogleScholar;
     int searchGoogleScholar;
-    ArrayList<GoogleSearch> resultDatabase;
+    //ArrayList<GoogleSearch> resultDatabase;
     int searchDatabase;
 
     TDiagramMouseManager tdmm ;
@@ -161,7 +162,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         this.tdmm = tdmm;
         this.setTitle("External Search");
          GraphicLib.centerOnParent(this);
-         String s="";
+         //String s="";
          for (int i =0; i< l.size(); i++){
         	 addValueListKeyword(l.get(i));
          }
@@ -216,9 +217,12 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jScrollPane8= new JScrollPane();
         jScrollPane9= new JScrollPane();
         jTextaddressDB = new JTextField();
+        combobox_Diagram = new javax.swing.JComboBox();
+        drawBt = new JButton();
 
+        String DIAGRAM_LIST[] = {"None","Statistic","Histogram","pie"};
         String SYSTEM_LIST[] = {"all", "linux", "windows", "others"};
-        String TIME_LIST[]= {"all", "last year", "last 5 years", "last 10 years"};
+        String TIME_LIST[]= {"all", "last year", "last 3 years"};
         String SCORE_LIST[] = {"all", "5-7", "7-8", "8-9"};
         String COLUMNTITLE_G[] ={"No", "Title", "Link"} ;
         String COLUMNTITLE_GS[]= {"No", "Title", "Author", "Link"};
@@ -252,8 +256,10 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         removeBt.setText("Remove");
         removeBt.setActionCommand("Remove");
         removeBt.setEnabled(false);
-
+        drawBt.setText("Draw");
+        drawBt.setEnabled(false);
         searchBt.setText("Search");
+        combobox_Diagram.setEnabled(false);
 
         searchBox.setText("Key words");
 
@@ -370,7 +376,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         jTabbedPane2.addTab(GOOGLE_SCHOLAR, jPanel_GoogleScholarTab);
 
-    /////
+        /////
 
         resultTable_db.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, COLUMNTITLE_DB) {
             @Override
@@ -404,12 +410,14 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         jTabbedPane2.addTab(DB, jPanel_DBTab);
 
+
         combobox_System.setModel(new javax.swing.DefaultComboBoxModel(SYSTEM_LIST));
 
         combobox_Year.setModel(new javax.swing.DefaultComboBoxModel(TIME_LIST));
 
         combobox_Score.setModel(new javax.swing.DefaultComboBoxModel(SCORE_LIST));
 
+        combobox_Diagram.setModel(new javax.swing.DefaultComboBoxModel(DIAGRAM_LIST));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -434,8 +442,9 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                                         .addComponent(removeBt))
                                                                 .addGap(100, 100, 100)))
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(jButton_Setting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jButton_Statistic, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE))
+                                                                .addComponent(jButton_Setting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(combobox_Diagram, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                )
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(jLabel_Score)
@@ -443,16 +452,20 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                         .addComponent(jLabel_System))
                                                 .addGap(37, 37, 37)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(combobox_Score, 0, 142, Short.MAX_VALUE)
-                                                        .addComponent(combobox_Year, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(combobox_System, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                                .addComponent(combobox_Score, 0, 142, Short.MAX_VALUE)
+                                                                .addComponent(combobox_Year, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(combobox_System, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                ))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel_Status)
                                                 .addGap(0, 0, Short.MAX_VALUE))
+
                                         .addGroup(layout.createSequentialGroup()
                                                 .addComponent(searchBox)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(searchBt, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(10, 10, 10)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(searchBt, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(drawBt, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -471,8 +484,9 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                                 .addComponent(combobox_System, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(googleScholarCb)
-                                                        .addComponent(jButton_Statistic))
+                                                                .addComponent(googleScholarCb)
+                                                                .addComponent(combobox_Diagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                )
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(removeBt))
                                         .addGroup(layout.createSequentialGroup()
@@ -485,9 +499,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                         .addComponent(combobox_Year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(jLabel_Year))))
                                 .addGap(24, 24, 24)
+                                .addComponent(drawBt)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(searchBt))
+
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jTabbedPane2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -521,19 +537,22 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             public void checkandsetSearchBt() {
 
 
-
                 if (searchBox.getText().length() <= 0 || searchBox.getText().length() > MAXLENGTH_INPUT) {
                     if (searchBox.getText().length() > MAXLENGTH_INPUT)
                         JOptionPane.showMessageDialog(null, ERROR_INPUT_TOO_LONG, "Warning",
                                 JOptionPane.WARNING_MESSAGE);
                     searchBt.setEnabled(false);
+                    drawBt.setEnabled(false);
                 } else
+                    if (combobox_Diagram.getSelectedItem() != "None")
+                        drawBt.setEnabled(true);
                     searchBt.setEnabled(true);
 
-                if ( ! isPrintableString(searchBox.getText())) {
+                if (!isPrintableString(searchBox.getText())) {
                     JOptionPane.showMessageDialog(null, "Not printable character", "Warning",
                             JOptionPane.WARNING_MESSAGE);
                     searchBt.setEnabled(false);
+                    drawBt.setEnabled(false);
                 }
             }
         });
@@ -547,7 +566,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         googleCb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                if (googleCb.isSelected() && ListKeywords.getModel().getSize()>0)
+                if (googleCb.isSelected() && ListKeywords.getModel().getSize() > 0)
                     searchBt.setEnabled(true);
                 googleCbActionPerformed(evt);
             }
@@ -555,16 +574,32 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         databaseCb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                if (databaseCb.isSelected() && ListKeywords.getModel().getSize()>0)
+                if (databaseCb.isSelected()){
+                    combobox_Diagram.setEnabled(true);
+                    if (combobox_Diagram.getSelectedItem()!="None")
+                        drawBt.setEnabled(true);
+                    else drawBt.setEnabled(false);
+                }else {
+                    combobox_Diagram.setEnabled(false);
+                    drawBt.setEnabled(false);
+                }
+                if (databaseCb.isSelected() && ListKeywords.getModel().getSize() > 0){
                     searchBt.setEnabled(true);
+                }
                 databaseCbActionPerformed(evt);
             }
         });
 
         googleScholarCb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                if (googleScholarCb.isSelected() && ListKeywords.getModel().getSize()>0)
+                if (googleScholarCb.isSelected() && ListKeywords.getModel().getSize() > 0) {
                     searchBt.setEnabled(true);
+                    drawBt.setEnabled(true);
+                }else
+                {
+                    //searchBt.setEnabled(false);
+                    drawBt.setEnabled(false);
+                }
                 googleScholarCbActionPerformed(evt);
             }
         });
@@ -642,13 +677,15 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                     Message msg = new Message(Message.CMD_DETAIL);
                     msg.addKeywordMessage(st);
 
-                    //Client cl = new Client();
+                    //Client cl = new Client();)
                     Message returnMsg = sendMessage(msg);
                     //Message returnMsg  = new Message(Message.RESULT_DETAIL);
 
                     //Record r = (Record)cl.parserAnswerMessage(returnMsg);
-                    Record r = (Record) parserMessage(returnMsg);
-                    printDetailRecord(r);
+                    if (returnMsg != null) {
+                        Record r = (Record) parserMessage(returnMsg);
+                        printDetailRecord(r);
+                    }
                 }
 
             }
@@ -719,12 +756,14 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         );
 
-            jButton_Statistic.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
+        drawBt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                //System.out.print(combobox_Diagram.getSelectedItem());
+                if (combobox_Diagram.getSelectedItem() == "statistic")
                     doStatistic();
-                }
-            });
+            }
+        });
 
         jTextaddressDB.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -744,11 +783,14 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         });
 
-        jTabbedPane2.addChangeListener(new ChangeListener() {
+
+        combobox_Diagram.addActionListener(new ActionListener() {
             @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                //detailText_db.setDocument(new HTMLDocument());
-                //detailText_google.setDocument(new HTMLDocument());
+            public void actionPerformed(ActionEvent actionEvent) {
+               if (combobox_Diagram.getSelectedItem() == "None" || searchBox.getText().length() <=0)
+                   drawBt.setEnabled(false);
+               else if  ((combobox_Diagram.getSelectedItem() != "None" && searchBox.getText().length() >0))
+                   drawBt.setEnabled(true);
             }
         });
 
@@ -760,11 +802,33 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         this.dispose();
     }
 
-    public Message sendMessage(Message msg){
+    /**
+     *
+     * @param msg
+     * @return
+     */
+    public Message sendMessage(Message msg) {
         Client cl = new Client();
-        return cl.send(msg,dbaddress,dbport);
+        try{
+            return cl.send(msg,dbaddress,dbport);
+        }catch (IOException e){
+            JOptionPane.showMessageDialog(null, "Cannot connect to server !!!", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "Cannot parse message!!!", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+
     }
 
+
+    /**
+     *
+     * @param msg
+     * @return Object
+     */
     public Object parserMessage(Message msg){
         Client cl = new Client();
         return cl.parserAnswerMessage(msg);
@@ -817,6 +881,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     }
 
+
+    /**
+     *
+     * @param evt
+     */
     private void searchBtActionPerformed(java.awt.event.ActionEvent evt)  {
 
         //reset Tab title
@@ -824,13 +893,10 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jTabbedPane2.setTitleAt(1, GOOGLE_SCHOLAR);
         jTabbedPane2.setTitleAt(2, DB);
 
-
-
         if (searchGoogle == 0 && searchGoogleScholar == 0 && searchDatabase == 0) {
             JOptionPane.showMessageDialog(null, "Please select the resource to search","Warning",
                     JOptionPane.WARNING_MESSAGE);
         }
-
 
         Thread t = new Thread(new Runnable() {
             @Override
@@ -975,20 +1041,27 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         t.start();
     }
 
-
-    public void showtable(ArrayList<Object[]> list, DefaultTableModel model,int index){
+    /**
+     * Display content in table.
+     * @param list
+     * @param model
+     * @param objectType 0: google
+     *                   1: google scholar
+     *                   2: database
+     */
+    public void showtable(ArrayList<Object[]> list, DefaultTableModel model,int objectType){
         int id=0;
-        if (index ==1 || index ==0) {
+        if (objectType ==1 || objectType ==0) {
             for (Object[] o : list) {
                 id = (Integer) (o[0]);
                 GoogleSearch gs = (GoogleSearch) (o[1]);
-                if (index == 0)
+                if (objectType == 0)
                     model.addRow(new Object[]{id, gs.getTitle(), gs.getUrl()});
-                else if (index == 1)
+                else if (objectType == 1)
                     model.addRow(new Object[]{id, gs.getTitle(), gs.getAuthors(), gs.getUrl()});
 
             }
-        } else if (index == 2){
+        } else if (objectType == 2){
             for (Object[] o : list) {
                 id = (Integer) (o[0]);
                 Record r = (Record) (o[1]);
@@ -997,20 +1070,29 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         }
 
 
-        if (index ==0 ){
-            jTabbedPane2.setTitleAt(index, GOOGLE + " [" + model.getRowCount() + "]");
+        if (objectType ==0 ){
+            jTabbedPane2.setTitleAt(objectType, GOOGLE + " [" + model.getRowCount() + "]");
         }
-        else if (index ==1 ){
-            jTabbedPane2.setTitleAt(index, GOOGLE_SCHOLAR + " [" + model.getRowCount() + "]");
+        else if (objectType ==1 ){
+            jTabbedPane2.setTitleAt(objectType, GOOGLE_SCHOLAR + " [" + model.getRowCount() + "]");
         }
-        else if (index ==2 ){
-            jTabbedPane2.setTitleAt(index, DB + " [" + model.getRowCount() + "]");
+        else if (objectType ==2 ){
+            jTabbedPane2.setTitleAt(objectType, DB + " [" + model.getRowCount() + "]");
         }
         searchBt.setEnabled(true);
         jLabel_Status.setText("Finished");
-        //jTabbedPane2.updateUI();
     }
 
+    /**
+     *
+     * @param evt
+     * @param rows
+     * @param resultTable
+     * @param textpane
+     * @param typeObject 0: google
+     *                   1: google scholar
+     *                   2: database
+     */
     private void selectrow(ListSelectionEvent evt,ArrayList<Object[]> rows,JTable resultTable,JTextPane textpane,int typeObject) {
     	int rowindex = resultTable.getSelectedRow();
     	int id =0;
@@ -1076,15 +1158,20 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             this.combobox_Score.setEnabled(false);
             this.combobox_Year.setEnabled(false);
         }
-    }    
-    
+    }
+
+
+    /**
+     * add new value into Keyword list.
+     * @param st
+     */
     public void addValueListKeyword(String st){
         if  (! this.listModel.contains(st)){
         	this.listModel.addElement(st);
 
         	String query = "";
-
         	if (this.listModel.getSize()>0)
+                //split the string
                 query = splitAndConcat((String) this.listModel.elementAt(0));
     	    	for (int i=1; i< this.listModel.getSize(); i++ ){
                     if (query != "")
@@ -1119,7 +1206,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             i=i+1;
         }
     }
-    
+
+
     public void putGoogleScholarToTable(ArrayList<GoogleSearch> a)
     {
     	int i = this.rowsGoogleScholar.size()+1;
@@ -1129,12 +1217,20 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     	}
     }
 
+
     private void printDetailRecord(Record r){
         if (r!=null)
             this.detailText_db.setText(formatOutput_DB_DETAIL(r));
     }
 
-
+    /**
+     *
+     * @param obj
+     * @param typeObject 0: obj from google.
+     *                   1: obj from googleScholar
+     *                   2: obj from database
+     * @param textPane
+     */
     public void presentDataInDetail(Object obj, int typeObject, JTextPane textPane){
 
         textPane.setContentType("text/html");
@@ -1156,89 +1252,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         }
     }
 
-    public void presentDataInDetail1(Object obj, int typeObject, JTextPane textPane){
-        StyledDocument  doc = textPane.getStyledDocument();
-        textPane.setText("");
-
-        SimpleAttributeSet bold = new SimpleAttributeSet();
-        StyleConstants.setBold(bold, true);
-        StyleConstants.setFontSize(bold, 15);
-        SimpleAttributeSet underline = new SimpleAttributeSet();
-        StyleConstants.setUnderline(underline, true);
-        SimpleAttributeSet normal = new SimpleAttributeSet();
-        StyleConstants.setBold(normal, false);
-        StyleConstants.setFontSize(normal, 13);
-
-        if (typeObject ==1 || typeObject ==0 ){
-            int offset = 0;
-            GoogleSearch gs =  (GoogleSearch)obj;
-            if (gs != null)
-            {
-                String detail = "";
-                if (gs.getTitle()!=null) {
-                    //detail = detail + gs.getTitle() + "\n";
-                    try {
-                        doc.insertString(offset, gs.getTitle() + "\n", bold);
-                        offset = offset+ gs.getTitle().length()+1;
-                    } catch (BadLocationException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
-
-                if (gs.getAuthors()!=null) {
-                    //detail = detail + gs.getAuthors() + "\n";
-                    try {
-                        doc.insertString(offset, gs.getAuthors() + "\n", normal);
-                        offset =  offset+gs.getAuthors().length()+1;
-                    } catch (BadLocationException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (gs.getUrl()!=null){
-                    try {
-                        detail = detail + gs.getUrl()+"\n";
-                        doc.insertString(offset, gs.getUrl() + "\n", underline);
-                        offset =  offset+gs.getUrl().length()+1;
-                    } catch (BadLocationException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if (gs.getCitedNumber()!=null){
-                    try {
-                        //detail = detail + gs.getCitedNumber()+"\n";
-                        doc.insertString(offset, gs.getCitedNumber() + "\n", normal);
-                        offset =  offset+gs.getCitedNumber().length()+1;
-                    } catch (BadLocationException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if (gs.getDesc()!=null){
-                    try {
-                        //detail = detail + gs.getCitedNumber()+"\n";
-                        //detail = detail + gs.getDesc()+"\n";
-                        doc.insertString(offset, gs.getDesc() + "\n", normal);
-                        offset =  offset+gs.getDesc().length()+1;
-                    } catch (BadLocationException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
-                //textPane.setText(detail);
-            }
-        }else{
-            Record r = (Record)obj;
-            if (r!=null) {
-                String detail = r.getSummary();
-                textPane.setText(detail);
-            }
-        }
-
-    }
 
     //==========================================
     //database functions
@@ -1265,22 +1278,24 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
 
             Message ret = sendMessage(msg);
+            if (ret !=null)
+            {
             byte[] b = (byte[])parserMessage(ret);
-            if(b != null){
+            if(b != null) {
                 ByteArrayInputStream in = new ByteArrayInputStream(b);
-                img =  ImageIO.read(in);
-                ImageIcon icon=new ImageIcon(img);
-                JFrame frame=new JFrame();
-                frame.setLayout(new FlowLayout());
-                frame.setSize(200,300);
-                JLabel lbl=new JLabel();
-                lbl.setIcon(icon);
-                frame.add(lbl);
-                frame.setVisible(true);
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                img = ImageIO.read(in);
+                ImageIcon icon = new ImageIcon(img);
+                Image scaleImage = icon.getImage().getScaledInstance(750, 200, Image.SCALE_DEFAULT);
+                icon = new ImageIcon(scaleImage);
+                JLabel imageLabel = new JLabel(icon);
+                JScrollPane scrollPane = new JScrollPane(imageLabel);
+                jTabbedPane2.addTab("HUY", scrollPane);
+
+            }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Cannot display diagram !!!", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
         }
 
     }
@@ -1303,7 +1318,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         return value;
     }
 
-
+    /**
+     * Check a string if it contains only number.
+     * @param str
+     * @return
+     */
     public boolean isNum(String str){
         try{
             Integer.parseInt(str);
@@ -1313,6 +1332,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         }
     }
 
+    /**
+     * create html format for content from Google Scholar
+     * @param gs
+     * @return String
+     */
     public String formatOutput_GoogleScholar (GoogleSearch gs){
         String html = "<html>" +
                 "<title>"+gs.getTitle()+"</title>" +
@@ -1326,6 +1350,12 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                 "</html>";
         return html;
     }
+
+    /**
+     * create html format for content from Google
+     * @param gs
+     * @return String
+     */
     public String formatOutput_Google (GoogleSearch gs){
         String html = "<html>" +
                 "<title>"+gs.getTitle()+"</title>" +
@@ -1338,6 +1368,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         return html;
     }
 
+    /**
+     * create html format for content from Database (not detail)
+     * @param r
+     * @return String
+     */
     public String formatOutput_DB_SHORT (Record r){
         String html = "<html>" +
                 "<body  style=\"font-size: 14pt\">" +
@@ -1349,6 +1384,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         return html;
     }
 
+    /**
+     * create html format for content from Database (detail)
+     * @param r
+     * @return String
+     */
     public String formatOutput_DB_DETAIL (Record r){
         String html = "<html>" +
                 "<body  style=\"font-size: 14pt\">" +
@@ -1370,6 +1410,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         return html;
     }
 
+    /**
+     * Check the printable character.
+     * @param c
+     * @return
+     */
     public boolean isPrintableChar( char c ) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of( c );
         return (!Character.isISOControl(c)) &&
@@ -1378,6 +1423,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                 block != Character.UnicodeBlock.SPECIALS;
     }
 
+    /**
+     * Check the printable string
+     * @param s
+     * @return
+     */
     public boolean isPrintableString(String s){
         if (s==null)
             return false;
