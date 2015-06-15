@@ -8,9 +8,13 @@ package web.crawler;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -39,11 +43,22 @@ import org.xml.sax.SAXException;
 import org.apache.commons.io.FileUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-
+/**
+ * Contain all the functions, which are using file
+ * @author Marie FORRAT & Angeliki AKTYPI
+ */
 public class File_management {
 
-    public static void DownloadFile(String filename) {
+    /**
+     * Download the zipped xml file from the National Vulnerability Database's website (https://nvd.nist.gov/)
+     * if the file doesn't exist in the working directory of the project.
+     * After extracting the xml file delete the zipped one.
+     * @param filename name of the file on the website
+     */
+    public static void DownloadFile(String filename) throws MalformedURLException, IOException {
 
         File file = new File(filename);
 
@@ -54,37 +69,112 @@ public class File_management {
             return;
         }
 
-        /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  */
-        /*            Code for downloading the XML file                       */
         try {
-            // Get URL content
-            URL FileUrl = new URL("https://nvd.nist.gov/feeds/xml/cve/" + filename);
+            //set the URL of the file to be downloaded
+            URL url = new URL("http://static.nvd.nist.gov/feeds/xml/cve/" + filename + ".zip");
+
             System.out.println("File: " + filename + " does not exists");
-            System.out.println("Downloading file: " + FileUrl.toString());
-            URLConnection FileConnection = FileUrl.openConnection();
+            System.out.println("Downloading file: " + url.toString());
 
-            try ( // Open the stream and put it into BufferedReader
-                    BufferedReader br = new BufferedReader(new InputStreamReader(FileConnection.getInputStream()))) {
-                String inputLine;
-                // Save to this filename
-                file.createNewFile();
+            //create the new connection
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-                // Use FileWriter to write file
-                FileWriter fw = new FileWriter(file.getAbsoluteFile());
-                try (BufferedWriter bw = new BufferedWriter(fw)) {
-                    while ((inputLine = br.readLine()) != null) {
-                        bw.write(inputLine);
-                    }
-                }
+            //set up some the connection and connect
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoOutput(true);
+            urlConnection.connect();
+
+            //creat the zip file 
+            String zip_filename = filename+".zip";
+            File zip_file = new File(zip_filename);
+
+            //write the downloaded data into the zip file
+            FileOutputStream fileOutput = new FileOutputStream(zip_file);
+
+            //reading the data from the url
+            InputStream inputStream = urlConnection.getInputStream();
+
+            //total size of the file
+            int totalSize = urlConnection.getContentLength();
+            //variable to store total downloaded bytes
+            int downloadedSize = 0;
+
+            //create a buffer...
+            byte[] buffer = new byte[1024];
+            int bufferLength = 0; //used to store a temporary size of the buffer
+
+            //read through the input buffer and write the contents to the file
+            while ( (bufferLength = inputStream.read(buffer)) > 0 ) {
+                //add the data in the buffer to the file in the file output stream
+                fileOutput.write(buffer, 0, bufferLength);
+                //add up the size so we know how much is downloaded
+                downloadedSize += bufferLength;
             }
+            //close the output stream when done
+            fileOutput.close();
 
-            System.out.println("File: " + filename + " has been downloaded\n");
+            unZipFile(zip_filename);
 
+            //keep only the xml files (the extracted file from the zip) 
+            zip_file.delete();
+
+            //catch some possible errors...
         } catch (MalformedURLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    public static void unZipFile(String zipFile){
+
+        byte[] buffer = new byte[1024];
+
+        try{
+
+            //get the zip file content
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+            //get the zipped file list entry
+            ZipEntry ze = zis.getNextEntry();
+
+            while(ze!=null){
+
+                String fileName = ze.getName();
+                File newFile = new File(fileName);
+
+
+                System.out.println("Unzipping file: " + newFile.getAbsoluteFile());
+
+
+                FileOutputStream fos = new FileOutputStream(newFile);
+
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+
+                fos.close();
+                ze = zis.getNextEntry();
+            }
+
+            zis.closeEntry();
+            zis.close();
+
+            //System.out.println("Done");
+
+        } catch(IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Store the result of one query on an xml file to be sent to a client
+     * @param rs result of a sql query 
+     * @return the xml file
+     * @throws TransformerConfigurationException
+     * @throws TransformerException
+     * @throws IOException
+     */
     public static File StoreResultsInFile(ResultSet rs)
             throws TransformerConfigurationException, TransformerException, IOException {
 
@@ -140,14 +230,20 @@ public class File_management {
             System.out.println("The folder structure does not exist");
         }else {
             String encode = "UTF-8";
-            FileUtils.writeStringToFile(file, xmlContent, encode);            
+            FileUtils.writeStringToFile(file, xmlContent, encode);
         }
-        
+
         File xmlFile = FileUtils.getFile(file);
-        
+
         return xmlFile;
     }
 
+    /**
+     * Parse a xml file, which contain CVE to retrieve all the information and fill a database with all the retrieve information
+     * The structure of the CVE has to be the same as the structure you can find in the cve from https://nvd.nist.gov/ 
+     * @param filename name of the xml file you want to parse
+     * @param database database you want to fill with data from the file
+     */
     public static void ParsingXML(String filename, web.crawler.Database_creation database) {
         LinkedList<String> list_id = new LinkedList<>();
         LinkedList<String> list_pub_date = new LinkedList<>();
@@ -180,18 +276,19 @@ public class File_management {
 
             doc.getDocumentElement().normalize();
 
-            // System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+            // For all the CVE that are in the file
             NodeList nList = doc.getElementsByTagName("entry");
-            
+
             for (int temp = 0; temp < nList.getLength(); temp++) {
 
                 Node nNode = nList.item(temp);
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
- 
+
                     Element eElement = (Element) nNode;
 
-                    //System.out.println("Vuln id : " + eElement.getAttribute("id"));
+                    //Store all the information in several lists by chcekcing first if the information is available:
+
                     list_id.add(eElement.getAttribute("id"));
 
                     if (eElement.getElementsByTagName("cvss:score").item(0) != null) {
@@ -247,9 +344,9 @@ public class File_management {
                     } else {
                         list_cwe_id.add("not available");
                     }
-                    
+
                     NodeList nList1 = eElement.getElementsByTagName("vuln:references");
-                    
+
                     for (int i = 0; i < nList1.getLength(); i++) {
 
                         list_ref_cve.add(eElement.getAttribute("id"));
@@ -273,9 +370,9 @@ public class File_management {
                         }
 
                     }
-                    
+
                     NodeList nList2 = eElement.getElementsByTagName("vuln:product");
-                    
+
                     for (int j = 0; j < nList2.getLength(); j++) {
 
                         list_soft_cve.add(eElement.getAttribute("id"));
@@ -284,31 +381,27 @@ public class File_management {
                             list_soft_name.add(eElement.getElementsByTagName("vuln:product").item(j).getTextContent());
                         } else {
                             list_soft_name.add("not available");
-                        }     
+                        }
                     }
-                    
+
                     list_pub_date.add(eElement.getElementsByTagName("vuln:published-datetime").item(0).getTextContent());
                     list_mod_date.add(eElement.getElementsByTagName("vuln:last-modified-datetime").item(0).getTextContent());
                     list_sum.add(eElement.getElementsByTagName("vuln:summary").item(0).getTextContent());
 
                 }
             }
-            
-            System.out.println(list_id.size());
-            System.out.println(list_ref_type.size());
-            System.out.println(list_soft_name.size());
-            System.out.println(list_id.get(list_id.size()-1));
-            System.out.println(list_ref_cve.get(list_ref_cve.size()-1));
-            System.out.println(list_soft_cve.get(list_soft_cve.size()-1));
-            
+
+            /**
+             * Insert all the information retrieve from the file (that are now store in several list) in the database
+             */
             PreparedStatement preparedStmt = database.getconn().prepareStatement("INSERT INTO VULNERABILITIES(CVE_ID,PUB_DATE,MOD_DATE,SCORE,ACCESS_VECTOR,ACCESS_COMPLEXITY,AUTHENTICATION,CONFIDENTIALITY_IMPACT,INTEGRITY_IMPACT,AVAILABILITY_IMPACT,GEN_DATE,CWE_ID,SUMMARY)" + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?, ?)");
             PreparedStatement preparedStmt1 = database.getconn().prepareStatement("INSERT INTO REFERENCESS(CVE_ID,REF_TYPE,SOURCE,LINK)" + "VALUES ( ?, ?, ?, ?)");
             PreparedStatement preparedStmt2 = database.getconn().prepareStatement("INSERT INTO SOFTWARES(CVE_ID,NAME)" + "VALUES ( ?, ?)");
-            
+
             System.out.println("Inserting " + list_id.size() + " data into VULNERABILITIES table ...");
-            
+
             for (int i = 0; i < list_id.size(); i++) {
-                
+
                 preparedStmt.setString(1, list_id.get(i));
                 preparedStmt.setString(2, list_pub_date.get(i));
                 preparedStmt.setString(3, list_mod_date.get(i));
@@ -324,11 +417,11 @@ public class File_management {
                 preparedStmt.setString(13, list_sum.get(i));
                 preparedStmt.executeUpdate();
             }
-            
+
             System.out.println("Inserting " + list_ref_type.size() + " data into REFERENCESS table ...");
-            
+
             for (int d = 0; d < list_ref_type.size(); d++) {
-                
+
                 preparedStmt1.setString(1, list_ref_cve.get(d));
                 preparedStmt1.setString(2, list_ref_type.get(d));
                 preparedStmt1.setString(3, list_ref_source.get(d));
@@ -337,9 +430,9 @@ public class File_management {
             }
 
             System.out.println("Inserting " + list_soft_name.size() + " data into SOFTWARES table ...");
-            
+
             for (int f = 0; f < list_soft_name.size(); f++) {
-                
+
                 preparedStmt2.setString(1, list_soft_cve.get(f));
                 preparedStmt2.setString(2, list_soft_name.get(f));
                 preparedStmt2.executeUpdate();
@@ -348,7 +441,7 @@ public class File_management {
             preparedStmt.close();
             preparedStmt1.close();
             preparedStmt2.close();
-            
+
             System.out.println("Number of vulnerabilities inserted in the database: " + list_id.size());
             System.out.println();
             database.setTotalRecordsInDatabase(database.getTotalRecordsInDatabase() + list_id.size());

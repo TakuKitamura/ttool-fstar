@@ -20,13 +20,22 @@ import org.apache.commons.io.FileUtils;
 import web.crawler.WebCrawler;
 import myutil.externalSearch.Message;
 
-
+/**
+ *
+ * @author Marie FORRAT & Angeliki AKTYPI & Dan Huynh VO
+ */
 public class MultiThreadServer {
 
     public static String ERR_SVDOWN = "ERR : Cannot run the server, shut down the previous one!";
 
+    /**
+     *
+     * @param cmd
+     * @param msg
+     * @return
+     */
     public static Message createImageAnswer(String cmd, Message msg) {
-        byte[] byteImg = Message.convertImageToByte();
+        byte[] byteImg = Message.convertImageToByte(msg);
         Message answerMessage = new Message();
         ArrayList<Object> content = new ArrayList();
         content.add(byteImg);
@@ -35,7 +44,17 @@ public class MultiThreadServer {
         System.out.println(Message.SUC_CREATE_ANS_MESSAGE);
         return answerMessage;
     }
-        
+
+    /**
+     *
+     * @param msg
+     * @param database
+     * @return
+     * @throws IOException
+     * @throws SQLException
+     * @throws AWTException
+     * @throws TransformerException
+     */
     public static Message analyseRequestMessage(Message msg, web.crawler.Database_query database) throws IOException, SQLException, AWTException, TransformerException {
         
         //System.out.println(msg.getCmd());
@@ -75,9 +94,16 @@ public class MultiThreadServer {
 
         if (msg.getCmd().equals(Message.CMD_STATISTIC)) {
             Data_visualisation datavis = new Data_visualisation(WebCrawler.database);
-            datavis.OpenCloud(msg.getValues());
+            datavis.OpenCloud(msg.getValues().get(0));
             //Set cmd for the answer message to sent back to the client
             cmd = msg.RESULT_STATISTIC;
+            answerMessage = createImageAnswer(cmd, msg);
+        }
+        if (msg.getCmd().equals(Message.CMD_HISTOGRAM)) {
+            Data_visualisation datavis = new Data_visualisation(WebCrawler.database);
+            datavis.Histogram(msg.getValues().get(0));
+            //Set cmd for the answer message to sent back to the client
+            cmd = msg.RESULT_HISTOGRAM;
             answerMessage = createImageAnswer(cmd, msg);
         }
         

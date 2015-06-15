@@ -77,6 +77,10 @@ public class Message implements Serializable {
 
     public static String PIC_SRC = "server_visualisation.png";
     public static String PIC_DES = "client_visualisation.png";
+    public static String PIC_SRC_HIST = "server_visualisation_Hist.png";
+    public static String PIC_SRC_STAT = "server_visualisation.png";
+    public static String PIC_DES_STAT = "client_visualisation_Stat.png";
+    public static String PIC_DES_HIST = "client_visualisation_Hist.png";
     public static String ERR_CMD = "Message command is empty\n";
     public static String ERR_CMD2 = "Wrong message command\n";
 
@@ -206,11 +210,19 @@ public class Message implements Serializable {
     }
 
 
-    public static byte[] convertImageToByte(){
+    public static byte[] convertImageToByte(Message msg){
         byte[] imgByte = null;
+        BufferedImage img;
 
         try {
-            BufferedImage img = ImageIO.read(new File(PIC_SRC));
+            if(msg.getCmd().equals("stat"))
+            {
+                img = ImageIO.read(new File(PIC_SRC_STAT));
+            }
+            else
+            {
+                img = ImageIO.read(new File(PIC_SRC_HIST));
+            }
 
             try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
                 ImageIO.write(img, "png", baos);
@@ -219,7 +231,8 @@ public class Message implements Serializable {
             }
 
         } catch (IOException e) {
-            System.out.println("Image can't not be found!");
+            // TODO Auto-generated catch block
+            System.out.println("Image can't not be found!\n");
         }
 
         System.out.println("Image has been converted successfully!");
@@ -228,20 +241,26 @@ public class Message implements Serializable {
     }
 
     //a function to convert a string byte to an image
-    public static void convertByteToImage(byte[] imgByte){
+    public static void convertByteToImage(byte[] imgByte,Message msg){
 
         if (imgByte != null){
 
             InputStream inStream = new ByteArrayInputStream(imgByte);
             try {
                 BufferedImage img = ImageIO.read(inStream);
-
-                ImageIO.write(img, "png", new File(PIC_DES));
-                //System.out.println("Image has been created successfully!");
-
+                if(msg.getCmd().equals(RESULT_STATISTIC))
+                {
+                    ImageIO.write(img, "png", new File(PIC_DES_STAT));
+                }
+                else
+                {
+                    ImageIO.write(img, "png", new File(PIC_DES_HIST));
+                }
+                System.out.println("Image has been created successfully!\n");
 
             } catch (IOException e) {
-               // System.out.println("Image can't not be created!");
+                // TODO Auto-generated catch block
+                System.out.println("Image can't not be created!\n");
             }
         }
 

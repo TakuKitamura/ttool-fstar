@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package web.crawler;
 
 import java.awt.AWTException;
@@ -16,6 +17,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.apache.derby.drda.NetworkServerControl;
 
+/**
+ * All the function necessary for the creation of the database, creation of tables in the database and the storage of this databse
+ * @author Marie FORRAT & Angeliki AKTYPI
+ */
 public class Database_creation {
 
     /* Global variables */
@@ -26,32 +31,78 @@ public class Database_creation {
     private int TotalRecordsInDatabase = 0;
 
     private static String DatabasePath = System.getProperty("user.dir");
+
+    /**
+     * Path to retrieve a former vulnerabilities table
+     */
     public static File VulnerabilitesSqlFile = new File(DatabasePath + "//vulnerabilites.sql");
+
+    /**
+     *Path to retrieve a former reference table
+     */
     public static File ReferencesSqlFile = new File(DatabasePath + "//references.sql");
+
+    /**
+     *Path to retrieve a former software table
+     */
     public static File SoftwaresSqlFile = new File(DatabasePath + "//softwares.sql");
 
+    /**
+     * Execute an SQL statement on the database. Be careful, this method does not protect of SQL injection
+     * @param SQLquery the query you want to execute on the database
+     * @return the result of the query
+     * @throws SQLException
+     */
     public ResultSet executestatement(String SQLquery) throws SQLException {
 
         ResultSet rs = stmt.executeQuery(SQLquery);
         return rs;
     }
 
+    /**
+     * set method to set the total recods in the database
+     * @param n integer
+     */
     public void setTotalRecordsInDatabase(int n) {
         TotalRecordsInDatabase = n;
     }
 
-    public int getTotalRecordsInDatabase() {
+    /**
+     * get method to get the number of total recods in the table vulnerabilities
+     * @return the total number of record in vulnerabilities table
+     * @throws SQLException
+     */
+    public int getTotalRecordsInDatabase() throws SQLException {
+
+        int TotalRecordsInDatabase = 0;
+        ResultSet rs = stmt.executeQuery("SELECT * FROM VULNERABILITIES");
+
+        while (rs.next()) {
+            TotalRecordsInDatabase++;
+        }
         return TotalRecordsInDatabase;
     }
 
+    /**
+     * Return the parameter connection of the databse
+     * @return connection
+     */
     public Connection getconn() {
         return conn;
     }
 
+    /**
+     *
+     * @return
+     */
     public java.sql.Statement getstmt() {
         return stmt;
     }
 
+    /**
+     * Print the table vulnerabilities int the output
+     * @throws SQLException
+     */
     public void PrintDatabase() throws SQLException {
         int Records = 0;
         ResultSet rs = stmt.executeQuery("SELECT * FROM VULNERABILITIES");
@@ -70,6 +121,10 @@ public class Database_creation {
         }
     }
 
+    /**
+     * Clear outputs of the console
+     * @throws AWTException
+     */
     public void ClearOutputs() throws AWTException {
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*                      Clear console                            */
@@ -82,20 +137,21 @@ public class Database_creation {
             /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
     }
 
-    public int CountRowsInDatabase() throws SQLException {
-        int Records = 0;
-        ResultSet rs = stmt.executeQuery("SELECT * FROM VULNERABILITIES");
 
-        // Count rows in the table VULNERABILITIES
-        while (rs.next()) {
-            Records++;
-        }
 
-        return (Records);
-    }
-
+    /**
+     * Create the database
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws Exception
+     */
     public void CreateDatabase() throws ClassNotFoundException, InstantiationException, IllegalAccessException, Exception {
-	String url = "jdbc:derby://localhost:1527/MyDatabase;create=true;user=root;password=1234";
+
+        /**
+         * Information for creating the database
+         */
+        String url = "jdbc:derby://localhost:1527/MyDatabase;create=true;user=root;password=1234";
         //String url = "jdbc:derby://localhost:1527/";
         String dbName = "MyDatabase";
         String driver = "org.apache.derby.jdbc.ClientDriver";
@@ -125,6 +181,10 @@ public class Database_creation {
         }
     }
 
+    /**
+     * Create 3 tables in the database, vulnerabilites, references, softwares
+     * @throws SQLException
+     */
     public void CreateTable() throws SQLException {
         System.out.println("Creating tables in database...");
         stmt = conn.createStatement();
@@ -154,7 +214,7 @@ public class Database_creation {
                 + "AVAILABILITY_IMPACT VARCHAR(100),"
                 + "GEN_DATE VARCHAR(100),"
                 + "CWE_ID VARCHAR(100),"
-                + "SUMMARY VARCHAR(3000))");
+                + "SUMMARY VARCHAR(5000))");
 
         System.out.println("Table VULNERABILITIES created");
 
@@ -174,6 +234,10 @@ public class Database_creation {
 
     }
 
+    /**
+     * import previous table from a file to have a database already fill
+     * @throws SQLException
+     */
     public void CreateDatabaseFromSQLFile() throws SQLException {
         PreparedStatement ps;
 
@@ -208,6 +272,10 @@ public class Database_creation {
         ps.execute();
     }
 
+    /**
+     * Sabe all the tables in a file to use them later
+     * @throws SQLException
+     */
     public void StoreDatabaseInFile() throws SQLException {
         PreparedStatement ps;
 

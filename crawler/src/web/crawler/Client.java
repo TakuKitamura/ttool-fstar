@@ -18,15 +18,27 @@ import org.apache.commons.io.FileUtils;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
-
+/**
+ *
+ * @author Marie FORRAT & Angeliki AKTYPI & Dan Huynh VO
+ */
 public class Client {
-
+    /**
+     *
+     * @param cmd
+     * @param options
+     * @param values
+     * @return
+     */
     public static Message createRequestMessage(String cmd, ArrayList<String> options, ArrayList<String> values) {
         Message requestMsg = new Message(cmd, options, values);
         System.out.println("\n" + Message.SUC_CREATE_REQ_MESSAGE);
         return requestMsg;
     }
-    
+    /**
+     *
+     * @param answerMsg
+     */
     public static void analyseAnswerMessage(Message answerMsg) {
         //Analyse the message from the server,
         //Depends on the cmd, we can determine the values 
@@ -38,8 +50,6 @@ public class Client {
         } 
         
         else if (cmd.equals(Message.RESULT_SEARCH)) {
-            //show GUI for search
-            //Call Huy's function
             ArrayList<Object> res = new ArrayList();
             res = answerMsg.getContent();
             System.out.println("\n"+res);
@@ -47,8 +57,6 @@ public class Client {
         } 
         
         else if (cmd.equals(Message.RESULT_DETAIL)) {
-            //show GUI for detail of a specific record
-            //Call Huy's function
             ArrayList<Object> res = new ArrayList();
             res = answerMsg.getContent();
             System.out.println("\n"+res);
@@ -57,17 +65,26 @@ public class Client {
         
         else if (cmd.equals(Message.RESULT_STATISTIC)) {
             
-            //Show picture-Use a function to convert binary to image
-            //Message.convertByteToImage(answerMsg.getImageByte());    
-            
             ArrayList<Object> resultContent = new ArrayList();
             resultContent = answerMsg.getContent();
             byte[] imgByte = (byte[]) resultContent.get(0);
-            Message.convertByteToImage(imgByte);
+            Message.convertByteToImage(imgByte,answerMsg);
 
             //Call Huy's function to load Image
-        } 
-        
+        }
+
+        else if (cmd.equals(Message.RESULT_HISTOGRAM)) {
+
+            //Show picture-Use a function to convert binary to image
+            //Message.convertByteToImage(answerMsg.getImageByte());
+
+            ArrayList<Object> resultContent = new ArrayList();
+            resultContent = answerMsg.getContent();
+            byte[] imgByte = (byte[]) resultContent.get(0);
+            Message.convertByteToImage(imgByte,answerMsg);
+
+            //Call Huy's function to load Image
+        }
         else {
             System.out.print(Message.ERR_CMD2);
         }
@@ -78,10 +95,10 @@ public class Client {
 	 SSLSocket client = null;
 
         try {
-		SSLSocketFactory sslSocketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
-                client = (SSLSocket)sslSocketFactory.createSocket("LocalHost",12345);
+		    SSLSocketFactory sslSocketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+            client = (SSLSocket)sslSocketFactory.createSocket("LocalHost",12345);
 
-                 client.setEnabledCipherSuites(client.getSupportedCipherSuites());
+            client.setEnabledCipherSuites(client.getSupportedCipherSuites());
 
             System.out.println("Client has been created successfully!");
 
@@ -108,23 +125,24 @@ public class Client {
             while (true) {
 
                 if (cmd.equals(Message.CMD_SEARCH)) {
-                                        
+
 
                     options.add(Message.OPTION_KEY_WORDS);
                     options.add(Message.OPTION_YEAR);
+                    options.add(Message.OPTION_SCORE);
                     options.add(Message.OPTION_SYSTEM);
                     options.add(Message.OPTION_NUMBER);
-                    
-                    System.out.println("Insert the keyword, the year, "
+
+                    System.out.println("Insert the keyword, the year, the score "
                             +"the system and the number of results that you wish.");
-                    System.out.println("Example:buffer%overflow 2015 linux 10\n");
+                    System.out.println("Example:buffer-injection this-year linux 4-5 10\n");
                     String arguments = br.readLine();
                     String[] argument = arguments.split(" ");
-                    
-                    for (int i = 0; i < 4; i++) {
+
+                    for (int i = 0; i < 5; i++) {
                         //System.out.println(argument[i]);
                         values.add(argument[i]);
-                    }                    
+                    }
                     break;
                 } 
             
@@ -140,22 +158,40 @@ public class Client {
                 
                 //Creat a statistic image request
                 else if (cmd.equals(Message.CMD_STATISTIC)) {
-                    
+
                     options.add(Message.OPTION_KEY_WORDS);
-                    
-                    System.out.println("Insert the systems that you wish " 
-                                    +"to be statistically examined.");
+
+                    System.out.println("Insert the systems that you wish "
+                            +"to be statistically examined.");
                     System.out.println("Example:linux apache chrome windows sql\n");
                     String arguments = br.readLine();
-                    String[] argument = arguments.split(" ");
-                    
+                    values.add(arguments);
+                    //String[] argument = arguments.split(" ");
+
+                  /*  for (int i = 0; i < argument.length; i++) {
+                        //System.out.println(argument[i]);
+                        values.add(argument[i]);
+                    }*/
+                    break;
+                }
+                else if (cmd.equals(Message.CMD_HISTOGRAM)) {
+
+                    options.add(Message.OPTION_KEY_WORDS);
+
+                    System.out.println("Insert one system that you wish "
+                            +"to be statistically examined.");
+                    System.out.println("Example:linux\n");
+                    String arguments = br.readLine();
+                  /*  String[] argument = arguments.split(" ");
+
                     for (int i = 0; i < argument.length; i++) {
                         //System.out.println(argument[i]);
                         values.add(argument[i]);
-                    }
+                    }*/
+                    values.add(arguments);
                     break;
-                }          
-                
+                }
+
                 else {
                     System.out.print(Message.ERR_CMD2);
                     break;

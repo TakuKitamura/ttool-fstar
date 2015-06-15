@@ -62,10 +62,14 @@ public class Client {
     public  Object parserAnswerMessage(Message answerMsg) {
         //Analyse the message from the server,
         //Depends on the cmd, we can determine the values
+        if (answerMsg ==null){
+            return null;
+        }
+
         String cmd = answerMsg.getCmd();
 
         if (cmd == null) {
-            TraceManager.addDev("Wrong message format - no cmd");
+            //TraceManager.addDev("Wrong message format - no cmd");
             return null;
         } else if (cmd.equals(Message.RESULT_SEARCH)) {
             ArrayList<Record> lrecord = new ArrayList<>();
@@ -143,9 +147,13 @@ public class Client {
             // the content are image.
             byte[] encoded = (byte[]) answerMsg.getContent().get(0);
             return encoded;
+        }  else if (cmd.equals(Message.RESULT_HISTOGRAM)) {
+        // the content are image.
+            byte[] encoded = (byte[]) answerMsg.getContent().get(0);
+            return encoded;
 
-        } else
-            TraceManager.addDev("The command is not supported\n");
+    } else
+            //TraceManager.addDev("The command is not supported\n");
         return null;
     }
 
@@ -179,7 +187,7 @@ public class Client {
         sslClient = (SSLSocket)sslSocketFactory.createSocket(server,port);
 
         sslClient.setEnabledCipherSuites(sslClient.getSupportedCipherSuites());
-        TraceManager.addDev("Client has been created successfully!");
+        //TraceManager.addDev("Client has been created successfully!");
 
         ObjectOutputStream outputStream = new ObjectOutputStream(sslClient.getOutputStream());
         ObjectInputStream inputStream = new ObjectInputStream(sslClient.getInputStream());

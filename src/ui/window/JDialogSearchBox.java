@@ -69,6 +69,7 @@ import javax.swing.text.html.HTMLDocument;
 import myutil.CheckConnection;
 import myutil.externalSearch.Record;
 import ui.ConfigurationTTool;
+import ui.IconManager;
 import ui.MalformedConfigurationException;
 import ui.TDiagramMouseManager;
 import myutil.externalSearch.Message;
@@ -94,6 +95,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     private javax.swing.JComboBox combobox_System;
     private javax.swing.JComboBox combobox_Year;
     private javax.swing.JComboBox combobox_Diagram;
+    private javax.swing.JComboBox combobox_Num;
     private javax.swing.JCheckBox databaseCb;
     private javax.swing.JTextPane detailText_db;
     private javax.swing.JTextPane detailText_google;
@@ -104,6 +106,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     private javax.swing.JButton jButton_Statistic;
     private javax.swing.JLabel jLabel_Status;
     private javax.swing.JLabel jLabel_System;
+    private javax.swing.JLabel jLabel_Number;
     private javax.swing.JLabel jLabel_Score;
     private javax.swing.JLabel jLabel_Year;
     private javax.swing.JPanel jPanel_DBTab;
@@ -137,6 +140,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     private TableSorter sortTable1;
     private String dbaddress;
     private int dbport;
+    private int tabCounter = 0;
 
 
 
@@ -205,8 +209,10 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         combobox_Score = new javax.swing.JComboBox();
         combobox_System = new javax.swing.JComboBox();;
         combobox_Year = new javax.swing.JComboBox();
+        combobox_Num = new javax.swing.JComboBox();
         jLabel_System = new javax.swing.JLabel();
         jLabel_Score = new javax.swing.JLabel();
+        jLabel_Number = new javax.swing.JLabel();
         jLabel_Year = new javax.swing.JLabel();
         jButton_Setting = new javax.swing.JButton();
         jButton_Statistic = new javax.swing.JButton();
@@ -219,14 +225,15 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jTextaddressDB = new JTextField();
         combobox_Diagram = new javax.swing.JComboBox();
         drawBt = new JButton();
-
-        String DIAGRAM_LIST[] = {"None","Statistic","Histogram","pie"};
+        String NUM_LIST[] = {"10","15","20","30"};
+        String DIAGRAM_LIST[] = {"None","Statistic","Histogram"};
         String SYSTEM_LIST[] = {"all", "linux", "windows", "others"};
-        String TIME_LIST[]= {"all", "last year", "last 3 years"};
+        String TIME_LIST[]= {"all", "this-year","last-year"};
         String SCORE_LIST[] = {"all", "5-7", "7-8", "8-9"};
         String COLUMNTITLE_G[] ={"No", "Title", "Link"} ;
         String COLUMNTITLE_GS[]= {"No", "Title", "Author", "Link"};
         String COLUMNTITLE_DB[]= {"No", "ID CVE", "Title"};
+
 
         detailText_google.setContentType("text/html");
         detailText_db.setContentType("text/html");
@@ -245,6 +252,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         rowsGoogleScholar=new ArrayList<Object[]>();
 
         jLabel_System.setText("System");
+        jLabel_Number.setText("Number of result");
         jLabel_Score.setText("Score");
         jLabel_Year.setText("Year");
         jButton_Setting.setText("Setting");
@@ -335,7 +343,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jTabbedPane2.addTab(GOOGLE, jPanel_GoogleTab);
 
 
-    ///
+        ///
         detailText_googleScholar.setBounds(0, 0, 20, 5);
         detailText_googleScholar.setEditable(false);
         jScrollPane8.setViewportView(detailText_googleScholar);
@@ -419,6 +427,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         combobox_Diagram.setModel(new javax.swing.DefaultComboBoxModel(DIAGRAM_LIST));
 
+        combobox_Num.setModel(new javax.swing.DefaultComboBoxModel(NUM_LIST));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -434,38 +444,44 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addComponent(googleCb)
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(databaseCb)
+
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(databaseCb)
                                                                         .addComponent(googleScholarCb)
                                                                         .addComponent(removeBt))
-                                                                .addGap(100, 100, 100)))
+                                                               ))
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                                 .addComponent(jButton_Setting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(combobox_Diagram, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+
                                                 )
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(jLabel_Score)
                                                         .addComponent(jLabel_Year)
-                                                        .addComponent(jLabel_System))
+                                                        .addComponent(jLabel_System)
+                                                        .addComponent(jLabel_Number)
+                                                        .addComponent(combobox_Diagram ))
                                                 .addGap(37, 37, 37)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                                 .addComponent(combobox_Score, 0, 142, Short.MAX_VALUE)
                                                                 .addComponent(combobox_Year, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                 .addComponent(combobox_System, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(combobox_Num, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 ))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel_Status)
                                                 .addGap(0, 0, Short.MAX_VALUE))
 
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(searchBox)
-                                                .addGap(10, 10, 10)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(searchBt, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(drawBt, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                        .addComponent(searchBox)
+                                                        .addGap(10, 10, 10)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                .addComponent(searchBt, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(drawBt, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+
+                                        ))
                                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -473,33 +489,44 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(jLabel_System, javax.swing.GroupLayout.Alignment.TRAILING)
                                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                                 .addComponent(googleCb)
-                                                                .addComponent(databaseCb)
-                                                                .addComponent(jButton_Setting)
+
                                                                 .addComponent(combobox_System, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                                 .addComponent(googleScholarCb)
-                                                                .addComponent(combobox_Diagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        //.addComponent(combobox_Diagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 )
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(removeBt))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(35, 35, 35)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(combobox_Score, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel_Score))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(combobox_Year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel_Year))))
-                                .addGap(24, 24, 24)
-                                .addComponent(drawBt)
+                                                        .addGap(35, 35, 35)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                .addComponent(combobox_Score, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(jLabel_Score))
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                .addComponent(databaseCb)
+                                                                .addComponent(jButton_Setting)
+                                                                .addComponent(combobox_Year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(jLabel_Year))
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                .addComponent(combobox_Num, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(jLabel_Number))
+                                        ))
+                                .addGap(10, 10, 10)
+
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(combobox_Diagram)
+                                        .addComponent(drawBt))
+                                .addGap(6, 6, 6)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(searchBt))
@@ -543,10 +570,9 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                 JOptionPane.WARNING_MESSAGE);
                     searchBt.setEnabled(false);
                     drawBt.setEnabled(false);
-                } else
-                    if (combobox_Diagram.getSelectedItem() != "None")
-                        drawBt.setEnabled(true);
-                    searchBt.setEnabled(true);
+                } else if (combobox_Diagram.getSelectedItem() != "None")
+                    drawBt.setEnabled(true);
+                searchBt.setEnabled(true);
 
                 if (!isPrintableString(searchBox.getText())) {
                     JOptionPane.showMessageDialog(null, "Not printable character", "Warning",
@@ -595,8 +621,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                 if (googleScholarCb.isSelected() && ListKeywords.getModel().getSize() > 0) {
                     searchBt.setEnabled(true);
                     drawBt.setEnabled(true);
-                }else
-                {
+                } else {
                     //searchBt.setEnabled(false);
                     drawBt.setEnabled(false);
                 }
@@ -735,7 +760,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                                   null, new Object[]{"Save", "Cancel"}, "OK");
                                                       }
                                                       ConfigurationTTool.ExternalServer = jTextaddressDB.getText();
-
+                                                      dbaddress=jTextaddressDB.getText().split(":")[0];
+                                                      dbport=Integer.parseInt(jTextaddressDB.getText().split(":")[1]);
                                                       try {
                                                           ConfigurationTTool.saveConfiguration();
                                                       } catch (MalformedConfigurationException e) {
@@ -760,8 +786,10 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 //System.out.print(combobox_Diagram.getSelectedItem());
-                if (combobox_Diagram.getSelectedItem() == "statistic")
+                if (combobox_Diagram.getSelectedItem() == "Statistic")
                     doStatistic();
+                if (combobox_Diagram.getSelectedItem() == "Histogram")
+                    doHistogram();
             }
         });
 
@@ -787,15 +815,17 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         combobox_Diagram.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-               if (combobox_Diagram.getSelectedItem() == "None" || searchBox.getText().length() <=0)
-                   drawBt.setEnabled(false);
-               else if  ((combobox_Diagram.getSelectedItem() != "None" && searchBox.getText().length() >0))
-                   drawBt.setEnabled(true);
+                if (combobox_Diagram.getSelectedItem() == "None" || searchBox.getText().length() <= 0)
+                    drawBt.setEnabled(false);
+                else if ((combobox_Diagram.getSelectedItem() != "None" && searchBox.getText().length() > 0))
+                    drawBt.setEnabled(true);
             }
         });
 
         pack();
     }//
+
+
 
     private void WindowClosing(WindowEvent evt) {
         tdmm.clearSelectComponents();
@@ -937,7 +967,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                             if (searchGoogle == 1) {
                                 jLabel_Status.setText("Retrieving data from Google");
 
-                                resultGoogle = GoogleSearch.getGoogleResult(searchBox.getText());
+                                resultGoogle = GoogleSearch.getGoogleResult(searchBox.getText(),(String)combobox_Num.getSelectedItem());
                                 jLabel_Status.setText("Done");
 
                                 if (resultGoogle == null) {
@@ -963,7 +993,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                             if (searchGoogleScholar == 1) {
                                 jLabel_Status.setText("Retrieving data from Google Scholar");
                                 //jLabel_Status.updateUI();
-                                resultGoogleScholar = GoogleSearch.getGoogleScholarResult(searchBox.getText());
+                                resultGoogleScholar = GoogleSearch.getGoogleScholarResult(searchBox.getText(),(String)combobox_Num.getSelectedItem());
                                 jLabel_Status.setText("Done");
                                 //jLabel_Status.updateUI();
                                 if (resultGoogleScholar == null) {
@@ -1000,35 +1030,15 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                     jLabel_Status.setText("Retrieving data from DB");
                     Message msg = new Message(Message.CMD_SEARCH);
 
-                    //Message msg = new Message(Message.CMD_DETAIL);
-                    //msg.addKeywordMessage("CVE-2013-0001");
-
-                    /*ArrayList<String> options = new ArrayList();
-                    ArrayList<String> values = new ArrayList();
-
-                    options.add("keyword");
-                    options.add("year");
-                    options.add("system");
-                    options.add(Message.OPTION_NUMBER);
-
-                    values.add("Stuxnet");
-                    values.add("2014");
-                    values.add("windows");
-                    values.add("10");
-                    msg.createRequestMessage(Message.CMD_SEARCH, options, values);*/
                     msg.addKeywordMessage(searchBox.getText());
-                    msg.addOptionValueMessage(Message.OPTION_YEAR, "2014");
+                    msg.addOptionValueMessage(Message.OPTION_YEAR, (String) combobox_Year.getSelectedItem());
                     msg.addOptionValueMessage(Message.OPTION_SYSTEM, (String) combobox_System.getSelectedItem());
-                    //msg.addOptionValueMessage(Message.OPTION_SCORE,(String)combobox_Score.getSelectedItem());
+                    msg.addOptionValueMessage(Message.OPTION_SCORE,(String)combobox_Score.getSelectedItem());
+                    msg.addOptionValueMessage(Message.OPTION_NUMBER,(String)combobox_Num.getSelectedItem());
 
-                   msg.addOptionValueMessage(Message.OPTION_NUMBER, Integer.toString(10));
 
-                    //create client
-                    //Client client = new Client();
-                    //Message msg1 = new Message(Message.RESULT_SEARCH);
                     Message returnMsg = sendMessage(msg);
 
-                    //Message msg1 = new Message(Message.RESULT_SEARCH);
 
                     ArrayList<Record> re = (ArrayList<Record>)parserMessage(returnMsg);
                     putDBToTable(re);
@@ -1191,30 +1201,38 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     
     public void putGoogleToTable(ArrayList<GoogleSearch> a)
     {
-    	int i = this.rowsGoogle.size()+1;
-    	for (GoogleSearch gs : a){
-    		this.rowsGoogle.add(new Object[]{i, gs});
-    		i=i+1;
-    	}
+        if (a!=null){
+            int i = this.rowsGoogle.size()+1;
+            for (GoogleSearch gs : a){
+                this.rowsGoogle.add(new Object[]{i, gs});
+                i=i+1;
+            }
+        }
+
     }
 
     public void putDBToTable(ArrayList<Record> a)
     {
-        int i = this.rowsGoogle.size()+1;
-        for (Record record : a){
-            this.rowsDB.add(new Object[]{i, record});
-            i=i+1;
+        if (a!=null){
+            int i = this.rowsGoogle.size()+1;
+            for (Record record : a){
+                this.rowsDB.add(new Object[]{i, record});
+                i=i+1;
+            }
         }
+
     }
 
 
     public void putGoogleScholarToTable(ArrayList<GoogleSearch> a)
     {
-    	int i = this.rowsGoogleScholar.size()+1;
-    	for (GoogleSearch gs : a){
-            rowsGoogleScholar.add(new Object[]{i, gs});
-    		i=i+1;
-    	}
+        if (a!=null) {
+            int i = this.rowsGoogleScholar.size() + 1;
+            for (GoogleSearch gs : a) {
+                rowsGoogleScholar.add(new Object[]{i, gs});
+                i = i + 1;
+            }
+        }
     }
 
 
@@ -1259,24 +1277,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     public void doStatistic() {
         BufferedImage img= null;
         try {
-            //img = ImageIO.read(new File("test.jpg"));
             Message msg = new Message(Message.CMD_STATISTIC);
-            ArrayList<String> options = new ArrayList<>();
-            ArrayList<String> values = new ArrayList<>();
-            options.add(Message.CMD_STATISTIC);
-
-
-            String arguments = searchBox.getText();
-            String[] argument = arguments.split(" ");
-
-            for (int i = 0; i < argument.length; i++) {
-                //System.out.println(argument[i]);
-                values.add(argument[i]);
-            }
-            msg.setOptions(options);
-            msg.setValues(values);
-
-
+            msg.addKeywordMessage(this.searchBox.getText());
             Message ret = sendMessage(msg);
             if (ret !=null)
             {
@@ -1285,12 +1287,9 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                 ByteArrayInputStream in = new ByteArrayInputStream(b);
                 img = ImageIO.read(in);
                 ImageIcon icon = new ImageIcon(img);
-                Image scaleImage = icon.getImage().getScaledInstance(750, 200, Image.SCALE_DEFAULT);
+                Image scaleImage = icon.getImage().getScaledInstance(650, 300, java.awt.Image.SCALE_SMOOTH);
                 icon = new ImageIcon(scaleImage);
-                JLabel imageLabel = new JLabel(icon);
-                JScrollPane scrollPane = new JScrollPane(imageLabel);
-                jTabbedPane2.addTab("HUY", scrollPane);
-
+                addTab("Statistic",icon);
             }
             }
         } catch (IOException e) {
@@ -1298,6 +1297,98 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                     JOptionPane.WARNING_MESSAGE);
         }
 
+    }
+
+    private void doHistogram() {
+        BufferedImage img= null;
+        try {
+            Message msg = new Message(Message.CMD_HISTOGRAM);
+            msg.addKeywordMessage(this.searchBox.getText());
+            Message ret = sendMessage(msg);
+            if (ret !=null)
+            {
+                byte[] b = (byte[])parserMessage(ret);
+                if(b != null) {
+                    ByteArrayInputStream in = new ByteArrayInputStream(b);
+                    img = ImageIO.read(in);
+                    ImageIcon icon = new ImageIcon(img);
+                    Image scaleImage = icon.getImage().getScaledInstance(700, 300, java.awt.Image.SCALE_SMOOTH);
+                    icon = new ImageIcon(scaleImage);
+                    addTab("Histogram",icon);
+
+                }
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Cannot display diagram !!!", "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+
+    }
+
+
+    private void removeTab(String name){
+        for ( int i =0; i < jTabbedPane2.getTabCount(); i ++){
+            if (jTabbedPane2.getTitleAt(i).equals(name)){
+                jTabbedPane2.remove(i);
+            }
+        }
+    }
+
+    private void addTab(String name,ImageIcon icon ){
+        tabCounter ++;
+        JLabel imageLabel = new JLabel(icon);
+        JScrollPane scrollPane = new JScrollPane(imageLabel);
+        removeTab(name);
+        jTabbedPane2.addTab(name, scrollPane);
+        //jTabbedPane2.setTabComponentAt(3, tabCloseButton);
+
+        int index = jTabbedPane2.indexOfTab(name);
+        JPanel pnlTab = new JPanel(new GridBagLayout());
+        pnlTab.setOpaque(false);
+        JLabel lblTitle = new JLabel(name);
+        //JButton btnClose = new JButton("x");
+        JButton btnClose = new JButton();
+
+        btnClose.setOpaque(false);
+        btnClose.setContentAreaFilled(false);
+        btnClose.setBorderPainted(false);
+        //btnClose.setPreferredSize(new Dimension(25, 25));
+        btnClose.setMargin(new Insets(0, 0, 0, 0));
+        btnClose.setIcon(IconManager.imgic26);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+
+        pnlTab.add(lblTitle, gbc);
+
+        gbc.gridx++;
+        gbc.gridx++;
+        gbc.gridy--;
+        gbc.weightx = 0;
+        pnlTab.add(btnClose, gbc);
+
+        jTabbedPane2.setTabComponentAt(index, pnlTab);
+        btnClose.setActionCommand("" +tabCounter);
+
+        btnClose.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JButton btn = (JButton) actionEvent.getSource();
+                String s1 = btn.getActionCommand();
+                for (int i = 1; i < jTabbedPane2.getTabCount(); i++) {
+                    JPanel pnl = (JPanel) jTabbedPane2.getTabComponentAt(i);
+                    if (pnl!=null) {
+                        btn = (JButton) pnl.getComponent(1);
+                        String s2 = btn.getActionCommand();
+                        if (s1.equals(s2)) {
+                            jTabbedPane2.removeTabAt(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
     }
 
 

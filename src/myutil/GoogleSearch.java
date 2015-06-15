@@ -63,21 +63,27 @@ public class GoogleSearch {
 	
 	public static final String charset = "UTF-8";
 	public static final String userAgent = "Eurecom";
-	public static final String google = "http://www.google.com/search?hl=en&q=";
-	public static final String googleScholar="http://scholar.google.com/scholar?ht=en&q=";
+	public static final String google = "http://www.google.com/search?hl=en";
+	public static final String googleScholar="http://scholar.google.com/scholar?ht=en";
 	
 	public static final String ENCODING_ERROR = "encodeding_error";
 	public static final String IOEx = "IOExeption";
 	
-	public static final ArrayList<GoogleSearch> getGoogleResult(String search) {
+	public static final ArrayList<GoogleSearch> getGoogleResult(String search,String num) {
 		ArrayList<GoogleSearch> r = new ArrayList<GoogleSearch>();
 		
 		String title="" ;
 		String url ="" ;
 		String desc="";
 		GoogleSearch gs;
-		try{		
-		Document doc = Jsoup.connect(google + URLEncoder.encode(search, charset)).userAgent(userAgent).get();
+
+
+		try{
+			String keyword  = "&q=" + URLEncoder.encode(search, charset);
+			String number = "&num=" + URLEncoder.encode(num, charset);
+			String googleurl = google + number + keyword;
+
+		Document doc = Jsoup.connect(googleurl).userAgent(userAgent).get();
 		
 		//get list of search result, each result begin with tag <li class="g">
 		Elements articles = doc.select("li.g");
@@ -136,7 +142,7 @@ public class GoogleSearch {
 	}
 	
 	
-	public static final ArrayList<GoogleSearch> getGoogleScholarResult(String search){
+	public static final ArrayList<GoogleSearch> getGoogleScholarResult(String search,String num){
 		ArrayList<GoogleSearch> r = new ArrayList<GoogleSearch>();
 		String title="";
 		String url="";
@@ -148,7 +154,10 @@ public class GoogleSearch {
         
 		GoogleSearch gs;
 		try{
-			Document doc = Jsoup.connect(googleScholar + URLEncoder.encode(search, charset)).userAgent(userAgent).get();
+			String keyword  = "&q=" + URLEncoder.encode(search, charset);
+			String number = "&num=" + URLEncoder.encode(num, charset);
+			String googleScholarurl = googleScholar + number + keyword;
+			Document doc = Jsoup.connect(googleScholarurl).userAgent(userAgent).get();
 
 		//get list of search result, each result begin with tag <li class="g">
 			Element error = doc.select("span.gs_red").first();
@@ -205,17 +214,6 @@ public class GoogleSearch {
 	                	}
 	                }
 	            }
-
-	            //TraceManager.addDev("title-->"+title);
-				//TraceManager.addDev("url-->"+url);
-	            //TraceManager.addDev("desc-->"+desc);
-	            //TraceManager.addDev("author-->"+authors);
-	            //TraceManager.addDev("cited number-->"+citedNumber);
-	            //TraceManager.addDev("cited link-->"+citedLinks);
-	            //TraceManager.addDev("related link-->"+related);
-
-
-
 	            gs.authors=authors;
 	            gs.title=title;
 	            gs.url=url;
