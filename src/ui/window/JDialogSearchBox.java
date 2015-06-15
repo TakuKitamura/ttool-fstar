@@ -175,6 +175,21 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
          this.setVisible(true);
 
     }
+    public JDialogSearchBox(Frame _frame, String _title, ArrayList<String> l) {
+        //super(_frame, _title, true);
+        initComponents();
+        this.tdmm = tdmm;
+        this.setTitle("External Search");
+        GraphicLib.centerOnParent(this);
+        //String s="";
+        for (int i =0; i< l.size(); i++){
+            addValueListKeyword(l.get(i));
+        }
+        pack();
+
+        this.setVisible(true);
+
+    }
 
     private void initComponents(){
     	jScrollPane1 = new javax.swing.JScrollPane();
@@ -232,16 +247,22 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         String SCORE_LIST[] = {"all", "5-7", "7-8", "8-9"};
         String COLUMNTITLE_G[] ={"No", "Title", "Link"} ;
         String COLUMNTITLE_GS[]= {"No", "Title", "Author", "Link"};
-        String COLUMNTITLE_DB[]= {"No", "ID CVE", "Title"};
+        String COLUMNTITLE_DB[]= {"No", "ID CVE", "Title","Score"};
 
 
         detailText_google.setContentType("text/html");
         detailText_db.setContentType("text/html");
         detailText_googleScholar.setContentType("text/html");
+        try {
+            jTextaddressDB.setText(ConfigurationTTool.ExternalServer);
+            dbaddress = jTextaddressDB.getText().split(":")[0];
+            dbport = Integer.parseInt(jTextaddressDB.getText().split(":")[1]);
+        }catch(ArrayIndexOutOfBoundsException exception) {
+            dbaddress="localhost";
+            dbport=12345;
+            jTextaddressDB.setText(dbaddress+Integer.toString(dbport));
+        }
 
-        jTextaddressDB.setText(ConfigurationTTool.ExternalServer);
-        dbaddress = jTextaddressDB.getText().split(":")[0];
-        dbport = Integer.parseInt(jTextaddressDB.getText().split(":")[1]);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -396,7 +417,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         jScrollPane5.setViewportView(resultTable_db);
         resultTable_db.getColumnModel().getColumn(0).setMaxWidth(40);
-        resultTable_db.getColumnModel().getColumn(2).setMinWidth(120);
+        resultTable_db.getColumnModel().getColumn(2).setMinWidth(90);
+        resultTable_db.getColumnModel().getColumn(3).setMaxWidth(50);
         jScrollPane7.setViewportView(detailText_db);
 
 
@@ -828,7 +850,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
 
     private void WindowClosing(WindowEvent evt) {
-        tdmm.clearSelectComponents();
+        if (tdmm !=null)
+            tdmm.clearSelectComponents();
         this.dispose();
     }
 

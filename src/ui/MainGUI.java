@@ -2964,15 +2964,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         ArrayList<String> listSearch = new ArrayList<String>();
 
         if (null == this.searchBox) {
-            if (getCurrentTDiagramPanel().tdmm.getSelectComponents().size() == 0) {
-                listSearch.add(textSearchField);
-            }
-            else{
-                listSearch = getCurrentTDiagramPanel().tdmm.getSelectComponents();
-                listSearch.add(0,textSearchField);
+            if (getCurrentTDiagramPanel()!=null) {
+                if (getCurrentTDiagramPanel().tdmm.getSelectComponents().size() == 0) {
+                    listSearch.add(textSearchField);
+                } else {
+                    listSearch = getCurrentTDiagramPanel().tdmm.getSelectComponents();
+                    listSearch.add(0, textSearchField);
 
-            }
-            this.searchBox = new JDialogSearchBox(frame, "External Search", listSearch,getCurrentTDiagramPanel().tdmm);
+                }
+                this.searchBox = new JDialogSearchBox(frame, "External Search", listSearch, getCurrentTDiagramPanel().tdmm);
+            }else
+                this.searchBox = new JDialogSearchBox(frame, "External Search", new ArrayList<String>());
 
         }
         else {

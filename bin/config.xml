@@ -61,11 +61,11 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /home/enrici/TURTLE/uppaal/spec.xml"/>
 
-<LastOpenFile data="/home/trhuy/TURTLE/stuxnet.xml"/>
+<LastOpenFile data="/home/trhuy/Downloads/CSmartCardProtocol.xml"/>
 
 <ExternalServer data="localhost:12345"/>
 
-<LastWindowAttributes x="358" y="70" width="792" height="597" max="false" />
+<LastWindowAttributes x="144" y="81" width="1219" height="597" max="false" />
 
 
 </TURTLECONFIGURATION>
