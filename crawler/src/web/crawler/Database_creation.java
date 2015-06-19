@@ -17,6 +17,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.apache.derby.drda.NetworkServerControl;
 
+
+
 /**
  * All the function necessary for the creation of the database, creation of tables in the database and the storage of this databse
  * @author Marie FORRAT & Angeliki AKTYPI
@@ -151,8 +153,8 @@ public class Database_creation {
         /**
          * Information for creating the database
          */
-        String url = "jdbc:derby://localhost:1527/MyDatabase;create=true;user=root;password=1234";
         //String url = "jdbc:derby://localhost:1527/";
+        String url = "jdbc:derby://localhost:1527/MyDatabase;create=true;user=root;password=1234";
         String dbName = "MyDatabase";
         String driver = "org.apache.derby.jdbc.ClientDriver";
         String username = "root";

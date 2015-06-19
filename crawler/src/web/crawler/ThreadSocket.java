@@ -20,13 +20,18 @@ import javax.net.ssl.SSLSocket;
 
 /**
  *
- * @author Dan
+ * @author Dan Huynh VO
  */
 public class ThreadSocket extends Thread{
     
    SSLSocket socket = null;
    Database_query database = null;
-    
+
+    /**
+     *
+     * @param socket
+     * @param database
+     */
     public ThreadSocket(SSLSocket socket,web.crawler.Database_query database){
         
         this.socket = socket;

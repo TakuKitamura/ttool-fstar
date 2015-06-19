@@ -136,13 +136,14 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     private String search;
 
-    private TableSorter sortTable;
-    private TableSorter sortTable1;
+    private TableSorter sortTableGS;
+    private TableSorter sortTableGSc;
+    private TableSorter sortTableDB;
+
+
     private String dbaddress;
     private int dbport;
     private int tabCounter = 0;
-
-
 
 
 
@@ -214,8 +215,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jLabel_Result = new javax.swing.JLabel();
         jLabel_Status = new javax.swing.JLabel();
 
-        sortTable = new TableSorter();
-        sortTable1 = new TableSorter();
+        sortTableGS = new TableSorter();
+        sortTableGSc = new TableSorter();
 
         jPanel_GoogleScholarTab = new javax.swing.JPanel();
         jPanel_GoogleTab = new javax.swing.JPanel();
@@ -238,13 +239,14 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jScrollPane8= new JScrollPane();
         jScrollPane9= new JScrollPane();
         jTextaddressDB = new JTextField();
+
         combobox_Diagram = new javax.swing.JComboBox();
         drawBt = new JButton();
-        String NUM_LIST[] = {"10","15","20","30"};
+        String NUM_LIST[] = {"10","15","20","30","40","50"};
         String DIAGRAM_LIST[] = {"None","Statistic","Histogram"};
         String SYSTEM_LIST[] = {"all", "linux", "windows", "others"};
         String TIME_LIST[]= {"all", "this-year","last-year"};
-        String SCORE_LIST[] = {"all", "5-7", "7-8", "8-9"};
+        String SCORE_LIST[] = {"all","8-10","7-8", "5-7", "0-5"};
         String COLUMNTITLE_G[] ={"No", "Title", "Link"} ;
         String COLUMNTITLE_GS[]= {"No", "Title", "Author", "Link"};
         String COLUMNTITLE_DB[]= {"No", "ID CVE", "Title","Score"};
@@ -323,15 +325,19 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         detailText_google.setBounds(0, 0, 20, 5);
         detailText_google.setEditable(false);
         jScrollPane3.setViewportView(detailText_google);
-        resultTable_google = new JTable(sortTable);
 
 
-        resultTable_google.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, COLUMNTITLE_G) {
+       sortTableGS = new TableSorter(new javax.swing.table.DefaultTableModel(new Object[][]{}, COLUMNTITLE_G) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         });
+
+
+        resultTable_google = new JTable(sortTableGS);
+        sortTableGS.setTableHeader(resultTable_google.getTableHeader());
+
         resultTable_google.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jScrollPane4.setViewportView(resultTable_google);
@@ -341,7 +347,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         resultTable_google.getColumnModel().getColumn(2).setMinWidth(400);
 
 
-        sortTable.setTableHeader(resultTable_google.getTableHeader());
+
 
         javax.swing.GroupLayout jPanel_GoogleTabLayout = new javax.swing.GroupLayout(jPanel_GoogleTab);
         jPanel_GoogleTab.setLayout(jPanel_GoogleTabLayout);
@@ -368,22 +374,26 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         detailText_googleScholar.setBounds(0, 0, 20, 5);
         detailText_googleScholar.setEditable(false);
         jScrollPane8.setViewportView(detailText_googleScholar);
-        resultTable_googleScholar = new JTable(sortTable1);
 
 
-        resultTable_googleScholar.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, COLUMNTITLE_GS) {
+        sortTableGSc = new TableSorter(new javax.swing.table.DefaultTableModel(new Object[][]{}, COLUMNTITLE_GS) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         });
+
+
+        resultTable_googleScholar = new JTable(sortTableGSc);
+        sortTableGSc.setTableHeader(resultTable_googleScholar.getTableHeader());
+
         resultTable_googleScholar.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jScrollPane9.setViewportView(resultTable_googleScholar);
 
         resultTable_googleScholar.getColumnModel().getColumn(0).setMaxWidth(40);
 
-        sortTable1.setTableHeader(resultTable_googleScholar.getTableHeader());
+
 
         javax.swing.GroupLayout jPanel_GoogleScholarTabLayout = new javax.swing.GroupLayout(jPanel_GoogleScholarTab);
         jPanel_GoogleScholarTab.setLayout(jPanel_GoogleScholarTabLayout);
@@ -407,18 +417,26 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         /////
 
-        resultTable_db.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, COLUMNTITLE_DB) {
+        sortTableDB = new TableSorter(new javax.swing.table.DefaultTableModel(new Object[][]{}, COLUMNTITLE_DB) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         });
+
+
+        resultTable_db = new JTable(sortTableDB);
+        sortTableDB.setTableHeader(resultTable_db.getTableHeader());
+
         resultTable_db.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jScrollPane5.setViewportView(resultTable_db);
         resultTable_db.getColumnModel().getColumn(0).setMaxWidth(40);
+        resultTable_db.getColumnModel().getColumn(1).setMaxWidth(200);
+        resultTable_db.getColumnModel().getColumn(1).setMinWidth(150);
         resultTable_db.getColumnModel().getColumn(2).setMinWidth(90);
-        resultTable_db.getColumnModel().getColumn(3).setMaxWidth(50);
+        resultTable_db.getColumnModel().getColumn(3).setMaxWidth(60);
+        resultTable_db.getColumnModel().getColumn(3).setMinWidth(60);
         jScrollPane7.setViewportView(detailText_db);
 
 
@@ -469,11 +487,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(databaseCb)
-                                                                        .addComponent(googleScholarCb)
-                                                                        .addComponent(removeBt))
-                                                               ))
+                                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                .addComponent(databaseCb)
+                                                                                .addComponent(googleScholarCb)
+                                                                                .addComponent(removeBt))
+                                                        ))
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                                 .addComponent(jButton_Setting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 
@@ -484,7 +502,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                         .addComponent(jLabel_Year)
                                                         .addComponent(jLabel_System)
                                                         .addComponent(jLabel_Number)
-                                                        .addComponent(combobox_Diagram ))
+                                                        .addComponent(combobox_Diagram))
                                                 .addGap(37, 37, 37)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                                 .addComponent(combobox_Score, 0, 142, Short.MAX_VALUE)
@@ -715,24 +733,32 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
         resultTable_db.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                int row = resultTable_db.getSelectedRow();
+
                 //int col = resultTable_db.getSelectedColumn();
 
                 if (e.getClickCount() == 2) {
-                    String st = (String) resultTable_db.getValueAt(row, 1);
 
-                    Message msg = new Message(Message.CMD_DETAIL);
-                    msg.addKeywordMessage(st);
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            int row = resultTable_db.getSelectedRow();
+                            String st = (String) resultTable_db.getValueAt(row, 1);
 
-                    //Client cl = new Client();)
-                    Message returnMsg = sendMessage(msg);
-                    //Message returnMsg  = new Message(Message.RESULT_DETAIL);
+                            Message msg = new Message(Message.CMD_DETAIL);
+                            msg.addKeywordMessage(st);
 
-                    //Record r = (Record)cl.parserAnswerMessage(returnMsg);
-                    if (returnMsg != null) {
-                        Record r = (Record) parserMessage(returnMsg);
-                        printDetailRecord(r);
-                    }
+                            //Client cl = new Client();)
+                            Message returnMsg = sendMessage(msg);
+
+                            if (returnMsg != null) {
+                                Record r = (Record) parserMessage(returnMsg);
+                                printDetailRecord(r);
+                            }
+                        }
+                    });
+                    t.start();
+
+
                 }
 
             }
@@ -773,7 +799,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                           joptionpane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                                                           null, new Object[]{"Save", "Cancel"}, "OK");
                                                   if (i == joptionpane.OK_OPTION) {
-                                                      // while (! (jTextaddressDB.getText().contains(":") && jTextaddressDB.getText().split(":").length == 2 && isNum(jTextaddressDB.getText().split(":")[1]))) {
                                                       while (!isAddressDBFormatted()) {
                                                           JOptionPane.showMessageDialog(null, "Address:Port", "Wrong format",
                                                                   JOptionPane.WARNING_MESSAGE);
@@ -808,10 +833,27 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 //System.out.print(combobox_Diagram.getSelectedItem());
-                if (combobox_Diagram.getSelectedItem() == "Statistic")
-                    doStatistic();
-                if (combobox_Diagram.getSelectedItem() == "Histogram")
-                    doHistogram();
+
+                if (combobox_Diagram.getSelectedItem() == "Statistic") {
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            doStatistic();
+                        }
+                    });
+                    t.start();
+                }
+                if (combobox_Diagram.getSelectedItem() == "Histogram") {
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            doHistogram();
+                            ;
+                        }
+                    });
+                    t.start();
+                }
+
             }
         });
 
@@ -958,9 +1000,10 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                 searchBt.setEnabled(false);
 
                 //reset content of table
-                DefaultTableModel modelGoogle = (DefaultTableModel) resultTable_google.getModel();
-                DefaultTableModel modelGoogleScholar = (DefaultTableModel) resultTable_googleScholar.getModel();
-                DefaultTableModel modelDB = (DefaultTableModel) resultTable_db.getModel();
+               // DefaultTableModel modelGoogle = (DefaultTableModel) resultTable_google.getModel();
+                DefaultTableModel modelGoogle = (DefaultTableModel) sortTableGS.getTableModel();
+                DefaultTableModel modelGoogleScholar = (DefaultTableModel) sortTableGSc.getTableModel();
+                DefaultTableModel modelDB = (DefaultTableModel) sortTableDB.getTableModel();
 
                 modelGoogle.setRowCount(0);
                 modelGoogleScholar.setRowCount(0);
@@ -1098,7 +1141,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             for (Object[] o : list) {
                 id = (Integer) (o[0]);
                 Record r = (Record) (o[1]);
-                model.addRow(new Object[]{id, r.getCve_id(), r.getName()});
+                model.addRow(new Object[]{id, r.getCve_id(), r.getName(),r.getScore()});
             }
         }
 
@@ -1237,7 +1280,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     public void putDBToTable(ArrayList<Record> a)
     {
         if (a!=null){
-            int i = this.rowsGoogle.size()+1;
+            int i = this.rowsDB.size()+1;
             for (Record record : a){
                 this.rowsDB.add(new Object[]{i, record});
                 i=i+1;
@@ -1305,15 +1348,15 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             Message ret = sendMessage(msg);
             if (ret !=null)
             {
-            byte[] b = (byte[])parserMessage(ret);
-            if(b != null) {
-                ByteArrayInputStream in = new ByteArrayInputStream(b);
-                img = ImageIO.read(in);
-                ImageIcon icon = new ImageIcon(img);
-                Image scaleImage = icon.getImage().getScaledInstance(650, 300, java.awt.Image.SCALE_SMOOTH);
-                icon = new ImageIcon(scaleImage);
-                addTab("Statistic",icon);
-            }
+                byte[] b = (byte[])parserMessage(ret);
+                if(b != null) {
+                    ByteArrayInputStream in = new ByteArrayInputStream(b);
+                    img = ImageIO.read(in);
+                    ImageIcon icon = new ImageIcon(img);
+                    Image scaleImage = icon.getImage().getScaledInstance(650, 300, java.awt.Image.SCALE_SMOOTH);
+                    icon = new ImageIcon(scaleImage);
+                    addTab("Statistic",icon);
+                }
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Cannot display diagram !!!", "Warning",
@@ -1492,7 +1535,9 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                 "<body  style=\"font-size: 14pt\">" +
                 "   <b>Title:  </b>" + r.getName() + "<br>" +
                 "   <b>ID : </b>" + r.getCve_id() + "<br>"+
+                "   <b>Score : </b>" + r.getScore() + "<br>"+
                 "   <b>Summary : </b>" + r.getSummary() + "<br>"+
+
                 "</body>"+
                 "</html>";
         return html;

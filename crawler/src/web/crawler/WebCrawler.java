@@ -6,10 +6,19 @@
 package web.crawler;
 
 import java.awt.AWTException;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributeView;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import myutil.externalSearch.Message;
 import static web.crawler.File_management.ParsingXML;
 import javax.net.ssl.SSLServerSocket;
@@ -38,6 +47,82 @@ public class WebCrawler {
      * @throws java.awt.AWTException
      * 
      */
+
+    public static void UpdateDatabase(String[] FileNames) throws IOException, SQLException{
+
+        /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+        /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+        /*                         Update Database                           */
+        /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+        if (database.ReferencesSqlFile.exists() & database.VulnerabilitesSqlFile.exists() & database.SoftwaresSqlFile.exists()) {
+
+            Path FilePath = Paths.get(FileNames[0]);
+            BasicFileAttributes view = Files.getFileAttributeView(FilePath, BasicFileAttributeView.class).readAttributes();
+            //FileTime time = view.creationTime();
+            FileTime time = view.lastModifiedTime();
+            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+            String dateCreated = df.format(time.toMillis());
+            System.out.println("The last update of the database was on " + dateCreated + "\n");
+
+            System.out.println("Do you want to update the database?\n");
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String answer = br.readLine();
+
+            switch (answer){
+
+                case "Yes":
+
+                    File thisyearfile = new File(FileNames[0]);
+                    thisyearfile.delete();
+
+                    File lastyearfile = new File(FileNames[1]);
+                    lastyearfile.delete();
+                    File beforelastyearfile = new File(FileNames[2]);
+                    beforelastyearfile.delete();
+                    File beforebeforelastyearfile = new File(FileNames[3]);
+                    beforebeforelastyearfile.delete();
+
+                    database.ReferencesSqlFile.delete();
+                    database.VulnerabilitesSqlFile.delete();
+                    database.SoftwaresSqlFile.delete();
+
+                    System.out.println("The files have been deleted!!\n");
+                    UpdateDatabase(FileNames);
+                    break;
+
+                case "No":
+
+                    database.CreateDatabaseFromSQLFile();
+
+                    System.out.println("\nDatabase is restored from files:\n"
+                            + database.ReferencesSqlFile.toString() + "\n"
+                            + database.VulnerabilitesSqlFile.toString() + "\n"
+                            + database.SoftwaresSqlFile.toString() + "\n");
+
+                    System.out.println("Total records insert in the database: " + database.getTotalRecordsInDatabase()+ "\n\n");
+
+                    break;
+
+                default:
+
+                    System.out.println("\nPlease enter Yes or No\n");
+                    UpdateDatabase(FileNames);
+                    break;
+            }
+
+        } else {
+            /* Read XML file and store the informations in the database          */
+            for (String xmlFile : FileNames) {
+                ParsingXML(xmlFile, database);
+            }
+            System.out.println("Total records insert in the database: " + database.getTotalRecordsInDatabase() + "\n\n");
+            /* Store myDatabase in file myDatabase.sql                           */
+            database.StoreDatabaseInFile();
+        }
+
+    }
+
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, IOException, AWTException, Exception {
         /**
         * The name of the file, for example "nvdcve-2.0-2015.xml", from https://nvd.nist.gov/, which data we want to inport in our database
@@ -57,12 +142,14 @@ public class WebCrawler {
         /*       Establish connection with server and create database        */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         database.CreateDatabase();
+
+        UpdateDatabase(FileNames);
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*                       Create SQL Database                         */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
-        if (database.ReferencesSqlFile.exists() & database.VulnerabilitesSqlFile.exists() & database.SoftwaresSqlFile.exists()) {
+      /*  if (database.ReferencesSqlFile.exists() & database.VulnerabilitesSqlFile.exists() & database.SoftwaresSqlFile.exists()) {
             database.CreateDatabaseFromSQLFile();
             System.out.println("Database is restored from files:\n"
                     + database.ReferencesSqlFile.toString() + "\n"
@@ -71,14 +158,14 @@ public class WebCrawler {
 
             System.out.println("Total records insert in the database: " + database.getTotalRecordsInDatabase()+ "\n\n");
         } else {
-            /* Read XML file and store the informations in the database          */
+            *//* Read XML file and store the informations in the database          *//*
             for (String xmlFile : FileNames) {
                 ParsingXML(xmlFile, database);
             }
             System.out.println("Total records insert in the database: " + database.getTotalRecordsInDatabase() + "\n\n");
-            /* Store myDatabase in file myDatabase.sql                           */
+            *//* Store myDatabase in file myDatabase.sql                           *//*
             database.StoreDatabaseInFile();
-        }
+        }*/
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */

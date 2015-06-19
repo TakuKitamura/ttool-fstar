@@ -83,9 +83,11 @@ public class Client {
                 Element e_id = eachRow.select("cve_id").first();
                 Element e_title = eachRow.select("name").first();
                 Element e_des = eachRow.select("summary").first();
+                Element e_score = eachRow.select("score").first();
                 r.setCve_id(e_id.text());
                 r.setName(e_title.text());
                 r.setSummary(e_des.text());
+                r.setScore(e_score.text());
                 lrecord.add(r);
             }
         return lrecord;

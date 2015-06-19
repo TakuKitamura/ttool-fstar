@@ -46,7 +46,7 @@ public class Database_query {
      */
     public void MakeQueryOnTheDatabase() throws IOException, SQLException, AWTException, TransformerException {
 
-        //  open up standard input                
+        //  open up standard input
         BufferedReader br;
 
         String query;
@@ -90,7 +90,7 @@ public class Database_query {
             /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
             /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-           
+
 
             /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
             /*                Print results in xml file                      */
@@ -119,65 +119,61 @@ public class Database_query {
         ResultSet rs;
         ArrayList<String> query;
         String querySQL;
+        String[] keywords;
         String year = "";
+        String system;
+        String score;
+        String[] score_limits;
 
         query = argumentsfromclient;
         //for (int i=0; i<5; i++){ System.out.println(query.get(i)); }
+
+        keywords = query.get(0).split("-");
 
         String thisyear = new SimpleDateFormat("yyyy").format(new Date());
 
         if (query.get(1).equals("this-year")) {
             year = thisyear;
-        }
-
-        else if (query.get(1).equals("last-year")) {
+        }else if (query.get(1).equals("last-year")) {
             year = Integer.toString(Integer.valueOf(thisyear)-1);
-        }
-
-        else if (query.get(1).equals("all")) {
+        }else if (query.get(1).equals("all")) {
             year = "%";
         }
 
-        String[] score_limits={"0","0"} ;
+        if (query.get(2).equals("all")){
+            system = "%";
+        }else {
+            system = query.get(2);
+        }
 
         if (query.get(3).equals("all")) {
-            System.out.print("Vo day");
-            score_limits[0] = "0";
-            score_limits[1]="10";
+            score = "0-10";
+        }else {
+            score = query.get(3);
         }
 
-        else {
-            score_limits = query.get(3).split("-");
-        }
+        score_limits = score.split("-");
 
-        System.out.print(query.get(0));
-        String[] keywords = query.get(0).split("-");
         //for (int i=0; i<2; i++){ System.out.println(Integer.valueOf(score_limits[i])); }
-                
+
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*                      Construct query                          */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
-       
+
         /* Select columes from the tables                                */
-        querySQL = "SELECT VULNERABILITIES.CVE_ID, SOFTWARES.\"NAME\", VULNERABILITIES.SUMMARY \n"
+        querySQL = "SELECT VULNERABILITIES.CVE_ID, VULNERABILITIES.SCORE, "
+                + "SOFTWARES.\"NAME\", VULNERABILITIES.SUMMARY \n"
                 + "FROM ROOT.SOFTWARES \n"
                 + "\tINNER JOIN ROOT.VULNERABILITIES \n"
                 + "\t\tON SOFTWARES.CVE_ID = VULNERABILITIES.CVE_ID \n";
+
         /*  Including the arguments in the query                         */
-
-        //querySQL += "WHERE SOFTWARES.\"NAME\" LIKE ? ";
-        querySQL += "WHERE VULNERABILITIES.SUMMARY LIKE ? ";
-
-        for (int i = 1; i < keywords.length; i++) {
-            //querySQL += "OR SOFTWARES.\"NAME\" LIKE ? ";
-            querySQL += "OR VULNERABILITIES.SUMMARY LIKE ? ";
-        }
-
-        querySQL += "AND VULNERABILITIES.CVE_ID LIKE ? "
+        querySQL += "WHERE (VULNERABILITIES.SUMMARY LIKE ? ";
+        for (int i = 1; i < keywords.length; i++) {querySQL += "OR VULNERABILITIES.SUMMARY LIKE ?";}
+        querySQL += ") AND VULNERABILITIES.CVE_ID LIKE ? "
                 + "AND SOFTWARES.\"NAME\" LIKE ? "
                 + "AND VULNERABILITIES.SCORE BETWEEN ? AND ? \n"
                 + "FETCH FIRST ? ROWS ONLY";
-
 
         System.out.println(querySQL);
 
@@ -188,14 +184,14 @@ public class Database_query {
             prep.setString(i+1, "%"+keywords[i]+"%");
         }
         prep.setString(i+1, "%"+year+"%");
-        prep.setString(i+2, "%"+query.get(2)+"%");
+        prep.setString(i+2, "%"+system+"%");
         prep.setInt(i+3, Integer.valueOf(score_limits[0]));
         prep.setInt(i+4, Integer.valueOf(score_limits[1]));
         prep.setInt(i+5,Integer.valueOf(query.get(4)));
 
         // Execute the query
         rs = prep.executeQuery();
-               
+
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
         // Store the result in a xml file
@@ -205,7 +201,7 @@ public class Database_query {
     }
 
     /**
-     * Get all the information concerning one vulnerabilities, found by using its CVE ID 
+     * Get all the information concerning one vulnerabilities, found by using its CVE ID
      * This function is protected against sql injection because it is using prepared statement
      * @param argumentfromclient a cve ID
      * @return xml containing the result of the query
