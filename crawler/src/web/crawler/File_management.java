@@ -224,8 +224,10 @@ public class File_management {
         transformer.transform(domSource, sr);
         String out = new SimpleDateFormat("dd-MM-yy/hh-mm-ss").format(new Date());
         String xmlContent = sr.getWriter().toString();
-        boolean success = (new File(System.getProperty("user.dir")+"\\results")).mkdir();
-        File file = new File(System.getProperty("user.dir")+"\\results\\"+out+".xml");
+        //boolean success = (new File(System.getProperty("user.dir")+"\\results")).mkdir();
+        //File file = new File(System.getProperty("user.dir")+"\\results\\"+out+".xml");
+        boolean success = (new File(System.getProperty("user.dir")+"/results")).mkdirs();
+        File file = new File(System.getProperty("user.dir")+"/results/"+out+".xml");
         if (success=false) {
             System.out.println("The folder structure does not exist");
         }else {

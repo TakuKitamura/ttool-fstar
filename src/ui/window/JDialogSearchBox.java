@@ -918,7 +918,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     }
 
-
     /**
      *
      * @param msg
@@ -1464,14 +1463,26 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
      * @return a splited, then concaternated with space.
      */
     public String splitAndConcat(String input){
-        String[] splitValue = input.split("(?=\\p{Lu})");
         String value = "";
-        if (splitValue.length>0){
-            value = splitValue[0];
-            for (int i =1 ; i < splitValue.length; i ++ ){
-                value = value + " " + splitValue[i];
+        if (input.contains("_")){
+            String[] splitValue = input.split("_");
+
+            if (splitValue.length>0){
+                value = splitValue[0];
+                for (int i =1 ; i < splitValue.length; i ++ ){
+                    value = value + " " + splitValue[i];
+                }
+            }
+        }else{
+            String[] splitValue = input.split("(?=\\p{Lu})");
+            if (splitValue.length>0){
+                value = splitValue[0];
+                for (int i =1 ; i < splitValue.length; i ++ ){
+                    value = value + " " + splitValue[i];
+                }
             }
         }
+
         return value;
     }
 

@@ -175,7 +175,7 @@ public class Database_query {
                 + "AND VULNERABILITIES.SCORE BETWEEN ? AND ? \n"
                 + "FETCH FIRST ? ROWS ONLY";
 
-        System.out.println(querySQL);
+        //System.out.println(querySQL);
 
         PreparedStatement prep = this.database.getconn().prepareStatement(querySQL);
 
