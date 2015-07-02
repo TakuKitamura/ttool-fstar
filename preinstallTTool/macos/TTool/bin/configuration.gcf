@@ -1,0 +1,12 @@
+rsh= ssh -x
+rcp= scp 
+cow10
+directory = /tmp/TTool
+cow11
+directory = /tmp/TTool
+cow12
+directory = /tmp/TTool
+cow13
+directory = /tmp/TTool
+cow15
+directory = /tmp/TTool

@@ -203,6 +203,9 @@ stdrelease:
 #UPPAAL
 	mkdir -p $(TTOOL_TARGET)/uppaal
 	cp $(TTOOL_DOC)/README_uppaal $(TTOOL_TARGET)/uppaal
+# Proverif
+	mkdir -p $(TTOOL_TARGET)/proverif
+	cp $(TTOOL_DOC)/README_proverif $(TTOOL_TARGET)/proverif
 # Figure
 	mkdir -p $(TTOOL_TARGET)/figure
 	cp $(TTOOL_DOC)/README_figure $(TTOOL_TARGET)/figure

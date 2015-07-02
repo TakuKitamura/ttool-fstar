@@ -1,0 +1,36 @@
+## Variable that points to SystemC installation path
+
+
+INCDIR = -I. -I$(SRCS_base_DIR) -I$(SRCS_base_DIRSRC) -I$(SRCS_generated_DIR)
+LIBDIR = -L. -L.. 
+LIBS   =  -lm $(EXTRA_LIBS)
+
+EXE    = $(MODULE).x
+
+.SUFFIXES: .c .o .x
+
+
+$(EXE): makedir $(OBJS) $(OBJS_executor) 
+ifeq ($(UNAME),Darwin)
+	$(CC) $(LFLAGS_MAC) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_executor) $(LIBS) 2>&1 | c++filt
+endif
+ifneq ($(UNAME),Darwin)
+	$(CC) $(LFLAGS_UNIX) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_executor) $(LIBS) 2>&1 | c++filt
+endif
+
+makedir:
+	echo Making directories
+	mkdir -p ./lib
+	mkdir -p ./lib/$(SRCS_generated_DIR)
+	mkdir -p ./lib/$(SRCS_base_DIRSRC)
+
+$(OBJDIR)/%.o: $(SRCS_base_DIR)/%.c
+	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
+
+
+clean:
+	rm -f $(OBJS_simulator) $(OBJS_executor) $(OBJS) *~ $(EXE) core 
+
+ultraclean: clean
+	rm -f Makefile.deps
+

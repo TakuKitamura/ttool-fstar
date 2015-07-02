@@ -1,0 +1,42 @@
+(*************************************************************
+ *                                                           *
+ *  Cryptographic protocol verifier                          *
+ *                                                           *
+ *  Bruno Blanchet and Vincent Cheval                        *
+ *                                                           *
+ *  Copyright (C) INRIA, CNRS 2000-2014                      *
+ *                                                           *
+ *************************************************************)
+
+(*
+
+    This file is free software; you can redistribute it and/or modify
+    it under the terms of the BSD License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    BSD license for more details (in file LICENSEBSD).
+
+*)
+(* Fails because cannot handle the equational theory
+   precisely enough. Use choice to prove this example successfully
+   (see examples/choice/dh-fs)
+*)
+
+type G.
+type exponent.
+
+const g: G [data].
+fun exp(G, exponent): G.
+
+equation forall x: exponent, y: exponent; exp(exp(g,x),y) = exp(exp(g,y),x).
+
+free c: channel.
+free x: G [private].
+free n,m,s: exponent [private].
+
+noninterf x among (exp(exp(g,m),n), exp(g,s)).
+
+process
+	out(c, (exp(g,m), exp(g,n), x))

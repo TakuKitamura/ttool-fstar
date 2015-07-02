@@ -1,0 +1,120 @@
+(* Generated proverif specification *)
+
+(* Boolean return types *)
+data true/0.
+data false/0.
+
+(* Functions data *)
+data UNKNOWN/0.
+
+(* Public key cryptography *)
+fun pk/1.
+fun aencrypt/2.
+reduc adecrypt(aencrypt(x,pk(y)),y) = x.
+
+fun sign/2.
+fun verifySign/3.
+equation verifySign(m, sign(m,sk), pk(sk))=true.
+
+(* Certificates  *)
+fun cert/2.
+fun verifyCert/2.
+equation verifyCert(cert(epk, sign(epk, sk)), pk(sk))=true.
+reduc getpk(cert(epk, sign(epk,sk))) = epk.
+
+(* Symmetric key cryptography *)
+fun sencrypt/2.
+reduc sdecrypt(sencrypt(x,k),k) = x.
+
+(* MAC *)
+fun MAC/2.
+reduc verifyMAC(m, k, MAC(m, k)) = true.
+
+(* HASH *)
+fun hash/1.
+
+(* CONCAT *)
+fun concat/5.
+reduc get1(concat(m1, m2, m3, m4, m5))= m1.
+reduc get2(concat(m1, m2, m3, m4, m5))= m2.
+reduc get3(concat(m1, m2, m3, m4, m5))= m3.
+reduc get4(concat(m1, m2, m3, m4, m5))= m4.
+reduc get5(concat(m1, m2, m3, m4, m5))= m5.
+
+
+(* Channel *)
+free ch.
+
+(* Channel *)
+private free chprivate.
+
+(* Data *)
+
+(* Secrecy Assumptions *)
+
+(* Queries *)
+private free RemoteControl__duration.
+query attacker:RemoteControl__duration.
+
+query ev:enteringState__RemoteControl__Msg1Sent().
+query ev:enteringState__RemoteControl__SendingRemoteOrder().
+query ev:enteringState__MicroWaveOven__Running().
+query ev:enteringState__WirelessInterface__gotDecryptedOrder().
+query ev:enteringState__WirelessInterface__gotWirelessOrder().
+
+(* Authenticity *)
+query evinj:authenticity__WirelessInterface__gotDecryptedOrder__msg2__data__1(m__93482) ==> evinj:authenticity__RemoteControl__SendingRemoteOrder__msg__data__1(m__93482).
+
+
+let RemoteControl__0 = 
+	let duration = RemoteControl__duration in
+	new msg1__data;
+	let PSK__data = RemoteControl__PSK__data in
+	new msg__data;
+	let msg1__data = duration in 
+	let msg__data= sencrypt(msg1__data, PSK__data) in
+	RemoteControl__1.
+
+let RemoteControl__1 = 
+	event enteringState__RemoteControl__SendingRemoteOrder();
+	event authenticity__RemoteControl__SendingRemoteOrder__msg__data__1(msg__data);
+	out(ch, msg__data);
+	RemoteControl__2.
+
+let RemoteControl__2 = 
+	event enteringState__RemoteControl__Msg1Sent();
+	0.
+
+let MicroWaveOven__0 = 
+	MicroWaveOven__1.
+
+let MicroWaveOven__1 = 
+	event enteringState__MicroWaveOven__Running().
+
+let RemotelyControlledMicrowave__0 = 
+	0.
+
+let WirelessInterface__0 = 
+	new msg2__data;
+	let PSK__data = RemoteControl__PSK__data in
+	new selectedDuration;
+	new msg3__data;
+	in(ch, msg2__data);
+	WirelessInterface__1.
+
+let WirelessInterface__1 = 
+	event enteringState__WirelessInterface__gotWirelessOrder();
+	let msg3__data= sdecrypt(msg2__data, PSK__data) in
+	let selectedDuration = msg3__data in 
+	WirelessInterface__2.
+
+let WirelessInterface__2 = 
+	event enteringState__WirelessInterface__gotDecryptedOrder();
+	event authenticity__WirelessInterface__gotDecryptedOrder__msg2__data__1(msg2__data);
+	out(chprivate, selectedDuration);
+	0.
+
+process
+	new RemoteControl__PSK__data;
+(!
+((RemoteControl__0) | (MicroWaveOven__0) | (RemotelyControlledMicrowave__0) | (WirelessInterface__0)))

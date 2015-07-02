@@ -133,7 +133,8 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             }
         }
 
-	if (!isPrivate() && !isAsynchronous()) {
+
+	if (!isPrivate() /*&& !isAsynchronous()*/) {
 	    int czz = (int)(cz*1.4);
 	    int x3 = p1.getX();
 	    int y3 = p1.getY();
@@ -159,10 +160,10 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 	    g.drawOval(x2+czz-4, y2-cz-7, 8, 6); 
 	    g.drawOval(x3+czz-4, y3-cz-7, 8, 6); 
 	    g.fillOval(x2+czz-2, y2-cz-6, 5, 4); 
-	    g.fillOval(x3+czz-2, y3-cz-6, 5, 4); 
-	    
+	    g.fillOval(x3+czz-2, y3-cz-6, 5, 4); 	    
 	    
 	}
+
 
         Point p11;
         if (isp1) {

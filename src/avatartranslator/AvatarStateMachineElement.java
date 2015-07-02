@@ -271,6 +271,10 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
           return false;
           }*/
 
+	if (n.length() < 5) {
+	    return false;
+	}
+
         if (n.substring(4, n.length()-1).compareTo(g) != 0) {
             return false;
         }

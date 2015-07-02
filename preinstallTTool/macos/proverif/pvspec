@@ -1,0 +1,337 @@
+(* Generated proverif specification *)
+
+(* Boolean return types *)
+data true/0.
+data false/0.
+
+(* Functions data *)
+data UNKNOWN/0.
+
+(* Public key cryptography *)
+fun pk/1.
+fun aencrypt/2.
+reduc adecrypt(aencrypt(x,pk(y)),y) = x.
+
+fun sign/2.
+fun verifySign/3.
+equation verifySign(m, sign(m,sk), pk(sk))=true.
+
+(* Certificates  *)
+fun cert/2.
+fun verifyCert/2.
+equation verifyCert(cert(epk, sign(epk, sk)), pk(sk))=true.
+reduc getpk(cert(epk, sign(epk,sk))) = epk.
+
+(* Symmetric key cryptography *)
+fun sencrypt/2.
+reduc sdecrypt(sencrypt(x,k),k) = x.
+
+(* MAC *)
+fun MAC/2.
+reduc verifyMAC(m, k, MAC(m, k)) = true.
+
+(* HASH *)
+fun hash/1.
+
+(* CONCAT *)
+fun concat/5.
+reduc get1(concat(m1, m2, m3, m4, m5))= m1.
+reduc get2(concat(m1, m2, m3, m4, m5))= m2.
+reduc get3(concat(m1, m2, m3, m4, m5))= m3.
+reduc get4(concat(m1, m2, m3, m4, m5))= m4.
+reduc get5(concat(m1, m2, m3, m4, m5))= m5.
+
+
+(* Channel *)
+free ch.
+
+(* Channel *)
+private free chprivate.
+
+(* Data *)
+
+(* Secrecy Assumptions *)
+
+(* Queries *)
+query ev:enteringState__ObserverProp1__Error().
+query ev:enteringState__ObserverProp1__WaitingForClosed().
+query ev:enteringState__ObserverProp1__WaitingForOpen().
+private free RemoteControl__duration.
+query attacker:RemoteControl__duration.
+
+query ev:enteringState__RemoteControl__Msg1Sent().
+query ev:enteringState__RemoteControl__SendingRemoteOrder().
+query ev:enteringState__MicroWaveOven__Running().
+query ev:enteringState__Bell__Ringing().
+query ev:enteringState__Bell__Active().
+query ev:enteringState__ControlPanel__Active().
+query ev:enteringState__Controller__Starting().
+query ev:enteringState__Controller__ReallyHeating().
+query ev:enteringState__Controller__Idle().
+query ev:enteringState__Controller__DoorOpened().
+query ev:enteringState__Controller__DoorOpenedWhileHeating().
+query ev:enteringState__Controller__Heating().
+query ev:enteringState__Magnetron__Running().
+query ev:enteringState__Magnetron__WaitForStart().
+query ev:enteringState__Door__Opened().
+query ev:enteringState__Door__IDLE().
+query ev:enteringState__WirelessInterface__gotDecryptedOrder().
+query ev:enteringState__WirelessInterface__gotWirelessOrder().
+
+(* Authenticity *)
+query evinj:authenticity__WirelessInterface__gotDecryptedOrder__msg2__data__1(m__93482) ==> evinj:authenticity__RemoteControl__SendingRemoteOrder__msg__data__1(m__93482).
+
+
+let ObserverProp1__0 = 
+	ObserverProp1__1.
+
+let ObserverProp1__1 = 
+	event enteringState__ObserverProp1__WaitingForOpen();
+	new choice__WaitingForOpen;
+	out(chprivate, choice__WaitingForOpen);
+	((ObserverProp1__2) | (ObserverProp1__3)).
+
+let ObserverProp1__2 = 
+	in(chprivate, m__);
+	if choice__WaitingForOpen = m__ then
+	in(chprivate, data__);
+	ObserverProp1__1.
+
+
+let ObserverProp1__3 = 
+	in(chprivate, m__);
+	if choice__WaitingForOpen = m__ then
+	in(chprivate, data__);
+	ObserverProp1__4.
+
+let ObserverProp1__4 = 
+	event enteringState__ObserverProp1__WaitingForClosed();
+	new choice__WaitingForClosed;
+	out(chprivate, choice__WaitingForClosed);
+	((ObserverProp1__5) | (ObserverProp1__6)).
+
+let ObserverProp1__5 = 
+	in(chprivate, m__);
+	if choice__WaitingForClosed = m__ then
+	in(chprivate, data__);
+	ObserverProp1__7.
+
+let ObserverProp1__6 = 
+	in(chprivate, m__);
+	if choice__WaitingForClosed = m__ then
+	in(chprivate, data__);
+	ObserverProp1__1.
+
+
+let ObserverProp1__7 = 
+	event enteringState__ObserverProp1__Error().
+
+let RemotelyControlledMicrowave__0 = 
+	0.
+
+let RemoteControl__0 = 
+	let duration = RemoteControl__duration in
+	new msg1__data;
+	let PSK__data = RemoteControl__PSK__data in
+	new msg__data;
+	let msg1__data = duration in 
+	let msg__data= sencrypt(msg1__data, PSK__data) in
+	RemoteControl__1.
+
+let RemoteControl__1 = 
+	event enteringState__RemoteControl__SendingRemoteOrder();
+	event authenticity__RemoteControl__SendingRemoteOrder__msg__data__1(msg__data);
+	out(ch, msg__data);
+	RemoteControl__2.
+
+let RemoteControl__2 = 
+	event enteringState__RemoteControl__Msg1Sent();
+	0.
+
+let MicroWaveOven__0 = 
+	MicroWaveOven__1.
+
+let MicroWaveOven__1 = 
+	event enteringState__MicroWaveOven__Running().
+
+let Bell__0 = 
+	Bell__1.
+
+let Bell__1 = 
+	event enteringState__Bell__Active();
+	in(chprivate, data__);
+	let runBell() in
+	Bell__2.
+
+let Bell__2 = 
+	event enteringState__Bell__Ringing();
+	Bell__1.
+
+
+let ControlPanel__0 = 
+	new duration;
+	ControlPanel__1.
+
+let ControlPanel__1 = 
+	event enteringState__ControlPanel__Active();
+	out(chprivate, duration);
+	ControlPanel__1.
+
+
+let Controller__0 = 
+	new duration;
+	new remainingTime;
+	Controller__1.
+
+let Controller__1 = 
+	event enteringState__Controller__Idle();
+	new choice__Idle;
+	out(chprivate, choice__Idle);
+	((Controller__2) | (Controller__3) | (Controller__4)).
+
+let Controller__2 = 
+	in(chprivate, m__);
+	if choice__Idle = m__ then
+	in(chprivate, duration);
+	Controller__5.
+
+let Controller__3 = 
+	in(chprivate, m__);
+	if choice__Idle = m__ then
+	in(chprivate, data__);
+	new data__;
+	out(chprivate, data__);
+	Controller__11.
+
+let Controller__4 = 
+	in(chprivate, m__);
+	if choice__Idle = m__ then
+	in(chprivate, duration);
+	Controller__5.
+
+
+let Controller__5 = 
+	event enteringState__Controller__Starting();
+	new data__;
+	out(chprivate, data__);
+	let remainingTime=duration in 
+	let startCooking(remainingTime) in
+	new data__;
+	out(chprivate, data__);
+	Controller__6.
+
+let Controller__6 = 
+	event enteringState__Controller__ReallyHeating();
+	new choice__ReallyHeating;
+	out(chprivate, choice__ReallyHeating);
+	((Controller__7) | (Controller__8) | (Controller__9)).
+
+let Controller__7 = 
+	in(chprivate, m__);
+	if choice__ReallyHeating = m__ then
+	new remainingTime;
+	let durationModified(remainingTime) in
+	Controller__6.
+
+
+let Controller__8 = 
+	in(chprivate, m__);
+	if choice__ReallyHeating = m__ then
+	new remainingTime;
+	let durationModified(remainingTime) in
+	in(chprivate, data__);
+	new data__;
+	out(chprivate, data__);
+	new data__;
+	out(chprivate, data__);
+	Controller__10.
+
+let Controller__9 = 
+	in(chprivate, m__);
+	if choice__ReallyHeating = m__ then
+	new data__;
+	out(chprivate, data__);
+	new data__;
+	out(chprivate, data__);
+	Controller__1.
+
+
+let Controller__10 = 
+	event enteringState__Controller__DoorOpenedWhileHeating();
+	in(chprivate, data__);
+	new data__;
+	out(chprivate, data__);
+	new data__;
+	out(chprivate, data__);
+	new data__;
+	out(chprivate, data__);
+	Controller__6.
+
+
+let Controller__11 = 
+	event enteringState__Controller__DoorOpened();
+	in(chprivate, data__);
+	new data__;
+	out(chprivate, data__);
+	Controller__1.
+
+
+let Magnetron__0 = 
+	new power;
+	Magnetron__1.
+
+let Magnetron__1 = 
+	event enteringState__Magnetron__WaitForStart();
+	in(chprivate, data__);
+	let ON() in
+	Magnetron__2.
+
+let Magnetron__2 = 
+	event enteringState__Magnetron__Running();
+	in(chprivate, data__);
+	let OFF() in
+	Magnetron__1.
+
+
+let Door__0 = 
+	Door__1.
+
+let Door__1 = 
+	event enteringState__Door__IDLE();
+	new data__;
+	out(chprivate, data__);
+	let openM() in
+	Door__2.
+
+let Door__2 = 
+	event enteringState__Door__Opened();
+	new data__;
+	out(chprivate, data__);
+	let closeM() in
+	Door__1.
+
+
+let WirelessInterface__0 = 
+	new msg2__data;
+	let PSK__data = RemoteControl__PSK__data in
+	new selectedDuration;
+	new msg3__data;
+	in(ch, msg2__data);
+	WirelessInterface__1.
+
+let WirelessInterface__1 = 
+	event enteringState__WirelessInterface__gotWirelessOrder();
+	let msg3__data= sdecrypt(msg2__data, PSK__data) in
+	let selectedDuration = msg3__data in 
+	WirelessInterface__2.
+
+let WirelessInterface__2 = 
+	event enteringState__WirelessInterface__gotDecryptedOrder();
+	event authenticity__WirelessInterface__gotDecryptedOrder__msg2__data__1(msg2__data);
+	out(chprivate, selectedDuration);
+	0.
+
+process
+	new RemoteControl__PSK__data;
+(!
+((ObserverProp1__0) | (RemotelyControlledMicrowave__0) | (RemoteControl__0) | (MicroWaveOven__0) | (Bell__0) | (ControlPanel__0) | (Controller__0) | (Magnetron__0) | (Door__0) | (WirelessInterface__0)))

@@ -1,0 +1,21 @@
+TTool, an open-source UML toolkit for modeling embedded systems and procotols.
+TTool is developed at ENST, http://labsoc.comelec.enst.fr/turtle/
+-------------------------------------------------------------------------------
+
+TTool: the TURTLE Toolkit
+-------------------------
+
+TTool relies on JDK 1.6 or later. For more information about installation or use of TTool, please, refer to :
+http://labsoc.comelec.enst.fr/TURTLE/HELP/index.html
+
+For the DIPLODOCUS UML profile, please refer to:
+http://www.comelec.enst.fr/recherche/labsoc/projets/DIPLODOCUS
+
+
+Installing TTool
+----------------
+
+Basically, TTool is offered as a gipped-tar archive. To uncompress it under Linux, type the following command (if we assume thar archive is named ttool.tgz) in the directory in which you wish to install TTool:
+$ tar -xofz ttool.tgz
+
+Various directories are created. A README_<directory name> file located in each of them summarizes its purpose and content.

@@ -1,14 +1,14 @@
-Sat Jun 27 18:00:11 CEST 2015 : Apache Derby Network Server - 10.11.1.1 - (1616546) started and ready to accept connections on port 1527
+Mon Jun 29 11:50:12 CEST 2015 : Apache Derby Network Server - 10.11.1.1 - (1616546) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Sat Jun 27 18:00:29 CEST 2015:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-014e-35bf-5eb2-000043e4831f 
-on database directory /home/trhuy/TURTLE/crawler/db-derby-10.11.1.1-bin/bin/MyDatabase with class loader sun.misc.Launcher$AppClassLoader@7451b0af 
-Loaded from file:/home/trhuy/TURTLE/crawler/db-derby-10.11.1.1-bin/lib/derby.jar
-java.vendor=Oracle Corporation
-java.runtime.version=1.7.0_79-b14
-user.dir=/home/trhuy/TURTLE/crawler/db-derby-10.11.1.1-bin/bin
-os.name=Linux
-os.arch=amd64
-os.version=3.13.0-37-generic
-derby.system.home=/home/trhuy/TURTLE/crawler/db-derby-10.11.1.1-bin/bin
+Mon Jun 29 11:50:26 CEST 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-014e-3eb8-e840-00002c4eaa4e 
+on database directory /Users/ludovicapvrille/Prog/TURTLE/crawler/db-derby-10.11.1.1-bin/bin/MyDatabase with class loader sun.misc.Launcher$AppClassLoader@1729854 
+Loaded from file:/Users/ludovicapvrille/Prog/TURTLE/crawler/db-derby-10.11.1.1-bin/lib/derby.jar
+java.vendor=Apple Inc.
+java.runtime.version=1.6.0_65-b14-462-11M4609
+user.dir=/Users/ludovicapvrille/Prog/TURTLE/crawler/db-derby-10.11.1.1-bin/bin
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.9.5
+derby.system.home=/Users/ludovicapvrille/Prog/TURTLE/crawler/db-derby-10.11.1.1-bin/bin
 Database Class Loader started - derby.database.classpath=''

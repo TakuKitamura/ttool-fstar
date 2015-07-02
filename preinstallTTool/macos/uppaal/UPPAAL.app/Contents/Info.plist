@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<string>true</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>JavaApplicationStub</string>
+	<key>CFBundleGetInfoString</key>
+	<string>UPPAAL</string>
+	<key>CFBundleIconFile</key>
+	<string>Uppaal Icon.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.uppaal.gui</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>UPPAAL</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>4.0.10-aca</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>4.0.10-aca</string>
+	<key>Java</key>
+	<dict>
+		<key>Arguments</key>
+		<string>--enginePath $APP_PACKAGE/Contents/MacOS --engineName server </string>
+		<key>ClassPath</key>
+		<array>
+			<string>$JAVAROOT/editor.jar</string>
+			<string>$JAVAROOT/model.jar</string>
+			<string>$JAVAROOT/jdom.jar</string>
+			<string>$JAVAROOT/swixml.jar</string>
+			<string>$JAVAROOT/uppaal.jar</string>
+			<string>$JAVAROOT/jh.jar</string>
+			<string>$JAVAROOT/jlfgr-1_0.jar</string>
+		</array>
+		<key>JVMVersion</key>
+		<string>1.5+</string>
+		<key>MainClass</key>
+		<string>com.uppaal.gui.Main</string>
+		<key>Properties</key>
+		<dict>
+			<key>apple.laf.useScreenMenuBar</key>
+			<string>true</string>
+		</dict>
+		<key>VMOptions</key>
+		<string>-Duser.language=en</string>
+	</dict>
+</dict>
+</plist>

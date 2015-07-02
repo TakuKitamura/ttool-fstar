@@ -1,0 +1,44 @@
+(*************************************************************
+ *                                                           *
+ *  Cryptographic protocol verifier                          *
+ *                                                           *
+ *  Bruno Blanchet and Vincent Cheval                        *
+ *                                                           *
+ *  Copyright (C) INRIA, CNRS 2000-2014                      *
+ *                                                           *
+ *************************************************************)
+
+(*
+
+    This file is free software; you can redistribute it and/or modify
+    it under the terms of the BSD License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    BSD license for more details (in file LICENSEBSD).
+
+*)
+
+
+
+free c.
+
+(* Public key cryptography *)
+
+fun penc/2.
+fun pk/1.
+reduc pdec(penc(x,pk(y)),y) = x.
+
+fun hash/1.
+
+private free w.
+weaksecret w.
+
+process
+	new s;
+	let pk = pk(s) in
+	out(c, pk);
+	out(c, penc(hash(w), pk))
+
+

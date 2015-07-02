@@ -1,0 +1,51 @@
+(*************************************************************
+ *                                                           *
+ *  Cryptographic protocol verifier                          *
+ *                                                           *
+ *  Bruno Blanchet and Vincent Cheval                        *
+ *                                                           *
+ *  Copyright (C) INRIA, CNRS 2000-2014                      *
+ *                                                           *
+ *************************************************************)
+
+(*
+
+    This file is free software; you can redistribute it and/or modify
+    it under the terms of the BSD License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    BSD license for more details (in file LICENSEBSD).
+
+*)
+pred c/1 decompData, elimVar.
+
+fun pk/1.
+fun encrypt/2.
+
+reduc
+(* Initialization *)
+
+c:c[];
+c:pk(sA[]);
+c:pk(sB[]);
+
+(* The attacker *)
+
+c:x & c:encrypt(m,pk(x)) -> c:m;
+c:x -> c:pk(x);
+c:x & c:y -> c:encrypt(x,y);
+
+(* The protocol *)
+(* A *)
+
+c:pkX -> c:encrypt((Na[pkX], pk(sA[])), pkX);
+c:pkX & c:encrypt((Na[pkX], y, pkX), pk(sA[]))
+   -> c:encrypt((y,k[pkX]), pkX);
+
+(* B *)
+
+c:encrypt((x,y), pk(sB[])) -> c:encrypt((x, Nb[x,y], pk(sB[])), y);
+c:encrypt((x,pk(sA[])), pk(sB[])) & c:encrypt((Nb[x, pk(sA[])], z), pk(sB[]))
+   -> c:encrypt(secret[], pk(z)).
