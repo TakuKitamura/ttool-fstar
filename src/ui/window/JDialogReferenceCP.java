@@ -58,6 +58,7 @@ import ui.*;
 import ui.tmldd.*;
 import ui.tmlsd.*;
 import ui.tmlcp.*;
+import ui.tmlcd.*;
 import ui.avatarbd.*;
 import tmltranslator.ctranslator.*;
 import tmltranslator.tmlcp.*;
@@ -123,16 +124,16 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 	//Panel3: assign a value to CP attributes
 	private JPanel panel3;
-	private JButton assignButton;
-	private JComboBox attributesList_CB;
-	private JTextField attributesValue_TF;
-	private Vector<String> attributesVector;
+	private JButton assignButton, addressButton;
+	private JComboBox attributesList_CB, applicationAttributesList_CB, addressList_CB;
+	private JTextField attributesValue_TF, addressValue_TF;
+	private Vector<String> attributesVector, applicationAttributesVector, addressVector;
 	
 	//Panel4: assign a value to CP attributes
 	private JPanel panel4;
 	private JScrollPane scrollPaneAttributes;
 	private JList scrollPaneAttributes_JL;
-	private Vector<String> assignedAttributes;
+	private Vector<String> assignedAttributes, assignedAddresses;
 	private JButton removeAttributeButton;
 
 	private JTabbedPane tabbedPane;
@@ -174,6 +175,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	}
 	else	{
 		assignedAttributes = new Vector<String>();
+		assignedAddresses = new Vector<String>();
 	}
 	
 	initComponents();
@@ -239,8 +241,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 			panel3 = new JPanel();
 			panel3.setLayout(gridbag3);
-			panel3.setBorder(new javax.swing.border.TitledBorder("CP attributes"));
-			panel3.setPreferredSize(new Dimension(325, 250));
+			panel3.setBorder(new javax.swing.border.TitledBorder("Assigning attributes"));
+			panel3.setPreferredSize(new Dimension(325, 300));
 			
 			panel4 = new JPanel();
 			panel4.setLayout(gridbag4);
@@ -326,7 +328,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			
 			mappableArchUnitsSL = new Vector<String>();	//the string list used in the architecture units combo box
 
-			checkValidityOfMappedUnits();	
+			checkValidityOfMappingInformation();		//checks the validity of both CP and mapped arch units
 
 			makeListOfMappableArchUnitsSL();
 			
@@ -409,16 +411,53 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c3.fill = GridBagConstraints.HORIZONTAL;
 			
 			//get the attributes from the selected CP
-			createAttributesVector();
-			TraceManager.addDev( "attributesVector:\n" + attributesVector.toString() );
+			createAttributesAndAddressVector();
+			createApplicationAttributesVector();
 
 			if( assignedAttributes.size() > 0 )	{
-				filterOutAssignedAttributes( attributesVector );
+				filterOutAssignedAttributes( attributesVector );	//eliminate the attributes that have already been assigned a value
 			}
-			panel3.add( new JLabel("Attribute:"), c3 );
+			panel3.add( new JLabel("CP attribute:"), c3 );
 			attributesList_CB = new JComboBox( attributesVector );
 			attributesList_CB.addActionListener(this);
 			panel3.add( attributesList_CB, c3 );
+
+			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+			panel3.add( new JLabel(" "), c3 );
+			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+			panel3.add( new JLabel(" "), c3 );
+
+			panel3.add( new JLabel("Application attribute:"), c3 );
+			applicationAttributesList_CB = new JComboBox( applicationAttributesVector );
+			applicationAttributesList_CB.addActionListener(this);
+			panel3.add( applicationAttributesList_CB, c3 );
+
+			/*panel3.add( new JLabel("Value:"), c3 );
+			attributesValue_TF = new JTextField( "", 5 );
+			attributesValue_TF.setPreferredSize( new Dimension(150, 30) );
+			panel3.add( attributesValue_TF, c3 );*/
+
+			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+			c3.fill = GridBagConstraints.BOTH;
+			c3.gridheight = 3;
+			panel3.add( new JLabel(" "), c3 );	//adds some vertical space in between two JLabels
+
+			assignButton = new JButton("Assign attribute value");
+			assignButton.addActionListener(this);
+			panel3.add( assignButton, c3 );
+
+			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+			c3.fill = GridBagConstraints.BOTH;
+			c3.gridheight = 3;
+			panel3.add( new JLabel(" "), c3 );	//adds some vertical space in between two JLabels
+
+			if( assignedAttributes.size() > 0 )	{
+				filterOutAssignedAddresses( addressVector );	//eliminate the addresses that have already been assigned a value
+			}
+			panel3.add( new JLabel("Address:"), c3 );
+			addressList_CB = new JComboBox( addressVector );
+			addressList_CB.addActionListener(this);
+			panel3.add( addressList_CB, c3 );
 
 			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
 			c3.fill = GridBagConstraints.BOTH;
@@ -426,18 +465,18 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel3.add( new JLabel(" "), c3 );
 
 			panel3.add( new JLabel("Value:"), c3 );
-			attributesValue_TF = new JTextField( "", 5 );
-			attributesValue_TF.setPreferredSize( new Dimension(150, 30) );
-			panel3.add( attributesValue_TF, c3 );
+			addressValue_TF = new JTextField( "", 5 );
+			addressValue_TF.setPreferredSize( new Dimension(150, 30) );
+			panel3.add( addressValue_TF, c3 );
 
 			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
 			c3.fill = GridBagConstraints.BOTH;
 			c3.gridheight = 3;
 			panel3.add( new JLabel(" "), c3 );	//adds some vertical space in between two JLabels
 
-			assignButton = new JButton("Assign value");
-			assignButton.addActionListener(this);
-			panel3.add( assignButton, c3 );
+			addressButton = new JButton("Assign address value");
+			addressButton.addActionListener(this);
+			panel3.add( addressButton, c3 );
 
 			//panel4
 			scrollPaneAttributes_JL = new JList( assignedAttributes );
@@ -586,37 +625,47 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			}
 		}
 
-		private void checkValidityOfMappedUnits()	{
+		private void checkValidityOfMappingInformation()	{
 			
-			ArrayList<String> info;	//Will contain: info[0] = CPName, info[1] = instanceName, info[2] = arcUnitName
+			ArrayList<String> mappingStringSplitted;	//Will contain: info[0] = CPName, info[1] = instanceName, info[2] = archUnitName
+			boolean removedCP = false;
+			boolean removedInstance = false;
 
 			Iterator<String> it	= mappedUnitsSL.iterator();
 			while( it.hasNext() )	{
-				info = retrieveSingleInformationFromMappingString( it.next() );
-				String CPname = info.get(0);
-				String instanceName = info.get(1);
+				mappingStringSplitted = splitMappingString( it.next() );
+				String CPname = mappingStringSplitted.get(0);
+				String instanceName = mappingStringSplitted.get(1);
+				
+				//first check that the mapped CP is still part of the current design
 				if( !doesCPexist( CPname ) )	{
 					it.remove();
+					removedCP = true;
 				}
-				else	{
-					//if the instance exists, remove it from listInstancesHash and add it to the list of mapped instances
+				else	{	//the CP exists, then check the single instances: if the instance exists, remove it from listInstancesHash and add it to the list of mapped instances
 					if( !checkAndRemoveIfInstanceExists( CPname, instanceName ) )	{	
 						it.remove();
+						removedInstance = true;
 					}
-					else	{
-						// a transfer instance was mapped on more than one arch unit
-						for( int i = 2; i < info.size(); i++ )	{
-							if( !doesArchUnitExist( info.get(i) ) )	{
-								it.remove();
-								restoreInstanceName( CPname, instanceName );	//put back the instance in listInstancesHash
-							}
+				}
+
+				//then check if the mapped units have not been changed
+				if( !removedCP && !removedInstance )	{
+					for( int i = 2; i < mappingStringSplitted.size(); i++ )	{
+						TraceManager.addDev( "Testing architecture units for string: " + mappingStringSplitted.toString() );
+						if( !doesArchUnitExist( mappingStringSplitted.get(i) ) )	{
+							TraceManager.addDev( mappingStringSplitted.get(i) + " does not exist and will be removed" );
+							it.remove();
+							restoreInstanceName( CPname, instanceName );	//release the mapped instance in listInstancesHash
 						}
 					}
 				}
+				removedCP = false;
+				removedInstance = false;
 			}
 		}
 
-		private ArrayList<String> retrieveSingleInformationFromMappingString( String s )	{
+		private ArrayList<String> splitMappingString( String s )	{
 
 			ArrayList<String> info = new ArrayList<String>();
 			String[] firstPart = s.split( " : " );
@@ -706,14 +755,27 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		}
 		
 		public void	actionPerformed( ActionEvent evt )  {
-			//String command = evt.getActionCommand();
 			
+			//String command = evt.getActionCommand();
+			String attr, attrType;
+
 			// Compare the action command to the known actions.
 			if( evt.getSource() == assignButton )  {
 				assignValueToAttribute();
 			}
+			if( evt.getSource() == addressButton )  {
+				assignValueToAddress();
+			}
 			if( evt.getSource() == removeAttributeButton )  {
-				removeAssignedAttribute();
+				int indexToRemove = scrollPaneAttributes_JL.getSelectedIndex();
+				attr = assignedAttributes.get( indexToRemove );
+				attrType = attr.split(" ")[0];	//get the attribute type, differentiate between addr and int/bool
+				if( attrType.equals( TMLType.ADDRESS_STRING ) )	{
+					removeAssignedAddress( indexToRemove, attr );
+				}
+				else	{
+					removeAssignedAttribute( indexToRemove, attr );
+				}
 			}
 			if( evt.getSource() == closeButton )  {
 				closeDialog();
@@ -864,7 +926,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			String archUnitName, CPName, instanceName;
 
 			if( listMappedUnitsJL.getSelectedIndex() >= 0 )	{
-				ArrayList<String> info = retrieveSingleInformationFromMappingString( mappedUnitsSL.get( listMappedUnitsJL.getSelectedIndex() ) );
+				ArrayList<String> info = splitMappingString( mappedUnitsSL.get( listMappedUnitsJL.getSelectedIndex() ) );
 				mappedUnitsSL.removeElementAt( listMappedUnitsJL.getSelectedIndex() );
 				CPName = info.get(0);
 				instanceName = info.get(1);
@@ -978,7 +1040,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 			//before eliminating the list of mapped units, put the instances back in the general data structure
 			for( int i = 0; i < mappedUnitsSL.size(); i++ )	{
-				ArrayList<String> info = retrieveSingleInformationFromMappingString( mappedUnitsSL.get(i) );
+				ArrayList<String> info = splitMappingString( mappedUnitsSL.get(i) );
 				restoreInstanceName( info.get(0), info.get(1) );
 			}
 			mappedUnitsSL.clear();
@@ -1054,11 +1116,57 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			}
 		}
 
-		private void removeAssignedAttribute()	{
+		private void assignValueToAddress()	{
+
+			String natRegex = "[0-9]+";
+			String addrValue = addressValue_TF.getText();
+			Vector<String> assignedAddresses = new Vector<String>();
+
+			if( addrValue.length() <= 2 && addrValue.length() > 0 )	{
+				JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+				return;
+			}
+			if( addrValue.length() > 2 )	{
+				if( !( addrValue.substring(0,2).equals("0x") || addrValue.substring(0,2).equals("0X") ) || !( addrValue.substring( 2,addrValue.length() ).matches( natRegex ) ) )	{
+					JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+					return;
+				}
+			}
+	
+			String addrName = ((String)addressList_CB.getSelectedItem()).split(" ")[1];
+			int indexToDelete = addressVector.indexOf( "addr " + addrName );
+			if( indexToDelete != -1 )	{
+				String assignement = "addr " + addrName + " = " + addrValue + ";";
+				assignedAddresses.add( assignement );
+
+				//update JComboBox
+				Vector<String> newList = new Vector<String>( addressVector );
+				newList.remove( indexToDelete );
+				addressList_CB.removeAllItems();
+				for( String s: newList )	{
+					addressList_CB.addItem( s );
+				}
+				addressVector = new Vector<String>( newList );
+
+				//clear text
+				addressValue_TF.setText("");
+
+				//update scrollPaneAttributes
+				assignedAttributes.addAll( assignedAddresses );
+				scrollPaneAttributes_JL.setListData( assignedAttributes );
+			}
+			else	{
+				JOptionPane.showMessageDialog( frame, "Please enter a value for the selected address", "No value for address",
+																			JOptionPane.INFORMATION_MESSAGE );
+				return;
+			}
+		}
+
+		private void removeAssignedAttribute( int indexToRemove, String attr )	{
 			
 			if( assignedAttributes.size() > 0 )	{
-				int indexToRemove = scrollPaneAttributes_JL.getSelectedIndex();
-				String attr = assignedAttributes.get( indexToRemove );
 				assignedAttributes.remove( indexToRemove );
 				scrollPaneAttributes_JL.setListData( assignedAttributes );
 
@@ -1072,6 +1180,26 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 					attributesList_CB.addItem( st );
 				}
 				attributesVector = new Vector<String>( newList );
+			}
+		}
+
+		private void removeAssignedAddress( int indexToRemove, String attr )	{
+			
+			if( assignedAttributes.size() > 0 )	{
+				//first remove the address from the list of attributes
+				assignedAttributes.remove( indexToRemove );
+				scrollPaneAttributes_JL.setListData( assignedAttributes );
+
+				// address must be put back in list of addresses to be mapped
+				String s = attr.split( " = " )[0];
+				Vector<String> newList = new Vector<String>( addressVector );
+				newList.add( s );
+
+				addressList_CB.removeAllItems();
+				for( String st: newList )	{
+					addressList_CB.addItem( st );
+				}
+				addressVector = new Vector<String>( newList );
 			}
 		}
 		
@@ -1268,7 +1396,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 			ArrayList<String> info;
 			for( String st: mappedUnitsSL )	{
-				info = retrieveSingleInformationFromMappingString( st );
+				info = splitMappingString( st );
 				if( info.get(1).equals( instanceName ) )	{
 					TraceManager.addDev( "Instance " + info.get(1) + " is mapped" );
 					return true;
@@ -1329,14 +1457,29 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		}
 	}
 
+	private void filterOutAssignedAddresses( Vector<String> addressVector )	{
+		
+		ArrayList<Integer> indexList = new ArrayList<Integer>();
+		for( String s: assignedAttributes )	{
+			String token = s.split( " = " )[0];
+			for( Iterator<String> iterator = addressVector.iterator(); iterator.hasNext(); ) {
+				String s1 = iterator.next();
+				if( token.equals( s1 ) ) {
+					iterator.remove();
+				}
+			}
+		}
+	}
+
 	public Vector<String> getAssignedAttributes()	{
 		return assignedAttributes;
 	}
 
-	private void createAttributesVector()	{
+	private void createAttributesAndAddressVector()	{
 
 		String selectedCPName = (String)communicationPatternsCB.getSelectedItem();
 		int index = getIndexOfSelectedCP();
+
 		TraceManager.addDev( "The selected CP has index: " + index );
 		if( index >= 0 )	{
 			ArrayList<TMLCP> tmlcpsList = new ArrayList<TMLCP>();
@@ -1346,15 +1489,49 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 				tmlcpsList.add( tmlcp );
 			}
 			HashSet<TMLAttribute> attributesHS = new HashSet<TMLAttribute>();
+			HashSet<TMLAttribute> addressHS = new HashSet<TMLAttribute>();
 			attributesVector = new Vector<String>();
+			addressVector = new Vector<String>();
 			//get the attributes of all SDs
 			for( TMLCPSequenceDiagram sd: tmlcpsList.get( index ).getCPSequenceDiagrams() )	{
 				for( TMLAttribute attr: sd.getAttributes() )	{
-					attributesHS.add( attr );
+					if( attr.isNat() || attr.isBool() )	{
+						attributesHS.add( attr );
+					}
+					if( attr.isAddress() )	{
+						addressHS.add( attr );
+					}
 				}
 			}
 			for( TMLAttribute attr: attributesHS )	{
 				attributesVector.add( attr.getType() + " " + attr.getName() );
+			}
+			for( TMLAttribute attr: addressHS )	{
+				addressVector.add( attr.getType() + " " + attr.getName() );
+			}
+		}
+	}
+
+	private void createApplicationAttributesVector()	{
+		applicationAttributesVector = new Vector<String>();
+		//I have to get all the attributes of all tasks in the application model AND their values
+		Vector listAttributes = cp.getTDiagramPanel().getMGUI().getAllApplicationTMLTasksAttributes();
+		for( Object o: listAttributes )	{
+			String s = o.toString();
+			TraceManager.addDev( "Attribute *" + s + "*" );
+			String attrName = s.split(" ")[0];
+			String attrType = s.split(" : ")[1];
+			if( attrType.contains( "Natural" ) )	{
+				attrType = TMLType.NATURAL_STRING;
+			}
+			else if( attrType.contains( "Bool" ) )	{
+				attrType = TMLType.BOOLEAN_STRING;
+			}
+			if( s.contains( "=" ) )	{
+				applicationAttributesVector.add( attrType + " " + attrName + " : " + s.split(" ")[2] );
+			}
+			else	{
+				applicationAttributesVector.add( attrType + " " + attrName );
 			}
 		}
 	}
