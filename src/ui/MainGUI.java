@@ -1274,6 +1274,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return list;
     }
 
+    public Vector getAllApplicationTMLTasksAttributes() {
+
+			TURTLEPanel tp;
+			Vector<TMLTaskOperator> list = new Vector<TMLTaskOperator>();
+
+			for( int i = 0; i < tabs.size(); i++ )	{
+				tp = (TURTLEPanel)(tabs.elementAt(i));
+				if( tp instanceof TMLComponentDesignPanel )	{
+					list.addAll( ((TMLComponentDesignPanel)tp).getAllTMLTasksAttributes() );
+				}
+			}
+      return list;
+    }
+
     public ArrayList<TMLCommunicationPatternPanel> getAllTMLCP() {
         TURTLEPanel tp;
         ArrayList<TMLCommunicationPatternPanel> list = new ArrayList<TMLCommunicationPatternPanel>();
