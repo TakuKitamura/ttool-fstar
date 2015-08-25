@@ -128,7 +128,7 @@ TOKEN:
 |	< MATH_SMALLER: "<" >
 |	< MATH_GREATER: ">" >
 |	< SEQUENCING_OP: ";" >
-|	< STAR_OP: "*" >
+|	< MATH_MULT: "*" >
 |	< MATH_PLUS: "+" >
 |	< MATH_MINUS: "-" >
 |	< DOT: "." >
@@ -150,7 +150,7 @@ TOKEN:
 | < END_AD: "><" >
 //| < ORDEROPERATOR: <SEQUENCING_OP> | <PARALLELISM_OP> >
 | < EOL: ("\n" | "\r" | "\r\n") >
-| < RIGHT_SLASH: "/" >
+| < MATH_DIV: "/" >
 | < QUOTATION_MARK: "\"" >
 }
 
@@ -172,7 +172,6 @@ TOKEN:
 | < #DECIMAL_LITERAL: ["0"-"9"] (["0"-"9"])* >
 }
 
-
 /* List of productions defining the non-terminals. They are implemented as methods of the above parser class*/
 /* Root production. */
 ASTStartSymbol StartSymbol():	/* The left hand side of this production is called Input and must be followed by colon */
@@ -180,7 +179,7 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 	int i;
 	String space = " ";
 	String undefinedDiagStringList = "";
-	TMLCP topCP = new TMLCP();
+	TMLCP topCP = new TMLCP( "noName" );
 	TMLCPSequenceDiagram seqDiag;
 	TMLCPActivityDiagram actDiag;
 	ArrayList<TMLAttribute> attributeList;
@@ -256,13 +255,13 @@ Sequence Diagram Section
 
 ArrayList<TMLAttribute> SequenceDiagramAttributesDeclaration():
 {
-	String instanceName, attributeName, attributeType;
-	Token t, t1;
+	String seqDiagName, instanceName, attributeName, attributeType;
+	Token t, t1 = new Token();
 	ArrayList<TMLAttribute> attributeList = new ArrayList<TMLAttribute>();
 }
 {
-	( instanceName = ID() "." attributeName = ID() ":" ( t = <BOOL_TYPE> | t = <INT_TYPE> )
-		<ASSIGNMENT> ( t1 = <IDENTIFIER> | t1 = <INTEGER_LITERAL> | t1 = <FALSECONST> | t1 = <TRUECONST> )
+	( seqDiagName = ID() "." instanceName = ID() "." attributeName = ID() ":" ( t = <BOOL_TYPE> | t = <INT_TYPE> )
+		( <ASSIGNMENT> ( t1 = <IDENTIFIER> | t1 = <INTEGER_LITERAL> | t1 = <FALSECONST> | t1 = <TRUECONST> ) )?
 	{
 		if( t.image.equals("int") )	{
 			attributeList.add( new TMLAttribute( attributeName, instanceName, new TMLType ( TMLType.NATURAL ), t1.image ) );
@@ -330,13 +329,18 @@ TMLSDInstance SequenceDiagramInstance( ArrayList<TMLAttribute> attributeList ):
 	{ return instance; }
 }
 
+//message parameters can be integer values or strings
 ArrayList<String> MessageParameters():
 {
 	String s;
 	ArrayList<String> params = new ArrayList<String>();
 }
 {
-	( "()" | "(" s = ID() { params.add(s); } ( "," s = ID() { params.add(s); } )* ")" )
+	(
+	"()"
+	|
+	"(" ( <INTEGER_LITERAL> "," )* s = ID() { params.add(s); } ( "," ( s = ID() { params.add(s); } | <INTEGER_LITERAL> ) )* ")"
+	)
 	{
 		return params;
 	}
@@ -364,24 +368,11 @@ String MAExpression():	//MA stands for Mathematical Action
 	s = MATerm() s1 = MAExpressionPrime()	{ return s + s1; }
 }
 
-String MAExpressionPrime():
-{
-	String s, s1;
-}
-{
-	<MATH_PLUS> s = MATerm() s1 = MAExpressionPrime()	{ return " + " + s + " " + s1; }
-| <MATH_MINUS> s = MATerm() s1 = MAExpressionPrime() { return " - " + s + " " + s1; }
-| <RIGHT_SLASH> s = MATerm() s1 = MAExpressionPrime() { return " / " + s + " " + s1; }
-| <STAR_OP> s = MATerm() s1 = MAExpressionPrime() { return " * " + s + " " + s1; }
-| {} { return ""; }
-}
-
 String MATerm():
 {
 	String s, s1;
 }
 {
-	//MAFactor() MATermPrime()
 	s = MAFactor() s1 = MATermPrime()	{ return s + s1; }
 }
 
@@ -391,7 +382,7 @@ String MATermPrime():
 }
 {
 	s = MAFactor() s1 = MATermPrime()	{ return s + s1; }
-| {} { return ""; }
+	| {} { return ""; }
 }
 
 String MAFactor():
@@ -405,6 +396,18 @@ String MAFactor():
 	s = ID() {return s; }
 	|
 	t = <INTEGER_LITERAL>	{ return t.image; }
+}
+
+String MAExpressionPrime():
+{
+	String s, s1;
+}
+{
+	<MATH_PLUS> s = MATerm() s1 = MAExpressionPrime()	{ return " + " + s + " " + s1; }
+| <MATH_MINUS> s = MATerm() s1 = MAExpressionPrime() { return " - " + s + " " + s1; }
+| <MATH_DIV> s = MATerm() s1 = MAExpressionPrime() { return " / " + s + " " + s1; }
+| <MATH_MULT> s = MATerm() s1 = MAExpressionPrime() { return " * " + s + " " + s1; }
+| {} { return ""; }
 }
 
 /* Right-recursive grammar for parsing boolean expressions in actions. No priority is given to boolean operators */
