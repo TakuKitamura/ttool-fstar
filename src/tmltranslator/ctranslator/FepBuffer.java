@@ -66,24 +66,24 @@ public class FepBuffer extends Buffer	{
 	public static final int DATA_TYPE_INDEX = 4;
 	
 	protected String numSamplesValue = USER_TO_DO;
-	protected static final String numSamplesType = "uint8_t";
+	protected static final String NUM_SAMPLES_TYPE = "uint8_t";
 	
 	protected String baseAddressValue = USER_TO_DO;
-	protected static final String baseAddressType = "uint64_t";
+	protected static final String BASE_ADDRESS_TYPE = "uint64_t";
 	
 	protected String bankValue = USER_TO_DO;
-	protected static final String bankType = "uint8_t";
+	protected static final String BANK_TYPE = "uint8_t";
 	
 	protected String dataTypeValue = USER_TO_DO;
-	protected static final String dataTypeType = "uint8_t";
+	protected static final String DATATYPE_TYPE = "uint8_t";
 
 	private static final int maxParameters = 4;
 
 	public static final String DECLARATION = "struct FEP_BUFFER_TYPE {" + CR + TAB +
-																						numSamplesType + SP + "num_samples" + SC + CR + TAB +
-																						baseAddressType + SP + "base_address" + SC + CR + TAB +
-																						bankType + SP + "bank" + SC + CR + TAB +
-																						dataTypeType + SP + "data_type" + SC + CR + "}" + SC + CR2 +
+																						NUM_SAMPLES_TYPE + SP + "num_samples" + SC + CR + TAB +
+																						BASE_ADDRESS_TYPE + SP + "base_address" + SC + CR + TAB +
+																						BANK_TYPE + SP + "bank" + SC + CR + TAB +
+																						DATATYPE_TYPE + SP + "data_type" + SC + CR + "}" + SC + CR2 +
 																						"typedef FEP_BUFFER_TYPE FEP_BUFFER_TYPE" + SC;
 	
 	private String Context = "FEP_CONTEXT";
@@ -105,10 +105,10 @@ public class FepBuffer extends Buffer	{
 		if( bufferParameters != null )	{
 			retrieveBufferParameters();
 		}
-		s.append( TAB + name + ".num_samples = " + "(" + numSamplesType + ")" + numSamplesValue + SC + CR );
-		s.append( TAB + name + ".base_address = " + "(" + baseAddressType + ")" + baseAddressValue + SC + CR );
-		s.append( TAB + name + ".bank = " + "(" + bankType + ")" + bankValue + SC + CR );
-		s.append( TAB + name + ".data_type = " + "(" + dataTypeType + ")" + dataTypeValue + SC + CR );
+		s.append( TAB + name + ".num_samples = " + "(" + NUM_SAMPLES_TYPE + ")" + numSamplesValue + SC + CR );
+		s.append( TAB + name + ".base_address = " + "(" + BASE_ADDRESS_TYPE + ")" + baseAddressValue + SC + CR );
+		s.append( TAB + name + ".bank = " + "(" + BANK_TYPE + ")" + bankValue + SC + CR );
+		s.append( TAB + name + ".data_type = " + "(" + DATATYPE_TYPE + ")" + dataTypeValue + SC + CR );
 		return s.toString();
 	}
 
@@ -174,10 +174,9 @@ public class FepBuffer extends Buffer	{
 		return buffer;
 	}
 	
-	public static JPanel makePanel( boolean loadBufferParameters, GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+	public static ArrayList<JPanel> makePanel( boolean loadBufferParameters, GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
 
 		String baseAddress = "", numSamples = "", bank = "", dataType = "";
-
 		GridBagLayout gridbag2 = new GridBagLayout();
 
 
@@ -223,7 +222,10 @@ public class FepBuffer extends Buffer	{
 			dataTypeCB.setSelectedIndex(0);
 		}
 		panel.add( dataTypeCB, c1 );
-		return panel;
+
+		ArrayList<JPanel> panelsList = new ArrayList<JPanel>();
+		panelsList.add( panel );
+		return panelsList;
 	}
 
 	public static boolean closePanel( Frame frame )	{

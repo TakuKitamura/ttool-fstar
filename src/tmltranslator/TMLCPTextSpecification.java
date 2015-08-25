@@ -219,15 +219,15 @@ public class TMLCPTextSpecification {
         return spec;
     }
 
-    public String toTextFormat( TMLMapping tmap ) {
+    /*public String toTextFormat( TMLMapping tmap ) {
 
-        /*tmap.sortByName();
+        tmap.sortByName();
           spec = makeDeclarations( tmap );
           spec += makeTasks( tmap );
           indent();
-          return spec;*/
+          return spec;
         return "FAKE";
-    }
+    }*/
 
     private String makeHeader() {
 
@@ -250,12 +250,18 @@ public class TMLCPTextSpecification {
             if( seqDiag.getAttributes().size() > 0 )    {
                 for( TMLAttribute attribute: seqDiag.getAttributes() )  {
                     if( !sbAttributes.toString().contains( attribute.toString() ) )     { //if attribute not already contained, then add it
-                        sbAttributes.append( attribute.toString() + CR );
+											if( attribute.toString().charAt( attribute.toString().length() - 1) == '=' )	{
+												//delete trailing =
+                        sbAttributes.append( seqDiag.getName() + "." + attribute.toString().substring( 0, attribute.toString().length()-1 ) + CR );
+											}
+											else	{
+                        sbAttributes.append( seqDiag.getName() + "." + attribute.toString() + CR );
+											}
                     }
                 }
             }
             for( tmltranslator.tmlcp.TMLSDInstance inst: listInstances )        {
-                sb.append( TAB + inst.getType() + " " + inst.getName() + CR );
+                sb.append( TAB + inst.getType() + SP + inst.getName() + CR );
                 if( inst.getEvents().size() > 0 )       {
                     ArrayList<TMLSDEvent> listEvents = inst.getEvents();
                     Collections.sort( listEvents );
@@ -268,7 +274,7 @@ public class TMLCPTextSpecification {
             sb.append( END + CR2 );
         }
         if( sbAttributes.length() > 0 ) {
-            return sbAttributes.toString() + CR2 + sb.toString();
+					return sbAttributes.toString() + CR2 + sb.toString();
         }
         return sb.toString();
     }
@@ -416,7 +422,7 @@ public class TMLCPTextSpecification {
 	}
 	
 	if (currentElement instanceof TMLCPForLoop) {
-	    TraceManager.addDev("Handling ForLoop: " + currentElement);
+	    //TraceManager.addDev("Handling ForLoop: " + currentElement);
 	    return parseForLoop((TMLCPForLoop)(currentElement), met);
 	}
 

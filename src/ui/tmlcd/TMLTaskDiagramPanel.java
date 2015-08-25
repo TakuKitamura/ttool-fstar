@@ -51,6 +51,7 @@ import org.w3c.dom.*;
 
 import ui.*;
 import ui.tmldd.*;
+import ui.tmlcd.*;
 import java.util.*;
 
 public class TMLTaskDiagramPanel extends TDiagramPanel {
@@ -380,7 +381,7 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
 		
 		return list;
 	}
-	
+
 	public ArrayList<String> getAllTMLCommunicationNames(String _topname) {
 		TGComponent tgc;
         Iterator iterator = componentList.listIterator();

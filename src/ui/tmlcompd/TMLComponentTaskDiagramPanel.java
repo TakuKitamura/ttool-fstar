@@ -52,6 +52,7 @@ import org.w3c.dom.*;
 
 import ui.*;
 import ui.tmldd.*;
+import ui.tmlcd.*;
 import java.util.*;
 
 import myutil.*;
@@ -1241,6 +1242,26 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
       return null;
       }*/
+		public Vector getAllTMLTasksAttributes() {
+
+			TGComponent tgc;
+			Iterator iterator = componentList.listIterator();
+			Vector list = new Vector();
+        
+  	  while(iterator.hasNext()) {
+				tgc = (TGComponent)(iterator.next());
+				if( tgc instanceof TMLCCompositeComponent )	{
+					for( TMLCPrimitiveComponent primComp: ((TMLCCompositeComponent)tgc).getAllPrimitiveComponents() )	{
+						for( Object o: primComp.getAttributes() )	{
+							String s = o.toString();
+							list.add( primComp.getValue() + "." + s.substring( 2, s.length()-1 ) );
+						}
+						//list.add( primComp.getAttributes() );
+					}
+				}
+			}
+			return list;
+		}
 
     public Vector<String> getAllRecords(TMLCPrimitiveComponent tgc) {
         Vector<String> list = new Vector<String>();

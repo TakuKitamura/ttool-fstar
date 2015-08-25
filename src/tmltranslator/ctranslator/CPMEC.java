@@ -66,9 +66,10 @@ public abstract class CPMEC	{
 	public static final String SingleDMA = "Single DMA";
 	public static final String DoubleDMA = "Double DMA";
 	public static final String MemoryCopy = "Memory Copy";
-	public static final int SingleDmaMEC = 0;
-	public static final int DoubleDmaMEC = 1;
-	public static final int CpuMemoryCopyMEC = 2;
+	//The number must be the same as the index in cpTypes
+	public static final int CpuMemoryCopyMEC = 0;
+	public static final int SingleDmaMEC = 1;
+	public static final int DoubleDmaMEC = 2;
 
 	public static final int mem2IP = 0;
 	public static final int IP2IP = 1;

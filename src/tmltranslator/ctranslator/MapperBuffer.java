@@ -48,50 +48,66 @@ package tmltranslator.ctranslator;;
 
 import java.util.*;
 import java.nio.*;
+import org.w3c.dom.Element;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
 import myutil.*;
 import tmltranslator.*;
 
 public class MapperBuffer extends Buffer	{
 
-	public static final String[] symmetricalValues = { "OFF" , "ON" };
+	public static final String[] symmetricalValues = { "OFF", "ON" };
 
 	//data in
-	public static final int numSamplesDataInMappIndex = 1;
-	protected String numSamplesDataInMappValue = USER_TO_DO;
-	public static final String numSamplesDataInMappType = "uint16_t";
+	public static final int NUM_SAMPLES_DATAIN_INDEX = 1;
+	protected String numSamplesDataInValue = USER_TO_DO;
+	public static final String NUM_SAMPLES_DATAIN_TYPE = "uint16_t";
 
-	public static final int baseAddressDataInMappIndex = 2;
-	protected String baseAddressDataInMappValue = USER_TO_DO;
-	public static final String baseAddressDataInMappType = "uint16_t";
+	public static final int BASE_ADDRESS_DATAIN_INDEX = 2;
+	protected String baseAddressDataInValue = USER_TO_DO;
+	public static final String BASE_ADDRESS_DATAIN_TYPE = "uint16_t";
 
-	public static final int bitsPerSymbolDataInMappIndex = 3;
-	protected String bitsPerSymbolDataInMappValue = USER_TO_DO;
-	public static final String bitsPerSymbolDataInMappType = "uint16_t";
+	public static final int BITS_PER_SYMBOL_DATAIN_INDEX = 3;
+	protected String bitsPerSymbolDataInValue = USER_TO_DO;
+	public static final String BITS_PER_SYMBOL_DATAIN_TYPE = "uint16_t";
 
-
-	public static int symmetricalValueDataInMappIndex = 4;
-	protected String symmetricalValueDataInMappValue = USER_TO_DO;
-	protected static final String symmetricalValueDataInMappType = "bool";
+	public static int SYMMETRICAL_VALUE_DATAIN_INDEX = 4;
+	protected String symmetricalValueDataInValue = USER_TO_DO;
+	protected static final String SYMMETRICAL_VALUE_DATAIN_TYPE = "bool";
 
 	//data out
-	public static final int baseAddressDataOutMappIndex = 5;
-	protected String baseAddressDataOutMappValue = USER_TO_DO;
-	public static final String baseAddressDataOutMappType = "uint16_t";
+	public static final int BASE_ADDRESS_DATAOUT_INDEX = 5;
+	protected String baseAddressDataOutValue = USER_TO_DO;
+	public static final String BASE_ADDRESS_DATAOUT_TYPE = "uint16_t";
 	
 	//Look up table
-	public static final int baseAddressLUTMappIndex = 6;
-	protected String baseAddressLUTMappValue = USER_TO_DO;
-	public static final String baseAddressLUTMappType = "uint16_t";
+	public static final int BASE_ADDRESS_LUT_INDEX = 6;
+	protected String baseAddressLUTValue = USER_TO_DO;
+	public static final String BASE_ADDRESS_LUT_TYPE = "uint16_t";
 
-	private static final int maxParameters = 6;;
+	private static final int MAX_PARAMETERS = 6;;
+
+	//PANEL
+	//Mapper Data In
+	private static JTextField baseAddressDataIn_TF, numSamplesDataIn_TF, bitsPerSymbolDataIn_TF;
+	private static String baseAddressDataIn, numSamplesDataIn, bitsPerSymbolDataIn, symmetricalValueDataIn;
+	private static JComboBox symmetricalValueDataIn_CB;
+	//Mapper Data Out
+	private static JTextField baseAddressDataOut_TF;
+	private static String baseAddressDataOut;
+	//Mapper LUT
+	private static JTextField baseAddressLUT_TF;
+	private static String baseAddressLUT;
 	
 	public static final String DECLARATION = "struct MAPPER_BUFFER_TYPE {" + CR + TAB +
-																						numSamplesDataInMappType + SP + "num_symbols" + SC + CR + TAB +
-																						baseAddressDataInMappType + SP + "input_base_address" + SC + CR + TAB +
-																						bitsPerSymbolDataInMappType + SP + "num_bits_per_symbol" + SC + CR + TAB +
-																						symmetricalValueDataInMappType + SP + "symmetrical_value" + SC + CR + TAB +
-																						baseAddressDataOutMappType + SP + "output_base_address" + SC + CR + TAB +
-																						baseAddressLUTMappType + SP + "lut_base_address" + SC + CR + "}" + SC + CR2 +
+																						NUM_SAMPLES_DATAIN_TYPE + SP + "num_symbols" + SC + CR + TAB +
+																						BASE_ADDRESS_DATAIN_TYPE + SP + "input_base_address" + SC + CR + TAB +
+																						BITS_PER_SYMBOL_DATAIN_TYPE + SP + "num_bits_per_symbol" + SC + CR + TAB +
+																						SYMMETRICAL_VALUE_DATAIN_TYPE + SP + "symmetrical_value" + SC + CR + TAB +
+																						BASE_ADDRESS_DATAOUT_TYPE + SP + "output_base_address" + SC + CR + TAB +
+																						BASE_ADDRESS_LUT_TYPE + SP + "lut_base_address" + SC + CR + "}" + SC + CR2 +
 																						"typedef MAPPER_BUFFER_TYPE MAPPER_BUFFER_TYPE" + SC;
 	
 	private String Context = "MAPPER_CONTEXT";
@@ -107,47 +123,47 @@ public class MapperBuffer extends Buffer	{
 		if( bufferParameters != null )	{
 			retrieveBufferParameters();
 		}
-		s.append( TAB + name + ".num_symbols = " + "(" + numSamplesDataInMappType + ")" + numSamplesDataInMappValue + SC + CR );
-		s.append( TAB + name + ".input_base_address = " + "(" + baseAddressDataInMappType + ")" + baseAddressDataInMappValue + SC + CR );
-		s.append( TAB + name + ".num_bits_per_symbol = " + "(" + bitsPerSymbolDataInMappType + ")" + bitsPerSymbolDataInMappValue + SC + CR );
-		s.append( TAB + name + ".symmetrical_value = " + "(" + symmetricalValueDataInMappType + ")" + symmetricalValueDataInMappValue + SC + CR );
-		s.append( TAB + name + ".output_base_address = " + "(" + baseAddressDataOutMappType + ")" + baseAddressDataOutMappValue + SC + CR );
-		s.append( TAB + name + ".lut_base_address = " + "(" + baseAddressLUTMappType + ")" + baseAddressLUTMappValue + SC + CR );
+		s.append( TAB + name + ".num_symbols = " + "(" + NUM_SAMPLES_DATAIN_TYPE + ")" + numSamplesDataInValue + SC + CR );
+		s.append( TAB + name + ".input_base_address = " + "(" + BASE_ADDRESS_DATAIN_TYPE + ")" + baseAddressDataInValue + SC + CR );
+		s.append( TAB + name + ".num_bits_per_symbol = " + "(" + BITS_PER_SYMBOL_DATAIN_TYPE + ")" + bitsPerSymbolDataInValue + SC + CR );
+		s.append( TAB + name + ".symmetrical_value = " + "(" + SYMMETRICAL_VALUE_DATAIN_TYPE + ")" + symmetricalValueDataInValue + SC + CR );
+		s.append( TAB + name + ".output_base_address = " + "(" + BASE_ADDRESS_DATAOUT_TYPE + ")" + baseAddressDataOutValue + SC + CR );
+		s.append( TAB + name + ".lut_base_address = " + "(" + BASE_ADDRESS_LUT_TYPE + ")" + baseAddressLUTValue + SC + CR );
 		return s.toString();
 	}
 
 	public String toString()	{
 
 		StringBuffer s = new StringBuffer( super.toString() );
-		s.append( TAB2 + "num_symbols = " + numSamplesDataInMappValue + SC + CR );
-		s.append( TAB2 + "input_base_address = " + baseAddressDataInMappValue + SC + CR );
-		s.append( TAB2 + "num_bits_per_symbol = " + bitsPerSymbolDataInMappValue + SC + CR );
-		s.append( TAB2 + "symmetrical_value = " + symmetricalValueDataInMappValue + SC + CR );
-		s.append( TAB2 + "output_base_address = " + baseAddressDataOutMappValue + SC + CR );
-		s.append( TAB2 + "lut_base_address = " + baseAddressLUTMappValue + SC + CR );
+		s.append( TAB2 + "num_symbols = " + numSamplesDataInValue + SC + CR );
+		s.append( TAB2 + "input_base_address = " + baseAddressDataInValue + SC + CR );
+		s.append( TAB2 + "num_bits_per_symbol = " + bitsPerSymbolDataInValue + SC + CR );
+		s.append( TAB2 + "symmetrical_value = " + symmetricalValueDataInValue + SC + CR );
+		s.append( TAB2 + "output_base_address = " + baseAddressDataOutValue + SC + CR );
+		s.append( TAB2 + "lut_base_address = " + baseAddressLUTValue + SC + CR );
 		return s.toString();
 	}
 	
 	private void retrieveBufferParameters()	{
 
-		if( bufferParameters.size() == maxParameters )	{
-			if( bufferParameters.get( numSamplesDataInMappIndex ).length() > 0 )	{
-				numSamplesDataInMappValue = bufferParameters.get( numSamplesDataInMappIndex );
+		if( bufferParameters.size() == MAX_PARAMETERS )	{
+			if( bufferParameters.get( NUM_SAMPLES_DATAIN_INDEX ).length() > 0 )	{
+				numSamplesDataInValue = bufferParameters.get( NUM_SAMPLES_DATAIN_INDEX );
 			}
-			if( bufferParameters.get( baseAddressDataInMappIndex ).length() > 0 )	{
-				baseAddressDataInMappValue = bufferParameters.get( baseAddressDataInMappIndex );
+			if( bufferParameters.get( BASE_ADDRESS_DATAIN_INDEX ).length() > 0 )	{
+				baseAddressDataInValue = bufferParameters.get( BASE_ADDRESS_DATAIN_INDEX );
 			}
-			if( bufferParameters.get( bitsPerSymbolDataInMappIndex ).length() > 0 )	{
-				bitsPerSymbolDataInMappValue = bufferParameters.get( bitsPerSymbolDataInMappIndex );
+			if( bufferParameters.get( BITS_PER_SYMBOL_DATAIN_INDEX ).length() > 0 )	{
+				bitsPerSymbolDataInValue = bufferParameters.get( BITS_PER_SYMBOL_DATAIN_INDEX );
 			}
-			if( bufferParameters.get( symmetricalValueDataInMappIndex ).length() > 0 )	{
-				symmetricalValueDataInMappValue = String.valueOf( ( new Vector<String>( Arrays.asList( symmetricalValues ))).indexOf( bufferParameters.get( symmetricalValueDataInMappIndex )));
+			if( bufferParameters.get( SYMMETRICAL_VALUE_DATAIN_INDEX ).length() > 0 )	{
+				symmetricalValueDataInValue = String.valueOf( ( new Vector<String>( Arrays.asList( symmetricalValues ))).indexOf( bufferParameters.get( SYMMETRICAL_VALUE_DATAIN_INDEX )));
 			}
-			if( bufferParameters.get( baseAddressDataOutMappIndex ).length() > 0 )	{
-				baseAddressDataOutMappValue = bufferParameters.get( baseAddressDataOutMappIndex );
+			if( bufferParameters.get( BASE_ADDRESS_DATAOUT_INDEX ).length() > 0 )	{
+				baseAddressDataOutValue = bufferParameters.get( BASE_ADDRESS_DATAOUT_INDEX );
 			}
-			if( bufferParameters.get( baseAddressLUTMappIndex ).length() > 0 )	{
-				baseAddressLUTMappValue = bufferParameters.get( baseAddressLUTMappIndex );
+			if( bufferParameters.get( BASE_ADDRESS_LUT_INDEX ).length() > 0 )	{
+				baseAddressLUTValue = bufferParameters.get( BASE_ADDRESS_LUT_INDEX );
 			}
 		}
 	}
@@ -155,4 +171,209 @@ public class MapperBuffer extends Buffer	{
 	public String getContext()	{
 		return Context;
 	}
+
+	public static String appendBufferParameters( ArrayList<String> buffer )	{
+
+		StringBuffer sb = new StringBuffer();
+   	sb.append("\" bufferType=\"" + Integer.toString( Buffer.MapperBuffer ) );
+		if( buffer.size() == MAX_PARAMETERS+1 )	{	//because the first parameter is the bufferType
+			//data in
+			sb.append("\" numSamplesDataIn=\"" + buffer.get( NUM_SAMPLES_DATAIN_INDEX ) );
+			sb.append("\" baseAddressDataIn=\"" + buffer.get( BASE_ADDRESS_DATAIN_INDEX ) );
+			sb.append("\" bitsPerSymbolDataIn=\"" + buffer.get( BITS_PER_SYMBOL_DATAIN_INDEX ) );
+			sb.append("\" symmetricalValueDataIn=\"" + buffer.get( SYMMETRICAL_VALUE_DATAIN_INDEX ) );
+			//data out
+			sb.append("\" baseAddressDataOut=\"" + buffer.get( BASE_ADDRESS_DATAOUT_INDEX ) );
+			//Look-up Table
+			sb.append("\" baseAddressLUT=\"" + buffer.get( BASE_ADDRESS_LUT_INDEX ) );
+		}
+		else	{
+			//data in
+			sb.append("\" numSamplesDataIn=\"" + SP );
+			sb.append("\" baseAddressDataIn=\"" + SP );
+			sb.append("\" bitsPerSymbolDataIn=\"" + SP );
+			sb.append("\" symmetricalValueDataIn=\"" + SP );
+			//data out
+			sb.append("\" baseAddressDataOut=\"" + SP );
+			//Look-up Table
+			sb.append("\" baseAddressLUT=\"" + SP );
+		}
+		return sb.toString();
+	}
+
+	public static ArrayList<String> buildBufferParameters( Element elt )	{
+
+		ArrayList<String> buffer = new ArrayList<String>();
+		buffer.add( 0, Integer.toString( Buffer.MapperBuffer ) );
+ 		buffer.add( NUM_SAMPLES_DATAIN_INDEX, elt.getAttribute( "numSamplesDataIn" ) );
+ 		buffer.add( BASE_ADDRESS_DATAIN_INDEX, elt.getAttribute( "baseAddressDataIn" ) );
+ 		buffer.add( BITS_PER_SYMBOL_DATAIN_INDEX, elt.getAttribute( "bitsPerSymbolDataIn" ) );
+ 		buffer.add( SYMMETRICAL_VALUE_DATAIN_INDEX, elt.getAttribute( "symmetricalValueDataIn" ) );
+		//data out
+		buffer.add( BASE_ADDRESS_DATAOUT_INDEX, elt.getAttribute( "baseAddressDataOut" ) );
+		//Look-up Table
+		buffer.add( BASE_ADDRESS_LUT_INDEX, elt.getAttribute( "baseAddressLUT" ) );
+		return buffer;
+	}
+	
+	public static ArrayList<JPanel> makePanel( boolean loadBufferParameters, GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+
+		GridBagLayout gridbag2 = new GridBagLayout();
+
+  	JPanel panel3 = new JPanel();
+		panel3.setLayout(gridbag2);
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: input buffer configuration"));
+		panel3.setPreferredSize(new Dimension(650, 350));
+
+  	JPanel panel4 = new JPanel();
+		panel4.setLayout(gridbag2);
+		panel4.setBorder(new javax.swing.border.TitledBorder("Code generation: output buffer configuration"));
+		panel4.setPreferredSize(new Dimension(650, 350));
+
+  	JPanel panel5 = new JPanel();
+		panel5.setLayout(gridbag2);
+		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Look Up Table configuration"));
+		panel5.setPreferredSize(new Dimension(650, 350));
+
+		if( loadBufferParameters )	{
+			//data in
+			numSamplesDataIn = bufferParameters.get( NUM_SAMPLES_DATAIN_INDEX );
+			baseAddressDataIn = bufferParameters.get( BASE_ADDRESS_DATAIN_INDEX );
+			bitsPerSymbolDataIn = bufferParameters.get( BITS_PER_SYMBOL_DATAIN_INDEX );
+			symmetricalValueDataIn = bufferParameters.get( SYMMETRICAL_VALUE_DATAIN_INDEX );
+			//data out
+			baseAddressDataOut = bufferParameters.get( BASE_ADDRESS_DATAOUT_INDEX );
+			//look-up table
+			baseAddressLUT = bufferParameters.get( BASE_ADDRESS_LUT_INDEX );
+		}
+		
+		//Data In panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesDataIn_TF = new JTextField( numSamplesDataIn, 5 );
+		panel3.add( new JLabel( "Number of symbols = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( numSamplesDataIn_TF, c1 );
+		//
+		baseAddressDataIn_TF = new JTextField( baseAddressDataIn, 5 );
+		panel3.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( baseAddressDataIn_TF, c1 );
+		//
+		bitsPerSymbolDataIn_TF = new JTextField( bitsPerSymbolDataIn, 5 );
+		panel3.add( new JLabel( "Number of bits/symbol = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( bitsPerSymbolDataIn_TF, c1 );
+		//
+		symmetricalValueDataIn_CB = new JComboBox( new Vector<String>( Arrays.asList( symmetricalValues ) ) );
+		panel3.add( new JLabel( "Symmetrical value = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( symmetricalValueDataIn != null )	{
+			symmetricalValueDataIn_CB.setSelectedItem( symmetricalValueDataIn );
+		}
+		panel3.add( symmetricalValueDataIn_CB, c1 );
+
+		//Data Out panel
+		baseAddressDataOut_TF = new JTextField( baseAddressDataOut, 5 );
+		panel4.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( baseAddressDataOut_TF, c1 );
+		//
+		//Look Up Table panel
+		baseAddressLUT_TF = new JTextField( baseAddressLUT, 5 );
+		panel5.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( baseAddressLUT_TF, c1 );
+
+		ArrayList<JPanel> panelsList = new ArrayList<JPanel>();
+		panelsList.add(panel3);
+		panelsList.add(panel4);
+		panelsList.add(panel5);
+
+		return panelsList;
+	}
+
+	public static boolean closePanel( Frame frame )	{
+
+		//check DI
+		numSamplesDataIn = (String)numSamplesDataIn_TF.getText();
+		baseAddressDataIn = (String)baseAddressDataIn_TF.getText();
+		bitsPerSymbolDataIn = (String)bitsPerSymbolDataIn_TF.getText();
+		symmetricalValueDataIn = (String)symmetricalValueDataIn_CB.getSelectedItem();
+		String regex = "[0-9]+";
+
+		if( baseAddressDataIn.length() <= 2 && baseAddressDataIn.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddressDataIn.length() > 2 )	{
+			if( !( baseAddressDataIn.substring(0,2).equals("0x") || baseAddressDataIn.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+		/*if( !( numSamplesDataIn.length() > 0 ) )	{
+			return true;
+		}*/
+		if( !numSamplesDataIn.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of bits/symbol must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( !( bitsPerSymbolDataIn.length() > 0 ) )	{
+			return true;
+		}
+		if( !bitsPerSymbolDataIn.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of bits/symbol must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+
+		//check DO
+		baseAddressDataOut = (String)baseAddressDataOut_TF.getText();
+		if( baseAddressDataOut.length() <= 2 && baseAddressDataOut.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddressDataOut.length() > 2 )	{
+			if( !( baseAddressDataOut.substring(0,2).equals("0x") || baseAddressDataOut.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+
+		//check LUT table
+		baseAddressLUT = (String) baseAddressLUT_TF.getText();
+		if( baseAddressLUT.length() <= 2 && baseAddressLUT.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddressLUT.length() > 2 )	{
+			if( !( baseAddressLUT.substring(0,2).equals("0x") || baseAddressLUT.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static void getBufferParameters( ArrayList<String> params )	{
+
+		//data in
+		params.add( NUM_SAMPLES_DATAIN_INDEX, numSamplesDataIn );
+		params.add( BASE_ADDRESS_DATAIN_INDEX, baseAddressDataIn );
+		params.add( BITS_PER_SYMBOL_DATAIN_INDEX, bitsPerSymbolDataIn );
+		params.add( SYMMETRICAL_VALUE_DATAIN_INDEX, symmetricalValueDataIn );
+		//data out
+		params.add( BASE_ADDRESS_DATAOUT_INDEX, baseAddressDataOut );
+		//look-up table
+		params.add( BASE_ADDRESS_LUT_INDEX, baseAddressLUT );
+	}
+
 }	//End of class

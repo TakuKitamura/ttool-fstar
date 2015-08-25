@@ -484,11 +484,12 @@ public class GTURTLEModeling {
 	    TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
 	    spec.toTextFormat( tmap );      //TMLMapping
 	    try {
-		spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
+				//TraceManager.addDev( "*** " + ConfigurationTTool.TMLCodeDirectory + File.separator );
+				spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
 	    }
 	    catch( Exception e ) {
-		TraceManager.addError( "Files could not be saved: " + e.getMessage() );
-		return false;
+				TraceManager.addError( "Files could not be saved: " + e.getMessage() );
+				return false;
 	    }
 	}
 

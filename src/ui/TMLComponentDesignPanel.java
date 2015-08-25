@@ -55,6 +55,9 @@ import java.util.*;
 import ui.tmlcompd.*;
 import ui.tmlad.*;
 import ui.tmldd.*;
+import ui.tmlcd.*;
+
+import myutil.*;
 
 public class TMLComponentDesignPanel extends TURTLEPanel {
     public TMLComponentTaskDiagramPanel tmlctdp;
@@ -179,6 +182,10 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
     public ArrayList<String> getAllCompositeComponent(String _name) {
         return tmlctdp.getAllCompositeComponent(_name);
     }
+		
+		public Vector getAllTMLTasksAttributes() {
+			return tmlctdp.getAllTMLTasksAttributes();
+		}
 
     public void getListOfBreakPoints(ArrayList<Point> points) {
         TGComponent tgc;

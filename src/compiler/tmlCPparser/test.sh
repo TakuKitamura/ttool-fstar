@@ -62,6 +62,6 @@ javac -classpath ../../:parser parser/*.java
 
 #Test the parser on a sample file
 echo -e "${BLUE}Launching the parser...${NC}"
-java -classpath ./parser/:../../ CPparser < ./spec.tmlcp
+java -classpath ./parser/:../../ CPparser < ./spec2.tmlcp
 #java -classpath ./parser/:../../ CPparser < ./spec.tmlcp
 #./HOC2.test

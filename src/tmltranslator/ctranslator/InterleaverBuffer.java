@@ -48,71 +48,91 @@ package tmltranslator.ctranslator;;
 
 import java.util.*;
 import java.nio.*;
+import org.w3c.dom.Element;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
 import myutil.*;
 import tmltranslator.*;
 
 public class InterleaverBuffer extends Buffer	{
 
-	public static final String[] symmetricalValues = { "OFF" , "ON" };
+	public static final String[] symmetricalValues = { "OFF", "ON" };
 	//data in
-	public static final int packedBinaryInIntlIndex = 1;
-	public static final int widthIntlIndex = 2;
-	public static final int bitInOffsetIntlIndex = 3;
-	public static final int inputOffsetIntlIndex = 4;
+	public static final int PACKED_BINARY_IN_INDEX = 1;
+	public static final int WIDTH_INDEX = 2;
+	public static final int BIT_IN_OFFSET_INDEX = 3;
+	public static final int INPUT_OFFSET_INDEX = 4;
 	//data out
-	public static final int packedBinaryOutIntlIndex = 5;
-	public static final int bitOutOffsetIntlIndex = 6;
-	public static final int outputOffsetIntlIndex = 7;
+	public static final int PACKED_BINARY_OUT_INDEX = 5;
+	public static final int BIT_OUT_OFFSET_INDEX = 6;
+	public static final int OUTPUT_OFFSET_INDEX = 7;
 	//permutation table
-	public static final int offsetPermIntlIndex = 8;
-	public static final int lengthPermIntlIndex = 9;
+	public static final int OFFSET_PERM_INDEX = 8;
+	public static final int LENGTH_PERM_INDEX = 9;
 	
-	public String packedBinaryInIntlValue = USER_TO_DO;
-	public static String packedBinaryInIntlType = "bool";
+	public String packedBinaryInValue = USER_TO_DO;
+	public static String PACKED_BINARY_IN_TYPE = "bool";
 	
-	public String widthIntlValue = USER_TO_DO;
-	public static String widthIntlType = "uint8_t";
+	public String widthValue = USER_TO_DO;
+	public static String WIDTH_TYPE = "uint8_t";
 	
-	public String bitInOffsetIntlValue = USER_TO_DO;
-	public static String bitInOffsetIntlType = "uint8_t";
+	public String bitInOffsetValue = USER_TO_DO;
+	public static String BIT_IN_OFFSET_TYPE = "uint8_t";
 	
-	public String inputOffsetIntlValue = USER_TO_DO;
-	public static String inputOffsetIntlType = "uint16_t";
+	public String inputOffsetValue = USER_TO_DO;
+	public static String INPUT_OFFSET_TYPE = "uint16_t";
 	
 	//data out
-	public String packedBinaryOutIntlValue = USER_TO_DO;
-	public static String packedBinaryOutIntlType = "bool";
+	public String packedBinaryOutValue = USER_TO_DO;
+	public static String PACKED_BINARY_OUT_TYPE = "bool";
 	
-	public String bitOutOffsetIntlValue = USER_TO_DO;
-	public static String bitOutOffsetIntlType = "uint8_t";
+	public String bitOutOffsetValue = USER_TO_DO;
+	public static String BIT_OUT_OFFSET_TYPE = "uint8_t";
 	
-	public String outputOffsetIntlValue = USER_TO_DO;
-	public static String outputOffsetIntlType = "uint16_t";
+	public String outputOffsetValue = USER_TO_DO;
+	public static String OUTPUT_OFFSET_TYPE = "uint16_t";
 	
 	//permutation table
-	public String offsetPermIntlValue = USER_TO_DO;
-	public static String offsetPermIntlType = "uint16_t";
+	public String offsetPermValue = USER_TO_DO;
+	public static String OFFSET_PERM_TYPE = "uint16_t";
 	
-	public String lengthPermIntlValue = USER_TO_DO;
-	public static String lengthPermIntlType = "uint16_t";
+	public String lengthPermValue = USER_TO_DO;
+	public static String LENGTH_PERM_TYPE = "uint16_t";
 
-	private static final int maxParameters = 9;
+	private static final int MAX_PARAMETERS = 9;
 
 	public static final String DECLARATION = "struct INTERLEAVER_BUFFER_TYPE {" + CR + TAB +
-																						packedBinaryInIntlType + SP + "packed_binary_input_mode" + SC + CR + TAB +
-																						widthIntlType + SP + "samples_width" + SC + CR + TAB +
-																						bitInOffsetIntlType + SP + "bit_input_offset" + SC + CR + TAB +
-																						inputOffsetIntlType + SP + "input_offset" + SC + CR + TAB +
+																						PACKED_BINARY_IN_TYPE + SP + "packed_binary_input_mode" + SC + CR + TAB +
+																						WIDTH_TYPE + SP + "samples_width" + SC + CR + TAB +
+																						BIT_IN_OFFSET_TYPE + SP + "bit_input_offset" + SC + CR + TAB +
+																						INPUT_OFFSET_TYPE + SP + "input_offset" + SC + CR + TAB +
 																						//data out
-																						packedBinaryOutIntlType + SP + "packed_binary_output_mode" + SC + CR + TAB +
-																						bitOutOffsetIntlType + SP + "bit_output_offset" + SC + CR + TAB +
-																						outputOffsetIntlType + SP + "output_offset" + SC + CR + TAB +
+																						PACKED_BINARY_OUT_TYPE + SP + "packed_binary_output_mode" + SC + CR + TAB +
+																						BIT_OUT_OFFSET_TYPE + SP + "bit_output_offset" + SC + CR + TAB +
+																						OUTPUT_OFFSET_TYPE + SP + "output_offset" + SC + CR + TAB +
 																						//permutation table
-																						offsetPermIntlType + SP + "permutation_offset" + SC + CR + TAB + 
-																						lengthPermIntlType + SP + "permutation_length" + SC + CR + "}" + SC + CR2 +
+																						OFFSET_PERM_TYPE + SP + "permutation_offset" + SC + CR + TAB + 
+																						LENGTH_PERM_TYPE + SP + "permutation_length" + SC + CR + "}" + SC + CR2 +
 																						"typedef INTERLEAVER_BUFFER_TYPE INTERLEAVER_BUFFER_TYPE" + SC + CR;
 	
 	private String Context = "INTL_CONTEXT";
+
+	//PANEL
+	//Intl Data In
+	private static JTextField width_TF, bitInOffset_TF, inputOffset_TF;
+	private static String width, bitInOffset, inputOffset, packedBinaryIn;
+	private static JComboBox packedBinaryIn_CB;
+
+	// Data Out
+	private static JTextField bitOutOffset_TF, outputOffset_TF;
+	private static JComboBox packedBinaryOut_CB;
+	private static String packedBinaryOut, bitOutOffset, outputOffset;
+
+	// Perm
+	private static JTextField lengthPerm_TF, offsetPerm_TF;
+	private static String lengthPerm, offsetPerm;
 	
 	public InterleaverBuffer( String _name, TMLTask _task )	{
 		type = "INTERLEAVER_BUFFER_TYPE";
@@ -125,71 +145,330 @@ public class InterleaverBuffer extends Buffer	{
 		if( bufferParameters != null )	{
 			retrieveBufferParameters();
 		}
-		s.append( TAB + name + ".packed_binary_input_mode = " + "(" + packedBinaryInIntlType + ")" + packedBinaryInIntlValue + SC + CR );
-		s.append( TAB + name + ".samples_width = " + SP + "(" + widthIntlType + ")" + widthIntlValue + SC + CR );
-		s.append( TAB + name + ".bit_input_offset = " + SP + "(" + bitInOffsetIntlType + ")" + bitInOffsetIntlValue + SC + CR );
-		s.append( TAB + name + ".input_offset = " + SP + "(" + inputOffsetIntlType + ")" + inputOffsetIntlValue + SC + CR );
+		s.append( TAB + name + ".packed_binary_input_mode = " + "(" + PACKED_BINARY_IN_TYPE + ")" + packedBinaryInValue + SC + CR );
+		s.append( TAB + name + ".samples_width = " + SP + "(" + WIDTH_TYPE + ")" + widthValue + SC + CR );
+		s.append( TAB + name + ".bit_input_offset = " + SP + "(" + BIT_IN_OFFSET_TYPE + ")" + bitInOffsetValue + SC + CR );
+		s.append( TAB + name + ".input_offset = " + SP + "(" + INPUT_OFFSET_TYPE + ")" + inputOffsetValue + SC + CR );
 		//data out
-		s.append( TAB + name + ".packed_binary_output_mode = " + SP + "(" + packedBinaryOutIntlType + ")" + packedBinaryOutIntlValue + SC + CR );
-		s.append( TAB + name + ".bit_output_offset = " + SP + "(" + bitOutOffsetIntlType + ")" + bitOutOffsetIntlValue + SC + CR );
-		s.append( TAB + name + ".output_offset = " + SP + "(" + outputOffsetIntlType + ")" + outputOffsetIntlValue + SC + CR );
+		s.append( TAB + name + ".packed_binary_output_mode = " + SP + "(" + PACKED_BINARY_OUT_TYPE + ")" + packedBinaryOutValue + SC + CR );
+		s.append( TAB + name + ".bit_output_offset = " + SP + "(" + BIT_OUT_OFFSET_TYPE + ")" + bitOutOffsetValue + SC + CR );
+		s.append( TAB + name + ".output_offset = " + SP + "(" + OUTPUT_OFFSET_TYPE + ")" + outputOffsetValue + SC + CR );
 		//permutation table
-		s.append( TAB + name + ".permutation_offset = " + SP + "(" + offsetPermIntlType + ")" + offsetPermIntlValue + SC + CR ); 
-		s.append( TAB + name + ".permutation_length = " + SP + "(" + lengthPermIntlType + ")" + lengthPermIntlValue + SC + CR );
+		s.append( TAB + name + ".permutation_offset = " + SP + "(" + OFFSET_PERM_TYPE + ")" + offsetPermValue + SC + CR ); 
+		s.append( TAB + name + ".permutation_length = " + SP + "(" + LENGTH_PERM_TYPE + ")" + lengthPermValue + SC + CR );
 		return s.toString();
 	}
 
 	public String toString()	{
 
 		StringBuffer s = new StringBuffer( super.toString() );
-		s.append( TAB2 + ".packed_binary_input_mode = " + packedBinaryInIntlValue + SC + CR );
-		s.append( TAB2 + ".samples_width = " + SP + widthIntlValue + SC + CR );
-		s.append( TAB2 + ".bit_input_offset = " + SP + bitInOffsetIntlValue + SC + CR );
-		s.append( TAB2 + ".input_offset = " + SP + inputOffsetIntlValue + SC + CR );
+		s.append( TAB2 + ".packed_binary_input_mode = " + packedBinaryInValue + SC + CR );
+		s.append( TAB2 + ".samples_width = " + SP + widthValue + SC + CR );
+		s.append( TAB2 + ".bit_input_offset = " + SP + bitInOffsetValue + SC + CR );
+		s.append( TAB2 + ".input_offset = " + SP + inputOffsetValue + SC + CR );
 		//data out
-		s.append( TAB2 + ".packed_binary_output_mode = " + SP + packedBinaryOutIntlValue + SC + CR );
-		s.append( TAB2 + ".bit_output_offset = " + SP + bitOutOffsetIntlValue + SC + CR );
-		s.append( TAB2 + ".output_offset = " + SP + outputOffsetIntlValue + SC + CR );
+		s.append( TAB2 + ".packed_binary_output_mode = " + SP + packedBinaryOutValue + SC + CR );
+		s.append( TAB2 + ".bit_output_offset = " + SP + bitOutOffsetValue + SC + CR );
+		s.append( TAB2 + ".output_offset = " + SP + outputOffsetValue + SC + CR );
 		//permutation table
-		s.append( TAB2 + ".permutation_offset = " + SP + offsetPermIntlValue + SC + CR ); 
-		s.append( TAB2 + ".permutation_length = " + SP + lengthPermIntlValue + SC + CR );
+		s.append( TAB2 + ".permutation_offset = " + SP + offsetPermValue + SC + CR ); 
+		s.append( TAB2 + ".permutation_length = " + SP + lengthPermValue + SC + CR );
 		return s.toString();
 	}
 	
 	private void retrieveBufferParameters()	{
 
-		if( bufferParameters.size() == maxParameters )	{
-			if( bufferParameters.get( packedBinaryInIntlIndex ).length() > 0 )	{
-				packedBinaryInIntlValue = String.valueOf((new Vector<String>( Arrays.asList( Buffer.onOffVector  ))).indexOf( bufferParameters.get( packedBinaryInIntlIndex )));
+		if( bufferParameters.size() == MAX_PARAMETERS )	{
+			if( bufferParameters.get( PACKED_BINARY_IN_INDEX ).length() > 0 )	{
+				packedBinaryInValue = String.valueOf((new Vector<String>( Arrays.asList( Buffer.onOffVector  ))).indexOf( bufferParameters.get( PACKED_BINARY_IN_INDEX )));
 			}
-			if( bufferParameters.get( widthIntlIndex ).length() > 0 )	{
-				widthIntlValue = bufferParameters.get( widthIntlIndex );
+			if( bufferParameters.get( WIDTH_INDEX ).length() > 0 )	{
+				widthValue = bufferParameters.get( WIDTH_INDEX );
 			}
-			if( bufferParameters.get( bitInOffsetIntlIndex ).length() > 0 )	{
-				bitInOffsetIntlValue = bufferParameters.get( bitInOffsetIntlIndex );
+			if( bufferParameters.get( BIT_IN_OFFSET_INDEX ).length() > 0 )	{
+				bitInOffsetValue = bufferParameters.get( BIT_IN_OFFSET_INDEX );
 			}
-			if( bufferParameters.get( inputOffsetIntlIndex ).length() > 0 )	{
-				inputOffsetIntlValue = bufferParameters.get( inputOffsetIntlIndex );
+			if( bufferParameters.get( INPUT_OFFSET_INDEX ).length() > 0 )	{
+				inputOffsetValue = bufferParameters.get( INPUT_OFFSET_INDEX );
 			}
-			if( bufferParameters.get( packedBinaryOutIntlIndex ).length() > 0 )	{
-				packedBinaryOutIntlValue = String.valueOf((new Vector<String>( Arrays.asList( Buffer.onOffVector  ))).indexOf( bufferParameters.get( packedBinaryOutIntlIndex )));
+			if( bufferParameters.get( PACKED_BINARY_OUT_INDEX ).length() > 0 )	{
+				packedBinaryOutValue = String.valueOf((new Vector<String>( Arrays.asList( Buffer.onOffVector  ))).indexOf( bufferParameters.get( PACKED_BINARY_OUT_INDEX )));
 			}
-			if( bufferParameters.get( bitOutOffsetIntlIndex ).length() > 0 )	{
-				bitOutOffsetIntlValue = bufferParameters.get( bitOutOffsetIntlIndex );
+			if( bufferParameters.get( BIT_OUT_OFFSET_INDEX ).length() > 0 )	{
+				bitOutOffsetValue = bufferParameters.get( BIT_OUT_OFFSET_INDEX );
 			}
-			if( bufferParameters.get( outputOffsetIntlIndex ).length() > 0 )	{
-				outputOffsetIntlValue = bufferParameters.get( outputOffsetIntlIndex );
+			if( bufferParameters.get( OUTPUT_OFFSET_INDEX ).length() > 0 )	{
+				outputOffsetValue = bufferParameters.get( OUTPUT_OFFSET_INDEX );
 			}
-			if( bufferParameters.get( offsetPermIntlIndex ).length() > 0 )	{
-				offsetPermIntlValue = bufferParameters.get( offsetPermIntlIndex );
+			if( bufferParameters.get( OFFSET_PERM_INDEX ).length() > 0 )	{
+				offsetPermValue = bufferParameters.get( OFFSET_PERM_INDEX );
 			}
-			if( bufferParameters.get( lengthPermIntlIndex ).length() > 0 )	{
-				lengthPermIntlValue = bufferParameters.get( lengthPermIntlIndex );
+			if( bufferParameters.get( LENGTH_PERM_INDEX ).length() > 0 )	{
+				lengthPermValue = bufferParameters.get( LENGTH_PERM_INDEX );
 			}
 		}
 	}
 
 	public String getContext()	{
 		return Context;
+	}
+
+	public static ArrayList<String> buildBufferParameters( Element elt )	{
+
+		ArrayList<String> buffer = new ArrayList<String>();
+		buffer.add( 0, Integer.toString( Buffer.InterleaverBuffer ) );
+		//data in
+		buffer.add( elt.getAttribute( "packedBinaryIn" ) );
+	  buffer.add( elt.getAttribute( "width" ) );
+	  buffer.add( elt.getAttribute( "bitInOffset" ) );
+	  buffer.add( elt.getAttribute( "inputOffset" ) );
+		//data out
+		buffer.add( elt.getAttribute( "packedBinaryOut" ) );
+		buffer.add( elt.getAttribute( "bitOutOffset" ) );
+		buffer.add( elt.getAttribute( "outputOffset" ) );
+		//permutation table
+		buffer.add( elt.getAttribute( "offsetPerm" ) );
+		buffer.add( elt.getAttribute( "lengthPerm" ) );
+		return buffer;
+	}
+
+	public static String appendBufferParameters( ArrayList<String> buffer )	{
+
+		StringBuffer sb = new StringBuffer();
+   	sb.append("\" bufferType=\"" + Integer.toString( Buffer.InterleaverBuffer ) );
+		if( buffer.size() == MAX_PARAMETERS+1 )	{	//because the first parameter is the bufferType
+			//data in
+   		sb.append( "\" packedBinaryIn=\"" + buffer.get( PACKED_BINARY_IN_INDEX ) );
+   		sb.append( "\" width=\"" + buffer.get( WIDTH_INDEX ) );
+   		sb.append( "\" bitInOffset=\"" + buffer.get( BIT_IN_OFFSET_INDEX ) );
+   		sb.append( "\" inputOffset=\"" + buffer.get( INPUT_OFFSET_INDEX ) );
+			//data out
+   		sb.append( "\" packedBinaryOut=\"" + buffer.get( PACKED_BINARY_OUT_INDEX ) );
+   		sb.append( "\" bitOutOffset=\"" + buffer.get( BIT_OUT_OFFSET_INDEX ) );
+   		sb.append( "\" outputOffset=\"" + buffer.get( OUTPUT_OFFSET_INDEX ) );
+			//permutation table
+   		sb.append( "\" offsetPerm=\"" + buffer.get( OFFSET_PERM_INDEX) );
+   		sb.append( "\" lengthPerm=\"" + buffer.get( LENGTH_PERM_INDEX) );
+		}
+		else	{
+			//data in
+   		sb.append( "\" packedBinaryIn=\"" + SP );
+   		sb.append( "\" width=\"" + SP );
+   		sb.append( "\" bitInOffset=\"" + SP );
+   		sb.append( "\" inputOffset=\"" + SP );
+			//data out
+   		sb.append( "\" packedBinaryOut=\"" + SP );
+   		sb.append( "\" bitOutOffset=\"" + SP );
+   		sb.append( "\" outputOffset=\"" + SP );
+			//permutation table
+   		sb.append( "\" offsetPerm=\"" + SP );
+   		sb.append( "\" lengthPerm=\"" + SP );
+		}
+
+		return sb.toString();
+	}
+
+	public static ArrayList<JPanel> makePanel( boolean loadBufferParameters, GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+
+		GridBagLayout gridbag2 = new GridBagLayout();
+
+  	JPanel panel3 = new JPanel();	//data in
+		panel3.setLayout(gridbag2);
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: input buffer configuration"));
+		panel3.setPreferredSize(new Dimension(650, 350));
+
+  	JPanel panel4 = new JPanel();	//data out
+		panel4.setLayout(gridbag2);
+		panel4.setBorder(new javax.swing.border.TitledBorder("Code generation: output buffer configuration"));
+		panel4.setPreferredSize(new Dimension(650, 350));
+
+  	JPanel panel5 = new JPanel();	//permutation table
+		panel5.setLayout(gridbag2);
+		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Permutation Table configuration"));
+		panel5.setPreferredSize(new Dimension(650, 350));
+
+		if( loadBufferParameters )	{
+			//data in
+			packedBinaryIn = bufferParameters.get( PACKED_BINARY_IN_INDEX );
+			width = bufferParameters.get( WIDTH_INDEX );
+			bitInOffset = bufferParameters.get( BIT_IN_OFFSET_INDEX );
+			inputOffset = bufferParameters.get( INPUT_OFFSET_INDEX );
+			//data out
+			packedBinaryOut = bufferParameters.get( PACKED_BINARY_OUT_INDEX );
+			bitOutOffset = bufferParameters.get( BIT_OUT_OFFSET_INDEX );
+			outputOffset = bufferParameters.get( OUTPUT_OFFSET_INDEX );
+			//permutation table
+			lengthPerm = bufferParameters.get( LENGTH_PERM_INDEX );
+			offsetPerm = bufferParameters.get( OFFSET_PERM_INDEX );
+		}
+		
+		//Data In panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		packedBinaryIn_CB = new JComboBox( Buffer.onOffVector );
+		panel3.add( new JLabel( "Packed binary input mode = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( packedBinaryIn != null )	{
+			packedBinaryIn_CB.setSelectedItem( packedBinaryIn );
+		}
+		panel3.add( packedBinaryIn_CB, c1 );
+		//
+		width_TF = new JTextField( width, 5 );
+		panel3.add( new JLabel( "Sample width = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( width_TF, c1 );
+		//
+		bitInOffset_TF = new JTextField( bitInOffset, 5 );
+		panel3.add( new JLabel( "Bit input offset = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( bitInOffset_TF, c1 );
+		//
+		inputOffset_TF = new JTextField( inputOffset, 5 );
+		panel3.add( new JLabel( "Offset of first input sample = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( inputOffset_TF, c1 );
+		//
+
+		//Data Out panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		packedBinaryOut_CB = new JComboBox( Buffer.onOffVector );
+		panel4.add( new JLabel( "Packed binary output mode = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( packedBinaryOut != null )	{
+			packedBinaryOut_CB.setSelectedItem( packedBinaryOut );
+		}
+		panel4.add( packedBinaryOut_CB, c1 );
+		//
+		bitOutOffset_TF = new JTextField( bitOutOffset, 5 );
+		panel4.add( new JLabel( "Bit output offset = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( bitOutOffset_TF, c1 );
+		//
+		c2.anchor = GridBagConstraints.LINE_START;
+		outputOffset_TF = new JTextField( outputOffset, 5 );
+		panel4.add( new JLabel( "Offset of first output sample = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( outputOffset_TF, c1 );
+
+		//Permutation Table panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		offsetPerm_TF = new JTextField( offsetPerm, 5 );
+		panel5.add( new JLabel( "Offset = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( offsetPerm_TF, c1 );
+		//
+		c2.anchor = GridBagConstraints.LINE_START;
+		lengthPerm_TF = new JTextField( lengthPerm, 5 );
+		panel5.add( new JLabel( "Length = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( lengthPerm_TF, c1 );
+
+		ArrayList<JPanel> panelsList = new ArrayList<JPanel>();
+		panelsList.add( panel3 );
+		panelsList.add( panel4 );
+		panelsList.add( panel5 );
+
+		return panelsList;
+	}
+
+	public static void getBufferParameters( ArrayList<String> params )	{
+
+		//data in
+		params.add( PACKED_BINARY_IN_INDEX, packedBinaryIn );
+		params.add( WIDTH_INDEX, width );
+		params.add( BIT_IN_OFFSET_INDEX, bitInOffset );
+		params.add( INPUT_OFFSET_INDEX, inputOffset );
+		//data out
+		params.add( PACKED_BINARY_OUT_INDEX, packedBinaryOut );
+		params.add( BIT_OUT_OFFSET_INDEX, bitOutOffset );
+		params.add( OUTPUT_OFFSET_INDEX, outputOffset );
+		//permutation table
+		params.add( OFFSET_PERM_INDEX, offsetPerm );
+		params.add( LENGTH_PERM_INDEX, lengthPerm );
+	}
+
+	public static boolean closePanel( Frame frame )	{
+
+		String regex = "[0-9]+";
+		width = (String)width_TF.getText();
+		bitInOffset = (String)bitInOffset_TF.getText();
+		inputOffset = (String)inputOffset_TF.getText();
+		packedBinaryIn = (String)packedBinaryIn_CB.getSelectedItem();
+
+		/*if( !( width.length() > 0 ) )	{
+			return true;
+		}*/
+		if( !width.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The samples width must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		/*if( !( bitInOffset.length() > 0 ) )	{
+			return true;
+		}*/
+		if( !bitInOffset.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The bit input offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		/*if( !( inputOffset.length() > 0 ) )	{
+			return true;
+		}*/
+		if( !inputOffset.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The bit intput offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+
+		//check DO
+		packedBinaryOut = (String)packedBinaryOut_CB.getSelectedItem();
+		bitOutOffset = 	(String)bitOutOffset_TF.getText();
+		outputOffset = (String)outputOffset_TF.getText();
+
+		/*if( !( bitOutOffset.length() > 0 ) )	{
+			return true;
+		}*/
+		if( !bitOutOffset.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The bit output offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		// check output offset
+		/*if( !( outputOffset.length() > 0 ) )	{
+			return true;
+		}*/
+		if( !outputOffset.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The output offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+
+		//check Permutation table
+		offsetPerm = (String) offsetPerm_TF.getText();
+		lengthPerm = (String) lengthPerm_TF.getText();
+		//check first entry offset
+		if( !( offsetPerm.length() > 0 ) )	{
+			return true;
+		}
+		if( !offsetPerm.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		//check permutation table length
+		/*if( !( lengthPerm.length() > 0 ) )	{
+			return true;
+		}*/
+		if( !lengthPerm.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The length must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( Integer.parseInt( lengthPerm ) == 0 )	{
+			JOptionPane.showMessageDialog( frame, "The length must be greater than 0", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+
+		return true;
 	}
 }	//End of class

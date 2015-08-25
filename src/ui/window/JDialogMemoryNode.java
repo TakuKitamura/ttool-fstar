@@ -156,9 +156,9 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         c3.gridheight = 1;
         c3.weighty = 1.0;
         c3.weightx = 1.0;
-  		  panel3.add(new JLabel("Buffer type:"), c3);
+  		  panel3.add(new JLabel("Memory type:"), c3);
 	    	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-    		bufferTypesCB = new JComboBox( new Vector<String>( Arrays.asList( Buffer.bufferTypesList ) ) );
+    		bufferTypesCB = new JComboBox( new Vector<String>( Arrays.asList( Buffer.memoryTypesList ) ) );
 				bufferTypesCB.setSelectedIndex( bufferType  );
 				panel3.add( bufferTypesCB, c3 );
         

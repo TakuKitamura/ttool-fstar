@@ -48,26 +48,35 @@ package tmltranslator.ctranslator;;
 
 import java.util.*;
 import java.nio.*;
+import org.w3c.dom.Element;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
 import myutil.*;
 import tmltranslator.*;
 
 public class MMBuffer extends Buffer	{
 
-	public static final int numSamplesIndex = 1;
-	public static final int baseAddressIndex = 2;
+	public static final int NUM_SAMPLES_INDEX = 1;
+	public static final int BASE_ADDRESS_INDEX = 2;
 
 	protected String numSamplesValue = USER_TO_DO;
-	protected static final String numSamplesType = "uint8_t";
+	protected static final String NUM_SAMPLES_TYPE = "uint8_t";
 	
 	protected String baseAddressValue = USER_TO_DO;
-	protected static final String baseAddressType = "uint32_t*";
+	protected static final String BASE_ADDRESS_TYPE = "uint32_t*";
 	
 	public static final String DECLARATION = "struct MM_BUFFER_TYPE {" + CR + TAB +
-																						numSamplesType + SP + "num_samples" + SC + CR + TAB +
-																						baseAddressType + SP + "base_address" + SC + CR + "}" + SC + CR2 +
+																						NUM_SAMPLES_TYPE + SP + "num_samples" + SC + CR + TAB +
+																						BASE_ADDRESS_TYPE + SP + "base_address" + SC + CR + "}" + SC + CR2 +
 																						"typedef MM_BUFFER_TYPE MM_BUFFER_TYPE" + SC + CR;
 	
 	private String Context = "embb_mainmemory_context";
+
+	private static final int MAX_PARAMETERS = 2;
+	private static JTextField numSamplesTF = new JTextField( "", 5 );
+	private static JTextField baseAddressTF = new JTextField( "", 5 );
 
 	public MMBuffer( String _name, TMLTask _task )	{
 		type = "MM_BUFFER_TYPE";
@@ -80,8 +89,8 @@ public class MMBuffer extends Buffer	{
 		if( bufferParameters != null )	{
 			retrieveBufferParameters();
 		}
-		s.append( TAB + name + ".num_samples = " + "(" + numSamplesType + ")" + numSamplesValue + SC + CR );
-		s.append( TAB + name + ".base_address = " + "(" + baseAddressType + ")" + baseAddressValue + SC + CR );
+		s.append( TAB + name + ".num_samples = " + "(" + NUM_SAMPLES_TYPE + ")" + numSamplesValue + SC + CR );
+		s.append( TAB + name + ".base_address = " + "(" + BASE_ADDRESS_TYPE + ")" + baseAddressValue + SC + CR );
 		return s.toString();
 	}
 
@@ -95,15 +104,107 @@ public class MMBuffer extends Buffer	{
 
 	private void retrieveBufferParameters()	{
 
-		if( bufferParameters.get( numSamplesIndex ).length() > 0 )	{
-			numSamplesValue = bufferParameters.get( numSamplesIndex );
+		if( bufferParameters.get( NUM_SAMPLES_INDEX ).length() > 0 )	{
+			numSamplesValue = bufferParameters.get( NUM_SAMPLES_INDEX );
 		}
-		if( bufferParameters.get( baseAddressIndex ).length() > 0 )	{
-			baseAddressValue = bufferParameters.get( baseAddressIndex );
+		if( bufferParameters.get( BASE_ADDRESS_INDEX ).length() > 0 )	{
+			baseAddressValue = bufferParameters.get( BASE_ADDRESS_INDEX );
 		}
 	}
 
 	public String getContext()	{
 		return Context;
+	}
+
+	public static ArrayList<String> buildBufferParameters( Element elt )	{
+
+		ArrayList<String> buffer = new ArrayList<String>();
+		buffer.add( 0, Integer.toString( Buffer.AdaifBuffer ) );
+		buffer.add( NUM_SAMPLES_INDEX, elt.getAttribute( "numSamples" ) );
+		buffer.add( BASE_ADDRESS_INDEX, elt.getAttribute( "baseAddress" ) );
+		return buffer;
+	}
+
+	public static String appendBufferParameters( ArrayList<String> buffer )	{
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("\" bufferType=\"" + Integer.toString( Buffer.AdaifBuffer ) );
+		if( buffer.size() == MAX_PARAMETERS+1 )	{	//because the first parameter is the bufferType
+			sb.append("\" numSamples=\"" + buffer.get( NUM_SAMPLES_INDEX ) );
+  	  sb.append("\" baseAddress=\"" + buffer.get( BASE_ADDRESS_INDEX ) );
+		}
+		else	{
+			sb.append("\" numSamples=\"" + SP );
+  	  sb.append("\" baseAddress=\"" + SP );
+		}
+		return sb.toString();
+	}
+
+	public static ArrayList<JPanel> makePanel( boolean loadBufferParameters, GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+
+		String baseAddress = "", numSamples = "";
+		GridBagLayout gridbag2 = new GridBagLayout();
+
+		JPanel panel = new JPanel();
+		panel.setLayout( gridbag2 );
+		panel.setBorder( new javax.swing.border.TitledBorder("Code generation: memory configuration"));
+		panel.setPreferredSize( new Dimension(650, 350) );
+
+		if( loadBufferParameters )	{
+			baseAddress = bufferParameters.get( BASE_ADDRESS_INDEX );
+			numSamples = bufferParameters.get( NUM_SAMPLES_INDEX );
+		}
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesTF.setText( numSamples );
+		panel.add( new JLabel( "Number of samples = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel.add( numSamplesTF, c1 );
+		//
+		baseAddressTF.setText( baseAddress );
+		panel.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel.add( baseAddressTF, c1 );
+		
+		ArrayList<JPanel> panelsList = new ArrayList<JPanel>();
+		panelsList.add( panel );
+		return panelsList;
+	}
+
+	public static void getBufferParameters( ArrayList<String> params )	{
+		params.add( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
+		params.add( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
+	}
+
+	public static boolean closePanel( Frame frame )	{
+
+		String baseAddress = (String) baseAddressTF.getText();
+		if( baseAddress.length() <= 2 && baseAddress.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddress.length() > 2 )	{
+			if( !( baseAddress.substring(0,2).equals("0x") || baseAddress.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+		String regex = "[0-9]+";
+		String numSamples = (String) numSamplesTF.getText();
+		if( !numSamples.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of samples must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( Integer.parseInt( numSamples ) == 0 )	{
+			JOptionPane.showMessageDialog( frame, "The number of samples must be greater than 0", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		/*if( !( numSamples.length() > 0 ) )	{
+			return true;
+		}*/
+		return true;
 	}
 }	//End of class

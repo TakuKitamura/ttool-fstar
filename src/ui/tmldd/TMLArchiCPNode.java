@@ -200,7 +200,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         String errors = "";
         String tmpName;
 
-        JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Setting CP attributes", this, mappedUnits, name, cpMEC, assignedAttributes, transferType1, transferType2 );
+        JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Communication Pattern configuration", this, mappedUnits, name, cpMEC, assignedAttributes, transferType1, transferType2 );
         dialog.setSize( 700, 550 );
         GraphicLib.centerOnParent( dialog );
         dialog.show(); // blocked until dialog has been closed
@@ -414,6 +414,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 		Vector<String> vectorToReturn;
 		switch( cpMEC )	{
 			case CPMEC.MemoryCopy:
+				TraceManager.addDev( "**** ASSIGNED ATTRIBUTES ****\\" + assignedAttributes );
 				vectorToReturn = CpuMemoryCopyMEC.sortAttributes( assignedAttributes );
 			break;
 			case CPMEC.SingleDMA:

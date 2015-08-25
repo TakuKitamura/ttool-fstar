@@ -247,61 +247,39 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			loadBufferParameters = true;
 		}
 
+		ArrayList<JPanel> panelsList;
+
 		switch( bufferType )	{
 			case Buffer.FepBuffer:	
-				/*numSamplesTF = new JTextField( "", 5 );
-				baseAddressTF = new JTextField( "", 5 );
-				bankCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.banksList ) ) );
-				dataTypeCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.dataTypeList ) ) );*/
-				panel3 = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panel3 = panelsList.get(0);
 				break;
 			case Buffer.InterleaverBuffer:	
-				if( loadBufferParameters )	{
-					//data in
-					packedBinaryInIntl = bufferParameters.get( InterleaverBuffer.packedBinaryInIntlIndex );
-					widthIntl = bufferParameters.get( InterleaverBuffer.widthIntlIndex );
-					bitInOffsetIntl = bufferParameters.get( InterleaverBuffer.bitInOffsetIntlIndex );
-					inputOffsetIntl = bufferParameters.get( InterleaverBuffer.inputOffsetIntlIndex );
-					//data out
-					packedBinaryOutIntl = bufferParameters.get( InterleaverBuffer.packedBinaryOutIntlIndex );
-					bitOutOffsetIntl = bufferParameters.get( InterleaverBuffer.bitOutOffsetIntlIndex );
-					outputOffsetIntl = bufferParameters.get( InterleaverBuffer.outputOffsetIntlIndex );
-					//permutation table
-					lengthPermIntl = bufferParameters.get( InterleaverBuffer.lengthPermIntlIndex );
-					offsetPermIntl = bufferParameters.get( InterleaverBuffer.offsetPermIntlIndex );
-				}
-				makeInterleaverBufferPanel( c1, c2 );
+				panelsList = InterleaverBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				tabbedPane.addTab( "Data In", panelsList.get(0) );
+				tabbedPane.addTab( "Data Out", panelsList.get(1) );
+				tabbedPane.addTab( "Permutation Table", panelsList.get(2) );
+				tabbedPane.setSelectedIndex(0);
 				break;
 			case Buffer.AdaifBuffer:	
-				if( loadBufferParameters )	{
-					baseAddress = bufferParameters.get( MMBuffer.baseAddressIndex );
-					numSamples = bufferParameters.get( MMBuffer.numSamplesIndex );
-				}
-				makeAdaifBufferPanel( c1, c2 );
+				panelsList = AdaifBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panel3 = panelsList.get(0);
 				break;
 			case Buffer.MapperBuffer:	
-				if( loadBufferParameters )	{
-					//data in
-					numSamplesDataInMapp = bufferParameters.get( MapperBuffer.numSamplesDataInMappIndex );
-					baseAddressDataInMapp = bufferParameters.get( MapperBuffer.baseAddressDataInMappIndex );
-					bitsPerSymbolDataInMapp = bufferParameters.get( MapperBuffer.bitsPerSymbolDataInMappIndex );
-					symmetricalValueDataInMapp = bufferParameters.get( MapperBuffer.symmetricalValueDataInMappIndex );
-					//data out
-					baseAddressDataOutMapp = bufferParameters.get( MapperBuffer.baseAddressDataOutMappIndex );
-					//look-up table
-					baseAddressLUTMapp = bufferParameters.get( MapperBuffer.baseAddressLUTMappIndex );
-				}
-				makeMapperBufferPanel( c1, c2 );
+				tabbedPane.removeAll();
+				panelsList = MapperBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				tabbedPane.addTab( "Data In", panelsList.get(0) );
+				tabbedPane.addTab( "Data Out", panelsList.get(1) );
+				tabbedPane.addTab( "Look Up Table", panelsList.get(2) );
+				tabbedPane.setSelectedIndex(0);
 				break;
 			case Buffer.MainMemoryBuffer:	
-				if( loadBufferParameters )	{
-					baseAddress = bufferParameters.get( MMBuffer.baseAddressIndex );
-					numSamples = bufferParameters.get( MMBuffer.numSamplesIndex );
-				}
-				makeMainMemoryBufferPanel( c1, c2 );
+				panelsList = MMBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panel3 = panelsList.get(0);
 				break;
 			default:	//the fep buffer 
-				panel3 = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panel3 = panelsList.get(0);
 				break;
 		}
 
@@ -365,7 +343,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		panel3.add( dataTypeCB, c1 );
 	}*/
 
-	private void makeInterleaverBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+	/*private void makeInterleaverBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
 		GridBagLayout gridbag2 = new GridBagLayout();
 
@@ -448,14 +426,14 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		tabbedPane.addTab( "Data Out", panel4 );
 		tabbedPane.addTab( "Permutation Table", panel5 );
 		tabbedPane.setSelectedIndex(0);
-	}
+	}*/
 
-	private void makeAdaifBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+	/*private void makeAdaifBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 		c2.anchor = GridBagConstraints.LINE_START;
 		makeMainMemoryBufferPanel( c1, c2 );
-	}
+	}*/
 
-	private void makeMapperBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+	/*private void makeMapperBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
 		GridBagLayout gridbag2 = new GridBagLayout();
 
@@ -516,7 +494,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		tabbedPane.addTab( "Data Out", panel4 );
 		tabbedPane.addTab( "Look Up Table", panel5 );
 		tabbedPane.setSelectedIndex(0);
-	}
+	}*/
 
 	private void makeMainMemoryBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 		
@@ -544,7 +522,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			for( int k = 0; k < componentList.size(); k++ )	{
 				if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
 					TMLArchiMemoryNode memoryNode = (TMLArchiMemoryNode)componentList.get(k);
-					TraceManager.addDev( "Comparing " + memoryNode.getName() + " with " + mappedMemory );
 					if( memoryNode.getName().equals( mappedMemory ) )	{
 						return memoryNode.getBufferType();
 					}
@@ -554,22 +531,15 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		}
     
     public void	actionPerformed(ActionEvent evt)  {
-       /* if (evt.getSource() == typeBox) {
-            boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-            initialValue.setEnabled(b);
-            return;
-        }*/
-		
-		if (evt.getSource() == referenceCommunicationName) {
-			selectPriority();
-		}
-		if( evt.getSource() == memoryCB )	{
-			updateBufferPanel();
-		}
-        
+
+			if (evt.getSource() == referenceCommunicationName) {
+				selectPriority();
+			}
+			if( evt.getSource() == memoryCB )	{
+				updateBufferPanel();
+			}
         
         String command = evt.getActionCommand();
-        
         // Compare the action command to the known actions.
         if (command.equals("Save and Close"))  {
             closeDialog();
@@ -590,68 +560,56 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c1.fill = GridBagConstraints.HORIZONTAL;
     c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		
-		flushBuffersStrings();
+		//flushBuffersStrings();
 		bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
+		loadBufferParameters = false;	//previous information will be lost
+		ArrayList<JPanel> panelsList;
 
 		switch( bufferType )	{
 			case Buffer.FepBuffer:	
-				//panel3.removeAll();
 				tabbedPane.removeAll();
-				/*numSamplesTF = new JTextField( "", 5 );
-				baseAddressTF = new JTextField( "", 5 );
-				bankCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.banksList ) ) );
-				dataTypeCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.dataTypeList ) ) );*/
-				panel3 = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 			case Buffer.MapperBuffer:	
-				cleanPanels();
-				makeMapperBufferPanel( c1, c2 );
-				revalidateAndRepaintPanels();
-				tabbedPane.addTab( "Data In", panel3 );
-				tabbedPane.addTab( "Data Out", panel4 );
-				tabbedPane.addTab( "Look Up Table", panel5 );
+				tabbedPane.removeAll();
+				panelsList = MapperBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				tabbedPane.addTab( "Data In", panelsList.get(0) );
+				tabbedPane.addTab( "Data Out", panelsList.get(1) );
+				tabbedPane.addTab( "Look Up Table", panelsList.get(2) );
 				tabbedPane.setSelectedIndex(0);
 				break;
 			case Buffer.AdaifBuffer:	
-				panel3.removeAll();
 				tabbedPane.removeAll();
-				makeAdaifBufferPanel( c1, c2 );
-				panel3.revalidate();
-				panel3.repaint();
+				panelsList = AdaifBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 			case Buffer.InterleaverBuffer:
-				cleanPanels();
-				makeInterleaverBufferPanel( c1, c2 );
-				revalidateAndRepaintPanels();
-				tabbedPane.addTab( "Data In", panel3 );
-				tabbedPane.addTab( "Data Out", panel4 );
-				tabbedPane.addTab( "Permutation Table", panel5 );
+				tabbedPane.removeAll();
+				panelsList = InterleaverBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				tabbedPane.addTab( "Data In", panelsList.get(0) );
+				tabbedPane.addTab( "Data Out", panelsList.get(1) );
+				tabbedPane.addTab( "Permutation Table", panelsList.get(2) );
 				tabbedPane.setSelectedIndex(0);
 				break;
 			case Buffer.MainMemoryBuffer:	
-				panel3.removeAll();
 				tabbedPane.removeAll();
-				makeMainMemoryBufferPanel( c1, c2 );
-				panel3.revalidate();
-				panel3.repaint();
+				panelsList = MMBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 			default:	//the main memory buffer 
-				//panel3.removeAll();
-				/*tabbedPane.removeAll();
-				numSamplesTF = new JTextField( "", 5 );
-				baseAddressTF = new JTextField( "", 5 );
-				bankCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.banksList ) ) );
-				dataTypeCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.dataTypeList ) ) );*/
-				panel3 = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				tabbedPane.removeAll();
+				panelsList = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 		}
 	}
 
-	private void flushBuffersStrings()	{
+	/*private void flushBuffersStrings()	{
 	
 		//interleaver
 		widthIntl = "";
@@ -679,7 +637,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		numSamples = "";
 		bitsPerSymbol = "";
 		symmetricalValue = "";
-	}
+	}*/
 	
 	
 	public void selectPriority() {
@@ -700,22 +658,22 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 						}
 						break;
 					case Buffer.MapperBuffer:	
-						if( !handleClosureWhenSelectedMapperBuffer() )	{
+						if( !MapperBuffer.closePanel( frame ) )	{
 							return;
 						}
 						break;
 					case Buffer.AdaifBuffer:	
-						if( !handleClosureWhenSelectedAdaifBuffer() )	{
+						if( !AdaifBuffer.closePanel( frame ) )	{
 							return;
 						}
 						break;
 					case Buffer.InterleaverBuffer:	
-						if( !handleClosureWhenSelectedInterleaverBuffer() )	{
+						if( !InterleaverBuffer.closePanel( frame ) )	{
 							return;
 						}
 						break;
 					case Buffer.MainMemoryBuffer:	
-						if( !handleClosureWhenSelectedMainMemoryBuffer() )	{
+						if( !MMBuffer.closePanel( frame ) )	{
 							return;
 						}
 						break;
@@ -727,22 +685,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				}
         dispose();
     }
-
-		private boolean handleClosureWhenSelectedInterleaverBuffer()	{
-			return checkDI_Intl() && checkDO_Intl() && CheckPerm_Intl();
-		}
-
-		private boolean handleClosureWhenSelectedAdaifBuffer()	{
-			return checkBaseAddress() && checkNumSamples();
-		}
-
-		private boolean handleClosureWhenSelectedMapperBuffer()	{
-			return checkDI_Mapper() && checkDO_Mapper() && checkLUT_Mapper();
-		}
-
-		private boolean handleClosureWhenSelectedMainMemoryBuffer()	{
-			return checkBaseAddress() && checkNumSamples();
-		}
 
 		public String getMappedPort()	{
 			return mappedPort;
@@ -788,7 +730,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		if (index > -1) {
 			tmp = tmp.substring(0, index).trim();
 		}
-		//System.out.println("tmp=" + tmp);
 		return tmp;
     }
 	
@@ -818,7 +759,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		return priority.getSelectedIndex();
 	}
 
-	private boolean checkBaseAddress()	{
+	/*private boolean checkBaseAddress()	{
 
 		baseAddress = (String) baseAddressTF.getText();
 		if( baseAddress.length() <= 2 && baseAddress.length() > 0 )	{
@@ -834,9 +775,9 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			}
 		}
 	return true;
-	}
+	}*/
 
-	private boolean checkLUT_Mapper()	{
+	/*private boolean checkLUT_Mapper()	{
 
 		baseAddressLUTMapp = (String) baseAddressLUTMapp_TF.getText();
 		if( baseAddressLUTMapp.length() <= 2 && baseAddressLUTMapp.length() > 0 )	{
@@ -852,9 +793,9 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			}
 		}
 		return true;
-	}
+	}*/
 
-	private boolean checkDI_Mapper()	{
+	/*private boolean checkDI_Mapper()	{
 
 		numSamplesDataInMapp = (String)numSamplesDataInMapp_TF.getText();
 		baseAddressDataInMapp = (String)baseAddressDataInMapp_TF.getText();
@@ -891,9 +832,9 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			return false;
 		}
 		return true;
-	}
+	}*/
 
-	private boolean checkDO_Mapper()	{
+	/*private boolean checkDO_Mapper()	{
 
 		baseAddressDataOutMapp = (String)baseAddressDataOutMapp_TF.getText();
 		if( baseAddressDataOutMapp.length() <= 2 && baseAddressDataOutMapp.length() > 0 )	{
@@ -909,9 +850,9 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			}
 		}
 		return true;
-	}
+	}*/
 			
-	private boolean checkDI_Intl()	{
+	/*private boolean checkDI_Intl()	{
 
 		String regex = "[0-9]+";
 		widthIntl = (String)widthIntl_TF.getText();
@@ -944,9 +885,9 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			return false;
 		}
 		return true;
-	}
+	}*/
 	
-	private boolean checkDO_Intl()	{
+/*	private boolean checkDO_Intl()	{
 
 		//check bitOutOffset and outOffset
 		packedBinaryOutIntl = (String)packedBinaryOutIntl_CB.getSelectedItem();
@@ -972,9 +913,9 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			return false;
 		}
 		return true;
-	}
+	}*/
 	
-	private boolean CheckPerm_Intl()	{
+	/*private boolean CheckPerm_Intl()	{
 
 		String regex = "[0-9]+";
 		offsetPermIntl = (String) offsetPermIntl_TF.getText();
@@ -1003,9 +944,9 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			return false;
 		}
 		return true;
-	}
+	}*/
 
-	private boolean checkNumSamples()	{
+	/*private boolean checkNumSamples()	{
 
 		String regex = "[0-9]+";
 		numSamples = (String) numSamplesTF.getText();
@@ -1023,10 +964,10 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			return false;
 		}
 		return true;
-	}
+	}*/
 
 
-	private boolean checkNumBitsPerSymbol()	{
+	/*private boolean checkNumBitsPerSymbol()	{
 
 		String regex = "[0-9]+";
 		bitsPerSymbol = (String) bitsPerSymbolTF.getText();
@@ -1044,7 +985,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			return false;
 		}
 		return true;
-	}
+	}*/
 	
 	public ArrayList<String> getBufferParameters()	{
 
@@ -1055,41 +996,16 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				FepBuffer.getBufferParameters( params );
 				break;
 			case Buffer.InterleaverBuffer:	
-				//data in
-				params.add( InterleaverBuffer.packedBinaryInIntlIndex, packedBinaryInIntl );
-				params.add( InterleaverBuffer.widthIntlIndex, widthIntl );
-				params.add( InterleaverBuffer.bitInOffsetIntlIndex, bitInOffsetIntl );
-				params.add( InterleaverBuffer.inputOffsetIntlIndex, inputOffsetIntl );
-				//data out
-				params.add( InterleaverBuffer.packedBinaryOutIntlIndex, packedBinaryOutIntl );
-				params.add( InterleaverBuffer.bitOutOffsetIntlIndex, bitOutOffsetIntl );
-				params.add( InterleaverBuffer.outputOffsetIntlIndex, outputOffsetIntl );
-				//permutation table
-				params.add( InterleaverBuffer.offsetPermIntlIndex, offsetPermIntl );
-				params.add( InterleaverBuffer.lengthPermIntlIndex, lengthPermIntl );
-				break;
-			case Buffer.BaseBuffer:
-				params.add( numSamples );
-				params.add( baseAddress );
+				InterleaverBuffer.getBufferParameters( params );
 				break;
 			case Buffer.AdaifBuffer:
-				params.add( numSamples );
-				params.add( baseAddress );
+				AdaifBuffer.getBufferParameters( params );
 				break;
 			case Buffer.MapperBuffer:	
-				//data in
-				params.add( MapperBuffer.numSamplesDataInMappIndex, numSamplesDataInMapp );
-				params.add( MapperBuffer.baseAddressDataInMappIndex, baseAddressDataInMapp );
-				params.add( MapperBuffer.bitsPerSymbolDataInMappIndex, bitsPerSymbolDataInMapp );
-				params.add( MapperBuffer.symmetricalValueDataInMappIndex, symmetricalValueDataInMapp );
-				//data out
-				params.add( MapperBuffer.baseAddressDataOutMappIndex, baseAddressDataOutMapp );
-				//look-up table
-				params.add( MapperBuffer.baseAddressLUTMappIndex, baseAddressLUTMapp );
+				MapperBuffer.getBufferParameters( params );
 				break;
 			case Buffer.MainMemoryBuffer:	
-				params.add( MMBuffer.numSamplesIndex, numSamples );
-				params.add( MMBuffer.baseAddressIndex, baseAddress );
+				MMBuffer.getBufferParameters( params );
 				break;
 			default:	//the main memory buffer
 				FepBuffer.getBufferParameters( params );

@@ -365,7 +365,12 @@ String MAExpression():	//MA stands for Mathematical Action
 	String s, s1;
 }
 {
-	s = MATerm() s1 = MAExpressionPrime()	{ return s + s1; }
+	s = MATerm()
+	( <MATH_PLUS> s1 = MAExpression() { return s + s1; }
+	|
+	<MATH_MINUS> s1 = MAExpression() { return s + s1; }
+	|
+	{} { return s; } )
 }
 
 String MATerm():
@@ -373,16 +378,12 @@ String MATerm():
 	String s, s1;
 }
 {
-	s = MAFactor() s1 = MATermPrime()	{ return s + s1; }
-}
-
-String MATermPrime():
-{
-	String s, s1;
-}
-{
-	s = MAFactor() s1 = MATermPrime()	{ return s + s1; }
-	| {} { return ""; }
+	s = MAFactor()
+	( <MATH_MULT> s1 = MATerm() { return s + s1; }
+	|
+	<MATH_DIV> s1 = MATerm() { return s + s1; }
+	|
+	{} { return s; } )
 }
 
 String MAFactor():
@@ -396,18 +397,6 @@ String MAFactor():
 	s = ID() {return s; }
 	|
 	t = <INTEGER_LITERAL>	{ return t.image; }
-}
-
-String MAExpressionPrime():
-{
-	String s, s1;
-}
-{
-	<MATH_PLUS> s = MATerm() s1 = MAExpressionPrime()	{ return " + " + s + " " + s1; }
-| <MATH_MINUS> s = MATerm() s1 = MAExpressionPrime() { return " - " + s + " " + s1; }
-| <MATH_DIV> s = MATerm() s1 = MAExpressionPrime() { return " / " + s + " " + s1; }
-| <MATH_MULT> s = MATerm() s1 = MAExpressionPrime() { return " * " + s + " " + s1; }
-| {} { return ""; }
 }
 
 /* Right-recursive grammar for parsing boolean expressions in actions. No priority is given to boolean operators */

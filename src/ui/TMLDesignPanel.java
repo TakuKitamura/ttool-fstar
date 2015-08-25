@@ -149,7 +149,7 @@ public class TMLDesignPanel extends TURTLEPanel {
 	public ArrayList<String> getAllTMLTaskNames(String _name) {
 		return tmltdp.getAllTMLTaskNames(_name);
 	}
-	
+
 	public ArrayList<String> getAllTMLCommunicationNames(String _name) {
 		return tmltdp.getAllTMLCommunicationNames(_name);
 	}

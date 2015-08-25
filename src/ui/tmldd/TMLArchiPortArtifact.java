@@ -272,42 +272,16 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 							sb.append( FepBuffer.appendBufferParameters( bufferParameters ) );
 							break;
 						case Buffer.InterleaverBuffer:	
-        			sb.append("\" bufferType=\"" + bufferType );
-							//data in
-	        		sb.append( "\" packedBinaryInIntl=\"" + bufferParameters.get( InterleaverBuffer.packedBinaryInIntlIndex ) );
-	        		sb.append( "\" widthIntl=\"" + bufferParameters.get( InterleaverBuffer.widthIntlIndex ) );
-	        		sb.append( "\" bitInOffsetIntl=\"" + bufferParameters.get( InterleaverBuffer.bitInOffsetIntlIndex ) );
-	        		sb.append( "\" inputOffsetIntl=\"" + bufferParameters.get( InterleaverBuffer.inputOffsetIntlIndex ) );
-							//data out
-	        		sb.append( "\" packedBinaryOutIntl=\"" + bufferParameters.get( InterleaverBuffer.packedBinaryOutIntlIndex ) );
-	        		sb.append( "\" bitOutOffsetIntl=\"" + bufferParameters.get( InterleaverBuffer.bitOutOffsetIntlIndex ) );
-	        		sb.append( "\" outputOffsetIntl=\"" + bufferParameters.get( InterleaverBuffer.outputOffsetIntlIndex ) );
-							//permutation table
-	        		sb.append( "\" offsetPermIntl=\"" + bufferParameters.get( InterleaverBuffer.offsetPermIntlIndex) );
-	        		sb.append( "\" lengthPermIntl=\"" + bufferParameters.get( InterleaverBuffer.lengthPermIntlIndex) );
+							sb.append( InterleaverBuffer.appendBufferParameters( bufferParameters ) );
 						break;
 						case Buffer.AdaifBuffer:	
 							sb.append( AdaifBuffer.appendBufferParameters( bufferParameters ) );
-        			/*sb.append("\" bufferType=\"" + bufferType );
-        			sb.append("\" numSamples=\"" + bufferParameters.get( MMBuffer.numSamplesIndex ) );
-        			sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );*/
 							break;
 						case Buffer.MapperBuffer:	
-        			sb.append("\" bufferType=\"" + bufferType );
-							//data in
-      	  		sb.append("\" numSamplesDataInMapp=\"" + bufferParameters.get( MapperBuffer.numSamplesDataInMappIndex ) );
-    	    		sb.append("\" baseAddressDataInMapp=\"" + bufferParameters.get( MapperBuffer.baseAddressDataInMappIndex ) );
-        			sb.append("\" bitsPerSymbolDataInMapp=\"" + bufferParameters.get( MapperBuffer.bitsPerSymbolDataInMappIndex ) );
-        			sb.append("\" symmetricalValueDataInMapp=\"" + bufferParameters.get( MapperBuffer.symmetricalValueDataInMappIndex ) );
-							//data out
-        			sb.append("\" baseAddressDataOutMapp=\"" + bufferParameters.get( MapperBuffer.baseAddressDataOutMappIndex ) );
-							//Look-up Table
-        			sb.append("\" baseAddressLUTMapp=\"" + bufferParameters.get( MapperBuffer.baseAddressLUTMappIndex ) );
+							sb.append( MapperBuffer.appendBufferParameters( bufferParameters ) );
 							break;
 						case Buffer.MainMemoryBuffer:	
-        			sb.append("\" bufferType=\"" + bufferType );
-  	      		sb.append("\" numSamples=\"" + bufferParameters.get( MMBuffer.numSamplesIndex ) );
-  	      		sb.append("\" baseAddress=\"" + bufferParameters.get( MMBuffer.baseAddressIndex ) );
+							sb.append( MMBuffer.appendBufferParameters( bufferParameters ) );
 							break;
 						default:	//the fep buffer 
 							sb.append( FepBuffer.appendBufferParameters( bufferParameters ) );
@@ -352,55 +326,21 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 																switch( Integer.parseInt( bufferType ) )	{
 																	case Buffer.FepBuffer:
 																		bufferParameters = FepBuffer.buildBufferParameters( elt );
-												        		/*bufferParameters.add( FepBuffer.baseAddressIndex, elt.getAttribute( "baseAddress" ) );
-												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
-												        		bufferParameters.add( elt.getAttribute( "bank" ) );
-												        		bufferParameters.add( elt.getAttribute( "dataType" ) );*/
 																		break;
 																	case Buffer.InterleaverBuffer:	
-																		bufferParameters.add( bufferType );
-																		//data in
-	        													bufferParameters.add( elt.getAttribute( "packedBinaryInIntl" ) );
-	        													bufferParameters.add( elt.getAttribute( "widthIntl" ) );
-	        													bufferParameters.add( elt.getAttribute( "bitInOffsetIntl" ) );
-	        													bufferParameters.add( elt.getAttribute( "inputOffsetIntl" ) );
-																		//data out
-																		bufferParameters.add( elt.getAttribute( "packedBinaryOutIntl" ) );
-																		bufferParameters.add( elt.getAttribute( "bitOutOffsetIntl" ) );
-																		bufferParameters.add( elt.getAttribute( "outputOffsetIntl" ) );
-																		//permutation table
-												        		bufferParameters.add( elt.getAttribute( "offsetPermIntl" ) );
-												        		bufferParameters.add( elt.getAttribute( "lengthPermIntl" ) );
+																		bufferParameters = InterleaverBuffer.buildBufferParameters( elt );
 																		break;
 																	case Buffer.AdaifBuffer:	
-																		AdaifBuffer.buildBufferParameters( elt );
-																		/*bufferParameters.add( bufferType );
-												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
-												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );*/
+																		bufferParameters = AdaifBuffer.buildBufferParameters( elt );
 																		break;
 																	case Buffer.MapperBuffer:	
-																		bufferParameters.add( bufferType );
-																		//data in
-												        		bufferParameters.add( elt.getAttribute( "numSamplesDataInMapp" ) );
-												        		bufferParameters.add( elt.getAttribute( "baseAddressDataInMapp" ) );
-												        		bufferParameters.add( elt.getAttribute( "bitsPerSymbolDataInMapp" ) );
-												        		bufferParameters.add( elt.getAttribute( "symmetricalValueDataInMapp" ) );
-																		//data out
-											        			bufferParameters.add( elt.getAttribute( "baseAddressDataOutMapp" ) );
-																		//Look-up Table
-											        			bufferParameters.add( elt.getAttribute( "baseAddressLUTMapp" ) );
+																		bufferParameters = MapperBuffer.buildBufferParameters( elt );
 																		break;
 																	case Buffer.MainMemoryBuffer:	
-																		bufferParameters.add( bufferType );
-												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
-												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
+																		bufferParameters = MMBuffer.buildBufferParameters( elt );
 																		break;
 																	default:	//the main memory buffer 
-																		bufferParameters.add( bufferType );
-												        		bufferParameters.add( elt.getAttribute( "baseAddress" ) );
-												        		bufferParameters.add( elt.getAttribute( "numSamples" ) );
-												        		bufferParameters.add( elt.getAttribute( "bank" ) );
-												        		bufferParameters.add( elt.getAttribute( "dataType" ) );
+																		bufferParameters = FepBuffer.buildBufferParameters( elt );
 																		break;
 																}
 																}

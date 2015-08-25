@@ -71,7 +71,12 @@ public class CpuMemoryCopyMEC extends CPMEC	{
 
 	public static Vector<String> sortAttributes( Vector<String> assignedAttributes )	{
 		
-		Vector<String> newVector = new Vector<String>( assignedAttributes );
+		//Vector<String> newVector = new Vector<String>( assignedAttributes );
+		Vector<String> newVector = new Vector<String>();
+		//temporary manual workaround
+		newVector.add("0");
+		newVector.add("0");
+		newVector.add("0");
 		for( String s: assignedAttributes )	{
 			if( s.contains( destinationAddress ) )	{
 				newVector.set( destinationAddressIndex, getAttributeValue(s) );

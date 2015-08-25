@@ -48,12 +48,17 @@ package tmltranslator.ctranslator;;
 
 import java.util.*;
 import java.nio.*;
+import org.w3c.dom.Element;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
 import myutil.*;
 import tmltranslator.*;
 
 public class Buffer	{
 
-	public static final String[] bufferTypesList = { "FEP buffer", "MAPPER buffer", "ADAIF buffer", "INTERLEAVER Buffer", "MAIN MEMORY buffer" };
+	public static final String[] memoryTypesList = { "FEP memory", "MAPPER memory", "ADAIF memory", "INTERLEAVER memory", "MAIN MEMORY memory" };
 	public static final String[] onOffVector = { "ON", "OFF" };
 	public static final int FepBuffer = 0;
 	public static final int MapperBuffer = 1;
@@ -88,11 +93,6 @@ public class Buffer	{
 		code = "struct" + SP + name + TAB + "{" + CR + "}" + SC;
 	}
 
-	/*public Buffer( TMLPort _port )	{
-		port = _port;
-		name = "buff__" + port.getName();
-	}*/
-	
 	public String toString()	{
 		if( port != null )	{
 			if( artifact != null )	{
@@ -104,7 +104,7 @@ public class Buffer	{
 		}
 		else	{
 			String s = type + SP + "BUFFER" + SP + name + CR;
-			return s;//name + SP + type + CR + TAB2 + "baseAddress = " + baseAddress + CR + TAB2 + "endAddress = " + endAddress;
+			return s;
 		}
 	}
 
@@ -149,4 +149,5 @@ public class Buffer	{
 	public void setMappingParameters( ArrayList<String> params )	{
 		bufferParameters = params;
 	}
+
 }	//End of class

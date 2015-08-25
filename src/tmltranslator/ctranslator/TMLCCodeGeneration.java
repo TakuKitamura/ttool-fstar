@@ -262,7 +262,7 @@ public class TMLCCodeGeneration	{
 		return list;
 	}
 
-	//Create the inBuffer form the port of the read channel associated to the xTask
+	//Create the inBuffer from the port of the read channel associated to the xTask
 	private Buffer createInBuffer( TMLTask xTask, HwNode node )	{
 	
 		if( xTask.getReadTMLChannels().size() > 0 )	{
@@ -286,7 +286,7 @@ public class TMLCCodeGeneration	{
 				else if( mec instanceof CpuMEC )	{
 					buff = new MMBuffer( "buff_" + readChannel.getDestinationPort().getName(), xTask );
 				}
-				buffersList.add( buff );
+				buffersList.add( buff );	//this line has to be commented if ch_in buffers are to be excluded from the C code
 				return buff;
 			}
 			else	{
@@ -310,14 +310,14 @@ public class TMLCCodeGeneration	{
 				else if( mec instanceof CpuMEC )	{
 					buff = new MMBuffer( "buff_" + readChannel.getDestinationPorts().get(i).getName(), xTask );
 				}
-				buffersList.add( buff );
+				buffersList.add( buff );	//this line has to be commented if ch_in buffers are to be excluded from the C code
 				return buff;
 			}
 		}
 		return null;
 	}
 
-	//Create the inBuffer form the port of the write channel associated to the xTask
+	//Create the inBuffer from the port of the write channel associated to the xTask
 	private Buffer createOutBuffer( TMLTask xTask, HwNode node )	{
 	
 		if( xTask.getWriteTMLChannels().size() > 0 )	{
@@ -723,7 +723,7 @@ public class TMLCCodeGeneration	{
 		ArchUnitMEC taskMEC;
 		Buffer inBuff, outBuff;
 		StringBuffer buffersString = new StringBuffer( "/**** Buffers *****/" + CR );
-		StringBuffer instructionsString = new StringBuffer( "/**** Operations Instructions *****/" + CR );
+		StringBuffer instructionsString = new StringBuffer( "/**** Operations Data Structures *****/" + CR );
 
 		for( Operation op: operationsList )	{
 			if( op.getType() == Operation.SDR )	{
@@ -733,7 +733,6 @@ public class TMLCCodeGeneration	{
 				outBuff = op.getOutBuffer();
 				ctxName = op.getContextName();
 				int xTaskOperationType = xTask.getOperationType();
-				//TraceManager.addDev( "Task: " + xTask.getName() + " with operationType: " + xTaskOperationType );
 				if( declaration )	{
 					if( inBuff == null )	{	//for source operation
 						buffersString.append( "extern" + SP + outBuff.getType() + SP + outBuff.getName() + SC + CR );
@@ -746,8 +745,10 @@ public class TMLCCodeGeneration	{
 						}
 						else	{	//for all the remaining operations
 							buffersString.append( "extern" + SP + inBuff.getType() + SP + inBuff.getName() + SC + CR );
+							//if( outBuff != null )	{
 							buffersString.append( "extern" + SP + outBuff.getType() + SP + outBuff.getName() + SC + CR );
 							instructionsString.append( "extern" + SP + OperationMEC.ContextList.get( xTaskOperationType ) + SP + ctxName + SC + CR );
+							//}
 						}
 					}
 				}
@@ -763,8 +764,10 @@ public class TMLCCodeGeneration	{
 						}
 						else	{	//for all the remaining operations
 							buffersString.append( inBuff.getType() + SP + inBuff.getName() + SC + CR );
-							buffersString.append( outBuff.getType() + SP + outBuff.getName() + SC + CR );
-							instructionsString.append( OperationMEC.ContextList.get( xTaskOperationType ) + SP + ctxName + SC + CR );
+							//if( outBuff != null )	{
+								buffersString.append( outBuff.getType() + SP + outBuff.getName() + SC + CR );
+								instructionsString.append( OperationMEC.ContextList.get( xTaskOperationType ) + SP + ctxName + SC + CR );
+							//}
 						}
 					}
 				}
@@ -850,16 +853,16 @@ public class TMLCCodeGeneration	{
 
 		StringBuffer s = new StringBuffer( CR2 + "enum sigs_enu	{" + CR );
 		for( Signal sig: signalsList )	{
-			s.append( sig.getName() + "," + CR );
+			s.append( TAB + sig.getName() + "," + CR );
 		}
-		s.append( postexList.get(0).getName() + "," + CR );
+		s.append( TAB + postexList.get(0).getName() + "," + CR );
 		s.append( "NUM_SIGS };" + CR2 + "enum ops_enu	{" + CR );
 
 		for( Operation op: operationsList )	{
-			s.append( op.getName() + ",\n" );
+			s.append( TAB + op.getName() + ",\n" );
 		}
 		for( DataTransfer dt: dataTransfersList )	{
-			s.append( dt.getName() + ",\n" );
+			s.append( TAB + dt.getName() + ",\n" );
 		}
 		s.append( "NUM_OPS };" + CR2 + "#endif" );
 		return s.toString();
@@ -1378,99 +1381,171 @@ public class TMLCCodeGeneration	{
 		}
 		initFileString.append( "}" + CR2 );
 		initFileString.append( "void cleanup_CPs_context( void )\t{" + CR );
-		ArchUnitMEC dmaArchMEC = new CpuMEC();
+		//ArchUnitMEC dmaArchMEC = new CpuMEC();
+
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
 			int cpMECType = tmlcplib.getCPMECType();
+			int transferType;
 			ctxName = dt.getContextName();
-			if( cpMECType == CPMEC.SingleDmaMEC )	{
-				int transferType = tmlcplib.getTransferTypes().get(0);
-				for( String s: tmlcplib.getMappedUnits() )	{
-					if( s.contains( CPMEC.dmaController ) )	{
-						String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
-						dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
-						break;
-					}
-				}
-				if( transferType == CPMEC.IP2IP )	{
-					initFileString.append( TAB + dmaArchMEC.getCtxCleanupCode() + "(&" + ctxName +"_0);" + CR );
-					initFileString.append( TAB + dmaArchMEC.getCtxCleanupCode() + "(&" + ctxName +"_1);" + CR );
-				}
-				else	{
-					initFileString.append( TAB2 + dmaArchMEC.getCtxCleanupCode() + "(&" + ctxName +");" + CR );
-				}
-			}
-			if( cpMECType == CPMEC.DoubleDmaMEC )	{
-				int suffix = 0;
-				for( String s: tmlcplib.getMappedUnits() )	{	//there are two DMA_controllers
-					if( s.contains( CPMEC.dmaController ) )	{
-						int transferType = tmlcplib.getTransferTypes().get(suffix);
-						String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
-						dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
-						if( transferType == CPMEC.IP2IP )	{
-							initFileString.append( TAB + dmaArchMEC.getCtxCleanupCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + "_0);" + CR );
-							initFileString.append( TAB + dmaArchMEC.getCtxCleanupCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + "_1);" + CR );
+			Vector<String> mappedUnits = tmlcplib.getMappedUnits();
+			switch( cpMECType )	{
+				case CPMEC.CpuMemoryCopyMEC:
+					initFileString.append( getCtxCleanupRoutine( ctxName, mappedUnits ) );
+				break;
+				case CPMEC.SingleDmaMEC:
+					transferType = tmlcplib.getTransferTypes().get(0);
+					/*for( String s: tmlcplib.getMappedUnits() )	{
+						if( s.contains( CPMEC.dmaController ) )	{
+							String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
+							dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
+							break;
 						}
-						else	{
-							initFileString.append( TAB + dmaArchMEC.getCtxCleanupCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + ");" + CR );
-						}
-						suffix++;
+					}*/
+					if( transferType == CPMEC.IP2IP )	{
+						initFileString.append( getCtxCleanupRoutine( ctxName + "_0", mappedUnits ) );
+						initFileString.append( getCtxCleanupRoutine( ctxName + "_1", mappedUnits ) );
 					}
-				}
-			}
+					else	{
+						initFileString.append( getCtxCleanupRoutine( ctxName, mappedUnits ) );
+					}
+				break;
+				case CPMEC.DoubleDmaMEC:
+					int suffix = 0;
+					for( String s: tmlcplib.getMappedUnits() )	{	//there are two DMA_controllers
+						if( s.contains( CPMEC.dmaController ) )	{
+							transferType = tmlcplib.getTransferTypes().get(suffix);
+							//String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
+							//dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
+							if( transferType == CPMEC.IP2IP )	{
+								initFileString.append( getCtxCleanupRoutine( ctxName + "_" + String.valueOf(suffix) + "_0", mappedUnits ) );
+								initFileString.append( getCtxCleanupRoutine( ctxName + "_" + String.valueOf(suffix) + "_1", mappedUnits ) );
+								//initFileString.append( TAB + dmaArchMEC.getCtxCleanupCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + "_0);" + CR );
+								//initFileString.append( TAB + dmaArchMEC.getCtxCleanupCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + "_1);" + CR );
+							}
+							else	{
+								initFileString.append( getCtxCleanupRoutine( ctxName + "_" + String.valueOf(suffix), mappedUnits ) );
+								//initFileString.append( TAB + dmaArchMEC.getCtxCleanupCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + ");" + CR );
+							}
+							suffix++;
+						}
+					}
+				break;
+			}	//end of switch
 		}
 		initFileString.append( "}" + CR );
 	}
 
 	private void generateInitRoutinesForCPs()	{
 
-		ArchUnitMEC dmaArchMEC = new CpuMEC();
+		//ArchUnitMEC dmaArchMEC = new CpuMEC();
 		ArrayList<ArchUnitMEC> dmaArchMECList = new ArrayList<ArchUnitMEC>();
+		int transferType, cpMECType;
+		Vector<String> mappedUnits = new Vector<String>();
 
 		for( DataTransfer dt: dataTransfersList )	{
 			TMLCPLib tmlcplib = dt.getTMLCPLib();
-			int cpMECType = tmlcplib.getCPMECType();
+			cpMECType = tmlcplib.getCPMECType();
+			mappedUnits = tmlcplib.getMappedUnits();
 			String ctxName = dt.getContextName();
 			String name = tmlcplib.getName().split("::")[0];
-			if( cpMECType == CPMEC.SingleDmaMEC )	{
-				int transferType = tmlcplib.getTransferTypes().get(0);
-				for( String s: tmlcplib.getMappedUnits() )	{
-					if( s.contains( CPMEC.dmaController ) )	{
-						String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
-						dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
-						break;
-					}
-				}
-				initFileString.append( "void init_" + name + "()\t{" + CR );
-				if( transferType == CPMEC.IP2IP )	{
-					initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + "_0, (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR );
-					initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + "_1, (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR + "}" + CR2 );
-				}
-				else	{
-					initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + ", (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR + "}" + CR2 );
-				}
-			}
-			if( cpMECType == CPMEC.DoubleDmaMEC )	{
-				initFileString.append( "void init_" + name + "()\t{" + CR );
-				int suffix = 0;
-				for( String s: tmlcplib.getMappedUnits() )	{	//there are two DMA_controllers
-					if( s.contains( CPMEC.dmaController ) )	{
-						int transferType = tmlcplib.getTransferTypes().get(suffix);
-						String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
-						dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC ;
-						if( transferType == CPMEC.IP2IP )	{
-							initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + "_0, (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR );
-							initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + "_1, (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR );
+			switch( cpMECType )	{
+				case CPMEC.CpuMemoryCopyMEC:
+					initFileString.append( "void init_" + name + "()\t{" + CR );
+					initFileString.append( getCtxInitRoutine( ctxName, mappedUnits ) );	//get the ctx_init routine, according to destination_storage in SD
+				break;
+				case CPMEC.SingleDmaMEC:
+					transferType = tmlcplib.getTransferTypes().get(0);
+					for( String s: tmlcplib.getMappedUnits() )	{
+						if( s.contains( CPMEC.dmaController ) )	{
+							String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
+							//dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
+							break;
 						}
-						else	{
-							initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + ", (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR );
-						}
-						suffix++;
 					}
+					initFileString.append( "void init_" + name + "()\t{" + CR );
+					if( transferType == CPMEC.IP2IP )	{
+						//initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + "_0, (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR );
+						initFileString.append( getCtxInitRoutine( ctxName + "_0", mappedUnits ) );
+						//initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + "_1, (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR + "}" + CR2 );
+						initFileString.append( getCtxInitRoutine( ctxName + "_1", mappedUnits ) );
+					}
+					else	{
+						//initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + ", (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR + "}" + CR2 );
+						initFileString.append( getCtxInitRoutine( ctxName, mappedUnits ) );
+					}
+				break;
+				case CPMEC.DoubleDmaMEC:
+					initFileString.append( "void init_" + name + "()\t{" + CR );
+					int suffix = 0;
+					for( String s: tmlcplib.getMappedUnits() )	{	//there are two DMA_controllers
+						if( s.contains( CPMEC.dmaController ) )	{
+							transferType = tmlcplib.getTransferTypes().get(suffix);
+							String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
+							//dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC ;
+							if( transferType == CPMEC.IP2IP )	{
+								//initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + "_0, (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR );
+								initFileString.append( getCtxInitRoutine( ctxName + "_" + String.valueOf(suffix) + "_0", mappedUnits ) );
+								//initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + "_1, (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR );
+								initFileString.append( getCtxInitRoutine( ctxName + "_" + String.valueOf(suffix) + "_1", mappedUnits ) );
+							}
+							else	{
+								//initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + ", (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR );
+								initFileString.append( getCtxInitRoutine( ctxName + "_" + String.valueOf(suffix), mappedUnits ) );
+							}
+							suffix++;
+						}
+					}
+				break;
+			}	//end of switch statement
+			initFileString.append( "}" + CR2 );
+		}	//end of for statement
+	}
+
+	private String getCtxInitRoutine( String ctxName, Vector<String> mappedUnits )	{
+
+		String filteredMemoryName = "";
+		for( String s: mappedUnits )	{
+			if( s.contains( "Dst_Storage_Instance" ) )	{
+				filteredMemoryName = s.split(":")[1].replaceAll("\\s+","");
+				if( filteredMemoryName.contains( "MAPPER" ) || filteredMemoryName.contains( "mapper" ) )	{
+					return TAB + "mapper_ctx_init(&" + ctxName + ", (uintptr_t) mapper_mss );" + CR;
 				}
-				initFileString.append( "}" + CR2 );
+				if( filteredMemoryName.contains( "FEP" ) || filteredMemoryName.contains( "fep" ) )	{
+					return TAB + "fep_ctx_init(&" + ctxName + ", (uintptr_t) fep_mss );" + CR;
+				}
+				if( filteredMemoryName.contains( "INTL" ) || filteredMemoryName.contains( "intl" ) )	{
+					return TAB + "intl_ctx_init(&" + ctxName + ", (uintptr_t) intl_mss );" + CR;
+				}
+				if( filteredMemoryName.contains( "ADAIF" ) || filteredMemoryName.contains( "adaif" ) )	{
+					return TAB + "adaif_ctx_init(&" + ctxName + ", (uintptr_t) adaif_mss );" + CR;
+				}
 			}
 		}
+		return "/* USER TODO */";
+	}
+
+	private String getCtxCleanupRoutine( String ctxName, Vector<String> mappedUnits )	{
+
+		String filteredMemoryName = "";
+		for( String s: mappedUnits )	{
+			if( s.contains( "Dst_Storage_Instance" ) )	{
+				filteredMemoryName = s.split(":")[1].replaceAll("\\s+","");
+				if( filteredMemoryName.contains( "MAPPER" ) || filteredMemoryName.contains( "mapper" ) )	{
+					return TAB + "mapper_ctx_cleanup(&" + ctxName + ");" + CR;
+				}
+				if( filteredMemoryName.contains( "FEP" ) || filteredMemoryName.contains( "fep" ) )	{
+					return TAB + "fep_ctx_cleanup(&" + ctxName + ");" + CR;
+				}
+				if( filteredMemoryName.contains( "INTL" ) || filteredMemoryName.contains( "intl" ) )	{
+					return TAB + "intl_ctx_cleanup(&" + ctxName + ");" + CR;
+				}
+				if( filteredMemoryName.contains( "ADAIF" ) || filteredMemoryName.contains( "adaif" ) )	{
+					return TAB + "adaif_ctx_cleanup(&" + ctxName + ");" + CR;
+				}
+			}
+		}
+		return "/* USER TODO */";
 	}
 
 	private void generateCodeToInitializeBuffers()	{
@@ -1571,7 +1646,7 @@ public class TMLCCodeGeneration	{
 		TMLCCodeGenerationMakefile make = new TMLCCodeGenerationMakefile( applicationName );
 		path = path.substring( 0, path.length()-1 );
 
-		TraceManager.addUser( "Saving C files in " + path + filename );
+		TraceManager.addUser( "Saving C files in " + path );
 		FileUtils.saveFile( path + "main.c", mainFileString.toString() );
 		FileUtils.saveFile( path + filename + ".h", headerString.toString() );
 		FileUtils.saveFile( path + filename + ".c", programString.toString() );

@@ -88,7 +88,7 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
     protected static String pathFormalExecute;
 
     protected static boolean interactiveSimulationSelected = true;
-    protected static boolean optimizeModeSelected = true;
+    //protected static boolean optimizeModeSelected = true;
 
     protected final static int NOT_STARTED = 1;
     protected final static int STARTED = 2;
@@ -108,7 +108,7 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
     protected JTextField code1, code2, compiler1, exe1, exe2, exe3, exe2int, exe2formal;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
-    protected JCheckBox removeCppFiles, removeXFiles, debugmode, optimizemode;
+    protected JCheckBox removeCppFiles, removeXFiles;//, debugmode, optimizemode;
     protected JComboBox versionSimulator;
 
     private Thread t;
@@ -232,13 +232,13 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
         removeXFiles.setSelected(true);
         jp01.add(removeXFiles, c01);
 
-        debugmode = new JCheckBox("Put debug information in code");
+        /*debugmode = new JCheckBox("Put debug information in code");
         debugmode.setSelected(false);
-        jp01.add(debugmode, c01);
+        jp01.add(debugmode, c01);*/
 
-        optimizemode = new JCheckBox("Optimize code");
+        /*optimizemode = new JCheckBox("Optimize code");
         optimizemode.setSelected(optimizeModeSelected);
-        jp01.add(optimizemode, c01);
+        jp01.add(optimizemode, c01);*/
 
         jp01.add(new JLabel(" "), c01);
 
@@ -384,7 +384,7 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
         if (mode == STARTED) {
             stopProcess();
         }
-        optimizeModeSelected = optimizemode.isSelected();
+        //optimizeModeSelected = optimizemode.isSelected();
         wasClosed = true;
         dispose();
     }

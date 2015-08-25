@@ -384,7 +384,9 @@ public class TMLCPSyntaxChecking {
             String receiverInstance = message.getReceiverName();
             ArrayList<TMLAttribute> parametersList = message.getAttributes();
             for( TMLAttribute parameter: parametersList )       {
-                if( !isParameterDeclared( parameter, senderInstance, diag ) )   {
+							//skip numerical parameters
+							if( !parameter.getName().matches("-?\\d+(\\.\\d+)?") )	{
+								if( !isParameterDeclared( parameter, senderInstance, diag ) )   {
                     addError( "Parameter <<" + parameter.getName() + ">> has not been declared in instance <<" + senderInstance + ">> in diagram <<" + diag.getName() + ">>", TMLCPError.ERROR_STRUCTURE );
                 }
                 if( !isParameterDeclared( parameter, receiverInstance, diag ) ) {
@@ -393,6 +395,7 @@ public class TMLCPSyntaxChecking {
                 if( !checkTypeCoherency( parameter, senderInstance, receiverInstance, diag ) )  {
                     addError( "Parameter <<" + parameter.getName() + ">> is declared with different types in instance <<" + senderInstance + ">> and in instance <<" + receiverInstance + ">> in diagram <<" + diag.getName() + ">>", TMLCPError.ERROR_STRUCTURE );
                 }
+							}
             }
         }
     }

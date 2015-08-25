@@ -98,7 +98,8 @@ public class TMLCCodeGenerationSyntaxCheck {
 		public void check()	{
 			checkForPrexAndPostexChannels();
 			checkForCPsAssociatedToForkChannels();	//so far we do not handle CPs associated to ports that are part of a fork channel
-			checkForXFTasks();
+			checkForXFTasks();	//check that the Operations have been correctly modeled with X and F tasks
+			checkMappingOfTasks();	//check that all tasks in the application model are mapped.
 		}
 
 		//valid prex ports are:
@@ -223,6 +224,20 @@ public class TMLCCodeGenerationSyntaxCheck {
 					if( !fTasksList.contains( name ) )	{
 						addError( "F task for operation " + name + " has not been instantiated", TMLCCodeGenerationError.ERROR_STRUCTURE );
 					}
+				}
+			}
+		}
+
+		private void checkMappingOfTasks()	{	//check that all tasks in the application have been mapped
+
+			HashSet<String> mappedTasksList = new HashSet<String>();
+
+			for( TMLTask task: tmap.getMappedTasks() )	{
+				mappedTasksList.add( task.getTaskName() );
+			}
+			for( TMLTask task: tmlm.getTasks() )	{
+				if( !mappedTasksList.contains( task.getTaskName() ) )	{
+					addError( "Task " + task.getTaskName() + " has not been mapped", TMLCCodeGenerationError.ERROR_STRUCTURE );
 				}
 			}
 		}
