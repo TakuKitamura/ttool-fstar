@@ -237,8 +237,6 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
         if ((getState() == TGState.POINTER_ON_ME) ||  (getState() == TGState.POINTED)||  (getState() == TGState.MOVING)){
             g.drawRoundRect(x-1, y-h+2, width+2, height+2, 5, 5);
         }
-
-
     }
 
 

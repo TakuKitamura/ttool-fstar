@@ -769,8 +769,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(false);
+	    break;
 
         case MODEL_SAVED:
+	    TraceManager.addDev("Disable save");
             actions[TGUIAction.ACT_SAVE].setEnabled(false);
             break;
         case BACKWARD:

@@ -37,7 +37,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class TMLMap
+   * Class TMLMapping
    * Creation: 05/09/2007
    * @version 1.1 10/06/2014
    * @author Ludovic APVRILLE, Andrea ENRICI

@@ -68,10 +68,10 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     private String reference="";
     private Vector<String> mappedUnits = new Vector<String>();
     private Vector<String> assignedAttributes = new Vector<String>();
-		private String cpMEC = "VOID";
-		private int transferType1 = -1;
-		private int transferType2 = -1;
-		private String completeName;
+    private String cpMEC = "VOID";
+    private int transferType1 = -1;
+    private int transferType2 = -1;
+    private String completeName;
 
     public TMLArchiCPNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -126,7 +126,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         g.drawString(ster, x + (width - w)/2, y + textY1);
         g.setFont(f);
         String val = name + "::" + reference;
-				completeName = val;
+        completeName = val;
         w  = g.getFontMetrics().stringWidth(val);
         g.drawString(val, x + (width - w)/2, y + textY2);
 
@@ -207,10 +207,10 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         //setJDialogOptions(jdab);
         name = dialog.getNodeName();
         mappedUnits = dialog.getMappedUnits();
-				cpMEC = dialog.getCPMEC();
-				transferType1 = dialog.getTransferTypes().get(0);
-				transferType2 = dialog.getTransferTypes().get(1);
-				assignedAttributes = dialog.getAssignedAttributes();
+        cpMEC = dialog.getCPMEC();
+        transferType1 = dialog.getTransferTypes().get(0);
+        transferType2 = dialog.getTransferTypes().get(1);
+        assignedAttributes = dialog.getAssignedAttributes();
 
         if( !dialog.isRegularClose() )  {
             return false;
@@ -277,7 +277,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
             String sstereotype = null, snodeName = null;
 
             mappedUnits.removeAllElements();
-						assignedAttributes.removeAllElements();
+            assignedAttributes.removeAllElements();
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
@@ -291,11 +291,11 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
                             if (elt.getTagName().equals("info")) {
                                 sstereotype = elt.getAttribute("stereotype");
                                 snodeName = elt.getAttribute("nodeName");
-																if( ( elt.getAttribute("cpMEC") != null ) && ( elt.getAttribute("cpMEC").length() > 0 ) )	{
-																	cpMEC = elt.getAttribute( "cpMEC" );
-																	transferType1 = Integer.parseInt(elt.getAttribute( "transferType1" ) );
-																	transferType2 = Integer.parseInt(elt.getAttribute( "transferType2" ) );
-																}
+                                if( ( elt.getAttribute("cpMEC") != null ) && ( elt.getAttribute("cpMEC").length() > 0 ) )       {
+                                    cpMEC = elt.getAttribute( "cpMEC" );
+                                    transferType1 = Integer.parseInt(elt.getAttribute( "transferType1" ) );
+                                    transferType2 = Integer.parseInt(elt.getAttribute( "transferType2" ) );
+                                }
                             }
                             if (sstereotype != null) {
                                 stereotype = sstereotype;
@@ -392,49 +392,49 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         return mappedUnits;
     }
 
-		public int getCPMEC()	{
-			if( cpMEC.equals( "Memory Copy" ) )	{
-				return CPMEC.CpuMemoryCopyMEC;
-			}
-			if( cpMEC.equals( "Single DMA" ) )	{
-				return CPMEC.SingleDmaMEC;
-			}
-			if( cpMEC.equals( "Double DMA" ) )	{
-				return CPMEC.DoubleDmaMEC;
-			}
-			return -1;
-		}
+    public int getCPMEC()       {
+        if( cpMEC.equals( "Memory Copy" ) )     {
+            return CPMEC.CpuMemoryCopyMEC;
+        }
+        if( cpMEC.equals( "Single DMA" ) )      {
+            return CPMEC.SingleDmaMEC;
+        }
+        if( cpMEC.equals( "Double DMA" ) )      {
+            return CPMEC.DoubleDmaMEC;
+        }
+        return -1;
+    }
 
-	public String getCompleteName()	{
-		return completeName;
-	}
+    public String getCompleteName()     {
+        return completeName;
+    }
 
-	public Vector<String> getAssignedAttributes()	{
+    public Vector<String> getAssignedAttributes()       {
 
-		Vector<String> vectorToReturn;
-		switch( cpMEC )	{
-			case CPMEC.MemoryCopy:
-				TraceManager.addDev( "**** ASSIGNED ATTRIBUTES ****\\" + assignedAttributes );
-				vectorToReturn = CpuMemoryCopyMEC.sortAttributes( assignedAttributes );
-			break;
-			case CPMEC.SingleDMA:
-				vectorToReturn = SingleDmaMEC.sortAttributes( assignedAttributes );
-			break;
-			case CPMEC.DoubleDMA:
-				vectorToReturn = DoubleDmaMEC.sortAttributes( assignedAttributes );
-			break;
-			default:
-				TraceManager.addDev( "ERROR in returning assignedAttributes" );
-				vectorToReturn = assignedAttributes;
-			break;
-		}
-		return vectorToReturn;
-	}
+        Vector<String> vectorToReturn;
+        switch( cpMEC ) {
+        case CPMEC.MemoryCopy:
+            TraceManager.addDev( "**** ASSIGNED ATTRIBUTES ****\\" + assignedAttributes );
+            vectorToReturn = CpuMemoryCopyMEC.sortAttributes( assignedAttributes );
+            break;
+        case CPMEC.SingleDMA:
+            vectorToReturn = SingleDmaMEC.sortAttributes( assignedAttributes );
+            break;
+        case CPMEC.DoubleDMA:
+            vectorToReturn = DoubleDmaMEC.sortAttributes( assignedAttributes );
+            break;
+        default:
+            TraceManager.addDev( "ERROR in returning assignedAttributes" );
+            vectorToReturn = assignedAttributes;
+            break;
+        }
+        return vectorToReturn;
+    }
 
-	public ArrayList<Integer> getTransferTypes()	{
-		ArrayList<Integer> transferTypes = new ArrayList<Integer>();
-		transferTypes.add( transferType1 );
-		transferTypes.add( transferType2 );
-		return transferTypes;
-	}
+    public ArrayList<Integer> getTransferTypes()        {
+        ArrayList<Integer> transferTypes = new ArrayList<Integer>();
+        transferTypes.add( transferType1 );
+        transferTypes.add( transferType2 );
+        return transferTypes;
+    }
 }

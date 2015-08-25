@@ -246,7 +246,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         }
 
         addSeparator();
-	
+
 
         if ((ConfigurationTTool.ExternalCommand1.length() > 0) && (ConfigurationTTool.ExternalCommand1Host.length() > 0)) {
             button = add(mgui.actions[TGUIAction.EXTERNAL_ACTION_1]);
@@ -271,27 +271,27 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         search.addActionListener(this);
 
         search.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent documentEvent) {
-                if (search.getText().length()>0){
-                    internalSearch.setEnabled(true);
-                }else
-                    internalSearch.setEnabled(false);
-            }
+                @Override
+                public void insertUpdate(DocumentEvent documentEvent) {
+                    if (search.getText().length()>0){
+                        internalSearch.setEnabled(true);
+                    }else
+                        internalSearch.setEnabled(false);
+                }
 
-            @Override
-            public void removeUpdate(DocumentEvent documentEvent) {
-                if (search.getText().length()>0){
-                    internalSearch.setEnabled(true);
-                }else
-                    internalSearch.setEnabled(false);
-            }
+                @Override
+                public void removeUpdate(DocumentEvent documentEvent) {
+                    if (search.getText().length()>0){
+                        internalSearch.setEnabled(true);
+                    }else
+                        internalSearch.setEnabled(false);
+                }
 
-            @Override
-            public void changedUpdate(DocumentEvent documentEvent) {
+                @Override
+                public void changedUpdate(DocumentEvent documentEvent) {
 
-            }
-        });
+                }
+            });
 
         //@author : Huy TRUONG
         //add external search button into menu bar
