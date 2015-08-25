@@ -57,6 +57,10 @@ public class TMLType {
     public final static int BOOLEAN = 2;
     public final static int ADDRESS = 3;
     public final static int OTHER = 4;
+
+    public final static String NATURAL_STRING = "int";
+    public final static String BOOLEAN_STRING = "bool";
+    public final static String ADDRESS_STRING = "addr";
     
     private int type;
     private String typeOther;
