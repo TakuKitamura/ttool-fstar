@@ -162,6 +162,9 @@ TOKEN:
 | < #LETTER: ["a"-"z","A"-"Z"] >
 |	< #DIGIT: ["0"-"9"] >
 |	< UNDERSCORE: "_" >
+|	< FORLOOP_STRING: <LETTER> (<UNDERSCORE> | <ASSIGNMENT> | <LETTER> | <DIGIT> | "#" | ";" | <MATH_SMALLER> | <MATH_GREATER> |
+<MATH_MINUS> | <MATH_PLUS> )+ (
+<LETTER> | <DIGIT> ) >
 //| < INCLUDE_SYMBOL: "$" >
 }
 
@@ -352,7 +355,8 @@ TMLSDAction Action( String instanceName ):
 	Token t;
 }
 {
-	<ACTION_KW> s = ID() <ASSIGNMENT> ( s1 = BAExpression() | s1 = MAExpression() )
+	//<ACTION_KW> s = ID() <ASSIGNMENT> ( s1 = BAExpression() | s1 = MAExpression() )
+	<ACTION_KW> s = ID() <ASSIGNMENT> s1 = MAExpression()	//trying to use one single expression to parse both math and boolean
 	{
 		TMLSDAction action = new TMLSDAction( s + " = " + s1, instanceName );
 		return action;
@@ -376,6 +380,7 @@ String MAExpression():	//MA stands for Mathematical Action
 String MATerm():
 {
 	String s, s1;
+	Token t;
 }
 {
 	s = MAFactor()
@@ -383,7 +388,22 @@ String MATerm():
 	|
 	<MATH_DIV> s1 = MATerm() { return s + s1; }
 	|
+	<LOGICALOR> ( s1 = ID() | s1 = BooleanConstant() )	{ return s + " || " + s1; }
+	|
+	<LOGICALAND> ( s1 = ID() | s1 = BooleanConstant() )	{ return s +" && " + s1; }
+	|
+	<EQUALITY> ( s1 = ID() | s1 = BooleanConstant() )	{ return s + " == " + s1; }
+	|
 	{} { return s; } )
+}
+
+String BooleanConstant():
+{
+}
+{
+	<FALSECONST> { return "false"; }
+	|
+	<TRUECONST> { return "true"; }
 }
 
 String MAFactor():
@@ -397,18 +417,33 @@ String MAFactor():
 	s = ID() {return s; }
 	|
 	t = <INTEGER_LITERAL>	{ return t.image; }
+	|
+	<TRUECONST> { return "true"; }
+	|
+	<FALSECONST> { return "false"; }
 }
 
 /* Right-recursive grammar for parsing boolean expressions in actions. No priority is given to boolean operators */
-String BAExpression():	//BA stands for Boolean Action
-{
+//String BAExpression():	//BA stands for Boolean Action
+/*{
 	String s, s1;
 }
 {
 	s = BATerm() s1 = BAExpressionPrime()	{ return s + s1; }
 }
+{
+	String s, s1;
+}
+{
+	s = ID() <LOGICALOR> s1 = ID()	{ return s + " || " + s1; }
+| s = ID() <LOGICALAND> s1 = ID()	{ return s +" && " + s1; }
+| s = ID() <EQUALITY> s1 = ID()	{ return s +" == " + s1; }
+| <TRUECONST> { return "true"; }
+| <FALSECONST> { return "false"; }
+//| {}	{ return ""; }
+}
 
-String BAExpressionPrime():
+/*String BAExpressionPrime():
 {
 	String s, s1;
 }
@@ -449,7 +484,7 @@ String BAFactor():
 	t = <FALSECONST>	{ return t.image; }
 	|
 	t = <TRUECONST> { return t.image; }
-}
+}*/
 
 String ID():
 {
@@ -478,20 +513,8 @@ void ActivityDiagram( TMLCP topCP ):
 		previousElement = currentElement;
 	}
 
-	(
-	parseReferenceToDiagram( topCP )	<SEQUENCING_OP> 
-	{
-		if( currentElement != null )	{
-			previousElement.addNextElement( currentElement );
-			globalAD.addTMLCPElement( currentElement );
-			previousElement = currentElement;
-		}
-	}
-	|
-		parseForkJoin( topCP )
-	|
-		parseChoiceLine( topCP ) 
-	)+
+	parseElements( topCP )
+
  	"END" "END" ID()
 	{
 		if( thereIsAChoice )	{	//Correcting the additional stop node added when parsing a choice
@@ -502,6 +525,26 @@ void ActivityDiagram( TMLCP topCP ):
 			thereIsAChoice = false;
 		}
 	}
+}
+
+void parseElements( TMLCP topCP ):
+{
+}
+{
+	(
+	parseReferenceToDiagram( topCP )	<SEQUENCING_OP> 
+	{
+		if( currentElement != null )	{
+			previousElement.addNextElement( currentElement );
+			globalAD.addTMLCPElement( currentElement );
+			previousElement = currentElement;
+		}
+	}
+	|
+		"{" ( parseForLoop( topCP ) | parseParallelism( topCP ) )
+	|
+		parseChoiceLine( topCP ) 
+	)+
 }
 
 void parseReferenceToDiagram( TMLCP topCP ):
@@ -526,7 +569,29 @@ void parseReferenceToDiagram( TMLCP topCP ):
 	}
 }
 
-void parseForkJoin( TMLCP topCP ):
+//only a sequence of SDs is allowed in the for-loop body
+void parseForLoop( TMLCP topCP ):
+{
+	String s;
+	Token t, t1;
+}
+{
+	"(" t = <FORLOOP_STRING> ")"
+	//parse the for-loop body: sequence of SDs terminated by >< and by };
+	( parseReferenceToDiagram( topCP )	<SEQUENCING_OP>  )+ "><" "};"
+	//continue parsing the rest of the CP
+	parseElements( topCP )
+}
+
+void LogicalExpression():
+{
+	String s;
+}
+{
+	s = ID() ( <MATH_SMALLER> | <MATH_GREATER> ) <INTEGER_LITERAL>
+}
+
+void parseParallelism( TMLCP topCP ):
 {
 	String name;
 	boolean isSD = false;
