@@ -65,7 +65,7 @@ public class CheckingError {
     private TMLTask tmlt;
     private TDiagramPanel tdp; 
     private TGComponent tgc;
-	private AvatarBlock ab;
+    private AvatarBlock ab;
     
     public CheckingError(int _type, String _message) {
         type = _type;
@@ -84,7 +84,7 @@ public class CheckingError {
         t = _t;
     }
 	
-	public void setAvatarBlock(AvatarBlock _ab) {
+    public void setAvatarBlock(AvatarBlock _ab) {
         ab = _ab;
     }
     

@@ -51,6 +51,7 @@ import java.util.*;
 import proverifspec.*;
 import myutil.*;
 import avatartranslator.*;
+import ui.*;
 
 public class AVATAR2ProVerif {
 
@@ -961,14 +962,14 @@ public class AVATAR2ProVerif {
     }
 
     public void makeBlockProcesses(AvatarBlock _block, AvatarStateMachine _asm, AvatarStateMachineElement _asme, ProVerifProcess _p, LinkedList<ProVerifProcess> _processes, LinkedList<AvatarState> _states, String _choiceInfo) {
-        AvatarSignal as;
+        avatartranslator.AvatarSignal as;
         AvatarActionOnSignal aaos;
         AvatarTransition at;
         ProVerifProcess p, ptmp, ptmp1, ptmp2;
         String tmp, name, value, term;
         int i, j;
         int index0, index1;
-        AvatarMethod am;
+        avatartranslator.AvatarMethod am;
         boolean found;
         LinkedList<String> pos;
 
@@ -1143,6 +1144,11 @@ public class AVATAR2ProVerif {
                     TraceManager.addDev("   Adding guard: " + tmp);
                     addLineNoEnd(_p, "if " + tmp + " then");
                 } else {
+		    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Guard: " + at.getGuard() + " in block " + _block.getName() + " is not supported. Replacing by an empty guard");
+                    ce.setAvatarBlock(_block);
+                    ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(_block.getName()));
+                    ce.setTGComponent((TGComponent)(at.getReferenceObject()));
+                    warnings.add(ce);
 		    addLineNoEnd(_p, "(*  Unsuported guard:" + at.getGuard() + " *)");
 		}
             }

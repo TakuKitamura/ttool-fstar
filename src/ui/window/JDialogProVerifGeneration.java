@@ -331,6 +331,10 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                 } else {
                     jta.append("Could not generate proverif code\n");
                 }
+
+		//if (mgui.gtm.getCheckingWarnings().size() > 0) {
+		    jta.append("" +  mgui.gtm.getCheckingWarnings().size() + " warning(s)\n");
+		    //}
             }
 
 

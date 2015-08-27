@@ -324,12 +324,12 @@ public class AvatarDesignPanel extends TURTLEPanel {
     }
 
     public void modelBacktracingProVerif(ProVerifOutputAnalyzer pvoa) {
-	
+
         if (abdp == null) {
             return;
         }
 
-	resetModelBacktracingProVerif();
+        resetModelBacktracingProVerif();
 
         String block, attr, state;
         int index;
@@ -339,7 +339,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         TGComponent tgc;
 
         // Confidential attributes
-         for(String s: pvoa.getSecretTerms()) {
+        for(String s: pvoa.getSecretTerms()) {
             index = s.indexOf("__");
             if (index != -1) {
                 block = s.substring(0, index);
