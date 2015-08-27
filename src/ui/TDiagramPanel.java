@@ -193,6 +193,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     private boolean isScaled;
     private boolean overcomeShowing = false;
+    private boolean drawingMain = true;
+
 
     //protected Image offScreenBuffer;
 
@@ -289,6 +291,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 zoom = _zoom;
             }
         }
+    }
+
+    public boolean isDrawingMain() {
+	return drawingMain;
     }
 
     public void updateComponentsAfterZoom() {
@@ -401,6 +407,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void paintMycomponents(Graphics g, boolean b, double w, double h) {
 
         lastGraphics = g;
+	drawingMain = b;
 
         //TraceManager.addDev("Nb of components: " + componentList.size());
 

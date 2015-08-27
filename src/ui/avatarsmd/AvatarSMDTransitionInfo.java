@@ -127,11 +127,15 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 
         g.setColor(ColorManager.AVATAR_GUARD);
 
+	if (tdp.isDrawingMain()) {
+	    width = minWidth;
+	}
+
         if (guard.length() > 0) {
             if (guard.compareTo("[ ]") != 0) {
                 g.drawString(guard, x, y + step);
                 atLeastOneThing = true;
-                if (!tdp.isScaled()) {
+                if (tdp.isDrawingMain()) {
                     width = Math.max(g.getFontMetrics().stringWidth(guard), width);
                     width = Math.max(minWidth, width);
                 }
@@ -146,7 +150,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
                 s = "after (" + afterMin + "," + afterMax + ")";
                 g.drawString(s, x, y + step);
                 atLeastOneThing = true;
-                if (!tdp.isScaled()) {
+                if (tdp.isDrawingMain()) {
                     width = Math.max(g.getFontMetrics().stringWidth(s), width);
                     width = Math.max(minWidth, width);
                 }
@@ -155,7 +159,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
                 s = "after (" + afterMin + ")";
                 g.drawString(s, x, y + step);
                 atLeastOneThing = true;
-                if (!tdp.isScaled()) {
+                if (tdp.isDrawingMain()) {
                     width = Math.max(g.getFontMetrics().stringWidth(s), width);
                     width = Math.max(minWidth, width);
                 }
@@ -168,7 +172,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
                 s = "computeFor (" + computeMin + "," + computeMax + ")";
                 g.drawString(s, x, y + step);
                 atLeastOneThing = true;
-                if (!tdp.isScaled()) {
+                if (tdp.isDrawingMain()) {
                     width = Math.max(g.getFontMetrics().stringWidth(s), width);
                     width = Math.max(minWidth, width);
                 }
@@ -177,7 +181,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
                 s = "computeFor (" + computeMin + ")";
                 g.drawString(s, x, y + step);
                 atLeastOneThing = true;
-                if (!tdp.isScaled()) {
+                if (tdp.isDrawingMain()) {
                     width = Math.max(g.getFontMetrics().stringWidth(s), width);
                     width = Math.max(minWidth, width);
                 }
@@ -192,7 +196,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
             if (s.length() > 0) {
                 g.drawString(s, x, y + step);
                 atLeastOneThing = true;
-                if (!tdp.isScaled()) {
+                if (tdp.isDrawingMain()) {
                     width = Math.max(g.getFontMetrics().stringWidth(s), width);
                     width = Math.max(minWidth, width);
                 }
@@ -225,7 +229,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 
 
 
-        if (!tdp.isScaled()) {
+        if (tdp.isDrawingMain()) {
             height = Math.max(step, minHeight);
         }
 
