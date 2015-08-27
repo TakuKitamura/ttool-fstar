@@ -257,6 +257,15 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
         g2 = Conversion.replaceAllString(g2, "]", "").trim();
         g2 = Conversion.replaceAllString(g2, " ", "");
 
+
+
+	//TraceManager.addDev("Else TEST: g1=" + g1 + "   g2=" + g2);
+
+	// Else?
+	if ((g1.compareTo("else") == 0) || (g2.compareTo("else") ==0)) {
+	    return true;
+	}
+
         String g, n;
 
         if (g1.startsWith("not(")) {
@@ -271,16 +280,35 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
           return false;
           }*/
 
-	if (n.length() < 5) {
+	if (n.length() < 6) {
 	    return false;
 	}
 
-        if (n.substring(4, n.length()-1).compareTo(g) != 0) {
+	n = n.substring(3, n.length());
+	n = myTrim(n);
+
+        if (n.compareTo(g) != 0) {
             return false;
         }
 
 
         return true;
+    }
+
+    private String myTrim(String toBeTrimmed) {
+	int length = toBeTrimmed.length();
+	String tmp = toBeTrimmed.trim();
+	if (tmp.startsWith("(")) {
+	    tmp = tmp.substring(1, tmp.length());
+	}
+	if (tmp.endsWith(")")) {
+	    tmp = tmp.substring(0, tmp.length()-1);
+	}
+	if (tmp.length() != length) {
+	    return myTrim(tmp);
+	}
+	return tmp;
+	
     }
 
     public boolean hasBreakpoint() {

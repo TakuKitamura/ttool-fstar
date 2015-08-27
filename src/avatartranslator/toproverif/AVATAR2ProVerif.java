@@ -111,6 +111,7 @@ public class AVATAR2ProVerif {
 
         avspec.removeCompositeStates();
         avspec.removeTimers();
+	avspec.removeElseGuards();
 
         makeHeader(_stateReachability);
 
@@ -1141,7 +1142,9 @@ public class AVATAR2ProVerif {
                 if (tmp != null) {
                     TraceManager.addDev("   Adding guard: " + tmp);
                     addLineNoEnd(_p, "if " + tmp + " then");
-                }
+                } else {
+		    addLineNoEnd(_p, "(*  Unsuported guard:" + at.getGuard() + " *)");
+		}
             }
 
 
@@ -1339,7 +1342,8 @@ public class AVATAR2ProVerif {
         TraceManager.addDev(" -> Analyzing equal guard: " + _guard);
         int index = _guard.indexOf("==");
         if (index == -1) {
-            if (AvatarAttribute.isAValidAttributeName(_guard.trim())) {
+	    _guard = myTrim(_guard);
+            if (AvatarAttribute.isAValidAttributeName(_guard)) {
                 myInt = macs.get(_guard.trim());
                 String[] ab = new String[2];
                 if (myInt != null) {
@@ -1366,6 +1370,23 @@ public class AVATAR2ProVerif {
         }
 
         return null;
+    }
+
+    // Remove all begining and trailing parenthesis and spaces
+    private String myTrim(String toBeTrimmed) {
+	int length = toBeTrimmed.length();
+	String tmp = toBeTrimmed.trim();
+	if (tmp.startsWith("(")) {
+	    tmp = tmp.substring(1, tmp.length());
+	}
+	if (tmp.endsWith(")")) {
+	    tmp = tmp.substring(0, tmp.length()-1);
+	}
+	if (tmp.length() != length) {
+	    return myTrim(tmp);
+	}
+	return tmp;
+	
     }
 
     public void terminateProcess(ProVerifProcess _p) {
