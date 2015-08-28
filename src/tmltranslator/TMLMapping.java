@@ -776,7 +776,7 @@ public class TMLMapping {
         // At each origin: We write in a new local channel in a NBRNBW fashion
         // This new channel is mapped on Src_Storage_Instance_1
         // Then, we send an event to a new DMA task mapped
-        // The DMa task read elements from the src mem and writes on the destination mem.
+        // The DMA task reads elements from the src mem and writes on the destination mem.
 
         // -> The old channel is thus transformed into two new channels
 
@@ -806,10 +806,14 @@ public class TMLMapping {
         // In the origin task, we change all writing to "chan" to "fromOriginToDMA"
         origin.replaceWriteChannelWith(chan, fromOriginToDMA);
         TMLEvent toDMA = new TMLEvent("toDMA" +  chan.getName(), chan, 1, false);
+	TMLEvent fromDMA = new TMLEvent("fromDMA" +  chan.getName(), chan, 1, false);
         tmlm.addEvent(toDMA);
+	tmlm.addEvent(fromDMA);
         toDMA.addParam(new TMLType(TMLType.NATURAL));
         toDMA.setTasks(origin, dmaTask);
-        origin.addSendEventAfterWriteIn(fromOriginToDMA, toDMA, "size");
+	fromDMA.setTasks(dmaTask, origin);
+        //origin.addSendEventAfterWriteIn(fromOriginToDMA, toDMA, "size");
+	origin.addSendAndReceiveEventAfterWriteIn(fromOriginToDMA, toDMA, fromDMA, "size", "");
 
 
         // We need to create the activity diagram of DMATask
@@ -827,6 +831,9 @@ public class TMLMapping {
         wait.setEvent(toDMA);
         wait.addParam("size");
         activity.addElement(wait);
+	TMLSendEvent done = new TMLSendEvent("DMATransferComplete", null);
+        done.setEvent(fromDMA);
+        activity.addElement(done);
         TMLForLoop mainLoop = new TMLForLoop("mainLoopOfDMA", null);
         mainLoop.setInit("i=0");
         mainLoop.setCondition("i==0");
@@ -859,7 +866,8 @@ public class TMLMapping {
         mainLoop.addNext(mainStop);
         wait.addNext(loop);
         loop.addNext(read);
-        loop.addNext(stop);
+        loop.addNext(done);
+	done.addNext(stop);
         read.addNext(write);
         write.addNext(stopWrite);
 

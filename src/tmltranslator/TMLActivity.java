@@ -461,6 +461,45 @@ public class TMLActivity extends TMLElement {
 	}
     }
 
+    public void addSendAndReceiveEventAfterWriteIn(TMLChannel chan, TMLEvent evt1, TMLEvent evt2, String action1, String action2) {
+	TMLActivityElement ae;
+	TMLWriteChannel twc;
+	int cpt = 0;
+
+	Vector<TMLActivityElementEvent> newElements = new Vector<TMLActivityElementEvent>();
+
+	for(int i=0; i<elements.size(); i++) {
+            ae = (TMLActivityElement)(elements.elementAt(i));
+	    if (ae instanceof TMLWriteChannel) {
+		twc = (TMLWriteChannel)ae;
+		for (int j = 0; j<twc.getNbOfChannels(); j++) {
+		    if (twc.getChannel(j) == chan) {
+			TMLSendEvent send = new TMLSendEvent("SendEvt" + cpt, ae.getReferenceObject());
+			send.setEvent(evt1);
+			TMLWaitEvent receive = new TMLWaitEvent("RecvEvt" + cpt, ae.getReferenceObject());
+			receive.setEvent(evt2);
+			
+			Vector nexts = ae.getNexts();
+			for (Object o: nexts) {
+			    receive.addNext((TMLActivityElement)o);
+			}
+			send.addNext(receive);
+			newElements.add(send);
+			newElements.add(receive);
+			send.addParam(action1);
+			receive.addParam(action2);
+			ae.clearNexts();
+			ae.addNext(send);
+		    }
+		}
+	    }
+	}
+
+	for(TMLActivityElementEvent s: newElements) {
+	    elements.add(s);
+	}
+    }
+
     public void removeEmptyInfiniteLoop() {
 	TMLForLoop loop = null;
 	for(TMLActivityElement elt: elements) {

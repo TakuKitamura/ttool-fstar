@@ -320,6 +320,10 @@ public class TMLTask extends TMLElement {
         activity.addSendEventAfterWriteIn(chan, evt, action);
     }
 
+    public void addSendAndReceiveEventAfterWriteIn(TMLChannel chan, TMLEvent evt1, TMLEvent evt2, String action1, String action2) {
+        activity.addSendAndReceiveEventAfterWriteIn(chan, evt1, evt2, action1, action2);
+    }
+
     public void addTMLChannel( TMLChannel _ch ) {
         channelsList.add( _ch );
     }
