@@ -144,8 +144,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     //drawing area
     private int minLimit = 10;
-    private int maxX = 1400;
-    private int maxY = 900;
+    private int maxX = 2500;
+    private int maxY = 1500;
     private final int limit = 10;
 
     private final int minimumXSize = 900;
@@ -1126,8 +1126,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     // Multi-select
     public void setSelectingComponents(int x, int y) {
-        x = Math.min(Math.max(minLimit, x), maxX);
-        y = Math.min(Math.max(minLimit, y), maxY);
+	x = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), x), (int)(Math.ceil(maxX*zoom)));
+	y = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), y), (int)(Math.ceil(maxY*zoom)));
+		     //        x = Math.min(Math.max(minLimit*zoom, x), maxX*zoom);
+		     //y = Math.min(Math.max(minLimit*zoom, y), maxY*zoom);
         initSelectX = x;
         currentSelectX = x;
         initSelectY = y;
@@ -1135,8 +1137,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void updateSelectingComponents(int x, int y) {
-        x = Math.min(Math.max(minLimit, x), maxX);
-        y = Math.min(Math.max(minLimit, y), maxY);
+	x = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), x), (int)(Math.ceil(maxX*zoom)));
+	y = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), y), (int)(Math.ceil(maxY*zoom)));
+	//x = Math.min(Math.max(minLimit, x), maxX);
+        //y = Math.min(Math.max(minLimit, y), maxY);
         currentSelectX = x;
         currentSelectY = y;
 
@@ -2211,19 +2215,21 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public int getMaxX() {
-        return maxX;
+        //return maxX;
+	return (int)(Math.ceil(maxX * zoom));
     }
 
     public int getMinX() {
-        return minLimit;
+        return (int)(Math.floor(minLimit*zoom));
     }
 
     public int getMinY() {
-        return minLimit;
+	return (int)(Math.floor(minLimit*zoom));
+        //return minLimit*zoom;
     }
 
     public int getMaxY() {
-        return maxY;
+        return (int)(Math.ceil(maxY * zoom));
     }
 
     public void setMaxX(int x) {

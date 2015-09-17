@@ -70,6 +70,8 @@ JTTOOL = $(TTOOL_PATH)/javacode
 JTTOOL_DIR = jttool
 TTOOL_TARGET = $(TTOOL_PATH)/TTool_install/TTool
 TTOOL_TARGET_RELEASE = $(TTOOL_PATH)/TTool_install
+TTOOL_PREINSTALL = $(TTOOL_PATH)/preinstallTTool
+TTOOL_PREINSTALL_LINUX = $(TTOOL_PREINSTALL)/linux
 
 RELEASE_STD_FILES_LINUX_EXE = ttool_unix
 RELEASE_STD_FILES_WINDIWS_EXE = ttool_windows.bat
@@ -243,6 +245,14 @@ stdrelease:
 	cp -R $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
 	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfv $(TTOOL_STD_RELEASE)/releaseWithSrc.tar *; $(GZIP) $(TTOOL_STD_RELEASE)/releaseWithSrc.tar; mv $(TTOOL_STD_RELEASE)/releaseWithSrc.tar.gz $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz
 
+preinstall: jar preinstall_linux
+
+preinstall_linux:
+#jars
+	cp $(TTOOL_BIN)/*.jar $(TTOOL_PREINSTALL_LINUX)/TTool/bin/
+
+	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_XML) $(TTOOL_PREINSTALL_LINUX)/TTool/modeling/
+	cp $(TTOOL_DOC)/README_modeling $(TTOOL_PREINSTALL_LINUX)/TTool/modeling/
 
 jttooljar:
 	cd $(JTTOOL);$(JAVAC) $(JTTOOL_DIR)/*.java;$(JAR) cmf $(TTOOL_SRC)/$(TTOOL_JAR_TXT) $(TTOOL_BIN)/$(JTTOOL_JAR) $(JTTOOL_DIR)/*.class 

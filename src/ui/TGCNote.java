@@ -82,10 +82,24 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
         minWidth = 20;
         minHeight = 10;
 
-	oldScaleFactor = tdp.getZoom();
+        oldScaleFactor = tdp.getZoom();
 
         nbConnectingPoint = 0;
-        addTGConnectingPointsComment();
+        //addTGConnectingPointsComment();
+	int len = makeTGConnectingPointsComment(16);
+	int decw = 0;
+	int dech = 0;
+	for(int i=0; i<2; i++) {
+	    connectingPoint[len] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.0 + dech);
+	    connectingPoint[len + 1 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 0.0 + dech);
+	    connectingPoint[len + 2 ] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.0 + dech);
+	    connectingPoint[len + 3 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.5 + dech);
+	    connectingPoint[len + 4 ] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.5 + dech);
+	    connectingPoint[len + 5 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 1.0 + dech);
+	    connectingPoint[len + 6 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 1.0 + dech);
+	    connectingPoint[len + 7 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.9 + decw, 1.0 + dech);
+	    len += 8;
+	}
 
         moveable = true;
         editable = true;
@@ -103,17 +117,17 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
 
 
     public void internalDrawing(Graphics g) {
-	Font f = g.getFont();
+        Font f = g.getFont();
         Font fold = f;
 
-	/*if (!tdp.isScaled()) {
-            graphics = g;
-	    }*/
+        /*if (!tdp.isScaled()) {
+          graphics = g;
+          }*/
 
-	if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
+        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
             currentFontSize = tdp.getFontSize();
             //System.out.println("Rescaled, font size = " + currentFontSize + " height=" + height);
-	    //            myFont = f.deriveFont((float)currentFontSize);
+            //            myFont = f.deriveFont((float)currentFontSize);
             //myFontB = myFont.deriveFont(Font.BOLD);
 
             if (rescaled) {
@@ -125,22 +139,22 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
             makeValue();
         }
 
-	int h  = g.getFontMetrics().getHeight();
+        int h  = g.getFontMetrics().getHeight();
         Color c = g.getColor();
 
-	int desiredWidth = minWidth;
+        int desiredWidth = minWidth;
         for(int i=0; i< values.length; i++) {
             desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX);
         }
 
         int desiredHeight = (values.length * currentFontSize) + textY + 1;
 
-	//TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
+        //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
 
         if ((desiredWidth != width) || (desiredHeight != height)) {
-	    resize(desiredWidth, desiredHeight);
+            resize(desiredWidth, desiredHeight);
         }
-	
+
         g.drawLine(x, y, x+width, y);
         g.drawLine(x, y, x, y+height);
         g.drawLine(x, y+height, x+width-limit, y+height);
@@ -163,7 +177,7 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
 
         g.setColor(Color.black);
         for (int i = 0; i<values.length; i++) {
-	    //TraceManager.addDev("x+texX=" + (x + textX) + " y+textY=" + y + textY + i* h + ": " + values[i]);
+            //TraceManager.addDev("x+texX=" + (x + textX) + " y+textY=" + y + textY + i* h + ": " + values[i]);
             g.drawString(values[i], x + textX, y + textY + (i+1)* currentFontSize);
         }
         g.setColor(c);
@@ -176,20 +190,20 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
     }
 
     /*public void checkMySize() {
-        if (myg == null) {
-            return;
-        }
-        int desiredWidth = minWidth;
-        for(int i=0; i< values.length; i++) {
-            desiredWidth = Math.max(desiredWidth, myg.getFontMetrics().stringWidth(values[i]) + marginX);
-        }
+      if (myg == null) {
+      return;
+      }
+      int desiredWidth = minWidth;
+      for(int i=0; i< values.length; i++) {
+      desiredWidth = Math.max(desiredWidth, myg.getFontMetrics().stringWidth(values[i]) + marginX);
+      }
 
-        int desiredHeight = values.length * myg.getFontMetrics().getHeight() + marginY;
+      int desiredHeight = values.length * myg.getFontMetrics().getHeight() + marginY;
 
-        if ((desiredWidth != width) || (desiredHeight != height)) {
-            resize(desiredWidth, desiredHeight);
-        }
-	}*/
+      if ((desiredWidth != width) || (desiredHeight != height)) {
+      resize(desiredWidth, desiredHeight);
+      }
+      }*/
 
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
@@ -225,11 +239,11 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
 
     public void rescale(double scaleFactor){
         /*dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
-        lineHeight = (int)(dlineHeight);
-        dlineHeight = dlineHeight - lineHeight;
-        minHeight = lineHeight;*/
+          lineHeight = (int)(dlineHeight);
+          dlineHeight = dlineHeight - lineHeight;
+          minHeight = lineHeight;*/
 
-	values = null;
+        values = null;
 
         super.rescale(scaleFactor);
     }
