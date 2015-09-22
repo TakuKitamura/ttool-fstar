@@ -574,7 +574,7 @@ public class AvatarBlock extends AvatarElement {
                             asme0 = asme.getNext(i);
                             if ((asme0 instanceof AvatarTransition) && (asme0 != at)) {
                                 at0 = (AvatarTransition)asme0;
-                                g = at0.getGuard();
+                                g = at0.getGuard().toString ();
                                 if (g != null) {
                                     if (at0.hasNonDeterministicGuard()) {
                                         guard = "false";
@@ -592,7 +592,7 @@ public class AvatarBlock extends AvatarElement {
                         guard = Conversion.replaceAllChar(guard, '[', "(");
                         guard = Conversion.replaceAllChar(guard, ']', ")");
                         guard = "[" + guard + "]";
-                        at.setGuard(guard);
+                        at.setGuard(new AvatarGuard (guard));
                         TraceManager.addDev("[ else ] replaced with :" + guard);
                     }
                 }

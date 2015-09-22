@@ -36,60 +36,43 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarSignal
-   * Signals in Avatar ...
-   * Creation: 20/05/2010
-   * @version 1.0 20/05/2010
-   * @author Ludovic APVRILLE
+   * Class AvatarActionAssignment
+   * Creation: 16/09/2015
+   * @version 1.0 16/09/2015
+   * @author Florian LUGOU
    * @see
    */
 
 
 package avatartranslator;
 
-import java.util.*;
+public class AvatarActionAssignment extends AvatarAction {
+    AvatarLeftHand leftHand;
+    AvatarTerm rightHand;
 
-import myutil.*;
-
-public class AvatarSignal extends AvatarMethod {
-
-    // Signa type
-    public final static int IN = 0;
-    public final static int OUT = 1;
-
-    private int inout;
-
-
-    public AvatarSignal(String _name, int _inout, Object _referenceObject) {
-        super(_name, _referenceObject);
-        inout = _inout;
+    public AvatarActionAssignment (AvatarLeftHand _leftHand, AvatarTerm _rightHand) {
+        this.leftHand = _leftHand;
+        this.rightHand = _rightHand;
     }
 
-    public int getInOut() {
-        return inout;
+    public boolean isAVariableSetting () {
+        return true;
     }
 
-    public void setInOut(int _inout) {
-        inout = _inout;
+    public AvatarLeftHand getLeftHand () {
+        return this.leftHand;
     }
 
-    public boolean isOut() {
-        return (inout == OUT);
+    public AvatarTerm getRightHand () {
+        return this.rightHand;
     }
 
-    public boolean isIn() {
-        return (inout == IN);
+    public boolean isABasicVariableSetting () {
+        return (this.leftHand instanceof AvatarLocalVar || this.leftHand instanceof AvatarAttribute) &&
+               (this.rightHand instanceof AvatarLocalVar || this.rightHand instanceof AvatarAttribute);
     }
 
-    public static boolean isAValidSignal(String _signal) {
-        return AvatarTerm.isValidName (_signal);
-    }
-
-    public String toString() {
-        String ret = super.toString();
-        if (isOut()) {
-            return "out " + ret;
-        }
-        return "in " + ret;
+    public String toString () {
+        return this.leftHand.toString () + " = " + this.rightHand.toString ();
     }
 }

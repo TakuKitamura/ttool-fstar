@@ -36,60 +36,78 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarSignal
-   * Signals in Avatar ...
-   * Creation: 20/05/2010
-   * @version 1.0 20/05/2010
-   * @author Ludovic APVRILLE
+   * Class AvatarTermFunction
+   * Creation: 16/09/2015
+   * @version 1.0 16/09/2015
+   * @author Florian LUGOU
    * @see
    */
 
-
 package avatartranslator;
 
-import java.util.*;
+import java.util.LinkedList;
+import myutil.TraceManager;
 
-import myutil.*;
+public class AvatarTermFunction extends AvatarAction implements AvatarTerm {
+    AvatarTuple args;
+    AvatarMethod method;
 
-public class AvatarSignal extends AvatarMethod {
-
-    // Signa type
-    public final static int IN = 0;
-    public final static int OUT = 1;
-
-    private int inout;
-
-
-    public AvatarSignal(String _name, int _inout, Object _referenceObject) {
-        super(_name, _referenceObject);
-        inout = _inout;
+    public AvatarTermFunction (AvatarMethod _method, AvatarTuple _args) {
+        this.args = _args;
+        this.method = _method;
     }
 
-    public int getInOut() {
-        return inout;
-    }
+    public static AvatarTermFunction createFromString (AvatarBlock block, String toParse) {
+        int indexLParen = toParse.indexOf ("(");
+        String methodName;
+        AvatarTuple argsTuple;
 
-    public void setInOut(int _inout) {
-        inout = _inout;
-    }
-
-    public boolean isOut() {
-        return (inout == OUT);
-    }
-
-    public boolean isIn() {
-        return (inout == IN);
-    }
-
-    public static boolean isAValidSignal(String _signal) {
-        return AvatarTerm.isValidName (_signal);
-    }
-
-    public String toString() {
-        String ret = super.toString();
-        if (isOut()) {
-            return "out " + ret;
+        if (indexLParen == -1) {
+            // No left parenthesis: this must be a 0-arity function call
+            methodName = toParse.trim ();
+            argsTuple = new AvatarTuple ();
         }
-        return "in " + ret;
+        else {
+            // Left parenthesis present
+            methodName = toParse.substring (0, indexLParen).trim ();
+            argsTuple = AvatarTuple.createFromString (block, toParse.substring (indexLParen));
+        }
+
+        AvatarMethod meth = block.getAvatarMethodWithName (methodName);
+        if (meth != null && argsTuple != null && meth.getListOfAttributes ().size () == argsTuple.getComponents ().size ())
+            // Method was found and the arguments provided are correct
+            return new AvatarTermFunction (meth, argsTuple);
+
+        TraceManager.addDev ("Function call '" + toParse + "' couldn't be parsed");
+
+        return null;
+    }
+
+    public AvatarMethod getMethod () {
+        return this.method;
+    }
+
+    public LinkedList<AvatarTerm> getArgs () {
+        return this.args.getComponents ();
+    }
+
+    public void addArgument (AvatarTerm term) {
+        this.args.addComponent (term);
+    }
+
+    public boolean isAMethodCall () {
+        return true;
+    }
+
+    public boolean isLeftHand () {
+        return false;
+    }
+
+    public String getName () {
+        return this.toString ();
+    }
+
+    public String toString () {
+        return this.method.getName () + " " + this.args.toString ();
     }
 }

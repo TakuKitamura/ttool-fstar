@@ -245,152 +245,6 @@ public class AvatarSpecification extends AvatarElement {
         return null;
     }
 
-    public static boolean isAVariableSettingString(String _action) {
-        int index = _action.indexOf('=');
-
-        if (index == -1) {
-            return false;
-        }
-
-        String tmp = _action.substring(index+1, _action.length()).trim();
-
-        index = tmp.indexOf('(');
-
-        if (index == -1) {
-            return true;
-        }
-
-        tmp = tmp.substring(0, index);
-
-        if (AvatarAttribute.isAValidAttributeName(tmp)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static boolean isABasicVariableSettingString(String _action) {
-        int index = _action.indexOf('=');
-
-        if (index == -1) {
-            return false;
-        }
-
-        String name0 = _action.substring(index+1, _action.length()).trim();
-        String name1 = _action.substring(0, index).trim();
-
-        if (!AvatarAttribute.isAValidAttributeName(name0)) {
-            return false;
-        }
-
-        if (!AvatarAttribute.isAValidAttributeName(name1)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static String getMethodCallFromAction(String _action) {
-        int index = _action.indexOf('=');
-        if (index > -1) {
-            _action = _action.substring(index+1, _action.length()).trim();
-        }
-
-        index = _action.indexOf('(');
-        if (index == -1) {
-            return _action;
-        }
-        return _action.substring(0, index);
-    }
-
-    public static int getNbOfParametersInAction(String _action) {
-        int index = _action.indexOf('=');
-        if (index > -1) {
-            _action = _action.substring(index+1, _action.length()).trim();
-        }
-
-        index = _action.indexOf('(');
-        if (index == -1) {
-            return 0;
-        }
-
-        String actions  = _action.substring(index+1, _action.length()).trim();
-
-        index = actions.indexOf(')');
-        if (index == -1) {
-            return 0;
-        }
-
-        actions = actions.substring(0, index).trim();
-
-        if (actions.length() == 0) {
-            return 0;
-        }
-
-        int cpt = 1;
-        while ((index = actions.indexOf(',')) != -1) {
-            cpt ++;
-            actions = actions.substring(index+1, actions.length()).trim();
-        }
-
-        return cpt;
-    }
-
-    public static int getNbOfReturnParametersInAction(String _action) {
-        int index = _action.indexOf('=');
-        if (index == -1) {
-            return 0;
-
-        }
-
-        _action = _action.substring(0, index).trim();
-
-        index = _action.indexOf('(');
-        if (index == -1) {
-            return 0;
-        }
-
-        String actions  = _action.substring(index+1, _action.length()).trim();
-
-        index = actions.indexOf(')');
-        if (index == -1) {
-            return 0;
-        }
-
-        actions = actions.substring(0, index).trim();
-
-        if (actions.length() == 0) {
-            return 0;
-        }
-
-        int cpt = 1;
-        while ((index = actions.indexOf(',')) != -1) {
-            cpt ++;
-            actions = actions.substring(index+1, actions.length()).trim();
-        }
-
-        return cpt;
-    }
-
-    public static String getParameterInAction(String _action, int _index) {
-        int nb = getNbOfParametersInAction(_action);
-        if (!(_index < nb) || (_index < 0)) {
-            return null;
-        }
-
-        int index = _action.indexOf('=');
-        if (index > -1) {
-            _action = _action.substring(index+1, _action.length()).trim();
-        }
-
-        int index1 = _action.indexOf('(');
-        int index2 = _action.indexOf(')');
-        String actions = _action.substring(index1+1, index2).trim();
-        String actionss[] = actions.split(",");
-        return actionss[_index].trim();
-
-    }
-
     public AvatarStateMachineElement getStateMachineElementFromReferenceObject(Object _o) {
         AvatarStateMachineElement asme;
         for(AvatarBlock block: blocks) {
@@ -436,26 +290,13 @@ public class AvatarSpecification extends AvatarElement {
         return null;
     }
 
-    public static boolean isElseGuard(String _guard) {
-        if (_guard == null) {
-            return false;
-        }
-
-        String guard = Conversion.replaceAllChar(_guard, ' ', "").trim();
-
-        return guard.compareTo("[else]") == 0;
-    }
-
     public boolean hasLossyChannel() {
-        for(AvatarRelation relation: relations) {
-            if (relation.isLossy()) {
+        for(AvatarRelation relation: relations)
+            if (relation.isLossy())
                 return true;
-            }
-        }
 
         return false;
     }
-
 
     public void makeRobustness() {
         TraceManager.addDev("Make robustness");

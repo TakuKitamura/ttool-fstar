@@ -84,6 +84,26 @@ public class AvatarStateMachine extends AvatarElement {
         return elements;
     }
 
+    private void getSimplifiedElementsAux (HashMap<AvatarStateMachineElement, Integer> simplifiedElements, HashSet<AvatarStateMachineElement> visited, AvatarStateMachineElement root) {
+        if (visited.contains (root)) {
+            Integer name = simplifiedElements.get (root);
+            if (name == null)
+                simplifiedElements.put (root, new Integer (simplifiedElements.size ()));
+        }
+        else {
+            visited.add (root);
+            for (AvatarStateMachineElement asme: root.nexts)
+                this.getSimplifiedElementsAux (simplifiedElements, visited, asme);
+        }
+    }
+
+    public HashMap<AvatarStateMachineElement, Integer> getSimplifiedElements () {
+        HashMap<AvatarStateMachineElement, Integer> simplifiedElements = new HashMap<AvatarStateMachineElement, Integer> ();
+        simplifiedElements.put (startState, new Integer (0));
+        this.getSimplifiedElementsAux (simplifiedElements, new HashSet<AvatarStateMachineElement> (), startState);
+        return simplifiedElements;
+    }
+
     public String toString() {
         StringBuffer sb = new StringBuffer("State machine Id=" + getID() + "\n");
 
@@ -303,7 +323,7 @@ public class AvatarStateMachine extends AvatarElement {
                     addElement(as);
                     as.setHidden(true);
                     as.setState(_currentState);
-                    AvatarTransition atn = new AvatarTransition("splittransition_after", null);
+                    AvatarTransition atn = new AvatarTransition(_at.getBlock (), "splittransition_after", null);
                     addElement(atn);
                     element.removeNext(_at);
                     element.addNext(atn);
@@ -583,7 +603,7 @@ public class AvatarStateMachine extends AvatarElement {
                     addElement(as);
                     as.setHidden(true);
                     as.setState(_currentState);
-                    AvatarTransition atn = new AvatarTransition("internaltransition", null);
+                    AvatarTransition atn = new AvatarTransition(_at.getBlock(), "internaltransition", null);
                     addElement(atn);
                     element.removeNext(_at);
                     element.addNext(atn);
@@ -612,7 +632,7 @@ public class AvatarStateMachine extends AvatarElement {
                     as = new AvatarState(tmp, null);
                     addElement(as);
                     as.setHidden(true);
-                    at = new AvatarTransition("internaltransition", null);
+                    at = new AvatarTransition(_at.getBlock (), "internaltransition", null);
                     addElement(at);
                     //_element -> at -> as -> element
 
@@ -634,7 +654,7 @@ public class AvatarStateMachine extends AvatarElement {
                         as = new AvatarState(tmp, null);
                         addElement(as);
                         as.setHidden(true);
-                        at = new AvatarTransition("internaltransition", null);
+                        at = new AvatarTransition(_at.getBlock (), "internaltransition", null);
                         addElement(at);
                         //_element -> at -> as -> element
 
@@ -912,8 +932,8 @@ public class AvatarStateMachine extends AvatarElement {
             ast.setTimerValue(val.getName());
             ast.setTimer(aa);
 
-            newat0 = new AvatarTransition("transition_settimer_" + aa.getName(), _block.getReferenceObject());
-            newat1 = new AvatarTransition("transition_settimer_" + aa.getName(), _block.getReferenceObject());
+            newat0 = new AvatarTransition(_block, "transition_settimer_" + aa.getName(), _block.getReferenceObject());
+            newat1 = new AvatarTransition(_block, "transition_settimer_" + aa.getName(), _block.getReferenceObject());
 
             elements.add(ar);
             elements.add(ast);
@@ -932,8 +952,8 @@ public class AvatarStateMachine extends AvatarElement {
         // Wait for timer expiration on the transition
         AvatarExpireTimer aet = new AvatarExpireTimer("expiretimer_" + aa.getName(), _block.getReferenceObject());
         aet.setTimer(aa);
-        newat0 = new AvatarTransition("transition0_expiretimer_" + aa.getName(), _block.getReferenceObject());
-        newat1 = new AvatarTransition("transition1_expiretimer_" + aa.getName(), _block.getReferenceObject());
+        newat0 = new AvatarTransition(_block, "transition0_expiretimer_" + aa.getName(), _block.getReferenceObject());
+        newat1 = new AvatarTransition(_block, "transition1_expiretimer_" + aa.getName(), _block.getReferenceObject());
         as = new AvatarState("state1_expiretimer_" + aa.getName(), _block.getReferenceObject());
         addElement(aet);
         addElement(newat0);
@@ -1004,7 +1024,7 @@ public class AvatarStateMachine extends AvatarElement {
 
             AvatarState myState = new AvatarState("statefortransition__" + ID_ELT, _at.getReferenceObject());
             myState.setHidden(true);
-            AvatarTransition at2 = new AvatarTransition("transitionfortransition__" + ID_ELT, _at.getReferenceObject());
+            AvatarTransition at2 = new AvatarTransition(_at.getBlock (), "transitionfortransition__" + ID_ELT, _at.getReferenceObject());
             ID_ELT ++;
             AvatarTransition at1 = (AvatarTransition)(next.getNext(0));
 
@@ -1019,7 +1039,7 @@ public class AvatarStateMachine extends AvatarElement {
             return;
         } else {
             AvatarState myState = new AvatarState("statefortransition__" + ID_ELT, _at.getReferenceObject());
-            AvatarTransition at = new AvatarTransition("transitionfortransition__", _at.getReferenceObject());
+            AvatarTransition at = new AvatarTransition(_at.getBlock (), "transitionfortransition__", _at.getReferenceObject());
             at.addNext(_at.getNext(0));
             _at.removeAllNexts();
             _at.addNext(myState);
@@ -1154,10 +1174,10 @@ public class AvatarStateMachine extends AvatarElement {
         return name + id;
     }
 
-    public void handleUnfollowedStartState() {
+    public void handleUnfollowedStartState(AvatarBlock _block) {
         if (startState.nbOfNexts() == 0) {
             AvatarStopState stopState = new AvatarStopState("__StopState", startState.getReferenceObject());
-            AvatarTransition at = new AvatarTransition("__toStop", startState.getReferenceObject());
+            AvatarTransition at = new AvatarTransition(_block, "__toStop", startState.getReferenceObject());
             addElement(stopState);
             addElement(at);
             startState.addNext(at);

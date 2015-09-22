@@ -15,7 +15,7 @@ GZIP = gzip -9 -f
 DEBUG  = -g
 CLASSPATH = -classpath
 SOURCEPATH = -sourcepath
-PACKAGE = avatartranslator avatartranslator/toexecutable avatartranslator/directsimulation avatartranslator/tocppsim avatartranslator/touppaal avatartranslator/toturtle avatartranslator/toproverif avatartranslator/totpn automata compiler/tmlparser vcd nc ddtranslator launcher myutil tpndescription sddescription sdtranslator tepe translator tmltranslator tmltranslator/tmlcp tmltranslator/toautomata tmltranslator/tosystemc  tmltranslator/tomappingsystemc tmltranslator/tomappingsystemc2 tmltranslator/tomappingsystemc3 tmltranslator/touppaal tmltranslator/toturtle translator/tojava translator/tosimujava translator/totpn translator/touppaal  ui ui/avatarbd ui/avatardd ui/avatarsmd ui/avatarrd ui/avatarpd ui/avatarcd ui/avatarad ui/ad ui/cd ui/oscd ui/osad ui/dd ui/ebrdd ui/file ui/graph ui/iod ui/ncdd ui/procsd ui/prosmdui/prosmd/util ui/tmlad ui/tmlcd ui/tmldd ui/tmlcomp ui/req ui/sd ui/tree ui/ucd ui/window tmltranslator tmltranslator/toturtle req/ebrdd tmltranslator/tosystemc tmatrix proverifspec uppaaldesc fr/inria/oasis/vercors/cttool/model remotesimulation tmltranslator/ctranslator attacktrees myutil/externalSearch
+#PACKAGE = avatartranslator avatartranslator/toexecutable avatartranslator/directsimulation avatartranslator/tocppsim avatartranslator/touppaal avatartranslator/toturtle avatartranslator/toproverif avatartranslator/totpn automata compiler/tmlparser vcd nc ddtranslator launcher myutil tpndescription sddescription sdtranslator tepe translator tmltranslator tmltranslator/tmlcp tmltranslator/toautomata tmltranslator/tosystemc  tmltranslator/tomappingsystemc tmltranslator/tomappingsystemc2 tmltranslator/tomappingsystemc3 tmltranslator/touppaal tmltranslator/toturtle translator/tojava translator/tosimujava translator/totpn translator/touppaal  ui ui/avatarbd ui/avatardd ui/avatarsmd ui/avatarrd ui/avatarpd ui/avatarcd ui/avatarad ui/ad ui/cd ui/oscd ui/osad ui/dd ui/ebrdd ui/file ui/graph ui/iod ui/ncdd ui/procsd ui/prosmdui/prosmd/util ui/tmlad ui/tmlcd ui/tmldd ui/tmlcomp ui/req ui/sd ui/tree ui/ucd ui/window tmltranslator tmltranslator/toturtle req/ebrdd tmltranslator/tosystemc tmatrix proverifspec uppaaldesc fr/inria/oasis/vercors/cttool/model remotesimulation tmltranslator/ctranslator attacktrees myutil/externalSearch
 BUILDER = builder.jar
 BUILD_INFO = build.txt
 BUILD_TO_MODIFY = src/ui/DefaultText.java
@@ -72,6 +72,7 @@ TTOOL_TARGET = $(TTOOL_PATH)/TTool_install/TTool
 TTOOL_TARGET_RELEASE = $(TTOOL_PATH)/TTool_install
 TTOOL_PREINSTALL = $(TTOOL_PATH)/preinstallTTool
 TTOOL_PREINSTALL_LINUX = $(TTOOL_PREINSTALL)/linux
+PACKAGE = $(shell cd $(TTOOL_SRC); find . -type d)
 
 RELEASE_STD_FILES_LINUX_EXE = ttool_unix
 RELEASE_STD_FILES_WINDIWS_EXE = ttool_windows.bat
@@ -299,3 +300,8 @@ clean:
 		rm -f $(TTOOL_SRC)/$$p/*.class $(TTOOL_SRC)/$$p/*.java~; \
 	done
 
+ultraclean: clean
+	@@for p in $(RELEASE_STD_FILES_BIN); do \
+		echo rm -f $$p;\
+		rm -f $(TTOOL_BIN)/$$p; \
+	done

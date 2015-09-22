@@ -70,5 +70,8 @@ public abstract class AvatarTimerOperator extends AvatarStateMachineElement {
 		
 		return "";
 	}
-	
+
+        public void translate (AvatarTranslator translator, Object arg) {
+            translator.translateTimerOperator (this, arg);
+        }
 }

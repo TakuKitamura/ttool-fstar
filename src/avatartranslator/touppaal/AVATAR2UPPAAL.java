@@ -685,7 +685,7 @@ public class AVATAR2UPPAAL {
 			//TraceManager.addDev("Transition with guard = " + at.getGuard() + " previous=" + _previousState);
 			if ((at.getNext(0) instanceof AvatarActionOnSignal) && !(at.hasActions()) && _previousState) {
 				if (at.isGuarded()) {
-					makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, at.getGuard(), false, false);
+					makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, at.getGuard().toString (), false, false);
 				}  else {
 					makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, null, false, false);
 				}
@@ -762,7 +762,7 @@ public class AVATAR2UPPAAL {
 				//_previous.setCommitted();
 				loc1 = addLocation(_template);
 				tr = addTransition(_template, _previous, loc1);
-				tmps = convertGuard(_at.getGuard());
+				tmps = convertGuard(_at.getGuard().toString ());
 				setGuard(tr, tmps);
 				TraceManager.addDev("MAKE CHOICE from guard");
 				setSynchronization(tr, "makeChoice!");
@@ -786,10 +786,10 @@ public class AVATAR2UPPAAL {
 		if (_at.hasActions()) {
 			for(i=0; i<_at.getNbOfAction(); i++) {
 				TraceManager.addDev("Adding Action :" + _at.getAction(i));
-				tmps = _at.getAction(i);
+				tmps = _at.getAction(i).toString ();
 				
 				// Setting a variable
-				if (AvatarSpecification.isAVariableSettingString(tmps)) {
+				if (AvatarAction.createFromString (_block, tmps).isAVariableSetting ()) {
 					loc1 = addLocation(_template);
 					//loc.setCommitted();
 					tr = addTransition(_template, loc, loc1);
@@ -813,7 +813,7 @@ public class AVATAR2UPPAAL {
 					} else {
 						loc.setUrgent();
 					}
-					setSynchronization(tr, AvatarSpecification.getMethodCallFromAction(tmps) + "!");
+					setSynchronization(tr, ((AvatarTermFunction) AvatarAction.createFromString (_block, tmps)).getMethod ().getName () + "!");
 					madeTheChoice = true;
 					makeMethodCall(_block, tr, tmps);
 					loc = loc1;
@@ -875,7 +875,7 @@ public class AVATAR2UPPAAL {
 				
 				// Computing guard
 				if (at.isGuarded()) {
-					tmps = convertGuard(at.getGuard());
+					tmps = convertGuard(at.getGuard().toString ());
 				} else {
 					tmps = "";
 				}
@@ -891,8 +891,8 @@ public class AVATAR2UPPAAL {
 					}
 					
 				} else if (at.hasActions()) {
-					tmps0 = at.getAction(0);
-					if (AvatarSpecification.isAVariableSettingString(tmps0)) {
+					tmps0 = at.getAction(0).toString ();
+					if (AvatarAction.createFromString (_block, tmps0).isAVariableSetting ()) {
 						// We must introduce a fake action
 						tr = addTransition(_template, _loc, locend);
 						if (tmps != null) {
@@ -994,53 +994,57 @@ public class AVATAR2UPPAAL {
 	}
 	
 	public void makeMethodCall(AvatarBlock _block, UPPAALTransition _tr, String _call) {
-		int j;
-		AvatarAttribute aa;
-		String result = "";
-		int nbOfInt = 0;
-		int nbOfBool = 0;
-		String tmps;
-		
-		TraceManager.addDev("Making method call:" + _call);
-		
-		String mc = "";
-		AvatarBlock block = _block;
-		String method = AvatarSpecification.getMethodCallFromAction(_call);
-		
-		block = _block.getBlockOfMethodWithName(method);
-		
-		if (block != null) {
-			mc = block.getName() + "__" + method + "!";
-		}
-		
-		TraceManager.addDev("Method name:" + mc);
-		
-		setSynchronization(_tr, mc);
-		for(j=0; j<AvatarSpecification.getNbOfParametersInAction(_call); j++) {
-			tmps = AvatarSpecification.getParameterInAction(_call, j);
-			TraceManager.addDev("Attribute #j: " + tmps);
-			aa = _block.getAvatarAttributeWithName(tmps);
-			if (aa != null) {
-				if ((nbOfInt > 0) || (nbOfBool > 0)) {
-					result = result + ",\n";
-				}
-				if (aa.isInt()) {
-					result = result + ACTION_INT + nbOfInt + " =" + aa.getName();
-					nbOfInt ++;
-				} else {
-					result = result + ACTION_BOOL + nbOfBool + " =" + aa.getName();
-					nbOfBool ++;
-				}
-			}
-		}
-		
-		if (result.length() > 0) {
-			setAssignment(_tr, result);
-		}
-		
-		nbOfIntParameters = Math.max(nbOfIntParameters, nbOfInt);
-		nbOfBooleanParameters = Math.max(nbOfBooleanParameters, nbOfBool);
-		
+            int j;
+            AvatarAttribute aa;
+            String result = "";
+            int nbOfInt = 0;
+            int nbOfBool = 0;
+            String tmps;
+            
+            TraceManager.addDev("Making method call:" + _call);
+            
+            String mc = "";
+            AvatarBlock block = _block;
+            AvatarAction action = AvatarAction.createFromString (_block, _call);
+            if (!action.isAMethodCall ())
+                return;
+
+            AvatarMethod avMethod = ((AvatarTermFunction) action).getMethod ();
+            String method = avMethod.getName ();
+            
+            block = _block.getBlockOfMethodWithName(method);
+            
+            if (block != null) {
+                    mc = block.getName() + "__" + method + "!";
+            }
+            
+            TraceManager.addDev("Method name:" + mc);
+            
+            setSynchronization(_tr, mc);
+            LinkedList<AvatarTerm> arguments = ((AvatarTermFunction) action).getArgs ();
+            for(AvatarTerm arg: arguments) {
+                if (!(arg instanceof AvatarAttribute))
+                    continue;
+
+                aa = (AvatarAttribute) arg;
+                if ((nbOfInt > 0) || (nbOfBool > 0))
+                    result = result + ",\n";
+
+                if (aa.isInt()) {
+                    result = result + ACTION_INT + nbOfInt + " =" + aa.getName();
+                    nbOfInt ++;
+                } else {
+                    result = result + ACTION_BOOL + nbOfBool + " =" + aa.getName();
+                    nbOfBool ++;
+                }
+            }
+            
+            if (result.length() > 0) {
+                    setAssignment(_tr, result);
+            }
+            
+            nbOfIntParameters = Math.max(nbOfIntParameters, nbOfInt);
+            nbOfBooleanParameters = Math.max(nbOfBooleanParameters, nbOfBool);
 	}
 	
 	public UPPAALLocation makeTimeInterval(UPPAALTemplate _template, UPPAALLocation _previous, String _minint, String _maxint) {

@@ -36,60 +36,60 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarSignal
-   * Signals in Avatar ...
-   * Creation: 20/05/2010
-   * @version 1.0 20/05/2010
-   * @author Ludovic APVRILLE
+   * Class AvatarTerm
+   * Creation: 16/09/2015
+   * @version 1.0 16/09/2015
+   * @author Florian LUGOU
    * @see
    */
 
 
 package avatartranslator;
 
-import java.util.*;
+import myutil.TraceManager;
+import translator.RTLOTOSKeyword;
+import translator.tojava.JKeyword;
 
-import myutil.*;
+public interface AvatarTerm {
+    public boolean isLeftHand ();
+    public String getName ();
 
-public class AvatarSignal extends AvatarMethod {
+    public static AvatarTerm createFromString (AvatarBlock block, String toParse) {
+        AvatarTerm result = AvatarTermFunction.createFromString (block, toParse);
+        if (result != null)
+            return result;
 
-    // Signa type
-    public final static int IN = 0;
-    public final static int OUT = 1;
+        result = AvatarTuple.createFromString (block, toParse);
+        if (result != null)
+            return result;
 
-    private int inout;
+        toParse = toParse.trim ();
+        result = block.getAvatarAttributeWithName (toParse);
+        if (result != null)
+            return result;
+        TraceManager.addDev ("AvatarAttribute '" + toParse + "' couldn't be parsed");
 
+        if (isValidName (toParse))
+            return new AvatarLocalVar (toParse);
+        TraceManager.addDev ("AvatarLocalVar '" + toParse + "' couldn't be parsed");
 
-    public AvatarSignal(String _name, int _inout, Object _referenceObject) {
-        super(_name, _referenceObject);
-        inout = _inout;
+        TraceManager.addDev ("AvatarTerm '" + toParse + "' couldn't be parsed");
+        return null;
     }
 
-    public int getInOut() {
-        return inout;
-    }
+    public static boolean isValidName (String _name) {
+        String toParse = _name.trim ();
+        String lowerid = toParse.toLowerCase();
+        boolean b1, b2, b3, b4, b5;
+        b1 = (toParse.substring(0,1)).matches("[a-zA-Z]");
+        b2 = toParse.matches("\\w*");
+        b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
+        b4 = true;
+        for (int i=0; i<5; i++)
+            if (lowerid.equals(AvatarType.getStringType(i).toLowerCase()))
+                b4 = false;
+        b5 = !JKeyword.isAKeyword(lowerid);
 
-    public void setInOut(int _inout) {
-        inout = _inout;
-    }
-
-    public boolean isOut() {
-        return (inout == OUT);
-    }
-
-    public boolean isIn() {
-        return (inout == IN);
-    }
-
-    public static boolean isAValidSignal(String _signal) {
-        return AvatarTerm.isValidName (_signal);
-    }
-
-    public String toString() {
-        String ret = super.toString();
-        if (isOut()) {
-            return "out " + ret;
-        }
-        return "in " + ret;
+        return (b1 && b2 && b3 && b4 && b5);
     }
 }

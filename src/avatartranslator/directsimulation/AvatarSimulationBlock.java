@@ -174,7 +174,7 @@ public class AvatarSimulationBlock  {
 				AvatarTransition at = (AvatarTransition)(asme);
 				if (at.isGuarded()) {
 					// Must evaluate the guard
-					String guard = at.getGuard();
+					String guard = at.getGuard().toString ();
 					String s = Conversion.replaceAllString(guard, "[", "").trim();
 					s = Conversion.replaceAllString(s, "]", "").trim();
 					guardOk = evaluateBoolExpression(s, lastTransaction.attributeValues);
@@ -352,7 +352,7 @@ public class AvatarSimulationBlock  {
 				if (at.hasActions()) {
 					actions = new Vector<String>();
 					for(i=0; i<at.getNbOfAction(); i++) {
-						action = at.getAction(i);
+						action = at.getAction(i).toString ();
 						//TraceManager.addDev("action #" + i  + " = " + action);
 						makeAction(action, attributeValues, actions);
 					}
@@ -535,7 +535,9 @@ public class AvatarSimulationBlock  {
 		String nameOfMethod;
 		int ind;
 		
-		if (AvatarTransition.isAMethodCall(_action)) {
+                AvatarAction action = AvatarAction.createFromString (block, _action);
+                // TODO: use the new AvatarAction class instead of re-parsing
+		if (action.isAMethodCall ()) {
 			// Evaluate all elements of the method call!
 			ind = _action.indexOf("(");
 			if (ind == -1) {

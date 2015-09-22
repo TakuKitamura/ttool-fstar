@@ -63,4 +63,7 @@ public class AvatarStartState extends AvatarStateMachineElement {
         return "Start state";
     }
 
+    public void translate (AvatarTranslator translator, Object arg) {
+        translator.translateStartState (this, arg);
+    }
 }

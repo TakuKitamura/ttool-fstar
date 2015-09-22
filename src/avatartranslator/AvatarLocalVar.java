@@ -36,60 +36,32 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarSignal
-   * Signals in Avatar ...
-   * Creation: 20/05/2010
-   * @version 1.0 20/05/2010
-   * @author Ludovic APVRILLE
+   * Class AvatarLocalVar
+   * Creation: 16/09/2015
+   * @version 1.0 16/09/2015
+   * @author Florian LUGOU
    * @see
    */
 
 
 package avatartranslator;
 
-import java.util.*;
+public class AvatarLocalVar implements AvatarTerm, AvatarLeftHand {
+    String name;
 
-import myutil.*;
-
-public class AvatarSignal extends AvatarMethod {
-
-    // Signa type
-    public final static int IN = 0;
-    public final static int OUT = 1;
-
-    private int inout;
-
-
-    public AvatarSignal(String _name, int _inout, Object _referenceObject) {
-        super(_name, _referenceObject);
-        inout = _inout;
+    public AvatarLocalVar (String _name) {
+        this.name = _name;
     }
 
-    public int getInOut() {
-        return inout;
+    public String getName () {
+        return this.name;
     }
 
-    public void setInOut(int _inout) {
-        inout = _inout;
+    public boolean isLeftHand () {
+        return true;
     }
 
-    public boolean isOut() {
-        return (inout == OUT);
-    }
-
-    public boolean isIn() {
-        return (inout == IN);
-    }
-
-    public static boolean isAValidSignal(String _signal) {
-        return AvatarTerm.isValidName (_signal);
-    }
-
-    public String toString() {
-        String ret = super.toString();
-        if (isOut()) {
-            return "out " + ret;
-        }
-        return "in " + ret;
+    public String toString () {
+        return this.name;
     }
 }

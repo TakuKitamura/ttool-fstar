@@ -36,60 +36,53 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarSignal
-   * Signals in Avatar ...
-   * Creation: 20/05/2010
-   * @version 1.0 20/05/2010
-   * @author Ludovic APVRILLE
+   * Class AvatarAction
+   * Creation: 16/09/2015
+   * @version 1.0 16/09/2015
+   * @author Florian LUGOU
    * @see
    */
 
-
 package avatartranslator;
 
-import java.util.*;
+import myutil.TraceManager;
 
-import myutil.*;
+public abstract class AvatarAction {
+    String action;
 
-public class AvatarSignal extends AvatarMethod {
+    public static AvatarAction createFromString (AvatarBlock block, String toParse) {
+        AvatarAction result = null;
 
-    // Signa type
-    public final static int IN = 0;
-    public final static int OUT = 1;
+        int indexEq = toParse.indexOf("=");
 
-    private int inout;
+        if (indexEq == -1)
+            // No equal sign: this must be a function call
+            result = AvatarTermFunction.createFromString (block, toParse);
 
+        else {
+            // This should be an assignment
+            AvatarTerm leftHand = AvatarTerm.createFromString (block, toParse.substring (0, indexEq));
+            AvatarTerm rightHand = AvatarTerm.createFromString (block, toParse.substring (indexEq + 1));
 
-    public AvatarSignal(String _name, int _inout, Object _referenceObject) {
-        super(_name, _referenceObject);
-        inout = _inout;
-    }
-
-    public int getInOut() {
-        return inout;
-    }
-
-    public void setInOut(int _inout) {
-        inout = _inout;
-    }
-
-    public boolean isOut() {
-        return (inout == OUT);
-    }
-
-    public boolean isIn() {
-        return (inout == IN);
-    }
-
-    public static boolean isAValidSignal(String _signal) {
-        return AvatarTerm.isValidName (_signal);
-    }
-
-    public String toString() {
-        String ret = super.toString();
-        if (isOut()) {
-            return "out " + ret;
+            if (leftHand != null && rightHand != null && leftHand.isLeftHand ())
+                result = new AvatarActionAssignment ((AvatarLeftHand) leftHand, rightHand);
         }
-        return "in " + ret;
+
+        if (result == null)
+            TraceManager.addDev ("Action '" + toParse + "' couldn't be parsed");
+
+        return result;
+    }
+
+    public boolean isAMethodCall () {
+        return false;
+    }
+
+    public boolean isAVariableSetting () {
+        return false;
+    }
+
+    public boolean isABasicVariableSetting () {
+        return false;
     }
 }

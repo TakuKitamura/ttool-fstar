@@ -116,4 +116,7 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
         }
     }
 
+    public void translate (AvatarTranslator translator, Object arg) {
+        translator.translateActionOnSignal (this, arg);
+    }
 }

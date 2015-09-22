@@ -51,41 +51,110 @@ import myutil.*;
 
 
 public class AvatarTransition extends AvatarStateMachineElement {
-    private String guard = "[ ]";
+    private AvatarGuard guard;
     private String minDelay = "", maxDelay = "";
     private String minCompute = "", maxCompute = "";
+    private AvatarBlock block;
 
-    private LinkedList<String> actions; // actions on variable, or method call
+    private LinkedList<AvatarAction> actions; // actions on variable, or method call
 
-    public AvatarTransition(String _name, Object _referenceObject) {
+    public AvatarTransition(AvatarBlock _block, String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-        actions = new LinkedList<String>();
+        actions = new LinkedList<AvatarAction>();
+        this.guard = new AvatarGuard ("[ ]");
+        this.block = _block;
     }
 
-
-    public String getGuard() {
+    public AvatarGuard getGuard() {
         return guard;
     }
 
-    public void setGuard(String _guard) {
-        guard = _guard;
+    public void setGuard(AvatarGuard _guard) {
+        this.guard = _guard;
     }
 
+    public void setGuard (String _guard) {
+        this.guard = new AvatarGuard (_guard);
+    }
 
     public void addGuard(String _g) {
-        guard = "(" + guard + ") and (" + _g + ")";
+        this.guard.addGuard (_g);
     }
 
     public int getNbOfAction() {
         return actions.size();
     }
 
-    public String getAction(int _index) {
+    public LinkedList<AvatarAction> getActions () {
+        return this.actions;
+    }
+
+    public AvatarBlock getBlock () {
+        return this.block;
+    }
+
+    private <T extends AvatarAction> Iterable<T> getIterableForClass (Class<T> childClass) {
+        return new Iterable<T> () {
+            public Iterator<T> iterator () {
+                return new Iterator<T> () {
+                    private Iterator<AvatarAction> actions = AvatarTransition.this.actions.iterator ();
+                    private boolean hasCached = false;
+                    private T cached;
+
+                    public boolean hasNext () {
+                        if (this.hasCached)
+                            return true;
+                        while (this.actions.hasNext ()) {
+                            AvatarAction action = this.actions.next ();
+                            if (childClass.isInstance (action)) {
+                                this.hasCached = true;
+                                this.cached = childClass.cast (action);
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+
+                    public T next () {
+                        if (this.hasCached) {
+                            this.hasCached = false;
+                            return this.cached;
+                        }
+
+                        while (this.actions.hasNext ()) {
+                            AvatarAction action = this.actions.next ();
+                            if (childClass.isInstance (action))
+                                return childClass.cast (action);
+                        }
+
+                        return null;
+                    }
+                };
+            }
+        };
+    }
+
+    public Iterable<AvatarTermFunction> getFunctionCalls () {
+        return this.getIterableForClass (AvatarTermFunction.class);
+    }
+
+    public Iterable<AvatarActionAssignment> getAssignments () {
+        return this.getIterableForClass (AvatarActionAssignment.class);
+    }
+
+    public AvatarAction getAction(int _index) {
         return actions.get(_index);
     }
 
     public void addAction(String _action) {
-        actions.add(_action);
+        AvatarAction aa = AvatarAction.createFromString (block, _action);
+        if (aa != null)
+            actions.add(aa);
+    }
+
+    public void addAction (AvatarAction _action) {
+        if (_action != null)
+            this.actions.add (_action);
     }
 
     public void setDelays(String _minDelay, String _maxDelay) {
@@ -117,26 +186,21 @@ public class AvatarTransition extends AvatarStateMachineElement {
         if (maxCompute.trim().length() ==0) {
             return getMinCompute();
         }
-        return maxCompute;
-    }
+        return maxCompute; }
 
     public boolean hasElseGuard() {
         if (guard == null) {
             return false;
         }
 
-        return AvatarSpecification.isElseGuard(guard);
+        return guard.isElseGuard();
     }
 
     public boolean hasNonDeterministicGuard() {
-        if (guard == null) {
+        if (guard == null)
             return false;
-        }
 
-        String tmp = Conversion.replaceAllChar(guard, ' ', "").trim();
-
-        return tmp.compareTo("[]") == 0;
-
+        return guard.isNonDeterministicGuard ();
     }
 
     public boolean isEmpty() {
@@ -149,7 +213,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
 
     public AvatarTransition cloneMe() {
-        AvatarTransition at = new AvatarTransition(getName(), getReferenceObject());
+        AvatarTransition at = new AvatarTransition(block, getName(), getReferenceObject());
         at.setGuard(getGuard());
         at.setDelays(getMinDelay(), getMaxDelay());
         at.setComputes(getMinCompute(), getMaxCompute());
@@ -166,7 +230,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public AvatarStateMachineElement basicCloneMe() {
-        AvatarTransition at = new AvatarTransition(getName() + "_clone", getReferenceObject());
+        AvatarTransition at = new AvatarTransition(block, getName() + "_clone", getReferenceObject());
 
         at.setGuard(getGuard());
 
@@ -183,7 +247,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
         if (actions.size() < 2) {
             return;
         }
-        String action = actions.get(0);
+        AvatarAction action = actions.get(0);
         actions.clear();
         actions.add(action);
     }
@@ -201,20 +265,10 @@ public class AvatarTransition extends AvatarStateMachineElement {
     //}
 
     public boolean isGuarded() {
-        if (guard == null) {
+        if (guard == null)
             return false;
-        }
 
-        if (guard.trim().length() == 0) {
-            return false;
-        }
-
-        String s = Conversion.replaceAllString(guard, " ", "").trim();
-        if (s.compareTo("[]") == 0) {
-            return false;
-        }
-
-        return true;
+        return guard.isGuarded ();
     }
 
     public boolean hasDelay() {
@@ -237,8 +291,8 @@ public class AvatarTransition extends AvatarStateMachineElement {
             return false;
         }
 
-        for(String s: actions) {
-            if (s.trim().length() > 0) {
+        for(AvatarAction a: actions) {
+            if (a.toString ().trim().length() > 0) {
                 return true;
             }
         }
@@ -256,7 +310,8 @@ public class AvatarTransition extends AvatarStateMachineElement {
             ret += "minCompute=" + getMinCompute() + " maxcompute=" + getMaxCompute() + "\n";
         }
 
-        for(String s: actions) {
+        for(AvatarAction a: actions) {
+            String s = a.toString ();
             if (s.trim().length() > 0) {
                 ret += s.trim() + " / ";
             }
@@ -273,40 +328,9 @@ public class AvatarTransition extends AvatarStateMachineElement {
     // Assumes actions are correctly formatted
     public boolean hasMethodCall() {
 
-
-        for(String action: actions) {
-            if (isAMethodCall(action)) {
+        for(AvatarAction action: actions)
+            if (action.isAMethodCall())
                 return true;
-            }
-        }
-        return false;
-
-    }
-
-    public static boolean isAMethodCall(String _action) {
-        int index;
-        index = _action.indexOf("=");
-
-        // Method of the form f(...)
-        if (index == -1) {
-            return true;
-        }
-
-        // Method of the form x = f(...)
-        _action = _action.substring(index+1, _action.length()).trim();
-        index = _action.indexOf("(");
-        if (index != -1) {
-            _action = _action.substring(0, index).trim();
-            if (_action.length() == 0) {
-                return false;
-
-            }
-            boolean b1 = (_action.substring(0,1)).matches("[a-zA-Z]");
-            boolean b2 = _action.matches("\\w*");
-            if (b1 && b2) {
-                return true;
-            }
-        }
 
         return false;
     }
@@ -325,19 +349,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
         return "Empty transition";
     }
 
-    public static String getVariableInAction(String action) {
-        action = action.trim();
-        int index = action.indexOf("=");
-        if (index == -1) {
-            return action;
-        }
-
-        return action.substring(0, index).trim();
+    public void translate (AvatarTranslator translator, Object arg) {
+        translator.translateTransition (this, arg);
     }
-
-
-
-
-
-
 }

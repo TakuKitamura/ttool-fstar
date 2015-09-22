@@ -624,11 +624,11 @@ public class GTURTLEModeling {
         return avatarspec;
     }
 
-    public boolean generateProVerifFromAVATAR(String _path, boolean _stateReachability, boolean _advancedTranslation) {
+    public boolean generateProVerifFromAVATAR(String _path, boolean _stateReachability, boolean _advancedTranslation, boolean _typed) {
         avatar2proverif = new AVATAR2ProVerif(avatarspec);
         //tml2uppaal.setChoiceDeterministic(choices);
         //tml2uppaal.setSizeInfiniteFIFO(_size);
-        proverif = avatar2proverif.generateProVerif(true, true, _stateReachability, _advancedTranslation);
+        proverif = avatar2proverif.generateProVerif(true, true, _stateReachability, _advancedTranslation, _typed);
 	warnings = avatar2proverif.getWarnings();
         languageID = PROVERIF;
         mgui.setMode(MainGUI.EDIT_PROVERIF_OK);

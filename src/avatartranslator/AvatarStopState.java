@@ -49,18 +49,21 @@ import java.util.*;
 
 
 public class AvatarStopState extends AvatarStateMachineElement {
-	
-	
+
+
     public AvatarStopState(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
-	
-	public AvatarStateMachineElement basicCloneMe() {
-		return new AvatarStopState(getName(), getReferenceObject());
-	}
-	
-	public String getNiceName() {
-		return "Stop state";
-	}
-    
+
+    public AvatarStateMachineElement basicCloneMe() {
+        return new AvatarStopState(getName(), getReferenceObject());
+    }
+
+    public String getNiceName() {
+        return "Stop state";
+    }
+
+    public void translate (AvatarTranslator translator, Object arg) {
+        translator.translateStopState (this, arg);
+    }
 }

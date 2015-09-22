@@ -118,4 +118,8 @@ public class AvatarState extends AvatarStateMachineElement {
         }
         return entryCode;
     }
+
+    public void translate (AvatarTranslator translator, Object arg) {
+        translator.translateState (this, arg);
+    }
 }

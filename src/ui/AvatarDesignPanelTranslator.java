@@ -1152,19 +1152,20 @@ public class AvatarDesignPanelTranslator {
                     element1 = (AvatarStateMachineElement)(listE.getObject(tgc1));
                     element2 = (AvatarStateMachineElement)(listE.getObject(tgc2));
                     if ((element1 != null) && (element2 != null)) {
-                        at = new AvatarTransition("avatar transition", tgc);
+                        at = new AvatarTransition(_ab, "avatar transition", tgc);
 
                         // Guard
                         tmp = modifyString(asmdco.getGuard());
 
-                        if (AvatarSpecification.isElseGuard(tmp)) {
-                            at.setGuard(tmp);
+                        AvatarGuard guard = new AvatarGuard (tmp);
+                        if (guard.isElseGuard()) {
+                            at.setGuard(guard);
                         } else {
                             error = AvatarSyntaxChecker.isAValidGuard(_as, _ab, tmp);
                             if (error < 0) {
                                 makeError(error, tdp, _ab, tgc, "transition guard", tmp);
                             } else {
-                                at.setGuard(tmp);
+                                at.setGuard(guard);
                             }
                         }
 
@@ -1262,7 +1263,7 @@ public class AvatarDesignPanelTranslator {
             }
         }
 
-        asm.handleUnfollowedStartState();
+        asm.handleUnfollowedStartState(_ab);
 
         // Investigate all states -> put warnings for all empty transitions from a state to the same one (infinite loop)
         int nb;

@@ -246,8 +246,8 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
         }
 
         String g1, g2;
-        g1 = at1.getGuard();
-        g2 = at2.getGuard();
+        g1 = at1.getGuard().toString ();
+        g2 = at2.getGuard().toString ();
 
         g1 = Conversion.replaceAllString(g1, "[", "");
         g1 = Conversion.replaceAllString(g1, "]", "").trim();
@@ -326,6 +326,8 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
     }
 
     public abstract String getNiceName();
+
+    public abstract void translate (AvatarTranslator translator, Object arg);
 
 
 }

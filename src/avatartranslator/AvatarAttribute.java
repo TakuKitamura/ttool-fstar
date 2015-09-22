@@ -53,7 +53,7 @@ import myutil.*;
 import translator.*;
 import translator.tojava.*;
 
-public class AvatarAttribute extends AvatarElement{
+public class AvatarAttribute extends AvatarElement implements AvatarTerm,AvatarLeftHand {
 
     // Types of parameters
     private int type;
@@ -112,29 +112,6 @@ public class AvatarAttribute extends AvatarElement{
         return (type == AvatarType.BOOLEAN);
     }
 
-    public static boolean isAValidAttributeName(String id) {
-        if ((id == null) || (id.length() < 1)) {
-            return false;
-        }
-
-        String lowerid = id.toLowerCase();
-        boolean b1, b2, b3, b4, b5;
-        b1 = (id.substring(0,1)).matches("[a-zA-Z]");
-        b2 = id.matches("\\w*");
-        b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
-        b5 = !JKeyword.isAKeyword(lowerid);
-
-
-        if ((lowerid.equals(AvatarType.getStringType(0).toLowerCase())) || (lowerid.equals(AvatarType.getStringType(1).toLowerCase())) || (lowerid.equals(AvatarType.getStringType(2).toLowerCase())) || (lowerid.equals(AvatarType.getStringType(3).toLowerCase())) || (lowerid.equals(AvatarType.getStringType(4).toLowerCase()))) {
-            b4 = false;
-        } else {
-            b4 = true;
-        }
-
-
-        return (b1 && b2 && b3 && b4 && b5);
-    }
-
     public String toString() {
         String ret = AvatarType.getStringType(type) + " " + getName();
         if (initialValue  == null) {
@@ -151,5 +128,9 @@ public class AvatarAttribute extends AvatarElement{
         }
 
         return ret + " = " + initialValue;
+    }
+
+    public boolean isLeftHand () {
+        return true;
     }
 }

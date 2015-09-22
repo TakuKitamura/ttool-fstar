@@ -506,7 +506,7 @@ public class AVATAR2CPOSIX {
 			AvatarTransition at = (AvatarTransition)_asme;
 			
 			if (at.isGuarded()) {
-				String g = modifyGuard(at.getGuard());
+				String g = modifyGuard(at.getGuard().toString ());
 				
 				ret += "if (!" + g + ") {" + CR;
 				if (debug) {
@@ -654,7 +654,7 @@ public class AVATAR2CPOSIX {
 		aaos = (AvatarActionOnSignal)(_at.getNext(0));
 		
 		if (_at.isGuarded()) {
-			String g = modifyGuard(_at.getGuard());
+			String g = modifyGuard(_at.getGuard().toString ());
 			ret += "if (" + g + ") {" + CR;
 		}
 		
@@ -734,7 +734,7 @@ public class AVATAR2CPOSIX {
 	private String makeImmediateAction(AvatarTransition _at, int _index) {
 		String ret = "";
 		if (_at.isGuarded()) {
-			String g = modifyGuard(_at.getGuard());
+			String g = modifyGuard(_at.getGuard().toString ());
 			ret += "if (" + g + ") {" + CR;
 		}
 		
@@ -947,33 +947,28 @@ public class AVATAR2CPOSIX {
     
     public String makeActionsOfTransaction(AvatarBlock _block, AvatarTransition _at) {
         String ret = "";
-        String act;
-        String var;
         String type;
         for(int i=0; i<_at.getNbOfAction(); i++) {
             // Must know whether this is an action or a method call
-            act = _at.getAction(i);
-            if (_at.isAMethodCall(act)) {
-                ret +=  modifyMethodName(_block, act) + ";" + CR;
+            AvatarAction act = _at.getAction(i);
+            if (act.isAMethodCall()) {
+                ret +=  modifyMethodName(_block, act.toString ()) + ";" + CR;
             } else {
-                ret +=  act + ";" + CR;
-                 var = _at.getVariableInAction(act);
-                 AvatarAttribute aa;
-                    aa = _block.getAvatarAttributeWithName(var);
-                    if (aa != null) {
-                        if (aa.isInt()) {
-                            type = "0";
-                        } else {
-                            type = "1";
-                        }
-                        //ret += "sprintf(__value, \"%d\", " + var + ");" + CR;
-                         ret += traceVariableModification(_block.getName(), var, type);
+                AvatarLeftHand leftHand = ((AvatarActionAssignment) act).getLeftHand ();
+                ret += act.toString () + ";" + CR;
+                if (leftHand instanceof AvatarAttribute) {
+                    if (((AvatarAttribute) leftHand).isInt()) {
+                        type = "0";
+                    } else {
+                        type = "1";
                     }
-               
+                    ret += traceVariableModification(_block.getName(), leftHand.toString (), type);
+                }
+
             }
         }
-        
+
         return ret;
     }		
-	
+
 }

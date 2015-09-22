@@ -36,67 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarRandom
- * Creation: 12/07/2010
- * @version 1.0 12/07/2010
- * @author Ludovic APVRILLE
+ * Class AvatarTranslator
+ * Creation: 16/09/2015
+ * @version 1.0 16/09/2015
+ * @author Florian LUGOU
  * @see
  */
 
 package avatartranslator;
 
-import java.util.*;
-
-
-public class AvatarRandom extends AvatarStateMachineElement {
-	protected String variable;
-	protected String minValue;
-	protected String maxValue;
-	protected int functionId;
-	
-    public AvatarRandom(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
-	
-	public String getVariable() {
-		return variable;
-	}
-	
-	public String getMinValue() {
-		return minValue;
-	}
-	
-	public String getMaxValue() {
-		return maxValue;
-	}
-	
-	public int getFunctionId() {
-		return functionId;
-	}
-	
-	public void setVariable(String _variable) {
-		variable = _variable;
-	}
-	
-	public void setValues(String _minValue, String _maxValue) {
-		minValue = _minValue;
-		maxValue = _maxValue;
-	}
-	
-	public void setFunctionId(int _functionId) {
-		functionId = _functionId;
-	}
-	
-	public AvatarStateMachineElement basicCloneMe() {
-		AvatarRandom ar = new AvatarRandom(getName(), getReferenceObject());
-		return ar;
-	}
-	
-	public String getNiceName() {
-		return "Random between " + minValue + " and " + maxValue + " stored in " + variable;
-	}
-	
-        public void translate (AvatarTranslator translator, Object arg) {
-            translator.translateRandom (this, arg);
-        }
+public interface AvatarTranslator {
+    public void translateTimerOperator (AvatarTimerOperator _asme, Object _arg);
+    public void translateActionOnSignal (AvatarActionOnSignal _asme, Object _arg);
+    public void translateTransition (AvatarTransition _asme, Object _arg);
+    public void translateStartState (AvatarStartState _asme, Object _arg);
+    public void translateState (AvatarState _asme, Object _arg);
+    public void translateRandom (AvatarRandom _asme, Object _arg);
+    public void translateStopState (AvatarStopState _asme, Object _arg);
 }
