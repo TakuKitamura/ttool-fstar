@@ -535,7 +535,7 @@ public class AvatarSimulationBlock  {
 		String nameOfMethod;
 		int ind;
 		
-                AvatarAction action = AvatarAction.createFromString (block, _action);
+                AvatarAction action = AvatarTerm.createActionFromString (block, _action);
                 // TODO: use the new AvatarAction class instead of re-parsing
 		if (action.isAMethodCall ()) {
 			// Evaluate all elements of the method call!

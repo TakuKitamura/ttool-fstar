@@ -47,42 +47,9 @@ package avatartranslator;
 
 import myutil.TraceManager;
 
-public abstract class AvatarAction {
-    String action;
-
-    public static AvatarAction createFromString (AvatarBlock block, String toParse) {
-        AvatarAction result = null;
-
-        int indexEq = toParse.indexOf("=");
-
-        if (indexEq == -1)
-            // No equal sign: this must be a function call
-            result = AvatarTermFunction.createFromString (block, toParse);
-
-        else {
-            // This should be an assignment
-            AvatarTerm leftHand = AvatarTerm.createFromString (block, toParse.substring (0, indexEq));
-            AvatarTerm rightHand = AvatarTerm.createFromString (block, toParse.substring (indexEq + 1));
-
-            if (leftHand != null && rightHand != null && leftHand.isLeftHand ())
-                result = new AvatarActionAssignment ((AvatarLeftHand) leftHand, rightHand);
-        }
-
-        if (result == null)
-            TraceManager.addDev ("Action '" + toParse + "' couldn't be parsed");
-
-        return result;
-    }
-
-    public boolean isAMethodCall () {
-        return false;
-    }
-
-    public boolean isAVariableSetting () {
-        return false;
-    }
-
-    public boolean isABasicVariableSetting () {
-        return false;
-    }
+public interface AvatarAction {
+    public boolean isAMethodCall ();
+    public boolean isAVariableSetting ();
+    public boolean isABasicVariableSetting ();
+    public String getName ();
 }

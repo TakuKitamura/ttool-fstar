@@ -93,14 +93,16 @@ public class AvatarTransition extends AvatarStateMachineElement {
         return this.block;
     }
 
-    private <T extends AvatarAction> Iterable<T> getIterableForClass (Class<T> childClass) {
+    private <T extends AvatarAction> Iterable<T> getIterableForClass (final Class<T> childClass) {
         return new Iterable<T> () {
+            @Override
             public Iterator<T> iterator () {
                 return new Iterator<T> () {
                     private Iterator<AvatarAction> actions = AvatarTransition.this.actions.iterator ();
                     private boolean hasCached = false;
                     private T cached;
 
+                    @Override
                     public boolean hasNext () {
                         if (this.hasCached)
                             return true;
@@ -115,6 +117,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
                         return false;
                     }
 
+                    @Override
                     public T next () {
                         if (this.hasCached) {
                             this.hasCached = false;
@@ -128,6 +131,11 @@ public class AvatarTransition extends AvatarStateMachineElement {
                         }
 
                         return null;
+                    }
+
+                    @Override
+                    public void remove () {
+                        throw new UnsupportedOperationException ();
                     }
                 };
             }
@@ -147,7 +155,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public void addAction(String _action) {
-        AvatarAction aa = AvatarAction.createFromString (block, _action);
+        AvatarAction aa = AvatarTerm.createActionFromString (block, _action);
         if (aa != null)
             actions.add(aa);
     }

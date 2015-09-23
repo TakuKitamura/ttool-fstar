@@ -46,15 +46,9 @@
 
 package avatartranslator;
 
-public class AvatarLocalVar implements AvatarTerm, AvatarLeftHand {
-    String name;
-
-    public AvatarLocalVar (String _name) {
-        this.name = _name;
-    }
-
-    public String getName () {
-        return this.name;
+public class AvatarLocalVar extends AvatarTerm implements AvatarLeftHand {
+    public AvatarLocalVar (String _name, Object _referenceObject) {
+        super (_name, _referenceObject);
     }
 
     public boolean isLeftHand () {

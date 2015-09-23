@@ -50,9 +50,12 @@ import myutil.TraceManager;
 import translator.RTLOTOSKeyword;
 import translator.tojava.JKeyword;
 
-public interface AvatarTerm {
-    public boolean isLeftHand ();
-    public String getName ();
+public abstract class AvatarTerm extends AvatarElement {
+    public abstract boolean isLeftHand ();
+
+    public AvatarTerm (String _name, Object _referenceObject) {
+        super (_name, _referenceObject);
+    }
 
     public static AvatarTerm createFromString (AvatarBlock block, String toParse) {
         AvatarTerm result = AvatarTermFunction.createFromString (block, toParse);
@@ -70,11 +73,35 @@ public interface AvatarTerm {
         TraceManager.addDev ("AvatarAttribute '" + toParse + "' couldn't be parsed");
 
         if (isValidName (toParse))
-            return new AvatarLocalVar (toParse);
+            return new AvatarLocalVar (toParse, block);
         TraceManager.addDev ("AvatarLocalVar '" + toParse + "' couldn't be parsed");
 
         TraceManager.addDev ("AvatarTerm '" + toParse + "' couldn't be parsed");
         return null;
+    }
+
+    public static AvatarAction createActionFromString (AvatarBlock block, String toParse) {
+        AvatarAction result = null;
+
+        int indexEq = toParse.indexOf("=");
+
+        if (indexEq == -1)
+            // No equal sign: this must be a function call
+            result = AvatarTermFunction.createFromString (block, toParse);
+
+        else {
+            // This should be an assignment
+            AvatarTerm leftHand = AvatarTerm.createFromString (block, toParse.substring (0, indexEq));
+            AvatarTerm rightHand = AvatarTerm.createFromString (block, toParse.substring (indexEq + 1));
+
+            if (leftHand != null && rightHand != null && leftHand.isLeftHand ())
+                result = new AvatarActionAssignment ((AvatarLeftHand) leftHand, rightHand);
+        }
+
+        if (result == null)
+            TraceManager.addDev ("Action '" + toParse + "' couldn't be parsed");
+
+        return result;
     }
 
     public static boolean isValidName (String _name) {

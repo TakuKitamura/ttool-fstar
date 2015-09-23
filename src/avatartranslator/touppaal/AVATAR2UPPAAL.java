@@ -789,7 +789,7 @@ public class AVATAR2UPPAAL {
 				tmps = _at.getAction(i).toString ();
 				
 				// Setting a variable
-				if (AvatarAction.createFromString (_block, tmps).isAVariableSetting ()) {
+				if (AvatarTerm.createActionFromString (_block, tmps).isAVariableSetting ()) {
 					loc1 = addLocation(_template);
 					//loc.setCommitted();
 					tr = addTransition(_template, loc, loc1);
@@ -813,7 +813,7 @@ public class AVATAR2UPPAAL {
 					} else {
 						loc.setUrgent();
 					}
-					setSynchronization(tr, ((AvatarTermFunction) AvatarAction.createFromString (_block, tmps)).getMethod ().getName () + "!");
+					setSynchronization(tr, ((AvatarTermFunction) AvatarTerm.createActionFromString (_block, tmps)).getMethod ().getName () + "!");
 					madeTheChoice = true;
 					makeMethodCall(_block, tr, tmps);
 					loc = loc1;
@@ -892,7 +892,7 @@ public class AVATAR2UPPAAL {
 					
 				} else if (at.hasActions()) {
 					tmps0 = at.getAction(0).toString ();
-					if (AvatarAction.createFromString (_block, tmps0).isAVariableSetting ()) {
+					if (AvatarTerm.createActionFromString (_block, tmps0).isAVariableSetting ()) {
 						// We must introduce a fake action
 						tr = addTransition(_template, _loc, locend);
 						if (tmps != null) {
@@ -1005,7 +1005,7 @@ public class AVATAR2UPPAAL {
             
             String mc = "";
             AvatarBlock block = _block;
-            AvatarAction action = AvatarAction.createFromString (_block, _call);
+            AvatarAction action = AvatarTerm.createActionFromString (_block, _call);
             if (!action.isAMethodCall ())
                 return;
 

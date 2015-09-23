@@ -46,5 +46,6 @@
 
 package avatartranslator;
 
-public interface AvatarLeftHand extends AvatarTerm {
+public interface AvatarLeftHand {
+    public String getName ();
 }

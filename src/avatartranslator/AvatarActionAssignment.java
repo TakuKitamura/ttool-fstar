@@ -46,7 +46,7 @@
 
 package avatartranslator;
 
-public class AvatarActionAssignment extends AvatarAction {
+public class AvatarActionAssignment implements AvatarAction {
     AvatarLeftHand leftHand;
     AvatarTerm rightHand;
 
@@ -57,6 +57,10 @@ public class AvatarActionAssignment extends AvatarAction {
 
     public boolean isAVariableSetting () {
         return true;
+    }
+
+    public boolean isAMethodCall () {
+        return false;
     }
 
     public AvatarLeftHand getLeftHand () {
@@ -70,6 +74,10 @@ public class AvatarActionAssignment extends AvatarAction {
     public boolean isABasicVariableSetting () {
         return (this.leftHand instanceof AvatarLocalVar || this.leftHand instanceof AvatarAttribute) &&
                (this.rightHand instanceof AvatarLocalVar || this.rightHand instanceof AvatarAttribute);
+    }
+
+    public String getName () {
+        return this.toString ();
     }
 
     public String toString () {

@@ -53,7 +53,7 @@ import myutil.*;
 import translator.*;
 import translator.tojava.*;
 
-public class AvatarAttribute extends AvatarElement implements AvatarTerm,AvatarLeftHand {
+public class AvatarAttribute extends AvatarTerm implements AvatarLeftHand {
 
     // Types of parameters
     private int type;

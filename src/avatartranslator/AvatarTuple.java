@@ -49,10 +49,11 @@ package avatartranslator;
 import java.util.LinkedList;
 import myutil.TraceManager;
 
-public class AvatarTuple implements AvatarTerm, AvatarLeftHand {
+public class AvatarTuple extends AvatarTerm implements AvatarLeftHand {
     LinkedList<AvatarTerm> components;
 
-    public AvatarTuple () {
+    public AvatarTuple (Object _referenceObject) {
+        super (null, _referenceObject);
         this.components = new LinkedList<AvatarTerm> ();
     }
 
@@ -67,7 +68,7 @@ public class AvatarTuple implements AvatarTerm, AvatarLeftHand {
             String[] components = toParse.substring (indexLParen+1, indexRParen).split (",");
 
             boolean illFormed = false;
-            AvatarTuple argsTuple = new AvatarTuple ();
+            AvatarTuple argsTuple = new AvatarTuple (block);
             for (String arg: components) {
                 AvatarTerm t = AvatarTerm.createFromString (block, arg);
                 if (t == null) {

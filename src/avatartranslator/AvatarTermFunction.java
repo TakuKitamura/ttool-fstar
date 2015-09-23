@@ -48,11 +48,12 @@ package avatartranslator;
 import java.util.LinkedList;
 import myutil.TraceManager;
 
-public class AvatarTermFunction extends AvatarAction implements AvatarTerm {
+public class AvatarTermFunction extends AvatarTerm implements AvatarAction {
     AvatarTuple args;
     AvatarMethod method;
 
-    public AvatarTermFunction (AvatarMethod _method, AvatarTuple _args) {
+    public AvatarTermFunction (AvatarMethod _method, AvatarTuple _args, Object _referenceObject) {
+        super (_method.getName () + " " + _args.toString (), _referenceObject);
         this.args = _args;
         this.method = _method;
     }
@@ -65,7 +66,7 @@ public class AvatarTermFunction extends AvatarAction implements AvatarTerm {
         if (indexLParen == -1) {
             // No left parenthesis: this must be a 0-arity function call
             methodName = toParse.trim ();
-            argsTuple = new AvatarTuple ();
+            argsTuple = new AvatarTuple (block);
         }
         else {
             // Left parenthesis present
@@ -76,7 +77,7 @@ public class AvatarTermFunction extends AvatarAction implements AvatarTerm {
         AvatarMethod meth = block.getAvatarMethodWithName (methodName);
         if (meth != null && argsTuple != null && meth.getListOfAttributes ().size () == argsTuple.getComponents ().size ())
             // Method was found and the arguments provided are correct
-            return new AvatarTermFunction (meth, argsTuple);
+            return new AvatarTermFunction (meth, argsTuple, block);
 
         TraceManager.addDev ("Function call '" + toParse + "' couldn't be parsed");
 
@@ -99,12 +100,16 @@ public class AvatarTermFunction extends AvatarAction implements AvatarTerm {
         return true;
     }
 
-    public boolean isLeftHand () {
+    public boolean isAVariableSetting () {
         return false;
     }
 
-    public String getName () {
-        return this.toString ();
+    public boolean isABasicVariableSetting () {
+        return false;
+    }
+
+    public boolean isLeftHand () {
+        return false;
     }
 
     public String toString () {
