@@ -139,7 +139,7 @@ public class AvatarDesignPanelTranslator {
 
                         //TraceManager.addDev("Reworked pragma =" + tmp);
 
-                        if (tmp == null) {
+                        if (tmpPragma == null) {
                             CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Invalid pragma: " + values[i].trim() + " (ignored)");
                             ce.setTGComponent(tgc);
                             ce.setTDiagramPanel(adp.getAvatarBDPanel());
