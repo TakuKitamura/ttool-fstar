@@ -74,18 +74,20 @@ public abstract class AvatarPragma extends AvatarElement {
 	String[] args = Arrays.copyOfRange(split, 1, split.length);
 	LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
 	if (header.equals("Authenticity")){
+	    //uses AttributeStates
 	    if (args.length != 2){
 		return null;
 	    }
+	    LinkedList<AvatarAttributeState> attrStates = new LinkedList<AvatarAttributeState>();
 	    for (String arg: args){
-		AvatarAttribute res = parseAuthAttr(arg, blocks);
+		AvatarAttributeState res = parseAuthAttr(arg, blocks);
 		if (res ==null){
 		    TraceManager.addDev("Can't find Pragma Attribute " + arg);
 		    return null;
 		}
-		attrs.add(res);
+		attrStates.add(res);
 	    }
-	    return new AvatarPragmaAuthenticity(str, obj, attrs);
+	    return new AvatarPragmaAuthenticity(str, obj, attrStates);
 	}
 	else {
 	    for (String arg: args){
@@ -145,7 +147,7 @@ public abstract class AvatarPragma extends AvatarElement {
 	TraceManager.addDev("Pragma Attribute Block not found "+ blockName);
 	return null;
     }
-    public static AvatarAttribute parseAuthAttr(String arg, LinkedList<AvatarBlock> blocks){
+    public static AvatarAttributeState parseAuthAttr(String arg, LinkedList<AvatarBlock> blocks){
 	//For Finding Authenticity Attributes
 	String[] split = arg.split("\\.");
 	// Must be blockName.stateName.attributeName
@@ -165,9 +167,13 @@ public abstract class AvatarPragma extends AvatarElement {
 		    //If the state is found, find either 'attrName' or 'attrName__data'
 		    AvatarAttribute attr= block.getAvatarAttributeWithName(attrName);
 		    if (attr ==null){
-			return block.getAvatarAttributeWithName(attrName+"__data");
+			attr= block.getAvatarAttributeWithName(attrName+"__data");
+			if (attr==null){
+			    return null;
+			}
+			return new AvatarAttributeState(stateName+"."+attrName+"__data", attr, attr, asm.getStateWithName(stateName));   
 		    }
-		    return attr;   
+		    return new AvatarAttributeState(stateName+"."+attrName, attr, attr, asm.getStateWithName(stateName));   
 		}
 		else {
 		    TraceManager.addDev("Pragma Attribute State not found "+ stateName);

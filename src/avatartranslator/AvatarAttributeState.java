@@ -46,41 +46,22 @@
 package avatartranslator;
 
 import java.util.*;
-
+import ui.avatarbd.*;
 import myutil.*;
+import ui.*;
 
-
-public class AvatarPragmaAuthenticity extends AvatarPragma {
-
-    private LinkedList<AvatarAttribute> arguments;
-    private AvatarAttributeState attrA;
-    private AvatarAttributeState attrB;
-    public AvatarPragmaAuthenticity(String _name, Object _referenceObject, LinkedList<AvatarAttributeState> args) {
+public class AvatarAttributeState extends AvatarElement {
+    private AvatarAttribute attribute;
+    private AvatarState state;
+    public AvatarAttributeState(String _name, Object _referenceObject, AvatarAttribute attr, AvatarState st) {
         super(_name, _referenceObject);
-	attrA= args.get(0);
-	attrB= args.get(1);
-	arguments =new LinkedList<AvatarAttribute>();
-	arguments.add(attrA.getAttribute());
-	arguments.add(attrB.getAttribute());
+	attribute = attr;
+	state = st;
     }
-    public AvatarPragmaAuthenticity(String _name, Object _referenceObject, AvatarAttributeState a, AvatarAttributeState b) {
-        super(_name, _referenceObject);
-        arguments =new LinkedList<AvatarAttribute>();
-	arguments.add(a.getAttribute());
-	arguments.add(b.getAttribute());
-	attrA= a;
-	attrB= b;
+    public AvatarAttribute getAttribute(){
+	return attribute;
     }
-    public LinkedList<AvatarAttribute> getArgs(){
-	return arguments;
+    public AvatarState getState(){
+	return state;
     }
-    
-    public AvatarAttributeState getAttrA(){
-	return attrA;
-    }
-    
-    public AvatarAttributeState getAttrB(){
-	return attrB;
-    }
-
 }
