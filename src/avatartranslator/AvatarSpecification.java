@@ -61,7 +61,7 @@ public class AvatarSpecification extends AvatarElement {
 
     //private AvatarBroadcast broadcast;
 
-    private LinkedList<String> pragmas;
+    private LinkedList<AvatarPragma> pragmas;
 
     private boolean robustnessMade = false;
 
@@ -73,7 +73,7 @@ public class AvatarSpecification extends AvatarElement {
         blocks = new LinkedList<AvatarBlock>();
         relations = new LinkedList<AvatarRelation>();
         //broadcast = new AvatarBroadcast("Broadcast", _referenceObject);
-        pragmas = new LinkedList<String>();
+        pragmas = new LinkedList<AvatarPragma>();
     }
 
 
@@ -120,7 +120,7 @@ public class AvatarSpecification extends AvatarElement {
         return relations;
     }
 
-    public LinkedList<String> getPragmas() {
+    public LinkedList<AvatarPragma> getPragmas() {
         return pragmas;
     }
 
@@ -153,7 +153,7 @@ public class AvatarSpecification extends AvatarElement {
       return broadcast;
       }*/
 
-    public void addPragma(String _pragma) {
+    public void addPragma(AvatarPragma _pragma) {
         pragmas.add(_pragma);
     }
 
@@ -168,7 +168,7 @@ public class AvatarSpecification extends AvatarElement {
             sb.append("Relation:" + relation.toString() + "\n");
         }
         sb.append("\nPragmas:\n");
-        for(String pragma: pragmas) {
+        for(AvatarPragma pragma: pragmas) {
             sb.append("Pragma:" + pragma.toString() + "\n");
         }
 

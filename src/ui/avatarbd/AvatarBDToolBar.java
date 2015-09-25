@@ -67,6 +67,7 @@ public class AvatarBDToolBar extends TToolBar {
 		mgui.updateZoomInfo();
 		
         mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
+        mgui.actions[TGUIAction.PRAGMA].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
 		
@@ -98,7 +99,10 @@ public class AvatarBDToolBar extends TToolBar {
         
         button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
         button.addMouseListener(mgui.mouseHandler);
-        
+
+        button = this.add(mgui.actions[TGUIAction.PRAGMA]);
+        button.addMouseListener(mgui.mouseHandler);
+
         button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
         button.addMouseListener(mgui.mouseHandler);
         

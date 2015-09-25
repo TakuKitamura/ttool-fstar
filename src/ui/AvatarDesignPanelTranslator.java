@@ -107,6 +107,7 @@ public class AvatarDesignPanelTranslator {
         }
 
         createBlocks(as, blocks);
+	System.out.println(as.getListOfBlocks().get(0).getName());
         createRelationsBetweenBlocks(as, blocks);
         makeBlockStateMachines(as);
         createPragmas(as, blocks);
@@ -120,14 +121,14 @@ public class AvatarDesignPanelTranslator {
     public void createPragmas(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
         Iterator iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
         TGComponent tgc;
-        TGCNote tgcn;
+        Pragma tgcn;
         String values [];
         String tmp;
-
+	AvatarPragma tmpPragma;
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TGCNote) {
-                tgcn = (TGCNote)tgc;
+            if (tgc instanceof Pragma) {
+                tgcn = (Pragma)tgc;
                 values = tgcn.getValues();
                 for(int i=0; i<values.length; i++) {
                     tmp = values[i].trim();
@@ -135,8 +136,7 @@ public class AvatarDesignPanelTranslator {
                         tmp = tmp.substring(1, tmp.length()).trim();
 
                         //TraceManager.addDev("Reworking pragma =" + tmp);
-
-                        tmp = reworkPragma(tmp, _blocks);
+                        tmpPragma = AvatarPragma.createFromString(tmp, tgc, _as.getListOfBlocks());
 
                         //TraceManager.addDev("Reworked pragma =" + tmp);
 
@@ -146,7 +146,7 @@ public class AvatarDesignPanelTranslator {
                             ce.setTDiagramPanel(adp.getAvatarBDPanel());
                             addWarning(ce);
                         } else {
-                            _as.addPragma(tmp);
+                            _as.addPragma(tmpPragma);
                             //TraceManager.addDev("Adding pragma:" + tmp);
                         }
                     }

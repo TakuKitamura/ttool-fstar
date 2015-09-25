@@ -164,6 +164,8 @@ public class TGComponentManager {
     public static final int TCD_TDATA = 209;
 
     public static final int UML_NOTE = 301;
+    public static final int PRAGMA = 302;
+
 
     public static final int IOD_CHOICE = 501;
     public static final int IOD_START_STATE = 502;
@@ -724,6 +726,9 @@ public class TGComponentManager {
             break;
         case UML_NOTE:
             tgc = new TGCNote(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case PRAGMA:
+            tgc = new Pragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case IOD_CHOICE:
             tgc = new IODChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);

@@ -7819,6 +7819,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(actions[TGUIAction.UML_NOTE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.UML_NOTE);
+       } else if (command.equals(actions[TGUIAction.PRAGMA].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PRAGMA);
 
             // AVATAR actions
         } else if (command.equals(actions[TGUIAction.ACT_AVATAR_SIM].getActionCommand())) {

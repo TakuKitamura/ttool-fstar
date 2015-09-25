@@ -80,7 +80,7 @@ public class ColorManager {
 
     //public static final Color UML_NOTE_BG = new Color(189, 91, 13, 200);
     public static  Color UML_NOTE_BG = new Color(173, 190, 234);
-
+    public static  Color PRAGMA_BG = new Color(255, 0, 255);
     public static final Color COMPOSITION_OPERATOR = Color.yellow;
     public static final Color ATTRIBUTE_BOX = new Color(199, 243, 105);
     public static final Color ATTRIBUTE_BOX_ACTION = new Color(199, 243, 105);
@@ -127,6 +127,7 @@ public class ColorManager {
     public static  Color TML_PORT_REQUEST = new Color(196, 166, 122);
 
     public static final Color UML_NOTE = Color.lightGray;
+    public static final Color PRAGMA = new Color(255, 0, 255);
 
     public static final Color SD_REFERENCE = new Color(104, 229, 255);
     public static final Color IOD_REFERENCE = new Color(216, 187, 249);
