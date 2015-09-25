@@ -790,7 +790,7 @@ public class TGUIAction extends AbstractAction {
         actions[TCD_INVOCATION_OPERATOR] = new TAction("add-invocation-operator", "Add Invocation composition operator", IconManager.imgic126, IconManager.imgic126, "Invocation composition operator", "Adds an invocation composition operator to the currently opened class diagram", 0);
         actions[TCD_ASSOCIATION_NAVIGATION] = new TAction("add-association-navigation", "Add association with navigation", IconManager.imgic106, IconManager.imgic108, "Association with navigation", "Adds an association with a navigation indication between two tclasses of the currently opened class diagram", 0);
         actions[UML_NOTE] = new TAction("edit-note", "Add a note to a diagram", IconManager.imgic320, IconManager.imgic321, "Add a comment", "Add a comment to the currently opened TTool diagram", 0);
-        actions[PRAGMA] = new TAction("pragma", "Add a pragma to a diagram", IconManager.imgic6000, IconManager.imgic6000, "Add a pragma", "Add a pragma to the currently opened TTool diagram", 0);
+        actions[PRAGMA] = new TAction("pragma", "Add a pragma to a diagram", IconManager.imgic6000, IconManager.imgic6001, "Add a pragma", "Add a pragma to the currently opened TTool diagram", 0);
 
         actions[IOD_EDIT] = new TAction("edit-io-diagram", "Edit interaction overview diagram", IconManager.imgic100, IconManager.imgic101, "Edit interaction overview diagram", "Make it possible to edit the currently opened interaction overview diagram", 0);
         actions[IOD_CONNECTOR] = new TAction("add-iod-connector", "Add IOD Connector", IconManager.imgic202, IconManager.imgic202, "Connector", "Add a Connector between two components of the currently opened interaction overview diagram", 0);
