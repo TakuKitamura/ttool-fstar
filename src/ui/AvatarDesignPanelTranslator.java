@@ -107,7 +107,6 @@ public class AvatarDesignPanelTranslator {
         }
 
         createBlocks(as, blocks);
-	System.out.println(as.getListOfBlocks().get(0).getName());
         createRelationsBetweenBlocks(as, blocks);
         makeBlockStateMachines(as);
         createPragmas(as, blocks);
