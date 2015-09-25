@@ -62,6 +62,8 @@ public abstract class AvatarPragma extends AvatarElement {
 	return arguments;
     }
     public static AvatarPragma createFromString(String str, Object obj, LinkedList<AvatarBlock> blocks){
+	//createFromString takes in a pragma string (with # removed), the containing object, and the list of AvatarBlocks, and returns the corresponding AvatarPragma or null if an error occurred
+	//The attributes referenced must exist 
 	//Remove leading spaces
     	str = str.trim();
 	String[] split = str.split("\\s+");
