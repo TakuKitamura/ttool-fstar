@@ -127,7 +127,10 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
 
     protected void translateQueryAtt (ProVerifQueryAtt _node, int _alinea) {
         this.fullSpec += "\n" + this.printAlinea (_alinea);
-        this.fullSpec += "query attacker(" + _node.name + ").";
+        this.fullSpec += "query attacker(";
+        if (_node.isNew)
+           this.fullSpec += "new ";
+        this.fullSpec += _node.name + ").";
     }
 
     protected void translateQueryEv (ProVerifQueryEv _node, int _alinea) {

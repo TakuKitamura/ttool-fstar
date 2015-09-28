@@ -233,7 +233,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             if (pragma instanceof AvatarPragmaSecret)
                 for (AvatarAttribute attribute: pragma.getArgs ()) {
                     String varName = this.makeAttrName(attribute.getBlock ().getName (), attribute.getName ());
-                    this.spec.addDeclaration (new ProVerifQueryAtt   (varName));
+                    this.spec.addDeclaration (new ProVerifQueryAtt   (varName, true));
                     TraceManager.addDev("|    attacker (" + varName + ")"); 
                 }
 
