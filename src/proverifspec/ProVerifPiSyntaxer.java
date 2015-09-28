@@ -56,22 +56,30 @@ public class ProVerifPiSyntaxer extends ProVerifSyntaxer {
         this.fullSpec += "\n" + this.printAlinea (_alinea);
         if (_node.priv)
             this.fullSpec += "private ";
-        this.fullSpec += "fun " + _node.name + "/" + _node.types.length + ".";
+        if (_node.reduc == null)
+            this.fullSpec += "fun " + _node.name + "/" + _node.types.length;
+        else
+            this.translateReducAux (_node.reduc, _alinea);
+        this.fullSpec += ".";
+    }
+
+    private void translateReducAux (ProVerifReduc _node, int _alinea) {
+        this.fullSpec += "reduc " + _node.formula;
+        ProVerifReduc otherwise = _node.otherwise;
+        while (otherwise != null) {
+            this.fullSpec += "\n" + this.printAlinea (_alinea);
+            if (_node.priv)
+                this.fullSpec += "        ";
+            this.fullSpec += "      otherwise " + otherwise.formula;
+            otherwise = otherwise.otherwise;
+        }
     }
 
     protected void translateReduc (ProVerifReduc _node, int _alinea) {
         this.fullSpec += "\n" + this.printAlinea (_alinea);
         if (_node.priv)
             this.fullSpec += "private ";
-        this.fullSpec += "reduc " + _node.formula;
-        ProVerifReduc otherwise = _node.otherwise;
-        while (otherwise != null) {
-            this.fullSpec += ";\n" + this.printAlinea (_alinea);
-            if (_node.priv)
-                this.fullSpec += "        ";
-            this.fullSpec += "      " + otherwise.formula;
-            otherwise = otherwise.otherwise;
-        }
+        this.translateReducAux (_node, _alinea);
         this.fullSpec += ".";
     }
 

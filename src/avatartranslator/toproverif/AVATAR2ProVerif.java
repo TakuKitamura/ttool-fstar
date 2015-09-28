@@ -126,7 +126,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         this.avspec.removeCompositeStates();
         this.avspec.removeTimers();
         // TODO: Why remove Else guards ?
-        this.avspec.removeElseGuards();
+        // this.avspec.removeElseGuards();
 
         this.makeHeader(_stateReachability);
 
@@ -260,10 +260,10 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 if (attrA != null && attrB != null) {
                     String sA = this.makeAttrName (attrA.getAttribute ().getBlock ().getName (), attrA.getAttribute ().getName (), attrA.getState ().getName ());
                     String sB = this.makeAttrName (attrB.getAttribute ().getBlock ().getName (), attrB.getAttribute ().getName (), attrB.getState ().getName ());
-                    TraceManager.addDev("|    authenticity__" + sA + " (dummyM) ==> authenticity__" + sB + " (dummyM)"); 
+                    TraceManager.addDev("|    authenticity__" + sB + " (dummyM) ==> authenticity__" + sA + " (dummyM)"); 
                     spec.addDeclaration (new ProVerifEvDecl ("authenticity__" + sA, new String[] {"bitstring"}));
                     spec.addDeclaration (new ProVerifEvDecl ("authenticity__" + sB, new String[] {"bitstring"}));
-                    spec.addDeclaration (new ProVerifQueryEvinj (new ProVerifVar[] {new ProVerifVar ("dummyM", "bitstring")}, "authenticity__" + sA + " (dummyM)", "authenticity__" + sB + " (dummyM)"));
+                    spec.addDeclaration (new ProVerifQueryEvinj (new ProVerifVar[] {new ProVerifVar ("dummyM", "bitstring")}, "authenticity__" + sB + " (dummyM)", "authenticity__" + sA + " (dummyM)"));
                 }
             }
     }
