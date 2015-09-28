@@ -48,41 +48,141 @@ package avatartranslator;
 
 import myutil.Conversion;
 
-public class AvatarGuard {
-    String guard;
+public abstract class AvatarGuard {
 
-    public AvatarGuard (String _guard) {
-        if (_guard == null)
-            this.guard = "[ ]";
-        else
-            this.guard = _guard;
+    private static int getMatchingRParen (String s, int indexLParen) {
+        int index, n;
+        n = 1;
+        for (index = indexLParen+1; index < s.length (); index++) {
+            if (s.charAt (index) == '(')
+                n ++;
+            else if (s.charAt (index) == ')')
+                n--;
+            if (n == 0)
+                break;
+        }
+
+        return index;
     }
 
-    public void addGuard(String _g) {
-        guard = "(" + guard + ") and (" + _g + ")";
+    public static AvatarGuard createFromString (AvatarBlock block, String _guard) {
+        if (_guard == null)
+            return new AvatarGuardEmpty ();
+
+        String sane = AvatarGuard.sanitizeString (_guard);
+        int indexRParen = 0;
+        AvatarTuple tuple = null;
+
+        AvatarGuard first = null;
+        if (sane.startsWith ("not(")) {
+            indexRParen = AvatarGuard.getMatchingRParen (sane, 3);
+            first = AvatarGuard.createFromString (block, sane.substring (4, indexRParen));
+
+            if (indexRParen == sane.length ()) {
+                if (first instanceof AvatarComposedGuard)
+                    return new AvatarUnaryGuard ("not(", ")", (AvatarComposedGuard) first);
+                else
+                    return new AvatarGuardEmpty ();
+            }
+        }
+
+        if (sane.startsWith ("(")) {
+            indexRParen = AvatarGuard.getMatchingRParen (sane, 0);
+
+            tuple = AvatarTuple.createFromString (block, sane.substring (0, indexRParen));
+            if (tuple == null) {
+                first = AvatarGuard.createFromString (block, sane.substring (1, indexRParen));
+
+                if (indexRParen == sane.length ()) {
+                    if (first instanceof AvatarComposedGuard)
+                        return new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) first);
+                    else
+                        return new AvatarGuardEmpty ();
+                } else {
+                    int indexLParen = sane.indexOf ("(", indexRParen);
+                    if (indexLParen == -1)
+                        indexLParen = indexRParen;
+
+                    for (String delim: new String[] {"and", "or"}) {
+
+                        int indexBinaryOp = sane.substring (0, indexLParen).indexOf (delim, indexRParen+1);
+                        if (indexBinaryOp != -1) {
+                            first = AvatarGuard.createFromString (block, sane.substring (0, indexBinaryOp));
+                            AvatarGuard second = AvatarGuard.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
+                            if (first instanceof AvatarComposedGuard && second instanceof AvatarComposedGuard)
+                                return new AvatarBinaryGuard ((AvatarComposedGuard) first, (AvatarComposedGuard) second, delim);
+
+                            return new AvatarGuardEmpty ();
+                        }
+                    }
+
+                    return new AvatarGuardEmpty ();
+                }
+            } else {
+                int indexLParen = sane.indexOf ("(", indexRParen);
+                if (indexLParen == -1)
+                    indexLParen = indexRParen;
+
+                for (String delim: new String[] {"==", "!="}) {
+                    int indexBinaryOp = sane.substring (0, indexLParen).indexOf (delim, indexRParen+1);
+                    if (indexBinaryOp != -1) {
+                        AvatarTerm secondTerm = AvatarTerm.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
+                        if (secondTerm != null)
+                            return new AvatarSimpleGuardDuo (tuple, secondTerm, delim);
+
+                        return new AvatarGuardEmpty ();
+                    }
+                }
+
+                return new AvatarGuardEmpty ();
+            }
+        }
+
+        for (String delim: new String[] {"==", "!="}) {
+            int indexBinaryOp = sane.indexOf (delim);
+            if (indexBinaryOp != -1) {
+                AvatarTerm firstTerm = AvatarTerm.createFromString (block, sane.substring (0, indexBinaryOp));
+                AvatarTerm secondTerm = AvatarTerm.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
+                if (secondTerm != null && firstTerm != null)
+                    return new AvatarSimpleGuardDuo (firstTerm, secondTerm, delim);
+
+                return new AvatarGuardEmpty ();
+            }
+        }
+
+        AvatarTerm term = AvatarTerm.createFromString (block, sane);
+        if (term != null)
+            return new AvatarSimpleGuardMono (term);
+
+        return new AvatarGuardEmpty ();
+    }
+
+    private static String sanitizeString (String s) {
+        String result = Conversion.replaceAllChar(s, ' ', "").trim();
+        result = Conversion.replaceAllChar(result, '[', "");
+        result = Conversion.replaceAllChar(result, ']', "");
+
+        return result;
+    }
+
+    public static AvatarGuard addGuard(AvatarGuard _guard, AvatarGuard _g, String _binaryOp) {
+        if (_g == null || ! (_g instanceof AvatarComposedGuard) || ! (_guard instanceof AvatarComposedGuard))
+            return _guard;
+
+        return new AvatarBinaryGuard (new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) _guard), 
+                                      new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) _g),
+                                      _binaryOp);
+    }
+
+    public AvatarGuard getRealGuard (AvatarStateMachineElement precedent) {
+        return this;
     }
 
     public boolean isElseGuard () {
-        String _guard = Conversion.replaceAllChar(guard, ' ', "").trim();
-
-        return _guard.compareTo("[else]") == 0;
-    }
-
-    public boolean isNonDeterministicGuard () {
-        String tmp = Conversion.replaceAllChar(guard, ' ', "").trim();
-
-        return tmp.compareTo("[]") == 0;
+        return false;
     }
 
     public boolean isGuarded () {
-        if (guard.trim().length() == 0)
-            return false;
-
-        String s = Conversion.replaceAllString(guard, " ", "").trim();
-        return s.compareTo("[]") != 0;
-    }
-
-    public String toString () {
-        return this.guard;
+        return true;
     }
 }

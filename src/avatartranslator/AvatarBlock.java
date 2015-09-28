@@ -57,12 +57,15 @@ public class AvatarBlock extends AvatarElement {
     private LinkedList<AvatarMethod> methods;
     private LinkedList<AvatarSignal> signals;
     private AvatarStateMachine asm;
+    private AvatarSpecification avspec;
 
     private String globalCode;
 
 
-    public AvatarBlock(String _name, Object _referenceObject) {
+    public AvatarBlock(String _name, AvatarSpecification _avspec, Object _referenceObject) {
         super(_name, _referenceObject);
+        this.avspec = _avspec;
+
         attributes = new LinkedList<AvatarAttribute>();
         methods = new LinkedList<AvatarMethod>();
         signals = new LinkedList<AvatarSignal>();
@@ -130,10 +133,14 @@ public class AvatarBlock extends AvatarElement {
     }
 
     ///////////////////////////////////
+    //
+    public AvatarConstant getAvatarConstantWithName(String _name) {
+        return this.avspec.getAvatarConstantWithName (_name);
+    }
 
     public void addIntAttributeIfApplicable(String _name) {
         if (getAvatarAttributeWithName(_name) == null) {
-            AvatarAttribute aa = new AvatarAttribute(_name, AvatarType.INTEGER, null);
+            AvatarAttribute aa = new AvatarAttribute(_name, AvatarType.INTEGER, this, null);
             addAttribute(aa);
         }
     }
@@ -399,14 +406,14 @@ public class AvatarBlock extends AvatarElement {
         for (AvatarAttribute aa: attributes) {
             if (aa.getType() == AvatarType.TIMER) {
                 as = new AvatarSignal("set__" + aa.getName(), AvatarSignal.OUT, aa.getReferenceObject());
-                value = new AvatarAttribute("__myvalue", AvatarType.INTEGER,  aa.getReferenceObject());
+                value = new AvatarAttribute("__myvalue", AvatarType.INTEGER, this, aa.getReferenceObject());
                 as.addParameter(value);
                 addSignal(as);
                 addSignal(new AvatarSignal("reset__" + aa.getName(), AvatarSignal.OUT, aa.getReferenceObject()));
                 addSignal(new AvatarSignal("expire__" + aa.getName(), AvatarSignal.IN, aa.getReferenceObject()));
 
                 // Create a timer block, and connect signals
-                AvatarBlock ab = AvatarBlockTemplate.getTimerBlock("Timer__" + aa.getName(), getReferenceObject(), null, null, null);
+                AvatarBlock ab = AvatarBlockTemplate.getTimerBlock("Timer__" + aa.getName(), _spec, getReferenceObject(), null, null, null);
                 _addedBlocks.add(ab);
 
                 AvatarRelation ar;
@@ -423,7 +430,7 @@ public class AvatarBlock extends AvatarElement {
         // Modify the state machine
         if (asm.removeTimers(this, "__timerValue")) {
             // Add an attribute for the timer value
-            value = new AvatarAttribute("__timerValue", AvatarType.INTEGER,  getReferenceObject());
+            value = new AvatarAttribute("__timerValue", AvatarType.INTEGER, this, getReferenceObject());
             addAttribute(value);
         }
 
@@ -449,7 +456,7 @@ public class AvatarBlock extends AvatarElement {
             }
         }
 
-        aa = new AvatarAttribute(_name+cpt, AvatarType.TIMER, getReferenceObject());
+        aa = new AvatarAttribute(_name+cpt, AvatarType.TIMER, this, getReferenceObject());
         addAttribute(aa);
 
         return aa;
@@ -466,7 +473,7 @@ public class AvatarBlock extends AvatarElement {
             }
         }
 
-        aa = new AvatarAttribute(_name+cpt, AvatarType.INTEGER, getReferenceObject());
+        aa = new AvatarAttribute(_name+cpt, AvatarType.INTEGER, this, getReferenceObject());
         addAttribute(aa);
 
         return aa;
@@ -592,7 +599,7 @@ public class AvatarBlock extends AvatarElement {
                         guard = Conversion.replaceAllChar(guard, '[', "(");
                         guard = Conversion.replaceAllChar(guard, ']', ")");
                         guard = "[" + guard + "]";
-                        at.setGuard(new AvatarGuard (guard));
+                        at.setGuard(AvatarGuard.createFromString (this, guard));
                         TraceManager.addDev("[ else ] replaced with :" + guard);
                     }
                 }

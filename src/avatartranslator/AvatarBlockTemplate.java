@@ -56,12 +56,12 @@ public class AvatarBlockTemplate  {
     public AvatarBlockTemplate() {
     }
 
-    public static AvatarBlock getTimerBlock(String _name, Object _referenceBlock, Object _referenceSet, Object _referenceExpire, Object _referenceReset) {
-        AvatarBlock ab = new AvatarBlock(_name, _referenceBlock);
+    public static AvatarBlock getTimerBlock(String _name, AvatarSpecification _avspec, Object _referenceBlock, Object _referenceSet, Object _referenceExpire, Object _referenceReset) {
+        AvatarBlock ab = new AvatarBlock(_name, _avspec, _referenceBlock);
 
         /*AvatarAttribute aa2 = new AvatarAttribute("toto", AvatarType.INTEGER, _referenceBlock);
           ab.addAttribute(aa2);*/
-        AvatarAttribute aa = new AvatarAttribute("value", AvatarType.INTEGER, _referenceBlock);
+        AvatarAttribute aa = new AvatarAttribute("value", AvatarType.INTEGER, ab, _referenceBlock);
         ab.addAttribute(aa);
         /*AvatarAttribute aa1 = new AvatarAttribute("__value", AvatarType.INTEGER, _referenceBlock);
           ab.addAttribute(aa1);*/
@@ -69,8 +69,10 @@ public class AvatarBlockTemplate  {
         AvatarSignal set = new AvatarSignal("set", AvatarSignal.IN, _referenceBlock);
         AvatarSignal reset = new AvatarSignal("reset", AvatarSignal.IN, _referenceBlock);
         AvatarSignal expire = new AvatarSignal("expire", AvatarSignal.OUT, _referenceBlock);
-        AvatarAttribute val = new AvatarAttribute("value", AvatarType.INTEGER,  aa.getReferenceObject());
-        set.addParameter(val);
+        
+        // FIXME: I replaced this val attribute by using the aa attribute created earlier. Is it ok ?
+        // AvatarAttribute val = new AvatarAttribute("value", AvatarType.INTEGER, ab, aa.getReferenceObject());
+        set.addParameter(aa);
         ab.addSignal(set);
         ab.addSignal(reset);
         ab.addSignal(expire);

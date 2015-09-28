@@ -602,7 +602,7 @@ public class AvatarSimulationBlock  {
 		int indexVar = block.getIndexOfAvatarAttributeWithName(nameOfVar);
 		if (indexVar != -1) {
 			// int or bool???
-			int type = block.getAttribute(indexVar).getType();
+			AvatarType type = block.getAttribute(indexVar).getType();
 			if (type == AvatarType.INTEGER) {
 				int result = evaluateIntExpression(act, _attributeValues);
 				_actions.add(nameOfVar + " = " + result);

@@ -47,12 +47,18 @@ package proverifspec;
 
 public class ProVerifReduc implements ProVerifDeclaration {
     protected ProVerifVar[] vars;
+    protected ProVerifReduc otherwise;
     protected String formula;
     protected boolean priv;
 
-    public ProVerifReduc (ProVerifVar[] _vars, String _formula) {
+    public ProVerifReduc (ProVerifVar[] _vars, String _formula, ProVerifReduc _otherwise) {
         this.vars = _vars;
         this.formula = _formula;
+        this.otherwise = _otherwise;
+    }
+
+    public ProVerifReduc (ProVerifVar[] _vars, String _formula) {
+        this (_vars, _formula, null);
     }
 
     public ProVerifReduc (ProVerifVar[] _vars, String _formula, boolean _priv) {

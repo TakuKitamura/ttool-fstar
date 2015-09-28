@@ -36,9 +36,9 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarTerm
-   * Creation: 16/09/2015
-   * @version 1.0 16/09/2015
+   * Class AvatarSimpleGuard
+   * Creation: 25/09/2015
+   * @version 1.0 25/09/2015
    * @author Florian LUGOU
    * @see
    */
@@ -46,20 +46,11 @@
 
 package avatartranslator;
 
-import myutil.TraceManager;
-import translator.RTLOTOSKeyword;
-import translator.tojava.JKeyword;
+import myutil.Conversion;
 
-public class AvatarConstant extends AvatarTerm {
-
-    public static final AvatarConstant TRUE = new AvatarConstant ("true", null);
-    public static final AvatarConstant FALSE = new AvatarConstant ("false", null);
-
-    public boolean isLeftHand (){
-	return false;
-    }
-
-    public AvatarConstant (String _name, Object _referenceObject) {
-        super (_name, _referenceObject);
-    }
+/**
+ * An AvatarSimpleGuard is an {@link AvatarGuard} that is of the form:
+ * {@link AvatarTerm} binaryOp {@link AvatarTerm} or simply {@link AvatarTerm}, or else
+ */
+public abstract class AvatarSimpleGuard extends AvatarComposedGuard {
 }

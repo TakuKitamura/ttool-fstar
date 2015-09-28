@@ -88,8 +88,8 @@ public class AvatarTermFunction extends AvatarTerm implements AvatarAction {
         return this.method;
     }
 
-    public LinkedList<AvatarTerm> getArgs () {
-        return this.args.getComponents ();
+    public AvatarTuple getArgs () {
+        return this.args;
     }
 
     public void addArgument (AvatarTerm term) {

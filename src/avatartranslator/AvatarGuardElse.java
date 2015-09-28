@@ -36,9 +36,9 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarTerm
-   * Creation: 16/09/2015
-   * @version 1.0 16/09/2015
+   * Class AvatarGuardElse
+   * Creation: 25/09/2015
+   * @version 1.0 25/09/2015
    * @author Florian LUGOU
    * @see
    */
@@ -46,20 +46,47 @@
 
 package avatartranslator;
 
-import myutil.TraceManager;
-import translator.RTLOTOSKeyword;
-import translator.tojava.JKeyword;
+import myutil.Conversion;
 
-public class AvatarConstant extends AvatarTerm {
-
-    public static final AvatarConstant TRUE = new AvatarConstant ("true", null);
-    public static final AvatarConstant FALSE = new AvatarConstant ("false", null);
-
-    public boolean isLeftHand (){
-	return false;
+/**
+ * An AvatarGuardElse is an {@link AvatarGuard} that is of the form:
+ * else
+ */
+public class AvatarGuardElse extends AvatarGuard {
+    public AvatarGuardElse () {
     }
 
-    public AvatarConstant (String _name, Object _referenceObject) {
-        super (_name, _referenceObject);
+    public AvatarGuard getRealGuard (AvatarStateMachineElement precedent) {
+        AvatarGuard result = null;
+        for (AvatarStateMachineElement asme: precedent.getNexts ()) {
+            if (! (asme instanceof AvatarTransition))
+                continue;
+            AvatarGuard guard = ((AvatarTransition) asme).getGuard ();
+            if (guard == this)
+                continue;
+
+            if (guard == null || !guard.isGuarded ())
+                // another guard is empty: else will never trigger
+                return null;
+
+            if (guard.isElseGuard ())
+                // there were two else guards... Shouldn't happen
+                continue;
+
+            if (result == null)
+                result = ((AvatarComposedGuard) guard).getOpposite ();
+            else
+                result = AvatarGuard.addGuard (result, ((AvatarComposedGuard) guard).getOpposite (), "and");
+        }
+
+        return result;
+    }
+
+    public String toString () {
+        return "else";
+    }
+
+    public boolean isElseGuard () {
+        return true;
     }
 }

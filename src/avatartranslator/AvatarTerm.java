@@ -72,9 +72,10 @@ public abstract class AvatarTerm extends AvatarElement {
             return result;
         TraceManager.addDev ("AvatarAttribute '" + toParse + "' couldn't be parsed");
 
-        if (isValidName (toParse))
-            return new AvatarLocalVar (toParse, block);
-        TraceManager.addDev ("AvatarLocalVar '" + toParse + "' couldn't be parsed");
+        result = block.getAvatarConstantWithName (toParse);
+        if (result != null)
+            return result;
+        TraceManager.addDev ("AvatarConstant '" + toParse + "' couldn't be parsed");
 
         TraceManager.addDev ("AvatarTerm '" + toParse + "' couldn't be parsed");
         return null;
@@ -112,8 +113,8 @@ public abstract class AvatarTerm extends AvatarElement {
         b2 = toParse.matches("\\w*");
         b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
         b4 = true;
-        for (int i=0; i<5; i++)
-            if (lowerid.equals(AvatarType.getStringType(i).toLowerCase()))
+        for (AvatarType type: AvatarType.values ())
+            if (lowerid.equals(type.getStringType ().toLowerCase ()))
                 b4 = false;
         b5 = !JKeyword.isAKeyword(lowerid);
 

@@ -628,7 +628,7 @@ public class GTURTLEModeling {
         avatar2proverif = new AVATAR2ProVerif(avatarspec);
         //tml2uppaal.setChoiceDeterministic(choices);
         //tml2uppaal.setSizeInfiniteFIFO(_size);
-        proverif = avatar2proverif.generateProVerif(true, true, _stateReachability, _advancedTranslation, _typed);
+        proverif = avatar2proverif.generateProVerif(true, true, _stateReachability, _typed);
 	warnings = avatar2proverif.getWarnings();
         languageID = PROVERIF;
         mgui.setMode(MainGUI.EDIT_PROVERIF_OK);

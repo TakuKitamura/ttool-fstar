@@ -63,7 +63,16 @@ public class ProVerifPiSyntaxer extends ProVerifSyntaxer {
         this.fullSpec += "\n" + this.printAlinea (_alinea);
         if (_node.priv)
             this.fullSpec += "private ";
-        this.fullSpec += "reduc " + _node.formula + ".";
+        this.fullSpec += "reduc " + _node.formula;
+        ProVerifReduc otherwise = _node.otherwise;
+        while (otherwise != null) {
+            this.fullSpec += ";\n" + this.printAlinea (_alinea);
+            if (_node.priv)
+                this.fullSpec += "        ";
+            this.fullSpec += "      " + otherwise.formula;
+            otherwise = otherwise.otherwise;
+        }
+        this.fullSpec += ".";
     }
 
     protected void translateVar (ProVerifVar _node, int _alinea) {

@@ -36,9 +36,9 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarTerm
-   * Creation: 16/09/2015
-   * @version 1.0 16/09/2015
+   * Class AvatarSimpleGuardMono
+   * Creation: 25/09/2015
+   * @version 1.0 25/09/2015
    * @author Florian LUGOU
    * @see
    */
@@ -46,20 +46,24 @@
 
 package avatartranslator;
 
-import myutil.TraceManager;
-import translator.RTLOTOSKeyword;
-import translator.tojava.JKeyword;
+import myutil.Conversion;
 
-public class AvatarConstant extends AvatarTerm {
+/**
+ * An AvatarSimpleGuardMono is an {@link AvatarSimpleGuard} that is of the form:
+ * {@link AvatarTerm}
+ */
+public class AvatarSimpleGuardMono extends AvatarSimpleGuard {
+    AvatarTerm term;
 
-    public static final AvatarConstant TRUE = new AvatarConstant ("true", null);
-    public static final AvatarConstant FALSE = new AvatarConstant ("false", null);
-
-    public boolean isLeftHand (){
-	return false;
+    public AvatarSimpleGuardMono (AvatarTerm _term) {
+        this.term = _term;
     }
 
-    public AvatarConstant (String _name, Object _referenceObject) {
-        super (_name, _referenceObject);
+    public AvatarTerm getTerm () {
+        return this.term;
+    }
+
+    public String toString () {
+        return this.term.getName ();
     }
 }

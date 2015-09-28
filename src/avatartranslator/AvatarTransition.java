@@ -61,7 +61,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
     public AvatarTransition(AvatarBlock _block, String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         actions = new LinkedList<AvatarAction>();
-        this.guard = new AvatarGuard ("[ ]");
+        this.guard = new AvatarGuardEmpty ();
         this.block = _block;
     }
 
@@ -74,11 +74,12 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public void setGuard (String _guard) {
-        this.guard = new AvatarGuard (_guard);
+        this.guard = AvatarGuard.createFromString (this.block, _guard);
     }
 
     public void addGuard(String _g) {
-        this.guard.addGuard (_g);
+        AvatarGuard guard = AvatarGuard.createFromString (this.block, _g);
+        this.guard = AvatarGuard.addGuard (this.guard, guard, "and");
     }
 
     public int getNbOfAction() {
@@ -208,7 +209,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
         if (guard == null)
             return false;
 
-        return guard.isNonDeterministicGuard ();
+        return !guard.isGuarded ();
     }
 
     public boolean isEmpty() {

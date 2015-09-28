@@ -76,6 +76,8 @@ public class AvatarSpecification extends AvatarElement {
         //broadcast = new AvatarBroadcast("Broadcast", _referenceObject);
         pragmas = new LinkedList<AvatarPragma>();
 	constants = new LinkedList<AvatarConstant>();
+        this.constants.add (AvatarConstant.FALSE);
+        this.constants.add (AvatarConstant.TRUE);
     }
 
 
@@ -126,7 +128,7 @@ public class AvatarSpecification extends AvatarElement {
         return pragmas;
     }
 
-    public LinkedList<AvatarConstant> getConstants() {
+    public LinkedList<AvatarConstant> getAvatarConstants() {
         return constants;
     }
 
@@ -164,7 +166,7 @@ public class AvatarSpecification extends AvatarElement {
     }
     public void addConstant(AvatarConstant _constant) {
 	//Only add unique constants
-	if (this.getConstantWithName(_constant.getName())==null){
+	if (this.getAvatarConstantWithName(_constant.getName())==null){
 	    constants.add(_constant);
 	}
     }
@@ -200,7 +202,7 @@ public class AvatarSpecification extends AvatarElement {
         return null;
     }
 
-    public AvatarConstant getConstantWithName(String _name) {
+    public AvatarConstant getAvatarConstantWithName(String _name) {
         for(AvatarConstant constant: constants) {
             if (constant.getName().compareTo(_name)== 0) {
                 return constant;

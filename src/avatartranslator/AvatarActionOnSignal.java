@@ -52,7 +52,7 @@ import myutil.*;
 
 public class AvatarActionOnSignal extends AvatarStateMachineElement {
     private AvatarSignal signal;
-    private LinkedList<String> values; // Attribute name
+    private LinkedList<String> values;
 
     public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject) {
         super(_name, _referenceObject);

@@ -85,6 +85,10 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 	}
     }
 
+    public LinkedList<AvatarStateMachineElement> getNexts () {
+        return this.nexts;
+    }
+
     public AvatarStateMachineElement getNext(int _index) {
         if (_index < nexts.size()) {
             return nexts.get(_index);
@@ -223,79 +227,56 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 
     // Guard with an id and not(id)
     public boolean hasElseChoiceType1() {
-        if (nexts.size() != 2) {
+        if (nexts.size() != 2)
             return false;
-        }
 
         AvatarStateMachineElement elt1, elt2;
 
         elt1 = getNext(0);
         elt2 = getNext(1);
 
-        if ( (!(elt1 instanceof AvatarTransition)) || (!(elt2 instanceof AvatarTransition))) {
+        if ( (!(elt1 instanceof AvatarTransition)) || (!(elt2 instanceof AvatarTransition)))
             return false;
-        }
 
         AvatarTransition at1, at2;
 
         at1 = (AvatarTransition)elt1;
         at2 = (AvatarTransition)elt2;
 
-        if ((!(at1.isGuarded())) || (!(at2.isGuarded()))) {
+        if ((!(at1.isGuarded())) || (!(at2.isGuarded())))
+            return false;
+
+        AvatarGuard g1 = at1.getGuard ();
+        AvatarGuard g2 = at2.getGuard ();
+
+        if (g1.isElseGuard () || g2.isElseGuard ())
+            return true;
+
+        if (g1 instanceof AvatarSimpleGuardDuo && g2 instanceof AvatarSimpleGuardDuo) {
+            AvatarSimpleGuardDuo gg1 = (AvatarSimpleGuardDuo) g1;
+            AvatarSimpleGuardDuo gg2 = (AvatarSimpleGuardDuo) g2;
+
+            if (gg1.getBinaryOp () != gg2.getBinaryOp ()) {
+                gg1 = new AvatarSimpleGuardDuo (gg1.getTermA (), gg1.getTermB (), gg2.getBinaryOp ());
+
+                String s1, s2;
+                s1 = this.myTrim (gg1.getRealGuard (this).toString ());
+                s2 = this.myTrim (gg2.getRealGuard (this).toString ());
+
+                return s1.equals (s2);
+            }
+
             return false;
         }
 
-        String g1, g2;
-        g1 = at1.getGuard().toString ();
-        g2 = at2.getGuard().toString ();
+        String s1, s2;
+        s1 = this.myTrim (g1.getRealGuard (this).toString ());
+        s2 = this.myTrim (((AvatarComposedGuard) g2).getOpposite ().toString ());
 
-        g1 = Conversion.replaceAllString(g1, "[", "");
-        g1 = Conversion.replaceAllString(g1, "]", "").trim();
-        g1 = Conversion.replaceAllString(g1, " ", "");
-
-        g2 = Conversion.replaceAllString(g2, "[", "");
-        g2 = Conversion.replaceAllString(g2, "]", "").trim();
-        g2 = Conversion.replaceAllString(g2, " ", "");
-
-
-
-	//TraceManager.addDev("Else TEST: g1=" + g1 + "   g2=" + g2);
-
-	// Else?
-	if ((g1.compareTo("else") == 0) || (g2.compareTo("else") ==0)) {
-	    return true;
-	}
-
-        String g, n;
-
-        if (g1.startsWith("not(")) {
-            n = g1;
-            g = g2;
-        } else {
-            g = g1;
-            n = g2;
-        }
-
-        /*if (!AvatarAttribute.isAValidAttributeName(g.trim())) {
-          return false;
-          }*/
-
-	if (n.length() < 6) {
-	    return false;
-	}
-
-	n = n.substring(3, n.length());
-	n = myTrim(n);
-
-        if (n.compareTo(g) != 0) {
-            return false;
-        }
-
-
-        return true;
+        return s1.equals (s2);
     }
 
-    private String myTrim(String toBeTrimmed) {
+    private static String myTrim(String toBeTrimmed) {
 	int length = toBeTrimmed.length();
 	String tmp = toBeTrimmed.trim();
 	if (tmp.startsWith("(")) {

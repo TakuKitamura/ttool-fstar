@@ -179,7 +179,7 @@ public class VariableTableModel extends AbstractTableModel {
 		if (aa == null) {
 			return ERROR_STRING;
 		}
-		return AvatarType.getStringType(aa.getType());
+		return aa.getType ().getStringType();
 	}
 	
 	private String getVariableName(int row) {

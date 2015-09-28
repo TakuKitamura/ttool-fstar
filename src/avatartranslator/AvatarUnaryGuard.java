@@ -36,7 +36,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarTerm
+   * Class AvatarUnaryGuard
    * Creation: 16/09/2015
    * @version 1.0 16/09/2015
    * @author Florian LUGOU
@@ -46,20 +46,40 @@
 
 package avatartranslator;
 
-import myutil.TraceManager;
-import translator.RTLOTOSKeyword;
-import translator.tojava.JKeyword;
+import myutil.Conversion;
 
-public class AvatarConstant extends AvatarTerm {
+public class AvatarUnaryGuard extends AvatarComposedGuard {
+    AvatarComposedGuard guard;
 
-    public static final AvatarConstant TRUE = new AvatarConstant ("true", null);
-    public static final AvatarConstant FALSE = new AvatarConstant ("false", null);
+    String before;
+    String after;
 
-    public boolean isLeftHand (){
-	return false;
+    public AvatarUnaryGuard (String _before, String _after, AvatarComposedGuard _guard) {
+        this.before = _before;
+        this.after = _after;
+        this.guard = _guard;
     }
 
-    public AvatarConstant (String _name, Object _referenceObject) {
-        super (_name, _referenceObject);
+    public String getBefore () {
+        return this.before;
+    }
+
+    public String getAfter () {
+        return this.after;
+    }
+
+    public AvatarComposedGuard getGuard () {
+        return this.guard;
+    }
+
+    public AvatarComposedGuard getOpposite () {
+        if (this.before.equals ("not(")) {
+            return this.guard;
+        }
+        return new AvatarUnaryGuard ("not(", ")", this);
+    }
+
+    public String toString () {
+        return this.before + this.guard.toString () + this.after;
     }
 }

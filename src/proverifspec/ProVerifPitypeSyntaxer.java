@@ -64,12 +64,14 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
             this.fullSpec += type;
         }
         this.fullSpec += "): " + _node.returnType;
+        if (_node.reduc != null)
+            this.translateReducAux (_node.reduc, _alinea+1);
         if (_node.priv)
             this.fullSpec += " [private]";
         this.fullSpec += ".";
     }
 
-    protected void translateReduc (ProVerifReduc _node, int _alinea) {
+    private void translateReducAux (ProVerifReduc _node, int _alinea) {
         this.fullSpec += "\n" + this.printAlinea (_alinea);
         this.fullSpec += "reduc ";
         if (_node.vars.length > 0) {
@@ -85,6 +87,31 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
             this.fullSpec += "; ";
         }
         this.fullSpec += _node.formula;
+
+        ProVerifReduc otherwise = _node.otherwise;
+        while (otherwise != null) {
+            this.fullSpec += "\n" + this.printAlinea (_alinea);
+            this.fullSpec += "      otherwise ";
+            if (otherwise.vars.length > 0) {
+                this.fullSpec += "forall ";
+                boolean first = true;
+                for (ProVerifVar var: otherwise.vars) {
+                    if (first)
+                        first = false;
+                    else
+                        this.fullSpec += ", ";
+                    this.fullSpec += var.name + ": " + var.type;
+                }
+                this.fullSpec += "; ";
+            }
+            this.fullSpec += otherwise.formula;
+            otherwise = otherwise.otherwise;
+        }
+    }
+
+    protected void translateReduc (ProVerifReduc _node, int _alinea) {
+        this.translateReducAux (_node, _alinea);
+
         if (_node.priv)
             this.fullSpec += " [private]";
         this.fullSpec += ".";

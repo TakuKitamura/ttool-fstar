@@ -47,67 +47,43 @@
 
 package avatartranslator;
 
-import java.util.*;
-
-import myutil.*;
-
-public class AvatarType {
-
+public enum AvatarType {
     // Types of parameters
-    //public final static int NATURAL = 0;
-    public final static int BOOLEAN = 1;
-    public final static int INTEGER = 2;
-    public final static int TIMER = 3;
+    BOOLEAN ("bool", "false", "f"),
+    INTEGER ("int", "0", "0"),
+    TIMER ("timer", "0", "0"),
+    
+    UNDEFINED ("undefined", "", "");
 
+    private String name = "";
+    private String defaultValue = "";
+    private String defaultValueTF = "";
 
-    public static int getType(String s) {
-        if (s.equals("bool")) {
-            return      BOOLEAN;
-        } else if (s.equals("Boolean")) {
-            return      BOOLEAN;
-        } else if (s.equals("int")) {
-            return      INTEGER;
-        } else if (s.equals("Integer")) {
-            return      INTEGER;
-        } else if (s.equals("Timer")) {
-            return      TIMER;
-        }
-        return -1;
+    AvatarType (String name, String defaultValue, String defaultValueTF) {
+        this.name = name;
+        this.defaultValue = defaultValue;
+        this.defaultValueTF = defaultValueTF;
     }
 
-    public static String getStringType(int _type) {
-        switch(_type) {
-        case BOOLEAN:
-            return "bool";
-        case INTEGER:
-            return "int";
-        case TIMER:
-            return "timer";
-        }
-        return "";
+    public static AvatarType getType (String s) {
+        if (s.equals("bool") || s.equals ("Boolean"))
+            return      AvatarType.BOOLEAN;
+        else if (s.equals("int") || s.equals("Integer"))
+            return      AvatarType.INTEGER;
+        else if (s.equals("Timer"))
+            return      AvatarType.TIMER;
+        return AvatarType.UNDEFINED;
     }
 
-    public static String getDefaultInitialValue(int _type) {
-        switch(_type) {
-        case BOOLEAN:
-            return "false";
-        case INTEGER:
-            return "0";
-        case TIMER:
-            return "0";
-        }
-        return "";
+    public String getStringType () {
+        return this.name;
     }
 
-    public static String getDefaultInitialValueTF(int _type) {
-        switch(_type) {
-        case BOOLEAN:
-            return "f";
-        case INTEGER:
-            return "0";
-        case TIMER:
-            return "0";
-        }
-        return "";
+    public String getDefaultInitialValue () {
+        return this.defaultValue;
+    }
+
+    public String getDefaultInitialValueTF() {
+        return this.defaultValueTF;
     }
 }

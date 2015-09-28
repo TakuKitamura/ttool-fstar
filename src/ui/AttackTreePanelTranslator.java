@@ -299,7 +299,7 @@ public class AttackTreePanelTranslator {
         // One block per attacknode to receive the attack
         // One block per attack -> syncho
         // One mast block with all channels declared at that level
-        AvatarBlock mainBlock = new AvatarBlock("MainBlock", null);
+        AvatarBlock mainBlock = new AvatarBlock("MainBlock", as, null);
         as.addBlock(mainBlock);
 
         // Declare all attacks
@@ -352,7 +352,7 @@ public class AttackTreePanelTranslator {
         for(Attack attack: at.getAttacks()) {
             if (attack.isLeaf()) {
                 // Make the block
-                AvatarBlock ab = new AvatarBlock(attack.getName(), listE.getTG(attack));
+                AvatarBlock ab = new AvatarBlock(attack.getName(), _as, listE.getTG(attack));
                 _as.addBlock(ab);
                 ab.setFather(_main);
 
@@ -365,7 +365,7 @@ public class AttackTreePanelTranslator {
 
             } else {
                 // Make the block
-                AvatarBlock ab = new AvatarBlock(attack.getName(), listE.getTG(attack));
+                AvatarBlock ab = new AvatarBlock(attack.getName(), _as, listE.getTG(attack));
                 _as.addBlock(ab);
                 ab.setFather(_main);
 
@@ -650,7 +650,7 @@ public class AttackTreePanelTranslator {
         for(AttackNode node: at.getAttackNodes()) {
             if (node.isWellFormed()) {
                 // Make the block
-                AvatarBlock ab = new AvatarBlock(node.getName(), listE.getTG(node));
+                AvatarBlock ab = new AvatarBlock(node.getName(), _as, listE.getTG(node));
                 _as.addBlock(ab);
                 ab.setFather(_main);
 
@@ -694,7 +694,7 @@ public class AttackTreePanelTranslator {
         atF.setHidden(true);
         String finalGuard = "";
         for(Attack att: _node.getInputAttacks()) {
-            AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ref);
+            AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ab, _ref);
             if (finalGuard.length() ==0) {
                 finalGuard += "(" + att.getName() + "__performed == true)";
             } else {
@@ -711,7 +711,7 @@ public class AttackTreePanelTranslator {
             asm.addElement(at);
             mainState.addNext(at);
             at.addNext(acceptAttack);
-            at.setGuard(new AvatarGuard ("["+att.getName() + "__performed == false]"));
+            at.setGuard(new AvatarSimpleGuardDuo (aa, AvatarConstant.FALSE, "=="));
             at = new AvatarTransition(_ab, "at_fromInputAttack", _ref);
             at.addAction(att.getName() + "__performed = true");
             asm.addElement(at);
@@ -762,16 +762,16 @@ public class AttackTreePanelTranslator {
         asm.addElement(atF);
         start.addNext(atF);
         atF.addNext(mainState);
-        String finalGuard = "";
+        AvatarGuard finalGuard = null;
         for(Attack att: _node.getInputAttacks()) {
-            AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ref);
-            if (finalGuard.length() ==0) {
-                finalGuard += "(" + att.getName() + "__performed == true)";
-            } else {
-                finalGuard += " || (" + att.getName() + "__performed == true)";
-            }
+            AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ab, _ref);
+            if (finalGuard == null)
+                finalGuard = new AvatarSimpleGuardDuo (aa, AvatarConstant.TRUE, "==");
+            else
+                finalGuard = AvatarGuard.addGuard (finalGuard, new AvatarSimpleGuardDuo (aa, AvatarConstant.TRUE, "=="), "||");
+
             _ab.addAttribute(aa);
-            atF.addAction(att.getName() + "__performed = false");
+            atF.addAction(new AvatarActionAssignment (aa, AvatarConstant.FALSE));
 
             // From Main
             avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
@@ -781,9 +781,9 @@ public class AttackTreePanelTranslator {
             asm.addElement(at);
             mainState.addNext(at);
             at.addNext(acceptAttack);
-            at.setGuard("["+att.getName() + "__performed == false]");
+            at.setGuard(new AvatarSimpleGuardDuo (aa, AvatarConstant.FALSE, "=="));
             at = new AvatarTransition(_ab, "at_fromInputAttack", _ref);
-            at.addAction(att.getName() + "__performed = true");
+            at.addAction(new AvatarActionAssignment (aa, AvatarConstant.TRUE));
             asm.addElement(at);
             acceptAttack.addNext(at);
             at.addNext(mainState);
@@ -795,9 +795,9 @@ public class AttackTreePanelTranslator {
             asm.addElement(at);
             endState.addNext(at);
             at.addNext(acceptAttack);
-            at.setGuard("["+att.getName() + "__performed == false]");
+            at.setGuard(new AvatarSimpleGuardDuo (aa, AvatarConstant.FALSE, "=="));
             at = new AvatarTransition(_ab, "at_fromInputAttack", _ref);
-            at.addAction(att.getName() + "__performed = true");
+            at.addAction(new AvatarActionAssignment (aa, AvatarConstant.TRUE));
             asm.addElement(at);
             acceptAttack.addNext(at);
             at.addNext(endState);
@@ -809,9 +809,9 @@ public class AttackTreePanelTranslator {
             asm.addElement(at);
             overallState.addNext(at);
             at.addNext(acceptAttack);
-            at.setGuard("["+att.getName() + "__performed == false]");
+            at.setGuard(new AvatarSimpleGuardDuo (aa, AvatarConstant.FALSE, "=="));
             at = new AvatarTransition(_ab, "at_fromInputAttack", _ref);
-            at.addAction(att.getName() + "__performed = true");
+            at.addAction(new AvatarActionAssignment (aa, AvatarConstant.TRUE));
             asm.addElement(at);
             acceptAttack.addNext(at);
             at.addNext(overallState);
@@ -825,7 +825,7 @@ public class AttackTreePanelTranslator {
         asm.addElement(at);
         mainState.addNext(at);
         at.addNext(endState);
-        at.setGuard("[" + finalGuard + "]");
+        at.setGuard(finalGuard);
 
         Attack resulting = _node.getResultingAttack();
         avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
@@ -867,20 +867,20 @@ public class AttackTreePanelTranslator {
         asm.addElement(atF);
         start.addNext(atF);
         atF.addNext(mainState);
-        String finalGuard = "oneDone == true";
-        String toEndGuard = "";
-        AvatarAttribute oneDone = new AvatarAttribute("oneDone", AvatarType.BOOLEAN, _ref);
+        AvatarAttribute oneDone = new AvatarAttribute("oneDone", AvatarType.BOOLEAN, _ab, _ref);
+        AvatarGuard finalGuard = new AvatarSimpleGuardDuo (oneDone, AvatarConstant.TRUE, "==");
+        AvatarGuard toEndGuard = null;
         _ab.addAttribute(oneDone);
         atF.addAction("oneDone = false");
         for(Attack att: _node.getInputAttacks()) {
-            AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ref);
+            AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ab, _ref);
             _ab.addAttribute(aa);
-            atF.addAction(att.getName() + "__performed = false");
-            if (toEndGuard.length() ==0) {
-                toEndGuard += "(" + att.getName() + "__performed == true)";
-            } else {
-                toEndGuard += " && (" + att.getName() + "__performed == true)";
-            }
+            atF.addAction(new AvatarActionAssignment (aa, AvatarConstant.FALSE));
+            if (toEndGuard == null)
+                toEndGuard = new AvatarSimpleGuardDuo (aa, AvatarConstant.TRUE, "==");
+            else
+                toEndGuard = AvatarGuard.addGuard (toEndGuard, new AvatarSimpleGuardDuo (aa, AvatarConstant.TRUE, "=="), "&&");
+
             // From Main
             avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
             AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
@@ -889,11 +889,14 @@ public class AttackTreePanelTranslator {
             asm.addElement(at);
             mainState.addNext(at);
             at.addNext(acceptAttack);
-            at.setGuard("[("+att.getName() + "__performed == false) && (oneDone == false)]");
+            at.setGuard(new AvatarBinaryGuard (
+                        new AvatarSimpleGuardDuo (aa, AvatarConstant.FALSE, "=="),
+                        new AvatarSimpleGuardDuo (oneDone, AvatarConstant.FALSE, "=="),
+                        "&&"));
             at = new AvatarTransition(_ab, "at_fromInputAttack", _ref);
-            at.addAction(att.getName() + "__performed = true");
+            at.addAction(new AvatarActionAssignment (aa, AvatarConstant.TRUE));
             at.setHidden(true);
-            at.addAction("oneDone = true");
+            at.addAction(new AvatarActionAssignment (oneDone, AvatarConstant.TRUE));
             asm.addElement(at);
             acceptAttack.addNext(at);
             at.addNext(mainState);
@@ -908,9 +911,9 @@ public class AttackTreePanelTranslator {
             asm.addElement(at);
             stoppingAll.addNext(at);
             at.addNext(acceptAttack);
-            at.setGuard("["+att.getName() + "__performed == false]");
+            at.setGuard(new AvatarSimpleGuardDuo (aa, AvatarConstant.FALSE, "=="));
             at = new AvatarTransition(_ab, "at_fromInputAttack", _ref);
-            at.addAction(att.getName() + "__performed = true");
+            at.addAction(new AvatarActionAssignment (aa, AvatarConstant.TRUE));
             at.setHidden(true);
             asm.addElement(at);
             acceptAttack.addNext(at);
@@ -933,7 +936,7 @@ public class AttackTreePanelTranslator {
         asm.addElement(at);
         mainState.addNext(at);
         at.addNext(stoppingAll);
-        at.setGuard("[" + finalGuard + "]");
+        at.setGuard(finalGuard);
 
 
         // Adding resulting attack
@@ -941,7 +944,7 @@ public class AttackTreePanelTranslator {
         asm.addElement(at);
         stoppingAll.addNext(at);
         at.addNext(endState);
-        at.setGuard("[" + toEndGuard + "]");
+        at.setGuard(toEndGuard);
 
         Attack resulting = _node.getResultingAttack();
         avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());

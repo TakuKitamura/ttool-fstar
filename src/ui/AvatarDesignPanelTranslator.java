@@ -403,7 +403,7 @@ public class AvatarDesignPanelTranslator {
     }
 
     public void addRegularAttribute(AvatarBlock _ab, TAttribute _a, String _preName) {
-        int type = 0;
+        AvatarType type = AvatarType.UNDEFINED;
         if (_a.getType() == TAttribute.INTEGER){
             type = AvatarType.INTEGER;
         } else if (_a.getType() == TAttribute.NATURAL){
@@ -413,7 +413,7 @@ public class AvatarDesignPanelTranslator {
         } else if (_a.getType() == TAttribute.TIMER) {
             type = AvatarType.TIMER;
         }
-        AvatarAttribute aa = new AvatarAttribute(_preName + _a.getId(), type, _a);
+        AvatarAttribute aa = new AvatarAttribute(_preName + _a.getId(), type, _ab, _a);
         aa.setInitialValue(_a.getInitialValue());
         _ab.addAttribute(aa);
     }
@@ -432,7 +432,7 @@ public class AvatarDesignPanelTranslator {
         Vector types;
 
         for(AvatarBDBlock block: _blocks) {
-            ab = new AvatarBlock(block.getBlockName(), block);
+            ab = new AvatarBlock(block.getBlockName(), _as, block);
             _as.addBlock(ab);
             listE.addCor(ab, block);
             block.setAVATARID(ab.getID());
@@ -530,14 +530,14 @@ public class AvatarDesignPanelTranslator {
         AvatarAttribute aa;
         Vector types;
         TAttribute ta;
-        int type;
+        AvatarType type = AvatarType.UNDEFINED;
 
         if (rt.length() == 0) {
             return;
         }
 
         if ((rt.compareTo("int") == 0) || (rt.compareTo("bool") == 0)) {
-            aa = new AvatarAttribute("return__0", AvatarType.getType(rt), _block);
+            aa = new AvatarAttribute("return__0", AvatarType.getType(rt), _ab, _block);
             _atam.addReturnParameter(aa);
         } else {
             types = adp.getAvatarBDPanel().getAttributesOfDataType(rt);
@@ -559,7 +559,7 @@ public class AvatarDesignPanelTranslator {
                     } else {
                         type = AvatarType.INTEGER;
                     }
-                    aa = new AvatarAttribute("return__" + j, type, _block);
+                    aa = new AvatarAttribute("return__" + j, type, _ab, _block);
                     _atam.addReturnParameter(aa);
                 }
             }
@@ -573,18 +573,18 @@ public class AvatarDesignPanelTranslator {
         AvatarAttribute aa;
         TAttribute ta;
         Vector v;
-        int type = 0;
+        AvatarType type = AvatarType.UNDEFINED;
 
         for(int i=0; i<types.length; i++) {
             v = adp.getAvatarBDPanel().getAttributesOfDataType(types[i]);
             if (v == null) {
-                if (AvatarType.getType(types[i]) == -1) {
+                if (AvatarType.getType(types[i]) == AvatarType.UNDEFINED) {
                     CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  \"" + types[i] + "\" declared in method " + _atam + " of block " + _block.getName());
                     ce.setAvatarBlock(_block);
                     ce.setTDiagramPanel(adp.getAvatarBDPanel());
                     addCheckingError(ce);
                 }
-                aa = new AvatarAttribute(typeIds[i], AvatarType.getType(types[i]), _uiam);
+                aa = new AvatarAttribute(typeIds[i], AvatarType.getType(types[i]), _block, _uiam);
                 _atam.addParameter(aa);
             } else {
                 for(int j=0; j<v.size(); j++) {
@@ -598,7 +598,7 @@ public class AvatarDesignPanelTranslator {
                     } else if (ta.getType() == TAttribute.TIMER) {
                         type = AvatarType.TIMER;
                     }
-                    aa = new AvatarAttribute(typeIds[i] + "__" + ta.getId(), type, _uiam);
+                    aa = new AvatarAttribute(typeIds[i] + "__" + ta.getId(), type, _block, _uiam);
                     _atam.addParameter(aa);
                 }
             }
@@ -1162,7 +1162,7 @@ public class AvatarDesignPanelTranslator {
                         // Guard
                         tmp = modifyString(asmdco.getGuard());
 
-                        AvatarGuard guard = new AvatarGuard (tmp);
+                        AvatarGuard guard = AvatarGuard.createFromString (_ab, tmp);
                         if (guard.isElseGuard()) {
                             at.setGuard(guard);
                         } else {

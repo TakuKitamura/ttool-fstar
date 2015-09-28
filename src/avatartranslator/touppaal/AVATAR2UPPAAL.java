@@ -1021,7 +1021,7 @@ public class AVATAR2UPPAAL {
             TraceManager.addDev("Method name:" + mc);
             
             setSynchronization(_tr, mc);
-            LinkedList<AvatarTerm> arguments = ((AvatarTermFunction) action).getArgs ();
+            LinkedList<AvatarTerm> arguments = ((AvatarTermFunction) action).getArgs ().getComponents ();
             for(AvatarTerm arg: arguments) {
                 if (!(arg instanceof AvatarAttribute))
                     continue;

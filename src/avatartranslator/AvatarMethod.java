@@ -99,7 +99,7 @@ public class AvatarMethod extends AvatarElement{
 
         if (returnParameters.size() != 0) {
             if (returnParameters.size() == 1) {
-                ret += AvatarType.getStringType(returnParameters.get(0).getType()) + " ";
+                ret += returnParameters.get(0).getType().getStringType() + " ";
             } else {
                 int index = 0;
                 for(AvatarAttribute aa: returnParameters) {
@@ -108,7 +108,7 @@ public class AvatarMethod extends AvatarElement{
                     } else {
                         ret = ret + ",";
                     }
-                    ret += AvatarType.getStringType(aa.getType());
+                    ret += aa.getType().getStringType();
                 }
                 ret = "(" + ret + ") ";
             }

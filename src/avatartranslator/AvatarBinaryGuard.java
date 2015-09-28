@@ -36,7 +36,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarTerm
+   * Class AvatarBinaryGuard
    * Creation: 16/09/2015
    * @version 1.0 16/09/2015
    * @author Florian LUGOU
@@ -46,20 +46,33 @@
 
 package avatartranslator;
 
-import myutil.TraceManager;
-import translator.RTLOTOSKeyword;
-import translator.tojava.JKeyword;
+import myutil.Conversion;
 
-public class AvatarConstant extends AvatarTerm {
+public class AvatarBinaryGuard extends AvatarComposedGuard {
+    AvatarComposedGuard guardA;
+    AvatarComposedGuard guardB;
 
-    public static final AvatarConstant TRUE = new AvatarConstant ("true", null);
-    public static final AvatarConstant FALSE = new AvatarConstant ("false", null);
+    String binaryOp;
 
-    public boolean isLeftHand (){
-	return false;
+    public AvatarBinaryGuard (AvatarComposedGuard _guardA, AvatarComposedGuard _guardB, String _binaryOp) {
+        this.guardA = _guardA;
+        this.guardB = _guardB;
+        this.binaryOp = _binaryOp;
     }
 
-    public AvatarConstant (String _name, Object _referenceObject) {
-        super (_name, _referenceObject);
+    public AvatarComposedGuard getGuardA () {
+        return this.guardA;
+    }
+
+    public AvatarComposedGuard getGuardB () {
+        return this.guardB;
+    }
+
+    public String getBinaryOp () {
+        return this.binaryOp;
+    }
+
+    public String toString () {
+        return this.guardA.toString () + this.binaryOp + this.guardB.toString ();
     }
 }

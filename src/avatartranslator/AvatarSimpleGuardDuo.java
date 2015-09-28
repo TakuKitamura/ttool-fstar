@@ -36,9 +36,9 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarTerm
-   * Creation: 16/09/2015
-   * @version 1.0 16/09/2015
+   * Class AvatarSimpleGuardDuo
+   * Creation: 25/09/2015
+   * @version 1.0 25/09/2015
    * @author Florian LUGOU
    * @see
    */
@@ -46,20 +46,36 @@
 
 package avatartranslator;
 
-import myutil.TraceManager;
-import translator.RTLOTOSKeyword;
-import translator.tojava.JKeyword;
+import myutil.Conversion;
 
-public class AvatarConstant extends AvatarTerm {
+/**
+ * An AvatarSimpleGuardDuo is an {@link AvatarSimpleGuard} that is of the form:
+ * {@link AvatarTerm} binaryOp {@link AvatarTerm}
+ */
+public class AvatarSimpleGuardDuo extends AvatarSimpleGuard {
+    AvatarTerm termA;
+    AvatarTerm termB;
+    String binaryOp;
 
-    public static final AvatarConstant TRUE = new AvatarConstant ("true", null);
-    public static final AvatarConstant FALSE = new AvatarConstant ("false", null);
-
-    public boolean isLeftHand (){
-	return false;
+    public AvatarSimpleGuardDuo (AvatarTerm _termA, AvatarTerm _termB, String _binaryOp) {
+        this.termA = _termA;
+        this.termB = _termB;
+        this.binaryOp = _binaryOp;
     }
 
-    public AvatarConstant (String _name, Object _referenceObject) {
-        super (_name, _referenceObject);
+    public AvatarTerm getTermA () {
+        return this.termA;
+    }
+
+    public AvatarTerm getTermB () {
+        return this.termB;
+    }
+
+    public String getBinaryOp () {
+        return this.binaryOp;
+    }
+
+    public String toString () {
+        return this.termA.getName () + " " + this.binaryOp + " " + this.termB.getName ();
     }
 }

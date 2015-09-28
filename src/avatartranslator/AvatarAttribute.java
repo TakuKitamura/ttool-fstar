@@ -56,11 +56,13 @@ import translator.tojava.*;
 public class AvatarAttribute extends AvatarTerm implements AvatarLeftHand {
 
     // Types of parameters
-    private int type;
+    private AvatarType type;
     private String initialValue;
 
+    private AvatarBlock block;
 
-    public AvatarAttribute(String _name, int _type, Object _referenceObject) {
+
+    public AvatarAttribute(String _name, AvatarType _type, AvatarBlock _block, Object _referenceObject) {
         super(_name, _referenceObject);
         /*if (_type == -1) {
           TraceManager.addDev("- - - - - - - - - - - - " + _name + ": " + _type);
@@ -72,6 +74,11 @@ public class AvatarAttribute extends AvatarTerm implements AvatarLeftHand {
           }
           }*/
         type = _type;
+        this.block = _block;
+    }
+
+    public AvatarBlock getBlock () {
+        return this.block;
     }
 
     public void setInitialValue(String _initialValue) {
@@ -93,15 +100,15 @@ public class AvatarAttribute extends AvatarTerm implements AvatarLeftHand {
     }
 
     public String getDefaultInitialValue() {
-        return AvatarType.getDefaultInitialValue(type);
+        return this.type.getDefaultInitialValue();
     }
 
     public String getDefaultInitialValueTF() {
-        return AvatarType.getDefaultInitialValueTF(type);
+        return this.type.getDefaultInitialValueTF();
     }
 
-    public int getType() {
-        return type;
+    public AvatarType getType() {
+        return this.type;
     }
 
     public boolean isInt() {
@@ -113,7 +120,7 @@ public class AvatarAttribute extends AvatarTerm implements AvatarLeftHand {
     }
 
     public String toString() {
-        String ret = AvatarType.getStringType(type) + " " + getName();
+        String ret = this.type.getStringType() + " " + getName();
         if (initialValue  == null) {
             return ret;
         }
@@ -122,7 +129,7 @@ public class AvatarAttribute extends AvatarTerm implements AvatarLeftHand {
     }
 
     public String toStringType() {
-        String ret = AvatarType.getStringType(type) + " " + getName() + " typeid= " + getType();
+        String ret = type.getStringType() + " " + getName() + " typeid= " + getType();
         if (initialValue  == null) {
             return ret;
         }
