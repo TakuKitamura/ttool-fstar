@@ -89,6 +89,13 @@ public abstract class AvatarPragma extends AvatarElement {
 	    }
 	    return new AvatarPragmaAuthenticity(str, obj, attrStates);
 	}
+	else if (header.equals("Constant")){
+	    LinkedList<AvatarConstant> constants = new LinkedList<AvatarConstant>();
+	    for (String arg: args){
+		constants.add(new AvatarConstant(arg, obj));
+	    }
+	    return new AvatarPragmaConstant(str, obj, constants);
+	}
 	else {
 	    for (String arg: args){
 		AvatarAttribute res = parseAttr(arg, blocks);

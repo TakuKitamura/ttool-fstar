@@ -226,10 +226,25 @@ public class AvatarPragmaTests {
 	//1 Attribute
 	AvatarPragmaAuthenticity res3 = (AvatarPragmaAuthenticity) res;
 	System.out.println("# of Attributes: " + (res.getArgs().size() == 2));
-	System.out.println("Attr Name "+ res3.getAttrA());
-	System.out.println("Attr Name "+ res3.getAttrB());
+	System.out.println("Attr "+ res3.getAttrA());
+	System.out.println("Attr "+ res3.getAttrB());
+	System.out.println("Attr Name "+ res3.getAttrA().getName());
+	System.out.println("Attr Name "+ res3.getAttrB().getName());
+	System.out.println("Attr State "+ res3.getAttrA().getState());
+	System.out.println("Attr State "+ res3.getAttrB().getState());
 	System.out.println("-------------------------------------");
 
+
+	//Test Constants
+	System.out.println("Constant Tests");
+	res = AvatarPragma.createFromString("Constant 1 0 a b", null,blocks);	
+	System.out.println("Right type :" + (res instanceof AvatarPragmaConstant));
+	AvatarPragmaConstant res5 = (AvatarPragmaConstant) res;
+        System.out.println("Right number of constants " + (res5.getConstants().size() == 4));
+	for (int i=0; i< res5.getConstants().size(); i++){
+            System.out.println("Constant " + res5.getConstants().get(i).getName());
+	}
+	System.out.println("-------------------------------------");
 	System.out.println("Tests finished");
     }
     public static void test(String[] args){

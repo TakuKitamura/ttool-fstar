@@ -144,7 +144,13 @@ public class AvatarDesignPanelTranslator {
                             ce.setTGComponent(tgc);
                             ce.setTDiagramPanel(adp.getAvatarBDPanel());
                             addWarning(ce);
-                        } else {
+                        } else if (tmpPragma instanceof AvatarPragmaConstant){
+			    AvatarPragmaConstant apg = (AvatarPragmaConstant) tmpPragma;
+			    for (AvatarConstant ac: apg.getConstants()){
+			        _as.addConstant(ac);
+			    }
+			
+			} else {
                             _as.addPragma(tmpPragma);
                             //TraceManager.addDev("Adding pragma:" + tmp);
                         }

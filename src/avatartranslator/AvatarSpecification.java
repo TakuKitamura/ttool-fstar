@@ -62,6 +62,7 @@ public class AvatarSpecification extends AvatarElement {
     //private AvatarBroadcast broadcast;
 
     private LinkedList<AvatarPragma> pragmas;
+    private LinkedList<AvatarConstant> constants;
 
     private boolean robustnessMade = false;
 
@@ -74,6 +75,7 @@ public class AvatarSpecification extends AvatarElement {
         relations = new LinkedList<AvatarRelation>();
         //broadcast = new AvatarBroadcast("Broadcast", _referenceObject);
         pragmas = new LinkedList<AvatarPragma>();
+	constants = new LinkedList<AvatarConstant>();
     }
 
 
@@ -124,6 +126,10 @@ public class AvatarSpecification extends AvatarElement {
         return pragmas;
     }
 
+    public LinkedList<AvatarConstant> getConstants() {
+        return constants;
+    }
+
     public boolean isASynchronousSignal(AvatarSignal _as) {
         for(AvatarRelation ar: relations) {
             if (ar.containsSignal(_as)) {
@@ -156,6 +162,12 @@ public class AvatarSpecification extends AvatarElement {
     public void addPragma(AvatarPragma _pragma) {
         pragmas.add(_pragma);
     }
+    public void addConstant(AvatarConstant _constant) {
+	//Only add unique constants
+	if (this.getConstantWithName(_constant.getName())==null){
+	    constants.add(_constant);
+	}
+    }
 
     public String toString() {
         //Thread.currentThread().dumpStack();
@@ -171,7 +183,9 @@ public class AvatarSpecification extends AvatarElement {
         for(AvatarPragma pragma: pragmas) {
             sb.append("Pragma:" + pragma.toString() + "\n");
         }
-
+	for (AvatarConstant constant: constants){
+	    sb.append("Constant:" + constant.toString() + "\n");
+	}
         return sb.toString();
 
     }
@@ -186,6 +200,15 @@ public class AvatarSpecification extends AvatarElement {
         return null;
     }
 
+    public AvatarConstant getConstantWithName(String _name) {
+        for(AvatarConstant constant: constants) {
+            if (constant.getName().compareTo(_name)== 0) {
+                return constant;
+            }
+        }
+
+        return null;
+    }
     public static String putAttributeValueInString(String _source, AvatarAttribute _at) {
         return Conversion.putVariableValueInString(ops, _source, _at.getName(), _at.getDefaultInitialValue());
     }
