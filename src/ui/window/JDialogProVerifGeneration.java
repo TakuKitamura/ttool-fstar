@@ -323,14 +323,30 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
         hasError = false;
 
         TraceManager.addDev("Thread started");
-
+	File testFile;
         try {
             // Code generation
             if (jp1.getSelectedIndex() == 0) {
                 jta.append("Generating ProVerif code\n");
 
                 testGo();
-
+		pathCode = code1.getText();
+		testFile = new File(pathCode);
+		if (pathCode.isEmpty() || pathCode.trim().isEmpty()){
+		    pathCode="pvspec";
+		}
+	        if (testFile.isDirectory()){
+		    if (pathCode.charAt(pathCode.length()-1) != '/'){
+			pathCode = pathCode + "/";
+		    }
+	     	    pathCode = pathCode+"pvspec";
+	        }
+		else {
+		    if (testFile.exists()){
+			//Raise error
+			System.out.println("FILE EXISTS!!!");
+		    }
+		}
                 if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachability.isSelected(), translationOfBooleanFunction.isSelected(), typedLanguage.isSelected())) {
                     jta.append("ProVerif code generation done\n");
                 } else {
@@ -342,6 +358,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
 		else {
 		    exe2.setText(pathExecute +  " -in pi ");	
 		}
+		exe2.setText(exe2.getText()+pathCode);
 		//if (mgui.gtm.getCheckingWarnings().size() > 0) {
 		    jta.append("" +  mgui.gtm.getCheckingWarnings().size() + " warning(s)\n");
 		    //}
@@ -358,13 +375,13 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
 		    String filename = "pvspec";
 		    String[] args = exe2.getText().split(" ");
 		    if (args.length > 3){
-			File testFile = new File(args[3]);
+			testFile = new File(args[3]);
 			if (testFile.isFile()){
 			    filename = "";
 			}
 		    }
 
-                    cmd = exe2.getText() + pathCode + filename;
+                    cmd = exe2.getText() + filename;
 
                     jta.append("Executing ProVerif code with command: \n" + cmd + "\n");
 

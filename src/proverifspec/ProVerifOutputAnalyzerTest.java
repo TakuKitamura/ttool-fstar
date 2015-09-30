@@ -57,7 +57,7 @@ public class ProVerifOutputAnalyzerTest {
 		try {
 			String s="";
 			String sCurrentLine;
-			br = new BufferedReader(new FileReader("/home/lile/TURTLE/src/proverifspec/typed.txt"));
+			br = new BufferedReader(new FileReader("proverifspec/typed.txt"));
 			while ((sCurrentLine = br.readLine()) != null) {
 			    s= s.concat(sCurrentLine+"\n");
 			}
@@ -111,7 +111,7 @@ public class ProVerifOutputAnalyzerTest {
 			System.out.println("Untyped Tests");
 
 
-			br = new BufferedReader(new FileReader("/home/lile/TURTLE/src/proverifspec/untyped.txt"));
+			br = new BufferedReader(new FileReader("proverifspec/untyped.txt"));
 			while ((sCurrentLine = br.readLine()) != null) {
 			    s= s.concat(sCurrentLine+"\n");
 			}

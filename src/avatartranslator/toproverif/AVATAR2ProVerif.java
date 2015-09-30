@@ -107,7 +107,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     public void saveInFile(String path) throws FileException {
         // TODO check if pvspec exists etc.
         // TODO: Add a field for Hash and check it
-        FileUtils.saveFile(path + "pvspec", this.spec.getStringSpec ());
+        FileUtils.saveFile(path, this.spec.getStringSpec ());
     }
 
     public Vector getWarnings() {
