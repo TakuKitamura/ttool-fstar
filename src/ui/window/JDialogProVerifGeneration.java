@@ -52,6 +52,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
+import java.io.*;
 
 import myutil.*;
 import avatartranslator.toproverif.*;
@@ -335,19 +336,35 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                 } else {
                     jta.append("Could not generate proverif code\n");
                 }
-
+		if (typedLanguage.isSelected()){
+  		    exe2.setText(pathExecute +  " -in pitype ");		
+		}
+		else {
+		    exe2.setText(pathExecute +  " -in pi ");	
+		}
 		//if (mgui.gtm.getCheckingWarnings().size() > 0) {
 		    jta.append("" +  mgui.gtm.getCheckingWarnings().size() + " warning(s)\n");
 		    //}
             }
-
-
             testGo();
-
             // Execute
             if (jp1.getSelectedIndex() == 1) {
                 try {
-                    cmd = exe2.getText() + pathCode + "pvspec";
+		    //Check for space at end
+		    if (exe2.getText().charAt(exe2.getText().length()-1) != ' '){
+			exe2.setText(exe2.getText() + " ");
+		    }
+		    //Check if input file provided
+		    String filename = "pvspec";
+		    String[] args = exe2.getText().split(" ");
+		    if (args.length > 3){
+			File testFile = new File(args[3]);
+			if (testFile.isFile()){
+			    filename = "";
+			}
+		    }
+
+                    cmd = exe2.getText() + pathCode + filename;
 
                     jta.append("Executing ProVerif code with command: \n" + cmd + "\n");
 
@@ -356,12 +373,14 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                     // Command
 
                     data = processCmd(cmd);
+
+
                     if (outputOfProVerif.isSelected()) {
                         jta.append(data);
                     }
-
+		    
                     ProVerifOutputAnalyzer pvoa = new ProVerifOutputAnalyzer();
-                    pvoa.analyzeOutput(data);
+                    pvoa.analyzeOutput(data, typedLanguage.isSelected());
 
                     if (pvoa.getErrors().size() != 0) {
                         jta.append("\nErrors found in the generated code:\n----------------\n");

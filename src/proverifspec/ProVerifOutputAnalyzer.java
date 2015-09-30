@@ -46,7 +46,7 @@
 package proverifspec;
 
 import java.util.*;
-
+import java.util.regex.*;
 import myutil.*;
 import java.io.*;
 
@@ -63,9 +63,23 @@ public class ProVerifOutputAnalyzer {
     private LinkedList<String> nonSatisfiedAuthenticity;
     private LinkedList<String> errors;
     private LinkedList<String> notproved;
-
-
-
+    String typedEvent = "not event(";
+    String untypedEvent = "not ev:";
+    String typedFalse = ") is false";
+    String typedTrue = ") is true";
+    String untypedFalse = " is false";
+    String untypedTrue = " is true";
+    String typedSecret = "not attacker(";
+    String untypedSecret = "not attacker:";
+    String typedStrongAuth = "inj-event(authenticity__";
+    String untypedStrongAuth = "evinj:authenticity__";
+    String typedWeakAuth = "(but event(authenticity__";
+    String untypedWeakAuth = "(but ev:authenticity__";
+    String typedAuthSplit = "==> inj-event(authenticity__";
+    String typedWeakAuthSplit = "==> event(authenticity__";
+    String untypedAuthSplit = "==> evinj:authenticity__";
+    String untypedWeakAuthSplit = "==> ev:authenticity__";
+    
     public ProVerifOutputAnalyzer() {
         reachableEvents = new LinkedList<String>();
         nonReachableEvents = new LinkedList<String>();
@@ -79,165 +93,116 @@ public class ProVerifOutputAnalyzer {
         notproved = new LinkedList<String>();
     }
 
-    public void analyzeOutput(String _s) {
-        String str, previous="";
+    public void analyzeTypedOutput(String _s) {
+	    String str, previous="";
         int index0, index1;
 
         BufferedReader reader = new BufferedReader(new StringReader(_s));
-
         try {
             while ((str = reader.readLine()) != null) {
-                index0 = str.indexOf("RESULT not ev:");
-                index1 = str.indexOf("() is false");
-                if ((index0 < index1) && (index0 != -1) && (index1 != -1)) {
-                    reachableEvents.add(str.substring(index0+14, index1));
-                }
-                index0 = str.indexOf("RESULT not ev:");
-                index1 = str.indexOf("() is true");
-                if ((index0 < index1) && (index0 != -1) && (index1 != -1)) {
-                    nonReachableEvents.add(str.substring(index0+14, index1));
-                }
-                index0 = str.indexOf("RESULT not attacker:");
-                index1 = str.indexOf("[] is true");
-                if ((index0 < index1) && (index0 != -1) && (index1 != -1)) {
-                    secretTerms.add(str.substring(index0+20, index1));
-                }
-                index0 = str.indexOf("RESULT not attacker:");
-                index1 = str.indexOf("[] is false");
-                if ((index0 < index1) && (index0 != -1) && (index1 != -1)) {
-                    nonSecretTerms.add(str.substring(index0+20, index1));
-                }
+		if (str.contains("RESULT")){
+	            if (str.contains(typedEvent)){
+ 	                if (str.contains(typedTrue)){
+			    //Add string between tags
+			    //Pattern.quote converts string into regex adding escape characters
+			    nonReachableEvents.add(str.split(Pattern.quote(typedEvent))[1].split(Pattern.quote(typedTrue))[0]);
+			}
+			else if (str.contains(typedFalse)) {
+			    reachableEvents.add(str.split(Pattern.quote(typedEvent))[1].split(Pattern.quote(typedFalse))[0]);
+			}
+		    }
+		    else if (str.contains(typedSecret)){
+		        if (str.contains(typedTrue)){
+		            //Add string between tags
+		            secretTerms.add(str.split(Pattern.quote(typedSecret))[1].split("\\[")[0]);
+		        }
+		        else if (str.contains(typedFalse)) {
+		            nonSecretTerms.add(str.split(Pattern.quote(typedSecret))[1].split("\\[")[0]);
+		        }
+		    }
+		    else if (str.contains(typedStrongAuth)){
+		        if (str.contains(typedTrue)){
+		            //Add string between tags
+		            satisfiedAuthenticity.add(str.split(typedStrongAuth)[1].split(typedAuthSplit)[0].split("\\(")[0] + " ==> " + str.split(typedAuthSplit)[1].split("\\(")[0]);
+		        }
+		        else if (str.contains(typedFalse)) {
+		            nonSatisfiedAuthenticity.add(str.split(Pattern.quote(typedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0]);
+		        }
+		    }
+		    else if (str.contains(typedWeakAuth)) {
+		        if (str.contains(typedTrue)){
+		            //Add string between tags
+		            satisfiedWeakAuthenticity.add(str.split(Pattern.quote(typedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedWeakAuthSplit))[1].split("\\(")[0]);
+		        }    	
+		    }
+		}
+		if (str.contains("Error:")){
+		    errors.add(str + ": " + previous);
+		}
+		else if (str.contains("cannot be proved")){
+		    notproved.add(str);
+		}
+            }    
+            previous = str;
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-                index0 = str.indexOf("RESULT evinj:");
-                index1 = str.indexOf("is true");
-                if ((index0 < index1) && (index0 != -1) && (index1 != -1)) {
-                    String tmp = str.substring(index0+27, index1);
-                    TraceManager.addDev("tmp1=" + tmp);
-
-                    // Cut query into two parts
-                    String cut = "==> evinj:authenticity__";
-                    int indexCut = tmp.indexOf(cut);
-                    if (indexCut != -1) {
-                        String tmp1 = tmp.substring(0, indexCut);
-                        String tmp2 = tmp.substring(indexCut+cut.length(), tmp.length());
-
-                        int indexP1 = tmp1.indexOf("(");
-                        int indexP2 = tmp2.indexOf("(");
-                        if (indexP1 > -1) {
-                            tmp1 = tmp1.substring(0, indexP1);
-                        }
-                        if (indexP2 > -1) {
-                            tmp2 = tmp2.substring(0, indexP2);
-                        }
-
-                        int index__ = tmp1.lastIndexOf("__");
-                        if (index__ != -1) {
-                            tmp1 = tmp1.substring(0, index__);
-                        }
-                        index__ = tmp2.lastIndexOf("__");
-                        if (index__ != -1) {
-                            tmp2 = tmp2.substring(0, index__);
-                        }
-
-
-                        TraceManager.addDev("tmp1=" + tmp1);
-                        TraceManager.addDev("tmp2=" + tmp2);
-                        satisfiedAuthenticity.add(tmp1 + " ==> " + tmp2);
-                    }
-
-                }
-
-
-                index0 = str.indexOf("RESULT (but ev:");
-                index1 = str.indexOf("is true");
-                if ((index0 < index1) && (index0 != -1) && (index1 != -1)) {
-                    String tmp = str.substring(index0+29, index1);
-                    TraceManager.addDev("tmp1=" + tmp);
-
-                    // Cut query into two parts
-                    String cut = "==> ev:authenticity__";
-                    int indexCut = tmp.indexOf(cut);
-                    if (indexCut != -1) {
-                        String tmp1 = tmp.substring(0, indexCut);
-                        String tmp2 = tmp.substring(indexCut+cut.length(), tmp.length());
-
-                        int indexP1 = tmp1.indexOf("(");
-                        int indexP2 = tmp2.indexOf("(");
-                        if (indexP1 > -1) {
-                            tmp1 = tmp1.substring(0, indexP1);
-                        }
-                        if (indexP2 > -1) {
-                            tmp2 = tmp2.substring(0, indexP2);
-                        }
-
-                        int index__ = tmp1.lastIndexOf("__");
-                        if (index__ != -1) {
-                            tmp1 = tmp1.substring(0, index__);
-                        }
-                        index__ = tmp2.lastIndexOf("__");
-                        if (index__ != -1) {
-                            tmp2 = tmp2.substring(0, index__);
-                        }
-
-
-                        TraceManager.addDev("tmp1=" + tmp1);
-                        TraceManager.addDev("tmp2=" + tmp2);
-                        satisfiedWeakAuthenticity.add(tmp1 + " ==> " + tmp2);
-                    }
-                }
-
-                index0 = str.indexOf("RESULT evinj:");
-                index1 = str.indexOf("is false");
-                if ((index0 < index1) && (index0 != -1) && (index1 != -1)) {
-		    String tmp = str.substring(index0+27, index1);
-                    TraceManager.addDev("tmp1=" + tmp);
-
-                    // Cut query into two parts
-                    String cut = "==> evinj:authenticity__";
-                    int indexCut = tmp.indexOf(cut);
-                    if (indexCut != -1) {
-                        String tmp1 = tmp.substring(0, indexCut);
-                        String tmp2 = tmp.substring(indexCut+cut.length(), tmp.length());
-
-                        int indexP1 = tmp1.indexOf("(");
-                        int indexP2 = tmp2.indexOf("(");
-                        if (indexP1 > -1) {
-                            tmp1 = tmp1.substring(0, indexP1);
-                        }
-                        if (indexP2 > -1) {
-                            tmp2 = tmp2.substring(0, indexP2);
-                        }
-
-                        int index__ = tmp1.lastIndexOf("__");
-                        if (index__ != -1) {
-                            tmp1 = tmp1.substring(0, index__);
-                        }
-                        index__ = tmp2.lastIndexOf("__");
-                        if (index__ != -1) {
-                            tmp2 = tmp2.substring(0, index__);
-                        }
-
-
-                        TraceManager.addDev("tmp1=" + tmp1);
-                        TraceManager.addDev("tmp2=" + tmp2);
-                        nonSatisfiedAuthenticity.add(tmp1 + " ==> " + tmp2);
-                    }
-
-                }
-
-                index0 = str.indexOf("Error:");
-                if (index0 != -1) {
-                    errors.add(str + ": " + previous);
-                }
-
-                index0 = str.indexOf("cannot be proved");
-                if (index0 != -1) {
-                    notproved.add(str);
-                }
-
-                previous = str;
-            }
-
+    public void analyzeOutput(String _s, boolean isTyped) {
+        String str, previous="";
+        int index0, index1;
+	if (isTyped) {
+	    analyzeTypedOutput(_s);
+	    return;
+	}
+        BufferedReader reader = new BufferedReader(new StringReader(_s));
+        try {
+            while ((str = reader.readLine()) != null) {
+		if (str.contains("RESULT")){
+	            if (str.contains(untypedEvent)){
+ 	                if (str.contains(untypedTrue)){
+			    //Add string between tags
+			    //Pattern.quote converts string into regex adding escape characters
+			    nonReachableEvents.add(str.split(Pattern.quote(untypedEvent))[1].split("\\(")[0]);
+			}
+			else if (str.contains(untypedFalse)) {
+			    reachableEvents.add(str.split(Pattern.quote(untypedEvent))[1].split("\\(")[0]);
+			}
+		    }
+		    else if (str.contains(untypedSecret)){
+		        if (str.contains(untypedTrue)){
+		            //Add string between tags
+		            secretTerms.add(str.split(Pattern.quote(untypedSecret))[1].split("\\[")[0]);
+		        }
+		        else if (str.contains(untypedFalse)) {
+		            nonSecretTerms.add(str.split(Pattern.quote(untypedSecret))[1].split("\\[")[0]);
+		        }
+		    }
+		    else if (str.contains(untypedStrongAuth)){
+		        if (str.contains(untypedTrue)){
+		            //Add string between tags
+		            satisfiedAuthenticity.add(str.split(untypedStrongAuth)[1].split(untypedAuthSplit)[0].split("\\(")[0] + " ==> " + str.split(untypedAuthSplit)[1].split("\\(")[0]);
+		        }
+		        else if (str.contains(untypedFalse)) {
+		            nonSatisfiedAuthenticity.add(str.split(Pattern.quote(untypedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedAuthSplit))[1].split("\\(")[0]);
+		        }
+		    }
+		    else if (str.contains(untypedWeakAuth)) {
+		        if (str.contains(untypedTrue)){
+		            //Add string between tags
+		            satisfiedWeakAuthenticity.add(str.split(Pattern.quote(untypedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedWeakAuthSplit))[1].split("\\(")[0]);
+		        }    	
+		    }
+		}
+		if (str.contains("Error:")){
+		    errors.add(str + ": " + previous);
+		}
+		else if (str.contains("cannot be proved")){
+		    notproved.add(str);
+		}
+            }    
+            previous = str;
         } catch(IOException e) {
             e.printStackTrace();
         }

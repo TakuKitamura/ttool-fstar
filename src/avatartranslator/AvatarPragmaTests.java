@@ -245,6 +245,10 @@ public class AvatarPragmaTests {
             System.out.println("Constant " + res5.getConstants().get(i).getName());
 	}
 	System.out.println("-------------------------------------");
+
+
+	//Avatar Specification Tests
+	
 	System.out.println("Tests finished");
     }
     public static void test(String[] args){
