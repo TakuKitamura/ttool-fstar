@@ -61,7 +61,7 @@ public class ProVerifOutputAnalyzerTest {
 			while ((sCurrentLine = br.readLine()) != null) {
 			    s= s.concat(sCurrentLine+"\n");
 			}
-			System.out.println(s);
+			//System.out.println(s);
 	
 			System.out.println("__________________________________");
 	
@@ -111,11 +111,11 @@ public class ProVerifOutputAnalyzerTest {
 			System.out.println("Untyped Tests");
 
 
-			br = new BufferedReader(new FileReader("/home/lile/TURTLE/src/proverifspec/typed.txt"));
+			br = new BufferedReader(new FileReader("/home/lile/TURTLE/src/proverifspec/untyped.txt"));
 			while ((sCurrentLine = br.readLine()) != null) {
 			    s= s.concat(sCurrentLine+"\n");
 			}
-			System.out.println(s);
+			//System.out.println(s);
 	
 			System.out.println("__________________________________");
 	
@@ -159,15 +159,7 @@ public class ProVerifOutputAnalyzerTest {
 			for (String str: poa.getNotProved()){
 			    System.out.println(str);
 			}
-			String x= "/home/lile/proverif -in pitype file ";
-			String[] as = x.split(" ");
-			System.out.println(as.length);
-			System.out.println(as[0]);
-			System.out.println(as[1]);
-			System.out.println(as[2]);
-			System.out.println(as[3]);
-			System.out.println(as[4]);
-			System.out.println(as[5]);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {

@@ -1,0 +1,599 @@
+Process:
+(
+    {1}!
+    {2}in(chControl, chControlData_101);
+    {3}let call__num_102 = chControlDec(chControlData_101) in
+    {4}if (call__num_102 = call__System__0) then
+    0
+) | (
+    {5}!
+    {6}in(chControl, chControlData_106);
+    {7}let (call__num_107,Bob__m__data__1_108,Bob__m2__data__1_109,Bob__sk__data__1_110,Bob__receivedData__1_111) = chControlDec(chControlData_106) in
+    {8}if (call__num_107 = call__Bob__0) then
+    {9}event enteringState__Bob__waitingForMessage();
+    {10}event authenticity__Bob__m2__data__waitingForMessage(Bob__m2__data__1_109);
+    {11}in(ch, privChData_112);
+    {12}let Bob__m2__data__2_113 = privChDec(privChData_112) in
+    {13}event enteringState__Bob__messageDecrypt();
+    {14}let Bob__m__data__2_114 = sdecrypt(Bob__m2__data__2_113,Bob__sk__data__1_110) in
+    {15}event enteringState__Bob__messageDecrypted();
+    {16}event authenticity__Bob__m__data__messageDecrypted(Bob__m__data__2_114);
+    {17}let Bob__receivedData__2_115 = Bob__m__data__2_114 in
+    {18}event enteringState__Bob__SecretDataReceived()
+) | (
+    {19}!
+    {20}in(chControl, chControlData_116);
+    {21}let (call__num_117,Alice__secretData__1_118,Alice__m__data__1_119,Alice__m1__data__1_120,Alice__sk__data__1_121) = chControlDec(chControlData_116) in
+    {22}if (call__num_117 = call__Alice__0) then
+    {23}event enteringState__Alice__makingMessage();
+    {24}let Alice__m__data__2_122 = Alice__secretData__1_118 in
+    {25}let Alice__m1__data__2_123 = sencrypt(Alice__m__data__2_122,Alice__sk__data__1_121) in
+    {26}event enteringState__Alice__sendingMessage();
+    {27}event authenticity__Alice__m1__data__sendingMessage(Alice__m1__data__2_123);
+    {28}event authenticity__Alice__m__data__sendingMessage(Alice__m__data__2_122);
+    {29}out(ch, privChEnc(Alice__m1__data__2_123))
+) | (
+    {30}!
+    {31}new Alice__sk__data_124;
+    {32}let Bob__sk__data_125 = Alice__sk__data_124 in
+    (
+        {33}out(chControl, chControlEnc((call__System__0)))
+    ) | (
+        {34}new Bob__m__data_126;
+        {35}new Bob__m2__data_127;
+        {36}new Bob__receivedData_128;
+        {37}out(chControl, chControlEnc((call__Bob__0,Bob__m__data_126,Bob__m2__data_127,Bob__sk__data_125,Bob__receivedData_128)))
+    ) | (
+        {38}new Alice__secretData_129;
+        {39}new Alice__m__data_130;
+        {40}new Alice__m1__data_131;
+        {41}out(chControl, chControlEnc((call__Alice__0,Alice__secretData_129,Alice__m__data_130,Alice__m1__data_131,Alice__sk__data_124)))
+    )
+)
+
+-- Query evinj:authenticity__Bob__m__data__messageDecrypted(dummyM_201) ==> evinj:authenticity__Alice__m__data__sendingMessage(dummyM_201)
+Completing...
+Starting query evinj:authenticity__Bob__m__data__messageDecrypted(dummyM_201) ==> evinj:authenticity__Alice__m__data__sendingMessage(dummyM_201)
+goal reachable: begin:authenticity__Alice__m__data__sendingMessage(Alice__secretData_129[!1 = @sid_731]), chControlData_116 = chControlEnc((call__Alice__0[],Alice__secretData_129[!1 = @sid_731],Alice__m__data_130[!1 = @sid_731],Alice__m1__data_131[!1 = @sid_731],Alice__sk__data_124[!1 = @sid_731])), @sid_494 = @sid_732, @occ28_544 = @occ_cst() -> end:endsid_733,authenticity__Bob__m__data__messageDecrypted(Alice__secretData_129[!1 = @sid_731])
+Abbreviations:
+Alice__secretData_756 = Alice__secretData_129[!1 = @sid_747]
+Alice__sk__data_757 = Alice__sk__data_124[!1 = @sid_747]
+Alice__m__data_758 = Alice__m__data_130[!1 = @sid_747]
+Alice__m1__data_759 = Alice__m1__data_131[!1 = @sid_747]
+Bob__m__data_760 = Bob__m__data_126[!1 = @sid_747]
+Bob__m2__data_761 = Bob__m2__data_127[!1 = @sid_747]
+Bob__receivedData_762 = Bob__receivedData_128[!1 = @sid_747]
+
+1. The message chControlEnc((call__Bob__0[],Bob__m__data_760,Bob__m2__data_761,Alice__sk__data_757,Bob__receivedData_762)) may be sent to the attacker at output {37}.
+attacker:chControlEnc((call__Bob__0[],Bob__m__data_760,Bob__m2__data_761,Alice__sk__data_757,Bob__receivedData_762)).
+
+2. The message chControlEnc((call__Alice__0[],Alice__secretData_756,Alice__m__data_758,Alice__m1__data_759,Alice__sk__data_757)) may be sent to the attacker at output {41}.
+attacker:chControlEnc((call__Alice__0[],Alice__secretData_756,Alice__m__data_758,Alice__m1__data_759,Alice__sk__data_757)).
+
+3. The message chControlEnc((call__Alice__0[],Alice__secretData_756,Alice__m__data_758,Alice__m1__data_759,Alice__sk__data_757)) that the attacker may have by 2 may be received at input {20}.
+The event authenticity__Alice__m__data__sendingMessage(Alice__secretData_756) (with environment chControlData_116 = chControlEnc((call__Alice__0[],Alice__secretData_756,Alice__m__data_758,Alice__m1__data_759,Alice__sk__data_757)), @sid_494 = @sid_746, @occ28_544 = @occ_cst()) may be executed at {28}.
+So the message privChEnc(sencrypt(Alice__secretData_756,Alice__sk__data_757)) may be sent to the attacker at output {29}.
+attacker:privChEnc(sencrypt(Alice__secretData_756,Alice__sk__data_757)).
+
+4. The message chControlEnc((call__Bob__0[],Bob__m__data_760,Bob__m2__data_761,Alice__sk__data_757,Bob__receivedData_762)) that the attacker may have by 1 may be received at input {6}.
+The message privChEnc(sencrypt(Alice__secretData_756,Alice__sk__data_757)) that the attacker may have by 3 may be received at input {11}.
+So event authenticity__Bob__m__data__messageDecrypted(Alice__secretData_756) may be executed at {16} in session endsid_754.
+end:endsid_754,authenticity__Bob__m__data__messageDecrypted(Alice__secretData_756).
+
+
+A more detailed output of the traces is available with
+  param traceDisplay = long.
+
+new Alice__sk__data_124 creating Alice__sk__data_124_769 at {31} in copy a_764
+
+new Alice__secretData_129 creating Alice__secretData_129_766 at {38} in copy a_764
+
+new Alice__m__data_130 creating Alice__m__data_130_767 at {39} in copy a_764
+
+new Alice__m1__data_131 creating Alice__m1__data_131_768 at {40} in copy a_764
+
+out(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_766,Alice__m__data_130_767,Alice__m1__data_131_768,Alice__sk__data_124_769))) at {41} in copy a_764
+
+new Bob__m__data_126 creating Bob__m__data_126_770 at {34} in copy a_764
+
+new Bob__m2__data_127 creating Bob__m2__data_127_771 at {35} in copy a_764
+
+new Bob__receivedData_128 creating Bob__receivedData_128_772 at {36} in copy a_764
+
+out(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_770,Bob__m2__data_127_771,Alice__sk__data_124_769,Bob__receivedData_128_772))) at {37} in copy a_764
+
+out(chControl, chControlEnc((call__System__0))) at {33} in copy a_764
+
+in(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_770,Bob__m2__data_127_771,Alice__sk__data_124_769,Bob__receivedData_128_772))) at {6} in copy a_763
+
+event(enteringState__Bob__waitingForMessage()) at {9} in copy a_763
+
+event(authenticity__Bob__m2__data__waitingForMessage(Bob__m2__data_127_771)) at {10} in copy a_763
+
+in(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_766,Alice__m__data_130_767,Alice__m1__data_131_768,Alice__sk__data_124_769))) at {20} in copy a_765
+
+event(enteringState__Alice__makingMessage()) at {23} in copy a_765
+
+event(enteringState__Alice__sendingMessage()) at {26} in copy a_765
+
+event(authenticity__Alice__m1__data__sendingMessage(sencrypt(Alice__secretData_129_766,Alice__sk__data_124_769))) at {27} in copy a_765
+
+event(authenticity__Alice__m__data__sendingMessage(Alice__secretData_129_766)) at {28} in copy a_765
+
+out(ch, privChEnc(sencrypt(Alice__secretData_129_766,Alice__sk__data_124_769))) at {29} in copy a_765
+
+in(ch, privChEnc(sencrypt(Alice__secretData_129_766,Alice__sk__data_124_769))) at {11} in copy a_763
+
+event(enteringState__Bob__messageDecrypt()) at {13} in copy a_763
+
+event(enteringState__Bob__messageDecrypted()) at {15} in copy a_763
+
+event(authenticity__Bob__m__data__messageDecrypted(Alice__secretData_129_766)) at {16} in copy a_763
+
+The event authenticity__Bob__m__data__messageDecrypted(Alice__secretData_129_766) is executed in session a_763.
+A trace has been found.
+I am now trying to reconstruct a trace that falsifies injectivity.
+Could not find a trace that contradicts injectivity.
+RESULT evinj:authenticity__Bob__m__data__messageDecrypted(dummyM_201) ==> evinj:authenticity__Alice__m__data__sendingMessage(dummyM_201) cannot be proved.
+RESULT (but ev:authenticity__Bob__m__data__messageDecrypted(dummyM_734) ==> ev:authenticity__Alice__m__data__sendingMessage(dummyM_734) is true.)
+-- Query evinj:authenticity__Bob__m2__data__waitingForMessage(dummyM_1132) ==> evinj:authenticity__Alice__m1__data__sendingMessage(dummyM_1132)
+Completing...
+Starting query evinj:authenticity__Bob__m2__data__waitingForMessage(dummyM_1132) ==> evinj:authenticity__Alice__m1__data__sendingMessage(dummyM_1132)
+goal reachable: end:endsid_1604,authenticity__Bob__m2__data__waitingForMessage(Bob__m2__data_127[!1 = @sid_1605])
+Abbreviations:
+Bob__m2__data_1616 = Bob__m2__data_127[!1 = @sid_1608]
+Bob__m__data_1617 = Bob__m__data_126[!1 = @sid_1608]
+Alice__sk__data_1618 = Alice__sk__data_124[!1 = @sid_1608]
+Bob__receivedData_1619 = Bob__receivedData_128[!1 = @sid_1608]
+
+1. The message chControlEnc((call__Bob__0[],Bob__m__data_1617,Bob__m2__data_1616,Alice__sk__data_1618,Bob__receivedData_1619)) may be sent to the attacker at output {37}.
+attacker:chControlEnc((call__Bob__0[],Bob__m__data_1617,Bob__m2__data_1616,Alice__sk__data_1618,Bob__receivedData_1619)).
+
+2. The message chControlEnc((call__Bob__0[],Bob__m__data_1617,Bob__m2__data_1616,Alice__sk__data_1618,Bob__receivedData_1619)) that the attacker may have by 1 may be received at input {6}.
+So event authenticity__Bob__m2__data__waitingForMessage(Bob__m2__data_1616) may be executed at {10} in session endsid_1614.
+end:endsid_1614,authenticity__Bob__m2__data__waitingForMessage(Bob__m2__data_1616).
+
+
+A more detailed output of the traces is available with
+  param traceDisplay = long.
+
+new Alice__sk__data_124 creating Alice__sk__data_124_1624 at {31} in copy a_1621
+
+new Alice__secretData_129 creating Alice__secretData_129_1628 at {38} in copy a_1621
+
+new Alice__m__data_130 creating Alice__m__data_130_1629 at {39} in copy a_1621
+
+new Alice__m1__data_131 creating Alice__m1__data_131_1630 at {40} in copy a_1621
+
+out(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_1628,Alice__m__data_130_1629,Alice__m1__data_131_1630,Alice__sk__data_124_1624))) at {41} in copy a_1621
+
+new Bob__m__data_126 creating Bob__m__data_126_1623 at {34} in copy a_1621
+
+new Bob__m2__data_127 creating Bob__m2__data_127_1622 at {35} in copy a_1621
+
+new Bob__receivedData_128 creating Bob__receivedData_128_1625 at {36} in copy a_1621
+
+out(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_1623,Bob__m2__data_127_1622,Alice__sk__data_124_1624,Bob__receivedData_128_1625))) at {37} in copy a_1621
+
+out(chControl, chControlEnc((call__System__0))) at {33} in copy a_1621
+
+in(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_1623,Bob__m2__data_127_1622,Alice__sk__data_124_1624,Bob__receivedData_128_1625))) at {6} in copy a_1620
+
+event(enteringState__Bob__waitingForMessage()) at {9} in copy a_1620
+
+event(authenticity__Bob__m2__data__waitingForMessage(Bob__m2__data_127_1622)) at {10} in copy a_1620
+
+The event authenticity__Bob__m2__data__waitingForMessage(Bob__m2__data_127_1622) is executed in session a_1620.
+A trace has been found.
+RESULT evinj:authenticity__Bob__m2__data__waitingForMessage(dummyM_1132) ==> evinj:authenticity__Alice__m1__data__sendingMessage(dummyM_1132) is false.
+RESULT (even ev:authenticity__Bob__m2__data__waitingForMessage(dummyM_1606) ==> ev:authenticity__Alice__m1__data__sendingMessage(dummyM_1606) is false.)
+-- Query not ev:enteringState__Alice__makingMessage()
+Completing...
+Starting query not ev:enteringState__Alice__makingMessage()
+goal reachable: end:enteringState__Alice__makingMessage()
+Abbreviations:
+Alice__secretData_2124 = Alice__secretData_129[!1 = @sid_2118]
+Alice__m__data_2125 = Alice__m__data_130[!1 = @sid_2118]
+Alice__m1__data_2126 = Alice__m1__data_131[!1 = @sid_2118]
+Alice__sk__data_2127 = Alice__sk__data_124[!1 = @sid_2118]
+
+1. The message chControlEnc((call__Alice__0[],Alice__secretData_2124,Alice__m__data_2125,Alice__m1__data_2126,Alice__sk__data_2127)) may be sent to the attacker at output {41}.
+attacker:chControlEnc((call__Alice__0[],Alice__secretData_2124,Alice__m__data_2125,Alice__m1__data_2126,Alice__sk__data_2127)).
+
+2. The message chControlEnc((call__Alice__0[],Alice__secretData_2124,Alice__m__data_2125,Alice__m1__data_2126,Alice__sk__data_2127)) that the attacker may have by 1 may be received at input {20}.
+So event enteringState__Alice__makingMessage() may be executed at {23}.
+end:enteringState__Alice__makingMessage().
+
+
+A more detailed output of the traces is available with
+  param traceDisplay = long.
+
+new Alice__sk__data_124 creating Alice__sk__data_124_2133 at {31} in copy a_2128
+
+new Alice__secretData_129 creating Alice__secretData_129_2130 at {38} in copy a_2128
+
+new Alice__m__data_130 creating Alice__m__data_130_2131 at {39} in copy a_2128
+
+new Alice__m1__data_131 creating Alice__m1__data_131_2132 at {40} in copy a_2128
+
+out(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_2130,Alice__m__data_130_2131,Alice__m1__data_131_2132,Alice__sk__data_124_2133))) at {41} in copy a_2128
+
+new Bob__m__data_126 creating Bob__m__data_126_2136 at {34} in copy a_2128
+
+new Bob__m2__data_127 creating Bob__m2__data_127_2137 at {35} in copy a_2128
+
+new Bob__receivedData_128 creating Bob__receivedData_128_2138 at {36} in copy a_2128
+
+out(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_2136,Bob__m2__data_127_2137,Alice__sk__data_124_2133,Bob__receivedData_128_2138))) at {37} in copy a_2128
+
+out(chControl, chControlEnc((call__System__0))) at {33} in copy a_2128
+
+in(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_2130,Alice__m__data_130_2131,Alice__m1__data_131_2132,Alice__sk__data_124_2133))) at {20} in copy a_2129
+
+event(enteringState__Alice__makingMessage()) at {23} in copy a_2129
+
+The event enteringState__Alice__makingMessage() is executed.
+A trace has been found.
+RESULT not ev:enteringState__Alice__makingMessage() is false.
+-- Query not ev:enteringState__Alice__sendingMessage()
+Completing...
+Starting query not ev:enteringState__Alice__sendingMessage()
+goal reachable: end:enteringState__Alice__sendingMessage()
+Abbreviations:
+Alice__secretData_2626 = Alice__secretData_129[!1 = @sid_2620]
+Alice__m__data_2627 = Alice__m__data_130[!1 = @sid_2620]
+Alice__m1__data_2628 = Alice__m1__data_131[!1 = @sid_2620]
+Alice__sk__data_2629 = Alice__sk__data_124[!1 = @sid_2620]
+
+1. The message chControlEnc((call__Alice__0[],Alice__secretData_2626,Alice__m__data_2627,Alice__m1__data_2628,Alice__sk__data_2629)) may be sent to the attacker at output {41}.
+attacker:chControlEnc((call__Alice__0[],Alice__secretData_2626,Alice__m__data_2627,Alice__m1__data_2628,Alice__sk__data_2629)).
+
+2. The message chControlEnc((call__Alice__0[],Alice__secretData_2626,Alice__m__data_2627,Alice__m1__data_2628,Alice__sk__data_2629)) that the attacker may have by 1 may be received at input {20}.
+So event enteringState__Alice__sendingMessage() may be executed at {26}.
+end:enteringState__Alice__sendingMessage().
+
+
+A more detailed output of the traces is available with
+  param traceDisplay = long.
+
+new Alice__sk__data_124 creating Alice__sk__data_124_2635 at {31} in copy a_2630
+
+new Alice__secretData_129 creating Alice__secretData_129_2632 at {38} in copy a_2630
+
+new Alice__m__data_130 creating Alice__m__data_130_2633 at {39} in copy a_2630
+
+new Alice__m1__data_131 creating Alice__m1__data_131_2634 at {40} in copy a_2630
+
+out(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_2632,Alice__m__data_130_2633,Alice__m1__data_131_2634,Alice__sk__data_124_2635))) at {41} in copy a_2630
+
+new Bob__m__data_126 creating Bob__m__data_126_2638 at {34} in copy a_2630
+
+new Bob__m2__data_127 creating Bob__m2__data_127_2639 at {35} in copy a_2630
+
+new Bob__receivedData_128 creating Bob__receivedData_128_2640 at {36} in copy a_2630
+
+out(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_2638,Bob__m2__data_127_2639,Alice__sk__data_124_2635,Bob__receivedData_128_2640))) at {37} in copy a_2630
+
+out(chControl, chControlEnc((call__System__0))) at {33} in copy a_2630
+
+in(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_2632,Alice__m__data_130_2633,Alice__m1__data_131_2634,Alice__sk__data_124_2635))) at {20} in copy a_2631
+
+event(enteringState__Alice__makingMessage()) at {23} in copy a_2631
+
+event(enteringState__Alice__sendingMessage()) at {26} in copy a_2631
+
+The event enteringState__Alice__sendingMessage() is executed.
+A trace has been found.
+RESULT not ev:enteringState__Alice__sendingMessage() is false.
+-- Query not ev:enteringState__Bob__waitingForMessage()
+Completing...
+Starting query not ev:enteringState__Bob__waitingForMessage()
+goal reachable: end:enteringState__Bob__waitingForMessage()
+Abbreviations:
+Bob__m__data_3129 = Bob__m__data_126[!1 = @sid_3123]
+Bob__m2__data_3130 = Bob__m2__data_127[!1 = @sid_3123]
+Alice__sk__data_3131 = Alice__sk__data_124[!1 = @sid_3123]
+Bob__receivedData_3132 = Bob__receivedData_128[!1 = @sid_3123]
+
+1. The message chControlEnc((call__Bob__0[],Bob__m__data_3129,Bob__m2__data_3130,Alice__sk__data_3131,Bob__receivedData_3132)) may be sent to the attacker at output {37}.
+attacker:chControlEnc((call__Bob__0[],Bob__m__data_3129,Bob__m2__data_3130,Alice__sk__data_3131,Bob__receivedData_3132)).
+
+2. The message chControlEnc((call__Bob__0[],Bob__m__data_3129,Bob__m2__data_3130,Alice__sk__data_3131,Bob__receivedData_3132)) that the attacker may have by 1 may be received at input {6}.
+So event enteringState__Bob__waitingForMessage() may be executed at {9}.
+end:enteringState__Bob__waitingForMessage().
+
+
+A more detailed output of the traces is available with
+  param traceDisplay = long.
+
+new Alice__sk__data_124 creating Alice__sk__data_124_3137 at {31} in copy a_3133
+
+new Alice__secretData_129 creating Alice__secretData_129_3141 at {38} in copy a_3133
+
+new Alice__m__data_130 creating Alice__m__data_130_3142 at {39} in copy a_3133
+
+new Alice__m1__data_131 creating Alice__m1__data_131_3143 at {40} in copy a_3133
+
+out(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_3141,Alice__m__data_130_3142,Alice__m1__data_131_3143,Alice__sk__data_124_3137))) at {41} in copy a_3133
+
+new Bob__m__data_126 creating Bob__m__data_126_3135 at {34} in copy a_3133
+
+new Bob__m2__data_127 creating Bob__m2__data_127_3136 at {35} in copy a_3133
+
+new Bob__receivedData_128 creating Bob__receivedData_128_3138 at {36} in copy a_3133
+
+out(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_3135,Bob__m2__data_127_3136,Alice__sk__data_124_3137,Bob__receivedData_128_3138))) at {37} in copy a_3133
+
+out(chControl, chControlEnc((call__System__0))) at {33} in copy a_3133
+
+in(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_3135,Bob__m2__data_127_3136,Alice__sk__data_124_3137,Bob__receivedData_128_3138))) at {6} in copy a_3134
+
+event(enteringState__Bob__waitingForMessage()) at {9} in copy a_3134
+
+The event enteringState__Bob__waitingForMessage() is executed.
+A trace has been found.
+RESULT not ev:enteringState__Bob__waitingForMessage() is false.
+-- Query not ev:enteringState__Bob__messageDecrypt()
+Completing...
+Starting query not ev:enteringState__Bob__messageDecrypt()
+goal reachable: end:enteringState__Bob__messageDecrypt()
+Abbreviations:
+Alice__secretData_3646 = Alice__secretData_129[!1 = @sid_3633]
+Alice__sk__data_3647 = Alice__sk__data_124[!1 = @sid_3633]
+Alice__m__data_3648 = Alice__m__data_130[!1 = @sid_3633]
+Alice__m1__data_3649 = Alice__m1__data_131[!1 = @sid_3633]
+Bob__m__data_3650 = Bob__m__data_126[!1 = @sid_3639]
+Bob__m2__data_3651 = Bob__m2__data_127[!1 = @sid_3639]
+Alice__sk__data_3652 = Alice__sk__data_124[!1 = @sid_3639]
+Bob__receivedData_3653 = Bob__receivedData_128[!1 = @sid_3639]
+
+1. The message chControlEnc((call__Bob__0[],Bob__m__data_3650,Bob__m2__data_3651,Alice__sk__data_3652,Bob__receivedData_3653)) may be sent to the attacker at output {37}.
+attacker:chControlEnc((call__Bob__0[],Bob__m__data_3650,Bob__m2__data_3651,Alice__sk__data_3652,Bob__receivedData_3653)).
+
+2. The message chControlEnc((call__Alice__0[],Alice__secretData_3646,Alice__m__data_3648,Alice__m1__data_3649,Alice__sk__data_3647)) may be sent to the attacker at output {41}.
+attacker:chControlEnc((call__Alice__0[],Alice__secretData_3646,Alice__m__data_3648,Alice__m1__data_3649,Alice__sk__data_3647)).
+
+3. The message chControlEnc((call__Alice__0[],Alice__secretData_3646,Alice__m__data_3648,Alice__m1__data_3649,Alice__sk__data_3647)) that the attacker may have by 2 may be received at input {20}.
+So the message privChEnc(sencrypt(Alice__secretData_3646,Alice__sk__data_3647)) may be sent to the attacker at output {29}.
+attacker:privChEnc(sencrypt(Alice__secretData_3646,Alice__sk__data_3647)).
+
+4. The message chControlEnc((call__Bob__0[],Bob__m__data_3650,Bob__m2__data_3651,Alice__sk__data_3652,Bob__receivedData_3653)) that the attacker may have by 1 may be received at input {6}.
+The message privChEnc(sencrypt(Alice__secretData_3646,Alice__sk__data_3647)) that the attacker may have by 3 may be received at input {11}.
+So event enteringState__Bob__messageDecrypt() may be executed at {13}.
+end:enteringState__Bob__messageDecrypt().
+
+
+A more detailed output of the traces is available with
+  param traceDisplay = long.
+
+new Alice__sk__data_124 creating Alice__sk__data_124_3664 at {31} in copy a_3656
+
+new Alice__secretData_129 creating Alice__secretData_129_3669 at {38} in copy a_3656
+
+new Alice__m__data_130 creating Alice__m__data_130_3670 at {39} in copy a_3656
+
+new Alice__m1__data_131 creating Alice__m1__data_131_3671 at {40} in copy a_3656
+
+out(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_3669,Alice__m__data_130_3670,Alice__m1__data_131_3671,Alice__sk__data_124_3664))) at {41} in copy a_3656
+
+new Bob__m__data_126 creating Bob__m__data_126_3662 at {34} in copy a_3656
+
+new Bob__m2__data_127 creating Bob__m2__data_127_3663 at {35} in copy a_3656
+
+new Bob__receivedData_128 creating Bob__receivedData_128_3665 at {36} in copy a_3656
+
+out(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_3662,Bob__m2__data_127_3663,Alice__sk__data_124_3664,Bob__receivedData_128_3665))) at {37} in copy a_3656
+
+out(chControl, chControlEnc((call__System__0))) at {33} in copy a_3656
+
+new Alice__sk__data_124 creating Alice__sk__data_124_3661 at {31} in copy a_3654
+
+new Alice__secretData_129 creating Alice__secretData_129_3658 at {38} in copy a_3654
+
+new Alice__m__data_130 creating Alice__m__data_130_3659 at {39} in copy a_3654
+
+new Alice__m1__data_131 creating Alice__m1__data_131_3660 at {40} in copy a_3654
+
+out(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_3658,Alice__m__data_130_3659,Alice__m1__data_131_3660,Alice__sk__data_124_3661))) at {41} in copy a_3654
+
+new Bob__m__data_126 creating Bob__m__data_126_3672 at {34} in copy a_3654
+
+new Bob__m2__data_127 creating Bob__m2__data_127_3673 at {35} in copy a_3654
+
+new Bob__receivedData_128 creating Bob__receivedData_128_3674 at {36} in copy a_3654
+
+out(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_3672,Bob__m2__data_127_3673,Alice__sk__data_124_3661,Bob__receivedData_128_3674))) at {37} in copy a_3654
+
+out(chControl, chControlEnc((call__System__0))) at {33} in copy a_3654
+
+in(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_3662,Bob__m2__data_127_3663,Alice__sk__data_124_3664,Bob__receivedData_128_3665))) at {6} in copy a_3657
+
+event(enteringState__Bob__waitingForMessage()) at {9} in copy a_3657
+
+event(authenticity__Bob__m2__data__waitingForMessage(Bob__m2__data_127_3663)) at {10} in copy a_3657
+
+in(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_3658,Alice__m__data_130_3659,Alice__m1__data_131_3660,Alice__sk__data_124_3661))) at {20} in copy a_3655
+
+event(enteringState__Alice__makingMessage()) at {23} in copy a_3655
+
+event(enteringState__Alice__sendingMessage()) at {26} in copy a_3655
+
+event(authenticity__Alice__m1__data__sendingMessage(sencrypt(Alice__secretData_129_3658,Alice__sk__data_124_3661))) at {27} in copy a_3655
+
+event(authenticity__Alice__m__data__sendingMessage(Alice__secretData_129_3658)) at {28} in copy a_3655
+
+out(ch, privChEnc(sencrypt(Alice__secretData_129_3658,Alice__sk__data_124_3661))) at {29} in copy a_3655
+
+in(ch, privChEnc(sencrypt(Alice__secretData_129_3658,Alice__sk__data_124_3661))) at {11} in copy a_3657
+
+event(enteringState__Bob__messageDecrypt()) at {13} in copy a_3657
+
+The event enteringState__Bob__messageDecrypt() is executed.
+A trace has been found.
+RESULT not ev:enteringState__Bob__messageDecrypt() is false.
+-- Query not ev:enteringState__Bob__SecretDataReceived()
+Completing...
+Starting query not ev:enteringState__Bob__SecretDataReceived()
+goal reachable: end:enteringState__Bob__SecretDataReceived()
+Abbreviations:
+Alice__secretData_4211 = Alice__secretData_129[!1 = @sid_4204]
+Alice__sk__data_4212 = Alice__sk__data_124[!1 = @sid_4204]
+Alice__m__data_4213 = Alice__m__data_130[!1 = @sid_4204]
+Alice__m1__data_4214 = Alice__m1__data_131[!1 = @sid_4204]
+Bob__m__data_4215 = Bob__m__data_126[!1 = @sid_4204]
+Bob__m2__data_4216 = Bob__m2__data_127[!1 = @sid_4204]
+Bob__receivedData_4217 = Bob__receivedData_128[!1 = @sid_4204]
+
+1. The message chControlEnc((call__Bob__0[],Bob__m__data_4215,Bob__m2__data_4216,Alice__sk__data_4212,Bob__receivedData_4217)) may be sent to the attacker at output {37}.
+attacker:chControlEnc((call__Bob__0[],Bob__m__data_4215,Bob__m2__data_4216,Alice__sk__data_4212,Bob__receivedData_4217)).
+
+2. The message chControlEnc((call__Alice__0[],Alice__secretData_4211,Alice__m__data_4213,Alice__m1__data_4214,Alice__sk__data_4212)) may be sent to the attacker at output {41}.
+attacker:chControlEnc((call__Alice__0[],Alice__secretData_4211,Alice__m__data_4213,Alice__m1__data_4214,Alice__sk__data_4212)).
+
+3. The message chControlEnc((call__Alice__0[],Alice__secretData_4211,Alice__m__data_4213,Alice__m1__data_4214,Alice__sk__data_4212)) that the attacker may have by 2 may be received at input {20}.
+So the message privChEnc(sencrypt(Alice__secretData_4211,Alice__sk__data_4212)) may be sent to the attacker at output {29}.
+attacker:privChEnc(sencrypt(Alice__secretData_4211,Alice__sk__data_4212)).
+
+4. The message chControlEnc((call__Bob__0[],Bob__m__data_4215,Bob__m2__data_4216,Alice__sk__data_4212,Bob__receivedData_4217)) that the attacker may have by 1 may be received at input {6}.
+The message privChEnc(sencrypt(Alice__secretData_4211,Alice__sk__data_4212)) that the attacker may have by 3 may be received at input {11}.
+So event enteringState__Bob__SecretDataReceived() may be executed at {18}.
+end:enteringState__Bob__SecretDataReceived().
+
+
+A more detailed output of the traces is available with
+  param traceDisplay = long.
+
+new Alice__sk__data_124 creating Alice__sk__data_124_4224 at {31} in copy a_4218
+
+new Alice__secretData_129 creating Alice__secretData_129_4221 at {38} in copy a_4218
+
+new Alice__m__data_130 creating Alice__m__data_130_4222 at {39} in copy a_4218
+
+new Alice__m1__data_131 creating Alice__m1__data_131_4223 at {40} in copy a_4218
+
+out(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_4221,Alice__m__data_130_4222,Alice__m1__data_131_4223,Alice__sk__data_124_4224))) at {41} in copy a_4218
+
+new Bob__m__data_126 creating Bob__m__data_126_4225 at {34} in copy a_4218
+
+new Bob__m2__data_127 creating Bob__m2__data_127_4226 at {35} in copy a_4218
+
+new Bob__receivedData_128 creating Bob__receivedData_128_4227 at {36} in copy a_4218
+
+out(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_4225,Bob__m2__data_127_4226,Alice__sk__data_124_4224,Bob__receivedData_128_4227))) at {37} in copy a_4218
+
+out(chControl, chControlEnc((call__System__0))) at {33} in copy a_4218
+
+in(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_4225,Bob__m2__data_127_4226,Alice__sk__data_124_4224,Bob__receivedData_128_4227))) at {6} in copy a_4220
+
+event(enteringState__Bob__waitingForMessage()) at {9} in copy a_4220
+
+event(authenticity__Bob__m2__data__waitingForMessage(Bob__m2__data_127_4226)) at {10} in copy a_4220
+
+in(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_4221,Alice__m__data_130_4222,Alice__m1__data_131_4223,Alice__sk__data_124_4224))) at {20} in copy a_4219
+
+event(enteringState__Alice__makingMessage()) at {23} in copy a_4219
+
+event(enteringState__Alice__sendingMessage()) at {26} in copy a_4219
+
+event(authenticity__Alice__m1__data__sendingMessage(sencrypt(Alice__secretData_129_4221,Alice__sk__data_124_4224))) at {27} in copy a_4219
+
+event(authenticity__Alice__m__data__sendingMessage(Alice__secretData_129_4221)) at {28} in copy a_4219
+
+out(ch, privChEnc(sencrypt(Alice__secretData_129_4221,Alice__sk__data_124_4224))) at {29} in copy a_4219
+
+in(ch, privChEnc(sencrypt(Alice__secretData_129_4221,Alice__sk__data_124_4224))) at {11} in copy a_4220
+
+event(enteringState__Bob__messageDecrypt()) at {13} in copy a_4220
+
+event(enteringState__Bob__messageDecrypted()) at {15} in copy a_4220
+
+event(authenticity__Bob__m__data__messageDecrypted(Alice__secretData_129_4221)) at {16} in copy a_4220
+
+event(enteringState__Bob__SecretDataReceived()) at {18} in copy a_4220
+
+The event enteringState__Bob__SecretDataReceived() is executed.
+A trace has been found.
+RESULT not ev:enteringState__Bob__SecretDataReceived() is false.
+-- Query not ev:enteringState__Bob__messageDecrypted()
+Completing...
+Starting query not ev:enteringState__Bob__messageDecrypted()
+goal reachable: end:enteringState__Bob__messageDecrypted()
+Abbreviations:
+Alice__secretData_4769 = Alice__secretData_129[!1 = @sid_4762]
+Alice__sk__data_4770 = Alice__sk__data_124[!1 = @sid_4762]
+Alice__m__data_4771 = Alice__m__data_130[!1 = @sid_4762]
+Alice__m1__data_4772 = Alice__m1__data_131[!1 = @sid_4762]
+Bob__m__data_4773 = Bob__m__data_126[!1 = @sid_4762]
+Bob__m2__data_4774 = Bob__m2__data_127[!1 = @sid_4762]
+Bob__receivedData_4775 = Bob__receivedData_128[!1 = @sid_4762]
+
+1. The message chControlEnc((call__Bob__0[],Bob__m__data_4773,Bob__m2__data_4774,Alice__sk__data_4770,Bob__receivedData_4775)) may be sent to the attacker at output {37}.
+attacker:chControlEnc((call__Bob__0[],Bob__m__data_4773,Bob__m2__data_4774,Alice__sk__data_4770,Bob__receivedData_4775)).
+
+2. The message chControlEnc((call__Alice__0[],Alice__secretData_4769,Alice__m__data_4771,Alice__m1__data_4772,Alice__sk__data_4770)) may be sent to the attacker at output {41}.
+attacker:chControlEnc((call__Alice__0[],Alice__secretData_4769,Alice__m__data_4771,Alice__m1__data_4772,Alice__sk__data_4770)).
+
+3. The message chControlEnc((call__Alice__0[],Alice__secretData_4769,Alice__m__data_4771,Alice__m1__data_4772,Alice__sk__data_4770)) that the attacker may have by 2 may be received at input {20}.
+So the message privChEnc(sencrypt(Alice__secretData_4769,Alice__sk__data_4770)) may be sent to the attacker at output {29}.
+attacker:privChEnc(sencrypt(Alice__secretData_4769,Alice__sk__data_4770)).
+
+4. The message chControlEnc((call__Bob__0[],Bob__m__data_4773,Bob__m2__data_4774,Alice__sk__data_4770,Bob__receivedData_4775)) that the attacker may have by 1 may be received at input {6}.
+The message privChEnc(sencrypt(Alice__secretData_4769,Alice__sk__data_4770)) that the attacker may have by 3 may be received at input {11}.
+So event enteringState__Bob__messageDecrypted() may be executed at {15}.
+end:enteringState__Bob__messageDecrypted().
+
+
+A more detailed output of the traces is available with
+  param traceDisplay = long.
+
+new Alice__sk__data_124 creating Alice__sk__data_124_4782 at {31} in copy a_4776
+
+new Alice__secretData_129 creating Alice__secretData_129_4779 at {38} in copy a_4776
+
+new Alice__m__data_130 creating Alice__m__data_130_4780 at {39} in copy a_4776
+
+new Alice__m1__data_131 creating Alice__m1__data_131_4781 at {40} in copy a_4776
+
+out(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_4779,Alice__m__data_130_4780,Alice__m1__data_131_4781,Alice__sk__data_124_4782))) at {41} in copy a_4776
+
+new Bob__m__data_126 creating Bob__m__data_126_4783 at {34} in copy a_4776
+
+new Bob__m2__data_127 creating Bob__m2__data_127_4784 at {35} in copy a_4776
+
+new Bob__receivedData_128 creating Bob__receivedData_128_4785 at {36} in copy a_4776
+
+out(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_4783,Bob__m2__data_127_4784,Alice__sk__data_124_4782,Bob__receivedData_128_4785))) at {37} in copy a_4776
+
+out(chControl, chControlEnc((call__System__0))) at {33} in copy a_4776
+
+in(chControl, chControlEnc((call__Bob__0,Bob__m__data_126_4783,Bob__m2__data_127_4784,Alice__sk__data_124_4782,Bob__receivedData_128_4785))) at {6} in copy a_4778
+
+event(enteringState__Bob__waitingForMessage()) at {9} in copy a_4778
+
+event(authenticity__Bob__m2__data__waitingForMessage(Bob__m2__data_127_4784)) at {10} in copy a_4778
+
+in(chControl, chControlEnc((call__Alice__0,Alice__secretData_129_4779,Alice__m__data_130_4780,Alice__m1__data_131_4781,Alice__sk__data_124_4782))) at {20} in copy a_4777
+
+event(enteringState__Alice__makingMessage()) at {23} in copy a_4777
+
+event(enteringState__Alice__sendingMessage()) at {26} in copy a_4777
+
+event(authenticity__Alice__m1__data__sendingMessage(sencrypt(Alice__secretData_129_4779,Alice__sk__data_124_4782))) at {27} in copy a_4777
+
+event(authenticity__Alice__m__data__sendingMessage(Alice__secretData_129_4779)) at {28} in copy a_4777
+
+out(ch, privChEnc(sencrypt(Alice__secretData_129_4779,Alice__sk__data_124_4782))) at {29} in copy a_4777
+
+in(ch, privChEnc(sencrypt(Alice__secretData_129_4779,Alice__sk__data_124_4782))) at {11} in copy a_4778
+
+event(enteringState__Bob__messageDecrypt()) at {13} in copy a_4778
+
+event(enteringState__Bob__messageDecrypted()) at {15} in copy a_4778
+
+The event enteringState__Bob__messageDecrypted() is executed.
+A trace has been found.
+RESULT not ev:enteringState__Bob__messageDecrypted() is false.
+-- Query not attacker:Alice__secretData_129[!1 = v_4858]
+Completing...
+Starting query not attacker:Alice__secretData_129[!1 = v_4858]
+RESULT not attacker:Alice__secretData_129[!1 = v_4858] is true.
