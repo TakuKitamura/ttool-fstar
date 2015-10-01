@@ -51,15 +51,25 @@ import myutil.*;
 import ui.*;
 
 public abstract class AvatarPragma extends AvatarElement {
-     private final String[] PRAGMAS = {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public"};
-    private final String[] PRAGMAS_TRANSLATION = {"Secret", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public"};
+     private final String[] PRAGMAS = {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "Constant"};
+    private final String[] PRAGMAS_TRANSLATION = {"Secret", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "Constant"};
     private LinkedList<AvatarAttribute> arguments;
+
+    
+    private int proofStatus = 0;
+
 
     public AvatarPragma(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
     public LinkedList<AvatarAttribute> getArgs(){
 	return arguments;
+    }
+    public int getProofStatus(){
+	return proofStatus;
+    }
+    public void setProofStatus(int status){
+	proofStatus = status;
     }
     public static AvatarPragma createFromString(String str, Object obj, LinkedList<AvatarBlock> blocks){
 	//createFromString takes in a pragma string (with # removed), the containing object, and the list of AvatarBlocks, and returns the corresponding AvatarPragma or null if an error occurred

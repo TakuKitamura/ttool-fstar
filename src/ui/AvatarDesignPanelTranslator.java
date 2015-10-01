@@ -120,14 +120,14 @@ public class AvatarDesignPanelTranslator {
     public void createPragmas(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
         Iterator iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
         TGComponent tgc;
-        Pragma tgcn;
+        AvatarBDPragma tgcn;
         String values [];
         String tmp;
 	AvatarPragma tmpPragma;
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof Pragma) {
-                tgcn = (Pragma)tgc;
+            if (tgc instanceof AvatarBDPragma) {
+                tgcn = (AvatarBDPragma)tgc;
                 values = tgcn.getValues();
                 for(int i=0; i<values.length; i++) {
                     tmp = values[i].trim();

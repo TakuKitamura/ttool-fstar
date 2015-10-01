@@ -39,7 +39,7 @@
  * Class AvatarPragma
  * Creation: 20/05/2010
  * @version 1.1 01/07/2014
- * @author Ludovic APVRILLE, Raja GATGOUT
+ * @author Ludovic APVRILLE, Letitia LI
  * @see
  */
 
