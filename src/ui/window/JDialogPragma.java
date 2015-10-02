@@ -129,6 +129,9 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
 
 	
         public boolean insertSelection() {
+	    if (!popupMenu.isVisible()){
+		return false;
+	    }
             if (list.getSelectedValue() != null) {
                 try {
                     final String selectedSuggestion = ((String) list.getSelectedValue()).substring(subWord.length());
@@ -270,7 +273,11 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
 
             @Override
             public void keyPressed(KeyEvent e) {
-
+		if (e.getKeyCode() == KeyEvent.VK_DOWN && suggestion != null) {
+                   e.consume();
+                } else if (e.getKeyCode() == KeyEvent.VK_UP && suggestion != null) {
+                    e.consume();
+                } 
             }
         });
 
