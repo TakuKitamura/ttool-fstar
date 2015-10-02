@@ -121,7 +121,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         removable = true;
 
         name = "Proverif Pragma";
-        value = "Proverif List of Pragma";
+        value = "";
 
         myImageIcon = IconManager.imgic6000;
     }
@@ -160,6 +160,8 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         Color c = g.getColor();
 
         int desiredWidth = minWidth;
+	desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth("Property Pragma") + marginX);
+	
         for(int i=0; i< values.length; i++) {
             desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX);
         }

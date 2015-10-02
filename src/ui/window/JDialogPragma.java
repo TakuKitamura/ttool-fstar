@@ -88,7 +88,9 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
             popupMenu.setOpaque(false);
             popupMenu.setBorder(null);
             popupMenu.add(list = createSuggestionList(position, subWord), BorderLayout.CENTER);
+	    if (list.getModel().getSize() >0){
             popupMenu.show(textarea, location.x, textarea.getBaseline(0, 0) + location.y);
+	    }
         }
 
         public void hide() {
@@ -141,7 +143,7 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
         }
 
         public void moveUp() {
-            int index = Math.min(list.getSelectedIndex() - 1, 0);
+            int index = Math.max(list.getSelectedIndex() - 1, 0);
             selectIndex(index);
         }
 
@@ -196,7 +198,7 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
             return;
         }
         final String subWord = text.substring(start, position);
-        if (subWord.length() < 2) {
+        if (subWord.length() < 1) {
             return;
         }
         suggestion = new SuggestionPanel(textarea, position, subWord, location);
@@ -258,10 +260,11 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
                     suggestion.moveDown();
                 } else if (e.getKeyCode() == KeyEvent.VK_UP && suggestion != null) {
                     suggestion.moveUp();
-                } else if (Character.isLetterOrDigit(e.getKeyChar())) {
-                    showSuggestionLater();
                 } else if (Character.isWhitespace(e.getKeyChar())) {
                     hideSuggestion();
+                }
+		else if (Character.isLetter(e.getKeyChar()) || e.getKeyChar()=='#'){
+                    showSuggestionLater();
                 }
             }
 
