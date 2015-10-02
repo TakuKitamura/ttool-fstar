@@ -624,6 +624,10 @@ public class GTURTLEModeling {
         return avatarspec;
     }
 
+    public ProVerifOutputAnalyzer getProVerifOutputAnalyzer () {
+        return this.avatar2proverif.getOutputAnalyzer ();
+    }
+
     public boolean generateProVerifFromAVATAR(String _path, boolean _stateReachability, boolean _advancedTranslation, boolean _typed) {
         avatar2proverif = new AVATAR2ProVerif(avatarspec);
         //tml2uppaal.setChoiceDeterministic(choices);

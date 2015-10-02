@@ -70,9 +70,8 @@ public class AvatarBlockTemplate  {
         AvatarSignal reset = new AvatarSignal("reset", AvatarSignal.IN, _referenceBlock);
         AvatarSignal expire = new AvatarSignal("expire", AvatarSignal.OUT, _referenceBlock);
         
-        // FIXME: I replaced this val attribute by using the aa attribute created earlier. Is it ok ?
-        // AvatarAttribute val = new AvatarAttribute("value", AvatarType.INTEGER, ab, aa.getReferenceObject());
-        set.addParameter(aa);
+        AvatarAttribute val = new AvatarAttribute("value", AvatarType.INTEGER, ab, aa.getReferenceObject());
+        set.addParameter(val);
         ab.addSignal(set);
         ab.addSignal(reset);
         ab.addSignal(expire);

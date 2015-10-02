@@ -79,7 +79,7 @@ public class AvatarTermFunction extends AvatarTerm implements AvatarAction {
             // Method was found and the arguments provided are correct
             return new AvatarTermFunction (meth, argsTuple, block);
 
-        TraceManager.addDev ("Function call '" + toParse + "' couldn't be parsed");
+        //TraceManager.addDev ("Function call '" + toParse + "' couldn't be parsed");
 
         return null;
     }

@@ -54,6 +54,8 @@ import ui.avatarbd.*;
 import ui.avatardd.*;
 import ui.avatarsmd.*;
 
+import avatartranslator.AvatarAttribute;
+
 
 import proverifspec.*;
 
@@ -337,61 +339,26 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
         resetModelBacktracingProVerif();
 
-        String block, attr, state;
+        // Confidential attributes
+        for(AvatarAttribute attribute: pvoa.getSecretTerms()) {
+            TAttribute a = abdp.getAttributeByBlockName(attribute.getBlock ().getName (), attribute.getName ());
+            if (a != null)
+                //TraceManager.addDev("Setting conf to ok");
+                a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
+        }
+
+        for(AvatarAttribute attribute: pvoa.getNonSecretTerms()) {
+            TAttribute a = abdp.getAttributeByBlockName(attribute.getBlock ().getName (), attribute.getName ());
+            if (a != null)
+                //TraceManager.addDev("Setting conf to ok");
+                a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
+        }
+
+        String block, state;
         int index;
-        TAttribute a;
         int i;
         ListIterator iterator;
         TGComponent tgc;
-
-        // Confidential attributes
-        for(String s: pvoa.getSecretTerms()) {
-            index = s.indexOf("__");
-            if (index != -1) {
-                block = s.substring(0, index);
-                attr = s.substring(index+2, s.length());
-                index = attr.indexOf("__");
-                if (index != -1) {
-                    attr = attr.substring(0, index);
-                }
-		else {
-		    index = attr.indexOf("_");
-		    if (index != -1){
-			attr = attr.substring(0, index);
-		    }
-		}
-                //TraceManager.addDev("Analyzing block=" + block + " attr=" + attr);
-                a = abdp.getAttributeByBlockName(block, attr);
-                if (a != null) {
-                    //TraceManager.addDev("Setting conf to ok");
-                    a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
-                }
-            }
-        }
-
-        for(String s: pvoa.getNonSecretTerms()) {
-            index = s.indexOf("__");
-            if (index != -1) {
-                block = s.substring(0, index);
-                attr = s.substring(index+2, s.length());
-                index = attr.indexOf("__");
-                if (index != -1) {
-                    attr = attr.substring(0, index);
-                }
-		else {
-		    index = attr.indexOf("_");
-		    if (index != -1){
-			attr = attr.substring(0, index);
-		    }
-		}
-                //TraceManager.addDev("Analyzing block=" + block + " attr=" + attr);
-                a = abdp.getAttributeByBlockName(block, attr);
-                if (a != null) {
-                    //TraceManager.addDev("Setting conf to ok");
-                    a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
-                }
-            }
-        }
 
         // Reachable states
         for(String s: pvoa.getReachableEvents()) {
@@ -439,7 +406,6 @@ public class AvatarDesignPanel extends TURTLEPanel {
                                     ((AvatarSMDState)tgc).setSecurityInfo(AvatarSMDState.NOT_REACHABLE, state);
                                 }
                             }
-
                         }
                     }
                 }

@@ -47,6 +47,7 @@ package avatartranslator.toproverif;
 
 import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Vector;
 
 import ui.CheckingError;
@@ -95,8 +96,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     private AvatarSpecification avspec;
 
     private HashMap<AvatarAttribute, AvatarAttribute> pubs;
+    private HashMap<AvatarAttribute, AvatarAttribute> nameEquivalence;
 
-    // TODO: add warnings
     private Vector warnings;
 
     public AVATAR2ProVerif(AvatarSpecification _avspec) {
@@ -114,6 +115,10 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         return this.warnings;
     }
 
+    public AvatarSpecification getAvatarSpecification () {
+        return this.avspec;
+    }
+
     public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize, boolean _stateReachability, boolean _typed) {
 
         this.warnings = new Vector();
@@ -128,13 +133,24 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         // TODO: Why remove Else guards ?
         // this.avspec.removeElseGuards();
 
-        this.makeHeader(_stateReachability);
-
         LinkedList<AvatarAttribute> allKnowledge = this.makeStartingProcess();
+
+        this.makeHeader(_stateReachability);
 
         this.makeBlocks(allKnowledge);
 
         return this.spec;
+    }
+
+    public ProVerifOutputAnalyzer getOutputAnalyzer () {
+        return new ProVerifOutputAnalyzer (this);
+    }
+
+    public String getTrueName (AvatarAttribute attr) {
+        AvatarAttribute trueAttr = this.nameEquivalence.get (attr);
+        if (trueAttr == null)
+            return null;
+        return AVATAR2ProVerif.translateTerm (trueAttr, null);
     }
 
     private static String makeAttrName (String... _params) {
@@ -216,14 +232,25 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         }
 
         /* Secrecy Assumptions */
+        HashSet<AvatarAttribute> secrecyChecked = new HashSet<AvatarAttribute> ();
+
         this.spec.addDeclaration (new ProVerifComment    ("Secrecy Assumptions"));
         TraceManager.addDev("Secrecy Assumptions");
         for (AvatarPragma pragma: this.avspec.getPragmas ())
             if (pragma instanceof AvatarPragmaSecrecyAssumption)
                 for (AvatarAttribute attribute: pragma.getArgs ()) {
-                    String name = this.makeAttrName (attribute.getBlock ().getName (), attribute.getName ());
+                    AvatarAttribute trueAttr = this.nameEquivalence.get (attribute);
+                    if (trueAttr == null)
+                        // TODO Warning
+                        continue;
+                    if (secrecyChecked.contains (trueAttr))
+                        continue;
+
+                    String name = AVATAR2ProVerif.translateTerm (trueAttr, null);
                     TraceManager.addDev("|    " + name);
                     this.spec.addDeclaration (new ProVerifSecrecyAssum (name));
+
+                    secrecyChecked.add (trueAttr);
                 }
 
         /* Queries */
@@ -232,9 +259,18 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         for (AvatarPragma pragma: this.avspec.getPragmas ())
             if (pragma instanceof AvatarPragmaSecret)
                 for (AvatarAttribute attribute: pragma.getArgs ()) {
-                    String varName = this.makeAttrName(attribute.getBlock ().getName (), attribute.getName ());
+                    AvatarAttribute trueAttr = this.nameEquivalence.get (attribute);
+                    if (trueAttr == null)
+                        // TODO Warning
+                        continue;
+                    if (secrecyChecked.contains (trueAttr))
+                        continue;
+
+                    String varName = AVATAR2ProVerif.translateTerm (trueAttr, null);
                     this.spec.addDeclaration (new ProVerifQueryAtt   (varName, true));
                     TraceManager.addDev("|    attacker (" + varName + ")"); 
+
+                    secrecyChecked.add (trueAttr);
                 }
 
         // Queries for states
@@ -258,8 +294,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 AvatarAttributeState attrA = ((AvatarPragmaAuthenticity) pragma).getAttrA ();
                 AvatarAttributeState attrB = ((AvatarPragmaAuthenticity) pragma).getAttrB ();
                 if (attrA != null && attrB != null) {
-                    String sA = this.makeAttrName (attrA.getAttribute ().getBlock ().getName (), attrA.getAttribute ().getName (), attrA.getState ().getName ());
-                    String sB = this.makeAttrName (attrB.getAttribute ().getBlock ().getName (), attrB.getAttribute ().getName (), attrB.getState ().getName ());
+                    String sA = AVATAR2ProVerif.makeAttrName (attrA.getAttribute ().getBlock ().getName (), attrA.getAttribute ().getName (), attrA.getState ().getName ());
+                    String sB = AVATAR2ProVerif.makeAttrName (attrB.getAttribute ().getBlock ().getName (), attrB.getAttribute ().getName (), attrB.getState ().getName ());
                     TraceManager.addDev("|    authenticity__" + sB + " (dummyM) ==> authenticity__" + sA + " (dummyM)"); 
                     spec.addDeclaration (new ProVerifEvDecl ("authenticity__" + sA, new String[] {"bitstring"}));
                     spec.addDeclaration (new ProVerifEvDecl ("authenticity__" + sB, new String[] {"bitstring"}));
@@ -287,14 +323,16 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         String blockName, paramName;
 
         // Store all the names that are system knowledge
-        // Enable to raise warning when an attribute is bothe system and session knowledge
+        // Enable to raise warning when an attribute is both system and session knowledge
         LinkedList<AvatarAttribute> systemKnowledge = new LinkedList<AvatarAttribute> ();
+
+        this.nameEquivalence = new HashMap<AvatarAttribute, AvatarAttribute> ();
 
         TraceManager.addDev("Finding system knowledge");
         for (AvatarPragma pragma: this.avspec.getPragmas ())
             // Check if pragma is system initial knowledge
             if (pragma instanceof AvatarPragmaInitialKnowledge && ((AvatarPragmaInitialKnowledge) pragma).isSystem ()) {
-                String first = null;
+                AvatarAttribute first = null;
                 boolean containsPublicKey = false;
                 for (AvatarAttribute arg: pragma.getArgs ()) {
                     // ignore if the attribute was already declared
@@ -304,13 +342,14 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     ProVerifProcInstr tmpInstr;
                     // Check if it is the first from the list
                     if (first == null) {
-                        first = this.makeAttrName (arg.getBlock ().getName (), arg.getName ());
+                        first = arg;
+                        this.nameEquivalence.put (first, first);
 
                         AvatarAttribute privateK = this.pubs.get (arg);
                         // Check if it is a public key
                         if (privateK != null) {
                             containsPublicKey = true;
-                            String privateKStr = this.makeAttrName (privateK.getBlock ().getName (), privateK.getName ());
+                            String privateKStr = AVATAR2ProVerif.translateTerm (privateK, null);
                             // Check if the corresponding private key has already been declared
                             if (!systemKnowledge.contains (privateK)) {
                                 lastInstr = lastInstr.setNextInstr (new ProVerifProcNew (privateKStr, "bitstring"));
@@ -318,15 +357,20 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             }
 
                             // Let the public key
-                            lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (first, "bitstring")}, PK_PK + "(" + privateKStr + ")"));;
+                            lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (AVATAR2ProVerif.translateTerm (first, null), "bitstring")}, PK_PK + "(" + privateKStr + ")"));;
                             // Make the public key public
-                            tmpInstr = new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + first + ");");
+                            tmpInstr = new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + AVATAR2ProVerif.translateTerm (first, null) + ");");
                         } else
-                            tmpInstr = new ProVerifProcNew (first, "bitstring");
+                            tmpInstr = new ProVerifProcNew (AVATAR2ProVerif.translateTerm (first, null), "bitstring");
                     } else {
                         // If there are more arguments after a public key ignore what follows
                         if (containsPublicKey) {
-                            // TODO: raise warning
+                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't define equality between public keys and other attributes.");
+                            //ce.setAvatarBlock(arg.block);
+                            //FIXME: quel TDiagramPanel ?
+                            //ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                            //ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                            //warnings.add(ce);
                             break;
                         }
                         // If there is a public key in the middle, ignore it
@@ -335,12 +379,12 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             continue;
                         }
 
-                        String str = this.makeAttrName (arg.getBlock ().getName (), arg.getName ());
-                        tmpInstr = new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, first);
-                        first = str;
+                        String str = AVATAR2ProVerif.translateTerm (arg, null);
+                        tmpInstr = new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, AVATAR2ProVerif.translateTerm (first, null));
+                        this.nameEquivalence.put (arg, first);
                     }
 
-                    TraceManager.addDev("|    Initial system knowledge pragma: " + first);
+                    TraceManager.addDev("|    Initial system knowledge pragma: " + AVATAR2ProVerif.translateTerm (first, null));
                     lastInstr = lastInstr.setNextInstr (tmpInstr);
                     systemKnowledge.add (arg);
                 }
@@ -367,7 +411,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         for (AvatarPragma pragma: this.avspec.getPragmas ())
             // Check if pragma is session initial knowledge
             if (pragma instanceof AvatarPragmaInitialKnowledge && !((AvatarPragmaInitialKnowledge) pragma).isSystem ()) {
-                String first = null;
+                AvatarAttribute first = null;
                 boolean containsPublicKey = false;
                 for (AvatarAttribute arg: pragma.getArgs ()) {
                     // ignore if the attribute was already declared
@@ -383,13 +427,14 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     ProVerifProcInstr tmpInstr;
                     // Check if it is the first from the list
                     if (first == null) {
-                        first = this.makeAttrName (arg.getBlock ().getName (), arg.getName ());
+                        first = arg;
+                        this.nameEquivalence.put (first, first);
 
                         AvatarAttribute privateK = this.pubs.get (arg);
                         // Check if it is a public key
                         if (privateK != null) {
                             containsPublicKey = true;
-                            String privateKStr = this.makeAttrName (privateK.getBlock ().getName (), privateK.getName ());
+                            String privateKStr = AVATAR2ProVerif.translateTerm (privateK, null);
                             // Check if the corresponding private key has already been declared
                             if (!systemKnowledge.contains (privateK) && !sessionKnowledge.contains (privateK)) {
                                 lastInstr = lastInstr.setNextInstr (new ProVerifProcNew (privateKStr, "bitstring"));
@@ -397,11 +442,11 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             }
 
                             // Let the public key
-                            lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (first, "bitstring")}, PK_PK + "(" + privateKStr + ")"));;
+                            lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (AVATAR2ProVerif.translateTerm (first, null), "bitstring")}, PK_PK + "(" + privateKStr + ")"));;
                             // Make the public key public
-                            tmpInstr = new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + first + ");");
+                            tmpInstr = new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + AVATAR2ProVerif.translateTerm (first, null) + ");");
                         } else
-                            tmpInstr = new ProVerifProcNew (first, "bitstring");
+                            tmpInstr = new ProVerifProcNew (AVATAR2ProVerif.translateTerm (first, null), "bitstring");
                     } else {
                         // If there are more arguments after a public key ignore what follows
                         if (containsPublicKey) {
@@ -414,12 +459,12 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             continue;
                         }
 
-                        String str = this.makeAttrName (arg.getBlock ().getName (), arg.getName ());
-                        tmpInstr = new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, first);
-                        first = str;
+                        this.nameEquivalence.put (arg, first);
+                        String str = AVATAR2ProVerif.translateTerm (arg, null);
+                        tmpInstr = new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, AVATAR2ProVerif.translateTerm (first, null));
                     }
 
-                    TraceManager.addDev("|    Initial session knowledge pragma: " + first);
+                    TraceManager.addDev("|    Initial session knowledge pragma: " + AVATAR2ProVerif.translateTerm (first, null));
                     lastInstr = lastInstr.setNextInstr (tmpInstr);
                     sessionKnowledge.add (arg);
                 }
@@ -457,7 +502,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     private ProVerifVar[] getProVerifVarFromAttr (LinkedList<AvatarAttribute> attrs) {
         LinkedList<ProVerifVar> result = new LinkedList<ProVerifVar> ();
         for(AvatarAttribute aa: attrs)
-            result.add (new ProVerifVar (this.makeAttrName (aa.getBlock ().getName (), aa.getName ()), "bitstring"));
+            result.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (aa, null), "bitstring"));
         return result.toArray (new ProVerifVar[result.size ()]);
     }
 
@@ -487,12 +532,12 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 continue;
 
             ProVerifProcInstr tmpInstr;
-            String str = this.makeAttrName (arg.getBlock ().getName (), arg.getName ());
+            String str = AVATAR2ProVerif.translateTerm (arg, null);
 
             AvatarAttribute privateK = this.pubs.get (arg);
             // Check if it is a public key
             if (privateK != null) {
-                String privateKStr = this.makeAttrName (privateK.getBlock ().getName (), privateK.getName ());
+                String privateKStr = AVATAR2ProVerif.translateTerm (privateK, null);
                 // Check if the corresponding private key has already been declared
                 if (!allKnowledge.contains (privateK)) {
                     lastInstr = lastInstr.setNextInstr (new ProVerifProcNew (privateKStr, "bitstring"));
@@ -520,14 +565,14 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         // Generate a new process for every simplified element of the block's state machine
         HashMap<AvatarStateMachineElement, Integer> simplifiedElements = ab.getStateMachine ().getSimplifiedElements ();
 
-        HashMap<AvatarAttribute, Integer> attributeCmp = new HashMap<AvatarAttribute, Integer> ();
-        for (AvatarAttribute attr: ab.getAttributes ())
-            attributeCmp.put (attr, 0);
-
         for (AvatarStateMachineElement asme: simplifiedElements.keySet ())
             if (asme != null) {
+                HashMap<AvatarAttribute, Integer> attributeCmp = new HashMap<AvatarAttribute, Integer> ();
+                for (AvatarAttribute attr: ab.getAttributes ())
+                    attributeCmp.put (attr, 0);
+
                 // Create the ProVerif process and add it to the ProVerif specification
-                ProVerifProcInstr p = new ProVerifProcess(makeAttrName(ab.getName(), simplifiedElements.get (asme).toString ()), new ProVerifVar[] {});
+                ProVerifProcInstr p = new ProVerifProcess(AVATAR2ProVerif.makeAttrName(ab.getName(), simplifiedElements.get (asme).toString ()), new ProVerifVar[] {});
                 this.spec.addDeclaration (p);
 
                 // Read and decrypt control data: variables sent to the process and the call__num variable
@@ -537,7 +582,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 for (AvatarAttribute attr: ab.getAttributes ()) {
                     Integer c = attributeCmp.get (attr) + 1;
                     attributeCmp.put (attr, c);
-                    attributes.add (new ProVerifVar (this.makeAttrName (attr.getBlock ().getName (), attr.getName (), c.toString ()), "bitstring"));
+                    attributes.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, attributeCmp), "bitstring"));
                 }
                 p = p.setNextInstr (new ProVerifProcLet (attributes.toArray (new ProVerifVar[attributes.size()]), CHCTRL_DECRYPT + " (chControlData)"));
 
@@ -579,7 +624,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 // If next is the root of a process send the attributes on the control channel
                 String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((call__" + arg.block.getName () + "__" + n;
                 for(AvatarAttribute aa: arg.block.getAttributes ())
-                    tmp += ", " + this.makeAttrName (aa.getBlock ().getName (), aa.getName (), arg.attributeCmp.get (aa).toString ());
+                    tmp += ", " + AVATAR2ProVerif.translateTerm (aa, arg.attributeCmp);
 
                 arg.lastInstr.setNextInstr (new ProVerifProcRaw (tmp + ")))"));
             }
@@ -797,12 +842,12 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 AvatarAttributeState attrA = ((AvatarPragmaAuthenticity) pragma).getAttrA ();
                 AvatarAttributeState attrB = ((AvatarPragmaAuthenticity) pragma).getAttrB ();
                 if (attrA.getState ().getName ().equals (_asme.getName ())) {
-                    String sp = "authenticity__" + this.makeAttrName (attrA.getAttribute ().getBlock ().getName (), attrA.getAttribute ().getName (), _asme.getName ()) + " (" + this.makeAttrName (attrA.getAttribute ().getBlock ().getName (), attrA.getAttribute ().getName (), arg.attributeCmp.get (attrA.getAttribute ()).toString ()) + ")";
+                    String sp = "authenticity__" + AVATAR2ProVerif.makeAttrName (attrA.getAttribute ().getBlock ().getName (), attrA.getAttribute ().getName (), _asme.getName ()) + " (" + AVATAR2ProVerif.makeAttrName (attrA.getAttribute ().getBlock ().getName (), attrA.getAttribute ().getName (), arg.attributeCmp.get (attrA.getAttribute ()).toString ()) + ")";
                     TraceManager.addDev("|    |    authenticity event " + sp + "added");
                     _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("event " + sp, true));
                 }
                 if (attrB.getState ().getName ().equals (_asme.getName ())) {
-                    String sp = "authenticity__" + this.makeAttrName (attrB.getAttribute ().getBlock ().getName (), attrB.getAttribute ().getName (), _asme.getName ()) + " (" + this.makeAttrName (attrB.getAttribute ().getBlock ().getName (), attrB.getAttribute ().getName (), arg.attributeCmp.get (attrB.getAttribute ()).toString ()) + ")";
+                    String sp = "authenticity__" + AVATAR2ProVerif.makeAttrName (attrB.getAttribute ().getBlock ().getName (), attrB.getAttribute ().getName (), _asme.getName ()) + " (" + AVATAR2ProVerif.makeAttrName (attrB.getAttribute ().getBlock ().getName (), attrB.getAttribute ().getName (), arg.attributeCmp.get (attrB.getAttribute ()).toString ()) + ")";
                     TraceManager.addDev("|    |    authenticity event " + sp + "added");
                     _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("event " + sp, true));
                 }
@@ -820,9 +865,12 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             TraceManager.addDev("|    |    calling next ITE");
             ProVerifProcITE ite = new ProVerifProcITE (AVATAR2ProVerif.translateGuard (((AvatarTransition) _asme.getNext (0)).getGuard ().getRealGuard (arg.lastASME), arg.attributeCmp));
 
+            HashMap<AvatarAttribute, Integer> attributeCmp = new HashMap<AvatarAttribute, Integer> (arg.attributeCmp);
+
             arg.lastInstr = _lastInstr.setNextInstr (ite);
             this.translateNext (_asme.getNext (0).getNext (0), arg);
 
+            arg.attributeCmp = attributeCmp;
             arg.lastInstr = ite.getElse ();
             this.translateNext (_asme.getNext (1).getNext (0), arg);
 
@@ -830,14 +878,17 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             TraceManager.addDev("|    |    non deterministic next state");
             for (int i=0; i<nbOfNexts-1; i++) {
                 String choice = "choice__" + _asme.getName () + "__" + i;
-                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcNew (choice, "bistring"));
+                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcNew (choice, "bitstring"));
                 _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + choice + ");"));
             }
             _lastInstr = _lastInstr.setNextInstr (new ProVerifProcIn (CH_MAINCH, new ProVerifVar[] {new ProVerifVar ("choice__" + _asme.getName (), "bitstring")}));
+
+            HashMap<AvatarAttribute, Integer> attributeCmp = arg.attributeCmp;
             for (int i=0; i<nbOfNexts-1; i++) {
                 String choice = "choice__" + _asme.getName () + "__" + i;
                 ProVerifProcITE ite = new ProVerifProcITE ("choice__" + _asme.getName () + " = " + choice);
 
+                arg.attributeCmp = new HashMap<AvatarAttribute, Integer> (arg.attributeCmp);
                 arg.lastASME = _asme;
                 arg.lastInstr = _lastInstr.setNextInstr (ite);
                 this.translateNext (_asme.getNext (i), arg);
@@ -845,13 +896,34 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 _lastInstr = ite.getElse ();
             }
 
+            arg.attributeCmp = attributeCmp;
             arg.lastInstr = _lastInstr;
             this.translateNext (_asme.getNext (nbOfNexts-1), arg);
         }
     }
 
     public void translateRandom (AvatarRandom _asme, Object _arg) {
-        // TODO: new
+        TraceManager.addDev("|    Random");
+        ProVerifTranslatorParameter arg = (ProVerifTranslatorParameter) _arg;
+        ProVerifProcInstr _lastInstr = arg.lastInstr;
+
+        AvatarTerm term = AvatarTerm.createFromString (arg.block, _asme.getVariable ());
+        LinkedList<AvatarAttribute> names = new LinkedList<AvatarAttribute> ();
+
+        if (term instanceof AvatarAttribute)
+            names.add ((AvatarAttribute) term);
+        else if (term instanceof AvatarTuple)
+            for (AvatarTerm t: ((AvatarTuple) term).getComponents ())
+                if (t instanceof AvatarAttribute)
+                    names.add ((AvatarAttribute) t);
+
+        for (AvatarAttribute attr: names) {
+            Integer c = arg.attributeCmp.get (attr) + 1;
+            arg.attributeCmp.put (attr, c);
+            _lastInstr = _lastInstr.setNextInstr (new ProVerifProcNew (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
+        }
+
+        arg.lastInstr = _lastInstr;
         this.translateNext (_asme.getNext(0), _arg);
     }
 
@@ -869,7 +941,10 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     private static String translateTerm (AvatarTerm term, HashMap<AvatarAttribute, Integer> attributeCmp) {
         if (term instanceof AvatarAttribute) {
             AvatarAttribute attr = (AvatarAttribute) term;
-            return AVATAR2ProVerif.makeAttrName (attr.getBlock ().getName (), attr.getName (), attributeCmp.get (attr).toString ());
+            if (attributeCmp != null)
+                return AVATAR2ProVerif.makeAttrName (attr.getBlock ().getName (), attr.getName (), attributeCmp.get (attr).toString ());
+            else
+                return AVATAR2ProVerif.makeAttrName (attr.getBlock ().getName (), attr.getName ());
         }
 
         if (term instanceof AvatarConstant) {

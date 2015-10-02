@@ -50,6 +50,10 @@ import java.util.regex.*;
 import myutil.*;
 import java.io.*;
 
+import avatartranslator.toproverif.AVATAR2ProVerif;
+import avatartranslator.AvatarAttribute;
+import avatartranslator.AvatarBlock;
+
 
 public class ProVerifOutputAnalyzer {
 
@@ -63,24 +67,28 @@ public class ProVerifOutputAnalyzer {
     private LinkedList<String> nonSatisfiedAuthenticity;
     private LinkedList<String> errors;
     private LinkedList<String> notproved;
-    String typedEvent = "not event(";
-    String untypedEvent = "not ev:";
-    String typedFalse = ") is false";
-    String typedTrue = ") is true";
-    String untypedFalse = " is false";
-    String untypedTrue = " is true";
-    String typedSecret = "not attacker(";
-    String untypedSecret = "not attacker:";
-    String typedStrongAuth = "inj-event(authenticity__";
-    String untypedStrongAuth = "evinj:authenticity__";
-    String typedWeakAuth = "(but event(authenticity__";
-    String untypedWeakAuth = "(but ev:authenticity__";
-    String typedAuthSplit = "==> inj-event(authenticity__";
-    String typedWeakAuthSplit = "==> event(authenticity__";
-    String untypedAuthSplit = "==> evinj:authenticity__";
-    String untypedWeakAuthSplit = "==> ev:authenticity__";
-    
-    public ProVerifOutputAnalyzer() {
+    private final static String typedEvent = "not event(";
+    private final static String untypedEvent = "not ev:";
+    private final static String typedFalse = ") is false";
+    private final static String typedTrue = ") is true";
+    private final static String untypedFalse = " is false";
+    private final static String untypedTrue = " is true";
+    private final static String typedSecret = "not attacker(";
+    private final static String untypedSecret = "not attacker:";
+    private final static String typedStrongAuth = "inj-event(authenticity__";
+    private final static String untypedStrongAuth = "evinj:authenticity__";
+    private final static String typedWeakAuth = "(but event(authenticity__";
+    private final static String untypedWeakAuth = "(but ev:authenticity__";
+    private final static String typedAuthSplit = "==> inj-event(authenticity__";
+    private final static String typedWeakAuthSplit = "==> event(authenticity__";
+    private final static String untypedAuthSplit = "==> evinj:authenticity__";
+    private final static String untypedWeakAuthSplit = "==> ev:authenticity__";
+
+    private AVATAR2ProVerif avatar2proverif;
+
+    public ProVerifOutputAnalyzer(AVATAR2ProVerif avatar2proverif) {
+        this.avatar2proverif = avatar2proverif;
+
         reachableEvents = new LinkedList<String>();
         nonReachableEvents = new LinkedList<String>();
         secretTerms = new LinkedList<String>();
@@ -94,54 +102,54 @@ public class ProVerifOutputAnalyzer {
     }
 
     public void analyzeTypedOutput(String _s) {
-	    String str, previous="";
+        String str, previous="";
         int index0, index1;
 
         BufferedReader reader = new BufferedReader(new StringReader(_s));
         try {
             while ((str = reader.readLine()) != null) {
-		if (str.contains("RESULT")){
-	            if (str.contains(typedEvent)){
- 	                if (str.contains(typedTrue)){
-			    //Add string between tags
-			    //Pattern.quote converts string into regex adding escape characters
-			    nonReachableEvents.add(str.split(Pattern.quote(typedEvent))[1].split(Pattern.quote(typedTrue))[0]);
-			}
-			else if (str.contains(typedFalse)) {
-			    reachableEvents.add(str.split(Pattern.quote(typedEvent))[1].split(Pattern.quote(typedFalse))[0]);
-			}
-		    }
-		    else if (str.contains(typedSecret)){
-		        if (str.contains(typedTrue)){
-		            //Add string between tags
-		            secretTerms.add(str.split(Pattern.quote(typedSecret))[1].split("\\[")[0]);
-		        }
-		        else if (str.contains(typedFalse)) {
-		            nonSecretTerms.add(str.split(Pattern.quote(typedSecret))[1].split("\\[")[0]);
-		        }
-		    }
-		    else if (str.contains(typedStrongAuth)){
-		        if (str.contains(typedTrue)){
-		            //Add string between tags
-		            satisfiedAuthenticity.add(str.split(typedStrongAuth)[1].split(typedAuthSplit)[0].split("\\(")[0] + " ==> " + str.split(typedAuthSplit)[1].split("\\(")[0]);
-		        }
-		        else if (str.contains(typedFalse)) {
-		            nonSatisfiedAuthenticity.add(str.split(Pattern.quote(typedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0]);
-		        }
-		    }
-		    else if (str.contains(typedWeakAuth)) {
-		        if (str.contains(typedTrue)){
-		            //Add string between tags
-		            satisfiedWeakAuthenticity.add(str.split(Pattern.quote(typedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedWeakAuthSplit))[1].split("\\(")[0]);
-		        }    	
-		    }
-		}
-		if (str.contains("Error:")){
-		    errors.add(str + ": " + previous);
-		}
-		else if (str.contains("cannot be proved")){
-		    notproved.add(str);
-		}
+                if (str.contains("RESULT")){
+                    if (str.contains(typedEvent)){
+                        if (str.contains(typedTrue)){
+                            //Add string between tags
+                            //Pattern.quote converts string into regex adding escape characters
+                            nonReachableEvents.add(str.split(Pattern.quote(typedEvent))[1].split(Pattern.quote(typedTrue))[0]);
+                        }
+                        else if (str.contains(typedFalse)) {
+                            reachableEvents.add(str.split(Pattern.quote(typedEvent))[1].split(Pattern.quote(typedFalse))[0]);
+                        }
+                    }
+                    else if (str.contains(typedSecret)){
+                        if (str.contains(typedTrue)){
+                            //Add string between tags
+                            secretTerms.add(str.split(Pattern.quote(typedSecret))[1].split("\\[")[0]);
+                        }
+                        else if (str.contains(typedFalse)) {
+                            nonSecretTerms.add(str.split(Pattern.quote(typedSecret))[1].split("\\[")[0]);
+                        }
+                    }
+                    else if (str.contains(typedStrongAuth)){
+                        if (str.contains(typedTrue)){
+                            //Add string between tags
+                            satisfiedAuthenticity.add(str.split(typedStrongAuth)[1].split(typedAuthSplit)[0].split("\\(")[0] + " ==> " + str.split(typedAuthSplit)[1].split("\\(")[0]);
+                        }
+                        else if (str.contains(typedFalse)) {
+                            nonSatisfiedAuthenticity.add(str.split(Pattern.quote(typedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0]);
+                        }
+                    }
+                    else if (str.contains(typedWeakAuth)) {
+                        if (str.contains(typedTrue)){
+                            //Add string between tags
+                            satisfiedWeakAuthenticity.add(str.split(Pattern.quote(typedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedWeakAuthSplit))[1].split("\\(")[0]);
+                        }    	
+                    }
+                }
+                if (str.contains("Error:")){
+                    errors.add(str + ": " + previous);
+                }
+                else if (str.contains("cannot be proved")){
+                    notproved.add(str);
+                }
             }    
             previous = str;
         } catch(IOException e) {
@@ -152,61 +160,60 @@ public class ProVerifOutputAnalyzer {
     public void analyzeOutput(String _s, boolean isTyped) {
         String str, previous="";
         int index0, index1;
-	if (isTyped) {
-	    analyzeTypedOutput(_s);
-	    return;
-	}
+        if (isTyped) {
+            analyzeTypedOutput(_s);
+            return;
+        }
         BufferedReader reader = new BufferedReader(new StringReader(_s));
         try {
             while ((str = reader.readLine()) != null) {
-		if (str.contains("RESULT")){
-	            if (str.contains(untypedEvent)){
- 	                if (str.contains(untypedTrue)){
-			    //Add string between tags
-			    //Pattern.quote converts string into regex adding escape characters
-			    nonReachableEvents.add(str.split(Pattern.quote(untypedEvent))[1].split("\\(")[0]);
-			}
-			else if (str.contains(untypedFalse)) {
-			    reachableEvents.add(str.split(Pattern.quote(untypedEvent))[1].split("\\(")[0]);
-			}
-		    }
-		    else if (str.contains(untypedSecret)){
-		        if (str.contains(untypedTrue)){
-		            //Add string between tags
-		            secretTerms.add(str.split(Pattern.quote(untypedSecret))[1].split("\\[")[0]);
-		        }
-		        else if (str.contains(untypedFalse)) {
-		            nonSecretTerms.add(str.split(Pattern.quote(untypedSecret))[1].split("\\[")[0]);
-		        }
-		    }
-		    else if (str.contains(untypedStrongAuth)){
-		        if (str.contains(untypedTrue)){
-		            //Add string between tags
-		            satisfiedAuthenticity.add(str.split(untypedStrongAuth)[1].split(untypedAuthSplit)[0].split("\\(")[0] + " ==> " + str.split(untypedAuthSplit)[1].split("\\(")[0]);
-		        }
-		        else if (str.contains(untypedFalse)) {
-		            nonSatisfiedAuthenticity.add(str.split(Pattern.quote(untypedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedAuthSplit))[1].split("\\(")[0]);
-		        }
-		    }
-		    else if (str.contains(untypedWeakAuth)) {
-		        if (str.contains(untypedTrue)){
-		            //Add string between tags
-		            satisfiedWeakAuthenticity.add(str.split(Pattern.quote(untypedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedWeakAuthSplit))[1].split("\\(")[0]);
-		        }    	
-		    }
-		}
-		if (str.contains("Error:")){
-		    errors.add(str + ": " + previous);
-		}
-		else if (str.contains("cannot be proved")){
-		    notproved.add(str);
-		}
+                if (str.contains("RESULT")){
+                    if (str.contains(untypedEvent)){
+                        if (str.contains(untypedTrue)){
+                            //Add string between tags
+                            //Pattern.quote converts string into regex adding escape characters
+                            nonReachableEvents.add(str.split(Pattern.quote(untypedEvent))[1].split("\\(")[0]);
+                        }
+                        else if (str.contains(untypedFalse)) {
+                            reachableEvents.add(str.split(Pattern.quote(untypedEvent))[1].split("\\(")[0]);
+                        }
+                    }
+                    else if (str.contains(untypedSecret)){
+                        if (str.contains(untypedTrue)){
+                            //Add string between tags
+                            secretTerms.add(str.split(Pattern.quote(untypedSecret))[1].split("\\[")[0]);
+                        }
+                        else if (str.contains(untypedFalse)) {
+                            nonSecretTerms.add(str.split(Pattern.quote(untypedSecret))[1].split("\\[")[0]);
+                        }
+                    }
+                    else if (str.contains(untypedStrongAuth)){
+                        if (str.contains(untypedTrue)){
+                            //Add string between tags
+                            satisfiedAuthenticity.add(str.split(untypedStrongAuth)[1].split(untypedAuthSplit)[0].split("\\(")[0] + " ==> " + str.split(untypedAuthSplit)[1].split("\\(")[0]);
+                        }
+                        else if (str.contains(untypedFalse)) {
+                            nonSatisfiedAuthenticity.add(str.split(Pattern.quote(untypedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedAuthSplit))[1].split("\\(")[0]);
+                        }
+                    }
+                    else if (str.contains(untypedWeakAuth)) {
+                        if (str.contains(untypedTrue)){
+                            //Add string between tags
+                            satisfiedWeakAuthenticity.add(str.split(Pattern.quote(untypedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedWeakAuthSplit))[1].split("\\(")[0]);
+                        }    	
+                    }
+                }
+                if (str.contains("Error:")){
+                    errors.add(str + ": " + previous);
+                }
+                else if (str.contains("cannot be proved")){
+                    notproved.add(str);
+                }
             }    
             previous = str;
         } catch(IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public LinkedList<String> getReachableEvents() {
@@ -217,12 +224,30 @@ public class ProVerifOutputAnalyzer {
         return nonReachableEvents;
     }
 
-    public LinkedList<String> getSecretTerms() {
-        return secretTerms;
+    public LinkedList<AvatarAttribute> getSecretTerms() {
+        // FIXME composed Types ?
+        LinkedList<AvatarAttribute> result = new LinkedList<AvatarAttribute> ();
+        for (AvatarBlock block: this.avatar2proverif.getAvatarSpecification ().getListOfBlocks ())
+            for (AvatarAttribute attr: block.getAttributes ()) {
+                String trueName = this.avatar2proverif.getTrueName (attr);
+                if (this.secretTerms.contains (trueName))
+                    result.add (attr);
+            }
+        return result;
     }
 
-    public LinkedList<String> getNonSecretTerms() {
-        return nonSecretTerms;
+    // FIXME what about cannot be proved ?
+
+    public LinkedList<AvatarAttribute> getNonSecretTerms() {
+        // FIXME composed Types ?
+        LinkedList<AvatarAttribute> result = new LinkedList<AvatarAttribute> ();
+        for (AvatarBlock block: this.avatar2proverif.getAvatarSpecification ().getListOfBlocks ())
+            for (AvatarAttribute attr: block.getAttributes ()) {
+                String trueName = this.avatar2proverif.getTrueName (attr);
+                if (this.nonSecretTerms.contains (trueName))
+                    result.add (attr);
+            }
+        return result;
     }
 
     public LinkedList<String> getSatisfiedAuthenticity() {

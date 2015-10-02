@@ -58,6 +58,9 @@ public abstract class AvatarTerm extends AvatarElement {
     }
 
     public static AvatarTerm createFromString (AvatarBlock block, String toParse) {
+        if (toParse == null || toParse.isEmpty ())
+            return null;
+
         AvatarTerm result = AvatarTermFunction.createFromString (block, toParse);
         if (result != null)
             return result;
@@ -70,14 +73,14 @@ public abstract class AvatarTerm extends AvatarElement {
         result = block.getAvatarAttributeWithName (toParse);
         if (result != null)
             return result;
-        TraceManager.addDev ("AvatarAttribute '" + toParse + "' couldn't be parsed");
+        //TraceManager.addDev ("AvatarAttribute '" + toParse + "' couldn't be parsed");
 
         result = block.getAvatarConstantWithName (toParse);
         if (result != null)
             return result;
-        TraceManager.addDev ("AvatarConstant '" + toParse + "' couldn't be parsed");
+        //TraceManager.addDev ("AvatarConstant '" + toParse + "' couldn't be parsed");
 
-        TraceManager.addDev ("AvatarTerm '" + toParse + "' couldn't be parsed");
+        //TraceManager.addDev ("AvatarTerm '" + toParse + "' couldn't be parsed");
         return null;
     }
 

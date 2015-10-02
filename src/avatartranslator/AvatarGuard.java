@@ -70,6 +70,10 @@ public abstract class AvatarGuard {
             return new AvatarGuardEmpty ();
 
         String sane = AvatarGuard.sanitizeString (_guard);
+
+        if (sane.toLowerCase ().equals ("else"))
+            return new AvatarGuardElse ();
+
         int indexRParen = 0;
         AvatarTuple tuple = null;
 

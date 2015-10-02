@@ -196,11 +196,11 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
           versionSimulator.setSelectedIndex(selectedItem);
           versionSimulator.addActionListener(this);
           jp01.add(versionSimulator, c01);
-          //System.out.println("selectedItem=" + selectedItem);
+        //System.out.println("selectedItem=" + selectedItem);
 
-          //devmode = new JCheckBox("Development version of the simulator");
-          //devmode.setSelected(true);
-          //jp01.add(devmode, c01);*/
+        //devmode = new JCheckBox("Development version of the simulator");
+        //devmode.setSelected(true);
+        //jp01.add(devmode, c01);*/
 
         jp01.add(new JLabel(" "), c01);
 
@@ -323,65 +323,57 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
         hasError = false;
 
         TraceManager.addDev("Thread started");
-	File testFile;
+        File testFile;
         try {
             // Code generation
             if (jp1.getSelectedIndex() == 0) {
                 jta.append("Generating ProVerif code\n");
 
                 testGo();
-		pathCode = code1.getText();
-		testFile = new File(pathCode);
-		if (pathCode.isEmpty() || pathCode.trim().isEmpty()){
-		    pathCode="pvspec";
-		}
-	        if (testFile.isDirectory()){
-		    if (pathCode.charAt(pathCode.length()-1) != '/'){
-			pathCode = pathCode + "/";
-		    }
-	     	    pathCode = pathCode+"pvspec";
-	        }
-		else {
-		    if (testFile.exists()){
-			//Raise error
-			System.out.println("FILE EXISTS!!!");
-		    }
-		}
+                pathCode = code1.getText().trim ();
+
+                if (pathCode.isEmpty()){
+                    pathCode="pvspec";
+                }
+
+                testFile = new File(pathCode);
+
+                if (testFile.isDirectory()){
+                    if (!pathCode.endsWith (File.separator)){
+                        pathCode += File.separator;
+                    }
+                    pathCode += "pvspec";
+                    testFile = new File(pathCode);
+                }
+                
+                if (testFile.exists()){
+                    // FIXME Raise error
+                    System.out.println("FILE EXISTS!!!");
+                }
+
                 if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachability.isSelected(), translationOfBooleanFunction.isSelected(), typedLanguage.isSelected())) {
                     jta.append("ProVerif code generation done\n");
                 } else {
                     jta.append("Could not generate proverif code\n");
                 }
-		if (typedLanguage.isSelected()){
-  		    exe2.setText(pathExecute +  " -in pitype ");		
-		}
-		else {
-		    exe2.setText(pathExecute +  " -in pi ");	
-		}
-		exe2.setText(exe2.getText()+pathCode);
-		//if (mgui.gtm.getCheckingWarnings().size() > 0) {
-		    jta.append("" +  mgui.gtm.getCheckingWarnings().size() + " warning(s)\n");
-		    //}
+
+                if (typedLanguage.isSelected()){
+                    exe2.setText(pathExecute +  " -in pitype ");		
+                }
+                else {
+                    exe2.setText(pathExecute +  " -in pi ");	
+                }
+                exe2.setText(exe2.getText()+pathCode);
+                //if (mgui.gtm.getCheckingWarnings().size() > 0) {
+                jta.append("" +  mgui.gtm.getCheckingWarnings().size() + " warning(s)\n");
+                //}
             }
             testGo();
             // Execute
             if (jp1.getSelectedIndex() == 1) {
                 try {
-		    //Check for space at end
-		    if (exe2.getText().charAt(exe2.getText().length()-1) != ' '){
-			exe2.setText(exe2.getText() + " ");
-		    }
-		    //Check if input file provided
-		    String filename = "pvspec";
-		    String[] args = exe2.getText().split(" ");
-		    if (args.length > 3){
-			testFile = new File(args[3]);
-			if (testFile.isFile()){
-			    filename = "";
-			}
-		    }
 
-                    cmd = exe2.getText() + filename;
+                    cmd = exe2.getText();
 
                     jta.append("Executing ProVerif code with command: \n" + cmd + "\n");
 
@@ -395,8 +387,8 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                     if (outputOfProVerif.isSelected()) {
                         jta.append(data);
                     }
-		    
-                    ProVerifOutputAnalyzer pvoa = new ProVerifOutputAnalyzer();
+
+                    ProVerifOutputAnalyzer pvoa = mgui.gtm.getProVerifOutputAnalyzer ();
                     pvoa.analyzeOutput(data, typedLanguage.isSelected());
 
                     if (pvoa.getErrors().size() != 0) {
@@ -418,13 +410,13 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                         }
 
                         jta.append("\nConfidential Data:\n----------------\n");
-                        for(String re: pvoa.getSecretTerms()) {
-                            jta.append(re+"\n");
+                        for(AvatarAttribute attr: pvoa.getSecretTerms()) {
+                            jta.append(attr.getBlock ().getName () + "." + attr.getName () + "\n");
                         }
 
                         jta.append("\nNon Confidential Data:\n----------------\n");
-                        for(String re: pvoa.getNonSecretTerms()) {
-                            jta.append(re+"\n");
+                        for(AvatarAttribute attr: pvoa.getNonSecretTerms()) {
+                            jta.append(attr.getBlock ().getName () + "." + attr.getName () + "\n");
                         }
 
                         jta.append("\nSatisfied Strong Authenticity:\n----------------\n");
@@ -432,7 +424,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                             jta.append(re+"\n");
                         }
 
-			jta.append("\nSatisfied Weak Authenticity:\n----------------\n");
+                        jta.append("\nSatisfied Weak Authenticity:\n----------------\n");
                         for(String re: pvoa.getSatisfiedWeakAuthenticity()) {
                             jta.append(re+"\n");
                         }
@@ -493,27 +485,27 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
 
     protected void setButtons() {
         switch(mode) {
-        case NOT_STARTED:
-            start.setEnabled(true);
-            stop.setEnabled(false);
-            close.setEnabled(true);
-            //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            getGlassPane().setVisible(false);
-            break;
-        case STARTED:
-            start.setEnabled(false);
-            stop.setEnabled(true);
-            close.setEnabled(false);
-            getGlassPane().setVisible(true);
-            //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            break;
-        case STOPPED:
-        default:
-            start.setEnabled(false);
-            stop.setEnabled(false);
-            close.setEnabled(true);
-            getGlassPane().setVisible(false);
-            break;
+            case NOT_STARTED:
+                start.setEnabled(true);
+                stop.setEnabled(false);
+                close.setEnabled(true);
+                //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                getGlassPane().setVisible(false);
+                break;
+            case STARTED:
+                start.setEnabled(false);
+                stop.setEnabled(true);
+                close.setEnabled(false);
+                getGlassPane().setVisible(true);
+                //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                break;
+            case STOPPED:
+            default:
+                start.setEnabled(false);
+                stop.setEnabled(false);
+                close.setEnabled(true);
+                getGlassPane().setVisible(false);
+                break;
         }
     }
 

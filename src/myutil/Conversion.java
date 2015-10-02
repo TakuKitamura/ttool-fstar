@@ -46,6 +46,7 @@
 package myutil;
 
 import java.util.*;
+import java.util.regex.*;
 
 
 public class Conversion {
@@ -534,7 +535,20 @@ public class Conversion {
 	}
 	
 	public static String putVariableValueInString(String[] ops, String expr, String variableName, String value) {
-		//TraceManager.addDev("Putting variable value = " + value + " of " + variableName + " in " + expr);
+            //TraceManager.addDev("Putting variable value = " + value + " of " + variableName + " in " + expr);
+
+            // Escaping variableName and value in case there are special characters
+            String in = Pattern.quote (variableName);
+            String out = Matcher.quoteReplacement (value);
+
+            // Creating the pattern that matches words equal to variableName
+            Pattern pattern = Pattern.compile ("(\\b" + in + "\\b)");
+            Matcher matcher = pattern.matcher (expr);
+
+            // Replacing all the matches by the replacement value
+            return matcher.replaceAll (out).trim ();
+
+            /*
 		String ret = " " + expr + " ";
 		String name = " " + variableName + " ";
 		String s0;
@@ -552,9 +566,18 @@ public class Conversion {
 		}
 		
 		return ret.trim();
+                */
 	}
 	
 	public static String removeAllActionOps(String[] ops, String input, String replacementValue) {
+            String ret = input;
+            for (String op: ops) {
+                String out = new String (new char[op.length ()]).replace("\0", replacementValue);
+                ret = ret.replace (op, out);
+            }
+            return ret;
+
+            /*
 		String output = input;
 		String tmp;
 		int cpt;
@@ -569,6 +592,7 @@ public class Conversion {
 			output = replaceAllString(output, ops[i], tmp);
 		}
 		return output;
+            */
 	}
 	
 	/**
