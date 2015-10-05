@@ -152,7 +152,7 @@ public class ProVerifOutputAnalyzerTest {
 
             //Untyped Tests
             //System.out.println("Untyped Tests");
-	    s= "";
+
             br = new BufferedReader(new FileReader("untyped.txt"));
             while ((sCurrentLine = br.readLine()) != null) {
                 s= s.concat(sCurrentLine+"\n");

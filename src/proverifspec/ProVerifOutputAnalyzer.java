@@ -149,9 +149,9 @@ public class ProVerifOutputAnalyzer {
                 }
                 else if (str.contains("cannot be proved")){
                     notproved.add(str);
-                }
-            }    
+                }    
             previous = str;
+            }  
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -208,9 +208,9 @@ public class ProVerifOutputAnalyzer {
                 }
                 else if (str.contains("cannot be proved")){
                     notproved.add(str);
-                }
-            }    
+                }    
             previous = str;
+            }
         } catch(IOException e) {
             e.printStackTrace();
         }
