@@ -142,7 +142,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
           }*/
 
         if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-            currentFontSize = tdp.getFontSize();
+            currentFontSize = tdp.getFontSize()+1;
             //System.out.println("Rescaled, font size = " + currentFontSize + " height=" + height);
             //            myFont = f.deriveFont((float)currentFontSize);
             //myFontB = myFont.deriveFont(Font.BOLD);
@@ -195,16 +195,22 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         g.fillPolygon(px, py, 4);
 
         g.setColor(Color.black);	
+	
 	int i = 1;
+	Font heading = new Font("heading", Font.BOLD, 14);
+	g.setFont(heading);
 	g.drawString("Model Pragma", x+textX, y+textY + currentFontSize);
+	g.setFont(fold);
 	for (String s: models){
 	    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
 	    i++;
 	}
 	g.drawString(" ", x+ textX, y+ textY+(i+1)*currentFontSize);
 	i++;
-	g.drawLine(x, y+textY+i*currentFontSize, x+width, y+textY+i*currentFontSize);
+	g.drawLine(x, y+textY/2+i*currentFontSize, x+width, y+textY/2+i*currentFontSize);
+	g.setFont(heading);
 	g.drawString("Property Pragma", x+textX, y+textY+(i+1)* currentFontSize);
+	g.setFont(fold);
 	i++;
 	for (String s: properties){
 	    if (authMap.containsKey(s)){

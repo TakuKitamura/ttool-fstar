@@ -88,8 +88,9 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
             popupMenu.setOpaque(false);
             popupMenu.setBorder(null);
             popupMenu.add(list = createSuggestionList(position, subWord), BorderLayout.CENTER);
+	    //Show popupMenu only if there are matching suggestions
 	    if (list.getModel().getSize() >0){
-            popupMenu.show(textarea, location.x, textarea.getBaseline(0, 0) + location.y);
+                popupMenu.show(textarea, location.x, textarea.getBaseline(0, 0) + location.y);
 	    }
         }
 
