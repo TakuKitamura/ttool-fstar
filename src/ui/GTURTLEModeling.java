@@ -639,9 +639,11 @@ public class GTURTLEModeling {
         //mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
         //uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
         try {
-            avatar2proverif.saveInFile(_path);
+            if (avatar2proverif.saveInFile(_path)){
             TraceManager.addDev("Specification generated in " + _path);
             return true;
+	     }
+	     return false;
         } catch (FileException fe) {
             TraceManager.addError("Exception: " + fe.getMessage());
             return false;

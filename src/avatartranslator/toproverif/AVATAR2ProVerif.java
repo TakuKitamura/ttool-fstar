@@ -49,6 +49,9 @@ import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
+import java.io.*;
+import javax.swing.*;
+
 
 import ui.CheckingError;
 import ui.AvatarDesignPanel;
@@ -105,10 +108,40 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         this.spec = null;
     }
 
-    public void saveInFile(String path) throws FileException {
+    public boolean saveInFile(String path) throws FileException {
         // TODO check if pvspec exists etc.
         // TODO: Add a field for Hash and check it
-        FileUtils.saveFile(path, this.spec.getStringSpec ());
+	//Our hash file is always hash.txt
+	String hashCode= Integer.toString(this.spec.getStringSpec().hashCode());
+	File file = new File(path);
+	BufferedReader br;
+        if (file.exists()){
+	    File hash = new File("hash.txt");
+	    if (hash.exists()){
+		try {
+  	 	    br = new BufferedReader(new FileReader("hash.txt"));
+		    String line = br.readLine();
+		    br = new BufferedReader(new FileReader(path));
+		    String s = br.readLine();
+		    String tmp;
+		    while ((tmp = br.readLine()) !=null){
+			s = s+"\n" + tmp;
+		    }
+		    String fileHash = Integer.toString(s.hashCode());
+		    if (!line.equals(fileHash)){
+			if(JOptionPane.showConfirmDialog(null, "File " + path + " already exists. Do you want to overwrite?", "Overwrite File?", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
+			    return false;
+			}
+		    }
+		    br.close();
+		} catch (Exception e) {
+			
+		}
+	    }
+	}
+        FileUtils.saveFile(path, this.spec.getStringSpec());
+	FileUtils.saveFile("hash.txt", hashCode);
+	return true;
     }
 
     public Vector getWarnings() {
