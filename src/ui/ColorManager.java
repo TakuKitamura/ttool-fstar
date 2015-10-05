@@ -127,7 +127,7 @@ public class ColorManager {
     public static  Color TML_PORT_REQUEST = new Color(196, 166, 122);
 
     public static final Color UML_NOTE = Color.lightGray;
-    public static final Color PRAGMA = new Color(255, 0, 255);
+    public static final Color PRAGMA = Color.orchid;
 
     public static final Color SD_REFERENCE = new Color(104, 229, 255);
     public static final Color IOD_REFERENCE = new Color(216, 187, 249);
