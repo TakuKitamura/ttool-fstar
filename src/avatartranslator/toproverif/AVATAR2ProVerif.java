@@ -971,7 +971,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     public void translateStopState (AvatarStopState _asme, Object _arg) {
     }
 
-    private static String translateTerm (AvatarTerm term, HashMap<AvatarAttribute, Integer> attributeCmp) {
+    protected static String translateTerm (AvatarTerm term, HashMap<AvatarAttribute, Integer> attributeCmp) {
         if (term instanceof AvatarAttribute) {
             AvatarAttribute attr = (AvatarAttribute) term;
             if (attributeCmp != null)

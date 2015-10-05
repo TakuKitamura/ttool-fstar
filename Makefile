@@ -2,6 +2,7 @@
 # TTool Makefile
 # Tested under Linux *only*
 # Meant to work with svn
+export
 
 TARGET_ARCH = linux
 
@@ -82,10 +83,14 @@ RELEASE_STD_FILES_LIB =  TClock1.lib TTimerv01.lib
 RELEASE_STD_FILES_BIN = $(LAUNCHER_BINARY) $(TTOOL_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(REMOTESIMULATOR_BINARY) $(RUNDSE_BINARY) 
 RELEASE_STD_FILES_LICENSES = LICENSE LICENSE_CECILL_ENG LICENSE_CECILL_FR
 
-
+TEST_DIR        = tests
+TEST_MK         = test.mk
+TEST_DIRS       = $(shell find $(TEST_DIR)/* -type d)
+TEST_MAKEFILES  = $(patsubst %,%/$(TEST_MK),$(TEST_DIRS))
 
 all: basic jar
 
+.PHONY: svn basicsvnapvrille myrelease basic jar ttooljar launcher tiftranslator tmltranslator rundse remotesimulator documentation stdrelease preinstall preinstall_linux jttooljar updatesimulator test
 
 svn:
 	date
@@ -285,6 +290,13 @@ updatesimulator:
 
 	cd /homes/apvrille/TechTTool/SystemCCode/generated/; make ultraclean
 
+test: $(TEST_MAKEFILES)
+	$(foreach m,$(TEST_MAKEFILES),$(MAKE) -s -C $(dir $(m)) -f $(TEST_MK);)
+	@echo "Everything went fine"
+
+$(TEST_DIR)/%/$(TEST_MK):
+	@cp $(TEST_DIR)/$(TEST_MK) $@
+
 clean:
 	rm -f $(TTOOL_SRC)/*.dot $(TTOOL_SRC)/*.dta $(TTOOL_SRC)/*.sim $(TTOOL_SRC)/*.lot
 	rm -f $(TTOOL_SRC)/*.class $(TTOOL_SRC)/*.java~
@@ -298,6 +310,14 @@ clean:
 	@@for p in $(PACKAGE); do \
 		echo rm -f $$p/*.class;\
 		rm -f $(TTOOL_SRC)/$$p/*.class $(TTOOL_SRC)/$$p/*.java~; \
+	done
+	@@for t in $(TEST_DIRS); do \
+		if [ -w $$t/$(TEST_MK) ]; \
+		then \
+			$(MAKE) -s -C $$t -f $(TEST_MK) clean; \
+			echo rm -f ./$$t/*.class; \
+			rm -f ./$$t/$(TEST_MK); \
+		fi; \
 	done
 
 ultraclean: clean
