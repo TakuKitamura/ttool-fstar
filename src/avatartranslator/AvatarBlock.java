@@ -138,6 +138,10 @@ public class AvatarBlock extends AvatarElement {
         return this.avspec.getAvatarConstantWithName (_name);
     }
 
+    public void addConstant (AvatarConstant _constant) {
+        this.avspec.addConstant (_constant);
+    }
+
     public void addIntAttributeIfApplicable(String _name) {
         if (getAvatarAttributeWithName(_name) == null) {
             AvatarAttribute aa = new AvatarAttribute(_name, AvatarType.INTEGER, this, null);

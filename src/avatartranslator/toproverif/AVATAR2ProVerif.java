@@ -592,6 +592,12 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             allKnowledge.add (arg);
         }
 
+        for (AvatarPragma pragma: this.avspec.getPragmas ())
+            if (pragma instanceof AvatarPragmaPublic)
+                for (AvatarAttribute attr: pragma.getArgs ())
+                    if (attr.getBlock () == ab)
+                        lastInstr = lastInstr.setNextInstr ( new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + AVATAR2ProVerif.translateTerm (attr, null) + ");"));
+
         // Call the first "real" process
         String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((call__" + ab.getName () + "__0";
         for(ProVerifVar aa: this.getAttributesFromBlock (ab))

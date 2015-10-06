@@ -78,6 +78,13 @@ public abstract class AvatarTerm extends AvatarElement {
         result = block.getAvatarConstantWithName (toParse);
         if (result != null)
             return result;
+
+        // Consider that new names are constants
+        if (AvatarTerm.isValidName (toParse)) {
+            result = new AvatarConstant (toParse, block);
+            block.addConstant ((AvatarConstant) result);
+            return result;
+        }
         //TraceManager.addDev ("AvatarConstant '" + toParse + "' couldn't be parsed");
 
         //TraceManager.addDev ("AvatarTerm '" + toParse + "' couldn't be parsed");
