@@ -131,7 +131,7 @@ public class ProVerifOutputAnalyzer {
                     else if (str.contains(typedStrongAuth)){
                         if (str.contains(typedTrue)){
                             //Add string between tags
-                            satisfiedAuthenticity.add(str.split(typedStrongAuth)[1].split(typedAuthSplit)[0].split("\\(")[0] + " ==> " + str.split(typedAuthSplit)[1].split("\\(")[0]);
+                            satisfiedAuthenticity.add(str.split(Pattern.quote(typedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0]);
                         }
                         else if (str.contains(typedFalse)) {
                             nonSatisfiedAuthenticity.add(str.split(Pattern.quote(typedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0]);
