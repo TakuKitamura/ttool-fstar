@@ -57,13 +57,12 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
     
     protected String text;
     
-    
     //components
     protected JTextArea textarea;
     protected JButton close;
     protected JButton cancel;
     protected JMenuBar menuBar;
-    protected JButton help;
+    protected JMenu help;
     protected JPopupMenu helpPopup;
 
     /** Creates new form  */
@@ -231,7 +230,7 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
         helpPopup = new JPopupMenu();
-	JTextArea jft = new JTextArea("Pragma Guidelines: #Authenticity: Compare two Attributes at a given state \n #Confidentiality: Query whether the attacker knows the value of this attribute. \n #Constant: Take a guess \n #InitialSessionKnowledge: Knowledge at the start of each session\n #InitialSystemKnowledge: Knowledge at the start of the system \n #PrivatePublicKeys: The attribute Private Key followed by the attribute Public Key \n #Public: Self-explanatory \n #SecrecyAssumption: Like Secret, but with a fancier name \n #Secret: See #Confidentiality");
+	JTextArea jft = new JTextArea("Pragma Guidelines: \n #Authenticity: Compare two Attributes at a given state \n #Confidentiality: Query whether the attacker knows the value of this attribute. \n #Constant: Take a guess \n #InitialSessionKnowledge: Knowledge at the start of each session\n #InitialSystemKnowledge: Knowledge at the start of the system \n #PrivatePublicKeys: The attribute Private Key followed by the attribute Public Key \n #Public: Self-explanatory \n #SecrecyAssumption: Like Secret, but with a fancier name \n #Secret: See #Confidentiality");
 	helpPopup.add(jft);
         textarea = new JTextArea();
 
@@ -242,7 +241,7 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
         textarea.setFont(new Font("times", Font.PLAIN, 12));
 	JMenuBar menuBar = new JMenuBar();
 	menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-	help = new JButton("?");
+	help = new JMenu("?");
 	menuBar.add(help);
 	setJMenuBar(menuBar);
 	textarea.addKeyListener(new KeyListener() {
@@ -345,7 +344,12 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
         dispose();
     }
     public void help(){
-	helpPopup.show(help, 20, 20);
+	if (!helpPopup.isVisible()){
+	    helpPopup.show(help, 20, 20);
+	}
+	else {
+	    helpPopup.setVisible(false);
+	}
     }
     public String getText() {
         return text;
