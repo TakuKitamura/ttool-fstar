@@ -216,7 +216,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
         c03.gridheight = 1;
 
         exegroup = new ButtonGroup();
-        exe = new JRadioButton(textC2, false);
+        exe = new JRadioButton(textC2, true);
         exe.addActionListener(this);
         exegroup.add(exe);
         //exeJava.addActionListener(this);

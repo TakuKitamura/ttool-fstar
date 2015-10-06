@@ -62,7 +62,10 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
     protected JTextArea textarea;
     protected JButton close;
     protected JButton cancel;
-    
+    protected JMenuBar menuBar;
+    protected JButton help;
+    protected JPopupMenu helpPopup;
+
     /** Creates new form  */
     public JDialogPragma(Frame f, String title, String _text) {
         super(f, title, true);
@@ -74,7 +77,7 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
 //Suggestion Panel code from: http://stackoverflow.com/questions/10873748/how-to-show-autocomplete-as-i-type-in-jtextarea
 
     public class SuggestionPanel {
-	private final String[] pragma = {"#Constant", "#InitialSystemKnowledge", "#InitialSessionKnowledge", "#PrivatePublicKeys", "#Public", "#Confidentiality", "#Secret", "#SecrecyAssumption", "#Authenticity"};
+	private final String[] pragma = {"#Authenticity", "#Confidentiality", "#Constant", "#InitialSessionKnowledge", "#InitialSystemKnowledge", "#PrivatePublicKeys", "#Public", "#SecrecyAssumption", "#Secret"};
         private JList list;
         private JPopupMenu popupMenu;
         private String subWord;
@@ -226,16 +229,23 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
         Font f = new Font("Helvetica", Font.PLAIN, 14);
         setFont(f);
         c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
+        helpPopup = new JPopupMenu();
+	JTextArea jft = new JTextArea("Pragma Guidelines: #Authenticity: Compare two Attributes at a given state \n #Confidentiality: Query whether the attacker knows the value of this attribute. \n #Constant: Take a guess \n #InitialSessionKnowledge: Knowledge at the start of each session\n #InitialSystemKnowledge: Knowledge at the start of the system \n #PrivatePublicKeys: The attribute Private Key followed by the attribute Public Key \n #Public: Self-explanatory \n #SecrecyAssumption: Like Secret, but with a fancier name \n #Secret: See #Confidentiality");
+	helpPopup.add(jft);
         textarea = new JTextArea();
+
         textarea.setEditable(true);
         textarea.setMargin(new Insets(10, 10, 10, 10));
         textarea.setTabSize(3);
         textarea.append(text);
         textarea.setFont(new Font("times", Font.PLAIN, 12));
+	JMenuBar menuBar = new JMenuBar();
+	menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+	help = new JButton("?");
+	menuBar.add(help);
+	setJMenuBar(menuBar);
 	textarea.addKeyListener(new KeyListener() {
-
             @Override
             public void keyTyped(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyChar() == KeyEvent.VK_TAB) {
@@ -282,24 +292,36 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
             }
         });
 
+
+	
         JScrollPane jsp = new JScrollPane(textarea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setPreferredSize(new Dimension(300, 300));
         c.add(jsp, BorderLayout.CENTER);
         
+
+
         close = new JButton("Ok", IconManager.imgic25);
         cancel = new JButton("Cancel", IconManager.imgic27);
         
+	help.setPreferredSize(new Dimension(30,30));
+
         close.setPreferredSize(new Dimension(150, 30));
         cancel.setPreferredSize(new Dimension(150, 30));
         
         close.addActionListener(this);
         cancel.addActionListener(this);
-        
+        help.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    help();
+                }
+            });
         JPanel jp = new JPanel();
         jp.add(close);
         jp.add(cancel);
         
         c.add(jp, BorderLayout.SOUTH);
+	
     }
     
     public void	actionPerformed(ActionEvent evt)  {
@@ -311,6 +333,7 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
         } else if (command.equals("Ok")) {
             close();
         }
+	
     }
     
     public void cancel() {
@@ -321,7 +344,9 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
         text = textarea.getText();
         dispose();
     }
-    
+    public void help(){
+	helpPopup.show(help, 20, 20);
+    }
     public String getText() {
         return text;
     }

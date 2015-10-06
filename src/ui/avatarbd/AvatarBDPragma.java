@@ -90,9 +90,9 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
     public AvatarBDPragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        width = 150;
+        width = 200;
         height = 30;
-        minWidth = 20;
+        minWidth = 80;
         minHeight = 10;
 	models = new LinkedList<String>();
 	properties = new LinkedList<String>();
@@ -160,7 +160,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         Color c = g.getColor();
 
         int desiredWidth = minWidth;
-	desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth("Property Pragma") + marginX);
+	desiredWidth = Math.max(desiredWidth, 2*g.getFontMetrics().stringWidth("Property Pragma") + marginX);
 	
         for(int i=0; i< values.length; i++) {
             desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX);
