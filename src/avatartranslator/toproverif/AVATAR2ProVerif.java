@@ -109,8 +109,6 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     }
 
     public boolean saveInFile(String path) throws FileException {
-        // TODO check if pvspec exists etc.
-        // TODO: Add a field for Hash and check it
 	//Our hash file is always hash.txt
 	String hashCode= Integer.toString(this.spec.getStringSpec().hashCode());
 	File file = new File(path);
@@ -163,8 +161,6 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         // TODO: What are composite states ?
         this.avspec.removeCompositeStates();
         this.avspec.removeTimers();
-        // TODO: Why remove Else guards ?
-        // this.avspec.removeElseGuards();
 
         LinkedList<AvatarAttribute> allKnowledge = this.makeStartingProcess();
 
@@ -273,9 +269,13 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             if (pragma instanceof AvatarPragmaSecrecyAssumption)
                 for (AvatarAttribute attribute: pragma.getArgs ()) {
                     AvatarAttribute trueAttr = this.nameEquivalence.get (attribute);
-                    if (trueAttr == null)
-                        // TODO Warning
+                    if (trueAttr == null) {
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't test confidentiality of attribute " + attribute.getBlock ().getName () + "." + attribute.getName () + " unless you declare it as initial knowledge.");
+                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
+                        ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
+                        warnings.add(ce);
                         continue;
+                    }
                     if (secrecyChecked.contains (trueAttr))
                         continue;
 
@@ -293,9 +293,13 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             if (pragma instanceof AvatarPragmaSecret)
                 for (AvatarAttribute attribute: pragma.getArgs ()) {
                     AvatarAttribute trueAttr = this.nameEquivalence.get (attribute);
-                    if (trueAttr == null)
-                        // TODO Warning
+                    if (trueAttr == null) {
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't test confidentiality of attribute " + attribute.getBlock ().getName () + "." + attribute.getName () + " unless you declare it as initial knowledge.");
+                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
+                        ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
+                        warnings.add(ce);
                         continue;
+                    }
                     if (secrecyChecked.contains (trueAttr))
                         continue;
 
@@ -399,16 +403,20 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         // If there are more arguments after a public key ignore what follows
                         if (containsPublicKey) {
                             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't define equality between public keys and other attributes.");
+                            ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+                            ce.setTGComponent((TGComponent)pragma.getReferenceObject());
+                            warnings.add(ce);
                             //ce.setAvatarBlock(arg.block);
-                            //FIXME: quel TDiagramPanel ?
                             //ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                             //ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
-                            //warnings.add(ce);
                             break;
                         }
                         // If there is a public key in the middle, ignore it
                         if (this.pubs.get (arg) != null) {
-                            // TODO: raise warning
+                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't define equality between public keys and other attributes.");
+                            ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+                            ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
+                            warnings.add(ce);
                             continue;
                         }
 
@@ -453,7 +461,10 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
                     // ignore if the attribute was sytem knowledge
                     if (systemKnowledge.contains (arg)) {
-                        // TODO: raise warning
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't define an attribute as both system and session knowledge.");
+                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
+                        ce.setTGComponent((TGComponent)pragma.getReferenceObject());
+                        warnings.add(ce);
                         continue;
                     }
 
@@ -483,12 +494,18 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     } else {
                         // If there are more arguments after a public key ignore what follows
                         if (containsPublicKey) {
-                            // TODO: raise warning
+                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't define equality between public keys and other attributes.");
+                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
+                            ce.setTGComponent((TGComponent)pragma.getReferenceObject());
+                            warnings.add(ce);
                             break;
                         }
                         // If there is a public key in the middle, ignore it
                         if (this.pubs.get (arg) != null) {
-                            // TODO: raise warning
+                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't define equality between public keys and other attributes.");
+                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
+                            ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
+                            warnings.add(ce);
                             continue;
                         }
 
@@ -709,9 +726,14 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 boolean first = true;
                 for(String value: _asme.getValues ()) {
                     AvatarTerm term = AvatarTerm.createFromString (arg.block, value);
-                    if (term == null)
-                        // TODO: warning
+                    if (term == null) {
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown term '" + value + "' (ignored)");
+                        ce.setAvatarBlock(arg.block);
+                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                        ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                        this.warnings.add(ce);
                         continue;
+                    }
 
                     if (first)
                         first = false;
@@ -737,9 +759,14 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             else
                 for(String value: _asme.getValues ()) {
                     AvatarTerm term = AvatarTerm.createFromString (arg.block, value);
-                    if (term == null || ! (term instanceof AvatarAttribute))
-                        // TODO: error
+                    if (term == null || ! (term instanceof AvatarAttribute)) {
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown attribute '" + value + "' (ignored)");
+                        ce.setAvatarBlock(arg.block);
+                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                        ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                        this.warnings.add(ce);
                         continue;
+                    }
 
                     AvatarAttribute attr = (AvatarAttribute) term;
                     Integer c = arg.attributeCmp.get (attr) + 1;
@@ -760,7 +787,6 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
         arg.lastInstr = _lastInstr;
         arg.lastASME = _asme;
-        // FIXME: can't be followed by multiple states ?
         this.translateNext (_asme.getNext(0), arg);
     }
 
@@ -779,7 +805,6 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 TraceManager.addDev("|    |    transition is guarded by " + tmp);
                 _lastInstr = _lastInstr.setNextInstr (new ProVerifProcITE (tmp));
             } else {
-                // TODO: warning
                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Guard: " + _asme.getGuard() + " in block " + arg.block.getName() + " is not supported. Replacing by an empty guard");
                 ce.setAvatarBlock(arg.block);
                 ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
@@ -826,9 +851,14 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             LinkedList<ProVerifVar> proVerifLeftHand = new LinkedList<ProVerifVar> ();
             if (leftHand instanceof AvatarTuple)
                 for (AvatarTerm term: ((AvatarTuple) leftHand).getComponents ()) {
-                    if (! (term instanceof AvatarAttribute))
-                        // TODO: warning
+                    if (! (term instanceof AvatarAttribute)) {
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + term.getName () + "' should be an attribute (ignored)");
+                        ce.setAvatarBlock(arg.block);
+                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                        ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                        this.warnings.add(ce);
                         continue;
+                    }
 
                     AvatarAttribute attr = (AvatarAttribute) term;
                     Integer c = arg.attributeCmp.get (attr) + 1;
@@ -858,7 +888,11 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 boolean ok = true;
                 for (int i = 1; i <= index; i++)
                     if (! (args.get(i) instanceof AvatarAttribute)) {
-                        // TODO: raise warning
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + args.get(i).getName () + "' should be an attribute (ignored)");
+                        ce.setAvatarBlock(arg.block);
+                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                        ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                        this.warnings.add(ce);
                         ok = false;
                     }
 

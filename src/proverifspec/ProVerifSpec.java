@@ -68,7 +68,6 @@ public class ProVerifSpec implements ProVerifDeclaration {
     public String getStringSpec() {
         if (this.syntaxer != null)
             return this.syntaxer.getStringSpec (this);
-        // TODO: raise error
         return "";
     }
 
