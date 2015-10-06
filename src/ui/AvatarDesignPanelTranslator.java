@@ -110,9 +110,11 @@ public class AvatarDesignPanelTranslator {
         createRelationsBetweenBlocks(as, blocks);
         makeBlockStateMachines(as);
         createPragmas(as, blocks);
-        TraceManager.addDev("Removing else guards");
-        as.removeElseGuards();
-        TraceManager.addDev("Removing else guards ... done");
+
+        // FIXME: is it ok to let else guards ?
+        // TraceManager.addDev("Removing else guards");
+        // as.removeElseGuards();
+        // TraceManager.addDev("Removing else guards ... done");
         return as;
     }
 

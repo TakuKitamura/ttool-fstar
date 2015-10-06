@@ -574,6 +574,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 // Check if the corresponding private key has already been declared
                 if (!allKnowledge.contains (privateK)) {
                     lastInstr = lastInstr.setNextInstr (new ProVerifProcNew (privateKStr, "bitstring"));
+                    this.nameEquivalence.put (privateK, privateK);
                     allKnowledge.add (privateK);
                 }
 
@@ -581,8 +582,10 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, PK_PK + "(" + privateKStr + ")"));;
                 // Make the public key public
                 tmpInstr = new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + str + ");");
-            } else
+            } else {
                 tmpInstr = new ProVerifProcNew (str, "bitstring");
+                this.nameEquivalence.put (arg, arg);
+            }
 
             TraceManager.addDev("|    AvatarAttribute: " + str);
             lastInstr = lastInstr.setNextInstr (tmpInstr);
@@ -750,6 +753,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         }
 
         arg.lastInstr = _lastInstr;
+        arg.lastASME = _asme;
         // FIXME: can't be followed by multiple states ?
         this.translateNext (_asme.getNext(0), arg);
     }
@@ -843,21 +847,34 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             if (name.equals ("get2") || name.equals ("get3") || name.equals ("get4")) {
                 // If the function called is get[234]
                 LinkedList<AvatarTerm> args = action.getArgs ().getComponents ();
-                int index = (int) name.charAt (3) - 49;
+                int index = (int) name.charAt (3) - 48;
 
-                if (args.get(0) instanceof AvatarAttribute) {
+                boolean ok = true;
+                for (int i = 1; i <= index; i++)
+                    if (! (args.get(i) instanceof AvatarAttribute)) {
+                        // TODO: raise warning
+                        ok = false;
+                    }
+
+                if (ok) {
                     // Create the corresponding assignment
-                    AvatarAttribute result = (AvatarAttribute) args.get (0);
+                    String rightHand = AVATAR2ProVerif.translateTerm (args.get (0), arg.attributeCmp);
 
-                    String rightHand = AVATAR2ProVerif.translateTerm (args.get (index), arg.attributeCmp);
-                    Integer c = arg.attributeCmp.get (result) + 1;
-                    arg.attributeCmp.put (result, c);
-                    _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (AVATAR2ProVerif.translateTerm (result, arg.attributeCmp), "bitstring")}, rightHand));
+                    LinkedList<ProVerifVar> tup = new LinkedList<ProVerifVar> ();
+                    for (int i = 1; i <= index; i++) {
+                        AvatarAttribute attr = (AvatarAttribute) args.get (i);
+                        Integer c = arg.attributeCmp.get (attr) + 1;
+                        arg.attributeCmp.put (attr, c);
+                        tup.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
+                    }
+
+                    _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (tup.toArray (new ProVerifVar[tup.size ()]), rightHand));
                 }
             }
         }
 
         arg.lastInstr = _lastInstr;
+        arg.lastASME = _asme;
         this.translateNext (_asme.getNext(0), arg);
     }
 
@@ -896,7 +913,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
         } else if (_asme.hasElseChoiceType1()) {
             TraceManager.addDev("|    |    calling next ITE");
-            ProVerifProcITE ite = new ProVerifProcITE (AVATAR2ProVerif.translateGuard (((AvatarTransition) _asme.getNext (0)).getGuard ().getRealGuard (arg.lastASME), arg.attributeCmp));
+            ProVerifProcITE ite = new ProVerifProcITE (AVATAR2ProVerif.translateGuard (((AvatarTransition) _asme.getNext (0)).getGuard ().getRealGuard (_asme), arg.attributeCmp));
 
             HashMap<AvatarAttribute, Integer> attributeCmp = new HashMap<AvatarAttribute, Integer> (arg.attributeCmp);
 
