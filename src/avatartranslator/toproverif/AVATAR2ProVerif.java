@@ -269,13 +269,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             if (pragma instanceof AvatarPragmaSecrecyAssumption)
                 for (AvatarAttribute attribute: pragma.getArgs ()) {
                     AvatarAttribute trueAttr = this.nameEquivalence.get (attribute);
-                    if (trueAttr == null) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't test confidentiality of attribute " + attribute.getBlock ().getName () + "." + attribute.getName () + " unless you declare it as initial knowledge.");
-                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
-                        ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
-                        warnings.add(ce);
-                        continue;
-                    }
+                    if (trueAttr == null)
+                        trueAttr = attribute;
                     if (secrecyChecked.contains (trueAttr))
                         continue;
 
@@ -293,13 +288,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             if (pragma instanceof AvatarPragmaSecret)
                 for (AvatarAttribute attribute: pragma.getArgs ()) {
                     AvatarAttribute trueAttr = this.nameEquivalence.get (attribute);
-                    if (trueAttr == null) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't test confidentiality of attribute " + attribute.getBlock ().getName () + "." + attribute.getName () + " unless you declare it as initial knowledge.");
-                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
-                        ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
-                        warnings.add(ce);
-                        continue;
-                    }
+                    if (trueAttr == null)
+                        trueAttr = attribute;
                     if (secrecyChecked.contains (trueAttr))
                         continue;
 
@@ -949,6 +939,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
         if (nbOfNexts == 1) {
             arg.lastInstr = _lastInstr;
+            arg.lastASME = _asme;
             this.translateNext (_asme.getNext(0), arg);
 
         } else if (_asme.hasElseChoiceType1()) {
@@ -958,10 +949,12 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             HashMap<AvatarAttribute, Integer> attributeCmp = new HashMap<AvatarAttribute, Integer> (arg.attributeCmp);
 
             arg.lastInstr = _lastInstr.setNextInstr (ite);
+            arg.lastASME = _asme;
             this.translateNext (_asme.getNext (0).getNext (0), arg);
 
             arg.attributeCmp = attributeCmp;
             arg.lastInstr = ite.getElse ();
+            arg.lastASME = _asme;
             this.translateNext (_asme.getNext (1).getNext (0), arg);
 
         } else {
@@ -988,6 +981,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
             arg.attributeCmp = attributeCmp;
             arg.lastInstr = _lastInstr;
+            arg.lastASME = _asme;
             this.translateNext (_asme.getNext (nbOfNexts-1), arg);
         }
     }
@@ -1014,6 +1008,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         }
 
         arg.lastInstr = _lastInstr;
+        arg.lastASME = _asme;
         this.translateNext (_asme.getNext(0), _arg);
     }
 

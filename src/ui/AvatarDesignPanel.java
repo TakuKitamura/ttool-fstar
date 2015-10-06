@@ -341,7 +341,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
         // Confidential attributes
         for(AvatarAttribute attribute: pvoa.getSecretTerms()) {
-            TAttribute a = abdp.getAttributeByBlockName(attribute.getBlock ().getName (), attribute.getName ());
+            TAttribute a = abdp.getAttributeByBlockName(attribute.getBlock ().getName (), attribute.getName ().split ("_")[0]);
             if (a != null)
                 //TraceManager.addDev("Setting conf to ok");
                 a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);

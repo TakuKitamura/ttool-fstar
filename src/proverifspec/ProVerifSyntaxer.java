@@ -124,8 +124,13 @@ public abstract class ProVerifSyntaxer {
     protected void translateProcITE (ProVerifProcITE _node, int _alinea) {
         this.fullSpec += "\n" + this.printAlinea (_alinea);
         this.fullSpec += "if " + _node.cond + " then";
-        if (_node.next != null)
+        if (_node.next != null) {
+            if (_node.elseInstr.next != null)
+                this.fullSpec += " (";
             this.translate (_node.next, _alinea+1);
+            if (_node.elseInstr.next != null)
+                this.fullSpec += ")";
+        }
         else
             this.fullSpec += " 0";
         if (_node.elseInstr.next != null) {

@@ -82,7 +82,7 @@ public abstract class AvatarGuard {
             indexRParen = AvatarGuard.getMatchingRParen (sane, 3);
             first = AvatarGuard.createFromString (block, sane.substring (4, indexRParen));
 
-            if (indexRParen == sane.length ()) {
+            if (indexRParen >= sane.length ()-1) {
                 if (first instanceof AvatarComposedGuard)
                     return new AvatarUnaryGuard ("not(", ")", (AvatarComposedGuard) first);
                 else

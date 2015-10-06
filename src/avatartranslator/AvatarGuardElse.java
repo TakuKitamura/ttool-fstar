@@ -58,9 +58,11 @@ public class AvatarGuardElse extends AvatarGuard {
 
     public AvatarGuard getRealGuard (AvatarStateMachineElement precedent) {
         AvatarGuard result = null;
+
         for (AvatarStateMachineElement asme: precedent.getNexts ()) {
             if (! (asme instanceof AvatarTransition))
                 continue;
+
             AvatarGuard guard = ((AvatarTransition) asme).getGuard ();
             if (guard == this)
                 continue;
