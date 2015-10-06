@@ -81,6 +81,6 @@ public class AvatarActionAssignment implements AvatarAction {
     }
 
     public String toString () {
-        return this.leftHand.toString () + " = " + this.rightHand.toString ();
+        return this.leftHand.getName() + " = " + this.rightHand.getName();
     }
 }

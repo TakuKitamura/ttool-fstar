@@ -341,6 +341,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         // Creating main container
         frame = new JFrame("TTool");
+
         frame.addWindowListener(this);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE );
         frame.setIconImage(IconManager.img8);

@@ -73,7 +73,7 @@ public abstract class AvatarTerm extends AvatarElement {
         result = block.getAvatarAttributeWithName (toParse);
         if (result != null)
             return result;
-        //TraceManager.addDev ("AvatarAttribute '" + toParse + "' couldn't be parsed");
+        TraceManager.addDev ("AvatarAttribute '" + toParse + "' couldn't be parsed");
 
         result = block.getAvatarConstantWithName (toParse);
         if (result != null)
