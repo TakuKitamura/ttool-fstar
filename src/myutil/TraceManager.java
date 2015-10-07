@@ -49,45 +49,45 @@ import java.io.*;
 
 
 public class TraceManager {
-	public final static int TO_CONSOLE = 0;
-	public final static int TO_FILE = 1;
-	public final static int TO_BUFFER = 2;
-	public final static int TO_DEVNULL = 3;
-	
+    public final static int TO_CONSOLE = 0;
+    public final static int TO_FILE = 1;
+    public final static int TO_BUFFER = 2;
+    public final static int TO_DEVNULL = 3;
+
     public static int userPolicy = TO_CONSOLE;
     public static int devPolicy = TO_CONSOLE;
-	public static int errPolicy = TO_CONSOLE;
-    
-	public static void addDev(String _s) {
-		switch(devPolicy) {
-		case TO_CONSOLE:
-			System.out.println(_s);
-			break;
-		case TO_DEVNULL:
-			break;
-		default:
-		}
-	}
-	
-	public static void addUser(String _s) {
-		switch(userPolicy) {
-		case TO_CONSOLE:
-			System.out.println(_s);
-			break;
-		default:
-			System.out.println(_s);
-		}
-	}
-	
-	public static void addError(String _s) {
-		switch(errPolicy) {
-		case TO_CONSOLE:
-			System.err.println(_s);
-			break;
-		default:
-			System.err.println(_s);
-		}
-	}
+    public static int errPolicy = TO_CONSOLE;
 
-    
+    public static void addDev(String _s) {
+        switch(devPolicy) {
+            case TO_CONSOLE:
+                System.out.println(_s);
+                break;
+            case TO_DEVNULL:
+                break;
+            default:
+        }
+    }
+
+    public static void addUser(String _s) {
+        switch(userPolicy) {
+            case TO_CONSOLE:
+                System.out.println(_s);
+                break;
+            default:
+                System.out.println(_s);
+        }
+    }
+
+    public static void addError(String _s) {
+        switch(errPolicy) {
+            case TO_CONSOLE:
+                System.err.println(_s);
+                break;
+            default:
+                System.err.println(_s);
+        }
+    }
+
+
 } // Class TraceManager

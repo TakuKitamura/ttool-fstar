@@ -83,7 +83,7 @@ RELEASE_STD_FILES_LIB =  TClock1.lib TTimerv01.lib
 RELEASE_STD_FILES_BIN = $(LAUNCHER_BINARY) $(TTOOL_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(REMOTESIMULATOR_BINARY) $(RUNDSE_BINARY) 
 RELEASE_STD_FILES_LICENSES = LICENSE LICENSE_CECILL_ENG LICENSE_CECILL_FR
 
-TEST_DIR        = tests
+TEST_DIR        = $(TTOOL_PATH)/tests
 TEST_MK         = test.mk
 TEST_DIRS       = $(shell find $(TEST_DIR)/* -type d)
 TEST_MAKEFILES  = $(patsubst %,%/$(TEST_MK),$(TEST_DIRS))
@@ -294,8 +294,8 @@ test: $(TEST_MAKEFILES)
 	$(foreach m,$(TEST_MAKEFILES),$(MAKE) -s -C $(dir $(m)) -f $(TEST_MK);)
 	@echo "Everything went fine"
 
-$(TEST_DIR)/%/$(TEST_MK):
-	@cp $(TEST_DIR)/$(TEST_MK) $@
+$(TEST_DIR)/%/$(TEST_MK): $(TEST_DIR)/$(TEST_MK)
+	@cp $< $@
 
 clean:
 	rm -f $(TTOOL_SRC)/*.dot $(TTOOL_SRC)/*.dta $(TTOOL_SRC)/*.sim $(TTOOL_SRC)/*.lot
@@ -315,10 +315,11 @@ clean:
 		if [ -w $$t/$(TEST_MK) ]; \
 		then \
 			$(MAKE) -s -C $$t -f $(TEST_MK) clean; \
-			echo rm -f ./$$t/*.class; \
-			rm -f ./$$t/$(TEST_MK); \
+			echo rm -f $$t/*.class; \
+			rm -f $$t/$(TEST_MK); \
 		fi; \
 	done
+	rm -f $(TEST_DIR)/*.class
 
 ultraclean: clean
 	@@for p in $(RELEASE_STD_FILES_BIN); do \

@@ -46,8 +46,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import avatartranslator.AvatarAttribute;
 import avatartranslator.AvatarBlock;
@@ -55,13 +53,14 @@ import avatartranslator.AvatarSpecification;
 import avatartranslator.toproverif.AVATAR2ProVerif;
 import proverifspec.ProVerifOutputAnalyzer;
 
+public class ProVerifOutputAnalyzerTest extends TToolTest {
 
-public class ProVerifOutputAnalyzerTest {
-    public static void main(String[] args){
+    public ProVerifOutputAnalyzerTest () {
+        super ("ProVerif Output Analyzer", false);
+    }
+
+    protected void test () {
         BufferedReader br = null;
-        byte[] expectedTyped = {-6, -76, -105, 122, 48, -22, 6, -4, 75, 68, 112, -32, 38, 67, 123, -98, -38, -87, 30, -27};
-        byte[] expectedUntyped = {-84, -61, 35, -120, 72, -116, -42, 37, -20, 80, -38, -73, -1, -17, 85, -81, 53, -5, 70, 88};
-
         try {
             String s="";
             String sCurrentLine;
@@ -70,8 +69,6 @@ public class ProVerifOutputAnalyzerTest {
                 s= s.concat(sCurrentLine+"\n");
             }
             //System.out.println(s);
-
-            System.out.print("==========> Testing ProVerif Output Analyzer");
 
             AvatarSpecification avspec = new AvatarSpecification ("dummy", null);
             AvatarBlock aliceBlock = new AvatarBlock ("Alice", avspec, null);
@@ -86,8 +83,6 @@ public class ProVerifOutputAnalyzerTest {
             avspec.addBlock (aliceBlock);
             avspec.addBlock (bobBlock);
 
-            MessageDigest md = MessageDigest.getInstance ("SHA");
-
             ProVerifOutputAnalyzer poa = new ProVerifOutputAnalyzer(
                     new AVATAR2ProVerif (avspec) {
                         public String getTrueName (AvatarAttribute attr) {
@@ -99,63 +94,61 @@ public class ProVerifOutputAnalyzerTest {
 
 
             //Test for Reachable Events
-            //System.out.println("Reachable Events " + poa.getReachableEvents().size());
+            this.updateDigest ("Reachable Events " + poa.getReachableEvents().size());
             for (String str: poa.getReachableEvents()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
 
-            //System.out.println("NonReachable Events " + poa.getNonReachableEvents().size());
+            this.updateDigest ("NonReachable Events " + poa.getNonReachableEvents().size());
             for (String str: poa.getNonReachableEvents()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
-            //System.out.println("Secret Terms " + poa.getSecretTerms().size());
+
+            this.updateDigest ("Secret Terms " + poa.getSecretTerms().size());
             for (AvatarAttribute attr: poa.getSecretTerms()){
-                md.update((attr.getBlock ().getName () + "." + attr.getName ()).getBytes ());
+                this.updateDigest ((attr.getBlock ().getName () + "." + attr.getName ()));
             }
-            //System.out.println("Non Secret Terms " + poa.getNonSecretTerms().size());
+            
+            this.updateDigest ("Non Secret Terms " + poa.getNonSecretTerms().size());
             for (AvatarAttribute attr: poa.getNonSecretTerms()){
-                md.update((attr.getBlock ().getName () + "." + attr.getName ()).getBytes ());
+                this.updateDigest ((attr.getBlock ().getName () + "." + attr.getName ()));
             }
-            //System.out.println("Satisfied Authenticity " +poa.getSatisfiedAuthenticity().size());
+
+            this.updateDigest ("Satisfied Authenticity " +poa.getSatisfiedAuthenticity().size());
             for (String str: poa.getSatisfiedAuthenticity()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
-            //System.out.println("Satisfied Weak Authenticity " +poa.getSatisfiedWeakAuthenticity().size());
+            
+            this.updateDigest ("Satisfied Weak Authenticity " +poa.getSatisfiedWeakAuthenticity().size());
             for (String str: poa.getSatisfiedWeakAuthenticity()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
-            //System.out.println("Non Satisfied Authenticity " +poa.getNonSatisfiedAuthenticity().size());
+
+            this.updateDigest ("Non Satisfied Authenticity " +poa.getNonSatisfiedAuthenticity().size());
             for (String str: poa.getNonSatisfiedAuthenticity()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
-            //System.out.println("Errors " +poa.getErrors().size());
+
+            this.updateDigest ("Errors " +poa.getErrors().size());
             for (String str: poa.getErrors()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
-            //System.out.println("Not proved " +poa.getNotProved().size());	
+
+            this.updateDigest ("Not proved " +poa.getNotProved().size());	
             for (String str: poa.getNotProved()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
 
-            byte[] dig = md.digest ();
-            for (int i=0; i<dig.length; i++)
-                if (expectedTyped[i] != dig[i]) {
-                    System.err.println ("\nCouldn't analyze ProVerif typed output...\n");
-                    System.exit (-1);
-                }
-
-            //Untyped Tests
-            //System.out.println("Untyped Tests");
+            if (!this.testDigest (new byte[] {-126, -51, 48, -20, -15, -101, 107, 0, -46, -110, -80, -56, -4, -120, 37, -47, -20, -55, 114, 111}))
+                this.error ("Couldn't analyze ProVerif typed output...");
 
             s = "";
             br = new BufferedReader(new FileReader("untyped.txt"));
             while ((sCurrentLine = br.readLine()) != null) {
                 s= s.concat(sCurrentLine+"\n");
             }
-            //System.out.println(s);
 
-            //System.out.println("__________________________________");
-
+            this.updateDigest ("__________________________________");
 
             poa = new ProVerifOutputAnalyzer(
                     new AVATAR2ProVerif (avspec) {
@@ -165,75 +158,67 @@ public class ProVerifOutputAnalyzerTest {
                     });
             poa.analyzeOutput(s,false);
 
-            md.reset ();
-
-            //System.out.println("Reachable Events " + poa.getReachableEvents().size());
+            this.updateDigest ("Reachable Events " + poa.getReachableEvents().size());
             for (String str: poa.getReachableEvents()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
 
-            //System.out.println("NonReachable Events " + poa.getNonReachableEvents().size());
+            this.updateDigest ("NonReachable Events " + poa.getNonReachableEvents().size());
             for (String str: poa.getNonReachableEvents()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
-            //System.out.println("Secret Terms " + poa.getSecretTerms().size());
+
+            this.updateDigest ("Secret Terms " + poa.getSecretTerms().size());
             for (AvatarAttribute attr: poa.getSecretTerms()){
-                md.update((attr.getBlock ().getName () + "." + attr.getName ()).getBytes ());
+                this.updateDigest ((attr.getBlock ().getName () + "." + attr.getName ()));
             }
-            //System.out.println("Non Secret Terms " + poa.getNonSecretTerms().size());
+
+            this.updateDigest ("Non Secret Terms " + poa.getNonSecretTerms().size());
             for (AvatarAttribute attr: poa.getNonSecretTerms()){
-                md.update((attr.getBlock ().getName () + "." + attr.getName ()).getBytes ());
+                this.updateDigest ((attr.getBlock ().getName () + "." + attr.getName ()));
             }
-            //System.out.println("Satisfied Authenticity " +poa.getSatisfiedAuthenticity().size());
+
+            this.updateDigest ("Satisfied Authenticity " +poa.getSatisfiedAuthenticity().size());
             for (String str: poa.getSatisfiedAuthenticity()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
-            //System.out.println("Satisfied Weak Authenticity " +poa.getSatisfiedWeakAuthenticity().size());
+
+            this.updateDigest ("Satisfied Weak Authenticity " +poa.getSatisfiedWeakAuthenticity().size());
             for (String str: poa.getSatisfiedWeakAuthenticity()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
-            //System.out.println("Non Satisfied Authenticity " +poa.getNonSatisfiedAuthenticity().size());
+
+            this.updateDigest ("Non Satisfied Authenticity " +poa.getNonSatisfiedAuthenticity().size());
             for (String str: poa.getNonSatisfiedAuthenticity()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
-            //System.out.println("Errors " +poa.getErrors().size());
+
+            this.updateDigest ("Errors " +poa.getErrors().size());
             for (String str: poa.getErrors()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
-            //System.out.println("Not proved " +poa.getNotProved().size());	
+
+            this.updateDigest ("Not proved " +poa.getNotProved().size());	
             for (String str: poa.getNotProved()){
-                md.update(str.getBytes ());
+                this.updateDigest (str);
             }
 
+            if (!this.testDigest (new byte[] {103, 89, 62, 106, -11, 41, -54, -64, -24, 74, 109, -93, 77, -21, 72, -62, 117, -41, -114, 46}))
+                this.error ("Couldn't analyze ProVerif untyped output...");
 
-            dig = md.digest ();
-
-            //System.out.print ("{");
-            //for (byte b: dig) {
-            //    System.out.print (b);
-            //    System.out.print (", ");
-            //}
-            //System.out.println ();
-            
-            for (int i=0; i<dig.length; i++)
-                if (expectedUntyped[i] != dig[i]) {
-                    System.err.println ("\nCouldn't analyze ProVerif untyped output...\n");
-                    System.exit (-1);
-                }
-
-            System.out.println(": ok");
-
-        } catch (IOException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            System.exit (-1);
+        } catch (IOException e) {
+            this.error (e.toString ());
         } finally {
             try {
                 if (br != null)br.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
-                System.exit (-1);
+                this.error (ex.toString ());
             }
         }
+    }
 
+    public static void main(String[] args){
+        ProVerifOutputAnalyzerTest pvoat = new ProVerifOutputAnalyzerTest ();
+        pvoat.runTest ();
     }
 }
