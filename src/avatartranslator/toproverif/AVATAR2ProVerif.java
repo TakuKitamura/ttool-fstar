@@ -276,7 +276,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
                     String name = AVATAR2ProVerif.translateTerm (trueAttr, null);
                     TraceManager.addDev("|    " + name);
-                    this.spec.addDeclaration (new ProVerifSecrecyAssum (name));
+                    // TODO: this doesn't work. Replacing by an attacker(...) query
+                    // this.spec.addDeclaration (new ProVerifSecrecyAssum (name));
+                    this.spec.addDeclaration (new ProVerifQueryAtt   (name, true));
 
                     secrecyChecked.add (trueAttr);
                 }
@@ -360,11 +362,16 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             // Check if pragma is system initial knowledge
             if (pragma instanceof AvatarPragmaInitialKnowledge && ((AvatarPragmaInitialKnowledge) pragma).isSystem ()) {
                 AvatarAttribute first = null;
-                boolean containsPublicKey = false;
+                AvatarAttribute containsPublicKey = null;
                 for (AvatarAttribute arg: pragma.getArgs ()) {
                     // ignore if the attribute was already declared
-                    if (systemKnowledge.contains (arg))
+                    if (systemKnowledge.contains (arg)) {
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + arg.getBlock ().getName () + "." + arg.getName () + " already appears in another initial knowledge pragma (ignored).");
+                        ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+                        ce.setTGComponent((TGComponent)pragma.getReferenceObject());
+                        warnings.add(ce);
                         continue;
+                    }
 
                     ProVerifProcInstr tmpInstr;
                     // Check if it is the first from the list
@@ -375,13 +382,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         AvatarAttribute privateK = this.pubs.get (arg);
                         // Check if it is a public key
                         if (privateK != null) {
-                            containsPublicKey = true;
                             String privateKStr = AVATAR2ProVerif.translateTerm (privateK, null);
                             // Check if the corresponding private key has already been declared
                             if (!systemKnowledge.contains (privateK)) {
+                                this.nameEquivalence.put (privateK, privateK);
                                 lastInstr = lastInstr.setNextInstr (new ProVerifProcNew (privateKStr, "bitstring"));
                                 systemKnowledge.add (privateK);
                             }
+
+                            containsPublicKey = this.nameEquivalence.get (privateK);
 
                             // Let the public key
                             lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (AVATAR2ProVerif.translateTerm (first, null), "bitstring")}, PK_PK + "(" + privateKStr + ")"));;
@@ -390,20 +399,11 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         } else
                             tmpInstr = new ProVerifProcNew (AVATAR2ProVerif.translateTerm (first, null), "bitstring");
                     } else {
-                        // If there are more arguments after a public key ignore what follows
-                        if (containsPublicKey) {
-                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't define equality between public keys and other attributes.");
-                            ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
-                            ce.setTGComponent((TGComponent)pragma.getReferenceObject());
-                            warnings.add(ce);
-                            //ce.setAvatarBlock(arg.block);
-                            //ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
-                            //ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
-                            break;
-                        }
+                        AvatarAttribute privateK = this.pubs.get (arg);
+
                         // If there is a public key in the middle, ignore it
-                        if (this.pubs.get (arg) != null) {
-                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't define equality between public keys and other attributes.");
+                        if (privateK != null) {
+                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "When defining equality between public keys, the first to appear in the pragma should be the one belonging to the block that owns the private key.");
                             ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
                             ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
                             warnings.add(ce);
@@ -411,8 +411,13 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         }
 
                         String str = AVATAR2ProVerif.translateTerm (arg, null);
-                        tmpInstr = new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, AVATAR2ProVerif.translateTerm (first, null));
-                        this.nameEquivalence.put (arg, first);
+
+                        if (containsPublicKey != null)
+                            tmpInstr = new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, PK_PK + "(" + AVATAR2ProVerif.translateTerm (containsPublicKey, null) + ")");
+                        else {
+                            tmpInstr = new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, AVATAR2ProVerif.translateTerm (first, null));
+                            this.nameEquivalence.put (arg, first);
+                        }
                     }
 
                     TraceManager.addDev("|    Initial system knowledge pragma: " + AVATAR2ProVerif.translateTerm (first, null));
@@ -443,11 +448,16 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             // Check if pragma is session initial knowledge
             if (pragma instanceof AvatarPragmaInitialKnowledge && !((AvatarPragmaInitialKnowledge) pragma).isSystem ()) {
                 AvatarAttribute first = null;
-                boolean containsPublicKey = false;
+                AvatarAttribute containsPublicKey = null;
                 for (AvatarAttribute arg: pragma.getArgs ()) {
                     // ignore if the attribute was already declared
-                    if (sessionKnowledge.contains (arg))
+                    if (sessionKnowledge.contains (arg)) {
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + arg.getBlock ().getName () + "." + arg.getName () + " already appears in another initial knowledge pragma (ignored).");
+                        ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+                        ce.setTGComponent((TGComponent)pragma.getReferenceObject());
+                        warnings.add(ce);
                         continue;
+                    }
 
                     // ignore if the attribute was sytem knowledge
                     if (systemKnowledge.contains (arg)) {
@@ -467,13 +477,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         AvatarAttribute privateK = this.pubs.get (arg);
                         // Check if it is a public key
                         if (privateK != null) {
-                            containsPublicKey = true;
                             String privateKStr = AVATAR2ProVerif.translateTerm (privateK, null);
                             // Check if the corresponding private key has already been declared
                             if (!systemKnowledge.contains (privateK) && !sessionKnowledge.contains (privateK)) {
+                                this.nameEquivalence.put (privateK, privateK);
                                 lastInstr = lastInstr.setNextInstr (new ProVerifProcNew (privateKStr, "bitstring"));
                                 sessionKnowledge.add (privateK);
                             }
+
+                            containsPublicKey = this.nameEquivalence.get (privateK);
 
                             // Let the public key
                             lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (AVATAR2ProVerif.translateTerm (first, null), "bitstring")}, PK_PK + "(" + privateKStr + ")"));;
@@ -482,26 +494,25 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         } else
                             tmpInstr = new ProVerifProcNew (AVATAR2ProVerif.translateTerm (first, null), "bitstring");
                     } else {
-                        // If there are more arguments after a public key ignore what follows
-                        if (containsPublicKey) {
-                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't define equality between public keys and other attributes.");
-                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
-                            ce.setTGComponent((TGComponent)pragma.getReferenceObject());
-                            warnings.add(ce);
-                            break;
-                        }
+                        AvatarAttribute privateK = this.pubs.get (arg);
+
                         // If there is a public key in the middle, ignore it
-                        if (this.pubs.get (arg) != null) {
-                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't define equality between public keys and other attributes.");
+                        if (privateK != null) {
+                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "When defining equality between public keys, the first to appear in the pragma should be the one belonging to the block that owns the private key.");
                             ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
                             ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
                             warnings.add(ce);
                             continue;
                         }
 
-                        this.nameEquivalence.put (arg, first);
                         String str = AVATAR2ProVerif.translateTerm (arg, null);
-                        tmpInstr = new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, AVATAR2ProVerif.translateTerm (first, null));
+
+                        if (containsPublicKey != null)
+                            tmpInstr = new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, PK_PK + "(" + AVATAR2ProVerif.translateTerm (containsPublicKey, null) + ")");
+                        else {
+                            tmpInstr = new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, AVATAR2ProVerif.translateTerm (first, null));
+                            this.nameEquivalence.put (arg, first);
+                        }
                     }
 
                     TraceManager.addDev("|    Initial session knowledge pragma: " + AVATAR2ProVerif.translateTerm (first, null));
@@ -789,7 +800,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         ProVerifProcInstr _lastInstr = arg.lastInstr;
 
         // Check if the transition is guarded
-        if (_asme.isGuarded()) {
+        if (_asme.isGuarded() && !arg.lastASME.hasElseChoiceType1 ()) {
             String tmp = AVATAR2ProVerif.translateGuard(_asme.getGuard().getRealGuard (arg.lastASME), arg.attributeCmp);
             if (tmp != null) {
                 TraceManager.addDev("|    |    transition is guarded by " + tmp);
@@ -909,7 +920,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     }
 
     public void translateState (AvatarState _asme, Object _arg) {
-        TraceManager.addDev("|    State");
+        TraceManager.addDev("|    State " + _asme.getName ());
         ProVerifTranslatorParameter arg = (ProVerifTranslatorParameter) _arg;
         ProVerifProcInstr _lastInstr = arg.lastInstr;
 
@@ -950,12 +961,12 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
             arg.lastInstr = _lastInstr.setNextInstr (ite);
             arg.lastASME = _asme;
-            this.translateNext (_asme.getNext (0).getNext (0), arg);
+            this.translateNext (_asme.getNext (0), arg);
 
             arg.attributeCmp = attributeCmp;
             arg.lastInstr = ite.getElse ();
             arg.lastASME = _asme;
-            this.translateNext (_asme.getNext (1).getNext (0), arg);
+            this.translateNext (_asme.getNext (1), arg);
 
         } else {
             TraceManager.addDev("|    |    non deterministic next state");
