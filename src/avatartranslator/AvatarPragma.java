@@ -71,111 +71,254 @@ public abstract class AvatarPragma extends AvatarElement {
     public void setProofStatus(int status){
 	proofStatus = status;
     }
-    public static AvatarPragma createFromString(String str, Object obj, LinkedList<AvatarBlock> blocks){
+    public static LinkedList<AvatarPragma> createFromString(String str, Object obj, LinkedList<AvatarBlock> blocks, HashMap<String, Vector> typeAttributesMap, HashMap<String, String> nameTypeMap){
 	//createFromString takes in a pragma string (with # removed), the containing object, and the list of AvatarBlocks, and returns the corresponding AvatarPragma or null if an error occurred
 	//The attributes referenced must exist 
 	//Remove leading spaces
+	LinkedList<AvatarPragma> pragmas = new LinkedList<AvatarPragma>();
     	str = str.trim();
 	String[] split = str.split("\\s+");
 	if (split.length < 2){
-	  return null;
+	  return pragmas;
 	}
         String header = split[0];
 	String[] args = Arrays.copyOfRange(split, 1, split.length);
-	LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
 	if (header.equals("Authenticity")){
-	    //uses AttributeStates
 	    if (args.length != 2){
-		return null;
+		TraceManager.addDev("Wrong number of attributes for Authenticity Pragma " + str);
+		return pragmas;
 	    }
-	    LinkedList<AvatarAttributeState> attrStates = new LinkedList<AvatarAttributeState>();
-	    for (String arg: args){
-		AvatarAttributeState res = parseAuthAttr(arg, blocks);
-		if (res ==null){
-		    TraceManager.addDev("Can't find Pragma Attribute " + arg);
-		    return null;
+	    String[] split1 = args[0].split("\\.");
+	    String[] split2 = args[1].split("\\.");
+	    // Must be blockName.stateName.attributeName
+	    if (split1.length != 3 || split2.length != 3){
+	        TraceManager.addDev("Badly Formatted Pragma Attribute");
+	        return pragmas;
+ 	    }
+	    String blockName1 = split1[0];
+	    String blockName2 = split2[0];
+	    String attrName1 = split1[2];
+	    String attrName2 = split2[2];
+	    if (!nameTypeMap.containsKey(blockName1+"."+attrName1) && !nameTypeMap.containsKey(blockName2+"."+attrName2)){
+		//Not composed types
+		LinkedList<AvatarAttributeState> attrStates = new LinkedList<AvatarAttributeState>();
+	        for (String arg: args){
+		    AvatarAttributeState res = parseAuthAttr(arg, blocks);
+		    if (res ==null){
+		        TraceManager.addDev("Can't find Pragma Attribute " + arg);
+		        return pragmas;
+		    }
+		    attrStates.add(res);
+	        }
+		pragmas.add(new AvatarPragmaAuthenticity(str, obj, attrStates));
+		return pragmas;
+	    } else if (!nameTypeMap.containsKey(blockName1+"."+attrName1) && nameTypeMap.containsKey(blockName2+"."+attrName2) || nameTypeMap.containsKey(blockName1+"."+attrName1) && !nameTypeMap.containsKey(blockName2+"."+attrName2)){
+		//1 composed type, 1 not
+		TraceManager.addDev("Incompatible types " + str);
+		return pragmas;
+	    } else {
+		//Yay composed types
+		if (!nameTypeMap.get(blockName1+"."+attrName1).equals(nameTypeMap.get(blockName1+"."+attrName1))){
+		    //Different types
+		    TraceManager.addDev("Incompatible types " + str);
+		    return pragmas;
 		}
-		attrStates.add(res);
+		//Generate a fun lot of pragmas...
+		//For each attribute, generate an authenticity pragma
+		Vector typeAttrs = typeAttributesMap.get(nameTypeMap.get(blockName1+"."+attrName1));
+		for (int i=0; i< typeAttrs.size(); i++){
+		    LinkedList<AvatarAttributeState> attrStates = new LinkedList<AvatarAttributeState>();
+		    TAttribute ta = (TAttribute) (typeAttrs.elementAt(i));
+		    String suffix = ta.getId();
+	 	    for (String arg: args){
+		        AvatarAttributeState res = parseAuthAttr(arg+"__"+suffix, blocks);
+		        if (res ==null){
+		            TraceManager.addDev("Can't find Pragma Attribute " + arg+"__"+suffix);
+		            return pragmas;
+		        }
+		        attrStates.add(res);
+	            }	
+		    pragmas.add(new AvatarPragmaAuthenticity(str, obj, attrStates));
+		}
+	        return pragmas;
 	    }
-	    return new AvatarPragmaAuthenticity(str, obj, attrStates);
 	}
 	else if (header.equals("Constant")){
 	    LinkedList<AvatarConstant> constants = new LinkedList<AvatarConstant>();
 	    for (String arg: args){
 		constants.add(new AvatarConstant(arg, obj));
 	    }
-	    return new AvatarPragmaConstant(str, obj, constants);
+	    pragmas.add(new AvatarPragmaConstant(str, obj, constants));
 	}
-	else {
-	    for (String arg: args){
-		AvatarAttribute res = parseAttr(arg, blocks);
+	else if (header.equals("PrivatePublicKeys")){
+	    LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
+	    if (args.length != 3){
+		TraceManager.addDev("Wrong number of attributes for PrivatePublicKeys Pragma " + str);
+		return pragmas;
+	    }
+	    String blockName = args[0];
+	    String attr1 = args[1];
+	    String attr2 = args[2];
+	    //Check if simple type or has only one field
+	    if (nameTypeMap.containsKey(blockName+"."+attr1)){
+		//Find # of fields
+		String type = nameTypeMap.get(blockName+"."+attr1);
+		if (typeAttributesMap.get(type).size()!=1){
+		    TraceManager.addDev("PrivatePublicKey cannot have more than 1 attribute "+ attr1);
+		    return pragmas;
+		}
+		TAttribute ta = (TAttribute)(typeAttributesMap.get(type).elementAt(0));
+		attr1 = attr1+"__"+ta.getId();
+	    }
+	    if (nameTypeMap.containsKey(blockName+"."+attr2)){
+		//Find # of fields
+		String type = nameTypeMap.get(blockName+"."+attr2);
+		if (typeAttributesMap.get(type).size()!=1){
+		    TraceManager.addDev("PrivatePublicKey cannot have more than 1 attribute "+ attr2);
+		    return pragmas;
+		}
+		TAttribute ta = (TAttribute)(typeAttributesMap.get(type).elementAt(0));
+		attr2 = attr2+"__"+ta.getId();
+	    }
+	    for (String attr: new String[]{attr1, attr2}){
+	        AvatarAttribute res = parseAttr(blockName, attr, blocks);
 		if (res ==null){
-		    TraceManager.addDev("Can't find Pragma Attribute "+ arg);
-		    return null;
+		    TraceManager.addDev("Can't find Pragma Attribute "+ attr);
+		    return pragmas;
 		}
 		attrs.add(res);
 	    }
+	    pragmas.add(new AvatarPragmaPrivatePublicKey(str, obj, attrs));
+	}
+	else if (header.equals("InitialSystemKnowledge") || header.equals("InitialSessionKnowledge")){
+	    //Check if all types are the same
+	    TreeSet<String> types = new TreeSet<String>();
+	    for (String arg: args){
+		String[] sp = arg.split("\\.");
+		// Must be blockName.attributeName
+		if (sp.length != 2){
+		    TraceManager.addDev("Badly Formatted Pragma Attribute " + arg);
+		}
+		String blockName = sp[0];
+		String attrName = sp[1];
+		if (nameTypeMap.containsKey(blockName+"."+attrName)){
+		    types.add(nameTypeMap.get(blockName+"."+attrName));
+		    
+		} else {
+		    types.add("base");
+		}
+	    }
+	    if (types.size()!=1){
+		TraceManager.addDev("Initial Knowledge Pragma attributes must be same type "+ str);
+	        return pragmas;
+	    }
+	    if (types.first().equals("base")){
+		//Simple type
+	 	LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
+		for (String arg: args){
+		    String[] sp = arg.split("\\.");
+		    String blockName = sp[0];
+		    String attrName = sp[1];
+		    AvatarAttribute res = parseAttr(blockName, attrName, blocks);
+		    if (res ==null){
+		        TraceManager.addDev("Can't find Pragma Attribute "+ arg);
+		        return pragmas;
+		    }
+		    attrs.add(res);
+		}
+		pragmas.add(new AvatarPragmaInitialKnowledge(str, obj, attrs, header.equals("InitialSystemKnowledge"))); 
+	    } else {
+		Vector typeAttrs = typeAttributesMap.get(types.first());
+		for (int i=0; i< typeAttrs.size(); i++){
+		    LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
+		    TAttribute ta = (TAttribute) (typeAttrs.elementAt(i));
+		    String suffix = ta.getId();
+	 	    for (String arg: args){
+			String[] sp = arg.split("\\.");
+			String blockName = sp[0];
+			String attrName = sp[1];
+			AvatarAttribute res = parseAttr(blockName, attrName+"__"+suffix, blocks);
+			if (res ==null){
+			    TraceManager.addDev("Can't find Pragma Attribute "+ attrName+"__"+suffix);
+		            return pragmas;
+		        }
+			System.out.println("Initial Knowledge "+ arg);
+		        attrs.add(res);
+	            }	
+		    pragmas.add(new AvatarPragmaInitialKnowledge(str, obj, attrs, header.equals("InitialSystemKnowledge")));
+		}
+	    }
+	}
+	else {
+	    LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
+	    for (String arg: args){
+		String[] sp = arg.split("\\.");
+		// Must be blockName.attributeName
+		if (sp.length != 2){
+		    TraceManager.addDev("Badly Formatted Pragma Attribute");
+		}
+		String blockName = sp[0];
+		String attrName = sp[1];
+		if (nameTypeMap.containsKey(blockName+"."+attrName)){
+		    //Composed type, YAY#$%^&*
+		    Vector typeAttrs = typeAttributesMap.get(nameTypeMap.get(blockName+"."+attrName));
+		    for (int i=0; i< typeAttrs.size(); i++){
+			TAttribute ta = (TAttribute) (typeAttrs.elementAt(i));
+		        String suffix = ta.getId();
+			AvatarAttribute res = parseAttr(blockName, attrName+"__"+suffix, blocks);
+			if (res ==null){
+			    TraceManager.addDev("Can't find Pragma Attribute "+ attrName+"__"+suffix);
+		            return pragmas;
+		        }
+		        attrs.add(res);
+		    }
+		} else {
+ 		    AvatarAttribute res = parseAttr(blockName, attrName, blocks);
+		    if (res ==null){
+		        TraceManager.addDev("Can't find Pragma Attribute "+ arg);
+		        return pragmas;
+		    }
+		    attrs.add(res);
+		}
+	    }
 	    switch(header){
 	        case "Confidentiality":
-		    return new AvatarPragmaSecret(str, obj, attrs);
+		    pragmas.add(new AvatarPragmaSecret(str, obj, attrs));
+		    break;
 	        case "Secret":
-		    return new AvatarPragmaSecret(str, obj, attrs);
+		    pragmas.add(new AvatarPragmaSecret(str, obj, attrs));
+		    break;
 	        case "SecrecyAssumption":
-		    return new AvatarPragmaSecrecyAssumption(str, obj, attrs);
-	        case "InitialSystemKnowledge":
-		    return new AvatarPragmaInitialKnowledge(str, obj, attrs, true);
-	        case "InitialSessionKnowledge":
-		    return new AvatarPragmaInitialKnowledge(str, obj, attrs, false);
-	        case "PrivatePublicKeys":
-		    if (args.length != 2){
-			TraceManager.addDev("Wrong Number of attributes for Private public key");
-		        return null;
-		    }
-		    return new AvatarPragmaPrivatePublicKey(str, obj, attrs);
+		    pragmas.add(new AvatarPragmaSecrecyAssumption(str, obj, attrs));
+		    break;
 	        case "Public":
-		    return new AvatarPragmaPublic(str, obj, attrs);
+		    pragmas.add(new AvatarPragmaPublic(str, obj, attrs));
+		    break;
 	        default:
 		    TraceManager.addDev("Invalid Pragma Name " + header);
 		    //Invalid pragma
-		    return null;
+		    return pragmas;
 	    }
 	}
+	return pragmas;
     }
-    public static AvatarAttribute parseAttr(String arg, LinkedList<AvatarBlock> blocks){
-	String[] split = arg.split("\\.");
-	// Must be blockName.attributeName
-	if (split.length != 2){
-	    TraceManager.addDev("Badly Formatted Pragma Attribute");
-	    return null;
-	}
-	String blockName = split[0];
-	String attrName = split[1];
+    public static AvatarAttribute parseAttr(String blockName, String attrName, LinkedList<AvatarBlock> blocks){
 	//Iterate through blocks
 	for (AvatarBlock block:blocks){
 	    if (block.getName().equals(blockName)){
 		//If the state is found, find either 'attrName' or 'attrName__data'
-		AvatarAttribute attr= block.getAvatarAttributeWithName(attrName);
-		if (attr ==null){
-		    return block.getAvatarAttributeWithName(attrName+"__data");
-		}
-		return attr;   
+		return block.getAvatarAttributeWithName(attrName);
 	    }
 	}
 	TraceManager.addDev("Pragma Attribute Block not found "+ blockName);
 	return null;
     }
     public static AvatarAttributeState parseAuthAttr(String arg, LinkedList<AvatarBlock> blocks){
-	//For Finding Authenticity Attributes
+	//Iterate through the list of blocks
 	String[] split = arg.split("\\.");
-	// Must be blockName.stateName.attributeName
-	if (split.length != 3){
-	    TraceManager.addDev("Badly Formatted Pragma Attribute");
-	    return null;
-	}
 	String blockName = split[0];
 	String stateName = split[1];
 	String attrName = split[2];
-	//Iterate through the list of blocks
 	for (AvatarBlock block:blocks){
 	    if (block.getName().equals(blockName)){
 		//Check if the state exists
@@ -184,11 +327,7 @@ public abstract class AvatarPragma extends AvatarElement {
 		    //If the state is found, find either 'attrName' or 'attrName__data'
 		    AvatarAttribute attr= block.getAvatarAttributeWithName(attrName);
 		    if (attr ==null){
-			attr= block.getAvatarAttributeWithName(attrName+"__data");
-			if (attr==null){
-			    return null;
-			}
-			return new AvatarAttributeState(stateName+"."+attrName+"__data", attr, attr, asm.getStateWithName(stateName));   
+			return null;  
 		    }
 		    return new AvatarAttributeState(stateName+"."+attrName, attr, attr, asm.getStateWithName(stateName));   
 		}

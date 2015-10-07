@@ -67,8 +67,8 @@ public class AvatarDesignPanelTranslator {
     protected CorrespondanceTGElement listE; // usual list
     //protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
     protected LinkedList <TDiagramPanel> panels;
-
-
+    protected HashMap<String, Vector> typeAttributesMap;    
+    protected HashMap<String, String> nameTypeMap;
     public AvatarDesignPanelTranslator(AvatarDesignPanel _adp) {
         adp = _adp;
         reinit();
@@ -105,10 +105,15 @@ public class AvatarDesignPanelTranslator {
                 as.addApplicationCode(abdp.getMainCode());
             }
         }
-
+	typeAttributesMap = new HashMap<String, Vector>();
+	nameTypeMap = new HashMap<String,String>();
         createBlocks(as, blocks);
         createRelationsBetweenBlocks(as, blocks);
         makeBlockStateMachines(as);
+	/*for (String s: nameTypeMap.keySet()){
+	    System.out.println(s + " "+ nameTypeMap.get(s));
+	    System.out.println(typeAttributesMap.get(nameTypeMap.get(s)).size());
+	} */
         createPragmas(as, blocks);
 
         // FIXME: is it ok to let else guards ?
@@ -125,7 +130,7 @@ public class AvatarDesignPanelTranslator {
         AvatarBDPragma tgcn;
         String values [];
         String tmp;
-	AvatarPragma tmpPragma;
+	LinkedList<AvatarPragma> pragmaList;
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             if (tgc instanceof AvatarBDPragma) {
@@ -137,24 +142,27 @@ public class AvatarDesignPanelTranslator {
                         tmp = tmp.substring(1, tmp.length()).trim();
 
                         //TraceManager.addDev("Reworking pragma =" + tmp);
-                        tmpPragma = AvatarPragma.createFromString(tmp, tgc, _as.getListOfBlocks());
+                        pragmaList = AvatarPragma.createFromString(tmp, tgc, _as.getListOfBlocks(), typeAttributesMap, nameTypeMap);
 
                         //TraceManager.addDev("Reworked pragma =" + tmp);
 
-                        if (tmpPragma == null) {
+                        if (pragmaList.size()==0) {
                             CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Invalid pragma: " + values[i].trim() + " (ignored)");
                             ce.setTGComponent(tgc);
                             ce.setTDiagramPanel(adp.getAvatarBDPanel());
                             addWarning(ce);
-                        } else if (tmpPragma instanceof AvatarPragmaConstant){
-			    AvatarPragmaConstant apg = (AvatarPragmaConstant) tmpPragma;
-			    for (AvatarConstant ac: apg.getConstants()){
-			        _as.addConstant(ac);
-			    }
-			
-			} else {
-                            _as.addPragma(tmpPragma);
+                        } else {
+			    for (AvatarPragma tmpPragma: pragmaList){
+			        if (tmpPragma instanceof AvatarPragmaConstant){
+			            AvatarPragmaConstant apg = (AvatarPragmaConstant) tmpPragma;
+			            for (AvatarConstant ac: apg.getConstants()){
+			                _as.addConstant(ac);
+			            }			
+			        } else {
+                            	    _as.addPragma(tmpPragma);
+				}
                             //TraceManager.addDev("Adding pragma:" + tmp);
+			    }
                         }
                     }
                 }
@@ -453,7 +461,7 @@ public class AvatarDesignPanelTranslator {
                     addRegularAttribute(ab, a, "");
                 } else {
                     // other
-                    //TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
+                    TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
                     types = adp.getAvatarBDPanel().getAttributesOfDataType(a.getTypeOther());
                     if (types == null) {
                         CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + a.getTypeOther() + " used in " + ab.getName());
@@ -468,6 +476,8 @@ public class AvatarDesignPanelTranslator {
                             ce.setTDiagramPanel(adp.getAvatarBDPanel());
                             addCheckingError(ce);
                         } else {
+			    nameTypeMap.put(block.getBlockName()+"."+a.getId(), a.getTypeOther());
+			    typeAttributesMap.put(a.getTypeOther(), types);
                             for(int j=0; j<types.size(); j++) {
                                 addRegularAttribute(ab, (TAttribute)(types.elementAt(j)), a.getId() + "__");
                             }
