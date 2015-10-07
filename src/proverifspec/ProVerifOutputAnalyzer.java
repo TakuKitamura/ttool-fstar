@@ -225,7 +225,6 @@ public class ProVerifOutputAnalyzer {
     }
 
     public LinkedList<AvatarAttribute> getSecretTerms() {
-        // FIXME composed Types ?
         LinkedList<AvatarAttribute> result = new LinkedList<AvatarAttribute> ();
         for (AvatarBlock block: this.avatar2proverif.getAvatarSpecification ().getListOfBlocks ())
             for (AvatarAttribute attr: block.getAttributes ()) {
@@ -239,7 +238,6 @@ public class ProVerifOutputAnalyzer {
     // FIXME what about cannot be proved ?
 
     public LinkedList<AvatarAttribute> getNonSecretTerms() {
-        // FIXME composed Types ?
         LinkedList<AvatarAttribute> result = new LinkedList<AvatarAttribute> ();
         for (AvatarBlock block: this.avatar2proverif.getAvatarSpecification ().getListOfBlocks ())
             for (AvatarAttribute attr: block.getAttributes ()) {

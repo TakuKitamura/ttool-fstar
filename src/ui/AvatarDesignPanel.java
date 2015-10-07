@@ -340,19 +340,46 @@ public class AvatarDesignPanel extends TURTLEPanel {
         resetModelBacktracingProVerif();
 
         // Confidential attributes
-        for(AvatarAttribute attribute: pvoa.getSecretTerms()) {
-            TAttribute a = abdp.getAttributeByBlockName(attribute.getBlock ().getName (), attribute.getName ().split ("_")[0]);
-            if (a != null)
-                //TraceManager.addDev("Setting conf to ok");
-                a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
-        }
+        LinkedList<AvatarAttribute> secretAttributes = pvoa.getSecretTerms ();
+        LinkedList<AvatarAttribute> nonSecretAttributes = pvoa.getNonSecretTerms ();
+        for (AvatarBDBlock bdBlock: abdp.getFullBlockList ())
+            for (Object tmpObj: bdBlock.getAttributeList ()) {
+                TAttribute tattr = (TAttribute) tmpObj;
+                if (tattr.getType () == TAttribute.OTHER) {
+                    Vector types = abdp.getAttributesOfDataType (tattr.getTypeOther ());
+                    int toBeFound = types.size ();
+                    boolean ko = false;
+                    for (Object tmpObj2: types) {
+                        TAttribute type = (TAttribute) tmpObj2;
+                        for(AvatarAttribute attribute: secretAttributes)
+                            if (attribute.getBlock ().getName ().equals (bdBlock.getBlockName ()) && attribute.getName ().equals (tattr.getId () + "__" + type.getId ())) {
+                                toBeFound --;
+                                break;
+                            }
 
-        for(AvatarAttribute attribute: pvoa.getNonSecretTerms()) {
-            TAttribute a = abdp.getAttributeByBlockName(attribute.getBlock ().getName (), attribute.getName().split ("_")[0]);
-            if (a != null)
-                //TraceManager.addDev("Setting conf to ok");
-                a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
-        }
+                        for(AvatarAttribute attribute: nonSecretAttributes)
+                            if (attribute.getBlock ().getName ().equals (bdBlock.getBlockName ()) && attribute.getName ().equals (tattr.getId () + "__" + type.getId ())) {
+                                ko = true;
+                                break;
+                            }
+
+                        if (ko)
+                            break;
+                    }
+
+                    if (ko)
+                        tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
+                    else if (toBeFound == 0)
+                        tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
+                } else {
+                    for(AvatarAttribute attribute: secretAttributes)
+                        if (attribute.getBlock ().getName ().equals (bdBlock.getBlockName ()) && attribute.getName ().equals (tattr.getId ()))
+                            tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
+                    for(AvatarAttribute attribute: nonSecretAttributes)
+                        if (attribute.getBlock ().getName ().equals (bdBlock.getBlockName ()) && attribute.getName ().equals (tattr.getId ()))
+                            tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
+                }
+            }
 
         String block, state;
         int index;
@@ -412,89 +439,90 @@ public class AvatarDesignPanel extends TURTLEPanel {
             }
         }
 
-	//Map Authenticity results to Pragma
-	for (String s: pvoa.getNotProved()){
-	    if (s.contains("authenticity")){
-	      String[] split = s.split(" ==> ");
-	      String[] argA = split[0].split("authenticity__")[1].split("\\(")[0].split("__");
-	      String[] argB = split[1].split("authenticity__")[1].split("\\(")[0].split("__");
-	      String fstr1 = argA[0]+"."+argA[3]+"."+argA[1];
-	      String fstr2 = argB[0]+"."+argB[3]+"."+argB[1];
-	      //Find the authenticity pragma
-	      for (Object ob: abdp.getComponentList()){
-		  if (ob instanceof AvatarBDPragma){
-  		      AvatarBDPragma pragma = (AvatarBDPragma) ob;
-		      for (String prop: pragma.getProperties()){
-			  if (prop.contains("#Authenticity") && prop.contains(fstr1) && prop.contains(fstr2)){
-			    pragma.authMap.put(prop, 4);
-			  }
-		      }
-		  }
-	      }
-	    }
-	}
+        LinkedList<String> notProved = pvoa.getNotProved ();
+        LinkedList<String> satisfied = pvoa.getSatisfiedAuthenticity ();
+        LinkedList<String> satisfiedWeak = pvoa.getSatisfiedWeakAuthenticity ();
+        LinkedList<String> nonSatisfied = pvoa.getNonSatisfiedAuthenticity ();
 
+          for (Object ob: abdp.getComponentList())
+              if (ob instanceof AvatarBDPragma) {
+                  AvatarBDPragma pragma = (AvatarBDPragma) ob;
+                  for (String prop: pragma.getProperties()) {
+                      String[] split = prop.trim ().split ("\\s+");
+                      if (split.length != 3)
+                          continue;
+                      if (split[0].equals ("#Authenticity")) {
+                          String[] argA = split[1].split("\\.");
+                          String[] argB = split[2].split("\\.");
 
-	for (String s: pvoa.getSatisfiedAuthenticity()){
-	    String[] split = s.split(" ==> ");
-	    String[] argA = split[0].split("__");
-	    String[] argB = split[1].split("__");
-	    String fstr1 = argA[0]+"."+argA[3]+"."+argA[1];
-	    String fstr2 = argB[0]+"."+argB[3]+"."+argB[1];
-	    System.out.println(fstr1 + " "+ fstr2);
-	//Find the authenticity pragma
-	    for (Object ob: abdp.getComponentList()){
-		if (ob instanceof AvatarBDPragma){
-  		    AvatarBDPragma pragma = (AvatarBDPragma) ob;
-		    for (String prop: pragma.getProperties()){
-			if (prop.contains("#Authenticity") && prop.contains(fstr1) && prop.contains(fstr2)){
-			    pragma.authMap.put(prop, 1);
-			}
-		    }
-		}
-	    }
-	
-	}
-	for (String s: pvoa.getSatisfiedWeakAuthenticity()){
-	    String[] split = s.split(" ==> ");
-	    String[] argA = split[0].split("__");
-	    String[] argB = split[1].split("__");
-	    String fstr1 = argA[0]+"."+argA[3]+"."+argA[1];
-	    String fstr2 = argB[0]+"."+argB[3]+"."+argB[1];
-	    //Find the authenticity pragma
-	    for (Object ob: abdp.getComponentList()){
-		if (ob instanceof AvatarBDPragma){
-  		    AvatarBDPragma pragma = (AvatarBDPragma) ob;
-		    for (String prop: pragma.getProperties()){
-			if (prop.contains("#Authenticity") && prop.contains(fstr1) && prop.contains(fstr2)){
-			    pragma.authMap.put(prop, 2);
-			}
-		    }
-		}
-	    }
-	
-	}
-	for (String s: pvoa.getNonSatisfiedAuthenticity()){
-	    String[] split = s.split(" ==> ");
-	    String[] argA = split[0].split("__");
-	    String[] argB = split[1].split("__");
-	    String fstr1 = argA[0]+"."+argA[3]+"."+argA[1];
-	    String fstr2 = argB[0]+"."+argB[3]+"."+argB[1];
-	    //Find the authenticity pragma
-	    for (Object ob: abdp.getComponentList()){
-		if (ob instanceof AvatarBDPragma){
-  		    AvatarBDPragma pragma = (AvatarBDPragma) ob;
-		    for (String prop: pragma.getProperties()){
-			if (prop.contains("#Authenticity") && prop.contains(fstr1) && prop.contains(fstr2)){
-			    pragma.authMap.put(prop, 3);
-			}
-		    }
-		}
-	    }
-	
-	}
+                          if (argA.length != 3 || argB.length != 3)
+                              continue;
 
+                          TAttribute tattrA = abdp.getAttributeByBlockName (argA[0], argA[2]);
+                          TAttribute tattrB = abdp.getAttributeByBlockName (argB[0], argB[2]);
 
+                          if (tattrA == null || tattrB == null)
+                              continue;
+
+                          if (tattrA.getType () != tattrB.getType ())
+                              continue;
+
+                          if (tattrA.getType () == TAttribute.OTHER) {
+                              if (! tattrA.getTypeOther ().equals (tattrB.getTypeOther ()))
+                                  continue;
+
+                              Vector types = abdp.getAttributesOfDataType (tattrA.getTypeOther ());
+                              int toBeFound = types.size ();
+                              boolean weakAuthenticity = false;
+                              boolean ko = false;
+                              boolean isNotProved = false;
+
+                              for (Object tmpObj: types) {
+                                  TAttribute type = (TAttribute) tmpObj;
+                                  String evA = argA[0] + "__" + argA[2] + "__"+ type.getId () + "__" + argA[1];
+                                  String evB = argB[0] + "__" + argB[2] + "__"+ type.getId () + "__" + argB[1];
+                                  String ev = evB + " ==> " + evA;
+
+                                  if (nonSatisfied.contains (ev)) {
+                                      ko = true;
+                                      break;
+                                  } else if (notProved.contains (ev)) {
+                                      toBeFound --;
+                                      isNotProved = true;
+                                  } else if (satisfiedWeak.contains (ev)) {
+                                      toBeFound --;
+                                      weakAuthenticity = true;
+                                  } else if (satisfied.contains (ev)) {
+                                      toBeFound --;
+                                  }
+                              }
+                              
+                              if (ko)
+                                  pragma.authMap.put(prop, 3);
+                              else if (toBeFound == 0) {
+                                  if (isNotProved)
+                                      pragma.authMap.put(prop, 4);
+                                  else if (weakAuthenticity)
+                                      pragma.authMap.put(prop, 2);
+                                  else
+			              pragma.authMap.put(prop, 1);
+                              }
+                          } else {
+                              String evA = argA[0] + "__" + argA[2] + "__" + argA[1];
+                              String evB = argB[0] + "__" + argB[2] + "__" + argB[1];
+                              String ev = evB + " ==> " + evA;
+                              if (nonSatisfied.contains (ev))
+                                  pragma.authMap.put(prop, 3);
+                              else if (notProved.contains (ev))
+                                  pragma.authMap.put(prop, 4);
+                              else if (satisfiedWeak.contains (ev))
+                                  pragma.authMap.put(prop, 2);
+                              else if (satisfied.contains (ev))
+                                  pragma.authMap.put(prop, 1);
+                          }
+                      }
+                  }
+              }
     }
 
     public ArrayList<String> getAllNonMappedAvatarBlockNames(String _name, ADDDiagramPanel _tadp, boolean ref, String name) {
