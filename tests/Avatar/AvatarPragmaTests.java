@@ -63,8 +63,6 @@ import avatartranslator.AvatarPragmaPublic;
 import avatartranslator.AvatarPragmaAuthenticity;
 import avatartranslator.AvatarPragmaConstant;
 
-import avatartranslator.*;
-
 public class AvatarPragmaTests extends TToolTest {	
 
 	public AvatarPragmaTests () {
@@ -171,7 +169,6 @@ public class AvatarPragmaTests extends TToolTest {
 	this.updateDigest("Right Type: " + (res.get(0) instanceof AvatarPragmaSecret));
 	//Attributes
 	this.updateDigest("# of Attributes: " + (res.get(0).getArgs().size() == 2));
-	this.updateDigest(res.get(0).getArgs().get(0));
 	this.updateDigest("Attr Name "+ (res.get(0).getArgs().get(0) +";"));
 	this.updateDigest("Attr Name "+ (res.get(0).getArgs().get(1)+";"));
 
@@ -341,6 +338,8 @@ public class AvatarPragmaTests extends TToolTest {
 	//Avatar Specification Tests
 	
 	this.updateDigest("Tests finished");
+	if (!this.testDigest (new byte[] {-111, 70, -80, 102, -77, -8, 127, 103, -92, 74, 25, 107, -108, 39, -5, 23, -49, 56, -95, 55}))
+           this.error ("Unexpected result when testing AvatarPragmas...");
     }
     public static void main(String[] args){
         AvatarPragmaTests apt = new AvatarPragmaTests ();
