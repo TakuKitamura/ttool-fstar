@@ -198,6 +198,7 @@ public abstract class AvatarPragma extends AvatarElement {
 		// Must be blockName.attributeName
 		if (sp.length != 2){
 		    TraceManager.addDev("Badly Formatted Pragma Attribute " + arg);
+		    return pragmas;
 		}
 		String blockName = sp[0];
 		String attrName = sp[1];
@@ -242,7 +243,6 @@ public abstract class AvatarPragma extends AvatarElement {
 			    TraceManager.addDev("Can't find Pragma Attribute "+ attrName+"__"+suffix);
 		            return pragmas;
 		        }
-			System.out.println("Initial Knowledge "+ arg);
 		        attrs.add(res);
 	            }	
 		    pragmas.add(new AvatarPragmaInitialKnowledge(str, obj, attrs, header.equals("InitialSystemKnowledge")));
@@ -256,6 +256,7 @@ public abstract class AvatarPragma extends AvatarElement {
 		// Must be blockName.attributeName
 		if (sp.length != 2){
 		    TraceManager.addDev("Badly Formatted Pragma Attribute");
+		    return pragmas;
 		}
 		String blockName = sp[0];
 		String attrName = sp[1];
