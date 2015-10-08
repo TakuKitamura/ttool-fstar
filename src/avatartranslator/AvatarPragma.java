@@ -92,7 +92,7 @@ public abstract class AvatarPragma extends AvatarElement {
 	    String[] split2 = args[1].split("\\.");
 	    // Must be blockName.stateName.attributeName
 	    if (split1.length != 3 || split2.length != 3){
-	        TraceManager.addDev("Badly Formatted Pragma Attribute");
+	        TraceManager.addDev("Badly Formatted Pragma Attribute "+ str);
 	        return pragmas;
  	    }
 	    String blockName1 = split1[0];
@@ -110,6 +110,11 @@ public abstract class AvatarPragma extends AvatarElement {
 		    }
 		    attrStates.add(res);
 	        }
+		//Check if same type
+		if (attrStates.get(0).getAttribute().getType() != attrStates.get(1).getAttribute().getType()){
+		    TraceManager.addDev("Incompatible types "+ str);
+		    return pragmas;
+		}
 		pragmas.add(new AvatarPragmaAuthenticity(str, obj, attrStates));
 		return pragmas;
 	    } else if (!nameTypeMap.containsKey(blockName1+"."+attrName1) && nameTypeMap.containsKey(blockName2+"."+attrName2) || nameTypeMap.containsKey(blockName1+"."+attrName1) && !nameTypeMap.containsKey(blockName2+"."+attrName2)){
@@ -118,7 +123,7 @@ public abstract class AvatarPragma extends AvatarElement {
 		return pragmas;
 	    } else {
 		//Yay composed types
-		if (!nameTypeMap.get(blockName1+"."+attrName1).equals(nameTypeMap.get(blockName1+"."+attrName1))){
+		if (!nameTypeMap.get(blockName1+"."+attrName1).equals(nameTypeMap.get(blockName2+"."+attrName2))){
 		    //Different types
 		    TraceManager.addDev("Incompatible types " + str);
 		    return pragmas;
@@ -226,6 +231,14 @@ public abstract class AvatarPragma extends AvatarElement {
 		        return pragmas;
 		    }
 		    attrs.add(res);
+		}
+		//Check if same type
+		AvatarType type = attrs.get(0).getType();
+		for (int i =1; i< attrs.size(); i++){
+		    if (type != attrs.get(i).getType()){
+			TraceManager.addDev("Incompatible types "+ str);
+			return pragmas;
+		    }
 		}
 		pragmas.add(new AvatarPragmaInitialKnowledge(str, obj, attrs, header.equals("InitialSystemKnowledge"))); 
 	    } else {

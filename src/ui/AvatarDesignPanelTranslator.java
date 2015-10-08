@@ -461,7 +461,7 @@ public class AvatarDesignPanelTranslator {
                     addRegularAttribute(ab, a, "");
                 } else {
                     // other
-                    TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
+                   // TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
                     types = adp.getAvatarBDPanel().getAttributesOfDataType(a.getTypeOther());
                     if (types == null) {
                         CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + a.getTypeOther() + " used in " + ab.getName());
