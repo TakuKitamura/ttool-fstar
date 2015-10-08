@@ -202,7 +202,7 @@ public abstract class AvatarPragma extends AvatarElement {
 		String[] sp = arg.split("\\.");
 		// Must be blockName.attributeName
 		if (sp.length != 2){
-		    TraceManager.addDev("Badly Formatted Pragma Attribute " + arg);
+		    TraceManager.addDev("Badly Formatted Pragma Attribute " + str);
 		    return pragmas;
 		}
 		String blockName = sp[0];
@@ -268,7 +268,7 @@ public abstract class AvatarPragma extends AvatarElement {
 		String[] sp = arg.split("\\.");
 		// Must be blockName.attributeName
 		if (sp.length != 2){
-		    TraceManager.addDev("Badly Formatted Pragma Attribute");
+		    TraceManager.addDev("Badly Formatted Pragma Attribute "+str);
 		    return pragmas;
 		}
 		String blockName = sp[0];
