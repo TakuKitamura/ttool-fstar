@@ -302,17 +302,28 @@ public class AvatarSpecification extends AvatarElement {
         return null;
     }
 
-    public AvatarState removeElseGuards() {
-        AvatarState state;
+    public void removeElseGuards() {
+        for (AvatarBlock block: blocks) {
+            AvatarStateMachine asm = block.getStateMachine ();
+            if (asm == null)
+                continue;
+            for (AvatarStateMachineElement asme: asm.getListOfElements ()) {
+                if (! (asme instanceof AvatarState))
+                    continue;
 
-        for(AvatarBlock block: blocks) {
-            state = block.removeElseGuards();
-            if (state != null) {
-                return state;
+                for (AvatarStateMachineElement next: asme.getNexts ()) {
+                    if (! (next instanceof AvatarTransition))
+                        continue;
+                    AvatarTransition at = (AvatarTransition) next;
+                    AvatarGuard ancientGuard = at.getGuard ();
+
+                    if (ancientGuard == null)
+                        continue;
+
+                    at.setGuard (ancientGuard.getRealGuard (asme));
+                }
             }
         }
-
-        return null;
     }
 
     public boolean hasLossyChannel() {

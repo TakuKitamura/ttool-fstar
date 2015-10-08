@@ -817,99 +817,100 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
         TraceManager.addDev("|    |    Actions");
         // Loop over all assigment functions
-        for(AvatarActionAssignment action: _asme.getAssignments ()) {
-            TraceManager.addDev("|    |    |    assignment found: " + action);
-            AvatarLeftHand leftHand = action.getLeftHand ();
+        for(AvatarAction aaction: _asme.getActions ()) {
+            if (aaction instanceof AvatarActionAssignment) {
+                AvatarActionAssignment action = (AvatarActionAssignment) aaction;
+                TraceManager.addDev("|    |    |    assignment found: " + action);
+                AvatarLeftHand leftHand = action.getLeftHand ();
 
-            // Compute right part of assignment
-            AvatarTerm rightHand = action.getRightHand ();
-            String proVerifRightHand = null;
-            if (rightHand instanceof AvatarTermFunction) {
-                // If it's a function call
-                String name = ((AvatarTermFunction) rightHand).getMethod ().getName ();
-                LinkedList<AvatarTerm> args = ((AvatarTermFunction) rightHand).getArgs ().getComponents ();
+                // Compute right part of assignment
+                AvatarTerm rightHand = action.getRightHand ();
+                String proVerifRightHand = null;
+                if (rightHand instanceof AvatarTermFunction) {
+                    // If it's a function call
+                    String name = ((AvatarTermFunction) rightHand).getMethod ().getName ();
+                    LinkedList<AvatarTerm> args = ((AvatarTermFunction) rightHand).getArgs ().getComponents ();
 
-                if (name.equals ("concat2") || name.equals ("concat3") || name.equals ("concat4")) {
-                    // If it's a concat function, just use tuples
-                    boolean first = true;
-                    proVerifRightHand = "(";
-                    for (AvatarTerm argTerm: args) {
-                        if (first)
-                            first = false;
-                        else
-                            proVerifRightHand += ", ";
-                        proVerifRightHand += AVATAR2ProVerif.translateTerm (argTerm, arg.attributeCmp);
-                    }
-                    proVerifRightHand += ")";
+                    if (name.equals ("concat2") || name.equals ("concat3") || name.equals ("concat4")) {
+                        // If it's a concat function, just use tuples
+                        boolean first = true;
+                        proVerifRightHand = "(";
+                        for (AvatarTerm argTerm: args) {
+                            if (first)
+                                first = false;
+                            else
+                                proVerifRightHand += ", ";
+                            proVerifRightHand += AVATAR2ProVerif.translateTerm (argTerm, arg.attributeCmp);
+                        }
+                        proVerifRightHand += ")";
+                    } else
+                        // Else use the function as is
+                        proVerifRightHand = AVATAR2ProVerif.translateTerm (rightHand, arg.attributeCmp);
                 } else
-                    // Else use the function as is
+                    // If it's not a function, use it as is
                     proVerifRightHand = AVATAR2ProVerif.translateTerm (rightHand, arg.attributeCmp);
-            } else
-                // If it's not a function, use it as is
-                proVerifRightHand = AVATAR2ProVerif.translateTerm (rightHand, arg.attributeCmp);
 
-            // Compute left hand part of the assignment
-            LinkedList<ProVerifVar> proVerifLeftHand = new LinkedList<ProVerifVar> ();
-            if (leftHand instanceof AvatarTuple)
-                for (AvatarTerm term: ((AvatarTuple) leftHand).getComponents ()) {
-                    if (! (term instanceof AvatarAttribute)) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + term.getName () + "' should be an attribute (ignored)");
-                        ce.setAvatarBlock(arg.block);
-                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
-                        ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
-                        this.warnings.add(ce);
-                        continue;
+                // Compute left hand part of the assignment
+                LinkedList<ProVerifVar> proVerifLeftHand = new LinkedList<ProVerifVar> ();
+                if (leftHand instanceof AvatarTuple)
+                    for (AvatarTerm term: ((AvatarTuple) leftHand).getComponents ()) {
+                        if (! (term instanceof AvatarAttribute)) {
+                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + term.getName () + "' should be an attribute (ignored)");
+                            ce.setAvatarBlock(arg.block);
+                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                            ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                            this.warnings.add(ce);
+                            continue;
+                        }
+
+                        AvatarAttribute attr = (AvatarAttribute) term;
+                        Integer c = arg.attributeCmp.get (attr) + 1;
+                        arg.attributeCmp.put (attr, c);
+                        proVerifLeftHand.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
                     }
-
-                    AvatarAttribute attr = (AvatarAttribute) term;
+                else if (leftHand instanceof AvatarAttribute) {
+                    AvatarAttribute attr = (AvatarAttribute) leftHand;
                     Integer c = arg.attributeCmp.get (attr) + 1;
                     arg.attributeCmp.put (attr, c);
                     proVerifLeftHand.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
                 }
-            else if (leftHand instanceof AvatarAttribute) {
-                AvatarAttribute attr = (AvatarAttribute) leftHand;
-                Integer c = arg.attributeCmp.get (attr) + 1;
-                arg.attributeCmp.put (attr, c);
-                proVerifLeftHand.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
-            }
 
-            if (proVerifRightHand != null && proVerifLeftHand.size () > 0)
-                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (proVerifLeftHand.toArray (new ProVerifVar[proVerifLeftHand.size ()]), proVerifRightHand));
-        }
+                if (proVerifRightHand != null && proVerifLeftHand.size () > 0)
+                    _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (proVerifLeftHand.toArray (new ProVerifVar[proVerifLeftHand.size ()]), proVerifRightHand));
+            } else if (aaction instanceof AvatarTermFunction) {
+                AvatarTermFunction action = (AvatarTermFunction) aaction;
+                String name = action.getMethod ().getName ();
 
-        // Loop over all function calls
-        for(AvatarTermFunction action: _asme.getFunctionCalls ()) {
-            String name = action.getMethod ().getName ();
+                if (name.equals ("get2") || name.equals ("get3") || name.equals ("get4")) {
+                    // If the function called is get[234]
+                    LinkedList<AvatarTerm> args = action.getArgs ().getComponents ();
+                    int index = (int) name.charAt (3) - 48;
 
-            if (name.equals ("get2") || name.equals ("get3") || name.equals ("get4")) {
-                // If the function called is get[234]
-                LinkedList<AvatarTerm> args = action.getArgs ().getComponents ();
-                int index = (int) name.charAt (3) - 48;
+                    boolean ok = true;
+                    for (int i = 1; i <= index; i++)
+                        if (! (args.get(i) instanceof AvatarAttribute)) {
+                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + args.get(i).getName () + "' should be an attribute (ignored)");
+                            ce.setAvatarBlock(arg.block);
+                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                            ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                            this.warnings.add(ce);
+                            ok = false;
+                        }
 
-                boolean ok = true;
-                for (int i = 1; i <= index; i++)
-                    if (! (args.get(i) instanceof AvatarAttribute)) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + args.get(i).getName () + "' should be an attribute (ignored)");
-                        ce.setAvatarBlock(arg.block);
-                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
-                        ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
-                        this.warnings.add(ce);
-                        ok = false;
+                    if (ok) {
+                        // Create the corresponding assignment
+                        String rightHand = AVATAR2ProVerif.translateTerm (args.get (0), arg.attributeCmp);
+
+                        LinkedList<ProVerifVar> tup = new LinkedList<ProVerifVar> ();
+                        for (int i = 1; i <= index; i++) {
+                            AvatarAttribute attr = (AvatarAttribute) args.get (i);
+                            Integer c = arg.attributeCmp.get (attr) + 1;
+                            arg.attributeCmp.put (attr, c);
+                            tup.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
+                        }
+
+                        _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (tup.toArray (new ProVerifVar[tup.size ()]), rightHand));
                     }
-
-                if (ok) {
-                    // Create the corresponding assignment
-                    String rightHand = AVATAR2ProVerif.translateTerm (args.get (0), arg.attributeCmp);
-
-                    LinkedList<ProVerifVar> tup = new LinkedList<ProVerifVar> ();
-                    for (int i = 1; i <= index; i++) {
-                        AvatarAttribute attr = (AvatarAttribute) args.get (i);
-                        Integer c = arg.attributeCmp.get (attr) + 1;
-                        arg.attributeCmp.put (attr, c);
-                        tup.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
-                    }
-
-                    _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (tup.toArray (new ProVerifVar[tup.size ()]), rightHand));
                 }
             }
         }

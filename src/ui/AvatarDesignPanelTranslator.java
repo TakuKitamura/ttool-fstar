@@ -116,10 +116,9 @@ public class AvatarDesignPanelTranslator {
 	} */
         createPragmas(as, blocks);
 
-        // FIXME: is it ok to let else guards ?
-        // TraceManager.addDev("Removing else guards");
-        // as.removeElseGuards();
-        // TraceManager.addDev("Removing else guards ... done");
+        TraceManager.addDev("Removing else guards");
+        as.removeElseGuards();
+        TraceManager.addDev("Removing else guards ... done");
         return as;
     }
 
