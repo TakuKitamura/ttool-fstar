@@ -124,7 +124,7 @@ public class AvatarPragmaTests extends TToolTest {
 	//Handle whitespace
 	res = AvatarPragma.createFromString("Public      A.key1", null,blocks, typeAttributesMap, nameTypeMap);
 	this.updateDigest("Whitespace parsing: " + (res.size()!=0));
-	res = AvatarPragma.createFromString("PrivatePublicKeys   A.key1     B.key2", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Confidentiality   A.key1     B.key2", null,blocks, typeAttributesMap, nameTypeMap);
 	this.updateDigest("Whitespace parsing: " + (res.size()!=0));
 
 	//Test missing block
@@ -218,19 +218,23 @@ public class AvatarPragmaTests extends TToolTest {
 	this.updateDigest("Attr Name " + res.get(1).getArgs().get(1));
 	this.updateDigest("-------------------------------------");
 
-	//Test System Knowledge
+	//Test Session Knowledge
 	this.updateDigest("Initial Session Knowledge Tests");
 	res = AvatarPragma.createFromString("InitialSessionKnowledge A.key2 B.key1 C.attr", null,blocks, typeAttributesMap, nameTypeMap);	
 	//Check no error
-	this.updateDigest("No error: "+ (res.size()==0));
+	this.updateDigest("No error: "+ (res.size()==1));
 	
 	//Check Type
 	this.updateDigest("Right Type: " + (res.get(0) instanceof AvatarPragmaInitialKnowledge));
-	//1 Attribute
+	//# Attributes
 	this.updateDigest("# of Attributes: " + (res.get(0).getArgs().size() == 3));
 	//Is session
 	res2 = (AvatarPragmaInitialKnowledge) res.get(0);
 	this.updateDigest("Is Session: " + !res2.isSystem());
+
+	//Test for error on different base types
+	res = AvatarPragma.createFromString("InitialSessionKnowledge A.key2 B.key2",null, blocks, typeAttributesMap, nameTypeMap);
+	this.updateDigest("Fail on different base types " + (res.size()==0));
 	this.updateDigest("-------------------------------------");
 
 	//Test PrivatePublicKey
@@ -287,18 +291,21 @@ public class AvatarPragmaTests extends TToolTest {
 	//Fail if attributes are not same type
 	res = AvatarPragma.createFromString("Authenticity A.a1.key1 C.c1.m", null,blocks, typeAttributesMap, nameTypeMap);
 	this.updateDigest("Incompatible types " + (res.size()==0));
-	res = AvatarPragma.createFromString("Authenticity B.a1.m C.c1.d", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Authenticity B.b1.m C.c1.d", null,blocks, typeAttributesMap, nameTypeMap);
 	this.updateDigest("Incompatible types " + (res.size()==0));
+	res = AvatarPragma.createFromString("Authenticity B.b1.key2 A.a1.key1", null,blocks, typeAttributesMap, nameTypeMap);
+	this.updateDigest("Incompatible types " + (res.size()==0));	
 	//Check no error
 	res = AvatarPragma.createFromString("Authenticity A.a1.key1 C.c1.attr", null,blocks, typeAttributesMap, nameTypeMap);	
 	this.updateDigest("No error: "+ (res.size()!=0));
 	//Check Type
 	this.updateDigest("Right Type: " + (res.get(0) instanceof AvatarPragmaAuthenticity));
+
 	//Attribute
 	AvatarPragmaAuthenticity res3 = (AvatarPragmaAuthenticity) res.get(0);
 	this.updateDigest("# of Attributes: " + (res3.getArgs().size() == 2));
-	this.updateDigest("Attr "+ res3.getAttrA());
-	this.updateDigest("Attr "+ res3.getAttrB());
+	//this.updateDigest("Attr "+ res3.getAttrA());
+	//this.updateDigest("Attr "+ res3.getAttrB());
 	this.updateDigest("Attr Name "+ res3.getAttrA().getName());
 	this.updateDigest("Attr Name "+ res3.getAttrB().getName());
 	this.updateDigest("Attr State "+ res3.getAttrA().getState());
@@ -308,8 +315,8 @@ public class AvatarPragmaTests extends TToolTest {
 	this.updateDigest("Multiple creation pass: "+ (res.size()==2));
 	res3 = (AvatarPragmaAuthenticity) res.get(1);
 	this.updateDigest("# of Attributes: " + (res3.getArgs().size() == 2));
-	this.updateDigest("Attr "+ res3.getAttrA());
-	this.updateDigest("Attr "+ res3.getAttrB());
+	//this.updateDigest("Attr "+ res3.getAttrA());
+	//this.updateDigest("Attr "+ res3.getAttrB());
 	this.updateDigest("Attr Name "+ res3.getAttrA().getName());
 	this.updateDigest("Attr Name "+ res3.getAttrB().getName());
 	this.updateDigest("Attr State "+ res3.getAttrA().getState());
@@ -338,7 +345,8 @@ public class AvatarPragmaTests extends TToolTest {
 	//Avatar Specification Tests
 	
 	this.updateDigest("Tests finished");
-	if (!this.testDigest (new byte[] {-111, 70, -80, 102, -77, -8, 127, 103, -92, 74, 25, 107, -108, 39, -5, 23, -49, 56, -95, 55}))
+	//this.printDigest();
+	if (!this.testDigest (new byte[] {-90, 49, 84, 60, -76, -16, -13, 79, -65, -123, 61, -9, 38, 110, -27, 80, 19, -15, 82, -36}))
            this.error ("Unexpected result when testing AvatarPragmas...");
     }
     public static void main(String[] args){
