@@ -53,6 +53,8 @@ import java.io.*;
 import javax.swing.*;
 
 
+import javax.xml.parsers.*;
+import ui.ConfigurationTTool;
 import ui.CheckingError;
 import ui.AvatarDesignPanel;
 import ui.TGComponent;
@@ -109,16 +111,14 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     }
 
     public boolean saveInFile(String path) throws FileException {
-	//Our hash file is always hash.txt
+	//Our hash is saved in config
 	String hashCode= Integer.toString(this.spec.getStringSpec().hashCode());
 	File file = new File(path);
 	BufferedReader br;
         if (file.exists()){
-	    File hash = new File("hash.txt");
-	    if (hash.exists()){
+	    String hash = ConfigurationTTool.ProVerifHash;
+	    if (!hash.equals("")){
 		try {
-  	 	    br = new BufferedReader(new FileReader("hash.txt"));
-		    String line = br.readLine();
 		    br = new BufferedReader(new FileReader(path));
 		    String s = br.readLine();
 		    String tmp;
@@ -126,19 +126,24 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 			s = s+"\n" + tmp;
 		    }
 		    String fileHash = Integer.toString(s.hashCode());
-		    if (!line.equals(fileHash)){
+		    if (!hash.equals(fileHash)){
 			if(JOptionPane.showConfirmDialog(null, "File " + path + " already exists. Do you want to overwrite?", "Overwrite File?", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
 			    return false;
 			}
 		    }
 		    br.close();
 		} catch (Exception e) {
-			
+			//
 		}
 	    }
 	}
         FileUtils.saveFile(path, this.spec.getStringSpec());
-	FileUtils.saveFile("hash.txt", hashCode);
+	ConfigurationTTool.ProVerifHash = hashCode;
+	try {
+	    ConfigurationTTool.saveConfiguration();
+	} catch (Exception e){
+//
+	}
 	return true;
     }
 

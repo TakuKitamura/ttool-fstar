@@ -236,18 +236,19 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 	models.clear();
 	properties.clear();
 	for (String s: values){
-	    if (Arrays.asList(mPragma).contains(s.split(" ")[0])){
+	    if (s.isEmpty() || s.split(" ").length < 1){
+		//Ignore
+	    }
+	    else if (Arrays.asList(mPragma).contains(s.split(" ")[0])){
 		models.add(s);
 	    }
 	    else if (Arrays.asList(pPragma).contains(s.split(" ")[0])){
 		properties.add(s);
 	    }
 	    else {
-		if (!s.isEmpty()){
 		//Warning Message
 		JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
                                                   JOptionPane.INFORMATION_MESSAGE);
-		}
 	    }
 	}
         //checkMySize();

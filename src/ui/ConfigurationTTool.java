@@ -147,7 +147,7 @@ public class ConfigurationTTool {
     public static String fileName = "";
 
     public static String ExternalServer="";
-
+    public static String ProVerifHash="";
     public static void makeDefaultConfiguration() {
         //System.out.println(Paths.get("").toAbsolutePath().toString());
         //System.out.println("User.dir path:" + System.getProperty("user.dir"));
@@ -192,6 +192,7 @@ public class ConfigurationTTool {
         if (data == null) {
             throw new MalformedConfigurationException("Filepb");
         }
+
 
         index0 = data.indexOf("LastOpenFile");
 
@@ -269,7 +270,26 @@ public class ConfigurationTTool {
                 write = true;
             }
         }
-
+	index0 = data.indexOf("ProVerifHash");
+	if (index0 > -1) {
+            index1 = data.indexOf('"', index0);
+            if (index1 > -1) {
+                index2 = data.indexOf('"', index1 + 1);
+                if (index2 > -1) {
+                    tmp = data.substring(index2, data.length());
+                    data = data.substring(0, index1+1) + ConfigurationTTool.ProVerifHash + tmp;
+                    write = true;
+                }
+            }
+        }
+	else {
+	    index1= data.indexOf("</TURTLECONFIGURATION>");
+            if (index1 > -1) {
+                location = "<ProVerifHash data=\"" + ConfigurationTTool.ProVerifHash + "\"/>\n\n";
+                data = data.substring(0, index1) + location + data.substring(index1, data.length());
+                write = true;
+            }
+	}
         if (write) {
             //sb.append("Writing data=" + data);
             try {
@@ -637,6 +657,10 @@ public class ConfigurationTTool {
             nl = doc.getElementsByTagName("ProVerifCodeDirectory");
             if (nl.getLength() > 0)
                 ProVerifCodeDirectory(nl);
+
+            nl = doc.getElementsByTagName("ProVerifHash");
+            if (nl.getLength() > 0)
+                ProVerifHash(nl);
 
             nl = doc.getElementsByTagName("ProVerifVerifierPath");
             if (nl.getLength() > 0)
@@ -1222,6 +1246,15 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             ProVerifCodeDirectory = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void ProVerifHash(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            ProVerifHash = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
