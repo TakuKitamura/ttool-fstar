@@ -162,7 +162,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		panel2.add(byteDataSize, c2);
 		
 		c2.gridwidth = 1;
-		panel2.add(new JLabel("Pipeline size (in byte):"), c2);
+		panel2.add(new JLabel("Pipeline size (num. stages):"), c2);
 		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
 		pipelineSize = new JTextField(""+node.getPipelineSize(), 15);
 		panel2.add(pipelineSize, c2);
