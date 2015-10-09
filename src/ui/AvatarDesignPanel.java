@@ -318,7 +318,8 @@ public class AvatarDesignPanel extends TURTLEPanel {
 	for (Object tgc: abdp.getComponentList()){
 	    if (tgc instanceof AvatarBDPragma){
 		AvatarBDPragma pragma = (AvatarBDPragma) tgc;
-		pragma.authMap.clear();
+		pragma.authStrongMap.clear();
+		pragma.authWeakMap.clear();	
 	
 	    }
 	}
@@ -473,7 +474,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
                               Vector types = abdp.getAttributesOfDataType (tattrA.getTypeOther ());
                               int toBeFound = types.size ();
-                              boolean weakAuthenticity = false;
+                              int weakLeft = types.size();
                               boolean ko = false;
                               boolean isNotProved = false;
 
@@ -482,43 +483,41 @@ public class AvatarDesignPanel extends TURTLEPanel {
                                   String evA = argA[0] + "__" + argA[2] + "__"+ type.getId () + "__" + argA[1];
                                   String evB = argB[0] + "__" + argB[2] + "__"+ type.getId () + "__" + argB[1];
                                   String ev = evB + " ==> " + evA;
-
+				  if (satisfiedWeak.contains (ev)) {
+                                      weakLeft--;
+                                  } 
                                   if (nonSatisfied.contains (ev)) {
                                       ko = true;
-                                      break;
                                   } else if (notProved.contains (ev)) {
                                       toBeFound --;
                                       isNotProved = true;
-                                  } else if (satisfiedWeak.contains (ev)) {
-                                      toBeFound --;
-                                      weakAuthenticity = true;
                                   } else if (satisfied.contains (ev)) {
                                       toBeFound --;
                                   }
                               }
-                              
+                              if (weakLeft==0){
+	                          pragma.authWeakMap.put(prop, 1);			
+			      }
                               if (ko)
-                                  pragma.authMap.put(prop, 3);
+                                  pragma.authStrongMap.put(prop, 2);
                               else if (toBeFound == 0) {
                                   if (isNotProved)
-                                      pragma.authMap.put(prop, 4);
-                                  else if (weakAuthenticity)
-                                      pragma.authMap.put(prop, 2);
+                                      pragma.authStrongMap.put(prop, 3);
                                   else
-			              pragma.authMap.put(prop, 1);
+			              pragma.authStrongMap.put(prop, 1);
                               }
                           } else {
                               String evA = argA[0] + "__" + argA[2] + "__" + argA[1];
                               String evB = argB[0] + "__" + argB[2] + "__" + argB[1];
                               String ev = evB + " ==> " + evA;
+			      if (satisfiedWeak.contains (ev))
+                                  pragma.authWeakMap.put(prop, 1);
                               if (nonSatisfied.contains (ev))
-                                  pragma.authMap.put(prop, 3);
+                                  pragma.authStrongMap.put(prop, 3);
                               else if (notProved.contains (ev))
-                                  pragma.authMap.put(prop, 4);
-                              else if (satisfiedWeak.contains (ev))
-                                  pragma.authMap.put(prop, 2);
+                                  pragma.authStrongMap.put(prop, 4);
                               else if (satisfied.contains (ev))
-                                  pragma.authMap.put(prop, 1);
+                                  pragma.authStrongMap.put(prop, 1);
                           }
                       }
                   }

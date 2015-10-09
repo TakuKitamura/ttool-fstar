@@ -760,6 +760,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             //state = tgc.getState();
             tgcTmp = tgc.isOnMeHL(x, y);
             if (tgcTmp != null) {
+		if (tgcTmp instanceof AvatarBDPragma){
+		    this.setToolTipText("The lock shows status of weak and strong authenticity. Green: Proved True, Red: Proved False, Grey: Cannot be proved");
+		} else {
+		    this.setToolTipText("");
+		}
                 if (!pointedElementFound) {
                     componentPointed = tgcTmp;
                     tgc.setState(TGState.POINTED);

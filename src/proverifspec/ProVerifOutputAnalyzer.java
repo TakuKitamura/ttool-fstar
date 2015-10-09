@@ -136,19 +136,25 @@ public class ProVerifOutputAnalyzer {
                         else if (str.contains(typedFalse)) {
                             nonSatisfiedAuthenticity.add(str.split(Pattern.quote(typedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0]);
                         }
+			else if (str.contains("cannot be proved")){
+			    notproved.add("Strong Authenticity "+ str.split(Pattern.quote(typedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0]);
+			}
                     }
                     else if (str.contains(typedWeakAuth)) {
                         if (str.contains(typedTrue)){
                             //Add string between tags
                             satisfiedWeakAuthenticity.add(str.split(Pattern.quote(typedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedWeakAuthSplit))[1].split("\\(")[0]);
-                        }    	
+                        }
+			else if (str.contains("cannot be proved")){
+			    notproved.add(str.split(Pattern.quote(typedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0]);
+			}    	
                     }
                 }
                 if (str.contains("Error:")){
                     errors.add(str + ": " + previous);
                 }
                 else if (str.contains("cannot be proved")){
-                    notproved.add(str);
+                 //   notproved.add(str);
                 }    
             previous = str;
             }  

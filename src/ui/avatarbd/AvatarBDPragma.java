@@ -63,7 +63,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
     protected String[] values;
     protected LinkedList<String> models;
     protected LinkedList<String> properties;
-    protected int textX = 15;
+    protected int textX = 25;
     protected int textY = 5;
     protected int marginY = 20;
     protected int marginX = 20;
@@ -82,21 +82,22 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
     private final String[] pPragma = {"#Confidentiality", "#Secret", "#SecrecyAssumption", "#Authenticity"};
     protected Graphics graphics;
     public final static int NOT_VERIFIED = 0;
-    public final static int PROVED_STRONG = 1;
-    public final static int PROVED_WEAK = 2;
-    public final static int PROVED_FALSE = 3; 
-    public final static int NOT_PROVED = 4;
-    public HashMap<String, Integer> authMap = new HashMap<String, Integer>();
-
+    public final static int PROVED_TRUE = 1;
+    public final static int PROVED_FALSE = 2; 
+    public final static int NOT_PROVED = 3;
+    public HashMap<String, Integer> authStrongMap = new HashMap<String, Integer>();
+    public HashMap<String, Integer> authWeakMap = new HashMap<String, Integer>();
     public AvatarBDPragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
         width = 200;
         height = 30;
         minWidth = 80;
         minHeight = 10;
 	models = new LinkedList<String>();
 	properties = new LinkedList<String>();
-	authMap = new HashMap<String, Integer>();
+	authStrongMap = new HashMap<String, Integer>();
+	authWeakMap = new HashMap<String, Integer>();
         oldScaleFactor = tdp.getZoom();
 
         nbConnectingPoint = 0;
@@ -160,13 +161,13 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         Color c = g.getColor();
 
         int desiredWidth = minWidth;
-	desiredWidth = Math.max(desiredWidth, 2*g.getFontMetrics().stringWidth("Property Pragma") + marginX);
+	desiredWidth = Math.max(desiredWidth, 2*g.getFontMetrics().stringWidth("Property Pragma") + marginX+ textX);
 	
         for(int i=0; i< values.length; i++) {
-            desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX);
+            desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX+textX);
         }
-
-        int desiredHeight = ((models.size() + properties.size()+4) * currentFontSize) + textY + 1;
+	currentFontSize= 25;
+        int desiredHeight = ((models.size() + properties.size()+4) *currentFontSize) + textY + 1;
 
         //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
 
@@ -213,9 +214,9 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 	g.setFont(fold);
 	i++;
 	for (String s: properties){
-	    if (authMap.containsKey(s)){
-		g.setFont(new Font("tmp", Font.BOLD, 18));
-		drawConfidentialityVerification(authMap.get(s), g, x+ lockX, y + lockY + (i+1)*currentFontSize);
+	    if (authStrongMap.containsKey(s) || authWeakMap.containsKey(s)){
+		g.setFont(new Font("tmp", Font.PLAIN, 7));
+		drawConfidentialityVerification(s, g, x+ lockX, y + lockY + (i+1)*currentFontSize);
 		g.setFont(fold);
 	    }
 	    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
@@ -269,34 +270,70 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
       resize(desiredWidth, desiredHeight);
       }
       }*/
-    private void drawConfidentialityVerification(int confidentialityVerification, Graphics g, int _x, int _y) {
+    private void drawConfidentialityVerification(String s, Graphics g, int _x, int _y) {
         Color c = g.getColor();
         Color c1;
-        switch(confidentialityVerification) {
-        case PROVED_STRONG:
-            c1 = Color.green;
-            break;
-        case PROVED_FALSE:
-            c1 = Color.red;
-            break;
-        case PROVED_WEAK:
-            c1 = Color.orange;
-            break;
-	case NOT_PROVED:
-	    c1 = Color.gray; 
-	    break;
-        default:
-            return;
-        }
-
-        g.drawOval(_x+6, _y-10, 6, 9);
-        g.setColor(c1);
-        g.fillRect(_x+4, _y-7, 9, 7);
-        g.setColor(c);
-        g.drawRect(_x+4, _y-7, 9, 7);
-	if (confidentialityVerification == NOT_PROVED){
-	    g.drawString("?", _x+4, _y+2);
+	Color c2;
+	int confStatus;
+	if (authStrongMap.containsKey(s)){
+	    confStatus = authStrongMap.get(s);
+	    switch(confStatus) {
+ 	        case PROVED_TRUE:
+                    c1 = Color.green;
+        	    break;
+        	case PROVED_FALSE:
+            	    c1 = Color.red;
+            	    break;
+		case NOT_PROVED:
+	    	    c1 = Color.gray; 
+	    	    break;
+        	default:
+            	    return;
+            }
+	} else {
+	    c1 = Color.gray;
 	}
+
+	if (authWeakMap.containsKey(s)){
+	    confStatus = authWeakMap.get(s);
+	    switch(confStatus) {
+ 	        case PROVED_TRUE:
+                    c2 = Color.green;
+        	    break;
+        	case PROVED_FALSE:
+            	    c2 = Color.red;
+            	    break;
+		case NOT_PROVED:
+	    	    c2 = Color.gray; 
+	    	    break;
+        	default:
+            	    return;
+            }
+	} else {
+	    c2 = c1;
+	}
+	
+        g.drawOval(_x+6, _y-13, 10, 15);
+        g.setColor(c1);
+	int[] xps = new int[]{_x+4, _x+4, _x+20};
+	int[] yps = new int[]{_y-7, _y+7, _y+7};
+	int[] xpw = new int[]{_x+20, _x+20, _x+4};
+	int[] ypw = new int[]{_y+7, _y-7, _y-7};
+	g.fillPolygon(xps, yps,3);	
+	
+	g.setColor(c2);	
+	g.fillPolygon(xpw, ypw, 3);
+
+//        g.fillRect(_x+4, _y-7, 18, 14);
+        g.setColor(c);
+//        g.drawRect(_x+4, _y-7, 18, 14);
+	g.drawPolygon(xps, yps,3);
+	g.drawPolygon(xpw, ypw, 3);
+	g.drawString("S", _x+6, _y+5);
+	g.drawString("W", _x+13, _y+1);
+//	if (c1==Color.gray){
+//	    g.drawString("?", _x+4, _y+2);
+//	}
 
     }
     public boolean editOndoubleClick(JFrame frame) {
