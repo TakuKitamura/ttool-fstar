@@ -68,7 +68,7 @@ public class ProVerifOutputAnalyzerTest extends TToolTest {
             while ((sCurrentLine = br.readLine()) != null) {
                 s= s.concat(sCurrentLine+"\n");
             }
-            //System.out.println(s);
+            //this.updateDigests);
 
             AvatarSpecification avspec = new AvatarSpecification ("dummy", null);
             AvatarBlock aliceBlock = new AvatarBlock ("Alice", avspec, null);
