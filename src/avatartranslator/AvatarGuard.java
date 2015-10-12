@@ -95,7 +95,6 @@ public abstract class AvatarGuard {
 
         if (sane.startsWith ("(")) {
             indexRParen = AvatarGuard.getMatchingRParen (sane, 0);
-
             tuple = AvatarTuple.createFromString (block, sane.substring (0, indexRParen));
             if (tuple == null) {
                 first = AvatarGuard.createFromString (block, sane.substring (1, indexRParen));
@@ -119,6 +118,7 @@ public abstract class AvatarGuard {
                         if (indexBinaryOp != -1) {
                             first = AvatarGuard.createFromString (block, sane.substring (0, indexBinaryOp));
                             AvatarGuard second = AvatarGuard.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
+			    System.out.println("guard "+ sane.substring(indexBinaryOp + delim.length ()));
                             if (first instanceof AvatarComposedGuard && second instanceof AvatarComposedGuard)
                                 return new AvatarBinaryGuard ((AvatarComposedGuard) first, (AvatarComposedGuard) second, delim);
 			    System.out.println("Binary guard "+ sane + "does not contain 2 guards");
@@ -146,8 +146,8 @@ public abstract class AvatarGuard {
                         return new AvatarGuardEmpty ();
                     }
                 }
-		System.out.println("Invalid guard expression "+ sane);
-		TraceManager.addDev("Invalid guard expression "+ sane);
+		System.out.println("Invalid guard expression with tuple "+ sane);
+		TraceManager.addDev("Invalid guard expression with tuple "+ sane);
                 return new AvatarGuardEmpty ();
             }
         }

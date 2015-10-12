@@ -146,7 +146,7 @@ public class ProVerifOutputAnalyzer {
                             satisfiedWeakAuthenticity.add(str.split(Pattern.quote(typedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedWeakAuthSplit))[1].split("\\(")[0]);
                         }
 			else if (str.contains("cannot be proved")){
-			    notproved.add(str.split(Pattern.quote(typedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0]);
+			    notproved.add("Weak Authenticity "+ str.split(Pattern.quote(typedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedWeakAuthSplit))[1].split("\\(")[0]);
 			}    	
                     }
                 }
@@ -201,19 +201,25 @@ public class ProVerifOutputAnalyzer {
                         else if (str.contains(untypedFalse)) {
                             nonSatisfiedAuthenticity.add(str.split(Pattern.quote(untypedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedAuthSplit))[1].split("\\(")[0]);
                         }
+			else if (str.contains("cannot be proved")){
+			    notproved.add("Strong Authenticity "+ str.split(Pattern.quote(untypedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedAuthSplit))[1].split("\\(")[0]);
+			}
                     }
                     else if (str.contains(untypedWeakAuth)) {
                         if (str.contains(untypedTrue)){
                             //Add string between tags
                             satisfiedWeakAuthenticity.add(str.split(Pattern.quote(untypedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedWeakAuthSplit))[1].split("\\(")[0]);
                         }    	
+			else if (str.contains("cannot be proved")){
+			    notproved.add("Weak Authenticity "+ str.split(Pattern.quote(untypedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedWeakAuthSplit))[1].split("\\(")[0]);
+			}  
                     }
                 }
                 if (str.contains("Error:")){
                     errors.add(str + ": " + previous);
                 }
                 else if (str.contains("cannot be proved")){
-                    notproved.add(str);
+           //         notproved.add(str);
                 }    
             previous = str;
             }

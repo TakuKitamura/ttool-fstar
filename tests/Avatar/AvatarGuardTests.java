@@ -164,6 +164,8 @@ public class AvatarGuardTests extends TToolTest {
 	System.out.println("Binary Guard Tests");
 	res= AvatarGuard.createFromString(A, "(key1==true) and (key2==false)");
 	System.out.println("Binary guard with and " +(res instanceof AvatarBinaryGuard));
+	res= AvatarGuard.createFromString(A, "(a) and (b)");
+	System.out.println("Binary guard with and " +(res instanceof AvatarBinaryGuard));
 	res= AvatarGuard.createFromString(A, "(key1==key1) or (key2==key1)");
 	System.out.println("Binary guard with or " +(res instanceof AvatarBinaryGuard));
 	res= AvatarGuard.createFromString(A, "((key1==key1) or (key2==key1)) and (m__a==m__b)");

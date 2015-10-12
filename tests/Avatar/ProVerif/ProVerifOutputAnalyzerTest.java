@@ -138,8 +138,8 @@ public class ProVerifOutputAnalyzerTest extends TToolTest {
             for (String str: poa.getNotProved()){
                 this.updateDigest (str);
             }
-
-            if (!this.testDigest (new byte[] {-126, -51, 48, -20, -15, -101, 107, 0, -46, -110, -80, -56, -4, -120, 37, -47, -20, -55, 114, 111}))
+	    
+            if (!this.testDigest (new byte[]  {-128, 84, -56, -2, -32, 96, -30, 96, -10, 47, -77, 22, 72, 96, -54, 100, -16, -104, 100, 82}))
                 this.error ("Couldn't analyze ProVerif typed output...");
 
             s = "";
@@ -203,7 +203,7 @@ public class ProVerifOutputAnalyzerTest extends TToolTest {
                 this.updateDigest (str);
             }
 
-            if (!this.testDigest (new byte[] {103, 89, 62, 106, -11, 41, -54, -64, -24, 74, 109, -93, 77, -21, 72, -62, 117, -41, -114, 46}))
+            if (!this.testDigest (new byte[] {87, -92, 11, -82, -116, -73, 5, -83, 86, 79, -30, -50, -128, 17, -9, -20, 56, 35, -20, 69}))
                 this.error ("Couldn't analyze ProVerif untyped output...");
 
         } catch (IOException e) {
