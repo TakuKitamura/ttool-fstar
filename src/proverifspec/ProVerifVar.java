@@ -49,15 +49,21 @@ public class ProVerifVar implements ProVerifDeclaration {
     protected String name;
     protected String type;
     protected boolean priv;
+    protected boolean patternEqual;
 
-    public ProVerifVar (String _name, String _type) {
+    public ProVerifVar (String _name, String _type, boolean _priv, boolean _patternEqual) {
         this.name = _name;
         this.type = _type;
+        this.priv = _priv;
+        this.patternEqual = _patternEqual;
+    }
+
+    public ProVerifVar (String _name, String _type) {
+        this (_name, _type, false, false);
     }
 
     public ProVerifVar (String _name, String _type, boolean _priv) {
-        this (_name, _type);
-        this.priv = _priv;
+        this (_name, _type, _priv, false);
     }
 
     public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {

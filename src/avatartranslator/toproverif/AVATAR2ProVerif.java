@@ -103,6 +103,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     private HashMap<AvatarAttribute, AvatarAttribute> pubs;
     private HashMap<AvatarAttribute, AvatarAttribute> nameEquivalence;
 
+    private boolean stateReachability;
+
     private Vector warnings;
 
     public AVATAR2ProVerif(AvatarSpecification _avspec) {
@@ -157,6 +159,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
     public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize, boolean _stateReachability, boolean _typed) {
 
+        this.stateReachability = _stateReachability;
         this.warnings = new Vector();
         if (_typed)
             this.spec = new ProVerifSpec (new ProVerifPitypeSyntaxer ());
@@ -169,7 +172,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
         LinkedList<AvatarAttribute> allKnowledge = this.makeStartingProcess();
 
-        this.makeHeader(_stateReachability);
+        this.makeHeader();
 
         this.makeBlocks(allKnowledge);
 
@@ -200,7 +203,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         return result;
     }
 
-    public void makeHeader(boolean _stateReachability) {
+    public void makeHeader() {
         TraceManager.addDev("\n\n=+=+=+ Making Headers +=+=+=");
         this.spec.addDeclaration (new ProVerifComment    ("Boolean return types"));
         this.spec.addDeclaration (new ProVerifConst      (TRUE, "bitstring"));
@@ -248,6 +251,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         String action = "(";
         for(AvatarBlock block: blocks) {
             HashMap<AvatarStateMachineElement, Integer> simplifiedElements = block.getStateMachine ().getSimplifiedElements ();
+            if (simplifiedElements.get (block.getStateMachine ().getStartState ()) == null)
+                simplifiedElements.put (block.getStateMachine ().getStartState (), new Integer (0));
+
             for (AvatarStateMachineElement asme: simplifiedElements.keySet ())
                 this.spec.addDeclaration (new ProVerifVar        ("call__" + block.getName() + "__" + simplifiedElements.get (asme), "bitstring", true));
         }
@@ -308,7 +314,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 }
 
         // Queries for states
-        if (_stateReachability) {
+        if (this.stateReachability) {
             this.spec.addDeclaration (new ProVerifComment    ("Queries Event"));
             TraceManager.addDev ("Queries Event"); 
             for (AvatarBlock block: this.avspec.getListOfBlocks ())
@@ -432,19 +438,31 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             }
 
         // Call all the processes corresponding to crossroads in the state machine
-        ProVerifProcRawGlobing globing = new ProVerifProcRawGlobing ("(", ")");
+        ProVerifProcRawGlobing globing = new ProVerifProcRawGlobing ("! (", ")");
         lastInstr.setNextInstr (globing);
         lastInstr = globing.getIntra ();
-        String action = "";
+
+        lastInstr = lastInstr.setNextInstr (new ProVerifProcNew ("sessionID", "bitstring"));
+
+        ProVerifProcParallel paral = new ProVerifProcParallel ();
+        lastInstr = lastInstr.setNextInstr (paral);
+
         for(AvatarBlock block: blocks) {
             HashMap<AvatarStateMachineElement, Integer> simplifiedElements = block.getStateMachine ().getSimplifiedElements ();
-            for (AvatarStateMachineElement asme: simplifiedElements.keySet ())
-                action += "(!" + block.getName () + "__" + simplifiedElements.get (asme) + ") | ";
-        }
-        lastInstr = lastInstr.setNextInstr (new ProVerifProcRaw (action));
 
-        globing = new ProVerifProcRawGlobing ("! (", ")");
-        lastInstr.setNextInstr (globing);
+            if (simplifiedElements.get (block.getStateMachine ().getStartState ()) == null)
+                paral.addInstr (new ProVerifProcCall (block.getName () + "__0", new ProVerifVar[] {new ProVerifVar ("sessionID", "bitstring")}));
+
+            for (AvatarStateMachineElement asme: simplifiedElements.keySet ()) {
+                globing = new ProVerifProcRawGlobing ("!", "");
+                paral.addInstr (globing);
+                globing.getIntra ().setNextInstr (new ProVerifProcCall (block.getName () + "__" + simplifiedElements.get (asme), new ProVerifVar[] {new ProVerifVar ("sessionID", "bitstring")}));
+            }
+        }
+
+
+        globing = new ProVerifProcRawGlobing ("(", ")");
+        paral.addInstr (globing);
         lastInstr = globing.getIntra ();
 
         TraceManager.addDev("Finding session knowledge");
@@ -529,13 +547,14 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         // Concatenate system and session knowledge
         systemKnowledge.addAll (sessionKnowledge);
 
-        ProVerifVar[] knowledgeArray = this.getProVerifVarFromAttr (systemKnowledge);
+        LinkedList<ProVerifVar> processArgs = this.getProVerifVarFromAttr (systemKnowledge);
+        processArgs.add (new ProVerifVar ("sessionID", "bitstring"));
 
         // Call every start process
         TraceManager.addDev("Finding processes");
-        ProVerifProcParallel paral = new ProVerifProcParallel ();
+        paral = new ProVerifProcParallel ();
         for(AvatarBlock block: blocks)
-            paral.addInstr (new ProVerifProcCall (block.getName() + "__start", knowledgeArray));
+            paral.addInstr (new ProVerifProcCall (block.getName() + "__start", processArgs.toArray (new ProVerifVar[processArgs.size ()])));
         lastInstr = lastInstr.setNextInstr (paral);
 
         // Set main process
@@ -555,18 +574,19 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             makeBlock(block, allKnowledge);
     }
 
-    private ProVerifVar[] getProVerifVarFromAttr (LinkedList<AvatarAttribute> attrs) {
+    private LinkedList<ProVerifVar> getProVerifVarFromAttr (LinkedList<AvatarAttribute> attrs) {
         LinkedList<ProVerifVar> result = new LinkedList<ProVerifVar> ();
         for(AvatarAttribute aa: attrs)
             result.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (aa, null), "bitstring"));
-        return result.toArray (new ProVerifVar[result.size ()]);
+        return result;
     }
 
     /**
      * Compute a list of ProVerifVar corresponding to the attributes of the block
      */
     private ProVerifVar[] getAttributesFromBlock (AvatarBlock ab) {
-        return this.getProVerifVarFromAttr (ab.getAttributes ());
+        LinkedList<ProVerifVar> result = this.getProVerifVarFromAttr (ab.getAttributes ());
+        return result.toArray (new ProVerifVar[result.size ()]);
     }
 
     /**
@@ -577,8 +597,11 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         LinkedList<AvatarAttribute> allKnowledge = (LinkedList<AvatarAttribute>) _allKnowledge.clone ();
 
         // Create first ProVerif process for this block and add it to the ProVerif specification
-        ProVerifVar[] knowledgeArray = this.getProVerifVarFromAttr (allKnowledge);
-        ProVerifProcInstr lastInstr = new ProVerifProcess(ab.getName() + "__start", knowledgeArray);
+        LinkedList<ProVerifVar> knowledgeArray = this.getProVerifVarFromAttr (allKnowledge);
+        LinkedList<ProVerifVar> processArgs = (LinkedList<ProVerifVar>) knowledgeArray.clone ();
+        processArgs.add (new ProVerifVar ("sessionID", "bitstring"));
+
+        ProVerifProcInstr lastInstr = new ProVerifProcess(ab.getName() + "__start", processArgs.toArray (new ProVerifVar[processArgs.size ()]));
         spec.addDeclaration (lastInstr);
 
         // Create a ProVerif Variable corresponding to each attribute block
@@ -622,13 +645,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         lastInstr = lastInstr.setNextInstr ( new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + AVATAR2ProVerif.translateTerm (attr, null) + ");"));
 
         // Call the first "real" process
-        String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((call__" + ab.getName () + "__0";
+        String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((sessionID, call__" + ab.getName () + "__0";
         for(ProVerifVar aa: this.getAttributesFromBlock (ab))
             tmp += ", " + aa.getName ();
         lastInstr = lastInstr.setNextInstr (new ProVerifProcRaw (tmp + ")))"));
 
         // Generate a new process for every simplified element of the block's state machine
         HashMap<AvatarStateMachineElement, Integer> simplifiedElements = ab.getStateMachine ().getSimplifiedElements ();
+        if (simplifiedElements.get (ab.getStateMachine ().getStartState ()) == null)
+            simplifiedElements.put (ab.getStateMachine ().getStartState (), new Integer (0));
 
         for (AvatarStateMachineElement asme: simplifiedElements.keySet ())
             if (asme != null) {
@@ -637,22 +662,20 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     attributeCmp.put (attr, 0);
 
                 // Create the ProVerif process and add it to the ProVerif specification
-                ProVerifProcInstr p = new ProVerifProcess(AVATAR2ProVerif.makeAttrName(ab.getName(), simplifiedElements.get (asme).toString ()), new ProVerifVar[] {});
+                ProVerifProcInstr p = new ProVerifProcess(AVATAR2ProVerif.makeAttrName(ab.getName(), simplifiedElements.get (asme).toString ()), new ProVerifVar[] {new ProVerifVar ("sessionID", "bitstring")});
                 this.spec.addDeclaration (p);
 
                 // Read and decrypt control data: variables sent to the process and the call__num variable
                 p = p.setNextInstr (new ProVerifProcIn (CHCTRL_CH, new ProVerifVar[] {new ProVerifVar ("chControlData", "bitstring")}));
                 LinkedList<ProVerifVar> attributes = new LinkedList<ProVerifVar> ();
-                attributes.add (new ProVerifVar ("call__num", "bitstring"));
+                attributes.add (new ProVerifVar ("sessionID", "bitstring", false, true));
+                attributes.add (new ProVerifVar ("call__" + ab.getName () + "__" + simplifiedElements.get (asme), "bitstring", false, true));
                 for (AvatarAttribute attr: ab.getAttributes ()) {
                     Integer c = attributeCmp.get (attr) + 1;
                     attributeCmp.put (attr, c);
                     attributes.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, attributeCmp), "bitstring"));
                 }
                 p = p.setNextInstr (new ProVerifProcLet (attributes.toArray (new ProVerifVar[attributes.size()]), CHCTRL_DECRYPT + " (chControlData)"));
-
-                // Check that call__num variable really corresponds to this process
-                p = p.setNextInstr (new ProVerifProcITE ("call__num = call__" + ab.getName () + "__" + simplifiedElements.get (asme)));
 
                 // Create an object that will serve as an argument passed to the translation functions
                 ProVerifTranslatorParameter arg = new ProVerifTranslatorParameter ();
@@ -930,8 +953,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         ProVerifTranslatorParameter arg = (ProVerifTranslatorParameter) _arg;
         ProVerifProcInstr _lastInstr = arg.lastInstr;
 
-        // Adding an event for reachability of the state
-        _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("event enteringState__" + arg.block.getName() + "__" + _asme.getName() + "()", true));
+        if (this.stateReachability)
+            // Adding an event for reachability of the state
+            _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("event enteringState__" + arg.block.getName() + "__" + _asme.getName() + "()", true));
 
         // Adding an event if authenticity is concerned with that state
         for (AvatarPragma pragma: this.avspec.getPragmas ())

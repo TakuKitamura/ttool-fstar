@@ -166,7 +166,11 @@ public class ProVerifPiSyntaxer extends ProVerifSyntaxer {
                 first = false;
             else
                 this.fullSpec += ", ";
-            this.fullSpec += var.name;
+
+            if (var.patternEqual)
+                this.fullSpec += "=" + var.name;
+            else
+                this.fullSpec += var.name;
         }
         if (_node.vars.length > 1)
             this.fullSpec += ")";

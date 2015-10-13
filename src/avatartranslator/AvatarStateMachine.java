@@ -84,23 +84,30 @@ public class AvatarStateMachine extends AvatarElement {
         return elements;
     }
 
-    private void getSimplifiedElementsAux (HashMap<AvatarStateMachineElement, Integer> simplifiedElements, HashSet<AvatarStateMachineElement> visited, AvatarStateMachineElement root) {
+    private int getSimplifiedElementsAux (HashMap<AvatarStateMachineElement, Integer> simplifiedElements, HashSet<AvatarStateMachineElement> visited, AvatarStateMachineElement root, int counter) {
         if (visited.contains (root)) {
             Integer name = simplifiedElements.get (root);
-            if (name == null)
-                simplifiedElements.put (root, new Integer (simplifiedElements.size ()));
+            if (name == null) {
+                if (root == this.startState)
+                    simplifiedElements.put (root, new Integer (0));
+                else {
+                    counter ++;
+                    simplifiedElements.put (root, new Integer (counter));
+                }
+            }
         }
         else {
             visited.add (root);
             for (AvatarStateMachineElement asme: root.nexts)
-                this.getSimplifiedElementsAux (simplifiedElements, visited, asme);
+                counter = this.getSimplifiedElementsAux (simplifiedElements, visited, asme, counter);
         }
+
+        return counter;
     }
 
     public HashMap<AvatarStateMachineElement, Integer> getSimplifiedElements () {
         HashMap<AvatarStateMachineElement, Integer> simplifiedElements = new HashMap<AvatarStateMachineElement, Integer> ();
-        simplifiedElements.put (startState, new Integer (0));
-        this.getSimplifiedElementsAux (simplifiedElements, new HashSet<AvatarStateMachineElement> (), startState);
+        this.getSimplifiedElementsAux (simplifiedElements, new HashSet<AvatarStateMachineElement> (), startState, 0);
         return simplifiedElements;
     }
 
