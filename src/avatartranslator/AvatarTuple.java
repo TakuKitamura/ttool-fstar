@@ -66,9 +66,6 @@ public class AvatarTuple extends AvatarTerm implements AvatarLeftHand {
             if (indexRParen == -1)
                 indexRParen = toParse.length ();
             String[] components = toParse.substring (indexLParen+1, indexRParen).split (",");
-	    for (String s: components){
-		System.out.println("comp " + s);
-		}
             boolean illFormed = false;
             AvatarTuple argsTuple = new AvatarTuple (block);
             for (String arg: components) {

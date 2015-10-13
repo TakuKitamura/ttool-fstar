@@ -146,6 +146,8 @@ public class AvatarGuardTests extends TToolTest {
 	System.out.println("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
 	res= AvatarGuard.createFromString(A, "key1 != a1234");
 	System.out.println("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
+	res= AvatarGuard.createFromString(A, "(a,b)==(c,d)");
+	System.out.println("Created duo guard with tuple " +(res instanceof AvatarSimpleGuardDuo));
 
 	//Unary Guards	
 	System.out.println("Unary Guard Tests");
@@ -165,7 +167,7 @@ public class AvatarGuardTests extends TToolTest {
 	res= AvatarGuard.createFromString(A, "(key1==true) and (key2==false)");
 	System.out.println("Binary guard with and " +(res instanceof AvatarBinaryGuard));
 	res= AvatarGuard.createFromString(A, "(a) and (b)");
-	System.out.println("Binary guard with and " +(res instanceof AvatarBinaryGuard));
+	System.out.println("Binary guard with tuple " +(res instanceof AvatarBinaryGuard));
 	res= AvatarGuard.createFromString(A, "(key1==key1) or (key2==key1)");
 	System.out.println("Binary guard with or " +(res instanceof AvatarBinaryGuard));
 	res= AvatarGuard.createFromString(A, "((key1==key1) or (key2==key1)) and (m__a==m__b)");
