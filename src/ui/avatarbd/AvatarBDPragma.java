@@ -166,8 +166,8 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         for(int i=0; i< values.length; i++) {
             desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX+textX);
         }
-	currentFontSize= 25;
-        int desiredHeight = ((models.size() + properties.size()+4) *currentFontSize) + textY + 1;
+//	currentFontSize= 5;
+        int desiredHeight = ((models.size() + properties.size()+4)*currentFontSize) + textY + 1;
 
         //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
 

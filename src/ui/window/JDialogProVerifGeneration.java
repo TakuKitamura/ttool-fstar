@@ -254,7 +254,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
 
         start.setPreferredSize(new Dimension(100, 30));
         stop.setPreferredSize(new Dimension(100, 30));
-        close.setPreferredSize(new Dimension(100, 30));
+        close.setPreferredSize(new Dimension(120, 30));
 
         start.addActionListener(this);
         stop.addActionListener(this);
