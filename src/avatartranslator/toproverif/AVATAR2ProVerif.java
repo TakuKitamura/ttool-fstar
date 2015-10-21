@@ -715,7 +715,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             Integer n = arg.simplifiedElements.get (next);
             if (n != null) {
                 // If next is the root of a process send the attributes on the control channel
-                String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((call__" + arg.block.getName () + "__" + n;
+                String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((sessionID, call__" + arg.block.getName () + "__" + n;
                 for(AvatarAttribute aa: arg.block.getAttributes ())
                     tmp += ", " + AVATAR2ProVerif.translateTerm (aa, arg.attributeCmp);
 
