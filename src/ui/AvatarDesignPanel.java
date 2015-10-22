@@ -513,9 +513,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
 			      if (satisfiedWeak.contains (ev))
                                   pragma.authWeakMap.put(prop, 1);
                               if (nonSatisfied.contains (ev))
-                                  pragma.authStrongMap.put(prop, 3);
+                                  pragma.authStrongMap.put(prop, 2);
                               else if (notProved.contains (ev))
-                                  pragma.authStrongMap.put(prop, 4);
+                                  pragma.authStrongMap.put(prop, 3);
                               else if (satisfied.contains (ev))
                                   pragma.authStrongMap.put(prop, 1);
                           }
