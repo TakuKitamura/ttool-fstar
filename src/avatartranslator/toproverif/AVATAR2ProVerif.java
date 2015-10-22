@@ -334,6 +334,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         /* Autenticity */
         this.spec.addDeclaration (new ProVerifComment    ("Authenticity"));
         TraceManager.addDev ("Authenticity"); 
+        HashSet<String> authenticityEvents = new HashSet<String> ();
         for (AvatarPragma pragma: this.avspec.getPragmas ())
             if (pragma instanceof AvatarPragmaAuthenticity) {
                 AvatarAttributeState attrA = ((AvatarPragmaAuthenticity) pragma).getAttrA ();
@@ -342,8 +343,14 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     String sA = AVATAR2ProVerif.makeAttrName (attrA.getAttribute ().getBlock ().getName (), attrA.getAttribute ().getName (), attrA.getState ().getName ());
                     String sB = AVATAR2ProVerif.makeAttrName (attrB.getAttribute ().getBlock ().getName (), attrB.getAttribute ().getName (), attrB.getState ().getName ());
                     TraceManager.addDev("|    authenticity__" + sB + " (dummyM) ==> authenticity__" + sA + " (dummyM)"); 
-                    spec.addDeclaration (new ProVerifEvDecl ("authenticity__" + sA, new String[] {"bitstring"}));
-                    spec.addDeclaration (new ProVerifEvDecl ("authenticity__" + sB, new String[] {"bitstring"}));
+                    if (!authenticityEvents.contains (sA)) {
+                        authenticityEvents.add (sA);
+                        spec.addDeclaration (new ProVerifEvDecl ("authenticity__" + sA, new String[] {"bitstring"}));
+                    }
+                    if (!authenticityEvents.contains (sB)) {
+                        authenticityEvents.add (sB);
+                        spec.addDeclaration (new ProVerifEvDecl ("authenticity__" + sB, new String[] {"bitstring"}));
+                    }
                     spec.addDeclaration (new ProVerifQueryEvinj (new ProVerifVar[] {new ProVerifVar ("dummyM", "bitstring")}, "authenticity__" + sB + " (dummyM)", "authenticity__" + sA + " (dummyM)"));
                 }
             }
@@ -963,19 +970,26 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("event enteringState__" + arg.block.getName() + "__" + _asme.getName() + "()", true));
 
         // Adding an event if authenticity is concerned with that state
+        HashSet<String> authenticityEvents = new HashSet<String> ();
         for (AvatarPragma pragma: this.avspec.getPragmas ())
             if (pragma instanceof AvatarPragmaAuthenticity) {
                 AvatarAttributeState attrA = ((AvatarPragmaAuthenticity) pragma).getAttrA ();
                 AvatarAttributeState attrB = ((AvatarPragmaAuthenticity) pragma).getAttrB ();
                 if (attrA.getState ().getName ().equals (_asme.getName ())) {
                     String sp = "authenticity__" + AVATAR2ProVerif.makeAttrName (attrA.getAttribute ().getBlock ().getName (), attrA.getAttribute ().getName (), _asme.getName ()) + " (" + AVATAR2ProVerif.makeAttrName (attrA.getAttribute ().getBlock ().getName (), attrA.getAttribute ().getName (), arg.attributeCmp.get (attrA.getAttribute ()).toString ()) + ")";
-                    TraceManager.addDev("|    |    authenticity event " + sp + "added");
-                    _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("event " + sp, true));
+                    if (!authenticityEvents.contains (sp)) {
+                        authenticityEvents.add (sp);
+                        TraceManager.addDev("|    |    authenticity event " + sp + "added");
+                        _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("event " + sp, true));
+                    }
                 }
                 if (attrB.getState ().getName ().equals (_asme.getName ())) {
                     String sp = "authenticity__" + AVATAR2ProVerif.makeAttrName (attrB.getAttribute ().getBlock ().getName (), attrB.getAttribute ().getName (), _asme.getName ()) + " (" + AVATAR2ProVerif.makeAttrName (attrB.getAttribute ().getBlock ().getName (), attrB.getAttribute ().getName (), arg.attributeCmp.get (attrB.getAttribute ()).toString ()) + ")";
-                    TraceManager.addDev("|    |    authenticity event " + sp + "added");
-                    _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("event " + sp, true));
+                    if (!authenticityEvents.contains (sp)) {
+                        authenticityEvents.add (sp);
+                        TraceManager.addDev("|    |    authenticity event " + sp + "added");
+                        _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("event " + sp, true));
+                    }
                 }
             }
 
