@@ -72,8 +72,8 @@ public class AvatarActionAssignment implements AvatarAction {
     }
 
     public boolean isABasicVariableSetting () {
-        return (this.leftHand instanceof AvatarLocalVar || this.leftHand instanceof AvatarAttribute) &&
-               (this.rightHand instanceof AvatarLocalVar || this.rightHand instanceof AvatarAttribute);
+        return  (this.leftHand instanceof AvatarAttribute || this.leftHand instanceof AvatarTuple) &&
+                (! (this.rightHand instanceof AvatarTermFunction));
     }
 
     public String getName () {

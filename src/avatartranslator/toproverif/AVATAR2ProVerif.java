@@ -218,14 +218,14 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         this.spec.addDeclaration (new ProVerifFunc       (PK_SIGN, new String[] {"bitstring", "bitstring"}, "bitstring"));
         this.spec.addDeclaration (new ProVerifFunc       (PK_VERIFYSIGN, new String[] {"bitstring", "bitstring", "bitstring"}, "bitstring",
                                   new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("sk", "bitstring")}, PK_VERIFYSIGN + " (m, " + PK_SIGN + " (m, sk), " + PK_PK + " (sk)) = " + TRUE,
-                                  new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("m2", "bitstring"), new ProVerifVar ("pk", "bitstring")}, PK_VERIFYSIGN + " (m, m2, pk) = " + FALSE))));
+                                  new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("m2", "bitstring"), new ProVerifVar ("ppk", "bitstring")}, PK_VERIFYSIGN + " (m, m2, ppk) = " + FALSE))));
 
 
         this.spec.addDeclaration (new ProVerifComment    ("Certificates"));
         this.spec.addDeclaration (new ProVerifFunc       (CERT_CERT, new String[] {"bitstring", "bitstring"}, "bitstring"));
         this.spec.addDeclaration (new ProVerifFunc       (CERT_VERIFYCERT, new String[] {"bitstring", "bitstring"}, "bitstring",
                                   new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("epk", "bitstring"), new ProVerifVar ("sk", "bitstring")}, CERT_VERIFYCERT + " (" + CERT_CERT + " (epk, " + PK_SIGN + " (epk, sk)), " + PK_PK + " (sk)) = " + TRUE,
-                                  new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("pk", "bitstring")}, CERT_VERIFYCERT + " (m, pk) = " + FALSE))));
+                                  new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("ppk", "bitstring")}, CERT_VERIFYCERT + " (m, ppk) = " + FALSE))));
         this.spec.addDeclaration (new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("epk", "bitstring"), new ProVerifVar ("sk", "bitstring")}, CERT_GETPK + " (" + CERT_CERT + " (epk, " + PK_SIGN + " (epk,sk))) = epk"));
 
         this.spec.addDeclaration (new ProVerifComment    ("Symmetric key cryptography"));
@@ -767,7 +767,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 boolean first = true;
                 for(String value: _asme.getValues ()) {
                     AvatarTerm term = AvatarTerm.createFromString (arg.block, value);
-                    if (term == null) {
+                    if (term == null || term instanceof AvatarTermRaw) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown term '" + value + "' (ignored)");
                         ce.setAvatarBlock(arg.block);
                         ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
@@ -860,6 +860,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         for(AvatarAction aaction: _asme.getActions ()) {
             if (aaction instanceof AvatarActionAssignment) {
                 AvatarActionAssignment action = (AvatarActionAssignment) aaction;
+
                 TraceManager.addDev("|    |    |    assignment found: " + action);
                 AvatarLeftHand leftHand = action.getLeftHand ();
 

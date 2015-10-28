@@ -36,26 +36,28 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarLocalVar
-   * Creation: 16/09/2015
-   * @version 1.0 16/09/2015
+   * Class AvatarTermRaw
+   * Creation: 28/10/2015
+   * @version 1.0 28/10/2015
    * @author Florian LUGOU
    * @see
    */
 
-
 package avatartranslator;
 
-public class AvatarLocalVar extends AvatarTerm implements AvatarLeftHand {
-    public AvatarLocalVar (String _name, Object _referenceObject) {
-        super (_name, _referenceObject);
+public class AvatarTermRaw extends AvatarTerm {
+    String raw;
+
+    public AvatarTermRaw (String raw, Object _referenceObject) {
+        super (raw, _referenceObject);
+        this.raw = raw;
     }
 
     public boolean isLeftHand () {
-        return true;
+        return false;
     }
 
     public String toString () {
-        return this.name;
+        return this.raw;
     }
 }

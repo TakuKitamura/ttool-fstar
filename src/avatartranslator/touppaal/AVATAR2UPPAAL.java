@@ -788,10 +788,10 @@ public class AVATAR2UPPAAL {
                 TraceManager.addDev("Adding Action :" + _at.getAction(i));
                 tmps = _at.getAction(i).toString ();
 
-		TraceManager.addDev("tmps=" + tmps);
+                AvatarAction tmpAction = AvatarTerm.createActionFromString (_block, tmps);
 
                 // Setting a variable
-                if (AvatarTerm.createActionFromString (_block, tmps).isAVariableSetting ()) {
+                if (tmpAction.isABasicVariableSetting ()) {
                     loc1 = addLocation(_template);
                     //loc.setCommitted();
                     tr = addTransition(_template, loc, loc1);
@@ -804,9 +804,16 @@ public class AVATAR2UPPAAL {
                     }
                     madeTheChoice = true;
                     loc = loc1;
-                    // Method call
+                // Method call
                 } else {
                     //TraceManager.addDev("Found method call:" + tmps);
+                    
+                    AvatarTermFunction funcCall = null;
+                    if (tmpAction instanceof AvatarTermFunction)
+                        funcCall = (AvatarTermFunction) tmpAction;
+                    else
+                        funcCall = (AvatarTermFunction) ((AvatarActionAssignment) tmpAction).getRightHand ();
+
                     loc1 = addLocation(_template);
                     tr = addTransition(_template, loc, loc1);
 
@@ -815,7 +822,7 @@ public class AVATAR2UPPAAL {
                     } else {
                         loc.setUrgent();
                     }
-                    setSynchronization(tr, ((AvatarTermFunction) AvatarTerm.createActionFromString (_block, tmps)).getMethod ().getName () + "!");
+                    setSynchronization(tr, funcCall.getMethod ().getName () + "!");
                     madeTheChoice = true;
                     makeMethodCall(_block, tr, tmps);
                     loc = loc1;

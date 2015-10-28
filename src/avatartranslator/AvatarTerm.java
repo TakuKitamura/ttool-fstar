@@ -89,7 +89,7 @@ public abstract class AvatarTerm extends AvatarElement {
         //TraceManager.addDev ("AvatarConstant '" + toParse + "' couldn't be parsed");
 
         //TraceManager.addDev ("AvatarTerm '" + toParse + "' couldn't be parsed");
-        return null;
+        return new AvatarTermRaw (toParse, block);
     }
 
     public static AvatarAction createActionFromString (AvatarBlock block, String toParse) {

@@ -118,7 +118,7 @@ public class AvatarTuple extends AvatarTerm implements AvatarLeftHand {
 
     public boolean isLeftHand () {
         for (AvatarTerm term: this.components)
-            if (!(term instanceof AvatarLocalVar))
+            if (!(term instanceof AvatarAttribute))
                 return false;
         return true;
     }
