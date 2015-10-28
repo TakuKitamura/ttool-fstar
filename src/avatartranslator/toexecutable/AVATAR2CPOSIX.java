@@ -975,13 +975,13 @@ public class AVATAR2CPOSIX {
                     } else {
                         type = "1";
                     }
-                    ret += traceVariableModification(_block.getName(), leftHand.toString (), type);
+                    ret += traceVariableModification(_block.getName(), leftHand.getName (), type);
                 }
 
             }
         }
 
         return ret;
-    }		
+    }
 
 }

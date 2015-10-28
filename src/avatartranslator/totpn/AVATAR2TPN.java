@@ -82,7 +82,6 @@ public class AVATAR2TPN {
     }
 
 
-
     public TPN generateTPN(boolean _debug, boolean _optimize) {
         GENERAL_ID = 0;
 

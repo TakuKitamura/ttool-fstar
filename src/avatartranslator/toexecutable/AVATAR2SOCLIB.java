@@ -1146,7 +1146,7 @@ public class AVATAR2SOCLIB {
                         type = "1";
                     }
                     //ret += "sprintf(__value, \"%d\", " + var + ");" + CR;
-                    ret += traceVariableModification(_block.getName(), leftHand.toString (), type);
+                    ret += traceVariableModification(_block.getName(), leftHand.getName (), type);
                 }
 
             }

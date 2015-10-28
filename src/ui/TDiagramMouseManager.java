@@ -647,7 +647,8 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 
 
     }
-    //author: huytruong
+
+    //Author: huytruong
     public ArrayList getSelectComponents(){
         return selectedMultiComponents  ;
     }

@@ -1094,6 +1094,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void finishAddingConnector(TGConnectingPoint p2) {
         TGConnector tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), mgui.getIdButtonSelected(), this, p1, p2, listPoint);
         if (tgco != null) {
+	    TraceManager.addDev("Adding connector");
             p2.setFree(false);
             componentList.add(0, tgco);
             if (tgco instanceof SpecificActionAfterAdd) {
@@ -1101,7 +1102,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
             stopAddingConnector(false);
             p1.setFree(false);
+	    p1 = null;
+	    p2 = null;
         } else {
+	    TraceManager.addDev("Cancel adding connector");
             p2.setFree(true);
             stopAddingConnector(true);
             p1.setFree(true);

@@ -215,11 +215,11 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
 
     public void setEnabled(boolean _enabled) {
-	enabled = _enabled;
+        enabled = _enabled;
     }
 
     public boolean isEnabled() {
-	return enabled;
+        return enabled;
     }
 
     // Internal component operations
@@ -686,7 +686,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     // _mode: 1 : running
     //       2 : selected for execution
     public void drawAVATARComp(Graphics g, int _mode) {
-	//TraceManager.addDev("drawing avatar comp=" + this);
+        //TraceManager.addDev("drawing avatar comp=" + this);
         int wb = 30;
         int hb = 10;
         int wh = 15;
@@ -708,7 +708,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
             myheight = height;
         }
 
-	if (_mode == 1) {
+        if (_mode == 1) {
             g.setColor(ColorManager.CURRENT_COMMAND_RUNNING);
         } else {
             g.setColor(ColorManager.CURRENT_COMMAND_SUSPENDED);
@@ -735,7 +735,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         xp[6] = myx - sep - wb -wh;
         yp[6] = myy + ((myheight+hb) / 2);
 
-        
+
         g.fillPolygon(xp, yp, 7);
     }
 
@@ -1734,7 +1734,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         //System.out.println("Getting TGConnecting point");
 
         for (int i=0; i<nbConnectingPoint; i++) {
-            if ((Math.abs(connectingPoint[i].getX() - x) < 3) && (Math.abs(connectingPoint[i].getY() - y) < 3) && (connectingPoint[i].isFree()) && (connectingPoint[i].isCompatibleWith(type))){
+            if ((Math.abs(connectingPoint[i].getX() - x) < 4) && (Math.abs(connectingPoint[i].getY() - y) < 4) && (connectingPoint[i].isFree()) && (connectingPoint[i].isCompatibleWith(type))){
                 return connectingPoint[i];
             }
         }
@@ -2713,9 +2713,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
         sb.append(translateCDParam());
         sb.append(translateSizeParam());
         sb.append(translateHidden());
-	if (this instanceof CanBeDisabled) {
-	    sb.append(translateEnabled());
-	}
+        if (this instanceof CanBeDisabled) {
+            sb.append(translateEnabled());
+        }
         sb.append(translateCDRectangleParam());
         sb.append(translateNameValue());
         sb.append(translateConnectingPoints());
@@ -2759,7 +2759,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     protected String translateEnabled() {
-	return "<enabled value=\"" + enabled + "\" />\n";
+        return "<enabled value=\"" + enabled + "\" />\n";
     }
 
     protected String translateHidden() {
