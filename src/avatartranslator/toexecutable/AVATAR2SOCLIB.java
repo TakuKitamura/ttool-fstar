@@ -1052,20 +1052,30 @@ public class AVATAR2SOCLIB {
         return _delay;
     }
 
-    private String modifyMethodName(AvatarBlock _ab, String _call) {
-        int index;
-        String ret0 = "";
+    private String modifyMethodName(AvatarBlock _ab, AvatarTerm term) {
+        if (term instanceof AvatarAttribute)
+            return term.getName ();
+        if (term instanceof AvatarConstant)
+            return term.getName ();
+        if (term instanceof AvatarTermRaw)
+            return term.getName ();
+        if (term instanceof AvatarTuple) {
+            boolean first = true;
+            String res = "(";
+            for (AvatarTerm tterm: ((AvatarTuple) term).getComponents ()) {
+                if (first)
+                    first = false;
+                else
+                    res += ", ";
+                res += this.modifyMethodName (_ab, tterm);
+            }
 
-        index = _call.indexOf("=");
-
-
-
-        if (index > -1) {
-            ret0 = _call.substring(0, index+1);
-            _call = _call.substring(index+2, _call.length());
+            return res + ")";
         }
-
-        return ret0 + _ab.getName() + "__" + _call.trim();
+        if (term instanceof AvatarTermFunction)
+            return  _ab.getName () + "__" + ((AvatarTermFunction) term).getMethod ().getName ()
+                + this.modifyMethodName (_ab, ((AvatarTermFunction) term).getArgs ());
+        return "";
     }
 
     private String traceRequest() {
@@ -1123,9 +1133,11 @@ public class AVATAR2SOCLIB {
             // Must know whether this is an action or a method call
             AvatarAction act = _at.getAction(i);
             if (act.isAMethodCall()) {
-                ret +=  modifyMethodName(_block, act.toString ()) + ";" + CR;
+                ret +=  modifyMethodName(_block, (AvatarTermFunction) act) + ";" + CR;
             } else {
-                ret +=  act.toString () + ";" + CR;
+                String actModified = modifyMethodName (_block, (AvatarTerm) ((AvatarActionAssignment) act).getLeftHand ())
+                    + " = " + modifyMethodName (_block, ((AvatarActionAssignment) act).getRightHand ());
+                ret +=  actModified + ";" + CR;
                 AvatarLeftHand leftHand = ((AvatarActionAssignment) act).getLeftHand ();
                 if (leftHand instanceof AvatarAttribute) {
                     if (((AvatarAttribute) leftHand).isInt()) {
