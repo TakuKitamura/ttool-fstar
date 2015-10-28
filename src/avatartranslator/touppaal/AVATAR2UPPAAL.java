@@ -824,7 +824,7 @@ public class AVATAR2UPPAAL {
                     }
                     setSynchronization(tr, funcCall.getMethod ().getName () + "!");
                     madeTheChoice = true;
-                    makeMethodCall(_block, tr, tmps);
+                    makeMethodCall(_block, tr, funcCall);
                     loc = loc1;
                 }
             }
@@ -1002,7 +1002,7 @@ public class AVATAR2UPPAAL {
 
     }
 
-    public void makeMethodCall(AvatarBlock _block, UPPAALTransition _tr, String _call) {
+    public void makeMethodCall(AvatarBlock _block, UPPAALTransition _tr, AvatarTermFunction action) {
         int j;
         AvatarAttribute aa;
         String result = "";
@@ -1010,15 +1010,11 @@ public class AVATAR2UPPAAL {
         int nbOfBool = 0;
         String tmps;
 
-        TraceManager.addDev("Making method call:" + _call);
+        TraceManager.addDev("Making method call:" + action.toString ());
 
         String mc = "";
         AvatarBlock block = _block;
-        AvatarAction action = AvatarTerm.createActionFromString (_block, _call);
-        if (!action.isAMethodCall ())
-            return;
-
-        AvatarMethod avMethod = ((AvatarTermFunction) action).getMethod ();
+        AvatarMethod avMethod = action.getMethod ();
         String method = avMethod.getName ();
 
         block = _block.getBlockOfMethodWithName(method);
@@ -1030,7 +1026,7 @@ public class AVATAR2UPPAAL {
         TraceManager.addDev("Method name:" + mc);
 
         setSynchronization(_tr, mc);
-        LinkedList<AvatarTerm> arguments = ((AvatarTermFunction) action).getArgs ().getComponents ();
+        LinkedList<AvatarTerm> arguments = action.getArgs ().getComponents ();
         for(AvatarTerm arg: arguments) {
             if (!(arg instanceof AvatarAttribute))
                 continue;
