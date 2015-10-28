@@ -7892,6 +7892,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARMAD_IMPACT_CONNECTOR);
         } else if (command.equals(actions[TGUIAction.AMAD_MEET_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARMAD_MEET_CONNECTOR);
+	} else if (command.equals(actions[TGUIAction.AMAD_BELONGSTOCOMPOSITION_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR);
 
             // AVATAR RD
         } else if (command.equals(actions[TGUIAction.ARD_EDIT].getActionCommand())) {

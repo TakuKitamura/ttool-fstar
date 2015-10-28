@@ -372,6 +372,7 @@ public class TGComponentManager {
     public static final int AVATARMAD_VERSIONING_CONNECTOR = 5254;
     public static final int AVATARMAD_IMPACT_CONNECTOR = 5255;
     public static final int AVATARMAD_MEET_CONNECTOR = 5256;
+    public static final int AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR = 5257;
 
     // AVATAR PD -> starts at 5300
     public static final int APD_BLOCK = 5300;
@@ -1031,7 +1032,7 @@ public class TGComponentManager {
         case TMLCP_JUNCTION:
             tgc = new TMLCPJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-	case TMLCP_FOR_LOOP:
+        case TMLCP_FOR_LOOP:
             tgc = new TMLCPForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case TMLSD_ACTION_STATE:
@@ -1256,6 +1257,8 @@ public class TGComponentManager {
             return AVATARMAD_IMPACT_CONNECTOR;
         } else if (tgc instanceof AvatarMADMeetConnector) {
             return AVATARMAD_MEET_CONNECTOR;
+	} else if (tgc instanceof AvatarMADBelongsToCompositionConnector) {
+            return AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR;
 
             // AVATAR RD
         } else if (tgc instanceof AvatarRDRequirement) {
@@ -1787,6 +1790,9 @@ public class TGComponentManager {
             break;
         case AVATARMAD_MEET_CONNECTOR:
             tgc = new AvatarMADMeetConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            break;
+	case AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR:
+            tgc = new AvatarMADBelongsToCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
 
             // AVATAR RD

@@ -51,6 +51,7 @@ import translator.RTLOTOSKeyword;
 import translator.tojava.JKeyword;
 
 public abstract class AvatarTerm extends AvatarElement {
+
     public abstract boolean isLeftHand ();
 
     public AvatarTerm (String _name, Object _referenceObject) {

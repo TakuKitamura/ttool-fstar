@@ -79,9 +79,12 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 
     private static String unitCycle = "1";
 
-    private static String[] simus = { "SystemC Simulator - LabSoC version",
-                                      "C++ Simulator - LabSoc version" };
-    private static int selectedItem = 1;
+    /*private static String[] simus = { "SystemC Simulator - LabSoC version",
+      "C++ Simulator - LabSoc version" };*/
+
+    private static String[] simus = { "C++ Simulator - LabSoc version" };
+    
+    private static int selectedItem = 0;
 
     protected static String pathCode;
     protected static String pathCompiler;
@@ -728,7 +731,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         selectedItem = versionSimulator.getSelectedIndex();
         //System.out.println("Selected item=" + selectedItem);
         switch( selectedItem ) {        //Old SystemC generator
-        case 0: {
+	    /*case 0: {
             tmltranslator.tomappingsystemc.TML2MappingSystemC tml2systc;
             if (mgui.gtm.getTMLMapping() == null) {
                 if (mgui.gtm.getArtificialTMLMapping() == null) {
@@ -755,8 +758,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
                 jta.append("Could not generate SystemC file\n");
             }
             break;
-        }
-        case 1: {       //Simulator without CPs (Daniel's version)
+	    }*/
+        case 0: {       //Simulator without CPs (Daniel's version)
             tmltranslator.tomappingsystemc2.TML2MappingSystemC tml2systc;
             // Making EBRDDs
             ArrayList<EBRDD> al = new ArrayList<EBRDD>();
@@ -820,7 +823,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
             }
             break;
         }
-        case 2: {       //Simulator version with CPs
+        case 1: {       //Simulator version with CPs
             tmltranslator.tomappingsystemc3.TML2MappingSystemC tml2systc;
             // Making EBRDDs
             ArrayList<EBRDD> al = new ArrayList<EBRDD>();

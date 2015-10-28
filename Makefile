@@ -161,14 +161,14 @@ stdrelease:
 	mkdir -p $(TTOOL_TARGET)/lib
 	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_LIB) $(TTOOL_TARGET)/lib
 	cp $(TTOOL_DOC)/README_lib $(TTOOL_TARGET)/lib
-# simulators
-	mkdir -p $(TTOOL_TARGET)/simulators/systemc1/src_simulator
-	mkdir -p $(TTOOL_TARGET)/simulators/systemc1/lib
-	cp  $(TTOOL_SIMULATORS)/systemc1/lib/README $(TTOOL_TARGET)/simulators/systemc1/lib/
-	cp  $(TTOOL_SIMULATORS)/systemc1/Makefile $(TTOOL_TARGET)/simulators/systemc1
-	cp  $(TTOOL_SIMULATORS)/systemc1/Makefile.defs $(TTOOL_TARGET)/simulators/systemc1
-	cp  $(TTOOL_SIMULATORS)/systemc1/src_simulator/*.cpp $(TTOOL_TARGET)/simulators/systemc1/src_simulator
-	cp  $(TTOOL_SIMULATORS)/systemc1/src_simulator/*.h $(TTOOL_TARGET)/simulators/systemc1/src_simulator
+# DIPLODOCUS simulators
+	#mkdir -p $(TTOOL_TARGET)/simulators/systemc1/src_simulator
+	#mkdir -p $(TTOOL_TARGET)/simulators/systemc1/lib
+	#cp  $(TTOOL_SIMULATORS)/systemc1/lib/README $(TTOOL_TARGET)/simulators/systemc1/lib/
+	#cp  $(TTOOL_SIMULATORS)/systemc1/Makefile $(TTOOL_TARGET)/simulators/systemc1
+	#cp  $(TTOOL_SIMULATORS)/systemc1/Makefile.defs $(TTOOL_TARGET)/simulators/systemc1
+	#cp  $(TTOOL_SIMULATORS)/systemc1/src_simulator/*.cpp $(TTOOL_TARGET)/simulators/systemc1/src_simulator
+	#cp  $(TTOOL_SIMULATORS)/systemc1/src_simulator/*.h $(TTOOL_TARGET)/simulators/systemc1/src_simulator
 	mkdir -p $(TTOOL_TARGET)/simulators/c++2/src_simulator
 	mkdir -p $(TTOOL_TARGET)/simulators/c++2/src_simulator/app
 	mkdir -p $(TTOOL_TARGET)/simulators/c++2/src_simulator/arch
@@ -256,9 +256,86 @@ preinstall: jar preinstall_linux
 preinstall_linux:
 #jars
 	cp $(TTOOL_BIN)/*.jar $(TTOOL_PREINSTALL_LINUX)/TTool/bin/
-
+#models
 	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_XML) $(TTOOL_PREINSTALL_LINUX)/TTool/modeling/
 	cp $(TTOOL_DOC)/README_modeling $(TTOOL_PREINSTALL_LINUX)/TTool/modeling/
+# lib
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/lib
+	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_LIB) $(TTOOL_PREINSTALL_LINUX)/TTool/lib
+	cp $(TTOOL_DOC)/README_lib cp $(RELEASE_STD_FILES_LIB) $(TTOOL_PREINSTALL_LINUX)/TTool/lib
+# DIPLODOCUS simulators
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/app
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/arch
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/ebrdd
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/evt
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/sim
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/TEPE
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/lib
+	cp  $(TTOOL_SIMULATORS)/c++2/lib/README $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/lib/
+	cp  $(TTOOL_SIMULATORS)/c++2/Makefile $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2
+	cp  $(TTOOL_SIMULATORS)/c++2/Makefile.defs $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2
+	cp  $(TTOOL_SIMULATORS)/c++2/schedstyle.css $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/app/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/app
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/app/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/app
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/arch/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/arch
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/arch/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/arch
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/ebrdd/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/ebrdd
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/ebrdd/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/ebrdd
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/evt/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/evt
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/evt/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/evt
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/sim/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/sim
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/sim/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/sim
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/TEPE/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/TEPE
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/TEPE/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/TEPE
+# Licenses
+	cd $(TTOOL_DOC); cp $(RELEASE_STD_FILES_LICENSES) $(TTOOL_PREINSTALL_LINUX)/TTool
+# Main readme
+	cp $(TTOOL_DOC)/README $(TTOOL_PREINSTALL_LINUX)/TTool
+# LOTOS
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool)/lotos
+	cp $(TTOOL_DOC)/README_lotos $(TTOOL_PREINSTALL_LINUX)/TTool/lotos
+#NC
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/nc
+	cp $(TTOOL_DOC)/README_nc $(TTOOL_TARGET)/nc
+#TML
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/tmlcode
+	cp $(TTOOL_DOC)/README_tml $(TTOOL_PREINSTALL_LINUX)/TTool/tmlcode
+#UPPAAL
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/uppaal
+	cp $(TTOOL_DOC)/README_uppaal $(TTOOL_PREINSTALL_LINUX)/TTool/uppaal
+# Proverif
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/proverif
+	cp $(TTOOL_DOC)/README_proverif $(TTOOL_PREINSTALL_LINUX)/TTool/proverif
+# Figure
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/figure
+	cp $(TTOOL_DOC)/README_figure $(TTOOL_PREINSTALL_LINUX)/TTool/figure
+# VCD
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/vcd
+	cp $(TTOOL_DOC)/README_vcd $(TTOOL_PREINSTALL_LINUX)/TTool/vcd
+# Basic doc
+	mkdir -p $(TTOOL_TARGET)/doc
+	cp $(TTOOL_DOC)/README_doc $(TTOOL_TARGET)/doc
+# AVATAR executable code
+	mkdir -p $(TTOOL_TARGET)/executablecode
+	mkdir -p $(TTOOL_TARGET)/executablecode/src
+	mkdir -p $(TTOOL_TARGET)/executablecode/generated_src
+	cp $(TTOOL_EXECUTABLECODE)/Makefile $(TTOOL_TARGET)/executablecode/
+	cp $(TTOOL_EXECUTABLECODE)/Makefile.defs $(TTOOL_TARGET)/executablecode/
+	cp $(TTOOL_EXECUTABLECODE)/Makefile.forsoclib $(TTOOL_TARGET)/executablecode/
+	cp $(TTOOL_EXECUTABLECODE)/src/*.c $(TTOOL_TARGET)/executablecode/src/
+	cp $(TTOOL_EXECUTABLECODE)/src/*.h $(TTOOL_TARGET)/executablecode/src/
+	cp $(TTOOL_EXECUTABLECODE)/generated_src/README $(TTOOL_TARGET)/executablecode/generated_src/
+
+# Basic bin
+	mkdir -p $(TTOOL_TARGET)/bin
+	cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin
+	cp $(TTOOL_BIN)/configuration.gcf $(TTOOL_TARGET)/bin
+	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
+	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_TARGET)/bin	
+
 
 jttooljar:
 	cd $(JTTOOL);$(JAVAC) $(JTTOOL_DIR)/*.java;$(JAR) cmf $(TTOOL_SRC)/$(TTOOL_JAR_TXT) $(TTOOL_BIN)/$(JTTOOL_JAR) $(JTTOOL_DIR)/*.class 

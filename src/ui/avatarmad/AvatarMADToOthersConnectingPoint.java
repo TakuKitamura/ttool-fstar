@@ -53,7 +53,7 @@ import ui.*;
 
 public class AvatarMADToOthersConnectingPoint extends  TGConnectingPointWidthHeight {
     
-	public AvatarMADToOthersConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+    public AvatarMADToOthersConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
         super(_container, _x, _y, _in, _out, _w, _h);
 		orientation = TGConnectingPoint.EAST;
     }
@@ -65,6 +65,10 @@ public class AvatarMADToOthersConnectingPoint extends  TGConnectingPointWidthHei
     
     public boolean isCompatibleWith(int type) {
         if (type == TGComponentManager.AVATARMAD_IMPACT_CONNECTOR) {
+            return true;
+        }
+
+	if (type == TGComponentManager.AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR) {
             return true;
         }
 		

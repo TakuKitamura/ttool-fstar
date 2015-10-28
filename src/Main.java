@@ -301,10 +301,10 @@ public class Main implements ActionListener {
             }
         }
 
-	String sk = null;
+        String sk = null;
         if (startLauncher) {
-	    RTLLauncher launcher = new RTLLauncher();
-	    sk = launcher.getKey();
+            RTLLauncher launcher = new RTLLauncher();
+            sk = launcher.getKey();
             Thread t = new Thread(launcher);
             t.start();
         }
@@ -317,7 +317,7 @@ public class Main implements ActionListener {
         if (splashFrame != null) {
             splashFrame.setMessage("Building graphical components");
         }
-	mainGUI.setKey(sk);
+        mainGUI.setKey(sk);
         mainGUI.build();
 
         // loading configuration
