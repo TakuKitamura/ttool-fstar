@@ -327,6 +327,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                         index = s.indexOf('$');
                         if ((index != -1) && (mode != NOT_STARTED)) {
                             name = s.substring(index+1, s.length());
+			    TraceManager.addDev("****\n name=" + name + " list=" + list + "\n****\n");
                             query = s.substring(0, index);
                             //jta.append("\n\n--------------------------------------------\n");
                             jta.append("\nReachability of: " + name + "\n");
