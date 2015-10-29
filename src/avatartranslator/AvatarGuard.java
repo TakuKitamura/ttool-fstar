@@ -86,10 +86,9 @@ public abstract class AvatarGuard {
                 if (first instanceof AvatarComposedGuard)
                     return new AvatarUnaryGuard ("not(", ")", (AvatarComposedGuard) first);
                 else {
-		    System.out.println("Could not create unary guard "+ sane);
-		    TraceManager.addDev("Could not create unary guard "+ sane);
+                    TraceManager.addDev("Could not create unary guard "+ sane);
                     return new AvatarGuardEmpty ();
-		    }
+                }
             }
         }
 
@@ -103,10 +102,9 @@ public abstract class AvatarGuard {
                     if (first instanceof AvatarComposedGuard)
                         return new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) first);
                     else {
-			System.out.println("Unary guard "+ sane + " does not contain guard");
-			TraceManager.addDev("Unary guard "+ sane + " does not contain guard");
+                        TraceManager.addDev("Unary guard "+ sane + " does not contain guard");
                         return new AvatarGuardEmpty ();
-			}
+                    }
                 } else {
                     int indexLParen = sane.indexOf ("(", indexRParen);
                     if (indexLParen == -1)
@@ -118,50 +116,47 @@ public abstract class AvatarGuard {
                         if (indexBinaryOp != -1) {
                             first = AvatarGuard.createFromString (block, sane.substring (0, indexBinaryOp));
                             AvatarGuard second = AvatarGuard.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
-			    System.out.println("guard "+ sane.substring(indexBinaryOp + delim.length ()));
+                            System.out.println("guard "+ sane.substring(indexBinaryOp + delim.length ()));
                             if (first instanceof AvatarComposedGuard && second instanceof AvatarComposedGuard)
                                 return new AvatarBinaryGuard ((AvatarComposedGuard) first, (AvatarComposedGuard) second, delim);
-			    System.out.println("Binary guard "+ sane + "does not contain 2 guards");
 			    TraceManager.addDev("Binary guard "+ sane + "does not contain 2 guards");
                             return new AvatarGuardEmpty ();
                         }
                     }
-		    System.out.println("Invalid guard "+ sane);
-		    TraceManager.addDev("Invalid guard "+ sane);
+                    TraceManager.addDev("Invalid guard "+ sane);
                     return new AvatarGuardEmpty ();
                 }
             } else if (tuple.getComponents().size()==1){
-		first = AvatarGuard.createFromString (block, sane.substring (1, indexRParen));
+                first = AvatarGuard.createFromString (block, sane.substring (1, indexRParen));
                 if (indexRParen == sane.length ()-1) {
                     if (first instanceof AvatarComposedGuard)
                         return new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) first);
                     else {
-			System.out.println("Unary guard "+ sane + " does not contain guard");
 			TraceManager.addDev("Unary guard "+ sane + " does not contain guard");
                         return new AvatarGuardEmpty ();
-			}
-                } 
-		    int indexLParen = sane.indexOf ("(", indexRParen);
-                    if (indexLParen == -1)
-                        indexLParen = indexRParen;
-
-                    for (String delim: new String[] {"and", "or"}) {
-
-                        int indexBinaryOp = sane.substring (0, indexLParen).indexOf (delim, indexRParen+1);
-                        if (indexBinaryOp != -1) {
-                            first = AvatarGuard.createFromString (block, sane.substring (0, indexBinaryOp));
-                            AvatarGuard second = AvatarGuard.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
-                            if (first instanceof AvatarComposedGuard && second instanceof AvatarComposedGuard)
-                                return new AvatarBinaryGuard ((AvatarComposedGuard) first, (AvatarComposedGuard) second, delim);
-			    System.out.println("Binary guard "+ sane + "does not contain 2 guards");
-			    TraceManager.addDev("Binary guard "+ sane + "does not contain 2 guards");
-                            return new AvatarGuardEmpty ();
-                        }
                     }
-		    System.out.println("Invalid guard "+ sane);
-		    TraceManager.addDev("Invalid guard "+ sane);
-                    return new AvatarGuardEmpty ();
-	    } else {
+                }
+                int indexLParen = sane.indexOf ("(", indexRParen);
+                if (indexLParen == -1)
+                    indexLParen = indexRParen;
+
+                for (String delim: new String[] {"and", "or"}) {
+
+                    int indexBinaryOp = sane.substring (0, indexLParen).indexOf (delim, indexRParen+1);
+                    if (indexBinaryOp != -1) {
+                        first = AvatarGuard.createFromString (block, sane.substring (0, indexBinaryOp));
+                        AvatarGuard second = AvatarGuard.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
+                        if (first instanceof AvatarComposedGuard && second instanceof AvatarComposedGuard)
+                            return new AvatarBinaryGuard ((AvatarComposedGuard) first, (AvatarComposedGuard) second, delim);
+                        System.out.println("Binary guard "+ sane + "does not contain 2 guards");
+                        TraceManager.addDev("Binary guard "+ sane + "does not contain 2 guards");
+                        return new AvatarGuardEmpty ();
+                    }
+                }
+                System.out.println("Invalid guard "+ sane);
+                TraceManager.addDev("Invalid guard "+ sane);
+                return new AvatarGuardEmpty ();
+            } else {
                 int indexLParen = sane.indexOf ("(", indexRParen);
                 if (indexLParen == -1)
                     indexLParen = indexRParen;
@@ -172,14 +167,14 @@ public abstract class AvatarGuard {
                         AvatarTerm secondTerm = AvatarTerm.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
                         if (secondTerm != null)
                             return new AvatarSimpleGuardDuo (tuple, secondTerm, delim);
-			System.out.println("Could not find term in guard "+ sane);
-			TraceManager.addDev("Could not find term in guard "+ sane);
+                        System.out.println("Could not find term in guard "+ sane);
+                        TraceManager.addDev("Could not find term in guard "+ sane);
                         return new AvatarGuardEmpty ();
                     }
                 }
-	
-		System.out.println("Invalid guard expression with tuple "+ sane);
-		TraceManager.addDev("Invalid guard expression with tuple "+ sane);
+
+                System.out.println("Invalid guard expression with tuple "+ sane);
+                TraceManager.addDev("Invalid guard expression with tuple "+ sane);
                 return new AvatarGuardEmpty ();
             }
         }
@@ -191,8 +186,8 @@ public abstract class AvatarGuard {
                 AvatarTerm secondTerm = AvatarTerm.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
                 if (secondTerm != null && firstTerm != null)
                     return new AvatarSimpleGuardDuo (firstTerm, secondTerm, delim);
-		System.out.println("Term in guard does not exist " +sane.substring (0, indexBinaryOp) + " "+ sane.substring (indexBinaryOp + delim.length ()));
-		TraceManager.addDev("Term in guard does not exist " +sane.substring (0, indexBinaryOp) + " "+ sane.substring (indexBinaryOp + delim.length ()));
+                System.out.println("Term in guard does not exist " +sane.substring (0, indexBinaryOp) + " "+ sane.substring (indexBinaryOp + delim.length ()));
+                TraceManager.addDev("Term in guard does not exist " +sane.substring (0, indexBinaryOp) + " "+ sane.substring (indexBinaryOp + delim.length ()));
                 return new AvatarGuardEmpty ();
             }
         }
@@ -200,8 +195,8 @@ public abstract class AvatarGuard {
         AvatarTerm term = AvatarTerm.createFromString (block, sane);
         if (term != null)
             return new AvatarSimpleGuardMono (term);
-	System.out.println("Term in guard does not exist " + sane);
-	TraceManager.addDev("Term in guard does not exist " + sane);
+        System.out.println("Term in guard does not exist " + sane);
+        TraceManager.addDev("Term in guard does not exist " + sane);
         return new AvatarGuardEmpty ();
     }
 
@@ -217,7 +212,7 @@ public abstract class AvatarGuard {
         if (_g == null || ! (_g instanceof AvatarComposedGuard) || ! (_guard instanceof AvatarComposedGuard))
             return _guard;
 
-        return new AvatarBinaryGuard (new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) _guard), 
+        return new AvatarBinaryGuard (new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) _guard),
                                       new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) _g),
                                       _binaryOp);
     }
