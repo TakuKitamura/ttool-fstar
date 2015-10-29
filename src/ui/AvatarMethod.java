@@ -103,7 +103,7 @@ public class AvatarMethod {
     // Returns null in case the method is not valid
     public static AvatarMethod isAValidMethod(String _method) {
 
-        //TraceManager.addDev("Is a valid method? " + _method);
+        TraceManager.addDev("Is a valid method? " + _method);
 
         String method, tmp, id;
         String rt = "";
@@ -113,28 +113,30 @@ public class AvatarMethod {
         }
 
         method = _method.trim();
-	// Must replace all "more than one space" by only one space
-	method = Conversion.replaceAllString(method, "\t", " ");
-	method = Conversion.replaceAllString(method, "  ", " ");
-	TraceManager.addDev("Method=" + method);
+        // Must replace all "more than one space" by only one space
+        method = Conversion.replaceAllString(method, "\t", " ");
+        method = Conversion.replaceAllString(method, "  ", " ");
+        TraceManager.addDev("Method=" + method);
 
         if (method.length() == 0) {
             return null;
         }
 
 
-	// If has opening parenthesis, remove all spaces before
-	int index0 = method.indexOf('(');
+        // If has opening parenthesis, remove all spaces before
+        int index0 = method.indexOf('(');
         int index1;
-	
-	index0 = method.indexOf('(');
-	if (index0 == 0) {
-	    return null;
-	} else if (method.charAt(index0-1) == ' ') {
-	    method = method.substring(0, index0-1) + method.substring(index0, method.length());
-	} 
-	
-	
+
+        index0 = method.indexOf('(');
+        if (index0 != -1) {
+            if (index0 == 0) {
+                return null;
+            } else if (method.charAt(index0-1) == ' ') {
+                method = method.substring(0, index0-1) + method.substring(index0, method.length());
+            }
+        }
+
+
 
         // Check whether there is a return type or not
         int index2 = method.indexOf(' ');
@@ -154,10 +156,10 @@ public class AvatarMethod {
             }
         }
 
-	//TraceManager.addDev("Valid type stage 1");
+        //TraceManager.addDev("Valid type stage 1");
 
 
-	index0 = method.indexOf('(');
+        index0 = method.indexOf('(');
         index1 = method.indexOf(')');
         // Only one of the two parenthesis
         if ((index0 == -1) && (index1 > -1)) {
@@ -198,7 +200,7 @@ public class AvatarMethod {
         //TraceManager.addDev("Checking for an id before parenthesis index0=" + index0 + " method=" + method);
         // Before parenthesis -> id
         tmp = method.substring(0, index0).trim();
-	//TraceManager.addDev("Checking for an id before parenthesis; tmp=" + tmp);
+        //TraceManager.addDev("Checking for an id before parenthesis; tmp=" + tmp);
         if (!isAValidId(tmp, true, true, true)) {
             return null;
         }
