@@ -177,9 +177,9 @@ public class AvatarSimulationPendingTransaction  {
             res  = res + "broadcast ";
         }
         if (linkedTransaction == null) {
-	    if (elementToExecute == null) {
-		TraceManager.addDev("Null element to execute");
-	    }
+            if (elementToExecute == null) {
+                TraceManager.addDev("Null element to execute");
+            }
 
             res = res + elementToExecute.getNiceName() + "/ID=" + elementToExecute.getID();
             if (hasClock) {
@@ -227,6 +227,34 @@ public class AvatarSimulationPendingTransaction  {
 
         }
         return null;
+    }
+
+    public boolean hasBlock(AvatarSimulationBlock _b) {
+	//TraceManager.addDev("HasBlock? _b=" + _b + " tr=" + this);
+        if (asb == _b) {
+	    //TraceManager.addDev("True");
+            return true;
+        }
+
+	if (linkedTransaction != null) {
+	    if (linkedTransaction.asb == _b) {
+		//TraceManager.addDev("True");
+		return true;
+	    }
+	}
+	
+        if (linkedTransactions != null) {
+            for(AvatarSimulationPendingTransaction aspt: linkedTransactions) {
+                if (aspt.asb == _b) {
+		    //TraceManager.addDev("True");
+                    return true;
+                }
+            }
+        }
+
+	//TraceManager.addDev("False");
+        return false;
+
     }
 
 

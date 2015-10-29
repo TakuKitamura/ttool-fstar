@@ -89,6 +89,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
     private int spaceBroadcast = 25;
 
     private boolean showHiddenStates = false;
+    private boolean showIDs = false;
 
 
     private double[] zoomValues = {0.2, 0.3, 0.5, 0.60, 0.80, 1.0, 1.2, 1.5, 2, 2.5, 3, 4};
@@ -164,6 +165,11 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 
     public void setShowHiddenStates(boolean _showHiddenStates) {
         showHiddenStates = _showHiddenStates;
+        repaint();
+    }
+
+    public void setShowIDs(boolean _showIDs) {
+        showIDs = _showIDs;
         repaint();
     }
 
@@ -367,7 +373,9 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 
                 if ((yMouse>= currentY) && (yMouse <= newCurrentY)) {
                     for(int cpt = 0; cpt<points.size(); cpt++) {
-                        drawIDInfo(g, points.get(cpt).x, points.get(cpt).y, transactionsOfPoints.get(cpt).id);
+			if (showIDs) {
+			    drawIDInfo(g, points.get(cpt).x, points.get(cpt).y, transactionsOfPoints.get(cpt).id);
+			}
                     }
                 }
 

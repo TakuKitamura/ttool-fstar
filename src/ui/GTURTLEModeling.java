@@ -152,12 +152,12 @@ public class GTURTLEModeling {
     private AVATAR2ProVerif avatar2proverif;
     private boolean optimizeAvatar;
     private int tmState; // 0:generated, 1: to be generated from mapping, 2: to be generated from TML modeling
-    
+
     private TMLModeling tmlm;
     private TMLMapping artificialtmap;
     private TMLMapping tmap;
     private TMLCP tmlcp;
-    
+
     private RequirementModeling rm;
     private NCStructure ncs;
     private MainGUI mgui;
@@ -464,8 +464,8 @@ public class GTURTLEModeling {
             else        {
                 Ccode.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, applicationName );
                 /*JOptionPane.showMessageDialog(  mgui.frame, "The application C code has been successfully generated in: "
-                                                + ConfigurationTTool.CcodeDirectory + "/", "C code generation successful",
-                                                JOptionPane.INFORMATION_MESSAGE);*/
+                  + ConfigurationTTool.CcodeDirectory + "/", "C code generation successful",
+                  JOptionPane.INFORMATION_MESSAGE);*/
             }
         }
         catch( Exception e ) {
@@ -478,20 +478,20 @@ public class GTURTLEModeling {
     public boolean generateTMLTxt( String _title ) {
 
 
-	 //This branch is activated if doing the syntax check from the architecture panel.
-         //It generates the text TML for the architecture and the application + mapping information
-	if (tmap != null) {
-	    TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
-	    spec.toTextFormat( tmap );      //TMLMapping
-	    try {
-				//TraceManager.addDev( "*** " + ConfigurationTTool.TMLCodeDirectory + File.separator );
-				spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
-	    }
-	    catch( Exception e ) {
-				TraceManager.addError( "Files could not be saved: " + e.getMessage() );
-				return false;
-	    }
-	}
+        //This branch is activated if doing the syntax check from the architecture panel.
+        //It generates the text TML for the architecture and the application + mapping information
+        if (tmap != null) {
+            TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
+            spec.toTextFormat( tmap );      //TMLMapping
+            try {
+                //TraceManager.addDev( "*** " + ConfigurationTTool.TMLCodeDirectory + File.separator );
+                spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
+            }
+            catch( Exception e ) {
+                TraceManager.addError( "Files could not be saved: " + e.getMessage() );
+                return false;
+            }
+        }
 
         if( tmlcp != null )     {       //Use the data structure filled by translateToTML... and pass it to the appropriate toTextFormat()
             TraceManager.addError( "About to generate the TMLText for CPs" );
@@ -547,8 +547,8 @@ public class GTURTLEModeling {
                     return false;
                 }
             }
-	    
-            
+
+
         }
         return true;    //temporary, just to check functionality
     }
@@ -597,10 +597,10 @@ public class GTURTLEModeling {
     }
 
     public boolean generateUPPAALFromAVATAR(String _path) {
-	if (avatarspec == null) {
-	    TraceManager.addDev("Null avatar spec");
-	    return false;
-	}
+        if (avatarspec == null) {
+            TraceManager.addDev("Null avatar spec");
+            return false;
+        }
         avatar2uppaal = new AVATAR2UPPAAL(avatarspec);
         //tml2uppaal.setChoiceDeterministic(choices);
         //tml2uppaal.setSizeInfiniteFIFO(_size);
@@ -633,17 +633,17 @@ public class GTURTLEModeling {
         //tml2uppaal.setChoiceDeterministic(choices);
         //tml2uppaal.setSizeInfiniteFIFO(_size);
         proverif = avatar2proverif.generateProVerif(true, true, _stateReachability, _typed);
-	warnings = avatar2proverif.getWarnings();
+        warnings = avatar2proverif.getWarnings();
         languageID = PROVERIF;
         mgui.setMode(MainGUI.EDIT_PROVERIF_OK);
         //mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
         //uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
         try {
             if (avatar2proverif.saveInFile(_path)){
-            TraceManager.addDev("Specification generated in " + _path);
-            return true;
-	     }
-	     return false;
+                TraceManager.addDev("Specification generated in " + _path);
+                return true;
+            }
+            return false;
         } catch (FileException fe) {
             TraceManager.addError("Exception: " + fe.getMessage());
             return false;
@@ -2029,9 +2029,9 @@ public class GTURTLEModeling {
             return;
         }
 
-	if (adp == null) {
-	    return;
-	}
+        if (adp == null) {
+            return;
+        }
 
         adp.removeAllMutualExclusionWithMasterMutex();
 
@@ -5599,7 +5599,7 @@ public class GTURTLEModeling {
             boolean breakpoint = false;
             boolean hidden = false;
             boolean masterMutex = false;
-	    boolean enable = true;
+            boolean enable = true;
 
             for(i=0; i<nl.getLength(); i++) {
                 n = nl.item(i);
@@ -5625,7 +5625,7 @@ public class GTURTLEModeling {
                         myValue = elt.getAttribute("value");
                     } else if (elt.getTagName().equals("hidden")) {
                         hidden = elt.getAttribute("value").equals("true");
-		    } else if (elt.getTagName().equals("enabled")) {
+                    } else if (elt.getTagName().equals("enabled")) {
                         enable = elt.getAttribute("value").equals("true");
                     } else if (elt.getTagName().equals("TGConnectingPoint")) {
                         x = Integer.decode(elt.getAttribute("num")).intValue();
@@ -5712,7 +5712,7 @@ public class GTURTLEModeling {
             }
 
             tgc.setHidden(hidden);
-	    tgc.setEnabled(enable);
+            tgc.setEnabled(enable);
 
             /*if (tgc instanceof TCDTObject) {
               TraceManager.addDev("Loading " + myValue);
@@ -6364,16 +6364,16 @@ public class GTURTLEModeling {
     }
 
     public boolean translateAttackTreePanel(AttackTreePanel atp) {
-	AttackTreePanelTranslator att = new AttackTreePanelTranslator(atp);
-	attackTree = att.translateToAttackTreeDataStructure();
-	checkingErrors = att.getCheckingErrors();
-	warnings = att.getWarnings();
-	if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+        AttackTreePanelTranslator att = new AttackTreePanelTranslator(atp);
+        attackTree = att.translateToAttackTreeDataStructure();
+        checkingErrors = att.getCheckingErrors();
+        warnings = att.getWarnings();
+        if ((checkingErrors != null) && (checkingErrors.size() > 0)){
             return false;
         }
-	avatarspec = att.generateAvatarSpec();
-	TraceManager.addDev("Avatar spec:" + avatarspec);
-	return true;
+        avatarspec = att.generateAvatarSpec();
+        TraceManager.addDev("Avatar spec:" + avatarspec);
+        return true;
     }
 
     public boolean translateNC(NCPanel ncp) {
@@ -6418,16 +6418,16 @@ public class GTURTLEModeling {
     }
 
     private void nullifyTMLModeling() {
-	tmlm = null;
-	artificialtmap = null;
-	tmap = null;
-	tmlcp = null;
+        tmlm = null;
+        artificialtmap = null;
+        tmap = null;
+        tmlcp = null;
     }
 
 
     public boolean translateTMLDesign(Vector tasksToTakeIntoAccount, TMLDesignPanel tmldp, boolean optimize) {
         nullifyTMLModeling();
-	ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
+        ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
         warnings = new Vector();
         mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
 
@@ -6477,7 +6477,7 @@ public class GTURTLEModeling {
     }
 
     public boolean translateTMLComponentDesign(Vector componentsToTakeIntoAccount, TMLComponentDesignPanel tmlcdp, boolean optimize) {
-	nullifyTMLModeling();
+        nullifyTMLModeling();
         ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
         warnings = new Vector();
         mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
@@ -6549,7 +6549,7 @@ public class GTURTLEModeling {
 
         gtmlm.setNodes(nodesToTakeIntoAccount); //simply transforms the parameter from a Vector to LinkedList
         nullifyTMLModeling();
-	tmlm = null;
+        tmlm = null;
         tm = null;
         tmState = 1;
         tmap = gtmlm.translateToTMLMapping();
@@ -6593,7 +6593,7 @@ public class GTURTLEModeling {
         tmlm = null;
         tm = null;
         tmState = 1;
-	nullifyTMLModeling();
+        nullifyTMLModeling();
         //tmlcp is the data structure for a CP corresponding to the graphical description with diagrams
         tmlcp = gtmlm.translateToTMLCPDataStructure( tmlcpp.getName() );
         //tmlcp.toString();

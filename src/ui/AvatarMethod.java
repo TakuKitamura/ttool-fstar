@@ -103,7 +103,7 @@ public class AvatarMethod {
     // Returns null in case the method is not valid
     public static AvatarMethod isAValidMethod(String _method) {
 
-        TraceManager.addDev("Is a valid method? " + _method);
+        //TraceManager.addDev("Is a valid method? " + _method);
 
         String method, tmp, id;
         String rt = "";
@@ -116,7 +116,7 @@ public class AvatarMethod {
         // Must replace all "more than one space" by only one space
         method = Conversion.replaceAllString(method, "\t", " ");
         method = Conversion.replaceAllString(method, "  ", " ");
-        TraceManager.addDev("Method=" + method);
+        //TraceManager.addDev("Method=" + method);
 
         if (method.length() == 0) {
             return null;

@@ -214,73 +214,6 @@ public class AvatarSpecificationSimulation  {
         return true;
     }
 
-    /*public void runSimulation() {
-      setMode(RUNNING);
-      int index[];
-      Vector<AvatarSimulationPendingTransaction> selectedTransactions;
-
-      boolean go = true;
-      stopped = true;
-
-      TraceManager.addDev("Simulation started at time: " + clockValue);
-
-      while(!killed) {
-      while((go == true) && !killed) {
-      while((go == true) && !killed) {
-      gatherPendingTransactions();
-
-      if (pendingTransactions.size() == 0) {
-      go = false;
-      TraceManager.addDev("No more pending transactions");
-      } else {
-
-      if (stopped && go) {
-      setMode(STOPPED);
-      TraceManager.addDev("Simulation waiting for run");
-      waitForUnstopped();
-      if (go) {
-      setMode(RUNNING);
-      }
-      } else if (nbOfCommands == 0) {
-      if (getSilentTransactionToExecute(pendingTransactions) == null) {
-      stopSimulation();
-      stopSimulation(go);
-      }
-      }
-
-      if (!killed) {
-      silentTransactionExecuted = false;
-      selectedTransactions = selectTransactions(pendingTransactions);
-
-      if (selectedTransactions.size() == 0) {
-      go = false;
-      TraceManager.addDev("Deadlock: no transaction can be selected");
-      } else {
-      //TraceManager.addDev("* * * * * Nb of selected transactions: " + selectedTransactions.size());
-      go = performSelectedTransactions(selectedTransactions);
-      //TraceManager.addDev("NbOfcommands=" + nbOfCommands);
-      if (!silentTransactionExecuted) {
-      nbOfCommands --;
-      }
-      if (asi != null) {
-      asi.updateTransactionAndTime(allTransactions.size(), clockValue);
-      }g
-      //TraceManager.addDev("------------- new NbOfcommands=" + nbOfCommands);
-      }
-      }
-      }
-      }
-      }
-      setMode(TERMINATED);
-      TraceManager.addDev("Simulation finished at time: " + clockValue + "\n--------------------------------------");
-      waitForKillResetOrBackward();
-      go = true;
-      }
-
-      setMode(KILLED);
-      //printExecutedTransactions();
-      }*/
-
     // Control function
 
     public void runSimulation() {
@@ -346,14 +279,14 @@ public class AvatarSpecificationSimulation  {
                 } else {
                     //TraceManager.addDev("pending transactions");
                     if ((nbOfCommandsActivated) && (nbOfCommands < 1)) {
-                        TraceManager.addDev("1. pending transactions");
+                        //TraceManager.addDev("1. pending transactions");
                         if (getSilentTransactionToExecute(pendingTransactions) == null) {
-			    TraceManager.addDev("Dont execute");
+                            //TraceManager.addDev("Dont execute");
                             setState(DONT_EXECUTE);
                         } else {
-			    TraceManager.addDev("Execute");
+                            //TraceManager.addDev("Execute");
                             setState(EXECUTE);
-			    stopped = false;
+                            stopped = false;
                         }
                     } else {
                         //TraceManager.addDev("2. pending transactions");
@@ -364,7 +297,7 @@ public class AvatarSpecificationSimulation  {
                 break;
 
             case EXECUTE:
-                TraceManager.addDev("-> -> EXECUTE");
+                //TraceManager.addDev("-> -> EXECUTE");
                 silentTransactionExecuted = false;
                 selectedTransactions = selectTransactions(pendingTransactions);
 
@@ -372,7 +305,7 @@ public class AvatarSpecificationSimulation  {
                     setState(TERMINATED);
                     TraceManager.addDev("Deadlock: no transaction can be selected");
                 } else {
-		    TraceManager.addDev("performSelectedTrans?");
+                    //TraceManager.addDev("performSelectedTrans?");
                     if (performSelectedTransactions(selectedTransactions)) {
                         if (!silentTransactionExecuted) {
                             if (nbOfCommandsActivated) {
@@ -489,7 +422,7 @@ public class AvatarSpecificationSimulation  {
             setState(EXECUTE);
         }
 
-        TraceManager.addDev("End of computing external command newState=" + newState + " state=" + state);
+        //TraceManager.addDev("End of computing external command newState=" + newState + " state=" + state);
         return;
     }
 
@@ -560,13 +493,13 @@ public class AvatarSpecificationSimulation  {
             pendingTransactions.addAll(asb.getPendingTransactions(allTransactions, clockValue, MAX_TRANSACTION_IN_A_ROW, bunchid));
         }
 
-        /*TraceManager.addDev("# of pending transactions before selection: " + pendingTransactions.size());
+        //TraceManager.addDev("# of pending transactions before selection: " + pendingTransactions.size());
 
-          int ind = 0;
-          for(AvatarSimulationPendingTransaction asptt :pendingTransactions) {
-          TraceManager.addDev("#" + ind + ": " + asptt);
-          ind ++;
-          }*/
+        int ind = 0;
+        /*for(AvatarSimulationPendingTransaction asptt :pendingTransactions) {
+            TraceManager.addDev("#" + ind + ": " + asptt);
+            ind ++;
+	    }*/
 
         Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
 
@@ -614,6 +547,12 @@ public class AvatarSpecificationSimulation  {
             }
         }
 
+	/*ind = 0;
+        for(AvatarSimulationPendingTransaction asptt :pendingTransactions) {
+            TraceManager.addDev("#" + ind + ": " + asptt);
+            ind ++;
+	    }*/
+
         boolean hasSilentTransaction = false;
         if (nbOfPureLogicalTransitions >0) {
             //TraceManager.addDev("Pure logical transaction");
@@ -626,7 +565,7 @@ public class AvatarSpecificationSimulation  {
                 }
             }
             pendingTransactions = ll;
-            //TraceManager.addDev("At least on logical transition");
+            //TraceManager.addDev("At least one logical transition");
 
             if (hasSilentTransaction) {
                 // Must keep only silent transactions
@@ -701,7 +640,9 @@ public class AvatarSpecificationSimulation  {
             AvatarTransition atr = (AvatarTransition)(aspt.elementToExecute);
             if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
                 if ((aspt.previouslyExecutedElement != null) && (aspt.previouslyExecutedElement.nbOfNexts() < 2)) {
+                    //TraceManager.addDev("Stage 1");
                     if (nbOfTransactions(aspt.asb, _pendingTransactions) < 2) {
+                        //TraceManager.addDev("Stage 2");
                         return true;
                     }
                 }
@@ -875,14 +816,14 @@ public class AvatarSpecificationSimulation  {
                 AvatarTransition atr = (AvatarTransition)(tr.elementToExecute);
                 if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
                     if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
-                        //TraceManager.addDev("Setting to silent");
+                        //TraceManager.addDev("Setting to silent: " + tr);
                         tr.isSilent = true;
                         return tr;
                     }
                 } else if (atr.isHidden()) {
-		    tr.isSilent = true;
-		    return tr;
-		}
+                    tr.isSilent = true;
+                    return tr;
+                }
                 // State entering?
             } else if (((tr.elementToExecute instanceof AvatarState) ||  (tr.elementToExecute instanceof AvatarStopState)) && (executeStateEntering)) {
                 if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
@@ -891,9 +832,9 @@ public class AvatarSpecificationSimulation  {
                     return tr;
                 }
             } else if (tr.elementToExecute.isHidden()) {
-		tr.isSilent = true;
-		return tr;
-	    }
+                tr.isSilent = true;
+                return tr;
+            }
         }
 
         return null;
@@ -940,11 +881,15 @@ public class AvatarSpecificationSimulation  {
 
     public int nbOfTransactions(AvatarSimulationBlock _asb, Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
         int cpt = 0;
+        //TraceManager.addDev("Nb of pending transactions:" + _pendingTransactions.size());
         for(AvatarSimulationPendingTransaction tr: _pendingTransactions) {
-            if (tr.asb == _asb) {
+            //TraceManager.addDev("tr=" + tr + " _asb=" + _asb + " tr.asb=" + tr.asb);
+            if (tr.hasBlock(_asb)) {
                 cpt ++;
+                //TraceManager.addDev("cpt++");
             }
         }
+        //TraceManager.addDev("cpt=" + cpt);
         return cpt;
     }
 

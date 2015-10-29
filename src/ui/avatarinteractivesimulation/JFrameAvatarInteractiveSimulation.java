@@ -269,7 +269,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
             listPendingTransactions.clearSelection();
             selectedComponentForTransaction1 = null;
-	    selectedComponentForTransaction2 = null;
+            selectedComponentForTransaction2 = null;
             if (ll != null) {
                 listPendingTransactions.setListData(ll);
                 int random = (int)(Math.floor((Math.random()*ll.size())));
@@ -375,7 +375,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
           //jsp.setMaximumSize(new Dimension(800, 400));*/
         JPanel lowerPartPanel = new JPanel(); lowerPartPanel.setLayout(new BorderLayout());
         sdpanel = new AvatarSpecificationSimulationSDPanel(ass);
-	sdpanel.setShowHiddenStates(false);
+        sdpanel.setShowHiddenStates(false);
         //ass.setName("Interaction Overview Diagram");
         JScrollPane jsp = new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         sdpanel.setMyScrollPanel(jsp);
@@ -569,7 +569,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         jp01.add(diploids, c01);
         diploids.addItemListener(this);
         diploids.setSelected(false);
-	hidden = new JCheckBox("Show hidden state in sequence diagram");
+        hidden = new JCheckBox("Show hidden state in sequence diagram");
         jp01.add(hidden, c01);
         hidden.addItemListener(this);
         hidden.setSelected(false);
@@ -1212,8 +1212,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             ((AvatarDesignPanel)(avspec.getReferenceObject())).resetMetElements();
 
         } else if (avspec.getReferenceObject() instanceof AttackTreePanel) {
-	    ((AttackTreePanel)(avspec.getReferenceObject())).resetMetElements();
-	}
+            ((AttackTreePanel)(avspec.getReferenceObject())).resetMetElements();
+        }
     }
 
     public void updateMetElements() {
@@ -1328,10 +1328,10 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
                 if (asyncPanel != null) {
                     asyncPanel.revalidate();
-		    if (comboFIFOs != null) {
-			comboFIFOs.revalidate();
-			comboFIFOs.repaint();
-		    }
+                    if (comboFIFOs != null) {
+                        comboFIFOs.revalidate();
+                        comboFIFOs.repaint();
+                    }
                 }
 
 
@@ -1766,13 +1766,14 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             try {
                 AvatarSimulationPendingTransaction aspt = (AvatarSimulationPendingTransaction)(listPendingTransactions.getSelectedValue());
                 selectedComponentForTransaction1 = (TGComponent)(aspt.elementToExecute.getReferenceObject());
+		selectedComponentForTransaction2 = null;
                 if ((selectedComponentForTransaction1 == null) && (aspt.linkedTransaction != null)) {
                     //TraceManager.addDev("Adding reference object: " + aspt.linkedTransaction.elementToExecute.getReferenceObject());
                     selectedComponentForTransaction1 = (TGComponent)(aspt.linkedTransaction.elementToExecute.getReferenceObject());
-		    selectedComponentForTransaction2 = null;
+                    selectedComponentForTransaction2 = null;
                 } else if (aspt.linkedTransaction != null) {
-		    selectedComponentForTransaction2 = (TGComponent)(aspt.linkedTransaction.elementToExecute.getReferenceObject());
-		}
+                    selectedComponentForTransaction2 = (TGComponent)(aspt.linkedTransaction.elementToExecute.getReferenceObject());
+                }
                 if (!(busyMode == AvatarSpecificationSimulation.GATHER) && !(busyMode == AvatarSpecificationSimulation.EXECUTE)) {
                     ass.setIndexSelectedTransaction(listPendingTransactions.getSelectedIndex());
                 }
@@ -1789,7 +1790,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             } catch (Exception ex){
                 TraceManager.addDev("Exception selected component");
                 selectedComponentForTransaction1 = null;
-		selectedComponentForTransaction2 = null;
+                selectedComponentForTransaction2 = null;
                 if (openDiagram.isSelected()) {
                     if ((previousBlock != null) &&  (animate.isSelected())){
                         mgui.openAVATARSMD(previousBlock.getName());
@@ -1802,7 +1803,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             }
         } else {
             selectedComponentForTransaction1 = null;
-	    selectedComponentForTransaction2 = null;
+            selectedComponentForTransaction2 = null;
             if ((previousBlock != null) && (animate.isSelected())) {
                 if (openDiagram.isSelected()) {
                     mgui.openAVATARSMD(previousBlock.getName());
@@ -1826,6 +1827,9 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             openDiagram.setEnabled(animate.isSelected());
         } else if (e.getSource() == diploids) {
             mgui.setAVATARIDs(diploids.isSelected());
+	    if (sdpanel != null) {
+                sdpanel.setShowIDs(diploids.isSelected());
+            }
         } else if (e.getSource() == executeEmptyTransition) {
             ass.setExecuteEmptyTransition(executeEmptyTransition.isSelected());
         } else if (e.getSource() == executeStateEntering) {
@@ -1837,10 +1841,10 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             }
 
         } else if (e.getSource() == hidden) {
-	    if (sdpanel != null) {
-		sdpanel.setShowHiddenStates(hidden.isSelected());
-	    }
-	}
+            if (sdpanel != null) {
+                sdpanel.setShowHiddenStates(hidden.isSelected());
+            }
+        }
 
     }
 
