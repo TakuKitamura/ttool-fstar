@@ -1,47 +1,47 @@
 /**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
-   ludovic.apvrille AT enst.fr
+  ludovic.apvrille AT enst.fr
 
-   This software is a computer program whose purpose is to allow the
-   edition of TURTLE analysis, design and deployment diagrams, to
-   allow the generation of RT-LOTOS or Java code from this diagram,
-   and at last to allow the analysis of formal validation traces
-   obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
-   from INRIA Rhone-Alpes.
+  This software is a computer program whose purpose is to allow the
+  edition of TURTLE analysis, design and deployment diagrams, to
+  allow the generation of RT-LOTOS or Java code from this diagram,
+  and at last to allow the analysis of formal validation traces
+  obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+  from INRIA Rhone-Alpes.
 
-   This software is governed by the CeCILL  license under French law and
-   abiding by the rules of distribution of free software.  You can  use,
-   modify and/ or redistribute the software under the terms of the CeCILL
-   license as circulated by CEA, CNRS and INRIA at the following URL
-   "http://www.cecill.info".
+  This software is governed by the CeCILL  license under French law and
+  abiding by the rules of distribution of free software.  You can  use,
+  modify and/ or redistribute the software under the terms of the CeCILL
+  license as circulated by CEA, CNRS and INRIA at the following URL
+  "http://www.cecill.info".
 
-   As a counterpart to the access to the source code and  rights to copy,
-   modify and redistribute granted by the license, users are provided only
-   with a limited warranty  and the software's author,  the holder of the
-   economic rights,  and the successive licensors  have only  limited
-   liability.
+  As a counterpart to the access to the source code and  rights to copy,
+  modify and redistribute granted by the license, users are provided only
+  with a limited warranty  and the software's author,  the holder of the
+  economic rights,  and the successive licensors  have only  limited
+  liability.
 
-   In this respect, the user's attention is drawn to the risks associated
-   with loading,  using,  modifying and/or developing or reproducing the
-   software by the user in light of its specific status of free software,
-   that may mean  that it is complicated to manipulate,  and  that  also
-   therefore means  that it is reserved for developers  and  experienced
-   professionals having in-depth computer knowledge. Users are therefore
-   encouraged to load and test the software's suitability as regards their
-   requirements in conditions enabling the security of their systems and/or
-   data to be ensured and,  more generally, to use and operate it in the
-   same conditions as regards security.
+  In this respect, the user's attention is drawn to the risks associated
+  with loading,  using,  modifying and/or developing or reproducing the
+  software by the user in light of its specific status of free software,
+  that may mean  that it is complicated to manipulate,  and  that  also
+  therefore means  that it is reserved for developers  and  experienced
+  professionals having in-depth computer knowledge. Users are therefore
+  encouraged to load and test the software's suitability as regards their
+  requirements in conditions enabling the security of their systems and/or
+  data to be ensured and,  more generally, to use and operate it in the
+  same conditions as regards security.
 
-   The fact that you are presently reading this means that you have had
-   knowledge of the CeCILL license and that you accept its terms.
+  The fact that you are presently reading this means that you have had
+  knowledge of the CeCILL license and that you accept its terms.
 
-   /**
-   * Class AvatarGuard
-   * Creation: 16/09/2015
-   * @version 1.0 16/09/2015
-   * @author Florian LUGOU
-   * @see
-   */
+/**
+ * Class AvatarGuard
+ * Creation: 16/09/2015
+ * @version 1.0 16/09/2015
+ * @author Florian LUGOU
+ * @see
+ */
 
 
 package avatartranslator;
@@ -116,10 +116,9 @@ public abstract class AvatarGuard {
                         if (indexBinaryOp != -1) {
                             first = AvatarGuard.createFromString (block, sane.substring (0, indexBinaryOp));
                             AvatarGuard second = AvatarGuard.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
-                            System.out.println("guard "+ sane.substring(indexBinaryOp + delim.length ()));
                             if (first instanceof AvatarComposedGuard && second instanceof AvatarComposedGuard)
                                 return new AvatarBinaryGuard ((AvatarComposedGuard) first, (AvatarComposedGuard) second, delim);
-			    TraceManager.addDev("Binary guard "+ sane + "does not contain 2 guards");
+                            TraceManager.addDev("Binary guard "+ sane + "does not contain 2 guards");
                             return new AvatarGuardEmpty ();
                         }
                     }
@@ -132,7 +131,7 @@ public abstract class AvatarGuard {
                     if (first instanceof AvatarComposedGuard)
                         return new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) first);
                     else {
-			TraceManager.addDev("Unary guard "+ sane + " does not contain guard");
+                        TraceManager.addDev("Unary guard "+ sane + " does not contain guard");
                         return new AvatarGuardEmpty ();
                     }
                 }
@@ -148,12 +147,10 @@ public abstract class AvatarGuard {
                         AvatarGuard second = AvatarGuard.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
                         if (first instanceof AvatarComposedGuard && second instanceof AvatarComposedGuard)
                             return new AvatarBinaryGuard ((AvatarComposedGuard) first, (AvatarComposedGuard) second, delim);
-                        System.out.println("Binary guard "+ sane + "does not contain 2 guards");
                         TraceManager.addDev("Binary guard "+ sane + "does not contain 2 guards");
                         return new AvatarGuardEmpty ();
                     }
                 }
-                System.out.println("Invalid guard "+ sane);
                 TraceManager.addDev("Invalid guard "+ sane);
                 return new AvatarGuardEmpty ();
             } else {
@@ -167,13 +164,11 @@ public abstract class AvatarGuard {
                         AvatarTerm secondTerm = AvatarTerm.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
                         if (secondTerm != null)
                             return new AvatarSimpleGuardDuo (tuple, secondTerm, delim);
-                        System.out.println("Could not find term in guard "+ sane);
                         TraceManager.addDev("Could not find term in guard "+ sane);
                         return new AvatarGuardEmpty ();
                     }
                 }
 
-                System.out.println("Invalid guard expression with tuple "+ sane);
                 TraceManager.addDev("Invalid guard expression with tuple "+ sane);
                 return new AvatarGuardEmpty ();
             }
@@ -186,7 +181,6 @@ public abstract class AvatarGuard {
                 AvatarTerm secondTerm = AvatarTerm.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
                 if (secondTerm != null && firstTerm != null)
                     return new AvatarSimpleGuardDuo (firstTerm, secondTerm, delim);
-                System.out.println("Term in guard does not exist " +sane.substring (0, indexBinaryOp) + " "+ sane.substring (indexBinaryOp + delim.length ()));
                 TraceManager.addDev("Term in guard does not exist " +sane.substring (0, indexBinaryOp) + " "+ sane.substring (indexBinaryOp + delim.length ()));
                 return new AvatarGuardEmpty ();
             }
@@ -195,7 +189,6 @@ public abstract class AvatarGuard {
         AvatarTerm term = AvatarTerm.createFromString (block, sane);
         if (term != null)
             return new AvatarSimpleGuardMono (term);
-        System.out.println("Term in guard does not exist " + sane);
         TraceManager.addDev("Term in guard does not exist " + sane);
         return new AvatarGuardEmpty ();
     }
@@ -213,8 +206,8 @@ public abstract class AvatarGuard {
             return _guard;
 
         return new AvatarBinaryGuard (new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) _guard),
-                                      new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) _g),
-                                      _binaryOp);
+                new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) _g),
+                _binaryOp);
     }
 
     public AvatarGuard getRealGuard (AvatarStateMachineElement precedent) {
