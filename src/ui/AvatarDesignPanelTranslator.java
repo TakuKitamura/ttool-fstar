@@ -994,6 +994,7 @@ public class AvatarDesignPanelTranslator {
                 // Random
             } else if (tgc instanceof AvatarSMDRandom) {
                 asmdrand = (AvatarSMDRandom)tgc;
+		//TraceManager.addDev("rand1");
                 arandom = new AvatarRandom("random", tgc);
                 tmp1 = modifyString(asmdrand.getMinValue());
                 error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp1);
@@ -1007,13 +1008,16 @@ public class AvatarDesignPanelTranslator {
                 }
                 arandom.setValues(tmp1, tmp2);
                 arandom.setFunctionId(asmdrand.getFunctionId());
+		//TraceManager.addDev("rand2");
 
                 tmp1 = modifyString(asmdrand.getVariable());
                 aa = _ab.getAvatarAttributeWithName(tmp1);
 
                 if (aa == null) {
-                    makeError(error, tdp, _ab, tgc, "variable of random", tmp2);
+		    //TraceManager.addDev("rand3");
+                    makeError(-3, tdp, _ab, tgc, "random", tmp1);
                 } else {
+		    //TraceManager.addDev("rand4");
                     // Checking type of variable -> must be an int
                     if (!(aa.isInt())) {
                         makeError(error, tdp, _ab, tgc, ": variable of random must be of type \"int\"", tmp2);
