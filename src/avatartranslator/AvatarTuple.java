@@ -65,18 +65,21 @@ public class AvatarTuple extends AvatarTerm implements AvatarLeftHand {
             int indexRParen = toParse.indexOf (")", indexLParen);
             if (indexRParen == -1)
                 indexRParen = toParse.length ();
-            String[] components = toParse.substring (indexLParen+1, indexRParen).split (",");
+            String[] components = toParse.substring (indexLParen+1, indexRParen).trim().split (",");
             boolean illFormed = false;
             AvatarTuple argsTuple = new AvatarTuple (block);
             for (String arg: components) {
-                AvatarTerm t = AvatarTerm.createFromString (block, arg);
-                if (t == null) {
-                    // Term couldn't be parsed
-                    illFormed = true;
-                    break;
-                }
+                if (!arg.isEmpty()) {
+                    TraceManager.addDev("In for with arg=" + arg+"|");
+                    AvatarTerm t = AvatarTerm.createFromString (block, arg);
+                    if (t == null) {
+                        // Term couldn't be parsed
+                        illFormed = true;
+                        break;
+                    }
 
-                argsTuple.addComponent (t);
+                    argsTuple.addComponent (t);
+                }
             }
 
             if (!illFormed)
@@ -84,9 +87,10 @@ public class AvatarTuple extends AvatarTerm implements AvatarLeftHand {
                 result = argsTuple;
         }
 
-        //if (result == null)
-            //TraceManager.addDev ("Tuple '" + toParse + "' couldn't be parsed");
-
+        if (result == null)
+            TraceManager.addDev ("Tuple '" + toParse + "' couldn't be parsed");
+        else
+            TraceManager.addDev ("Ok when parsing Tuple:" + toParse);
         return result;
     }
 
@@ -112,7 +116,7 @@ public class AvatarTuple extends AvatarTerm implements AvatarLeftHand {
                 result += ", ";
             result += term.getName ();
         }
-        
+
         return result + ")";
     }
 

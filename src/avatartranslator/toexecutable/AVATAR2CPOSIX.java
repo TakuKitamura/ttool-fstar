@@ -291,9 +291,6 @@ public class AVATAR2CPOSIX {
         LinkedList<AvatarAttribute> list;
         LinkedList<AvatarAttribute> listA;
 
-
-
-
         String nameMethod = _block.getName() + "__" +_am.getName();
 
         for(String s: _allNames) {
@@ -393,7 +390,7 @@ public class AVATAR2CPOSIX {
                 }
                 ret+= ");" + CR;
 
-            }			
+            }
         }
         ret += "}" + CR + CR;
         _taskFile.addToMainCode(ret + CR);
@@ -416,7 +413,7 @@ public class AVATAR2CPOSIX {
         String sh = "extern " + s + ";" + CR;
         s+= "{" + CR;
 
-        s += makeAttributesDeclaration(_block, _taskFile);	
+        s += makeAttributesDeclaration(_block, _taskFile);
 
         s+= CR + "int __currentState = STATE__START__STATE;" + CR;
 
@@ -439,7 +436,7 @@ public class AVATAR2CPOSIX {
 
         s+= CR + "pthread_cond_init(&__myCond, NULL);" + CR;
 
-        s+= CR + "fillListOfRequests(&__list, __myname, &__myCond, &__mainMutex);" + CR; 
+        s+= CR + "fillListOfRequests(&__list, __myname, &__myCond, &__mainMutex);" + CR;
 
         s+= "//printf(\"my name = %s\\n\", __myname);" + CR;
 
@@ -482,9 +479,9 @@ public class AVATAR2CPOSIX {
 
         s+= "//printf(\"Exiting = %s\\n\", __myname);" + CR;
         s+= "return NULL;" + CR;
-        s += "}" + CR;	
+        s += "}" + CR;
         _taskFile.addToMainCode(s + CR);
-        _taskFile.addToHeaderCode(sh + CR);	
+        _taskFile.addToHeaderCode(sh + CR);
     }
 
     public String makeBehaviourFromElement(AvatarBlock _block, AvatarStateMachineElement _asme, boolean firstCall) {
@@ -512,7 +509,7 @@ public class AVATAR2CPOSIX {
                 if (debug) {
                     ret += "debug2Msg(__myname, \"Guard failed: " + g + "\");" + CR;
                 }
-                ret += "__currentState = STATE__STOP__STATE;" + CR; 
+                ret += "__currentState = STATE__STOP__STATE;" + CR;
                 ret += "break;" + CR;
                 ret += "}" + CR;
             }
@@ -542,10 +539,10 @@ public class AVATAR2CPOSIX {
                 if (debug) {
                     ret += "debug2Msg(__myname, \"-> (=====) Entering state + " + _asme.getName() + "\");" + CR;
                 }
-                return ret + "__currentState = STATE__" + _asme.getName() + ";" + CR; 
+                return ret + "__currentState = STATE__" + _asme.getName() + ";" + CR;
             } else {
                 if (_asme.nbOfNexts() == 0) {
-                    return ret + "__currentState = STATE__STOP__STATE;" + CR; 
+                    return ret + "__currentState = STATE__STOP__STATE;" + CR;
                 }
 
                 if (_asme.nbOfNexts() == 1) {
@@ -553,7 +550,7 @@ public class AVATAR2CPOSIX {
                 }
 
                 // Complex case of states -> several nexts
-                // Put in list all 
+                // Put in list all
 
 
                 // 1) Only immediatly executable transitions
@@ -578,7 +575,7 @@ public class AVATAR2CPOSIX {
                 // Test if at least one request in the list!
                 ret += "if (nbOfRequests(&__list) == 0) {" + CR;
                 ret += "debug2Msg(__myname, \"No possible request\");" + CR;
-                ret += "__currentState = STATE__STOP__STATE;" + CR; 
+                ret += "__currentState = STATE__STOP__STATE;" + CR;
                 ret += "break;" + CR;
                 ret += "}" + CR;
 
@@ -621,7 +618,7 @@ public class AVATAR2CPOSIX {
         }
 
         if (_asme instanceof AvatarStopState) {
-            return ret + "__currentState = STATE__STOP__STATE;" + CR; 
+            return ret + "__currentState = STATE__STOP__STATE;" + CR;
         }
 
         if (_asme instanceof AvatarRandom) {
@@ -768,7 +765,7 @@ public class AVATAR2CPOSIX {
     }
 
     public void makeThreadsInMain(boolean _debug) {
-        mainFile.appendToMainCode(CR + "/* Threads of tasks */" + CR);  
+        mainFile.appendToMainCode(CR + "/* Threads of tasks */" + CR);
         for(TaskFile taskFile: taskFiles) {
             mainFile.appendToMainCode("pthread_t thread__" + taskFile.getName() + ";" + CR);
         }
@@ -776,25 +773,25 @@ public class AVATAR2CPOSIX {
         makeArgumentsInMain(_debug);
 
         if (_debug) {
-            mainFile.appendToMainCode("/* Activating debug messages */" + CR); 
-            mainFile.appendToMainCode("activeDebug();" + CR);  
+            mainFile.appendToMainCode("/* Activating debug messages */" + CR);
+            mainFile.appendToMainCode("activeDebug();" + CR);
         }
 
 
 
-        mainFile.appendToMainCode("/* Activating randomness */" + CR); 
-        mainFile.appendToMainCode("initRandom();" + CR); 
+        mainFile.appendToMainCode("/* Activating randomness */" + CR);
+        mainFile.appendToMainCode("initRandom();" + CR);
 
         mainFile.appendToMainCode("/* Initializing the main mutex */" + CR);
         mainFile.appendToMainCode("if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}" + CR + CR);
 
-        mainFile.appendToMainCode("/* Initializing mutex of messages */" + CR); 
-        mainFile.appendToMainCode("initMessages();" + CR); 
+        mainFile.appendToMainCode("/* Initializing mutex of messages */" + CR);
+        mainFile.appendToMainCode("initMessages();" + CR);
 
 
         if (avspec.hasApplicationCode()) {
-            mainFile.appendToMainCode("/* User initialization */" + CR); 
-            mainFile.appendToMainCode("__user_init();" + CR); 
+            mainFile.appendToMainCode("/* User initialization */" + CR);
+            mainFile.appendToMainCode("__user_init();" + CR);
         }
 
 
@@ -813,11 +810,11 @@ public class AVATAR2CPOSIX {
     }
 
     public void makeArgumentsInMain(boolean _debug) {
-        mainFile.appendToMainCode("/* Activating tracing  */" + CR); 
+        mainFile.appendToMainCode("/* Activating tracing  */" + CR);
 
         if (tracing) {
             mainFile.appendToMainCode("if (argc>1){" + CR);
-            mainFile.appendToMainCode("activeTracingInFile(argv[1]);" + CR + "} else {" + CR);  
+            mainFile.appendToMainCode("activeTracingInFile(argv[1]);" + CR + "} else {" + CR);
             mainFile.appendToMainCode("activeTracingInConsole();" + CR + "}" + CR);
         }
     }
@@ -870,12 +867,12 @@ public class AVATAR2CPOSIX {
     public String reworkDelay(String _delay) {
 
         switch(timeUnit) {
-            case USEC:
-                return _delay;
-            case MSEC:
-                return "(" + _delay + ")*1000";
-            case SEC:
-                return "(" + _delay + ")*1000000";
+        case USEC:
+            return _delay;
+        case MSEC:
+            return "(" + _delay + ")*1000";
+        case SEC:
+            return "(" + _delay + ")*1000000";
         }
 
         return _delay;
@@ -960,11 +957,15 @@ public class AVATAR2CPOSIX {
         String type;
         for(int i=0; i<_at.getNbOfAction(); i++) {
             // Must know whether this is an action or a method call
+	    
             AvatarAction act = _at.getAction(i);
+	    TraceManager.addDev("Action=" + act);
             if (act.isAMethodCall()) {
+		TraceManager.addDev("Method call");
                 String actModified = modifyMethodName (_block, (AvatarTermFunction) act);
                 ret +=  actModified + ";" + CR;
             } else {
+		TraceManager.addDev("Else");
                 String actModified = modifyMethodName (_block, (AvatarTerm) ((AvatarActionAssignment) act).getLeftHand ())
                     + " = " + modifyMethodName (_block, ((AvatarActionAssignment) act).getRightHand ());
                 AvatarLeftHand leftHand = ((AvatarActionAssignment) act).getLeftHand ();
