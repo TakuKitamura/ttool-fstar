@@ -480,15 +480,15 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 //jta.append("The verifier of UPPAAL could not be started: error\n");
                 throw new LauncherException("The verifier of UPPAAL could not be started.\nProbably, UPPAAL is badly installed, or TTool is badly configured:\nCheck for UPPAALVerifierPath and UPPAALVerifierHost configurations.");
             }
-            if (data.indexOf("[error]") > -1) {
-                jta.append("ERROR -> property could not be studied\n");
-            } else {
-                if (data.indexOf("NOT") > -1) {
-                    jta.append("-> property is NOT satisfied\n");
-                } else {
-                    jta.append("-> property is satisfied\n");
-                }
-            }
+	    else if (data.indexOf("Property is satisfied") >-1){
+		jta.append("-> property is satisfied\n");
+	    }
+	    else if (data.indexOf("Property is NOT satisfied") > -1) {
+		jta.append("-> property is NOT satisfied\n");
+	    }
+	    else {
+		jta.append("ERROR -> property could not be studied\n");
+	    }
         } else {
             jta.append("** verification stopped **\n");
         }
