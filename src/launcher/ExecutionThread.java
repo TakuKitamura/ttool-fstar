@@ -229,14 +229,14 @@ class ExecutionThread extends Thread {
                 
                 //TraceManager.addDev("Reading the output stream of the process " + cmd);
                 while (((str = proc_in.readLine()) != null) && (go == true)){
-                	System.out.println("out:" + str);
-                    //TraceManager.addDev("out " + str);
+                	//System.out.println("out:" + str);
+                    TraceManager.addDev("out " + str);
                     respond(out, "4" + str);
                 }
 		proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
                 while (((str = proc_err.readLine()) != null) && (go == true)){
-                	System.out.println("error out:" + str);
-                    //TraceManager.addDev("out " + str);
+                	//System.out.println("error out:" + str);
+                    TraceManager.addDev("error out " + str);
                     respond(out, "4" + str);
                 }
                 /*int c;
