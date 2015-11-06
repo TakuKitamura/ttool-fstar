@@ -119,7 +119,7 @@ public class AvatarDesignPanelTranslator {
         TraceManager.addDev("Removing else guards");
         as.removeElseGuards();
         TraceManager.addDev("Removing else guards ... done");
-	System.out.println(as.toString());
+	//System.out.println(as.toString());
         return as;
     }
 

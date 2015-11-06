@@ -58,7 +58,7 @@ class ExecutionThread extends Thread {
     private RshServer rsh;
     private ServerSocket server = null;
     private boolean go;
-    BufferedReader proc_in;
+    BufferedReader proc_in, proc_err;
     private Process proc;
     
     private boolean piped;
@@ -165,7 +165,7 @@ class ExecutionThread extends Thread {
         proc = null;
         BufferedReader in = null;
         String str;
-        
+
         // print output in pipe
         if (mustWaitForPiped) {
             try {
@@ -178,8 +178,12 @@ class ExecutionThread extends Thread {
                 waitingForPipe();
                 TraceManager.addDev("Got pipe");
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+		proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
                 try {
                     while (((str = proc_in.readLine()) != null) && (go == true)){
+                        pipe.write((str + "\n").getBytes());
+                    }
+                    while (((str = proc_err.readLine()) != null) && (go == true)){
                         pipe.write((str + "\n").getBytes());
                     }
                 } catch (IOException e) {
@@ -226,6 +230,12 @@ class ExecutionThread extends Thread {
                 //TraceManager.addDev("Reading the output stream of the process " + cmd);
                 while (((str = proc_in.readLine()) != null) && (go == true)){
                 	System.out.println("out:" + str);
+                    //TraceManager.addDev("out " + str);
+                    respond(out, "4" + str);
+                }
+		proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+                while (((str = proc_err.readLine()) != null) && (go == true)){
+                	System.out.println("error out:" + str);
                     //TraceManager.addDev("out " + str);
                     respond(out, "4" + str);
                 }

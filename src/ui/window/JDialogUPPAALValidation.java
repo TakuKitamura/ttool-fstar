@@ -362,7 +362,6 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                     jta.append("Liveness: No selected component found on diagrams\n\n");
                 }
             }
-
             if (stateL.isSelected() && (mode != NOT_STARTED)) {
                 ArrayList<String> list = mgui.gtm.getUPPAALQueries(tp);
                 String s1, s2, name1, name2, query1, query2;
@@ -474,7 +473,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         if(showDetails.isSelected()) {
             jta.append(data);
         }
-
+	//NOTE: [error] is only visible if Error Stream is parsed
         if (mode != NOT_STARTED) {
             if (data.trim().length() == 0) {
                 //jta.append("The verifier of UPPAAL could not be started: error\n");
