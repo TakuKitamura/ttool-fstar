@@ -132,7 +132,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 	}
 
         if (guard.length() > 0) {
-            if (guard.compareTo("[ ]") != 0) {
+            if (guard.replaceAll("\\s+", "").compareTo("[]") != 0) {
                 g.drawString(guard, x, y + step);
                 atLeastOneThing = true;
                 if (tdp.isDrawingMain()) {

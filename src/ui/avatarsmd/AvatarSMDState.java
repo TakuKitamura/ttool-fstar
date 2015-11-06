@@ -351,7 +351,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
           getValue());*/
 
 
-        JDialogAvatarState jdas = new JDialogAvatarState(frame, "Setting transition parameters", value, entryCode);
+        JDialogAvatarState jdas = new JDialogAvatarState(frame, "Setting state parameters", value, entryCode);
         jdas.setSize(600, 550);
         GraphicLib.centerOnParent(jdas);
         jdas.show(); // blocked until dialog has been closed

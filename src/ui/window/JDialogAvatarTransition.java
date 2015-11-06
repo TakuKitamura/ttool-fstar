@@ -323,7 +323,16 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
 
     public void insertElements() {
         int index = elements.getSelectedIndex();
-        actionsT.append(insertElements.get(index));
+        int caretPos = actionsT.getCaretPosition ();
+        String str = insertElements.get(index);
+        String text = actionsT.getText ();
+        if (caretPos > 0 && text.charAt (caretPos-1) != ' ' && text.charAt (caretPos-1) != '(')
+            str = " " + str;
+        if (caretPos == text.length () || (text.charAt (caretPos) != ' ' && text.charAt (caretPos) != ')'))
+            str = str + " ";
+        actionsT.insert (str, caretPos);
+        actionsT.setCaretPosition (caretPos + str.length ());
+        actionsT.requestFocusInWindow ();
     }
 
     public void closeDialog() {
