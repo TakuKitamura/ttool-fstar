@@ -624,6 +624,9 @@ public class GTURTLEModeling {
         return avatarspec;
     }
 
+    public AVATAR2UPPAAL getAvatar2Uppaal(){
+	return avatar2uppaal;
+    }
     public ProVerifOutputAnalyzer getProVerifOutputAnalyzer () {
         return this.avatar2proverif.getOutputAnalyzer ();
     }

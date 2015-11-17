@@ -51,13 +51,17 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 
+import avatartranslator.*;
+import avatartranslator.touppaal.*;
+import uppaaldesc.*;
 import launcher.*;
 import myutil.*;
 import ui.*;
 
 public class JDialogUPPAALValidation extends javax.swing.JDialog implements ActionListener, Runnable  {
-    private static boolean deadlockAChecked, deadlockEChecked, generateTraceChecked, customChecked, stateAChecked, stateEChecked, stateLChecked, showDetailsChecked;
+    private static boolean deadlockAChecked, deadlockEChecked, generateTraceChecked, customChecked, stateAChecked, stateEChecked, stateLChecked, showDetailsChecked, translateChecked;
 
     protected MainGUI mgui;
 
@@ -81,9 +85,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     protected JButton close;
     protected JButton eraseAll;
 
-    protected JCheckBox deadlockE, deadlockA, generateTrace, custom, stateE, stateA, stateL, showDetails;
+    protected JCheckBox deadlockE, deadlockA, generateTrace, custom, stateE, stateA, stateL, showDetails, translateCustom;
     protected JTextField customText;
-
+    protected JTextField translatedText;
     protected TURTLEPanel tp;
 
 
@@ -173,13 +177,23 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         custom.addActionListener(this);
         jp1.add(custom, c1);
         custom.setSelected(customChecked);
-
+        
         c1.gridwidth = 1;
-        jp1.add(new JLabel("Custom formulae = "), c1);
+        jp1.add(new JLabel("Custom formula to translate = "), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         customText = new JTextField("Type your CTL formulae here!", 80);
         customText.addActionListener(this);
         jp1.add(customText, c1);
+	
+        c1.gridwidth = 1;
+	translateCustom = new JCheckBox("Use translated custom verification");
+        translateCustom.addActionListener(this);
+        jp1.add(translateCustom, c1);
+        custom.setSelected(translateChecked);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+	translatedText = new JTextField("Translated CTL formula here", 80);
+	customText.addActionListener(this);
+	jp1.add(translatedText,c1);
 
         generateTrace = new JCheckBox("Generate simulation trace");
         generateTrace.addActionListener(this);
@@ -212,7 +226,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
         start.setPreferredSize(new Dimension(100, 30));
         stop.setPreferredSize(new Dimension(100, 30));
-        close.setPreferredSize(new Dimension(100, 30));
+        close.setPreferredSize(new Dimension(110, 30));
         eraseAll.setPreferredSize(new Dimension(100, 30));
 
         start.addActionListener(this);
@@ -261,6 +275,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         stateAChecked = stateA.isSelected();
         stateLChecked = stateL.isSelected();
         customChecked = custom.isSelected();
+	translateChecked = translateCustom.isSelected();
         generateTraceChecked = generateTrace.isSelected();
         showDetailsChecked = showDetails.isSelected();
         dispose();
@@ -412,8 +427,12 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
             if(custom.isSelected() && (mode != NOT_STARTED)) {
                 jta.append("\n\n--------------------------------------------\n");
+
                 jta.append("Studying custom CTL formulae\n");
-                workQuery(customText.getText(), fn, trace_id, rshc);
+		if (!translateCustom.isSelected()) {
+		    translateCustomQuery(customText.getText());                    
+		}
+		workQuery(translatedText.getText(), fn, trace_id, rshc);
                 trace_id++;
             }
 
@@ -451,7 +470,49 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         mode = NOT_STARTED;
         setButtons();
     }
+    private void translateCustomQuery(String query){
+	UPPAALSpec spec = mgui.gtm.getLastUPPAALSpecification();
+	AVATAR2UPPAAL avatar2uppaal = mgui.gtm.getAvatar2Uppaal();
+	AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
+	Hashtable <String, String> hash = avatar2uppaal.getHash();
+	String finQuery=query+" ";
+/*	String[] split = query.split("[\\s-()=]+");
+	for (String s: split){
+		System.out.println(s);
+	} */
+/*	Pattern p = Pattern.compile("[\\s-()=]+");
+	Matcher m = p.matcher(query);
+	int index1=0;
+	int index2=m.start();
+	while (m.find()){
+	    System.out.println("Finding ...");
+	    index2=m.start();
+	    String rep = hash.get(finQuery.substring(index1, index2));
+	    if (rep !=null){
+		System.out.println(finQuery.substring(index1, index2) + "--" + rep);
+		finQuery = finQuery.substring(0,index1) + rep + finQuery.substring(index2, finQuery.length());
+	    }
+	    index1=index2;
+	}*/
+	for (String str: hash.keySet()){
+	    finQuery = finQuery.replaceAll(str+"\\s", hash.get(str));
+	    finQuery = finQuery.replaceAll(str+"\\)", hash.get(str)+"\\)");
+	    finQuery = finQuery.replaceAll(str+"\\-", hash.get(str)+"\\-");
+	}
+	if (avspec==null){
+	    return;
+	}
 
+	LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
+	for (AvatarBlock block:blocks){
+	    UPPAALTemplate temp = spec.getTemplateByName(block.getName());
+	    if (temp !=null){
+		int index = avatar2uppaal.getIndexOfTranslatedTemplate(temp);
+		finQuery = finQuery.replaceAll(block.getName(), block.getName()+"__"+index);
+	    }
+	}
+	translatedText.setText(finQuery);
+    }
     private void workQuery(String query, String fn, int trace_id, RshClient rshc) throws LauncherException {
 
         //TraceManager.addDev("Working on query: " + query);

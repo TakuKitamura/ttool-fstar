@@ -76,7 +76,7 @@ public class AVATAR2UPPAAL {
 
     private Hashtable <AvatarStateMachineElement, UPPAALLocation> hash;
     private Hashtable <AvatarStateMachineElement, UPPAALLocation> hashChecking;
-
+    private Hashtable <String, String> translateString;
     public final static int STEP_X = 5;
     public final static int STEP_Y = 70;
     public final static int STEP_LOOP_X = 150;
@@ -146,11 +146,14 @@ public class AVATAR2UPPAAL {
     /*public RelationTIFUPPAAL getRelationTIFUPPAAL () {
       return table;
       }*/
-
+    public Hashtable <String, String> getHash(){
+	return translateString;
+    }
     public UPPAALSpec generateUPPAAL(boolean _debug, boolean _optimize) {
         warnings = new Vector();
         hash = new Hashtable<AvatarStateMachineElement, UPPAALLocation>();
         hashChecking = new Hashtable<AvatarStateMachineElement, UPPAALLocation>();
+	translateString = new Hashtable<String, String>();
         spec = new UPPAALSpec();
 
         avspec.removeCompositeStates();
@@ -230,7 +233,6 @@ public class AVATAR2UPPAAL {
     }
 
     public void translateBlock(AvatarBlock _block) {
-
         UPPAALTemplate template = newBlockTemplate(_block, 0);
 
         // Behaviour
@@ -520,7 +522,11 @@ public class AVATAR2UPPAAL {
     public void makeBehaviour(AvatarBlock _block, UPPAALTemplate _template) {
         initXY();
         UPPAALLocation loc = makeBlockInit(_block, _template);
+
         TraceManager.addDev("Nb of locations=" + _template.getNbOfLocations());
+
+//	translateString.put(_block.getName(), _block.getName()+"__"+_template.getNbOfLocations());
+
         AvatarStartState ass = _block.getStateMachine().getStartState();
 
         TraceManager.addDev("Making behaviour of " + _block.getName());
@@ -622,10 +628,12 @@ public class AVATAR2UPPAAL {
                 tr = addTransition(_template, _previous, loc);
                 hashChecking.put(_elt, _previous);
                 hash.put(_elt, _previous);
+	        translateString.put(_block.getName()+"."+_elt.getName(),_block.getName()+"."+_previous.name);
                 _previous = loc;
 
             } else {
                 hash.put(_elt, _previous);
+	        translateString.put(_block.getName()+"."+_elt.getName(),_block.getName()+"."+_previous.name);
             }
 
             state = (AvatarState)_elt;
@@ -936,6 +944,7 @@ public class AVATAR2UPPAAL {
                         loc2 = hash.get(aaos);
                         if (loc2 == null) {
                             hash.put(aaos, loc1);
+			    translateString.put(_block.getName()+"."+aaos.getName(),_block.getName()+"."+loc1.name);
                         }
 
                         tr = addTransition(_template, loc1, locend);
