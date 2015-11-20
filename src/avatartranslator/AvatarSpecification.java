@@ -62,6 +62,7 @@ public class AvatarSpecification extends AvatarElement {
     //private AvatarBroadcast broadcast;
 
     private LinkedList<AvatarPragma> pragmas;
+    private LinkedList<String> safety_pragmas;
     private LinkedList<AvatarConstant> constants;
 
     private boolean robustnessMade = false;
@@ -76,6 +77,7 @@ public class AvatarSpecification extends AvatarElement {
         //broadcast = new AvatarBroadcast("Broadcast", _referenceObject);
         pragmas = new LinkedList<AvatarPragma>();
 	constants = new LinkedList<AvatarConstant>();
+	safety_pragmas = new LinkedList<String>();
         this.constants.add (AvatarConstant.FALSE);
         this.constants.add (AvatarConstant.TRUE);
     }
@@ -127,7 +129,9 @@ public class AvatarSpecification extends AvatarElement {
     public LinkedList<AvatarPragma> getPragmas() {
         return pragmas;
     }
-
+    public LinkedList<String> getSafetyPragmas() {
+        return safety_pragmas;
+    }
     public LinkedList<AvatarConstant> getAvatarConstants() {
         return constants;
     }
@@ -163,6 +167,9 @@ public class AvatarSpecification extends AvatarElement {
 
     public void addPragma(AvatarPragma _pragma) {
         pragmas.add(_pragma);
+    }
+    public void addSafetyPragma(String _pragma) {
+        safety_pragmas.add(_pragma);
     }
     public void addConstant(AvatarConstant _constant) {
 	//Only add unique constants

@@ -85,10 +85,13 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     protected JButton close;
     protected JButton eraseAll;
 
-    protected JCheckBox deadlockE, deadlockA, generateTrace, custom, stateE, stateA, stateL, showDetails, translateCustom;
+    protected JCheckBox deadlockE, deadlockA, generateTrace, custom, stateE, stateA, stateL, showDetails;
     protected JTextField customText;
     protected JTextField translatedText;
     protected TURTLEPanel tp;
+    protected LinkedList<JCheckBox> customChecks;
+
+    protected LinkedList<String> customQueries;
 
 
     /** Creates new form  */
@@ -103,9 +106,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         spec = _spec;
         host = _host;
         tp = _tp;
-
+	customQueries = mgui.gtm.getAvatarSpecification().getSafetyPragmas();
         //TraceManager.addDev("Panel in UPPAAL Validation: " + mgui.getTabName(tp));
-
+	customChecks = new LinkedList<JCheckBox>();
 
         initComponents();
         myInitComponents();
@@ -172,19 +175,25 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         stateL.setToolTipText("Study the fact that, if accessed,  a given state is eventually followed by another one");
         jp1.add(stateL, c1);
         stateL.setSelected(stateLChecked);
-
+	c1.gridwidth = GridBagConstraints.REMAINDER;
         custom = new JCheckBox("Custom verification");
         custom.addActionListener(this);
         jp1.add(custom, c1);
         custom.setSelected(customChecked);
-        
-        c1.gridwidth = 1;
-        jp1.add(new JLabel("Custom formula to translate = "), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+	for (String s: customQueries){
+	    JCheckBox cqb = new JCheckBox(s);
+	    cqb.addActionListener(this);
+	    jp1.add(cqb, c1);	
+	    customChecks.add(cqb);
+	    
+	}
+      /*  jp1.add(new JLabel("Custom formula to translate = "), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         customText = new JTextField("Type your CTL formulae here!", 80);
         customText.addActionListener(this);
         jp1.add(customText, c1);
-	
+
         c1.gridwidth = 1;
 	translateCustom = new JCheckBox("Use translated custom verification");
         translateCustom.addActionListener(this);
@@ -194,7 +203,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 	translatedText = new JTextField("Translated CTL formula here", 80);
 	customText.addActionListener(this);
 	jp1.add(translatedText,c1);
-
+	*/
         generateTrace = new JCheckBox("Generate simulation trace");
         generateTrace.addActionListener(this);
         jp1.add(generateTrace, c1);
@@ -275,7 +284,6 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         stateAChecked = stateA.isSelected();
         stateLChecked = stateL.isSelected();
         customChecked = custom.isSelected();
-	translateChecked = translateCustom.isSelected();
         generateTraceChecked = generateTrace.isSelected();
         showDetailsChecked = showDetails.isSelected();
         dispose();
@@ -429,11 +437,14 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 jta.append("\n\n--------------------------------------------\n");
 
                 jta.append("Studying custom CTL formulae\n");
-		if (!translateCustom.isSelected()) {
-		    translateCustomQuery(customText.getText());                    
+		for (JCheckBox j: customChecks){
+		    if (j.isSelected()){
+			jta.append(j.getText()+"\n");
+		        String translation = translateCustomQuery(j.getText());
+  		        workQuery(translation, fn, trace_id, rshc);
+                        trace_id++;
+		    }
 		}
-		workQuery(translatedText.getText(), fn, trace_id, rshc);
-                trace_id++;
             }
 
             //Removing files
@@ -470,10 +481,12 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         mode = NOT_STARTED;
         setButtons();
     }
-    private void translateCustomQuery(String query){
+    private String translateCustomQuery(String query){
 	UPPAALSpec spec = mgui.gtm.getLastUPPAALSpecification();
 	AVATAR2UPPAAL avatar2uppaal = mgui.gtm.getAvatar2Uppaal();
 	AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
+	//LinkedList<String> customQueries = avspec.getSafetyPragmas();
+	System.out.println("First custom query "+ customQueries.get(0));
 	Hashtable <String, String> hash = avatar2uppaal.getHash();
 	String finQuery=query+" ";
 /*	String[] split = query.split("[\\s-()=]+");
@@ -500,7 +513,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 	    finQuery = finQuery.replaceAll(str+"\\-", hash.get(str)+"\\-");
 	}
 	if (avspec==null){
-	    return;
+	    return "";
 	}
 
 	LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
@@ -511,7 +524,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 		finQuery = finQuery.replaceAll(block.getName(), block.getName()+"__"+index);
 	    }
 	}
-	translatedText.setText(finQuery);
+	//translatedText.setText(finQuery);
+	return finQuery;
     }
     private void workQuery(String query, String fn, int trace_id, RshClient rshc) throws LauncherException {
 
@@ -598,8 +612,6 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             stateE.setEnabled(true);
             stateA.setEnabled(true);
             stateL.setEnabled(true);
-            //customText.setEnabled(true);
-            customText.setEnabled(custom.isSelected());
             generateTrace.setEnabled(true);
             showDetails.setEnabled(true);
 
@@ -623,7 +635,6 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             stateE.setEnabled(false);
             stateA.setEnabled(false);
             stateL.setEnabled(false);
-            customText.setEnabled(false);
             generateTrace.setEnabled(false);
             showDetails.setEnabled(false);
             start.setEnabled(false);
@@ -640,7 +651,6 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             stateE.setEnabled(false);
             stateA.setEnabled(false);
             stateL.setEnabled(false);
-            customText.setEnabled(false);
             generateTrace.setEnabled(false);
             showDetails.setEnabled(false);
             start.setEnabled(false);

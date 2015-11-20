@@ -92,7 +92,7 @@ public class IconManager {
     //Common to all diagrams
     public static ImageIcon imgic302, imgic304, imgic306, imgic308;
     public static ImageIcon imgic310, imgic312, imgic314, imgic315, imgic316, imgic317, imgic318, imgic319;
-    public static ImageIcon imgic320, imgic321, imgic322, imgic323, imgic324, imgic6000, imgic6001;
+    public static ImageIcon imgic320, imgic321, imgic322, imgic323, imgic324, imgic6000, imgic6001, imgic6002, imgic6003;
     public static ImageIcon imgic330, imgic331, imgic332, imgic333, imgic334, imgic335, imgic336, imgic337, imgic338, imgic339;
     public static ImageIcon imgic340, imgic341, imgic342, imgic344;
 
@@ -569,6 +569,8 @@ public class IconManager {
     private static String icon5114 = "images/toolbarButtonGraphics/general/Search16_I.gif";
     private static String icon6000 = "images/toolbarButtonGraphics/general/pragma16.gif";
     private static String icon6001 = "images/toolbarButtonGraphics/general/pragma24.gif";
+    private static String icon6002 = "images/toolbarButtonGraphics/general/safepragma16.gif";
+    private static String icon6003 = "images/toolbarButtonGraphics/general/safepragma24.gif";
     public IconManager() {
 
     }
@@ -963,6 +965,8 @@ public class IconManager {
 
         imgic6000 = getIcon(icon6000);
 	imgic6001 = getIcon(icon6001);
+        imgic6002 = getIcon(icon6002);
+	imgic6003 = getIcon(icon6003);
     }
 
 } // Class

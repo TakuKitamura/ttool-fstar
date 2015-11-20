@@ -128,6 +128,7 @@ public class AvatarDesignPanelTranslator {
         Iterator iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
         TGComponent tgc;
         AvatarBDPragma tgcn;
+	AvatarBDSafetyPragma tgsp;
         String values [];
         String tmp;
 	LinkedList<AvatarPragma> pragmaList;
@@ -167,6 +168,13 @@ public class AvatarDesignPanelTranslator {
                     }
                 }
             }
+	    if (tgc instanceof AvatarBDSafetyPragma) {
+		tgsp = (AvatarBDSafetyPragma)tgc;
+                values = tgsp.getValues();
+		for (String s: values){
+		    _as.addSafetyPragma(s);
+		}
+	    }
         }
     }
 

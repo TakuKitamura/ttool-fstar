@@ -491,7 +491,8 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_VIEW_PM_SAVED_AUT = 267;
 
     public static final int UML_NOTE = 42;
-    public static final int PRAGMA = 43;
+    public static final int PRAGMA = 600;
+    public static final int SAFETY_PRAGMA = 601;
 
     public static final int ACT_CUT = 44;
     public static final int ACT_COPY = 45;
@@ -557,7 +558,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_INTERNAL_SEARCH = 415;
     //--
 
-    public static final int NB_ACTION = 418;
+    public static final int NB_ACTION = 700;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -792,6 +793,7 @@ public class TGUIAction extends AbstractAction {
         actions[TCD_ASSOCIATION_NAVIGATION] = new TAction("add-association-navigation", "Add association with navigation", IconManager.imgic106, IconManager.imgic108, "Association with navigation", "Adds an association with a navigation indication between two tclasses of the currently opened class diagram", 0);
         actions[UML_NOTE] = new TAction("edit-note", "Add a note to a diagram", IconManager.imgic320, IconManager.imgic321, "Add a comment", "Add a comment to the currently opened TTool diagram", 0);
         actions[PRAGMA] = new TAction("pragma", "Add a pragma to a diagram", IconManager.imgic6000, IconManager.imgic6001, "Add a pragma", "Add a pragma to the currently opened TTool diagram", 0);
+        actions[SAFETY_PRAGMA] = new TAction("safety_pragma", "Add a safety (UPPAAL) pragma to a diagram", IconManager.imgic6002, IconManager.imgic6003, "Add a safety (UPPAAL) pragma", "Add a safety (UPPAAL) pragma to the currently opened TTool diagram", 0);
 
         actions[IOD_EDIT] = new TAction("edit-io-diagram", "Edit interaction overview diagram", IconManager.imgic100, IconManager.imgic101, "Edit interaction overview diagram", "Make it possible to edit the currently opened interaction overview diagram", 0);
         actions[IOD_CONNECTOR] = new TAction("add-iod-connector", "Add IOD Connector", IconManager.imgic202, IconManager.imgic202, "Connector", "Add a Connector between two components of the currently opened interaction overview diagram", 0);

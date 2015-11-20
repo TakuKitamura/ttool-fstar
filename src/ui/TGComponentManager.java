@@ -165,6 +165,7 @@ public class TGComponentManager {
 
     public static final int UML_NOTE = 301;
     public static final int PRAGMA = 302;
+    public static final int SAFETY_PRAGMA = 303;
 
 
     public static final int IOD_CHOICE = 501;
@@ -730,6 +731,9 @@ public class TGComponentManager {
             break;
         case PRAGMA:
             tgc = new AvatarBDPragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SAFETY_PRAGMA:
+            tgc = new AvatarBDSafetyPragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case IOD_CHOICE:
             tgc = new IODChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
