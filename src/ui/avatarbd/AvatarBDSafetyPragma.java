@@ -169,7 +169,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         g.drawLine(x, y+height, x+width-limit, y+height);
         g.drawLine(x+width, y, x+width, y+height - limit);
 
-        g.setColor(ColorManager.PRAGMA_BG);
+        g.setColor(ColorManager.SAFETY_PRAGMA_BG);
         int [] px1 = {x+1, x+width, x + width, x + width-limit, x+1};
         int [] py1 = {y+1, y+1, y+height-limit, y+height, y+height};
         g.fillPolygon(px1, py1, 5);

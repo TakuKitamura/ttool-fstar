@@ -79,8 +79,9 @@ public class ColorManager {
     public static final Color POINTED_0 = new Color(139, 79, 11);
 
     //public static final Color UML_NOTE_BG = new Color(189, 91, 13, 200);
-    public static  Color UML_NOTE_BG = new Color(173, 190, 234);
-    public static  Color PRAGMA_BG = new Color(200, 170, 200);
+    public static Color UML_NOTE_BG = new Color(173, 190, 234);
+    public static Color PRAGMA_BG = new Color(200, 170, 200);
+    public static Color SAFETY_PRAGMA_BG = new Color(230, 200, 230);
     public static final Color COMPOSITION_OPERATOR = Color.yellow;
     public static final Color ATTRIBUTE_BOX = new Color(199, 243, 105);
     public static final Color ATTRIBUTE_BOX_ACTION = new Color(199, 243, 105);
@@ -128,6 +129,7 @@ public class ColorManager {
 
     public static final Color UML_NOTE = new Color(73, 90, 134);
     public static final Color PRAGMA = new Color(100, 0, 100);
+    public static final Color SAFETY_PRAGMA = new Color(100, 100, 0);
 
     public static final Color SD_REFERENCE = new Color(104, 229, 255);
     public static final Color IOD_REFERENCE = new Color(216, 187, 249);
