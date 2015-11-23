@@ -632,10 +632,11 @@ public class AVATAR2UPPAAL {
                 _previous = loc;
 
             } else {
+                _previous.unsetOptimizable();
                 hash.put(_elt, _previous);
 	        translateString.put(_block.getName()+"."+_elt.getName(),_block.getName()+"."+_previous.name);
             }
-
+	    System.out.println(_block.getName()+"."+_elt.getName()+":"+_block.getName()+"."+_previous.name);
             state = (AvatarState)_elt;
 
 

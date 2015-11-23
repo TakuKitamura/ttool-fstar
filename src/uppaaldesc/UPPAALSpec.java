@@ -136,6 +136,7 @@ public class UPPAALSpec {
 	}
 	
 	public void optimize() {
+		
 		ListIterator iterator = templates.listIterator();
 		UPPAALTemplate template;
 		
@@ -145,5 +146,6 @@ public class UPPAALSpec {
 			template = (UPPAALTemplate)(iterator.next());
 			template.optimize();
 		}
+		
 	}
 }

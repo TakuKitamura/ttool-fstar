@@ -109,7 +109,6 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 	customQueries = mgui.gtm.getAvatarSpecification().getSafetyPragmas();
         //TraceManager.addDev("Panel in UPPAAL Validation: " + mgui.getTabName(tp));
 	customChecks = new LinkedList<JCheckBox>();
-
         initComponents();
         myInitComponents();
         pack();

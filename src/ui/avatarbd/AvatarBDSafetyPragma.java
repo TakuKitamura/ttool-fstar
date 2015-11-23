@@ -215,6 +215,9 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 	    else if (Arrays.asList(pPragma).contains(s.split(" ")[0])){
 		properties.add(s);
 	    }
+	    else if (s.contains("-->")){
+		properties.add(s);
+	    }
 	    else {
 		//Warning Message
 		JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
