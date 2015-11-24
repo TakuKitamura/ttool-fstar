@@ -230,8 +230,13 @@ public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionLi
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
         helpPopup = new JPopupMenu();
-	JTextArea jft = new JTextArea("A[] E[] E<> A<>");
+	JTextArea jft = new JTextArea("UPPAAL pragmas");
 	helpPopup.add(jft);
+	helpPopup.add(new JLabel(new ImageIcon("src/ui/window/helpMenuImages/A1.gif")));	
+	helpPopup.add(new JLabel(new ImageIcon("src/ui/window/helpMenuImages/A2.gif")));
+	helpPopup.add(new JLabel(new ImageIcon("src/ui/window/helpMenuImages/E1.gif")));
+	helpPopup.add(new JLabel(new ImageIcon("src/ui/window/helpMenuImages/E2.gif")));
+	helpPopup.add(new JLabel(new ImageIcon("src/ui/window/helpMenuImages/imply.gif")));
         textarea = new JTextArea();
 
         textarea.setEditable(true);
