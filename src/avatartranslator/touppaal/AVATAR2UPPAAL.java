@@ -71,7 +71,7 @@ public class AVATAR2UPPAAL {
     private LinkedList gatesSynchronized;
     private LinkedList gatesSynchronizedRelations;
     private LinkedList gatesAsynchronized;
-
+    private LinkedList<String> unoptStates;
     private int nbOfIntParameters, nbOfBooleanParameters;
 
     private Hashtable <AvatarStateMachineElement, UPPAALLocation> hash;
@@ -159,7 +159,16 @@ public class AVATAR2UPPAAL {
         avspec.removeCompositeStates();
         avspec.removeTimers();
         avspec.makeRobustness();
-
+	LinkedList<String> uppaalPragmas = avspec.getSafetyPragmas();
+	unoptStates= new LinkedList<String>();
+	for (String s: uppaalPragmas){
+	    String[] split = s.split("[^a-zA-Z0-9\\.]");
+	    for (String t:split){
+		if (t.contains(".")){
+		    unoptStates.add(t);
+		}
+	    }
+	}
 
         //TraceManager.addDev("->   Spec:" + avspec.toString());
 
@@ -620,7 +629,7 @@ public class AVATAR2UPPAAL {
             // Avatar State
         } else if (_elt instanceof AvatarState) {
             TraceManager.addDev("+ + + + + + + + + + + State " + _elt + ": first handling");
-            if (_elt.isCheckable()) {
+            if (_elt.isCheckable() || unoptStates.contains(_block.getName()+"."+_elt.getName())) {
                 TraceManager.addDev("[CHECKING] State " + _elt + " is selected for checking previous=" + _previous);
                 _previous.unsetOptimizable();
                 _previous.setCommitted();
@@ -636,7 +645,7 @@ public class AVATAR2UPPAAL {
                 hash.put(_elt, _previous);
 	        translateString.put(_block.getName()+"."+_elt.getName(),_block.getName()+"."+_previous.name);
             }
-	    System.out.println(_block.getName()+"."+_elt.getName()+":"+_block.getName()+"."+_previous.name);
+	    //System.out.println(_block.getName()+"."+_elt.getName()+":"+_block.getName()+"."+_previous.name);
             state = (AvatarState)_elt;
 
 
