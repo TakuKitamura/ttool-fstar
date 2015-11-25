@@ -398,6 +398,11 @@ clean:
 	done
 	rm -f $(TEST_DIR)/*.class
 
+
+publishjar: ttooljar
+	scp bin/ttool.jar apvrille@ssh.enst.fr:public_html/docs/
+	ssh apvrille@ssh.enst.fr "chmod a+r public_html/docs/ttool.jar"
+
 ultraclean: clean
 	@@for p in $(RELEASE_STD_FILES_BIN); do \
 		echo rm -f $$p;\
