@@ -77,27 +77,35 @@ public class RshServer {
     public static String iv = "Wh4t4b0utThisKe?";
 
     public RshServer() {
-        TraceManager.addDev("Using port: " + port);
-        processes = new Vector();
-        try {
-            server = new ServerSocket(port);
-        } catch (Exception e) {
-            System.out.println("Server could not start(Socket pb)");
-        }		
-    }
-
-    public RshServer(String _sk) {
-        TraceManager.addDev("Using port: " + port);
-	sk = _sk;
-        processes = new Vector();
-        try {
-            server = new ServerSocket(port);
-        } catch (Exception e) {
-            System.out.println("Server could not start(Socket pb)");
-        }		
+	startingServer();
     }
 
     
+    public RshServer(String _sk) {
+	sk = _sk;
+	startingServer();
+    }
+
+    private void startingServer() {
+	processes = new Vector();
+	int i = 0;
+	for(i=0; i<100; i++) {
+	    try {
+		server = new ServerSocket(port+i);
+		break;
+	    } catch (Exception e) {
+		//System.out.println("Server could not start(Socket pb)");
+	    }
+	}
+	if (i == 100) {
+	    System.out.println("Launching external applications is disabled: no socket is available");
+	} else {
+	    port = port +i;
+	    launcher.RshClient.PORT_NUMBER = port;
+	    TraceManager.addDev("Using port: " + port);
+	}
+    }
+
 
     public void setNonSecure() {
         isSecure = false;

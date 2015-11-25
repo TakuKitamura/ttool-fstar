@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<TURTLEGMODELING version="0.93-beta3">
+<TURTLEGMODELING version="0.98-beta3">
 
 <Modeling type="AVATAR Design" nameTab="NetworkSystem" >
 <AVATARBlockDiagramPanel name="AVATAR Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" >
+<MainCode value="void __user_init() {"/>
+<MainCode value="}"/>
+<Optimized value="true" />
+<Validated value="" />
+<Ignored value="" />
+
 <CONNECTOR type="5002" id="2" >
 <cdparam x="695" y="206" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -38,7 +44,7 @@
 </CONNECTOR>
 <COMPONENT type="5003" id="13" >
 <cdparam x="272" y="452" />
-<sizeparam width="149" height="93" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="149" height="93" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="DataType0" value="PDU" />
@@ -58,7 +64,7 @@
 
 <COMPONENT type="5000" id="38" >
 <cdparam x="862" y="181" />
-<sizeparam width="183" height="200" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="183" height="200" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Block0" value="Server" />
@@ -87,6 +93,7 @@
 <TGConnectingPoint num="22" id="36" />
 <TGConnectingPoint num="23" id="37" />
 <extraparam>
+<CryptoBlock value="false" />
 <Attribute access="0" id="pdu" value="" type="5" typeOther="PDU" />
 <Method value="gotPDUFromClient(int x)" />
 <Signal value="in socket_in(PDU pdu)" />
@@ -96,7 +103,7 @@
 
 <COMPONENT type="5000" id="63" >
 <cdparam x="21" y="134" />
-<sizeparam width="191" height="200" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="191" height="200" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Block0" value="Client" />
@@ -125,6 +132,7 @@
 <TGConnectingPoint num="22" id="61" />
 <TGConnectingPoint num="23" id="62" />
 <extraparam>
+<CryptoBlock value="false" />
 <Attribute access="0" id="x" value="" type="8" typeOther="" />
 <Attribute access="0" id="d" value="14" type="8" typeOther="" />
 <Attribute access="0" id="pdu" value="" type="5" typeOther="PDU" />
@@ -137,7 +145,7 @@
 
 <COMPONENT type="5000" id="138" >
 <cdparam x="350" y="22" />
-<sizeparam width="392" height="349" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="392" height="349" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Block0" value="Network" />
@@ -166,6 +174,7 @@
 <TGConnectingPoint num="22" id="136" />
 <TGConnectingPoint num="23" id="137" />
 <extraparam>
+<CryptoBlock value="false" />
 <Method value="gotPacket(int x)" />
 <Signal value="in port0_in(PDU pdu)" />
 <Signal value="out port0_out(PDU pdu)" />
@@ -176,7 +185,7 @@
 <SUBCOMPONENT type="5000" id="88" >
 <father id="138" num="0" />
 <cdparam x="375" y="151" />
-<sizeparam width="162" height="198" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="162" height="198" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="230" minY="0" maxY="151" />
 <infoparam name="Block0" value="Port0In" />
@@ -205,6 +214,7 @@
 <TGConnectingPoint num="22" id="86" />
 <TGConnectingPoint num="23" id="87" />
 <extraparam>
+<CryptoBlock value="false" />
 <Attribute access="0" id="d" value="5" type="8" typeOther="" />
 <Attribute access="0" id="pdu" value="" type="5" typeOther="PDU" />
 </extraparam>
@@ -212,7 +222,7 @@
 <SUBCOMPONENT type="5000" id="113" >
 <father id="138" num="1" />
 <cdparam x="568" y="156" />
-<sizeparam width="153" height="201" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="153" height="201" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="239" minY="0" maxY="148" />
 <infoparam name="Block0" value="Port1In" />
@@ -241,6 +251,7 @@
 <TGConnectingPoint num="22" id="111" />
 <TGConnectingPoint num="23" id="112" />
 <extraparam>
+<CryptoBlock value="false" />
 <Attribute access="0" id="d" value="5" type="8" typeOther="" />
 <Attribute access="0" id="pdu" value="" type="5" typeOther="PDU" />
 </extraparam>
@@ -269,7 +280,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="139" >
 <father id="153" num="0" />
 <cdparam x="407" y="385" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
@@ -277,7 +288,7 @@
 <SUBCOMPONENT type="-1" id="140" >
 <father id="153" num="1" />
 <cdparam x="299" y="385" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
@@ -285,7 +296,7 @@
 <SUBCOMPONENT type="-1" id="141" >
 <father id="153" num="2" />
 <cdparam x="299" y="100" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
@@ -293,7 +304,7 @@
 <SUBCOMPONENT type="-1" id="142" >
 <father id="153" num="3" />
 <cdparam x="370" y="100" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
@@ -301,7 +312,7 @@
 <SUBCOMPONENT type="-1" id="147" >
 <father id="153" num="4" />
 <cdparam x="429" y="405" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -315,8 +326,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -331,7 +340,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="158" >
 <father id="160" num="0" />
 <cdparam x="435" y="302" />
-<sizeparam width="145" height="30" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="145" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -347,8 +356,6 @@
 <computeMax value="" />
 <actions value="gotPDUFromClient(pdu.x)" />
 <actions value="pdu.x = pdu.x + 5" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -363,7 +370,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="165" >
 <father id="167" num="0" />
 <cdparam x="424" y="249" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -377,8 +384,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -393,7 +398,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="172" >
 <father id="174" num="0" />
 <cdparam x="407" y="110" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -407,14 +412,12 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="5103" id="185" >
-<cdparam x="356" y="340" />
-<sizeparam width="102" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="351" y="340" />
+<sizeparam width="113" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="socket_out(pdu)" />
@@ -432,7 +435,7 @@
 
 <COMPONENT type="5106" id="226" >
 <cdparam x="334" y="120" />
-<sizeparam width="146" height="50" minWidth="40" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="146" height="50" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="state0" value="Wait4ClientPacket" />
@@ -476,11 +479,13 @@
 <TGConnectingPoint num="37" id="223" />
 <TGConnectingPoint num="38" id="224" />
 <TGConnectingPoint num="39" id="225" />
+<extraparam>
+</extraparam>
 </COMPONENT>
 
 <COMPONENT type="5104" id="237" >
-<cdparam x="356" y="238" />
-<sizeparam width="102" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="352" y="238" />
+<sizeparam width="111" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="socket_in(pdu)" />
@@ -499,7 +504,7 @@
 
 <COMPONENT type="5100" id="239" >
 <cdparam x="400" y="50" />
-<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="start state" value="null" />
@@ -521,7 +526,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="244" >
 <father id="246" num="0" />
 <cdparam x="412" y="438" />
-<sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -535,8 +540,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -551,7 +554,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="251" >
 <father id="253" num="0" />
 <cdparam x="413" y="368" />
-<sizeparam width="76" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="76" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -566,8 +569,6 @@
 <computeMin value="" />
 <computeMax value="" />
 <actions value="gotData(pdu)" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -582,7 +583,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="258" >
 <father id="260" num="0" />
 <cdparam x="386" y="331" />
-<sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -596,8 +597,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -612,7 +611,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="265" >
 <father id="267" num="0" />
 <cdparam x="358" y="215" />
-<sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -626,8 +625,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -642,7 +639,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="272" >
 <father id="274" num="0" />
 <cdparam x="662" y="321" />
-<sizeparam width="95" height="30" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="95" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -657,8 +654,6 @@
 <computeMin value="" />
 <computeMax value="" />
 <actions value="switchOff()" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -673,7 +668,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="279" >
 <father id="281" num="0" />
 <cdparam x="345" y="75" />
-<sizeparam width="60" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="60" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -688,8 +683,6 @@
 <computeMin value="" />
 <computeMax value="" />
 <actions value="pdu.x = 8" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -704,7 +697,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="286" >
 <father id="288" num="0" />
 <cdparam x="402" y="205" />
-<sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -718,14 +711,12 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="5101" id="290" >
 <cdparam x="772" y="362" />
-<sizeparam width="20" height="20" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="20" height="20" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="stop state" value="null" />
@@ -734,7 +725,7 @@
 
 <COMPONENT type="5100" id="292" >
 <cdparam x="313" y="29" />
-<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="start state" value="null" />
@@ -743,7 +734,7 @@
 
 <COMPONENT type="5106" id="450" >
 <cdparam x="236" y="116" />
-<sizeparam width="384" height="427" minWidth="40" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="384" height="427" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="state0" value="Transmit" />
@@ -788,11 +779,13 @@
 <TGConnectingPoint num="38" id="448" />
 <TGConnectingPoint num="39" id="449" />
 <accessibility />
+<extraparam>
+</extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="5103" id="303" >
 <father id="450" num="0" />
-<cdparam x="360" y="401" />
-<sizeparam width="102" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="355" y="401" />
+<sizeparam width="113" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="301" minY="0" maxY="407" />
 <infoparam name="Send signal" value="socket_out(pdu)" />
@@ -811,7 +804,7 @@
 <SUBCOMPONENT type="5106" id="344" >
 <father id="450" num="1" />
 <cdparam x="303" y="250" />
-<sizeparam width="153" height="40" minWidth="40" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="153" height="40" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="231" minY="0" maxY="387" />
 <infoparam name="state0" value="WaitForServer" />
@@ -858,11 +851,13 @@
 <accessibility />
 <invariant />
 <mastermutex />
+<extraparam>
+</extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5103" id="355" >
 <father id="450" num="2" />
-<cdparam x="307" y="193" />
-<sizeparam width="102" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="302" y="193" />
+<sizeparam width="113" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="301" minY="0" maxY="407" />
 <infoparam name="Send signal" value="socket_out(pdu)" />
@@ -880,7 +875,7 @@
 <SUBCOMPONENT type="5100" id="357" >
 <father id="450" num="3" />
 <cdparam x="344" y="154" />
-<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="369" minY="0" maxY="412" />
 <infoparam name="start state" value="null" />
@@ -888,8 +883,8 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5104" id="368" >
 <father id="450" num="4" />
-<cdparam x="347" y="323" />
-<sizeparam width="102" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="343" y="323" />
+<sizeparam width="111" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="301" minY="0" maxY="407" />
 <infoparam name="Send signal" value="socket_in(pdu)" />
@@ -907,7 +902,7 @@
 <SUBCOMPONENT type="5106" id="409" >
 <father id="450" num="5" />
 <cdparam x="354" y="467" />
-<sizeparam width="149" height="40" minWidth="40" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="149" height="40" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="235" minY="0" maxY="387" />
 <infoparam name="state0" value="WaitForServer" />
@@ -951,6 +946,8 @@
 <TGConnectingPoint num="37" id="406" />
 <TGConnectingPoint num="38" id="407" />
 <TGConnectingPoint num="39" id="408" />
+<extraparam>
+</extraparam>
 </SUBCOMPONENT>
 
 
@@ -968,7 +965,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="455" >
 <father id="457" num="0" />
 <cdparam x="407" y="110" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -982,14 +979,12 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="5101" id="459" >
 <cdparam x="402" y="93" />
-<sizeparam width="20" height="20" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="20" height="20" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="stop state" value="null" />
@@ -998,7 +993,7 @@
 
 <COMPONENT type="5100" id="461" >
 <cdparam x="400" y="50" />
-<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="start state" value="null" />
@@ -1020,7 +1015,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="466" >
 <father id="468" num="0" />
 <cdparam x="478" y="274" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -1034,8 +1029,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1050,7 +1043,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="473" >
 <father id="475" num="0" />
 <cdparam x="515" y="330" />
-<sizeparam width="111" height="32" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="111" height="32" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -1065,8 +1058,6 @@
 <computeMin value="" />
 <computeMax value="" />
 <actions value="gotPacket(pdu.x)" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1087,7 +1078,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="476" >
 <father id="488" num="0" />
 <cdparam x="356" y="397" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
@@ -1095,7 +1086,7 @@
 <SUBCOMPONENT type="-1" id="477" >
 <father id="488" num="1" />
 <cdparam x="356" y="163" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
@@ -1103,7 +1094,7 @@
 <SUBCOMPONENT type="-1" id="478" >
 <father id="488" num="2" />
 <cdparam x="434" y="163" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
@@ -1111,7 +1102,7 @@
 <SUBCOMPONENT type="-1" id="483" >
 <father id="488" num="3" />
 <cdparam x="504" y="399" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -1125,8 +1116,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1141,7 +1130,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="493" >
 <father id="495" num="0" />
 <cdparam x="471" y="144" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -1155,14 +1144,12 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="5103" id="506" >
-<cdparam x="460" y="356" />
-<sizeparam width="91" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="453" y="356" />
+<sizeparam width="105" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="port0_out(pdu)" />
@@ -1179,8 +1166,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="517" >
-<cdparam x="460" y="280" />
-<sizeparam width="91" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="454" y="280" />
+<sizeparam width="103" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="port1_in(pdu)" />
@@ -1198,7 +1185,7 @@
 
 <COMPONENT type="5106" id="558" >
 <cdparam x="451" y="161" />
-<sizeparam width="109" height="73" minWidth="40" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="109" height="73" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="state0" value="WaitForPacket" />
@@ -1242,11 +1229,13 @@
 <TGConnectingPoint num="37" id="555" />
 <TGConnectingPoint num="38" id="556" />
 <TGConnectingPoint num="39" id="557" />
+<extraparam>
+</extraparam>
 </COMPONENT>
 
 <COMPONENT type="5100" id="560" >
 <cdparam x="464" y="84" />
-<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="start state" value="null" />
@@ -1268,7 +1257,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="565" >
 <father id="567" num="0" />
 <cdparam x="407" y="110" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -1282,8 +1271,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1304,7 +1291,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="568" >
 <father id="580" num="0" />
 <cdparam x="435" y="372" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
@@ -1312,7 +1299,7 @@
 <SUBCOMPONENT type="-1" id="569" >
 <father id="580" num="1" />
 <cdparam x="315" y="368" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
@@ -1320,7 +1307,7 @@
 <SUBCOMPONENT type="-1" id="570" >
 <father id="580" num="2" />
 <cdparam x="309" y="187" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
@@ -1328,7 +1315,7 @@
 <SUBCOMPONENT type="-1" id="575" >
 <father id="580" num="3" />
 <cdparam x="440" y="365" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -1342,8 +1329,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1358,7 +1343,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="585" >
 <father id="587" num="0" />
 <cdparam x="472" y="280" />
-<sizeparam width="91" height="32" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="91" height="32" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -1373,8 +1358,6 @@
 <computeMin value="" />
 <computeMax value="" />
 <actions value="gotPacket(pdu.x)" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1389,7 +1372,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="592" >
 <father id="594" num="0" />
 <cdparam x="414" y="240" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -1403,14 +1386,12 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="5103" id="605" >
-<cdparam x="395" y="311" />
-<sizeparam width="91" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="388" y="311" />
+<sizeparam width="105" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="port1_out(pdu)" />
@@ -1427,8 +1408,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="616" >
-<cdparam x="395" y="240" />
-<sizeparam width="91" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="389" y="240" />
+<sizeparam width="103" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="port0_in(pdu)" />
@@ -1446,7 +1427,7 @@
 
 <COMPONENT type="5106" id="657" >
 <cdparam x="387" y="127" />
-<sizeparam width="109" height="73" minWidth="40" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="109" height="73" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="state0" value="WaitForPacket" />
@@ -1490,11 +1471,13 @@
 <TGConnectingPoint num="37" id="654" />
 <TGConnectingPoint num="38" id="655" />
 <TGConnectingPoint num="39" id="656" />
+<extraparam>
+</extraparam>
 </COMPONENT>
 
 <COMPONENT type="5100" id="659" >
 <cdparam x="400" y="50" />
-<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="start state" value="null" />
