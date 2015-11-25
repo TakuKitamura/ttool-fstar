@@ -133,7 +133,6 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         JPanel jp1 = new JPanel();
         GridBagLayout gridbag1 = new GridBagLayout();
         GridBagConstraints c1 = new GridBagConstraints();
-
         jp1.setLayout(gridbag1);
         jp1.setBorder(new javax.swing.border.TitledBorder("Verify with UPPAAL: options"));
         //jp1.setPreferredSize(new Dimension(300, 150));
@@ -179,10 +178,15 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         custom.addActionListener(this);
         jp1.add(custom, c1);
         custom.setSelected(customChecked);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 	for (String s: customQueries){
+	    c1.gridwidth = GridBagConstraints.RELATIVE;
+	    JLabel space = new JLabel("   ");
+	    c1.weightx=0.0;
+	    jp1.add(space, c1);
+            c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 	    JCheckBox cqb = new JCheckBox(s);
 	    cqb.addActionListener(this);
+	    c1.weightx=1.0;
 	    jp1.add(cqb, c1);	
 	    customChecks.add(cqb);
 	    
@@ -212,8 +216,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         showDetails.addActionListener(this);
         jp1.add(showDetails, c1);
         showDetails.setSelected(showDetailsChecked);
-
-
+	
+	jp1.setMinimumSize(jp1.getPreferredSize());
         c.add(jp1, BorderLayout.NORTH);
 
         jta = new ScrolledJTextArea();
@@ -247,7 +251,6 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         jp2.add(stop);
         jp2.add(close);
         jp2.add(eraseAll);
-
         c.add(jp2, BorderLayout.SOUTH);
     }
 
@@ -484,8 +487,6 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 	UPPAALSpec spec = mgui.gtm.getLastUPPAALSpecification();
 	AVATAR2UPPAAL avatar2uppaal = mgui.gtm.getAvatar2Uppaal();
 	AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
-	//LinkedList<String> customQueries = avspec.getSafetyPragmas();
-	System.out.println("First custom query "+ customQueries.get(0));
 	Hashtable <String, String> hash = avatar2uppaal.getHash();
 	String finQuery=query+" ";
 /*	String[] split = query.split("[\\s-()=]+");
@@ -613,7 +614,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             stateL.setEnabled(true);
             generateTrace.setEnabled(true);
             showDetails.setEnabled(true);
-
+	    for (JCheckBox cb: customChecks){
+		cb.setEnabled(custom.isSelected());
+	    }
             if (custom.isSelected() || /*deadlockE.isSelected() ||*/deadlockA.isSelected() || stateE.isSelected() || stateA.isSelected() || stateL.isSelected()) {
                 start.setEnabled(true);
             } else {
@@ -640,6 +643,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             stop.setEnabled(true);
             close.setEnabled(false);
             eraseAll.setEnabled(false);
+	    for (JCheckBox cb: customChecks){
+		cb.setEnabled(false);
+	    }
             getGlassPane().setVisible(true);
             break;
         case STOPPED:
@@ -657,6 +663,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             close.setEnabled(true);
             eraseAll.setEnabled(true);
             getGlassPane().setVisible(false);
+	    for (JCheckBox cb: customChecks){
+		cb.setEnabled(false);
+	    }
             break;
         }
     }
