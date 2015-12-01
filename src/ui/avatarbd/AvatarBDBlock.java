@@ -1067,6 +1067,74 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return ((AvatarDesignPanel)(tdp.tp)).getAvatarSMDPanel(getBlockName());
     }
 
+    public boolean isCryptoBlock() {
+        return isCryptoBlock;
+    }
+
+    public void removeCryptoElements() {
+        isCryptoBlock = false;
+
+        // Adding function
+        String method = "Message aencrypt(Message msg, Key k)";
+        removeMethodIfApplicable(myMethods, method);
+        method = "Message adecrypt(Message msg, Key k)";
+        removeMethodIfApplicable(myMethods, method);
+        method = "Key pk(Key k)";
+        removeMethodIfApplicable(myMethods, method);
+        method = "Message sign(Message msg, Key k)";
+        removeMethodIfApplicable(myMethods, method);
+        method = "bool verifySign(Message msg1, Message sig, Key k)";
+        removeMethodIfApplicable(myMethods, method);
+
+        /* Certifying */
+        method = "Message cert(Key k, Message msg)";
+        removeMethodIfApplicable(myMethods, method);
+        method = "bool verifyCert(Message cert, Key k)";
+        removeMethodIfApplicable(myMethods, method);
+        method = "Key getpk(Message cert)";
+        removeMethodIfApplicable(myMethods, method);
+
+
+        method = "Message sencrypt(Message msg, Key k)";
+        removeMethodIfApplicable(myMethods, method);
+        method = "Message sdecrypt(Message msg, Key k)";
+        removeMethodIfApplicable(myMethods, method);
+
+        method = "Message hash(Message msg)";
+        removeMethodIfApplicable(myMethods, method);
+
+        method = "Message MAC(Message msg, Key k)";
+        removeMethodIfApplicable(myMethods, method);
+        method = "bool verifyMAC(Message msg, Key k, Message macmsg)";
+        removeMethodIfApplicable(myMethods, method);
+
+        method = "Message concat2(Message msg1, Message msg2)";
+        removeMethodIfApplicable(myMethods, method);
+
+        method = "Message concat3(Message msg1, Message msg2, Message msg3)";
+        removeMethodIfApplicable(myMethods, method);
+
+        method = "Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)";
+        removeMethodIfApplicable(myMethods, method);
+
+
+        method = "get2(Message msg, Message msg1, Message msg2)";
+        removeMethodIfApplicable(myMethods, method);
+
+        method = "get3(Message msg, Message msg1, Message msg2, Message msg3)";
+        removeMethodIfApplicable(myMethods, method);
+
+        method = "get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)";
+        removeMethodIfApplicable(myMethods, method);
+
+        // Adding channels chin chout
+        /*String signal = "in chin(Message msg)";
+          addSignalIfApplicable(mySignals, signal);
+          signal = "out chout(Message msg)";
+          addSignalIfApplicable(mySignals, signal);*/
+
+    }
+
     public void addCryptoElements() {
         isCryptoBlock = true;
 
@@ -1131,7 +1199,23 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     }
 
-    private void addMethodIfApplicable(Vector _v, String _s) {
+    private void removeMethodIfApplicable(Vector _v, String _s) {
+        AvatarMethod am = null;
+        for(Object o: _v) {
+            if (o instanceof AvatarMethod) {
+                am = (AvatarMethod)o;
+                if (am.toString().compareTo(_s) == 0) {
+                    break;
+                }
+            }
+        }
+
+        if (am != null) {
+            _v.remove(am);
+        }
+    }
+
+     private void addMethodIfApplicable(Vector _v, String _s) {
         AvatarMethod am;
         for(Object o: _v) {
             if (o instanceof AvatarMethod) {

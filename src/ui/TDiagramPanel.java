@@ -125,7 +125,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected JPopupMenu componentMenu;
     protected JPopupMenu selectedMenu;
     protected int popupX, popupY;
-    protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide,search, enableDisable;
+    protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide,search, enableDisable, setAsCryptoBlock, setAsRegularBlock;
     protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex;
     protected JMenuItem breakpoint;
     protected JMenuItem paste, insertLibrary, upX, upY, downX, downY;
@@ -1449,6 +1449,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         componentMenu.add(hide);
         componentMenu.add(unhide);
         componentMenu.addSeparator();
+	componentMenu.add(setAsCryptoBlock);
+	componentMenu.add(setAsRegularBlock);
         componentMenu.add(setJavaCode);
         componentMenu.add(removeJavaCode);
         componentMenu.add(setInternalComment);
@@ -1533,6 +1535,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         unhide = new JMenuItem("Show internal components");
         unhide.addActionListener(menuAL);
+
+
+	setAsCryptoBlock = new JMenuItem("Set as crypto block");
+        setAsCryptoBlock.addActionListener(menuAL);
+
+	setAsRegularBlock = new JMenuItem("Set as regular block");
+        setAsRegularBlock.addActionListener(menuAL);
 
         setJavaCode = new JMenuItem("Set Java code");
         setJavaCode.addActionListener(menuAL);
@@ -1698,6 +1707,21 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             repaint();
             return;
         }
+
+	if ((e.getSource() == setAsCryptoBlock) || (e.getSource() == setAsRegularBlock)) {
+	    
+	    if (componentPopup instanceof AvatarBDBlock) {
+		AvatarBDBlock bd = (AvatarBDBlock) componentPopup;
+		if (bd.isCryptoBlock()) {
+		    bd.removeCryptoElements();
+		} else  {
+		    bd.addCryptoElements();
+		}
+		repaint();
+		return;
+	    }					   
+	}
+		
 
         if (e.getSource() == removeJavaCode) {
             componentPopup.setPreJavaCode(null);
@@ -1941,6 +1965,16 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             setJavaCode.setEnabled(false);
             removeJavaCode.setEnabled(false);
         }
+
+	if (componentPointed instanceof AvatarBDBlock) { 
+	    AvatarBDBlock block = (AvatarBDBlock)componentPointed;
+	    setAsCryptoBlock.setEnabled(!block.isCryptoBlock());
+	    setAsRegularBlock.setEnabled(block.isCryptoBlock());
+	} else { 
+	    setAsRegularBlock.setEnabled(false);
+	    setAsCryptoBlock.setEnabled(false);
+	}
+
 
         if (componentPointed instanceof EmbeddedComment) {
             setInternalComment.setEnabled(true);

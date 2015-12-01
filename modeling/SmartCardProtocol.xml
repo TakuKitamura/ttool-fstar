@@ -17,8 +17,8 @@
 </COMPONENT>
 
 <COMPONENT type="6002" id="13" >
-<cdparam x="438" y="234" />
-<sizeparam width="264" height="96" minWidth="10" minHeight="24" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="402" y="223" />
+<sizeparam width="279" height="96" minWidth="10" minHeight="24" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="TGComponent" value="Mapping" />
@@ -30,7 +30,7 @@
 </COMPONENT>
 <SUBCOMPONENT type="6005" id="6" >
 <father id="13" num="0" />
-<cdparam x="442" y="278" />
+<cdparam x="406" y="267" />
 <sizeparam width="8" height="8" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="605" maxX="605" minY="355" maxY="355" />
@@ -38,7 +38,7 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="6005" id="7" >
 <father id="13" num="1" />
-<cdparam x="442" y="265" />
+<cdparam x="406" y="254" />
 <sizeparam width="8" height="8" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="605" maxX="605" minY="340" maxY="340" />
@@ -61,21 +61,21 @@
 <cdparam x="604" y="124" />
 <sizeparam width="8" height="8" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="604" maxX="604" minY="124" maxY="124" />
-<infoparam name="value " value="Architecture2" />
+<cdrectangleparam minX="755" maxX="755" minY="155" maxY="155" />
+<infoparam name="value " value="Mapping2" />
 </SUBCOMPONENT>
 <SUBCOMPONENT type="6005" id="15" >
 <father id="20" num="1" />
 <cdparam x="604" y="112" />
 <sizeparam width="8" height="8" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="604" maxX="604" minY="112" maxY="112" />
-<infoparam name="value " value="Architecture1" />
+<cdrectangleparam minX="755" maxX="755" minY="140" maxY="140" />
+<infoparam name="value " value="Mapping1" />
 </SUBCOMPONENT>
 
 <COMPONENT type="6000" id="26" >
-<cdparam x="360" y="80" />
-<sizeparam width="160" height="96" minWidth="10" minHeight="24" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="273" y="80" />
+<sizeparam width="247" height="96" minWidth="10" minHeight="24" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="TGComponent" value="Application" />
@@ -86,7 +86,7 @@
 </COMPONENT>
 <SUBCOMPONENT type="6005" id="21" >
 <father id="26" num="0" />
-<cdparam x="364" y="112" />
+<cdparam x="277" y="112" />
 <sizeparam width="8" height="8" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="455" maxX="455" minY="140" maxY="140" />
@@ -99,7 +99,7 @@
 <infoparam name="connector from TGComponent to TGComponent" value="&lt;&lt;deriveReqt&gt;&gt;" />
 <TGConnectingPoint num="0" id="27" />
 <P1  x="680" y="176" id="16" />
-<P2  x="596" y="234" id="9" />
+<P2  x="569" y="223" id="9" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="6004" id="30" >
@@ -107,8 +107,8 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="&lt;&lt;deriveReqt&gt;&gt;" />
 <TGConnectingPoint num="0" id="29" />
-<P1  x="440" y="176" id="22" />
-<P2  x="543" y="234" id="8" />
+<P1  x="396" y="176" id="22" />
+<P2  x="513" y="223" id="8" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 
@@ -125,8 +125,8 @@
 <cdparam x="967" y="112" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="697" y="126" id="392" />
-<P2  x="639" y="126" id="133" />
+<P1  x="707" y="116" id="392" />
+<P2  x="629" y="116" id="133" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="33" >
@@ -134,7 +134,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
 <P1  x="831" y="152" id="195" />
-<P2  x="717" y="126" id="397" />
+<P2  x="707" y="136" id="397" />
 <Point x="832" y="126" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="32" >
@@ -150,7 +150,7 @@
 <cdparam x="337" y="99" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="417" y="85" id="515" />
+<P1  x="427" y="75" id="515" />
 <P2  x="326" y="94" id="98" />
 <Point x="326" y="85" />
 <AutomaticDrawing  data="true" />
@@ -168,7 +168,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
 <P1  x="515" y="95" id="131" />
-<P2  x="437" y="85" id="520" />
+<P2  x="427" y="95" id="520" />
 <Point x="515" y="85" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="36" >
@@ -184,143 +184,143 @@
 <cdparam x="337" y="286" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="417" y="295" id="496" />
-<P2  x="387" y="295" id="96" />
+<P1  x="427" y="285" id="496" />
+<P2  x="377" y="285" id="96" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="39" >
 <cdparam x="396" y="285" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="459" y="295" id="129" />
-<P2  x="437" y="295" id="501" />
+<P1  x="469" y="285" id="129" />
+<P2  x="427" y="305" id="501" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="40" >
 <cdparam x="337" y="237" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="417" y="235" id="477" />
-<P2  x="387" y="235" id="94" />
+<P1  x="427" y="225" id="477" />
+<P2  x="377" y="225" id="94" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="41" >
 <cdparam x="396" y="236" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="459" y="235" id="127" />
-<P2  x="437" y="235" id="482" />
+<P1  x="469" y="225" id="127" />
+<P2  x="427" y="245" id="482" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="42" >
 <cdparam x="353" y="208" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="437" y="199" id="463" />
-<P2  x="459" y="199" id="125" />
+<P1  x="427" y="209" id="463" />
+<P2  x="469" y="189" id="125" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="43" >
 <cdparam x="266" y="208" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="387" y="199" id="92" />
-<P2  x="417" y="199" id="458" />
+<P1  x="377" y="189" id="92" />
+<P2  x="427" y="189" id="458" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="44" >
 <cdparam x="353" y="181" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="437" y="269" id="444" />
-<P2  x="459" y="269" id="123" />
+<P1  x="427" y="279" id="444" />
+<P2  x="469" y="259" id="123" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="45" >
 <cdparam x="235" y="186" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="387" y="269" id="90" />
-<P2  x="417" y="269" id="439" />
+<P1  x="377" y="259" id="90" />
+<P2  x="427" y="259" id="439" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="46" >
 <cdparam x="353" y="161" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="437" y="162" id="539" />
-<P2  x="459" y="162" id="121" />
+<P1  x="427" y="172" id="539" />
+<P2  x="469" y="152" id="121" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="47" >
 <cdparam x="235" y="160" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="387" y="162" id="88" />
-<P2  x="417" y="162" id="534" />
+<P1  x="377" y="152" id="88" />
+<P2  x="427" y="152" id="534" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="48" >
 <cdparam x="787" y="206" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="697" y="253" id="373" />
-<P2  x="639" y="253" id="119" />
+<P1  x="707" y="243" id="373" />
+<P2  x="629" y="243" id="119" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="49" >
 <cdparam x="867" y="190" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="757" y="253" id="189" />
-<P2  x="717" y="253" id="378" />
+<P1  x="767" y="243" id="189" />
+<P2  x="707" y="263" id="378" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="50" >
 <cdparam x="803" y="180" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="717" y="224" id="359" />
-<P2  x="757" y="224" id="191" />
+<P1  x="707" y="234" id="359" />
+<P2  x="767" y="214" id="191" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="51" >
 <cdparam x="655" y="211" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="639" y="224" id="117" />
-<P2  x="697" y="224" id="354" />
+<P1  x="629" y="214" id="117" />
+<P2  x="707" y="214" id="354" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="52" >
 <cdparam x="803" y="159" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="717" y="189" id="340" />
-<P2  x="757" y="189" id="193" />
+<P1  x="707" y="199" id="340" />
+<P2  x="767" y="179" id="193" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="53" >
 <cdparam x="655" y="182" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="639" y="189" id="115" />
-<P2  x="697" y="189" id="335" />
+<P1  x="629" y="179" id="115" />
+<P2  x="707" y="179" id="335" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="54" >
 <cdparam x="655" y="151" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="628" y="306" id="113" />
-<P2  x="697" y="314" id="317" />
+<P1  x="628" y="286" id="113" />
+<P2  x="707" y="304" id="317" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="55" >
 <cdparam x="1028" y="535" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="545" y="304" id="109" />
+<P1  x="545" y="288" id="109" />
 <P2  x="545" y="323" id="144" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -328,8 +328,8 @@
 <cdparam x="1307" y="853" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="717" y="314" id="321" />
-<P2  x="759" y="314" id="187" />
+<P1  x="707" y="324" id="321" />
+<P2  x="767" y="306" id="187" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="57" >
@@ -337,15 +337,15 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
 <P1  x="633" y="323" id="156" />
-<P2  x="697" y="314" id="316" />
+<P2  x="707" y="304" id="316" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="59" >
 <cdparam x="1307" y="807" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="717" y="434" id="264" />
-<P2  x="826" y="425" id="185" />
+<P1  x="707" y="444" id="264" />
+<P2  x="826" y="409" id="185" />
 <Point x="826" y="434" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="58" >
@@ -361,96 +361,96 @@
 <cdparam x="1154" y="856" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="664" y="434" id="152" />
-<P2  x="697" y="434" id="259" />
+<P1  x="656" y="426" id="152" />
+<P2  x="707" y="424" id="259" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="61" >
 <cdparam x="1307" y="761" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="717" y="413" id="245" />
-<P2  x="759" y="413" id="183" />
+<P1  x="707" y="423" id="245" />
+<P2  x="767" y="405" id="183" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="62" >
 <cdparam x="1154" y="811" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="664" y="413" id="150" />
-<P2  x="697" y="413" id="240" />
+<P1  x="656" y="405" id="150" />
+<P2  x="707" y="403" id="240" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="63" >
 <cdparam x="1626" y="770" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="697" y="391" id="221" />
-<P2  x="664" y="391" id="148" />
+<P1  x="707" y="381" id="221" />
+<P2  x="656" y="383" id="148" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="64" >
 <cdparam x="1799" y="785" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="759" y="391" id="177" />
-<P2  x="717" y="391" id="226" />
+<P1  x="767" y="383" id="177" />
+<P2  x="707" y="401" id="226" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="65" >
 <cdparam x="1438" y="869" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="664" y="366" id="146" />
-<P2  x="697" y="366" id="278" />
+<P1  x="656" y="358" id="146" />
+<P2  x="707" y="356" id="278" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="66" >
 <cdparam x="1699" y="736" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="717" y="366" id="283" />
-<P2  x="759" y="366" id="179" />
+<P1  x="707" y="376" id="283" />
+<P2  x="767" y="358" id="179" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="67" >
 <cdparam x="1626" y="659" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="697" y="344" id="297" />
-<P2  x="664" y="344" id="154" />
+<P1  x="707" y="334" id="297" />
+<P2  x="656" y="336" id="154" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="68" >
 <cdparam x="1799" y="673" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="759" y="344" id="181" />
-<P2  x="717" y="344" id="302" />
+<P1  x="767" y="336" id="181" />
+<P2  x="707" y="354" id="302" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="69" >
 <cdparam x="1304" y="321" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="1014" y="244" id="210" />
-<P2  x="965" y="244" id="175" />
+<P1  x="1022" y="236" id="210" />
+<P2  x="957" y="236" id="175" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="70" >
 <cdparam x="1168" y="455" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="965" y="273" id="173" />
-<P2  x="1014" y="273" id="208" />
+<P1  x="957" y="265" id="173" />
+<P2  x="1022" y="265" id="208" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="73" >
 <cdparam x="1037" y="180" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="965" y="174" id="171" />
-<P2  x="965" y="206" id="169" />
+<P1  x="957" y="166" id="171" />
+<P2  x="957" y="198" id="169" />
 <Point x="1017" y="174" />
 <Point x="1017" y="206" />
 <AutomaticDrawing  data="true" />
@@ -475,24 +475,24 @@
 <cdparam x="873" y="361" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="965" y="304" id="167" />
-<P2  x="1014" y="304" id="206" />
+<P1  x="957" y="296" id="167" />
+<P2  x="1022" y="296" id="206" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="75" >
 <cdparam x="361" y="136" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="437" y="128" id="425" />
-<P2  x="461" y="128" id="111" />
+<P1  x="427" y="138" id="425" />
+<P2  x="469" y="120" id="111" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="76" >
 <cdparam x="306" y="210" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="385" y="128" id="86" />
-<P2  x="417" y="128" id="420" />
+<P1  x="377" y="120" id="86" />
+<P2  x="427" y="118" id="420" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="1205" id="85" >
@@ -545,7 +545,7 @@
 <infoparam name="TGComponent" value="Request activation" />
 <TGConnectingPoint num="0" id="86" />
 <extraparam>
-<Prop commName="activation" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="activation" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -562,7 +562,7 @@
 <infoparam name="TGComponent" value="Event data_Ready" />
 <TGConnectingPoint num="0" id="88" />
 <extraparam>
-<Prop commName="data_Ready" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="data_Ready" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -579,7 +579,7 @@
 <infoparam name="TGComponent" value="Event data_Ready_SC" />
 <TGConnectingPoint num="0" id="90" />
 <extraparam>
-<Prop commName="data_Ready_SC" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="data_Ready_SC" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -613,7 +613,7 @@
 <infoparam name="TGComponent" value="Channel fromSCtoD" />
 <TGConnectingPoint num="0" id="94" />
 <extraparam>
-<Prop commName="fromSCtoD" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="fromSCtoD" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -630,7 +630,7 @@
 <infoparam name="TGComponent" value="Event answerToReset, pTSConfirm" />
 <TGConnectingPoint num="0" id="96" />
 <extraparam>
-<Prop commName="answerToReset, pTSConfirm" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="answerToReset, pTSConfirm" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -647,7 +647,7 @@
 <infoparam name="TGComponent" value="Event reset, pTS" />
 <TGConnectingPoint num="0" id="98" />
 <extraparam>
-<Prop commName="reset, pTS" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="reset, pTS" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -708,7 +708,7 @@
 <infoparam name="TGComponent" value="Request start_Application" />
 <TGConnectingPoint num="0" id="109" />
 <extraparam>
-<Prop commName="start_Application" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="start_Application" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -725,7 +725,7 @@
 <infoparam name="TGComponent" value="Request activation" />
 <TGConnectingPoint num="0" id="111" />
 <extraparam>
-<Prop commName="activation" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="activation" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -742,7 +742,7 @@
 <infoparam name="TGComponent" value="Request start_TCP_IP" />
 <TGConnectingPoint num="0" id="113" />
 <extraparam>
-<Prop commName="start_TCP_IP" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="start_TCP_IP" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -759,7 +759,7 @@
 <infoparam name="TGComponent" value="Event receive" />
 <TGConnectingPoint num="0" id="115" />
 <extraparam>
-<Prop commName="receive" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="receive" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -776,7 +776,7 @@
 <infoparam name="TGComponent" value="Channel fromPtoT" />
 <TGConnectingPoint num="0" id="117" />
 <extraparam>
-<Prop commName="fromPtoT" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="fromPtoT" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -793,7 +793,7 @@
 <infoparam name="TGComponent" value="Channel fromTtoP" />
 <TGConnectingPoint num="0" id="119" />
 <extraparam>
-<Prop commName="fromTtoP" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="fromTtoP" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -810,7 +810,7 @@
 <infoparam name="TGComponent" value="Event data_Ready" />
 <TGConnectingPoint num="0" id="121" />
 <extraparam>
-<Prop commName="data_Ready" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="data_Ready" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -827,7 +827,7 @@
 <infoparam name="TGComponent" value="Event data_Ready_SC" />
 <TGConnectingPoint num="0" id="123" />
 <extraparam>
-<Prop commName="data_Ready_SC" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="data_Ready_SC" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -844,7 +844,7 @@
 <infoparam name="TGComponent" value="Channel fromDtoSC0" />
 <TGConnectingPoint num="0" id="125" />
 <extraparam>
-<Prop commName="fromDtoSC0" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="fromDtoSC0" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -861,7 +861,7 @@
 <infoparam name="TGComponent" value="Channel fromSCtoD" />
 <TGConnectingPoint num="0" id="127" />
 <extraparam>
-<Prop commName="fromSCtoD" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="fromSCtoD" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -878,7 +878,7 @@
 <infoparam name="TGComponent" value="Event answerToReset, pTSConfirm" />
 <TGConnectingPoint num="0" id="129" />
 <extraparam>
-<Prop commName="answerToReset, pTSConfirm" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="answerToReset, pTSConfirm" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -895,7 +895,7 @@
 <infoparam name="TGComponent" value="Event reset, pTS" />
 <TGConnectingPoint num="0" id="131" />
 <extraparam>
-<Prop commName="reset, pTS" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="reset, pTS" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -912,7 +912,7 @@
 <infoparam name="TGComponent" value="Event send" />
 <TGConnectingPoint num="0" id="133" />
 <extraparam>
-<Prop commName="send" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="send" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -947,7 +947,7 @@
 <infoparam name="TGComponent" value="Request start_Application" />
 <TGConnectingPoint num="0" id="144" />
 <extraparam>
-<Prop commName="start_Application" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="start_Application" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -964,7 +964,7 @@
 <infoparam name="TGComponent" value="Channel fromAtoT" />
 <TGConnectingPoint num="0" id="146" />
 <extraparam>
-<Prop commName="fromAtoT" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="fromAtoT" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -981,7 +981,7 @@
 <infoparam name="TGComponent" value="Event receive_Application" />
 <TGConnectingPoint num="0" id="148" />
 <extraparam>
-<Prop commName="receive_Application" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="receive_Application" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -998,7 +998,7 @@
 <infoparam name="TGComponent" value="Event open, abort, close" />
 <TGConnectingPoint num="0" id="150" />
 <extraparam>
-<Prop commName="open, abort, close" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="open, abort, close" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1015,7 +1015,7 @@
 <infoparam name="TGComponent" value="Event send_TCP" />
 <TGConnectingPoint num="0" id="152" />
 <extraparam>
-<Prop commName="send_TCP" commType="1" origin="true" finite="false" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="send_TCP" commType="1" origin="true" finite="false" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1049,7 +1049,7 @@
 <infoparam name="TGComponent" value="Request start_TCP_IP" />
 <TGConnectingPoint num="0" id="156" />
 <extraparam>
-<Prop commName="start_TCP_IP" commType="2" origin="true" finite="false" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="start_TCP_IP" commType="2" origin="true" finite="false" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1110,7 +1110,7 @@
 <infoparam name="TGComponent" value="Event stop" />
 <TGConnectingPoint num="0" id="167" />
 <extraparam>
-<Prop commName="stop" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="stop" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1127,7 +1127,7 @@
 <infoparam name="TGComponent" value="Channel temp" />
 <TGConnectingPoint num="0" id="169" />
 <extraparam>
-<Prop commName="temp" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="temp" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1144,7 +1144,7 @@
 <infoparam name="TGComponent" value="Channel temp" />
 <TGConnectingPoint num="0" id="171" />
 <extraparam>
-<Prop commName="temp" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="temp" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1161,7 +1161,7 @@
 <infoparam name="TGComponent" value="Request req_Timer" />
 <TGConnectingPoint num="0" id="173" />
 <extraparam>
-<Prop commName="req_Timer" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="req_Timer" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1178,7 +1178,7 @@
 <infoparam name="TGComponent" value="Event timeOut" />
 <TGConnectingPoint num="0" id="175" />
 <extraparam>
-<Prop commName="timeOut" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="timeOut" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1195,7 +1195,7 @@
 <infoparam name="TGComponent" value="Event receive_Application" />
 <TGConnectingPoint num="0" id="177" />
 <extraparam>
-<Prop commName="receive_Application" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="receive_Application" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1212,7 +1212,7 @@
 <infoparam name="TGComponent" value="Channel fromAtoT" />
 <TGConnectingPoint num="0" id="179" />
 <extraparam>
-<Prop commName="fromAtoT" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="fromAtoT" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1229,7 +1229,7 @@
 <infoparam name="TGComponent" value="Channel fromTtoA" />
 <TGConnectingPoint num="0" id="181" />
 <extraparam>
-<Prop commName="fromTtoA" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="fromTtoA" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1246,7 +1246,7 @@
 <infoparam name="TGComponent" value="Event open, abort, close" />
 <TGConnectingPoint num="0" id="183" />
 <extraparam>
-<Prop commName="open, abort, close" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="open, abort, close" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1263,7 +1263,7 @@
 <infoparam name="TGComponent" value="Event send_TCP" />
 <TGConnectingPoint num="0" id="185" />
 <extraparam>
-<Prop commName="send_TCP" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="send_TCP" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1280,7 +1280,7 @@
 <infoparam name="TGComponent" value="Request start_TCP_IP" />
 <TGConnectingPoint num="0" id="187" />
 <extraparam>
-<Prop commName="start_TCP_IP" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="start_TCP_IP" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1297,7 +1297,7 @@
 <infoparam name="TGComponent" value="Channel fromTtoP" />
 <TGConnectingPoint num="0" id="189" />
 <extraparam>
-<Prop commName="fromTtoP" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="fromTtoP" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1314,7 +1314,7 @@
 <infoparam name="TGComponent" value="Channel fromPtoT" />
 <TGConnectingPoint num="0" id="191" />
 <extraparam>
-<Prop commName="fromPtoT" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="fromPtoT" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1331,7 +1331,7 @@
 <infoparam name="TGComponent" value="Event receive" />
 <TGConnectingPoint num="0" id="193" />
 <extraparam>
-<Prop commName="receive" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="receive" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1348,7 +1348,7 @@
 <infoparam name="TGComponent" value="Event send" />
 <TGConnectingPoint num="0" id="195" />
 <extraparam>
-<Prop commName="send" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="send" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1384,7 +1384,7 @@
 <infoparam name="TGComponent" value="Event stop" />
 <TGConnectingPoint num="0" id="206" />
 <extraparam>
-<Prop commName="stop" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="stop" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1401,7 +1401,7 @@
 <infoparam name="TGComponent" value="Request req_Timer" />
 <TGConnectingPoint num="0" id="208" />
 <extraparam>
-<Prop commName="req_Timer" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="req_Timer" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1418,7 +1418,7 @@
 <infoparam name="TGComponent" value="Event timeOut" />
 <TGConnectingPoint num="0" id="210" />
 <extraparam>
-<Prop commName="timeOut" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
+<Prop commName="timeOut" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="-1" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -6205,22 +6205,21 @@ On prend b=1 comme exemple
 </COMPONENT>
 
 <COMPONENT type="1010" id="1488" >
-<cdparam x="138" y="129" />
-<sizeparam width="57" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="141" y="129" />
+<sizeparam width="51" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="reset() " />
 <TGConnectingPoint num="0" id="1486" />
 <TGConnectingPoint num="1" id="1487" />
-<accessibility />
 <extraparam>
 <Data eventName="reset" nbOfParams="5" />
 </extraparam>
 </COMPONENT>
 
 <COMPONENT type="1008" id="1491" >
-<cdparam x="108" y="182" />
-<sizeparam width="116" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="113" y="182" />
+<sizeparam width="106" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="answerToReset()" />
@@ -6232,8 +6231,8 @@ On prend b=1 comme exemple
 </COMPONENT>
 
 <COMPONENT type="1010" id="1494" >
-<cdparam x="143" y="237" />
-<sizeparam width="47" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="144" y="237" />
+<sizeparam width="44" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="pTS() " />
@@ -6245,8 +6244,8 @@ On prend b=1 comme exemple
 </COMPONENT>
 
 <COMPONENT type="1008" id="1497" >
-<cdparam x="121" y="308" />
-<sizeparam width="90" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="124" y="308" />
+<sizeparam width="85" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="pTSConfirm()" />
@@ -6259,7 +6258,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="1506" >
 <cdparam x="376" y="98" />
-<sizeparam width="249" height="65" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="233" height="65" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="UML Note" value="The first two layers of the OSI model 
@@ -6282,8 +6281,8 @@ the smart card and the terminal
 </COMPONENT>
 
 <COMPONENT type="1007" id="1509" >
-<cdparam x="250" y="97" />
-<sizeparam width="96" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="254" y="97" />
+<sizeparam width="89" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send request" value="start_TCP_IP()" />
@@ -6295,8 +6294,8 @@ the smart card and the terminal
 </COMPONENT>
 
 <COMPONENT type="1007" id="1512" >
-<cdparam x="236" y="148" />
-<sizeparam width="125" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="241" y="148" />
+<sizeparam width="114" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send request" value="start_Application()" />
@@ -6317,8 +6316,8 @@ the smart card and the terminal
 </COMPONENT>
 
 <COMPONENT type="1008" id="1517" >
-<cdparam x="305" y="350" />
-<sizeparam width="115" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="309" y="350" />
+<sizeparam width="106" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="data_Ready_SC()" />
@@ -6339,8 +6338,8 @@ the smart card and the terminal
 </COMPONENT>
 
 <COMPONENT type="1009" id="1522" >
-<cdparam x="318" y="308" />
-<sizeparam width="88" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="321" y="308" />
+<sizeparam width="83" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="read channel" value="fromTtoP(1) " />
@@ -6352,8 +6351,8 @@ the smart card and the terminal
 </COMPONENT>
 
 <COMPONENT type="1010" id="1525" >
-<cdparam x="335" y="264" />
-<sizeparam width="55" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="337" y="264" />
+<sizeparam width="50" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="send() " />
@@ -6365,8 +6364,8 @@ the smart card and the terminal
 </COMPONENT>
 
 <COMPONENT type="1006" id="1528" >
-<cdparam x="315" y="392" />
-<sizeparam width="94" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="319" y="392" />
+<sizeparam width="87" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="write channel" value="fromSCtoD(1)" />
@@ -6378,8 +6377,8 @@ the smart card and the terminal
 </COMPONENT>
 
 <COMPONENT type="1008" id="1531" >
-<cdparam x="493" y="350" />
-<sizeparam width="65" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="496" y="350" />
+<sizeparam width="59" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="receive()" />
@@ -6391,8 +6390,8 @@ the smart card and the terminal
 </COMPONENT>
 
 <COMPONENT type="1009" id="1534" >
-<cdparam x="472" y="311" />
-<sizeparam width="106" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="476" y="311" />
+<sizeparam width="99" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="read channel" value="fromDtoSC0(1) " />
@@ -6404,8 +6403,8 @@ the smart card and the terminal
 </COMPONENT>
 
 <COMPONENT type="1006" id="1537" >
-<cdparam x="483" y="387" />
-<sizeparam width="84" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="486" y="387" />
+<sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="write channel" value="fromPtoT(1)" />
@@ -6417,8 +6416,8 @@ the smart card and the terminal
 </COMPONENT>
 
 <COMPONENT type="1010" id="1540" >
-<cdparam x="477" y="268" />
-<sizeparam width="97" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="480" y="268" />
+<sizeparam width="90" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="data_Ready() " />
@@ -6432,7 +6431,7 @@ the smart card and the terminal
 
 <COMPONENT type="1014" id="1544" >
 <cdparam x="236" y="202" />
-<sizeparam width="124" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="125" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="for loop" value="for(j=0;x==0;j = j)" />
@@ -6639,7 +6638,7 @@ the smart card and the terminal
 <cdparam x="391" y="282" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="600" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from for loop to select" value="null" />
-<P1  x="360" y="216" id="1542" />
+<P1  x="361" y="216" id="1542" />
 <P2  x="439" y="216" id="1547" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -6986,11 +6985,11 @@ the smart card and the terminal
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="1743" >
 <father id="1804" num="0" />
-<cdparam x="226" y="304" />
-<sizeparam width="109" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="92" y="154" />
+<sizeparam width="163" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="350" minY="0" maxY="271" />
-<infoparam name="TGComponent" value="AppC::Timer" />
+<cdrectangleparam minX="0" maxX="296" minY="0" maxY="271" />
+<infoparam name="TGComponent" value="AppC::InterfaceDevice" />
 <TGConnectingPoint num="0" id="1735" />
 <TGConnectingPoint num="1" id="1736" />
 <TGConnectingPoint num="2" id="1737" />
@@ -7000,16 +6999,16 @@ the smart card and the terminal
 <TGConnectingPoint num="6" id="1741" />
 <TGConnectingPoint num="7" id="1742" />
 <extraparam>
-<info value="AppC::Timer" taskName="Timer" referenceTaskName="AppC" priority="0" operation="" fatherComponentMECType="" />
+<info value="AppC::InterfaceDevice" taskName="InterfaceDevice" referenceTaskName="AppC" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1752" >
 <father id="1804" num="1" />
-<cdparam x="290" y="234" />
-<sizeparam width="139" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="291" y="153" />
+<sizeparam width="136" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="320" minY="0" maxY="271" />
-<infoparam name="TGComponent" value="AppC::Application" />
+<cdrectangleparam minX="0" maxX="323" minY="0" maxY="271" />
+<infoparam name="TGComponent" value="AppC::SmartCard" />
 <TGConnectingPoint num="0" id="1744" />
 <TGConnectingPoint num="1" id="1745" />
 <TGConnectingPoint num="2" id="1746" />
@@ -7019,7 +7018,7 @@ the smart card and the terminal
 <TGConnectingPoint num="6" id="1750" />
 <TGConnectingPoint num="7" id="1751" />
 <extraparam>
-<info value="AppC::Application" taskName="Application" referenceTaskName="AppC" priority="0" operation="" fatherComponentMECType="" />
+<info value="AppC::SmartCard" taskName="SmartCard" referenceTaskName="AppC" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1761" >
@@ -7043,11 +7042,11 @@ the smart card and the terminal
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1770" >
 <father id="1804" num="3" />
-<cdparam x="291" y="153" />
-<sizeparam width="136" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="290" y="234" />
+<sizeparam width="139" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="323" minY="0" maxY="271" />
-<infoparam name="TGComponent" value="AppC::SmartCard" />
+<cdrectangleparam minX="0" maxX="320" minY="0" maxY="271" />
+<infoparam name="TGComponent" value="AppC::Application" />
 <TGConnectingPoint num="0" id="1762" />
 <TGConnectingPoint num="1" id="1763" />
 <TGConnectingPoint num="2" id="1764" />
@@ -7057,16 +7056,16 @@ the smart card and the terminal
 <TGConnectingPoint num="6" id="1768" />
 <TGConnectingPoint num="7" id="1769" />
 <extraparam>
-<info value="AppC::SmartCard" taskName="SmartCard" referenceTaskName="AppC" priority="0" operation="" fatherComponentMECType="" />
+<info value="AppC::Application" taskName="Application" referenceTaskName="AppC" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1779" >
 <father id="1804" num="4" />
-<cdparam x="92" y="154" />
-<sizeparam width="163" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="226" y="304" />
+<sizeparam width="109" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="296" minY="0" maxY="271" />
-<infoparam name="TGComponent" value="AppC::InterfaceDevice" />
+<cdrectangleparam minX="0" maxX="350" minY="0" maxY="271" />
+<infoparam name="TGComponent" value="AppC::Timer" />
 <TGConnectingPoint num="0" id="1771" />
 <TGConnectingPoint num="1" id="1772" />
 <TGConnectingPoint num="2" id="1773" />
@@ -7076,7 +7075,7 @@ the smart card and the terminal
 <TGConnectingPoint num="6" id="1777" />
 <TGConnectingPoint num="7" id="1778" />
 <extraparam>
-<info value="AppC::InterfaceDevice" taskName="InterfaceDevice" referenceTaskName="AppC" priority="0" operation="" fatherComponentMECType="" />
+<info value="AppC::Timer" taskName="Timer" referenceTaskName="AppC" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7307,23 +7306,23 @@ the smart card and the terminal
 <attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType=""/>
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1101" id="1931" >
-<father id="1974" num="0" />
+<SUBCOMPONENT type="1101" id="1777" >
+<father id="1820" num="0" />
 <cdparam x="258" y="61" />
-<sizeparam width="109" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="108" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="159" minY="0" maxY="104" />
+<cdrectangleparam minX="0" maxX="160" minY="0" maxY="104" />
 <infoparam name="TGComponent" value="AppC::TCPIP" />
-<TGConnectingPoint num="0" id="1923" />
-<TGConnectingPoint num="1" id="1924" />
-<TGConnectingPoint num="2" id="1925" />
-<TGConnectingPoint num="3" id="1926" />
-<TGConnectingPoint num="4" id="1927" />
-<TGConnectingPoint num="5" id="1928" />
-<TGConnectingPoint num="6" id="1929" />
-<TGConnectingPoint num="7" id="1930" />
+<TGConnectingPoint num="0" id="1769" />
+<TGConnectingPoint num="1" id="1770" />
+<TGConnectingPoint num="2" id="1771" />
+<TGConnectingPoint num="3" id="1772" />
+<TGConnectingPoint num="4" id="1773" />
+<TGConnectingPoint num="5" id="1774" />
+<TGConnectingPoint num="6" id="1775" />
+<TGConnectingPoint num="7" id="1776" />
 <extraparam>
-<info value="AppC::TCPIP" taskName="TCPIP" referenceTaskName="AppC" priority="0" operation="" fatherComponentMECType="" />
+<info value="AppC::TCPIP" taskName="TCPIP" referenceTaskName="AppC" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1940" >
@@ -7345,23 +7344,23 @@ the smart card and the terminal
 <info value="AppC::Application" taskName="Application" referenceTaskName="AppC" priority="0" operation="" fatherComponentMECType="" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="1101" id="1949" >
-<father id="1974" num="2" />
+<SUBCOMPONENT type="1101" id="1795" >
+<father id="1820" num="2" />
 <cdparam x="373" y="61" />
-<sizeparam width="141" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="136" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="127" minY="0" maxY="104" />
+<cdrectangleparam minX="0" maxX="132" minY="0" maxY="104" />
 <infoparam name="TGComponent" value="AppC::SmartCard" />
-<TGConnectingPoint num="0" id="1941" />
-<TGConnectingPoint num="1" id="1942" />
-<TGConnectingPoint num="2" id="1943" />
-<TGConnectingPoint num="3" id="1944" />
-<TGConnectingPoint num="4" id="1945" />
-<TGConnectingPoint num="5" id="1946" />
-<TGConnectingPoint num="6" id="1947" />
-<TGConnectingPoint num="7" id="1948" />
+<TGConnectingPoint num="0" id="1787" />
+<TGConnectingPoint num="1" id="1788" />
+<TGConnectingPoint num="2" id="1789" />
+<TGConnectingPoint num="3" id="1790" />
+<TGConnectingPoint num="4" id="1791" />
+<TGConnectingPoint num="5" id="1792" />
+<TGConnectingPoint num="6" id="1793" />
+<TGConnectingPoint num="7" id="1794" />
 <extraparam>
-<info value="AppC::SmartCard" taskName="SmartCard" referenceTaskName="AppC" priority="0" operation="" fatherComponentMECType="" />
+<info value="AppC::SmartCard" taskName="SmartCard" referenceTaskName="AppC" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 
