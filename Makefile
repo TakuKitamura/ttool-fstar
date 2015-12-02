@@ -88,6 +88,43 @@ TEST_MK         = test.mk
 TEST_DIRS       = $(shell find $(TEST_DIR)/* -type d)
 TEST_MAKEFILES  = $(patsubst %,%/$(TEST_MK),$(TEST_DIRS))
 
+
+
+define HELP_message
+How to compile TTool:
+---------------------
+make all                        builds TTool and produced the jar files in bin/
+
+Usual targets:
+---------------
+make (help)                     prints this help
+make svn                        produces the .class files and commit a new build version in the svn
+make basic                      generates the .class files
+make documentation              generates the documentation of java classes using javadoc
+make release                    to prepare a new release for the website. It produces the release.tgz files in releases/
+make test                       tests on TTool. Currently, on tests on ProVerif generation
+make clean                      removes the .class .dot .dta .sim .lot .~ and clears the release and test directories
+make publish_jar                places ttool.jar in perso.telecom-paristech.fr/docs/ttool.jar. Must have the right ssh key installed for this
+make ultraclean                 runs clean and then removes the jar files in bin/
+
+Other targets:
+--------------
+make basicsvnapvrille           produces the .class files and commit a new build version in the svn with username "apvrille"
+make jar                        generates the .jar files in bin/
+make publish_jar                places ttool.jar in perso.telecom-paristech.fr/docs/ttool.jar. Must have the right ssh key installed for this
+
+
+Please report bugs or suggestions of improvements to:
+  Ludovic Apvrille <ludovic.apvrille@telecom-paristech.fr>
+endef
+export HELP_message
+
+
+# Targets
+help:
+	@echo "$$HELP_message"
+
+
 all: basic jar
 
 .PHONY: svn basicsvnapvrille myrelease basic jar ttooljar launcher tiftranslator tmltranslator rundse remotesimulator documentation stdrelease preinstall preinstall_linux jttooljar updatesimulator test
@@ -374,6 +411,12 @@ test: $(TEST_MAKEFILES)
 $(TEST_DIR)/%/$(TEST_MK): $(TEST_DIR)/$(TEST_MK)
 	@cp $< $@
 
+
+
+publishjar: ttooljar
+	scp bin/ttool.jar apvrille@ssh.enst.fr:public_html/docs/
+	ssh apvrille@ssh.enst.fr "chmod a+r public_html/docs/ttool.jar"
+
 clean:
 	rm -f $(TTOOL_SRC)/*.dot $(TTOOL_SRC)/*.dta $(TTOOL_SRC)/*.sim $(TTOOL_SRC)/*.lot
 	rm -f $(TTOOL_SRC)/*.class $(TTOOL_SRC)/*.java~
@@ -394,14 +437,7 @@ clean:
 			$(MAKE) -s -C $$t -f $(TEST_MK) clean; \
 			echo rm -f $$t/*.class; \
 			rm -f $$t/$(TEST_MK); \
-		fi; \
-	done
-	rm -f $(TEST_DIR)/*.class
 
-
-publishjar: ttooljar
-	scp bin/ttool.jar apvrille@ssh.enst.fr:public_html/docs/
-	ssh apvrille@ssh.enst.fr "chmod a+r public_html/docs/ttool.jar"
 
 ultraclean: clean
 	@@for p in $(RELEASE_STD_FILES_BIN); do \
