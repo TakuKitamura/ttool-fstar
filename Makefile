@@ -437,6 +437,8 @@ clean:
 			$(MAKE) -s -C $$t -f $(TEST_MK) clean; \
 			echo rm -f $$t/*.class; \
 			rm -f $$t/$(TEST_MK); \
+		fi \
+	done
 
 
 ultraclean: clean
