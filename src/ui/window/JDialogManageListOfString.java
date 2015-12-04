@@ -1,48 +1,48 @@
 /**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
-ludovic.apvrille AT enst.fr
+   ludovic.apvrille AT enst.fr
 
-This software is a computer program whose purpose is to allow the 
-edition of TURTLE analysis, design and deployment diagrams, to 
-allow the generation of RT-LOTOS or Java code from this diagram, 
-and at last to allow the analysis of formal validation traces 
-obtained from external tools, e.g. RTL from LAAS-CNRS and CADP 
-from INRIA Rhone-Alpes.
+   This software is a computer program whose purpose is to allow the
+   edition of TURTLE analysis, design and deployment diagrams, to
+   allow the generation of RT-LOTOS or Java code from this diagram,
+   and at last to allow the analysis of formal validation traces
+   obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+   from INRIA Rhone-Alpes.
 
-This software is governed by the CeCILL  license under French law and
-abiding by the rules of distribution of free software.  You can  use, 
-modify and/ or redistribute the software under the terms of the CeCILL
-license as circulated by CEA, CNRS and INRIA at the following URL
-"http://www.cecill.info". 
+   This software is governed by the CeCILL  license under French law and
+   abiding by the rules of distribution of free software.  You can  use,
+   modify and/ or redistribute the software under the terms of the CeCILL
+   license as circulated by CEA, CNRS and INRIA at the following URL
+   "http://www.cecill.info".
 
-As a counterpart to the access to the source code and  rights to copy,
-modify and redistribute granted by the license, users are provided only
-with a limited warranty  and the software's author,  the holder of the
-economic rights,  and the successive licensors  have only  limited
-liability. 
+   As a counterpart to the access to the source code and  rights to copy,
+   modify and redistribute granted by the license, users are provided only
+   with a limited warranty  and the software's author,  the holder of the
+   economic rights,  and the successive licensors  have only  limited
+   liability.
 
-In this respect, the user's attention is drawn to the risks associated
-with loading,  using,  modifying and/or developing or reproducing the
-software by the user in light of its specific status of free software,
-that may mean  that it is complicated to manipulate,  and  that  also
-therefore means  that it is reserved for developers  and  experienced
-professionals having in-depth computer knowledge. Users are therefore
-encouraged to load and test the software's suitability as regards their
-requirements in conditions enabling the security of their systems and/or 
-data to be ensured and,  more generally, to use and operate it in the 
-same conditions as regards security. 
+   In this respect, the user's attention is drawn to the risks associated
+   with loading,  using,  modifying and/or developing or reproducing the
+   software by the user in light of its specific status of free software,
+   that may mean  that it is complicated to manipulate,  and  that  also
+   therefore means  that it is reserved for developers  and  experienced
+   professionals having in-depth computer knowledge. Users are therefore
+   encouraged to load and test the software's suitability as regards their
+   requirements in conditions enabling the security of their systems and/or
+   data to be ensured and,  more generally, to use and operate it in the
+   same conditions as regards security.
 
-The fact that you are presently reading this means that you have had
-knowledge of the CeCILL license and that you accept its terms.
+   The fact that you are presently reading this means that you have had
+   knowledge of the CeCILL license and that you accept its terms.
 
-/**
- * Class JDialogManageListOfString
- * Dialog for managing two lists of String
- * Creation: 28/03/2014
- * @version 1.0 28/03/2014
- * @author Ludovic APVRILLE
- * @see
- */
+   /**
+   * Class JDialogManageListOfString
+   * Dialog for managing two lists of String
+   * Creation: 28/03/2014
+   * @version 1.0 28/03/2014
+   * @author Ludovic APVRILLE
+   * @see
+   */
 
 package ui.window;
 
@@ -56,13 +56,13 @@ import ui.*;
 
 
 public class JDialogManageListOfString extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-	
-	
-    
-	private static boolean overideSyntaxChecking = false;
-    
+
+
+
+    private static boolean overideSyntaxChecking = false;
+
     private Vector<String> ignored, selected;
-    
+
     //subpanels
     private JPanel panel1, panel2, panel3, panel6;
     private JList listIgnored;
@@ -71,29 +71,29 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
     private JButton addOneSelected;
     private JButton addOneIgnored;
     private JButton allIgnored;
-    
+
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
-    
+
     private boolean hasBeenCancelled = false;
-    
+
     /** Creates new form  */
     public JDialogManageListOfString(Frame f, Vector<String> _ignored, Vector<String> _selected, String title) {
         super(f, title, true);
-        
+
         ignored = _ignored;
         selected = _selected;
-        
+
         initComponents();
         myInitComponents();
         pack();
     }
-    
+
     private void myInitComponents() {
         setButtons();
     }
-    
+
     private void initComponents() {
         Container c = getContentPane();
         GridBagLayout gridbag1 = new GridBagLayout();
@@ -101,7 +101,7 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+
         // ignored list
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
@@ -114,7 +114,7 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
         panel1.add(scrollPane1, BorderLayout.CENTER);
         panel1.setPreferredSize(new Dimension(200, 250));
         c.add(panel1, BorderLayout.WEST);
-        
+
         // validated list
         panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
@@ -127,69 +127,69 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
         panel2.add(scrollPane2, BorderLayout.CENTER);
         panel2.setPreferredSize(new Dimension(200, 250));
         c.add(panel2, BorderLayout.EAST);
-        
+
         // central buttons
         panel3 = new JPanel();
         panel3.setLayout(gridbag1);
-        
+
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.gridheight = 1;
-        
+
         allSelected = new JButton(IconManager.imgic50);
         allSelected.setPreferredSize(new Dimension(50, 25));
         allSelected.addActionListener(this);
         allSelected.setActionCommand("allSelected");
         panel3.add(allSelected, c1);
-        
+
         addOneSelected = new JButton(IconManager.imgic48);
         addOneSelected.setPreferredSize(new Dimension(50, 25));
         addOneSelected.addActionListener(this);
         addOneSelected.setActionCommand("addOneSelected");
         panel3.add(addOneSelected, c1);
-        
+
         panel3.add(new JLabel(" "), c1);
-        
+
         addOneIgnored = new JButton(IconManager.imgic46);
         addOneIgnored.addActionListener(this);
         addOneIgnored.setPreferredSize(new Dimension(50, 25));
         addOneIgnored.setActionCommand("addOneIgnored");
         panel3.add(addOneIgnored, c1);
-        
+
         allIgnored = new JButton(IconManager.imgic44);
         allIgnored.addActionListener(this);
         allIgnored.setPreferredSize(new Dimension(50, 25));
         allIgnored.setActionCommand("allIgnored");
         panel3.add(allIgnored, c1);
-        
+
         c.add(panel3, BorderLayout.CENTER);
-        
+
         // main panel;
         panel6 = new JPanel();
         panel6.setLayout(new FlowLayout());
-		
-        
+
+
         closeButton = new JButton("OK", IconManager.imgic37);
         //closeButton.setPreferredSize(new Dimension(600, 50));
         closeButton.addActionListener(this);
         closeButton.setPreferredSize(new Dimension(200, 30));
-        
+
         cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         cancelButton.setPreferredSize(new Dimension(200, 30));
         panel6.add(cancelButton);
-		panel6.add(closeButton);
-		
-        
+        panel6.add(closeButton);
+
+
         c.add(panel6, BorderLayout.SOUTH);
-        
+
     }
-    
-    public void	actionPerformed(ActionEvent evt)  {
+
+    public void actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
-        
+
         // Compare the action command to the known actions.
         if (evt.getSource() == closeButton)  {
             closeDialog();
@@ -205,8 +205,8 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
             allIgnored();
         }
     }
-    
-    
+
+
     private void addOneIgnored() {
         int [] list = listSelected.getSelectedIndices();
         Vector v = new Vector();
@@ -216,30 +216,30 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
             ignored.addElement((String)o);
             v.addElement(o);
         }
-        
+
         selected.removeAll(v);
         listIgnored.setListData(ignored);
         listSelected.setListData(selected);
         setButtons();
     }
-    
+
     private void addOneSelected() {
         int [] list = listIgnored.getSelectedIndices();
         Vector v = new Vector();
         Object o;
         for (int i=0; i<list.length; i++){
             o = ignored
-            .elementAt(list[i]);
+                .elementAt(list[i]);
             selected.addElement((String)o);
             v.addElement(o);
         }
-        
+
         ignored.removeAll(v);
         listIgnored.setListData(ignored);
         listSelected.setListData(selected);
         setButtons();
     }
-    
+
     private void allSelected() {
         selected.addAll(ignored);
         ignored.removeAllElements();
@@ -247,7 +247,7 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
         listSelected.setListData(selected);
         setButtons();
     }
-    
+
     private void allIgnored() {
         ignored.addAll(selected);
         selected.removeAllElements();
@@ -255,67 +255,67 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
         listSelected.setListData(selected);
         setButtons();
     }
-    
-    
+
+
     public void closeDialog() {
         dispose();
     }
-    
+
     public void cancelDialog() {
-    	hasBeenCancelled = true;
+        hasBeenCancelled = true;
         dispose();
     }
-    
+
     public boolean hasBeenCancelled() {
-    	return hasBeenCancelled;	
+        return hasBeenCancelled;
     }
-    
+
     private void setButtons() {
         int i1 = listIgnored.getSelectedIndex();
         int i2 = listSelected.getSelectedIndex();
-        
+
         //closeButton.setEnabled(true);
-        
+
         if (i1 == -1) {
             addOneSelected.setEnabled(false);
         } else {
             addOneSelected.setEnabled(true);
             //listValidated.clearSelection();
         }
-        
+
         if (i2 == -1) {
             addOneIgnored.setEnabled(false);
         } else {
             addOneIgnored.setEnabled(true);
             //listIgnored.clearSelection();
         }
-        
+
         if (ignored.size() ==0) {
             allSelected.setEnabled(false);
         } else {
             allSelected.setEnabled(true);
         }
-        
+
         if (selected.size() ==0) {
             allIgnored.setEnabled(false);
-           
+
         } else {
             allIgnored.setEnabled(true);
-           
+
         }
     }
-    
-    
+
+
     public void valueChanged(ListSelectionEvent e) {
         setButtons();
     }
-	
-	public Vector<String> getSelected() {
-		return selected;
-	}
-	
-	public Vector<String> getIgnored() {
-		return ignored;
-	}
-    
+
+    public Vector<String> getSelected() {
+        return selected;
+    }
+
+    public Vector<String> getIgnored() {
+        return ignored;
+    }
+
 }
