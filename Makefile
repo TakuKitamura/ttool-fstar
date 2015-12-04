@@ -93,7 +93,7 @@ TEST_MAKEFILES  = $(patsubst %,%/$(TEST_MK),$(TEST_DIRS))
 define HELP_message
 How to compile TTool:
 ---------------------
-make all                        builds TTool and produced the jar files in bin/
+make all                        builds TTool and produces the jar files in bin/
 
 Usual targets:
 ---------------

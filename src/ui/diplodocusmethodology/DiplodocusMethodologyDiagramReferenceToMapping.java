@@ -66,10 +66,11 @@ public class DiplodocusMethodologyDiagramReferenceToMapping extends DiplodocusMe
         
 		initScaling(200, 120);
         
-        nbConnectingPoint = 2;
+        nbConnectingPoint = 3;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.4, 0.0, TGConnectingPoint.WEST);
-        connectingPoint[1] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.6, 0.0, TGConnectingPoint.WEST);
+        connectingPoint[0] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 0.0, TGConnectingPoint.WEST);
+        connectingPoint[1] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.7, 0.0, TGConnectingPoint.WEST);
+	connectingPoint[2] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 0.0, TGConnectingPoint.WEST);
         
         typeOfReference = MAPPING;
         
