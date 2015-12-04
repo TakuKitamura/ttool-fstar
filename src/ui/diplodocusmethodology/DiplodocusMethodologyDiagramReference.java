@@ -375,7 +375,7 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         String s = e.getActionCommand();
 
         if (e.getSource() == diagramReference) {
-            addDiagramReference(null);
+            addDiagramReference(getTDiagramPanel().getMGUI().getFrame());
         }
 
         return true;
