@@ -106,9 +106,13 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         spec = _spec;
         host = _host;
         tp = _tp;
-	customQueries = mgui.gtm.getAvatarSpecification().getSafetyPragmas();
+        AvatarSpecification aspec = mgui.gtm.getAvatarSpecification();
+        if (aspec != null) {
+            customQueries = aspec.getSafetyPragmas();
+        }
+
         //TraceManager.addDev("Panel in UPPAAL Validation: " + mgui.getTabName(tp));
-	customChecks = new LinkedList<JCheckBox>();
+        customChecks = new LinkedList<JCheckBox>();
         initComponents();
         myInitComponents();
         pack();
@@ -173,40 +177,42 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         stateL.setToolTipText("Study the fact that, if accessed,  a given state is eventually followed by another one");
         jp1.add(stateL, c1);
         stateL.setSelected(stateLChecked);
-	c1.gridwidth = GridBagConstraints.REMAINDER;
+        c1.gridwidth = GridBagConstraints.REMAINDER;
         custom = new JCheckBox("Custom verification");
         custom.addActionListener(this);
         jp1.add(custom, c1);
         custom.setSelected(customChecked);
-	for (String s: customQueries){
-	    c1.gridwidth = GridBagConstraints.RELATIVE;
-	    JLabel space = new JLabel("   ");
-	    c1.weightx=0.0;
-	    jp1.add(space, c1);
-            c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-	    JCheckBox cqb = new JCheckBox(s);
-	    cqb.addActionListener(this);
-	    c1.weightx=1.0;
-	    jp1.add(cqb, c1);	
-	    customChecks.add(cqb);
-	    
-	}
-      /*  jp1.add(new JLabel("Custom formula to translate = "), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        customText = new JTextField("Type your CTL formulae here!", 80);
-        customText.addActionListener(this);
-        jp1.add(customText, c1);
+        if (customQueries != null) {
+            for (String s: customQueries){
+                c1.gridwidth = GridBagConstraints.RELATIVE;
+                JLabel space = new JLabel("   ");
+                c1.weightx=0.0;
+                jp1.add(space, c1);
+                c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+                JCheckBox cqb = new JCheckBox(s);
+                cqb.addActionListener(this);
+                c1.weightx=1.0;
+                jp1.add(cqb, c1);
+                customChecks.add(cqb);
 
-        c1.gridwidth = 1;
-	translateCustom = new JCheckBox("Use translated custom verification");
-        translateCustom.addActionListener(this);
-        jp1.add(translateCustom, c1);
-        custom.setSelected(translateChecked);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-	translatedText = new JTextField("Translated CTL formula here", 80);
-	customText.addActionListener(this);
-	jp1.add(translatedText,c1);
-	*/
+            }
+        }
+        /*  jp1.add(new JLabel("Custom formula to translate = "), c1);
+            c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+            customText = new JTextField("Type your CTL formulae here!", 80);
+            customText.addActionListener(this);
+            jp1.add(customText, c1);
+
+            c1.gridwidth = 1;
+            translateCustom = new JCheckBox("Use translated custom verification");
+            translateCustom.addActionListener(this);
+            jp1.add(translateCustom, c1);
+            custom.setSelected(translateChecked);
+            c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+            translatedText = new JTextField("Translated CTL formula here", 80);
+            customText.addActionListener(this);
+            jp1.add(translatedText,c1);
+        */
         generateTrace = new JCheckBox("Generate simulation trace");
         generateTrace.addActionListener(this);
         jp1.add(generateTrace, c1);
@@ -216,8 +222,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         showDetails.addActionListener(this);
         jp1.add(showDetails, c1);
         showDetails.setSelected(showDetailsChecked);
-	
-	jp1.setMinimumSize(jp1.getPreferredSize());
+
+        jp1.setMinimumSize(jp1.getPreferredSize());
         c.add(jp1, BorderLayout.NORTH);
 
         jta = new ScrolledJTextArea();
@@ -352,7 +358,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                         index = s.indexOf('$');
                         if ((index != -1) && (mode != NOT_STARTED)) {
                             name = s.substring(index+1, s.length());
-			    TraceManager.addDev("****\n name=" + name + " list=" + list + "\n****\n");
+                            TraceManager.addDev("****\n name=" + name + " list=" + list + "\n****\n");
                             query = s.substring(0, index);
                             //jta.append("\n\n--------------------------------------------\n");
                             jta.append("\nReachability of: " + name + "\n");
@@ -408,16 +414,16 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                                 //TraceManager.addDev("name1=" + name1 + "\nname2=" + name2);
                                 //TraceManager.addDev("query1=" + s1 + "\nquery2=" + s2);
                                 if ((name1.compareTo(name2) != 0) && (name1.length() > 0) && (name2.length() > 0)) {
-				    if (!(showDetails.isSelected())) {
-					int indexName = name1.indexOf(":");
-					if (indexName != -1) {
-					    name1 = name1.substring(indexName+1, name1.length()).trim();
-					}
-					indexName = name2.indexOf(":");
-					if (indexName != -1) {
-					    name2 = name2.substring(indexName+1, name2.length()).trim();
-					}
-				    }
+                                    if (!(showDetails.isSelected())) {
+                                        int indexName = name1.indexOf(":");
+                                        if (indexName != -1) {
+                                            name1 = name1.substring(indexName+1, name1.length()).trim();
+                                        }
+                                        indexName = name2.indexOf(":");
+                                        if (indexName != -1) {
+                                            name2 = name2.substring(indexName+1, name2.length()).trim();
+                                        }
+                                    }
                                     jta.append("\nLeads to: " + name1 + "--> " + name2 + "\n");
                                     workQuery(query1 + " --> " + query2, fn, trace_id, rshc);
                                     trace_id++;
@@ -439,14 +445,14 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 jta.append("\n\n--------------------------------------------\n");
 
                 jta.append("Studying custom CTL formulae\n");
-		for (JCheckBox j: customChecks){
-		    if (j.isSelected()){
-			jta.append(j.getText()+"\n");
-		        String translation = translateCustomQuery(j.getText());
-  		        workQuery(translation, fn, trace_id, rshc);
+                for (JCheckBox j: customChecks){
+                    if (j.isSelected()){
+                        jta.append(j.getText()+"\n");
+                        String translation = translateCustomQuery(j.getText());
+                        workQuery(translation, fn, trace_id, rshc);
                         trace_id++;
-		    }
-		}
+                    }
+                }
             }
 
             //Removing files
@@ -484,48 +490,48 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         setButtons();
     }
     private String translateCustomQuery(String query){
-	UPPAALSpec spec = mgui.gtm.getLastUPPAALSpecification();
-	AVATAR2UPPAAL avatar2uppaal = mgui.gtm.getAvatar2Uppaal();
-	AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
-	Hashtable <String, String> hash = avatar2uppaal.getHash();
-	String finQuery=query+" ";
-/*	String[] split = query.split("[\\s-()=]+");
-	for (String s: split){
-		System.out.println(s);
-	} */
-/*	Pattern p = Pattern.compile("[\\s-()=]+");
-	Matcher m = p.matcher(query);
-	int index1=0;
-	int index2=m.start();
-	while (m.find()){
-	    System.out.println("Finding ...");
-	    index2=m.start();
-	    String rep = hash.get(finQuery.substring(index1, index2));
-	    if (rep !=null){
-		System.out.println(finQuery.substring(index1, index2) + "--" + rep);
-		finQuery = finQuery.substring(0,index1) + rep + finQuery.substring(index2, finQuery.length());
-	    }
-	    index1=index2;
-	}*/
-	for (String str: hash.keySet()){
-	    finQuery = finQuery.replaceAll(str+"\\s", hash.get(str));
-	    finQuery = finQuery.replaceAll(str+"\\)", hash.get(str)+"\\)");
-	    finQuery = finQuery.replaceAll(str+"\\-", hash.get(str)+"\\-");
-	}
-	if (avspec==null){
-	    return "";
-	}
+        UPPAALSpec spec = mgui.gtm.getLastUPPAALSpecification();
+        AVATAR2UPPAAL avatar2uppaal = mgui.gtm.getAvatar2Uppaal();
+        AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
+        Hashtable <String, String> hash = avatar2uppaal.getHash();
+        String finQuery=query+" ";
+        /*      String[] split = query.split("[\\s-()=]+");
+                for (String s: split){
+                System.out.println(s);
+                } */
+        /*      Pattern p = Pattern.compile("[\\s-()=]+");
+                Matcher m = p.matcher(query);
+                int index1=0;
+                int index2=m.start();
+                while (m.find()){
+                System.out.println("Finding ...");
+                index2=m.start();
+                String rep = hash.get(finQuery.substring(index1, index2));
+                if (rep !=null){
+                System.out.println(finQuery.substring(index1, index2) + "--" + rep);
+                finQuery = finQuery.substring(0,index1) + rep + finQuery.substring(index2, finQuery.length());
+                }
+                index1=index2;
+                }*/
+        for (String str: hash.keySet()){
+            finQuery = finQuery.replaceAll(str+"\\s", hash.get(str));
+            finQuery = finQuery.replaceAll(str+"\\)", hash.get(str)+"\\)");
+            finQuery = finQuery.replaceAll(str+"\\-", hash.get(str)+"\\-");
+        }
+        if (avspec==null){
+            return "";
+        }
 
-	LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
-	for (AvatarBlock block:blocks){
-	    UPPAALTemplate temp = spec.getTemplateByName(block.getName());
-	    if (temp !=null){
-		int index = avatar2uppaal.getIndexOfTranslatedTemplate(temp);
-		finQuery = finQuery.replaceAll(block.getName(), block.getName()+"__"+index);
-	    }
-	}
-	//translatedText.setText(finQuery);
-	return finQuery;
+        LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
+        for (AvatarBlock block:blocks){
+            UPPAALTemplate temp = spec.getTemplateByName(block.getName());
+            if (temp !=null){
+                int index = avatar2uppaal.getIndexOfTranslatedTemplate(temp);
+                finQuery = finQuery.replaceAll(block.getName(), block.getName()+"__"+index);
+            }
+        }
+        //translatedText.setText(finQuery);
+        return finQuery;
     }
     private void workQuery(String query, String fn, int trace_id, RshClient rshc) throws LauncherException {
 
@@ -548,21 +554,21 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         if(showDetails.isSelected()) {
             jta.append(data);
         }
-	//NOTE: [error] is only visible if Error Stream is parsed
+        //NOTE: [error] is only visible if Error Stream is parsed
         if (mode != NOT_STARTED) {
             if (data.trim().length() == 0) {
                 //jta.append("The verifier of UPPAAL could not be started: error\n");
                 throw new LauncherException("The verifier of UPPAAL could not be started.\nProbably, UPPAAL is badly installed, or TTool is badly configured:\nCheck for UPPAALVerifierPath and UPPAALVerifierHost configurations.");
             }
-	    else if (data.indexOf("Property is satisfied") >-1){
-		jta.append("-> property is satisfied\n");
-	    }
-	    else if (data.indexOf("Property is NOT satisfied") > -1) {
-		jta.append("-> property is NOT satisfied\n");
-	    }
-	    else {
-		jta.append("ERROR -> property could not be studied\n");
-	    }
+            else if (data.indexOf("Property is satisfied") >-1){
+                jta.append("-> property is satisfied\n");
+            }
+            else if (data.indexOf("Property is NOT satisfied") > -1) {
+                jta.append("-> property is NOT satisfied\n");
+            }
+            else {
+                jta.append("ERROR -> property could not be studied\n");
+            }
         } else {
             jta.append("** verification stopped **\n");
         }
@@ -614,9 +620,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             stateL.setEnabled(true);
             generateTrace.setEnabled(true);
             showDetails.setEnabled(true);
-	    for (JCheckBox cb: customChecks){
-		cb.setEnabled(custom.isSelected());
-	    }
+            for (JCheckBox cb: customChecks){
+                cb.setEnabled(custom.isSelected());
+            }
             if (custom.isSelected() || /*deadlockE.isSelected() ||*/deadlockA.isSelected() || stateE.isSelected() || stateA.isSelected() || stateL.isSelected()) {
                 start.setEnabled(true);
             } else {
@@ -643,9 +649,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             stop.setEnabled(true);
             close.setEnabled(false);
             eraseAll.setEnabled(false);
-	    for (JCheckBox cb: customChecks){
-		cb.setEnabled(false);
-	    }
+            for (JCheckBox cb: customChecks){
+                cb.setEnabled(false);
+            }
             getGlassPane().setVisible(true);
             break;
         case STOPPED:
@@ -663,9 +669,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             close.setEnabled(true);
             eraseAll.setEnabled(true);
             getGlassPane().setVisible(false);
-	    for (JCheckBox cb: customChecks){
-		cb.setEnabled(false);
-	    }
+            for (JCheckBox cb: customChecks){
+                cb.setEnabled(false);
+            }
             break;
         }
     }

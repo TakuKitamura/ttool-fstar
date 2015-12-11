@@ -26,7 +26,7 @@
 <GTKWavePath data="/usr/bin/gtkwave" />
 <VCDPath data="../vcd/" />
 <UPPAALCodeDirectory data="../uppaal/" />
-<UPPAALVerifierPath data="../../uppaal/bin-Linux/verifyta.exe" />
+<UPPAALVerifierPath data="../../uppaal/bin-Win32/verifyta.exe" />
 <UPPAALVerifierHost data="localhost" />
 <ProVerifCodeDirectory data="../proverif/" />
 <ProVerifVerifierPath data="../../proverif/proverif.exe" />
@@ -40,7 +40,7 @@
 
 
 <ExternalCommand1Host data="localhost"/>
-<ExternalCommand1 data="/usr/bin/gtkwave ../simulators/c++2/vcddump.vcd"/>
+<ExternalCommand1 data="../../uppaal/uppaal ../uppaal/spec.xml"/>
 
 
 <ExternalServer data="localhost:12345"/>
