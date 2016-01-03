@@ -3,7 +3,7 @@
 
 INCDIR = -I. -I.. -I$(SRCS_base_DIR) -I$(SRCS_base_DIR)/app -I$(SRCS_base_DIR)/arch -I$(SRCS_base_DIR)/evt -I$(SRCS_base_DIR)/sim -I$(SRCS_base_DIR)/TEPE
 LIBDIR = -L. -L.. 
-LIBS   =  -lm $(EXTRA_LIBS)
+LIBS   =  -lm -ldl $(EXTRA_LIBS)
 
 EXE    = $(MODULE).x
 

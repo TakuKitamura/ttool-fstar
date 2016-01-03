@@ -7,7 +7,7 @@ OPT    = -O3 -pthread
 # Solaris
 #LOPT   = -O1 -pthread -ldl -lnsl -lsocket
 #Linux
-LOPT   = -O3 -ldl
+LOPT   = -O3 -ldl 
 LTHREAD = -pthread
 
 DEBUG  = -g

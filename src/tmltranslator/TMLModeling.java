@@ -56,6 +56,7 @@ public class TMLModeling {
     private ArrayList<TMLChannel> channels;
     private ArrayList<TMLRequest> requests;
     private ArrayList<TMLEvent> events;
+    private ArrayList<String[]> pragmas;
 
     private TMLElement correspondance[];
 
@@ -81,6 +82,7 @@ public class TMLModeling {
         TMLMapping tmlmapping;
         tmlmapping = new TMLMapping(this, new TMLArchitecture(), false);
         tmlmapping.makeMinimumMapping();
+	//Find Task A. Attribute and Task B.Attribute
         return tmlmapping;
 
         /*TMLArchitecture tmla = new TMLArchitecture();
@@ -138,13 +140,16 @@ public class TMLModeling {
         channels = new ArrayList<TMLChannel>();
         events = new ArrayList<TMLEvent>();
         requests = new ArrayList<TMLRequest>();
+	pragmas = new ArrayList<String[]>();
 
     }
 
     public void addTask(TMLTask task) {
         tasks.add(task);
     }
-
+    public void addPragma(String[] s){
+	pragmas.add(s);
+    }
     public void addChannel(TMLChannel channel) {
         channels.add(channel);
     }
@@ -549,7 +554,9 @@ public class TMLModeling {
     public ArrayList<TMLTask> getTasks() {
         return tasks;
     }
-
+    public ArrayList<String[]> getPragmas(){
+	return pragmas;
+    }
     public ListIterator getListIteratorTasks() {
         return tasks.listIterator();
     }

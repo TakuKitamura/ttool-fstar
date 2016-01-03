@@ -106,6 +106,10 @@ public class GTMLModeling  {
 
     public GTMLModeling(TMLArchiPanel _tmlap, boolean resetList) {
         tmlap = _tmlap;
+	//System.out.println(tmlap.getMainGUI());
+	//TURTLEPanel tup = (TURTLEPanel)(tmlap.getMainGUI().getTURTLEPanel(namePanel));
+	//if (tup instanceof TMLDesignPanel) {
+	//tmldp = tmlap.getMainGUI().
         table = new Hashtable<String, String>();
         if (resetList) {
             listE = new CorrespondanceTGElement();
@@ -149,6 +153,7 @@ public class GTMLModeling  {
                 addTMLChannels();
                 addTMLEvents();
                 addTMLRequests();
+		//addTMLPragmas();
                 TraceManager.addDev("At line 151");
                 generateTasksActivityDiagrams();
                 removeActionsWithDollars();
@@ -210,6 +215,7 @@ public class GTMLModeling  {
                 addTMLCEvents();
                 TraceManager.addDev("Adding requests");
                 addTMLCRequests();
+		//addTMLPragmas();
                 TraceManager.addDev("At line 211");
                 generateTasksActivityDiagrams();
                 removeActionsWithDollars();
@@ -217,7 +223,7 @@ public class GTMLModeling  {
             } catch (MalformedTMLDesignException mtmlde) {
                 TraceManager.addDev("Modeling error:" + mtmlde.getMessage());
             }
-
+	    
             TMLSyntaxChecking syntax = new TMLSyntaxChecking(tmlm);
             syntax.checkSyntax();
 
@@ -276,7 +282,24 @@ public class GTMLModeling  {
     public Vector getCheckingWarnings() {
         return warnings;
     }
-
+    private void addTMLPragmas(){
+	TGComponent tgc;
+	System.out.println(tmlap);
+	components = tmlap.tmlap.getComponentList();
+	ListIterator iterator = components.listIterator();
+	while(iterator.hasNext()) {
+	  tgc = (TGComponent)(iterator.next());
+	  if (tgc instanceof TGCNote){
+	    TGCNote note = (TGCNote) tgc;
+	    String[] vals = note.getValues();
+	    for (String s: vals){
+		if (s.contains(" ") && s.contains(".")){
+  		  tmlm.addPragma(s.split(" "));
+		}
+	    }
+	  }
+	}
+    }
     private void addTMLTasks() throws MalformedTMLDesignException {
         TGComponent tgc;
         TMLTask tmlt;
@@ -2953,6 +2976,7 @@ public class GTMLModeling  {
     private void makeMapping() {
         if (nodesToTakeIntoAccount == null) {
             components = tmlap.tmlap.getComponentList();
+
         } else {
             components = nodesToTakeIntoAccount;
         }
@@ -2970,7 +2994,9 @@ public class GTMLModeling  {
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             //if( tgc instanceof TMLArchiCPNode )       {
+			
             node = archi.getHwNodeByName( tgc.getName() );
+	    System.out.println("NODE "+node.getName());
             if( ( node != null ) && ( node instanceof HwExecutionNode ) ) {     //why checking this instanceof?
                 artifacts = ( (TMLArchiNode)(tgc) ).getAllTMLArchiArtifacts();
                 for( TMLArchiArtifact artifact:artifacts ) {
@@ -3055,6 +3081,32 @@ public class GTMLModeling  {
             }
 
         }
+	    TMLTask a;
+	    TMLTask b; 
+	    addTMLPragmas();
+	    for (String[] ss: tmlm.getPragmas()){
+		if (ss[0].equals("#Confidentiality") && ss.length==3){
+		  String task1 = ss[1].split("\\.")[0];
+		  String attr1 = ss[1].split("\\.")[1];
+		  String task2 = ss[2].split("\\.")[0];
+		  String attr2 = ss[2].split("\\.")[1];
+	          a = tmlm.getTMLTaskByName(task1);
+	          b = tmlm.getTMLTaskByName(task2);
+	          System.out.println("A " + a.getName());
+		  System.out.println("map "+map);
+		  HwNode node1 =	map.getHwNodeOf(a);
+		  HwNode node2 = map.getHwNodeOf(b);
+		  System.out.println("node "+node1.getName());
+		  System.out.println("node "+node2.getName());
+		  if (node1!=node2){
+  		    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Tasks " + task1 + " and " + task2 + " not on same node.");
+                    ce.setTDiagramPanel(tmlap.tmlap);
+                    ce.setTGComponent(null);
+                    checkingErrors.add(ce);
+		}
+	      }	
+	    }
+
     }
 
     public void addToTable(String s1, String s2) {
