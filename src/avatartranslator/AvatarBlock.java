@@ -133,7 +133,7 @@ public class AvatarBlock extends AvatarElement {
     }
 
     ///////////////////////////////////
-    //
+    
     public AvatarConstant getAvatarConstantWithName(String _name) {
         return this.avspec.getAvatarConstantWithName (_name);
     }

@@ -36,8 +36,8 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class JDialogADDBusNode
- * Dialog for managing attributes of bus nodes
+ * Class JDialogADDVgmnNode
+ * Dialog for managing attributes of CROSSBAR nodes
  * Creation: 02/07/2014
  * @version 1.0 02/07/2014
  * @author Ludovic APVRILLE
@@ -57,20 +57,20 @@ import ui.*;
 import ui.avatardd.*;
 
 
-public class JDialogADDBusNode extends javax.swing.JDialog implements ActionListener  {
+public class JDialogADDCrossbarNode extends javax.swing.JDialog implements ActionListener  {
     
     private boolean regularClose;
     
     private JPanel panel2;
     private Frame frame;
-    private ADDBusNode node;
+    private ADDCrossbarNode node;
     
 	
     // Panel1
     protected JTextField nodeName;
 	
 	// Panel2
-    protected JTextField index, nbOfAttachedInitiators, nbOfAttachedTargets, fifoDepth, minLatency;
+    protected JTextField index, nbOfAttachedInitiators, nbOfAttachedTargets, cluster_index, cluster_address;
 	
     
     // Main Panel
@@ -78,7 +78,7 @@ public class JDialogADDBusNode extends javax.swing.JDialog implements ActionList
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogADDBusNode(Frame _frame, String _title, ADDBusNode _node) {
+    public JDialogADDCrossbarNode(Frame _frame, String _title, ADDCrossbarNode _node) {
         super(_frame, _title, true);
         frame = _frame;
         node = _node;
@@ -108,7 +108,7 @@ public class JDialogADDBusNode extends javax.swing.JDialog implements ActionList
         
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("BUS attributes"));
+        panel2.setBorder(new javax.swing.border.TitledBorder("CROSSBAR attributes"));
         panel2.setPreferredSize(new Dimension(400, 200));
         
 		c1.gridwidth = 1;
@@ -116,7 +116,7 @@ public class JDialogADDBusNode extends javax.swing.JDialog implements ActionList
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Bus name:"), c2);
+        panel2.add(new JLabel("Crossbar name:"), c2);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         nodeName = new JTextField(node.getNodeName(), 30);
         nodeName.setEditable(true);
@@ -135,30 +135,31 @@ public class JDialogADDBusNode extends javax.swing.JDialog implements ActionList
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         index = new JTextField(""+node.getIndex(), 15);
         panel2.add(index, c2);
-		
-		c2.gridwidth = 1;
+	
+	/* This is generated automatically by the DD analyzer */ 
+	/*c2.gridwidth = 1;
         panel2.add(new JLabel("Nb of attached initators:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nbOfAttachedInitiators = new JTextField(""+node.getNbOfAttachedInitiators(), 15);
-        panel2.add(nbOfAttachedInitiators, c2);
+        nbAttachedInitiat = new JTextField(""+node.getNbAttachedInitiat(), 15);
+        panel2.add(nbAttachedInitiat, c2);*/
         
-        c2.gridwidth = 1;
+	/* c2.gridwidth = 1;
         panel2.add(new JLabel("Nb of attached target:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nbOfAttachedTargets = new JTextField(""+node.getNbOfAttachedTargets(), 15);
-        panel2.add(nbOfAttachedTargets, c2);
+        nbAttachedTarget = new JTextField(""+node.getNbAttachedTarget(), 15);
+        panel2.add(nbAttachedTarget, c2);*/
         
         c2.gridwidth = 1;
-        panel2.add(new JLabel("Fifo depth:"), c2);
+        panel2.add(new JLabel("Cluster index:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        fifoDepth = new JTextField(""+node.getFifoDepth(), 15);
-        panel2.add(fifoDepth, c2);
+        cluster_index = new JTextField(""+node.getClusterIndex(), 15);
+        panel2.add(cluster_index, c2);
         
         c2.gridwidth = 1;
-        panel2.add(new JLabel("Min latency:"), c2);
+        panel2.add(new JLabel("Cluster address:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        minLatency = new JTextField(""+node.getMinLatency(), 15);
-        panel2.add(minLatency, c2);
+        cluster_address = new JTextField(""+node.getClusterAddress(), 15);
+        panel2.add(cluster_address, c2);
         
         
         
@@ -229,12 +230,12 @@ public class JDialogADDBusNode extends javax.swing.JDialog implements ActionList
 		  return nbOfAttachedTargets.getText();
 	  }
 	  
-	public String getFifoDepth(){
-		  return fifoDepth.getText();
+	public String getClusterIndex(){
+		  return cluster_index.getText();
 	  }
 	  
-	  public String getMinLatency(){
-		  return minLatency.getText();
+	  public String getClusterAddress(){
+		  return cluster_address.getText();
 	  }
  
     

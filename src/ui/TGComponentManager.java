@@ -393,7 +393,7 @@ public class TGComponentManager {
     public static final int APD_COMPOSITION_CONNECTOR = 5313;
 
     // Avatar Deployment Diagrams at 5350
-    public static final int ADD_CONNECTOR = 5350;
+    /*    public static final int ADD_CONNECTOR = 5350;
     public static final int ADD_CPUNODE = 5351;
     public static final int ADD_ARTIFACT = 5352;
     public static final int ADD_BUSNODE = 5353;
@@ -405,7 +405,24 @@ public class TGComponentManager {
     public static final int ADD_ICUNODE = 5359;
     public static final int ADD_COPROMWMRNODE = 5360;
     public static final int ADD_TIMERNODE = 5361;
-    public static final int ADD_CHANNELARTIFACT = 5362;
+    public static final int ADD_CHANNELARTIFACT = 5362;*/
+
+// Avatar Deployment Diagrams at 5350
+	public static final int ADD_CONNECTOR = 5350;
+	public static final int ADD_CPUNODE = 5351;
+	public static final int ADD_ARTIFACT = 5352;
+	public static final int ADD_BUSNODE = 5363;
+	public static final int ADD_TTYNODE = 5354;
+	public static final int ADD_RAMNODE = 5355;        
+	public static final int ADD_ROMNODE = 5356;
+	public static final int ADD_BRIDGENODE = 5357;
+	public static final int ADD_DMANODE = 5358;
+	public static final int ADD_ICUNODE = 5359;
+	public static final int ADD_COPROMWMRNODE = 5360;
+	public static final int ADD_TIMERNODE = 5361;
+	public static final int ADD_CHANNELARTIFACT = 5362;
+        public static final int ADD_VGMNNODE = 5353;
+        public static final int ADD_CROSSBARNODE = 5364;
 
     // AVATAR CD -> starts at 5400
     public static final int ACD_BLOCK = 5400;
@@ -595,6 +612,12 @@ public class TGComponentManager {
         case ADD_BUSNODE:
             tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
+	case ADD_VGMNNODE:
+                tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+	case ADD_CROSSBARNODE:
+                tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
         case ADD_TTYNODE:
             tgc = new ADDTTYNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;

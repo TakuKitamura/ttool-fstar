@@ -40,7 +40,8 @@
  * Dialog for managing the generation and compilation of AVATAR executable code
  * Creation: 29/03/2011
  * @version 1.1 29/03/2011
- * @author Ludovic APVRILLE, Daniela GENIUS
+ * @author Ludovic APVRILLE
+ * @author (added deployment diagrams) Julien Henon, Daniela GENIUS
  * @see
  */
 
@@ -62,7 +63,9 @@ import avatartranslator.toexecutable.*;
 import launcher.*;
 
 import ui.interactivesimulation.*;
-
+import ddtranslatorSoclib.toSoclib.*;
+import ddtranslatorSoclib.*;
+import ui.avatardd.*;
 
 public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
 
@@ -610,6 +613,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
                         try {
                             jta.append("Saving code in files\n");
                             pathCode = code1.getText();
+			    //gene.avatartocposix.saveInFiles(pathCode);//DG 27.11.
                             avatartocposix.saveInFiles(pathCode);
                             //tml2systc.saveFile(pathCode, "appmodel");
                             jta.append("Code saved\n");
@@ -698,15 +702,18 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
                     jta.append("Generating executable code (SOCLIB version)\n");
 
                     if (removeCFiles.isSelected()) {
-                        jta.append("Removing all .h files in " +  code1.getText() +  AVATAR2SOCLIB.getGeneratedPath() + "\n");
-                        list = FileUtils.deleteFiles(code1.getText() +  AVATAR2SOCLIB.getGeneratedPath(), ".h");
+
+                        jta.append("Removing all .h files\n");
+                        //list = FileUtils.deleteFiles(code1.getText() +  AVATAR2SOCLIB.getGeneratedPath(), ".h");
+	list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGeneratedPath(), ".h");
                         if (list.length() == 0) {
                             jta.append("No files were deleted\n");
                         } else {
                             jta.append("Files deleted:\n" + list + "\n");
                         }
                         jta.append("Removing all  .c files\n");
-                        list = FileUtils.deleteFiles(code1.getText() +  AVATAR2SOCLIB.getGeneratedPath(), ".c");
+list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGeneratedPath(), ".c");
+                        //list = FileUtils.deleteFiles(code1.getText() +  AVATAR2SOCLIB.getGeneratedPath(), ".c");
                         if (list.length() == 0) {
                             jta.append("No files were deleted\n");
                         } else {
@@ -734,17 +741,30 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
                     if (avspec == null) {
                         jta.append("Error: No AVATAR specification\n");
                     } else {
-                        AVATAR2SOCLIB avatartocposix = new AVATAR2SOCLIB(avspec);
+			/* AVATAR2SOCLIB avatartocposix = new AVATAR2SOCLIB(avspec);
                         avatartocposix.includeUserCode(putUserCode.isSelected());
                         avatartocposix.setTimeUnit(selectedUnit);
-                        avatartocposix.generateCPOSIX(debugmode.isSelected(), tracemode.isSelected());
+                        avatartocposix.generateCPOSIX(debugmode.isSelected(), tracemode.isSelected());*/
+		      // julien -----------------------------------------
+                      ADDDiagramPanel deploymentDiagramPanel = mgui.getFirstAvatarDeploymentPanelFound();
+                      AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
+                      AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();	
+                    			  
+		      TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec,avspec);
+		      gene.includeUserCode(putUserCode.isSelected());
+		      gene.setTimeUnit(selectedUnit);
+		      gene.generateSoclib(debugmode.isSelected(), tracemode.isSelected());
+                 
+                    // ----------end addition julien ----------------------------------------
+
                         testGo();
                         jta.append("Generation of C-SOCLIB executable code: done\n");
                         //t2j.printJavaClasses();
                         try {
                             jta.append("Saving code in files\n");
                             pathCode = code1.getText();
-                            avatartocposix.saveInFiles(pathCode);
+                         gene.saveInFiles(pathCode);//DG 27.11.
+//avatartocposix.saveInFiles(pathCode);
                             //tml2systc.saveFile(pathCode, "appmodel");
                             jta.append("Code saved\n");
                         } catch (Exception e) {

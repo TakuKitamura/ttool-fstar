@@ -41,12 +41,16 @@
  * Creation: 15/12/2003
  * Version: 1.1 21/12/2003
  * Version: 1.2 29/09/2004
+ * 26/11/2015 D. Genius added DDD
  * @author Ludovic APVRILLE
  * @see
  */
 
 package ui;
-
+import ddtranslatorSoclib.*;
+import ddtranslatorSoclib.toSoclib.*;
+import ddtranslatorSoclib.toTopCell.*;
+import ddtranslatorSoclib.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -98,6 +102,12 @@ import ui.avatarad.*;
 import ui.avatardd.*;
 
 import proverifspec.*;
+
+import ddtranslatorSoclib.toFile.*;
+import ddtranslatorSoclib.toSoclib.*;
+import ddtranslatorSoclib.toTopCell.*;
+import ddtranslatorSoclib.*;
+import avatartranslator.*;
 
 public  class MainGUI implements ActionListener, WindowListener, KeyListener, PeriodicBehavior {
 
@@ -3952,6 +3962,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         dtree.toBeUpdated();
     }
 
+// julien --------------------------------------------------------------
+
+
+    public void avatarddExecutableCodeGeneration(){
+      TraceManager.addDev("Avatar code generation");
+      JDialogAvatarddExecutableCodeGeneration jgen = new JDialogAvatarddExecutableCodeGeneration(frame, this, "Executable Code generation", ConfigurationTTool.AVATARExecutableCodeHost,"" , ConfigurationTTool.AVATARExecutableCodeDirectory,"","");
+        jgen.setSize(500, 450);
+        GraphicLib.centerOnParent(jgen);
+        jgen.setVisible(true);
+        dtree.toBeUpdated();
+    }
+
+  // ---------------------------------------------------------------------
+
     public void generateUPPAAL() {
         generateUPPAAL(true);
     }
@@ -7149,6 +7173,97 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             return null;
         }
     }
+    //---------------------------------- DDD ------------------------------------
+ // return current deployment panel
+
+    public ADDDiagramPanel getDeploymentPanel() {
+      ADDDiagramPanel deploymentDiagram =  null ; //(ADDDiagramPanel)activetdp;
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        Vector<TDiagramPanel> ps = tp.panels;            
+        for(TDiagramPanel panel : ps ){
+          if (panel instanceof ADDDiagramPanel){
+            deploymentDiagram = (ADDDiagramPanel)panel;
+          }
+       }
+      if(deploymentDiagram == null)
+         System.err.println("No ADDDiagramPanel found : MainGUI.getDeploymentPanel()");
+      return deploymentDiagram;
+    }
+
+
+ public ADDDiagramPanel getFirstAvatarDeploymentPanelFound(){
+	    ADDDiagramPanel adp = null;
+		for(int i =0 ; i<tabs.size();i++)
+			if(tabs.get(i) instanceof ADDPanel){
+				adp = ((ADDPanel)tabs.get(i)).tmladd;
+			}
+		if (adp == null)
+			System.err.println("No AvatarDeployment Panel Found : MainGUI.getFirstAvatarDeploymentPanelFound()");
+		return adp;
+    }
+
+
+  // find the first Design Panel in MainGUI.tabs  
+
+    public AvatarDesignPanel getFirstAvatarDesignPanelFound(){
+	    AvatarDesignPanel adp = null;
+		for(int i =0 ; i<tabs.size();i++)
+			if(tabs.get(i) instanceof AvatarDesignPanel){
+				adp = (AvatarDesignPanel)tabs.get(i);
+			}
+		if (adp == null)
+			System.err.println("No AvatarDesign Panel Found : MainGUI.getFirstAvatarDesignPanel()");
+		return adp;
+    }
+    
+
+    public void extracDeploymentDiagramToFile(){   
+      
+	ADDDiagramPanel deploymentDiagramPanel = getDeploymentPanel();
+	AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
+
+	AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
+	AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();	
+
+
+    AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator( designDiagramPanel);
+	LinkedList<AvatarBDBlock> adp =  designDiagramPanel.getAvatarBDPanel().getFullBlockList();
+	Vector blocks = new Vector(adp);
+	AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(blocks);
+
+	//DG
+	//LinkedList<AvatarComponent> components = AvatarddSpecification.getComponents();
+	//AvatarToFile tofile;
+	//tofile =  new AvatarToFile(components,avaspec);
+	//tofile.extracParamToFile();
+    }
+ public void avatarToSoclib(){
+
+	ADDDiagramPanel deploymentDiagramPanel = getDeploymentPanel();
+	AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
+
+	AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
+	AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();	
+
+
+    AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator( designDiagramPanel);
+	LinkedList<AvatarBDBlock> adp =  designDiagramPanel.getAvatarBDPanel().getFullBlockList();
+	Vector blocks = new Vector(adp);
+	AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(blocks);
+	
+	// Generator for block tasks and application main file
+	
+	TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec,avaspec);
+	gene.generateSoclib(false,false);
+	try{
+    System.err.println("ok");
+	gene.saveInFiles(gene.getGeneratedPath());
+	}catch(FileException e){
+		System.err.println("FileException : MainGUI.avatarToSoclib()");
+	}
+
+    }
+    //--------------------end DDD------------------------------------------------
 
     public boolean selectMainTab(String id) {
         TURTLEPanel tp;
@@ -7997,13 +8112,26 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             // Avatar DD
         } else if (command.equals(actions[TGUIAction.ADD_EDIT].getActionCommand())) {
             actionOnButton(TGComponentManager.EDIT, -1);
+
+ // julien  --------------------------------------------------------------
+        } else if (command.equals(actions[TGUIAction.DEPLOY_AVATAR_DIAGRAM].getActionCommand())){
+          avatarddExecutableCodeGeneration();
+        } else if  (command.equals(actions[TGUIAction.EXTRAC_DEPLOY_PARAM_TO_FILE].getActionCommand())){
+          	extracDeploymentDiagramToFile();
+        // -------------------------------------------------------------------------
+
+
         } else if (command.equals(actions[TGUIAction.ADD_LINK].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ADD_CONNECTOR);
         } else if (command.equals(actions[TGUIAction.ADD_CPUNODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_CPUNODE);
         } else if (command.equals(actions[TGUIAction.ADD_BUSNODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_BUSNODE);
-        } else if (command.equals(actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) {
+        } 
+else if (command.equals(actions[TGUIAction.ADD_VGMNNODE].getActionCommand())) {
+          actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_VGMNNODE);
+        }
+else if (command.equals(actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_BRIDGENODE);
         }  else if (command.equals(actions[TGUIAction.ADD_TTYNODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_TTYNODE);

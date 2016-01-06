@@ -6,68 +6,71 @@
 <DTA2DOTPath data="/packages/RT-LOTOS.0.12/bin/dta2dot" />
 <RG2TLSAPath data="/packages/RT-LOTOS.0.12/bin/rg2tlsa" />
 <RGSTRAPPath data="/packages/RT-LOTOS.0.12/bin/rgstrap" />
-<!--DOTTYPath data="/usr/bin/dot" /-->
-<DOTTYPath data="/bin/dotty" />
+<DOTTYPath data="//opt/csw/bin/dotty" />
 <DOTTYHost data="localhost" />
 <AldebaranHost data="localhost" />
-<AldebaranPath data="/home/enrici/cadp/com/aldebaran" />
-<BcgioPath data="/home/enrici/cadp/bin.iX86/bcg_io" />
-<BcgminPath data="/home/enrici/cadp/bin.iX86/bcg_min" />
-<BisimulatorPath data="/home/enrici/cadp/com/bcg_open" />
-<BcgmergePath data="/home/enrici/cadp/com/bcg_merge" />
-<CaesarPath data="/home/enrici/cadp/bin.iX86/caesar" />
-<CaesarOpenPath data="/home/enrici/cadp/com/caesar.open" />
-<FILEPath data="/home/enrici/TURTLE/modeling" />
-<LIBPath data="/home/enrici/TURTLE/lib" />
-<IMGPath data="/home/enrici/TURTLE/figure" />
-<LOTOSPath data="/home/enrici/TURTLE/lotos" />
-<GGraphPath data="/home/enrici/TURTLE/graphs" />
-<TGraphPath data="/home/enrici/TURTLE/graphs" />
+<AldebaranPath data="/packages/cadp/com/aldebaran" />
+<BcgioPath data="/packages/cadp/bin.iX86/bcg_io" />
+<BcgminPath data="/packages/cadp/bin.iX86/bcg_min" />
+<BisimulatorPath data="/packages/cadp/com/bcg_open" />
+<BcgmergePath data="/packages/cadp/com/bcg_merge" />
+<CaesarPath data="/packages/cadp/bin.iX86/caesar" />
+<CaesarOpenPath data="/packages/cadp/com/caesar.open" />
+<FILEPath data="/users/enseig/genius/TURTLE/modeling" />
+<LIBPath data="/users/enseig/genius/TURTLE/lib" />
+<IMGPath data="/users/enseig/genius/TURTLE/figure" />
+<LOTOSPath data="/users/enseig/genius/TURTLE/lotos" />
+<GGraphPath data="/users/enseig/genius/TURTLE/graphs" />
+<TGraphPath data="/users/enseig/genius/TURTLE/graphs" />
 <TToolUpdateURL data="" data1="http://labsoc.comelec.enst.fr/turtle/ttoolversion.html" />
 <TToolUpdateProxy data="false" />
 <TToolUpdateProxyPort data="8080" />
 <TToolUpdateProxyHost data="To Be Completed" />
-<JavaCodeDirectory data="/home/enrici/TURTLE/javacode" />
+<JavaCodeDirectory data="/users/enseig/genius/TURTLE/javacode" />
 <JavaCompilerPath data="/usr/bin/javac" />
-<TToolClassPath data="/home/enrici/TURTLE/javacode" />
+<TToolClassPath data="/users/enseig/genius/TURTLE/javacode" />
 <JavaExecutePath data="/usr/bin/java" />
 <JavaHeader data="import java.sql.*;" />
-<SystemCCodeDirectory data="/home/enrici/TURTLE/simulators/c++2/" />
+<SystemCCodeDirectory data="/users/enseig/genius/TURTLE/simulators/c++2/" />
 <SystemCHost data="localhost"/>
-<SystemCCodeCompileCommand data="make -C /home/enrici/TURTLE/simulators/c++2/" />
-<SystemCCodeExecuteCommand data="/home/enrici/TURTLE/simulators/c++2/run.x -ovcd /home/enrici/TURTLE/simulators/c++2/vcddump.vcd" />
-<SystemCCodeInteractiveExecuteCommand data="/home/enrici/TURTLE/simulators/c++2/run.x -server" />
-<TMLCodeDirectory data="/home/enrici/TURTLE/tmlcode" />
-<CcodeDirectory data="/home/enrici/TURTLE/Ccode" />
-<GTKWavePath data="/usr/bin/gtkwave" />
-<VCDPath data="/home/enrici/TURTLE/vcd/" />
-<UPPAALCodeDirectory data="/home/enrici/TURTLE/uppaal/" />
-<UPPAALVerifierPath data="/home/enrici/TURTLE/uppaal/bin-Linux/verifyta" />
+<SystemCCodeCompileCommand data="make -C /users/enseig/genius/TURTLE/simulators/c++2/" />
+<SystemCCodeExecuteCommand data="/users/enseig/genius/TURTLE/simulators/c++2/run.x -ovcd /users/enseig/genius/TURTLE/simulators/c++2/vcddump.vcd" />
+<SystemCCodeInteractiveExecuteCommand data="/users/enseig/genius/TURTLE/simulators/c++2/run.x -server" />
+<TMLCodeDirectory data="/users/enseig/genius/TURTLE/tmlcode" />
+<GTKWavePath data="/opt/local/bin/gtkwave" />
+<VCDPath data="/users/enseig/genius/TURTLE/vcd/" />
+<UPPAALCodeDirectory data="/users/enseig/genius/TURTLE/uppaal/" />
+<UPPAALVerifierPath data="/packages/uppaal-4.0.11/verifyta" />
 <UPPAALVerifierHost data="localhost" />
-<ProVerifCodeDirectory data="/home/enrici/TURTLE/proverif/" />
+<ProVerifCodeDirectory data="/users/enseig/genius/TURTLE/proverif/" />
 <ProVerifVerifierPath data="/packages/proverif/proverif" />
 <ProVerifVerifierHost data="localhost" />
-<AVATARExecutableCodeDirectory data="/home/enrici/TURTLE/executablecode/" />
+<AVATARExecutableCodeDirectory data="/users/enseig/genius/TURTLE/executablecode/" />
 <AVATARExecutableCodeHost data="localhost"/>
-<AVATARExecutableCodeCompileCommand data="make -C /home/enrici/TURTLE/executablecode" />
-<AVATARExecutableCodeExecuteCommand data="/home/enrici/TURTLE/executablecode/run.x" />
-<AVATARExecutableSoclibCodeCompileCommand data="make -C /home/enrici/TURTLE/executablecode updategeneratedcode compilesoclib" />
-<AVATARExecutableSoclibCodeExecuteCommand data="make -C /home/enrici/TURTLE/executablecode runsoclib" />
-<AVATARExecutableSoclibTraceFile data="/home/enrici/TURTLE/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/vcitty" />
+<AVATARExecutableCodeCompileCommand data="make -C /users/enseig/genius/TURTLE/executablecode" />
+<AVATARExecutableCodeExecuteCommand data="/users/enseig/genius/TURTLE/executablecode/run.x" />
+<AVATARExecutableSoclibCodeCompileCommand data="make -C /users/enseig/genius/TURTLE/executablecode updategeneratedcode compilesoclib" />
+<AVATARExecutableSoclibCodeExecuteCommand data="make -C /users/enseig/genius/TURTLE/executablecode runsoclib" />
+<AVATARExecutableSoclibTraceFile data="/users/enseig/genius/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/vcitty" />
 
 
 <ExternalCommand1Host data="localhost"/>
-<ExternalCommand1 data="/usr/bin/gtkwave /home/enrici/TURTLE/simulators/c++2/vcddump.vcd"/>
+<ExternalCommand1 data="/opt/local/bin/gtkwave /users/enseig/genius/TURTLE/simulators/c++2/vcddump.vcd"/>
 <ExternalCommand2Host data="localhost"/>
-<ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /home/enrici/TURTLE/uppaal/spec.xml"/>
+<ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /users/enseig/genius/TURTLE/uppaal/spec.xml"/>
 
-<LastOpenFile data="/home/trhuy/Downloads/SemesterFinalResult/StuxnetModel/stuxnet_6_12_split (1).xml"/>
+<LastOpenFile data="/users/enseig/genius/TURTLE/modeling/miniAsynchronousDeploy2.xml"/>
 
-<ExternalServer data="10.188.65.215:12345"/>
 
-<LastWindowAttributes x="494" y="224" width="1219" height="597" max="false" />
+
+<LastWindowAttributes x="744" y="231" width="936" height="596" max="false" />
 
 
 <ProVerifHash data=""/>
 
 </TURTLECONFIGURATION>
+
+
+
+
+
