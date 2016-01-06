@@ -78,7 +78,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     private int execiTime = HwCPU.DEFAULT_EXECI_TIME;
     private int execcTime = HwCPU.DEFAULT_EXECC_TIME;
     private int cacheMiss = HwCPU.DEFAULT_CACHE_MISS;
-
+    private int encryption = HwCPU.ENCRYPTION_NONE;
     public TMLArchiCPUNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
@@ -397,7 +397,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                 errors += "Clock ratio  ";
             }
         }
-
+	encryption = dialog.getEncryption();
         if (error) {
             JOptionPane.showMessageDialog(frame,
                                           "Invalid value for the following attributes: " + errors,
@@ -614,7 +614,9 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     public int getSliceTime(){
         return sliceTime;
     }
-
+    public int getEncryption(){
+	return encryption;
+    }
     public String getAttributes() {
         String attr = "";
         attr += "Nb of cores = " + nbOfCores + "\n";

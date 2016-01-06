@@ -2196,6 +2196,7 @@ public class GTMLModeling  {
                     cpu.execcTime = node.getExeccTime();
                     cpu.clockRatio = node.getClockRatio();
                     cpu.MEC = node.getMECType();
+		    cpu.encryption = node.getEncryption();
                     listE.addCor(cpu, node);
                     archi.addHwNode(cpu);
                     TraceManager.addDev("CPU node added: " + cpu.getName());
@@ -2996,7 +2997,6 @@ public class GTMLModeling  {
             //if( tgc instanceof TMLArchiCPNode )       {
 			
             node = archi.getHwNodeByName( tgc.getName() );
-	    System.out.println("NODE "+node.getName());
             if( ( node != null ) && ( node instanceof HwExecutionNode ) ) {     //why checking this instanceof?
                 artifacts = ( (TMLArchiNode)(tgc) ).getAllTMLArchiArtifacts();
                 for( TMLArchiArtifact artifact:artifacts ) {
@@ -3081,28 +3081,38 @@ public class GTMLModeling  {
             }
 
         }
-	    TMLTask a;
-	    TMLTask b; 
+	    TMLTask a; 
 	    addTMLPragmas();
 	    for (String[] ss: tmlm.getPragmas()){
-		if (ss[0].equals("#Confidentiality") && ss.length==3){
-		  String task1 = ss[1].split("\\.")[0];
-		  String attr1 = ss[1].split("\\.")[1];
-		  String task2 = ss[2].split("\\.")[0];
-		  String attr2 = ss[2].split("\\.")[1];
-	          a = tmlm.getTMLTaskByName(task1);
-	          b = tmlm.getTMLTaskByName(task2);
-	          System.out.println("A " + a.getName());
-		  System.out.println("map "+map);
-		  HwNode node1 =	map.getHwNodeOf(a);
-		  HwNode node2 = map.getHwNodeOf(b);
-		  System.out.println("node "+node1.getName());
-		  System.out.println("node "+node2.getName());
-		  if (node1!=node2){
-  		    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Tasks " + task1 + " and " + task2 + " not on same node.");
-                    ce.setTDiagramPanel(tmlap.tmlap);
-                    ce.setTGComponent(null);
-                    checkingErrors.add(ce);
+	      if (ss[0].equals("#Confidentiality") && ss.length > 1){
+		String task1 = ss[1].split("\\.")[0];
+		String attr1 = ss[1].split("\\.")[1];
+	        a = tmlm.getTMLTaskByName(task1);
+		if (a ==null){
+		  continue;
+		}
+		HwCPU node1 = (HwCPU) map.getHwNodeOf(a);
+		if (node1.encryption ==0){
+		//If unencrypted
+		  ArrayList<TMLSendEvent> events = a.getSendEvents();
+		  List<TMLTask> destinations = new ArrayList<TMLTask>();
+		  for (TMLSendEvent event: events){	
+		    String params = event.getAllParams();
+		    for (String param: params.split(",")){
+		      if (attr1.equals(param)){
+			destinations.add(event.getEvent().getDestinationTask());
+		      }
+		    }
+		  }     
+		  for (TMLTask t: destinations){
+		    HwNode node2 = map.getHwNodeOf(t);
+		    if (node1!=node2){
+		      CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Confidentiality of " + ss[1]+ " not preserved.");
+                      ce.setTDiagramPanel(tmlap.tmlap);
+                      ce.setTGComponent(null);
+                      checkingErrors.add(ce);
+		    }
+		  }
 		}
 	      }	
 	    }

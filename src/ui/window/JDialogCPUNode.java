@@ -74,8 +74,8 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	
 	// Panel2
 	protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles, taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime;
-	protected JComboBox schedulingPolicy, MECTypeCB;
-	
+	protected JComboBox schedulingPolicy, MECTypeCB, encryption;
+
 	
 	// Main Panel
 	private JButton closeButton;
@@ -231,6 +231,11 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
     c4.gridwidth = 1;
     c4.fill = GridBagConstraints.HORIZONTAL;
     c4.anchor = GridBagConstraints.CENTER;*/
+		panel4.add(new JLabel("Encryption"), c4);
+		c4.gridwidth = GridBagConstraints.REMAINDER;
+		encryption = new JComboBox(new String[]{"None", "Software Encryption", "Hardware Security Module"});
+		panel4.add(encryption, c4);
+		c4.gridwidth = 1;
 		panel4.add(new JLabel("Embb Model Extension Construct:"), c4);
     c4.gridwidth = GridBagConstraints.REMAINDER; //end row
     MECTypeCB = new JComboBox( ArchUnitMEC.stringTypes );
@@ -353,6 +358,9 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		return schedulingPolicy.getSelectedIndex();
 	}
 
+	public int getEncryption(){
+		return encryption.getSelectedIndex();
+	}
 	public ArchUnitMEC getMECType()	{
 		return MECType;
 	}
