@@ -50,10 +50,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+
 import javax.swing.*;
 
 import javax.swing.event.EventListenerList;
-import ddtranslatorSoclib.toFile.*;
 
 public class TGUIAction extends AbstractAction {
     // Actions
@@ -371,7 +371,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ADD_EDIT = 398;
     public static final int ADD_LINK = 399;
     public static final int ADD_CPUNODE = 400;
-    public static final int ADD_BUSNODE = 420;
+    public static final int ADD_BUSNODE = 401;
     public static final int ADD_BLOCKARTIFACT = 402;
     public static final int ADD_TTYNODE = 403;
     public static final int ADD_RAMNODE = 404;
@@ -382,15 +382,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ADD_COPROMWMRNODE = 409;
     public static final int ADD_TIMERNODE = 410;
     public static final int ADD_CHANNELARTIFACT = 411;
-    public static final int ADD_VGMNNODE = 401;
-    public static final int ADD_CROSSBARNODE = 421;
-  // julien -------------------------------------------------------------
-    
-    public static final int DEPLOY_AVATAR_DIAGRAM = 418;
-    public static final int EXTRAC_DEPLOY_PARAM_TO_FILE = 419;
-  // --------------------------------------------------------------------
 
-	
 
 
     // AVATAR Parametric Diagrams
@@ -778,16 +770,8 @@ public class TGUIAction extends AbstractAction {
         actions[ADD_LINK] = new TAction("add-add-link", "Add a link", IconManager.imgic202, IconManager.imgic202, "Link", "Add a link between two nodes of the currently opened AVATAR deployment diagram", 0);
         actions[ADD_CPUNODE] = new TAction("add-add-cpunode", "Add a CPU", IconManager.imgic1100, IconManager.imgic1100, "CPU", "Add a cpu node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_BUSNODE] = new TAction("add-add-busnode", "Add a Bus", IconManager.imgic1102, IconManager.imgic1102, "Bus", "Add a bus node to the currently opened AVATAR deployment diagram", 0);
-actions[ADD_VGMNNODE] = new TAction("add-add-vgmnnode", "Add a VGMN", IconManager.imgic1102, IconManager.imgic1102, "VGMN", "Add a VGMN node to the currently opened AVATAR deployment diagram", 0);
-	actions[ADD_CROSSBARNODE] = new TAction("add-add-crossbarnode", "Add a CROSSBAR", IconManager.imgic1102, IconManager.imgic1102, "Crossbar", "Add a Crossbar node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_TTYNODE] = new TAction("add-add-tty", "Add a TTY node", IconManager.imgic1108, IconManager.imgic1108, "TTY", "Add a tty node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_BLOCKARTIFACT] = new TAction("add-add-blockartifact", "Map an AVATAR block", IconManager.imgic702, IconManager.imgic702, "Map an AVATAR block", "Map an AVATAR block onto a node in the currently opened AVATAR deployment diagram", 0);
- // julien ----------------------------------------------------------------------------------
-        actions[DEPLOY_AVATAR_DIAGRAM] = new TAction("DEPLOY", "DEPLOY",IconManager.imgic94, IconManager.imgic94, "Generate DEPLOY Soclib", "DEPLOY diagram without check syntax", 0);
-	
-        actions[EXTRAC_DEPLOY_PARAM_TO_FILE] = new TAction("FILE", "FILE",IconManager.imgic340,IconManager.imgic340, "Extrac attributes to File", "Extrac attributes to specified File", 0);
-      // -----------------------------------------------------------------------------------------
-
         actions[ADD_CHANNELARTIFACT] = new TAction("add-add-channelartifact", "Map an AVATAR Channel", IconManager.imgic702, IconManager.imgic702, "Map an AVATAR channel", "Map an AVATAR channel onto a memory in the currently opened AVATAR deployment diagram", 0);
         actions[ADD_BRIDGENODE] = new TAction("add-add-bridgenode", "Add a Bridge", IconManager.imgic1104, IconManager.imgic1104, "Bridge node", "Add a bridge node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_RAMNODE] = new TAction("add-add-ramnode", "Add a RAM", IconManager.imgic1108, IconManager.imgic1108, "RAM", "Add a hardware accelerator node to the currently opened AVATAR deployment diagram", 0);

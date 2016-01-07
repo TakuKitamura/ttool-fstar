@@ -70,7 +70,7 @@ public class JDialogADDBusNode extends javax.swing.JDialog implements ActionList
     protected JTextField nodeName;
 	
 	// Panel2
-    protected JTextField index, nbOfAttachedInitiators, nbOfAttachedTargets, fifoDepth, minLatency;
+    protected JTextField index, nbAttachedInitiat, nbAttachedTarget, fifoDepth, minLatency;
 	
     
     // Main Panel
@@ -139,14 +139,14 @@ public class JDialogADDBusNode extends javax.swing.JDialog implements ActionList
 		c2.gridwidth = 1;
         panel2.add(new JLabel("Nb of attached initators:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nbOfAttachedInitiators = new JTextField(""+node.getNbOfAttachedInitiators(), 15);
-        panel2.add(nbOfAttachedInitiators, c2);
+        nbAttachedInitiat = new JTextField(""+node.getNbAttachedInitiat(), 15);
+        panel2.add(nbAttachedInitiat, c2);
         
         c2.gridwidth = 1;
         panel2.add(new JLabel("Nb of attached target:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nbOfAttachedTargets = new JTextField(""+node.getNbOfAttachedTargets(), 15);
-        panel2.add(nbOfAttachedTargets, c2);
+        nbAttachedTarget = new JTextField(""+node.getNbAttachedTarget(), 15);
+        panel2.add(nbAttachedTarget, c2);
         
         c2.gridwidth = 1;
         panel2.add(new JLabel("Fifo depth:"), c2);
@@ -221,12 +221,12 @@ public class JDialogADDBusNode extends javax.swing.JDialog implements ActionList
         return index.getText();
     }
     
-    public String getNbOfAttachedInitiators() {
-        return nbOfAttachedInitiators.getText();
+    public String getNbAttachedInitiat() {
+        return nbAttachedInitiat.getText();
     }
 	
-	public String getNbOfAttachedTargets(){
-		  return nbOfAttachedTargets.getText();
+	public String getNbAttachedTarget(){
+		  return nbAttachedTarget.getText();
 	  }
 	  
 	public String getFifoDepth(){

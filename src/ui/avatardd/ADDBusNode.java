@@ -66,8 +66,8 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 		private String stereotype = "VGMN";
 		
 		private int index = 0;
-		private int nbOfAttachedInitiators = 0;
-		private int nbOfAttachedTargets = 0;
+		private int nbAttachedInitiat = 0;
+		private int nbAttachedTarget = 0;
 		private int fifoDepth = 0;
 		private int minLatency = 0;
 		
@@ -111,7 +111,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 				removable = true;
 				userResizable = true;
 				
-				name = tdp.findNodeName("Bus");
+				name = tdp.findNodeName("Vgmn");
 				value = "name";
 				
 				myImageIcon = IconManager.imgic700;
@@ -220,34 +220,34 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 						}
 				}
 				
-				if (dialog.getNbOfAttachedInitiators().length() != 0) {	
+				if (dialog.getNbAttachedInitiat().length() != 0) {	
 						try {
-								tmp = nbOfAttachedInitiators;
-								nbOfAttachedInitiators = Integer.decode(dialog.getNbOfAttachedInitiators()).intValue();
-								if (nbOfAttachedInitiators < 0) {
-										nbOfAttachedInitiators = tmp;
+								tmp = nbAttachedInitiat;
+								nbAttachedInitiat = Integer.decode(dialog.getNbAttachedInitiat()).intValue();
+								if (nbAttachedInitiat < 0) {
+										nbAttachedInitiat = tmp;
 										error = true;
-										errors += "nbOfAttachedInitiators  ";
+										errors += "nbAttachedInitiat  ";
 								}
 						} catch (Exception e) {
 								error = true;
-								errors += "nbOfAttachedInitiators  ";
+								errors += "nbAttachedInitiat  ";
 						}
 				}
 				
 				
-				if (dialog.getNbOfAttachedTargets().length() != 0) {	
+				if (dialog.getNbAttachedTarget().length() != 0) {	
 						try {
-								tmp = nbOfAttachedTargets;
-								nbOfAttachedTargets = Integer.decode(dialog.getNbOfAttachedTargets()).intValue();
-								if (nbOfAttachedTargets < 0) {
-										nbOfAttachedTargets = tmp;
+								tmp = nbAttachedTarget;
+								nbAttachedTarget = Integer.decode(dialog.getNbAttachedTarget()).intValue();
+								if (nbAttachedTarget < 0) {
+										nbAttachedTarget = tmp;
 										error = true;
-										errors += "nbOfAttachedTargets  ";
+										errors += "nbAttachedTarget  ";
 								}
 						} catch (Exception e) {
 								error = true;
-								errors += "nbOfAttachedTargets  ";
+								errors += "nbAttachedTarget  ";
 						}
 				}                 
 				
@@ -303,8 +303,8 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 				sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
 				sb.append("\" />\n");
 				sb.append("<attributes index=\"" + index + "\" ");
-				sb.append(" nbOfAttachedInitiators=\"" + nbOfAttachedInitiators + "\" ");
-				sb.append(" nbOfAttachedTargets=\"" + nbOfAttachedTargets + "\" ");
+				sb.append(" nbAttachedInitiat=\"" + nbAttachedInitiat + "\" ");
+				sb.append(" nbAttachedTarget=\"" + nbAttachedTarget + "\" ");
 				sb.append(" minLatency=\"" + minLatency + "\" ");
 				sb.append(" fifoDepth=\"" + fifoDepth + "\" ");
 				sb.append("/>\n");
@@ -345,8 +345,8 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 														
 														if (elt.getTagName().equals("attributes")) {
 																index = Integer.decode(elt.getAttribute("index")).intValue();
-																nbOfAttachedInitiators =Integer.decode(elt.getAttribute("nbOfAttachedInitiators")).intValue();
-																nbOfAttachedTargets = Integer.decode(elt.getAttribute("nbOfAttachedTargets")).intValue();
+																nbAttachedInitiat =Integer.decode(elt.getAttribute("nbAttachedInitiat")).intValue();
+																nbAttachedTarget = Integer.decode(elt.getAttribute("nbAttachedTarget")).intValue();
 																minLatency = Integer.decode(elt.getAttribute("minLatency")).intValue();
 																fifoDepth = Integer.decode(elt.getAttribute("fifoDepth")).intValue();
 																
@@ -367,31 +367,18 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 		public String getAttributes() {
 				String attr = "";
 				attr += "index = " + index + "\n";
-				attr += "nbOfAttachedInitiators = " + nbOfAttachedInitiators + "\n";
-				attr += "nbOfAttachedTargets = " + nbOfAttachedTargets + "\n"; 
+				attr += "nbAttachedInitiat = " + nbAttachedInitiat + "\n";
+				attr += "nbAttachedTarget = " + nbAttachedTarget + "\n"; 
 				attr += "minLatency = " + minLatency + "\n";
 				attr += "fifoDepth = " + fifoDepth + "\n";
 				return attr;
 		}
-
-    public String getAttributesToFile() {
-				String attr = "";
-				attr += index + "\n";
-				attr += nbOfAttachedInitiators + "\n";
-				attr += nbOfAttachedTargets + "\n"; 
-				attr += minLatency + "\n";
-				attr += fifoDepth + "\n";
-				return attr;
-		}
 		
-		public int getIndex() { return index;}
-		public int getNbOfAttachedInitiators() { return nbOfAttachedInitiators;}
-		public int getNbOfAttachedTargets() { return nbOfAttachedTargets;}
+				public int getIndex() { return index;}
+		public int getNbAttachedInitiat() { return nbAttachedInitiat;}
+		public int getNbAttachedTarget() { return nbAttachedTarget;}
 		public int getFifoDepth() { return fifoDepth;}
 		public int getMinLatency() { return minLatency;}
 		
-     public String toString(){
-      return "Bus";
-    }
 		
 }

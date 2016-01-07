@@ -43,8 +43,6 @@ knowledge of the CeCILL license and that you accept its terms.
  * @version 1.0 30/06/2014
  * @author Ludovic APVRILLE
  * @see ADDDiagramPanel
- * @version 2.0 08/07/2015
- * @author Ludovic APVRILLE (update by Julien HENON, Daniela GENIUS)
  */
 
 package ui.avatardd;
@@ -70,8 +68,6 @@ public class ADDDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.ADD_CPUNODE].setEnabled(b);
 		mgui.actions[TGUIAction.ADD_BUSNODE].setEnabled(b);
 		mgui.actions[TGUIAction.ADD_BRIDGENODE].setEnabled(b);
-		mgui.actions[TGUIAction.ADD_VGMNNODE].setEnabled(b);
-		mgui.actions[TGUIAction.ADD_CROSSBARNODE].setEnabled(b);
         mgui.actions[TGUIAction.ADD_BLOCKARTIFACT].setEnabled(b);    
         mgui.actions[TGUIAction.ADD_CHANNELARTIFACT].setEnabled(b);
         mgui.actions[TGUIAction.ADD_TTYNODE].setEnabled(b);
@@ -85,16 +81,8 @@ public class ADDDiagramToolBar extends TToolBar {
 		
 		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
 		
-      // julien -------------------------------------------------
-
-        mgui.actions[TGUIAction.DEPLOY_AVATAR_DIAGRAM].setEnabled(b);
- 	mgui.actions[TGUIAction.EXTRAC_DEPLOY_PARAM_TO_FILE].setEnabled(b);
-
-
-      // --------------------------------------------------------
-
-      /*mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
+		/*mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);*/
 		
 		mgui.updateZoomInfo();
@@ -145,17 +133,13 @@ public class ADDDiagramToolBar extends TToolBar {
         button = this.add(mgui.actions[TGUIAction.ADD_TTYNODE]);
         button.addMouseListener(mgui.mouseHandler);
 		
-	this.addSeparator();
-				
-	button = this.add(mgui.actions[TGUIAction.ADD_BUSNODE]);
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ADD_BUSNODE]);
         button.addMouseListener(mgui.mouseHandler);
-	button = this.add(mgui.actions[TGUIAction.ADD_BRIDGENODE]);
-        button.addMouseListener(mgui.mouseHandler);	
-	button = this.add(mgui.actions[TGUIAction.ADD_VGMNNODE]);
+		button = this.add(mgui.actions[TGUIAction.ADD_BRIDGENODE]);
         button.addMouseListener(mgui.mouseHandler);
-	button = this.add(mgui.actions[TGUIAction.ADD_CROSSBARNODE]);
-        button.addMouseListener(mgui.mouseHandler);
-	button = this.add(mgui.actions[TGUIAction.ADD_RAMNODE]);
+		button = this.add(mgui.actions[TGUIAction.ADD_RAMNODE]);
         button.addMouseListener(mgui.mouseHandler);
         button = this.add(mgui.actions[TGUIAction.ADD_CHANNELARTIFACT]);
         button.addMouseListener(mgui.mouseHandler);
@@ -164,21 +148,12 @@ public class ADDDiagramToolBar extends TToolBar {
         
         
 
-	this.addSeparator();
+		this.addSeparator();
 		
-	button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
         button.addMouseListener(mgui.mouseHandler);
-        
-       this.addSeparator();
-
-	button = this.add(mgui.actions[TGUIAction.EXTRAC_DEPLOY_PARAM_TO_FILE]);
-        button.addMouseListener(mgui.mouseHandler);
-
-	button = this.add(mgui.actions[TGUIAction.DEPLOY_AVATAR_DIAGRAM]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        // -----------------------------------------------------
-
+		
+		
     }
     
 } // Class
