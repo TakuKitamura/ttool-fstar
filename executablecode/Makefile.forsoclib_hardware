@@ -1,0 +1,41 @@
+SOCLIB_CPU=ppc
+MUTEKH_CPU=ppc
+
+include generated_topcell/procinfo.mk
+
+#SOCLIB_CPU=sparcv8
+#MUTEKH_CPU=sparc
+#SOCLIB_CPU_COUNT=1
+
+PATH+=/opt/mutekh/bin
+export PATH
+
+updateruntime:
+#	cp ~/TTool/executablecode/src/*.c ~/Prog/mutekh/libavatar/
+#	cp ~/TTool/executablecode/src/*.h ~/Prog/mutekh/libavatar/include/  
+	cp ~/TTool/executablecode/src_soclib/*.c ~/Prog/mutekh/libavatar/
+	cp ~/TTool/executablecode/src_soclib/*.h ~/Prog/mutekh/libavatar/include/  
+	cp ~/TTool/executablecode/src_soclib/Makefile ~/Prog/mutekh/libavatar/
+
+updategeneratedcode:
+#	cp ~/TTool/executablecode/generated_src/*.h ~/Prog/mutekh/examples/avatar
+#	cp ~/TTool/executablecode/generated_src/*.c ~/Prog/mutekh/examples/avatar	
+	cp ~/TTool/executablecode/generated_src_soclib/*.h ~/Prog/mutekh/examples/avatar 
+
+	cp ~/TTool/executablecode/generated_src_soclib/*.c ~/Prog/mutekh/examples/avatar 
+
+	cp ~/TTool/executablecode/Makefile.soclib ~/Prog/mutekh/examples/avatar/Makefile
+
+compilesoclib:
+	cp ~/TTool/executablecode/generated_topcell/top.cc  ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/
+	cp ~/TTool/executablecode/generated_topcell/deployinfo.h  ~/Prog/mutekh/arch/soclib/
+	cp ~/TTool/executablecode/generated_topcell/deployinfo_map.h  ~/Prog/mutekh/arch/soclib/
+	cat ~/TTool/executablecode/generated_topcell/config_noproc ~/TTool/executablecode/generated_topcell/nbproc > ~/TTool/executablecode/generated_topcell/config 
+	cp ~/TTool/executablecode/generated_topcell/config  ~/Prog/mutekh/examples/avatar/
+	cd ~/Prog/mutekh; make CONF=examples/avatar/config BUILD=soclib-$(MUTEKH_CPU):pf-tutorial
+
+runsoclib:
+	echo "running soclib"
+	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ~/Prog/mutekh/avatar-soclib-$(MUTEKH_CPU).out
+allsoclib: updateruntime updategeneratedcode compilesoclib runsoclib
+
