@@ -1,0 +1,12 @@
+To compile for soclib (simulated) hardware platform :
+
+add in bin/config.xml
+
+<AVATARExecutableSoclibCodeCompileCommand data="make -C ~/TURTLE/executablecode updategeneratedcode
+ compilesoclib" />
+<AVATARExecutableSoclibCodeExecuteCommand data="make -C ~/TURTLE/executablecode runsoclib" />
+<AVATARExecutableSoclibTraceFile data="~Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kern
+el_tutorial/vcitty" />
+
+You have to obtain the Prog arborescence containing mutekH and a SoClib platform
+Please contact daniela.genius@lip6.fr

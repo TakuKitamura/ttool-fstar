@@ -36,7 +36,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class ADDBusNode
+* Class ADDVgmnNode
 * Node. To be used in Avatar Deployment Diagram
 * Creation: 30/06/2014
 * @version 1.0 30/06/2014
@@ -58,22 +58,22 @@ import ui.window.*;
 
 import tmltranslator.*;
 
-public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
+public class ADDCrossbarNode extends ADDCommunicationNode implements WithAttributes {
 		private int textY1 = 15;
 		private int textY2 = 30;
 		private int derivationx = 2;
 		private int derivationy = 3;
-		private String stereotype = "VGMN";
+		private String stereotype = "CROSSBAR";
 		
 		private int index = 0;
 		private int nbOfAttachedInitiators = 0;
 		private int nbOfAttachedTargets = 0;
-		private int fifoDepth = 0;
-		private int minLatency = 0;
+		private int cluster_index = 0;
+		private int cluster_address = 0;
 		
 
 		
-		public ADDBusNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+		public ADDCrossbarNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 				super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 				
 				width = 250;
@@ -111,7 +111,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 				removable = true;
 				userResizable = true;
 				
-				name = tdp.findNodeName("Bus");
+				name = tdp.findNodeName("Crossbar");
 				value = "name";
 				
 				myImageIcon = IconManager.imgic700;
@@ -183,7 +183,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 				int tmp;
 				String tmpName;
 				
-				JDialogADDBusNode dialog = new JDialogADDBusNode(frame, "Setting bus attributes", this);
+				JDialogADDCrossbarNode dialog = new JDialogADDCrossbarNode(frame, "Setting vgmn attributes", this);
 				dialog.setSize(500, 450);
 				GraphicLib.centerOnParent(dialog);
 				dialog.show(); // blocked until dialog has been closed
@@ -251,33 +251,33 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 						}
 				}                 
 				
-				if (dialog.getFifoDepth().length() != 0) {	
+				if (dialog.getClusterIndex().length() != 0) {	
 						try {
-								tmp = fifoDepth;
-								fifoDepth = Integer.decode(dialog.getFifoDepth()).intValue();
-								if (fifoDepth < 0) {
-										fifoDepth = tmp;
+								tmp = cluster_index;
+								cluster_index = Integer.decode(dialog.getClusterIndex()).intValue();
+								if (cluster_index < 0) {
+										cluster_index = tmp;
 										error = true;
-										errors += "fifoDepth  ";
+										errors += "cluster_index  ";
 								}
 						} catch (Exception e) {
 								error = true;
-								errors += "fifoDepth  ";
+								errors += "cluster_index  ";
 						}
 				}
 				
-				if (dialog.getMinLatency().length() != 0) {	
+				if (dialog.getClusterAddress().length() != 0) {	
 						try {
-								tmp = minLatency;
-								minLatency = Integer.decode(dialog.getMinLatency()).intValue();
-								if (minLatency < 0) {
-										minLatency = tmp;
+								tmp = cluster_address;
+								cluster_address = Integer.decode(dialog.getClusterAddress()).intValue();
+								if (cluster_address < 0) {
+									       cluster_address = tmp;
 										error = true;
-										errors += "minLatency  ";
+										errors += "cluster_address  ";
 								}
 						} catch (Exception e) {
 								error = true;
-								errors += "minLatency  ";
+								errors += "cluster_address ";
 						}
 				}
 
@@ -295,7 +295,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 		
 		
 		public int getType() {
-				return TGComponentManager.ADD_BUSNODE;
+				return TGComponentManager.ADD_CROSSBARNODE;
 		}
 		
 		protected String translateExtraParam() {
@@ -304,9 +304,10 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 				sb.append("\" />\n");
 				sb.append("<attributes index=\"" + index + "\" ");
 				sb.append(" nbOfAttachedInitiators=\"" + nbOfAttachedInitiators + "\" ");
-				sb.append(" nbOfAttachedTargets=\"" + nbOfAttachedTargets + "\" ");
-				sb.append(" minLatency=\"" + minLatency + "\" ");
-				sb.append(" fifoDepth=\"" + fifoDepth + "\" ");
+				
+				sb.append(" nbOfAttachedTargets\"" + nbOfAttachedTargets + "\" ");
+				sb.append(" cluster_index=\"" + cluster_index + "\" ");
+				sb.append(" cluster_address=\"" + cluster_address + "\" ");
 				sb.append("/>\n");
 				sb.append("</extraparam>\n");
 				return new String(sb);
@@ -347,8 +348,8 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 																index = Integer.decode(elt.getAttribute("index")).intValue();
 																nbOfAttachedInitiators =Integer.decode(elt.getAttribute("nbOfAttachedInitiators")).intValue();
 																nbOfAttachedTargets = Integer.decode(elt.getAttribute("nbOfAttachedTargets")).intValue();
-																minLatency = Integer.decode(elt.getAttribute("minLatency")).intValue();
-																fifoDepth = Integer.decode(elt.getAttribute("fifoDepth")).intValue();
+																cluster_index = Integer.decode(elt.getAttribute("cluster_index")).intValue();
+																cluster_address = Integer.decode(elt.getAttribute("cluster_address")).intValue();
 																
 														}
 												}
@@ -369,29 +370,29 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 				attr += "index = " + index + "\n";
 				attr += "nbOfAttachedInitiators = " + nbOfAttachedInitiators + "\n";
 				attr += "nbOfAttachedTargets = " + nbOfAttachedTargets + "\n"; 
-				attr += "minLatency = " + minLatency + "\n";
-				attr += "fifoDepth = " + fifoDepth + "\n";
+				attr += "cluster_address = " + cluster_address+ "\n";
+				attr += "cluster_index= " + cluster_index + "\n";
 				return attr;
 		}
 
     public String getAttributesToFile() {
 				String attr = "";
 				attr += index + "\n";
-				attr += nbOfAttachedInitiators + "\n";
-				attr += nbOfAttachedTargets + "\n"; 
-				attr += minLatency + "\n";
-				attr += fifoDepth + "\n";
+				attr += nbOfAttachedInitiators+ "\n";
+				attr += nbOfAttachedTargets+ "\n";
+				attr += cluster_index + "\n"; 			
+				attr += cluster_address + "\n";
 				return attr;
 		}
 		
 		public int getIndex() { return index;}
 		public int getNbOfAttachedInitiators() { return nbOfAttachedInitiators;}
 		public int getNbOfAttachedTargets() { return nbOfAttachedTargets;}
-		public int getFifoDepth() { return fifoDepth;}
-		public int getMinLatency() { return minLatency;}
+		public int getClusterIndex() { return cluster_index;}
+		public int getClusterAddress() { return cluster_address;}
 		
      public String toString(){
-      return "Bus";
+      return "Crossbar";
     }
 		
 }

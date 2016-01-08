@@ -36,7 +36,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class ADDBusNode
+* Class ADDVgmnNode
 * Node. To be used in Avatar Deployment Diagram
 * Creation: 30/06/2014
 * @version 1.0 30/06/2014
@@ -58,7 +58,7 @@ import ui.window.*;
 
 import tmltranslator.*;
 
-public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
+public class ADDVgmnNode extends ADDCommunicationNode implements WithAttributes {
 		private int textY1 = 15;
 		private int textY2 = 30;
 		private int derivationx = 2;
@@ -73,7 +73,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 		
 
 		
-		public ADDBusNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+		public ADDVgmnNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 				super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 				
 				width = 250;
@@ -111,7 +111,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 				removable = true;
 				userResizable = true;
 				
-				name = tdp.findNodeName("Bus");
+				name = tdp.findNodeName("Vgmn");
 				value = "name";
 				
 				myImageIcon = IconManager.imgic700;
@@ -183,7 +183,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 				int tmp;
 				String tmpName;
 				
-				JDialogADDBusNode dialog = new JDialogADDBusNode(frame, "Setting bus attributes", this);
+				JDialogADDVgmnNode dialog = new JDialogADDVgmnNode(frame, "Setting vgmn attributes", this);
 				dialog.setSize(500, 450);
 				GraphicLib.centerOnParent(dialog);
 				dialog.show(); // blocked until dialog has been closed
@@ -295,7 +295,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 		
 		
 		public int getType() {
-				return TGComponentManager.ADD_BUSNODE;
+				return TGComponentManager.ADD_VGMNNODE;
 		}
 		
 		protected String translateExtraParam() {
@@ -391,7 +391,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 		public int getMinLatency() { return minLatency;}
 		
      public String toString(){
-      return "Bus";
+      return "Vgmn";
     }
 		
 }

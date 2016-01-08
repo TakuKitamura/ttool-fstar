@@ -281,7 +281,4 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
         return taskName;
     }
 	
-	
-    
-    
 }

@@ -147,6 +147,15 @@ public class AvatarSpecification extends AvatarElement {
 
     }
 
+    //DG
+ public boolean ASynchronousExist(){
+      LinkedList<AvatarRelation> asynchro = getRelations();
+      for ( AvatarRelation ar : asynchro )
+        if (ar.isAsynchronous())
+          return true;
+      return false;
+    }
+    // end DG
     public void addBlock(AvatarBlock _block) {
         blocks.add(_block);
     }

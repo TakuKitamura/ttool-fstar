@@ -1,5 +1,5 @@
 UNAME := $(shell uname -s)
-CC     = gcc
+CC     = /usr/bin/gcc
 #CC     = test2.sh
 #CC = /packages/gcc_3.2.2/bin/g++32
 OPT    = -O1 -pthread
