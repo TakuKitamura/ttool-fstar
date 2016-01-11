@@ -153,7 +153,6 @@ public class GTMLModeling  {
                 addTMLChannels();
                 addTMLEvents();
                 addTMLRequests();
-		//addTMLPragmas();
                 TraceManager.addDev("At line 151");
                 generateTasksActivityDiagrams();
                 removeActionsWithDollars();
@@ -215,7 +214,6 @@ public class GTMLModeling  {
                 addTMLCEvents();
                 TraceManager.addDev("Adding requests");
                 addTMLCRequests();
-		//addTMLPragmas();
                 TraceManager.addDev("At line 211");
                 generateTasksActivityDiagrams();
                 removeActionsWithDollars();
@@ -284,7 +282,6 @@ public class GTMLModeling  {
     }
     private void addTMLPragmas(){
 	TGComponent tgc;
-	System.out.println(tmlap);
 	components = tmlap.tmlap.getComponentList();
 	ListIterator iterator = components.listIterator();
 	while(iterator.hasNext()) {
@@ -293,7 +290,7 @@ public class GTMLModeling  {
 	    TGCNote note = (TGCNote) tgc;
 	    String[] vals = note.getValues();
 	    for (String s: vals){
-		if (s.contains(" ") && s.contains(".")){
+		if (s.contains(" ") && s.contains("#")){
   		  tmlm.addPragma(s.split(" "));
 		}
 	    }
@@ -2239,6 +2236,7 @@ public class GTMLModeling  {
                     bus.arbitration = busnode.getArbitrationPolicy();
                     bus.clockRatio = busnode.getClockRatio();
                     bus.sliceTime = busnode.getSliceTime();
+		    bus.privacy = busnode.getPrivacy();
                     listE.addCor(bus, busnode);
                     archi.addHwNode(bus);
                     TraceManager.addDev("BUS node added:" + bus.getName());
@@ -3085,36 +3083,118 @@ public class GTMLModeling  {
 	    addTMLPragmas();
 	    for (String[] ss: tmlm.getPragmas()){
 	      if (ss[0].equals("#Confidentiality") && ss.length > 1){
-		String task1 = ss[1].split("\\.")[0];
-		String attr1 = ss[1].split("\\.")[1];
+		String task1 = ss[1];
 	        a = tmlm.getTMLTaskByName(task1);
+
 		if (a ==null){
 		  continue;
 		}
 		HwCPU node1 = (HwCPU) map.getHwNodeOf(a);
-		if (node1.encryption ==0){
+	//	if (node1.encryption ==0){
 		//If unencrypted
-		  ArrayList<TMLSendEvent> events = a.getSendEvents();
+		  ArrayList<TMLChannel> channels = tmlm.getChannels();
 		  List<TMLTask> destinations = new ArrayList<TMLTask>();
-		  for (TMLSendEvent event: events){	
-		    String params = event.getAllParams();
-		    for (String param: params.split(",")){
-		      if (attr1.equals(param)){
-			destinations.add(event.getEvent().getDestinationTask());
-		      }
+		  for (TMLChannel channel: channels){	
+		    if(channel.hasOriginTask(a)){
+			if (channel.isBasicChannel()){
+			     destinations.add(channel.getDestinationTask());
+			}
+			else {
+			     destinations.addAll(channel.getDestinationTasks());
+			}
 		    }
+		    else if(channel.hasDestinationTask(a)){
+			if (channel.isBasicChannel()){
+			     destinations.add(channel.getOriginTask());
+			}
+			else {
+			     destinations.addAll(channel.getOriginTasks());
+			}
+		    }
+			
 		  }     
 		  for (TMLTask t: destinations){
+		    List<HwBus> buses = new ArrayList<HwBus>();
 		    HwNode node2 = map.getHwNodeOf(t);
 		    if (node1!=node2){
-		      CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Confidentiality of " + ss[1]+ " not preserved.");
+		      //Navigate architecture for node
+		      List<HwLink> links = archi.getHwLinks();
+		      HwNode last = node1;
+		/*      for (HwLink link: links){
+			if (link.hwnode == node1){
+			  last = link.bus;    
+			}
+		      }*/
+		      List<HwNode> found = new ArrayList<HwNode>();	
+		      List<HwNode> done = new ArrayList<HwNode>();
+		      List<HwNode> path = new ArrayList<HwNode>();
+		      Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
+		      for (HwLink link: links){
+		//	System.out.println("link "+ link.hwnode + " "+ link.bus);
+			if (link.hwnode == node1){
+			  found.add(link.bus);
+			  List<HwNode> tmp = new ArrayList<HwNode>();
+			  tmp.add(link.bus);
+			  pathMap.put(link.bus, tmp);
+			}
+		      }
+		      outerloop:
+		      while (found.size()>0){
+			HwNode curr = found.remove(0);
+			for (HwLink link: links){
+			  if (curr == link.bus){
+			    if (link.hwnode == node2){
+			      path = pathMap.get(curr);
+			      break outerloop;
+			    }
+			    if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+			      found.add(link.hwnode);
+			      List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+			      tmp.add(link.hwnode);
+			      pathMap.put(link.hwnode, tmp);
+			    }
+			  }
+			  else if (curr == link.hwnode){
+			      if (!done.contains(link.bus) && !found.contains(link.bus)){
+			        found.add(link.bus);
+			        List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+			        tmp.add(link.bus);
+			        pathMap.put(link.bus, tmp);
+			      }
+			  }
+			}
+			done.add(curr);
+		      }
+		      if (path.size() ==0){
+			System.out.println("Path does not exist");
+		      }
+		      else {
+			System.out.println(node1.getName());
+			HwBus bus;
+			//Check if all buses and bridges are private
+			for (HwNode n: path){
+			  if (n instanceof HwBus){
+			    bus = (HwBus) n;
+			    if (bus.privacy ==0){
+			      CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Confidentiality of data within " + ss[1]+ " not preserved.");
+                      	      ce.setTDiagramPanel(tmlap.tmlap);
+                      	      ce.setTGComponent(listE.getTG(n));
+                      	      checkingErrors.add(ce);
+			      break;
+			    }
+			  }
+			  System.out.println("path: " +n.getName());
+			}
+			System.out.println(node2.getName());
+		      }
+		  /*    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Confidentiality of data within " + ss[1]+ " not preserved.");
                       ce.setTDiagramPanel(tmlap.tmlap);
                       ce.setTGComponent(null);
-                      checkingErrors.add(ce);
+                      checkingErrors.add(ce); */
 		    }
 		  }
 		}
-	      }	
+	    //  }	
 	    }
 
     }
