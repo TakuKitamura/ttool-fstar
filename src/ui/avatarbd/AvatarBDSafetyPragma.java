@@ -76,8 +76,12 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
     private Font myFont, myFontB;
     private int maxFontSize = 30;
     private int minFontSize = 4;
+    public final static int PROVED_TRUE = 1;
+    public final static int PROVED_FALSE = 0; 
     private int currentFontSize = -1;
     private final String[] pPragma = {"A[]", "A<>", "E[]", "E<>"};
+    public HashMap<String, Integer> verifMap = new HashMap<String, Integer>();
+
     protected Graphics graphics;
     public AvatarBDSafetyPragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -192,6 +196,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 	g.setFont(fold);
 	for (String s: properties){
 	    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
+	    drawVerification(s, g, x+textX, y+textY + (i+1)* currentFontSize);
 	    i++;
 	}
 
@@ -296,7 +301,33 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         sb.append("</extraparam>\n");
         return new String(sb);
     }
-
+    private void drawVerification(String s, Graphics g, int _x, int _y){
+        Color c = g.getColor();
+        Color c1;
+	int status;
+	if (verifMap.containsKey(s)){
+	    status = verifMap.get(s);
+	    if (status== PROVED_TRUE){
+		g.setColor(Color.green);
+		int[] xp1 = new int[]{_x-20, _x-18, _x-12, _x-14};
+		int[] yp1 = new int[]{_y-3, _y-5, _y-1, _y+1};
+		int[] xp2 = new int[]{_x-14, _x-12, _x-3, _x-5};
+		int[] yp2 = new int[]{_y-1, _y+1, _y-8, _y-10};	
+		g.fillPolygon(xp1, yp1, 4);
+		g.fillPolygon(xp2, yp2, 4);
+	    } 
+	    else {
+		g.setColor(Color.red);
+		int[] xp1 = new int[]{_x-17, _x-15, _x-6, _x-8};
+		int[] yp1 = new int[]{_y-8, _y-6, _y+2, _y+4};
+		int[] xp2 = new int[]{_x-15, _x-17, _x-8, _x-6};
+		int[] yp2 = new int[]{_y+4, _y+2, _y-8, _y-6};	
+		g.fillPolygon(xp1, yp1, 4);
+		g.fillPolygon(xp2, yp2, 4);
+	    }
+	}
+	g.setColor(c);
+    }
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         value = "";
         values = null;

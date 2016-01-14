@@ -189,8 +189,9 @@ public class TML2MappingSystemC {
                     //tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime
                     //declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, 5, " + (int) Math.ceil(((float)exNode.execiTime)*(1+((float)exNode.branchingPredictionPenalty)/100)) + " ) " + SCCR;
                     declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime) + ", " + (int) Math.ceil((float)(exNode.clockRatio * Math.max(exNode.execiTime,exNode.execcTime) * (exNode.branchingPredictionPenalty * exNode.pipelineSize +100 - exNode.branchingPredictionPenalty))/100) + " ) " + SCCR;
-                //for(int cores=0; cores<exNode.nbOfCores; cores++){
-                for(int cores=0; cores<1; cores++){
+		System.out.println("cores " + exNode.nbOfCores);
+                for(int cores=0; cores<exNode.nbOfCores; cores++){
+                //for(int cores=0; cores<1; cores++){
                     //if (tmlmapping.isAUsedHwNode(node)) {
                     declaration += "CPU* " + exNode.getName() + cores + " = new SingleCoreCPU(" + exNode.getID() + ", \"" + exNode.getName() + "_" + cores + "\", " + exNode.getName() + "_scheduler" + ", ";
 
@@ -266,8 +267,8 @@ public class TML2MappingSystemC {
                     for(HwLink link: nodeLinks){
                         //declaration+= "BusMaster* " + node.getName() + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + node.getName() + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", 1, array(1, (SchedulableCommDevice*)" +  link.bus.getName() + "))" + SCCR;
                         int noOfCores;
-                        //if (node instanceof HwCPU) noOfCores= ((HwCPU)node).nbOfCores; else noOfCores=1;
-                        noOfCores=1;
+                        if (node instanceof HwCPU) noOfCores= ((HwCPU)node).nbOfCores; else noOfCores=1;
+                        //noOfCores=2;
                         for (int cores=0; cores<noOfCores; cores++){
                             String nodeName=node.getName();
                             if ((node instanceof HwCPU) ||  (node instanceof HwA) )
@@ -380,8 +381,8 @@ public class TML2MappingSystemC {
                     for(HwLink link: busLinks){
                         if (link.hwnode instanceof HwExecutionNode || link.hwnode instanceof HwBridge){
                             if ((link.hwnode instanceof HwCPU) || (link.hwnode instanceof HwA)){
-                                //for (int cores=0; cores< ((HwCPU)link.hwnode).nbOfCores; cores++){
-                                for (int cores=0; cores< 1; cores++){
+                                for (int cores=0; cores< ((HwCPU)link.hwnode).nbOfCores; cores++){
+                                //for (int cores=0; cores< 1; cores++){
                                     devices += ", (WorkloadSource*)" + link.hwnode.getName()+ cores + "_" + node.getName() + "_Master";
                                     numDevices++;
                                 }
@@ -422,23 +423,23 @@ public class TML2MappingSystemC {
             declaration += task.getName() + "* task__" + task.getName() + " = new " + task.getName() + "("+ task.getID() +","+ task.getPriority() + ",\"" + task.getName() + "\", array(";
 
             if (node instanceof HwCPU){
-                //declaration+= ((HwCPU)node).nbOfCores;
-                declaration+= 1;
-                //for (int cores=0; cores< ((HwCPU)node).nbOfCores; cores++){
-                for (int cores=0; cores< 1; cores++){
+                declaration+= ((HwCPU)node).nbOfCores;
+                //declaration+= 1;
+                for (int cores=0; cores< ((HwCPU)node).nbOfCores; cores++){
+                //for (int cores=0; cores< 1; cores++){
                     declaration+= "," + node.getName()+cores;
                 }
                 //declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
                 declaration+= "),1" + CR;
             }else if (node instanceof HwA){
-                //declaration+= ((HwCPU)node).nbOfCores;
-                declaration+= 1;
-                //for (int cores=0; cores< ((HwCPU)node).nbOfCores; cores++){
-                for (int cores=0; cores< 1; cores++){
+                declaration+= ((HwCPU)node).nbOfCores;
+                //declaration+= 1;
+                for (int cores=0; cores< ((HwCPU)node).nbOfCores; cores++){
+                //for (int cores=0; cores< 1; cores++){
                     declaration+= "," + node.getName()+cores;
                 }
-                //declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
-                declaration+= "),1" + CR;
+                declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
+                //declaration+= "),1" + CR;
             } else {
                 declaration += "1," + node.getName() + "),1" + CR;
             }

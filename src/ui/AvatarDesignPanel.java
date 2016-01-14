@@ -331,6 +331,17 @@ public class AvatarDesignPanel extends TURTLEPanel {
             }
         }
     }
+    
+
+    public void modelBacktracingUppaal(HashMap verifMap){
+	for (Object ob: abdp.getComponentList()) {
+          if (ob instanceof AvatarBDSafetyPragma) {
+            AvatarBDSafetyPragma pragma = (AvatarBDSafetyPragma) ob;
+            pragma.verifMap = verifMap;
+	  }
+	}	
+    }
+
 
     public void modelBacktracingProVerif(ProVerifOutputAnalyzer pvoa) {
 

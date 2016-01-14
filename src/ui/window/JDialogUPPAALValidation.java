@@ -92,8 +92,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     protected LinkedList<JCheckBox> customChecks;
 
     protected LinkedList<String> customQueries;
-
-
+    public HashMap<String, Integer> verifMap;
+    protected int status = -1;
     /** Creates new form  */
     public JDialogUPPAALValidation(Frame f, MainGUI _mgui, String title, String _cmdVerifyta, String _pathTrace, String _fileName, String _spec, String _host, TURTLEPanel _tp) {
         super(f, title, true);
@@ -115,6 +115,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         customChecks = new LinkedList<JCheckBox>();
         initComponents();
         myInitComponents();
+	verifMap = new HashMap<String, Integer>();
         pack();
 
         //getGlassPane().addMouseListener( new MouseAdapter() {});
@@ -449,10 +450,13 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                     if (j.isSelected()){
                         jta.append(j.getText()+"\n");
                         String translation = translateCustomQuery(j.getText());
+			status = -1;
                         workQuery(translation, fn, trace_id, rshc);
+			verifMap.put(j.getText(), status);
                         trace_id++;
                     }
                 }
+		mgui.modelBacktracingUPPAAL(verifMap);
             }
 
             //Removing files
@@ -485,7 +489,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             } catch (LauncherException le1) {}
             return;
         }
-
+   	
         mode = NOT_STARTED;
         setButtons();
     }
@@ -562,9 +566,11 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             }
             else if (data.indexOf("Property is satisfied") >-1){
                 jta.append("-> property is satisfied\n");
+		status=1;
             }
             else if (data.indexOf("Property is NOT satisfied") > -1) {
                 jta.append("-> property is NOT satisfied\n");
+		status = 0;
             }
             else {
                 jta.append("ERROR -> property could not be studied\n");
@@ -578,6 +584,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         if (generateTrace.isSelected()) {
             generateTraceFile(fn, trace_id, rshc);
         }
+	
     }
 
     private void generateTraceFile(String fn, int trace_id, RshClient rshc) throws LauncherException{

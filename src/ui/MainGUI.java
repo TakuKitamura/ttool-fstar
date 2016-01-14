@@ -3715,6 +3715,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         getCurrentTDiagramPanel().repaint();
     }
 
+    public void modelBacktracingUPPAAL(HashMap<String, Integer> verifMap) {
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) {
+            return;
+        }
+
+        if (!(tp instanceof AvatarDesignPanel)) {
+            return;
+        }
+
+        AvatarDesignPanel adp = (AvatarDesignPanel)tp;
+        adp.modelBacktracingUppaal(verifMap);
+        getCurrentTDiagramPanel().repaint();
+    }
+
     public void generateRTLOTOS() {
         generateRTLOTOS(false);
     }
