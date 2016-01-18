@@ -75,6 +75,7 @@ public class MMBuffer extends Buffer	{
 	private String Context = "embb_mainmemory_context";
 
 	private static final int MAX_PARAMETERS = 2;
+	private static ArrayList<String> bufferParams = new ArrayList<String>();	//the DS that collects all the above params
 	private static JTextField numSamplesTF = new JTextField( "", 5 );
 	private static JTextField baseAddressTF = new JTextField( "", 5 );
 
@@ -134,13 +135,13 @@ public class MMBuffer extends Buffer	{
   	  sb.append("\" baseAddress=\"" + buffer.get( BASE_ADDRESS_INDEX ) );
 		}
 		else	{
-			sb.append("\" numSamples=\"" + SP );
-  	  sb.append("\" baseAddress=\"" + SP );
+			sb.append("\" numSamples=\"\"" + SP );
+  	  sb.append( "baseAddress=\"" );
 		}
 		return sb.toString();
 	}
 
-	public static ArrayList<JPanel> makePanel( boolean loadBufferParameters, GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
 
 		String baseAddress = "", numSamples = "";
 		GridBagLayout gridbag2 = new GridBagLayout();
@@ -150,10 +151,9 @@ public class MMBuffer extends Buffer	{
 		panel.setBorder( new javax.swing.border.TitledBorder("Code generation: memory configuration"));
 		panel.setPreferredSize( new Dimension(650, 350) );
 
-		if( loadBufferParameters )	{
-			baseAddress = bufferParameters.get( BASE_ADDRESS_INDEX );
-			numSamples = bufferParameters.get( NUM_SAMPLES_INDEX );
-		}
+		baseAddress = bufferParameters.get( BASE_ADDRESS_INDEX );
+		numSamples = bufferParameters.get( NUM_SAMPLES_INDEX );
+
 		c2.anchor = GridBagConstraints.LINE_START;
 		numSamplesTF.setText( numSamples );
 		panel.add( new JLabel( "Number of samples = "),  c2 );
@@ -167,17 +167,17 @@ public class MMBuffer extends Buffer	{
 		
 		ArrayList<JPanel> panelsList = new ArrayList<JPanel>();
 		panelsList.add( panel );
-		return panelsList;
-	}
 
-	public static void getBufferParameters( ArrayList<String> params )	{
-		params.add( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
-		params.add( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
+		fillBufferParameters();	//to avoid an empty buffer of parameters if user closes the window without saving
+		return panelsList;
 	}
 
 	public static boolean closePanel( Frame frame )	{
 
+		String regex = "[0-9]+";
 		String baseAddress = (String) baseAddressTF.getText();
+		String numSamples = (String) numSamplesTF.getText();
+
 		if( baseAddress.length() <= 2 && baseAddress.length() > 0 )	{
 			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
@@ -190,9 +190,7 @@ public class MMBuffer extends Buffer	{
 				return false;
 			}
 		}
-		String regex = "[0-9]+";
-		String numSamples = (String) numSamplesTF.getText();
-		if( !numSamples.matches( regex ) )	{
+		if( ( numSamples.length() > 0 ) && !numSamples.matches( regex ) )	{
 			JOptionPane.showMessageDialog( frame, "The number of samples must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
@@ -202,9 +200,27 @@ public class MMBuffer extends Buffer	{
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
-		/*if( !( numSamples.length() > 0 ) )	{
-			return true;
-		}*/
+
+		fillBufferParameters();
 		return true;
 	}
+
+	private static void fillBufferParameters()	{
+
+		if( bufferParams.size() > 0 ) 	{
+			bufferParams.set( BUFFER_TYPE_INDEX, String.valueOf( Buffer.MainMemoryBuffer ) );
+			bufferParams.set( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
+			bufferParams.set( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
+		}
+		else	{
+			bufferParams.add( BUFFER_TYPE_INDEX, String.valueOf( Buffer.MainMemoryBuffer ) );
+			bufferParams.add( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
+			bufferParams.add( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
+		}
+	}
+
+	public static ArrayList<String> getBufferParameters()	{
+		return bufferParams;
+	}
+
 }	//End of class

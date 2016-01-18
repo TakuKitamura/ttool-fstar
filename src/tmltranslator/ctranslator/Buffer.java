@@ -67,6 +67,8 @@ public class Buffer	{
 	public static final int MainMemoryBuffer = 4;
 	public static final int BaseBuffer = 5;
 
+	public static final int BUFFER_TYPE_INDEX = 0;
+
 	public static final int bufferTypeIndex = 0;
 
 	public static String CR = "\n";

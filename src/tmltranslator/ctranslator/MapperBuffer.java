@@ -87,7 +87,9 @@ public class MapperBuffer extends Buffer	{
 	protected String baseAddressLUTValue = USER_TO_DO;
 	public static final String BASE_ADDRESS_LUT_TYPE = "uint16_t";
 
-	private static final int MAX_PARAMETERS = 6;;
+	private static ArrayList<String> bufferParams;// = new ArrayList<String>();	//the DS that collects all the above params
+
+	private static final int MAX_PARAMETERS = 6;
 
 	//PANEL
 	//Mapper Data In
@@ -189,14 +191,14 @@ public class MapperBuffer extends Buffer	{
 		}
 		else	{
 			//data in
-			sb.append("\" numSamplesDataIn=\"" + SP );
-			sb.append("\" baseAddressDataIn=\"" + SP );
-			sb.append("\" bitsPerSymbolDataIn=\"" + SP );
-			sb.append("\" symmetricalValueDataIn=\"" + SP );
+			sb.append("\" numSamplesDataIn=\"\"" + SP );
+			sb.append("baseAddressDataIn=\"\"" + SP );
+			sb.append("bitsPerSymbolDataIn=\"\"" + SP );
+			sb.append("symmetricalValueDataIn=\"\"" + SP );
 			//data out
-			sb.append("\" baseAddressDataOut=\"" + SP );
+			sb.append("baseAddressDataOut=\"\"" + SP );
 			//Look-up Table
-			sb.append("\" baseAddressLUT=\"" + SP );
+			sb.append("baseAddressLUT=\"" );
 		}
 		return sb.toString();
 	}
@@ -216,7 +218,7 @@ public class MapperBuffer extends Buffer	{
 		return buffer;
 	}
 	
-	public static ArrayList<JPanel> makePanel( boolean loadBufferParameters, GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
 
 		GridBagLayout gridbag2 = new GridBagLayout();
 
@@ -235,17 +237,15 @@ public class MapperBuffer extends Buffer	{
 		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Look Up Table configuration"));
 		panel5.setPreferredSize(new Dimension(650, 350));
 
-		if( loadBufferParameters )	{
-			//data in
-			numSamplesDataIn = bufferParameters.get( NUM_SAMPLES_DATAIN_INDEX );
-			baseAddressDataIn = bufferParameters.get( BASE_ADDRESS_DATAIN_INDEX );
-			bitsPerSymbolDataIn = bufferParameters.get( BITS_PER_SYMBOL_DATAIN_INDEX );
-			symmetricalValueDataIn = bufferParameters.get( SYMMETRICAL_VALUE_DATAIN_INDEX );
-			//data out
-			baseAddressDataOut = bufferParameters.get( BASE_ADDRESS_DATAOUT_INDEX );
-			//look-up table
-			baseAddressLUT = bufferParameters.get( BASE_ADDRESS_LUT_INDEX );
-		}
+		//data in
+		numSamplesDataIn = bufferParameters.get( NUM_SAMPLES_DATAIN_INDEX );
+		baseAddressDataIn = bufferParameters.get( BASE_ADDRESS_DATAIN_INDEX );
+		bitsPerSymbolDataIn = bufferParameters.get( BITS_PER_SYMBOL_DATAIN_INDEX );
+		symmetricalValueDataIn = bufferParameters.get( SYMMETRICAL_VALUE_DATAIN_INDEX );
+		//data out
+		baseAddressDataOut = bufferParameters.get( BASE_ADDRESS_DATAOUT_INDEX );
+		//look-up table
+		baseAddressLUT = bufferParameters.get( BASE_ADDRESS_LUT_INDEX );
 		
 		//Data In panel
 		c2.anchor = GridBagConstraints.LINE_START;
@@ -289,6 +289,7 @@ public class MapperBuffer extends Buffer	{
 		panelsList.add(panel4);
 		panelsList.add(panel5);
 
+		fillBufferParameters();	//to avoid an empty buffer of parameters if user closes the window without saving
 		return panelsList;
 	}
 
@@ -302,7 +303,7 @@ public class MapperBuffer extends Buffer	{
 		String regex = "[0-9]+";
 
 		if( baseAddressDataIn.length() <= 2 && baseAddressDataIn.length() > 0 )	{
-			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address for the input buffer", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
@@ -313,27 +314,25 @@ public class MapperBuffer extends Buffer	{
 				return false;
 			}
 		}
-		/*if( !( numSamplesDataIn.length() > 0 ) )	{
-			return true;
-		}*/
-		if( !numSamplesDataIn.matches( regex ) )	{
-			JOptionPane.showMessageDialog( frame, "The number of bits/symbol must be expressed as a natural", "Badly formatted parameter",
+		if( numSamplesDataIn.length() > 0 )	{
+			if( !numSamplesDataIn.matches( regex ) )	{
+				JOptionPane.showMessageDialog( frame, "The number of bits/symbol must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
-			return false;
+				return false;
+			}
 		}
-		if( !( bitsPerSymbolDataIn.length() > 0 ) )	{
-			return true;
-		}
-		if( !bitsPerSymbolDataIn.matches( regex ) )	{
-			JOptionPane.showMessageDialog( frame, "The number of bits/symbol must be expressed as a natural", "Badly formatted parameter",
+		if( bitsPerSymbolDataIn.length() > 0 )	{
+			if( !bitsPerSymbolDataIn.matches( regex ) )	{
+				JOptionPane.showMessageDialog( frame, "The number of bits/symbol must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
-			return false;
+				return false;
+			}
 		}
 
 		//check DO
 		baseAddressDataOut = (String)baseAddressDataOut_TF.getText();
 		if( baseAddressDataOut.length() <= 2 && baseAddressDataOut.length() > 0 )	{
-			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address for the output buffer", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
@@ -348,7 +347,7 @@ public class MapperBuffer extends Buffer	{
 		//check LUT table
 		baseAddressLUT = (String) baseAddressLUT_TF.getText();
 		if( baseAddressLUT.length() <= 2 && baseAddressLUT.length() > 0 )	{
-			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+			JOptionPane.showMessageDialog( frame, "Please enter a valid LUT base address", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
@@ -359,21 +358,44 @@ public class MapperBuffer extends Buffer	{
 				return false;
 			}
 		}
-
+		
+		fillBufferParameters();
 		return true;
 	}
 
-	public static void getBufferParameters( ArrayList<String> params )	{
+	private static void fillBufferParameters()	{
 
-		//data in
-		params.add( NUM_SAMPLES_DATAIN_INDEX, numSamplesDataIn );
-		params.add( BASE_ADDRESS_DATAIN_INDEX, baseAddressDataIn );
-		params.add( BITS_PER_SYMBOL_DATAIN_INDEX, bitsPerSymbolDataIn );
-		params.add( SYMMETRICAL_VALUE_DATAIN_INDEX, symmetricalValueDataIn );
-		//data out
-		params.add( BASE_ADDRESS_DATAOUT_INDEX, baseAddressDataOut );
-		//look-up table
-		params.add( BASE_ADDRESS_LUT_INDEX, baseAddressLUT );
+		if( bufferParams == null )	{
+			bufferParams = new ArrayList<String>();
+		}
+		if( bufferParams.size() > 0 )	{
+			bufferParams.set( BUFFER_TYPE_INDEX, String.valueOf( Buffer.MapperBuffer ) );
+			//data in
+			bufferParams.set( NUM_SAMPLES_DATAIN_INDEX, numSamplesDataIn );
+			bufferParams.set( BASE_ADDRESS_DATAIN_INDEX, baseAddressDataIn );
+			bufferParams.set( BITS_PER_SYMBOL_DATAIN_INDEX, bitsPerSymbolDataIn );
+			bufferParams.set( SYMMETRICAL_VALUE_DATAIN_INDEX, symmetricalValueDataIn );
+			//data out
+			bufferParams.set( BASE_ADDRESS_DATAOUT_INDEX, baseAddressDataOut );
+			//look-up table
+			bufferParams.set( BASE_ADDRESS_LUT_INDEX, baseAddressLUT );
+		}
+		else	{
+			bufferParams.add( BUFFER_TYPE_INDEX, String.valueOf( Buffer.MapperBuffer ) );
+			//data in
+			bufferParams.add( NUM_SAMPLES_DATAIN_INDEX, numSamplesDataIn );
+			bufferParams.add( BASE_ADDRESS_DATAIN_INDEX, baseAddressDataIn );
+			bufferParams.add( BITS_PER_SYMBOL_DATAIN_INDEX, bitsPerSymbolDataIn );
+			bufferParams.add( SYMMETRICAL_VALUE_DATAIN_INDEX, symmetricalValueDataIn );
+			//data out
+			bufferParams.add( BASE_ADDRESS_DATAOUT_INDEX, baseAddressDataOut );
+			//look-up table
+			bufferParams.add( BASE_ADDRESS_LUT_INDEX, baseAddressLUT );
+		}
+	}
+
+	public static ArrayList<String> getBufferParameters()	{
+		return bufferParams;
 	}
 
 }	//End of class

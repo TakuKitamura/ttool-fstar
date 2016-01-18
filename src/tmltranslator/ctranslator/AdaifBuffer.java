@@ -74,6 +74,7 @@ public class AdaifBuffer extends Buffer	{
 	
 	private String Context = "embb_mainmemory_context";
 
+	private static ArrayList<String> bufferParams = new ArrayList<String>();	//the DS that collects all the above params
 	private static final int MAX_PARAMETERS = 2;
 	private static JTextField numSamplesTF = new JTextField( "", 5 );
 	private static JTextField baseAddressTF = new JTextField( "", 5 );
@@ -125,8 +126,8 @@ public class AdaifBuffer extends Buffer	{
   	  sb.append("\" baseAddress=\"" + buffer.get( BASE_ADDRESS_INDEX ) );
 		}
 		else	{
-			sb.append("\" numSamples=\"" + SP );
-  	  sb.append("\" baseAddress=\"" + SP );
+			sb.append("\" numSamples=\"\"" + SP );
+  	  sb.append("baseAddress=\"" );
 		}
 		return sb.toString();
 	}
@@ -140,7 +141,7 @@ public class AdaifBuffer extends Buffer	{
 		return buffer;
 	}
 
-	public static ArrayList<JPanel> makePanel( boolean loadBufferParameters, GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
 
 		String baseAddress = "", numSamples = "";
 		GridBagLayout gridbag2 = new GridBagLayout();
@@ -150,10 +151,10 @@ public class AdaifBuffer extends Buffer	{
 		panel.setBorder( new javax.swing.border.TitledBorder("Code generation: memory configuration"));
 		panel.setPreferredSize( new Dimension(650, 350) );
 
-		if( loadBufferParameters )	{
-			baseAddress = bufferParameters.get( BASE_ADDRESS_INDEX );
-			numSamples = bufferParameters.get( NUM_SAMPLES_INDEX );
-		}
+		//retrieve parameters from the buffer
+		baseAddress = bufferParameters.get( BASE_ADDRESS_INDEX );
+		numSamples = bufferParameters.get( NUM_SAMPLES_INDEX );
+
 		c2.anchor = GridBagConstraints.LINE_START;
 		numSamplesTF.setText( numSamples );
 		panel.add( new JLabel( "Number of samples = "),  c2 );
@@ -167,6 +168,8 @@ public class AdaifBuffer extends Buffer	{
 		
 		ArrayList<JPanel> panelsList = new ArrayList<JPanel>();
 		panelsList.add( panel );
+
+		fillBufferParameters();	//to avoid an empty buffer of parameters if user closes the window without saving
 		return panelsList;
 	}
 
@@ -187,25 +190,37 @@ public class AdaifBuffer extends Buffer	{
 		}
 		String regex = "[0-9]+";
 		String numSamples = (String) numSamplesTF.getText();
-		if( !numSamples.matches( regex ) )	{
+		if( ( numSamples.length() > 0 ) && !numSamples.matches( regex ) )	{
 			JOptionPane.showMessageDialog( frame, "The number of samples must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
-		if( Integer.parseInt( numSamples ) == 0 )	{
+		if( ( numSamples.length() > 0 ) && ( Integer.parseInt( numSamples ) == 0 ) )	{
 			JOptionPane.showMessageDialog( frame, "The number of samples must be greater than 0", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
-		/*if( !( numSamples.length() > 0 ) )	{
-			return true;
-		}*/
+
+		fillBufferParameters();
 		return true;
 	}
 
-	public static void getBufferParameters( ArrayList<String> params )	{
-		params.add( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
-		params.add( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
+	private static void fillBufferParameters()	{
+
+		if( bufferParams.size() > 0 ) 	{
+			bufferParams.set( BUFFER_TYPE_INDEX, String.valueOf( Buffer.AdaifBuffer ) );
+			bufferParams.set( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
+			bufferParams.set( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
+		}
+		else	{
+			bufferParams.add( BUFFER_TYPE_INDEX, String.valueOf( Buffer.AdaifBuffer ) );
+			bufferParams.add( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
+			bufferParams.add( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
+		}
+	}
+
+	public static ArrayList<String> getBufferParameters()	{
+		return bufferParams;
 	}
 
 }	//End of class

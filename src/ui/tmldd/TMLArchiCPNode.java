@@ -211,6 +211,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         transferType1 = dialog.getTransferTypes().get(0);
         transferType2 = dialog.getTransferTypes().get(1);
         assignedAttributes = dialog.getAssignedAttributes();
+				TraceManager.addDev( "RETRIEVING ASSIGNED ATTRIBUTES: " + assignedAttributes.toString() );
 
         if( !dialog.isRegularClose() )  {
             return false;

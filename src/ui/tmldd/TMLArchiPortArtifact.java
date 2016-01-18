@@ -148,9 +148,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                     while(iterator.hasNext()) {
                         tgc = (TGComponent)(iterator.next());
                         if (tgc instanceof TMLArchiMemoryNode) {
-                            //TraceManager.addDev("Testing |" + tgc.getName() + "|  vs | " + s + "|");
                             if (tgc.getName().compareTo(mappedMemory) == 0) {
-                                //TraceManager.addDev("Ok");
                                 GraphicLib.dashedLine(g, getX() + getWidth()/2, getY() + getHeight()/2, tgc.getX() + tgc.getWidth()/2, tgc.getY() + tgc.getHeight()/2);
                             }
                         }
@@ -189,14 +187,14 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         String tmp;
         boolean error = false;
 
-				TraceManager.addDev( "bufferParameters before: " + bufferParameters.toString() );
+				TraceManager.addDev( "bufferParameters before opening the window: " + bufferParameters.toString() );
         JDialogPortArtifact dialog = new JDialogPortArtifact(frame, "Setting port artifact attributes", this, mappedMemory, bufferParameters, value );
         dialog.setSize(700, 600);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
         mappedMemory = dialog.getMappedMemory();
-        bufferParameters = dialog.getBufferParameters();
-				TraceManager.addDev( "bufferParameters after: " + bufferParameters.toString() );
+        bufferParameters = dialog.getBufferParameters();	//becomes empty if closing the window without pushing Save
+				TraceManager.addDev( "bufferParameters after closing the window: " + bufferParameters.toString() );
 				bufferType = bufferParameters.get( Buffer.bufferTypeIndex );
 
         if (!dialog.isRegularClose()) {

@@ -528,7 +528,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c5.weightx = 1.0;
 			c5.fill = GridBagConstraints.HORIZONTAL;
 			c5.anchor = GridBagConstraints.LINE_START;
-			panel5.add( new JLabel( "DMA Transfer Type 1:" ), c5 );
+			panel5.add( new JLabel( "Type of DMA transfer n.1:" ), c5 );
 			transferTypeCB1 = new JComboBox( new Vector<String>( Arrays.asList( CPMEC.transferTypes ) ) );
 			if( transferType1 == -1 )	{
 				transferTypeCB1.setSelectedIndex( 0 );
@@ -548,7 +548,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c5.weightx = 1.0;
 			c5.fill = GridBagConstraints.HORIZONTAL;
 			c5.anchor = GridBagConstraints.LINE_START;
-			panel5.add( new JLabel( "DMA Transfer Type 2:" ), c5 );
+			panel5.add( new JLabel( "Type of DMA transfer n.2:" ), c5 );
 			transferTypeCB2 = new JComboBox( new Vector<String>( Arrays.asList( CPMEC.transferTypes ) ) );
 			if( transferType2 == -1 )	{
 				transferTypeCB2.setSelectedIndex( 0 );

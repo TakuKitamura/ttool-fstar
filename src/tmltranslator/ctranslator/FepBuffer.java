@@ -78,6 +78,7 @@ public class FepBuffer extends Buffer	{
 	protected static final String DATATYPE_TYPE = "uint8_t";
 
 	private static final int maxParameters = 4;
+	private static ArrayList<String> bufferParams = new ArrayList<String>();	//the DS that collects all the above params
 
 	public static final String DECLARATION = "struct FEP_BUFFER_TYPE {" + CR + TAB +
 																						NUM_SAMPLES_TYPE + SP + "num_samples" + SC + CR + TAB +
@@ -156,9 +157,9 @@ public class FepBuffer extends Buffer	{
 		}
 		else	{
 			sb.append("\" baseAddress=\"" + SP );
-  	  sb.append("\" numSamples=\"" + SP );
-    	sb.append("\" bank=\"" + SP );
-	    sb.append("\" dataType=\"" + SP );
+  	  sb.append("numSamples=\"\"" + SP );
+    	sb.append("bank=\"\"" + SP );
+	    sb.append("dataType=\"" );
 		}
 		return sb.toString();
 	}
@@ -174,7 +175,7 @@ public class FepBuffer extends Buffer	{
 		return buffer;
 	}
 	
-	public static ArrayList<JPanel> makePanel( boolean loadBufferParameters, GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
 
 		String baseAddress = "", numSamples = "", bank = "", dataType = "";
 		GridBagLayout gridbag2 = new GridBagLayout();
@@ -185,12 +186,10 @@ public class FepBuffer extends Buffer	{
 		panel.setBorder( new javax.swing.border.TitledBorder("Code generation: memory configuration"));
 		panel.setPreferredSize( new Dimension(650, 350) );
 
-		if( loadBufferParameters )	{
-			baseAddress = bufferParameters.get( BASE_ADDRESS_INDEX );
-			numSamples = bufferParameters.get( NUM_SAMPLES_INDEX );
-			bank = bufferParameters.get( BANK_INDEX );
-			dataType = bufferParameters.get( DATA_TYPE_INDEX );
-		}
+		baseAddress = bufferParameters.get( BASE_ADDRESS_INDEX );
+		numSamples = bufferParameters.get( NUM_SAMPLES_INDEX );
+		bank = bufferParameters.get( BANK_INDEX );
+		dataType = bufferParameters.get( DATA_TYPE_INDEX );
 
     panel.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
 
@@ -225,12 +224,17 @@ public class FepBuffer extends Buffer	{
 
 		ArrayList<JPanel> panelsList = new ArrayList<JPanel>();
 		panelsList.add( panel );
+
+		fillBufferParameters();	//to avoid an empty buffer of parameters if user closes the window without saving
 		return panelsList;
 	}
 
 	public static boolean closePanel( Frame frame )	{
 
+		String regex = "[0-9]+";
 		String baseAddress = (String) baseAddressTF.getText();
+		String numSamples = (String) numSamplesTF.getText();
+
 		if( baseAddress.length() <= 2 && baseAddress.length() > 0 )	{
 			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
@@ -243,9 +247,7 @@ public class FepBuffer extends Buffer	{
 				return false;
 			}
 		}
-		String regex = "[0-9]+";
-		String numSamples = (String) numSamplesTF.getText();
-		if( !numSamples.matches( regex ) )	{
+		if( ( numSamples.length() > 0 ) && !numSamples.matches( regex ) )	{
 			JOptionPane.showMessageDialog( frame, "The number of samples must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
@@ -255,18 +257,31 @@ public class FepBuffer extends Buffer	{
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
-		if( !( numSamples.length() > 0 ) )	{
-			return true;
-		}
+
+		fillBufferParameters();
 		return true;
 	}
 
-	public static void getBufferParameters( ArrayList<String> params )	{
-		
-		params.add( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
-		params.add( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
-		params.add( BANK_INDEX, (String)bankCB.getSelectedItem() );
-		params.add( DATA_TYPE_INDEX, (String)dataTypeCB.getSelectedItem() );
+	private static void fillBufferParameters()	{
+
+		if( bufferParams.size() > 0 )	{
+			bufferParams.set( BUFFER_TYPE_INDEX, String.valueOf( Buffer.FepBuffer ) );
+			bufferParams.set( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
+			bufferParams.set( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
+			bufferParams.set( BANK_INDEX, (String)bankCB.getSelectedItem() );
+			bufferParams.set( DATA_TYPE_INDEX, (String)dataTypeCB.getSelectedItem() );
+		}
+		else	{
+			bufferParams.add( BUFFER_TYPE_INDEX, String.valueOf( Buffer.FepBuffer ) );
+			bufferParams.add( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
+			bufferParams.add( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
+			bufferParams.add( BANK_INDEX, (String)bankCB.getSelectedItem() );
+			bufferParams.add( DATA_TYPE_INDEX, (String)dataTypeCB.getSelectedItem() );
+		}
+	}
+
+	public static ArrayList<String> getBufferParameters()	{
+		return bufferParams;
 	}
 
 }	//End of class
