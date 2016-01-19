@@ -125,6 +125,10 @@ public class AttackTreePanel extends TURTLEPanel {
         return mgui.getTitleAt(this) + " (SysML Parametric Diagram)";
     }
 
+    public boolean canFirstDiagramBeMoved() {
+	return true;
+    }
+
     public boolean removeEnabled(int index) {
         if (panels.size() > 1) {
             return true;

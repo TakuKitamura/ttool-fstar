@@ -262,6 +262,10 @@ public abstract class TURTLEPanel implements GenericTree {
         }
     }
 
+    public boolean canFirstDiagramBeMoved() {
+	return false;
+    }
+
     public boolean removeEnabled(int index) {
         return false;
     }

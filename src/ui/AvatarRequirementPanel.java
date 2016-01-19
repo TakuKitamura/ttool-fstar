@@ -157,6 +157,10 @@ public class AvatarRequirementPanel extends TURTLEPanel {
     public String toString() {
         return mgui.getTitleAt(this) + " (SysML Requirement and Parametric Diagrams)";
     }
+
+    public boolean canFirstDiagramBeMoved() {
+	return true;
+    }
     
     public boolean removeEnabled(int index) {
         if (panels.size() > 1) {

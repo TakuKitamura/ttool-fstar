@@ -149,6 +149,10 @@ public class AvatarMADsPanel extends TURTLEPanel {
     public boolean isAvatarMADEnabled() {
         return true;
     }
+
+    public boolean canFirstDiagramBeMoved() {
+	return true;
+    }
     
     public boolean removeEnabled(int index) {
         return true;
