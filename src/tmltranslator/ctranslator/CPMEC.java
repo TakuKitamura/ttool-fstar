@@ -66,6 +66,7 @@ public abstract class CPMEC	{
 	public static final String SingleDMA = "Single DMA";
 	public static final String DoubleDMA = "Double DMA";
 	public static final String MemoryCopy = "Memory Copy";
+
 	//The number must be the same as the index in cpTypes
 	public static final int CpuMemoryCopyMEC = 0;
 	public static final int SingleDmaMEC = 1;
@@ -78,6 +79,8 @@ public abstract class CPMEC	{
 	public static final String dmaController = "DMA_Controller";
 	public static final String sourceStorage = "Src_Storage_Instance";
 	public static final String destinationStorage = "Dst_Storage_Instance";
+
+	public static final String USER_TO_DO = "/* USER TO DO */";
 
 	public String getExecCode()	{
 		return exec_code;
