@@ -61,8 +61,11 @@ public class SingleDmaMEC extends CPMEC	{
 	public static final String counter = "counter";
 
 	private String memoryBaseAddress = "0";
+	private String dataToTransfer = USER_TO_DO;
+	private static String dstAddress = USER_TO_DO;
+	private static String srcAddress = USER_TO_DO;
 
-	public SingleDmaMEC( String ctxName, ArchUnitMEC archMEC, int srcMemoryType, int dstMemoryType, int transferType, String sizeString )	{
+	public SingleDmaMEC( String ctxName, ArchUnitMEC archMEC, int srcMemoryType, int dstMemoryType, int transferType, Vector<String> attributes )	{
 
 		switch( srcMemoryType )	{
 			case Buffer.FepBuffer:
@@ -85,26 +88,37 @@ public class SingleDmaMEC extends CPMEC	{
 			break;
 		}
 
+		if( attributes.size() > 0 )	{
+			dataToTransfer = attributes.get( counterIndex );
+			srcAddress = attributes.get( sourceAddressIndex );
+			dstAddress = attributes.get( destinationAddressIndex );
+		}
+		else	{
+			dataToTransfer = USER_TO_DO;
+			srcAddress = USER_TO_DO;
+			dstAddress = USER_TO_DO;
+		}
+
 		switch( transferType )	{
 			case CPMEC.mem2IP:
-				exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", /*USER TODO: *SRC */, " + sizeString + " );" + CR;
+				exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", " + srcAddress + ", " + dataToTransfer + " );" + CR;
 				init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
 				cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";
 			break;
 			case CPMEC.IP2mem:
-				exec_code = TAB + "embb_ip2mem( /* USER TODO: *DST */, (EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", " + sizeString + " );" + CR;	
+				exec_code = TAB + "embb_ip2mem( " + dstAddress + ", (EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", " + dataToTransfer + " );" + CR;
 				init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
 				cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";
 			break;
 			case CPMEC.IP2IP:
-				exec_code = TAB + "embb_ip2ip((EMBB_CONTEXT *)&" + ctxName + "_0, (uintptr_t) " + memoryBaseAddress + ", (EMBB_CONTEXT *)&" + ctxName + "_1, (uintptr_t) " + memoryBaseAddress + ", " + sizeString + " );" + CR;	
+				exec_code = TAB + "embb_ip2ip((EMBB_CONTEXT *)&" + ctxName + "_0, (uintptr_t) " + memoryBaseAddress + ", (EMBB_CONTEXT *)&" + ctxName + "_1, (uintptr_t) " + memoryBaseAddress + ", " + dataToTransfer + " );" + CR;	
 				init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + "_0, " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
 				init_code += TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + "_1, " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
 				cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +"_0);";
 				cleanup_code += TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +"_1);";
 			break;
 			default:
-				exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", /*USER TODO: *SRC */, " + sizeString + " );" + CR;
+				exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", " + srcAddress + ", " + dataToTransfer + " );" + CR;
 			break;
 		}
 	}
