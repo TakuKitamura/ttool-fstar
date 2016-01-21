@@ -462,10 +462,10 @@ public class TMLCPTextSpecification {
 	sb.append( SP + "{" );
 	
 	TMLCPElement inLoop = nextElements.get(0);
-	sb.append("(" + loop.getInit() + ";" + loop.getCondition() + ";" + loop.getIncrement() + ") ");
-	sb.append(parseElement2(nextElements.get(1), met));
+	sb.append("(" + loop.getInit().replaceAll("\\s+","") + ";" + loop.getCondition().replaceAll("\\s+","") + ";" + loop.getIncrement().replaceAll("\\s+","") + ") ");
+	sb.append(parseElement2(nextElements.get(0), met));	//first the for-loop body
 	sb.append( "}" + SEQUENCE_OP );
-	sb.append(parseElement2(nextElements.get(0), met));
+	sb.append(parseElement2(nextElements.get(1), met));	//then the diagrams that follow the for-loop termination
 
 	return sb.toString();
 		  
