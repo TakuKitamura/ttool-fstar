@@ -124,7 +124,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 	//Panel3: assign a value to CP attributes
 	private JPanel panel3;
-	private JButton assignButton, addressButton;
+	private JButton attributeButton, addressButton;
 	private JComboBox attributesList_CB, applicationAttributesList_CB, addressList_CB;
 	private JTextField attributesValue_TF, addressValue_TF;
 	private Vector<String> attributesVector, applicationAttributesVector, addressVector;
@@ -241,7 +241,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 			panel3 = new JPanel();
 			panel3.setLayout(gridbag3);
-			panel3.setBorder(new javax.swing.border.TitledBorder("Assigning attributes"));
+			panel3.setBorder(new javax.swing.border.TitledBorder("Assigning value to message parameters"));
 			panel3.setPreferredSize(new Dimension(325, 300));
 			
 			panel4 = new JPanel();
@@ -427,24 +427,29 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
 			panel3.add( new JLabel(" "), c3 );
 
-			panel3.add( new JLabel("Application attribute:"), c3 );
+			/*panel3.add( new JLabel("Application attribute:"), c3 );
 			applicationAttributesList_CB = new JComboBox( applicationAttributesVector );
 			applicationAttributesList_CB.addActionListener(this);
-			panel3.add( applicationAttributesList_CB, c3 );
-
-			/*panel3.add( new JLabel("Value:"), c3 );
-			attributesValue_TF = new JTextField( "", 5 );
-			attributesValue_TF.setPreferredSize( new Dimension(150, 30) );
-			panel3.add( attributesValue_TF, c3 );*/
+			panel3.add( applicationAttributesList_CB, c3 );*/
 
 			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
 			c3.fill = GridBagConstraints.BOTH;
 			c3.gridheight = 3;
 			panel3.add( new JLabel(" "), c3 );	//adds some vertical space in between two JLabels
 
-			assignButton = new JButton("Assign attribute value");
-			assignButton.addActionListener(this);
-			panel3.add( assignButton, c3 );
+			panel3.add( new JLabel("Attribute value:"), c3 );
+			attributesValue_TF = new JTextField( "", 5 );
+			attributesValue_TF.setPreferredSize( new Dimension(150, 30) );
+			panel3.add( attributesValue_TF, c3 );
+
+			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+			c3.fill = GridBagConstraints.BOTH;
+			c3.gridheight = 3;
+			panel3.add( new JLabel(" "), c3 );	//adds some vertical space in between two JLabels
+
+			attributeButton = new JButton("Assign attribute value");
+			attributeButton.addActionListener(this);
+			panel3.add( attributeButton, c3 );
 
 			c3.gridwidth = GridBagConstraints.REMAINDER; //end row
 			c3.fill = GridBagConstraints.BOTH;
@@ -454,7 +459,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			if( assignedAttributes.size() > 0 )	{
 				filterOutAssignedAddresses( addressVector );	//eliminate the addresses that have already been assigned a value
 			}
-			panel3.add( new JLabel("Address:"), c3 );
+
+			panel3.add( new JLabel("CP address:"), c3 );
 			addressList_CB = new JComboBox( addressVector );
 			addressList_CB.addActionListener(this);
 			panel3.add( addressList_CB, c3 );
@@ -464,7 +470,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c3.gridheight = 3;
 			panel3.add( new JLabel(" "), c3 );
 
-			panel3.add( new JLabel("Value:"), c3 );
+			panel3.add( new JLabel("Address value:"), c3 );
 			addressValue_TF = new JTextField( "", 5 );
 			addressValue_TF.setPreferredSize( new Dimension(150, 30) );
 			panel3.add( addressValue_TF, c3 );
@@ -760,7 +766,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			String attr, attrType;
 
 			// Compare the action command to the known actions.
-			if( evt.getSource() == assignButton )  {
+			if( evt.getSource() == attributeButton )  {
 				assignValueToAttribute();
 			}
 			if( evt.getSource() == addressButton )  {
@@ -1110,7 +1116,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 				}
 			}
 			else	{
-						JOptionPane.showMessageDialog( frame, "Please enter a value for the selected attribute", "No value for attribute",
+						JOptionPane.showMessageDialog( frame, "Please enter a value to the selected attribute", "No value for attribute",
 																				JOptionPane.INFORMATION_MESSAGE );
 						return;
 			}

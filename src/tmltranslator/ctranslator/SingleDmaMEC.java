@@ -93,11 +93,6 @@ public class SingleDmaMEC extends CPMEC	{
 			srcAddress = attributes.get( sourceAddressIndex );
 			dstAddress = attributes.get( destinationAddressIndex );
 		}
-		else	{
-			dataToTransfer = USER_TO_DO;
-			srcAddress = USER_TO_DO;
-			dstAddress = USER_TO_DO;
-		}
 
 		switch( transferType )	{
 			case CPMEC.mem2IP:

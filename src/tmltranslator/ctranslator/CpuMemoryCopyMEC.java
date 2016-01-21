@@ -48,6 +48,7 @@
 package tmltranslator.ctranslator;;
 
 import java.util.*;
+import myutil.*;
 
 public class CpuMemoryCopyMEC extends CPMEC	{
 
@@ -61,17 +62,25 @@ public class CpuMemoryCopyMEC extends CPMEC	{
 	public static final String counter = "samplesToLoad";
 
 	private String memoryBaseAddress = "embb_mss";
+	private String srcAddress = USER_TO_DO;
+	private String dataToTransfer = USER_TO_DO;
 
-	public CpuMemoryCopyMEC( String ctxName, ArchUnitMEC archMEC, String sizeString )	{
+	public CpuMemoryCopyMEC( String ctxName, Vector<String> attributes )	{
+	
+		CpuMEC cpu = new CpuMEC();
+		if( attributes.size() > 0 )	{
+			srcAddress = attributes.get( sourceAddressIndex );
+			dataToTransfer = attributes.get( counterIndex );
+			// apparently there is no need to use destinationAddress
+		}
 
-		exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", /*USER TODO: *SRC */, " + sizeString + " );" + CR;
-		init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
-		cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";
+		exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", " + srcAddress + ", " + dataToTransfer + " );" + CR;
+		init_code = TAB + cpu.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) " + cpu.getLocalMemoryPointer() + " );" + CR;
+		cleanup_code = TAB + cpu.getCtxCleanupCode() + "(&" + ctxName +");";
 	}
 
 	public static Vector<String> sortAttributes( Vector<String> assignedAttributes )	{
 		
-		//Vector<String> newVector = new Vector<String>( assignedAttributes );
 		Vector<String> newVector = new Vector<String>();
 		//temporary manual workaround
 		newVector.add("0");

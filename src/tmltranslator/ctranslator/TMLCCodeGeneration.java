@@ -1118,13 +1118,12 @@ public class TMLCCodeGeneration	{
 				programString.append( TAB + "sig[ " + sig.getName() + " ].f = false;" + CR );
 			}
 			int cpMECType = tmlcplib.getCPMECType();
+			Vector<String> mecAttributes = tmlcplib.getAssignedAttributes();
 			if( cpMECType == CPMEC.CpuMemoryCopyMEC )	{
-				counter = (attributes.size() == 0 ) ? "/* USER TODO */" : attributes.get( CpuMemoryCopyMEC.counterIndex );
-				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName, new CpuMEC(), counter );	//mem2ip
+				CpuMemoryCopyMEC mec = new CpuMemoryCopyMEC( ctxName, mecAttributes );	//mem2ip
 				programString.append( mec.getExecCode() );
 			}
 			if( cpMECType == CPMEC.SingleDmaMEC )	{
-				int transferType = tmlcplib.getTransferTypes().get(0);
 				for( String s1: tmlcplib.getMappedUnits() )	{
 					if( s1.contains( CPMEC.dmaController ) )	{
 						String dmaUnit = s1.split(":")[1].replaceAll("\\s+","");
@@ -1139,7 +1138,7 @@ public class TMLCCodeGeneration	{
 						dstMemoryType = tmla.getHwMemoryByName( memoryUnit ).BufferType;
 					}
 				}
-				SingleDmaMEC mec = new SingleDmaMEC( ctxName, dmaArchMEC, srcMemoryType, dstMemoryType, transferType, attributes );
+				SingleDmaMEC mec = new SingleDmaMEC( ctxName, dmaArchMEC, srcMemoryType, dstMemoryType, tmlcplib.getTransferTypes().get(0), attributes );
 				programString.append( mec.getExecCode() );
 			}
 			if( cpMECType == CPMEC.DoubleDmaMEC )	{
@@ -1148,28 +1147,41 @@ public class TMLCCodeGeneration	{
 				Vector<Integer> srcMemoryTypes = new Vector<Integer>();
 				Vector<Integer> dstMemoryTypes = new Vector<Integer>();
 				Vector<ArchUnitMEC> dmaArchMECs = new Vector<ArchUnitMEC>();
-				int iDma = 0;
-				int iSrc = 0;
-				int iDst = 0;
-				int iteration = 1;	// fixing compilation
+				int iDma = 1;
+				int iSrc = 1;
+				int iDst = 1;
+//				int iteration = 1;	// fixing compilation
 				for( String s1: tmlcplib.getMappedUnits() )	{	//there are two DMA_controllers
-					if( s1.contains( CPMEC.dmaController + "_" + String.valueOf(iteration) ) )	{
+					/*TraceManager.addDev( "Comparing " + s1 + " with " + CPMEC.dmaController + "_" + String.valueOf(iDma) );
+					TraceManager.addDev( "Comparing " + s1 + " with " + CPMEC.sourceStorage + "_" + String.valueOf(iSrc) );
+					TraceManager.addDev( "Comparing " + s1 + " with " + CPMEC.destinationStorage + "_" + String.valueOf(iDst) );*/
+					if( s1.contains( CPMEC.dmaController + "_" + String.valueOf(iDma) ) )	{
 						String dmaUnit = s1.split(":")[1].replaceAll("\\s+","");
-						dmaArchMECs.set( iDma, tmla.getHwCPUByName( dmaUnit ).MEC );
+						dmaArchMECs.add( iDma-1, tmla.getHwCPUByName( dmaUnit ).MEC );
 						iDma++;
 					}
-					if( s1.contains( CPMEC.sourceStorage + "_" + String.valueOf(iteration) ) )	{
+					if( s1.contains( CPMEC.sourceStorage + "_" + String.valueOf(iSrc) ) )	{
 						String memoryUnit = s1.split(":")[1].replaceAll("\\s+","");
-						srcMemoryTypes.set( iSrc, tmla.getHwMemoryByName( memoryUnit ).BufferType );
+						srcMemoryTypes.add( iSrc-1, tmla.getHwMemoryByName( memoryUnit ).BufferType );
 						iSrc++;
 					}
-					if( s1.contains( CPMEC.destinationStorage + "_" + String.valueOf(iteration) ) )	{
+					if( s1.contains( CPMEC.destinationStorage + "_" + String.valueOf(iDst) ) )	{
 						String memoryUnit = s1.split(":")[1].replaceAll("\\s+","");
-						dstMemoryTypes.set( iDst, tmla.getHwMemoryByName( memoryUnit ).BufferType );
+						dstMemoryTypes.add( iDst-1, tmla.getHwMemoryByName( memoryUnit ).BufferType );
 						iDst++;
 					}
 				}
-				DoubleDmaMEC mec = new DoubleDmaMEC( ctxName, dmaArchMECs.get(0), srcMemoryTypes.get(0), dstMemoryTypes.get(0), transferTypes, attributes );
+				/*TraceManager.addDev( "About to create the DoubleDmaMEC class" );
+				for( Integer i: srcMemoryTypes )	{
+					TraceManager.addDev( "srcMemoryTypes = " + i.intValue() );
+				}
+				for( Integer i: dstMemoryTypes )	{
+					TraceManager.addDev( "dstMemoryTypes = " + i.intValue() );
+				}
+				for( ArchUnitMEC i: dmaArchMECs )	{
+					TraceManager.addDev( "dmaArchMECs = " + i.toString() );
+				}*/
+				DoubleDmaMEC mec = new DoubleDmaMEC( ctxName, dmaArchMECs, srcMemoryTypes, dstMemoryTypes, transferTypes, attributes );
 				programString.append( mec.getExecCode() );
 			}
 			for( Signal sig: dt.getOutSignals() )	{
