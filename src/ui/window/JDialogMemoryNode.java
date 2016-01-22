@@ -75,6 +75,8 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
 		//Panel3: code generation
 		protected int bufferType = 0;	//it is the index in the ArrayList of String
 		protected JComboBox bufferTypesCB;
+	
+		private JTabbedPane tabbedPane;
     
     // Main Panel
     private JButton closeButton;
@@ -111,6 +113,7 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
+				tabbedPane = new JTabbedPane();
         
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
@@ -122,12 +125,12 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         panel3.setBorder(new javax.swing.border.TitledBorder("Code generation"));
         panel3.setPreferredSize(new Dimension(300, 200));
         
-		c1.gridwidth = 1;
+				c1.gridwidth = 1;
         c1.gridheight = 1;
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Memory name:"), c2);
+        panel2.add(new JLabel("Memory name:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         nodeName = new JTextField(node.getNodeName(), 30);
         nodeName.setEditable(true);
@@ -156,7 +159,7 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         c3.gridheight = 1;
         c3.weighty = 1.0;
         c3.weightx = 1.0;
-  		  panel3.add(new JLabel("Memory type:"), c3);
+  		  panel3.add(new JLabel("<html>Memory Extension<br>Construct:</html>"), c3);
 	    	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
     		bufferTypesCB = new JComboBox( new Vector<String>( Arrays.asList( Buffer.memoryTypesList ) ) );
 				bufferTypesCB.setSelectedIndex( bufferType  );
@@ -168,8 +171,13 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 				c0.fill = GridBagConstraints.BOTH;
-        c.add(panel2, c0);
-        c.add(panel3, c0);
+
+				tabbedPane.addTab( "Simulation", panel2 );
+				tabbedPane.addTab( "Code generation", panel3 );
+				tabbedPane.setSelectedIndex(0);
+        /*c.add(panel2, c0);
+        c.add(panel3, c0);*/
+				c.add( tabbedPane, c0 );
         
         c0.gridwidth = 1;
         c0.gridheight = 1;

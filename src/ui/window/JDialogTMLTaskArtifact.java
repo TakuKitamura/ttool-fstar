@@ -59,25 +59,27 @@ import tmltranslator.ctranslator.*;
 import myutil.*;
 
 public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements ActionListener  {
-    
-    private boolean regularClose;
+
+	private boolean regularClose;
 	private boolean emptyList = false;
     
-    private JPanel panel2, panel3;
-    private Frame frame;
-    private TMLArchiArtifact artifact;
-		private String operation = "VOID";
-		private ArchUnitMEC MECType;
+  private JPanel panel2, panel3;
+  private Frame frame;
+  private TMLArchiArtifact artifact;
+	private String operation = "VOID";
+	private ArchUnitMEC MECType;
     
-    //protected JTextField taskName;
+  //protected JTextField taskName;
 	protected JComboBox referenceTaskName, priority, operationsListCB;
 	
+	private JTabbedPane tabbedPane;
+	
     // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
+  private JButton closeButton;
+  private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogTMLTaskArtifact(Frame _frame, String _title, TMLArchiArtifact _artifact, String _operation, ArchUnitMEC _MECType) {
+  public JDialogTMLTaskArtifact(Frame _frame, String _title, TMLArchiArtifact _artifact, String _operation, ArchUnitMEC _MECType) {
         super(_frame, _title, true);
         frame = _frame;
         artifact = _artifact;
@@ -93,141 +95,137 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
     }
     
     private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagLayout gridbag3 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        GridBagConstraints c2 = new GridBagConstraints();
-        GridBagConstraints c3 = new GridBagConstraints();
-        
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
-        
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        
-        panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
-        panel2.setPreferredSize(new Dimension(350, 250));
-        
-				c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Task:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllNonMappedTMLTaskNames((TMLArchiDiagramPanel)(artifact.getTDiagramPanel()), artifact.getReferenceTaskName(), artifact.getTaskName());
-		int index = 0;
-		if (list.size() == 0) {
-			list.add("No more task to map");
-			emptyList = true;
-		} else {
-			index = indexOf(list, artifact.getValue());
-		}
-        referenceTaskName = new JComboBox(list);
-		referenceTaskName.setSelectedIndex(index);
-        //referenceTaskName.setEditable(true);
-        //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(referenceTaskName, c1);
-		
-		list = new Vector<String>();
-		for(int i=0; i<11; i++) {
-			list.add(""+i);
-		}
-    c1.gridwidth = 1;//GridBagConstraints.REMAINDER; //end row
-    panel2.add(new JLabel("Priority:"), c1);
-    //c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		priority = new JComboBox(list);
-		priority.setSelectedIndex(artifact.getPriority());
-		panel2.add(priority, c1);
-		
-		panel3 = new JPanel();
-		panel3.setLayout(gridbag3);
-		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation"));
-		panel3.setPreferredSize(new Dimension(350, 250));
-		c3.gridwidth = 1;
-    c3.gridheight = 1;
-    c3.weighty = 1.0;
-    c3.weightx = 1.0;
-    c3.fill = GridBagConstraints.HORIZONTAL;
-    //c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-    panel3.add(new JLabel("Operation:"), c3);
-    c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-		Vector<String> operationsListS = new Vector<String>();
-		int indexOp = 0;
-		TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
-		if( MECType instanceof FepMEC )	{
-			operationsListS = FepMEC.operationsList;
-			indexOp = operationsListS.indexOf( operation );
-		}
-		else if( MECType instanceof MapperMEC )	{
-			operationsListS.add( MapperMEC.Operation );
-			indexOp = operationsListS.indexOf( operation );
-		}
-		else if( MECType instanceof InterleaverMEC )	{
-			operationsListS.add( InterleaverMEC.Operation );
-			indexOp = operationsListS.indexOf( operation );
-		}
-		else if( MECType instanceof AdaifMEC )	{
-			operationsListS.add( AdaifMEC.Operation );
-			indexOp = operationsListS.indexOf( operation );
-		}
-		else if( MECType instanceof CpuMEC )	{
-			String tmp = (String)(referenceTaskName.getSelectedItem());
-			operationsListS.add( tmp.split("::")[1] );
-			indexOp = operationsListS.indexOf( operation );
-		}
-		else	{
-			operationsListS.add("No MEC selected");
-		}
-    operationsListCB = new JComboBox( operationsListS );
-		if( operation.equals( "VOID" ) || operation.equals( "" ) )	{
-			operationsListCB.setSelectedIndex( 0 );
-		}
-		else	{
-			if( indexOp == -1 )	{ indexOp = 0; }
-			operationsListCB.setSelectedIndex( indexOp  );
-		}
-		panel3.add( operationsListCB, c3 );
 
-		/*c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Name:"), c2);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        taskName = new JTextField(artifact.getTaskName(), 30);
-        taskName.setEditable(true);
-        taskName.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(taskName, c1);*/
+			Container c = getContentPane();
+      GridBagLayout gridbag0 = new GridBagLayout();
+      GridBagLayout gridbag1 = new GridBagLayout();
+      GridBagLayout gridbag2 = new GridBagLayout();
+      GridBagLayout gridbag3 = new GridBagLayout();
+      GridBagConstraints c0 = new GridBagConstraints();
+      GridBagConstraints c1 = new GridBagConstraints();
+      GridBagConstraints c2 = new GridBagConstraints();
+      GridBagConstraints c3 = new GridBagConstraints();
+      
+      setFont(new Font("Helvetica", Font.PLAIN, 14));
+      c.setLayout(gridbag0);
+      
+      setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+      
+      
+      panel2 = new JPanel();
+      panel2.setLayout(gridbag2);
+      panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
+      panel2.setPreferredSize(new Dimension(350, 250));
+
+			tabbedPane = new JTabbedPane();
         
-        // main panel;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-				c0.fill = GridBagConstraints.BOTH;
-        c.add(panel2, c0);
-        c.add(panel3, c0);
-        
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
-    }
+			c1.gridwidth = 1;
+      c1.gridheight = 1;
+      c1.weighty = 1.0;
+      c1.weightx = 1.0;
+      c1.fill = GridBagConstraints.HORIZONTAL;
+      panel2.add(new JLabel("Task:"), c1);
+      c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+			Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllNonMappedTMLTaskNames((TMLArchiDiagramPanel)(artifact.getTDiagramPanel()), artifact.getReferenceTaskName(), artifact.getTaskName());
+			int index = 0;
+			if (list.size() == 0) {
+				list.add("No more task to map");
+				emptyList = true;
+			} else {
+				index = indexOf(list, artifact.getValue());
+			}
+      referenceTaskName = new JComboBox(list);
+			referenceTaskName.setSelectedIndex(index);
+      //referenceTaskName.setEditable(true);
+      //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
+			panel2.add(referenceTaskName, c1);
+		
+			list = new Vector<String>();
+			for(int i=0; i<11; i++) {
+				list.add(""+i);
+			}
+	    c1.gridwidth = 1;//GridBagConstraints.REMAINDER; //end row
+  	  panel2.add(new JLabel("Priority:"), c1);
+    	//c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+			priority = new JComboBox(list);
+			priority.setSelectedIndex(artifact.getPriority());
+			panel2.add(priority, c1);
+		
+			panel3 = new JPanel();
+			panel3.setLayout(gridbag3);
+			panel3.setBorder(new javax.swing.border.TitledBorder("Code generation"));
+			panel3.setPreferredSize(new Dimension(350, 250));
+			c3.gridwidth = 1;
+    	c3.gridheight = 1;
+	    c3.weighty = 1.0;
+  	  c3.weightx = 1.0;
+    	c3.fill = GridBagConstraints.HORIZONTAL;
+	    //c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+  	  panel3.add(new JLabel("<html>Task Extension<br>Construct:</html>"), c3);
+    	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+			Vector<String> operationsListS = new Vector<String>();
+			int indexOp = 0;
+			TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
+			if( MECType instanceof FepMEC )	{
+				operationsListS = FepMEC.operationsList;
+				indexOp = operationsListS.indexOf( operation );
+			}
+			else if( MECType instanceof MapperMEC )	{
+				operationsListS.add( MapperMEC.Operation );
+				indexOp = operationsListS.indexOf( operation );
+			}
+			else if( MECType instanceof InterleaverMEC )	{
+				operationsListS.add( InterleaverMEC.Operation );
+				indexOp = operationsListS.indexOf( operation );
+			}
+			else if( MECType instanceof AdaifMEC )	{
+				operationsListS.add( AdaifMEC.Operation );
+				indexOp = operationsListS.indexOf( operation );
+			}
+			else if( MECType instanceof CpuMEC )	{
+				String tmp = (String)(referenceTaskName.getSelectedItem());
+				operationsListS.add( tmp.split("::")[1] );
+				indexOp = operationsListS.indexOf( operation );
+			}
+			else	{
+				operationsListS.add("No MEC selected");
+			}
+  	  operationsListCB = new JComboBox( operationsListS );
+			if( operation.equals( "VOID" ) || operation.equals( "" ) )	{
+				operationsListCB.setSelectedIndex( 0 );
+			}
+			else	{
+				if( indexOp == -1 )	{ indexOp = 0; }
+				operationsListCB.setSelectedIndex( indexOp  );
+			}
+			panel3.add( operationsListCB, c3 );
+
+
+			// main panel;
+			c0.gridheight = 10;
+			c0.weighty = 1.0;
+    	c0.weightx = 1.0;
+	    c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+			c0.fill = GridBagConstraints.BOTH;
+			tabbedPane.addTab( "Simulation", panel2 );
+			tabbedPane.addTab( "Code generation", panel3 );
+			tabbedPane.setSelectedIndex(0);
+    	/*c.add(panel2, c0);
+	    c.add(panel3, c0);*/
+			c.add( tabbedPane, c0 );
+    	
+	    c0.gridwidth = 1;
+  	  c0.gridheight = 1;
+    	c0.fill = GridBagConstraints.HORIZONTAL;
+	    closeButton = new JButton("Save and Close", IconManager.imgic25);
+  	  //closeButton.setPreferredSize(new Dimension(600, 50));
+    	closeButton.addActionListener(this);
+	    c.add(closeButton, c0);
+  	  c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+    	cancelButton = new JButton("Cancel", IconManager.imgic27);
+	    cancelButton.addActionListener(this);
+  	  c.add(cancelButton, c0);
+		}
     
     public void	actionPerformed(ActionEvent evt)  {
        /* if (evt.getSource() == typeBox) {

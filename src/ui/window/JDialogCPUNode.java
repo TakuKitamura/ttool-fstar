@@ -244,7 +244,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		encryption.setSelectedIndex(node.getEncryption());
 		panel4.add(encryption, c4);
 		c4.gridwidth = 1;
-		panel4.add(new JLabel("Embb Model Extension Construct:"), c4);
+		panel4.add(new JLabel("CPU Extension Construct:"), c4);
     c4.gridwidth = GridBagConstraints.REMAINDER; //end row
     MECTypeCB = new JComboBox( ArchUnitMEC.stringTypes );
 		if( MECType == null )	{

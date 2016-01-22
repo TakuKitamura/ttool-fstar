@@ -514,7 +514,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c5.weightx = 1.0;
 			c5.fill = GridBagConstraints.HORIZONTAL;
 			c5.anchor = GridBagConstraints.LINE_START;
-			panel5.add( new JLabel( "Model Extension Construct:" ), c5 );
+			panel5.add( new JLabel( "CP Extension Construct:" ), c5 );
 			cpMECsCB = new JComboBox( new Vector<String>( Arrays.asList( CPMEC.cpTypes ) ) );
 			if( cpMEC.equals( "VOID" ) || cpMEC.equals( "" ) )	{
 				cpMECsCB.setSelectedIndex( 0 );
@@ -576,7 +576,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel12.add( panel1, c0 );
 			panel12.add( panel2, c0 );
 
-			tabbedPane.addTab( "Structure", panel12 );
+			tabbedPane.addTab( "Instances", panel12 );
 
 			c0.gridwidth = 1;
 			c0.gridheight = 10;
