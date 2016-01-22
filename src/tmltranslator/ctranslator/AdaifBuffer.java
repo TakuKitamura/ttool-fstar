@@ -141,7 +141,7 @@ public class AdaifBuffer extends Buffer	{
 		return buffer;
 	}
 
-	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
 		String baseAddress = "", numSamples = "";
 		GridBagLayout gridbag2 = new GridBagLayout();
@@ -150,10 +150,6 @@ public class AdaifBuffer extends Buffer	{
 		panel.setLayout( gridbag2 );
 		panel.setBorder( new javax.swing.border.TitledBorder("Code generation: memory configuration"));
 		panel.setPreferredSize( new Dimension(650, 350) );
-
-		//retrieve parameters from the buffer
-		baseAddress = bufferParameters.get( BASE_ADDRESS_INDEX );
-		numSamples = bufferParameters.get( NUM_SAMPLES_INDEX );
 
 		c2.anchor = GridBagConstraints.LINE_START;
 		numSamplesTF.setText( numSamples );

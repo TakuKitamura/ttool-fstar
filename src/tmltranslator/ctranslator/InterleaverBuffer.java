@@ -124,17 +124,17 @@ public class InterleaverBuffer extends Buffer	{
 	//PANEL
 	//Intl Data In
 	private static JTextField width_TF, bitInOffset_TF, inputOffset_TF;
-	private static String width, bitInOffset, inputOffset, packedBinaryIn;
+	private static String width = "", bitInOffset = "", inputOffset = "", packedBinaryIn = "";
 	private static JComboBox packedBinaryIn_CB;
 
 	// Data Out
 	private static JTextField bitOutOffset_TF, outputOffset_TF;
 	private static JComboBox packedBinaryOut_CB;
-	private static String packedBinaryOut, bitOutOffset, outputOffset;
+	private static String packedBinaryOut = "", bitOutOffset = "", outputOffset = "";
 
 	// Perm
 	private static JTextField lengthPerm_TF, offsetPerm_TF;
-	private static String lengthPerm, offsetPerm;
+	private static String lengthPerm = "", offsetPerm = "";
 	
 	public InterleaverBuffer( String _name, TMLTask _task )	{
 		type = "INTERLEAVER_BUFFER_TYPE";
@@ -270,7 +270,7 @@ public class InterleaverBuffer extends Buffer	{
 		return sb.toString();
 	}
 
-	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
 		GridBagLayout gridbag2 = new GridBagLayout();
 
@@ -289,27 +289,11 @@ public class InterleaverBuffer extends Buffer	{
 		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Permutation Table configuration"));
 		panel5.setPreferredSize(new Dimension(650, 350));
 
-		//data in
-		packedBinaryIn = bufferParameters.get( PACKED_BINARY_IN_INDEX );
-		width = bufferParameters.get( WIDTH_INDEX );
-		bitInOffset = bufferParameters.get( BIT_IN_OFFSET_INDEX );
-		inputOffset = bufferParameters.get( INPUT_OFFSET_INDEX );
-		//data out
-		packedBinaryOut = bufferParameters.get( PACKED_BINARY_OUT_INDEX );
-		bitOutOffset = bufferParameters.get( BIT_OUT_OFFSET_INDEX );
-		outputOffset = bufferParameters.get( OUTPUT_OFFSET_INDEX );
-		//permutation table
-		lengthPerm = bufferParameters.get( LENGTH_PERM_INDEX );
-		offsetPerm = bufferParameters.get( OFFSET_PERM_INDEX );
-		
 		//Data In panel
 		c2.anchor = GridBagConstraints.LINE_START;
 		packedBinaryIn_CB = new JComboBox( Buffer.onOffVector );
 		panel3.add( new JLabel( "Packed binary input mode = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		if( packedBinaryIn != null )	{
-			packedBinaryIn_CB.setSelectedItem( packedBinaryIn );
-		}
 		panel3.add( packedBinaryIn_CB, c1 );
 		//
 		width_TF = new JTextField( width, 5 );
@@ -333,9 +317,6 @@ public class InterleaverBuffer extends Buffer	{
 		packedBinaryOut_CB = new JComboBox( Buffer.onOffVector );
 		panel4.add( new JLabel( "Packed binary output mode = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		if( packedBinaryOut != null )	{
-			packedBinaryOut_CB.setSelectedItem( packedBinaryOut );
-		}
 		panel4.add( packedBinaryOut_CB, c1 );
 		//
 		bitOutOffset_TF = new JTextField( bitOutOffset, 5 );

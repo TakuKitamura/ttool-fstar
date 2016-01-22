@@ -94,14 +94,14 @@ public class MapperBuffer extends Buffer	{
 	//PANEL
 	//Mapper Data In
 	private static JTextField baseAddressDataIn_TF, numSamplesDataIn_TF, bitsPerSymbolDataIn_TF;
-	private static String baseAddressDataIn, numSamplesDataIn, bitsPerSymbolDataIn, symmetricalValueDataIn;
+	private static String baseAddressDataIn = "", numSamplesDataIn = "", bitsPerSymbolDataIn = "", symmetricalValueDataIn = "";
 	private static JComboBox symmetricalValueDataIn_CB;
 	//Mapper Data Out
 	private static JTextField baseAddressDataOut_TF;
-	private static String baseAddressDataOut;
+	private static String baseAddressDataOut = "";
 	//Mapper LUT
 	private static JTextField baseAddressLUT_TF;
-	private static String baseAddressLUT;
+	private static String baseAddressLUT = "";
 	
 	public static final String DECLARATION = "struct MAPPER_BUFFER_TYPE {" + CR + TAB +
 																						NUM_SAMPLES_DATAIN_TYPE + SP + "num_symbols" + SC + CR + TAB +
@@ -218,7 +218,7 @@ public class MapperBuffer extends Buffer	{
 		return buffer;
 	}
 	
-	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
 		GridBagLayout gridbag2 = new GridBagLayout();
 
@@ -237,16 +237,6 @@ public class MapperBuffer extends Buffer	{
 		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Look Up Table configuration"));
 		panel5.setPreferredSize(new Dimension(650, 350));
 
-		//data in
-		numSamplesDataIn = bufferParameters.get( NUM_SAMPLES_DATAIN_INDEX );
-		baseAddressDataIn = bufferParameters.get( BASE_ADDRESS_DATAIN_INDEX );
-		bitsPerSymbolDataIn = bufferParameters.get( BITS_PER_SYMBOL_DATAIN_INDEX );
-		symmetricalValueDataIn = bufferParameters.get( SYMMETRICAL_VALUE_DATAIN_INDEX );
-		//data out
-		baseAddressDataOut = bufferParameters.get( BASE_ADDRESS_DATAOUT_INDEX );
-		//look-up table
-		baseAddressLUT = bufferParameters.get( BASE_ADDRESS_LUT_INDEX );
-		
 		//Data In panel
 		c2.anchor = GridBagConstraints.LINE_START;
 		numSamplesDataIn_TF = new JTextField( numSamplesDataIn, 5 );
@@ -267,9 +257,6 @@ public class MapperBuffer extends Buffer	{
 		symmetricalValueDataIn_CB = new JComboBox( new Vector<String>( Arrays.asList( symmetricalValues ) ) );
 		panel3.add( new JLabel( "Symmetrical value = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		if( symmetricalValueDataIn != null )	{
-			symmetricalValueDataIn_CB.setSelectedItem( symmetricalValueDataIn );
-		}
 		panel3.add( symmetricalValueDataIn_CB, c1 );
 
 		//Data Out panel

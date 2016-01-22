@@ -175,7 +175,7 @@ public class FepBuffer extends Buffer	{
 		return buffer;
 	}
 	
-	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters )	{
+	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
 		String baseAddress = "", numSamples = "", bank = "", dataType = "";
 		GridBagLayout gridbag2 = new GridBagLayout();
@@ -185,11 +185,6 @@ public class FepBuffer extends Buffer	{
 		panel.setLayout( gridbag2 );
 		panel.setBorder( new javax.swing.border.TitledBorder("Code generation: memory configuration"));
 		panel.setPreferredSize( new Dimension(650, 350) );
-
-		baseAddress = bufferParameters.get( BASE_ADDRESS_INDEX );
-		numSamples = bufferParameters.get( NUM_SAMPLES_INDEX );
-		bank = bufferParameters.get( BANK_INDEX );
-		dataType = bufferParameters.get( DATA_TYPE_INDEX );
 
     panel.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
 
@@ -205,21 +200,21 @@ public class FepBuffer extends Buffer	{
 		panel.add( baseAddressTF, c1 );
 		//
 		panel.add( new JLabel( "Bank number = "),  c2 );
-		if( bank != null && !bank.equals("") )	{
+		/*if( bank != null && !bank.equals("") )	{
 			bankCB.setSelectedIndex( Integer.parseInt( bank ) );
 		}
 		else	{
 			bankCB.setSelectedIndex(0);
-		}
+		}*/
 		panel.add( bankCB, c1 );
 		//
 		panel.add( new JLabel( "Data type = "),  c2 );
-		if( dataType != null && !dataType.equals("") )	{
+		/*if( dataType != null && !dataType.equals("") )	{
 			dataTypeCB.setSelectedItem( dataType );
 		}
 		else	{
 			dataTypeCB.setSelectedIndex(0);
-		}
+		}*/
 		panel.add( dataTypeCB, c1 );
 
 		ArrayList<JPanel> panelsList = new ArrayList<JPanel>();

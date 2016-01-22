@@ -1080,7 +1080,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 				String attrType = ((String)attributesList_CB.getSelectedItem()).split(" ")[0];
 				if( attrType.equals( "int" ) )	{
 					if( !attrValue.matches( natRegex ) )	{
-						JOptionPane.showMessageDialog( frame, "Attribute is of type integer", "Badly formatted parameter",
+						JOptionPane.showMessageDialog( frame, "Attribute must be of type Natural", "Badly formatted parameter",
 																				JOptionPane.INFORMATION_MESSAGE );
 						return;
 					}
