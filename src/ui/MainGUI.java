@@ -8841,11 +8841,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                         mgui.newAvatarMethodology();
                     } else if (ac.equals("New DIPLODOCUS Design")) {
                         mgui.newTMLDesign();
-                    } else if (ac.equals("New Component-based DIPLODOCUS Design")) {
+                    } else if (e.getSource() == newTMLComponentDesign) {
                         mgui.newTMLComponentDesign();
                     } else if (e.getSource() == newTMLCP) {
                         mgui.newTMLCP();
-                    } else if (ac.equals("New DIPLODOCUS Architecture")) {
+                    } else if (e.getSource() == newTMLArchi) {
                         mgui.newTMLArchi();
                     } else if (ac.equals("New Proactive Design")) {
                         mgui.newProactiveDesign();
