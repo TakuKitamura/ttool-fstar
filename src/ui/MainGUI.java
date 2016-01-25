@@ -5729,20 +5729,24 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return getSequenceDiagramPanel(tp, s);
     }
 
-    public AttackTreeDiagramPanel getAttackTreeDiagramPanel(int index, String s) {
+    public AttackTreeDiagramPanel getAttackTreeDiagramPanel(int index, int indexTab, String s) {
         //TraceManager.addDev("Searching for " + s);
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
-        return getAttackTreeDiagramPanel(tp, s);
+        return getAttackTreeDiagramPanel(tp, indexTab, s);
     }
 
-    public AttackTreeDiagramPanel getAttackTreeDiagramPanel(TURTLEPanel tp, String s) {
-        for(int i=0; i<tp.tabbedPane.getTabCount(); i++) {
-            if (tp.tabbedPane.getTitleAt(i).equals(s)) {
+    public AttackTreeDiagramPanel getAttackTreeDiagramPanel(TURTLEPanel tp, int indexTab, String s) {
+	if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+            return (AttackTreeDiagramPanel)(tp.panelAt(indexTab));
+        }
+        return null;
+        /*for(int i=0; i<tp.tabbedPane.getTabCount(); i++) {
+            if (tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
                 if (tp.panelAt(i) instanceof AttackTreeDiagramPanel)
                     return  (AttackTreeDiagramPanel)(tp.panelAt(i));
             }
         }
-        return null;
+        return null;*/
     }
 
 

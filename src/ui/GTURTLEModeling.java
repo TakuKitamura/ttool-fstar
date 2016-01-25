@@ -4124,6 +4124,33 @@ public class GTURTLEModeling {
         }
     }
 
+    public void loadAttackTree(Node node) throws  MalformedModelingException, SAXException {
+        Element elt = (Element) node;
+        String nameTab;
+        NodeList diagramNl;
+        int indexTree;
+	int cpttdp = 0;
+	
+
+        nameTab = elt.getAttribute("nameTab");
+
+        indexTree = mgui.createAttackTree(nameTab);
+
+        diagramNl = node.getChildNodes();
+
+        for(int j=0; j<diagramNl.getLength(); j++) {
+            //TraceManager.addDev("Deployment nodes: " + j);
+            node = diagramNl.item(j);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                elt = (Element)node;
+                if (elt.getTagName().compareTo("AttackTreeDiagramPanel") == 0) {
+                    loadAttackTreeDiagram(elt, indexTree, cpttdp);
+		    cpttdp ++;
+                }
+            }
+        }
+    }
+
     public void loadAvatarMADs(Node node) throws  MalformedModelingException, SAXException {
         Element elt = (Element) node;
         String nameTab;
@@ -4393,29 +4420,7 @@ public class GTURTLEModeling {
         }
     }
 
-    public void loadAttackTree(Node node) throws  MalformedModelingException, SAXException {
-        Element elt = (Element) node;
-        String nameTab;
-        NodeList diagramNl;
-        int indexTree;
-
-        nameTab = elt.getAttribute("nameTab");
-
-        indexTree = mgui.createAttackTree(nameTab);
-
-        diagramNl = node.getChildNodes();
-
-        for(int j=0; j<diagramNl.getLength(); j++) {
-            //TraceManager.addDev("Deployment nodes: " + j);
-            node = diagramNl.item(j);
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                elt = (Element)node;
-                if (elt.getTagName().compareTo("AttackTreeDiagramPanel") == 0) {
-                    loadAttackTreeDiagram(elt, indexTree);
-                }
-            }
-        }
-    }
+    
 
     public void loadDiplodocusMethodology(Node node) throws  MalformedModelingException, SAXException {
         Element elt = (Element) node;
@@ -5166,13 +5171,15 @@ public class GTURTLEModeling {
         loadDiagram(elt, tdp);
     }
 
-    public void loadAttackTreeDiagram(Element elt, int indexDiag) throws  MalformedModelingException, SAXException {
+    public void loadAttackTreeDiagram(Element elt, int indexDiag, int indexTab) throws  MalformedModelingException, SAXException {
         String name;
+
+	//TraceManager.addDev("indexDiag=" + indexDiag);
 
         name = elt.getAttribute("name");
         mgui.createAttackTreeDiagram(indexDiag, name);
 
-        TDiagramPanel tdp = mgui.getAttackTreeDiagramPanel(indexDiag, name);
+        TDiagramPanel tdp = mgui.getAttackTreeDiagramPanel(indexDiag, indexTab, name);
 
         if (tdp == null) {
             throw new MalformedModelingException();
