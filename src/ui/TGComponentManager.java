@@ -40,7 +40,7 @@
  * Class TGComponentManager
  * Definition and creation of all possible graphical components of TTool
  * Creation: 21/12/2003
- * @version 1.2 03/06/2015
+ * @version 1.3 27/01/2016
  * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
@@ -89,6 +89,8 @@ import ui.avatarrd.*;
 import ui.avatarpd.*;
 import ui.avatarcd.*; // Context Diagram
 import ui.avatarad.*; // Activity Diagram
+
+import ui.sysmlsecmethodology.*;
 
 public class TGComponentManager {
 
@@ -456,6 +458,16 @@ public class TGComponentManager {
     public static final int AVATARMETHODOLOGY_DIAGRAM_NAME = 5607;
     public static final int AVATARMETHODOLOGY_CONNECTOR = 5608;
 
+    // SysML-Sec Methodology Diagrams at 5700
+    public static final int SYSMLSEC_METHODOLOGY_REF_ASSUMPTIONS = 5701;
+    public static final int SYSMLSEC_METHODOLOGY_REF_REQUIREMENT = 5702;
+    public static final int SYSMLSEC_METHODOLOGY_REF_ANALYSIS = 5703;
+    public static final int SYSMLSEC_METHODOLOGY_REF_DESIGN = 5704;
+    public static final int SYSMLSEC_METHODOLOGY_REF_PROPERTIES = 5705;
+    public static final int SYSMLSEC_METHODOLOGY_REF_PROTOTYPE = 5706;
+    public static final int SYSMLSEC_METHODOLOGY_DIAGRAM_NAME = 5707;
+    public static final int SYSMLSEC_METHODOLOGY_CONNECTOR = 5708;
+
 
     public static final int EDIT = -1;
     public static final int COMPONENT = 0;
@@ -670,6 +682,29 @@ public class TGComponentManager {
             break;
         case AVATARMETHODOLOGY_DIAGRAM_NAME:
             tgc = new AvatarMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+
+   //SysML-Sec Methodology
+        case SYSMLSEC_METHODOLOGY_REF_ASSUMPTIONS:
+            tgc = new SysmlsecMethodologyReferenceToAssumptions(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SYSMLSEC_METHODOLOGY_REF_REQUIREMENT:
+            tgc = new SysmlsecMethodologyReferenceToRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SYSMLSEC_METHODOLOGY_REF_ANALYSIS:
+            tgc = new SysmlsecMethodologyReferenceToAnalysis(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SYSMLSEC_METHODOLOGY_REF_DESIGN:
+            tgc = new SysmlsecMethodologyReferenceToDesign(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SYSMLSEC_METHODOLOGY_REF_PROPERTIES:
+            tgc = new SysmlsecMethodologyReferenceToProperties(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SYSMLSEC_METHODOLOGY_REF_PROTOTYPE:
+            tgc = new SysmlsecMethodologyReferenceToPrototype(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SYSMLSEC_METHODOLOGY_DIAGRAM_NAME:
+            tgc = new SysmlsecMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
 
 
@@ -1272,6 +1307,24 @@ public class TGComponentManager {
         } else if (tgc instanceof AvatarMethodologyConnector) {
             return AVATARMETHODOLOGY_CONNECTOR;
 
+	    // SysML-Sec Methodology
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToAssumptions) {
+            return SYSMLSEC_METHODOLOGY_REF_ASSUMPTIONS;
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToRequirement) {
+            return  SYSMLSEC_METHODOLOGY_REF_REQUIREMENT;
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToAnalysis) {
+            return  SYSMLSEC_METHODOLOGY_REF_ANALYSIS;
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToDesign) {
+            return  SYSMLSEC_METHODOLOGY_REF_DESIGN;
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToProperties) {
+            return  SYSMLSEC_METHODOLOGY_REF_PROPERTIES;
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToPrototype) {
+            return  SYSMLSEC_METHODOLOGY_REF_PROTOTYPE;
+        } else if (tgc instanceof SysmlsecMethodologyDiagramName) {
+            return  SYSMLSEC_METHODOLOGY_DIAGRAM_NAME;
+        } else if (tgc instanceof SysmlsecMethodologyConnector) {
+            return  SYSMLSEC_METHODOLOGY_CONNECTOR;
+
 
             // AVATAR MAD
         } else if (tgc instanceof AvatarMADAssumption) {
@@ -1809,6 +1862,11 @@ public class TGComponentManager {
             // AVATAR Methodology
         case AVATARMETHODOLOGY_CONNECTOR:
             tgc = new AvatarMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            break;
+	    
+	     // SysML-Sec Methodology
+        case SYSMLSEC_METHODOLOGY_CONNECTOR:
+            tgc = new SysmlsecMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
 
             // AVATAR MAD

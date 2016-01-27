@@ -1197,10 +1197,32 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (index == -1) {
             index = tabs.size();
         }
+	
+	TraceManager.addDev("New avatar methodo panel");
         AvatarMethodologyPanel dp = new AvatarMethodologyPanel(this);
         tabs.add(index, dp);
         mainTabbedPane.add(dp.tabbedPane, index);
         mainTabbedPane.setToolTipTextAt(index, "Open AVATAR methodology");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic99);
+        //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+        dp.init(name);
+        if (addDefaultElements) {
+            dp.initElements();
+        }
+        //ystem.out.println("Design added");
+        return index;
+    }
+
+    private int addSysmlsecMethodologyPanel(String name, int index, boolean addDefaultElements) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+	TraceManager.addDev("New SysMLSec Methodopanel");
+        SysmlsecMethodologyPanel dp = new SysmlsecMethodologyPanel(this);
+        tabs.add(index, dp);
+        mainTabbedPane.add(dp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open SysML-Sec methodology");
         mainTabbedPane.setTitleAt(index, name);
         mainTabbedPane.setIconAt(index, IconManager.imgic99);
         //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
@@ -1574,6 +1596,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return index;
     }
 
+     public int createSysmlsecMethodology(String name) {
+        int index = addSysmlsecMethodologyPanel(name, -1, false);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+
     public int createTMLDesign(String name) {
         int index = addTMLDesignPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
@@ -1909,6 +1937,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newAvatarMethodology() {
         //TraceManager.addDev("NEW DESIGN");
         addAvatarMethodologyPanel("AVATAR_Methodology", -1, true);
+        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size()-1);
+        //paneAction(null);
+        //frame.repaint();
+    }
+
+    public void newSysmlsecMethodology() {
+        //TraceManager.addDev("NEW DESIGN");
+        addSysmlsecMethodologyPanel("SysMLSec_Methodology", -1, true);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
@@ -5499,6 +5536,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         tp.tabbedPane.setTitleAt(0, name);
     }
 
+     public void setSysmlsecMethodologyDiagramName(int indexDesign, String name) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        tp.tabbedPane.setTitleAt(0, name);
+    }
+
     public void setTMLTaskDiagramName(int indexDesign, String name) {
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
         tp.tabbedPane.setTitleAt(0, name);
@@ -8616,7 +8658,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         private JPopupMenu menu;
 
         private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign,
-            newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD;
+            newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo;
         private JMenuItem newAVATARAnalysis;
 
         public PopupListener(MainGUI _mgui) {
@@ -8661,7 +8703,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
             newTMLDesign = createMenuItem("New Partitioning - Design");
             newTMLComponentDesign = createMenuItem("New Partitioning - functional view");
-            newTMLArchi = createMenuItem("New Partitioning - Architecture");
+            newTMLArchi = createMenuItem("New Partitioning - Architecture and Mapping");
             newTMLCP = createMenuItem("New Partitioning - Communication Pattern");
             newProactiveDesign = createMenuItem("New Proactive Design");
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
@@ -8672,6 +8714,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             newAVATARBD = createMenuItem("New Design");
             newAVATARDD = createMenuItem("New Deployment Diagram");
             newAvatarMethodo = createMenuItem("New AVATAR Methodology");
+	    newSysmlsecMethodo = createMenuItem("New SysML-Sec Methodology");
 
             menu = new JPopupMenu("Views");
             menu.add(moveLeft);
@@ -8734,6 +8777,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 	    if (avatarOn) {
 		    menu.add(newAvatarMethodo);
+		    menu.add(newSysmlsecMethodo);
 	    }
 	    menu.addSeparator();
 
@@ -8839,6 +8883,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                         mgui.newDiplodocusMethodology();
                     }    else if (e.getSource() == newAvatarMethodo) {
                         mgui.newAvatarMethodology();
+		    }    else if (e.getSource() == newSysmlsecMethodo) {
+                        mgui.newSysmlsecMethodology();
                     } else if (ac.equals("New DIPLODOCUS Design")) {
                         mgui.newTMLDesign();
                     } else if (e.getSource() == newTMLComponentDesign) {

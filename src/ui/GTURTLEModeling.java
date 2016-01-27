@@ -99,6 +99,7 @@ import tpndescription.*;
 
 import ui.diplodocusmethodology.*;
 import ui.avatarmethodology.*;
+import ui.sysmlsecmethodology.*;
 import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmlcompd.*;
@@ -3010,7 +3011,7 @@ public class GTURTLEModeling {
 
 
             }else if (tdp instanceof AvatarMethodologyDiagramPanel) {
-                nl = doc.getElementsByTagName("DiplodocusMethodologyDiagramPanelCopy");
+                nl = doc.getElementsByTagName("AvatarMethodologyDiagramPanelCopy");
                 docCopy = doc;
 
                 if (nl == null) {
@@ -3021,6 +3022,57 @@ public class GTURTLEModeling {
 
 
                 AvatarMethodologyDiagramPanel amdp = (AvatarMethodologyDiagramPanel)tdp;
+
+
+                for(i=0; i<nl.getLength(); i++) {
+                    adn = nl.item(i);
+                    if (adn.getNodeType() == Node.ELEMENT_NODE) {
+                        elt = (Element) adn;
+
+                        if (amdp == null) {
+                            throw new MalformedModelingException();
+                        }
+
+                        //int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+                        //int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+                        //int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+                        //int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+                        decX = _decX;
+                        decY = _decY;
+
+                        amdp.loadExtraParameters(elt);
+
+                        //TraceManager.addDev("Toto 2");
+
+                        //TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " components");
+                        makeXMLComponents(elt.getElementsByTagName("COMPONENT"), amdp);
+                        //TraceManager.addDev("Toto 3");
+                        makePostProcessing(amdp);
+                        //TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " connectors");
+                        makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), amdp);
+                        //TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " subcomponents");
+                        makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), amdp);
+                        //TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " real points");
+                        connectConnectorsToRealPoints(amdp);
+                        amdp.structureChanged();
+                        //TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
+                        makePostLoading(amdp, beginIndex);
+                        //TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
+                    }
+                }
+	    }else if (tdp instanceof SysmlsecMethodologyDiagramPanel) {
+                nl = doc.getElementsByTagName("SysmlsecMethodologyDiagramPanelCopy");
+                docCopy = doc;
+
+                if (nl == null) {
+                    return;
+                }
+
+                //TraceManager.addDev("Toto 1");
+
+
+                SysmlsecMethodologyDiagramPanel amdp = (SysmlsecMethodologyDiagramPanel)tdp;
 
 
                 for(i=0; i<nl.getLength(); i++) {
@@ -4017,6 +4069,8 @@ public class GTURTLEModeling {
             loadDiplodocusMethodology(node);
         } else if (type.compareTo("Avatar Methodology") == 0) {
             loadAvatarMethodology(node);
+	} else if (type.compareTo("Sysmlsec Methodology") == 0) {
+            loadSysmlsecMethodology(node);
         } else if (type.compareTo("TML Design") == 0) {
             loadTMLDesign(node);
         } else if (type.compareTo("TML Component Design") == 0) {
@@ -4470,9 +4524,37 @@ public class GTURTLEModeling {
                 elt = (Element)node;
                 if (elt.getTagName().compareTo("AvatarMethodologyDiagramPanel") == 0) {
                     // Class diagram
-                    //TraceManager.addDev("Loading TML CD");
+                    TraceManager.addDev("Loading Avatar methodo");
                     loadAvatarMethodologyDiagram(elt, indexDesign);
-                    //TraceManager.addDev("End loading TML CD");
+                    TraceManager.addDev("End Loading avatar methodo");
+                }
+            }
+        }
+    }
+
+    public void loadSysmlsecMethodology(Node node) throws  MalformedModelingException, SAXException {
+        Element elt = (Element) node;
+        String nameTab;
+        NodeList diagramNl;
+        int indexDesign;
+
+
+        nameTab = elt.getAttribute("nameTab");
+
+        indexDesign = mgui.createSysmlsecMethodology(nameTab);
+
+        diagramNl = node.getChildNodes();
+
+        for(int j=0; j<diagramNl.getLength(); j++) {
+            //TraceManager.addDev("Design nodes: " + j);
+            node = diagramNl.item(j);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                elt = (Element)node;
+                if (elt.getTagName().compareTo("SysmlsecMethodologyDiagramPanel") == 0) {
+                    // Class diagram
+                    TraceManager.addDev("Loading SysMLSec methodo");
+                    loadSysmlsecMethodologyDiagram(elt, indexDesign);
+                    TraceManager.addDev("End loading SysMLSec methodo");
                 }
             }
         }
@@ -4937,6 +5019,22 @@ public class GTURTLEModeling {
         // class diagram name
         name = elt.getAttribute("name");
         mgui.setAvatarMethodologyDiagramName(indexDesign, name);
+        tdp = mgui.getMainTDiagramPanel(indexDesign);
+        tdp.setName(name);
+
+        //TraceManager.addDev("tdp=" + tdp.getName());
+
+        loadDiagram(elt, tdp);
+    }
+
+    public void loadSysmlsecMethodologyDiagram(Element elt, int indexDesign) throws  MalformedModelingException, SAXException {
+
+        String name;
+        TDiagramPanel tdp;
+
+        // class diagram name
+        name = elt.getAttribute("name");
+        mgui.setSysmlsecMethodologyDiagramName(indexDesign, name);
         tdp = mgui.getMainTDiagramPanel(indexDesign);
         tdp.setName(name);
 

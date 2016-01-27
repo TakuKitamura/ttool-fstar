@@ -294,7 +294,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public boolean isDrawingMain() {
-	return drawingMain;
+        return drawingMain;
     }
 
     public void updateComponentsAfterZoom() {
@@ -407,7 +407,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void paintMycomponents(Graphics g, boolean b, double w, double h) {
 
         lastGraphics = g;
-	drawingMain = b;
+        drawingMain = b;
 
         //TraceManager.addDev("Nb of components: " + componentList.size());
 
@@ -760,11 +760,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             //state = tgc.getState();
             tgcTmp = tgc.isOnMeHL(x, y);
             if (tgcTmp != null) {
-		if (tgcTmp instanceof AvatarBDPragma){
-		    this.setToolTipText("The lock shows status of weak and strong authenticity. Green: Proved True, Red: Proved False, Grey: Cannot be proved");
-		} else {
-		    this.setToolTipText("");
-		}
+                if (tgcTmp instanceof AvatarBDPragma){
+                    this.setToolTipText("The lock shows status of weak and strong authenticity. Green: Proved True, Red: Proved False, Grey: Cannot be proved");
+                } else {
+                    this.setToolTipText("");
+                }
                 if (!pointedElementFound) {
                     componentPointed = tgcTmp;
                     tgc.setState(TGState.POINTED);
@@ -1094,7 +1094,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void finishAddingConnector(TGConnectingPoint p2) {
         TGConnector tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), mgui.getIdButtonSelected(), this, p1, p2, listPoint);
         if (tgco != null) {
-	    TraceManager.addDev("Adding connector");
+            TraceManager.addDev("Adding connector");
             p2.setFree(false);
             componentList.add(0, tgco);
             if (tgco instanceof SpecificActionAfterAdd) {
@@ -1102,10 +1102,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
             stopAddingConnector(false);
             p1.setFree(false);
-	    p1 = null;
-	    p2 = null;
+            p1 = null;
+            p2 = null;
         } else {
-	    TraceManager.addDev("Cancel adding connector");
+            TraceManager.addDev("Cancel adding connector");
             p2.setFree(true);
             stopAddingConnector(true);
             p1.setFree(true);
@@ -1135,10 +1135,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     // Multi-select
     public void setSelectingComponents(int x, int y) {
-	x = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), x), (int)(Math.ceil(maxX*zoom)));
-	y = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), y), (int)(Math.ceil(maxY*zoom)));
-		     //        x = Math.min(Math.max(minLimit*zoom, x), maxX*zoom);
-		     //y = Math.min(Math.max(minLimit*zoom, y), maxY*zoom);
+        x = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), x), (int)(Math.ceil(maxX*zoom)));
+        y = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), y), (int)(Math.ceil(maxY*zoom)));
+        //        x = Math.min(Math.max(minLimit*zoom, x), maxX*zoom);
+        //y = Math.min(Math.max(minLimit*zoom, y), maxY*zoom);
         initSelectX = x;
         currentSelectX = x;
         initSelectY = y;
@@ -1146,9 +1146,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void updateSelectingComponents(int x, int y) {
-	x = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), x), (int)(Math.ceil(maxX*zoom)));
-	y = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), y), (int)(Math.ceil(maxY*zoom)));
-	//x = Math.min(Math.max(minLimit, x), maxX);
+        x = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), x), (int)(Math.ceil(maxX*zoom)));
+        y = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), y), (int)(Math.ceil(maxY*zoom)));
+        //x = Math.min(Math.max(minLimit, x), maxX);
         //y = Math.min(Math.max(minLimit, y), maxY);
         currentSelectX = x;
         currentSelectY = y;
@@ -1440,7 +1440,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         componentMenu.add(clone);
         componentMenu.add(bringFront);
         componentMenu.add(bringBack);
-	componentMenu.add(enableDisable);
+        componentMenu.add(enableDisable);
         componentMenu.add(makeSquare);
         componentMenu.addSeparator();
         componentMenu.add(attach);
@@ -1449,8 +1449,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         componentMenu.add(hide);
         componentMenu.add(unhide);
         componentMenu.addSeparator();
-	componentMenu.add(setAsCryptoBlock);
-	componentMenu.add(setAsRegularBlock);
+        componentMenu.add(setAsCryptoBlock);
+        componentMenu.add(setAsRegularBlock);
         componentMenu.add(setJavaCode);
         componentMenu.add(removeJavaCode);
         componentMenu.add(setInternalComment);
@@ -1512,7 +1512,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         clone = new JMenuItem("Clone");
         clone.addActionListener(menuAL);
 
-	enableDisable = new JMenuItem("Enable/Disable");
+        enableDisable = new JMenuItem("Enable/Disable");
         enableDisable.addActionListener(menuAL);
 
         bringFront = new JMenuItem("Bring to front");
@@ -1537,10 +1537,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         unhide.addActionListener(menuAL);
 
 
-	setAsCryptoBlock = new JMenuItem("Set as crypto block");
+        setAsCryptoBlock = new JMenuItem("Set as crypto block");
         setAsCryptoBlock.addActionListener(menuAL);
 
-	setAsRegularBlock = new JMenuItem("Set as regular block");
+        setAsRegularBlock = new JMenuItem("Set as regular block");
         setAsRegularBlock.addActionListener(menuAL);
 
         setJavaCode = new JMenuItem("Set Java code");
@@ -1628,10 +1628,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             repaint();
             return;
         }
-	
-	if (e.getSource() == enableDisable) {
-	    componentPopup.setEnabled(!componentPopup.isEnabled());
-	    getGUI().changeMade(this, CHANGE_VALUE_COMPONENT);
+
+        if (e.getSource() == enableDisable) {
+            componentPopup.setEnabled(!componentPopup.isEnabled());
+            getGUI().changeMade(this, CHANGE_VALUE_COMPONENT);
             repaint();
             return;
         }
@@ -1708,20 +1708,20 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             return;
         }
 
-	if ((e.getSource() == setAsCryptoBlock) || (e.getSource() == setAsRegularBlock)) {
-	    
-	    if (componentPopup instanceof AvatarBDBlock) {
-		AvatarBDBlock bd = (AvatarBDBlock) componentPopup;
-		if (bd.isCryptoBlock()) {
-		    bd.removeCryptoElements();
-		} else  {
-		    bd.addCryptoElements();
-		}
-		repaint();
-		return;
-	    }					   
-	}
-		
+        if ((e.getSource() == setAsCryptoBlock) || (e.getSource() == setAsRegularBlock)) {
+
+            if (componentPopup instanceof AvatarBDBlock) {
+                AvatarBDBlock bd = (AvatarBDBlock) componentPopup;
+                if (bd.isCryptoBlock()) {
+                    bd.removeCryptoElements();
+                } else  {
+                    bd.addCryptoElements();
+                }
+                repaint();
+                return;
+            }
+        }
+
 
         if (e.getSource() == removeJavaCode) {
             componentPopup.setPreJavaCode(null);
@@ -1916,7 +1916,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             clone.setEnabled(false);
         }
 
-	if (componentPointed instanceof CanBeDisabled) {
+        if (componentPointed instanceof CanBeDisabled) {
             /*if (componentPointed.hasFather()) {
               clone.setEnabled(false);
               } else {*/
@@ -1966,14 +1966,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             removeJavaCode.setEnabled(false);
         }
 
-	if (componentPointed instanceof AvatarBDBlock) { 
-	    AvatarBDBlock block = (AvatarBDBlock)componentPointed;
-	    setAsCryptoBlock.setEnabled(!block.isCryptoBlock());
-	    setAsRegularBlock.setEnabled(block.isCryptoBlock());
-	} else { 
-	    setAsRegularBlock.setEnabled(false);
-	    setAsCryptoBlock.setEnabled(false);
-	}
+        if (componentPointed instanceof AvatarBDBlock) {
+            AvatarBDBlock block = (AvatarBDBlock)componentPointed;
+            setAsCryptoBlock.setEnabled(!block.isCryptoBlock());
+            setAsRegularBlock.setEnabled(block.isCryptoBlock());
+        } else {
+            setAsRegularBlock.setEnabled(false);
+            setAsCryptoBlock.setEnabled(false);
+        }
 
 
         if (componentPointed instanceof EmbeddedComment) {
@@ -2259,7 +2259,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public int getMaxX() {
         //return maxX;
-	return (int)(Math.ceil(maxX * zoom));
+        return (int)(Math.ceil(maxX * zoom));
     }
 
     public int getMinX() {
@@ -2267,7 +2267,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public int getMinY() {
-	return (int)(Math.floor(minLimit*zoom));
+        return (int)(Math.floor(minLimit*zoom));
         //return minLimit*zoom;
     }
 
