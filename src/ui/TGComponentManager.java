@@ -466,7 +466,12 @@ public class TGComponentManager {
     public static final int SYSMLSEC_METHODOLOGY_REF_PROPERTIES = 5705;
     public static final int SYSMLSEC_METHODOLOGY_REF_PROTOTYPE = 5706;
     public static final int SYSMLSEC_METHODOLOGY_DIAGRAM_NAME = 5707;
-    public static final int SYSMLSEC_METHODOLOGY_CONNECTOR = 5708;
+    public static final int SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW = 5713;
+    public static final int SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW = 5709;
+    public static final int SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW = 5710;
+    public static final int SYSMLSEC_METHODOLOGY_REF_CP_VIEW = 5711;
+    public static final int SYSMLSEC_METHODOLOGY_REF_ATTACK = 5712;
+    public static final int SYSMLSEC_METHODOLOGY_CONNECTOR = 5718;
 
 
     public static final int EDIT = -1;
@@ -702,6 +707,21 @@ public class TGComponentManager {
             break;
         case SYSMLSEC_METHODOLOGY_REF_PROTOTYPE:
             tgc = new SysmlsecMethodologyReferenceToPrototype(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+	case SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW:
+            tgc = new SysmlsecMethodologyReferenceToApplication(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+	    	case SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW:
+            tgc = new SysmlsecMethodologyReferenceToArchitecture(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+	    	case SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW:
+            tgc = new SysmlsecMethodologyReferenceToMapping(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+	case SYSMLSEC_METHODOLOGY_REF_CP_VIEW:
+            tgc = new SysmlsecMethodologyReferenceToCP(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+	case SYSMLSEC_METHODOLOGY_REF_ATTACK:
+            tgc = new SysmlsecMethodologyReferenceToAttack(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SYSMLSEC_METHODOLOGY_DIAGRAM_NAME:
             tgc = new SysmlsecMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1324,6 +1344,17 @@ public class TGComponentManager {
             return  SYSMLSEC_METHODOLOGY_DIAGRAM_NAME;
         } else if (tgc instanceof SysmlsecMethodologyConnector) {
             return  SYSMLSEC_METHODOLOGY_CONNECTOR;
+	} else if (tgc instanceof SysmlsecMethodologyReferenceToApplication) {
+            return  SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW;
+	} else if (tgc instanceof SysmlsecMethodologyReferenceToArchitecture) {
+            return  SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW;
+	} else if (tgc instanceof SysmlsecMethodologyReferenceToCP) {
+            return  SYSMLSEC_METHODOLOGY_REF_CP_VIEW;
+	} else if (tgc instanceof SysmlsecMethodologyReferenceToMapping) {
+            return  SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW;
+	} else if (tgc instanceof SysmlsecMethodologyReferenceToAttack) {
+            return  SYSMLSEC_METHODOLOGY_REF_ATTACK;
+	    
 
 
             // AVATAR MAD

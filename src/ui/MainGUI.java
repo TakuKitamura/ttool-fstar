@@ -1971,8 +1971,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void newTMLArchi() {
-        TraceManager.addDev("NEW DIPLO Architecture");
-        addTMLArchiPanel("DIPLODOCUS Architecture", -1);
+        //TraceManager.addDev("NEW DIPLO Architecture");
+        addTMLArchiPanel("Architecture", -1);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
@@ -1980,8 +1980,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void newADD() {
-        TraceManager.addDev("NEW Avatar deployment");
-        addADDPanel("Avatar Deployment", -1);
+        //TraceManager.addDev("NEW Avatar deployment");
+        addADDPanel("Deployment", -1);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
@@ -2003,22 +2003,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void newAvatarBD() {
-        TraceManager.addDev("NEW AVATAR BD");
-        addAvatarDesignPanel("AVATAR Design", -1);
+        //TraceManager.addDev("NEW AVATAR BD");
+        addAvatarDesignPanel("Design", -1);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
     }
 
     public void newAvatarRequirement() {
-        TraceManager.addDev("NEW AVATAR Requirement");
-        addAvatarRequirementPanel("AVATAR Requirements", 0);
+        //TraceManager.addDev("NEW AVATAR Requirement");
+        addAvatarRequirementPanel("Requirements", 0);
         //((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(0);
     }
 
     public void newAvatarMADs() {
-        TraceManager.addDev("NEW AVATAR MAD");
-        addAvatarMADPanel("MADs", 0);
+        //TraceManager.addDev("NEW AVATAR MAD");
+        addAvatarMADPanel("Assumptions", 0);
         //((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(0);
     }

@@ -67,10 +67,23 @@ public class SysmlsecMethodologyDiagramName extends TGCScalableWithoutInternalCo
     protected final static int INVARIANTS = 3;
     protected final static int PROTO = 4;
 
+    protected final static int SIM_ANIM_APP_DIPLO = 5;
+    protected final static int SIM_TRACE_APP_DIPLO = 6;
+    protected final static int LOT_APP_DIPLO = 7;
+    protected final static int UPP_APP_DIPLO = 8;
+    protected final static int TML_APP_DIPLO = 9;
+
+    protected final static int FV_MAPPING_DIPLO = 10;
+    protected final static int SIM_TRACE_MAPPING_DIPLO = 11;
+    protected final static int SIM_ANIM_MAPPING_DIPLO = 12;
+    protected final static int TML_MAPPING_DIPLO = 13;
+    
+
 
     protected final String[] SHORT_ACTION_NAMES = {
         "simu", "upp", "proverif", "inv",
-        "code-gen"};
+        "code-gen", "sim-trace", "upp", "lot", "tml",
+        "fv", "sim-trace", "tmap", "sim-anim", "sim-anim"};
 
     protected final String[] LONG_ACTION_NAMES = {
         /*0*/ "Simulation and animate the model",
@@ -78,6 +91,15 @@ public class SysmlsecMethodologyDiagramName extends TGCScalableWithoutInternalCo
         "Verify security properties on the model with ProVerif",
         "Verify mutual exclusions on the model with invariants",
         "Generate executable code",
+	"Generate a vcd simulation trace of a DIPLODOCUS functional model",
+        "Verify a DIPLODOCUS functional model with UPPAAL",
+        "Generate a Reachability graph of a DIPLODOCUS functional model",
+        "Generate a TML text description of a DIPLODOCUS functional model",
+        "Formal verify a DIPLODOCUS mapping model",
+        "Simulate a DIPLODOCUS mapping model",
+        "Generate a TMAP/TARCHI/TML text dscription of a DIPLODOCUS mapping model",
+        "Simulate and animate DIPLODOCUS functional models",
+        "Simulate and animate DIPLODOCUS mapping models"
     };
 
     protected int[] validations;

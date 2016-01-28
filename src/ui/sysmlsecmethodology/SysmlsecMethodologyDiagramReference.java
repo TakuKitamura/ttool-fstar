@@ -79,7 +79,7 @@ public abstract class SysmlsecMethodologyDiagramReference extends TGCScalableWit
 
     protected int typeOfReference;
 
-    protected final static String[] TYPE_STR = {"Assumptions", "Requirements", "Analysis", "Design", "Properties", "Prototyping"};
+    protected final static String[] TYPE_STR = {"Assumptions", "Requirements", "Analysis", "Design", "Properties", "Prototyping", "Functional view", "Architecture view", "Mapping", "Communication pattern", "Attacks"};
     protected final static int NB_TYPE = 6;
 
     protected final static int ASSUMPTIONS = 0;
@@ -88,6 +88,12 @@ public abstract class SysmlsecMethodologyDiagramReference extends TGCScalableWit
     protected final static int DESIGN = 3;
     protected final static int PROPERTY = 4;
     protected final static int PROTOTYPING = 5;
+    protected final static int FUNCTIONAL_VIEW = 6;
+    protected final static int ARCHITECTURE_VIEW = 7;
+    protected final static int MAPPING_VIEW = 8;
+    protected final static int CP_VIEW = 9;
+    protected final static int ATTACK = 10;
+    
 
     protected JMenuItem diagramReference;
 

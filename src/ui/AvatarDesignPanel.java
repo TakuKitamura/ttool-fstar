@@ -165,7 +165,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
         //Class diagram
         abdp = new AvatarBDPanel(mgui, toolBarAvatarBD);
-        abdp.setName("AVATAR Block Diagram");
+        abdp.setName("Block Diagram");
         abdp.tp = this;
         tdp = abdp;
         panels.add(abdp); // Always first in list
@@ -175,7 +175,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
         toolBarPanel.add(toolBarAvatarBD, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab("AVATAR Design", IconManager.imgic80, toolBarPanel, "Opens the AVATAR Design");
+        tabbedPane.addTab("Design", IconManager.imgic80, toolBarPanel, "Opens the Design");
         tabbedPane.setSelectedIndex(0);
         //tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
         mgui.changeMade(abdp, TDiagramPanel.NEW_COMPONENT);
@@ -209,7 +209,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
     }
 
     public String toString() {
-        return mgui.getTitleAt(this) + " (AVATAR Design)";
+        return mgui.getTitleAt(this) + " (Design)";
     }
 
     public void resetMetElements() {
