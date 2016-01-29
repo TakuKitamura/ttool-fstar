@@ -87,7 +87,7 @@ public class GTMLModeling  {
     private Vector<TDiagramPanel> panels;
 
     private boolean putPrefixName = false;
-
+    public Map<String, Boolean> channelConfMap = new HashMap<String, Boolean>();
     public GTMLModeling(TMLDesignPanel _tmldp, boolean resetList) {
         tmldp = _tmldp;
         table = new Hashtable<String, String>();
@@ -3079,43 +3079,45 @@ public class GTMLModeling  {
             }
 
         }
-	    TMLTask a; 
+	
+
 	    addTMLPragmas();
-	    for (String[] ss: tmlm.getPragmas()){
+ 	    //for (TMLTask a: ){
+	        
+/*	    for (String[] ss: tmlm.getPragmas()){
 	      if (ss[0].equals("#Confidentiality") && ss.length > 1){
 		String task1 = ss[1];
 	        a = tmlm.getTMLTaskByName(task1);
 
 		if (a ==null){
 		  continue;
-		}
-		HwCPU node1 = (HwCPU) map.getHwNodeOf(a);
+		}*/
+	
+		//HwCPU node1 = (HwCPU) map.getHwNodeOf(a);
 	//	if (node1.encryption ==0){
 		//If unencrypted
+		  //Find confidentiality of all channels
 		  ArrayList<TMLChannel> channels = tmlm.getChannels();
 		  List<TMLTask> destinations = new ArrayList<TMLTask>();
+		  TMLTask a; 
 		  for (TMLChannel channel: channels){	
-		    if(channel.hasOriginTask(a)){
-			if (channel.isBasicChannel()){
-			     destinations.add(channel.getDestinationTask());
-			}
-			else {
-			     destinations.addAll(channel.getDestinationTasks());
-			}
+		    destinations.clear();
+		    if (channel.isBasicChannel()){
+			a = channel.getOriginTask();
+			destinations.add(channel.getDestinationTask());
 		    }
-		    else if(channel.hasDestinationTask(a)){
-			if (channel.isBasicChannel()){
-			     destinations.add(channel.getOriginTask());
-			}
-			else {
-			     destinations.addAll(channel.getOriginTasks());
-			}
-		    }
-			
-		  }     
-		  for (TMLTask t: destinations){
+		    else {
+			a=channel.getOriginTasks().get(0);
+			destinations.addAll(channel.getDestinationTasks());
+		    }  
+		    HwCPU node1 = (HwCPU) map.getHwNodeOf(a);
+		    for (TMLTask t: destinations){
 		    List<HwBus> buses = new ArrayList<HwBus>();
 		    HwNode node2 = map.getHwNodeOf(t);
+		    if (node1==node2){
+			System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is confidential");
+			channelConfMap.put(channel.getName(), true);
+		    }
 		    if (node1!=node2){
 		      //Navigate architecture for node
 		      List<HwLink> links = archi.getHwLinks();
@@ -3166,26 +3168,28 @@ public class GTMLModeling  {
 			done.add(curr);
 		      }
 		      if (path.size() ==0){
-			System.out.println("Path does not exist");
+			System.out.println("Path does not exist for channel " + channel.getName() + " between Task " + a.getTaskName() + " and Task " + t.getTaskName());
 		      }
 		      else {
-			System.out.println(node1.getName());
+			boolean priv=true;
 			HwBus bus;
 			//Check if all buses and bridges are private
 			for (HwNode n: path){
 			  if (n instanceof HwBus){
 			    bus = (HwBus) n;
 			    if (bus.privacy ==0){
-			      CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Confidentiality of data within " + ss[1]+ " not preserved.");
+			  /*    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Confidentiality of data within " + ss[1]+ " not preserved.");
                       	      ce.setTDiagramPanel(tmlap.tmlap);
                       	      ce.setTGComponent(listE.getTG(n));
                       	      checkingErrors.add(ce);
+			      break;*/
+			      priv=false;
 			      break;
 			    }
 			  }
-			  System.out.println("path: " +n.getName());
 			}
-			System.out.println(node2.getName());
+			channelConfMap.put(channel.getName(), priv);
+			System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is " + (priv ? "confidential" : "not confidential"));
 		      }
 		  /*    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Confidentiality of data within " + ss[1]+ " not preserved.");
                       ce.setTDiagramPanel(tmlap.tmlap);
@@ -3193,7 +3197,7 @@ public class GTMLModeling  {
                       checkingErrors.add(ce); */
 		    }
 		  }
-		}
+		//}
 	    //  }	
 	    }
 
