@@ -64,7 +64,7 @@ public class SysmlsecMethodologyReferenceToPrototype extends SysmlsecMethodology
     public SysmlsecMethodologyReferenceToPrototype(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(300, 70);
+        initScaling(200, 70);
 
         nbConnectingPoint = 1;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];

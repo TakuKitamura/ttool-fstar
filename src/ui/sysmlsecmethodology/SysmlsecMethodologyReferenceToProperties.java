@@ -68,7 +68,7 @@ public class SysmlsecMethodologyReferenceToProperties extends SysmlsecMethodolog
 
         nbConnectingPoint = 1;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.2, 0.0, TGConnectingPoint.WEST);
+        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 0, TGConnectingPoint.WEST);
 
         typeOfReference = PROPERTY;
 

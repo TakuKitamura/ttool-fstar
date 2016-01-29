@@ -64,7 +64,7 @@ public class SysmlsecMethodologyReferenceToMapping extends SysmlsecMethodologyDi
     public SysmlsecMethodologyReferenceToMapping(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(200, 120);
+        initScaling(200, 70);
 
         nbConnectingPoint = 3;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
