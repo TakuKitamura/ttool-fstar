@@ -230,7 +230,7 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
         helpPopup = new JPopupMenu();
-	JTextArea jft = new JTextArea("Pragma Guidelines: \n #Authenticity: Compare two Attributes at a given state \n #Confidentiality: Query whether the attacker knows the value of this attribute. \n #Constant: Take a guess \n #InitialSessionKnowledge: Knowledge at the start of each session\n #InitialSystemKnowledge: Knowledge at the start of the system \n #PrivatePublicKeys: The attribute Private Key followed by the attribute Public Key \n #Public: Self-explanatory \n #SecrecyAssumption: Like Secret, but with a fancier name \n #Secret: See #Confidentiality");
+	JTextArea jft = new JTextArea("Pragma Guidelines: \n #Authenticity: Compare if two Attributes are equal at given states \n #Confidentiality: Query whether the attacker knows the value of this attribute. \n #Constant: Declare string as possible constant \n #InitialSessionKnowledge: Knowledge at the start of each session\n #InitialSystemKnowledge: Knowledge at the start of the system \n #PrivatePublicKeys: Set two attribute of a block as Private and Public Key respectively \n #Public: Declare variable public \n #SecrecyAssumption: Assume attribute confidential, but query to verify \n #Secret: See #Confidentiality");
 	helpPopup.add(jft);
         textarea = new JTextArea();
 
