@@ -854,6 +854,7 @@ public class AvatarStateMachine extends AvatarElement {
                 if (previous.size() == 1) {
                     if (previous.get(0) instanceof AvatarTransition) {
                         AvatarTransition at = (AvatarTransition)(previous.get(0));
+			TraceManager.addDev("Timer value setting=" +  ast.getTimerValue());
                         at.addAction(timerAttributeName + " = " + ast.getTimerValue());
                     } else {
                         TraceManager.addError("The element before a set time is not a transition!");
