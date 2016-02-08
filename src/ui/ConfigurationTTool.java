@@ -125,6 +125,8 @@ public class ConfigurationTTool {
 
     // AVATAR Code generation
     public static String AVATARExecutableCodeDirectory = "";
+    public static String AVATARMPSoCCodeDirectory = "";
+     public static String AVATARMPSoCCompileCommand = "";
     public static String AVATARExecutableCodeHost = "";
     public static String AVATARExecutableCodeCompileCommand = "";
     public static String AVATARExecutableCodeExecuteCommand = "";
@@ -370,6 +372,8 @@ public class ConfigurationTTool {
         // AVATAR: executable code
         sb.append("\nAVATAR (executable code):\n");
         sb.append("AVATARExecutableCodeDirectory: " + AVATARExecutableCodeDirectory + "\n");
+ sb.append("AVATARMPSoCCodeDirectory: " + AVATARMPSoCCodeDirectory + "\n");
+sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
         sb.append("AVATARExecutableCodeHost: " + AVATARExecutableCodeHost + "\n");
         sb.append("AVATARExecutableCodeCompileCommand: " + AVATARExecutableCodeCompileCommand + "\n");
         sb.append("AVATARExecutableCodeExecuteCommand: " + AVATARExecutableCodeExecuteCommand + "\n");
@@ -593,6 +597,12 @@ public class ConfigurationTTool {
             nl = doc.getElementsByTagName("AVATARExecutableCodeDirectory");
             if (nl.getLength() > 0)
                 AVATARExecutableCodeDirectory(nl);
+	    nl = doc.getElementsByTagName("AVATARMPSoCCodeDirectory");
+            if (nl.getLength() > 0)
+                AVATARMPSoCCodeDirectory(nl);
+	    nl = doc.getElementsByTagName("AVATARMPSoCCompileCommand");
+            if (nl.getLength() > 0)
+                AVATARMPSoCCompileCommand(nl);
             nl = doc.getElementsByTagName("AVATARExecutableCodeHost");
             if (nl.getLength() > 0)
                 AVATARExecutableCodeHost(nl);
@@ -1187,6 +1197,24 @@ public class ConfigurationTTool {
             throw new MalformedConfigurationException(e.getMessage());
         }
     }
+
+private static void AVATARMPSoCCodeDirectory(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARMPSoCCodeDirectory = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+private static void AVATARMPSoCCompileCommand(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+             AVATARMPSoCCompileCommand= elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
 
     private static void AVATARExecutableCodeHost(NodeList nl) throws MalformedConfigurationException {
         try {

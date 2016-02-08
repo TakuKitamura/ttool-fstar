@@ -397,7 +397,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                 errors += "Clock ratio  ";
             }
         }
-	encryption = dialog.getEncryption();
+	//encryption = dialog.getEncryption();
         if (error) {
             JOptionPane.showMessageDialog(frame,
                                           "Invalid value for the following attributes: " + errors,

@@ -74,7 +74,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     protected Frame f;
     protected MainGUI mgui;
 
-    private String textSysC1 = "Base directory of code generation code:";
+    private String textSysC1 = "Base directory of code generation:";
     private String textSysC2 = "Compile executable code in";
     private String textSysC3 = "Compile soclib executable with";
     //private String textSysC3 = "with";
@@ -101,8 +101,8 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     protected static String pathCompileSoclib;
     protected static String pathExecuteSoclib;
     protected static String pathSoclibTraceFile;
-
-
+    protected static String pathCompilerMPSoC;
+    protected static String pathExecuteMPSoC;
     protected static boolean optimizeModeSelected = true;
 
     protected final static int NOT_STARTED = 1;
@@ -145,7 +145,6 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     private String hostExecute;
 
     protected RshClient rshc;
-
 
     /** Creates new form  */
     public JDialogAvatarExecutableCodeGeneration(Frame _f, MainGUI _mgui, String title, String _hostExecute, String _pathCode, String _pathCompiler, String _pathExecute, String _pathCompilerSoclib, String _pathExecuteSoclib, String _pathSoclibTraceFile) {

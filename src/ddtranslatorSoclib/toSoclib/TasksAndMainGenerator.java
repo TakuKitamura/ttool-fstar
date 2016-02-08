@@ -63,7 +63,8 @@ public class TasksAndMainGenerator {
 
 
     private final static String UNUSED_ATTR = "__attribute__((unused))";    
-    private final static String GENERATED_PATH = "generated_src_soclib" + File.separator;   
+    //private final static String GENERATED_PATH = "generated_src_soclib" + File.separator; 
+    private final static String GENERATED_PATH = "generated_src" + File.separator; 
     private final static String UNKNOWN = "UNKNOWN";
     private final static String CR = "\n";
     private final static String CR2 = "\n\n";
