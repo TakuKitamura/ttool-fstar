@@ -87,7 +87,7 @@ public class GTMLModeling  {
     private Vector<TDiagramPanel> panels;
 
     private boolean putPrefixName = false;
-    public Map<String, Boolean> channelConfMap = new HashMap<String, Boolean>();
+
     public GTMLModeling(TMLDesignPanel _tmldp, boolean resetList) {
         tmldp = _tmldp;
         table = new Hashtable<String, String>();
@@ -153,6 +153,7 @@ public class GTMLModeling  {
                 addTMLChannels();
                 addTMLEvents();
                 addTMLRequests();
+		//addTMLPragmas();
                 TraceManager.addDev("At line 151");
                 generateTasksActivityDiagrams();
                 removeActionsWithDollars();
@@ -214,6 +215,7 @@ public class GTMLModeling  {
                 addTMLCEvents();
                 TraceManager.addDev("Adding requests");
                 addTMLCRequests();
+		//addTMLPragmas();
                 TraceManager.addDev("At line 211");
                 generateTasksActivityDiagrams();
                 removeActionsWithDollars();
@@ -282,6 +284,7 @@ public class GTMLModeling  {
     }
     private void addTMLPragmas(){
 	TGComponent tgc;
+	System.out.println(tmlap);
 	components = tmlap.tmlap.getComponentList();
 	ListIterator iterator = components.listIterator();
 	while(iterator.hasNext()) {
@@ -290,7 +293,7 @@ public class GTMLModeling  {
 	    TGCNote note = (TGCNote) tgc;
 	    String[] vals = note.getValues();
 	    for (String s: vals){
-		if (s.contains(" ") && s.contains("#")){
+		if (s.contains(" ") && s.contains(".")){
   		  tmlm.addPragma(s.split(" "));
 		}
 	    }
@@ -2236,7 +2239,6 @@ public class GTMLModeling  {
                     bus.arbitration = busnode.getArbitrationPolicy();
                     bus.clockRatio = busnode.getClockRatio();
                     bus.sliceTime = busnode.getSliceTime();
-		    bus.privacy = busnode.getPrivacy();
                     listE.addCor(bus, busnode);
                     archi.addHwNode(bus);
                     TraceManager.addDev("BUS node added:" + bus.getName());
@@ -3079,126 +3081,40 @@ public class GTMLModeling  {
             }
 
         }
-	
-
+	    TMLTask a; 
 	    addTMLPragmas();
- 	    //for (TMLTask a: ){
-	        
-/*	    for (String[] ss: tmlm.getPragmas()){
+	    for (String[] ss: tmlm.getPragmas()){
 	      if (ss[0].equals("#Confidentiality") && ss.length > 1){
-		String task1 = ss[1];
+		String task1 = ss[1].split("\\.")[0];
+		String attr1 = ss[1].split("\\.")[1];
 	        a = tmlm.getTMLTaskByName(task1);
-
 		if (a ==null){
 		  continue;
-		}*/
-	
-		//HwCPU node1 = (HwCPU) map.getHwNodeOf(a);
-	//	if (node1.encryption ==0){
+		}
+		HwCPU node1 = (HwCPU) map.getHwNodeOf(a);
+		if (node1.encryption ==0){
 		//If unencrypted
-		  //Find confidentiality of all channels
-		  ArrayList<TMLChannel> channels = tmlm.getChannels();
+		  ArrayList<TMLSendEvent> events = a.getSendEvents();
 		  List<TMLTask> destinations = new ArrayList<TMLTask>();
-		  TMLTask a; 
-		  for (TMLChannel channel: channels){	
-		    destinations.clear();
-		    if (channel.isBasicChannel()){
-			a = channel.getOriginTask();
-			destinations.add(channel.getDestinationTask());
+		  for (TMLSendEvent event: events){	
+		    String params = event.getAllParams();
+		    for (String param: params.split(",")){
+		      if (attr1.equals(param)){
+			destinations.add(event.getEvent().getDestinationTask());
+		      }
 		    }
-		    else {
-			a=channel.getOriginTasks().get(0);
-			destinations.addAll(channel.getDestinationTasks());
-		    }  
-		    HwCPU node1 = (HwCPU) map.getHwNodeOf(a);
-		    for (TMLTask t: destinations){
-		    List<HwBus> buses = new ArrayList<HwBus>();
+		  }     
+		  for (TMLTask t: destinations){
 		    HwNode node2 = map.getHwNodeOf(t);
-		    if (node1==node2){
-			System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is confidential");
-			channelConfMap.put(channel.getName(), true);
-		    }
 		    if (node1!=node2){
-		      //Navigate architecture for node
-		      List<HwLink> links = archi.getHwLinks();
-		      HwNode last = node1;
-		/*      for (HwLink link: links){
-			if (link.hwnode == node1){
-			  last = link.bus;    
-			}
-		      }*/
-		      List<HwNode> found = new ArrayList<HwNode>();	
-		      List<HwNode> done = new ArrayList<HwNode>();
-		      List<HwNode> path = new ArrayList<HwNode>();
-		      Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
-		      for (HwLink link: links){
-		//	System.out.println("link "+ link.hwnode + " "+ link.bus);
-			if (link.hwnode == node1){
-			  found.add(link.bus);
-			  List<HwNode> tmp = new ArrayList<HwNode>();
-			  tmp.add(link.bus);
-			  pathMap.put(link.bus, tmp);
-			}
-		      }
-		      outerloop:
-		      while (found.size()>0){
-			HwNode curr = found.remove(0);
-			for (HwLink link: links){
-			  if (curr == link.bus){
-			    if (link.hwnode == node2){
-			      path = pathMap.get(curr);
-			      break outerloop;
-			    }
-			    if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
-			      found.add(link.hwnode);
-			      List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
-			      tmp.add(link.hwnode);
-			      pathMap.put(link.hwnode, tmp);
-			    }
-			  }
-			  else if (curr == link.hwnode){
-			      if (!done.contains(link.bus) && !found.contains(link.bus)){
-			        found.add(link.bus);
-			        List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
-			        tmp.add(link.bus);
-			        pathMap.put(link.bus, tmp);
-			      }
-			  }
-			}
-			done.add(curr);
-		      }
-		      if (path.size() ==0){
-			System.out.println("Path does not exist for channel " + channel.getName() + " between Task " + a.getTaskName() + " and Task " + t.getTaskName());
-		      }
-		      else {
-			boolean priv=true;
-			HwBus bus;
-			//Check if all buses and bridges are private
-			for (HwNode n: path){
-			  if (n instanceof HwBus){
-			    bus = (HwBus) n;
-			    if (bus.privacy ==0){
-			  /*    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Confidentiality of data within " + ss[1]+ " not preserved.");
-                      	      ce.setTDiagramPanel(tmlap.tmlap);
-                      	      ce.setTGComponent(listE.getTG(n));
-                      	      checkingErrors.add(ce);
-			      break;*/
-			      priv=false;
-			      break;
-			    }
-			  }
-			}
-			channelConfMap.put(channel.getName(), priv);
-			System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is " + (priv ? "confidential" : "not confidential"));
-		      }
-		  /*    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Confidentiality of data within " + ss[1]+ " not preserved.");
+		      CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Confidentiality of " + ss[1]+ " not preserved.");
                       ce.setTDiagramPanel(tmlap.tmlap);
                       ce.setTGComponent(null);
-                      checkingErrors.add(ce); */
+                      checkingErrors.add(ce);
 		    }
 		  }
-		//}
-	    //  }	
+		}
+	      }	
 	    }
 
     }
