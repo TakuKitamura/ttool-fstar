@@ -232,7 +232,7 @@ public class Main implements ActionListener {
 			if (args[i].compareTo("-proverif") ==0 )  {
 				proverif = true;
                 System.out.println("ProVerif activated - these are beta features that are meant to be used only for research purpose");
-		}*/
+		}
 			
 			if (args[i].compareTo("-noproverif") ==0 )  {
 				proverif = false;
