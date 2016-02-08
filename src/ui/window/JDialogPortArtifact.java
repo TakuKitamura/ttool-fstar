@@ -107,33 +107,32 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	private JPanel panel3, panel4, panel5;
 	private JTabbedPane tabbedPane;
 	private int bufferType = 0;
+	private boolean loadBufferParameters = false;
 	private ArrayList<String> bufferParameters;
-	private String appName = "";
     
     /** Creates new form  */
     public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory, ArrayList<String> _bufferParameters, String _mappedPort ) {
-			super(_frame, _title, true);
-			frame = _frame;
-			artifact = _artifact;
-			mappedMemory = _mappedMemory;
-			bufferParameters = _bufferParameters;
-			mappedPort = _mappedPort;
-			appName = mappedPort.split("::")[0];
-
-			TraceManager.addDev("init components");
-
-			initComponents();
-
-			TraceManager.addDev("my init components");
-
-			myInitComponents();
-
-			TraceManager.addDev("pack");
-			pack();
+        super(_frame, _title, true);
+        frame = _frame;
+        artifact = _artifact;
+				mappedMemory = _mappedMemory;
+				bufferParameters = _bufferParameters;
+				mappedPort = _mappedPort;
+        
+		TraceManager.addDev("init components");
+		
+        initComponents();
+		
+		TraceManager.addDev("my init components");
+		
+        myInitComponents();
+		
+		TraceManager.addDev("pack");
+        pack();
     }
     
     private void myInitComponents() {
-			selectPriority();
+		selectPriority();
     }
     
     private void initComponents() {
@@ -173,7 +172,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		TraceManager.addDev("Getting communications");
 		Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllTMLCommunicationNames();
-
 		Vector<String> portsList = new Vector<String>();
 		int index = 0;
 		if (list.size() == 0) {
@@ -184,24 +182,23 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			index = 0;//indexOf(list, artifact.getFullValue());
 			//parse each entry of list. Entry is in format AppName::chIn__chOut
 			for( String s: list )	{
-				if( s.contains( appName ) )	{	//build the DS for the mapped applications (filter out the case of multiple applications)
-					TraceManager.addDev( "Parsing: " + s );
-					String[] temp1 = s.split("__");
-					String[] temp2 = temp1[0].split( "::" );
-					String chOut = temp2[0] + "::" + temp1[1];
-					String chIn = temp2[0] + "::" + temp2[1];
-					if( !portsList.contains( chOut ) )	{
-						portsList.add( chOut );
-					}
-					if( !portsList.contains( chIn ) )	{
-						portsList.add( chIn );
-					}
+				TraceManager.addDev( "Parsing: " + s );
+				String[] temp1 = s.split("__");
+				String[] temp2 = temp1[0].split( "::" );
+				String chOut = temp2[0] + "::" + temp1[1];
+				String chIn = temp2[0] + "::" + temp2[1];
+				if( !portsList.contains( chOut ) )	{
+					portsList.add( chOut );
+				}
+				if( !portsList.contains( chIn ) )	{
+					portsList.add( chIn );
 				}
 			}
 		}
 		
 		TraceManager.addDev("Got communications");
 
+		
     referenceCommunicationName = new JComboBox(portsList);
 		if( mappedPort.equals( "VOID" ) || mappedPort.equals( "" ) )	{
 			referenceCommunicationName.setSelectedIndex( 0 );
@@ -241,46 +238,47 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		memoryCB.addActionListener(this);
 		panel2.add( memoryCB, c1 );
 
-		/*if( bufferParameters.size() == 0 )	{
+		if( bufferParameters.size() == 0 )	{
 			bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
-			TraceManager.addDev( "From if branch, the buffer type is: " + bufferType );
+			loadBufferParameters = false;
 		}
-		else	{*/
+		else	{
 			bufferType = Integer.parseInt( bufferParameters.get( Buffer.bufferTypeIndex ) );
-		//}
+			loadBufferParameters = true;
+		}
 
 		ArrayList<JPanel> panelsList;
 
 		switch( bufferType )	{
 			case Buffer.FepBuffer:	
-				panelsList = FepBuffer.makePanel( c1, c2 );
+				panelsList = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				panel3 = panelsList.get(0);
 				break;
 			case Buffer.InterleaverBuffer:	
-				panelsList = InterleaverBuffer.makePanel( c1, c2 );
+				panelsList = InterleaverBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				tabbedPane.addTab( "Data In", panelsList.get(0) );
 				tabbedPane.addTab( "Data Out", panelsList.get(1) );
 				tabbedPane.addTab( "Permutation Table", panelsList.get(2) );
 				tabbedPane.setSelectedIndex(0);
 				break;
 			case Buffer.AdaifBuffer:	
-				panelsList = AdaifBuffer.makePanel( c1, c2 );
+				panelsList = AdaifBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				panel3 = panelsList.get(0);
 				break;
 			case Buffer.MapperBuffer:	
 				tabbedPane.removeAll();
-				panelsList = MapperBuffer.makePanel( c1, c2 );
+				panelsList = MapperBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				tabbedPane.addTab( "Data In", panelsList.get(0) );
 				tabbedPane.addTab( "Data Out", panelsList.get(1) );
 				tabbedPane.addTab( "Look Up Table", panelsList.get(2) );
 				tabbedPane.setSelectedIndex(0);
 				break;
 			case Buffer.MainMemoryBuffer:	
-				panelsList = MMBuffer.makePanel( c1, c2 );
+				panelsList = MMBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				panel3 = panelsList.get(0);
 				break;
 			default:	//the fep buffer 
-				panelsList = FepBuffer.makePanel( c1, c2 );
+				panelsList = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				panel3 = panelsList.get(0);
 				break;
 		}
@@ -313,39 +311,242 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c.add(cancelButton, c0);
   }
 
-	private int getBufferTypeFromSelectedMemory( String mappedMemory )	{
+	/*private void makeFepBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+
+    panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
+
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesTF = new JTextField( numSamples, 5 );
+		panel3.add( new JLabel( "Number of samples = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( numSamplesTF, c1 );
+		//
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel3.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( baseAddressTF, c1 );
+		//
+		bankCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.banksList ) ) );
+		panel3.add( new JLabel( "Bank number = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( bank != null )	{
+			bankCB.setSelectedIndex( Integer.parseInt( bank ) );
+		}
+		panel3.add( bankCB, c1 );
+		//
+		dataTypeCB = new JComboBox( new Vector<String>( Arrays.asList( FepBuffer.dataTypeList ) ) );
+		panel3.add( new JLabel( "Data type = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( dataType != null )	{
+			dataTypeCB.setSelectedItem( dataType );
+		}
+		panel3.add( dataTypeCB, c1 );
+	}*/
+
+	/*private void makeInterleaverBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+
+		GridBagLayout gridbag2 = new GridBagLayout();
+
+  	panel3 = new JPanel();	//data in
+		panel3.setLayout(gridbag2);
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: input buffer configuration"));
+		panel3.setPreferredSize(new Dimension(650, 350));
+
+  	panel4 = new JPanel();	//data out
+		panel4.setLayout(gridbag2);
+		panel4.setBorder(new javax.swing.border.TitledBorder("Code generation: output buffer configuration"));
+		panel4.setPreferredSize(new Dimension(650, 350));
+
+  	panel5 = new JPanel();	//permutation table
+		panel5.setLayout(gridbag2);
+		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Permutation Table configuration"));
+		panel5.setPreferredSize(new Dimension(650, 350));
 		
-		LinkedList componentList = artifact.getTDiagramPanel().getComponentList();
-		Vector<String> list = new Vector<String>();
+		//Data In panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		packedBinaryInIntl_CB = new JComboBox( Buffer.onOffVector );
+		panel3.add( new JLabel( "Packed binary input mode = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( packedBinaryInIntl != null )	{
+			packedBinaryInIntl_CB.setSelectedItem( packedBinaryInIntl );
+		}
+		panel3.add( packedBinaryInIntl_CB, c1 );
+		//
+		widthIntl_TF = new JTextField( widthIntl, 5 );
+		panel3.add( new JLabel( "Sample width = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( widthIntl_TF, c1 );
+		//
+		bitInOffsetIntl_TF = new JTextField( bitInOffsetIntl, 5 );
+		panel3.add( new JLabel( "Bit input offset = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( bitInOffsetIntl_TF, c1 );
+		//
+		inputOffsetIntl_TF = new JTextField( inputOffsetIntl, 5 );
+		panel3.add( new JLabel( "Offset of first input sample = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( inputOffsetIntl_TF, c1 );
+		//
+
+		//Data Out panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		packedBinaryOutIntl_CB = new JComboBox( Buffer.onOffVector );
+		panel4.add( new JLabel( "Packed binary output mode = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( packedBinaryOutIntl != null )	{
+			packedBinaryOutIntl_CB.setSelectedItem( packedBinaryOutIntl );
+		}
+		panel4.add( packedBinaryOutIntl_CB, c1 );
+		//
+		bitOutOffsetIntl_TF = new JTextField( bitOutOffsetIntl, 5 );
+		panel4.add( new JLabel( "Bit output offset = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( bitOutOffsetIntl_TF, c1 );
+		//
+		c2.anchor = GridBagConstraints.LINE_START;
+		outputOffsetIntl_TF = new JTextField( outputOffsetIntl, 5 );
+		panel4.add( new JLabel( "Offset of first output sample = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( outputOffsetIntl_TF, c1 );
+
+		//Permutation Table panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		offsetPermIntl_TF = new JTextField( offsetPermIntl, 5 );
+		panel5.add( new JLabel( "Offset = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( offsetPermIntl_TF, c1 );
+		//
+		c2.anchor = GridBagConstraints.LINE_START;
+		lengthPermIntl_TF = new JTextField( lengthPermIntl, 5 );
+		panel5.add( new JLabel( "Length = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( lengthPermIntl_TF, c1 );
+
+		tabbedPane.addTab( "Data In", panel3 );
+		tabbedPane.addTab( "Data Out", panel4 );
+		tabbedPane.addTab( "Permutation Table", panel5 );
+		tabbedPane.setSelectedIndex(0);
+	}*/
+
+	/*private void makeAdaifBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+		c2.anchor = GridBagConstraints.LINE_START;
+		makeMainMemoryBufferPanel( c1, c2 );
+	}*/
+
+	/*private void makeMapperBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+
+		GridBagLayout gridbag2 = new GridBagLayout();
+
+  	panel3 = new JPanel();
+		panel3.setLayout(gridbag2);
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: input buffer configuration"));
+		panel3.setPreferredSize(new Dimension(650, 350));
+
+  	panel4 = new JPanel();
+		panel4.setLayout(gridbag2);
+		panel4.setBorder(new javax.swing.border.TitledBorder("Code generation: output buffer configuration"));
+		panel4.setPreferredSize(new Dimension(650, 350));
+
+  	panel5 = new JPanel();
+		panel5.setLayout(gridbag2);
+		panel5.setBorder(new javax.swing.border.TitledBorder("Code generation: Look Up Table configuration"));
+		panel5.setPreferredSize(new Dimension(650, 350));
 		
-		for( int k = 0; k < componentList.size(); k++ )	{
-			if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
-				TMLArchiMemoryNode memoryNode = (TMLArchiMemoryNode)componentList.get(k);
-				if( memoryNode.getName().equals( mappedMemory ) )	{
-					return memoryNode.getBufferType();
+		//Data In panel
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesDataInMapp_TF = new JTextField( numSamplesDataInMapp, 5 );
+		panel3.add( new JLabel( "Number of symbols = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( numSamplesDataInMapp_TF, c1 );
+		//
+		baseAddressDataInMapp_TF = new JTextField( baseAddressDataInMapp, 5 );
+		panel3.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( baseAddressDataInMapp_TF, c1 );
+		//
+		bitsPerSymbolDataInMapp_TF = new JTextField( bitsPerSymbolDataInMapp, 5 );
+		panel3.add( new JLabel( "Number of bits/symbol = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel3.add( bitsPerSymbolDataInMapp_TF, c1 );
+		//
+		symmetricalValueDataInMapp_CB = new JComboBox( new Vector<String>( Arrays.asList( MapperBuffer.symmetricalValues ) ) );
+		panel3.add( new JLabel( "Symmetrical value = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		if( symmetricalValueDataInMapp != null )	{
+			symmetricalValueDataInMapp_CB.setSelectedItem( symmetricalValueDataInMapp );
+		}
+		panel3.add( symmetricalValueDataInMapp_CB, c1 );
+
+		//Data Out panel
+		baseAddressDataOutMapp_TF = new JTextField( baseAddressDataOutMapp, 5 );
+		panel4.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel4.add( baseAddressDataOutMapp_TF, c1 );
+		//
+		//Look Up Table panel
+		baseAddressLUTMapp_TF = new JTextField( baseAddressLUTMapp, 5 );
+		panel5.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel5.add( baseAddressLUTMapp_TF, c1 );
+		//
+
+		tabbedPane.addTab( "Data In", panel3 );
+		tabbedPane.addTab( "Data Out", panel4 );
+		tabbedPane.addTab( "Look Up Table", panel5 );
+		tabbedPane.setSelectedIndex(0);
+	}*/
+
+	private void makeMainMemoryBufferPanel( GridBagConstraints c1, GridBagConstraints c2 )	{
+		
+		panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
+
+		c2.anchor = GridBagConstraints.LINE_START;
+		numSamplesTF = new JTextField( numSamples, 5 );
+		panel3.add( new JLabel( "Number of samples = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		numSamplesTF = new JTextField( numSamples, 5 );
+		panel3.add( numSamplesTF, c1 );
+		//
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel3.add( new JLabel( "Base address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		baseAddressTF = new JTextField( baseAddress, 5 );
+		panel3.add( baseAddressTF, c1 );
+	}
+
+		private int getBufferTypeFromSelectedMemory( String mappedMemory )	{
+			
+			LinkedList componentList = artifact.getTDiagramPanel().getComponentList();
+			Vector<String> list = new Vector<String>();
+			
+			for( int k = 0; k < componentList.size(); k++ )	{
+				if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
+					TMLArchiMemoryNode memoryNode = (TMLArchiMemoryNode)componentList.get(k);
+					if( memoryNode.getName().equals( mappedMemory ) )	{
+						return memoryNode.getBufferType();
+					}
 				}
 			}
+			return 0;	//default: the main memory buffer
 		}
-		return 0;	//default: the main memory buffer
-	}
     
-  public void	actionPerformed(ActionEvent evt)  {
+    public void	actionPerformed(ActionEvent evt)  {
 
-		if (evt.getSource() == referenceCommunicationName) {
-			selectPriority();
-		}
-		if( evt.getSource() == memoryCB )	{
-			updateBufferPanel();
-		}
+			if (evt.getSource() == referenceCommunicationName) {
+				selectPriority();
+			}
+			if( evt.getSource() == memoryCB )	{
+				updateBufferPanel();
+			}
         
-    String command = evt.getActionCommand();
-    // Compare the action command to the known actions.
-   	if (command.equals("Save and Close"))  {
-    	closeDialog();
-    } else if (command.equals("Cancel")) {
-    	cancelDialog();
-		}
-	}
+        String command = evt.getActionCommand();
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close"))  {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
+    }
 
 	private void updateBufferPanel()	{
 
@@ -361,18 +562,19 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		
 		//flushBuffersStrings();
 		bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
+		loadBufferParameters = false;	//previous information will be lost
 		ArrayList<JPanel> panelsList;
 
 		switch( bufferType )	{
 			case Buffer.FepBuffer:	
 				tabbedPane.removeAll();
-				panelsList = FepBuffer.makePanel( c1, c2 );
+				panelsList = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 			case Buffer.MapperBuffer:	
 				tabbedPane.removeAll();
-				panelsList = MapperBuffer.makePanel( c1, c2 );
+				panelsList = MapperBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				tabbedPane.addTab( "Data In", panelsList.get(0) );
 				tabbedPane.addTab( "Data Out", panelsList.get(1) );
 				tabbedPane.addTab( "Look Up Table", panelsList.get(2) );
@@ -380,13 +582,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				break;
 			case Buffer.AdaifBuffer:	
 				tabbedPane.removeAll();
-				panelsList = AdaifBuffer.makePanel( c1, c2 );
+				panelsList = AdaifBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 			case Buffer.InterleaverBuffer:
 				tabbedPane.removeAll();
-				panelsList = InterleaverBuffer.makePanel( c1, c2 );
+				panelsList = InterleaverBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				tabbedPane.addTab( "Data In", panelsList.get(0) );
 				tabbedPane.addTab( "Data Out", panelsList.get(1) );
 				tabbedPane.addTab( "Permutation Table", panelsList.get(2) );
@@ -394,19 +596,50 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				break;
 			case Buffer.MainMemoryBuffer:	
 				tabbedPane.removeAll();
-				panelsList = MMBuffer.makePanel( c1, c2 );
+				panelsList = MMBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 			default:	//the main memory buffer 
 				tabbedPane.removeAll();
-				panelsList = FepBuffer.makePanel( c1, c2 );
+				panelsList = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
 				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 		}
 	}
 
+	/*private void flushBuffersStrings()	{
+	
+		//interleaver
+		widthIntl = "";
+		bitInOffsetIntl = "";
+		inputOffsetIntl = "";
+		packedBinaryInIntl = "";
+		packedBinaryOutIntl = "";
+		bitOutOffsetIntl = "";
+		outputOffsetIntl = "";
+		lengthPermIntl = "";
+		offsetPermIntl = "";
+
+		//mapper
+		baseAddressDataInMapp = "";
+		numSamplesDataInMapp = "";
+		bitsPerSymbolDataInMapp = "";
+		symmetricalValueDataInMapp = "";
+		baseAddressDataOutMapp = "";
+		baseAddressLUTMapp = "";
+
+		//other buffers
+		baseAddress = "";
+		mappedPort = "";
+		sampleLength = "";
+		numSamples = "";
+		bitsPerSymbol = "";
+		symmetricalValue = "";
+	}*/
+	
+	
 	public void selectPriority() {
 		//System.out.println("Select priority");
 		int index = ((TMLArchiDiagramPanel)artifact.getTDiagramPanel()).getMaxPriority((String)(referenceCommunicationName.getSelectedItem()));
@@ -419,7 +652,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				mappedMemory = (String) memoryCB.getItemAt( memoryCB.getSelectedIndex() );
 				bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
 				switch ( bufferType )	{
-					case Buffer.FepBuffer:
+					case Buffer.FepBuffer:	
 						if( !FepBuffer.closePanel( frame ) )	{
 							return;
 						}
@@ -510,6 +743,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		return "";
 	 }
 	
+	
 	public int indexOf(Vector<String> _list, String name) {
 		int i = 0;
 		for(String s : _list) {
@@ -525,28 +759,256 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		return priority.getSelectedIndex();
 	}
 
+	/*private boolean checkBaseAddress()	{
+
+		baseAddress = (String) baseAddressTF.getText();
+		if( baseAddress.length() <= 2 && baseAddress.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddress.length() > 2 )	{
+			if( !( baseAddress.substring(0,2).equals("0x") || baseAddress.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+	return true;
+	}*/
+
+	/*private boolean checkLUT_Mapper()	{
+
+		baseAddressLUTMapp = (String) baseAddressLUTMapp_TF.getText();
+		if( baseAddressLUTMapp.length() <= 2 && baseAddressLUTMapp.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddressLUTMapp.length() > 2 )	{
+			if( !( baseAddressLUTMapp.substring(0,2).equals("0x") || baseAddressLUTMapp.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+		return true;
+	}*/
+
+	/*private boolean checkDI_Mapper()	{
+
+		numSamplesDataInMapp = (String)numSamplesDataInMapp_TF.getText();
+		baseAddressDataInMapp = (String)baseAddressDataInMapp_TF.getText();
+		bitsPerSymbolDataInMapp = (String)bitsPerSymbolDataInMapp_TF.getText();
+		symmetricalValueDataInMapp = (String)symmetricalValueDataInMapp_CB.getSelectedItem();
+		String regex = "[0-9]+";
+
+		if( baseAddressDataInMapp.length() <= 2 && baseAddressDataInMapp.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddressDataInMapp.length() > 2 )	{
+			if( !( baseAddressDataInMapp.substring(0,2).equals("0x") || baseAddressDataInMapp.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+		if( !( numSamplesDataInMapp.length() > 0 ) )	{
+			return true;
+		}
+		if( !numSamplesDataInMapp.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of bits/symbol must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( !( bitsPerSymbolDataInMapp.length() > 0 ) )	{
+			return true;
+		}
+		if( !bitsPerSymbolDataInMapp.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of bits/symbol must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		return true;
+	}*/
+
+	/*private boolean checkDO_Mapper()	{
+
+		baseAddressDataOutMapp = (String)baseAddressDataOutMapp_TF.getText();
+		if( baseAddressDataOutMapp.length() <= 2 && baseAddressDataOutMapp.length() > 0 )	{
+			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( baseAddressDataOutMapp.length() > 2 )	{
+			if( !( baseAddressDataOutMapp.substring(0,2).equals("0x") || baseAddressDataOutMapp.substring(0,2).equals("0X") ) )	{
+				JOptionPane.showMessageDialog( frame, "Base address must be expressed in hexadecimal", "Badly formatted parameter",
+																				JOptionPane.INFORMATION_MESSAGE );
+				return false;
+			}
+		}
+		return true;
+	}*/
+			
+	/*private boolean checkDI_Intl()	{
+
+		String regex = "[0-9]+";
+		widthIntl = (String)widthIntl_TF.getText();
+		bitInOffsetIntl = (String)bitInOffsetIntl_TF.getText();
+		inputOffsetIntl = (String)inputOffsetIntl_TF.getText();
+		packedBinaryInIntl = (String)packedBinaryInIntl_CB.getSelectedItem();
+
+		if( !( widthIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !widthIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The samples width must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( !( bitInOffsetIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !bitInOffsetIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The bit input offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( !( inputOffsetIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !inputOffsetIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The bit intput offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		return true;
+	}*/
+	
+/*	private boolean checkDO_Intl()	{
+
+		//check bitOutOffset and outOffset
+		packedBinaryOutIntl = (String)packedBinaryOutIntl_CB.getSelectedItem();
+		bitOutOffsetIntl = 	(String)bitOutOffsetIntl_TF.getText();
+		outputOffsetIntl = (String)outputOffsetIntl_TF.getText();
+		String regex = "[0-9]+";
+
+		if( !( bitOutOffsetIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !bitOutOffsetIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The bit output offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		// check output offset
+		if( !( outputOffsetIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !outputOffsetIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The output offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		return true;
+	}*/
+	
+	/*private boolean CheckPerm_Intl()	{
+
+		String regex = "[0-9]+";
+		offsetPermIntl = (String) offsetPermIntl_TF.getText();
+		lengthPermIntl = (String) lengthPermIntl_TF.getText();
+		//check first entry offset
+		if( !( offsetPermIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !offsetPermIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The offset must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		//check permutation table length
+		if( !( lengthPermIntl.length() > 0 ) )	{
+			return true;
+		}
+		if( !lengthPermIntl.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The length must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( Integer.parseInt( lengthPermIntl ) == 0 )	{
+			JOptionPane.showMessageDialog( frame, "The length must be greater than 0", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		return true;
+	}*/
+
+	/*private boolean checkNumSamples()	{
+
+		String regex = "[0-9]+";
+		numSamples = (String) numSamplesTF.getText();
+		if( !( numSamples.length() > 0 ) )	{
+			return true;
+		}
+		if( !numSamples.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of samples must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( Integer.parseInt( numSamples ) == 0 )	{
+			JOptionPane.showMessageDialog( frame, "The number of samples must be greater than 0", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		return true;
+	}*/
+
+
+	/*private boolean checkNumBitsPerSymbol()	{
+
+		String regex = "[0-9]+";
+		bitsPerSymbol = (String) bitsPerSymbolTF.getText();
+		if( !( bitsPerSymbol.length() > 0 ) )	{
+			return true;
+		}
+		if( Integer.parseInt( bitsPerSymbol ) == 0 )	{
+			JOptionPane.showMessageDialog( frame, "The number of bits/samples must be greater than 0", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		if( !bitsPerSymbol.matches( regex ) )	{
+			JOptionPane.showMessageDialog( frame, "The number of bits/samples must be expressed as a natural", "Badly formatted parameter",
+																			JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+		return true;
+	}*/
+	
 	public ArrayList<String> getBufferParameters()	{
 
 		ArrayList<String> params = new ArrayList<String>();
 		params.add( String.valueOf( bufferType ) );
 		switch( bufferType )	{
 			case Buffer.FepBuffer:
-				params = FepBuffer.getBufferParameters();
+				FepBuffer.getBufferParameters( params );
 				break;
 			case Buffer.InterleaverBuffer:	
-				params = InterleaverBuffer.getBufferParameters();
+				InterleaverBuffer.getBufferParameters( params );
 				break;
 			case Buffer.AdaifBuffer:
-				params = AdaifBuffer.getBufferParameters();
+				AdaifBuffer.getBufferParameters( params );
 				break;
 			case Buffer.MapperBuffer:	
-				params = MapperBuffer.getBufferParameters();
+				MapperBuffer.getBufferParameters( params );
 				break;
 			case Buffer.MainMemoryBuffer:	
-				params = MMBuffer.getBufferParameters();
+				MMBuffer.getBufferParameters( params );
 				break;
 			default:	//the main memory buffer
-				params = FepBuffer.getBufferParameters();
+				FepBuffer.getBufferParameters( params );
 				break;
 		}
 		return params;

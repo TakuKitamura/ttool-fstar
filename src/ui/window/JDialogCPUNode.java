@@ -74,19 +74,9 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	
 	// Panel2
 	protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles, taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime;
-<<<<<<< .mine
 	protected JComboBox schedulingPolicy, MECTypeCB;
-=======
-	protected JComboBox schedulingPolicy, MECTypeCB, encryption;
->>>>>>> .r12352
 	
-<<<<<<< .mine
 	
-=======
-	// Tabbed pane for panel1 and panel2
-	private JTabbedPane tabbedPane;
-	
->>>>>>> .r12352
 	// Main Panel
 	private JButton closeButton;
 	private JButton cancelButton;
@@ -126,8 +116,6 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		panel2.setLayout(gridbag2);
 		panel2.setBorder(new javax.swing.border.TitledBorder("CPU attributes"));
 		panel2.setPreferredSize(new Dimension(400, 300));
-
-		tabbedPane = new JTabbedPane();
 		
 		c2.gridwidth = 1;
 		c2.gridheight = 1;
@@ -243,19 +231,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
     c4.gridwidth = 1;
     c4.fill = GridBagConstraints.HORIZONTAL;
     c4.anchor = GridBagConstraints.CENTER;*/
-<<<<<<< .mine
-=======
-		panel4.add(new JLabel("Encryption:"), c4);
-		c4.gridwidth = GridBagConstraints.REMAINDER;
-		encryption = new JComboBox();
-		encryption.addItem("None");
-		encryption.addItem("Software Encryption");
-		encryption.addItem("Hardware Security Module");
-		encryption.setSelectedIndex(node.getEncryption());
-		panel4.add(encryption, c4);
-		c4.gridwidth = 1;
->>>>>>> .r12352
-		panel4.add(new JLabel("CPU Extension Construct:"), c4);
+		panel4.add(new JLabel("Embb Model Extension Construct:"), c4);
     c4.gridwidth = GridBagConstraints.REMAINDER; //end row
     MECTypeCB = new JComboBox( ArchUnitMEC.stringTypes );
 		if( MECType == null )	{
@@ -266,10 +242,6 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		}
 		MECTypeCB.addActionListener(this);
     panel4.add( MECTypeCB, c4);
-
-		tabbedPane.addTab( "Simulation", panel2 );
-		tabbedPane.addTab( "Code generation", panel4 );
-		tabbedPane.setSelectedIndex(0);
         
 		// main panel;
 		c0.gridheight = 10;
@@ -277,9 +249,8 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		c0.weightx = 1.0;
 		c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 		c0.fill = GridBagConstraints.BOTH;
-		/*c.add(panel2, c0);
-		c.add(panel4, c0);*/
-		c.add( tabbedPane, c0 );
+		c.add(panel2, c0);
+		c.add(panel4, c0);
 		
 		c0.gridwidth = 1;
 		c0.gridheight = 1;
@@ -381,7 +352,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	public int getSchedulingPolicy() {
 		return schedulingPolicy.getSelectedIndex();
 	}
-	
+
 	public ArchUnitMEC getMECType()	{
 		return MECType;
 	}
