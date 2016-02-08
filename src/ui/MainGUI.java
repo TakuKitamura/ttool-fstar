@@ -3955,24 +3955,32 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void avatarExecutableCodeGeneration() {
         TraceManager.addDev("Avatar code generation");
-        JDialogAvatarExecutableCodeGeneration jgen = new JDialogAvatarExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution", ConfigurationTTool.AVATARExecutableCodeHost, ConfigurationTTool.AVATARExecutableCodeDirectory,  ConfigurationTTool.AVATARExecutableCodeCompileCommand, ConfigurationTTool.AVATARExecutableCodeExecuteCommand, ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand, ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand,  ConfigurationTTool.AVATARExecutableSoclibTraceFile);
+        JDialogAvatarExecutableCodeGeneration jgen = new JDialogAvatarExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution", ConfigurationTTool.AVATARExecutableCodeHost, 
+ConfigurationTTool.AVATARExecutableCodeDirectory,  
+ConfigurationTTool.AVATARExecutableCodeCompileCommand, 
+ConfigurationTTool.AVATARExecutableCodeExecuteCommand, 
+ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand, 
+ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand,  											       
+ConfigurationTTool.AVATARExecutableSoclibTraceFile);
         jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen);
         jgen.setVisible(true);
         dtree.toBeUpdated();
     }
 
-// julien --------------------------------------------------------------
-
-
-    public void avatarddExecutableCodeGeneration(){
+    // DG
+      public void avatarddExecutableCodeGeneration(){
       TraceManager.addDev("Avatar code generation");
-      JDialogAvatarddExecutableCodeGeneration jgen = new JDialogAvatarddExecutableCodeGeneration(frame, this, "Executable Code generation", ConfigurationTTool.AVATARExecutableCodeHost,"" , ConfigurationTTool.AVATARExecutableCodeDirectory,"","");
+      JDialogAvatarddExecutableCodeGeneration jgen = new JDialogAvatarddExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution", 
+ConfigurationTTool.AVATARExecutableCodeHost,
+ConfigurationTTool.AVATARMPSoCCodeDirectory,			      
+ConfigurationTTool.AVATARMPSoCCompileCommand,				      
+ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);						       
         jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen);
         jgen.setVisible(true);
         dtree.toBeUpdated();
-    }
+	}
 
   // ---------------------------------------------------------------------
 
