@@ -66,7 +66,7 @@ public class HwBus extends HwCommunicationNode  {
 	public int arbitration = DEFAULT_ARBITRATION;
 	public int privacy = BUS_PUBLIC;
     public int sliceTime = DEFAULT_SLICE_TIME;
-	
+    public static final int BUS_PUBLIC = 1;//DG
 	public HwBus(String _name) {
 		super(_name);
 	}
