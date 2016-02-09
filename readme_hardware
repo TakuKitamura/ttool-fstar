@@ -38,16 +38,17 @@ SystemCASS also works, libraries for Linux are contained in the distribution
 -------------------------------------------------------------------------------
 Additions to the TTool arborescence:
 ====================================
-in the executablecode directory three new sub directories were added for MPSoC execution: 
 
-- generated_code_soclib: generated task code for the blocks and main code spawning the POSIX threads
-- src_soclib : the runtime for MPSoC platforms (using mwmr channels)
-- generated_topcell: topcell and bits of mapping information to generate the ldscript
+at top level, a directory named  MPSoC was added: 
+
+- generated_src: generated task code for AVATAR blocks and main code spawning the POSIX threads
+- src : the runtime for MPSoC platforms (using mwmr channels)
+- generated_topcell: topcell and mapping information to generate the ldscript
 
 --------------------------------------------------------------------
 TTool will copy code from these directories into the Prog arborescence as follows:
 
-generated_code_soclib :  *.c and *h to Prog/mutekh/examples/avatar
+generated_src :  *.c and *h to Prog/mutekh/examples/avatar
 		      src_soclib to Prog/mutekh/libavatar
 
 generated_topcell :
@@ -65,70 +66,45 @@ it contains subdirectories toSoclib and toTopCell generating task/main code and 
 ldscript and main, respectively
 Other files from TTool had to be slightly adapted, not listed here
 
-Makefile :
-==========
-
-To compile for the soclib (simulated) MPSoC platform, you have
-to add a new target to executablecode/Makefile.forsoclib
-
-updategeneratedcodesoclib:
-	cp ~/TURTLE/executablecode/generated_src_soclib/*.c ~/Prog/mutekh/exampl
-es/avatar 
-	cp ~/TURTLE/executablecode/Makefile.soclib ~/Prog/mutekh/examples/avatar
-/Makefile
-
-You also have to update the MPSoC version of the runtime 
-
-updateruntimesoclib:
-	cp ~/TURTLE/executablecode/src_soclib/*.c ~/Prog/mutekh/libavatar/
-	cp ~/TURTLE/executablecode/src_soclib/*.h ~/Prog/mutekh/libavatar/includ
-e/  
-	cp ~/TURTLE/executablecode/src_soclib/Makefile ~/Prog/mutekh/libavatar/
-
-
-These additions are contained in Makefile.forsoclib_mpsoc which replaces
-Makefile.forsoclib
-
-cp Makefile.forsoclib_mpsoc Makefile.forsoclib
-
 --------------------------------------------------------------------------------------
-In bin/config.xml line :
+In TURTLE/bin/ you may add the following two lines in the config.xml file :
 
-<AVATARExecutableSoclibCodeCompileCommand data="make -C /home/enrici/TURTLE/exec
-utablecode updategeneratedcode compilesoclib" />
-has to be remplicated and modified to : 
-<AVATARExecutableSoclibCodeCompileCommand data="make -C ~/TURTLE/executablecode updategeneratedcodesoclib compilesoclib" />
-such that the new target updategeneratedcodesoclib, which copies the files from generated_code_soclib is taken
-
-This line is treated in src/ui/MainGUI.java and src/ui/window/JDialogAvatarExecutableCodeGeneration
-%ToDo discuss with Ludovic
+<AVATARMPSoCCodeDirectory data="/users/enseig/genius/TURTLE/MPSoC/" />
+<AVATARMPSoCCompileCommand data="make -C /users/enseig/genius/TURTLE/MPSoC updategeneratedcode compilesoclib" />
 
 ---------------------------------------------------------------------------------
-Summary: how to use Deployment Diagrams
-=======================================
+Summary: how to use Deployment Diagrams (awaiting a detailed tutorial)
+======================================================================
 
-Starting from an existing diagram : open together with AVATAR diagram (File->open)
+These features are available in the experimental version; the option -experimental
+must be added in ttool.exe for example
 
-Click on AvatarDeployment (right tab) first
-Click on the gear at the right of the lower toolbar (Deployment Diagram toolbar)
-Select AVATAR Topcell, Tasks, and Main option (the usual case, as we do not only
-want the topcell but information to be taken into account in caode and ldscript generation)
+java -Xmx1024m -Djavax.net.ssl.trustStore=ServerKeyStore -Djavax.net.ssl.trustStorePassword=123456  -jar ttool.jar -config config.xml -experimental -debug -avatar -uppaal -launcher 
 
-Then click on AVATAR Design (left tab)
-select V&V (the Syntax Analysis reads in the diagrams and checks their syntax)
-If successful, code can be generated: the gear in the upper toolbar becomes available
 
-- select AVATAR SOCLIB code generator in the code generation menu
+When starting from an existing diagram : automatically opened together with AVATAR diagram (File->open)
+
+- Click on AVATAR Design (left tab in main window)
+  select V&V then Syntax Analysis; this reads in the diagrams and checks their syntax
+- Click on AvatarDeployment (right tab in main window) 
+  Click on the gear at the right of the lower toolbar (Deployment Diagram toolbar)
+
+- select AVATAR SOCLIB code generator in the code generation menu (only one option available if generating code with deployment)
   it is recommended to select the debug option to have detailed output
-- select Compile soclib executable in the compile menu
-- select Run code in soclib/mutekh in the Exeute menu
+  tracing is currently not active but cycle information can be obtained
+- select Compile tab, then "Compile soclib executable with" then "Start" in the compile menu
+- select Execute tab, then "Run code in soclib/mutekh" then "Start" in the Exeute menu
 
 A TTY (green on black) should open; if the debug option was selected, the
 application progress and read/write operation on channels can be monitored 
 (this is provisional awaiting more comfortable tracing facilities on cycle accurate level)
 
-Designing one's own diagrams: toolbar in the Deployment Diagram tab (ower toolbar)
-the following components  
+Designing one's own diagrams: 
+
+ight click on Avatar Deployment tab : New AVATAR Deployment Diagram
+
+toolbar in the Deployment Diagram tab (lower toolbar)
+The following components are available
 
 CPU
 task to CPU: map tasks onto processors
@@ -153,7 +129,5 @@ one level of interconnect, either VGMN, bus (VGSB) or Crossbar supported current
 
 Right click on components then select edit allows to modify attributes : for example, specify number of cache lines,
 the size of a memory bank
-%Attention: some of these parameters are currently set by default an are not taken into account
-%ToDo detailed doc with screenshots
 --------------------------------------------------------------------------------------------
 Please contact daniela.genius@lip6.fr
