@@ -76,14 +76,14 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     protected MainGUI mgui;
 
     private String textSysC1 = "Base directory of code generation:";
-    private String textSysC2 = "Compile executable code in";
+    //private String textSysC2 = "Compile executable code in";
     private String textSysC3 = "Compile soclib executable with";
     //private String textSysC3 = "with";
-    private String textSysC4 = "Run code:";
+    //private String textSysC4 = "Run code:";
     private String textSysC5 = "Run code and trace events (if enabled at code generation):";
     private String textSysC6 = "Run code in soclib / mutekh:";
-    private String textSysC8 = "Show trace from file:";
-    private String textSysC9 = "Show trace from soclib file:";
+    private String textSysC8 = "Show AVATAR trace from file w/o hardware:";
+    private String textSysC9 = "Show cycle accurate trace from MPSoC file:";
 
     private static String unitCycle = "1";
 
@@ -102,7 +102,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     //protected static String pathExecuteWithTracing;
     //protected static String pathCompileSoclib;
     //protected static String pathExecuteSoclib;
-    //protected static String pathSoclibTraceFile;
+    protected static String pathSoclibTraceFile;
     protected static String pathCompileMPSoC;
     protected static String pathExecuteMPSoC;
     protected static boolean optimizeModeSelected = true;
@@ -299,19 +299,19 @@ String _pathExecuteMPSoC) {
 
         compilegroup =  new ButtonGroup();
 
-        compile = new JRadioButton(textSysC2, false);
+        /*compile = new JRadioButton(textSysC2, false);
         jp02.add(compile, c02);
         compile.addActionListener(this);
-        compilegroup.add(compile);
+        compilegroup.add(compile);*/
         //code2 = new JTextField(pathCode, 100);
         //jp02.add(code2, c02);
 
         //jp02.add(new JLabel("with"), c02);
 
-        compiler1 = new JTextField(pathCompileMPSoC, 100);
-        jp02.add(compiler1, c02);
+        //compiler1 = new JTextField(pathCompileMPSoC, 100);
+        //jp02.add(compiler1, c02);
 
-        jp02.add(new JLabel(" "), c02);
+        //jp02.add(new JLabel(" "), c02);
 
 
         compilesoclib = new JRadioButton(textSysC3, false);
@@ -321,7 +321,7 @@ String _pathExecuteMPSoC) {
         compiler2 = new JTextField(pathCompileMPSoC, 100);
         jp02.add(compiler2, c02);
 
-        compile.setSelected(selectedCompile == 0);
+        //compile.setSelected(selectedCompile == 0);
         compilesoclib.setSelected(selectedCompile == 1);
 
         jp1.add("Compile", jp02);
@@ -335,13 +335,13 @@ String _pathExecuteMPSoC) {
         c03.gridheight = 1;
 
 	exegroup = new ButtonGroup();
-        exe = new JRadioButton(textSysC4, false);
+        /*exe = new JRadioButton(textSysC4, false);
         exe.addActionListener(this);
         exegroup.add(exe);
         jp03.add(exe, c03);
         exe2 = new JTextField(pathExecuteMPSoC, 100);
         jp03.add(exe2, c03);
-        exegroup.add(exe);
+        exegroup.add(exe);*/
 
         exetrace = new JRadioButton(textSysC5, false);
         exetrace.addActionListener(this);
@@ -357,7 +357,7 @@ String _pathExecuteMPSoC) {
         exe4 = new JTextField(pathExecuteMPSoC, 100);
         jp03.add(exe4, c03);
 
-        exe.setSelected(selectedRun == 0);
+        //exe.setSelected(selectedRun == 0);
         exetrace.setSelected(selectedRun == 1);
         exesoclib.setSelected(selectedRun == 2);
 
@@ -392,9 +392,9 @@ String _pathExecuteMPSoC) {
         viewtracesoclib = new JRadioButton(textSysC9, false);
         viewgroup.add(viewtracesoclib);
         viewtracesoclib.addActionListener(this);
-	// jp04.add(viewtracesoclib, c04);
-	//        simulationsoclibTraceFile = new JTextField(pathSoclibTraceFile, 100);
-        //jp04.add(simulationsoclibTraceFile, c04);
+	jp04.add(viewtracesoclib, c04);
+	simulationsoclibTraceFile = new JTextField(pathSoclibTraceFile, 100);
+        jp04.add(simulationsoclibTraceFile, c04);
 
         showSimulationTrace = new JButton("Show simulation trace");
         showSimulationTrace.addActionListener(this);
@@ -457,9 +457,11 @@ String _pathExecuteMPSoC) {
             selectedUnit = units.getSelectedIndex();
         } else if (evt.getSource() == showSimulationTrace) {
             showSimulationTrace();
-        } else if ((evt.getSource() == exe) || (evt.getSource() == exetrace)|| (evt.getSource() == exesoclib)) {
+        } //else if ((evt.getSource() == exe) || (evt.getSource() == exetrace)|| (evt.getSource() == exesoclib)) {
+	else if ((evt.getSource() == exetrace)|| (evt.getSource() == exesoclib)) {
             makeSelectionExecute();
-        } else if ((evt.getSource() == compile) || (evt.getSource() == compilesoclib)) {
+	    // } else if ((evt.getSource() == compile) || (evt.getSource() == compilesoclib)) {
+	} else if ( (evt.getSource() == compilesoclib)) {
             makeSelectionCompile();
         } else if ((evt.getSource() == viewtrace) || (evt.getSource() == viewtracesoclib)) {
             makeSelectionViewTrace();
@@ -480,31 +482,31 @@ String _pathExecuteMPSoC) {
     }
 
     public void makeSelectionExecute() {
-        if (exe.isSelected()) {
+        /*if (exe.isSelected()) {
             selectedRun = 0;
-        } else {
+	    } else {*/
             if (exetrace.isSelected()) {
                 selectedRun = 1;
             } else {
                 selectedRun = 2;
             }
-        }
+	    //}
 
-        exe2.setEnabled(selectedRun == 0);
+	    // exe2.setEnabled(selectedRun == 0);
         exe3.setEnabled(selectedRun == 1);
         exe4.setEnabled(selectedRun == 2);
 
     }
 
     public void makeSelectionCompile() {
-        if (compile.isSelected()) {
+	/* if (compile.isSelected()) {
             selectedCompile = 0;
-        } else {
+	    } else {*/
             selectedCompile = 1;
-        }
+	    //}
 
         //code2.setEnabled(selectedCompile == 0);
-        compiler1.setEnabled(selectedCompile == 0);
+	    //        compiler1.setEnabled(selectedCompile == 0);
         compiler2.setEnabled(selectedCompile == 1);
 
     }
@@ -625,11 +627,11 @@ String _pathExecuteMPSoC) {
                 // Compilation
                 if (jp1.getSelectedIndex() == 1) {
 
-                    if (selectedCompile == 0) {
-                        cmd = compiler1.getText();
-                    } else {
+                    //if (selectedCompile == 0) {
+                        //cmd = compiler1.getText();
+		    // } else {
                         cmd = compiler2.getText();
-                    }
+			// }
 
                     jta.append("Compiling executable code with command: \n" + cmd + "\n");
 
@@ -655,15 +657,15 @@ String _pathExecuteMPSoC) {
 
                 if (jp1.getSelectedIndex() == 2) {
                     try {
-                        if (selectedRun == 0) {
+                        /*if (selectedRun == 0) {
                             cmd = exe2.getText();
-                        } else {
+			    } else {*/
                             if (selectedRun == 1) {
                                 cmd = exe3.getText();
                             } else {
                                 cmd = exe4.getText();
                             }
-                        }
+			    // }
 
                         jta.append("Executing code with command: \n" + cmd + "\n");
 
@@ -790,11 +792,11 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
                 // Compilation
                 if (jp1.getSelectedIndex() == 1) {
 
-                    if (selectedCompile == 0) {
+                    //if (selectedCompile == 0) {
                         cmd = compiler1.getText();
-                    } else {
-                        cmd = compiler2.getText();
-                    }
+			//} else {
+			//    cmd = compiler2.getText();
+			// }
 
                     jta.append("Compiling executable code with command: \n" + cmd + "\n");
 
@@ -820,15 +822,15 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
 
                 if (jp1.getSelectedIndex() == 2) {
                     try {
-                        if (selectedRun == 0) {
+                        /*if (selectedRun == 0) {
                             cmd = exe2.getText();
-                        } else {
+			    } else {*/
                             if (selectedRun == 1) {
                                 cmd = exe3.getText();
                             } else {
                                 cmd = exe4.getText();
                             }
-                        }
+			    //}
 
                         jta.append("Executing code with command: \n" + cmd + "\n");
 
