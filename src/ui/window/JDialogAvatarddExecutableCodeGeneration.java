@@ -559,7 +559,8 @@ String _pathExecuteMPSoC) {
 
         try {
             selectedItem = versionCodeGenerator.getSelectedIndex();
-            if (selectedItem == 0) {
+            if (selectedItem == 1) {
+
                 // Code generation
                 if (jp1.getSelectedIndex() == 0) {
                     jta.append("Generating executable code (C-POSIX version)\n");
@@ -636,7 +637,7 @@ String _pathExecuteMPSoC) {
                     jta.append("Compiling executable code with command: \n" + cmd + "\n");
 
                     rshc = new RshClient(hostExecute);
-                    // Assuma data are on the remote host
+                    // Assume data are on the remote host
                     // Command
                     try {
                         processCmd(cmd, jta);
@@ -694,8 +695,12 @@ String _pathExecuteMPSoC) {
             }
 
             //ajoute DG
-            if (selectedItem == 1) {
+            if (selectedItem == 0) {
                 // Code generation
+
+	jta.append("######################################\n");
+	jta.append("######################################\n");
+	jta.append("######################################\n");
                 if (jp1.getSelectedIndex() == 0) {
                     jta.append("Generating executable code (SOCLIB version)\n");
 
@@ -753,8 +758,15 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
 		      gene.setTimeUnit(selectedUnit);
 		      gene.generateSoclib(debugmode.isSelected(), tracemode.isSelected());
 
+
 		      //DG 5.2.
- TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec);
+		      if ( avddspec == null) {
+			  jta.append("Error: No AVATAR Deployment specification\n");
+		      } else {
+			  System.err.println("AVATAR TOPCELL found");
+		      }
+
+		      TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec);
             testGo();
             jta.append("Generation of TopCell executable code: done\n");
 
@@ -793,9 +805,9 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
                 if (jp1.getSelectedIndex() == 1) {
 
                     //if (selectedCompile == 0) {
-                        cmd = compiler1.getText();
+		    //cmd = compiler1.getText();
 			//} else {
-			//    cmd = compiler2.getText();
+			    cmd = compiler2.getText();
 			// }
 
                     jta.append("Compiling executable code with command: \n" + cmd + "\n");
