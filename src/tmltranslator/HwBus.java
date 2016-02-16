@@ -65,8 +65,7 @@ public class HwBus extends HwCommunicationNode  {
 	public int pipelineSize = DEFAULT_PIPELINE_SIZE;
 	public int arbitration = DEFAULT_ARBITRATION;
 	public int privacy = BUS_PUBLIC;
-    public int sliceTime = DEFAULT_SLICE_TIME;
-    public static final int BUS_PUBLIC = 1;//DG
+        public int sliceTime = DEFAULT_SLICE_TIME;
 	public HwBus(String _name) {
 		super(_name);
 	}
