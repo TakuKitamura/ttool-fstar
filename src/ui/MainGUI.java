@@ -122,6 +122,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public static boolean proverifOn;
     public static boolean experimentalOn;
     public static boolean avatarOnly;
+    public static boolean turtleOn;
 
     public final static int LOTOS = 0;
     public final static int RT_LOTOS = 1;
@@ -305,8 +306,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // Thread fof autosave
     PeriodicBehaviorThread pbt;
 
-    public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
+    public MainGUI(boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
                    _avatarOnly, boolean _experimental) {
+        turtleOn = _turtleOn;
         systemcOn = _systemcOn;
         lotosOn = _lotosOn;
         proactiveOn = _proactiveOn;
@@ -318,6 +320,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         proverifOn = _proverifOn;
         avatarOnly = _avatarOnly;
         experimentalOn = _experimental;
+
         currentInvariant = null;
 
         pbt = new PeriodicBehaviorThread(this, 120000); // save every two minutes
@@ -780,10 +783,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(false);
-	    break;
+            break;
 
         case MODEL_SAVED:
-	    TraceManager.addDev("Disable save");
+            TraceManager.addDev("Disable save");
             actions[TGUIAction.ACT_SAVE].setEnabled(false);
             break;
         case BACKWARD:
@@ -1195,10 +1198,32 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (index == -1) {
             index = tabs.size();
         }
+	
+	TraceManager.addDev("New avatar methodo panel");
         AvatarMethodologyPanel dp = new AvatarMethodologyPanel(this);
         tabs.add(index, dp);
         mainTabbedPane.add(dp.tabbedPane, index);
         mainTabbedPane.setToolTipTextAt(index, "Open AVATAR methodology");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic99);
+        //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+        dp.init(name);
+        if (addDefaultElements) {
+            dp.initElements();
+        }
+        //ystem.out.println("Design added");
+        return index;
+    }
+
+    private int addSysmlsecMethodologyPanel(String name, int index, boolean addDefaultElements) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+	TraceManager.addDev("New SysMLSec Methodopanel");
+        SysmlsecMethodologyPanel dp = new SysmlsecMethodologyPanel(this);
+        tabs.add(index, dp);
+        mainTabbedPane.add(dp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open SysML-Sec methodology");
         mainTabbedPane.setTitleAt(index, name);
         mainTabbedPane.setIconAt(index, IconManager.imgic99);
         //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
@@ -1289,16 +1314,16 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public Vector getAllApplicationTMLTasksAttributes() {
 
-			TURTLEPanel tp;
-			Vector<TMLTaskOperator> list = new Vector<TMLTaskOperator>();
+        TURTLEPanel tp;
+        Vector<TMLTaskOperator> list = new Vector<TMLTaskOperator>();
 
-			for( int i = 0; i < tabs.size(); i++ )	{
-				tp = (TURTLEPanel)(tabs.elementAt(i));
-				if( tp instanceof TMLComponentDesignPanel )	{
-					list.addAll( ((TMLComponentDesignPanel)tp).getAllTMLTasksAttributes() );
-				}
-			}
-      return list;
+        for( int i = 0; i < tabs.size(); i++ )  {
+            tp = (TURTLEPanel)(tabs.elementAt(i));
+            if( tp instanceof TMLComponentDesignPanel ) {
+                list.addAll( ((TMLComponentDesignPanel)tp).getAllTMLTasksAttributes() );
+            }
+        }
+        return list;
     }
 
     public ArrayList<TMLCommunicationPatternPanel> getAllTMLCP() {
@@ -1568,6 +1593,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public int createAvatarMethodology(String name) {
         int index = addAvatarMethodologyPanel(name, -1, false);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+
+     public int createSysmlsecMethodology(String name) {
+        int index = addSysmlsecMethodologyPanel(name, -1, false);
         mainTabbedPane.setSelectedIndex(index);
         return index;
     }
@@ -1913,6 +1944,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //frame.repaint();
     }
 
+    public void newSysmlsecMethodology() {
+        //TraceManager.addDev("NEW DESIGN");
+        addSysmlsecMethodologyPanel("SysMLSec_Methodology", -1, true);
+        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size()-1);
+        //paneAction(null);
+        //frame.repaint();
+    }
+
     public void newTMLComponentDesign() {
         //TraceManager.addDev("NEW DESIGN");
         addTMLComponentDesignPanel("DIPLODOCUS_C_Design", -1);
@@ -1932,8 +1972,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void newTMLArchi() {
-        TraceManager.addDev("NEW DIPLO Architecture");
-        addTMLArchiPanel("DIPLODOCUS Architecture", -1);
+        //TraceManager.addDev("NEW DIPLO Architecture");
+        addTMLArchiPanel("Architecture", -1);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
@@ -1941,8 +1981,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void newADD() {
-        TraceManager.addDev("NEW Avatar deployment");
-        addADDPanel("Avatar Deployment", -1);
+        //TraceManager.addDev("NEW Avatar deployment");
+        addADDPanel("Deployment", -1);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
@@ -1964,22 +2004,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void newAvatarBD() {
-        TraceManager.addDev("NEW AVATAR BD");
-        addAvatarDesignPanel("AVATAR Design", -1);
+        //TraceManager.addDev("NEW AVATAR BD");
+        addAvatarDesignPanel("Design", -1);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
     }
 
     public void newAvatarRequirement() {
-        TraceManager.addDev("NEW AVATAR Requirement");
-        addAvatarRequirementPanel("AVATAR Requirements", 0);
+        //TraceManager.addDev("NEW AVATAR Requirement");
+        addAvatarRequirementPanel("Requirements", 0);
         //((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(0);
     }
 
     public void newAvatarMADs() {
-        TraceManager.addDev("NEW AVATAR MAD");
-        addAvatarMADPanel("MADs", 0);
+        //TraceManager.addDev("NEW AVATAR MAD");
+        addAvatarMADPanel("Assumptions", 0);
         //((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(0);
     }
@@ -3753,9 +3793,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
         if (!automatic) {
             JOptionPane.showMessageDialog(frame,
-                                          "RT-LOTOS specification generated",
-                                          "RT-LOTOS specification",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "RT-LOTOS specification generated",
+                    "RT-LOTOS specification",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
         dtree.toBeUpdated();
         return true;
@@ -3786,9 +3826,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             //TraceManager.addDev("LOTOS generated");
             if (!automatic) {
                 JOptionPane.showMessageDialog(frame,
-                                              "LOTOS specification generated (" + getCheckingWarnings().size() + " warning(s))",
-                                              "LOTOS specification",
-                                              JOptionPane.INFORMATION_MESSAGE);
+                        "LOTOS specification generated (" + getCheckingWarnings().size() + " warning(s))",
+                        "LOTOS specification",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         }
         setMode(MainGUI.RTLOTOS_OK);
@@ -3908,9 +3948,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void generateAUTS() {
         JDialogGenAUTS jdgauts = new JDialogGenAUTS(frame, this, "Generation of automata via LOTOS", gtm.getPathCaesar(),
-                                                    gtm.getPathBcgio(),
-                                                    REMOTE_RTL_LOTOS_FILE,
-                                                    gtm.getCaesarHost(), ConfigurationTTool.TGraphPath);
+                gtm.getPathBcgio(),
+                REMOTE_RTL_LOTOS_FILE,
+                gtm.getCaesarHost(), ConfigurationTTool.TGraphPath);
         jdgauts.setSize(450, 600);
         GraphicLib.centerOnParent(jdgauts);
         jdgauts.setVisible(true);
@@ -3943,9 +3983,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             formalValidation(true);
         } else {
             JOptionPane.showMessageDialog(frame,
-                                          "" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). UPPAAL specification could NOT be generated",
-                                          "Translation to UPPAAL failed",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). UPPAAL specification could NOT be generated",
+                    "Translation to UPPAAL failed",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
     }
@@ -3970,13 +4010,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void avatarExecutableCodeGeneration() {
         TraceManager.addDev("Avatar code generation");
-        JDialogAvatarExecutableCodeGeneration jgen = new JDialogAvatarExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution", ConfigurationTTool.AVATARExecutableCodeHost, 
-ConfigurationTTool.AVATARExecutableCodeDirectory,  
-ConfigurationTTool.AVATARExecutableCodeCompileCommand, 
-ConfigurationTTool.AVATARExecutableCodeExecuteCommand, 
-ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand, 
-ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand,  											       
-ConfigurationTTool.AVATARExecutableSoclibTraceFile);
+        JDialogAvatarExecutableCodeGeneration jgen = new JDialogAvatarExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution", ConfigurationTTool.AVATARExecutableCodeHost, ConfigurationTTool.AVATARExecutableCodeDirectory,  ConfigurationTTool.AVATARExecutableCodeCompileCommand, ConfigurationTTool.AVATARExecutableCodeExecuteCommand, ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand, ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand,  ConfigurationTTool.AVATARExecutableSoclibTraceFile);
         jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen);
         jgen.setVisible(true);
@@ -3997,7 +4031,7 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         dtree.toBeUpdated();
 	}
 
-  // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
 
     public void generateUPPAAL() {
         generateUPPAAL(true);
@@ -4013,14 +4047,14 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
                 if (showWindow) {
                     if (result) {
                         JOptionPane.showMessageDialog(frame,
-                                                      "0 error, " + getCheckingWarnings().size() + " warning(s). UPPAAL specification generated",
-                                                      "Successful translation to UPPAAL",
-                                                      JOptionPane.INFORMATION_MESSAGE);
+                                "0 error, " + getCheckingWarnings().size() + " warning(s). UPPAAL specification generated",
+                                "Successful translation to UPPAAL",
+                                JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(frame,
-                                                      "" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). UPPAAL specification could NOT be generated",
-                                                      "Translation to UPPAAL failed",
-                                                      JOptionPane.INFORMATION_MESSAGE);
+                                "" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). UPPAAL specification could NOT be generated",
+                                "Translation to UPPAAL failed",
+                                JOptionPane.INFORMATION_MESSAGE);
 
 
                     }
@@ -4129,8 +4163,8 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
             avatarSimulation();
         } else if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLArchiPanel))  {
             JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "Simulation code generation and compilation",
-                                                                         ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand,
-                                                                         ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath, _mode);
+                    ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand,
+                    ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath, _mode);
             jgen.setSize(500, 750);
             GraphicLib.centerOnParent(jgen);
             jgen.setVisible(true);
@@ -4241,11 +4275,11 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
             path = file.getAbsolutePath();
         }
         JDialogCCodeGeneration jgen = new JDialogCCodeGeneration( frame, this, "Application code generation and compilation",
-                                                                  ConfigurationTTool.SystemCHost, ConfigurationTTool.CcodeDirectory,
-                                                                  "make -C " + ConfigurationTTool.CcodeDirectory,
-                                                                  ConfigurationTTool.SystemCCodeExecuteCommand,
-                                                                  ConfigurationTTool.SystemCCodeInteractiveExecuteCommand,
-                                                                  ConfigurationTTool.GGraphPath, gtm );
+                ConfigurationTTool.SystemCHost, ConfigurationTTool.CcodeDirectory,
+                "make -C " + ConfigurationTTool.CcodeDirectory,
+                ConfigurationTTool.SystemCCodeExecuteCommand,
+                ConfigurationTTool.SystemCCodeInteractiveExecuteCommand,
+                ConfigurationTTool.GGraphPath, gtm );
         jgen.setSize(500, 750);
         GraphicLib.centerOnParent(jgen);
         jgen.setVisible(true);
@@ -4324,22 +4358,22 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
     public void checkCode() {
         if (gtm.getLanguageID() == GTURTLEModeling.RT_LOTOS) {
             JDialogTextProcess jdtp = new JDialogTextProcess(frame,
-                                                             "Checking RT-LOTOS specification with RTL",
-                                                             gtm.getPathRTL() + " __FILENAME -max-spec-t-1",
-                                                             REMOTE_RTL_LOTOS_FILE,
-                                                             gtm.getLastRTLOTOSSpecification(),
-                                                             gtm.getHost());
+                    "Checking RT-LOTOS specification with RTL",
+                    gtm.getPathRTL() + " __FILENAME -max-spec-t-1",
+                    REMOTE_RTL_LOTOS_FILE,
+                    gtm.getLastRTLOTOSSpecification(),
+                    gtm.getHost());
             jdtp.setSize(450, 600);
             GraphicLib.centerOnParent(jdtp);
             jdtp.setVisible(true);
             dtree.toBeUpdated();
         } else if (gtm.getLanguageID() == GTURTLEModeling.LOTOS) {
             JDialogLOTOSAnalysis jdla = new JDialogLOTOSAnalysis(frame,
-                                                                 this, "Checking LOTOS specification with CAESAR",
-                                                                 gtm.getPathCaesar(),
-                                                                 REMOTE_RTL_LOTOS_FILE,
-                                                                 gtm.getLastRTLOTOSSpecification(),
-                                                                 gtm.getCaesarHost());
+                    this, "Checking LOTOS specification with CAESAR",
+                    gtm.getPathCaesar(),
+                    REMOTE_RTL_LOTOS_FILE,
+                    gtm.getLastRTLOTOSSpecification(),
+                    gtm.getCaesarHost());
             jdla.setSize(450, 600);
             GraphicLib.centerOnParent(jdla);
             jdla.setVisible(true);
@@ -4351,12 +4385,12 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
     public void simulation() {
         if (gtm.getLanguageID() == GTURTLEModeling.RT_LOTOS) {
             JDialogSimulation jds = new JDialogSimulation(frame,
-                                                          this,
-                                                          "Intensive simulation with RTL",
-                                                          gtm.getPathRTL(),
-                                                          REMOTE_RTL_LOTOS_FILE,
-                                                          gtm.getLastRTLOTOSSpecification(),
-                                                          gtm.getHost());
+                    this,
+                    "Intensive simulation with RTL",
+                    gtm.getPathRTL(),
+                    REMOTE_RTL_LOTOS_FILE,
+                    gtm.getLastRTLOTOSSpecification(),
+                    gtm.getHost());
             jds.setSize(450, 600);
             GraphicLib.centerOnParent(jds);
             jds.setVisible(true);
@@ -4387,17 +4421,17 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
     public void formalValidation(boolean automatic, TURTLEPanel _tp) {
         if (gtm.getLanguageID() == GTURTLEModeling.RT_LOTOS) {
             JDialogFormalValidation jdfv = new JDialogFormalValidation(frame,
-                                                                       this,
-                                                                       "Formal Validation with RTL",
-                                                                       gtm.getPathRTL(),
-                                                                       gtm.getPathDTA2DOT(),
-                                                                       gtm.getPathRGSTRAP(),
-                                                                       gtm.getPathRG2TLSA(),
-                                                                       REMOTE_RTL_LOTOS_FILE,
-                                                                       gtm.getLastRTLOTOSSpecification(),
-                                                                       gtm.getHost(),
-                                                                       gtm.getHostAldebaran(),
-                                                                       gtm.getPathBcgio());
+                    this,
+                    "Formal Validation with RTL",
+                    gtm.getPathRTL(),
+                    gtm.getPathDTA2DOT(),
+                    gtm.getPathRGSTRAP(),
+                    gtm.getPathRG2TLSA(),
+                    REMOTE_RTL_LOTOS_FILE,
+                    gtm.getLastRTLOTOSSpecification(),
+                    gtm.getHost(),
+                    gtm.getHostAldebaran(),
+                    gtm.getPathBcgio());
             jdfv.setAutomatic(automatic);
             jdfv.setSize(450, 600);
             GraphicLib.centerOnParent(jdfv);
@@ -4405,14 +4439,14 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
             dtree.toBeUpdated();
         } else if (gtm.getLanguageID() == GTURTLEModeling.LOTOS) {
             JDialogLOTOSValidation jdla = new JDialogLOTOSValidation(frame,
-                                                                     this, "Generating RG with CAESAR",
-                                                                     gtm.getPathCaesar(),
-                                                                     gtm.getPathCaesarOpen(),
-                                                                     gtm.getPathBcgio(),
-                                                                     gtm.getPathBcgmerge(),
-                                                                     REMOTE_RTL_LOTOS_FILE,
-                                                                     gtm.getLastRTLOTOSSpecification(),
-                                                                     gtm.getCaesarHost());
+                    this, "Generating RG with CAESAR",
+                    gtm.getPathCaesar(),
+                    gtm.getPathCaesarOpen(),
+                    gtm.getPathBcgio(),
+                    gtm.getPathBcgmerge(),
+                    REMOTE_RTL_LOTOS_FILE,
+                    gtm.getLastRTLOTOSSpecification(),
+                    gtm.getCaesarHost());
             jdla.setAutomatic(automatic);
             jdla.setSize(450, 600);
             GraphicLib.centerOnParent(jdla);
@@ -4420,30 +4454,30 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
             dtree.toBeUpdated();
         } else if (gtm.getLanguageID() == GTURTLEModeling.UPPAAL) {
             JDialogUPPAALValidation jduv = new JDialogUPPAALValidation(frame,
-                                                                       this, "Formal verification with UPPAAL",
-                                                                       gtm.getPathUPPAALVerifier(),
-                                                                       gtm.getPathUPPAALFile(),
-                                                                       REMOTE_UPPAAL_FILE,
-                                                                       gtm.getLastUPPAALSpecification().getStringSpec(),
-                                                                       gtm.getUPPAALVerifierHost(),
-                                                                       _tp);
+                    this, "Formal verification with UPPAAL",
+                    gtm.getPathUPPAALVerifier(),
+                    gtm.getPathUPPAALFile(),
+                    REMOTE_UPPAAL_FILE,
+                    gtm.getLastUPPAALSpecification().getStringSpec(),
+                    gtm.getUPPAALVerifierHost(),
+                    _tp);
             jduv.setSize(450, 600);
             GraphicLib.centerOnParent(jduv);
             jduv.setVisible(true);
             dtree.toBeUpdated();
         } else if (gtm.getLanguageID() == GTURTLEModeling.MATRIX) {
             JDialogTMatrixManagement jdfv = new JDialogTMatrixManagement(frame,
-                                                                         this,
-                                                                         "Observers's Based Formal Verification",
-                                                                         gtm.getRequirementModeling(),
-                                                                         gtm.getPathRTL(),
-                                                                         gtm.getPathDTA2DOT(),
-                                                                         gtm.getPathRGSTRAP(),
-                                                                         gtm.getPathRG2TLSA(),
-                                                                         REMOTE_RTL_LOTOS_FILE,
-                                                                         gtm.getHost(),
-                                                                         GTURTLEModeling.getHostAldebaran(),
-                                                                         gtm.getPathBcgio());
+                    this,
+                    "Observers's Based Formal Verification",
+                    gtm.getRequirementModeling(),
+                    gtm.getPathRTL(),
+                    gtm.getPathDTA2DOT(),
+                    gtm.getPathRGSTRAP(),
+                    gtm.getPathRG2TLSA(),
+                    REMOTE_RTL_LOTOS_FILE,
+                    gtm.getHost(),
+                    GTURTLEModeling.getHostAldebaran(),
+                    gtm.getPathBcgio());
             jdfv.setSize(550, 600);
             jdfv.setIconImage(IconManager.img8);
             GraphicLib.centerOnParent(jdfv);
@@ -4458,16 +4492,16 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
             tcdp = ((DesignPanel)(getCurrentTURTLEPanel())).tcdp;
         }
         JDialogProjection jdfv = new JDialogProjection(frame,
-                                                       this,
-                                                       tcdp,
-                                                       gtm.getTURTLEModeling(),
-                                                       GTURTLEModeling.getHostAldebaran(),
-                                                       GTURTLEModeling.getPathAldebaran(),
-                                                       gtm.getPathBcgmin(),
-                                                       gtm.getPathBcgio(),
-                                                       gtm.getLastRGAUT(),
-                                                       REMOTE_ALDEBARAN_AUT_FILE,
-                                                       "Minimization using Aldebaran");
+                this,
+                tcdp,
+                gtm.getTURTLEModeling(),
+                GTURTLEModeling.getHostAldebaran(),
+                GTURTLEModeling.getPathAldebaran(),
+                gtm.getPathBcgmin(),
+                gtm.getPathBcgio(),
+                gtm.getLastRGAUT(),
+                REMOTE_ALDEBARAN_AUT_FILE,
+                "Minimization using Aldebaran");
         jdfv.setSize(900, 700);
         GraphicLib.centerOnParent(jdfv);
         jdfv.setVisible(true);
@@ -4477,19 +4511,19 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         JDialogGraphModification jdgm;
         if (gtm == null ){
             jdgm = new JDialogGraphModification(frame,
-                                                GTURTLEModeling.getHostAldebaran(),
-                                                GTURTLEModeling.getPathBcgio(),
-                                                "graph",
-                                                "Minimization using Aldebaran",
-                                                null, null);
+                    GTURTLEModeling.getHostAldebaran(),
+                    GTURTLEModeling.getPathBcgio(),
+                    "graph",
+                    "Minimization using Aldebaran",
+                    null, null);
         } else {
             jdgm = new JDialogGraphModification(frame,
-                                                GTURTLEModeling.getHostAldebaran(),
-                                                gtm.getPathBcgio(),
-                                                "graph",
-                                                "Minimization using Aldebaran",
-                                                gtm.getLastRGAUT(),
-                                                gtm.getLastTextualRGAUTProj());
+                    GTURTLEModeling.getHostAldebaran(),
+                    gtm.getPathBcgio(),
+                    "graph",
+                    "Minimization using Aldebaran",
+                    gtm.getLastRGAUT(),
+                    gtm.getLastTextualRGAUTProj());
         }
         jdgm.setSize(600, 500);
         GraphicLib.centerOnParent(jdgm);
@@ -4505,11 +4539,11 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
 
     public void bisimulation() {
         JDialogBisimulation jdb = new JDialogBisimulation(frame,
-                                                          GTURTLEModeling.getHostAldebaran(),
-                                                          GTURTLEModeling.getPathAldebaran(),
-                                                          REMOTE_ALDEBARAN_BISIMU_FILE1,
-                                                          REMOTE_ALDEBARAN_BISIMU_FILE2,
-                                                          "Bisimulation using Aldebaran");
+                GTURTLEModeling.getHostAldebaran(),
+                GTURTLEModeling.getPathAldebaran(),
+                REMOTE_ALDEBARAN_BISIMU_FILE1,
+                REMOTE_ALDEBARAN_BISIMU_FILE2,
+                "Bisimulation using Aldebaran");
         jdb.setSize(650, 800);
         GraphicLib.centerOnParent(jdb);
         jdb.setVisible(true);
@@ -4518,12 +4552,12 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
 
     public void bisimulationCADP() {
         JDialogBisimulationBisimulator jdb = new JDialogBisimulationBisimulator(frame,
-                                                                                GTURTLEModeling.getCaesarHost(),
-                                                                                GTURTLEModeling.getPathBisimulator(),
-                                                                                GTURTLEModeling.getPathBcgio(),
-                                                                                REMOTE_BISIMULATOR_FILE1,
-                                                                                REMOTE_BISIMULATOR_FILE2,
-                                                                                "Bisimulation using BISIMULATOR");
+                GTURTLEModeling.getCaesarHost(),
+                GTURTLEModeling.getPathBisimulator(),
+                GTURTLEModeling.getPathBcgio(),
+                REMOTE_BISIMULATOR_FILE1,
+                REMOTE_BISIMULATOR_FILE2,
+                "Bisimulation using BISIMULATOR");
         jdb.setSize(650, 800);
         GraphicLib.centerOnParent(jdb);
         jdb.setVisible(true);
@@ -4594,9 +4628,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         String spec = loadFile(new File(ConfigurationTTool.TGraphPath + "/tree.aut"));
         if (spec == null) {
             JOptionPane.showMessageDialog(frame,
-                                          "The fill could not be loaded:",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The fill could not be loaded:",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -4755,9 +4789,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         String s = gtm.showDTA();
         if (s != null) {
             JOptionPane.showMessageDialog(frame,
-                                          "The DTA could not be displayed: " + s,
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The DTA could not be displayed: " + s,
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -4770,9 +4804,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         String s = gtm.showRG();
         if (s != null) {
             JOptionPane.showMessageDialog(frame,
-                                          "The RG could not be displayed: " + s,
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The RG could not be displayed: " + s,
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -4780,9 +4814,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         String s = gtm.showTLSA();
         if (s != null) {
             JOptionPane.showMessageDialog(frame,
-                                          "The TLSA could not be displayed: " + s,
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The TLSA could not be displayed: " + s,
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -4790,9 +4824,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         String s = gtm.showRGAut();
         if (s != null) {
             JOptionPane.showMessageDialog(frame,
-                                          "The RG could not be displayed: " + s,
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The RG could not be displayed: " + s,
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -4800,9 +4834,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         String s = gtm.showRGAutProj();
         if (s != null) {
             JOptionPane.showMessageDialog(frame,
-                                          "The RG could not be displayed: " + s,
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The RG could not be displayed: " + s,
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -4810,9 +4844,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         String s = gtm.showRGDiplodocus();
         if (s != null) {
             JOptionPane.showMessageDialog(frame,
-                                          "The RG could not be displayed: " + s,
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The RG could not be displayed: " + s,
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -4820,9 +4854,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         String s = GTURTLEModeling.runDOTTY(modifiedautdot);
         if (s != null) {
             JOptionPane.showMessageDialog(frame,
-                                          "The RG could not be displayed: " + s,
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The RG could not be displayed: " + s,
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -4832,9 +4866,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
             String s = GTURTLEModeling.showGGraph(graph[1]);
             if (s != null) {
                 JOptionPane.showMessageDialog(frame,
-                                              "The graph could not be displayed: " + s,
-                                              "Error",
-                                              JOptionPane.INFORMATION_MESSAGE);
+                        "The graph could not be displayed: " + s,
+                        "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
@@ -4846,9 +4880,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
             String s = GTURTLEModeling.showGGraph(graph[1]);
             if (s != null) {
                 JOptionPane.showMessageDialog(frame,
-                                              "The graph could not be displayed: " + s,
-                                              "Error",
-                                              JOptionPane.INFORMATION_MESSAGE);
+                        "The graph could not be displayed: " + s,
+                        "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
@@ -4882,9 +4916,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
     public void diagramCapture() {
         if (tabs.size() < 1) {
             JOptionPane.showMessageDialog(frame,
-                                          "No diagram is under edition",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "No diagram is under edition",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -4905,9 +4939,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
 
         if (tabs.size() < 1) {
             JOptionPane.showMessageDialog(frame,
-                                          "No diagram is under edition",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "No diagram is under edition",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -4923,24 +4957,24 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
                 FileUtils.saveFile(file.getAbsolutePath(), s);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame,
-                                              "File could not be saved: " + e.getMessage(),
-                                              "Error",
-                                              JOptionPane.INFORMATION_MESSAGE);
+                        "File could not be saved: " + e.getMessage(),
+                        "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
             JOptionPane.showMessageDialog(frame,
-                                          "The capture was correctly performed and saved in " + file.getAbsolutePath(),
-                                          "Save in svg format ok",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The capture was correctly performed and saved in " + file.getAbsolutePath(),
+                    "Save in svg format ok",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
     public void allDiagramCapture() {
         if (tabs.size() < 1) {
             JOptionPane.showMessageDialog(frame,
-                                          "No diagram is under edition",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "No diagram is under edition",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -4977,9 +5011,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         }
 
         JOptionPane.showMessageDialog(frame,
-                                      "All diagrams were sucessfully captured",
-                                      "Capture ok",
-                                      JOptionPane.INFORMATION_MESSAGE);
+                "All diagrams were sucessfully captured",
+                "Capture ok",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void selectedCapture() {
@@ -5000,9 +5034,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         }
         if(!checkFileForSave(file)) {
             JOptionPane.showMessageDialog(frame,
-                                          "The capture could not be performed: invalid file",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The capture could not be performed: invalid file",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return null;
         }
         return file;
@@ -5018,9 +5052,9 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         }
         if(!checkFileForSave(file)) {
             JOptionPane.showMessageDialog(frame,
-                                          "The capture could not be performed: invalid file",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The capture could not be performed: invalid file",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return null;
         }
         return file;
@@ -5035,15 +5069,15 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
             ImageIO.write(image, "png", file);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                                          "The capture could not be performed:" + e.getMessage(),
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The capture could not be performed:" + e.getMessage(),
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         JOptionPane.showMessageDialog(frame,
-                                      "The capture was correctly performed",
-                                      "Screen capture ok",
-                                      JOptionPane.INFORMATION_MESSAGE);
+                "The capture was correctly performed",
+                "Screen capture ok",
+                JOptionPane.INFORMATION_MESSAGE);
         return;
     }
 
@@ -5054,16 +5088,16 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
             ImageIO.write(image, "png", file);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                                          "The capture could not be performed:" + e.getMessage(),
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The capture could not be performed:" + e.getMessage(),
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
         if (info) {
             JOptionPane.showMessageDialog(frame,
-                                          "The capture was correctly performed and saved in " + file.getAbsolutePath(),
-                                          "Screen capture ok",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The capture was correctly performed and saved in " + file.getAbsolutePath(),
+                    "Screen capture ok",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
         return true;
     }
@@ -5505,6 +5539,11 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         tp.tabbedPane.setTitleAt(0, name);
     }
 
+    public void setSysmlsecMethodologyDiagramName(int indexDesign, String name) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        tp.tabbedPane.setTitleAt(0, name);
+    }
+
     public void setTMLTaskDiagramName(int indexDesign, String name) {
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
         tp.tabbedPane.setTitleAt(0, name);
@@ -5735,20 +5774,24 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         return getSequenceDiagramPanel(tp, s);
     }
 
-    public AttackTreeDiagramPanel getAttackTreeDiagramPanel(int index, String s) {
+    public AttackTreeDiagramPanel getAttackTreeDiagramPanel(int index, int indexTab, String s) {
         //TraceManager.addDev("Searching for " + s);
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
-        return getAttackTreeDiagramPanel(tp, s);
+        return getAttackTreeDiagramPanel(tp, indexTab, s);
     }
 
-    public AttackTreeDiagramPanel getAttackTreeDiagramPanel(TURTLEPanel tp, String s) {
-        for(int i=0; i<tp.tabbedPane.getTabCount(); i++) {
-            if (tp.tabbedPane.getTitleAt(i).equals(s)) {
-                if (tp.panelAt(i) instanceof AttackTreeDiagramPanel)
-                    return  (AttackTreeDiagramPanel)(tp.panelAt(i));
-            }
+    public AttackTreeDiagramPanel getAttackTreeDiagramPanel(TURTLEPanel tp, int indexTab, String s) {
+        if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+            return (AttackTreeDiagramPanel)(tp.panelAt(indexTab));
         }
         return null;
+        /*for(int i=0; i<tp.tabbedPane.getTabCount(); i++) {
+          if (tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+          if (tp.panelAt(i) instanceof AttackTreeDiagramPanel)
+          return  (AttackTreeDiagramPanel)(tp.panelAt(i));
+          }
+        }
+        return null;*/
     }
 
 
@@ -6036,21 +6079,21 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         //And removed by Emil
 
         /*
-          LinkedList cmps=gtm.gpdtemp.getProCSDComponentsList();
-          for (int i=0;i<cmps.size();i++)
-          {
-          ProCSDComponent c = (ProCSDComponent)cmps.get(i);
+           LinkedList cmps=gtm.gpdtemp.getProCSDComponentsList();
+           for (int i=0;i<cmps.size();i++)
+           {
+           ProCSDComponent c = (ProCSDComponent)cmps.get(i);
 
-          if (c.getType()== TGComponentManager.PROCSD_COMPONENT)
-          {
-          if(c.getComponentID().equals(temp.getName()))
-          {
-          c.mySMD=temp;
-          i=cmps.size();
-          }
-          }
-          }
-        */
+           if (c.getType()== TGComponentManager.PROCSD_COMPONENT)
+           {
+           if(c.getComponentID().equals(temp.getName()))
+           {
+           c.mySMD=temp;
+           i=cmps.size();
+           }
+           }
+           }
+           */
         //
         setPanelMode();
         return(s); //Changes by Solange from return true
@@ -7197,93 +7240,93 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         }
     }
     //---------------------------------- DDD ------------------------------------
- // return current deployment panel
+    // return current deployment panel
 
     public ADDDiagramPanel getDeploymentPanel() {
-      ADDDiagramPanel deploymentDiagram =  null ; //(ADDDiagramPanel)activetdp;
+        ADDDiagramPanel deploymentDiagram =  null ; //(ADDDiagramPanel)activetdp;
         TURTLEPanel tp = getCurrentTURTLEPanel();
-        Vector<TDiagramPanel> ps = tp.panels;            
+        Vector<TDiagramPanel> ps = tp.panels;
         for(TDiagramPanel panel : ps ){
-          if (panel instanceof ADDDiagramPanel){
-            deploymentDiagram = (ADDDiagramPanel)panel;
-          }
-       }
-      if(deploymentDiagram == null)
-         System.err.println("No ADDDiagramPanel found : MainGUI.getDeploymentPanel()");
-      return deploymentDiagram;
+            if (panel instanceof ADDDiagramPanel){
+                deploymentDiagram = (ADDDiagramPanel)panel;
+            }
+        }
+        if(deploymentDiagram == null)
+            System.err.println("No ADDDiagramPanel found : MainGUI.getDeploymentPanel()");
+        return deploymentDiagram;
     }
 
 
- public ADDDiagramPanel getFirstAvatarDeploymentPanelFound(){
-	    ADDDiagramPanel adp = null;
-		for(int i =0 ; i<tabs.size();i++)
-			if(tabs.get(i) instanceof ADDPanel){
-				adp = ((ADDPanel)tabs.get(i)).tmladd;
-			}
-		if (adp == null)
-			System.err.println("No AvatarDeployment Panel Found : MainGUI.getFirstAvatarDeploymentPanelFound()");
-		return adp;
+    public ADDDiagramPanel getFirstAvatarDeploymentPanelFound(){
+        ADDDiagramPanel adp = null;
+        for(int i =0 ; i<tabs.size();i++)
+            if(tabs.get(i) instanceof ADDPanel){
+                adp = ((ADDPanel)tabs.get(i)).tmladd;
+            }
+        if (adp == null)
+            System.err.println("No AvatarDeployment Panel Found : MainGUI.getFirstAvatarDeploymentPanelFound()");
+        return adp;
     }
 
 
-  // find the first Design Panel in MainGUI.tabs  
+    // find the first Design Panel in MainGUI.tabs
 
     public AvatarDesignPanel getFirstAvatarDesignPanelFound(){
-	    AvatarDesignPanel adp = null;
-		for(int i =0 ; i<tabs.size();i++)
-			if(tabs.get(i) instanceof AvatarDesignPanel){
-				adp = (AvatarDesignPanel)tabs.get(i);
-			}
-		if (adp == null)
-			System.err.println("No AvatarDesign Panel Found : MainGUI.getFirstAvatarDesignPanel()");
-		return adp;
+        AvatarDesignPanel adp = null;
+        for(int i =0 ; i<tabs.size();i++)
+            if(tabs.get(i) instanceof AvatarDesignPanel){
+                adp = (AvatarDesignPanel)tabs.get(i);
+            }
+        if (adp == null)
+            System.err.println("No AvatarDesign Panel Found : MainGUI.getFirstAvatarDesignPanel()");
+        return adp;
     }
-    
-
-    public void extracDeploymentDiagramToFile(){   
-      
-	ADDDiagramPanel deploymentDiagramPanel = getDeploymentPanel();
-	AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
-
-	AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
-	AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();	
 
 
-    AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator( designDiagramPanel);
-	LinkedList<AvatarBDBlock> adp =  designDiagramPanel.getAvatarBDPanel().getFullBlockList();
-	Vector blocks = new Vector(adp);
-	AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(blocks);
+    public void extracDeploymentDiagramToFile(){
 
-	//DG
-	//LinkedList<AvatarComponent> components = AvatarddSpecification.getComponents();
-	//AvatarToFile tofile;
-	//tofile =  new AvatarToFile(components,avaspec);
-	//tofile.extracParamToFile();
+        ADDDiagramPanel deploymentDiagramPanel = getDeploymentPanel();
+        AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
+
+        AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
+        AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();
+
+
+        AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator( designDiagramPanel);
+        LinkedList<AvatarBDBlock> adp =  designDiagramPanel.getAvatarBDPanel().getFullBlockList();
+        Vector blocks = new Vector(adp);
+        AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(blocks);
+
+        //DG
+        //LinkedList<AvatarComponent> components = AvatarddSpecification.getComponents();
+        //AvatarToFile tofile;
+        //tofile =  new AvatarToFile(components,avaspec);
+        //tofile.extracParamToFile();
     }
- public void avatarToSoclib(){
+    public void avatarToSoclib(){
 
-	ADDDiagramPanel deploymentDiagramPanel = getDeploymentPanel();
-	AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
+        ADDDiagramPanel deploymentDiagramPanel = getDeploymentPanel();
+        AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
 
-	AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
-	AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();	
+        AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
+        AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();
 
 
-    AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator( designDiagramPanel);
-	LinkedList<AvatarBDBlock> adp =  designDiagramPanel.getAvatarBDPanel().getFullBlockList();
-	Vector blocks = new Vector(adp);
-	AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(blocks);
-	
-	// Generator for block tasks and application main file
-	
-	TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec,avaspec);
-	gene.generateSoclib(false,false);
-	try{
-    System.err.println("ok");
-	gene.saveInFiles(gene.getGeneratedPath());
-	}catch(FileException e){
-		System.err.println("FileException : MainGUI.avatarToSoclib()");
-	}
+        AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator( designDiagramPanel);
+        LinkedList<AvatarBDBlock> adp =  designDiagramPanel.getAvatarBDPanel().getFullBlockList();
+        Vector blocks = new Vector(adp);
+        AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(blocks);
+
+        // Generator for block tasks and application main file
+
+        TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec,avaspec);
+        gene.generateSoclib(false,false);
+        try{
+            System.err.println("ok");
+            gene.saveInFiles(gene.getGeneratedPath());
+        }catch(FileException e){
+            System.err.println("FileException : MainGUI.avatarToSoclib()");
+        }
 
     }
     //--------------------end DDD------------------------------------------------
@@ -7958,8 +8001,10 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
             actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(actions[TGUIAction.UML_NOTE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.UML_NOTE);
-       } else if (command.equals(actions[TGUIAction.PRAGMA].getActionCommand())) {
+        } else if (command.equals(actions[TGUIAction.PRAGMA].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PRAGMA);
+        } else if (command.equals(actions[TGUIAction.SAFETY_PRAGMA].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SAFETY_PRAGMA);
 
             // AVATAR actions
         } else if (command.equals(actions[TGUIAction.ACT_AVATAR_SIM].getActionCommand())) {
@@ -8030,7 +8075,7 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARMAD_IMPACT_CONNECTOR);
         } else if (command.equals(actions[TGUIAction.AMAD_MEET_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARMAD_MEET_CONNECTOR);
-	} else if (command.equals(actions[TGUIAction.AMAD_BELONGSTOCOMPOSITION_CONNECTOR].getActionCommand())) {
+        } else if (command.equals(actions[TGUIAction.AMAD_BELONGSTOCOMPOSITION_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR);
 
             // AVATAR RD
@@ -8134,12 +8179,12 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
         } else if (command.equals(actions[TGUIAction.ADD_EDIT].getActionCommand())) {
             actionOnButton(TGComponentManager.EDIT, -1);
 
- // julien  --------------------------------------------------------------
+            // julien  --------------------------------------------------------------
         } else if (command.equals(actions[TGUIAction.DEPLOY_AVATAR_DIAGRAM].getActionCommand())){
-          avatarddExecutableCodeGeneration();
+            avatarddExecutableCodeGeneration();
         } else if  (command.equals(actions[TGUIAction.EXTRAC_DEPLOY_PARAM_TO_FILE].getActionCommand())){
-          	extracDeploymentDiagramToFile();
-        // -------------------------------------------------------------------------
+            extracDeploymentDiagramToFile();
+            // -------------------------------------------------------------------------
 
 
         } else if (command.equals(actions[TGUIAction.ADD_LINK].getActionCommand())) {
@@ -8148,11 +8193,11 @@ ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_CPUNODE);
         } else if (command.equals(actions[TGUIAction.ADD_BUSNODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_BUSNODE);
-        } 
-else if (command.equals(actions[TGUIAction.ADD_VGMNNODE].getActionCommand())) {
-          actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_VGMNNODE);
         }
-else if (command.equals(actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) {
+        else if (command.equals(actions[TGUIAction.ADD_VGMNNODE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_VGMNNODE);
+        }
+        else if (command.equals(actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_BRIDGENODE);
         }  else if (command.equals(actions[TGUIAction.ADD_TTYNODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_TTYNODE);
@@ -8585,9 +8630,9 @@ else if (command.equals(actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) 
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PROCSD_COMPONENT);
             //Delegate ports removed, by Solange
             /*
-              } else if (command.equals(actions[TGUIAction.PROCSD_DELEGATE_PORT].getActionCommand())) {
-              actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PROCSD_DELEGATE_PORT);
-            */
+               } else if (command.equals(actions[TGUIAction.PROCSD_DELEGATE_PORT].getActionCommand())) {
+               actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PROCSD_DELEGATE_PORT);
+               */
         } else if (command.equals(actions[TGUIAction.PROCSD_IN_PORT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PROCSD_IN_PORT);
         } else if (command.equals(actions[TGUIAction.PROCSD_OUT_PORT].getActionCommand())) {
@@ -8616,7 +8661,7 @@ else if (command.equals(actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) 
         private JPopupMenu menu;
 
         private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign,
-            newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD;
+                newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo;
         private JMenuItem newAVATARAnalysis;
 
         public PopupListener(MainGUI _mgui) {
@@ -8653,23 +8698,26 @@ else if (command.equals(actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) 
             newAnalysis = createMenuItem("New TURTLE Analysis");
             newDesign = createMenuItem("New TURTLE Design");
             newDeployment = createMenuItem("New TURTLE Deployment");
-            newAttackTree = createMenuItem("New AVATAR Attack Tree");
+
+            newAttackTree = createMenuItem("New Attack Tree");
             newRequirement = createMenuItem("New TURTLE Requirement Diagram");
+
             newTMLMethodo = createMenuItem("New DIPLODOCUS Methodology");
 
-            newTMLDesign = createMenuItem("New DIPLODOCUS Design");
-            newTMLComponentDesign = createMenuItem("New Component-based DIPLODOCUS Design");
-            newTMLArchi = createMenuItem("New DIPLODOCUS Architecture");
-            newTMLCP = createMenuItem("New DIPLODOCUS Communication Pattern");
+            newTMLDesign = createMenuItem("New Partitioning - Design");
+            newTMLComponentDesign = createMenuItem("New Partitioning - functional view");
+            newTMLArchi = createMenuItem("New Partitioning - Architecture and Mapping");
+            newTMLCP = createMenuItem("New Partitioning - Communication Pattern");
             newProactiveDesign = createMenuItem("New Proactive Design");
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
             newNCDesign = createMenuItem("New Network Calculus Design");
-            newMAD = createMenuItem("New AVATAR Modeling Assumptions Diagram");
-            newAVATARRequirement = createMenuItem("New AVATAR Requirement Diagrams");
-            newAVATARAnalysis = createMenuItem("New AVATAR Analysis");
-            newAVATARBD = createMenuItem("New AVATAR Design");
-            newAVATARDD = createMenuItem("New AVATAR Deployment Diagram");
+            newMAD = createMenuItem("New Modeling Assumptions Diagram");
+            newAVATARRequirement = createMenuItem("New Requirement Diagrams");
+            newAVATARAnalysis = createMenuItem("New Analysis");
+            newAVATARBD = createMenuItem("New Design");
+            newAVATARDD = createMenuItem("New Deployment Diagram");
             newAvatarMethodo = createMenuItem("New AVATAR Methodology");
+            newSysmlsecMethodo = createMenuItem("New SysML-Sec Methodology");
 
             menu = new JPopupMenu("Views");
             menu.add(moveLeft);
@@ -8690,47 +8738,73 @@ else if (command.equals(actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) 
 
             menu.addSeparator();
 
+            // TURTLE first and other old profiles. Old way
             if (!avatarOnly) {
-                menu.add(newRequirement);
-
-                menu.add(newAnalysis);
-                menu.add(newDesign);
-                menu.add(newDeployment);
+                if (turtleOn) {
+                    menu.add(newRequirement);
+                    menu.add(newAnalysis);
+                    menu.add(newDesign);
+                    menu.add(newDeployment);
+                    menu.addSeparator();
+                }
 
                 if (osOn) {
-                    //TraceManager.addDev("OS is on");
-                    menu.addSeparator();
                     menu.add(newTURTLEOSDesign);
+                    menu.addSeparator();
+                    //TraceManager.addDev("OS is on");
                 } else {
                     //TraceManager.addDev("OS is off");
                 }
 
                 if (proactiveOn) {
-                    menu.addSeparator();
                     menu.add(newProactiveDesign);
-                }
-
-                if (systemcOn) {
                     menu.addSeparator();
-                    menu.add(newTMLMethodo);
-                    menu.add(newTMLDesign);
-                    menu.add(newTMLComponentDesign);
-                    menu.add(newTMLCP);
-                    menu.add(newTMLArchi);
                 }
 
                 if (ncOn) {
-                    menu.addSeparator();
                     menu.add(newNCDesign);
+                    menu.addSeparator();
+                }
+
+            }
+
+
+
+            // Methodologies
+            if (!avatarOnly) {
+                if (systemcOn) {
+                    menu.add(newTMLMethodo);
+                }
+
+            }
+
+            if (avatarOn) {
+                menu.add(newAvatarMethodo);
+                menu.add(newSysmlsecMethodo);
+            }
+            menu.addSeparator();
+
+
+            //diagrams
+            if (!avatarOnly) {
+                if (systemcOn) {
+
+                    //menu.add(newTMLMethodo);
+                    //menu.add(newTMLDesign);
+                    menu.add(newTMLComponentDesign);
+                    menu.add(newTMLCP);
+                    menu.add(newTMLArchi);
+                    menu.addSeparator();
                 }
             }
 
             if (avatarOn) {
-                menu.addSeparator();
-                menu.add(newAvatarMethodo);
-                menu.add(newAttackTree);
+                //               menu.addSeparator();
+                //menu.add(newAvatarMethodo);
+
                 menu.add(newMAD);
                 menu.add(newAVATARRequirement);
+                menu.add(newAttackTree);
                 menu.add(newAVATARAnalysis);
                 menu.add(newAVATARBD);
                 if (experimentalOn) {
@@ -8782,63 +8856,65 @@ else if (command.equals(actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) 
 
         private Action listener = new AbstractAction() {
 
-                public void actionPerformed(ActionEvent e) {
-                    JMenuItem item = (JMenuItem)e.getSource();
-                    String ac = item.getActionCommand();
-                    if(ac.equals("Rename")) {
-                        mgui.requestRenameTab(mainTabbedPane.getSelectedIndex());
-                    } else if (ac.equals("Remove")) {
-                        mgui.requestRemoveTab(mainTabbedPane.getSelectedIndex());
-                    } else if (ac.equals("Move to the left")) {
-                        mgui.requestMoveLeftTab(mainTabbedPane.getSelectedIndex());
-                    } else if (ac.equals("Move to the right")) {
-                        mgui.requestMoveRightTab(mainTabbedPane.getSelectedIndex());
-                    } else if (ac.equals("Sort")) {
-                        GraphicLib.sortJTabbedPane(mgui.mainTabbedPane, mgui.tabs, 0, mgui.mainTabbedPane.getTabCount());
-                        mgui.changeMade(null, -1);
-                    } else if (ac.equals("Clone")) {
-                        mgui.cloneTab(mainTabbedPane.getSelectedIndex());
-                    } else if (ac.equals("New TURTLE Analysis")) {
-                        mgui.newAnalysis();
-                    } else if (ac.equals("New TURTLE Design")) {
-                        mgui.newDesign();
-                    } else if (ac.equals("New TURTLE Deployment")) {
-                        mgui.newDeployment();
-                    } else if (e.getSource() == newAttackTree) {
-                        mgui.newAttackTree();
-                    } else if (ac.equals("New TURTLE Requirement Diagram")) {
-                        mgui.newRequirement();
-                    }    else if (e.getSource() == newTMLMethodo) {
-                        mgui.newDiplodocusMethodology();
-                    }    else if (e.getSource() == newAvatarMethodo) {
-                        mgui.newAvatarMethodology();
-                    } else if (ac.equals("New DIPLODOCUS Design")) {
-                        mgui.newTMLDesign();
-                    } else if (ac.equals("New Component-based DIPLODOCUS Design")) {
-                        mgui.newTMLComponentDesign();
-                    } else if (e.getSource() == newTMLCP) {
-                        mgui.newTMLCP();
-                    } else if (ac.equals("New DIPLODOCUS Architecture")) {
-                        mgui.newTMLArchi();
-                    } else if (ac.equals("New Proactive Design")) {
-                        mgui.newProactiveDesign();
-                    } else if (ac.equals("New TURTLE-OS Design")) {
-                        mgui.newTURTLEOSDesign();
-                    } else if (e.getSource() == newNCDesign) {
-                        mgui.newNCDesign();
-                    } else if (e.getSource() == newAVATARBD) {
-                        mgui.newAvatarBD();
-                    } else if (e.getSource() == newAVATARDD) {
-                        mgui.newADD();
-                    } else if (e.getSource() == newAVATARRequirement) {
-                        mgui.newAvatarRequirement();
-                    } else if (e.getSource() == newMAD) {
-                        mgui.newAvatarMADs();
-                    } else if (e.getSource() == newAVATARAnalysis) {
-                        mgui.newAvatarAnalysis();
-                    }
+            public void actionPerformed(ActionEvent e) {
+                JMenuItem item = (JMenuItem)e.getSource();
+                String ac = item.getActionCommand();
+                if(ac.equals("Rename")) {
+                    mgui.requestRenameTab(mainTabbedPane.getSelectedIndex());
+                } else if (ac.equals("Remove")) {
+                    mgui.requestRemoveTab(mainTabbedPane.getSelectedIndex());
+                } else if (ac.equals("Move to the left")) {
+                    mgui.requestMoveLeftTab(mainTabbedPane.getSelectedIndex());
+                } else if (ac.equals("Move to the right")) {
+                    mgui.requestMoveRightTab(mainTabbedPane.getSelectedIndex());
+                } else if (ac.equals("Sort")) {
+                    GraphicLib.sortJTabbedPane(mgui.mainTabbedPane, mgui.tabs, 0, mgui.mainTabbedPane.getTabCount());
+                    mgui.changeMade(null, -1);
+                } else if (ac.equals("Clone")) {
+                    mgui.cloneTab(mainTabbedPane.getSelectedIndex());
+                } else if (ac.equals("New TURTLE Analysis")) {
+                    mgui.newAnalysis();
+                } else if (ac.equals("New TURTLE Design")) {
+                    mgui.newDesign();
+                } else if (ac.equals("New TURTLE Deployment")) {
+                    mgui.newDeployment();
+                } else if (e.getSource() == newAttackTree) {
+                    mgui.newAttackTree();
+                } else if (ac.equals("New TURTLE Requirement Diagram")) {
+                    mgui.newRequirement();
+                }    else if (e.getSource() == newTMLMethodo) {
+                    mgui.newDiplodocusMethodology();
+                }    else if (e.getSource() == newAvatarMethodo) {
+                    mgui.newAvatarMethodology();
+                }    else if (e.getSource() == newSysmlsecMethodo) {
+                    mgui.newSysmlsecMethodology();
+                } else if (ac.equals("New DIPLODOCUS Design")) {
+                    mgui.newTMLDesign();
+                } else if (e.getSource() == newTMLComponentDesign) {
+                    mgui.newTMLComponentDesign();
+                } else if (e.getSource() == newTMLCP) {
+                    mgui.newTMLCP();
+                } else if (e.getSource() == newTMLArchi) {
+                    mgui.newTMLArchi();
+                } else if (ac.equals("New Proactive Design")) {
+                    mgui.newProactiveDesign();
+                } else if (ac.equals("New TURTLE-OS Design")) {
+                    mgui.newTURTLEOSDesign();
+                } else if (e.getSource() == newNCDesign) {
+                    mgui.newNCDesign();
+                } else if (e.getSource() == newAVATARBD) {
+                    mgui.newAvatarBD();
+                } else if (e.getSource() == newAVATARDD) {
+                    mgui.newADD();
+                } else if (e.getSource() == newAVATARRequirement) {
+                    mgui.newAvatarRequirement();
+                } else if (e.getSource() == newMAD) {
+                    mgui.newAvatarMADs();
+                } else if (e.getSource() == newAVATARAnalysis) {
+                    mgui.newAvatarAnalysis();
                 }
-            };
+            }
+        };
 
 
     }
