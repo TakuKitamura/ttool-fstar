@@ -251,34 +251,34 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 		switch( bufferType )	{
 			case Buffer.FepBuffer:	
-				panelsList = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = FepBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				break;
 			case Buffer.InterleaverBuffer:	
-				panelsList = InterleaverBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = InterleaverBuffer.makePanel( c1, c2 );
 				tabbedPane.addTab( "Data In", panelsList.get(0) );
 				tabbedPane.addTab( "Data Out", panelsList.get(1) );
 				tabbedPane.addTab( "Permutation Table", panelsList.get(2) );
 				tabbedPane.setSelectedIndex(0);
 				break;
 			case Buffer.AdaifBuffer:	
-				panelsList = AdaifBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = AdaifBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				break;
 			case Buffer.MapperBuffer:	
 				tabbedPane.removeAll();
-				panelsList = MapperBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = MapperBuffer.makePanel( c1, c2 );
 				tabbedPane.addTab( "Data In", panelsList.get(0) );
 				tabbedPane.addTab( "Data Out", panelsList.get(1) );
 				tabbedPane.addTab( "Look Up Table", panelsList.get(2) );
 				tabbedPane.setSelectedIndex(0);
 				break;
 			case Buffer.MainMemoryBuffer:	
-				panelsList = MMBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = MMBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				break;
 			default:	//the fep buffer 
-				panelsList = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = FepBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				break;
 		}
@@ -568,13 +568,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		switch( bufferType )	{
 			case Buffer.FepBuffer:	
 				tabbedPane.removeAll();
-				panelsList = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = FepBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 			case Buffer.MapperBuffer:	
 				tabbedPane.removeAll();
-				panelsList = MapperBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = MapperBuffer.makePanel( c1, c2 );
 				tabbedPane.addTab( "Data In", panelsList.get(0) );
 				tabbedPane.addTab( "Data Out", panelsList.get(1) );
 				tabbedPane.addTab( "Look Up Table", panelsList.get(2) );
@@ -582,13 +582,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				break;
 			case Buffer.AdaifBuffer:	
 				tabbedPane.removeAll();
-				panelsList = AdaifBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = AdaifBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 			case Buffer.InterleaverBuffer:
 				tabbedPane.removeAll();
-				panelsList = InterleaverBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = InterleaverBuffer.makePanel( c1, c2 );
 				tabbedPane.addTab( "Data In", panelsList.get(0) );
 				tabbedPane.addTab( "Data Out", panelsList.get(1) );
 				tabbedPane.addTab( "Permutation Table", panelsList.get(2) );
@@ -596,13 +596,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				break;
 			case Buffer.MainMemoryBuffer:	
 				tabbedPane.removeAll();
-				panelsList = MMBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = MMBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 			default:	//the main memory buffer 
 				tabbedPane.removeAll();
-				panelsList = FepBuffer.makePanel( loadBufferParameters, c1, c2, bufferParameters );
+				panelsList = FepBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
@@ -993,22 +993,22 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		params.add( String.valueOf( bufferType ) );
 		switch( bufferType )	{
 			case Buffer.FepBuffer:
-				FepBuffer.getBufferParameters( params );
+				FepBuffer.getBufferParameters();
 				break;
 			case Buffer.InterleaverBuffer:	
-				InterleaverBuffer.getBufferParameters( params );
+				InterleaverBuffer.getBufferParameters();
 				break;
 			case Buffer.AdaifBuffer:
-				AdaifBuffer.getBufferParameters( params );
+				AdaifBuffer.getBufferParameters();
 				break;
 			case Buffer.MapperBuffer:	
-				MapperBuffer.getBufferParameters( params );
+				MapperBuffer.getBufferParameters();
 				break;
 			case Buffer.MainMemoryBuffer:	
-				MMBuffer.getBufferParameters( params );
+				MMBuffer.getBufferParameters();
 				break;
 			default:	//the main memory buffer
-				FepBuffer.getBufferParameters( params );
+				FepBuffer.getBufferParameters();
 				break;
 		}
 		return params;
