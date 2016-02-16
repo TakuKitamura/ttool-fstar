@@ -318,7 +318,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         proverifOn = _proverifOn;
         avatarOnly = _avatarOnly;
         experimentalOn = _experimental;
-
         currentInvariant = null;
 
         pbt = new PeriodicBehaviorThread(this, 120000); // save every two minutes
@@ -654,6 +653,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(true);
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
             actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
+            actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(true);
             break;
 
         case MODEL_UPPAAL_OK:
@@ -3712,6 +3712,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         AvatarDesignPanel adp = (AvatarDesignPanel)tp;
         adp.modelBacktracingProVerif(pvoa);
+        getCurrentTDiagramPanel().repaint();
+    }
+
+    public void modelBacktracingUPPAAL(HashMap<String, Integer> verifMap) {
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) {
+            return;
+        }
+
+        if (!(tp instanceof AvatarDesignPanel)) {
+            return;
+        }
+
+        AvatarDesignPanel adp = (AvatarDesignPanel)tp;
+        adp.modelBacktracingUppaal(verifMap);
         getCurrentTDiagramPanel().repaint();
     }
 
