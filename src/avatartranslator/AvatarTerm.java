@@ -70,6 +70,10 @@ public abstract class AvatarTerm extends AvatarElement {
         if (result != null)
             return result;
 
+        result = AvatarArithmeticOp.createFromString (block, toParse);
+        if (result != null)
+            return result;
+
         toParse = toParse.trim ();
         result = block.getAvatarAttributeWithName (toParse);
         if (result != null)
@@ -79,6 +83,14 @@ public abstract class AvatarTerm extends AvatarElement {
         result = block.getAvatarConstantWithName (toParse);
         if (result != null)
             return result;
+
+        try {
+            // TODO: replace that by a true AvatarNumeric
+            int i = Integer.parseInt (toParse);
+            result = new AvatarConstant (toParse, block);
+            block.addConstant ((AvatarConstant) result);
+            return result;
+        } catch (NumberFormatException e) { }
 
         // Consider that new names are constants
         if (AvatarTerm.isValidName (toParse)) {

@@ -885,6 +885,12 @@ public class AVATAR2CPOSIX {
             return term.getName ();
         if (term instanceof AvatarTermRaw)
             return term.getName ();
+        if (term instanceof AvatarArithmeticOp) {
+            AvatarArithmeticOp aop = (AvatarArithmeticOp) term;
+            return this.modifyMethodName (_ab, aop.getTerm1 ())
+                + aop.getOperator ()
+                + this.modifyMethodName (_ab, aop.getTerm2 ());
+        }
         if (term instanceof AvatarTuple) {
             boolean first = true;
             String res = "(";

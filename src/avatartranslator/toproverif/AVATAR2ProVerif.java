@@ -97,11 +97,17 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     private final static String CHCTRL_ENCRYPT = "chControlEnc";
     private final static String CHCTRL_DECRYPT = "chControlDec";
 
+    private final static String ZERO = "O";
+    private final static String PEANO_N = "N";
+
+    private final static int    MAX_INT = 50;
+
     private ProVerifSpec spec;
     private AvatarSpecification avspec;
 
     private HashMap<AvatarAttribute, AvatarAttribute> pubs;
     private HashMap<AvatarAttribute, AvatarAttribute> nameEquivalence;
+    private HashSet<AvatarAttribute> secrecyChecked;
 
     private boolean stateReachability;
 
@@ -243,6 +249,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
         this.spec.addDeclaration (new ProVerifComment    ("Channel"));
         this.spec.addDeclaration (new ProVerifVar        (CH_MAINCH, "channel"));
+        // TODO: add one encryption function per signal
         this.spec.addDeclaration (new ProVerifFunc       (CH_ENCRYPT, new String[] {"bitstring"}, "bitstring", true));
         this.spec.addDeclaration (new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("x", "bitstring")}, CH_DECRYPT + " (" + CH_ENCRYPT + " (x)) = x", true));
 
@@ -250,6 +257,10 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         this.spec.addDeclaration (new ProVerifVar        (CHCTRL_CH, "channel"));
         this.spec.addDeclaration (new ProVerifFunc       (CHCTRL_ENCRYPT, new String[] {"bitstring"}, "bitstring", true));
         this.spec.addDeclaration (new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("x", "bitstring")}, CHCTRL_DECRYPT + " (" + CHCTRL_ENCRYPT + " (x)) = x", true));
+
+        this.spec.addDeclaration (new ProVerifComment    ("Basic Peano Arithmetic"));
+        this.spec.addDeclaration (new ProVerifConst      (ZERO, "bitstring"));
+        this.spec.addDeclaration (new ProVerifFunc       (PEANO_N, new String[] {"bitstring"}, "bitstring"));
 
         /* Declare all the call__*** variables */
         LinkedList<AvatarBlock> blocks = this.avspec.getListOfBlocks();
@@ -277,7 +288,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         }
 
         /* Secrecy Assumptions */
-        HashSet<AvatarAttribute> secrecyChecked = new HashSet<AvatarAttribute> ();
+        this.secrecyChecked = new HashSet<AvatarAttribute> ();
 
         this.spec.addDeclaration (new ProVerifComment    ("Secrecy Assumptions"));
         TraceManager.addDev("Secrecy Assumptions");
@@ -287,7 +298,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     AvatarAttribute trueAttr = this.nameEquivalence.get (attribute);
                     if (trueAttr == null)
                         trueAttr = attribute;
-                    if (secrecyChecked.contains (trueAttr))
+                    if (this.secrecyChecked.contains (trueAttr))
                         continue;
 
                     String name = AVATAR2ProVerif.translateTerm (trueAttr, null);
@@ -296,7 +307,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     // this.spec.addDeclaration (new ProVerifSecrecyAssum (name));
                     this.spec.addDeclaration (new ProVerifQueryAtt   (name, true));
 
-                    secrecyChecked.add (trueAttr);
+                    this.secrecyChecked.add (trueAttr);
                 }
 
         /* Queries */
@@ -308,27 +319,40 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     AvatarAttribute trueAttr = this.nameEquivalence.get (attribute);
                     if (trueAttr == null)
                         trueAttr = attribute;
-                    if (secrecyChecked.contains (trueAttr))
+                    if (this.secrecyChecked.contains (trueAttr))
                         continue;
 
                     String varName = AVATAR2ProVerif.translateTerm (trueAttr, null);
                     this.spec.addDeclaration (new ProVerifQueryAtt   (varName, true));
                     TraceManager.addDev("|    attacker (" + varName + ")"); 
 
-                    secrecyChecked.add (trueAttr);
+                    this.secrecyChecked.add (trueAttr);
                 }
 
         // Queries for states
         if (this.stateReachability) {
             this.spec.addDeclaration (new ProVerifComment    ("Queries Event"));
             TraceManager.addDev ("Queries Event"); 
-            for (AvatarBlock block: this.avspec.getListOfBlocks ())
-                for(AvatarStateMachineElement asme: block.getStateMachine ().getListOfElements ())
+            for (AvatarBlock block: this.avspec.getListOfBlocks ()) {
+                HashSet<AvatarStateMachineElement> visited = new HashSet<AvatarStateMachineElement> ();
+                LinkedList<AvatarStateMachineElement> toVisit = new LinkedList<AvatarStateMachineElement> ();
+                toVisit.add (block.getStateMachine ().getStartState ());
+                while (! toVisit.isEmpty ()) {
+                    AvatarStateMachineElement asme = toVisit.remove ();
+                    if (visited.contains (asme))
+                        continue;
+                    visited.add (asme);
+
                     if (asme instanceof AvatarState) {
                         this.spec.addDeclaration (new ProVerifQueryEv    (new ProVerifVar[] {}, "enteringState__" + block.getName() + "__" + asme.getName()));
                         this.spec.addDeclaration (new ProVerifEvDecl     ("enteringState__" + block.getName() + "__" + asme.getName(), new String[] {}));
                         TraceManager.addDev("|    event (enteringState__" + block.getName() + "__" + asme.getName() + ")"); 
                     }
+
+                    for (AvatarStateMachineElement _asme: asme.getNexts ())
+                        toVisit.add (_asme);
+                }
+            }
         }
 
         /* Autenticity */
@@ -908,12 +932,28 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         Integer c = arg.attributeCmp.get (attr) + 1;
                         arg.attributeCmp.put (attr, c);
                         proVerifLeftHand.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
+
+                        if (this.secrecyChecked.contains (attr)) {
+                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + term.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + term.getName () + ".");
+                            ce.setAvatarBlock(arg.block);
+                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                            ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                            this.warnings.add(ce);
+                        }
                     }
                 else if (leftHand instanceof AvatarAttribute) {
                     AvatarAttribute attr = (AvatarAttribute) leftHand;
                     Integer c = arg.attributeCmp.get (attr) + 1;
                     arg.attributeCmp.put (attr, c);
                     proVerifLeftHand.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
+
+                    if (this.secrecyChecked.contains (attr)) {
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + attr.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + attr.getName () + ".");
+                        ce.setAvatarBlock(arg.block);
+                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                        ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                        this.warnings.add(ce);
+                    }
                 }
 
                 if (proVerifRightHand != null && proVerifLeftHand.size () > 0)
@@ -948,6 +988,13 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             Integer c = arg.attributeCmp.get (attr) + 1;
                             arg.attributeCmp.put (attr, c);
                             tup.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
+                            if (this.secrecyChecked.contains (attr)) {
+                                CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + attr.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + attr.getName () + ".");
+                                ce.setAvatarBlock(arg.block);
+                                ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                                ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                                this.warnings.add(ce);
+                            }
                         }
 
                         _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (tup.toArray (new ProVerifVar[tup.size ()]), rightHand));
@@ -1095,7 +1142,78 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
         if (term instanceof AvatarConstant) {
             AvatarConstant constant = (AvatarConstant) term;
+            TraceManager.addDev("AvatarConstant");
+
+            try {
+                int i = Integer.parseInt (constant.getName ());
+                TraceManager.addDev("AvatarConstant Integer");
+
+                if (i <= MAX_INT) {
+                    int j;
+                    StringBuilder sb = new StringBuilder ();
+                    for (j=i; j>0; j--) {
+                        sb.append (PEANO_N);
+                        sb.append ("(");
+                    }
+                    sb.append (ZERO);
+                    for (; i>0; i--)
+                        sb.append (")");
+                    TraceManager.addDev("AvatarConstant Integer Lower: " + sb.toString ());
+                        
+                    return sb.toString ();
+                } else {
+                    // TODO: raise error
+                    return ZERO;
+                }
+            } catch (NumberFormatException e) { }
+
             return constant.getName ();
+        }
+
+        if (term instanceof AvatarArithmeticOp) {
+            AvatarArithmeticOp op = (AvatarArithmeticOp) term;
+            if (op.getOperator ().compareTo ("+") == 0) {
+                AvatarTerm t1, t2;
+                t1 = op.getTerm1 ();
+                t2 = op.getTerm2 ();
+                if (t1 instanceof AvatarConstant) {
+                    AvatarTerm t = t1;
+                    t1 = t2;
+                    t2 = t;
+                } else if (!(t2 instanceof AvatarConstant)) {
+                    // TODO: raise error
+                    return null;
+                }
+
+                try {
+                    int i = Integer.parseInt (t2.getName ());
+
+                    if (i <= MAX_INT) {
+                        int j;
+                        StringBuilder sb = new StringBuilder ();
+                        for (j=i; j>0; j--) {
+                            sb.append (PEANO_N);
+                            sb.append ("(");
+                        }
+                        sb.append (AVATAR2ProVerif.translateTerm(t1, attributeCmp));
+                        for (; i>0; i--)
+                            sb.append (")");
+                            
+                        return sb.toString ();
+                    } else {
+                        // TODO: raise error
+                        return AVATAR2ProVerif.translateTerm(t1, attributeCmp);
+                    }
+                } catch (NumberFormatException e) { 
+                    // TODO: raise error
+                    return AVATAR2ProVerif.translateTerm(t1, attributeCmp);
+                }
+
+                
+            } else {
+                // TODO: raise error
+                return null;
+            }
         }
 
         if (term instanceof AvatarTermFunction) {
