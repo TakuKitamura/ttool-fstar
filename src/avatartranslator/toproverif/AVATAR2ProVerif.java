@@ -681,7 +681,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         lastInstr = lastInstr.setNextInstr ( new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + AVATAR2ProVerif.translateTerm (attr, null) + ");"));
 
         // Call the first "real" process
-        String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((sessionID, call__" + ab.getName () + "__0";
+        String strong = "strong__" + AVATAR2ProVerif.makeAttrName (ab.getName (), "0");
+        lastInstr = lastInstr.setNextInstr (new ProVerifProcIn (CHCTRL_CH, new ProVerifVar[] {new ProVerifVar (strong, "bitstring")}));
+        String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((sessionID, call__" + ab.getName () + "__0" + ", " + strong;
         for(ProVerifVar aa: this.getAttributesFromBlock (ab))
             tmp += ", " + aa.getName ();
         lastInstr = lastInstr.setNextInstr (new ProVerifProcRaw (tmp + ")))"));
@@ -702,10 +704,14 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 this.spec.addDeclaration (p);
 
                 // Read and decrypt control data: variables sent to the process and the call__num variable
+                strong = "strong__" + AVATAR2ProVerif.makeAttrName (ab.getName(), simplifiedElements.get (asme).toString ());
+                p = p.setNextInstr (new ProVerifProcNew (strong, "bitstring"));
+                p = p.setNextInstr (new ProVerifProcRaw ("out (" + CHCTRL_CH + ", " + strong + ");"));
                 p = p.setNextInstr (new ProVerifProcIn (CHCTRL_CH, new ProVerifVar[] {new ProVerifVar ("chControlData", "bitstring")}));
                 LinkedList<ProVerifVar> attributes = new LinkedList<ProVerifVar> ();
                 attributes.add (new ProVerifVar ("sessionID", "bitstring", false, true));
                 attributes.add (new ProVerifVar ("call__" + ab.getName () + "__" + simplifiedElements.get (asme), "bitstring", false, true));
+                attributes.add (new ProVerifVar (strong, "bitstring", false, true));
                 for (AvatarAttribute attr: ab.getAttributes ()) {
                     Integer c = attributeCmp.get (attr) + 1;
                     attributeCmp.put (attr, c);
@@ -746,7 +752,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             Integer n = arg.simplifiedElements.get (next);
             if (n != null) {
                 // If next is the root of a process send the attributes on the control channel
-                String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((sessionID, call__" + arg.block.getName () + "__" + n;
+                String strong = "strong__" + AVATAR2ProVerif.makeAttrName (arg.block.getName (), n.toString ());
+                arg.lastInstr = arg.lastInstr.setNextInstr (new ProVerifProcIn (CHCTRL_CH, new ProVerifVar[] {new ProVerifVar (strong, "bitstring")}));
+                String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((sessionID, call__" + arg.block.getName () + "__" + n + ", " + strong;
                 for(AvatarAttribute aa: arg.block.getAttributes ())
                     tmp += ", " + AVATAR2ProVerif.translateTerm (aa, arg.attributeCmp);
 
