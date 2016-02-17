@@ -82,7 +82,6 @@ public class TMLModeling {
         TMLMapping tmlmapping;
         tmlmapping = new TMLMapping(this, new TMLArchitecture(), false);
         tmlmapping.makeMinimumMapping();
-	//Find Task A. Attribute and Task B.Attribute
         return tmlmapping;
 
         /*TMLArchitecture tmla = new TMLArchitecture();

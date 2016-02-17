@@ -48,6 +48,7 @@ package tmltranslator;
 
 import java.util.*;
 import myutil.*;
+import tmltranslator.toproverif.*;
 
 
 public class TMLMapping {
@@ -93,6 +94,10 @@ public class TMLMapping {
         if( reset ) {
             DIPLOElement.resetID();
         }
+    }
+
+    public void translate2ProVerif(){
+	TML2ProVerif spec = new TML2ProVerif(this);
     }
 
     public void makeMinimumMapping() {
