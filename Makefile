@@ -127,8 +127,6 @@ help:
 
 all: basic jar
 
-.PHONY: svn basicsvnapvrille myrelease basic jar ttooljar launcher tiftranslator tmltranslator rundse remotesimulator documentation stdrelease preinstall preinstall_linux jttooljar updatesimulator test
-
 svn:
 	date
 	svn update build.txt src/ui/DefaultText.java
