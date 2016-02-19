@@ -51,7 +51,7 @@ import java.util.*;
 import myutil.*;
 import avatartranslator.*;
 
-public class TaskFileSocLib {
+public class TaskFileSoclib {
 	/////////////////////RG
 	//1) enlever pthread.h
 	//2) ajouter : srl.h et mwmr.h
