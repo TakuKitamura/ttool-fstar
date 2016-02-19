@@ -286,7 +286,7 @@ stdrelease:
 	cp -R $(TTOOL_SRC)/* $(TTOOL_TARGET)/src
 	find $(TTOOL_TARGET)/src -type f -not \( -name '*.java' -o -name '*.gif' -o -name '*.jjt' -o -name '*.txt' \) -a -exec rm -f {} \;
 	cp -R $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
-	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfv $(TTOOL_STD_RELEASE)/releaseWithSrc.tar * && $(GZIP) $(TTOOL_STD_RELEASE)/releaseWithSrc.tar&&mv $(TTOOL_STD_RELEASE)/releaseWithSrc.tar.gz $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz
+	cd $(TTOOL_TARGET_RELEASE);$(TAR) cvzf $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz *
 
 preinstall: jar preinstall_linux
 
