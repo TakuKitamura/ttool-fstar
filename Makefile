@@ -278,7 +278,7 @@ stdrelease:
 
 # Basic release
 	echo "Basic release"
-	cd $(TTOOL_TARGET_RELEASE)&&$(TAR) cfv $(TTOOL_STD_RELEASE)/release.tar * && $(GZIP) $(TTOOL_STD_RELEASE)/release.tar && mv $(TTOOL_STD_RELEASE)/release.tar.gz $(TTOOL_STD_RELEASE)/release.tgz
+	cd $(TTOOL_TARGET_RELEASE)&&$(TAR) cvzf $(TTOOL_STD_RELEASE)/release.tgz * 
 # Advanced release
 	echo "Advanced release"
 	$(JAVADOC) -J-Xmx256m $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_TARGET)/doc/srcdoc $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
