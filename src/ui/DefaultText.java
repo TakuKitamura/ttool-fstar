@@ -49,7 +49,7 @@ package ui;
 
 public class DefaultText  {
 
-    public static String BUILD = "11777";
+    public static String BUILD = "12377";
     public static String DATE = "2016/01/25 16:42:36 CET";
     
     
@@ -60,7 +60,7 @@ public class DefaultText  {
     }
     
     public static String getVersion() {
-        return "0.98-beta3"; /* Set new release May 28th, 2015 */
+        return "0.98-beta4"; /* Set new release Feb. 19th, 2016 */
     }
     
     public static String getFullVersion() {
