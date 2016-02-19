@@ -277,14 +277,14 @@ stdrelease:
 	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_TARGET)/bin	
 
 # Basic release
-	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfv $(TTOOL_STD_RELEASE)/release.tar *; $(GZIP) $(TTOOL_STD_RELEASE)/release.tar; mv $(TTOOL_STD_RELEASE)/release.tar.gz $(TTOOL_STD_RELEASE)/release.tgz
+	cd $(TTOOL_TARGET_RELEASE)&&$(TAR) cfv $(TTOOL_STD_RELEASE)/release.tar * && $(GZIP) $(TTOOL_STD_RELEASE)/release.tar && mv $(TTOOL_STD_RELEASE)/release.tar.gz $(TTOOL_STD_RELEASE)/release.tgz
 # Advanced release
 	$(JAVADOC) -J-Xmx256m $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_TARGET)/doc/srcdoc $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
 	mkdir -p $(TTOOL_TARGET)/src
 	cp -R $(TTOOL_SRC)/* $(TTOOL_TARGET)/src
 	find $(TTOOL_TARGET)/src -type f -not \( -name '*.java' -o -name '*.gif' -o -name '*.jjt' -o -name '*.txt' \) -a -exec rm -f {} \;
 	cp -R $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
-	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfv $(TTOOL_STD_RELEASE)/releaseWithSrc.tar && $(GZIP) $(TTOOL_STD_RELEASE)/releaseWithSrc.tar&&mv $(TTOOL_STD_RELEASE)/releaseWithSrc.tar.gz $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz
+	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfv $(TTOOL_STD_RELEASE)/releaseWithSrc.tar * && $(GZIP) $(TTOOL_STD_RELEASE)/releaseWithSrc.tar&&mv $(TTOOL_STD_RELEASE)/releaseWithSrc.tar.gz $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz
 
 preinstall: jar preinstall_linux
 
