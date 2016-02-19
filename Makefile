@@ -12,7 +12,6 @@ JAVACC = /usr/bin/javacc.sh
 JAR    = jar
 JAVADOC = javadoc
 TAR = tar
-GZIP = /bin/gzip -f
 DEBUG  = -g
 CLASSPATH = -classpath
 SOURCEPATH = -sourcepath
