@@ -277,8 +277,10 @@ stdrelease:
 	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_TARGET)/bin	
 
 # Basic release
+	echo "Basic release"
 	cd $(TTOOL_TARGET_RELEASE)&&$(TAR) cfv $(TTOOL_STD_RELEASE)/release.tar * && $(GZIP) $(TTOOL_STD_RELEASE)/release.tar && mv $(TTOOL_STD_RELEASE)/release.tar.gz $(TTOOL_STD_RELEASE)/release.tgz
 # Advanced release
+	echo "Advanced release"
 	$(JAVADOC) -J-Xmx256m $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_TARGET)/doc/srcdoc $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
 	mkdir -p $(TTOOL_TARGET)/src
 	cp -R $(TTOOL_SRC)/* $(TTOOL_TARGET)/src
