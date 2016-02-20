@@ -58,6 +58,8 @@ public class AvatarStateMachine extends AvatarElement {
 
     private static int ID_ELT = 0;
 
+    protected LinkedList<AvatarStateMachineElement> states;
+
 
     public AvatarStateMachine(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -74,14 +76,45 @@ public class AvatarStateMachine extends AvatarElement {
 
     public void addElement(AvatarStateMachineElement _element) {
         elements.add(_element);
+	states = null;
     }
 
     public void removeElement(AvatarStateMachineElement _element) {
         elements.remove(_element);
+	states = null;
     }
 
     public LinkedList<AvatarStateMachineElement> getListOfElements() {
         return elements;
+    }
+
+    private void makeStates() {
+	states = new LinkedList<AvatarStateMachineElement>();
+	for(AvatarStateMachineElement asme: elements) {
+	    if (asme instanceof AvatarState) {
+		states.add(asme);
+	    }
+	}
+    }
+
+    public int stateNb() {
+	if (states == null) {
+	    makeStates();
+	}
+
+	return states.size();
+    }
+
+    public AvatarState getState(int index) {
+	if (states == null) {
+	    makeStates();
+	}
+
+	try {
+	    return (AvatarState)(states.get(index));
+	} catch (Exception e) {
+	}
+	return null;
     }
 
     private int getSimplifiedElementsAux (HashMap<AvatarStateMachineElement, Integer> simplifiedElements, HashSet<AvatarStateMachineElement> visited, AvatarStateMachineElement root, int counter) {

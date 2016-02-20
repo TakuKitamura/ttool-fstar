@@ -653,6 +653,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
         AVATAR_met = _metNb;
     }
 
+    public int getAVATARMet() {
+	return AVATAR_met;
+    }
+
     public void setInternalAvatarMet(int _metNb) {
         for(int i=0; i<nbInternalTGComponent; i++) {
             tgcomponent[i].setAVATARMet(_metNb);

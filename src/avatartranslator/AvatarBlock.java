@@ -179,6 +179,14 @@ public class AvatarBlock extends AvatarElement {
         return attributes.size();
     }
 
+    public int stateNb() {
+        return asm.stateNb();
+    }
+
+    public AvatarState getState(int index) {
+	return asm.getState(index);
+    }
+
     public void putAllTimers(ArrayList<AvatarAttribute> timers) {
         for(AvatarAttribute attribute: attributes) {
             if (attribute.getType() == AvatarType.TIMER) {
@@ -429,8 +437,8 @@ public class AvatarBlock extends AvatarElement {
             }
         }
 
-	value = new AvatarAttribute("__timerValue", AvatarType.INTEGER, this, getReferenceObject());
-	addAttribute(value);
+        value = new AvatarAttribute("__timerValue", AvatarType.INTEGER, this, getReferenceObject());
+        addAttribute(value);
 
         // Modify the state machine
         if (asm.removeTimers(this, "__timerValue")) {

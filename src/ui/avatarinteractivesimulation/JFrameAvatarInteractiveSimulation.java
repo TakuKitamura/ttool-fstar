@@ -151,6 +151,12 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     private TransactionTableModel transactiontm;
     private JScrollPane jspTransactionInfo;
 
+    // Met elements
+    private JPanel metElementsPanel;
+    private MetElementsTableModel metelementstm;
+    private JScrollPane jspMetElementsInfo;
+    
+
     // DisplayedBlocks
     private JPanel displayedBlockPanel;
     private JScrollPane jspDisplayedBlocks;
@@ -767,6 +773,26 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         transactionPanel.add(jspTransactionInfo, BorderLayout.CENTER);
 
 
+	// Met elements
+        metElementsPanel = new JPanel();
+        metElementsPanel.setLayout(new BorderLayout());
+        infoTab.addTab("Met states", IconManager.imgic1202, metElementsPanel, "Met states");
+        metelementstm = new MetElementsTableModel(ass);
+
+        sorterPI = new TableSorter(metelementstm);
+        jtablePI = new JTable(sorterPI);
+        sorterPI.setTableHeader(jtablePI.getTableHeader());
+        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(100);
+        ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+        jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jspMetElementsInfo = new JScrollPane(jtablePI);
+        jspMetElementsInfo.setWheelScrollingEnabled(true);
+        jspMetElementsInfo.getVerticalScrollBar().setUnitIncrement(10);
+        jspMetElementsInfo.setPreferredSize(new Dimension(250, 300));
+        metElementsPanel.add(jspMetElementsInfo, BorderLayout.CENTER);
+
+
         // Displayed blocks
         displayedBlockPanel = new JPanel();
         displayedBlockPanel.setLayout(new GridBagLayout());
@@ -1237,6 +1263,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                     tgc = (TGComponent)oo;
                     //TraceManager.addDev("TGComponent: " + tgc);
                     tgc.setAVATARMet(hashOfAllElements.get(o).intValue());
+		    
                 }
 
             }
