@@ -1312,11 +1312,14 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 Object oo = ((AvatarStateMachineElement)o).getReferenceObject();
                 if (oo != null) {
                     tgc = (TGComponent)oo;
-		    if (tgc.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0) {
+		    /*if (tgc.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0) {
 			total ++;
-		    }
+			}*/
                     //TraceManager.addDev("TGComponent: " + tgc);
 		    int met = hashOfAllElements.get(o).intValue();
+		    if ((met > 0) && (tgc.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0)) {
+			total ++;
+		    }
                     tgc.setAVATARMet(met);
 		    //total ++;
 		    //if (met >0) {
