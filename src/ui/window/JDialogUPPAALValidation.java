@@ -539,7 +539,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     }
     private void workQuery(String query, String fn, int trace_id, RshClient rshc) throws LauncherException {
 
-        //TraceManager.addDev("Working on query: " + query);
+        TraceManager.addDev("Working on query: " + query);
 
         String cmd1, data;
         if(showDetails.isSelected()) {
@@ -553,6 +553,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         }
         cmd1 += fn + ".xml " + fn + ".q";
         //jta.append("--------------------------------------------\n");
+	//TraceManager.addDev("Query:>" + cmd1 + "<");
         data = processCmd(cmd1);
         //TraceManager.addDev("Results:>" + data + "<");
         if(showDetails.isSelected()) {
