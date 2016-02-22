@@ -118,12 +118,14 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     private int invokedLater = 0;
 
+    private int totalNbOfElements = -1;
+
 
 
     //private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
 
     // Status elements
-    JLabel statuss, status, time, info;
+    JLabel statuss, status, time, info, coverage;
 
     // Task elements
     //TaskVariableTableModel tvtm;
@@ -539,10 +541,14 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
         jp02.add(time);
         jp02.add(new JLabel(" "));
-        jp02.add(new JLabel("Nb of transactions:"));
+        jp02.add(new JLabel("Transactions:"));
         info = new JLabel("Unknown");
-        info.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
-        jp02.add(info);
+	jp02.add(info);
+	jp02.add(new JLabel(" "));
+        jp02.add(new JLabel("Coverage:"));
+        coverage = new JLabel("0 %");
+        coverage.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+        jp02.add(coverage);
 
         // Options
         jp01 = new JPanel();
@@ -1165,7 +1171,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     }
 
     public void setLabelColors() {
-        if ((time !=null) && (status != null) && (info != null)) {
+        if ((time !=null) && (status != null) && (info != null) && (coverage != null)) {
             String oldTime = time.getText();
             int index = oldTime.indexOf("(");
             if (index != -1) {
@@ -1187,6 +1193,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 status.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
                 time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
                 info.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+		coverage.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
                 break;
             case AvatarSpecificationSimulation.GATHER:
             case AvatarSpecificationSimulation.EXECUTE:
@@ -1196,18 +1203,21 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 status.setForeground(ColorManager.InteractiveSimulationText_BUSY);
                 time.setForeground(ColorManager.InteractiveSimulationText_BUSY);
                 info.setForeground(ColorManager.InteractiveSimulationText_BUSY);
+		coverage.setForeground(ColorManager.InteractiveSimulationText_BUSY);
                 break;
             case AvatarSpecificationSimulation.TERMINATED:
                 status.setText("Terminated");
                 status.setForeground(ColorManager.InteractiveSimulationText_TERM);
                 time.setForeground(ColorManager.InteractiveSimulationText_TERM);
                 info.setForeground(ColorManager.InteractiveSimulationText_TERM);
+		coverage.setForeground(ColorManager.InteractiveSimulationText_TERM);
                 break;
             case AvatarSpecificationSimulation.KILLED:
                 status.setText("killed");
                 status.setForeground(ColorManager.InteractiveSimulationText_TERM);
                 time.setForeground(ColorManager.InteractiveSimulationText_TERM);
                 info.setForeground(ColorManager.InteractiveSimulationText_TERM);
+		coverage.setForeground(ColorManager.InteractiveSimulationText_TERM);
                 break;
             }
         }
@@ -1240,6 +1250,10 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         } else if (avspec.getReferenceObject() instanceof AttackTreePanel) {
             ((AttackTreePanel)(avspec.getReferenceObject())).resetMetElements();
         }
+
+	if (coverage != null) {
+	    coverage.setText("0 %");
+	}
     }
 
     public void updateMetElements() {
@@ -1254,6 +1268,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         if (hashOfAllElements.hashCode() != nbOfAllExecutedElements) {
             Object objs[] = hashOfAllElements.keySet().toArray();
+	    //int total = 0;
+	    //int totalMet = 0;
             //TraceManager.addDev("Parsing array of elements: " + objs.length);
             for(int i=0; i<objs.length; i++) {
                 o = objs[i];
@@ -1262,13 +1278,23 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 if (oo != null) {
                     tgc = (TGComponent)oo;
                     //TraceManager.addDev("TGComponent: " + tgc);
-                    tgc.setAVATARMet(hashOfAllElements.get(o).intValue());
+		    int met = hashOfAllElements.get(o).intValue();
+                    tgc.setAVATARMet(met);
+		    //total ++;
+		    //if (met >0) {
+		    //totalMet ++;
+		    //}
 		    
                 }
 
             }
+	    nbOfAllExecutedElements = hashOfAllElements.hashCode();
+	    if ((totalNbOfElements != -1) && (coverage != null)) {
+		TraceManager.addDev("totalMet=" + totalMet + " total=" + total);
+		coverage.setText(""+ ( ((double)totalMet*100)/total) + "%");
+	    }
         }
-        nbOfAllExecutedElements = hashOfAllElements.hashCode();
+        //nbOfAllExecutedElements = hashOfAllElements.hashCode();
     }
 
     public void updateTransactionsTable() {
