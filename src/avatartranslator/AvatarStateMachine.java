@@ -105,6 +105,16 @@ public class AvatarStateMachine extends AvatarElement {
 	return states.size();
     }
 
+    public int getNbOfASMGraphicalElements() {
+	int cpt = 0;
+	for(AvatarElement elt: elements) {
+	    if (elt.getReferenceObject() != null) {
+		cpt ++;
+	    }
+	}
+	return cpt;
+    }
+
     public AvatarState getState(int index) {
 	if (states == null) {
 	    makeStates();

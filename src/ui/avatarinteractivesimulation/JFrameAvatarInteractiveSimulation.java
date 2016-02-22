@@ -187,9 +187,9 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     private int busyMode = 0; // Mode of AvatarSpecificationSimulation
 
     // For managing actions
-    public      AvatarInteractiveSimulationActions [] actions;
-    public      MouseHandler mouseHandler;
-    public  KeyListener keyHandler;
+    public AvatarInteractiveSimulationActions [] actions;
+    public MouseHandler mouseHandler;
+    public KeyListener keyHandler;
 
 
     /*private Hashtable <Integer, String> valueTable;
@@ -208,6 +208,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     private LinkedList<TGComponent> runningTGComponents;
     private int nbOfAllExecutedElements = 0;
+    private double coverageVal = 0;
 
     private long previousTime;
 
@@ -546,7 +547,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 	jp02.add(info);
 	jp02.add(new JLabel(" "));
         jp02.add(new JLabel("Coverage:"));
-        coverage = new JLabel("0 %");
+        coverage = new JLabel(coverageVal + " %");
         coverage.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
         jp02.add(coverage);
 
@@ -1261,11 +1262,45 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         TGComponent tgc;
         Object o;
 
+
+	if ((totalNbOfElements == -1) && (ass != null)){
+	    totalNbOfElements = 0;
+	    Vector<Object> mettableElements = new Vector<Object>();
+	    for(AvatarSimulationBlock asb: ass.getSimulationBlocks()) {
+		AvatarBlock ab = asb.getBlock();
+		if (ab != null) {
+		    //if (!(ab.getName().startsWith("Timer__"))) {
+		    AvatarStateMachine asm = ab.getStateMachine();
+		    if (asm != null) {
+			for(AvatarStateMachineElement elt: asm.getListOfElements()) {
+			    Object obj = elt.getReferenceObject();
+			    if (obj != null) {
+				
+				// Verifier que obj est une element de machine à états
+				if (obj.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0) {
+				    if (!(mettableElements.contains(obj))) {
+					mettableElements.add(obj);
+				    }
+				}
+				
+			    }
+			}
+		    }
+		    //for(Avatar
+		    //totalNbOfElements = mettable
+			//}
+		}
+	    }
+	    totalNbOfElements = mettableElements.size();
+	    //totalNbOfElements = ass.getNbOfASMGraphicalElements();
+	}
+
         if (hashOfAllElements == null) {
             nbOfAllExecutedElements = 0;
             return;
         }
 
+	int total = 0;
         if (hashOfAllElements.hashCode() != nbOfAllExecutedElements) {
             Object objs[] = hashOfAllElements.keySet().toArray();
 	    //int total = 0;
@@ -1277,6 +1312,9 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 Object oo = ((AvatarStateMachineElement)o).getReferenceObject();
                 if (oo != null) {
                     tgc = (TGComponent)oo;
+		    if (tgc.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0) {
+			total ++;
+		    }
                     //TraceManager.addDev("TGComponent: " + tgc);
 		    int met = hashOfAllElements.get(o).intValue();
                     tgc.setAVATARMet(met);
@@ -1289,9 +1327,14 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
             }
 	    nbOfAllExecutedElements = hashOfAllElements.hashCode();
-	    if ((totalNbOfElements != -1) && (coverage != null)) {
-		//TraceManager.addDev("totalMet=" + totalMet + " total=" + total);
-		//coverage.setText(""+ ( ((double)totalMet*100)/total) + "%");
+	    if ((totalNbOfElements != -1)) {
+		//TraceManager.addDev("totalMet=" + hashOfAllElements.size() + " total=" + totalNbOfElements);
+		double cov = (total*1000.0)/totalNbOfElements;
+		cov = Math.floor(cov);
+		coverageVal = cov / 10;
+		if(coverage != null) {
+		    coverage.setText(""+  coverageVal + "%");
+		}
 	    }
         }
         //nbOfAllExecutedElements = hashOfAllElements.hashCode();

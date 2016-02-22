@@ -3971,7 +3971,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TraceManager.addDev("Avatar simulation");
         jfais = new JFrameAvatarInteractiveSimulation(frame, this, "Interactive simulation", gtm.getAvatarSpecification());
         jfais.setIconImage(IconManager.img9);
-        jfais.setSize(800, 600);
+        jfais.setSize(900, 600);
         GraphicLib.centerOnParent(jfais);
         jfais.setVisible(true);
     }

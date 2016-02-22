@@ -136,6 +136,14 @@ public class AvatarSpecification extends AvatarElement {
         return constants;
     }
 
+    public int getNbOfASMGraphicalElements() {
+	int cpt = 0;
+	for(AvatarBlock block: blocks) {
+	    cpt += block.getNbOfASMGraphicalElements();
+	}
+	return cpt;
+    }
+
     public boolean isASynchronousSignal(AvatarSignal _as) {
         for(AvatarRelation ar: relations) {
             if (ar.containsSignal(_as)) {

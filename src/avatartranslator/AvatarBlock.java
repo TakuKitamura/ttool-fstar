@@ -126,14 +126,20 @@ public class AvatarBlock extends AvatarElement {
         return methods;
     }
 
-    /////////////////////////////////// RG
 
     public LinkedList<AvatarSignal> getSignals() {
         return signals ;
     }
 
-    ///////////////////////////////////
-    //
+    public int getNbOfASMGraphicalElements() {
+	if (asm == null) {
+	    return 0;
+	}
+
+	return asm.getNbOfASMGraphicalElements();
+    }
+
+
     public AvatarConstant getAvatarConstantWithName(String _name) {
         return this.avspec.getAvatarConstantWithName (_name);
     }
