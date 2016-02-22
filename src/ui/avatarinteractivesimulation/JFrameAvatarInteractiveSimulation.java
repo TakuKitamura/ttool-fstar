@@ -1290,8 +1290,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             }
 	    nbOfAllExecutedElements = hashOfAllElements.hashCode();
 	    if ((totalNbOfElements != -1) && (coverage != null)) {
-		TraceManager.addDev("totalMet=" + totalMet + " total=" + total);
-		coverage.setText(""+ ( ((double)totalMet*100)/total) + "%");
+		//TraceManager.addDev("totalMet=" + totalMet + " total=" + total);
+		//coverage.setText(""+ ( ((double)totalMet*100)/total) + "%");
 	    }
         }
         //nbOfAllExecutedElements = hashOfAllElements.hashCode();
