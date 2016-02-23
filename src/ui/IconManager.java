@@ -110,7 +110,7 @@ public class IconManager {
     public static ImageIcon imgic900, imgic902, imgic904, imgic906, imgic908, imgic910, imgic912, imgic914, imgic916, imgic918;
     public static ImageIcon imgic920, imgic922, imgic924, imgic926, imgic928, imgic930;
     // Requirement diagrams
-    public static ImageIcon imgic1000, imgic1002, imgic1004,imgic1006,imgic1008, imgic1010, imgic1012, imgic1014, imgic1016;
+    public static ImageIcon imgic1000, imgic1002, imgic1004,imgic1006,imgic1008, imgic1010, imgic1012, imgic1014, imgic1016, imgic1018;
     public static ImageIcon imgic1050, imgic1052, imgic1054,imgic1056, imgic1058, imgic1060;
 
     // Attack Tree Diagrams
@@ -146,7 +146,7 @@ public class IconManager {
     public static ImageIcon imgic5030, imgic5032, imgic5034, imgic5036, imgic5038;
     public static ImageIcon imgic5040, imgic5042, imgic5044, imgic5046, imgic5048;
     public static ImageIcon imgic5050, imgic5052, imgic5054, imgic5056, imgic5058;
-    public static ImageIcon imgic5060, imgic5062, imgic5064, imgic5066;
+    public static ImageIcon imgic5060, imgic5062, imgic5064, imgic5066, imgic5068;
 
     public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
     public static ImageIcon imgic5110, imgic5112, imgic5113,imgic5114;
@@ -442,6 +442,7 @@ public class IconManager {
     private static String icon1012 = "images/reqcomp.gif";
     private static String icon1014 = "images/ebrddobs.gif";
     private static String icon1016 = "images/reqref.gif";
+    private static String icon1018 = "images/reqsatisfy.gif";
 
 
 
@@ -554,6 +555,7 @@ public class IconManager {
     private static String icon5062 = "images/avatarmadeltref.gif";
     private static String icon5064 = "images/avatarmadversioning.gif";
     private static String icon5066 = "images/avatarmadimpact.gif";
+    private static String icon5068 = "images/avatarrdref.gif";
 
     private static String icon5100 = "images/avatarhead16.gif";
     private static String icon5102 = "images/avatarhead32.gif";
@@ -840,6 +842,7 @@ public class IconManager {
         imgic1012 = getIcon(icon1012);
         imgic1014 = getIcon(icon1014);
         imgic1016 = getIcon(icon1016);
+	imgic1018 = getIcon(icon1018);
 
         imgic1050 = getIcon(icon1050);
         imgic1052 = getIcon(icon1052);
@@ -945,6 +948,7 @@ public class IconManager {
         imgic5062 = getIcon(icon5062);
         imgic5064 = getIcon(icon5064);
         imgic5066 = getIcon(icon5066);
+	imgic5068 = getIcon(icon5068);
 
         imgic5100 = getIcon(icon5100);
         imgic5102 = getIcon(icon5102);

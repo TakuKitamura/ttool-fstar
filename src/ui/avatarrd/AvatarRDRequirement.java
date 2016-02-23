@@ -125,7 +125,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         minWidth = 1;
         minHeight = lineHeight;
 
-        nbConnectingPoint = 28;
+        nbConnectingPoint = 40;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         connectingPoint[0] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.0, 0.25, TGConnectingPoint.WEST);
         connectingPoint[1] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.0, 0.5, TGConnectingPoint.WEST);
@@ -155,7 +155,19 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         connectingPoint[25] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
         connectingPoint[26] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
         connectingPoint[27] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
-
+	int i = 28;
+	connectingPoint[0+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.0, 0.25);
+        connectingPoint[1+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.0, 0.5);
+        connectingPoint[2+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.0, 0.75);
+        connectingPoint[3+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 1.0, 0.25);
+        connectingPoint[4+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 1.0, 0.5);
+        connectingPoint[5+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 1.0, 0.75);
+        connectingPoint[6+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.25, 0.0);
+        connectingPoint[7+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.5, 0.0);
+        connectingPoint[8+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.75, 0.0);
+        connectingPoint[9+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.25, 1.0);
+        connectingPoint[10+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.5, 1.0);
+        connectingPoint[11+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.75, 1.0);
 
         addTGConnectingPointsCommentTop();
 

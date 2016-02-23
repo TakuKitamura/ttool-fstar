@@ -362,7 +362,9 @@ public class TGComponentManager {
     // AVATAR RD -> starts at 5200
     public static final int AVATARRD_REQUIREMENT = 5200;
     public static final int AVATARRD_PROPERTY = 5201;
+    public static final int AVATARRD_ELEMENT_REFERENCE = 5207;
     public static final int AVATARRD_DERIVE_CONNECTOR = 5202;
+    public static final int AVATARRD_SATISFY_CONNECTOR = 5208;
     public static final int AVATARRD_REFINE_CONNECTOR = 5206;
     public static final int AVATARRD_VERIFY_CONNECTOR = 5203;
     public static final int AVATARRD_COPY_CONNECTOR = 5204;
@@ -533,6 +535,9 @@ public class TGComponentManager {
         case AVATARRD_PROPERTY:
             tgc = new AvatarRDProperty(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
+	case AVATARRD_ELEMENT_REFERENCE:
+            tgc = new AvatarRDElementReference(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break; 
 
         case AVATARMAD_ASSUMPTION:
             tgc = new AvatarMADAssumption(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1380,8 +1385,12 @@ public class TGComponentManager {
             return AVATARRD_REQUIREMENT;
         } else if (tgc instanceof AvatarRDProperty) {
             return AVATARRD_PROPERTY;
+	} else if (tgc instanceof AvatarRDElementReference) {
+            return AVATARRD_ELEMENT_REFERENCE;
         } else if (tgc instanceof AvatarRDDeriveConnector) {
             return AVATARRD_DERIVE_CONNECTOR;
+	} else if (tgc instanceof AvatarRDSatisfyConnector) {
+            return AVATARRD_SATISFY_CONNECTOR;
         } else if (tgc instanceof AvatarRDRefineConnector) {
             return AVATARRD_REFINE_CONNECTOR;
         } else if (tgc instanceof AvatarRDVerifyConnector) {
@@ -1920,6 +1929,8 @@ public class TGComponentManager {
             // AVATAR RD
         case AVATARRD_DERIVE_CONNECTOR:
             tgc = new AvatarRDDeriveConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+	case AVATARRD_SATISFY_CONNECTOR:
+            tgc = new AvatarRDSatisfyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
         case AVATARRD_REFINE_CONNECTOR:
             tgc = new AvatarRDRefineConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
