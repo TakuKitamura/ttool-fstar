@@ -1,0 +1,9 @@
+# see also pictopdf
+outps=`basename $1 .png`.ps
+# A4 = 21 cm x 29.6 cm
+# pnmtops wants size in inches
+width=7.48
+height=10.87
+anytopnm $1 | pnmtops -imagewidth $width -imageheight $height -nosetpage -rle -noturn > $outps
+ps2pdf -sPAPERSIZE=a4 -dAutoFilterColorImages=false -dAutoFilterGrayImages=false -sColorImageFilter=FlateEncode -sGrayImageFilter=FlateEncode $outps
+rm $outps

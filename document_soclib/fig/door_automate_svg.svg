@@ -1,0 +1,91 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+<ellipse  cx="407" cy="57" rx="7" ry="7" fill="#000000"/>
+<line  x1="407" y1="65" x2="407" y2="70" stroke="#000000" stroke-width="1" fill="none"/>
+<rect  x="357" y="100" width="100" height="31" rx="5" ry="5" fill="#c1daf1"/>
+<rect  x="357" y="100" width="100" height="31" rx="5" ry="5" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="393" y="115" style="font-size:12; font-family:Dialog.bold; font-weight=bold; fill=#000000">IDLE</text>
+<line  x1="357" y1="117" x2="457" y2="117" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="404" y1="160" x2="404" y2="155" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="404" y1="180" x2="404" y2="185" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="380" y1="161" x2="421" y2="161" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="380" y1="181" x2="421" y2="181" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="380" y1="161" x2="380" y2="181" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="421" y1="161" x2="431" y2="171" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="421" y1="181" x2="431" y2="171" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="379" y1="160" x2="420" y2="160" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="379" y1="180" x2="420" y2="180" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="379" y1="160" x2="379" y2="180" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="420" y1="160" x2="430" y2="170" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="420" y1="180" x2="430" y2="170" stroke="#000000" stroke-width="1" fill="none"/>
+<text  x="383" y="175" style="font-size:12; font-family:Dialog.plain; fill=#000000">open()</text>
+<line  x1="404" y1="356" x2="404" y2="351" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="404" y1="376" x2="404" y2="381" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="375" y1="357" x2="426" y2="357" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="375" y1="377" x2="426" y2="377" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="375" y1="357" x2="375" y2="377" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="426" y1="357" x2="436" y2="367" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="426" y1="377" x2="436" y2="367" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="374" y1="356" x2="425" y2="356" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="374" y1="376" x2="425" y2="376" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="374" y1="356" x2="374" y2="376" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="425" y1="356" x2="435" y2="366" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="425" y1="376" x2="435" y2="366" stroke="#000000" stroke-width="1" fill="none"/>
+<text  x="376" y="371" style="font-size:12; font-family:Dialog.plain; fill=#000000">closed()</text>
+<rect  x="354" y="243" width="100" height="30" rx="5" ry="5" fill="#c1daf1"/>
+<rect  x="354" y="243" width="100" height="30" rx="5" ry="5" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="361" y="258" style="font-size:12; font-family:Dialog.bold; font-weight=bold; fill=#000000">DoorIsOpened</text>
+<line  x1="354" y1="260" x2="454" y2="260" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="403" y1="205" x2="403" y2="200" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="403" y1="225" x2="403" y2="230" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="368" y1="206" x2="440" y2="206" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="440" y1="206" x2="440" y2="226" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="368" y1="226" x2="440" y2="226" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="368" y1="206" x2="378" y2="216" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="368" y1="226" x2="378" y2="216" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="367" y1="205" x2="439" y2="205" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="439" y1="205" x2="439" y2="225" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="367" y1="225" x2="439" y2="225" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="367" y1="205" x2="377" y2="215" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="367" y1="225" x2="377" y2="215" stroke="#000000" stroke-width="1" fill="none"/>
+<text  x="379" y="220" style="font-size:12; font-family:Dialog.plain; fill=#000000">okDoor()</text>
+<line  x1="388" y1="406" x2="388" y2="401" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="388" y1="426" x2="388" y2="431" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="353" y1="407" x2="425" y2="407" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="425" y1="407" x2="425" y2="427" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="353" y1="427" x2="425" y2="427" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="353" y1="407" x2="363" y2="417" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="353" y1="427" x2="363" y2="417" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="352" y1="406" x2="424" y2="406" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="424" y1="406" x2="424" y2="426" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="352" y1="426" x2="424" y2="426" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="352" y1="406" x2="362" y2="416" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="352" y1="426" x2="362" y2="416" stroke="#000000" stroke-width="1" fill="none"/>
+<text  x="364" y="421" style="font-size:12; font-family:Dialog.plain; fill=#000000">okDoor()</text>
+<line  x1="407" y1="70" x2="407" y2="100" stroke="#000000" stroke-width="1" fill="none"/>
+<polygon  points="407,100 402,91 411,91 " fill="#000000"/>
+<polygon  points="407,100 402,91 411,91 " fill="none" stroke="#000000" stroke-width="1"/>
+<line  x1="407" y1="131" x2="404" y2="155" stroke="#000000" stroke-width="1" fill="none"/>
+<polygon  points="404,155 400,145 410,147 " fill="#000000"/>
+<polygon  points="404,155 400,145 410,147 " fill="none" stroke="#000000" stroke-width="1"/>
+<line  x1="404" y1="185" x2="403" y2="200" stroke="#000000" stroke-width="1" fill="none"/>
+<polygon  points="403,200 398,191 408,191 " fill="#000000"/>
+<polygon  points="403,200 398,191 408,191 " fill="none" stroke="#000000" stroke-width="1"/>
+<line  x1="388" y1="431" x2="345" y2="523" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="345" y1="523" x2="262" y2="526" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="262" y1="526" x2="315" y2="264" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="315" y1="264" x2="334" y2="115" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="334" y1="115" x2="357" y2="115" stroke="#000000" stroke-width="1" fill="none"/>
+<polygon  points="357,115 348,119 348,110 " fill="#000000"/>
+<polygon  points="357,115 348,119 348,110 " fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="312" y="477" style="font-size:12; font-family:Dialog.plain; fill=#694b0b">after (2,4)</text>
+<line  x1="404" y1="273" x2="404" y2="351" stroke="#000000" stroke-width="1" fill="none"/>
+<polygon  points="404,351 399,342 408,342 " fill="#000000"/>
+<polygon  points="404,351 399,342 408,342 " fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="407" y="311" style="font-size:12; font-family:Dialog.plain; fill=#694b0b">after (2,4)</text>
+<line  x1="403" y1="230" x2="404" y2="243" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="404" y1="381" x2="388" y2="401" stroke="#000000" stroke-width="1" fill="none"/>
+<polygon  points="388,401 389,391 397,397 " fill="#000000"/>
+<polygon  points="388,401 389,391 397,397 " fill="none" stroke="#000000" stroke-width="1"/>
+</svg>

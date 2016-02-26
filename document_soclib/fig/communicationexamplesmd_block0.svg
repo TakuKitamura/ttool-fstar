@@ -1,0 +1,58 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+<line  x1="386" y1="223" x2="386" y2="234" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="386" y1="121" x2="386" y2="141" stroke="#000000" stroke-width="1" fill="none"/>
+<polygon  points="386,141 381,132 390,132 " fill="#000000"/>
+<polygon  points="386,141 381,132 390,132 " fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="395" y="135" style="font-size:12; font-family:Dialog; fill=#7710f3">x = x + 1</text>
+<line  x1="386" y1="84" x2="386" y2="91" stroke="#000000" stroke-width="1" fill="none"/>
+<ellipse  cx="386" cy="71" rx="7" ry="7" fill="#000000"/>
+<line  x1="386" y1="79" x2="386" y2="84" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="386" y1="96" x2="386" y2="91" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="386" y1="116" x2="386" y2="121" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="363" y1="97" x2="402" y2="97" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="363" y1="117" x2="402" y2="117" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="363" y1="97" x2="363" y2="117" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="402" y1="97" x2="412" y2="107" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="402" y1="117" x2="412" y2="107" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="362" y1="96" x2="401" y2="96" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="362" y1="116" x2="401" y2="116" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="362" y1="96" x2="362" y2="116" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="401" y1="96" x2="411" y2="106" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="401" y1="116" x2="411" y2="106" stroke="#000000" stroke-width="1" fill="none"/>
+<text  x="367" y="111" style="font-size:12; font-family:Dialog; fill=#000000">sig1(x)</text>
+<line  x1="386" y1="198" x2="386" y2="193" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="386" y1="218" x2="386" y2="223" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="363" y1="199" x2="402" y2="199" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="363" y1="219" x2="402" y2="219" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="363" y1="199" x2="363" y2="219" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="402" y1="199" x2="412" y2="209" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="402" y1="219" x2="412" y2="209" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="362" y1="198" x2="401" y2="198" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="362" y1="218" x2="401" y2="218" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="362" y1="198" x2="362" y2="218" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="401" y1="198" x2="411" y2="208" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="401" y1="218" x2="411" y2="208" stroke="#000000" stroke-width="1" fill="none"/>
+<text  x="367" y="213" style="font-size:12; font-family:Dialog; fill=#000000">sig2(x)</text>
+<ellipse  cx="386" cy="249" rx="8" ry="8" fill="#000000"/>
+<ellipse  cx="386" cy="249" rx="10" ry="10" fill="none" stroke="#000000" stroke-width="1"/>
+<line  x1="386" y1="239" x2="386" y2="234" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="386" y1="146" x2="386" y2="141" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="386" y1="166" x2="386" y2="171" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="363" y1="147" x2="402" y2="147" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="363" y1="167" x2="402" y2="167" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="363" y1="147" x2="363" y2="167" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="402" y1="147" x2="412" y2="157" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="402" y1="167" x2="412" y2="157" stroke="#80b4cd" stroke-width="1" fill="none"/>
+<line  x1="362" y1="146" x2="401" y2="146" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="362" y1="166" x2="401" y2="166" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="362" y1="146" x2="362" y2="166" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="401" y1="146" x2="411" y2="156" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="401" y1="166" x2="411" y2="156" stroke="#000000" stroke-width="1" fill="none"/>
+<text  x="367" y="161" style="font-size:12; font-family:Dialog; fill=#000000">sig1(x)</text>
+<line  x1="386" y1="171" x2="386" y2="193" stroke="#000000" stroke-width="1" fill="none"/>
+<polygon  points="386,193 381,184 390,184 " fill="#000000"/>
+<polygon  points="386,193 381,184 390,184 " fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="400" y="185" style="font-size:12; font-family:Dialog; fill=#7710f3">x = x + 1</text>
+</svg>

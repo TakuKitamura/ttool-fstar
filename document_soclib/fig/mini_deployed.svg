@@ -1,0 +1,103 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+<line  x1="560" y1="234" x2="482" y2="338" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="834" y1="233" x2="544" y2="338" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="220" y1="333" x2="357" y2="350" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="788" y1="483" x2="544" y2="388" stroke="#000000" stroke-width="1" fill="none"/>
+<rect  x="709" y="33" width="250" height="200" fill="none" stroke="#000000" stroke-width="1"/>
+<line  x1="709" y1="33" x2="711" y2="30" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="959" y1="33" x2="961" y2="30" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="711" y1="30" x2="961" y2="30" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="959" y1="233" x2="961" y2="230" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="961" y1="30" x2="961" y2="230" stroke="#000000" stroke-width="1" fill="none"/>
+<rect  x="710" y="34" width="248" height="198" fill="#c6ebf9"/>
+<text  x="806" y="48" style="font-size:12; font-family:Dialog.bold; font-weight=bold; fill=#000000">&lt;&lt;CPU&gt;&gt;</text>
+<text  x="809" y="63" style="font-size:12; font-family:Dialog.plain; fill=#000000">CPU0</text>
+<rect  x="760" y="87" width="151" height="40" fill="none" stroke="#000000" stroke-width="1"/>
+<rect  x="761" y="88" width="149" height="38" fill="#c6e3f9"/>
+<line  x1="886" y1="92" x2="886" y2="117" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="886" y1="92" x2="901" y2="92" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="901" y1="92" x2="906" y2="97" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="906" y1="97" x2="906" y2="117" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="906" y1="117" x2="886" y2="117" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="901" y1="92" x2="901" y2="97" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="901" y1="97" x2="906" y2="97" stroke="#000000" stroke-width="1" fill="none"/>
+<text  x="765" y="102" style="font-size:12; font-family:Dialog.plain; fill=#000000">AVATAR Design::B0</text>
+<rect  x="722" y="131" width="150" height="40" fill="none" stroke="#000000" stroke-width="1"/>
+<rect  x="723" y="132" width="148" height="38" fill="#c6e3f9"/>
+<line  x1="847" y1="136" x2="847" y2="161" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="847" y1="136" x2="862" y2="136" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="862" y1="136" x2="867" y2="141" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="867" y1="141" x2="867" y2="161" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="867" y1="161" x2="847" y2="161" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="862" y1="136" x2="862" y2="141" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="862" y1="141" x2="867" y2="141" stroke="#000000" stroke-width="1" fill="none"/>
+<text  x="727" y="146" style="font-size:12; font-family:Dialog.plain; fill=#000000">AVATAR Design::B1</text>
+<rect  x="435" y="34" width="250" height="200" fill="none" stroke="#000000" stroke-width="1"/>
+<line  x1="435" y1="34" x2="437" y2="31" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="685" y1="34" x2="687" y2="31" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="437" y1="31" x2="687" y2="31" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="685" y1="234" x2="687" y2="231" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="687" y1="31" x2="687" y2="231" stroke="#000000" stroke-width="1" fill="none"/>
+<rect  x="436" y="35" width="248" height="198" fill="#c6ebf9"/>
+<text  x="532" y="49" style="font-size:12; font-family:Dialog.bold; font-weight=bold; fill=#000000">&lt;&lt;CPU&gt;&gt;</text>
+<text  x="542" y="64" style="font-size:12; font-family:Dialog.plain; fill=#000000">CPU1</text>
+<rect  x="494" y="88" width="150" height="40" fill="none" stroke="#000000" stroke-width="1"/>
+<rect  x="495" y="89" width="148" height="38" fill="#c6e3f9"/>
+<line  x1="619" y1="93" x2="619" y2="118" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="619" y1="93" x2="634" y2="93" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="634" y1="93" x2="639" y2="98" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="639" y1="98" x2="639" y2="118" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="639" y1="118" x2="619" y2="118" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="634" y1="93" x2="634" y2="98" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="634" y1="98" x2="639" y2="98" stroke="#000000" stroke-width="1" fill="none"/>
+<text  x="499" y="103" style="font-size:12; font-family:Dialog.plain; fill=#000000">AVATAR Design::B2</text>
+<rect  x="785" y="82" width="143" height="40" fill="none" stroke="#000000" stroke-width="1"/>
+<rect  x="786" y="83" width="141" height="38" fill="#c6e3f9"/>
+<line  x1="903" y1="87" x2="903" y2="112" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="903" y1="87" x2="918" y2="87" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="918" y1="87" x2="923" y2="92" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="923" y1="92" x2="923" y2="112" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="923" y1="112" x2="903" y2="112" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="918" y1="87" x2="918" y2="92" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="918" y1="92" x2="923" y2="92" stroke="#000000" stroke-width="1" fill="none"/>
+<text  x="790" y="97" style="font-size:12; font-family:Dialog.plain; fill=#000000">AVATAR Design::B</text>
+<rect  x="688" y="483" width="200" height="200" fill="none" stroke="#000000" stroke-width="1"/>
+<line  x1="688" y1="483" x2="690" y2="480" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="888" y1="483" x2="890" y2="480" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="690" y1="480" x2="890" y2="480" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="888" y1="683" x2="890" y2="680" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="890" y1="480" x2="890" y2="680" stroke="#000000" stroke-width="1" fill="none"/>
+<rect  x="689" y="484" width="198" height="198" fill="#acead3"/>
+<text  x="760" y="498" style="font-size:12; font-family:Dialog.bold; font-weight=bold; fill=#000000">&lt;&lt;RAM&gt;&gt;</text>
+<text  x="745" y="513" style="font-size:12; font-family:Dialog.plain; fill=#000000">Memory0</text>
+<rect  x="396" y="544" width="492" height="40" fill="none" stroke="#000000" stroke-width="1"/>
+<rect  x="397" y="545" width="490" height="38" fill="#c6e3f9"/>
+<line  x1="863" y1="549" x2="863" y2="574" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="863" y1="549" x2="878" y2="549" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="878" y1="549" x2="883" y2="554" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="883" y1="554" x2="883" y2="574" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="883" y1="574" x2="863" y2="574" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="878" y1="549" x2="878" y2="554" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="878" y1="554" x2="883" y2="554" stroke="#000000" stroke-width="1" fill="none"/>
+<text  x="401" y="559" style="font-size:12; font-family:Dialog.plain; fill=#000000">AVATAR Design::B/out sendReq(int value) #--# B2/in receiveReq(int value)</text>
+<rect  x="46" y="305" width="174" height="113" fill="none" stroke="#000000" stroke-width="1"/>
+<line  x1="46" y1="305" x2="48" y2="302" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="220" y1="305" x2="222" y2="302" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="48" y1="302" x2="222" y2="302" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="220" y1="418" x2="222" y2="415" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="222" y1="302" x2="222" y2="415" stroke="#000000" stroke-width="1" fill="none"/>
+<rect  x="47" y="306" width="172" height="111" fill="#c6ebf9"/>
+<text  x="108" y="320" style="font-size:12; font-family:Dialog.bold; font-weight=bold; fill=#000000">&lt;&lt;TTY&gt;&gt;</text>
+<text  x="112" y="335" style="font-size:12; font-family:Dialog.plain; fill=#000000">TTY0</text>
+<rect  x="357" y="338" width="250" height="50" fill="none" stroke="#000000" stroke-width="1"/>
+<line  x1="357" y1="338" x2="359" y2="335" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="607" y1="338" x2="609" y2="335" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="359" y1="335" x2="609" y2="335" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="607" y1="388" x2="609" y2="385" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="609" y1="335" x2="609" y2="385" stroke="#000000" stroke-width="1" fill="none"/>
+<rect  x="358" y="339" width="248" height="48" fill="#d7bc80"/>
+<text  x="446" y="353" style="font-size:12; font-family:Dialog.bold; font-weight=bold; fill=#000000">&lt;&lt;VGMN&gt;&gt;</text>
+<text  x="461" y="368" style="font-size:12; font-family:Dialog.plain; fill=#000000">Bus0</text>
+</svg>
