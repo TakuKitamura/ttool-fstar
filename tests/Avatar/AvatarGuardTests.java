@@ -36,10 +36,10 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarPragma
- * Creation: 20/05/2010
- * @version 1.1 01/07/2014
- * @author Ludovic APVRILLE, Raja GATGOUT
+ * Class AvatarGuardTests
+ * Creation: 20/05/2015
+ * @version 1.1 01/07/2015
+ * @author Ludovic APVRILLE, Letitia LI
  * @see
  */
 

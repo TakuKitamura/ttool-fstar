@@ -387,7 +387,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         avatarSimu.setVisible(!b);
         avatarFVUPPAAL.setVisible(!b);
         if (avatarFVProVerif != null) {
-            avatarFVProVerif.setVisible(!b);
+            avatarFVProVerif.setVisible(b);
         }
         avatarCodeGeneration.setVisible(!b);
 

@@ -6548,13 +6548,12 @@ public class GTURTLEModeling {
         artificialtmap = tmlm.getDefaultMapping();
         tmap = null;
         listE = gtmlm.getCorrespondanceTable();
-
         //TraceManager.addDev("TML Modeling translated");
         //TraceManager.addDev("----- TML Modeling -----");
         //TraceManager.addDev(tmlm.toString());
         //TraceManager.addDev("------------------------");
         checkingErrors = gtmlm.getCheckingErrors();
-
+	
         if ((checkingErrors != null) && (checkingErrors.size() > 0)){
             analyzeErrors();
             return false;
@@ -6665,7 +6664,7 @@ public class GTURTLEModeling {
         listE = gtmlm.getCorrespondanceTable();
 
         checkingErrors = gtmlm.getCheckingErrors();
-
+	avatarspec = gtmlm.avspec;
         if ((checkingErrors != null) && (checkingErrors.size() > 0)){
             analyzeErrors();
             warnings = gtmlm.getCheckingWarnings();

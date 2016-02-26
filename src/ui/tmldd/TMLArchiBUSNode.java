@@ -303,6 +303,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 				sb.append(" sliceTime=\"" + sliceTime + "\" ");
 				sb.append(" pipelineSize=\"" + pipelineSize + "\" ");
 				sb.append(" clockRatio=\"" + clockRatio + "\" ");
+				sb.append(" privacy=\"" + privacy + "\" ");
 				sb.append("/>\n");
 				sb.append("</extraparam>\n");
 				return new String(sb);
@@ -310,54 +311,53 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 		
 		public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
 				//System.out.println("*** load extra synchro ***");
-				try {
-						
-						NodeList nli;
-						Node n1, n2;
-						Element elt;
-						int t1id;
-						String sstereotype = null, snodeName = null;
-						
-						for(int i=0; i<nl.getLength(); i++) {
-								n1 = nl.item(i);
-								//System.out.println(n1);
-								if (n1.getNodeType() == Node.ELEMENT_NODE) {
-										nli = n1.getChildNodes();
-										for(int j=0; i<nli.getLength(); i++) {
-												n2 = nli.item(i);
-												//System.out.println(n2);
-												if (n2.getNodeType() == Node.ELEMENT_NODE) {
-														elt = (Element) n2;
-														if (elt.getTagName().equals("info")) {
-																sstereotype = elt.getAttribute("stereotype");
-																snodeName = elt.getAttribute("nodeName");
-														}
-														if (sstereotype != null) {
-																stereotype = sstereotype;
-														} 
-														if (snodeName != null){
-																name = snodeName;
-														}
-														
-														if (elt.getTagName().equals("attributes")) {
-																byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
-																arbitrationPolicy =Integer.decode(elt.getAttribute("arbitrationPolicy")).intValue();
-																pipelineSize = Integer.decode(elt.getAttribute("pipelineSize")).intValue();
-																if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
-																		clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
-																}
-																if ((elt.getAttribute("sliceTime") != null) &&  (elt.getAttribute("sliceTime").length() > 0)){
-																		sliceTime = Integer.decode(elt.getAttribute("sliceTime")).intValue();
-																}
-														}
-												}
-										}
+			try {
+				NodeList nli;
+				Node n1, n2;
+				Element elt;
+				int t1id;
+				String sstereotype = null, snodeName = null;	
+				for(int i=0; i<nl.getLength(); i++) {
+					n1 = nl.item(i);
+					//System.out.println(n1);
+					if (n1.getNodeType() == Node.ELEMENT_NODE) {
+						nli = n1.getChildNodes();
+						for(int j=0; i<nli.getLength(); i++) {
+					 		n2 = nli.item(i);
+							//System.out.println(n2);
+							if (n2.getNodeType() == Node.ELEMENT_NODE) {
+								elt = (Element) n2;
+								if (elt.getTagName().equals("info")) {
+									sstereotype = elt.getAttribute("stereotype");
+									snodeName = elt.getAttribute("nodeName");
 								}
+								if (sstereotype != null) {
+									stereotype = sstereotype;
+								} 
+								if (snodeName != null){
+									name = snodeName;
+								}
+								if (elt.getTagName().equals("attributes")) {
+									byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
+									arbitrationPolicy =Integer.decode(elt.getAttribute("arbitrationPolicy")).intValue();									pipelineSize = Integer.decode(elt.getAttribute("pipelineSize")).intValue();
+									if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
+										clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
+									}
+									if ((elt.getAttribute("sliceTime") != null) &&  (elt.getAttribute("sliceTime").length() > 0)){
+										sliceTime = Integer.decode(elt.getAttribute("sliceTime")).intValue();
+									}
+									if ((elt.getAttribute("privacy") != null) &&  (elt.getAttribute("privacy").length() > 0)){
+										privacy = Integer.decode(elt.getAttribute("privacy")).intValue();
+									}
+								}
+							}
 						}
-						
-				} catch (Exception e) {
-						throw new MalformedModelingException();
+					}
 				}
+						
+			} catch (Exception e) {
+				throw new MalformedModelingException();
+			}
 		}
 		
 		

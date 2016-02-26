@@ -336,7 +336,7 @@ public class TML2ProVerif {
 	/* Queries */
         this.spec.addDeclaration (new ProVerifComment    ("Queries Secret"));
         TraceManager.addDev("Queries Secret"); 
-        for (String[] pragma: tmlmodel.getPragmas ()){
+        for (String[] pragma: tmlmap.getPragmas ()){
             if (pragma[0].equals("#Confidentiality")){
                     this.spec.addDeclaration (new ProVerifQueryAtt   (pragma[1].replaceAll("\\.", "__"), true));
                     TraceManager.addDev("|    attacker (" + pragma[1].replaceAll("\\.", "__") + ")"); 
@@ -521,37 +521,45 @@ TMLActivity act= task.getActivityDiagram();
 	    //declare entering
 	    p = p.setNextInstr (new ProVerifProcRaw ("event enteringState__" + task.getName() + "__" + stateNum + "()", true));
 	    stateNum++;
-	    if (ae instanceof TMLActivityElementChannel){
-	        TMLActivityElementChannel aec = (TMLActivityElementChannel) ae;
-		int channelStatus = channelMap.get(aec.getChannel(0).getName());
-	        if (aec instanceof TMLWriteChannel){
-		    tmp = "out (" + CH_MAINCH + ", ";
-		    //Look up privacy
-		    if (channelStatus!=channelUnreachable){
-		        if (channelStatus==channelPrivate)
-                            tmp += CH_ENCRYPT + " (";
-            	    	tmp += "data__"+aec.getChannel(0).getName()+")";
-		        if (channelStatus==channelPrivate)
-                            tmp += ")";
-		        p = p.setNextInstr(new ProVerifProcRaw (tmp, true));
-		    }
-	        }
-	        else {
-		    if (channelStatus==channelPrivate) {
-			LinkedList<ProVerifVar> vars = new LinkedList<ProVerifVar> ();
-                	TraceManager.addDev("|    |    in (chPriv, ...)");
-			vars.add (new ProVerifVar ("data__"+ aec.getChannel(0).getName(), "bitstring"));
-                	p = p.setNextInstr (new ProVerifProcIn (CH_MAINCH, new ProVerifVar[] {new ProVerifVar ("privChData", "bitstring")}));
-                	p = p.setNextInstr (new ProVerifProcLet (vars.toArray (new ProVerifVar[vars.size()]), CH_DECRYPT + " (privChData)"));
-            	    }
-		    else {
-	                LinkedList<ProVerifVar> vars = new LinkedList<ProVerifVar> ();
-		        vars.add (new ProVerifVar ("data__"+ aec.getChannel(0).getName(), "bitstring"));
-		        p=p.setNextInstr(new ProVerifProcIn (CH_MAINCH, vars.toArray (new ProVerifVar[vars.size()])));
-		    }
-	        }
+	    if (ae instanceof TMLChoice){
+		TMLChoice aechoice = (TMLChoice) ae;
+		for (int i=0; i< ae.getNbNext(); i++){
+		    
+		}
 	    }
-	    ae = ae.getNextElement(0);
+	    else {
+	        if (ae instanceof TMLActivityElementChannel){
+	            TMLActivityElementChannel aec = (TMLActivityElementChannel) ae;
+		    int channelStatus = channelMap.get(aec.getChannel(0).getName());
+	            if (aec instanceof TMLWriteChannel){
+		        tmp = "out (" + CH_MAINCH + ", ";
+		        //Look up privacy
+		        if (channelStatus!=channelUnreachable){
+		            if (channelStatus==channelPrivate)
+                                tmp += CH_ENCRYPT + " (";
+            	    	    tmp += "data__"+aec.getChannel(0).getName()+")";
+		            if (channelStatus==channelPrivate)
+                                tmp += ")";
+		            p = p.setNextInstr(new ProVerifProcRaw (tmp, true));
+		        }
+	            }
+	            else {
+		        if (channelStatus==channelPrivate) {
+			    LinkedList<ProVerifVar> vars = new LinkedList<ProVerifVar> ();
+                	    TraceManager.addDev("|    |    in (chPriv, ...)");
+			    vars.add (new ProVerifVar ("data__"+ aec.getChannel(0).getName(), "bitstring"));
+                	    p = p.setNextInstr (new ProVerifProcIn (CH_MAINCH, new ProVerifVar[] {new ProVerifVar ("privChData", "bitstring")}));
+                	    p = p.setNextInstr (new ProVerifProcLet (vars.toArray (new ProVerifVar[vars.size()]), CH_DECRYPT + " (privChData)"));
+            	        }
+		        else {
+	                    LinkedList<ProVerifVar> vars = new LinkedList<ProVerifVar> ();
+		            vars.add (new ProVerifVar ("data__"+ aec.getChannel(0).getName(), "bitstring"));
+		            p=p.setNextInstr(new ProVerifProcIn (CH_MAINCH, vars.toArray (new ProVerifVar[vars.size()])));
+		        }
+	            }
+	        }
+	        ae = ae.getNextElement(0);
+	    }
 	}
 
 

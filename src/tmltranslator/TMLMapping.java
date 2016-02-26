@@ -67,7 +67,7 @@ public class TMLMapping {
 
     private ArrayList<TMLCPLib> mappedCPLibs;
 
-
+    private ArrayList<String[]> pragmas= new ArrayList<String[]>();
     private boolean optimized = false;
 
     private int hashCode;
@@ -286,6 +286,14 @@ public class TMLMapping {
         }
 
         return tmla.getCPUIDs();
+    }
+
+    public void addPragma(String[] s){
+	pragmas.add(s);
+    }
+
+    public ArrayList<String[]> getPragmas(){
+	return pragmas;
     }
 
     public String[] getCPUandHwAIDs() {

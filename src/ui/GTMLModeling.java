@@ -62,6 +62,8 @@ import tmltranslator.toproverif.*;
 import proverifspec.*;
 import myutil.*;
 import tmltranslator.ctranslator.*;
+import avatartranslator.*;
+
 
 public class GTMLModeling  {
     private TMLDesignPanel tmldp;
@@ -75,8 +77,7 @@ public class GTMLModeling  {
     private LinkedList removedChannels, removedRequests, removedEvents;
     private static CorrespondanceTGElement listE;
     private Hashtable<String, String> table;
-    public Map<String, Boolean> channelConfMap = new HashMap<String, Boolean>();
-
+    public AvatarSpecification avspec;
     //private ArrayList<HwNode> nodesToTakeIntoAccount;
     private LinkedList nodesToTakeIntoAccount;
 
@@ -287,21 +288,21 @@ public class GTMLModeling  {
     }
     private void addTMLPragmas(){
 	TGComponent tgc;
-	System.out.println(tmlap);
 	components = tmlap.tmlap.getComponentList();
 	ListIterator iterator = components.listIterator();
 	while(iterator.hasNext()) {
-	  tgc = (TGComponent)(iterator.next());
-	  if (tgc instanceof TGCNote){
-	    TGCNote note = (TGCNote) tgc;
-	    String[] vals = note.getValues();
-	    for (String s: vals){
-		if (s.contains(" ") && s.contains(".")){
-  		  tmlm.addPragma(s.split(" "));
-		}
+	    tgc = (TGComponent)(iterator.next());
+	    if (tgc instanceof TGCNote){
+	        TGCNote note = (TGCNote) tgc;
+	        String[] vals = note.getValues();
+	        for (String s: vals){
+		    System.out.println("Val " + s);
+		    if (s.contains("#") && s.contains(" ")){
+  		        map.addPragma(s.split(" "));
+	    	    }
+	        }
 	    }
-	  }
-	}
+        }
     }
     private void addTMLTasks() throws MalformedTMLDesignException {
         TGComponent tgc;
@@ -1530,6 +1531,7 @@ public class GTMLModeling  {
                 tmlforloop.setInit("");
                 tmlforloop.setCondition("");
                 tmlforloop.setIncrement("");
+		tmlforloop.setInfinite(true);
                 activity.addElement(tmlforloop);
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlforloop, tgc);
@@ -2242,6 +2244,7 @@ public class GTMLModeling  {
                     bus.arbitration = busnode.getArbitrationPolicy();
                     bus.clockRatio = busnode.getClockRatio();
                     bus.sliceTime = busnode.getSliceTime();
+		    bus.privacy = busnode.getPrivacy();
                     listE.addCor(bus, busnode);
                     archi.addHwNode(bus);
                     TraceManager.addDev("BUS node added:" + bus.getName());
@@ -3085,92 +3088,8 @@ public class GTMLModeling  {
 
         }
 	addTMLPragmas();
-	ArrayList<TMLChannel> channels = tmlm.getChannels();
-	List<TMLTask> destinations = new ArrayList<TMLTask>();
-	TMLTask a; 
-	for (TMLChannel channel: channels){	
-	    destinations.clear();
-	    if (channel.isBasicChannel()){
-	        a = channel.getOriginTask();
-		destinations.add(channel.getDestinationTask());
-	    }
-	    else {
-		a=channel.getOriginTasks().get(0);
-		destinations.addAll(channel.getDestinationTasks());
-	    }  
-	    HwCPU node1 = (HwCPU) map.getHwNodeOf(a);
-	    for (TMLTask t: destinations){
-	        List<HwBus> buses = new ArrayList<HwBus>();
-		HwNode node2 = map.getHwNodeOf(t);
-		if (node1==node2){
-		    System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is confidential");
-		    channelConfMap.put(channel.getName(), true);
-		}
-		if (node1!=node2){
-		    //Navigate architecture for node
-		    List<HwLink> links = archi.getHwLinks();
-		    HwNode last = node1;
-		    List<HwNode> found = new ArrayList<HwNode>();	
-		    List<HwNode> done = new ArrayList<HwNode>();
-		    List<HwNode> path = new ArrayList<HwNode>();
-		    Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
-		    for (HwLink link: links){
-			if (link.hwnode == node1){
-			    found.add(link.bus);
-			    List<HwNode> tmp = new ArrayList<HwNode>();
-			    tmp.add(link.bus);
-			    pathMap.put(link.bus, tmp);
-			}
-		    }
-		    outerloop:
-		        while (found.size()>0){
-			    HwNode curr = found.remove(0);
-			    for (HwLink link: links){
-			        if (curr == link.bus){
-			    	    if (link.hwnode == node2){
-			      		path = pathMap.get(curr);
-			      		break outerloop;
-			    	    }
-			    	    if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
-			      		found.add(link.hwnode);
-			      		List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
-			      		tmp.add(link.hwnode);
-			      		pathMap.put(link.hwnode, tmp);
-			    	    }
-			  	}
-			        else if (curr == link.hwnode){
-			      	    if (!done.contains(link.bus) && !found.contains(link.bus)){
-			        	found.add(link.bus);
-			        	List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
-			        	tmp.add(link.bus);
-			        	pathMap.put(link.bus, tmp);
-			      	    }
-			  	}
-			    }
-			    done.add(curr);
-		      }
-		      if (path.size() ==0){
-			  System.out.println("Path does not exist for channel " + channel.getName() + " between Task " + a.getTaskName() + " and Task " + t.getTaskName());
-		      }
-		      else {
-			  boolean priv=true;
-			  HwBus bus;
-			  //Check if all buses and bridges are private
-			  for (HwNode n: path){
-			      if (n instanceof HwBus){
-			          bus = (HwBus) n;
-			    	  if (bus.privacy ==0){
-			      	      priv=false;
-					break;
-			    	  }
-			      }
-			  }
-			  channelConfMap.put(channel.getName(), priv);
-			  System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is " + (priv ? "confidential" : "not confidential"));
-		      }
-		}
-	    }
-	}  
+	TML2Avatar t2a = new TML2Avatar(map);
+	avspec = t2a.generateAvatarSpec();
     }
 
     public void addToTable(String s1, String s2) {

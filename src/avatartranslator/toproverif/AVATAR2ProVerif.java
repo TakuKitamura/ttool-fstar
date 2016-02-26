@@ -787,7 +787,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
             // Use a dummy name if no value is sent
             if (_asme.getNbOfValues() == 0)
-                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcNew ("data__", "bistring"));
+                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcNew ("data__", "bitstring"));
 
             String tmp = "out (" + CH_MAINCH + ", ";
             if (isPrivate)
