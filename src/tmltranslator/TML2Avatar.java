@@ -48,6 +48,7 @@ import tmltranslator.*;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.HashSet;
 import java.util.Vector;
 import java.io.*;
@@ -62,15 +63,118 @@ import ui.TGComponent;
 import proverifspec.*;
 import myutil.*;
 import avatartranslator.*;
-
+   
 public class TML2Avatar {
     TMLMapping tmlmap;
+    TMLModeling tmlmodel;
+
+    public HashMap<TMLChannel, Integer> channelMap = new HashMap<TMLChannel,Integer>();
+    public HashMap<TMLTask, AvatarBlock> taskBlockMap = new HashMap<TMLTask, AvatarBlock>(); 
+
+    private final static Integer channelPublic = 0;
+    private final static Integer channelPrivate = 1;
+    private final static Integer channelUnreachable = 2;
+
+
     List<String> allStates;
     public TML2Avatar(TMLMapping tmlmap) {
         this.tmlmap = tmlmap;
+	this.tmlmodel = tmlmap.getTMLModeling();
 	allStates = new ArrayList<String>();
     }
     
+    public void checkChannels(){
+	ArrayList<TMLChannel> channels = tmlmodel.getChannels();
+	List<TMLTask> destinations = new ArrayList<TMLTask>();
+	TMLTask a; 
+	for (TMLChannel channel: channels){	
+	    destinations.clear();
+	    if (channel.isBasicChannel()){
+	        a = channel.getOriginTask();
+		destinations.add(channel.getDestinationTask());
+	    }
+	    else {
+		a=channel.getOriginTasks().get(0);
+		destinations.addAll(channel.getDestinationTasks());
+	    }  
+	    HwCPU node1 = (HwCPU) tmlmap.getHwNodeOf(a);
+	    for (TMLTask t: destinations){
+	        List<HwBus> buses = new ArrayList<HwBus>();
+		HwNode node2 = tmlmap.getHwNodeOf(t);
+		if (node1==node2){
+		    System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is confidential");
+		    channelMap.put(channel, channelPrivate);
+		}
+		if (node1!=node2){
+		    //Navigate architecture for node
+		    List<HwLink> links = tmlmap.getTMLArchitecture().getHwLinks();
+		    HwNode last = node1;
+		    List<HwNode> found = new ArrayList<HwNode>();	
+		    List<HwNode> done = new ArrayList<HwNode>();
+		    List<HwNode> path = new ArrayList<HwNode>();
+		    Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
+		    for (HwLink link: links){
+			if (link.hwnode == node1){
+			    found.add(link.bus);
+			    List<HwNode> tmp = new ArrayList<HwNode>();
+			    tmp.add(link.bus);
+			    pathMap.put(link.bus, tmp);
+			}
+		    }
+		    outerloop:
+		        while (found.size()>0){
+			    HwNode curr = found.remove(0);
+			    for (HwLink link: links){
+			        if (curr == link.bus){
+			    	    if (link.hwnode == node2){
+			      		path = pathMap.get(curr);
+			      		break outerloop;
+			    	    }
+			    	    if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+			      		found.add(link.hwnode);
+			      		List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+			      		tmp.add(link.hwnode);
+			      		pathMap.put(link.hwnode, tmp);
+			    	    }
+			  	}
+			        else if (curr == link.hwnode){
+			      	    if (!done.contains(link.bus) && !found.contains(link.bus)){
+			        	found.add(link.bus);
+			        	List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+			        	tmp.add(link.bus);
+			        	pathMap.put(link.bus, tmp);
+			      	    }
+			  	}
+			    }
+			    done.add(curr);
+		      }
+		      if (path.size() ==0){
+			  System.out.println("Path does not exist for channel " + channel.getName() + " between Task " + a.getTaskName() + " and Task " + t.getTaskName());
+			  channelMap.put(channel, channelUnreachable);
+		      }
+		      else {
+			  int priv=1;
+			  HwBus bus;
+			  //Check if all buses and bridges are private
+			  for (HwNode n: path){
+			      if (n instanceof HwBus){
+			          bus = (HwBus) n;
+				  System.out.println("BUS PRIVACY "+bus.privacy);
+			    	  if (bus.privacy ==0){
+			      	      priv=0;
+					break;
+			    	  }
+			      }
+			  }
+			  channelMap.put(channel, priv);
+			  System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is " + (priv==1 ? "confidential" : "not confidential"));
+		      }
+		}
+	    }
+	}  
+    }
+   
+
     public List<AvatarStateMachineElement> translateState(TMLActivityElement ae, AvatarBlock block){
 
         TMLActionState tmlaction;
@@ -339,6 +443,7 @@ public class TML2Avatar {
 	ArrayList<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
 	for (TMLTask task:tasks){
 	    AvatarBlock block = new AvatarBlock(task.getName(), avspec, task.getReferenceObject());
+	    taskBlockMap.put(task, block);
 	    for (TMLAttribute attr: task.getAttributes()){
 		AvatarType type;
 		if (attr.getType().getType()==TMLType.NATURAL){
@@ -378,6 +483,11 @@ public class TML2Avatar {
 
 	    avspec.addBlock(block);
 	   
+	}
+	checkChannels();
+	for (TMLChannel channel:channelMap.keySet()){
+	    AvatarRelation ar= new AvatarRelation(channel.getName(), taskBlockMap.get(channel.getOriginTask()), taskBlockMap.get(channel.getDestinationTask()), channel.getReferenceObject());
+	    avspec.addRelation(ar);
 	}
 	System.out.println(avspec);
 	return avspec;
