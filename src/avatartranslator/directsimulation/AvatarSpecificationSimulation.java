@@ -497,9 +497,9 @@ public class AvatarSpecificationSimulation  {
 
         int ind = 0;
         /*for(AvatarSimulationPendingTransaction asptt :pendingTransactions) {
-            TraceManager.addDev("#" + ind + ": " + asptt);
-            ind ++;
-	    }*/
+          TraceManager.addDev("#" + ind + ": " + asptt);
+          ind ++;
+          }*/
 
         Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
 
@@ -547,11 +547,11 @@ public class AvatarSpecificationSimulation  {
             }
         }
 
-	/*ind = 0;
-        for(AvatarSimulationPendingTransaction asptt :pendingTransactions) {
-            TraceManager.addDev("#" + ind + ": " + asptt);
-            ind ++;
-	    }*/
+        /*ind = 0;
+          for(AvatarSimulationPendingTransaction asptt :pendingTransactions) {
+          TraceManager.addDev("#" + ind + ": " + asptt);
+          ind ++;
+          }*/
 
         boolean hasSilentTransaction = false;
         if (nbOfPureLogicalTransitions >0) {
