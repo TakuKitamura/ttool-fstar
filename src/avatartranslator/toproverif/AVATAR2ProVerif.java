@@ -90,8 +90,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     private final static String HASH_HASH = "hash";
 
     private final static String CH_MAINCH = "ch";
-    private final static String CH_ENCRYPT = "privChEnc";
-    private final static String CH_DECRYPT = "privChDec";
+    private final static String CH_ENCRYPT = "privChEnc__";
+    private final static String CH_DECRYPT = "privChDec__";
 
     private final static String CHCTRL_CH = "chControl";
     private final static String CHCTRL_ENCRYPT = "chControlEnc";
@@ -109,6 +109,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     private HashMap<AvatarAttribute, AvatarAttribute> nameEquivalence;
     private HashSet<AvatarAttribute> secrecyChecked;
 
+    private int dummyDataCounter;
+
     private boolean stateReachability;
 
     private Vector warnings;
@@ -119,40 +121,40 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     }
 
     public boolean saveInFile(String path) throws FileException {
-	//Our hash is saved in config
-	String hashCode= Integer.toString(this.spec.getStringSpec().hashCode());
-	File file = new File(path);
-	BufferedReader br;
+        //Our hash is saved in config
+        String hashCode= Integer.toString(this.spec.getStringSpec().hashCode());
+        File file = new File(path);
+        BufferedReader br;
         if (file.exists()){
-	    String hash = ConfigurationTTool.ProVerifHash;
-	    if (!hash.equals("")){
-		try {
-		    br = new BufferedReader(new FileReader(path));
-		    String s = br.readLine();
-		    String tmp;
-		    while ((tmp = br.readLine()) !=null){
-			s = s+"\n" + tmp;
-		    }
-		    String fileHash = Integer.toString(s.hashCode());
-		    if (!hash.equals(fileHash)){
-			if(JOptionPane.showConfirmDialog(null, "File " + path + " already exists. Do you want to overwrite?", "Overwrite File?", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
-			    return false;
-			}
-		    }
-		    br.close();
-		} catch (Exception e) {
-			//
-		}
-	    }
-	}
+            String hash = ConfigurationTTool.ProVerifHash;
+            if (!hash.equals("")){
+                try {
+                    br = new BufferedReader(new FileReader(path));
+                    String s = br.readLine();
+                    String tmp;
+                    while ((tmp = br.readLine()) !=null){
+                        s = s+"\n" + tmp;
+                    }
+                    String fileHash = Integer.toString(s.hashCode());
+                    if (!hash.equals(fileHash)){
+                        if(JOptionPane.showConfirmDialog(null, "File " + path + " already exists. Do you want to overwrite?", "Overwrite File?", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
+                            return false;
+                        }
+                    }
+                    br.close();
+                } catch (Exception e) {
+                    //
+                }
+            }
+        }
         FileUtils.saveFile(path, this.spec.getStringSpec());
-	ConfigurationTTool.ProVerifHash = hashCode;
-	try {
-	    ConfigurationTTool.saveConfiguration();
-	} catch (Exception e){
-//
-	}
-	return true;
+        ConfigurationTTool.ProVerifHash = hashCode;
+        try {
+            ConfigurationTTool.saveConfiguration();
+        } catch (Exception e){
+            //
+        }
+        return true;
     }
 
     public Vector getWarnings() {
@@ -176,6 +178,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         this.avspec.removeCompositeStates();
         this.avspec.removeTimers();
 
+        this.dummyDataCounter = 0;
+
         LinkedList<AvatarAttribute> allKnowledge = this.makeStartingProcess();
 
         this.makeHeader();
@@ -189,13 +193,6 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         return new ProVerifOutputAnalyzer (this);
     }
 
-    public String getTrueName (AvatarAttribute attr) {
-        AvatarAttribute trueAttr = this.nameEquivalence.get (attr);
-        if (trueAttr == null)
-            return null;
-        return AVATAR2ProVerif.translateTerm (trueAttr, null);
-    }
-
     private static String makeAttrName (String... _params) {
         String result = "";
         boolean first = true;
@@ -207,6 +204,200 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             result += p;
         }
         return result;
+    }
+
+    protected static String translateTerm (AvatarTerm term, HashMap<AvatarAttribute, Integer> attributeCmp) {
+        if (term instanceof AvatarAttribute) {
+            AvatarAttribute attr = (AvatarAttribute) term;
+            if (attributeCmp != null)
+                return AVATAR2ProVerif.makeAttrName (attr.getBlock ().getName (), attr.getName (), attributeCmp.get (attr).toString ());
+            else
+                return AVATAR2ProVerif.makeAttrName (attr.getBlock ().getName (), attr.getName ());
+        }
+
+        if (term instanceof AvatarConstant) {
+            AvatarConstant constant = (AvatarConstant) term;
+            TraceManager.addDev("AvatarConstant");
+
+            try {
+                int i = Integer.parseInt (constant.getName ());
+                TraceManager.addDev("AvatarConstant Integer");
+
+                if (i <= MAX_INT) {
+                    int j;
+                    StringBuilder sb = new StringBuilder ();
+                    for (j=i; j>0; j--) {
+                        sb.append (PEANO_N);
+                        sb.append ("(");
+                    }
+                    sb.append (ZERO);
+                    for (; i>0; i--)
+                        sb.append (")");
+                    TraceManager.addDev("AvatarConstant Integer Lower: " + sb.toString ());
+
+                    return sb.toString ();
+                } else {
+                    // TODO: raise error
+                    return ZERO;
+                }
+            } catch (NumberFormatException e) { }
+
+            return constant.getName ();
+        }
+
+        if (term instanceof AvatarArithmeticOp) {
+            AvatarArithmeticOp op = (AvatarArithmeticOp) term;
+            if (op.getOperator ().compareTo ("+") == 0) {
+                AvatarTerm t1, t2;
+                t1 = op.getTerm1 ();
+                t2 = op.getTerm2 ();
+                if (t1 instanceof AvatarConstant) {
+                    AvatarTerm t = t1;
+                    t1 = t2;
+                    t2 = t;
+                } else if (!(t2 instanceof AvatarConstant)) {
+                    // TODO: raise error
+                    return null;
+                }
+
+                try {
+                    int i = Integer.parseInt (t2.getName ());
+
+                    if (i <= MAX_INT) {
+                        int j;
+                        StringBuilder sb = new StringBuilder ();
+                        for (j=i; j>0; j--) {
+                            sb.append (PEANO_N);
+                            sb.append ("(");
+                        }
+                        sb.append (AVATAR2ProVerif.translateTerm(t1, attributeCmp));
+                        for (; i>0; i--)
+                            sb.append (")");
+
+                        return sb.toString ();
+                    } else {
+                        // TODO: raise error
+                        return AVATAR2ProVerif.translateTerm(t1, attributeCmp);
+                    }
+                } catch (NumberFormatException e) { 
+                    // TODO: raise error
+                    return AVATAR2ProVerif.translateTerm(t1, attributeCmp);
+                }
+
+
+            } else {
+                // TODO: raise error
+                return null;
+            }
+        }
+
+        if (term instanceof AvatarTermFunction) {
+            AvatarTuple args = ((AvatarTermFunction) term).getArgs ();
+            AvatarMethod method = ((AvatarTermFunction) term).getMethod ();
+
+            return method.getName () + " " + AVATAR2ProVerif.translateTerm (args, attributeCmp);
+        }
+
+        if (term instanceof AvatarTuple) {
+            String result = "(";
+            boolean first = true;
+            for (AvatarTerm arg: ((AvatarTuple) term).getComponents ()) {
+                if (first)
+                    first = false;
+                else
+                    result += ", ";
+                result += AVATAR2ProVerif.translateTerm (arg, attributeCmp);
+            }
+            result += ")";
+
+            return result;
+        }
+
+        return null;
+    }
+
+    // Supported guards: a == b, not(a == b), g1 and g2, g1 or g2
+    // -> transformed into a = b, a <> b, g1 && g2, g1 || g2
+    // Returns nulls otherwise
+    private static String translateGuard (AvatarGuard _guard, HashMap<AvatarAttribute, Integer> attributeCmp) {
+        if (_guard == null || _guard instanceof AvatarGuardEmpty)
+            return null;
+
+        if (_guard instanceof AvatarGuardElse)
+            // TODO: warning
+            return null;
+
+        if (_guard instanceof AvatarSimpleGuardMono) {
+            String term = AVATAR2ProVerif.translateTerm (((AvatarSimpleGuardMono) _guard).getTerm (), attributeCmp);
+            if (term != null)
+                return term + " = " + TRUE;
+
+            return null;
+        }
+
+        if (_guard instanceof AvatarSimpleGuardDuo) {
+            String delim = null;
+            String termA = AVATAR2ProVerif.translateTerm (((AvatarSimpleGuardDuo) _guard).getTermA (), attributeCmp);
+            String termB = AVATAR2ProVerif.translateTerm (((AvatarSimpleGuardDuo) _guard).getTermB (), attributeCmp);
+            if (((AvatarSimpleGuardDuo) _guard).getBinaryOp ().equals ("=="))
+                delim = "=";
+            else if (((AvatarSimpleGuardDuo) _guard).getBinaryOp ().equals ("!="))
+                delim = "<>";
+
+            if (termA != null && termB != null && delim != null)
+                return termA + " " + delim + " " + termB;
+
+            return null;
+        }
+
+        if (_guard instanceof AvatarUnaryGuard) {
+            String before = ((AvatarUnaryGuard) _guard).getBefore ();
+            String after = ((AvatarUnaryGuard) _guard).getAfter ();
+            AvatarGuard guard = ((AvatarUnaryGuard) _guard).getGuard ();
+
+            String beforeProV = null;
+            String afterProV = ")";
+
+            if (before.equals ("not("))
+                beforeProV = "not (";
+            else if (before.equals ("("))
+                beforeProV = "(";
+
+            String guardProV = AVATAR2ProVerif.translateGuard (guard, attributeCmp);
+
+            if (beforeProV != null && guardProV != null)
+                return beforeProV + guardProV + afterProV;
+
+            return null;
+        }
+
+        if (_guard instanceof AvatarBinaryGuard) {
+            String delim = ((AvatarBinaryGuard) _guard).getBinaryOp ();
+            AvatarGuard guardA = ((AvatarBinaryGuard) _guard).getGuardA ();
+            AvatarGuard guardB = ((AvatarBinaryGuard) _guard).getGuardB ();
+
+            String delimProV = null;
+
+            if (delim.equals ("and"))
+                delimProV = "&&";
+            else if (delim.equals ("or"))
+                delimProV = "||";
+
+            String guardAProV = AVATAR2ProVerif.translateGuard (guardA, attributeCmp);
+            String guardBProV = AVATAR2ProVerif.translateGuard (guardB, attributeCmp);
+
+            if (delimProV != null && guardAProV != null && guardBProV != null)
+                return guardAProV + " " + delimProV + " " + guardBProV;
+        }
+
+        return null;
+    }
+
+    public String getTrueName (AvatarAttribute attr) {
+        AvatarAttribute trueAttr = this.nameEquivalence.get (attr);
+        if (trueAttr == null)
+            return null;
+        return AVATAR2ProVerif.translateTerm (trueAttr, null);
     }
 
     public void makeHeader() {
@@ -223,15 +414,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         this.spec.addDeclaration (new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("x", "bitstring"), new ProVerifVar ("y", "bitstring")}, PK_DECRYPT + " (" + PK_ENCRYPT + " (x, " + PK_PK + " (y)), y) = x"));
         this.spec.addDeclaration (new ProVerifFunc       (PK_SIGN, new String[] {"bitstring", "bitstring"}, "bitstring"));
         this.spec.addDeclaration (new ProVerifFunc       (PK_VERIFYSIGN, new String[] {"bitstring", "bitstring", "bitstring"}, "bitstring",
-                                  new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("sk", "bitstring")}, PK_VERIFYSIGN + " (m, " + PK_SIGN + " (m, sk), " + PK_PK + " (sk)) = " + TRUE,
-                                  new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("m2", "bitstring"), new ProVerifVar ("ppk", "bitstring")}, PK_VERIFYSIGN + " (m, m2, ppk) = " + FALSE))));
+                    new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("sk", "bitstring")}, PK_VERIFYSIGN + " (m, " + PK_SIGN + " (m, sk), " + PK_PK + " (sk)) = " + TRUE,
+                        new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("m2", "bitstring"), new ProVerifVar ("ppk", "bitstring")}, PK_VERIFYSIGN + " (m, m2, ppk) = " + FALSE))));
 
 
         this.spec.addDeclaration (new ProVerifComment    ("Certificates"));
         this.spec.addDeclaration (new ProVerifFunc       (CERT_CERT, new String[] {"bitstring", "bitstring"}, "bitstring"));
         this.spec.addDeclaration (new ProVerifFunc       (CERT_VERIFYCERT, new String[] {"bitstring", "bitstring"}, "bitstring",
-                                  new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("epk", "bitstring"), new ProVerifVar ("sk", "bitstring")}, CERT_VERIFYCERT + " (" + CERT_CERT + " (epk, " + PK_SIGN + " (epk, sk)), " + PK_PK + " (sk)) = " + TRUE,
-                                  new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("ppk", "bitstring")}, CERT_VERIFYCERT + " (m, ppk) = " + FALSE))));
+                    new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("epk", "bitstring"), new ProVerifVar ("sk", "bitstring")}, CERT_VERIFYCERT + " (" + CERT_CERT + " (epk, " + PK_SIGN + " (epk, sk)), " + PK_PK + " (sk)) = " + TRUE,
+                        new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("ppk", "bitstring")}, CERT_VERIFYCERT + " (m, ppk) = " + FALSE))));
         this.spec.addDeclaration (new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("epk", "bitstring"), new ProVerifVar ("sk", "bitstring")}, CERT_GETPK + " (" + CERT_CERT + " (epk, " + PK_SIGN + " (epk,sk))) = epk"));
 
         this.spec.addDeclaration (new ProVerifComment    ("Symmetric key cryptography"));
@@ -241,8 +432,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         this.spec.addDeclaration (new ProVerifComment    ("MAC"));
         this.spec.addDeclaration (new ProVerifFunc       (MAC_MAC, new String[] {"bitstring", "bitstring"}, "bitstring"));
         this.spec.addDeclaration (new ProVerifFunc       (MAC_VERIFYMAC, new String[] {"bitstring", "bitstring", "bitstring"}, "bitstring",
-                                  new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("k", "bitstring")}, MAC_VERIFYMAC + " (m, k, " + MAC_MAC + " (m, k)) = " + TRUE,
-                                  new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("m2", "bitstring"), new ProVerifVar ("k", "bitstring")}, MAC_VERIFYMAC + " (m, k, m2) = " + FALSE))));
+                    new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("k", "bitstring")}, MAC_VERIFYMAC + " (m, k, " + MAC_MAC + " (m, k)) = " + TRUE,
+                        new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("m", "bitstring"), new ProVerifVar ("m2", "bitstring"), new ProVerifVar ("k", "bitstring")}, MAC_VERIFYMAC + " (m, k, m2) = " + FALSE))));
 
         this.spec.addDeclaration (new ProVerifComment    ("HASH"));
         this.spec.addDeclaration (new ProVerifFunc       (HASH_HASH, new String[] {"bitstring"}, "bitstring"));
@@ -250,8 +441,17 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         this.spec.addDeclaration (new ProVerifComment    ("Channel"));
         this.spec.addDeclaration (new ProVerifVar        (CH_MAINCH, "channel"));
         // TODO: add one encryption function per signal
-        this.spec.addDeclaration (new ProVerifFunc       (CH_ENCRYPT, new String[] {"bitstring"}, "bitstring", true));
-        this.spec.addDeclaration (new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("x", "bitstring")}, CH_DECRYPT + " (" + CH_ENCRYPT + " (x)) = x", true));
+
+        for (AvatarRelation ar: this.avspec.getRelations ())
+            if (ar.isPrivate ()) {
+                int nbOfSignals = ar.nbOfSignals ();
+                int i;
+                for (i=0; i<nbOfSignals; i++) {
+                    String name = ar.getSignal1 (i).getName () + ar.getSignal2 (i).getName ();
+                    this.spec.addDeclaration (new ProVerifFunc       (CH_ENCRYPT + name, new String[] {"bitstring"}, "bitstring", true));
+                    this.spec.addDeclaration (new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("x", "bitstring")}, CH_DECRYPT + name + " (" + CH_ENCRYPT + name + " (x)) = x", true));
+                }
+            }
 
         this.spec.addDeclaration (new ProVerifComment    ("Control Channel"));
         this.spec.addDeclaration (new ProVerifVar        (CHCTRL_CH, "channel"));
@@ -681,7 +881,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         lastInstr = lastInstr.setNextInstr ( new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + AVATAR2ProVerif.translateTerm (attr, null) + ");"));
 
         // Call the first "real" process
-        String strong = "strong__" + AVATAR2ProVerif.makeAttrName (ab.getName (), "0");
+        this.dummyDataCounter ++;
+        String strong = "strong__" + AVATAR2ProVerif.makeAttrName (ab.getName (), "0") + this.dummyDataCounter;
         lastInstr = lastInstr.setNextInstr (new ProVerifProcIn (CHCTRL_CH, new ProVerifVar[] {new ProVerifVar (strong, "bitstring")}));
         String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((sessionID, call__" + ab.getName () + "__0" + ", " + strong;
         for(ProVerifVar aa: this.getAttributesFromBlock (ab))
@@ -704,7 +905,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 this.spec.addDeclaration (p);
 
                 // Read and decrypt control data: variables sent to the process and the call__num variable
-                strong = "strong__" + AVATAR2ProVerif.makeAttrName (ab.getName(), simplifiedElements.get (asme).toString ());
+                this.dummyDataCounter ++;
+                strong = "strong__" + AVATAR2ProVerif.makeAttrName (ab.getName(), simplifiedElements.get (asme).toString ()) + this.dummyDataCounter;
                 p = p.setNextInstr (new ProVerifProcNew (strong, "bitstring"));
                 p = p.setNextInstr (new ProVerifProcRaw ("out (" + CHCTRL_CH + ", " + strong + ");"));
                 p = p.setNextInstr (new ProVerifProcIn (CHCTRL_CH, new ProVerifVar[] {new ProVerifVar ("chControlData", "bitstring")}));
@@ -752,7 +954,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             Integer n = arg.simplifiedElements.get (next);
             if (n != null) {
                 // If next is the root of a process send the attributes on the control channel
-                String strong = "strong__" + AVATAR2ProVerif.makeAttrName (arg.block.getName (), n.toString ());
+                this.dummyDataCounter ++;
+                String strong = "strong__" + AVATAR2ProVerif.makeAttrName (arg.block.getName (), n.toString ()) + this.dummyDataCounter;
                 arg.lastInstr = arg.lastInstr.setNextInstr (new ProVerifProcIn (CHCTRL_CH, new ProVerifVar[] {new ProVerifVar (strong, "bitstring")}));
                 String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((sessionID, call__" + arg.block.getName () + "__" + n + ", " + strong;
                 for(AvatarAttribute aa: arg.block.getAttributes ())
@@ -779,6 +982,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         // Check if the channel is private
         boolean isPrivate = false;
         AvatarRelation ar = this.avspec.getAvatarRelationWithSignal(as);
+        int index = ar.getIndexOfSignal (as);
+        String name = ar.getSignal1 (index).getName () + ar.getSignal2 (index).getName ();
+
         if (ar != null)
             isPrivate = ar.isPrivate();
 
@@ -786,15 +992,17 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             // If this is an out operation
 
             // Use a dummy name if no value is sent
-            if (_asme.getNbOfValues() == 0)
-                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcNew ("data__", "bitstring"));
+            if (_asme.getNbOfValues() == 0) {
+                this.dummyDataCounter ++;
+                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcNew ("data__" + this.dummyDataCounter, "bitstring"));
+            }
 
             String tmp = "out (" + CH_MAINCH + ", ";
             if (isPrivate)
-                tmp += CH_ENCRYPT + " (";
+                tmp += CH_ENCRYPT + name + " (";
 
             if (_asme.getNbOfValues() == 0)
-                tmp += "data__";
+                tmp += "data__" + this.dummyDataCounter;
             else {
                 boolean first = true;
                 for(String value: _asme.getValues ()) {
@@ -827,9 +1035,10 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         } else {
             // If it's an In operation
             LinkedList<ProVerifVar> vars = new LinkedList<ProVerifVar> ();
-            if (_asme.getNbOfValues() == 0)
-                vars.add (new ProVerifVar ("data__", "bitstring"));
-            else
+            if (_asme.getNbOfValues() == 0) {
+                this.dummyDataCounter ++;
+                vars.add (new ProVerifVar ("data__" + this.dummyDataCounter, "bitstring"));
+            } else
                 for(String value: _asme.getValues ()) {
                     AvatarTerm term = AvatarTerm.createFromString (arg.block, value);
                     if (term == null || ! (term instanceof AvatarAttribute)) {
@@ -850,8 +1059,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             // If the channel is private use the CH_DECRYPT function
             if (isPrivate) {
                 TraceManager.addDev("|    |    in (chPriv, ...)");
-                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcIn (CH_MAINCH, new ProVerifVar[] {new ProVerifVar ("privChData", "bitstring")}));
-                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (vars.toArray (new ProVerifVar[vars.size()]), CH_DECRYPT + " (privChData)"));
+                this.dummyDataCounter ++;
+                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcIn (CH_MAINCH, new ProVerifVar[] {new ProVerifVar ("privChData" + this.dummyDataCounter, "bitstring")}));
+                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (vars.toArray (new ProVerifVar[vars.size()]), CH_DECRYPT + name + " (privChData" + this.dummyDataCounter + ")"));
             } else {
                 TraceManager.addDev("|    |    in (ch, ...)");
                 _lastInstr = _lastInstr.setNextInstr (new ProVerifProcIn (CH_MAINCH, vars.toArray (new ProVerifVar[vars.size()])));
@@ -878,12 +1088,13 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 TraceManager.addDev("|    |    transition is guarded by " + tmp);
                 _lastInstr = _lastInstr.setNextInstr (new ProVerifProcITE (tmp));
             } else {
+                TraceManager.addDev ("!!!       Guard: " + _asme.getGuard() + " in block " + arg.block.getName() + " is not supported. Replacing by an empty guard");
                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Guard: " + _asme.getGuard() + " in block " + arg.block.getName() + " is not supported. Replacing by an empty guard");
                 ce.setAvatarBlock(arg.block);
                 ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                 ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                 warnings.add(ce);
-                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("(*  Unsuported guard:" + _asme.getGuard() + " *)"));
+                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("(*  Unsupported guard:" + _asme.getGuard() + " *)"));
             }
         }
 
@@ -925,47 +1136,56 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
                 // Compute left hand part of the assignment
                 LinkedList<ProVerifVar> proVerifLeftHand = new LinkedList<ProVerifVar> ();
-                if (leftHand instanceof AvatarTuple)
-                    for (AvatarTerm term: ((AvatarTuple) leftHand).getComponents ()) {
-                        if (! (term instanceof AvatarAttribute)) {
-                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + term.getName () + "' should be an attribute (ignored)");
-                            ce.setAvatarBlock(arg.block);
-                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
-                            ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
-                            this.warnings.add(ce);
-                            continue;
-                        }
+                if (proVerifRightHand != null) {
+                    if (leftHand instanceof AvatarTuple)
+                        for (AvatarTerm term: ((AvatarTuple) leftHand).getComponents ()) {
+                            if (! (term instanceof AvatarAttribute)) {
+                                CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + term.getName () + "' should be an attribute (ignored)");
+                                ce.setAvatarBlock(arg.block);
+                                ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                                ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                                this.warnings.add(ce);
+                                continue;
+                            }
 
-                        AvatarAttribute attr = (AvatarAttribute) term;
+                            AvatarAttribute attr = (AvatarAttribute) term;
+                            Integer c = arg.attributeCmp.get (attr) + 1;
+                            arg.attributeCmp.put (attr, c);
+                            proVerifLeftHand.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
+
+                            if (this.secrecyChecked.contains (attr)) {
+                                CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + term.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + term.getName () + ".");
+                                ce.setAvatarBlock(arg.block);
+                                ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                                ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                                this.warnings.add(ce);
+                            }
+                        }
+                    else if (leftHand instanceof AvatarAttribute) {
+                        AvatarAttribute attr = (AvatarAttribute) leftHand;
                         Integer c = arg.attributeCmp.get (attr) + 1;
                         arg.attributeCmp.put (attr, c);
                         proVerifLeftHand.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
 
                         if (this.secrecyChecked.contains (attr)) {
-                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + term.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + term.getName () + ".");
+                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + attr.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + attr.getName () + ".");
                             ce.setAvatarBlock(arg.block);
                             ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                             ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                             this.warnings.add(ce);
                         }
                     }
-                else if (leftHand instanceof AvatarAttribute) {
-                    AvatarAttribute attr = (AvatarAttribute) leftHand;
-                    Integer c = arg.attributeCmp.get (attr) + 1;
-                    arg.attributeCmp.put (attr, c);
-                    proVerifLeftHand.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
-
-                    if (this.secrecyChecked.contains (attr)) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + attr.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + attr.getName () + ".");
-                        ce.setAvatarBlock(arg.block);
-                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
-                        ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
-                        this.warnings.add(ce);
-                    }
                 }
-
                 if (proVerifRightHand != null && proVerifLeftHand.size () > 0)
                     _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (proVerifLeftHand.toArray (new ProVerifVar[proVerifLeftHand.size ()]), proVerifRightHand));
+                else {
+                    TraceManager.addDev ("!!!       Assignment: " + action.toString () + " in block " + arg.block.getName() + " is not supported. Removing it.");
+                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Assignment: " + action.toString () + " in block " + arg.block.getName() + " is not supported. Removing it.");
+                    ce.setAvatarBlock(arg.block);
+                    ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                    ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
+                    warnings.add(ce);
+                }
             } else if (aaction instanceof AvatarTermFunction) {
                 AvatarTermFunction action = (AvatarTermFunction) aaction;
                 String name = action.getMethod ().getName ();
@@ -1087,7 +1307,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 String choice = "choice__" + _asme.getName () + "__" + i;
                 ProVerifProcITE ite = new ProVerifProcITE ("choice__" + _asme.getName () + " = " + choice);
 
-                arg.attributeCmp = new HashMap<AvatarAttribute, Integer> (arg.attributeCmp);
+                arg.attributeCmp = new HashMap<AvatarAttribute, Integer> (attributeCmp);
                 arg.lastASME = _asme;
                 arg.lastInstr = _lastInstr.setNextInstr (ite);
                 this.translateNext (_asme.getNext (i), arg);
@@ -1137,192 +1357,5 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     }
 
     public void translateStopState (AvatarStopState _asme, Object _arg) {
-    }
-
-    protected static String translateTerm (AvatarTerm term, HashMap<AvatarAttribute, Integer> attributeCmp) {
-        if (term instanceof AvatarAttribute) {
-            AvatarAttribute attr = (AvatarAttribute) term;
-            if (attributeCmp != null)
-                return AVATAR2ProVerif.makeAttrName (attr.getBlock ().getName (), attr.getName (), attributeCmp.get (attr).toString ());
-            else
-                return AVATAR2ProVerif.makeAttrName (attr.getBlock ().getName (), attr.getName ());
-        }
-
-        if (term instanceof AvatarConstant) {
-            AvatarConstant constant = (AvatarConstant) term;
-            TraceManager.addDev("AvatarConstant");
-
-            try {
-                int i = Integer.parseInt (constant.getName ());
-                TraceManager.addDev("AvatarConstant Integer");
-
-                if (i <= MAX_INT) {
-                    int j;
-                    StringBuilder sb = new StringBuilder ();
-                    for (j=i; j>0; j--) {
-                        sb.append (PEANO_N);
-                        sb.append ("(");
-                    }
-                    sb.append (ZERO);
-                    for (; i>0; i--)
-                        sb.append (")");
-                    TraceManager.addDev("AvatarConstant Integer Lower: " + sb.toString ());
-                        
-                    return sb.toString ();
-                } else {
-                    // TODO: raise error
-                    return ZERO;
-                }
-            } catch (NumberFormatException e) { }
-
-            return constant.getName ();
-        }
-
-        if (term instanceof AvatarArithmeticOp) {
-            AvatarArithmeticOp op = (AvatarArithmeticOp) term;
-            if (op.getOperator ().compareTo ("+") == 0) {
-                AvatarTerm t1, t2;
-                t1 = op.getTerm1 ();
-                t2 = op.getTerm2 ();
-                if (t1 instanceof AvatarConstant) {
-                    AvatarTerm t = t1;
-                    t1 = t2;
-                    t2 = t;
-                } else if (!(t2 instanceof AvatarConstant)) {
-                    // TODO: raise error
-                    return null;
-                }
-
-                try {
-                    int i = Integer.parseInt (t2.getName ());
-
-                    if (i <= MAX_INT) {
-                        int j;
-                        StringBuilder sb = new StringBuilder ();
-                        for (j=i; j>0; j--) {
-                            sb.append (PEANO_N);
-                            sb.append ("(");
-                        }
-                        sb.append (AVATAR2ProVerif.translateTerm(t1, attributeCmp));
-                        for (; i>0; i--)
-                            sb.append (")");
-                            
-                        return sb.toString ();
-                    } else {
-                        // TODO: raise error
-                        return AVATAR2ProVerif.translateTerm(t1, attributeCmp);
-                    }
-                } catch (NumberFormatException e) { 
-                    // TODO: raise error
-                    return AVATAR2ProVerif.translateTerm(t1, attributeCmp);
-                }
-
-                
-            } else {
-                // TODO: raise error
-                return null;
-            }
-        }
-
-        if (term instanceof AvatarTermFunction) {
-            AvatarTuple args = ((AvatarTermFunction) term).getArgs ();
-            AvatarMethod method = ((AvatarTermFunction) term).getMethod ();
-
-            return method.getName () + " " + AVATAR2ProVerif.translateTerm (args, attributeCmp);
-        }
-
-        if (term instanceof AvatarTuple) {
-            String result = "(";
-            boolean first = true;
-            for (AvatarTerm arg: ((AvatarTuple) term).getComponents ()) {
-                if (first)
-                    first = false;
-                else
-                    result += ", ";
-                result += AVATAR2ProVerif.translateTerm (arg, attributeCmp);
-            }
-            result += ")";
-
-            return result;
-        }
-
-        return null;
-    }
-
-    // Supported guards: a == b, not(a == b), g1 and g2, g1 or g2
-    // -> transformed into a = b, a <> b, g1 && g2, g1 || g2
-    // Returns nulls otherwise
-    private static String translateGuard (AvatarGuard _guard, HashMap<AvatarAttribute, Integer> attributeCmp) {
-        if (_guard == null || _guard instanceof AvatarGuardEmpty)
-            return null;
-
-        if (_guard instanceof AvatarGuardElse)
-            // TODO: warning
-            return null;
-
-        if (_guard instanceof AvatarSimpleGuardMono) {
-            String term = AVATAR2ProVerif.translateTerm (((AvatarSimpleGuardMono) _guard).getTerm (), attributeCmp);
-            if (term != null)
-                return term + " = " + TRUE;
-
-            return null;
-        }
-
-        if (_guard instanceof AvatarSimpleGuardDuo) {
-            String delim = null;
-            String termA = AVATAR2ProVerif.translateTerm (((AvatarSimpleGuardDuo) _guard).getTermA (), attributeCmp);
-            String termB = AVATAR2ProVerif.translateTerm (((AvatarSimpleGuardDuo) _guard).getTermB (), attributeCmp);
-            if (((AvatarSimpleGuardDuo) _guard).getBinaryOp ().equals ("=="))
-                delim = "=";
-            else if (((AvatarSimpleGuardDuo) _guard).getBinaryOp ().equals ("!="))
-                delim = "<>";
-
-            if (termA != null && termB != null && delim != null)
-                return termA + " " + delim + " " + termB;
-
-            return null;
-        }
-
-        if (_guard instanceof AvatarUnaryGuard) {
-            String before = ((AvatarUnaryGuard) _guard).getBefore ();
-            String after = ((AvatarUnaryGuard) _guard).getAfter ();
-            AvatarGuard guard = ((AvatarUnaryGuard) _guard).getGuard ();
-
-            String beforeProV = null;
-            String afterProV = ")";
-
-            if (before.equals ("not("))
-                beforeProV = "not (";
-            else if (before.equals ("("))
-                beforeProV = "(";
-
-            String guardProV = AVATAR2ProVerif.translateGuard (guard, attributeCmp);
-
-            if (beforeProV != null && guardProV != null)
-                return beforeProV + guardProV + afterProV;
-
-            return null;
-        }
-
-        if (_guard instanceof AvatarBinaryGuard) {
-            String delim = ((AvatarBinaryGuard) _guard).getBinaryOp ();
-            AvatarGuard guardA = ((AvatarBinaryGuard) _guard).getGuardA ();
-            AvatarGuard guardB = ((AvatarBinaryGuard) _guard).getGuardB ();
-
-            String delimProV = null;
-
-            if (delim.equals ("and"))
-                delimProV = "&&";
-            else if (delim.equals ("or"))
-                delimProV = "||";
-
-            String guardAProV = AVATAR2ProVerif.translateGuard (guardA, attributeCmp);
-            String guardBProV = AVATAR2ProVerif.translateGuard (guardB, attributeCmp);
-
-            if (delimProV != null && guardAProV != null && guardBProV != null)
-                return guardAProV + " " + delimProV + " " + guardBProV;
-        }
-
-        return null;
     }
 }
