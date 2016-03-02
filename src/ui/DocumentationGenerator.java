@@ -39,7 +39,7 @@
  * Class DocumentationGenerator
  * Generation of documentation from TTool diagrams
  * Creation: 19/09/2008
- * @version 1.0 19/09/2008
+ * @version 2.0 02/03/2016
  * @author Ludovic APVRILLE
  * @see
  */
@@ -196,7 +196,12 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
                 tmp = "TURTLE Deployment";
             }
 
+	    // HTML
             doc += "<br>\n<h" + firstHeadingNumber + ">" + tmp + "</h" + firstHeadingNumber + ">\n";
+
+	    // Latex
+	    includeLatexDoc += "\\section{" + tmp + "}\n";
+	    
             for(j=0; j<tp.panels.size(); j++) {
                 if (go == false) {
                     return false;
@@ -222,16 +227,28 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
                 }
 
                 if (tdp instanceof TMLArchiDiagramPanel) {
-                    tmp = "";
-                }
+                    tmp = "Architecture or Mapping of " + panelName;
+		}
 
                 if (tdp instanceof TDeploymentDiagramPanel) {
                     tmp = "";
                 }
 
+		String imgName = path + "img_" + i + "_" + j + ".png";
+		
+		// HTML
                 doc += "<h" + (firstHeadingNumber+1) + ">" + tmp + "</h" + (firstHeadingNumber+1) + ">\n";
+
+		// Latex
+		includeLatexDoc += "\\subsection{" + tmp + "}\n";
+		includeLatexDoc += "Figures \\ref{fig:" + tmp  + "} presents ...\n";
+		includeLatexDoc += "\\begin{figure*}[htb]\n\\centering\n";
+		includeLatexDoc += "\\includegraphics[width=\\textwidth]{" + imgName + "}\n";
+		includeLatexDoc += "\\caption{Diagram \"" + tmp + "\"}\n\\label{fig:" + tmp + "}\n\\end{figure*}\n\n"; 
+
+		// Capturing the diagram		
                 image = tdp.performMinimalCapture();
-                file1 = new File(path + "img_" + i + "_" + j + ".png");
+                file1 = new File(imgName);
                 //frame.paint(frame.getGraphics());
                 try {
                     // save captured image to PNG file
@@ -305,11 +322,11 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
         tmpdoc += DefaultText.getVersion();
         tmpdoc += " generation date: " + formattedDate;
         tmpdoc += "----\n";
-	tmpdoc += "\\documentclass[11pt,a4paper]{article}\n\n\begin{document}\n";
+	tmpdoc += "\\documentclass[11pt,a4paper]{article}\n\n\\usepackage{graphicx}\n\n\\begin{document}\n";
 	tmpdoc += "\\title{" + projectName + "}\n";
 	tmpdoc += "\\date{\\today}\n";
 	tmpdoc += "\\maketitle\n\n";
-	tmpdoc += "\\include{"+texIncludeFileName+"}\n";
+	tmpdoc += "\\input{"+texIncludeFileName+"}\n";
 	tmpdoc += "\\end{document}\n\n";
         return tmpdoc;
     }
