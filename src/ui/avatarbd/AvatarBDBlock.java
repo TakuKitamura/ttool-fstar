@@ -982,6 +982,30 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return mySignals;
     }
 
+    public Vector getOutSignalList() {
+        Vector v = new Vector();
+        AvatarSignal s;
+	for(int i=0; i<mySignals.size(); i++) {
+            s = (AvatarSignal)(mySignals.get(i));
+            if (s.getInOut() == AvatarSignal.OUT) {
+                v.add(s);
+            }
+        }
+        return v;
+    }
+
+    public Vector getInSignalList() {
+        Vector v = new Vector();
+        AvatarSignal s;
+	for(int i=0; i<mySignals.size(); i++) {
+            s = (AvatarSignal)(mySignals.get(i));
+            if (s.getInOut() == AvatarSignal.IN) {
+                v.add(s);
+            }
+        }
+        return v;
+    }
+
     public Vector getAllMethodList() {
         if (getFather() == null) {
             return myMethods;
@@ -1031,6 +1055,15 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     public Vector getListOfAvailableSignals() {
         return ((AvatarBDPanel)(tdp)).getListOfAvailableSignals(this);
     }
+
+    public Vector getListOfAvailableOutSignals() {
+        return ((AvatarBDPanel)(tdp)).getListOfAvailableOutSignals(this);
+    }
+
+    public Vector getListOfAvailableInSignals() {
+        return ((AvatarBDPanel)(tdp)).getListOfAvailableInSignals(this);
+    }
+
 
     // _id may contain the full signal
     public AvatarSignal getSignalNameBySignalDef(String _id) {
@@ -1215,7 +1248,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
     }
 
-     private void addMethodIfApplicable(Vector _v, String _s) {
+    private void addMethodIfApplicable(Vector _v, String _s) {
         AvatarMethod am;
         for(Object o: _v) {
             if (o instanceof AvatarMethod) {

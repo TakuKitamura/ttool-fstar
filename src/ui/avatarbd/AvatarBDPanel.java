@@ -378,6 +378,74 @@ public class AvatarBDPanel extends TDiagramPanel {
         return v;
     }
 
+    public Vector getListOfAvailableOutSignals(AvatarBDBlock _block) {
+        int i;
+        TGComponent tgc;
+        LinkedList<String> ll;
+        AvatarBDPortConnector port;
+        Iterator iterator = componentList.listIterator();
+        ArrayList<String> list = new ArrayList<String>();
+        Vector v = new Vector();
+        Vector listOfBlock = _block.getOutSignalList();
+
+        if (listOfBlock.size() == 0) {
+            return v;
+        }
+
+        v.addAll(listOfBlock);
+
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof AvatarBDPortConnector) {
+                port = (AvatarBDPortConnector)tgc;
+                if (port.getAvatarBDBlock1() == _block) {
+                    ll = port.getListOfSignalsOrigin();
+                    removeSignals(v, ll);
+                }
+                if (port.getAvatarBDBlock2() == _block) {
+                    ll = port.getListOfSignalsDestination();
+                    removeSignals(v, ll);
+                }
+            }
+        }
+
+        return v;
+    }
+
+    public Vector getListOfAvailableInSignals(AvatarBDBlock _block) {
+        int i;
+        TGComponent tgc;
+        LinkedList<String> ll;
+        AvatarBDPortConnector port;
+        Iterator iterator = componentList.listIterator();
+        ArrayList<String> list = new ArrayList<String>();
+        Vector v = new Vector();
+        Vector listOfBlock = _block.getInSignalList();
+
+        if (listOfBlock.size() == 0) {
+            return v;
+        }
+
+        v.addAll(listOfBlock);
+
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof AvatarBDPortConnector) {
+                port = (AvatarBDPortConnector)tgc;
+                if (port.getAvatarBDBlock1() == _block) {
+                    ll = port.getListOfSignalsOrigin();
+                    removeSignals(v, ll);
+                }
+                if (port.getAvatarBDBlock2() == _block) {
+                    ll = port.getListOfSignalsDestination();
+                    removeSignals(v, ll);
+                }
+            }
+        }
+
+        return v;
+    }
+
     // Remove AvatarSignals of v which name is provided in list
     private void removeSignals(Vector v, LinkedList<String> list) {
         int i;
