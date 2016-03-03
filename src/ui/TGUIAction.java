@@ -82,6 +82,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_TURTLE_WEBSITE = 117;
     public static final int ACT_TURTLE_DOCUMENTATION = 118;
     public static final int ACT_DIPLODOCUS_DOCUMENTATION = 242;
+    public static final int ACT_SYSMLSEC_DOCUMENTATION = 426;
     public static final int ACT_ABOUT = 4;
     public static final int ACT_ENHANCE = 160;
     public static final int ACT_TTOOL_CONFIGURATION = 323;
@@ -521,6 +522,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_DIAGRAM_CAPTURE = 60;
     public static final int ACT_SVG_DIAGRAM_CAPTURE = 366;
     public static final int ACT_ALL_DIAGRAM_CAPTURE = 114;
+    public static final int ACT_ALL_DIAGRAM_CAPTURE_SVG = 427;
     public static final int ACT_SELECTED_CAPTURE = 61;
 
     public static final int ACT_GEN_DOC = 247;
@@ -568,7 +570,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_INTERNAL_SEARCH = 415;
     //--
 
-    public static final int NB_ACTION = 426;
+    public static final int NB_ACTION = 428;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -731,10 +733,11 @@ public class TGUIAction extends AbstractAction {
 
 
         actions[ACT_SCREEN_CAPTURE] = new TAction("screen-capture", "Screen capture", IconManager.imgic338, IconManager.imgic339, "Screen capture",  "Capture the screen", 0);
-        actions[ACT_TTOOL_WINDOW_CAPTURE] = new TAction("tool-window-capture", "00 window capture", IconManager.imgic338, IconManager.imgic339, "Main window capture",  "Capture the main window", 0);
-        actions[ACT_DIAGRAM_CAPTURE] = new TAction("diagram-capture", "Diagram capture", IconManager.imgic338, IconManager.imgic339, "Diagram capture",  "Capture the currenlty opened diagram", 0);
-        actions[ACT_SVG_DIAGRAM_CAPTURE] = new TAction("svg-diagram-capture", "Diagram capture (SVG)", IconManager.imgic338, IconManager.imgic339, "Diagram capture (SVG)",  "Capture the currenlty opened diagram in svg format", 0);
-        actions[ACT_ALL_DIAGRAM_CAPTURE] = new TAction("all-diagram-capture", "All diagram capture", IconManager.imgic338, IconManager.imgic339, "All diagram capture",  "Capture the currenlty opened set of diagram (analysis, design, etc.)", 0);
+        actions[ACT_TTOOL_WINDOW_CAPTURE] = new TAction("tool-window-capture", "TTool Window capture", IconManager.imgic338, IconManager.imgic339, "Main window capture",  "Capture the main window", 0);
+        actions[ACT_DIAGRAM_CAPTURE] = new TAction("diagram-capture", "Current diagram capture (PNG)", IconManager.imgic338, IconManager.imgic339, "Diagram capture",  "Capture the currenlty opened diagram", 0);
+        actions[ACT_SVG_DIAGRAM_CAPTURE] = new TAction("svg-diagram-capture", "Current diagram capture (SVG)", IconManager.imgic338, IconManager.imgic339, "Diagram capture (SVG)",  "Capture the currenlty opened diagram in svg format", 0);
+        actions[ACT_ALL_DIAGRAM_CAPTURE] = new TAction("all-diagram-capture", "All diagrams capture (PNG)", IconManager.imgic338, IconManager.imgic339, "All diagram capture (PNG)",  "Capture in png images the currenlty opened set of diagram (analysis, design, etc.)", 0);
+	actions[ACT_ALL_DIAGRAM_CAPTURE_SVG] = new TAction("all-diagram-capture-svg", "All diagrams capture (SVG)", IconManager.imgic338, IconManager.imgic339, "All diagram capture (SVG)",  "Capture in svg images the currenlty opened set of diagram (analysis, design, etc.)", 0);
         actions[ACT_SELECTED_CAPTURE] = new TAction("selected-capture", "Capture of selected components", IconManager.imgic338, IconManager.imgic339, "Capture of selected components",  "Capture the selected components of the currently opened diagram", 0);
         actions[ACT_GEN_DOC] = new TAction("gen-doc", "Documentation generation", IconManager.imgic28, IconManager.imgic28, "Documentation generation",  "Documentation may be automatically generated, in html format, from edited diagrams", 0);
         actions[ACT_GEN_DOC_REQ] = new TAction("gen-doc-req", "SysML requirements documentation", IconManager.imgic28, IconManager.imgic28, "SysML requirements documentation",  "SysML requirements documentation is displayed in an array, and may be further automatically generated in html format", 0);
@@ -743,6 +746,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_TURTLE_WEBSITE] = new TAction("turtle-website-command", "TTool's website", IconManager.imgic30, IconManager.imgic31, "TTool's website", "Various information (e.g., documentation) on TTool", 0);
         actions[ACT_TURTLE_DOCUMENTATION] = new TAction("turtle-docu-command", "AVATAR online help", IconManager.imgic30, IconManager.imgic31, "AVATAR online help", "AVATAR online help", 0);
         actions[ACT_DIPLODOCUS_DOCUMENTATION] = new TAction("diplo-docu-command", "DIPLODOCUS online help", IconManager.imgic30, IconManager.imgic31, "DIPLODOCUS online help", "DIPLODOCUS online help", 0);
+	actions[ACT_SYSMLSEC_DOCUMENTATION] = new TAction("diplo-docu-command", "SysML-Sec online help", IconManager.imgic30, IconManager.imgic31, "SysML-Sec online help", "SysML-Sec online help", 0);
         actions[ACT_TTOOL_CONFIGURATION] = new TAction("configuration-command", "Configuration", IconManager.imgic76, IconManager.imgic77, "Configuration", "Configuration loaded at startup", 0);
 
         actions[ACT_ENHANCE] = new TAction("enhance-command", "Enhance", IconManager.imgic28, IconManager.imgic29, "Enhance", "Automatically enhance diagram", 0);

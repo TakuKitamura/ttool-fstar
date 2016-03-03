@@ -590,6 +590,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_TTOOL_CONFIGURATION].setEnabled(true);
             actions[TGUIAction.ACT_TURTLE_WEBSITE].setEnabled(true);
             actions[TGUIAction.ACT_TURTLE_DOCUMENTATION].setEnabled(true);
+	    actions[TGUIAction.ACT_SYSMLSEC_DOCUMENTATION].setEnabled(true);
             actions[TGUIAction.ACT_DIPLODOCUS_DOCUMENTATION].setEnabled(true);
             actions[TGUIAction.ACT_VIEW_SAVED_LOT].setEnabled(true);
             actions[TGUIAction.ACT_VIEW_SAVED_DOT].setEnabled(true);
@@ -630,6 +631,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_DIAGRAM_CAPTURE].setEnabled(true);
             actions[TGUIAction.ACT_SVG_DIAGRAM_CAPTURE].setEnabled(true);
             actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE].setEnabled(true);
+	    actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE_SVG].setEnabled(true);
             actions[TGUIAction.ACT_GEN_DOC].setEnabled(true);
             actions[TGUIAction.ACT_GEN_DOC_REQ].setEnabled(true);
             actions[TGUIAction.ACT_VIEW_JAVA].setEnabled(true);
@@ -3096,6 +3098,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         BrowserControl.startBrowerToURL("http://ttool.telecom-paristech.fr/avatar.html");
     }
 
+    public void helpSysMLSec() {
+        BrowserControl.startBrowerToURL("http://sysml-sec.telecom-paristech.fr/");
+    }
+
     public void helpDIPLODOCUS() {
         BrowserControl.startBrowerToURL("http://ttool.telecom-paristech.fr/diplodocus.html");
     }
@@ -4980,7 +4986,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         File file = selectFileForCapture();
         if (file == null)
-            return;
+	return;
 
         TURTLEPanel tp = getCurrentTURTLEPanel();
         TDiagramPanel tdp1;
@@ -5001,17 +5007,79 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             }
             file1 = FileUtils.addFileExtensionIfMissing(file1, TImgFilter.getExtension());
             if (!writeImageCapture(image, file1, false)) {
+		JOptionPane.showMessageDialog(frame,
+                                      "Diagrams could NOT be captured in png format",
+                                      "Capture failed",
+                                      JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
             if (i ==0) {
                 if (!writeImageCapture(image, file, false)) {
+		    JOptionPane.showMessageDialog(frame,
+                                      "Diagrams could NOT be captured in png format",
+                                      "Capture failed",
+                                      JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
             }
         }
 
         JOptionPane.showMessageDialog(frame,
-                                      "All diagrams were sucessfully captured",
+                                      "All diagrams were sucessfully captured in png format",
+                                      "Capture ok",
+                                      JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void allDiagramCaptureSvg() {
+        if (tabs.size() < 1) {
+            JOptionPane.showMessageDialog(frame,
+                                          "No diagram is under edition",
+                                          "Error",
+                                          JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        File file = selectSVGFileForCapture();
+        if (file == null)
+            return;
+
+        TURTLEPanel tp;// = getCurrentTURTLEPanel();
+        TDiagramPanel tdp1;
+        BufferedImage image;
+        File file1;
+        String name = file.getAbsolutePath();
+        name = name.substring(0, name.length() - 4);
+
+        //boolean actions;
+	for(int j=0; j<tabs.size(); j++) {
+	    tp = (TURTLEPanel)(tabs.get(j));
+	    for(int i=0; i<tp.panels.size(); i++) {
+		tdp1 = (TDiagramPanel)(tp.panels.elementAt(i));
+		tdp1.repaint();
+		
+		String svgImg = tdp1.svgCapture();
+		
+		if (i < 10) {
+		    file1 = new File(name + j + "_" + "0" + i);
+		} else {
+		    file1 = new File(name + j + "_" + i);
+		}
+		file1 = FileUtils.addFileExtensionIfMissing(file1, TSVGFilter.getExtension());
+		try {
+		    FileUtils.saveFile(file1, svgImg);
+		} catch(Exception e) {
+		    JOptionPane.showMessageDialog(frame,
+						  "Diagrams could NOT be captured in svg format",
+						  "Capture failed",
+						  JOptionPane.INFORMATION_MESSAGE);
+		    return;
+		}
+		
+	    }
+	}
+	
+        JOptionPane.showMessageDialog(frame,
+                                      "All diagrams were sucessfully captured in svg format",
                                       "Capture ok",
                                       JOptionPane.INFORMATION_MESSAGE);
     }
@@ -7847,6 +7915,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             aboutTURTLE();
         } else if (command.equals(actions[TGUIAction.ACT_TURTLE_DOCUMENTATION].getActionCommand())) {
             helpTURTLE();
+	} else if (command.equals(actions[TGUIAction.ACT_SYSMLSEC_DOCUMENTATION].getActionCommand())) {
+            helpSysMLSec();   
         } else if (command.equals(actions[TGUIAction.ACT_DIPLODOCUS_DOCUMENTATION].getActionCommand())) {
             helpDIPLODOCUS();
         } else if (command.equals(actions[TGUIAction.ACT_MODEL_CHECKING].getActionCommand())) {
@@ -7957,6 +8027,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             svgDiagramCapture();
         } else if (command.equals(actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE].getActionCommand())) {
             allDiagramCapture();
+	} else if (command.equals(actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE_SVG].getActionCommand())) {
+            allDiagramCaptureSvg();
         } else if (command.equals(actions[TGUIAction.ACT_SELECTED_CAPTURE].getActionCommand())) {
             selectedCapture();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_DOC].getActionCommand())) {

@@ -565,6 +565,8 @@ public  class JMenuBarTurtle extends JMenuBar   {
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE]);
         menuItem.addMouseListener(mgui.mouseHandler);
+	menuItem = capture.add(mgui.actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE_SVG]);
+        menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_SELECTED_CAPTURE]);
         menuItem.addMouseListener(mgui.mouseHandler);
 
@@ -607,6 +609,8 @@ public  class JMenuBarTurtle extends JMenuBar   {
         menuItem = help.add(mgui.actions[TGUIAction.ACT_TURTLE_DOCUMENTATION]);
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = help.add(mgui.actions[TGUIAction.ACT_DIPLODOCUS_DOCUMENTATION]);
+        menuItem.addMouseListener(mgui.mouseHandler);
+	menuItem = help.add(mgui.actions[TGUIAction.ACT_SYSMLSEC_DOCUMENTATION]);
         menuItem.addMouseListener(mgui.mouseHandler);
         help.addSeparator();
         menuItem = help.add(mgui.actions[TGUIAction.ACT_TURTLE_WEBSITE]);
