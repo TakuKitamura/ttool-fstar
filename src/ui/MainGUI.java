@@ -5056,7 +5056,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 	    for(int i=0; i<tp.panels.size(); i++) {
 		tdp1 = (TDiagramPanel)(tp.panels.elementAt(i));
 		tdp1.repaint();
-		
+
+		tdp1.performMinimalCapture();
 		String svgImg = tdp1.svgCapture();
 		
 		if (i < 10) {

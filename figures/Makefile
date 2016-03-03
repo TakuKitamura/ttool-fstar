@@ -1,6 +1,6 @@
-SHELL	:=/bin/bash
-FIGDIR	:= .
-BUILDDIR := build
+SHELL		:=/bin/bash
+BUILDDIR	:= .
+FIGDIR		:= .
 
 include mli.mk
 

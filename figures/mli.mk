@@ -5,9 +5,9 @@
 # See Copyright Notice in COPYING and license in LICENSE. #
 ###########################################################
 
-#######################
-# Adapt to your needs #
-#######################
+###################################################
+# Default values of most important make variables #
+###################################################
 
 # mli needs bash
 SHELL		?= /bin/bash
@@ -70,7 +70,7 @@ TEXFILES	= $(wildcard *.tex)
 define  AUXFILE_names
 $(addsuffix .$(1),$(patsubst %.tex,%,$(TEXFILES)))
 endef
-SUFFIXES	= aux log lof out bbl blg toc nav snm vrb bibtex.log
+SUFFIXES	= aux log previous.log lof out bbl blg toc nav snm vrb bibtex.log
 AUXFILES	= $(addprefix $(BUILDDIR)/,$(foreach suffix,$(SUFFIXES),$(call AUXFILE_names,$(suffix))))
 
 # Figures build files
@@ -83,7 +83,7 @@ make (help)				print this help
 make foo (or $(BUILDDIR)/foo.pdf)	build the $(BUILDDIR)/foo.pdf document
 make all				build all documents
 make clean				delete generated files except PDFs of documents
-make ultraclean				delete $(BUILDDIR) build directory
+make ultraclean				delete all generated files (but not the build directory)
 
 Buildable documents:
   $(sort $(TARGETS))
@@ -278,11 +278,11 @@ $(PDFTARGETS): $(BUILDDIR)/%.pdf: %.tex
 		echo "diff $(BUILDDIR)/$$f.previous.log $(BUILDDIR)/$$f.log"; \
 		exit -1; \
 	fi; \
-	rm $(BUILDDIR)/$$f.previous.log; \
+	rm -f $(BUILDDIR)/$$f.previous.log; \
 	grep -v 'Package: infwarerr .* Providing info/warning/error messages' $(BUILDDIR)/$$f.log | \
-		grep -iE 'warning|error' || rm $(BUILDDIR)/$$f.log; \
+		grep -iE 'warning|error' || rm -f $(BUILDDIR)/$$f.log; \
 	if [ -f $(FIGURESLOG) ]; then \
-		grep -iE 'warning|error' $(FIGURESLOG) || rm $(FIGURESLOG); \
+		grep -iE 'warning|error' $(FIGURESLOG) || rm -f $(FIGURESLOG); \
 	fi
 
 $(BUILDDIR)/.exists:
@@ -292,5 +292,5 @@ $(BUILDDIR)/.exists:
 clean:
 	@rm -f $(FIGURES) $(AUXFILES) $(FIGURESLOG)
 
-ultraclean:
-	@rm -rf $(BUILDDIR)
+ultraclean: clean
+	@rm -f $(PDFTARGETS) $(BUILDDIR)/.exists
