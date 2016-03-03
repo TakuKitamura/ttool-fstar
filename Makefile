@@ -59,9 +59,10 @@ TTOOL_PATH := $(shell /bin/pwd)
 TTOOL_SRC = $(TTOOL_PATH)/src
 TTOOL_BIN = $(TTOOL_PATH)/bin
 TTOOL_MODELING = $(TTOOL_PATH)/modeling
+TTOOL_MODELING = $(TTOOL_PATH)/figures
 TTOOL_EXECUTABLECODE = $(TTOOL_PATH)/executablecode
 TTOOL_SIMULATORS = $(TTOOL_PATH)/simulators
-TTOOL_DOC = $(TTOOL_PATH)/doc
+TTOOL_FIGURES = $(TTOOL_PATH)/doc
 TTOOL_DOC_HTML = $(TTOOL_PATH)/doc/html
 TTOOL_VCD = $(TTOOL_PATH)/vcd
 TTOOL_WORD = $(TTOOL_PATH)/doc/word
@@ -249,8 +250,10 @@ stdrelease:
 	mkdir -p $(TTOOL_TARGET)/proverif
 	cp $(TTOOL_DOC)/README_proverif $(TTOOL_TARGET)/proverif
 # Figure
-	mkdir -p $(TTOOL_TARGET)/figure
-	cp $(TTOOL_DOC)/README_figure $(TTOOL_TARGET)/figure
+	mkdir -p $(TTOOL_TARGET)/figures
+	cp $(TTOOL_DOC)/README_figure $(TTOOL_TARGET)/figures
+	cp $(TTOOL_FIGURES)/Makefile $(TTOOL_TARGET)/figures
+	cp $(TTOOL_FIGURES)/mli.mk $(TTOOL_TARGET)/figures
 # VCD
 	mkdir -p $(TTOOL_TARGET)/vcd
 	cp $(TTOOL_DOC)/README_vcd $(TTOOL_TARGET)/vcd

@@ -70,8 +70,11 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
     private int firstHeadingNumber = 1;
     private static String title = "TTool project:";
     private String fileName = "doc.html";
+    private String fileNameSvg = "docsvg.html";
     private String texFileName = "doc.tex";
     private String texIncludeFileName = "diag.tex";
+    private String texFileNameSvg = "docsvg.tex";
+    private String texIncludeFileNameSvg = "diagsvg.tex";
     private String path;
     private String projectName;
 
@@ -83,8 +86,12 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 
 
     private String doc;
+    private String docSvg;
     private String mainLatexDoc;
     private String includeLatexDoc;
+    private String mainLatexDocSvg;
+    private String includeLatexDocSvg;
+    
 
 
     public DocumentationGenerator(Vector _panels, JTabbedPane _mainTabbedPane, String _path, String _projectName) {
@@ -154,6 +161,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
         int i,j;
         cpt = 0;
         BufferedImage image;
+	String svgImg;
         TURTLEPanel tp;
         TDiagramPanel tdp;
         File file1;
@@ -162,6 +170,8 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 
 	mainLatexDoc = getLatexDocumentationHeader(projectName);
 	includeLatexDoc = getIncludeLatexDocumentationHeader(projectName);
+	mainLatexDocSvg = getLatexDocumentationHeaderSvg(projectName);
+	includeLatexDocSvg = getIncludeLatexDocumentationHeaderSvg(projectName);
 	
         doc = "";
         doc += "<html>\n";
@@ -170,6 +180,9 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 
         doc +="<center><h1>" + title + "</h1></center>\n";
         doc +="<center><b><h1>" + projectName + "</h1></b></center>\n<br><br>\n";
+
+	docSvg = doc;
+	
 
         for(i=0; i<panels.size(); i++) {
             tp = (TURTLEPanel)(panels.elementAt(i));
@@ -198,9 +211,11 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 
 	    // HTML
             doc += "<br>\n<h" + firstHeadingNumber + ">" + tmp + "</h" + firstHeadingNumber + ">\n";
+	    docSvg += "<br>\n<h" + firstHeadingNumber + ">" + tmp + "</h" + firstHeadingNumber + ">\n";
 
 	    // Latex
 	    includeLatexDoc += "\\section{" + tmp + "}\n";
+	    includeLatexDocSvg += "\\section{" + tmp + "}\n";
 	    
             for(j=0; j<tp.panels.size(); j++) {
                 if (go == false) {
@@ -234,10 +249,12 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
                     tmp = "";
                 }
 
-		String imgName = path + "img_" + i + "_" + j + ".png";
+		String imgName = "img_" + i + "_" + j + ".png";
+		String imgNameSvg = "Vimg_" + i + "_" + j;
 		
 		// HTML
                 doc += "<h" + (firstHeadingNumber+1) + ">" + tmp + "</h" + (firstHeadingNumber+1) + ">\n";
+		docSvg += "<h" + (firstHeadingNumber+1) + ">" + tmp + "</h" + (firstHeadingNumber+1) + ">\n";
 
 		// Latex
 		includeLatexDoc += "\\subsection{" + tmp + "}\n";
@@ -246,14 +263,25 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 		includeLatexDoc += "\\includegraphics[width=\\textwidth]{" + imgName + "}\n";
 		includeLatexDoc += "\\caption{Diagram \"" + tmp + "\"}\n\\label{fig:" + tmp + "}\n\\end{figure*}\n\n"; 
 
+		includeLatexDocSvg += "\\subsection{" + tmp + "}\n";
+		includeLatexDocSvg += "Figures \\ref{fig:" + tmp  + "} presents ...\n";
+		includeLatexDocSvg += "\\begin{figure*}[htb]\n\\centering\n";
+		includeLatexDocSvg += "\\includegraphics[width=\\textwidth]{" + imgNameSvg + "-svg.pdf}\n";
+		includeLatexDocSvg += "\\caption{Diagram \"" + tmp + "\"}\n\\label{fig:" + tmp + "}\n\\end{figure*}\n\n"; 
+		
 		// Capturing the diagram		
                 image = tdp.performMinimalCapture();
-                file1 = new File(imgName);
+		svgImg = tdp.svgCapture();
+                file1 = new File(path+imgName);
+		//file2 = new File(imgNameSvg);
                 //frame.paint(frame.getGraphics());
                 try {
                     // save captured image to PNG file
                     ImageIO.write(image, "png", file1);
-                    doc += "<center><img src=\"img_" + i + "_" + j + ".png\" align=\"middle\" title=\"" + tmp + "\"></center>\n";
+		    FileUtils.saveFile(path+imgNameSvg+".svg", svgImg);
+                    //doc += "<center><img src=\"img_" + i + "_" + j + ".png\" align=\"middle\" title=\"" + tmp + "\"></center>\n";
+		    doc += "<center><img src=\"img_" + i + "_" + j + ".png\" align=\"middle\" title=\"" + tmp + "\"></center>\n";
+		    docSvg += "<center><img src=\"img_" + i + "_" + j + ".svg\" align=\"middle\" title=\"" + tmp + "\"></center>\n";
                 } catch (Exception e) {
                     System.out.println("Image (" + i + ", " + j + ") could not be captured");
                 }
@@ -262,11 +290,19 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
         }
 
         doc+="</body>\n</html>";
+	docSvg+="</body>\n</html>";
 
         try {
             FileUtils.saveFile(path+fileName, doc);	    
         } catch (FileException fe) {
             System.out.println("HTML file could not be saved");
+            return false;
+        }
+
+	try {
+            FileUtils.saveFile(path+fileNameSvg, docSvg);	    
+        } catch (FileException fe) {
+            System.out.println("HTML file with svg img could not be saved");
             return false;
         }
 
@@ -280,9 +316,25 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 	try {
             FileUtils.saveFile(path+texIncludeFileName, includeLatexDoc);	    
         } catch (FileException fe) {
-            System.out.println("Main latex file could not be saved");
+            System.out.println("Include latex file could not be saved");
             return false;
         }
+
+	
+	try {
+            FileUtils.saveFile(path+texFileNameSvg, mainLatexDocSvg);	    
+        } catch (FileException fe) {
+            System.out.println("Main latex svg file could not be saved");
+            return false;
+        }
+
+	try {
+            FileUtils.saveFile(path+texIncludeFileNameSvg, includeLatexDocSvg);	    
+        } catch (FileException fe) {
+            System.out.println("include latex svg file could not be saved");
+            return false;
+        }
+	
 
         finished = true;
 
@@ -332,6 +384,41 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
     }
 
     public  String getIncludeLatexDocumentationHeader(String _projectName) {
+        GregorianCalendar calendar = (GregorianCalendar)GregorianCalendar.getInstance();
+        Date date = calendar.getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+        String formattedDate = formatter.format(date);
+
+        String tmpdoc="";
+        tmpdoc += "%----- Automatically generated by TTool version ";
+        tmpdoc += DefaultText.getVersion();
+        tmpdoc += " generation date: " + formattedDate;
+        tmpdoc += "----\n\n";
+        return tmpdoc;
+    }
+
+    public  String getLatexDocumentationHeaderSvg(String _projectName) {
+        GregorianCalendar calendar = (GregorianCalendar)GregorianCalendar.getInstance();
+        Date date = calendar.getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+        String formattedDate = formatter.format(date);
+
+        String tmpdoc="";
+        tmpdoc += "%----- Automatically generated by TTool version ";
+        tmpdoc += DefaultText.getVersion();
+        tmpdoc += " generation date: " + formattedDate;
+        tmpdoc += "----\n";
+	tmpdoc += "% To be compiled as follows: make all. Relies on https://github.com/pacalet/mli.git\n";
+	tmpdoc += "\\documentclass[11pt,a4paper]{article}\n\n\\usepackage{graphicx}\n\n\\begin{document}\n";
+	tmpdoc += "\\title{" + projectName + "}\n";
+	tmpdoc += "\\date{\\today}\n";
+	tmpdoc += "\\maketitle\n\n";
+	tmpdoc += "\\input{"+texIncludeFileNameSvg+"}\n";
+	tmpdoc += "\\end{document}\n\n";
+        return tmpdoc;
+    }
+
+    public  String getIncludeLatexDocumentationHeaderSvg(String _projectName) {
         GregorianCalendar calendar = (GregorianCalendar)GregorianCalendar.getInstance();
         Date date = calendar.getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm");
