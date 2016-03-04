@@ -78,6 +78,10 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
     protected final static int STARTED = 2;
     protected final static int STOPPED = 3;
 
+    public final static int REACHABILITY_ALL        = 1;
+    public final static int REACHABILITY_SELECTED   = 2;
+    public final static int REACHABILITY_NONE       = 3;
+
     int mode;
 
     //components
@@ -92,7 +96,9 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
     protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
-    protected JCheckBox stateReachability, translationOfBooleanFunction, outputOfProVerif, typedLanguage;
+    protected JCheckBox outputOfProVerif, typedLanguage;
+    protected JRadioButton stateReachabilityAll, stateReachabilitySelected, stateReachabilityNone;
+    protected ButtonGroup stateReachabilityGroup;
     protected JComboBox versionSimulator;
 
     private Thread t;
@@ -156,7 +162,6 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
         jp03.setBorder(new javax.swing.border.TitledBorder("Execution"));
 
 
-        c01.gridheight = 1;
         c01.weighty = 1.0;
         c01.weightx = 1.0;
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -173,14 +178,34 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
         jp01.add(new JLabel(" "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 
-        stateReachability = new JCheckBox("Compute state reachability");
-        stateReachability.setSelected(true);
-        jp01.add(stateReachability, c01);
 
-        translationOfBooleanFunction = new JCheckBox("Advanced translation of boolean functions");
-        translationOfBooleanFunction.setSelected(true);
-        jp01.add(translationOfBooleanFunction, c01);
+        c01.gridx = 0;
+        c01.gridy = 3;
+        c01.gridwidth = 1;
+        jp01.add(new JLabel("Compute state reachability: "), c01);
 
+        stateReachabilityGroup = new ButtonGroup ();
+
+        c01.gridx = 1;
+        stateReachabilityAll = new JRadioButton("all");
+        jp01.add(stateReachabilityAll, c01);
+
+        c01.gridx = 2;
+        stateReachabilitySelected = new JRadioButton("selected");
+        jp01.add(stateReachabilitySelected, c01);
+
+        c01.gridx = 3;
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        stateReachabilityNone = new JRadioButton("none");
+        jp01.add(stateReachabilityNone, c01);
+
+        stateReachabilityGroup.add (stateReachabilityAll);
+        stateReachabilityGroup.add (stateReachabilitySelected);
+        stateReachabilityGroup.add (stateReachabilityNone);
+        stateReachabilityAll.setSelected(true);
+
+        c01.gridx = GridBagConstraints.RELATIVE;
+        c01.gridy = GridBagConstraints.RELATIVE;
         typedLanguage = new JCheckBox("Generate typed Pi calculus");
         typedLanguage.setSelected(true);
         jp01.add(typedLanguage, c01);
@@ -351,7 +376,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                     System.out.println("FILE EXISTS!!!");
                 }
 
-                if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachability.isSelected(), translationOfBooleanFunction.isSelected(), typedLanguage.isSelected())) {
+                if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachabilityAll.isSelected () ? REACHABILITY_ALL : stateReachabilitySelected.isSelected () ? REACHABILITY_SELECTED : REACHABILITY_NONE, typedLanguage.isSelected())) {
                     jta.append("ProVerif code generation done\n");
                 } else {
 		    setError();

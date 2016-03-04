@@ -76,7 +76,7 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
 //Suggestion Panel code from: http://stackoverflow.com/questions/10873748/how-to-show-autocomplete-as-i-type-in-jtextarea
 
     public class SuggestionPanel {
-	private final String[] pragma = {"#Authenticity", "#Confidentiality", "#Constant", "#InitialSessionKnowledge", "#InitialSystemKnowledge", "#PrivatePublicKeys", "#Public", "#SecrecyAssumption", "#Secret"};
+	private final String[] pragma = {"#Authenticity", "#Confidentiality", "#PublicConstant", "#PrivateConstant", "#InitialSessionKnowledge", "#InitialSystemKnowledge", "#PrivatePublicKeys", "#Public", "#SecrecyAssumption", "#Secret"};
         private JList list;
         private JPopupMenu popupMenu;
         private String subWord;
@@ -230,7 +230,7 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
         helpPopup = new JPopupMenu();
-	JTextArea jft = new JTextArea("Pragma Guidelines: \n #Authenticity: Compare if two Attributes are equal at given states \n #Confidentiality: Query whether the attacker knows the value of this attribute. \n #Constant: Declare string as possible constant \n #InitialSessionKnowledge: Knowledge at the start of each session\n #InitialSystemKnowledge: Knowledge at the start of the system \n #PrivatePublicKeys: Set two attribute of a block as Private and Public Key respectively \n #Public: Declare variable public \n #SecrecyAssumption: Assume attribute confidential, but query to verify \n #Secret: See #Confidentiality");
+	JTextArea jft = new JTextArea("Pragma Guidelines: \n #Authenticity: Compare if two Attributes are equal at given states \n #Confidentiality: Query whether the attacker knows the value of this attribute. \n #PublicConstant: Declare string as public constant \n #PrivateConstant: Declare string as private constant \n #InitialSessionKnowledge: Knowledge at the start of each session\n #InitialSystemKnowledge: Knowledge at the start of the system \n #PrivatePublicKeys: Set two attribute of a block as Private and Public Key respectively \n #Public: Declare variable public \n #SecrecyAssumption: Assume attribute confidential, but query to verify \n #Secret: See #Confidentiality");
 	helpPopup.add(jft);
         textarea = new JTextArea();
 

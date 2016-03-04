@@ -78,7 +78,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
     private int maxFontSize = 30;
     private int minFontSize = 4;
     private int currentFontSize = -1;
-    private final String[] mPragma = {"#Constant", "#InitialSystemKnowledge", "#InitialSessionKnowledge", "#PrivatePublicKeys", "#Public"};
+    private final String[] mPragma = {"#PublicConstant", "#PrivateConstant", "#InitialSystemKnowledge", "#InitialSessionKnowledge", "#PrivatePublicKeys", "#Public"};
     private final String[] pPragma = {"#Confidentiality", "#Secret", "#SecrecyAssumption", "#Authenticity"};
     protected Graphics graphics;
     public final static int NOT_VERIFIED = 0;

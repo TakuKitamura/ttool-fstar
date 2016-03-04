@@ -52,18 +52,32 @@ import myutil.*;
 
 public class AvatarPragmaConstant extends AvatarPragma {
 
-    private LinkedList<AvatarAttribute> arguments;
     private LinkedList<AvatarConstant> constants;
+    private boolean isPublic;
 
-    public AvatarPragmaConstant(String _name, Object _referenceObject, LinkedList<AvatarConstant> _consts){
+    public AvatarPragmaConstant(String _name, Object _referenceObject, LinkedList<AvatarConstant> _consts, boolean _isPublic){
 	super(_name, _referenceObject);
 	arguments = new LinkedList<AvatarAttribute>();
 	constants = _consts;
+        this.isPublic = _isPublic;
     }
-    public LinkedList<AvatarAttribute> getArgs(){
-	return arguments;
-    }
+
     public LinkedList<AvatarConstant> getConstants() {
 	return constants;
+    }
+    
+    public AvatarConstant getConstantWithName (String name) {
+        for (AvatarConstant c: this.constants)
+            if (c.getName ().equals (name))
+                return c;
+        return null;
+    }
+
+    public boolean hasConstantWithName (String name) {
+        return this.getConstantWithName (name) != null;
+    }
+
+    public boolean isPublic () {
+        return this.isPublic;
     }
 }

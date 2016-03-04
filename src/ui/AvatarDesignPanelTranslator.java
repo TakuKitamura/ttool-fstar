@@ -59,8 +59,8 @@ import ui.window.*;
 
 public class AvatarDesignPanelTranslator {
 
-    private final String[] PRAGMAS = {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Constant"};
-    private final String[] PRAGMAS_TRANSLATION = {"Secret", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Constant"};
+    private final String[] PRAGMAS = {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "PublicConstant", "PrivateConstant"};
+    private final String[] PRAGMAS_TRANSLATION = {"Secret", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "PublicConstant", "PrivateConstant"};
 
     protected AvatarDesignPanel adp;
     protected Vector checkingErrors, warnings;
@@ -158,10 +158,9 @@ public class AvatarDesignPanelTranslator {
 			            AvatarPragmaConstant apg = (AvatarPragmaConstant) tmpPragma;
 			            for (AvatarConstant ac: apg.getConstants()){
 			                _as.addConstant(ac);
-			            }			
-			        } else {
-                            	    _as.addPragma(tmpPragma);
-				}
+			            }
+			        }
+                                _as.addPragma(tmpPragma);
                             //TraceManager.addDev("Adding pragma:" + tmp);
 			    }
                         }

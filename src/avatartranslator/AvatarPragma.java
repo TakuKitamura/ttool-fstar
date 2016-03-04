@@ -51,9 +51,9 @@ import myutil.*;
 import ui.*;
 
 public abstract class AvatarPragma extends AvatarElement {
-     private final String[] PRAGMAS = {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "Constant"};
-    private final String[] PRAGMAS_TRANSLATION = {"Secret", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "Constant"};
-    private LinkedList<AvatarAttribute> arguments;
+     private final String[] PRAGMAS =               {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "PublicConstant", "PrivateConstant"};
+    private final String[] PRAGMAS_TRANSLATION =    {"Secret",          "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "PublicConstant", "PrivateConstant"};
+    protected LinkedList<AvatarAttribute> arguments;
 
     
     private int proofStatus = 0;
@@ -148,12 +148,19 @@ public abstract class AvatarPragma extends AvatarElement {
 	        return pragmas;
 	    }
 	}
-	else if (header.equals("Constant")){
+	else if (header.equals("PrivateConstant")){
 	    LinkedList<AvatarConstant> constants = new LinkedList<AvatarConstant>();
 	    for (String arg: args){
 		constants.add(new AvatarConstant(arg, obj));
 	    }
-	    pragmas.add(new AvatarPragmaConstant(str, obj, constants));
+	    pragmas.add(new AvatarPragmaConstant(str, obj, constants, false));
+	}
+	else if (header.equals("PublicConstant")){
+	    LinkedList<AvatarConstant> constants = new LinkedList<AvatarConstant>();
+	    for (String arg: args){
+		constants.add(new AvatarConstant(arg, obj));
+	    }
+	    pragmas.add(new AvatarPragmaConstant(str, obj, constants, true));
 	}
 	else if (header.equals("PrivatePublicKeys")){
 	    LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();

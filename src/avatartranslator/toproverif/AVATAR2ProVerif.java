@@ -57,6 +57,7 @@ import javax.xml.parsers.*;
 import ui.ConfigurationTTool;
 import ui.CheckingError;
 import ui.AvatarDesignPanel;
+import ui.window.JDialogProVerifGeneration;
 import ui.TGComponent;
 import proverifspec.*;
 import myutil.*;
@@ -111,7 +112,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
     private int dummyDataCounter;
 
-    private boolean stateReachability;
+    private int stateReachability;
 
     private Vector warnings;
 
@@ -165,7 +166,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         return this.avspec;
     }
 
-    public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize, boolean _stateReachability, boolean _typed) {
+    public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize, int _stateReachability, boolean _typed) {
 
         this.stateReachability = _stateReachability;
         this.warnings = new Vector();
@@ -474,18 +475,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 this.spec.addDeclaration (new ProVerifVar        ("call__" + block.getName() + "__" + simplifiedElements.get (asme), "bitstring", true));
         }
 
-        this.spec.addDeclaration (new ProVerifComment    ("Data"));
+        this.spec.addDeclaration (new ProVerifComment    ("Constants"));
         TraceManager.addDev("Constants");
-        for (AvatarPragma pragma: this.avspec.getPragmas ()) {
-            TraceManager.addDev("Pragma    " + pragma.toString ());
-
+        for (AvatarPragma pragma: this.avspec.getPragmas ())
             if (pragma instanceof AvatarPragmaConstant)
                 for (AvatarConstant constant: ((AvatarPragmaConstant) pragma).getConstants ()) {
                     String constName = constant.getName ();
                     TraceManager.addDev("|    " + constName);
-                    this.spec.addDeclaration (new ProVerifConst      (constName, "bitstring"));
+                    this.spec.addDeclaration (new ProVerifVar      (constName, "bitstring", ! ((AvatarPragmaConstant) pragma).isPublic ()));
                 }
-        }
 
         /* Secrecy Assumptions */
         this.secrecyChecked = new HashSet<AvatarAttribute> ();
@@ -530,9 +528,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 }
 
         // Queries for states
-        if (this.stateReachability) {
+        TraceManager.addDev ("Queries Event (" + (this.stateReachability == JDialogProVerifGeneration.REACHABILITY_ALL ? "ALL" : this.stateReachability == JDialogProVerifGeneration.REACHABILITY_SELECTED ? "SELECTED" : "NONE") + ")"); 
+        if (this.stateReachability != JDialogProVerifGeneration.REACHABILITY_NONE) {
             this.spec.addDeclaration (new ProVerifComment    ("Queries Event"));
-            TraceManager.addDev ("Queries Event"); 
             for (AvatarBlock block: this.avspec.getListOfBlocks ()) {
                 HashSet<AvatarStateMachineElement> visited = new HashSet<AvatarStateMachineElement> ();
                 LinkedList<AvatarStateMachineElement> toVisit = new LinkedList<AvatarStateMachineElement> ();
@@ -543,7 +541,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         continue;
                     visited.add (asme);
 
-                    if (asme instanceof AvatarState) {
+                    if (asme instanceof AvatarState && (this.stateReachability == JDialogProVerifGeneration.REACHABILITY_ALL || ((AvatarState) asme).isCheckable ())) {
                         this.spec.addDeclaration (new ProVerifQueryEv    (new ProVerifVar[] {}, "enteringState__" + block.getName() + "__" + asme.getName()));
                         this.spec.addDeclaration (new ProVerifEvDecl     ("enteringState__" + block.getName() + "__" + asme.getName(), new String[] {}));
                         TraceManager.addDev("|    event (enteringState__" + block.getName() + "__" + asme.getName() + ")"); 
@@ -604,6 +602,22 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
         this.nameEquivalence = new HashMap<AvatarAttribute, AvatarAttribute> ();
 
+        TraceManager.addDev("Finding constants");
+        for (AvatarBlock block: blocks)
+            for (AvatarAttribute attr: block.getAttributes ())
+                if (this.avspec.getAvatarConstantWithName (attr.getName ()) != null) {
+                    if (attr.isInt () || attr.isBool ()) {
+                        lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, null), "bitstring")}, attr.getName ()));
+                        systemKnowledge.add (attr);
+                    } else {
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + attr.getBlock ().getName () + "." + attr.getName () + " should be of type int or bool to be considered as a constant.");
+                        ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+                        ce.setTGComponent((TGComponent)attr.getReferenceObject());
+                        warnings.add(ce);
+                        continue;
+                    }
+                }
+
         TraceManager.addDev("Finding system knowledge");
         for (AvatarPragma pragma: this.avspec.getPragmas ())
             // Check if pragma is system initial knowledge
@@ -613,7 +627,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 for (AvatarAttribute arg: pragma.getArgs ()) {
                     // ignore if the attribute was already declared
                     if (systemKnowledge.contains (arg)) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + arg.getBlock ().getName () + "." + arg.getName () + " already appears in another initial knowledge pragma (ignored).");
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + arg.getBlock ().getName () + "." + arg.getName () + " already appears in another initial knowledge pragma or is a constant (ignored).");
                         ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
                         ce.setTGComponent((TGComponent)pragma.getReferenceObject());
                         warnings.add(ce);
@@ -1241,7 +1255,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         ProVerifTranslatorParameter arg = (ProVerifTranslatorParameter) _arg;
         ProVerifProcInstr _lastInstr = arg.lastInstr;
 
-        if (this.stateReachability)
+        if (this.stateReachability == JDialogProVerifGeneration.REACHABILITY_ALL ||
+           (this.stateReachability == JDialogProVerifGeneration.REACHABILITY_SELECTED && _asme.isCheckable ()))
             // Adding an event for reachability of the state
             _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("event enteringState__" + arg.block.getName() + "__" + _asme.getName() + "()", true));
 
