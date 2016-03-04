@@ -57,6 +57,7 @@ import ui.tmldd.*;
 import ui.tmlcp.*;
 import ui.tmlsd.*;
 import tmltranslator.*;
+import tmltranslator.toavatar.*;
 import tmltranslator.tmlcp.*;
 import tmltranslator.toproverif.*;
 import proverifspec.*;

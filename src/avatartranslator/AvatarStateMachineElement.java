@@ -96,6 +96,12 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
         return null;
     }
 
+    public void removeNext(int _index){
+	if (_index < nexts.size()){
+	    nexts.remove(_index);
+	}
+    }
+
     public void setHidden(boolean _b) {
 	isHidden = _b;
     }

@@ -3752,13 +3752,19 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             return;
         }
 
-        if (!(tp instanceof AvatarDesignPanel)) {
-            return;
+        if (tp instanceof AvatarDesignPanel) {
+            AvatarDesignPanel adp = (AvatarDesignPanel)tp;
+            adp.modelBacktracingProVerif(pvoa);
+            getCurrentTDiagramPanel().repaint();
         }
-
-        AvatarDesignPanel adp = (AvatarDesignPanel)tp;
-        adp.modelBacktracingProVerif(pvoa);
-        getCurrentTDiagramPanel().repaint();
+	else if (tp instanceof TMLArchiPanel) {
+	}
+	else if (tp instanceof TMLDesignPanel){
+	    TMLDesignPanel tap = (TMLDesignPanel) tp;
+	    tap.modelBacktracingProVerif(pvoa);
+	    getCurrentTDiagramPanel().repaint();
+	}
+	return;
     }
 
     public void modelBacktracingUPPAAL(HashMap<String, Integer> verifMap) {

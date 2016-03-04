@@ -59,7 +59,12 @@ public class TMLADChoice extends TGCWithInternalComponent implements EmbeddedCom
     private int textX1, textY1, textX2, textY2, textX3, textY3;
     
     protected int stateOfError = 0; // Not yet checked
-	
+    public final static int NOT_VERIFIED = 0;
+    public final static int REACHABLE = 1;
+    public final static int NOT_REACHABLE = 2;
+
+    public int securityInformation;
+
     public TMLADChoice(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
@@ -163,6 +168,32 @@ public class TMLADChoice extends TGCWithInternalComponent implements EmbeddedCom
             return tgcomponent[i].getValue();
         }
         return "";
+    }
+    public void drawSecurityInformation(Graphics g) {
+        if (securityInformation > 0) {
+
+            Color c = g.getColor();
+            Color c1;
+            switch(securityInformation) {
+            case REACHABLE:
+                c1 = Color.green;
+                break;
+            case NOT_REACHABLE:
+                c1 = Color.red;
+                break;
+            default:
+                return;
+            }
+
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x-30, y+4, x-15, y+4, true);
+            g.drawOval(x-11, y-3, 7, 9);
+            g.setColor(c1);
+            g.fillRect(x-12, y, 9, 7);
+            g.setColor(c);
+            g.drawRect(x-12, y, 9, 7);
+
+        }
+
     }
     
     public void setGuard(String guard, int i) {

@@ -109,10 +109,9 @@ public class TMLArchiPanel extends TURTLEPanel {
         return mgui.getTitleAt(this) + " (DIPLODOCUS Mapping View)";
     }
 	
-	public void renameMapping(String oldName, String newName) {
-		if (tmlap != null) {
-			tmlap.renameMapping(oldName, newName);
-		}
+    public void renameMapping(String oldName, String newName) {
+	if (tmlap != null) {
+	    tmlap.renameMapping(oldName, newName);
 	}
-    
+    }
 }
