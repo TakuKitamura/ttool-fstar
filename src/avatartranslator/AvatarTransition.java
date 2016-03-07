@@ -79,6 +79,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
     public void addGuard(String _g) {
         AvatarGuard guard = AvatarGuard.createFromString (this.block, _g);
+	System.out.println("DID I ADD THE GUARD " + guard.toString());
         this.guard = AvatarGuard.addGuard (this.guard, guard, "and");
     }
 
@@ -325,7 +326,10 @@ public class AvatarTransition extends AvatarStateMachineElement {
                 ret += s.trim() + " / ";
             }
         }
-
+	String s = guard.toString ();
+	if (s.trim().length() > 0) {
+           ret +="guard " + s.trim() + " / ";
+    	}
         if (ret.length() > 0) {
             ret = "\n" + ret;
         }

@@ -3088,9 +3088,6 @@ public class GTMLModeling  {
             }
 
         }
-	addTMLPragmas();
-	TML2Avatar t2a = new TML2Avatar(map);
-	avspec = t2a.generateAvatarSpec();
     }
 
     public void addToTable(String s1, String s2) {

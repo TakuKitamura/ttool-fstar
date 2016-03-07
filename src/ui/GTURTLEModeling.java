@@ -133,6 +133,7 @@ import proverifspec.*;
 import req.ebrdd.*;
 
 import tmltranslator.ctranslator.*;
+import tmltranslator.toavatar.*;
 
 //Communication Pattern javaCC parser
 //import compiler.tmlCPparser.*;
@@ -633,6 +634,15 @@ public class GTURTLEModeling {
     }
 
     public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed) {
+	if (avatarspec==null){
+	    if (tmap!=null){
+		TML2Avatar t2a = new TML2Avatar(tmap);
+		avatarspec = t2a.generateAvatarSpec();
+	    }
+	    else {
+		return false;
+	    }
+	}
         avatar2proverif = new AVATAR2ProVerif(avatarspec);
         //tml2uppaal.setChoiceDeterministic(choices);
         //tml2uppaal.setSizeInfiniteFIFO(_size);
