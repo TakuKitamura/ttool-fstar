@@ -980,8 +980,16 @@ public class TML2Avatar {
 	    }
 	    avspec.addRelation(ar);
 	}
+	System.out.println("???");
+	for (AvatarSignal sig: signals){
+	    //$%^&*() check that all signals are put in relations
+	    AvatarRelation ar = avspec.getAvatarRelationWithSignal(sig);
+	    if (ar==null){
+		System.out.println("missing relation for " + sig.getName());
+	    }
+	}
 	//Check if we matched up all signals
-	System.out.println(avspec);
+	//System.out.println(avspec);
 	return avspec;
     }
 
