@@ -61,226 +61,226 @@ public class TMLChannel extends TMLCommunicationElement {
     private int max;
 
     // Used on for 1 -> 1 channel
-    protected TMLTask originTask, destinationTask; 
+    protected TMLTask originTask, destinationTask;
     protected TMLPort originPort, destinationPort; // Not used by the simulator
 
     // Used for 1 -> many channel, or for many -> 1 channel
     protected ArrayList<TMLTask> originTasks, destinationTasks;
     protected ArrayList<TMLPort> originPorts, destinationPorts;
 
-		private String TAB = "\t";
-		private String TAB2 = "\t\t";
-		private String CR = "\n";
-		private String SP = " ";
+    private String TAB = "\t";
+    private String TAB2 = "\t\t";
+    private String CR = "\n";
+    private String SP = " ";
     private int priority;
 
 
     public TMLChannel(String name, Object reference) {
         super(name, reference);
-	originTasks = new ArrayList<TMLTask>();
-	destinationTasks = new ArrayList<TMLTask>();
-	originPorts = new ArrayList<TMLPort>();
-	destinationPorts = new ArrayList<TMLPort>();
+        originTasks = new ArrayList<TMLTask>();
+        destinationTasks = new ArrayList<TMLTask>();
+        originPorts = new ArrayList<TMLPort>();
+        destinationPorts = new ArrayList<TMLPort>();
     }
 
 
     public boolean hasDestinationTask(TMLTask t) {
-	if (destinationTask == t) {
-	    return true;
-	}
+        if (destinationTask == t) {
+            return true;
+        }
 
-	for(TMLTask task: destinationTasks) {
-	    if (task == t) {
-		return true;
-	    }
-	}
+        for(TMLTask task: destinationTasks) {
+            if (task == t) {
+                return true;
+            }
+        }
 
-	return false;
-    } 
+        return false;
+    }
 
     public boolean hasOriginTask(TMLTask t) {
-	/*TraceManager.addDev("t=" + t + " origin task=" + originTask);
-	if (originTask != null) {
-	    TraceManager.addDev("t=" + t.getName() + "| origin task=" + originTask.getName() + "|");
-	    }*/
-	if (originTask == t) {
-	    return true;
-	}
+        /*TraceManager.addDev("t=" + t + " origin task=" + originTask);
+          if (originTask != null) {
+          TraceManager.addDev("t=" + t.getName() + "| origin task=" + originTask.getName() + "|");
+          }*/
+        if (originTask == t) {
+            return true;
+        }
 
-	for(TMLTask task: originTasks) {
-	    //TraceManager.addDev("t=" + t + " origins task=" + task);
-	    if (task == t) {
-		return true;
-	    }
-	}
+        for(TMLTask task: originTasks) {
+            //TraceManager.addDev("t=" + t + " origins task=" + task);
+            if (task == t) {
+                return true;
+            }
+        }
 
-	TraceManager.addDev("Returning false");
+        TraceManager.addDev("Returning false");
 
-	return false;
-    } 
+        return false;
+    }
 
     public String getNameOfDestinationTasks() {
-	if (destinationTask != null) {
-	    return destinationTask.getName();
-	}
+        if (destinationTask != null) {
+            return destinationTask.getName();
+        }
 
-	String ret = "";
-	for(TMLTask task: destinationTasks) {
-	    ret += " " + task.getName();
-	}
-	return ret.trim();
+        String ret = "";
+        for(TMLTask task: destinationTasks) {
+            ret += " " + task.getName();
+        }
+        return ret.trim();
     }
 
     public TMLTask getOriginTask(int index) {
-	return originTasks.get(index);
+        return originTasks.get(index);
     }
 
     public TMLTask getDestinationTask(int index) {
-	return destinationTasks.get(index);
+        return destinationTasks.get(index);
     }
 
     public TMLPort getOriginPort(int index) {
-	return originPorts.get(index);
+        return originPorts.get(index);
     }
 
     public TMLPort getDestinationPort(int index) {
-	return destinationPorts.get(index);
+        return destinationPorts.get(index);
     }
 
     public String getNameOfOriginTasks() {
-	if (originTask != null) {
-	    return originTask.getName();
-	}
+        if (originTask != null) {
+            return originTask.getName();
+        }
 
-	String ret = "";
-	for(TMLTask task: originTasks) {
-	    ret += " " + task.getName();
-	}
-	return ret.trim();
+        String ret = "";
+        for(TMLTask task: originTasks) {
+            ret += " " + task.getName();
+        }
+        return ret.trim();
     }
 
     public int getNbOfDestinationPorts() {
-	if (isBasicChannel()) {
-	    if (destinationPort != null) {
-		return 1;
-	    } else {
-		return 0;
-	    }
-	}
+        if (isBasicChannel()) {
+            if (destinationPort != null) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
 
-	if (destinationPorts == null) {
-	    return 0;
-	}
+        if (destinationPorts == null) {
+            return 0;
+        }
 
-	return destinationPorts.size();
+        return destinationPorts.size();
     }
 
     public TMLPort hasDestinationPort(String name) {
-	//TraceManager.addDev("Searching for dest port=" + name);
-	if (destinationPort != null) {
-	    //TraceManager.addDev("Dest port1=" + destinationPort.getName());
-	    if (destinationPort.getName().compareTo(name) ==0) {
-		//TraceManager.addDev("Found1");
-		return destinationPort;
-	    }
-	}
+        //TraceManager.addDev("Searching for dest port=" + name);
+        if (destinationPort != null) {
+            //TraceManager.addDev("Dest port1=" + destinationPort.getName());
+            if (destinationPort.getName().compareTo(name) ==0) {
+                //TraceManager.addDev("Found1");
+                return destinationPort;
+            }
+        }
 
-	if (destinationPorts == null) {
-	    return null;
-	}
+        if (destinationPorts == null) {
+            return null;
+        }
 
-	for (TMLPort port: destinationPorts) {
-	    //TraceManager.addDev("Dest portm=" + port.getName());
-	    if (port.getName().compareTo(name) ==0) {
-		//TraceManager.addDev("Foundm");
-		return port;
-	    }
-	}
-	//TraceManager.addDev("Not found");
-	return null;
-	
+        for (TMLPort port: destinationPorts) {
+            //TraceManager.addDev("Dest portm=" + port.getName());
+            if (port.getName().compareTo(name) ==0) {
+                //TraceManager.addDev("Foundm");
+                return port;
+            }
+        }
+        //TraceManager.addDev("Not found");
+        return null;
+
     }
 
     // Complex channels
     public boolean isBasicChannel() {
-	return (originTasks.size() == 0);
+        return (originTasks.size() == 0);
     }
 
     public void removeComplexInformation() {
-	originTasks = new ArrayList<TMLTask>();
-	destinationTasks = new ArrayList<TMLTask>();
-	originPorts = new ArrayList<TMLPort>();
-	destinationPorts = new ArrayList<TMLPort>();
+        originTasks = new ArrayList<TMLTask>();
+        destinationTasks = new ArrayList<TMLTask>();
+        originPorts = new ArrayList<TMLPort>();
+        destinationPorts = new ArrayList<TMLPort>();
     }
 
     public boolean isBadComplexChannel() {
-	if ((originTasks.size() == 1) && (destinationTasks.size() >= 1)) {
-	    return false;
-	}
+        if ((originTasks.size() == 1) && (destinationTasks.size() >= 1)) {
+            return false;
+        }
 
-	if ((destinationTasks.size() == 1) && (originTasks.size() >= 1)) {
-	    return false;
-	}
+        if ((destinationTasks.size() == 1) && (originTasks.size() >= 1)) {
+            return false;
+        }
 
-	return true;
+        return true;
     }
 
     public boolean isAForkChannel() {
-	return ((originTasks.size() == 1) && (destinationTasks.size() >= 1));
+        return ((originTasks.size() == 1) && (destinationTasks.size() >= 1));
     }
 
     public boolean isAJoinChannel() {
-	return ((destinationTasks.size() == 1) && (originTasks.size() >= 1));
+        return ((destinationTasks.size() == 1) && (originTasks.size() >= 1));
     }
 
     public boolean isAJoinChannel(int nbOfOrigins) {
-	return ((destinationTasks.size() == 1) && (originTasks.size() == nbOfOrigins));
+        return ((destinationTasks.size() == 1) && (originTasks.size() == nbOfOrigins));
     }
 
     public void toBasicIfPossible() {
-	if ((originTasks.size() ==1) && (destinationTasks.size() ==1)) {
-	    originTask = originTasks.get(0);
-	    destinationTask = destinationTasks.get(0);
-	    originPort = originPorts.get(0);
-	    destinationPort = destinationPorts.get(0);
-	    originTasks = new ArrayList<TMLTask>();
-	    destinationTasks = new ArrayList<TMLTask>();
-	    originPorts = new ArrayList<TMLPort>();
-	    destinationPorts = new ArrayList<TMLPort>();
-	}
+        if ((originTasks.size() ==1) && (destinationTasks.size() ==1)) {
+            originTask = originTasks.get(0);
+            destinationTask = destinationTasks.get(0);
+            originPort = originPorts.get(0);
+            destinationPort = destinationPorts.get(0);
+            originTasks = new ArrayList<TMLTask>();
+            destinationTasks = new ArrayList<TMLTask>();
+            originPorts = new ArrayList<TMLPort>();
+            destinationPorts = new ArrayList<TMLPort>();
+        }
     }
 
     public void addTaskPort(TMLTask _task, TMLPort _port, boolean isOrigin) {
-	if (isOrigin) {
-	    originTasks.add(_task);
-	    originPorts.add(_port);
-	} else {
-	    destinationTasks.add(_task);
-	    destinationPorts.add(_port);
-	}
+        if (isOrigin) {
+            originTasks.add(_task);
+            originPorts.add(_port);
+        } else {
+            destinationTasks.add(_task);
+            destinationPorts.add(_port);
+        }
     }
 
     public ArrayList<TMLTask> getOriginTasks() {
-	return originTasks;
+        return originTasks;
     }
 
     public ArrayList<TMLTask> getDestinationTasks() {
-	return destinationTasks;
+        return destinationTasks;
     }
 
     public ArrayList<TMLPort> getOriginPorts() {
-	return originPorts;
+        return originPorts;
     }
 
     public ArrayList<TMLPort> getDestinationPorts() {
-	return destinationPorts;
+        return destinationPorts;
     }
 
     public void removeComplexInformations() {
-	originTasks = new ArrayList<TMLTask>();
-	destinationTasks = new ArrayList<TMLTask>();
-	originPorts = new ArrayList<TMLPort>();
-	destinationPorts = new ArrayList<TMLPort>();
+        originTasks = new ArrayList<TMLTask>();
+        destinationTasks = new ArrayList<TMLTask>();
+        originPorts = new ArrayList<TMLPort>();
+        destinationPorts = new ArrayList<TMLPort>();
     }
 
 
@@ -291,10 +291,10 @@ public class TMLChannel extends TMLCommunicationElement {
     }
 
     public void setPorts(TMLPort _origin, TMLPort _destination) {
-	originPort = _origin;
-	destinationPort = _destination;
+        originPort = _origin;
+        destinationPort = _destination;
     }
-  
+
     public TMLTask getOriginTask() {
         return originTask;
     }
@@ -304,11 +304,11 @@ public class TMLChannel extends TMLCommunicationElement {
     }
 
     public TMLPort getOriginPort() {
-	return originPort;
+        return originPort;
     }
 
     public TMLPort getDestinationPort() {
-	return destinationPort;
+        return destinationPort;
     }
 
     public void setPriority(int _priority) {
@@ -399,33 +399,33 @@ public class TMLChannel extends TMLCommunicationElement {
         }
         return false;
     }
-	
-	public String toString()	{
 
-		String s = TAB + "CHANNEL" + SP + name + CR;
-		if( isBasicChannel() )	{
-			s += TAB2 + "Origin task: " + originTask.getName() + CR;
-			s += TAB2 + "Origin port: " + originPort.getName() + CR;
-			s += TAB2 + "Destination task: " + destinationTask.getName() + CR;
-			s += TAB2 + "Destination port: " + destinationPort.getName() + CR;
-		}
-		if( isAForkChannel() )	{
-			s += TAB2 + "Origin task: " + originTasks.get(0).getName() + CR;
-			s += TAB2 + "Origin port: " + originPorts.get(0).getName() + CR;
-			for( int i = 0; i < destinationTasks.size(); i++ )	{
-				s += TAB2 + "Destination task: "  +destinationTasks.get(i).getName() + CR;
-				s += TAB2 + "Destination port: " + destinationPorts.get(i).getName() + CR;
-			}
-		}
-		if( isAJoinChannel() )	{
-			for( int i = 0; i < originTasks.size(); i++ )	{
-				s += TAB2 + "Origin task: " + originTasks.get(i).getName() + CR;
-				s += TAB2 + "Origin port: " + originPorts.get(i).getName() + CR;
-			}
-			s += TAB2 + "Destination task: " + destinationTasks.get(0).getName() + CR;
-			s += TAB2 + "Destination port: " + destinationPorts.get(0).getName() + CR;
-		}
-		return s;
-	}
-		
+    public String toString()    {
+
+        String s = TAB + "CHANNEL" + SP + name + CR;
+        if( isBasicChannel() )  {
+            s += TAB2 + "Origin task: " + originTask.getName() + CR;
+            s += TAB2 + "Origin port: " + originPort.getName() + CR;
+            s += TAB2 + "Destination task: " + destinationTask.getName() + CR;
+            s += TAB2 + "Destination port: " + destinationPort.getName() + CR;
+        }
+        if( isAForkChannel() )  {
+            s += TAB2 + "Origin task: " + originTasks.get(0).getName() + CR;
+            s += TAB2 + "Origin port: " + originPorts.get(0).getName() + CR;
+            for( int i = 0; i < destinationTasks.size(); i++ )  {
+                s += TAB2 + "Destination task: "  +destinationTasks.get(i).getName() + CR;
+                s += TAB2 + "Destination port: " + destinationPorts.get(i).getName() + CR;
+            }
+        }
+        if( isAJoinChannel() )  {
+            for( int i = 0; i < originTasks.size(); i++ )       {
+                s += TAB2 + "Origin task: " + originTasks.get(i).getName() + CR;
+                s += TAB2 + "Origin port: " + originPorts.get(i).getName() + CR;
+            }
+            s += TAB2 + "Destination task: " + destinationTasks.get(0).getName() + CR;
+            s += TAB2 + "Destination port: " + destinationPorts.get(0).getName() + CR;
+        }
+        return s;
+    }
+
 }

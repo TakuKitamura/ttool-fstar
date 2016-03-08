@@ -3056,7 +3056,7 @@ public class GTMLModeling  {
                         elt = tmlm.getCommunicationElementByName(s);
                         TraceManager.addDev("comm elts: " + tmlm.getStringListCommunicationElements());
                         if (elt instanceof TMLChannel) {
-                            TraceManager.addDev("Setting priority of " + elt + " to " + artifact.getPriority() );
+                            //TraceManager.addDev("Setting priority of " + elt + " to " + artifact.getPriority() );
                             ((TMLChannel)(elt)).setPriority(artifact.getPriority());
                         }
                         if(elt != null) {
