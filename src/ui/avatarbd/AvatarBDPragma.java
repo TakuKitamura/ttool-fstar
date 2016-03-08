@@ -313,12 +313,12 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 	    c2 = c1;
 	}
 	
-        g.drawOval(_x+6, _y-13, 10, 15);
+        g.drawOval(_x+6, _y-16, 10, 15);
         g.setColor(c1);
 	int[] xps = new int[]{_x+4, _x+4, _x+20};
-	int[] yps = new int[]{_y-7, _y+7, _y+7};
+	int[] yps = new int[]{_y-10, _y+4, _y+4};
 	int[] xpw = new int[]{_x+20, _x+20, _x+4};
-	int[] ypw = new int[]{_y+7, _y-7, _y-7};
+	int[] ypw = new int[]{_y+4, _y-10, _y-10};
 	g.fillPolygon(xps, yps,3);	
 	
 	g.setColor(c2);	
@@ -329,8 +329,8 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 //        g.drawRect(_x+4, _y-7, 18, 14);
 	g.drawPolygon(xps, yps,3);
 	g.drawPolygon(xpw, ypw, 3);
-	g.drawString("S", _x+6, _y+5);
-	g.drawString("W", _x+13, _y+1);
+	g.drawString("S", _x+6, _y+2);
+	g.drawString("W", _x+13, _y-2);
 //	if (c1==Color.gray){
 //	    g.drawString("?", _x+4, _y+2);
 //	}
