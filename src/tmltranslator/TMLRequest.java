@@ -52,11 +52,12 @@ public class TMLRequest extends TMLCommunicationElement {
     protected Vector params; // List of various types of parameters
     protected ArrayList<TMLTask> originTasks; // list of tasks from which request starts
     protected TMLTask destinationTask;
-    
+    protected ArrayList<String> paramNames;
     public TMLRequest(String name, Object reference) {
         super(name, reference);
         params = new Vector();
         originTasks = new ArrayList<TMLTask>();
+	paramNames = new ArrayList<String>();
     }
     
     public int getNbOfParams() {
@@ -66,7 +67,10 @@ public class TMLRequest extends TMLCommunicationElement {
     public void addParam(TMLType _type) {
         params.add(_type);
     }
-    
+    public void addParamName(String name){
+	paramNames.add(name);
+    }
+
     public TMLType getType(int i) {
         if (i<getNbOfParams()) {
             return (TMLType)(params.elementAt(i));
@@ -74,7 +78,13 @@ public class TMLRequest extends TMLCommunicationElement {
             return null;
         }
     }
-    
+    public String getParam(int i){
+	if (i<getNbOfParams()) {
+            return paramNames.get(i);
+        } else {
+            return null;
+        }
+    }
     public void setDestinationTask(TMLTask _task) {
         destinationTask = _task;
     }

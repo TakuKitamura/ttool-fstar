@@ -1661,10 +1661,12 @@ public class GTMLModeling  {
                             for(int k=0; k<allVariables.size(); k++) {
                                 //TraceManager.addDev("Adding record: " + allVariables.get(k));
                                 tmlsendrequest.addParam(allVariables.get(k));
+				request.addParamName(allVariables.get(k));
                             }
                         } else {
                             //TraceManager.addDev("Adding param: " + tmp);
                             tmlsendrequest.addParam(tmp);
+			    request.addParamName(tmp);
                         }
                     }
                     if (request.getNbOfParams() != tmlsendrequest.getNbOfParams()) {

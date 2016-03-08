@@ -217,6 +217,9 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
     protected void translateProcIn (ProVerifProcIn _node, int _alinea) {
         this.fullSpec += "\n" + this.printAlinea (_alinea);
         this.fullSpec += "in (" + _node.channel + ", ";
+	if (_node.vars.length>1){
+	    this.fullSpec += "(";
+	}
         boolean first = true;
         for (ProVerifVar var: _node.vars) {
             if (first)
@@ -226,6 +229,9 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
             this.fullSpec += var.name + ": " + var.type;
         }
         this.fullSpec += ")";
+	if (_node.vars.length>1){
+	    this.fullSpec += ")";
+	}
         if (_node.next != null) {
             this.fullSpec += ";";
             this.translate (_node.next, _alinea);

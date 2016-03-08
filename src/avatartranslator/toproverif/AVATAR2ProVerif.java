@@ -1014,7 +1014,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             String tmp = "out (" + CH_MAINCH + ", ";
             if (isPrivate)
                 tmp += CH_ENCRYPT + name + " (";
-
+	    if (_asme.getNbOfValues()>1){
+		tmp +="(";
+	    }
             if (_asme.getNbOfValues() == 0)
                 tmp += "data__" + this.dummyDataCounter;
             else {
@@ -1042,6 +1044,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 tmp += ")";
 
             tmp += ")";
+	    if (_asme.getNbOfValues()>1){
+		tmp +=")";
+	    }
             TraceManager.addDev("|    |    " + tmp);
 
             _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw (tmp, true));
@@ -1058,7 +1063,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     if (term == null || ! (term instanceof AvatarAttribute)) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown attribute '" + value + "' (ignored)");
                         ce.setAvatarBlock(arg.block);
-                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                  //      ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                         ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                         this.warnings.add(ce);
                         continue;
@@ -1105,7 +1110,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 TraceManager.addDev ("!!!       Guard: " + _asme.getGuard() + " in block " + arg.block.getName() + " is not supported. Replacing by an empty guard");
                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Guard: " + _asme.getGuard() + " in block " + arg.block.getName() + " is not supported. Replacing by an empty guard");
                 ce.setAvatarBlock(arg.block);
-                ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                //ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                 ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                 warnings.add(ce);
                 _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("(*  Unsupported guard:" + _asme.getGuard() + " *)"));
@@ -1196,7 +1201,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     TraceManager.addDev ("!!!       Assignment: " + action.toString () + " in block " + arg.block.getName() + " is not supported. Removing it.");
                     CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Assignment: " + action.toString () + " in block " + arg.block.getName() + " is not supported. Removing it.");
                     ce.setAvatarBlock(arg.block);
-                    ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                    //ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                     ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                     warnings.add(ce);
                 }
