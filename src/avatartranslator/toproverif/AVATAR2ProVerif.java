@@ -611,7 +611,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         systemKnowledge.add (attr);
                     } else {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + attr.getBlock ().getName () + "." + attr.getName () + " should be of type int or bool to be considered as a constant.");
-                        ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+                       // ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
                         ce.setTGComponent((TGComponent)attr.getReferenceObject());
                         warnings.add(ce);
                         continue;
@@ -628,7 +628,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     // ignore if the attribute was already declared
                     if (systemKnowledge.contains (arg)) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + arg.getBlock ().getName () + "." + arg.getName () + " already appears in another initial knowledge pragma or is a constant (ignored).");
-                        ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+                   //     ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
                         ce.setTGComponent((TGComponent)pragma.getReferenceObject());
                         warnings.add(ce);
                         continue;
@@ -665,7 +665,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         // If there is a public key in the middle, ignore it
                         if (privateK != null) {
                             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "When defining equality between public keys, the first to appear in the pragma should be the one belonging to the block that owns the private key.");
-                            ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+                         //   ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
                             ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
                             warnings.add(ce);
                             continue;
@@ -726,7 +726,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     // ignore if the attribute was already declared
                     if (sessionKnowledge.contains (arg)) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + arg.getBlock ().getName () + "." + arg.getName () + " already appears in another initial knowledge pragma (ignored).");
-                        ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+                       // ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
                         ce.setTGComponent((TGComponent)pragma.getReferenceObject());
                         warnings.add(ce);
                         continue;
@@ -735,7 +735,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     // ignore if the attribute was sytem knowledge
                     if (systemKnowledge.contains (arg)) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't define an attribute as both system and session knowledge.");
-                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
+                      //  ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
                         ce.setTGComponent((TGComponent)pragma.getReferenceObject());
                         warnings.add(ce);
                         continue;
@@ -772,7 +772,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         // If there is a public key in the middle, ignore it
                         if (privateK != null) {
                             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "When defining equality between public keys, the first to appear in the pragma should be the one belonging to the block that owns the private key.");
-                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
+                         //   ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
                             ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
                             warnings.add(ce);
                             continue;
@@ -1026,7 +1026,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     if (term == null || term instanceof AvatarTermRaw) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown term '" + value + "' (ignored)");
                         ce.setAvatarBlock(arg.block);
-                        ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                       // ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                         ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                         this.warnings.add(ce);
                         continue;
@@ -1161,7 +1161,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             if (! (term instanceof AvatarAttribute)) {
                                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + term.getName () + "' should be an attribute (ignored)");
                                 ce.setAvatarBlock(arg.block);
-                                ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                               // ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                                 ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                                 this.warnings.add(ce);
                                 continue;
@@ -1175,7 +1175,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             if (this.secrecyChecked.contains (attr)) {
                                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + term.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + term.getName () + ".");
                                 ce.setAvatarBlock(arg.block);
-                                ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                            //    ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                                 ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                                 this.warnings.add(ce);
                             }
@@ -1189,7 +1189,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         if (this.secrecyChecked.contains (attr)) {
                             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + attr.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + attr.getName () + ".");
                             ce.setAvatarBlock(arg.block);
-                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                         //   ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                             ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                             this.warnings.add(ce);
                         }
@@ -1219,7 +1219,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         if (! (args.get(i) instanceof AvatarAttribute)) {
                             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + args.get(i).getName () + "' should be an attribute (ignored)");
                             ce.setAvatarBlock(arg.block);
-                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                          //  ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                             ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                             this.warnings.add(ce);
                             ok = false;
@@ -1238,7 +1238,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             if (this.secrecyChecked.contains (attr)) {
                                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + attr.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + attr.getName () + ".");
                                 ce.setAvatarBlock(arg.block);
-                                ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                              //  ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                                 ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                                 this.warnings.add(ce);
                             }
