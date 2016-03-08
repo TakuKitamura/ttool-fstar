@@ -168,7 +168,7 @@ public class TGComponentManager {
     public static final int UML_NOTE = 301;
     public static final int PRAGMA = 302;
     public static final int SAFETY_PRAGMA = 303;
-
+    public static final int INFO_PANEL = 304;
 
     public static final int IOD_CHOICE = 501;
     public static final int IOD_START_STATE = 502;
@@ -398,9 +398,24 @@ public class TGComponentManager {
 
     // Avatar Deployment Diagrams at 5350
     /*    public static final int ADD_CONNECTOR = 5350;
+          public static final int ADD_CPUNODE = 5351;
+          public static final int ADD_ARTIFACT = 5352;
+          public static final int ADD_BUSNODE = 5353;
+          public static final int ADD_TTYNODE = 5354;
+          public static final int ADD_RAMNODE = 5355;
+          public static final int ADD_ROMNODE = 5356;
+          public static final int ADD_BRIDGENODE = 5357;
+          public static final int ADD_DMANODE = 5358;
+          public static final int ADD_ICUNODE = 5359;
+          public static final int ADD_COPROMWMRNODE = 5360;
+          public static final int ADD_TIMERNODE = 5361;
+          public static final int ADD_CHANNELARTIFACT = 5362;*/
+
+    // Avatar Deployment Diagrams at 5350
+    public static final int ADD_CONNECTOR = 5350;
     public static final int ADD_CPUNODE = 5351;
     public static final int ADD_ARTIFACT = 5352;
-    public static final int ADD_BUSNODE = 5353;
+    public static final int ADD_BUSNODE = 5363;
     public static final int ADD_TTYNODE = 5354;
     public static final int ADD_RAMNODE = 5355;
     public static final int ADD_ROMNODE = 5356;
@@ -409,24 +424,9 @@ public class TGComponentManager {
     public static final int ADD_ICUNODE = 5359;
     public static final int ADD_COPROMWMRNODE = 5360;
     public static final int ADD_TIMERNODE = 5361;
-    public static final int ADD_CHANNELARTIFACT = 5362;*/
-
-// Avatar Deployment Diagrams at 5350
-	public static final int ADD_CONNECTOR = 5350;
-	public static final int ADD_CPUNODE = 5351;
-	public static final int ADD_ARTIFACT = 5352;
-	public static final int ADD_BUSNODE = 5363;
-	public static final int ADD_TTYNODE = 5354;
-	public static final int ADD_RAMNODE = 5355;        
-	public static final int ADD_ROMNODE = 5356;
-	public static final int ADD_BRIDGENODE = 5357;
-	public static final int ADD_DMANODE = 5358;
-	public static final int ADD_ICUNODE = 5359;
-	public static final int ADD_COPROMWMRNODE = 5360;
-	public static final int ADD_TIMERNODE = 5361;
-	public static final int ADD_CHANNELARTIFACT = 5362;
-        public static final int ADD_VGMNNODE = 5353;
-        public static final int ADD_CROSSBARNODE = 5364;
+    public static final int ADD_CHANNELARTIFACT = 5362;
+    public static final int ADD_VGMNNODE = 5353;
+    public static final int ADD_CROSSBARNODE = 5364;
 
     // AVATAR CD -> starts at 5400
     public static final int ACD_BLOCK = 5400;
@@ -535,9 +535,9 @@ public class TGComponentManager {
         case AVATARRD_PROPERTY:
             tgc = new AvatarRDProperty(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-	case AVATARRD_ELEMENT_REFERENCE:
+        case AVATARRD_ELEMENT_REFERENCE:
             tgc = new AvatarRDElementReference(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break; 
+            break;
 
         case AVATARMAD_ASSUMPTION:
             tgc = new AvatarMADAssumption(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -634,12 +634,12 @@ public class TGComponentManager {
         case ADD_BUSNODE:
             tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-	case ADD_VGMNNODE:
-                tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-                break; 
-	case ADD_CROSSBARNODE:
-                tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-                break; 
+        case ADD_VGMNNODE:
+            tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case ADD_CROSSBARNODE:
+            tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
         case ADD_TTYNODE:
             tgc = new ADDTTYNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
@@ -694,7 +694,7 @@ public class TGComponentManager {
             tgc = new AvatarMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
 
-   //SysML-Sec Methodology
+            //SysML-Sec Methodology
         case SYSMLSEC_METHODOLOGY_REF_ASSUMPTIONS:
             tgc = new SysmlsecMethodologyReferenceToAssumptions(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
@@ -713,19 +713,19 @@ public class TGComponentManager {
         case SYSMLSEC_METHODOLOGY_REF_PROTOTYPE:
             tgc = new SysmlsecMethodologyReferenceToPrototype(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-	case SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW:
+        case SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW:
             tgc = new SysmlsecMethodologyReferenceToApplication(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-	    	case SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW:
+        case SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW:
             tgc = new SysmlsecMethodologyReferenceToArchitecture(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-	    	case SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW:
+        case SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW:
             tgc = new SysmlsecMethodologyReferenceToMapping(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-	case SYSMLSEC_METHODOLOGY_REF_CP_VIEW:
+        case SYSMLSEC_METHODOLOGY_REF_CP_VIEW:
             tgc = new SysmlsecMethodologyReferenceToCP(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-	case SYSMLSEC_METHODOLOGY_REF_ATTACK:
+        case SYSMLSEC_METHODOLOGY_REF_ATTACK:
             tgc = new SysmlsecMethodologyReferenceToAttack(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SYSMLSEC_METHODOLOGY_DIAGRAM_NAME:
@@ -812,6 +812,9 @@ public class TGComponentManager {
             break;
         case UML_NOTE:
             tgc = new TGCNote(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+	case INFO_PANEL:
+            tgc = new TGCPanelInfo(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case PRAGMA:
             tgc = new AvatarBDPragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -936,7 +939,7 @@ public class TGComponentManager {
         case DIPLODODUSMETHODOLOGY_REF_APPLICATION:
             tgc = new DiplodocusMethodologyDiagramReferenceToApplication(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-	case DIPLODODUSMETHODOLOGY_REF_CP:
+        case DIPLODODUSMETHODOLOGY_REF_CP:
             tgc = new DiplodocusMethodologyDiagramReferenceToCP(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case DIPLODODUSMETHODOLOGY_REF_ARCHITECTURE:
@@ -1332,7 +1335,7 @@ public class TGComponentManager {
         } else if (tgc instanceof AvatarMethodologyConnector) {
             return AVATARMETHODOLOGY_CONNECTOR;
 
-	    // SysML-Sec Methodology
+            // SysML-Sec Methodology
         } else if (tgc instanceof SysmlsecMethodologyReferenceToAssumptions) {
             return SYSMLSEC_METHODOLOGY_REF_ASSUMPTIONS;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToRequirement) {
@@ -1349,17 +1352,17 @@ public class TGComponentManager {
             return  SYSMLSEC_METHODOLOGY_DIAGRAM_NAME;
         } else if (tgc instanceof SysmlsecMethodologyConnector) {
             return  SYSMLSEC_METHODOLOGY_CONNECTOR;
-	} else if (tgc instanceof SysmlsecMethodologyReferenceToApplication) {
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToApplication) {
             return  SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW;
-	} else if (tgc instanceof SysmlsecMethodologyReferenceToArchitecture) {
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToArchitecture) {
             return  SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW;
-	} else if (tgc instanceof SysmlsecMethodologyReferenceToCP) {
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToCP) {
             return  SYSMLSEC_METHODOLOGY_REF_CP_VIEW;
-	} else if (tgc instanceof SysmlsecMethodologyReferenceToMapping) {
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToMapping) {
             return  SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW;
-	} else if (tgc instanceof SysmlsecMethodologyReferenceToAttack) {
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToAttack) {
             return  SYSMLSEC_METHODOLOGY_REF_ATTACK;
-	    
+
 
 
             // AVATAR MAD
@@ -1377,7 +1380,7 @@ public class TGComponentManager {
             return AVATARMAD_IMPACT_CONNECTOR;
         } else if (tgc instanceof AvatarMADMeetConnector) {
             return AVATARMAD_MEET_CONNECTOR;
-	} else if (tgc instanceof AvatarMADBelongsToCompositionConnector) {
+        } else if (tgc instanceof AvatarMADBelongsToCompositionConnector) {
             return AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR;
 
             // AVATAR RD
@@ -1385,11 +1388,11 @@ public class TGComponentManager {
             return AVATARRD_REQUIREMENT;
         } else if (tgc instanceof AvatarRDProperty) {
             return AVATARRD_PROPERTY;
-	} else if (tgc instanceof AvatarRDElementReference) {
+        } else if (tgc instanceof AvatarRDElementReference) {
             return AVATARRD_ELEMENT_REFERENCE;
         } else if (tgc instanceof AvatarRDDeriveConnector) {
             return AVATARRD_DERIVE_CONNECTOR;
-	} else if (tgc instanceof AvatarRDSatisfyConnector) {
+        } else if (tgc instanceof AvatarRDSatisfyConnector) {
             return AVATARRD_SATISFY_CONNECTOR;
         } else if (tgc instanceof AvatarRDRefineConnector) {
             return AVATARRD_REFINE_CONNECTOR;
@@ -1527,6 +1530,8 @@ public class TGComponentManager {
             return      CONNECTOR_INTERACTION;
         } else if (tgc instanceof TGCNote) {
             return      UML_NOTE;
+	} else if (tgc instanceof TGCPanelInfo) {
+            return      INFO_PANEL;
         } else if (tgc instanceof IODChoice) {
             return IOD_CHOICE;
         } else if (tgc instanceof IODStartState) {
@@ -1631,7 +1636,7 @@ public class TGComponentManager {
             return ATD_ATTACK_CONNECTOR;
         } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToApplication) {
             return DIPLODODUSMETHODOLOGY_REF_APPLICATION;
-	} else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToCP) {
+        } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToCP) {
             return DIPLODODUSMETHODOLOGY_REF_CP;
         } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToArchitecture) {
             return DIPLODODUSMETHODOLOGY_REF_ARCHITECTURE;
@@ -1903,8 +1908,8 @@ public class TGComponentManager {
         case AVATARMETHODOLOGY_CONNECTOR:
             tgc = new AvatarMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
-	    
-	     // SysML-Sec Methodology
+
+            // SysML-Sec Methodology
         case SYSMLSEC_METHODOLOGY_CONNECTOR:
             tgc = new SysmlsecMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
@@ -1922,14 +1927,14 @@ public class TGComponentManager {
         case AVATARMAD_MEET_CONNECTOR:
             tgc = new AvatarMADMeetConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
-	case AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR:
+        case AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR:
             tgc = new AvatarMADBelongsToCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
 
             // AVATAR RD
         case AVATARRD_DERIVE_CONNECTOR:
             tgc = new AvatarRDDeriveConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-	case AVATARRD_SATISFY_CONNECTOR:
+        case AVATARRD_SATISFY_CONNECTOR:
             tgc = new AvatarRDSatisfyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
         case AVATARRD_REFINE_CONNECTOR:

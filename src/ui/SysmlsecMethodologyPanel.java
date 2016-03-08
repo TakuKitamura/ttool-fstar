@@ -78,7 +78,7 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
 
     // Put the methodology
     public void initElements() {
-        TGComponent tgc1 = dmd.addComponent(50, 350, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ASSUMPTIONS, false);
+        TGComponent tgc1 = dmd.addComponent(50, 300, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ASSUMPTIONS, false);
         TGComponent tgc2 = dmd.addComponent(350, 200, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_REQUIREMENT, false);
 
 	TGComponent tgc10 = dmd.addComponent(350, 400, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ATTACK, false);
@@ -87,10 +87,10 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
 	TGComponent tgc7 = dmd.addComponent(650, 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW, false);
         TGComponent tgc8 = dmd.addComponent(1150, 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW, false);
         TGComponent tgc9 = dmd.addComponent(900, 225, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW, false);
-	TGComponent tgc11 = dmd.addComponent(900, 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_CP_VIEW, false);
+	TGComponent tgc11 = dmd.addComponent(887, 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_CP_VIEW, false);
         
 
-	int xa = 750;
+	int xa = 900;
 	int ya = 400;
 	// Software dev.
 	TGComponent tgc3 = dmd.addComponent(xa, ya, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ANALYSIS, false);
@@ -99,6 +99,29 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
         TGComponent tgc6 = dmd.addComponent(xa-250, ya+100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_PROPERTIES, false);
 	
 
+	TGCPanelInfo infoParti = (TGCPanelInfo)(dmd.addComponent(630, 65, TGComponentManager.INFO_PANEL, false));
+	infoParti.resize(750, 250);
+	infoParti.setValue("SW/HW Partitioning");
+	infoParti.setStringPos(TGCPanelInfo.UPPER_MIDDLE);
+	infoParti.setFillColor(ColorManager.SYSMLSEC_PARTITIONING);
+	infoParti.setTextColor(Color.white);
+
+	TGCPanelInfo infoSw = (TGCPanelInfo)(dmd.addComponent(xa-270, ya-25, TGComponentManager.INFO_PANEL, false));
+	infoSw.resize(750, 325);
+	infoSw.setValue("SW Design");
+	infoSw.setStringPos(TGCPanelInfo.UPPER_MIDDLE);
+	infoSw.setFillColor(ColorManager.SYSMLSEC_SWDESIGN);
+	infoSw.setTextColor(Color.white);
+       
+	
+	TGCPanelInfo infoReq = (TGCPanelInfo)(dmd.addComponent(330, 169, TGComponentManager.INFO_PANEL, false));
+	infoReq.resize(241, 340);
+	infoReq.setValue("Req and attacks");
+	infoReq.setStringPos(TGCPanelInfo.UPPER_MIDDLE);
+	infoReq.setTextColor(Color.white);
+	infoReq.setFillColor(ColorManager.SYSMLSEC_REQ);
+	
+	
 
         //Connectors
 
@@ -162,7 +185,9 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
         p1 = tgc2.getTGConnectingPointAtIndex(0);
         p2 = tgc6.getTGConnectingPointAtIndex(0);
         listPoint = new Vector();
-	p = new Point(xa-160, 235);
+	p = new Point(xa-305, 235);
+	listPoint.add(p);
+	p = new Point(xa-305, ya+50);
         listPoint.add(p);
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
         p1.setFree(false);
@@ -196,6 +221,11 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
         p1.setFree(false);
         p2.setFree(false);
         dmd.getComponentList().add(0, tgco);
+
+
+	dmd.bringToBack(infoParti);
+	dmd.bringToBack(infoSw);
+	dmd.bringToBack(infoReq);
 
 
     }

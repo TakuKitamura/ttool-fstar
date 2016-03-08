@@ -127,7 +127,13 @@ public class ColorManager {
     public static  Color TML_PORT_EVENT = new Color(216, 187, 249);
     public static  Color TML_PORT_REQUEST = new Color(196, 166, 122);
 
-    public static final Color UML_NOTE = new Color(73, 90, 134);
+    public static Color UML_NOTE = new Color(73, 90, 134);
+    
+    public static Color SYSMLSEC_PARTITIONING = new Color(73, 90, 134);
+    public static Color SYSMLSEC_SWDESIGN = new Color(73, 90, 134);
+    public static Color SYSMLSEC_REQ = new Color(73, 90, 134);
+
+    
     public static final Color PRAGMA = new Color(100, 0, 100);
     public static final Color SAFETY_PRAGMA = new Color(100, 100, 0);
 
@@ -277,6 +283,9 @@ public class ColorManager {
         AVATAR_RECEIVE_SIGNAL = Color.white;
         AVATAR_ASSUMPTION_ATTRIBUTES = Color.white;
         AVATAR_ASSUMPTION_TOP = Color.white;
+	SYSMLSEC_PARTITIONING = Color.white;
+	SYSMLSEC_SWDESIGN = Color.white;
+	SYSMLSEC_REQ = Color.white;
 
     }
 
