@@ -397,7 +397,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                 errors += "Clock ratio  ";
             }
         }
-	//encryption = dialog.getEncryption();
+	encryption = dialog.getEncryption();
         if (error) {
             JOptionPane.showMessageDialog(frame,
                                           "Invalid value for the following attributes: " + errors,
@@ -477,7 +477,8 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         sb.append(" execiTime=\"" + execiTime + "\"");
         sb.append(" execcTime=\"" + execcTime + "\"");
         sb.append(" clockRatio=\"" + clockRatio + "\"");
-				sb.append(" MECType=\"" + MECType.getIndex() + "\"");
+	sb.append(" MECType=\"" + MECType.getIndex() + "\"");
+	sb.append(" encryption=\"" + encryption + "\"");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -551,6 +552,9 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 																}
                                 if ((elt.getAttribute("sliceTime") != null) &&  (elt.getAttribute("sliceTime").length() > 0)){
                                     sliceTime = Integer.decode(elt.getAttribute("sliceTime")).intValue();
+                                }
+				if ((elt.getAttribute("encryption") != null) &&  (elt.getAttribute("encryption").length() > 0)){
+                                    encryption = Integer.decode(elt.getAttribute("encryption")).intValue();
                                 }
                             }
                         }
@@ -634,7 +638,8 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         attr += "Branch. pred. misrate (in %) = " + branchingPredictionPenalty + "\n";
         attr += "Cache miss (in %) = " + cacheMiss + "\n";
         attr += "Clock ratio = " + clockRatio + "\n";
-				attr += "MECType = " + MECType.getIndex() + "\n";
+	attr += "MECType = " + MECType.getIndex() + "\n";
+	attr += "encryption = " + encryption+ "\n";
         return attr;
 
     }
