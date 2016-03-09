@@ -49,7 +49,7 @@ package tmltranslator;
 import java.util.*;
 import myutil.*;
 import tmltranslator.toproverif.*;
-
+import ui.*;
 
 public class TMLMapping {
 
@@ -72,7 +72,7 @@ public class TMLMapping {
 
     private int hashCode;
     private boolean hashCodeComputed = false;
-
+    private TMLComponentDesignPanel tmldp;
     public TMLMapping(TMLModeling _tmlm, TMLArchitecture _tmla, boolean reset) {
 
         tmlm = _tmlm;
@@ -1403,5 +1403,11 @@ public class TMLMapping {
                 }
             }
         }
+    }
+    public void setTMLDesignPanel(TMLComponentDesignPanel _tmldp){
+	tmldp = _tmldp;
+    }
+    public TMLComponentDesignPanel getTMLCDesignPanel(){
+	return tmldp;
     }
 }       //End of class

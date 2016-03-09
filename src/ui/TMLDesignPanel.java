@@ -81,7 +81,6 @@ public class TMLDesignPanel extends TURTLEPanel {
         }
         return null;
     }
-    
     public void addTMLActivityDiagram(String s) {
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());

@@ -57,6 +57,7 @@ import javax.xml.parsers.*;
 import ui.ConfigurationTTool;
 import ui.CheckingError;
 import ui.AvatarDesignPanel;
+import ui.TMLComponentDesignPanel;
 import ui.window.JDialogProVerifGeneration;
 import ui.TGComponent;
 import proverifspec.*;
@@ -611,7 +612,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         systemKnowledge.add (attr);
                     } else {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + attr.getBlock ().getName () + "." + attr.getName () + " should be of type int or bool to be considered as a constant.");
-                       // ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+			if (this.avspec.getReferenceObject()==null){
+			    //...
+		    	}			
+			else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+                            ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+			}
+			else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel){
+			    ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).tmlctdp);
+			}
                         ce.setTGComponent((TGComponent)attr.getReferenceObject());
                         warnings.add(ce);
                         continue;
@@ -628,7 +637,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     // ignore if the attribute was already declared
                     if (systemKnowledge.contains (arg)) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + arg.getBlock ().getName () + "." + arg.getName () + " already appears in another initial knowledge pragma or is a constant (ignored).");
-                   //     ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+			if (this.avspec.getReferenceObject()==null){
+			    //...
+		    	}
+			else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+                            ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+			}
+			else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel){
+			    ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).tmlctdp);
+			}
                         ce.setTGComponent((TGComponent)pragma.getReferenceObject());
                         warnings.add(ce);
                         continue;
@@ -665,7 +682,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         // If there is a public key in the middle, ignore it
                         if (privateK != null) {
                             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "When defining equality between public keys, the first to appear in the pragma should be the one belonging to the block that owns the private key.");
-                         //   ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+			    if (this.avspec.getReferenceObject()==null){
+				//...
+		    	    }
+			    else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+				ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+			    }
+			    else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel){
+				ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).tmlctdp);
+			    }
                             ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
                             warnings.add(ce);
                             continue;
@@ -726,7 +751,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     // ignore if the attribute was already declared
                     if (sessionKnowledge.contains (arg)) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + arg.getBlock ().getName () + "." + arg.getName () + " already appears in another initial knowledge pragma (ignored).");
-                       // ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+ 			if (this.avspec.getReferenceObject()==null){
+			    //...
+		    	}                        
+			else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+			    ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+			}
+			else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel){
+			    ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).tmlctdp);
+			}
                         ce.setTGComponent((TGComponent)pragma.getReferenceObject());
                         warnings.add(ce);
                         continue;
@@ -735,7 +768,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     // ignore if the attribute was sytem knowledge
                     if (systemKnowledge.contains (arg)) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "You can't define an attribute as both system and session knowledge.");
-                      //  ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
+			if (this.avspec.getReferenceObject()==null){
+				//...
+		    	}
+			else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+                    	    ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
+			}
+			else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel){
+			    ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).tmlctdp);
+			}
                         ce.setTGComponent((TGComponent)pragma.getReferenceObject());
                         warnings.add(ce);
                         continue;
@@ -772,7 +813,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         // If there is a public key in the middle, ignore it
                         if (privateK != null) {
                             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "When defining equality between public keys, the first to appear in the pragma should be the one belonging to the block that owns the private key.");
-                         //   ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
+			    if (this.avspec.getReferenceObject()==null){
+				//...
+		    	    }
+                            else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+			    	ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarBDPanel());
+			    }
+			    else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel) {
+				ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).tmlctdp);
+			    }
                             ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
                             warnings.add(ce);
                             continue;
@@ -1026,7 +1075,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     if (term == null || term instanceof AvatarTermRaw) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown term '" + value + "' (ignored)");
                         ce.setAvatarBlock(arg.block);
-                       // ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+			if (this.avspec.getReferenceObject()==null){
+			     //...
+		   	}
+                        else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+			    ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+			}
+			else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel){
+			    ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).getTMLActivityDiagramPanel(arg.block.getName()));
+			}
                         ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                         this.warnings.add(ce);
                         continue;
@@ -1063,7 +1120,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     if (term == null || ! (term instanceof AvatarAttribute)) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown attribute '" + value + "' (ignored)");
                         ce.setAvatarBlock(arg.block);
-                  //      ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+			if (this.avspec.getReferenceObject()==null){
+			    //...
+		    	}
+			else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+			}
+			else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel) {
+			    ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).getTMLActivityDiagramPanel(arg.block.getName()));
+			}
                         ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                         this.warnings.add(ce);
                         continue;
@@ -1110,7 +1175,14 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 TraceManager.addDev ("!!!       Guard: " + _asme.getGuard() + " in block " + arg.block.getName() + " is not supported. Replacing by an empty guard");
                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Guard: " + _asme.getGuard() + " in block " + arg.block.getName() + " is not supported. Replacing by an empty guard");
                 ce.setAvatarBlock(arg.block);
-                //ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+		if (this.avspec.getReferenceObject()==null){
+		}
+		else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+                    ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+		}
+		else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel){
+		    ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).getTMLActivityDiagramPanel(arg.block.getName()));
+		}
                 ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                 warnings.add(ce);
                 _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("(*  Unsupported guard:" + _asme.getGuard() + " *)"));
@@ -1161,7 +1233,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             if (! (term instanceof AvatarAttribute)) {
                                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + term.getName () + "' should be an attribute (ignored)");
                                 ce.setAvatarBlock(arg.block);
-                               // ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+ 				if (this.avspec.getReferenceObject()==null){
+				    //...
+		    		}
+				else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+				    ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+				}
+				else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel){
+				    ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).getTMLActivityDiagramPanel(arg.block.getName()));
+				}
                                 ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                                 this.warnings.add(ce);
                                 continue;
@@ -1175,7 +1255,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             if (this.secrecyChecked.contains (attr)) {
                                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + term.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + term.getName () + ".");
                                 ce.setAvatarBlock(arg.block);
-                            //    ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+				if (this.avspec.getReferenceObject()==null){
+				    //...
+		    		}
+				else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+                                    ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+				}
+				else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel){
+				    ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).getTMLActivityDiagramPanel(arg.block.getName()));
+				}
                                 ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                                 this.warnings.add(ce);
                             }
@@ -1189,7 +1277,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         if (this.secrecyChecked.contains (attr)) {
                             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + attr.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + attr.getName () + ".");
                             ce.setAvatarBlock(arg.block);
-                         //   ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+	 		    if (this.avspec.getReferenceObject()==null){
+				//...
+		    	    }
+			    else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+                          	ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+			    }
+			    else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel) {
+				ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).getTMLActivityDiagramPanel(arg.block.getName()));
+			    }
                             ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                             this.warnings.add(ce);
                         }
@@ -1201,7 +1297,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     TraceManager.addDev ("!!!       Assignment: " + action.toString () + " in block " + arg.block.getName() + " is not supported. Removing it.");
                     CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Assignment: " + action.toString () + " in block " + arg.block.getName() + " is not supported. Removing it.");
                     ce.setAvatarBlock(arg.block);
-                    //ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+		    if (this.avspec.getReferenceObject()==null){
+			//...
+		    }
+		    else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+            	        ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+		    }
+		    else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel){
+			ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).getTMLActivityDiagramPanel(arg.block.getName()));
+		    }
                     ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                     warnings.add(ce);
                 }
@@ -1219,7 +1323,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         if (! (args.get(i) instanceof AvatarAttribute)) {
                             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + args.get(i).getName () + "' should be an attribute (ignored)");
                             ce.setAvatarBlock(arg.block);
-                          //  ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+			    if (this.avspec.getReferenceObject()==null){
+				//...
+		    	    }
+			    else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+                            	ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+			    }
+			    else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel) {
+				ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).getTMLActivityDiagramPanel(arg.block.getName()));
+			    }
                             ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                             this.warnings.add(ce);
                             ok = false;
@@ -1238,7 +1350,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             if (this.secrecyChecked.contains (attr)) {
                                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + attr.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + attr.getName () + ".");
                                 ce.setAvatarBlock(arg.block);
-                              //  ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+				if (this.avspec.getReferenceObject()==null){
+				    //...
+		    		}
+				else if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+                                    ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+				}
+				else if (this.avspec.getReferenceObject() instanceof TMLComponentDesignPanel){
+				    ce.setTDiagramPanel(((TMLComponentDesignPanel)(this.avspec.getReferenceObject())).getTMLActivityDiagramPanel(arg.block.getName()));
+				}
                                 ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                                 this.warnings.add(ce);
                             }

@@ -76,8 +76,8 @@ public class TML2Avatar {
     private final static Integer channelPublic = 0;
     private final static Integer channelPrivate = 1;
     private final static Integer channelUnreachable = 2;
-
-
+    AvatarSpecification avspec;
+	
     List<String> allStates;
     public TML2Avatar(TMLMapping tmlmap) {
         this.tmlmap = tmlmap;
@@ -357,15 +357,19 @@ public class TML2Avatar {
 	    }
 	    AvatarActionOnSignal as= new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
 	    for (int i=0; i<sr.getNbOfParams(); i++){
-		as.addValue(sr.getParam(i));
+		if (block.getAvatarAttributeWithName(sr.getParam(i))==null){
+		    //Throw Error
+		    System.out.println("Missing Attribute " + sr.getParam(i));
+		    as.addValue("tmp");
+		}
+		else {
+		    as.addValue(sr.getParam(i));
+		}
 	    }
 	    //Create new value to send....
 	    AvatarAttribute requestData= new AvatarAttribute(req.getName()+"__reqData", AvatarType.INTEGER, block, null);
 	    as.addValue(req.getName()+"__reqData");
 	    block.addAttribute(requestData);
-	    for (int i=0; i< req.getNbOfParams(); i++){
-		as.addValue(req.getParam(i));
-	    }
 	    tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 	    elementList.add(as);
 	    as.addNext(tran);
@@ -478,21 +482,31 @@ public class TML2Avatar {
 	}
 	else if (ae instanceof TMLActivityElementEvent){
 	    TMLActivityElementEvent aee = (TMLActivityElementEvent) ae;
-	    TMLEvent ch = aee.getEvent();
+	    TMLEvent evt = aee.getEvent();
 	    if (ae instanceof TMLSendEvent){
 		AvatarSignal sig;
-		if (!signalMap.containsKey(block.getName()+"__OUT__"+ch.getName())){
-	            sig = new AvatarSignal(block.getName()+"__OUT__"+ch.getName(), AvatarSignal.OUT, ch.getReferenceObject());
+		if (!signalMap.containsKey(block.getName()+"__OUT__"+evt.getName())){
+	            sig = new AvatarSignal(block.getName()+"__OUT__"+evt.getName(), AvatarSignal.OUT, evt.getReferenceObject());
 	            signals.add(sig);
 		    block.addSignal(sig);
-		    signalMap.put(block.getName()+"__OUT__"+ch.getName(), sig);
+		    signalMap.put(block.getName()+"__OUT__"+evt.getName(), sig);
 	    	}
 	    	else {
-		    sig=signalMap.get(block.getName()+"__OUT__"+ch.getName());
+		    sig=signalMap.get(block.getName()+"__OUT__"+evt.getName());
 	    	}
 	        AvatarActionOnSignal as= new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
- 		AvatarAttribute eventData= new AvatarAttribute(ch.getName()+"__eventData", AvatarType.INTEGER, block, null);
-	        as.addValue(ch.getName()+"__eventData");
+		for (int i=0; i< aee.getNbOfParams(); i++){
+		    if (block.getAvatarAttributeWithName(aee.getParam(i))==null){
+		    	//Throw Error
+		    	System.out.println("Missing Attribute " + aee.getParam(i));
+			as.addValue("tmp");
+		    }
+		    else {
+		        as.addValue(aee.getParam(i));
+		    }
+		}
+ 		AvatarAttribute eventData= new AvatarAttribute(evt.getName()+"__eventData", AvatarType.INTEGER, block, null);
+	        as.addValue(evt.getName()+"__eventData");
 	        block.addAttribute(eventData);
 	        tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 	        elementList.add(as);
@@ -501,18 +515,28 @@ public class TML2Avatar {
 	    }
 	    else if (ae instanceof TMLWaitEvent){
 		AvatarSignal sig; 
-		if (!signalMap.containsKey(block.getName()+"__IN__"+ch.getName())){
-	            sig = new AvatarSignal(block.getName()+"__IN__"+ch.getName(), AvatarSignal.IN, ch.getReferenceObject());
+		if (!signalMap.containsKey(block.getName()+"__IN__"+evt.getName())){
+	            sig = new AvatarSignal(block.getName()+"__IN__"+evt.getName(), AvatarSignal.IN, evt.getReferenceObject());
 	            signals.add(sig);
 		    block.addSignal(sig);
-		    signalMap.put(block.getName()+"__IN__"+ch.getName(), sig);
+		    signalMap.put(block.getName()+"__IN__"+evt.getName(), sig);
 	    	}
 	    	else {
-		    sig=signalMap.get(block.getName()+"__IN__"+ch.getName());
+		    sig=signalMap.get(block.getName()+"__IN__"+evt.getName());
 	    	}
 	        AvatarActionOnSignal as= new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
- 		AvatarAttribute eventData= new AvatarAttribute(ch.getName()+"__eventData", AvatarType.INTEGER, block, null);
-	    	as.addValue(ch.getName()+"__eventData");
+		for (int i=0; i< aee.getNbOfParams(); i++){
+		    if (block.getAvatarAttributeWithName(aee.getParam(i))==null){
+		        //Throw Error
+			as.addValue("tmp");
+		    	System.out.println("Missing Attribute " + aee.getParam(i));
+		    }
+		    else {
+			as.addValue(aee.getParam(i));
+		    }
+		}
+ 		AvatarAttribute eventData= new AvatarAttribute(evt.getName()+"__eventData", AvatarType.INTEGER, block, null);
+	    	as.addValue(evt.getName()+"__eventData");
 	    	block.addAttribute(eventData);
 	        tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 	        elementList.add(as);
@@ -534,7 +558,8 @@ public class TML2Avatar {
 	else if (ae instanceof TMLActivityElementWithAction){
 	    AvatarState as = new AvatarState(ae.getName(), ae.getReferenceObject());
 	    tran = new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
-	    tran.addAction(((TMLActivityElementWithAction) ae).getAction());
+	    //For now, get rid of the action. It won't translate anywya
+	    //tran.addAction(((TMLActivityElementWithAction) ae).getAction());
 	    as.addNext(tran);
 	    elementList.add(as);
 	    elementList.add(tran);
@@ -611,6 +636,7 @@ public class TML2Avatar {
 		return elementList;
 	    }
 	    else {
+		boolean guardEx=true;
 		//Make initializaton, then choice state with transitions
 		List<AvatarStateMachineElement> elements=translateState(ae.getNextElement(0), block);
 		List<AvatarStateMachineElement> afterloop = translateState(ae.getNextElement(1), block);
@@ -627,7 +653,20 @@ public class TML2Avatar {
 		tran.addNext(as);
 		//transition to first element of loop
 		tran = new AvatarTransition(block, "loop_increment__"+ae.getName(), ae.getReferenceObject());
-		tran.setGuard(loop.getCondition().replaceAll("<", "!="));
+		AvatarGuard guard = AvatarGuard.createFromString (block, loop.getCondition().replaceAll("<", "!="));
+                if (guard.isElseGuard()) {
+                    tran.setGuard(guard);
+                } else {
+                    int error = AvatarSyntaxChecker.isAValidGuard(avspec, block, loop.getCondition().replaceAll("<","!="));
+                    if (error < 0 || loop.getCondition().length()>4) {
+			//guardEx=false;			
+			AvatarGuard defaultGuard = AvatarGuard.createFromString(block, loop.getCondition().split("<")[0]+"!=5");
+			tran.setGuard(defaultGuard);
+                        System.out.println("cannot translate guard " + loop.getCondition().replaceAll("<", "!="));
+                    } else {
+                        tran.setGuard(guard);
+                    }
+                }
 		tran.addAction(AvatarTerm.createActionFromString(block, loop.getIncrement()));
 		tran.addNext(elements.get(0));
 		as.addNext(tran);
@@ -653,7 +692,9 @@ public class TML2Avatar {
 		
 		//Transition if exiting loop
 		tran=new AvatarTransition(block, "end_loop__"+ae.getName(), ae.getReferenceObject());
-		tran.setGuard("else");
+		if (guardEx){
+		    tran.setGuard(new AvatarGuardElse());
+		}
 		as.addNext(tran);
 		if (afterloop.size()==0){
 		    afterloop.add(new AvatarStopState("stop", null));
@@ -709,7 +750,7 @@ public class TML2Avatar {
 	return elementList;
     }
 
-   public String processName(String name, int id){
+    public String processName(String name, int id){
 	name = name.replaceAll("-","_").replaceAll(" ","");	
 	if (allStates.contains(name)){
 	    return name+id;
@@ -719,18 +760,30 @@ public class TML2Avatar {
 	    allStates.add(name);
 	    return name;
 	}
-   }
+    }
+/*    public AvatarPragma generatePragma(String[] s){
+	
+    }*/
 
     public AvatarSpecification generateAvatarSpec(){
-	//TODO: Broadcast channels
-	//TODO: Request parameters
 	//TODO: Add pragmas
+	//TODO: Fix Avatar2Proverif warning references to panel
+	//TODO: Make state names readable
+	//TODO: Put back numeric guards
+	//TODO: Calcuate for temp variable
 	//TODO: Cry
-	AvatarSpecification avspec = new AvatarSpecification("spec", null);
+	AvatarSpecification avspec = new AvatarSpecification("spec", tmlmap.getTMLCDesignPanel());
+	if (tmlmap.getTMLCDesignPanel()==null){
+	    System.out.println("Failed to generate specification");
+	    return avspec;
+	}
 	ArrayList<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
 	for (TMLTask task:tasks){
 	    AvatarBlock block = new AvatarBlock(task.getName(), avspec, task.getReferenceObject());
 	    taskBlockMap.put(task, block);
+	    //Add temp variable for unsendable signals
+	    AvatarAttribute tmp = new AvatarAttribute("tmp", AvatarType.INTEGER, block, null);
+	    block.addAttribute(tmp);
 	    for (TMLAttribute attr: task.getAttributes()){
 		AvatarType type;
 		if (attr.getType().getType()==TMLType.NATURAL){
@@ -751,6 +804,7 @@ public class TML2Avatar {
 	    //TODO: Create a fork with many requests. This looks terrible
 	    if (tmlmodel.getRequestToMe(task)!=null){
 		TMLRequest request= tmlmodel.getRequestToMe(task);
+		System.out.println("request to me " + request.getName());
 		//Oh this is fun...let's restructure the state machine
 		//Create own start state, and ignore the returned one
 		List<AvatarStateMachineElement> elementList= translateState(task.getActivityDiagram().get(0), block);
@@ -769,7 +823,14 @@ public class TML2Avatar {
 		AvatarAttribute requestData= new AvatarAttribute(request.getName()+"__reqData", AvatarType.INTEGER, block, null);
 		block.addAttribute(requestData);
 		for (int i=0; i< request.getNbOfParams(); i++){
-		    as.addValue(request.getParam(i)+"__reqData");
+		    if (block.getAvatarAttributeWithName(request.getParam(i))==null){
+		    	//Throw Error
+			as.addValue("tmp");
+		    	System.out.println("Missing Attribute " + request.getParam(i));
+		    }
+		    else {
+		    	as.addValue(request.getParam(i));
+		    }
 		}
 		AvatarTransition tran = new AvatarTransition(block, "__after_" + request.getName(), task.getActivityDiagram().get(0).getReferenceObject());
 		as.addNext(tran);
@@ -980,7 +1041,6 @@ public class TML2Avatar {
 	    }
 	    avspec.addRelation(ar);
 	}
-	System.out.println("???");
 	for (AvatarSignal sig: signals){
 	    //$%^&*() check that all signals are put in relations
 	    AvatarRelation ar = avspec.getAvatarRelationWithSignal(sig);
@@ -989,7 +1049,7 @@ public class TML2Avatar {
 	    }
 	}
 	//Check if we matched up all signals
-	//System.out.println(avspec);
+	System.out.println(avspec);
 	return avspec;
     }
 

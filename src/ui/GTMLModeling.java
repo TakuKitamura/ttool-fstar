@@ -2047,7 +2047,6 @@ public class GTMLModeling  {
         tmlm = new TMLModeling(true);
         archi = new TMLArchitecture();  //filled by makeArchitecture
         map = new TMLMapping(tmlm, archi, false);
-
         checkingErrors = new Vector();
         warnings = new Vector();
         //listE = new CorrespondanceTGElement();
@@ -2069,7 +2068,7 @@ public class GTMLModeling  {
         //TraceManager.addDev("End of TML modeling --->");
 
         removeActionsWithRecords();
-
+	map.setTMLDesignPanel(this.tmlcdp);
         return map;     // the data structure map is returned to CheckSyntaxTMLMapping in GTURTLEModeling
     }
 
@@ -2732,6 +2731,7 @@ public class GTMLModeling  {
                                 tmp = (Vector)(taskss.get(index));
                             } else {
                                 panels.add(tmldp);
+				this.tmldp = tmldp;
                                 tmp = new Vector();
                                 taskss.add(tmp);
                             }
@@ -2782,7 +2782,7 @@ public class GTMLModeling  {
         }
 
         TraceManager.addDev("Nb of panels regular:" + panels.size() + " components" + cpanels.size());
-
+	
         // For each panel, construct a TMLModeling
         TMLModeling tmpm;
         GTMLModeling gtml;
@@ -2808,6 +2808,7 @@ public class GTMLModeling  {
 
         if (cpanels.size() > 0) {
             for(TMLComponentDesignPanel panel: cpanels) {
+		this.tmlcdp = panel;
                 gtml =  new GTMLModeling(panel, false);
                 gtml.setComponents(allcomp);
                 gtml.putPrefixName(true);
