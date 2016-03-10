@@ -241,7 +241,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         LinkedList<AvatarAttribute> nonSecretAttributes = pvoa.getNonSecretTerms ();
 	for (AvatarAttribute attr: secretAttributes){
 		System.out.println("!!!");
-	    iterator = tmlctdp.getComponentList().listIterator();
+	    iterator = tmlctdp.getPrimitiveComponentList().listIterator();
 	    while (iterator.hasNext()){
 		tgc = (TGComponent)(iterator.next());
 		if (tgc instanceof TMLCPrimitivePort){
