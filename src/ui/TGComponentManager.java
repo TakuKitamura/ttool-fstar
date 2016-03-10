@@ -1934,6 +1934,7 @@ public class TGComponentManager {
             // AVATAR RD
         case AVATARRD_DERIVE_CONNECTOR:
             tgc = new AvatarRDDeriveConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+	    break;
         case AVATARRD_SATISFY_CONNECTOR:
             tgc = new AvatarRDSatisfyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
