@@ -72,9 +72,8 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 		private int maxNbOfLoss; //-1 means no max
 
     public boolean data;
-
-    
-    
+    public boolean checkConf;
+    public boolean checkAuth = false;
     // Panel1
     private JTextField nameText, maxText, widthText, associatedEventJT;
     private JComboBox typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
@@ -85,7 +84,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 		private Vector<String> types;
     
 		// Robustness
-		private JCheckBox isLossyBox, isPrexCB, isPostexCB;
+		private JCheckBox isLossyBox, isPrexCB, isPostexCB, confCheckBox, authCheckBox;
 		private JTextField lossPercentageText, maxNbOfLossText;
 	
 	
@@ -93,7 +92,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     private JButton closeButton;
     private JButton cancelButton;
 
-    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex ) {
+    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex , boolean _checkConf) {
         super(f, title, true);
         frame = f;
         
@@ -105,20 +104,21 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         
         data = false;
         
-				dataFlowType = _dataFlowType;
-				associatedEvent = _associatedEvent;
+	dataFlowType = _dataFlowType;
+	associatedEvent = _associatedEvent;
         maxInFIFO = _maxInFIFO;
-				widthSamples = _widthSamples;
-				isOrigin = _isOrigin;
+	widthSamples = _widthSamples;
+	isOrigin = _isOrigin;
         isFinite = _isFinite;
         isBlocking = _isBlocking;
 				
-				isPrex = _isPrex;
-				isPostex = _isPostex;
-				isLossy = _isLossy;
-				lossPercentage = _lossPercentage;
-				maxNbOfLoss = _maxNbOfLoss;
-        
+	isPrex = _isPrex;
+	isPostex = _isPostex;
+	isLossy = _isLossy;
+	lossPercentage = _lossPercentage;
+	maxNbOfLoss = _maxNbOfLoss;
+	checkConf = _checkConf;
+
         myInitComponents();
         initComponents();
         checkMode();
@@ -273,6 +273,11 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         c2.gridheight = 3;
         panel2.add(new JLabel(" "), c2);
 		
+	confCheckBox = new JCheckBox("Check Confidentiality");
+	panel2.add(confCheckBox, c2);
+	confCheckBox.setSelected(checkConf);
+	authCheckBox = new JCheckBox("Check Authenticity");
+	panel2.add(authCheckBox,c2);
         c2.gridwidth = 1;
         c2.fill = GridBagConstraints.HORIZONTAL;
         c2.anchor = GridBagConstraints.CENTER;
@@ -562,6 +567,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 				associatedEvent = (String)associatedEventJT.getText();
 				isPrex = isPrexCB.isSelected();
 				isPostex = isPostexCB.isSelected();
+				checkConf = confCheckBox.isSelected();
 				if( isPrex && isPostex )	{
 					JOptionPane.showMessageDialog( frame, "A channel cannot be marked as both prex and postex", "Error",
 																				 JOptionPane.INFORMATION_MESSAGE );

@@ -717,6 +717,7 @@ public class GTMLModeling  {
                                 addToTable(makeName(port2, port2.getFather().getValue()) + "/" + name2, name);
 
                                 channel = new TMLChannel(name, port1);
+				channel.checkConf= port1.checkConf;
                                 channel.setSize(port1.getSize());
                                 channel.setMax(port1.getMax());
                                 if (port1.isBlocking() && port2.isBlocking()) {
@@ -812,6 +813,7 @@ public class GTMLModeling  {
                             // Channel attributes
                             port = (TMLCPrimitivePort)(portstome.get(0));
                             channel = new TMLChannel(name, port1);
+			    channel.checkConf= port1.checkConf;
                             channel.setSize(port1.getSize());
                             channel.setMax(port1.getMax());
                             if (port1.isBlocking() && port.isBlocking()) {

@@ -595,7 +595,14 @@ public class TML2Avatar {
 	    	    block.addSignal(sig);
 		    signalMap.put(block.getName()+"__OUT__"+ch.getName(), sig);
 		    AvatarAttribute channelData= new AvatarAttribute(ch.getName()+"__chData", AvatarType.INTEGER, block, null);
+		    LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
 	    	    block.addAttribute(channelData);
+		    attrs.add(channelData);
+		    if (ch.checkConf){
+			System.out.println("channel " + ch.getName());
+			System.out.println("block " + block.getName());
+		        avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ch.getName()+"__chData", ch.getReferenceObject(), attrs));
+		    }
 	    	}
 	    	else {
 		    sig=signalMap.get(block.getName()+"__OUT__"+ch.getName());
@@ -772,7 +779,7 @@ public class TML2Avatar {
 	//TODO: Put back numeric guards
 	//TODO: Calcuate for temp variable
 	//TODO: Cry
-	AvatarSpecification avspec = new AvatarSpecification("spec", tmlmap.getTMLCDesignPanel());
+	this.avspec = new AvatarSpecification("spec", tmlmap.getTMLCDesignPanel());
 	if (tmlmap.getTMLCDesignPanel()==null){
 	    System.out.println("Failed to generate specification");
 	    return avspec;

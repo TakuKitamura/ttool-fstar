@@ -3759,8 +3759,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
 	else if (tp instanceof TMLArchiPanel) {
 	}
-	else if (tp instanceof TMLDesignPanel){
-	    TMLDesignPanel tap = (TMLDesignPanel) tp;
+	else if (tp instanceof TMLComponentDesignPanel){
+	    TMLComponentDesignPanel tap = (TMLComponentDesignPanel) tp;
 	    tap.modelBacktracingProVerif(pvoa);
 	    getCurrentTDiagramPanel().repaint();
 	}

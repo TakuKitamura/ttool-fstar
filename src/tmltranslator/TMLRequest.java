@@ -53,6 +53,8 @@ public class TMLRequest extends TMLCommunicationElement {
     protected ArrayList<TMLTask> originTasks; // list of tasks from which request starts
     protected TMLTask destinationTask;
     protected ArrayList<String> paramNames;
+    public static int confStatus;
+    public static boolean checkConf;
     public TMLRequest(String name, Object reference) {
         super(name, reference);
         params = new Vector();

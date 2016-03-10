@@ -56,7 +56,8 @@ import ui.tmlcompd.*;
 import ui.tmlad.*;
 import ui.tmldd.*;
 import ui.tmlcd.*;
-
+import avatartranslator.*;
+import proverifspec.*;
 import myutil.*;
 
 public class TMLComponentDesignPanel extends TURTLEPanel {
@@ -229,5 +230,82 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
     public String[] getAllOutRequests(String nameOfComponent) {
 	return tmlctdp.getAllOutRequests(nameOfComponent);
     }
+   public void modelBacktracingProVerif(ProVerifOutputAnalyzer pvoa) {
 
+        resetModelBacktracingProVerif();
+        TGComponent tgc;
+	int index;
+	ListIterator iterator;
+        // Confidential attributes
+        LinkedList<AvatarAttribute> secretAttributes = pvoa.getSecretTerms ();
+        LinkedList<AvatarAttribute> nonSecretAttributes = pvoa.getNonSecretTerms ();
+	for (AvatarAttribute attr: secretAttributes){
+		System.out.println("!!!");
+	    iterator = tmlctdp.getComponentList().listIterator();
+	    while (iterator.hasNext()){
+		tgc = (TGComponent)(iterator.next());
+		if (tgc instanceof TMLCPrimitivePort){
+			System.out.println("port "+tgc);
+		     ((TMLCPrimitivePort)tgc).checkStatus =2;
+		}
+	    }
+	}
+/*
+        for(String s: pvoa.getNonReachableEvents()) {
+            index = s.indexOf("__");
+            if (index != -1) {
+                block = s.substring(index+2, s.length());
+                index = block.indexOf("__");
+                if (index != -1) {
+                    state = block.substring(index+2, block.length());
+                    block = block.substring(0, index);
+                    TraceManager.addDev("Block=" + block + " state=" + state);
+                    for(i=0; i<panels.size(); i++) {
+                        tdp = (TDiagramPanel)(panels.get(i));
+                        if ((tdp instanceof AvatarSMDPanel) && (tdp.getName().compareTo(block) == 0)){
+                            iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+                            while(iterator.hasNext()) {
+                                tgc = (TGComponent)(iterator.next());
+                                if (tgc instanceof AvatarSMDState) {
+                                    ((AvatarSMDState)tgc).setSecurityInfo(AvatarSMDState.NOT_REACHABLE, state);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+*/
+        LinkedList<String> notProved = pvoa.getNotProved ();
+        LinkedList<String> satisfied = pvoa.getSatisfiedAuthenticity ();
+        LinkedList<String> satisfiedWeak = pvoa.getSatisfiedWeakAuthenticity ();
+        LinkedList<String> nonSatisfied = pvoa.getNonSatisfiedAuthenticity ();
+    }
+
+
+    public void resetModelBacktracingProVerif() {
+        /*if (abdp == null) {
+            return;
+        }
+
+        // Reset confidential attributes
+        for(AvatarBDBlock block1: abdp.getFullBlockList()) {
+            block1.resetConfidentialityOfAttributes();
+        }
+	for (Object tgc: abdp.getComponentList()){
+	    if (tgc instanceof AvatarBDPragma){
+		AvatarBDPragma pragma = (AvatarBDPragma) tgc;
+		pragma.authStrongMap.clear();
+		pragma.authWeakMap.clear();	
+	
+	    }
+	}
+        // Reset reachable states
+        for(int i=0; i<panels.size(); i++) {
+            tdp = (TDiagramPanel)(panels.get(i));
+            if (tdp instanceof AvatarSMDPanel) {
+                ((AvatarSMDPanel)tdp).resetStateSecurityInfo();
+            }
+        }*/
+    }
 }
