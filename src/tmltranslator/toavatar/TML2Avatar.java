@@ -77,12 +77,13 @@ public class TML2Avatar {
     private final static Integer channelPrivate = 1;
     private final static Integer channelUnreachable = 2;
     AvatarSpecification avspec;
-	
+    ArrayList<String> attrsToCheck;
     List<String> allStates;
     public TML2Avatar(TMLMapping tmlmap) {
         this.tmlmap = tmlmap;
 	this.tmlmodel = tmlmap.getTMLModeling();
 	allStates = new ArrayList<String>();
+	attrsToCheck=new ArrayList<String>();
     }
     
     public void checkConnections(){
@@ -355,6 +356,22 @@ public class TML2Avatar {
 	    else {
 		sig=signalMap.get(block.getName()+"__OUT__"+req.getName());
 	    }
+	    if (req.checkConf){
+		LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
+		if (!attrsToCheck.contains(req.getName()+"__reqData")){
+		    attrs.add(new AvatarAttribute(req.getName()+"__reqData", AvatarType.INTEGER, block, null));
+		    attrsToCheck.add(req.getName()+"__reqData");
+		}
+		for (int i=0; i<sr.getNbOfParams(); i++){
+		    if (block.getAvatarAttributeWithName(sr.getParam(i))!=null && !attrsToCheck.contains(sr.getParam(i))){
+		        attrs.add(block.getAvatarAttributeWithName(sr.getParam(i)));
+			attrsToCheck.add(sr.getParam(i));
+		    }
+	        }
+		if (attrs.size()>0){
+	            avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+req.getName()+"__reqData", req.getReferenceObject(), attrs));
+		}
+	    }
 	    AvatarActionOnSignal as= new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
 	    for (int i=0; i<sr.getNbOfParams(); i++){
 		if (block.getAvatarAttributeWithName(sr.getParam(i))==null){
@@ -369,7 +386,9 @@ public class TML2Avatar {
 	    //Create new value to send....
 	    AvatarAttribute requestData= new AvatarAttribute(req.getName()+"__reqData", AvatarType.INTEGER, block, null);
 	    as.addValue(req.getName()+"__reqData");
-	    block.addAttribute(requestData);
+	    if (block.getAvatarAttributeWithName(req.getName()+"__reqData")==null){
+	    	block.addAttribute(requestData);	
+	    }
 	    tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 	    elementList.add(as);
 	    as.addNext(tran);
@@ -499,15 +518,33 @@ public class TML2Avatar {
 		    if (block.getAvatarAttributeWithName(aee.getParam(i))==null){
 		    	//Throw Error
 		    	System.out.println("Missing Attribute " + aee.getParam(i));
-			as.addValue("tmp");
 		    }
 		    else {
 		        as.addValue(aee.getParam(i));
 		    }
 		}
+	    	if (evt.checkConf){
+		    LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
+		    if (!attrsToCheck.contains(evt.getName()+"__eventData")){
+		    	attrs.add(new AvatarAttribute(evt.getName()+"__eventData", AvatarType.INTEGER, block, null));
+		    	attrsToCheck.add(evt.getName()+"__eventData");
+		    }
+		    for (int i=0; i<aee.getNbOfParams(); i++){
+		    	if (block.getAvatarAttributeWithName(aee.getParam(i))!=null && !attrsToCheck.contains(aee.getParam(i))){
+		    	    attrs.add(block.getAvatarAttributeWithName(aee.getParam(i)));
+			    attrsToCheck.add(aee.getParam(i));
+		        }
+	            }
+		    if (attrs.size()>0){
+	                avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+evt.getName()+"__eventData", evt.getReferenceObject(), attrs));
+		    }
+	            
+	        }
  		AvatarAttribute eventData= new AvatarAttribute(evt.getName()+"__eventData", AvatarType.INTEGER, block, null);
 	        as.addValue(evt.getName()+"__eventData");
-	        block.addAttribute(eventData);
+		if (block.getAvatarAttributeWithName(evt.getName()+"__eventData")==null){
+	            block.addAttribute(eventData);
+		}
 	        tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 	        elementList.add(as);
 	        as.addNext(tran);
@@ -537,7 +574,9 @@ public class TML2Avatar {
 		}
  		AvatarAttribute eventData= new AvatarAttribute(evt.getName()+"__eventData", AvatarType.INTEGER, block, null);
 	    	as.addValue(evt.getName()+"__eventData");
-	    	block.addAttribute(eventData);
+		if (block.getAvatarAttributeWithName(evt.getName()+"__eventData")==null){
+	    	    block.addAttribute(eventData);
+		}
 	        tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 	        elementList.add(as);
 	        as.addNext(tran);
@@ -582,7 +621,9 @@ public class TML2Avatar {
 		    signalMap.put(block.getName()+"__IN__"+ch.getName(), sig);
 		    block.addSignal(sig);
 	    	    AvatarAttribute channelData= new AvatarAttribute(ch.getName()+"__chData", AvatarType.INTEGER, block, null);
-	    	    block.addAttribute(channelData);
+		    if (block.getAvatarAttributeWithName(ch.getName()+"__chData")==null){
+	    	        block.addAttribute(channelData);
+		    }
 	    	}
 	    	else {
 		    sig=signalMap.get(block.getName()+"__IN__"+ch.getName());
@@ -595,19 +636,22 @@ public class TML2Avatar {
 	    	    block.addSignal(sig);
 		    signalMap.put(block.getName()+"__OUT__"+ch.getName(), sig);
 		    AvatarAttribute channelData= new AvatarAttribute(ch.getName()+"__chData", AvatarType.INTEGER, block, null);
-		    LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
-	    	    block.addAttribute(channelData);
-		    attrs.add(channelData);
-		    if (ch.checkConf){
-			System.out.println("channel " + ch.getName());
-			System.out.println("block " + block.getName());
-		        avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ch.getName()+"__chData", ch.getReferenceObject(), attrs));
+		    if (block.getAvatarAttributeWithName(ch.getName()+"__chData")==null){
+	    	        block.addAttribute(channelData);
 		    }
 	    	}
 	    	else {
 		    sig=signalMap.get(block.getName()+"__OUT__"+ch.getName());
 	    	}
 	    }
+	    if (ch.checkConf){
+		LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
+		if (!attrsToCheck.contains(ch.getName()+"__chData")){
+		    attrs.add(new AvatarAttribute(ch.getName()+"__chData", AvatarType.INTEGER, block, null));
+		    attrsToCheck.add(ch.getName()+"__chData");
+		    avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ch.getName()+"__chData", ch.getReferenceObject(), attrs));
+	        }
+	    }   
 	    AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
 	    as.addValue(ch.getName()+"__chData");
 	    tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
@@ -784,6 +828,7 @@ public class TML2Avatar {
 	    System.out.println("Failed to generate specification");
 	    return avspec;
 	}
+	attrsToCheck.clear();
 	ArrayList<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
 	for (TMLTask task:tasks){
 	    AvatarBlock block = new AvatarBlock(task.getName(), avspec, task.getReferenceObject());
@@ -1056,7 +1101,7 @@ public class TML2Avatar {
 	    }
 	}
 	//Check if we matched up all signals
-	System.out.println(avspec);
+	//System.out.println(avspec);
 	return avspec;
     }
 

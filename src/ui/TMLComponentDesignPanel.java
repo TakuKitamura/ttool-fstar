@@ -241,12 +241,19 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         LinkedList<AvatarAttribute> nonSecretAttributes = pvoa.getNonSecretTerms ();
 	for (AvatarAttribute attr: secretAttributes){
 		System.out.println("!!!");
-	    iterator = tmlctdp.getPrimitiveComponentList().listIterator();
+	    iterator = tmlctdp.componentList.listIterator();
 	    while (iterator.hasNext()){
+
 		tgc = (TGComponent)(iterator.next());
-		if (tgc instanceof TMLCPrimitivePort){
-			System.out.println("port "+tgc);
-		     ((TMLCPrimitivePort)tgc).checkStatus =2;
+		System.out.println("NEXT " + tgc);
+		if (tgc instanceof TMLCPrimitiveComponent){
+		    ArrayList<TMLCPrimitivePort> ports = ((TMLCPrimitiveComponent) tgc).getAllInternalPrimitivePorts();
+		    for (TMLCPrimitivePort p:ports){
+			if (p.checkStatus>0){
+			    System.out.println(p.getName());
+//			    p.checkStatus=3;
+			}
+		    }
 		}
 	    }
 	}

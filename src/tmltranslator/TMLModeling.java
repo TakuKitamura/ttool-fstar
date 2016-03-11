@@ -47,6 +47,9 @@ package tmltranslator;
 
 import java.util.*;
 import myutil.*;
+import ui.tmlcompd.*;
+import avatartranslator.*;
+import proverifspec.*;
 //import compiler.expression.*;
 
 
@@ -596,7 +599,94 @@ public class TMLModeling {
         }
         return list;
     }
-
+    public void backtrace(ProVerifOutputAnalyzer pvoa, String mappingName){
+ 	LinkedList<AvatarAttribute> secretAttributes = pvoa.getSecretTerms ();
+        LinkedList<AvatarAttribute> nonSecretAttributes = pvoa.getNonSecretTerms ();
+	for (AvatarAttribute attr: secretAttributes){
+	    System.out.println("Attribute " + attr.getName());
+	    TMLChannel channel = getChannelByName(attr.getName().replaceAll("__chData",""));
+	    if (channel!=null){
+		System.out.println("write to chan " + channel.getName());
+		for (TMLCPrimitivePort port:channel.ports){
+		    port.checkStatus = 2;
+	 	    port.mappingName= mappingName;
+		}
+	    }
+	    TMLRequest req = getRequestByName(attr.getName().replaceAll("__reqData",""));
+	    if (req !=null){
+		System.out.println("write to req " + req.getName());
+		for (TMLCPrimitivePort port: req.ports){
+		    port.checkStatus=2;
+		    port.mappingName= mappingName;
+		}
+	    }
+	    TMLEvent ev = getEventByName(attr.getName().replaceAll("__eventData",""));
+	    if (ev !=null){
+		System.out.println("write to event " + ev.getName());
+		ev.port.checkStatus=2;
+		ev.port.mappingName= mappingName;
+	    }
+	}
+	for (AvatarAttribute attr: nonSecretAttributes){
+	    TMLChannel channel = getChannelByName(attr.getName().replaceAll("__chData",""));
+	    if (channel!=null){
+		System.out.println("write to ch " + channel.getName());
+		for (TMLCPrimitivePort port:channel.ports){
+		    port.checkStatus = 3;
+	 	    port.mappingName= mappingName;
+		}
+	    }
+	    TMLRequest req = getRequestByName(attr.getName().replaceAll("__reqData",""));
+	    if (req !=null){
+		System.out.println("write to req " + req.getName());
+		for (TMLCPrimitivePort port: req.ports){
+		    port.checkStatus=3;
+		    port.mappingName= mappingName;
+		}
+	    }
+	    TMLEvent ev = getEventByName(attr.getName().replaceAll("__eventData",""));
+	    if (ev !=null){
+		System.out.println("write to event " + ev.getName());
+		ev.port.checkStatus=3;
+		ev.port2.checkStatus=3;
+		ev.port.mappingName= mappingName;
+	    }
+	}
+	System.out.println("backtracing finished");
+	return;
+    }
+    public void clearBacktracing(){
+	for (TMLChannel channel: getChannels()){
+	    System.out.println("Channel " + channel.getName());
+	    for (TMLCPrimitivePort port:channel.ports){
+		if (port.checkStatus>1){
+		    port.checkStatus=1;
+		    port.mappingName="???";
+		}
+	    }
+	}
+	for (TMLRequest req: getRequests()){
+	    for (TMLCPrimitivePort port:req.ports){
+		if (port.checkStatus>1){
+		    port.checkStatus=1;
+		    port.mappingName="???";
+		}
+	    }
+	}
+	for (TMLEvent evt: getEvents()){
+	    if (evt.port!=null && evt.port2!=null){
+	        if (evt.port.checkStatus>1){
+		    evt.port.checkStatus=1;
+		    evt.port.mappingName="???";
+	        }
+	        if (evt.port2.checkStatus>1){
+		    evt.port2.checkStatus=1;
+		    evt.port2.mappingName="???";
+	        }
+	    }
+	}
+	return;
+    }
     public ArrayList<TMLEvent> getEvents(TMLTask t) {
         TMLEvent evt;
         ArrayList<TMLEvent> list = new ArrayList<TMLEvent>();

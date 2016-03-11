@@ -46,7 +46,7 @@
 package tmltranslator;
 
 import java.util.*;
-
+import ui.tmlcompd.TMLCPrimitivePort;
 
 public class TMLEvent extends TMLCommunicationElement {
     protected Vector params; // List of various types of parameters
@@ -56,6 +56,8 @@ public class TMLEvent extends TMLCommunicationElement {
     protected TMLTask origin, destination;
     public static int confStatus;
     public static boolean checkConf;
+    public TMLCPrimitivePort port;
+    public TMLCPrimitivePort port2;
     /*public TMLEvent(String name, Object reference) {
       super(name, reference);
       params = new Vector();

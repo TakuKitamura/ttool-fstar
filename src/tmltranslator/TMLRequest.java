@@ -46,7 +46,7 @@
 package tmltranslator;
 
 import java.util.*;
-
+import ui.tmlcompd.TMLCPrimitivePort;
 
 public class TMLRequest extends TMLCommunicationElement {
     protected Vector params; // List of various types of parameters
@@ -55,11 +55,13 @@ public class TMLRequest extends TMLCommunicationElement {
     protected ArrayList<String> paramNames;
     public static int confStatus;
     public static boolean checkConf;
+    public ArrayList<TMLCPrimitivePort> ports;
     public TMLRequest(String name, Object reference) {
         super(name, reference);
         params = new Vector();
         originTasks = new ArrayList<TMLTask>();
 	paramNames = new ArrayList<String>();
+	ports = new ArrayList<TMLCPrimitivePort>();
     }
     
     public int getNbOfParams() {

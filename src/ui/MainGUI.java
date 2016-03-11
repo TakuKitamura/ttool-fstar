@@ -3758,11 +3758,18 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             getCurrentTDiagramPanel().repaint();
         }
 	else if (tp instanceof TMLArchiPanel) {
+	  /*  for (int i=0; i<tabs.size(); i++){
+		tp = (TURTLEPanel)(tabs.elementAt(i));
+                if (tp instanceof TMLComponentDesignPanel) {
+                    ((TMLComponentDesignPanel)tp).modelBacktracingProVerif(pvoa);
+                }
+	    }*/
+	    System.out.println("BACKTRACE");
+	    gtm.getTMLMapping().getTMLModeling().clearBacktracing();
+	    gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, getTabName(tp));
 	}
 	else if (tp instanceof TMLComponentDesignPanel){
-	    TMLComponentDesignPanel tap = (TMLComponentDesignPanel) tp;
-	    tap.modelBacktracingProVerif(pvoa);
-	    getCurrentTDiagramPanel().repaint();
+	    
 	}
 	return;
     }

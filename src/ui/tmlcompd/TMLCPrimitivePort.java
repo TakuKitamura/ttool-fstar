@@ -112,7 +112,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         editable = true;
         removable = true;
         userResizable = false;
-	checkConf=false;
+	checkConf=true;
         commName = "comm";
         //value = "MyName";
         makeValue();
@@ -318,7 +318,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
           g.drawString(lname, x+width - w - 1, y+(int)(si)-2);
           }
           }*/
-	drawVerification(g);
+
+	    drawVerification(g);
+	
         g.setFont(fold);
 	
         drawParticularity(g);
@@ -342,12 +344,14 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         default:
             return;
         }
-	g.drawString(mappingName, x, y);
-        g.drawOval(x+6, y-10, 6, 9);
-        g.setColor(c1);
-        g.fillRect(x+4, y-7, 9, 7);
-        g.setColor(c);
-        g.drawRect(x+4, y-7, 9, 7);
+	    g.drawString(mappingName, x-15, y-8);
+            g.drawOval(x-10, y, 6, 9);
+            g.setColor(c1);
+            g.fillRect(x-12, y+3, 9, 7);
+            g.setColor(c);
+            g.drawRect(x-12, y+3, 9, 7);
+        
+
 
     }
 
@@ -449,7 +453,6 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             TMLCPrimitiveComponent tgc = (TMLCPrimitiveComponent)(getFather());
             otherTypes = tgc.getAllRecords();
         }
-
         JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf);
         jda.setSize(350, 700);
         GraphicLib.centerOnParent(jda);

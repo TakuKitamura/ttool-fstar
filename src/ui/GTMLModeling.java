@@ -717,9 +717,11 @@ public class GTMLModeling  {
                                 addToTable(makeName(port2, port2.getFather().getValue()) + "/" + name2, name);
 
                                 channel = new TMLChannel(name, port1);
-				channel.checkConf= port1.checkConf;
+				channel.checkConf= port1.checkConf || port2.checkConf;
                                 channel.setSize(port1.getSize());
                                 channel.setMax(port1.getMax());
+				channel.ports.add(port1);
+				channel.ports.add(port2);
                                 if (port1.isBlocking() && port2.isBlocking()) {
                                     channel.setType(TMLChannel.BRBW);
                                 } else if (!port1.isBlocking() && port2.isBlocking()) {
@@ -813,7 +815,13 @@ public class GTMLModeling  {
                             // Channel attributes
                             port = (TMLCPrimitivePort)(portstome.get(0));
                             channel = new TMLChannel(name, port1);
+			    channel.ports.add(port1);
 			    channel.checkConf= port1.checkConf;
+			    for(j=0; j<portstome.size(); j++) {
+                                TMLCPrimitivePort p = (TMLCPrimitivePort)(portstome.get(j));
+			        channel.checkConf= p.checkConf || channel.checkConf;
+				channel.ports.add(p);
+			    }
                             channel.setSize(port1.getSize());
                             channel.setMax(port1.getMax());
                             if (port1.isBlocking() && port.isBlocking()) {
@@ -953,6 +961,7 @@ public class GTMLModeling  {
                             } else {
                                 event = new TMLEvent(name, port1, -1, port1.isBlocking());
                             }
+			    event.checkConf= port1.checkConf;
                             for(i=0; i<port1.getNbMaxAttribute(); i++) {
                                 tt = port1.getParamAt(i);
                                 if ((tt != null) && (tt.getType() != TType.NONE)) {
@@ -1094,7 +1103,8 @@ public class GTMLModeling  {
                     }
 
                     request = new TMLRequest(name, port1);
-
+		    request.checkConf = port1.checkConf;
+		    request.ports.add(port1);
                     for(i=0; i<port1.getNbMaxAttribute(); i++) {
                         tt = port1.getParamAt(i);
                         if ((tt != null) && (tt.getType() != TType.NONE)) {

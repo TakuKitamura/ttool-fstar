@@ -263,7 +263,6 @@ public class ProVerifOutputAnalyzer {
     public LinkedList<String> getSatisfiedAuthenticity() {
         return satisfiedAuthenticity;
     }
-
     public LinkedList<String> getSatisfiedWeakAuthenticity() {
         return satisfiedWeakAuthenticity;
     }

@@ -48,7 +48,7 @@ package tmltranslator;
 import myutil.*;
 
 import java.util.*;
-
+import ui.tmlcompd.TMLCPrimitivePort;
 
 public class TMLChannel extends TMLCommunicationElement {
 
@@ -60,7 +60,9 @@ public class TMLChannel extends TMLCommunicationElement {
     private int size;
     private int type;
     private int max;
-
+    public TMLCPrimitivePort port;
+    public TMLCPrimitivePort port2;
+    public ArrayList<TMLCPrimitivePort> ports;
     // Used on for 1 -> 1 channel
     protected TMLTask originTask, destinationTask;
     protected TMLPort originPort, destinationPort; // Not used by the simulator
@@ -82,6 +84,7 @@ public class TMLChannel extends TMLCommunicationElement {
         destinationTasks = new ArrayList<TMLTask>();
         originPorts = new ArrayList<TMLPort>();
         destinationPorts = new ArrayList<TMLPort>();
+	ports = new ArrayList<TMLCPrimitivePort>();
     }
 
 
