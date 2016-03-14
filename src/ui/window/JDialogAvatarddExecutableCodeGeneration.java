@@ -36,12 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class JDialogAvatarExecutableCodeGeneration
+ * Class JDialogAvatarddExecutableCodeGeneration
  * Dialog for managing the generation and compilation of AVATAR executable code
- * Creation: 29/03/2011
- * @version 1.1 29/03/2011
+ * Creation: june 2014
+ * @version 1.1
  * @author Ludovic APVRILLE
- * @author (added deployment diagrams) Julien Henon, Daniela GENIUS
+ * @version 2.0 (march 2016)
+ * @author (adapted to code generation from deployment diagrams) Julien Henon, Daniela GENIUS 2015-2016
  * @see
  */
 
@@ -83,17 +84,14 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     private String textSysC6 = "Show cycle accurate trace from MPSoC file:";
 
     private static String unitCycle = "1";
-
-    //modif DG
+    
     private static String[] codes = {"AVATAR SOCLIB"};
-    private static int selectedItem = 0;
+   
     private static int selectedRun = 1;
     private static int selectedCompile = 0;
     private static int selectedViewTrace = 0;
     private static boolean static_putUserCode = true;
-    //ajoute DG 14.03.
-protected static String pathCodeTopCell;
-    //fin ajoute
+  
     protected static String pathCode;
     protected static String pathSoclibTraceFile;
     protected static String pathCompileMPSoC;
@@ -144,10 +142,10 @@ protected static String pathCodeTopCell;
     /** Creates new form  */
 
     public JDialogAvatarddExecutableCodeGeneration(Frame _f, MainGUI _mgui, String title, 
-String _hostExecute, 
-String _pathCode, 						
-String _pathCompileMPSoC, 
-String _pathExecuteMPSoC) {
+						   String _hostExecute, 
+						   String _pathCode, 						
+						   String _pathCompileMPSoC, 
+						   String _pathExecuteMPSoC) {
 
         super(title);
 
@@ -233,10 +231,10 @@ String _pathExecuteMPSoC) {
 
         code1 = new JTextField(pathCode, 100);
         jp01.add(code1, c01);
-	//DG ajoute 14.03.
-code2 = new JTextField(pathCode, 100);
-      jp01.add(code2, c01);
-      // fin ajoute DG
+	//DG added path to topcell
+        code2 = new JTextField(pathCode, 100);
+        jp01.add(code2, c01);
+     
         jp01.add(new JLabel(" "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 
@@ -444,13 +442,13 @@ code2 = new JTextField(pathCode, 100);
 
     public void makeSelectionExecute() {
       
-            if (exetrace.isSelected()) {
-                selectedRun = 1;
-            } else {
-                selectedRun = 2;
-            }
+	if (exetrace.isSelected()) {
+	    selectedRun = 1;
+	} else {
+	    selectedRun = 2;
+	}
 	
-	    // exe2.setEnabled(selectedRun == 0);
+	// exe2.setEnabled(selectedRun == 0);
         exe3.setEnabled(selectedRun == 1);
         exe4.setEnabled(selectedRun == 2);
     }
@@ -507,321 +505,193 @@ code2 = new JTextField(pathCode, 100);
 
         hasError = false;
 
-	 try {
-	     //selectedItem = versionCodeGenerator.getSelectedIndex();
-	    selectedItem = 0;
-	    /*   if (selectedItem == 1) {
+	try {
+	  
+	   
 
-                // Code generation
-                if (jp1.getSelectedIndex() == 0) {
-                    jta.append("Generating executable code (C-POSIX version)\n");
-
-                    if (removeCFiles.isSelected()) {
-                        jta.append("Removing all .h files\n");
-                        list = FileUtils.deleteFiles(code1.getText() +  AVATAR2CPOSIX.getGeneratedPath(), ".h");
-                        if (list.length() == 0) {
-                            jta.append("No files were deleted\n");
-                        } else {
-                            jta.append("Files deleted:\n" + list + "\n");
-                        }
-                        jta.append("Removing all  .c files\n");
-                        list = FileUtils.deleteFiles(code1.getText() +  AVATAR2CPOSIX.getGeneratedPath(), ".c");
-                        if (list.length() == 0) {
-                            jta.append("No files were deleted\n");
-                        } else {
-                            jta.append("Files deleted:\n" + list + "\n");
-                        }
-                    }
-
-                    if (removeXFiles.isSelected()) {
-                        jta.append("Removing all .x files\n");
-                        list = FileUtils.deleteFiles(code1.getText() , ".x");
-                        if (list.length() == 0) {
-                            jta.append("No files were deleted\n");
-                        } else {
-                            jta.append("Files deleted:\n" + list + "\n");
-                        }
-                    }
-
-                    testGo();
-
-                    selectedUnit = units.getSelectedIndex();
-                    //System.out.println("Selected item=" + selectedItem);
-                    AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
-
-                    // Generating code
-                    if (avspec == null) {
-                        jta.append("Error: No AVATAR specification\n");
-                    } else {
-                        AVATAR2CPOSIX avatartocposix = new AVATAR2CPOSIX(avspec);
-                        avatartocposix.includeUserCode(putUserCode.isSelected());
-                        avatartocposix.setTimeUnit(selectedUnit);
-                        avatartocposix.generateCPOSIX(debugmode.isSelected(), tracemode.isSelected());
-                        testGo();
-                        jta.append("Generation of C-POSIX executable code: done\n");
-                        //t2j.printJavaClasses();
-                        try {
-                            jta.append("Saving code in files\n");
-                            pathCode = code1.getText();
-			    
-                            avatartocposix.saveInFiles(pathCode);
-                           
-                            jta.append("Code saved\n");
-                        } catch (Exception e) {
-                            jta.append("Could not generate files\n");
-                        }
-                    }
-                }
-
-                testGo();
-
-
-                // Compilation
-                if (jp1.getSelectedIndex() == 1) {                    
-                        cmd = compiler.getText();	       
-                    jta.append("Compiling executable code with command: \n" + cmd + "\n");
-
-                    rshc = new RshClient(hostExecute);
-                    // Assume data are on the remote host
-                    // Command
-                    try {
-                        processCmd(cmd, jta);
-                        //data = processCmd(cmd);
-                        //jta.append(data);
-                        jta.append("Compilation done\n");
-                    } catch (LauncherException le) {
-                        jta.append("Error: " + le.getMessage() + "\n");
-                        mode =  STOPPED;
-                        setButtons();
-                        return;
-                    } catch (Exception e) {
-                        mode =  STOPPED;
-                        setButtons();
-                        return;
-                    }
-                }
-
-                if (jp1.getSelectedIndex() == 2) {
-                    try {                       
-                           if (selectedRun == 1) {
-                                cmd = exe3.getText();
-                            } else {
-                                cmd = exe4.getText();
-                            }			   
-
-                        jta.append("Executing code with command: \n" + cmd + "\n");
-
-                        rshc = new RshClient(hostExecute);
-                        // Assume data are on the remote host
-                        // Command
-
-                        processCmd(cmd, jta);
-                        //jta.append(data);
-                        jta.append("Execution done\n");
-                    } catch (LauncherException le) {
-                        jta.append("Error: " + le.getMessage() + "\n");
-                        mode =  STOPPED;
-                        setButtons();
-                        return;
-                    } catch (Exception e) {
-                        mode =  STOPPED;
-                        setButtons();
-                        return;
-                    }
-                }
-
-                if ((hasError == false) && (jp1.getSelectedIndex() < 2)) {
-                    jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
-                }
-            }*/
-
-          
-	    // if (selectedItem == 0) {
-                // Code generation	
-System.err.println("$$$ test "+jp1.getSelectedIndex());
-                if (jp1.getSelectedIndex() == 0) {
-                    jta.append("Generating executable code (SOCLIB version)\n");
-		    //selectedUnit = 1;
+	    if (jp1.getSelectedIndex() == 0) {
+		jta.append("Generating executable code (SOCLIB version)\n");
+		//selectedUnit = 1;
 		 
-		    ADDDiagramPanel deploymentDiagramPanel = mgui.getFirstAvatarDeploymentPanelFound();
-		    AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
-		    AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();
+		ADDDiagramPanel deploymentDiagramPanel = mgui.getFirstAvatarDeploymentPanelFound();
+		AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
+		AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();
 
-        // Generating code
-          if ( avddspec == null) {
-            jta.append("Error: No AVATAR Deployemnt specification\n");
-          } else {
-            System.err.println("**AVATAR TOPCELL found");
+		// Generating code
+		if ( avddspec == null) {
+		    jta.append("Error: No AVATAR Deployemnt specification\n");
+		} else {
+		    System.err.println("**AVATAR TOPCELL found");
 
-            TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec);
-            testGo();
-            jta.append("Generation of TopCell executable code: done\n");
-System.err.println("**get Text "+code2.getText());
-            try {
-              jta.append("Saving code in files\n");
-	      System.err.println("**Saving code in files\n");
-              pathCode = code2.getText();
+		    TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec);
+		    testGo();
+		    jta.append("Generation of TopCell executable code: done\n");
+		    System.err.println("**get Text "+code2.getText());
+		    try {
+			jta.append("Saving code in files\n");
+			System.err.println("**Saving code in files\n");
+			pathCode = code2.getText();
 
-	      System.err.println("**AVATAR TOPCELL saved in "+code2.getText());
+			System.err.println("**AVATAR TOPCELL saved in "+code2.getText());
 
-              topCellGenerator.saveFile(pathCode);
+			topCellGenerator.saveFile(pathCode);
 
-              jta.append("Code saved\n");
-            } catch (Exception e) {
-              jta.append("Could not generate files\n"); System.err.println("**Could not generate files\n");
-            }
-          }
+			jta.append("Code saved\n");
+		    } catch (Exception e) {
+			jta.append("Could not generate files\n"); System.err.println("**Could not generate files\n");
+		    }
+		}
 						     
 	    
-        testGo();
+		testGo();
 
 
-	if (removeCFiles.isSelected()) {
+		if (removeCFiles.isSelected()) {
 
-	    jta.append("Removing all .h files\n");
+		    jta.append("Removing all .h files\n");
 	    
-	    list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGeneratedPath(), ".h");
-	    if (list.length() == 0) {
-                            jta.append("No files were deleted\n");
-	    } else {
-		jta.append("Files deleted:\n" + list + "\n");
-	    }
-	    jta.append("Removing all  .c files\n");
-list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGeneratedPath(), ".c");
-//list = FileUtils.deleteFiles(code1.getText() +  AVATAR2SOCLIB.getGeneratedPath(), ".c");
-if (list.length() == 0) {
-    jta.append("No files were deleted\n");
-} else {
-    jta.append("Files deleted:\n" + list + "\n");
-}
-	}
+		    list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGeneratedPath(), ".h");
+		    if (list.length() == 0) {
+			jta.append("No files were deleted\n");
+		    } else {
+			jta.append("Files deleted:\n" + list + "\n");
+		    }
+		    jta.append("Removing all  .c files\n");
+		    list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGeneratedPath(), ".c");
+		    //list = FileUtils.deleteFiles(code1.getText() +  AVATAR2SOCLIB.getGeneratedPath(), ".c");
+		    if (list.length() == 0) {
+			jta.append("No files were deleted\n");
+		    } else {
+			jta.append("Files deleted:\n" + list + "\n");
+		    }
+		}
 
-                    if (removeXFiles.isSelected()) {
-                        jta.append("Removing all .x files\n");
-                        list = FileUtils.deleteFiles(code1.getText() , ".x");
-                        if (list.length() == 0) {
-                            jta.append("No files were deleted\n");
-                        } else {
-                            jta.append("Files deleted:\n" + list + "\n");
-                        }
-                    }
+		if (removeXFiles.isSelected()) {
+		    jta.append("Removing all .x files\n");
+		    list = FileUtils.deleteFiles(code1.getText() , ".x");
+		    if (list.length() == 0) {
+			jta.append("No files were deleted\n");
+		    } else {
+			jta.append("Files deleted:\n" + list + "\n");
+		    }
+		}
 
-                    testGo();
+		testGo();
 
-                    selectedUnit = units.getSelectedIndex();
-                    //System.out.println("Selected item=" + selectedItem);
-                    AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
+		selectedUnit = units.getSelectedIndex();
+		//System.out.println("Selected item=" + selectedItem);
+		AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
 
-                    // Generating code
-                    if (avspec == null) {
-                        jta.append("Error: No AVATAR specification\n");
-                    } else {
+		// Generating code
+		if (avspec == null) {
+		    jta.append("Error: No AVATAR specification\n");
+		} else {
 				      	                    		        
-		      TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec,avspec);
-		      gene.includeUserCode(putUserCode.isSelected());
-		      gene.setTimeUnit(selectedUnit);
-		      gene.generateSoclib(debugmode.isSelected(), tracemode.isSelected());
+		    TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec,avspec);
+		    gene.includeUserCode(putUserCode.isSelected());
+		    gene.setTimeUnit(selectedUnit);
+		    gene.generateSoclib(debugmode.isSelected(), tracemode.isSelected());
 		      
-		      if ( avddspec == null) {
-			  jta.append("Error: No AVATAR Deployment specification\n");
-		      } else {
-			  System.err.println("AVATAR TOPCELL found");
-		      }
+		    if ( avddspec == null) {
+			jta.append("Error: No AVATAR Deployment specification\n");
+		    } else {
+			System.err.println("AVATAR TOPCELL found");
+		    }
 
-		      TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec);
-            testGo();
-            jta.append("Generation of TopCell executable code: done\n");
+		    TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec);
+		    testGo();
+		    jta.append("Generation of TopCell executable code: done\n");
 
-            try {
-              jta.append("Saving code in files\n");
-              pathCode = code2.getText();
-              topCellGenerator.saveFile(pathCode);
+		    try {
+			jta.append("Saving code in files\n");
+			pathCode = code2.getText();
+			topCellGenerator.saveFile(pathCode);
 
-              jta.append("Code saved\n");
-            } catch (Exception e) {
-              jta.append("Could not generate files\n");
-            }
+			jta.append("Code saved\n");
+		    } catch (Exception e) {
+			jta.append("Could not generate files\n");
+		    }
 	           
+		    testGo();
+		    jta.append("Generation of C-SOCLIB executable code: done\n");
+		    //t2j.printJavaClasses();
+		    try {
+			jta.append("Saving code in files\n");
+			pathCode = code1.getText();
+			gene.saveInFiles(pathCode);
+
+			jta.append("Code saved\n");
+		    } catch (Exception e) {
+			jta.append("Could not generate files\n");
+		    }
+		}
+	    }
+
 	    testGo();
-	    jta.append("Generation of C-SOCLIB executable code: done\n");
-                        //t2j.printJavaClasses();
-                        try {
-                            jta.append("Saving code in files\n");
-                            pathCode = code1.getText();
-                         gene.saveInFiles(pathCode);
 
-                            jta.append("Code saved\n");
-                        } catch (Exception e) {
-                            jta.append("Could not generate files\n");
-                        }
-                    }
-                }
+	    // Compilation
+	    if (jp1.getSelectedIndex() == 1) {
+		cmd = compiler.getText();		
+		jta.append("Compiling executable code with command: \n" + cmd + "\n");
 
-                testGo();
+		rshc = new RshClient(hostExecute);
+		// AssumE data are on the remote host
+		// Command
+		try {
+		    processCmd(cmd, jta);
+		    //data = processCmd(cmd);
+		    //jta.append(data);
+		    jta.append("Compilation done\n");
+		} catch (LauncherException le) {
+		    jta.append("Error: " + le.getMessage() + "\n");
+		    mode =  STOPPED;
+		    setButtons();
+		    return;
+		} catch (Exception e) {
+		    mode =  STOPPED;
+		    setButtons();
+		    return;
+		}
+	    }
 
-                // Compilation
-                if (jp1.getSelectedIndex() == 1) {
-			    cmd = compiler.getText();		
-                    jta.append("Compiling executable code with command: \n" + cmd + "\n");
-
-                    rshc = new RshClient(hostExecute);
-                    // AssumE data are on the remote host
-                    // Command
-                    try {
-                        processCmd(cmd, jta);
-                        //data = processCmd(cmd);
-                        //jta.append(data);
-                        jta.append("Compilation done\n");
-                    } catch (LauncherException le) {
-                        jta.append("Error: " + le.getMessage() + "\n");
-                        mode =  STOPPED;
-                        setButtons();
-                        return;
-                    } catch (Exception e) {
-                        mode =  STOPPED;
-                        setButtons();
-                        return;
-                    }
-                }
-
-                if (jp1.getSelectedIndex() == 2) {
-                    try {
-                                                   if (selectedRun == 1) {
-                                cmd = exe3.getText();
-                            } else {
-                                cmd = exe4.getText();
-                            }
+	    if (jp1.getSelectedIndex() == 2) {
+		try {
+		    if (selectedRun == 1) {
+			cmd = exe3.getText();
+		    } else {
+			cmd = exe4.getText();
+		    }
 		
-                        jta.append("Executing code with command: \n" + cmd + "\n");
+		    jta.append("Executing code with command: \n" + cmd + "\n");
 
-                        rshc = new RshClient(hostExecute);
-                        // Assume data are on the remote host
-                        // Command
+		    rshc = new RshClient(hostExecute);
+		    // Assume data are on the remote host
+		    // Command
 
-                        processCmd(cmd, jta);
-                        //jta.append(data);
-                        jta.append("Execution done\n");
-                    } catch (LauncherException le) {
-                        jta.append("Error: " + le.getMessage() + "\n");
-                        mode =  STOPPED;
-                        setButtons();
-                        return;
-                    } catch (Exception e) {
-                        mode =  STOPPED;
-                        setButtons();
-                        return;
-                    }
-                }
+		    processCmd(cmd, jta);
+		    //jta.append(data);
+		    jta.append("Execution done\n");
+		} catch (LauncherException le) {
+		    jta.append("Error: " + le.getMessage() + "\n");
+		    mode =  STOPPED;
+		    setButtons();
+		    return;
+		} catch (Exception e) {
+		    mode =  STOPPED;
+		    setButtons();
+		    return;
+		}
+	    }
 
-                if ((hasError == false) && (jp1.getSelectedIndex() < 2)) {
-                    jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
-                }
-		//}
+	    if ((hasError == false) && (jp1.getSelectedIndex() < 2)) {
+		jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
+	    }
+	    //}
 
             //fin ajoute DG
 
 
-    } catch (InterruptedException ie) {
+	} catch (InterruptedException ie) {
             jta.append("Interrupted\n");
         }
 
