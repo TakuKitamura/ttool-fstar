@@ -82,6 +82,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     private String textSysC4 = "Run code in soclib / mutekh:";
     private String textSysC5 = "Show AVATAR trace from file w/o hardware:";
     private String textSysC6 = "Show cycle accurate trace from MPSoC file:";
+    private String textSysC7 = "Base directory of topcell generation:";
 
     private static String unitCycle = "1";
     
@@ -232,6 +233,10 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
         code1 = new JTextField(pathCode, 100);
         jp01.add(code1, c01);
 	
+        gen = new JLabel(textSysC7);
+        //genJava.addActionListener(this);
+        jp01.add(gen, c01);
+
         code2 = new JTextField(pathCode, 100); 
         jp01.add(code2, c01);
      
