@@ -411,7 +411,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
         } else if (command.equals("Close")) {
             closeDialog();
         } else if (evt.getSource() == versionCodeGenerator) {
-            selectedItem = versionCodeGenerator.getSelectedIndex();
+	    // selectedItem = versionCodeGenerator.getSelectedIndex();
         } else if (evt.getSource() == units) {
             selectedUnit = units.getSelectedIndex();
         } else if (evt.getSource() == showSimulationTrace) {
