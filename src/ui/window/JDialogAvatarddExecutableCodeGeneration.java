@@ -231,8 +231,8 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
         code1 = new JTextField(pathCode, 100);
         jp01.add(code1, c01);
-	//DG added path to topcell
-        code2 = new JTextField(pathCode, 100);
+	
+        code2 = new JTextField(pathCode, 100); 
         jp01.add(code2, c01);
      
         jp01.add(new JLabel(" "), c01);
@@ -272,7 +272,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
         jp01.add(new JLabel("Code generator used:"), c01);
 
         versionCodeGenerator = new JComboBox(codes);
-        versionCodeGenerator.setSelectedIndex(selectedItem);
+	// versionCodeGenerator.setSelectedIndex(selectedItem);
         versionCodeGenerator.addActionListener(this);
         jp01.add(versionCodeGenerator, c01);
       
