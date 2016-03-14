@@ -76,32 +76,25 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     protected MainGUI mgui;
 
     private String textSysC1 = "Base directory of code generation:";
-    //private String textSysC2 = "Compile executable code in";
-    private String textSysC3 = "Compile soclib executable with";
-    //private String textSysC3 = "with";
-    //private String textSysC4 = "Run code:";
-    private String textSysC5 = "Run code and trace events (if enabled at code generation):";
-    private String textSysC6 = "Run code in soclib / mutekh:";
-    private String textSysC8 = "Show AVATAR trace from file w/o hardware:";
-    private String textSysC9 = "Show cycle accurate trace from MPSoC file:";
+    private String textSysC2 = "Compile soclib executable with";   
+    private String textSysC3 = "Run code and trace events (if enabled at code generation):";
+    private String textSysC4 = "Run code in soclib / mutekh:";
+    private String textSysC5 = "Show AVATAR trace from file w/o hardware:";
+    private String textSysC6 = "Show cycle accurate trace from MPSoC file:";
 
     private static String unitCycle = "1";
 
     //modif DG
-    //private static String[] codes = {"AVATAR CPOSIX", "AVATAR SOCLIB"};
     private static String[] codes = {"AVATAR SOCLIB"};
     private static int selectedItem = 0;
     private static int selectedRun = 1;
     private static int selectedCompile = 0;
     private static int selectedViewTrace = 0;
     private static boolean static_putUserCode = true;
-
+    //ajoute DG 14.03.
+protected static String pathCodeTopCell;
+    //fin ajoute
     protected static String pathCode;
-    //protected static String pathCompiler;
-    //protected static String pathExecute;
-    //protected static String pathExecuteWithTracing;
-    //protected static String pathCompileSoclib;
-    //protected static String pathExecuteSoclib;
     protected static String pathSoclibTraceFile;
     protected static String pathCompileMPSoC;
     protected static String pathExecuteMPSoC;
@@ -124,7 +117,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     protected JRadioButton exe, exeint, exetrace, exesoclib, compile, compilesoclib, viewtrace, viewtracesoclib;
     protected ButtonGroup compilegroup, exegroup, viewgroup;
     protected JLabel gen;
-    protected JTextField code1, code2, compiler1, compiler2, exe1, exe2, exe3, exe4, exe2int, simulationTraceFile, simulationsoclibTraceFile;
+    protected JTextField code1, code2, compiler, exe1, exe2, exe3, exe4, exe2int, simulationTraceFile, simulationsoclibTraceFile;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
     protected JCheckBox removeCFiles, removeXFiles, debugmode, tracemode, optimizemode, putUserCode;
@@ -149,6 +142,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     protected RshClient rshc;
 
     /** Creates new form  */
+
     public JDialogAvatarddExecutableCodeGeneration(Frame _f, MainGUI _mgui, String title, 
 String _hostExecute, 
 String _pathCode, 						
@@ -239,7 +233,10 @@ String _pathExecuteMPSoC) {
 
         code1 = new JTextField(pathCode, 100);
         jp01.add(code1, c01);
-
+	//DG ajoute 14.03.
+code2 = new JTextField(pathCode, 100);
+      jp01.add(code2, c01);
+      // fin ajoute DG
         jp01.add(new JLabel(" "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 
@@ -280,12 +277,7 @@ String _pathExecuteMPSoC) {
         versionCodeGenerator.setSelectedIndex(selectedItem);
         versionCodeGenerator.addActionListener(this);
         jp01.add(versionCodeGenerator, c01);
-        //System.out.println("selectedItem=" + selectedItem);
-
-        //devmode = new JCheckBox("Development version of the simulator");
-        //devmode.setSelected(true);
-        //jp01.add(devmode, c01);
-
+      
         jp01.add(new JLabel(" "), c01);
         jp1.add("Generate code", jp01);
 
@@ -297,29 +289,14 @@ String _pathExecuteMPSoC) {
         c02.fill = GridBagConstraints.BOTH;
         c02.gridheight = 1;
 
-        compilegroup =  new ButtonGroup();
+        compilegroup =  new ButtonGroup();      
 
-        /*compile = new JRadioButton(textSysC2, false);
-        jp02.add(compile, c02);
-        compile.addActionListener(this);
-        compilegroup.add(compile);*/
-        //code2 = new JTextField(pathCode, 100);
-        //jp02.add(code2, c02);
-
-        //jp02.add(new JLabel("with"), c02);
-
-        //compiler1 = new JTextField(pathCompileMPSoC, 100);
-        //jp02.add(compiler1, c02);
-
-        //jp02.add(new JLabel(" "), c02);
-
-
-        compilesoclib = new JRadioButton(textSysC3, false);
+        compilesoclib = new JRadioButton(textSysC2, false);
         compilesoclib.addActionListener(this);
         jp02.add(compilesoclib, c02);
         compilegroup.add(compilesoclib);
-        compiler2 = new JTextField(pathCompileMPSoC, 100);
-        jp02.add(compiler2, c02);
+        compiler = new JTextField(pathCompileMPSoC, 100);
+        jp02.add(compiler, c02);
 
         //compile.setSelected(selectedCompile == 0);
         compilesoclib.setSelected(selectedCompile == 1);
@@ -334,23 +311,16 @@ String _pathExecuteMPSoC) {
         c03.fill = GridBagConstraints.BOTH;
         c03.gridheight = 1;
 
-	exegroup = new ButtonGroup();
-        /*exe = new JRadioButton(textSysC4, false);
-        exe.addActionListener(this);
-        exegroup.add(exe);
-        jp03.add(exe, c03);
-        exe2 = new JTextField(pathExecuteMPSoC, 100);
-        jp03.add(exe2, c03);
-        exegroup.add(exe);*/
+	exegroup = new ButtonGroup();      
 
-        exetrace = new JRadioButton(textSysC5, false);
+        exetrace = new JRadioButton(textSysC3, false);
         exetrace.addActionListener(this);
         exegroup.add(exetrace);
         jp03.add(exetrace, c03);
         exe3 = new JTextField(pathExecuteMPSoC +  " " + pathCode + File.separator + "trace.txt", 100);
         jp03.add(exe3, c03);
 
-        exesoclib = new JRadioButton(textSysC6, false);
+        exesoclib = new JRadioButton(textSysC4, false);
         exesoclib.addActionListener(this);
         exegroup.add(exesoclib);
         jp03.add(exesoclib, c03);
@@ -359,16 +329,7 @@ String _pathExecuteMPSoC) {
 
         //exe.setSelected(selectedRun == 0);
         exetrace.setSelected(selectedRun == 1);
-        exesoclib.setSelected(selectedRun == 2);
-
-        /*exeint = new JRadioButton(textSysC5, true);
-          exeint.addActionListener(this);
-          exegroup.add(exeint);
-          //exeJava.addActionListener(this);
-          jp03.add(exeint, c03);
-
-          exe2int = new JTextField(pathInteractiveExecute, 100);
-          jp03.add(exe2int, c02);*/
+        exesoclib.setSelected(selectedRun == 2);        
 
         jp03.add(new JLabel(" "), c03);
 
@@ -383,13 +344,13 @@ String _pathExecuteMPSoC) {
         c04.gridheight = 1;
 
         viewgroup = new ButtonGroup();
-        viewtrace = new JRadioButton(textSysC8, false);
+        viewtrace = new JRadioButton(textSysC5, false);
         viewgroup.add(viewtrace);
         viewtrace.addActionListener(this);
         jp04.add(viewtrace, c04);
         simulationTraceFile = new JTextField(pathCode + File.separator + "trace.txt", 100);
         jp04.add(simulationTraceFile, c04);
-        viewtracesoclib = new JRadioButton(textSysC9, false);
+        viewtracesoclib = new JRadioButton(textSysC6, false);
         viewgroup.add(viewtracesoclib);
         viewtracesoclib.addActionListener(this);
 	jp04.add(viewtracesoclib, c04);
@@ -482,32 +443,22 @@ String _pathExecuteMPSoC) {
     }
 
     public void makeSelectionExecute() {
-        /*if (exe.isSelected()) {
-            selectedRun = 0;
-	    } else {*/
+      
             if (exetrace.isSelected()) {
                 selectedRun = 1;
             } else {
                 selectedRun = 2;
             }
-	    //}
-
+	
 	    // exe2.setEnabled(selectedRun == 0);
         exe3.setEnabled(selectedRun == 1);
         exe4.setEnabled(selectedRun == 2);
-
     }
 
     public void makeSelectionCompile() {
-	/* if (compile.isSelected()) {
-            selectedCompile = 0;
-	    } else {*/
-            selectedCompile = 1;
-	    //}
 
-        //code2.setEnabled(selectedCompile == 0);
-	    //        compiler1.setEnabled(selectedCompile == 0);
-        compiler2.setEnabled(selectedCompile == 1);
+	selectedCompile = 1;	
+        compiler.setEnabled(selectedCompile == 1);
 
     }
 
@@ -520,7 +471,6 @@ String _pathExecuteMPSoC) {
 
         simulationTraceFile.setEnabled(selectedViewTrace == 0);
 	// simulationsoclibTraceFile.setEnabled(selectedViewTrace == 1);
-
     }
 
     public void stopProcess() {
@@ -557,9 +507,10 @@ String _pathExecuteMPSoC) {
 
         hasError = false;
 
-        try {
-            selectedItem = versionCodeGenerator.getSelectedIndex();
-            if (selectedItem == 1) {
+	 try {
+	     //selectedItem = versionCodeGenerator.getSelectedIndex();
+	    selectedItem = 0;
+	    /*   if (selectedItem == 1) {
 
                 // Code generation
                 if (jp1.getSelectedIndex() == 0) {
@@ -612,9 +563,9 @@ String _pathExecuteMPSoC) {
                         try {
                             jta.append("Saving code in files\n");
                             pathCode = code1.getText();
-			    //gene.avatartocposix.saveInFiles(pathCode);//DG 27.11.
+			    
                             avatartocposix.saveInFiles(pathCode);
-                            //tml2systc.saveFile(pathCode, "appmodel");
+                           
                             jta.append("Code saved\n");
                         } catch (Exception e) {
                             jta.append("Could not generate files\n");
@@ -626,14 +577,8 @@ String _pathExecuteMPSoC) {
 
 
                 // Compilation
-                if (jp1.getSelectedIndex() == 1) {
-
-                    //if (selectedCompile == 0) {
-                        //cmd = compiler1.getText();
-		    // } else {
-                        cmd = compiler2.getText();
-			// }
-
+                if (jp1.getSelectedIndex() == 1) {                    
+                        cmd = compiler.getText();	       
                     jta.append("Compiling executable code with command: \n" + cmd + "\n");
 
                     rshc = new RshClient(hostExecute);
@@ -657,16 +602,12 @@ String _pathExecuteMPSoC) {
                 }
 
                 if (jp1.getSelectedIndex() == 2) {
-                    try {
-                        /*if (selectedRun == 0) {
-                            cmd = exe2.getText();
-			    } else {*/
-                            if (selectedRun == 1) {
+                    try {                       
+                           if (selectedRun == 1) {
                                 cmd = exe3.getText();
                             } else {
                                 cmd = exe4.getText();
-                            }
-			    // }
+                            }			   
 
                         jta.append("Executing code with command: \n" + cmd + "\n");
 
@@ -692,37 +633,68 @@ String _pathExecuteMPSoC) {
                 if ((hasError == false) && (jp1.getSelectedIndex() < 2)) {
                     jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
                 }
-            }
+            }*/
 
-            //ajoute DG
-            if (selectedItem == 0) {
-                // Code generation
-
-	jta.append("######################################\n");
-	jta.append("######################################\n");
-	jta.append("######################################\n");
+          
+	    // if (selectedItem == 0) {
+                // Code generation	
+System.err.println("$$$ test "+jp1.getSelectedIndex());
                 if (jp1.getSelectedIndex() == 0) {
                     jta.append("Generating executable code (SOCLIB version)\n");
+		    //selectedUnit = 1;
+		 
+		    ADDDiagramPanel deploymentDiagramPanel = mgui.getFirstAvatarDeploymentPanelFound();
+		    AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
+		    AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();
 
-                    if (removeCFiles.isSelected()) {
+        // Generating code
+          if ( avddspec == null) {
+            jta.append("Error: No AVATAR Deployemnt specification\n");
+          } else {
+            System.err.println("**AVATAR TOPCELL found");
 
-                        jta.append("Removing all .h files\n");
-                        //list = FileUtils.deleteFiles(code1.getText() +  AVATAR2SOCLIB.getGeneratedPath(), ".h");
-	list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGeneratedPath(), ".h");
-                        if (list.length() == 0) {
+            TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec);
+            testGo();
+            jta.append("Generation of TopCell executable code: done\n");
+System.err.println("**get Text "+code2.getText());
+            try {
+              jta.append("Saving code in files\n");
+	      System.err.println("**Saving code in files\n");
+              pathCode = code2.getText();
+
+	      System.err.println("**AVATAR TOPCELL saved in "+code2.getText());
+
+              topCellGenerator.saveFile(pathCode);
+
+              jta.append("Code saved\n");
+            } catch (Exception e) {
+              jta.append("Could not generate files\n"); System.err.println("**Could not generate files\n");
+            }
+          }
+						     
+	    
+        testGo();
+
+
+	if (removeCFiles.isSelected()) {
+
+	    jta.append("Removing all .h files\n");
+	    
+	    list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGeneratedPath(), ".h");
+	    if (list.length() == 0) {
                             jta.append("No files were deleted\n");
-                        } else {
-                            jta.append("Files deleted:\n" + list + "\n");
-                        }
-                        jta.append("Removing all  .c files\n");
+	    } else {
+		jta.append("Files deleted:\n" + list + "\n");
+	    }
+	    jta.append("Removing all  .c files\n");
 list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGeneratedPath(), ".c");
-                        //list = FileUtils.deleteFiles(code1.getText() +  AVATAR2SOCLIB.getGeneratedPath(), ".c");
-                        if (list.length() == 0) {
-                            jta.append("No files were deleted\n");
-                        } else {
-                            jta.append("Files deleted:\n" + list + "\n");
-                        }
-                    }
+//list = FileUtils.deleteFiles(code1.getText() +  AVATAR2SOCLIB.getGeneratedPath(), ".c");
+if (list.length() == 0) {
+    jta.append("No files were deleted\n");
+} else {
+    jta.append("Files deleted:\n" + list + "\n");
+}
+	}
 
                     if (removeXFiles.isSelected()) {
                         jta.append("Removing all .x files\n");
@@ -744,22 +716,12 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
                     if (avspec == null) {
                         jta.append("Error: No AVATAR specification\n");
                     } else {
-			/* AVATAR2SOCLIB avatartocposix = new AVATAR2SOCLIB(avspec);
-                        avatartocposix.includeUserCode(putUserCode.isSelected());
-                        avatartocposix.setTimeUnit(selectedUnit);
-                        avatartocposix.generateCPOSIX(debugmode.isSelected(), tracemode.isSelected());*/
-		      // julien -----------------------------------------
-                      ADDDiagramPanel deploymentDiagramPanel = mgui.getFirstAvatarDeploymentPanelFound();
-                      AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
-                      AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();	
-                    			  
+				      	                    		        
 		      TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec,avspec);
 		      gene.includeUserCode(putUserCode.isSelected());
 		      gene.setTimeUnit(selectedUnit);
 		      gene.generateSoclib(debugmode.isSelected(), tracemode.isSelected());
-
-
-		      //DG 5.2.
+		      
 		      if ( avddspec == null) {
 			  jta.append("Error: No AVATAR Deployment specification\n");
 		      } else {
@@ -779,19 +741,15 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
             } catch (Exception e) {
               jta.append("Could not generate files\n");
             }
-	    //end DG
-                 
-                    // ----------end addition julien ----------------------------------------
-
-                        testGo();
-                        jta.append("Generation of C-SOCLIB executable code: done\n");
+	           
+	    testGo();
+	    jta.append("Generation of C-SOCLIB executable code: done\n");
                         //t2j.printJavaClasses();
                         try {
                             jta.append("Saving code in files\n");
                             pathCode = code1.getText();
-                         gene.saveInFiles(pathCode);//DG 27.11.
-//avatartocposix.saveInFiles(pathCode);
-                            //tml2systc.saveFile(pathCode, "appmodel");
+                         gene.saveInFiles(pathCode);
+
                             jta.append("Code saved\n");
                         } catch (Exception e) {
                             jta.append("Could not generate files\n");
@@ -803,17 +761,11 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
 
                 // Compilation
                 if (jp1.getSelectedIndex() == 1) {
-
-                    //if (selectedCompile == 0) {
-		    //cmd = compiler1.getText();
-			//} else {
-			    cmd = compiler2.getText();
-			// }
-
+			    cmd = compiler.getText();		
                     jta.append("Compiling executable code with command: \n" + cmd + "\n");
 
                     rshc = new RshClient(hostExecute);
-                    // Assuma data are on the remote host
+                    // AssumE data are on the remote host
                     // Command
                     try {
                         processCmd(cmd, jta);
@@ -834,16 +786,12 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
 
                 if (jp1.getSelectedIndex() == 2) {
                     try {
-                        /*if (selectedRun == 0) {
-                            cmd = exe2.getText();
-			    } else {*/
-                            if (selectedRun == 1) {
+                                                   if (selectedRun == 1) {
                                 cmd = exe3.getText();
                             } else {
                                 cmd = exe4.getText();
                             }
-			    //}
-
+		
                         jta.append("Executing code with command: \n" + cmd + "\n");
 
                         rshc = new RshClient(hostExecute);
@@ -868,12 +816,12 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
                 if ((hasError == false) && (jp1.getSelectedIndex() < 2)) {
                     jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
                 }
-            }
+		//}
 
             //fin ajoute DG
 
 
-        } catch (InterruptedException ie) {
+    } catch (InterruptedException ie) {
             jta.append("Interrupted\n");
         }
 
