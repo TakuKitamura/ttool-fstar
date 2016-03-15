@@ -4918,8 +4918,12 @@ public class GTURTLEModeling {
         TraceManager.addDev("ADD 3.1");
 
         if (tdp == null) {
-            TraceManager.addDev("ADD 3.2");
-            throw new MalformedModelingException();
+	    // Try to get the first diagram of the panel
+	    tdp = mgui.getAvatarADDPanelByIndex(indexAnalysis, indexTab);
+	    if (tdp == null) {
+		TraceManager.addDev("ADD 3.2");
+		throw new MalformedModelingException();
+	    }
         }
         tdp.removeAll();
         TraceManager.addDev("ADD 4");

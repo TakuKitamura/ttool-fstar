@@ -784,50 +784,14 @@
 
 
 
-<Modeling type="ADD" nameTab="Deployment" >
+<Modeling type="ADD" nameTab="Deployment1" >
 <ADDDiagramPanel name="Deployment Diagram" minX="10" maxX="2500" minY="10" maxY="1500" attributes="0" masterClockFrequency="200" >
-<COMPONENT type="5361" id="378" >
-<cdparam x="506" y="404" />
+<COMPONENT type="5361" id="326" >
+<cdparam x="464" y="404" />
 <sizeparam width="200" height="200" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Timer0" value="name" />
-<TGConnectingPoint num="0" id="379" />
-<TGConnectingPoint num="1" id="380" />
-<TGConnectingPoint num="2" id="381" />
-<TGConnectingPoint num="3" id="382" />
-<TGConnectingPoint num="4" id="383" />
-<TGConnectingPoint num="5" id="384" />
-<TGConnectingPoint num="6" id="385" />
-<TGConnectingPoint num="7" id="386" />
-<TGConnectingPoint num="8" id="387" />
-<TGConnectingPoint num="9" id="388" />
-<TGConnectingPoint num="10" id="389" />
-<TGConnectingPoint num="11" id="390" />
-<TGConnectingPoint num="12" id="391" />
-<TGConnectingPoint num="13" id="392" />
-<TGConnectingPoint num="14" id="393" />
-<TGConnectingPoint num="15" id="394" />
-<TGConnectingPoint num="16" id="395" />
-<TGConnectingPoint num="17" id="396" />
-<TGConnectingPoint num="18" id="397" />
-<TGConnectingPoint num="19" id="398" />
-<TGConnectingPoint num="20" id="399" />
-<TGConnectingPoint num="21" id="400" />
-<TGConnectingPoint num="22" id="401" />
-<TGConnectingPoint num="23" id="402" />
-<extraparam>
-<info stereotype="Timer" nodeName="Timer0" />
-<attributes index="0"  nIrq="0" />
-</extraparam>
-</COMPONENT>
-
-<COMPONENT type="5355" id="326" >
-<cdparam x="736" y="325" />
-<sizeparam width="200" height="200" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="Memory0" value="name" />
 <TGConnectingPoint num="0" id="302" />
 <TGConnectingPoint num="1" id="303" />
 <TGConnectingPoint num="2" id="304" />
@@ -853,17 +817,17 @@
 <TGConnectingPoint num="22" id="324" />
 <TGConnectingPoint num="23" id="325" />
 <extraparam>
-<info stereotype="RAM" nodeName="Memory0" />
-<attributes byteDataSize="4"  index="0" />
+<info stereotype="Timer" nodeName="Timer0" />
+<attributes index="0"  nIrq="0" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="5363" id="351" >
-<cdparam x="653" y="90" />
-<sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="5355" id="351" >
+<cdparam x="854" y="301" />
+<sizeparam width="200" height="200" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="Bus0" value="name" />
+<infoparam name="Memory0" value="name" />
 <TGConnectingPoint num="0" id="327" />
 <TGConnectingPoint num="1" id="328" />
 <TGConnectingPoint num="2" id="329" />
@@ -889,17 +853,17 @@
 <TGConnectingPoint num="22" id="349" />
 <TGConnectingPoint num="23" id="350" />
 <extraparam>
-<info stereotype="VGMN" nodeName="Bus0" />
-<attributes index="0"  nbOfAttachedInitiators="0"  nbOfAttachedTargets="0"  minLatency="0"  fifoDepth="0" />
+<info stereotype="RAM" nodeName="Memory0" />
+<attributes byteDataSize="4"  index="0" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="5351" id="376" >
-<cdparam x="245" y="94" />
-<sizeparam width="250" height="200" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="5363" id="376" >
+<cdparam x="671" y="87" />
+<sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="CPU0" value="name" />
+<infoparam name="Bus0" value="name" />
 <TGConnectingPoint num="0" id="352" />
 <TGConnectingPoint num="1" id="353" />
 <TGConnectingPoint num="2" id="354" />
@@ -924,6 +888,42 @@
 <TGConnectingPoint num="21" id="373" />
 <TGConnectingPoint num="22" id="374" />
 <TGConnectingPoint num="23" id="375" />
+<extraparam>
+<info stereotype="VGMN" nodeName="Bus0" />
+<attributes index="0"  nbOfAttachedInitiators="0"  nbOfAttachedTargets="0"  minLatency="0"  fifoDepth="0" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="5351" id="401" >
+<cdparam x="203" y="93" />
+<sizeparam width="250" height="200" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="CPU0" value="name" />
+<TGConnectingPoint num="0" id="377" />
+<TGConnectingPoint num="1" id="378" />
+<TGConnectingPoint num="2" id="379" />
+<TGConnectingPoint num="3" id="380" />
+<TGConnectingPoint num="4" id="381" />
+<TGConnectingPoint num="5" id="382" />
+<TGConnectingPoint num="6" id="383" />
+<TGConnectingPoint num="7" id="384" />
+<TGConnectingPoint num="8" id="385" />
+<TGConnectingPoint num="9" id="386" />
+<TGConnectingPoint num="10" id="387" />
+<TGConnectingPoint num="11" id="388" />
+<TGConnectingPoint num="12" id="389" />
+<TGConnectingPoint num="13" id="390" />
+<TGConnectingPoint num="14" id="391" />
+<TGConnectingPoint num="15" id="392" />
+<TGConnectingPoint num="16" id="393" />
+<TGConnectingPoint num="17" id="394" />
+<TGConnectingPoint num="18" id="395" />
+<TGConnectingPoint num="19" id="396" />
+<TGConnectingPoint num="20" id="397" />
+<TGConnectingPoint num="21" id="398" />
+<TGConnectingPoint num="22" id="399" />
+<TGConnectingPoint num="23" id="400" />
 <extraparam>
 <info stereotype="CPU" nodeName="CPU0" />
 <attributes nbOfIrq="6"  iCacheWays="0"  iCacheSets="0"  iCacheWords="0"  dCacheWays="0"  dCacheSets="0"  dCacheWords="0" />

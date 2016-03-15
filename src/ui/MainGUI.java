@@ -6359,6 +6359,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return getAvatarADDPanel(tp, indexTab, s);
     }
 
+     public ADDDiagramPanel getAvatarADDPanelByIndex(int index, int indexTab) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getAvatarADDPanelByIndex(tp, indexTab);
+    }
+
 
     public AvatarPDPanel getAvatarPDPanel(TURTLEPanel tp, int indexTab, String s) {
         if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
@@ -6374,6 +6379,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             return (ADDDiagramPanel)(tp.panelAt(indexTab));
         }
         return null;
+    }
+
+    public ADDDiagramPanel getAvatarADDPanelByIndex(TURTLEPanel tp, int indexTab) {
+        //TraceManager.addDev("index=" + indexTab + " s=" + s + "title=" +tp.tabbedPane.getTitleAt(indexTab));
+
+        //if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+            return (ADDDiagramPanel)(tp.panelAt(indexTab));
+	    //}
+        
     }
 
     public AvatarCDPanel getAvatarCDPanel(int index, int indexTab, String s) {
