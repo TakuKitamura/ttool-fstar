@@ -1261,7 +1261,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         ADDPanel dp = new ADDPanel(this);
         tabs.add(index, dp);
         mainTabbedPane.add(dp.tabbedPane, index);
-        mainTabbedPane.setToolTipTextAt(index, "Open Avatar deployment diagram");
+        mainTabbedPane.setToolTipTextAt(index, "Open deployment diagram");
         mainTabbedPane.setTitleAt(index, name);
         mainTabbedPane.setIconAt(index, IconManager.imgic60);
         //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");

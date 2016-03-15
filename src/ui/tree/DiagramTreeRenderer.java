@@ -80,6 +80,7 @@ import ui.avatarpd.*;
 import ui.avatarmad.*;
 import ui.avatarad.*;
 import ui.avatarcd.*;
+import ui.avatardd.*;
 
 import ui.diplodocusmethodology.*;
 import ui.avatarmethodology.*;
@@ -107,10 +108,10 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
                                            hasFocus);
         if (value instanceof AvatarDesignPanel) {
             setIcon(IconManager.imgic80);
-            setToolTipText("Avatar Design");
+            setToolTipText("Software Design");
         } else if (value instanceof AvatarAnalysisPanel) {
             setIcon(IconManager.imgic18);
-            setToolTipText("Avatar Analysis");
+            setToolTipText("Software Analysis");
         } else if (value instanceof DiplodocusMethodologyPanel) {
             setIcon(IconManager.imgic98);
             setToolTipText("DIPLODOCUS Methodology");
@@ -131,28 +132,34 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
             setToolTipText("SysMLSec Methodology");
         } else if (value instanceof TMLCommunicationPatternPanel) {
             setIcon(IconManager.imgic18);
-            setToolTipText("DIPLODOCUS Communication Patterns");
+            setToolTipText("Communication Patterns");
         } else if (value instanceof AvatarCDPanel) {
             setIcon(IconManager.imgic600);
-            setToolTipText("Avatar Use Case Diagram");
+            setToolTipText("Use Case Diagram");
         } else if (value instanceof AvatarADPanel) {
             setIcon(IconManager.imgic5048);
-            setToolTipText("Avatar Activity Diagram");
+            setToolTipText("Activity Diagram");
         } else if (value instanceof AvatarBDPanel) {
             setIcon(IconManager.imgic80);
-            setToolTipText("Avatar Block Diagram");
+            setToolTipText("Block Diagram");
         } else if (value instanceof AvatarSMDPanel) {
             setIcon(IconManager.imgic63);
-            setToolTipText("Avatar SMD");
+            setToolTipText("State Machine Diagram");
         } else if (value instanceof AvatarRequirementPanel) {
             setIcon(IconManager.imgic82);
-            setToolTipText("Avatar Block Diagram");
+            setToolTipText("Requirement Diagram");
         } else if (value instanceof AvatarPDPanel) {
             setIcon(IconManager.imgic82);
-            setToolTipText("Avatar Property Diagram");
+            setToolTipText("Property Diagram");
         } else if (value instanceof AvatarRDPanel) {
             setIcon(IconManager.imgic84);
-            setToolTipText("Avatar Requirement Diagram");
+            setToolTipText("Requirement Diagram");
+        } else if (value instanceof ADDDiagramPanel) {
+            setIcon(IconManager.imgic60);
+            setToolTipText("Deployment Diagram");
+        } else if (value instanceof ADDPanel) {
+            setIcon(IconManager.imgic60);
+            setToolTipText("Deployment Diagram");
         } else if (value instanceof GTURTLEModeling) {
             setIcon(IconManager.imgic8);
             setToolTipText("TURTLE modeling");
@@ -221,25 +228,25 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
             setToolTipText("TURTLE-OS Activity Diagram of " + value.toString());
         } else if (value instanceof TMLActivityDiagramPanel) {
             setIcon(IconManager.imgic63);
-            setToolTipText("TML Activity Diagram of " + value.toString());
+            setToolTipText("Activity Diagram of " + value.toString());
         } else if (value instanceof TMLTaskDiagramPanel) {
             setIcon(IconManager.imgic62);
-            setToolTipText("TML Task Diagram of " + value.toString());
+            setToolTipText("Functional view of " + value.toString());
         } else if (value instanceof TMLDesignPanel) {
             setIcon(IconManager.imgic62);
-            setToolTipText("TML Design");
+            setToolTipText("Functional view");
         } else if (value instanceof TMLComponentDesignPanel) {
             setIcon(IconManager.imgic1208);
-            setToolTipText("TML Component-based Design");
+            setToolTipText("Functional view");
         } else if (value instanceof TMLComponentTaskDiagramPanel) {
             setIcon(IconManager.imgic1208);
-            setToolTipText("TML Component Design");
+            setToolTipText("Functional view");
         } else if (value instanceof TMLArchiPanel) {
             setIcon(IconManager.imgic60);
-            setToolTipText("TML Architecture");
+            setToolTipText("Architecture");
         } else if (value instanceof TMLArchiDiagramPanel) {
             setIcon(IconManager.imgic60);
-            setToolTipText("TML Architecture Diagram: " + value.toString());
+            setToolTipText("Architecture Diagram: " + value.toString());
         } else if (value instanceof TGComponent) {
             TGComponent t = (TGComponent)value;
             setIcon(t.getImageIcon());

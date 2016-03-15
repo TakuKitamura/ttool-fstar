@@ -69,7 +69,7 @@ public class ADDPanel extends TURTLEPanel {
     }
     
     public void init() {
-         addDeploymentPanelDiagram("Avatar Deployment Diagram");
+         addDeploymentPanelDiagram("Deployment Diagram");
  
     }
     
@@ -82,7 +82,7 @@ public class ADDPanel extends TURTLEPanel {
         
         //Class	diagram
         tmladd = new ADDDiagramPanel(mgui, toolBar);
-        tmladd.setName("Avatar Deployment Diagram");
+        tmladd.setName("Deployment Diagram");
         tmladd.tp = this;
         tdp = tmladd;
         panels.add(tmladd); // Always first in list
@@ -92,7 +92,7 @@ public class ADDPanel extends TURTLEPanel {
         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
         toolBarPanel.add(toolBar, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab("Avatar Deployment Diagram", IconManager.imgic60, toolBarPanel, "Opens Avatar deployment diagram");
+        tabbedPane.addTab("Deployment Diagram", IconManager.imgic60, toolBarPanel, "Opens deployment diagram");
         tabbedPane.setSelectedIndex(0);
       
         return true;
@@ -107,7 +107,7 @@ public class ADDPanel extends TURTLEPanel {
     }
     
     public String toString() {
-        return mgui.getTitleAt(this) + " (Avatar deployment diagram)";
+        return mgui.getTitleAt(this) + " (deployment diagram)";
     }
 	
 	public void renameDeployment(String oldName, String newName) {
