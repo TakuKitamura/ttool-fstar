@@ -1,0 +1,7 @@
+* Install Ubuntu LTS 14.04 in virtualbox
+* Once the installation is finished, install the Vbox companion ttool (Device, insert guest additions), and then reboot
+* Install the latest jdk in /opt/
+* Install the preinstall version of TTool for Linux, reconfigure ttool.exe to point to the right installation of the jdk
+* Install other necessary tools : sudo apt-get install g++ gtkwave graphviz
+
+That's all folks!

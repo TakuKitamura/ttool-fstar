@@ -59,10 +59,11 @@ TTOOL_PATH := $(shell /bin/pwd)
 TTOOL_SRC = $(TTOOL_PATH)/src
 TTOOL_BIN = $(TTOOL_PATH)/bin
 TTOOL_MODELING = $(TTOOL_PATH)/modeling
-TTOOL_MODELING = $(TTOOL_PATH)/figures
+#TTOOL_MODELING = $(TTOOL_PATH)/figures
 TTOOL_EXECUTABLECODE = $(TTOOL_PATH)/executablecode
 TTOOL_SIMULATORS = $(TTOOL_PATH)/simulators
 TTOOL_FIGURES = $(TTOOL_PATH)/doc
+TTOOL_DOC = $(TTOOL_PATH)/doc
 TTOOL_DOC_HTML = $(TTOOL_PATH)/doc/html
 TTOOL_VCD = $(TTOOL_PATH)/vcd
 TTOOL_WORD = $(TTOOL_PATH)/doc/word
@@ -112,6 +113,7 @@ Other targets:
 make basicsvnapvrille           produces the .class files and commit a new build version in the svn with username "apvrille"
 make jar                        generates the .jar files in bin/
 make publish_jar                places ttool.jar in perso.telecom-paristech.fr/docs/ttool.jar. Must have the right ssh key installed for this
+make preinstall			generates a preinstall version of TTool for Linux
 
 
 Please report bugs or suggestions of improvements to:
@@ -301,7 +303,7 @@ preinstall_linux:
 # lib
 	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/lib
 	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_LIB) $(TTOOL_PREINSTALL_LINUX)/TTool/lib
-	cp $(TTOOL_DOC)/README_lib cp $(RELEASE_STD_FILES_LIB) $(TTOOL_PREINSTALL_LINUX)/TTool/lib
+	cp $(TTOOL_DOC)/README_lib $(TTOOL_PREINSTALL_LINUX)/TTool/lib
 # DIPLODOCUS simulators
 	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator
 	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/app
@@ -334,7 +336,7 @@ preinstall_linux:
 # Main readme
 	cp $(TTOOL_DOC)/README $(TTOOL_PREINSTALL_LINUX)/TTool
 # LOTOS
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool)/lotos
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/lotos
 	cp $(TTOOL_DOC)/README_lotos $(TTOOL_PREINSTALL_LINUX)/TTool/lotos
 #NC
 	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/nc

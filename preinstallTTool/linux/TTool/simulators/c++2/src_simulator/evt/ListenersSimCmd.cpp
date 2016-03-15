@@ -47,6 +47,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLNotifiedCommand.h>
 #include <TMLWaitCommand.h>
 #include <TMLTask.h>
+#include <dlfcn.h>
 #include <CPU.h>
 #define COND_SOURCE_FILE_NAME "newlib.c"
 #define COND_OBJ_FILE_NAME "newlib.o"

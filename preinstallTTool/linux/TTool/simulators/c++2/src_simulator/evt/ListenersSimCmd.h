@@ -49,6 +49,7 @@ Ludovic Apvrille, Renaud Pacalet
 //#include <CommandAbstr.h>
 //#include <TaskAbstr.h>
 //#include <CPUAbstr.h>
+#include <dlfcn.h>
 //#include <ChannelAbstr.h>
 #include <SignalConstraint.h>
 #include <PropertyConstraint.h>
