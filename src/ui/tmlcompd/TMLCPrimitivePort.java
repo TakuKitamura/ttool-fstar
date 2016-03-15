@@ -112,7 +112,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         editable = true;
         removable = true;
         userResizable = false;
-	checkConf=true;
+	checkConf=false;
         commName = "comm";
         //value = "MyName";
         makeValue();
@@ -318,9 +318,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
           g.drawString(lname, x+width - w - 1, y+(int)(si)-2);
           }
           }*/
-
+	if (checkConf){
 	    drawVerification(g);
-	
+	}
         g.setFont(fold);
 	
         drawParticularity(g);

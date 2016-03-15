@@ -717,7 +717,6 @@ public class GTMLModeling  {
                                 addToTable(makeName(port2, port2.getFather().getValue()) + "/" + name2, name);
 
                                 channel = new TMLChannel(name, port1);
-				channel.checkConf= port1.checkConf || port2.checkConf;
                                 channel.setSize(port1.getSize());
                                 channel.setMax(port1.getMax());
 				channel.ports.add(port1);
@@ -816,10 +815,8 @@ public class GTMLModeling  {
                             port = (TMLCPrimitivePort)(portstome.get(0));
                             channel = new TMLChannel(name, port1);
 			    channel.ports.add(port1);
-			    channel.checkConf= port1.checkConf;
 			    for(j=0; j<portstome.size(); j++) {
                                 TMLCPrimitivePort p = (TMLCPrimitivePort)(portstome.get(j));
-			        channel.checkConf= p.checkConf || channel.checkConf;
 				channel.ports.add(p);
 			    }
                             channel.setSize(port1.getSize());
@@ -961,7 +958,8 @@ public class GTMLModeling  {
                             } else {
                                 event = new TMLEvent(name, port1, -1, port1.isBlocking());
                             }
-			    event.checkConf= port1.checkConf;
+			    event.port=port1;
+			    event.port2= port2;
                             for(i=0; i<port1.getNbMaxAttribute(); i++) {
                                 tt = port1.getParamAt(i);
                                 if ((tt != null) && (tt.getType() != TType.NONE)) {
@@ -1096,15 +1094,16 @@ public class GTMLModeling  {
                     name = makeName(port1, name1);
                     addToTable(makeName(port1, port1.getFather().getValue()) + "/" + name1, name);
 
+		    request = new TMLRequest(name, port1);
+		    request.ports.add(port1);
                     for(i=0; i<portstome.size(); i++) {
                         port2 = (TMLCPrimitivePort)(portstome.get(i));
+			request.ports.add(port2);
                         TraceManager.addDev("Add add add to table request : " + makeName(port2, port2.getFather().getValue()) + "/" + port2.getName() + " name =" + name);
                         addToTable(makeName(port2, port2.getFather().getValue()) + "/" + port2.getPortName(), name);
                     }
 
-                    request = new TMLRequest(name, port1);
-		    request.checkConf = port1.checkConf;
-		    request.ports.add(port1);
+                    
                     for(i=0; i<port1.getNbMaxAttribute(); i++) {
                         tt = port1.getParamAt(i);
                         if ((tt != null) && (tt.getType() != TType.NONE)) {

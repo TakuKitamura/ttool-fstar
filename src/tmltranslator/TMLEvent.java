@@ -54,8 +54,8 @@ public class TMLEvent extends TMLCommunicationElement {
     protected boolean isBlocking = false; // By default, latest events is removed when the FIFO is full
     protected boolean canBeNotified = false;
     protected TMLTask origin, destination;
-    public static int confStatus;
-    public static boolean checkConf;
+    public int confStatus;
+    public boolean checkConf;
     public TMLCPrimitivePort port;
     public TMLCPrimitivePort port2;
     /*public TMLEvent(String name, Object reference) {
@@ -69,7 +69,7 @@ public class TMLEvent extends TMLCommunicationElement {
         maxEvt = _maxEvt;
         isBlocking = _isBlocking;
         checkMaxEvt();
-
+	checkConf=false;
         //System.out.println("New event: " + name + " max=" + _maxEvt + " blocking=" + isBlocking);
     }
 

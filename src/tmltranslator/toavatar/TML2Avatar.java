@@ -59,6 +59,7 @@ import javax.xml.parsers.*;
 import ui.ConfigurationTTool;
 import ui.CheckingError;
 import ui.AvatarDesignPanel;
+import ui.tmlcompd.*;
 import ui.TGComponent;
 import proverifspec.*;
 import myutil.*;
@@ -225,7 +226,7 @@ public class TML2Avatar {
 			    done.add(curr);
 		      }
 		      if (path.size() ==0){
-			  System.out.println("Path does not exist for channel " + channel.getName() + " between Task " + a.getTaskName() + " and Task " + t.getTaskName());
+			//  System.out.println("Path does not exist for channel " + channel.getName() + " between Task " + a.getTaskName() + " and Task " + t.getTaskName());
 			  channelMap.put(channel, channelUnreachable);
 		      }
 		      else {
@@ -242,7 +243,7 @@ public class TML2Avatar {
 			      }
 			  }
 			  channelMap.put(channel, priv);
-			  System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is " + (priv==1 ? "confidential" : "not confidential"));
+			  //System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is " + (priv==1 ? "confidential" : "not confidential"));
 		      }
 		}
 	    }
@@ -517,6 +518,7 @@ public class TML2Avatar {
 		for (int i=0; i< aee.getNbOfParams(); i++){
 		    if (block.getAvatarAttributeWithName(aee.getParam(i))==null){
 		    	//Throw Error
+			as.addValue("tmp");
 		    	System.out.println("Missing Attribute " + aee.getParam(i));
 		    }
 		    else {
@@ -818,7 +820,6 @@ public class TML2Avatar {
 
     public AvatarSpecification generateAvatarSpec(){
 	//TODO: Add pragmas
-	//TODO: Fix Avatar2Proverif warning references to panel
 	//TODO: Make state names readable
 	//TODO: Put back numeric guards
 	//TODO: Calcuate for temp variable
@@ -829,6 +830,21 @@ public class TML2Avatar {
 	    return avspec;
 	}
 	attrsToCheck.clear();
+
+	for (TMLChannel channel: tmlmodel.getChannels()){
+	    for (TMLCPrimitivePort p: channel.ports){
+	        channel.checkConf = channel.checkConf || p.checkConf;
+	    }
+	}
+	for (TMLEvent event: tmlmodel.getEvents()){
+	    event.checkConf = event.port.checkConf || event.port2.checkConf;
+	}
+	for (TMLRequest request: tmlmodel.getRequests()){
+	    for (TMLCPrimitivePort p: request.ports){
+		request.checkConf = p.checkConf || request.checkConf;
+	    }
+	}
+
 	ArrayList<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
 	for (TMLTask task:tasks){
 	    AvatarBlock block = new AvatarBlock(task.getName(), avspec, task.getReferenceObject());
@@ -856,7 +872,6 @@ public class TML2Avatar {
 	    //TODO: Create a fork with many requests. This looks terrible
 	    if (tmlmodel.getRequestToMe(task)!=null){
 		TMLRequest request= tmlmodel.getRequestToMe(task);
-		System.out.println("request to me " + request.getName());
 		//Oh this is fun...let's restructure the state machine
 		//Create own start state, and ignore the returned one
 		List<AvatarStateMachineElement> elementList= translateState(task.getActivityDiagram().get(0), block);
@@ -878,7 +893,6 @@ public class TML2Avatar {
 		    if (block.getAvatarAttributeWithName(request.getParam(i))==null){
 		    	//Throw Error
 			as.addValue("tmp");
-		    	System.out.println("Missing Attribute " + request.getParam(i));
 		    }
 		    else {
 		    	as.addValue(request.getParam(i));
@@ -959,11 +973,9 @@ public class TML2Avatar {
 		    }
 	        }
 	        if (sig1.size()==0){
-		    System.out.println("Failure at " + channel.getDestinationTask().getName()+"__IN__"+channel.getName());
 		    sig1.add(new AvatarSignal(channel.getDestinationTask().getName()+"__IN__"+channel.getName(), AvatarSignal.IN, null));
 	    	}
 	    	if (sig2.size()==0){
-		    System.out.println("Fail " + channel.getOriginTask().getName()+"__OUT__"+channel.getName());
 		    sig2.add(new AvatarSignal(channel.getOriginTask().getName()+"__OUT__"+channel.getName(), AvatarSignal.OUT, null));
 	    	}
 	    	if (sig1.size()==1 && sig2.size()==1){
@@ -975,7 +987,6 @@ public class TML2Avatar {
 	    	avspec.addRelation(ar);
 	    }
 	    else {
-		System.out.println("Complex channel ");
 		for (TMLTask t1: channel.getOriginTasks()){
 		    for (TMLTask t2: channel.getDestinationTasks()){
 			AvatarRelation ar= new AvatarRelation(channel.getName(), taskBlockMap.get(t1), taskBlockMap.get(t2), channel.getReferenceObject());
@@ -1057,6 +1068,7 @@ public class TML2Avatar {
 	    }
 	}
 	for (TMLEvent event: tmlmodel.getEvents()){
+	    
 	    AvatarRelation ar = new AvatarRelation(event.getName(), taskBlockMap.get(event.getOriginTask()), taskBlockMap.get(event.getDestinationTask()), event.getReferenceObject());
 	    ar.setPrivate(originDestMap.get(event.getOriginTask().getName()+"__"+event.getDestinationTask().getName())==1);
 	    List<AvatarSignal> sig1 = new ArrayList<AvatarSignal>();

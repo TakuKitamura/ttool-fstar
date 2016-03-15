@@ -72,6 +72,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
     // Attributes
     private boolean attributesAreDrawn = false;
+    public HashMap<String, Integer> attrMap = new HashMap<String, Integer>();
+    public String mappingName;
     protected Vector myAttributes;
     private int textX = 15; // border for ports
     private double dtextX = 0.0;
@@ -218,6 +220,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                 w = g.getFontMetrics().stringWidth(attr);
                 if ((w + (2 * textX) + 1) < width) {
                     g.drawString(attr, x + textX, y + cpt);
+		    drawVerification(g, x + textX, y+ cpt, a.getConfidentialityVerification());
                 } else {
                     attr = "...";
                     w = g.getFontMetrics().stringWidth(attr);
@@ -233,6 +236,28 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         }
 
         g.setFont(fold);
+
+    }
+     public void drawVerification(Graphics g, int x, int y, int checkStatus){
+        Color c = g.getColor();
+        Color c1;
+        switch(checkStatus) {
+        case TAttribute.CONFIDENTIALITY_OK:
+            c1 = Color.green;
+            break;
+        case TAttribute.CONFIDENTIALITY_KO:
+            c1 = Color.red;
+            break;
+        default:
+            return;
+        }
+            g.drawOval(x-10, y-10, 6, 9);
+            g.setColor(c1);
+            g.fillRect(x-12, y-5, 9, 7);
+            g.setColor(c);
+            g.drawRect(x-12, y-5, 9, 7);
+        
+
 
     }
 

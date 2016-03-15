@@ -55,8 +55,8 @@ public class TMLChannel extends TMLCommunicationElement {
     public static final int BRBW = 0;
     public static final int BRNBW = 1;
     public static final int NBRNBW = 2;
-    public static int confStatus;
-    public static boolean checkConf;
+    public int confStatus;
+    public boolean checkConf;
     private int size;
     private int type;
     private int max;
@@ -85,6 +85,7 @@ public class TMLChannel extends TMLCommunicationElement {
         originPorts = new ArrayList<TMLPort>();
         destinationPorts = new ArrayList<TMLPort>();
 	ports = new ArrayList<TMLCPrimitivePort>();
+	checkConf=false;
     }
 
 
