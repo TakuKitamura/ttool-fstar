@@ -60,11 +60,12 @@ import ui.ConfigurationTTool;
 import ui.CheckingError;
 import ui.AvatarDesignPanel;
 import ui.tmlcompd.*;
+import ui.tmlad.*;
 import ui.TGComponent;
 import proverifspec.*;
 import myutil.*;
 import avatartranslator.*;
-   
+
 public class TML2Avatar {
     TMLMapping tmlmap;
     TMLModeling tmlmodel;
@@ -73,6 +74,7 @@ public class TML2Avatar {
     public HashMap<TMLTask, AvatarBlock> taskBlockMap = new HashMap<TMLTask, AvatarBlock>();  
     public HashMap<String, Integer> originDestMap = new HashMap<String, Integer>();
     HashMap<String, AvatarSignal> signalMap = new HashMap<String, AvatarSignal>();
+    public HashMap<String, Object> stateObjectMap = new HashMap<String, Object>();
     List<AvatarSignal> signals = new ArrayList<AvatarSignal>();
     private final static Integer channelPublic = 0;
     private final static Integer channelPrivate = 1;
@@ -348,6 +350,8 @@ public class TML2Avatar {
 	    TMLSendRequest sr= (TMLSendRequest) ae;
 	    TMLRequest req = sr.getRequest();
 	    AvatarSignal sig;
+	    AvatarState signalState = new AvatarState("signalstate_"+ae.getName()+"_"+req.getName(),ae.getReferenceObject(), ((TGComponent)ae.getReferenceObject()).getCheckableAccessibility());
+	    AvatarTransition signalTran = new AvatarTransition(block, "__after_signalstate_"+ae.getName()+"_"+req.getName(), ae.getReferenceObject());
 	    if (!signalMap.containsKey(block.getName()+"__OUT__"+req.getName())){
 	        sig = new AvatarSignal(block.getName()+"__OUT__"+req.getName(), AvatarSignal.OUT, req.getReferenceObject());
 	        signals.add(sig);
@@ -391,6 +395,10 @@ public class TML2Avatar {
 	    	block.addAttribute(requestData);	
 	    }
 	    tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
+	    elementList.add(signalState);
+	    signalState.addNext(signalTran);
+	    elementList.add(signalTran);	
+	    signalTran.addNext(as);    
 	    elementList.add(as);
 	    as.addNext(tran);
 	    elementList.add(tran);
@@ -503,6 +511,8 @@ public class TML2Avatar {
 	else if (ae instanceof TMLActivityElementEvent){
 	    TMLActivityElementEvent aee = (TMLActivityElementEvent) ae;
 	    TMLEvent evt = aee.getEvent();
+	    AvatarState signalState = new AvatarState("signalstate_"+ae.getName()+"_"+evt.getName(),ae.getReferenceObject(), ((TGComponent) ae.getReferenceObject()).getCheckableAccessibility());
+	    AvatarTransition signalTran = new AvatarTransition(block, "__after_signalstate_"+ae.getName()+"_"+evt.getName(), ae.getReferenceObject());
 	    if (ae instanceof TMLSendEvent){
 		AvatarSignal sig;
 		if (!signalMap.containsKey(block.getName()+"__OUT__"+evt.getName())){
@@ -548,9 +558,15 @@ public class TML2Avatar {
 	            block.addAttribute(eventData);
 		}
 	        tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
-	        elementList.add(as);
+		elementList.add(signalState);
+		signalState.addNext(signalTran);
+		elementList.add(signalTran);	
+		signalTran.addNext(as);        
+		elementList.add(as);
 	        as.addNext(tran);
 	        elementList.add(tran);
+		
+		
 	    }
 	    else if (ae instanceof TMLWaitEvent){
 		AvatarSignal sig; 
@@ -580,6 +596,10 @@ public class TML2Avatar {
 	    	    block.addAttribute(eventData);
 		}
 	        tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
+		elementList.add(signalState);
+		signalState.addNext(signalTran);
+		elementList.add(signalTran);	
+		signalTran.addNext(as);    
 	        elementList.add(as);
 	        as.addNext(tran);
 	        elementList.add(tran);
@@ -616,6 +636,8 @@ public class TML2Avatar {
 	    TMLActivityElementChannel aec = (TMLActivityElementChannel) ae;
 	    TMLChannel ch = aec.getChannel(0);
 	    AvatarSignal sig;
+	    AvatarState signalState = new AvatarState("signalstate_"+ae.getName()+"_"+ch.getName(),ae.getReferenceObject(), ((TGComponent)ae.getReferenceObject()).getCheckableAccessibility());
+	    AvatarTransition signalTran = new AvatarTransition(block, "__after_signalstate_"+ae.getName()+"_"+ch.getName(), ae.getReferenceObject());
 	    if (ae instanceof TMLReadChannel){
 		if (!signalMap.containsKey(block.getName()+"__IN__"+ch.getName())){
 	            sig = new AvatarSignal(block.getName()+"__IN__"+ch.getName(), AvatarSignal.IN, ch.getReferenceObject());
@@ -657,6 +679,10 @@ public class TML2Avatar {
 	    AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
 	    as.addValue(ch.getName()+"__chData");
 	    tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
+	    elementList.add(signalState);
+	    signalState.addNext(signalTran);
+	    elementList.add(signalTran);	
+	    signalTran.addNext(as);    
 	    as.addNext(tran);
 	    elementList.add(as);
 	    elementList.add(tran);
@@ -693,7 +719,7 @@ public class TML2Avatar {
 		//Make initializaton, then choice state with transitions
 		List<AvatarStateMachineElement> elements=translateState(ae.getNextElement(0), block);
 		List<AvatarStateMachineElement> afterloop = translateState(ae.getNextElement(1), block);
-		AvatarState initState = new AvatarState(ae.getName()+"__init", ae.getReferenceObject(), true);
+		AvatarState initState = new AvatarState(ae.getName()+"__init", ae.getReferenceObject());
 		elementList.add(initState);
 		//Build transition to choice
 		tran = new AvatarTransition(block, "loop_init__"+ae.getName(), ae.getReferenceObject());
@@ -701,7 +727,7 @@ public class TML2Avatar {
 		elementList.add(tran);
 		initState.addNext(tran);
 		//Choice state
-		AvatarState as = new AvatarState(ae.getName()+"__choice", ae.getReferenceObject(), true);
+		AvatarState as = new AvatarState(ae.getName()+"__choice", ae.getReferenceObject());
 		elementList.add(as);
 		tran.addNext(as);
 		//transition to first element of loop
@@ -759,7 +785,7 @@ public class TML2Avatar {
 	    }
 	}
 	else if (ae instanceof TMLChoice){
-	    AvatarState as = new AvatarState(ae.getName(), ae.getReferenceObject(), true);
+	    AvatarState as = new AvatarState(ae.getName(), ae.getReferenceObject());
 	    //Make many choices
 	    elementList.add(as);
 	    TMLChoice c = (TMLChoice) ae;
@@ -915,6 +941,7 @@ public class TML2Avatar {
 		for (AvatarStateMachineElement e: elementList){
 		    e.setName(processName(e.getName(), e.getID()));
 		    asm.addElement(e);
+		    stateObjectMap.put(task.getName()+"__"+e.getName(), e.getReferenceObject());
 		}
 		  /*  if (e instanceof AvatarStopState){
 			//ignore it
@@ -937,6 +964,7 @@ public class TML2Avatar {
 	        for (AvatarStateMachineElement e: elementList){
 		    e.setName(processName(e.getName(), e.getID()));
 		    asm.addElement(e);
+		    stateObjectMap.put(task.getName()+"__"+e.getName(), e.getReferenceObject());
 	        }
 	        asm.setStartState((AvatarStartState) elementList.get(0));
 	    }
@@ -1116,5 +1144,60 @@ public class TML2Avatar {
 	//System.out.println(avspec);
 	return avspec;
     }
-
+    public void backtraceReachability(List<String> reachableStates, List<String> nonReachableStates){
+	for (String s: reachableStates){
+	    if (stateObjectMap.containsKey(s.replace("enteringState__",""))){
+		Object obj = stateObjectMap.get(s.replace("enteringState__",""));
+		if (obj instanceof TMLADWriteChannel){
+		    TMLADWriteChannel wc =(TMLADWriteChannel) obj;
+		    wc.reachabilityInformation=1;
+		}
+		if (obj instanceof TMLADReadChannel){
+		    TMLADReadChannel wc =(TMLADReadChannel) obj;
+		    wc.reachabilityInformation=1;
+		}
+		
+		if (obj instanceof TMLADSendEvent){
+		    TMLADSendEvent wc =(TMLADSendEvent) obj;
+		    wc.reachabilityInformation=1;
+		}
+		
+		if (obj instanceof TMLADSendRequest){
+		    TMLADSendRequest wc =(TMLADSendRequest) obj;
+		    wc.reachabilityInformation=1;
+		}
+		if (obj instanceof TMLADWaitEvent){
+		    TMLADWaitEvent wc =(TMLADWaitEvent) obj;
+		    wc.reachabilityInformation=1;
+		}		
+	    }
+	}
+	for (String s:nonReachableStates){
+	    if (stateObjectMap.containsKey(s.replace("enteringState__",""))){
+		Object obj = stateObjectMap.get(s.replace("enteringState__",""));
+		if (obj instanceof TMLADWriteChannel){
+		    TMLADWriteChannel wc =(TMLADWriteChannel) obj;
+		    wc.reachabilityInformation=2;
+		}
+		if (obj instanceof TMLADReadChannel){
+		    TMLADReadChannel wc =(TMLADReadChannel) obj;
+		    wc.reachabilityInformation=2;
+		}
+		
+		if (obj instanceof TMLADSendEvent){
+		    TMLADSendEvent wc =(TMLADSendEvent) obj;
+		    wc.reachabilityInformation=2;
+		}
+		
+		if (obj instanceof TMLADSendRequest){
+		    TMLADSendRequest wc =(TMLADSendRequest) obj;
+		    wc.reachabilityInformation=2;
+		}
+		if (obj instanceof TMLADWaitEvent){
+		    TMLADWaitEvent wc =(TMLADWaitEvent) obj;
+		    wc.reachabilityInformation=2;
+		}		
+	    }
+	}
+    }
 }

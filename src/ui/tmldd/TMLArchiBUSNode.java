@@ -147,6 +147,24 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 				//g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
 				g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
 				g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+
+				c = g.getColor();
+
+				//Draw bus privacy
+				if (privacy== HwBus.BUS_PUBLIC){	
+				    g.drawArc(x+6, y+18, 12, 18, 50, 170);
+            			    g.setColor(Color.red);
+            			    g.fillRect(x+4, y+26, 18, 14);
+            			    g.setColor(c);
+            			    g.drawRect(x+4, y+26, 18, 14);
+				}
+				else {
+				    g.drawOval(x+6, y+19, 12, 18);
+            			    g.setColor(Color.green);
+            			    g.fillRect(x+4, y+25, 18, 14);
+            			    g.setColor(c);
+            			    g.drawRect(x+4, y+25, 18, 14);
+				}
 		}
 		
 		public TGComponent isOnOnlyMe(int x1, int y1) {

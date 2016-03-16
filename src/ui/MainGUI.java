@@ -3764,9 +3764,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     ((TMLComponentDesignPanel)tp).modelBacktracingProVerif(pvoa);
                 }
 	    }*/
-	    System.out.println("BACKTRACE");
 	    gtm.getTMLMapping().getTMLModeling().clearBacktracing();
 	    gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, getTabName(tp));
+	    gtm.getTML2Avatar().backtraceReachability(pvoa.getReachableEvents(), pvoa.getNonReachableEvents());
 	}
 	else if (tp instanceof TMLComponentDesignPanel){
 	    

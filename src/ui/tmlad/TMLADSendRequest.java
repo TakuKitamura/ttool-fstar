@@ -70,6 +70,12 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
 
     protected int stateOfError = 0; // Not yet checked
 
+    public final static int NOT_VERIFIED = 0;
+    public final static int REACHABLE = 1;
+    public final static int NOT_REACHABLE = 2;
+
+    public int reachabilityInformation;
+
     public TMLADSendRequest(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
@@ -147,8 +153,33 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
         g.drawString("req", x+(width-w) / 2, y);
         g.drawString(value, x + (width - w) / 2 , y + textY);
 
+	drawReachabilityInformation(g);
     }
+    public void drawReachabilityInformation(Graphics g) {
+        if (reachabilityInformation > 0) {
 
+            Color c = g.getColor();
+            Color c1;
+            switch(reachabilityInformation) {
+            case REACHABLE:
+                c1 = Color.green;
+                break;
+            case NOT_REACHABLE:
+                c1 = Color.red;
+                break;
+            default:
+                return;
+            }
+
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x-30, y+4, x-15, y+4, true);
+            g.drawOval(x-11, y-3, 7, 9);
+            g.setColor(c1);
+            g.fillRect(x-12, y, 9, 7);
+            g.setColor(c);
+            g.drawRect(x-12, y, 9, 7);
+
+        }
+    }
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;

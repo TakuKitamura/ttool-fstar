@@ -159,7 +159,7 @@ public class GTURTLEModeling {
     private TMLMapping artificialtmap;
     private TMLMapping tmap;
     private TMLCP tmlcp;
-
+    private TML2Avatar t2a;
     private RequirementModeling rm;
     private NCStructure ncs;
     private MainGUI mgui;
@@ -636,7 +636,7 @@ public class GTURTLEModeling {
     public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed) {
 	if (avatarspec==null){
 	    if (tmap!=null){
-		TML2Avatar t2a = new TML2Avatar(tmap);
+		t2a = new TML2Avatar(tmap);
 		avatarspec = t2a.generateAvatarSpec();
 	    }
 	    else {
@@ -1297,7 +1297,9 @@ public class GTURTLEModeling {
     public TMLModeling getTMLModeling() {
         return tmlm;
     }
-
+    public TML2Avatar getTML2Avatar(){
+	return t2a;
+    }
     public TMLMapping getArtificialTMLMapping() {
         return artificialtmap;
     }
