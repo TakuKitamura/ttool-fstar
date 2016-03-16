@@ -60,8 +60,8 @@ import ui.cd.*;
 import ui.window.*;
 
 public  class AvatarMADBelongsToCompositionConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent{
-    protected int d = 20;
-    protected int D = 26;
+    protected int d = 12;
+    protected int D = 18;
     //protected int widthValue, heightValue, maxWidthValue, h;
     protected Polygon p;
     protected int xp1, xp2, yp1, yp2;
