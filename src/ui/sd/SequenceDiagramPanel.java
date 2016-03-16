@@ -1,48 +1,48 @@
 /**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
-ludovic.apvrille AT enst.fr
+   ludovic.apvrille AT enst.fr
 
-This software is a computer program whose purpose is to allow the 
-edition of TURTLE analysis, design and deployment diagrams, to 
-allow the generation of RT-LOTOS or Java code from this diagram, 
-and at last to allow the analysis of formal validation traces 
-obtained from external tools, e.g. RTL from LAAS-CNRS and CADP 
-from INRIA Rhone-Alpes.
+   This software is a computer program whose purpose is to allow the
+   edition of TURTLE analysis, design and deployment diagrams, to
+   allow the generation of RT-LOTOS or Java code from this diagram,
+   and at last to allow the analysis of formal validation traces
+   obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+   from INRIA Rhone-Alpes.
 
-This software is governed by the CeCILL  license under French law and
-abiding by the rules of distribution of free software.  You can  use, 
-modify and/ or redistribute the software under the terms of the CeCILL
-license as circulated by CEA, CNRS and INRIA at the following URL
-"http://www.cecill.info". 
+   This software is governed by the CeCILL  license under French law and
+   abiding by the rules of distribution of free software.  You can  use,
+   modify and/ or redistribute the software under the terms of the CeCILL
+   license as circulated by CEA, CNRS and INRIA at the following URL
+   "http://www.cecill.info".
 
-As a counterpart to the access to the source code and  rights to copy,
-modify and redistribute granted by the license, users are provided only
-with a limited warranty  and the software's author,  the holder of the
-economic rights,  and the successive licensors  have only  limited
-liability. 
+   As a counterpart to the access to the source code and  rights to copy,
+   modify and redistribute granted by the license, users are provided only
+   with a limited warranty  and the software's author,  the holder of the
+   economic rights,  and the successive licensors  have only  limited
+   liability.
 
-In this respect, the user's attention is drawn to the risks associated
-with loading,  using,  modifying and/or developing or reproducing the
-software by the user in light of its specific status of free software,
-that may mean  that it is complicated to manipulate,  and  that  also
-therefore means  that it is reserved for developers  and  experienced
-professionals having in-depth computer knowledge. Users are therefore
-encouraged to load and test the software's suitability as regards their
-requirements in conditions enabling the security of their systems and/or 
-data to be ensured and,  more generally, to use and operate it in the 
-same conditions as regards security. 
+   In this respect, the user's attention is drawn to the risks associated
+   with loading,  using,  modifying and/or developing or reproducing the
+   software by the user in light of its specific status of free software,
+   that may mean  that it is complicated to manipulate,  and  that  also
+   therefore means  that it is reserved for developers  and  experienced
+   professionals having in-depth computer knowledge. Users are therefore
+   encouraged to load and test the software's suitability as regards their
+   requirements in conditions enabling the security of their systems and/or
+   data to be ensured and,  more generally, to use and operate it in the
+   same conditions as regards security.
 
-The fact that you are presently reading this means that you have had
-knowledge of the CeCILL license and that you accept its terms.
+   The fact that you are presently reading this means that you have had
+   knowledge of the CeCILL license and that you accept its terms.
 
-/**
- * Class SequenceDiagramPanel
- * Panel for drawing a sequence diagram
- * Creation: 30/09/2004
- * @version 1.0 30/09/2004
- * @author Ludovic APVRILLE
- * @see
- */
+   /**
+   * Class SequenceDiagramPanel
+   * Panel for drawing a sequence diagram
+   * Creation: 30/09/2004
+   * @version 1.0 30/09/2004
+   * @author Ludovic APVRILLE
+   * @see
+   */
 
 package ui.sd;
 
@@ -51,100 +51,100 @@ import java.util.*;
 
 import ui.*;
 
-public class SequenceDiagramPanel extends TDiagramPanel {
-    
+public class SequenceDiagramPanel extends TDiagramPanel{
+
     public  SequenceDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
         /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);*/
+          addMouseListener(tdmm);
+          addMouseMotionListener(tdmm);*/
     }
-    
+
     public boolean actionOnDoubleClick(TGComponent tgc) {
         //System.out.println("Action");
         /*if (tgc instanceof TCDTClass) {
-            TCDTClass t = (TCDTClass)tgc;
-            return mgui.newTClassName(t.oldValue, t.getValue());
-        } else if (tgc instanceof TCDActivityDiagramBox) {
-            if (tgc.getFather() instanceof TCDTClass) {
-                mgui.selectTab(tgc.getFather().getValue());
-            } else if (tgc.getFather() instanceof TCDTObject) {
-                TCDTObject to = (TCDTObject)(tgc.getFather());
-                TCDTClass t = to.getMasterTClass();
-                if (t != null) {
-                    mgui.selectTab(t.getValue());
-                }
-            }
-            return false; // because no change made on any diagram
-        }*/
+          TCDTClass t = (TCDTClass)tgc;
+          return mgui.newTClassName(t.oldValue, t.getValue());
+          } else if (tgc instanceof TCDActivityDiagramBox) {
+          if (tgc.getFather() instanceof TCDTClass) {
+          mgui.selectTab(tgc.getFather().getValue());
+          } else if (tgc.getFather() instanceof TCDTObject) {
+          TCDTObject to = (TCDTObject)(tgc.getFather());
+          TCDTClass t = to.getMasterTClass();
+          if (t != null) {
+          mgui.selectTab(t.getValue());
+          }
+          }
+          return false; // because no change made on any diagram
+          }*/
         return false;
     }
-    
+
     public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
-            TCDTClass tgcc = (TCDTClass)(tgc);
-            mgui.addTClass(tgcc.getClassName());
-            return true;
-        }*/
+          TCDTClass tgcc = (TCDTClass)(tgc);
+          mgui.addTClass(tgcc.getClassName());
+          return true;
+          }*/
         return false;
     }
-    
+
     public boolean actionOnRemove(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
-            TCDTClass tgcc = (TCDTClass)(tgc);
-            mgui.removeTClass(tgcc.getClassName());
-            resetAllInstancesOf(tgcc);
-            return true;
-        }*/
+          TCDTClass tgcc = (TCDTClass)(tgc);
+          mgui.removeTClass(tgcc.getClassName());
+          resetAllInstancesOf(tgcc);
+          return true;
+          }*/
         return false;
     }
-    
+
     public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
-            return actionOnDoubleClick(tgc);
-        }*/
+          return actionOnDoubleClick(tgc);
+          }*/
         return false;
     }
-    
+
     public String getXMLHead() {
         return "<SequenceDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
     }
-    
+
     public String getXMLTail() {
         return "</SequenceDiagramPanel>";
     }
-    
+
     public String getXMLSelectedHead() {
         return "<SequenceDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
-    
+
     public String getXMLSelectedTail() {
         return "</SequenceDiagramPanelCopy>";
     }
-    
+
     public String getXMLCloneHead() {
         return "<SequenceDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
-    
+
     public String getXMLCloneTail() {
         return "</SequenceDiagramPanelCopy>";
     }
-    
+
     public void makePostLoadingProcessing() throws MalformedModelingException {
         TGComponent tgc;
-        
+
         /*for(int i=0; i<componentList.size(); i++) {
-            tgc = (TGComponent)(componentList.elementAt(i));
-            if (tgc instanceof TCDTObject) {
-                ((TCDTObject)tgc).postLoadingProcessing();
-            }
-        }*/
+          tgc = (TGComponent)(componentList.elementAt(i));
+          if (tgc instanceof TCDTObject) {
+          ((TCDTObject)tgc).postLoadingProcessing();
+          }
+          }*/
     }
-    
+
     public SDInstance getSDInstance(String name) {
         TGComponent tgc;
         Iterator iterator = componentList.listIterator();
-        
+
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             if (tgc instanceof SDInstance) {
@@ -155,8 +155,8 @@ public class SequenceDiagramPanel extends TDiagramPanel {
         }
         return null;
     }
-    
-    
+
+
     public void alignInstances() {
         SDInstance ontheLeft = null, sdi;
         int x = getMaxX(),xtmp;
@@ -164,7 +164,7 @@ public class SequenceDiagramPanel extends TDiagramPanel {
         int i;
         TGComponent tgc;
         Iterator iterator = componentList.listIterator();
-        
+
         // search for the instances which is the most on the left
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
@@ -176,10 +176,10 @@ public class SequenceDiagramPanel extends TDiagramPanel {
                 }
             }
         }
-        
+
         if (ontheLeft == null)
             return;
-        
+
         // move accordingly other instances
         y = ontheLeft.getY();
         iterator = componentList.listIterator();
@@ -189,14 +189,14 @@ public class SequenceDiagramPanel extends TDiagramPanel {
                 tgc.setCd(tgc.getX(), y);
             }
         }
-        
+
     }
-    
+
     public TGConnectorRelativeTimeSD firstAndConnectedSDRelativeTimeConstraint(TGComponent tgc) {
         TGComponent tmp;
         TGConnectingPoint p1;
         Iterator iterator = componentList.listIterator();
-        
+
         while(iterator.hasNext()) {
             tmp = (TGComponent)(iterator.next());
             if (tmp instanceof TGConnectorRelativeTimeSD){
@@ -208,13 +208,13 @@ public class SequenceDiagramPanel extends TDiagramPanel {
         }
         return null;
     }
-    
+
     public TGComponent getSecondTGComponent(TGConnector tgco) {
         TGComponent tmp;
         TGComponent tmp1;
         TGConnectingPoint p2 = tgco.getTGConnectingPointP2();
         Iterator iterator = componentList.listIterator();
-        
+
         while(iterator.hasNext()) {
             tmp = (TGComponent)(iterator.next());
             tmp1 = tmp.belongsToMeOrSon(p2);
@@ -222,17 +222,17 @@ public class SequenceDiagramPanel extends TDiagramPanel {
                 return tmp1;
             }
         }
-        
+
         return null;
     }
-    
+
     public TGConnector messageActionCloserTo(TGComponent tgc, SDInstance sd) {
         int distance = 25;
         TGConnector found = null;
         TGComponent tmp;
         TGConnectingPoint p;
         Iterator iterator = componentList.listIterator();
-        
+
         while(iterator.hasNext()) {
             tmp = (TGComponent)(iterator.next());
             if (tmp instanceof TGConnectorMessageSD){
@@ -254,38 +254,38 @@ public class SequenceDiagramPanel extends TDiagramPanel {
         }
         return found;
     }
-    
+
     public TGConnectingPoint TGConnectingPointActionCloserTo(TGComponent tc1, TGConnector tgco, SDInstance sdi) {
         TGConnectingPoint p1, p2;
         p1 = tgco.getTGConnectingPointP1();
         p2 = tgco.getTGConnectingPointP2();
-        
+
         boolean hasp1 = sdi.belongsToMe(p1);
         boolean hasp2 = sdi.belongsToMe(p2);
-        
+
         if ((!hasp1) && (!hasp2)) {
             return null;
         }
-        
+
         if ((hasp1) && (!hasp2)) {
             return p1;
         }
-        
+
         if ((!hasp1) && (hasp2)) {
             return p2;
         }
-        
+
         // both belongs to the sdinstance
         int y1 = p1.getY();
         int y2 = p2.getY();
-        
+
         if ((Math.abs(y2-tc1.getY())) < ((Math.abs(y1-tc1.getY())))) {
             return p2;
         } else {
             return p1;
         }
     }
-    
+
     public TGComponent getActionCloserTo(int y, SDInstance sdi) {
         int distance = 25;
         TGComponent tgc, found = null;
@@ -305,25 +305,67 @@ public class SequenceDiagramPanel extends TDiagramPanel {
         }
         return found;
     }
-	
-	public void increaseInstanceSize(int size) {
-		Iterator iterator = componentList.listIterator();
+
+    public void increaseInstanceSize(int size) {
+        Iterator iterator = componentList.listIterator();
         TGComponent tgc;
-		int maxYH = 0;
-		
+        int maxYH = 0;
+
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
-			
-			if (tgc instanceof SDInstance) {
-				tgc.setUserResize(tgc.getX(), tgc.getY(), tgc.getWidth(), tgc.getHeight() + size);
-			}
-			
-			maxYH = Math.max(maxYH, tgc.getY() + tgc.getHeight());
-		}
-		
-		if (maxYH > getMaxY()) {
-			setMaxY(getMaxY() + increment);
+
+            if (tgc instanceof SDInstance) {
+                tgc.setUserResize(tgc.getX(), tgc.getY(), tgc.getWidth(), tgc.getHeight() + size);
+            }
+
+            maxYH = Math.max(maxYH, tgc.getY() + tgc.getHeight());
+        }
+
+        if (maxYH > getMaxY()) {
+            setMaxY(getMaxY() + increment);
             updateSize();
-		}
-	}
+        }
+    }
+
+
+    public void updateAllInstanceMinMaxSize() {
+	Iterator iterator = componentList.listIterator();
+        TGComponent tgc;
+
+	int minSize = 0;
+
+
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+
+            if (tgc instanceof SDInstance) {
+		minSize = Math.max(((SDInstance)tgc).getMinHeightSize(), minSize);
+            }
+        }
+
+	iterator = componentList.listIterator();
+	 while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+
+            if (tgc instanceof SDInstance) {
+		((SDInstance)tgc).setMinHeight(minSize);
+            }
+        }
+	
+    }
+
+
+    public void instanceHasBeenResized(SDInstance _ins, int _w, int _h) {
+	Iterator iterator = componentList.listIterator();
+        TGComponent tgc;
+
+
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+
+            if ((tgc instanceof SDInstance) && (tgc != _ins)) {
+		tgc.actionOnUserResize(_w, _h);
+            }
+        }
+    }
 }
