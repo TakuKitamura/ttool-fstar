@@ -65,6 +65,7 @@ TTOOL_MPSOC = $(TTOOL_PATH)/MPSoC
 TTOOL_SIMULATORS = $(TTOOL_PATH)/simulators
 TTOOL_FIGURES = $(TTOOL_PATH)/figures
 TTOOL_DOC = $(TTOOL_PATH)/doc
+TTOOL_DOC_SOCLIB = $(TTOOL_PATH)/document_soclib
 TTOOL_DOC_HTML = $(TTOOL_PATH)/doc/html
 TTOOL_VCD = $(TTOOL_PATH)/vcd
 TTOOL_WORD = $(TTOOL_PATH)/doc/word
@@ -263,6 +264,7 @@ stdrelease:
 # Basic doc
 	mkdir -p $(TTOOL_TARGET)/doc
 	cp $(TTOOL_DOC)/README_doc $(TTOOL_TARGET)/doc
+	cp $(TTOOL_DOC_SOCLIB)/doc_ttool_soclib.pdf  $(TTOOL_TARGET)/doc/
 # AVATAR executable code
 	mkdir -p $(TTOOL_TARGET)/executablecode
 	mkdir -p $(TTOOL_TARGET)/executablecode/src
@@ -292,7 +294,6 @@ stdrelease:
 	cp $(TTOOL_BIN)/configuration.gcf $(TTOOL_TARGET)/bin
 	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
 	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_TARGET)/bin	
-
 # Basic release
 	echo "Basic release"
 	cd $(TTOOL_TARGET_RELEASE)&&$(TAR) cvzf $(TTOOL_STD_RELEASE)/release.tgz * 
