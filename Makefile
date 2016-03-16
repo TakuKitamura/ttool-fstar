@@ -61,8 +61,9 @@ TTOOL_BIN = $(TTOOL_PATH)/bin
 TTOOL_MODELING = $(TTOOL_PATH)/modeling
 #TTOOL_MODELING = $(TTOOL_PATH)/figures
 TTOOL_EXECUTABLECODE = $(TTOOL_PATH)/executablecode
+TTOOL_MPSOC = $(TTOOL_PATH)/MPSoC
 TTOOL_SIMULATORS = $(TTOOL_PATH)/simulators
-TTOOL_FIGURES = $(TTOOL_PATH)/doc
+TTOOL_FIGURES = $(TTOOL_PATH)/figures
 TTOOL_DOC = $(TTOOL_PATH)/doc
 TTOOL_DOC_HTML = $(TTOOL_PATH)/doc/html
 TTOOL_VCD = $(TTOOL_PATH)/vcd
@@ -272,7 +273,19 @@ stdrelease:
 	cp $(TTOOL_EXECUTABLECODE)/src/*.c $(TTOOL_TARGET)/executablecode/src/
 	cp $(TTOOL_EXECUTABLECODE)/src/*.h $(TTOOL_TARGET)/executablecode/src/
 	cp $(TTOOL_EXECUTABLECODE)/generated_src/README $(TTOOL_TARGET)/executablecode/generated_src/
-
+# MPSOC
+	mkdir -p $(TTOOL_TARGET)/MPSoC
+	mkdir -p $(TTOOL_TARGET)/MPSoC/generated_topcell
+	mkdir -p $(TTOOL_TARGET)/MPSoC/generated_src
+	mkdir -p $(TTOOL_TARGET)/MPSoC/src
+	cp $(TTOOL_MPSOC)/Makefile $(TTOOL_TARGET)/MPSoC/
+	cp $(TTOOL_MPSOC)/Makefile.defs $(TTOOL_TARGET)/MPSoC/
+	cp $(TTOOL_MPSOC)/Makefile.forsoclib $(TTOOL_TARGET)/MPSoC/
+	cp $(TTOOL_MPSOC)/src/*.c $(TTOOL_TARGET)/MPSoC/src/
+	cp $(TTOOL_MPSOC)/src/*.h $(TTOOL_TARGET)/MPSoC/src/
+	cp $(TTOOL_MPSOC)/generated_src/README $(TTOOL_TARGET)/MPSoC/generated_src/
+	cp $(TTOOL_MPSOC)/generated_topcell/nbproc $(TTOOL_TARGET)/MPSoC/generated_topcell/
+	cp $(TTOOL_MPSOC)/generated_topcell/config_noproc $(TTOOL_TARGET)/MPSoC/generated_topcell/
 # Basic bin
 	mkdir -p $(TTOOL_TARGET)/bin
 	cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin

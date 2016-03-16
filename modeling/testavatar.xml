@@ -822,62 +822,43 @@
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="5355" id="360" >
+<COMPONENT type="5355" id="369" >
 <cdparam x="830" y="298" />
 <sizeparam width="409" height="195" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Memory0" value="name" />
-<TGConnectingPoint num="0" id="336" />
-<TGConnectingPoint num="1" id="337" />
-<TGConnectingPoint num="2" id="338" />
-<TGConnectingPoint num="3" id="339" />
-<TGConnectingPoint num="4" id="340" />
-<TGConnectingPoint num="5" id="341" />
-<TGConnectingPoint num="6" id="342" />
-<TGConnectingPoint num="7" id="343" />
-<TGConnectingPoint num="8" id="344" />
-<TGConnectingPoint num="9" id="345" />
-<TGConnectingPoint num="10" id="346" />
-<TGConnectingPoint num="11" id="347" />
-<TGConnectingPoint num="12" id="348" />
-<TGConnectingPoint num="13" id="349" />
-<TGConnectingPoint num="14" id="350" />
-<TGConnectingPoint num="15" id="351" />
-<TGConnectingPoint num="16" id="352" />
-<TGConnectingPoint num="17" id="353" />
-<TGConnectingPoint num="18" id="354" />
-<TGConnectingPoint num="19" id="355" />
-<TGConnectingPoint num="20" id="356" />
-<TGConnectingPoint num="21" id="357" />
-<TGConnectingPoint num="22" id="358" />
-<TGConnectingPoint num="23" id="359" />
+<TGConnectingPoint num="0" id="345" />
+<TGConnectingPoint num="1" id="346" />
+<TGConnectingPoint num="2" id="347" />
+<TGConnectingPoint num="3" id="348" />
+<TGConnectingPoint num="4" id="349" />
+<TGConnectingPoint num="5" id="350" />
+<TGConnectingPoint num="6" id="351" />
+<TGConnectingPoint num="7" id="352" />
+<TGConnectingPoint num="8" id="353" />
+<TGConnectingPoint num="9" id="354" />
+<TGConnectingPoint num="10" id="355" />
+<TGConnectingPoint num="11" id="356" />
+<TGConnectingPoint num="12" id="357" />
+<TGConnectingPoint num="13" id="358" />
+<TGConnectingPoint num="14" id="359" />
+<TGConnectingPoint num="15" id="360" />
+<TGConnectingPoint num="16" id="361" />
+<TGConnectingPoint num="17" id="362" />
+<TGConnectingPoint num="18" id="363" />
+<TGConnectingPoint num="19" id="364" />
+<TGConnectingPoint num="20" id="365" />
+<TGConnectingPoint num="21" id="366" />
+<TGConnectingPoint num="22" id="367" />
+<TGConnectingPoint num="23" id="368" />
 <extraparam>
 <info stereotype="RAM" nodeName="Memory0" />
 <attributes byteDataSize="4"  index="0" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="5362" id="412" >
-<father id="360" num="0" />
-<cdparam x="881" y="397" />
-<sizeparam width="340" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="69" minY="0" maxY="155" />
-<infoparam name="TGComponent" value="TestAsynchronous1::B0/in m2() #--# B1/out m2()" />
-<TGConnectingPoint num="0" id="413" />
-<TGConnectingPoint num="1" id="414" />
-<TGConnectingPoint num="2" id="415" />
-<TGConnectingPoint num="3" id="416" />
-<TGConnectingPoint num="4" id="417" />
-<TGConnectingPoint num="5" id="418" />
-<TGConnectingPoint num="6" id="419" />
-<TGConnectingPoint num="7" id="420" />
-<extraparam>
-<info value="TestAsynchronous1::B0/in m2() #--# B1/out m2()" channelName="B0/in m2() #--# B1/out m2()" referenceDiagram="TestAsynchronous1" />
-</extraparam>
-</SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="335" >
-<father id="360" num="1" />
+<father id="369" num="0" />
 <cdparam x="873" y="343" />
 <sizeparam width="340" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -895,73 +876,92 @@
 <info value="TestAsynchronous1::B0/out m0() #--# B1/in m0()" channelName="B0/out m0() #--# B1/in m0()" referenceDiagram="TestAsynchronous1" />
 </extraparam>
 </SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="344" >
+<father id="369" num="1" />
+<cdparam x="881" y="397" />
+<sizeparam width="340" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="69" minY="0" maxY="155" />
+<infoparam name="TGComponent" value="TestAsynchronous1::B0/in m2() #--# B1/out m2()" />
+<TGConnectingPoint num="0" id="336" />
+<TGConnectingPoint num="1" id="337" />
+<TGConnectingPoint num="2" id="338" />
+<TGConnectingPoint num="3" id="339" />
+<TGConnectingPoint num="4" id="340" />
+<TGConnectingPoint num="5" id="341" />
+<TGConnectingPoint num="6" id="342" />
+<TGConnectingPoint num="7" id="343" />
+<extraparam>
+<info value="TestAsynchronous1::B0/in m2() #--# B1/out m2()" channelName="B0/in m2() #--# B1/out m2()" referenceDiagram="TestAsynchronous1" />
+</extraparam>
+</SUBCOMPONENT>
 
-<COMPONENT type="5363" id="385" >
+<COMPONENT type="5363" id="394" >
 <cdparam x="671" y="87" />
 <sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Bus0" value="name" />
-<TGConnectingPoint num="0" id="361" />
-<TGConnectingPoint num="1" id="362" />
-<TGConnectingPoint num="2" id="363" />
-<TGConnectingPoint num="3" id="364" />
-<TGConnectingPoint num="4" id="365" />
-<TGConnectingPoint num="5" id="366" />
-<TGConnectingPoint num="6" id="367" />
-<TGConnectingPoint num="7" id="368" />
-<TGConnectingPoint num="8" id="369" />
-<TGConnectingPoint num="9" id="370" />
-<TGConnectingPoint num="10" id="371" />
-<TGConnectingPoint num="11" id="372" />
-<TGConnectingPoint num="12" id="373" />
-<TGConnectingPoint num="13" id="374" />
-<TGConnectingPoint num="14" id="375" />
-<TGConnectingPoint num="15" id="376" />
-<TGConnectingPoint num="16" id="377" />
-<TGConnectingPoint num="17" id="378" />
-<TGConnectingPoint num="18" id="379" />
-<TGConnectingPoint num="19" id="380" />
-<TGConnectingPoint num="20" id="381" />
-<TGConnectingPoint num="21" id="382" />
-<TGConnectingPoint num="22" id="383" />
-<TGConnectingPoint num="23" id="384" />
+<TGConnectingPoint num="0" id="370" />
+<TGConnectingPoint num="1" id="371" />
+<TGConnectingPoint num="2" id="372" />
+<TGConnectingPoint num="3" id="373" />
+<TGConnectingPoint num="4" id="374" />
+<TGConnectingPoint num="5" id="375" />
+<TGConnectingPoint num="6" id="376" />
+<TGConnectingPoint num="7" id="377" />
+<TGConnectingPoint num="8" id="378" />
+<TGConnectingPoint num="9" id="379" />
+<TGConnectingPoint num="10" id="380" />
+<TGConnectingPoint num="11" id="381" />
+<TGConnectingPoint num="12" id="382" />
+<TGConnectingPoint num="13" id="383" />
+<TGConnectingPoint num="14" id="384" />
+<TGConnectingPoint num="15" id="385" />
+<TGConnectingPoint num="16" id="386" />
+<TGConnectingPoint num="17" id="387" />
+<TGConnectingPoint num="18" id="388" />
+<TGConnectingPoint num="19" id="389" />
+<TGConnectingPoint num="20" id="390" />
+<TGConnectingPoint num="21" id="391" />
+<TGConnectingPoint num="22" id="392" />
+<TGConnectingPoint num="23" id="393" />
 <extraparam>
 <info stereotype="VGMN" nodeName="Bus0" />
 <attributes index="0"  nbOfAttachedInitiators="0"  nbOfAttachedTargets="0"  minLatency="0"  fifoDepth="0" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="5351" id="410" >
+<COMPONENT type="5351" id="419" >
 <cdparam x="203" y="93" />
 <sizeparam width="250" height="200" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="CPU0" value="name" />
-<TGConnectingPoint num="0" id="386" />
-<TGConnectingPoint num="1" id="387" />
-<TGConnectingPoint num="2" id="388" />
-<TGConnectingPoint num="3" id="389" />
-<TGConnectingPoint num="4" id="390" />
-<TGConnectingPoint num="5" id="391" />
-<TGConnectingPoint num="6" id="392" />
-<TGConnectingPoint num="7" id="393" />
-<TGConnectingPoint num="8" id="394" />
-<TGConnectingPoint num="9" id="395" />
-<TGConnectingPoint num="10" id="396" />
-<TGConnectingPoint num="11" id="397" />
-<TGConnectingPoint num="12" id="398" />
-<TGConnectingPoint num="13" id="399" />
-<TGConnectingPoint num="14" id="400" />
-<TGConnectingPoint num="15" id="401" />
-<TGConnectingPoint num="16" id="402" />
-<TGConnectingPoint num="17" id="403" />
-<TGConnectingPoint num="18" id="404" />
-<TGConnectingPoint num="19" id="405" />
-<TGConnectingPoint num="20" id="406" />
-<TGConnectingPoint num="21" id="407" />
-<TGConnectingPoint num="22" id="408" />
-<TGConnectingPoint num="23" id="409" />
+<TGConnectingPoint num="0" id="395" />
+<TGConnectingPoint num="1" id="396" />
+<TGConnectingPoint num="2" id="397" />
+<TGConnectingPoint num="3" id="398" />
+<TGConnectingPoint num="4" id="399" />
+<TGConnectingPoint num="5" id="400" />
+<TGConnectingPoint num="6" id="401" />
+<TGConnectingPoint num="7" id="402" />
+<TGConnectingPoint num="8" id="403" />
+<TGConnectingPoint num="9" id="404" />
+<TGConnectingPoint num="10" id="405" />
+<TGConnectingPoint num="11" id="406" />
+<TGConnectingPoint num="12" id="407" />
+<TGConnectingPoint num="13" id="408" />
+<TGConnectingPoint num="14" id="409" />
+<TGConnectingPoint num="15" id="410" />
+<TGConnectingPoint num="16" id="411" />
+<TGConnectingPoint num="17" id="412" />
+<TGConnectingPoint num="18" id="413" />
+<TGConnectingPoint num="19" id="414" />
+<TGConnectingPoint num="20" id="415" />
+<TGConnectingPoint num="21" id="416" />
+<TGConnectingPoint num="22" id="417" />
+<TGConnectingPoint num="23" id="418" />
 <extraparam>
 <info stereotype="CPU" nodeName="CPU0" />
 <attributes nbOfIrq="6"  iCacheWays="0"  iCacheSets="0"  iCacheWords="0"  dCacheWays="0"  dCacheSets="0"  dCacheWords="0" />

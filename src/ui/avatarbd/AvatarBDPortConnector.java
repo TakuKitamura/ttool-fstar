@@ -281,9 +281,6 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
                 g.setColor(Color.BLACK);
             }
         }
-
-
-
     }
 
     public AvatarBDBlock getAvatarBDBlock1() {
