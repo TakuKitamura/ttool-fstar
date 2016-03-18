@@ -384,7 +384,7 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
 
     }
 
-    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+    /*public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
         componentMenu.addSeparator();
 
         JMenuItem decrease = new JMenuItem("Decrease size");
@@ -403,7 +403,7 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
             increaseSize();
         }
         return true;
-    }
+	}*/
 
     public void updateMinMaxSize() {
 	((SequenceDiagramPanel)tdp).updateAllInstanceMinMaxSize();

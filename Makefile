@@ -36,7 +36,8 @@ TMLTRANSLATOR_JAR_TXT = tmltranslator.txt
 RUNDSE_JAR_TXT = rundse.txt
 REMOTESIMULATOR_JAR_TXT = simulationcontrol.txt
 TTOOL_CONFIG = config.xml
-TTOOL_CONFIG_SRC = config.xml
+#TTOOL_CONFIG_SRC = config.xml
+#TTOOL_CONFIG_SRC = $(TTOOL_DOC)/config_linux.xml  $(TTOOL_DOC)/config_macosx.xml  $(TTOOL_DOC)/config_windows.xml
 JTTOOL_JAR = jttool.jar
 TTOOL_LOTOS_H =  spec
 TTOOL_LOTOS_H_0 = spec_0.h 
@@ -75,8 +76,11 @@ JTTOOL_DIR = jttool
 TTOOL_TARGET = $(TTOOL_PATH)/TTool_install/TTool
 TTOOL_TARGET_RELEASE = $(TTOOL_PATH)/TTool_install
 TTOOL_PREINSTALL = $(TTOOL_PATH)/preinstallTTool
-TTOOL_PREINSTALL_LINUX = $(TTOOL_PREINSTALL)/linux
+TTOOL_PREINSTALL_LINUX = $(TTOOL_PREINSTALL)/TTool_Linux
 PACKAGE = $(shell cd $(TTOOL_SRC); find . -type d)
+
+TTOOL_CONFIG_SRC = $(TTOOL_DOC)/config_linux.xml  $(TTOOL_DOC)/config_macosx.xml  $(TTOOL_DOC)/config_windows.xml
+TTOOL_EXE = $(TTOOL_DOC)/ttool_linux.exe  $(TTOOL_DOC)/ttool_macosx.exe  $(TTOOL_DOC)/ttool_windows.bat
 
 RELEASE_STD_FILES_LINUX_EXE = ttool_unix
 RELEASE_STD_FILES_WINDIWS_EXE = ttool_windows.bat
@@ -289,11 +293,13 @@ stdrelease:
 	cp $(TTOOL_MPSOC)/generated_topcell/nbproc $(TTOOL_TARGET)/MPSoC/generated_topcell/
 	cp $(TTOOL_MPSOC)/generated_topcell/config_noproc $(TTOOL_TARGET)/MPSoC/generated_topcell/
 # Basic bin
+	cp $(TTOOL_EXE) $(TTOOL_TARGET)/
 	mkdir -p $(TTOOL_TARGET)/bin
 	cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin
 	cp $(TTOOL_BIN)/configuration.gcf $(TTOOL_TARGET)/bin
 	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
-	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_TARGET)/bin	
+	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_CONFIG_SRC) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_TARGET)/bin
+	cp $(TTOOL_TARGET)/bin/config_linux.xml $(TTOOL_TARGET)/bin/config.xml
 # Basic release
 	echo "Basic release"
 	cd $(TTOOL_TARGET_RELEASE)&&$(TAR) cvzf $(TTOOL_STD_RELEASE)/release.tgz * 
@@ -389,7 +395,8 @@ preinstall_linux:
 	cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin
 	cp $(TTOOL_BIN)/configuration.gcf $(TTOOL_TARGET)/bin
 	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
-	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_TARGET)/bin	
+	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_TARGET)/bin
+	cp $(TTOOL_TARGET)/bin/config_linux.xml $(TTOOL_TARGET)/bin/config.xml
 
 
 jttooljar:

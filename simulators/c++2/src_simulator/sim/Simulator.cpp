@@ -612,10 +612,10 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
   aGlobMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl /*<< TAG_REPLYo << anIssuedCmd << TAG_REPLYc << std::endl*/;
   aInpStream >> aCmd;
   //std::cout << "Not crashed. I: " << iCmd << std::endl;
-  //std::cout << "Decoding command:" << iCmd << std::endl;
+  //std::cout << "Decoding command: d" << iCmd << " " << aCmd<<std::endl;
   switch (aCmd){
 		case 0: //Quit simulation
-			std::cout << "QUIT SIMULATION"  << std::endl;
+			std::cout << "QUIT SIMULATION from Decode Command"  << std::endl;
 			break;
 		case 1:{
 			struct timeval aBegin,aEnd;
@@ -629,7 +629,7 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
 			      _syncInfo->_server->sendReply(anAckMsg.str());
 			}
 			aInpStream >> aParam1;
-			//std::cout << "Not crashed. I: " << iCmd << std::endl;
+			std::cout << "Not crashed. I: " << iCmd << " param= " << aParam1 << std::endl;
 			TMLTransaction* oLastTrans;
 			switch (aParam1){
 				case 0:	//Run to next breakpoint
