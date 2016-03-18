@@ -93,7 +93,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
     protected JRadioButton exe, exeint;
     protected ButtonGroup exegroup;
     protected JLabel gen, comp;
-    protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int;
+    protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int, loopLimit;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
     protected JCheckBox outputOfProVerif, typedLanguage;
@@ -209,8 +209,10 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
         typedLanguage = new JCheckBox("Generate typed Pi calculus");
         typedLanguage.setSelected(true);
         jp01.add(typedLanguage, c01);
-
-
+	jp01.add(new JLabel("Limit on loop iterations"));
+	c01.gridwidth= GridBagConstraints.REMAINDER;
+        loopLimit = new JTextField("1", 3);
+	jp01.add(loopLimit,c01);
         /*optimizemode = new JCheckBox("Optimize code");
           optimizemode.setSelected(optimizeModeSelected);
           jp01.add(optimizemode, c01);
@@ -375,8 +377,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                     // FIXME Raise error
                     System.out.println("FILE EXISTS!!!");
                 }
-
-                if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachabilityAll.isSelected () ? REACHABILITY_ALL : stateReachabilitySelected.isSelected () ? REACHABILITY_SELECTED : REACHABILITY_NONE, typedLanguage.isSelected())) {
+                if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachabilityAll.isSelected () ? REACHABILITY_ALL : stateReachabilitySelected.isSelected () ? REACHABILITY_SELECTED : REACHABILITY_NONE, typedLanguage.isSelected(), loopLimit.getText())) {
                     jta.append("ProVerif code generation done\n");
                 } else {
 		    setError();

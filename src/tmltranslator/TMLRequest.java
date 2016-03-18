@@ -84,10 +84,10 @@ public class TMLRequest extends TMLCommunicationElement {
         }
     }
     public String getParam(int i){
-	if (i<getNbOfParams()) {
+	if (i<paramNames.size()) {
             return paramNames.get(i);
         } else {
-            return null;
+            return "";
         }
     }
     public void setDestinationTask(TMLTask _task) {

@@ -51,6 +51,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.*;
 import javax.swing.*;
 import java.util.ArrayList;
@@ -79,6 +81,7 @@ public class TML2Avatar {
     private final static Integer channelPublic = 0;
     private final static Integer channelPrivate = 1;
     private final static Integer channelUnreachable = 2;
+    public int loopLimit = 1;
     AvatarSpecification avspec;
     ArrayList<String> attrsToCheck;
     List<String> allStates;
@@ -690,32 +693,6 @@ public class TML2Avatar {
 	else if (ae instanceof TMLForLoop){
 	    TMLForLoop loop = (TMLForLoop)ae;
 	    if (loop.isInfinite()){
-		List<AvatarStateMachineElement> elements = translateState(ae.getNextElement(0), block);
-		//AvatarTransition looptran = new AvatarTransition(block, "loop__"+ae.getName(), null);
-		//elementList.addAll(elements);
-		//elementList.add(looptran);
-		//replace stop states and point empty transitions to start of loop
-		for (AvatarStateMachineElement e: elements){
-		    if (e instanceof AvatarStopState){
-		    }
-		    else if (e.getNexts().size()==0){
-			e.addNext(elements.get(0));
-			elementList.add(e);
-		    }
-		    else if (e.getNext(0) instanceof AvatarStopState){
-			//Remove the transition to AvatarStopState
-			e.removeNext(0);
-			e.addNext(elements.get(0));
-			elementList.add(e);
-			}
-		    else {
-		        elementList.add(e);
-		    }
-		}
-		return elementList;
-	    }
-	    else {
-		boolean guardEx=true;
 		//Make initializaton, then choice state with transitions
 		List<AvatarStateMachineElement> elements=translateState(ae.getNextElement(0), block);
 		List<AvatarStateMachineElement> afterloop = translateState(ae.getNextElement(1), block);
@@ -723,7 +700,7 @@ public class TML2Avatar {
 		elementList.add(initState);
 		//Build transition to choice
 		tran = new AvatarTransition(block, "loop_init__"+ae.getName(), ae.getReferenceObject());
-		tran.addAction(AvatarTerm.createActionFromString(block, loop.getInit()));
+		tran.addAction(AvatarTerm.createActionFromString(block, "loop_index=0"));
 		elementList.add(tran);
 		initState.addNext(tran);
 		//Choice state
@@ -732,21 +709,9 @@ public class TML2Avatar {
 		tran.addNext(as);
 		//transition to first element of loop
 		tran = new AvatarTransition(block, "loop_increment__"+ae.getName(), ae.getReferenceObject());
-		AvatarGuard guard = AvatarGuard.createFromString (block, loop.getCondition().replaceAll("<", "!="));
-                if (guard.isElseGuard()) {
-                    tran.setGuard(guard);
-                } else {
-                    int error = AvatarSyntaxChecker.isAValidGuard(avspec, block, loop.getCondition().replaceAll("<","!="));
-                    if (error < 0 || loop.getCondition().length()>4) {
-			//guardEx=false;			
-			AvatarGuard defaultGuard = AvatarGuard.createFromString(block, loop.getCondition().split("<")[0]+"!=5");
-			tran.setGuard(defaultGuard);
-                        System.out.println("cannot translate guard " + loop.getCondition().replaceAll("<", "!="));
-                    } else {
-                        tran.setGuard(guard);
-                    }
-                }
-		tran.addAction(AvatarTerm.createActionFromString(block, loop.getIncrement()));
+		//Set default loop limit guard
+		tran.setGuard(AvatarGuard.createFromString(block, "loop_index != "+loopLimit));
+		tran.addAction(AvatarTerm.createActionFromString(block, "loop_index = loop_index + 1"));
 		tran.addNext(elements.get(0));
 		as.addNext(tran);
 		elementList.add(tran);
@@ -771,9 +736,66 @@ public class TML2Avatar {
 		
 		//Transition if exiting loop
 		tran=new AvatarTransition(block, "end_loop__"+ae.getName(), ae.getReferenceObject());
-		if (guardEx){
-		    tran.setGuard(new AvatarGuardElse());
+		tran.setGuard(new AvatarGuardElse());
+		as.addNext(tran);
+		AvatarStopState stop = new AvatarStopState("stop", null);
+		tran.addNext(stop);
+		elementList.add(tran);
+		elementList.add(stop);
+		return elementList;
+	    }
+	    else {
+		//Make initializaton, then choice state with transitions
+		List<AvatarStateMachineElement> elements=translateState(ae.getNextElement(0), block);
+		List<AvatarStateMachineElement> afterloop = translateState(ae.getNextElement(1), block);
+		AvatarState initState = new AvatarState(ae.getName()+"__init", ae.getReferenceObject());
+		elementList.add(initState);
+		//Build transition to choice
+		tran = new AvatarTransition(block, "loop_init__"+ae.getName(), ae.getReferenceObject());
+		tran.addAction(AvatarTerm.createActionFromString(block, loop.getInit()));
+		tran.addAction(AvatarTerm.createActionFromString(block, "loop_index=0"));
+		elementList.add(tran);
+		initState.addNext(tran);
+		//Choice state
+		AvatarState as = new AvatarState(ae.getName()+"__choice", ae.getReferenceObject());
+		elementList.add(as);
+		tran.addNext(as);
+		//transition to first element of loop
+		tran = new AvatarTransition(block, "loop_increment__"+ae.getName(), ae.getReferenceObject());
+		//Set default loop limit guard
+		tran.setGuard(AvatarGuard.createFromString(block, "loop_index != "+loopLimit));
+		AvatarGuard guard = AvatarGuard.createFromString (block, loop.getCondition().replaceAll("<", "!="));
+                int error = AvatarSyntaxChecker.isAValidGuard(avspec, block, loop.getCondition().replaceAll("<","!="));
+                if (error != 0) {
+                    tran.addGuard(loop.getCondition().replaceAll("<", "!="));
+                }
+		tran.addAction(AvatarTerm.createActionFromString(block, loop.getIncrement()));
+		tran.addAction(AvatarTerm.createActionFromString(block, "loop_index = loop_index + 1"));
+		tran.addNext(elements.get(0));
+		as.addNext(tran);
+		elementList.add(tran);
+		//Process elements in loop to remove stop states and empty transitions, and loop back to choice
+		for (AvatarStateMachineElement e: elements){
+		    if (e instanceof AvatarStopState){
+		    }
+		    else if (e.getNexts().size()==0){
+			e.addNext(as);
+			elementList.add(e);
+		    }
+		    else if (e.getNext(0) instanceof AvatarStopState){
+			//Remove the transition to AvatarStopState
+			e.removeNext(0);
+			e.addNext(as);
+			elementList.add(e);
+			}
+		    else {
+		        elementList.add(e);
+		    }
 		}
+		
+		//Transition if exiting loop
+		tran=new AvatarTransition(block, "end_loop__"+ae.getName(), ae.getReferenceObject());
+		tran.setGuard(new AvatarGuardElse());
 		as.addNext(tran);
 		if (afterloop.size()==0){
 		    afterloop.add(new AvatarStopState("stop", null));
@@ -844,7 +866,7 @@ public class TML2Avatar {
 	
     }*/
 
-    public AvatarSpecification generateAvatarSpec(){
+    public AvatarSpecification generateAvatarSpec(String _loopLimit){
 	//TODO: Add pragmas
 	//TODO: Make state names readable
 	//TODO: Put back numeric guards
@@ -856,7 +878,14 @@ public class TML2Avatar {
 	    return avspec;
 	}
 	attrsToCheck.clear();
-
+	
+	//Only set the loop limit if it's a number
+	String pattern = "^[0-9]{1,2}$";
+	Pattern r = Pattern.compile(pattern);
+	Matcher m = r.matcher(_loopLimit);
+	if (m.find()){
+	    loopLimit = Integer.valueOf(_loopLimit);
+	}
 	for (TMLChannel channel: tmlmodel.getChannels()){
 	    for (TMLCPrimitivePort p: channel.ports){
 	        channel.checkConf = channel.checkConf || p.checkConf;
@@ -878,6 +907,8 @@ public class TML2Avatar {
 	    //Add temp variable for unsendable signals
 	    AvatarAttribute tmp = new AvatarAttribute("tmp", AvatarType.INTEGER, block, null);
 	    block.addAttribute(tmp);
+	    AvatarAttribute loop_index = new AvatarAttribute("loop_index", AvatarType.INTEGER, block, null);
+	    block.addAttribute(loop_index);
 	    for (TMLAttribute attr: task.getAttributes()){
 		AvatarType type;
 		if (attr.getType().getType()==TMLType.NATURAL){
@@ -897,6 +928,10 @@ public class TML2Avatar {
 	    
 	    //TODO: Create a fork with many requests. This looks terrible
 	    if (tmlmodel.getRequestToMe(task)!=null){
+		//Create iteration attribute
+		AvatarAttribute req_loop_index= new AvatarAttribute("req_loop_index", AvatarType.INTEGER, block, null);
+		block.addAttribute(req_loop_index);
+
 		TMLRequest request= tmlmodel.getRequestToMe(task);
 		//Oh this is fun...let's restructure the state machine
 		//Create own start state, and ignore the returned one
@@ -904,62 +939,97 @@ public class TML2Avatar {
 		AvatarStartState ss = new AvatarStartState("start", task.getActivityDiagram().get(0).getReferenceObject());
 		asm.addElement(ss);
 		AvatarTransition at= new AvatarTransition(block, "__after_start", task.getActivityDiagram().get(0).getReferenceObject());
+		at.addAction(AvatarTerm.createActionFromString(block, "req_loop_index = 0"));
 		ss.addNext(at);
 		asm.addElement(at);
-		AvatarSignal sig = new AvatarSignal(block.getName()+"__IN__"+request.getName(), AvatarSignal.IN, request.getReferenceObject());
-		block.addSignal(sig);
-		signals.add(sig);
-	        AvatarActionOnSignal as= new AvatarActionOnSignal("getRequest__"+request.getName(), sig, request.getReferenceObject());
-		at.addNext(as);
-		asm.addElement(as);
-	        as.addValue(request.getName()+"__reqData");
-		AvatarAttribute requestData= new AvatarAttribute(request.getName()+"__reqData", AvatarType.INTEGER, block, null);
-		block.addAttribute(requestData);
-		for (int i=0; i< request.getNbOfParams(); i++){
-		    if (block.getAvatarAttributeWithName(request.getParam(i))==null){
-		    	//Throw Error
-			as.addValue("tmp");
-		    }
-		    else {
-		    	as.addValue(request.getParam(i));
-		    }
-		}
-		AvatarTransition tran = new AvatarTransition(block, "__after_" + request.getName(), task.getActivityDiagram().get(0).getReferenceObject());
-		as.addNext(tran);
-		asm.addElement(tran);
+		
+		AvatarState loopstart = new AvatarState("loopstart", task.getActivityDiagram().get(0).getReferenceObject());
+		at.addNext(loopstart);	
+		asm.addElement(loopstart);
 
 		//Find the original start state, transition, and next element
 		AvatarStateMachineElement start = elementList.get(0);
 		AvatarStateMachineElement startTran= start.getNext(0);
 		AvatarStateMachineElement newStart = startTran.getNext(0);
-		tran.addNext(newStart);
 		elementList.remove(start);
 		elementList.remove(startTran);
 		//Find every stop state, remove them, reroute transitions to them
 		//For now, route every transition to stop state to remove the loop on requests 
-		
+
 		for (AvatarStateMachineElement e: elementList){
 		    e.setName(processName(e.getName(), e.getID()));
-		    asm.addElement(e);
 		    stateObjectMap.put(task.getName()+"__"+e.getName(), e.getReferenceObject());
-		}
-		  /*  if (e instanceof AvatarStopState){
+		
+		    if (e instanceof AvatarStopState){
 			//ignore it
 		    }
 		    else {
 			for (int i=0; i< e.getNexts().size(); i++){
 			    if (e.getNext(i) instanceof AvatarStopState){
 				e.removeNext(i);
-				//Route it back to the state with request
-				e.addNext(as);
+				//Route it back to the loop start
+				e.addNext(loopstart);
 			    }
 			}
 		        asm.addElement(e);
 		    }
-		}*/
+		}
+
+		//Create exit after # of loop iterations is maxed out
+		AvatarStopState stop = new AvatarStopState("stop", task.getActivityDiagram().get(0).getReferenceObject());	
+		AvatarTransition exitTran = new AvatarTransition(block, "to_stop", task.getActivityDiagram().get(0).getReferenceObject());
+		
+	
+		//Add Requests, direct transition to start of state machine
+		for (Object obj: tmlmodel.getRequestsToMe(task)){		
+		    TMLRequest req = (TMLRequest) obj;
+		    AvatarTransition incrTran = new AvatarTransition(block, "__after_loopstart__"+req.getName(), task.getActivityDiagram().get(0).getReferenceObject());
+		    incrTran.addAction(AvatarTerm.createActionFromString(block,"req_loop_index = req_loop_index + 1"));
+		    incrTran.setGuard(AvatarGuard.createFromString(block, "req_loop_index != " + loopLimit));
+		    asm.addElement(incrTran);
+		    loopstart.addNext(incrTran);	
+		    AvatarSignal sig; 
+		    if (!signalMap.containsKey(block.getName()+"__IN__"+req.getName())){
+		        sig = new AvatarSignal(block.getName()+"__IN__"+req.getName(), AvatarSignal.IN, req.getReferenceObject());
+		        block.addSignal(sig);
+		        signals.add(sig);
+			signalMap.put(block.getName()+"__IN__"+req.getName(),sig);
+		    }
+		    else {
+			sig = signalMap.get(block.getName()+"__IN__"+req.getName());
+		    }
+	            AvatarActionOnSignal as= new AvatarActionOnSignal("getRequest__"+req.getName(), sig, req.getReferenceObject());
+		    incrTran.addNext(as);
+		    asm.addElement(as);
+	            as.addValue(req.getName()+"__reqData");
+		    AvatarAttribute requestData= new AvatarAttribute(req.getName()+"__reqData", AvatarType.INTEGER, block, null);
+		    block.addAttribute(requestData);
+	 	    for (int i=0; i< request.getNbOfParams(); i++){
+		        if (block.getAvatarAttributeWithName(request.getParam(i))==null){
+		    	    //Throw Error
+			    as.addValue("tmp");
+		    	}
+		     	else {
+		      	    as.addValue(request.getParam(i));
+		    	}
+		    }
+		    AvatarTransition tran = new AvatarTransition(block, "__after_" + request.getName(), task.getActivityDiagram().get(0).getReferenceObject());
+		    as.addNext(tran);
+		    asm.addElement(tran);
+		    tran.addNext(newStart);
+		}
+
+
+	
+		
+
+
+		
 		asm.setStartState((AvatarStartState) ss);
+	
 	    }
 	    else {
+		//Not requested
 		List<AvatarStateMachineElement> elementList= translateState(task.getActivityDiagram().get(0), block);
 	        for (AvatarStateMachineElement e: elementList){
 		    e.setName(processName(e.getName(), e.getID()));
@@ -1134,7 +1204,7 @@ public class TML2Avatar {
 	    avspec.addRelation(ar);
 	}
 	for (AvatarSignal sig: signals){
-	    //$%^&*() check that all signals are put in relations
+	    //check that all signals are put in relations
 	    AvatarRelation ar = avspec.getAvatarRelationWithSignal(sig);
 	    if (ar==null){
 		System.out.println("missing relation for " + sig.getName());

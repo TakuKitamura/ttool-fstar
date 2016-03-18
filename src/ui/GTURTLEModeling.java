@@ -633,16 +633,18 @@ public class GTURTLEModeling {
         return this.avatar2proverif.getOutputAnalyzer ();
     }
 
-    public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed) {
-	if (avatarspec==null){
-	    if (tmap!=null){
-		t2a = new TML2Avatar(tmap);
-		avatarspec = t2a.generateAvatarSpec();
-	    }
-	    else {
-		return false;
-	    }
+    public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed){
+	return generateProVerifFromAVATAR(_path, _stateReachability, _typed, "1");
+    }
+    public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed, String loopLimit) {
+	if (tmap!=null){
+	    t2a = new TML2Avatar(tmap);
+	    avatarspec = t2a.generateAvatarSpec(loopLimit);
 	}
+	else {
+	    return false;
+	}
+	
         avatar2proverif = new AVATAR2ProVerif(avatarspec);
         //tml2uppaal.setChoiceDeterministic(choices);
         //tml2uppaal.setSizeInfiniteFIFO(_size);
