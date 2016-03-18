@@ -81,7 +81,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected boolean isPrex = false;
     protected int lossPercentage;
     protected int maxNbOfLoss; //-1 means no max
-    
+
     public int checkStatus;
     public boolean checkConf;
     public static int NOCHECK= 0;
@@ -112,12 +112,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         editable = true;
         removable = true;
         userResizable = false;
-	checkConf=false;
+        checkConf=false;
         commName = "comm";
         //value = "MyName";
         makeValue();
         setName("Primitive port");
-	checkStatus= NOCHECK;
+        checkStatus= NOCHECK;
         list = new TType[nbMaxAttribute];
         for(int i=0; i<nbMaxAttribute; i++) {
             list[i] = new TType();
@@ -318,11 +318,11 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
           g.drawString(lname, x+width - w - 1, y+(int)(si)-2);
           }
           }*/
-	if (checkConf){
-	    drawVerification(g);
-	}
+        if (checkConf){
+            drawVerification(g);
+        }
         g.setFont(fold);
-	
+
         drawParticularity(g);
     }
 
@@ -344,13 +344,13 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         default:
             return;
         }
-	    g.drawString(mappingName, x-15, y-8);
-            g.drawOval(x-10, y, 6, 9);
-            g.setColor(c1);
-            g.fillRect(x-12, y+3, 9, 7);
-            g.setColor(c);
-            g.drawRect(x-12, y+3, 9, 7);
-        
+        g.drawString(mappingName, x-15, y-8);
+        g.drawOval(x-10, y, 6, 9);
+        g.setColor(c1);
+        g.fillRect(x-12, y+3, 9, 7);
+        g.setColor(c);
+        g.drawRect(x-12, y+3, 9, 7);
+
 
 
     }
@@ -482,17 +482,17 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                 maxNbOfLoss = jda.getMaxNbOfLoss();
                 oldTypep = typep;
                 typep = jda.getPortType();
-		checkConf = jda.checkConf;
-		if (checkConf){
-		    if (checkStatus==NOCHECK){
-			checkStatus=TOCHECK;
-		    }
-		}
-		else {
-		    if (checkStatus!=NOCHECK){
-			checkStatus=NOCHECK;
-		    }
-		}
+                checkConf = jda.checkConf;
+                if (checkConf){
+                    if (checkStatus==NOCHECK){
+                        checkStatus=TOCHECK;
+                    }
+                }
+                else {
+                    if (checkStatus!=NOCHECK){
+                        checkStatus=NOCHECK;
+                    }
+                }
                 for(int i=0; i<nbMaxAttribute; i++) {
                     //TraceManager.addDev("Getting string type: " + jda.getStringType(i));
                     list[i].setType(jda.getStringType(i));
@@ -506,7 +506,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
 
         ((TMLComponentTaskDiagramPanel)tdp).updatePorts();
-	
+
         return true;
     }
 
@@ -544,8 +544,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         sb.append("\" maxNbOfLoss=\"" + maxNbOfLoss);
         sb.append("\" dataFlowType=\"" + dataFlowType);
         sb.append("\" associatedEvent=\"" + associatedEvent);
-	sb.append("\" checkConf=\"" + checkConf);
-	sb.append("\" checkStatus=\"" + checkStatus);
+        sb.append("\" checkConf=\"" + checkConf);
+        sb.append("\" checkStatus=\"" + checkStatus);
         sb.append("\" />\n");
         for(int i=0; i<nbMaxAttribute; i++) {
             //System.out.println("Attribute:" + i);
@@ -623,8 +623,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                                     maxNbOfLoss = Integer.decode(elt.getAttribute("maxNbOfLoss")).intValue();
                                     dataFlowType = elt.getAttribute("dataFlowType");
                                     associatedEvent = elt.getAttribute("associatedEvent");
-				    checkConf = (elt.getAttribute("checkConf").compareTo("true")==0);
-				    checkStatus = Integer.valueOf(elt.getAttribute("checkStatus"));
+                                    checkConf = (elt.getAttribute("checkConf").compareTo("true")==0);
+                                    checkStatus = Integer.valueOf(elt.getAttribute("checkStatus"));
                                     isLossy = (elt.getAttribute("isLossy").compareTo("true") ==0);
                                     isPrex = (elt.getAttribute("isPrex").compareTo("true") ==0);
                                     isPostex = (elt.getAttribute("isPostex").compareTo("true") ==0);
@@ -813,21 +813,21 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             }
         }
     }
-	
-	public String getDataFlowType()	{
-		return dataFlowType;
-	}
 
-	public boolean isPrex()	{
-		return isPrex;
-	}
+    public String getDataFlowType()     {
+        return dataFlowType;
+    }
 
-	public boolean isPostex()	{
-		return isPostex;
-	}
+    public boolean isPrex()     {
+        return isPrex;
+    }
 
-	public String getAssociatedEvent()	{
-		return associatedEvent;
-	}
+    public boolean isPostex()   {
+        return isPostex;
+    }
+
+    public String getAssociatedEvent()  {
+        return associatedEvent;
+    }
 
 }
