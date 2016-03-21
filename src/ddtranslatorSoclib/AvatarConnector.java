@@ -18,7 +18,7 @@ public class AvatarConnector{
     }
 
     AvatarConnectingPoint getconectingPoint1(){
-      return connectingPoint2;
+      return connectingPoint1;
     }
 
     AvatarConnectingPoint getconectingPoint2(){

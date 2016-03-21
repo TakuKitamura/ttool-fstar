@@ -49,6 +49,7 @@ public class TopCellGenerator
 
 	public String generateTopCell() {
 	    String icn;
+
 	    /* first test validity of the hardware platform*/
             if(TopCellGenerator.avatardd.getNbCPU()==0){
 		    System.out.println("***Warning: require at least one CPU***");
@@ -108,7 +109,6 @@ public class TopCellGenerator
 	}
 
     public void saveFile(String path) {
-
 		try {
           System.err.println(path + GENERATED_PATH + "top.cc");
 			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/top.cc");
@@ -119,6 +119,7 @@ public class TopCellGenerator
 		}
 		saveFileDeploy(path);
 		saveFileProcinfo(path);
+		saveFileNBproc(path);
 	}
 
     public void saveFileDeploy(String path) {
