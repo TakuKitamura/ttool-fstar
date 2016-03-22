@@ -641,7 +641,7 @@ public class GTURTLEModeling {
 	    t2a = new TML2Avatar(tmap);
 	    avatarspec = t2a.generateAvatarSpec(loopLimit);
 	}
-	else {
+	else if (avatarspec == null){
 	    return false;
 	}
 	
