@@ -87,10 +87,6 @@ public class AvatarTuple extends AvatarTerm implements AvatarLeftHand {
                 result = argsTuple;
         }
 
-        if (result == null)
-            TraceManager.addDev ("Tuple '" + toParse + "' couldn't be parsed");
-        else
-            TraceManager.addDev ("Ok when parsing Tuple:" + toParse);
         return result;
     }
 

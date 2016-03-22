@@ -70,6 +70,8 @@ public abstract class AvatarGuard {
             return new AvatarGuardEmpty ();
 
         String sane = AvatarGuard.sanitizeString (_guard);
+        if (sane.isEmpty ())
+            return new AvatarGuardEmpty ();
 
         if (sane.toLowerCase ().equals ("else"))
             return new AvatarGuardElse ();
@@ -181,7 +183,7 @@ public abstract class AvatarGuard {
                 AvatarTerm secondTerm = AvatarTerm.createFromString (block, sane.substring (indexBinaryOp + delim.length ()));
                 if (secondTerm != null && firstTerm != null)
                     return new AvatarSimpleGuardDuo (firstTerm, secondTerm, delim);
-                TraceManager.addDev("Term in guard does not exist " +sane.substring (0, indexBinaryOp) + " "+ sane.substring (indexBinaryOp + delim.length ()));
+                // TraceManager.addDev("Term in guard does not exist " +sane.substring (0, indexBinaryOp) + " "+ sane.substring (indexBinaryOp + delim.length ()));
                 return new AvatarGuardEmpty ();
             }
         }
@@ -189,7 +191,9 @@ public abstract class AvatarGuard {
         AvatarTerm term = AvatarTerm.createFromString (block, sane);
         if (term != null)
             return new AvatarSimpleGuardMono (term);
-        TraceManager.addDev("Term in guard does not exist " + sane);
+
+        // TODO: add warning
+        TraceManager.addDev("Could not parse guard '" + sane + "'. Replacing by an empty guard.");
         return new AvatarGuardEmpty ();
     }
 

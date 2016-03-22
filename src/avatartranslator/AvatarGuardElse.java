@@ -69,10 +69,12 @@ public class AvatarGuardElse extends AvatarGuard {
 
             if (guard == null || !guard.isGuarded ())
                 // another guard is empty: else will never trigger
-                return null;
+                // FIXME: add warning
+                return new AvatarConstantGuard (AvatarConstant.FALSE);
 
             if (guard.isElseGuard ())
                 // there were two else guards... Shouldn't happen
+                // FIXME: add warning
                 continue;
 
             if (result == null)
