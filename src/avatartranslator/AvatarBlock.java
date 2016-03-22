@@ -106,9 +106,9 @@ public class AvatarBlock extends AvatarElement {
         return asm;
     }
 
-    public void addAttribute(AvatarAttribute _attribute) {
+    /*public void addAttribute(AvatarAttribute _attribute) {
         attributes.add(_attribute);
-    }
+	}*/
 
     public void addMethod(AvatarMethod _method) {
         methods.add(_method);
@@ -148,10 +148,16 @@ public class AvatarBlock extends AvatarElement {
         this.avspec.addConstant (_constant);
     }
 
+    public void addAttribute(AvatarAttribute _aa) {
+	if (getAvatarAttributeWithName(_aa.getName()) == null) {
+	    attributes.add(_aa);
+	}
+    }
+
     public void addIntAttributeIfApplicable(String _name) {
         if (getAvatarAttributeWithName(_name) == null) {
             AvatarAttribute aa = new AvatarAttribute(_name, AvatarType.INTEGER, this, null);
-            addAttribute(aa);
+            attributes.add(aa);
         }
     }
 
