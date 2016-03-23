@@ -2,7 +2,7 @@ SHELL		:=/bin/bash
 BUILDDIR	:= .
 FIGDIR		:= .
 
-include mli.mk
+include ./mli.mk
 
 docsvg.pdf: $(FIGURES)
 
