@@ -27,6 +27,12 @@ import static web.crawler.File_management.ParsingXML;
  * Main program
  * @author Marie FORRAT & Angeliki AKTYPI
  */
+
+
+
+
+
+
 public class WebCrawler {
 
     /**
