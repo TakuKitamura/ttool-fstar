@@ -35,6 +35,8 @@ TIFTRANSLATOR_JAR_TXT = tiftranslator.txt
 TMLTRANSLATOR_JAR_TXT = tmltranslator.txt
 WEBCRAWLER_SERVER_JAR_TXT = webcrawler.txt
 WEBCRAWLER_CLIENT_JAR_TXT = client.txt
+WEBCRAWLER_SERVER_BINARY = webcrawler-server.jar
+WEBCRAWLER_CLIENT_BINARY = webcrawler-client.jar
 RUNDSE_JAR_TXT = rundse.txt
 REMOTESIMULATOR_JAR_TXT = simulationcontrol.txt
 TTOOL_CONFIG = config.xml
@@ -60,7 +62,9 @@ ENTERPRISE_LOGO =  starting_logo_enterprise.gif
 #Variable that points to TTool installation Path
 TTOOL_PATH := $(shell /bin/pwd)
 TTOOL_SRC = $(TTOOL_PATH)/src
+TTOOL_WEBCRAWLER_SRC = $(TTOOL_PATH)/src/web/crawler
 TTOOL_BIN = $(TTOOL_PATH)/bin
+TTOOL_CLASSPATH_BINARY = $(TTOOL_BIN)/JavaPlot.jar:$(TTOOL_BIN)/commons-codec-1.10.jar:$(TTOOL_BIN)/commons-io-2.4-javadoc.jar:$(TTOOL_BIN)/commons-io-2.4.jar:$(TTOOL_BIN)/derby.jar:$(TTOOL_BIN)/derbyclient-10.9.1.0.jar:$(TTOOL_BIN)/derbynet.jar:$(TTOOL_BIN)/dom4j-1.6.1.jar:$(TTOOL_BIN)/jaxen-1.1.6.jar:$(TTOOL_BIN)/jsoup-1.8.1.jar:$(TTOOL_BIN)/opencloud.jar:.
 TTOOL_MODELING = $(TTOOL_PATH)/modeling
 #TTOOL_MODELING = $(TTOOL_PATH)/figures
 TTOOL_EXECUTABLECODE = $(TTOOL_PATH)/executablecode
@@ -142,19 +146,19 @@ svn:
 	svn update build.txt src/ui/DefaultText.java
 	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
 	svn --username apvrille commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
-	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java
+	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java $(TTOOL_WEBCRAWLER_SRC)/*.java 
 
 basicsvnapvrille:
 	date
 	svn --username apvrille update build.txt src/ui/DefaultText.java
 	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
 	svn --username apvrille commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
-	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java
+	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java $(TTOOL_WEBCRAWLER_SRC)/*.java 
 
 myrelease: basic launcher ttooljar 
 
 basic:
-	$(JAVAC) $(SOURCEPATH) $(TTOOL_SRC) $(CLASSPATH) $(TTOOL_BIN)/$(JSOUP_BINARY):$(TTOOL_BIN)/$(COMMON_CODEC_BINARY) $(TTOOL_SRC)/*.java	
+	$(JAVAC) $(SOURCEPATH) $(TTOOL_SRC) $(CLASSPATH) $(TTOOL_CLASSPATH_BINARY) $(TTOOL_SRC)/*.java $(TTOOL_WEBCRAWLER_SRC)/*.java 
 
 jar: launcher ttooljar tiftranslator tmltranslator rundse remotesimulator webcrawler
 
@@ -183,6 +187,12 @@ rundse:
 remotesimulator:
 	rm -f $(TTOOL_BIN)/$(REMOTESIMULATOR_BINARY)
 	cd $(TTOOL_SRC);$(JAR) cmf $(REMOTESIMULATOR_JAR_TXT) $(TTOOL_BIN)/$(REMOTESIMULATOR_BINARY)  RemoteSimulationControl.class remotesimulation/*.class
+
+webcrawler:
+	rm -f $(TTOOL_BIN)/$(WEBCRAWLER_SERVER_BINARY)
+	cd $(TTOOL_SRC);$(JAR) cmf $(WEBCRAWLER_SERVER_JAR_TXT) $(TTOOL_BIN)/$(WEBCRAWLER_SERVER_BINARY)  web/crawler/*.class 
+	rm -f $(TTOOL_BIN)/$(WEBCRAWLER_CLIENT_BINARY)
+	cd $(TTOOL_SRC);$(JAR) cmf $(WEBCRAWLER_CLIENT_JAR_TXT) $(TTOOL_BIN)/$(WEBCRAWLER_CLIENT_BINARY)  web/crawler/*.class 
 
 documentation:
 	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_DOC_HTML) $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
