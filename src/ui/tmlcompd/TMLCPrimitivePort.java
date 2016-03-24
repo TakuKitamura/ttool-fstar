@@ -82,12 +82,17 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected int lossPercentage;
     protected int maxNbOfLoss; //-1 means no max
 
-    public int checkStatus;
+    //Security Verification
+    public int checkConfStatus;
+    public int checkWeakAuthStatus;
+    public int checkStrongAuthStatus;
     public boolean checkConf;
+    public boolean checkAuth;
     public static int NOCHECK= 0;
     public static int TOCHECK = 1;
     public static int CHECKED_CONF = 2;
     public static int CHECKED_UNCONF = 3;
+  
     public String mappingName="???";
     protected int decPoint = 3;
 
@@ -117,7 +122,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         //value = "MyName";
         makeValue();
         setName("Primitive port");
-        checkStatus= NOCHECK;
+        checkConfStatus= NOCHECK;
         list = new TType[nbMaxAttribute];
         for(int i=0; i<nbMaxAttribute; i++) {
             list[i] = new TType();
@@ -296,31 +301,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             g.drawString(commName, x, y-1);
         }
 
-        // Name
-
-
-        // Type
-        /*String lname;
-          if ((si + 2) < height) {
-          switch(typep) {
-          case 0:
-          lname = "c";
-          break;
-          case 1:
-          lname = "e";
-          break;
-          case 2:
-          default:
-          lname = "r";
-          }
-          w = g.getFontMetrics().stringWidth(lname);
-          if (w < (width / 2)) {
-          g.drawString(lname, x+width - w - 1, y+(int)(si)-2);
-          }
-          }*/
-        if (checkConf){
-            drawVerification(g);
+        if (checkConf && isOrigin){
+            drawConfVerification(g);
         }
+	if (checkAuth && !isOrigin){
+	    drawAuthVerification(g);
+	}
         g.setFont(fold);
 
         drawParticularity(g);
@@ -328,10 +314,52 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
     public abstract void drawParticularity(Graphics g);
 
-    public void drawVerification(Graphics g){
+
+    public void drawAuthVerification(Graphics g){
+	Color c = g.getColor();
+        Color c1;
+	Color c2;
+	switch(checkStrongAuthStatus) {
+ 	    case 2:
+                c1 = Color.green;
+        	break;
+            case 3:
+                c1 = Color.red;
+                break;
+            default:
+                c1 = Color.gray;
+	}
+	switch(checkWeakAuthStatus) {
+ 	    case 2:
+                c2 = Color.green;
+                break;
+            case 3:
+                c2 = Color.red;
+                break;
+            default:
+                c2= c1;
+	}
+	
+        g.drawOval(x-16, y, 10, 15);
+        g.setColor(c1);
+	int[] xps = new int[]{x-18, x-18, x-2};
+	int[] yps = new int[]{y+6, y+20, y+20};
+	int[] xpw = new int[]{x-2, x-2, x-18};
+	int[] ypw = new int[]{y+20, y+6, y+6};
+	g.fillPolygon(xps, yps,3);	
+	
+	g.setColor(c2);	
+	g.fillPolygon(xpw, ypw, 3);
+        g.setColor(c);
+	g.drawPolygon(xps, yps,3);
+	g.drawPolygon(xpw, ypw, 3);
+	g.drawString("S", x-16, y+18);
+	g.drawString("W", x-9, y+14);
+    }
+    public void drawConfVerification(Graphics g){
         Color c = g.getColor();
         Color c1;
-        switch(checkStatus) {
+        switch(checkConfStatus) {
         case 1:
             c1 = Color.gray;
             break;
@@ -453,7 +481,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             TMLCPrimitiveComponent tgc = (TMLCPrimitiveComponent)(getFather());
             otherTypes = tgc.getAllRecords();
         }
-        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf);
+        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf, checkAuth);
         jda.setSize(350, 700);
         GraphicLib.centerOnParent(jda);
         jda.show(); // blocked until dialog has been closed
@@ -484,15 +512,16 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                 typep = jda.getPortType();
                 checkConf = jda.checkConf;
                 if (checkConf){
-                    if (checkStatus==NOCHECK){
-                        checkStatus=TOCHECK;
+                    if (checkConfStatus==NOCHECK){
+                        checkConfStatus=TOCHECK;
                     }
                 }
                 else {
-                    if (checkStatus!=NOCHECK){
-                        checkStatus=NOCHECK;
+                    if (checkConfStatus!=NOCHECK){
+                        checkConfStatus=NOCHECK;
                     }
                 }
+		checkAuth=jda.checkAuth;
                 for(int i=0; i<nbMaxAttribute; i++) {
                     //TraceManager.addDev("Getting string type: " + jda.getStringType(i));
                     list[i].setType(jda.getStringType(i));
@@ -545,7 +574,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         sb.append("\" dataFlowType=\"" + dataFlowType);
         sb.append("\" associatedEvent=\"" + associatedEvent);
         sb.append("\" checkConf=\"" + checkConf);
-        sb.append("\" checkStatus=\"" + checkStatus);
+        sb.append("\" checkAuth=\"" + checkAuth);
+        sb.append("\" checkConfStatus=\"" + checkConfStatus);
         sb.append("\" />\n");
         for(int i=0; i<nbMaxAttribute; i++) {
             //System.out.println("Attribute:" + i);
@@ -624,7 +654,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                                     dataFlowType = elt.getAttribute("dataFlowType");
                                     associatedEvent = elt.getAttribute("associatedEvent");
                                     checkConf = (elt.getAttribute("checkConf").compareTo("true")==0);
-                                    checkStatus = Integer.valueOf(elt.getAttribute("checkStatus"));
+				    checkAuth = (elt.getAttribute("checkAuth").compareTo("true")==0);
+                                    checkConfStatus = Integer.valueOf(elt.getAttribute("checkConfStatus"));
                                     isLossy = (elt.getAttribute("isLossy").compareTo("true") ==0);
                                     isPrex = (elt.getAttribute("isPrex").compareTo("true") ==0);
                                     isPostex = (elt.getAttribute("isPostex").compareTo("true") ==0);

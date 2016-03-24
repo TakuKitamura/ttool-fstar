@@ -73,7 +73,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 
     public boolean data;
     public boolean checkConf;
-    public boolean checkAuth = false;
+    public boolean checkAuth;
     // Panel1
     private JTextField nameText, maxText, widthText, associatedEventJT;
     private JComboBox typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
@@ -92,7 +92,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     private JButton closeButton;
     private JButton cancelButton;
 
-    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex , boolean _checkConf) {
+    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex , boolean _checkConf, boolean _checkAuth) {
         super(f, title, true);
         frame = f;
         
@@ -118,6 +118,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 	lossPercentage = _lossPercentage;
 	maxNbOfLoss = _maxNbOfLoss;
 	checkConf = _checkConf;
+	checkAuth = _checkAuth;
 
         myInitComponents();
         initComponents();
@@ -278,6 +279,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 	confCheckBox.setSelected(checkConf);
 	authCheckBox = new JCheckBox("Check Authenticity");
 	panel2.add(authCheckBox,c2);
+	authCheckBox.setSelected(checkAuth);
         c2.gridwidth = 1;
         c2.fill = GridBagConstraints.HORIZONTAL;
         c2.anchor = GridBagConstraints.CENTER;
@@ -568,6 +570,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 				isPrex = isPrexCB.isSelected();
 				isPostex = isPostexCB.isSelected();
 				checkConf = confCheckBox.isSelected();
+				checkAuth = authCheckBox.isSelected();
 				if( isPrex && isPostex )	{
 					JOptionPane.showMessageDialog( frame, "A channel cannot be marked as both prex and postex", "Error",
 																				 JOptionPane.INFORMATION_MESSAGE );
