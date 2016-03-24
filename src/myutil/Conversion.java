@@ -340,29 +340,31 @@ public class Conversion {
         boolean b1, b2;
         String s1, s2;
 
+	
+	
         while ( (index = s.indexOf(from, fromIndex)) != -1) {
             // Wrong data or not ? Nb or character just before or just after ?
             if (index == 0) {
-                s1 = s.substring(index, index + from.length());
+		b1 = false;
             } else {
-                s1 = s.substring(index-1, index + from.length());
+		s1 = s.substring(index-1, index + from.length());
+		b1 = s1.matches("\\w*");
             }
 
-            b1 = s1.matches("\\w*");
+	    //TraceManager.addDev("s1=" + s1);
 
             if (index == (s.length() - from.length() - 1)) {
-                s2 = s.substring(index, index + from.length());
+		b2 = false;
             } else {
                 s2 = s.substring(index, Math.min(index + from.length() + 1, s.length()));
+		b2 = s2.matches("\\w*");
             }
-            //System.out.println("s1 = " + s1 + " s2 = " + s2);
-
-            b2 = s2.matches("\\w*");
+            //TraceManager.addDev("s1 = " + s1 + " s2 = " + s2);
 
             if (!(b1 || b2)) {
                 // from must be replaced
                 s = s.substring(0, index) + to + s.substring(index + from.length(), s.length());
-                //System.out.println("Replaced ! new s=" + s);
+                TraceManager.addDev("Replaced ! new s=" + s);
                 fromIndex = index + to.length();
             } else {
                 fromIndex = index + 1;
@@ -372,7 +374,7 @@ public class Conversion {
 
 
         return s;
-    }
+	}
 
     public static String indentString(String _input, int _nbDec) {
         int dec = 0;

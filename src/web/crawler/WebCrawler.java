@@ -1,9 +1,52 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+
+   ludovic.apvrille AT enst.fr
+
+   This software is a computer program whose purpose is to allow the
+   edition of TURTLE analysis, design and deployment diagrams, to
+   allow the generation of RT-LOTOS or Java code from this diagram,
+   and at last to allow the analysis of formal validation traces
+   obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+   from INRIA Rhone-Alpes.
+
+   This software is governed by the CeCILL  license under French law and
+   abiding by the rules of distribution of free software.  You can  use,
+   modify and/ or redistribute the software under the terms of the CeCILL
+   license as circulated by CEA, CNRS and INRIA at the following URL
+   "http://www.cecill.info".
+
+   As a counterpart to the access to the source code and  rights to copy,
+   modify and redistribute granted by the license, users are provided only
+   with a limited warranty  and the software's author,  the holder of the
+   economic rights,  and the successive licensors  have only  limited
+   liability.
+
+   In this respect, the user's attention is drawn to the risks associated
+   with loading,  using,  modifying and/or developing or reproducing the
+   software by the user in light of its specific status of free software,
+   that may mean  that it is complicated to manipulate,  and  that  also
+   therefore means  that it is reserved for developers  and  experienced
+   professionals having in-depth computer knowledge. Users are therefore
+   encouraged to load and test the software's suitability as regards their
+   requirements in conditions enabling the security of their systems and/or
+   data to be ensured and,  more generally, to use and operate it in the
+   same conditions as regards security.
+
+   The fact that you are presently reading this means that you have had
+   knowledge of the CeCILL license and that you accept its terms.
+
+   /**
+   * Class WebCrawler
+   * Management of Avatar block panels
+   * Creation: 2015
+   * @version 2.0 24/03/2016
+   * @author  Marie FORRAT, Angeliki AKTYPI, Ludovic APVRILLE
+   * @see MainGUI
+   */
+
 package web.crawler;
+
+import myutil.*;
 
 import java.awt.AWTException;
 import java.io.BufferedReader;
@@ -23,23 +66,19 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import static web.crawler.File_management.ParsingXML;
 
-/**
- * Main program
- * @author Marie FORRAT & Angeliki AKTYPI
- */
-
-
-
-
 
 
 public class WebCrawler {
 
     /**
-     *create the database 
+     *create the database
      */
     public static Database_creation database;
-    
+
+    public static final int PORT = 8244;
+
+    private String pathToFiles;
+
     /**
      * main program
      * @param args the command line arguments
@@ -49,18 +88,22 @@ public class WebCrawler {
      * @throws java.sql.SQLException
      * @throws java.io.IOException
      * @throws java.awt.AWTException
-     * 
+     *
      */
-    
-    public static void UpdateDatabase(String[] FileNames) throws IOException, SQLException{
-    
+
+    public WebCrawler(String _pathToFiles) {
+        pathToFiles = _pathToFiles + java.io.File.separator;
+    }
+
+    public void UpdateDatabase(String[] FileNames) throws IOException, SQLException{
+
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*                         Update Database                           */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
-                
+
         if (database.ReferencesSqlFile.exists() & database.VulnerabilitesSqlFile.exists() & database.SoftwaresSqlFile.exists()) {
-            
+
             Path FilePath = Paths.get(FileNames[0]);
             BasicFileAttributes view = Files.getFileAttributeView(FilePath, BasicFileAttributeView.class).readAttributes();
             //FileTime time = view.creationTime();
@@ -68,51 +111,51 @@ public class WebCrawler {
             SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
             String dateCreated = df.format(time.toMillis());
             System.out.println("The last update of the database was on " + dateCreated + "\n");
-        
+
             System.out.println("Do you want to update the database?\n");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            String answer = br.readLine();
-            
-            switch (answer){
-                
-                case "Yes":
-                    
-                    File thisyearfile = new File(FileNames[0]);
-                    thisyearfile.delete();
-                    File lastyearfile = new File(FileNames[1]);
-                    lastyearfile.delete();
-                    File beforelastyearfile = new File(FileNames[2]);
-                    beforelastyearfile.delete();
-                    File beforebeforelastyearfile = new File(FileNames[3]);
-                    beforebeforelastyearfile.delete();
-                    database.ReferencesSqlFile.delete();
-                    database.VulnerabilitesSqlFile.delete();
-                    database.SoftwaresSqlFile.delete();
-                    
-                    System.out.println("The files have been deleted!!\n");
-                    UpdateDatabase(FileNames);
-                    break;
-                    
-                case "No":
-                    
-                    database.CreateDatabaseFromSQLFile();
-                
-                    System.out.println("\nDatabase is restored from files:\n"
-                        + database.ReferencesSqlFile.toString() + "\n"
-                        + database.VulnerabilitesSqlFile.toString() + "\n"
-                        + database.SoftwaresSqlFile.toString() + "\n");
+            String answer = br.readLine().toLowerCase();
 
-                    System.out.println("Total records insert in the database: " + database.getTotalRecordsInDatabase()+ "\n\n");
-                    
-                    break;
-                    
-                default:
-                    
-                    System.out.println("\nPlease enter Yes or No\n");
-                    UpdateDatabase(FileNames);
-                    break;                
+            switch (answer){
+
+            case "yes":
+
+                File thisyearfile = new File(FileNames[0]);
+                thisyearfile.delete();
+                File lastyearfile = new File(FileNames[1]);
+                lastyearfile.delete();
+                File beforelastyearfile = new File(FileNames[2]);
+                beforelastyearfile.delete();
+                File beforebeforelastyearfile = new File(FileNames[3]);
+                beforebeforelastyearfile.delete();
+                database.ReferencesSqlFile.delete();
+                database.VulnerabilitesSqlFile.delete();
+                database.SoftwaresSqlFile.delete();
+
+                TraceManager.addDev("The database files have been deleted!!\n");
+                UpdateDatabase(FileNames);
+                break;
+
+            case "no":
+
+                database.CreateDatabaseFromSQLFile();
+
+                TraceManager.addDev("\nDatabase has been restored from the following files:\n"
+                                    + database.ReferencesSqlFile.toString() + "\n"
+                                    + database.VulnerabilitesSqlFile.toString() + "\n"
+                                    + database.SoftwaresSqlFile.toString() + "\n");
+
+                TraceManager.addDev("Total records insert in the database: " + database.getTotalRecordsInDatabase()+ "\n\n");
+
+                break;
+
+            default:
+
+                TraceManager.addDev("\nPlease enter Yes or No\n");
+                UpdateDatabase(FileNames);
+                break;
             }
-                       
+
         } else {
             /* Read XML file and store the informations in the database          */
             for (String xmlFile : FileNames) {
@@ -122,21 +165,29 @@ public class WebCrawler {
             /* Store myDatabase in file myDatabase.sql                           */
             database.StoreDatabaseInFile();
         }
-    
-}
-    
-    public static void main(String args[]) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, IOException, AWTException, Exception {
 
-        /**
-         * The name of the file, for example "nvdcve-2.0-2015.xml", from https://nvd.nist.gov/, which data we want to inport in our database
-         */
+    }
+
+    public static void main(String args[]) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, IOException, AWTException, Exception {
+        WebCrawler wc = new WebCrawler("../localdb");
+        wc.start();
+    }
+
+
+    public void start() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, IOException, AWTException, Exception {
+
+        if (pathToFiles == null) {
+            pathToFiles = "";
+        }
+
+
         String thisyear = new SimpleDateFormat("yyyy").format(new Date());
-        
+
         String FileNames[] = {
-            "nvdcve-2.0-"+thisyear+".xml",
-            "nvdcve-2.0-"+(Integer.valueOf(thisyear)-1)+".xml",
-            "nvdcve-2.0-"+(Integer.valueOf(thisyear)-2)+".xml",
-            "nvdcve-2.0-"+(Integer.valueOf(thisyear)-3)+".xml",
+            pathToFiles + "nvdcve-2.0-"+thisyear+".xml",
+            pathToFiles + "nvdcve-2.0-"+(Integer.valueOf(thisyear)-1)+".xml",
+            pathToFiles + "nvdcve-2.0-"+(Integer.valueOf(thisyear)-2)+".xml",
+            pathToFiles + "nvdcve-2.0-"+(Integer.valueOf(thisyear)-3)+".xml",
         };
         //Database_creation database = new Database_creation();
         database = new Database_creation();
@@ -144,16 +195,16 @@ public class WebCrawler {
         /*       Establish connection with server and create database        */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         database.CreateDatabase();
-        
+
         UpdateDatabase(FileNames);
-                
+
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*                       Data Visualization                          */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         Data_visualisation datavisual = new Data_visualisation(database);
-       
+
         // datavisual.Histogram("linux");
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
@@ -166,10 +217,10 @@ public class WebCrawler {
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*              Server's Protocol Initialization                     */
-        /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */        
+        /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         try {
-            ServerSocket server = new ServerSocket(1234);
-            System.out.println("Server has been created successfully\n");
+            ServerSocket server = new ServerSocket(8244);
+            TraceManager.addDev("Server has been created successfully");
 
             while (true) { //Allow a client to connect
                 //Use multithread
@@ -185,8 +236,6 @@ public class WebCrawler {
         // Clean-up environment
         database.getstmt().close();
         database.getconn().close();
-        System.out.println("\n\n\nClosing connection with the database");
-        
+        TraceManager.addDev("\n\n\nClosing connection with the database");
     }
-
 }

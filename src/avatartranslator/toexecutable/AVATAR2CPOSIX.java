@@ -38,7 +38,7 @@
  * /**
  * Class AVATAR2CPOSIX
  * Creation: 29/03/2011
- * @version 1.1 29/03/2011
+ * @version 1.2 24/03/2016
  * @author Ludovic APVRILLE
  * @see
  */
@@ -861,6 +861,7 @@ public class AVATAR2CPOSIX {
         g = Conversion.replaceOp(g, "and", "&&");
         g = Conversion.replaceOp(g, "or", "||");
         g = Conversion.replaceOp(g, "not", "!");
+	TraceManager.addDev("Guard=" + g);
         return g;
     }
 
