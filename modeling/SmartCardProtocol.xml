@@ -6,7 +6,7 @@
 <AvatarRDPanel name="AVATAR RD" minX="10" maxX="1400" minY="10" maxY="900" zoom="1.0" >
 <COMPONENT type="301" id="17" >
 <cdparam x="627" y="331" />
-<sizeparam width="428" height="87" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="366" height="87" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="UML Note" value="Modeling assumptions

@@ -66,7 +66,7 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
 
     protected String channelName = "ch";
     protected String nbOfSamples= "1";
-
+    public String securityContext = "";
     protected int stateOfError = 0; // Not yet checked
     
     public final static int NOT_VERIFIED = 0;
@@ -168,12 +168,12 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
                 return;
             }
 
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x-30, y+4, x-15, y+4, true);
-            g.drawOval(x-11, y-3, 7, 9);
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x-30, y-3, x-15, y-3, true);
+            g.drawOval(x-11, y-10, 7, 9);
             g.setColor(c1);
-            g.fillRect(x-12, y, 9, 7);
+            g.fillRect(x-12, y-7, 9, 7);
             g.setColor(c);
-            g.drawRect(x-12, y, 9, 7);
+            g.drawRect(x-12, y-7, 9, 7);
 
         }
     }
@@ -217,12 +217,14 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
     }
 
     public boolean editOndoubleClick(JFrame frame) {
-	String [] labels = new String[2];
-        String [] values = new String[2];
+	String [] labels = new String[3];
+        String [] values = new String[3];
         labels[0] = "Channel name";
         values[0] = channelName;
 	labels[1] = "Nb of samples";
         values[1] = nbOfSamples;
+	labels[2] = "Security Pattern";
+	values[2] = securityContext;
 	
         ArrayList<String []> help = new ArrayList<String []>();
 	String[] allOutChannels = tdp.getMGUI().getAllOutChannels();
@@ -230,7 +232,7 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
 	
 
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
-	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 2, labels, values, help);
+	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 3, labels, values, help);
         jdms.setSize(450, 300);
         GraphicLib.centerOnParent(jdms);
         jdms.show(); // blocked until dialog has been closed
@@ -238,6 +240,7 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
         if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
             channelName = jdms.getString(0);
             nbOfSamples = jdms.getString(1);
+	    securityContext = jdms.getString(2);
 
             makeValue();
             return true;
@@ -253,6 +256,8 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
         sb.append(channelName);
         sb.append("\" nbOfSamples=\"");
         sb.append(getSamplesValue());
+        sb.append("\" secPattern=\"");
+        sb.append(securityContext);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -282,6 +287,7 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
                             if (elt.getTagName().equals("Data")) {
                                 channelName = elt.getAttribute("channelName");
                                 nbOfSamples = elt.getAttribute("nbOfSamples");
+                                securityContext = elt.getAttribute("secPattern");
                             }
                         }
                     }

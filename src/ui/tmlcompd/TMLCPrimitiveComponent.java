@@ -238,10 +238,10 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         g.setFont(fold);
 
     }
-     public void drawVerification(Graphics g, int x, int y, int checkStatus){
+     public void drawVerification(Graphics g, int x, int y, int checkConfStatus){
         Color c = g.getColor();
         Color c1;
-        switch(checkStatus) {
+        switch(checkConfStatus) {
         case TAttribute.CONFIDENTIALITY_OK:
             c1 = Color.green;
             break;

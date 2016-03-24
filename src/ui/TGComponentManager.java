@@ -236,6 +236,8 @@ public class TGComponentManager {
     public static final int TMLAD_INTERVAL_DELAY = 1028;
     public static final int TMLAD_FOR_EVER_LOOP = 1030;
     public static final int TMLAD_READ_REQUEST_ARG = 1034;
+    public static final int TMLAD_ENCRYPT = 1035;
+    public static final int TMLAD_DECRYPT = 1036;
 
     public static final int TMLARCHI_CPUNODE = 1100;
     public static final int TMLARCHI_ARTIFACT = 1101;
@@ -1039,6 +1041,12 @@ public class TGComponentManager {
         case TMLAD_RANDOM:
             tgc = new TMLADRandom(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
+        case TMLAD_ENCRYPT:
+            tgc = new TMLADEncrypt(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case TMLAD_DECRYPT:
+            tgc = new TMLADDecrypt(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
         case TMLCTD_CCOMPONENT:
             tgc = new TMLCCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
@@ -1696,6 +1704,10 @@ public class TGComponentManager {
             return TMLAD_UNORDERED_SEQUENCE;
         } else if (tgc instanceof TMLADSelectEvt) {
             return TMLAD_SELECT_EVT;
+        } else if (tgc instanceof TMLADEncrypt) {
+            return TMLAD_ENCRYPT;
+        } else if (tgc instanceof TMLADDecrypt) {
+            return TMLAD_DECRYPT;
         } else if (tgc instanceof TMLADRandom) {
             return TMLAD_RANDOM;
 

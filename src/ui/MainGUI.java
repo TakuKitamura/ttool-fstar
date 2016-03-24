@@ -3767,6 +3767,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 	    gtm.getTMLMapping().getTMLModeling().clearBacktracing();
 	    gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, getTabName(tp));
 	    gtm.getTML2Avatar().backtraceReachability(pvoa.getReachableEvents(), pvoa.getNonReachableEvents());
+	    gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getSatisfiedAuthenticity(), pvoa.getSatisfiedWeakAuthenticity(), pvoa.getNonSatisfiedAuthenticity(), getTabName(tp));
+	    System.out.println("backtracing finished");
 	}
 	else if (tp instanceof TMLComponentDesignPanel){
 	    
@@ -8557,6 +8559,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_SELECT_EVT);
         } else if (command.equals(actions[TGUIAction.TMLAD_RANDOM].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_RANDOM);
+ 	} else if (command.equals(actions[TGUIAction.TMLAD_ENCRYPT].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_ENCRYPT);
+ 	} else if (command.equals(actions[TGUIAction.TMLAD_DECRYPT].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_DECRYPT);
         } else if (command.equals(actions[TGUIAction.TMLCTD_CCOMPONENT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCTD_CCOMPONENT);
         } else if (command.equals(actions[TGUIAction.TMLCTD_CREMOTECOMPONENT].getActionCommand())) {

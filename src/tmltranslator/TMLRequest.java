@@ -55,6 +55,7 @@ public class TMLRequest extends TMLCommunicationElement {
     protected ArrayList<String> paramNames;
     public int confStatus;
     public boolean checkConf;
+    public boolean checkAuth;
     public ArrayList<TMLCPrimitivePort> ports;
     public TMLRequest(String name, Object reference) {
         super(name, reference);

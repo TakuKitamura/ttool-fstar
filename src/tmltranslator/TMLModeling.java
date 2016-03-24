@@ -61,7 +61,7 @@ public class TMLModeling {
     private ArrayList<TMLRequest> requests;
     private ArrayList<TMLEvent> events;
     private ArrayList<String[]> pragmas;
-
+    public ArrayList<SecurityPattern> securityPatterns;
     private TMLElement correspondance[];
 
     private boolean optimized = false;
@@ -608,7 +608,7 @@ public class TMLModeling {
 	    if (channel!=null){
 		for (TMLCPrimitivePort port:channel.ports){
 		    if (port.checkConf){
-		    	port.checkStatus = 2;
+		    	port.checkConfStatus = 2;
 	 	    	port.mappingName= mappingName;
 		    }
 		}
@@ -617,7 +617,7 @@ public class TMLModeling {
 	    if (req !=null){
 		for (TMLCPrimitivePort port: req.ports){
 		    if (port.checkConf){
-		    	port.checkStatus = 2;
+		    	port.checkConfStatus = 2;
 
 	 	    	port.mappingName= mappingName;
 		    }
@@ -626,11 +626,11 @@ public class TMLModeling {
 	    TMLEvent ev = getEventByName(attr.getName().replaceAll("__eventData",""));
 	    if (ev !=null){
 		if (ev.port.checkConf){
-		    ev.port.checkStatus=2;
+		    ev.port.checkConfStatus=2;
 		    ev.port.mappingName= mappingName;
 		}
 		if (ev.port2.checkConf){
-		    ev.port2.checkStatus=2;
+		    ev.port2.checkConfStatus=2;
 		    ev.port2.mappingName=mappingName;
 		}
 	    }
@@ -658,7 +658,7 @@ public class TMLModeling {
 	    if (channel!=null){
 		for (TMLCPrimitivePort port:channel.ports){
 		    if (port.checkConf){
-		    	port.checkStatus = 3;
+		    	port.checkConfStatus = 3;
 	 	    	port.mappingName= mappingName;
 		    }
 		}
@@ -667,7 +667,7 @@ public class TMLModeling {
 	    if (req !=null){
 		for (TMLCPrimitivePort port: req.ports){
 		    if (port.checkConf){
-		    	port.checkStatus = 3;
+		    	port.checkConfStatus = 3;
 	 	    	port.mappingName= mappingName;
 		    }
 		}
@@ -675,10 +675,11 @@ public class TMLModeling {
 	    TMLEvent ev = getEventByName(attr.getName().replaceAll("__eventData",""));
 	    if (ev !=null){
 		if (ev.port.checkConf){
-		    ev.port.checkStatus=3;
+		    ev.port.checkConfStatus=3;
+		    ev.port.mappingName= mappingName;
 		}
 		if (ev.port2.checkConf){
-		    ev.port2.checkStatus=3;
+		    ev.port2.checkConfStatus=3;
 		    ev.port2.mappingName= mappingName;
 		}
 	    }
@@ -698,37 +699,200 @@ public class TMLModeling {
 		}
 	    }
 	}
-
-	System.out.println("backtracing finished");
 	return;
+    }
+    public void backtraceAuthenticity(LinkedList<String> satisfiedAuthenticity, LinkedList<String> satisfiedWeakAuthenticity,LinkedList<String> nonSatisfiedAuthenticity, String mappingName){
+	for (String s: satisfiedAuthenticity){
+	    String signalName = s.split("__chData")[0];
+	    for (TMLTask t: getTasks()){
+		if (signalName.contains(t.getName())){
+		    signalName = signalName.replace(t.getName()+"__","");
+		}
+	    }
+	    TMLChannel channel = getChannelByName(signalName);
+	    if (channel!=null){
+		for (TMLCPrimitivePort port:channel.ports){
+		    if (port.checkAuth){
+		    	port.checkStrongAuthStatus = 2;
+	 	    	port.mappingName= mappingName;
+		    }
+		}
+	    }
+	    signalName = s.split("__reqData")[0];
+	    for (TMLTask t: getTasks()){
+		if (signalName.contains(t.getName())){
+		    signalName = signalName.replace(t.getName()+"__","");
+		}
+	    }
+	    TMLRequest req = getRequestByName(signalName);
+	    if (req !=null){
+		for (TMLCPrimitivePort port: req.ports){
+		    if (port.checkAuth){
+		    	port.checkStrongAuthStatus = 2;
+	 	    	port.mappingName= mappingName;
+		    }
+		}
+	    }
+	    signalName = s.split("__eventData")[0];
+	    for (TMLTask t: getTasks()){
+		if (signalName.contains(t.getName())){
+		    signalName = signalName.replace(t.getName()+"__","");
+		}
+	    }
+	    TMLEvent ev = getEventByName(signalName);
+	    if (ev !=null){
+		if (ev.port.checkAuth){
+		    ev.port.checkStrongAuthStatus=2;
+		    ev.port2.mappingName= mappingName;
+		}
+		if (ev.port2.checkAuth){
+		    ev.port2.checkStrongAuthStatus=2;
+		    ev.port2.mappingName= mappingName;
+		}
+	    }
+	}
+	for (String s: satisfiedWeakAuthenticity){
+	    String signalName = s.split("__chData")[0];
+	    for (TMLTask t: getTasks()){
+		if (signalName.contains(t.getName())){
+		    signalName = signalName.replace(t.getName()+"__","");
+		}
+	    }
+	    TMLChannel channel = getChannelByName(signalName);
+	    if (channel!=null){
+		for (TMLCPrimitivePort port:channel.ports){
+		    if (port.checkAuth){
+		    	port.checkWeakAuthStatus = 2;
+	 	    	port.mappingName= mappingName;
+		    }
+		}
+	    }
+	    signalName = s.split("__reqData")[0];
+	    for (TMLTask t: getTasks()){
+		if (signalName.contains(t.getName())){
+		    signalName = signalName.replace(t.getName()+"__","");
+		}
+	    }
+	    TMLRequest req = getRequestByName(signalName);
+	    if (req !=null){
+		for (TMLCPrimitivePort port: req.ports){
+		    if (port.checkAuth){
+		    	port.checkWeakAuthStatus = 2;
+	 	    	port.mappingName= mappingName;
+		    }
+		}
+	    }
+	    signalName = s.split("__eventData")[0];
+	    for (TMLTask t: getTasks()){
+		if (signalName.contains(t.getName())){
+		    signalName = signalName.replace(t.getName()+"__","");
+		}
+	    }
+	    TMLEvent ev = getEventByName(signalName);
+	    if (ev !=null){
+		if (ev.port.checkAuth){
+		    ev.port.checkWeakAuthStatus=2;
+		    ev.port2.mappingName= mappingName;
+		}
+		if (ev.port2.checkAuth){
+		    ev.port2.checkWeakAuthStatus=2;
+		    ev.port2.mappingName= mappingName;
+		}
+	    }
+	}
+	for (String s: nonSatisfiedAuthenticity){
+	    String signalName = s.split("__chData")[0];
+	    for (TMLTask t: getTasks()){
+		if (signalName.contains(t.getName())){
+		    signalName = signalName.replace(t.getName()+"__","");
+		}
+	    }
+	    TMLChannel channel = getChannelByName(signalName);
+	    if (channel!=null){
+		for (TMLCPrimitivePort port:channel.ports){
+		    if (port.checkAuth){
+		    	port.checkStrongAuthStatus = 3;
+	 	    	port.mappingName= mappingName;
+		    }
+		}
+	    }
+	    signalName = s.split("__reqData")[0];
+	    for (TMLTask t: getTasks()){
+		if (signalName.contains(t.getName())){
+		    signalName = signalName.replace(t.getName()+"__","");
+		}
+	    }
+	    TMLRequest req = getRequestByName(signalName);
+	    if (req !=null){
+		for (TMLCPrimitivePort port: req.ports){
+		    if (port.checkAuth){
+		    	port.checkStrongAuthStatus = 3;
+	 	    	port.mappingName= mappingName;
+		    }
+		}
+	    }
+	    signalName = s.split("__eventData")[0];
+	    for (TMLTask t: getTasks()){
+		if (signalName.contains(t.getName())){
+		    signalName = signalName.replace(t.getName()+"__","");
+		}
+	    }
+	    TMLEvent ev = getEventByName(signalName);
+	    if (ev !=null){
+		if (ev.port.checkAuth){
+		    ev.port.checkStrongAuthStatus=3;
+		    ev.port2.mappingName= mappingName;
+		}
+		if (ev.port2.checkAuth){
+		    ev.port2.checkStrongAuthStatus=3;
+		    ev.port2.mappingName= mappingName;
+		}
+	    }
+	}
     }
     public void clearBacktracing(){
 	for (TMLChannel channel: getChannels()){
 	    for (TMLCPrimitivePort port:channel.ports){
-		if (port.checkStatus>1){
-		    port.checkStatus=1;
+		if (port.checkConfStatus>1){
+		    port.checkConfStatus=1;
 		    port.mappingName="???";
+		}
+		if (port.checkStrongAuthStatus>1 || port.checkWeakAuthStatus>1){
+		    port.checkStrongAuthStatus = 1;
+		    port.checkWeakAuthStatus=1;
 		}
 	    }
 	}
 	for (TMLRequest req: getRequests()){
 	    for (TMLCPrimitivePort port:req.ports){
-		if (port.checkStatus>1){
-		    port.checkStatus=1;
+		if (port.checkConfStatus>1){
+		    port.checkConfStatus=1;
 		    port.mappingName="???";
+		}
+		if (port.checkStrongAuthStatus>1 || port.checkWeakAuthStatus>1){
+		    port.checkStrongAuthStatus = 1;
+		    port.checkWeakAuthStatus=1;
 		}
 	    }
 	}
 	for (TMLEvent evt: getEvents()){
 	    if (evt.port!=null && evt.port2!=null){
-	        if (evt.port.checkStatus>1){
-		    evt.port.checkStatus=1;
+	        if (evt.port.checkConfStatus>1){
+		    evt.port.checkConfStatus=1;
 		    evt.port.mappingName="???";
 	        }
-	        if (evt.port2.checkStatus>1){
-		    evt.port2.checkStatus=1;
+		if (evt.port.checkStrongAuthStatus>1 || evt.port.checkWeakAuthStatus>1){
+		    evt.port.checkStrongAuthStatus=1;
+		    evt.port.checkWeakAuthStatus=1;
+		}
+	        if (evt.port2.checkConfStatus>1){
+		    evt.port2.checkConfStatus=1;
 		    evt.port2.mappingName="???";
 	        }
+		if (evt.port2.checkStrongAuthStatus>1 || evt.port2.checkWeakAuthStatus>1){
+		    evt.port2.checkStrongAuthStatus=1;
+		    evt.port2.checkWeakAuthStatus=1;
+		}
 	    }
 	}
 	return;

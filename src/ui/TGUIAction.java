@@ -204,6 +204,9 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLAD_SELECT_EVT = 206;
     public static final int TMLAD_RANDOM = 245;
     public static final int TMLAD_READ_REQUEST_ARG = 335;
+    
+    public static final int TMLAD_ENCRYPT = 430;
+    public static final int TMLAD_DECRYPT = 431;
 
     public static final int TMLARCHI_EDIT = 216;
     public static final int TMLARCHI_LINK = 217;
@@ -570,7 +573,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_INTERNAL_SEARCH = 415;
     //--
 
-    public static final int NB_ACTION = 428;
+    public static final int NB_ACTION = 500;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -917,6 +920,12 @@ actions[ADD_VGMNNODE] = new TAction("add-add-vgmnnode", "Add a VGMN", IconManage
         actions[TMLAD_SELECT_EVT] = new TAction("add-tmlad-select-evt", "Add select event", IconManager.imgic916, IconManager.imgic916, "Select event", "Add a selection between events to the currently opened TML Task activity diagram", 0);
         actions[TMLAD_RANDOM] = new TAction("add-tmlad-random", "Add random", IconManager.imgic924, IconManager.imgic924, "Select random", "Add a random operator to the currently opened TML Task activity diagram", 0);
         actions[TMLAD_READ_REQUEST_ARG] = new TAction("add-tmladd-read-request-arg", "Reading request arguments", IconManager.imgic930, IconManager.imgic930, "Reading request arguments", "Add a reading request argument operator to the currently opened TML activity diagram", 0);
+
+
+
+	actions[TMLAD_ENCRYPT] = new TAction("add-tmlad-encrypt", "Add Encryption", IconManager.imgic940, IconManager.imgic940, "Encryption", "Add an encryption operator to the currently opened TML Task activity diagram", 0);
+	actions[TMLAD_DECRYPT] = new TAction("add-tmlad-decrypt", "Add Decryption", IconManager.imgic941, IconManager.imgic941, "Decryption", "Add a decryption operator to the currently opened TML Task activity diagram", 0);
+
 
         actions[EBRDD_EDIT] = new TAction("edit-ebrdd-diagram", "Edit EBRDD", IconManager.imgic100, IconManager.imgic101, "Edit EBRDD", "Make it possible to edit the currently opened Event-Based Requirement Description Diagram", 0);
         actions[EBRDD_CONNECTOR] = new TAction("add-ebrdd-connector", "Connect two operators together", IconManager.imgic202, IconManager.imgic202, "Connect two operators together", "Connect two operators of the currently opened Event-Based Requirement Description Diagram", 0);

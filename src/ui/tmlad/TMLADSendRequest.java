@@ -171,12 +171,12 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
                 return;
             }
 
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x-30, y+4, x-15, y+4, true);
-            g.drawOval(x-11, y-3, 7, 9);
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x-30, y-3, x-15, y-3, true);
+            g.drawOval(x-11, y-10, 7, 9);
             g.setColor(c1);
-            g.fillRect(x-12, y, 9, 7);
+            g.fillRect(x-12, y-7, 9, 7);
             g.setColor(c);
-            g.drawRect(x-12, y, 9, 7);
+            g.drawRect(x-12, y-7, 9, 7);
 
         }
     }

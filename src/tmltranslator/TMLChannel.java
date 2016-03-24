@@ -57,6 +57,7 @@ public class TMLChannel extends TMLCommunicationElement {
     public static final int NBRNBW = 2;
     public int confStatus;
     public boolean checkConf;
+    public boolean checkAuth;
     private int size;
     private int type;
     private int max;

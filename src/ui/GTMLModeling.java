@@ -1471,6 +1471,21 @@ public class GTMLModeling  {
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlexecii, tgc);
 
+            } else if (tgc instanceof TMLADEncrypt) {
+                tmlexeci = new TMLExecI("execi", tgc);
+                tmlexeci.setAction("123");
+                activity.addElement(tmlexeci);
+                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                listE.addCor(tmlexeci, tgc);
+
+            } else if (tgc instanceof TMLADDecrypt) {
+                tmlexeci = new TMLExecI("decrypt", tgc);
+                tmlexeci.setAction("234");
+                activity.addElement(tmlexeci);
+                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                listE.addCor(tmlexeci, tgc);
+
+
             } else if (tgc instanceof TMLADExecC) {
                 tmlexecc = new TMLExecC("execc", tgc);
                 tmlexecc.setAction(modifyString(((TMLADExecC)tgc).getDelayValue()));

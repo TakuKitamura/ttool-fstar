@@ -55,6 +55,7 @@ public class TMLEvent extends TMLCommunicationElement {
     protected boolean canBeNotified = false;
     protected TMLTask origin, destination;
     public int confStatus;
+    public boolean checkAuth;
     public boolean checkConf;
     public TMLCPrimitivePort port;
     public TMLCPrimitivePort port2;
