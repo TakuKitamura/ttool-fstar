@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.net.*;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import myutil.TraceManager;
@@ -184,15 +185,20 @@ public class Client {
      */
     public Message send(Message msg, String server, int port) throws IOException, ClassNotFoundException {
         SSLSocket sslClient = null;
-        //crate a ssl socket.
-        SSLSocketFactory sslSocketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+        //Create a ssl socket.
+        /*SSLSocketFactory sslSocketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
         sslClient = (SSLSocket)sslSocketFactory.createSocket(server,port);
-
         sslClient.setEnabledCipherSuites(sslClient.getSupportedCipherSuites());
-        //TraceManager.addDev("Client has been created successfully!");
+        TraceManager.addDev("Client has been created successfully!");
 
         ObjectOutputStream outputStream = new ObjectOutputStream(sslClient.getOutputStream());
-        ObjectInputStream inputStream = new ObjectInputStream(sslClient.getInputStream());
+        ObjectInputStream inputStream = new ObjectInputStream(sslClient.getInputStream());*/
+
+	Socket client = new Socket("LocalHost", 1234);
+	System.out.println("Client has been created successfully!");
+
+	ObjectOutputStream outputStream = new ObjectOutputStream(client.getOutputStream());
+	ObjectInputStream inputStream = new ObjectInputStream(client.getInputStream());
 
         outputStream.writeObject(msg);
 

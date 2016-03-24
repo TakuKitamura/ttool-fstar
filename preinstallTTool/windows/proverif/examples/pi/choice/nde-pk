@@ -1,0 +1,40 @@
+(*************************************************************
+ *                                                           *
+ *  Cryptographic protocol verifier                          *
+ *                                                           *
+ *  Bruno Blanchet and Vincent Cheval                        *
+ *                                                           *
+ *  Copyright (C) INRIA, CNRS 2000-2014                      *
+ *                                                           *
+ *************************************************************)
+
+(*
+
+    This file is free software; you can redistribute it and/or modify
+    it under the terms of the BSD License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    BSD license for more details (in file LICENSEBSD).
+
+*)
+(* Non-deterministic public-key encryption *)
+
+fun pk/1.
+fun enc/3.
+fun dec/2.
+equation dec(enc(x, pk(y), z), y) = x.
+
+free c,c2.
+
+process
+	new s;
+	(
+	  out(c, pk(s))
+	|
+	  !
+	  in(c2, x);
+	  new a;
+	  out(c, choice[enc(x, pk(s), a), a])
+	)

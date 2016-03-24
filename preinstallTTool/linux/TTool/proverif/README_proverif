@@ -1,0 +1,5 @@
+TTool, an open-source UML toolkit for modeling embedded systems and procotols.
+TTool is developed at Telecom ParisTech, http://ttool.telecom-paristech.fr/
+-------------------------------------------------------------------------------
+
+The proverif directory is intended to store the proverif files generated from TTool. To generate these files, please refer to http://ttool.telecom-paristech.fr/

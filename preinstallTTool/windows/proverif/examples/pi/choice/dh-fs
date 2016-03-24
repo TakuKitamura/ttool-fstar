@@ -1,0 +1,33 @@
+(*************************************************************
+ *                                                           *
+ *  Cryptographic protocol verifier                          *
+ *                                                           *
+ *  Bruno Blanchet and Vincent Cheval                        *
+ *                                                           *
+ *  Copyright (C) INRIA, CNRS 2000-2014                      *
+ *                                                           *
+ *************************************************************)
+
+(*
+
+    This file is free software; you can redistribute it and/or modify
+    it under the terms of the BSD License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    BSD license for more details (in file LICENSEBSD).
+
+*)
+(* Diffie-Hellman *)
+
+data g/0.
+fun exp/2.
+
+equation exp(exp(g,x),y) = exp(exp(g,y),x).
+
+free c.
+
+process
+	new a1; new a2; new a3;
+	out(c, (exp(g,a1), exp(g,a2), choice[exp(exp(g,a1),a2), exp(g,a3)]))

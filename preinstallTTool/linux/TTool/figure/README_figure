@@ -1,0 +1,17 @@
+TTool, an open-source UML toolkit for modeling embedded systems and procotols.
+TTool is developed at ENST, http://ttool.telecom-paristech.fr
+-------------------------------------------------------------------------------
+
+Directory generally configured as the one for saving diagram captures performed from TTool, and the HTML/Latex documentation that can be generated from TTool.
+
+Two latex sources are generated:
+* One using a png-based capture of the diagrams
+* Another one using the svg-based diagram capture.
+To compile the generated latex source code, (you must have inkscape installed) simply type:
+$ make all
+
+If you wish to compile the png-version of the generated latex, you may also simply do:
+$ pdflatex doc.tex
+
+
+

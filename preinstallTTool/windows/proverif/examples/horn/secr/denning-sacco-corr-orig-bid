@@ -1,0 +1,69 @@
+(*************************************************************
+ *                                                           *
+ *  Cryptographic protocol verifier                          *
+ *                                                           *
+ *  Bruno Blanchet and Vincent Cheval                        *
+ *                                                           *
+ *  Copyright (C) INRIA, CNRS 2000-2014                      *
+ *                                                           *
+ *************************************************************)
+
+(*
+
+    This file is free software; you can redistribute it and/or modify
+    it under the terms of the BSD License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    BSD license for more details (in file LICENSEBSD).
+
+*)
+pred c/1 elimVar,decompData.
+nounif c:x.
+
+fun pk/1.
+fun encrypt/2.
+
+fun sign/2.
+
+fun sencrypt/2.
+
+fun host/1.
+
+query c:secret[].
+
+not c:sA[].
+not c:sS[].
+
+reduc
+(* Initialization *)
+
+c:c[];
+c:pk(sA[]);
+c:pk(sS[]);
+
+(* The attacker *)
+
+c:x & c:encrypt(m,pk(x)) -> c:m;
+c:x -> c:pk(x);
+c:x & c:y -> c:encrypt(x,y);
+c:sign(x,y) -> c:x;
+c:x & c:y -> c:sign(x,y);
+c:host(x);
+c:x & c:y -> c:sencrypt(x,y);
+c:x & c:sencrypt(m,x) -> c:m;
+
+(* The protocol *)
+(* A *)
+
+c:(sign((host(sA[]), pk(sA[])), sS[]), sign((host(x), pkx), sS[])) -> 
+c:(sign((host(sA[]), pk(sA[])), sS[]), sign((host(x), pkx), sS[]), encrypt(sign((host(sA[]), host(x), k[pkx]), sA[]), pkx));
+
+(* B *)
+
+c:(sign((host(sA[]), pk(s1)), sS[]), sign((host(sA[]), pk(sA[])), sS[]), encrypt(sign((host(sA[]), host(sA[]), k), s1), pk(sA[]))) -> c:sencrypt(secret[], k);
+
+(* server *)
+
+c:(host(s1), host(s2)) -> c:(sign((host(s1), pk(s1)), sS[]), sign((host(s2), pk(s2)), sS[])).

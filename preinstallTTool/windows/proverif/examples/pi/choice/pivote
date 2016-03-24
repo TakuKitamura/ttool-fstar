@@ -1,0 +1,45 @@
+(*************************************************************
+ *                                                           *
+ *  Cryptographic protocol verifier                          *
+ *                                                           *
+ *  Bruno Blanchet and Vincent Cheval                        *
+ *                                                           *
+ *  Copyright (C) INRIA, CNRS 2000-2014                      *
+ *                                                           *
+ *************************************************************)
+
+(*
+
+    This file is free software; you can redistribute it and/or modify
+    it under the terms of the BSD License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    BSD license for more details (in file LICENSEBSD).
+
+*)
+(* Naive vote protocol
+   Taken from Delaune, Jacquemard, LSV-04-1 *)
+
+(* public key encryption *)
+
+fun pk/1.
+fun encrypt/2.
+reduc decrypt(encrypt(x,pk(y)), y) = x.
+
+free c.
+private free v.
+
+let processA = 
+	out(c, encrypt(v, pkS)). 
+
+process 
+	(new skS;
+	let pkS = pk(skS) in
+	out(c, pkS);
+	!processA) 
+	|
+	(phase 1;
+	new w;
+	out(c, choice[w,v]))

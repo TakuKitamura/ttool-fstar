@@ -33,6 +33,8 @@ TTOOL_JAR_TXT = ttool.txt
 LAUNCHER_JAR_TXT = launcher.txt
 TIFTRANSLATOR_JAR_TXT = tiftranslator.txt
 TMLTRANSLATOR_JAR_TXT = tmltranslator.txt
+WEBCRAWLER_SERVER_JAR_TXT = webcrawler.txt
+WEBCRAWLER_CLIENT_JAR_TXT = client.txt
 RUNDSE_JAR_TXT = rundse.txt
 REMOTESIMULATOR_JAR_TXT = simulationcontrol.txt
 TTOOL_CONFIG = config.xml
@@ -154,7 +156,7 @@ myrelease: basic launcher ttooljar
 basic:
 	$(JAVAC) $(SOURCEPATH) $(TTOOL_SRC) $(CLASSPATH) $(TTOOL_BIN)/$(JSOUP_BINARY):$(TTOOL_BIN)/$(COMMON_CODEC_BINARY) $(TTOOL_SRC)/*.java	
 
-jar: launcher ttooljar tiftranslator tmltranslator rundse remotesimulator
+jar: launcher ttooljar tiftranslator tmltranslator rundse remotesimulator webcrawler
 
 ttooljar:
 	rm -f $(TTOOL_BIN)/$(TTOOL_BINARY)

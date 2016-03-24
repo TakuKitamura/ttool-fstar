@@ -1,0 +1,5 @@
+TTool, an open-source UML toolkit for modeling embedded systems and procotols.
+TTool is developed at Telecom ParisTech http://ttool.telecom-paristech.fr
+-------------------------------------------------------------------------------
+
+The uppaal directory is intended to store the uppaal files generated from TTool. 

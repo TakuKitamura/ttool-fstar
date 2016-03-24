@@ -1,0 +1,50 @@
+SOCLIB_CPU=ppc405
+MUTEKH_CPU=ppc
+SOCLIB_CPU_COUNT=5
+
+#SOCLIB_CPU=sparcv8
+#MUTEKH_CPU=sparc
+#SOCLIB_CPU_COUNT=1
+
+PATH+=/opt/mutekh/bin
+export PATH
+
+updateruntime:
+	cp ~/TTool/executablecode/src/*.c ~/Prog/mutekh/libavatar/
+	cp ~/TTool/executablecode/src/*.h ~/Prog/mutekh/libavatar/include/   
+
+updategeneratedcode:
+	cp ~/TTool/executableCode/generated_src/*.h ~/Prog/mutekh/examples/avatar
+	cp ~/TTool/executableCode/generated_src/*.c ~/Prog/mutekh/examples/avatar 
+	cp ~/TTool/executableCode/Makefile.soclib ~/Prog/mutekh/examples/avatar/Makefile
+
+compilesoclib:
+	cd ~/Prog/mutekh; make CONF=examples/avatar/config BUILD=soclib-$(MUTEKH_CPU):pf-tutorial
+
+runsoclib:
+	echo "running soclib"
+	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ~/Prog/mutekh/avatar-soclib-$(MUTEKH_CPU).out
+allsoclib: updateruntime updategeneratedcode compilesoclib runsoclib
+
+
+updateruntime_hw:
+	cp ~/TTool/executablecode/src_soclib/*.c ~/Prog/mutekh/libavatar/
+	cp ~/TTool/executablecode/src_soclib/include/*.h ~/Prog/mutekh/libavatar/include/   
+
+updategeneratedcode_hw:
+#DG 31.10. prendre version du code appli pour soclib materiel
+	cp ~/TTool/executablecode/generated_src_soclib/*.h ~/Prog/mutekh/examples/avatar
+#DG 31.10. prendre version du code appli pour soclib materiel
+	cp ~/TTool/executablecode/generated_src_soclib/*.c ~/Prog/mutekh/examples/avatar 
+
+	cp ~/TTool/executableCode/Makefile.soclib ~/Prog/mutekh/examples/avatar/Makefile
+
+compilesoclib_hw:
+	cd ~/Prog/mutekh; make CONF=examples/avatar/config BUILD=soclib-$(MUTEKH_CPU):pf-tutorial
+
+#DG 31.10.2014 ici ajoute un make dans le repertoire de la plateforme materielle
+runsoclib_hw:
+	echo "running soclib"
+	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ~/Prog/mutekh/avatar-soclib-$(MUTEKH_CPU).out
+allsoclib: updateruntime updategeneratedcode compilesoclib runsoclib
+
