@@ -50,6 +50,8 @@ import myutil.Conversion;
 
 public abstract class AvatarComposedGuard extends AvatarGuard {
     public AvatarComposedGuard getOpposite () {
-        return new AvatarUnaryGuard ("not(", ")", this);
+        //return new AvatarUnaryGuard ("not(", ")", this);
+	//DG 24.03.
+	return new AvatarUnaryGuard ("!(", ")", this);
     }
 }
