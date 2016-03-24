@@ -1,0 +1,5 @@
+* Starting the db server:
+TTool/bin/startDB.exe
+
+* Stoppping the database server
+TTool/bin/stopDB.exe
