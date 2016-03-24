@@ -352,16 +352,15 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         }
 
         if (_guard instanceof AvatarUnaryGuard) {
-            String before = ((AvatarUnaryGuard) _guard).getBefore ();
-            String after = ((AvatarUnaryGuard) _guard).getAfter ();
+            String unary = ((AvatarUnaryGuard) _guard).getUnaryOp ();
             AvatarGuard guard = ((AvatarUnaryGuard) _guard).getGuard ();
 
             String beforeProV = null;
             String afterProV = ")";
 
-            if (before.equals ("not("))
+            if (unary.equals ("not"))
                 beforeProV = "not (";
-            else if (before.equals ("("))
+            else if (unary.equals (""))
                 beforeProV = "(";
 
             String guardProV = AVATAR2ProVerif.translateGuard (guard, attributeCmp);

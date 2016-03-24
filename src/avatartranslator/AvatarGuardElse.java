@@ -86,7 +86,7 @@ public class AvatarGuardElse extends AvatarGuard {
         return result;
     }
 
-    public String toString () {
+    public String getAsString (AvatarSyntaxTranslator translator) {
         return "else";
     }
 

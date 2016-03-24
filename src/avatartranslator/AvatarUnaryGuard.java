@@ -51,13 +51,20 @@ import myutil.Conversion;
 public class AvatarUnaryGuard extends AvatarComposedGuard {
     AvatarComposedGuard guard;
 
+    String unary;
+
     String before;
     String after;
 
-    public AvatarUnaryGuard (String _before, String _after, AvatarComposedGuard _guard) {
+    public AvatarUnaryGuard (String _unary, String _before, String _after, AvatarComposedGuard _guard) {
+        this.unary = _unary;
         this.before = _before;
         this.after = _after;
         this.guard = _guard;
+    }
+
+    public String getUnaryOp () {
+        return this.unary;
     }
 
     public String getBefore () {
@@ -73,13 +80,13 @@ public class AvatarUnaryGuard extends AvatarComposedGuard {
     }
 
     public AvatarComposedGuard getOpposite () {
-        if (this.before.equals ("not(")) {
+        if (this.unary.equals ("not")) {
             return this.guard;
         }
-        return new AvatarUnaryGuard ("not(", ")", this);
+        return new AvatarUnaryGuard ("not", "(", ")", this);
     }
 
-    public String toString () {
-        return this.before + this.guard.toString () + this.after;
+    public String getAsString (AvatarSyntaxTranslator translator) {
+        return translator.translateUnaryOp (this.unary) + this.before + this.guard.getAsString (translator) + this.after;
     }
 }

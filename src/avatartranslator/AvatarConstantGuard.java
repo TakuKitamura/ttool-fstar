@@ -63,7 +63,7 @@ public class AvatarConstantGuard extends AvatarSimpleGuard {
         return this.constant;
     }
 
-    public String toString () {
+    public String getAsString (AvatarSyntaxTranslator translator) {
         return this.constant.getName ();
     }
 }

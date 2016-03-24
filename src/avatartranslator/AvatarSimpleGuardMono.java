@@ -63,7 +63,7 @@ public class AvatarSimpleGuardMono extends AvatarSimpleGuard {
         return this.term;
     }
 
-    public String toString () {
+    public String getAsString (AvatarSyntaxTranslator translator) {
         return this.term.getName ();
     }
 }

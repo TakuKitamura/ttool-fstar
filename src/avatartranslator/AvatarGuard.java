@@ -86,7 +86,7 @@ public abstract class AvatarGuard {
 
             if (indexRParen >= sane.length ()-1) {
                 if (first instanceof AvatarComposedGuard)
-                    return new AvatarUnaryGuard ("not(", ")", (AvatarComposedGuard) first);
+                    return new AvatarUnaryGuard ("not", "(", ")", (AvatarComposedGuard) first);
                 else {
                     TraceManager.addDev("Could not create unary guard "+ sane);
                     return new AvatarGuardEmpty ();
@@ -102,7 +102,7 @@ public abstract class AvatarGuard {
 
                 if (indexRParen == sane.length ()-1) {
                     if (first instanceof AvatarComposedGuard)
-                        return new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) first);
+                        return new AvatarUnaryGuard ("", "(", ")", (AvatarComposedGuard) first);
                     else {
                         TraceManager.addDev("Unary guard "+ sane + " does not contain guard");
                         return new AvatarGuardEmpty ();
@@ -131,7 +131,7 @@ public abstract class AvatarGuard {
                 first = AvatarGuard.createFromString (block, sane.substring (1, indexRParen));
                 if (indexRParen == sane.length ()-1) {
                     if (first instanceof AvatarComposedGuard)
-                        return new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) first);
+                        return new AvatarUnaryGuard ("", "(", ")", (AvatarComposedGuard) first);
                     else {
                         TraceManager.addDev("Unary guard "+ sane + " does not contain guard");
                         return new AvatarGuardEmpty ();
@@ -209,8 +209,8 @@ public abstract class AvatarGuard {
         if (_g == null || ! (_g instanceof AvatarComposedGuard) || ! (_guard instanceof AvatarComposedGuard))
             return _guard;
 
-        return new AvatarBinaryGuard (new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) _guard),
-                new AvatarUnaryGuard ("(", ")", (AvatarComposedGuard) _g),
+        return new AvatarBinaryGuard (new AvatarUnaryGuard ("", "(", ")", (AvatarComposedGuard) _guard),
+                new AvatarUnaryGuard ("", "(", ")", (AvatarComposedGuard) _g),
                 _binaryOp);
     }
 
@@ -224,5 +224,11 @@ public abstract class AvatarGuard {
 
     public boolean isGuarded () {
         return true;
+    }
+
+    public abstract String getAsString (AvatarSyntaxTranslator translator);
+
+    public String toString () {
+        return this.getAsString (new AvatarSyntaxTranslator ());
     }
 }

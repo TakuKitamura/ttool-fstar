@@ -75,7 +75,7 @@ public class AvatarSimpleGuardDuo extends AvatarSimpleGuard {
         return this.binaryOp;
     }
 
-    public String toString () {
-        return this.termA.getName () + " " + this.binaryOp + " " + this.termB.getName ();
+    public String getAsString (AvatarSyntaxTranslator translator) {
+        return this.termA.getName () + " " + translator.translateBinaryOp (this.binaryOp) + " " + this.termB.getName ();
     }
 }

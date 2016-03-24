@@ -72,7 +72,7 @@ public class AvatarBinaryGuard extends AvatarComposedGuard {
         return this.binaryOp;
     }
 
-    public String toString () {
-        return this.guardA.toString () + this.binaryOp + this.guardB.toString ();
+    public String getAsString (AvatarSyntaxTranslator translator) {
+        return this.guardA.getAsString (translator) + translator.translateBinaryOp (this.binaryOp) + this.guardB.getAsString (translator);
     }
 }

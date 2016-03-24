@@ -36,9 +36,9 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AvatarGuardEmpty
-   * Creation: 25/09/2015
-   * @version 1.0 25/09/2015
+   * Class AvatarSyntaxTranslator
+   * Creation: 24/03/2016
+   * @version 1.0 24/03/2016
    * @author Florian LUGOU
    * @see
    */
@@ -46,20 +46,12 @@
 
 package avatartranslator;
 
-import myutil.Conversion;
-
-/**
- * An AvatarGuardEmpty is an empty {@link AvatarGuard}
- */
-public class AvatarGuardEmpty extends AvatarGuard {
-    public AvatarGuardEmpty () {
+public class AvatarSyntaxTranslator {
+    String translateUnaryOp (String op) {
+        return op;
     }
 
-    public boolean isGuarded () {
-        return false;
-    }
-
-    public String getAsString (AvatarSyntaxTranslator translator) {
-        return "";
+    String translateBinaryOp (String op) {
+        return op;
     }
 }
