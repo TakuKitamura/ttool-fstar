@@ -100,6 +100,9 @@ public class DatabaseCreation {
 	vulnerabilitesSqlFile = new File(dbPath + "//vulnerabilites.sql");
 	referencesSqlFile = new File(dbPath + "//references.sql");
 	softwaresSqlFile = new File(dbPath + "//softwares.sql");
+
+	
+	TraceManager.addDev("Path to vuln:" + vulnerabilitesSqlFile.getCanonicalPath());
     }
 
     public File getVulnerabilitesSqlFile() {return vulnerabilitesSqlFile;}
@@ -355,7 +358,7 @@ public class DatabaseCreation {
         ps = conn.prepareStatement("CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
         ps.setString(1, null);
         ps.setString(2, "VULNERABILITIES");
-        ps.setString(3, vulnerabilitesSqlFile.toString());
+        ps.setString(3, vulnerabilitesSqlFile.getCanonicalPath());
         ps.setString(4, ";");
         ps.setString(5, null);
         ps.setString(6, "UTF-8");
