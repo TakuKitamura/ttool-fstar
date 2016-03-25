@@ -185,8 +185,6 @@ public class Client {
             while (true) {
 
                 if (cmd.equals(Message.CMD_SEARCH)) {
-
-
                     options.add(Message.OPTION_KEY_WORDS);
                     options.add(Message.OPTION_DATE);
                     options.add(Message.OPTION_SCORE);
