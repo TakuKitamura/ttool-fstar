@@ -1,0 +1,91 @@
+<!--<div class="summary">
+This is how to show a summary of a page. For example. Of course. It's merely a highlighted box...
+</div>-->
+
+<h1>Support: Identified Bugs (since 2009)</h1>
+
+<br>
+<br>
+If you think you have identified a bug, please, do send an email (provided in the <a href="./contact.html">contact section</a>) with a clear explanation this bug, including <b>your version of TTool</b> as well as involved models. Your version of TTool can be identified in the <b>"Help"</b> menu, <b>"About"</b> menu item. All bugs that can be corrected at once, i.e., without a tracking over days, are not listed here.
+<br>
+<br>
+<br>
+<hr>
+
+<h2 id="func"> Identified Bugs (2016) </h2>
+<ul>
+<li><b><strike>Bug #028</strike></b> (March, 24th, 2016): C-POSIX code generation from AVATAR diagrams sometimes fails because of the "not" function. Resolved since build 12522</li>
+<br>
+</ul>
+<hr>
+<h2 id="func"> Identified Bugs (2015) </h2>
+<ul>
+<li><b>Bug #027</b> (August, 26th, 2015): It is not always possible to select elements of diagrams when the zoom function has been used.</li> 
+<br>
+<li><b>Bug #026</b> (March, 13th, 2015): AVATAR: ";" at the end of action in transitions might result in errors when using UPPAAL (bug in the AVATAR to UPPAAL converter?).</li> 
+<br>
+<li><b>Bug #025</b> (March, 13th, 2015): TTool cannot always detect that the UPPAAL license has expired, and responds as if the verification of property was succesful.</li> 
+<br>
+<li><b>Bug #024</b> (March, 13th, 2015): AVATAR: when generating ProVerif code from all blocks of the Microwave example, ProVerif returns an error</li> 
+<br>
+</ul>
+<br>
+<hr>
+<h2 id="func"> Identified Bugs (2010) </h2>
+<ul>
+<li><b><strike>Bug #023</strike></b> (May, 7th, 2010): sometimes, when removing a connector between too compoments, it is not possible to add a new connectors to the should-be-free connecting point. Can be reproduced under Linux only?. Resolved since build 6516.</li>
+<br>
+<li><b><strike>Bug #022</strike></b> (April, 6th, 2010): TTool stable version does not contain any config.xml file. Resolved since v0.92.</li>
+<br>
+<li><b>Bug #021</b> (April, 6th, 2010): TTool starts just nothing when clicking on "help TURTLE"</li>
+</li>
+</ul>
+<br>
+<hr>
+
+<h2 id="func"> Identified Bugs (2009) </h2>
+
+<ul>
+<li><b><strike>Bug #020</strike></b> (November, 25th, 2009): TTool crashes when using TMLWaitEvent operators with an event declared with non-set attributes. Resolved the 4th of December, 2009 (build 3104).</li>
+<br>
+<li><b>Bug #019</b> (September, 11th, 2009): intermediate points of connectors do not move when the whole connector, embedded into another component, moves.</li>
+<br>
+<li><b><strike>Bug #018</strike></b> (July, 6th, 2009): TTool crashes when a Sequence Diagram has an guard without an "[end]".</li>
+<br>
+<li><b><strike>Bug #017</strike></b> (May, 25th, 2009): connectors do not always load correctly on reference components in TML component diagrams. It is due to the fact that some referenced components have not yet been loaded. A solution would be to load all diagrams, and at the end, to load connectors. Resolved the  26th of May, 2009 (build 2705).</li>
+<br>
+<li><b><strike>Bug #016</strike></b>(May, 18th, 2009): Ports are not always updated correctly on reference components in TML component diagrams. Resolved the 19th of May, 2009 (build 2599).</li>
+<br>
+<li><b><strike>Bug #015</strike></b> (May, 18th, 2009):BCG graphs are not saved in the same locations as other graphs in DOT or AUT format. Resolved the 18th of May, 2009 (build 2569).</li>
+<br>
+<li><b><strike>Bug #014</strike></b> (April, 24th, 2009): TURTLE-to-UPPAAL code generator may not work when parallel operators with synchronization are used.</li>
+<br>
+<li><b><strike>Bug #013</strike></b> (April, 16th, 2009): On DIPLODOCUS Architecture diagrams, when moving the mouse pointer over a given node with several artifacts, only one artifact is correctly highlighted.</li>
+<br>
+<li><b><strike>Bug #012</strike></b> (April, 15th, 2009): The UPPAAL code generator may generate UPPAAL locations with both committed and urgent parameter, which is not allowed. Resolved the 16th of April, 2009 (build 2370).</li>
+<br>
+<li><b><strike>Bug #011</strike></b> (April, 10th, 2009): When editing the parameters of a DIPLODOCUS memory, the editing window might be too small for the fields to be editable. Resolved the 14th of April (build 2347).</li>
+<br>
+<li><b><strike>Bug #010</strike></b> (April, 10th, 2009): When editing the parameters of a DIPLODOCUS memory,  the editing window might be too small for the fields to be editable. Resolved the 14th of April (build 2347).</li>
+<br>
+<li><b><strike>Bug #009</strike></b> (April, 8th, 2009): When a copy-paste action of a tclass is performed, its activity diagram is also copied-pasted. But, the size of the panel of the pasted activity diagram is not set to the size of the original panel [Bug is probably located in function loadActivityDiagram of GTURTLEModeling, should use functions maxX += increment; and updateSize(); on the panel ...]. Resolved the 14th of April.</li>
+<br>
+<li><b><strike>Bug #008</strike></b> (April, 7th, 2009): When a TURTLE design is formally validated (generation of RG) and the design has not ben saved, the RG cannot be visualized [Note: this may apply to other UML profile]. Resolved the 8th of April, 2009.</li>
+<br>
+<li><b><strike>Bug #007</strike></b> (April, 6th, 2009): Translation of TIF choices into UPPAAL is not correct because time may evolved when evaluating guards, since UPPAAL locations representing those choices are not urgent. Resolved the 8th of April, 2009.</li>
+<br>
+<li><b><strike>Bug #005</strike></b> (April, 6th, 2009): Zoom information is not updated / set to enable when loading a new modeling. Resolved the 10th of April, 2009 (build 2332).</li>
+<br>
+<li><b><strike>Bug #004</strike></b>(April, 6th, 2009): UPPAAL translator from TURTLE activity diagrams does not handled correctly non-deterministic guards of choices when the option "assume all choices are deterministic" is checked. Resolved the 6th of April, 2009.</li>
+<br>
+<li><b><strike>Bug #003</strike></b> (April, 6th, 2009): no "config.xml" in release 0.92 and release 0.92beta1. Resolved the 6th of April, 2009.</b></li>
+<br>
+<li><b><strike>Bug #002</strike></b> (March, 31, 2009): "clock" keywork is reserved in UPPAAL -> shall be considered as a keyword too in TURTLE / DIPLODOCUS diagrams. Resolved the 6th of April, 2009.</li>
+<br>
+<li><b><strike>Bug #001</strike></b> (March, 24, 2009): actions selected as "check for accessibility", on activity diagrams, are not considered by UPPAAL on TObjects, but only on TClasses. Resolved the 10th of April, 2009 (build 2230).</li>
+</ul>
+
+<br>
+
+
+
