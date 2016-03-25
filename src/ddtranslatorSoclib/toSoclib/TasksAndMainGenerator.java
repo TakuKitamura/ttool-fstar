@@ -651,6 +651,7 @@ public class TasksAndMainGenerator {
 
             if (at.isGuarded()) {
                	String g = modifyGuard(at.getGuard().toString());
+		
                 ret += "if (!" + g + ") {" + CR;
                 if (debug) {
                     ret += "debug2Msg(__myname, \"Guard failed: " + g + "\");" + CR;
@@ -801,6 +802,7 @@ public class TasksAndMainGenerator {
 
         if (_at.isGuarded()) {
             String g = modifyGuard(_at.getGuard().toString());
+	    
             ret += "if (" + g + ") {" + CR;
         }
 
@@ -891,6 +893,7 @@ public class TasksAndMainGenerator {
         String ret = "";
         if (_at.isGuarded()) {
            String g = modifyGuard(_at.getGuard().toString());
+	   
             ret += "if (" + g + ") {" + CR;
         }
 
@@ -1065,7 +1068,8 @@ public class TasksAndMainGenerator {
         g = Conversion.replaceAllString(g, "]", ")").trim();
         g = Conversion.replaceOp(g, "and", "&&");
         g = Conversion.replaceOp(g, "or", "||");
-        g = Conversion.replaceOp(g, "not", "!");
+        // g = Conversion.replaceOp(g, "not", "!");
+	g = g.replaceAll("not", "!");
         return g;
     }
 
