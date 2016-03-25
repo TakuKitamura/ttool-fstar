@@ -84,7 +84,7 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
         editable = true;
         removable = true;
         
-        name = "encrypt";
+        name = "decrypt";
         
         myImageIcon = IconManager.imgic214;
     }
@@ -197,7 +197,7 @@ public boolean editOndoubleClick(JFrame frame) {
     }
     
     public int getType() {
-        return TGComponentManager.TMLAD_ENCRYPT;
+        return TGComponentManager.TMLAD_DECRYPT;
     }
     
     public int getDefaultConnector() {

@@ -1474,7 +1474,7 @@ public class GTMLModeling  {
                 listE.addCor(tmlexecii, tgc);
 
             } else if (tgc instanceof TMLADEncrypt) {
-                tmlexeci = new TMLExecI("execi", tgc);
+                tmlexeci = new TMLExecI("encrypt", tgc);
                 tmlexeci.setAction("123");
                 activity.addElement(tmlexeci);
 		SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).keySize, ((TMLADEncrypt)tgc).MACSize);
@@ -1608,6 +1608,10 @@ public class GTMLModeling  {
                     tmlreadchannel = new TMLReadChannel("read channel", tgc);
                     tmlreadchannel.setNbOfSamples(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
                     tmlreadchannel.addChannel(channel);
+		//security pattern
+		    if (securityPatterns.get(((TMLADReadChannel)tgc).securityContext)!=null){
+			tmlreadchannel.securityPattern= securityPatterns.get(((TMLADReadChannel)tgc).securityContext);
+		    }
                     activity.addElement(tmlreadchannel);
                     ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlreadchannel, tgc);
@@ -1908,6 +1912,10 @@ public class GTMLModeling  {
                         channel = tmlm.getChannelByName(getFromTable(tmltask, channels[i]));
                         tmlwritechannel.addChannel(channel);
                     }
+		    //add sec pattern
+		    if (securityPatterns.get(((TMLADWriteChannel)tgc).securityContext)!=null){
+			tmlwritechannel.securityPattern= securityPatterns.get(((TMLADWriteChannel)tgc).securityContext);
+		    }
                     activity.addElement(tmlwritechannel);
                     ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlwritechannel, tgc);
