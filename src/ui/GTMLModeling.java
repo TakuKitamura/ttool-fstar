@@ -91,6 +91,8 @@ public class GTMLModeling  {
     private Vector<TDiagramPanel> diagramPanelsToTakeIntoAccount;
     private Vector<TDiagramPanel> panels;
 
+    private HashMap<String, SecurityPattern> securityPatterns = new HashMap<String, SecurityPattern>();
+
     private boolean putPrefixName = false;
 
     public GTMLModeling(TMLDesignPanel _tmldp, boolean resetList) {
@@ -1475,6 +1477,9 @@ public class GTMLModeling  {
                 tmlexeci = new TMLExecI("execi", tgc);
                 tmlexeci.setAction("123");
                 activity.addElement(tmlexeci);
+		SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).keySize, ((TMLADEncrypt)tgc).MACSize);
+		tmlexeci.securityPattern = securityPattern;
+		securityPatterns.put(((TMLADEncrypt)tgc).securityContext, securityPattern);
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlexeci, tgc);
 
@@ -1482,6 +1487,7 @@ public class GTMLModeling  {
                 tmlexeci = new TMLExecI("decrypt", tgc);
                 tmlexeci.setAction("234");
                 activity.addElement(tmlexeci);
+		tmlexeci.securityPattern = securityPatterns.get(((TMLADDecrypt)tgc).securityContext);
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlexeci, tgc);
 

@@ -99,8 +99,8 @@ public class TML2Avatar {
     public void checkConnections(){
 	for (TMLTask t1:tmlmodel.getTasks()){
 	    for (TMLTask t2:tmlmodel.getTasks()){
-		HwCPU node1 = (HwCPU) tmlmap.getHwNodeOf(t1);
-		HwCPU node2 = (HwCPU) tmlmap.getHwNodeOf(t2);
+		HwExecutionNode node1 = (HwExecutionNode) tmlmap.getHwNodeOf(t1);
+		HwExecutionNode node2 = (HwExecutionNode) tmlmap.getHwNodeOf(t2);
 		if (node1==node2){
 		    originDestMap.put(t1.getName()+"__"+t2.getName(), channelPrivate);
 		}

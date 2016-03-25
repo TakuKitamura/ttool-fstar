@@ -50,7 +50,7 @@ import java.util.*;
 
 public class TMLActivityElement extends TMLElement{
     protected Vector<TMLActivityElement> nexts;
-    public String securityContext="";
+    public SecurityPattern securityPattern;
     public TMLActivityElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         nexts = new Vector();
