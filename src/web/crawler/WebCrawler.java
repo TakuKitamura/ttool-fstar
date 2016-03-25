@@ -156,7 +156,7 @@ public class WebCrawler {
         } else {
             /* Read XML file and store the informations in the database          */
             for (String xmlFile : FileNames) {
-                ParsingXML(xmlFile, database);
+                ParsingXML(xmlFile, pathToFiles, database);
             }
             System.out.println("Total records insert in the database: " + database.getTotalRecordsInDatabase() + "\n\n");
             /* Store myDatabase in file myDatabase.sql                           */
@@ -177,6 +177,7 @@ public class WebCrawler {
             pathToFiles = "";
         }
 
+	TraceManager.addDev("PathtoFiles=" + pathToFiles);
 
         String thisyear = new SimpleDateFormat("yyyy").format(new Date());
 

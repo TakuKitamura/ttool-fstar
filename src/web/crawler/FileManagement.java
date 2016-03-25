@@ -47,6 +47,8 @@
 
 package web.crawler;
 
+import myutil.*;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -97,9 +99,9 @@ public class FileManagement {
      * After extracting the xml file delete the zipped one.
      * @param filename name of the file on the website
      */
-    public static void DownloadFile(String filename) throws MalformedURLException, IOException {
+    public static void downloadFile(String filename, String destinationPath) throws MalformedURLException, IOException {
 
-        File file = new File(filename);
+        File file = new File(destinationPath + filename);
 
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  */
         /*   If the file already exists return else download it from the      */
@@ -112,7 +114,7 @@ public class FileManagement {
             //set the URL of the file to be downloaded
             URL url = new URL("http://static.nvd.nist.gov/feeds/xml/cve/" + filename + ".zip"); 
 
-            System.out.println("File: " + filename + " does not exists");
+            System.out.println("File: " + destinationPath + filename + " does not exists");
             System.out.println("Downloading file: " + url.toString());
             
             //create the new connection
@@ -123,11 +125,12 @@ public class FileManagement {
             urlConnection.setDoOutput(true);
             urlConnection.connect();
 
-            //creat the zip file 
-            String zip_filename = filename+".zip";
+            // Create the zip file
+            String zip_filename = destinationPath + filename + ".zip";
+	    TraceManager.addDev("zip_name=" + zip_filename);
             File zip_file = new File(zip_filename);
 
-            //write the downloaded data into the zip file
+            // Write the downloaded data into the zip file
             FileOutputStream fileOutput = new FileOutputStream(zip_file);
 
             //reading the data from the url
@@ -152,7 +155,7 @@ public class FileManagement {
             //close the output stream when done
             fileOutput.close();
                         
-            unZipFile(zip_filename);
+            unZipFile(zip_filename, destinationPath);
             
             //keep only the xml files (the extracted file from the zip) 
             zip_file.delete();
@@ -166,7 +169,7 @@ public class FileManagement {
     }
     
     
-    public static void unZipFile(String zipFile){
+    public static void unZipFile(String zipFile, String destinationPath){
  
      byte[] buffer = new byte[1024];
  
@@ -180,7 +183,8 @@ public class FileManagement {
     	while(ze!=null){
  
     	    String fileName = ze.getName();
-            File newFile = new File(fileName);
+	    TraceManager.addDev("Ze.Name=" + fileName);
+            File newFile = new File(destinationPath + fileName);
  
            
             System.out.println("Unzipping file: " + newFile.getAbsoluteFile());
@@ -284,7 +288,7 @@ public class FileManagement {
      * @param filename name of the xml file you want to parse
      * @param database database you want to fill with data from the file
      */
-    public static void ParsingXML(String filename, web.crawler.DatabaseCreation database) {
+    public static void ParsingXML(String filename, String destinationPath, web.crawler.DatabaseCreation database) {
         LinkedList<String> list_id = new LinkedList<>();
         LinkedList<String> list_pub_date = new LinkedList<>();
         LinkedList<String> list_score = new LinkedList<>();
@@ -307,7 +311,7 @@ public class FileManagement {
 
         try {
 
-            DownloadFile(filename);
+            downloadFile(filename, destinationPath);
             System.out.println("Extracting data from file: " + filename);
             File fXmlFile = new File(filename);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
