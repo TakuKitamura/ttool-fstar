@@ -84,6 +84,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
     //Security Verification
     public int checkConfStatus;
+
+    public int checkSecConfStatus;
+    public int checkSecWeakAuthStatus;
+    public int checkSecStrongAuthStatus;
+    public String secName="";
+
     public int checkWeakAuthStatus;
     public int checkStrongAuthStatus;
     public boolean checkConf;
@@ -304,7 +310,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         if (checkConf && isOrigin){
             drawConfVerification(g);
         }
-	if (checkAuth && !isOrigin){
+	if (checkAuth && !isOrigin && !secName.equals("")){
 	    drawAuthVerification(g);
 	}
         g.setFont(fold);
@@ -316,10 +322,11 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
 
     public void drawAuthVerification(Graphics g){
+        g.drawString(secName, x-20, y+8);
 	Color c = g.getColor();
         Color c1;
 	Color c2;
-	switch(checkStrongAuthStatus) {
+	switch(checkSecStrongAuthStatus) {
  	    case 2:
                 c1 = Color.green;
         	break;
@@ -329,7 +336,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             default:
                 c1 = Color.gray;
 	}
-	switch(checkWeakAuthStatus) {
+	switch(checkSecWeakAuthStatus) {
  	    case 2:
                 c2 = Color.green;
                 break;
@@ -340,12 +347,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                 c2= c1;
 	}
 	
-        g.drawOval(x-16, y, 10, 15);
+        g.drawOval(x-18, y+8, 10, 15);
         g.setColor(c1);
-	int[] xps = new int[]{x-18, x-18, x-2};
-	int[] yps = new int[]{y+6, y+20, y+20};
-	int[] xpw = new int[]{x-2, x-2, x-18};
-	int[] ypw = new int[]{y+20, y+6, y+6};
+	int[] xps = new int[]{x-20, x-20, x-4};
+	int[] yps = new int[]{y+14, y+28, y+28};
+	int[] xpw = new int[]{x-4, x-4, x-20};
+	int[] ypw = new int[]{y+28, y+14, y+14};
 	g.fillPolygon(xps, yps,3);	
 	
 	g.setColor(c2);	
@@ -353,8 +360,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         g.setColor(c);
 	g.drawPolygon(xps, yps,3);
 	g.drawPolygon(xpw, ypw, 3);
-	g.drawString("S", x-16, y+18);
-	g.drawString("W", x-9, y+14);
+	g.drawString("S", x-18, y+26);
+	g.drawString("W", x-11, y+22);
     }
     public void drawConfVerification(Graphics g){
         Color c = g.getColor();
@@ -381,6 +388,27 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
 
 
+	if (!secName.equals("")){
+      switch(checkSecConfStatus) {
+        case 1:
+            c1 = Color.gray;
+            break;
+        case 2:
+            c1 = Color.green;
+            break;
+        case 3:
+            c1 = Color.red;
+            break;
+        default:
+            return;
+        }
+        g.drawString(secName, x-20, y+20);
+        g.drawOval(x-10, y+22, 6, 9);
+        g.setColor(c1);
+        g.fillRect(x-12, y+24, 9, 7);
+        g.setColor(c);
+        g.drawRect(x-12, y+24, 9, 7);
+	}
     }
 
     public void manageMove() {

@@ -78,10 +78,12 @@ public class TML2Avatar {
     HashMap<String, AvatarSignal> signalMap = new HashMap<String, AvatarSignal>();
     public HashMap<String, Object> stateObjectMap = new HashMap<String, Object>();
 
+    HashMap<String, String> secChannelMap = new HashMap<String, String>();
+
     HashMap<String, AvatarAttributeState> signalAuthOriginMap = new HashMap<String, AvatarAttributeState>();
     HashMap<String, AvatarAttributeState> signalAuthDestMap = new HashMap<String, AvatarAttributeState>();
 
-    ArrayList<SecurityPattern> secPatterns = new ArrayList<SecurityPattern>();
+    public ArrayList<SecurityPattern> secPatterns = new ArrayList<SecurityPattern>();
 
     List<AvatarSignal> signals = new ArrayList<AvatarSignal>();
     private final static Integer channelPublic = 0;
@@ -739,6 +741,7 @@ public class TML2Avatar {
 		AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
 		
 		if (ae.securityPattern!=null){
+		    secChannelMap.put(ae.securityPattern.name,ch.getName());
 		    System.out.println(block.getName() + " readchannel has security pattern" + ae.securityPattern.name);
 		    as.addValue(ae.securityPattern.name+"_encrypted");
 		    AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
@@ -810,6 +813,7 @@ public class TML2Avatar {
 		    as.addValue(ae.securityPattern.name+"_encrypted");
 		    AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
 		    block.addAttribute(data);
+		    secChannelMap.put(ae.securityPattern.name,ch.getName());
 		}
 		else {
 	    	as.addValue(ch.getName()+"__chData");
@@ -1045,15 +1049,6 @@ public class TML2Avatar {
 
 	
 	    AvatarBlock block = new AvatarBlock(task.getName(), avspec, task.getReferenceObject());
-
-	    tmlmap.getTMLModeling().securityPatterns.add("enc");
-	    for (String s:tmlmap.getTMLModeling().securityPatterns){
-		System.out.println("Adding attr security pattern " + s);
-		AvatarAttribute tmp = new AvatarAttribute(s, AvatarType.INTEGER, block, null);
-	        block.addAttribute(tmp);
-		tmp = new AvatarAttribute(s+"_encrypted", AvatarType.INTEGER, block, null);
-	        block.addAttribute(tmp);
-	    }
 	    taskBlockMap.put(task, block);
 	    //Add temp variable for unsendable signals
 	    AvatarAttribute tmp = new AvatarAttribute("tmp", AvatarType.INTEGER, block, null);
@@ -1401,9 +1396,11 @@ public class TML2Avatar {
 	//Check if we matched up all signals
 	//System.out.println(avspec);
 	
-
+	tmlmap.getTMLModeling().secChannelMap = secChannelMap;
 	return avspec;
     }
+
+ //   public void backtracePatterns(List<Stri
    
     public void backtraceReachability(List<String> reachableStates, List<String> nonReachableStates){
 	for (String s: reachableStates){
