@@ -38,7 +38,7 @@
  * /**
  * Class Conversion
  * Creation: 01/12/2003
- * @version 1.1 01/12/2003
+ * @version 1.2 25/03/2016
  * @author Ludovic APVRILLE
  * @see
  */
@@ -359,7 +359,7 @@ public class Conversion {
                 s2 = s.substring(index, Math.min(index + from.length() + 1, s.length()));
 		b2 = s2.matches("\\w*");
             }
-            //TraceManager.addDev("s1 = " + s1 + " s2 = " + s2);
+            TraceManager.addDev("s=" + s + " b1 = " + b1 + " b2 = " + b2);
 
             if (!(b1 || b2)) {
                 // from must be replaced
