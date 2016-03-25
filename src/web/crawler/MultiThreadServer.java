@@ -65,6 +65,7 @@ import java.util.logging.Logger;
 import javax.xml.transform.TransformerException;
 import org.apache.commons.io.FileUtils;
 import web.crawler.WebCrawler;
+import myutil.externalSearch.Message;
 
 
 public class MultiThreadServer {

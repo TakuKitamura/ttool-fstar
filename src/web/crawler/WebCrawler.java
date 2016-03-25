@@ -65,6 +65,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import static web.crawler.FileManagement.ParsingXML;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 
@@ -119,12 +124,16 @@ public class WebCrawler {
 
                 File thisyearfile = new File(FileNames[0]);
                 thisyearfile.delete();
+		
                 File lastyearfile = new File(FileNames[1]);
                 lastyearfile.delete();
+		
                 File beforelastyearfile = new File(FileNames[2]);
                 beforelastyearfile.delete();
+		
                 File beforebeforelastyearfile = new File(FileNames[3]);
                 beforebeforelastyearfile.delete();
+		
                 database.deleteReferencesSqlFile();
                 database.deleteVulnerabilitesSqlFile();
                 database.deleteSoftwaresSqlFile();
@@ -155,7 +164,7 @@ public class WebCrawler {
 
         } else {
             /* Read XML file and store the informations in the database          */
-            for (String xmlFile : FileNames) {
+            for (String xmlFile: FileNames) {
                 ParsingXML(xmlFile, pathToFiles, database);
             }
             System.out.println("Total records insert in the database: " + database.getTotalRecordsInDatabase() + "\n\n");
@@ -177,7 +186,6 @@ public class WebCrawler {
             pathToFiles = "";
         }
 
-	TraceManager.addDev("PathtoFiles=" + pathToFiles);
 
         String thisyear = new SimpleDateFormat("yyyy").format(new Date());
 
@@ -216,14 +224,21 @@ public class WebCrawler {
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*              Server's Protocol Initialization                     */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ 	SSLServerSocket sslServerSocket = null;
         try {
-            ServerSocket server = new ServerSocket(PORT);
-            TraceManager.addDev("Server has been created successfully");
+        //    ServerSocket server = new ServerSocket(1234);
+		SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+                sslServerSocket = (SSLServerSocket) factory.createServerSocket(12345);
+
+            System.out.println("Server has been created successfully\n");
 
             while (true) { //Allow a client to connect
                 //Use multithread
                 //If a client asks to connect, then accept it
-                new ThreadSocket(server.accept(), dbq).start();
+		SSLSocket sslSocket = (SSLSocket) sslServerSocket.accept();
+                sslSocket.setEnabledCipherSuites(sslServerSocket.getSupportedCipherSuites());
+
+                new ThreadSocket(sslSocket, dbq).start();
             }
 
         } catch (IOException e) {

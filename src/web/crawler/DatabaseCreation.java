@@ -349,6 +349,8 @@ public class DatabaseCreation {
             vulnerabilitesSqlFile.delete();
         }
 
+
+	TraceManager.addDev("Storing in File:" + vulnerabilitesSqlFile.toString());
         /* Store Table VULNERABILITIES                                       */
         ps = conn.prepareStatement("CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
         ps.setString(1, null);

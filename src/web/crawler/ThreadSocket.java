@@ -42,7 +42,7 @@
    * Creation: 2015
    * @version 2.0 25/03/2016
    * @author  Dan Huynh VO, Ludovic APVRILLE
-   * @see 
+   * @see
    */
 
 package web.crawler;
@@ -54,24 +54,27 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.transform.TransformerException;
+import myutil.externalSearch.Message;
+import javax.net.ssl.SSLSocket;
 
 
 
 public class ThreadSocket extends Thread {
-    
-   Socket socket = null;
-   DatabaseQuery database = null;
-    
+
+    SSLSocket socket = null;
+    DatabaseQuery database = null;
+
     /**
      *
      * @param socket
      * @param database
      */
-    public ThreadSocket(Socket socket, web.crawler.DatabaseQuery database){
+    public ThreadSocket(SSLSocket socket, web.crawler.DatabaseQuery database){
+
         this.socket = socket;
         this.database=database;
     }
-    
+
     @Override
     public void run() {
         try {
@@ -79,34 +82,34 @@ public class ThreadSocket extends Thread {
             //Receive from clients
             ObjectOutputStream toClient = new ObjectOutputStream(socket.getOutputStream());
             //Send to clients
-            
-            
-                //Create a new message to prepare getting the message from client
-                Message requestMsg = new Message();
-               
-                try {
-                    requestMsg = (Message) fromClient.readObject();
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
-                }
-               
-                //Print the result 
-                //System.out.println(requestMsg.getCmd());
-                //System.out.println(requestMsg.getOptions());
-                //System.out.println(requestMsg.getValues());
 
-                //Read the message and then modify the content
-                
-                Message answerMsg = new Message();
-                answerMsg = MultiThreadServer.analyseRequestMessage(requestMsg,database);
-                
-                //Send it back to the client
-                toClient.writeObject(answerMsg);
-                
-                toClient.close();
-                fromClient.close();
-                socket.close();
-             
+
+            //Create a new message to prepare getting the message from client
+            Message requestMsg = new Message();
+
+            try {
+                requestMsg = (Message) fromClient.readObject();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            //Print the result
+            //System.out.println(requestMsg.getCmd());
+            //System.out.println(requestMsg.getOptions());
+            //System.out.println(requestMsg.getValues());
+
+            //Read the message and then modify the content
+
+            Message answerMsg = new Message();
+            answerMsg = MultiThreadServer.analyseRequestMessage(requestMsg, database);
+
+            //Send it back to the client
+            toClient.writeObject(answerMsg);
+
+            toClient.close();
+            fromClient.close();
+            socket.close();
+
         } catch (IOException ex) {
             Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
