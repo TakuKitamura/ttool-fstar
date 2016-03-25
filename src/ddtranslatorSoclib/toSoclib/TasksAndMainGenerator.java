@@ -1068,8 +1068,8 @@ public class TasksAndMainGenerator {
         g = Conversion.replaceAllString(g, "]", ")").trim();
         g = Conversion.replaceOp(g, "and", "&&");
         g = Conversion.replaceOp(g, "or", "||");
-        // g = Conversion.replaceOp(g, "not", "!");
-	g = g.replaceAll("not", "!");
+        g = Conversion.replaceOp(g, "not", "!");
+
         return g;
     }
 

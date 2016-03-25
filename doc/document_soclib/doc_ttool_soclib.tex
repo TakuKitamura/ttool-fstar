@@ -260,7 +260,7 @@ available from \texttt{http://ttool.telecom-paristech.fr} or \texttt{https://www
 %on pourrait renommer en avatarsoclib archive...
 \item Your system has to feature a gcc compiler and a gdb
 \begin{itemize}
-\item Linux : gcc 4.7. was tested with success 
+\item Linux : gcc 4.7.3 was tested with success 
 \item MacOSX : there are some difficulties with the Xcode compiler, we recommend the homebrew gcc-4.8 compiler
 \end{itemize}
 
@@ -273,6 +273,21 @@ available from \texttt{http://ttool.telecom-paristech.fr} or \texttt{https://www
 \end{enumerate}
 }
 
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Requirements for Linux and MacOSX (2)}
+You have to add in your .bashrc
+\begin{verbatim}
+export SYSTEMC=/opt/systemc-2.3.1
+export PATH=/opt/java/bin:$SYSTEMC/bin:/Prog/mutekh/bin:
+/opt/mutekh/bin:/home/ttool/Prog/soclib/utils/bin:$PATH
+
+export LD_LIBRARY_PATH=/opt/mutekh/lib/
+:$SYSTEMC/lib-linux64:$LD_LIBRARY_PATH
+\end{verbatim}
+
+}
+
 \subsection{Alternatives}
 \frame[containsverbatim]{
 \MyLogo
@@ -281,6 +296,10 @@ available from \texttt{http://ttool.telecom-paristech.fr} or \texttt{https://www
 \item Alternatively, SystemCASS \cite{SYSTEMCASS} is a simulation engine from Lip6 for cycle accurate level which is 10 to 20 times faster than SystemC event-based simulation: \texttt{https://www-soc.lip6.fr/trac/systemcass}
 
 To be installed under \texttt{/opt}
+and modify in .bashrc 
+\begin{verbatim}
+export SYSTEMC=/opt/systemc-2.3.1
+\end{verbatim}
 \end{itemize}
 
 Some tools cannot be distributed by us. If you wish to
@@ -398,6 +417,24 @@ java -Xmx1024m -Djavax.net.ssl.trustStore=ServerKeyStore
 
 }
 
+%\frame[containsverbatim]{
+%\MyLogo
+%\frametitle{Virtual Box}
+%\begin{itemize}
+%\item For those who require a ready-to-run version
+%and those who do not use Linux,
+%we propose a Virtual Machine
+%\item The user is ttool and the password is ttoolVM
+
+%\item You have to add in your .bashrc
+%\begin{verbatim}
+%export SYSTEMC=/opt/systemc-2.3.1
+%export PATH=/opt/java/bin:$SYSTEMC/bin:/Prog/mutekh/bin:/opt/mutekh/bin:/home/ttool/Prog/soclib/utils/bin:$PATH
+
+%export LD_LIBRARY_PATH=/opt/mutekh/lib/:$SYSTEMC/lib-linux64:$LD_LIBRARY_PATH
+%\end{verbatim}
+%\end{itemize}
+%}
 
 \section{Compilation Tool Chain}
 \subsection{Context}
