@@ -70,8 +70,10 @@ public class DefaultText  {
     private static StringBuffer makeAbout() {
         StringBuffer sb = new StringBuffer();
         sb.append("TTool version " + getFullVersion() + "\n\n");
-        sb.append("Programmers\n\tLudovic Apvrille, Daniel Knorreck, Andrea Enrici - Telecom ParisTech - contact email: ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\tCopyright Institut Telecom - Telecom ParisTech / Ludovic Apvrille / Daniel Knorreck / Andrea Enrici \n\n");
+        sb.append("Programmers\n\tLudovic Apvrille, Daniel Knorreck, Andrea Enrici, Florian Lugou, Letitia Li - Telecom ParisTech\n");
+	sb.append("Daniela Genius - LIP6\n");
+	sb.append("Contact email: ludovic.apvrille@telecom-paristech.fr\n");
+        sb.append("\tCopyright Institut Telecom - Telecom ParisTech / Ludovic Apvrille \n\n");
         sb.append("Online documentation\n\tLudovic Apvrille - Telecom ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n\n");
         sb.append("For more information regarding TTool, and the UML/SysML profiles supportd by TTool:\n");
         sb.append("TTool's website: http://ttool.telecom-paristech.fr/\n\n");
