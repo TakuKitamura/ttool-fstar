@@ -155,8 +155,8 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 			
 				}
 				else {
-				    int[] xps = new int[]{x+4, x+7, x+13, x+19, x+22, x+22, x+13, x+4};
-				    int[] yps = new int[]{y+20, y+20, y+15, y+20, y+20, y+35, y+40, y+35};
+				    int[] xps = new int[]{x+4, x+9, x+13, x+17, x+22, x+22, x+13, x+4};
+				    int[] yps = new int[]{y+20, y+20, y+15, y+20, y+20, y+35, y+43, y+35};
  	      			    g.setColor(Color.green);
 				    g.fillPolygon(xps, yps,8);	
 
