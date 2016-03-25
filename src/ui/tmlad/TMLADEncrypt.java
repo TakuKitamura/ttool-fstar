@@ -65,6 +65,7 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     public String MACSize="0";
     public String keySize="0";
     public String securityContext="";
+    public String calculationTime="100";
 	
 	protected int stateOfError = 0; // Not yet checked
     
@@ -114,18 +115,20 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     }
     
 public boolean editOndoubleClick(JFrame frame) {
-        String [] labels = new String[3];
-        String [] values = new String[3];
+        String [] labels = new String[4];
+        String [] values = new String[4];
 	labels[0] = "Security Pattern";
 	values[0] = securityContext;
 	labels[1]="Key Size";
 	values[1]=keySize;
 	labels[2]="MAC Size";
 	values[2]=MACSize;
+	labels[3]="calcTime";
+	values[3]=calculationTime;
 	
 
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
-	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 3, labels, values);
+	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 4, labels, values);
         jdms.setSize(450, 300);
         GraphicLib.centerOnParent(jdms);
         jdms.show(); // blocked until dialog has been closed
@@ -134,6 +137,7 @@ public boolean editOndoubleClick(JFrame frame) {
 	    securityContext = jdms.getString(0);
 	    keySize=jdms.getString(1);
 	    MACSize=jdms.getString(2);
+	    calculationTime=jdms.getString(3);
             return true;
         }
 
@@ -163,8 +167,10 @@ public boolean editOndoubleClick(JFrame frame) {
         sb.append(securityContext);
         sb.append("\" keysize=\"");
         sb.append(keySize);
-		sb.append("\" macsize=\"");
+	sb.append("\" macsize=\"");
         sb.append(MACSize);
+	sb.append("\" calcTime=\"");
+        sb.append(calculationTime);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -197,6 +203,7 @@ public boolean editOndoubleClick(JFrame frame) {
                                 securityContext = elt.getAttribute("secPattern");
                                 keySize = elt.getAttribute("keysize");
 				MACSize = elt.getAttribute("macsize");
+				calculationTime = elt.getAttribute("calcTime");
                                 //System.out.println("eventName=" +eventName + " variable=" + result);
                             }
                         }

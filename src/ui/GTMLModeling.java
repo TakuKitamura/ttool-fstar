@@ -1474,22 +1474,22 @@ public class GTMLModeling  {
                 listE.addCor(tmlexecii, tgc);
 
             } else if (tgc instanceof TMLADEncrypt) {
-                tmlexeci = new TMLExecI("encrypt", tgc);
-                tmlexeci.setAction("123");
+                tmlexecc = new TMLExecI("encrypt", tgc);
+                tmlexecc.setAction(((TMLADEncrypt) tgc).calculationTime);
                 activity.addElement(tmlexeci);
 		SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).keySize, ((TMLADEncrypt)tgc).MACSize);
-		tmlexeci.securityPattern = securityPattern;
+		tmlexecc.securityPattern = securityPattern;
 		securityPatterns.put(((TMLADEncrypt)tgc).securityContext, securityPattern);
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
-                listE.addCor(tmlexeci, tgc);
+                listE.addCor(tmlexecc, tgc);
 
             } else if (tgc instanceof TMLADDecrypt) {
-                tmlexeci = new TMLExecI("decrypt", tgc);
-                tmlexeci.setAction("234");
+                tmlexecc = new TMLExecI("decrypt", tgc);
+                tmlexecc.setAction(((TMLADDecrypt) tgc).calculationTime);
                 activity.addElement(tmlexeci);
-		tmlexeci.securityPattern = securityPatterns.get(((TMLADDecrypt)tgc).securityContext);
+		tmlexecc.securityPattern = securityPatterns.get(((TMLADDecrypt)tgc).securityContext);
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
-                listE.addCor(tmlexeci, tgc);
+                listE.addCor(tmlexecc, tgc);
 
 
             } else if (tgc instanceof TMLADExecC) {

@@ -63,6 +63,7 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
     private int ilength = 10;
     private int lineLength1 = 2;
     public String securityContext="";
+    public String calculationTime ="";
 	
 	protected int stateOfError = 0; // Not yet checked
     
@@ -112,21 +113,23 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
     }
     
 public boolean editOndoubleClick(JFrame frame) {
-        String [] labels = new String[1];
-        String [] values = new String[1];
+        String [] labels = new String[2];
+        String [] values = new String[2];
 	labels[0] = "Security Pattern";
 	values[0] = securityContext;
-
+	labels[1] = "Calculation Time";
+	values[1] = calculationTime;
 	
 
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
-	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 1, labels, values);
+	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 2, labels, values);
         jdms.setSize(450, 300);
         GraphicLib.centerOnParent(jdms);
         jdms.show(); // blocked until dialog has been closed
 
         if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
 	    securityContext = jdms.getString(0);
+	    calculationTime = jdms.getString(1);
             return true;
         }
 
@@ -154,6 +157,8 @@ public boolean editOndoubleClick(JFrame frame) {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data secPattern=\"");
         sb.append(securityContext);
+        sb.append("\" calcTime=\"");
+        sb.append(calculationTime);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -184,6 +189,7 @@ public boolean editOndoubleClick(JFrame frame) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Data")) {
                                 securityContext = elt.getAttribute("secPattern");
+                                securityContext = elt.getAttribute("calcTime");
                                 //System.out.println("eventName=" +eventName + " variable=" + result);
                             }
                         }

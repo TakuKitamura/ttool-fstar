@@ -1368,7 +1368,7 @@ public class TML2Avatar {
 	    }
 	}
 	//Check if we matched up all signals
-	//System.out.println(avspec);
+	System.out.println(avspec);
 	
 
 	return avspec;
