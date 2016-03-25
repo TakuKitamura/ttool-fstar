@@ -37,7 +37,7 @@
 
    /**
    * Class WebCrawler
-   * Management of Avatar block panels
+   * Implement of a webcrawler for CVEs
    * Creation: 2015
    * @version 2.0 24/03/2016
    * @author  Marie FORRAT, Angeliki AKTYPI, Ludovic APVRILLE
@@ -64,16 +64,13 @@ import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import static web.crawler.File_management.ParsingXML;
+import static web.crawler.FileManagement.ParsingXML;
 
 
 
 public class WebCrawler {
 
-    /**
-     *create the database
-     */
-    public static Database_creation database;
+    public DatabaseCreation database;
 
     public static final int PORT = 8244;
 
@@ -104,7 +101,7 @@ public class WebCrawler {
 
         if (database.ReferencesSqlFile.exists() & database.VulnerabilitesSqlFile.exists() & database.SoftwaresSqlFile.exists()) {
 
-            Path FilePath = Paths.get(FileNames[0]);
+            Path FilePath = Paths.get(pathToFiles + FileNames[0]);
             BasicFileAttributes view = Files.getFileAttributeView(FilePath, BasicFileAttributeView.class).readAttributes();
             //FileTime time = view.creationTime();
             FileTime time = view.lastModifiedTime();
@@ -169,7 +166,7 @@ public class WebCrawler {
     }
 
     public static void main(String args[]) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, IOException, AWTException, Exception {
-        WebCrawler wc = new WebCrawler("../localdb");
+        WebCrawler wc = new WebCrawler("../localdb/");
         wc.start();
     }
 
@@ -184,13 +181,13 @@ public class WebCrawler {
         String thisyear = new SimpleDateFormat("yyyy").format(new Date());
 
         String FileNames[] = {
-            pathToFiles + "nvdcve-2.0-"+thisyear+".xml",
-            pathToFiles + "nvdcve-2.0-"+(Integer.valueOf(thisyear)-1)+".xml",
-            pathToFiles + "nvdcve-2.0-"+(Integer.valueOf(thisyear)-2)+".xml",
-            pathToFiles + "nvdcve-2.0-"+(Integer.valueOf(thisyear)-3)+".xml",
+            "nvdcve-2.0-"+thisyear+".xml",
+            "nvdcve-2.0-"+(Integer.valueOf(thisyear)-1)+".xml",
+            "nvdcve-2.0-"+(Integer.valueOf(thisyear)-2)+".xml",
+            "nvdcve-2.0-"+(Integer.valueOf(thisyear)-3)+".xml",
         };
         //Database_creation database = new Database_creation();
-        database = new Database_creation();
+        database = new DatabaseCreation();
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*       Establish connection with server and create database        */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
@@ -203,7 +200,7 @@ public class WebCrawler {
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*                       Data Visualization                          */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
-        Data_visualisation datavisual = new Data_visualisation(database);
+        DataVisualisation datavisual = new DataVisualisation(database);
 
         // datavisual.Histogram("linux");
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
@@ -211,7 +208,7 @@ public class WebCrawler {
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*              Execute SQL queries to the Database                  */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
-        Database_query dbq= new Database_query(database);
+        DatabaseQuery dbq= new DatabaseQuery(database);
         // dbq.MakeQueryOnTheDatabase();
 
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
@@ -219,7 +216,7 @@ public class WebCrawler {
         /*              Server's Protocol Initialization                     */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         try {
-            ServerSocket server = new ServerSocket(8244);
+            ServerSocket server = new ServerSocket(PORT);
             TraceManager.addDev("Server has been created successfully");
 
             while (true) { //Allow a client to connect

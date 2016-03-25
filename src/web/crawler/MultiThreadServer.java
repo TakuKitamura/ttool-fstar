@@ -1,3 +1,50 @@
+
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+
+   ludovic.apvrille AT enst.fr
+
+   This software is a computer program whose purpose is to allow the
+   edition of TURTLE analysis, design and deployment diagrams, to
+   allow the generation of RT-LOTOS or Java code from this diagram,
+   and at last to allow the analysis of formal validation traces
+   obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+   from INRIA Rhone-Alpes.
+
+   This software is governed by the CeCILL  license under French law and
+   abiding by the rules of distribution of free software.  You can  use,
+   modify and/ or redistribute the software under the terms of the CeCILL
+   license as circulated by CEA, CNRS and INRIA at the following URL
+   "http://www.cecill.info".
+
+   As a counterpart to the access to the source code and  rights to copy,
+   modify and redistribute granted by the license, users are provided only
+   with a limited warranty  and the software's author,  the holder of the
+   economic rights,  and the successive licensors  have only  limited
+   liability.
+
+   In this respect, the user's attention is drawn to the risks associated
+   with loading,  using,  modifying and/or developing or reproducing the
+   software by the user in light of its specific status of free software,
+   that may mean  that it is complicated to manipulate,  and  that  also
+   therefore means  that it is reserved for developers  and  experienced
+   professionals having in-depth computer knowledge. Users are therefore
+   encouraged to load and test the software's suitability as regards their
+   requirements in conditions enabling the security of their systems and/or
+   data to be ensured and,  more generally, to use and operate it in the
+   same conditions as regards security.
+
+   The fact that you are presently reading this means that you have had
+   knowledge of the CeCILL license and that you accept its terms.
+
+   /**
+   * Class WebCrawler
+   * Implement of a webcrawler for CVEs
+   * Creation: 2015
+   * @version 2.0 25/03/2016
+   * @author  Marie FORRAT, Angeliki AKTYPI, Ludovic APVRILLE
+   * @see MainGUI
+   */
+
 package web.crawler;
 
 import java.awt.AWTException;
@@ -19,10 +66,7 @@ import javax.xml.transform.TransformerException;
 import org.apache.commons.io.FileUtils;
 import web.crawler.WebCrawler;
 
-/**
- *
- * @author Marie FORRAT & Angeliki AKTYPI & Dan Huynh VO
- */
+
 public class MultiThreadServer {
 
     /**
@@ -57,7 +101,7 @@ public class MultiThreadServer {
      * @throws AWTException
      * @throws TransformerException
      */
-    public static Message analyseRequestMessage(Message msg, web.crawler.Database_query database) throws IOException, SQLException, AWTException, TransformerException {
+    public static Message analyseRequestMessage(Message msg, web.crawler.DatabaseQuery database) throws IOException, SQLException, AWTException, TransformerException {
         
         //System.out.println(msg.getCmd());
         
@@ -95,14 +139,14 @@ public class MultiThreadServer {
         }
 
         if (msg.getCmd().equals(Message.CMD_STATISTIC)) {
-            Data_visualisation datavis = new Data_visualisation(WebCrawler.database);
+            DataVisualisation datavis = new DataVisualisation(database.getDatabase());
             datavis.OpenCloud(msg.getValues().get(0));
             //Set cmd for the answer message to sent back to the client
             cmd = msg.RESULT_STATISTIC;
             answerMessage = createImageAnswer(cmd, msg);
         }
          if (msg.getCmd().equals(Message.CMD_HISTOGRAM)) {
-            Data_visualisation datavis = new Data_visualisation(WebCrawler.database);
+	     DataVisualisation datavis = new DataVisualisation(database.getDatabase());
             datavis.Histogram(msg.getValues().get(0));
             //Set cmd for the answer message to sent back to the client
             cmd = msg.RESULT_HISTOGRAM;
