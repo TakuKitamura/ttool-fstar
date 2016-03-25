@@ -190,9 +190,9 @@ remotesimulator:
 
 webcrawler:
 	rm -f $(TTOOL_BIN)/$(WEBCRAWLER_SERVER_BINARY)
-	cd $(TTOOL_SRC);$(JAR) cmf $(WEBCRAWLER_SERVER_JAR_TXT) $(TTOOL_BIN)/$(WEBCRAWLER_SERVER_BINARY)  web/crawler/*.class 
+	cd $(TTOOL_SRC);$(JAR) cmf $(WEBCRAWLER_SERVER_JAR_TXT) $(TTOOL_BIN)/$(WEBCRAWLER_SERVER_BINARY)  web/crawler/*.class myutil/*.class
 	rm -f $(TTOOL_BIN)/$(WEBCRAWLER_CLIENT_BINARY)
-	cd $(TTOOL_SRC);$(JAR) cmf $(WEBCRAWLER_CLIENT_JAR_TXT) $(TTOOL_BIN)/$(WEBCRAWLER_CLIENT_BINARY)  web/crawler/*.class 
+	cd $(TTOOL_SRC);$(JAR) cmf $(WEBCRAWLER_CLIENT_JAR_TXT) $(TTOOL_BIN)/$(WEBCRAWLER_CLIENT_BINARY)  web/crawler/*.class myutil/*.class
 
 documentation:
 	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_DOC_HTML) $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java

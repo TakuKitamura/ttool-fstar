@@ -80,18 +80,37 @@ public class DatabaseCreation {
     /**
      * Path to retrieve a former vulnerabilities table
      */
-    public static File VulnerabilitesSqlFile = new File(DatabasePath + "//vulnerabilites.sql");
+    private File vulnerabilitesSqlFile; // = new File(DatabasePath + "//vulnerabilites.sql");
 
     /**
      *Path to retrieve a former reference table
      */
-    public static File ReferencesSqlFile = new File(DatabasePath + "//references.sql");
+    private File referencesSqlFile; // = new File(DatabasePath + "//references.sql");
 
     /**
      *Path to retrieve a former software table
      */
-    public static File SoftwaresSqlFile = new File(DatabasePath + "//softwares.sql");
+    private File softwaresSqlFile; // = new File(DatabasePath + "//softwares.sql");
 
+    private String dbPath;
+
+
+    public DatabaseCreation(String _dbPath) {
+	dbPath = _dbPath;
+	vulnerabilitesSqlFile = new File(dbPath + "//vulnerabilites.sql");
+	referencesSqlFile = new File(dbPath + "//references.sql");
+	softwaresSqlFile = new File(dbPath + "//softwares.sql");
+    }
+
+    public File getVulnerabilitesSqlFile() {return vulnerabilitesSqlFile;}
+    public File getReferencesSqlFile() {return referencesSqlFile;}
+    public File getSoftwaresSqlFile() {return softwaresSqlFile;}
+
+    public void deleteVulnerabilitesSqlFile() {vulnerabilitesSqlFile.delete();}
+    public void deleteReferencesSqlFile() {referencesSqlFile.delete();}
+    public void deleteSoftwaresSqlFile() {softwaresSqlFile.delete();}
+    
+    
     /**
      * Execute an SQL statement on the database. Be careful, this method does not protect of SQL injection
      * @param SQLquery the query you want to execute on the database
@@ -290,7 +309,7 @@ public class DatabaseCreation {
         ps = conn.prepareStatement("CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (?,?,?,?,?,?,?)");
         ps.setString(1, null);
         ps.setString(2, "VULNERABILITIES");
-        ps.setString(3, VulnerabilitesSqlFile.toString());
+        ps.setString(3, vulnerabilitesSqlFile.toString());
         ps.setString(4, ";");
         ps.setString(5, "%");
         ps.setString(6, null);
@@ -300,7 +319,7 @@ public class DatabaseCreation {
         ps = conn.prepareStatement("CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (?,?,?,?,?,?,?)");
         ps.setString(1, null);
         ps.setString(2, "REFERENCESS");
-        ps.setString(3, ReferencesSqlFile.toString());
+        ps.setString(3, referencesSqlFile.toString());
         ps.setString(4, ";");
         ps.setString(5, "%");
         ps.setString(6, null);
@@ -310,7 +329,7 @@ public class DatabaseCreation {
         ps = conn.prepareStatement("CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (?,?,?,?,?,?,?)");
         ps.setString(1, null);
         ps.setString(2, "SOFTWARES");
-        ps.setString(3, SoftwaresSqlFile.toString());
+        ps.setString(3, softwaresSqlFile.toString());
         ps.setString(4, ";");
         ps.setString(5, "%");
         ps.setString(6, null);
@@ -326,52 +345,52 @@ public class DatabaseCreation {
         PreparedStatement ps;
 
         /* If myDatabase.sql file already exists then delete it!             */
-        if (VulnerabilitesSqlFile.exists()) {
-            VulnerabilitesSqlFile.delete();
+        if (vulnerabilitesSqlFile.exists()) {
+            vulnerabilitesSqlFile.delete();
         }
 
         /* Store Table VULNERABILITIES                                       */
         ps = conn.prepareStatement("CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
         ps.setString(1, null);
         ps.setString(2, "VULNERABILITIES");
-        ps.setString(3, VulnerabilitesSqlFile.toString());
+        ps.setString(3, vulnerabilitesSqlFile.toString());
         ps.setString(4, ";");
         ps.setString(5, null);
         ps.setString(6, "UTF-8");
         ps.execute();
-        System.out.println("Table: VULNERABILITIES is stored in file: " + VulnerabilitesSqlFile.toString());
+        System.out.println("Table: VULNERABILITIES is stored in file: " + vulnerabilitesSqlFile.toString());
 
         /* If myDatabase.sql file already exists then delete it!             */
-        if (ReferencesSqlFile.exists()) {
-            ReferencesSqlFile.delete();
+        if (referencesSqlFile.exists()) {
+            referencesSqlFile.delete();
         }
 
         /* Store Table REFERENCESS                                           */
         ps = conn.prepareStatement("CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
         ps.setString(1, null);
         ps.setString(2, "REFERENCESS");
-        ps.setString(3, ReferencesSqlFile.toString());
+        ps.setString(3, referencesSqlFile.toString());
         ps.setString(4, ";");
         ps.setString(5, null);
         ps.setString(6, "UTF-8");
         ps.execute();
-        System.out.println("Table: REFERENCESS is stored in file: " + ReferencesSqlFile.toString());
+        System.out.println("Table: REFERENCESS is stored in file: " + referencesSqlFile.toString());
 
         /* If myDatabase.sql file already exists then delete it!             */
-        if (SoftwaresSqlFile.exists()) {
-            SoftwaresSqlFile.delete();
+        if (softwaresSqlFile.exists()) {
+            softwaresSqlFile.delete();
         }
 
         /* Store Table REFERENCESS                                           */
         ps = conn.prepareStatement("CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
         ps.setString(1, null);
         ps.setString(2, "SOFTWARES");
-        ps.setString(3, SoftwaresSqlFile.toString());
+        ps.setString(3, softwaresSqlFile.toString());
         ps.setString(4, ";");
         ps.setString(5, null);
         ps.setString(6, "UTF-8");
         ps.execute();
-        System.out.println("Table: SOFTWARES is stored in file: " + SoftwaresSqlFile.toString());
+        System.out.println("Table: SOFTWARES is stored in file: " + softwaresSqlFile.toString());
 
     }
 

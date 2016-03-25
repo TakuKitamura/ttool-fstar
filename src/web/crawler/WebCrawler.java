@@ -99,7 +99,7 @@ public class WebCrawler {
         /*                         Update Database                           */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-        if (database.ReferencesSqlFile.exists() & database.VulnerabilitesSqlFile.exists() & database.SoftwaresSqlFile.exists()) {
+        if (database.getReferencesSqlFile().exists() & database.getVulnerabilitesSqlFile().exists() & database.getSoftwaresSqlFile().exists()) {
 
             Path FilePath = Paths.get(pathToFiles + FileNames[0]);
             BasicFileAttributes view = Files.getFileAttributeView(FilePath, BasicFileAttributeView.class).readAttributes();
@@ -125,9 +125,9 @@ public class WebCrawler {
                 beforelastyearfile.delete();
                 File beforebeforelastyearfile = new File(FileNames[3]);
                 beforebeforelastyearfile.delete();
-                database.ReferencesSqlFile.delete();
-                database.VulnerabilitesSqlFile.delete();
-                database.SoftwaresSqlFile.delete();
+                database.deleteReferencesSqlFile();
+                database.deleteVulnerabilitesSqlFile();
+                database.deleteSoftwaresSqlFile();
 
                 TraceManager.addDev("The database files have been deleted!!\n");
                 UpdateDatabase(FileNames);
@@ -138,9 +138,9 @@ public class WebCrawler {
                 database.CreateDatabaseFromSQLFile();
 
                 TraceManager.addDev("\nDatabase has been restored from the following files:\n"
-                                    + database.ReferencesSqlFile.toString() + "\n"
-                                    + database.VulnerabilitesSqlFile.toString() + "\n"
-                                    + database.SoftwaresSqlFile.toString() + "\n");
+                                    + database.getReferencesSqlFile().toString() + "\n"
+                                    + database.getVulnerabilitesSqlFile().toString() + "\n"
+                                    + database.getSoftwaresSqlFile().toString() + "\n");
 
                 TraceManager.addDev("Total records insert in the database: " + database.getTotalRecordsInDatabase()+ "\n\n");
 
@@ -187,7 +187,7 @@ public class WebCrawler {
             "nvdcve-2.0-"+(Integer.valueOf(thisyear)-3)+".xml",
         };
         //Database_creation database = new Database_creation();
-        database = new DatabaseCreation();
+        database = new DatabaseCreation(pathToFiles);
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*       Establish connection with server and create database        */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
