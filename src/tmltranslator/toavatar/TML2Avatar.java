@@ -654,7 +654,13 @@ public class TML2Avatar {
 		secPatterns.add(ae.securityPattern);
 		block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
 		block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
-		tran.addAction(ae.securityPattern.name+"_encrypted= sencrypt("+ae.securityPattern.name+", key)");
+
+		AvatarMethod sencrypt = new AvatarMethod("sencrypt", ae);
+		sencrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+		sencrypt.addParameter(block.getAvatarAttributeWithName("key"));
+		block.addMethod(sencrypt);
+		tran.addAction(ae.securityPattern.name+"_encrypted = sencrypt("+ae.securityPattern.name+", key)");
+		System.out.println("ADDING ACTION ENCRYPT");
 		System.out.println("Found security pattern "+ae.securityPattern.name);
 		ae.securityPattern.originTask=block.getName();
 		ae.securityPattern.state1=as;
@@ -667,12 +673,27 @@ public class TML2Avatar {
 	    else if (ae.securityPattern!=null && ae.getName().contains("decrypt")){
 		block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
 		block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
-		tran.addAction(ae.securityPattern.name+"= sdecrypt("+ae.securityPattern.name+"_encrypted,key)");
+
+
+		AvatarMethod sdecrypt = new AvatarMethod("sdecrypt", ae);
+		sdecrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+		sdecrypt.addParameter(block.getAvatarAttributeWithName("key"));
+		block.addMethod(sdecrypt);
+
+
+		tran.addAction(ae.securityPattern.name+" = sdecrypt("+ae.securityPattern.name+"_encrypted, key)");
+
+
+
+		System.out.println("ADDING ACTION DECRYPT");
 		ae.securityPattern.state2=as;
 		System.out.println("Found security pattern decrypt "+ae.securityPattern.name);
 		
 	    	elementList.add(as);
 	    	elementList.add(tran);
+		as.addNext(tran);
+
+
 		AvatarState dummy = new AvatarState(ae.getName()+"_dummy", ae.getReferenceObject());
 		tran.addNext(dummy);
 	    	tran = new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
@@ -718,7 +739,7 @@ public class TML2Avatar {
 		AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
 		
 		if (ae.securityPattern!=null){
-		    System.out.println("has security pattern" + ae.securityPattern.name);
+		    System.out.println(block.getName() + " readchannel has security pattern" + ae.securityPattern.name);
 		    as.addValue(ae.securityPattern.name+"_encrypted");
 		    AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
 		    block.addAttribute(data);
@@ -752,10 +773,7 @@ public class TML2Avatar {
 	    	}
 	    }
 	    else {
-		//Write Channel
-		if (ae.securityPattern!=null){
-		    System.out.println("has security pattern "+ae.securityPattern.name);
-		}
+		//WriteChannel
 		if (!signalMap.containsKey(block.getName()+"__OUT__"+ch.getName())){
 	            sig = new AvatarSignal(block.getName()+"__OUT__"+ch.getName(), AvatarSignal.OUT, ch.getReferenceObject());
 	            signals.add(sig);
@@ -788,7 +806,7 @@ public class TML2Avatar {
 	    	AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
 
 		if (ae.securityPattern!=null){
-		    System.out.println("has security pattern" + ae.securityPattern.name);
+		    System.out.println(block.getName() + " writechannel has security pattern" + ae.securityPattern.name);
 		    as.addValue(ae.securityPattern.name+"_encrypted");
 		    AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
 		    block.addAttribute(data);
@@ -1022,7 +1040,20 @@ public class TML2Avatar {
 
 	ArrayList<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
 	for (TMLTask task:tasks){
+
+
+
+	
 	    AvatarBlock block = new AvatarBlock(task.getName(), avspec, task.getReferenceObject());
+
+	    tmlmap.getTMLModeling().securityPatterns.add("enc");
+	    for (String s:tmlmap.getTMLModeling().securityPatterns){
+		System.out.println("Adding attr security pattern " + s);
+		AvatarAttribute tmp = new AvatarAttribute(s, AvatarType.INTEGER, block, null);
+	        block.addAttribute(tmp);
+		tmp = new AvatarAttribute(s+"_encrypted", AvatarType.INTEGER, block, null);
+	        block.addAttribute(tmp);
+	    }
 	    taskBlockMap.put(task, block);
 	    //Add temp variable for unsendable signals
 	    AvatarAttribute tmp = new AvatarAttribute("tmp", AvatarType.INTEGER, block, null);
@@ -1368,7 +1399,7 @@ public class TML2Avatar {
 	    }
 	}
 	//Check if we matched up all signals
-	System.out.println(avspec);
+	//System.out.println(avspec);
 	
 
 	return avspec;

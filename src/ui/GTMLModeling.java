@@ -2108,9 +2108,11 @@ public class GTMLModeling  {
         if (!makeTMLModeling()) {
             return null;
         }
+	System.out.println("security patterns " + tmlm.securityPatterns);
         TraceManager.addDev("Making mapping");
         makeMapping();  //fills map
-
+//	map.securityPatterns.addAll(securityPatterns.keySet());
+	System.out.println("security patterns " + securityPatterns);
         TraceManager.addDev("Making TMLCPLib");
         makeTMLCPLib();
 

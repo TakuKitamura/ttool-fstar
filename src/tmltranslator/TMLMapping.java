@@ -56,6 +56,7 @@ public class TMLMapping {
     private TMLModeling tmlm;
     private TMLArchitecture tmla;
     private TMLCP tmlcp;
+public List<String> securityPatterns = new ArrayList<String>();
 
     private ArrayList<HwExecutionNode> onnodes;
     private ArrayList<TMLTask> mappedtasks;

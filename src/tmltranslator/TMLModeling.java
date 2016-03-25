@@ -61,7 +61,7 @@ public class TMLModeling {
     private ArrayList<TMLRequest> requests;
     private ArrayList<TMLEvent> events;
     private ArrayList<String[]> pragmas;
-    public ArrayList<SecurityPattern> securityPatterns;
+    public ArrayList<String> securityPatterns=new ArrayList<String>();
     private TMLElement correspondance[];
 
     private boolean optimized = false;
@@ -1054,6 +1054,9 @@ public class TMLModeling {
                 tasks.add(task);
             }
         }
+	for (String s: tmlm.securityPatterns){
+	    securityPatterns.add(s);
+	}
     }
 
 

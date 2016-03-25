@@ -189,7 +189,7 @@ public boolean editOndoubleClick(JFrame frame) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Data")) {
                                 securityContext = elt.getAttribute("secPattern");
-                                securityContext = elt.getAttribute("calcTime");
+                                calculationTime = elt.getAttribute("calcTime");
                                 //System.out.println("eventName=" +eventName + " variable=" + result);
                             }
                         }
