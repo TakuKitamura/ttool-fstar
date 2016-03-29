@@ -228,9 +228,9 @@ public class WebCrawler {
         try {
         //    ServerSocket server = new ServerSocket(1234);
 		SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-                sslServerSocket = (SSLServerSocket) factory.createServerSocket(12345);
+                sslServerSocket = (SSLServerSocket) factory.createServerSocket(PORT);
 
-            System.out.println("Server has been created successfully\n");
+            System.out.println("Server has been created successfully on port " + PORT + "\n");
 
             while (true) { //Allow a client to connect
                 //Use multithread

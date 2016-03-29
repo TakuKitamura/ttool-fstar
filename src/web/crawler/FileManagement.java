@@ -313,7 +313,7 @@ public class FileManagement {
 
             downloadFile(filename, destinationPath);
             System.out.println("Extracting data from file: " + filename);
-            File fXmlFile = new File(filename);
+            File fXmlFile = new File(destinationPath + filename);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = (Document) dBuilder.parse(fXmlFile);
@@ -490,6 +490,7 @@ public class FileManagement {
             System.out.println();
             database.setTotalRecordsInDatabase(database.getTotalRecordsInDatabase() + list_id.size());
         } catch (ParserConfigurationException | SAXException | IOException | DOMException | SQLException | NumberFormatException e) {
+	    System.out.println("Exception during the parsing of a CVE file: " + e.getMessage());
         }
     }
 

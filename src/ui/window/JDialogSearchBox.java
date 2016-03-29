@@ -47,6 +47,7 @@
 package ui.window;
 
 import web.crawler.*;
+import myutil.TraceManager;
 
 
 import java.awt.*;
@@ -908,12 +909,14 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     public Message sendMessage(Message msg) {
         Client cl = new Client();
         try{
-            return cl.send(msg,dbaddress,dbport);
+            return cl.send(msg, dbaddress, dbport, true);
         }catch (IOException e){
+	    TraceManager.addDev("Connection error: " + e.getMessage());
             JOptionPane.showMessageDialog(null, "Cannot connect to server !!!", "Warning",
                                           JOptionPane.WARNING_MESSAGE);
             return null;
         } catch (ClassNotFoundException e) {
+	    TraceManager.addDev("Classe error: " + e.getMessage());
             JOptionPane.showMessageDialog(null, "Cannot parse message!!!", "Warning",
                                           JOptionPane.WARNING_MESSAGE);
             return null;
@@ -1043,21 +1046,26 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                                       , "Retrieving data is failed",
                                                                       JOptionPane.ERROR_MESSAGE);
                                         jLabel_Status.setText("Failed to retrieving data from Google");
-                                    }else if (resultGoogle != null) {
-
-                                        if(resultGoogle.get(0).getTitle() == GoogleSearch.IOEx) {
-                                            JOptionPane.showMessageDialog(null, "Can connect to Google\n " +
-                                                                          "Please check the internet connection","Connection Error",
-                                                                          JOptionPane.ERROR_MESSAGE);
-                                            jLabel_Status.setText("Failed to retrieving data from Google");
-                                        } else {
-                                            putGoogleToTable(resultGoogle);
-                                            showtable(rowsGoogle,modelGoogle,0);
-                                        }
-
+                                    } else if (resultGoogle != null) {
+					if (resultGoogle.size() == 0) {
+					    JOptionPane.showMessageDialog(null, "No result\n " +
+                                                                          "Please check the keywords you have entered","No result",JOptionPane.ERROR_MESSAGE);
+					    jLabel_Status.setText("Google returned no data");
+									  } else {
+						if(resultGoogle.get(0).getTitle() == GoogleSearch.IOEx) {
+						    JOptionPane.showMessageDialog(null, "Can connect to Google\n " +
+										  "Please check the internet connection","Connection Error",
+										  JOptionPane.ERROR_MESSAGE);
+						    jLabel_Status.setText("Failed to retrieving data from Google");
+						} else {
+						    putGoogleToTable(resultGoogle);
+						    showtable(rowsGoogle,modelGoogle,0);
+						}
+					}
+					
                                     }
                                 }
-
+				
                                 if (searchGoogleScholar == 1) {
                                     jLabel_Status.setText("Retrieving data from Google Scholar");
                                     //jLabel_Status.updateUI();
@@ -1069,7 +1077,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                                                       , "Retrieving data is failed",
                                                                       JOptionPane.ERROR_MESSAGE);
                                         jLabel_Status.setText("Failed to retrieving data from Google Scholar");
-                                    }else if (resultGoogleScholar != null) {
+                                    } else if ((resultGoogleScholar != null) && (resultGoogleScholar.size() > 0)) {
                                         if (resultGoogleScholar.get(0).getTitle() == GoogleSearch.IOEx) {
                                             JOptionPane.showMessageDialog(null, "Can't connect to Google Scholar\n " +
                                                                           "Please check the internet connection","Connection Error",

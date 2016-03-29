@@ -47,6 +47,8 @@
 
 package web.crawler;
 
+import myutil.externalSearch.*;
+
 import java.awt.AWTException;
 import java.net.Socket;
 import java.io.*;
