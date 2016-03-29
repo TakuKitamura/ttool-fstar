@@ -165,7 +165,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
         TURTLEPanel tp;
         TDiagramPanel tdp;
         File file1;
-        String tmp;
+        String tmp, tmpForRef;
 
 
 	mainLatexDoc = getLatexDocumentationHeader(projectName);
@@ -209,6 +209,8 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
                 tmp = "TURTLE Deployment";
             }
 
+	    tmp = Conversion.replaceAllChar(tmp, '_', "\\_");
+
 	    // HTML
             doc += "<br>\n<h" + firstHeadingNumber + ">" + tmp + "</h" + firstHeadingNumber + ">\n";
 	    docSvg += "<br>\n<h" + firstHeadingNumber + ">" + tmp + "</h" + firstHeadingNumber + ">\n";
@@ -224,6 +226,11 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
                 tdp = (TDiagramPanel)(tp.panels.elementAt(j));
 
                 tmp = tp.tabbedPane.getTitleAt(j);
+
+		tmpForRef = Conversion.replaceAllChar(tmp, '_', "");
+		tmpForRef += tmpForRef + i + j;
+		tmp = Conversion.replaceAllChar(tmp, '_', "\\_");
+		
 
                 if (tdp instanceof TMLActivityDiagramPanel) {
                     tmp = "Behavior of Task: " + tmp;
@@ -258,16 +265,16 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 
 		// Latex
 		includeLatexDoc += "\\subsection{" + tmp + "}\n";
-		includeLatexDoc += "Figures \\ref{fig:" + tmp  + "} presents ...\n";
+		includeLatexDoc += "Figures \\ref{fig:" + tmpForRef  + "} presents ...\n";
 		includeLatexDoc += "\\begin{figure*}[htb]\n\\centering\n";
 		includeLatexDoc += "\\includegraphics[width=\\textwidth]{" + imgName + "}\n";
-		includeLatexDoc += "\\caption{Diagram \"" + tmp + "\"}\n\\label{fig:" + tmp + "}\n\\end{figure*}\n\n"; 
+		includeLatexDoc += "\\caption{Diagram \"" + tmp + "\"}\n\\label{fig:" + tmpForRef + "}\n\\end{figure*}\n\n"; 
 
 		includeLatexDocSvg += "\\subsection{" + tmp + "}\n";
-		includeLatexDocSvg += "Figures \\ref{fig:" + tmp  + "} presents ...\n";
+		includeLatexDocSvg += "Figures \\ref{fig:" + tmpForRef  + "} presents ...\n";
 		includeLatexDocSvg += "\\begin{figure*}[htb]\n\\centering\n";
 		includeLatexDocSvg += "\\includegraphics[width=\\textwidth]{" + imgNameSvg + "-svg.pdf}\n";
-		includeLatexDocSvg += "\\caption{Diagram \"" + tmp + "\"}\n\\label{fig:" + tmp + "}\n\\end{figure*}\n\n"; 
+		includeLatexDocSvg += "\\caption{Diagram \"" + tmp + "\"}\n\\label{fig:" + tmpForRef + "}\n\\end{figure*}\n\n"; 
 		
 		// Capturing the diagram		
                 image = tdp.performMinimalCapture();
