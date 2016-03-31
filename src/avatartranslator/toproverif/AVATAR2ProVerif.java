@@ -1280,7 +1280,10 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             if (pragma instanceof AvatarPragmaAuthenticity) {
                 AvatarAttributeState attrA = ((AvatarPragmaAuthenticity) pragma).getAttrA ();
                 AvatarAttributeState attrB = ((AvatarPragmaAuthenticity) pragma).getAttrB ();
-                if (attrA.getState ().getName ().equals (_asme.getName ())) {
+                if (attrA.getAttribute ().getBlock () ==  arg.block && attrA.getState ().getName ().equals (_asme.getName ())) {
+                    TraceManager.addDev ("DEBUG: " + attrA.getAttribute ());
+                    TraceManager.addDev ("DEBUG: " + attrA.getAttribute ().getBlock ());
+                    TraceManager.addDev ("DEBUG: " + arg.attributeCmp.get (attrA.getAttribute()));
                     String sp = "authenticity__" + AVATAR2ProVerif.makeAttrName (attrA.getAttribute ().getBlock ().getName (), attrA.getAttribute ().getName (), _asme.getName ()) + " (" + AVATAR2ProVerif.makeAttrName (attrA.getAttribute ().getBlock ().getName (), attrA.getAttribute ().getName (), arg.attributeCmp.get (attrA.getAttribute ()).toString ()) + ")";
                     if (!authenticityEvents.contains (sp)) {
                         authenticityEvents.add (sp);
