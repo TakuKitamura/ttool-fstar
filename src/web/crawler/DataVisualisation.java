@@ -81,15 +81,15 @@ import static javax.swing.WindowConstants.HIDE_ON_CLOSE;
 public class DataVisualisation {
 
     private web.crawler.DatabaseCreation database;
-    
+
     /**
-     * 
+     *
      * @param db database you want to do the query on
      */
     public DataVisualisation(web.crawler.DatabaseCreation db) {
         this.database = db;
     }
-    
+
     /**
      * Generate an histogram graph by searching the number of time the vulnerability is conerning a keyword(parameter) since 3 years ago
      * @param keyword the keyword you want to do statistic with
@@ -103,66 +103,78 @@ public class DataVisualisation {
         /**
          * Do all the query necessary to have the data
          */
-         String thisyear = new SimpleDateFormat("yyyy").format(new Date());
-          String year1 = Integer.toString(Integer.valueOf(thisyear)-1);
-          String year2 = Integer.toString(Integer.valueOf(thisyear)-2);
-          String year3 = Integer.toString(Integer.valueOf(thisyear)-3);
-          String year4 = Integer.toString(Integer.valueOf(thisyear)-4);
-         querySQL = "SELECT * FROM SOFTWARES WHERE NAME  LIKE ? AND CVE_ID LIKE  ?";
-           
-            
-             PreparedStatement prep = this.database.getconn().prepareStatement(querySQL);
-            prep.setString(1,"%"+keyword+"%");
-            prep.setString(2,"%"+year3+"%");
-            rs = prep.executeQuery();
-            
-           int Records = 0;
+
+
+
+	keyword = keyword.toLowerCase().trim();
+
+	if (keyword.length() ==0) {
+	    throw new IOException("Empty keyword");
+	}
+
+	keyword = (keyword.split(" "))[0];
+	
+
+        String thisyear = new SimpleDateFormat("yyyy").format(new Date());
+        String year1 = Integer.toString(Integer.valueOf(thisyear)-1);
+        String year2 = Integer.toString(Integer.valueOf(thisyear)-2);
+        String year3 = Integer.toString(Integer.valueOf(thisyear)-3);
+        String year4 = Integer.toString(Integer.valueOf(thisyear)-4);
+        querySQL = "SELECT * FROM SOFTWARES WHERE NAME  LIKE ? AND CVE_ID LIKE  ?";
+
+
+        PreparedStatement prep = this.database.getconn().prepareStatement(querySQL);
+        prep.setString(1,"%"+keyword+"%");
+        prep.setString(2,"%"+year3+"%");
+        rs = prep.executeQuery();
+
+        int Records = 0;
         while (rs.next()) {
             Records++;
         }
-          PreparedStatement prep1 = this.database.getconn().prepareStatement(querySQL);
-            prep1.setString(1,"%"+keyword+"%");
-            prep1.setString(2,"%"+year2+"%");
-            rs = prep1.executeQuery();
-            
-           int Records1 = 0;
+        PreparedStatement prep1 = this.database.getconn().prepareStatement(querySQL);
+        prep1.setString(1,"%"+keyword+"%");
+        prep1.setString(2,"%"+year2+"%");
+        rs = prep1.executeQuery();
+
+        int Records1 = 0;
         while (rs.next()) {
             Records1++;
         }
-          PreparedStatement prep2 = this.database.getconn().prepareStatement(querySQL);
-            prep2.setString(1,"%"+keyword+"%");
-            prep2.setString(2,"%"+year1+"%");
-            rs = prep2.executeQuery();
-            
-           int Records2 = 0;
+        PreparedStatement prep2 = this.database.getconn().prepareStatement(querySQL);
+        prep2.setString(1,"%"+keyword+"%");
+        prep2.setString(2,"%"+year1+"%");
+        rs = prep2.executeQuery();
+
+        int Records2 = 0;
         while (rs.next()) {
             Records2++;
         }
-          PreparedStatement prep3 = this.database.getconn().prepareStatement(querySQL);
-            prep3.setString(1,"%"+keyword+"%");
-            prep3.setString(2,"%"+thisyear+"%");
-            rs = prep3.executeQuery();
-            
-           int Records3 = 0;
+        PreparedStatement prep3 = this.database.getconn().prepareStatement(querySQL);
+        prep3.setString(1,"%"+keyword+"%");
+        prep3.setString(2,"%"+thisyear+"%");
+        rs = prep3.executeQuery();
+
+        int Records3 = 0;
         while (rs.next()) {
             Records3++;
         }
-/**
- * Preparation to save the plot after its generation
- */
-    ImageTerminal png = new ImageTerminal();
-    File file = new File(Message.PIC_SRC_HIST);
-    try {
-        file.createNewFile();
-        png.processOutput(new FileInputStream(file));
-    } catch (FileNotFoundException ex) {
-        System.err.print(ex);
-    } catch (IOException ex) {
-        System.err.print(ex);
-    }
-    /**
-     * Generate the plot
-     */
+        /**
+         * Preparation to save the plot after its generation
+         */
+        ImageTerminal png = new ImageTerminal();
+        File file = new File(Message.PIC_SRC_HIST);
+        try {
+            file.createNewFile();
+            png.processOutput(new FileInputStream(file));
+        } catch (FileNotFoundException ex) {
+            System.err.print(ex);
+        } catch (IOException ex) {
+            System.err.print(ex);
+        }
+        /**
+         * Generate the plot
+         */
         JavaPlot p = new JavaPlot();
         p.setTerminal(png);
         int y4=Integer.parseInt(year4);
@@ -178,11 +190,11 @@ public class DataVisualisation {
         myPlotStyle.setLineWidth(2);
         s.setPlotStyle(myPlotStyle);
         s.setTitle("Number of CVEs for "+keyword+" since 3 years ago");
-        
+
         p.addPlot(s);
         p.getAxis("x").setBoundaries(2011, 2016);
-         double[][] pointpoint1 = {{2011, 0}, {2012.5, Records}, {2013.5, Records1}, {2014.5, Records2}, {2015.5, Records3}};
-        
+        double[][] pointpoint1 = {{2011, 0}, {2012.5, Records}, {2013.5, Records1}, {2014.5, Records2}, {2015.5, Records3}};
+
         PlotStyle myPlotStyle1 = new PlotStyle();
         myPlotStyle1.setStyle(Style.IMPULSES);
         DataSetPlot s1 = new DataSetPlot(pointpoint1);
@@ -192,18 +204,18 @@ public class DataVisualisation {
         s1.setTitle("");
         p.addPlot(s1);
         p.plot();
-     
-  /**
-   * Save the plot
-   */
-    try {
-        ImageIO.write(png.getImage(), "png", file);
-    } catch (IOException ex) {
-        System.err.print(ex);
-    }
+
+        /**
+         * Save the plot
+         */
+        try {
+            ImageIO.write(png.getImage(), "png", file);
+        } catch (IOException ex) {
+            System.err.print(ex);
+        }
 
     }
-    
+
     /**
      * Generate the opencloud graph, generate different size for keyword according to their importance in the database
      * @param argumentsfromclient list of keyword to use for generating the graph
@@ -212,7 +224,7 @@ public class DataVisualisation {
      * @throws AWTException
      */
     public void OpenCloud(String argumentsfromclient) throws IOException, SQLException, AWTException {
-        
+
         ResultSet rs;
         String querySQL;
         JFrame frame = new JFrame();
@@ -220,23 +232,24 @@ public class DataVisualisation {
         JPanel panel = new JPanel();
         Cloud cloud = new Cloud();
         cloud.setMaxWeight(25.0);
-        ArrayList<String> arguments= new ArrayList <String>(Arrays.asList(argumentsfromclient.split(" ")));
+        ArrayList<String> arguments= new ArrayList <String>(Arrays.asList(argumentsfromclient.toLowerCase().split(" ")));
         for (int i = 0; i < arguments.size(); i++) {
-            querySQL = "SELECT * FROM SOFTWARES WHERE NAME  LIKE ?";
-           // rs = database.executestatement(querySQL);
-            
-             PreparedStatement prep = this.database.getconn().prepareStatement(querySQL);
+            querySQL = "SELECT * FROM SOFTWARES WHERE NAME LIKE ?";
+            // rs = database.executestatement(querySQL);
+
+            PreparedStatement prep = this.database.getconn().prepareStatement(querySQL);
             prep.setString(1,"%"+arguments.get(i)+"%");
             rs = prep.executeQuery();
+	    //System.out.println("prep=" + prep);
             int Records = 0;
             while (rs.next()) {
-                // System.out.println(Records1);
+                //System.out.println(Records1);
                 Records++;
             }
-            //System.out.println(argumentsfromclient.get(i) + Records);
+            //System.out.println("arg=" + arguments.get(i) + " # of occurences=" + Records);
             cloud.addTag(new Tag(arguments.get(i), Records));
         }
-        
+
         for (Tag tag : cloud.tags()) {
             final JLabel label = new JLabel(tag.getName());
             label.setOpaque(false);
@@ -251,9 +264,9 @@ public class DataVisualisation {
         BufferedImage bi = getJframeScreenShot(frame);
         write(bi, "png", new File(Message.PIC_SRC_STAT));
         frame.setDefaultCloseOperation(HIDE_ON_CLOSE);//TO not close the program while exiting the Jframe
-        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));// TO close the jframe after the screeshot 
+        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));// TO close the jframe after the screeshot
     }
-    
+
     private BufferedImage getJframeScreenShot(JFrame panel) {
         BufferedImage bi = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_ARGB);
         panel.paint(bi.getGraphics());

@@ -382,6 +382,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
         tmpdoc += " generation date: " + formattedDate;
         tmpdoc += "----\n";
 	tmpdoc += "\\documentclass[11pt,a4paper]{article}\n\n\\usepackage{graphicx}\n\n\\begin{document}\n";
+	tmpdoc += "\\extrafloats{750}\n";
 	tmpdoc += "\\title{" + Conversion.replaceAllString(projectName, "_", "\\_") + "}\n";
 	tmpdoc += "\\date{\\today}\n";
 	tmpdoc += "\\maketitle\n\n";
@@ -417,6 +418,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
         tmpdoc += "----\n";
 	tmpdoc += "% To be compiled as follows: make all. Relies on https://github.com/pacalet/mli.git\n";
 	tmpdoc += "\\documentclass[11pt,a4paper]{article}\n\n\\usepackage{graphicx}\n\n\\begin{document}\n";
+	tmpdoc += "\\extrafloats{750}\n";
 	tmpdoc += "\\title{" + Conversion.replaceAllString(projectName, "_", "\\_") + "}\n";
 	tmpdoc += "\\date{\\today}\n";
 	tmpdoc += "\\maketitle\n\n";

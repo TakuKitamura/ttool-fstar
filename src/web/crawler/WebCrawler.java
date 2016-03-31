@@ -124,16 +124,16 @@ public class WebCrawler {
 
                 File thisyearfile = new File(FileNames[0]);
                 thisyearfile.delete();
-		
+
                 File lastyearfile = new File(FileNames[1]);
                 lastyearfile.delete();
-		
+
                 File beforelastyearfile = new File(FileNames[2]);
                 beforelastyearfile.delete();
-		
+
                 File beforebeforelastyearfile = new File(FileNames[3]);
                 beforebeforelastyearfile.delete();
-		
+
                 database.deleteReferencesSqlFile();
                 database.deleteVulnerabilitesSqlFile();
                 database.deleteSoftwaresSqlFile();
@@ -224,18 +224,18 @@ public class WebCrawler {
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
         /*              Server's Protocol Initialization                     */
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
- 	SSLServerSocket sslServerSocket = null;
+        SSLServerSocket sslServerSocket = null;
         try {
-        //    ServerSocket server = new ServerSocket(1234);
-		SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-                sslServerSocket = (SSLServerSocket) factory.createServerSocket(PORT);
+            //    ServerSocket server = new ServerSocket(1234);
+            SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+            sslServerSocket = (SSLServerSocket) factory.createServerSocket(PORT);
 
             System.out.println("Server has been created successfully on port " + PORT + "\n");
 
             while (true) { //Allow a client to connect
                 //Use multithread
                 //If a client asks to connect, then accept it
-		SSLSocket sslSocket = (SSLSocket) sslServerSocket.accept();
+                SSLSocket sslSocket = (SSLSocket) sslServerSocket.accept();
                 sslSocket.setEnabledCipherSuites(sslServerSocket.getSupportedCipherSuites());
 
                 new ThreadSocket(sslSocket, dbq).start();
