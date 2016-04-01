@@ -59,9 +59,6 @@ import ui.window.*;
 
 public class AvatarDesignPanelTranslator {
 
-    private final String[] PRAGMAS = {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "PublicConstant", "PrivateConstant"};
-    private final String[] PRAGMAS_TRANSLATION = {"Secret", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "PublicConstant", "PrivateConstant"};
-
     protected AvatarDesignPanel adp;
     protected Vector checkingErrors, warnings;
     protected CorrespondanceTGElement listE; // usual list
@@ -123,6 +120,46 @@ public class AvatarDesignPanelTranslator {
         return as;
     }
 
+    public class ErrorAccumulator {
+        private TGComponent tgc;
+        private TDiagramPanel tdp;
+        private AvatarBlock ab;
+
+        public ErrorAccumulator (TGComponent tgc, TDiagramPanel tdp, AvatarBlock ab) {
+            this.tgc = tgc;
+            this.tdp = tdp;
+            this.ab = ab;
+        }
+
+        public ErrorAccumulator (TGComponent tgc, TDiagramPanel tdp) {
+            this (tgc, tdp, null);
+        }
+
+        public CheckingError createError (String msg) {
+            CheckingError ce = new CheckingError (CheckingError.BEHAVIOR_ERROR, msg);
+            ce.setAvatarBlock (this.ab);
+            ce.setTGComponent (this.tgc);
+            ce.setTDiagramPanel (this.tdp);
+
+            return ce;
+        }
+
+        public void addWarning (CheckingError ce) {
+            AvatarDesignPanelTranslator.this.addWarning (ce);
+        }
+
+        public void addWarning (String msg) {
+            this.addWarning (this.createError (msg));
+        }
+
+        public void addError (CheckingError ce) {
+            AvatarDesignPanelTranslator.this.addCheckingError (ce);
+        }
+
+        public void addError (String msg) {
+            this.addError (this.createError (msg));
+        }
+    }
 
     public void createPragmas(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
         Iterator iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
@@ -135,6 +172,7 @@ public class AvatarDesignPanelTranslator {
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             if (tgc instanceof AvatarBDPragma) {
+                ErrorAccumulator errorAcc = new ErrorAccumulator (tgc, adp.getAvatarBDPanel());
                 tgcn = (AvatarBDPragma)tgc;
                 values = tgcn.getValues();
                 for(int i=0; i<values.length; i++) {
@@ -143,26 +181,19 @@ public class AvatarDesignPanelTranslator {
                         tmp = tmp.substring(1, tmp.length()).trim();
 
                         //TraceManager.addDev("Reworking pragma =" + tmp);
-                        pragmaList = AvatarPragma.createFromString(tmp, tgc, _as.getListOfBlocks(), typeAttributesMap, nameTypeMap);
+                        pragmaList = AvatarPragma.createFromString(tmp, tgc, _as.getListOfBlocks(), typeAttributesMap, nameTypeMap, errorAcc);
 
                         //TraceManager.addDev("Reworked pragma =" + tmp);
 
-                        if (pragmaList.size()==0) {
-                            CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Invalid pragma: " + values[i].trim() + " (ignored)");
-                            ce.setTGComponent(tgc);
-                            ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                            addWarning(ce);
-                        } else {
-			    for (AvatarPragma tmpPragma: pragmaList){
-			        if (tmpPragma instanceof AvatarPragmaConstant){
-			            AvatarPragmaConstant apg = (AvatarPragmaConstant) tmpPragma;
-			            for (AvatarConstant ac: apg.getConstants()){
-			                _as.addConstant(ac);
-			            }
-			        }
-                                _as.addPragma(tmpPragma);
-                            //TraceManager.addDev("Adding pragma:" + tmp);
-			    }
+                        for (AvatarPragma tmpPragma: pragmaList){
+                            if (tmpPragma instanceof AvatarPragmaConstant){
+                                AvatarPragmaConstant apg = (AvatarPragmaConstant) tmpPragma;
+                                for (AvatarConstant ac: apg.getConstants()){
+                                    _as.addConstant(ac);
+                                }
+                            }
+                            _as.addPragma(tmpPragma);
+                        //TraceManager.addDev("Adding pragma:" + tmp);
                         }
                     }
                 }
@@ -192,21 +223,21 @@ public class AvatarDesignPanelTranslator {
 
         String header = _pragma.substring(0, index).trim();
 
-        for(i=0; i<PRAGMAS.length; i++) {
-            if (header.compareTo(PRAGMAS[i]) == 0) {
+        for(i=0; i<AvatarPragma.PRAGMAS.length; i++) {
+            if (header.compareTo(AvatarPragma.PRAGMAS[i]) == 0) {
                 break;
             }
         }
 
         // Invalid header?
-        if (i == PRAGMAS.length) {
+        if (i == AvatarPragma.PRAGMAS.length) {
             TraceManager.addDev("Invalid Pragma " + 0);
             return null;
         }
 
 
 
-        ret = PRAGMAS_TRANSLATION[i] + " ";
+        ret = AvatarPragma.PRAGMAS_TRANSLATION[i] + " ";
 
         // Checking for arguments
 
@@ -668,8 +699,6 @@ public class AvatarDesignPanelTranslator {
                 _aaos.addValue((String)(v.get(i)));
             }
         }
-
-
     }
 
     public void makeStateMachine(AvatarSpecification _as, AvatarBlock _ab) {
