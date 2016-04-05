@@ -258,7 +258,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 		SignalChangeData* aTopElement;
 		TMLTime aNextClockEvent=0;
 		myfile << "$date\n" << asctime(aTimeinfo) << "$end\n\n$version\nDaniel's TML simulator\n$end\n\n";
-		myfile << "$timescale\n1 ns\n$end\n\n$scope module Simulation $end\n";
+		myfile << "$timescale\n5 ns\n$end\n\n$scope module Simulation $end\n";
 		//std::cout << "Before 1st loop" << std::endl;
 		//for (TraceableDeviceList::const_iterator i=_simComp->getVCDIterator(false); i!= _simComp->getVCDIterator(true); ++i){
 		for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
