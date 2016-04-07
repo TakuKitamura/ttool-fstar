@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<TURTLEGMODELING version="0.98-beta3">
+<TURTLEGMODELING version="0.98-beta4">
 
 <Modeling type="AVATAR Design" nameTab="AVATAR Design" >
-<AVATARBlockDiagramPanel name="AVATAR Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" >
+<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" >
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="Block1;Block0;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="2" >
@@ -453,7 +453,7 @@
 
 
 <Modeling type="ADD" nameTab="Avatar Deployment" >
-<ADDDiagramPanel name="Avatar Deployment Diagram" minX="10" maxX="1400" minY="10" maxY="900" attributes="0" masterClockFrequency="200" >
+<ADDDiagramPanel name="Deployment Diagram" minX="10" maxX="1400" minY="10" maxY="900" attributes="0" masterClockFrequency="200" >
 <COMPONENT type="5363" id="231" >
 <cdparam x="435" y="312" />
 <sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
