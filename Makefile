@@ -151,7 +151,7 @@ svnup:
 
 basicsvnapvrille: svupapvrille jar
 
-svnupapvrille
+svnupapvrille:
 	date
 	svn --username apvrille update build.txt src/ui/DefaultText.java
 	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
