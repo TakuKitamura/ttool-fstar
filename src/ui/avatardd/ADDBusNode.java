@@ -63,7 +63,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
     private int textY2 = 30;
     private int derivationx = 2;
     private int derivationy = 3;
-    private String stereotype = "VGMN";
+    private String stereotype = "VGSB";
 
     private int index = 0;
     private int nbOfAttachedInitiators = 0;

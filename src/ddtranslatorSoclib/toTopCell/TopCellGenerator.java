@@ -73,8 +73,9 @@ public class TopCellGenerator
 		icn="vgsb";
 	    }
 	    /* More complicate dto detect : central crossbar or local crossbars : ToDo */
+	   
 	    if(TopCellGenerator.avatardd.getNbCrossbar()>0){
-		 System.out.println("***Possible Clustered Interconnect***");
+		 System.out.println("***Clustered Interconnect***");
 	    }
 	    makeVCIparameters();
 	    makeConfig();

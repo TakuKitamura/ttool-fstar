@@ -183,7 +183,7 @@ public class ADDCrossbarNode extends ADDCommunicationNode implements WithAttribu
 				int tmp;
 				String tmpName;
 				
-				JDialogADDCrossbarNode dialog = new JDialogADDCrossbarNode(frame, "Setting vgmn attributes", this);
+				JDialogADDCrossbarNode dialog = new JDialogADDCrossbarNode(frame, "Setting crossbar attributes", this);
 				dialog.setSize(500, 450);
 				GraphicLib.centerOnParent(dialog);
 				dialog.show(); // blocked until dialog has been closed

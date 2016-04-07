@@ -13,15 +13,17 @@ public class AvatarRAM extends AvatarComponent{
 
     public int no_ram;
     public int no_target;
+    public int no_target_local;
+    public int no_cluster;
 
     LinkedList<AvatarChannel> channelMapped ;
-
-    public AvatarRAM(String _memoryName,int _index,int _dataSize,int _no_ram)  {
+    //DG 4.4. we add a field cluster_index, for the time when a cluster will have more than one RAM
+    public AvatarRAM(String _memoryName,int _index,int _dataSize,int _no_ram, int _no_cluster)  {
       memoryName = _memoryName;
       index = _index;
       dataSize = _dataSize;
       no_ram = _no_ram;
-     
+      no_cluster=_no_cluster;
       channelMapped =  new LinkedList<AvatarChannel>();
     }
 
@@ -37,6 +39,10 @@ public class AvatarRAM extends AvatarComponent{
       return no_target;
     }
 
+    public int getNo_cluster(){
+      return no_cluster;
+    } 
+
     public void setNo_ram(int _no_ram){
       no_ram = _no_ram;
     }
@@ -44,6 +50,11 @@ public class AvatarRAM extends AvatarComponent{
     public void setNo_target(int _no_target){
       no_target = _no_target;
     }
+
+    public void setNo_cluster(int _no_cluster){
+      no_cluster = _no_cluster;
+    }
+
     public int getIndex(){
 	return index;
     }

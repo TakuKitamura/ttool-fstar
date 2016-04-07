@@ -35,7 +35,8 @@ public class AvatarDeploymentPanelTranslator{
     private int nb_tty = 0;
     private int no_tty = 0;
     private int nb_mwmr_segments = 0;
-
+    //private int no_cluster = 0;//DG 4.4. works for 1 RAM per cluster ans does nor respect the name given by the user
+    private int nb_clusters = 0;
     private LinkedList TGCComponents ;
 
     private LinkedList<AvatarComponent> avatarComponents ;
@@ -95,8 +96,8 @@ public class AvatarDeploymentPanelTranslator{
 
                 int index = tty.getIndex();
                 String ttyName = tty.getNodeName();
-
-                AvatarTTY avtty =  new AvatarTTY(ttyName,index,no_tty);
+	
+                AvatarTTY avtty =  new AvatarTTY(ttyName,index,no_tty,index);
                 nb_tty++;
                 nb_target++;
 
@@ -118,7 +119,7 @@ public class AvatarDeploymentPanelTranslator{
                 int nbOfAttachedTargets = bus.getNbOfAttachedTargets();
                 int fifoDepth = bus.getFifoDepth();
                 int minLatency = bus.getMinLatency();
-
+System.out.println("$$$$$$$ vgsb read in");
                 AvatarBus avbus = new AvatarBus(busName,nbOfAttachedInitiators,nbOfAttachedTargets,fifoDepth,minLatency);
                 avatarComponents.add(avbus);
 
@@ -132,7 +133,7 @@ public class AvatarDeploymentPanelTranslator{
                 int nbOfAttachedTargets = vgmn.getNbOfAttachedTargets();
                 int fifoDepth = vgmn.getFifoDepth();
                 int minLatency = vgmn.getMinLatency();
-
+System.out.println("$$$$$$$ vgmn read in");
                 AvatarVgmn avvgmn = new AvatarVgmn(vgmnName,nbOfAttachedInitiators,nbOfAttachedTargets,fifoDepth,minLatency);
                 avatarComponents.add(avvgmn);
 
@@ -148,6 +149,7 @@ public class AvatarDeploymentPanelTranslator{
                 int cluster_address = crossbar.getClusterAddress();
 
                 AvatarCrossbar avcrossbar = new AvatarCrossbar(crossbarName,nbOfAttachedInitiators,nbOfAttachedTargets,cluster_index,cluster_address);
+		nb_clusters++;System.out.println("$$$$$$$nb crossbars read in"+nb_clusters);
                 avatarComponents.add(avcrossbar);
             }
             else if(dp instanceof ADDICUNode){
@@ -198,8 +200,9 @@ public class AvatarDeploymentPanelTranslator{
                     String name = addRamNode.getNodeName();
                     int index = addRamNode.getIndex();
                     int byteDataSize = addRamNode.getDataSize();
-
-                    AvatarRAM avram = new AvatarRAM(name,index,byteDataSize,no_ram);
+		   
+                    AvatarRAM avram = new AvatarRAM(name,index,byteDataSize,no_ram,index);
+                    int cluster_index = avram.getIndex();
                     no_ram++;
                     nb_ram++;
                     nb_target++;
@@ -210,8 +213,10 @@ public class AvatarDeploymentPanelTranslator{
 
                         String referenceDiagram = c.getReferenceDiagram();
                         String  channelName = c.getChannelName();
-
-                        AvatarChannel avcl = new AvatarChannel(referenceDiagram,channelName,avram);
+			//DG channel is inevitably on same cluster as RAM it is mapped on :)
+			String  newChannelName = channelName.substring(0,10)+channelName.substring(channelName.length()-10,channelName.length()-1);
+			//AvatarChannel avcl = new AvatarChannel(referenceDiagram,newChannelName,avram,cluster_index);
+                        AvatarChannel avcl = new AvatarChannel(referenceDiagram,channelName,avram,cluster_index);
                         avram.addChannel(avcl);
                         avatarMappedObject.add(avcl);
                     }

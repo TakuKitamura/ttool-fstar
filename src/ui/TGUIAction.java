@@ -390,6 +390,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ADD_CHANNELARTIFACT = 411;
     public static final int ADD_VGMNNODE = 401;
     public static final int ADD_CROSSBARNODE = 421;
+   
   // julien -------------------------------------------------------------
     
     public static final int DEPLOY_AVATAR_DIAGRAM = 418;
@@ -787,7 +788,7 @@ public class TGUIAction extends AbstractAction {
         actions[ADD_LINK] = new TAction("add-add-link", "Add a link", IconManager.imgic202, IconManager.imgic202, "Link", "Add a link between two nodes of the currently opened AVATAR deployment diagram", 0);
         actions[ADD_CPUNODE] = new TAction("add-add-cpunode", "Add a CPU", IconManager.imgic1100, IconManager.imgic1100, "CPU", "Add a cpu node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_BUSNODE] = new TAction("add-add-busnode", "Add a Bus", IconManager.imgic1102, IconManager.imgic1102, "Bus", "Add a bus node to the currently opened AVATAR deployment diagram", 0);
-actions[ADD_VGMNNODE] = new TAction("add-add-vgmnnode", "Add a VGMN", IconManager.imgic1102, IconManager.imgic1102, "VGMN", "Add a VGMN node to the currently opened AVATAR deployment diagram", 0);
+	actions[ADD_VGMNNODE] = new TAction("add-add-vgmnnode", "Add a VGMN", IconManager.imgic1102, IconManager.imgic1102, "VGMN", "Add a VGMN node to the currently opened AVATAR deployment diagram", 0);
 	actions[ADD_CROSSBARNODE] = new TAction("add-add-crossbarnode", "Add a CROSSBAR", IconManager.imgic1102, IconManager.imgic1102, "Crossbar", "Add a Crossbar node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_TTYNODE] = new TAction("add-add-tty", "Add a TTY node", IconManager.imgic1108, IconManager.imgic1108, "TTY", "Add a tty node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_BLOCKARTIFACT] = new TAction("add-add-blockartifact", "Map an AVATAR block", IconManager.imgic702, IconManager.imgic702, "Map an AVATAR block", "Map an AVATAR block onto a node in the currently opened AVATAR deployment diagram", 0);

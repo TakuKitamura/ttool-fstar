@@ -270,7 +270,7 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
 		ADDChannelArtifact artifact;
 		int i;
 		String name = _ref + "::" + _name;
-		
+	
 		while(iterator.hasNext()) {
 			tgc = (TGComponent)(iterator.next());
 			if (tgc instanceof ADDRAMNode) {

@@ -8,11 +8,14 @@ public class AvatarChannel extends AvatarMappedObject{
     private AvatarRAM avatarRAMReference; 
     private String referenceDiagram ;
 	private String channelName ;
+    private int no_cluster;
 
-    public AvatarChannel(String _referenceDiagram,  String _channelName, AvatarRAM _avatarRAMReference ){
+
+    public AvatarChannel(String _referenceDiagram,  String _channelName, AvatarRAM _avatarRAMReference, int _no_cluster){
       referenceDiagram =  _referenceDiagram;
       channelName = _channelName;
       avatarRAMReference = _avatarRAMReference;
+      no_cluster = _no_cluster;
     }
 
     public AvatarRAM getAvatarRAMReference(){
@@ -26,8 +29,17 @@ public class AvatarChannel extends AvatarMappedObject{
     public String getReferenceDiagram(){
       return referenceDiagram;
     }
+
+    /*public String  getChannelName(){ 
+	 String newChannelName = channelName.substring(0,10)+channelName.substring(channelName.length()-10,channelName.length()-1);
+      return newChannelName;
+      } */
     
-    public String  getChannelName(){
+    public String  getChannelName(){      
       return channelName;
+      } 
+
+    public int getNo_cluster(){
+      return no_cluster;
     } 
 }

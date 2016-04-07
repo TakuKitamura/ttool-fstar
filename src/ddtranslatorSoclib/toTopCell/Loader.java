@@ -19,6 +19,9 @@ public class Loader {
 
 	public static String  getLoader() {
 
+int nb_clusters=5;//TopCellGenerator.avatardd.getAllCrossbar().size();
+		System.out.println("@@@@@@@@@@nb_clusters@@@@@@@@: "+nb_clusters);
+
 		loader = CR2 + "//-------------------------Call Loader---------------------------------" + CR2 ;
 		loader = loader + "std::cerr << \"caba-vgmn-mutekh_kernel_tutorial SoCLib simulator for MutekH\" << std::endl;"
 				+ CR2 ;
@@ -77,7 +80,12 @@ public class Loader {
 		loader = loader + "      }" + CR ;
 		loader = loader + "    }" + CR2 ;
 		int nb_tty =1; //DG currently only one (multi) tty
-		loader = loader + "  const size_t xicu_n_irq = "+(1+nb_tty+3)+";" + CR2 ;
+
+if(nb_clusters==0){
+    loader = loader + "  const size_t xicu_n_irq = "+(1+nb_tty+3)+";" + CR2 ;
+}else{
+    loader = loader + "  const size_t xicu_n_irq = "+(5*nb_clusters)+";" + CR2 ;
+}
         return loader;
 	}
 

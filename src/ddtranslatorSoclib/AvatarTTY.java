@@ -12,11 +12,13 @@ public class AvatarTTY extends AvatarComponent {
     private String ttyName;
     private int no_tty;
     private int no_target;
-	
-    public AvatarTTY(String _ttyName,int _index, int _no_tty){
+    private int no_cluster;
+//DG 4.4. we add a field cluster_index, for the time where a cluster can have more tahn one TTY
+    public AvatarTTY(String _ttyName, int _index, int _no_tty, int _no_cluster){
       index =  _index;
       ttyName =  _ttyName;
       no_tty = _no_tty;
+      no_cluster= _no_cluster;
     }
 
     public String getTTYName(){
@@ -35,6 +37,10 @@ public class AvatarTTY extends AvatarComponent {
       return no_target;
     }
 
+    public int getNo_cluster(){
+      return no_cluster;
+    } 
+
     public void setNo_tty(int _no_tty){
         no_tty = _no_tty;
     }
@@ -43,5 +49,8 @@ public class AvatarTTY extends AvatarComponent {
 	no_target = _no_target;
     }
 
+    public void setNo_cluster(int _no_cluster){
+	no_cluster = _no_cluster;
+    }
 }
 
