@@ -141,19 +141,21 @@ help:
 
 all: basic jar
 
-svn:
+svn: svnup jar
+
+svnup:
 	date
 	svn update build.txt src/ui/DefaultText.java
 	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
 	svn --username apvrille commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
-	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java $(TTOOL_WEBCRAWLER_SRC)/*.java 
 
-basicsvnapvrille:
+basicsvnapvrille: svupapvrille jar
+
+svnupapvrille
 	date
 	svn --username apvrille update build.txt src/ui/DefaultText.java
 	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
 	svn --username apvrille commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
-	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java $(TTOOL_WEBCRAWLER_SRC)/*.java 
 
 myrelease: basic launcher ttooljar 
 
