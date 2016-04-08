@@ -46,6 +46,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+
 import myutil.TraceManager;
 import translator.RTLOTOSKeyword;
 import translator.tojava.JKeyword;
@@ -62,4 +64,12 @@ public class AvatarConstant extends AvatarTerm {
     public AvatarConstant (String _name, Object _referenceObject) {
         super (_name, _referenceObject);
     }
+
+    @Override
+    public AvatarConstant clone () {
+        return this;
+    }
+
+    @Override
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) { }
 }

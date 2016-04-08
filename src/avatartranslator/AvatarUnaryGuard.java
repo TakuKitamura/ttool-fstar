@@ -46,6 +46,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+
 import myutil.Conversion;
 
 public class AvatarUnaryGuard extends AvatarComposedGuard {
@@ -88,5 +90,15 @@ public class AvatarUnaryGuard extends AvatarComposedGuard {
 
     public String getAsString (AvatarSyntaxTranslator translator) {
         return translator.translateUnaryOp (this.unary) + this.before + this.guard.getAsString (translator) + this.after;
+    }
+
+    @Override
+    public AvatarUnaryGuard clone () {
+        return new AvatarUnaryGuard (this.unary, this.before, this.after, this.guard.clone ());
+    }
+
+    @Override
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        this.guard.replaceAttributes (attributesMapping);
     }
 }

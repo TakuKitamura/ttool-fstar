@@ -1,0 +1,449 @@
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ *
+ * ludovic.apvrille AT enst.fr
+ *
+ * This software is a computer program whose purpose is to allow the
+ * edition of TURTLE analysis, design and deployment diagrams, to
+ * allow the generation of RT-LOTOS or Java code from this diagram,
+ * and at last to allow the analysis of formal validation traces
+ * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+ * from INRIA Rhone-Alpes.
+ *
+ * This software is governed by the CeCILL  license under French law and
+ * abiding by the rules of distribution of free software.  You can  use,
+ * modify and/ or redistribute the software under the terms of the CeCILL
+ * license as circulated by CEA, CNRS and INRIA at the following URL
+ * "http://www.cecill.info".
+ *
+ * As a counterpart to the access to the source code and  rights to copy,
+ * modify and redistribute granted by the license, users are provided only
+ * with a limited warranty  and the software's author,  the holder of the
+ * economic rights,  and the successive licensors  have only  limited
+ * liability.
+ *
+ * In this respect, the user's attention is drawn to the risks associated
+ * with loading,  using,  modifying and/or developing or reproducing the
+ * software by the user in light of its specific status of free software,
+ * that may mean  that it is complicated to manipulate,  and  that  also
+ * therefore means  that it is reserved for developers  and  experienced
+ * professionals having in-depth computer knowledge. Users are therefore
+ * encouraged to load and test the software's suitability as regards their
+ * requirements in conditions enabling the security of their systems and/or
+ * data to be ensured and,  more generally, to use and operate it in the
+ * same conditions as regards security.
+ *
+ * The fact that you are presently reading this means that you have had
+ * knowledge of the CeCILL license and that you accept its terms.
+ */
+
+package avatartranslator;
+
+import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Iterator;
+
+/**
+ * AvatarLibraryFunction is used to represent a library function that can be further used in state machine diagrams.
+ * <p>
+ * A library function is defined by:
+ * <ul>
+ * <li>a name</li>
+ * <li>a set of {@link AvatarAttribute} representing the parameters of the function,</li>
+ * <li>a set of {@link AvatarAttribute} for local usage,</li>
+ * <li>a set of {@link AvatarSignal} that are used to communicate,</li>
+ * <li>a set of {@link AvatarAttribute} that will contain the return values of the function and</li>
+ * <li>an {@link AvatarStateMachine} that describes the content of the function.</li>
+ * </ul>
+ * </p>
+ *
+ * @version 1.0 04.07.2016
+ * @author Florian LUGOU
+ */
+public class AvatarLibraryFunction extends AvatarElement implements AvatarTranslator {
+
+    /**
+     * The list of parameters of the function. Their values should never be reaffected.
+     *
+     * <p>Note that these are only placeholders and should not be used outside this class.</p>
+     */
+    private LinkedList<AvatarAttribute> parameters;
+
+    /**
+     * The list of variables local to the function.
+     *
+     * <p>Note that these are only placeholders and should not be used outside this class.</p>
+     */
+    private LinkedList<AvatarAttribute> attributes;
+
+    /**
+     * The list of signals used by the function.
+     *
+     * <p>Note that these are only placeholders and should not be used outside this class.</p>
+     */
+    private LinkedList<AvatarSignal> signals;
+
+    /**
+     * The list of attribute that will hold the return values of the function. These shouldn't be elements of {@link AvatarLibraryFunction#attributes} or {@link AvatarLibraryFunction#parameters}.
+     *
+     * <p>Note that these are only placeholders and should not be used outside this class.</p>
+     */
+    private LinkedList<AvatarAttribute> returnAttributes;
+
+    /**
+     * The state machine describing the behaviour of the function.
+     */
+    private AvatarStateMachine asm;
+
+    /**
+     * The specification that this library function is part of.
+     */
+    private AvatarSpecification avspec;
+
+
+    /**
+     * Basic constructor of the function function.
+     *
+     * @param name
+     *      The name that identifies this function.
+     * @param avspec
+     *      The specification this function is part of.
+     * @param referenceObject
+     *      The graphical element that this function is related to.
+     */
+    public AvatarLibraryFunction (String name, AvatarSpecification avspec, Object referenceObject) {
+        super(name, referenceObject);
+        this.avspec = avspec;
+    }
+
+    /**
+     * Look for an attribute in the list of local attributes, parameters and return values.
+     *
+     * @param name
+     *      The name of the attribute to look for.
+     *
+     * @return The corresponding attribute if found, null otherwise.
+     */
+    public AvatarAttribute getAttributeWithName (String name) {
+        for (AvatarAttribute attr: this.parameters)
+            if (attr.getName ().equals (name))
+                return attr;
+        for (AvatarAttribute attr: this.attributes)
+            if (attr.getName ().equals (name))
+                return attr;
+        for (AvatarAttribute attr: this.returnAttributes)
+            if (attr.getName ().equals (name))
+                return attr;
+        return null;
+    }
+
+    /**
+     * Add all of the temporary attributes used by the function to the block.
+     *
+     * @param block
+     *      The block to which the attributes should be added.
+     * @param mapping
+     *      A mapping from placeholders to attributes of the block.
+     */
+    public void addAttributesToBlock (AvatarBlock block, HashMap<AvatarAttribute, AvatarAttribute> mapping) {
+        for (AvatarAttribute attribute: this.attributes) {
+            String name = this.name + "__" + attribute.getName ();
+            AvatarAttribute attr = block.getAvatarAttributeWithName (name);
+            if (attr == null)
+                attr = new AvatarAttribute (name, attribute.getType (), block, block.getReferenceObject ());
+
+            mapping.put (attribute, attr);
+        }
+    }
+
+    /**
+     * Add mappings from parameters and return values placeholders to "real" attributes.
+     *
+     * @param mapping
+     *      A mapping from placeholders to attributes of the block.
+     * @param parameters
+     *      A list of the attributes that were passed as parameters.
+     * @param returnAttributes
+     *      A list of the attributes that should receive return values.
+     */
+    public void addAttributesToMapping (HashMap<AvatarAttribute, AvatarAttribute> mapping, LinkedList<AvatarAttribute> parameters, LinkedList<AvatarAttribute> returnAttributes) {
+        Iterator<AvatarAttribute> placeholders = this.parameters.iterator ();
+        for (AvatarAttribute attr: parameters)
+            mapping.put (placeholders.next (), attr);
+
+        placeholders = this.returnAttributes.iterator ();
+        for (AvatarAttribute attr: returnAttributes)
+            mapping.put (placeholders.next (), attr);
+    }
+
+    /**
+     * Add mappings from signals placeholders to "real" signals.
+     *
+     * @param mapping
+     *      A mapping from placeholders to signals of the block.
+     * @param signals
+     *      A list of the attributes that were passed as parameters.
+     */
+    public void addSignalsToMapping (HashMap<AvatarSignal, AvatarSignal> mapping, LinkedList<AvatarSignal> signals) {
+        Iterator<AvatarSignal> placeholders = this.signals.iterator ();
+        for (AvatarSignal signal: signals)
+            mapping.put (placeholders.next (), signal);
+    }
+
+    /**
+     * Inner class used to pass arguments for the translation process.
+     */
+    private class TranslatorArgument {
+
+        /**
+         * A mapping from placeholders to attributes of the block.
+         */
+        public HashMap<AvatarAttribute, AvatarAttribute> placeholdersMapping;
+
+        /**
+         * A mapping from placeholders to signals of the block.
+         */
+        public HashMap<AvatarSignal, AvatarSignal> signalsMapping;
+
+        /**
+         * The previous element of the state machine being created.
+         */
+        public AvatarStateMachineElement previousElement;
+
+        /**
+         * The last element of the state machine being created.
+         */
+        public AvatarStateMachineElement lastElement;
+
+        /**
+         * A mapping from placeholder state machine elements to "real" elements.
+         */
+        public HashMap<AvatarStateMachineElement, AvatarStateMachineElement> elementsMapping;
+
+        /**
+         * The block the function call belongs to.
+         */
+        public AvatarBlock block;
+
+        /**
+         * The reference object associated to the function call being translated.
+         */
+        public Object referenceObject;
+
+        /**
+         * Basic constructor.
+         *
+         * @param placeholdersMapping
+         *      A mapping from placeholders to attributes of the block.
+         * @param signalsMapping
+         *      A mapping from placeholders to signals of the block.
+         * @param previousElement
+         *      The previous element of the state machine being created.
+         * @param lastElement
+         *      The last element of the state machine being created.
+         * @param elementsMapping
+         *      A mapping from placeholder state machine elements to <i>real</i> elements.
+         * @param block
+         *      The block the function call belongs to.
+         * @param referenceObject
+         *      The reference object associated to the function call being translated.
+         */
+        public TranslatorArgument (HashMap<AvatarAttribute, AvatarAttribute> placeholdersMapping, HashMap<AvatarSignal, AvatarSignal> signalsMapping, AvatarStateMachineElement previousElement, AvatarStateMachineElement lastElement, HashMap<AvatarStateMachineElement, AvatarStateMachineElement> elementsMapping, AvatarBlock block, Object referenceObject) {
+            this.placeholdersMapping = placeholdersMapping;
+            this.signalsMapping = signalsMapping;
+            this.previousElement = previousElement;
+            this.lastElement = lastElement;
+            this.elementsMapping = elementsMapping;
+            this.block = block;
+            this.referenceObject = referenceObject;
+        }
+    }
+
+    /**
+     * Translate the state machine described by this function in the context of a particular block.
+     *
+     * @param placeholdersMapping
+     *      A mapping from placeholders to attributes of the block.
+     * @param signalsMapping
+     *      A mapping from placeholders to signals of the block.
+     * @param firstElement
+     *      The first element of the state machine to be created.
+     * @param block
+     *      The block the function call belongs to.
+     * @param referenceObject
+     *      The reference object associated to the function call being translated.
+     *
+     * @return The last element of the state machine created.
+     */
+    public AvatarState translateASMWithMapping (HashMap<AvatarAttribute, AvatarAttribute> placeholdersMapping, HashMap<AvatarSignal, AvatarSignal> signalsMapping, AvatarStateMachineElement firstElement, AvatarBlock block, Object referenceObject) {
+        /* Create the last state */
+        AvatarState lastState = new AvatarState ("exit_" + this.name, referenceObject);
+
+        /* Create the argument object that will be passed to translation functions */
+        Object arg = new TranslatorArgument (
+                placeholdersMapping,
+                signalsMapping,
+                firstElement,
+                lastState,
+                new HashMap<AvatarStateMachineElement, AvatarStateMachineElement> (),
+                block,
+                referenceObject);
+
+        /* Translate the state machine, starting from the first state */
+        this.asm.getStartState ().translate (this, arg);
+
+        return lastState;
+    }
+
+    /**
+     * Translate elements that follow the current state.
+     *
+     * @param asme
+     *      The newly created element.
+     * @param placeholder
+     *      The state machine element that has just be translated.
+     * @param arg
+     *      The object containing the arguments to pass to the translation functions.
+     */
+    private void translateNext (AvatarStateMachineElement asme, AvatarStateMachineElement placeholder, TranslatorArgument arg) {
+        arg.previousElement.addNext (asme);
+        arg.elementsMapping.put (placeholder, asme);
+
+        /* If there is no next element, consider this as an end state */
+        if (placeholder.nbOfNexts () == 0) {
+            asme.addNext (arg.lastElement);
+            return;
+        }
+
+        /* Loop through the next elements */
+        for (AvatarStateMachineElement next: placeholder.getNexts ()) {
+            AvatarStateMachineElement existingNext = arg.elementsMapping.get (next);
+            /* Check if next element has already been translated */
+            if (existingNext != null)
+                asme.addNext (existingNext);
+            else {
+                arg.previousElement = asme;
+                next.translate (this, arg);
+            }
+        }
+    }
+
+    @Override
+    public void translateTimerOperator (AvatarTimerOperator _asme, Object _arg) {
+        TranslatorArgument arg = (TranslatorArgument) _arg;
+
+        AvatarTimerOperator asme;
+
+        if (_asme instanceof AvatarSetTimer) {
+            // TODO: isn't the name used for the timer ?
+            asme = new AvatarSetTimer (this.name + "__" + _asme.getName (), arg.referenceObject);
+
+            // TODO: should probably replace attributes to, right ?
+            ((AvatarSetTimer) asme).setTimerValue (((AvatarSetTimer) _asme).getTimerValue ());
+        } else if (_asme instanceof AvatarResetTimer)
+            asme = new AvatarResetTimer (this.name + "__" + _asme.getName (), arg.referenceObject);
+        else if (_asme instanceof AvatarExpireTimer) 
+            asme = new AvatarExpireTimer (this.name + "__" + _asme.getName (), arg.referenceObject);
+        else
+            /* !!! should not happen */
+            return;
+        
+        asme.setTimer (arg.placeholdersMapping.get (_asme.getTimer ()));
+
+        this.translateNext (asme, _asme, arg);
+    }
+
+    @Override
+    public void translateActionOnSignal (AvatarActionOnSignal _asme, Object _arg) {
+        TranslatorArgument arg = (TranslatorArgument) _arg;
+
+        AvatarActionOnSignal asme = new AvatarActionOnSignal (this.name + "__" + _asme.getName (), arg.signalsMapping.get (_asme.getSignal ()), arg.referenceObject);
+        for (String s: _asme.getValues ()) {
+            AvatarAttribute attr = this.getAttributeWithName (s);
+            if (attr == null)
+                asme.addValue (s);
+            else
+                asme.addValue (arg.placeholdersMapping.get (attr).getName ());
+        }
+
+        this.translateNext (asme, _asme, arg);
+    }
+
+    @Override
+    public void translateTransition (AvatarTransition _asme, Object _arg) {
+        TranslatorArgument arg = (TranslatorArgument) _arg;
+
+        AvatarTransition asme = new AvatarTransition (arg.block, this.name + "__" + _asme.getName (), arg.referenceObject);
+
+        AvatarGuard guard = _asme.getGuard ().clone ();
+        guard.replaceAttributes (arg.placeholdersMapping);
+        asme.setGuard (guard);
+
+        asme.setDelays (_asme.getMinDelay (), _asme.getMaxDelay ());
+        asme.setComputes (_asme.getMinCompute (), _asme.getMaxCompute ());
+
+        for (AvatarAction _action: _asme.getActions ()) {
+            AvatarAction action = _action.clone ();
+            action.replaceAttributes (arg.placeholdersMapping);
+
+            asme.addAction (action);
+        }
+
+        this.translateNext (asme, _asme, arg);
+    }
+
+    @Override
+    public void translateStartState (AvatarStartState _asme, Object _arg) {
+        TranslatorArgument arg = (TranslatorArgument) _arg;
+
+        _asme.getNext (0).translate (this, arg);
+    }
+
+    @Override
+    public void translateState (AvatarState _asme, Object _arg) {
+        TranslatorArgument arg = (TranslatorArgument) _arg;
+
+        /* Mark state as non checkable as it is up to now impossible to display the
+         * reachability of state in a function for a particular invocation of this
+         * function.
+         */
+        AvatarState asme = new AvatarState (this.name + "__" + _asme.getName (), arg.referenceObject, false);
+        asme.setHidden (true);
+        asme.addEntryCode (_asme.getEntryCode ());
+
+        this.translateNext (asme, _asme, arg);
+    }
+
+    @Override
+    public void translateRandom (AvatarRandom _asme, Object _arg) {
+        TranslatorArgument arg = (TranslatorArgument) _arg;
+
+        AvatarRandom asme = new AvatarRandom (this.name + "__" + _asme.getName (), arg.referenceObject);
+        asme.setValues (_asme.getMinValue (), _asme.getMaxValue ());
+        asme.setFunctionId (_asme.getFunctionId ());
+        asme.setVariable (arg.placeholdersMapping.get (this.getAttributeWithName (_asme.getVariable ())).getName ());
+
+        this.translateNext (asme, _asme, arg);
+    }
+
+    @Override
+    public void translateStopState (AvatarStopState _asme, Object _arg) {
+        TranslatorArgument arg = (TranslatorArgument) _arg;
+
+        arg.previousElement.addNext (arg.lastElement);
+    }
+
+    @Override
+    public void translateLibraryFunctionCall (AvatarLibraryFunctionCall _asme, Object _arg) {
+        TranslatorArgument arg = (TranslatorArgument) _arg;
+
+        AvatarLibraryFunctionCall asme = new AvatarLibraryFunctionCall (this.name + "__" + _asme.getName (), _asme.getLibraryFunction (), arg.referenceObject);
+        for (AvatarAttribute attr: _asme.getParameters ())
+            asme.addParameter (arg.placeholdersMapping.get (attr));
+        for (AvatarSignal signal: _asme.getSignals ())
+            asme.addSignal (arg.signalsMapping.get (signal));
+        for (AvatarAttribute attr: _asme.getReturnAttributes ())
+            asme.addReturnAttribute (arg.placeholdersMapping.get (attr));
+
+        this.translateNext (asme, _asme, arg);
+    }
+}

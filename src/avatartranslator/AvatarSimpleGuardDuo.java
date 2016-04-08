@@ -46,6 +46,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+
 import myutil.Conversion;
 
 /**
@@ -77,5 +79,16 @@ public class AvatarSimpleGuardDuo extends AvatarSimpleGuard {
 
     public String getAsString (AvatarSyntaxTranslator translator) {
         return this.termA.getName () + " " + translator.translateBinaryOp (this.binaryOp) + " " + this.termB.getName ();
+    }
+
+    @Override
+    public AvatarSimpleGuardDuo clone () {
+        return new AvatarSimpleGuardDuo (this.termA.clone (), this.termB.clone (), this.binaryOp);
+    }
+
+    @Override
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        this.termA.replaceAttributes (attributesMapping);
+        this.termB.replaceAttributes (attributesMapping);
     }
 }

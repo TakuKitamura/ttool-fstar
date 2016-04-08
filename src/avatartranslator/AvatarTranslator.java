@@ -53,4 +53,5 @@ public interface AvatarTranslator {
     public void translateState (AvatarState _asme, Object _arg);
     public void translateRandom (AvatarRandom _asme, Object _arg);
     public void translateStopState (AvatarStopState _asme, Object _arg);
+    public void translateLibraryFunctionCall (AvatarLibraryFunctionCall _asme, Object _arg);
 }

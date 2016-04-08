@@ -46,6 +46,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+
 public class AvatarActionAssignment implements AvatarAction {
     AvatarLeftHand leftHand;
     AvatarTerm rightHand;
@@ -82,5 +84,23 @@ public class AvatarActionAssignment implements AvatarAction {
 
     public String toString () {
         return this.leftHand.getName() + " = " + this.rightHand.getName();
+    }
+
+    @Override
+    public AvatarActionAssignment clone () {
+        return new AvatarActionAssignment (this.leftHand.clone (), this.rightHand.clone ());
+    }
+
+    @Override
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        if (this.leftHand instanceof AvatarAttribute)
+            this.leftHand = attributesMapping.get ((AvatarAttribute) this.leftHand);
+        else
+            this.leftHand.replaceAttributes (attributesMapping);
+
+        if (this.rightHand instanceof AvatarAttribute)
+            this.rightHand = attributesMapping.get ((AvatarAttribute) this.rightHand);
+        else
+            this.rightHand.replaceAttributes (attributesMapping);
     }
 }

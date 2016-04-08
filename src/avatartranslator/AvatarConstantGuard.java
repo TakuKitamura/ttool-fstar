@@ -46,6 +46,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+
 import myutil.Conversion;
 
 /**
@@ -66,4 +68,12 @@ public class AvatarConstantGuard extends AvatarSimpleGuard {
     public String getAsString (AvatarSyntaxTranslator translator) {
         return this.constant.getName ();
     }
+
+    @Override
+    public AvatarConstantGuard clone () {
+        return new AvatarConstantGuard (this.constant);
+    }
+
+    @Override
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) { }
 }

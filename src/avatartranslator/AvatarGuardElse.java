@@ -46,6 +46,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+
 import myutil.Conversion;
 
 /**
@@ -93,4 +95,12 @@ public class AvatarGuardElse extends AvatarGuard {
     public boolean isElseGuard () {
         return true;
     }
+
+    @Override
+    public AvatarGuardElse clone () {
+        return new AvatarGuardElse ();
+    }
+
+    @Override
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) { }
 }

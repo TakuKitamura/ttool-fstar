@@ -45,6 +45,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+
 public class AvatarTermRaw extends AvatarTerm {
     String raw;
 
@@ -60,4 +62,12 @@ public class AvatarTermRaw extends AvatarTerm {
     public String toString () {
         return this.raw;
     }
+
+    @Override
+    public AvatarTermRaw clone () {
+        return new AvatarTermRaw (this.raw, this.referenceObject);
+    }
+
+    @Override
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) { }
 }

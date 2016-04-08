@@ -224,6 +224,7 @@ public class AvatarBlock extends AvatarElement {
         return attributes.get(_index);
     }
 
+
     public int getIndexOfAvatarAttributeWithName(String _name) {
         int cpt = 0;
         for(AvatarAttribute attribute: attributes) {
@@ -235,6 +236,14 @@ public class AvatarBlock extends AvatarElement {
         return -1;
     }
 
+    /**
+     * Look for an attribute with the provided name.
+     *
+     * @param _name
+     *      The name of the attribute to look for.
+     *
+     * @return The attribute if found, or null otherwise
+     */
     public AvatarAttribute getAvatarAttributeWithName(String _name) {
         for(AvatarAttribute attribute: attributes) {
             if (attribute.getName().compareTo(_name)== 0) {

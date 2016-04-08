@@ -53,7 +53,7 @@ import myutil.*;
 import translator.*;
 import translator.tojava.*;
 
-public class AvatarAttribute extends AvatarTerm implements AvatarLeftHand {
+public class AvatarAttribute extends AvatarLeftHand {
 
     // Types of parameters
     private AvatarType type;
@@ -139,5 +139,15 @@ public class AvatarAttribute extends AvatarTerm implements AvatarLeftHand {
 
     public boolean isLeftHand () {
         return true;
+    }
+
+    @Override
+    public AvatarAttribute clone () {
+        return this;
+    }
+
+    @Override
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        /* !!! We should never arrive here !!! */
     }
 }

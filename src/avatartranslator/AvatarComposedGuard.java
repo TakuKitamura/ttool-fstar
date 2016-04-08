@@ -52,4 +52,6 @@ public abstract class AvatarComposedGuard extends AvatarGuard {
     public AvatarComposedGuard getOpposite () {
         return new AvatarUnaryGuard ("not", "(", ")", this);
     }
+
+    public abstract AvatarComposedGuard clone ();
 }

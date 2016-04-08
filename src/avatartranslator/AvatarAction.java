@@ -45,6 +45,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+
 import myutil.TraceManager;
 
 public interface AvatarAction {
@@ -52,4 +54,19 @@ public interface AvatarAction {
     public boolean isAVariableSetting ();
     public boolean isABasicVariableSetting ();
     public String getName ();
+
+    /**
+     * Returns a full clone of the action.
+     *
+     * @return A clone of the action.
+     */
+    public AvatarAction clone ();
+
+    /**
+     * Replaces attributes in this action according to the provided mapping.
+     *
+     * @param attributesMapping
+     *      The mapping used to replace the attributes of the action. All the attributes of the block should be present as keys.
+     */
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping);
 }

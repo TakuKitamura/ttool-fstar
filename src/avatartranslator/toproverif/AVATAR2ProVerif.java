@@ -1390,4 +1390,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
     public void translateStopState (AvatarStopState _asme, Object _arg) {
     }
+
+    public void translateLibraryFunctionCall(AvatarLibraryFunctionCall _asme, Object _arg) {
+        /* should not happen */
+        this.translateNext (_asme.getNext(0), _arg);
+    }
 }

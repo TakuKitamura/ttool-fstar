@@ -47,9 +47,11 @@
 package avatartranslator;
 
 import java.util.LinkedList;
+import java.util.HashMap;
+
 import myutil.TraceManager;
 
-public class AvatarTuple extends AvatarTerm implements AvatarLeftHand {
+public class AvatarTuple extends AvatarLeftHand {
     LinkedList<AvatarTerm> components;
 
     public AvatarTuple (Object _referenceObject) {
@@ -121,5 +123,25 @@ public class AvatarTuple extends AvatarTerm implements AvatarLeftHand {
             if (!(term instanceof AvatarAttribute))
                 return false;
         return true;
+    }
+
+    @Override
+    public AvatarTuple clone () {
+        AvatarTuple clone = new AvatarTuple (this.referenceObject);
+        for (AvatarTerm term: this.components)
+            clone.addComponent (term.clone ());
+        return clone;
+    }
+
+    @Override
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        LinkedList<AvatarTerm> components = new LinkedList<AvatarTerm> ();
+        for (AvatarTerm term: this.components)
+            if (term instanceof AvatarAttribute)
+                components.add (attributesMapping.get ((AvatarAttribute) term));
+            else {
+                components.add (term);
+                term.replaceAttributes (attributesMapping);
+            }
     }
 }

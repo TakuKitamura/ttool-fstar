@@ -45,6 +45,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+
 import myutil.TraceManager;
 
 public class AvatarArithmeticOp extends AvatarTerm {
@@ -99,5 +101,23 @@ public class AvatarArithmeticOp extends AvatarTerm {
 
     public boolean isLeftHand () {
         return false;
+    }
+
+    @Override
+    public AvatarArithmeticOp clone () {
+        return new AvatarArithmeticOp (this.term1.clone (), this.term2.clone (), this.operator, this.referenceObject);
+    }
+
+    @Override
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        if (this.term1 instanceof AvatarAttribute)
+            this.term1 = attributesMapping.get ((AvatarAttribute) this.term1);
+        else
+            this.term1.replaceAttributes (attributesMapping);
+
+        if (this.term2 instanceof AvatarAttribute)
+            this.term2 = attributesMapping.get ((AvatarAttribute) this.term2);
+        else
+            this.term2.replaceAttributes (attributesMapping);
     }
 }

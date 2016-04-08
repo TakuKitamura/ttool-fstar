@@ -46,6 +46,11 @@
 
 package avatartranslator;
 
-public interface AvatarLeftHand {
-    public String getName ();
+public abstract class AvatarLeftHand extends AvatarTerm {
+    public AvatarLeftHand (String name, Object referenceObject) {
+        super (name, referenceObject);
+    }
+
+    @Override
+    public abstract AvatarLeftHand clone ();
 }

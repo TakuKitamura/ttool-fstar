@@ -46,6 +46,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+
 import myutil.TraceManager;
 import translator.RTLOTOSKeyword;
 import translator.tojava.JKeyword;
@@ -143,4 +145,22 @@ public abstract class AvatarTerm extends AvatarElement {
 
         return (b1 && b2 && b3 && b4 && b5);
     }
+
+
+    /**
+     * Returns a full clone of the term.
+     *
+     * <p>Note that this is a full clone except for {@link AvatarAttribute} and {@link AvatarConstant} that shouldn't be cloned</p>
+     *
+     * @return A clone of the term.
+     */
+    public abstract AvatarTerm clone ();
+
+    /**
+     * Replaces attributes in this term according to the provided mapping.
+     *
+     * @param attributesMapping
+     *      The mapping used to replace the attributes of the term. All the attributes of the block should be present as keys.
+     */
+    public abstract void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping);
 }

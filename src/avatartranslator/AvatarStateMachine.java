@@ -1236,4 +1236,71 @@ public class AvatarStateMachine extends AvatarElement {
         }
     }
 
+    /**
+     * Removes all function calls by inlining them.
+     *
+     * @param avspec
+     *      The specification used to query library functions.
+     */
+    public void removeLibraryFunctionCalls (AvatarBlock block) {
+        /* Perform BFS for AvatarLibraryFunctionCall elements. When one is found, replace it by the state machine and fix the links */
+        LinkedList<AvatarStateMachineElement> toVisit = new LinkedList<AvatarStateMachineElement> ();
+        toVisit.add (this.startState);
+        HashSet<AvatarStateMachineElement> visited = new HashSet<AvatarStateMachineElement> ();
+        HashMap<AvatarLibraryFunctionCall, AvatarStateMachineElement> callsTranslated = new HashMap<AvatarLibraryFunctionCall, AvatarStateMachineElement> ();
+
+        while (!toVisit.isEmpty ()) {
+            /* Get the first element of the queue */
+            AvatarStateMachineElement curAsme = toVisit.remove ();
+            if (visited.contains (curAsme))
+                continue;
+
+            if (curAsme instanceof AvatarLibraryFunctionCall) {
+                /* Create a state that will be used as an entry point for the sub-state machine */
+                AvatarState firstState = new AvatarState ("entry_" + curAsme.getName (), curAsme.getReferenceObject ());
+
+                /* Add this state to the mapping so that future state can use it to replace their next element */
+                callsTranslated.put ((AvatarLibraryFunctionCall) curAsme, firstState);
+
+                /* inline the function call */
+                AvatarStateMachineElement lastState = ((AvatarLibraryFunctionCall) curAsme).inlineFunctionCall (block, firstState);
+
+                /* Add the next elements to the newly created last state */
+                for (AvatarStateMachineElement asme: curAsme.getNexts ())
+                    lastState.addNext (asme);
+
+                /* Use the translated function call's first element as current element */
+                curAsme = firstState;
+            }
+
+            /* Add current element to the visited set */
+            visited.add (curAsme);
+
+            /* Loop through the next elements */
+            int i=0;
+            for (AvatarStateMachineElement asme: curAsme.getNexts ()) {
+                /* Check if it is a function call */
+                if (asme instanceof AvatarLibraryFunctionCall) {
+                    AvatarStateMachineElement replaceBy = callsTranslated.get ((AvatarLibraryFunctionCall) asme);
+                    /* Check if function call has already been translated */
+                    if (replaceBy != null) {
+                        /* replace by the translated function call */
+                        curAsme.removeNext (i);
+                        curAsme.addNext (replaceBy);
+                        
+                        /* new next element has been added at the end of the list so we need to fix i */
+                        i--;
+                    } else {
+                        /* mark the function call and the current state to be visited */
+                        toVisit.add (asme);
+                        toVisit.add (curAsme);
+                        visited.remove (curAsme);
+                    }
+                } else
+                    toVisit.add (asme);
+
+                i++;
+            }
+        }
+    }
 }

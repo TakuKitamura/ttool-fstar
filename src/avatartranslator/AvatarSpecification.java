@@ -57,6 +57,11 @@ public class AvatarSpecification extends AvatarElement {
     private LinkedList<AvatarBlock> blocks;
     private LinkedList<AvatarRelation> relations;
 
+    /**
+     * The list of all library calls that can be called.
+     */
+    private LinkedList<AvatarLibraryFunctionCall> libraryCalls;
+
     private String applicationCode;
 
     //private AvatarBroadcast broadcast;
@@ -80,6 +85,8 @@ public class AvatarSpecification extends AvatarElement {
 	safety_pragmas = new LinkedList<String>();
         this.constants.add (AvatarConstant.FALSE);
         this.constants.add (AvatarConstant.TRUE);
+
+        this.libraryCalls = new LinkedList<AvatarLibraryFunctionCall> ();
     }
 
 
@@ -347,6 +354,19 @@ public class AvatarSpecification extends AvatarElement {
                     at.setGuard (ancientGuard.getRealGuard (asme));
                 }
             }
+        }
+    }
+
+    /**
+     * Removes all function calls by inlining them.
+     */
+    public void removeLibraryFunctionCalls () {
+        for (AvatarBlock block: this.blocks) {
+            AvatarStateMachine asm = block.getStateMachine ();
+            if (asm == null)
+                continue;
+
+            asm.removeLibraryFunctionCalls (block);
         }
     }
 

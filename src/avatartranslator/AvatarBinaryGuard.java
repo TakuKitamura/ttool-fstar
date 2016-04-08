@@ -46,6 +46,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+
 import myutil.Conversion;
 
 public class AvatarBinaryGuard extends AvatarComposedGuard {
@@ -74,5 +76,16 @@ public class AvatarBinaryGuard extends AvatarComposedGuard {
 
     public String getAsString (AvatarSyntaxTranslator translator) {
         return this.guardA.getAsString (translator) + translator.translateBinaryOp (this.binaryOp) + this.guardB.getAsString (translator);
+    }
+
+    @Override
+    public AvatarBinaryGuard clone () {
+        return new AvatarBinaryGuard (this.guardA.clone (), this.guardB.clone (), this.binaryOp);
+    }
+
+    @Override
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        this.guardA.replaceAttributes (attributesMapping);
+        this.guardB.replaceAttributes (attributesMapping);
     }
 }

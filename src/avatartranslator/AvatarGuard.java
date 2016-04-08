@@ -45,6 +45,9 @@
 
 
 package avatartranslator;
+
+import java.util.HashMap;
+
 import myutil.TraceManager;
 import myutil.Conversion;
 
@@ -231,4 +234,19 @@ public abstract class AvatarGuard {
     public String toString () {
         return this.getAsString (new AvatarSyntaxTranslator ());
     }
+
+    /**
+     * Returns a full clone of the guard.
+     *
+     * @return A clone of the guard.
+     */
+    public abstract AvatarGuard clone ();
+
+    /**
+     * Replaces attributes in this guard according to the provided mapping.
+     *
+     * @param attributesMapping
+     *      The mapping used to replace the attributes of the guard. All the attributes of the block should be present as keys.
+     */
+    public abstract void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping);
 }

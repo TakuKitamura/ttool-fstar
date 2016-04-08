@@ -45,7 +45,9 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+
 import myutil.TraceManager;
 
 public class AvatarTermFunction extends AvatarTerm implements AvatarAction {
@@ -115,5 +117,15 @@ public class AvatarTermFunction extends AvatarTerm implements AvatarAction {
 
     public String toString () {
         return this.method.getName () + " " + this.args.toString ();
+    }
+
+    @Override
+    public AvatarTermFunction clone () {
+        return new AvatarTermFunction (this.method, this.args.clone (), this.referenceObject);
+    }
+
+    @Override
+    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        this.args.replaceAttributes (attributesMapping);
     }
 }
