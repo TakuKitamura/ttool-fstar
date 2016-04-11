@@ -10,7 +10,7 @@ public class AvatarChannel extends AvatarMappedObject{
 	private String channelName ;
     private int no_cluster;
 
-
+//DG 4.4. we add a field cluster_index
     public AvatarChannel(String _referenceDiagram,  String _channelName, AvatarRAM _avatarRAMReference, int _no_cluster){
       referenceDiagram =  _referenceDiagram;
       channelName = _channelName;

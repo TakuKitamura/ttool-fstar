@@ -15,9 +15,7 @@ public class Signal {
     private static final String NAME_RST = "signal_resetn";
 
 	public static String getSignal() {
-	    int nb_clusters=5;//TopCellGenerator.avatardd.getAllCrossbar().size();		   
-System.out.println("@@@@@@@@@@nb_clusters@@@@@@@@: "+nb_clusters);	
-		    
+	    int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();	
 
 		String signal = CR2 + "//-------------------------------signaux------------------------------------" + CR2;
 		

@@ -13,17 +13,13 @@ import java.util.*;
 public class MappingTable {
 	
     private final static String CR = "\n";
-	private final static String CR2 = "\n\n"; 
+    private final static String CR2 = "\n\n"; 
     private static String mapping;
+      
+    public static String getMappingTable() {
 
+	    int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
    
-    //System.out.println("@@@@@@@@@@nb_clusters@@@@@@@@: "+nb_clusters);	
-
-	public static String getMappingTable() {
-
-	    int nb_clusters=5;//TopCellGenerator.avatardd.getAllCrossbar().size();
-    /* depending on the cpu type, the addresses of some segments (reset etc.) differ */
-
 	    if(nb_clusters == 0){
 
       mapping = CR2 + "//-----------------------mapping table------------------------" + CR2;

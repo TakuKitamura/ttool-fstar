@@ -170,7 +170,7 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
 
         if (dialog.getChannelName().length() != 0) {
             channelName = dialog.getChannelName();
-
+	    
             /*if (!TAttribute.isAValidId(tmp, false, false)) {
               error = true;
               } else {
@@ -193,9 +193,29 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
 
     }
 
-    private void makeFullValue() {
+    //DG rudimentary parsing to obtain shorter channel names
+       private void makeFullValue() {
+	   String newChannelName=channelName;	 
+	   int pos1=channelName.indexOf('(');
+	   if(pos1 != -1) {
+	   int pos2=channelName.lastIndexOf(')');
+	   int pos3=channelName.indexOf('(');
+	   int pos4=channelName.lastIndexOf('(');
+	  
+	   System.err.println("****** Channel Name "+ channelName);
+	   newChannelName = channelName.substring(0,pos1);
+	   //newChannelName = channelName.substring(0,pos1-1)+channelName.substring(pos2+1,pos3)+channelName.substring(pos4,channelName.length()-1);
+	   value = newChannelName;
+System.err.println("****** New Channel Name "+ newChannelName);
+	   }
+	   else{
+	       value = channelName;
+	   }
+	   }
+
+    /* private void makeFullValue() {
         value = referenceDiagram + "::" + channelName;
-    }
+	}*/
 
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {

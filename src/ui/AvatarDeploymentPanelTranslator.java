@@ -202,7 +202,7 @@ System.out.println("$$$$$$$ vgmn read in");
                     int byteDataSize = addRamNode.getDataSize();
 		   
                     AvatarRAM avram = new AvatarRAM(name,index,byteDataSize,no_ram,index);
-                    int cluster_index = avram.getIndex();
+                    int cluster_index = avram.getIndex();//DG 4.4. a verifier
                     no_ram++;
                     nb_ram++;
                     nb_target++;
@@ -214,8 +214,6 @@ System.out.println("$$$$$$$ vgmn read in");
                         String referenceDiagram = c.getReferenceDiagram();
                         String  channelName = c.getChannelName();
 			//DG channel is inevitably on same cluster as RAM it is mapped on :)
-			String  newChannelName = channelName.substring(0,10)+channelName.substring(channelName.length()-10,channelName.length()-1);
-			//AvatarChannel avcl = new AvatarChannel(referenceDiagram,newChannelName,avram,cluster_index);
                         AvatarChannel avcl = new AvatarChannel(referenceDiagram,channelName,avram,cluster_index);
                         avram.addChannel(avcl);
                         avatarMappedObject.add(avcl);

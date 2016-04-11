@@ -12,7 +12,9 @@ public class NetList {
     private static final String NAME_RST = "signal_resetn";
 
     public static String getNetlist(String icn) {
-	int nb_clusters=5;//TopCellGenerator.avatardd.getAllCrossbar().size();
+	int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
+	boolean trace_caba=true; //tracing is enabled in cycle accurate mode
+
 		String netlist;
 
 		netlist = CR2 + "//------------------------------Netlist---------------------------------" + CR2;
@@ -297,6 +299,32 @@ netlist = netlist + "// RAM netlist" + CR2;
   	netlist = netlist + "vcifdtrom.begin_device_node(\"vci_fd_access\", \"soclib:vci_fd_access\");" + CR;
   	netlist = netlist + "vcifdtrom.add_property(\"interrupts\", 2);" + CR;
   	netlist = netlist + "vcifdtrom.end_node();" + CR2;
+
+	//not all interfaces are of interest; non-clustered version
+
+	int i,j;
+	if(nb_clusters==0){
+	    if(trace_caba){
+	      for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
+		  netlist += "logger"+i+".p_clk(signal_clk);" + CR;
+		  netlist += "logger"+i+".p_clk(signal_resetn);" + CR;
+		  netlist += "logger"+i+".p_vci(signal_vci_m["+i+"]);" + CR;
+	      }
+
+	      for(j=i;j<i+(TopCellGenerator.avatardd.getAllRAM().size()+3);j++){
+		  netlist += "logger"+j+".p_clk(signal_clk);" + CR;
+		  netlist += "logger"+j+".p_clk(signal_resetn);" + CR;
+	      }
+	      netlist += "logger"+i+".p_vci(signal_vci_vcilocks);"+ CR;
+	      netlist += "logger"+(i+1)+".p_vci(signal_vci_mwmr_ram);"+ CR;
+	      netlist += "logger"+(i+2)+".p_vci(signal_vci_mwmrd_ram);"+ CR;      
+	    }
+	    j=3+TopCellGenerator.avatardd.getNb_init();
+	    for(i=0;i<TopCellGenerator.avatardd.getAllRAM().size();i++){
+		netlist += "logger"+j+".p_vci(signal_vci_vciram"+i+");"+ CR;
+	}
+	}
+	
 
 		netlist = netlist + "  sc_core::sc_start(sc_core::sc_time(0, sc_core::SC_NS));" + CR;
 		netlist = netlist + "  signal_resetn = false;" + CR;

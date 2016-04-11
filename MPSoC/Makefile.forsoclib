@@ -13,7 +13,7 @@ export PATH
 updateruntime:
 	cp ~/TURTLE/MPSoC/src/*.c ~/Prog/mutekh/libavatar/
 	cp ~/TURTLE/MPSoC/src/*.h ~/Prog/mutekh/libavatar/include/  
-	cp ~/TURTLE/MPSoC/src/Makefile ~/Prog/mutekh/libavatar/
+	//cp ~/TURTLE/MPSoC/src/Makefile ~/Prog/mutekh/libavatar/
 	
 updategeneratedcode:
 	cp ~/TURTLE/MPSoC/generated_src/*.h ~/Prog/mutekh/examples/avatar 
@@ -30,6 +30,6 @@ compilesoclib:
 
 runsoclib:
 	echo "running soclib"
-	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ~/Prog/mutekh/avatar-soclib-$(MUTEKH_CPU).out
+	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ~/Prog/mutekh/avatar-soclib-$(MUTEKH_CPU).out > trace
 allsoclib: updateruntime updategeneratedcode updateruntimesoclib updategeneratedcodesoclib  compilesoclib runsoclib
 

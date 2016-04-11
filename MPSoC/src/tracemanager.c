@@ -13,7 +13,6 @@
 
 #define TRACE_FILE_NAME "Trace.txt"
 
-
 pthread_mutex_t __traceMutex;
 
 int trace = TRACE_OFF;
@@ -22,20 +21,25 @@ int id = 0;
 FILE *file;
 
 struct timespec begints;
-
+long begintc;//DG
 
 void addInfo(char *dest, char *info) {
   //char s1[10];
-  long tmp;
+  long tmp, tmp2;
   //long tmp1;
   //int i;
   struct timespec ts, ts1;
+  long tc, tc1; //DG
+
   my_clock_gettime(&ts);
-  
+  //tc=get_cpu_cycles();//DG
+  tc=cpu_cycle_count();
   debugMsg("DIFF TIME");
   diffTime(&begints, &ts, &ts1);
+  diffCycles(&begintc, &tc, &tc1);//DG
 
   tmp = ts1.tv_nsec;
+  tmp2 = tc1;//DG
 
   if (tmp < 0) {
     tmp = -tmp;
@@ -52,6 +56,7 @@ void addInfo(char *dest, char *info) {
   
   /* s1 -> tmp */
   sprintf(dest, "#%d time=%ld.%09ld %s", id, ts1.tv_sec, tmp, info);
+  sprintf(dest, "#%d cpu_time=%ld %s", id, tmp2, info);//DG
   id ++;
 }
 
@@ -81,7 +86,9 @@ void writeInTrace(char *info) {
 void activeTracingInFile(char *fileName) {
   char *name;
   trace = TRACE_IN_FILE;
+ //DG : cpu_cycle_count()
   my_clock_gettime(&begints); 
+  begintc=cpu_cycle_count();//get_cpu_cycles();//DG
   if (fileName == NULL) {
     name = TRACE_FILE_NAME;
   } else {
@@ -95,7 +102,8 @@ void activeTracingInFile(char *fileName) {
 
 void activeTracingInConsole() {
   trace = TRACE_IN_CONSOLE;
-  my_clock_gettime(&begints); 
+  my_clock_gettime(&begints);  
+  begintc=cpu_cycle_count();//get_cpu_cycles();//DG
   
   /* Initializing mutex */
   if (pthread_mutex_init(&__traceMutex, NULL) < 0) { exit(-1);}

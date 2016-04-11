@@ -19,8 +19,9 @@ public class Declaration {
 
 		//Is the present architecture clustered? at least one crossbar
 	
-		int nb_clusters=5;//TopCellGenerator.avatardd.getAllCrossbar().size();
-		System.out.println("@@@@@@@@@@nb_clusters@@@@@@@@: "+nb_clusters);
+		int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();	
+
+		boolean trace_caba=true; //tracing is enabled in cycle accurate mode
 
 	if(nb_clusters==0){
 		declaration += CR
@@ -118,6 +119,17 @@ if(nb_clusters==0){
 	  
 	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+6)+
 	     ");" + CR2;
+	  int i;
+	  if(trace_caba){
+	      for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
+		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
+	      }
+	      
+	      for(i=0;i<TopCellGenerator.avatardd.getAllRAM().size()+3;i++){
+		  declaration += "soclib::caba::VciLogger<vci_param> logger"+(i+TopCellGenerator.avatardd.getNb_init())+"(\"logger" +(i+TopCellGenerator.avatardd.getNb_init()) +"\",maptab);" + CR2;
+	      }
+    }
+
 
           //if BUS was not last in input file, update here
           bus.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
@@ -131,10 +143,22 @@ if(nb_clusters==0){
 	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+6)+
 	     "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 
+	  //performance measurement infrastructure: declare as many loggers as VCI interfaces if flag trace_caba is set
+	  int i=0;
+	  if(trace_caba){
+	      for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
+		  declaration += "soclib::caba::VciLogger<vci_param> logger(\"logger" + i+"\",maptab);" + CR2;
+	      }
+	      int j=i;
+	      for(i=0;i<TopCellGenerator.avatardd.getAllRAM().size()+3;i++){
+		  declaration += "soclib::caba::VciLogger<vci_param> logger(\"logger" + j+"\",maptab);" + CR2;
+	      }
+    }
+
 	  // if VGMN was not last in input file, update here 
           vgmn.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
           vgmn.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target()+4);//DG 04.12. two additionnal targets for channel mapping
-	  }
+	 }
 }else
     //clustered
     {
@@ -144,9 +168,21 @@ if(nb_clusters==0){
 	  declaration += "soclib::caba::VciVgsb<vci_param> " + bus.getBusName() +"(\"" + bus.getBusName() + "\"" + " , maptab, "+ 1 +"," + 6+ ");" + CR2;
 
           //if BUS was not last in input file, update here
+
+ int i=0;
+	  if(trace_caba){
+	      for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
+		  declaration += "soclib::caba::VciLogger<vci_param> logger(\"logger" + i+"\",maptab);" + CR2;
+	      }
+	      int j=i;
+	      for(i=0;i<TopCellGenerator.avatardd.getAllRAM().size()+3;i++){
+		  declaration += "soclib::caba::VciLogger<vci_param> logger(\"logger" + j+"\",maptab);" + CR2;
+	      }
+	  }
+
           bus.setNbOfAttachedInitiators(1); 
           bus.setnbOfAttachedTargets(6);
-	  }	
+  }	
 
          for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
           System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
@@ -154,11 +190,23 @@ if(nb_clusters==0){
       
 	  declaration += "soclib::caba::VciVgmn<vci_param> "+ vgmn.getVgmnName() +" (\"" + vgmn.getVgmnName() + "\"" + " , maptab, "+ 1 +"," + 6 +
 	     "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
+	  int i=0;
+	  if(trace_caba){
+	      for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
+		  declaration += "soclib::caba::VciLogger<vci_param> logger(\"logger" + i+"\",maptab);" + CR2;
+	      }
+	      int j=i;
+	      for(i=0;i<TopCellGenerator.avatardd.getAllRAM().size()+3;i++){
+		  declaration += "soclib::caba::VciLogger<vci_param> logger(\"logger" + j+"\",maptab);" + CR2;
+	      }
+    }
+
+
 	  // if VGMN was not last in input file, update here 
           vgmn.setNbOfAttachedInitiators(1); 
           vgmn.setnbOfAttachedTargets(6);	
 	 }
-}
+	
 
 	for  (AvatarCrossbar crossbar : TopCellGenerator.avatardd.getAllCrossbar()) {
           System.out.println("initiators: "+crossbar.getNbOfAttachedInitiators());	
@@ -170,6 +218,7 @@ if(nb_clusters==0){
           crossbar.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
           crossbar.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target());
 	  }	
-	  return declaration;
     }
+	  return declaration;
+	}
 }
