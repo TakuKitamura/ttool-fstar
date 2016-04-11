@@ -809,14 +809,15 @@ public class TML2Avatar {
 	    	AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
 
 		if (ae.securityPattern!=null){
-		    System.out.println(block.getName() + " writechannel has security pattern" + ae.securityPattern.name);
+		    System.out.println(block.getName() + " writechannel has security pattern " + ae.securityPattern.name);
 		    as.addValue(ae.securityPattern.name+"_encrypted");
 		    AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
 		    block.addAttribute(data);
 		    secChannelMap.put(ae.securityPattern.name,ch.getName());
 		}
 		else {
-	    	as.addValue(ch.getName()+"__chData");
+	  	    System.out.println(block.getName() + " writechannel has no security pattern ");
+	    	    as.addValue(ch.getName()+"__chData");
 		}
 
 	    	tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());

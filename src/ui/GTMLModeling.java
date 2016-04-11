@@ -1291,10 +1291,36 @@ public class GTMLModeling  {
             }
         }
     }
+    
+    private void createSecurityPatterns(TMLTask tmltask){
+	TMLActivity activity = tmltask.getActivityDiagram();
+        TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel)(activity.getReferenceObject());
+	TGComponent tgc;
+        TraceManager.addDev("Generating activity diagram of:" + tmltask.getName());
 
+        // search for start state
+        LinkedList list = tadp.getComponentList();
+        Iterator iterator = list.listIterator();
+	while(iterator.hasNext()){
+	    tgc = (TGComponent)(iterator.next());
+	    if (tgc instanceof TMLADEncrypt) {
+		SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).keySize, ((TMLADEncrypt)tgc).MACSize);
+		securityPatterns.put(((TMLADEncrypt)tgc).securityContext, securityPattern);
+	    }
+	}
+    }
     private void generateTasksActivityDiagrams() throws MalformedTMLDesignException {
         TMLTask tmltask;
-        ListIterator iterator = tmlm.getTasks().listIterator();
+
+	//First generate security patterns over all tasks
+	ListIterator iterator = tmlm.getTasks().listIterator();
+
+        while(iterator.hasNext()) {
+            tmltask = (TMLTask)(iterator.next());
+            createSecurityPatterns(tmltask);
+        }	
+
+        iterator = tmlm.getTasks().listIterator();
 
         while(iterator.hasNext()) {
             tmltask = (TMLTask)(iterator.next());
@@ -1919,7 +1945,10 @@ public class GTMLModeling  {
                         tmlwritechannel.addChannel(channel);
                     }
 		    //add sec pattern
+		    System.out.println("All security patterns "+securityPatterns);
+		    System.out.println(((TMLADWriteChannel)tgc).securityContext);
 		    if (securityPatterns.get(((TMLADWriteChannel)tgc).securityContext)!=null){
+			System.out.println("Security context "+((TMLADWriteChannel)tgc).securityContext+"!");
 			tmlwritechannel.securityPattern= securityPatterns.get(((TMLADWriteChannel)tgc).securityContext);
 		 	int cur = Integer.valueOf(modifyString(((TMLADWriteChannel)tgc).getSamplesValue()));
 		    	int add = Integer.valueOf(tmlwritechannel.securityPattern.MACSize);

@@ -603,7 +603,6 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         sb.append("\" associatedEvent=\"" + associatedEvent);
         sb.append("\" checkConf=\"" + checkConf);
         sb.append("\" checkAuth=\"" + checkAuth);
-        sb.append("\" checkConfStatus=\"" + checkConfStatus);
         sb.append("\" />\n");
         for(int i=0; i<nbMaxAttribute; i++) {
             //System.out.println("Attribute:" + i);
@@ -683,7 +682,6 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                                     associatedEvent = elt.getAttribute("associatedEvent");
                                     checkConf = (elt.getAttribute("checkConf").compareTo("true")==0);
 				    checkAuth = (elt.getAttribute("checkAuth").compareTo("true")==0);
-                                    checkConfStatus = Integer.valueOf(elt.getAttribute("checkConfStatus"));
                                     isLossy = (elt.getAttribute("isLossy").compareTo("true") ==0);
                                     isPrex = (elt.getAttribute("isPrex").compareTo("true") ==0);
                                     isPostex = (elt.getAttribute("isPostex").compareTo("true") ==0);

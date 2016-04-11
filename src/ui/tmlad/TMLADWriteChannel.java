@@ -147,7 +147,9 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
 
         g.drawString("chl", x+(width-w) / 2, y);
         g.drawString(value, x + (width - w) / 2 , y + textY);
-
+	if (!securityContext.equals("")){
+	    g.drawString("sec:"+securityContext, x+width/2, y+height+textY);
+	}
 	drawReachabilityInformation(g);
 
     }

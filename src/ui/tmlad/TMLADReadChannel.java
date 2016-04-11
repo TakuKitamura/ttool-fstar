@@ -149,6 +149,9 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         g.drawString("chl", x+(width-w) / 2, y+textY0);
         g.drawString(value, x + linebreak + textX0, y + textY1);
 	
+	if (!securityContext.equals("")){
+	    g.drawString("sec:"+securityContext, x+width/2, y+height+textY1);
+	}
 	drawReachabilityInformation(g);
 
     }
