@@ -56,7 +56,7 @@ import java.util.*;
 import myutil.*;
 
 public class AvatarBDPanel extends TDiagramPanel {
-    private Vector validated, ignored;
+    private Vector<AvatarBDStateMachineOwner> validated, ignored;
     private String val = null, ign = null;
     private boolean optimized = true;
 
@@ -73,13 +73,14 @@ public class AvatarBDPanel extends TDiagramPanel {
           addMouseMotionListener(tdmm);*/
     }
 
-
     public boolean actionOnDoubleClick(TGComponent tgc) {
         //System.out.println("Action");
         if (tgc instanceof AvatarBDBlock) {
             AvatarBDBlock b = (AvatarBDBlock)tgc;
             //System.out.println("oldValue:" + b.oldValue);
-            return mgui.newAvatarBDBlockName(tp, b.oldValue, b.getValue());
+            return this.changeStateMachineTabName (b.oldValue, b.getValue());
+        } else if (tgc instanceof AvatarBDLibraryFunction) {
+            return true;
         } else if (tgc instanceof AvatarBDDataType) {
             return true;
         }
@@ -93,7 +94,12 @@ public class AvatarBDPanel extends TDiagramPanel {
         if (tgc instanceof AvatarBDBlock) {
             AvatarBDBlock abdb = (AvatarBDBlock)(tgc);
             //TraceManager.addDev(" *** add Avatar block *** name=" + abdb.getBlockName());
-            mgui.addAvatarBlock(tp, abdb.getBlockName());
+            ((AvatarDesignPanel) this.tp).addAvatarStateMachineDiagramPanel(abdb.getBlockName());
+            this.mgui.setPanelMode ();
+            return true;
+        } else if (tgc instanceof AvatarBDLibraryFunction) {
+            ((AvatarDesignPanel) this.tp).addAvatarStateMachineDiagramPanel(((AvatarBDLibraryFunction) tgc).getFunctionName ());
+            this.mgui.setPanelMode ();
             return true;
         }
         return false;
@@ -151,20 +157,11 @@ public class AvatarBDPanel extends TDiagramPanel {
     }
 
     public void setConnectorsToFront() {
-        TGComponent tgc;
-
-        //System.out.println("list size=" + componentList.size());
-
-        Iterator iterator = componentList.listIterator();
-
         ArrayList<TGComponent> list = new ArrayList<TGComponent>();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (!(tgc instanceof TGConnector)) {
+        for (TGComponent tgc: this.componentList)
+            if (!(tgc instanceof TGConnector))
                 list.add(tgc);
-            }
-        }
 
         //System.out.println("Putting to back ...");
         for(TGComponent tgc1: list) {
@@ -173,8 +170,6 @@ public class AvatarBDPanel extends TDiagramPanel {
             componentList.add(tgc1);
         }
     }
-
-
 
     /*public boolean areAttributesVisible() {
       return attributesVisible;
@@ -215,7 +210,7 @@ public class AvatarBDPanel extends TDiagramPanel {
         } else {
             s+= "<Validated value=\"";
             for(i=0; i<validated.size();i++) {
-                s += ((AvatarBDBlock)(validated.elementAt(i))).getBlockName() + ";";
+                s += ((AvatarBDStateMachineOwner)(validated.elementAt(i))).getOwnerName() + ";";
             }
             s += "\" />\n";
         }
@@ -225,7 +220,7 @@ public class AvatarBDPanel extends TDiagramPanel {
         } else {
             s+= "<Ignored value=\"";
             for(i=0; i<ignored.size();i++) {
-                s += ((AvatarBDBlock)(ignored.elementAt(i))).getBlockName() + ";";
+                s += ((AvatarBDStateMachineOwner)(ignored.elementAt(i))).getOwnerName() + ";";
             }
             s += "\" />\n";
         }
@@ -324,243 +319,186 @@ public class AvatarBDPanel extends TDiagramPanel {
         } catch (Exception e) {
             // Model was saved in an older version of TTool
             TraceManager.addDev("Exception when loading parameter of block diagram:" + e.getMessage());
-
         }
-
-
     }
-
 
     public void updateAllSignalsOnConnectors() {
-        TGComponent tgc;
-        AvatarBDPortConnector port;
-        Iterator iterator = componentList.listIterator();
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc instanceof AvatarBDPortConnector) {
-                port = (AvatarBDPortConnector)tgc;
+                AvatarBDPortConnector port = (AvatarBDPortConnector)tgc;
                 port.updateAllSignals();
             }
-        }
     }
 
-    public Vector getListOfAvailableSignals(AvatarBDBlock _block) {
-        int i;
-        TGComponent tgc;
-        LinkedList<String> ll;
-        AvatarBDPortConnector port;
-        Iterator iterator = componentList.listIterator();
-        ArrayList<String> list = new ArrayList<String>();
-        Vector v = new Vector();
-        Vector listOfBlock = _block.getSignalList();
+    public Vector<AvatarSignal> getListOfAvailableSignals(AvatarBDBlock _block) {
+        Vector<AvatarSignal> v = new Vector<AvatarSignal> ();
 
-        if (listOfBlock.size() == 0) {
+        Vector<AvatarSignal> listOfBlock = _block.getSignalList();
+        if (listOfBlock.size() == 0)
             return v;
-        }
 
         v.addAll(listOfBlock);
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc instanceof AvatarBDPortConnector) {
-                port = (AvatarBDPortConnector)tgc;
+                AvatarBDPortConnector port = (AvatarBDPortConnector) tgc;
                 if (port.getAvatarBDBlock1() == _block) {
-                    ll = port.getListOfSignalsOrigin();
+                    LinkedList<String> ll = port.getListOfSignalsOrigin();
                     removeSignals(v, ll);
                 }
                 if (port.getAvatarBDBlock2() == _block) {
-                    ll = port.getListOfSignalsDestination();
+                    LinkedList<String> ll = port.getListOfSignalsDestination();
                     removeSignals(v, ll);
                 }
             }
-        }
 
         return v;
     }
 
-    public Vector getListOfAvailableOutSignals(AvatarBDBlock _block) {
-        int i;
-        TGComponent tgc;
-        LinkedList<String> ll;
-        AvatarBDPortConnector port;
-        Iterator iterator = componentList.listIterator();
-        ArrayList<String> list = new ArrayList<String>();
-        Vector v = new Vector();
-        Vector listOfBlock = _block.getOutSignalList();
+    public Vector<AvatarSignal> getListOfAvailableOutSignals (AvatarBDBlock _block) {
+        Vector<AvatarSignal> v = new Vector<AvatarSignal> ();
 
-        if (listOfBlock.size() == 0) {
+        Vector<AvatarSignal> listOfBlock = _block.getOutSignalList();
+        if (listOfBlock.size() == 0)
             return v;
-        }
 
         v.addAll(listOfBlock);
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc instanceof AvatarBDPortConnector) {
-                port = (AvatarBDPortConnector)tgc;
+                AvatarBDPortConnector port = (AvatarBDPortConnector)tgc;
                 if (port.getAvatarBDBlock1() == _block) {
-                    ll = port.getListOfSignalsOrigin();
+                    LinkedList<String> ll = port.getListOfSignalsOrigin();
                     removeSignals(v, ll);
                 }
                 if (port.getAvatarBDBlock2() == _block) {
-                    ll = port.getListOfSignalsDestination();
+                    LinkedList<String> ll = port.getListOfSignalsDestination();
                     removeSignals(v, ll);
                 }
             }
-        }
 
         return v;
     }
 
-    public Vector getListOfAvailableInSignals(AvatarBDBlock _block) {
-        int i;
-        TGComponent tgc;
-        LinkedList<String> ll;
-        AvatarBDPortConnector port;
-        Iterator iterator = componentList.listIterator();
-        ArrayList<String> list = new ArrayList<String>();
-        Vector v = new Vector();
-        Vector listOfBlock = _block.getInSignalList();
+    public Vector<AvatarSignal> getListOfAvailableInSignals(AvatarBDBlock _block) {
+        Vector<AvatarSignal> v = new Vector<AvatarSignal> ();
 
-        if (listOfBlock.size() == 0) {
+        Vector<AvatarSignal> listOfBlock = _block.getInSignalList();
+        if (listOfBlock.size() == 0)
             return v;
-        }
 
         v.addAll(listOfBlock);
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc instanceof AvatarBDPortConnector) {
-                port = (AvatarBDPortConnector)tgc;
+                AvatarBDPortConnector port = (AvatarBDPortConnector)tgc;
                 if (port.getAvatarBDBlock1() == _block) {
-                    ll = port.getListOfSignalsOrigin();
+                    LinkedList<String> ll = port.getListOfSignalsOrigin();
                     removeSignals(v, ll);
                 }
                 if (port.getAvatarBDBlock2() == _block) {
-                    ll = port.getListOfSignalsDestination();
+                    LinkedList<String> ll = port.getListOfSignalsDestination();
                     removeSignals(v, ll);
                 }
             }
-        }
 
         return v;
     }
 
     // Remove AvatarSignals of v which name is provided in list
-    private void removeSignals(Vector v, LinkedList<String> list) {
-        int i;
-        AvatarSignal as;
+    private static void removeSignals(Vector<AvatarSignal> v, LinkedList<String> list) {
         for(String s: list) {
-            for(i=0; i<v.size(); i++) {
-                as = (AvatarSignal)(v.get(i));
-                if (as.toString().compareTo(s) == 0) {
-                    v.removeElementAt(i);
+            Iterator<AvatarSignal> iterator = v.iterator ();
+            while (iterator.hasNext ()) {
+                AvatarSignal as = iterator.next ();
+                if (as.toString().equals (s)) {
+                    iterator.remove ();
                     break;
                 }
             }
         }
     }
 
-    public LinkedList<AvatarBDBlock> getFullBlockList() {
-        TGComponent tgc;
-        AvatarBDBlock block;
-        LinkedList<AvatarBDBlock> list = new LinkedList<AvatarBDBlock>();
-        Iterator iterator = componentList.listIterator();
+    public LinkedList<AvatarBDStateMachineOwner> getFullStateMachineOwnerList() {
+        LinkedList<AvatarBDStateMachineOwner> list = new LinkedList<AvatarBDStateMachineOwner>();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof AvatarBDBlock) {
-                block = (AvatarBDBlock)tgc;
-                list.add(block);
-                list.addAll(block.getFullBlockList());
+        for (TGComponent tgc: this.componentList)
+            if (tgc instanceof AvatarBDStateMachineOwner) {
+                list.add ((AvatarBDStateMachineOwner) tgc);
+                if (tgc instanceof AvatarBDBlock)
+                    list.addAll (((AvatarBDBlock) tgc).getFullBlockList());
             }
-        }
+
+        return list;
+    }
+
+    public LinkedList<AvatarBDBlock> getFullBlockList () {
+        LinkedList<AvatarBDBlock> list = new LinkedList<AvatarBDBlock> ();
+
+        for (TGComponent tgc: this.componentList)
+            if (tgc instanceof AvatarBDBlock) {
+                list.add ((AvatarBDBlock) tgc);
+                list.addAll (((AvatarBDBlock) tgc).getFullBlockList());
+            }
+
         return list;
     }
 
     public TAttribute getAttributeByBlockName(String _blockName, String attributeName) {
         TAttribute a;
-        for(AvatarBDBlock block: getFullBlockList()) {
-            if (block.getBlockName().compareTo(_blockName) == 0) {
+        for(AvatarBDStateMachineOwner block: getFullStateMachineOwnerList())
+            if (block.getOwnerName().equals (_blockName))
                 return block.getAttributeByName(attributeName);
-            }
-        }
+
         return null;
     }
 
-    public Vector getAllAttributesOfBlock(String _name) {
-        LinkedList<AvatarBDBlock> list = getFullBlockList();
-        for(AvatarBDBlock block: list) {
-            if (block.getBlockName().compareTo(_name) ==0) {
-                return block.getAttributeList();
-            }
-        }
-        return null;
+    public Vector<TAttribute> getAllAttributesOfBlock (String _name) {
+        LinkedList<AvatarBDStateMachineOwner> list = getFullStateMachineOwnerList ();
+        for(AvatarBDStateMachineOwner block: list)
+            if (block.getOwnerName ().equals (_name))
+                return block.getAttributeList ();
+
+        return new Vector<TAttribute> ();
     }
 
-    public Vector getAllMethodsOfBlock(String _name) {
-        LinkedList<AvatarBDBlock> list = getFullBlockList();
-        for(AvatarBDBlock block: list) {
-            if (block.getBlockName().compareTo(_name) ==0) {
+    public Vector<AvatarMethod> getAllMethodsOfBlock(String _name) {
+        for(AvatarBDStateMachineOwner block: getFullStateMachineOwnerList())
+            if (block.getOwnerName().equals (_name))
                 return block.getAllMethodList();
-            }
-        }
+
         return null;
     }
 
-    public Vector getAllSignalsOfBlock(String _name) {
-        LinkedList<AvatarBDBlock> list = getFullBlockList();
-        for(AvatarBDBlock block: list) {
-            if (block.getBlockName().compareTo(_name) ==0) {
+    public Vector<AvatarSignal> getAllSignalsOfBlock(String _name) {
+        for(AvatarBDStateMachineOwner block: getFullStateMachineOwnerList())
+            if (block.getOwnerName().equals (_name))
                 return block.getAllSignalList();
-            }
-        }
+
         return null;
     }
 
-    public Vector getAllTimersOfBlock(String _name) {
-        LinkedList<AvatarBDBlock> list = getFullBlockList();
-        for(AvatarBDBlock block: list) {
-            if (block.getBlockName().compareTo(_name) ==0) {
+    public Vector<String> getAllTimersOfBlock(String _name) {
+        for(AvatarBDStateMachineOwner block: getFullStateMachineOwnerList())
+            if (block.getOwnerName().equals (_name))
                 return block.getAllTimerList();
-            }
-        }
+
         return null;
     }
 
     public Vector getAttributesOfDataType(String _name) {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-        AvatarBDDataType adt;
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc instanceof AvatarBDDataType) {
-                adt = (AvatarBDDataType)tgc;
-                if (adt.getDataTypeName().compareTo(_name) == 0) {
+                AvatarBDDataType adt = (AvatarBDDataType)tgc;
+                if (adt.getDataTypeName().compareTo(_name) == 0)
                     return adt.getAttributeList();
-                }
             }
-        }
 
         return null;
     }
 
     public TAttribute getAttribute(String _name, String _nameOfBlock) {
-
-        //TraceManager.addDev("Searching for attribute: " + _name  + " of block " + _nameOfBlock);
-
-        TAttribute ta;
-        Vector v = getAllAttributesOfBlock(_nameOfBlock);
-
-        for(int i=0; i<v.size(); i++) {
-            ta = (TAttribute)(v.get(i));
-            if (ta.getId().compareTo(_name) ==0) {
-                return ta;
-            }
-        }
-
-        return null;
+        return this.getAttributeByBlockName(_nameOfBlock, _name);
     }
 
     public void setMainCode(String s) {
@@ -574,14 +512,14 @@ public class AvatarBDPanel extends TDiagramPanel {
         return mainCode;
     }
 
-    public Vector getValidated() {
+    public Vector<AvatarBDStateMachineOwner> getValidated() {
         if ((val != null) && (validated == null)) {
             makeValidated();
         }
         return validated;
     }
 
-    public Vector getIgnored() {
+    public Vector<AvatarBDStateMachineOwner> getIgnored() {
         if ((ign != null) && (ignored == null)) {
             makeIgnored();
         }
@@ -593,11 +531,11 @@ public class AvatarBDPanel extends TDiagramPanel {
     }
 
 
-    public void setValidated(Vector _validated) {
+    public void setValidated(Vector<AvatarBDStateMachineOwner> _validated) {
         validated = _validated;
     }
 
-    public void setIgnored(Vector _ignored) {
+    public void setIgnored(Vector<AvatarBDStateMachineOwner> _ignored) {
         ignored = _ignored;
     }
 
@@ -607,16 +545,16 @@ public class AvatarBDPanel extends TDiagramPanel {
 
     public void makeValidated() {
         TraceManager.addDev("Making validated with val=" + val);
-        validated = new Vector();
-        LinkedList<AvatarBDBlock> list = getFullBlockList();
+        validated = new Vector<AvatarBDStateMachineOwner> ();
+        LinkedList<AvatarBDStateMachineOwner> list = getFullStateMachineOwnerList();
         String tmp;
 
         String split[] = val.split(";");
         for(int i=0; i<split.length; i++) {
             tmp = split[i].trim();
             if (tmp.length() > 0) {
-                for (AvatarBDBlock block: list) {
-                    if (block.getBlockName().compareTo(tmp) == 0) {
+                for (AvatarBDStateMachineOwner block: list) {
+                    if (block.getOwnerName().equals (tmp)) {
                         validated.add(block);
                         break;
                     }
@@ -628,17 +566,17 @@ public class AvatarBDPanel extends TDiagramPanel {
 
     public void makeIgnored() {
         TraceManager.addDev("Making ignored with ign=" + val);
-        ignored = new Vector();
-        LinkedList<AvatarBDBlock> list = getFullBlockList();
+        ignored = new Vector<AvatarBDStateMachineOwner> ();
+        LinkedList<AvatarBDStateMachineOwner> list = getFullStateMachineOwnerList();
         String tmp;
 
         String split[] = ign.split(";");
         for(int i=0; i<split.length; i++) {
             tmp = split[i].trim();
             if (tmp.length() > 0) {
-                for (AvatarBDBlock block: list) {
-                    if (block.getBlockName().compareTo(tmp) == 0) {
-                        validated.add(block);
+                for (AvatarBDStateMachineOwner block: list) {
+                    if (block.getOwnerName().equals (tmp)) {
+                        ignored.add(block);
                         break;
                     }
                 }
@@ -672,26 +610,18 @@ public class AvatarBDPanel extends TDiagramPanel {
 
     
     public ArrayList<String> getAllNonMappedAvatarChannelNames(String _topName, ADDDiagramPanel _tadp) {
-        Iterator iterator = componentList.listIterator();
         ArrayList<String> list = new ArrayList<String>();
-        String name;
-        TGComponent tgc;
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc instanceof AvatarBDPortConnector) {
                 AvatarBDPortConnector port = (AvatarBDPortConnector)tgc;
 		if (port.getListOfSignalsOrigin().size() > 0) {
-		    name = port.getChannelName();
-		    if (!_tadp.isChannelMapped(_topName,  name)) {
+                    String name = port.getChannelName();
+		    if (!_tadp.isChannelMapped(_topName,  name))
 			list.add(_topName + "::" + name);
-		    }
 		}
             }
-        }
+
         return list;
     }
-
-
-
 }

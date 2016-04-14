@@ -342,10 +342,12 @@ public class TGComponentManager {
 
     // AVATAR BD -> starts at 5000
     public static final int AVATARBD_BLOCK = 5000;
-    public static final int AVATARBD_CRYPTOBLOCK = 5004;
     public static final int AVATARBD_COMPOSITION_CONNECTOR = 5001;
     public static final int AVATARBD_PORT_CONNECTOR = 5002;
     public static final int AVATARBD_DATATYPE = 5003;
+    public static final int AVATARBD_CRYPTOBLOCK = 5004;
+    public static final int AVATARBD_LIBRARYFUNCTION = 5005;
+    public static final int AVATARBD_CRYPTOLIBRARYFUNCTION = 5006;
 
     // AVATAR SMD -> starts at 5100
     public static final int AVATARSMD_START_STATE = 5100;
@@ -496,6 +498,13 @@ public class TGComponentManager {
             break;
         case AVATARBD_DATATYPE:
             tgc = new AvatarBDDataType(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case AVATARBD_LIBRARYFUNCTION:
+            tgc = new AvatarBDLibraryFunction (x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case AVATARBD_CRYPTOLIBRARYFUNCTION:
+            tgc = new AvatarBDLibraryFunction (x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            ((AvatarBDLibraryFunction)tgc).addCryptoElements();
             break;
         case AVATARSMD_START_STATE:
             tgc = new AvatarSMDStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);

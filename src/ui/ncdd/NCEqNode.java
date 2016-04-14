@@ -257,11 +257,11 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
     }
     
     
-    public Vector getArtifactList() {
-        Vector v = new Vector();
+    public Vector<NCTrafficArtifact> getArtifactList() {
+        Vector<NCTrafficArtifact> v = new Vector<NCTrafficArtifact> ();
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof NCTrafficArtifact) {
-                v.add(tgcomponent[i]);
+                v.add((NCTrafficArtifact) tgcomponent[i]);
             }
         }
         return v;

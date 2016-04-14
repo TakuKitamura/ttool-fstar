@@ -90,10 +90,16 @@ public class AvatarDesignPanelTranslator {
         return listE;
     }
 
-    public AvatarSpecification generateAvatarSpecification(Vector _blocks) {
+    public AvatarSpecification generateAvatarSpecification(Vector<AvatarBDStateMachineOwner> _blocks) {
         LinkedList<AvatarBDBlock> blocks = new LinkedList<AvatarBDBlock>();
+        LinkedList<AvatarBDLibraryFunction> libraryFunctions = new LinkedList<AvatarBDLibraryFunction>();
 
-        blocks.addAll(_blocks);
+        for (AvatarBDStateMachineOwner owner: _blocks)
+            if (owner instanceof AvatarBDBlock)
+                blocks.add ((AvatarBDBlock) owner);
+            else
+                libraryFunctions.add ((AvatarBDLibraryFunction) owner);
+
         AvatarSpecification as = new AvatarSpecification("avatarspecification", adp);
 
         if (adp != null) {
@@ -104,6 +110,7 @@ public class AvatarDesignPanelTranslator {
         }
 	typeAttributesMap = new HashMap<String, Vector>();
 	nameTypeMap = new HashMap<String,String>();
+        createLibraryFunctions (as, libraryFunctions);
         createBlocks(as, blocks);
         createRelationsBetweenBlocks(as, blocks);
         makeBlockStateMachines(as);
@@ -464,6 +471,10 @@ public class AvatarDesignPanelTranslator {
         AvatarAttribute aa = new AvatarAttribute(_preName + _a.getId(), type, _ab, _a);
         aa.setInitialValue(_a.getInitialValue());
         _ab.addAttribute(aa);
+    }
+
+    public void createLibraryFunctions (AvatarSpecification _as, LinkedList<AvatarBDLibraryFunction> _libraryFunctions) {
+        // TODO: translate this as a block
     }
 
     public void createBlocks(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {

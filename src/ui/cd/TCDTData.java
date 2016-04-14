@@ -359,7 +359,7 @@ public class TCDTData extends TGCWithInternalComponent {
     public String toString() {    
        return getValue(); 
     }
-    
+
  	public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_ASSOCIATION;
       }

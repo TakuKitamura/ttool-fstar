@@ -418,8 +418,6 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         return TGComponentManager.AVATARMAD_ASSUMPTION;
     }
 
-
-
     public String toString() {
         String ret =  getValue();
 

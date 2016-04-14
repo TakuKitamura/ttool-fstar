@@ -270,7 +270,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
     public String getTaskName() {
         return value;
     }
-    
+
     public  int getType() {
         return TGComponentManager.TMLTD_TASK;
     }

@@ -110,7 +110,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     protected String name;
 
-    protected LinkedList componentList;
+    protected LinkedList<TGComponent> componentList;
     protected TGConnectingPoint selectedConnectingPoint;
     protected TGComponent componentPointed;
     protected TGComponent componentPopup;
@@ -240,7 +240,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //setMinimumSize(new Dimension(1000, 1000));
         //setMaximumSize(new Dimension(1000, 1000));
         setPreferredSize(new Dimension(maxX + limit, maxY + limit));
-        componentList = new LinkedList();
+        componentList = new LinkedList<TGComponent> ();
         mgui = _mgui;
         ttb = _ttb;
         mode = NORMAL;
@@ -299,17 +299,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public void updateComponentsAfterZoom() {
         //TraceManager.addDev("Zoom factor=" + zoom);
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
         boolean change = false;
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc instanceof ScalableTGComponent) {
                 ((ScalableTGComponent)tgc).rescale(zoom);
                 change = true;
             }
-        }
 
         if (change) {
             mgui.changeMade(this, MOVE_COMPONENT);
@@ -327,7 +323,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void removeAll() {
-        componentList = new LinkedList();
+        this.componentList = new LinkedList<TGComponent> ();
     }
 
 
@@ -341,13 +337,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void structureChanged() {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             tgc.TDPStructureChanged();
-        }
     }
 
     public void setAttributes(int _attr) {
@@ -359,23 +350,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void valueChanged() {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             tgc.TDPvalueChanged();
-        }
     }
 
     public int makeLovelyIds(int id) {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             id = tgc.makeLovelyIds(id);
-        }
 
         return id;
     }
@@ -396,7 +377,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void basicPaintMyComponents(Graphics g) {
         TGComponent tgc;
         for(int i=componentList.size()-1; i>=0; i--) {
-            tgc = (TGComponent)(componentList.get(i));
+            tgc = this.componentList.get(i);
             if (!tgc.isHidden()) {
                 TraceManager.addDev("Painting " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY());
                 tgc.draw(g);
@@ -452,8 +433,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //TraceManager.addDev("Draw 3");
 
         TGComponent tgc;
-        for(int i=componentList.size()-1; i>=0; i--) {
-            tgc = (TGComponent)(componentList.get(i));
+        for(int i=this.componentList.size()-1; i>=0; i--) {
+            tgc = this.componentList.get(i);
             if (!tgc.isHidden()) {
                 //TraceManager.addDev("Painting " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY());
                 tgc.draw(g);
@@ -538,8 +519,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         if ((this instanceof TDPWithAttributes) && (getAttributeState() != 0))  {
             //TraceManager.addDev("Tdp with attributes");
-            for(int i=componentList.size()-1; i>=0; i--) {
-                tgc = (TGComponent)(componentList.get(i));
+            for(int i=this.componentList.size()-1; i>=0; i--) {
+                tgc = this.componentList.get(i);
                 if (!tgc.isHidden()) {
                     tgc.drawWithAttributes(g);
                 }
@@ -591,7 +572,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
       }*/
 
     public void loadFromXML(String s) {
-        componentList = new LinkedList();
+        this.componentList = new LinkedList();
 
         mode = NORMAL;
     }
@@ -639,15 +620,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     private StringBuffer componentsInXML(boolean selected) {
         StringBuffer sb = new StringBuffer("");
         StringBuffer s;
-        TGComponent tgc;
 
         //Added by Solange to see the components in the list
-        LinkedList ruteoList=componentList;
+        LinkedList<TGComponent> ruteoList=this.componentList;
         //
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if ((selected == false) || (tgc.isSelected())) {
                 s = tgc.saveInXML();
                 if (s == null) {
@@ -657,8 +635,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 sb.append("\n");
             }
 
-        }
-        //TraceManager.addDev("making copy sb=\n" + sb);
         return sb;
     }
 
@@ -670,12 +646,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     // Selecting components
     public int selectComponentInRectangle(int x, int y, int width, int height) {
         //TraceManager.addDev("x=" + x + " y=" + y + " width=" +width + " height=" + height);
-        TGComponent tgc;
         int cpt = 0;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc.areAllInRectangle(x, y, width, height)) {
                 tgc.select(true);
                 tgc.setState(TGState.SELECTED);
@@ -684,7 +657,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 tgc.select(false);
                 tgc.setState(TGState.NORMAL);
             }
-        }
 
         return cpt;
     }
@@ -695,7 +667,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     //author: huytruong
     public byte hoveredComponent(int x, int y) {
-        TGComponent tgc, tgcTmp;
+        TGComponent tgcTmp;
         //int state;
         //boolean b = false;
         boolean hoveredElementFound = false;
@@ -704,10 +676,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         TGComponent tmp = componentHovered;
         componentHovered = null;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList) {
             //state = tgc.getState();
             tgcTmp = tgc.isOnMeHL(x, y);
             if (tgcTmp != null) {
@@ -744,7 +714,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     // -> 2 One component highlighted, no change
     // -> 3 One component highlighted, change
     public byte highlightComponent(int x, int y) {
-        TGComponent tgc, tgcTmp;
+        TGComponent tgcTmp;
         //int state;
         //boolean b = false;
         boolean pointedElementFound = false;
@@ -753,10 +723,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         TGComponent tmp = componentPointed;
         componentPointed = null;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList) {
             //state = tgc.getState();
             tgcTmp = tgc.isOnMeHL(x, y);
             if (tgcTmp != null) {
@@ -786,7 +754,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void highlightTGComponent(TGComponent tgc) {
-        if (!componentList.contains(tgc.getTopFather())) {
+        if (!this.componentList.contains(tgc.getTopFather())) {
             return;
         }
 
@@ -816,12 +784,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public TGConnectingPoint findConnectingPoint(int id) {
-        TGComponent tgc;
         TGConnectingPoint p;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList) {
             p = tgc.findConnectingPoint(id);
             if (p != null) {
                 return p;
@@ -832,84 +797,58 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public TGComponent findComponentWithId(int id) {
-        TGComponent tgc1, tgc2;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc1 = (TGComponent)(iterator.next());
-            tgc2 = tgc1.containsLoadedId(id);
-            if (tgc2 != null) {
+        for (TGComponent tgc1: this.componentList) {
+            TGComponent tgc2 = tgc1.containsLoadedId(id);
+            if (tgc2 != null)
                 return tgc2;
-            }
         }
+
         return null;
     }
 
     public TGConnector findTGConnectorStartingAt(CDElement c) {
-        TGComponent tgc;
-        TGConnector tgco;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc instanceof TGConnector) {
-                tgco = (TGConnector) tgc;
-                if (tgco.isP1(c)) {
+                TGConnector tgco = (TGConnector) tgc;
+                if (tgco.isP1(c))
                     return tgco;
-                }
-
             }
-        }
+
         return null;
     }
 
     public TGConnector findTGConnectorUsing(CDElement c) {
-        TGComponent tgc;
-        TGConnector tgco;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc instanceof TGConnector) {
-                tgco = (TGConnector) tgc;
-                if (tgco.isP1(c)) {
+                TGConnector tgco = (TGConnector) tgc;
+                if (tgco.isP1(c))
                     return tgco;
-                }
-                if (tgco.isP2(c)) {
+                if (tgco.isP2(c))
                     return tgco;
-                }
-
             }
-        }
+
         return null;
     }
 
 
     public boolean highlightOutAndFreeConnectingPoint(int x, int y, int type) {
-        TGComponent tgc;
-        TGConnectingPoint cp;
-        int state;
         boolean b = false;
         boolean pointedElementFound = false;
         selectedConnectingPoint = null;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (pointedElementFound == true) {
+        for (TGComponent tgc: this.componentList)
+            if (pointedElementFound)
                 b =  tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
-            }
-            if (pointedElementFound == false) {
-                cp = tgc.getFreeTGConnectingPointAtAndCompatible(x, y, type);
+            else {
+                TGConnectingPoint cp = tgc.getFreeTGConnectingPointAtAndCompatible(x, y, type);
                 if ((cp != null) && (cp.isOut()) && (cp.isFree()) && (cp.isCompatibleWith(type))) {
                     selectedConnectingPoint = cp;
                     pointedElementFound = true;
                     b = cp.setState(TGConnectingPoint.SELECTED) || b;
-                } else {
+                } else
                     b =  tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
-                }
             }
-        }
+
         return b;
     }
 
@@ -942,16 +881,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
       }*/
 
     public boolean highlightInAndFreeConnectingPoint(int x, int y, int type) {
-        TGComponent tgc;
         TGConnectingPoint cp;
         int state;
         boolean b = false;
         boolean pointedElementFound = false;
         selectedConnectingPoint = null;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList) {
             if (pointedElementFound == true) {
                 b =  tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
             }
@@ -1026,54 +962,41 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public SwallowTGComponent findSwallowTGComponent(int x, int y, TGComponent tgcdiff) {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if ((tgc instanceof SwallowTGComponent) && (tgc.isOnMeHL(x, y) != null) && (tgc != tgcdiff)) {
+        for (TGComponent tgc: this.componentList)
+            if ((tgc instanceof SwallowTGComponent) && (tgc.isOnMeHL(x, y) != null) && (tgc != tgcdiff))
                 return ((SwallowTGComponent)tgc);
-                /*if (((SwallowTGComponent)tgc).acceptSwallowedTGComponent(tgcdiff)) {
 
-                  }*/
-            }
-        }
         return null;
     }
 
     public void addBuiltComponent(TGComponent tgc) {
         if (tgc != null) {
-            componentList.add(tgc);
+            this.componentList.add(tgc);
         }
     }
 
     public void addBuiltConnector(TGConnector tgc) {
         if (tgc != null) {
-            componentList.add(tgc);
+            this.componentList.add(tgc);
         }
     }
 
-    public LinkedList getComponentList() {
-        return componentList;
+    public LinkedList<TGComponent> getComponentList() {
+        return this.componentList;
     }
 
-    public LinkedList getAllComponentList() {
-        TGComponent tgc;
+    public LinkedList<TGComponent> getAllComponentList() {
 
-        LinkedList ll = new LinkedList();
-        ll.addAll(componentList);
+        LinkedList<TGComponent> ll = new LinkedList<TGComponent> ();
+        ll.addAll(this.componentList);
 
-        ListIterator iterator = componentList.listIterator();
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             ll.addAll(tgc.getRecursiveAllInternalComponent());
-        }
 
         return ll;
     }
 
     // Adding connector
-
     public void addingTGConnector() {
         listPoint = new Vector();
         p1 = getSelectedTGConnectingPoint();
@@ -1096,7 +1019,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         if (tgco != null) {
             TraceManager.addDev("Adding connector");
             p2.setFree(false);
-            componentList.add(0, tgco);
+            this.componentList.add(0, tgco);
             if (tgco instanceof SpecificActionAfterAdd) {
                 ((SpecificActionAfterAdd)tgco).specificActionAfterAdd();
             }
@@ -1175,11 +1098,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void unselectSelectedComponents() {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList) {
             tgc.select(false);
             tgc.setState(TGState.NORMAL);
         }
@@ -1206,27 +1125,15 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void setMovingSelectedComponents() {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc.isSelected()) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc.isSelected())
                 tgc.setState(TGState.MOVING);
-            }
-        }
     }
 
     public void setStopMovingSelectedComponents() {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc.isSelected()) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc.isSelected())
                 tgc.setState(TGState.SELECTED);
-            }
-        }
     }
 
     public int getXSelected() {
@@ -1249,127 +1156,91 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         int oldY = ySel;
         xSel = x;
         ySel = y;
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc.isSelected()) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc.isSelected())
                 tgc.forceMove(xSel - oldX, ySel - oldY);
-            }
-        }
     }
 
     public TGComponent nextSelectedComponent() {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc.isSelected()) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc.isSelected())
                 return tgc;
-            }
-        }
+
         return null;
     }
 
-    public Vector selectedTclasses() {
-        TGComponent tgc;
-        TCDTClass t;
-        Vector v = null;
-        Iterator iterator = componentList.listIterator();
+    public Vector<TCDTClass> selectedTclasses() {
+        Vector<TCDTClass> v = null;
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if ((tgc.isSelected()) && (tgc instanceof TCDTClass)) {
-                if (v == null) {
-                    v = new Vector();
-                }
-                v.addElement(tgc);
+                if (v == null)
+                    v = new Vector<TCDTClass> ();
+
+                v.addElement((TCDTClass) tgc);
             }
-        }
+
         return v;
     }
 
-    public Vector selectedTURTLEOSClasses() {
-        TGComponent tgc;
-        Vector v = null;
-        Iterator iterator = componentList.listIterator();
+    public Vector<TOSClass> selectedTURTLEOSClasses() {
+        Vector<TOSClass> v = null;
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if ((tgc.isSelected()) && (tgc instanceof TOSClass)) {
-                if (v == null) {
-                    v = new Vector();
-                }
-                v.addElement(tgc);
+                if (v == null)
+                    v = new Vector<TOSClass> ();
+                v.addElement((TOSClass) tgc);
             }
-        }
+
         return v;
     }
 
-    public Vector selectedTMLTasks() {
-        TGComponent tgc;
-        TMLTaskOperator t;
-        Vector v = null;
-        Iterator iterator = componentList.listIterator();
+    public Vector<TMLTaskOperator> selectedTMLTasks() {
+        Vector<TMLTaskOperator> v = null;
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if ((tgc.isSelected()) && (tgc instanceof TMLTaskOperator)) {
-                if (v == null) {
-                    v = new Vector();
-                }
-                v.addElement(tgc);
+                if (v == null)
+                    v = new Vector<TMLTaskOperator> ();
+                v.addElement((TMLTaskOperator) tgc);
             }
-        }
+
         return v;
     }
 
-    public Vector selectedAvatarBDBlocks() {
-        TGComponent tgc;
-        //AvatarBDBlock b;
-        Vector v = null;
-        Iterator iterator = componentList.listIterator();
+    public Vector<AvatarBDBlock> selectedAvatarBDBlocks() {
+        Vector<AvatarBDBlock> v = null;
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if ((tgc.isSelected()) && (tgc instanceof AvatarBDBlock)) {
-                if (v == null) {
-                    v = new Vector();
-                }
-                v.addElement(tgc);
-                LinkedList<AvatarBDBlock> list = ((AvatarBDBlock)tgc).getFullBlockList();
-                v.addAll(list);
+                if (v == null)
+                    v = new Vector<AvatarBDBlock> ();
+                v.addElement((AvatarBDBlock) tgc);
+                v.addAll(((AvatarBDBlock) tgc).getFullBlockList());
             }
-        }
+
         return v;
     }
 
-    public Vector selectedCPrimitiveComponent() {
-        TGComponent tgc;
-        TMLCPrimitiveComponent tcomp;
-        Vector v = null;
-        Iterator iterator = componentList.listIterator();
+    public Vector<TMLCPrimitiveComponent> selectedCPrimitiveComponent() {
+        Vector<TMLCPrimitiveComponent> v = null;
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc.isSelected()) {
                 if (tgc instanceof TMLCPrimitiveComponent) {
-                    if (v == null) {
-                        v = new Vector();
-                    }
-                    v.addElement(tgc);
+                    if (v == null)
+                        v = new Vector<TMLCPrimitiveComponent> ();
+                    v.addElement((TMLCPrimitiveComponent) tgc);
                 }
 
                 if (tgc instanceof TMLCCompositeComponent) {
-                    if (v == null) {
-                        v = new Vector();
-                    }
-                    v.addAll(((TMLCCompositeComponent)(tgc)).getAllPrimitiveComponents());
+                    if (v == null)
+                        v = new Vector<TMLCPrimitiveComponent> ();
+                    v.addAll(((TMLCCompositeComponent) (tgc)).getAllPrimitiveComponents());
                 }
             }
-        }
+
         return v;
     }
 
@@ -2150,13 +2021,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     // operations
     public void removeComponent(TGComponent tgc) {
-        TGComponent t;
-        Iterator iterator = componentList.listIterator();
-
         fatherOfRemoved = tgc.getFather();
 
-        while(iterator.hasNext()) {
-            t = (TGComponent)(iterator.next());
+        for (TGComponent t: this.componentList)
             if (t == tgc) {
                 removeConnectors(tgc);
                 if (tgc instanceof TGConnector) {
@@ -2176,60 +2043,46 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     return;
                 }
             }
-        }
     }
 
     public void removeConnectors(TGComponent tgc) {
-        TGConnector tgcon;
-        TGComponent t;
-        TGConnectingPoint cp;
-        int i, j, k;
-
-        for (i = 0; i<tgc.getNbConnectingPoint(); i++) {
-            cp = tgc.tgconnectingPointAtIndex(i);
-            for(j=0; j<componentList.size(); j++) {
-                t = (TGComponent)(componentList.get(j));
+        for (int i = 0; i<tgc.getNbConnectingPoint(); i++) {
+            TGConnectingPoint cp = tgc.tgconnectingPointAtIndex(i);
+            Iterator<TGComponent> iterator = this.componentList.iterator ();
+            while (iterator.hasNext ()) {
+                TGComponent t = iterator.next ();
                 if (t instanceof TGConnector) {
-                    tgcon = (TGConnector)t;
+                    TGConnector tgcon = (TGConnector)t;
                     if ((cp == tgcon.getTGConnectingPointP1()) || (cp == tgcon.getTGConnectingPointP2())) {
-                        componentList.remove(j);
+                        iterator.remove ();
                         actionOnRemove(t);
-                        j --;
                         tgcon.getTGConnectingPointP1().setFree(true);
                         tgcon.getTGConnectingPointP2().setFree(true);
-                        for(k=0; k<tgcon.getNbConnectingPoint(); k++) {
+                        for(int k=0; k<tgcon.getNbConnectingPoint(); k++)
                             removeOneConnector(tgcon.tgconnectingPointAtIndex(k));
-                        }
                     }
                 }
             }
         }
 
-        for(i=0; i<tgc.getNbInternalTGComponent(); i++) {
+        for(int i=0; i<tgc.getNbInternalTGComponent(); i++)
             removeConnectors(tgc.getInternalTGComponent(i));
-        }
     }
 
     public void removeOneConnector(TGConnectingPoint cp) {
-        //TraceManager.addDev("Remove one connector");
-        TGConnector tgcon;
-        TGComponent t;
-        int j, k;
-
-        for(j=0; j<componentList.size(); j++) {
-            t = (TGComponent)(componentList.get(j));
+        Iterator<TGComponent> iterator = this.componentList.iterator ();
+        while (iterator.hasNext ()) {
+            TGComponent t = iterator.next ();
             if (t instanceof TGConnector) {
-                tgcon = (TGConnector)t;
+                TGConnector tgcon = (TGConnector)t;
                 if ((cp == tgcon.getTGConnectingPointP1()) || (cp == tgcon.getTGConnectingPointP2())) {
-                    componentList.remove(j);
+                    iterator.remove ();
                     actionOnRemove(t);
-                    j --;
                     tgcon.getTGConnectingPointP1().setFree(true);
                     tgcon.getTGConnectingPointP2().setFree(true);
                     TraceManager.addDev("Removed one connector!");
-                    for(k=0; k<tgcon.getNbConnectingPoint(); k++) {
+                    for(int k=0; k<tgcon.getNbConnectingPoint(); k++)
                         removeOneConnector(tgcon.tgconnectingPointAtIndex(k));
-                    }
                 }
             }
         }
@@ -2298,19 +2151,16 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void attach(TGComponent tgc) {
-        if (tgc instanceof SwallowedTGComponent) {
-            if (tgc.tdp.addComponent(tgc, tgc.getX(), tgc.getY(), true, false)) {
-                // Component was attached -> must be removed from the list
-                componentList.remove(tgc);
-            }
-        }
+        if (tgc instanceof SwallowedTGComponent && tgc.tdp.addComponent (tgc, tgc.getX(), tgc.getY(), true, false))
+            // Component was attached -> must be removed from the list
+            this.componentList.remove(tgc);
     }
 
     public void detach(TGComponent tgc) {
         if ((tgc instanceof SwallowedTGComponent) && (tgc.getFather() != null)) {
             ((SwallowTGComponent)tgc.getFather()).removeSwallowedTGComponent(tgc);
             tgc.setFather(null);
-            componentList.add(tgc);
+            this.componentList.add(tgc);
             tgc.wasUnswallowed();
             bringToFront(tgc);
         }
@@ -2337,28 +2187,19 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     //returns the highest id amongst its components
     public int getMaxId() {
-        TGComponent tgc;
         int ret = 0;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             ret = Math.max(ret, tgc.getMaxId());
-        }
+
         return ret;
     }
 
     public int getMaxIdSelected() {
-        TGComponent tgc;
         int ret = 0;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc.isSelected()) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc.isSelected())
                 ret = Math.max(ret, tgc.getMaxId());
-            }
-        }
+
         return ret;
     }
 
@@ -2376,19 +2217,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     // tell the other component connected to this connecting point
     public TGConnector getConnectorConnectedTo(TGConnectingPoint p) {
-        TGComponent tgc;
-        TGConnector tgco;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc instanceof TGConnector) {
-                tgco = (TGConnector)tgc;
-                if ((tgco.getTGConnectingPointP1() == p) || (tgco.getTGConnectingPointP2() == p)) {
+                TGConnector tgco = (TGConnector) tgc;
+                if ((tgco.getTGConnectingPointP1() == p) || (tgco.getTGConnectingPointP2() == p))
                     return tgco;
-                }
             }
-        }
+
         return null;
     }
 
@@ -2432,957 +2267,469 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public TGComponent getComponentToWhichBelongs(TGConnectingPoint p) {
-        TGComponent tgc1, tgc2;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc1 = (TGComponent)(iterator.next());
-            tgc2 = tgc1.belongsToMeOrSon(p);
-            if (tgc2 != null) {
+        for (TGComponent tgc1: this.componentList) {
+            TGComponent tgc2 = tgc1.belongsToMeOrSon(p);
+            if (tgc2 != null)
                 return tgc2;
-            }
         }
+
         return null;
     }
 
-    public TGComponent getComponentToWhichBelongs(LinkedList components, TGConnectingPoint p) {
-        TGComponent tgc1, tgc2;
-        Iterator iterator = components.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc1 = (TGComponent)(iterator.next());
-            tgc2 = tgc1.belongsToMeOrSon(p);
-            if (tgc2 != null) {
+    public static TGComponent getComponentToWhichBelongs (LinkedList<TGComponent> components, TGConnectingPoint p) {
+        for (TGComponent tgc1: components) {
+            TGComponent tgc2 = tgc1.belongsToMeOrSon(p);
+            if (tgc2 != null)
                 return tgc2;
-            }
         }
+
         return null;
     }
 
     public void getAllCheckableTGComponent(ArrayList<TGComponent> _list) {
-        //TraceManager.addDev("Checking for components on=" + this);
-        Iterator iterator = componentList.listIterator();
-        TGComponent tgc;
-        LinkedList list;
-
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc.hasCheckableAccessibility()) {
-                list = tgc.getAllCheckableAccessibility();
-                _list.addAll(list);
-            }
-        }
-
+        for (TGComponent tgc: this.componentList)
+            if (tgc.hasCheckableAccessibility())
+                _list.addAll(tgc.getAllCheckableAccessibility ());
     }
 
     public void getAllCheckableInvariantTGComponent(ArrayList<TGComponent> _list) {
-        //TraceManager.addDev("Checking for components on=" + this);
-        Iterator iterator = componentList.listIterator();
-        TGComponent tgc;
-        LinkedList list;
-
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc.hasCheckableInvariant()) {
-                list = tgc.getAllCheckableInvariant();
-                _list.addAll(list);
-            }
-        }
+        for (TGComponent tgc: this.componentList)
+            if (tgc.hasCheckableInvariant())
+                _list.addAll(tgc.getAllCheckableInvariant());
     }
 
     // Main Tree
-
     public int getChildCount() {
-        return componentList.size();
+        return this.componentList.size();
     }
 
     public Object getChild(int index) {
-        return componentList.get(index);
+        return this.componentList.get(index);
     }
 
     public int getIndexOfChild(Object child) {
-        return componentList.indexOf(child);
+        return this.componentList.indexOf(child);
     }
 
     //Tclass
-
-    public boolean isAlreadyATClassName(String name) {
-        TClassInterface t;
-        Object o;
-        int i;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = (TGComponent)(iterator.next());
-            if (o instanceof TClassInterface) {
-                t = (TClassInterface)o;
-                if (t.getClassName().equals(name)) {
-                    return true;
-                }
-            }
+    private class NameChecker {
+        public boolean isNameAlreadyTaken (TGComponent o, String name) {
+            // Must deal with the case where mutliple the tested component
+            // inherit from multiple classes / interfaces.
+            // In such case we execute all check*** functions until one
+            // returns true, in which case we can return true;
+            return (o instanceof TClassInterface        && this.checkTClassInterface ((TClassInterface) o, name))
+                || (o instanceof TCDTData               && this.checkTCDTData ((TCDTData) o, name))
+                || (o instanceof TCDTObject             && this.checkTCDTObject ((TCDTObject) o, name))
+                || (o instanceof TOSClass               && this.checkTOSClass ((TOSClass) o, name))
+                || (o instanceof Requirement            && this.checkRequirement ((Requirement) o, name))
+                || (o instanceof TMLCPrimitiveComponent && this.checkTMLCPrimitiveComponent ((TMLCPrimitiveComponent) o, name))
+                || (o instanceof TMLCRecordComponent    && this.checkTMLCRecordComponent ((TMLCRecordComponent) o, name))
+                || (o instanceof TMLCCompositeComponent && this.checkTMLCCompositeComponent ((TMLCCompositeComponent) o, name))
+                || (o instanceof TMLTaskInterface       && this.checkTMLTaskInterface ((TMLTaskInterface) o, name))
+                || (o instanceof ATDBlock               && this.checkATDBlock ((ATDBlock) o, name))
+                || (o instanceof AvatarBDBlock          && this.checkAvatarBDBlock ((AvatarBDBlock) o, name))
+                || (o instanceof AvatarCDBlock          && this.checkAvatarCDBlock ((AvatarCDBlock) o, name))
+                || (o instanceof AvatarSMDState         && this.checkAvatarSMDState ((AvatarSMDState) o, name))
+                || (o instanceof AvatarADActivity       && this.checkAvatarADActivity ((AvatarADActivity) o, name))
+                || (o instanceof AvatarMADAssumption    && this.checkAvatarMADAssumption ((AvatarMADAssumption) o, name))
+                || (o instanceof AvatarRDRequirement    && this.checkAvatarRDRequirement ((AvatarRDRequirement) o, name))
+                || (o instanceof NCEqNode               && this.checkNCEqNode ((NCEqNode) o, name))
+                || (o instanceof NCSwitchNode           && this.checkNCSwitchNode ((NCSwitchNode) o, name))
+                || (o instanceof AvatarBDDataType       && this.checkAvatarBDDataType ((AvatarBDDataType) o, name))
+                || (o instanceof AvatarBDLibraryFunction && this.checkAvatarBDLibraryFunction ((AvatarBDLibraryFunction) o, name));
         }
-        return false;
+
+        public boolean checkTClassInterface (TClassInterface o, String name) { return false; }
+        public boolean checkTCDTData (TCDTData o, String name) { return false; }
+        public boolean checkTCDTObject (TCDTObject o, String name) { return false; }
+        public boolean checkTOSClass (TOSClass o, String name) { return false; }
+        public boolean checkRequirement (Requirement o, String name) { return false; }
+        public boolean checkTMLCPrimitiveComponent (TMLCPrimitiveComponent o, String name) { return false; }
+        public boolean checkTMLCRecordComponent (TMLCRecordComponent o, String name) { return false; }
+        public boolean checkTMLCCompositeComponent (TMLCCompositeComponent o, String name) { return false; }
+        public boolean checkTMLTaskInterface (TMLTaskInterface o, String name) { return false; }
+        public boolean checkATDBlock (ATDBlock o, String name) { return false; }
+        public boolean checkAvatarBDBlock (AvatarBDBlock o, String name) { return false; }
+        public boolean checkAvatarCDBlock (AvatarCDBlock o, String name) { return false; }
+        public boolean checkAvatarSMDState (AvatarSMDState o, String name) { return false; }
+        public boolean checkAvatarADActivity (AvatarADActivity o, String name) { return false; }
+        public boolean checkAvatarMADAssumption (AvatarMADAssumption o, String name) { return false; }
+        public boolean checkAvatarRDRequirement (AvatarRDRequirement o, String name) { return false; }
+        public boolean checkNCEqNode (NCEqNode o, String name) { return false; }
+        public boolean checkNCSwitchNode (NCSwitchNode o, String name) { return false; }
+        public boolean checkAvatarBDDataType (AvatarBDDataType o, String name) { return false; }
+        public boolean checkAvatarBDLibraryFunction (AvatarBDLibraryFunction o, String name) { return false; }
     }
 
-    public boolean isAlreadyATMLTaskName(String name) {
-        TMLTaskInterface t;
-        Object o;
-        int i;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = (TGComponent)(iterator.next());
-            if (o instanceof TMLTaskInterface) {
-                t = (TMLTaskInterface)o;
-                if (t.getTaskName().equals(name)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    private boolean isNameUnique (String name, NameChecker checker) {
+        for (TGComponent o: this.componentList)
+            if (checker.isNameAlreadyTaken (o, name))
+                return false;
+        return true;
     }
 
-    public boolean isAlreadyAnAvatarBDBlockName(String name) {
-        AvatarBDBlock b;
-        Object o;
-        int i;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = (TGComponent)(iterator.next());
-            if (o instanceof AvatarBDBlock) {
-                b = (AvatarBDBlock)o;
-                if (b.getBlockName().equals(name)) {
-                    return true;
-                }
-                LinkedList<AvatarBDBlock> list = b.getFullBlockList();
-                for(AvatarBDBlock ab: list) {
-                    if (ab.getBlockName().equals(name)) {
-                        return true;
-                    }
-                }
-
-            }
+    private String findGoodName (String name, NameChecker checker) {
+        // index >= 0 catch overflows
+        for (int index=0; index>=0; index++) {
+            String tryName = name + index;
+            if (this.isNameUnique (tryName, checker))
+                return tryName;
         }
-        return false;
-    }
 
-    public boolean isAlreadyATMLPrimitiveComponentName(String name) {
-        TMLCPrimitiveComponent pc;
-        Object o;
-        int i;
-        Iterator iterator = componentList.listIterator();
-        ArrayList<TMLCPrimitiveComponent> list;
-
-        while(iterator.hasNext()) {
-            o = (TGComponent)(iterator.next());
-            if (o instanceof TMLCPrimitiveComponent) {
-                pc = (TMLCPrimitiveComponent)o;
-                if (pc.getValue().equals(name)) {
-                    return true;
-                }
-            }
-            if (o instanceof TMLCCompositeComponent) {
-                list = ((TMLCCompositeComponent)o).getAllPrimitiveComponents();
-                for(TMLCPrimitiveComponent cpc: list) {
-                    if (cpc.getValue().equals(name)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean isAlreadyATOSClassName(String name) {
-        TOSClass t;
-        Object o;
-        int i;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = (TGComponent)(iterator.next());
-            if (o instanceof TOSClass) {
-                t = (TOSClass)o;
-                if (t.getClassName().equals(name)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        throw new RuntimeException("Integer Overflow");
     }
 
     public String findTClassName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        TClassInterface t;
-        Object o;
-        TCDTData td;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (o instanceof TClassInterface) {
-                    t = (TClassInterface)o;
-                    if (t.getClassName().equals(name + index)) {
-                        ok = false;
-                    }
-                }
-                if (o instanceof TCDTData) {
-                    td = (TCDTData)o;
-                    if (td.getValue().equals(name + index)) {
-                        ok = false;
-                    }
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkTClassInterface (TClassInterface o, String name) {
+                return o.getClassName ().equals (name);
             }
-            if (ok) {
-                return name + index;
+            public boolean checkTCDTData (TCDTData o, String name) {
+                return o.getValue ().equals (name);
             }
-            index ++;
-        }
-        return name;
+        });
     }
 
     public String findTOSClassName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        TOSClass t;
-        Object o;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (o instanceof TOSClass) {
-                    t = (TOSClass)o;
-                    if (t.getClassName().equals(name + index)) {
-                        ok = false;
-                    }
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkTOSClass (TOSClass o, String name) {
+                return o.getClassName ().equals (name);
             }
-            if (ok) {
-                return name + index;
-            }
-            index ++;
-        }
-        return name;
+        });
     }
 
     public String findRequirementName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        Requirement req;
-        Object o;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (o instanceof Requirement) {
-                    req = (Requirement)o;
-                    if (req.getRequirementName().equals(name + index)) {
-                        ok = false;
-                    }
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkRequirement (Requirement o, String name) {
+                return o.getRequirementName ().equals (name);
             }
-            if (ok) {
-                return name + index;
-            }
-            index ++;
-        }
-        return name;
+        });
     }
 
     public String findTMLPrimitiveComponentName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        TGComponent o;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (findTMLPrimitiveComponentNameTgc(name, o, index)) {
-                    ok = false;
-                    break;
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkTMLCPrimitiveComponent (TMLCPrimitiveComponent o, String name) {
+                return o.getValue ().equals (name);
             }
-            if (ok) {
-                return name + index;
+            public boolean checkTMLCRecordComponent (TMLCRecordComponent o, String name) {
+                return o.getValue ().equals (name);
             }
-            index ++;
-        }
-        return name;
+            public boolean checkTMLCCompositeComponent (TMLCCompositeComponent o, String name) {
+                for (int i=0; i<o.getNbInternalTGComponent (); i++)
+                    if (this.isNameAlreadyTaken (o.getInternalTGComponent (i), name))
+                        return true;
+                return false;
+            }
+        });
     }
 
     public String findTMLRecordComponentName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        TGComponent o;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (findTMLRecordComponentNameTgc(name, o, index)) {
-                    ok = false;
-                    break;
-                }
-            }
-            if (ok) {
-                return name + index;
-            }
-            index ++;
-        }
-        return name;
-    }
-
-    public boolean findTMLPrimitiveComponentNameTgc(String name, TGComponent tgc, int index) {
-        if (tgc instanceof TMLCPrimitiveComponent) {
-            if (tgc.getValue().equals(name+index)) {
-                return true;
-            }
-        }
-
-        if (tgc instanceof TMLCRecordComponent) {
-            if (tgc.getValue().equals(name+index)) {
-                return true;
-            }
-        }
-
-        for(int i=0; i<tgc.getNbInternalTGComponent(); i++) {
-            if (findTMLPrimitiveComponentNameTgc(name, tgc.getInternalTGComponent(i), index)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean findTMLRecordComponentNameTgc(String name, TGComponent tgc, int index) {
-        if (tgc instanceof TMLCPrimitiveComponent) {
-            if (tgc.getValue().equals(name+index)) {
-                return true;
-            }
-        }
-
-        if (tgc instanceof TMLCRecordComponent) {
-            if (tgc.getValue().equals(name+index)) {
-                return true;
-            }
-        }
-
-        for(int i=0; i<tgc.getNbInternalTGComponent(); i++) {
-            if (findTMLRecordComponentNameTgc(name, tgc.getInternalTGComponent(i), index)) {
-                return true;
-            }
-        }
-
-        return false;
+        return this.findTMLPrimitiveComponentName (name);
     }
 
     public String findTMLTaskName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        TMLTaskInterface t;
-        Object o;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (o instanceof TMLTaskInterface) {
-                    t = (TMLTaskInterface)o;
-                    if (t.getTaskName().equals(name + index)) {
-                        ok = false;
-                    }
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkTMLTaskInterface (TMLTaskInterface o, String name) {
+                return o.getTaskName ().equals (name);
             }
-            if (ok) {
-                return name + index;
-            }
-            index ++;
-        }
-        return name;
+        });
     }
 
     public String findBlockName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        ATDBlock t;
-        Object o;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (o instanceof ATDBlock) {
-                    t = (ATDBlock)o;
-                    if (t.getName().equals(name + index)) {
-                        ok = false;
-                    }
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkATDBlock (ATDBlock o, String name) {
+                return o.getName ().equals (name);
             }
-            if (ok) {
-                return name + index;
-            }
-            index ++;
-        }
-        return name;
+        });
     }
 
     public String findAvatarBDBlockName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        AvatarBDBlock t;
-        Object o;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (o instanceof AvatarBDBlock) {
-                    t = (AvatarBDBlock)o;
-                    if (t.getValue().equals(name + index)) {
-                        ok = false;
-                    }
-                    if (t.hasInternalBlockWithName(name+index)) {
-                        ok = false;
-                    }
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkAvatarBDBlock (AvatarBDBlock o, String name) {
+                if (o.getValue ().equals (name))
+                    return true;
+                return o.hasInternalBlockWithName (name);
             }
-            if (ok) {
-                return name + index;
+            public boolean checkAvatarBDLibraryFunction (AvatarBDLibraryFunction o, String name) {
+                return o.getFunctionName ().equals (name);
             }
-            index ++;
-        }
-        return name;
+            public boolean checkAvatarBDDataType (AvatarBDDataType o, String name) {
+                return o.getDataTypeName ().equals (name);
+            }
+        });
     }
 
     public String findAvatarCDBlockName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        AvatarCDBlock t;
-        Object o;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (o instanceof AvatarCDBlock) {
-                    t = (AvatarCDBlock)o;
-                    if (t.getValue().equals(name + index)) {
-                        ok = false;
-                    }
-                    if (t.hasInternalBlockWithName(name+index)) {
-                        ok = false;
-                    }
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkAvatarCDBlock (AvatarCDBlock o, String name) {
+                if (o.getValue ().equals (name))
+                    return true;
+                return o.hasInternalBlockWithName (name);
             }
-            if (ok) {
-                return name + index;
-            }
-            index ++;
-        }
-        return name;
+        });
     }
 
     public String findAvatarSMDStateName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        AvatarSMDState s;
-        Object o;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (o instanceof AvatarSMDState) {
-                    s = (AvatarSMDState)o;
-                    if (s.getValue().equals(name + index)) {
-                        ok = false;
-                    }
-                    if (s.hasInternalStateWithName(name+index)) {
-                        ok = false;
-                    }
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkAvatarSMDState (AvatarSMDState o, String name) {
+                if (o.getValue ().equals (name))
+                    return true;
+                return o.hasInternalStateWithName (name);
             }
-            if (ok) {
-                return name + index;
-            }
-            index ++;
-        }
-        return name;
+        });
     }
 
     public String findAvatarADActivityName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        AvatarADActivity s;
-        Object o;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (o instanceof AvatarADActivity) {
-                    s = (AvatarADActivity)o;
-                    if (s.getValue().equals(name + index)) {
-                        ok = false;
-                    }
-                    if (s.hasInternalActivityWithName(name+index)) {
-                        ok = false;
-                    }
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkAvatarADActivity (AvatarADActivity o, String name) {
+                if (o.getValue ().equals (name))
+                    return true;
+                return o.hasInternalActivityWithName (name);
             }
-            if (ok) {
-                return name + index;
-            }
-            index ++;
-        }
-        return name;
+        });
     }
 
-
-
     public String findAvatarAssumptionName(String name, int start) {
-        boolean ok;
-        int i;
-        int index = start;
-        AvatarMADAssumption assump;
-        Object o;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (o instanceof AvatarMADAssumption) {
-                    assump = (AvatarMADAssumption)o;
-                    if (assump.getValue().equals(name + index)) {
-                        ok = false;
-                    }
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkAvatarMADAssumption (AvatarMADAssumption o, String name) {
+                return o.getValue ().equals (name);
             }
-            if (ok) {
-                return name + index;
-            }
-            index ++;
-        }
-        return name;
+        });
     }
 
     public String findAvatarRequirementName(String name, int start) {
-        boolean ok;
-        int i;
-        int index = start;
-        AvatarRDRequirement areq;
-        Object o;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                o = (TGComponent)(iterator.next());
-                if (o instanceof AvatarRDRequirement) {
-                    areq = (AvatarRDRequirement)o;
-                    if (areq.getValue().equals(name + index)) {
-                        ok = false;
-                    }
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkAvatarRDRequirement (AvatarRDRequirement o, String name) {
+                return o.getValue ().equals (name);
             }
-            if (ok) {
-                return name + index;
-            }
-            index ++;
-        }
-        return name;
+        });
     }
 
     public String findAvatarRequirementID(String id) {
-        boolean ok;
-        int i;
-        int index = 0;
-        AvatarRDRequirement areq;
-        Object o;
-        Iterator iterator;
         try {
-            int intid = Integer.decode(id).intValue();
-            int otherid;
-
-            while(index >= 0) {
-                ok = true;
-                iterator = componentList.listIterator();
-                while(iterator.hasNext()) {
-                    o = (TGComponent)(iterator.next());
+            // intid >= 0 catch overflows
+            for (int intid = Integer.decode(id).intValue(); intid >=0; intid++) {
+                boolean ok = true;
+                for (TGComponent o: this.componentList)
                     if (o instanceof AvatarRDRequirement) {
-                        areq = (AvatarRDRequirement)o;
-                        otherid = Integer.decode(areq.getID()).intValue();
+                        AvatarRDRequirement areq = (AvatarRDRequirement) o;
+                        int otherid = Integer.decode(areq.getID()).intValue();
                         if (intid == otherid) {
                             ok = false;
+                            break;
                         }
                     }
-                }
-                if (ok) {
-                    return "" + intid;
-                }
-                intid ++;
+
+                if (ok)
+                    return Integer.toString(intid);
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
+            return id;
         }
-        return id;
+
+        throw new RuntimeException("Integer Overflow");
     }
 
-
-
     public String findTObjectName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        Iterator iterator;
-
-        while(index >= 0) {
-            TGComponent tgc;
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                tgc = (TGComponent)(iterator.next());
-                if (tgc instanceof TCDTObject) {
-                    if (((TCDTObject)tgc).getObjectName().equals(name + index)) {
-                        ok = false;
-                    }
-                }
-                if (tgc instanceof TCDTClass) {
-                    if (((TCDTClass)tgc).getClassName().startsWith(name + index)) {
-                        ok = false;
-                    }
-                }
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkTCDTObject (TCDTObject o, String name) {
+                return o.getObjectName ().equals (name);
             }
-            if (ok) {
-                return name + index;
+            public boolean checkTCDTClass (TCDTClass o, String name) {
+                return o.getClassName ().startsWith (name);
             }
-            index ++;
-        }
-        return name;
+        });
     }
 
     public String findTObjectName(String name1, String name2) {
-        boolean ok;
-        int i;
-        int index = 0;
-        Iterator iterator;
+        // index >= 0 catch overflows
+        for (int index=0; index>=0; index++) {
+            boolean ok = true;
+            String tryName = name1 + index;
 
-        while(index >= 0) {
-            TGComponent tgc;
-            ok = true;
-            iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                tgc = (TGComponent)(iterator.next());
-                if (tgc instanceof TCDTObject) {
-                    if (((TCDTObject)tgc).getObjectName().equals(name + index)) {
-                        ok = false;
-                    }
-                }
-            }
-            if (ok) {
-                if (isTObjectNameUnique(name1+index+name2)) {
-                    return name1 + index;
-                }
-            }
-            index ++;
+            for (TGComponent o: this.componentList)
+                if (o instanceof TCDTObject && ((TCDTObject) o).getObjectName().equals(tryName))
+                    ok = false;
+
+            if (ok && this.isTObjectNameUnique(tryName+name2))
+                return tryName;
         }
-        return name;
+
+
+        throw new RuntimeException("Integer Overflow");
     }
 
     public String findNodeName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        TGComponent tgc;
-        Iterator iterator;
-
-        while(index >= 0) {
-            //ok = true;
-            ok = isNCNameUnique(name + index);
-            /*iterator = componentList.listIterator();
-              while(iterator.hasNext()) {
-              tgc = (TGComponent)(iterator.next());
-              if (tgc.getName().equals(name + index)) {
-              ok = false;
-              }
-              }*/
-            if (ok) {
-                return name + index;
+        return this.findGoodName (name, new NameChecker () {
+            public boolean checkNCEqNode (NCEqNode o, String name) {
+                if (o.getName ().equals (name))
+                    return true;
+                for (NCTrafficArtifact arti: o.getArtifactList ())
+                    if (arti.getValue ().equals (name))
+                        return true;
+                return false;
             }
-            index ++;
-        }
-        return name;
+            public boolean checkNCSwitchNode (NCSwitchNode o, String name) {
+                if (o.getName ().equals (name))
+                    return true;
+                for (NCRouteArtifact arti: o.getArtifactList ())
+                    if (arti.getValue ().equals (name))
+                        return true;
+                return false;
+            }
+            public boolean checkNCConnectorNode (NCConnectorNode o, String name) {
+                return o.getInterfaceName ().equals (name);
+            }
+        });
     }
 
     public String findInterfaceName(String name) {
-        boolean ok;
-        int i;
-        int index = 0;
-        TGComponent tgc;
-        Iterator iterator;
-
-        while(index >= 0) {
-            ok = isNCNameUnique(name + index);
-            /*iterator = componentList.listIterator();
-              while(iterator.hasNext()) {
-              tgc = (TGComponent)(iterator.next());
-              if (tgc instanceof NCConnectorNode) {
-              if (((NCConnectorNode)tgc).getInterfaceName().equals(name + index)) {
-              ok = false;
-              }
-              } else {
-              if (tgc.getName().equals(name + index)) {
-              ok = false;
-              }
-              }
-              }*/
-            if (ok) {
-                return name + index;
-            }
-            index ++;
-        }
-        return name;
+        return this.findNodeName (name);
     }
 
-    public boolean isTClassNameUnique(String s) {
-        Object o;
-        TClassInterface t;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = (TGComponent)(iterator.next());
-            if (o instanceof TClassInterface) {
-                t = (TClassInterface)o;
-                if (t.getClassName().equals(s)) {
-                    return false;
-                }
-            }
-            if (o instanceof TCDTData) {
-                if (((TCDTData)o).getValue().equals(s)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    public boolean isAlreadyATClassName (String name) {
+        return !this.isTClassNameUnique (name);
     }
 
-    public boolean isTOSClassNameUnique(String s) {
-        Object o;
-        TOSClass t;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = (TGComponent)(iterator.next());
-            if (o instanceof TOSClass) {
-                t = (TOSClass)o;
-                if (t.getClassName().equals(s)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    public boolean isAlreadyATMLTaskName(String name) {
+        return !this.isTMLTaskNameUnique (name);
     }
 
-    public boolean isTMLTaskNameUnique(String s) {
-        Object o;
-        TMLTaskInterface t;
-        Iterator iterator = componentList.listIterator();
-
-
-        while(iterator.hasNext()) {
-            o = (TGComponent)(iterator.next());
-            if (o instanceof TMLTaskInterface) {
-                t = (TMLTaskInterface)o;
-                if (t.getTaskName().equals(s)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    public boolean isAlreadyAnAvatarBDBlockName(String name) {
+        return !this.isAvatarBlockNameUnique (name);
     }
 
-    public boolean isBlockNameUnique(String s) {
-        Object o;
-        ATDBlock t;
-        Iterator iterator = componentList.listIterator();
-
-
-        while(iterator.hasNext()) {
-            o = (TGComponent)(iterator.next());
-            if (o instanceof ATDBlock) {
-                t = (ATDBlock)o;
-                if (t.getName().equals(s)) {
-                    return false;
-                }
+    public boolean isAlreadyATMLPrimitiveComponentName(String name) {
+        return !this.isNameUnique (name, new NameChecker () {
+            public boolean checkTMLCPrimitiveComponent (TMLCPrimitiveComponent o, String name) {
+                return o.getValue ().equals (name);
             }
-        }
-        return true;
+            public boolean checkTMLCRecordComponent (TMLCRecordComponent o, String name) {
+                return o.getValue ().equals (name);
+            }
+            public boolean checkTMLCCompositeComponent (TMLCCompositeComponent o, String name) {
+                for (int i=0; i<o.getNbInternalTGComponent (); i++)
+                    if (this.isNameAlreadyTaken (o.getInternalTGComponent (i), name))
+                        return true;
+                return false;
+            }
+        });
     }
 
-    public boolean isAvatarBlockNameUnique(String s) {
-        Object o;
-        AvatarBDBlock block;
-        AvatarBDDataType type;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = (TGComponent)(iterator.next());
-            if (o instanceof AvatarBDBlock) {
-                block = (AvatarBDBlock)o;
-                if (block.getBlockName().equals(s)) {
-                    return false;
-                }
-            }
-            if (o instanceof AvatarBDDataType) {
-                type = (AvatarBDDataType)o;
-                if (type.getDataTypeName().equals(s)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    public boolean isAlreadyATOSClassName(String name) {
+        return !this.isTOSClassNameUnique (name);
     }
 
-    public boolean isNCNameUnique(String s) {
-        Object o;
-        TGComponent tgc;
-        Vector v;
-        NCTrafficArtifact arti;
-        NCRouteArtifact artiroute;
-        int i;
-        NCConnectorNode link;
-
-        Iterator iterator = componentList.listIterator();
-
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if ((tgc instanceof NCEqNode) || (tgc instanceof NCSwitchNode)){
-                if (tgc.getName().equals(s)) {
-                    return false;
-                }
-
-                if (tgc instanceof NCEqNode) {
-                    v = ((NCEqNode)tgc).getArtifactList();
-                    for (i=0; i<v.size(); i++) {
-                        arti = (NCTrafficArtifact)(v.get(i));
-                        if (arti.getValue().equals(s)) {
-                            return false;
-                        }
-                    }
-                }
-
-                if (tgc instanceof NCSwitchNode) {
-                    v = ((NCSwitchNode)tgc).getArtifactList();
-                    for (i=0; i<v.size(); i++) {
-                        artiroute = (NCRouteArtifact)(v.get(i));
-                        if (artiroute.getValue().equals(s)) {
-                            return false;
-                        }
-                    }
-                }
+    public boolean isTClassNameUnique(String name) {
+        return this.isNameUnique (name, new NameChecker () {
+            public boolean checkTClassInterface (TClassInterface o, String name) {
+                return o.getClassName ().equals (name);
             }
-
-            if (tgc instanceof NCConnectorNode) {
-                link = (NCConnectorNode)tgc;
-                if (link.getInterfaceName().equals(s)) {
-                    return false;
-                }
+            public boolean checkTCDTData (TCDTData o, String name) {
+                return o.getValue ().equals (name);
             }
-        }
-        return true;
+        });
     }
 
-    public boolean isRequirementNameUnique(String s) {
-        Object o;
-        Requirement req;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = (TGComponent)(iterator.next());
-            if (o instanceof Requirement) {
-                req = (Requirement)o;
-                //TraceManager.addDev("analysing s = " + s + " vs " + req.getRequirementName());
-                if (req.getRequirementName().compareTo(s) == 0) {
-                    return false;
-                }
+    public boolean isTOSClassNameUnique(String name) {
+        return this.isNameUnique (name, new NameChecker () {
+            public boolean checkTOSClass (TOSClass o, String name) {
+                return o.getClassName ().equals (name);
             }
-        }
-        return true;
+        });
     }
 
-    public boolean isTObjectNameUnique(String s) {
-        Object o;
-        TClassInterface t;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = (TGComponent)(iterator.next());
-            if (o instanceof TClassInterface) {
-                t = (TClassInterface)o;
-                if (t.getClassName().equals(s)) {
-                    return false;
-                }
+    public boolean isTMLTaskNameUnique(String name) {
+        return this.isNameUnique (name, new NameChecker () {
+            public boolean checkTMLTaskInterface (TMLTaskInterface o, String name) {
+                return o.getTaskName ().equals (name);
             }
-        }
-        return true;
+        });
+    }
+
+    public boolean isBlockNameUnique(String name) {
+        return this.isNameUnique (name, new NameChecker () {
+            public boolean checkATDBlock (ATDBlock o, String name) {
+                return o.getName ().equals (name);
+            }
+        });
+    }
+
+    /**
+     * Check if any other <b>block, library function or data type</b>
+     * (contrary to what the name suggests) has this name.
+     *
+     * @param name
+     *      The name to check.
+     *
+     * @return true if the name is unique, false otherwise.
+     */
+    public boolean isAvatarBlockNameUnique (String name) {
+        return this.isNameUnique (name, new NameChecker () {
+            public boolean checkAvatarBDBlock (AvatarBDBlock o, String name) {
+                if (o.getValue ().equals (name))
+                    return true;
+                return o.hasInternalBlockWithName (name);
+            }
+            public boolean checkAvatarBDLibraryFunction (AvatarBDLibraryFunction o, String name) {
+                return o.getFunctionName ().equals (name);
+            }
+            public boolean checkAvatarBDDataType (AvatarBDDataType o, String name) {
+                return o.getDataTypeName ().equals (name);
+            }
+        });
+    }
+
+    public boolean isNCNameUnique(String name) {
+        return this.isNameUnique (name, new NameChecker () {
+            public boolean checkNCEqNode (NCEqNode o, String name) {
+                if (o.getName ().equals (name))
+                    return true;
+                for (NCTrafficArtifact arti: o.getArtifactList ())
+                    if (arti.getValue ().equals (name))
+                        return true;
+                return false;
+            }
+            public boolean checkNCSwitchNode (NCSwitchNode o, String name) {
+                if (o.getName ().equals (name))
+                    return true;
+                for (NCRouteArtifact arti: o.getArtifactList ())
+                    if (arti.getValue ().equals (name))
+                        return true;
+                return false;
+            }
+            public boolean checkNCConnectorNode (NCConnectorNode o, String name) {
+                return o.getInterfaceName ().equals (name);
+            }
+        });
+    }
+
+    public boolean isRequirementNameUnique(String name) {
+        return this.isNameUnique (name, new NameChecker () {
+            public boolean checkRequirement (Requirement o, String name) {
+                return o.getRequirementName ().equals (name);
+            }
+        });
+    }
+
+    public boolean isTObjectNameUnique(String name) {
+        // FIXME: this is not coherent with findTObjectName !!!
+        return this.isNameUnique (name, new NameChecker () {
+            public boolean checkTClassInterface (TClassInterface o, String name) {
+                return o.getClassName ().equals (name);
+            }
+        });
     }
 
     // For compatibility with ttool v0.41
     // Assumes no internal duplicate id
     public void checkForDuplicateId() {
-        TGComponent tgc1, tgc2;
-        int id;
-        int i, j;
-
-        for(i=0; i<componentList.size(); i++) {
-            tgc1 = (TGComponent)(componentList.get(i));
-            for(j=0; j<componentList.size(); j++) {
+        for(int i=0; i<componentList.size(); i++) {
+            TGComponent tgc1 = (TGComponent)(componentList.get(i));
+            for(int j=0; j<componentList.size(); j++)
                 if (j != i) {
-                    tgc2 = (TGComponent)(componentList.get(j));
+                    TGComponent tgc2 = (TGComponent)(componentList.get(j));
                     tgc2 = tgc2.getIfId(tgc1.getId());
                     if (tgc2 != null) {
                         TraceManager.addDev("*** Same ID ***");
@@ -3390,7 +2737,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                         TraceManager.addDev("tgc2" + tgc2.getClass());
                     }
                 }
-            }
         }
     }
 
@@ -3402,164 +2748,101 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
       }
       }*/
 
-    public Vector getTClasses() {
-        Vector v = new Vector();
-        Object o;
-        Iterator iterator = componentList.iterator();
+    public Vector<TCDTClass> getTClasses() {
+        Vector<TCDTClass> v = new Vector<TCDTClass> ();
 
-        while(iterator.hasNext()) {
-            o = iterator.next();
-            if (o instanceof TCDTClass) {
-                v.add(o);
-            }
-        }
+        for (TGComponent o: this.componentList)
+            if (o instanceof TCDTClass)
+                v.add((TCDTClass) o);
 
         return v;
     }
 
     public Vector<String> getAllDataTypes() {
         Vector<String> v = new Vector<String>();
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-
-            if (tgc instanceof AvatarBDDataType) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc instanceof AvatarBDDataType)
                 v.add(((AvatarBDDataType)(tgc)).getDataTypeName());
-            }
-        }
 
         return v;
     }
 
     public void removeSynchronizedGates(Vector v, TClassInterface t, TCDSynchroGateList tcdsgl ) {
-        TGComponent tgc;
-        TCDCompositionOperatorWithSynchro tgso;
-        Vector ttwoattrib;
         int j = 0;
-        TTwoAttributes tt;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-
+        for (TGComponent tgc: this.componentList)
             if (tgc instanceof TCDCompositionOperatorWithSynchro) {
-                tgso = (TCDCompositionOperatorWithSynchro)tgc;
+                TCDCompositionOperatorWithSynchro tgso = (TCDCompositionOperatorWithSynchro)tgc;
 
-                if ((tgso.getT1() == t) ||(tgso.getT2() == t)) {
-                    if (tgso.getSynchroGateList() != tcdsgl) {
-                        ttwoattrib = tgso.getSynchroGateList().getGates();
-                        for(j=0; j<ttwoattrib.size(); j++) {
-                            tt = (TTwoAttributes)(ttwoattrib.elementAt(j));
-                            if (tt.t1 == t) {
-                                v.removeElement(tt.ta1);
-                            } else {
-                                v.removeElement(tt.ta2);
-                            }
-                        }
+                if (((tgso.getT1() == t) || (tgso.getT2() == t)) && tgso.getSynchroGateList() != tcdsgl) {
+                    Vector ttwoattrib = tgso.getSynchroGateList().getGates();
+                    for(j=0; j<ttwoattrib.size(); j++) {
+                        TTwoAttributes tt = (TTwoAttributes)(ttwoattrib.elementAt(j));
+                        if (tt.t1 == t)
+                            v.removeElement(tt.ta1);
+                        else
+                            v.removeElement(tt.ta2);
                     }
                 }
             }
-        }
     }
 
     public boolean isASynchronizedGate(TAttribute ta) {
-        TGComponent tgc;
-        TCDCompositionOperatorWithSynchro tgso;
-        Vector ttwoattrib;
-        TTwoAttributes tt;
-        Iterator iterator = componentList.listIterator();
-        int j;
-
-        //TraceManager.addDev("Checking " + ta);
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-
+        for (TGComponent tgc: this.componentList)
             if (tgc instanceof TCDCompositionOperatorWithSynchro) {
-                tgso = (TCDCompositionOperatorWithSynchro)tgc;
-                ttwoattrib = tgso.getSynchroGateList().getGates();
-                for(j=0; j<ttwoattrib.size(); j++) {
-                    tt = (TTwoAttributes)(ttwoattrib.elementAt(j));
-                    //TraceManager.addDev("tt= " + tt);
-                    if ((tt.ta1 == ta) || (tt.ta2 == ta)) {
-                        //TraceManager.addDev("true");
+                TCDCompositionOperatorWithSynchro tgso = (TCDCompositionOperatorWithSynchro)tgc;
+                Vector ttwoattrib = tgso.getSynchroGateList().getGates();
+                for(int j=0; j<ttwoattrib.size(); j++) {
+                    TTwoAttributes tt = (TTwoAttributes)(ttwoattrib.elementAt(j));
+                    if ((tt.ta1 == ta) || (tt.ta2 == ta))
                         return true;
-                    }
-                    //TraceManager.addDev("false!");
                 }
             }
-        }
+
         return false;
     }
 
     public boolean hasAlreadyAnInstance(TCDTObject to) {
-        Object o;
-        TClassInterface t;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = iterator.next();
+        for (TGComponent o: this.componentList)
             if ((o instanceof TClassInterface)  && (!o.equals(to))){
-                t = (TClassInterface)o;
-                if (t.getClassName().compareTo(to.getClassName()) == 0) {
+                TClassInterface t = (TClassInterface)o;
+                if (t.getClassName().compareTo(to.getClassName()) == 0)
                     return true;
-                }
             }
-        }
 
         return false;
     }
 
     // updates attributes and gates
     public void updateInstances(TCDTClass tc) {
-        Object o;
-        TCDTObject to;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = iterator.next();
-            if (o instanceof TCDTObject){
-                to = (TCDTObject)o;
+        for (TGComponent o: this.componentList)
+            if (o instanceof TCDTObject) {
+                TCDTObject to = (TCDTObject)o;
                 if (to.getMasterTClass() == tc) {
                     to.updateAttributes(tc.getAttributes());
                     to.updateGates(tc.getGates());
                 }
             }
-        }
     }
 
     public void resetAllInstancesOf(TCDTClass tc) {
-        Object o;
-        TCDTObject to;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = iterator.next();
+        for (TGComponent o: this.componentList)
             if (o instanceof TCDTObject){
-                to = (TCDTObject)o;
-                if (to.getMasterTClass() == tc) {
+                TCDTObject to = (TCDTObject)o;
+                if (to.getMasterTClass() == tc)
                     to.reset();
-                }
             }
-        }
     }
 
     public TCDTClass findTClassByName(String name) {
-        TCDTClass tc;
-        Object o;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            o = iterator.next();
+        for (TGComponent o: this.componentList)
             if (o instanceof TCDTClass){
-                tc = (TCDTClass)o;
-                if (tc.getClassName().compareTo(name) == 0) {
+                TCDTClass tc = (TCDTClass)o;
+                if (tc.getClassName().compareTo(name) == 0)
                     return tc;
-                }
             }
-        }
+
         return null;
     }
 
@@ -3626,13 +2909,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public int getRealMinX() {
         int res = maxX;
-        int cur;
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            cur = tgc.getCurrentMinX();
+        for (TGComponent tgc: this.componentList) {
+            int cur = tgc.getCurrentMinX();
             //TraceManager.addDev("cur=" + cur + " res=" + res + " tgc=" + tgc.getName());
             if (cur < res)
                 res = cur;
@@ -3649,13 +2928,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public int getRealMinY() {
         int res = maxY;
-        int cur;
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            cur = tgc.getCurrentMinY();
+        for (TGComponent tgc: this.componentList) {
+            int cur = tgc.getCurrentMinY();
             if (cur < res)
                 res = cur;
         }
@@ -3671,13 +2946,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public int getRealMaxX() {
         int res = limit;
-        int cur;
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            cur = tgc.getCurrentMaxX();
+        for (TGComponent tgc: this.componentList) {
+            int cur = tgc.getCurrentMaxX();
             if (cur > res)
                 res = cur;
         }
@@ -3686,13 +2957,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public int getRealMaxY() {
         int res = limit;
-        int cur;
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            cur = tgc.getCurrentMaxY();
+        for (TGComponent tgc: this.componentList) {
+            int cur = tgc.getCurrentMaxY();
             if (cur > res)
                 res = cur;
         }
@@ -3705,15 +2972,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public TGComponent getSecondTGComponent(TGConnector tgco) {
         TGConnectingPoint p = tgco.getTGConnectingPointP2();
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc.belongsToMe(p)) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc.belongsToMe(p))
                 return tgc;
-            }
-        }
+
         return null;
     }
 
@@ -3735,29 +2998,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void checkAllMySize() {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             tgc.checkAllMySize();
-        }
     }
 
     public void enhance() {
-
     }
 
     public void autoAdjust() {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TGAutoAdjust) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc instanceof TGAutoAdjust)
                 ((TGAutoAdjust)tgc).autoAdjust(adjustMode);
-            }
-        }
+
         adjustMode = (adjustMode + 1)% 2;
 
         repaint();
@@ -3794,9 +3046,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         TGConnector tgco;
 
-        TGComponent tgc;
-        Iterator iterator;
-
         for(i=0; i<added.getNbConnectingPoint(); i++) {
 
             tgcp = added.getTGConnectingPointAtIndex(i);
@@ -3806,9 +3055,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 found = null;
                 distance = 100;
 
-                iterator = componentList.listIterator();
-                while(iterator.hasNext()) {
-                    tgc = (TGComponent)(iterator.next());
+                for (TGComponent tgc: this.componentList)
                     if (tgc != added) {
                         for(j=0; j<tgc.getNbConnectingPoint(); j++) {
                             tgcp1 = tgc.getTGConnectingPointAtIndex(j);
@@ -3828,7 +3075,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                         }
 
                     }
-                }
                 if (found != null) {
                     //TraceManager.addDev("Adding connector");
                     if (found.isIn()) {
@@ -3838,7 +3084,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     }
                     found.setFree(false);
                     tgcp.setFree(false);
-                    componentList.add(tgco);
+                    this.componentList.add(tgco);
                     //TraceManager.addDev("Connector added");
                 }
             }
@@ -3847,39 +3093,25 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void resetAllDIPLOIDs() {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             tgc.setDIPLOID(-1);
-        }
     }
 
     public void getListOfBreakPoints(ArrayList<Point> points, int taskID) {
-        Point p;
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-        int i;
-        boolean found;
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             if (tgc.getBreakpoint() && (tgc.getDIPLOID() != -1)) {
-                found = false;
-                for(i=0; i<points.size(); i++) {
+                boolean found = false;
+                for(int i=0; i<points.size(); i++)
                     if (points.get(i).y == tgc.getDIPLOID()) {
                         found = true;
                         break;
                     }
-                }
+
                 if (!found) {
-                    p = new Point(taskID, tgc.getDIPLOID());
+                    Point p = new Point(taskID, tgc.getDIPLOID());
                     points.add(p);
                 }
             }
-        }
-
     }
 
     public String svgCapture() {
@@ -3933,30 +3165,36 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
+    public boolean changeStateMachineTabName (String oldValue, String newValue) {
+        int stateMachineTab = -1;
+        for(int i = 0; i<this.tp.tabbedPane.getTabCount(); i++) {
+            if (this.tp.tabbedPane.getTitleAt (i).equals (newValue))
+                return false;
+
+            if (this.tp.tabbedPane.getTitleAt (i).equals (oldValue))
+                stateMachineTab = i;
+        }
+
+        if (stateMachineTab < 0)
+            return false;
+
+        this.tp.tabbedPane.setTitleAt (stateMachineTab, newValue);
+        this.tp.tabbedPane.setToolTipTextAt (stateMachineTab, "Opens the state machine of " + newValue);
+
+        //change panel name
+        for (int j=0; j<this.tp.panels.size(); j++) {
+            TDiagramPanel tdp = (TDiagramPanel) (this.tp.panels.elementAt(j));
+            if (tdp.getName().equals(oldValue))
+                tdp.setName(newValue);
+        }
+
+        return true;
+    }
+
     public void searchForText(String text, Vector<Object> elements) {
         TraceManager.addDev("Searching for " + text + " in " + this);
 
-        Iterator iterator = componentList.listIterator();
-        TGComponent tgc;
-        String save;
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: this.componentList)
             tgc.searchForText(text, elements);
-            /*save = tgc.saveInXML().toString().toLowerCase();
-              if (save.indexOf(text) >= 0) {
-              TraceManager.addDev("Found " + tgc);
-              elements.add(tgc);
-              CheckingError ce = new CheckingError(CheckingError.INFO, tgc.toString());
-              ce.setTDiagramPanel(this);
-              ce.setTGComponent(tgc);
-              elements.add(ce);
-              }*/
-        }
-
     }
-
-
-
-
 }

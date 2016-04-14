@@ -58,7 +58,7 @@ import ui.window.*;
 import ui.avatarsmd.*;
 
 
-public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, GenericTree {
+public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, GenericTree, AvatarBDStateMachineOwner {
 
     private static String GLOBAL_CODE_INFO = "(global code)";
 
@@ -84,7 +84,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
 
     // TAttribute, AvatarMethod, AvatarSignal
-    protected Vector myAttributes, myMethods, mySignals;
+    protected Vector<TAttribute> myAttributes;
+    protected Vector<AvatarMethod> myMethods;
+    protected Vector<AvatarSignal> mySignals;
     protected String [] globalCode;
 
 
@@ -138,9 +140,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         myImageIcon = IconManager.imgic700;
 
-        myAttributes = new Vector();
-        myMethods = new Vector();
-        mySignals = new Vector();
+        this.myAttributes = new Vector<TAttribute> ();
+        this.myMethods = new Vector<AvatarMethod> ();
+        this.mySignals = new Vector<AvatarSignal> ();
 
         actionOnAdd();
     }
@@ -263,12 +265,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             g.setFont(f);
             int step = si + 2;
 
-            while(index < myAttributes.size()) {
+            while(index < this.myAttributes.size()) {
                 cpt += step ;
                 if (cpt >= (height - textX)) {
                     break;
                 }
-                a = (TAttribute)(myAttributes.get(index));
+                a = this.myAttributes.get(index);
                 attr = a.toAvatarString();
                 w = g.getFontMetrics().stringWidth(attr);
                 if ((w + (2 * textX) + 1) < width) {
@@ -299,7 +301,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         // Methods
         if (((AvatarBDPanel)tdp).areAttributesVisible()) {
             limitMethod = -1;
-            if (myMethods.size() > 0) {
+            if (this.myMethods.size() > 0) {
                 if (cpt < height) {
                     cpt += textY1;
                     g.drawLine(x, y+cpt, x+width, y+cpt);
@@ -318,12 +320,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             g.setFont(f);
             int step = si + 2;
 
-            while(index < myMethods.size()) {
+            while(index < this.myMethods.size()) {
                 cpt += step ;
                 if (cpt >= (height - textX)) {
                     break;
                 }
-                am = (AvatarMethod)(myMethods.get(index));
+                am = this.myMethods.get (index);
                 method = "~ " + am.toString();
                 w = g.getFontMetrics().stringWidth(method);
                 if ((w + (2 * textX) + 1) < width) {
@@ -349,7 +351,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         // Signals
         if (((AvatarBDPanel)tdp).areAttributesVisible()) {
 
-            if (mySignals.size() > 0) {
+            if (this.mySignals.size() > 0) {
                 if (cpt < height) {
                     cpt += textY1;
                     g.drawLine(x, y+cpt, x+width, y+cpt);
@@ -368,12 +370,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             g.setFont(f);
             int step = si + 2;
 
-            while(index < mySignals.size()) {
+            while(index < this.mySignals.size()) {
                 cpt += step ;
                 if (cpt >= (height - textX)) {
                     break;
                 }
-                as = (AvatarSignal)(mySignals.get(index));
+                as = this.mySignals.get (index);
                 signal = "~ " + as.toString();
                 w = g.getFontMetrics().stringWidth(signal);
                 if ((w + (2 * textX) + 1) < width) {
@@ -531,7 +533,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
 
         if ((limitMethod == -1) && (limitAttr == -1)) {
-            if (mySignals.size() > 1) {
+            if (this.mySignals.size() > 1) {
                 tab = 2;
             }
         }
@@ -541,7 +543,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         if (ttdp instanceof AvatarBDPanel) {
             mainCode = ((AvatarBDPanel)(ttdp)).getMainCode();
         }
-        JDialogAvatarBlock jdab = new JDialogAvatarBlock(myAttributes, myMethods, mySignals, null, frame, "Setting attributes of " + value, "Attribute", tab, globalCode, true, mainCode);
+        JDialogAvatarBlock jdab = new JDialogAvatarBlock(this.myAttributes, this.myMethods, this.mySignals, null, frame, "Setting attributes of " + value, "Attribute", tab, globalCode, true, mainCode);
         setJDialogOptions(jdab);
         jdab.setSize(650, 575);
         GraphicLib.centerOnParent(jdab);
@@ -679,19 +681,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
 
     protected String translateExtraParam() {
-        TAttribute a;
-        AvatarMethod am;
-        AvatarSignal as;
-
-        //System.out.println("Loading extra params of " + value);
-        //value = "";
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<CryptoBlock value=\"" + isCryptoBlock + "\" />\n");
-        for(int i=0; i<myAttributes.size(); i++) {
-            //System.out.println("Attribute:" + i);
-            a = (TAttribute)(myAttributes.elementAt(i));
-            //System.out.println("Attribute:" + i + " = " + a.getId());
-            //value = value + a + "\n";
+        for (TAttribute a: this.myAttributes) {
             sb.append("<Attribute access=\"");
             sb.append(a.getAccess());
             sb.append("\" id=\"");
@@ -704,20 +696,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             sb.append(a.getTypeOther());
             sb.append("\" />\n");
         }
-        for(int i=0; i<myMethods.size(); i++) {
-            //System.out.println("Attribute:" + i);
-            am = (AvatarMethod)(myMethods.elementAt(i));
-            //System.out.println("Attribute:" + i + " = " + a.getId());
-            //value = value + a + "\n";
+        for (AvatarMethod am: this.myMethods) {
             sb.append("<Method value=\"");
             sb.append(am.toSaveString());
             sb.append("\" />\n");
         }
-        for(int i=0; i<mySignals.size(); i++) {
-            //System.out.println("Attribute:" + i);
-            as = (AvatarSignal)(mySignals.elementAt(i));
-            //System.out.println("Attribute:" + i + " = " + a.getId());
-            //value = value + a + "\n";
+        for (AvatarSignal as: this.mySignals) {
             sb.append("<Signal value=\"");
             sb.append(as.toString());
             sb.append("\" />\n");
@@ -794,7 +778,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                     }
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
                                     ta.isAvatar = true;
-                                    myAttributes.addElement(ta);
+                                    this.myAttributes.addElement(ta);
                                 }
                             }
                             if (elt.getTagName().equals("Method")) {
@@ -819,7 +803,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 if (am != null) {
                                     //TraceManager.addDev("Setting to " + implementation + " the implementation of " + am);
                                     am.setImplementationProvided(implementation);
-                                    myMethods.add(am);
+                                    this.myMethods.add(am);
                                 }
                             }
                             if (elt.getTagName().equals("Signal")) {
@@ -831,7 +815,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 }
                                 as = AvatarSignal.isAValidSignal(signal);
                                 if (as != null) {
-                                    mySignals.add(as);
+                                    this.mySignals.add(as);
                                 } else {
                                     TraceManager.addDev("Invalid signal:" + signal);
                                 }
@@ -959,96 +943,76 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return TGComponentManager.AVATARBD_PORT_CONNECTOR;
     }
 
-    public Vector getAttributeList() {
-        return myAttributes;
+    public Vector<TAttribute> getAttributeList() {
+        return this.myAttributes;
     }
 
     public TAttribute getAttributeByName(String _name) {
-        TAttribute a;
-        for(int i=0; i<myAttributes.size(); i++) {
-            a = (TAttribute)(myAttributes.elementAt(i));
-            if (a.getId().compareTo(_name) == 0) {
+        for (TAttribute a: this.myAttributes)
+            if (a.getId().compareTo(_name) == 0)
                 return a;
-            }
-        }
         return null;
     }
 
-    public Vector getMethodList() {
-        return myMethods;
+    public Vector<AvatarMethod> getMethodList() {
+        return this.myMethods;
     }
 
-    public Vector getSignalList() {
-        return mySignals;
+    public Vector<AvatarSignal> getSignalList() {
+        return this.mySignals;
     }
 
-    public Vector getOutSignalList() {
-        Vector v = new Vector();
-        AvatarSignal s;
-	for(int i=0; i<mySignals.size(); i++) {
-            s = (AvatarSignal)(mySignals.get(i));
-            if (s.getInOut() == AvatarSignal.OUT) {
+    public Vector<AvatarSignal> getOutSignalList() {
+        Vector<AvatarSignal> v = new Vector<AvatarSignal> ();
+	for(AvatarSignal s: this.mySignals)
+            if (s.getInOut() == AvatarSignal.OUT)
                 v.add(s);
-            }
-        }
         return v;
     }
 
-    public Vector getInSignalList() {
-        Vector v = new Vector();
-        AvatarSignal s;
-	for(int i=0; i<mySignals.size(); i++) {
-            s = (AvatarSignal)(mySignals.get(i));
-            if (s.getInOut() == AvatarSignal.IN) {
+    public Vector<AvatarSignal> getInSignalList() {
+        Vector<AvatarSignal> v = new Vector<AvatarSignal> ();
+	for(AvatarSignal s: this.mySignals)
+            if (s.getInOut() == AvatarSignal.IN)
                 v.add(s);
-            }
-        }
         return v;
     }
 
-    public Vector getAllMethodList() {
+    public Vector<AvatarMethod> getAllMethodList() {
         if (getFather() == null) {
-            return myMethods;
+            return this.myMethods;
         }
 
-        Vector v = new Vector();
-        v.addAll(myMethods);
-        v.addAll(((AvatarBDBlock)getFather()).getAllMethodList());
+        Vector<AvatarMethod> v = new Vector<AvatarMethod> ();
+        v.addAll(this.myMethods);
+        v.addAll(((AvatarBDBlock) getFather()).getAllMethodList());
         return v;
     }
 
-    public Vector getAllSignalList() {
+    public Vector<AvatarSignal> getAllSignalList() {
         if (getFather() == null) {
-            return mySignals;
+            return this.mySignals;
         }
 
-        Vector v = new Vector();
-        v.addAll(mySignals);
+        Vector<AvatarSignal> v = new Vector<AvatarSignal> ();
+        v.addAll(this.mySignals);
         v.addAll(((AvatarBDBlock)getFather()).getAllSignalList());
         return v;
     }
 
-    public Vector getAllTimerList() {
-        Vector v = new Vector();
-        TAttribute a;
+    public Vector<String> getAllTimerList() {
+        Vector<String> v = new Vector<String> ();
 
-        for(int i=0; i<myAttributes.size(); i++) {
-            a = (TAttribute)(myAttributes.elementAt(i));
-            if (a.getType() == TAttribute.TIMER) {
+        for (TAttribute a: this.myAttributes)
+            if (a.getType() == TAttribute.TIMER)
                 v.add(a.getId());
-            }
-        }
         return v;
     }
 
     public AvatarSignal getAvatarSignalFromName(String _name) {
-        AvatarSignal as;
-        for(int i=0; i<mySignals.size(); i++) {
-            as = (AvatarSignal)(mySignals.get(i));
-            if (as.getId().compareTo(_name) == 0) {
+        for (AvatarSignal as: this.mySignals)
+            if (as.getId().compareTo(_name) == 0)
                 return as;
-            }
-        }
         return null;
     }
 
@@ -1073,14 +1037,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
         _id = _id.trim();
         //TraceManager.addDev("Searching for signal with id=" + _id);
-        AvatarSignal as;
-        for(int i=0; i<mySignals.size(); i++) {
-            as = (AvatarSignal)(mySignals.get(i));
-            if (as.getId().compareTo(_id) == 0) {
-                //TraceManager.addDev("found");
+        for (AvatarSignal as: this.mySignals)
+            if (as.getId().compareTo(_id) == 0)
                 return as;
-            }
-        }
         //TraceManager.addDev("Not found");
         return null;
     }
@@ -1107,190 +1066,49 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     public void removeCryptoElements() {
         isCryptoBlock = false;
 
-        // Adding function
-        String method = "Message aencrypt(Message msg, Key k)";
-        removeMethodIfApplicable(myMethods, method);
-        method = "Message adecrypt(Message msg, Key k)";
-        removeMethodIfApplicable(myMethods, method);
-        method = "Key pk(Key k)";
-        removeMethodIfApplicable(myMethods, method);
-        method = "Message sign(Message msg, Key k)";
-        removeMethodIfApplicable(myMethods, method);
-        method = "bool verifySign(Message msg1, Message sig, Key k)";
-        removeMethodIfApplicable(myMethods, method);
-
-        /* Certifying */
-        method = "Message cert(Key k, Message msg)";
-        removeMethodIfApplicable(myMethods, method);
-        method = "bool verifyCert(Message cert, Key k)";
-        removeMethodIfApplicable(myMethods, method);
-        method = "Key getpk(Message cert)";
-        removeMethodIfApplicable(myMethods, method);
-
-
-        method = "Message sencrypt(Message msg, Key k)";
-        removeMethodIfApplicable(myMethods, method);
-        method = "Message sdecrypt(Message msg, Key k)";
-        removeMethodIfApplicable(myMethods, method);
-
-        method = "Message hash(Message msg)";
-        removeMethodIfApplicable(myMethods, method);
-
-        method = "Message MAC(Message msg, Key k)";
-        removeMethodIfApplicable(myMethods, method);
-        method = "bool verifyMAC(Message msg, Key k, Message macmsg)";
-        removeMethodIfApplicable(myMethods, method);
-
-        method = "Message concat2(Message msg1, Message msg2)";
-        removeMethodIfApplicable(myMethods, method);
-
-        method = "Message concat3(Message msg1, Message msg2, Message msg3)";
-        removeMethodIfApplicable(myMethods, method);
-
-        method = "Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)";
-        removeMethodIfApplicable(myMethods, method);
-
-
-        method = "get2(Message msg, Message msg1, Message msg2)";
-        removeMethodIfApplicable(myMethods, method);
-
-        method = "get3(Message msg, Message msg1, Message msg2, Message msg3)";
-        removeMethodIfApplicable(myMethods, method);
-
-        method = "get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)";
-        removeMethodIfApplicable(myMethods, method);
-
-        // Adding channels chin chout
-        /*String signal = "in chin(Message msg)";
-          addSignalIfApplicable(mySignals, signal);
-          signal = "out chout(Message msg)";
-          addSignalIfApplicable(mySignals, signal);*/
-
+        for (String method: AvatarMethod.cryptoMethods)
+            this.removeMethodIfApplicable (method);
     }
 
     public void addCryptoElements() {
         isCryptoBlock = true;
 
-        // Adding function
-        String method = "Message aencrypt(Message msg, Key k)";
-        addMethodIfApplicable(myMethods, method);
-        method = "Message adecrypt(Message msg, Key k)";
-        addMethodIfApplicable(myMethods, method);
-        method = "Key pk(Key k)";
-        addMethodIfApplicable(myMethods, method);
-        method = "Message sign(Message msg, Key k)";
-        addMethodIfApplicable(myMethods, method);
-        method = "bool verifySign(Message msg1, Message sig, Key k)";
-        addMethodIfApplicable(myMethods, method);
-
-        /* Certifying */
-        method = "Message cert(Key k, Message msg)";
-        addMethodIfApplicable(myMethods, method);
-        method = "bool verifyCert(Message cert, Key k)";
-        addMethodIfApplicable(myMethods, method);
-        method = "Key getpk(Message cert)";
-        addMethodIfApplicable(myMethods, method);
-
-
-        method = "Message sencrypt(Message msg, Key k)";
-        addMethodIfApplicable(myMethods, method);
-        method = "Message sdecrypt(Message msg, Key k)";
-        addMethodIfApplicable(myMethods, method);
-
-        method = "Message hash(Message msg)";
-        addMethodIfApplicable(myMethods, method);
-
-        method = "Message MAC(Message msg, Key k)";
-        addMethodIfApplicable(myMethods, method);
-        method = "bool verifyMAC(Message msg, Key k, Message macmsg)";
-        addMethodIfApplicable(myMethods, method);
-
-        method = "Message concat2(Message msg1, Message msg2)";
-        addMethodIfApplicable(myMethods, method);
-
-        method = "Message concat3(Message msg1, Message msg2, Message msg3)";
-        addMethodIfApplicable(myMethods, method);
-
-        method = "Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)";
-        addMethodIfApplicable(myMethods, method);
-
-
-        method = "get2(Message msg, Message msg1, Message msg2)";
-        addMethodIfApplicable(myMethods, method);
-
-        method = "get3(Message msg, Message msg1, Message msg2, Message msg3)";
-        addMethodIfApplicable(myMethods, method);
-
-        method = "get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)";
-        addMethodIfApplicable(myMethods, method);
-
-        // Adding channels chin chout
-        /*String signal = "in chin(Message msg)";
-          addSignalIfApplicable(mySignals, signal);
-          signal = "out chout(Message msg)";
-          addSignalIfApplicable(mySignals, signal);*/
-
+        for (String method: AvatarMethod.cryptoMethods)
+            this.addMethodIfApplicable (method);
     }
 
-    private void removeMethodIfApplicable(Vector _v, String _s) {
-        AvatarMethod am = null;
-        for(Object o: _v) {
-            if (o instanceof AvatarMethod) {
-                am = (AvatarMethod)o;
-                if (am.toString().compareTo(_s) == 0) {
-                    break;
-                }
+    private void removeMethodIfApplicable(String methodString) {
+        Iterator<AvatarMethod> iterator = this.myMethods.iterator ();
+        while (iterator.hasNext ()) {
+            AvatarMethod am = iterator.next ();
+            // TODO: replace by a more OO way...
+            if (am.toString ().equals (methodString)) {
+                iterator.remove ();
+                break;
             }
         }
-
-        if (am != null) {
-            _v.remove(am);
-        }
     }
 
-    private void addMethodIfApplicable(Vector _v, String _s) {
-        AvatarMethod am;
-        for(Object o: _v) {
-            if (o instanceof AvatarMethod) {
-                am = (AvatarMethod)o;
-                if (am.toString().compareTo(_s) == 0) {
+    private void addMethodIfApplicable (String methodString) {
+        for (AvatarMethod am: this.myMethods)
+            // TODO: replace by a more OO way...
+            if (am.toString ().equals (methodString))
                     return;
-                }
-            }
-        }
 
-        am = AvatarMethod.isAValidMethod(_s);
-        if (am != null) {
-            _v.add(am);
-        }
-    }
-
-    private void addSignalIfApplicable(Vector _v, String _s) {
-        AvatarSignal as;
-        for(Object o: _v) {
-            if (o instanceof AvatarSignal) {
-                as = (AvatarSignal)o;
-                if (as.toString().compareTo(_s) == 0) {
-                    return;
-                }
-            }
-        }
-
-        as = AvatarSignal.isAValidSignal(_s);
-        if (as != null) {
-            _v.add(as);
-        }
+        AvatarMethod am = AvatarMethod.isAValidMethod (methodString);
+        if (am != null)
+            this.myMethods.add (am);
     }
 
     public boolean hasDefinitions() {
-        return ((myAttributes.size() + myMethods.size() + mySignals.size() + nbInternalTGComponent)>0);
+        return ((this.myAttributes.size() + this.myMethods.size() + this.mySignals.size() + nbInternalTGComponent)>0);
     }
 
     // Main Tree
 
     public int getChildCount() {
         //TraceManager.addDev("Counting childs!");
-        return myAttributes.size() + myMethods.size() + mySignals.size() + nbInternalTGComponent;
+        return this.myAttributes.size() + this.myMethods.size() + this.mySignals.size() + nbInternalTGComponent;
     }
 
     public Object getChild(int index) {
@@ -1302,19 +1120,19 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
 
         index = index - nbInternalTGComponent;
-        sa = myAttributes.size();
+        sa = this.myAttributes.size();
         //      TraceManager.addDev("index = " + index + " sa=" + sa);
         if (sa <= index) {
             index = index - sa;
-            sa = myMethods.size();
+            sa = this.myMethods.size();
             if (sa <= index) {
-                return mySignals.get(index - sa);
+                return this.mySignals.get(index - sa);
             } else {
-                return myMethods.get(index);
+                return this.myMethods.get(index);
             }
         }
 
-        return myAttributes.get(index);
+        return this.myAttributes.get(index);
     }
 
     public int getIndexOfChild(Object child) {
@@ -1327,15 +1145,15 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
 
         if (child instanceof TAttribute) {
-            return myAttributes.indexOf(child) + nbInternalTGComponent;
+            return this.myAttributes.indexOf(child) + nbInternalTGComponent;
         }
 
         if (child instanceof AvatarMethod) {
-            return myMethods.indexOf(child) + myAttributes.size() + nbInternalTGComponent;
+            return this.myMethods.indexOf(child) + this.myAttributes.size() + nbInternalTGComponent;
         }
 
         if (child instanceof AvatarSignal) {
-            return mySignals.indexOf(child) + myAttributes.size() + myMethods.size() + nbInternalTGComponent;
+            return this.mySignals.indexOf(child) + this.myAttributes.size() + this.myMethods.size() + nbInternalTGComponent;
         }
 
         return -1;
@@ -1346,14 +1164,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
 
     public void resetConfidentialityOfAttributes() {
-        TAttribute a;
-
-        for(int i=0; i<myAttributes.size(); i++) {
-            a = (TAttribute)(myAttributes.elementAt(i));
+        for (TAttribute a: this.myAttributes)
             a.setConfidentialityVerification(TAttribute.NOT_VERIFIED);
-        }
     }
 
-
-
+    @Override
+    public String getOwnerName () {
+        return this.getBlockName ();
+    }
 }

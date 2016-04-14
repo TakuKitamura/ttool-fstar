@@ -90,6 +90,12 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
     private LinkedList<AvatarAttribute> returnAttributes;
 
     /**
+     * The list of methods that can be used by the function.
+     *
+     */
+    private LinkedList<AvatarMethod> methods;
+
+    /**
      * The state machine describing the behaviour of the function.
      */
     private AvatarStateMachine asm;

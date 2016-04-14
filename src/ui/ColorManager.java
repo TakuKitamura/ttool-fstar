@@ -152,6 +152,7 @@ public class ColorManager {
     //public static final Color AVATAR_BLOCK = new Color(158, 218, 227);
     //public static final Color AVATAR_BLOCK = new Color(149, 193, 210);
     public static  Color AVATAR_BLOCK = new Color(193, 218, 241);
+    public static  Color AVATAR_LIBRARYFUNCTION = new Color(237, 208, 14);
     //public static final Color AVATAR_DATATYPE = new Color(109, 193, 210);
     public static  Color AVATAR_DATATYPE = new Color(156, 220, 162);
     public static  Color AVATAR_SEND_SIGNAL = new Color(128, 180, 205);

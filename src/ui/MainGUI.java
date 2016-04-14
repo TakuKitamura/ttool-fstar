@@ -151,7 +151,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public  KeyListener keyHandler;
 
     // Validation
-    public Vector tclassesToValidate = new Vector();
+    public Vector<AvatarBDStateMachineOwner> tclassesToValidate = new Vector<AvatarBDStateMachineOwner> ();
 
     // Status bar
     private     JLabel status;
@@ -1848,7 +1848,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             activetdp = null;
 
             gtm = null;
-            tclassesToValidate = new Vector();
+            tclassesToValidate = new Vector<AvatarBDStateMachineOwner> ();
             MasterGateManager.reinitNameRestriction();
 
             typeButtonSelected = - 1;
@@ -3208,7 +3208,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             DesignPanel dp = (DesignPanel)tp;
             JDialogModelChecking.validated = dp.validated;
             JDialogModelChecking.ignored = dp.ignored;
-            tclassesToValidate = new Vector();
+            tclassesToValidate = new Vector<AvatarBDStateMachineOwner> ();
             JDialogModelChecking jdmc = new JDialogModelChecking(frame, tclassesToValidate,dp.tcdp.getComponentList(), "Choosing Tclasses to validate");
             if (!automatic) {
                 GraphicLib.centerOnParent(jdmc);
@@ -3292,7 +3292,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             //JDialogModelChecking.validated = adp.validated;
             //JDialogModelChecking.ignored = adp.ignored;
             tclassesToValidate = new Vector();
-            JDialogSelectAvatarBlock jdmc = new JDialogSelectAvatarBlock(frame, tclassesToValidate, adp.getAvatarBDPanel().getFullBlockList(), "Choosing blocks to validate", adp.getValidated(), adp.getIgnored(), adp.getOptimized());
+            JDialogSelectAvatarBlock jdmc = new JDialogSelectAvatarBlock(frame, tclassesToValidate, adp.getAvatarBDPanel().getFullStateMachineOwnerList(), "Choosing blocks to validate", adp.getValidated(), adp.getIgnored(), adp.getOptimized());
             if (!automatic) {
                 GraphicLib.centerOnParent(jdmc);
                 jdmc.setVisible(true); // blocked until dialog has been closed
@@ -3321,18 +3321,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     setMode(MainGUI.AVATAR_SYNTAXCHECKING_OK);
                     //setMode(MainGUI.MODEL_PROVERIF_OK);
                     //setMode(MainGUI.GEN_DESIGN_OK);
+                    /*
                     if (!automatic) {
                         JOptionPane.showMessageDialog(frame,
                                                       "0 error, " + getCheckingWarnings().size() + " warning(s). You can now perform simulations or formal proofs (UPPAAL)",
                                                       "Syntax analysis successful on avatar design diagrams",
                                                       JOptionPane.INFORMATION_MESSAGE);
                     }
+                    */
                 } else {
                     if (!automatic) {
                         JOptionPane.showMessageDialog(frame,
                                                       "The Avatar modeling contains several errors",
                                                       "Syntax analysis failed",
-                                                      JOptionPane.INFORMATION_MESSAGE);
+                                                      JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -5247,16 +5249,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return idButtonSelected;
     }
 
-    public void addAvatarBlock(TURTLEPanel tp, String s)        {
-        //TraceManager.addDev("ADD TML Task=" + s);
-        if (!(tp instanceof AvatarDesignPanel)) {
-            return;
-        }
-
-        ((AvatarDesignPanel)tp).addAvatarStateMachineDiagramPanel(s);
-        setPanelMode();
-    }
-
     public void addTClass(TURTLEPanel tp, String s)     {
         if (!(tp instanceof DesignPanel)) {
             return;
@@ -7017,43 +7009,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return false;
     }
 
-    public boolean newAvatarBDBlockName(TURTLEPanel tp, String old, String niou) {
-        //TraceManager.addDev("Panel=" + tp + " Old  task name = " + old + " New task name=" + niou);
-        JTabbedPane jtp = tp.tabbedPane;
-        int i;
-        for(i = 0; i<jtp.getTabCount(); i++) {
-            //TraceManager.addDev("jtp  = " + jtp.getTitleAt(i));
-            if (jtp.getTitleAt(i).equals(niou)) {
-                return false;
-            }
-        }
-        //TraceManager.addDev("old " + old + " niou " + niou);
-        //TraceManager.addDev("nb Of panels:"+ jtp.getTabCount());
-        for(i = 0; i<jtp.getTabCount(); i++) {
-            //TraceManager.addDev("Tab " + i + " = " + mainTabbedPane.getTitleAt(i));
-            //TraceManager.addDev("jtp  = >" + jtp.getTitleAt(i) + "<");
-            //TraceManager.addDev("old  = >" + old + "<");
-            if (jtp.getTitleAt(i).compareTo(old) == 0) {
-                jtp.setTitleAt(i, niou);
-                jtp.setToolTipTextAt(i, "Opens the state machine of " + niou);
-                TDiagramPanel tdp;
-                //change panel name
-                for(int j=0; j<tp.panels.size(); j++) {
-                    tdp = (TDiagramPanel)(tp.panels.elementAt(j));
-                    if (tdp.getName().equals(old)) {
-                        tdp.setName(niou);
-                        //TraceManager.addDev("Renamed to " + niou);
-                    }
-                }
-
-                return true;
-            }
-        }
-        // internal error
-        ErrorGUI.exit(ErrorGUI.ERROR_TAB);
-        return false;
-    }
-
     public boolean nameComponentInUse(TURTLEPanel tp, String old, String niou) {
         JTabbedPane jtp = tp.tabbedPane;
         for(int i = 0; i<jtp.getTabCount(); i++) {
@@ -8131,6 +8086,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARBD_COMPOSITION_CONNECTOR);
         } else if (command.equals(actions[TGUIAction.ABD_PORT_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARBD_PORT_CONNECTOR);
+        } else if (command.equals(actions[TGUIAction.ABD_LIBRARYFUNCTION].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_LIBRARYFUNCTION);
+        } else if (command.equals(actions[TGUIAction.ABD_CRYPTOLIBRARYFUNCTION].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_CRYPTOLIBRARYFUNCTION);
 
             // AVATAR SMD
         } else if (command.equals(actions[TGUIAction.ASMD_EDIT].getActionCommand())) {

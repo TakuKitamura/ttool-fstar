@@ -148,6 +148,7 @@ public class IconManager {
     public static ImageIcon imgic5040, imgic5042, imgic5044, imgic5046, imgic5048;
     public static ImageIcon imgic5050, imgic5052, imgic5054, imgic5056, imgic5058;
     public static ImageIcon imgic5060, imgic5062, imgic5064, imgic5066, imgic5068;
+    public static ImageIcon imgic5070;
 
     public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
     public static ImageIcon imgic5110, imgic5112, imgic5113,imgic5114;
@@ -524,6 +525,8 @@ public class IconManager {
 
 
     // AVATAR
+    public static final int iconSize = 15;
+
     private static String icon5000 = "images/avatarblock.gif";
     private static String icon5002 = "images/avatarbdcomp.gif";
     private static String icon5004 = "images/avatarbdlink.gif";
@@ -559,6 +562,7 @@ public class IconManager {
     private static String icon5064 = "images/avatarmadversioning.gif";
     private static String icon5066 = "images/avatarmadimpact.gif";
     private static String icon5068 = "images/avatarrdref.gif";
+    private static String icon5070 = "images/avatarlibfunction.gif";
 
     private static String icon5100 = "images/avatarhead16.gif";
     private static String icon5102 = "images/avatarhead32.gif";
@@ -954,6 +958,7 @@ public class IconManager {
         imgic5064 = getIcon(icon5064);
         imgic5066 = getIcon(icon5066);
 	imgic5068 = getIcon(icon5068);
+	imgic5070 = getIcon(icon5070);
 
         imgic5100 = getIcon(icon5100);
         imgic5102 = getIcon(icon5102);

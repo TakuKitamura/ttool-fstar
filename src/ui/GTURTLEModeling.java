@@ -1920,7 +1920,7 @@ public class GTURTLEModeling {
     }
 
     // BUILDING An AVATAR Design AND CHECKING IT
-    public boolean checkAvatarDesign(Vector blocks, AvatarDesignPanel adp, boolean _optimize) {
+    public boolean checkAvatarDesign(Vector<AvatarBDStateMachineOwner> blocks, AvatarDesignPanel adp, boolean _optimize) {
         // Builds a TURTLE modeling from diagrams
         //warnings = new Vector();
         //checkingErrors = null;

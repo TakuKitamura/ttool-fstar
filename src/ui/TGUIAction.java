@@ -334,6 +334,8 @@ public class TGUIAction extends AbstractAction {
     public static final int ABD_DATATYPE = 324;
     public static final int ABD_COMPOSITION_CONNECTOR = 290;
     public static final int ABD_PORT_CONNECTOR = 295;
+    public static final int ABD_LIBRARYFUNCTION = 428;
+    public static final int ABD_CRYPTOLIBRARYFUNCTION = 429;
 
     // AVATAR State Machine
     public static final int ASMD_EDIT = 291;
@@ -1049,6 +1051,8 @@ public class TGUIAction extends AbstractAction {
         actions[ABD_DATATYPE] = new TAction("abd-datatype", "Add a data type", IconManager.imgic5034, IconManager.imgic5034, "Data type", "Add a SysML Block representing a Data Type to the currently opened AVATAR Block Diagram", 0);
         actions[ABD_COMPOSITION_CONNECTOR] = new TAction("abd-composition-connector", "Add a composition connector between blocks", IconManager.imgic5002, IconManager.imgic5002, "Composition connector", "Add a composition between blocks of the currently opened AVATAR Block Diagram", 0);
         actions[ABD_PORT_CONNECTOR] = new TAction("abd-port-connector", "Add a composition connector between blocks", IconManager.imgic5004, IconManager.imgic5004, "Port connector", "Add a port link between blocks of the currently opened AVATAR Block Diagram", 0);
+        actions[ABD_LIBRARYFUNCTION] = new TAction("abd-libraryfunction", "Add a library function", IconManager.imgic5070, IconManager.imgic5000, "Library Function", "Add a Library Function to the currently opened AVATAR Block Diagram", 0);
+        actions[ABD_CRYPTOLIBRARYFUNCTION] = new TAction("abd-cryptolibraryfunction", "Add a crypto library function", IconManager.imgic5070, IconManager.imgic5000, "Crypto library function", "Add a Crypto Library Function to the currently opened AVATAR Block Diagram", 0);
 
         // AVATAR State Machine Diagrams
         actions[ASMD_EDIT] = new TAction("edit-asmd-diagram", "Edit AVATAR state machine diagram", IconManager.imgic100, IconManager.imgic101, "Edit AVATAR state machine diagram", "Make it possible to edit the currently opened AVATAR state machine diagram", 0);

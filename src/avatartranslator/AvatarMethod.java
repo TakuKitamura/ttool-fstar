@@ -51,7 +51,7 @@ import java.util.*;
 
 import myutil.*;
 
-public class AvatarMethod extends AvatarElement{
+public class AvatarMethod extends AvatarElement {
 
     protected boolean implementationProvided;
 

@@ -57,15 +57,15 @@ import ui.avatarbd.*;
 
 
 public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    public Vector validated, ignored;
+    public Vector<AvatarBDStateMachineOwner> validated, ignored;
     private boolean optimized = true;
 
-    private Vector val, ign, back;
+    private Vector<AvatarBDStateMachineOwner> val, ign, back;
 
     //subpanels
     private JPanel panel1, panel2, panel3, panel4, panel5, panel6;
-    private JList listIgnored;
-    private JList listValidated;
+    private JList<AvatarBDStateMachineOwner> listIgnored;
+    private JList<AvatarBDStateMachineOwner> listValidated;
     private JButton allValidated;
     private JButton addOneValidated;
     private JButton addOneIgnored;
@@ -79,7 +79,7 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
     private boolean hasBeenCancelled = false;
 
     /** Creates new form  */
-    public JDialogSelectAvatarBlock(Frame f, Vector _back, LinkedList componentList, String title, Vector _validated, Vector _ignored, boolean _optimized) {
+    public JDialogSelectAvatarBlock(Frame f, Vector<AvatarBDStateMachineOwner> _back, LinkedList<AvatarBDStateMachineOwner> componentList, String title, Vector<AvatarBDStateMachineOwner> _validated, Vector<AvatarBDStateMachineOwner> _ignored, boolean _optimized) {
         super(f, title, true);
 
         back = _back;
@@ -103,42 +103,24 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
         pack();
     }
 
-    private Vector makeNewVal(LinkedList list) {
-        Vector v = new Vector();
-        TGComponent tgc;
-
-        for(int i=0; i<list.size(); i++) {
-            tgc = (TGComponent)(list.get(i));
-            //System.out.println(tgc);
-            if (tgc instanceof AvatarBDBlock) {
-                v.addElement(tgc);
-            }
-        }
-        return v;
+    private Vector<AvatarBDStateMachineOwner> makeNewVal(LinkedList<AvatarBDStateMachineOwner> list) {
+        return new Vector<AvatarBDStateMachineOwner> (list);
     }
 
-    private void checkTask(Vector tobeChecked, LinkedList source) {
-        AvatarBDBlock t;
-
-        for(int i=0; i<tobeChecked.size(); i++) {
-            t = (AvatarBDBlock)(tobeChecked.elementAt(i));
-            if (!source.contains(t)) {
-                tobeChecked.removeElementAt(i);
-                i--;
-            }
+    private void checkTask(Vector<AvatarBDStateMachineOwner> tobeChecked, LinkedList<AvatarBDStateMachineOwner> source) {
+        Iterator<AvatarBDStateMachineOwner> iterator = tobeChecked.iterator ();
+        
+        while (iterator.hasNext ()) {
+            AvatarBDStateMachineOwner t = iterator.next ();
+            if (!source.contains(t))
+                iterator.remove ();
         }
     }
 
-    public void addNewTask(Vector added, LinkedList source, Vector notSource) {
-        TGComponent tgc;
-
-        for(int i=0; i<source.size(); i++) {
-            tgc = (TGComponent)(source.get(i));
-            if ((tgc instanceof AvatarBDBlock) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
+    public void addNewTask(Vector<AvatarBDStateMachineOwner> added, LinkedList<AvatarBDStateMachineOwner> source, Vector<AvatarBDStateMachineOwner> notSource) {
+        for (AvatarBDStateMachineOwner tgc: source)
+            if (!added.contains(tgc) && !notSource.contains(tgc))
                 added.addElement(tgc);
-                //System.out.println("New element");
-            }
-        }
     }
 
     private void myInitComponents() {
@@ -284,10 +266,9 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
 
     private void addOneIgnored() {
         int [] list = listValidated.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
+        Vector<AvatarBDStateMachineOwner> v = new Vector<AvatarBDStateMachineOwner> ();
         for (int i=0; i<list.length; i++){
-            o = val.elementAt(list[i]);
+            AvatarBDStateMachineOwner o = val.elementAt(list[i]);
             ign.addElement(o);
             v.addElement(o);
         }
@@ -301,9 +282,8 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
     private void addOneValidated() {
         int [] list = listIgnored.getSelectedIndices();
         Vector v = new Vector();
-        Object o;
         for (int i=0; i<list.length; i++){
-            o = ign.elementAt(list[i]);
+            AvatarBDStateMachineOwner o = ign.elementAt(list[i]);
             val.addElement(o);
             v.addElement(o);
         }
@@ -393,11 +373,11 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
         return hasBeenCancelled;
     }
 
-    public Vector getValidated() {
+    public Vector<AvatarBDStateMachineOwner> getValidated() {
         return validated;
     }
 
-    public Vector getIgnored() {
+    public Vector<AvatarBDStateMachineOwner> getIgnored() {
         return ignored;
     }
 }

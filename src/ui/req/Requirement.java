@@ -425,7 +425,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     public String getRequirementName() {
         return value;
     }
-    
+
     public boolean isFormal() {
         return (reqType == 1);
     }

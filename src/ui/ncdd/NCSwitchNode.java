@@ -301,8 +301,8 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
         return list;
     }
 	
-	public Vector getArtifactList() {
-       Vector v = new Vector();
+	public Vector<NCRouteArtifact> getArtifactList() {
+       Vector<NCRouteArtifact> v = new Vector<NCRouteArtifact> ();
 	   NCRouteArtifact r;
 	   
         for(int i=0; i<nbInternalTGComponent; i++) {
