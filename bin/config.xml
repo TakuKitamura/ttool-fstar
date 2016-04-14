@@ -53,7 +53,8 @@
 <AVATARExecutableCodeExecuteCommand data="/users/enseig/genius/TURTLE/executablecode/run.x" />
 <AVATARExecutableSoclibCodeCompileCommand data="make -C /users/enseig/genius/TURTLE/MPSoC updategeneratedcode compilesoclib" />
 <AVATARExecutableSoclibCodeExecuteCommand data="make -C /users/enseig/genius/TURTLE/MPSoC runsoclib" />
-<AVATARExecutableSoclibTraceFile data="/users/enseig/genius/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/vcitty" />
+<AVATARExecutableSoclibCodeTraceCommand data="make -C /users/enseig/genius/TURTLE/MPSoC runsoclib-trace" />
+<AVATARExecutableSoclibTraceFile data="/users/enseig/genius/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/trace" />
 
 
 <ExternalCommand1Host data="localhost"/>
@@ -61,11 +62,11 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /users/enseig/genius/TURTLE/uppaal/spec.xml"/>
 
-<LastOpenFile data="/users/enseig/genius/TURTLE/modeling/DASIP2016_avec_TTY.xml"/>
+<LastOpenFile data="/users/enseig/genius/TURTLE/modeling/DASIP2016_1proc.xml"/>
 
 
 
-<LastWindowAttributes x="114" y="25" width="1554" height="1000" max="false" />
+<LastWindowAttributes x="589" y="178" width="1680" height="1000" max="false" />
 
 
 <ProVerifHash data=""/>

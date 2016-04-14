@@ -17,7 +17,7 @@
 #include "mwmr.h" 
  
 
-#define NB_PROC 5
+#define NB_PROC 1
 #define WIDTH 4
 #define DEPTH 16
 
@@ -25,24 +25,24 @@ void __user_init() {
 }
 
 #include "TestBench.h"
-#include "SpeedSensor.h"
-#include "RadarSensor.h"
-#include "GPSSensor.h"
-#include "CarPositionSimulator.h"
 #include "EmergencySimulator.h"
+#include "CarPositionSimulator.h"
+#include "GPSSensor.h"
+#include "RadarSensor.h"
+#include "SpeedSensor.h"
 #include "Communication.h"
-#include "DSRSC_Management.h"
-#include "NeighbourhoodTableManagement.h"
 #include "CorrectnessChecking.h"
+#include "NeighbourhoodTableManagement.h"
+#include "DSRSC_Management.h"
 #include "PTC.h"
 #include "DrivingPowerReductionStrategy.h"
 #include "BCU.h"
-#include "DangerAvoidanceStrategy.h"
 #include "BrakeManagement.h"
+#include "DangerAvoidanceStrategy.h"
 #include "CSCU.h"
-#include "ObjectListManagement.h"
-#include "PlausibilityCheck.h"
 #include "VehiculeDynamicsManagement.h"
+#include "PlausibilityCheck.h"
+#include "ObjectListManagement.h"
 
 /* Main mutex */
 pthread_barrier_t barrier ;
@@ -115,32 +115,30 @@ int main(int argc, char *argv[]) {
   
   /* Threads of tasks */
   pthread_t thread__TestBench;
-  pthread_t thread__SpeedSensor;
-  pthread_t thread__RadarSensor;
-  pthread_t thread__GPSSensor;
-  pthread_t thread__CarPositionSimulator;
   pthread_t thread__EmergencySimulator;
+  pthread_t thread__CarPositionSimulator;
+  pthread_t thread__GPSSensor;
+  pthread_t thread__RadarSensor;
+  pthread_t thread__SpeedSensor;
   pthread_t thread__Communication;
-  pthread_t thread__DSRSC_Management;
-  pthread_t thread__NeighbourhoodTableManagement;
   pthread_t thread__CorrectnessChecking;
+  pthread_t thread__NeighbourhoodTableManagement;
+  pthread_t thread__DSRSC_Management;
   pthread_t thread__PTC;
   pthread_t thread__DrivingPowerReductionStrategy;
   pthread_t thread__BCU;
-  pthread_t thread__DangerAvoidanceStrategy;
   pthread_t thread__BrakeManagement;
+  pthread_t thread__DangerAvoidanceStrategy;
   pthread_t thread__CSCU;
-  pthread_t thread__ObjectListManagement;
-  pthread_t thread__PlausibilityCheck;
   pthread_t thread__VehiculeDynamicsManagement;
+  pthread_t thread__PlausibilityCheck;
+  pthread_t thread__ObjectListManagement;
   /* Activating tracing  */
   if (argc>1){
     activeTracingInFile(argv[1]);
   } else {
     activeTracingInConsole();
   }
-  /* Activating debug messages */
-  activeDebug();
   /* Activating randomness */
   initRandom();
   /* Initializing the main mutex */
@@ -150,156 +148,140 @@ if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}
   __user_init();
   
   
-  debugMsg("Starting tasks");
   struct mwmr_s *channels_array_TestBench;
   ptr =malloc(sizeof(pthread_t));
   thread__TestBench= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 4;  
+  attr_t->cpucount = 0;  
   
   
-  debugMsg("Starting tasks");
   pthread_create(&thread__TestBench, NULL, mainFunc__TestBench, (void *)channels_array_TestBench);
-  
-  struct mwmr_s *channels_array_SpeedSensor;
-  ptr =malloc(sizeof(pthread_t));
-  thread__SpeedSensor= (pthread_t)ptr;
-  attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 4;  
-  
-  
-  debugMsg("Starting tasks");
-  pthread_create(&thread__SpeedSensor, NULL, mainFunc__SpeedSensor, (void *)channels_array_SpeedSensor);
-  
-  struct mwmr_s *channels_array_RadarSensor;
-  ptr =malloc(sizeof(pthread_t));
-  thread__RadarSensor= (pthread_t)ptr;
-  attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 4;  
-  
-  
-  debugMsg("Starting tasks");
-  pthread_create(&thread__RadarSensor, NULL, mainFunc__RadarSensor, (void *)channels_array_RadarSensor);
-  
-  struct mwmr_s *channels_array_GPSSensor;
-  ptr =malloc(sizeof(pthread_t));
-  thread__GPSSensor= (pthread_t)ptr;
-  attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 4;  
-  
-  
-  debugMsg("Starting tasks");
-  pthread_create(&thread__GPSSensor, NULL, mainFunc__GPSSensor, (void *)channels_array_GPSSensor);
-  
-  struct mwmr_s *channels_array_CarPositionSimulator;
-  ptr =malloc(sizeof(pthread_t));
-  thread__CarPositionSimulator= (pthread_t)ptr;
-  attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 4;  
-  
-  
-  debugMsg("Starting tasks");
-  pthread_create(&thread__CarPositionSimulator, NULL, mainFunc__CarPositionSimulator, (void *)channels_array_CarPositionSimulator);
   
   struct mwmr_s *channels_array_EmergencySimulator;
   ptr =malloc(sizeof(pthread_t));
   thread__EmergencySimulator= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 4;  
+  attr_t->cpucount = 0;  
   
   
-  debugMsg("Starting tasks");
   pthread_create(&thread__EmergencySimulator, NULL, mainFunc__EmergencySimulator, (void *)channels_array_EmergencySimulator);
+  
+  struct mwmr_s *channels_array_CarPositionSimulator;
+  ptr =malloc(sizeof(pthread_t));
+  thread__CarPositionSimulator= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  attr_t->cpucount = 0;  
+  
+  
+  pthread_create(&thread__CarPositionSimulator, NULL, mainFunc__CarPositionSimulator, (void *)channels_array_CarPositionSimulator);
+  
+  struct mwmr_s *channels_array_GPSSensor;
+  ptr =malloc(sizeof(pthread_t));
+  thread__GPSSensor= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  attr_t->cpucount = 0;  
+  
+  
+  pthread_create(&thread__GPSSensor, NULL, mainFunc__GPSSensor, (void *)channels_array_GPSSensor);
+  
+  struct mwmr_s *channels_array_RadarSensor;
+  ptr =malloc(sizeof(pthread_t));
+  thread__RadarSensor= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  attr_t->cpucount = 0;  
+  
+  
+  pthread_create(&thread__RadarSensor, NULL, mainFunc__RadarSensor, (void *)channels_array_RadarSensor);
+  
+  struct mwmr_s *channels_array_SpeedSensor;
+  ptr =malloc(sizeof(pthread_t));
+  thread__SpeedSensor= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  attr_t->cpucount = 0;  
+  
+  
+  pthread_create(&thread__SpeedSensor, NULL, mainFunc__SpeedSensor, (void *)channels_array_SpeedSensor);
   
   struct mwmr_s *channels_array_Communication;
   ptr =malloc(sizeof(pthread_t));
   thread__Communication= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 1;  
+  attr_t->cpucount = 0;  
   
   
-  debugMsg("Starting tasks");
   pthread_create(&thread__Communication, NULL, mainFunc__Communication, (void *)channels_array_Communication);
-  
-  struct mwmr_s *channels_array_DSRSC_Management;
-  ptr =malloc(sizeof(pthread_t));
-  thread__DSRSC_Management= (pthread_t)ptr;
-  attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 1;  
-  
-  
-  debugMsg("Starting tasks");
-  pthread_create(&thread__DSRSC_Management, NULL, mainFunc__DSRSC_Management, (void *)channels_array_DSRSC_Management);
-  
-  struct mwmr_s *channels_array_NeighbourhoodTableManagement;
-  ptr =malloc(sizeof(pthread_t));
-  thread__NeighbourhoodTableManagement= (pthread_t)ptr;
-  attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 1;  
-  
-  
-  debugMsg("Starting tasks");
-  pthread_create(&thread__NeighbourhoodTableManagement, NULL, mainFunc__NeighbourhoodTableManagement, (void *)channels_array_NeighbourhoodTableManagement);
   
   struct mwmr_s *channels_array_CorrectnessChecking;
   ptr =malloc(sizeof(pthread_t));
   thread__CorrectnessChecking= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 1;  
+  attr_t->cpucount = 0;  
   
   
-  debugMsg("Starting tasks");
   pthread_create(&thread__CorrectnessChecking, NULL, mainFunc__CorrectnessChecking, (void *)channels_array_CorrectnessChecking);
+  
+  struct mwmr_s *channels_array_NeighbourhoodTableManagement;
+  ptr =malloc(sizeof(pthread_t));
+  thread__NeighbourhoodTableManagement= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  attr_t->cpucount = 0;  
+  
+  
+  pthread_create(&thread__NeighbourhoodTableManagement, NULL, mainFunc__NeighbourhoodTableManagement, (void *)channels_array_NeighbourhoodTableManagement);
+  
+  struct mwmr_s *channels_array_DSRSC_Management;
+  ptr =malloc(sizeof(pthread_t));
+  thread__DSRSC_Management= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  attr_t->cpucount = 0;  
+  
+  
+  pthread_create(&thread__DSRSC_Management, NULL, mainFunc__DSRSC_Management, (void *)channels_array_DSRSC_Management);
   
   struct mwmr_s *channels_array_PTC;
   ptr =malloc(sizeof(pthread_t));
   thread__PTC= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 2;  
+  attr_t->cpucount = 0;  
   
   
-  debugMsg("Starting tasks");
   pthread_create(&thread__PTC, NULL, mainFunc__PTC, (void *)channels_array_PTC);
   
   struct mwmr_s *channels_array_DrivingPowerReductionStrategy;
   ptr =malloc(sizeof(pthread_t));
   thread__DrivingPowerReductionStrategy= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 2;  
+  attr_t->cpucount = 0;  
   
   
-  debugMsg("Starting tasks");
   pthread_create(&thread__DrivingPowerReductionStrategy, NULL, mainFunc__DrivingPowerReductionStrategy, (void *)channels_array_DrivingPowerReductionStrategy);
   
   struct mwmr_s *channels_array_BCU;
   ptr =malloc(sizeof(pthread_t));
   thread__BCU= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 3;  
+  attr_t->cpucount = 0;  
   
   
-  debugMsg("Starting tasks");
   pthread_create(&thread__BCU, NULL, mainFunc__BCU, (void *)channels_array_BCU);
-  
-  struct mwmr_s *channels_array_DangerAvoidanceStrategy;
-  ptr =malloc(sizeof(pthread_t));
-  thread__DangerAvoidanceStrategy= (pthread_t)ptr;
-  attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 3;  
-  
-  
-  debugMsg("Starting tasks");
-  pthread_create(&thread__DangerAvoidanceStrategy, NULL, mainFunc__DangerAvoidanceStrategy, (void *)channels_array_DangerAvoidanceStrategy);
   
   struct mwmr_s *channels_array_BrakeManagement;
   ptr =malloc(sizeof(pthread_t));
   thread__BrakeManagement= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 3;  
+  attr_t->cpucount = 0;  
   
   
-  debugMsg("Starting tasks");
   pthread_create(&thread__BrakeManagement, NULL, mainFunc__BrakeManagement, (void *)channels_array_BrakeManagement);
+  
+  struct mwmr_s *channels_array_DangerAvoidanceStrategy;
+  ptr =malloc(sizeof(pthread_t));
+  thread__DangerAvoidanceStrategy= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  attr_t->cpucount = 0;  
+  
+  
+  pthread_create(&thread__DangerAvoidanceStrategy, NULL, mainFunc__DangerAvoidanceStrategy, (void *)channels_array_DangerAvoidanceStrategy);
   
   struct mwmr_s *channels_array_CSCU;
   ptr =malloc(sizeof(pthread_t));
@@ -308,28 +290,7 @@ if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}
   attr_t->cpucount = 0;  
   
   
-  debugMsg("Starting tasks");
   pthread_create(&thread__CSCU, NULL, mainFunc__CSCU, (void *)channels_array_CSCU);
-  
-  struct mwmr_s *channels_array_ObjectListManagement;
-  ptr =malloc(sizeof(pthread_t));
-  thread__ObjectListManagement= (pthread_t)ptr;
-  attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 0;  
-  
-  
-  debugMsg("Starting tasks");
-  pthread_create(&thread__ObjectListManagement, NULL, mainFunc__ObjectListManagement, (void *)channels_array_ObjectListManagement);
-  
-  struct mwmr_s *channels_array_PlausibilityCheck;
-  ptr =malloc(sizeof(pthread_t));
-  thread__PlausibilityCheck= (pthread_t)ptr;
-  attr_t = malloc(sizeof(pthread_attr_t));
-  attr_t->cpucount = 0;  
-  
-  
-  debugMsg("Starting tasks");
-  pthread_create(&thread__PlausibilityCheck, NULL, mainFunc__PlausibilityCheck, (void *)channels_array_PlausibilityCheck);
   
   struct mwmr_s *channels_array_VehiculeDynamicsManagement;
   ptr =malloc(sizeof(pthread_t));
@@ -338,34 +299,49 @@ if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}
   attr_t->cpucount = 0;  
   
   
-  debugMsg("Starting tasks");
   pthread_create(&thread__VehiculeDynamicsManagement, NULL, mainFunc__VehiculeDynamicsManagement, (void *)channels_array_VehiculeDynamicsManagement);
   
+  struct mwmr_s *channels_array_PlausibilityCheck;
+  ptr =malloc(sizeof(pthread_t));
+  thread__PlausibilityCheck= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  attr_t->cpucount = 0;  
   
   
-  debugMsg("Joining tasks");
+  pthread_create(&thread__PlausibilityCheck, NULL, mainFunc__PlausibilityCheck, (void *)channels_array_PlausibilityCheck);
+  
+  struct mwmr_s *channels_array_ObjectListManagement;
+  ptr =malloc(sizeof(pthread_t));
+  thread__ObjectListManagement= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  attr_t->cpucount = 0;  
+  
+  
+  pthread_create(&thread__ObjectListManagement, NULL, mainFunc__ObjectListManagement, (void *)channels_array_ObjectListManagement);
+  
+  
+  
   pthread_join(thread__TestBench, NULL);
-  pthread_join(thread__SpeedSensor, NULL);
-  pthread_join(thread__RadarSensor, NULL);
-  pthread_join(thread__GPSSensor, NULL);
-  pthread_join(thread__CarPositionSimulator, NULL);
   pthread_join(thread__EmergencySimulator, NULL);
+  pthread_join(thread__CarPositionSimulator, NULL);
+  pthread_join(thread__GPSSensor, NULL);
+  pthread_join(thread__RadarSensor, NULL);
+  pthread_join(thread__SpeedSensor, NULL);
   pthread_join(thread__Communication, NULL);
-  pthread_join(thread__DSRSC_Management, NULL);
-  pthread_join(thread__NeighbourhoodTableManagement, NULL);
   pthread_join(thread__CorrectnessChecking, NULL);
+  pthread_join(thread__NeighbourhoodTableManagement, NULL);
+  pthread_join(thread__DSRSC_Management, NULL);
   pthread_join(thread__PTC, NULL);
   pthread_join(thread__DrivingPowerReductionStrategy, NULL);
   pthread_join(thread__BCU, NULL);
-  pthread_join(thread__DangerAvoidanceStrategy, NULL);
   pthread_join(thread__BrakeManagement, NULL);
+  pthread_join(thread__DangerAvoidanceStrategy, NULL);
   pthread_join(thread__CSCU, NULL);
-  pthread_join(thread__ObjectListManagement, NULL);
-  pthread_join(thread__PlausibilityCheck, NULL);
   pthread_join(thread__VehiculeDynamicsManagement, NULL);
+  pthread_join(thread__PlausibilityCheck, NULL);
+  pthread_join(thread__ObjectListManagement, NULL);
   
   
-  debugMsg("Application terminated");
   return 0;
   
 }

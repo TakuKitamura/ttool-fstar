@@ -28,8 +28,12 @@ compilesoclib:
 	cp ~/TURTLE/MPSoC/generated_topcell/config  ~/Prog/mutekh/examples/avatar/
 	cd ~/Prog/mutekh; make CONF=examples/avatar/config BUILD=soclib-$(MUTEKH_CPU):pf-tutorial
 
-runsoclib:
+runsoclib-trace:
 	echo "running soclib"
 	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ~/Prog/mutekh/avatar-soclib-$(MUTEKH_CPU).out > trace
+
+runsoclib:
+	echo "running soclib"
+	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ~/Prog/mutekh/avatar-soclib-$(MUTEKH_CPU).out 
 allsoclib: updateruntime updategeneratedcode updateruntimesoclib updategeneratedcodesoclib  compilesoclib runsoclib
 

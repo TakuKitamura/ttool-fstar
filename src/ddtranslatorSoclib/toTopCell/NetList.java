@@ -307,13 +307,13 @@ netlist = netlist + "// RAM netlist" + CR2;
 	    if(trace_caba){
 	      for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
 		  netlist += "logger"+i+".p_clk(signal_clk);" + CR;
-		  netlist += "logger"+i+".p_clk(signal_resetn);" + CR;
+		  netlist += "logger"+i+".p_resetn(signal_resetn);" + CR;
 		  netlist += "logger"+i+".p_vci(signal_vci_m["+i+"]);" + CR;
 	      }
 
 	      for(j=i;j<i+(TopCellGenerator.avatardd.getAllRAM().size()+3);j++){
 		  netlist += "logger"+j+".p_clk(signal_clk);" + CR;
-		  netlist += "logger"+j+".p_clk(signal_resetn);" + CR;
+		  netlist += "logger"+j+".p_resetn(signal_resetn);" + CR;
 	      }
 	      netlist += "logger"+i+".p_vci(signal_vci_vcilocks);"+ CR;
 	      netlist += "logger"+(i+1)+".p_vci(signal_vci_mwmr_ram);"+ CR;
@@ -322,6 +322,7 @@ netlist = netlist + "// RAM netlist" + CR2;
 	    j=3+TopCellGenerator.avatardd.getNb_init();
 	    for(i=0;i<TopCellGenerator.avatardd.getAllRAM().size();i++){
 		netlist += "logger"+j+".p_vci(signal_vci_vciram"+i+");"+ CR;
+		j++;
 	}
 	}
 	

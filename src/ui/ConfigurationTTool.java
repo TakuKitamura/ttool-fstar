@@ -132,6 +132,7 @@ public class ConfigurationTTool {
     public static String AVATARExecutableCodeExecuteCommand = "";
     public static String AVATARExecutableSoclibCodeCompileCommand = "";
     public static String AVATARExecutableSoclibCodeExecuteCommand = "";
+    public static String AVATARExecutableSoclibCodeTraceCommand = "";
     public static String AVATARExecutableSoclibTraceFile = "";
 
 
@@ -379,6 +380,7 @@ sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
         sb.append("AVATARExecutableCodeExecuteCommand: " + AVATARExecutableCodeExecuteCommand + "\n");
         sb.append("AVATARExecutableSocLibCodeCompileCommand: " + AVATARExecutableSoclibCodeCompileCommand + "\n");
         sb.append("AVATARExecutableSocLibCodeExecuteCommand: " + AVATARExecutableSoclibCodeExecuteCommand + "\n");
+	sb.append("AVATARExecutableSocLibCodeTraceCommand: " + AVATARExecutableSoclibCodeTraceCommand + "\n");
         sb.append("AVATARExecutableSocLibCodeTraceFile: " + AVATARExecutableSoclibTraceFile + "\n");
 
         sb.append("\nProVerif:\n");
@@ -618,6 +620,9 @@ sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
             nl = doc.getElementsByTagName("AVATARExecutableSoclibCodeExecuteCommand");
             if (nl.getLength() > 0)
                 AVATARExecutableSoclibCodeExecuteCommand(nl);
+	    nl = doc.getElementsByTagName("AVATARExecutableSoclibCodeTraceCommand");
+            if (nl.getLength() > 0)
+                AVATARExecutableSoclibCodeTraceCommand(nl);
             nl = doc.getElementsByTagName("AVATARExecutableSoclibTraceFile");
             if (nl.getLength() > 0)
                 AVATARExecutableSoclibTraceFile(nl);
@@ -1256,6 +1261,15 @@ private static void AVATARMPSoCCompileCommand(NodeList nl) throws MalformedConfi
         try {
             Element elt = (Element)(nl.item(0));
             AVATARExecutableSoclibCodeExecuteCommand = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+    
+    private static void AVATARExecutableSoclibCodeTraceCommand(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARExecutableSoclibCodeTraceCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

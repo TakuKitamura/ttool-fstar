@@ -13516,12 +13516,12 @@ Otherwise, the most far away
 
 <Modeling type="ADD" nameTab="Avatar Deployment" >
 <ADDDiagramPanel name="Deployment Diagram" minX="10" maxX="1400" minY="10" maxY="900" attributes="0" masterClockFrequency="200" >
-<CONNECTOR type="5350" id="6483" >
-<cdparam x="1113" y="453" />
+<CONNECTOR type="5350" id="6508" >
+<cdparam x="893" y="488" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="{info}" />
-<P1  x="1113" y="453" id="6371" />
-<P2  x="791" y="396" id="5981" />
+<P1  x="893" y="488" id="6360" />
+<P2  x="728" y="409" id="5983" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="5363" id="5992" >
@@ -13560,48 +13560,12 @@ Otherwise, the most far away
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="5355" id="6152" >
-<cdparam x="271" y="471" />
-<sizeparam width="458" height="332" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="5354" id="6017" >
+<cdparam x="16" y="462" />
+<sizeparam width="169" height="155" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
-<infoparam name="Memory0" value="name" />
-<TGConnectingPoint num="0" id="6128" />
-<TGConnectingPoint num="1" id="6129" />
-<TGConnectingPoint num="2" id="6130" />
-<TGConnectingPoint num="3" id="6131" />
-<TGConnectingPoint num="4" id="6132" />
-<TGConnectingPoint num="5" id="6133" />
-<TGConnectingPoint num="6" id="6134" />
-<TGConnectingPoint num="7" id="6135" />
-<TGConnectingPoint num="8" id="6136" />
-<TGConnectingPoint num="9" id="6137" />
-<TGConnectingPoint num="10" id="6138" />
-<TGConnectingPoint num="11" id="6139" />
-<TGConnectingPoint num="12" id="6140" />
-<TGConnectingPoint num="13" id="6141" />
-<TGConnectingPoint num="14" id="6142" />
-<TGConnectingPoint num="15" id="6143" />
-<TGConnectingPoint num="16" id="6144" />
-<TGConnectingPoint num="17" id="6145" />
-<TGConnectingPoint num="18" id="6146" />
-<TGConnectingPoint num="19" id="6147" />
-<TGConnectingPoint num="20" id="6148" />
-<TGConnectingPoint num="21" id="6149" />
-<TGConnectingPoint num="22" id="6150" />
-<TGConnectingPoint num="23" id="6151" />
-<extraparam>
-<info stereotype="RAM" nodeName="Memory0" />
-<attributes byteDataSize="33554432"  index="0" />
-</extraparam>
-</COMPONENT>
-<SUBCOMPONENT type="5362" id="6001" >
-<father id="6152" num="0" />
-<cdparam x="285" y="506" />
-<sizeparam width="201" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="257" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="GPSSensor/out setPosition" />
+<infoparam name="TTY0" value="name" />
 <TGConnectingPoint num="0" id="5993" />
 <TGConnectingPoint num="1" id="5994" />
 <TGConnectingPoint num="2" id="5995" />
@@ -13610,888 +13574,968 @@ Otherwise, the most far away
 <TGConnectingPoint num="5" id="5998" />
 <TGConnectingPoint num="6" id="5999" />
 <TGConnectingPoint num="7" id="6000" />
-<extraparam>
-<info value="GPSSensor/out setPosition" channelName="GPSSensor/out setPosition(int currentPosition) #--# NeighbourhoodTableManagement/in setPosition(int currentPosition)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6010" >
-<father id="6152" num="1" />
-<cdparam x="285" y="526" />
-<sizeparam width="301" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="157" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="EmergencySimulator/out obstacleDetected" />
-<TGConnectingPoint num="0" id="6002" />
-<TGConnectingPoint num="1" id="6003" />
-<TGConnectingPoint num="2" id="6004" />
-<TGConnectingPoint num="3" id="6005" />
-<TGConnectingPoint num="4" id="6006" />
-<TGConnectingPoint num="5" id="6007" />
-<TGConnectingPoint num="6" id="6008" />
-<TGConnectingPoint num="7" id="6009" />
-<extraparam>
-<info value="EmergencySimulator/out obstacleDetected" channelName="EmergencySimulator/out obstacleDetected(int id, int position) #--# DSRSC_Management/in obstacleDetected(int id, int position)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6019" >
-<father id="6152" num="2" />
-<cdparam x="285" y="545" />
-<sizeparam width="261" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="197" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="CarPositionSimulator/out carPosition" />
-<TGConnectingPoint num="0" id="6011" />
-<TGConnectingPoint num="1" id="6012" />
-<TGConnectingPoint num="2" id="6013" />
-<TGConnectingPoint num="3" id="6014" />
-<TGConnectingPoint num="4" id="6015" />
-<TGConnectingPoint num="5" id="6016" />
-<TGConnectingPoint num="6" id="6017" />
-<TGConnectingPoint num="7" id="6018" />
-<extraparam>
-<info value="CarPositionSimulator/out carPosition" channelName="CarPositionSimulator/out carPosition(int id, int position) #--# DSRSC_Management/in carPosition(int id, int position)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6028" >
-<father id="6152" num="3" />
-<cdparam x="285" y="564" />
-<sizeparam width="283" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="175" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="DSRSC_Management/out setCarPosition" />
-<TGConnectingPoint num="0" id="6020" />
-<TGConnectingPoint num="1" id="6021" />
-<TGConnectingPoint num="2" id="6022" />
-<TGConnectingPoint num="3" id="6023" />
-<TGConnectingPoint num="4" id="6024" />
-<TGConnectingPoint num="5" id="6025" />
-<TGConnectingPoint num="6" id="6026" />
-<TGConnectingPoint num="7" id="6027" />
-<extraparam>
-<info value="DSRSC_Management/out setCarPosition" channelName="DSRSC_Management/out setCarPosition(int id, int position) #--# NeighbourhoodTableManagement/in addANode(int id, int position)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6037" >
-<father id="6152" num="4" />
-<cdparam x="285" y="580" />
-<sizeparam width="410" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="48" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="DSRSC_Management/out forwardEmergencyBrakingMessage" />
-<TGConnectingPoint num="0" id="6029" />
-<TGConnectingPoint num="1" id="6030" />
-<TGConnectingPoint num="2" id="6031" />
-<TGConnectingPoint num="3" id="6032" />
-<TGConnectingPoint num="4" id="6033" />
-<TGConnectingPoint num="5" id="6034" />
-<TGConnectingPoint num="6" id="6035" />
-<TGConnectingPoint num="7" id="6036" />
-<extraparam>
-<info value="DSRSC_Management/out forwardEmergencyBrakingMessage" channelName="DSRSC_Management/out forwardEmergencyBrakingMessage(int id, int position) #--# CorrectnessChecking/in getEmergencyBrakingMessage(int id, int position)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6046" >
-<father id="6152" num="5" />
-<cdparam x="285" y="597" />
-<sizeparam width="361" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="97" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="CorrectnessChecking/out toPlausibityCheckMessage" />
-<TGConnectingPoint num="0" id="6038" />
-<TGConnectingPoint num="1" id="6039" />
-<TGConnectingPoint num="2" id="6040" />
-<TGConnectingPoint num="3" id="6041" />
-<TGConnectingPoint num="4" id="6042" />
-<TGConnectingPoint num="5" id="6043" />
-<TGConnectingPoint num="6" id="6044" />
-<TGConnectingPoint num="7" id="6045" />
-<extraparam>
-<info value="CorrectnessChecking/out toPlausibityCheckMessage" channelName="CorrectnessChecking/out toPlausibityCheckMessage(int id, int position) #--# PlausibilityCheck/in getEmergencyMessageToVerify(int id, int position)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6055" >
-<father id="6152" num="6" />
-<cdparam x="285" y="613" />
-<sizeparam width="237" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="221" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="RadarSensor/out obstacleAhead" />
-<TGConnectingPoint num="0" id="6047" />
-<TGConnectingPoint num="1" id="6048" />
-<TGConnectingPoint num="2" id="6049" />
-<TGConnectingPoint num="3" id="6050" />
-<TGConnectingPoint num="4" id="6051" />
-<TGConnectingPoint num="5" id="6052" />
-<TGConnectingPoint num="6" id="6053" />
-<TGConnectingPoint num="7" id="6054" />
-<extraparam>
-<info value="RadarSensor/out obstacleAhead" channelName="RadarSensor/out obstacleAhead(int info) #--# ObjectListManagement/in isObstacleAhead(int info)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6064" >
-<father id="6152" num="7" />
-<cdparam x="285" y="629" />
-<sizeparam width="272" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="186" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="PlausibilityCheck/in getInfoOnObstacle" />
-<TGConnectingPoint num="0" id="6056" />
-<TGConnectingPoint num="1" id="6057" />
-<TGConnectingPoint num="2" id="6058" />
-<TGConnectingPoint num="3" id="6059" />
-<TGConnectingPoint num="4" id="6060" />
-<TGConnectingPoint num="5" id="6061" />
-<TGConnectingPoint num="6" id="6062" />
-<TGConnectingPoint num="7" id="6063" />
-<extraparam>
-<info value="PlausibilityCheck/in getInfoOnObstacle" channelName="PlausibilityCheck/in getInfoOnObstacle(int obstacle) #--# ObjectListManagement/out getInfoOnObstacle(int info)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6073" >
-<father id="6152" num="8" />
-<cdparam x="285" y="647" />
-<sizeparam width="247" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="211" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="SpeedSensor/out updateOnSpeed" />
-<TGConnectingPoint num="0" id="6065" />
-<TGConnectingPoint num="1" id="6066" />
-<TGConnectingPoint num="2" id="6067" />
-<TGConnectingPoint num="3" id="6068" />
-<TGConnectingPoint num="4" id="6069" />
-<TGConnectingPoint num="5" id="6070" />
-<TGConnectingPoint num="6" id="6071" />
-<TGConnectingPoint num="7" id="6072" />
-<extraparam>
-<info value="SpeedSensor/out updateOnSpeed" channelName="SpeedSensor/out updateOnSpeed(int speed) #--# VehiculeDynamicsManagement/in updateOnSpeed(int speed)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6082" >
-<father id="6152" num="9" />
-<cdparam x="285" y="663" />
-<sizeparam width="256" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="202" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="PlausibilityCheck/in getInfoOnSpeed" />
-<TGConnectingPoint num="0" id="6074" />
-<TGConnectingPoint num="1" id="6075" />
-<TGConnectingPoint num="2" id="6076" />
-<TGConnectingPoint num="3" id="6077" />
-<TGConnectingPoint num="4" id="6078" />
-<TGConnectingPoint num="5" id="6079" />
-<TGConnectingPoint num="6" id="6080" />
-<TGConnectingPoint num="7" id="6081" />
-<extraparam>
-<info value="PlausibilityCheck/in getInfoOnSpeed" channelName="PlausibilityCheck/in getInfoOnSpeed(int speed) #--# VehiculeDynamicsManagement/out getInfoOnSpeed(int speed)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6091" >
-<father id="6152" num="10" />
-<cdparam x="285" y="679" />
-<sizeparam width="252" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="206" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="DangerAvoidanceStrategy/in brake" />
-<TGConnectingPoint num="0" id="6083" />
-<TGConnectingPoint num="1" id="6084" />
-<TGConnectingPoint num="2" id="6085" />
-<TGConnectingPoint num="3" id="6086" />
-<TGConnectingPoint num="4" id="6087" />
-<TGConnectingPoint num="5" id="6088" />
-<TGConnectingPoint num="6" id="6089" />
-<TGConnectingPoint num="7" id="6090" />
-<extraparam>
-<info value="DangerAvoidanceStrategy/in brake" channelName="DangerAvoidanceStrategy/in brake(int speed, int currentPosition, int position) #--# PlausibilityCheck/out brake(int speed, int currentPosition, int position)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6100" >
-<father id="6152" num="11" />
-<cdparam x="285" y="695" />
-<sizeparam width="301" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="157" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="DangerAvoidanceStrategy/out brakePower" />
-<TGConnectingPoint num="0" id="6092" />
-<TGConnectingPoint num="1" id="6093" />
-<TGConnectingPoint num="2" id="6094" />
-<TGConnectingPoint num="3" id="6095" />
-<TGConnectingPoint num="4" id="6096" />
-<TGConnectingPoint num="5" id="6097" />
-<TGConnectingPoint num="6" id="6098" />
-<TGConnectingPoint num="7" id="6099" />
-<extraparam>
-<info value="DangerAvoidanceStrategy/out brakePower" channelName="DangerAvoidanceStrategy/out brakePower(int value) #--# BrakeManagement/in brake(int value)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6109" >
-<father id="6152" num="12" />
-<cdparam x="285" y="715" />
-<sizeparam width="308" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="150" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="DangerAvoidanceStrategy/out reducePower" />
-<TGConnectingPoint num="0" id="6101" />
-<TGConnectingPoint num="1" id="6102" />
-<TGConnectingPoint num="2" id="6103" />
-<TGConnectingPoint num="3" id="6104" />
-<TGConnectingPoint num="4" id="6105" />
-<TGConnectingPoint num="5" id="6106" />
-<TGConnectingPoint num="6" id="6107" />
-<TGConnectingPoint num="7" id="6108" />
-<extraparam>
-<info value="DangerAvoidanceStrategy/out reducePower" channelName="DangerAvoidanceStrategy/out reducePower(int value) #--# DrivingPowerReductionStrategy/in getReducePowerOrder(int value)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6118" >
-<father id="6152" num="13" />
-<cdparam x="285" y="735" />
-<sizeparam width="335" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="123" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="NeighbourhoodTableManagement/out sendTable" />
-<TGConnectingPoint num="0" id="6110" />
-<TGConnectingPoint num="1" id="6111" />
-<TGConnectingPoint num="2" id="6112" />
-<TGConnectingPoint num="3" id="6113" />
-<TGConnectingPoint num="4" id="6114" />
-<TGConnectingPoint num="5" id="6115" />
-<TGConnectingPoint num="6" id="6116" />
-<TGConnectingPoint num="7" id="6117" />
-<extraparam>
-<info value="NeighbourhoodTableManagement/out sendTable" channelName="NeighbourhoodTableManagement/out sendTable(int currentPosition, NodeList list) #--# PlausibilityCheck/in getNodeList(NodeList list)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5362" id="6127" >
-<father id="6152" num="14" />
-<cdparam x="285" y="757" />
-<sizeparam width="416" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="42" minY="0" maxY="292" />
-<infoparam name="TGComponent" value="DSRSC_Management/in broadcastEmergencyBrakingMessage" />
-<TGConnectingPoint num="0" id="6119" />
-<TGConnectingPoint num="1" id="6120" />
-<TGConnectingPoint num="2" id="6121" />
-<TGConnectingPoint num="3" id="6122" />
-<TGConnectingPoint num="4" id="6123" />
-<TGConnectingPoint num="5" id="6124" />
-<TGConnectingPoint num="6" id="6125" />
-<TGConnectingPoint num="7" id="6126" />
-<extraparam>
-<info value="DSRSC_Management/in broadcastEmergencyBrakingMessage" channelName="DSRSC_Management/in broadcastEmergencyBrakingMessage(int id, int position) #--# DangerAvoidanceStrategy/out forwardEmergency(int myID, int currentPosition)" referenceDiagram="AVATAR Design" />
-</extraparam>
-</SUBCOMPONENT>
-
-<COMPONENT type="5354" id="6177" >
-<cdparam x="16" y="462" />
-<sizeparam width="169" height="155" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
-<infoparam name="TTY0" value="name" />
-<TGConnectingPoint num="0" id="6153" />
-<TGConnectingPoint num="1" id="6154" />
-<TGConnectingPoint num="2" id="6155" />
-<TGConnectingPoint num="3" id="6156" />
-<TGConnectingPoint num="4" id="6157" />
-<TGConnectingPoint num="5" id="6158" />
-<TGConnectingPoint num="6" id="6159" />
-<TGConnectingPoint num="7" id="6160" />
-<TGConnectingPoint num="8" id="6161" />
-<TGConnectingPoint num="9" id="6162" />
-<TGConnectingPoint num="10" id="6163" />
-<TGConnectingPoint num="11" id="6164" />
-<TGConnectingPoint num="12" id="6165" />
-<TGConnectingPoint num="13" id="6166" />
-<TGConnectingPoint num="14" id="6167" />
-<TGConnectingPoint num="15" id="6168" />
-<TGConnectingPoint num="16" id="6169" />
-<TGConnectingPoint num="17" id="6170" />
-<TGConnectingPoint num="18" id="6171" />
-<TGConnectingPoint num="19" id="6172" />
-<TGConnectingPoint num="20" id="6173" />
-<TGConnectingPoint num="21" id="6174" />
-<TGConnectingPoint num="22" id="6175" />
-<TGConnectingPoint num="23" id="6176" />
+<TGConnectingPoint num="8" id="6001" />
+<TGConnectingPoint num="9" id="6002" />
+<TGConnectingPoint num="10" id="6003" />
+<TGConnectingPoint num="11" id="6004" />
+<TGConnectingPoint num="12" id="6005" />
+<TGConnectingPoint num="13" id="6006" />
+<TGConnectingPoint num="14" id="6007" />
+<TGConnectingPoint num="15" id="6008" />
+<TGConnectingPoint num="16" id="6009" />
+<TGConnectingPoint num="17" id="6010" />
+<TGConnectingPoint num="18" id="6011" />
+<TGConnectingPoint num="19" id="6012" />
+<TGConnectingPoint num="20" id="6013" />
+<TGConnectingPoint num="21" id="6014" />
+<TGConnectingPoint num="22" id="6015" />
+<TGConnectingPoint num="23" id="6016" />
 <extraparam>
 <info stereotype="TTY" nodeName="TTY0" />
 <attributes index="0" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="5351" id="6238" >
+<COMPONENT type="5351" id="6078" >
 <cdparam x="879" y="10" />
 <sizeparam width="364" height="237" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="CPU4" value="name" />
-<TGConnectingPoint num="0" id="6214" />
-<TGConnectingPoint num="1" id="6215" />
-<TGConnectingPoint num="2" id="6216" />
-<TGConnectingPoint num="3" id="6217" />
-<TGConnectingPoint num="4" id="6218" />
-<TGConnectingPoint num="5" id="6219" />
-<TGConnectingPoint num="6" id="6220" />
-<TGConnectingPoint num="7" id="6221" />
-<TGConnectingPoint num="8" id="6222" />
-<TGConnectingPoint num="9" id="6223" />
-<TGConnectingPoint num="10" id="6224" />
-<TGConnectingPoint num="11" id="6225" />
-<TGConnectingPoint num="12" id="6226" />
-<TGConnectingPoint num="13" id="6227" />
-<TGConnectingPoint num="14" id="6228" />
-<TGConnectingPoint num="15" id="6229" />
-<TGConnectingPoint num="16" id="6230" />
-<TGConnectingPoint num="17" id="6231" />
-<TGConnectingPoint num="18" id="6232" />
-<TGConnectingPoint num="19" id="6233" />
-<TGConnectingPoint num="20" id="6234" />
-<TGConnectingPoint num="21" id="6235" />
-<TGConnectingPoint num="22" id="6236" />
-<TGConnectingPoint num="23" id="6237" />
+<TGConnectingPoint num="0" id="6054" />
+<TGConnectingPoint num="1" id="6055" />
+<TGConnectingPoint num="2" id="6056" />
+<TGConnectingPoint num="3" id="6057" />
+<TGConnectingPoint num="4" id="6058" />
+<TGConnectingPoint num="5" id="6059" />
+<TGConnectingPoint num="6" id="6060" />
+<TGConnectingPoint num="7" id="6061" />
+<TGConnectingPoint num="8" id="6062" />
+<TGConnectingPoint num="9" id="6063" />
+<TGConnectingPoint num="10" id="6064" />
+<TGConnectingPoint num="11" id="6065" />
+<TGConnectingPoint num="12" id="6066" />
+<TGConnectingPoint num="13" id="6067" />
+<TGConnectingPoint num="14" id="6068" />
+<TGConnectingPoint num="15" id="6069" />
+<TGConnectingPoint num="16" id="6070" />
+<TGConnectingPoint num="17" id="6071" />
+<TGConnectingPoint num="18" id="6072" />
+<TGConnectingPoint num="19" id="6073" />
+<TGConnectingPoint num="20" id="6074" />
+<TGConnectingPoint num="21" id="6075" />
+<TGConnectingPoint num="22" id="6076" />
+<TGConnectingPoint num="23" id="6077" />
 <extraparam>
 <info stereotype="CPU" nodeName="CPU4" />
 <attributes nbOfIrq="6"  iCacheWays="8"  iCacheSets="1"  iCacheWords="4"  dCacheWays="8"  dCacheSets="1"  dCacheWords="4" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="5352" id="6186" >
-<father id="6238" num="0" />
+<SUBCOMPONENT type="5352" id="6026" >
+<father id="6078" num="0" />
 <cdparam x="902" y="193" />
 <sizeparam width="325" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="39" minY="0" maxY="197" />
 <infoparam name="TGComponent" value="AVATAR Design::VehiculeDynamicsManagement" />
-<TGConnectingPoint num="0" id="6178" />
-<TGConnectingPoint num="1" id="6179" />
-<TGConnectingPoint num="2" id="6180" />
-<TGConnectingPoint num="3" id="6181" />
-<TGConnectingPoint num="4" id="6182" />
-<TGConnectingPoint num="5" id="6183" />
-<TGConnectingPoint num="6" id="6184" />
-<TGConnectingPoint num="7" id="6185" />
+<TGConnectingPoint num="0" id="6018" />
+<TGConnectingPoint num="1" id="6019" />
+<TGConnectingPoint num="2" id="6020" />
+<TGConnectingPoint num="3" id="6021" />
+<TGConnectingPoint num="4" id="6022" />
+<TGConnectingPoint num="5" id="6023" />
+<TGConnectingPoint num="6" id="6024" />
+<TGConnectingPoint num="7" id="6025" />
 <extraparam>
 <info value="AVATAR Design::VehiculeDynamicsManagement" taskName="VehiculeDynamicsManagement" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6195" >
-<father id="6238" num="1" />
+<SUBCOMPONENT type="5352" id="6035" >
+<father id="6078" num="1" />
 <cdparam x="902" y="147" />
 <sizeparam width="238" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="126" minY="0" maxY="197" />
 <infoparam name="TGComponent" value="AVATAR Design::PlausibilityCheck" />
-<TGConnectingPoint num="0" id="6187" />
-<TGConnectingPoint num="1" id="6188" />
-<TGConnectingPoint num="2" id="6189" />
-<TGConnectingPoint num="3" id="6190" />
-<TGConnectingPoint num="4" id="6191" />
-<TGConnectingPoint num="5" id="6192" />
-<TGConnectingPoint num="6" id="6193" />
-<TGConnectingPoint num="7" id="6194" />
+<TGConnectingPoint num="0" id="6027" />
+<TGConnectingPoint num="1" id="6028" />
+<TGConnectingPoint num="2" id="6029" />
+<TGConnectingPoint num="3" id="6030" />
+<TGConnectingPoint num="4" id="6031" />
+<TGConnectingPoint num="5" id="6032" />
+<TGConnectingPoint num="6" id="6033" />
+<TGConnectingPoint num="7" id="6034" />
 <extraparam>
 <info value="AVATAR Design::PlausibilityCheck" taskName="PlausibilityCheck" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6204" >
-<father id="6238" num="2" />
+<SUBCOMPONENT type="5352" id="6044" >
+<father id="6078" num="2" />
 <cdparam x="903" y="102" />
 <sizeparam width="277" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="87" minY="0" maxY="197" />
 <infoparam name="TGComponent" value="AVATAR Design::ObjectListManagement" />
-<TGConnectingPoint num="0" id="6196" />
-<TGConnectingPoint num="1" id="6197" />
-<TGConnectingPoint num="2" id="6198" />
-<TGConnectingPoint num="3" id="6199" />
-<TGConnectingPoint num="4" id="6200" />
-<TGConnectingPoint num="5" id="6201" />
-<TGConnectingPoint num="6" id="6202" />
-<TGConnectingPoint num="7" id="6203" />
+<TGConnectingPoint num="0" id="6036" />
+<TGConnectingPoint num="1" id="6037" />
+<TGConnectingPoint num="2" id="6038" />
+<TGConnectingPoint num="3" id="6039" />
+<TGConnectingPoint num="4" id="6040" />
+<TGConnectingPoint num="5" id="6041" />
+<TGConnectingPoint num="6" id="6042" />
+<TGConnectingPoint num="7" id="6043" />
 <extraparam>
 <info value="AVATAR Design::ObjectListManagement" taskName="ObjectListManagement" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6213" >
-<father id="6238" num="3" />
+<SUBCOMPONENT type="5352" id="6053" >
+<father id="6078" num="3" />
 <cdparam x="904" y="56" />
 <sizeparam width="170" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="194" minY="0" maxY="197" />
 <infoparam name="TGComponent" value="AVATAR Design::CSCU" />
-<TGConnectingPoint num="0" id="6205" />
-<TGConnectingPoint num="1" id="6206" />
-<TGConnectingPoint num="2" id="6207" />
-<TGConnectingPoint num="3" id="6208" />
-<TGConnectingPoint num="4" id="6209" />
-<TGConnectingPoint num="5" id="6210" />
-<TGConnectingPoint num="6" id="6211" />
-<TGConnectingPoint num="7" id="6212" />
+<TGConnectingPoint num="0" id="6045" />
+<TGConnectingPoint num="1" id="6046" />
+<TGConnectingPoint num="2" id="6047" />
+<TGConnectingPoint num="3" id="6048" />
+<TGConnectingPoint num="4" id="6049" />
+<TGConnectingPoint num="5" id="6050" />
+<TGConnectingPoint num="6" id="6051" />
+<TGConnectingPoint num="7" id="6052" />
 <extraparam>
 <info value="AVATAR Design::CSCU" taskName="CSCU" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 
-<COMPONENT type="5351" id="6299" >
+<COMPONENT type="5351" id="6139" >
 <cdparam x="25" y="10" />
 <sizeparam width="379" height="227" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="CPU1" value="name" />
-<TGConnectingPoint num="0" id="6275" />
-<TGConnectingPoint num="1" id="6276" />
-<TGConnectingPoint num="2" id="6277" />
-<TGConnectingPoint num="3" id="6278" />
-<TGConnectingPoint num="4" id="6279" />
-<TGConnectingPoint num="5" id="6280" />
-<TGConnectingPoint num="6" id="6281" />
-<TGConnectingPoint num="7" id="6282" />
-<TGConnectingPoint num="8" id="6283" />
-<TGConnectingPoint num="9" id="6284" />
-<TGConnectingPoint num="10" id="6285" />
-<TGConnectingPoint num="11" id="6286" />
-<TGConnectingPoint num="12" id="6287" />
-<TGConnectingPoint num="13" id="6288" />
-<TGConnectingPoint num="14" id="6289" />
-<TGConnectingPoint num="15" id="6290" />
-<TGConnectingPoint num="16" id="6291" />
-<TGConnectingPoint num="17" id="6292" />
-<TGConnectingPoint num="18" id="6293" />
-<TGConnectingPoint num="19" id="6294" />
-<TGConnectingPoint num="20" id="6295" />
-<TGConnectingPoint num="21" id="6296" />
-<TGConnectingPoint num="22" id="6297" />
-<TGConnectingPoint num="23" id="6298" />
+<TGConnectingPoint num="0" id="6115" />
+<TGConnectingPoint num="1" id="6116" />
+<TGConnectingPoint num="2" id="6117" />
+<TGConnectingPoint num="3" id="6118" />
+<TGConnectingPoint num="4" id="6119" />
+<TGConnectingPoint num="5" id="6120" />
+<TGConnectingPoint num="6" id="6121" />
+<TGConnectingPoint num="7" id="6122" />
+<TGConnectingPoint num="8" id="6123" />
+<TGConnectingPoint num="9" id="6124" />
+<TGConnectingPoint num="10" id="6125" />
+<TGConnectingPoint num="11" id="6126" />
+<TGConnectingPoint num="12" id="6127" />
+<TGConnectingPoint num="13" id="6128" />
+<TGConnectingPoint num="14" id="6129" />
+<TGConnectingPoint num="15" id="6130" />
+<TGConnectingPoint num="16" id="6131" />
+<TGConnectingPoint num="17" id="6132" />
+<TGConnectingPoint num="18" id="6133" />
+<TGConnectingPoint num="19" id="6134" />
+<TGConnectingPoint num="20" id="6135" />
+<TGConnectingPoint num="21" id="6136" />
+<TGConnectingPoint num="22" id="6137" />
+<TGConnectingPoint num="23" id="6138" />
 <extraparam>
 <info stereotype="CPU" nodeName="CPU1" />
 <attributes nbOfIrq="6"  iCacheWays="8"  iCacheSets="1"  iCacheWords="4"  dCacheWays="8"  dCacheSets="1"  dCacheWords="4" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="5352" id="6247" >
-<father id="6299" num="0" />
+<SUBCOMPONENT type="5352" id="6087" >
+<father id="6139" num="0" />
 <cdparam x="55" y="189" />
 <sizeparam width="267" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="112" minY="0" maxY="187" />
 <infoparam name="TGComponent" value="AVATAR Design::CorrectnessChecking" />
-<TGConnectingPoint num="0" id="6239" />
-<TGConnectingPoint num="1" id="6240" />
-<TGConnectingPoint num="2" id="6241" />
-<TGConnectingPoint num="3" id="6242" />
-<TGConnectingPoint num="4" id="6243" />
-<TGConnectingPoint num="5" id="6244" />
-<TGConnectingPoint num="6" id="6245" />
-<TGConnectingPoint num="7" id="6246" />
+<TGConnectingPoint num="0" id="6079" />
+<TGConnectingPoint num="1" id="6080" />
+<TGConnectingPoint num="2" id="6081" />
+<TGConnectingPoint num="3" id="6082" />
+<TGConnectingPoint num="4" id="6083" />
+<TGConnectingPoint num="5" id="6084" />
+<TGConnectingPoint num="6" id="6085" />
+<TGConnectingPoint num="7" id="6086" />
 <extraparam>
 <info value="AVATAR Design::CorrectnessChecking" taskName="CorrectnessChecking" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6256" >
-<father id="6299" num="1" />
+<SUBCOMPONENT type="5352" id="6096" >
+<father id="6139" num="1" />
 <cdparam x="55" y="144" />
 <sizeparam width="343" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="36" minY="0" maxY="187" />
 <infoparam name="TGComponent" value="AVATAR Design::NeighbourhoodTableManagement" />
-<TGConnectingPoint num="0" id="6248" />
-<TGConnectingPoint num="1" id="6249" />
-<TGConnectingPoint num="2" id="6250" />
-<TGConnectingPoint num="3" id="6251" />
-<TGConnectingPoint num="4" id="6252" />
-<TGConnectingPoint num="5" id="6253" />
-<TGConnectingPoint num="6" id="6254" />
-<TGConnectingPoint num="7" id="6255" />
+<TGConnectingPoint num="0" id="6088" />
+<TGConnectingPoint num="1" id="6089" />
+<TGConnectingPoint num="2" id="6090" />
+<TGConnectingPoint num="3" id="6091" />
+<TGConnectingPoint num="4" id="6092" />
+<TGConnectingPoint num="5" id="6093" />
+<TGConnectingPoint num="6" id="6094" />
+<TGConnectingPoint num="7" id="6095" />
 <extraparam>
 <info value="AVATAR Design::NeighbourhoodTableManagement" taskName="NeighbourhoodTableManagement" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6265" >
-<father id="6299" num="2" />
+<SUBCOMPONENT type="5352" id="6105" >
+<father id="6139" num="2" />
 <cdparam x="57" y="99" />
 <sizeparam width="264" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="115" minY="0" maxY="187" />
 <infoparam name="TGComponent" value="AVATAR Design::DSRSC_Management" />
-<TGConnectingPoint num="0" id="6257" />
-<TGConnectingPoint num="1" id="6258" />
-<TGConnectingPoint num="2" id="6259" />
-<TGConnectingPoint num="3" id="6260" />
-<TGConnectingPoint num="4" id="6261" />
-<TGConnectingPoint num="5" id="6262" />
-<TGConnectingPoint num="6" id="6263" />
-<TGConnectingPoint num="7" id="6264" />
+<TGConnectingPoint num="0" id="6097" />
+<TGConnectingPoint num="1" id="6098" />
+<TGConnectingPoint num="2" id="6099" />
+<TGConnectingPoint num="3" id="6100" />
+<TGConnectingPoint num="4" id="6101" />
+<TGConnectingPoint num="5" id="6102" />
+<TGConnectingPoint num="6" id="6103" />
+<TGConnectingPoint num="7" id="6104" />
 <extraparam>
 <info value="AVATAR Design::DSRSC_Management" taskName="DSRSC_Management" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6274" >
-<father id="6299" num="3" />
+<SUBCOMPONENT type="5352" id="6114" >
+<father id="6139" num="3" />
 <cdparam x="57" y="55" />
 <sizeparam width="229" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="150" minY="0" maxY="187" />
 <infoparam name="TGComponent" value="AVATAR Design::Communication" />
-<TGConnectingPoint num="0" id="6266" />
-<TGConnectingPoint num="1" id="6267" />
-<TGConnectingPoint num="2" id="6268" />
-<TGConnectingPoint num="3" id="6269" />
-<TGConnectingPoint num="4" id="6270" />
-<TGConnectingPoint num="5" id="6271" />
-<TGConnectingPoint num="6" id="6272" />
-<TGConnectingPoint num="7" id="6273" />
+<TGConnectingPoint num="0" id="6106" />
+<TGConnectingPoint num="1" id="6107" />
+<TGConnectingPoint num="2" id="6108" />
+<TGConnectingPoint num="3" id="6109" />
+<TGConnectingPoint num="4" id="6110" />
+<TGConnectingPoint num="5" id="6111" />
+<TGConnectingPoint num="6" id="6112" />
+<TGConnectingPoint num="7" id="6113" />
 <extraparam>
 <info value="AVATAR Design::Communication" taskName="Communication" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 
-<COMPONENT type="5351" id="6342" >
+<COMPONENT type="5351" id="6182" >
 <cdparam x="29" y="253" />
 <sizeparam width="357" height="149" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="CPU2" value="name" />
-<TGConnectingPoint num="0" id="6318" />
-<TGConnectingPoint num="1" id="6319" />
-<TGConnectingPoint num="2" id="6320" />
-<TGConnectingPoint num="3" id="6321" />
-<TGConnectingPoint num="4" id="6322" />
-<TGConnectingPoint num="5" id="6323" />
-<TGConnectingPoint num="6" id="6324" />
-<TGConnectingPoint num="7" id="6325" />
-<TGConnectingPoint num="8" id="6326" />
-<TGConnectingPoint num="9" id="6327" />
-<TGConnectingPoint num="10" id="6328" />
-<TGConnectingPoint num="11" id="6329" />
-<TGConnectingPoint num="12" id="6330" />
-<TGConnectingPoint num="13" id="6331" />
-<TGConnectingPoint num="14" id="6332" />
-<TGConnectingPoint num="15" id="6333" />
-<TGConnectingPoint num="16" id="6334" />
-<TGConnectingPoint num="17" id="6335" />
-<TGConnectingPoint num="18" id="6336" />
-<TGConnectingPoint num="19" id="6337" />
-<TGConnectingPoint num="20" id="6338" />
-<TGConnectingPoint num="21" id="6339" />
-<TGConnectingPoint num="22" id="6340" />
-<TGConnectingPoint num="23" id="6341" />
+<TGConnectingPoint num="0" id="6158" />
+<TGConnectingPoint num="1" id="6159" />
+<TGConnectingPoint num="2" id="6160" />
+<TGConnectingPoint num="3" id="6161" />
+<TGConnectingPoint num="4" id="6162" />
+<TGConnectingPoint num="5" id="6163" />
+<TGConnectingPoint num="6" id="6164" />
+<TGConnectingPoint num="7" id="6165" />
+<TGConnectingPoint num="8" id="6166" />
+<TGConnectingPoint num="9" id="6167" />
+<TGConnectingPoint num="10" id="6168" />
+<TGConnectingPoint num="11" id="6169" />
+<TGConnectingPoint num="12" id="6170" />
+<TGConnectingPoint num="13" id="6171" />
+<TGConnectingPoint num="14" id="6172" />
+<TGConnectingPoint num="15" id="6173" />
+<TGConnectingPoint num="16" id="6174" />
+<TGConnectingPoint num="17" id="6175" />
+<TGConnectingPoint num="18" id="6176" />
+<TGConnectingPoint num="19" id="6177" />
+<TGConnectingPoint num="20" id="6178" />
+<TGConnectingPoint num="21" id="6179" />
+<TGConnectingPoint num="22" id="6180" />
+<TGConnectingPoint num="23" id="6181" />
 <extraparam>
 <info stereotype="CPU" nodeName="CPU2" />
 <attributes nbOfIrq="6"  iCacheWays="8"  iCacheSets="1"  iCacheWords="4"  dCacheWays="8"  dCacheSets="1"  dCacheWords="4" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="5352" id="6308" >
-<father id="6342" num="0" />
+<SUBCOMPONENT type="5352" id="6148" >
+<father id="6182" num="0" />
 <cdparam x="42" y="348" />
 <sizeparam width="332" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="25" minY="0" maxY="109" />
 <infoparam name="TGComponent" value="AVATAR Design::DrivingPowerReductionStrategy" />
-<TGConnectingPoint num="0" id="6300" />
-<TGConnectingPoint num="1" id="6301" />
-<TGConnectingPoint num="2" id="6302" />
-<TGConnectingPoint num="3" id="6303" />
-<TGConnectingPoint num="4" id="6304" />
-<TGConnectingPoint num="5" id="6305" />
-<TGConnectingPoint num="6" id="6306" />
-<TGConnectingPoint num="7" id="6307" />
+<TGConnectingPoint num="0" id="6140" />
+<TGConnectingPoint num="1" id="6141" />
+<TGConnectingPoint num="2" id="6142" />
+<TGConnectingPoint num="3" id="6143" />
+<TGConnectingPoint num="4" id="6144" />
+<TGConnectingPoint num="5" id="6145" />
+<TGConnectingPoint num="6" id="6146" />
+<TGConnectingPoint num="7" id="6147" />
 <extraparam>
 <info value="AVATAR Design::DrivingPowerReductionStrategy" taskName="DrivingPowerReductionStrategy" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6317" >
-<father id="6342" num="1" />
+<SUBCOMPONENT type="5352" id="6157" >
+<father id="6182" num="1" />
 <cdparam x="44" y="294" />
 <sizeparam width="159" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="198" minY="0" maxY="109" />
 <infoparam name="TGComponent" value="AVATAR Design::PTC" />
-<TGConnectingPoint num="0" id="6309" />
-<TGConnectingPoint num="1" id="6310" />
-<TGConnectingPoint num="2" id="6311" />
-<TGConnectingPoint num="3" id="6312" />
-<TGConnectingPoint num="4" id="6313" />
-<TGConnectingPoint num="5" id="6314" />
-<TGConnectingPoint num="6" id="6315" />
-<TGConnectingPoint num="7" id="6316" />
+<TGConnectingPoint num="0" id="6149" />
+<TGConnectingPoint num="1" id="6150" />
+<TGConnectingPoint num="2" id="6151" />
+<TGConnectingPoint num="3" id="6152" />
+<TGConnectingPoint num="4" id="6153" />
+<TGConnectingPoint num="5" id="6154" />
+<TGConnectingPoint num="6" id="6155" />
+<TGConnectingPoint num="7" id="6156" />
 <extraparam>
 <info value="AVATAR Design::PTC" taskName="PTC" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 
-<COMPONENT type="5351" id="6394" >
-<cdparam x="938" y="453" />
+<COMPONENT type="5351" id="6234" >
+<cdparam x="945" y="286" />
 <sizeparam width="350" height="189" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="CPU3" value="name" />
-<TGConnectingPoint num="0" id="6370" />
-<TGConnectingPoint num="1" id="6371" />
-<TGConnectingPoint num="2" id="6372" />
-<TGConnectingPoint num="3" id="6373" />
-<TGConnectingPoint num="4" id="6374" />
-<TGConnectingPoint num="5" id="6375" />
-<TGConnectingPoint num="6" id="6376" />
-<TGConnectingPoint num="7" id="6377" />
-<TGConnectingPoint num="8" id="6378" />
-<TGConnectingPoint num="9" id="6379" />
-<TGConnectingPoint num="10" id="6380" />
-<TGConnectingPoint num="11" id="6381" />
-<TGConnectingPoint num="12" id="6382" />
-<TGConnectingPoint num="13" id="6383" />
-<TGConnectingPoint num="14" id="6384" />
-<TGConnectingPoint num="15" id="6385" />
-<TGConnectingPoint num="16" id="6386" />
-<TGConnectingPoint num="17" id="6387" />
-<TGConnectingPoint num="18" id="6388" />
-<TGConnectingPoint num="19" id="6389" />
-<TGConnectingPoint num="20" id="6390" />
-<TGConnectingPoint num="21" id="6391" />
-<TGConnectingPoint num="22" id="6392" />
-<TGConnectingPoint num="23" id="6393" />
+<TGConnectingPoint num="0" id="6210" />
+<TGConnectingPoint num="1" id="6211" />
+<TGConnectingPoint num="2" id="6212" />
+<TGConnectingPoint num="3" id="6213" />
+<TGConnectingPoint num="4" id="6214" />
+<TGConnectingPoint num="5" id="6215" />
+<TGConnectingPoint num="6" id="6216" />
+<TGConnectingPoint num="7" id="6217" />
+<TGConnectingPoint num="8" id="6218" />
+<TGConnectingPoint num="9" id="6219" />
+<TGConnectingPoint num="10" id="6220" />
+<TGConnectingPoint num="11" id="6221" />
+<TGConnectingPoint num="12" id="6222" />
+<TGConnectingPoint num="13" id="6223" />
+<TGConnectingPoint num="14" id="6224" />
+<TGConnectingPoint num="15" id="6225" />
+<TGConnectingPoint num="16" id="6226" />
+<TGConnectingPoint num="17" id="6227" />
+<TGConnectingPoint num="18" id="6228" />
+<TGConnectingPoint num="19" id="6229" />
+<TGConnectingPoint num="20" id="6230" />
+<TGConnectingPoint num="21" id="6231" />
+<TGConnectingPoint num="22" id="6232" />
+<TGConnectingPoint num="23" id="6233" />
 <extraparam>
 <info stereotype="CPU" nodeName="CPU3" />
 <attributes nbOfIrq="6"  iCacheWays="8"  iCacheSets="1"  iCacheWords="4"  dCacheWays="8"  dCacheSets="1"  dCacheWords="4" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="5352" id="6351" >
-<father id="6394" num="0" />
-<cdparam x="971" y="587" />
+<SUBCOMPONENT type="5352" id="6191" >
+<father id="6234" num="0" />
+<cdparam x="978" y="420" />
 <sizeparam width="251" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="99" minY="0" maxY="149" />
 <infoparam name="TGComponent" value="AVATAR Design::BrakeManagement" />
-<TGConnectingPoint num="0" id="6343" />
-<TGConnectingPoint num="1" id="6344" />
-<TGConnectingPoint num="2" id="6345" />
-<TGConnectingPoint num="3" id="6346" />
-<TGConnectingPoint num="4" id="6347" />
-<TGConnectingPoint num="5" id="6348" />
-<TGConnectingPoint num="6" id="6349" />
-<TGConnectingPoint num="7" id="6350" />
+<TGConnectingPoint num="0" id="6183" />
+<TGConnectingPoint num="1" id="6184" />
+<TGConnectingPoint num="2" id="6185" />
+<TGConnectingPoint num="3" id="6186" />
+<TGConnectingPoint num="4" id="6187" />
+<TGConnectingPoint num="5" id="6188" />
+<TGConnectingPoint num="6" id="6189" />
+<TGConnectingPoint num="7" id="6190" />
 <extraparam>
 <info value="AVATAR Design::BrakeManagement" taskName="BrakeManagement" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6360" >
-<father id="6394" num="1" />
-<cdparam x="971" y="540" />
+<SUBCOMPONENT type="5352" id="6200" >
+<father id="6234" num="1" />
+<cdparam x="978" y="373" />
 <sizeparam width="298" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="52" minY="0" maxY="149" />
 <infoparam name="TGComponent" value="AVATAR Design::DangerAvoidanceStrategy" />
-<TGConnectingPoint num="0" id="6352" />
-<TGConnectingPoint num="1" id="6353" />
-<TGConnectingPoint num="2" id="6354" />
-<TGConnectingPoint num="3" id="6355" />
-<TGConnectingPoint num="4" id="6356" />
-<TGConnectingPoint num="5" id="6357" />
-<TGConnectingPoint num="6" id="6358" />
-<TGConnectingPoint num="7" id="6359" />
+<TGConnectingPoint num="0" id="6192" />
+<TGConnectingPoint num="1" id="6193" />
+<TGConnectingPoint num="2" id="6194" />
+<TGConnectingPoint num="3" id="6195" />
+<TGConnectingPoint num="4" id="6196" />
+<TGConnectingPoint num="5" id="6197" />
+<TGConnectingPoint num="6" id="6198" />
+<TGConnectingPoint num="7" id="6199" />
 <extraparam>
 <info value="AVATAR Design::DangerAvoidanceStrategy" taskName="DangerAvoidanceStrategy" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6369" >
-<father id="6394" num="2" />
-<cdparam x="970" y="494" />
+<SUBCOMPONENT type="5352" id="6209" >
+<father id="6234" num="2" />
+<cdparam x="977" y="327" />
 <sizeparam width="161" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="189" minY="0" maxY="149" />
 <infoparam name="TGComponent" value="AVATAR Design::BCU" />
-<TGConnectingPoint num="0" id="6361" />
-<TGConnectingPoint num="1" id="6362" />
-<TGConnectingPoint num="2" id="6363" />
-<TGConnectingPoint num="3" id="6364" />
-<TGConnectingPoint num="4" id="6365" />
-<TGConnectingPoint num="5" id="6366" />
-<TGConnectingPoint num="6" id="6367" />
-<TGConnectingPoint num="7" id="6368" />
+<TGConnectingPoint num="0" id="6201" />
+<TGConnectingPoint num="1" id="6202" />
+<TGConnectingPoint num="2" id="6203" />
+<TGConnectingPoint num="3" id="6204" />
+<TGConnectingPoint num="4" id="6205" />
+<TGConnectingPoint num="5" id="6206" />
+<TGConnectingPoint num="6" id="6207" />
+<TGConnectingPoint num="7" id="6208" />
 <extraparam>
 <info value="AVATAR Design::BCU" taskName="BCU" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 
-<COMPONENT type="5351" id="6473" >
+<COMPONENT type="5351" id="6313" >
 <cdparam x="455" y="10" />
 <sizeparam width="329" height="311" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="CPU0" value="name" />
-<TGConnectingPoint num="0" id="6449" />
-<TGConnectingPoint num="1" id="6450" />
-<TGConnectingPoint num="2" id="6451" />
-<TGConnectingPoint num="3" id="6452" />
-<TGConnectingPoint num="4" id="6453" />
-<TGConnectingPoint num="5" id="6454" />
-<TGConnectingPoint num="6" id="6455" />
-<TGConnectingPoint num="7" id="6456" />
-<TGConnectingPoint num="8" id="6457" />
-<TGConnectingPoint num="9" id="6458" />
-<TGConnectingPoint num="10" id="6459" />
-<TGConnectingPoint num="11" id="6460" />
-<TGConnectingPoint num="12" id="6461" />
-<TGConnectingPoint num="13" id="6462" />
-<TGConnectingPoint num="14" id="6463" />
-<TGConnectingPoint num="15" id="6464" />
-<TGConnectingPoint num="16" id="6465" />
-<TGConnectingPoint num="17" id="6466" />
-<TGConnectingPoint num="18" id="6467" />
-<TGConnectingPoint num="19" id="6468" />
-<TGConnectingPoint num="20" id="6469" />
-<TGConnectingPoint num="21" id="6470" />
-<TGConnectingPoint num="22" id="6471" />
-<TGConnectingPoint num="23" id="6472" />
+<TGConnectingPoint num="0" id="6289" />
+<TGConnectingPoint num="1" id="6290" />
+<TGConnectingPoint num="2" id="6291" />
+<TGConnectingPoint num="3" id="6292" />
+<TGConnectingPoint num="4" id="6293" />
+<TGConnectingPoint num="5" id="6294" />
+<TGConnectingPoint num="6" id="6295" />
+<TGConnectingPoint num="7" id="6296" />
+<TGConnectingPoint num="8" id="6297" />
+<TGConnectingPoint num="9" id="6298" />
+<TGConnectingPoint num="10" id="6299" />
+<TGConnectingPoint num="11" id="6300" />
+<TGConnectingPoint num="12" id="6301" />
+<TGConnectingPoint num="13" id="6302" />
+<TGConnectingPoint num="14" id="6303" />
+<TGConnectingPoint num="15" id="6304" />
+<TGConnectingPoint num="16" id="6305" />
+<TGConnectingPoint num="17" id="6306" />
+<TGConnectingPoint num="18" id="6307" />
+<TGConnectingPoint num="19" id="6308" />
+<TGConnectingPoint num="20" id="6309" />
+<TGConnectingPoint num="21" id="6310" />
+<TGConnectingPoint num="22" id="6311" />
+<TGConnectingPoint num="23" id="6312" />
 <extraparam>
 <info stereotype="CPU" nodeName="CPU0" />
 <attributes nbOfIrq="6"  iCacheWays="1"  iCacheSets="8"  iCacheWords="4"  dCacheWays="1"  dCacheSets="8"  dCacheWords="4" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="5352" id="6403" >
-<father id="6473" num="0" />
+<SUBCOMPONENT type="5352" id="6243" >
+<father id="6313" num="0" />
 <cdparam x="498" y="275" />
 <sizeparam width="261" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="68" minY="0" maxY="271" />
 <infoparam name="TGComponent" value="AVATAR Design::EmergencySimulator" />
-<TGConnectingPoint num="0" id="6395" />
-<TGConnectingPoint num="1" id="6396" />
-<TGConnectingPoint num="2" id="6397" />
-<TGConnectingPoint num="3" id="6398" />
-<TGConnectingPoint num="4" id="6399" />
-<TGConnectingPoint num="5" id="6400" />
-<TGConnectingPoint num="6" id="6401" />
-<TGConnectingPoint num="7" id="6402" />
+<TGConnectingPoint num="0" id="6235" />
+<TGConnectingPoint num="1" id="6236" />
+<TGConnectingPoint num="2" id="6237" />
+<TGConnectingPoint num="3" id="6238" />
+<TGConnectingPoint num="4" id="6239" />
+<TGConnectingPoint num="5" id="6240" />
+<TGConnectingPoint num="6" id="6241" />
+<TGConnectingPoint num="7" id="6242" />
 <extraparam>
 <info value="AVATAR Design::EmergencySimulator" taskName="EmergencySimulator" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6412" >
-<father id="6473" num="1" />
+<SUBCOMPONENT type="5352" id="6252" >
+<father id="6313" num="1" />
 <cdparam x="498" y="232" />
 <sizeparam width="264" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="65" minY="0" maxY="271" />
 <infoparam name="TGComponent" value="AVATAR Design::CarPositionSimulator" />
-<TGConnectingPoint num="0" id="6404" />
-<TGConnectingPoint num="1" id="6405" />
-<TGConnectingPoint num="2" id="6406" />
-<TGConnectingPoint num="3" id="6407" />
-<TGConnectingPoint num="4" id="6408" />
-<TGConnectingPoint num="5" id="6409" />
-<TGConnectingPoint num="6" id="6410" />
-<TGConnectingPoint num="7" id="6411" />
+<TGConnectingPoint num="0" id="6244" />
+<TGConnectingPoint num="1" id="6245" />
+<TGConnectingPoint num="2" id="6246" />
+<TGConnectingPoint num="3" id="6247" />
+<TGConnectingPoint num="4" id="6248" />
+<TGConnectingPoint num="5" id="6249" />
+<TGConnectingPoint num="6" id="6250" />
+<TGConnectingPoint num="7" id="6251" />
 <extraparam>
 <info value="AVATAR Design::CarPositionSimulator" taskName="CarPositionSimulator" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6421" >
-<father id="6473" num="2" />
+<SUBCOMPONENT type="5352" id="6261" >
+<father id="6313" num="2" />
 <cdparam x="497" y="145" />
 <sizeparam width="216" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="113" minY="0" maxY="271" />
 <infoparam name="TGComponent" value="AVATAR Design::RadarSensor" />
-<TGConnectingPoint num="0" id="6413" />
-<TGConnectingPoint num="1" id="6414" />
-<TGConnectingPoint num="2" id="6415" />
-<TGConnectingPoint num="3" id="6416" />
-<TGConnectingPoint num="4" id="6417" />
-<TGConnectingPoint num="5" id="6418" />
-<TGConnectingPoint num="6" id="6419" />
-<TGConnectingPoint num="7" id="6420" />
+<TGConnectingPoint num="0" id="6253" />
+<TGConnectingPoint num="1" id="6254" />
+<TGConnectingPoint num="2" id="6255" />
+<TGConnectingPoint num="3" id="6256" />
+<TGConnectingPoint num="4" id="6257" />
+<TGConnectingPoint num="5" id="6258" />
+<TGConnectingPoint num="6" id="6259" />
+<TGConnectingPoint num="7" id="6260" />
 <extraparam>
 <info value="AVATAR Design::RadarSensor" taskName="RadarSensor" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6430" >
-<father id="6473" num="3" />
+<SUBCOMPONENT type="5352" id="6270" >
+<father id="6313" num="3" />
 <cdparam x="497" y="188" />
 <sizeparam width="204" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="125" minY="0" maxY="271" />
 <infoparam name="TGComponent" value="AVATAR Design::GPSSensor" />
-<TGConnectingPoint num="0" id="6422" />
-<TGConnectingPoint num="1" id="6423" />
-<TGConnectingPoint num="2" id="6424" />
-<TGConnectingPoint num="3" id="6425" />
-<TGConnectingPoint num="4" id="6426" />
-<TGConnectingPoint num="5" id="6427" />
-<TGConnectingPoint num="6" id="6428" />
-<TGConnectingPoint num="7" id="6429" />
+<TGConnectingPoint num="0" id="6262" />
+<TGConnectingPoint num="1" id="6263" />
+<TGConnectingPoint num="2" id="6264" />
+<TGConnectingPoint num="3" id="6265" />
+<TGConnectingPoint num="4" id="6266" />
+<TGConnectingPoint num="5" id="6267" />
+<TGConnectingPoint num="6" id="6268" />
+<TGConnectingPoint num="7" id="6269" />
 <extraparam>
 <info value="AVATAR Design::GPSSensor" taskName="GPSSensor" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6439" >
-<father id="6473" num="4" />
+<SUBCOMPONENT type="5352" id="6279" >
+<father id="6313" num="4" />
 <cdparam x="497" y="99" />
 <sizeparam width="218" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="111" minY="0" maxY="271" />
 <infoparam name="TGComponent" value="AVATAR Design::SpeedSensor" />
-<TGConnectingPoint num="0" id="6431" />
-<TGConnectingPoint num="1" id="6432" />
-<TGConnectingPoint num="2" id="6433" />
-<TGConnectingPoint num="3" id="6434" />
-<TGConnectingPoint num="4" id="6435" />
-<TGConnectingPoint num="5" id="6436" />
-<TGConnectingPoint num="6" id="6437" />
-<TGConnectingPoint num="7" id="6438" />
+<TGConnectingPoint num="0" id="6271" />
+<TGConnectingPoint num="1" id="6272" />
+<TGConnectingPoint num="2" id="6273" />
+<TGConnectingPoint num="3" id="6274" />
+<TGConnectingPoint num="4" id="6275" />
+<TGConnectingPoint num="5" id="6276" />
+<TGConnectingPoint num="6" id="6277" />
+<TGConnectingPoint num="7" id="6278" />
 <extraparam>
 <info value="AVATAR Design::SpeedSensor" taskName="SpeedSensor" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5352" id="6448" >
-<father id="6473" num="5" />
+<SUBCOMPONENT type="5352" id="6288" >
+<father id="6313" num="5" />
 <cdparam x="496" y="53" />
 <sizeparam width="199" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="130" minY="0" maxY="271" />
 <infoparam name="TGComponent" value="AVATAR Design::TestBench" />
-<TGConnectingPoint num="0" id="6440" />
-<TGConnectingPoint num="1" id="6441" />
-<TGConnectingPoint num="2" id="6442" />
-<TGConnectingPoint num="3" id="6443" />
-<TGConnectingPoint num="4" id="6444" />
-<TGConnectingPoint num="5" id="6445" />
-<TGConnectingPoint num="6" id="6446" />
-<TGConnectingPoint num="7" id="6447" />
+<TGConnectingPoint num="0" id="6280" />
+<TGConnectingPoint num="1" id="6281" />
+<TGConnectingPoint num="2" id="6282" />
+<TGConnectingPoint num="3" id="6283" />
+<TGConnectingPoint num="4" id="6284" />
+<TGConnectingPoint num="5" id="6285" />
+<TGConnectingPoint num="6" id="6286" />
+<TGConnectingPoint num="7" id="6287" />
 <extraparam>
 <info value="AVATAR Design::TestBench" taskName="TestBench" referenceTaskName="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 
-<CONNECTOR type="5350" id="6474" >
+<COMPONENT type="5355" id="6383" >
+<cdparam x="664" y="488" />
+<sizeparam width="458" height="315" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="Memory1" value="name" />
+<TGConnectingPoint num="0" id="6359" />
+<TGConnectingPoint num="1" id="6360" />
+<TGConnectingPoint num="2" id="6361" />
+<TGConnectingPoint num="3" id="6362" />
+<TGConnectingPoint num="4" id="6363" />
+<TGConnectingPoint num="5" id="6364" />
+<TGConnectingPoint num="6" id="6365" />
+<TGConnectingPoint num="7" id="6366" />
+<TGConnectingPoint num="8" id="6367" />
+<TGConnectingPoint num="9" id="6368" />
+<TGConnectingPoint num="10" id="6369" />
+<TGConnectingPoint num="11" id="6370" />
+<TGConnectingPoint num="12" id="6371" />
+<TGConnectingPoint num="13" id="6372" />
+<TGConnectingPoint num="14" id="6373" />
+<TGConnectingPoint num="15" id="6374" />
+<TGConnectingPoint num="16" id="6375" />
+<TGConnectingPoint num="17" id="6376" />
+<TGConnectingPoint num="18" id="6377" />
+<TGConnectingPoint num="19" id="6378" />
+<TGConnectingPoint num="20" id="6379" />
+<TGConnectingPoint num="21" id="6380" />
+<TGConnectingPoint num="22" id="6381" />
+<TGConnectingPoint num="23" id="6382" />
+<extraparam>
+<info stereotype="RAM" nodeName="Memory1" />
+<attributes byteDataSize="33554432"  index="0" />
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="5362" id="6322" >
+<father id="6383" num="0" />
+<cdparam x="684" y="539" />
+<sizeparam width="361" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="97" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="CorrectnessChecking/out toPlausibityCheckMessage" />
+<TGConnectingPoint num="0" id="6314" />
+<TGConnectingPoint num="1" id="6315" />
+<TGConnectingPoint num="2" id="6316" />
+<TGConnectingPoint num="3" id="6317" />
+<TGConnectingPoint num="4" id="6318" />
+<TGConnectingPoint num="5" id="6319" />
+<TGConnectingPoint num="6" id="6320" />
+<TGConnectingPoint num="7" id="6321" />
+<extraparam>
+<info value="CorrectnessChecking/out toPlausibityCheckMessage" channelName="CorrectnessChecking/out toPlausibityCheckMessage(int id, int position) #--# PlausibilityCheck/in getEmergencyMessageToVerify(int id, int position)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6331" >
+<father id="6383" num="1" />
+<cdparam x="684" y="634" />
+<sizeparam width="410" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="48" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="DSRSC_Management/out forwardEmergencyBrakingMessage" />
+<TGConnectingPoint num="0" id="6323" />
+<TGConnectingPoint num="1" id="6324" />
+<TGConnectingPoint num="2" id="6325" />
+<TGConnectingPoint num="3" id="6326" />
+<TGConnectingPoint num="4" id="6327" />
+<TGConnectingPoint num="5" id="6328" />
+<TGConnectingPoint num="6" id="6329" />
+<TGConnectingPoint num="7" id="6330" />
+<extraparam>
+<info value="DSRSC_Management/out forwardEmergencyBrakingMessage" channelName="DSRSC_Management/out forwardEmergencyBrakingMessage(int id, int position) #--# CorrectnessChecking/in getEmergencyBrakingMessage(int id, int position)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6340" >
+<father id="6383" num="2" />
+<cdparam x="684" y="614" />
+<sizeparam width="283" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="175" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="DSRSC_Management/out setCarPosition" />
+<TGConnectingPoint num="0" id="6332" />
+<TGConnectingPoint num="1" id="6333" />
+<TGConnectingPoint num="2" id="6334" />
+<TGConnectingPoint num="3" id="6335" />
+<TGConnectingPoint num="4" id="6336" />
+<TGConnectingPoint num="5" id="6337" />
+<TGConnectingPoint num="6" id="6338" />
+<TGConnectingPoint num="7" id="6339" />
+<extraparam>
+<info value="DSRSC_Management/out setCarPosition" channelName="DSRSC_Management/out setCarPosition(int id, int position) #--# NeighbourhoodTableManagement/in addANode(int id, int position)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6349" >
+<father id="6383" num="3" />
+<cdparam x="684" y="593" />
+<sizeparam width="416" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="42" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="DSRSC_Management/in broadcastEmergencyBrakingMessage" />
+<TGConnectingPoint num="0" id="6341" />
+<TGConnectingPoint num="1" id="6342" />
+<TGConnectingPoint num="2" id="6343" />
+<TGConnectingPoint num="3" id="6344" />
+<TGConnectingPoint num="4" id="6345" />
+<TGConnectingPoint num="5" id="6346" />
+<TGConnectingPoint num="6" id="6347" />
+<TGConnectingPoint num="7" id="6348" />
+<extraparam>
+<info value="DSRSC_Management/in broadcastEmergencyBrakingMessage" channelName="DSRSC_Management/in broadcastEmergencyBrakingMessage(int id, int position) #--# DangerAvoidanceStrategy/out forwardEmergency(int myID, int currentPosition)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6358" >
+<father id="6383" num="4" />
+<cdparam x="685" y="685" />
+<sizeparam width="335" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="123" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="NeighbourhoodTableManagement/out sendTable" />
+<TGConnectingPoint num="0" id="6350" />
+<TGConnectingPoint num="1" id="6351" />
+<TGConnectingPoint num="2" id="6352" />
+<TGConnectingPoint num="3" id="6353" />
+<TGConnectingPoint num="4" id="6354" />
+<TGConnectingPoint num="5" id="6355" />
+<TGConnectingPoint num="6" id="6356" />
+<TGConnectingPoint num="7" id="6357" />
+<extraparam>
+<info value="NeighbourhoodTableManagement/out sendTable" channelName="NeighbourhoodTableManagement/out sendTable(int currentPosition, NodeList list) #--# PlausibilityCheck/in getNodeList(NodeList list)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+
+<COMPONENT type="5355" id="6498" >
+<cdparam x="205" y="489" />
+<sizeparam width="426" height="315" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="Memory0" value="name" />
+<TGConnectingPoint num="0" id="6474" />
+<TGConnectingPoint num="1" id="6475" />
+<TGConnectingPoint num="2" id="6476" />
+<TGConnectingPoint num="3" id="6477" />
+<TGConnectingPoint num="4" id="6478" />
+<TGConnectingPoint num="5" id="6479" />
+<TGConnectingPoint num="6" id="6480" />
+<TGConnectingPoint num="7" id="6481" />
+<TGConnectingPoint num="8" id="6482" />
+<TGConnectingPoint num="9" id="6483" />
+<TGConnectingPoint num="10" id="6484" />
+<TGConnectingPoint num="11" id="6485" />
+<TGConnectingPoint num="12" id="6486" />
+<TGConnectingPoint num="13" id="6487" />
+<TGConnectingPoint num="14" id="6488" />
+<TGConnectingPoint num="15" id="6489" />
+<TGConnectingPoint num="16" id="6490" />
+<TGConnectingPoint num="17" id="6491" />
+<TGConnectingPoint num="18" id="6492" />
+<TGConnectingPoint num="19" id="6493" />
+<TGConnectingPoint num="20" id="6494" />
+<TGConnectingPoint num="21" id="6495" />
+<TGConnectingPoint num="22" id="6496" />
+<TGConnectingPoint num="23" id="6497" />
+<extraparam>
+<info stereotype="RAM" nodeName="Memory0" />
+<attributes byteDataSize="33554432"  index="0" />
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="5362" id="6392" >
+<father id="6498" num="0" />
+<cdparam x="252" y="591" />
+<sizeparam width="237" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="189" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="RadarSensor/out obstacleAhead" />
+<TGConnectingPoint num="0" id="6384" />
+<TGConnectingPoint num="1" id="6385" />
+<TGConnectingPoint num="2" id="6386" />
+<TGConnectingPoint num="3" id="6387" />
+<TGConnectingPoint num="4" id="6388" />
+<TGConnectingPoint num="5" id="6389" />
+<TGConnectingPoint num="6" id="6390" />
+<TGConnectingPoint num="7" id="6391" />
+<extraparam>
+<info value="RadarSensor/out obstacleAhead" channelName="RadarSensor/out obstacleAhead(int info) #--# ObjectListManagement/in isObstacleAhead(int info)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6401" >
+<father id="6498" num="1" />
+<cdparam x="251" y="657" />
+<sizeparam width="272" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="154" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="PlausibilityCheck/in getInfoOnObstacle" />
+<TGConnectingPoint num="0" id="6393" />
+<TGConnectingPoint num="1" id="6394" />
+<TGConnectingPoint num="2" id="6395" />
+<TGConnectingPoint num="3" id="6396" />
+<TGConnectingPoint num="4" id="6397" />
+<TGConnectingPoint num="5" id="6398" />
+<TGConnectingPoint num="6" id="6399" />
+<TGConnectingPoint num="7" id="6400" />
+<extraparam>
+<info value="PlausibilityCheck/in getInfoOnObstacle" channelName="PlausibilityCheck/in getInfoOnObstacle(int obstacle) #--# ObjectListManagement/out getInfoOnObstacle(int info)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6410" >
+<father id="6498" num="2" />
+<cdparam x="252" y="574" />
+<sizeparam width="247" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="179" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="SpeedSensor/out updateOnSpeed" />
+<TGConnectingPoint num="0" id="6402" />
+<TGConnectingPoint num="1" id="6403" />
+<TGConnectingPoint num="2" id="6404" />
+<TGConnectingPoint num="3" id="6405" />
+<TGConnectingPoint num="4" id="6406" />
+<TGConnectingPoint num="5" id="6407" />
+<TGConnectingPoint num="6" id="6408" />
+<TGConnectingPoint num="7" id="6409" />
+<extraparam>
+<info value="SpeedSensor/out updateOnSpeed" channelName="SpeedSensor/out updateOnSpeed(int speed) #--# VehiculeDynamicsManagement/in updateOnSpeed(int speed)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6419" >
+<father id="6498" num="3" />
+<cdparam x="251" y="636" />
+<sizeparam width="256" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="170" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="PlausibilityCheck/in getInfoOnSpeed" />
+<TGConnectingPoint num="0" id="6411" />
+<TGConnectingPoint num="1" id="6412" />
+<TGConnectingPoint num="2" id="6413" />
+<TGConnectingPoint num="3" id="6414" />
+<TGConnectingPoint num="4" id="6415" />
+<TGConnectingPoint num="5" id="6416" />
+<TGConnectingPoint num="6" id="6417" />
+<TGConnectingPoint num="7" id="6418" />
+<extraparam>
+<info value="PlausibilityCheck/in getInfoOnSpeed" channelName="PlausibilityCheck/in getInfoOnSpeed(int speed) #--# VehiculeDynamicsManagement/out getInfoOnSpeed(int speed)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6428" >
+<father id="6498" num="4" />
+<cdparam x="251" y="740" />
+<sizeparam width="252" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="174" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="DangerAvoidanceStrategy/in brake" />
+<TGConnectingPoint num="0" id="6420" />
+<TGConnectingPoint num="1" id="6421" />
+<TGConnectingPoint num="2" id="6422" />
+<TGConnectingPoint num="3" id="6423" />
+<TGConnectingPoint num="4" id="6424" />
+<TGConnectingPoint num="5" id="6425" />
+<TGConnectingPoint num="6" id="6426" />
+<TGConnectingPoint num="7" id="6427" />
+<extraparam>
+<info value="DangerAvoidanceStrategy/in brake" channelName="DangerAvoidanceStrategy/in brake(int speed, int currentPosition, int position) #--# PlausibilityCheck/out brake(int speed, int currentPosition, int position)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6437" >
+<father id="6498" num="5" />
+<cdparam x="251" y="723" />
+<sizeparam width="301" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="125" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="DangerAvoidanceStrategy/out brakePower" />
+<TGConnectingPoint num="0" id="6429" />
+<TGConnectingPoint num="1" id="6430" />
+<TGConnectingPoint num="2" id="6431" />
+<TGConnectingPoint num="3" id="6432" />
+<TGConnectingPoint num="4" id="6433" />
+<TGConnectingPoint num="5" id="6434" />
+<TGConnectingPoint num="6" id="6435" />
+<TGConnectingPoint num="7" id="6436" />
+<extraparam>
+<info value="DangerAvoidanceStrategy/out brakePower" channelName="DangerAvoidanceStrategy/out brakePower(int value) #--# BrakeManagement/in brake(int value)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6446" >
+<father id="6498" num="6" />
+<cdparam x="251" y="706" />
+<sizeparam width="308" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="118" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="DangerAvoidanceStrategy/out reducePower" />
+<TGConnectingPoint num="0" id="6438" />
+<TGConnectingPoint num="1" id="6439" />
+<TGConnectingPoint num="2" id="6440" />
+<TGConnectingPoint num="3" id="6441" />
+<TGConnectingPoint num="4" id="6442" />
+<TGConnectingPoint num="5" id="6443" />
+<TGConnectingPoint num="6" id="6444" />
+<TGConnectingPoint num="7" id="6445" />
+<extraparam>
+<info value="DangerAvoidanceStrategy/out reducePower" channelName="DangerAvoidanceStrategy/out reducePower(int value) #--# DrivingPowerReductionStrategy/in getReducePowerOrder(int value)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6455" >
+<father id="6498" num="7" />
+<cdparam x="252" y="557" />
+<sizeparam width="201" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="225" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="GPSSensor/out setPosition" />
+<TGConnectingPoint num="0" id="6447" />
+<TGConnectingPoint num="1" id="6448" />
+<TGConnectingPoint num="2" id="6449" />
+<TGConnectingPoint num="3" id="6450" />
+<TGConnectingPoint num="4" id="6451" />
+<TGConnectingPoint num="5" id="6452" />
+<TGConnectingPoint num="6" id="6453" />
+<TGConnectingPoint num="7" id="6454" />
+<extraparam>
+<info value="GPSSensor/out setPosition" channelName="GPSSensor/out setPosition(int currentPosition) #--# NeighbourhoodTableManagement/in setPosition(int currentPosition)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6464" >
+<father id="6498" num="8" />
+<cdparam x="252" y="540" />
+<sizeparam width="261" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="165" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="CarPositionSimulator/out carPosition" />
+<TGConnectingPoint num="0" id="6456" />
+<TGConnectingPoint num="1" id="6457" />
+<TGConnectingPoint num="2" id="6458" />
+<TGConnectingPoint num="3" id="6459" />
+<TGConnectingPoint num="4" id="6460" />
+<TGConnectingPoint num="5" id="6461" />
+<TGConnectingPoint num="6" id="6462" />
+<TGConnectingPoint num="7" id="6463" />
+<extraparam>
+<info value="CarPositionSimulator/out carPosition" channelName="CarPositionSimulator/out carPosition(int id, int position) #--# DSRSC_Management/in carPosition(int id, int position)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5362" id="6473" >
+<father id="6498" num="9" />
+<cdparam x="252" y="521" />
+<sizeparam width="301" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="125" minY="0" maxY="275" />
+<infoparam name="TGComponent" value="EmergencySimulator/out obstacleDetected" />
+<TGConnectingPoint num="0" id="6465" />
+<TGConnectingPoint num="1" id="6466" />
+<TGConnectingPoint num="2" id="6467" />
+<TGConnectingPoint num="3" id="6468" />
+<TGConnectingPoint num="4" id="6469" />
+<TGConnectingPoint num="5" id="6470" />
+<TGConnectingPoint num="6" id="6471" />
+<TGConnectingPoint num="7" id="6472" />
+<extraparam>
+<info value="EmergencySimulator/out obstacleDetected" channelName="EmergencySimulator/out obstacleDetected(int id, int position) #--# DSRSC_Management/in obstacleDetected(int id, int position)" referenceDiagram="AVATAR Design" />
+</extraparam>
+</SUBCOMPONENT>
+
+<CONNECTOR type="5350" id="6499" >
 <cdparam x="701" y="321" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="{info}" />
-<P1  x="701" y="321" id="6464" />
+<P1  x="701" y="321" id="6304" />
 <P2  x="666" y="359" id="5969" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<CONNECTOR type="5350" id="6475" >
+<CONNECTOR type="5350" id="6500" >
 <cdparam x="970" y="247" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="{info}" />
-<P1  x="970" y="247" id="6228" />
+<P1  x="970" y="247" id="6068" />
 <P2  x="791" y="371" id="5979" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<CONNECTOR type="5350" id="6477" >
+<CONNECTOR type="5350" id="6501" >
+<cdparam x="1050" y="406" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="945" y="427" id="6222" />
+<P2  x="791" y="396" id="5981" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="5350" id="6502" >
 <cdparam x="809" y="464" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="{info}" />
-<P1  x="500" y="471" id="6129" />
+<P1  x="418" y="489" id="6475" />
 <P2  x="666" y="409" id="5974" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<CONNECTOR type="5350" id="6479" >
+<CONNECTOR type="5350" id="6504" >
 <cdparam x="142" y="462" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="{info}" />
-<P1  x="142" y="462" id="6162" />
+<P1  x="142" y="462" id="6002" />
 <P2  x="541" y="409" id="5973" />
 <Point x="545" y="409" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR><SUBCOMPONENT type="-1" id="6478" >
-<father id="6479" num="0" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="6503" >
+<father id="6504" num="0" />
 <cdparam x="545" y="409" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -14499,19 +14543,19 @@ Otherwise, the most far away
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<CONNECTOR type="5350" id="6480" >
+<CONNECTOR type="5350" id="6505" >
 <cdparam x="386" y="364" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="{info}" />
-<P1  x="386" y="364" id="6331" />
+<P1  x="386" y="364" id="6171" />
 <P2  x="541" y="396" id="5980" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<CONNECTOR type="5350" id="6481" >
+<CONNECTOR type="5350" id="6506" >
 <cdparam x="404" y="237" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="{info}" />
-<P1  x="404" y="237" id="6282" />
+<P1  x="404" y="237" id="6122" />
 <P2  x="541" y="384" id="5971" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>

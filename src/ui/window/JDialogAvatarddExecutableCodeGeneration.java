@@ -78,7 +78,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
     private String textSysC1 = "Base directory of code generation:";
     private String textSysC2 = "Compile soclib executable with";   
-    private String textSysC3 = "Run code and trace events (if enabled at code generation):";
+    private String textSysC3 = "Run code and trace traffic on interconnect :";
     private String textSysC4 = "Run code in soclib / mutekh:";
     private String textSysC5 = "Show AVATAR trace from file w/o hardware:";
     private String textSysC6 = "Show cycle accurate trace from MPSoC file:";
@@ -320,7 +320,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
         exetrace.addActionListener(this);
         exegroup.add(exetrace);
         jp03.add(exetrace, c03);
-        exe3 = new JTextField(pathExecuteMPSoC +  " " + pathCode + File.separator + "trace.txt", 100);
+        exe3 = new JTextField(pathExecuteMPSoC+"-trace", 100);
         jp03.add(exe3, c03);
 
         exesoclib = new JRadioButton(textSysC4, false);
