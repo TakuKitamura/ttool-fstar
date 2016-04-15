@@ -95,7 +95,6 @@ public class TML2Avatar {
     List<String> allStates;
     public TML2Avatar(TMLMapping tmlmap) {
         this.tmlmap = tmlmap;
-	System.out.println(tmlmap.mappedcommelts);
 	this.tmlmodel = tmlmap.getTMLModeling();
 	allStates = new ArrayList<String>();
 	attrsToCheck=new ArrayList<String>();
@@ -1212,7 +1211,6 @@ public class TML2Avatar {
 
 	//Add authenticity pragmas
 	for (String s: signalAuthOriginMap.keySet()){
-		System.out.println("authe " + s);
 	    if (signalAuthDestMap.containsKey(s)){
 		AvatarPragmaAuthenticity pragma = new AvatarPragmaAuthenticity(s, signalAuthOriginMap.get(s).getReferenceObject(), signalAuthOriginMap.get(s), signalAuthDestMap.get(s));
 		avspec.addPragma(pragma);
@@ -1226,7 +1224,21 @@ public class TML2Avatar {
 	for (TMLChannel channel:tmlmodel.getChannels()){
 	    if (channel.isBasicChannel()){
 		AvatarRelation ar= new AvatarRelation(channel.getName(), taskBlockMap.get(channel.getOriginTask()), taskBlockMap.get(channel.getDestinationTask()), channel.getReferenceObject());
-	        ar.setPrivate(originDestMap.get(channel.getOriginTask().getName()+"__"+channel.getDestinationTask().getName())==1);
+		LinkedList<HwCommunicationNode> path =tmlmap.findNodesForElement(channel);
+	        if (path.size()!=0){
+		   // System.out.println(path);
+		    ar.setPrivate(true);
+		    for (HwCommunicationNode node:path){
+			if (node instanceof HwBus){
+			    if (((HwBus) node).privacy ==0){
+				ar.setPrivate(false);
+			    }
+			}
+		    }
+		}
+		else {
+	            ar.setPrivate(originDestMap.get(channel.getOriginTask().getName()+"__"+channel.getDestinationTask().getName())==1);
+		}
 	        //Find in signal
 	        List<AvatarSignal> sig1 = new ArrayList<AvatarSignal>();
 	        List<AvatarSignal> sig2 = new ArrayList<AvatarSignal>();

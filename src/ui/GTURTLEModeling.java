@@ -641,6 +641,13 @@ public class GTURTLEModeling {
 	    t2a = new TML2Avatar(tmap);
 	    avatarspec = t2a.generateAvatarSpec(loopLimit);
 	}
+	else if (tmlm!=null){
+	    //Generate default mapping
+	    tmap = tmlm.getDefaultMapping();
+	    tmap.setTMLDesignPanel((TMLComponentDesignPanel)mgui.getCurrentTURTLEPanel());
+	    t2a=new TML2Avatar(tmap);
+	    avatarspec = t2a.generateAvatarSpec(loopLimit);
+	}
 	else if (avatarspec == null){
 	    return false;
 	}

@@ -637,7 +637,6 @@ public class TMLModeling {
 	    }
 	    String channelName=secChannelMap.get(attr.getName());
 	    if (channelName!=null){
-	    System.out.println("CHANNEL FOUND "+channelName);
 	    channel = getChannelByName(channelName);
 	    if (channel!=null){
 		for (TMLCPrimitivePort port:channel.ports){
@@ -698,7 +697,6 @@ public class TMLModeling {
 		}
 	    }
  	    String channelName=secChannelMap.get(attr.getName());
-	    System.out.println("CHANNEL FOUND "+channelName);
 	if (channelName!=null){
 	    channel = getChannelByName(channelName);
 	    if (channel!=null){
@@ -730,7 +728,6 @@ public class TMLModeling {
     }
     public void backtraceAuthenticity(LinkedList<String> satisfiedAuthenticity, LinkedList<String> satisfiedWeakAuthenticity,LinkedList<String> nonSatisfiedAuthenticity, String mappingName){
 	for (String s: satisfiedAuthenticity){
-	    System.out.println("authenticity" +s);
 	    String signalName = s.split("__chData")[0];
 	    for (TMLTask t: getTasks()){
 		if (signalName.contains(t.getName())){
@@ -785,17 +782,17 @@ public class TMLModeling {
 		    signalName = signalName.replace(t.getName()+"__","");
 		}
 	    }
-	    System.out.println("auth on "+signalName);
 	    String channelName=secChannelMap.get(signalName);
-	    System.out.println("auth channel "+channelName);
-	    channel = getChannelByName(channelName);
-	    if (channel!=null){
-		for (TMLCPrimitivePort port:channel.ports){
-		    if (port.checkAuth){
-		    	port.checkSecStrongAuthStatus = 2;
-	 	    	port.secName= signalName;
+	    if (channelName!=null){
+	    	channel = getChannelByName(channelName);
+	    	if (channel!=null){
+		    for (TMLCPrimitivePort port:channel.ports){
+		    	if (port.checkAuth){
+		    	    port.checkSecStrongAuthStatus = 2;
+	 	    	    port.secName= signalName;
+		    	}
 		    }
-		}
+	        }
 	    }
 	}
 	for (String s: satisfiedWeakAuthenticity){
@@ -853,14 +850,16 @@ public class TMLModeling {
 		}
 	    }
 	    String channelName=secChannelMap.get(signalName);
-	    channel = getChannelByName(channelName);
-	    if (channel!=null){
-		for (TMLCPrimitivePort port:channel.ports){
-		    if (port.checkAuth){
-		    	port.checkSecWeakAuthStatus = 2;
-	 	    	port.secName= signalName;
+	    if (channelName!=null){
+	    	channel = getChannelByName(channelName);
+	    	if (channel!=null){
+		    for (TMLCPrimitivePort port:channel.ports){
+		    	if (port.checkAuth){
+		    	    port.checkSecWeakAuthStatus = 2;
+	 	    	    port.secName= signalName;
+		    	}
 		    }
-		}
+	    	}
 	    }
 	}
 	for (String s: nonSatisfiedAuthenticity){
@@ -919,17 +918,18 @@ public class TMLModeling {
 	    }
 	    String channelName=secChannelMap.get(signalName);
 	    if (channelName!=null){
-	    channel = getChannelByName(channelName);
-	    if (channel!=null){
-		for (TMLCPrimitivePort port:channel.ports){
-		    if (port.checkAuth){
-		    	port.checkSecStrongAuthStatus = 3;
-	 	    	port.secName= signalName;
+	    	channel = getChannelByName(channelName);
+	    	if (channel!=null){
+		    for (TMLCPrimitivePort port:channel.ports){
+		    	if (port.checkAuth){
+		            port.checkSecStrongAuthStatus = 3;
+	 	    	    port.secName= signalName;
+		    	}
 		    }
-		}
-	    }
+	        }
 	    }
 	}
+	return;
     }
     public void clearBacktracing(){
 	for (TMLChannel channel: getChannels()){

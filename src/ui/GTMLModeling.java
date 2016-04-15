@@ -1946,7 +1946,6 @@ public class GTMLModeling  {
                     }
 		    //add sec pattern
 		    if (securityPatterns.get(((TMLADWriteChannel)tgc).securityContext)!=null){
-			System.out.println("Security context "+((TMLADWriteChannel)tgc).securityContext+"!");
 			tmlwritechannel.securityPattern= securityPatterns.get(((TMLADWriteChannel)tgc).securityContext);
 		 	int cur = Integer.valueOf(modifyString(((TMLADWriteChannel)tgc).getSamplesValue()));
 		    	int add = Integer.valueOf(tmlwritechannel.securityPattern.MACSize);
@@ -2135,11 +2134,9 @@ public class GTMLModeling  {
         if (!makeTMLModeling()) {
             return null;
         }
-	System.out.println("security patterns " + tmlm.securityPatterns);
         TraceManager.addDev("Making mapping");
         makeMapping();  //fills map
 //	map.securityPatterns.addAll(securityPatterns.keySet());
-	System.out.println("security patterns " + securityPatterns);
         TraceManager.addDev("Making TMLCPLib");
         makeTMLCPLib();
 
