@@ -1226,7 +1226,6 @@ public class TML2Avatar {
 		AvatarRelation ar= new AvatarRelation(channel.getName(), taskBlockMap.get(channel.getOriginTask()), taskBlockMap.get(channel.getDestinationTask()), channel.getReferenceObject());
 		LinkedList<HwCommunicationNode> path =tmlmap.findNodesForElement(channel);
 	        if (path.size()!=0){
-		   // System.out.println(path);
 		    ar.setPrivate(true);
 		    for (HwCommunicationNode node:path){
 			if (node instanceof HwBus){

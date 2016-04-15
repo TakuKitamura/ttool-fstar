@@ -110,6 +110,7 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
         g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength,  x + (width/2) + lineLength1, y+(height-ilength)/2 + ilength);
         g.drawLine(x + (width/2)- lineLength1, y+(height-ilength)/2, x + (width/2)- lineLength1, y+(height+ilength)/2);
         g.drawLine(x + (width/2)+ lineLength1, y+(height-ilength)/2, x + (width/2)+ lineLength1, y+(height+ilength)/2);
+	g.drawString("sec:"+ securityContext, x+3*width/2, y+ height/2);
     }
     
 public boolean editOndoubleClick(JFrame frame) {
