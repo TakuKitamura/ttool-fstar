@@ -61,7 +61,7 @@ public List<String> securityPatterns = new ArrayList<String>();
     private ArrayList<HwExecutionNode> onnodes;
     private ArrayList<TMLTask> mappedtasks;
     private ArrayList<HwCommunicationNode> oncommnodes;
-    private ArrayList<TMLElement> mappedcommelts;
+    public ArrayList<TMLElement> mappedcommelts;
 
     private ArrayList<TMLCP> mappedCPs;
     private ArrayList<TMLElement> commEltsMappedOnCPs;

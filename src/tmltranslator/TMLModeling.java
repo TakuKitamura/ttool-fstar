@@ -1628,7 +1628,7 @@ public class TMLModeling {
 
             if ((elt0 instanceof TMLExecC) && (elt0.getNbNext() == 1)) {
                 elt1 = elt0.getNextElement(0);
-                if (elt1 instanceof TMLExecC) {
+                if (elt1 instanceof TMLExecC && ((TMLExecC)elt1).securityPattern==null) {
                     // Concate both elements
                     concateActivityElementWithActions(activity, (TMLActivityElementWithAction)elt0, (TMLActivityElementWithAction)elt1);
 

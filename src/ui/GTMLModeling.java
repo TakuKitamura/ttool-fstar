@@ -1945,8 +1945,6 @@ public class GTMLModeling  {
                         tmlwritechannel.addChannel(channel);
                     }
 		    //add sec pattern
-		    System.out.println("All security patterns "+securityPatterns);
-		    System.out.println(((TMLADWriteChannel)tgc).securityContext);
 		    if (securityPatterns.get(((TMLADWriteChannel)tgc).securityContext)!=null){
 			System.out.println("Security context "+((TMLADWriteChannel)tgc).securityContext+"!");
 			tmlwritechannel.securityPattern= securityPatterns.get(((TMLADWriteChannel)tgc).securityContext);
