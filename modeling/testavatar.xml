@@ -5,7 +5,7 @@
 <Modeling type="Avatar Analysis" nameTab="Analysis" >
 <SequenceDiagramPanel name="MyScenario0" minX="10" maxX="2500" minY="10" maxY="1500" >
 <COMPONENT type="606" id="50" >
-<cdparam x="403" y="129" />
+<cdparam x="376" y="130" />
 <sizeparam width="10" height="500" minWidth="10" minHeight="250" maxWidth="10" maxHeight="1500" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -124,12 +124,12 @@
 </extraparam>
 </COMPONENT>
 
-<CONNECTOR type="106" id="101" >
-<cdparam x="199" y="189" />
+<CONNECTOR type="107" id="101" >
+<cdparam x="199" y="259" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="msg?" />
-<P1  x="199" y="189" id="55" />
-<P2  x="408" y="189" id="6" />
+<P1  x="199" y="259" id="62" />
+<P2  x="381" y="260" id="13" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 
@@ -997,11 +997,11 @@
 </COMPONENT>
 <SUBCOMPONENT type="5362" id="436" >
 <father id="470" num="0" />
-<cdparam x="873" y="343" />
+<cdparam x="881" y="397" />
 <sizeparam width="340" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="69" minY="0" maxY="155" />
-<infoparam name="TGComponent" value="B0/out m0" />
+<infoparam name="TGComponent" value="B0/in m2" />
 <TGConnectingPoint num="0" id="428" />
 <TGConnectingPoint num="1" id="429" />
 <TGConnectingPoint num="2" id="430" />
@@ -1011,16 +1011,16 @@
 <TGConnectingPoint num="6" id="434" />
 <TGConnectingPoint num="7" id="435" />
 <extraparam>
-<info value="B0/out m0" channelName="B0/out m0() #--# B1/in m0()" referenceDiagram="TestAsynchronous1" />
+<info value="B0/in m2" channelName="B0/in m2() #--# B1/out m2()" referenceDiagram="TestAsynchronous1" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="445" >
 <father id="470" num="1" />
-<cdparam x="881" y="397" />
+<cdparam x="873" y="343" />
 <sizeparam width="340" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="69" minY="0" maxY="155" />
-<infoparam name="TGComponent" value="B0/in m2" />
+<infoparam name="TGComponent" value="B0/out m0" />
 <TGConnectingPoint num="0" id="437" />
 <TGConnectingPoint num="1" id="438" />
 <TGConnectingPoint num="2" id="439" />
@@ -1030,7 +1030,7 @@
 <TGConnectingPoint num="6" id="443" />
 <TGConnectingPoint num="7" id="444" />
 <extraparam>
-<info value="B0/in m2" channelName="B0/in m2() #--# B1/out m2()" referenceDiagram="TestAsynchronous1" />
+<info value="B0/out m0" channelName="B0/out m0() #--# B1/in m0()" referenceDiagram="TestAsynchronous1" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1140,7 +1140,7 @@
 </CONNECTOR>
 <COMPONENT type="302" id="539" >
 <cdparam x="219" y="346" />
-<sizeparam width="297" height="71" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="239" height="71" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Proverif Pragma" value="#PublicConstant v.c

@@ -46,6 +46,8 @@
 
 package ui.sd;
 
+import myutil.*;
+
 //import java.awt.*;
 import java.util.*;
 
@@ -367,5 +369,33 @@ public class SequenceDiagramPanel extends TDiagramPanel{
 		tgc.actionOnUserResize(_w, _h);
             }
         }
+    }
+
+    public void switchToSynchronousMessage(TGConnectorMessageAsyncSD oldOne) {
+	int x1 = oldOne.getX();
+	int y1 = oldOne.getY();
+	TGConnectingPoint p1 = oldOne.getTGConnectingPointP1();
+	TGConnectingPoint p2 = oldOne.getTGConnectingPointP2();
+
+	Vector listPoint = oldOne.getListOfPoints();
+	removeComponent(oldOne);
+	TGConnector newOne = TGComponentManager.addConnector(x1, y1, TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD, this, p1, p2, listPoint);
+	addBuiltConnector(newOne);
+	//TraceManager.addDev("Element added");
+	repaint();
+    }
+
+    public void switchToAsynchronousMessage(TGConnectorMessageSyncSD oldOne) {
+	int x1 = oldOne.getX();
+	int y1 = oldOne.getY();
+	TGConnectingPoint p1 = oldOne.getTGConnectingPointP1();
+	TGConnectingPoint p2 = oldOne.getTGConnectingPointP2();
+
+	Vector listPoint = oldOne.getListOfPoints();
+	removeComponent(oldOne);
+	TGConnector newOne = TGComponentManager.addConnector(x1, y1, TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD, this, p1, p2, listPoint);
+	addBuiltConnector(newOne);
+	//TraceManager.addDev("Element added");
+	repaint();
     }
 }

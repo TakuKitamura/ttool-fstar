@@ -168,9 +168,11 @@ public abstract class TGConnectorMessageSD extends TGConnector {
         String s = e.getActionCommand();
 	TraceManager.addDev("action: " + s);
         if (s.indexOf(TO_SYNC) > -1) {
+	    ((SequenceDiagramPanel)tdp).switchToSynchronousMessage((TGConnectorMessageAsyncSD)this); 
             TraceManager.addDev("To Sync message");
         }
 	if (s.indexOf(TO_ASYNC) > -1) {
+	    ((SequenceDiagramPanel)tdp).switchToAsynchronousMessage((TGConnectorMessageSyncSD)this); 
             TraceManager.addDev("To async message");
         } 
             

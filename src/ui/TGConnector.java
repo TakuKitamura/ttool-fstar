@@ -55,34 +55,34 @@ import java.util.*;
 
 import myutil.*;
 
-public abstract class TGConnector extends TGCWithInternalComponent	{
-    
+public abstract class TGConnector extends TGCWithInternalComponent      {
+
     protected final static String XML_CONNECTOR_HEAD = "<CONNECTOR type=\"";
     protected final static String XML_ID = "\" id=\"";
     protected final static String XML_CONNECTOR_TAIL = "</CONNECTOR>";
-    
+
     protected TGConnectingPoint p1, p2; // initial and destination connecting points.
-    
+
     protected int cdx; // last mouse x position
     protected int cdy; // last mouse y position
-    
+
     protected int popupx, popupy; //used when popupmenu is activated
-    
+
     protected int DIST_Y = 20;
-    
+
     protected boolean automaticDrawing = true; // Used when user select to enhance the diagram automatically
 
-    
+
     // WARNING: point of connectors must be put first in the list of internal components ...
-    
+
     public TGConnector(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         p1 = _p1;
         p2 = _p2;
-        
+
         nbInternalTGComponent = _listPoint.size();
         tgcomponent = new TGComponent[nbInternalTGComponent];
-        
+
         Point p;
         //System.out.println("nbInternalTGComponent" + nbInternalTGComponent);
         for(int i=0; i<nbInternalTGComponent; i++) {
@@ -91,51 +91,59 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
             tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, _minX, _maxX, _minY, _maxY, false, this, _tdp);
         }
         name = "connector";
-        
+
         canBeCloned = false;
         removable = true;
     }
-	
-	public int getIndexOfLastTGCPointOfConnector() {
-		if (nbInternalTGComponent == 0) { return -1;}
-		int index;
-		for(index = 0; index<tgcomponent.length; index++) {
-			if (!(tgcomponent[index] instanceof TGCPointOfConnector)) {
-				break;
-			}
-		}
-		index = index - 1;
-		//TraceManager.addDev("Index=" + index);
-		return index;
+
+    public Vector getListOfPoints() {
+	Vector v = new Vector();
+	for(int i=0; i<nbInternalTGComponent; i++) {
+	    v.add(new Point(tgcomponent[i].getX(), tgcomponent[i].getY()));
 	}
-	
-	public boolean hasTGCPointOfConnector() {
-		return (getIndexOfLastTGCPointOfConnector() != -1);
-	}
-	
-	public boolean hasOtherInternalComponents() {
-		return ((getIndexOfLastTGCPointOfConnector()+1) != getNbInternalTGComponent());
-	}
-	
-	public int getFirstIndexOfOtherInternalComponents() {
-		if (hasOtherInternalComponents()) {
-			return getIndexOfLastTGCPointOfConnector() + 1;
-		}
-		return -1;
-	}
-    
-    
+	return v;
+    }
+
+    public int getIndexOfLastTGCPointOfConnector() {
+        if (nbInternalTGComponent == 0) { return -1;}
+        int index;
+        for(index = 0; index<tgcomponent.length; index++) {
+            if (!(tgcomponent[index] instanceof TGCPointOfConnector)) {
+                break;
+            }
+        }
+        index = index - 1;
+        //TraceManager.addDev("Index=" + index);
+        return index;
+    }
+
+    public boolean hasTGCPointOfConnector() {
+        return (getIndexOfLastTGCPointOfConnector() != -1);
+    }
+
+    public boolean hasOtherInternalComponents() {
+        return ((getIndexOfLastTGCPointOfConnector()+1) != getNbInternalTGComponent());
+    }
+
+    public int getFirstIndexOfOtherInternalComponents() {
+        if (hasOtherInternalComponents()) {
+            return getIndexOfLastTGCPointOfConnector() + 1;
+        }
+        return -1;
+    }
+
+
     public void internalDrawing(Graphics g) {
-        
+
         TGComponent p3, p4;
-        
-		
-		if (hasTGCPointOfConnector())  {
+
+
+        if (hasTGCPointOfConnector())  {
             p3 = tgcomponent[0];
             p4 = tgcomponent[0];
             //TraceManager.addDev("p3.x " + p3.getX() + " p3.y " + p3.getY());
             drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY());
-            
+
             for(int i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
                 p3 = tgcomponent[i];
                 p4 = tgcomponent[i+1];
@@ -146,88 +154,88 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
             drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
         }
     }
-    
+
     protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
         g.drawLine(x1, y1, x2, y2);
     }
-    
+
     protected abstract void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2);
-    
+
     public TGConnectingPoint getTGConnectingPointP1() {
         return p1;
     }
-    
+
     public TGConnectingPoint getTGConnectingPointP2() {
         return p2;
     }
-    
+
     public void setP1(TGConnectingPoint p) {
         p1 = p;
     }
-    
+
     public void setP2(TGConnectingPoint p) {
         p2 = p;
     }
-    
+
     public boolean isP1(CDElement cd) {
         return (p1 == cd);
     }
-    
+
     public boolean isP2(CDElement cd) {
         return (p2 == cd);
     }
-	
-	public Point getMiddleFirstSegment() {
-		if (nbInternalTGComponent ==0) {
-			return new Point((p1.getX()+p2.getX())/2, (p1.getY()+p2.getY())/2);
-		}
-		
-		if (tgcomponent[0] instanceof TGCPointOfConnector) {
-			//TraceManager.addDev("TGCPointOfConnector");
-			return new Point((p1.getX()+tgcomponent[0].getX())/2, (p1.getY()+tgcomponent[0].getY())/2);
-		}
-		
-		return new Point((p1.getX()+p2.getX())/2, (p1.getY()+p2.getY())/2);
-	}
-    
+
+    public Point getMiddleFirstSegment() {
+        if (nbInternalTGComponent ==0) {
+            return new Point((p1.getX()+p2.getX())/2, (p1.getY()+p2.getY())/2);
+        }
+
+        if (tgcomponent[0] instanceof TGCPointOfConnector) {
+            //TraceManager.addDev("TGCPointOfConnector");
+            return new Point((p1.getX()+tgcomponent[0].getX())/2, (p1.getY()+tgcomponent[0].getY())/2);
+        }
+
+        return new Point((p1.getX()+p2.getX())/2, (p1.getY()+p2.getY())/2);
+    }
+
     public boolean alignTGComponents() {
         int dist_y = p2.getY() - p1.getY();
         int dist_x = p2.getX() - p1.getX();;
         if ((dist_y < 0) ||(dist_x == 0)){
             return false;
         }
-        
+
         TGComponent tgc;
-        
+
         if (!(p2.getFather() instanceof TGComponent)) {
             return false;
         }
-        
+
         if (p2.getFather() instanceof TGConnector) {
             return false;
         }
-        
+
         tgc = ((TGComponent)(p2.getFather())).getTopFather();
         tgc.setCd(tgc.getX() - dist_x, tgc.getY());
         makeSquareWithoutMovingTGComponents();
         return true;
     }
-    
+
     public boolean alignOrMakeSquareTGComponents() {
         int dist_y = p2.getY() - p1.getY();
         int dist_x = p2.getX() - p1.getX();;
-        
-        
+
+
         TGComponent tgc;
-        
+
         if (!(p2.getFather() instanceof TGComponent)) {
             return false;
         }
-        
+
         if (p2.getFather() instanceof TGConnector) {
             return false;
         }
-        
+
         tgc = ((TGComponent)(p2.getFather())).getTopFather();
         if ((dist_y > 0) && (Math.abs(dist_x) < 30)){
             tgc.setCd(tgc.getX() - dist_x, tgc.getY());
@@ -235,45 +243,45 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
         makeSquareWithoutMovingTGComponents();
         return true;
     }
-	
-	public void drawAVATARID(Graphics g) {
-		if (getAVATARID() != -1) {
-			g.setColor(ColorManager.AVATARID);
-			int xx, yy;
-			if (getIndexOfLastTGCPointOfConnector() >= 0) {
-				xx = tgcomponent[0].x;
-				yy = tgcomponent[0].y;
-			} else {
-				xx = p2.getX();
-				yy = p2.getY();
-			}
-			g.drawString(""+getAVATARID(), (p1.getX()+xx)/2, ((p1.getY()+yy)/2) + 5);
-		}
-	}
-    
+
+    public void drawAVATARID(Graphics g) {
+        if (getAVATARID() != -1) {
+            g.setColor(ColorManager.AVATARID);
+            int xx, yy;
+            if (getIndexOfLastTGCPointOfConnector() >= 0) {
+                xx = tgcomponent[0].x;
+                yy = tgcomponent[0].y;
+            } else {
+                xx = p2.getX();
+                yy = p2.getY();
+            }
+            g.drawString(""+getAVATARID(), (p1.getX()+xx)/2, ((p1.getY()+yy)/2) + 5);
+        }
+    }
+
     public void makeSquareWithoutMovingTGComponents() {
         if ((p1 == null) ||(p2 == null)) {
             return;
         }
-        
+
         int dist_y = p2.getY() - p1.getY();
         //int dist_x = p2.getX() - p1.getX();
         //TGComponent tgc;
         //TGComponent [] tgcomponentOld;
         //int nbInternalTGComponentOld;
         int i;
-        
+
         if (dist_y > 0) {
             // algorithm 1
             // We need only two points
             // we complete to two Points if dist_x is really grater than dist_y
-            
+
             //System.out.println("Algo1");
-            
+
             /*if ((dist_x != 0) && ((dist_y/5) > dist_x))  {
-                completePointsTo(2);
-            }*/
-            
+              completePointsTo(2);
+              }*/
+
             // greater than two, or equal to two
             // we cut in half The first half points to the fist cd, the others to the last
             for(i=0; i<getIndexOfLastTGCPointOfConnector()/2; i++) {
@@ -293,24 +301,24 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
                 minXX = Math.min(minXX, tgcomponent[i].getX());
                 maxXX = Math.max(maxXX, tgcomponent[i].getX());
             }
-            
+
             resX = 0;
             //System.out.println("p1.x = " + p1.getX() + " p2.x = " + p2.getX() + " minXX=" + minXX + "maxXX=" + maxXX);
             if (!((minXX == 500000) ||(getIndexOfLastTGCPointOfConnector() == -1))){
                 /*if (Math.abs(minXX - p1.getX()) > Math.abs(maxXX - p1.getX())) {
-                    resX = minXX;
-                } else {
-                    resX = maxXX;
-                }*/
-                
-                
-                
+                  resX = minXX;
+                  } else {
+                  resX = maxXX;
+                  }*/
+
+
+
                 /*if (p2.getX() < p1.getX()) {
-                    resX = minXX;
-                } else {
-                    resX = maxXX;
-                }*/
-                
+                  resX = minXX;
+                  } else {
+                  resX = maxXX;
+                  }*/
+
                 //System.out.println("p1.x = " + p1.getX() + " p2.x = " + p2.getX() + " minXX=" + minXX + "maxXX=" + maxXX);
                 if (p1.getX() < p2.getX()) {
                     if (minXX < p1.getX()) {
@@ -327,7 +335,7 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
                     } else {
                         if (minXX < (p1.getX() - DIST_Y)) {
                             resX = minXX;
-                        } 
+                        }
                     }
                 }
             }
@@ -336,9 +344,9 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
                 resX = (p2.getX() + p1.getX()) / 2;
             }
             completePointsTo(4);
-			
-			int lastIndex = getIndexOfLastTGCPointOfConnector() + 1;
-            
+
+            int lastIndex = getIndexOfLastTGCPointOfConnector() + 1;
+
             // we cut all points in four quaters
             for(i=0; i<lastIndex/4; i++) {
                 tgcomponent[i].setCd(p1.getX(), p1.getY() + DIST_Y);
@@ -355,7 +363,7 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
             //}
         }
     }
-    
+
     private void completePointsTo(int desiredNbOfPoints) {
         int nbToAdd = desiredNbOfPoints - nbInternalTGComponent;
         //System.out.println("Adding a point nbToAdd = " + nbToAdd);
@@ -365,10 +373,10 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
             addTGCPointOfConnector(p2.getX(), p2.getY());
         }
     }
-    
+
     public int indexPointedSegment(int x1, int y1) {
         TGComponent p3, p4;
-        
+
         if (hasTGCPointOfConnector()) {
             p3 = tgcomponent[0];
             p4 = p3;
@@ -378,16 +386,16 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
             for(int i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
                 p3 = tgcomponent[i];
                 p4 = tgcomponent[i+1];
-                
+
                 if ((int)(Line2D.ptSegDistSq(p3.getX(), p3.getY(), p4.getX(), p4.getY(), x1, y1)) < distanceSelected) {
                     return i+1;
                 }
             }
-            
+
             if ((int)(Line2D.ptSegDistSq(p4.getX(), p4.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
                 return getIndexOfLastTGCPointOfConnector()+1;
             }
-            
+
         } else {
             if (p2 != null) {
                 if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
@@ -397,12 +405,12 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
         }
         return -1;
     }
-    
+
     public CDElement [] closerPToClickFirst(int x, int y) {
         CDElement [] cde = new CDElement[2];
         int distance1 = (int)(new Point(x, y).distance(p1.getX(), p1.getY()));
         int distance2 = (int)(new Point(x, y).distance(p2.getX(), p2.getY()));
-        
+
         if (distance1 < distance2) {
             cde[0] = p1;
             cde[1] = p2;
@@ -410,78 +418,78 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
             cde[0] = p2;
             cde[1] = p1;
         }
-        
+
         return cde;
     }
-    
+
     public CDElement[] getPointedSegment(int x1, int y1) {
         TGCPointOfConnector p3, p4;
         CDElement [] pt = new CDElement[2];
-		try {
-        
-        if (hasTGCPointOfConnector()) {
-            p3 = (TGCPointOfConnector)tgcomponent[0];
-            p4 = p3;
-            if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p3.getX(), p3.getY(), x1, y1)) < distanceSelected) {
-                pt[0] = p1;
-                pt[1] = p3;
-                return pt;
-            }
-            for(int i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
-                p3 = (TGCPointOfConnector)(tgcomponent[i]);
-                p4 = (TGCPointOfConnector)(tgcomponent[i+1]);
-                
-                if ((int)(Line2D.ptSegDistSq(p3.getX(), p3.getY(), p4.getX(), p4.getY(), x1, y1)) < distanceSelected) {
-                    pt[0] = p3;
-                    pt[1] = p4;
+        try {
+
+            if (hasTGCPointOfConnector()) {
+                p3 = (TGCPointOfConnector)tgcomponent[0];
+                p4 = p3;
+                if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p3.getX(), p3.getY(), x1, y1)) < distanceSelected) {
+                    pt[0] = p1;
+                    pt[1] = p3;
                     return pt;
                 }
-            }
-            
-            if ((int)(Line2D.ptSegDistSq(p4.getX(), p4.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
-                pt[0] = p4;
-                pt[1] = p2;
-                return pt;
-            }
-            
-        } else {
-            if (p2 != null) {
-                if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
-                    pt[0] = p1;
+                for(int i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
+                    p3 = (TGCPointOfConnector)(tgcomponent[i]);
+                    p4 = (TGCPointOfConnector)(tgcomponent[i+1]);
+
+                    if ((int)(Line2D.ptSegDistSq(p3.getX(), p3.getY(), p4.getX(), p4.getY(), x1, y1)) < distanceSelected) {
+                        pt[0] = p3;
+                        pt[1] = p4;
+                        return pt;
+                    }
+                }
+
+                if ((int)(Line2D.ptSegDistSq(p4.getX(), p4.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
+                    pt[0] = p4;
                     pt[1] = p2;
                     return pt;
                 }
+
+            } else {
+                if (p2 != null) {
+                    if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
+                        pt[0] = p1;
+                        pt[1] = p2;
+                        return pt;
+                    }
+                }
             }
-        }
-		} catch (Exception e) {}
+        } catch (Exception e) {}
         return null;
     }
-    
+
     public boolean areAllInRectangle(int x1, int y1, int width1, int height1) {
         //System.out.println("width: " + width + " height: " + height);
         TGComponent p3, p4;
-        
+
         if (hasTGCPointOfConnector()) {
             p3 = tgcomponent[0];
             p4 = p3;
             if (!GraphicLib.isSegmentInRectangle(p1.getX(), p1.getY(), p3.getX(), p3.getY(), x1, y1, width1, height1)) {
                 return false;
             }
-            
+
             for(int i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
                 p3 = tgcomponent[i];
                 p4 = tgcomponent[i+1];
                 if  (!GraphicLib.isSegmentInRectangle(p3.getX(), p3.getY(), p4.getX(), p4.getY(), x1, y1, width1, height1)) {
                     return false;
                 }
-                
+
             }
-            
+
             if  (!GraphicLib.isSegmentInRectangle(p4.getX(), p4.getY(), p2.getX(), p2.getY(), x1, y1, width1, height1)) {
                 return false;
             }
-            
-            
+
+
         } else {
             if (p2 != null) {
                 if  (!GraphicLib.isSegmentInRectangle(p1.getX(), p1.getY(), p2.getX(), p2.getY(), x1, y1, width1, height1)) {
@@ -489,23 +497,23 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
                 }
             }
         }
-		
-		if (hasOtherInternalComponents()) {
-			for(int j=getFirstIndexOfOtherInternalComponents(); j<tgcomponent.length; j++) {
-				if (!tgcomponent[j].isInRectangle(x1, y1, width1, height1)) {
-					//TraceManager.addDev("Not in rectangle");
-					return false;
-				}
-			}
-		}
-        
+
+        if (hasOtherInternalComponents()) {
+            for(int j=getFirstIndexOfOtherInternalComponents(); j<tgcomponent.length; j++) {
+                if (!tgcomponent[j].isInRectangle(x1, y1, width1, height1)) {
+                    //TraceManager.addDev("Not in rectangle");
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
-    
+
     public TGComponent isOnOnlyMe(int x1, int y1) {
         TGComponent p3, p4;
-		int i;
-        
+        int i;
+
         if (hasTGCPointOfConnector()) {
             p3 = tgcomponent[0];
             p4 = p3;
@@ -515,16 +523,16 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
             for(i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
                 p3 = tgcomponent[i];
                 p4 = tgcomponent[i+1];
-                
+
                 if ((int)(Line2D.ptSegDistSq(p3.getX(), p3.getY(), p4.getX(), p4.getY(), x1, y1)) < distanceSelected) {
                     return this;
                 }
             }
-            
+
             if ((int)(Line2D.ptSegDistSq(p4.getX(), p4.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
                 return this;
             }
-            
+
         } else {
             if (p2 != null) {
                 if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
@@ -532,77 +540,77 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
                 }
             }
         }
-		
-		if (hasOtherInternalComponents()) {
-			for(i=getFirstIndexOfOtherInternalComponents(); i<tgcomponent.length; i++) {
-				if (tgcomponent[i].isOnMe(x1, y1) != null) {
-					return this;
-				}
-			}
-		}
-		
+
+        if (hasOtherInternalComponents()) {
+            for(i=getFirstIndexOfOtherInternalComponents(); i<tgcomponent.length; i++) {
+                if (tgcomponent[i].isOnMe(x1, y1) != null) {
+                    return this;
+                }
+            }
+        }
+
         return extraIsOnOnlyMe(x1, y1);
     }
-    
+
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {
         return null;
     }
-    
+
     public void pointHasBeenRemoved(TGCPointOfConnector tgc) {
         return;
     }
-    
-    
+
+
     // indexCon indicates from which points the potential connecitng point is the closer
     public void pointHasBeenAdded(TGCPointOfConnector tgc, int index, int indexCon) {
         return;
     }
-    
+
     private boolean addTGCPointOfConnector(int x, int y) {
-		//TraceManager.addDev("Adding point of connector at "+  x + "," + y);
+        //TraceManager.addDev("Adding point of connector at "+  x + "," + y);
         CDElement [] pt = getPointedSegment(x, y);
-                /*System.out.println("Two pts");
-                System.out.println("p1  x=" + pt[0].x + " y=" + pt[0].y);
-                System.out.println("p2  x=" + pt[1].x + " y=" + pt[1].y);*/
+        /*System.out.println("Two pts");
+          System.out.println("p1  x=" + pt[0].x + " y=" + pt[0].y);
+          System.out.println("p2  x=" + pt[1].x + " y=" + pt[1].y);*/
         if (pt != null) {
             Point p = new Point((pt[0].getX() + pt[1].getX()) / 2, (pt[0].getY() + pt[1].getY()) / 2);
             int distance1 = (int)(new Point(x, y).distance(pt[0].getX(), pt[0].getY()));
             int distance2 = (int)(new Point(x, y).distance(pt[1].getX(), pt[1].getY()));
             int index = indexPointedSegment(x, y);
             int indexCon;
-            
+
             if (distance1 < distance2) {
                 indexCon = 0;
             } else {
                 indexCon = 1;
             }
-			//TraceManager.addDev("tgcpoint of connector added at index " + index + " indexCon=" + indexCon);
-            
+            //TraceManager.addDev("tgcpoint of connector added at index " + index + " indexCon=" + indexCon);
+
             TGCPointOfConnector t = new TGCPointOfConnector(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp);
             if (addInternalComponent(t, index) ) {
                 pointHasBeenAdded(t, index, indexCon);
-				//TraceManager.addDev("Return true");
+                //TraceManager.addDev("Return true");
                 return true;
-            } 
+            }
         }
-		//TraceManager.addDev("Return false");
+        //TraceManager.addDev("Return false");
         return false;
     }
-    
+
     public void setAutomaticDrawing(boolean b) {
         automaticDrawing = b;
     }
-    
+
     public boolean getAutomaticDrawing() {
         return  automaticDrawing;
     }
-    
+
     public boolean isPtOnVerticalSegment(TGConnectingPoint tgcp) {
         int index = indexOf(tgcp);
         if (index == -1) {
             return false;
         }
-        
+
         int p1x, p1y, p2x, p2y;
         if (index == 0) {
             p1x = p1.getX();
@@ -611,7 +619,7 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
             p1x = tgcomponent[index-1].getX();
             p1y = tgcomponent[index-1].getY();
         }
-        
+
         if (index == (getNbConnectingPoint() - 1)) {
             p2x = p2.getX();
             p2y = p2.getY();
@@ -619,14 +627,14 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
             p2x = tgcomponent[index].getX();
             p2y = tgcomponent[index].getY();
         }
-        
+
         if (Math.abs(p1x - p2x) < Math.abs(p1y - p2y)) {
             return true;
         }
         return false;
-        
+
     }
-    
+
     public StringBuffer saveInXML() {
         StringBuffer sb = new StringBuffer(XML_CONNECTOR_HEAD);
         sb.append(getType());
@@ -651,18 +659,18 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
         String s = "<infoparam name=\"" + name + "\" value=\"";
         s = s + GTURTLEModeling.transformString(value);
         return s +  "\" />\n";
-		}
-    
+    }
+
     public String translateP1() {
         int id = p1.getId();
         return ("<P1  x=\"" + p1.getX() + "\" y=\"" + p1.getY() + "\" id=\"" + id + "\" />\n");
     }
-    
+
     public String translateP2() {
         int id = p2.getId();
         return ("<P2  x=\"" + p2.getX() + "\" y=\"" + p2.getY() + "\" id=\"" + id + "\" />\n");
     }
-    
+
     public StringBuffer translatePoints() {
         StringBuffer sb = new StringBuffer();
         for(int i=0; i<getIndexOfLastTGCPointOfConnector()+1; i++) {
@@ -672,7 +680,7 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
         }
         return sb;
     }
-    
+
     public String translateAutomaticDrawing() {
         if (automaticDrawing) {
             return ("<AutomaticDrawing  data=\"true\" />\n");
@@ -680,7 +688,7 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
             return ("<AutomaticDrawing  data=\"false\" />\n");
         }
     }
-    
+
     public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
         popupx = x;
         popupy = y;
@@ -697,22 +705,22 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
         } else {
             automatic = new JMenuItem("Activate automatic drawing");
         }
-		
+
         automatic.addActionListener(menuAL);
         componentMenu.add(automatic);
-		
-		JMenuItem negation;
-		if (canBeNegated()) {
-			if (getNegation()) {
-				negation = new JMenuItem("Negation (to off)");
-			} else {
-				negation = new JMenuItem("Negation (to on)");
-			}
-			negation.addActionListener(menuAL);
-			componentMenu.add(negation);
-		}
+
+        JMenuItem negation;
+        if (canBeNegated()) {
+            if (getNegation()) {
+                negation = new JMenuItem("Negation (to off)");
+            } else {
+                negation = new JMenuItem("Negation (to on)");
+            }
+            negation.addActionListener(menuAL);
+            componentMenu.add(negation);
+        }
     }
-    
+
     public boolean eventOnPopup(ActionEvent e) {
         if (e.getActionCommand().equals("Add Point")) {
             return addTGCPointOfConnector(popupx, popupy);
@@ -725,73 +733,73 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
             automaticDrawing = true;
             return true;
         } else if (e.getActionCommand().startsWith("Negation ")) {
-			reverseNegation();
-		}
+            reverseNegation();
+        }
         return false;
     }
-    
+
     public void reverse() {
-		TGComponent[] tgcomponentnew = new TGComponent[nbInternalTGComponent];
-		TGConnectingPoint tmp;
-		
-		if (hasTGCPointOfConnector()) {
-			
-			int i;
-			
-			for(i=0; i<getIndexOfLastTGCPointOfConnector()+1; i++) {
-				tgcomponentnew[i] = tgcomponent[getIndexOfLastTGCPointOfConnector()-i];
-			}
-			
-			if (hasOtherInternalComponents()) {
-				for(i=getFirstIndexOfOtherInternalComponents(); i<getNbInternalTGComponent()+1; i++) {
-					tgcomponentnew[i] = tgcomponent[i];
-				}
-			}
-		}
-        
+        TGComponent[] tgcomponentnew = new TGComponent[nbInternalTGComponent];
+        TGConnectingPoint tmp;
+
+        if (hasTGCPointOfConnector()) {
+
+            int i;
+
+            for(i=0; i<getIndexOfLastTGCPointOfConnector()+1; i++) {
+                tgcomponentnew[i] = tgcomponent[getIndexOfLastTGCPointOfConnector()-i];
+            }
+
+            if (hasOtherInternalComponents()) {
+                for(i=getFirstIndexOfOtherInternalComponents(); i<getNbInternalTGComponent()+1; i++) {
+                    tgcomponentnew[i] = tgcomponent[i];
+                }
+            }
+        }
+
         tmp = p2;
         p2 = p1;
         p1 = tmp;
-        
-		tgcomponent = tgcomponentnew;
+
+        tgcomponent = tgcomponentnew;
     }
-	
-	
-	// Middle of the last segment
-	public void drawAttributes(Graphics g, String attr) {
+
+
+    // Middle of the last segment
+    public void drawAttributes(Graphics g, String attr) {
         int s0=4, s1=9, s2=30, s3=10;
-		int x1, y1;
-		
-		// Set x and y correctly -> x1 and y1
-		if (!hasTGCPointOfConnector()) {
-			x1 = (p1.getX() + p2.getX()) / 2;
-			y1 = (p1.getY() + p2.getY()) / 2;
-		} else {
-			x1 = (tgcomponent[getIndexOfLastTGCPointOfConnector()].getX() + p2.getX()) / 2;
-			y1 = (tgcomponent[getIndexOfLastTGCPointOfConnector()].getY() + p2.getY()) / 2;
-		}
-        
+        int x1, y1;
+
+        // Set x and y correctly -> x1 and y1
+        if (!hasTGCPointOfConnector()) {
+            x1 = (p1.getX() + p2.getX()) / 2;
+            y1 = (p1.getY() + p2.getY()) / 2;
+        } else {
+            x1 = (tgcomponent[getIndexOfLastTGCPointOfConnector()].getX() + p2.getX()) / 2;
+            y1 = (tgcomponent[getIndexOfLastTGCPointOfConnector()].getY() + p2.getY()) / 2;
+        }
+
         g.fillOval(x1-s0, y1-s0, s1, s1);
         GraphicLib.dashedLine(g, x1, y1, x1+s2, y1);
         GraphicLib.dashedLine(g, x1+s2, y1, x1+s2+s3, y1+s3);
-        
+
         Point p1 = drawCode(g, attr, x1+s2+s3, y1+s3, true, false, 10);
-        
+
         int w = p1.x;
         int h = p1.y-y1+s3;
         GraphicLib.dashedRect(g, x1+s2+s3, y1+s3, w+15, h-12);
-        
+
     }
-	
-	public void reverseNegation() {
-	}
-	
-	public boolean canBeNegated() {
-		return false;
-	}
-	
-	public boolean getNegation() {
-		return false;
-	}
+
+    public void reverseNegation() {
+    }
+
+    public boolean canBeNegated() {
+        return false;
+    }
+
+    public boolean getNegation() {
+        return false;
+    }
 
 }//End of class
