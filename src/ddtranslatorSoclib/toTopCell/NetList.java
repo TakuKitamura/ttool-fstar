@@ -303,7 +303,41 @@ netlist = netlist + "// RAM netlist" + CR2;
 	//not all interfaces are of interest; non-clustered version
 
 	int i,j;
-	if(nb_clusters==0){
+ 
+
+	/*if the channel is monitored, add it to the list */
+	/*	for (AvatarChannel channel : TopCellGenerator.avatardd.getAllMappedChannels()) { if (channel.monitored()){
+	      	      
+	    }	    
+	  }*/
+
+	i=0;
+	/* Which VCI interfaces are marked as monitored? */
+	/* currently, connectors not individual channels (logger not stats) */
+	//for (AvatarConnector connector : TopCellGenerator.avatardd.getAllConnectors()) { if (connector.monitored()){
+
+		/* we identify the component on the interface */
+		//AvatarConnectingPoint point = connector.getconectingPoint1();
+		//AvatarComponent component = point.getComponent();
+		/* we identify the target or initiator number (target currently) */
+	//	int number = component.getNo_target();
+
+	//also per default mwmr_ram and mwmrd_ram?
+	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
+	    if (ram.getMonitored()==1){
+		//int number = ram.getNo_target();
+		//String name = ram.getMemoryName();
+		int number = number = ram.getNo_ram();;
+	      netlist += "logger"+i+".p_clk(signal_clk);" + CR;
+	      netlist += "logger"+i+".p_resetn(signal_resetn);" + CR; 
+	      //netlist += "logger"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;
+	      netlist += "logger"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;
+	      i++;	      
+	    }	    
+	  }
+
+
+	/*	if(nb_clusters==0){
 	    if(trace_caba){
 	      for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
 		  netlist += "logger"+i+".p_clk(signal_clk);" + CR;
@@ -324,7 +358,7 @@ netlist = netlist + "// RAM netlist" + CR2;
 		netlist += "logger"+j+".p_vci(signal_vci_vciram"+i+");"+ CR;
 		j++;
 	}
-	}
+	}*/
 	
 
 		netlist = netlist + "  sc_core::sc_start(sc_core::sc_time(0, sc_core::SC_NS));" + CR;

@@ -1,7 +1,6 @@
 #ifndef Block1_H
 #define Block1_H
 #include <stdio.h>
-#include <pthread.h>
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -14,7 +13,9 @@
 #include "random.h"
 #include "tracemanager.h"
 #include "main.h"
+#include "mwmr.h"
+ 
 
-extern void *mainFunc__Block1(void *arg);
+extern void *mainFunc__Block1(struct mwmr_s *channels_Block1[]);
 
 #endif

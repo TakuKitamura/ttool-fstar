@@ -9,13 +9,14 @@ public class AvatarChannel extends AvatarMappedObject{
     private String referenceDiagram ;
 	private String channelName ;
     private int no_cluster;
+    private int  monitored;
 
-//DG 4.4. we add a field cluster_index
-    public AvatarChannel(String _referenceDiagram,  String _channelName, AvatarRAM _avatarRAMReference, int _no_cluster){
+    public AvatarChannel(String _referenceDiagram,  String _channelName, AvatarRAM _avatarRAMReference, int _no_cluster, int _monitored){
       referenceDiagram =  _referenceDiagram;
       channelName = _channelName;
       avatarRAMReference = _avatarRAMReference;
       no_cluster = _no_cluster;
+      monitored = _monitored;
     }
 
     public AvatarRAM getAvatarRAMReference(){
@@ -42,4 +43,9 @@ public class AvatarChannel extends AvatarMappedObject{
     public int getNo_cluster(){
       return no_cluster;
     } 
+
+    public int getMonitored(){
+      return monitored;
+    } 
+
 }

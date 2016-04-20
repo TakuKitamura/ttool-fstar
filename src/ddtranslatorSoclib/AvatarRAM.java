@@ -15,15 +15,17 @@ public class AvatarRAM extends AvatarComponent{
     public int no_target;
     public int no_target_local;
     public int no_cluster;
+    public int monitored;
 
     LinkedList<AvatarChannel> channelMapped ;
     //DG 4.4. we add a field cluster_index, for the time when a cluster will have more than one RAM
-    public AvatarRAM(String _memoryName,int _index,int _dataSize,int _no_ram, int _no_cluster)  {
+    public AvatarRAM(String _memoryName,int _index,int _dataSize,int _no_ram, int _no_cluster, int _monitored)  {
       memoryName = _memoryName;
       index = _index;
       dataSize = _dataSize;
       no_ram = _no_ram;
       no_cluster=_no_cluster;
+      monitored=_monitored;
       channelMapped =  new LinkedList<AvatarChannel>();
     }
 
@@ -61,6 +63,13 @@ public class AvatarRAM extends AvatarComponent{
 
     public int getDataSize(){
 	return dataSize;
+    }
+
+    public int getMonitored(){
+	return monitored;
+    }
+    public void setMonitored(int _monitored){
+	monitored = _monitored;
     }
     
     public LinkedList<AvatarChannel> getChannels(){

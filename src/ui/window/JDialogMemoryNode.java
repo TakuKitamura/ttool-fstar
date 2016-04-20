@@ -70,7 +70,7 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
     protected JTextField nodeName;
 	
 	// Panel2
-    protected JTextField byteDataSize, clockRatio;
+    protected JTextField byteDataSize, monitored, clockRatio;
 
 		//Panel3: code generation
 		protected int bufferType = 0;	//it is the index in the ArrayList of String
@@ -147,6 +147,13 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         byteDataSize = new JTextField(""+node.getByteDataSize(), 15);
         panel2.add(byteDataSize, c2);
+
+	c2.gridwidth = 1;
+        panel2.add(new JLabel("Monitored :"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
+	monitored = new JTextField("", 15);
+        panel2.add(monitored, c2);
 		
 		c2.gridwidth = 1;
         panel2.add(new JLabel("Clock ratio:"), c2);
@@ -231,7 +238,10 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
     public String getByteDataSize() {
         return byteDataSize.getText();
     }
-	
+
+    public String getMonitored() {
+        return monitored.getText();
+    }	
 	 public String getClockRatio() {
         return clockRatio.getText();
     }

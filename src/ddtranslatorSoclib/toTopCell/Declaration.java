@@ -119,8 +119,18 @@ if(nb_clusters==0){
 	  
 	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+6)+
 	     ");" + CR2;
-	  int i;
-	  if(trace_caba){
+	  int i=0;
+
+	  //logger not yet stats/monitor
+	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
+	    if (ram.getMonitored()==1){
+		int number = ram.getNo_target();
+		declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
+	      i++;	      
+	    }	    
+	  }
+
+	  /*	  if(trace_caba){
 	      for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
 		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
 	      }
@@ -128,7 +138,7 @@ if(nb_clusters==0){
 	      for(i=0;i<TopCellGenerator.avatardd.getAllRAM().size()+3;i++){
 		  declaration += "soclib::caba::VciLogger<vci_param> logger"+(i+TopCellGenerator.avatardd.getNb_init())+"(\"logger" +(i+TopCellGenerator.avatardd.getNb_init()) +"\",maptab);" + CR2;
 	      }
-    }
+	      }*/
 
 
           //if BUS was not last in input file, update here

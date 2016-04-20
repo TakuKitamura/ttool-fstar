@@ -66,7 +66,8 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
     protected String stereotype = "RAM";
     
     protected int index = 0;
-	protected int byteDataSize = HwMemory.DEFAULT_BYTE_DATA_SIZE;
+    protected int monitored = 0;
+    protected int byteDataSize = HwMemory.DEFAULT_BYTE_DATA_SIZE;
     
     public ADDMemoryNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -139,6 +140,10 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
     public int getDataSize() {
     		return byteDataSize;
     }
+
+    public int getMonitored() {
+    		return monitored;
+    }
     
     public boolean editOndoubleClick(JFrame frame) {
 		boolean error = false;
@@ -197,6 +202,21 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
 							errors += "byteDataSize  ";
 					}
 			}
+
+			if (dialog.getMonitored().length() != 0) {	
+					try {
+							tmp = monitored;
+							monitored = Integer.decode(dialog.getMonitored()).intValue();
+							if (index < 0) {
+									monitored = tmp;
+									error = true;
+									errors += "monitored ";
+							}
+					} catch (Exception e) {
+							error = true;
+							errors += "monitored  ";
+					}
+			}
 			
 			if (error) {
 					JOptionPane.showMessageDialog(frame,
@@ -219,6 +239,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
         sb.append("\" />\n");
 		sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
+		sb.append("<attributes monitored=\"" + monitored + "\" ");
 		sb.append(" index=\"" + index + "\" ");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
@@ -258,6 +279,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
 							
 							if (elt.getTagName().equals("attributes")) {
                                 byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
+				monitored = Integer.decode(elt.getAttribute("monitored")).intValue();
                                 index = Integer.decode(elt.getAttribute("index")).intValue();
 								
                             }

@@ -72,8 +72,7 @@ public class JDialogADDMemoryNode extends javax.swing.JDialog implements ActionL
 	// Panel2
     protected JTextField index;
     protected JTextField dataSize;
-    
-	
+    protected JTextField monitored;	
     
     // Main Panel
     private JButton closeButton;
@@ -145,6 +144,11 @@ public class JDialogADDMemoryNode extends javax.swing.JDialog implements ActionL
         dataSize = new JTextField(""+node.getDataSize(), 15);
         panel2.add(dataSize, c2);
         
+	c2.gridwidth = 1;
+        panel2.add(new JLabel("Monitored:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        monitored = new JTextField(""+node.getMonitored(), 15);
+        panel2.add(monitored, c2);
         
         // main panel;
         c0.gridheight = 10;
@@ -207,6 +211,10 @@ public class JDialogADDMemoryNode extends javax.swing.JDialog implements ActionL
     
     public String getDataSize() {
         return dataSize.getText();
+    }
+
+    public String getMonitored() {
+        return monitored.getText();
     }
     
     

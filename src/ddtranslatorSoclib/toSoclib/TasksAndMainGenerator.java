@@ -703,7 +703,7 @@ public class TasksAndMainGenerator {
 	   
  //DG 29.03.
 	    int cpuid = FindCPUidFromTask(_block);
-	    ret += "printf(\"tracing cycles --- block: "+_block.getName()+" cpu: %d cycle count: %d \\n\","+ cpuid+", cpu_cycle_count());"+CR;
+	    //   ret += "printf(\"tracing cycles --- block: "+_block.getName()+" cpu: %d cycle count: %d \\n\","+ cpuid+", cpu_cycle_count());"+CR;
             if (!firstCall) {
 		if (debug) {
 		    ret += "debug2Msg(__myname, \"-> (=====) Entering state + " + _asme.getName() + "\");" + CR;

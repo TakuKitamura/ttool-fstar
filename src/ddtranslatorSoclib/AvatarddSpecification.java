@@ -128,7 +128,7 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       for (AvatarComponent crossbar : components )
         {
 	    if (crossbar instanceof AvatarCrossbar){
-	 System.out.println("@@@@@@@@@@@@@@@@@@@@@@ Clustered Interconnect @@@@@@@@@@@@@@@@@");
+	 System.out.println("@@@@@@@@@@@@@@@@@@@@@@ Clustered Interconnect found @@@@@@@@@@@@@@@@@");
             crossbars.add((AvatarCrossbar)crossbar);	    
 	    }
 
