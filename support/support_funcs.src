@@ -13,7 +13,11 @@ To ask for a new functionality, please, do send an email (provided in the <a hre
 <hr>
 
 <h2 id="func"> Requested Functionalities (2016) </h2>
-<ul> 
+<ul>
+<li> <b>Req #037</b> (April., 18, 2016) Possibility to zoom/unzoom in sequence diagrams.</li>
+<br>
+<li> <b>Req #036</b> (April., 1, 2016) Possibility to use a "leads to" property with a time limit i.e. an action a1 leads to an action a2 in less than x units of times.</li>
+<br>
 <li> <b>Req #035</b> (Jan., 27, 2016) Opening a referenced elt (e.g, an impact link in a MAD) with a double-click.</li>
 <br>
 </ul>
