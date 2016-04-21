@@ -18,11 +18,11 @@ public class AvatarConnector{
       monitored = _monitored;
     }
 
-    AvatarConnectingPoint getconectingPoint1(){
+    public AvatarConnectingPoint getconectingPoint1(){
       return connectingPoint1;
     }
 
-    AvatarConnectingPoint getconectingPoint2(){
+    public AvatarConnectingPoint getconectingPoint2(){
       return connectingPoint2;
     }
 

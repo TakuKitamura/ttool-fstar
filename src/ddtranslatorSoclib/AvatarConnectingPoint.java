@@ -18,7 +18,7 @@ public class AvatarConnectingPoint{
       return ownerConnector;
     }
 
-    AvatarComponent getComponent(){
+    public AvatarComponent getComponent(){//DG
       return ownerComponent;
     }
 

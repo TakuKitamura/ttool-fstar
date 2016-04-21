@@ -121,24 +121,30 @@ if(nb_clusters==0){
 	     ");" + CR2;
 	  int i=0;
 
-	  //logger not yet stats/monitor
+	  //monitoring either by logger(1) ou stats (2) 
 	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
+
 	    if (ram.getMonitored()==1){
 		int number = ram.getNo_target();
 		declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
 	      i++;	      
-	    }	    
-	  }
+	    }	
+	    else{
+		if (ram.getMonitored()==2){
+		int number = ram.getNo_target();
 
-	  /*	  if(trace_caba){
-	      for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
-		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
-	      }
-	      
-	      for(i=0;i<TopCellGenerator.avatardd.getAllRAM().size()+3;i++){
-		  declaration += "soclib::caba::VciLogger<vci_param> logger"+(i+TopCellGenerator.avatardd.getNb_init())+"(\"logger" +(i+TopCellGenerator.avatardd.getNb_init()) +"\",maptab);" + CR2;
-	      }
-	      }*/
+                //LinkedList<AvatarChannel> channels=ram.getChannels();	
+	
+		String strArray="";
+
+                for(AvatarChannel channel: ram.getChannels()){
+		  strArray=strArray+"\""+channel.getChannelName()+"\","; 
+		}      
+		declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr0.log\",stringArray("+strArray+"NULL));" + CR2;
+	      i++;	      
+	    }	
+	    }
+	  }	 
 
 
           //if BUS was not last in input file, update here

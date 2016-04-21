@@ -1,4 +1,1 @@
 
-#define DEPLOY_RAM0_NAME channel_ram1
-#define DEPLOY_RAM0_ADDR 0x7f000000
-#define DEPLOY_RAM0_SIZE 0x2000000

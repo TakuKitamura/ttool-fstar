@@ -30,12 +30,7 @@ public class AvatarChannel extends AvatarMappedObject{
     public String getReferenceDiagram(){
       return referenceDiagram;
     }
-
-    /*public String  getChannelName(){ 
-	 String newChannelName = channelName.substring(0,10)+channelName.substring(channelName.length()-10,channelName.length()-1);
-      return newChannelName;
-      } */
-    
+       
     public String  getChannelName(){      
       return channelName;
       } 

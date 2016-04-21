@@ -66,6 +66,16 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       return channels;
     }
     
+    /*   public LinkedList<AvatarConnector> getAllConnectors(){
+      LinkedList<AvatarConnector> connectors = new LinkedList<AvatarConnector>();
+      for (AvatarComponent connector: components )
+        {
+          if (connector instanceof AvatarConnector)
+	      connectors.add((AvatarConnector)connector);
+        }
+      return connectors;
+      }*/
+
     public LinkedList<AvatarTTY> getAllTTY(){
 	int i=0;
       LinkedList<AvatarTTY> ttys = new LinkedList<AvatarTTY>();

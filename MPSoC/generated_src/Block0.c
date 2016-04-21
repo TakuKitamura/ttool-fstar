@@ -42,7 +42,7 @@ void *mainFunc__Block0(struct mwmr_s *channels_Block0[]){
       case STATE__state0: 
       debug2Msg(__myname, "-> (=====)before MakeNewRequest");
       debugInt("channel address", &__req0);
-      makeNewRequest(&__req0, 42, SEND_ASYNC_REQUEST, 0, 0, 0, 0, __params0);
+      makeNewRequest(&__req0, 2276, SEND_ASYNC_REQUEST, 0, 0, 0, 0, __params0);
       debug2Msg(__myname, "-> (=====)after MakeNewRequest");
       __req0.asyncChannel = &__Block0_val__Block1_val;
       debug2Msg(__myname, "-> (=====)before executeOneRequest");

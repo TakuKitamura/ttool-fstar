@@ -312,30 +312,47 @@ netlist = netlist + "// RAM netlist" + CR2;
 	  }*/
 
 	i=0;
+
 	/* Which VCI interfaces are marked as monitored? */
-	/* currently, connectors not individual channels (logger not stats) */
-	//for (AvatarConnector connector : TopCellGenerator.avatardd.getAllConnectors()) { if (connector.monitored()){
 
+	//	for (AvatarConnector connector : TopCellGenerator.avatardd.getAllConnectors()) { 
+	//if (connector.getMonitored()==1){
+		//netlist += "logger"+i+".p_clk(signal_clk);" + CR;
+	        //netlist += "logger"+i+".p_resetn(signal_resetn);" + CR; 	 
 		/* we identify the component on the interface */
-		//AvatarConnectingPoint point = connector.getconectingPoint1();
-		//AvatarComponent component = point.getComponent();
-		/* we identify the target or initiator number (target currently) */
-	//	int number = component.getNo_target();
+		/*AvatarConnectingPoint point = connector.getconectingPoint1();
+		AvatarComponent component = point.getComponent();
 
-	//also per default mwmr_ram and mwmrd_ram?
-	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
-	    if (ram.getMonitored()==1){
-		//int number = ram.getNo_target();
-		//String name = ram.getMemoryName();
-		int number = number = ram.getNo_ram();;
-	      netlist += "logger"+i+".p_clk(signal_clk);" + CR;
-	      netlist += "logger"+i+".p_resetn(signal_resetn);" + CR; 
-	      //netlist += "logger"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;
-	      netlist += "logger"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;
+		if(component instanceof AvatarRAM){ 
+		    component.setMonitored(1);
+		    }*/
+		//for cache monitoring
+		//if(component instanceof AvatarCPU){ 
+		    //    component.setMonitored(1);not yet implemented, for cache behavior
+		//	}	
+	// }	
+	    //i++;	
+	//	}
+	    //actually only RAM are monitored, later caches
+	    //for RAM we can choose between logger and stats
+	    i=0;
+	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
+	    if (ram.getMonitored()==1){	
+		int number = number = ram.getNo_ram();
+	        netlist += "logger"+i+".p_clk(signal_clk);" + CR;
+	        netlist += "logger"+i+".p_resetn(signal_resetn);" + CR; 
+		netlist += "logger"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;  	     
+	    }	
+	    else{
+		if (ram.getMonitored()==2){
+		int number = number = ram.getNo_ram();	      
+		netlist += "mwmr_stats"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;
+
+  //currently all channels mapped on this RAM are monitored
 	      i++;	      
-	    }	    
+	    }	 
 	  }
-
+	}
 
 	/*	if(nb_clusters==0){
 	    if(trace_caba){
