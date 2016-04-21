@@ -621,6 +621,7 @@ public class AvatarBDPanel extends TDiagramPanel {
                 AvatarBDPortConnector port = (AvatarBDPortConnector)tgc;
 		if (port.getListOfSignalsOrigin().size() > 0) {
                     String name = port.getChannelName();
+		    TraceManager.addDev("[CHA] Channel name=" + name);
 		    if (!_tadp.isChannelMapped(_topName,  name))
 			list.add(_topName + "::" + name);
 		}

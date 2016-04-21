@@ -1732,6 +1732,61 @@
 
 <Modeling type="ADD" nameTab="Deployment" >
 <ADDDiagramPanel name="Deployment Diagram" minX="10" maxX="2500" minY="10" maxY="1500" attributes="0" masterClockFrequency="200" >
+<COMPONENT type="5355" id="872" >
+<cdparam x="479" y="81" />
+<sizeparam width="200" height="200" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="Memory0" value="name" />
+<TGConnectingPoint num="0" id="873" />
+<TGConnectingPoint num="1" id="874" />
+<TGConnectingPoint num="2" id="875" />
+<TGConnectingPoint num="3" id="876" />
+<TGConnectingPoint num="4" id="877" />
+<TGConnectingPoint num="5" id="878" />
+<TGConnectingPoint num="6" id="879" />
+<TGConnectingPoint num="7" id="880" />
+<TGConnectingPoint num="8" id="881" />
+<TGConnectingPoint num="9" id="882" />
+<TGConnectingPoint num="10" id="883" />
+<TGConnectingPoint num="11" id="884" />
+<TGConnectingPoint num="12" id="885" />
+<TGConnectingPoint num="13" id="886" />
+<TGConnectingPoint num="14" id="887" />
+<TGConnectingPoint num="15" id="888" />
+<TGConnectingPoint num="16" id="889" />
+<TGConnectingPoint num="17" id="890" />
+<TGConnectingPoint num="18" id="891" />
+<TGConnectingPoint num="19" id="892" />
+<TGConnectingPoint num="20" id="893" />
+<TGConnectingPoint num="21" id="894" />
+<TGConnectingPoint num="22" id="895" />
+<TGConnectingPoint num="23" id="896" />
+<extraparam>
+<info stereotype="RAM" nodeName="Memory0" />
+<attributes byteDataSize="4" monitored="0"  index="0" />
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="5362" id="897" >
+<father id="872" num="0" />
+<cdparam x="542" y="183" />
+<sizeparam width="89" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="111" minY="0" maxY="160" />
+<infoparam name="TGComponent" value="B0/in m2" />
+<TGConnectingPoint num="0" id="898" />
+<TGConnectingPoint num="1" id="899" />
+<TGConnectingPoint num="2" id="900" />
+<TGConnectingPoint num="3" id="901" />
+<TGConnectingPoint num="4" id="902" />
+<TGConnectingPoint num="5" id="903" />
+<TGConnectingPoint num="6" id="904" />
+<TGConnectingPoint num="7" id="905" />
+<extraparam>
+<info value="B0/in m2" channelName="B0/in m2() #--# B1/out m2()" referenceDiagram="TestAsynchronous1" />
+</extraparam>
+</SUBCOMPONENT>
+
 <COMPONENT type="5363" id="818" >
 <cdparam x="548" y="472" />
 <sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
