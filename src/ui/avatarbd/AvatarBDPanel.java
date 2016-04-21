@@ -106,17 +106,21 @@ public class AvatarBDPanel extends TDiagramPanel {
     }
 
     public boolean actionOnRemove(TGComponent tgc) {
-        //System.out.println("Action on remove!");
-        if (tgc instanceof AvatarBDBlock) {
-            AvatarBDBlock abdb = (AvatarBDBlock)(tgc);
-            //System.out.println(" *** add tclass *** name=" + tmlt.getTaskName());
-            mgui.removeAvatarBlock(tp, abdb.getBlockName());
-            LinkedList<AvatarBDBlock> list  = abdb.getFullBlockList();
-            for(AvatarBDBlock b: list) {
-                mgui.removeAvatarBlock(tp, b.getBlockName());
+        if (tgc instanceof AvatarBDStateMachineOwner) {
+            AvatarBDStateMachineOwner abdb = (AvatarBDStateMachineOwner) tgc;
+            this.mgui.removeAvatarBlock (tp, abdb.getOwnerName());
+            if (tgc instanceof AvatarBDBlock) {
+                LinkedList<AvatarBDBlock> list  = ((AvatarBDBlock) abdb).getFullBlockList();
+                for(AvatarBDBlock b: list)
+                    mgui.removeAvatarBlock(tp, b.getBlockName());
+
+                for(AvatarBDLibraryFunction b: ((AvatarBDBlock) abdb).getFullLibraryFunctionList())
+                    mgui.removeAvatarBlock (tp, b.getFunctionName());
             }
+
             return true;
         }
+
         return false;
     }
 
@@ -486,7 +490,7 @@ public class AvatarBDPanel extends TDiagramPanel {
         return null;
     }
 
-    public Vector getAttributesOfDataType(String _name) {
+    public Vector<TAttribute> getAttributesOfDataType(String _name) {
         for (TGComponent tgc: this.componentList)
             if (tgc instanceof AvatarBDDataType) {
                 AvatarBDDataType adt = (AvatarBDDataType)tgc;

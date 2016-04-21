@@ -160,12 +160,23 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         int h  = g.getFontMetrics().getHeight();
         Color c = g.getColor();
 
-        int desiredWidth = minWidth;
-	desiredWidth = Math.max(desiredWidth, 2*g.getFontMetrics().stringWidth("Property Pragma") + marginX+ textX);
-	
-        for(int i=0; i< values.length; i++) {
-            desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX+textX);
-        }
+        /* !!! WARNING !!!
+         * Note that here we use TDiagramPanel.stringWidth instead of graph.getFontMetrics().stringWidth
+         * Indeed, TGComponent (and so TGCNote) objects are drawn twice when the bird view is enabled.
+         * First, they are drawn on the TDiagramPanel and then on the bird view.
+         * Problem is that we compute the width for this element (which will be further used for isOnMe
+         * for instance) so that it matches the text inside of it. It is thus important that the width of
+         * the strings - that will affect the width of the component - is the same each time it is drawn.
+         * For some unknown reasons, even if the current Font of the Graphics object is the same, the
+         * FontMetrics object derived from it is not the same (ascent and descent are different) so for
+         * the same text and the same Font, width would still change if we used the FontMetrics fetched
+         * from the Graphics object.
+         * Thus we use a saved FontMetrics object in TDiagramPanel that only changes when zoom changes.
+         */
+	int desiredWidth = Math.max(this.minWidth, 2*this.tdp.stringWidth(g, "Property Pragma") + marginX+ textX);
+        for(int i=0; i< values.length; i++)
+            desiredWidth = Math.max(desiredWidth, this.tdp.stringWidth(g, values[i]) + marginX+textX);
+
 //	currentFontSize= 5;
         int desiredHeight = ((models.size() + properties.size()+4)*currentFontSize) + textY + 1;
 
@@ -195,10 +206,10 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         }
         g.fillPolygon(px, py, 4);
 
-        g.setColor(Color.black);	
+        g.setColor(c);	
 	
 	int i = 1;
-	Font heading = new Font("heading", Font.BOLD, 14);
+	Font heading = new Font("heading", Font.BOLD, this.tdp.getFontSize ()*7/6);
 	g.setFont(heading);
 	g.drawString("Model Pragma", x+textX, y+textY + currentFontSize);
 	g.setFont(fold);
@@ -206,6 +217,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 	    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
 	    i++;
 	}
+        // FIXME: why the empty string ?
 	g.drawString(" ", x+ textX, y+ textY+(i+1)*currentFontSize);
 	i++;
 	g.drawLine(x, y+textY/2+i*currentFontSize, x+width, y+textY/2+i*currentFontSize);

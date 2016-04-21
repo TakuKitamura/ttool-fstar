@@ -153,6 +153,9 @@ public class AvatarSpecificationSimulation  {
 
         // Remove composite states
         avspec.removeCompositeStates();
+        
+        // Remove library function calls
+        avspec.removeLibraryFunctionCalls ();
 
         // Remove timers
         avspec.removeTimers();

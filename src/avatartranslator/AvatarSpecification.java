@@ -58,9 +58,9 @@ public class AvatarSpecification extends AvatarElement {
     private LinkedList<AvatarRelation> relations;
 
     /**
-     * The list of all library calls that can be called.
+     * The list of all library functions that can be called.
      */
-    private LinkedList<AvatarLibraryFunctionCall> libraryCalls;
+    private LinkedList<AvatarLibraryFunction> libraryFunctions;
 
     private String applicationCode;
 
@@ -86,9 +86,16 @@ public class AvatarSpecification extends AvatarElement {
         this.constants.add (AvatarConstant.FALSE);
         this.constants.add (AvatarConstant.TRUE);
 
-        this.libraryCalls = new LinkedList<AvatarLibraryFunctionCall> ();
+        this.libraryFunctions = new LinkedList<AvatarLibraryFunction> ();
     }
 
+    public LinkedList<AvatarLibraryFunction> getListOfLibraryFunctions () {
+        return this.libraryFunctions;
+    }
+
+    public void addLibraryFunction (AvatarLibraryFunction libraryFunction) {
+        this.libraryFunctions.add (libraryFunction);
+    }
 
     // For code generation
     public void addApplicationCode(String _code) {

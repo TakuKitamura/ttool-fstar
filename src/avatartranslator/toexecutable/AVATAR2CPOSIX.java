@@ -136,6 +136,7 @@ public class AVATAR2CPOSIX {
         taskFiles = new Vector<TaskFile>();
 
         avspec.removeCompositeStates();
+        avspec.removeLibraryFunctionCalls ();
         avspec.removeTimers();
 
 

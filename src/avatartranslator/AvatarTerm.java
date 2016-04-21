@@ -60,7 +60,7 @@ public abstract class AvatarTerm extends AvatarElement {
         super (_name, _referenceObject);
     }
 
-    public static AvatarTerm createFromString (AvatarBlock block, String toParse) {
+    public static AvatarTerm createFromString (AvatarStateMachineOwner block, String toParse) {
         if (toParse == null || toParse.isEmpty ())
             return null;
 
@@ -82,7 +82,7 @@ public abstract class AvatarTerm extends AvatarElement {
             return result;
         TraceManager.addDev ("AvatarAttribute '" + toParse + "' couldn't be parsed");
 
-        result = block.getAvatarConstantWithName (toParse);
+        result = block.getAvatarSpecification ().getAvatarConstantWithName (toParse);
         if (result != null)
             return result;
 
@@ -90,14 +90,14 @@ public abstract class AvatarTerm extends AvatarElement {
             // TODO: replace that by a true AvatarNumeric
             int i = Integer.parseInt (toParse);
             result = new AvatarConstant (toParse, block);
-            block.addConstant ((AvatarConstant) result);
+            block.getAvatarSpecification ().addConstant ((AvatarConstant) result);
             return result;
         } catch (NumberFormatException e) { }
 
         // Consider that new names are constants
         if (AvatarTerm.isValidName (toParse)) {
             result = new AvatarConstant (toParse, block);
-            block.addConstant ((AvatarConstant) result);
+            block.getAvatarSpecification ().addConstant ((AvatarConstant) result);
             return result;
         }
         //TraceManager.addDev ("AvatarConstant '" + toParse + "' couldn't be parsed");
@@ -106,7 +106,7 @@ public abstract class AvatarTerm extends AvatarElement {
         return new AvatarTermRaw (toParse, block);
     }
 
-    public static AvatarAction createActionFromString (AvatarBlock block, String toParse) {
+    public static AvatarAction createActionFromString (AvatarStateMachineOwner block, String toParse) {
         AvatarAction result = null;
 
         int indexEq = toParse.indexOf("=");

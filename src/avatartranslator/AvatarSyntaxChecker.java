@@ -58,7 +58,7 @@ public class AvatarSyntaxChecker  {
     public AvatarSyntaxChecker() {
     }
 
-    public static int isAValidGuard(AvatarSpecification _as, AvatarBlock _ab, String _guard) {
+    public static int isAValidGuard(AvatarSpecification _as, AvatarStateMachineOwner _ab, String _guard) {
         //TraceManager.addDev("Evaluating (non modified) guard:" + _guard);
 
         String tmp = _guard.replaceAll(" ", "").trim();
@@ -91,7 +91,7 @@ public class AvatarSyntaxChecker  {
         //return parse(_as, _ab, "guard", _guard);
     }
 
-    public static int isAValidIntExpr(AvatarSpecification _as, AvatarBlock _ab, String _expr) {
+    public static int isAValidIntExpr(AvatarSpecification _as, AvatarStateMachineOwner _ab, String _expr) {
         if (_expr.trim().length() == 0) {
             return 0;
         }
@@ -118,7 +118,7 @@ public class AvatarSyntaxChecker  {
 
     }
 
-    public static int isAValidBoolExpr(AvatarSpecification _as, AvatarBlock _ab, String _expr) {
+    public static int isAValidBoolExpr(AvatarSpecification _as, AvatarStateMachineOwner _ab, String _expr) {
         if (_expr.trim().length() == 0) {
             return 0;
         }
@@ -145,7 +145,7 @@ public class AvatarSyntaxChecker  {
         // OLD return parse(_as, _ab, "actionbool", _expr);
     }
 
-    public static int isAValidVariableExpr(AvatarSpecification _as, AvatarBlock _ab, String _expr) {
+    public static int isAValidVariableExpr(AvatarSpecification _as, AvatarStateMachineOwner _ab, String _expr) {
         int index0 = _expr.indexOf("=");
         if (index0 == -1) {
             return -1;

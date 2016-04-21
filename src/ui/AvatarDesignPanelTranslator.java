@@ -108,22 +108,22 @@ public class AvatarDesignPanelTranslator {
                 as.addApplicationCode(abdp.getMainCode());
             }
         }
-	typeAttributesMap = new HashMap<String, Vector>();
-	nameTypeMap = new HashMap<String,String>();
+        typeAttributesMap = new HashMap<String, Vector>();
+        nameTypeMap = new HashMap<String,String>();
         createLibraryFunctions (as, libraryFunctions);
         createBlocks(as, blocks);
         createRelationsBetweenBlocks(as, blocks);
         makeBlockStateMachines(as);
-	/*for (String s: nameTypeMap.keySet()){
-	    System.out.println(s + " "+ nameTypeMap.get(s));
-	    System.out.println(typeAttributesMap.get(nameTypeMap.get(s)).size());
-	} */
+        /*for (String s: nameTypeMap.keySet()){
+          System.out.println(s + " "+ nameTypeMap.get(s));
+          System.out.println(typeAttributesMap.get(nameTypeMap.get(s)).size());
+          } */
         createPragmas(as, blocks);
 
         TraceManager.addDev("Removing else guards");
         as.removeElseGuards();
         TraceManager.addDev("Removing else guards ... done");
-	//System.out.println(as.toString());
+        //System.out.println(as.toString());
         return as;
     }
 
@@ -172,10 +172,10 @@ public class AvatarDesignPanelTranslator {
         Iterator iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
         TGComponent tgc;
         AvatarBDPragma tgcn;
-	AvatarBDSafetyPragma tgsp;
+        AvatarBDSafetyPragma tgsp;
         String values [];
         String tmp;
-	LinkedList<AvatarPragma> pragmaList;
+        LinkedList<AvatarPragma> pragmaList;
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             if (tgc instanceof AvatarBDPragma) {
@@ -200,18 +200,18 @@ public class AvatarDesignPanelTranslator {
                                 }
                             }
                             _as.addPragma(tmpPragma);
-                        //TraceManager.addDev("Adding pragma:" + tmp);
+                            //TraceManager.addDev("Adding pragma:" + tmp);
                         }
                     }
                 }
             }
-	    if (tgc instanceof AvatarBDSafetyPragma) {
-		tgsp = (AvatarBDSafetyPragma)tgc;
+            if (tgc instanceof AvatarBDSafetyPragma) {
+                tgsp = (AvatarBDSafetyPragma)tgc;
                 values = tgsp.getValues();
-		for (String s: values){
-		    _as.addSafetyPragma(s);
-		}
-	    }
+                for (String s: values){
+                    _as.addSafetyPragma(s);
+                }
+            }
         }
     }
 
@@ -292,17 +292,17 @@ public class AvatarDesignPanelTranslator {
                           if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
                           ret = ret  + tmp + " ";
                           } else if (ta.getType() == TAttribute.OTHER) {
-                          // Must find all subsequent types
-                          types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
-                          if (types == null) {
-                          TraceManager.addDev("Invalid Pragma " + 1);
-                          return null;
+                        // Must find all subsequent types
+                        types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
+                        if (types == null) {
+                        TraceManager.addDev("Invalid Pragma " + 1);
+                        return null;
 
-                          } else {
-                          for(int j=0; j<types.size(); j++) {
-                          ret = ret + tmp + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
-                          }
-                          }
+                        } else {
+                        for(int j=0; j<types.size(); j++) {
+                        ret = ret + tmp + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
+                        }
+                        }
                           }
 
                           }
@@ -454,10 +454,9 @@ public class AvatarDesignPanelTranslator {
         TraceManager.addDev("Reworked pragma: " + ret);
 
         return ret.trim();
-
     }
 
-    public void addRegularAttribute(AvatarBlock _ab, TAttribute _a, String _preName) {
+    private AvatarAttribute createRegularAttribute (AvatarStateMachineOwner _ab, TAttribute _a, String _preName) {
         AvatarType type = AvatarType.UNDEFINED;
         if (_a.getType() == TAttribute.INTEGER){
             type = AvatarType.INTEGER;
@@ -470,11 +469,131 @@ public class AvatarDesignPanelTranslator {
         }
         AvatarAttribute aa = new AvatarAttribute(_preName + _a.getId(), type, _ab, _a);
         aa.setInitialValue(_a.getInitialValue());
-        _ab.addAttribute(aa);
+
+        return aa;
+    }
+
+    public void addRegularAttribute(AvatarBlock _ab, TAttribute _a, String _preName) {
+        _ab.addAttribute(this.createRegularAttribute (_ab, _a, _preName));
     }
 
     public void createLibraryFunctions (AvatarSpecification _as, LinkedList<AvatarBDLibraryFunction> _libraryFunctions) {
-        // TODO: translate this as a block
+        for (AvatarBDLibraryFunction libraryFunction: _libraryFunctions) {
+            AvatarLibraryFunction alf = new AvatarLibraryFunction (libraryFunction.getFunctionName (), _as, libraryFunction);
+            _as.addLibraryFunction (alf);
+            listE.addCor(alf, libraryFunction);
+            libraryFunction.setAVATARID(alf.getID());
+
+            // Create parameters
+            for (TAttribute attr: libraryFunction.getParameters ())
+                if (attr.getType() == TAttribute.INTEGER
+                        || attr.getType() == TAttribute.NATURAL
+                        || attr.getType() == TAttribute.BOOLEAN
+                        || attr.getType() == TAttribute.TIMER)
+                    alf.addParameter (this.createRegularAttribute (alf, attr, ""));
+                else {
+                    // other
+                    Vector<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (attr.getTypeOther ());
+                    if (types == null) {
+                        CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + attr.getTypeOther() + " used in " + alf.getName());
+                        // TODO: adapt
+                        // ce.setAvatarBlock(ab);
+                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                        addCheckingError(ce);
+                        return;
+                    } else {
+                        if (types.isEmpty ()) {
+                            CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Data type definition must contain at least one attribute:  " + alf.getName());
+                            ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                            addCheckingError(ce);
+                        } else {
+                            nameTypeMap.put (libraryFunction.getFunctionName()+"."+attr.getId(), attr.getTypeOther());
+                            typeAttributesMap.put (attr.getTypeOther(), types);
+                            for (TAttribute type: types)
+                                alf.addParameter (this.createRegularAttribute (alf, type, attr.getId() + "__"));
+                        }
+                    }
+                }
+
+            // Create return values
+            for (TAttribute attr: libraryFunction.getReturnAttributes ())
+                if (attr.getType() == TAttribute.INTEGER
+                        || attr.getType() == TAttribute.NATURAL
+                        || attr.getType() == TAttribute.BOOLEAN
+                        || attr.getType() == TAttribute.TIMER)
+                    alf.addReturnAttribute (this.createRegularAttribute (alf, attr, ""));
+                else {
+                    // other
+                    Vector<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (attr.getTypeOther ());
+                    if (types == null) {
+                        CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + attr.getTypeOther() + " used in " + alf.getName());
+                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                        addCheckingError(ce);
+                        return;
+                    } else {
+                        if (types.isEmpty ()) {
+                            CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Data type definition must contain at least one attribute:  " + alf.getName());
+                            ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                            addCheckingError(ce);
+                        } else {
+                            nameTypeMap.put (libraryFunction.getFunctionName()+"."+attr.getId(), attr.getTypeOther());
+                            typeAttributesMap.put (attr.getTypeOther(), types);
+                            for (TAttribute type: types)
+                                alf.addReturnAttribute (this.createRegularAttribute (alf, type, attr.getId() + "__"));
+                        }
+                    }
+                }
+
+            // Create attributes
+            for (TAttribute attr: libraryFunction.getAttributes ())
+                if (attr.getType() == TAttribute.INTEGER
+                        || attr.getType() == TAttribute.NATURAL
+                        || attr.getType() == TAttribute.BOOLEAN
+                        || attr.getType() == TAttribute.TIMER)
+                    alf.addReturnAttribute (this.createRegularAttribute (alf, attr, ""));
+                else {
+                    // other
+                    Vector<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (attr.getTypeOther ());
+                    if (types == null) {
+                        CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + attr.getTypeOther() + " used in " + alf.getName());
+                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                        addCheckingError(ce);
+                        return;
+                    } else {
+                        if (types.isEmpty ()) {
+                            CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Data type definition must contain at least one attribute:  " + alf.getName());
+                            ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                            addCheckingError(ce);
+                        } else {
+                            nameTypeMap.put (libraryFunction.getFunctionName()+"."+attr.getId(), attr.getTypeOther());
+                            typeAttributesMap.put (attr.getTypeOther(), types);
+                            for (TAttribute type: types)
+                                alf.addAttribute (this.createRegularAttribute (alf, type, attr.getId() + "__"));
+                        }
+                    }
+                }
+
+                // Create methods
+                for (ui.AvatarMethod uiam: libraryFunction.getMethods ()) {
+                    avatartranslator.AvatarMethod atam = new avatartranslator.AvatarMethod (uiam.getId (), uiam);
+                    atam.setImplementationProvided (uiam.isImplementationProvided());
+                    alf.addMethod (atam);
+                    this.makeParameters (alf, atam, uiam);
+                    this.makeReturnParameters (alf, libraryFunction, atam, uiam);
+                }
+
+                // Create signals
+                for (ui.AvatarSignal uias: libraryFunction.getSignals ()) {
+                    avatartranslator.AvatarSignal atas;
+                    if (uias.getInOut() == uias.IN)
+                        atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.IN, uias);
+                    else
+                        atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.OUT, uias);
+
+                    alf.addSignal (atas);
+                    this.makeParameters (alf, atas, uias);
+                }
+        }
     }
 
     public void createBlocks(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
@@ -510,7 +629,7 @@ public class AvatarDesignPanelTranslator {
                     addRegularAttribute(ab, a, "");
                 } else {
                     // other
-                   // TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
+                    // TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
                     types = adp.getAvatarBDPanel().getAttributesOfDataType(a.getTypeOther());
                     if (types == null) {
                         CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + a.getTypeOther() + " used in " + ab.getName());
@@ -525,8 +644,8 @@ public class AvatarDesignPanelTranslator {
                             ce.setTDiagramPanel(adp.getAvatarBDPanel());
                             addCheckingError(ce);
                         } else {
-			    nameTypeMap.put(block.getBlockName()+"."+a.getId(), a.getTypeOther());
-			    typeAttributesMap.put(a.getTypeOther(), types);
+                            nameTypeMap.put(block.getBlockName()+"."+a.getId(), a.getTypeOther());
+                            typeAttributesMap.put(a.getTypeOther(), types);
                             for(int j=0; j<types.size(); j++) {
                                 addRegularAttribute(ab, (TAttribute)(types.elementAt(j)), a.getId() + "__");
                             }
@@ -580,13 +699,15 @@ public class AvatarDesignPanelTranslator {
 
     public void makeBlockStateMachines(AvatarSpecification _as) {
         // Make state machine of blocks
-        for(AvatarBlock block: _as.getListOfBlocks()) {
-            makeStateMachine(_as, block);
-        }
+        for(AvatarBlock block: _as.getListOfBlocks())
+            this.makeStateMachine(_as, block);
 
+        // Make state machine of library functions
+        for (AvatarLibraryFunction libraryFunction: _as.getListOfLibraryFunctions ())
+            this.makeStateMachine (_as, libraryFunction);
     }
 
-    public void makeReturnParameters(AvatarBlock _ab, AvatarBDBlock _block, avatartranslator.AvatarMethod _atam, ui.AvatarMethod _uiam) {
+    public void makeReturnParameters(AvatarStateMachineOwner _ab, AvatarBDStateMachineOwner _block, avatartranslator.AvatarMethod _atam, ui.AvatarMethod _uiam) {
         String rt = _uiam.getReturnType().trim();
         AvatarAttribute aa;
         Vector types;
@@ -603,23 +724,23 @@ public class AvatarDesignPanelTranslator {
         } else {
             types = adp.getAvatarBDPanel().getAttributesOfDataType(rt);
             if (types == null) {
-                CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + rt + " declared as a return parameter of a method of " + _block.getName());
-                ce.setAvatarBlock(_ab);
+                CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + rt + " declared as a return parameter of a method of " + _block.getOwnerName());
+                // TODO: adapt
+                // ce.setAvatarBlock(_ab);
                 ce.setTDiagramPanel(adp.getAvatarBDPanel());
                 addCheckingError(ce);
                 return;
             } else {
                 for(int j=0; j<types.size(); j++) {
                     ta = (TAttribute)(types.elementAt(j));
-                    if (ta.getType() == TAttribute.INTEGER){
+                    if (ta.getType() == TAttribute.INTEGER)
                         type = AvatarType.INTEGER;
-                    } else if (ta.getType() == TAttribute.NATURAL){
+                    else if (ta.getType() == TAttribute.NATURAL)
                         type = AvatarType.INTEGER;
-                    } else if (ta.getType() == TAttribute.BOOLEAN) {
+                    else if (ta.getType() == TAttribute.BOOLEAN)
                         type = AvatarType.BOOLEAN;
-                    } else {
+                    else
                         type = AvatarType.INTEGER;
-                    }
                     aa = new AvatarAttribute("return__" + j, type, _ab, _block);
                     _atam.addReturnParameter(aa);
                 }
@@ -628,7 +749,7 @@ public class AvatarDesignPanelTranslator {
 
     }
 
-    public void makeParameters(AvatarBlock _block, avatartranslator.AvatarMethod _atam, ui.AvatarMethod _uiam) {
+    public void makeParameters(AvatarStateMachineOwner _block, avatartranslator.AvatarMethod _atam, ui.AvatarMethod _uiam) {
         String typeIds[] = _uiam.getTypeIds();
         String types[] = _uiam.getTypes();
         AvatarAttribute aa;
@@ -641,7 +762,8 @@ public class AvatarDesignPanelTranslator {
             if (v == null) {
                 if (AvatarType.getType(types[i]) == AvatarType.UNDEFINED) {
                     CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  \"" + types[i] + "\" declared in method " + _atam + " of block " + _block.getName());
-                    ce.setAvatarBlock(_block);
+                    // TODO: adapt
+                    // ce.setAvatarBlock(_block);
                     ce.setTDiagramPanel(adp.getAvatarBDPanel());
                     addCheckingError(ce);
                 }
@@ -666,11 +788,12 @@ public class AvatarDesignPanelTranslator {
         }
     }
 
-    public void manageAttribute(String _name, AvatarBlock _ab, AvatarActionOnSignal _aaos, TDiagramPanel _tdp, TGComponent _tgc, String _idOperator) {
+    public void manageAttribute (String _name, AvatarStateMachineOwner _ab, AvatarActionOnSignal _aaos, TDiagramPanel _tdp, TGComponent _tgc, String _idOperator) {
         TAttribute ta =  adp.getAvatarBDPanel().getAttribute(_name, _ab.getName());
         if (ta == null) {
             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + _name + " in signal expression: " + _idOperator);
-            ce.setAvatarBlock(_ab);
+            // TODO: adapt
+            // ce.setAvatarBlock(_ab);
             ce.setTDiagramPanel(_tdp);
             ce.setTGComponent(_tgc);
             addCheckingError(ce);
@@ -700,7 +823,8 @@ public class AvatarDesignPanelTranslator {
             aa = _ab.getAvatarAttributeWithName((String)(v.get(i)));
             if (aa == null) {
                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + _name + " in signal expression: " + _idOperator);
-                ce.setAvatarBlock(_ab);
+                // TODO: adapt
+                // ce.setAvatarBlock(_ab);
                 ce.setTDiagramPanel(_tdp);
                 ce.setTGComponent(_tgc);
                 addCheckingError(ce);
@@ -712,657 +836,484 @@ public class AvatarDesignPanelTranslator {
         }
     }
 
-    public void makeStateMachine(AvatarSpecification _as, AvatarBlock _ab) {
-        AvatarBDBlock block = (AvatarBDBlock)(listE.getTG(_ab));
+    private void translateAvatarSMDSendSignal (TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDSendSignal asmdss) throws CheckingError {
+        AvatarStateMachine asm = _ab.getStateMachine ();
+        avatartranslator.AvatarSignal atas = _ab.getAvatarSignalWithName (asmdss.getSignalName ());
+        if (atas == null)
+            throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Unknown signal: " + asmdss.getSignalName());
+
+        // Get relation of that signal
+        if (_ab instanceof AvatarBlock) {
+            // Note that for library functions, signals are just placeholders so they don't need to be connected to anything
+            AvatarRelation ar = _as.getAvatarRelationWithSignal (atas);
+            if (ar == null)
+                throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Signal used for sending in " + asmdss.getValue() + " is not connected to a channel");
+        }
+
+        AvatarActionOnSignal aaos = new AvatarActionOnSignal ("action_on_signal", atas, asmdss);
+        if (asmdss.hasCheckableAccessibility())
+            aaos.setCheckable();
+
+        if (aaos.isReceiving ())
+            throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "A receiving signal is used for sending: " + asmdss.getValue());
+
+        if (asmdss.getNbOfValues() == -1)
+            throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal: " + asmdss.getValue());
+
+        for(int i=0; i<asmdss.getNbOfValues(); i++) {
+            String tmp = asmdss.getValue(i);
+            if (tmp.isEmpty ())
+                throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Empty parameter in signal expression: " + asmdss.getValue());
+
+            this.manageAttribute (tmp, _ab, aaos, tdp, asmdss, asmdss.getValue());
+        }
+
+        if (aaos.getNbOfValues () != atas.getListOfAttributes ().size ())
+            throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> nb of parameters does not match definition");
+
+        // Checking expressions passed as parameter
+        for (int i=0; i<aaos.getNbOfValues(); i++) {
+            String theVal = aaos.getValue(i);
+            if (atas.getListOfAttributes ().get (i).isInt ()) {
+                if (AvatarSyntaxChecker.isAValidIntExpr (_as, _ab, theVal) < 0)
+                    throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
+            } else {
+                // We assume it is a bool attribute
+                if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, theVal) < 0)
+                    throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
+            }
+        }
+
+        this.listE.addCor (aaos, asmdss);
+        asmdss.setAVATARID (aaos.getID());
+        asm.addElement (aaos);
+    }
+
+
+    private void translateAvatarSMDReceiveSignal (TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDReceiveSignal asmdrs) throws CheckingError {
+        AvatarStateMachine asm = _ab.getStateMachine ();
+        avatartranslator.AvatarSignal atas = _ab.getAvatarSignalWithName (asmdrs.getSignalName ());
+        if (atas == null)
+            throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Unknown signal: " + asmdrs.getSignalName());
+
+        // Get relation of that signal
+        if (_ab instanceof AvatarBlock) {
+            // Note that for library functions, signals are just placeholders so they don't need to be connected to anything
+            AvatarRelation ar = _as.getAvatarRelationWithSignal (atas);
+            if (ar == null)
+                throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Signal used for receiving in " + asmdrs.getValue() + " is not connected to a channel");
+        }
+
+        AvatarActionOnSignal aaos = new AvatarActionOnSignal ("action_on_signal", atas, asmdrs);
+        if (asmdrs.hasCheckableAccessibility())
+            aaos.setCheckable();
+
+        if (aaos.isSending())
+            throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "A sending signal is used for receiving: " + asmdrs.getValue());
+
+        if (asmdrs.getNbOfValues() == -1)
+            throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal: " + asmdrs.getValue());
+
+        for(int i=0; i<asmdrs.getNbOfValues(); i++) {
+            String tmp = asmdrs.getValue(i);
+            if (tmp.isEmpty ())
+                throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Empty parameter in signal expression: " + asmdrs.getValue());
+
+            this.manageAttribute (tmp, _ab, aaos, tdp, asmdrs, asmdrs.getValue());
+        }
+
+        if (aaos.getNbOfValues () != atas.getListOfAttributes ().size ())
+            throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> nb of parameters does not match definition");
+
+        // Checking expressions passed as parameter
+        for (int i=0; i<aaos.getNbOfValues(); i++) {
+            String theVal = aaos.getValue(i);
+            if (atas.getListOfAttributes ().get (i).isInt ()) {
+                if (AvatarSyntaxChecker.isAValidIntExpr (_as, _ab, theVal) < 0)
+                    throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> value at index #" + i + " does not match definition");
+            } else {
+                // We assume it is a bool attribute
+                if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, theVal) < 0)
+                    throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> value at index #" + i + " does not match definition");
+            }
+        }
+
+        this.listE.addCor (aaos, asmdrs);
+        asmdrs.setAVATARID (aaos.getID());
+        asm.addElement (aaos);
+    }
+
+    private void translateAvatarSMDState (TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDState tgc) throws CheckingError {
+        AvatarStateMachine asm = _ab.getStateMachine ();
+        AvatarState astate = asm.getStateWithName(tgc.getValue());
+        if (astate == null) {
+            astate = new AvatarState (tgc.getValue(), tgc);
+            asm.addElement (astate);
+        }
+
+        if (tgc.hasCheckableAccessibility ())
+            astate.setCheckable ();
+
+        // Executable code
+        astate.addEntryCode(((AvatarSMDState)(tgc)).getEntryCode());
+
+        this.listE.addCor (astate, tgc);
+        astate.addReferenceObject (tgc);
+        tgc.setAVATARID (astate.getID());
+    }
+
+    private void translateAvatarSMDRandom (TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDRandom asmdrand) throws CheckingError {
+        AvatarStateMachine asm = _ab.getStateMachine ();
+        AvatarRandom arandom = new AvatarRandom ("random", asmdrand);
+        String tmp1 = modifyString (asmdrand.getMinValue());
+        int error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp1);
+        if (error < 0)
+            this.makeError (error, tdp, _ab, asmdrand, "min value of random", tmp1);
+
+        String tmp2 = modifyString(asmdrand.getMaxValue());
+        error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp2);
+        if (error < 0)
+            this.makeError (error, tdp, _ab, asmdrand, "max value of random", tmp2);
+
+        arandom.setValues (tmp1, tmp2);
+        arandom.setFunctionId (asmdrand.getFunctionId());
+
+        tmp1 = modifyString(asmdrand.getVariable());
+        AvatarAttribute aa = _ab.getAvatarAttributeWithName (tmp1);
+
+        if (aa == null)
+            this.makeError (-3, tdp, _ab, asmdrand, "random", tmp1);
+        // Checking type of variable -> must be an int
+        else if (!(aa.isInt()))
+            this.makeError (error, tdp, _ab, asmdrand, ": variable of random must be of type \"int\"", tmp2);
+
+        arandom.setVariable (tmp1);
+
+        asm.addElement (arandom);
+        listE.addCor (arandom, asmdrand);
+        asmdrand.setAVATARID (arandom.getID());
+    }
+
+    private void translateAvatarSMDSetTimer (TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDSetTimer asmdst) throws CheckingError {
+        AvatarStateMachine asm = _ab.getStateMachine ();
+        String tmp = asmdst.getTimerName();
+        AvatarAttribute aa = _ab.getAvatarAttributeWithName(tmp);
+        if (aa == null)
+            throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed timer parameter: " + tmp + " in timer setting");
+
+        if (aa.getType() != AvatarType.TIMER)
+            throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in timer setting: shall be a parameter of type \"Timer\"");
+
+        tmp = this.modifyString (asmdst.getTimerValue ());
+        int error = AvatarSyntaxChecker.isAValidIntExpr (_as, _ab, tmp);
+        if (error < 0)
+            this.makeError(error, tdp, _ab, asmdst, "value of the timer setting", tmp);
+
+        AvatarSetTimer asettimer = new AvatarSetTimer("settimer__" + aa.getName(), asmdst);
+        asettimer.setTimer (aa);
+        asettimer.setTimerValue (tmp);
+        asm.addElement (asettimer);
+        this.listE.addCor (asettimer, asmdst);
+        asmdst.setAVATARID (asettimer.getID());
+    }
+
+    private void translateAvatarSMDResetTimer (TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDResetTimer asmdrt) throws CheckingError {
+        AvatarStateMachine asm = _ab.getStateMachine ();
+        String tmp = asmdrt.getTimerName();
+        AvatarAttribute aa = _ab.getAvatarAttributeWithName (tmp);
+        if (aa == null)
+            throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed timer parameter: " + tmp + " in timer reset");
+
+        if (aa.getType() != AvatarType.TIMER)
+            throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in timer reset: shall be a parameter of type \"Timer\"");
+
+        AvatarResetTimer aresettimer = new AvatarResetTimer("resettimer__" + aa.getName(), asmdrt);
+        aresettimer.setTimer (aa);
+        asm.addElement(aresettimer);
+        this.listE.addCor (aresettimer, asmdrt);
+        asmdrt.setAVATARID (aresettimer.getID());
+    }
+
+    private void translateAvatarSMDExpireTimer (TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDExpireTimer asmdet) throws CheckingError {
+        AvatarStateMachine asm = _ab.getStateMachine ();
+        String tmp = asmdet.getTimerName();
+        AvatarAttribute aa = _ab.getAvatarAttributeWithName (tmp);
+        if (aa == null)
+            throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed timer parameter: " + tmp + " in timer expiration");
+
+        if (aa.getType() != AvatarType.TIMER)
+            throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in timer expiration: shall be a parameter of type \"Timer\"");
+
+        AvatarExpireTimer aexpiretimer = new AvatarExpireTimer("expiretimer__" + aa.getName(), asmdet);
+        aexpiretimer.setTimer(aa);
+        asm.addElement(aexpiretimer);
+        this.listE.addCor(aexpiretimer, asmdet);
+        asmdet.setAVATARID(aexpiretimer.getID());
+    }
+
+    public void makeStateMachine (AvatarSpecification _as, AvatarStateMachineOwner _ab) {
+        AvatarBDStateMachineOwner block = (AvatarBDStateMachineOwner) listE.getTG (_ab);
+        AvatarStateMachine asm = _ab.getStateMachine ();
+
         if (block == null) {
-            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "No corresponding graphical block for  " + _ab.getName());
-            ce.setAvatarBlock(_ab);
+            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "No corresponding graphical block for " + _ab.getName());
+            // TODO: adapt
+            // ce.setAvatarBlock(_ab);
             ce.setTDiagramPanel(adp.getAvatarBDPanel());
             addCheckingError(ce);
             return;
         }
 
         AvatarSMDPanel asmdp = block.getAvatarSMDPanel();
-        String name = block.getBlockName();
-        TDiagramPanel tdp;
+        if (asmdp == null)
+            return;
+
+        String name = block.getOwnerName();
 
         int size = checkingErrors.size();
 
-        if (asmdp == null) {
-            return;
-        }
-
-        tdp = (TDiagramPanel)asmdp;
+        TDiagramPanel tdp = (TDiagramPanel) asmdp;
 
         // search for start state
-        LinkedList list = asmdp.getComponentList();
-        Iterator iterator = list.listIterator();
-        TGComponent tgc;
         AvatarSMDStartState tss = null;
-        int cptStart = 0;
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof AvatarSMDStartState){
-                tss = (AvatarSMDStartState)tgc;
-                cptStart ++;
+        for (TGComponent tgc: asmdp.getComponentList ())
+            if (tgc instanceof AvatarSMDStartState) {
+                if (tss == null)
+                    tss = (AvatarSMDStartState) tgc;
+                else {
+                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "More than one start state in the state machine diagram of " + name);
+                    ce.setTDiagramPanel(tdp);
+                    addCheckingError(ce);
+                    return;
+                }
             }
-        }
 
         if (tss == null) {
             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "No start state in the state machine diagram of " + name);
-            ce.setAvatarBlock(_ab);
-            ce.setTDiagramPanel(tdp);
-            addCheckingError(ce);
-            return;
-        }
-
-        if (cptStart > 1) {
-            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "More than one start state in the state machine diagram of " + name);
-            ce.setAvatarBlock(_ab);
             ce.setTDiagramPanel(tdp);
             addCheckingError(ce);
             return;
         }
 
         // This shall also be true for all composite state: at most one start state!
-        tgc = checkForStartStateOfCompositeStates(asmdp);
-        if (tgc != null) {
+        if (checkForStartStateOfCompositeStates (asmdp) != null) {
             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "More than one start state in composite state");
-            ce.setAvatarBlock(_ab);
             ce.setTDiagramPanel(tdp);
-            ce.setTGComponent(tgc);
             addCheckingError(ce);
             return;
         }
 
-        // First pass: creating AVATAR components, but no interconnection between them
-        iterator = asmdp.getAllComponentList().listIterator();
-        AvatarSMDReceiveSignal asmdrs;
-        AvatarSMDSendSignal asmdss;
-        AvatarSMDRandom asmdrand;
-
-        AvatarStateMachine asm = _ab.getStateMachine();
-        avatartranslator.AvatarSignal atas;
-        AvatarActionOnSignal aaos;
-        AvatarAttribute aa;
-        AvatarStopState astop;
-        AvatarStartState astart;
-        AvatarState astate;
-        AvatarRandom arandom;
-        AvatarSetTimer asettimer;
-        AvatarResetTimer aresettimer;
-        AvatarExpireTimer aexpiretimer;
-        AvatarRelation ar;
-        int i;
-        String tmp;
-        TAttribute ta;
-
         int choiceID = 0;
-        int error;
-        String tmp1, tmp2;
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-
-            // Receive signal
-            if (tgc instanceof AvatarSMDReceiveSignal) {
-                asmdrs = (AvatarSMDReceiveSignal)tgc;
-                atas = _ab.getAvatarSignalWithName(asmdrs.getSignalName());
-                if (atas == null) {
-                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown signal: " + asmdrs.getSignalName());
-                    ce.setAvatarBlock(_ab);
-                    ce.setTDiagramPanel(tdp);
-                    ce.setTGComponent(tgc);
-                    addCheckingError(ce);
-
-                } else {
-                    // Get relation of that signal
-                    ar = _as.getAvatarRelationWithSignal(atas);
-                    if (ar == null) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Signal used for receiving in " + asmdrs.getValue() + " is not connected to a channel");
-                        ce.setAvatarBlock(_ab);
-                        ce.setTDiagramPanel(tdp);
-                        ce.setTGComponent(tgc);
-                        addCheckingError(ce);
-                        //_as.addBroadcastSignal(atas);
-                    }
-                    aaos = new AvatarActionOnSignal("action_on_signal", atas, tgc);
-                    if (asmdrs.hasCheckableAccessibility()) {
-                        aaos.setCheckable();
-                    }
-                    if (aaos.isSending()) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A sending signal is used for receiving: " + asmdrs.getValue());
-                        ce.setAvatarBlock(_ab);
-                        ce.setTDiagramPanel(tdp);
-                        ce.setTGComponent(tgc);
-                        addCheckingError(ce);
-                    }
-                    if (asmdrs.getNbOfValues() == -1){
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal: " + asmdrs.getValue());
-                        ce.setAvatarBlock(_ab);
-                        ce.setTDiagramPanel(tdp);
-                        ce.setTGComponent(tgc);
-                        addCheckingError(ce);
-                    } else {
-                        for(i=0; i<asmdrs.getNbOfValues(); i++) {
-                            tmp = asmdrs.getValue(i);
-                            if (tmp.length() == 0) {
-                                CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdrs.getValue());
-                                ce.setAvatarBlock(_ab);
-                                ce.setTDiagramPanel(tdp);
-                                ce.setTGComponent(tgc);
-                                addCheckingError(ce);
-                            } else {
-                                manageAttribute(tmp, _ab, aaos, tdp, tgc, asmdrs.getValue());
-                            }
-                        }
-
-                        if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
-                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> nb of parameters does not match definition");
-                            TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-                            ce.setAvatarBlock(_ab);
-                            ce.setTDiagramPanel(tdp);
-                            ce.setTGComponent(tgc);
-                            addCheckingError(ce);
-                        } else {
-
-                            // Checking expressions passed as parameter
-                            for(i=0; i<aaos.getNbOfValues(); i++) {
-                                String theVal = aaos.getValue(i);
-                                if (atas.getListOfAttributes().get(i).isInt()) {
-                                    if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, theVal) < 0) {
-                                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> value at index #" + i + " does not match definition");
-                                        //TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-                                        ce.setAvatarBlock(_ab);
-                                        ce.setTDiagramPanel(tdp);
-                                        ce.setTGComponent(tgc);
-                                        addCheckingError(ce);
-                                    }
-                                } else {
-                                    // We assume it is a bool attribute
-                                    if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, theVal) < 0) {
-                                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> value at index #" + i + " does not match definition");
-                                        //TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-                                        ce.setAvatarBlock(_ab);
-                                        ce.setTDiagramPanel(tdp);
-                                        ce.setTGComponent(tgc);
-                                        addCheckingError(ce);
-                                    }
-                                }
-                            }
-                        }
-                        //adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
-                        listE.addCor(aaos, tgc);
-                        tgc.setAVATARID(aaos.getID());
-                        asm.addElement(aaos);
-                    }
-                }
-
+        // First pass: creating AVATAR components, but no interconnection between them
+        for (TGComponent tgc: asmdp.getAllComponentList ())
+            try {
+                // Receive signal
+                if (tgc instanceof AvatarSMDReceiveSignal)
+                    this.translateAvatarSMDReceiveSignal (tdp, _as, _ab, (AvatarSMDReceiveSignal) tgc);
                 // Send signals
-            } else if (tgc instanceof AvatarSMDSendSignal) {
-                asmdss = (AvatarSMDSendSignal)tgc;
-                atas = _ab.getAvatarSignalWithName(asmdss.getSignalName());
-
-                if (atas == null) {
-                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown signal: " + asmdss.getSignalName());
-                    ce.setAvatarBlock(_ab);
-                    ce.setTDiagramPanel(tdp);
-                    ce.setTGComponent(tgc);
-                    addCheckingError(ce);
-                } else {
-                    // Get relation of that signal
-                    ar = _as.getAvatarRelationWithSignal(atas);
-                    if (ar == null) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Signal used for sending in " + asmdss.getValue() + " is not connected to a channel");
-                        ce.setAvatarBlock(_ab);
-                        ce.setTDiagramPanel(tdp);
-                        ce.setTGComponent(tgc);
-                        addCheckingError(ce);
-                        //_as.addBroadcastSignal(atas);
-                    }
-
-                    aaos = new AvatarActionOnSignal("action_on_signal", atas, tgc);
-                    if (asmdss.hasCheckableAccessibility()) {
-                        aaos.setCheckable();
-                    }
-                    if (aaos.isReceiving()) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A sending signal is used for receiving: " + asmdss.getValue());
-                        ce.setAvatarBlock(_ab);
-                        ce.setTDiagramPanel(tdp);
-                        ce.setTGComponent(tgc);
-                        addCheckingError(ce);
-                    }
-                    if (asmdss.getNbOfValues() == -1) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal: " + asmdss.getValue());
-                        ce.setAvatarBlock(_ab);
-                        ce.setTDiagramPanel(tdp);
-                        ce.setTGComponent(tgc);
-                        addCheckingError(ce);
-                    } else {
-                        //TraceManager.addDev("Nb of values in signal" + atas.getName() + " :" + atas.getListOfAttributes().size());
-                        //TraceManager.addDev("Nb of values in admdss :" + asmdss.getNbOfValues());
-
-                        for(i=0; i<asmdss.getNbOfValues(); i++) {
-                            tmp = asmdss.getValue(i);
-                            if (tmp.length() == 0) {
-                                CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdss.getValue());
-                                ce.setAvatarBlock(_ab);
-                                ce.setTDiagramPanel(tdp);
-                                ce.setTGComponent(tgc);
-                                addCheckingError(ce);
-                            } else {
-                                manageAttribute(tmp, _ab, aaos, tdp, tgc, asmdss.getValue());
-                            }
-                        }
-                        if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
-                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> nb of parameters does not match definition");
-                            TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-                            ce.setAvatarBlock(_ab);
-                            ce.setTDiagramPanel(tdp);
-                            ce.setTGComponent(tgc);
-                            addCheckingError(ce);
-                        }  else {
-
-                            // Checking expressions passed as parameter
-                            //TraceManager.addDev("Block = " + _ab.getName());
-                            for(i=0; i<aaos.getNbOfValues(); i++) {
-                                String theVal = aaos.getValue(i);
-                                if (atas.getListOfAttributes().get(i).isInt()) {
-                                    if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, theVal) < 0) {
-                                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
-                                        //TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-                                        ce.setAvatarBlock(_ab);
-                                        ce.setTDiagramPanel(tdp);
-                                        ce.setTGComponent(tgc);
-                                        addCheckingError(ce);
-                                    }
-                                } else {
-                                    // We assume it is a bool attribute
-                                    if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, theVal) < 0) {
-                                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
-                                        //TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-                                        ce.setAvatarBlock(_ab);
-                                        ce.setTDiagramPanel(tdp);
-                                        ce.setTGComponent(tgc);
-                                        addCheckingError(ce);
-                                    }
-                                }
-                            }
-                        }
-
-                        // Check that tmp is the identifier of an attribute
-                        /*aa = _ab.getAvatarAttributeWithName(tmp);
-                          if (aa == null) {
-                          CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdss.getValue());
-                          ce.setAvatarBlock(_ab);
-                          ce.setTDiagramPanel(tdp);
-                          ce.setTGComponent(tgc);
-                          addCheckingError(ce);
-                          } else {
-                          aaos.addValue(tmp);
-                          }*/
-                        //adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
-                        listE.addCor(aaos, tgc);
-                        tgc.setAVATARID(aaos.getID());
-                        asm.addElement(aaos);
-                    }
-                }
-
+                else if (tgc instanceof AvatarSMDSendSignal)
+                    this.translateAvatarSMDSendSignal (tdp, _as, _ab, (AvatarSMDSendSignal) tgc);
                 // State
-            } else if (tgc instanceof AvatarSMDState) {
-                //TraceManager.addDev("Value = " + tgc.getValue());
-                astate = asm.getStateWithName(tgc.getValue());
-                if (astate == null) {
-                    astate = new AvatarState(tgc.getValue(), tgc);
-                    asm.addElement(astate);
-                }
-                if (tgc.hasCheckableAccessibility()) {
-                    astate.setCheckable();
-                    TraceManager.addDev("Setting as checkable : " + tgc.getValue());
-                }
-
-                // Executable code
-                astate.addEntryCode(((AvatarSMDState)(tgc)).getEntryCode());
-                //_ab.addGlobalCode(((AvatarSMDState)(tgc)).getGlobalCode());
-
-                listE.addCor(astate, tgc);
-                astate.addReferenceObject(tgc);
-                tgc.setAVATARID(astate.getID());
-
-
+                else if (tgc instanceof AvatarSMDState)
+                    this.translateAvatarSMDState (tdp, _as, _ab, (AvatarSMDState) tgc);
                 // Choice
-            } else if (tgc instanceof AvatarSMDChoice) {
-                astate = new AvatarState("choice__" + choiceID, tgc);
-                choiceID ++;
-                asm.addElement(astate);
-                listE.addCor(astate, tgc);
-                tgc.setAVATARID(astate.getID());
-
+                else if (tgc instanceof AvatarSMDChoice) {
+                    AvatarState astate = new AvatarState ("choice__" + choiceID, tgc);
+                    choiceID ++;
+                    asm.addElement (astate);
+                    listE.addCor (astate, tgc);
+                    tgc.setAVATARID (astate.getID());
+                }
                 // Random
-            } else if (tgc instanceof AvatarSMDRandom) {
-                asmdrand = (AvatarSMDRandom)tgc;
-		//TraceManager.addDev("rand1");
-                arandom = new AvatarRandom("random", tgc);
-                tmp1 = modifyString(asmdrand.getMinValue());
-                error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp1);
-                if (error < 0) {
-                    makeError(error, tdp, _ab, tgc, "min value of random", tmp1);
-                }
-                tmp2 = modifyString(asmdrand.getMaxValue());
-                error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp1);
-                if (error < 0) {
-                    makeError(error, tdp, _ab, tgc, "max value of random", tmp2);
-                }
-                arandom.setValues(tmp1, tmp2);
-                arandom.setFunctionId(asmdrand.getFunctionId());
-		//TraceManager.addDev("rand2");
-
-                tmp1 = modifyString(asmdrand.getVariable());
-                aa = _ab.getAvatarAttributeWithName(tmp1);
-
-                if (aa == null) {
-		    //TraceManager.addDev("rand3");
-                    makeError(-3, tdp, _ab, tgc, "random", tmp1);
-                } else {
-		    //TraceManager.addDev("rand4");
-                    // Checking type of variable -> must be an int
-                    if (!(aa.isInt())) {
-                        makeError(error, tdp, _ab, tgc, ": variable of random must be of type \"int\"", tmp2);
-                    }
-                }
-
-                arandom.setVariable(tmp1);
-
-                asm.addElement(arandom);
-                listE.addCor(arandom, tgc);
-                tgc.setAVATARID(arandom.getID());
-
+                else if (tgc instanceof AvatarSMDRandom)
+                    this.translateAvatarSMDRandom (tdp, _as, _ab, (AvatarSMDRandom) tgc);
                 // Set timer
-            } else if (tgc instanceof AvatarSMDSetTimer) {
-                tmp = ((AvatarSMDSetTimer)tgc).getTimerName();
-                aa = _ab.getAvatarAttributeWithName(tmp);
-                if (aa == null) {
-                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed timer parameter: " + tmp + " in timer setting");
-                    ce.setAvatarBlock(_ab);
-                    ce.setTDiagramPanel(tdp);
-                    ce.setTGComponent(tgc);
-                    addCheckingError(ce);
-                } else {
-                    if (aa.getType() != AvatarType.TIMER) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in timer setting: shall be a parameter of type \"Timer\"");
-                        ce.setAvatarBlock(_ab);
-                        ce.setTDiagramPanel(tdp);
-                        ce.setTGComponent(tgc);
-                        addCheckingError(ce);
-                    } else {
-                        tmp = modifyString(((AvatarSMDSetTimer)tgc).getTimerValue());
-                        error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp);
-                        if (error < 0) {
-                            makeError(error, tdp, _ab, tgc, "value of the timer setting", tmp);
-                        }
-                        asettimer = new AvatarSetTimer("settimer__" + aa.getName(), tgc);
-                        asettimer.setTimer(aa);
-                        asettimer.setTimerValue(tmp);
-                        asm.addElement(asettimer);
-                        listE.addCor(asettimer, tgc);
-                        tgc.setAVATARID(asettimer.getID());
-                    }
-                }
-
+                else if (tgc instanceof AvatarSMDSetTimer)
+                    this.translateAvatarSMDSetTimer (tdp, _as, _ab, (AvatarSMDSetTimer) tgc);
                 // Reset timer
-            } else if (tgc instanceof AvatarSMDResetTimer) {
-                tmp = ((AvatarSMDResetTimer)tgc).getTimerName();
-                aa = _ab.getAvatarAttributeWithName(tmp);
-                if (aa == null) {
-                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed timer parameter: " + tmp + " in timer reset");
-                    ce.setAvatarBlock(_ab);
-                    ce.setTDiagramPanel(tdp);
-                    ce.setTGComponent(tgc);
-                    addCheckingError(ce);
-                } else {
-                    if (aa.getType() != AvatarType.TIMER) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in timer reset: shall be a parameter of type \"Timer\"");
-                        ce.setAvatarBlock(_ab);
-                        ce.setTDiagramPanel(tdp);
-                        ce.setTGComponent(tgc);
-                        addCheckingError(ce);
-                    } else {
-                        aresettimer = new AvatarResetTimer("resettimer__" + aa.getName(), tgc);
-                        aresettimer.setTimer(aa);
-                        asm.addElement(aresettimer);
-                        listE.addCor(aresettimer, tgc);
-                        tgc.setAVATARID(aresettimer.getID());
-                    }
-                }
-
+                else if (tgc instanceof AvatarSMDResetTimer)
+                    this.translateAvatarSMDResetTimer (tdp, _as, _ab, (AvatarSMDResetTimer) tgc);
                 // Expire timer
-            } else if (tgc instanceof AvatarSMDExpireTimer) {
-                tmp = ((AvatarSMDExpireTimer)tgc).getTimerName();
-                aa = _ab.getAvatarAttributeWithName(tmp);
-                if (aa == null) {
-                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed timer parameter: " + tmp + " in timer expiration");
-                    ce.setAvatarBlock(_ab);
-                    ce.setTDiagramPanel(tdp);
-                    ce.setTGComponent(tgc);
-                    addCheckingError(ce);
-                } else {
-                    if (aa.getType() != AvatarType.TIMER) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in timer expiration: shall be a parameter of type \"Timer\"");
-                        ce.setAvatarBlock(_ab);
-                        ce.setTDiagramPanel(tdp);
-                        ce.setTGComponent(tgc);
-                        addCheckingError(ce);
-                    } else {
-                        aexpiretimer = new AvatarExpireTimer("expiretimer__" + aa.getName(), tgc);
-                        aexpiretimer.setTimer(aa);
-                        asm.addElement(aexpiretimer);
-                        listE.addCor(aexpiretimer, tgc);
-                        tgc.setAVATARID(aexpiretimer.getID());
-                    }
-                }
-
+                else if (tgc instanceof AvatarSMDExpireTimer)
+                    this.translateAvatarSMDExpireTimer (tdp, _as, _ab, (AvatarSMDExpireTimer) tgc);
                 // Start state
-            } else if (tgc instanceof AvatarSMDStartState) {
-                astart = new AvatarStartState("start", tgc);
-                listE.addCor(astart, tgc);
-                tgc.setAVATARID(astart.getID());
-                asm.addElement(astart);
-                if (tgc.getFather() == null) {
-                    asm.setStartState(astart);
-                }
-
+                else if (tgc instanceof AvatarSMDStartState) {
+                    AvatarStartState astart = new AvatarStartState("start", tgc);
+                    this.listE.addCor (astart, tgc);
+                    tgc.setAVATARID (astart.getID());
+                    asm.addElement(astart);
+                    if (tgc.getFather() == null)
+                        asm.setStartState(astart);
                 // Stop state
-            } else if (tgc instanceof AvatarSMDStopState) {
-                astop = new AvatarStopState("stop", tgc);
-                listE.addCor(astop, tgc);
-                tgc.setAVATARID(astop.getID());
-                asm.addElement(astop);
+                } else if (tgc instanceof AvatarSMDStopState) {
+                    AvatarStopState astop = new AvatarStopState ("stop", tgc);
+                    this.listE.addCor(astop, tgc);
+                    tgc.setAVATARID(astop.getID());
+                    asm.addElement(astop);
+                }
+            } catch (CheckingError ce) {
+                // TODO: adapt
+                // ce.setAvatarBlock (_ab);
+                ce.setTDiagramPanel (tdp);
+                ce.setTGComponent (tgc);
+                ce.addMessagePrefix ("State Machine of " + name + ": ");
+                this.addCheckingError (ce);
             }
-        }
 
-        if (checkingErrors.size() != size) {
+        if (checkingErrors.size() != size)
             return;
-        }
 
         // Remove all internal start states
         asm.removeAllInternalStartStates();
 
         // Make hierachy between states and elements
-        iterator = asmdp.getAllComponentList().listIterator();
-        AvatarStateMachineElement element1, element2;
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if ((tgc != null) && (tgc.getFather() != null)) {
-                element1 = (AvatarStateMachineElement)(listE.getObject(tgc));
-                element2 = (AvatarStateMachineElement)(listE.getObject(tgc.getFather()));
-                if ((element1 != null) && (element2 != null) && (element2 instanceof AvatarState)) {
-                    element1.setState((AvatarState)element2);
-                }
+        for (TGComponent tgc: asmdp.getAllComponentList ())
+            if (tgc != null && tgc.getFather() != null) {
+                AvatarStateMachineElement element1 = (AvatarStateMachineElement)(listE.getObject(tgc));
+                AvatarStateMachineElement element2 = (AvatarStateMachineElement)(listE.getObject(tgc.getFather()));
+                if (element1 != null && element2 != null && element2 instanceof AvatarState)
+                    element1.setState ((AvatarState) element2);
             }
-        }
 
         // Make next: handle transitions
-        iterator = asmdp.getAllComponentList().listIterator();
-        AvatarSMDConnector asmdco;
-        AvatarTransition at;
-        TGComponent tgc1, tgc2;
-        Vector <String> vs;
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: asmdp.getAllComponentList ())
             if (tgc instanceof AvatarSMDConnector) {
-                asmdco = (AvatarSMDConnector)tgc;
-                tgc1 = tdp.getComponentToWhichBelongs(asmdco.getTGConnectingPointP1());
-                tgc2 = tdp.getComponentToWhichBelongs(asmdco.getTGConnectingPointP2());
-                if ((tgc1 == null) || (tgc2 == null)) {
+                AvatarSMDConnector asmdco = (AvatarSMDConnector) tgc;
+                TGComponent tgc1 = tdp.getComponentToWhichBelongs (asmdco.getTGConnectingPointP1());
+                TGComponent tgc2 = tdp.getComponentToWhichBelongs (asmdco.getTGConnectingPointP2());
+                if (tgc1 == null || tgc2 == null)
                     TraceManager.addDev("Tgcs null in Avatar translation");
-                } else {
-                    element1 = (AvatarStateMachineElement)(listE.getObject(tgc1));
-                    element2 = (AvatarStateMachineElement)(listE.getObject(tgc2));
-                    if ((element1 != null) && (element2 != null)) {
-                        at = new AvatarTransition(_ab, "avatar transition", tgc);
+                else {
+                    AvatarStateMachineElement element1 = (AvatarStateMachineElement)(listE.getObject(tgc1));
+                    AvatarStateMachineElement element2 = (AvatarStateMachineElement)(listE.getObject(tgc2));
+                    if (element1 != null && element2 != null) {
+                        AvatarTransition at = new AvatarTransition (_ab, "avatar transition", tgc);
 
                         // Guard
-                        tmp = modifyString(asmdco.getGuard());
-
+                        String tmp = modifyString (asmdco.getGuard());
                         AvatarGuard guard = AvatarGuard.createFromString (_ab, tmp);
-                        if (guard.isElseGuard()) {
+                        if (guard.isElseGuard())
                             at.setGuard(guard);
-                        } else {
-                            error = AvatarSyntaxChecker.isAValidGuard(_as, _ab, tmp);
-                            if (error < 0) {
-                                makeError(error, tdp, _ab, tgc, "transition guard", tmp);
-                            } else {
-                                at.setGuard(guard);
-                            }
+                        else {
+                            int error = AvatarSyntaxChecker.isAValidGuard (_as, _ab, tmp);
+                            if (error < 0)
+                                this.makeError (error, tdp, _ab, tgc, "transition guard", tmp);
+                            else
+                                at.setGuard (guard);
                         }
 
                         // Delays
-                        tmp1 = modifyString(asmdco.getAfterMinDelay());
-                        error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp1);
+                        String tmp1 = modifyString (asmdco.getAfterMinDelay ());
+                        int error = AvatarSyntaxChecker.isAValidIntExpr (_as, _ab, tmp1);
                         if (error < 0) {
-                            makeError(error, tdp, _ab, tgc, "after min delay", tmp1);
+                            this.makeError (error, tdp, _ab, tgc, "after min delay", tmp1);
                             tmp1 = null;
                         }
-                        tmp2 = modifyString(asmdco.getAfterMaxDelay());
-                        error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp2);
+                        String tmp2 = modifyString (asmdco.getAfterMaxDelay ());
+                        error = AvatarSyntaxChecker.isAValidIntExpr (_as, _ab, tmp2);
                         if (error < 0) {
-                            makeError(error, tdp, _ab, tgc, "after max delay", tmp2);
+                            this.makeError(error, tdp, _ab, tgc, "after max delay", tmp2);
                             tmp2 = null;
                         }
 
-                        if ((tmp1 != null) && (tmp2 != null)) {
+                        if (tmp1 != null && tmp2 != null)
                             at.setDelays(tmp1, tmp2);
-                        }
 
                         // Compute min and max
-                        tmp1 = modifyString(asmdco.getComputeMinDelay());
-                        error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp1);
+                        tmp1 = modifyString (asmdco.getComputeMinDelay ());
+                        error = AvatarSyntaxChecker.isAValidIntExpr (_as, _ab, tmp1);
                         if (error < 0) {
-                            makeError(error, tdp, _ab, tgc, "compute min ", tmp1);
+                            this.makeError (error, tdp, _ab, tgc, "compute min ", tmp1);
                             tmp1 = null;
                         }
                         tmp2 = modifyString(asmdco.getComputeMaxDelay());
                         error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp2);
                         if (error < 0) {
-                            makeError(error, tdp, _ab, tgc, "compute max ", tmp2);
+                            this.makeError (error, tdp, _ab, tgc, "compute max ", tmp2);
                             tmp2 = null;
                         }
 
-                        if ((tmp1 != null) && (tmp2 != null)) {
+                        if (tmp1 != null && tmp2 != null)
                             at.setComputes(tmp1, tmp2);
-                        }
-
-
 
                         // Actions
-                        vs = asmdco.getActions();
-                        for(String s: vs) {
+                        for(String s: asmdco.getActions())
                             if (s.trim().length() > 0) {
                                 s = modifyString(s.trim());
+
                                 // Variable assignation or method call?
-
-                                //TraceManager.addDev("IsAVariable Assignation: " + s + " -> " + isAVariableAssignation(s));
-
                                 if (!isAVariableAssignation(s)) {
                                     // Method call
-				    int index2 = s.indexOf(";");
-				    if (index2 != -1) {
-					makeError(error, tdp, _ab, tgc, "transition action", s);
-				    }
+                                    int index2 = s.indexOf(";");
+                                    if (index2 != -1)
+                                        this.makeError(error, tdp, _ab, tgc, "transition action", s);
+
                                     s = modifyStringMethodCall(s, _ab.getName());
-                                    if(!_ab.isAValidMethodCall(s)) {
+                                    if (!AvatarBlock.isAValidMethodCall (_ab, s)) {
                                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed transition method call: " + s);
-                                        ce.setAvatarBlock(_ab);
+                                        // TODO: adapt
+                                        // ce.setAvatarBlock(_ab);
                                         ce.setTDiagramPanel(tdp);
                                         ce.setTGComponent(tgc);
                                         addCheckingError(ce);
-                                    } else {
+                                    } else
                                         at.addAction(s);
-                                    }
                                 } else {
                                     // Variable assignation
-                                    error = AvatarSyntaxChecker.isAValidVariableExpr(_as, _ab, s);
-                                    if (error < 0) {
-                                        makeError(error, tdp, _ab, tgc, "transition action", s);
-                                    } else {
-                                        at.addAction(s);
-                                    }
+                                    error = AvatarSyntaxChecker.isAValidVariableExpr (_as, _ab, s);
+                                    if (error < 0)
+                                        this.makeError (error, tdp, _ab, tgc, "transition action", s);
+                                    else
+                                        at.addAction (s);
                                 }
                             }
+
+                        element1.addNext (at);
+                        at.addNext (element2);
+                        this.listE.addCor (at, tgc);
+                        tgc.setAVATARID (at.getID());
+                        asm.addElement (at);
+
+                        // Check for after on composite transitions
+                        if (at.hasDelay() && element1 instanceof AvatarState && asm.isACompositeTransition(at)) {
+                            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "After clause cannot be used on composite transitions. Use timers instead.");
+                            // TODO: adapt
+                            // ce.setAvatarBlock(_ab);
+                            ce.setTDiagramPanel(tdp);
+                            ce.setTGComponent(tgc);
+                            addCheckingError(ce);
                         }
-
-                        element1.addNext(at);
-                        at.addNext(element2);
-                        listE.addCor(at, tgc);
-                        tgc.setAVATARID(at.getID());
-                        asm.addElement(at);
-
-			// Check for after on composite transitions
-			if (at.hasDelay() && (element1 instanceof AvatarState) && asm.isACompositeTransition(at)) {
-			    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "After clause cannot be used on composite transitions. Use timers instead.");
-			    ce.setAvatarBlock(_ab);
-			    ce.setTDiagramPanel(tdp);
-			    ce.setTGComponent(tgc);
-			    addCheckingError(ce);
-			}
                     }
                 }
             }
-        }
 
         asm.handleUnfollowedStartState(_ab);
 
         // Investigate all states -> put warnings for all empty transitions from a state to the same one (infinite loop)
         int nb;
-        for(AvatarStateMachineElement asmee: asm.getListOfElements()) {
-            if (asmee instanceof AvatarState) {
-                nb = ((AvatarState)asmee).hasEmptyTransitionsOnItself(asm);
-                if (nb > 0) {
-                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "State(s) " + asmee.getName() + " has " + nb + " empty transition(s) on itself");
-                    ce.setAvatarBlock(_ab);
-                    ce.setTDiagramPanel(tdp);
-                    ce.setTGComponent((TGComponent)(asmee.getReferenceObject()));
-                    addWarning(ce);
-                }
+        for (AvatarStateMachineElement asmee: asm.getListOfElements())
+            if (asmee instanceof AvatarState && ((AvatarState)asmee).hasEmptyTransitionsOnItself(asm) > 0) {
+                CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "State(s) " + asmee.getName() + " has empty transitions on itself");
+                // TODO: adapt
+                // ce.setAvatarBlock(_ab);
+                ce.setTDiagramPanel(tdp);
+                ce.setTGComponent((TGComponent)(asmee.getReferenceObject()));
+                addWarning(ce);
             }
-        }
-
-
-
-
     }
 
-    private void makeError(int _error, TDiagramPanel _tdp, AvatarBlock _ab, TGComponent _tgc, String _info, String _element) {
+    private void makeError(int _error, TDiagramPanel _tdp, AvatarStateMachineOwner _ab, TGComponent _tgc, String _info, String _element) {
         if (_error == -3) {
             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Undeclared variable in " + _info + ": " + _element);
-            ce.setAvatarBlock(_ab);
+            // TODO: adapt
+            // ce.setAvatarBlock(_ab);
             ce.setTDiagramPanel(_tdp);
             ce.setTGComponent(_tgc);
             addCheckingError(ce);
         } else {
             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted " + _info + ": " + _element);
-            ce.setAvatarBlock(_ab);
+            // TODO: adapt
+            // ce.setAvatarBlock(_ab);
             ce.setTDiagramPanel(_tdp);
             ce.setTGComponent(_tgc);
             addCheckingError(ce);
@@ -1574,7 +1525,7 @@ public class AvatarDesignPanelTranslator {
     }
 
     public void checkForAfterOnCompositeTransition() {
-	
+
     }
 
 

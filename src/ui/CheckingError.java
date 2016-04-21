@@ -52,7 +52,7 @@ import tmltranslator.*;
 
 
 
-public class CheckingError {
+public class CheckingError extends Exception {
     
     public final static int STRUCTURE_ERROR = 0;
     public final static int BEHAVIOR_ERROR = 1;
@@ -82,6 +82,10 @@ public class CheckingError {
     
     public void setTClass(TClass _t) {
         t = _t;
+    }
+
+    public void addMessagePrefix (String prefix) {
+        this.message = prefix + this.message;
     }
 	
     public void setAvatarBlock(AvatarBlock _ab) {

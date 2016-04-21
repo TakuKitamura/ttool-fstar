@@ -1225,7 +1225,7 @@ public class AvatarStateMachine extends AvatarElement {
         return name + id;
     }
 
-    public void handleUnfollowedStartState(AvatarBlock _block) {
+    public void handleUnfollowedStartState(AvatarStateMachineOwner _block) {
         if (startState.nbOfNexts() == 0) {
             AvatarStopState stopState = new AvatarStopState("__StopState", startState.getReferenceObject());
             AvatarTransition at = new AvatarTransition(_block, "__toStop", startState.getReferenceObject());

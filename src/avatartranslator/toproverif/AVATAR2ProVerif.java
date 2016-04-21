@@ -177,6 +177,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
         // TODO: What are composite states ?
         this.avspec.removeCompositeStates();
+
+        this.avspec.removeLibraryFunctionCalls ();
+
         this.avspec.removeTimers();
 
         this.dummyDataCounter = 0;

@@ -43,6 +43,7 @@ import java.util.Vector;
 import ui.AvatarSignal;
 import ui.AvatarMethod;
 import ui.TAttribute;
+import ui.avatarsmd.AvatarSMDPanel;
 
 /**
  * This interface represent block diagram elements that are associated to a state machine.
@@ -64,4 +65,5 @@ public interface AvatarBDStateMachineOwner {
     public Vector<AvatarMethod> getAllMethodList ();
 
     public String getOwnerName ();
+    public AvatarSMDPanel getAvatarSMDPanel ();
 }

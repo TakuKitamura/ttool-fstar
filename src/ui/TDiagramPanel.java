@@ -281,14 +281,23 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return (int)(Math.round(12*zoom));
     }
 
+    private FontMetrics savedFontMetrics = null;
+    public int stringWidth (Graphics g, String str) {
+        if (this.savedFontMetrics == null)
+            this.savedFontMetrics = g.getFontMetrics (new Font (Font.SANS_SERIF, Font.PLAIN, this.getFontSize ()));
+        return this.savedFontMetrics.stringWidth (str);
+    }
+
     public void setZoom(double _zoom) {
         if (_zoom < zoom) {
             if (zoom > 0.199) {
                 zoom = _zoom;
+                this.savedFontMetrics = null;
             }
         } else {
             if (zoom < 5) {
                 zoom = _zoom;
+                this.savedFontMetrics = null;
             }
         }
     }
@@ -385,118 +394,88 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
+    private Font fontToUse = null;
     public void paintMycomponents(Graphics g, boolean b, double w, double h) {
+        if (this.fontToUse == null)
+            this.fontToUse = g.getFont ();
+        else
+            g.setFont (fontToUse);
 
-        lastGraphics = g;
-        drawingMain = b;
+        this.lastGraphics = g;
+        this.drawingMain = b;
 
-        //TraceManager.addDev("Nb of components: " + componentList.size());
-
-        /*if (!zoomed) {
-          zoomed = true;*/
-        //Graphics2D g2 = (Graphics2D)g;
-        //g2.scale(0.75, 0.75);
-        //}
-
-        if (!overcomeShowing) {
-            if (!isShowing()) {
-                TraceManager.addDev("Not showing!" + tp);
-                return;
-            }
+        if (!this.overcomeShowing && !this.isShowing()) {
+            TraceManager.addDev("Not showing!" + tp);
+            return;
         }
 
-        //TraceManager.addDev("Draw");
-
         try {
-            super.paintComponent(g);
+            super.paintComponent (g);
         } catch (Exception e) {
             TraceManager.addDev("Got exception: " + e.getMessage());
             return;
         }
 
-        //TraceManager.addDev("Draw 1");
-
-        //ZoomGraphics g = new ZoomGraphics(gr, zoom);
-        if (!draw) {
+        if (!this.draw)
             return;
-        }
-
-        //TraceManager.addDev("Draw 2");
 
         // Draw Components
-        if ((w != 1.0) ||(h != 1.0)) {
-            ((Graphics2D)g).scale(w, h);
-            isScaled = true;
+        if (w != 1.0 || h != 1.0) {
+            ((Graphics2D) g).scale (w, h);
+            this.isScaled = true;
         } else {
-            isScaled = false;
+            this.isScaled = false;
         }
-        //TraceManager.addDev("Draw 3");
 
+        // Draw every non hidden component
         TGComponent tgc;
         for(int i=this.componentList.size()-1; i>=0; i--) {
             tgc = this.componentList.get(i);
-            if (!tgc.isHidden()) {
-                //TraceManager.addDev("Painting " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY());
-                tgc.draw(g);
-                if (mgui.getTypeButtonSelected() != TGComponentManager.EDIT) {
-                    tgc.drawTGConnectingPoint(g, mgui.getIdButtonSelected());
-                }
-                if (mode == MOVE_CONNECTOR_HEAD) {
-                    tgc.drawTGConnectingPoint(g, type);
-                }
+            if (tgc.isHidden())
+                continue;
 
-                if (javaVisible) {
-                    if (tgc.hasPostJavaCode() || tgc.hasPreJavaCode()) {
-                        tgc.drawJavaCode(g);
-                    }
-                }
+            tgc.draw (g);
+            if (this.mgui.getTypeButtonSelected () != TGComponentManager.EDIT)
+                tgc.drawTGConnectingPoint (g, this.mgui.getIdButtonSelected());
 
+            if (this.mode == MOVE_CONNECTOR_HEAD) 
+                tgc.drawTGConnectingPoint (g, this.type);
 
-
-                /*if (internalCommentVisible) {
-                  ifi (tgc.hasInternalComment()) {
-                  tgc.drawInternalComment(g);
-                  }
-                  }*/
-
-                /*if ((attributesOn) && (tgc instanceof WithAttributes)) {
-                //TraceManager.addDev("Attributes to de drawn for" + tgc);
-                tgc.drawAttributes(g, ((WithAttributes)tgc).getAttributes());
-                }*/
-            }
+            if (this.javaVisible && (tgc.hasPostJavaCode () || tgc.hasPreJavaCode ()))
+                tgc.drawJavaCode (g);
         }
 
         // Draw name of component selected
-        if (componentPointed != null) {
-            String name1 = componentPointed.getName();
-            if (componentPointed.hasFather()) {
-                name1 = componentPointed.getTopLevelName() + ": " + name1;
-            }
-            //g.setColor(Color.black);
-            //g.drawString(name, 20, 20);
-            //mgui.setStatusBarText(name1);
+        if (this.componentPointed != null) {
+            String name1 = this.componentPointed.getName ();
+            if (this.componentPointed.hasFather ())
+                name1 = this.componentPointed.getTopLevelName () + ": " + name1;
         }
 
         //Draw component being added
-        if (mode == ADDING_CONNECTOR) {
+        if (this.mode == ADDING_CONNECTOR) {
             // Drawing connector
             g.setColor(Color.red);
-            drawConnectorBeingAdded(g);
+            this.drawConnectorBeingAdded(g);
             g.drawLine(x1, y1, x2, y2);
         }
 
-        if (mode == SELECTING_COMPONENTS) {
+        if (this.mode == SELECTING_COMPONENTS) {
             g.setColor(Color.black);
-            GraphicLib.dashedRect(g, Math.min(initSelectX, currentSelectX), Math.min(initSelectY, currentSelectY), Math.abs(currentSelectX -  initSelectX), Math.abs(currentSelectY - initSelectY));
+            GraphicLib.dashedRect (g,
+                    Math.min(this.initSelectX, this.currentSelectX),
+                    Math.min(this.initSelectY, this.currentSelectY),
+                    Math.abs(this.currentSelectX - this.initSelectX),
+                    Math.abs(this.currentSelectY - this.initSelectY));
         }
 
-        if (((mode == SELECTED_COMPONENTS) || (mode == MOVING_SELECTED_COMPONENTS)) && (selectedTemp)) {
-            if (showSelectionZone) {
-                if (mode == MOVING_SELECTED_COMPONENTS) {
+        if ((this.mode == SELECTED_COMPONENTS || this.mode == MOVING_SELECTED_COMPONENTS) && this.selectedTemp) {
+            if (this.showSelectionZone) {
+                if (this.mode == MOVING_SELECTED_COMPONENTS)
                     g.setColor(ColorManager.MOVING_0);
-                } else {
+                else
                     g.setColor(ColorManager.POINTER_ON_ME_0);
-                }
+
                 GraphicLib.setMediumStroke(g);
             } else {
                 g.setColor(ColorManager.NORMAL_0);
@@ -527,10 +506,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
         }
 
-        if (b) {
+        if (b)
             mgui.drawBird();
-        }
-
     }
 
     public boolean isScaled() {

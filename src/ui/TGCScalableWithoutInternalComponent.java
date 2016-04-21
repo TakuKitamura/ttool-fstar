@@ -15,6 +15,7 @@
    license as circulated by CEA, CNRS and INRIA at the following URL
    "http://www.cecill.info".
 
+
    As a counterpart to the access to the source code and  rights to copy,
    modify and redistribute granted by the license, users are provided only
    with a limited warranty  and the software's author,  the holder of the
@@ -46,6 +47,8 @@
 
 package ui;
 
+import myutil.TraceManager;
+
 //import java.awt.*;
 
 public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInternalComponent implements ScalableTGComponent {
@@ -56,7 +59,7 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
     }
 
-    public void rescale(double scaleFactor){
+    public void rescale (double scaleFactor){
         rescaled = true;
 
         dwidth = (width + dwidth) / oldScaleFactor * scaleFactor;

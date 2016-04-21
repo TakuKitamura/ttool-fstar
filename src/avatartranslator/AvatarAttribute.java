@@ -59,10 +59,10 @@ public class AvatarAttribute extends AvatarLeftHand {
     private AvatarType type;
     private String initialValue;
 
-    private AvatarBlock block;
+    private AvatarStateMachineOwner block;
 
 
-    public AvatarAttribute(String _name, AvatarType _type, AvatarBlock _block, Object _referenceObject) {
+    public AvatarAttribute (String _name, AvatarType _type, AvatarStateMachineOwner _block, Object _referenceObject) {
         super(_name, _referenceObject);
         /*if (_type == -1) {
           TraceManager.addDev("- - - - - - - - - - - - " + _name + ": " + _type);
@@ -77,7 +77,7 @@ public class AvatarAttribute extends AvatarLeftHand {
         this.block = _block;
     }
 
-    public AvatarBlock getBlock () {
+    public AvatarStateMachineOwner getBlock () {
         return this.block;
     }
 

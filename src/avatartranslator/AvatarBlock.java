@@ -50,7 +50,7 @@ import java.util.*;
 import myutil.*;
 
 
-public class AvatarBlock extends AvatarElement {
+public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwner {
 
     private AvatarBlock father;
     private LinkedList<AvatarAttribute> attributes;
@@ -139,13 +139,8 @@ public class AvatarBlock extends AvatarElement {
 	return asm.getNbOfASMGraphicalElements();
     }
 
-
-    public AvatarConstant getAvatarConstantWithName(String _name) {
-        return this.avspec.getAvatarConstantWithName (_name);
-    }
-
-    public void addConstant (AvatarConstant _constant) {
-        this.avspec.addConstant (_constant);
+    public AvatarSpecification getAvatarSpecification () {
+        return this.avspec;
     }
 
     public void addAttribute(AvatarAttribute _aa) {
@@ -304,7 +299,7 @@ public class AvatarBlock extends AvatarElement {
         return null;
     }
 
-    public boolean isAValidMethodCall(String _s) {
+    public static boolean isAValidMethodCall (AvatarStateMachineOwner owner, String _s) {
         int i;
 
         //TraceManager.addDev("****** method=" + _s);
@@ -326,7 +321,7 @@ public class AvatarBlock extends AvatarElement {
 
         String method = _s.substring(0, index0);
 
-        AvatarMethod am = getAvatarMethodWithName(method);
+        AvatarMethod am = owner.getAvatarMethodWithName(method);
         if (am == null) {
             //TraceManager.addDev("Method not found");
             return false;
@@ -353,12 +348,12 @@ public class AvatarBlock extends AvatarElement {
             // Must check tha validity of this action
 
             if (am.getListOfAttributes().get(i).isInt()) {
-                if (AvatarSyntaxChecker.isAValidIntExpr(null, this, actions[i].trim()) < 0) {
+                if (AvatarSyntaxChecker.isAValidIntExpr(null, owner, actions[i].trim()) < 0) {
                     return false;
                 }
             } else {
                 // Assume it is a bool attribute
-                if (AvatarSyntaxChecker.isAValidBoolExpr(null, this, actions[i].trim()) < 0) {
+                if (AvatarSyntaxChecker.isAValidBoolExpr(null, owner, actions[i].trim()) < 0) {
                     return false;
                 }
             }
@@ -392,7 +387,7 @@ public class AvatarBlock extends AvatarElement {
 
                     for(i=0; i<actions.length; i++) {
                         //TraceManager.addDev("params=" + retparams +  " actions=" + actions[i]);
-                        aa = getAvatarAttributeWithName(actions[i].trim());
+                        aa = owner.getAvatarAttributeWithName(actions[i].trim());
                         if (aa == null) {
                             //TraceManager.addDev("Failed for attribute " + actions[i]);
                             return false;
@@ -401,7 +396,7 @@ public class AvatarBlock extends AvatarElement {
 
                 } else {
                     // Only one param.
-                    aa = getAvatarAttributeWithName(retparams);
+                    aa = owner.getAvatarAttributeWithName(retparams);
                     if (aa == null) {
                         //TraceManager.addDev("Failed for return attribute " + retparams);
                         return false;
@@ -418,7 +413,6 @@ public class AvatarBlock extends AvatarElement {
         //TraceManager.addDev("Ok for method " + _s);
 
         return true;
-
     }
 
     public AvatarStateMachineElement getStateMachineElementFromReferenceObject(Object _o) {

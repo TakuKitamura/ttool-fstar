@@ -5410,19 +5410,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
     }
 
-    public void removeAvatarBlock(TURTLEPanel tp, String s)     {
-        if (!(tp instanceof AvatarDesignPanel)) {
+    public void removeAvatarBlock (TURTLEPanel tp, String s) {
+        if (!(tp instanceof AvatarDesignPanel))
             return;
-        }
 
-        for(int i = 0; i<tp.tabbedPane.getTabCount(); i++) {
+        for (int i=0; i<tp.tabbedPane.getTabCount(); i++)
             if (tp.tabbedPane.getTitleAt(i).equals(s)) {
                 tp.tabbedPane.removeTabAt(i);
                 tp.panels.removeElementAt(i);
-                setPanelMode();
+                this.setPanelMode();
                 return;
             }
-        }
     }
 
     public void removeTMLCPrimitiveComponent(TURTLEPanel tp, String s)  {
@@ -8106,6 +8104,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_SEND_SIGNAL);
         } else if (command.equals(actions[TGUIAction.ASMD_RECEIVE_SIGNAL].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_RECEIVE_SIGNAL);
+        } else if (command.equals(actions[TGUIAction.ASMD_LIBRARY_FUNCTION_CALL].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_LIBRARY_FUNCTION_CALL);
         } else if (command.equals(actions[TGUIAction.ASMD_PARALLEL].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_PARALLEL);
         } else if (command.equals(actions[TGUIAction.ASMD_STATE].getActionCommand())) {

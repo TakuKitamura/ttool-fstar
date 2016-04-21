@@ -157,6 +157,7 @@ public class ColorManager {
     public static  Color AVATAR_DATATYPE = new Color(156, 220, 162);
     public static  Color AVATAR_SEND_SIGNAL = new Color(128, 180, 205);
     public static  Color AVATAR_RECEIVE_SIGNAL = new Color(128, 180, 205);
+    public static  Color AVATAR_LIBRARY_FUNCTION_CALL = new Color(128, 180, 205);
     //public static final Color AVATAR_GUARD = new Color(128, 180, 205);
     public static  Color AVATAR_GUARD = new Color(0, 89, 26);
     //public static final Color AVATAR_TIME = new Color(108, 92, 67);

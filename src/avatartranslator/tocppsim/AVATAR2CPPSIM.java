@@ -93,6 +93,7 @@ public class AVATAR2CPPSIM{
 		optimize = _optimize;
 		warnings = new Vector();
 		avspec.removeCompositeStates();
+                avspec.removeLibraryFunctionCalls ();
 		transBlocks.clear();
 		//REMOVE ALL RANDOM SEQUENCES? removeAllRandomSequences();
 		//TraceManager.addDev("->   Spec:" + avspec.toString());

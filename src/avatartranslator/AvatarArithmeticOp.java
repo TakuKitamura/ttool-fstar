@@ -63,7 +63,7 @@ public class AvatarArithmeticOp extends AvatarTerm {
         this.term2 = _term2;
     }
 
-    public static AvatarArithmeticOp createFromString (AvatarBlock block, String toParse) {
+    public static AvatarArithmeticOp createFromString (AvatarStateMachineOwner block, String toParse) {
         for (String op: AvatarArithmeticOp.knownOp) {
             int indexOp = toParse.indexOf (op);
             if (indexOp != -1) {

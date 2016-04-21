@@ -753,8 +753,18 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
             a = new TAttribute(accessIndex, identifier, value, typeIndex);
         a.isAvatar = true;
 
+        int index;
+        Object old = null;
+        if (modify) {
+            index = this.listAttribute[tabIndex].getSelectedIndex ();
+            old = this.attributes[tabIndex].remove (index);
+        } else
+            index = this.attributes[tabIndex].size ();
+
         //checks whether an attribute with this identifier already belongs to the list
         if (this.attributes[0].contains (a) || this.attributes[2].contains (a) || this.attributes[3].contains (a)) {
+            if (modify)
+                this.attributes[tabIndex].add (index, old);
             JOptionPane.showMessageDialog (this,
                                           "Bad Identifier: another attribute or parameter already has the same name.",
                                           "Error",
@@ -763,33 +773,10 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
             return;
         }
 
-        if (modify) {
-            int index = this.listAttribute[tabIndex].getSelectedIndex ();
-            this.attributes[tabIndex].remove (index);
-            this.attributes[tabIndex].add (index, a);
-            this.listAttribute[tabIndex].setListData (this.attributes[tabIndex].toArray ());
-            this.listAttribute[tabIndex].setSelectedIndex(index);
-        } else {
-            this.attributes[tabIndex].add (a);
-            this.listAttribute[tabIndex].setListData (this.attributes[tabIndex].toArray ());
-            this.listAttribute[tabIndex].setSelectedIndex(this.attributes[tabIndex].size () - 1);
-        }
-
+        this.attributes[tabIndex].add (index, a);
+        this.listAttribute[tabIndex].setListData (this.attributes[tabIndex].toArray ());
+        this.listAttribute[tabIndex].setSelectedIndex(index);
         this.listAttribute[tabIndex].requestFocus ();
-
-        /*
-        if (attributes.contains(a)) {
-            index = attributes.indexOf(a);
-            a = (TAttribute)(attributes.elementAt(index));
-            a.setAccess(i);
-            if (j == TAttribute.OTHER) {
-                a.setTypeOther(o2.toString());
-            }
-            a.setType(j);
-            a.setInitialValue(value);
-            //attributes.removeElementAt(index);
-        }
-        */
     }
 
     private void addMethod (boolean modify) {
@@ -811,11 +798,19 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
         }
 
         am.setImplementationProvided(false);
-        
-        AvatarMethod amtmp;
+
+        int index;
+        Object old = null;
+        if (modify) {
+            index = this.listAttribute[4].getSelectedIndex ();
+            old = this.attributes[4].remove (index);
+        } else
+            index = this.attributes[4].size ();
 
         // Checks whether the same method already belongs to the list
         if (this.attributes[4].contains (am)) {
+            if (modify)
+                this.attributes[4].add (index, old);
             JOptionPane.showMessageDialog (this,
                                           "This method already exists",
                                           "Error",
@@ -824,23 +819,10 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
             return;
         }
 
-        if (modify) {
-            int index = this.listAttribute[4].getSelectedIndex ();
-            this.attributes[4].remove (index);
-            this.attributes[4].add (index, am);
-            this.listAttribute[4].setListData (this.attributes[4].toArray ());
-            this.listAttribute[4].setSelectedIndex(index);
-        } else {
-            this.attributes[4].add (am);
-            this.listAttribute[4].setListData (this.attributes[4].toArray ());
-            this.listAttribute[4].setSelectedIndex(this.attributes[4].size () - 1);
-        }
+        this.attributes[4].add (index, am);
+        this.listAttribute[4].setListData (this.attributes[4].toArray ());
+        this.listAttribute[4].setSelectedIndex(index);
         this.listAttribute[4].requestFocus ();
-
-            /*
-        {
-        }
-        */
     }
 
     private void addSignal (boolean modify) {
@@ -861,8 +843,19 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
             return;
         }
 
+        int index;
+        Object old = null;
+        if (modify) {
+            index = this.listAttribute[1].getSelectedIndex ();
+            old = this.attributes[1].remove (index);
+        } else
+            index = this.attributes[1].size ();
+
+
         // Checks whether the same signal already belongs to the list
         if (this.attributes[1].contains (as)) {
+            if (modify)
+                this.attributes[1].add (index, old);
             JOptionPane.showMessageDialog (this,
                                           "This signal already exists",
                                           "Error",
@@ -871,26 +864,10 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
             return;
         }
 
-        if (modify) {
-            int index = this.listAttribute[1].getSelectedIndex ();
-            this.attributes[1].remove (index);
-            this.attributes[1].add (index, as);
-            this.listAttribute[1].setListData (this.attributes[1].toArray ());
-            this.listAttribute[1].setSelectedIndex(index);
-        } else {
-            this.attributes[1].add(as);
-            this.listAttribute[1].setListData(this.attributes[1].toArray ());
-            this.listAttribute[1].setSelectedIndex(this.attributes[1].size () - 1);
-        }
-
+        this.attributes[1].add (index, as);
+        this.listAttribute[1].setListData (this.attributes[1].toArray ());
+        this.listAttribute[1].setSelectedIndex(index);
         this.listAttribute[1].requestFocus ();
-
-                /*
-            {
-                signals.removeElementAt(index);
-                signals.add(index, as);
-            }
-            */
     }
 
     private void handleModify () {

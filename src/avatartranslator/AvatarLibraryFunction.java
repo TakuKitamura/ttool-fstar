@@ -59,7 +59,7 @@ import java.util.Iterator;
  * @version 1.0 04.07.2016
  * @author Florian LUGOU
  */
-public class AvatarLibraryFunction extends AvatarElement implements AvatarTranslator {
+public class AvatarLibraryFunction extends AvatarElement implements AvatarTranslator, AvatarStateMachineOwner {
 
     /**
      * The list of parameters of the function. Their values should never be reaffected.
@@ -118,18 +118,157 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      */
     public AvatarLibraryFunction (String name, AvatarSpecification avspec, Object referenceObject) {
         super(name, referenceObject);
+
         this.avspec = avspec;
+
+        this.parameters = new LinkedList<AvatarAttribute> ();
+        this.signals = new LinkedList<AvatarSignal> ();
+        this.returnAttributes = new LinkedList<AvatarAttribute> ();
+        this.attributes = new LinkedList<AvatarAttribute> ();
+        this.methods = new LinkedList<AvatarMethod> ();
+
+        this.asm = new AvatarStateMachine ("statemachineoffunction__" + name, referenceObject);
+    }
+
+    @Override
+    public AvatarSpecification getAvatarSpecification () {
+        return this.avspec;
     }
 
     /**
-     * Look for an attribute in the list of local attributes, parameters and return values.
+     * Return the list of parameters of the function.
      *
-     * @param name
-     *      The name of the attribute to look for.
-     *
-     * @return The corresponding attribute if found, null otherwise.
+     * @return The list of parameters.
      */
-    public AvatarAttribute getAttributeWithName (String name) {
+    public LinkedList<AvatarAttribute> getParameters () {
+        return this.parameters;
+    }
+
+    /**
+     * Add a parameter for this function.
+     *
+     * @param attr
+     *      The parameter to add.
+     */
+    public void addParameter (AvatarAttribute attr) {
+        this.parameters.add (attr);
+    }
+
+    /**
+     * Return the list of signals.
+     *
+     * @return The list of signals.
+     */
+    public LinkedList<AvatarSignal> getSignals () {
+        return this.signals;
+    }
+
+    /**
+     * Add a signal.
+     *
+     * @param signal
+     *      The signal to add.
+     */
+    public void addSignal (AvatarSignal signal) {
+        this.signals.add (signal);
+    }
+
+    @Override
+    public AvatarSignal getAvatarSignalWithName (String signalName) {
+        for (AvatarSignal signal: this.signals)
+            if (signal.getName ().equals (signalName))
+                return signal;
+
+        return null;
+    }
+
+    /**
+     * Return the list of return values.
+     *
+     * @return The list of return values.
+     */
+    public LinkedList<AvatarAttribute> getReturnAttributes () {
+        return this.returnAttributes;
+    }
+
+    /**
+     * Add a return value.
+     *
+     * @param returnAttribute
+     *      The return value to add.
+     */
+    public void addReturnAttribute (AvatarAttribute returnAttribute) {
+        this.returnAttributes.add (returnAttribute);
+    }
+
+    /**
+     * Return the list of attributes local to the function.
+     *
+     * @return The list of local attributes.
+     */
+    public LinkedList<AvatarAttribute> getLocalAttributes () {
+        return this.attributes;
+    }
+
+    @Override
+    public LinkedList<AvatarAttribute> getAttributes () {
+        LinkedList<AvatarAttribute> result = new LinkedList<AvatarAttribute> ();
+
+        for (AvatarAttribute attr: this.attributes)
+            result.add (attr);
+        for (AvatarAttribute attr: this.returnAttributes)
+            result.add (attr);
+        for (AvatarAttribute attr: this.parameters)
+            result.add (attr);
+
+        return result;
+    }
+
+    /**
+     * Add an attribute local to this function.
+     *
+     * @param attribute
+     *      The local attribute to add.
+     */
+    public void addAttribute (AvatarAttribute attribute) {
+        this.attributes.add (attribute);
+    }
+
+    /**
+     * Return the list of methods.
+     *
+     * @return The list of methods used by this function.
+     */
+    public LinkedList<AvatarMethod> getMethods () {
+        return this.methods;
+    }
+
+    @Override
+    public AvatarMethod getAvatarMethodWithName (String methodName) {
+        for (AvatarMethod method: this.methods)
+            if (method.getName ().equals (methodName))
+                return method;
+
+        return null;
+    }
+
+    /**
+     * Add a method.
+     *
+     * @param method
+     *      The method to add to this function.
+     */
+    public void addMethod (AvatarMethod method) {
+        this.methods.add (method);
+    }
+
+    @Override
+    public AvatarStateMachine getStateMachine () {
+        return this.asm;
+    }
+
+    @Override
+    public AvatarAttribute getAvatarAttributeWithName (String name) {
         for (AvatarAttribute attr: this.parameters)
             if (attr.getName ().equals (name))
                 return attr;
@@ -364,7 +503,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
 
         AvatarActionOnSignal asme = new AvatarActionOnSignal (this.name + "__" + _asme.getName (), arg.signalsMapping.get (_asme.getSignal ()), arg.referenceObject);
         for (String s: _asme.getValues ()) {
-            AvatarAttribute attr = this.getAttributeWithName (s);
+            AvatarAttribute attr = this.getAvatarAttributeWithName (s);
             if (attr == null)
                 asme.addValue (s);
             else
@@ -426,7 +565,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         AvatarRandom asme = new AvatarRandom (this.name + "__" + _asme.getName (), arg.referenceObject);
         asme.setValues (_asme.getMinValue (), _asme.getMaxValue ());
         asme.setFunctionId (_asme.getFunctionId ());
-        asme.setVariable (arg.placeholdersMapping.get (this.getAttributeWithName (_asme.getVariable ())).getName ());
+        asme.setVariable (arg.placeholdersMapping.get (this.getAvatarAttributeWithName (_asme.getVariable ())).getName ());
 
         this.translateNext (asme, _asme, arg);
     }

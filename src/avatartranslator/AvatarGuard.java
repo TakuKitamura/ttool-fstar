@@ -68,7 +68,7 @@ public abstract class AvatarGuard {
         return index;
     }
 
-    public static AvatarGuard createFromString (AvatarBlock block, String _guard) {
+    public static AvatarGuard createFromString (AvatarStateMachineOwner block, String _guard) {
         if (_guard == null)
             return new AvatarGuardEmpty ();
 

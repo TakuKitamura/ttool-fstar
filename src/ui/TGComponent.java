@@ -66,6 +66,7 @@ import ui.tmlcd.*;
 import ui.tmlcompd.*;
 import ui.tmldd.*;
 import ui.tree.*;
+import ui.avatarbd.AvatarBDPragma;
 
 import tmltranslator.*;
 
@@ -865,7 +866,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
         RunningInfo ri;
         LoadInfo li;
         ColorManager.setColor(g, state, 0);
+        Font font = new Font (Font.SANS_SERIF, Font.PLAIN, this.tdp.getFontSize ());
+        g.setFont (font);
         internalDrawing(g);
+        g.setFont (font);
         repaint = false;
         drawInternalComponents(g);
         GraphicLib.setNormalStroke(g);

@@ -54,11 +54,11 @@ public class AvatarTransition extends AvatarStateMachineElement {
     private AvatarGuard guard;
     private String minDelay = "", maxDelay = "";
     private String minCompute = "", maxCompute = "";
-    private AvatarBlock block;
+    private AvatarStateMachineOwner block;
 
     private LinkedList<AvatarAction> actions; // actions on variable, or method call
 
-    public AvatarTransition(AvatarBlock _block, String _name, Object _referenceObject) {
+    public AvatarTransition (AvatarStateMachineOwner _block, String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         actions = new LinkedList<AvatarAction>();
         this.guard = new AvatarGuardEmpty ();
@@ -90,7 +90,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
         return this.actions;
     }
 
-    public AvatarBlock getBlock () {
+    public AvatarStateMachineOwner getBlock () {
         return this.block;
     }
 

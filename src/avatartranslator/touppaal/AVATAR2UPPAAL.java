@@ -157,6 +157,7 @@ public class AVATAR2UPPAAL {
         spec = new UPPAALSpec();
 
         avspec.removeCompositeStates();
+        avspec.removeLibraryFunctionCalls ();
         avspec.removeTimers();
         avspec.makeRobustness();
 	LinkedList<String> uppaalPragmas = avspec.getSafetyPragmas();

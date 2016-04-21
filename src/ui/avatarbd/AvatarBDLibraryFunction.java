@@ -55,7 +55,7 @@ import javax.swing.JOptionPane;
 import myutil.GraphicLib;
 import myutil.TraceManager;
 
-import ui.TGCScalableWithInternalComponent;
+import ui.TGCScalableWithoutInternalComponent;
 import ui.TAttribute;
 import ui.TGComponent;
 import ui.TDiagramPanel;
@@ -67,6 +67,7 @@ import ui.TGComponentManager;
 import ui.AvatarSignal;
 import ui.AvatarMethod;
 import ui.AvatarDesignPanel;
+import ui.SwallowedTGComponent;
 import ui.avatarsmd.AvatarSMDPanel;
 import ui.window.JDialogAvatarLibraryFunction;
 
@@ -76,7 +77,7 @@ import ui.window.JDialogAvatarLibraryFunction;
  * @version 1.0 04.08.2016
  * @author Florian LUGOU
  */
-public class AvatarBDLibraryFunction extends TGCScalableWithInternalComponent implements AvatarBDStateMachineOwner {
+public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent, AvatarBDStateMachineOwner {
 
     /**
      * Stereotype for standard library function.
@@ -104,7 +105,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithInternalComponent im
     private static final int paddingHorizontal = 7;
 
     /**
-     * The vertical spacing before and after text.
+     * The vertical spacing between lines.
      */
     private static final int paddingVertical   = 3;
 
@@ -127,11 +128,6 @@ public class AvatarBDLibraryFunction extends TGCScalableWithInternalComponent im
      * Current font size.
      */
     private int currentFontSize = -1;
-
-    /**
-     * Equals True when the box is large enough for the text to be displayed.
-     */
-    private boolean displayText = true;
 
     /**
      * Equals True when the box is large enough for the icon to be drawn.
@@ -235,8 +231,8 @@ public class AvatarBDLibraryFunction extends TGCScalableWithInternalComponent im
             // TODO: throw exception
         }
 
-        this.currentFontSize = this.maxFontSize;
         this.oldScaleFactor = this.tdp.getZoom();
+        this.currentFontSize = (int) (AvatarBDLibraryFunction.maxFontSize * this.oldScaleFactor);
 
         // TODO: change that
         this.myImageIcon = IconManager.imgic700;
@@ -333,49 +329,6 @@ public class AvatarBDLibraryFunction extends TGCScalableWithInternalComponent im
      *      The {@link Graphics} object used to draw this component.
      */
     private void internalDrawingAux (Graphics graph) {
-        String ster;
-        if (!this.isCrypto)
-            ster = "<<" + stereotype + ">>";
-        else
-            ster = "<<" + stereotypeCrypto + ">>";
-
-        Font font = graph.getFont ();
-
-        if (this.rescaled && !this.tdp.isScaled ()) {
-            this.rescaled = false;
-            // Must set the font size...
-            // Incrementally find the biggest font not greater than max_font size
-            // If font is less than min_font, no text is displayed
-
-            // This is the maximum font size possible
-            int maxCurrentFontSize = Math.max (0, Math.min (this.height, this.maxFontSize));
-            font = font.deriveFont ((float) maxCurrentFontSize);
-
-            // Try to decrease font size until we get below the minimum
-            while (maxCurrentFontSize > (this.minFontSize - 1)) {
-                // Compute width of name of the function
-                int w0 = graph.getFontMetrics (font).stringWidth (this.value);
-                // Compute width of string stereotype
-                int w1 = graph.getFontMetrics (font).stringWidth (ster);
-
-                // if one of the two width is small enough use this font size
-                if (Math.min (w0, w1) < this.width - (2*this.paddingHorizontal))
-                    break;
-
-                // Decrease font size
-                maxCurrentFontSize --;
-                // Scale the font
-                font = font.deriveFont ((float) maxCurrentFontSize);
-            }
-
-            // Use this font
-            graph.setFont (font);
-            this.currentFontSize = maxCurrentFontSize;
-
-            // if font is two small don't display the text
-            this.displayText = this.currentFontSize >= this.minFontSize;
-        }
-
         // Draw outer rectangle (for border)
         Color c = graph.getColor ();
         graph.drawRect (this.x, this.y, this.width, this.height);
@@ -393,34 +346,116 @@ public class AvatarBDLibraryFunction extends TGCScalableWithInternalComponent im
         // h retains the coordinate along X where an element was last drawn
         int h = 0;
 
-        // Draw icon
-        this.iconIsDrawn = this.width > IconManager.iconSize + 2*this.paddingHorizontal && height > IconManager.iconSize + 2*paddingHorizontal;
-        if (this.iconIsDrawn)
-            graph.drawImage (IconManager.img5100, this.x + this.width - IconManager.iconSize - this.paddingHorizontal, this.y + paddingHorizontal, null);
+        int paddingVertical = (int) (AvatarBDLibraryFunction.paddingVertical * this.tdp.getZoom ());
+        int paddingHorizontal = (int) (AvatarBDLibraryFunction.paddingHorizontal * this.tdp.getZoom ());
 
-        if (!this.displayText)
+        // Draw icon
+        this.iconIsDrawn = this.width > IconManager.iconSize + 2*paddingHorizontal && height > IconManager.iconSize + 2*paddingHorizontal;
+        if (this.iconIsDrawn)
+            graph.drawImage (IconManager.img5100, this.x + this.width - IconManager.iconSize - paddingHorizontal, this.y + paddingHorizontal, null);
+
+
+        Font font = graph.getFont ();
+
+        String ster;
+        if (!this.isCrypto)
+            ster = "<<" + stereotype + ">>";
+        else
+            ster = "<<" + stereotypeCrypto + ">>";
+
+        if (this.rescaled && !this.tdp.isScaled ()) {
+            this.rescaled = false;
+            // Must set the font size...
+            // Incrementally find the biggest font not greater than max_font size
+            // If font is less than min_font, no text is displayed
+
+            // This is the maximum font size possible
+            int maxCurrentFontSize = Math.max (0, Math.min (this.height, (int) (AvatarBDLibraryFunction.maxFontSize*this.tdp.getZoom ())));
+            font = font.deriveFont ((float) maxCurrentFontSize);
+
+            // Try to decrease font size until we get below the minimum
+            while (maxCurrentFontSize > (AvatarBDLibraryFunction.minFontSize*this.tdp.getZoom () - 1)) {
+                // Compute width of name of the function
+                int w0 = graph.getFontMetrics (font).stringWidth (this.value);
+                // Compute width of string stereotype
+                int w1 = graph.getFontMetrics (font).stringWidth (ster);
+
+                // if one of the two width is small enough use this font size
+                if (Math.min (w0, w1) < this.width - (2*paddingHorizontal))
+                    break;
+
+                // Decrease font size
+                maxCurrentFontSize --;
+                // Scale the font
+                font = font.deriveFont ((float) maxCurrentFontSize);
+            }
+
+            // Box is too damn small
+            if (this.currentFontSize < AvatarBDLibraryFunction.minFontSize*this.tdp.getZoom ()) {
+                maxCurrentFontSize ++;
+                // Scale the font
+                font = font.deriveFont ((float) maxCurrentFontSize);
+            }
+
+            // Use this font
+            graph.setFont (font);
+            this.currentFontSize = maxCurrentFontSize;
+        } else
+            font = font.deriveFont (this.currentFontSize);
+
+        graph.setFont (font.deriveFont (Font.BOLD));
+        h = graph.getFontMetrics ().getAscent () + graph.getFontMetrics ().getLeading () + paddingVertical;
+
+        if (h + graph.getFontMetrics ().getDescent () + paddingVertical >= this.height)
             return;
 
-        int paddingVertical = (int) (this.paddingVertical * this.tdp.getZoom ());
-
         // Write stereotype if small enough
-        graph.setFont (font.deriveFont (Font.BOLD));
         int w = graph.getFontMetrics ().stringWidth (ster);
-        h = graph.getFontMetrics ().getAscent () + graph.getFontMetrics ().getLeading () + paddingVertical;
-        if (w + 2*this.paddingHorizontal < this.width && h + graph.getFontMetrics ().getDescent () + paddingVertical < this.height)
+        if (w + 2*paddingHorizontal < this.width)
             graph.drawString (ster, this.x + (this.width - w)/2, this.y + h);
+        else {
+            // try to draw with "..." instead
+            if (!this.isCrypto)
+                ster = this.stereotype;
+            else
+                ster = this.stereotypeCrypto;
+
+            for (int stringLength = ster.length ()-1; stringLength >= 0; stringLength--) {
+                String abbrev = "<<" + ster.substring (0, stringLength) + "...>>";
+                w = graph.getFontMetrics ().stringWidth (abbrev);
+                if (w + 2*paddingHorizontal < this.width) {
+                    graph.drawString (abbrev, this.x + (this.width - w)/2, this.y + h);
+                    break;
+                }
+            }
+        }
 
         // Write value if small enough
         graph.setFont (font);
-        w = graph.getFontMetrics ().stringWidth (this.value);
         h += graph.getFontMetrics ().getHeight () + paddingVertical;
-        if (w + 2*this.paddingHorizontal < this.width && h + graph.getFontMetrics ().getDescent () + paddingVertical < this.height)
+        if (h + graph.getFontMetrics ().getDescent () + paddingVertical >= this.height)
+            return;
+
+        w = graph.getFontMetrics ().stringWidth (this.value);
+        if (w + 2*paddingHorizontal < this.width)
             graph.drawString (this.value, this.x + (this.width - w)/2, this.y + h);
+        else {
+            // try to draw with "..." instead
+            for (int stringLength = this.value.length ()-1; stringLength >= 0; stringLength--) {
+                String abbrev = this.value.substring (0, stringLength) + "...";
+                w = graph.getFontMetrics ().stringWidth (abbrev);
+                if (w + 2*paddingHorizontal < this.width) {
+                    graph.drawString (abbrev, this.x + (this.width - w)/2, this.y + h);
+                    break;
+                }
+            }
+        }
+
+        h += graph.getFontMetrics ().getDescent () + paddingVertical;
 
         // Update lower bound of text
         this.limitName = this.y + h;
 
-        h += paddingVertical;
         if (h + paddingVertical >= this.height)
             return;
 
@@ -431,7 +466,8 @@ public class AvatarBDLibraryFunction extends TGCScalableWithInternalComponent im
             return;
 
         // Set font size
-        int attributeFontSize = Math.min (12, this.currentFontSize - 2);
+        // int attributeFontSize = Math.min (12, this.currentFontSize - 2);
+        int attributeFontSize = this.currentFontSize*5/6;
         graph.setFont (font.deriveFont ((float) attributeFontSize));
         int step = graph.getFontMetrics ().getHeight ();
 
@@ -440,7 +476,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithInternalComponent im
         // Parameters
         for (TAttribute attr: this.parameters) {
             h += step;
-            if (h >= this.height - this.paddingHorizontal) {
+            if (h >= this.height - paddingHorizontal) {
                 this.limitParameters = this.y + this.height;
                 return;
             }
@@ -450,16 +486,16 @@ public class AvatarBDLibraryFunction extends TGCScalableWithInternalComponent im
 
             // Try to draw it
             w = graph.getFontMetrics ().stringWidth (attrString);
-            if (w + 2*this.paddingHorizontal < this.width)
-                graph.drawString (attrString, this.x + this.paddingHorizontal, this.y + h);
+            if (w + 2*paddingHorizontal < this.width)
+                graph.drawString (attrString, this.x + paddingHorizontal, this.y + h);
             else {
                 // If we can't, try to draw with "..." instead
                 int stringLength;
                 for (stringLength = attrString.length ()-1; stringLength >= 0; stringLength--) {
                     String abbrev = attrString.substring (0, stringLength) + "...";
                     w = graph.getFontMetrics ().stringWidth (abbrev);
-                    if (w + 2*this.paddingHorizontal < this.width) {
-                        graph.drawString (abbrev, this.x + this.paddingHorizontal, this.y + h);
+                    if (w + 2*paddingHorizontal < this.width) {
+                        graph.drawString (abbrev, this.x + paddingHorizontal, this.y + h);
                         break;
                     }
                 }
@@ -470,95 +506,91 @@ public class AvatarBDLibraryFunction extends TGCScalableWithInternalComponent im
             }
         }
 
+        h += graph.getFontMetrics ().getDescent () + paddingVertical;
+
         // Remember the end of parameters
         this.limitParameters = this.y + h;
 
+        if (h + paddingVertical >= this.height)
+            return;
+
+        graph.drawLine (this.x, this.y+h, this.x+this.width, this.y+h);
+        h += paddingVertical;
+
         // Signals
-        if (this.signals.size() > 0) {
-            h += paddingVertical;
-
-            if (h + paddingVertical >= this.height)
+        for (AvatarSignal signal: this.signals) {
+            h += step ;
+            if (h >= this.height - paddingHorizontal) {
+                this.limitSignals = this.y + this.height;
                 return;
-
-            graph.drawLine(this.x, this.y+h, this.x+this.width, this.y+h);
-            h += paddingVertical;
-
-            for (AvatarSignal signal: this.signals) {
-                h += step ;
-                if (h >= this.height - this.paddingHorizontal) {
-                    this.limitSignals = this.y + this.height;
-                    return;
-                }
-
-                String signalString = "~ " + signal.toString ();
-                w = graph.getFontMetrics ().stringWidth (signalString);
-                if (w + 2*this.paddingHorizontal < this.width)
-                    graph.drawString (signalString, this.x + this.paddingHorizontal, this.y + h);
-                else {
-                    // If we can't, try to draw with "..." instead
-                    int stringLength;
-                    for (stringLength = signalString.length ()-1; stringLength >= 0; stringLength--) {
-                        String abbrev = signalString.substring (0, stringLength) + "...";
-                        w = graph.getFontMetrics ().stringWidth (abbrev);
-                        if (w + 2*this.paddingHorizontal < this.width) {
-                            graph.drawString (abbrev, this.x + this.paddingHorizontal, this.y + h);
-                            break;
-                        }
-                    }
-
-                    if (stringLength < 0)
-                        // skip signal
-                        h -= step;
-                }
             }
 
-            // Remember limit of signals
-            this.limitSignals = this.y + h;
+            String signalString = "~ " + signal.toString ();
+            w = graph.getFontMetrics ().stringWidth (signalString);
+            if (w + 2*paddingHorizontal < this.width)
+                graph.drawString (signalString, this.x + paddingHorizontal, this.y + h);
+            else {
+                // If we can't, try to draw with "..." instead
+                int stringLength;
+                for (stringLength = signalString.length ()-1; stringLength >= 0; stringLength--) {
+                    String abbrev = signalString.substring (0, stringLength) + "...";
+                    w = graph.getFontMetrics ().stringWidth (abbrev);
+                    if (w + 2*paddingHorizontal < this.width) {
+                        graph.drawString (abbrev, this.x + paddingHorizontal, this.y + h);
+                        break;
+                    }
+                }
+
+                if (stringLength < 0)
+                    // skip signal
+                    h -= step;
+            }
         }
 
-        // Return Attributes
-        if (this.returnAttributes.size() > 0) {
-            h += paddingVertical;
+        h += graph.getFontMetrics ().getDescent () + paddingVertical;
 
-            if (h + paddingVertical >= this.height)
+        // Remember limit of signals
+        this.limitSignals = this.y + h;
+
+        if (h + paddingVertical >= this.height)
+            return;
+
+        graph.drawLine (this.x, this.y+h, this.x+this.width, this.y+h);
+        h += paddingVertical;
+
+        // Return Attributes
+        for (TAttribute attr: this.returnAttributes) {
+            h += step;
+            if (h >= this.height - paddingHorizontal)
                 return;
 
-            graph.drawLine(this.x, this.y+h, this.x+this.width, this.y+h);
-            h += paddingVertical;
+            // Get the string for this return attribute
+            String attrString = attr.toAvatarString ();
 
-            for (TAttribute attr: this.returnAttributes) {
-                h += step;
-                if (h >= this.height - this.paddingHorizontal)
-                    return;
-
-                // Get the string for this return attribute
-                String attrString = attr.toAvatarString ();
-
-                w = graph.getFontMetrics ().stringWidth (attrString);
-                if (w + 2*this.paddingHorizontal < this.width)
-                    graph.drawString (attrString, this.x + this.paddingHorizontal, this.y + h);
-                else {
-                    // If we can't, try to draw with "..." instead
-                    int stringLength;
-                    for (stringLength = attrString.length ()-1; stringLength >= 0; stringLength--) {
-                        String abbrev = attrString.substring (0, stringLength) + "...";
-                        w = graph.getFontMetrics ().stringWidth (abbrev);
-                        if (w + 2*this.paddingHorizontal < this.width) {
-                            graph.drawString (abbrev, this.x + this.paddingHorizontal, this.y + h);
-                            break;
-                        }
+            w = graph.getFontMetrics ().stringWidth (attrString);
+            if (w + 2*paddingHorizontal < this.width)
+                graph.drawString (attrString, this.x + paddingHorizontal, this.y + h);
+            else {
+                // If we can't, try to draw with "..." instead
+                int stringLength;
+                for (stringLength = attrString.length ()-1; stringLength >= 0; stringLength--) {
+                    String abbrev = attrString.substring (0, stringLength) + "...";
+                    w = graph.getFontMetrics ().stringWidth (abbrev);
+                    if (w + 2*paddingHorizontal < this.width) {
+                        graph.drawString (abbrev, this.x + paddingHorizontal, this.y + h);
+                        break;
                     }
-
-                    if (stringLength < 0)
-                        // skip signal
-                        h -= step;
                 }
+
+                if (stringLength < 0)
+                    // skip signal
+                    h -= step;
             }
         }
     }
 
     @Override
-    public TGComponent isOnOnlyMe (int x1, int y1) {
+    public TGComponent isOnMe (int x1, int y1) {
 
         if (GraphicLib.isInRectangle(x1, y1, this.x, this.y, this.width, this.height))
             return this;
@@ -568,11 +600,12 @@ public class AvatarBDLibraryFunction extends TGCScalableWithInternalComponent im
 
     @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+        int paddingHorizontal = (int) (AvatarBDLibraryFunction.paddingHorizontal*this.tdp.getZoom ());
         if (this.iconIsDrawn && GraphicLib.isInRectangle(
                     _x,
                     _y,
-                    this.x + this.width - IconManager.iconSize - this.paddingHorizontal,
-                    this.y + this.paddingHorizontal,
+                    this.x + this.width - IconManager.iconSize - paddingHorizontal,
+                    this.y + paddingHorizontal,
                     IconManager.iconSize,
                     IconManager.iconSize)) {
             this.tdp.selectTab (this.getValue ());
@@ -994,6 +1027,17 @@ public class AvatarBDLibraryFunction extends TGCScalableWithInternalComponent im
                 return as;
 
         return null;
+    }
+
+    @Override
+    public void resizeWithFather() {
+        if (this.father != null && this.father instanceof AvatarBDBlock) {
+            // Too large to fit in the father? -> resize it!
+            this.resizeToFatherSize();
+
+            this.setCdRectangle (0, this.father.getWidth() - this.getWidth(), 0, this.father.getHeight() - this.getHeight());
+            this.setMoveCd (this.x, this.y);
+        }
     }
 
     @Override

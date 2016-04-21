@@ -362,6 +362,7 @@ public class TGComponentManager {
     public static final int AVATARSMD_SET_TIMER = 5109;
     public static final int AVATARSMD_RESET_TIMER = 5110;
     public static final int AVATARSMD_EXPIRE_TIMER = 5111;
+    public static final int AVATARSMD_LIBRARY_FUNCTION_CALL = 5112;
 
     // AVATAR RD -> starts at 5200
     public static final int AVATARRD_REQUIREMENT = 5200;
@@ -514,6 +515,9 @@ public class TGComponentManager {
             break;
         case AVATARSMD_SEND_SIGNAL:
             tgc = new AvatarSMDSendSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case AVATARSMD_LIBRARY_FUNCTION_CALL:
+            tgc = new AvatarSMDLibraryFunctionCall (x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case AVATARSMD_RECEIVE_SIGNAL:
             tgc = new AvatarSMDReceiveSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1289,6 +1293,8 @@ public class TGComponentManager {
             return AVATARSMD_SEND_SIGNAL;
         } else if (tgc instanceof AvatarSMDReceiveSignal) {
             return AVATARSMD_RECEIVE_SIGNAL;
+        } else if (tgc instanceof AvatarSMDLibraryFunctionCall) {
+            return AVATARSMD_LIBRARY_FUNCTION_CALL;
         } else if (tgc instanceof AvatarSMDParallel) {
             return AVATARSMD_PARALLEL;
         } else if (tgc instanceof AvatarSMDState) {

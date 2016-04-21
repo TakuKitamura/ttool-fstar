@@ -59,7 +59,7 @@ public class AvatarTuple extends AvatarLeftHand {
         this.components = new LinkedList<AvatarTerm> ();
     }
 
-    public static AvatarTuple createFromString (AvatarBlock block, String toParse) {
+    public static AvatarTuple createFromString (AvatarStateMachineOwner block, String toParse) {
         AvatarTuple result = null;
 
         int indexLParen = toParse.indexOf ("(");

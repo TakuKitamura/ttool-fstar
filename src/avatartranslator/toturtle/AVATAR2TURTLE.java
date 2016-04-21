@@ -75,6 +75,7 @@ public class AVATAR2TURTLE {
 		//System.out.println("generate TM");
 		//tmlmodeling.removeAllRandomSequences();
 		spec.removeCompositeStates();
+        spec.removeLibraryFunctionCalls ();
 		
         tm = new TURTLEModeling();
         checkingErrors = new Vector();

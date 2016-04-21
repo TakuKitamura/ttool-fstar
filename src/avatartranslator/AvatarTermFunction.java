@@ -60,7 +60,7 @@ public class AvatarTermFunction extends AvatarTerm implements AvatarAction {
         this.method = _method;
     }
 
-    public static AvatarTermFunction createFromString (AvatarBlock block, String toParse) {
+    public static AvatarTermFunction createFromString (AvatarStateMachineOwner block, String toParse) {
         int indexLParen = toParse.indexOf ("(");
         String methodName;
         AvatarTuple argsTuple;

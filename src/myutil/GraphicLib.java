@@ -432,10 +432,10 @@ public final class GraphicLib {
     }
     
     public static boolean isInRectangle(int x1, int y1, int x, int y, int width, int height) {
-        if ((x1 >= x) && ((x + width) >= x1) && (y1 >= y) && ((y + height) >= y1)) {
-            return true;
-        }
-        return false;
+        return  x1 >= x         &&
+                x + width >= x1 &&
+                y1 >= y         &&
+                y + height >= y1;
     }
 	
 	public static Point putPointOnRectangle(int x1, int y1, int x, int y, int width, int height) {

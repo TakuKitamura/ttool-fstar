@@ -67,26 +67,25 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
 
     protected Color myColor;
 
-    private Font myFont, myFontB;
+    private Font myFontB;
     private int maxFontSize = 30;
     private int minFontSize = 4;
-    private int currentFontSize = -1;
+    private int currentFontSize;
 
     protected Graphics graphics;
 
     public TGCNote(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 150;
-        height = 30;
-        minWidth = 20;
-        minHeight = 10;
+        this.width = 150;
+        this.height = 30;
+        this.minWidth = 20;
+        this.minHeight = 10;
 
-        oldScaleFactor = tdp.getZoom();
+        this.oldScaleFactor = tdp.getZoom();
 
-        nbConnectingPoint = 0;
-        //addTGConnectingPointsComment();
-	int len = makeTGConnectingPointsComment(16);
+        this.nbConnectingPoint = 0;
+	int len = this.makeTGConnectingPointsComment(16);
 	int decw = 0;
 	int dech = 0;
 	for(int i=0; i<2; i++) {
@@ -101,130 +100,100 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
 	    len += 8;
 	}
 
-        moveable = true;
-        editable = true;
-        removable = true;
+        this.moveable = true;
+        this.editable = true;
+        this.removable = true;
 
-        name = "UML Note";
-        value = "UML note:\nDouble-click to edit";
+        this.currentFontSize = tdp.getFontSize();
 
-        myImageIcon = IconManager.imgic320;
+        this.name = "UML Note";
+        this.value = "UML note:\nDouble-click to edit";
+
+        this.myImageIcon = IconManager.imgic320;
     }
 
     public String[] getValues() {
-        return values;
+        return this.values;
     }
 
 
-    public void internalDrawing(Graphics g) {
-        Font f = g.getFont();
-        Font fold = f;
-
-        /*if (!tdp.isScaled()) {
-          graphics = g;
-          }*/
-
-        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-            currentFontSize = tdp.getFontSize();
-            //System.out.println("Rescaled, font size = " + currentFontSize + " height=" + height);
-            //            myFont = f.deriveFont((float)currentFontSize);
-            //myFontB = myFont.deriveFont(Font.BOLD);
-
-            if (rescaled) {
-                rescaled = false;
-            }
+    public void internalDrawing (Graphics graph) {
+        if (this.rescaled && !this.tdp.isScaled()) {
+            this.rescaled = false;
+            this.currentFontSize = this.tdp.getFontSize();
         }
 
-        if (values == null) {
-            makeValue();
-        }
+        graph.setFont (graph.getFont ().deriveFont (this.currentFontSize));
 
-        int h  = g.getFontMetrics().getHeight();
-        Color c = g.getColor();
+        if (this.values == null)
+            this.makeValue ();
 
-        int desiredWidth = minWidth;
-        for(int i=0; i< values.length; i++) {
-            desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX);
-        }
+        int h  = graph.getFontMetrics ().getHeight();
+        Color c = graph.getColor();
 
-        int desiredHeight = (values.length * currentFontSize) + textY + 1;
+        int desiredWidth = this.minWidth;
+        for(int i=0; i< this.values.length; i++)
+            /* !!! WARNING !!!
+             * Note that here we use TDiagramPanel.stringWidth instead of graph.getFontMetrics().stringWidth
+             * Indeed, TGComponent (and so TGCNote) objects are drawn twice when the bird view is enabled.
+             * First, they are drawn on the TDiagramPanel and then on the bird view.
+             * Problem is that we compute the width for this element (which will be further used for isOnMe
+             * for instance) so that it matches the text inside of it. It is thus important that the width of
+             * the strings - that will affect the width of the component - is the same each time it is drawn.
+             * For some unknown reasons, even if the current Font of the Graphics object is the same, the
+             * FontMetrics object derived from it is not the same (ascent and descent are different) so for
+             * the same text and the same Font, width would still change if we used the FontMetrics fetched
+             * from the Graphics object.
+             * Thus we use a saved FontMetrics object in TDiagramPanel that only changes when zoom changes.
+             */
+            desiredWidth = Math.max (desiredWidth, this.tdp.stringWidth(graph, this.values[i]) + this.marginX);
 
-        //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
 
-        if ((desiredWidth != width) || (desiredHeight != height)) {
-            resize(desiredWidth, desiredHeight);
-        }
+        int desiredHeight = (this.values.length * this.currentFontSize) + this.textY + 1;
 
-        g.drawLine(x, y, x+width, y);
-        g.drawLine(x, y, x, y+height);
-        g.drawLine(x, y+height, x+width-limit, y+height);
-        g.drawLine(x+width, y, x+width, y+height - limit);
+        if (desiredWidth != this.width || desiredHeight != this.height)
+            this.resize (desiredWidth, desiredHeight);
 
-        g.setColor(ColorManager.UML_NOTE_BG);
-        int [] px1 = {x+1, x+width, x + width, x + width-limit, x+1};
-        int [] py1 = {y+1, y+1, y+height-limit, y+height, y+height};
-        g.fillPolygon(px1, py1, 5);
-        g.setColor(c);
+        graph.drawLine(this.x, this.y, this.x+this.width, this.y);
+        graph.drawLine(this.x, this.y, this.x, this.y+this.height);
+        graph.drawLine(this.x, this.y+this.height, this.x+this.width-this.limit, this.y+this.height);
+        graph.drawLine(this.x+this.width, this.y, this.x+this.width, this.y+this.height - this.limit);
 
-        int [] px = {x+width, x + width - 4, x+width-10, x + width-limit};
-        int [] py = {y+height-limit, y + height - limit + 3, y + height - limit + 2, y +height};
-        g.drawPolygon(px, py, 4);
+        graph.setColor(ColorManager.UML_NOTE_BG);
+        int [] px1 = {this.x+1, this.x+this.width, this.x + this.width, this.x + this.width-this.limit, this.x+1};
+        int [] py1 = {this.y+1, this.y+1, this.y+this.height-this.limit, this.y+this.height, this.y+this.height};
+        graph.fillPolygon(px1, py1, 5);
+        graph.setColor(c);
 
-        if (g.getColor() == ColorManager.NORMAL_0) {
-            g.setColor(ColorManager.UML_NOTE);
-        }
-        g.fillPolygon(px, py, 4);
+        int [] px = {this.x+this.width, this.x + this.width - 4, this.x+this.width-10, this.x + this.width-this.limit};
+        int [] py = {this.y+this.height-this.limit, this.y + this.height - this.limit + 3, this.y + this.height - this.limit + 2, this.y +this.height};
+        graph.drawPolygon(px, py, 4);
 
-        g.setColor(Color.black);
-        for (int i = 0; i<values.length; i++) {
-            //TraceManager.addDev("x+texX=" + (x + textX) + " y+textY=" + y + textY + i* h + ": " + values[i]);
-            g.drawString(values[i], x + textX, y + textY + (i+1)* currentFontSize);
-        }
-        g.setColor(c);
+        if (c == ColorManager.NORMAL_0)
+            graph.setColor(ColorManager.UML_NOTE);
 
+        graph.fillPolygon (px, py, 4);
+
+        graph.setColor(c);
+        for (int i = 0; i<this.values.length; i++)
+            graph.drawString(this.values[i], this.x + this.textX, this.y + this.textY + (i+1)* this.currentFontSize);
     }
 
     public void makeValue() {
-        values = Conversion.wrapText(value);
-        //checkMySize();
+        values = Conversion.wrapText (value);
     }
 
-    /*public void checkMySize() {
-      if (myg == null) {
-      return;
-      }
-      int desiredWidth = minWidth;
-      for(int i=0; i< values.length; i++) {
-      desiredWidth = Math.max(desiredWidth, myg.getFontMetrics().stringWidth(values[i]) + marginX);
-      }
-
-      int desiredHeight = values.length * myg.getFontMetrics().getHeight() + marginY;
-
-      if ((desiredWidth != width) || (desiredHeight != height)) {
-      resize(desiredWidth, desiredHeight);
-      }
-      }*/
-
     public boolean editOndoubleClick(JFrame frame) {
-        String oldValue = value;
+        String oldValue = this.value;
 
         JDialogNote jdn = new JDialogNote(frame, "Setting the note", value);
-        //jdn.setLocation(200, 150);
         GraphicLib.centerOnParent(jdn);
         jdn.show(); // blocked until dialog has been closed
 
-        String s = jdn.getText();
-        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-            String tmp = s;
-            /*s = GTURTLEModeling.removeForbiddenCharactersFromInput(s);
-              s = Conversion.replaceAllChar(s, '&', " ");
-              s = Conversion.replaceAllChar(s, '"', " ");
-
-              if(s.compareTo(tmp) != 0) {
-              JOptionPane.showMessageDialog(frame, "Forbidden characters have been removed from the note", "Error", JOptionPane.INFORMATION_MESSAGE);
-              }*/
-            setValue(s);
-            makeValue();
+        String s = jdn.getText ();
+        if (s != null && s.length() > 0 && !s.equals(oldValue)) {
+            this.setValue (s);
+            this.makeValue ();
             return true;
         }
         return false;
@@ -253,9 +222,9 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
     }
 
     protected String translateExtraParam() {
-        if (values == null) {
-            makeValue();
-        }
+        if (values == null)
+            this.makeValue();
+
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         for(int i=0; i<values.length; i++) {
             sb.append("<Line value=\"");

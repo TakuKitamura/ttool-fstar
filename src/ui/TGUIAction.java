@@ -344,6 +344,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ASMD_STOP = 294;
     public static final int ASMD_SEND_SIGNAL = 296;
     public static final int ASMD_RECEIVE_SIGNAL = 297;
+    public static final int ASMD_LIBRARY_FUNCTION_CALL = 432;
     public static final int ASMD_PARALLEL = 298;
     public static final int ASMD_STATE = 299;
     public static final int ASMD_CHOICE = 325;
@@ -1061,6 +1062,8 @@ public class TGUIAction extends AbstractAction {
         actions[ASMD_STOP] = new TAction("add-asmd-stop", "Add Stop", IconManager.imgic210, IconManager.imgic210, "Stop", "Add a termination state to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_SEND_SIGNAL] = new TAction("add-asmd-sendsignal", "Send signal", IconManager.imgic904, IconManager.imgic904, "Send signal", "Add a send signal operator to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_RECEIVE_SIGNAL] = new TAction("add-asmd-receivesignal", "Receive signal", IconManager.imgic908, IconManager.imgic908, "Receive signal", "Add a receive signal operator to the currently opened AVATAR state machine diagram", 0);
+        // TODO: change icon
+        actions[ASMD_LIBRARY_FUNCTION_CALL] = new TAction("add-asmd-libraryfunctioncall", "Library function call", IconManager.imgic904, IconManager.imgic904, "Library function call", "Add a library function call to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_PARALLEL] = new TAction("add-asmd-parallel", "Parallel", IconManager.imgic206, IconManager.imgic206, "Parallel", "Add a parallel operator to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_STATE] = new TAction("add-asmd-state", "State", IconManager.imgic5036, IconManager.imgic5036, "State", "Add a new state to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_CHOICE] = new TAction("add-asmd-choice", "Add Choice", IconManager.imgic208, IconManager.imgic208, "Choice", "Add a choice - non-deterministic or guarded - to the currently opened AVATAR state machine diagram", 0);

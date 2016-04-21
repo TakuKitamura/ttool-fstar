@@ -95,6 +95,7 @@ public class AVATAR2TPN {
         tpn = new TPN();
 
         avspec.removeCompositeStates();
+        avspec.removeLibraryFunctionCalls ();
         avspec.removeTimers();
 
         makeBlocks();
