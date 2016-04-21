@@ -213,6 +213,14 @@ public class JDialogAvatarChannelArtifact extends javax.swing.JDialog implements
         return tmp.substring(index+2, tmp.length());
     }
 
+    public String getFullChannelName() {
+	return (String)(referenceDiagram.getSelectedItem());
+    }
+
+    public string getStatusInformation() {
+	return fullChannelName;
+    }
+
 
     public int indexOf(Vector<String> _list, String name) {
         int i = 0;

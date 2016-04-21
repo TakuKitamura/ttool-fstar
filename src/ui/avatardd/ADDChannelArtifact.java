@@ -69,6 +69,7 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
     protected String oldValue = "";
     protected String referenceDiagram = "referenceToDiagram";
     protected String channelName = "channelName";
+    protected String fullChannelName = "fullChannelName";
 
     public ADDChannelArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -164,27 +165,13 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
         if (dialog.getReferenceDiagram().length() != 0) {
             tmp = dialog.getReferenceDiagram();
             referenceDiagram= tmp;
-
-
         }
 
         if (dialog.getChannelName().length() != 0) {
             channelName = dialog.getChannelName();
-
-            /*if (!TAttribute.isAValidId(tmp, false, false)) {
-              error = true;
-              } else {
-              channelName = tmp;
-              }*/
+	    fullChannelName = dialog.getFullChannelName();
         }
 
-
-        /*if (error) {
-          JOptionPane.showMessageDialog(frame,
-          "Name is non-valid",
-          "Error",
-          JOptionPane.INFORMATION_MESSAGE);
-          }*/
 
         makeFullValue();
 
@@ -195,7 +182,7 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
 
     //DG rudimentary parsing to obtain shorter channel names
     private void makeFullValue() {
-        String newChannelName=channelName;
+        String newChannelName = channelName;
         int pos1=channelName.indexOf('(');
         if(pos1 != -1) {
             int pos2=channelName.lastIndexOf(')');
@@ -230,7 +217,7 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
 
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<info value=\"" + value + "\" channelName=\"" + channelName + "\" referenceDiagram=\"");
+        sb.append("<info value=\"" + value + "\" channelName=\"" + channelName + "\" fullChannelName=\"" + fullChannelName + "\" referenceDiagram=\"");
         sb.append(referenceDiagram);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
@@ -245,7 +232,7 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
             Node n1, n2;
             Element elt;
             int t1id;
-            String svalue = null, sname = null, sreferenceTask = null;
+            String svalue = null, sname = null, fname = null, sreferenceTask = null;
             String prio;
 
             for(int i=0; i<nl.getLength(); i++) {
@@ -261,6 +248,7 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
                             if (elt.getTagName().equals("info")) {
                                 svalue = elt.getAttribute("value");
                                 sname = elt.getAttribute("channelName");
+				fname = elt.getAttribute("fullChannelName");
                                 sreferenceTask = elt.getAttribute("referenceDiagram");
 
                             }
@@ -270,6 +258,11 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
                             if (sname != null){
                                 channelName = sname;
                             }
+			    if (fname != null){
+                                fullChannelName = fname;
+                            } else {
+				fullChannelName = channelName;
+			    }
                             if (sreferenceTask != null) {
                                 referenceDiagram = sreferenceTask;
                             }
@@ -299,6 +292,10 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
 
     public String getChannelName() {
         return channelName;
+    }
+
+    public String getLongChannelName() {
+        return fullChannelName;
     }
 
 }

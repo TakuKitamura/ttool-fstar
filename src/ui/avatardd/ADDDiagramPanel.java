@@ -52,6 +52,7 @@ import org.w3c.dom.*;
 import java.util.*;
 
 import ui.*;
+import myutil.*;
 
 public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
     private int masterClockFrequency = 200; // in MHz
@@ -277,7 +278,8 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
                 v =  ((ADDRAMNode)(tgc)).getArtifactList();
                 for(i=0; i<v.size(); i++) {
                     artifact = (ADDChannelArtifact)(v.get(i));
-                    if (artifact.getValue().equals(name)) {
+		    TraceManager.addDev("Comparing "  + artifact.getLongChannelName() + " with " + name);
+                    if (artifact.getLongChannelName().equals(name)) {
                         return true;
                     }
                 }

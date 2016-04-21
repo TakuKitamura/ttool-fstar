@@ -168,7 +168,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     JFrameBird birdframe;
     private boolean hasChanged = false;
 
-    //@autho: Huy TRUONG
+    //@author: Huy TRUONG
     public JDialogSearchBox searchBox;
     //--
 
@@ -250,7 +250,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
     //TURTLE modeling graphic components
-    private     JTabbedPane mainTabbedPane;
+    private JTabbedPane mainTabbedPane;
     private JToolBarMainTurtle mainBar;
     //private JPopupMenu menuTabbedPane;
 
