@@ -61,7 +61,7 @@ public class IconManager {
     //Added by Solange
     public static ImageIcon imgic0, imgic1;
     public static Image img8, img9;
-    public static Image img5100, img5102;
+    public static Image img5100, img5102, img5200;
     //Added by Solange
     public static Image img0, img1;
 
@@ -152,6 +152,7 @@ public class IconManager {
 
     public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
     public static ImageIcon imgic5110, imgic5112, imgic5113,imgic5114;
+    public static ImageIcon imgic5200;
 
     // Delegate ports image removed, by Solange
     //public static ImageIcon imgic2102;
@@ -405,7 +406,7 @@ public class IconManager {
     // Deployment diagrams
     private static String icon700 = "images/ddnode.gif";
     private static String icon702 = "images/ddartifact.gif";
-
+    
 
 
     // TML
@@ -576,6 +577,10 @@ public class IconManager {
     private static String icon5112 = "images/invariantbig.gif";
     private static String icon5113 = "images/toolbarButtonGraphics/general/Search16_E.gif";
     private static String icon5114 = "images/toolbarButtonGraphics/general/Search16_I.gif";
+
+    // Avatar DD
+    private static String icon5200 = "images/search-ideogram-25px.png";
+   
     private static String icon6000 = "images/toolbarButtonGraphics/general/pragma16.gif";
     private static String icon6001 = "images/toolbarButtonGraphics/general/pragma24.gif";
     private static String icon6002 = "images/toolbarButtonGraphics/general/safepragma16.gif";
@@ -976,6 +981,11 @@ public class IconManager {
         imgic5112 = getIcon(icon5112);
         imgic5113 = getIcon(icon5113);
         imgic5114 = getIcon(icon5114);
+
+	imgic5200 = getIcon(icon5200);
+	if (imgic5200 != null) {
+            img5200 = imgic5200.getImage();
+        }
 
         imgic6000 = getIcon(icon6000);
 	imgic6001 = getIcon(icon6001);
