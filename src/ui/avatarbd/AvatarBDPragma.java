@@ -372,7 +372,9 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         }
         return null;
     }
-
+   public String getToolTipText() {
+	return "The lock shows status of weak and strong authenticity. Green: Proved True, Red: Proved False, Grey: Cannot be proved";
+    }
     public void rescale(double scaleFactor){
         /*dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
           lineHeight = (int)(dlineHeight);

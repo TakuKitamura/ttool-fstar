@@ -1565,7 +1565,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
         }
         return -1;
     }
-
+    public String getToolTipText(){
+	return "";
+    }
     public void drawTGConnectingPoint(Graphics g) {
 
         for (int i=0; i<nbConnectingPoint; i++) {

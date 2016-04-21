@@ -700,19 +700,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         TGComponent tmp = componentPointed;
         componentPointed = null;
-
+	this.setToolTipText(null);
         for (TGComponent tgc: this.componentList) {
             //state = tgc.getState();
             tgcTmp = tgc.isOnMeHL(x, y);
             if (tgcTmp != null) {
-                if (tgcTmp instanceof AvatarBDPragma){
-                    this.setToolTipText("The lock shows status of weak and strong authenticity. Green: Proved True, Red: Proved False, Grey: Cannot be proved");
-                } else {
-                    this.setToolTipText("");
-                }
                 if (!pointedElementFound) {
                     componentPointed = tgcTmp;
                     tgc.setState(TGState.POINTED);
+		    String tooltip = componentPointed.getToolTipText();
+		    if (tooltip!=null && tooltip.length()>0){
+		    	this.setToolTipText(tooltip);
+		    }
 		    String tmpinfo = componentPointed.getStatusInformation();
 		    if (tmpinfo != null) { mgui.setStatusBarText(tmpinfo);}
                     pointedElementFound = true;
