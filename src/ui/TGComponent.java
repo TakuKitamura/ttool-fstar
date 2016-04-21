@@ -286,7 +286,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public String getStatusInformation() {
-	return null;
+	return " ";
     }
 
 

@@ -298,4 +298,8 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
         return fullChannelName;
     }
 
+    public String getStatusInformation() {
+	return fullChannelName;
+    }
+
 }

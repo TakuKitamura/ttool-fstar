@@ -1865,7 +1865,19 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void setStatusBarText(String s) {
         // captitalizeFirstLetter
-        status.setText(s.substring(0, 1).toUpperCase() + s.substring(1, s.length()));
+	if (s == null)  {
+	    return;
+	}
+
+	if (s.length() == 0) {
+	    return;
+	}
+
+	if (s.length() > 1) {
+	    status.setText(s.substring(0, 1).toUpperCase() + s.substring(1, s.length()));
+	} else {
+	    status.setText(s);
+	}
     }
 
     public void reinitMainTabbedPane() {

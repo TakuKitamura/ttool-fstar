@@ -713,6 +713,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 if (!pointedElementFound) {
                     componentPointed = tgcTmp;
                     tgc.setState(TGState.POINTED);
+		    String tmpinfo = componentPointed.getStatusInformation();
+		    if (tmpinfo != null) { mgui.setStatusBarText(tmpinfo);}
                     pointedElementFound = true;
                     info = 2;
                 } else {
