@@ -106,7 +106,10 @@ public  class ADDConnector extends TGConnector  {
             GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
         }*/
     }
-    
+
+    public boolean hasASpy() {
+	return hasASpy;
+    }
     
     public int getType() {
         return TGComponentManager.ADD_CONNECTOR;
