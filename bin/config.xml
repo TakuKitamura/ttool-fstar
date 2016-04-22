@@ -62,11 +62,11 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /users/enseig/genius/TURTLE/uppaal/spec.xml"/>
 
-<LastOpenFile data="/users/enseig/genius/TURTLE/modeling/DASIP2016/DASIP2016_2RAM.xml"/>
+<LastOpenFile data="/users/enseig/genius/TURTLE/modeling/MicroWaveOven_SimpleAsynchronousDeploy3CPU2RAM.xml"/>
 
 
 
-<LastWindowAttributes x="70" y="25" width="1554" height="881" max="false" />
+<LastWindowAttributes x="126" y="25" width="1554" height="938" max="false" />
 
 
 <ProVerifHash data=""/>
