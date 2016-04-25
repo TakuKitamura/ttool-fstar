@@ -268,6 +268,10 @@ public class Main implements ActionListener {
                 ColorManager.noColor();
             }
 
+	    if (args[i].compareTo("-turtle") == 0) {
+		turtle = true;
+            }
+
         }
 
         // Icons
