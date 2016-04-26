@@ -170,7 +170,7 @@ public class TURTLEModelingDrawer {
     
     public void addAttributes(TClass t, TCDTClass tcd) throws MalformedTURTLEModelingException {
         Vector params = t.getParamList();
-        Vector attributes = new Vector();
+        LinkedList<TAttribute> attributes = new LinkedList<TAttribute> ();
         Param p;
         TAttribute ta;
         
@@ -196,7 +196,7 @@ public class TURTLEModelingDrawer {
     
     public void addGates(TClass t, TCDTClass tcd) throws MalformedTURTLEModelingException {
         Vector tmgates = t.getGateList();
-        Vector gates = new Vector();
+        LinkedList<TAttribute> gates = new LinkedList<TAttribute> ();
         Gate g;
         TAttribute ta;
         
@@ -643,7 +643,7 @@ public class TURTLEModelingDrawer {
     
     // If invocation / synchro -> set synchronization gates
     public void makeGates(TGComponent operator, Relation r, TCDTClass t1, TCDTClass t2)  throws MalformedTURTLEModelingException {
-        Vector gates = null;
+        LinkedList<TTwoAttributes> gates = null;
         TTwoAttributes tt;
         TAttribute ta1, ta2;
         Gate g1, g2;

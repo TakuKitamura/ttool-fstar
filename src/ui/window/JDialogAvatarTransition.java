@@ -58,7 +58,8 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
 
     private Vector<String> actions;
     private String guard, afterMin, afterMax, computeMin, computeMax;
-    private Vector myAttributes, myMethods;
+    private LinkedList<TAttribute> myAttributes;
+    private LinkedList<AvatarMethod> myMethods;
     private Vector<String> allElements, insertElements;
 
     protected String [] filesToInclude;
@@ -85,7 +86,7 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
 
     /** Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-    public JDialogAvatarTransition(Frame _f, String _title, String _guard, String _afterMin, String _afterMax, String _computeMin, String _computeMax, Vector<String> _actions, Vector _myAttributes, Vector _myMethods, String[] _filesToInclude, String[] _codeToInclude) {
+    public JDialogAvatarTransition(Frame _f, String _title, String _guard, String _afterMin, String _afterMax, String _computeMin, String _computeMax, Vector<String> _actions, LinkedList<TAttribute> _myAttributes, LinkedList<AvatarMethod> _myMethods, String[] _filesToInclude, String[] _codeToInclude) {
 
         super(_f, _title, true);
 
@@ -111,20 +112,16 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
 
     private void makeElements() {
         int i;
-        TAttribute ta;
-        AvatarMethod am;
 
         allElements = new Vector<String>();
         insertElements = new Vector<String>();
 
-        for(i=0; i<myAttributes.size(); i++) {
-            ta = (TAttribute)(myAttributes.get(i));
+        for (TAttribute ta: myAttributes) {
             allElements.add(ta.toString());
             insertElements.add(ta.getId());
         }
 
-        for(i=0; i<myMethods.size(); i++) {
-            am = (AvatarMethod)(myMethods.get(i));
+        for (AvatarMethod am: myMethods) {
             allElements.add(am.toString());
             insertElements.add(am.getUseDescription());
         }

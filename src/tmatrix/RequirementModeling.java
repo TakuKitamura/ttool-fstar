@@ -63,7 +63,7 @@ public class RequirementModeling {
     protected static final String BAD_FORMATTING = "Bad formal description";
     
     private LinkedList matrix;
-    private Vector errors, warnings;
+    private LinkedList<CheckingError> errors, warnings;
     
     private MainGUI mgui;
     
@@ -72,8 +72,8 @@ public class RequirementModeling {
         mgui = _mgui;
         
         matrix = new LinkedList();
-        errors = new Vector();
-        warnings = new Vector();
+        errors = new LinkedList<CheckingError> ();
+        warnings = new LinkedList<CheckingError> ();
         
         generateFirstMatrix(reqs, rdp);
         printMatrix();
@@ -186,11 +186,11 @@ public class RequirementModeling {
         }
     }
     
-    public Vector getCheckingErrors() {
+    public LinkedList<CheckingError> getCheckingErrors() {
         return errors;
     }
     
-    public Vector getWarnings() {
+    public LinkedList<CheckingError> getWarnings() {
         return warnings;
     }
     
@@ -226,7 +226,7 @@ public class RequirementModeling {
     private void buildTURTLEModelingFromTURTLEPanel(Requirements reqs, TURTLEPanel tp) {
         TURTLEModeling tm;
         CorrespondanceTGElement listE;
-        Vector errorstmp;
+        LinkedList<CheckingError> errorstmp;
         CheckingError ce;
         
         mgui.reinitCountOfPanels();

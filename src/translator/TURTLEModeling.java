@@ -1190,7 +1190,7 @@ public class TURTLEModeling {
 	}
 	
 	// To identify constant values -> applied to nat and booleans only 
-	public void removeUselessVariables(Vector warnings) {
+	public void removeUselessVariables(LinkedList<CheckingError> warnings) {
 		 TClass t;
 		 for(int i=0; i<tclass.size(); i++) {
             t = (TClass)(tclass.elementAt(i));
@@ -1198,7 +1198,7 @@ public class TURTLEModeling {
 		 }
 	}
 	
-	public void removeUselessVariables(TClass t, Vector warnings) {
+	public void removeUselessVariables(TClass t, LinkedList<CheckingError> warnings) {
 		int i;
 		int usage;
 		Param p; 
@@ -1484,7 +1484,7 @@ public class TURTLEModeling {
 	}
 	
 	// To identify constant values -> applied to nat and booleans only 
-	public void removeUselessGates(Vector warnings) {
+	public void removeUselessGates(LinkedList<CheckingError> warnings) {
 		 TClass t;
 		 for(int i=0; i<tclass.size(); i++) {
             t = (TClass)(tclass.elementAt(i));
@@ -1492,7 +1492,7 @@ public class TURTLEModeling {
 		 }
 	}
 	
-	public void removeUselessGates(TClass t, Vector warnings) {
+	public void removeUselessGates(TClass t, LinkedList<CheckingError> warnings) {
 		int i;
 		Gate g;
 		CheckingError error;
@@ -1515,7 +1515,7 @@ public class TURTLEModeling {
 	}
 	
 	// Returns 1 if gate is used; 0 otherwise
-	public int usageGate(TClass t, Gate g, Vector warnings) {
+	public int usageGate(TClass t, Gate g, LinkedList<CheckingError> warnings) {
 		Relation r;
 		int i, usage;
 		Gate og;

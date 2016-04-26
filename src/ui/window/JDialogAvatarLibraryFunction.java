@@ -986,7 +986,6 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
                 this.methodText.setText (am.toString());
             }
         } else { // Attributes
-            TAttribute a = (TAttribute) (this.attributes[selectedTab].get (i));
             JTextField textField, initialValue;
             JComboBox<String> accessBox, typeBox;
 
@@ -1007,13 +1006,21 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
                 typeBox = this.attributesTypeBox;
             }
 
-            textField.setText (a.getId ());
-            initialValue.setText(a.getInitialValue());
-            this.select (accessBox, a.getStringAccess(a.getAccess()));
-            if (a.getType() == TAttribute.OTHER)
-                this.select (typeBox, a.getTypeOther());
-            else
-                this.select(typeBox, a.getStringAvatarType(a.getType()));
+            if (i == -1) {
+                textField.setText ("");
+                initialValue.setText ("");
+                accessBox.setSelectedIndex(0);
+                typeBox.setSelectedIndex(0);
+            } else {
+                TAttribute a = (TAttribute) (this.attributes[selectedTab].get (i));
+                textField.setText (a.getId ());
+                initialValue.setText(a.getInitialValue());
+                this.select (accessBox, a.getStringAccess(a.getAccess()));
+                if (a.getType() == TAttribute.OTHER)
+                    this.select (typeBox, a.getTypeOther());
+                else
+                    this.select (typeBox, a.getStringAvatarType(a.getType()));
+            }
         }
     }
 

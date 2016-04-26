@@ -50,12 +50,13 @@ import java.util.*;
 import tpndescription.*;
 import myutil.*;
 import translator.*;
+import ui.CheckingError;
 
 public class TURTLE2TPN {
     
     private TPN tpn;
     private TURTLEModeling tm;
-    private Vector warnings;
+    private LinkedList<CheckingError> warnings;
     private LinkedList tmpComponents;
     private LinkedList entryPlaces;
     private LinkedList exitPlaces;
@@ -80,12 +81,12 @@ public class TURTLE2TPN {
         return tpn.toString();
     }
     
-    public Vector getWarnings() {
+    public LinkedList<CheckingError> getWarnings() {
         return warnings;
     }
     
     public TPN generateTPN(boolean _debug) {
-        warnings = new Vector();
+        warnings = new LinkedList<CheckingError> ();
         tpn = new TPN();
         tmpComponents = new LinkedList();
         entryPlaces = new LinkedList();
@@ -169,7 +170,7 @@ public class TURTLE2TPN {
             translateADComponents(t, adc.getNext(0), p1);
         } else {
             // Operator is ignored
-            warnings.add("Operator " + adc + " is not a recognized operator -> ignored");
+            warnings.add(new CheckingError (CheckingError.BEHAVIOR_ERROR, "Operator " + adc + " is not a recognized operator -> ignored"));
             addComponentRef(adc, p, p);
             translateADComponents(t, adc.getNext(0), p);
         }
@@ -218,11 +219,11 @@ public class TURTLE2TPN {
         }
         
         if (p == null) {
-            warnings.add("Delay (" + delay + ") is not a valid delay -> ignoring delay");
+            warnings.add(new CheckingError (CheckingError.BEHAVIOR_ERROR, "Delay (" + delay + ") is not a valid delay -> ignoring delay"));
             return -1;
         }
         
-        warnings.add("Delay (" + delay + ") is set as delay("+ value + ")"); 
+        warnings.add(new CheckingError (CheckingError.BEHAVIOR_ERROR, "Delay (" + delay + ") is set as delay("+ value + ")"));
         return value;
     }
     

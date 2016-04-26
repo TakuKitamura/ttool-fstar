@@ -112,7 +112,7 @@ public class TCDTData extends TGCWithInternalComponent {
     }
     
     public void reset() {
-        ((TCDReducedAttributeBox)tgcomponent[0]).setAttributes(new Vector());
+        ((TCDReducedAttributeBox)tgcomponent[0]).setAttributes(new LinkedList<TAttribute> ());
         ((TCDReducedAttributeBox)tgcomponent[0]).checkMySize();
     }
     
@@ -289,51 +289,38 @@ public class TCDTData extends TGCWithInternalComponent {
         return false;
     }
     
-    public void resetAttributes(Vector v) {
-        Vector setV = new Vector();
-        TAttribute ta;
-        for(int i=0; i<v.size(); i++) {
-            ta = (TAttribute)(v.elementAt(i));
-            setV.addElement(ta.makeClone());
-        }
+    public void resetAttributes(LinkedList<TAttribute> v) {
+        LinkedList<TAttribute> setV = new LinkedList<TAttribute> ();
+        for (TAttribute ta: v)
+            setV.add (ta.makeClone());
+
         ((TCDReducedAttributeBox)tgcomponent[0]).setAttributes(setV);
         ((TCDReducedAttributeBox)tgcomponent[0]).checkMySize();
     }
     
-    public void updateAttributes(Vector v) {
-        Vector setV = ((TCDReducedAttributeBox)tgcomponent[0]).getAttributes();
+    public void updateAttributes(LinkedList<TAttribute> v) {
+        LinkedList<TAttribute> setV = ((TCDReducedAttributeBox)tgcomponent[0]).getAttributes();
         int size = setV.size();
-        TAttribute ta1, ta2 = null;
-        int i, j;
-        boolean found;
         
         // adapt old vector to the new attributes
-        for(i=0; i<v.size(); i++) {
-            ta1 = (TAttribute)(v.elementAt(i));
-            found = false;
+        for (TAttribute ta1: v) {
+            boolean found = false;
             
             // is in vector?
-            for(j=0; j<setV.size(); j++) {
-                ta2 = (TAttribute)(setV.elementAt(j));
-                if (ta1.getId().compareTo(ta2.getId()) == 0) {
-                    if ((ta2.isSet()) && (ta1.getType() == ta2.getType())) {
-                        found = true;
-                        break;
-                    }
+            for (TAttribute ta2: setV)
+                if (ta1.getId().compareTo(ta2.getId()) == 0 && ta2.isSet() && ta1.getType() == ta2.getType()) {
+                    found = true;
+                    setV.add (ta2);
+                    break;
                 }
-            }
             
-            if (!found) {
-                setV.addElement(ta1.makeClone());
-            } else {
-                setV.addElement(ta2);
-            }
+            if (!found)
+                setV.add (ta1.makeClone());
         }
         
         // Remove first elements
-        for(i=0; i<size; i++) {
-            setV.removeElementAt(0);
-        }
+        for(int i=0; i<size; i++)
+            setV.remove (0);
         
         ((TCDReducedAttributeBox)tgcomponent[0]).setAttributes(setV);
         ((TCDReducedAttributeBox)tgcomponent[0]).checkMySize();
@@ -351,7 +338,7 @@ public class TCDTData extends TGCWithInternalComponent {
         return TGComponentManager.TCD_TDATA;
     }
     
-    public Vector getAttributes(){
+    public LinkedList<TAttribute> getAttributes(){
         return ((TGCAttributeBox)(tgcomponent[0])).getAttributeList();
     }
     

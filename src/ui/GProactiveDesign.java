@@ -75,7 +75,7 @@ public class GProactiveDesign  {
     private LinkedList connectorsPortInterfacesList=new LinkedList();
     private LinkedList interfacesList =new LinkedList(); //list of ProCSDInterface
     private LinkedList ProCSDComponentsList=new LinkedList();
-    private Vector checkingErrors=new Vector(); 
+    private LinkedList<CheckingError> checkingErrors=new LinkedList<CheckingError> (); 
   //  private CorrespondanceTGElement listE;
     private CorrespondanceSMDManager corespManager;
     private boolean buildErrors;
@@ -93,7 +93,7 @@ public class GProactiveDesign  {
 
     
     private void init()
-    {   checkingErrors = new Vector();
+    {   checkingErrors = new LinkedList<CheckingError> ();
       //  listE = new CorrespondanceTGElement();
     	portsList=new LinkedList(); //list of ProCSDPort 
         connectorsList =new LinkedList(); //list of TGConnectorProCSD
@@ -2097,11 +2097,11 @@ public class GProactiveDesign  {
     */ 
    
     
-    public Vector getCheckingWarnings() {
+    public LinkedList<CheckingError> getCheckingWarnings() {
         return null;
     }
     
-    public Vector getCheckingErrors() {
+    public LinkedList<CheckingError> getCheckingErrors() {
     	return checkingErrors;
     }
     

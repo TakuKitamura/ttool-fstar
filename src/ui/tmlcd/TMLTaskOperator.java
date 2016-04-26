@@ -275,7 +275,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
         return TGComponentManager.TMLTD_TASK;
     }
     
-    public Vector getAttributes(){
+    public LinkedList<TAttribute> getAttributes(){
         return ((TMLAttributeBox)(tgcomponent[0])).getAttributeList();
     }
     
@@ -284,7 +284,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
         ((TMLAttributeBox)(tgcomponent[0])).checkMySize();
     }
     
-    public void setAttributes(Vector attributes) {
+    public void setAttributes(LinkedList<TAttribute> attributes) {
         ((TMLAttributeBox)(tgcomponent[0])).setAttributeList(attributes);
     }
     

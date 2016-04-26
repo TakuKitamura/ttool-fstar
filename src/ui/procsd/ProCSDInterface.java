@@ -76,7 +76,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
     
 	// implements also SwallowedTGComponent ??? to see... 
 	private boolean removedFromPanel=false;
-	private Vector<TAttribute> myMessages;
+	private LinkedList<TAttribute> myMessages;
      protected Graphics myG;
      protected boolean showMessages=false,lastVisible;
      private JMenuItem showMsgs;
@@ -101,7 +101,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	        value="InterfaceName"; 
 	        editable = true;
 	        userResizable=true;
-	        myMessages=new Vector();
+	        myMessages=new LinkedList<TAttribute> ();
 	        
 	        // Changed of place by Solange
 	        //Antes era showMsgs = new JMenuItem("show messages");
@@ -132,9 +132,9 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	}
 	
 	
-	public void setMessages(Collection messages)
+	public void setMessages(Collection<TAttribute> messages)
 	{
-		this.myMessages=new Vector(messages);
+		this.myMessages=new LinkedList<TAttribute> (messages);
 	}
 	
 	
@@ -238,7 +238,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	        	//Changed from TAttribute all over the file, by Solange
 	            TAttribute a;
 	            for(int i=0; i<myMessages.size(); i++) {
-	                a = (TAttribute)(myMessages.elementAt(i));
+	                a = myMessages.get (i);
 	              
 	                if (((ProactiveCSDPanel) tdp).getMyFont() == ProactiveCSDPanel.BIG_FONT)
 	       		 {
@@ -261,14 +261,14 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	        return TGComponentManager.PROCSD_INTERFACE;
 	    }
 	
-	  public LinkedList getMyMessages()
+	  public LinkedList<TAttribute> getMyMessages()
 	  {
-		  return new LinkedList(myMessages);
+		  return (LinkedList<TAttribute>) myMessages.clone ();
 	  }
 	    public boolean editOndoubleClick(JFrame frame) {
 	       
 	    	//Changed from JDialogAttribute, by Solange
-	        JDialogAttributeProCSD dialog = new JDialogAttributeProCSD(myMessages, new Vector(), frame, "Setting messages of this interface" , "message");
+	        JDialogAttributeProCSD dialog = new JDialogAttributeProCSD(myMessages, new LinkedList<TAttribute> (), frame, "Setting messages of this interface" , "message");
 	        //setJDialogOptions(jda);
 	        dialog.addAccess("+");
 	        //dialog.addAccess("-");
@@ -373,7 +373,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	        
 	        TAttribute a;
 	        for(int i=0; i<myMessages.size(); i++) {
-	            a = (TAttribute)(myMessages.elementAt(i));
+	            a = myMessages.get (i);
 	            desiredWidth = Math.max(desiredWidth,  myG.getFontMetrics().stringWidth(a.toString()) + 2 * textX);
 	        }
 	        
@@ -459,7 +459,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	        for(int i=0; i<myMessages.size(); i++) {
 	            //System.out.println("Attribute:" + i);
                 //Changed from TAttribute, by Solange
-	            a = (TAttribute)(myMessages.elementAt(i));
+	            a = myMessages.get (i);
 	            //System.out.println("Attribute:" + i + " = " + a.getId());        
 	            sb.append("<Attribute access=\"");
 	            sb.append(a.getAccess());
@@ -538,7 +538,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	                                    //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
 	                                	
 	                                    TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-	                                    myMessages.addElement(ta);
+	                                    myMessages.add (ta);
 	                                }
 	                            }
 	                            if (elt.getTagName().equals("ShowMessages")) {

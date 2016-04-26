@@ -114,7 +114,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
     private int stateReachability;
 
-    private Vector warnings;
+    private LinkedList<CheckingError> warnings;
 
     public AVATAR2ProVerif(AvatarSpecification _avspec) {
         this.avspec = _avspec;
@@ -158,7 +158,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         return true;
     }
 
-    public Vector getWarnings() {
+    public LinkedList<CheckingError> getWarnings() {
         return this.warnings;
     }
 
@@ -169,7 +169,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize, int _stateReachability, boolean _typed) {
 
         this.stateReachability = _stateReachability;
-        this.warnings = new Vector();
+        this.warnings = new LinkedList<CheckingError> ();
         if (_typed)
             this.spec = new ProVerifSpec (new ProVerifPitypeSyntaxer ());
         else

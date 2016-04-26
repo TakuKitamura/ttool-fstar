@@ -60,7 +60,7 @@ public abstract class TCDCompositionOperatorWithSynchro extends TCDCompositionOp
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 	}
 	
-	public Vector getGates() {
+	public LinkedList<TTwoAttributes> getGates() {
 		return ((TCDSynchroGateList)tgcomponent[0]).getGates();	
 	}
         

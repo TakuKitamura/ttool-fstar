@@ -60,7 +60,7 @@ import myutil.*;
 public class JDialogSignalAssociation extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
     private Vector signalAssociation, localSignalAssociations;
     private AvatarBDBlock block1, block2;
-    private Vector available1, available2;
+    private LinkedList<AvatarSignal> available1, available2;
     private AvatarBDPortConnector connector;
 
     private JRadioButton synchronous, asynchronous;
@@ -374,29 +374,22 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 
 
         if ((i1 > -1) && (i2 > -1)) {
-            AvatarSignal as1 = (AvatarSignal)(available1.elementAt(i1));
-            AvatarSignal as2 = (AvatarSignal)(available2.elementAt(i2));
+            AvatarSignal as1 = available1.get (i1);
+            AvatarSignal as2 = available2.get (i2);
 
             addButton.setEnabled(as1.isCompatibleWith(as2));
         }
     }
 
     private void makeComboBoxes() {
-        signalsBlock1.removeAllItems();
-        signalsBlock2.removeAllItems();
+        signalsBlock1.removeAllItems ();
+        signalsBlock2.removeAllItems ();
 
-        int i;
-        AvatarSignal as;
-
-        for(i=0; i<available1.size(); i++) {
-            as = (AvatarSignal)(available1.elementAt(i));
+        for (AvatarSignal as: available1)
             signalsBlock1.addItem(as.toString());
-        }
 
-        for(i=0; i<available2.size(); i++) {
-            as = (AvatarSignal)(available2.elementAt(i));
+        for (AvatarSignal as: available2)
             signalsBlock2.addItem(as.toString());
-        }
     }
 
     public void addSignals() {
@@ -405,13 +398,13 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 
 
         if ((i1 > -1) && (i2 > -1)) {
-            AvatarSignal as1 = (AvatarSignal)(available1.elementAt(i1));
-            AvatarSignal as2 = (AvatarSignal)(available2.elementAt(i2));
+            AvatarSignal as1 = available1.get (i1);
+            AvatarSignal as2 = available2.get (i2);
 
             String s = connector.makeSignalAssociation(block1, as1, block2, as2);
             localSignalAssociations.add(s);
-            available1.removeElementAt(i1);
-            available2.removeElementAt(i2);
+            available1.remove (i1);
+            available2.remove (i2);
             makeComboBoxes();
             listSignals.setListData(localSignalAssociations);
         }

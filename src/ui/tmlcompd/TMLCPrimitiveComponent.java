@@ -74,7 +74,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     private boolean attributesAreDrawn = false;
     public HashMap<String, Integer> attrMap = new HashMap<String, Integer>();
     public String mappingName;
-    protected Vector myAttributes;
+    protected LinkedList<TAttribute> myAttributes;
     private int textX = 15; // border for ports
     private double dtextX = 0.0;
 
@@ -111,7 +111,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
         myImageIcon = IconManager.imgic1202;
 
-        myAttributes = new Vector();
+        myAttributes = new LinkedList<TAttribute> ();
 
         actionOnAdd();
     }
@@ -215,7 +215,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                 if (cpt >= (height - textX)) {
                     break;
                 }
-                a = (TAttribute)(myAttributes.elementAt(index));
+                a = myAttributes.get (index);
                 attr = a.toString();
                 w = g.getFontMetrics().stringWidth(attr);
                 if ((w + (2 * textX) + 1) < width) {
@@ -456,7 +456,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
             return value;
         } else {
             if (index <= myAttributes.size()) {
-                return myAttributes.elementAt(index-1);
+                return myAttributes.get (index-1);
             } else {
                 return tgcomponent[index-1-myAttributes.size()];
             }
@@ -488,7 +488,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         for(int i=0; i<myAttributes.size(); i++) {
             //TraceManager.addDev("Attribute:" + i);
-            a = (TAttribute)(myAttributes.elementAt(i));
+            a = myAttributes.get (i);
             //TraceManager.addDev("Attribute:" + i + " = " + a.getId());
             //value = value + a + "\n";
             sb.append("<Attribute access=\"");
@@ -547,7 +547,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //TraceManager.addDev("Adding attribute " + id + " typeOther=" + typeOther);
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-                                    myAttributes.addElement(ta);
+                                    myAttributes.add (ta);
                                 }
                             }
                         }
@@ -564,7 +564,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         return currentFontSize;
     }
 
-    public Vector getAttributes() {
+    public LinkedList<TAttribute> getAttributes() {
         return myAttributes;
     }
 

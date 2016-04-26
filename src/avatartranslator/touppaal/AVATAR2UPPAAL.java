@@ -63,7 +63,7 @@ public class AVATAR2UPPAAL {
     private UPPAALSpec spec;
     private AvatarSpecification avspec;
 
-    private Vector warnings;
+    private LinkedList<CheckingError> warnings;
 
     private int currentX, currentY;
 
@@ -139,7 +139,7 @@ public class AVATAR2UPPAAL {
     }
 
 
-    public Vector getWarnings() {
+    public LinkedList<CheckingError> getWarnings() {
         return warnings;
     }
 
@@ -150,7 +150,7 @@ public class AVATAR2UPPAAL {
 	return translateString;
     }
     public UPPAALSpec generateUPPAAL(boolean _debug, boolean _optimize) {
-        warnings = new Vector();
+        warnings = new LinkedList<CheckingError>();
         hash = new Hashtable<AvatarStateMachineElement, UPPAALLocation>();
         hashChecking = new Hashtable<AvatarStateMachineElement, UPPAALLocation>();
 	translateString = new Hashtable<String, String>();

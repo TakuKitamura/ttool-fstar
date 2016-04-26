@@ -61,7 +61,7 @@ import myutil.*;
 public class JDialogTMLCPTransferInstance extends JDialogTMLSDInstance implements ActionListener, ListSelectionListener  {
 	
   /** Creates new form  */
-  public JDialogTMLCPTransferInstance( Vector _attributes, Vector _forbidden, Frame f, String title, String attrib, String _name )	{
+  public JDialogTMLCPTransferInstance( LinkedList<TAttribute> _attributes, LinkedList<TAttribute> _forbidden, Frame f, String title, String attrib, String _name )	{
 		super( _attributes, _forbidden, f, title, attrib, _name );
 	}
     
@@ -165,7 +165,7 @@ public class JDialogTMLCPTransferInstance extends JDialogTMLSDInstance implement
         panel1.add(addButton, c1);
         
         // 1st line panel2
-        listAttribute = new JList(attributes);
+        listAttribute = new JList<TAttribute> (attributes.toArray (new TAttribute[0]));
         //listAttribute.setFixedCellWidth(150);
         //listAttribute.setFixedCellHeight(20);
         listAttribute.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -234,9 +234,9 @@ public class JDialogTMLCPTransferInstance extends JDialogTMLSDInstance implement
     
  	@Override public void closeDialog() {
     	cancelled = false;
-      attributesPar.removeAllElements();
+      attributesPar.clear ();
       for(int i=0; i<attributes.size(); i++) {
-				attributesPar.addElement(attributes.elementAt(i));
+				attributesPar.add (attributes.get (i));
 			}
 			this.name = nameOfInstance.getText();
       dispose();

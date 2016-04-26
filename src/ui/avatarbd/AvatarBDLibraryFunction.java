@@ -40,7 +40,6 @@ package ui.avatarbd;
 
 import java.util.LinkedList;
 import java.util.Iterator;
-import java.util.Vector;
 
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
@@ -77,7 +76,7 @@ import ui.window.JDialogAvatarLibraryFunction;
  * @version 1.0 04.08.2016
  * @author Florian LUGOU
  */
-public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent, AvatarBDStateMachineOwner {
+public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent, AvatarBDStateMachineOwner, Comparable<AvatarBDLibraryFunction> {
 
     /**
      * Stereotype for standard library function.
@@ -965,8 +964,8 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     }
 
     @Override
-    public Vector<TAttribute> getAttributeList () {
-        Vector<TAttribute> list = new Vector<TAttribute> ();
+    public LinkedList<TAttribute> getAttributeList () {
+        LinkedList<TAttribute> list = new LinkedList<TAttribute> ();
         list.addAll (this.parameters);
         list.addAll (this.returnAttributes);
         list.addAll (this.attributes);
@@ -975,8 +974,8 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     }
 
     @Override
-    public Vector<String> getAllTimerList () {
-        Vector<String> v = new Vector<String> ();
+    public LinkedList<String> getAllTimerList () {
+        LinkedList<String> v = new LinkedList<String> ();
 
         for (TAttribute a: this.parameters)
             if (a.getType() == TAttribute.TIMER)
@@ -1006,12 +1005,19 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     }
 
     @Override
-    public Vector<AvatarSignal> getSignalList () {
-        return new Vector<AvatarSignal> (this.signals);
+    public LinkedList<AvatarSignal> getSignalList () {
+        return new LinkedList<AvatarSignal> (this.signals);
     }
 
     @Override
-    public Vector<AvatarSignal> getAllSignalList () {
+    public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctionList () {
+        if (this.getFather() == null)
+            return ((AvatarBDPanel) this.tdp).getFullLibraryFunctionList ();
+        return ((AvatarBDBlock) this.getFather()).getAllLibraryFunctionList();
+    }
+
+    @Override
+    public LinkedList<AvatarSignal> getAllSignalList () {
         return this.getSignalList ();
     }
 
@@ -1041,12 +1047,17 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     }
 
     @Override
-    public Vector<AvatarMethod> getMethodList () {
-        return new Vector<AvatarMethod> (this.methods);
+    public LinkedList<AvatarMethod> getMethodList () {
+        return new LinkedList<AvatarMethod> (this.methods);
     }
 
     @Override
-    public Vector<AvatarMethod> getAllMethodList () {
+    public LinkedList<AvatarMethod> getAllMethodList () {
         return this.getMethodList ();
+    }
+
+    @Override
+    public int compareTo (AvatarBDLibraryFunction f) {
+        return this.name.compareTo (f.getFunctionName ());
     }
 }

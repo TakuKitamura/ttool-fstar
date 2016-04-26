@@ -189,7 +189,7 @@ public class AvatarSMDExpireTimer extends AvatarSMDBasicComponent implements Bas
     }
 
     public boolean editOndoubleClick(JFrame frame) {
-        Vector timers = tdp.getMGUI().getAllTimers();
+        LinkedList<String> timers = tdp.getMGUI().getAllTimers();
         TraceManager.addDev("Nb of timers:" + timers.size());
 
         JDialogAvatarTimer jdat = new JDialogAvatarTimer(frame, "Timer expiration",  getTimerName(), "", timers, false);

@@ -78,7 +78,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent  {
 	
 	
 	// TAttribute, AvatarMethod, AvatarSignal
-	protected Vector<TAttribute> myAttributes;
+	protected LinkedList<TAttribute> myAttributes;
 	
 	public String oldValue;
     
@@ -112,7 +112,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent  {
         
         myImageIcon = IconManager.imgic700;
 		
-		myAttributes = new Vector<TAttribute> ();
+		myAttributes = new LinkedList<TAttribute> ();
 		
 		actionOnAdd();
     }
@@ -366,7 +366,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent  {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         for(int i=0; i<myAttributes.size(); i++) {
             //System.out.println("Attribute:" + i);
-            a = myAttributes.elementAt(i);
+            a = myAttributes.get (i);
             //System.out.println("Attribute:" + i + " = " + a.getId());
             //value = value + a + "\n";
             sb.append("<Attribute access=\"");
@@ -429,7 +429,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent  {
 									}
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
 									ta.isAvatar = true;
-                                    myAttributes.addElement(ta);
+                                    myAttributes.add (ta);
                                 }
                             }
                         }
@@ -450,7 +450,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent  {
         return TGComponentManager.AVATARBD_PORT_CONNECTOR;
 	}
 	
-	public Vector<TAttribute> getAttributeList() {
+	public LinkedList<TAttribute> getAttributeList() {
 		return myAttributes;
 	}
     

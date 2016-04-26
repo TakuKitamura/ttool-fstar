@@ -191,7 +191,7 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements BasicE
 	}
     
     public boolean editOndoubleClick(JFrame frame) {
-		Vector timers = tdp.getMGUI().getAllTimers();
+		LinkedList<String> timers = tdp.getMGUI().getAllTimers();
 		TraceManager.addDev("Nb of timers:" + timers.size());
 		
 		JDialogAvatarTimer jdat = new JDialogAvatarTimer(frame, "Setting timer set",  getTimerName(), getTimerValue(), timers, true);

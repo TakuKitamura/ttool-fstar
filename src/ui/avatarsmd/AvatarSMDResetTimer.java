@@ -185,7 +185,7 @@ public class AvatarSMDResetTimer extends AvatarSMDBasicComponent implements Basi
     }
     
     public boolean editOndoubleClick(JFrame frame) {
-		Vector timers = tdp.getMGUI().getAllTimers();
+		LinkedList<String> timers = tdp.getMGUI().getAllTimers();
 		TraceManager.addDev("Nb of timers:" + timers.size());
 		
 		JDialogAvatarTimer jdat = new JDialogAvatarTimer(frame, "Reset timer",  getTimerName(), "", timers, false);

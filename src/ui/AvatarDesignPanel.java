@@ -63,7 +63,6 @@ import myutil.*;
 
 public class AvatarDesignPanel extends TURTLEPanel {
     public AvatarBDPanel abdp;
-    //   public Vector validated, ignored;
 
 
     public AvatarDesignPanel(MainGUI _mgui) {
@@ -78,13 +77,13 @@ public class AvatarDesignPanel extends TURTLEPanel {
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
 
-    public void setValidated(Vector _validated) {
+    public void setValidated(LinkedList<AvatarBDStateMachineOwner> _validated) {
         if (abdp != null) {
             abdp.setValidated(_validated);
         }
     }
 
-    public void setIgnored(Vector _ignored) {
+    public void setIgnored(LinkedList<AvatarBDStateMachineOwner> _ignored) {
         if (abdp != null) {
             abdp.setIgnored(_ignored);
         }
@@ -96,14 +95,14 @@ public class AvatarDesignPanel extends TURTLEPanel {
         }
     }
 
-    public Vector getValidated() {
+    public LinkedList<AvatarBDStateMachineOwner> getValidated() {
         if (abdp != null) {
             return abdp.getValidated();
         }
         return null;
     }
 
-    public Vector getIgnored() {
+    public LinkedList<AvatarBDStateMachineOwner> getIgnored() {
         if (abdp != null) {
             return abdp.getIgnored();
         }
@@ -184,19 +183,23 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
     }
 
-    public Vector getAllAttributes(String _name) {
+    public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctions(String _name) {
+        return abdp.getAllLibraryFunctionsForBlock (_name);
+    }
+
+    public LinkedList<TAttribute> getAllAttributes(String _name) {
         return abdp.getAllAttributesOfBlock(_name);
     }
 
-    public Vector getAllMethods(String _name) {
+    public LinkedList<AvatarMethod> getAllMethods(String _name) {
         return abdp.getAllMethodsOfBlock(_name);
     }
 
-    public Vector getAllSignals(String _name) {
+    public LinkedList<AvatarSignal> getAllSignals(String _name) {
         return abdp.getAllSignalsOfBlock(_name);
     }
 
-    public Vector getAllTimers(String _name) {
+    public LinkedList<String> getAllTimers(String _name) {
         return abdp.getAllTimersOfBlock(_name);
     }
 
@@ -355,14 +358,12 @@ public class AvatarDesignPanel extends TURTLEPanel {
         LinkedList<AvatarAttribute> secretAttributes = pvoa.getSecretTerms ();
         LinkedList<AvatarAttribute> nonSecretAttributes = pvoa.getNonSecretTerms ();
         for (AvatarBDBlock bdBlock: abdp.getFullBlockList ())
-            for (Object tmpObj: bdBlock.getAttributeList ()) {
-                TAttribute tattr = (TAttribute) tmpObj;
+            for (TAttribute tattr: bdBlock.getAttributeList ()) {
                 if (tattr.getType () == TAttribute.OTHER) {
-                    Vector types = abdp.getAttributesOfDataType (tattr.getTypeOther ());
+                    LinkedList<TAttribute> types = abdp.getAttributesOfDataType (tattr.getTypeOther ());
                     int toBeFound = types.size ();
                     boolean ko = false;
-                    for (Object tmpObj2: types) {
-                        TAttribute type = (TAttribute) tmpObj2;
+                    for (TAttribute type: types) {
                         for(AvatarAttribute attribute: secretAttributes)
                             if (attribute.getBlock ().getName ().equals (bdBlock.getBlockName ()) && attribute.getName ().equals (tattr.getId () + "__" + type.getId ())) {
                                 toBeFound --;
@@ -483,14 +484,13 @@ public class AvatarDesignPanel extends TURTLEPanel {
                               if (! tattrA.getTypeOther ().equals (tattrB.getTypeOther ()))
                                   continue;
 
-                              Vector types = abdp.getAttributesOfDataType (tattrA.getTypeOther ());
+                              LinkedList<TAttribute> types = abdp.getAttributesOfDataType (tattrA.getTypeOther ());
                               int toBeFound = types.size ();
                               int weakLeft = types.size();
                               boolean ko = false;
                               boolean isNotProved = false;
 
-                              for (Object tmpObj: types) {
-                                  TAttribute type = (TAttribute) tmpObj;
+                              for (TAttribute type: types) {
                                   String evA = argA[0] + "__" + argA[2] + "__"+ type.getId () + "__" + argA[1];
                                   String evB = argB[0] + "__" + argB[2] + "__"+ type.getId () + "__" + argB[1];
                                   String ev = evB + " ==> " + evA;

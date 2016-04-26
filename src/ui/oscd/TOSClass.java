@@ -316,11 +316,11 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
         return TGComponentManager.TOSCD_TCLASS;
     }
 
-    public Vector getAttributes(){
+    public LinkedList<TAttribute> getAttributes(){
         return ((TGCAttributeBox)(tgcomponent[0])).getAttributeList();
     }
 
-    public Vector getGates() {
+    public LinkedList<TAttribute> getGates() {
         return ((TGCAttributeBox)(tgcomponent[1])).getAttributeList();
     }
 
@@ -329,11 +329,11 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
         ((TGCAttributeBox)(tgcomponent[1])).checkMySize();
     }
 
-    public void setAttributes(Vector attributes) {
+    public void setAttributes(LinkedList<TAttribute> attributes) {
         ((TGCAttributeBox)(tgcomponent[0])).setAttributeList(attributes);
     }
 
-    public void setGates(Vector gates) {
+    public void setGates(LinkedList<TAttribute> gates) {
         ((TGCAttributeBox)(tgcomponent[1])).setAttributeList(gates);
     }
 
@@ -345,14 +345,11 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
     } */
 
     public TAttribute getGateById(String name) {
-        TAttribute ta;
-        Vector list = ((TGCAttributeBox)(tgcomponent[1])).getAttributeList();
-        for(int i=0; i<list.size(); i++) {
-            ta = (TAttribute)(list.elementAt(i));
-            if (ta.getId().equals(name)) {
+        LinkedList<TAttribute> list = ((TGCAttributeBox)(tgcomponent[1])).getAttributeList();
+        for (TAttribute ta: list)
+            if (ta.getId().equals(name))
                 return ta;
-            }
-        }
+
         return null;
     }
 

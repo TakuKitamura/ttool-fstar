@@ -82,7 +82,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 	
 	private Font bigFont;
 
-	private Vector myAttributes;
+	private LinkedList<TAttribute> myAttributes;
 
 	private boolean showAttributes = false;
 	
@@ -124,14 +124,14 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		value = "ID";
 
 		myImageIcon = IconManager.imgic700;
-		myAttributes = new Vector();
+		myAttributes = new LinkedList<TAttribute> ();
 		bigFont = new Font("big Font", Font.BOLD, 16);
 	}
 
 	
 	public void setAttributes(Collection attribs)
 	{
-		myAttributes=new Vector(attribs);
+		myAttributes=new LinkedList<TAttribute> (attribs);
 	}
 
 	public String getNewPortCode()
@@ -524,7 +524,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		
 		if (e.getActionCommand().equals("edit attributes")) {
 			JDialogAttribute dialog = new JDialogAttribute(myAttributes,
-					new Vector(), tdp.getGUI().getFrame(),
+					new LinkedList<TAttribute> (), tdp.getGUI().getFrame(),
 					"Setting attributes for this component", "Attribute");
 			dialog.addAccess("-");
 			dialog.addType("Natural");
@@ -688,7 +688,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		for (int i = 0; i < myAttributes.size(); i++) {
 			// System.out.println("Attribute:" + i);
-			a = (TAttribute) (myAttributes.elementAt(i));
+			a = myAttributes.get (i);
 			// System.out.println("Attribute:" + i + " = " + a.getId());
 
 			sb.append("<Attribute access=\"");
@@ -773,7 +773,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 									TAttribute ta = new TAttribute(access, id,
 											valueAtt, type, typeOther);
 									// ta.setInitialValue(valueAtt);
-									myAttributes.addElement(ta);
+									myAttributes.add (ta);
 								}
 							}
 							if (elt.getTagName().equals("ShowAttributes")) {

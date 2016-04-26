@@ -140,9 +140,9 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
     public void reset() {
         masterTClass = null;
         makeValue();
-        ((TCDReducedAttributeBox)tgcomponent[0]).setAttributes(new Vector());
+        ((TCDReducedAttributeBox)tgcomponent[0]).setAttributes(new LinkedList<TAttribute> ());
         ((TCDReducedAttributeBox)tgcomponent[0]).checkMySize();
-        ((TCDReducedAttributeGateBox)tgcomponent[1]).setAttributes(new Vector());
+        ((TCDReducedAttributeGateBox)tgcomponent[1]).setAttributes(new LinkedList<TAttribute> ());
         ((TCDReducedAttributeGateBox)tgcomponent[1]).checkMySize();
     }
     
@@ -290,8 +290,8 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
         // Should attributes and Gates evolve
         if (masterTClass != oldMasterTClass) {
             if (masterTClass == null) {
-                resetAttributes(new Vector());
-                resetGates(new Vector());
+                resetAttributes(new LinkedList<TAttribute> ());
+                resetGates(new LinkedList<TAttribute> ());
             } else {
                 resetAttributes(masterTClass.getAttributes());
                 resetGates(masterTClass.getGates());
@@ -304,99 +304,75 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
         return true;
     }
     
-    public void resetAttributes(Vector v) {
-        Vector setV = new Vector();
-        TAttribute ta;
-        for(int i=0; i<v.size(); i++) {
-            ta = (TAttribute)(v.elementAt(i));
-            setV.addElement(ta.makeClone());
-        }
+    public void resetAttributes(LinkedList<TAttribute> v) {
+        LinkedList<TAttribute> setV = new LinkedList<TAttribute> ();
+        for (TAttribute ta: v)
+            setV.add (ta.makeClone());
+
         ((TCDReducedAttributeBox)tgcomponent[0]).setAttributes(setV);
         ((TCDReducedAttributeBox)tgcomponent[0]).checkMySize();
     }
     
-    public void resetGates(Vector v) {
-        Vector setV = new Vector();
-        TAttribute ta;
-        for(int i=0; i<v.size(); i++) {
-            ta = (TAttribute)(v.elementAt(i));
-            setV.addElement(ta.makeClone());
-        }
+    public void resetGates(LinkedList<TAttribute> v) {
+        LinkedList<TAttribute> setV = new LinkedList<TAttribute> ();
+        for (TAttribute ta: v)
+            setV.add (ta.makeClone());
+
         ((TCDReducedAttributeGateBox)tgcomponent[1]).setAttributes(setV);
         ((TCDReducedAttributeGateBox)tgcomponent[1]).checkMySize();
     }
     
-    public void updateAttributes(Vector v) {
-        Vector setV = ((TCDReducedAttributeBox)tgcomponent[0]).getAttributes();
+    public void updateAttributes(LinkedList<TAttribute> v) {
+        LinkedList<TAttribute> setV = ((TCDReducedAttributeBox)tgcomponent[0]).getAttributes();
         int size = setV.size();
-        TAttribute ta1, ta2 = null;
-        int i, j;
-        boolean found;
         
         // adapt old vector to the new attributes
-        for(i=0; i<v.size(); i++) {
-            ta1 = (TAttribute)(v.elementAt(i));
-            found = false;
+        for (TAttribute ta1: v) {
+            boolean found = false;
             
             // is in vector?
-            for(j=0; j<setV.size(); j++) {
-                ta2 = (TAttribute)(setV.elementAt(j));
-                if (ta1.getId().compareTo(ta2.getId()) == 0) {
-                    if ((ta2.isSet()) && (ta1.getType() == ta2.getType())) {
-                        found = true;
-                        break;
-                    }
+            for (TAttribute ta2: setV)
+                if (ta1.getId().compareTo(ta2.getId()) == 0 && ta2.isSet() && ta1.getType() == ta2.getType()) {
+                    found = true;
+                    setV.add (ta2);
+                    break;
                 }
-            }
             
-            if (!found) {
-                setV.addElement(ta1.makeClone());
-            } else {
-                setV.addElement(ta2);
-            }
+            if (!found)
+                setV.add (ta1.makeClone());
         }
         
         // Remove first elements
-        for(i=0; i<size; i++) {
-            setV.removeElementAt(0);
-        }
+        for(int i=0; i<size; i++)
+            setV.remove (0);
         
         ((TCDReducedAttributeBox)tgcomponent[0]).setAttributes(setV);
         ((TCDReducedAttributeBox)tgcomponent[0]).checkMySize();
     }
     
-    public void updateGates(Vector v) {
-        Vector setV = ((TCDReducedAttributeGateBox)tgcomponent[1]).getAttributes();
+    public void updateGates(LinkedList<TAttribute> v) {
+        LinkedList<TAttribute> setV = ((TCDReducedAttributeGateBox)tgcomponent[1]).getAttributes();
         int size = setV.size();
-        TAttribute ta1, ta2 = null;
-        int i, j;
-        boolean found;
         
         // adapt old vector to the new attributes
-        for(i=0; i<v.size(); i++) {
-            ta1 = (TAttribute)(v.elementAt(i));
-            found = false;
+        for (TAttribute ta1: v) {
+            boolean found = false;
             
             // is in vector?
-            for(j=0; j<setV.size(); j++) {
-                ta2 = (TAttribute)(setV.elementAt(j));
+            for (TAttribute ta2: setV)
                 if (ta1.compareTo(ta2) == 0) {
                     found = true;
+                    setV.add (ta2);
                     break;
                 }
-            }
             
-            if (!found) {
-                setV.addElement(ta1.makeClone());
-            } else {
-                setV.addElement(ta2);
-            }
+            if (!found)
+                setV.add (ta1.makeClone());
         }
         
         // Remove first elements
-        for(i=0; i<size; i++) {
-            setV.removeElementAt(0);
-        }
+        for(int i=0; i<size; i++)
+            setV.remove (0);
         
         ((TCDReducedAttributeGateBox)tgcomponent[1]).setAttributes(setV);
         ((TCDReducedAttributeGateBox)tgcomponent[1]).checkMySize();
@@ -443,30 +419,27 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
         return TGComponentManager.TCD_TOBJECT;
     }
     
-    public Vector getAttributes(){
+    public LinkedList<TAttribute> getAttributes(){
         return ((TGCReducedAttributeBox)(tgcomponent[0])).getAttributes();
     }
     
-    public Vector getGates() {
+    public LinkedList<TAttribute> getGates() {
         return ((TGCReducedAttributeBox)(tgcomponent[1])).getAttributes();
     }
     
-    // builds a new Vector
-    public Vector gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl) {
-        Vector v = (Vector)(getGates().clone());
+    // builds a new LinkedList
+    public LinkedList<TAttribute> gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl) {
+        LinkedList<TAttribute> v = (LinkedList<TAttribute>)(getGates().clone());
         tdp.removeSynchronizedGates(v, this, tcdsgl);
         return v;
     }
     
     public TAttribute getGateById(String name) {
-        TAttribute ta;
-        Vector list = ((TGCReducedAttributeBox)(tgcomponent[1])).getAttributes();
-        for(int i=0; i<list.size(); i++) {
-            ta = (TAttribute)(list.elementAt(i));
-            if (ta.getId().equals(name)) {
+        LinkedList<TAttribute> list = ((TGCReducedAttributeBox)(tgcomponent[1])).getAttributes();
+        for (TAttribute ta: list)
+            if (ta.getId().equals(name))
                 return ta;
-            }
-        }
+
         return null;
     }
     

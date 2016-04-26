@@ -60,11 +60,11 @@ import ui.window.*;
 public class AvatarDesignPanelTranslator {
 
     protected AvatarDesignPanel adp;
-    protected Vector checkingErrors, warnings;
+    protected LinkedList<CheckingError> checkingErrors, warnings;
     protected CorrespondanceTGElement listE; // usual list
     //protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
     protected LinkedList <TDiagramPanel> panels;
-    protected HashMap<String, Vector> typeAttributesMap;    
+    protected HashMap<String, LinkedList<TAttribute>> typeAttributesMap;    
     protected HashMap<String, String> nameTypeMap;
     public AvatarDesignPanelTranslator(AvatarDesignPanel _adp) {
         adp = _adp;
@@ -72,17 +72,17 @@ public class AvatarDesignPanelTranslator {
     }
 
     public void reinit() {
-        checkingErrors = new Vector();
-        warnings = new Vector();
+        checkingErrors = new LinkedList<CheckingError> ();
+        warnings = new LinkedList<CheckingError> ();
         listE = new CorrespondanceTGElement();
         panels = new LinkedList <TDiagramPanel>();
     }
 
-    public Vector getErrors() {
+    public LinkedList<CheckingError> getErrors() {
         return checkingErrors;
     }
 
-    public Vector getWarnings() {
+    public LinkedList<CheckingError> getWarnings() {
         return warnings;
     }
 
@@ -90,7 +90,7 @@ public class AvatarDesignPanelTranslator {
         return listE;
     }
 
-    public AvatarSpecification generateAvatarSpecification(Vector<AvatarBDStateMachineOwner> _blocks) {
+    public AvatarSpecification generateAvatarSpecification(LinkedList<AvatarBDStateMachineOwner> _blocks) {
         LinkedList<AvatarBDBlock> blocks = new LinkedList<AvatarBDBlock>();
         LinkedList<AvatarBDLibraryFunction> libraryFunctions = new LinkedList<AvatarBDLibraryFunction>();
 
@@ -108,7 +108,7 @@ public class AvatarDesignPanelTranslator {
                 as.addApplicationCode(abdp.getMainCode());
             }
         }
-        typeAttributesMap = new HashMap<String, Vector>();
+        typeAttributesMap = new HashMap<String, LinkedList<TAttribute>>();
         nameTypeMap = new HashMap<String,String>();
         createLibraryFunctions (as, libraryFunctions);
         createBlocks(as, blocks);
@@ -255,7 +255,7 @@ public class AvatarDesignPanelTranslator {
         String tmp;
         String blockName, stateName, paramName = "";
         boolean found = false;
-        Vector types;
+        LinkedList<TAttribute> types;
         AvatarBDBlock block;
         TAttribute ta;
         AvatarBlock ab;
@@ -338,9 +338,8 @@ public class AvatarDesignPanelTranslator {
                                             return null;
                                         } else {
                                             TraceManager.addDev("Pragma " + ret + " types size=" + types.size());
-                                            for(int j=0; j<types.size(); j++) {
-                                                ret = ret  + " " + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
-                                            }
+                                            for (TAttribute type: types)
+                                                ret = ret  + " " + paramName + "__" + type.getId() + " ";
                                         }
 
                                     } else {
@@ -397,9 +396,8 @@ public class AvatarDesignPanelTranslator {
                                         if (types == null) {
                                             return null;
                                         } else {
-                                            for(int j=0; j<types.size(); j++) {
-                                                ret = ret + blockName + "." + stateName + "." + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
-                                            }
+                                            for (TAttribute type: types)
+                                                ret = ret + blockName + "." + stateName + "." + paramName + "__" + type.getId() + " ";
                                         }
 
                                     } else {
@@ -427,9 +425,8 @@ public class AvatarDesignPanelTranslator {
                                         if (types == null) {
                                             return null;
                                         } else {
-                                            for(int j=0; j<types.size(); j++) {
-                                                ret = ret + blockName + "." + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
-                                            }
+                                            for (TAttribute type: types)
+                                                ret = ret + blockName + "." + paramName + "__" + type.getId() + " ";
                                         }
 
                                     } else {
@@ -493,7 +490,7 @@ public class AvatarDesignPanelTranslator {
                     alf.addParameter (this.createRegularAttribute (alf, attr, ""));
                 else {
                     // other
-                    Vector<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (attr.getTypeOther ());
+                    LinkedList<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (attr.getTypeOther ());
                     if (types == null) {
                         CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + attr.getTypeOther() + " used in " + alf.getName());
                         // TODO: adapt
@@ -524,7 +521,7 @@ public class AvatarDesignPanelTranslator {
                     alf.addReturnAttribute (this.createRegularAttribute (alf, attr, ""));
                 else {
                     // other
-                    Vector<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (attr.getTypeOther ());
+                    LinkedList<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (attr.getTypeOther ());
                     if (types == null) {
                         CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + attr.getTypeOther() + " used in " + alf.getName());
                         ce.setTDiagramPanel(adp.getAvatarBDPanel());
@@ -553,7 +550,7 @@ public class AvatarDesignPanelTranslator {
                     alf.addReturnAttribute (this.createRegularAttribute (alf, attr, ""));
                 else {
                     // other
-                    Vector<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (attr.getTypeOther ());
+                    LinkedList<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (attr.getTypeOther ());
                     if (types == null) {
                         CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + attr.getTypeOther() + " used in " + alf.getName());
                         ce.setTDiagramPanel(adp.getAvatarBDPanel());
@@ -597,28 +594,14 @@ public class AvatarDesignPanelTranslator {
     }
 
     public void createBlocks(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
-        AvatarBlock ab;
-        Vector v;
-        TAttribute a;
-        int i;
-        AvatarAttribute aa;
-        ui.AvatarMethod uiam;
-        ui.AvatarSignal uias;
-        avatartranslator.AvatarMethod atam;
-        avatartranslator.AvatarSignal atas;
-        TGComponent tgc1, tgc2;
-        Vector types;
-
         for(AvatarBDBlock block: _blocks) {
-            ab = new AvatarBlock(block.getBlockName(), _as, block);
+            AvatarBlock ab = new AvatarBlock(block.getBlockName(), _as, block);
             _as.addBlock(ab);
             listE.addCor(ab, block);
             block.setAVATARID(ab.getID());
 
             // Create attributes
-            v = block.getAttributeList();
-            for(i=0; i<v.size(); i++) {
-                a = (TAttribute)(v.elementAt(i));
+            for (TAttribute a: block.getAttributeList ()) {
                 if (a.getType() == TAttribute.INTEGER){
                     addRegularAttribute(ab, a, "");
                 } else if (a.getType() == TAttribute.NATURAL){
@@ -630,7 +613,7 @@ public class AvatarDesignPanelTranslator {
                 } else {
                     // other
                     // TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
-                    types = adp.getAvatarBDPanel().getAttributesOfDataType(a.getTypeOther());
+                    LinkedList<TAttribute> types = adp.getAvatarBDPanel().getAttributesOfDataType(a.getTypeOther());
                     if (types == null) {
                         CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + a.getTypeOther() + " used in " + ab.getName());
                         ce.setAvatarBlock(ab);
@@ -646,9 +629,8 @@ public class AvatarDesignPanelTranslator {
                         } else {
                             nameTypeMap.put(block.getBlockName()+"."+a.getId(), a.getTypeOther());
                             typeAttributesMap.put(a.getTypeOther(), types);
-                            for(int j=0; j<types.size(); j++) {
-                                addRegularAttribute(ab, (TAttribute)(types.elementAt(j)), a.getId() + "__");
-                            }
+                            for (TAttribute type: types)
+                                addRegularAttribute(ab, type, a.getId() + "__");
                         }
                     }
 
@@ -656,20 +638,17 @@ public class AvatarDesignPanelTranslator {
             }
 
             // Create methods
-            v = block.getMethodList();
-            for(i=0; i<v.size(); i++) {
-                uiam = (AvatarMethod)(v.get(i));
-                atam = new avatartranslator.AvatarMethod(uiam.getId(), uiam);
+            for (ui.AvatarMethod uiam: block.getMethodList ()) {
+                avatartranslator.AvatarMethod atam = new avatartranslator.AvatarMethod(uiam.getId(), uiam);
                 atam.setImplementationProvided(uiam.isImplementationProvided());
                 ab.addMethod(atam);
                 makeParameters(ab, atam, uiam);
                 makeReturnParameters(ab, block, atam, uiam);
             }
-            // Create signals
-            v = block.getSignalList();
-            for(i=0; i<v.size(); i++) {
-                uias = (AvatarSignal)(v.get(i));
 
+            // Create signals
+            for (ui.AvatarSignal uias: block.getSignalList ()) {
+                avatartranslator.AvatarSignal atas;
                 if (uias.getInOut() == uias.IN) {
                     atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.IN, uias);
                 } else {
@@ -686,10 +665,10 @@ public class AvatarDesignPanelTranslator {
 
         // Make block hierarchy
         for(AvatarBlock block: _as.getListOfBlocks()) {
-            tgc1 = listE.getTG(block);
+            TGComponent tgc1 = listE.getTG(block);
             if ((tgc1 != null) && (tgc1.getFather() != null)) {
-                tgc2 = tgc1.getFather();
-                ab = listE.getAvatarBlock(tgc2);
+                TGComponent tgc2 = tgc1.getFather();
+                AvatarBlock ab = listE.getAvatarBlock(tgc2);
                 if (ab != null) {
                     block.setFather(ab);
                 }
@@ -710,8 +689,6 @@ public class AvatarDesignPanelTranslator {
     public void makeReturnParameters(AvatarStateMachineOwner _ab, AvatarBDStateMachineOwner _block, avatartranslator.AvatarMethod _atam, ui.AvatarMethod _uiam) {
         String rt = _uiam.getReturnType().trim();
         AvatarAttribute aa;
-        Vector types;
-        TAttribute ta;
         AvatarType type = AvatarType.UNDEFINED;
 
         if (rt.length() == 0) {
@@ -722,7 +699,7 @@ public class AvatarDesignPanelTranslator {
             aa = new AvatarAttribute("return__0", AvatarType.getType(rt), _ab, _block);
             _atam.addReturnParameter(aa);
         } else {
-            types = adp.getAvatarBDPanel().getAttributesOfDataType(rt);
+            LinkedList<TAttribute> types = adp.getAvatarBDPanel().getAttributesOfDataType(rt);
             if (types == null) {
                 CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + rt + " declared as a return parameter of a method of " + _block.getOwnerName());
                 // TODO: adapt
@@ -731,8 +708,8 @@ public class AvatarDesignPanelTranslator {
                 addCheckingError(ce);
                 return;
             } else {
-                for(int j=0; j<types.size(); j++) {
-                    ta = (TAttribute)(types.elementAt(j));
+                int j=0;
+                for (TAttribute ta: types) {
                     if (ta.getType() == TAttribute.INTEGER)
                         type = AvatarType.INTEGER;
                     else if (ta.getType() == TAttribute.NATURAL)
@@ -741,7 +718,7 @@ public class AvatarDesignPanelTranslator {
                         type = AvatarType.BOOLEAN;
                     else
                         type = AvatarType.INTEGER;
-                    aa = new AvatarAttribute("return__" + j, type, _ab, _block);
+                    aa = new AvatarAttribute("return__" + j++, type, _ab, _block);
                     _atam.addReturnParameter(aa);
                 }
             }
@@ -752,13 +729,9 @@ public class AvatarDesignPanelTranslator {
     public void makeParameters(AvatarStateMachineOwner _block, avatartranslator.AvatarMethod _atam, ui.AvatarMethod _uiam) {
         String typeIds[] = _uiam.getTypeIds();
         String types[] = _uiam.getTypes();
-        AvatarAttribute aa;
-        TAttribute ta;
-        Vector v;
-        AvatarType type = AvatarType.UNDEFINED;
 
         for(int i=0; i<types.length; i++) {
-            v = adp.getAvatarBDPanel().getAttributesOfDataType(types[i]);
+            LinkedList<TAttribute> v = adp.getAvatarBDPanel().getAttributesOfDataType(types[i]);
             if (v == null) {
                 if (AvatarType.getType(types[i]) == AvatarType.UNDEFINED) {
                     CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  \"" + types[i] + "\" declared in method " + _atam + " of block " + _block.getName());
@@ -767,11 +740,11 @@ public class AvatarDesignPanelTranslator {
                     ce.setTDiagramPanel(adp.getAvatarBDPanel());
                     addCheckingError(ce);
                 }
-                aa = new AvatarAttribute(typeIds[i], AvatarType.getType(types[i]), _block, _uiam);
+                AvatarAttribute aa = new AvatarAttribute(typeIds[i], AvatarType.getType(types[i]), _block, _uiam);
                 _atam.addParameter(aa);
             } else {
-                for(int j=0; j<v.size(); j++) {
-                    ta = (TAttribute)(v.get(j));
+                for (TAttribute ta: v) {
+                    AvatarType type = AvatarType.UNDEFINED;
                     if (ta.getType() == TAttribute.INTEGER){
                         type = AvatarType.INTEGER;
                     } else if (ta.getType() == TAttribute.NATURAL){
@@ -781,7 +754,7 @@ public class AvatarDesignPanelTranslator {
                     } else if (ta.getType() == TAttribute.TIMER) {
                         type = AvatarType.TIMER;
                     }
-                    aa = new AvatarAttribute(typeIds[i] + "__" + ta.getId(), type, _block, _uiam);
+                    AvatarAttribute aa = new AvatarAttribute(typeIds[i] + "__" + ta.getId(), type, _block, _uiam);
                     _atam.addParameter(aa);
                 }
             }
@@ -803,24 +776,17 @@ public class AvatarDesignPanelTranslator {
 
         //TraceManager.addDev("Found: " + ta.getId());
 
-        AvatarAttribute aa;
-        Vector v = new Vector();
-        int i;
-        TAttribute tatmp;
+        LinkedList<String> v = new LinkedList<String> ();
 
-        if (ta.getType() == TAttribute.OTHER) {
-            Vector v0 = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
-            for(i=0; i<v0.size(); i++) {
-                tatmp = (TAttribute)(v0.get(i));
+        if (ta.getType() == TAttribute.OTHER)
+            for (TAttribute tatmp: adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther()))
                 v.add(_name + "__" + tatmp.getId());
-            }
-        } else {
+        else
             v.add(_name);
-        }
 
         //TraceManager.addDev("Size of vector:" + v.size());
-        for(i=0; i<v.size(); i++) {
-            aa = _ab.getAvatarAttributeWithName((String)(v.get(i)));
+        for (String name: v) {
+            AvatarAttribute aa = _ab.getAvatarAttributeWithName(name);
             if (aa == null) {
                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + _name + " in signal expression: " + _idOperator);
                 // TODO: adapt
@@ -831,7 +797,7 @@ public class AvatarDesignPanelTranslator {
                 return ;
             } else {
                 //TraceManager.addDev("-> Adding attr in action on signal in block " + _ab.getName() + ":" + _name + "__" + tatmp.getId());
-                _aaos.addValue((String)(v.get(i)));
+                _aaos.addValue(name);
             }
         }
     }
@@ -1400,16 +1366,16 @@ public class AvatarDesignPanelTranslator {
 
     private void addCheckingError(CheckingError ce) {
         if (checkingErrors == null) {
-            checkingErrors = new Vector();
+            checkingErrors = new LinkedList<CheckingError> ();
         }
-        checkingErrors.addElement(ce);
+        checkingErrors.add (ce);
     }
 
     private void addWarning(CheckingError ce) {
         if (warnings == null) {
-            warnings = new Vector();
+            warnings = new LinkedList<CheckingError> ();
         }
-        warnings.addElement(ce);
+        warnings.add (ce);
     }
 
     private String modifyString(String _input) {
@@ -1434,23 +1400,22 @@ public class AvatarDesignPanelTranslator {
         }
 
         //TraceManager.addDev("-> -> Analyzing method call " + s);
-        TAttribute ta, tatmp;
 
         String [] actions = s.split(",");
         s = "";
         for(int i=0; i<actions.length; i++) {
-            ta = adp.getAvatarBDPanel().getAttribute(actions[i].trim(), _blockName);
+            TAttribute ta = adp.getAvatarBDPanel().getAttribute(actions[i].trim(), _blockName);
             if (ta == null) {
                 s = s + actions[i].trim();
             } else {
                 if (ta.getType() == TAttribute.OTHER) {
-                    Vector v0 = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
-                    for(int j=0; j<v0.size(); j++) {
-                        tatmp = (TAttribute)(v0.get(j));
-                        s += actions[i].trim() + "__" + tatmp.getId();
-                        if (j != v0.size()-1) {
+                    boolean first = true;
+                    for (TAttribute tatmp: adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther())) {
+                        if (first)
+                            first = false;
+                        else
                             s = s + ", ";
-                        }
+                        s += actions[i].trim() + "__" + tatmp.getId();
                     }
                 } else {
                     s = s + actions[i].trim();
@@ -1467,24 +1432,23 @@ public class AvatarDesignPanelTranslator {
         index0 = s.indexOf("=");
         if (index0 != -1) {
             String param = s.substring(0, index0).trim();
-            ta = adp.getAvatarBDPanel().getAttribute(param, _blockName);
+            TAttribute ta = adp.getAvatarBDPanel().getAttribute(param, _blockName);
             if (ta == null) {
                 TraceManager.addDev("-> -> NULL Param " + param + " in block " + _blockName);
                 s = param + s.substring(index0, s.length());
             } else {
                 if (ta.getType() == TAttribute.OTHER) {
                     String newparams = "";
-                    Vector v0 = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
-                    for(int j=0; j<v0.size(); j++) {
-                        tatmp = (TAttribute)(v0.get(j));
-                        newparams += param + "__" + tatmp.getId();
-                        if (j != v0.size()-1) {
+                    boolean first = true;
+                    for (TAttribute tatmp: adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther())) {
+                        if (first)
+                            first = false;
+                        else
                             newparams = newparams + ", ";
-                        }
+                        newparams += param + "__" + tatmp.getId();
                     }
-                    if (v0.size() > 1) {
+                    if (adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther()).size() > 1)
                         newparams = "(" + newparams + ")";
-                    }
                     s = newparams + s.substring(index0, s.length());
                 } else {
                     s = param + s.substring(index0, s.length());

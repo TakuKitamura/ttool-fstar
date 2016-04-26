@@ -220,7 +220,7 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
     }
 
     public boolean editOndoubleClick(JFrame frame) {
-        Vector signals = tdp.getMGUI().getAllSignals();
+        LinkedList<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
         //TraceManager.addDev("Nb of signals:" + signals.size());
 
         JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting send signal",  value, signals, true);

@@ -55,7 +55,7 @@ import myutil.*;
 
 public class TURTLEModelChecker {
     private TURTLEModeling tm;
-    private Vector warnings;
+    private LinkedList<CheckingError> warnings;
     
     //private String SEPARATOR = ": ";
     //private String END = "\n";
@@ -110,14 +110,14 @@ public class TURTLEModelChecker {
         tm = _tm;
     }
     
-    public Vector getWarnings() {
+    public LinkedList<CheckingError> getWarnings() {
         return warnings;
     }
     
-    public Vector syntaxAnalysisChecking() {
+    public LinkedList<CheckingError> syntaxAnalysisChecking() {
         //TraceManager.addDev("modelChecking");
-        Vector errors = new Vector();
-        warnings = new Vector();
+        LinkedList<CheckingError> errors = new LinkedList<CheckingError>();
+        warnings = new LinkedList<CheckingError>();
         syntaxAnalysisCheckingCD(errors, warnings);
         TClass t;
         for(int i=0; i<tm.classNb(); i++) {
@@ -130,11 +130,11 @@ public class TURTLEModelChecker {
         return errors;
     }
     
-    public void syntaxAnalysisCheckingCD(Vector errors, Vector warnings) {
+    public void syntaxAnalysisCheckingCD(LinkedList<CheckingError> errors, LinkedList<CheckingError> warnings) {
     	checkRuleCD001(errors, warnings);
     }
     
-    public void syntaxAnalysisCheckingAD(TClass t, Vector errors, Vector warnings) {
+    public void syntaxAnalysisCheckingAD(TClass t, LinkedList<CheckingError> errors, LinkedList<CheckingError> warnings) {
         //TraceManager.addDev("Checking activity diagram of " + t.getName());
         checkRuleAD000(t, errors, warnings);
         checkRuleAD001(t, errors, warnings);
@@ -147,11 +147,11 @@ public class TURTLEModelChecker {
     }
     
     
-    private void checkRuleCD001(Vector errors, Vector warnings) {
+    private void checkRuleCD001(LinkedList<CheckingError> errors, LinkedList<CheckingError> warnings) {
         return;
     }
     
-    private void checkRuleAD000(TClass t, Vector errors, Vector warnings) {
+    private void checkRuleAD000(TClass t, LinkedList<CheckingError> errors, LinkedList<CheckingError> warnings) {
         ActivityDiagram ad = t.getActivityDiagram();
         CheckingError error;
         
@@ -165,7 +165,7 @@ public class TURTLEModelChecker {
     }
     
     // assumes a non-null activity diagram
-    private void  checkRuleAD001(TClass t, Vector errors, Vector warnings) {
+    private void  checkRuleAD001(TClass t, LinkedList<CheckingError> errors, LinkedList<CheckingError> warnings) {
         ActivityDiagram ad = t.getActivityDiagram();
         
         if (ad == null) {
@@ -189,7 +189,7 @@ public class TURTLEModelChecker {
         ad.setSelectedAll(false);
     }
     
-    private void analyzeAccessibility(TClass t, ADComponent ad, Vector errors, Vector warnings) {
+    private void analyzeAccessibility(TClass t, ADComponent ad, LinkedList<CheckingError> errors, LinkedList<CheckingError> warnings) {
         if (ad == null) {
 			
             CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, t.getName()+ ERROR_AD_001c);
@@ -220,7 +220,7 @@ public class TURTLEModelChecker {
     }
     
     // Valid list of synchronization gates for parallel operators
-    private void  checkRuleAD004(TClass t, Vector errors, Vector warnings) {
+    private void  checkRuleAD004(TClass t, LinkedList<CheckingError> errors, LinkedList<CheckingError> warnings) {
         ActivityDiagram ad = t.getActivityDiagram();
         ADComponent ad1;
         ADParallel adp;
@@ -248,7 +248,7 @@ public class TURTLEModelChecker {
     }
     
     // No recursive process after parallel operator
-    private void  checkRuleAD005(TClass t, Vector errors, Vector warnings) {
+    private void  checkRuleAD005(TClass t, LinkedList<CheckingError> errors, LinkedList<CheckingError> warnings) {
         ActivityDiagram ad = t.getActivityDiagram();
         if (ad == null) {
             CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, t.getName() + " has no activity diagram");
@@ -273,7 +273,7 @@ public class TURTLEModelChecker {
     }
     
     // no more than two nexts after parallel operators with synchronized gates
-    private void  checkRuleAD006(TClass t, Vector errors, Vector warnings) {
+    private void  checkRuleAD006(TClass t, LinkedList<CheckingError> errors, LinkedList<CheckingError> warnings) {
         ActivityDiagram ad = t.getActivityDiagram();
         ADComponent ad1;
         ADParallel adp;
@@ -302,7 +302,7 @@ public class TURTLEModelChecker {
     }
     
     // Valid list of synchronization gates for parallel operators: gates should not be involved in external synchronization
-    private void  checkRuleAD007(TClass t, Vector errors, Vector warnings) {
+    private void  checkRuleAD007(TClass t, LinkedList<CheckingError> errors, LinkedList<CheckingError> warnings) {
         ActivityDiagram ad = t.getActivityDiagram();
         ADComponent ad1;
         ADParallel adp;
@@ -338,7 +338,7 @@ public class TURTLEModelChecker {
         }
     }
     
-    private void  checkRuleAD008(TClass t, Vector errors, Vector warnings) {
+    private void  checkRuleAD008(TClass t, LinkedList<CheckingError> errors, LinkedList<CheckingError> warnings) {
         ActivityDiagram ad = t.getActivityDiagram();
         ADComponent ad1;
         ADParallel adp;
@@ -376,7 +376,7 @@ public class TURTLEModelChecker {
 	
 	
 	// Syntax error
-	private void  checkRuleAD009(TClass t, Vector errors, Vector warnings) {
+	private void  checkRuleAD009(TClass t, LinkedList<CheckingError> errors, LinkedList<CheckingError> warnings) {
 		ActivityDiagram ad = t.getActivityDiagram();
         ADComponent ad1;
 		Param p;
@@ -499,7 +499,7 @@ public class TURTLEModelChecker {
 	* 2. Parsing the expression with variables values to see whether variables are well-placed or not
 	* The second parsing is performed iff the first one succeeds
 	*/
-	public void parsing(TClass t, ADComponent elt, String parseCmd, String action, Vector errors) {
+	public void parsing(TClass t, ADComponent elt, String parseCmd, String action, LinkedList<CheckingError> errors) {
 		TMLExprParser parser;
 		SimpleNode root;
 		int i;

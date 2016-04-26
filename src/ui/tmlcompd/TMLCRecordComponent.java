@@ -72,7 +72,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 	
 	// Attributes
 	private boolean attributesAreDrawn = false;
-	protected Vector myAttributes;
+	protected LinkedList<TAttribute> myAttributes;
 	private int textX = 15; // border for ports
 	private double dtextX = 0.0;
 	
@@ -109,7 +109,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 		
         myImageIcon = IconManager.imgic1202;
 		
-		myAttributes = new Vector();
+		myAttributes = new LinkedList<TAttribute> ();
 		
 		actionOnAdd();
     }
@@ -209,7 +209,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 				if (cpt >= (height - textX)) {
 					break;
 				}
-				a = (TAttribute)(myAttributes.elementAt(index));
+				a = myAttributes.get (index);
 				attr = a.toString();
 				w = g.getFontMetrics().stringWidth(attr);
 				if ((w + (2 * textX) + 1) < width) {
@@ -353,7 +353,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 		if (index == 0) {
 			return value;
 		} else {
-			return myAttributes.elementAt(index-1);
+			return myAttributes.get (index-1);
 		}
     }
     
@@ -373,7 +373,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         for(int i=0; i<myAttributes.size(); i++) {
             //System.out.println("Attribute:" + i);
-            a = (TAttribute)(myAttributes.elementAt(i));
+            a = myAttributes.get (i);
             //System.out.println("Attribute:" + i + " = " + a.getId());
             //value = value + a + "\n";
             sb.append("<Attribute access=\"");
@@ -432,7 +432,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-                                    myAttributes.addElement(ta);
+                                    myAttributes.add (ta);
                                 }
                             }
                         }
@@ -449,7 +449,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 		return currentFontSize;
 	}
 	
-	public Vector getAttributes() {
+	public LinkedList<TAttribute> getAttributes() {
 		return myAttributes;
 	}
 	  

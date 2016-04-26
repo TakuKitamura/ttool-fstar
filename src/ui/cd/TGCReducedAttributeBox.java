@@ -61,7 +61,7 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
     protected String attributeText;
     protected int textX = 5;
     protected int textY = 20;
-    protected Vector myAttributes;
+    protected LinkedList<TAttribute> myAttributes;
     protected Graphics myG;
     protected Color myColor;
     protected boolean attributes;
@@ -86,14 +86,14 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
         editable = true;
         removable = false;
         
-        myAttributes = new Vector();
+        myAttributes = new LinkedList<TAttribute> ();
     }
     
-    public Vector getAttributes() {
+    public LinkedList<TAttribute> getAttributes() {
         return myAttributes;
     }
     
-    public void setAttributes(Vector v) {
+    public void setAttributes(LinkedList<TAttribute> v) {
         myAttributes = v;
     }
     
@@ -117,7 +117,7 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
         if (areVisible()) {
             TAttribute a;
             for(int i=0; i<myAttributes.size(); i++) {
-                a = (TAttribute)(myAttributes.elementAt(i));
+                a = myAttributes.get (i);
                 g.drawString(a.toNameAndValue(), x + textX, y + textY + i* h);
             }
         } else if (myAttributes.size() >0) {
@@ -129,7 +129,7 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
         value = "";
         TAttribute a;
         for(int i=0; i<myAttributes.size(); i++) {
-            a = (TAttribute)(myAttributes.elementAt(i));
+            a = myAttributes.get (i);
             value = value + a + "\n";
         }
         //System.out.println("Value = " + value);
@@ -169,7 +169,7 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
         
         TAttribute a;
         for(int i=0; i<myAttributes.size(); i++) {
-            a = (TAttribute)(myAttributes.elementAt(i));
+            a = myAttributes.get (i);
             desiredWidth = Math.max(desiredWidth,  myG.getFontMetrics().stringWidth(a.toNameAndValue()) + 2 * textX);
         }
         
@@ -215,7 +215,7 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
     }
     
     protected abstract void setJDialogOptions(JDialogReducedAttribute jda);
-    protected abstract Vector getCustomAttributes();
+    protected abstract LinkedList<TAttribute> getCustomAttributes();
     
     public TGComponent isOnMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -230,7 +230,7 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
         value = "";
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         for(int i=0; i<myAttributes.size(); i++) {
-            a = (TAttribute)(myAttributes.elementAt(i));
+            a = myAttributes.get (i);
             value = value + a + "\n";
             sb.append("<Attribute access=\"");
             sb.append(a.getAccess());
@@ -299,7 +299,7 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
                                     if (set.equals("true")) {
                                         ta.set(true);
                                     }
-                                    myAttributes.addElement(ta);
+                                    myAttributes.add (ta);
                                 }
                             }
                         }
@@ -320,7 +320,7 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
     }
     
     public Object getChild(int index) {
-        return myAttributes.elementAt(index);
+        return myAttributes.get (index);
     }
     
     public int getIndexOfChild(Object child) {

@@ -55,7 +55,7 @@ import java.util.*;
 import ui.*;
 
 public class JDialogReducedAttribute extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    private Vector attributesPar, setList, unsetList, tclassAttributes;
+    private LinkedList<TAttribute> attributesPar, setList, unsetList, tclassAttributes;
     
     private JPanel panel1, panel2;
     
@@ -66,13 +66,13 @@ public class JDialogReducedAttribute extends javax.swing.JDialog implements Acti
     private String attrib, nameTClass, nameTObject; // "Attributes", "Gates", etc.
     
     // Panel1
-    private JList tclassAttributeList;
+    private JList<TAttribute> tclassAttributeList;
     private JTextField identifierText;
     private JTextField initialValue;
     private JButton setButton;
     
     //Panel2
-    private JList setAttributes;
+    private JList<TAttribute> setAttributes;
     private JButton unsetButton;
     
     // Main Panel
@@ -80,7 +80,7 @@ public class JDialogReducedAttribute extends javax.swing.JDialog implements Acti
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogReducedAttribute(Vector _attributes, Vector _tclassAttributes, Frame f, String title, String  _attrib, String _nameTObject, String _nameTClass) {
+    public JDialogReducedAttribute(LinkedList<TAttribute> _attributes, LinkedList<TAttribute> _tclassAttributes, Frame f, String title, String  _attrib, String _nameTObject, String _nameTClass) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
@@ -90,16 +90,16 @@ public class JDialogReducedAttribute extends javax.swing.JDialog implements Acti
         
         tclassAttributes = _tclassAttributes;
         
-        unsetList = new Vector();
-        setList = new Vector();
+        unsetList = new LinkedList<TAttribute> ();
+        setList = new LinkedList<TAttribute> ();
         
         TAttribute ta;
         for(int i=0; i<attributesPar.size(); i++) {
-            ta = (TAttribute)(attributesPar.elementAt(i));
+            ta = attributesPar.get (i);
             if (ta.isSet()) {
-                setList.addElement(ta.makeClone());
+                setList.add (ta.makeClone());
             } else {
-                unsetList.addElement(ta.makeClone());
+                unsetList.add (ta.makeClone());
             }
         }
         
@@ -145,7 +145,7 @@ public class JDialogReducedAttribute extends javax.swing.JDialog implements Acti
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         c1.fill = GridBagConstraints.BOTH;
         c1.gridheight = 3;
-        tclassAttributeList = new JList(tclassAttributes);
+        tclassAttributeList = new JList<TAttribute> (tclassAttributes.toArray (new TAttribute[0]));
         tclassAttributeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tclassAttributeList.addListSelectionListener(this);
         JScrollPane scrollPane1 = new JScrollPane(tclassAttributeList);
@@ -192,7 +192,7 @@ public class JDialogReducedAttribute extends javax.swing.JDialog implements Acti
         panel1.add(setButton, c1);
         
         // 1st line panel2
-        setAttributes = new JList(setList);
+        setAttributes = new JList<TAttribute> (setList.toArray (new TAttribute[0]));
         setAttributes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setAttributes.addListSelectionListener(this);
         JScrollPane scrollPane2 = new JScrollPane(setAttributes);
@@ -258,17 +258,17 @@ public class JDialogReducedAttribute extends javax.swing.JDialog implements Acti
     }
     
     public void closeDialog() {
-        attributesPar.removeAllElements();
+        attributesPar.clear ();
         
         int i, j;
         TAttribute ta1 = null, ta2 = null;
         boolean found = false;
         
         for(i=0; i<tclassAttributes.size(); i++) {
-            ta1 = (TAttribute)(tclassAttributes.elementAt(i));
+            ta1 = tclassAttributes.get (i);
             
             for(j=0; j<setList.size(); j++) {
-                ta2 = (TAttribute)(setList.elementAt(j));
+                ta2 = setList.get (j);
                 found = false;
                 if (ta2.getId().compareTo(ta1.getId()) ==0) {
                     found = true;
@@ -278,9 +278,9 @@ public class JDialogReducedAttribute extends javax.swing.JDialog implements Acti
             
             if (found) {
                 ta2.set(true);
-                attributesPar.addElement(ta2);
+                attributesPar.add (ta2);
             } else {
-                attributesPar.addElement(ta1);
+                attributesPar.add (ta1);
             }
             
         }
@@ -294,8 +294,8 @@ public class JDialogReducedAttribute extends javax.swing.JDialog implements Acti
     public void unsetValue() {
         int index = setAttributes.getSelectedIndex();
         if ((index > -1) && (index < setList.size())) {
-            setList.removeElementAt(index);
-            setAttributes.setListData(setList);
+            setList.remove (index);
+            setAttributes.setListData(setList.toArray (new TAttribute[0]));
         }
     }
     
@@ -311,7 +311,7 @@ public class JDialogReducedAttribute extends javax.swing.JDialog implements Acti
             return;
         }
         
-        TAttribute ta = (TAttribute)(tclassAttributes.elementAt(index));
+        TAttribute ta = tclassAttributes.get (index);
         if (!TAttribute.isAValidInitialValue(ta.getType(), s)) {
             JOptionPane.showMessageDialog(frame,
             "The value is not valid",
@@ -326,17 +326,17 @@ public class JDialogReducedAttribute extends javax.swing.JDialog implements Acti
         //boolean found = false;
         
         for(i=0; i<setList.size(); i++) {
-            ta1 = (TAttribute)(setList.elementAt(i));
+            ta1 = setList.get (i);
             if (ta1.getId().compareTo(ta.getId()) == 0) {
-                setList.removeElementAt(i);
+                setList.remove (i);
                 break;
             }
         }
         
         ta1 = ta.makeClone();
         ta1.setInitialValue(s);
-        setList.addElement(ta1);
-        setAttributes.setListData(setList);
+        setList.add (ta1);
+        setAttributes.setListData(setList.toArray (new TAttribute[0]));
         
     }
     
@@ -348,7 +348,7 @@ public class JDialogReducedAttribute extends javax.swing.JDialog implements Acti
                 setButton.setEnabled(false);
                 identifierText.setText("");
             } else {
-                TAttribute a = (TAttribute)(tclassAttributes.elementAt(index));
+                TAttribute a = tclassAttributes.get (index);
                 identifierText.setText(a.getId());
                 initialValue.setText(a.getInitialValue());
                 if (isEditable) {

@@ -47,10 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.util.Vector;
+import java.util.LinkedList;
 
 import ui.cd.*;
 
 public interface TClassSynchroInterface extends TClassInterface  {
-    public Vector gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl);
+    public LinkedList<TAttribute> gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl);
 }

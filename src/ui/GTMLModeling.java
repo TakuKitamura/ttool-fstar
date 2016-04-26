@@ -71,7 +71,7 @@ public class GTMLModeling  {
     private TMLComponentDesignPanel tmlcdp;
     private TMLArchiPanel tmlap;
     private TMLModeling tmlm;
-    private Vector checkingErrors, warnings;
+    private LinkedList<CheckingError> checkingErrors, warnings;
     private LinkedList tasksToTakeIntoAccount;
     private LinkedList componentsToTakeIntoAccount;
     private LinkedList components;
@@ -141,8 +141,8 @@ public class GTMLModeling  {
 
     public TMLModeling translateToTMLModeling(boolean onlyTakenIntoAccount, boolean _resetID) {
         tmlm = new TMLModeling(_resetID);
-        checkingErrors = new Vector();
-        warnings = new Vector();
+        checkingErrors = new LinkedList<CheckingError> ();
+        warnings = new LinkedList<CheckingError> ();
 
         //boolean b;
 
@@ -282,11 +282,11 @@ public class GTMLModeling  {
         diagramPanelsToTakeIntoAccount = new Vector<TDiagramPanel>( panels );
     }
 
-    public Vector getCheckingErrors() {
+    public LinkedList<CheckingError> getCheckingErrors() {
         return checkingErrors;
     }
 
-    public Vector getCheckingWarnings() {
+    public LinkedList<CheckingError> getCheckingWarnings() {
         return warnings;
     }
     private void addTMLPragmas(){
@@ -1213,26 +1213,24 @@ public class GTMLModeling  {
     }
 
     private void addAttributesTo(TMLTask tmltask, TMLTaskOperator tmlto) {
-        Vector attributes = tmlto.getAttributes();
+        LinkedList<TAttribute> attributes = tmlto.getAttributes();
         addAttributesTo(tmlto, tmltask, attributes);
     }
 
     private void addAttributesTo(TMLTask tmltask, TMLCPrimitiveComponent tmlcpc) {
-        Vector attributes = tmlcpc.getAttributes();
+        LinkedList<TAttribute> attributes = tmlcpc.getAttributes();
         addAttributesTo(tmlcpc, tmltask, attributes);
     }
 
-    private void addAttributesTo(TGComponent tgc, TMLTask tmltask, Vector attributes) {
-        TAttribute ta;
+    private void addAttributesTo(TGComponent tgc, TMLTask tmltask, LinkedList<TAttribute> attributes) {
         TMLType tt;
         String name;
         TMLAttribute tmlt;
         TMLRequest req;
         TMLCRecordComponent rc;
 
-        for(int i=0; i<attributes.size(); i++) {
+        for (TAttribute ta: attributes) {
             rc = null; tt = null;
-            ta = (TAttribute)(attributes.elementAt(i));
             if (ta.getType() == TAttribute.NATURAL) {
                 tt = new TMLType(TMLType.NATURAL);
             } else if (ta.getType() == TAttribute.BOOLEAN) {
@@ -1271,10 +1269,8 @@ public class GTMLModeling  {
             } else {
                 // Adding all elements of record
                 TraceManager.addDev("Found a record named: " + rc.getValue());
-                TAttribute tat;
-                Vector attr = rc.getAttributes();
-                for(int j=0; j<attr.size(); j++) {
-                    tat = (TAttribute)(attr.elementAt(j));
+                LinkedList<TAttribute> attr = rc.getAttributes();
+                for (TAttribute tat: attr) {
                     if (tat.getType() == TAttribute.NATURAL) {
                         tt = new TMLType(TMLType.NATURAL);
                     } else if (tat.getType() == TAttribute.BOOLEAN) {
@@ -2124,8 +2120,8 @@ public class GTMLModeling  {
         tmlm = new TMLModeling(true);
         archi = new TMLArchitecture();  //filled by makeArchitecture
         map = new TMLMapping(tmlm, archi, false);
-        checkingErrors = new Vector();
-        warnings = new Vector();
+        checkingErrors = new LinkedList<CheckingError> ();
+        warnings = new LinkedList<CheckingError> ();
         //listE = new CorrespondanceTGElement();
 
         TraceManager.addDev("Making architecture");
@@ -2153,8 +2149,8 @@ public class GTMLModeling  {
     public TMLCP translateToTMLCPDataStructure( String _cpName )        {
 
         tmlcp = new TMLCP( _cpName );
-        checkingErrors = new Vector();
-        warnings = new Vector();
+        checkingErrors = new LinkedList<CheckingError> ();
+        warnings = new LinkedList<CheckingError> ();
         //listE = new CorrespondanceTGElement();
 
         if( tmlcpp != null )    {
@@ -2619,7 +2615,7 @@ public class GTMLModeling  {
     private tmltranslator.tmlcp.TMLCPSequenceDiagram createSequenceDiagramDataStructure( ui.tmlsd.TMLSDPanel panel,
                                                                                          ArrayList<String> names )      throws MalformedTMLDesignException {
 
-        Vector<TAttribute> attributes;
+        LinkedList<TAttribute> attributes;
         int index1;
         int index2;
         TGComponent[] components;

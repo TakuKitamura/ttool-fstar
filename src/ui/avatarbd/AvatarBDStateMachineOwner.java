@@ -38,7 +38,7 @@
 
 package ui.avatarbd;
 
-import java.util.Vector;
+import java.util.LinkedList;
 
 import ui.AvatarSignal;
 import ui.AvatarMethod;
@@ -55,14 +55,15 @@ import ui.avatarsmd.AvatarSMDPanel;
  */
 public interface AvatarBDStateMachineOwner {
 
-    public Vector<TAttribute> getAttributeList ();
-    public Vector<String> getAllTimerList ();
+    public LinkedList<TAttribute> getAttributeList ();
+    public LinkedList<String> getAllTimerList ();
     public TAttribute getAttributeByName (String _name);
-    public Vector<AvatarSignal> getSignalList ();
-    public Vector<AvatarSignal> getAllSignalList ();
+    public LinkedList<AvatarSignal> getSignalList ();
+    public LinkedList<AvatarSignal> getAllSignalList ();
     public AvatarSignal getSignalNameBySignalDef (String _id);
-    public Vector<AvatarMethod> getMethodList ();
-    public Vector<AvatarMethod> getAllMethodList ();
+    public LinkedList<AvatarMethod> getMethodList ();
+    public LinkedList<AvatarMethod> getAllMethodList ();
+    public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctionList ();
 
     public String getOwnerName ();
     public AvatarSMDPanel getAvatarSMDPanel ();

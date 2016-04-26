@@ -260,7 +260,7 @@ public class TClassDiagramPanel extends TDiagramPanel implements ClassDiagramPan
     }
 	
 	public void makeStateActionsOf(TClassInterface tgc) {
-		Vector tclasses = new Vector();
+		LinkedList<TClassInterface> tclasses = new LinkedList<TClassInterface> ();
 		tclasses.add(tgc);
 		
 		DesignPanel dp = (DesignPanel)(mgui.getCurrentTURTLEPanel());

@@ -47,7 +47,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.util.Vector;
+import java.util.LinkedList;
 
 
 public interface TClassInterface  {
@@ -55,8 +55,8 @@ public interface TClassInterface  {
     public String getValue();
     public int getId();
     public boolean isStart();
-    public Vector getAttributes();
-    public Vector getGates();
+    public LinkedList<TAttribute> getAttributes();
+    public LinkedList<TAttribute> getGates();
     //public TActivityDiagramPanel getActivityDiagramPanel();
     public ActivityDiagramPanelInterface getBehaviourDiagramPanel();
     

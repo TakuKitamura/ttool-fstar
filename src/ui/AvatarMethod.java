@@ -246,7 +246,7 @@ public class AvatarMethod {
 
         String splitted[] = tmp.split(",");
         int size = splitted.length/2;
-        TraceManager.addDev("Nb of parameters=" + size);
+        // TraceManager.addDev("Nb of parameters=" + size);
         String types[] = new String[size];
         String typeIds[] = new String[size];
         boolean b0, b1;

@@ -74,7 +74,7 @@ public abstract class AvatarPragma extends AvatarElement {
         proofStatus = status;
     }
 
-    public static LinkedList<AvatarPragma> createFromString(String str, Object obj, LinkedList<AvatarBlock> blocks, HashMap<String, Vector> typeAttributesMap, HashMap<String, String> nameTypeMap, AvatarDesignPanelTranslator.ErrorAccumulator errorAcc){
+    public static LinkedList<AvatarPragma> createFromString(String str, Object obj, LinkedList<AvatarBlock> blocks, HashMap<String, LinkedList<TAttribute>> typeAttributesMap, HashMap<String, String> nameTypeMap, AvatarDesignPanelTranslator.ErrorAccumulator errorAcc){
         //createFromString takes in a pragma string (with # removed), the containing object, and the list of AvatarBlocks, and returns the corresponding AvatarPragma or null if an error occurred
         //The attributes referenced must exist 
 
@@ -144,10 +144,9 @@ public abstract class AvatarPragma extends AvatarElement {
                 }
                 //Generate a fun lot of pragmas...
                 //For each attribute, generate an authenticity pragma
-                Vector typeAttrs = typeAttributesMap.get(nameTypeMap.get(blockName1+"."+attrName1));
-                for (int i=0; i< typeAttrs.size(); i++){
+                LinkedList<TAttribute> typeAttrs = typeAttributesMap.get(nameTypeMap.get(blockName1+"."+attrName1));
+                for (TAttribute ta: typeAttrs) {
                     LinkedList<AvatarAttributeState> attrStates = new LinkedList<AvatarAttributeState>();
-                    TAttribute ta = (TAttribute) (typeAttrs.elementAt(i));
                     String suffix = ta.getId();
                     for (String arg: args){
                         AvatarAttributeState res = parseAuthAttr(arg+"__"+suffix, blocks);
@@ -204,7 +203,7 @@ public abstract class AvatarPragma extends AvatarElement {
                     errorAcc.addWarning("PrivatePublicKey cannot have more than 1 attribute "+ attr1);
                     return pragmas;
                 }
-                TAttribute ta = (TAttribute)(typeAttributesMap.get(type).elementAt(0));
+                TAttribute ta = typeAttributesMap.get(type).get (0);
                 attr1 = attr1+"__"+ta.getId();
             }
             if (nameTypeMap.containsKey(blockName+"."+attr2)){
@@ -215,7 +214,7 @@ public abstract class AvatarPragma extends AvatarElement {
                     errorAcc.addWarning ("PrivatePublicKey cannot have more than 1 attribute "+ attr2);
                     return pragmas;
                 }
-                TAttribute ta = (TAttribute)(typeAttributesMap.get(type).elementAt(0));
+                TAttribute ta = typeAttributesMap.get(type).get (0);
                 attr2 = attr2+"__"+ta.getId();
             }
             for (String attr: new String[]{attr1, attr2}){
@@ -280,10 +279,9 @@ public abstract class AvatarPragma extends AvatarElement {
                 }
                 pragmas.add(new AvatarPragmaInitialKnowledge(str, obj, attrs, header.equals("InitialSystemKnowledge"))); 
             } else {
-                Vector typeAttrs = typeAttributesMap.get(types.first());
-                for (int i=0; i< typeAttrs.size(); i++){
+                LinkedList<TAttribute> typeAttrs = typeAttributesMap.get(types.first());
+                for (TAttribute ta: typeAttrs) {
                     LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
-                    TAttribute ta = (TAttribute) (typeAttrs.elementAt(i));
                     String suffix = ta.getId();
                     for (String arg: args){
                         String[] sp = arg.split("\\.");
@@ -315,9 +313,8 @@ public abstract class AvatarPragma extends AvatarElement {
                 String attrName = sp[1];
                 if (nameTypeMap.containsKey(blockName+"."+attrName)){
                     //Composed type, YAY#$%^&*
-                    Vector typeAttrs = typeAttributesMap.get(nameTypeMap.get(blockName+"."+attrName));
-                    for (int i=0; i< typeAttrs.size(); i++){
-                        TAttribute ta = (TAttribute) (typeAttrs.elementAt(i));
+                    LinkedList<TAttribute> typeAttrs = typeAttributesMap.get(nameTypeMap.get(blockName+"."+attrName));
+                    for (TAttribute ta: typeAttrs) {
                         String suffix = ta.getId();
                         AvatarAttribute res = parseAttr(blockName, attrName+"__"+suffix, blocks);
                         if (res ==null){

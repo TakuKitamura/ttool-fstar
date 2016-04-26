@@ -54,7 +54,7 @@ import translator.*;
 
 public class GTURTLEOSModeling  {
     private TURTLEOSDesignPanel tosdp;
-    private Vector checkingErrors, warnings;
+    private LinkedList<CheckingError> checkingErrors, warnings;
     CorrespondanceTGElement listE;
 
     public GTURTLEOSModeling(TURTLEOSDesignPanel _tosdp) {
@@ -64,20 +64,20 @@ public class GTURTLEOSModeling  {
     public TURTLEModeling generateTURTLEModeling() {
         TURTLEModeling tm = new TURTLEModeling();
         DesignPanelTranslator dpt = new DesignPanelTranslator(tosdp);
-        Vector tclasses = tosdp.toscdp.getAllClasses();
+        LinkedList<TClassInterface> tclasses = tosdp.toscdp.getAllClasses();
         tm = dpt.generateTURTLEModeling(tclasses, "");
         listE = dpt.getCorrespondanceTGElement();
         makePeriodicTasks();
-        checkingErrors = new Vector();
-        warnings = new Vector();
+        checkingErrors = new LinkedList<CheckingError> ();
+        warnings = new LinkedList<CheckingError> ();
         return tm;
     }
     
-    public Vector getCheckingErrors() {
+    public LinkedList<CheckingError> getCheckingErrors() {
       return checkingErrors;
     }
 
-    public Vector getCheckingWarnings() {
+    public LinkedList<CheckingError> getCheckingWarnings() {
       return warnings;
     }
     

@@ -654,15 +654,9 @@ public class TMLModeling {
 		if (t.getReferenceObject() instanceof TMLCPrimitiveComponent && t.getName().equals(attr.getBlock().getName())){
 		    TMLCPrimitiveComponent comp = (TMLCPrimitiveComponent) t.getReferenceObject();
 		    comp.mappingName=mappingName;
-		    Vector attrs = comp.getAttributes();
-		    int i=0;
-		    while(i < attrs.size() ) {
-                	TAttribute a = (TAttribute)(attrs.elementAt(i));
-			if (a.getId().equals(attr.getName()) ){
+                    for (TAttribute a: comp.getAttributes ())
+			if (a.getId().equals(attr.getName())) 
 			    a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
-			}
-			i++;
-		    }
 		}
 	    }
 	}
@@ -712,15 +706,9 @@ public class TMLModeling {
 		if (t.getReferenceObject() instanceof TMLCPrimitiveComponent){
 		    TMLCPrimitiveComponent comp = (TMLCPrimitiveComponent) t.getReferenceObject();
 		    comp.mappingName=mappingName;
-		    Vector attrs = comp.getAttributes();
-		    int i=0;
-		    while(i < attrs.size()) {
-                	TAttribute a = (TAttribute)(attrs.elementAt(i));
-			if (a.getId().equals(attr.getName()) &&t.getName().equals(attr.getBlock().getName())){
+                    for (TAttribute a: comp.getAttributes ())
+			if (a.getId().equals(attr.getName()) &&t.getName().equals(attr.getBlock().getName()))
 			    a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
-			}
-			i++;
-		    }
 		}
 	    }
 	}

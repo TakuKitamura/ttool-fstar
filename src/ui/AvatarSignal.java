@@ -171,11 +171,7 @@ public class AvatarSignal extends AvatarMethod {
         return isAValidSignal(inout, super.toString());
     }
 
-    public boolean isCompatibleWith(AvatarSignal _as) {
-        if (_as.getInOut() == getInOut()) {
-            return false;
-        }
-
+    public boolean hasSamePrototype (AvatarSignal _as) {
         String[] astypes = _as.getTypes();
 
         if (astypes.length != types.length) {
@@ -189,6 +185,14 @@ public class AvatarSignal extends AvatarMethod {
         }
 
         return true;
+    }
+
+    public boolean isCompatibleWith(AvatarSignal _as) {
+        if (_as.getInOut() == getInOut()) {
+            return false;
+        }
+
+        return this.hasSamePrototype (_as);
     }
 
     public static String getSignalNameFromFullSignalString(String _signal) {

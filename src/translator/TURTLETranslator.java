@@ -63,7 +63,7 @@ public class TURTLETranslator {
 	private Vector vectorHLProcess;
 	private int languageID;
 
-	private Vector warning; /* Meant to contain String */
+	private LinkedList<CheckingError> warning;
 
 	private MasterGateManager mgm;
 
@@ -125,7 +125,7 @@ public class TURTLETranslator {
 		}
 	}*/
 
-	public Vector getWarnings() {
+	public LinkedList<CheckingError> getWarnings() {
 		return warning;
 	}
 
@@ -141,7 +141,7 @@ public class TURTLETranslator {
 		int i;
 
 		languageID = LOTOS;
-		warning = new Vector();
+		warning = new LinkedList<CheckingError> ();
 
 		MasterGateManager.reinitNameRestriction();
 
@@ -238,7 +238,7 @@ public class TURTLETranslator {
 		int i;
 
 		languageID = RT_LOTOS;
-		warning = new Vector();
+		warning = new LinkedList<CheckingError> ();
 
 		MasterGateManager.reinitNameRestriction();
 

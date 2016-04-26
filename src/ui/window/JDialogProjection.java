@@ -65,8 +65,8 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
     private static boolean isStrongSelected = true;
 
 
-    private Vector gatesIgnored;
-    private Vector gatesProjected;
+    private LinkedList<TClassAndGateDS> gatesIgnored;
+    private LinkedList<TClassAndGateDS> gatesProjected;
     
     private MainGUI mgui;
     
@@ -91,8 +91,8 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
     
     //subpanels
     private JPanel panel1, panel2, panel3, panel4;
-    private JList listIgnored;
-    private JList listProjected;
+    private JList<TClassAndGateDS> listIgnored;
+    private JList<TClassAndGateDS> listProjected;
     private JButton allProjected;
     private JButton addOneProjected;
     private JButton addOneIgnored;
@@ -136,51 +136,35 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
     }
     
     private void initGates(TClassDiagramPanel tcd) {
-        gatesIgnored = new Vector();
-        gatesProjected = new Vector();
+        gatesIgnored = new LinkedList<TClassAndGateDS> ();
+        gatesProjected = new LinkedList<TClassAndGateDS> ();
         
-        TGComponent tgc;
-        TClassInterface tci;
-        TClassAndGateDS tcg;
-        int i, j;
-        Vector gates;
-        TAttribute ta;
-        
-        LinkedList list = tcd.getComponentList();
-        
-        for(i=0; i<list.size(); i++) {
-            tgc = (TGComponent)(list.get(i));
+        LinkedList<TGComponent> list = tcd.getComponentList();
+        for (TGComponent tgc: list)
             if (tgc instanceof TClassInterface) {
-                tci = (TClassInterface)tgc;
-                gates = tci.getGates();
-                for(j=0; j<gates.size(); j++) {
-                    ta = (TAttribute)(gates.elementAt(j));
-                    tcg = new TClassAndGateDS(tci, ta);
-                    gatesIgnored.addElement(tcg);
+                TClassInterface tci = (TClassInterface)tgc;
+                LinkedList<TAttribute> gates = tci.getGates();
+                for (TAttribute ta: gates) {
+                    TClassAndGateDS tcg = new TClassAndGateDS(tci, ta);
+                    gatesIgnored.add (tcg);
                 }
             }
-        }
         
         Collections.sort(gatesIgnored);
     }
     
     private void initGates(TURTLEModeling tm) {
         //System.out.println("*** init gates tm ***");
-        gatesIgnored = new Vector();
-        gatesProjected = new Vector();
-        TClass t;
-        Vector gateList;
-        Gate g;
-        int j;
-        TClassAndGateDS tcg;
+        gatesIgnored = new LinkedList<TClassAndGateDS> ();
+        gatesProjected = new LinkedList<TClassAndGateDS> ();
         
         for(int i=0; i<tm.classNb(); i++) {
-            t = tm.getTClassAtIndex(i);
-            gateList = t.getGateList();
-            for(j=0; j<gateList.size(); j++) {
-                g = (Gate)(gateList.elementAt(j));
-                tcg = new TClassAndGateDS(t, g);
-                gatesIgnored.addElement(tcg);
+            TClass t = tm.getTClassAtIndex(i);
+            Vector gateList = t.getGateList();
+            for(int j=0; j<gateList.size(); j++) {
+                Gate g = (Gate)(gateList.elementAt(j));
+                TClassAndGateDS tcg = new TClassAndGateDS(t, g);
+                gatesIgnored.add (tcg);
             }
             
         }
@@ -212,7 +196,7 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
         panel1.setBorder(new javax.swing.border.TitledBorder("Gates ignored"));
-        listIgnored = new JList(gatesIgnored);
+        listIgnored = new JList<TClassAndGateDS> (gatesIgnored.toArray (new TClassAndGateDS[0]));
         //listIgnored.setPreferredSize(new Dimension(200, 250));
         listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listIgnored.addListSelectionListener(this);
@@ -225,7 +209,7 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
         panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
         panel2.setBorder(new javax.swing.border.TitledBorder("Gates taken into account"));
-        listProjected = new JList(gatesProjected);
+        listProjected = new JList<TClassAndGateDS> (gatesProjected.toArray (new TClassAndGateDS[0]));
         //listProjected.setPreferredSize(new Dimension(200, 250));
         listProjected.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listProjected.addListSelectionListener(this);
@@ -414,38 +398,36 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
     
     private void addOneIgnored() {
         int [] list = listProjected.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
+        LinkedList<TClassAndGateDS> v = new LinkedList<TClassAndGateDS> ();
         for (int i=0; i<list.length; i++){
-            o = gatesProjected.elementAt(list[i]);
-            gatesIgnored.addElement(o);
-            v.addElement(o);
+            TClassAndGateDS o = gatesProjected.get (list[i]);
+            gatesIgnored.add (o);
+            v.add (o);
         }
         
         gatesProjected.removeAll(v);
         moveSynchronizedGatesAsWell(gatesIgnored, gatesProjected);
         Collections.sort(gatesIgnored);
-        listIgnored.setListData(gatesIgnored);
-        listProjected.setListData(gatesProjected);
+        listIgnored.setListData(gatesIgnored.toArray (new TClassAndGateDS[0]));
+        listProjected.setListData(gatesProjected.toArray (new TClassAndGateDS[0]));
         checkMode();
         setButtons();
     }
     
     private void addOneProjected() {
         int [] list = listIgnored.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
+        LinkedList<TClassAndGateDS> v = new LinkedList<TClassAndGateDS> ();
         for (int i=0; i<list.length; i++){
-            o = gatesIgnored.elementAt(list[i]);
-            gatesProjected.addElement(o);
-            v.addElement(o);
+            TClassAndGateDS o = gatesIgnored.get (list[i]);
+            gatesProjected.add (o);
+            v.add (o);
         }
         
         gatesIgnored.removeAll(v);
         moveSynchronizedGatesAsWell(gatesProjected, gatesIgnored);
         Collections.sort(gatesProjected);
-        listIgnored.setListData(gatesIgnored);
-        listProjected.setListData(gatesProjected);
+        listIgnored.setListData(gatesIgnored.toArray (new TClassAndGateDS[0]));
+        listProjected.setListData(gatesProjected.toArray (new TClassAndGateDS[0]));
         checkMode();
         setButtons();
     }
@@ -453,9 +435,9 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
     private void allProjected() {
         gatesProjected.addAll(gatesIgnored);
         Collections.sort(gatesProjected);
-        gatesIgnored.removeAllElements();
-        listIgnored.setListData(gatesIgnored);
-        listProjected.setListData(gatesProjected);
+        gatesIgnored.clear ();
+        listIgnored.setListData(gatesIgnored.toArray (new TClassAndGateDS[0]));
+        listProjected.setListData(gatesProjected.toArray (new TClassAndGateDS[0]));
         checkMode();
         setButtons();
     }
@@ -463,29 +445,29 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
     private void allIgnored() {
         gatesIgnored.addAll(gatesProjected);
         Collections.sort(gatesIgnored);
-        gatesProjected.removeAllElements();
-        listIgnored.setListData(gatesIgnored);
-        listProjected.setListData(gatesProjected);
+        gatesProjected.clear ();
+        listIgnored.setListData(gatesIgnored.toArray (new TClassAndGateDS[0]));
+        listProjected.setListData(gatesProjected.toArray (new TClassAndGateDS[0]));
         checkMode();
         setButtons();
     }
     
-    private void moveSynchronizedGatesAsWell(Vector toCheck, Vector toPickup) {
-        TClassAndGateDS tcg, tcg1;
+    private void moveSynchronizedGatesAsWell(LinkedList<TClassAndGateDS> toCheck, LinkedList<TClassAndGateDS> toPickup) {
+        TClassAndGateDS tcg1;
         MasterGateManager mgm = mgui.gtm.getNewMasterGateManager();
         //Gate g;
         GroupOfGates gog, gog1;
         
-        for (int i=0; i<toCheck.size(); i++){
-            tcg = (TClassAndGateDS)(toCheck.elementAt(i));
+
+        for (TClassAndGateDS tcg: toCheck) {
             gog = mgm.groupOf(tcg.getTClassName(), tcg.getGateName());
             if (gog != null) {
                 for(int j=0; j<toPickup.size(); j++) {
-                    tcg1 = (TClassAndGateDS)(toPickup.elementAt(j));
+                    tcg1 = toPickup.get (j);
                     gog1 = mgm.groupOf(tcg1.getTClassName(), tcg1.getGateName());
                     if (gog1 == gog) {
-                        toCheck.addElement(tcg1);
-                        toPickup.removeElementAt(j);
+                        toCheck.add (tcg1);
+                        toPickup.remove (j);
                         j--;
                     }
                 }

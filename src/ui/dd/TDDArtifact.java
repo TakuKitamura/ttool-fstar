@@ -275,23 +275,17 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
         }
         
         //System.out.println("DesignPanel ok");
-        LinkedList ll = dp.tcdp.getComponentList();
-        ListIterator iterator = ll.listIterator();
-        TGComponent tgc;
+        LinkedList<TGComponent> ll = dp.tcdp.getComponentList();
         TCDTClass tc;
         ArtifactTClassGate atg;
-        Vector listGates;
-        int i;
-        TAttribute ta;
+        LinkedList<TAttribute> listGates;
         
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        for (TGComponent tgc: ll)
             if (tgc instanceof TCDTClass) {
                 tc = (TCDTClass)tgc;
                 //System.out.println("Found class = " + tc.getClassName());
                 listGates = tc.getGates();
-                for(i=0; i<listGates.size(); i++) {
-                    ta = (TAttribute)(listGates.elementAt(i));
+                for (TAttribute ta: listGates) {
                     if (ta.getAccess() == TAttribute.PUBLIC) {
                         // Verify if it is already involved in a synchronization internal to the component
                         if (!dp.tcdp.isASynchronizedGate(ta)) {
@@ -301,11 +295,7 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
                     }
                 }
             }
-        }
         
         return v;
-        
     }
-    
-    
 }

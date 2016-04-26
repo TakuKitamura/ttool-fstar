@@ -57,7 +57,8 @@ import ui.cd.*;
 
 
 public class JDialogSynchro extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    private Vector gatesOfT1, gatesOfT2, synchro, newSynchro;
+    private LinkedList<TAttribute> gatesOfT1, gatesOfT2;
+    private LinkedList<TTwoAttributes> synchro, newSynchro;
     private TClassSynchroInterface t1, t2;
     //private TDiagramPanel _tdp;
     
@@ -68,7 +69,7 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
     private JButton addButton;
     
     //Panel2
-    private JList listGates;
+    private JList<TTwoAttributes> listGates;
     private JButton upButton;
     private JButton downButton;
     private JButton removeButton;
@@ -78,7 +79,7 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogSynchro(Frame f, TClassSynchroInterface _t1, TClassSynchroInterface _t2, Vector _synchro, TCDSynchroGateList _tcdsgl, String title) {
+    public JDialogSynchro(Frame f, TClassSynchroInterface _t1, TClassSynchroInterface _t2, LinkedList<TTwoAttributes> _synchro, TCDSynchroGateList _tcdsgl, String title) {
         super(f, title, true);
         t1 = _t1;
         t2 = _t2;
@@ -92,7 +93,7 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
         checkGates(synchro);
         
         // clone synchronization gates -> for cancel
-        newSynchro = (Vector)(synchro.clone());
+        newSynchro = (LinkedList<TTwoAttributes>)(synchro.clone());
         
         // remove gates involved in synchro
         adjustGatesOfTClasses();
@@ -102,12 +103,9 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
         pack();
     }
     
-    private void checkGates(Vector sync) {
-        TTwoAttributes tt;
-        int i;
-        
-        for(i=0; i<sync.size(); i++) {
-            tt = (TTwoAttributes)(sync.elementAt(i));
+    private void checkGates(LinkedList<TTwoAttributes> sync) {
+        for(int i=0; i<sync.size(); i++) {
+            TTwoAttributes tt = sync.get (i);
             if ((tt.t1 != t1) || (tt.t2 != t2) || (!gatesOfT1.contains(tt.ta1)) || (!gatesOfT2.contains(tt.ta2))) {
                 sync.remove(tt);
                 i --;
@@ -119,37 +117,29 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
     }
     
     private void adjustGatesOfTClasses() {
-        int i;
-        TTwoAttributes tt;
-        
-        for(i=0; i<newSynchro.size(); i++) {
-            tt = (TTwoAttributes)(newSynchro.elementAt(i));
-            if (gatesOfT1.contains(tt.ta1)) {
+        for (TTwoAttributes tt: newSynchro ) {
+            if (gatesOfT1.contains(tt.ta1))
                 gatesOfT1.remove(tt.ta1);
-            }
-            if (gatesOfT2.contains(tt.ta2)) {
+            if (gatesOfT2.contains(tt.ta2))
                 gatesOfT2.remove(tt.ta2);
-            }
         }
         
         //checking access : only pubic gates can be connected
-        int access;
-        TAttribute a;
         
-        for(i=0; i<gatesOfT1.size(); i++) {
-            a = (TAttribute)(gatesOfT1.elementAt(i));
-            access = a.getAccess();
+        for(int i=0; i<gatesOfT1.size(); i++) {
+            TAttribute a = gatesOfT1.get (i);
+            int access = a.getAccess();
             if (access != TAttribute.PUBLIC) {
-                gatesOfT1.removeElementAt(i);
+                gatesOfT1.remove (i);
                 i--;
             }
         }
         
-        for(i=0; i<gatesOfT2.size(); i++) {
-            a = (TAttribute)(gatesOfT2.elementAt(i));
-            access = a.getAccess();
+        for(int i=0; i<gatesOfT2.size(); i++) {
+            TAttribute a = gatesOfT2.get (i);
+            int access = a.getAccess();
             if (access != TAttribute.PUBLIC) {
-                gatesOfT2.removeElementAt(i);
+                gatesOfT2.remove (i);
                 i--;
             }
         }
@@ -226,7 +216,7 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
         panel1.add(addButton, c1);
         
         // 1st line panel2
-        listGates = new JList(newSynchro);
+        listGates = new JList<TTwoAttributes> (newSynchro.toArray (new TTwoAttributes[0]));
         listGates.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listGates.addListSelectionListener(this);
         JScrollPane scrollPane = new JScrollPane(listGates);
@@ -310,12 +300,12 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
         TAttribute g;
         
         for(i=0; i<gatesOfT1.size(); i++) {
-            g = (TAttribute)(gatesOfT1.elementAt(i));
+            g = gatesOfT1.get (i);
             gatesBox1.addItem(t1.getValue() + "." + g.getId());
         }
         
         for(i=0; i<gatesOfT2.size(); i++) {
-            g = (TAttribute)(gatesOfT2.elementAt(i));
+            g = gatesOfT2.get (i);
             gatesBox2.addItem(t2.getValue() + "." + g.getId());
         }
     }
@@ -326,37 +316,37 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
         TTwoAttributes tt;
         
         if ((i1 > -1) && (i2 > -1)) {
-            TAttribute g1 = (TAttribute)(gatesOfT1.elementAt(i1));
-            TAttribute g2 = (TAttribute)(gatesOfT2.elementAt(i2));
+            TAttribute g1 = gatesOfT1.get (i1);
+            TAttribute g2 = gatesOfT2.get (i2);
             
             tt = new TTwoAttributes(t1, t2, g1, g2);
             newSynchro.add(tt);
-            gatesOfT1.removeElementAt(i1);
-            gatesOfT2.removeElementAt(i2);
+            gatesOfT1.remove (i1);
+            gatesOfT2.remove (i2);
             makeComboBoxes();
-            listGates.setListData(newSynchro);
+            listGates.setListData(newSynchro.toArray (new TTwoAttributes[0]));
         }
     }
     
     public void removeSynchro() {
         int i = listGates.getSelectedIndex() ;
         if (i!= -1) {
-            TTwoAttributes tt = (TTwoAttributes)(newSynchro.elementAt(i));
+            TTwoAttributes tt = newSynchro.get (i);
             gatesOfT1.add(tt.ta1);
             gatesOfT2.add(tt.ta2);
             makeComboBoxes();
-            newSynchro.removeElementAt(i);
-            listGates.setListData(newSynchro);
+            newSynchro.remove (i);
+            listGates.setListData(newSynchro.toArray (new TTwoAttributes[0]));
         }
     }
     
     public void downSynchro() {
         int i = listGates.getSelectedIndex();
         if ((i!= -1) && (i != newSynchro.size() - 1)) {
-            Object o = newSynchro.elementAt(i);
-            newSynchro.removeElementAt(i);
-            newSynchro.insertElementAt(o, i+1);
-            listGates.setListData(newSynchro);
+            TTwoAttributes o = newSynchro.get (i);
+            newSynchro.remove (i);
+            newSynchro.add (i+1, o);
+            listGates.setListData(newSynchro.toArray (new TTwoAttributes[0]));
             listGates.setSelectedIndex(i+1);
         }
     }
@@ -364,19 +354,19 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
     public void upSynchro() {
         int i = listGates.getSelectedIndex();
         if (i > 0) {
-            Object o = newSynchro.elementAt(i);
-            newSynchro.removeElementAt(i);
-            newSynchro.insertElementAt(o, i-1);
-            listGates.setListData(newSynchro);
+            TTwoAttributes o = newSynchro.get (i);
+            newSynchro.remove (i);
+            newSynchro.add (i-1, o);
+            listGates.setListData(newSynchro.toArray (new TTwoAttributes[0]));
             listGates.setSelectedIndex(i-1);
         }
     }
     
     
     public void closeDialog() {
-        synchro.removeAllElements();
+        synchro.clear ();
         for(int i=0; i<newSynchro.size(); i++) {
-            synchro.addElement(newSynchro.elementAt(i));
+            synchro.add (newSynchro.get (i));
         }
         dispose();
     }

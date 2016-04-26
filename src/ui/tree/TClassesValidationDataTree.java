@@ -49,13 +49,13 @@ import ui.*;
 import myutil.*;
 
 
-public class TClassesValidationDataTree implements GenericTree {
+public class TClassesValidationDataTree<T> implements GenericTree {
     	
     private MainGUI mgui;
     private String name = "Validated TClasses";
     
-	public TClassesValidationDataTree(MainGUI _mgui) {
-		mgui = _mgui;
+	public TClassesValidationDataTree(MainGUI mgui) {
+		this.mgui = mgui;
 	}
 	
 	public String toString() {
@@ -63,15 +63,14 @@ public class TClassesValidationDataTree implements GenericTree {
 	}
 	
 	public int getChildCount() {
-		return mgui.tclassesToValidate.size();
+		return this.mgui.tclassesToValidate.size();
 	}
 	
 	public Object getChild(int index) {
-		return mgui.tclassesToValidate.elementAt(index);
+		return this.mgui.tclassesToValidate.get (index);
 	}
 	
 	public int getIndexOfChild(Object child) {
-		return mgui.tclassesToValidate.indexOf(child);
+		return this.mgui.tclassesToValidate.indexOf(child);
 	}
-
 }

@@ -138,6 +138,11 @@ public class TAttribute {
     public String getInitialValue() { return initialValue;}
     public int getType() { return type;}
     public String getTypeOther() { return typeOther;}
+    public boolean hasSameType (TAttribute ta) {
+        int otherType = ta.getType ();
+        return otherType == this.type &&
+              (otherType != OTHER || this.typeOther.equals (ta.getTypeOther ()));
+    }
     
     public void setAccess(int _access) { access = _access;};
     public void setType(int _type) { type = _type;};
@@ -238,19 +243,13 @@ public class TAttribute {
         }
     }
     
-    public static boolean notIn(String s, Vector forbidden) {
-        if (forbidden == null) {
+    public static boolean notIn(String s, LinkedList<TAttribute> forbidden) {
+        if (forbidden == null)
             return true;
-        }
         
-        TAttribute t;
-        
-        for(int i= 0; i<forbidden.size(); i++) {
-            t = (TAttribute)(forbidden.elementAt(i));
-            if (s.compareTo(t.getId()) ==0) {
+        for (TAttribute t: forbidden)
+            if (s.compareTo(t.getId()) ==0)
                 return false;
-            }
-        }
         
         return true;
     }

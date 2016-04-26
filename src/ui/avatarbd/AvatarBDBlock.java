@@ -83,9 +83,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
 
     // TAttribute, AvatarMethod, AvatarSignal
-    protected Vector<TAttribute> myAttributes;
-    protected Vector<AvatarMethod> myMethods;
-    protected Vector<AvatarSignal> mySignals;
+    protected LinkedList<TAttribute> myAttributes;
+    protected LinkedList<AvatarMethod> myMethods;
+    protected LinkedList<AvatarSignal> mySignals;
     protected String [] globalCode;
 
 
@@ -139,9 +139,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         myImageIcon = IconManager.imgic700;
 
-        this.myAttributes = new Vector<TAttribute> ();
-        this.myMethods = new Vector<AvatarMethod> ();
-        this.mySignals = new Vector<AvatarSignal> ();
+        this.myAttributes = new LinkedList<TAttribute> ();
+        this.myMethods = new LinkedList<AvatarMethod> ();
+        this.mySignals = new LinkedList<AvatarSignal> ();
 
         actionOnAdd();
     }
@@ -795,7 +795,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                     }
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
                                     ta.isAvatar = true;
-                                    this.myAttributes.addElement(ta);
+                                    this.myAttributes.add (ta);
                                 }
                             }
                             if (elt.getTagName().equals("Method")) {
@@ -969,7 +969,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return TGComponentManager.AVATARBD_PORT_CONNECTOR;
     }
 
-    public Vector<TAttribute> getAttributeList() {
+    public LinkedList<TAttribute> getAttributeList() {
         return this.myAttributes;
     }
 
@@ -980,54 +980,66 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return null;
     }
 
-    public Vector<AvatarMethod> getMethodList() {
+    public LinkedList<AvatarMethod> getMethodList() {
         return this.myMethods;
     }
 
-    public Vector<AvatarSignal> getSignalList() {
+    public LinkedList<AvatarSignal> getSignalList() {
         return this.mySignals;
     }
 
-    public Vector<AvatarSignal> getOutSignalList() {
-        Vector<AvatarSignal> v = new Vector<AvatarSignal> ();
+    public LinkedList<AvatarSignal> getOutSignalList() {
+        LinkedList<AvatarSignal> v = new LinkedList<AvatarSignal> ();
 	for(AvatarSignal s: this.mySignals)
             if (s.getInOut() == AvatarSignal.OUT)
                 v.add(s);
         return v;
     }
 
-    public Vector<AvatarSignal> getInSignalList() {
-        Vector<AvatarSignal> v = new Vector<AvatarSignal> ();
+    public LinkedList<AvatarSignal> getInSignalList() {
+        LinkedList<AvatarSignal> v = new LinkedList<AvatarSignal> ();
 	for(AvatarSignal s: this.mySignals)
             if (s.getInOut() == AvatarSignal.IN)
                 v.add(s);
         return v;
     }
 
-    public Vector<AvatarMethod> getAllMethodList() {
+    public LinkedList<AvatarMethod> getAllMethodList() {
         if (getFather() == null) {
             return this.myMethods;
         }
 
-        Vector<AvatarMethod> v = new Vector<AvatarMethod> ();
+        LinkedList<AvatarMethod> v = new LinkedList<AvatarMethod> ();
         v.addAll(this.myMethods);
         v.addAll(((AvatarBDBlock) getFather()).getAllMethodList());
         return v;
     }
 
-    public Vector<AvatarSignal> getAllSignalList() {
+    public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctionList() {
+        LinkedList<AvatarBDLibraryFunction> list = this.getFullLibraryFunctionList ();
+
+        if (this.getFather() == null) {
+            list.addAll (((AvatarBDPanel) this.tdp).getFullLibraryFunctionList ());
+            return list;
+        }
+
+        list.addAll(((AvatarBDBlock) this.getFather()).getAllLibraryFunctionList());
+        return list;
+    }
+
+    public LinkedList<AvatarSignal> getAllSignalList() {
         if (getFather() == null) {
             return this.mySignals;
         }
 
-        Vector<AvatarSignal> v = new Vector<AvatarSignal> ();
+        LinkedList<AvatarSignal> v = new LinkedList<AvatarSignal> ();
         v.addAll(this.mySignals);
         v.addAll(((AvatarBDBlock)getFather()).getAllSignalList());
         return v;
     }
 
-    public Vector<String> getAllTimerList() {
-        Vector<String> v = new Vector<String> ();
+    public LinkedList<String> getAllTimerList() {
+        LinkedList<String> v = new LinkedList<String> ();
 
         for (TAttribute a: this.myAttributes)
             if (a.getType() == TAttribute.TIMER)
@@ -1042,15 +1054,15 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return null;
     }
 
-    public Vector getListOfAvailableSignals() {
+    public LinkedList<AvatarSignal> getListOfAvailableSignals() {
         return ((AvatarBDPanel)(tdp)).getListOfAvailableSignals(this);
     }
 
-    public Vector getListOfAvailableOutSignals() {
+    public LinkedList<AvatarSignal> getListOfAvailableOutSignals() {
         return ((AvatarBDPanel)(tdp)).getListOfAvailableOutSignals(this);
     }
 
-    public Vector getListOfAvailableInSignals() {
+    public LinkedList<AvatarSignal> getListOfAvailableInSignals() {
         return ((AvatarBDPanel)(tdp)).getListOfAvailableInSignals(this);
     }
 

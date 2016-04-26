@@ -55,7 +55,7 @@ import ui.ad.*;
 
 public class DesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterface {
     public TClassDiagramPanel tcdp; 
-    public Vector validated, ignored;
+    public LinkedList<TClassInterface> validated, ignored;
 
 
     public DesignPanel(MainGUI _mgui) {

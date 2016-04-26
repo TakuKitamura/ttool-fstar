@@ -58,8 +58,10 @@ import myutil.*;
 
 public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
 
-    private Vector attributes, attributesPar, forbidden, initValues;
-    private Vector methods, methodsPar, signals, signalsPar;
+    private LinkedList<TAttribute> attributes, attributesPar, forbidden;
+    private LinkedList<Boolean> initValues;
+    private LinkedList<AvatarMethod> methods, methodsPar;
+    private LinkedList<AvatarSignal> signals, signalsPar;
     private boolean checkKeyword, checkJavaKeyword;
 
     private boolean cancelled = false;
@@ -84,7 +86,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     private JButton addButton;
 
     //Panel2
-    private JList listAttribute;
+    private JList<TAttribute> listAttribute;
     private JButton upButton;
     private JButton downButton;
     private JButton removeButton;
@@ -94,7 +96,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     private JPanel panel3, panel4;
     private JTextField methodText;
     private JButton addMethodButton;
-    private JList listMethod;
+    private JList<AvatarMethod> listMethod;
     private JButton upMethodButton;
     private JButton downMethodButton;
     private JButton removeMethodButton;
@@ -106,7 +108,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     private JComboBox signalInOutBox;
     private JTextField signalText;
     private JButton addSignalButton;
-    private JList listSignal;
+    private JList<AvatarSignal> listSignal;
     private JButton upSignalButton;
     private JButton downSignalButton;
     private JButton removeSignalButton;
@@ -116,7 +118,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     private JButton cancelButton;
 
     /** Creates new form  */
-    public JDialogAvatarBlock(Vector _attributes, Vector _methods, Vector _signals, Vector _forbidden, Frame f, String title, String attrib, int _tab, String []_globalCode, boolean _hasGlobalCode, String _mainCode) {
+    public JDialogAvatarBlock(LinkedList<TAttribute> _attributes, LinkedList<AvatarMethod> _methods, LinkedList<AvatarSignal> _signals, LinkedList<TAttribute> _forbidden, Frame f, String title, String attrib, int _tab, String []_globalCode, boolean _hasGlobalCode, String _mainCode) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
@@ -127,12 +129,12 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 
 
         if (methodsPar == null) {
-            methodsPar = new Vector();
+            methodsPar = new LinkedList<AvatarMethod> ();
             hasMethods = false;
         }
 
         if (signalsPar == null) {
-            signalsPar = new Vector();
+            signalsPar = new LinkedList<AvatarSignal> ();
             hasSignals = false;
         }
 
@@ -144,25 +146,22 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 
 
         forbidden = _forbidden;
-        initValues = new Vector();
+        initValues = new LinkedList<Boolean> ();
         this.attrib = attrib;
         tab = _tab;
 
-        attributes = new Vector();
-        methods = new Vector();
-        signals = new Vector();
+        attributes = new LinkedList<TAttribute> ();
+        methods = new LinkedList<AvatarMethod> ();
+        signals = new LinkedList<AvatarSignal> ();
 
-        for(int i=0; i<attributesPar.size(); i++) {
-            attributes.addElement(((TAttribute)(attributesPar.elementAt(i))).makeClone());
-        }
+        for(TAttribute attr: this.attributesPar)
+            this.attributes.add (attr.makeClone());
 
-        for(int i=0; i<methodsPar.size(); i++) {
-            methods.addElement(((AvatarMethod)(methodsPar.elementAt(i))).makeClone());
-        }
+        for(AvatarMethod meth: this.methodsPar)
+            this.methods.add (meth.makeClone());
 
-        for(int i=0; i<signalsPar.size(); i++) {
-            signals.addElement(((AvatarSignal)(signalsPar.elementAt(i))).makeClone());
-        }
+        for(AvatarSignal sig: this.signalsPar)
+            this.signals.add (sig.makeClone());
 
         initComponents();
         myInitComponents();
@@ -280,7 +279,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         panel1.add(addButton, c1);
 
         // 1st line panel2
-        listAttribute = new JList(attributes);
+        listAttribute = new JList<TAttribute> (this.attributes.toArray (new TAttribute[0]));
         //listAttribute.setFixedCellWidth(150);
         //listAttribute.setFixedCellHeight(20);
         listAttribute.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -375,7 +374,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         panel3.add(addMethodButton, c3);
 
         // 1st line panel4
-        listMethod = new JList(methods);
+        listMethod = new JList<AvatarMethod> (this.methods.toArray (new AvatarMethod[0]));
         listMethod.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listMethod.addListSelectionListener(this);
         scrollPane = new JScrollPane(listMethod);
@@ -441,9 +440,9 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         // second line panel5
         c5.gridwidth = 1;
         c5.fill = GridBagConstraints.HORIZONTAL;
-        Vector v = new Vector();
-        v.add("in");
-        v.add("out");
+        String[] v = new String[2];
+        v[0] = "in";
+        v[1] = "out";
         signalInOutBox = new JComboBox(v);
         panel5.add(signalInOutBox, c5);
         signalText = new JTextField();
@@ -465,7 +464,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         panel5.add(addSignalButton, c5);
 
         // 1st line panel6
-        listSignal = new JList(signals);
+        listSignal = new JList<AvatarSignal> (this.signals.toArray (new AvatarSignal[0]));
         listSignal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listSignal.addListSelectionListener(this);
         scrollPane = new JScrollPane(listSignal);
@@ -598,7 +597,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 
     public void actionPerformed(ActionEvent evt)  {
         if (evt.getSource() == typeBox) {
-            boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+            boolean b = initValues.get (typeBox.getSelectedIndex()).booleanValue();
             initialValue.setEnabled(b);
             return;
         }
@@ -710,18 +709,17 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
                     int index = attributes.size();
                     if (attributes.contains(a)) {
                         index = attributes.indexOf(a);
-                        a = (TAttribute)(attributes.elementAt(index));
+                        a = attributes.get (index);
                         a.setAccess(i);
                         if (j == TAttribute.OTHER) {
                             a.setTypeOther(o2.toString());
                         }
                         a.setType(j);
                         a.setInitialValue(value);
-                        //attributes.removeElementAt(index);
                     } else {
                         attributes.add(index, a);
                     }
-                    listAttribute.setListData(attributes);
+                    listAttribute.setListData(attributes.toArray (new TAttribute[0]));
                     identifierText.setText("");
                 } else {
                     JOptionPane.showMessageDialog(frame,
@@ -769,10 +767,10 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
             if (index == -1) {
                 methods.add(am);
             } else {
-                methods.removeElementAt(index);
+                methods.remove (index);
                 methods.add(index, am);
             }
-            listMethod.setListData(methods);
+            listMethod.setListData(methods.toArray (new AvatarMethod[0]));
             methodText.setText("");
 
         } else {
@@ -804,10 +802,10 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
             if (index == -1) {
                 signals.add(as);
             } else {
-                signals.removeElementAt(index);
-                signals.add(index, as);
+                signals.remove (index);
+                signals.add (index, as);
             }
-            listSignal.setListData(signals);
+            listSignal.setListData(signals.toArray (new AvatarSignal[0]));
             signalText.setText("");
 
         } else {
@@ -822,20 +820,20 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     public void removeAttribute() {
         int i = listAttribute.getSelectedIndex() ;
         if (i!= -1) {
-            TAttribute a = (TAttribute)(attributes.elementAt(i));
+            TAttribute a = attributes.get (i);
             a.setAccess(-1);
-            attributes.removeElementAt(i);
-            listAttribute.setListData(attributes);
+            attributes.remove (i);
+            listAttribute.setListData(attributes.toArray (new TAttribute[0]));
         }
     }
 
     public void downAttribute() {
         int i = listAttribute.getSelectedIndex();
         if ((i!= -1) && (i != attributes.size() - 1)) {
-            Object o = attributes.elementAt(i);
-            attributes.removeElementAt(i);
-            attributes.insertElementAt(o, i+1);
-            listAttribute.setListData(attributes);
+            TAttribute o = attributes.get (i);
+            attributes.remove (i);
+            attributes.add (i+1, o);
+            listAttribute.setListData(attributes.toArray (new TAttribute[0]));
             listAttribute.setSelectedIndex(i+1);
         }
     }
@@ -845,10 +843,10 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         //TraceManager.addDev("Selected index = " + i);
         if (i > 0) {
             //TraceManager.addDev("Modifying ...");
-            Object o = attributes.elementAt(i);
-            attributes.removeElementAt(i);
-            attributes.insertElementAt(o, i-1);
-            listAttribute.setListData(attributes);
+            TAttribute o = attributes.get (i);
+            attributes.remove (i);
+            attributes.add (i-1, o);
+            listAttribute.setListData(attributes.toArray (new TAttribute[0]));
             listAttribute.setSelectedIndex(i-1);
         }
     }
@@ -856,10 +854,8 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     public void removeMethod() {
         int i = listMethod.getSelectedIndex() ;
         if (i!= -1) {
-            //AvatarMethod am = (AvatarMethod)(methods.elementAt(i));
-            //a.setAccess(-1);
-            methods.removeElementAt(i);
-            listMethod.setListData(methods);
+            methods.remove (i);
+            listMethod.setListData(methods.toArray (new AvatarMethod [0]));
         }
     }
 
@@ -867,10 +863,10 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         int i = listMethod.getSelectedIndex();
         //TraceManager.addDev("Selected index method = " + i);
         if (i > 0) {
-            Object o = methods.elementAt(i);
-            methods.removeElementAt(i);
-            methods.insertElementAt(o, i-1);
-            listMethod.setListData(methods);
+            AvatarMethod o = methods.get (i);
+            methods.remove (i);
+            methods.add (i-1, o);
+            listMethod.setListData(methods.toArray (new AvatarMethod [0]));
             listMethod.setSelectedIndex(i-1);
         }
     }
@@ -878,10 +874,10 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     public void downMethod() {
         int i = listMethod.getSelectedIndex();
         if ((i!= -1) && (i != methods.size() - 1)) {
-            Object o = methods.elementAt(i);
-            methods.removeElementAt(i);
-            methods.insertElementAt(o, i+1);
-            listMethod.setListData(methods);
+            AvatarMethod o = methods.get (i);
+            methods.remove (i);
+            methods.add (i+1, o);
+            listMethod.setListData(methods.toArray (new AvatarMethod [0]));
             listMethod.setSelectedIndex(i+1);
         }
     }
@@ -889,20 +885,18 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     public void removeSignal() {
         int i = listSignal.getSelectedIndex() ;
         if (i!= -1) {
-            //AvatarMethod am = (AvatarMethod)(methods.elementAt(i));
-            //a.setAccess(-1);
-            signals.removeElementAt(i);
-            listSignal.setListData(signals);
+            signals.remove (i);
+            listSignal.setListData(signals.toArray (new AvatarSignal [0]));
         }
     }
 
     public void upSignal() {
         int i = listSignal.getSelectedIndex();
         if (i > 0) {
-            Object o = signals.elementAt(i);
-            signals.removeElementAt(i);
-            signals.insertElementAt(o, i-1);
-            listSignal.setListData(signals);
+            AvatarSignal o = signals.get (i);
+            signals.remove (i);
+            signals.add (i-1, o);
+            listSignal.setListData(signals.toArray (new AvatarSignal [0]));
             listSignal.setSelectedIndex(i-1);
         }
     }
@@ -910,10 +904,10 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     public void downSignal() {
         int i = listSignal.getSelectedIndex();
         if ((i!= -1) && (i != signals.size() - 1)) {
-            Object o = signals.elementAt(i);
-            signals.removeElementAt(i);
-            signals.insertElementAt(o, i+1);
-            listSignal.setListData(signals);
+            AvatarSignal o = signals.get (i);
+            signals.remove(i);
+            signals.add (i+1, o);
+            listSignal.setListData(signals.toArray (new AvatarSignal [0]));
             listSignal.setSelectedIndex(i+1);
         }
     }
@@ -921,18 +915,18 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 
     public void closeDialog() {
         cancelled = false;
-        attributesPar.removeAllElements();
-        for(int i=0; i<attributes.size(); i++) {
-            attributesPar.addElement(attributes.elementAt(i));
-        }
-        methodsPar.removeAllElements();
-        for(int i=0; i<methods.size(); i++) {
-            methodsPar.addElement(methods.elementAt(i));
-        }
-        signalsPar.removeAllElements();
-        for(int i=0; i<signals.size(); i++) {
-            signalsPar.addElement(signals.elementAt(i));
-        }
+        attributesPar.clear ();
+        for(TAttribute attr: this.attributes)
+            attributesPar.add (attr);
+
+        methodsPar.clear ();
+        for(AvatarMethod meth: this.methods)
+            methodsPar.add (meth);
+
+        signalsPar.clear ();
+        for(AvatarSignal sig: this.signals)
+            signalsPar.add (sig);
+
         globalCode =  Conversion.wrapText(jtaGlobalCode.getText());
         mainCode = jtaMainCode.getText();
         dispose();
@@ -958,7 +952,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
             identifierText.setText("");
             //initialValue.setText("");
         } else {
-            TAttribute a = (TAttribute)(attributes.elementAt(i));
+            TAttribute a = attributes.get (i);
             identifierText.setText(a.getId());
             initialValue.setText(a.getInitialValue());
             select(accessBox, a.getStringAccess(a.getAccess()));
@@ -988,7 +982,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
             methodText.setText("");
             //initialValue.setText("");
         } else {
-            AvatarMethod am = (AvatarMethod)(methods.elementAt(i));
+            AvatarMethod am = methods.get (i);
             methodText.setText(am.toString());
             TraceManager.addDev("Implementation of " + am + " is: " +  am.isImplementationProvided());
             implementationProvided.setSelected(am.isImplementationProvided());
@@ -1013,7 +1007,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
             signalText.setText("");
             //initialValue.setText("");
         } else {
-            AvatarSignal as = (AvatarSignal)(signals.elementAt(i));
+            AvatarSignal as = signals.get (i);
             signalText.setText(as.toBasicString());
             signalInOutBox.setSelectedIndex(as.getInOut());
             removeSignalButton.setEnabled(true);

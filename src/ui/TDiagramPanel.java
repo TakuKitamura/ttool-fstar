@@ -2746,22 +2746,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return v;
     }
 
-    public void removeSynchronizedGates(Vector v, TClassInterface t, TCDSynchroGateList tcdsgl ) {
-        int j = 0;
-
+    public void removeSynchronizedGates(LinkedList<TAttribute> v, TClassInterface t, TCDSynchroGateList tcdsgl ) {
         for (TGComponent tgc: this.componentList)
             if (tgc instanceof TCDCompositionOperatorWithSynchro) {
                 TCDCompositionOperatorWithSynchro tgso = (TCDCompositionOperatorWithSynchro)tgc;
 
                 if (((tgso.getT1() == t) || (tgso.getT2() == t)) && tgso.getSynchroGateList() != tcdsgl) {
-                    Vector ttwoattrib = tgso.getSynchroGateList().getGates();
-                    for(j=0; j<ttwoattrib.size(); j++) {
-                        TTwoAttributes tt = (TTwoAttributes)(ttwoattrib.elementAt(j));
+                    LinkedList<TTwoAttributes> ttwoattrib = tgso.getSynchroGateList().getGates();
+                    for (TTwoAttributes tt: ttwoattrib)
                         if (tt.t1 == t)
-                            v.removeElement(tt.ta1);
+                            v.remove (tt.ta1);
                         else
-                            v.removeElement(tt.ta2);
-                    }
+                            v.remove (tt.ta2);
                 }
             }
     }
@@ -2770,12 +2766,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         for (TGComponent tgc: this.componentList)
             if (tgc instanceof TCDCompositionOperatorWithSynchro) {
                 TCDCompositionOperatorWithSynchro tgso = (TCDCompositionOperatorWithSynchro)tgc;
-                Vector ttwoattrib = tgso.getSynchroGateList().getGates();
-                for(int j=0; j<ttwoattrib.size(); j++) {
-                    TTwoAttributes tt = (TTwoAttributes)(ttwoattrib.elementAt(j));
+                LinkedList<TTwoAttributes> ttwoattrib = tgso.getSynchroGateList().getGates();
+                for (TTwoAttributes tt: ttwoattrib)
                     if ((tt.ta1 == ta) || (tt.ta2 == ta))
                         return true;
-                }
             }
 
         return false;

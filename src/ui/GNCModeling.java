@@ -58,7 +58,7 @@ public class GNCModeling  {
 	private NCStructure ncs;
     private NCPanel ncp;
 	private NCDiagramPanel ncdp;
-    private Vector checkingErrors, warnings;
+    private LinkedList<CheckingError> checkingErrors, warnings;
 	private CorrespondanceTGElement listE;
 	private NCStructure nc;
 	
@@ -75,8 +75,8 @@ public class GNCModeling  {
 		PATH_INDEX = 0;
 		
         ncs = new NCStructure();
-        checkingErrors = new Vector();
-        warnings = new Vector();
+        checkingErrors = new LinkedList<CheckingError> ();
+        warnings = new LinkedList<CheckingError> ();
 		listE = new CorrespondanceTGElement();
         //boolean b;
         
@@ -99,11 +99,11 @@ public class GNCModeling  {
 	}
     
     
-    public Vector getCheckingErrors() {
+    public LinkedList<CheckingError> getCheckingErrors() {
         return checkingErrors;
     }
     
-    public Vector getCheckingWarnings() {
+    public LinkedList<CheckingError> getCheckingWarnings() {
         return warnings;
     }
     

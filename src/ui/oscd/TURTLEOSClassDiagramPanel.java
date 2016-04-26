@@ -128,20 +128,18 @@ public class TURTLEOSClassDiagramPanel extends TDiagramPanel implements ClassDia
         return "</TURTLEOSClassDiagramPanelCopy>";
     }
     
-    public Vector getAllClasses() {
-      Vector v = new Vector();
+    public LinkedList<TClassInterface> getAllClasses() {
+      LinkedList<TClassInterface> v = new LinkedList<TClassInterface> ();
       
       ListIterator iterator = getComponentList().listIterator();
       
       while(iterator.hasNext()) {
         TGComponent tgc = (TGComponent)(iterator.next());
         if (tgc instanceof TClassInterface) {
-           v.add(tgc);
+           v.add((TClassInterface) tgc);
         }
       }
       
       return v;
-      
     }
-    
 }

@@ -70,7 +70,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 		protected boolean isActor;
 		protected static int heightActor = 30;
 		protected static int widthActor = 16;
-		protected Vector myAttributes;
+		protected LinkedList<TAttribute> myAttributes;
 		protected String mappedUnit = "";	//The arch unit where the instance is mapped to
 	
     
@@ -94,7 +94,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
         userResizable = true;
         value = "Instance name";
         name = "instance";
-				myAttributes = new Vector();
+				myAttributes = new LinkedList<TAttribute> ();
         myImageIcon = IconManager.imgic500;
 	}
     
@@ -366,7 +366,6 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
      }
 	 
 	 protected String translateExtraParam() {
-        TAttribute a;
         StringBuffer sb = new StringBuffer( "<extraparam>\n" );
         sb.append( "<Mapping mappedOn=\"" );
         sb.append( "" + mappedUnit );
@@ -374,11 +373,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
         sb.append( "<Actor data=\"" );
         sb.append( ""+isActor );
         sb.append( "\" />\n" );
-        for( int i = 0; i < myAttributes.size(); i++ )	{
-					//TraceManager.addDev("Attribute:" + i);
-          a = (TAttribute)( myAttributes.elementAt(i) );
-          //TraceManager.addDev("Attribute:" + i + " = " + a.getId());
-          //value = value + a + "\n";
+        for (TAttribute a: myAttributes) {
           sb.append( "<Attribute access=\"" );
           sb.append( a.getAccess() );
           sb.append( "\" id=\"" );
@@ -442,7 +437,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 												if( (TAttribute.isAValidId(id, false, false) ) && ( TAttribute.isAValidInitialValue(type, valueAtt)) )	{
 													//TraceManager.addDev("Adding attribute " + id + " typeOther=" + typeOther);
 													TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-													myAttributes.addElement(ta);
+													myAttributes.add (ta);
 												}
                       }
                     }
@@ -471,7 +466,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 		return connectingPoint;
 	}
 
-	public Vector getAttributes()	{
+	public LinkedList<TAttribute> getAttributes()	{
 		return myAttributes;
 	}
 }

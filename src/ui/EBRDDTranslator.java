@@ -56,7 +56,7 @@ import tmltranslator.*;
 
 public class EBRDDTranslator {
 	protected EBRDD ebrdd;
-	protected Vector checkingErrors, warnings;
+	protected LinkedList<CheckingError> checkingErrors, warnings;
 	protected CorrespondanceTGElement listE; // usual list
 	//protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
 	
@@ -65,32 +65,32 @@ public class EBRDDTranslator {
 	}
 	
 	public void reinit() {
-		checkingErrors = new Vector();
-		warnings = new Vector();
+		checkingErrors = new LinkedList<CheckingError> ();
+		warnings = new LinkedList<CheckingError> ();
 		listE = new CorrespondanceTGElement();
 		//listB = new CorrespondanceTGElement();
 	}
 	
-	public Vector getErrors() {
+	public LinkedList<CheckingError> getErrors() {
 		return checkingErrors;
 	}
 	
-	public Vector getWarnings() {
+	public LinkedList<CheckingError> getWarnings() {
 		return warnings;
 	}
 	
 	private void addCheckingError(CheckingError ce) {
 		if (checkingErrors == null) {
-			checkingErrors = new Vector();
+			checkingErrors = new LinkedList<CheckingError> ();
 		}
-		checkingErrors.addElement(ce);
+		checkingErrors.add (ce);
 	}
 	
 	private void addWarning(CheckingError ce) {
 		if (warnings == null) {
-			warnings = new Vector();
+			warnings = new LinkedList<CheckingError> ();
 		}
-		warnings.addElement(ce);
+		warnings.add (ce);
 	}
 	
 	public CorrespondanceTGElement getCorrespondanceTGElement() {
@@ -141,8 +141,6 @@ public class EBRDDTranslator {
 		req.ebrdd.EBRDDAttribute attr;
 		ESO eso;
 		ERB erb;
-		TAttribute ta;
-		Vector vv;
 		TMLType tt;
 		int i;
 		
@@ -159,9 +157,8 @@ public class EBRDDTranslator {
 			
 			// Variables
 			if (tgc instanceof EBRDDAttributeBox) {
-				vv = ((EBRDDAttributeBox)tgc).getAttributeList();
-				for(int l=0; l<vv.size(); l++) {
-					ta = (TAttribute)(vv.get(l));
+				LinkedList<TAttribute> vv = ((EBRDDAttributeBox)tgc).getAttributeList();
+                                for (TAttribute ta: vv) {
 					if (ta.getType() == TAttribute.NATURAL) {
 						tt = new TMLType(TMLType.NATURAL);
 					} else if (ta.getType() == TAttribute.BOOLEAN) {

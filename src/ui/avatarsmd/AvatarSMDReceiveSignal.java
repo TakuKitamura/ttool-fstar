@@ -222,7 +222,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 	
     
     public boolean editOndoubleClick(JFrame frame) {
-		Vector signals = tdp.getMGUI().getAllSignals();
+		LinkedList<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
 		TraceManager.addDev("Nb of signals:" + signals.size());
 		
 		JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting receive signal",  value, signals, false);

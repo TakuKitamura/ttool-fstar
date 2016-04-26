@@ -56,15 +56,15 @@ import ui.*;
 
 
 public class JDialogModelChecking extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    public static Vector validated, ignored;
+    public static LinkedList<TClassInterface> validated, ignored;
     private static boolean overideSyntaxChecking = false;
 
-    private Vector val, ign, back;
+    private LinkedList<TClassInterface> val, ign, back;
 
     //subpanels
     private JPanel panel1, panel2, panel3, panel4, panel5, panel6;
-    private JList listIgnored;
-    private JList listValidated;
+    private JList<TClassInterface> listIgnored;
+    private JList<TClassInterface> listValidated;
     private JButton allValidated;
     private JButton addOneValidated;
     private JButton addOneIgnored;
@@ -76,7 +76,7 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
     private JButton cancelButton;
 
     /** Creates new form  */
-    public JDialogModelChecking(Frame f, Vector _back, LinkedList componentList, String title) {
+    public JDialogModelChecking(Frame f, LinkedList<TClassInterface> _back, LinkedList<TGComponent> componentList, String title) {
         super(f, title, true);
 
         back = _back;
@@ -84,12 +84,12 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         if ((validated == null) || (ignored == null)) {
             val = makeNewVal(componentList);
             //System.out.println("Val size: " + val.size() + "component list:" + componentList.size());
-            ign = new Vector();
+            ign = new LinkedList<TClassInterface> ();
         } else {
             val = validated;
             ign = ignored;
-            checkTClasses(val, componentList);
-            checkTClasses(ign, componentList);
+            this.checkTClasses(val, componentList);
+            this.checkTClasses(ign, componentList);
             addNewTclasses(val, componentList, ign);
         }
 
@@ -98,42 +98,29 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         pack();
     }
 
-    private Vector makeNewVal(LinkedList list) {
-        Vector v = new Vector();
-        TGComponent tgc;
+    private LinkedList<TClassInterface> makeNewVal(LinkedList<TGComponent> list) {
+        LinkedList<TClassInterface> v = new LinkedList<TClassInterface> ();
 
-        for(int i=0; i<list.size(); i++) {
-            tgc = (TGComponent)(list.get(i));
-            //System.out.println(tgc);
-            if (tgc instanceof TClassInterface) {
-                v.addElement(tgc);
-            }
-        }
+        for (TGComponent tgc: list)
+            if (tgc instanceof TClassInterface)
+                v.add ((TClassInterface) tgc);
+
         return v;
     }
 
-    private void checkTClasses(Vector tobeChecked, LinkedList source) {
-        TClassInterface t;
-
-        for(int i=0; i<tobeChecked.size(); i++) {
-            t = (TClassInterface)(tobeChecked.elementAt(i));
-            if (!source.contains(t)) {
-                tobeChecked.removeElementAt(i);
-                i--;
-            }
+    private void checkTClasses(LinkedList<TClassInterface> tobeChecked, LinkedList<TGComponent> source) {
+        Iterator<TClassInterface> iter = tobeChecked.iterator ();
+        while (iter.hasNext ()) {
+            TClassInterface t = iter.next ();
+            if (!source.contains(t))
+                iter.remove ();
         }
     }
 
-    public void addNewTclasses(Vector added, LinkedList source, Vector notSource) {
-        TGComponent tgc;
-
-        for(int i=0; i<source.size(); i++) {
-            tgc = (TGComponent)(source.get(i));
-            if ((tgc instanceof TClassInterface) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
-                added.addElement(tgc);
-                //System.out.println("New element");
-            }
-        }
+    public void addNewTclasses(LinkedList<TClassInterface> added, LinkedList<TGComponent> source, LinkedList<TClassInterface> notSource) {
+        for (TGComponent tgc: source)
+            if ((tgc instanceof TClassInterface) && (!added.contains(tgc)) && (!notSource.contains(tgc)))
+                added.add ((TClassInterface) tgc);
     }
 
     private void myInitComponents() {
@@ -152,7 +139,7 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
         panel1.setBorder(new javax.swing.border.TitledBorder("Ignored"));
-        listIgnored = new JList(ign);
+        listIgnored = new JList<TClassInterface> (ign.toArray (new TClassInterface[0]));
         //listIgnored.setPreferredSize(new Dimension(200, 250));
         listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listIgnored.addListSelectionListener(this);
@@ -165,7 +152,7 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
         panel2.setBorder(new javax.swing.border.TitledBorder("Taken into account"));
-        listValidated = new JList(val);
+        listValidated = new JList<TClassInterface> (val.toArray (new TClassInterface[0]));
         //listValidated.setPreferredSize(new Dimension(200, 250));
         listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listValidated.addListSelectionListener(this);
@@ -265,58 +252,48 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
 
 
     private void addOneIgnored() {
-        int [] list = listValidated.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
-        for (int i=0; i<list.length; i++){
-            o = val.elementAt(list[i]);
-            ign.addElement(o);
-            v.addElement(o);
+        for (TClassInterface c: this.listValidated.getSelectedValuesList ()) {
+            ign.add (c);
+            val.remove (c);
         }
 
-        val.removeAll(v);
-        listIgnored.setListData(ign);
-        listValidated.setListData(val);
-        setButtons();
+        listIgnored.setListData(ign.toArray (new TClassInterface [0]));
+        listValidated.setListData(val.toArray (new TClassInterface [0]));
+        this.setButtons();
     }
 
     private void addOneValidated() {
-        int [] list = listIgnored.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
-        for (int i=0; i<list.length; i++){
-            o = ign.elementAt(list[i]);
-            val.addElement(o);
-            v.addElement(o);
+        for (TClassInterface c: this.listIgnored.getSelectedValuesList ()) {
+            ign.remove (c);
+            val.add (c);
         }
 
-        ign.removeAll(v);
-        listIgnored.setListData(ign);
-        listValidated.setListData(val);
+        listIgnored.setListData(ign.toArray (new TClassInterface [0]));
+        listValidated.setListData(val.toArray (new TClassInterface [0]));
         setButtons();
     }
 
     private void allValidated() {
-        val.addAll(ign);
-        ign.removeAllElements();
-        listIgnored.setListData(ign);
-        listValidated.setListData(val);
-        setButtons();
+        val.addAll (ign);
+        ign.clear ();
+        listIgnored.setListData(ign.toArray (new TClassInterface[0]));
+        listValidated.setListData(val.toArray (new TClassInterface[0]));
+        this.setButtons();
     }
 
     private void allIgnored() {
         ign.addAll(val);
-        val.removeAllElements();
-        listIgnored.setListData(ign);
-        listValidated.setListData(val);
+        val.clear ();
+        listIgnored.setListData(ign.toArray (new TClassInterface[0]));
+        listValidated.setListData(val.toArray (new TClassInterface[0]));
         setButtons();
     }
 
 
     public void closeDialog() {
-        back.removeAllElements();
+        back.clear ();
         for(int i=0; i<val.size(); i++) {
-            back.addElement(val.elementAt(i));
+            back.add (val.get (i));
         }
         validated = val;
         ignored = ign;
@@ -367,13 +344,10 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
 
     public int nbStart() {
         int cpt = 0;
-        TClassInterface t;
-        for(int i=0; i<val.size(); i++) {
-            t = (TClassInterface)(val.elementAt(i));
-            if (t.isStart()) {
+        for (TClassInterface t: val)
+            if (t.isStart())
                 cpt ++;
-            }
-        }
+
         return cpt;
     }
 
@@ -384,5 +358,4 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
     public boolean getOverideSyntaxChecking() {
         return overideSyntaxChecking;
     }
-
 }

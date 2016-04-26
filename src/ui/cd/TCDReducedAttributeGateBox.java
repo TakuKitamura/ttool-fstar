@@ -100,7 +100,7 @@ public class TCDReducedAttributeGateBox extends TGCReducedAttributeBox {
         ColorManager.setColor(g, getState(), 0);
     }
     
-    protected Vector getCustomAttributes() {
+    protected LinkedList<TAttribute> getCustomAttributes() {
         TCDTObject to = (TCDTObject)(getFather());
         TCDTClass tc = to.getMasterTClass();
         return tc.getGates();

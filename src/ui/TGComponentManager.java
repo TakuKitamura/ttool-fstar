@@ -1279,6 +1279,8 @@ public class TGComponentManager {
             return AVATARBD_COMPOSITION_CONNECTOR;
         } else if (tgc instanceof AvatarBDPortConnector) {
             return AVATARBD_PORT_CONNECTOR;
+        } else if (tgc instanceof AvatarBDLibraryFunction) {
+            return AVATARBD_LIBRARYFUNCTION;
 
 
 

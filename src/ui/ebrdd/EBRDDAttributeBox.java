@@ -63,8 +63,8 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
     protected String attributeText = "Variable";
     protected int textX = 5;
     protected int textY = 20;
-    protected Vector myAttributes;
-    protected Vector forbiddenNames;
+    protected LinkedList<TAttribute> myAttributes;
+    protected LinkedList<TAttribute> forbiddenNames;
     protected Graphics myG;
     protected Color myColor;
     protected boolean attributes;
@@ -102,24 +102,24 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
 		
         myImageIcon = IconManager.imgic1060;
 		
-		myAttributes = new Vector();
+		myAttributes = new LinkedList<TAttribute> ();
 		
 		myColor = ColorManager.UML_NOTE_BG;
 		
-		forbiddenNames = new Vector();
+		forbiddenNames = new LinkedList<TAttribute> ();
 		
 		//actionOnAdd();
     }
     
-     public Vector getAttributeList() {
+     public LinkedList<TAttribute> getAttributeList() {
         return myAttributes;
     }
     
-    public void setAttributeList(Vector attributes) {
+    public void setAttributeList(LinkedList<TAttribute> attributes) {
         myAttributes = attributes;
     }
     
-    public void setForbiddenNames(Vector v) {
+    public void setForbiddenNames(LinkedList<TAttribute> v) {
         forbiddenNames = v;
     }
     
@@ -142,7 +142,7 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
         if (areVisible()) {
             TAttribute a;
             for(int i=0; i<myAttributes.size(); i++) {
-                a = (TAttribute)(myAttributes.elementAt(i));
+                a = myAttributes.get (i);
                 g.drawString(a.toString(), x + textX, y + textY + i* h);
             }
         } else if (myAttributes.size() >0) {
@@ -154,7 +154,7 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
         value = "";
         TAttribute a;
         for(int i=0; i<myAttributes.size(); i++) {
-            a = (TAttribute)(myAttributes.elementAt(i));
+            a = myAttributes.get (i);
             value = value + a + "\n";
         }
         //System.out.println("Value = " + value);
@@ -190,7 +190,7 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
         
         TAttribute a;
         for(int i=0; i<myAttributes.size(); i++) {
-            a = (TAttribute)(myAttributes.elementAt(i));
+            a = myAttributes.get (i);
             desiredWidth = Math.max(desiredWidth,  myG.getFontMetrics().stringWidth(a.toString()) + 2 * textX);
         }
         
@@ -246,7 +246,7 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         for(int i=0; i<myAttributes.size(); i++) {
             //System.out.println("Attribute:" + i);
-            a = (TAttribute)(myAttributes.elementAt(i));
+            a = myAttributes.get (i);
             //System.out.println("Attribute:" + i + " = " + a.getId());
             value = value + a + "\n";
             sb.append("<Attribute access=\"");
@@ -307,7 +307,7 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-                                    myAttributes.addElement(ta);
+                                    myAttributes.add (ta);
                                 }
                             }
                         }
@@ -328,7 +328,7 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
     }
     
     public Object getChild(int index) {
-        return myAttributes.elementAt(index);
+        return myAttributes.get (index);
     }
     
     public int getIndexOfChild(Object child) {

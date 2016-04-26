@@ -70,7 +70,7 @@ public class Mapping2TIF {
 	private TMLArchitecture tmlarchitecture;
 	
     private TURTLEModeling tm;
-    private Vector checkingErrors;
+    private LinkedList<CheckingError> checkingErrors;
 	
 	private boolean showSampleChannels = false;
 	private boolean showChannels = false;
@@ -114,7 +114,7 @@ public class Mapping2TIF {
 		tmlarchitecture = tmlmapping.getTMLArchitecture();
     }
     
-    public Vector getCheckingErrors() {
+    public LinkedList<CheckingError> getCheckingErrors() {
         return checkingErrors;
     }
 	
@@ -203,7 +203,7 @@ public class Mapping2TIF {
 		
 		//TraceManager.addDev("generate TM");
         tm = new TURTLEModeling();
-        checkingErrors = new Vector();
+        checkingErrors = new LinkedList<CheckingError> ();
 		
 		// Init structures
 		prepareSystemTClass();

@@ -62,8 +62,8 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
     protected String attributeText;
     protected int textX = 5;
     protected int textY = 20;
-    protected Vector myAttributes;
-    protected Vector forbiddenNames;
+    protected LinkedList<TAttribute> myAttributes;
+    protected LinkedList<TAttribute> forbiddenNames;
     protected Graphics myG;
     protected Color myColor;
     protected boolean attributes;
@@ -88,18 +88,18 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
         editable = true;
         removable = false;
         
-        myAttributes = new Vector();
+        myAttributes = new LinkedList<TAttribute> ();
     }
     
-    public Vector getAttributeList() {
+    public LinkedList<TAttribute> getAttributeList() {
         return myAttributes;
     }
     
-    public void setAttributeList(Vector attributes) {
+    public void setAttributeList(LinkedList<TAttribute> attributes) {
         myAttributes = attributes;
     }
     
-    public void setForbiddenNames(Vector v) {
+    public void setForbiddenNames(LinkedList<TAttribute> v) {
         forbiddenNames = v;
     }
     
@@ -122,7 +122,7 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
         if (areVisible()) {
             TAttribute a;
             for(int i=0; i<myAttributes.size(); i++) {
-                a = (TAttribute)(myAttributes.elementAt(i));
+                a = myAttributes.get (i);
                 g.drawString(a.toString(), x + textX, y + textY + i* h);
             }
         } else if (myAttributes.size() >0) {
@@ -132,12 +132,8 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
     
     public void makeValue() {
         value = "";
-        TAttribute a;
-        for(int i=0; i<myAttributes.size(); i++) {
-            a = (TAttribute)(myAttributes.elementAt(i));
+        for (TAttribute a: myAttributes)
             value = value + a + "\n";
-        }
-        //System.out.println("Value = " + value);
     }
     
     public boolean areVisible() {
@@ -172,11 +168,8 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
         int h = myG.getFontMetrics().getHeight();
         int desiredHeight =  Math.max(minHeight, h * (myAttributes.size() -1) + minHeight);
         
-        TAttribute a;
-        for(int i=0; i<myAttributes.size(); i++) {
-            a = (TAttribute)(myAttributes.elementAt(i));
+        for (TAttribute a: myAttributes)
             desiredWidth = Math.max(desiredWidth,  myG.getFontMetrics().stringWidth(a.toString()) + 2 * textX);
-        }
         
         minDesiredWidth = desiredWidth;
         minDesiredHeight = desiredHeight;
@@ -227,13 +220,9 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
     }
     
     protected String translateExtraParam() {
-        TAttribute a;
         value = "";
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        for(int i=0; i<myAttributes.size(); i++) {
-            //System.out.println("Attribute:" + i);
-            a = (TAttribute)(myAttributes.elementAt(i));
-            //System.out.println("Attribute:" + i + " = " + a.getId());
+        for (TAttribute a: myAttributes) {
             value = value + a + "\n";
             sb.append("<Attribute access=\"");
             sb.append(a.getAccess());
@@ -293,7 +282,7 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-                                    myAttributes.addElement(ta);
+                                    myAttributes.add (ta);
                                 }
                             }
                         }
@@ -314,10 +303,10 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
     }
     
     public Object getChild(int index) {
-        return myAttributes.elementAt(index);
+        return myAttributes.get (index);
     }
     
     public int getIndexOfChild(Object child) {
-        return myAttributes.indexOf(child);
+        return myAttributes.indexOf (child);
     }
 }

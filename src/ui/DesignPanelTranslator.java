@@ -60,7 +60,7 @@ import ui.osad.*;
 
 public class DesignPanelTranslator {
     protected TURTLEDesignPanelInterface dp;
-    protected Vector checkingErrors, warnings;
+    protected LinkedList<CheckingError> checkingErrors, warnings;
     protected CorrespondanceTGElement listE; // usual list
     protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
     protected LinkedList <TDiagramPanel> panels;
@@ -72,19 +72,19 @@ public class DesignPanelTranslator {
     }
 
     public void reinit() {
-        checkingErrors = new Vector();
-        warnings = new Vector();
+        checkingErrors = new LinkedList<CheckingError> ();
+        warnings = new LinkedList<CheckingError> ();
         listE = new CorrespondanceTGElement();
         listB = new CorrespondanceTGElement();
         panels = new LinkedList <TDiagramPanel>();
         activities = new LinkedList <ActivityDiagram>();
     }
 
-    public Vector getErrors() {
+    public LinkedList<CheckingError> getErrors() {
         return checkingErrors;
     }
 
-    public Vector getWarnings() {
+    public LinkedList<CheckingError> getWarnings() {
         return warnings;
     }
 
@@ -93,21 +93,16 @@ public class DesignPanelTranslator {
     }
 
     public TURTLEModeling generateTURTLEModeling() {
-        Vector tclasses = new Vector();
-        TGComponent tgc;
+        LinkedList<TClassInterface> tclasses = new LinkedList<TClassInterface>();
 
-        ListIterator iterator = dp.getStructurePanel().getComponentList().listIterator();
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TClassInterface) {
-                tclasses.add(tgc);
-            }
-        }
+        for (Object tgc: dp.getStructurePanel ().getComponentList ())
+            if (tgc instanceof TClassInterface)
+                tclasses.add((TClassInterface) tgc);
 
         return generateTURTLEModeling(tclasses, "");
     }
 
-    public TURTLEModeling generateTURTLEModeling(Vector tclasses, String preName) {
+    public TURTLEModeling generateTURTLEModeling(LinkedList<TClassInterface> tclasses, String preName) {
         TURTLEModeling tmodel = new TURTLEModeling();
         addTClasses(dp, tclasses, preName, tmodel);
         addRelations(dp, tmodel);
@@ -116,60 +111,50 @@ public class DesignPanelTranslator {
 
     private void addCheckingError(CheckingError ce) {
         if (checkingErrors == null) {
-            checkingErrors = new Vector();
+            checkingErrors = new LinkedList<CheckingError> ();
         }
-        checkingErrors.addElement(ce);
+        checkingErrors.add (ce);
     }
 
     private void addWarning(CheckingError ce) {
         if (warnings == null) {
-            warnings = new Vector();
+            warnings = new LinkedList<CheckingError> ();
         }
-        warnings.addElement(ce);
+        warnings.add (ce);
     }
 
 
-    public void addTClasses(TURTLEDesignPanelInterface dp, Vector tclasses, String preName, TURTLEModeling tm) {
+    public void addTClasses(TURTLEDesignPanelInterface dp, LinkedList<TClassInterface> tclasses, String preName, TURTLEModeling tm) {
         TDiagramPanel tdp;
         // search for class diagram panels
         tdp = dp.panelAt(0);
         /*if (tdp instanceof TClassDiagramPanel) {
           addTClassesFromPanel((TClassDiagramPanel)tdp, tclasses, preName, tm);
           }*/
-        if (tdp instanceof ClassDiagramPanelInterface) {
+        if (tdp instanceof ClassDiagramPanelInterface)
             addTClassesFromPanel(tdp, (ClassDiagramPanelInterface)tdp, tclasses, preName, tm);
-        }
     }
 
-    private void addTClassesFromPanel(TDiagramPanel diag, ClassDiagramPanelInterface tdp, Vector tclasses, String preName, TURTLEModeling tm) {
+    private void addTClassesFromPanel(TDiagramPanel diag, ClassDiagramPanelInterface tdp, LinkedList<TClassInterface> tclasses, String preName, TURTLEModeling tm) {
         LinkedList list = tdp.getComponentList();
-        Iterator iterator = list.listIterator();
 
         // search for tclasses
-        TGComponent tgc;
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if ((tgc instanceof TClassInterface) && (tclasses.contains(tgc))) {
+        for (Object tgc: tdp.getComponentList ())
+            if ((tgc instanceof TClassInterface) && (tclasses.contains(tgc)))
                 addTClassFromTClassInterface((TClassInterface)tgc, diag, tdp, preName, tm);
-            }
-        }
     }
 
     private void addTClassFromTClassInterface(TClassInterface tgc, TDiagramPanel diag, ClassDiagramPanelInterface tdp, String preName, TURTLEModeling tm) {
         //System.out.println("Adding TClass: " + tgc.getClassName());
         TClass t = new TClass(preName + tgc.getClassName(), tgc.isStart());
 
-        Vector v;
         int i, j;
-        TAttribute a;
         Param p;
         Gate g; boolean internal; int type;
         int value;
 
         // Attributes
-        v = tgc.getAttributes();
-        for(i=0; i<v.size(); i++) {
-            a = (TAttribute)(v.elementAt(i));
+        for (TAttribute a: tgc.getAttributes()) {
             if (a.getType() == TAttribute.NATURAL) {
                 p = new Param(a.getId(), Param.NAT, a.getInitialValue());
                 p.setAccess(a.getAccessString());
@@ -215,23 +200,21 @@ public class DesignPanelTranslator {
         }
 
         // Gates
-        v = tgc.getGates();
-        for(i=0; i<v.size(); i++) {
-            a = (TAttribute)(v.elementAt(i));
+        for (TAttribute a: tgc.getGates()) {
             internal = (a.getAccess() == TAttribute.PRIVATE);
             switch(a.getType()) {
-            case TAttribute.GATE:
-                type = Gate.GATE;
-                break;
-            case TAttribute.OUTGATE:
-                type = Gate.OUTGATE;
-                break;
-            case
-                TAttribute.INGATE:
-                type = Gate.INGATE;
-                break;
-            default:
-                type = -1;
+                case TAttribute.GATE:
+                    type = Gate.GATE;
+                    break;
+                case TAttribute.OUTGATE:
+                    type = Gate.OUTGATE;
+                    break;
+                    case
+                        TAttribute.INGATE:
+                        type = Gate.INGATE;
+                    break;
+                default:
+                    type = -1;
             }
             if (type > -1) {
                 internal = false; // We consider all gates as public gates -> private is given for documentation purpose only
@@ -261,10 +244,8 @@ public class DesignPanelTranslator {
                 return ;
             }
 
-            Vector v = tdata.getAttributes();
-            TAttribute b; Param p;
-            for(int i=0; i<v.size(); i++) {
-                b = (TAttribute)(v.elementAt(i));
+            Param p;
+            for (TAttribute b: tdata.getAttributes()) {
                 if (b.getType() == TAttribute.NATURAL) {
                     p = new Param(a.getId() + "__" + b.getId(), Param.NAT, b.getInitialValue());
                     p.setAccess(a.getAccessString());
@@ -465,7 +446,7 @@ public class DesignPanelTranslator {
                         ce.setTClass(t);
                         ce.setTGComponent(tgc);
                         ce.setTDiagramPanel(tdp);
-                        addCheckingError(ce);
+                        addCheckingError(ce);  
                         tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
                     }
                     adap = new ADActionStateWithParam(p);
@@ -530,24 +511,16 @@ public class DesignPanelTranslator {
                     if (index > -1) {
                         String name0 = s.substring(0,index).trim();
                         String name1 = s.substring(index+1,s.length()).trim();
-                        Vector attributes = tci.getAttributes();
-                        int index0 = -1;
-                        int index1 = -1;
-                        TAttribute ta, ta0 = null, ta1 = null;
+                        TAttribute ta0 = null, ta1 = null;
 
-                        for(j=0; j<attributes.size(); j++) {
-                            ta = (TAttribute)(attributes.get(j));
-                            if (ta.getId().compareTo(name0) == 0) {
-                                index0 = j;
+                        for (TAttribute ta: tci.getAttributes()) {
+                            if (ta.getId().compareTo(name0) == 0)
                                 ta0 = ta;
-                            }
-                            if (ta.getId().compareTo(name1) == 0) {
-                                index1 = j;
+                            if (ta.getId().compareTo(name1) == 0)
                                 ta1 = ta;
-                            }
                         }
 
-                        if (((index0 != -1) && (index1 != -1)) && (ta0.getTypeOther().compareTo(ta1.getTypeOther()) == 0)) {
+                        if (ta0 != null && ta1 != null && ta0.getTypeOther().compareTo(ta1.getTypeOther()) == 0) {
                             // Expand the equality!
                             tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
 
@@ -986,7 +959,7 @@ public class DesignPanelTranslator {
                 // identification of connected components
                 tgc1 = null; tgc2 = null;
                 for(j=0; j<list.size(); j++) {
-                    tgc3 =      (TGComponent)(list.get(j));
+                    tgc3 = 	(TGComponent)(list.get(j));
                     if (tgc3.belongsToMe(p1)) {
                         tgc1 = tgc3;
                     }
@@ -1140,7 +1113,7 @@ public class DesignPanelTranslator {
 
                 if (tgco instanceof TGConnectorAssociationWithNavigation) {
                     r = new Relation(type, tc1, tc2, true);
-                }       else {
+                }	else {
                     r = new Relation(type, tc1, tc2, false);
                 }
 
@@ -1148,22 +1121,20 @@ public class DesignPanelTranslator {
                 //System.out.println("Adding " + Relation.translation(type) + " relation between " + tc1.getName() + " and " + tc2.getName());
 
                 // if tgco is a synchro operator -> synchronizations gates
-                if (tco instanceof TCDSynchroOperator) {
-                    Vector gates = ((TCDSynchroOperator)tco).getGates();
-                    setGatesOf(r, gates, tc1, tc2);
-                }
+                if (tco instanceof TCDSynchroOperator)
+                    setGatesOf(r, ((TCDSynchroOperator)tco).getGates(), tc1, tc2);
 
-                if (tco instanceof TCDInvocationOperator) {
-                    Vector gates = ((TCDInvocationOperator)tco).getGates();
-                    setGatesOf(r, gates, tc1, tc2);
-                }
+                if (tco instanceof TCDInvocationOperator)
+                    setGatesOf(r, ((TCDInvocationOperator)tco).getGates(), tc1, tc2);
 
+                /* COMMENTED on 04.25.2016
+                 * Seems like we can't instantiate TCDWatchdogOperator
+                 * and the setWatchdogGatesOf function is buggy: it uses
+                 * TTwoAttributes as if they were TAttribute.
                 // if tgco watcdog -> list of gates
-                if (tco instanceof TCDWatchdogOperator) {
-                    Vector gates = ((TCDWatchdogOperator)tco).getGates();
-                    setWatchdogGatesOf(r, gates, tc1, tc2);
-                }
-
+                if (tco instanceof TCDWatchdogOperator)
+                    setWatchdogGatesOf(r, ((TCDWatchdogOperator)tco).getGates(), tc1, tc2);
+                 */
             }
         }
     }
@@ -1172,25 +1143,23 @@ public class DesignPanelTranslator {
         if (tco instanceof TCDParallelOperator) {
             return Relation.PAR;
         } else if (tco instanceof TCDPreemptionOperator) {
-            return      Relation.PRE;
+            return 	Relation.PRE;
         } else if (tco instanceof TCDSequenceOperator) {
-            return      Relation.SEQ;
+            return 	Relation.SEQ;
         } else if (tco instanceof TCDSynchroOperator) {
-            return      Relation.SYN;
+            return 	Relation.SYN;
         } else if (tco instanceof TCDInvocationOperator) {
-            return      Relation.INV;
+            return 	Relation.INV;
         } else if (tco instanceof TCDWatchdogOperator) {
-            return      Relation.WAT;
+            return 	Relation.WAT;
         }
         return -1;
     }
 
-    private void setGatesOf(Relation r, Vector gates, TClass tc1, TClass tc2) {
-        TTwoAttributes tt;
+    private void setGatesOf(Relation r, LinkedList<TTwoAttributes> gates, TClass tc1, TClass tc2) {
         Gate g1, g2;
 
-        for(int i=0; i<gates.size(); i++) {
-            tt = (TTwoAttributes)(gates.elementAt(i));
+        for (TTwoAttributes tt: gates) {
             g1 = tc1.getGateByName(tt.ta1.getId());
             g2 = tc2.getGateByName(tt.ta2.getId());
 
@@ -1201,19 +1170,18 @@ public class DesignPanelTranslator {
         }
     }
 
-    private void setWatchdogGatesOf(Relation r, Vector gates, TClass tc1, TClass tc2) {
-        //TTwoAttributes tt;
-        TAttribute t;
-        Gate g1;
+    /* COMMENTED on 04.25.2016
+     * Seems like we can't instantiate TCDWatchdogOperator
+     * and the setWatchdogGatesOf function is buggy: it uses
+     * TTwoAttributes as if they were TAttribute.
+    private void setWatchdogGatesOf(Relation r, LinkedList<TTwoAttributes> gates, TClass tc1, TClass tc2) {
 
-        for(int i=0; i<gates.size(); i++) {
-            t = (TAttribute)(gates.elementAt(i));
-            g1 = tc1.getGateByName(t.getId());
+        for (TTwoAttributes t: gates) {
+            Gate g1 = tc1.getGateByName(((TAttribute) t).getId());
 
-            if (g1 != null)  {
+            if (g1 != null)
                 r.addGates(g1, g1);
-            }
         }
     }
-
+    */
 }

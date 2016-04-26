@@ -56,7 +56,8 @@ import ui.*;
 
 
 public class JDialogAttribute extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    protected Vector attributes, attributesPar, forbidden, initValues;
+    protected LinkedList<TAttribute> attributes, attributesPar, forbidden;
+    protected LinkedList<Boolean> initValues;
     protected boolean checkKeyword, checkJavaKeyword, checkTMLKeyword;
     
     protected JPanel panel1, panel2;
@@ -72,7 +73,7 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
     protected JButton addButton;
     
     //Panel2
-    protected JList listAttribute;
+    protected JList<TAttribute> listAttribute;
     protected JButton upButton;
     protected JButton downButton;
     protected JButton removeButton;
@@ -82,19 +83,18 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
     protected JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogAttribute(Vector _attributes, Vector _forbidden, Frame f, String title, String attrib) {
+    public JDialogAttribute(LinkedList<TAttribute> _attributes, LinkedList<TAttribute>_forbidden, Frame f, String title, String attrib) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
         forbidden = _forbidden;
-        initValues = new Vector();
+        initValues = new LinkedList<Boolean> ();
         this.attrib = attrib;
         
-        attributes = new Vector();
+        attributes = new LinkedList<TAttribute> ();
         
-        for(int i=0; i<attributesPar.size(); i++) {
-            attributes.addElement(((TAttribute)(attributesPar.elementAt(i))).makeClone());
-        }
+        for(TAttribute attr: attributesPar)
+            attributes.add (attr.makeClone());
         
         
         initComponents();
@@ -197,7 +197,7 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
         panel1.add(addButton, c1);
         
         // 1st line panel2
-        listAttribute = new JList(attributes);
+        listAttribute = new JList<TAttribute> (attributes.toArray (new TAttribute[0]));
         //listAttribute.setFixedCellWidth(150);
         //listAttribute.setFixedCellHeight(20);
         listAttribute.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -258,7 +258,7 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
     
     public void	actionPerformed(ActionEvent evt)  {
         if (evt.getSource() == typeBox) {
-            boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+            boolean b = initValues.get (typeBox.getSelectedIndex()).booleanValue();
             initialValue.setEnabled(b);
             return;
         }
@@ -354,18 +354,17 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
                     int index = attributes.size();
                     if (attributes.contains(a)) {
                         index = attributes.indexOf(a);
-                        a = (TAttribute)(attributes.elementAt(index));
+                        a = attributes.get (index);
                         a.setAccess(i);
                         if (j == TAttribute.OTHER) {
                             a.setTypeOther(o2.toString());
                         }
                         a.setType(j);                        
                         a.setInitialValue(value);
-                        //attributes.removeElementAt(index);
                     } else {
                         attributes.add(index, a);
                     }
-                    listAttribute.setListData(attributes);
+                    listAttribute.setListData(attributes.toArray (new TAttribute[0]));
                     identifierText.setText("");
                 } else {
                     JOptionPane.showMessageDialog(frame,
@@ -393,20 +392,20 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
     public void removeAttribute() {
         int i = listAttribute.getSelectedIndex() ;
         if (i!= -1) {
-            TAttribute a = (TAttribute)(attributes.elementAt(i));
+            TAttribute a = attributes.get (i);
             a.setAccess(-1);
-            attributes.removeElementAt(i);
-            listAttribute.setListData(attributes);
+            attributes.remove (i);
+            listAttribute.setListData(attributes.toArray (new TAttribute[0]));
         }
     }
     
     public void downAttribute() {
         int i = listAttribute.getSelectedIndex();
         if ((i!= -1) && (i != attributes.size() - 1)) {
-            Object o = attributes.elementAt(i);
-            attributes.removeElementAt(i);
-            attributes.insertElementAt(o, i+1);
-            listAttribute.setListData(attributes);
+            TAttribute o = attributes.get (i);
+            attributes.remove(i);
+            attributes.add (i+1, o);
+            listAttribute.setListData(attributes.toArray (new TAttribute[0]));
             listAttribute.setSelectedIndex(i+1);
         }
     }
@@ -414,20 +413,19 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
     public void upAttribute() {
         int i = listAttribute.getSelectedIndex();
         if (i > 0) {
-            Object o = attributes.elementAt(i);
-            attributes.removeElementAt(i);
-            attributes.insertElementAt(o, i-1);
-            listAttribute.setListData(attributes);
+            TAttribute o = attributes.get (i);
+            attributes.remove (i);
+            attributes.add (i-1, o);
+            listAttribute.setListData(attributes.toArray (new TAttribute[0]));
             listAttribute.setSelectedIndex(i-1);
         }
     }
     
     
     public void closeDialog() {
-        attributesPar.removeAllElements();
-        for(int i=0; i<attributes.size(); i++) {
-            attributesPar.addElement(attributes.elementAt(i));
-        }
+        attributesPar.clear ();
+        for(TAttribute attr: this.attributes)
+            attributesPar.add (attr);
         dispose();
     }
     
@@ -444,7 +442,7 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
             identifierText.setText("");
             //initialValue.setText("");
         } else {
-            TAttribute a = (TAttribute)(attributes.elementAt(i));
+            TAttribute a = attributes.get (i);
             identifierText.setText(a.getId());
             initialValue.setText(a.getInitialValue());
             select(accessBox, a.getStringAccess(a.getAccess()));

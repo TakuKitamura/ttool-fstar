@@ -65,7 +65,7 @@ import sddescription.*;
 public class AnalysisPanelTranslator {
     AnalysisPanel ap;
     MainGUI mgui;
-    Vector checkingErrors;
+    LinkedList<CheckingError> checkingErrors;
     CorrespondanceTGElement listE;
     
     public AnalysisPanelTranslator(AnalysisPanel _ap, MainGUI _mgui) {
@@ -75,15 +75,15 @@ public class AnalysisPanelTranslator {
     }
     
     public void reinit() {
-        checkingErrors = new Vector();
+        checkingErrors = new LinkedList<CheckingError> ();
         listE = new CorrespondanceTGElement();
     }
     
-    public Vector getErrors() {
+    public LinkedList<CheckingError> getErrors() {
         return checkingErrors;
     }
     
-    public Vector getWarnings() {
+    public LinkedList<CheckingError> getWarnings() {
         return null;
     }
     
@@ -864,9 +864,9 @@ public class AnalysisPanelTranslator {
     
     private void addCheckingError(CheckingError ce) {
         if (checkingErrors == null) {
-            checkingErrors = new Vector();
+            checkingErrors = new LinkedList<CheckingError> ();
         }
-        checkingErrors.addElement(ce);
+        checkingErrors.add (ce);
     }
     
 }
