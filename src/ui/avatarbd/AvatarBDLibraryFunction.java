@@ -222,7 +222,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             if (this.tdp.isAvatarBlockNameUnique (tmpName) &&
                 true) { // TODO: check if no other tab has same name
                 this.name = tmpName;
-                this.setValue(tmpName);
+                this.value = tmpName;
                 break;
             }
         }
@@ -589,6 +589,13 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     }
 
     @Override
+    public void setName (String s) {
+        this.tdp.changeStateMachineTabName (this.name, s);
+        this.name = s;
+        this.setValue (s);
+    }
+
+    @Override
     public TGComponent isOnMe (int x1, int y1) {
 
         if (GraphicLib.isInRectangle(x1, y1, this.x, this.y, this.width, this.height))
@@ -647,8 +654,9 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             }
 
             this.name = s;
-            this.setValue (s);
+            this.value = s;
             this.recalculateSize ();
+            this.repaint = true;
 
             return true;
         }
@@ -737,6 +745,20 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
 
         for (TAttribute attr: this.returnAttributes) {
             sb.append("<ReturnAttribute access=\"");
+            sb.append(attr.getAccess());
+            sb.append("\" id=\"");
+            sb.append(attr.getId());
+            sb.append("\" value=\"");
+            sb.append(attr.getInitialValue());
+            sb.append("\" type=\"");
+            sb.append(attr.getType());
+            sb.append("\" typeOther=\"");
+            sb.append(attr.getTypeOther());
+            sb.append("\" />\n");
+        }
+
+        for (TAttribute attr: this.attributes) {
+            sb.append("<Attribute access=\"");
             sb.append(attr.getAccess());
             sb.append("\" id=\"");
             sb.append(attr.getId());
@@ -853,6 +875,28 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
                                     ta.isAvatar = true;
                                     this.returnAttributes.add (ta);
+                                }
+                            }
+
+                            break;
+
+                        case "Attribute":
+                            {
+                                Integer access = Integer.decode (elt.getAttribute ("access")).intValue ();
+                                Integer type = Integer.decode (elt.getAttribute ("type")).intValue ();
+                                String typeOther = elt.getAttribute ("typeOther");
+                                String id = elt.getAttribute("id");
+                                String valueAtt = elt.getAttribute("value");
+                                if (valueAtt.equals("null"))
+                                    valueAtt = "";
+
+                                if (TAttribute.isAValidId (id, false, false) && TAttribute.isAValidInitialValue (type, valueAtt)) {
+                                    if (type == TAttribute.NATURAL)
+                                        type = TAttribute.INTEGER;
+
+                                    TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
+                                    ta.isAvatar = true;
+                                    this.attributes.add (ta);
                                 }
                             }
 

@@ -418,14 +418,13 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         if (h + textY1 >= this.height)
             return;
 
-        graph.drawLine (this.x, this.y+h, this.x+this.width, this.y+h);
-        h += textY1;
-
         // Global code
         if (hasGlobalCode()) {
-            h += step;
-            if (h >= this.height - textX)
+            if (h+textY1+step >= this.height - textX)
                 return;
+
+            graph.drawLine (this.x, this.y+h, this.x+this.width, this.y+h);
+            h += textY1+step;
 
             w = graph.getFontMetrics ().stringWidth (GLOBAL_CODE_INFO);
             if (w + 2*textX < this.width)

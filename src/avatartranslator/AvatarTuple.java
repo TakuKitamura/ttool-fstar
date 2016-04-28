@@ -72,7 +72,7 @@ public class AvatarTuple extends AvatarLeftHand {
             AvatarTuple argsTuple = new AvatarTuple (block);
             for (String arg: components) {
                 if (!arg.isEmpty()) {
-                    TraceManager.addDev("In for with arg=" + arg+"|");
+                    // TraceManager.addDev("In for with arg=" + arg+"|");
                     AvatarTerm t = AvatarTerm.createFromString (block, arg);
                     if (t == null) {
                         // Term couldn't be parsed
@@ -143,5 +143,6 @@ public class AvatarTuple extends AvatarLeftHand {
                 components.add (term);
                 term.replaceAttributes (attributesMapping);
             }
+        this.components = components;
     }
 }

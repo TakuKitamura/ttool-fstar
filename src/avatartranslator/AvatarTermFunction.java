@@ -77,12 +77,9 @@ public class AvatarTermFunction extends AvatarTerm implements AvatarAction {
         }
 
         AvatarMethod meth = block.getAvatarMethodWithName (methodName);
-        if (meth != null && argsTuple != null && meth.getListOfAttributes ().size () == argsTuple.getComponents ().size ()){
+        if (meth != null && argsTuple != null && meth.getListOfAttributes ().size () == argsTuple.getComponents ().size ())
             // Method was found and the arguments provided are correct
-        TraceManager.addDev ("Function call '" + toParse + "' added parsed");
             return new AvatarTermFunction (meth, argsTuple, block);
-}
-        TraceManager.addDev ("Function call '" + toParse + "' couldn't be parsed");
 
         return null;
     }

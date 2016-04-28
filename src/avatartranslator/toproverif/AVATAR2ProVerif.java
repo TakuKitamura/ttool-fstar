@@ -921,8 +921,10 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         for (AvatarStateMachineElement asme: simplifiedElements.keySet ())
             if (asme != null) {
                 HashMap<AvatarAttribute, Integer> attributeCmp = new HashMap<AvatarAttribute, Integer> ();
-                for (AvatarAttribute attr: ab.getAttributes ())
+                for (AvatarAttribute attr: ab.getAttributes ()) {
+                    TraceManager.addDev ("=== " + attr);
                     attributeCmp.put (attr, 0);
+                }
 
                 // Create the ProVerif process and add it to the ProVerif specification
                 ProVerifProcInstr p = new ProVerifProcess(AVATAR2ProVerif.makeAttrName(ab.getName(), simplifiedElements.get (asme).toString ()), new ProVerifVar[] {new ProVerifVar ("sessionID", "bitstring")});

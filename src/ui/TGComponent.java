@@ -2388,7 +2388,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         return name;
     }
 
-    public final void setName(String s) {
+    public void setName(String s) {
         name = s;
     }
 

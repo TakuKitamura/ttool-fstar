@@ -42,6 +42,8 @@ import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import myutil.TraceManager;
+
 /**
  * AvatarLibraryFunction is used to represent a library function that can be further used in state machine diagrams.
  * <p>
@@ -224,12 +226,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         return result;
     }
 
-    /**
-     * Add an attribute local to this function.
-     *
-     * @param attribute
-     *      The local attribute to add.
-     */
+    @Override
     public void addAttribute (AvatarAttribute attribute) {
         this.attributes.add (attribute);
     }
@@ -293,8 +290,10 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         for (AvatarAttribute attribute: this.attributes) {
             String name = this.name + "__" + attribute.getName ();
             AvatarAttribute attr = block.getAvatarAttributeWithName (name);
-            if (attr == null)
+            if (attr == null) {
                 attr = new AvatarAttribute (name, attribute.getType (), block, block.getReferenceObject ());
+                block.addAttribute (attr);
+            }
 
             mapping.put (attribute, attr);
         }
@@ -482,7 +481,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
             // TODO: isn't the name used for the timer ?
             asme = new AvatarSetTimer (this.name + "__" + _asme.getName (), arg.referenceObject);
 
-            // TODO: should probably replace attributes to, right ?
+            // TODO: should probably replace attributes too, right ?
             ((AvatarSetTimer) asme).setTimerValue (((AvatarSetTimer) _asme).getTimerValue ());
         } else if (_asme instanceof AvatarResetTimer)
             asme = new AvatarResetTimer (this.name + "__" + _asme.getName (), arg.referenceObject);
@@ -529,7 +528,6 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         for (AvatarAction _action: _asme.getActions ()) {
             AvatarAction action = _action.clone ();
             action.replaceAttributes (arg.placeholdersMapping);
-
             asme.addAction (action);
         }
 

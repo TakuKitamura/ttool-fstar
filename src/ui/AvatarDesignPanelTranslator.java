@@ -547,7 +547,7 @@ public class AvatarDesignPanelTranslator {
                         || attr.getType() == TAttribute.NATURAL
                         || attr.getType() == TAttribute.BOOLEAN
                         || attr.getType() == TAttribute.TIMER)
-                    alf.addReturnAttribute (this.createRegularAttribute (alf, attr, ""));
+                    alf.addAttribute (this.createRegularAttribute (alf, attr, ""));
                 else {
                     // other
                     LinkedList<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (attr.getTypeOther ());
@@ -855,6 +855,215 @@ public class AvatarDesignPanelTranslator {
         asm.addElement (aaos);
     }
 
+    private void translateAvatarSMDLibraryFunctionCall (TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDLibraryFunctionCall asmdlfc) throws CheckingError {
+        AvatarStateMachine asm = _ab.getStateMachine ();
+
+        /* Get Function corresponding to this call */
+        AvatarBDLibraryFunction libraryFunction = asmdlfc.getLibraryFunction ();
+        if (libraryFunction == null)
+            throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Should define a library function for this call");
+
+        /* Get Avatar representation of this function */
+        AvatarLibraryFunction aLibraryFunction = listE.getAvatarLibraryFunction (libraryFunction);
+        if (aLibraryFunction == null)
+            throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Unknown library function '" + libraryFunction.getFunctionName () + "'");
+
+        /* create Avatar representation of the function call */
+        AvatarLibraryFunctionCall alfc = new AvatarLibraryFunctionCall ("library_function_call", aLibraryFunction, asmdlfc);
+
+        /* Get the list of parameters passed to the function */
+        LinkedList<TAttribute> parameters = asmdlfc.getParameters ();
+        /* If the number of parameters does not match raise an error */
+        if (parameters.size () != libraryFunction.getParameters ().size ())
+            throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Calling library function " + libraryFunction.getFunctionName () + " requires " + libraryFunction.getParameters ().size () + "parameters (" + parameters.size () + " provided)");
+
+        /* Loop through the parameters */
+        int i=0;
+        for (TAttribute ta: parameters) {
+            i ++;
+            /* If parameter has not be filled in raise an error */
+            if (ta == null)
+                throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Missing parameter #" + i + " when calling library function " + libraryFunction.getFunctionName ());
+
+            /* Check if type of parameter matches what's expected */
+            TAttribute returnTA = libraryFunction.getParameters ().get (i-1);
+            if (!ta.hasSameType (returnTA))
+                throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Type of parameter #" + i + " when calling library function " + libraryFunction.getFunctionName () + " does not match");
+
+            /* Creates all the parameters corresponding to this parameter */
+            LinkedList<String> parameterNames = new LinkedList<String> ();
+            if (ta.getType() == TAttribute.INTEGER
+                    || ta.getType() == TAttribute.NATURAL
+                    || ta.getType() == TAttribute.BOOLEAN
+                    || ta.getType() == TAttribute.TIMER)
+                parameterNames.add (ta.getId ());
+            else {
+                LinkedList<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (ta.getTypeOther ());
+                if (types == null || types.isEmpty ())
+                    throw new CheckingError (CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + ta.getTypeOther () + " when calling " + libraryFunction.getFunctionName ());
+
+                for (TAttribute type: types)
+                    parameterNames.add (ta.getId () + "__" + type.getId ());
+            }
+
+            /* Add flattened parameters */
+            for (String parameterName: parameterNames) {
+                /* Try to get the corresponding attribute */
+                AvatarAttribute attr = _ab.getAvatarAttributeWithName (parameterName);
+                /* If it does not exist raise an error */
+                if (attr == null)
+                    throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Parameter '" + ta.getId () + "' passed when calling library function " + libraryFunction.getFunctionName () + " does not exist");
+                alfc.addParameter (attr);
+            }
+        }
+
+        /* Get the list of signals mapped to the function's placeholders */
+        LinkedList<ui.AvatarSignal> signals = asmdlfc.getSignals ();
+        /* If the number of signals does not match raise an error */
+        if (signals.size () != libraryFunction.getSignals ().size ())
+            throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Calling library function " + libraryFunction.getFunctionName () + " requires " + libraryFunction.getSignals ().size () + " signals (" + signals.size () + " mapped)");
+
+        /* Loop through the signals */
+        i=0;
+        for (ui.AvatarSignal uias: signals) {
+            i ++;
+            /* If signal has not be filled in raise an error */
+            if (uias == null)
+                throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Missing mapping for signal #" + i + " when calling library function " + libraryFunction.getFunctionName ());
+
+            /* Check if prototype of signal matches what's expected */
+            ui.AvatarSignal expectedSig = libraryFunction.getSignals ().get (i-1);
+            if (!expectedSig.hasSamePrototype (uias))
+                throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Prototype of signal #" + i + " when calling library function " + libraryFunction.getFunctionName () + " does not match");
+
+            /* Try to get the corresponding signal */
+            avatartranslator.AvatarSignal sig = _ab.getAvatarSignalWithName (uias.getId ());
+            /* If it does not exist raise an error */
+            if (sig == null)
+                throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Signal '" + uias.getId () + "' mapped when calling library function " + libraryFunction.getFunctionName () + " does not exist");
+            alfc.addSignal (sig);
+        }
+
+        /* Get the list of return attributes passed to the function */
+        LinkedList<TAttribute> returnAttributes = asmdlfc.getReturnAttributes ();
+        /* If the number of return attributes is greater that what the function can return raise an error */
+        if (returnAttributes.size () > libraryFunction.getReturnAttributes ().size ())
+            throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Calling library function " + libraryFunction.getFunctionName () + " can only return " + libraryFunction.getReturnAttributes ().size () + " values (" + returnAttributes.size () + " expected)");
+
+        /* Loop through the return attributes */
+        i=0;
+        for (TAttribute ta: returnAttributes) {
+            LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute> ();
+            /* If return attribute has not be filled in, add a dummy one */
+            if (ta == null) {
+                TAttribute returnTA = libraryFunction.getReturnAttributes ().get (i);
+                String dummyName = "__dummy_return_attribute_" + returnTA.getId ();
+
+                /* Creates all the attributes corresponding to this return attribute */
+                if (returnTA.getType() == TAttribute.INTEGER
+                        || returnTA.getType() == TAttribute.NATURAL
+                        || returnTA.getType() == TAttribute.BOOLEAN
+                        || returnTA.getType() == TAttribute.TIMER) {
+                    AvatarAttribute attr = _ab.getAvatarAttributeWithName (dummyName);
+                    if (attr == null) {
+                        attr = this.createRegularAttribute (_ab, returnTA, "__dummy_return_attribute_");
+                        _ab.addAttribute (attr);
+                    }
+                    attrs.add (attr);
+                } else {
+                    LinkedList<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (returnTA.getTypeOther ());
+                    if (types == null || types.isEmpty ())
+                        throw new CheckingError (CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + returnTA.getTypeOther () + " when calling " + libraryFunction.getFunctionName ());
+
+                    for (TAttribute type: types) {
+                        String attributeName = dummyName + "__" + type.getId ();
+                        AvatarAttribute attr = _ab.getAvatarAttributeWithName (attributeName);
+                        if (attr == null) {
+                            attr = this.createRegularAttribute (_ab, type, dummyName + "__");
+                            _ab.addAttribute (attr);
+                        }
+                        attrs.add (attr);
+                    }
+                }
+            } else {
+                /* Check if type of return attribute matches what's expected */
+                TAttribute returnTA = libraryFunction.getReturnAttributes ().get (i);
+                if (!ta.hasSameType (returnTA))
+                    throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Type of return attribute #" + (i+1) + " when calling library function " + libraryFunction.getFunctionName () + " does not match");
+
+                /* Creates all the attributes corresponding to this return attribute */
+                LinkedList<String> attributeNames = new LinkedList<String> ();
+                if (ta.getType() == TAttribute.INTEGER
+                        || ta.getType() == TAttribute.NATURAL
+                        || ta.getType() == TAttribute.BOOLEAN
+                        || ta.getType() == TAttribute.TIMER)
+                    attributeNames.add (ta.getId ());
+                else {
+                    LinkedList<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (ta.getTypeOther ());
+                    if (types == null || types.isEmpty ())
+                        throw new CheckingError (CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + ta.getTypeOther () + " when calling " + libraryFunction.getFunctionName ());
+
+                    for (TAttribute type: types)
+                        attributeNames.add (ta.getId () + "__" + type.getId ());
+                }
+
+                /* Add flattened parameters */
+                for (String attributeName: attributeNames) {
+                    AvatarAttribute attr = _ab.getAvatarAttributeWithName (attributeName);
+                    /* If a return attribute was given but we can't find the corresponding one raise an error */
+                    if (attr == null)
+                        throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Attribute '" + ta.getId () + "' expected to hold return value #" + (i+1) + " when calling library function " + libraryFunction.getFunctionName () + " does not exist");
+                    attrs.add (attr);
+                }
+            }
+
+            for (AvatarAttribute attr: attrs)
+                alfc.addReturnAttribute (attr);
+            i ++;
+        }
+
+        /* If there were missing return attributes, add dummies ones */
+        for (; i<libraryFunction.getReturnAttributes ().size (); i++) {
+            TAttribute returnTA = libraryFunction.getReturnAttributes ().get (i);
+            String dummyName = "__dummy_return_attribute_" + returnTA.getId ();
+
+            LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute> ();
+            /* Creates all the attributes corresponding to this return attribute */
+            if (returnTA.getType() == TAttribute.INTEGER
+                    || returnTA.getType() == TAttribute.NATURAL
+                    || returnTA.getType() == TAttribute.BOOLEAN
+                    || returnTA.getType() == TAttribute.TIMER) {
+                AvatarAttribute attr = _ab.getAvatarAttributeWithName (dummyName);
+                if (attr == null) {
+                    attr = this.createRegularAttribute (_ab, returnTA, "__dummy_return_attribute_");
+                    _ab.addAttribute (attr);
+                }
+                attrs.add (attr);
+            } else {
+                LinkedList<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (returnTA.getTypeOther ());
+                if (types == null || types.isEmpty ())
+                    throw new CheckingError (CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + returnTA.getTypeOther () + " when calling " + libraryFunction.getFunctionName ());
+
+                for (TAttribute type: types) {
+                    String attributeName = dummyName + "__" + type.getId ();
+                    AvatarAttribute attr = _ab.getAvatarAttributeWithName (attributeName);
+                    if (attr == null) {
+                        attr = this.createRegularAttribute (_ab, type, dummyName + "__");
+                        _ab.addAttribute (attr);
+                    }
+                    attrs.add (attr);
+                }
+            }
+
+            for (AvatarAttribute attr: attrs)
+                alfc.addReturnAttribute (attr);
+        }
+
+        this.listE.addCor (alfc, asmdlfc);
+        asmdlfc.setAVATARID (alfc.getID());
+        asm.addElement (alfc);
+    }
+
 
     private void translateAvatarSMDReceiveSignal (TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDReceiveSignal asmdrs) throws CheckingError {
         AvatarStateMachine asm = _ab.getStateMachine ();
@@ -1079,6 +1288,9 @@ public class AvatarDesignPanelTranslator {
                 // Send signals
                 else if (tgc instanceof AvatarSMDSendSignal)
                     this.translateAvatarSMDSendSignal (tdp, _as, _ab, (AvatarSMDSendSignal) tgc);
+                // Library Function Call
+                else if (tgc instanceof AvatarSMDLibraryFunctionCall)
+                    this.translateAvatarSMDLibraryFunctionCall (tdp, _as, _ab, (AvatarSMDLibraryFunctionCall) tgc);
                 // State
                 else if (tgc instanceof AvatarSMDState)
                     this.translateAvatarSMDState (tdp, _as, _ab, (AvatarSMDState) tgc);

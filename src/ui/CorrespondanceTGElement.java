@@ -203,6 +203,18 @@ public class CorrespondanceTGElement {
         }
         return null;
     }
+
+    public AvatarLibraryFunction getAvatarLibraryFunction (TGComponent _tgc) {
+        int index = tg.indexOf (_tgc);
+        if (index == -1)
+            return null;
+
+        Object o = data.elementAt (index);
+        if (o instanceof AvatarLibraryFunction)
+            return (AvatarLibraryFunction) o;
+
+        return null;
+    }
     
     public HMSCNode getNodeAt(int index) {
         if ((index != -1) && (data.size() > index)) {
