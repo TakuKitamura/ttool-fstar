@@ -146,7 +146,6 @@ if(nb_clusters==0){
 	    }
 	  }	 
 
-
           //if BUS was not last in input file, update here
           bus.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
           bus.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target());
@@ -158,18 +157,32 @@ if(nb_clusters==0){
       
 	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+6)+
 	     "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
-
-	  //performance measurement infrastructure: declare as many loggers as VCI interfaces if flag trace_caba is set
 	  int i=0;
-	  if(trace_caba){
-	      for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
-		  declaration += "soclib::caba::VciLogger<vci_param> logger(\"logger" + i+"\",maptab);" + CR2;
-	      }
-	      int j=i;
-	      for(i=0;i<TopCellGenerator.avatardd.getAllRAM().size()+3;i++){
-		  declaration += "soclib::caba::VciLogger<vci_param> logger(\"logger" + j+"\",maptab);" + CR2;
-	      }
-    }
+	  //performance measurement infrastructure
+
+	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
+
+	    if (ram.getMonitored()==1){
+		int number = ram.getNo_target();
+		declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
+	      i++;	      
+	    }	
+	    else{
+		if (ram.getMonitored()==2){
+		int number = ram.getNo_target();
+
+                //LinkedList<AvatarChannel> channels=ram.getChannels();	
+	
+		String strArray="";
+
+                for(AvatarChannel channel: ram.getChannels()){
+		  strArray=strArray+"\""+channel.getChannelName()+"\","; 
+		}      
+		declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr0.log\",stringArray("+strArray+"NULL));" + CR2;
+	      i++;	      
+	    }	
+	    }
+	  }	 
 
 	  // if VGMN was not last in input file, update here 
           vgmn.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 

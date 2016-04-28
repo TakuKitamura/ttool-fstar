@@ -345,7 +345,9 @@ netlist = netlist + "// RAM netlist" + CR2;
 	    }	
 	    else{
 		if (ram.getMonitored()==2){
-		int number = number = ram.getNo_ram();	      
+		int number = number = ram.getNo_ram();	
+		netlist += "mwmr_stats"+i+".p_clk(signal_clk);" + CR;
+	        netlist += "mwmr_stats"+i+".p_resetn(signal_resetn);" + CR; 
 		netlist += "mwmr_stats"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;
 
   //currently all channels mapped on this RAM are monitored

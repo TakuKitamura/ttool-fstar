@@ -19,8 +19,14 @@ int nb_clusters=5;
     public static  String getHeader() {
 
 		header = "//-------------------------------Header------------------------------------" + CR2
-				+ " #include <iostream>" + CR + "#include <cstdlib>" + CR + "#include <stdexcept>" + CR2
-				+ "#define CONFIG_GDB_SERVER" + CR + "#define CONFIG_SOCLIB_MEMCHECK" + CR2;
+		    + "#include <iostream>" + CR 
+		    + "#include <cstdlib>"  + CR 
+		    + "#include <vector>" + CR
+		    + "#include <string>" + CR 
+		    + "#include <stdexcept>" + CR 
+		    + "#include <cstdarg>" +CR2
+		    + "#define CONFIG_GDB_SERVER" + CR 
+		    + "#define CONFIG_SOCLIB_MEMCHECK" + CR2;
 
 	header = header + "#include \"iss_memchecker.h\"" + CR 
 	    +"#include \"gdbserver.h\""+ CR2 
@@ -40,8 +46,41 @@ int nb_clusters=5;
 				+ "#include \"vci_simhelper.h\"" + CR + "#include \"vci_fd_access.h\"" + CR
 + "#include \"vci_ethernet.h\"" + CR
 				+ "#include \"vci_rttimer.h\"" + CR
-	+ "#include \"vci_logger.h\"" + CR2;
-		header = header + "using namespace soclib;" + CR + "using common::IntTab;" + CR + "using common::Segment;";
+	+ "#include \"vci_logger.h\"" + CR
+	+ "#include \"vci_mwmr_stats.h\"" + CR2;
+	
+	header = header +"namespace {" + CR
++"std::vector<std::string> stringArray(" + CR
++"	const char *first, ... )" + CR
++"{" + CR
++"	std::vector<std::string> ret;" + CR
++"	va_list arg;" + CR
++"	va_start(arg, first);" + CR
++"	const char *s = first;" + CR
++"	while(s) {" + CR
++"		ret.push_back(std::string(s));" + CR
++"		s = va_arg(arg, const char *);" + CR
++"	};" + CR
++"	va_end(arg);" + CR
++"	return ret;" + CR
++"}" + CR2
++"std::vector<int> intArray(" + CR
++"	const int length, ... )" + CR
++"{" + CR
++"	int i;" + CR
++"	std::vector<int> ret;" + CR
++"	va_list arg;" + CR
++"	va_start(arg, length);" + CR2
++"	for (i=0; i<length; ++i) {" + CR
++"		ret.push_back(va_arg(arg, int));" + CR
++"	};" + CR
++"	va_end(arg);" + CR
++"	return ret;" + CR
++"}" + CR
+	    +"}" + CR2;
+
+	header = header + "using namespace soclib;" + CR + "using common::IntTab;" + CR + "using common::Segment;";
+
 
   		if(TopCellGenerator.avatardd.getNbClusters()==0){
 		header = header + CR2 + "static common::MappingTable maptab(32, IntTab(8), IntTab(8), 0xfff00000);";
