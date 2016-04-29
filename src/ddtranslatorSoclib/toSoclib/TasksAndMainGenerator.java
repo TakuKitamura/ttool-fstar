@@ -184,25 +184,7 @@ public class TasksAndMainGenerator {
         mainFile.appendToMainCode("pthread_attr_init(attr_t);" + CR );
         mainFile.appendToMainCode("pthread_mutex_init(&__mainMutex, NULL);" +CR2);       
     }
-
-    public String getReducedChannelName(AvatarRelation ar, int i){
-	String newChannelName; 
-	String channelName;
-        channelName=getChannelName(ar, i);
-	newChannelName = channelName;
-	//newChannelName = channelName.substring(0,10)+channelName.substring(channelName.length()-10,channelName.length()-1);
-	return newChannelName;
-    }
-
-    public String getReducedChannelName(AvatarRelation ar, AvatarSignal as){
-	String newChannelName; 
-	String channelName;
-        channelName=getChannelName(ar, as);
-	newChannelName = channelName;
-	//newChannelName = channelName.substring(0,10)+channelName.substring(channelName.length()-10,channelName.length()-1);
-	return newChannelName;
-    }
-
+  
     public void makeSynchronousChannels() {
 	int i=0;        
         // Create a synchronous channel per relation/signal
@@ -212,13 +194,13 @@ public class TasksAndMainGenerator {
         for(AvatarRelation ar: avspec.getRelations()) {
             if (!ar.isAsynchronous()) {
                 for(i=0; i<ar.nbOfSignals(); i++) {
-                    mainFile.appendToHCode("extern syncchannel __" + getReducedChannelName(ar, i)  + ";" + CR);
-                    mainFile.appendToBeforeMainCode("syncchannel __" + getReducedChannelName(ar, i) + ";" + CR);
-						    mainFile.appendToMainCode("__" + getReducedChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
-												       mainFile.appendToMainCode("__" + getReducedChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
+                    mainFile.appendToHCode("extern syncchannel __" + getChannelName(ar, i)  + ";" + CR);
+                    mainFile.appendToBeforeMainCode("syncchannel __" + getChannelName(ar, i) + ";" + CR);
+						    mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
+												       mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
 	
                     if (ar.isBroadcast()) {
-                        mainFile.appendToMainCode("setBroadcast(&__" + getReducedChannelName(ar, i) + ", true);" + CR);
+                        mainFile.appendToMainCode("setBroadcast(&__" + getChannelName(ar, i) + ", true);" + CR);
                     }		   
                 }
             }
@@ -237,26 +219,26 @@ public class TasksAndMainGenerator {
 	    for(AvatarRelation ar: avspec.getRelations()) {
 		if (ar.isAsynchronous()) {
 		    for(int i=0; i<ar.nbOfSignals() ; i++) {
-			mainFile.appendToHCode("extern asyncchannel __" + getReducedChannelName(ar, i) + ";" + CR);
+			mainFile.appendToHCode("extern asyncchannel __" + getChannelName(ar, i) + ";" + CR);
 
-			mainFile.appendToBeforeMainCode("asyncchannel __" +getReducedChannelName(ar, i) + ";" + CR);
-			mainFile.appendToMainCode("__" + getReducedChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
-			mainFile.appendToMainCode("__" +getReducedChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
+			mainFile.appendToBeforeMainCode("asyncchannel __" +getChannelName(ar, i) + ";" + CR);
+			mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
+			mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
 			if (ar.isBlocking()) {
-			    mainFile.appendToMainCode("__" +getReducedChannelName(ar, i) + ".isBlocking = 1;" + CR);
+			    mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".isBlocking = 1;" + CR);
 			} else {
-			    mainFile.appendToMainCode("__" + getReducedChannelName(ar, i) + ".isBlocking = 0;" + CR);
+			    mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".isBlocking = 0;" + CR);
 			}
-			mainFile.appendToMainCode("__" + getReducedChannelName(ar, i) + ".maxNbOfMessages = " + ar.getSizeOfFIFO() + ";" + CR);
+			mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".maxNbOfMessages = " + ar.getSizeOfFIFO() + ";" + CR);
 			
-			mainFile.appendToMainCode("__" + getReducedChannelName(ar, i) + ".mwmr_fifo = &" + getReducedChannelName(ar, i) + ";" + CR);
+			mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
 			
 	
-			mainFile.appendToBeforeMainCode("uint32_t *const "+ getReducedChannelName(ar, i)+"_lock= LOCKSADDR+0x"+(i*20) +";" + CR); 
+			mainFile.appendToBeforeMainCode("uint32_t *const "+ getChannelName(ar, i)+"_lock= LOCKSADDR+0x"+(i*20) +";" + CR); 
 	//DG parameter <depth>  should ultimately be generated; width is fixed as long as data is not explicitly modeled
-			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getReducedChannelName(ar, i) +"_status =  MWMR_STATUS_INITIALIZER(1, 1);" + CR); 
-			mainFile.appendToBeforeMainCode("uint8_t "+getReducedChannelName(ar, i) +"_data[32*2];" + CR);
-			mainFile.appendToBeforeMainCode("struct mwmr_s "+getReducedChannelName(ar, i) + "= MWMR_INITIALIZER(1, 1, "+getReducedChannelName(ar, i)+"_data,&"+getReducedChannelName(ar, i)+"_status,\""+getReducedChannelName(ar, i)+"\","+getReducedChannelName(ar, i)+"_lock);" + CR2);		
+			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status =  MWMR_STATUS_INITIALIZER(1, 1);" + CR); 
+			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32*2];" + CR);
+			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) + "= MWMR_INITIALIZER(1, 1, "+getChannelName(ar, i)+"_data,&"+getChannelName(ar, i)+"_status,\""+getChannelName(ar, i)+"\","+getChannelName(ar, i)+"_lock);" + CR2);		
 		    }
 		}
 	    }
@@ -485,7 +467,7 @@ public class TasksAndMainGenerator {
             AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
 	    //DG 
 	    if(ar.isAsynchronous()){
-            ret2+= CR + "struct mwmr_s *" + getReducedChannelName(ar, as);
+            ret2+= CR + "struct mwmr_s *" + getChannelName(ar, as);
 	    }
         }
 
@@ -870,15 +852,15 @@ public class TasksAndMainGenerator {
 		    ret+="debugInt(\"channel address\", &__req"+_index+");" + CR;
 		    ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", SEND_ASYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 		    ret += "debug2Msg(__myname, \"-> (=====)after MakeNewRequest\");" + CR;
-		    ret += "__req" + _index + ".asyncChannel = &__" + getReducedChannelName(ar, as) + ";" + CR;                
+		    ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;                
                 } else {
 		    if (ar.isBroadcast()) {
 			ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_BROADCAST_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
-			ret += "__req" + _index + ".syncChannel = &__" + getReducedChannelName(ar, as) + ";" + CR;
+			ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 
 		    } else {
 			ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
-			ret += "__req" + _index + ".syncChannel = &__" + getReducedChannelName(ar, as) + ";" + CR;
+			ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 
 		    }
                 }
@@ -892,14 +874,14 @@ public class TasksAndMainGenerator {
 		    //ret += "debug2Msg(__myname, \"-> (=====)before MakeNewRequest\");" + CR;
 //ret+="debugInt(\"channel address\", &__req"+_index+");" + CR;
 		    ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_ASYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
-		    ret += "__req" + _index + ".asyncChannel = &__" + getReducedChannelName(ar, as) + ";" + CR;
+		    ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 		} else {
                     if (ar.isBroadcast()) {
                         ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_BROADCAST_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
-			ret += "__req" + _index + ".syncChannel = &__" + getReducedChannelName(ar, as) + ";" + CR;
+			ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                     } else {
 			ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
-			ret += "__req" + _index + ".syncChannel = &__" + getReducedChannelName(ar, as) + ";" + CR;
+			ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                     }
 		}
 	    }
@@ -989,7 +971,7 @@ public class TasksAndMainGenerator {
 	      for(i=0; i<ar.nbOfSignals() ; i++) {		  		
 	
 		  if(((ar.block1.getName()==taskFile.getName())||(ar.block2.getName()==taskFile.getName()))&&(ar.isAsynchronous())){ 
-		      channelString+="channels_array_"+  taskFile.getName() +"["+j+"]=&"+getReducedChannelName(ar, i)+";" + CR;
+		      channelString+="channels_array_"+  taskFile.getName() +"["+j+"]=&"+getChannelName(ar, i)+";" + CR;
 			cptchannels_array ++;
 		      j++;		
 		  }		    		   		    

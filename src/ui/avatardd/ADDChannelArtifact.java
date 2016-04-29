@@ -180,7 +180,6 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
 
     }
 
-    //DG rudimentary parsing to obtain shorter channel names
     private void makeFullValue() {
         String newChannelName = channelName;
         int pos1=channelName.indexOf('(');
@@ -188,12 +187,10 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
             int pos2=channelName.lastIndexOf(')');
             int pos3=channelName.indexOf('(');
             int pos4=channelName.lastIndexOf('(');
-
-            TraceManager.addDev("****** Channel Name "+ channelName);
+          
             newChannelName = channelName.substring(0,pos1);
-            //newChannelName = channelName.substring(0,pos1-1)+channelName.substring(pos2+1,pos3)+channelName.substring(pos4,channelName.length()-1);
-            value = newChannelName;
-            TraceManager.addDev("****** New Channel Name "+ newChannelName);
+            
+            value = newChannelName;        
         }
         else{
             value = channelName;

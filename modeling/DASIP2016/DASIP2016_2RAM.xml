@@ -3,7 +3,7 @@
 <TURTLEGMODELING version="0.98-beta4">
 
 <Modeling type="TML Component Design" nameTab="Braking - FV" >
-<TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="10" maxX="1913" minY="10" maxY="1413" channels="true" events="true" requests="true" zoom="1.0000000000000009" >
+<TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="10" maxX="1921" minY="10" maxY="1421" channels="true" events="true" requests="true" zoom="1.0000000000000009" >
 <CONNECTOR type="126" id="2" >
 <cdparam x="472" y="108" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -170,7 +170,7 @@
 <cdparam x="355" y="122" />
 <sizeparam width="170" height="99" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="DSRCManagement" />
 <TGConnectingPoint num="0" id="33" />
 <TGConnectingPoint num="1" id="34" />
@@ -292,7 +292,7 @@
 <cdparam x="1353" y="752" />
 <sizeparam width="233" height="60" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="doReduceDrivingPower" />
 <TGConnectingPoint num="0" id="44" />
 <TGConnectingPoint num="1" id="45" />
@@ -327,7 +327,7 @@
 <cdparam x="1241" y="613" />
 <sizeparam width="245" height="64" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="DrivingPowerReductionstrategy" />
 <TGConnectingPoint num="0" id="57" />
 <TGConnectingPoint num="1" id="58" />
@@ -379,7 +379,7 @@
 <cdparam x="1449" y="354" />
 <sizeparam width="141" height="67" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="DoBrake" />
 <TGConnectingPoint num="0" id="68" />
 <TGConnectingPoint num="1" id="69" />
@@ -414,7 +414,7 @@
 <cdparam x="188" y="618" />
 <sizeparam width="146" height="50" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="GPSReception" />
 <TGConnectingPoint num="0" id="79" />
 <TGConnectingPoint num="1" id="80" />
@@ -449,7 +449,7 @@
 <cdparam x="273" y="467" />
 <sizeparam width="275" height="62" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="NeighbourhoodTableManagement" />
 <TGConnectingPoint num="0" id="94" />
 <TGConnectingPoint num="1" id="95" />
@@ -518,7 +518,7 @@
 <cdparam x="402" y="304" />
 <sizeparam width="176" height="60" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="CorrectnessChecking" />
 <TGConnectingPoint num="0" id="107" />
 <TGConnectingPoint num="1" id="108" />
@@ -570,7 +570,7 @@
 <cdparam x="600" y="68" />
 <sizeparam width="239" height="61" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="GetEnvironmentInformation" />
 <TGConnectingPoint num="0" id="118" />
 <TGConnectingPoint num="1" id="119" />
@@ -605,7 +605,7 @@
 <cdparam x="605" y="434" />
 <sizeparam width="223" height="66" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="PlausibilityCheck" />
 <TGConnectingPoint num="0" id="137" />
 <TGConnectingPoint num="1" id="138" />
@@ -708,7 +708,7 @@
 <cdparam x="605" y="315" />
 <sizeparam width="227" height="57" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="ObjectListManagement" />
 <TGConnectingPoint num="0" id="150" />
 <TGConnectingPoint num="1" id="151" />
@@ -760,7 +760,7 @@
 <cdparam x="615" y="597" />
 <sizeparam width="242" height="62" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="VehicleDynamicsManagement" />
 <TGConnectingPoint num="0" id="163" />
 <TGConnectingPoint num="1" id="164" />
@@ -812,7 +812,7 @@
 <cdparam x="613" y="720" />
 <sizeparam width="215" height="61" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="GetVehicleDynamics" />
 <TGConnectingPoint num="0" id="174" />
 <TGConnectingPoint num="1" id="175" />
@@ -847,7 +847,7 @@
 <cdparam x="1160" y="366" />
 <sizeparam width="193" height="60" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="BrakeManagement" />
 <TGConnectingPoint num="0" id="187" />
 <TGConnectingPoint num="1" id="188" />
@@ -899,7 +899,7 @@
 <cdparam x="977" y="492" />
 <sizeparam width="200" height="76" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="DangerAvoidanceStrategy" />
 <TGConnectingPoint num="0" id="206" />
 <TGConnectingPoint num="1" id="207" />
@@ -1002,7 +1002,7 @@
 <cdparam x="37" y="72" />
 <sizeparam width="158" height="149" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Primitive component" value="DSRCRxTx" />
 <TGConnectingPoint num="0" id="221" />
 <TGConnectingPoint num="1" id="222" />
@@ -1071,7 +1071,7 @@
 <cdparam x="30" y="44" />
 <sizeparam width="498" height="184" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="1413" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
 <infoparam name="Composite component" value="DSRCTask" />
 <TGConnectingPoint num="0" id="230" />
 <TGConnectingPoint num="1" id="231" />
@@ -2890,12 +2890,12 @@
 
 
 <Modeling type="Requirement" nameTab="General Requirements" >
-<TRequirementDiagramPanel name="AvailabilityRequirements" minX="10" maxX="1913" minY="10" maxY="913" zoom="1.0000000000000002" >
+<TRequirementDiagramPanel name="AvailabilityRequirements" minX="10" maxX="1921" minY="10" maxY="921" zoom="1.0000000000000002" >
 <COMPONENT type="900" id="1162" >
 <cdparam x="470" y="532" />
 <sizeparam width="333" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="317" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="913" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
 <infoparam name="Requirement" value="EnsureHighestAvalabilityForHighestPriorityFunctions" />
 <TGConnectingPoint num="0" id="1131" />
 <TGConnectingPoint num="1" id="1132" />
@@ -2946,7 +2946,7 @@
 <cdparam x="196" y="535" />
 <sizeparam width="213" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="196" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="913" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
 <infoparam name="Requirement" value="EnsureAvailabilityRadioMedium" />
 <TGConnectingPoint num="0" id="1163" />
 <TGConnectingPoint num="1" id="1164" />
@@ -2997,7 +2997,7 @@
 <cdparam x="764" y="331" />
 <sizeparam width="310" height="102" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="288" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="913" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
 <infoparam name="Requirement" value="EnsureExternalCommunicationDeviceAvailability" />
 <TGConnectingPoint num="0" id="1195" />
 <TGConnectingPoint num="1" id="1196" />
@@ -3047,7 +3047,7 @@
 <cdparam x="527" y="329" />
 <sizeparam width="181" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="144" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="913" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
 <infoparam name="Requirement" value="EnsureRAMAvailability" />
 <TGConnectingPoint num="0" id="1227" />
 <TGConnectingPoint num="1" id="1228" />
@@ -3098,7 +3098,7 @@
 <cdparam x="303" y="331" />
 <sizeparam width="181" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="145" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="913" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
 <infoparam name="Requirement" value="EnsureCPUAvailability" />
 <TGConnectingPoint num="0" id="1259" />
 <TGConnectingPoint num="1" id="1260" />
@@ -3149,7 +3149,7 @@
 <cdparam x="72" y="334" />
 <sizeparam width="181" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="141" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="913" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
 <infoparam name="Requirement" value="EnsureBusAvailability" />
 <TGConnectingPoint num="0" id="1291" />
 <TGConnectingPoint num="1" id="1292" />
@@ -3200,7 +3200,7 @@
 <cdparam x="467" y="123" />
 <sizeparam width="181" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="164" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1913" minY="10" maxY="913" />
+<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
 <infoparam name="Requirement" value="EnsureAvailabilityOfECUs" />
 <TGConnectingPoint num="0" id="1323" />
 <TGConnectingPoint num="1" id="1324" />
@@ -5759,7 +5759,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
+<Validated value="TestBench;SpeedSensor;RadarSensor;GPSSensor;CarPositionSimulator;EmergencySimulator;Communication;DSRSC_Management;NeighbourhoodTableManagement;CorrectnessChecking;PTC;DrivingPowerReductionStrategy;BCU;DangerAvoidanceStrategy;BrakeManagement;CSCU;ObjectListManagement;PlausibilityCheck;VehiculeDynamicsManagement;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="2676" >
@@ -14180,7 +14180,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6320" />
 <TGConnectingPoint num="7" id="6321" />
 <extraparam>
-<info value="NeighbourhoodTableManagement/out sendTable" channelName="NeighbourhoodTableManagement/out sendTable(int currentPosition, NodeList list) #--# PlausibilityCheck/in getNodeList(NodeList list)" referenceDiagram="AVATAR Design" />
+<info value="NeighbourhoodTableManagement/out sendTable" channelName="NeighbourhoodTableManagement/out sendTable(int currentPosition, NodeList list) #--# PlausibilityCheck/in getNodeList(NodeList list)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6331" >
@@ -14199,7 +14199,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6329" />
 <TGConnectingPoint num="7" id="6330" />
 <extraparam>
-<info value="DSRSC_Management/in broadcastEmergencyBrakingMessage" channelName="DSRSC_Management/in broadcastEmergencyBrakingMessage(int id, int position) #--# DangerAvoidanceStrategy/out forwardEmergency(int myID, int currentPosition)" referenceDiagram="AVATAR Design" />
+<info value="DSRSC_Management/in broadcastEmergencyBrakingMessage" channelName="DSRSC_Management/in broadcastEmergencyBrakingMessage(int id, int position) #--# DangerAvoidanceStrategy/out forwardEmergency(int myID, int currentPosition)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6340" >
@@ -14218,7 +14218,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6338" />
 <TGConnectingPoint num="7" id="6339" />
 <extraparam>
-<info value="DSRSC_Management/out setCarPosition" channelName="DSRSC_Management/out setCarPosition(int id, int position) #--# NeighbourhoodTableManagement/in addANode(int id, int position)" referenceDiagram="AVATAR Design" />
+<info value="DSRSC_Management/out setCarPosition" channelName="DSRSC_Management/out setCarPosition(int id, int position) #--# NeighbourhoodTableManagement/in addANode(int id, int position)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6349" >
@@ -14237,7 +14237,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6347" />
 <TGConnectingPoint num="7" id="6348" />
 <extraparam>
-<info value="DSRSC_Management/out forwardEmergencyBrakingMessage" channelName="DSRSC_Management/out forwardEmergencyBrakingMessage(int id, int position) #--# CorrectnessChecking/in getEmergencyBrakingMessage(int id, int position)" referenceDiagram="AVATAR Design" />
+<info value="DSRSC_Management/out forwardEmergencyBrakingMessage" channelName="DSRSC_Management/out forwardEmergencyBrakingMessage(int id, int position) #--# CorrectnessChecking/in getEmergencyBrakingMessage(int id, int position)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6358" >
@@ -14256,7 +14256,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6356" />
 <TGConnectingPoint num="7" id="6357" />
 <extraparam>
-<info value="CorrectnessChecking/out toPlausibityCheckMessage" channelName="CorrectnessChecking/out toPlausibityCheckMessage(int id, int position) #--# PlausibilityCheck/in getEmergencyMessageToVerify(int id, int position)" referenceDiagram="AVATAR Design" />
+<info value="CorrectnessChecking/out toPlausibityCheckMessage" channelName="CorrectnessChecking/out toPlausibityCheckMessage(int id, int position) #--# PlausibilityCheck/in getEmergencyMessageToVerify(int id, int position)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -14311,7 +14311,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6390" />
 <TGConnectingPoint num="7" id="6391" />
 <extraparam>
-<info value="EmergencySimulator/out obstacleDetected" channelName="EmergencySimulator/out obstacleDetected(int id, int position) #--# DSRSC_Management/in obstacleDetected(int id, int position)" referenceDiagram="AVATAR Design" />
+<info value="EmergencySimulator/out obstacleDetected" channelName="EmergencySimulator/out obstacleDetected(int id, int position) #--# DSRSC_Management/in obstacleDetected(int id, int position)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6401" >
@@ -14330,7 +14330,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6399" />
 <TGConnectingPoint num="7" id="6400" />
 <extraparam>
-<info value="CarPositionSimulator/out carPosition" channelName="CarPositionSimulator/out carPosition(int id, int position) #--# DSRSC_Management/in carPosition(int id, int position)" referenceDiagram="AVATAR Design" />
+<info value="CarPositionSimulator/out carPosition" channelName="CarPositionSimulator/out carPosition(int id, int position) #--# DSRSC_Management/in carPosition(int id, int position)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6410" >
@@ -14349,7 +14349,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6408" />
 <TGConnectingPoint num="7" id="6409" />
 <extraparam>
-<info value="GPSSensor/out setPosition" channelName="GPSSensor/out setPosition(int currentPosition) #--# NeighbourhoodTableManagement/in setPosition(int currentPosition)" referenceDiagram="AVATAR Design" />
+<info value="GPSSensor/out setPosition" channelName="GPSSensor/out setPosition(int currentPosition) #--# NeighbourhoodTableManagement/in setPosition(int currentPosition)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6419" >
@@ -14368,7 +14368,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6417" />
 <TGConnectingPoint num="7" id="6418" />
 <extraparam>
-<info value="DangerAvoidanceStrategy/out reducePower" channelName="DangerAvoidanceStrategy/out reducePower(int value) #--# DrivingPowerReductionStrategy/in getReducePowerOrder(int value)" referenceDiagram="AVATAR Design" />
+<info value="DangerAvoidanceStrategy/out reducePower" channelName="DangerAvoidanceStrategy/out reducePower(int value) #--# DrivingPowerReductionStrategy/in getReducePowerOrder(int value)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6428" >
@@ -14387,7 +14387,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6426" />
 <TGConnectingPoint num="7" id="6427" />
 <extraparam>
-<info value="DangerAvoidanceStrategy/out brakePower" channelName="DangerAvoidanceStrategy/out brakePower(int value) #--# BrakeManagement/in brake(int value)" referenceDiagram="AVATAR Design" />
+<info value="DangerAvoidanceStrategy/out brakePower" channelName="DangerAvoidanceStrategy/out brakePower(int value) #--# BrakeManagement/in brake(int value)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6437" >
@@ -14406,7 +14406,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6435" />
 <TGConnectingPoint num="7" id="6436" />
 <extraparam>
-<info value="DangerAvoidanceStrategy/in brake" channelName="DangerAvoidanceStrategy/in brake(int speed, int currentPosition, int position) #--# PlausibilityCheck/out brake(int speed, int currentPosition, int position)" referenceDiagram="AVATAR Design" />
+<info value="DangerAvoidanceStrategy/in brake" channelName="DangerAvoidanceStrategy/in brake(int speed, int currentPosition, int position) #--# PlausibilityCheck/out brake(int speed, int currentPosition, int position)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6446" >
@@ -14425,7 +14425,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6444" />
 <TGConnectingPoint num="7" id="6445" />
 <extraparam>
-<info value="PlausibilityCheck/in getInfoOnSpeed" channelName="PlausibilityCheck/in getInfoOnSpeed(int speed) #--# VehiculeDynamicsManagement/out getInfoOnSpeed(int speed)" referenceDiagram="AVATAR Design" />
+<info value="PlausibilityCheck/in getInfoOnSpeed" channelName="PlausibilityCheck/in getInfoOnSpeed(int speed) #--# VehiculeDynamicsManagement/out getInfoOnSpeed(int speed)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6455" >
@@ -14444,7 +14444,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6453" />
 <TGConnectingPoint num="7" id="6454" />
 <extraparam>
-<info value="SpeedSensor/out updateOnSpeed" channelName="SpeedSensor/out updateOnSpeed(int speed) #--# VehiculeDynamicsManagement/in updateOnSpeed(int speed)" referenceDiagram="AVATAR Design" />
+<info value="SpeedSensor/out updateOnSpeed" channelName="SpeedSensor/out updateOnSpeed(int speed) #--# VehiculeDynamicsManagement/in updateOnSpeed(int speed)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6464" >
@@ -14463,7 +14463,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6462" />
 <TGConnectingPoint num="7" id="6463" />
 <extraparam>
-<info value="PlausibilityCheck/in getInfoOnObstacle" channelName="PlausibilityCheck/in getInfoOnObstacle(int obstacle) #--# ObjectListManagement/out getInfoOnObstacle(int info)" referenceDiagram="AVATAR Design" />
+<info value="PlausibilityCheck/in getInfoOnObstacle" channelName="PlausibilityCheck/in getInfoOnObstacle(int obstacle) #--# ObjectListManagement/out getInfoOnObstacle(int info)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5362" id="6473" >
@@ -14482,7 +14482,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="6" id="6471" />
 <TGConnectingPoint num="7" id="6472" />
 <extraparam>
-<info value="RadarSensor/out obstacleAhead" channelName="RadarSensor/out obstacleAhead(int info) #--# ObjectListManagement/in isObstacleAhead(int info)" referenceDiagram="AVATAR Design" />
+<info value="RadarSensor/out obstacleAhead" channelName="RadarSensor/out obstacleAhead(int info) #--# ObjectListManagement/in isObstacleAhead(int info)" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 

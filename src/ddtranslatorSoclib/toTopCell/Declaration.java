@@ -11,6 +11,59 @@ public class Declaration {
     private static String CR = "\n";
     private static String CR2 = "\n\n";
 
+    //DG 28.04. parsing of channel name seems less complicated than identifying the referenced avatar blocks and channels 
+       
+    public static String generateName(AvatarChannel channel){
+	String channelName="";
+	String channelNameTest = channel.getChannelName();
+
+	//extract first block name
+	int pos1=channelNameTest.indexOf('/');
+	int pos2; int x;
+
+	if ((channelNameTest.substring(pos1+1,pos1+2)).equals("in")){
+	    pos2=pos1+3;x=0;	System.out.println("33333"+channelNameTest);
+	}
+	else{ 
+	    pos2=pos1+4;x=1;
+	}
+	channelName=channelName+channelNameTest.substring(0,pos1)+"_";
+
+	//extract first signal name
+
+	channelNameTest=channelNameTest.substring(pos2-(1-x),channelNameTest.length());
+
+	pos1=channelNameTest.indexOf('(');
+	channelName=channelName+channelNameTest.substring(x,pos1)+"__";
+	
+	pos1=channelNameTest.indexOf('#');
+	channelNameTest=channelNameTest.substring(pos1+1,channelNameTest.length());
+	pos1=channelNameTest.indexOf('#');
+	channelNameTest=channelNameTest.substring(pos1+2,channelNameTest.length());
+
+	//extract second  block name
+	pos1=channelNameTest.indexOf('/');
+
+	if ((channelNameTest.substring(pos1+1,pos1+2)).equals("in")){
+	    pos2=pos1+3;x=0;	System.out.println("33333"+channelNameTest);
+
+	}
+	else{ 
+	    pos2=pos1+4;x=1;
+	}
+	channelName=channelName+channelNameTest.substring(0,pos1)+"_";
+
+	//extract second signal name
+	channelNameTest=channelNameTest.substring(pos2-(1-x),channelNameTest.length());
+
+	pos1=channelNameTest.indexOf('(');
+        channelName=channelName+channelNameTest.substring(x,pos1);	
+ 
+    return channelName;
+    }
+
+    //fin ajoute DG
+
 	public static String getDeclarations() {
 	   
 		String declaration = "//----------------------------Instantiation-------------------------------" + CR2;	
@@ -80,11 +133,7 @@ else{
 		    declaration += "caba::VciRam<vci_param>mwmr_ram(\"mwmr_ram\",IntTab(0,"+(TopCellGenerator.avatardd.getNb_target()+3)+"),maptab);" + CR2; 
 		    declaration += "caba::VciRam<vci_param>mwmrd_ram(\"mwmrd_ram\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+4)+"),maptab);" + CR2; 
 }
-		    else{
-
-			// declaration += "caba::VciRam<vci_param>mwmr_ram(\"mwmr_ram\",IntTab(0,1),maptab);" + CR2; 
-			//	    declaration += "caba::VciRam<vci_param>mwmrd_ram(\"mwmrd_ram\", IntTab(0,2),maptab);" + CR2; 
-}		    	
+		    	
 		    if(nb_clusters==0){
 	 for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()){
 		    declaration += "caba::VciMultiTty<vci_param> " + tty.getTTYName()+ "(\"" + tty.getTTYName()+ "\", IntTab(" + tty.getNo_target()+ "), maptab, \"vci_multi_tty"+"\", NULL);"+ CR;}
@@ -132,14 +181,16 @@ if(nb_clusters==0){
 	    else{
 		if (ram.getMonitored()==2){
 		int number = ram.getNo_target();
-
-                //LinkedList<AvatarChannel> channels=ram.getChannels();	
-	
+             
 		String strArray="";
 
-                for(AvatarChannel channel: ram.getChannels()){
-		  strArray=strArray+"\""+channel.getChannelName()+"\","; 
-		}      
+		 for(AvatarChannel channel: ram.getChannels()){ 
+		   
+		     String chname = generateName(channel);
+		     
+		     strArray=strArray+"\""+chname+"\",";
+		}   
+		
 		declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr0.log\",stringArray("+strArray+"NULL));" + CR2;
 	      i++;	      
 	    }	
@@ -176,7 +227,9 @@ if(nb_clusters==0){
 		String strArray="";
 
                 for(AvatarChannel channel: ram.getChannels()){
-		  strArray=strArray+"\""+channel.getChannelName()+"\","; 
+		    //   strArray=strArray+"\""+channel.getChannelName()+"\","; 
+		    String chname = generateName(channel);
+		     strArray=strArray+"\""+chname+"\",";
 		}      
 		declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr0.log\",stringArray("+strArray+"NULL));" + CR2;
 	      i++;	      
@@ -186,7 +239,7 @@ if(nb_clusters==0){
 
 	  // if VGMN was not last in input file, update here 
           vgmn.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
-          vgmn.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target()+4);//DG 04.12. two additionnal targets for channel mapping
+          vgmn.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target()+4);
 	 }
 }else
     //clustered
