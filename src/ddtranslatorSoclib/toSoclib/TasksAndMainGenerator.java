@@ -173,8 +173,8 @@ public class TasksAndMainGenerator {
                
 	//the address of mwmr segments is currently hard coded for powerPC; will be changed later
 	
-        mainFile.appendToBeforeMainCode("#define MWMRADDR 0x20200000" + CR );
-        mainFile.appendToBeforeMainCode("#define LOCKSADDR 0x30200000" + CR );
+        mainFile.appendToBeforeMainCode("#define MWMRADDR 0xB0200000" + CR );
+        mainFile.appendToBeforeMainCode("#define LOCKSADDR 0xC0200000" + CR );
         mainFile.appendToBeforeMainCode("#define base(arg) arg" + CR2 );
         mainFile.appendToBeforeMainCode("typedef struct mwmr_s mwmr_t;" + CR2);
 

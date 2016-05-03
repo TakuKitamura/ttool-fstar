@@ -49,8 +49,8 @@ pthread_barrier_t barrier ;
 pthread_attr_t *attr_t;
 pthread_mutex_t __mainMutex;
 
-#define MWMRADDR 0x20200000
-#define LOCKSADDR 0x30200000
+#define MWMRADDR 0xB0200000
+#define LOCKSADDR 0xC0200000
 #define base(arg) arg
 
 typedef struct mwmr_s mwmr_t;

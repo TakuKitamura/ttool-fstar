@@ -41,17 +41,14 @@ public class Deployinfo {
     /* for the moment, this is specific to PowerPC */
   
     public static String getDeployInfo() {
-	int i=0; 
-        int calculated_addr = 2130706432;// 0x7f000000 currently fixed
 
-       //address is fixed for the moment but can be given in the DDiagram or calculated
+        int calculated_addr = 2130706432;// 0x7f000000 currently fixed for power pc
+     
         String deployinfo = CR;
-
-	/* special case: there is only one memory bank and/or at least one CHANNEL channel is mapped to it */
-	
+	int i=1;
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
 	    //String string_adress_start = Integer.toHexString(calculated_addr);
-String string_adress_start = Integer.toHexString(268435456);
+	    String string_adress_start = Integer.toHexString(i*268435456);
 	// if((ram.getNo_ram()==0)&&(!(ram.getChannels().isEmpty()))){
 	   
 		//deployinfo = "#define DEPLOY_RAM" + i + "_NAME mem_ram"+ CR;
@@ -66,15 +63,10 @@ String string_adress_start = Integer.toHexString(268435456);
 	    deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_SIZE 0x"+ string_size + CR; 
 
 	    deployinfo += "#define DEPLOY_RAM" + ram.getNo_ram()  + "_NAME uram" + ram.getNo_ram() + CR;
-	    //}
-	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + (string_adress_start+Integer.toHexString(2097152)) + CR; // attention this must be hexadecimal	   	  
+	   
+	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + (Integer.toHexString((i*268435456)+2097152)) + CR; // attention this must be hexadecimal	   	  
 	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_SIZE 0x"+ string_size + CR; 
-
-// attention this must be hexadecimal
-	    //calculated_addr=calculated_addr-16777216; // attention this must be hexadecimal	
-	    //	    calculated_addr=calculated_addr-33554432;
-	    //i++;
-	    // } 
+	    i++;
 	}
 	return deployinfo;	
     }
