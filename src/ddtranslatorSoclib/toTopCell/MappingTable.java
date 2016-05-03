@@ -67,17 +67,17 @@ int j=0; int k=0; int l=0;
       if(TopCellGenerator.avatardd.getAllCrossbar().size()==0){	
       
       for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {						      
-	  /*	   if(ram.getNo_ram() ==0){
-          ram.setNo_target(2);				   
+	  if(ram.getNo_ram() ==0){
+          ram.setNo_target(2);	
+	  mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0000000, 0x00100000, IntTab("+(ram.getNo_target()+2)+"), false));" + CR;
+	  mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0200000, 0x00100000, IntTab("+(ram.getNo_target()+2)+"), false));" + CR;	   
         }
         else{
           ram.setNo_target(7+j);
-          mapping += "maptab.add(Segment(\"channel" + j + "\", 0x" + (6 - j) + "f000000, 0x01000000, IntTab("+ram.getNo_target()+"), false));" + CR;
-          j++;
-	  }*/
-
-	  mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0000000, 0x00100000, IntTab("+(ram.getNo_target()+2)+"), false));" + CR;
-	  mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0200000, 0x00100000, IntTab("+(ram.getNo_target()+2)+"), false));" + CR;
+	  mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0000000, 0x00100000, IntTab("+(ram.getNo_target())+"), false));" + CR;
+	  mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0200000, 0x00100000, IntTab("+(ram.getNo_target())+"), false));" + CR;
+	  j++;	 
+        }
       }
      
       for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) {
@@ -123,9 +123,9 @@ int j=0; int k=0; int l=0;
       mapping = mapping + "maptab.add(Segment(\"vci_fd_access\", 0xd4200000, 0x00000100, IntTab("+(l+1)+"), false));" + CR;
       mapping = mapping + "maptab.add(Segment(\"vci_ethernet\",  0xd5000000, 0x00000020, IntTab("+(l+2)+"), false));" + CR;
       mapping = mapping + "maptab.add(Segment(\"vci_block_device\", 0xd1200000, 0x00000020, IntTab("+(l+3)+"), false));" + CR2;
-      mapping = mapping + "maptab.add(Segment(\"vci_locks\", 0x30200000, 0x00000100, IntTab("+(l+4)+"), false));" + CR2;//DG 4.12. for coprocessor wrapper
+      mapping = mapping + "maptab.add(Segment(\"vci_locks\", 0xC0200000, 0x00000100, IntTab("+(l+4)+"), false));" + CR2;//DG 4.12. for coprocessor wrapper
 mapping = mapping + "maptab.add(Segment(\"mwmr_ram\", 0xA0200000,  0x00001000, IntTab("+(l+5)+"), false));" + CR2;//DG 4.12. for coprocessor wrapper
-mapping = mapping + "maptab.add(Segment(\"mwmrd_ram\", 0x20200000,  0x00003000, IntTab("+(l+6)+"), false));" + CR2;//DG 4.12.
+mapping = mapping + "maptab.add(Segment(\"mwmrd_ram\", 0xB0200000,  0x00003000, IntTab("+(l+6)+"), false));" + CR2;//DG 4.12.
      
 	    }
 	    else{
@@ -168,9 +168,9 @@ mapping = mapping + "maptab.add(Segment(\"mwmrd_ram\", 0x20200000,  0x00003000, 
 	      }	  
 	    
 	for(c=0;c<nb_clusters;c++){
-	      mapping = mapping + "maptab.add(Segment(\"vci_locks"+c+"\", 0x30200000, 0x00000100, IntTab("+c+",3), false));" + CR2;
+	      mapping = mapping + "maptab.add(Segment(\"vci_locks"+c+"\", 0xC0200000, 0x00000100, IntTab("+c+",3), false));" + CR2;
 	      mapping = mapping + "maptab.add(Segment(\"mwmr_ram"+c+"\", 0xA"+c+"200000,  0x00001000, IntTab("+c+",1), false));" + CR2;
-	      mapping = mapping + "maptab.add(Segment(\"mwmrd_ram"+c+"\", 0x2"+c+"200000,  0x00003000, IntTab("+c+",2), false));" + CR2;   
+	      mapping = mapping + "maptab.add(Segment(\"mwmrd_ram"+c+"\", 0xB"+c+"200000,  0x00003000, IntTab("+c+",2), false));" + CR2;   
 	  }
 
       //now treat ram and tty

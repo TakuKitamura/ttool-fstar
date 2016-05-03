@@ -19,22 +19,19 @@ public class Declaration {
 
 	//extract first block name
 	int pos1=channelNameTest.indexOf('/');
-	int pos2; int x;
-
+	int pos2;
 	if ((channelNameTest.substring(pos1+1,pos1+3)).equals("in")){
-	    pos2=pos1+3;x=0;	System.out.println("33333"+channelNameTest);
+	    pos2=pos1+3;	
 	}
-	else{ 
-	    pos2=pos1+4;x=1;
+	else{ 	    
+	    pos2=pos1+4;
 	}
 	channelName=channelName+channelNameTest.substring(0,pos1)+"_";
 
 	//extract first signal name
-
-	channelNameTest=channelNameTest.substring(pos2-(1-x),channelNameTest.length());
-
+	channelNameTest=channelNameTest.substring((pos2),channelNameTest.length());
 	pos1=channelNameTest.indexOf('(');
-	channelName=channelName+channelNameTest.substring(x,pos1)+"__";
+	channelName=channelName+channelNameTest.substring(1,pos1)+"__";
 	
 	pos1=channelNameTest.indexOf('#');
 	channelNameTest=channelNameTest.substring(pos1+1,channelNameTest.length());
@@ -45,19 +42,19 @@ public class Declaration {
 	pos1=channelNameTest.indexOf('/');
 
 	if ((channelNameTest.substring(pos1+1,pos1+3)).equals("in")){
-	    pos2=pos1+3;x=0;	System.out.println("33333"+channelNameTest);
-
+	    pos2=pos1+3;
 	}
 	else{ 
-	    pos2=pos1+4;x=1;
+	    pos2=pos1+4;
 	}
 	channelName=channelName+channelNameTest.substring(0,pos1)+"_";
 
 	//extract second signal name
-	channelNameTest=channelNameTest.substring(pos2-(1-x),channelNameTest.length());
+	
+        channelNameTest=channelNameTest.substring((pos2),channelNameTest.length());
 
-	pos1=channelNameTest.indexOf('(');
-        channelName=channelName+channelNameTest.substring(x,pos1);	
+	pos1=channelNameTest.indexOf('(');	
+        channelName=channelName+channelNameTest.substring(1,pos1);	
  
     return channelName;
     }
@@ -130,7 +127,7 @@ else{
       // There can be an arbitrary number of RAMS (at least one, RAM0 is distinguished) and TTY	
 	
 		if(nb_clusters==0){
-		    declaration += "caba::VciRam<vci_param>mwmr_ram(\"mwmr_ram\",IntTab(0,"+(TopCellGenerator.avatardd.getNb_target()+3)+"),maptab);" + CR2; 
+		    declaration += "caba::VciRam<vci_param>mwmr_ram(\"mwmr_ram\",IntTab("+(TopCellGenerator.avatardd.getNb_target()+3)+"),maptab);" + CR2; 
 		    declaration += "caba::VciRam<vci_param>mwmrd_ram(\"mwmrd_ram\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+4)+"),maptab);" + CR2; 
 }
 		    	
@@ -139,9 +136,14 @@ else{
 		    declaration += "caba::VciMultiTty<vci_param> " + tty.getTTYName()+ "(\"" + tty.getTTYName()+ "\", IntTab(" + tty.getNo_target()+ "), maptab, \"vci_multi_tty"+"\", NULL);"+ CR;}
 
 	 for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) 
+	     if(ram.getNo_ram()==0){
+		 declaration += "soclib::caba::VciRam<vci_param>" + ram.getMemoryName()+ "(\"" + ram.getMemoryName()+ "\"" + ", IntTab(2), maptab);" + CR; 
+	     }
+	     else{
 	     declaration += "soclib::caba::VciRam<vci_param>" + ram.getMemoryName()+ "(\"" + ram.getMemoryName()+ "\"" + ", IntTab("
-		 + (ram.getNo_target()+2) + "), maptab);" + CR; 
-		}
+		 + ram.getNo_target() + "), maptab);" + CR; 
+	     }
+	     }
 		else{
  for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()){
 		    declaration += "caba::VciMultiTty<vci_param> " + tty.getTTYName()+ "(\"" + tty.getTTYName()+ "\", IntTab("+ tty.getNo_cluster()+"," + tty.getNo_target()+ "), maptab, \"vci_multi_tty"+"\", NULL);"+ CR;}
