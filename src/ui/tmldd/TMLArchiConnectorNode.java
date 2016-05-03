@@ -50,6 +50,7 @@ package ui.tmldd;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 
@@ -63,8 +64,10 @@ import ui.window.*;
 public  class TMLArchiConnectorNode extends TGConnector implements WithAttributes {
     protected int arrowLength = 10;
     protected int widthValue, heightValue, maxWidthValue, h;
-	
-	protected int priority = 0; // Between 0 and 10
+    public static final String NO_SPY = "Remove spy";
+    public static final String ADD_SPY = "Add spy";
+    protected boolean hasASpy;
+    protected int priority = 0; // Between 0 and 10
     
     public TMLArchiConnectorNode(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
@@ -89,6 +92,9 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
     }
     
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
+	  if (hasASpy) {
+	      g.drawImage(IconManager.img5200, (x1 + x2)/2, (y1 + y2)/2, null);
+	  }
     	  g.drawLine(x1, y1, x2, y2);
         /*if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
             g.drawLine(x1, y1, x2, y2);
@@ -97,7 +103,23 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
         }*/
     }
     
-    
+    public boolean hasASpy() {
+	return hasASpy;
+    }
+    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+        componentMenu.addSeparator();
+        JMenuItem generate = null;
+        // Should verify first whether it is connected to a formal requirement with a verify relation, or not
+	if (hasASpy) {
+	    generate = new JMenuItem(NO_SPY);
+	} else {
+	    generate = new JMenuItem(ADD_SPY);
+	}
+	
+
+        generate.addActionListener(menuAL);
+        componentMenu.add(generate);
+    }
     public int getType() {
         return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
     }
@@ -107,6 +129,7 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
         sb.append("<info priority=\"");
 		sb.append(priority);
         sb.append("\" />\n");
+	sb.append("<spy value=\"" + hasASpy + "\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
     }
@@ -137,6 +160,13 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
 									priority = Integer.decode(prio).intValue();
 								}
                             }
+			    if (elt.getTagName().equals("spy")) {
+                                String tmp = elt.getAttribute("value").trim();
+				//TraceManager.addDev("[DD] value=" + tmp);
+				if (tmp.compareTo("true") == 0) {
+				    hasASpy = true;
+				}
+                            }
                         }
                     }
                 }
@@ -147,7 +177,20 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
         }
     }
 	
-    
+        public boolean eventOnPopup(ActionEvent e) {
+        String s = e.getActionCommand();
+	TraceManager.addDev("action: " + s);
+        if (s.indexOf(NO_SPY) > -1) {
+	    hasASpy = false;
+	    tdp.repaint();
+        }
+	if (s.indexOf(ADD_SPY) > -1) {
+	    hasASpy = true;
+	    tdp.repaint();
+        } 
+            
+        return true;
+    }
     public TMLArchiCPUNode getOriginNode() {
         TGComponent tgc = tdp.getComponentToWhichBelongs(getTGConnectingPointP1());
         if (tgc instanceof TMLArchiCPUNode) {
