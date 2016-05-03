@@ -21,7 +21,7 @@ public class Declaration {
 	int pos1=channelNameTest.indexOf('/');
 	int pos2; int x;
 
-	if ((channelNameTest.substring(pos1+1,pos1+2)).equals("in")){
+	if ((channelNameTest.substring(pos1+1,pos1+3)).equals("in")){
 	    pos2=pos1+3;x=0;	System.out.println("33333"+channelNameTest);
 	}
 	else{ 
@@ -44,7 +44,7 @@ public class Declaration {
 	//extract second  block name
 	pos1=channelNameTest.indexOf('/');
 
-	if ((channelNameTest.substring(pos1+1,pos1+2)).equals("in")){
+	if ((channelNameTest.substring(pos1+1,pos1+3)).equals("in")){
 	    pos2=pos1+3;x=0;	System.out.println("33333"+channelNameTest);
 
 	}
@@ -140,7 +140,7 @@ else{
 
 	 for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) 
 	     declaration += "soclib::caba::VciRam<vci_param>" + ram.getMemoryName()+ "(\"" + ram.getMemoryName()+ "\"" + ", IntTab("
-		 + ram.getNo_target() + "), maptab);" + CR; 
+		 + (ram.getNo_target()+2) + "), maptab);" + CR; 
 		}
 		else{
  for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()){

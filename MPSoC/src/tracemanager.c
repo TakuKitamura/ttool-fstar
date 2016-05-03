@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+//#include <pthread.h>
+//#include "system.h"
 
 #include "tracemanager.h"
 #include "debug.h"
@@ -16,12 +18,12 @@
 pthread_mutex_t __traceMutex;
 
 int trace = TRACE_OFF;
-int id = 0;
+int action_id = 0;
 
 FILE *file;
 
 struct timespec begints;
-long begintc;//DG
+long begintc;
 
 void addInfo(char *dest, char *info) {
   //char s1[10];
@@ -29,17 +31,18 @@ void addInfo(char *dest, char *info) {
   //long tmp1;
   //int i;
   struct timespec ts, ts1;
-  long tc, tc1; //DG
+  long tc, tc1;
 
   my_clock_gettime(&ts);
-  //tc=get_cpu_cycles();//DG
+  //tc=get_cpu_cycles();
   tc=cpu_cycle_count();
+
   debugMsg("DIFF TIME");
   diffTime(&begints, &ts, &ts1);
-  diffCycles(&begintc, &tc, &tc1);//DG
+  //  diffCycles(&begintc, &tc, &tc1);
 
   tmp = ts1.tv_nsec;
-  tmp2 = tc1;//DG
+  // tmp2 = tc1;//DG
 
   if (tmp < 0) {
     tmp = -tmp;
@@ -55,9 +58,10 @@ void addInfo(char *dest, char *info) {
     s1[9] = '\0';*/
   
   /* s1 -> tmp */
-  sprintf(dest, "#%d time=%ld.%09ld %s", id, ts1.tv_sec, tmp, info);
-  sprintf(dest, "#%d cpu_time=%ld %s", id, tmp2, info);//DG
-  id ++;
+  sprintf(dest, "action #%d time=%ld.%09ld %s",action_id, ts1.tv_sec, tmp, info);
+  
+  sprintf(dest, "action #%d cpu_time=%ld %s", action_id, tc , info);//DG
+  action_id ++;
 }
 
 

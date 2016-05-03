@@ -58,7 +58,7 @@ void diffTime(struct timespec *src1, struct timespec *src2, struct timespec *des
 //DG
 void diffCycles(long *src1, long *src2, long *dest) {
   int diff = 0;debugMsg("DIFF CYCLES\n");
-  dest = src2-src1;
+  *dest = src2-src1;
 }
 
 

@@ -7,7 +7,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
+<Validated value="Block1;Block0;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="2" >
@@ -486,7 +486,7 @@
 <TGConnectingPoint num="23" id="239" />
 <extraparam>
 <info stereotype="RAM" nodeName="Memory0" />
-<attributes byteDataSize="1024"  index="0" />
+<attributes byteDataSize="1048576"  index="0" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="5362" id="215" >
@@ -505,7 +505,7 @@
 <TGConnectingPoint num="6" id="213" />
 <TGConnectingPoint num="7" id="214" />
 <extraparam>
-<info value="Block0/out val" channelName="Block0/out val() #--# Block1/in val()" referenceDiagram="AVATAR Design" />
+<info value="Block0/out val" channelName="Block0/out val() #--# Block1/in val()" fullChannelName="" referenceDiagram="AVATAR Design" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -699,7 +699,7 @@
 <P2  x="622" y="362" id="256" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<spy value="true" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5350" id="361" >
@@ -730,7 +730,7 @@
 <P2  x="435" y="337" id="244" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<spy value="false" />
+<spy value="true" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5350" id="363" >

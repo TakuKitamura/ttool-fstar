@@ -50,24 +50,31 @@ public class Deployinfo {
 	/* special case: there is only one memory bank and/or at least one CHANNEL channel is mapped to it */
 	
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
-	String string_adress_start = Integer.toHexString(calculated_addr);
-
-	    if((ram.getNo_ram()==0)&&(!(ram.getChannels().isEmpty()))){
+	    //String string_adress_start = Integer.toHexString(calculated_addr);
+String string_adress_start = Integer.toHexString(268435456);
+	// if((ram.getNo_ram()==0)&&(!(ram.getChannels().isEmpty()))){
 	   
 		//deployinfo = "#define DEPLOY_RAM" + i + "_NAME mem_ram"+ CR;
 	  
-	}
-	else{
-	    deployinfo += "#define DEPLOY_RAM" + i + "_NAME channel_ram" + ram.getNo_ram() + CR;
+		//	}
+	    //	else{
+	    deployinfo += "#define CACHED_RAM" + ram.getNo_ram()  + "_NAME cram" + ram.getNo_ram() + CR;
 	    //}
-	    deployinfo = deployinfo + "#define DEPLOY_RAM" + i + "_ADDR 0x" + string_adress_start + CR; // attention this must be hexadecimal	   
-	    int size = ram.getDataSize();
-	    String string_size = Integer.toHexString(size);
-	    deployinfo = deployinfo + "#define DEPLOY_RAM" + i + "_SIZE 0x"+ string_size + CR; // attention this must be hexadecimal
+	    deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_ADDR 0x" + (string_adress_start) + CR; // attention this must be hexadecimal	   
+	    int size = 65536;//ram.getDataSize(); DG 2.5.
+	    String string_size = (Integer.toHexString(size/2));//half is uram, half is cram
+	    deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_SIZE 0x"+ string_size + CR; 
+
+	    deployinfo += "#define DEPLOY_RAM" + ram.getNo_ram()  + "_NAME uram" + ram.getNo_ram() + CR;
+	    //}
+	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + (string_adress_start+Integer.toHexString(2097152)) + CR; // attention this must be hexadecimal	   	  
+	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_SIZE 0x"+ string_size + CR; 
+
+// attention this must be hexadecimal
 	    //calculated_addr=calculated_addr-16777216; // attention this must be hexadecimal	
-	    calculated_addr=calculated_addr-33554432;
-	    i++;
-	  } 
+	    //	    calculated_addr=calculated_addr-33554432;
+	    //i++;
+	    // } 
 	}
 	return deployinfo;	
     }
@@ -78,21 +85,14 @@ public class Deployinfo {
 
 	deployinfo_map += "#define MAP_A\\" + CR;		
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
-	    if (!(ram.getChannels().isEmpty())){
-		//deployinfo_map = deployinfo_map +".channel"+i+" : { \\" + CR;
-	    for (AvatarChannel channel : ram.getChannels()) {
-		deployinfo_map = deployinfo_map +"\n .channel"+i+" : { \\" + CR;
-		deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")\\"+ CR;
-		i++;
-		deployinfo_map=deployinfo_map+ "} > mwmrd_ram\\"+ CR;//DG 07.12.
-    /*	    if (ram.getNo_ram()==0){ 
-		deployinfo_map=deployinfo_map+ "} > mem_ram\\"+ CR;
-	    }
-	    else{	
-		deployinfo_map=deployinfo_map+ "} > channel_ram"+ ram.getNo_ram()+ "\\" +CR;
-		}DG 07.12.*/
-	    }
-	  }	    
+	    if (!(ram.getChannels().isEmpty())){	
+		for (AvatarChannel channel : ram.getChannels()) {
+		    deployinfo_map = deployinfo_map +"\n .channel"+i+" : { \\" + CR;
+		    deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")\\"+ CR;
+		    i++;
+		    deployinfo_map=deployinfo_map+ "} > uram"+ram.getNo_ram()+"\\"+ CR;	
+		}
+	    }	    
 	}
 	return deployinfo_map;	
     }

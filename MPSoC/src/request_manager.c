@@ -58,9 +58,13 @@ void executeSendSyncTransaction(request *req) {
 
   //ajoute DG 7.7. choix randomise du writer a deja ete fait
   //actuellement sans mwmr, gestionnaire central
-  //sync_write(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID);//pas clair quell donne est a transmettre, choisi ID
+  // sync_write(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID);//pas clair quell donne est a transmettre, choisi ID
+  //sync_write(channel->mwmr_fifo, &msg, 1 );
+  //debugMsg("before sync write\n");
+  debugInt("syncchannel address \n", req->syncChannel->mwmr_fifo);
+  sync_write(req->syncChannel->mwmr_fifo, selectedReq->ID, 1 );//pas clair quelle donnee est a transmettre, choisi ID
+  // debugMsg("after sync write\n");
   // fin ajoute 
-
   debugMsg("Signaling");
   //DG 21.09. faut changer?
   pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
@@ -107,9 +111,12 @@ void executeReceiveSyncTransaction(request *req) {
   debugMsg("Signaling");
   pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
 
-  //ajoute DG
+  //ajoute DG async_read(channel->mwmr_fifo, &msg, 1);
+  debugInt("syncchannel read: address \n",selectedReq->syncChannel->mwmr_fifo);
+  sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID, 1);
   //sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID); //pas clair quell donne est a transmettre, choisi ID
- //fin ajoute
+ //fin ajoute 
+  debugMsg("after syncchannel read");
   traceSynchroRequest(selectedReq, req);
 }
 

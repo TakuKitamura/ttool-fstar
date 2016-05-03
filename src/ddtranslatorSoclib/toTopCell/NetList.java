@@ -134,10 +134,10 @@ public class NetList {
 		    netlist = netlist + ram.getMemoryName()+".p_vci(signal_vci_vciram"+ram.getNo_ram()+");" + CR2;
 
 		    if(icn=="vgmn"){
-			netlist = netlist + "vgmn.p_to_target["+ram.getNo_target()+"](signal_vci_vciram"+ram.getNo_ram()+");" + CR2;
+			netlist = netlist + "vgmn.p_to_target["+(ram.getNo_target()+2)+"](signal_vci_vciram"+ram.getNo_ram()+");" + CR2;
 		    }
 		    else{
-			netlist = netlist + "vgsb.p_to_target["+ram.getNo_target()+"](signal_vci_vciram"+ram.getNo_ram()+");" + CR2;
+			netlist = netlist + "vgsb.p_to_target["+(ram.getNo_target()+2)+"](signal_vci_vciram"+ram.getNo_ram()+");" + CR2;
 		    }		   
 		}
 		    netlist = netlist + "vci_locks.p_clk(" + NAME_CLK + ");" + CR;

@@ -53,9 +53,9 @@ asyncchannel *getNewAsyncchannel(char *outname, char *inname, int isBlocking, in
   asyncch->mwmr_fifo=fifo;
   asyncch->mwmr_fifo->depth=fifo->depth;
   asyncch->mwmr_fifo->width=fifo->width;
-  debugInt("asyncchannel getNew %x \n",asyncch->mwmr_fifo);
-  debugInt("asyncchannel %x \n",asyncch->mwmr_fifo->depth);
-  debugInt("asyncchannel %x \n",asyncch->mwmr_fifo->width);
+  debugInt("asyncchannel getNew \n",asyncch->mwmr_fifo);
+  debugInt("asyncchannel \n",asyncch->mwmr_fifo->depth);
+  debugInt("asyncchannel \n",asyncch->mwmr_fifo->width);
 
   return asyncch;
 }
@@ -77,9 +77,9 @@ void destroyAsyncchannel(asyncchannel *asyncch) {
     msg = channel->pendingMessages;
     channel->pendingMessages = NULL;
   
-    debugInt("asyncchannel read: address %x \n",channel->mwmr_fifo);
-    debugInt("asyncchannel %x \n",channel->mwmr_fifo->depth);
-    debugInt("asyncchannel %x \n",channel->mwmr_fifo->width);
+    debugInt("asyncchannel read: address \n",channel->mwmr_fifo);
+    debugInt("asyncchannel \n",channel->mwmr_fifo->depth);
+    debugInt("asyncchannel \n",channel->mwmr_fifo->width);
     async_read(channel->mwmr_fifo, &msg, 1);
     return msg;
   }

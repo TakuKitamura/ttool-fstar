@@ -74,7 +74,7 @@ void sync_write(struct mwmr_s *fifo, void *_ptr){
 
 //DG 7.9. add MWMR as parameter
 //syncchannel *getNewSyncchannel(char *outname, char *inname, struct mwmr_s *fifo) {
-syncchannel *getNewSyncchannel(char *outname, char *inname) {
+syncchannel *getNewSyncchannel(char *outname, char *inname, struct mwmr_s *fifo) {
   syncchannel * syncch = (syncchannel *)(malloc(sizeof(struct syncchannel)));
   if (syncch == NULL) {
     criticalError("Allocation of request failed");
@@ -85,7 +85,7 @@ syncchannel *getNewSyncchannel(char *outname, char *inname) {
   syncch->outWaitQueue = NULL;
   syncch->isBroadcast = false;
   //DG 7.9. add MWMR
-  //syncch->mwmr_fifo=fifo;
+  syncch->mwmr_fifo=fifo;
   return syncch;
 }
 

@@ -3,7 +3,7 @@
 <TURTLEGMODELING version="0.98-beta4">
 
 <Modeling type="TML Component Design" nameTab="Braking - FV" >
-<TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="10" maxX="1921" minY="10" maxY="1421" channels="true" events="true" requests="true" zoom="1.0000000000000009" >
+<TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="10" maxX="1927" minY="10" maxY="1427" channels="true" events="true" requests="true" zoom="1.0000000000000009" >
 <CONNECTOR type="126" id="2" >
 <cdparam x="472" y="108" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -170,7 +170,7 @@
 <cdparam x="355" y="122" />
 <sizeparam width="170" height="99" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="DSRCManagement" />
 <TGConnectingPoint num="0" id="33" />
 <TGConnectingPoint num="1" id="34" />
@@ -292,7 +292,7 @@
 <cdparam x="1353" y="752" />
 <sizeparam width="233" height="60" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="doReduceDrivingPower" />
 <TGConnectingPoint num="0" id="44" />
 <TGConnectingPoint num="1" id="45" />
@@ -327,7 +327,7 @@
 <cdparam x="1241" y="613" />
 <sizeparam width="245" height="64" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="DrivingPowerReductionstrategy" />
 <TGConnectingPoint num="0" id="57" />
 <TGConnectingPoint num="1" id="58" />
@@ -379,7 +379,7 @@
 <cdparam x="1449" y="354" />
 <sizeparam width="141" height="67" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="DoBrake" />
 <TGConnectingPoint num="0" id="68" />
 <TGConnectingPoint num="1" id="69" />
@@ -414,7 +414,7 @@
 <cdparam x="188" y="618" />
 <sizeparam width="146" height="50" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="GPSReception" />
 <TGConnectingPoint num="0" id="79" />
 <TGConnectingPoint num="1" id="80" />
@@ -449,7 +449,7 @@
 <cdparam x="273" y="467" />
 <sizeparam width="275" height="62" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="NeighbourhoodTableManagement" />
 <TGConnectingPoint num="0" id="94" />
 <TGConnectingPoint num="1" id="95" />
@@ -518,7 +518,7 @@
 <cdparam x="402" y="304" />
 <sizeparam width="176" height="60" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="CorrectnessChecking" />
 <TGConnectingPoint num="0" id="107" />
 <TGConnectingPoint num="1" id="108" />
@@ -570,7 +570,7 @@
 <cdparam x="600" y="68" />
 <sizeparam width="239" height="61" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="GetEnvironmentInformation" />
 <TGConnectingPoint num="0" id="118" />
 <TGConnectingPoint num="1" id="119" />
@@ -605,7 +605,7 @@
 <cdparam x="605" y="434" />
 <sizeparam width="223" height="66" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="PlausibilityCheck" />
 <TGConnectingPoint num="0" id="137" />
 <TGConnectingPoint num="1" id="138" />
@@ -708,7 +708,7 @@
 <cdparam x="605" y="315" />
 <sizeparam width="227" height="57" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="ObjectListManagement" />
 <TGConnectingPoint num="0" id="150" />
 <TGConnectingPoint num="1" id="151" />
@@ -760,7 +760,7 @@
 <cdparam x="615" y="597" />
 <sizeparam width="242" height="62" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="VehicleDynamicsManagement" />
 <TGConnectingPoint num="0" id="163" />
 <TGConnectingPoint num="1" id="164" />
@@ -812,7 +812,7 @@
 <cdparam x="613" y="720" />
 <sizeparam width="215" height="61" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="GetVehicleDynamics" />
 <TGConnectingPoint num="0" id="174" />
 <TGConnectingPoint num="1" id="175" />
@@ -847,7 +847,7 @@
 <cdparam x="1160" y="366" />
 <sizeparam width="193" height="60" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="BrakeManagement" />
 <TGConnectingPoint num="0" id="187" />
 <TGConnectingPoint num="1" id="188" />
@@ -899,7 +899,7 @@
 <cdparam x="977" y="492" />
 <sizeparam width="200" height="76" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="DangerAvoidanceStrategy" />
 <TGConnectingPoint num="0" id="206" />
 <TGConnectingPoint num="1" id="207" />
@@ -1002,7 +1002,7 @@
 <cdparam x="37" y="72" />
 <sizeparam width="158" height="149" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Primitive component" value="DSRCRxTx" />
 <TGConnectingPoint num="0" id="221" />
 <TGConnectingPoint num="1" id="222" />
@@ -1071,7 +1071,7 @@
 <cdparam x="30" y="44" />
 <sizeparam width="498" height="184" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="1421" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="1427" />
 <infoparam name="Composite component" value="DSRCTask" />
 <TGConnectingPoint num="0" id="230" />
 <TGConnectingPoint num="1" id="231" />
@@ -2890,12 +2890,12 @@
 
 
 <Modeling type="Requirement" nameTab="General Requirements" >
-<TRequirementDiagramPanel name="AvailabilityRequirements" minX="10" maxX="1921" minY="10" maxY="921" zoom="1.0000000000000002" >
+<TRequirementDiagramPanel name="AvailabilityRequirements" minX="10" maxX="1927" minY="10" maxY="927" zoom="1.0000000000000002" >
 <COMPONENT type="900" id="1162" >
 <cdparam x="470" y="532" />
 <sizeparam width="333" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="317" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="927" />
 <infoparam name="Requirement" value="EnsureHighestAvalabilityForHighestPriorityFunctions" />
 <TGConnectingPoint num="0" id="1131" />
 <TGConnectingPoint num="1" id="1132" />
@@ -2946,7 +2946,7 @@
 <cdparam x="196" y="535" />
 <sizeparam width="213" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="196" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="927" />
 <infoparam name="Requirement" value="EnsureAvailabilityRadioMedium" />
 <TGConnectingPoint num="0" id="1163" />
 <TGConnectingPoint num="1" id="1164" />
@@ -2997,7 +2997,7 @@
 <cdparam x="764" y="331" />
 <sizeparam width="310" height="102" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="288" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="927" />
 <infoparam name="Requirement" value="EnsureExternalCommunicationDeviceAvailability" />
 <TGConnectingPoint num="0" id="1195" />
 <TGConnectingPoint num="1" id="1196" />
@@ -3047,7 +3047,7 @@
 <cdparam x="527" y="329" />
 <sizeparam width="181" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="144" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="927" />
 <infoparam name="Requirement" value="EnsureRAMAvailability" />
 <TGConnectingPoint num="0" id="1227" />
 <TGConnectingPoint num="1" id="1228" />
@@ -3098,7 +3098,7 @@
 <cdparam x="303" y="331" />
 <sizeparam width="181" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="145" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="927" />
 <infoparam name="Requirement" value="EnsureCPUAvailability" />
 <TGConnectingPoint num="0" id="1259" />
 <TGConnectingPoint num="1" id="1260" />
@@ -3149,7 +3149,7 @@
 <cdparam x="72" y="334" />
 <sizeparam width="181" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="141" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="927" />
 <infoparam name="Requirement" value="EnsureBusAvailability" />
 <TGConnectingPoint num="0" id="1291" />
 <TGConnectingPoint num="1" id="1292" />
@@ -3200,7 +3200,7 @@
 <cdparam x="467" y="123" />
 <sizeparam width="181" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="164" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1921" minY="10" maxY="921" />
+<cdrectangleparam minX="10" maxX="1927" minY="10" maxY="927" />
 <infoparam name="Requirement" value="EnsureAvailabilityOfECUs" />
 <TGConnectingPoint num="0" id="1323" />
 <TGConnectingPoint num="1" id="1324" />
@@ -5759,7 +5759,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="TestBench;SpeedSensor;RadarSensor;GPSSensor;CarPositionSimulator;EmergencySimulator;Communication;DSRSC_Management;NeighbourhoodTableManagement;CorrectnessChecking;PTC;DrivingPowerReductionStrategy;BCU;DangerAvoidanceStrategy;BrakeManagement;CSCU;ObjectListManagement;PlausibilityCheck;VehiculeDynamicsManagement;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="2676" >
@@ -5821,7 +5821,7 @@
 <extraparam>
 <isd value="in getReducePowerOrder(int value)" />
 <oso value="out reducePower(int value)" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="2682" >
@@ -14161,7 +14161,7 @@ Otherwise, the most far away
 <TGConnectingPoint num="23" id="6382" />
 <extraparam>
 <info stereotype="RAM" nodeName="Memory1" />
-<attributes byteDataSize="33554432"  index="0" />
+<attributes byteDataSize="33554432"  index="1" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="5362" id="6322" >
@@ -14494,7 +14494,7 @@ Otherwise, the most far away
 <P2  x="728" y="409" id="5983" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<spy value="false" />
+<spy value="true" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5350" id="6500" >
