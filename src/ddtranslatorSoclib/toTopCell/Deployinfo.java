@@ -64,7 +64,7 @@ public class Deployinfo {
 
 	    deployinfo += "#define DEPLOY_RAM" + ram.getNo_ram()  + "_NAME uram" + ram.getNo_ram() + CR;
 	   
-	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + (Integer.toHexString((i*268435456)+2097152)) + CR; // attention this must be hexadecimal	   	  
+	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + (Integer.toHexString((i*268435456+2097152))) + CR; // attention this must be hexadecimal	   	  
 	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_SIZE 0x"+ string_size + CR; 
 	    i++;
 	}

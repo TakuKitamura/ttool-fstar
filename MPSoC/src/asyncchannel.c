@@ -94,9 +94,9 @@ void destroyAsyncchannel(asyncchannel *asyncch) {
   channel->currentNbOfMessages = channel->currentNbOfMessages -1;
   previous->next = NULL;
   debugInt("before async read 1\n");
-  debugInt("asyncchannel address %x \n",channel->mwmr_fifo);
-  debugInt("asyncchannel %x \n",channel->mwmr_fifo->depth);
-  debugInt("asyncchannel %x \n",channel->mwmr_fifo->width);
+  debugInt("asyncchannel address \n",channel->mwmr_fifo);
+  debugInt("asyncchannel \n",channel->mwmr_fifo->depth);
+  debugInt("asyncchannel \n",channel->mwmr_fifo->width);
   async_read(channel->mwmr_fifo, &msg, 1);
   
   return msg;
@@ -108,9 +108,9 @@ void addMessageToAsyncChannel(asyncchannel *channel, message *msg) {
   channel->pendingMessages = msg;
   channel->currentNbOfMessages = channel->currentNbOfMessages+1;
   debugInt("asyncchannel write: address %x \n",channel->mwmr_fifo);
-  debugInt("asyncchannel %x \n",channel->mwmr_fifo->depth);
-  debugInt("asyncchannel %x \n",channel->mwmr_fifo->width); 
-  debugInt("channel->mwmr_fifo: %x \n",channel->mwmr_fifo);
+  debugInt("asyncchannel \n",channel->mwmr_fifo->depth);
+  debugInt("asyncchannel  \n",channel->mwmr_fifo->width); 
+  debugInt("channel->mwmr_fifo: \n",channel->mwmr_fifo);
   async_write(channel->mwmr_fifo, &msg, 1 );
 
 }

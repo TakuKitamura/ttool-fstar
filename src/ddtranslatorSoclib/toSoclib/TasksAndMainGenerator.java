@@ -175,6 +175,15 @@ public class TasksAndMainGenerator {
 	
         mainFile.appendToBeforeMainCode("#define MWMRADDR 0xB0200000" + CR );
         mainFile.appendToBeforeMainCode("#define LOCKSADDR 0xC0200000" + CR );
+
+	int d=0;
+
+	for(AvatarRelation ar: avspec.getRelations()) {
+	    mainFile.appendToBeforeMainCode("#define CHANNEL"+d+" __attribute__((section(\"section_channel"+d+"\")))" + CR ); //DG 3.5.
+	    d++;
+	}
+
+
         mainFile.appendToBeforeMainCode("#define base(arg) arg" + CR2 );
         mainFile.appendToBeforeMainCode("typedef struct mwmr_s mwmr_t;" + CR2);
 
@@ -192,7 +201,7 @@ public class TasksAndMainGenerator {
         mainFile.appendToBeforeMainCode("/* Synchronous channels */" + CR);
         mainFile.appendToMainCode("/* Synchronous channels */" + CR);
         for(AvatarRelation ar: avspec.getRelations()) {
-
+	    int j=0;
 	if (!ar.isAsynchronous()) {
 		    for(i=0; i<ar.nbOfSignals() ; i++) {
 			mainFile.appendToHCode("extern syncchannel __" + getChannelName(ar, i) + ";" + CR);
@@ -203,11 +212,12 @@ public class TasksAndMainGenerator {
 			mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
 				
 			mainFile.appendToBeforeMainCode("uint32_t *const "+ getChannelName(ar, i)+"_lock= LOCKSADDR+0x"+(i*20) +";" + CR); 
-			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status =  MWMR_STATUS_INITIALIZER(1, 1);" + CR); 
+			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+j+" = MWMR_STATUS_INITIALIZER(1, 1);" + CR); //DG 3.5.
 			//	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32*2];" + CR);
 			//synchronous channels are depth 1
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32];" + CR);
-			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) + "= MWMR_INITIALIZER(1, 1, "+getChannelName(ar, i)+"_data,&"+getChannelName(ar, i)+"_status,\""+getChannelName(ar, i)+"\","+getChannelName(ar, i)+"_lock);" + CR2);		
+			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+j+" = MWMR_INITIALIZER(1, 1, "+getChannelName(ar, i)+"_data,&"+getChannelName(ar, i)+"_status,\""+getChannelName(ar, i)+"\","+getChannelName(ar, i)+"_lock);" + CR2);	
+			j++;	
 	  }
 	}
       }
@@ -236,7 +246,7 @@ public class TasksAndMainGenerator {
 	    mainFile.appendToHCode("/* Asynchronous channels */" + CR);
 	    mainFile.appendToBeforeMainCode("/* Asynchronous channels */" + CR);
 	    mainFile.appendToMainCode("/* Asynchronous channels */" + CR);
-            
+            int j=0;
 	    for(AvatarRelation ar: avspec.getRelations()) {
 		if (ar.isAsynchronous()) {
 		    for(int i=0; i<ar.nbOfSignals() ; i++) {
@@ -257,9 +267,10 @@ public class TasksAndMainGenerator {
 	
 			mainFile.appendToBeforeMainCode("uint32_t *const "+ getChannelName(ar, i)+"_lock= LOCKSADDR+0x"+(i*20) +";" + CR); 
 	//DG parameter <depth>  should ultimately be generated; width is fixed as long as data is not explicitly modeled
-			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status =  MWMR_STATUS_INITIALIZER(1, 1);" + CR); 
+			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+j+"=  MWMR_STATUS_INITIALIZER(1, 1);" + CR); //DG 3.5.
 			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32*2];" + CR);
-			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) + "= MWMR_INITIALIZER(1, 1, "+getChannelName(ar, i)+"_data,&"+getChannelName(ar, i)+"_status,\""+getChannelName(ar, i)+"\","+getChannelName(ar, i)+"_lock);" + CR2);		
+			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) + " CHANNEL"+j+"= MWMR_INITIALIZER(1, 1, "+getChannelName(ar, i)+"_data,&"+getChannelName(ar, i)+"_status,\""+getChannelName(ar, i)+"\","+getChannelName(ar, i)+"_lock);" + CR2);//DG 3.5.
+			j++;		
 		    }
 		}
 	    }
