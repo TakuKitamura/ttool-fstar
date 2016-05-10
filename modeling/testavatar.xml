@@ -992,6 +992,7 @@
 <TGConnectingPoint num="23" id="451" />
 <extraparam>
 <info stereotype="VGMN" nodeName="Bus0" />
+<info stereotype="VGMN" nodeName="Bus0" />
 <attributes index="0"  nbOfAttachedInitiators="0"  nbOfAttachedTargets="0"  minLatency="0"  fifoDepth="0" />
 </extraparam>
 </COMPONENT>
