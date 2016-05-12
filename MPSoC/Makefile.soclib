@@ -1,1 +1,1 @@
-objs = main.o TestBench.o SpeedSensor.o RadarSensor.o GPSSensor.o CarPositionSimulator.o EmergencySimulator.o Communication.o DSRSC_Management.o NeighbourhoodTableManagement.o CorrectnessChecking.o PTC.o DrivingPowerReductionStrategy.o BCU.o DangerAvoidanceStrategy.o BrakeManagement.o CSCU.o ObjectListManagement.o PlausibilityCheck.o VehiculeDynamicsManagement.o 
+objs = main.o Block1.o Block0.o 

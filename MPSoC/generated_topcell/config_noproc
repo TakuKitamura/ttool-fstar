@@ -39,5 +39,6 @@
   # inter-processor interrupts
   CONFIG_HEXO_IPI
 #  CONFIG_ARCH_SMP undefined
+CONFIG_ARCH_SMP
 # number of processors derived from SysML design
 # CONFIG_CPU_MAXCOUNT 5

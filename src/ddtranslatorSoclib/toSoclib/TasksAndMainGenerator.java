@@ -211,12 +211,12 @@ public class TasksAndMainGenerator {
 			mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);		
 			mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
 				
-			mainFile.appendToBeforeMainCode("uint32_t *const "+ getChannelName(ar, i)+"_lock= LOCKSADDR+0x"+(i*20) +";" + CR); 
-			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+j+" = MWMR_STATUS_INITIALIZER(1, 1);" + CR); //DG 3.5.
+			mainFile.appendToBeforeMainCode("uint32_t *const "+ getChannelName(ar, i)+"_lock= LOCKSADDR+0x"+(j*20) +";" + CR); //DG 9.5. i-> j
+			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+j+" = MWMR_STATUS_INITIALIZER(1, 1);" + CR); //DG 9.5. j-> i
 			//	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32*2];" + CR);
 			//synchronous channels are depth 1
-	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32];" + CR);
-			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+j+" = MWMR_INITIALIZER(1, 1, "+getChannelName(ar, i)+"_data,&"+getChannelName(ar, i)+"_status,\""+getChannelName(ar, i)+"\","+getChannelName(ar, i)+"_lock);" + CR2);	
+			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+j+";" + CR);//DG 12.05.
+			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+i+" = MWMR_INITIALIZER(1, 1, "+getChannelName(ar, i)+"_data,&"+getChannelName(ar, i)+"_status,\""+getChannelName(ar, i)+"\","+getChannelName(ar, i)+"_lock);" + CR2);//DG 9.5. j->i	
 			j++;	
 	  }
 	}
@@ -265,11 +265,11 @@ public class TasksAndMainGenerator {
 			mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
 			
 	
-			mainFile.appendToBeforeMainCode("uint32_t *const "+ getChannelName(ar, i)+"_lock= LOCKSADDR+0x"+(i*20) +";" + CR); 
+			mainFile.appendToBeforeMainCode("uint32_t *const "+ getChannelName(ar, i)+"_lock= LOCKSADDR+0x"+(j*20) +";" + CR); //DG 9.5. i->j 
 	//DG parameter <depth>  should ultimately be generated; width is fixed as long as data is not explicitly modeled
-			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+j+"=  MWMR_STATUS_INITIALIZER(1, 1);" + CR); //DG 3.5.
+			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+i+"=  MWMR_STATUS_INITIALIZER(1, 1);" + CR); //DG 9.5. j->i
 			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32*2];" + CR);
-			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) + " CHANNEL"+j+"= MWMR_INITIALIZER(1, 1, "+getChannelName(ar, i)+"_data,&"+getChannelName(ar, i)+"_status,\""+getChannelName(ar, i)+"\","+getChannelName(ar, i)+"_lock);" + CR2);//DG 3.5.
+			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) + " CHANNEL"+i+"= MWMR_INITIALIZER(1, 1, "+getChannelName(ar, i)+"_data,&"+getChannelName(ar, i)+"_status,\""+getChannelName(ar, i)+"\","+getChannelName(ar, i)+"_lock);" + CR2);//DG 9.5. j->i
 			j++;		
 		    }
 		}
@@ -1025,13 +1025,13 @@ public class TasksAndMainGenerator {
 	    mainFile.appendToMainCode("ptr =malloc(sizeof(pthread_t));" + CR);		   
 	    mainFile.appendToMainCode("thread__"+taskFile.getName() + "= (pthread_t)ptr;" + CR); 
 	    mainFile.appendToMainCode("attr_t = malloc(sizeof(pthread_attr_t));" + CR);
-	    mainFile.appendToMainCode("attr_t->cpucount = "+ taskFile.getCPUId()  +";  " +CR);
-
+	    //mainFile.appendToMainCode("attr_t->cpucount = "+ taskFile.getCPUId()  +";  " +CR);
+	    mainFile.appendToMainCode("pthread_attr_affinity(attr_t, "+ taskFile.getCPUId()  +");  " +CR);
 	    mainFile.appendToMainCode(CR + CR + mainDebugMsg("Starting tasks"));
 	    //if(cptchannels_array==0){
 	    //	mainFile.appendToMainCode("pthread_create(&thread__" +taskFile.getName()+", NULL, mainFunc__" + taskFile.getName()+", NULL);" + CR2);
 	    // }else{	    
-	    mainFile.appendToMainCode("pthread_create(&thread__" +taskFile.getName()+", NULL, mainFunc__" + taskFile.getName() +", (void *)channels_array_"+taskFile.getName()+");" + CR2);
+	    mainFile.appendToMainCode("pthread_create(&thread__" +taskFile.getName()+", attr_t, mainFunc__" + taskFile.getName() +", (void *)channels_array_"+taskFile.getName()+");" + CR2);
 	    //}		    
 	}
     

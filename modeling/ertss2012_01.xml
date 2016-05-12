@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<TURTLEGMODELING version="0.98-beta4">
+<TURTLEGMODELING version="0.98-beta3">
 
 <Modeling type="TML Component Design" nameTab="Braking - FV" >
-<TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="10" maxX="1903" minY="10" maxY="1403" channels="true" events="true" requests="true" zoom="1.0000000000000009" >
+<TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="10" maxX="1901" minY="10" maxY="1401" channels="true" events="true" requests="true" zoom="1.0000000000000009" >
 <CONNECTOR type="126" id="2" >
 <cdparam x="472" y="108" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="460" y="109" id="29" />
-<P2  x="208" y="94" id="219" />
+<P2  x="195" y="81" id="219" />
 <Point x="460" y="95" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1" >
@@ -25,8 +25,8 @@
 <cdparam x="168" y="107" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="208" y="187" id="217" />
-<P2  x="342" y="187" id="31" />
+<P1  x="195" y="174" id="217" />
+<P2  x="355" y="174" id="31" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="5" >
@@ -34,7 +34,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="1018" y="479" id="204" />
-<P2  x="538" y="167" id="27" />
+<P2  x="525" y="154" id="27" />
 <Point x="1018" y="168" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="4" >
@@ -50,15 +50,15 @@
 <cdparam x="221" y="113" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="208" y="138" id="215" />
-<P2  x="342" y="138" id="25" />
+<P1  x="195" y="125" id="215" />
+<P2  x="355" y="125" id="25" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="7" >
 <cdparam x="1309" y="685" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="1360" y="690" id="53" />
+<P1  x="1360" y="664" id="53" />
 <P2  x="1415" y="739" id="42" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -66,16 +66,16 @@
 <cdparam x="1183" y="534" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="1138" y="581" id="196" />
-<P2  x="1228" y="638" id="55" />
+<P1  x="1138" y="555" id="196" />
+<P2  x="1241" y="625" id="55" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="9" >
 <cdparam x="1555" y="370" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="1366" y="393" id="183" />
-<P2  x="1436" y="393" id="66" />
+<P1  x="1353" y="380" id="183" />
+<P2  x="1449" y="380" id="66" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="10" >
@@ -83,15 +83,15 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="1080" y="479" id="200" />
-<P2  x="1147" y="395" id="185" />
+<P2  x="1160" y="382" id="185" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="11" >
 <cdparam x="843" y="483" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="841" y="470" id="129" />
-<P2  x="964" y="531" id="202" />
+<P1  x="828" y="457" id="129" />
+<P2  x="977" y="518" id="202" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="12" >
@@ -99,7 +99,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="692" y="584" id="159" />
-<P2  x="692" y="513" id="127" />
+<P2  x="692" y="487" id="127" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="13" >
@@ -107,14 +107,14 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="695" y="707" id="172" />
-<P2  x="695" y="672" id="161" />
+<P2  x="695" y="646" id="161" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="14" >
 <cdparam x="247" y="495" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="375" y="234" id="23" />
+<P1  x="375" y="208" id="23" />
 <P2  x="301" y="454" id="88" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -123,14 +123,14 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="263" y="605" id="77" />
-<P2  x="317" y="542" id="90" />
+<P2  x="317" y="516" id="90" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="16" >
 <cdparam x="247" y="467" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="480" y="234" id="21" />
+<P1  x="480" y="208" id="21" />
 <P2  x="521" y="291" id="103" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -138,23 +138,23 @@
 <cdparam x="555" y="415" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="561" y="508" id="92" />
-<P2  x="592" y="492" id="131" />
+<P1  x="548" y="495" id="92" />
+<P2  x="605" y="479" id="131" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="18" >
 <cdparam x="531" y="310" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="569" y="377" id="105" />
-<P2  x="592" y="457" id="133" />
+<P1  x="569" y="351" id="105" />
+<P2  x="605" y="444" id="133" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="19" >
 <cdparam x="708" y="372" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="708" y="385" id="146" />
+<P1  x="708" y="359" id="146" />
 <P2  x="708" y="421" id="135" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -162,7 +162,7 @@
 <cdparam x="707" y="234" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="706" y="142" id="116" />
+<P1  x="706" y="116" id="116" />
 <P2  x="706" y="302" id="148" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -170,7 +170,7 @@
 <cdparam x="355" y="122" />
 <sizeparam width="170" height="99" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="DSRCManagement" />
 <TGConnectingPoint num="0" id="33" />
 <TGConnectingPoint num="1" id="34" />
@@ -194,7 +194,7 @@
 <infoparam name="Primitive port" value="Event emergencyBrake" />
 <TGConnectingPoint num="0" id="21" />
 <extraparam>
-<Prop commName="emergencyBrake" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="emergencyBrake" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -211,7 +211,7 @@
 <infoparam name="Primitive port" value="Channel neighbourhoodInfo" />
 <TGConnectingPoint num="0" id="23" />
 <extraparam>
-<Prop commName="neighbourhoodInfo" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="neighbourhoodInfo" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -228,7 +228,7 @@
 <infoparam name="Primitive port" value="Event DSRCEmergencyBrake" />
 <TGConnectingPoint num="0" id="25" />
 <extraparam>
-<Prop commName="DSRCEmergencyBrake" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="DSRCEmergencyBrake" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -245,7 +245,7 @@
 <infoparam name="Primitive port" value="Event sendEmergencyBraking" />
 <TGConnectingPoint num="0" id="27" />
 <extraparam>
-<Prop commName="sendEmergencyBraking" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="sendEmergencyBraking" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -262,7 +262,7 @@
 <infoparam name="Primitive port" value="Event broadcastInfoEmergencyBraking" />
 <TGConnectingPoint num="0" id="29" />
 <extraparam>
-<Prop commName="broadcastInfoEmergencyBraking" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="broadcastInfoEmergencyBraking" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -279,7 +279,7 @@
 <infoparam name="Primitive port" value="Channel neighbourhoodData" />
 <TGConnectingPoint num="0" id="31" />
 <extraparam>
-<Prop commName="neighbourhoodData" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="neighbourhoodData" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -292,7 +292,7 @@
 <cdparam x="1353" y="752" />
 <sizeparam width="233" height="60" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="doReduceDrivingPower" />
 <TGConnectingPoint num="0" id="44" />
 <TGConnectingPoint num="1" id="45" />
@@ -314,7 +314,7 @@
 <infoparam name="Primitive port" value="Event commandDP" />
 <TGConnectingPoint num="0" id="42" />
 <extraparam>
-<Prop commName="commandDP" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="commandDP" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -327,7 +327,7 @@
 <cdparam x="1241" y="613" />
 <sizeparam width="245" height="64" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="DrivingPowerReductionstrategy" />
 <TGConnectingPoint num="0" id="57" />
 <TGConnectingPoint num="1" id="58" />
@@ -349,7 +349,7 @@
 <infoparam name="Primitive port" value="Event commandDP" />
 <TGConnectingPoint num="0" id="53" />
 <extraparam>
-<Prop commName="commandDP" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="commandDP" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -366,7 +366,7 @@
 <infoparam name="Primitive port" value="Event drivingPowerReduction" />
 <TGConnectingPoint num="0" id="55" />
 <extraparam>
-<Prop commName="drivingPowerReduction" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="drivingPowerReduction" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -379,7 +379,7 @@
 <cdparam x="1449" y="354" />
 <sizeparam width="141" height="67" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="DoBrake" />
 <TGConnectingPoint num="0" id="68" />
 <TGConnectingPoint num="1" id="69" />
@@ -401,7 +401,7 @@
 <infoparam name="Primitive port" value="Event brake" />
 <TGConnectingPoint num="0" id="66" />
 <extraparam>
-<Prop commName="brake" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="brake" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -414,7 +414,7 @@
 <cdparam x="188" y="618" />
 <sizeparam width="146" height="50" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="GPSReception" />
 <TGConnectingPoint num="0" id="79" />
 <TGConnectingPoint num="1" id="80" />
@@ -436,7 +436,7 @@
 <infoparam name="Primitive port" value="Channel positionInformation" />
 <TGConnectingPoint num="0" id="77" />
 <extraparam>
-<Prop commName="positionInformation" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="positionInformation" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -449,7 +449,7 @@
 <cdparam x="273" y="467" />
 <sizeparam width="275" height="62" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="NeighbourhoodTableManagement" />
 <TGConnectingPoint num="0" id="94" />
 <TGConnectingPoint num="1" id="95" />
@@ -471,7 +471,7 @@
 <infoparam name="Primitive port" value="Channel neighbourhoodInfo" />
 <TGConnectingPoint num="0" id="88" />
 <extraparam>
-<Prop commName="neighbourhoodInfo" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="neighbourhoodInfo" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -488,7 +488,7 @@
 <infoparam name="Primitive port" value="Channel positionInformation" />
 <TGConnectingPoint num="0" id="90" />
 <extraparam>
-<Prop commName="positionInformation" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="positionInformation" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -505,7 +505,7 @@
 <infoparam name="Primitive port" value="Channel neigbourhoodTable" />
 <TGConnectingPoint num="0" id="92" />
 <extraparam>
-<Prop commName="neigbourhoodTable" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="neigbourhoodTable" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -518,7 +518,7 @@
 <cdparam x="402" y="304" />
 <sizeparam width="176" height="60" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="CorrectnessChecking" />
 <TGConnectingPoint num="0" id="107" />
 <TGConnectingPoint num="1" id="108" />
@@ -540,7 +540,7 @@
 <infoparam name="Primitive port" value="Event emergencyBrake" />
 <TGConnectingPoint num="0" id="103" />
 <extraparam>
-<Prop commName="emergencyBrake" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="emergencyBrake" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -557,7 +557,7 @@
 <infoparam name="Primitive port" value="Event emergencyBrake" />
 <TGConnectingPoint num="0" id="105" />
 <extraparam>
-<Prop commName="emergencyBrake" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="emergencyBrake" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -570,7 +570,7 @@
 <cdparam x="600" y="68" />
 <sizeparam width="239" height="61" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="GetEnvironmentInformation" />
 <TGConnectingPoint num="0" id="118" />
 <TGConnectingPoint num="1" id="119" />
@@ -592,7 +592,7 @@
 <infoparam name="Primitive port" value="Channel rawData01" />
 <TGConnectingPoint num="0" id="116" />
 <extraparam>
-<Prop commName="rawData01" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="rawData01" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -605,7 +605,7 @@
 <cdparam x="605" y="434" />
 <sizeparam width="223" height="66" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="PlausibilityCheck" />
 <TGConnectingPoint num="0" id="137" />
 <TGConnectingPoint num="1" id="138" />
@@ -627,7 +627,7 @@
 <infoparam name="Primitive port" value="Channel vehicleDynamics" />
 <TGConnectingPoint num="0" id="127" />
 <extraparam>
-<Prop commName="vehicleDynamics" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="vehicleDynamics" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -644,7 +644,7 @@
 <infoparam name="Primitive port" value="Event emergencyBrake" />
 <TGConnectingPoint num="0" id="129" />
 <extraparam>
-<Prop commName="emergencyBrake" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="emergencyBrake" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -661,7 +661,7 @@
 <infoparam name="Primitive port" value="Channel neighbourhoodTable" />
 <TGConnectingPoint num="0" id="131" />
 <extraparam>
-<Prop commName="neighbourhoodTable" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="neighbourhoodTable" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -678,7 +678,7 @@
 <infoparam name="Primitive port" value="Event emergencyBrake" />
 <TGConnectingPoint num="0" id="133" />
 <extraparam>
-<Prop commName="emergencyBrake" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="emergencyBrake" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -695,7 +695,7 @@
 <infoparam name="Primitive port" value="Channel objList01" />
 <TGConnectingPoint num="0" id="135" />
 <extraparam>
-<Prop commName="objList01" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="objList01" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -708,7 +708,7 @@
 <cdparam x="605" y="315" />
 <sizeparam width="227" height="57" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="ObjectListManagement" />
 <TGConnectingPoint num="0" id="150" />
 <TGConnectingPoint num="1" id="151" />
@@ -730,7 +730,7 @@
 <infoparam name="Primitive port" value="Channel objList01" />
 <TGConnectingPoint num="0" id="146" />
 <extraparam>
-<Prop commName="objList01" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="objList01" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -747,7 +747,7 @@
 <infoparam name="Primitive port" value="Channel rawData01" />
 <TGConnectingPoint num="0" id="148" />
 <extraparam>
-<Prop commName="rawData01" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="rawData01" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -760,7 +760,7 @@
 <cdparam x="615" y="597" />
 <sizeparam width="242" height="62" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="VehicleDynamicsManagement" />
 <TGConnectingPoint num="0" id="163" />
 <TGConnectingPoint num="1" id="164" />
@@ -782,7 +782,7 @@
 <infoparam name="Primitive port" value="Channel vehicleDynamics" />
 <TGConnectingPoint num="0" id="159" />
 <extraparam>
-<Prop commName="vehicleDynamics" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="vehicleDynamics" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -799,7 +799,7 @@
 <infoparam name="Primitive port" value="Channel rawData02" />
 <TGConnectingPoint num="0" id="161" />
 <extraparam>
-<Prop commName="rawData02" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="rawData02" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -812,7 +812,7 @@
 <cdparam x="613" y="720" />
 <sizeparam width="215" height="61" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="GetVehicleDynamics" />
 <TGConnectingPoint num="0" id="174" />
 <TGConnectingPoint num="1" id="175" />
@@ -834,7 +834,7 @@
 <infoparam name="Primitive port" value="Channel rawData02" />
 <TGConnectingPoint num="0" id="172" />
 <extraparam>
-<Prop commName="rawData02" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="rawData02" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -847,7 +847,7 @@
 <cdparam x="1160" y="366" />
 <sizeparam width="193" height="60" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="BrakeManagement" />
 <TGConnectingPoint num="0" id="187" />
 <TGConnectingPoint num="1" id="188" />
@@ -869,7 +869,7 @@
 <infoparam name="Primitive port" value="Event brake" />
 <TGConnectingPoint num="0" id="183" />
 <extraparam>
-<Prop commName="brake" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="brake" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -886,7 +886,7 @@
 <infoparam name="Primitive port" value="Event brakeCommand" />
 <TGConnectingPoint num="0" id="185" />
 <extraparam>
-<Prop commName="brakeCommand" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="brakeCommand" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -899,7 +899,7 @@
 <cdparam x="977" y="492" />
 <sizeparam width="200" height="76" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="DangerAvoidanceStrategy" />
 <TGConnectingPoint num="0" id="206" />
 <TGConnectingPoint num="1" id="207" />
@@ -921,7 +921,7 @@
 <infoparam name="Primitive port" value="Event drivingPowerReduction" />
 <TGConnectingPoint num="0" id="196" />
 <extraparam>
-<Prop commName="drivingPowerReduction" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="drivingPowerReduction" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -938,7 +938,7 @@
 <infoparam name="Primitive port" value="Event infoEmergencyBraking" />
 <TGConnectingPoint num="0" id="198" />
 <extraparam>
-<Prop commName="infoEmergencyBraking" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="infoEmergencyBraking" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -955,7 +955,7 @@
 <infoparam name="Primitive port" value="Event brakeCommand" />
 <TGConnectingPoint num="0" id="200" />
 <extraparam>
-<Prop commName="brakeCommand" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="brakeCommand" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -972,7 +972,7 @@
 <infoparam name="Primitive port" value="Event emergencyBrake" />
 <TGConnectingPoint num="0" id="202" />
 <extraparam>
-<Prop commName="emergencyBrake" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="emergencyBrake" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -989,7 +989,7 @@
 <infoparam name="Primitive port" value="Event sendEmergencyBraking" />
 <TGConnectingPoint num="0" id="204" />
 <extraparam>
-<Prop commName="sendEmergencyBraking" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="sendEmergencyBraking" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1002,7 +1002,7 @@
 <cdparam x="37" y="72" />
 <sizeparam width="158" height="149" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Primitive component" value="DSRCRxTx" />
 <TGConnectingPoint num="0" id="221" />
 <TGConnectingPoint num="1" id="222" />
@@ -1024,7 +1024,7 @@
 <infoparam name="Primitive port" value="Event DSRCEmergencyBrake" />
 <TGConnectingPoint num="0" id="215" />
 <extraparam>
-<Prop commName="DSRCEmergencyBrake" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="DSRCEmergencyBrake" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1041,7 +1041,7 @@
 <infoparam name="Primitive port" value="Channel neighbourhoodData" />
 <TGConnectingPoint num="0" id="217" />
 <extraparam>
-<Prop commName="neighbourhoodData" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="neighbourhoodData" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1058,7 +1058,7 @@
 <infoparam name="Primitive port" value="Event broadcastInfoEmergencyBraking" />
 <TGConnectingPoint num="0" id="219" />
 <extraparam>
-<Prop commName="broadcastInfoEmergencyBraking" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" checkConf="false" checkAuth="false" checkConfStatus="0" />
+<Prop commName="broadcastInfoEmergencyBraking" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="" associatedEvent="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1071,7 +1071,7 @@
 <cdparam x="30" y="44" />
 <sizeparam width="498" height="184" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="1403" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="1401" />
 <infoparam name="Composite component" value="DSRCTask" />
 <TGConnectingPoint num="0" id="230" />
 <TGConnectingPoint num="1" id="231" />
@@ -1328,10 +1328,10 @@
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="277" >
 <father id="302" num="0" />
-<cdparam x="1880" y="1259" />
-<sizeparam width="168" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1884" y="1259" />
+<sizeparam width="155" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="19" minY="0" maxY="66" />
+<cdrectangleparam minX="0" maxX="32" minY="0" maxY="66" />
 <infoparam name="TGComponent" value="Braking - FV::DoBrake" />
 <TGConnectingPoint num="0" id="269" />
 <TGConnectingPoint num="1" id="270" />
@@ -1414,15 +1414,15 @@
 <TGConnectingPoint num="23" id="369" />
 <extraparam>
 <info stereotype="CPURR" nodeName="CPU_BCU" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="336" >
 <father id="370" num="0" />
-<cdparam x="1463" y="1073" />
-<sizeparam width="231" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1466" y="1073" />
+<sizeparam width="211" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="31" minY="0" maxY="122" />
+<cdrectangleparam minX="0" maxX="51" minY="0" maxY="122" />
 <infoparam name="TGComponent" value="Braking - FV::BrakeManagement" />
 <TGConnectingPoint num="0" id="328" />
 <TGConnectingPoint num="1" id="329" />
@@ -1438,10 +1438,10 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="345" >
 <father id="370" num="1" />
-<cdparam x="1416" y="1017" />
-<sizeparam width="278" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1437" y="1017" />
+<sizeparam width="248" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="-16" minY="0" maxY="122" />
+<cdrectangleparam minX="0" maxX="14" minY="0" maxY="122" />
 <infoparam name="TGComponent" value="Braking - FV::DangerAvoidanceStrategy" />
 <TGConnectingPoint num="0" id="337" />
 <TGConnectingPoint num="1" id="338" />
@@ -1488,7 +1488,7 @@
 <TGConnectingPoint num="23" id="394" />
 <extraparam>
 <info stereotype="BUS-RR" nodeName="CAN_BCU" />
-<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0" />
+<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
 
@@ -1565,10 +1565,10 @@
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="429" >
 <father id="454" num="0" />
-<cdparam x="1114" y="1221" />
-<sizeparam width="282" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1125" y="1221" />
+<sizeparam width="257" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="-4" minY="0" maxY="50" />
+<cdrectangleparam minX="0" maxX="21" minY="0" maxY="50" />
 <infoparam name="TGComponent" value="Braking - FV::GetEnvironmentInformation" />
 <TGConnectingPoint num="0" id="421" />
 <TGConnectingPoint num="1" id="422" />
@@ -1620,10 +1620,10 @@
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="463" >
 <father id="488" num="0" />
-<cdparam x="1126" y="1093" />
-<sizeparam width="241" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1133" y="1093" />
+<sizeparam width="221" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="7" minY="0" maxY="72" />
+<cdrectangleparam minX="0" maxX="27" minY="0" maxY="72" />
 <infoparam name="TGComponent" value="Braking - FV::GetVehicleDynamics" />
 <TGConnectingPoint num="0" id="455" />
 <TGConnectingPoint num="1" id="456" />
@@ -1706,15 +1706,15 @@
 <TGConnectingPoint num="23" id="564" />
 <extraparam>
 <info stereotype="CPURR" nodeName="CPU_CSCU" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="522" >
 <father id="565" num="0" />
-<cdparam x="670" y="1047" />
-<sizeparam width="298" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="691" y="1047" />
+<sizeparam width="274" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="-21" minY="0" maxY="171" />
+<cdrectangleparam minX="0" maxX="3" minY="0" maxY="171" />
 <infoparam name="TGComponent" value="Braking - FV::VehicleDynamicsManagement" />
 <TGConnectingPoint num="0" id="514" />
 <TGConnectingPoint num="1" id="515" />
@@ -1730,10 +1730,10 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="531" >
 <father id="565" num="1" />
-<cdparam x="750" y="986" />
-<sizeparam width="218" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="763" y="986" />
+<sizeparam width="201" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="59" minY="0" maxY="171" />
+<cdrectangleparam minX="0" maxX="76" minY="0" maxY="171" />
 <infoparam name="TGComponent" value="Braking - FV::PlausibilityCheck" />
 <TGConnectingPoint num="0" id="523" />
 <TGConnectingPoint num="1" id="524" />
@@ -1749,10 +1749,10 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="540" >
 <father id="565" num="2" />
-<cdparam x="711" y="927" />
-<sizeparam width="257" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="726" y="927" />
+<sizeparam width="234" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="20" minY="0" maxY="171" />
+<cdrectangleparam minX="0" maxX="43" minY="0" maxY="171" />
 <infoparam name="TGComponent" value="Braking - FV::ObjectListManagement" />
 <TGConnectingPoint num="0" id="532" />
 <TGConnectingPoint num="1" id="533" />
@@ -1799,7 +1799,7 @@
 <TGConnectingPoint num="23" id="589" />
 <extraparam>
 <info stereotype="BUS-RR" nodeName="CAN" />
-<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0" />
+<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
 
@@ -1907,7 +1907,7 @@
 <TGConnectingPoint num="23" id="664" />
 <extraparam>
 <info stereotype="BUS-RR" nodeName="CAN_CU" />
-<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0" />
+<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
 
@@ -1984,10 +1984,10 @@
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="699" >
 <father id="724" num="0" />
-<cdparam x="684" y="197" />
-<sizeparam width="204" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="695" y="197" />
+<sizeparam width="188" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="3" minY="0" maxY="50" />
+<cdrectangleparam minX="0" maxX="19" minY="0" maxY="50" />
 <infoparam name="TGComponent" value="Braking - FV::GPSReception" />
 <TGConnectingPoint num="0" id="691" />
 <TGConnectingPoint num="1" id="692" />
@@ -2040,9 +2040,9 @@
 <SUBCOMPONENT type="1101" id="733" >
 <father id="758" num="0" />
 <cdparam x="699" y="427" />
-<sizeparam width="180" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="168" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="18" minY="0" maxY="65" />
+<cdrectangleparam minX="0" maxX="30" minY="0" maxY="65" />
 <infoparam name="TGComponent" value="Braking - FV::DSRCRxTx" />
 <TGConnectingPoint num="0" id="725" />
 <TGConnectingPoint num="1" id="726" />
@@ -2269,7 +2269,7 @@
 <TGConnectingPoint num="23" id="907" />
 <extraparam>
 <info stereotype="BUS-RR" nodeName="CAN_CSCU" />
-<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0" />
+<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
 
@@ -2341,7 +2341,7 @@
 <TGConnectingPoint num="23" id="957" />
 <extraparam>
 <info stereotype="BUS-RR" nodeName="CAN_CU" />
-<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0" />
+<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
 
@@ -2413,15 +2413,15 @@
 <TGConnectingPoint num="23" id="1016" />
 <extraparam>
 <info stereotype="CPURR" nodeName="CPU_PTC" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="992" >
 <father id="1017" num="0" />
-<cdparam x="10" y="952" />
-<sizeparam width="311" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="28" y="952" />
+<sizeparam width="279" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="-16" minY="0" maxY="88" />
+<cdrectangleparam minX="0" maxX="16" minY="0" maxY="88" />
 <infoparam name="TGComponent" value="Braking - FV::DrivingPowerReductionstrategy" />
 <TGConnectingPoint num="0" id="984" />
 <TGConnectingPoint num="1" id="985" />
@@ -2473,10 +2473,10 @@
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="1026" >
 <father id="1051" num="0" />
-<cdparam x="432" y="1171" />
-<sizeparam width="259" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="448" y="1171" />
+<sizeparam width="237" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="-16" minY="0" maxY="50" />
+<cdrectangleparam minX="0" maxX="6" minY="0" maxY="50" />
 <infoparam name="TGComponent" value="Braking - FV::doReduceDrivingPower" />
 <TGConnectingPoint num="0" id="1018" />
 <TGConnectingPoint num="1" id="1019" />
@@ -2523,15 +2523,15 @@
 <TGConnectingPoint num="23" id="1102" />
 <extraparam>
 <info stereotype="CPURR" nodeName="CPU_CU" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="1060" >
 <father id="1103" num="0" />
-<cdparam x="179" y="230" />
-<sizeparam width="323" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="196" y="230" />
+<sizeparam width="296" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="-17" minY="0" maxY="165" />
+<cdrectangleparam minX="0" maxX="10" minY="0" maxY="165" />
 <infoparam name="TGComponent" value="Braking - FV::NeighbourhoodTableManagement" />
 <TGConnectingPoint num="0" id="1052" />
 <TGConnectingPoint num="1" id="1053" />
@@ -2548,9 +2548,9 @@
 <SUBCOMPONENT type="1101" id="1069" >
 <father id="1103" num="1" />
 <cdparam x="202" y="175" />
-<sizeparam width="247" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="227" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="59" minY="0" maxY="165" />
+<cdrectangleparam minX="0" maxX="79" minY="0" maxY="165" />
 <infoparam name="TGComponent" value="Braking - FV::CorrectnessChecking" />
 <TGConnectingPoint num="0" id="1061" />
 <TGConnectingPoint num="1" id="1062" />
@@ -2567,9 +2567,9 @@
 <SUBCOMPONENT type="1101" id="1078" >
 <father id="1103" num="2" />
 <cdparam x="204" y="285" />
-<sizeparam width="230" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="214" height="50" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="76" minY="0" maxY="165" />
+<cdrectangleparam minX="0" maxX="92" minY="0" maxY="165" />
 <infoparam name="TGComponent" value="Braking - FV::DSRCManagement" />
 <TGConnectingPoint num="0" id="1070" />
 <TGConnectingPoint num="1" id="1071" />
@@ -2890,12 +2890,12 @@
 
 
 <Modeling type="Requirement" nameTab="General Requirements" >
-<TRequirementDiagramPanel name="AvailabilityRequirements" minX="10" maxX="1903" minY="10" maxY="903" zoom="1.0000000000000002" >
+<TRequirementDiagramPanel name="AvailabilityRequirements" minX="10" maxX="1901" minY="10" maxY="901" zoom="1.0000000000000002" >
 <COMPONENT type="900" id="1162" >
 <cdparam x="470" y="532" />
 <sizeparam width="333" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="317" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="903" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="901" />
 <infoparam name="Requirement" value="EnsureHighestAvalabilityForHighestPriorityFunctions" />
 <TGConnectingPoint num="0" id="1131" />
 <TGConnectingPoint num="1" id="1132" />
@@ -2946,7 +2946,7 @@
 <cdparam x="196" y="535" />
 <sizeparam width="213" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="196" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="903" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="901" />
 <infoparam name="Requirement" value="EnsureAvailabilityRadioMedium" />
 <TGConnectingPoint num="0" id="1163" />
 <TGConnectingPoint num="1" id="1164" />
@@ -2997,7 +2997,7 @@
 <cdparam x="764" y="331" />
 <sizeparam width="310" height="102" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="288" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="903" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="901" />
 <infoparam name="Requirement" value="EnsureExternalCommunicationDeviceAvailability" />
 <TGConnectingPoint num="0" id="1195" />
 <TGConnectingPoint num="1" id="1196" />
@@ -3047,7 +3047,7 @@
 <cdparam x="527" y="329" />
 <sizeparam width="181" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="144" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="903" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="901" />
 <infoparam name="Requirement" value="EnsureRAMAvailability" />
 <TGConnectingPoint num="0" id="1227" />
 <TGConnectingPoint num="1" id="1228" />
@@ -3098,7 +3098,7 @@
 <cdparam x="303" y="331" />
 <sizeparam width="181" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="145" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="903" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="901" />
 <infoparam name="Requirement" value="EnsureCPUAvailability" />
 <TGConnectingPoint num="0" id="1259" />
 <TGConnectingPoint num="1" id="1260" />
@@ -3149,7 +3149,7 @@
 <cdparam x="72" y="334" />
 <sizeparam width="181" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="141" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="903" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="901" />
 <infoparam name="Requirement" value="EnsureBusAvailability" />
 <TGConnectingPoint num="0" id="1291" />
 <TGConnectingPoint num="1" id="1292" />
@@ -3200,7 +3200,7 @@
 <cdparam x="467" y="123" />
 <sizeparam width="181" height="114" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="164" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1903" minY="10" maxY="903" />
+<cdrectangleparam minX="10" maxX="1901" minY="10" maxY="901" />
 <infoparam name="Requirement" value="EnsureAvailabilityOfECUs" />
 <TGConnectingPoint num="0" id="1323" />
 <TGConnectingPoint num="1" id="1324" />
@@ -5755,7 +5755,7 @@
 
 
 <Modeling type="AVATAR Design" nameTab="AVATAR Design" >
-<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1900" minY="10" maxY="2400" >
+<AVATARBlockDiagramPanel name="AVATAR Block Diagram" minX="10" maxX="1900" minY="10" maxY="2400" >
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />

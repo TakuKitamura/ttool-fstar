@@ -358,13 +358,63 @@ netlist = netlist + "// RAM netlist" + CR2;
 	  }
 	}	
 
+	    //RAM are monitored in trace file if marked trace option 3
+	    netlist += "sc_trace_file *tf;" + CR;
+	    netlist += "tf=sc_create_vcd_trace_file(\"mytrace\");" + CR;
+	    netlist += "sc_trace(tf,signal_clk,\"CLK\");" + CR;
+	    netlist += "sc_trace(tf,signal_resetn,\"RESETN\");" + CR;
+
+
+
+netlist += "sc_trace(tf, signal_vci_xicu,\"signal_vci_xicu\");" + CR;
+netlist += "sc_trace(tf, signal_vci_vcifdtrom,\"signal_vci_vcifdtrom\");" + CR;
+netlist += "sc_trace(tf, signal_vci_vcihetrom,\"signal_vci_vcihetrom\");" + CR;
+netlist += "sc_trace(tf, signal_vci_vcirom ,\"signal_vci_vcirom\");" + CR;
+netlist += "sc_trace(tf, signal_vci_vcisimhelper,\"signal_vci_vcisimhelper\");" + CR;
+netlist += "sc_trace(tf, signal_vci_vcirttimer ,\"signal_vci_vcirttimer\");" + CR;
+netlist += "sc_trace(tf, signal_vci_vcilocks ,\"signal_vci_vcilocks\");" + CR;
+netlist += "sc_trace(tf, signal_vci_mwmr_ram ,\"signal_vci_mwmr_ram\");" + CR;
+netlist += "sc_trace(tf, signal_vci_mwmrd_ram ,\"signal_vci_mwmrd_ram\");" + CR;
+netlist += "sc_trace(tf, signal_vci_vcifdaccessi,\"signal_vci_vcifdaccessi\");" + CR;
+netlist += "sc_trace(tf,signal_vci_vcifdaccesst ,\"signal_vci_vcifdaccesst\");" + CR;
+netlist += "sc_trace(tf,signal_vci_bdi ,\"signal_vci_bdi\");" + CR;
+netlist += "sc_trace(tf, signal_vci_bdt,\"signal_vci_bdt\");" + CR;
+netlist += "sc_trace(tf, signal_vci_etherneti,\"signal_vci_etherneti\");" + CR;
+netlist += "sc_trace(tf,signal_vci_ethernett ,\"signal_vci_ethernett\");" + CR;
+
+for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
+	 
+         netlist += "sc_trace(tf,signal_vci_m["+ i +"] ,\"signal_vci_m["+ i +"]\");" + CR;
+}
+
+//more signals to be monitored?
+//netlist += " sc_trace(tf, ,\"\");" + CR;
+
+  for(i=0;i<(TopCellGenerator.avatardd.getNb_init()+4);i++){    
+      netlist += "sc_trace(tf,signal_xicu_irq["+ i +"] ,\"signal_xicu_irq["+ i +"]\");" + CR;   
+  }
+
+    for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) { 
+       
+	   netlist += "sc_trace(tf,signal_vci_tty"+tty.getNo_tty()+",\"TTY"+tty.getNo_tty()+"\");" + CR;
+     
+       }	
+
+	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
+		// if (ram.getMonitored()==3){	
+		netlist += "sc_trace(tf,signal_vci_vciram"+ram.getNo_ram()+",\"Memory"+ram.getNo_ram()+"\");" + CR;
+		//}	
+	    }
+	   
+
 		netlist = netlist + "  sc_core::sc_start(sc_core::sc_time(0, sc_core::SC_NS));" + CR;
 		netlist = netlist + "  signal_resetn = false;" + CR;
 		netlist = netlist + "  sc_core::sc_start(sc_core::sc_time(1, sc_core::SC_NS));" + CR;
 		netlist = netlist + "  signal_resetn = true;" + CR;
 		netlist = netlist + "  sc_core::sc_start();" + CR;
+		netlist += "sc_close_vcd_trace_file(tf);" + CR;
 		netlist = netlist + CR + "  return EXIT_SUCCESS;"+ CR;
 		netlist = netlist +"}" + CR;
 		return netlist;
 		}
-}
+    }
