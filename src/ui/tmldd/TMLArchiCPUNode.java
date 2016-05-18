@@ -192,7 +192,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
-				MECType = dialog.getMECType();
+        MECType = dialog.getMECType();
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -390,14 +390,14 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                 if (clockRatio < 1) {
                     clockRatio = tmp;
                     error = true;
-                    errors += "Clock ratio  ";
+                    errors += "Clock diviser  ";
                 }
             } catch (Exception e) {
                 error = true;
-                errors += "Clock ratio  ";
+                errors += "Clock diviser  ";
             }
         }
-	encryption = dialog.getEncryption();
+        encryption = dialog.getEncryption();
         if (error) {
             JOptionPane.showMessageDialog(frame,
                                           "Invalid value for the following attributes: " + errors,
@@ -477,8 +477,8 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         sb.append(" execiTime=\"" + execiTime + "\"");
         sb.append(" execcTime=\"" + execcTime + "\"");
         sb.append(" clockRatio=\"" + clockRatio + "\"");
-	sb.append(" MECType=\"" + MECType.getIndex() + "\"");
-	sb.append(" encryption=\"" + encryption + "\"");
+        sb.append(" MECType=\"" + MECType.getIndex() + "\"");
+        sb.append(" encryption=\"" + encryption + "\"");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -543,17 +543,17 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
                                 }
                                 if ((elt.getAttribute("MECType") != null) &&  (elt.getAttribute("MECType").length() > 0)){
-																	if( elt.getAttribute("MECType").length() > 1 )	{	//old format
-                                		MECType = ArchUnitMEC.Types.get(0);
-																	}
-																	else	{
-                                		MECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("MECType") ) );
-																	}
-																}
+                                    if( elt.getAttribute("MECType").length() > 1 )      {       //old format
+                                        MECType = ArchUnitMEC.Types.get(0);
+                                    }
+                                    else        {
+                                        MECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("MECType") ) );
+                                    }
+                                }
                                 if ((elt.getAttribute("sliceTime") != null) &&  (elt.getAttribute("sliceTime").length() > 0)){
                                     sliceTime = Integer.decode(elt.getAttribute("sliceTime")).intValue();
                                 }
-				if ((elt.getAttribute("encryption") != null) &&  (elt.getAttribute("encryption").length() > 0)){
+                                if ((elt.getAttribute("encryption") != null) &&  (elt.getAttribute("encryption").length() > 0)){
                                     encryption = Integer.decode(elt.getAttribute("encryption")).intValue();
                                 }
                             }
@@ -619,7 +619,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         return sliceTime;
     }
     public int getEncryption(){
-	return encryption;
+        return encryption;
     }
     public String getAttributes() {
         String attr = "";
@@ -637,9 +637,9 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         attr += "EXECC exec. time (in cycle) = " + execcTime + "\n";
         attr += "Branch. pred. misrate (in %) = " + branchingPredictionPenalty + "\n";
         attr += "Cache miss (in %) = " + cacheMiss + "\n";
-        attr += "Clock ratio = " + clockRatio + "\n";
-	attr += "MECType = " + MECType.getIndex() + "\n";
-	attr += "encryption = " + encryption+ "\n";
+        attr += "Clock diviser = " + clockRatio + "\n";
+        attr += "MECType = " + MECType.getIndex() + "\n";
+        attr += "encryption = " + encryption+ "\n";
         return attr;
 
     }

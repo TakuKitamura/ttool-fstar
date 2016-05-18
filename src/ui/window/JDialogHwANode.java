@@ -58,38 +58,38 @@ import ui.tmldd.*;
 
 
 public class JDialogHwANode extends javax.swing.JDialog implements ActionListener  {
-    
+
     private boolean regularClose;
-    
+
     private JPanel panel2;
     private Frame frame;
     private TMLArchiHWANode node;
-    
-	
+
+
     // Panel1
     protected JTextField nodeName;
-	
-	// Panel2
+
+    // Panel2
     protected JTextField byteDataSize, execiTime, clockRatio;
-	
+
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
-    
+
     /** Creates new form  */
     public JDialogHwANode(Frame _frame, String _title, TMLArchiHWANode _node) {
         super(_frame, _title, true);
         frame = _frame;
         node = _node;
-        
+
         initComponents();
         myInitComponents();
         pack();
     }
-    
+
     private void myInitComponents() {
     }
-    
+
     private void initComponents() {
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
@@ -98,19 +98,19 @@ public class JDialogHwANode extends javax.swing.JDialog implements ActionListene
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
-        
+
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
-        
+
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        
+
+
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("CPU attributes"));
         panel2.setPreferredSize(new Dimension(400, 300));
-        
-		c1.gridwidth = 1;
+
+        c1.gridwidth = 1;
         c1.gridheight = 1;
         c1.weighty = 1.0;
         c1.weightx = 1.0;
@@ -120,39 +120,39 @@ public class JDialogHwANode extends javax.swing.JDialog implements ActionListene
         nodeName = new JTextField(node.getNodeName(), 30);
         nodeName.setEditable(true);
         nodeName.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(nodeName, c1);
- 
+        panel2.add(nodeName, c1);
+
         c2.gridwidth = 1;
         c2.gridheight = 1;
         c2.weighty = 1.0;
         c2.weightx = 1.0;
         c2.fill = GridBagConstraints.HORIZONTAL;
-        
+
         c2.gridwidth = 1;
         panel2.add(new JLabel("Data size (in byte):"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         byteDataSize = new JTextField(""+node.getByteDataSize(), 15);
         panel2.add(byteDataSize, c2);
-		
-		c2.gridwidth = 1;
+
+        c2.gridwidth = 1;
         panel2.add(new JLabel("Execi execution time (in cycle):"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         execiTime = new JTextField(""+node.getExeciTime(), 15);
         panel2.add(execiTime, c2);
-		
-		c2.gridwidth = 1;
-        panel2.add(new JLabel("Clock ratio:"), c2);
+
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("Clock diviser:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         clockRatio = new JTextField(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
-        
+
         // main panel;
         c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c.add(panel2, c0);
-        
+
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
@@ -165,17 +165,17 @@ public class JDialogHwANode extends javax.swing.JDialog implements ActionListene
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-       /* if (evt.getSource() == typeBox) {
-            boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-            initialValue.setEnabled(b);
-            return;
-        }*/
-        
-        
+
+    public void actionPerformed(ActionEvent evt)  {
+        /* if (evt.getSource() == typeBox) {
+           boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+           initialValue.setEnabled(b);
+           return;
+           }*/
+
+
         String command = evt.getActionCommand();
-        
+
         // Compare the action command to the known actions.
         if (command.equals("Save and Close"))  {
             closeDialog();
@@ -183,34 +183,34 @@ public class JDialogHwANode extends javax.swing.JDialog implements ActionListene
             cancelDialog();
         }
     }
-    
+
     public void closeDialog() {
         regularClose = true;
         dispose();
     }
-    
+
     public void cancelDialog() {
         dispose();
     }
-    
+
     public boolean isRegularClose() {
         return regularClose;
     }
-	
-	public String getNodeName() {
+
+    public String getNodeName() {
         return nodeName.getText();
     }
-    
+
     public String getByteDataSize() {
         return byteDataSize.getText();
     }
-	
-	public String getExeciTime(){
-		return execiTime.getText();
-	}
-	
-	public String getClockRatio(){
-		return clockRatio.getText();
-	}
-	  
+
+    public String getExeciTime(){
+        return execiTime.getText();
+    }
+
+    public String getClockRatio(){
+        return clockRatio.getText();
+    }
+
 }
