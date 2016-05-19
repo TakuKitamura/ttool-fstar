@@ -79,3 +79,7 @@ std::string TMLTransaction::toShortString() const{
 }
 
 
+void toXML(std::ostringstream& glob, int deviceID, std::string deviceNAME) const {
+  
+}
+

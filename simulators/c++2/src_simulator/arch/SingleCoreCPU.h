@@ -118,6 +118,13 @@ public:
 	std::ostream& writeObject(std::ostream &os);
 protected:
 	///Truncates the next transaction at time iTime
+
+	/**
+      	\param glob refers to the output stream
+    	*/
+	void allTrans2XML(std::ostringstream& glob) const;
+
+	
 	/**
 	\param iTime Indicates at what time the transaction should be truncated
 	*/

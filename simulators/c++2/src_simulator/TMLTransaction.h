@@ -226,6 +226,9 @@ public:
 	inline static void resetID() {_ID=1;}
 	inline void setStateID(ID iID) {_stateID=iID;}
 	inline ID getStateID() {return _stateID;}
+
+	void toXML(std::ostringstream& glob, int deviceID, std::string deviceNAME) const;
+
 protected:
 	///Time when the transaction became runnable
 	TMLTime _runnableTime;

@@ -217,7 +217,13 @@ void Simulator::schedule2TXT(std::string& iTraceFileName) const{
 
 void Simulator::allTrans2XML(std::ostringstream& glob) const{
   glob << TAG_TRANSo << "Transaction" << TAG_TRANSc << std::endl;
+  for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+    (*i)->allTrans2XML(myfile);
+  }
   
+  for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+    (*j)->allTrans2XML(myfile);
+  }
 }
 
 

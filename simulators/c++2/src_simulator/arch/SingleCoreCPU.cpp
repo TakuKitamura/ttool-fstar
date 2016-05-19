@@ -315,6 +315,9 @@ std::string SingleCoreCPU::toShortString() const{
 	return outp.str();
 }
 
+
+
+
 void SingleCoreCPU::schedule2HTML(std::ofstream& myfile) const{
 	TMLTime aCurrTime=0;
 	TMLTransaction* aCurrTrans;
@@ -395,6 +398,13 @@ void SingleCoreCPU::schedule2TXT(std::ofstream& myfile) const{
 	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
 		myfile << (*i)->toShortString() << std::endl;
 	}
+}
+
+
+void allTrans2XML(std::ostringstream& glob) const {
+  for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+    (*i)->toXML(glob, 0, _name);
+  }
 }
 
 //TMLTime SingleCoreCPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
