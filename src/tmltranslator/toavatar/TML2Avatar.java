@@ -647,7 +647,7 @@ public class TML2Avatar {
 	}
 	else if (ae instanceof TMLActivityElementWithAction){
 	    //Might be encrypt or decrypt
-	    AvatarState as = new AvatarState(ae.getName(), ae.getReferenceObject());
+	    AvatarState as = new AvatarState(ae.getValue(), ae.getReferenceObject());
 	    tran = new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 	    //For now, get rid of the action. It won't translate anyway
 	    //tran.addAction(((TMLActivityElementWithAction) ae).getAction());
@@ -1194,14 +1194,13 @@ public class TML2Avatar {
 	        asm.setStartState((AvatarStartState) elementList.get(0));
 	    }
 	    for (SecurityPattern secPattern: secPatterns){
-	        System.out.println("secpattern "+ secPattern.name);
 		AvatarAttribute sec = new AvatarAttribute(secPattern.name, AvatarType.INTEGER, block, null);
 		AvatarAttribute enc = new AvatarAttribute(secPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
 	        LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
 		block.addAttribute(sec);
 		block.addAttribute(enc);
 	        attrs.add(sec);
-	        avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ "securitypattern", null, attrs));
+	        avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ secPattern.name, null, attrs));
 	    }
 	    avspec.addBlock(block);
 	}
@@ -1212,7 +1211,7 @@ public class TML2Avatar {
 	//Add authenticity pragmas
 	for (String s: signalAuthOriginMap.keySet()){
 	    if (signalAuthDestMap.containsKey(s)){
-		AvatarPragmaAuthenticity pragma = new AvatarPragmaAuthenticity(s, signalAuthOriginMap.get(s).getReferenceObject(), signalAuthOriginMap.get(s), signalAuthDestMap.get(s));
+		AvatarPragmaAuthenticity pragma = new AvatarPragmaAuthenticity("#Authenticity ", signalAuthOriginMap.get(s).getReferenceObject(), signalAuthOriginMap.get(s), signalAuthDestMap.get(s));
 		avspec.addPragma(pragma);
 	    }
 	}

@@ -51,6 +51,7 @@ import java.util.*;
 public class TMLActivityElement extends TMLElement{
     protected Vector<TMLActivityElement> nexts;
     public SecurityPattern securityPattern;
+    private String value="";
     public TMLActivityElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         nexts = new Vector();
@@ -60,7 +61,12 @@ public class TMLActivityElement extends TMLElement{
     public int getNbNext() {
         return nexts.size();
     }
-
+    public void setValue(String val){
+	value=val;
+    }
+    public String getValue(){
+	return value;
+    }
     public TMLActivityElement getNextElement(int _i) {
         if (_i < getNbNext() ) {
             return (TMLActivityElement)(nexts.elementAt(_i));

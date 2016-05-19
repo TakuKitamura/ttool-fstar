@@ -519,7 +519,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                     return true;
                 } else {
                     JOptionPane.showMessageDialog(frame,
-                                                  "Could not change the name of the Block: this name is already in use",
+                                                  "Could not change the name of the Block: frame error",
                                                   "Error",
                                                   JOptionPane.INFORMATION_MESSAGE);
                     setValue(oldValue);

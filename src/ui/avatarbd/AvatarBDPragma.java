@@ -130,6 +130,10 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
     public String[] getValues() {
         return values;
     }
+    public void setValues(String[] v){
+	values=v;
+	makeValue();
+    }
     public LinkedList<String> getProperties() {
 	return properties;
     }
