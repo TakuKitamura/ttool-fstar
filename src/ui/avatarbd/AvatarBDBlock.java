@@ -311,9 +311,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
             // Try to draw it
             w = graph.getFontMetrics ().stringWidth (attrString);
-            if (w + 2*textX < this.width)
+            if (w + 2*textX < this.width) {
                 graph.drawString (attrString, this.x + textX, this.y + h);
-            else {
+                this.drawConfidentialityVerification (attr.getConfidentialityVerification (), graph, this.x, this.y + h);
+            } else {
                 // If we can't, try to draw with "..." instead
                 int stringLength;
                 for (stringLength = attrString.length ()-1; stringLength >= 0; stringLength--) {
@@ -321,6 +322,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                     w = graph.getFontMetrics ().stringWidth (abbrev);
                     if (w + 2*textX < this.width) {
                         graph.drawString (abbrev, this.x + textX, this.y + h);
+                        this.drawConfidentialityVerification (attr.getConfidentialityVerification (), graph, this.x, this.y + h);
                         break;
                     }
                 }
