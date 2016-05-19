@@ -63,11 +63,13 @@ public class TML2AvatarDP {
     //protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
     protected TMLMapping tmlmap;
     public AvatarDesignPanel adp;
+    private List<String> signals;
     private Map<AvatarTransition, TGConnectingPoint> tranSourceMap = new HashMap<AvatarTransition, TGConnectingPoint>();
     private Map<AvatarTransition, AvatarStateMachineElement> tranDestMap = new HashMap<AvatarTransition, AvatarStateMachineElement>();
     private Map<AvatarStateMachineElement, TGConnectingPoint> locMap = new HashMap<AvatarStateMachineElement, TGConnectingPoint>();
     private Map<AvatarStateMachineElement, TGComponent> SMDMap = new HashMap<AvatarStateMachineElement, TGComponent>();
     public Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
+    public Map<String, AvatarBDBlock> blockMap = new HashMap<String, AvatarBDBlock>();
     public TML2AvatarDP(TMLMapping tmlmapping) {
         tmlmap = tmlmapping;
     }
@@ -190,6 +192,7 @@ public class TML2AvatarDP {
 	    tranSourceMap.clear();
 	    bl.setValue(ab.getName().split("__")[1]);
 	    abd.changeStateMachineTabName ("Block0", bl.getValue());
+	    blockMap.put(bl.getValue(), abd);
 	    abd.addComponent(bl, xpos, ypos, false, true);
 	    xpos+=400;
 	    //Build the state machine
@@ -222,7 +225,11 @@ public class TML2AvatarDP {
 
 	
 
+
 	//Add Relations
+	for (String s: originDestMap.keySet()){
+	AvatarBDCompositionConnector conn = new AvatarBDCompositionConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint);
+	
 	ypos+=100;
 	//Add Pragmas
 	AvatarBDPragma pragma=new AvatarBDPragma(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);

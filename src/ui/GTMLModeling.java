@@ -1483,7 +1483,7 @@ public class GTMLModeling  {
             } else if (tgc instanceof TMLADExecI) {
                 tmlexeci = new TMLExecI("execi", tgc);
                 tmlexeci.setAction(modifyString(((TMLADExecI)tgc).getDelayValue()));
-		tmlexeci.setValue(((TMLADExecC)tgc).getDelayValue());
+		tmlexeci.setValue(((TMLADExecI)tgc).getDelayValue());
                 activity.addElement(tmlexeci);
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlexeci, tgc);
@@ -1519,7 +1519,6 @@ public class GTMLModeling  {
             } else if (tgc instanceof TMLADExecC) {
                 tmlexecc = new TMLExecC("execc", tgc);
 		tmlexecc.setValue(((TMLADExecC)tgc).getDelayValue());
-		System.out.println("val " + tgc.getValue());
                 tmlexecc.setAction(modifyString(((TMLADExecC)tgc).getDelayValue()));
                 activity.addElement(tmlexecc);
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
