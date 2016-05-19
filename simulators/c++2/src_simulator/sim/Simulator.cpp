@@ -215,6 +215,13 @@ void Simulator::schedule2TXT(std::string& iTraceFileName) const{
 	std::cout << "The text output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
 
+void Simulator::allTrans2XML(std::ostringstream& glob) const{
+  glob << TAG_TRANSo << "Transaction" << TAG_TRANSc << std::endl;
+  
+}
+
+
+
 void Simulator::schedule2HTML(std::string& iTraceFileName) const{
 	struct timeval aBegin,aEnd;
 	gettimeofday(&aBegin,NULL);
@@ -1207,6 +1214,12 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
 			TMLCommand::streamStateXML(aGlobMsg);
 			std::cout << "End Get execution statistics of commands." << std::endl;
 			break;
+		case 22://Get list of transactions
+			std::cout << "Get list of transactions." << std::endl;
+			//aGlobMsg << TAG_MSGo << "Breakpoints are disabled." << TAG_MSGc << std::endl;
+			allTrans2XML(aGlobMsg);
+			std::cout << "End list of transactions." << std::endl;
+			break;	
 		default:
 			aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
 			anErrorCode=3;

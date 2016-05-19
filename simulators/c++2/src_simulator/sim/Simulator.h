@@ -240,6 +240,13 @@ public:
 	\param iTraceFileName Name of the output trace file
 	*/
 	void schedule2TXT(std::string& iTraceFileName) const;
+
+	/**
+	\param glob Stream on which the XML answer shall be send to
+	*/
+	void allTrans2XML(std::ostringstream& glob) const;
+	
+	
 	///Is true if the simulator is busy
 	/**
 	\return Busy flag

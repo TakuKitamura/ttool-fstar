@@ -321,6 +321,7 @@ void SingleCoreCPU::schedule2HTML(std::ofstream& myfile) const{
 	unsigned int aBlanks,aLength,aColor;
 	std::string aCommentString;
 	//if (_transactList.empty()) return;
+	//std::cout << "0. size: " << _transactList.size() << '\n';
 	myfile << "<h2><span>Scheduling for device: "<< _name <<"</span></h2>\n<table>\n<tr>";
 	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
 		aCurrTrans=*i;

@@ -168,7 +168,7 @@ public:
 		_idlePenalty=iIdlePenalty;
 #endif
 	}
-	///Returns the task switching panalty of the transaction
+	///Returns the task switching penalty of the transaction
 	/**
       	\return Task switching penalty
     	*/	
@@ -179,7 +179,7 @@ public:
 		return 0;
 #endif
 	}
-	///Sets the task switching panalty of the transaction
+	///Sets the task switching penalty of the transaction
 	/**
       	\param iTaskSwitchingPenalty Task switching penalty
     	*/	
