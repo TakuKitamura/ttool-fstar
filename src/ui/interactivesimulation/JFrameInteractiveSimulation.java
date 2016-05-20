@@ -1400,47 +1400,52 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                         }
 
                         nl = elt.getElementsByTagName(SIMULATION_TRANS);
-                        for(int kk=0; kk<nl.getLength(); kk++) {
-                            node0 = nl.item(kk);
-                            elt0 = (Element)node0;
+                        if (nl.getLength() == 0) {
+                            //updateTableOfTransactions(0);
+			    ttm.fireTableStructureChanged();
+                        } else {
+                            for(int kk=0; kk<nl.getLength(); kk++) {
+                                node0 = nl.item(kk);
+                                elt0 = (Element)node0;
 
-                            if (elt0 != null) {
-                                //TraceManager.addDev("transinfo found: " + elt0);
-                                SimulationTransaction st = new SimulationTransaction();
-                                st.nodeType = elt0.getAttribute("deviceid");
-				
-                                st.deviceName = elt0.getAttribute("devicename");
-                                String commandT = elt0.getAttribute("command");
-				//TraceManager.addDev("command found: " + commandT);
-                                if (commandT != null) {
-                                    int index = commandT.indexOf(": ");
-                                    if (index == -1){
-                                        st.taskName = "Unknown";
-                                        st.command = commandT;
-                                    } else {
-                                        st.taskName = commandT.substring(0, index).trim();
-                                        st.command = commandT.substring(index+1, commandT.length()).trim();
+                                if (elt0 != null) {
+                                    //TraceManager.addDev("transinfo found: " + elt0);
+                                    SimulationTransaction st = new SimulationTransaction();
+                                    st.nodeType = elt0.getAttribute("deviceid");
+
+                                    st.deviceName = elt0.getAttribute("devicename");
+                                    String commandT = elt0.getAttribute("command");
+                                    //TraceManager.addDev("command found: " + commandT);
+                                    if (commandT != null) {
+                                        int index = commandT.indexOf(": ");
+                                        if (index == -1){
+                                            st.taskName = "Unknown";
+                                            st.command = commandT;
+                                        } else {
+                                            st.taskName = commandT.substring(0, index).trim();
+                                            st.command = commandT.substring(index+1, commandT.length()).trim();
+                                        }
                                     }
+                                    //TraceManager.addDev("Command handled");
+                                    st.startTime = elt0.getAttribute("starttime");
+                                    st.length = elt0.getAttribute("length");
+                                    st.virtualLength = elt0.getAttribute("virtuallength");
+                                    st.channelName = elt0.getAttribute("ch");
+
+                                    if (trans == null) {
+                                        trans = new Vector<SimulationTransaction>();
+                                    }
+
+                                    trans.add(st);
+                                    //updateTableOfTransactions(trans.size()-1);
+                                    //TraceManager.addDev("Nb of trans:" + trans.size());
                                 }
-				//TraceManager.addDev("Command handled");
-                                st.startTime = elt0.getAttribute("starttime");
-                                st.length = elt0.getAttribute("length");
-                                st.virtualLength = elt0.getAttribute("virtuallength");
-                                st.channelName = elt0.getAttribute("ch");
-
-				if (trans == null) {
-				    trans = new Vector<SimulationTransaction>();
-				}
-				
-                                trans.add(st);
-
-                                TraceManager.addDev("Nb of trans:" + trans.size());
-
+				//ttm.fireTableStructureChanged();
+				    //updateTableOfTransactions(trans.size()-1);
                             }
+			    ttm.fireTableStructureChanged();
                         }
-                        if (nl.getLength() > 0) {
-                            updateTableOfTransactions();
-                        }
+
 
                     }
 
@@ -2359,8 +2364,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         }
     }
 
-    private void updateTableOfTransactions() {
-        jspTransactionInfo.repaint();
+    private void updateTableOfTransactions(int index) {
+        ttm.fireTableRowUpdated(index);
     }
 
 

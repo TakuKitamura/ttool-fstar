@@ -36,10 +36,10 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class BusTableModel
-   * Information on busses
-   * Creation: 02/06/2009
-   * @version 1.0 02/06/2009
+   * Class TransactionTableModel
+   * Recent transactions
+   * Creation: 20/05/2016
+   * @version 1.0 20/05/2016
    * @author Ludovic APVRILLE
    * @see
    */
@@ -52,95 +52,76 @@ import javax.swing.table.*;
 import myutil.*;
 import tmltranslator.*;
 
-public class BusTableModel extends AbstractTableModel {
-    private TMLMapping tmap;
-    ArrayList<HwBus> bus;
-    private Hashtable <Integer, String> valueTable;
-    private Hashtable <Integer, Integer> rowTable;
-
+public class TransactionTableModel extends AbstractTableModel {
+    private JFrameInteractiveSimulation jfis;
     private int nbOfRows;
 
     //private String [] names;
-    public BusTableModel(TMLMapping _tmap, Hashtable<Integer, String> _valueTable, Hashtable <Integer, Integer> _rowTable) {
-        tmap = _tmap;
-        valueTable = _valueTable;
-        rowTable = _rowTable;
-        computeData();
+    public TransactionTableModel(JFrameInteractiveSimulation _jfis) {
+	jfis = _jfis;
     }
 
     // From AbstractTableModel
     public int getRowCount() {
-        return nbOfRows;
+	Vector<SimulationTransaction> tr = jfis.getListOfRecentTransactions();
+	if (tr == null) {
+	    return 0;
+	}
+        return tr.size();
     }
 
     public int getColumnCount() {
-        return 3;
+        return 5;
     }
 
     public Object getValueAt(int row, int column) {
-        if (tmap == null) {
-            return "-";
-        }
+        Vector<SimulationTransaction> tr = jfis.getListOfRecentTransactions();
+	if (tr == null) {
+	    return "";
+	}
 
-        if (column == 0) {
-            return bus.get(row).getName();
-        } else if (column == 1) {
-            return bus.get(row).getID();
-        } else if (column == 2) {
-            return getBusStatus(row);
+	if (row >= tr.size()) {
+	    return "";
+	}
+
+	SimulationTransaction st = tr.get(row);
+
+	switch(column) {
+        case 0:
+            return st.deviceName;
+        case 1:
+            return st.taskName;
+        case 2:
+            return st.command;
+        case 3:
+            return st.startTime;
+        case 4:
+            return st.channelName;
         }
-        return "";
+        return "unknown";		
     }
 
     public String getColumnName(int columnIndex) {
         switch(columnIndex) {
         case 0:
-            return "Bus Name";
+            return "Node";
         case 1:
-            return "Bus ID";
+            return "Task";
         case 2:
-            return "State";
+            return "Command";
+        case 3:
+            return "Start";
+        case 4:
+            return "Channel";
         }
         return "unknown";
     }
 
-    // Assumes tmlm != null
-    private String getBusStatus(int row) {
-        int ID = bus.get(row).getID();
-        String s = valueTable.get(new Integer(ID));
-
-        if (s != null) {
-            return s;
-        }
-
-
-        valueTable.put(new Integer(ID), "-");
-        rowTable.put(new Integer(ID), row);
-        return "-";
-
-    }
-
-
-    private void computeData() {
-        if (tmap == null) {
-            nbOfRows = 0;
-            return ;
-        }
-
-        bus = new ArrayList<HwBus>();
-
-        for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
-            if (node instanceof HwBus) {
-                bus.add((HwBus)node);
-            }
-        }
-
-        nbOfRows = bus.size();
-
-        for(int i=0; i<nbOfRows; i++) {
-            getBusStatus(i);
-        }
-        return;
+    public void fireTableRowUpdated(int index) {
+	TraceManager.addDev("Firing on row=" + index);
+	for (int i=0; i<getColumnCount(); i++) {
+	    fireTableCellUpdated(index, i);
+	}
     }
 
 }

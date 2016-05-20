@@ -56,9 +56,9 @@ import javax.swing.table.*;
  * <p/>
  * This is a long overdue rewrite of a class of the same name that
  * first appeared in the swing table demos in 1997.
- * 
+ *
  * @author Philip Milne
- * @author Brendon McLean 
+ * @author Brendon McLean
  * @author Dan van Enckevort
  * @author Parwinder Sekhon
  * @version 2.0 02/27/04
@@ -76,40 +76,40 @@ public class TableSorter extends AbstractTableModel {
     private static Directive EMPTY_DIRECTIVE = new Directive(-1, NOT_SORTED);
 
     public static final Comparator COMPARABLE_COMAPRATOR = new Comparator() {
-        public int compare(Object o1, Object o2) {
-            return ((Comparable) o1).compareTo(o2);
-        }
-    };
+            public int compare(Object o1, Object o2) {
+                return ((Comparable) o1).compareTo(o2);
+            }
+        };
     public static final Comparator LEXICAL_COMPARATOR = new Comparator() {
-        /*public int compare(Object o1, Object o2) {
-            return o1.toString().compareTo(o2.toString());
-        }*/
-        /*public int compare(Object o1, Object o2) {
-            int i1, i2;
-            try {
-                i1 = Integer.parseInt((String)o1);
-                i2 = Integer.parseInt((String)o2);
-                return i2 - i1;
-            } catch (Exception e) {
+            /*public int compare(Object o1, Object o2) {
+              return o1.toString().compareTo(o2.toString());
+              }*/
+            /*public int compare(Object o1, Object o2) {
+              int i1, i2;
+              try {
+              i1 = Integer.parseInt((String)o1);
+              i2 = Integer.parseInt((String)o2);
+              return i2 - i1;
+              } catch (Exception e) {
+              return o1.toString().compareTo(o2.toString());
+              }
+              }*/
+            public int compare(Object o1, Object o2) {
+                if ((o1 instanceof Integer) && (o2 instanceof Integer)) {
+                    return ((Integer)o1).compareTo((Integer)o2);
+                }
                 return o1.toString().compareTo(o2.toString());
             }
-        }*/
-         public int compare(Object o1, Object o2) {
-            if ((o1 instanceof Integer) && (o2 instanceof Integer)) {
-                return ((Integer)o1).compareTo((Integer)o2);
-            }
-            return o1.toString().compareTo(o2.toString());
-        }
-    };
-    
+        };
+
     public static final Comparator INTEGER_COMPARATOR = new Comparator() {
-        public int compare(Object o1, Object o2) {
-            if ((o1 instanceof Integer) && (o2 instanceof Integer)) {
-                return ((Integer)o1).compareTo((Integer)o2);
+            public int compare(Object o1, Object o2) {
+                if ((o1 instanceof Integer) && (o2 instanceof Integer)) {
+                    return ((Integer)o1).compareTo((Integer)o2);
+                }
+                return o1.toString().compareTo(o2.toString());
             }
-            return o1.toString().compareTo(o2.toString());
-        }
-    };
+        };
 
     private Row[] viewToModel;
     private int[] modelToView;
@@ -175,7 +175,7 @@ public class TableSorter extends AbstractTableModel {
         if (this.tableHeader != null) {
             this.tableHeader.addMouseListener(mouseListener);
             this.tableHeader.setDefaultRenderer(
-                    new SortableHeaderRenderer(this.tableHeader.getDefaultRenderer()));
+                                                new SortableHeaderRenderer(this.tableHeader.getDefaultRenderer()));
         }
     }
 
@@ -250,17 +250,19 @@ public class TableSorter extends AbstractTableModel {
     }
 
     private Row[] getViewToModel() {
-        if (viewToModel == null) {
-            int tableModelRowCount = tableModel.getRowCount();
-            viewToModel = new Row[tableModelRowCount];
-            for (int row = 0; row < tableModelRowCount; row++) {
-                viewToModel[row] = new Row(row);
-            }
+        try {
+            if (viewToModel == null) {
+                int tableModelRowCount = tableModel.getRowCount();
+                viewToModel = new Row[tableModelRowCount];
+                for (int row = 0; row < tableModelRowCount; row++) {
+                    viewToModel[row] = new Row(row);
+                }
 
-            if (isSorting()) {
-                Arrays.sort(viewToModel);
+                if (isSorting()) {
+                    Arrays.sort(viewToModel);
+                }
             }
-        }
+        } catch (Exception e) {}
         return viewToModel;
     }
 
@@ -279,7 +281,7 @@ public class TableSorter extends AbstractTableModel {
         return modelToView;
     }
 
-    // TableModel interface methods 
+    // TableModel interface methods
 
     public int getRowCount() {
         return (tableModel == null) ? 0 : tableModel.getRowCount();
@@ -302,7 +304,11 @@ public class TableSorter extends AbstractTableModel {
     }
 
     public Object getValueAt(int row, int column) {
-        return tableModel.getValueAt(modelIndex(row), column);
+	try {
+	    return tableModel.getValueAt(modelIndex(row), column);
+	} catch (Exception e) {
+	    return null;
+	}
     }
 
     public void setValueAt(Object aValue, int row, int column) {
@@ -310,7 +316,7 @@ public class TableSorter extends AbstractTableModel {
     }
 
     // Helper classes
-    
+
     private class Row implements Comparable {
         private int modelIndex;
 
@@ -349,53 +355,53 @@ public class TableSorter extends AbstractTableModel {
 
     private class TableModelHandler implements TableModelListener {
         public void tableChanged(TableModelEvent e) {
-            // If we're not sorting by anything, just pass the event along.             
+            // If we're not sorting by anything, just pass the event along.
             if (!isSorting()) {
                 clearSortingState();
                 fireTableChanged(e);
                 return;
             }
-                
-            // If the table structure has changed, cancel the sorting; the             
-            // sorting columns may have been either moved or deleted from             
-            // the model. 
+
+            // If the table structure has changed, cancel the sorting; the
+            // sorting columns may have been either moved or deleted from
+            // the model.
             if (e.getFirstRow() == TableModelEvent.HEADER_ROW) {
                 cancelSorting();
                 fireTableChanged(e);
                 return;
             }
 
-            // We can map a cell event through to the view without widening             
-            // when the following conditions apply: 
-            // 
-            // a) all the changes are on one row (e.getFirstRow() == e.getLastRow()) and, 
+            // We can map a cell event through to the view without widening
+            // when the following conditions apply:
+            //
+            // a) all the changes are on one row (e.getFirstRow() == e.getLastRow()) and,
             // b) all the changes are in one column (column != TableModelEvent.ALL_COLUMNS) and,
-            // c) we are not sorting on that column (getSortingStatus(column) == NOT_SORTED) and, 
+            // c) we are not sorting on that column (getSortingStatus(column) == NOT_SORTED) and,
             // d) a reverse lookup will not trigger a sort (modelToView != null)
             //
             // Note: INSERT and DELETE events fail this test as they have column == ALL_COLUMNS.
-            // 
-            // The last check, for (modelToView != null) is to see if modelToView 
-            // is already allocated. If we don't do this check; sorting can become 
-            // a performance bottleneck for applications where cells  
-            // change rapidly in different parts of the table. If cells 
-            // change alternately in the sorting column and then outside of             
-            // it this class can end up re-sorting on alternate cell updates - 
-            // which can be a performance problem for large tables. The last 
-            // clause avoids this problem. 
+            //
+            // The last check, for (modelToView != null) is to see if modelToView
+            // is already allocated. If we don't do this check; sorting can become
+            // a performance bottleneck for applications where cells
+            // change rapidly in different parts of the table. If cells
+            // change alternately in the sorting column and then outside of
+            // it this class can end up re-sorting on alternate cell updates -
+            // which can be a performance problem for large tables. The last
+            // clause avoids this problem.
             int column = e.getColumn();
             if (e.getFirstRow() == e.getLastRow()
-                    && column != TableModelEvent.ALL_COLUMNS
-                    && getSortingStatus(column) == NOT_SORTED
-                    && modelToView != null) {
+                && column != TableModelEvent.ALL_COLUMNS
+                && getSortingStatus(column) == NOT_SORTED
+                && modelToView != null) {
                 int viewIndex = getModelToView()[e.getFirstRow()];
-                fireTableChanged(new TableModelEvent(TableSorter.this, 
-                                                     viewIndex, viewIndex, 
+                fireTableChanged(new TableModelEvent(TableSorter.this,
+                                                     viewIndex, viewIndex,
                                                      column, e.getType()));
                 return;
             }
 
-            // Something has happened to the data that may have invalidated the row order. 
+            // Something has happened to the data that may have invalidated the row order.
             clearSortingState();
             fireTableDataChanged();
             return;
@@ -413,8 +419,8 @@ public class TableSorter extends AbstractTableModel {
                 if (!e.isControlDown()) {
                     cancelSorting();
                 }
-                // Cycle the sorting states through {NOT_SORTED, ASCENDING, DESCENDING} or 
-                // {NOT_SORTED, DESCENDING, ASCENDING} depending on whether shift is pressed. 
+                // Cycle the sorting states through {NOT_SORTED, ASCENDING, DESCENDING} or
+                // {NOT_SORTED, DESCENDING, ASCENDING} depending on whether shift is pressed.
                 status = status + (e.isShiftDown() ? -1 : 1);
                 status = (status + 4) % 3 - 1; // signed mod, returning {-1, 0, 1}
                 setSortingStatus(column, status);
@@ -434,27 +440,27 @@ public class TableSorter extends AbstractTableModel {
         }
 
         public void paintIcon(Component c, Graphics g, int x, int y) {
-            Color color = c == null ? Color.GRAY : c.getBackground();             
-            // In a compound sort, make each succesive triangle 20% 
-            // smaller than the previous one. 
+            Color color = c == null ? Color.GRAY : c.getBackground();
+            // In a compound sort, make each succesive triangle 20%
+            // smaller than the previous one.
             int dx = (int)(size/2*Math.pow(0.8, priority));
             int dy = descending ? dx : -dx;
-            // Align icon (roughly) with font baseline. 
+            // Align icon (roughly) with font baseline.
             y = y + 5*size/6 + (descending ? -dy : 0);
             int shift = descending ? 1 : -1;
             g.translate(x, y);
 
-            // Right diagonal. 
+            // Right diagonal.
             g.setColor(color.darker());
             g.drawLine(dx / 2, dy, 0, 0);
             g.drawLine(dx / 2, dy + shift, 0, shift);
-            
-            // Left diagonal. 
+
+            // Left diagonal.
             g.setColor(color.brighter());
             g.drawLine(dx / 2, dy, dx, 0);
             g.drawLine(dx / 2, dy + shift, dx, shift);
-            
-            // Horizontal line. 
+
+            // Horizontal line.
             if (descending) {
                 g.setColor(color.darker().darker());
             } else {
@@ -482,14 +488,14 @@ public class TableSorter extends AbstractTableModel {
             this.tableCellRenderer = tableCellRenderer;
         }
 
-        public Component getTableCellRendererComponent(JTable table, 
+        public Component getTableCellRendererComponent(JTable table,
                                                        Object value,
-                                                       boolean isSelected, 
+                                                       boolean isSelected,
                                                        boolean hasFocus,
-                                                       int row, 
+                                                       int row,
                                                        int column) {
-            Component c = tableCellRenderer.getTableCellRendererComponent(table, 
-                    value, isSelected, hasFocus, row, column);
+            Component c = tableCellRenderer.getTableCellRendererComponent(table,
+                                                                          value, isSelected, hasFocus, row, column);
             if (c instanceof JLabel) {
                 JLabel l = (JLabel) c;
                 l.setHorizontalTextPosition(JLabel.LEFT);
