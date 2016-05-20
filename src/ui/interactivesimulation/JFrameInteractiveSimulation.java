@@ -1402,7 +1402,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                         nl = elt.getElementsByTagName(SIMULATION_TRANS);
                         if (nl.getLength() == 0) {
                             //updateTableOfTransactions(0);
-			    ttm.fireTableStructureChanged();
+			    //ttm.fireTableStructureChanged();
                         } else {
                             for(int kk=0; kk<nl.getLength(); kk++) {
                                 node0 = nl.item(kk);
@@ -1443,7 +1443,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 				//ttm.fireTableStructureChanged();
 				    //updateTableOfTransactions(trans.size()-1);
                             }
-			    ttm.fireTableStructureChanged();
+			    TraceManager.addDev("Transactions updated");
+			    ttm.setData(trans);
+			    
                         }
 
 
@@ -2364,9 +2366,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         }
     }
 
-    private void updateTableOfTransactions(int index) {
+    /*private void updateTableOfTransactions(int index) {
         ttm.fireTableRowUpdated(index);
-    }
+	}*/
 
 
     private void updateBusState(String _id, String _utilization) {

@@ -55,36 +55,37 @@ import tmltranslator.*;
 public class TransactionTableModel extends AbstractTableModel {
     private JFrameInteractiveSimulation jfis;
     private int nbOfRows;
+    private SimulationTransaction data[];
 
     //private String [] names;
     public TransactionTableModel(JFrameInteractiveSimulation _jfis) {
-	jfis = _jfis;
+	jfis = jfis;
+	data = null;
     }
 
     // From AbstractTableModel
-    public int getRowCount() {
-	Vector<SimulationTransaction> tr = jfis.getListOfRecentTransactions();
-	if (tr == null) {
+    public synchronized int getRowCount() {
+	//Vector<SimulationTransaction> tr = jfis.getListOfRecentTransactions();
+	if (data == null) {
 	    return 0;
 	}
-        return tr.size();
+        return data.length;
     }
 
     public int getColumnCount() {
         return 5;
     }
 
-    public Object getValueAt(int row, int column) {
-        Vector<SimulationTransaction> tr = jfis.getListOfRecentTransactions();
-	if (tr == null) {
+    public synchronized Object getValueAt(int row, int column) {
+	if (data == null) {
 	    return "";
 	}
 
-	if (row >= tr.size()) {
+	if (row >= data.length) {
 	    return "";
 	}
 
-	SimulationTransaction st = tr.get(row);
+	SimulationTransaction st = data[row];
 
 	switch(column) {
         case 0:
@@ -117,11 +118,12 @@ public class TransactionTableModel extends AbstractTableModel {
         return "unknown";
     }
 
-    public void fireTableRowUpdated(int index) {
-	TraceManager.addDev("Firing on row=" + index);
-	for (int i=0; i<getColumnCount(); i++) {
-	    fireTableCellUpdated(index, i);
+    public synchronized void setData(Vector<SimulationTransaction> _trans) {
+	data = new SimulationTransaction[_trans.size()];
+	for(int i=0; i<_trans.size(); i++) {
+	    data[i] = _trans.get(i);
 	}
+	fireTableStructureChanged();
     }
 
 }

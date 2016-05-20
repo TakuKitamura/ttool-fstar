@@ -494,6 +494,7 @@ public class TableSorter extends AbstractTableModel {
                                                        boolean hasFocus,
                                                        int row,
                                                        int column) {
+	    try {
             Component c = tableCellRenderer.getTableCellRendererComponent(table,
                                                                           value, isSelected, hasFocus, row, column);
             if (c instanceof JLabel) {
@@ -503,6 +504,9 @@ public class TableSorter extends AbstractTableModel {
                 l.setIcon(getHeaderRendererIcon(modelColumn, l.getFont().getSize()));
             }
             return c;
+	    } catch (Exception e) {
+		return null;
+	    }
         }
     }
 
