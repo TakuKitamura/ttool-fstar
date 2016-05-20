@@ -190,8 +190,8 @@ using std::max;
 #define TAG_EXTIMEc "</extime>"
 #define TAG_CONTDELo "<contdel"
 #define TAG_CONTDELc "</contdel>"
-#define TAG_TRANSo "<trans>"
-#define TAG_TRANSc "</trans>"
+#define TAG_TRANSo "<transinfo "
+#define TAG_TRANSc " />"
 
 #define TAG_BUSo "<bus"
 #define TAG_BUSc "</bus>"

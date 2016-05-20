@@ -244,7 +244,7 @@ public:
 	/**
 	\param glob Stream on which the XML answer shall be send to
 	*/
-	void allTrans2XML(std::ostringstream& glob) const;
+	void allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
 	
 	
 	///Is true if the simulator is busy

@@ -47,7 +47,7 @@ Ludovic Apvrille, Renaud Pacalet
 class TMLCommand;
 class TMLChannel;
 
-class TMLTransaction{
+class TMLTransaction {
 public:
 	///Constructor
     	/**
@@ -214,6 +214,8 @@ public:
 	*/
 	inline void setChannel(TMLChannel* iChannel) {_channel=iChannel;}
 	///Get channel on which data was conveyed
+
+	
 	/**
 	\return Pointer to channel
 	*/
@@ -227,7 +229,8 @@ public:
 	inline void setStateID(ID iID) {_stateID=iID;}
 	inline ID getStateID() {return _stateID;}
 
-	void toXML(std::ostringstream& glob, int deviceID, std::string deviceNAME) const;
+	void toXML(std::ostringstream& glob, int deviceID, std::string deviceName) const;
+	
 
 protected:
 	///Time when the transaction became runnable

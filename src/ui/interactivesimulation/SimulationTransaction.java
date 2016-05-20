@@ -36,10 +36,10 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class GenericTransaction
-   * Transaction as used
-   * Creation: 26/05/2011
-   * @version 1.0 26/05/2011
+   * Class SimulationTransaction
+   * Transaction as defined by the simulation engine
+   * Creation: 20/05/2016
+   * @version 1.0 20/05/2016
    * @author Ludovic APVRILLE
    * @see
    */
@@ -52,34 +52,21 @@ import javax.swing.table.*;
 import myutil.*;
 import tmltranslator.*;
 
-public class GenericTransaction  {
+public class SimulationTransaction  {
 
-    public final static int NOT_DEFINED = 0;
-    public final static int FUNCTION_CALL = 1;
-    public final static int STATE_ENTERING = 2;
-    public final static int VAR_MODIFICATION = 3;
-    public final static int SEND_SYNCHRO = 4;
-    public final static int SYNCHRO = 5;
-    public final static int SEND_ASYNCHRO = 6;
-    public final static int RECEIVE_ASYNCHRO = 7;
+    public final static int NODE_TYPE_CPU = 0;
+    public final static int NOTE_TYPE_BUS = 1;
 
-    public int ID;
-    public int type;
-    public String entityName;
-    public String otherEntityName; /*  name of destination in synchro, etc. */
-    public String name; /* Used for channel names */
-    public String params; /* values separated with commas */
-    public String messageID; /* Used for identifiying asynchronous messages */
-    public String action;
-    public long startingTime;
-    public long finishTime;
+    public String nodeType;
+    public String deviceName;
+    public String taskName; 
+    public String command;
+    public String startTime;
+    public String length; /* Used for identifiying asynchronous messages */
+    public String virtualLength;
+    public String channelName;
 
-    public long stamp;
-
-
-
-    public GenericTransaction() {
+    public SimulationTransaction() {
     }
-
 
 }

@@ -177,6 +177,22 @@ void Bus::schedule2TXT(std::ofstream& myfile) const{
 	}
 }
 
+void Bus::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const {
+  int size = _transactList.size();
+  int begining = size - maxNbOfTrans;
+  if (begining <0) {
+    begining = 0;
+  }
+  int cpt =0;
+  for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+    if (cpt >= begining) {
+      (*i)->toXML(glob, 1, _name);
+    }
+    cpt ++;
+  }
+}
+
+
 //Returns the next signal change (for vcd output)
 void Bus::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
 	//std::ostringstream outp;

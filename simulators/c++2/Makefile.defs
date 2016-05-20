@@ -36,7 +36,10 @@ $(OBJDIR)/%.o: $(SRCS_base_DIR)/%.cpp
 $(OBJDIR)/%.o: ./%.cpp
 	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
 
-clean::
+test:
+	./run.x -oxml answer.xml -cmd '1 2 1000000;22 100;7 0 vcddump.vcd' 
+
+clean:
 	rm -f $(OBJS_simulator) $(OBJS) *~ $(EXE) core 
 
 ultraclean: clean

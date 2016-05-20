@@ -79,7 +79,18 @@ std::string TMLTransaction::toShortString() const{
 }
 
 
-void toXML(std::ostringstream& glob, int deviceID, std::string deviceNAME) const {
+void TMLTransaction::toXML(std::ostringstream& glob, int deviceID, std::string deviceName) const {
+  if (_command==0) {
+    glob << TAG_TRANSo << " deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" command=\"0\"";
+  } else {
+    glob << TAG_TRANSo << " deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" command=\"" << _command->toShortString() << "\"";
+    glob << " starttime=\"" << _startTime << "\" length=\"" << _length << "\" virtuallength=\"" <<  _virtualLength << "\""; 
+    if (_channel!=0) glob << " ch=\"" << _channel->toShortString() << "\"";
+  }
+
+
   
+  glob <<  TAG_TRANSc << "\n";
+
 }
 

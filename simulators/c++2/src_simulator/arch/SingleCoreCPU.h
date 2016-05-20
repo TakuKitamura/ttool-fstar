@@ -111,6 +111,12 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	void schedule2TXT(std::ofstream& myfile) const;
+	
+	/**
+      	\param glob refers to the output stream
+    	*/
+	void allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
+	
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();
 	inline void streamStateXML(std::ostream& s) const {streamBenchmarks(s);}
@@ -118,11 +124,6 @@ public:
 	std::ostream& writeObject(std::ostream &os);
 protected:
 	///Truncates the next transaction at time iTime
-
-	/**
-      	\param glob refers to the output stream
-    	*/
-	void allTrans2XML(std::ostringstream& glob) const;
 
 	
 	/**
