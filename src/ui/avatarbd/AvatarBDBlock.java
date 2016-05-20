@@ -152,7 +152,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         this.internalDrawingAux (graph);
         graph.setFont (font);
     }
-
+    public void addSignal(AvatarSignal sig){
+	this.mySignals.add(sig);
+    }
     public void internalDrawingAux (Graphics graph) {
         // Draw outer rectangle (for border)
         Color c = graph.getColor ();

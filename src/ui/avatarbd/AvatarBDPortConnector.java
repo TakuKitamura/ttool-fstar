@@ -571,6 +571,8 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 
         for(i=0; i<outSignalsAtOrigin.size(); i++) {
             try {
+		System.out.println("OUT " +outSignalsAtOrigin.get(i));
+		System.out.println("SIGNAL " + block1.getAvatarSignalFromFullName(outSignalsAtOrigin.get(i)));
                 s = makeSignalAssociation(block1, block1.getAvatarSignalFromFullName(outSignalsAtOrigin.get(i)), block2, block2.getAvatarSignalFromFullName(inSignalsAtDestination.get(i)));
                 v.add(s);
             } catch (Exception e) {
@@ -580,6 +582,8 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 
         for(i=0; i<inSignalsAtOrigin.size(); i++) {
             try {
+		System.out.println("OUT " +inSignalsAtOrigin.get(i));
+		System.out.println("SIGNAL " + block1.getAvatarSignalFromFullName(inSignalsAtOrigin.get(i)));
                 s = makeSignalAssociation(block1, block1.getAvatarSignalFromFullName(inSignalsAtOrigin.get(i)), block2, block2.getAvatarSignalFromFullName(outSignalsAtDestination.get(i)));
                 v.add(s);
             } catch (Exception e) {
@@ -639,7 +643,24 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 
         return _assoc.substring(index0+1, _assoc.length()).trim();
     }
-
+    public void addSignal(String signal, boolean in, boolean origin){
+	if (in){
+	    if (origin){
+		inSignalsAtOrigin.add(signal);
+	    }
+	    else {
+		inSignalsAtDestination.add(signal);
+	    }
+	}
+	else {
+	    if (origin){
+		outSignalsAtOrigin.add(signal);
+	    }
+	    else {
+		outSignalsAtDestination.add(signal);
+	    }
+	}
+    }
     public void updateAllSignals() {
         try {
             Vector v = getAssociationSignals();

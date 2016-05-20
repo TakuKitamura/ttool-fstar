@@ -63,7 +63,7 @@ public class TML2AvatarDP {
     //protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
     protected TMLMapping tmlmap;
     public AvatarDesignPanel adp;
-    private List<String> signals;
+
     private Map<AvatarTransition, TGConnectingPoint> tranSourceMap = new HashMap<AvatarTransition, TGConnectingPoint>();
     private Map<AvatarTransition, AvatarStateMachineElement> tranDestMap = new HashMap<AvatarTransition, AvatarStateMachineElement>();
     private Map<AvatarStateMachineElement, TGConnectingPoint> locMap = new HashMap<AvatarStateMachineElement, TGConnectingPoint>();
@@ -71,30 +71,37 @@ public class TML2AvatarDP {
     public Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
     public Map<String, AvatarBDBlock> blockMap = new HashMap<String, AvatarBDBlock>();
     public TML2AvatarDP(TMLMapping tmlmapping) {
+  
         tmlmap = tmlmapping;
     }
 
     public void commMap(){
+	//Create a map of all connections
 	TMLModeling tmlmodel=tmlmap.getTMLModeling();
 	for (TMLTask t: tmlmodel.getTasks()){
 	    Set<String> hs = new HashSet<String>();
-	 
+	    //Iterate through channels
 	    LinkedList ll= tmlmodel.getChannelsToMe(t);
       	    ListIterator iterator = ll.listIterator();
             TMLChannel chanl;
+	    String name="";
             while(iterator.hasNext()) {
                 chanl = (TMLChannel)(iterator.next()); 
-		for (TMLTask dt: chanl.getDestinationTasks()){
-		    hs.add(dt.getName());
+		for (TMLTask dt: chanl.getOriginTasks()){
+		    name= dt.getName();
+		    hs.add(name.split("__")[name.split("__").length-1]);
 		}
+		name= chanl.getOriginTask().getName();
+		hs.add(name.split("__")[name.split("__").length-1]);
 	    }
-	    originDestMap.put(t.getName(), hs);
-	    //check channels
+	    name=t.getName();
+	    originDestMap.put(name.split("__")[name.split("__").length-1], hs);
+	    
 	    //get connections
 	//Do we care about requests/events
 	}
     }
-    public void addStates(AvatarStateMachineElement asme, int x, int y, AvatarSMDPanel smp){
+    public void addStates(AvatarStateMachineElement asme, int x, int y, AvatarSMDPanel smp, AvatarBDBlock bl){
 	TGConnectingPoint tp = new TGConnectingPoint(null, x, y, false, false);
 	if (asme instanceof AvatarStartState){
 	    AvatarSMDStartState smdss = new AvatarSMDStartState(x, y, x, x*2, y, y*2, false, null, smp);
@@ -111,23 +118,33 @@ public class TML2AvatarDP {
 	    if (sig.isOut()){
 		AvatarSMDReceiveSignal smdrs = new AvatarSMDReceiveSignal(x, y, x, x*2, y, y*2, false, null, smp);
 		smp.addComponent(smdrs, x, y, false, true);
-	        smdrs.setValue(sig.getName().split("__")[sig.getName().split("__").length-1]);
+		String name=sig.getName().split("__")[sig.getName().split("__").length-1];
+	        smdrs.setValue(name+"()");
+		sig.setName(name);
 	        smdrs.recalculateSize();
 		SMDMap.put(asme, smdrs);
 	        tp = smdrs.getFreeTGConnectingPoint(x+smdrs.getWidth()/2,y+smdrs.getHeight());
 		TGConnectingPoint tp2 = smdrs.getFreeTGConnectingPoint(x+smdrs.getWidth()/2,y);
 	    	locMap.put(asme, tp2);
+		if (bl.getAvatarSignalFromName(name) ==null){
+		    bl.addSignal(new ui.AvatarSignal(0, name, new String[0], new String[0]));
+		}
 
 	    }
 	    else {
 		AvatarSMDSendSignal smdss = new AvatarSMDSendSignal(x, y, x, x*2, y, y*2, false, null, smp);
 		smp.addComponent(smdss, x, y, false, true);
-	        smdss.setValue(sig.getName().split("__")[sig.getName().split("__").length-1]);
+	        String name=sig.getName().split("__")[sig.getName().split("__").length-1];
+	        smdss.setValue(name+"()");
+		sig.setName(name);
 	        smdss.recalculateSize();
 		SMDMap.put(asme, smdss);
 	    	tp = smdss.getFreeTGConnectingPoint(x+smdss.getWidth()/2,y+smdss.getHeight());
 		TGConnectingPoint tp2 = smdss.getFreeTGConnectingPoint(x+smdss.getWidth()/2,y);
 	    	locMap.put(asme, tp2);
+		if (bl.getAvatarSignalFromName(name)  == null){
+		    bl.addSignal(new ui.AvatarSignal(1, name, new String[0], new String[0]));
+		}
 	    }
 
 	}
@@ -150,7 +167,7 @@ public class TML2AvatarDP {
 			    tranDestMap.put(at, next);
 			}
 		    }
-		    addStates(next, x, y, smp);
+		    addStates(next, x, y, smp,bl);
 		    return;
 		}
 	    }
@@ -173,7 +190,7 @@ public class TML2AvatarDP {
 		AvatarTransition t = (AvatarTransition) asme;
 		tranDestMap.put(t, el);
 	    }
-	    addStates(el, diff*i, y+ydiff, smp);
+	    addStates(el, diff*i, y+ydiff, smp, bl);
 	    i++;  
 	}
 	return;
@@ -192,7 +209,7 @@ public class TML2AvatarDP {
 	    tranSourceMap.clear();
 	    bl.setValue(ab.getName().split("__")[1]);
 	    abd.changeStateMachineTabName ("Block0", bl.getValue());
-	    blockMap.put(bl.getValue(), abd);
+	    blockMap.put(bl.getValue(), bl);
 	    abd.addComponent(bl, xpos, ypos, false, true);
 	    xpos+=400;
 	    //Build the state machine
@@ -208,7 +225,7 @@ public class TML2AvatarDP {
 	    //Remove the empty check states
 	    
 	    AvatarStartState start= asm.getStartState();
-	    addStates(start, smx, smy, smp);
+	    addStates(start, smx, smy, smp, bl);
 	    //Add transitions
 	    for (AvatarTransition t: tranSourceMap.keySet()){
 		TGConnectingPoint p1 = tranSourceMap.get(t);
@@ -224,12 +241,29 @@ public class TML2AvatarDP {
 	}
 
 	
-
+	commMap();
 
 	//Add Relations
-	for (String s: originDestMap.keySet()){
-	AvatarBDCompositionConnector conn = new AvatarBDCompositionConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint);
-	
+	for (String bl1: originDestMap.keySet()){
+	    for (String bl2:originDestMap.get(bl1)){ 
+		Vector points=new Vector();
+		TGConnectingPoint p1= blockMap.get(bl1).getFreeTGConnectingPoint(blockMap.get(bl1).getX(), blockMap.get(bl1).getY());
+		TGConnectingPoint p2=blockMap.get(bl2).getFreeTGConnectingPoint(blockMap.get(bl2).getX(),blockMap.get(bl2).getY());
+		AvatarBDPortConnector conn = new AvatarBDPortConnector(0, 0, 0, 0, 0, 0, true, null, abd, p1, p2, points);
+
+		//Add Relations to connector
+		for (ui.AvatarSignal sig:blockMap.get(bl1).getSignalList()){
+		    for (ui.AvatarSignal sig2: blockMap.get(bl2).getSignalList()){
+			if (sig.getId().equals(sig2.getId())){
+			    conn.addSignal("in "+sig.getId(), true, true);
+			    conn.addSignal("out "+sig.getId(), false, false);
+			}
+		    }
+		}
+		abd.addComponent(conn, 0,0,false,true);
+		System.out.println("size " +conn.getAssociationSignals().size());
+	    }
+	}
 	ypos+=100;
 	//Add Pragmas
 	AvatarBDPragma pragma=new AvatarBDPragma(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
@@ -237,9 +271,26 @@ public class TML2AvatarDP {
 	String s="";
 	int i=0;
 	for (AvatarPragma p: avspec.getPragmas()){
-	    System.out.println(p.getName());
-	    arr[i] = p.getName();
-	    s=s.concat(p.getName()+"\n");
+	    
+//	    arr[i] = p.getName();
+	    String t= "";
+	    String[] split = p.getName().split(" ");
+	    if (p.getName().contains("#Confidentiality")){
+	        for (String str:split){
+		    if (str.contains(".")){
+			String tmp = str.split("\\.")[0];
+			String tmp2 = str.split("\\.")[1];
+			System.out.println("TMP " + tmp + " "+ tmp2);
+		    	t=t.concat(tmp.split("__")[tmp.split("__").length-1] + "." + tmp2.split("__")[Math.max(tmp2.split("__").length-2,0)] + " ");
+		    }
+		    else {
+			t=t.concat(str+" ");
+		    }
+		}
+	    }
+	    else if (p.getName().contains("Authenticity")){
+	    }
+	    s=s.concat(t+"\n");
 	    i++;
 	}
 	pragma.setValue(s);

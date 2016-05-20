@@ -637,11 +637,14 @@ public class GTURTLEModeling {
 	return generateProVerifFromAVATAR(_path, _stateReachability, _typed, "1");
     }
     public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed, String loopLimit) {
-	if (tmap!=null){
+	if (avatarspec !=null){
+	     //use avspec
+	}
+	else if (tmap!=null){
 	    t2a = new TML2Avatar(tmap);
-	/*    TML2AvatarDP tml2avatardp = new TML2AvatarDP(tmap);
+	    TML2AvatarDP tml2avatardp = new TML2AvatarDP(tmap);
 	    tml2avatardp.adp = mgui.getFirstAvatarDesignPanelFound();
-	    tml2avatardp.translate(); */
+	    tml2avatardp.translate(); 
 	    avatarspec = t2a.generateAvatarSpec(loopLimit);
 	}
 	else if (tmlm!=null){
