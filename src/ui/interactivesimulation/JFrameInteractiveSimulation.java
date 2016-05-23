@@ -72,6 +72,8 @@ import javax.xml.parsers.*;
 
 public  class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener, ChangeListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 
+    protected static final int NB_OF_TRANSACTIONS = 10;
+
     protected static final String SIMULATION_HEADER = "siminfo";
     protected static final String SIMULATION_GLOBAL = "global";
     protected static final String SIMULATION_TASK = "task";
@@ -123,7 +125,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
 
     // Commands
-    JPanel main, mainTop, commands, save, state, infos, outputs, cpuPanel, variablePanel, transactionPanel; // from MGUI
+    JPanel main, mainTop, commands, save, state, infos, outputs, cpuPanel, variablePanel;
+    protected JPanelTransactions transactionPanel;
     JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo;
     JTabbedPane commandTab, infoTab;
     protected JTextField paramMainCommand;
@@ -145,9 +148,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     private JScrollPane jspTaskVariableInfo;
 
     // Last transactions elements
-    TransactionTableModel ttm;
-    JButton updateTransactionInformationButton;
-    private JScrollPane jspTransactionInfo;
+    //private TransactionTableModel ttm;
+    //JButton updateTransactionInformationButton;
+    //private JScrollPane jspTransactionInfo;
     private Vector<SimulationTransaction> trans;
 
     // Breakpoints
@@ -806,10 +809,10 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         variablePanel.add(updateTaskVariableInformationButton, BorderLayout.SOUTH);
 
         // Transactions
-        transactionPanel = new JPanel();
-        transactionPanel.setLayout(new BorderLayout());
+        transactionPanel = new JPanelTransactions(this, NB_OF_TRANSACTIONS);
+        //transactionPanel.setLayout(new BorderLayout());
         infoTab.addTab("Transactions", null, transactionPanel, "Recent transactions");
-        ttm = new TransactionTableModel(this);
+        /*ttm = new TransactionTableModel(this);
         sorterPI = new TableSorter(ttm);
         jtablePI = new JTable(sorterPI);
         sorterPI.setTableHeader(jtablePI.getTableHeader());
@@ -825,7 +828,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         jspTransactionInfo.setPreferredSize(new Dimension(500, 300));
         transactionPanel.add(jspTransactionInfo, BorderLayout.NORTH);
         updateTransactionInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS]);
-        transactionPanel.add(updateTransactionInformationButton, BorderLayout.SOUTH);
+        transactionPanel.add(updateTransactionInformationButton, BorderLayout.SOUTH);*/
 
         // CPUs
         cpuPanel = new JPanel();
@@ -1578,7 +1581,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
                             st.deviceName = elt.getAttribute("devicename");
                             String commandT = elt.getAttribute("command");
-                            //TraceManager.addDev("command found: " + commandT);
+                            TraceManager.addDev("command found: " + commandT);
                             if (commandT != null) {
                                 int index = commandT.indexOf(": ");
                                 if (index == -1){
@@ -1694,7 +1697,10 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                     trans = new Vector<SimulationTransaction>();
                 }
                 //TraceManager.addDev("Transinfo -> " + trans.size());
-                ttm.setData(trans);
+		if (transactionPanel != null) {
+		    transactionPanel.setData(trans);
+		}
+                //ttm.setData(trans);
             }
         } catch (Exception e) {
             TraceManager.addError("Exception in xml parsing " + e.getMessage() + " node= " + node1);
@@ -2133,7 +2139,11 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         }
 
         trans = null;
-        sendCommand("lt 10");
+	int nb = NB_OF_TRANSACTIONS;
+	if (transactionPanel != null) {
+	    nb = transactionPanel.getNbOfTransactions();
+	}
+        sendCommand("lt " + nb);
     }
 
     private void updateTaskCommands() {
