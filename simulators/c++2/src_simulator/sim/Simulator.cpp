@@ -929,19 +929,26 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
   }
   case 4:{//Print information about simulation element x
     //bool aFailure=false;
-    std::cout << "Print information about simulation element x." << std::endl;
+    //std::cout << "Print information about simulation element x." << std::endl;
     aInpStream >> aParam1;
     aInpStream >> aStrParam;
+    //std::cout << "Print information about simulation element: " << aStrParam << std::endl;
     anErrorCode=0;
     switch (aParam1){
     case 0: {//CPU
       TraceableDevice* aDevice = dynamic_cast<TraceableDevice*>(_simComp->getCPUByName(aStrParam));
-      if (aDevice!=0) aDevice->streamStateXML(anEntityMsg); else anErrorCode=2;
+      if (aDevice!=0) {
+        std::cout << "Print information about CPU: " << _simComp->getCPUByName(aStrParam) << std::endl;
+        aDevice->streamStateXML(anEntityMsg);
+      } else anErrorCode=2;
       break;
     }
     case 1: {//Bus
       TraceableDevice* aDevice = dynamic_cast<TraceableDevice*>(_simComp->getBusByName(aStrParam));
-      if (aDevice!=0) aDevice->streamStateXML(anEntityMsg); else anErrorCode=2;
+      if (aDevice!=0) {
+        std::cout << "Print information about bus: " << _simComp->getBusByName(aStrParam) << std::endl;
+        aDevice->streamStateXML(anEntityMsg);
+      } else anErrorCode=2;
       break;
     }
     case 2: //Mem
@@ -951,14 +958,18 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     case 4:{ //Channel
       TMLChannel* aDevice = _simComp->getChannelByName(aStrParam);
       if (aDevice!=0){
-        std::cout << "get Channel info" << std::endl;
+        std::cout << "Print information about channel: " <<  _simComp->getChannelByName(aStrParam) << std::endl;
+        //std::cout << "get Channel info" << std::endl;
         aDevice->streamStateXML(anEntityMsg);
-      }else anErrorCode=2;
+      } else anErrorCode=2;
       break;
     }
     case 5: {//Task
       TraceableDevice* aDevice = dynamic_cast<TraceableDevice*>(_simComp->getTaskByName(aStrParam));
-      if (aDevice!=0) aDevice->streamStateXML(anEntityMsg); else anErrorCode=2;
+      if (aDevice!=0) {
+        std::cout << "Print information about Task: " <<  _simComp->getTaskByName(aStrParam) << std::endl;
+        aDevice->streamStateXML(anEntityMsg);
+      } else anErrorCode=2;
       break;
     }
     default:anErrorCode=3;
@@ -977,7 +988,7 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
       break;
     }
-    std::cout << "End Print information about simulation element x." << std::endl;
+    //std::cout << "End Print information about simulation element" << aStrParam << std::endl;
     break;
   }
   case 5:{//Set variable x to value y
