@@ -1594,6 +1594,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                             }
                             //TraceManager.addDev("Command handled");
                             st.startTime = elt.getAttribute("starttime");
+			    st.endTime = elt.getAttribute("endtime");
                             st.length = elt.getAttribute("length");
                             st.virtualLength = elt.getAttribute("virtuallength");
                             st.channelName = elt.getAttribute("ch");

@@ -73,7 +73,7 @@ public class TransactionTableModel extends AbstractTableModel {
     }
 
     public int getColumnCount() {
-        return 5;
+        return 7;
     }
 
     public synchronized Object getValueAt(int row, int column) {
@@ -96,7 +96,11 @@ public class TransactionTableModel extends AbstractTableModel {
             return st.command;
         case 3:
             return st.startTime;
-        case 4:
+	case 4:
+            return st.endTime;
+	case 5:
+            return st.length;
+        case 6:
             return st.channelName;
         }
         return "unknown";		
@@ -112,7 +116,11 @@ public class TransactionTableModel extends AbstractTableModel {
             return "Command";
         case 3:
             return "Start";
-        case 4:
+	case 4:
+            return "End";
+	case 5:
+            return "Length"; 
+        case 6:
             return "Channel";
         }
         return "unknown";

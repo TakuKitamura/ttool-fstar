@@ -62,6 +62,7 @@ public class SimulationTransaction  {
     public String taskName; 
     public String command;
     public String startTime;
+    public String endTime;
     public String length; /* Used for identifiying asynchronous messages */
     public String virtualLength;
     public String channelName;

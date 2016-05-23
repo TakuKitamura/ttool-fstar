@@ -111,6 +111,8 @@ public  class JPanelTransactions extends JPanel  {
         ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(150);
         ((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
         ((jtablePI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
+	((jtablePI.getColumnModel()).getColumn(5)).setPreferredWidth(100);
+	((jtablePI.getColumnModel()).getColumn(6)).setPreferredWidth(100);
         jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jspTransactionInfo = new JScrollPane(jtablePI);
         jspTransactionInfo.setWheelScrollingEnabled(true);
