@@ -215,15 +215,18 @@ void Simulator::schedule2TXT(std::string& iTraceFileName) const{
   std::cout << "The text output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
 
-void Simulator::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const{
+int Simulator::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const{
+  int total = 0;
   //glob << TAG_TRANSo << "Transaction" << TAG_TRANSc << std::endl;
   for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
-    (*i)->allTrans2XML(glob, maxNbOfTrans);
+    total += (*i)->allTrans2XML(glob, maxNbOfTrans);
   }
 
   for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
-    (*j)->allTrans2XML(glob, maxNbOfTrans);
+    total += (*j)->allTrans2XML(glob, maxNbOfTrans);
   }
+
+  return total;
 }
 
 
@@ -617,6 +620,7 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
   //std::cout << "Not crashed. II\n";
   std::ostringstream aGlobMsg, anEntityMsg, anAckMsg;
   std::string aStrParam;
+  int returnedNbOfTransactions = 0;
   //bool aSimTerminated=false;
   //std::cout << "Not crashed. III\n";
   //std::cout << "Not crashed. I: " << iCmd << std::endl;
@@ -1224,11 +1228,12 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     aInpStream >> aParam2;
     std::cout << "Get list of at most " << aParam2 << " transactions per CPU and Bus." << std::endl;
     //aGlobMsg << TAG_MSGo << "Breakpoints are disabled." << TAG_MSGc << std::endl;
-    allTrans2XML(aGlobMsg, aParam2);
+    returnedNbOfTransactions = allTrans2XML(anEntityMsg, aParam2);
+    anEntityMsg << TAG_TRANSACTION_NBo << "nb=\"" << returnedNbOfTransactions << "\"" << TAG_TRANSACTION_NBc <<  std::endl;
     std::cout << "End list of transactions." << std::endl;
     break;
   default:
-    aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
+    anEntityMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
     anErrorCode=3;
 
   }

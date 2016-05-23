@@ -115,7 +115,7 @@ public:
 	/**
       	\param glob refers to the output stream
     	*/
-	void allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
+	int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
 	
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();

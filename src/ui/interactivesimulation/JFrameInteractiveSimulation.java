@@ -78,6 +78,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     protected static final String SIMULATION_CPU = "cpu";
     protected static final String SIMULATION_BUS = "bus";
     protected static final String SIMULATION_TRANS = "transinfo";
+    protected static final String SIMULATION_TRANS_NB = "transnb";
     protected static final String SIMULATION_COMMAND = "cmd";
 
     private static String buttonStartS = "Start simulator";
@@ -1312,6 +1313,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         String busid;
         String state;
         String usedEnergy;
+        boolean transInfo = false;
 
         int k;
 
@@ -1399,54 +1401,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                             }
                         }
 
-                        nl = elt.getElementsByTagName(SIMULATION_TRANS);
-                        if (nl.getLength() == 0) {
-                            //updateTableOfTransactions(0);
-			    //ttm.fireTableStructureChanged();
-                        } else {
-                            for(int kk=0; kk<nl.getLength(); kk++) {
-                                node0 = nl.item(kk);
-                                elt0 = (Element)node0;
 
-                                if (elt0 != null) {
-                                    //TraceManager.addDev("transinfo found: " + elt0);
-                                    SimulationTransaction st = new SimulationTransaction();
-                                    st.nodeType = elt0.getAttribute("deviceid");
-
-                                    st.deviceName = elt0.getAttribute("devicename");
-                                    String commandT = elt0.getAttribute("command");
-                                    //TraceManager.addDev("command found: " + commandT);
-                                    if (commandT != null) {
-                                        int index = commandT.indexOf(": ");
-                                        if (index == -1){
-                                            st.taskName = "Unknown";
-                                            st.command = commandT;
-                                        } else {
-                                            st.taskName = commandT.substring(0, index).trim();
-                                            st.command = commandT.substring(index+1, commandT.length()).trim();
-                                        }
-                                    }
-                                    //TraceManager.addDev("Command handled");
-                                    st.startTime = elt0.getAttribute("starttime");
-                                    st.length = elt0.getAttribute("length");
-                                    st.virtualLength = elt0.getAttribute("virtuallength");
-                                    st.channelName = elt0.getAttribute("ch");
-
-                                    if (trans == null) {
-                                        trans = new Vector<SimulationTransaction>();
-                                    }
-
-                                    trans.add(st);
-                                    //updateTableOfTransactions(trans.size()-1);
-                                    //TraceManager.addDev("Nb of trans:" + trans.size());
-                                }
-				//ttm.fireTableStructureChanged();
-				    //updateTableOfTransactions(trans.size()-1);
-                            }
-			    TraceManager.addDev("Transactions updated");
-			    ttm.setData(trans);
-			    
-                        }
 
 
                     }
@@ -1566,6 +1521,104 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
                         //System.out.println("toto1");
 
+
+                        /*nl = elt.getElementsByTagName(SIMULATION_TRANS);
+                          if (nl.getLength() == 0) {
+                          //updateTableOfTransactions(0);
+                          //ttm.fireTableStructureChanged();
+                          } else {
+                          System.out.println("toto1.1");
+                          for(int kk=0; kk<nl.getLength(); kk++) {
+                          node0 = nl.item(kk);
+                          elt0 = (Element)node0;
+
+
+                          if (elt0 != null) {
+                          TraceManager.addDev("transinfo found: " + elt0);
+                          SimulationTransaction st = new SimulationTransaction();
+                          st.nodeType = elt0.getAttribute("deviceid");
+
+                          st.deviceName = elt0.getAttribute("devicename");
+                          String commandT = elt0.getAttribute("command");
+                          //TraceManager.addDev("command found: " + commandT);
+                          if (commandT != null) {
+                          int index = commandT.indexOf(": ");
+                          if (index == -1){
+                          st.taskName = "Unknown";
+                          st.command = commandT;
+                          } else {
+                          st.taskName = commandT.substring(0, index).trim();
+                          st.command = commandT.substring(index+1, commandT.length()).trim();
+                          }
+                          }
+                          //TraceManager.addDev("Command handled");
+                          st.startTime = elt0.getAttribute("starttime");
+                          st.length = elt0.getAttribute("length");
+                          st.virtualLength = elt0.getAttribute("virtuallength");
+                          st.channelName = elt0.getAttribute("ch");
+
+                          if (trans == null) {
+                          trans = new Vector<SimulationTransaction>();
+                          }
+
+                          trans.add(st);
+                          //updateTableOfTransactions(trans.size()-1);
+                          //TraceManager.addDev("Nb of trans:" + trans.size());
+                          }
+                          //ttm.fireTableStructureChanged();
+                          //updateTableOfTransactions(trans.size()-1);
+                          }
+                          TraceManager.addDev("Transactions updated");
+                          //ttm.setData(trans);
+
+                          }*/
+                        if (elt.getTagName().compareTo(SIMULATION_TRANS) == 0) {
+                            SimulationTransaction st = new SimulationTransaction();
+                            st.nodeType = elt.getAttribute("deviceid");
+
+                            st.deviceName = elt.getAttribute("devicename");
+                            String commandT = elt.getAttribute("command");
+                            //TraceManager.addDev("command found: " + commandT);
+                            if (commandT != null) {
+                                int index = commandT.indexOf(": ");
+                                if (index == -1){
+                                    st.taskName = "Unknown";
+                                    st.command = commandT;
+                                } else {
+                                    st.taskName = commandT.substring(0, index).trim();
+                                    st.command = commandT.substring(index+1, commandT.length()).trim();
+                                }
+                            }
+                            //TraceManager.addDev("Command handled");
+                            st.startTime = elt.getAttribute("starttime");
+                            st.length = elt.getAttribute("length");
+                            st.virtualLength = elt.getAttribute("virtuallength");
+                            st.channelName = elt.getAttribute("ch");
+
+                            if (trans == null) {
+                                trans = new Vector<SimulationTransaction>();
+                            }
+
+                            trans.add(st);
+                            transInfo = true;
+                        }
+
+
+                        //System.out.println("toto2");
+                        if (elt.getTagName().compareTo(SIMULATION_TRANS_NB) == 0) {
+                            transInfo = true;
+                            //System.out.println("toto2.1");
+                            name = elt.getAttribute("nb");
+                            try {
+                                int nb = Integer.decode(name).intValue();
+                                if (nb < 1) {
+                                    trans = new Vector<SimulationTransaction>();
+                                }
+                            } catch (Exception e) {
+                            }
+                        }
+
+
                         if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
                             id = null;
                             name = null;
@@ -1633,13 +1686,15 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                         }
 
                         //TraceManager.addDev("toto3 " + elt.getTagName());
-
-
-
-
-
                     }
                 }
+            }
+            if (transInfo) {
+                if (trans == null) {
+                    trans = new Vector<SimulationTransaction>();
+                }
+                //TraceManager.addDev("Transinfo -> " + trans.size());
+                ttm.setData(trans);
             }
         } catch (Exception e) {
             TraceManager.addError("Exception in xml parsing " + e.getMessage() + " node= " + node1);
@@ -2367,8 +2422,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     }
 
     /*private void updateTableOfTransactions(int index) {
-        ttm.fireTableRowUpdated(index);
-	}*/
+      ttm.fireTableRowUpdated(index);
+      }*/
 
 
     private void updateBusState(String _id, String _utilization) {

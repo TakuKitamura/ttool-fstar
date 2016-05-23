@@ -192,6 +192,8 @@ using std::max;
 #define TAG_CONTDELc "</contdel>"
 #define TAG_TRANSo "<transinfo "
 #define TAG_TRANSc " />"
+#define TAG_TRANSACTION_NBo "<transnb "
+#define TAG_TRANSACTION_NBc " />"
 
 #define TAG_BUSo "<bus"
 #define TAG_BUSc "</bus>"

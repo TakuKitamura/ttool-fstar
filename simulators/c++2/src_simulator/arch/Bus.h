@@ -106,7 +106,7 @@ public:
 	/**
       	\param glob refers to the output stream
     	*/
-	void allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
+	int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
 
 	/**
       	\param myfile Reference to the ofstream object representing the output file

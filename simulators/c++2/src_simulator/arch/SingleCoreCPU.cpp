@@ -401,19 +401,22 @@ void SingleCoreCPU::schedule2TXT(std::ofstream& myfile) const{
 }
 
 
-void SingleCoreCPU::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const {
+int SingleCoreCPU::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const {
   int size = _transactList.size();
   int begining = size - maxNbOfTrans;
   if (begining <0) {
     begining = 0;
   }
   int cpt =0;
+  int total = 0;
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
     if (cpt >= begining) {
       (*i)->toXML(glob, 1, _name);
+      total ++;
     }
     cpt ++;
   }
+  return total;
 }
 
 //TMLTime SingleCoreCPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){

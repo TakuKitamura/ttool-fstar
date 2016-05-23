@@ -91,7 +91,7 @@ public:
 	/**
       	\param glob references the output stream object 
     	*/
-	virtual void allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const =0;
+	virtual int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const =0;
 	
 	virtual std::string toString() const =0;
 	virtual std::istream& readObject(std::istream &is){
