@@ -873,7 +873,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	g.drawString(transaction, x, y+100);
 	int i=0;
 	for (SimulationTransaction t:transactions){
-	    g.drawString(t.taskName + " "+t.command, x, y+100+10*i);
+	  //  g.drawString(t.taskName + " "+t.command, x, y+100+10*i);
 	    i++;
 	}
     }
