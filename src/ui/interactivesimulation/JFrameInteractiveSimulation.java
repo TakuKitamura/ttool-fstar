@@ -1283,6 +1283,14 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         return true;
 
     }
+    protected void addTransactionToNode(SimulationTransaction tran){
+	String nodename = tran.deviceName;
+	for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
+            if ((node.getName()+"_0").equals(nodename)){
+                mgui.addTransaction(node.getID(), tran);
+            }
+	}
+    }
 
     protected boolean loadConfiguration(Node node1) {
         NodeList diagramNl = node1.getChildNodes();
@@ -1604,6 +1612,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                             }
 
                             trans.add(st);
+			    addTransactionToNode(st);
                             transInfo = true;
                         }
 

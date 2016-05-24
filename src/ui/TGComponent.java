@@ -66,6 +66,7 @@ import ui.tmlcd.*;
 import ui.tmlcompd.*;
 import ui.tmldd.*;
 import ui.tree.*;
+import ui.interactivesimulation.*;
 import ui.avatarbd.AvatarBDPragma;
 
 import tmltranslator.*;
@@ -149,6 +150,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
     protected boolean userResizable;
     protected boolean hidden;
 
+    //Associated transactions
+    public String transaction="";
+    public ArrayList<SimulationTransaction> transactions;
+
     protected String value; //applies if editable
     protected String name = "TGComponent";
 
@@ -204,7 +209,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
         id = ID;
         ID ++;
-
         //System.out.println("creation Id:" + id);
     }
 
@@ -835,7 +839,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
                         }
                     }
                 }
-                g.drawString(s1, x - sep - wb -wh + 2, y + 4 + ((height) / 2));
+                g.drawString("Transactions " +s1, x - sep - wb -wh + 2, y + 4 + ((height) / 2));
 
             }
         }
@@ -863,8 +867,16 @@ public abstract class TGComponent implements CDElement, GenericTree {
             //g.drawLine(x+width+sizeOval, y+(sizeRect/2)+20, x+width+sizeOval+(sizeOval), y+(sizeRect/2)+20);
             //g.drawString("" + (int)(li.energy) + " pW", x+width+sizeOval+(sizeOval) + 1, y+(sizeOval/2) + 20);
         }
+	//Draw transactions too??? 
     }
-
+    public void drawTransaction(Graphics g){
+	g.drawString(transaction, x, y+100);
+	int i=0;
+	for (SimulationTransaction t:transactions){
+	    g.drawString(t.taskName + " "+t.command, x, y+100+10*i);
+	    i++;
+	}
+    }
     public void draw(Graphics g) {
         RunningInfo ri;
         LoadInfo li;
@@ -987,6 +999,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
                         if (li != null) {
                             drawLoadDiploID(g, li);
                         }
+			ArrayList<SimulationTransaction> ts= tdp.getMGUI().getTransactions(getDIPLOID());
+			if (ts !=null){
+			    transaction = "";
+			    transactions=ts;
+			    drawTransaction(g);
+			}
+		    
                     }
                     /*if (this instanceof TMLArchiCPUNode) {
 

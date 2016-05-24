@@ -302,6 +302,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // Interaction with simulators
     private ArrayList<RunningInfo> runningIDs;
     private ArrayList<LoadInfo> loadIDs;
+    private Map<Integer, ArrayList<SimulationTransaction>> transactionMap = new HashMap<Integer, ArrayList<SimulationTransaction>>();
     private JFrameInteractiveSimulation jfis;
     private JFrameAvatarInteractiveSimulation jfais;
 
@@ -7597,6 +7598,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         return null;
     }
+    public synchronized ArrayList<SimulationTransaction> getTransactions(int id){
+        if (transactionMap == null) {
+            return null;
+        }
+
+        return transactionMap.get(id);
+    }
 
     public synchronized LoadInfo isLoadID(int id) {
         if (loadIDs == null) {
@@ -7680,7 +7688,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             tdp.repaint();
         }
     }
-
+    public synchronized void addTransaction(int _id, SimulationTransaction st){
+	if (transactionMap.containsKey(_id)){
+	    transactionMap.get(_id).add(st);
+	}
+	else {
+	    ArrayList<SimulationTransaction> ts = new ArrayList<SimulationTransaction>();
+	    ts.add(st);
+	    transactionMap.put(_id, ts);
+	}
+	TDiagramPanel tdp = getCurrentTDiagramPanel();
+        if (tdp != null) {
+            tdp.repaint();
+        }
+    }
     public synchronized void addLoadInfo(int _id, double _load, long _energy) {
         if (loadIDs == null) {
             loadIDs = new ArrayList<LoadInfo>();

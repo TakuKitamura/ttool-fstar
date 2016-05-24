@@ -115,7 +115,7 @@ public class TML2AvatarDP {
 	}
 	if (asme instanceof AvatarActionOnSignal){
 	    avatartranslator.AvatarSignal sig = ((AvatarActionOnSignal) asme).getSignal();
-	    if (sig.isOut()){
+	    if (sig.isIn()){
 		AvatarSMDReceiveSignal smdrs = new AvatarSMDReceiveSignal(x, y, x, x*2, y, y*2, false, null, smp);
 		smp.addComponent(smdrs, x, y, false, true);
 		String name=sig.getName().split("__")[sig.getName().split("__").length-1];
@@ -190,8 +190,10 @@ public class TML2AvatarDP {
 		AvatarTransition t = (AvatarTransition) asme;
 		tranDestMap.put(t, el);
 	    }
-	    addStates(el, diff*i, y+ydiff, smp, bl);
-	    i++;  
+	    if (!SMDMap.containsKey(el)){
+	    	addStates(el, diff*i, y+ydiff, smp, bl);
+	    	i++;  
+	    }
 	}
 	return;
     }
