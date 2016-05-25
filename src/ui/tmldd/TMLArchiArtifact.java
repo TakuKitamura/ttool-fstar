@@ -75,6 +75,8 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 
 		private ArchUnitMEC fatherArchUnitMECType = new CpuMEC();
     
+    public String status="";
+    public String lastTransaction="";
     public TMLArchiArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
@@ -114,7 +116,13 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         
         g.drawRect(x, y, width, height);
 		Color c = g.getColor();
+
+	if (status.equals("running")){
+		g.setColor(ColorManager.CURRENT_COMMAND_RUNNING);
+        }
+	else {
 		g.setColor(ColorManager.CPU_BOX_2);
+        }
 		g.fillRect(x+1, y+1, width-1, height-1);
         g.setColor(c);
 		

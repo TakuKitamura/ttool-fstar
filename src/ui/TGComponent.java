@@ -154,6 +154,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
     public String transaction="";
     public ArrayList<SimulationTransaction> transactions;
 
+    //If task
+    public String runningStatus="";
+
     protected String value; //applies if editable
     protected String name = "TGComponent";
 
@@ -752,9 +755,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
 
+
     public void drawRunningDiploID(Graphics g, RunningInfo ri) {
         //System.out.println("Drawing running DIPLO");
-        int wb = 30;
+        int wb = 50;
         int hb = 10;
         int wh = 15;
         int hh = 20;
@@ -810,7 +814,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
             int ww = g.getFontMetrics().stringWidth(s);
 
             if (ri.startTime != null) {
-                g.drawString(ri.startTime, x - sep - wb -wh, y + ((height-hb) / 2) - 1);
+                g.drawString("startTime:"+ri.startTime, x - sep - wb -wh, y + ((height-hb) / 2) - 1);
             }
             g.drawString(s, x - sep - wb -wh -ww, y + 4 + ((height) / 2));
             if (ri.finishTime != null) {
@@ -818,7 +822,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
                 if (s.compareTo("-1") == 0) {
                     s = "?";
                 }
-                g.drawString(s, x - sep - wb -wh, y + ((height+hb) / 2) + 10);
+                g.drawString("endTime:" +s, x - sep - wb -wh, y + ((height+hb) / 2) + 10);
             }
 
             // Transaction
@@ -839,7 +843,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
                         }
                     }
                 }
-                g.drawString("Transactions " +s1, x - sep - wb -wh + 2, y + 4 + ((height) / 2));
+               //g.drawString("Transactions " +s1, x - sep - wb -wh + 2, y + 4 + ((height) / 2));
 
             }
         }
@@ -870,12 +874,18 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	//Draw transactions too??? 
     }
     public void drawTransaction(Graphics g){
-	g.drawString(transaction, x, y+100);
-	int i=0;
-	for (SimulationTransaction t:transactions){
-	  //  g.drawString(t.taskName + " "+t.command, x, y+100+10*i);
-	    i++;
-	}
+	Color c=g.getColor();
+	Color textColor=Color.BLACK;
+	g.setColor(textColor);
+	g.drawString(transaction, x, y+height+10);
+	g.setColor(c);
+    }
+    public void drawStatus(Graphics g){
+	Color c=g.getColor();
+	Color textColor=Color.BLACK;
+	g.setColor(textColor);
+	g.drawString(runningStatus, x+width, y);
+	g.setColor(c);
     }
     public void draw(Graphics g) {
         RunningInfo ri;
@@ -1001,9 +1011,23 @@ public abstract class TGComponent implements CDElement, GenericTree {
                         }
 			ArrayList<SimulationTransaction> ts= tdp.getMGUI().getTransactions(getDIPLOID());
 			if (ts !=null){
-			    transaction = "";
+			    transaction = ts.get(0).taskName+ ":" +ts.get(0).command;
 			    transactions=ts;
 			    drawTransaction(g);
+			}
+			Map<String, String> statMap = tdp.getMGUI().getStatus(getDIPLOID());
+			for (String name:statMap.keySet()){
+			    String stat =statMap.get(name);
+			    for (int i=0; i< nbInternalTGComponent; i++){	
+				Object ob = getChild(i);
+				if (ob instanceof TMLArchiArtifact){
+				     TMLArchiArtifact art = (TMLArchiArtifact) ob;
+				     if (art.getValue().replaceAll(":", "_").equals(name)){
+					art.runningStatus=stat;
+			    		art.drawStatus(g);
+				     }
+				}
+			    }
 			}
 		    
                     }

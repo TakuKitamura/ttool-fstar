@@ -1291,7 +1291,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             }
 	}
     }
-
+    protected void addStatusToNode(String status, String task){
+            mgui.addStatus(task,status);
+    }
     protected boolean loadConfiguration(Node node1) {
         NodeList diagramNl = node1.getChildNodes();
         if (diagramNl == null) {
@@ -1493,6 +1495,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                             }
 
                             if ((id != null) && ((extime != null) || (state != null))) {
+				addStatusToNode(state, name);
                                 updateTaskCyclesAndState(id, extime, state);
                             }
 
@@ -2375,7 +2378,6 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         Integer i = getInteger(_id);
         Integer ex = getInteger(_extime);
         int row;
-
         String s = "";
         if (_state != null) {
             s += _state;
@@ -2385,7 +2387,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             s+= _extime;
         }
 
-
+	
 
         if ((i != null) && (ex != null)) {
             try {
@@ -2590,6 +2592,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESET_SIMU].getActionCommand())) {
             mgui.resetRunningID();
             mgui.resetLoadID();
+            mgui.resetTransactions();
+            mgui.resetStatus();
             sendCommand("reset");
             askForUpdate();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {

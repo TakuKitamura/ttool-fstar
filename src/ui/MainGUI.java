@@ -303,6 +303,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     private ArrayList<RunningInfo> runningIDs;
     private ArrayList<LoadInfo> loadIDs;
     private Map<Integer, ArrayList<SimulationTransaction>> transactionMap = new HashMap<Integer, ArrayList<SimulationTransaction>>();
+    private Map<String, String> statusMap = new HashMap<String, String>();
     private JFrameInteractiveSimulation jfis;
     private JFrameAvatarInteractiveSimulation jfais;
 
@@ -7605,7 +7606,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         return transactionMap.get(id);
     }
+    public synchronized Map<String,String> getStatus(int id){
+        if (statusMap == null) {
+            return null;
+        }
 
+        return statusMap;
+    }
     public synchronized LoadInfo isLoadID(int id) {
         if (loadIDs == null) {
             return null;
@@ -7637,6 +7644,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
         loadIDs = null;
         TDiagramPanel tdp = getCurrentTDiagramPanel();
+        if (tdp != null) {
+            tdp.repaint();
+        }
+    }
+    public synchronized void resetTransactions() {
+	transactionMap.clear();
+	TDiagramPanel tdp = getCurrentTDiagramPanel();
+        if (tdp != null) {
+            tdp.repaint();
+        }
+    }
+    public synchronized void resetStatus() {
+	statusMap.clear();
+	TDiagramPanel tdp = getCurrentTDiagramPanel();
         if (tdp != null) {
             tdp.repaint();
         }
@@ -7702,6 +7723,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             tdp.repaint();
         }
     }
+
+    public synchronized void addStatus(String task, String stat){
+	statusMap.put(task, stat);
+	TDiagramPanel tdp = getCurrentTDiagramPanel();
+        if (tdp != null) {
+            tdp.repaint();
+        }
+    }
+
     public synchronized void addLoadInfo(int _id, double _load, long _energy) {
         if (loadIDs == null) {
             loadIDs = new ArrayList<LoadInfo>();
