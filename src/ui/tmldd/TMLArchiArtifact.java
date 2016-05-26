@@ -117,13 +117,18 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         g.drawRect(x, y, width, height);
 		Color c = g.getColor();
 
-	if (status.equals("running")){
-		g.setColor(ColorManager.CURRENT_COMMAND_RUNNING);
-        }
-	else {
+	if (runningStatus.compareTo("running") == 0) {
+            g.setColor(ColorManager.CURRENT_COMMAND_RUNNING);
+        } else if (runningStatus.compareTo("runnable") == 0) {
+            g.setColor(ColorManager.CURRENT_COMMAND_RUNNABLE);
+        } else if (runningStatus.compareTo("suspended") == 0) {
+            g.setColor(ColorManager.CURRENT_COMMAND_SUSPENDED);
+        } else if (runningStatus.compareTo("terminated") == 0) {
+            g.setColor(ColorManager.CURRENT_COMMAND_TERMINATED);
+        } else {
 		g.setColor(ColorManager.CPU_BOX_2);
         }
-		g.fillRect(x+1, y+1, width-1, height-1);
+	g.fillRect(x+1, y+1, width-1, height-1);
         g.setColor(c);
 		
         //g.drawRoundRect(x, y, width, height, arc, arc);

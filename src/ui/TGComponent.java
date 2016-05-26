@@ -882,9 +882,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
     public void drawStatus(Graphics g){
 	Color c=g.getColor();
-	Color textColor=Color.BLACK;
-	g.setColor(textColor);
+	g.setColor(Color.BLACK);
 	g.drawString(runningStatus, x+width, y);
+	internalDrawing(g);
 	g.setColor(c);
     }
     public void draw(Graphics g) {
@@ -1025,6 +1025,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 				     if (art.getValue().replaceAll(":", "_").equals(name)){
 					art.runningStatus=stat;
 			    		art.drawStatus(g);
+					tdp.repaint();
 				     }
 				}
 			    }
@@ -1055,7 +1056,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
             drawAVATARID(g);
         } else if (tdp.TEPE_ID_ON) {
             drawTEPEID(g);
-        }
+        } else {
+	    runningStatus="";
+	}
 
         if (tdp.AVATAR_ANIMATE_ON) {
             //TraceManager.addDev("Avatar animate?");
