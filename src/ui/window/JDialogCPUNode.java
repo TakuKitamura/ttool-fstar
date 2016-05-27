@@ -55,6 +55,7 @@ import java.util.*;
 import tmltranslator.ctranslator.*;
 import ui.*;
 import ui.tmldd.*;
+import ui.interactivesimulation.*;
 
 import myutil.*;
 
@@ -62,7 +63,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 
     private boolean regularClose;
 
-    private JPanel panel2, panel4;
+    private JPanel panel2, panel4, panel5;
     private Frame frame;
     private TMLArchiCPUNode node;
 
@@ -82,14 +83,14 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
-
+    public ArrayList<SimulationTransaction> transactions;
     /** Creates new form  */
-    public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType) {
+    public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, ArrayList<SimulationTransaction> _transactions) {
         super(_frame, _title, true);
         frame = _frame;
         node = _node;
         MECType = _MECType;
-
+	transactions = _transactions;
         initComponents();
         myInitComponents();
         pack();
@@ -255,9 +256,19 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
         }
         MECTypeCB.addActionListener(this);
         panel4.add( MECTypeCB, c4);
+	if (transactions.size()!=0) {
+		panel5=new JPanel();
+		panel5.setPreferredSize(new Dimension(400,300));
+		MyFrame f =new MyFrame();
+		f.setPreferredSize(new Dimension(400,300));
+		panel5.add(f,c4);
+		tabbedPane.addTab("Simulation Transactions", panel5);
+	//Draw from transactions
+ 	}
 
         tabbedPane.addTab( "Simulation", panel2 );
         tabbedPane.addTab( "Code generation", panel4 );
+
         tabbedPane.setSelectedIndex(0);
 
         // main panel;
@@ -378,5 +389,58 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
         return MECType;
     }
 
+  class MyFrame extends JPanel {
+    public void paint(Graphics g) {
+	//Draw Axis
+	g.drawLine(70,0,70,300);
+	int i=0;
+	java.util.List<String> tasks=new ArrayList<String>();
+	Map<String, java.util.List<SimulationTransaction>> tasktrans = new HashMap<String, java.util.List<SimulationTransaction>>();
+	double incr=0.0;
+	int maxtime=0;
+	int mintime=999999999;
+	//Colors
+	//Exec- ColorManager.EXEC
+	//Channel - TML_PORT_CHANNEL
 
+    	for (SimulationTransaction st: transactions){
+	    if (!tasks.contains(st.taskName)){
+		tasks.add(st.taskName);
+		java.util.List<SimulationTransaction> tmp = new ArrayList<SimulationTransaction>();
+		tasktrans.put(st.taskName, tmp);
+	    }
+	    tasktrans.get(st.taskName).add(st);
+	    if (Integer.valueOf(st.startTime)<mintime){
+		mintime=Integer.valueOf(st.startTime);
+	    }
+	    if (Integer.valueOf(st.endTime)>maxtime){
+		maxtime=Integer.valueOf(st.endTime);
+	    }
+	}
+	incr=(maxtime - mintime)/300.0;
+	for (String s:tasks){
+	    i++;
+	    g.drawString(s.split("__")[1],0, i*50+50);
+	    for (SimulationTransaction tran: tasktrans.get(s)){
+		//Fill rectangle with color
+		if (tran.command.contains("Read") || tran.command.contains("Write")){
+		    g.setColor(ColorManager.TML_PORT_CHANNEL);
+		}
+		else {
+		    g.setColor(ColorManager.EXEC);
+		}
+		int start = (int) ((Integer.valueOf(tran.startTime)-mintime)/incr+70.0);
+		int end = (int) ((Integer.valueOf(tran.endTime)-mintime)/incr+70.0);
+		g.fillRect(start, i*50+40, end-start, 20);
+		g.setColor(Color.black);
+		g.drawRect(start, i*50+40, end-start, 20);
+		g.drawString(tran.command.split(" ")[0], start+10, i*50+55);
+	    }
+	}
+	g.drawString(Integer.toString(mintime), 70, 250);
+	g.drawString(Integer.toString(maxtime), 350, 250);
+     // g.setColor(Color.red);
+      //g.fillRect(10,10,100,100);
+    }
+  }
 }

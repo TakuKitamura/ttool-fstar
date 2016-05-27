@@ -55,6 +55,7 @@ import org.w3c.dom.*;
 import myutil.*;
 import ui.*;
 import ui.window.*;
+import ui.interactivesimulation.*;
 
 import tmltranslator.*;
 import tmltranslator.ctranslator.*;
@@ -188,7 +189,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         int tmp;
         String tmpName;
 
-        JDialogCPUNode dialog = new JDialogCPUNode(frame, "Setting CPU attributes", this, MECType );
+        JDialogCPUNode dialog = new JDialogCPUNode(frame, "Setting CPU attributes", this, MECType, transactions );
         dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed

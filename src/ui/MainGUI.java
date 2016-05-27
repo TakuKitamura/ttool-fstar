@@ -7711,7 +7711,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
     public synchronized void addTransaction(int _id, SimulationTransaction st){
 	if (transactionMap.containsKey(_id)){
-	    transactionMap.get(_id).add(st);
+	    if (!transactionMap.get(_id).contains(st)){
+	    	transactionMap.get(_id).add(st);	
+	    }
 	}
 	else {
 	    ArrayList<SimulationTransaction> ts = new ArrayList<SimulationTransaction>();
