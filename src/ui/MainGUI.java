@@ -4170,7 +4170,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void avatarModelChecker() {
 	TraceManager.addDev("Execute avatar model checker");
-	
     }
 
     public void generateProVerif() {
