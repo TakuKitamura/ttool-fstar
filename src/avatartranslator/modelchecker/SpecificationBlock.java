@@ -64,4 +64,7 @@ public class SpecificationBlock  {
 	return values.hashCode();
     }
 
+    public void setInit() {
+    }
+
 }

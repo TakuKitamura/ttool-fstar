@@ -680,6 +680,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             break;
         case MODEL_PROVERIF_OK:
             actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(true);
+	    
             break;
         case EDIT_PROVERIF_OK:
             actions[TGUIAction.ACT_VIEW_RTLOTOS].setEnabled(true);
@@ -701,6 +702,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(true);
             actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS].setEnabled(true);
             actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(true);
+	    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(true);
             break;
         case ATTACKTREE_SYNTAXCHECKING_OK:
             actions[TGUIAction.ACT_AVATAR_SIM].setEnabled(true);
@@ -741,6 +743,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
             actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
+	    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
             actions[TGUIAction.ACT_SIMULATION].setEnabled(false);
             actions[TGUIAction.ACT_VALIDATION].setEnabled(false);
@@ -765,6 +768,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_GEN_CCODE].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
             actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
+	    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
@@ -783,6 +787,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
             actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
+	    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
             actions[TGUIAction.ACT_SIMULATION].setEnabled(false);
             actions[TGUIAction.ACT_VALIDATION].setEnabled(false);
@@ -4161,6 +4166,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             jgen.setVisible(true);
             //dtree.toBeUpdated();
         }
+    }
+
+    public void avatarModelChecker() {
+	TraceManager.addDev("Execute avatar model checker");
+	
     }
 
     public void generateProVerif() {
@@ -8031,6 +8041,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             generateUPPAAL();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_PROVERIF].getActionCommand())) {
             generateProVerif();
+        } else if (command.equals(actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].getActionCommand())) {
+            avatarModelChecker();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_JAVA].getActionCommand())) {
             generateJava();
         } else if (command.equals(actions[TGUIAction.ACT_SIMU_JAVA].getActionCommand())) {

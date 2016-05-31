@@ -159,7 +159,7 @@ public class AvatarModelChecker extends Runnable {
         // For each block, get the list of possible transactions
 
         // For each realizable transition
-        //   Make it, rest clock of the involved blocks to 0, increase hmin/hmax of each block
+        //   Make it, reset clock of the involved blocks to 0, increase hmin/hmax of each block
         //   compute new state, and compare with existing ones
         //   If not a new state, create the link rom the previsou state to the new one
         //   Otherwise create the new state and its link, and add it to the pending list of states
