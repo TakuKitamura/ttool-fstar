@@ -1013,8 +1013,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
                         }
 			ArrayList<SimulationTransaction> ts= tdp.getMGUI().getTransactions(getDIPLOID());
 			if (ts !=null && ts.size()>0){
-			    transaction = ts.get(ts.size()-1).taskName+ ":" +ts.get(ts.size()-1).command;
-			    transactions=ts;
+			    transactions = new ArrayList<SimulationTransaction>(ts);
+			    transaction = transactions.get(transactions.size()-1).taskName+ ":" +transactions.get(transactions.size()-1).command;
 			    drawTransaction(g);
 			    for (int i=0; i< nbInternalTGComponent; i++){
 				Object ob = getChild(i);

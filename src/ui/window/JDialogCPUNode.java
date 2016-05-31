@@ -388,9 +388,44 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
     public ArchUnitMEC getMECType()     {
         return MECType;
     }
-
-  class MyFrame extends JPanel {
+  class Range {
+	int xi, yi, xf, yf;
+	public Range(int xa, int ya, int xb, int yb){
+	    xi=xa;
+	    yi=ya;
+	    xf=xb;
+	    yf=yb;
+	}
+	public boolean inRange(int x, int y){
+	    if (y>yi && y<yf){
+	    	if (x>xi && x<xf){
+		    return true;
+	    	}
+	    }
+	    return false;
+	}
+  }
+  class MyFrame extends JPanel implements MouseMotionListener{
+	Map<Range, String> toolMap = new HashMap<Range, String>();
+	public MyFrame(){
+	    addMouseMotionListener(this);
+	}
+	public void mouseDragged(MouseEvent e) {
+       //do something
+        }
+    	public void mouseMoved(MouseEvent e) {
+	    setToolTipText(null);
+	    for (Range r:toolMap.keySet()){
+		int x=e.getX();
+		int y=e.getY();
+		if (r.inRange(x,y)){
+		    setToolTipText(toolMap.get(r));
+		    break;
+		}
+	    }
+    	}
     public void paint(Graphics g) {
+	
 	//Draw Axis
 	g.drawLine(70,0,70,300);
 	int i=0;
@@ -402,14 +437,27 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	//Colors
 	//Exec- ColorManager.EXEC
 	//Channel - TML_PORT_CHANNEL
-
+	Collections.sort(transactions, new Comparator<SimulationTransaction>(){
+     	public int compare(SimulationTransaction o1, SimulationTransaction o2){
+	     if (o1.startTime.equals(o2.startTime)){
+		return 0;
+	     }
+        	return Integer.valueOf(o1.startTime) < Integer.valueOf(o2.startTime) ? -1 : 1;
+	     }
+	});
+	ArrayList<SimulationTransaction> tranList = new ArrayList<SimulationTransaction>(transactions);
     	for (SimulationTransaction st: transactions){
 	    if (!tasks.contains(st.taskName)){
 		tasks.add(st.taskName);
 		java.util.List<SimulationTransaction> tmp = new ArrayList<SimulationTransaction>();
 		tasktrans.put(st.taskName, tmp);
 	    }
-	    tasktrans.get(st.taskName).add(st);
+	    if (tasktrans.get(st.taskName).size()==0 || !tasktrans.get(st.taskName).get(tasktrans.get(st.taskName).size()-1).command.equals(st.command)){
+		tasktrans.get(st.taskName).add(st);
+	    }
+	    else {
+		tranList.remove(st);
+	    }
 	    if (Integer.valueOf(st.startTime)<mintime){
 		mintime=Integer.valueOf(st.startTime);
 	    }
@@ -417,28 +465,46 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		maxtime=Integer.valueOf(st.endTime);
 	    }
 	}
-	incr=(maxtime - mintime)/300.0;
+	String commandName="";
 	for (String s:tasks){
 	    i++;
 	    g.drawString(s.split("__")[1],0, i*50+50);
 	    for (SimulationTransaction tran: tasktrans.get(s)){
 		//Fill rectangle with color
-		if (tran.command.contains("Read") || tran.command.contains("Write")){
+		if (tran.command.contains("Read")) {
+		    commandName="RD";
 		    g.setColor(ColorManager.TML_PORT_CHANNEL);
 		}
+		else if (tran.command.contains("Write")){
+		    g.setColor(ColorManager.TML_PORT_CHANNEL);
+		    commandName="WR";
+		}
+		else if (tran.command.contains("Send")){
+		    g.setColor(ColorManager.TML_PORT_EVENT);
+		    commandName="SND";
+		}
+		else if (tran.command.contains("Wait")){
+		    g.setColor(ColorManager.TML_PORT_EVENT);
+		    commandName="WT";
+		}
+		else if (tran.command.contains("Request")){
+		    g.setColor(ColorManager.TML_PORT_REQUEST);
+		    commandName="REQ";
+		}
 		else {
+		    commandName="EX";
 		    g.setColor(ColorManager.EXEC);
 		}
-		int start = (int) ((Integer.valueOf(tran.startTime)-mintime)/incr+70.0);
-		int end = (int) ((Integer.valueOf(tran.endTime)-mintime)/incr+70.0);
-		g.fillRect(start, i*50+40, end-start, 20);
+		int start = 30*tranList.indexOf(tran)+70;
+		g.fillRect(start, i*50+40, 30, 20);
 		g.setColor(Color.black);
-		g.drawRect(start, i*50+40, end-start, 20);
-		g.drawString(tran.command.split(" ")[0], start+10, i*50+55);
+		g.drawRect(start, i*50+40, 30, 20);
+		g.drawString(commandName, start+2, i*50+55);
+		toolMap.put(new Range(start, i*50+40, start+30, i*50+40+20), tran.command+ " Time "+ tran.startTime + "-" + tran.endTime);
 	    }
 	}
-	g.drawString(Integer.toString(mintime), 70, 250);
-	g.drawString(Integer.toString(maxtime), 350, 250);
+	//g.drawString(Integer.toString(mintime), 70, 250);
+	//g.drawString(Integer.toString(maxtime), 350, 250);
      // g.setColor(Color.red);
       //g.fillRect(10,10,100,100);
     }
