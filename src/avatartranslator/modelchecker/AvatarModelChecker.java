@@ -70,6 +70,11 @@ public class AvatarModelChecker extends Runnable {
     }
 
     public void startModelChecking() {
+	// Remove timers, composite states, randoms
+	spec.removeTimers();
+	spec.removeCompositeStates();
+	spec.removeRandoms();
+	
         startModelChecking(DEFAULT_NB_OF_THREADS);
     }
 
@@ -93,7 +98,7 @@ public class AvatarModelChecker extends Runnable {
         // All done
     }
 
-    private void computeallStates() {
+    private void computeAllStates() {
         int i;
         Thread []ts = new Thread[nbOfThreads];
 

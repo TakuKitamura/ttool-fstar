@@ -49,54 +49,54 @@ import java.util.*;
 
 
 public class AvatarRandom extends AvatarStateMachineElement {
-	protected String variable;
-	protected String minValue;
-	protected String maxValue;
-	protected int functionId;
-	
+    protected String variable;
+    protected String minValue;
+    protected String maxValue;
+    protected int functionId;
+
     public AvatarRandom(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
-	
-	public String getVariable() {
-		return variable;
-	}
-	
-	public String getMinValue() {
-		return minValue;
-	}
-	
-	public String getMaxValue() {
-		return maxValue;
-	}
-	
-	public int getFunctionId() {
-		return functionId;
-	}
-	
-	public void setVariable(String _variable) {
-		variable = _variable;
-	}
-	
-	public void setValues(String _minValue, String _maxValue) {
-		minValue = _minValue;
-		maxValue = _maxValue;
-	}
-	
-	public void setFunctionId(int _functionId) {
-		functionId = _functionId;
-	}
-	
-	public AvatarStateMachineElement basicCloneMe() {
-		AvatarRandom ar = new AvatarRandom(getName(), getReferenceObject());
-		return ar;
-	}
-	
-	public String getNiceName() {
-		return "Random between " + minValue + " and " + maxValue + " stored in " + variable;
-	}
-	
-        public void translate (AvatarTranslator translator, Object arg) {
-            translator.translateRandom (this, arg);
-        }
+
+    public String getVariable() {
+        return variable;
+    }
+
+    public String getMinValue() {
+        return minValue;
+    }
+
+    public String getMaxValue() {
+        return maxValue;
+    }
+
+    public int getFunctionId() {
+        return functionId;
+    }
+
+    public void setVariable(String _variable) {
+        variable = _variable;
+    }
+
+    public void setValues(String _minValue, String _maxValue) {
+        minValue = _minValue;
+        maxValue = _maxValue;
+    }
+
+    public void setFunctionId(int _functionId) {
+        functionId = _functionId;
+    }
+
+    public AvatarStateMachineElement basicCloneMe() {
+        AvatarRandom ar = new AvatarRandom(getName(), getReferenceObject());
+        return ar;
+    }
+
+    public String getNiceName() {
+        return "Random between " + minValue + " and " + maxValue + " stored in " + variable;
+    }
+
+    public void translate (AvatarTranslator translator, Object arg) {
+        translator.translateRandom (this, arg);
+    }
 }

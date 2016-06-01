@@ -165,6 +165,46 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
 
+    public void removeRandoms(AvatarBlock _block) {
+	int id = 0;
+	ArrayList<AvatarStateMachineElement> toRemove = new ArrayList<AvatarStateMachineElement>();
+	AvatarStateMachineElement next;
+	AvatarStateMachineElement previous;
+	
+	for(AvatarStateMachineElement elt: elements) {
+	    if (elt instanceof AvatarRandom) {
+		AvatarRandom random = (AvatarRandom)elt;
+		previous = getPreviousElementOf(elt);
+		next = elt.getNext(0);
+		toRemove.add(elt);
+
+		// Creating elements
+		AvatarTransition at1 = new AvatarTransition(_block, "Transition1ForRandom" + elt.getName() + "__" + id, elt.getReferenceObject());
+		at1.addAction(random.getVariable() + "=" + random.getMinValue());
+		AvatarState randomState = new AvatarState("StateForRandom" + elt.getName() + "__" + id, elt.getReferenceObject());
+		AvatarTransition at2 = new AvatarTransition(_block, "Transition2ForRandom" + elt.getName() + "__" + id, elt.getReferenceObject());
+		at2.addGuard("[" + random.getVariable() + " < " + random.getMaxValue() + "]");
+		at2.addAction(random.getVariable() + "=" + random.getVariable() + 1);
+		
+		// Linking elements
+		if (previous != null) {
+		    previous.removeAllNexts();
+		    previous.addNext(at1);
+		}
+		at1.addNext(randomState);
+		randomState.addNext(at2);
+		randomState.addNext(next);
+		at2.addNext(randomState);
+		
+	    }
+	}
+
+	for(AvatarStateMachineElement trash: toRemove) {
+	    elements.remove(trash);
+	}
+    }
+    
+
     // Assumes no after clause on composite relation
     public void removeCompositeStates(AvatarBlock _block) {
         TraceManager.addDev("\n-------------- Remove composite states ---------------\n");

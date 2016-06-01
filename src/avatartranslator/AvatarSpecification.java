@@ -260,8 +260,15 @@ public class AvatarSpecification extends AvatarElement {
 
     public void removeCompositeStates() {
         for(AvatarBlock block: blocks) {
-	    TraceManager.addDev("- - - - - - - - Removing composite states of " + block);
+	    //TraceManager.addDev("- - - - - - - - Removing composite states of " + block);
             block.getStateMachine().removeCompositeStates(block);
+        }
+    }
+
+    public void removeRandoms() {
+	for(AvatarBlock block: blocks) {
+	    TraceManager.addDev("- - - - - - - - Removing randoms of " + block);
+            block.getStateMachine().removeRandoms(block);
         }
     }
 
