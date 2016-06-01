@@ -51,6 +51,16 @@ import myutil.*;
 
 
 public class AvatarTransition extends AvatarStateMachineElement {
+
+    // Type management: to be used by code generators
+    public static final int UNDEFINED = -1;
+    public static final int TYPE_ACTION = 0;
+    public static final int TYPE_SEND_SYNC = 1;
+    public static final int TYPE_RECV_SYNC = 2;
+
+    public int type = UNDEFINED;
+
+    
     private AvatarGuard guard;
     private String minDelay = "", maxDelay = "";
     private String minCompute = "", maxCompute = "";

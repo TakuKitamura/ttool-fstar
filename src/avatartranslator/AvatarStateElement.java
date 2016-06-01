@@ -36,9 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarStartState
- * Creation: 20/05/2010
- * @version 1.0 20/05/2010
+ * Class AvatarStateElement
+ * Creation: 01/06/2016
+ * @version 1.0 01/06/2016
  * @author Ludovic APVRILLE
  * @see
  */
@@ -48,22 +48,15 @@ package avatartranslator;
 import java.util.*;
 
 
-public class AvatarStartState extends AvatarStateElement {
+public abstract class AvatarStateElement extends AvatarStateMachineElement {
 
 
-    public AvatarStartState(String _name, Object _referenceObject) {
+    public AvatarStateElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
 
-    public AvatarStateMachineElement basicCloneMe() {
-        return new AvatarStartState(getName(), getReferenceObject());
+    public AvatarStateElement(String _name, Object _referenceObject, boolean _isCheckable) {
+        super(_name, _referenceObject, _isCheckable);
     }
 
-    public String getNiceName() {
-        return "Start state";
-    }
-
-    public void translate (AvatarTranslator translator, Object arg) {
-        translator.translateStartState (this, arg);
-    }
 }

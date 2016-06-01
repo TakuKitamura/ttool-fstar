@@ -52,7 +52,11 @@ import java.util.*;
 import myutil.*;
 
 public class AvatarStateMachine extends AvatarElement {
+    // to be used by code generator for fast access to states
+    public AvatarStateElement [] allStates;
 
+
+    
     protected LinkedList<AvatarStateMachineElement> elements;
     protected AvatarStartState startState;
 
@@ -74,6 +78,16 @@ public class AvatarStateMachine extends AvatarElement {
         return startState;
     }
 
+    public int getNbOfStatesElement() {
+	int cpt = 0;
+	for(AvatarStateMachineElement asme: elements) {
+            if (asme instanceof AvatarStateElement) {
+                cpt ++;
+            }
+        }
+	return cpt;
+    }
+
     public void addElement(AvatarStateMachineElement _element) {
         elements.add(_element);
         states = null;
@@ -93,6 +107,17 @@ public class AvatarStateMachine extends AvatarElement {
         for(AvatarStateMachineElement asme: elements) {
             if (asme instanceof AvatarState) {
                 states.add(asme);
+            }
+        }
+    }
+
+    public void makeAllStates() {
+	int cpt = 0;
+	allStates = new AvatarStateElement[getNbOfStatesElement()];
+        for(AvatarStateMachineElement asme: elements) {
+            if (asme instanceof AvatarStateElement) {
+                allStates[cpt] = (AvatarStateElement)asme;
+		cpt ++;
             }
         }
     }
@@ -243,6 +268,10 @@ public class AvatarStateMachine extends AvatarElement {
 		    }		    
                 }
             }
+        }
+
+	for(AvatarStateMachineElement add: toAdd) {
+            elements.add(add);
         }
     }
 

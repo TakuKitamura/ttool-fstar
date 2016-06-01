@@ -49,15 +49,18 @@ package avatartranslator.modelchecker;
 
 import java.util.*;
 
+import avatartranslator.*;
 import myutil.*;
 
-public class AvatarModelChecker extends Runnable {
+public class AvatarModelChecker implements Runnable {
     private final static int DEFAULT_NB_OF_THREADS = 4;
     private final static int SLEEP_DURATION = 500;
 
     private AvatarSpecification spec;
-    private int nbOfThreads = DEFAULT_NB_OF_THREAD;
+    private int nbOfThreads = DEFAULT_NB_OF_THREADS;
     private int nbOfCurrentComputations;
+    private boolean stoppedBeforeEnd;
+    
 
 
     // ReachabilityGraph
@@ -70,13 +73,31 @@ public class AvatarModelChecker extends Runnable {
     }
 
     public void startModelChecking() {
+	stoppedBeforeEnd = false;
+	
 	// Remove timers, composite states, randoms
+	TraceManager.addDev("Reworking Avatar specification");
 	spec.removeTimers();
 	spec.removeCompositeStates();
 	spec.removeRandoms();
-	
+	spec.makeFullStates();
+
+
+	TraceManager.addDev("Preparing Avatar specification");
+	prepareStates();
+	prepareTransitions();
+
+	TraceManager.addDev("Starting the model checking");
         startModelChecking(DEFAULT_NB_OF_THREADS);
+	TraceManager.addDev("Model checking done");
     }
+
+    public boolean hasBeenStoppedBeforeCompletion() {
+	return stoppedBeforeEnd;
+    }
+
+
+    
 
     public void startModelChecking(int _nbOfThreads) {
         nbOfThreads = _nbOfThreads;
@@ -90,12 +111,17 @@ public class AvatarModelChecker extends Runnable {
         SpecificationState initialState = new SpecificationState();
         initialState.setInit(spec);
 
-        states.add(initialState);
+        states.put(initialState.hashValue, initialState);
         pendingStates.add(initialState);
 
         computeAllStates();
 
         // All done
+    }
+
+    public void stopModelChecking() {
+	emptyPendingStates();
+	stoppedBeforeEnd = true;
     }
 
     private void computeAllStates() {
@@ -108,7 +134,8 @@ public class AvatarModelChecker extends Runnable {
         }
 
         for(i=0; i<nbOfThreads; i++) {
-            ts[i].join();
+	    try {
+		ts[i].join();} catch (Exception e){}
         }
     }
 
@@ -135,7 +162,7 @@ public class AvatarModelChecker extends Runnable {
     private synchronized SpecificationState pickupState() {
         int size = pendingStates.size();
         while (size == 0) {
-            if (nbOfComputations == 0) {
+            if (nbOfCurrentComputations == 0) {
                 return null;
             } else {
                 try {
@@ -146,7 +173,7 @@ public class AvatarModelChecker extends Runnable {
 
         SpecificationState s = pendingStates.get(0);
         pendingStates.remove(0);
-        nbOfComputations ++;
+        nbOfCurrentComputations ++;
         return s;
     }
 
@@ -156,7 +183,12 @@ public class AvatarModelChecker extends Runnable {
     }
 
     private synchronized int getNbOfComputations() {
-        return nbOfComputations;
+        return nbOfCurrentComputations;
+    }
+
+    private synchronized void emptyPendingStates() {
+	pendingStates.clear();
+	nbOfCurrentComputations = 0;
     }
 
 
@@ -172,5 +204,53 @@ public class AvatarModelChecker extends Runnable {
 
 
     }
+
+    private void prepareStates() {
+	// Put states in a list
+	for(AvatarBlock block: spec.getListOfBlocks()) {
+	    AvatarStateMachine asm = block.getStateMachine();
+	    if (asm != null) {
+		asm.makeAllStates();
+	    }
+	}
+    }
+
+    private void prepareTransitions() {
+	// Compute the id of each transition
+	// Assumes the allStates list has been computed in AvatarStateMachine
+	// Assumes that it is only after states that transitions have non empty
+	
+
+	for(AvatarBlock block: spec.getListOfBlocks()) {
+	    AvatarStateMachine asm = block.getStateMachine();
+	    if (asm != null) {
+		for(int i=0; i<asm.allStates.length; i++) {
+		    for(int j=0; j<asm.allStates[i].nbOfNexts(); j++) {
+			AvatarStateMachineElement elt = asm.allStates[i].getNext(j);
+			if (elt instanceof AvatarTransition) {
+			    AvatarTransition at = (AvatarTransition)elt;
+			    AvatarStateMachineElement next = at.getNext(0);
+			    if (next != null) {
+				if (next instanceof AvatarActionOnSignal) {
+				    AvatarSignal sig = ((AvatarActionOnSignal)next).getSignal();
+				    if (sig != null) {
+					if (sig.isIn()) {
+					    at.type = AvatarTransition.TYPE_RECV_SYNC;
+					} else {
+					    at.type = AvatarTransition.TYPE_SEND_SYNC;
+					}
+				    }
+				} else {
+				    at.type = AvatarTransition.TYPE_ACTION;
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	}
+    }
+
+    
 
 }

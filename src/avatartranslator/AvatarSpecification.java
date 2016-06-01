@@ -49,11 +49,13 @@ package avatartranslator;
 
 import java.util.*;
 
+
+import avatartranslator.modelchecker.*;
 import myutil.*;
 
 public class AvatarSpecification extends AvatarElement {
     public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}", "|", "&"};
-
+    
     private LinkedList<AvatarBlock> blocks;
     private LinkedList<AvatarRelation> relations;
 
@@ -262,6 +264,14 @@ public class AvatarSpecification extends AvatarElement {
         for(AvatarBlock block: blocks) {
 	    //TraceManager.addDev("- - - - - - - - Removing composite states of " + block);
             block.getStateMachine().removeCompositeStates(block);
+        }
+    }
+
+
+    public void makeFullStates() {
+	for(AvatarBlock block: blocks) {
+	    TraceManager.addDev("- - - - - - - - Making full states of " + block);
+            block.getStateMachine().makeFullStates(block);
         }
     }
 

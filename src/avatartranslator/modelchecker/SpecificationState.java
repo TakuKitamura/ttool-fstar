@@ -47,8 +47,11 @@
 
 package avatartranslator.modelchecker;
 
+
+
 import java.util.*;
 
+import avatartranslator.*;
 import myutil.*;
 
 public class SpecificationState  {
@@ -60,12 +63,17 @@ public class SpecificationState  {
     public SpecificationState() {
     }
 
+    // blocks must not be null
     public void computeHash() {
 	int[] hash = new int[blocks.length];
 	for(int i=0; i<hash.length; i++) {
 	    hash[i] = blocks[i].getHash();
 	}
 	hashValue = hash.hashCode(); 
+    }
+
+    public void setInit(AvatarSpecification _spec) {
+	computeHash();
     }
 
 }

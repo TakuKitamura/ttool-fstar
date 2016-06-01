@@ -50,9 +50,10 @@ import java.util.*;
 import myutil.*;
 
 
-public class AvatarState extends AvatarStateMachineElement {
+public class AvatarState extends AvatarStateElement {
     private String entryCode;
     private boolean hidden; // i.e, not present in the original state machine
+    public int stateID; // to be used by code generator to more efficiently keep track of states.
 
     public AvatarState(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
