@@ -76,12 +76,12 @@ public class AvatarStateMachine extends AvatarElement {
 
     public void addElement(AvatarStateMachineElement _element) {
         elements.add(_element);
-	states = null;
+        states = null;
     }
 
     public void removeElement(AvatarStateMachineElement _element) {
         elements.remove(_element);
-	states = null;
+        states = null;
     }
 
     public LinkedList<AvatarStateMachineElement> getListOfElements() {
@@ -89,42 +89,42 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
     private void makeStates() {
-	states = new LinkedList<AvatarStateMachineElement>();
-	for(AvatarStateMachineElement asme: elements) {
-	    if (asme instanceof AvatarState) {
-		states.add(asme);
-	    }
-	}
+        states = new LinkedList<AvatarStateMachineElement>();
+        for(AvatarStateMachineElement asme: elements) {
+            if (asme instanceof AvatarState) {
+                states.add(asme);
+            }
+        }
     }
 
     public int stateNb() {
-	if (states == null) {
-	    makeStates();
-	}
+        if (states == null) {
+            makeStates();
+        }
 
-	return states.size();
+        return states.size();
     }
 
     public int getNbOfASMGraphicalElements() {
-	int cpt = 0;
-	for(AvatarElement elt: elements) {
-	    if (elt.getReferenceObject() != null) {
-		cpt ++;
-	    }
-	}
-	return cpt;
+        int cpt = 0;
+        for(AvatarElement elt: elements) {
+            if (elt.getReferenceObject() != null) {
+                cpt ++;
+            }
+        }
+        return cpt;
     }
 
     public AvatarState getState(int index) {
-	if (states == null) {
-	    makeStates();
-	}
+        if (states == null) {
+            makeStates();
+        }
 
-	try {
-	    return (AvatarState)(states.get(index));
-	} catch (Exception e) {
-	}
-	return null;
+        try {
+            return (AvatarState)(states.get(index));
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     private int getSimplifiedElementsAux (HashMap<AvatarStateMachineElement, Integer> simplifiedElements, HashSet<AvatarStateMachineElement> visited, AvatarStateMachineElement root, int counter) {
@@ -165,45 +165,129 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
 
-    public void removeRandoms(AvatarBlock _block) {
-	int id = 0;
-	ArrayList<AvatarStateMachineElement> toRemove = new ArrayList<AvatarStateMachineElement>();
-	AvatarStateMachineElement next;
-	AvatarStateMachineElement previous;
-	
-	for(AvatarStateMachineElement elt: elements) {
-	    if (elt instanceof AvatarRandom) {
-		AvatarRandom random = (AvatarRandom)elt;
-		previous = getPreviousElementOf(elt);
-		next = elt.getNext(0);
-		toRemove.add(elt);
-
-		// Creating elements
-		AvatarTransition at1 = new AvatarTransition(_block, "Transition1ForRandom" + elt.getName() + "__" + id, elt.getReferenceObject());
-		at1.addAction(random.getVariable() + "=" + random.getMinValue());
-		AvatarState randomState = new AvatarState("StateForRandom" + elt.getName() + "__" + id, elt.getReferenceObject());
-		AvatarTransition at2 = new AvatarTransition(_block, "Transition2ForRandom" + elt.getName() + "__" + id, elt.getReferenceObject());
-		at2.addGuard("[" + random.getVariable() + " < " + random.getMaxValue() + "]");
-		at2.addAction(random.getVariable() + "=" + random.getVariable() + 1);
-		
-		// Linking elements
-		if (previous != null) {
-		    previous.removeAllNexts();
-		    previous.addNext(at1);
-		}
-		at1.addNext(randomState);
-		randomState.addNext(at2);
-		randomState.addNext(next);
-		at2.addNext(randomState);
-		
-	    }
-	}
-
-	for(AvatarStateMachineElement trash: toRemove) {
-	    elements.remove(trash);
-	}
+    // Add missing implicit states.
+    public void makeFullStates(AvatarBlock _block) {
+        addStatesToTransitionsBetweenTwoNonStates(_block);
+        addStatesToTransitionsWithActions(_block);
     }
-    
+
+
+    private void addStatesToTransitionsBetweenTwoNonStates(AvatarBlock _block) {
+        AvatarStateMachineElement next;
+        AvatarStateMachineElement previous;
+        ArrayList<AvatarStateMachineElement> toAdd = new ArrayList<AvatarStateMachineElement>();
+        int id = 0;
+
+        for(AvatarStateMachineElement elt: elements) {
+            if (elt instanceof AvatarTransition) {
+                AvatarTransition tr = (AvatarTransition)elt;
+                previous = getPreviousElementOf(elt);
+                next = elt.getNext(0);
+
+                // If the next and previous are non states
+                if ((previous != null) && (next != null)) {
+                    if ((!(previous instanceof AvatarState)) && (!(next instanceof AvatarState))) {
+                        // We create an intermediate state
+                        AvatarState state = new AvatarState("IntermediateState__" + id, elt.getReferenceObject());
+                        toAdd.add(state);
+                        AvatarTransition at1 = new AvatarTransition(_block, "TransitionForIntermediateState__" + id, elt.getReferenceObject());
+                        toAdd.add(at1);
+
+                        tr.removeAllNexts();
+                        tr.addNext(state);
+                        state.addNext(at1);
+                        at1.addNext(next);
+
+                        id ++;
+                    }
+                }
+
+            }
+        }
+
+        for(AvatarStateMachineElement add: toAdd) {
+            elements.add(add);
+        }
+
+    }
+
+    // Hanlding transitions with actions which have a non state
+    // after
+    private void addStatesToTransitionsWithActions(AvatarBlock _block) {
+        AvatarStateMachineElement next;
+        AvatarStateMachineElement previous;
+        ArrayList<AvatarStateMachineElement> toAdd = new ArrayList<AvatarStateMachineElement>();
+        int id = 0;
+        for(AvatarStateMachineElement elt: elements) {
+            if (elt instanceof AvatarTransition) {
+                AvatarTransition tr = (AvatarTransition)elt;
+
+                // tr with actions?
+                if (tr.getNbOfAction() > 0) {
+                    previous = getPreviousElementOf(elt);
+                    next = elt.getNext(0);
+
+		    if (!(next instanceof AvatarState)) {
+			// We create an intermediate state
+                        AvatarState state = new AvatarState("IntermediateState__" + id, elt.getReferenceObject());
+                        toAdd.add(state);
+                        AvatarTransition at1 = new AvatarTransition(_block, "TransitionForIntermediateState__" + id, elt.getReferenceObject());
+                        toAdd.add(at1);
+
+			tr.removeAllNexts();
+                        tr.addNext(state);
+                        state.addNext(at1);
+                        at1.addNext(next);
+
+                        id ++;
+		    }		    
+                }
+            }
+        }
+    }
+
+
+    public void removeRandoms(AvatarBlock _block) {
+        int id = 0;
+        ArrayList<AvatarStateMachineElement> toRemove = new ArrayList<AvatarStateMachineElement>();
+        AvatarStateMachineElement next;
+        AvatarStateMachineElement previous;
+
+        for(AvatarStateMachineElement elt: elements) {
+            if (elt instanceof AvatarRandom) {
+                AvatarRandom random = (AvatarRandom)elt;
+                previous = getPreviousElementOf(elt);
+                next = elt.getNext(0);
+                toRemove.add(elt);
+
+                // Creating elements
+                AvatarTransition at1 = new AvatarTransition(_block, "Transition1ForRandom" + elt.getName() + "__" + id, elt.getReferenceObject());
+                at1.addAction(random.getVariable() + "=" + random.getMinValue());
+                AvatarState randomState = new AvatarState("StateForRandom" + elt.getName() + "__" + id, elt.getReferenceObject());
+                AvatarTransition at2 = new AvatarTransition(_block, "Transition2ForRandom" + elt.getName() + "__" + id, elt.getReferenceObject());
+                at2.addGuard("[" + random.getVariable() + " < " + random.getMaxValue() + "]");
+                at2.addAction(random.getVariable() + "=" + random.getVariable() + 1);
+
+                // Linking elements
+                if (previous != null) {
+                    previous.removeAllNexts();
+                    previous.addNext(at1);
+                }
+                at1.addNext(randomState);
+                randomState.addNext(at2);
+                randomState.addNext(next);
+                at2.addNext(randomState);
+
+                id ++;
+
+            }
+        }
+
+        for(AvatarStateMachineElement trash: toRemove) {
+            elements.remove(trash);
+        }
+    }
+
 
     // Assumes no after clause on composite relation
     public void removeCompositeStates(AvatarBlock _block) {
@@ -937,7 +1021,7 @@ public class AvatarStateMachine extends AvatarElement {
                 if (previous.size() == 1) {
                     if (previous.get(0) instanceof AvatarTransition) {
                         AvatarTransition at = (AvatarTransition)(previous.get(0));
-			TraceManager.addDev("Timer value setting=" +  ast.getTimerValue());
+                        TraceManager.addDev("Timer value setting=" +  ast.getTimerValue());
                         at.addAction(timerAttributeName + " = " + ast.getTimerValue());
                     } else {
                         TraceManager.addError("The element before a set time is not a transition!");
@@ -1327,7 +1411,7 @@ public class AvatarStateMachine extends AvatarElement {
                         /* replace by the translated function call */
                         curAsme.removeNext (i);
                         curAsme.addNext (replaceBy);
-                        
+
                         /* new next element has been added at the end of the list so we need to fix i */
                         i--;
                     } else {
