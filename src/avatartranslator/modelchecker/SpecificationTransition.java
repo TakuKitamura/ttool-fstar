@@ -56,14 +56,37 @@ public class SpecificationTransition  {
     public int clockMin, clockMax;
     
     public AvatarBlock[] blocks;
+    public SpecificationBlock[] specBlocks;
     public int[] blocksInt;
 
     public AvatarTransition[] transitions;
-
-    public int type;
+    
     
     public SpecificationTransition() {
     }
+
+    public void init(int _nbOfElements, AvatarTransition _at, AvatarBlock _ab, SpecificationBlock _sb, int _blockIndex) {
+	transitions = new AvatarTransition[_nbOfElements];
+	transitions[0] = _at;
+	    
+	blocks = new AvatarBlock[_nbOfElements];
+	blocks[0] = _ab;
+
+	specBlocks = new SpecificationBlock[_nbOfElements];
+	specBlocks[0] = _sb;
+
+	blocksInt = new int[_nbOfElements];
+	blocksInt[0] = _blockIndex;	
+    }
+
+    public int getType() {
+	if (transitions == null) {
+	    return AvatarTransition.UNDEFINED;
+	}
+	return transitions[0].type;
+	
+    }
+
 
 
 }

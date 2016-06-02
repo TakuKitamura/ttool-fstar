@@ -209,7 +209,7 @@ public class AvatarModelChecker implements Runnable {
 
             for(AvatarStateMachineElement elt: ase.getNexts()) {
                 if (elt instanceof AvatarTransition) {
-                    handleAvatarTransition((AvatarTransition)elt, block, sb, transitions);
+                    handleAvatarTransition((AvatarTransition)elt, block, sb, cpt, transitions);
                 }
             }
 
@@ -228,7 +228,7 @@ public class AvatarModelChecker implements Runnable {
 
     }
 
-    private void handleAvatarTransition(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb,  ArrayList<SpecificationTransition> _transitionsToAdd) {
+    private void handleAvatarTransition(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb,  int _indexOfBlock, ArrayList<SpecificationTransition> _transitionsToAdd) {
         if (_at.type == AvatarTransition.UNDEFINED) {
             return;
         }
@@ -247,6 +247,11 @@ public class AvatarModelChecker implements Runnable {
         }
 
         SpecificationTransition st = new SpecificationTransition();
+	st.init(1, _at, _block, _sb, _indexOfBlock);
+	
+	// Must compute the clockmin and clockmax values
+	
+	
     }
 
 
