@@ -474,12 +474,6 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
 	    }
         }
 
-
-	/*if (!hasTimerAttribute) {
-	    // We must remove the timer variable
-	    value = new AvatarAttribute("__timerValue", AvatarType.INTEGER, this, getReferenceObject());
-	    addAttribute(value);
-	    }*/
     }
 
     public boolean hasTimerAttribute() {

@@ -60,7 +60,7 @@ public class AvatarModelChecker implements Runnable {
     private int nbOfThreads = DEFAULT_NB_OF_THREADS;
     private int nbOfCurrentComputations;
     private boolean stoppedBeforeEnd;
-    
+
 
 
     // ReachabilityGraph
@@ -73,31 +73,31 @@ public class AvatarModelChecker implements Runnable {
     }
 
     public void startModelChecking() {
-	stoppedBeforeEnd = false;
-	
-	// Remove timers, composite states, randoms
-	TraceManager.addDev("Reworking Avatar specification");
-	spec.removeTimers();
-	spec.removeCompositeStates();
-	spec.removeRandoms();
-	spec.makeFullStates();
+        stoppedBeforeEnd = false;
+
+        // Remove timers, composite states, randoms
+        TraceManager.addDev("Reworking Avatar specification");
+        spec.removeTimers();
+        spec.removeCompositeStates();
+        spec.removeRandoms();
+        spec.makeFullStates();
 
 
-	TraceManager.addDev("Preparing Avatar specification");
-	prepareStates();
-	prepareTransitions();
+        TraceManager.addDev("Preparing Avatar specification");
+        prepareStates();
+        prepareTransitions();
 
-	TraceManager.addDev("Starting the model checking");
+        TraceManager.addDev("Starting the model checking");
         startModelChecking(DEFAULT_NB_OF_THREADS);
-	TraceManager.addDev("Model checking done");
+        TraceManager.addDev("Model checking done");
     }
 
     public boolean hasBeenStoppedBeforeCompletion() {
-	return stoppedBeforeEnd;
+        return stoppedBeforeEnd;
     }
 
 
-    
+
 
     public void startModelChecking(int _nbOfThreads) {
         nbOfThreads = _nbOfThreads;
@@ -110,7 +110,7 @@ public class AvatarModelChecker implements Runnable {
         // Compute initial state
         SpecificationState initialState = new SpecificationState();
         initialState.setInit(spec);
-	TraceManager.addDev("initialState=" + initialState.toString());
+        TraceManager.addDev("initialState=" + initialState.toString());
 
         states.put(initialState.hashValue, initialState);
         pendingStates.add(initialState);
@@ -121,8 +121,8 @@ public class AvatarModelChecker implements Runnable {
     }
 
     public void stopModelChecking() {
-	emptyPendingStates();
-	stoppedBeforeEnd = true;
+        emptyPendingStates();
+        stoppedBeforeEnd = true;
     }
 
     private void computeAllStates() {
@@ -135,8 +135,8 @@ public class AvatarModelChecker implements Runnable {
         }
 
         for(i=0; i<nbOfThreads; i++) {
-	    try {
-		ts[i].join();} catch (Exception e){}
+            try {
+                ts[i].join();} catch (Exception e){}
         }
     }
 
@@ -188,13 +188,35 @@ public class AvatarModelChecker implements Runnable {
     }
 
     private synchronized void emptyPendingStates() {
-	pendingStates.clear();
-	nbOfCurrentComputations = 0;
+        pendingStates.clear();
+        nbOfCurrentComputations = 0;
     }
 
 
     private void computeAllStatesFrom(SpecificationState _ss) {
+        int cpt;
+
         // For each block, get the list of possible transactions
+        ArrayList<SpecificationTransition> transitions = new ArrayList<SpecificationTransition>();
+
+        // At first, do not merge synchronous transitions
+        // Simply get basics transitions
+        cpt = 0;
+        for(AvatarBlock block: spec.getListOfBlocks()) {
+            AvatarStateMachine asm = block.getStateMachine();
+            SpecificationBlock sb = _ss.blocks[cpt];
+            AvatarStateElement ase = asm.allStates[sb.values[SpecificationBlock.STATE_INDEX]];
+
+            for(AvatarStateMachineElement elt: ase.getNexts()) {
+                if (elt instanceof AvatarTransition) {
+                    handleAvatarTransition((AvatarTransition)elt, block, sb, transitions);
+                }
+            }
+
+            cpt ++;
+        }
+
+
 
         // For each realizable transition
         //   Make it, reset clock of the involved blocks to 0, increase hmin/hmax of each block
@@ -206,52 +228,110 @@ public class AvatarModelChecker implements Runnable {
 
     }
 
+    private void handleAvatarTransition(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb,  ArrayList<SpecificationTransition> _transitionsToAdd) {
+        if (_at.type == AvatarTransition.UNDEFINED) {
+            return;
+        }
+
+        // Must see whether the guard is ok or not
+        if (_at.isGuarded()) {
+            // Must evaluate the guard
+            String guard = _at.getGuard().toString ();
+            String s = Conversion.replaceAllString(guard, "[", "").trim();
+            s = Conversion.replaceAllString(s, "]", "").trim();
+            boolean guardOk = evaluateBoolExpression(s, _block, _sb);
+            TraceManager.addDev("guard ok=" + guardOk);
+            if (!guardOk) {
+                return;
+            }
+        }
+
+        SpecificationTransition st = new SpecificationTransition();
+    }
+
+
     private void prepareStates() {
-	// Put states in a list
-	for(AvatarBlock block: spec.getListOfBlocks()) {
-	    AvatarStateMachine asm = block.getStateMachine();
-	    if (asm != null) {
-		asm.makeAllStates();
-	    }
-	}
+        // Put states in a list
+        for(AvatarBlock block: spec.getListOfBlocks()) {
+            AvatarStateMachine asm = block.getStateMachine();
+            if (asm != null) {
+                asm.makeAllStates();
+            }
+        }
     }
 
     private void prepareTransitions() {
-	// Compute the id of each transition
-	// Assumes the allStates list has been computed in AvatarStateMachine
-	// Assumes that it is only after states that transitions have non empty
-	
+        // Compute the id of each transition
+        // Assumes the allStates list has been computed in AvatarStateMachine
+        // Assumes that it is only after states that transitions have non empty
 
-	for(AvatarBlock block: spec.getListOfBlocks()) {
-	    AvatarStateMachine asm = block.getStateMachine();
-	    if (asm != null) {
-		for(int i=0; i<asm.allStates.length; i++) {
-		    for(int j=0; j<asm.allStates[i].nbOfNexts(); j++) {
-			AvatarStateMachineElement elt = asm.allStates[i].getNext(j);
-			if (elt instanceof AvatarTransition) {
-			    AvatarTransition at = (AvatarTransition)elt;
-			    AvatarStateMachineElement next = at.getNext(0);
-			    if (next != null) {
-				if (next instanceof AvatarActionOnSignal) {
-				    AvatarSignal sig = ((AvatarActionOnSignal)next).getSignal();
-				    if (sig != null) {
-					if (sig.isIn()) {
-					    at.type = AvatarTransition.TYPE_RECV_SYNC;
-					} else {
-					    at.type = AvatarTransition.TYPE_SEND_SYNC;
-					}
-				    }
-				} else {
-				    at.type = AvatarTransition.TYPE_ACTION;
-				}
-			    }
-			}
-		    }
-		}
-	    }
-	}
+
+        for(AvatarBlock block: spec.getListOfBlocks()) {
+            AvatarStateMachine asm = block.getStateMachine();
+            if (asm != null) {
+                for(int i=0; i<asm.allStates.length; i++) {
+                    for(int j=0; j<asm.allStates[i].nbOfNexts(); j++) {
+                        AvatarStateMachineElement elt = asm.allStates[i].getNext(j);
+                        if (elt instanceof AvatarTransition) {
+                            AvatarTransition at = (AvatarTransition)elt;
+                            AvatarStateMachineElement next = at.getNext(0);
+                            if (next != null) {
+                                if (next instanceof AvatarActionOnSignal) {
+                                    AvatarSignal sig = ((AvatarActionOnSignal)next).getSignal();
+                                    if (sig != null) {
+                                        if (sig.isIn()) {
+                                            at.type = AvatarTransition.TYPE_RECV_SYNC;
+                                        } else {
+                                            at.type = AvatarTransition.TYPE_SEND_SYNC;
+                                        }
+                                    }
+                                } else {
+                                    at.type = AvatarTransition.TYPE_ACTION;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    
+
+
+    public boolean evaluateBoolExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb/*Vector<String> _attributeValues*/) {
+        String act = _expr;
+        int cpt = 0;
+        for(AvatarAttribute at: _block.getAttributes()) {
+            String val = "";
+            if (at.isInt()) {
+                val = ""+_sb.values[cpt+SpecificationBlock.ATTR_INDEX];
+                if (val.startsWith("-")) {
+                    val = "(0" + val + ")";
+                }
+            } else if (at.isBool()) {
+		if (_sb.values[cpt+SpecificationBlock.ATTR_INDEX] == 0) {
+		    val = "false";
+		} else {
+		    val = "true";
+		}
+	    }
+            act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, _block.getAttribute(cpt).getName(), val);
+            cpt ++;
+        }
+
+        BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
+
+        if (act.trim().startsWith("100")) {
+            TraceManager.addDev("Current block " + _block.getName());
+        }
+
+        boolean result = bee.getResultOf(act);
+        if (bee.getError() != null) {
+            TraceManager.addDev("Error: " + bee.getError());
+        }
+
+        //TraceManager.addDev("Result of " + _expr + " = " + result);
+        return result;
+    }
 
 }
