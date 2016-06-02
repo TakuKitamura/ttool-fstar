@@ -58,7 +58,7 @@ public class SpecificationState  {
 
     public SpecificationBlock [] blocks;
     public int hashValue;
-    public int id;
+    public boolean hashComputed;
 
     public SpecificationState() {
     }
@@ -69,11 +69,38 @@ public class SpecificationState  {
 	for(int i=0; i<hash.length; i++) {
 	    hash[i] = blocks[i].getHash();
 	}
-	hashValue = hash.hashCode(); 
+	hashValue = hash.hashCode();
+	hashComputed = true;
+    }
+
+    public int getHash() {
+	if (!hashComputed) {
+	    computeHash();
+	}
+	return hashValue;
     }
 
     public void setInit(AvatarSpecification _spec) {
+	int cpt = 0;
+	// Initialize blocks
+	// Blocks : h to 0, variables to their starting values, state to starting state.
+	blocks = new SpecificationBlock[_spec.getListOfBlocks().size()];
+	
+	for(AvatarBlock block: _spec.getListOfBlocks()) {
+	    blocks[cpt] = new SpecificationBlock();
+	    blocks[cpt].init(block);
+	    cpt ++;
+	}
+	
 	computeHash();
+    }
+
+    public String toString() {
+	StringBuffer sb = new StringBuffer("Hash: " + getHash());
+	for(int i=0; i<blocks.length; i++) {
+	    sb.append("\n  "+i + ": " + blocks[i].toString());
+	}
+	return sb.toString();
     }
 
 }

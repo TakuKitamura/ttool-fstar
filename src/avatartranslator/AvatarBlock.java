@@ -463,13 +463,32 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         }
 
         // Remove Timer attribute
+	//boolean hasTimerAttribute = false;
         LinkedList<AvatarAttribute> tmps = attributes;
         attributes = new LinkedList<AvatarAttribute>();
         for (AvatarAttribute aa: tmps) {
             if (aa.getType() != AvatarType.TIMER) {
                 attributes.add(aa);
-            }
+	    } else {
+		//hasTimerAttribute = true;
+	    }
         }
+
+
+	/*if (!hasTimerAttribute) {
+	    // We must remove the timer variable
+	    value = new AvatarAttribute("__timerValue", AvatarType.INTEGER, this, getReferenceObject());
+	    addAttribute(value);
+	    }*/
+    }
+
+    public boolean hasTimerAttribute() {
+	for(AvatarAttribute attr: attributes) {
+	    if (attr.isTimer()) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     public AvatarAttribute addTimerAttribute(String _name) {
@@ -565,5 +584,15 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
             }
         }
         return cpt;
+    }
+
+
+    public int getIndexOfStartState() {
+	if (asm == null) {
+	    return -1;
+	}
+
+	return asm.getIndexOfStartState();
+	
     }
 }

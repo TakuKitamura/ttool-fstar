@@ -1456,4 +1456,20 @@ public class AvatarStateMachine extends AvatarElement {
             }
         }
     }
+
+    // allstates must be computed first i.e. non null.
+    // Otherwise, returns -1
+    public int getIndexOfStartState() {
+	if (allStates == null) {
+	    return -1;
+	}
+
+	for(int i=0; i<allStates.length; i++) {
+	    if (allStates[i] instanceof AvatarStartState) {
+		return i;
+	    }
+	}
+
+	return -1;
+    }
 }

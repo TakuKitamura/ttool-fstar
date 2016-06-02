@@ -287,7 +287,9 @@ public class AvatarSpecification extends AvatarElement {
 
         LinkedList<AvatarBlock> addedBlocks = new LinkedList<AvatarBlock>();
         for(AvatarBlock block: blocks) {
-            block.removeTimers(this, addedBlocks);
+	    if (block.hasTimerAttribute()) {
+		block.removeTimers(this, addedBlocks);
+	    }
         }
 
         for(int i=0; i<addedBlocks.size(); i++) {

@@ -99,12 +99,41 @@ public class AvatarAttribute extends AvatarLeftHand {
         return initialValue;
     }
 
+
+    public int getInitialValueInInt() {
+	if ((initialValue == null) || (initialValue.length() == 0)) {
+            return getDefaultInitialValueInInt();
+        }
+
+	if (isInt()) {
+	    try {
+		return Integer.decode(initialValue).intValue();
+	    } catch (Exception e) {
+		return -1;
+	    }
+	}
+
+	if (isBool()) {
+	    if (initialValue.charAt(0) == 'f') {
+		return 0;
+	    } else {
+		return 1;
+	    }
+	}
+
+	return 0;
+    }
+
     public String getDefaultInitialValue() {
         return this.type.getDefaultInitialValue();
     }
 
     public String getDefaultInitialValueTF() {
         return this.type.getDefaultInitialValueTF();
+    }
+
+    public int getDefaultInitialValueInInt() {
+        return this.type.getDefaultInitialValueInInt();
     }
 
     public AvatarType getType() {
@@ -118,6 +147,11 @@ public class AvatarAttribute extends AvatarLeftHand {
     public boolean isBool() {
         return (type == AvatarType.BOOLEAN);
     }
+
+    public boolean isTimer() {
+        return (type == AvatarType.TIMER);
+    }
+    
 
     public String toString() {
         String ret = this.type.getStringType() + " " + getName();

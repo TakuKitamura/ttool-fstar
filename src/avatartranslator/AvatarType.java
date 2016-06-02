@@ -49,20 +49,22 @@ package avatartranslator;
 
 public enum AvatarType {
     // Types of parameters
-    BOOLEAN ("bool", "false", "f"),
-    INTEGER ("int", "0", "0"),
-    TIMER ("timer", "0", "0"),
+    BOOLEAN ("bool", "false", "f", 0),
+    INTEGER ("int", "0", "0", 0),
+    TIMER ("timer", "0", "0", 0),
     
-    UNDEFINED ("undefined", "", "");
+    UNDEFINED ("undefined", "", "", -1);
 
     private String name = "";
     private String defaultValue = "";
     private String defaultValueTF = "";
+    private int defaultValueInInt = -1;
 
-    AvatarType (String name, String defaultValue, String defaultValueTF) {
+    AvatarType (String name, String defaultValue, String defaultValueTF, int defaultValueInInt) {
         this.name = name;
         this.defaultValue = defaultValue;
         this.defaultValueTF = defaultValueTF;
+	this.defaultValueInInt = defaultValueInInt;
     }
 
     public static AvatarType getType (String s) {
@@ -85,5 +87,9 @@ public enum AvatarType {
 
     public String getDefaultInitialValueTF() {
         return this.defaultValueTF;
+    }
+
+    public int getDefaultInitialValueInInt() {
+        return this.defaultValueInInt;
     }
 }
