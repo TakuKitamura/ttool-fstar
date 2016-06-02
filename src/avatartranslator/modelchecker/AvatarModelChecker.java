@@ -238,18 +238,58 @@ public class AvatarModelChecker implements Runnable {
 	}
 	transitions = newTransitions;
 
-	// Selecting the ones with the lowest clock interval
+	// Selecting only the transactions within the smallest clock interval
+	int clockMin=Integer.MAX_VALUE, clockMax=0;
+	for(SpecificationTransition tr: transitions) {
+	    clockMin = Math.min(clockMin, tr.clockMin);
+	    clockMax = Math.min(clockMin, tr.clockMin);
+	}
+	TraceManager.addDev("Selected clock interval:" + clockMin + "," + clockMax);
+
+	newTransitions = new ArrayList<SpecificationTransition>();
+	for(SpecificationTransition tr: transitions) {
+	    if (tr.clockMin  < clockMax) {
+		tr.clockMax = clockMax;
+		newTransitions.add(tr);
+	    }
+	}
+	transitions = newTransitions;
 	
-
-
         // For each realizable transition
-        //   Make it, reset clock of the involved blocks to 0, increase hmin/hmax of each block
+        //   Make it, reset clock of the involved blocks to 0, increase clockmin/clockhmax of each block
         //   compute new state, and compare with existing ones
-        //   If not a new state, create the link rom the previsou state to the new one
+        //   If not a new state, create the link rom the previous state to the new one
         //   Otherwise create the new state and its link, and add it to the pending list of states
+	for(SpecificationTransition tr: transitions) {
+	    // Make tr
+	    // to do so, must create a new state
+	    SpecificationState newState = _ss.advancedClone();
 
+	    // For non impacted blocks, increase their clock value, or set their clock to 0
+	    newState.increaseClockOfBlocksExcept(tr);
 
+	    // Impact the variable of the state, either by executing actions, or by
+	    // doing the synchronization
+	    String action = executeTransition(_ss, newState, tr);
 
+	    // Compute the hash of the new state, and create the link to the right next state
+	    SpecificationLink link = new SpecificationLink();
+	    link.originState = _ss;
+	    link.action = action;
+	    newState.computeHash();
+	    SpecificationState similar = states.get(newState.getHash());
+	    if (similar == null) {
+		//  Unknown state
+		states.put(newState.getHash(), newState);
+		pendingStates.add(newState);
+		link.destinationState = newState;
+		
+	    } else {
+		// Create a link from former state to the existing one
+		link.destinationState = similar;
+	    }
+	    links.add(link);	    
+	}
     }
 
     private void handleAvatarTransition(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb,  int _indexOfBlock, ArrayList<SpecificationTransition> _transitionsToAdd) {
@@ -274,8 +314,8 @@ public class AvatarModelChecker implements Runnable {
 	st.init(1, _at, _block, _sb, _indexOfBlock);
 	
 	// Must compute the clockmin and clockmax values
-	st.clockMin = evaluateIntExpression(_at.getMinDelay(), _block, _sb);
-	st.clockMax = evaluateIntExpression(_at.getMaxDelay(), _block, _sb);
+	st.clockMin = evaluateIntExpression(_at.getMinDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMIN_INDEX];
+	st.clockMax = evaluateIntExpression(_at.getMaxDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
     }
 
 
@@ -404,11 +444,17 @@ public class AvatarModelChecker implements Runnable {
 	AvatarSignal asr = ((AvatarActionOnSignal)asmer).getSignal();
 
 	if (spec.areSynchronized(ass, asr)) {
+	    SpecificationTransition st = new SpecificationTransition();
+	    st.makeFromTwoSynchronous(sender, receiver);
+	    return st;
 	}
-				     
-	
+				     	
 	return null;
 	
+    }
+
+    private String executeTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
+	return "not implemented";
     }
 
     

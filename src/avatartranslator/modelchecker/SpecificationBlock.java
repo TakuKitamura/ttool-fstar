@@ -100,4 +100,10 @@ public class SpecificationBlock  {
 	}
 	return sb.toString();
     }
+
+    public SpecificationBlock advancedClone() {
+	SpecificationBlock sb = new SpecificationBlock();
+	sb.values = values.clone();
+	return sb;
+    }
 }

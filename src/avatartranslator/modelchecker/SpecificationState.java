@@ -61,6 +61,7 @@ public class SpecificationState  {
     public boolean hashComputed;
 
     public SpecificationState() {
+	hashComputed = false;
     }
 
     // blocks must not be null
@@ -101,6 +102,31 @@ public class SpecificationState  {
 	    sb.append("\n  "+i + ": " + blocks[i].toString());
 	}
 	return sb.toString();
+    }
+
+    public SpecificationState advancedClone() {
+	SpecificationState st = new SpecificationState();
+	st.blocks = new SpecificationBlock[blocks.length];
+	for(int i=0; i<blocks.length; i++) {
+	    st.blocks[i] = blocks[i].advancedClone();
+	}
+	return st;
+    }
+
+    // Increase the clock of the blocks not in the transition
+    // and puts the one of others to 0
+    public void increaseClockOfBlocksExcept(SpecificationTransition _st) {
+	SpecificationBlock sb;
+	for(int i=0; i<blocks.length; i++) {
+	    sb = blocks[i];
+	    if (!(_st.hasBlockIndex(i))) {
+		sb.values[SpecificationBlock.CLOCKMIN_INDEX] += _st.clockMin;
+		sb.values[SpecificationBlock.CLOCKMAX_INDEX] += _st.clockMax;
+	    } else {
+		sb.values[SpecificationBlock.CLOCKMIN_INDEX] = 0;
+		sb.values[SpecificationBlock.CLOCKMAX_INDEX] = 0;
+	    }
+	}
     }
 
 }

@@ -87,6 +87,43 @@ public class SpecificationTransition  {
 	
     }
 
+    public void makeFromTwoSynchronous(SpecificationTransition _tr1, SpecificationTransition _tr2) {
+	int nbOfElements = 2;
+	transitions = new AvatarTransition[nbOfElements];
+	transitions[0] = _tr1.transitions[0];
+	transitions[1] = _tr2.transitions[0];
+	    
+	blocks = new AvatarBlock[nbOfElements];
+	blocks[0] = _tr1.blocks[0];
+	blocks[1] = _tr2.blocks[0];
+
+	specBlocks = new SpecificationBlock[nbOfElements];
+	specBlocks[0] = _tr1.specBlocks[0];
+	specBlocks[1] = _tr2.specBlocks[0];
+
+	blocksInt = new int[nbOfElements];
+	blocksInt[0] = _tr1.blocksInt[0];
+	blocksInt[1] = _tr2.blocksInt[0];
+
+	clockMin = Math.max(_tr1.clockMin, _tr2.clockMin);
+	clockMax = Math.max(_tr1.clockMax, _tr2.clockMax);
+	
+    }
+
+    public boolean hasBlockIndex(int _index) {
+	if (blocksInt == null) {
+	    return false;
+	}
+
+	for(int i=0; i<blocksInt.length; i++) {
+	    if (blocksInt[i] == _index) {
+		return true;
+	    }
+	}
+
+	return false;
+    }
+
 
 
 }
