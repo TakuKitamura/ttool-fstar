@@ -216,6 +216,30 @@ public class AvatarModelChecker implements Runnable {
             cpt ++;
         }
 
+	// All locally executable transitions are now gathered.
+	// We simply need to select the one that are executable
+	// Two constraints: synchronous transactions must have a counter part
+	// then, we select only the transitions which clock intervals are within the lowest clock interval
+
+	// Reworking sync/non sync. We create one new transition for all possible synchros, and we remove the ones
+	// with only one synchro
+	ArrayList<SpecificationTransition> newTransitions = new ArrayList<SpecificationTransition>();
+	for(SpecificationTransition tr: transitions) {
+	    if (tr.getType() == AvatarTransition.TYPE_SEND_SYNC) {
+		for(SpecificationTransition tro: transitions) {
+		    if (tro.getType() == AvatarTransition.TYPE_RECV_SYNC) {
+			SpecificationTransition newT = computeSynchronousTransition(tr, tro);
+			if (newT != null) newTransitions.add(newT);
+		    }
+		}
+	    } else if (tr.getType() == AvatarTransition.TYPE_ACTION) {
+		newTransitions.add(tr);
+	    }
+	}
+	transitions = newTransitions;
+
+	// Selecting the ones with the lowest clock interval
+	
 
 
         // For each realizable transition
@@ -250,8 +274,8 @@ public class AvatarModelChecker implements Runnable {
 	st.init(1, _at, _block, _sb, _indexOfBlock);
 	
 	// Must compute the clockmin and clockmax values
-	
-	
+	st.clockMin = evaluateIntExpression(_at.getMinDelay(), _block, _sb);
+	st.clockMax = evaluateIntExpression(_at.getMaxDelay(), _block, _sb);
     }
 
 
@@ -303,7 +327,7 @@ public class AvatarModelChecker implements Runnable {
 
 
 
-    public boolean evaluateBoolExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb/*Vector<String> _attributeValues*/) {
+    public boolean evaluateBoolExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb) {
         String act = _expr;
         int cpt = 0;
         for(AvatarAttribute at: _block.getAttributes()) {
@@ -338,5 +362,55 @@ public class AvatarModelChecker implements Runnable {
         //TraceManager.addDev("Result of " + _expr + " = " + result);
         return result;
     }
+
+    public int evaluateIntExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb) {
+	String act = _expr;
+        int cpt = 0;
+	for(AvatarAttribute at: _block.getAttributes()) {
+            String val = "";
+            if (at.isInt()) {
+                val = ""+_sb.values[cpt+SpecificationBlock.ATTR_INDEX];
+                if (val.startsWith("-")) {
+                    val = "(0" + val + ")";
+                }
+            } else if (at.isBool()) {
+		if (_sb.values[cpt+SpecificationBlock.ATTR_INDEX] == 0) {
+		    val = "false";
+		} else {
+		    val = "true";
+		}
+	    }
+            act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, _block.getAttribute(cpt).getName(), val);
+            cpt ++;
+        }
+        
+        TraceManager.addDev("Evaluating Int expression: " + act);
+
+        return (int)(new IntExpressionEvaluator().getResultOf(act));
+    }
+
+    private SpecificationTransition computeSynchronousTransition(SpecificationTransition sender, SpecificationTransition receiver) {
+	AvatarTransition trs = sender.transitions[0];
+	AvatarTransition trr = receiver.transitions[0];
+
+	AvatarStateMachineElement asmes, asmer;
+	asmes = trs.getNext(0);
+	asmer = trs.getNext(0);
+	if ((asmes == null) || (asmer == null)) return null;
+	if (!(asmes instanceof AvatarActionOnSignal)) return null;
+	if (!(asmer instanceof AvatarActionOnSignal)) return null;
+
+	AvatarSignal ass = ((AvatarActionOnSignal)asmes).getSignal();
+	AvatarSignal asr = ((AvatarActionOnSignal)asmer).getSignal();
+
+	if (spec.areSynchronized(ass, asr)) {
+	}
+				     
+	
+	return null;
+	
+    }
+
+    
 
 }

@@ -318,6 +318,18 @@ public class AvatarSpecification extends AvatarElement {
 
     }
 
+    public boolean areSynchronized(AvatarSignal as1, AvatarSignal as2) {
+	AvatarRelation ar = getAvatarRelationWithSignal(as1);
+	if (ar == null) {
+	    return false;
+	}
+
+	int index1 = ar.getIndexOfSignal(as1);
+	int index2 = ar.getIndexOfSignal(as2);
+
+	return (index1 == index2);
+    }
+
     public AvatarRelation getAvatarRelationWithSignal(AvatarSignal _as) {
         for(AvatarRelation ar: relations) {
             if (ar.hasSignal(_as) > -1) {
