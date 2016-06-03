@@ -230,8 +230,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	    testGo();
 	    amc.startModelChecking();
             
-	    //if (mgui.gtm.getCheckingWarnings().size() > 0) {
-	    jta.append("" +  mgui.gtm.getCheckingWarnings().size() + " warning(s)\n");
+	    jta.append("Nb of states:" + amc.getNbOfStates());
+	    jta.append("Nb of links:" + amc.getNbOfLinks());
+	    TraceManager.addDev(amc.toString());
 	    
 
         } catch (InterruptedException ie) {

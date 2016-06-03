@@ -72,6 +72,18 @@ public class AvatarModelChecker implements Runnable {
         spec = _spec;
     }
 
+    public int getNbOfStates() {
+	return states.size();
+    }
+
+    public int getNbOfLinks() {
+	return links.size();
+    }
+
+    public int getNbOfPendingStates() {
+	return pendingStates.size();
+    }
+
     public void startModelChecking() {
         stoppedBeforeEnd = false;
 
@@ -216,80 +228,80 @@ public class AvatarModelChecker implements Runnable {
             cpt ++;
         }
 
-	// All locally executable transitions are now gathered.
-	// We simply need to select the one that are executable
-	// Two constraints: synchronous transactions must have a counter part
-	// then, we select only the transitions which clock intervals are within the lowest clock interval
+        // All locally executable transitions are now gathered.
+        // We simply need to select the one that are executable
+        // Two constraints: synchronous transactions must have a counter part
+        // then, we select only the transitions which clock intervals are within the lowest clock interval
 
-	// Reworking sync/non sync. We create one new transition for all possible synchros, and we remove the ones
-	// with only one synchro
-	ArrayList<SpecificationTransition> newTransitions = new ArrayList<SpecificationTransition>();
-	for(SpecificationTransition tr: transitions) {
-	    if (tr.getType() == AvatarTransition.TYPE_SEND_SYNC) {
-		for(SpecificationTransition tro: transitions) {
-		    if (tro.getType() == AvatarTransition.TYPE_RECV_SYNC) {
-			SpecificationTransition newT = computeSynchronousTransition(tr, tro);
-			if (newT != null) newTransitions.add(newT);
-		    }
-		}
-	    } else if (tr.getType() == AvatarTransition.TYPE_ACTION) {
-		newTransitions.add(tr);
-	    }
-	}
-	transitions = newTransitions;
+        // Reworking sync/non sync. We create one new transition for all possible synchros, and we remove the ones
+        // with only one synchro
+        ArrayList<SpecificationTransition> newTransitions = new ArrayList<SpecificationTransition>();
+        for(SpecificationTransition tr: transitions) {
+            if (tr.getType() == AvatarTransition.TYPE_SEND_SYNC) {
+                for(SpecificationTransition tro: transitions) {
+                    if (tro.getType() == AvatarTransition.TYPE_RECV_SYNC) {
+                        SpecificationTransition newT = computeSynchronousTransition(tr, tro);
+                        if (newT != null) newTransitions.add(newT);
+                    }
+                }
+            } else if (tr.getType() == AvatarTransition.TYPE_ACTION) {
+                newTransitions.add(tr);
+            }
+        }
+        transitions = newTransitions;
 
-	// Selecting only the transactions within the smallest clock interval
-	int clockMin=Integer.MAX_VALUE, clockMax=0;
-	for(SpecificationTransition tr: transitions) {
-	    clockMin = Math.min(clockMin, tr.clockMin);
-	    clockMax = Math.min(clockMin, tr.clockMin);
-	}
-	TraceManager.addDev("Selected clock interval:" + clockMin + "," + clockMax);
+        // Selecting only the transactions within the smallest clock interval
+        int clockMin=Integer.MAX_VALUE, clockMax=0;
+        for(SpecificationTransition tr: transitions) {
+            clockMin = Math.min(clockMin, tr.clockMin);
+            clockMax = Math.min(clockMin, tr.clockMin);
+        }
+        TraceManager.addDev("Selected clock interval:" + clockMin + "," + clockMax);
 
-	newTransitions = new ArrayList<SpecificationTransition>();
-	for(SpecificationTransition tr: transitions) {
-	    if (tr.clockMin  < clockMax) {
-		tr.clockMax = clockMax;
-		newTransitions.add(tr);
-	    }
-	}
-	transitions = newTransitions;
-	
+        newTransitions = new ArrayList<SpecificationTransition>();
+        for(SpecificationTransition tr: transitions) {
+            if (tr.clockMin  < clockMax) {
+                tr.clockMax = clockMax;
+                newTransitions.add(tr);
+            }
+        }
+        transitions = newTransitions;
+
         // For each realizable transition
         //   Make it, reset clock of the involved blocks to 0, increase clockmin/clockhmax of each block
         //   compute new state, and compare with existing ones
         //   If not a new state, create the link rom the previous state to the new one
         //   Otherwise create the new state and its link, and add it to the pending list of states
-	for(SpecificationTransition tr: transitions) {
-	    // Make tr
-	    // to do so, must create a new state
-	    SpecificationState newState = _ss.advancedClone();
+        for(SpecificationTransition tr: transitions) {
+            // Make tr
+            // to do so, must create a new state
+            SpecificationState newState = _ss.advancedClone();
 
-	    // For non impacted blocks, increase their clock value, or set their clock to 0
-	    newState.increaseClockOfBlocksExcept(tr);
+            // For non impacted blocks, increase their clock value, or set their clock to 0
+            newState.increaseClockOfBlocksExcept(tr);
 
-	    // Impact the variable of the state, either by executing actions, or by
-	    // doing the synchronization
-	    String action = executeTransition(_ss, newState, tr);
+            // Impact the variable of the state, either by executing actions, or by
+            // doing the synchronization
+            String action = executeTransition(_ss, newState, tr);
 
-	    // Compute the hash of the new state, and create the link to the right next state
-	    SpecificationLink link = new SpecificationLink();
-	    link.originState = _ss;
-	    link.action = action;
-	    newState.computeHash();
-	    SpecificationState similar = states.get(newState.getHash());
-	    if (similar == null) {
-		//  Unknown state
-		states.put(newState.getHash(), newState);
-		pendingStates.add(newState);
-		link.destinationState = newState;
-		
-	    } else {
-		// Create a link from former state to the existing one
-		link.destinationState = similar;
-	    }
-	    links.add(link);	    
-	}
+            // Compute the hash of the new state, and create the link to the right next state
+            SpecificationLink link = new SpecificationLink();
+            link.originState = _ss;
+            link.action = action;
+            newState.computeHash();
+            SpecificationState similar = states.get(newState.getHash());
+            if (similar == null) {
+                //  Unknown state
+                states.put(newState.getHash(), newState);
+                pendingStates.add(newState);
+                link.destinationState = newState;
+
+            } else {
+                // Create a link from former state to the existing one
+                link.destinationState = similar;
+            }
+            links.add(link);
+        }
     }
 
     private void handleAvatarTransition(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb,  int _indexOfBlock, ArrayList<SpecificationTransition> _transitionsToAdd) {
@@ -311,11 +323,11 @@ public class AvatarModelChecker implements Runnable {
         }
 
         SpecificationTransition st = new SpecificationTransition();
-	st.init(1, _at, _block, _sb, _indexOfBlock);
-	
-	// Must compute the clockmin and clockmax values
-	st.clockMin = evaluateIntExpression(_at.getMinDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMIN_INDEX];
-	st.clockMax = evaluateIntExpression(_at.getMaxDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
+        st.init(1, _at, _block, _sb, _indexOfBlock);
+
+        // Must compute the clockmin and clockmax values
+        st.clockMin = evaluateIntExpression(_at.getMinDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMIN_INDEX];
+        st.clockMax = evaluateIntExpression(_at.getMaxDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
     }
 
 
@@ -378,12 +390,12 @@ public class AvatarModelChecker implements Runnable {
                     val = "(0" + val + ")";
                 }
             } else if (at.isBool()) {
-		if (_sb.values[cpt+SpecificationBlock.ATTR_INDEX] == 0) {
-		    val = "false";
-		} else {
-		    val = "true";
-		}
-	    }
+                if (_sb.values[cpt+SpecificationBlock.ATTR_INDEX] == 0) {
+                    val = "false";
+                } else {
+                    val = "true";
+                }
+            }
             act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, _block.getAttribute(cpt).getName(), val);
             cpt ++;
         }
@@ -404,9 +416,9 @@ public class AvatarModelChecker implements Runnable {
     }
 
     public int evaluateIntExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb) {
-	String act = _expr;
+        String act = _expr;
         int cpt = 0;
-	for(AvatarAttribute at: _block.getAttributes()) {
+        for(AvatarAttribute at: _block.getAttributes()) {
             String val = "";
             if (at.isInt()) {
                 val = ""+_sb.values[cpt+SpecificationBlock.ATTR_INDEX];
@@ -414,49 +426,173 @@ public class AvatarModelChecker implements Runnable {
                     val = "(0" + val + ")";
                 }
             } else if (at.isBool()) {
-		if (_sb.values[cpt+SpecificationBlock.ATTR_INDEX] == 0) {
-		    val = "false";
-		} else {
-		    val = "true";
-		}
-	    }
+                if (_sb.values[cpt+SpecificationBlock.ATTR_INDEX] == 0) {
+                    val = "false";
+                } else {
+                    val = "true";
+                }
+            }
             act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, _block.getAttribute(cpt).getName(), val);
             cpt ++;
         }
-        
+
         TraceManager.addDev("Evaluating Int expression: " + act);
 
         return (int)(new IntExpressionEvaluator().getResultOf(act));
     }
 
     private SpecificationTransition computeSynchronousTransition(SpecificationTransition sender, SpecificationTransition receiver) {
-	AvatarTransition trs = sender.transitions[0];
-	AvatarTransition trr = receiver.transitions[0];
+        AvatarTransition trs = sender.transitions[0];
+        AvatarTransition trr = receiver.transitions[0];
 
-	AvatarStateMachineElement asmes, asmer;
-	asmes = trs.getNext(0);
-	asmer = trs.getNext(0);
-	if ((asmes == null) || (asmer == null)) return null;
-	if (!(asmes instanceof AvatarActionOnSignal)) return null;
-	if (!(asmer instanceof AvatarActionOnSignal)) return null;
+        AvatarStateMachineElement asmes, asmer;
+        asmes = trs.getNext(0);
+        asmer = trs.getNext(0);
+        if ((asmes == null) || (asmer == null)) return null;
+        if (!(asmes instanceof AvatarActionOnSignal)) return null;
+        if (!(asmer instanceof AvatarActionOnSignal)) return null;
 
-	AvatarSignal ass = ((AvatarActionOnSignal)asmes).getSignal();
-	AvatarSignal asr = ((AvatarActionOnSignal)asmer).getSignal();
+        AvatarSignal ass = ((AvatarActionOnSignal)asmes).getSignal();
+        AvatarSignal asr = ((AvatarActionOnSignal)asmer).getSignal();
 
-	if (spec.areSynchronized(ass, asr)) {
-	    SpecificationTransition st = new SpecificationTransition();
-	    st.makeFromTwoSynchronous(sender, receiver);
-	    return st;
-	}
-				     	
-	return null;
-	
+        if (spec.areSynchronized(ass, asr)) {
+            SpecificationTransition st = new SpecificationTransition();
+            st.makeFromTwoSynchronous(sender, receiver);
+            return st;
+        }
+
+        return null;
+
     }
 
     private String executeTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
-	return "not implemented";
+        int type = _st.transitions[0].type;
+        AvatarStateElement ase;
+
+        // Fill the new states of the involved blocks
+        for(int i=0; i<_st.transitions.length; i++) {
+            ase = _st.transitions[i].getNextState(10);
+            if (ase != null) {
+                int index = _st.blocks[i].getStateMachine().getIndexOfState(ase);
+                if (index > -1) {
+                    _newState.blocks[_st.blocksInt[i]].values[SpecificationBlock.STATE_INDEX] = index;
+                }
+            }
+        }
+
+
+
+        if (type == AvatarTransition.TYPE_ACTION) {
+            return executeActionTransition(_previousState, _newState, _st);
+        } else if (type == AvatarTransition.TYPE_SEND_SYNC) {
+            return executeSyncTransition(_previousState, _newState, _st);
+        }
+
+        return "not implemented";
     }
 
-    
+    // Execute the actions of a transition, and correspondingly impact the variables of the
+    // block executing the transition
+    private String executeActionTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
+        // We use the attributes value as in the _newState
+        // Get the attributes value list
+        AvatarBlock block = _st.blocks[0];
+
+        for(AvatarAction aAction: _st.transitions[0].getActions()) {
+            // Variable affectation
+            if (aAction instanceof AvatarActionAssignment) {
+                //if (!(aAction.isAMethodCall ())) {
+                /*String action = aAction.toString ();
+                  int ind = action.indexOf("=");
+                  if (ind == -1) {
+                  return "";
+                  }*/
+                String nameOfVar = ((AvatarActionAssignment)aAction).getLeftHand().getName();
+                String act = ((AvatarActionAssignment)aAction).getRightHand().toString();
+                int indexVar = block.getIndexOfAvatarAttributeWithName(nameOfVar);
+                AvatarType type = block.getAttribute(indexVar).getType();
+                if (indexVar != -1) {
+                    if (type == AvatarType.INTEGER) {
+                        int result = evaluateIntExpression(act, _st.blocks[0], _newState.blocks[_st.blocksInt[0]]);
+                        _newState.blocks[_st.blocksInt[0]].values[SpecificationBlock.ATTR_INDEX+indexVar] = result;
+                    } else if (type == AvatarType.BOOLEAN) {
+                        boolean bool = evaluateBoolExpression(act, _st.blocks[0], _newState.blocks[_st.blocksInt[0]]);
+                        if (bool) {
+                            _newState.blocks[_st.blocksInt[0]].values[SpecificationBlock.ATTR_INDEX+indexVar] = 1;
+                        } else {
+                            _newState.blocks[_st.blocksInt[0]].values[SpecificationBlock.ATTR_INDEX+indexVar] = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return "i(" + _st.transitions[0].getName() + "/" + _st.transitions[0].getID() + ")";
+    }
+
+    private String executeSyncTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
+        AvatarBlock block0 = _st.blocks[0];
+        AvatarBlock block1 = _st.blocks[1];
+        AvatarActionOnSignal aaoss, aaosr;
+	AvatarAttribute avat;
+        String value;
+	int result;
+	boolean resultB;
+	int indexVar;
+	String nameOfVar;
+	String ret = "";
+	    
+
+        try {
+            aaoss = (AvatarActionOnSignal)(_st.transitions[0].getNext(0));
+            aaosr = (AvatarActionOnSignal)(_st.transitions[1].getNext(0));
+        } catch (Exception e) {
+            return "";
+        }
+
+        // copy the value of attributes from one block to the other one
+        for(int i=0; i<aaoss.getNbOfValues(); i++) {
+            value = aaoss.getValue(i);
+            try {
+                avat = aaoss.getSignal().getListOfAttributes().get(i);
+                if (avat.getType() == AvatarType.INTEGER) {
+                    //TraceManager.addDev("Evaluating expression, value=" + value);
+                    result = evaluateIntExpression(value, block0, _newState.blocks[_st.blocksInt[0]]);
+                } else if (avat.getType() == AvatarType.BOOLEAN) {
+                    resultB = evaluateBoolExpression(value, block0, _newState.blocks[_st.blocksInt[0]]);
+		    result = resultB? 1 : 0;
+                } else {
+		    result = 0;
+		}
+
+		// Putting the result to the destination var
+		nameOfVar = aaosr.getValue(i);
+		indexVar = block1.getIndexOfAvatarAttributeWithName(nameOfVar);
+		_newState.blocks[_st.blocksInt[1]].values[SpecificationBlock.ATTR_INDEX+indexVar] = result;
+		ret += "" + result;
+            } catch (Exception e) {
+                TraceManager.addDev("EXCEPTION on adding value " + aaoss);
+            }
+        }
+
+
+	return "!" + aaoss.getSignal().getName() + "_?" + aaosr.getSignal().getName() + "("+ ret + ")";
+        
+    }
+
+    public String toString() {
+	StringBuffer sb = new StringBuffer("States:\n");
+	for(SpecificationState state: states.values()) {
+	    sb.append(state.toString());
+	}
+	sb.append("\nLinks:\n");
+	for(SpecificationLink link: links) {
+	    sb.append(link.toString());
+	}
+	return sb.toString();
+    }
+
+
 
 }

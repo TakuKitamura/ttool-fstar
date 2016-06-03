@@ -59,4 +59,8 @@ public class SpecificationLink  {
 
     public SpecificationLink() {
     }
+
+    public String toString() {
+	return "" + originState.getHash() + " --> " + destinationState.getHash();
+    }
 }

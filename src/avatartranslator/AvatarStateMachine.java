@@ -1472,4 +1472,18 @@ public class AvatarStateMachine extends AvatarElement {
 
 	return -1;
     }
+
+    public int getIndexOfState(AvatarStateElement _ase) {
+	if (allStates == null) {
+	    return -1;
+	}
+
+	for(int i=0; i<allStates.length; i++) {
+	    if (allStates[i] == _ase) {
+		return i;
+	    }
+	}
+
+	return -1;
+    }
 }

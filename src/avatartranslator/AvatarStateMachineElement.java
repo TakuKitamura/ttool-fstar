@@ -96,6 +96,24 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
         return null;
     }
 
+    // Returns the next encountered states amons the next (of the next ...)
+    // taking only the first next each time
+    public AvatarStateElement getNextState(int _maxNbOfIterations) {
+	if (this instanceof AvatarStateElement) {
+	    return (AvatarStateElement)this;
+	}
+
+	if (_maxNbOfIterations <= 0) {
+	    return null;
+	}
+
+	if (nexts == null) { return null;}
+	if (nexts.size() < 1) {return null;}
+
+	return nexts.get(0).getNextState(_maxNbOfIterations);
+    }
+
+    
     public void removeNext(int _index){
 	if (_index < nexts.size()){
 	    nexts.remove(_index);
