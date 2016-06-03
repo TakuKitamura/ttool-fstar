@@ -175,13 +175,14 @@ public class TML2AvatarDP {
 	    smp.addComponent(smdstate, x, y, false, true);
 	    smdstate.setValue(asme.getName());
 	    smdstate.recalculateSize();
+	    SMDMap.put(asme, smdstate);
 	    tp = smdstate.getFreeTGConnectingPoint(x+smdstate.getWidth()/2,y+smdstate.getHeight());
 	    TGConnectingPoint tp2 = smdstate.getFreeTGConnectingPoint(x+smdstate.getWidth()/2,y);
 	    locMap.put(asme, tp2);
 	}
 	int i=1;
 	int diff=400;
-	int ydiff=100;
+	int ydiff=50;
 	for (AvatarStateMachineElement el:asme.getNexts()){
 	    if (el instanceof AvatarTransition){
 		tranSourceMap.put((AvatarTransition) el, tp);
@@ -213,6 +214,16 @@ public class TML2AvatarDP {
 	    abd.changeStateMachineTabName ("Block0", bl.getValue());
 	    blockMap.put(bl.getValue(), bl);
 	    abd.addComponent(bl, xpos, ypos, false, true);
+	    for (AvatarAttribute attr: ab.getAttributes()){
+		int type=5;
+		if (attr.getType()==AvatarType.BOOLEAN){
+		    type=4;
+		}
+		if (attr.getType()==AvatarType.INTEGER){
+		    type=0;
+		}
+		bl.addAttribute(new TAttribute(0, attr.getName(), attr.getType().getDefaultInitialValue(), type));
+	    }
 	    xpos+=400;
 	    //Build the state machine
 	    int smx=400;
@@ -238,6 +249,14 @@ public class TML2AvatarDP {
 		    return;
 		}
 		AvatarSMDConnector SMDcon = new AvatarSMDConnector((int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), true, null, smp, p1, p2, points);	
+		String action="";
+		if (t.getActions().size()==0){
+		    action="";
+		}
+		else {
+		    action=t.getActions().get(0).toString();
+		}
+		SMDcon.setTransitionInfo(t.getGuard().toString(), action);
 		smp.addComponent(SMDcon, (int) p1.getX(), (int) p1.getY(), false, true);
 	    }
 	}

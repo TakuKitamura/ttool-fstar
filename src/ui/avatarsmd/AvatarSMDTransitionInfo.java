@@ -111,7 +111,12 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
     public Vector<String> getListOfActions() {
         return listOfActions;
     }
-
+    public void setGuard(String s){
+	guard=s;
+    }
+    public void addAction(String s){
+	listOfActions.add(s);
+    }
     public void internalDrawing(Graphics g) {
         int step = 0;
         String s;

@@ -982,6 +982,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                 return a;
         return null;
     }
+    public void addAttribute(TAttribute ta){
+	this.myAttributes.add(ta);
+    }
 
     public LinkedList<AvatarMethod> getMethodList() {
         return this.myMethods;

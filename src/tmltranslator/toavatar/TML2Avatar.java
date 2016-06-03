@@ -647,7 +647,7 @@ public class TML2Avatar {
 	}
 	else if (ae instanceof TMLActivityElementWithAction){
 	    //Might be encrypt or decrypt
-	    AvatarState as = new AvatarState(ae.getValue(), ae.getReferenceObject());
+	    AvatarState as = new AvatarState(ae.getValue()+"_"+ae.getName(), ae.getReferenceObject());
 	    tran = new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 	    //For now, get rid of the action. It won't translate anyway
 	    //tran.addAction(((TMLActivityElementWithAction) ae).getAction());
@@ -1398,7 +1398,7 @@ public class TML2Avatar {
 	    }
 	}
 	//Check if we matched up all signals
-	//System.out.println(avspec);
+	System.out.println(avspec);
 	
 	tmlmap.getTMLModeling().secChannelMap = secChannelMap;
 	return avspec;
