@@ -88,7 +88,7 @@ public class IntExpressionEvaluator {
         }
 
         if (errorMessage != null) {
-            TraceManager.addDev("Expr contains an error:" + errorMessage);
+            TraceManager.addDev("Expr contains an error:" + errorMessage + " expr=" + _expr);
         } else {
             //TraceManager.addDev("Expr is correct");
         }

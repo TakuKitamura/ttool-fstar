@@ -326,7 +326,7 @@ public class BoolExpressionEvaluator {
 
         // So, this is an op!
         int typeOfOp = currentType;
-        TraceManager.addDev("Parsing right expression");
+        //TraceManager.addDev("Parsing right expression");
         int resultRight[] = parseNonEmptyExpr();
 
         if (hasError()) {
@@ -372,7 +372,7 @@ public class BoolExpressionEvaluator {
 
             // Int ops
         } else {
-            TraceManager.addDev("** Int operator = " + typeOfOp);
+            //TraceManager.addDev("** Int operator = " + typeOfOp);
             if (typeOfOp == EQUAL_TOKEN) {
                 if (result[0] == resultRight[0]) {
                     result[0] = 1;
