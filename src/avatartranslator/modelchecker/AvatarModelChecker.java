@@ -513,6 +513,7 @@ public class AvatarModelChecker implements Runnable {
                 AvatarType type = block.getAttribute(indexVar).getType();
                 if (indexVar != -1) {
                     if (type == AvatarType.INTEGER) {
+			TraceManager.addDev("Evaluating int expr=" + act);
                         int result = evaluateIntExpression(act, _st.blocks[0], _newState.blocks[_st.blocksInt[0]]);
                         _newState.blocks[_st.blocksInt[0]].values[SpecificationBlock.ATTR_INDEX+indexVar] = result;
                     } else if (type == AvatarType.BOOLEAN) {

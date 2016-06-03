@@ -231,7 +231,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	    amc.startModelChecking();
             
 	    jta.append("Nb of states:" + amc.getNbOfStates());
-	    jta.append("Nb of links:" + amc.getNbOfLinks());
+	    jta.append("Nb of links:\n" + amc.getNbOfLinks());
 	    TraceManager.addDev(amc.toString());
 	    
 
