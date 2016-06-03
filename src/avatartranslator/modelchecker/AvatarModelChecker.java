@@ -67,6 +67,7 @@ public class AvatarModelChecker implements Runnable {
     private Map<Integer, SpecificationState> states;
     private List<SpecificationState> pendingStates;
     private List<SpecificationLink> links;
+    private long stateID = 0;
 
     public AvatarModelChecker(AvatarSpecification _spec) {
         spec = _spec;
@@ -84,8 +85,15 @@ public class AvatarModelChecker implements Runnable {
 	return pendingStates.size();
     }
 
+    public synchronized long getStateID() {
+	long tmp = stateID;
+	stateID ++;
+	return tmp;
+    }
+
     public void startModelChecking() {
         stoppedBeforeEnd = false;
+	stateID = 0;
 
         // Remove timers, composite states, randoms
         TraceManager.addDev("Reworking Avatar specification");
@@ -122,6 +130,7 @@ public class AvatarModelChecker implements Runnable {
         // Compute initial state
         SpecificationState initialState = new SpecificationState();
         initialState.setInit(spec);
+	initialState.id = getStateID();
         TraceManager.addDev("initialState=" + initialState.toString());
 
         states.put(initialState.hashValue, initialState);
@@ -228,6 +237,8 @@ public class AvatarModelChecker implements Runnable {
             cpt ++;
         }
 
+	TraceManager.addDev("Possible transitions 1:" + transitions.size());
+	
         // All locally executable transitions are now gathered.
         // We simply need to select the one that are executable
         // Two constraints: synchronous transactions must have a counter part
@@ -249,23 +260,27 @@ public class AvatarModelChecker implements Runnable {
             }
         }
         transitions = newTransitions;
+	TraceManager.addDev("Possible transitions 2:" + transitions.size());
 
+	
         // Selecting only the transactions within the smallest clock interval
         int clockMin=Integer.MAX_VALUE, clockMax=0;
         for(SpecificationTransition tr: transitions) {
             clockMin = Math.min(clockMin, tr.clockMin);
             clockMax = Math.min(clockMin, tr.clockMin);
         }
+	
         TraceManager.addDev("Selected clock interval:" + clockMin + "," + clockMax);
 
         newTransitions = new ArrayList<SpecificationTransition>();
         for(SpecificationTransition tr: transitions) {
-            if (tr.clockMin  < clockMax) {
+            if (tr.clockMin  <= clockMax) {
                 tr.clockMax = clockMax;
                 newTransitions.add(tr);
             }
         }
         transitions = newTransitions;
+	TraceManager.addDev("Possible transitions 3:" + transitions.size());
 
         // For each realizable transition
         //   Make it, reset clock of the involved blocks to 0, increase clockmin/clockhmax of each block
@@ -295,6 +310,7 @@ public class AvatarModelChecker implements Runnable {
                 states.put(newState.getHash(), newState);
                 pendingStates.add(newState);
                 link.destinationState = newState;
+		newState.id = getStateID();
 
             } else {
                 // Create a link from former state to the existing one
@@ -323,11 +339,23 @@ public class AvatarModelChecker implements Runnable {
         }
 
         SpecificationTransition st = new SpecificationTransition();
+	_transitionsToAdd.add(st);
         st.init(1, _at, _block, _sb, _indexOfBlock);
 
         // Must compute the clockmin and clockmax values
-        st.clockMin = evaluateIntExpression(_at.getMinDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMIN_INDEX];
-        st.clockMax = evaluateIntExpression(_at.getMaxDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
+	String minDelay = _at.getMinDelay().trim();
+	if ((minDelay == null) || (minDelay.length() == 0)) {
+	    st.clockMin = 0 - _sb.values[SpecificationBlock.CLOCKMIN_INDEX];
+	} else {
+	    st.clockMin = evaluateIntExpression(_at.getMinDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMIN_INDEX];
+	}
+	String maxDelay = _at.getMaxDelay().trim();
+	if ((maxDelay == null) || (maxDelay.length() == 0)) {
+	    st.clockMax = 0 - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
+	} else {
+	    st.clockMax = evaluateIntExpression(_at.getMaxDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
+	}
+
     }
 
 
@@ -437,7 +465,7 @@ public class AvatarModelChecker implements Runnable {
         }
 
         TraceManager.addDev("Evaluating Int expression: " + act);
-
+	//Thread.currentThread().dumpStack();
         return (int)(new IntExpressionEvaluator().getResultOf(act));
     }
 
@@ -498,6 +526,8 @@ public class AvatarModelChecker implements Runnable {
         // Get the attributes value list
         AvatarBlock block = _st.blocks[0];
 
+	String retAction = null;
+
         for(AvatarAction aAction: _st.transitions[0].getActions()) {
             // Variable affectation
             if (aAction instanceof AvatarActionAssignment) {
@@ -509,6 +539,13 @@ public class AvatarModelChecker implements Runnable {
                   }*/
                 String nameOfVar = ((AvatarActionAssignment)aAction).getLeftHand().getName();
                 String act = ((AvatarActionAssignment)aAction).getRightHand().toString();
+
+		//TraceManager.addDev("act=" + act);
+		
+		if (retAction == null) {
+		    retAction = nameOfVar + "=" + act;
+		}
+		
                 int indexVar = block.getIndexOfAvatarAttributeWithName(nameOfVar);
                 AvatarType type = block.getAttribute(indexVar).getType();
                 if (indexVar != -1) {
@@ -528,8 +565,11 @@ public class AvatarModelChecker implements Runnable {
             }
         }
 
-
-        return "i(" + _st.transitions[0].getName() + "/" + _st.transitions[0].getID() + ")";
+	if (retAction == null) {
+	    retAction =  "";
+	}
+	
+        return "i(" + _st.blocks[0].getName() + "/" + retAction + ")";
     }
 
     private String executeSyncTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
@@ -559,6 +599,7 @@ public class AvatarModelChecker implements Runnable {
                 avat = aaoss.getSignal().getListOfAttributes().get(i);
                 if (avat.getType() == AvatarType.INTEGER) {
                     //TraceManager.addDev("Evaluating expression, value=" + value);
+		    TraceManager.addDev("Evaluating int expr=" + value);
                     result = evaluateIntExpression(value, block0, _newState.blocks[_st.blocksInt[0]]);
                 } else if (avat.getType() == AvatarType.BOOLEAN) {
                     resultB = evaluateBoolExpression(value, block0, _newState.blocks[_st.blocksInt[0]]);
@@ -585,15 +626,24 @@ public class AvatarModelChecker implements Runnable {
     public String toString() {
 	StringBuffer sb = new StringBuffer("States:\n");
 	for(SpecificationState state: states.values()) {
-	    sb.append(state.toString());
+	    sb.append(state.toString() + "\n");
 	}
 	sb.append("\nLinks:\n");
 	for(SpecificationLink link: links) {
-	    sb.append(link.toString());
+	    sb.append(link.toString() + "\n");
 	}
 	return sb.toString();
     }
 
 
+    public String toAUT() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("des(0," + getNbOfLinks() + "," + getNbOfStates() + ")\n");
+        
+        for(SpecificationLink link: links){
+	    sb.append("(" + link.originState.id + ",\"" + link.action + "\"," + link.destinationState.id + ")\n");
+        }
+        return new String(sb);
+    }
 
 }

@@ -62,6 +62,9 @@ import ui.*;
 
 public class JDialogAvatarModelChecker extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {
 
+    protected static String graphDir;
+    protected static boolean graphSelected = false;
+    
     protected MainGUI mgui;
 
     protected final static int NOT_STARTED = 1;
@@ -88,6 +91,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     //protected ButtonGroup exegroup;
     //protected JLabel gen, comp;
     //protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int, loopLimit;
+
+    protected JCheckBox saveGraphAUT;
+    protected JTextField graphPath;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
 
@@ -101,11 +107,15 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
 
     /** Creates new form  */
-    public JDialogAvatarModelChecker(Frame f, MainGUI _mgui, String title, AvatarSpecification _spec) {
+    public JDialogAvatarModelChecker(Frame f, MainGUI _mgui, String title, AvatarSpecification _spec, String _graphDir)  {
         super(f, title, true);
 
         mgui = _mgui;
 	spec = _spec;
+
+	if (graphDir == null) {
+	    graphDir = _graphDir + File.separator + "avatar.aut";
+	}
 
 	initComponents();
         myInitComponents();
@@ -135,6 +145,18 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         jp01.setLayout(gridbag01);
         jp01.setBorder(new javax.swing.border.TitledBorder("Options"));
 
+	c01.gridwidth = 1;
+	c01.gridheight = 1;
+	c01.weighty = 1.0;
+	c01.weightx = 1.0;
+	c01.fill = GridBagConstraints.HORIZONTAL;
+	c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+	saveGraphAUT = new JCheckBox("Save RG (AUT format) in:", graphSelected);
+	saveGraphAUT.addActionListener(this);
+	jp01.add(saveGraphAUT, c01);
+	graphPath = new JTextField(graphDir);
+	jp01.add(graphPath, c01);
+	c.add(jp01, BorderLayout.NORTH);
  
 
 
@@ -179,7 +201,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
-        }
+        } else if (evt.getSource() == saveGraphAUT) {
+	    setButtons();
+	}
     }
 
     public void closeDialog() {
@@ -230,9 +254,20 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	    testGo();
 	    amc.startModelChecking();
             
-	    jta.append("Nb of states:" + amc.getNbOfStates());
-	    jta.append("Nb of links:\n" + amc.getNbOfLinks());
+	    jta.append("Nb of states:" + amc.getNbOfStates() + "\n");
+	    jta.append("Nb of links:" + amc.getNbOfLinks() + "\n");
+	    //TraceManager.addDev(amc.toString());
 	    TraceManager.addDev(amc.toString());
+	    if (saveGraphAUT.isSelected()) {
+		try {
+		    String graph = amc.toAUT();
+		    //TraceManager.addDev("graph AUT=\n" + graph);
+		    FileUtils.saveFile(graphPath.getText(), graph);
+		    jta.append("Graph saved in " + graphPath.getText());
+		} catch (Exception e) {
+		    jta.append("Graph could not be saved in " + graphPath.getText());
+		}
+	    }
 	    
 
         } catch (InterruptedException ie) {
@@ -252,6 +287,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     }
 
     protected void setButtons() {
+	graphSelected = saveGraphAUT.isSelected();
+	graphPath.setEnabled(saveGraphAUT.isSelected());
         switch(mode) {
             case NOT_STARTED:
                 start.setEnabled(true);

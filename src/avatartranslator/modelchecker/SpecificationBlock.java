@@ -67,7 +67,7 @@ public class SpecificationBlock  {
     }
 
     public int getHash() {
-	return values.hashCode();
+	return Arrays.hashCode(values);
     }
 
     public void init(AvatarBlock _block) {

@@ -59,6 +59,7 @@ public class SpecificationState  {
     public SpecificationBlock [] blocks;
     public int hashValue;
     public boolean hashComputed;
+    public long id;
 
     public SpecificationState() {
 	hashComputed = false;
@@ -70,7 +71,7 @@ public class SpecificationState  {
 	for(int i=0; i<hash.length; i++) {
 	    hash[i] = blocks[i].getHash();
 	}
-	hashValue = hash.hashCode();
+	hashValue = Arrays.hashCode(hash);
 	hashComputed = true;
     }
 
@@ -97,7 +98,7 @@ public class SpecificationState  {
     }
 
     public String toString() {
-	StringBuffer sb = new StringBuffer("Hash: " + getHash());
+	StringBuffer sb = new StringBuffer("id: " + id);
 	for(int i=0; i<blocks.length; i++) {
 	    sb.append("\n  "+i + ": " + blocks[i].toString());
 	}

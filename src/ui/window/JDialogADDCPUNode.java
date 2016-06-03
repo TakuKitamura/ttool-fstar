@@ -57,7 +57,7 @@ import ui.*;
 import ui.avatardd.*;
 
 
-public class JDialogADDCPUNode extends javax.swing.JDialog implements ActionListener  {
+public class JDialogADDCPUNode extends javax.swing.JDialog implements ActionListener {
 	
 	private boolean regularClose;
 	

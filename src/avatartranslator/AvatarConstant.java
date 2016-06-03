@@ -72,4 +72,9 @@ public class AvatarConstant extends AvatarTerm {
 
     @Override
     public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) { }
+
+    @Override
+    public String toString() {
+	return getName();
+    }
 }

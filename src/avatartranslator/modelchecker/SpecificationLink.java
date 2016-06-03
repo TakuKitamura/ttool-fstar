@@ -61,6 +61,6 @@ public class SpecificationLink  {
     }
 
     public String toString() {
-	return "" + originState.getHash() + " --> " + destinationState.getHash();
+	return "" + originState.id + " -- " + action + " --> " + destinationState.id;
     }
 }
