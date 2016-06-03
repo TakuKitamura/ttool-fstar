@@ -475,7 +475,7 @@ public class AvatarModelChecker implements Runnable {
 
         AvatarStateMachineElement asmes, asmer;
         asmes = trs.getNext(0);
-        asmer = trs.getNext(0);
+        asmer = trr.getNext(0);
         if ((asmes == null) || (asmer == null)) return null;
         if (!(asmes instanceof AvatarActionOnSignal)) return null;
         if (!(asmer instanceof AvatarActionOnSignal)) return null;
