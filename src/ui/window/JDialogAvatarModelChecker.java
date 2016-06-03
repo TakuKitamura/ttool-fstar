@@ -64,6 +64,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
     protected static String graphDir;
     protected static boolean graphSelected = false;
+    protected static String graphDirDot;
+    protected static boolean graphSelectedDot = false;
     
     protected MainGUI mgui;
 
@@ -92,8 +94,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     //protected JLabel gen, comp;
     //protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int, loopLimit;
 
-    protected JCheckBox saveGraphAUT;
-    protected JTextField graphPath;
+    protected JCheckBox saveGraphAUT, saveGraphDot;
+    protected JTextField graphPath, graphPathDot;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
 
@@ -115,6 +117,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
 	if (graphDir == null) {
 	    graphDir = _graphDir + File.separator + "avatar.aut";
+	}
+	if (graphDirDot == null) {
+	    graphDirDot = _graphDir + File.separator + "avatar.dot";
 	}
 
 	initComponents();
@@ -156,6 +161,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	jp01.add(saveGraphAUT, c01);
 	graphPath = new JTextField(graphDir);
 	jp01.add(graphPath, c01);
+	saveGraphDot = new JCheckBox("Save RG (dotty format) in:", graphSelectedDot);
+	saveGraphDot.addActionListener(this);
+	jp01.add(saveGraphDot, c01);
+	graphPathDot = new JTextField(graphDirDot);
+	jp01.add(graphPathDot, c01);
 	c.add(jp01, BorderLayout.NORTH);
  
 
@@ -202,6 +212,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         } else if (command.equals("Close")) {
             closeDialog();
         } else if (evt.getSource() == saveGraphAUT) {
+	    setButtons();
+	} else if (evt.getSource() == saveGraphDot) {
 	    setButtons();
 	}
     }
@@ -263,9 +275,19 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 		    String graph = amc.toAUT();
 		    //TraceManager.addDev("graph AUT=\n" + graph);
 		    FileUtils.saveFile(graphPath.getText(), graph);
-		    jta.append("Graph saved in " + graphPath.getText());
+		    jta.append("Graph saved in " + graphPath.getText() + "\n");
 		} catch (Exception e) {
-		    jta.append("Graph could not be saved in " + graphPath.getText());
+		    jta.append("Graph could not be saved in " + graphPath.getText() + "\n");
+		}
+	    }
+	    if (saveGraphDot.isSelected()) {
+		try {
+		    String graph = amc.toDOT();
+		    //TraceManager.addDev("graph AUT=\n" + graph);
+		    FileUtils.saveFile(graphPathDot.getText(), graph);
+		    jta.append("Graph saved in " + graphPathDot.getText()+ "\n");
+		} catch (Exception e) {
+		    jta.append("Graph could not be saved in " + graphPathDot.getText()+ "\n");
 		}
 	    }
 	    
@@ -289,6 +311,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     protected void setButtons() {
 	graphSelected = saveGraphAUT.isSelected();
 	graphPath.setEnabled(saveGraphAUT.isSelected());
+	graphSelectedDot = saveGraphDot.isSelected();
+	graphPathDot.setEnabled(saveGraphDot.isSelected());
         switch(mode) {
             case NOT_STARTED:
                 start.setEnabled(true);

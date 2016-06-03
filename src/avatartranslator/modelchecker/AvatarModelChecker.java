@@ -68,6 +68,7 @@ public class AvatarModelChecker implements Runnable {
     private List<SpecificationState> pendingStates;
     private List<SpecificationLink> links;
     private long stateID = 0;
+    private int blockValues;
 
     public AvatarModelChecker(AvatarSpecification _spec) {
         spec = _spec;
@@ -130,6 +131,7 @@ public class AvatarModelChecker implements Runnable {
         // Compute initial state
         SpecificationState initialState = new SpecificationState();
         initialState.setInit(spec);
+	blockValues = initialState.getBlockValues();
 	initialState.id = getStateID();
         TraceManager.addDev("initialState=" + initialState.toString());
 
@@ -303,17 +305,19 @@ public class AvatarModelChecker implements Runnable {
             SpecificationLink link = new SpecificationLink();
             link.originState = _ss;
             link.action = action;
-            newState.computeHash();
-            SpecificationState similar = states.get(newState.getHash());
+            newState.computeHash(blockValues);
+            SpecificationState similar = states.get(newState.getHash(blockValues));
             if (similar == null) {
                 //  Unknown state
-                states.put(newState.getHash(), newState);
+                states.put(newState.getHash(blockValues), newState);
                 pendingStates.add(newState);
                 link.destinationState = newState;
 		newState.id = getStateID();
+		TraceManager.addDev("Creating new state for newState=" + newState); 
 
             } else {
                 // Create a link from former state to the existing one
+		TraceManager.addDev("Similar state found State=" + newState.getHash(blockValues) + "\n" + newState + "\nsimilar=" + similar.getHash(blockValues) + "\n" + similar); 
                 link.destinationState = similar;
             }
             links.add(link);
@@ -645,5 +649,17 @@ public class AvatarModelChecker implements Runnable {
         }
         return new String(sb);
     }
+
+    public String toDOT() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("digraph TToolAvatarGraph {\n");
+        
+        for(SpecificationLink link: links){
+	    sb.append(" " + link.originState.id + " -> " + link.destinationState.id  + "[label=\"" + link.action + "\"];\n");
+        }
+	sb.append("}");
+        return new String(sb);
+    }
+    
 
 }

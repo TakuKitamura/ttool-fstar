@@ -66,18 +66,23 @@ public class SpecificationState  {
     }
 
     // blocks must not be null
-    public void computeHash() {
-	int[] hash = new int[blocks.length];
-	for(int i=0; i<hash.length; i++) {
-	    hash[i] = blocks[i].getHash();
+    public void computeHash(int blockValues) {
+	int[] hash = new int[blockValues];
+	int cpt = 0;
+	for(int i=0; i<blocks.length; i++) {
+	    for(int j=0; j<blocks[i].values.length; j++) {
+		hash[cpt] = blocks[i].values[j];
+		cpt++;
+	    }
+	    //TraceManager.addDev("hash[" + i + "]=" + hash[i]);
 	}
 	hashValue = Arrays.hashCode(hash);
 	hashComputed = true;
     }
 
-    public int getHash() {
+    public int getHash(int blockValues) {
 	if (!hashComputed) {
-	    computeHash();
+	    computeHash(blockValues);
 	}
 	return hashValue;
     }
@@ -94,7 +99,7 @@ public class SpecificationState  {
 	    cpt ++;
 	}
 	
-	computeHash();
+	computeHash(getBlockValues());
     }
 
     public String toString() {
@@ -128,6 +133,15 @@ public class SpecificationState  {
 		sb.values[SpecificationBlock.CLOCKMAX_INDEX] = 0;
 	    }
 	}
+    }
+
+    public int getBlockValues() {
+	int cpt = 0;
+	for(int i=0; i<blocks.length; i++) {
+	    cpt += blocks[i].values.length;
+	    //TraceManager.addDev("hash[" + i + "]=" + hash[i]);
+	}
+	return cpt;
     }
 
 }

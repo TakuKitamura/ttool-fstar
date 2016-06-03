@@ -93,7 +93,7 @@ public class SpecificationBlock  {
 
     public String toString() {
 	StringBuffer sb = new StringBuffer("Hash=");
-	sb.append(getHash());
+	//sb.append(getHash());
 	for (int i=0; i<values.length; i++) {
 	    sb.append(" ");
 	    sb.append(values[i]);
