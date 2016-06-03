@@ -239,7 +239,7 @@ public class AvatarModelChecker implements Runnable {
             cpt ++;
         }
 
-	TraceManager.addDev("Possible transitions 1:" + transitions.size());
+	//TraceManager.addDev("Possible transitions 1:" + transitions.size());
 	
         // All locally executable transitions are now gathered.
         // We simply need to select the one that are executable
@@ -262,17 +262,17 @@ public class AvatarModelChecker implements Runnable {
             }
         }
         transitions = newTransitions;
-	TraceManager.addDev("Possible transitions 2:" + transitions.size());
+	//TraceManager.addDev("Possible transitions 2:" + transitions.size());
 
 	
         // Selecting only the transactions within the smallest clock interval
-        int clockMin=Integer.MAX_VALUE, clockMax=0;
+        int clockMin=Integer.MAX_VALUE, clockMax=Integer.MAX_VALUE;
         for(SpecificationTransition tr: transitions) {
             clockMin = Math.min(clockMin, tr.clockMin);
-            clockMax = Math.min(clockMin, tr.clockMin);
+            clockMax = Math.min(clockMax, tr.clockMax);
         }
 	
-        TraceManager.addDev("Selected clock interval:" + clockMin + "," + clockMax);
+        //TraceManager.addDev("Selected clock interval:" + clockMin + "," + clockMax);
 
         newTransitions = new ArrayList<SpecificationTransition>();
         for(SpecificationTransition tr: transitions) {
@@ -282,7 +282,7 @@ public class AvatarModelChecker implements Runnable {
             }
         }
         transitions = newTransitions;
-	TraceManager.addDev("Possible transitions 3:" + transitions.size());
+	//TraceManager.addDev("Possible transitions 3:" + transitions.size());
 
         // For each realizable transition
         //   Make it, reset clock of the involved blocks to 0, increase clockmin/clockhmax of each block
@@ -313,11 +313,11 @@ public class AvatarModelChecker implements Runnable {
                 pendingStates.add(newState);
                 link.destinationState = newState;
 		newState.id = getStateID();
-		TraceManager.addDev("Creating new state for newState=" + newState); 
+		//TraceManager.addDev("Creating new state for newState=" + newState); 
 
             } else {
                 // Create a link from former state to the existing one
-		TraceManager.addDev("Similar state found State=" + newState.getHash(blockValues) + "\n" + newState + "\nsimilar=" + similar.getHash(blockValues) + "\n" + similar); 
+		//TraceManager.addDev("Similar state found State=" + newState.getHash(blockValues) + "\n" + newState + "\nsimilar=" + similar.getHash(blockValues) + "\n" + similar); 
                 link.destinationState = similar;
             }
             links.add(link);
@@ -336,7 +336,7 @@ public class AvatarModelChecker implements Runnable {
             String s = Conversion.replaceAllString(guard, "[", "").trim();
             s = Conversion.replaceAllString(s, "]", "").trim();
             boolean guardOk = evaluateBoolExpression(s, _block, _sb);
-            TraceManager.addDev("guard ok=" + guardOk);
+            //TraceManager.addDev("guard ok=" + guardOk);
             if (!guardOk) {
                 return;
             }
@@ -435,7 +435,7 @@ public class AvatarModelChecker implements Runnable {
         BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
 
         if (act.trim().startsWith("100")) {
-            TraceManager.addDev("Current block " + _block.getName());
+            //TraceManager.addDev("Current block " + _block.getName());
         }
 
         boolean result = bee.getResultOf(act);
@@ -468,7 +468,7 @@ public class AvatarModelChecker implements Runnable {
             cpt ++;
         }
 
-        TraceManager.addDev("Evaluating Int expression: " + act);
+        //TraceManager.addDev("Evaluating Int expression: " + act);
 	//Thread.currentThread().dumpStack();
         return (int)(new IntExpressionEvaluator().getResultOf(act));
     }
@@ -554,7 +554,7 @@ public class AvatarModelChecker implements Runnable {
                 AvatarType type = block.getAttribute(indexVar).getType();
                 if (indexVar != -1) {
                     if (type == AvatarType.INTEGER) {
-			TraceManager.addDev("Evaluating int expr=" + act);
+			//TraceManager.addDev("Evaluating int expr=" + act);
                         int result = evaluateIntExpression(act, _st.blocks[0], _newState.blocks[_st.blocksInt[0]]);
                         _newState.blocks[_st.blocksInt[0]].values[SpecificationBlock.ATTR_INDEX+indexVar] = result;
                     } else if (type == AvatarType.BOOLEAN) {
@@ -603,7 +603,7 @@ public class AvatarModelChecker implements Runnable {
                 avat = aaoss.getSignal().getListOfAttributes().get(i);
                 if (avat.getType() == AvatarType.INTEGER) {
                     //TraceManager.addDev("Evaluating expression, value=" + value);
-		    TraceManager.addDev("Evaluating int expr=" + value);
+		    //TraceManager.addDev("Evaluating int expr=" + value);
                     result = evaluateIntExpression(value, block0, _newState.blocks[_st.blocksInt[0]]);
                 } else if (avat.getType() == AvatarType.BOOLEAN) {
                     resultB = evaluateBoolExpression(value, block0, _newState.blocks[_st.blocksInt[0]]);

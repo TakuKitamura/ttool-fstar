@@ -265,7 +265,7 @@ public class IntExpressionEvaluator {
             else if (c1 == ')') {
                 currentType = c1;
                 nbOpen --;
-                TraceManager.addDev(") met: Nb of open=" + nbOpen);
+                //TraceManager.addDev(") met: Nb of open=" + nbOpen);
                 if (nbOpen < 0) {
                     TraceManager.addDev("int Expr: found pb with a parenthesis");
                 }
@@ -274,7 +274,7 @@ public class IntExpressionEvaluator {
 
             else if (c1 == '(') {
                 nbOpen ++;
-                TraceManager.addDev("( met: Nb of open=" + nbOpen);
+                //TraceManager.addDev("( met: Nb of open=" + nbOpen);
                 currentType = c1;
 
                 return;

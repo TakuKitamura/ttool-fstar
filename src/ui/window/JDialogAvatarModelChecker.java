@@ -269,7 +269,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	    jta.append("Nb of states:" + amc.getNbOfStates() + "\n");
 	    jta.append("Nb of links:" + amc.getNbOfLinks() + "\n");
 	    //TraceManager.addDev(amc.toString());
-	    TraceManager.addDev(amc.toString());
+	    //TraceManager.addDev(amc.toString());
 	    if (saveGraphAUT.isSelected()) {
 		try {
 		    String graph = amc.toAUT();
