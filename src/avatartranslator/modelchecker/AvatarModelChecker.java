@@ -53,7 +53,7 @@ import avatartranslator.*;
 import myutil.*;
 
 public class AvatarModelChecker implements Runnable {
-    private final static int DEFAULT_NB_OF_THREADS = 8;
+    private final static int DEFAULT_NB_OF_THREADS = 1;
     private final static int SLEEP_DURATION = 500;
 
     private AvatarSpecification spec;
@@ -309,11 +309,23 @@ public class AvatarModelChecker implements Runnable {
 
 	if (ignoreConcurrenceBetweenInternalActions) {
 	    SpecificationTransition st = null;
-	    // See whether there is at least one transition with an internal action
+	    // See whether there is at least one transition with an immediate internal action with no alternative in the same block
 	    for(SpecificationTransition tr: transitions) {
-		if (AvatarTransition.isActionType(tr.getType()) || tr.getType() == AvatarTransition.TYPE_EMPTY) {
-		    st = tr;
-		    break;
+		if ((AvatarTransition.isActionType(tr.getType()) && (tr.clockMax ==  clockMin))|| tr.getType() == AvatarTransition.TYPE_EMPTY) {
+		    // Must look for similar transitions in the the same block
+		    boolean foundSameBlock = false;
+		    for(SpecificationTransition tro: transitions) {
+			if (tro != tr) {
+			    if (tro.hasBlockOf(tr)) {
+				foundSameBlock = true;
+				break;
+			    }
+			}
+		    }
+		    if (!foundSameBlock) {
+			st = tr;
+			break;
+		    }
 		}
 	    }
 	    if (st != null) {
@@ -322,12 +334,17 @@ public class AvatarModelChecker implements Runnable {
 	    }
 	}
 
+	TraceManager.addDev("Possible transitions 4:" + transitions.size());
         // For each realizable transition
         //   Make it, reset clock of the involved blocks to 0, increase clockmin/clockhmax of each block
         //   compute new state, and compare with existing ones
         //   If not a new state, create the link rom the previous state to the new one
         //   Otherwise create the new state and its link, and add it to the pending list of states
+	int cptt = 0;
         for(SpecificationTransition tr: transitions) {
+	    TraceManager.addDev("Handling transitions #" + cptt + " type =" + tr.getType());
+	    cptt ++;
+
             // Make tr
             // to do so, must create a new state
             SpecificationState newState = _ss.advancedClone();

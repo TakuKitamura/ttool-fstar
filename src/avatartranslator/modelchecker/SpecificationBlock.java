@@ -62,6 +62,8 @@ public class SpecificationBlock  {
     public static final int ATTR_INDEX = 3;
     
     public int [] values; // state in block, clockmin, clockmax, variables
+    public boolean hasTimedTransition;
+    public boolean timeElapsed;
 
     public SpecificationBlock() {
     }
@@ -105,5 +107,9 @@ public class SpecificationBlock  {
 	SpecificationBlock sb = new SpecificationBlock();
 	sb.values = values.clone();
 	return sb;
+    }
+
+    public boolean hasTimedTransition() {
+	return true;
     }
 }

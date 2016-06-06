@@ -110,6 +110,26 @@ public class SpecificationTransition  {
 	
     }
 
+    public boolean hasBlockOf(SpecificationTransition _tr) {
+	if (blocks == null) {
+	    return false;
+	}
+
+	if (_tr.blocks == null) {
+	    return false;
+	}
+
+	for (int i=0; i<blocks.length; i++) {
+	    for(int j=0; j<_tr.blocks.length; j++) {
+		if (blocks[i] == blocks[j]) {
+		    return true;
+		}
+	    }
+	}
+
+	return false;
+    }
+
     public boolean hasBlockIndex(int _index) {
 	if (blocksInt == null) {
 	    return false;

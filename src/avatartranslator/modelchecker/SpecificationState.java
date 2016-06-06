@@ -120,14 +120,21 @@ public class SpecificationState  {
     }
 
     // Increase the clock of the blocks not in the transition
-    // and puts the one of others to 0
+    // and having a timed transition.
+    // Otherwise, puts the one of others to 0
     public void increaseClockOfBlocksExcept(SpecificationTransition _st) {
 	SpecificationBlock sb;
 	for(int i=0; i<blocks.length; i++) {
 	    sb = blocks[i];
 	    if (!(_st.hasBlockIndex(i))) {
-		sb.values[SpecificationBlock.CLOCKMIN_INDEX] += _st.clockMin;
-		sb.values[SpecificationBlock.CLOCKMAX_INDEX] += _st.clockMax;
+		if (sb.hasTimedTransition()) {
+		    sb.values[SpecificationBlock.CLOCKMIN_INDEX] += _st.clockMin;
+		    sb.values[SpecificationBlock.CLOCKMAX_INDEX] += _st.clockMax;
+		} 
+		/*else {
+		    sb.values[SpecificationBlock.CLOCKMIN_INDEX] = 0;
+		    sb.values[SpecificationBlock.CLOCKMAX_INDEX] = 0;
+		    }*/
 	    } else {
 		sb.values[SpecificationBlock.CLOCKMIN_INDEX] = 0;
 		sb.values[SpecificationBlock.CLOCKMAX_INDEX] = 0;
