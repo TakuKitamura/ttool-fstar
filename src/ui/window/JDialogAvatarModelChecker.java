@@ -66,6 +66,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     protected static boolean graphSelected = false;
     protected static String graphDirDot;
     protected static boolean graphSelectedDot = false;
+    protected static boolean ignoreEmptyTransitionsSelected = true;
     
     protected MainGUI mgui;
 
@@ -94,7 +95,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     //protected JLabel gen, comp;
     //protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int, loopLimit;
 
-    protected JCheckBox saveGraphAUT, saveGraphDot;
+    protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions;
     protected JTextField graphPath, graphPathDot;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
@@ -156,6 +157,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	c01.weightx = 1.0;
 	c01.fill = GridBagConstraints.HORIZONTAL;
 	c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+	ignoreEmptyTransitions = new JCheckBox("IgnoreEmptyTransitions", ignoreEmptyTransitionsSelected);
+	ignoreEmptyTransitions.addActionListener(this);
+	jp01.add(ignoreEmptyTransitions, c01);
 	saveGraphAUT = new JCheckBox("Save RG (AUT format) in:", graphSelected);
 	saveGraphAUT.addActionListener(this);
 	jp01.add(saveGraphAUT, c01);
@@ -215,6 +219,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	    setButtons();
 	} else if (evt.getSource() == saveGraphDot) {
 	    setButtons();
+	} else if (evt.getSource() == ignoreEmptyTransitions) {
+	    setButtons();
 	}
     }
 
@@ -261,8 +267,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         try {  
 	    jta.append("Starting the model checker\n");
 	    amc = new AvatarModelChecker(spec);
-	    
-	    
+
+	    // Setting options
+	    amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
+
+	    // Starting model checking
 	    testGo();
 	    amc.startModelChecking();
             
@@ -313,6 +322,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	graphPath.setEnabled(saveGraphAUT.isSelected());
 	graphSelectedDot = saveGraphDot.isSelected();
 	graphPathDot.setEnabled(saveGraphDot.isSelected());
+	ignoreEmptyTransitionsSelected = ignoreEmptyTransitions.isSelected();
         switch(mode) {
             case NOT_STARTED:
                 start.setEnabled(true);

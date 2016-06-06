@@ -56,7 +56,7 @@ public class AvatarStateMachine extends AvatarElement {
     public AvatarStateElement [] allStates;
 
 
-    
+
     protected LinkedList<AvatarStateMachineElement> elements;
     protected AvatarStartState startState;
 
@@ -79,13 +79,13 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
     public int getNbOfStatesElement() {
-	int cpt = 0;
-	for(AvatarStateMachineElement asme: elements) {
+        int cpt = 0;
+        for(AvatarStateMachineElement asme: elements) {
             if (asme instanceof AvatarStateElement) {
                 cpt ++;
             }
         }
-	return cpt;
+        return cpt;
     }
 
     public void addElement(AvatarStateMachineElement _element) {
@@ -112,12 +112,12 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
     public void makeAllStates() {
-	int cpt = 0;
-	allStates = new AvatarStateElement[getNbOfStatesElement()];
+        int cpt = 0;
+        allStates = new AvatarStateElement[getNbOfStatesElement()];
         for(AvatarStateMachineElement asme: elements) {
             if (asme instanceof AvatarStateElement) {
                 allStates[cpt] = (AvatarStateElement)asme;
-		cpt ++;
+                cpt ++;
             }
         }
     }
@@ -252,25 +252,25 @@ public class AvatarStateMachine extends AvatarElement {
                     previous = getPreviousElementOf(elt);
                     next = elt.getNext(0);
 
-		    if (!(next instanceof AvatarState)) {
-			// We create an intermediate state
+                    if (!(next instanceof AvatarState)) {
+                        // We create an intermediate state
                         AvatarState state = new AvatarState("IntermediateState__" + id, elt.getReferenceObject());
                         toAdd.add(state);
                         AvatarTransition at1 = new AvatarTransition(_block, "TransitionForIntermediateState__" + id, elt.getReferenceObject());
                         toAdd.add(at1);
 
-			tr.removeAllNexts();
+                        tr.removeAllNexts();
                         tr.addNext(state);
                         state.addNext(at1);
                         at1.addNext(next);
 
                         id ++;
-		    }		    
+                    }
                 }
             }
         }
 
-	for(AvatarStateMachineElement add: toAdd) {
+        for(AvatarStateMachineElement add: toAdd) {
             elements.add(add);
         }
     }
@@ -1457,33 +1457,83 @@ public class AvatarStateMachine extends AvatarElement {
         }
     }
 
-    // allstates must be computed first i.e. non null.
-    // Otherwise, returns -1
-    public int getIndexOfStartState() {
-	if (allStates == null) {
-	    return -1;
-	}
+    /**
+     * Removes all empty transitions between two states.
+     * This concerns also the start state, and a end state
+     * DO NOT take into account code of states, and start states
+     *
+     * @param block
+     *      The block containing the state machine
+     */
+    public void removeEmptyTransitions (AvatarBlock _block) {
 
-	for(int i=0; i<allStates.length; i++) {
-	    if (allStates[i] instanceof AvatarStartState) {
-		return i;
+        // Look for such a transition
+        // states -> tr -> state with tr is empty
+        // a tr is empty when it has no action or guard
+        AvatarStateElement foundState1 = null, foundState2=null;
+        AvatarTransition foundAt=null;
+
+
+        for(AvatarStateMachineElement elt: elements) {
+            if ((elt instanceof AvatarStateElement) && (!(elt instanceof AvatarStartState))) {
+                if (elt.getNexts().size() == 1) {
+                    AvatarTransition at = (AvatarTransition)(elt.getNext(0));
+                    if (at.getNext(0) instanceof AvatarStateElement) {
+                        if (at.isEmpty() && at.hasNonDeterministicGuard()) {
+                            foundState1 = (AvatarStateElement) elt;
+                            foundAt = at;
+                            foundState2 = (AvatarStateElement)(at.getNext(0));
+			    break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Found?
+        if (foundState1 != null) {
+	    if( foundState1 == foundState2) {
+		// We simply remove the transition
+		removeElement(foundAt);
+	    } else {
+		// Must remove state1 and at, and link all previous of state 1 to state2
+		for(AvatarStateMachineElement elt:  getPreviousElementsOf(foundState1)) {
+		    elt.replaceAllNext(foundState1, foundState2);
+		}
+		removeElement(foundAt);
+		removeElement(foundState1);
+		foundState2.addReferenceObjectFrom(foundState1);
+		
 	    }
-	}
+	    removeEmptyTransitions(_block);
+        }
+    }
 
-	return -1;
+    public int getIndexOfStartState() {
+        if (allStates == null) {
+            return -1;
+        }
+
+        for(int i=0; i<allStates.length; i++) {
+            if (allStates[i] instanceof AvatarStartState) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     public int getIndexOfState(AvatarStateElement _ase) {
-	if (allStates == null) {
-	    return -1;
-	}
+        if (allStates == null) {
+            return -1;
+        }
 
-	for(int i=0; i<allStates.length; i++) {
-	    if (allStates[i] == _ase) {
-		return i;
-	    }
-	}
+        for(int i=0; i<allStates.length; i++) {
+            if (allStates[i] == _ase) {
+                return i;
+            }
+        }
 
-	return -1;
+        return -1;
     }
 }

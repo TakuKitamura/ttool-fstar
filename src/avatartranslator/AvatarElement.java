@@ -64,6 +64,17 @@ public class AvatarElement {
         referenceObject = _referenceObject;
     }
 
+    public void addReferenceObjectFrom(AvatarElement _elt) {
+	addReferenceObject(_elt.getReferenceObject());
+	Vector<Object> others = _elt.getReferenceObjects();
+	if (others != null) {
+	    for(Object o: others) {
+		addReferenceObject(o);
+	    }
+	}
+	
+    }
+
     public void addReferenceObject(Object _ref) {
         if (otherReferenceObjects == null) {
             otherReferenceObjects = new Vector<Object>();
@@ -97,6 +108,10 @@ public class AvatarElement {
 
     public Object getReferenceObject() {
         return referenceObject;
+    }
+
+    public Vector<Object> getReferenceObjects() {
+	return otherReferenceObjects;
     }
 
     public int getID(){

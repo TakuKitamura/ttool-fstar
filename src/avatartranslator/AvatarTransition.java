@@ -54,9 +54,14 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
     // Type management: to be used by code generators
     public static final int UNDEFINED = -1;
-    public static final int TYPE_ACTION = 0;
-    public static final int TYPE_SEND_SYNC = 1;
-    public static final int TYPE_RECV_SYNC = 2;
+    
+    public static final int TYPE_SEND_SYNC = 0;
+    public static final int TYPE_RECV_SYNC = 1;
+    
+    public static final int TYPE_ACTIONONLY = 2;
+    public static final int TYPE_EMPTY = 3;
+    public static final int TYPE_METHODONLY = 4;
+    public static final int TYPE_ACTION_AND_METHOD = 5;
 
     public int type = UNDEFINED;
 
@@ -94,6 +99,31 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
     public int getNbOfAction() {
         return actions.size();
+    }
+
+    public static boolean isActionType(int _type) {
+	return ((_type == TYPE_ACTIONONLY) || (_type == TYPE_METHODONLY) || (_type == TYPE_ACTION_AND_METHOD));
+    }
+
+    public boolean hasMethod() {
+	for(AvatarAction aa: actions) {
+	    if (aa.isAMethodCall()) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean hasAction() {
+	for(AvatarAction aa: actions) {
+	    if (aa.isABasicVariableSetting()) {
+		return true;
+	    }
+	    if (aa.isAVariableSetting()) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     public LinkedList<AvatarAction> getActions () {
@@ -229,6 +259,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
         return (actions.size()  == 0);
     }
+
 
 
     public AvatarTransition cloneMe() {

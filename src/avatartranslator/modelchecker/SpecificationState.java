@@ -99,7 +99,7 @@ public class SpecificationState  {
 	    cpt ++;
 	}
 	
-	computeHash(getBlockValues());
+	//computeHash(getBlockValues());
     }
 
     public String toString() {

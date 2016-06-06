@@ -416,6 +416,15 @@ public class AvatarSpecification extends AvatarElement {
         return false;
     }
 
+
+    public void removeEmptyTransitions() {
+	for (AvatarBlock block: this.blocks) {
+            AvatarStateMachine asm = block.getStateMachine ();
+            if (asm != null)
+		asm.removeEmptyTransitions (block);
+        }
+    }
+
     public void makeRobustness() {
         TraceManager.addDev("Make robustness");
         if (robustnessMade) {
