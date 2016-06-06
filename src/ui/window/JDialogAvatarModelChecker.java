@@ -67,6 +67,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     protected static String graphDirDot;
     protected static boolean graphSelectedDot = false;
     protected static boolean ignoreEmptyTransitionsSelected = true;
+    protected static boolean ignoreConcurrenceBetweenInternalActionsSelected = true;
     
     protected MainGUI mgui;
 
@@ -95,7 +96,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     //protected JLabel gen, comp;
     //protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int, loopLimit;
 
-    protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions;
+    protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreConcurrenceBetweenInternalActions;
     protected JTextField graphPath, graphPathDot;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
@@ -160,6 +161,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	ignoreEmptyTransitions = new JCheckBox("IgnoreEmptyTransitions", ignoreEmptyTransitionsSelected);
 	ignoreEmptyTransitions.addActionListener(this);
 	jp01.add(ignoreEmptyTransitions, c01);
+	ignoreEmptyTransitions = new JCheckBox("IgnoreEmptyTransitions", ignoreConcurrenceBetweenInternalActionsSelected);
+	ignoreConcurrenceBetweenInternalActions.addActionListener(this);
+	jp01.add(gnoreEmptyTransitions, c01);
 	saveGraphAUT = new JCheckBox("Save RG (AUT format) in:", graphSelected);
 	saveGraphAUT.addActionListener(this);
 	jp01.add(saveGraphAUT, c01);
@@ -221,7 +225,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	    setButtons();
 	} else if (evt.getSource() == ignoreEmptyTransitions) {
 	    setButtons();
-	}
+	} else if (evt.getSource() == ignoreConcurrenceBetweenInternalActions) {
+	    setButtons();
+	} 
     }
 
     public void closeDialog() {
@@ -323,6 +329,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	graphSelectedDot = saveGraphDot.isSelected();
 	graphPathDot.setEnabled(saveGraphDot.isSelected());
 	ignoreEmptyTransitionsSelected = ignoreEmptyTransitions.isSelected();
+	ignoreConcurrenceBetweenInternalActionsSelected = ignoreConcurrenceBetweenInternalActions.isSelected();
         switch(mode) {
             case NOT_STARTED:
                 start.setEnabled(true);
