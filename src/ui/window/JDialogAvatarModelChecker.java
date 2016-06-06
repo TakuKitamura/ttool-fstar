@@ -158,10 +158,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	c01.weightx = 1.0;
 	c01.fill = GridBagConstraints.HORIZONTAL;
 	c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-	ignoreEmptyTransitions = new JCheckBox("IgnoreEmptyTransitions", ignoreEmptyTransitionsSelected);
+	ignoreEmptyTransitions = new JCheckBox("Do not display empty transitions as internal actions", ignoreEmptyTransitionsSelected);
 	ignoreEmptyTransitions.addActionListener(this);
 	jp01.add(ignoreEmptyTransitions, c01);
-	ignoreEmptyTransitions = new JCheckBox("IgnoreEmptyTransitions", ignoreConcurrenceBetweenInternalActionsSelected);
+	ignoreConcurrenceBetweenInternalActions = new JCheckBox("Ignore concurrency between internal actions", ignoreConcurrenceBetweenInternalActionsSelected);
 	ignoreConcurrenceBetweenInternalActions.addActionListener(this);
 	jp01.add(ignoreConcurrenceBetweenInternalActions, c01);
 	saveGraphAUT = new JCheckBox("Save RG (AUT format) in:", graphSelected);
@@ -276,6 +276,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
 	    // Setting options
 	    amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
+	    amc.setIgnoreConcurrenceBetweenInternalActions(ignoreConcurrenceBetweenInternalActionsSelected);
 
 	    // Starting model checking
 	    testGo();
@@ -283,7 +284,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             
 	    jta.append("Nb of states:" + amc.getNbOfStates() + "\n");
 	    jta.append("Nb of links:" + amc.getNbOfLinks() + "\n");
-	    //TraceManager.addDev(amc.toString());
+	    TraceManager.addDev(amc.toString());
 	    //TraceManager.addDev(amc.toString());
 	    if (saveGraphAUT.isSelected()) {
 		try {

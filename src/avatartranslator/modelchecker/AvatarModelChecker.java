@@ -73,6 +73,7 @@ public class AvatarModelChecker implements Runnable {
 
     // Otions
     private boolean ignoreEmptyTransitions;
+    private boolean ignoreConcurrenceBetweenInternalActions;
 
     public AvatarModelChecker(AvatarSpecification _spec) {
         spec = _spec;
@@ -99,6 +100,10 @@ public class AvatarModelChecker implements Runnable {
 
     public void setIgnoreEmptyTransitions(boolean _b) {
         ignoreEmptyTransitions = _b;
+    }
+
+    public void setIgnoreConcurrenceBetweenInternalActions(boolean _b) {
+	ignoreConcurrenceBetweenInternalActions = _b;
     }
 
 
@@ -246,12 +251,6 @@ public class AvatarModelChecker implements Runnable {
             SpecificationBlock sb = _ss.blocks[cpt];
             AvatarStateElement ase = asm.allStates[sb.values[SpecificationBlock.STATE_INDEX]];
 
-
-            // Handle empty transitions
-            //if (ignoreEmptyTransitions) {
-            //    ase = getStateWithNonEmptyUniqueTransition(ase, block, sb);
-            //}
-
             for(AvatarStateMachineElement elt: ase.getNexts()) {
                 if (elt instanceof AvatarTransition) {
                     handleAvatarTransition((AvatarTransition)elt, block, sb, cpt, transitions);
@@ -261,10 +260,10 @@ public class AvatarModelChecker implements Runnable {
             cpt ++;
         }
 
-        //TraceManager.addDev("Possible transitions 1:" + transitions.size());
+        TraceManager.addDev("Possible transitions 1:" + transitions.size());
 
         // All locally executable transitions are now gathered.
-        // We simply need to select the one that are executable
+        // We simply need to select the ones that are executable
         // Two constraints: synchronous transactions must have a counter part
         // then, we select only the transitions which clock intervals are within the lowest clock interval
 
@@ -286,7 +285,7 @@ public class AvatarModelChecker implements Runnable {
 	    }
         }
         transitions = newTransitions;
-        //TraceManager.addDev("Possible transitions 2:" + transitions.size());
+        TraceManager.addDev("Possible transitions 2:" + transitions.size());
 
 
         // Selecting only the transactions within the smallest clock interval
@@ -296,7 +295,7 @@ public class AvatarModelChecker implements Runnable {
             clockMax = Math.min(clockMax, tr.clockMax);
         }
 
-        //TraceManager.addDev("Selected clock interval:" + clockMin + "," + clockMax);
+        TraceManager.addDev("Selected clock interval:" + clockMin + "," + clockMax);
 
         newTransitions = new ArrayList<SpecificationTransition>();
         for(SpecificationTransition tr: transitions) {
@@ -306,7 +305,22 @@ public class AvatarModelChecker implements Runnable {
             }
         }
         transitions = newTransitions;
-        //TraceManager.addDev("Possible transitions 3:" + transitions.size());
+        TraceManager.addDev("Possible transitions 3:" + transitions.size());
+
+	if (ignoreConcurrenceBetweenInternalActions) {
+	    SpecificationTransition st = null;
+	    // See whether there is at least one transition with an internal action
+	    for(SpecificationTransition tr: transitions) {
+		if (AvatarTransition.isActionType(tr.getType()) || tr.getType() == AvatarTransition.TYPE_EMPTY) {
+		    st = tr;
+		    break;
+		}
+	    }
+	    if (st != null) {
+		transitions.clear();
+		transitions.add(st);
+	    }
+	}
 
         // For each realizable transition
         //   Make it, reset clock of the involved blocks to 0, increase clockmin/clockhmax of each block
@@ -494,6 +508,7 @@ public class AvatarModelChecker implements Runnable {
     }
 
     public int evaluateIntExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb) {
+	TraceManager.addDev("Evaluating Int expression 1: " + _expr);
         String act = _expr;
         int cpt = 0;
         for(AvatarAttribute at: _block.getAttributes()) {
@@ -514,7 +529,7 @@ public class AvatarModelChecker implements Runnable {
             cpt ++;
         }
 
-        //TraceManager.addDev("Evaluating Int expression: " + act);
+        TraceManager.addDev("Evaluating Int expression S: " + act);
         //Thread.currentThread().dumpStack();
         return (int)(new IntExpressionEvaluator().getResultOf(act));
     }
@@ -588,9 +603,9 @@ public class AvatarModelChecker implements Runnable {
                   return "";
                   }*/
                 String nameOfVar = ((AvatarActionAssignment)aAction).getLeftHand().getName();
-                String act = ((AvatarActionAssignment)aAction).getRightHand().toString();
+                String act = ((AvatarActionAssignment)aAction).getRightHand().getName();
 
-                //TraceManager.addDev("act=" + act);
+                TraceManager.addDev("*** act=" + act);
 
                 if (retAction == null) {
                     retAction = nameOfVar + "=" + act;
