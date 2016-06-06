@@ -163,7 +163,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	jp01.add(ignoreEmptyTransitions, c01);
 	ignoreEmptyTransitions = new JCheckBox("IgnoreEmptyTransitions", ignoreConcurrenceBetweenInternalActionsSelected);
 	ignoreConcurrenceBetweenInternalActions.addActionListener(this);
-	jp01.add(gnoreEmptyTransitions, c01);
+	jp01.add(ignoreConcurrenceBetweenInternalActions, c01);
 	saveGraphAUT = new JCheckBox("Save RG (AUT format) in:", graphSelected);
 	saveGraphAUT.addActionListener(this);
 	jp01.add(saveGraphAUT, c01);
