@@ -61,23 +61,23 @@ import ui.*;
 
 
 public class JDialogAvatarModelChecker extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {
-
+    public final static int REACHABILITY_ALL        = 1;
+    public final static int REACHABILITY_SELECTED   = 2;
+    public final static int REACHABILITY_NONE       = 3;
+   
     protected static String graphDir;
     protected static boolean graphSelected = false;
     protected static String graphDirDot;
     protected static boolean graphSelectedDot = false;
     protected static boolean ignoreEmptyTransitionsSelected = true;
     protected static boolean ignoreConcurrenceBetweenInternalActionsSelected = true;
+    protected static int reachabilitySelected = REACHABILITY_NONE;
     
     protected MainGUI mgui;
 
     protected final static int NOT_STARTED = 1;
     protected final static int STARTED = 2;
     protected final static int STOPPED = 3;
-
-    public final static int REACHABILITY_ALL        = 1;
-    public final static int REACHABILITY_SELECTED   = 2;
-    public final static int REACHABILITY_NONE       = 3;
 
     private int mode;
 
@@ -95,7 +95,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     //protected ButtonGroup exegroup;
     //protected JLabel gen, comp;
     //protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int, loopLimit;
-
+    
+    protected JRadioButton noReachability, reachabilityCheckable, reachabilityAllStates;
+    protected ButtonGroup reachabilities;
+    
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreConcurrenceBetweenInternalActions;
     protected JTextField graphPath, graphPathDot;
     protected JTabbedPane jp1;
@@ -164,6 +167,31 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	ignoreConcurrenceBetweenInternalActions = new JCheckBox("Ignore concurrency between internal actions", ignoreConcurrenceBetweenInternalActionsSelected);
 	ignoreConcurrenceBetweenInternalActions.addActionListener(this);
 	jp01.add(ignoreConcurrenceBetweenInternalActions, c01);
+
+	
+	// Reachability
+	reachabilities = new ButtonGroup();
+	
+	noReachability = new JRadioButton("No reachability");
+	noReachability.addActionListener(this);
+	jp01.add(noReachability, c01);
+	reachabilities.add(noReachability);
+
+	reachabilityCheckable = new JRadioButton("Reachability of selected states");
+	reachabilityCheckable.addActionListener(this);
+	jp01.add(reachabilityCheckable, c01);
+	reachabilities.add(reachabilityCheckable);
+	
+	reachabilityAllStates = new JRadioButton("Reachability of all states");
+	reachabilityAllStates.addActionListener(this);
+	jp01.add(reachabilityAllStates, c01);
+	reachabilities.add(reachabilityAllStates);
+
+	noReachability.setSelected(reachabilitySelected ==  REACHABILITY_NONE);
+	reachabilityCheckable.setSelected(reachabilitySelected ==  REACHABILITY_SELECTED);
+	reachabilityAllStates.setSelected(reachabilitySelected ==  REACHABILITY_ALL);
+
+	// RG
 	saveGraphAUT = new JCheckBox("Save RG (AUT format) in:", graphSelected);
 	saveGraphAUT.addActionListener(this);
 	jp01.add(saveGraphAUT, c01);
@@ -227,7 +255,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	    setButtons();
 	} else if (evt.getSource() == ignoreConcurrenceBetweenInternalActions) {
 	    setButtons();
-	} 
+	} else {
+	    setButtons();
+	}
     }
 
     public void closeDialog() {
@@ -278,13 +308,32 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	    amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
 	    amc.setIgnoreConcurrenceBetweenInternalActions(ignoreConcurrenceBetweenInternalActionsSelected);
 
+	    // Reachability
+	    if (reachabilitySelected ==  REACHABILITY_SELECTED) {
+		amc.setReachabilityOfSelected();
+		jta.append("Reachability of selected states activated\n");
+	    }
+	    
+	    // RG?
+	    if (graphSelected || graphSelectedDot) {
+		amc.setComputeRG(true);
+		jta.append("Computation of Reachability Graph activated\n");
+	    }
+	    
 	    // Starting model checking
 	    testGo();
+	    
 	    amc.startModelChecking();
             
 	    jta.append("Nb of states:" + amc.getNbOfStates() + "\n");
 	    jta.append("Nb of links:" + amc.getNbOfLinks() + "\n");
-	    TraceManager.addDev(amc.toString());
+
+	    if (reachabilitySelected ==  REACHABILITY_SELECTED) {
+		jta.append("\nReachabilities found:\n");
+		jta.append(amc.reachabilityToString());
+	    }
+	    
+	    //TraceManager.addDev(amc.toString());
 	    //TraceManager.addDev(amc.toString());
 	    if (saveGraphAUT.isSelected()) {
 		try {
@@ -331,6 +380,15 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	graphPathDot.setEnabled(saveGraphDot.isSelected());
 	ignoreEmptyTransitionsSelected = ignoreEmptyTransitions.isSelected();
 	ignoreConcurrenceBetweenInternalActionsSelected = ignoreConcurrenceBetweenInternalActions.isSelected();
+
+	if (noReachability.isSelected()) {
+	    reachabilitySelected = REACHABILITY_NONE;
+	} else if ( reachabilityCheckable.isSelected()) {
+	    reachabilitySelected = REACHABILITY_SELECTED;
+	} else {
+	    reachabilitySelected = REACHABILITY_ALL;
+	}
+	
         switch(mode) {
             case NOT_STARTED:
                 start.setEnabled(true);

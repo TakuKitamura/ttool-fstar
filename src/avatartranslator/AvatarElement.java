@@ -122,4 +122,8 @@ public class AvatarElement {
         TraceManager.addDev("Reset AvatarID");
         ID = 0;
     }
+
+    public String toString() {
+	return getName();
+    }
 }

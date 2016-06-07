@@ -60,6 +60,7 @@ public class AvatarModelChecker implements Runnable {
     private int nbOfThreads = DEFAULT_NB_OF_THREADS;
     private int nbOfCurrentComputations;
     private boolean stoppedBeforeEnd;
+    private boolean stoppedConditionReached;
 
 
 
@@ -71,13 +72,24 @@ public class AvatarModelChecker implements Runnable {
     private int blockValues;
 
 
-    // Otions
+    // Options
     private boolean ignoreEmptyTransitions;
     private boolean ignoreConcurrenceBetweenInternalActions;
+
+    // RG
+    private boolean computeRG;
+    
+    // Reachability
+    private boolean studyReachability;
+    private ArrayList<SpecificationReachability> reachabilities;
+    private int nbOfRemainingReachabilities;
 
     public AvatarModelChecker(AvatarSpecification _spec) {
         spec = _spec;
         ignoreEmptyTransitions = true;
+	ignoreConcurrenceBetweenInternalActions = true;
+	studyReachability = false;
+	computeRG = false;
     }
 
     public int getNbOfStates() {
@@ -104,6 +116,33 @@ public class AvatarModelChecker implements Runnable {
 
     public void setIgnoreConcurrenceBetweenInternalActions(boolean _b) {
 	ignoreConcurrenceBetweenInternalActions = _b;
+    }
+
+    public int setReachabilityOfSelected() {
+	reachabilities = new ArrayList<SpecificationReachability>();
+	for(AvatarBlock block: spec.getListOfBlocks()) {
+	    for(AvatarStateMachineElement elt: block.getStateMachine().getListOfElements()) {
+		if (elt.isCheckable()) {
+		    SpecificationReachability reach = new SpecificationReachability(elt);
+		    reachabilities.add(reach);
+		}
+	    }
+	}
+	nbOfRemainingReachabilities = reachabilities.size();
+	studyReachability = true;
+	return nbOfRemainingReachabilities;
+    }
+
+    public ArrayList<SpecificationReachability> getReachabilities() {
+	return reachabilities;
+    }
+
+    public int getNbOfRemainingReachabilities() {
+	return nbOfRemainingReachabilities;
+    }
+
+    public void setComputeRG(boolean _rg) {
+	computeRG = _rg;
     }
 
 
@@ -144,6 +183,11 @@ public class AvatarModelChecker implements Runnable {
         pendingStates = Collections.synchronizedList(new LinkedList<SpecificationState>());
         links = Collections.synchronizedList(new ArrayList<SpecificationLink>());
 
+	// Check stop conditions
+	if (mustStop()) {
+	    return;
+	}
+	
         // Compute initial state
         SpecificationState initialState = new SpecificationState();
         initialState.setInit(spec);
@@ -182,6 +226,16 @@ public class AvatarModelChecker implements Runnable {
             try {
                 ts[i].join();} catch (Exception e){}
         }
+
+	// Set to non reachable not computed elements
+	if ((studyReachability) && (!stoppedBeforeEnd)) {
+	    for(SpecificationReachability re: reachabilities) {
+		if (re.result == SpecificationReachabilityType.NOTCOMPUTED) {
+		    re.result = SpecificationReachabilityType.NONREACHABLE;
+		}
+	    }
+	}
+	
     }
 
     public void run() {
@@ -190,7 +244,16 @@ public class AvatarModelChecker implements Runnable {
         boolean go = true;
         while(go) {
             // Pickup a state
+	    if ((stoppedBeforeEnd) || (stoppedConditionReached)) {
+		return;
+	    }
+	    
+	    // Pickup a state
             s = pickupState();
+
+	    if ((stoppedBeforeEnd) || (stoppedConditionReached)) {
+		return;
+	    }
 
             if (s == null) {
                 // Terminate
@@ -590,8 +653,9 @@ public class AvatarModelChecker implements Runnable {
 
         // Fill the new states of the involved blocks
         for(int i=0; i<_st.transitions.length; i++) {
-            ase = _st.transitions[i].getNextState(10);
+            ase = getNextState(_st.transitions[i], _newState, 10);
             if (ase != null) {
+		checkElement(ase, _newState);
                 int index = _st.blocks[i].getStateMachine().getIndexOfState(ase);
                 if (index > -1) {
                     _newState.blocks[_st.blocksInt[i]].values[SpecificationBlock.STATE_INDEX] = index;
@@ -608,6 +672,19 @@ public class AvatarModelChecker implements Runnable {
         }
 
         return "not implemented";
+    }
+
+    private AvatarStateElement getNextState(AvatarStateMachineElement e, SpecificationState _newState, int maxNbOfIterations) {
+	checkElement(e, _newState);
+	e = e.getNext(0);
+	if (e instanceof AvatarStateElement) {
+	    return (AvatarStateElement)e;
+	}
+	maxNbOfIterations --;
+	if (maxNbOfIterations == 0) {
+	    return null;
+	}
+	return getNextState(e, _newState, maxNbOfIterations);
     }
 
     // Execute the actions of a transition, and correspondingly impact the variables of the
@@ -722,8 +799,9 @@ public class AvatarModelChecker implements Runnable {
             AvatarStateElement ase = asm.allStates[sb.values[SpecificationBlock.STATE_INDEX]];
 	
 	    
-	    AvatarStateElement aseAfter = getStateWithNonEmptyUniqueTransition(ase, block, sb);
+	    AvatarStateElement aseAfter = getStateWithNonEmptyUniqueTransition(ase, block, sb, _ss);
 	    if (aseAfter != ase) {
+		checkElement(aseAfter, _ss);
 		// Must modify the state of the considered block
 		sb.values[SpecificationBlock.STATE_INDEX] = asm.getIndexOfState(aseAfter);
 	    }
@@ -731,11 +809,11 @@ public class AvatarModelChecker implements Runnable {
      	}
     }
 
-    private AvatarStateElement getStateWithNonEmptyUniqueTransition(AvatarStateElement _ase, AvatarBlock _block, SpecificationBlock _sb) {
-	return getStateWithNonEmptyUniqueTransitionArray(_ase, _block, _sb, null);
+    private AvatarStateElement getStateWithNonEmptyUniqueTransition(AvatarStateElement _ase, AvatarBlock _block, SpecificationBlock _sb, SpecificationState _ss) {
+	return getStateWithNonEmptyUniqueTransitionArray(_ase, _block, _sb, _ss, null);
     }
 
-    private AvatarStateElement getStateWithNonEmptyUniqueTransitionArray(AvatarStateElement _ase, AvatarBlock _block, SpecificationBlock _sb, ArrayList<AvatarStateElement> listOfStates ) {
+    private AvatarStateElement getStateWithNonEmptyUniqueTransitionArray(AvatarStateElement _ase, AvatarBlock _block, SpecificationBlock _sb, SpecificationState _ss, ArrayList<AvatarStateElement> listOfStates ) {
 
 	//	TraceManager.addDev("Handling Empty transition of previous=" + _ase.getName());
 	
@@ -767,6 +845,7 @@ public class AvatarModelChecker implements Runnable {
 
 	
 	AvatarStateElement ase = (AvatarStateElement)(at.getNext(0));
+	checkElement(ase, _ss);
 	//TraceManager.addDev("Handling Empty transition of " + _block.getName() + " with nextState = " + ase.getName() + " and previous=" + _ase.getName());
 
 	if (listOfStates == null) {
@@ -782,10 +861,55 @@ public class AvatarModelChecker implements Runnable {
 	}
 	listOfStates.add(_ase);
 
-	return getStateWithNonEmptyUniqueTransitionArray(ase, _block, _sb, listOfStates);
+	return getStateWithNonEmptyUniqueTransitionArray(ase, _block, _sb, _ss, listOfStates);
 	
 	
 	}
+
+
+    // Checking elements
+    public void checkElement(AvatarStateMachineElement elt, SpecificationState _ss) {
+	if (studyReachability) {
+	    checkElementReachability(elt, _ss);
+	}
+    }
+
+    public void checkElementReachability(AvatarStateMachineElement elt, SpecificationState _ss) {
+	for(SpecificationReachability re: reachabilities) {
+	    if (re.result ==  SpecificationReachabilityType.NOTCOMPUTED) {
+		if (re.ref == elt) {
+		    re.result = SpecificationReachabilityType.REACHABLE;
+		    re.state = _ss;
+		    nbOfRemainingReachabilities --;
+		}
+	    }
+	}
+    }
+    
+
+
+    // Stop condition
+
+    public synchronized boolean mustStop() {
+	if (stoppedConditionReached) {
+	    return true;
+	}
+
+	stoppedConditionReached = true;
+	
+	if (studyReachability && nbOfRemainingReachabilities>0) {
+	    stoppedConditionReached = false;
+	}
+
+	if (computeRG) {
+	    stoppedConditionReached = false;
+	}
+
+	return stoppedConditionReached;
+    }
+    
+
+    // Generators
 
     public String toString() {
         StringBuffer sb = new StringBuffer("States:\n");
@@ -819,6 +943,25 @@ public class AvatarModelChecker implements Runnable {
         }
         sb.append("}");
         return new String(sb);
+    }
+
+    public String reachabilityToString() {
+	if (!studyReachability) {
+	    return "Reachability not activated";
+	}
+
+
+	String ret = "";
+	if (stoppedBeforeEnd) {
+	    ret += "Beware: Full study of reacha&bility might not have been fully completed\n";
+	}
+
+	int cpt=0;
+	for(SpecificationReachability re: reachabilities) {
+	    ret += cpt + ": " + re.toString() + "\n";
+	    cpt ++;
+	}
+	return ret;
     }
 
 

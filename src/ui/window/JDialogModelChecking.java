@@ -239,7 +239,7 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
             closeDialog();
         } else if (command.equals("Cancel")) {
             cancelDialog();
-        } else if (command.equals("addOneIgnored")) {
+	} else if (command.equals("addOneIgnored")) {
             addOneIgnored();
         } else if (command.equals("addOneValidated")) {
             addOneValidated();

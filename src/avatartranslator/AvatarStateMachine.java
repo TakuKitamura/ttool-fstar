@@ -286,7 +286,7 @@ public class AvatarStateMachine extends AvatarElement {
                 // tr with actions?
                 if (tr.getNbOfAction() > 0) {
                     previous = getPreviousElementOf(elt);
-		    if (!(previous instanceof AvatarState)) {
+		    if (!(previous instanceof AvatarStateElement)) {
                         // We create an intermediate state
                         AvatarState state = new AvatarState("IntermediateState__" + id, elt.getReferenceObject());
                         toAdd.add(state);
