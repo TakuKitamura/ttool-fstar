@@ -238,6 +238,9 @@ public class AvatarStateMachine extends AvatarElement {
 
     // Hanlding transitions with actions which have a non state
     // after
+
+    // Then, handling transitions with actions which have a non state
+    // before
     private void addStatesToTransitionsWithActions(AvatarBlock _block) {
         AvatarStateMachineElement next;
         AvatarStateMachineElement previous;
@@ -268,12 +271,46 @@ public class AvatarStateMachine extends AvatarElement {
                     }
                 }
             }
+
         }
 
         for(AvatarStateMachineElement add: toAdd) {
             elements.add(add);
         }
+	toAdd.clear();
+
+	for(AvatarStateMachineElement elt: elements) {
+            if (elt instanceof AvatarTransition) {
+                AvatarTransition tr = (AvatarTransition)elt;
+
+                // tr with actions?
+                if (tr.getNbOfAction() > 0) {
+                    previous = getPreviousElementOf(elt);
+                    next = elt.getNext(0);
+		    if (!(previous instanceof AvatarState)) {
+                        // We create an intermediate state
+                        AvatarState state = new AvatarState("IntermediateState__" + id, elt.getReferenceObject());
+                        toAdd.add(state);
+                        AvatarTransition at1 = new AvatarTransition(_block, "TransitionForIntermediateState__" + id, elt.getReferenceObject());
+                        toAdd.add(at1);
+
+                        previous.removeAllNexts();
+			previous.addNext(at1);
+			at1.addNext(state);
+			state.addNext(tr);
+                        id ++;
+                    }
+		}
+	    }
+	}
+
+	for(AvatarStateMachineElement add: toAdd) {
+            elements.add(add);
+        }
+	
     }
+
+    
 
 
     public void removeRandoms(AvatarBlock _block) {

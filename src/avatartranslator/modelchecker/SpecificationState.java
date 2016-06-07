@@ -61,94 +61,97 @@ public class SpecificationState  {
     public boolean hashComputed;
     public long id;
 
+    public ArrayList<SpecificationTransition> transitions;
+
     public SpecificationState() {
-	hashComputed = false;
+        hashComputed = false;
     }
 
     // blocks must not be null
     public void computeHash(int blockValues) {
-	int[] hash = new int[blockValues];
-	int cpt = 0;
-	for(int i=0; i<blocks.length; i++) {
-	    for(int j=0; j<blocks[i].values.length; j++) {
-		hash[cpt] = blocks[i].values[j];
-		cpt++;
-	    }
-	    //TraceManager.addDev("hash[" + i + "]=" + hash[i]);
-	}
-	hashValue = Arrays.hashCode(hash);
-	hashComputed = true;
+        int[] hash = new int[blockValues];
+        int cpt = 0;
+        for(int i=0; i<blocks.length; i++) {
+            for(int j=0; j<blocks[i].values.length; j++) {
+                hash[cpt] = blocks[i].values[j];
+                cpt++;
+            }
+            //TraceManager.addDev("hash[" + i + "]=" + hash[i]);
+        }
+        hashValue = Arrays.hashCode(hash);
+        hashComputed = true;
     }
 
     public int getHash(int blockValues) {
-	if (!hashComputed) {
-	    computeHash(blockValues);
-	}
-	return hashValue;
+        if (!hashComputed) {
+            computeHash(blockValues);
+        }
+        return hashValue;
     }
 
     public void setInit(AvatarSpecification _spec) {
-	int cpt = 0;
-	// Initialize blocks
-	// Blocks : h to 0, variables to their starting values, state to starting state.
-	blocks = new SpecificationBlock[_spec.getListOfBlocks().size()];
-	
-	for(AvatarBlock block: _spec.getListOfBlocks()) {
-	    blocks[cpt] = new SpecificationBlock();
-	    blocks[cpt].init(block);
-	    cpt ++;
-	}
-	
-	//computeHash(getBlockValues());
+        int cpt = 0;
+        // Initialize blocks
+        // Blocks : h to 0, variables to their starting values, state to starting state.
+        blocks = new SpecificationBlock[_spec.getListOfBlocks().size()];
+
+        for(AvatarBlock block: _spec.getListOfBlocks()) {
+            blocks[cpt] = new SpecificationBlock();
+            blocks[cpt].init(block);
+            cpt ++;
+        }
+
+        //computeHash(getBlockValues());
     }
 
     public String toString() {
-	StringBuffer sb = new StringBuffer("id: " + id);
-	for(int i=0; i<blocks.length; i++) {
-	    sb.append("\n  "+i + ": " + blocks[i].toString());
-	}
-	return sb.toString();
+        StringBuffer sb = new StringBuffer("id: " + id);
+        for(int i=0; i<blocks.length; i++) {
+            sb.append("\n  "+i + ": " + blocks[i].toString());
+        }
+        return sb.toString();
     }
 
     public SpecificationState advancedClone() {
-	SpecificationState st = new SpecificationState();
-	st.blocks = new SpecificationBlock[blocks.length];
-	for(int i=0; i<blocks.length; i++) {
-	    st.blocks[i] = blocks[i].advancedClone();
-	}
-	return st;
+        SpecificationState st = new SpecificationState();
+        st.blocks = new SpecificationBlock[blocks.length];
+        for(int i=0; i<blocks.length; i++) {
+            st.blocks[i] = blocks[i].advancedClone();
+        }
+        return st;
     }
 
     // Increase the clock of the blocks not in the transition
     // and having a timed transition.
     // Otherwise, puts the one of others to 0
     public void increaseClockOfBlocksExcept(SpecificationTransition _st) {
-	SpecificationBlock sb;
-	for(int i=0; i<blocks.length; i++) {
-	    sb = blocks[i];
-	    if (!(_st.hasBlockIndex(i))) {
-		if (sb.hasTimedTransition()) {
-		    sb.values[SpecificationBlock.CLOCKMIN_INDEX] += _st.clockMin;
-		    sb.values[SpecificationBlock.CLOCKMAX_INDEX] += _st.clockMax;
-		} 
-		/*else {
-		    sb.values[SpecificationBlock.CLOCKMIN_INDEX] = 0;
-		    sb.values[SpecificationBlock.CLOCKMAX_INDEX] = 0;
-		    }*/
-	    } else {
-		sb.values[SpecificationBlock.CLOCKMIN_INDEX] = 0;
-		sb.values[SpecificationBlock.CLOCKMAX_INDEX] = 0;
-	    }
-	}
+        SpecificationBlock sb;
+        for(int i=0; i<blocks.length; i++) {
+            sb = blocks[i];
+            if (!(_st.hasBlockIndex(i))) {
+                sb.values[SpecificationBlock.CLOCKMIN_INDEX] += _st.clockMin;
+                sb.values[SpecificationBlock.CLOCKMAX_INDEX] += _st.clockMax;
+		sb.values[SpecificationBlock.CLOCKMIN_INDEX] = Math.min(sb.values[SpecificationBlock.CLOCKMIN_INDEX], sb.maxClock);
+		sb.values[SpecificationBlock.CLOCKMAX_INDEX] = Math.min(sb.values[SpecificationBlock.CLOCKMAX_INDEX], sb.maxClock);
+            } else {
+                sb.values[SpecificationBlock.CLOCKMIN_INDEX] = 0;
+                sb.values[SpecificationBlock.CLOCKMAX_INDEX] = 0;
+            }
+        }
     }
 
     public int getBlockValues() {
-	int cpt = 0;
-	for(int i=0; i<blocks.length; i++) {
-	    cpt += blocks[i].values.length;
-	    //TraceManager.addDev("hash[" + i + "]=" + hash[i]);
-	}
-	return cpt;
+        int cpt = 0;
+        for(int i=0; i<blocks.length; i++) {
+            cpt += blocks[i].values.length;
+            //TraceManager.addDev("hash[" + i + "]=" + hash[i]);
+        }
+        return cpt;
+    }
+
+    public void finished() {
+        //blocks = null;
+        transitions = null;
     }
 
 }

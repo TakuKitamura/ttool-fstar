@@ -147,6 +147,7 @@ public class AvatarModelChecker implements Runnable {
         // Compute initial state
         SpecificationState initialState = new SpecificationState();
         initialState.setInit(spec);
+	prepareTransitionsOfState(initialState);
         blockValues = initialState.getBlockValues();
         initialState.id = getStateID();
 	if (ignoreEmptyTransitions) {
@@ -235,12 +236,9 @@ public class AvatarModelChecker implements Runnable {
         nbOfCurrentComputations = 0;
     }
 
-
-    private void computeAllStatesFrom(SpecificationState _ss) {
-        int cpt;
-
-        // For each block, get the list of possible transactions
-        ArrayList<SpecificationTransition> transitions = new ArrayList<SpecificationTransition>();
+    private void prepareTransitionsOfState(SpecificationState _ss) {
+	int cpt;
+	_ss.transitions = new ArrayList<SpecificationTransition>();
 
         // At first, do not merge synchronous transitions
         // Simply get basics transitions
@@ -253,12 +251,17 @@ public class AvatarModelChecker implements Runnable {
 
             for(AvatarStateMachineElement elt: ase.getNexts()) {
                 if (elt instanceof AvatarTransition) {
-                    handleAvatarTransition((AvatarTransition)elt, block, sb, cpt, transitions);
+                    handleAvatarTransition((AvatarTransition)elt, block, sb, cpt, _ss.transitions);
                 }
             }
 
             cpt ++;
         }
+    }
+
+
+    private void computeAllStatesFrom(SpecificationState _ss) {
+	ArrayList<SpecificationTransition> transitions = _ss.transitions;
 
         TraceManager.addDev("Possible transitions 1:" + transitions.size());
 
@@ -355,6 +358,7 @@ public class AvatarModelChecker implements Runnable {
             // Impact the variable of the state, either by executing actions, or by
             // doing the synchronization
             String action = executeTransition(_ss, newState, tr);
+	    prepareTransitionsOfState(newState);
 
 	    // Remove empty transitions if applicable
 	    if (ignoreEmptyTransitions) {
@@ -382,6 +386,7 @@ public class AvatarModelChecker implements Runnable {
             }
             links.add(link);
         }
+	_ss.finished();
     }
 
     private boolean guardResult(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb) {
@@ -422,7 +427,9 @@ public class AvatarModelChecker implements Runnable {
         if ((maxDelay == null) || (maxDelay.length() == 0)) {
             st.clockMax = 0 - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
         } else {
-            st.clockMax = evaluateIntExpression(_at.getMaxDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
+	    int resMax = evaluateIntExpression(_at.getMaxDelay(), _block, _sb);
+	    _sb.maxClock = Math.max(_sb.maxClock, resMax);
+            st.clockMax = resMax - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
         }
 
     }
@@ -525,7 +532,7 @@ public class AvatarModelChecker implements Runnable {
     }
 
     public int evaluateIntExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb) {
-	TraceManager.addDev("Evaluating Int expression 1: " + _expr);
+	//TraceManager.addDev("Evaluating Int expression 1: " + _expr);
         String act = _expr;
         int cpt = 0;
         for(AvatarAttribute at: _block.getAttributes()) {
@@ -546,7 +553,7 @@ public class AvatarModelChecker implements Runnable {
             cpt ++;
         }
 
-        TraceManager.addDev("Evaluating Int expression S: " + act);
+        //TraceManager.addDev("Evaluating Int expression S: " + act);
         //Thread.currentThread().dumpStack();
         return (int)(new IntExpressionEvaluator().getResultOf(act));
     }
@@ -622,7 +629,7 @@ public class AvatarModelChecker implements Runnable {
                 String nameOfVar = ((AvatarActionAssignment)aAction).getLeftHand().getName();
                 String act = ((AvatarActionAssignment)aAction).getRightHand().getName();
 
-                TraceManager.addDev("*** act=" + act);
+                //TraceManager.addDev("*** act=" + act);
 
                 if (retAction == null) {
                     retAction = nameOfVar + "=" + act;
