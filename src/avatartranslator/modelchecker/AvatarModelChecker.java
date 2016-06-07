@@ -360,12 +360,12 @@ public class AvatarModelChecker implements Runnable {
             // Impact the variable of the state, either by executing actions, or by
             // doing the synchronization
             String action = executeTransition(_ss, newState, tr);
-	    prepareTransitionsOfState(newState);
 
 	    // Remove empty transitions if applicable
 	    if (ignoreEmptyTransitions) {
 		handleNonEmptyUniqueTransition(newState);
 	    }
+	    prepareTransitionsOfState(newState);
 
             // Compute the hash of the new state, and create the link to the right next state
             SpecificationLink link = new SpecificationLink();
@@ -736,15 +736,25 @@ public class AvatarModelChecker implements Runnable {
     }
 
     private AvatarStateElement getStateWithNonEmptyUniqueTransitionArray(AvatarStateElement _ase, AvatarBlock _block, SpecificationBlock _sb, ArrayList<AvatarStateElement> listOfStates ) {
+
+	//	TraceManager.addDev("Handling Empty transition of previous=" + _ase.getName());
+	
 	if (_ase.getNexts().size() != 1) {
 	    return _ase;
 	}
 
+	
+	//TraceManager.addDev("Handling Empty transition of previous= 1 " + _ase.getName());
+	
 	AvatarTransition at = (AvatarTransition)(_ase.getNext(0));
+
+	//TraceManager.addDev("Handling Empty transition of previous= 2 " + _ase.getName() + " trans=" + at.getName());
 
 	if(!((at.type == AvatarTransition.TYPE_EMPTY) || (at.type == AvatarTransition.TYPE_METHODONLY))) {
 	    return _ase;
 	}
+
+	//TraceManager.addDev("Handling Empty transition of previous= 3 " + _ase.getName() + " trans=" + at.getName());
 	
 	// Check guard;
 	boolean guard = guardResult(at, _block, _sb);
@@ -753,11 +763,17 @@ public class AvatarModelChecker implements Runnable {
 	    return _ase;
 	}
 
+	//TraceManager.addDev("Handling Empty transition of previous= 4 " + _ase.getName() + " trans=" + at.getName());
+
+	
 	AvatarStateElement ase = (AvatarStateElement)(at.getNext(0));
+	//TraceManager.addDev("Handling Empty transition of " + _block.getName() + " with nextState = " + ase.getName() + " and previous=" + _ase.getName());
+
 	if (listOfStates == null) {
 	    if (ase == _ase) {
 		return _ase; 
 	    }
+	    //TraceManager.addDev("New list of states " + _block.getName());
 	    listOfStates = new ArrayList<AvatarStateElement>();
 	} else {
 	    if (listOfStates.contains(ase)) {
