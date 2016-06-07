@@ -9344,7 +9344,7 @@ or by a maintenance station
 <cdparam x="516" y="268" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from List of all parameters of an Avatar SMD transition to UML Note" value="null" />
-<P1  x="516" y="129" id="4555" />
+<P1  x="516" y="146" id="4555" />
 <P2  x="661" y="85" id="4625" />
 <AutomaticDrawing  data="false" />
 </CONNECTOR>

@@ -417,11 +417,11 @@ public class AvatarSpecification extends AvatarElement {
     }
 
 
-    public void removeEmptyTransitions() {
+    public void removeEmptyTransitions(boolean _canOptimize) {
 	for (AvatarBlock block: this.blocks) {
             AvatarStateMachine asm = block.getStateMachine ();
             if (asm != null)
-		asm.removeEmptyTransitions (block);
+		asm.removeEmptyTransitions (block, _canOptimize);
         }
     }
 

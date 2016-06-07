@@ -1501,7 +1501,7 @@ public class AvatarStateMachine extends AvatarElement {
      * @param block
      *      The block containing the state machine
      */
-    public void removeEmptyTransitions (AvatarBlock _block) {
+    public void removeEmptyTransitions (AvatarBlock _block, boolean _canOptimize) {
 
         // Look for such a transition
         // states -> tr -> state with tr is empty
@@ -1516,10 +1516,13 @@ public class AvatarStateMachine extends AvatarElement {
                     AvatarTransition at = (AvatarTransition)(elt.getNext(0));
                     if (at.getNext(0) instanceof AvatarStateElement) {
                         if (at.isEmpty() && at.hasNonDeterministicGuard()) {
-                            foundState1 = (AvatarStateElement) elt;
-                            foundAt = at;
-                            foundState2 = (AvatarStateElement)(at.getNext(0));
-			    break;
+			    if ((_canOptimize) || (!(elt.isCheckable()))){
+				foundState1 = (AvatarStateElement) elt;
+				foundAt = at;
+				foundState2 = (AvatarStateElement)(at.getNext(0));
+				break;
+			    }
+			    
                         }
                     }
                 }
@@ -1546,7 +1549,7 @@ public class AvatarStateMachine extends AvatarElement {
 		foundState2.addReferenceObjectFrom(foundState1);
 		
 	    }
-	    removeEmptyTransitions(_block);
+	    removeEmptyTransitions(_block, _canOptimize);
         }
     }
 

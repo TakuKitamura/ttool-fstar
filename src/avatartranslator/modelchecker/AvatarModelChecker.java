@@ -172,7 +172,7 @@ public class AvatarModelChecker implements Runnable {
         spec.removeRandoms();
         spec.makeFullStates();
 	if (ignoreEmptyTransitions) {
-	    spec.removeEmptyTransitions();
+	    spec.removeEmptyTransitions(nbOfRemainingReachabilities == 0);
 	}
 
 
