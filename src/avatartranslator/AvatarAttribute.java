@@ -176,6 +176,11 @@ public class AvatarAttribute extends AvatarLeftHand {
     }
 
     @Override
+    public boolean containsAMethodCall () {
+        return false;
+    }
+
+    @Override
     public AvatarAttribute clone () {
         return this;
     }

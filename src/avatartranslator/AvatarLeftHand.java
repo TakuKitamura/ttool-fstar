@@ -52,10 +52,5 @@ public abstract class AvatarLeftHand extends AvatarTerm {
     }
 
     @Override
-    public boolean containsAMethodCall () {
-        return false;
-    }
-
-    @Override
     public abstract AvatarLeftHand clone ();
 }

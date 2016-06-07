@@ -126,6 +126,14 @@ public class AvatarTuple extends AvatarLeftHand {
     }
 
     @Override
+    public boolean containsAMethodCall () {
+        for (AvatarTerm term: this.components)
+            if (term.containsAMethodCall ())
+                return true;
+        return false;
+    }
+
+    @Override
     public AvatarTuple clone () {
         AvatarTuple clone = new AvatarTuple (this.referenceObject);
         for (AvatarTerm term: this.components)
