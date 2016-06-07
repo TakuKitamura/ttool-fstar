@@ -36,10 +36,10 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class SpecificationBlock
-   * Coding of a block
-   * Creation: 31/05/2016
-   * @version 1.0 31/05/2016
+   * Class SpecificationReachabilityType
+   * Reachability types
+   * Creation: 07/06/2016
+   * @version 1.0 07/06/2016
    * @author Ludovic APVRILLE
    * @see
    */
@@ -52,64 +52,6 @@ import java.util.*;
 
 import myutil.*;
 
-public class SpecificationBlock  {
-    
-    public static final int HEADER_VALUES = 3;
-    
-    public static final int STATE_INDEX = 0;
-    public static final int CLOCKMIN_INDEX = 1;
-    public static final int CLOCKMAX_INDEX = 2;
-    public static final int ATTR_INDEX = 3;
-    
-    public int [] values; // state in block, clockmin, clockmax, variables
-    public int maxClock;
-
-    public SpecificationBlock() {
-    }
-
-    public int getHash() {
-	return Arrays.hashCode(values);
-    }
-
-    public void init(AvatarBlock _block) {
-	LinkedList<AvatarAttribute> attrs = _block.getAttributes();
-	//TraceManager.addDev("Nb of attributes:" + attrs.size());
-	//TraceManager.addDev("in block=" + _block.toString());
-	values = new int[HEADER_VALUES+attrs.size()];
-
-	// Initial state
-	values[STATE_INDEX] = _block.getIndexOfStartState();
-	
-	// Clock
-	values[CLOCKMIN_INDEX] = 0;
-	values[CLOCKMAX_INDEX] = 0;
-
-	// Attributes
-	int cpt = HEADER_VALUES;
-	String initial;
-	for(AvatarAttribute attr: attrs) {
-	    values[cpt++] = attr.getInitialValueInInt();
-	}	
-    }
-
-    public String toString() {
-	StringBuffer sb = new StringBuffer("Hash=");
-	//sb.append(getHash());
-	for (int i=0; i<values.length; i++) {
-	    sb.append(" ");
-	    sb.append(values[i]);
-	}
-	return sb.toString();
-    }
-
-    public SpecificationBlock advancedClone() {
-	SpecificationBlock sb = new SpecificationBlock();
-	sb.values = values.clone();
-	sb.maxClock = maxClock;
-	return sb;
-    }
-
-    public boolean hasTimedTransition() {
-	return true;
-    }
+public enum SpecificationReachabilityType  {
+    NOTCOMPUTED, REACHABLE, NONREACHABLE
 }

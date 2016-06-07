@@ -270,14 +270,14 @@ public class AvatarSpecification extends AvatarElement {
 
     public void makeFullStates() {
 	for(AvatarBlock block: blocks) {
-	    TraceManager.addDev("- - - - - - - - Making full states of " + block);
+	    //TraceManager.addDev("- - - - - - - - Making full states of " + block);
             block.getStateMachine().makeFullStates(block);
         }
     }
 
     public void removeRandoms() {
 	for(AvatarBlock block: blocks) {
-	    TraceManager.addDev("- - - - - - - - Removing randoms of " + block);
+	    //TraceManager.addDev("- - - - - - - - Removing randoms of " + block);
             block.getStateMachine().removeRandoms(block);
         }
     }

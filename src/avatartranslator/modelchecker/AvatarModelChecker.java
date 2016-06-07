@@ -341,7 +341,7 @@ public class AvatarModelChecker implements Runnable {
     private void computeAllStatesFrom(SpecificationState _ss) {
 	ArrayList<SpecificationTransition> transitions = _ss.transitions;
 
-        TraceManager.addDev("Possible transitions 1:" + transitions.size());
+        //TraceManager.addDev("Possible transitions 1:" + transitions.size());
 
         // All locally executable transitions are now gathered.
         // We simply need to select the ones that are executable
@@ -366,7 +366,7 @@ public class AvatarModelChecker implements Runnable {
 	    }
         }
         transitions = newTransitions;
-        TraceManager.addDev("Possible transitions 2:" + transitions.size());
+        //TraceManager.addDev("Possible transitions 2:" + transitions.size());
 
 
         // Selecting only the transactions within the smallest clock interval
@@ -376,7 +376,7 @@ public class AvatarModelChecker implements Runnable {
             clockMax = Math.min(clockMax, tr.clockMax);
         }
 
-        TraceManager.addDev("Selected clock interval:" + clockMin + "," + clockMax);
+        //TraceManager.addDev("Selected clock interval:" + clockMin + "," + clockMax);
 
         newTransitions = new ArrayList<SpecificationTransition>();
         for(SpecificationTransition tr: transitions) {
@@ -386,7 +386,7 @@ public class AvatarModelChecker implements Runnable {
             }
         }
         transitions = newTransitions;
-        TraceManager.addDev("Possible transitions 3:" + transitions.size());
+        //TraceManager.addDev("Possible transitions 3:" + transitions.size());
 
 	if (ignoreConcurrenceBetweenInternalActions) {
 	    SpecificationTransition st = null;
@@ -417,7 +417,7 @@ public class AvatarModelChecker implements Runnable {
 	    }
 	}
 
-	TraceManager.addDev("Possible transitions 4:" + transitions.size());
+	//TraceManager.addDev("Possible transitions 4:" + transitions.size());
         // For each realizable transition
         //   Make it, reset clock of the involved blocks to 0, increase clockmin/clockhmax of each block
         //   compute new state, and compare with existing ones
@@ -425,7 +425,7 @@ public class AvatarModelChecker implements Runnable {
         //   Otherwise create the new state and its link, and add it to the pending list of states
 	int cptt = 0;
         for(SpecificationTransition tr: transitions) {
-	    TraceManager.addDev("Handling transitions #" + cptt + " type =" + tr.getType());
+	    //TraceManager.addDev("Handling transitions #" + cptt + " type =" + tr.getType());
 	    cptt ++;
 
             // Make tr
@@ -913,7 +913,7 @@ public class AvatarModelChecker implements Runnable {
 	stoppedConditionReached = true;
 
 	if (studyReachability && nbOfRemainingReachabilities==0) {
-	    TraceManager.addDev("All reachability found");
+	    TraceManager.addDev("***** All reachability found");
 	}
 	
 	if (studyReachability && nbOfRemainingReachabilities>0) {

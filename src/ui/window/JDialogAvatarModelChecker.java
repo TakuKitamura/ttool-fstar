@@ -309,9 +309,16 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	    amc.setIgnoreConcurrenceBetweenInternalActions(ignoreConcurrenceBetweenInternalActionsSelected);
 
 	    // Reachability
+	    int res;
 	    if (reachabilitySelected ==  REACHABILITY_SELECTED) {
-		amc.setReachabilityOfSelected();
-		jta.append("Reachability of selected states activated\n");
+		res = amc.setReachabilityOfSelected();
+		jta.append("Reachability of " + res + " selected elements activated\n");
+		
+	    }
+
+	    if (reachabilitySelected ==  REACHABILITY_ALL) {
+		res = amc.setReachabilityOfAllStates();
+		jta.append("Reachability of " + res +  " states activated\n");
 	    }
 	    
 	    // RG?
@@ -324,11 +331,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	    testGo();
 	    
 	    amc.startModelChecking();
-            
+            jta.append("\n\nModel checking done\n");
 	    jta.append("Nb of states:" + amc.getNbOfStates() + "\n");
 	    jta.append("Nb of links:" + amc.getNbOfLinks() + "\n");
 
-	    if (reachabilitySelected ==  REACHABILITY_SELECTED) {
+	    if ((reachabilitySelected ==  REACHABILITY_SELECTED) || (reachabilitySelected ==  REACHABILITY_ALL)) {
 		jta.append("\nReachabilities found:\n");
 		jta.append(amc.reachabilityToString());
 	    }
