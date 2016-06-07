@@ -53,7 +53,7 @@ import avatartranslator.*;
 import myutil.*;
 
 public class AvatarModelChecker implements Runnable {
-    private final static int DEFAULT_NB_OF_THREADS = 1;
+    private final static int DEFAULT_NB_OF_THREADS = 12;
     private final static int SLEEP_DURATION = 500;
 
     private AvatarSpecification spec;
@@ -316,11 +316,13 @@ public class AvatarModelChecker implements Runnable {
 	    for(SpecificationTransition tr: transitions) {
 		if ((AvatarTransition.isActionType(tr.getType()) && (tr.clockMax ==  clockMin))|| tr.getType() == AvatarTransition.TYPE_EMPTY) {
 		    // Must look for similar transitions in the the same block
+		    //TraceManager.addDev("Lookin for same block for " + tr);
 		    boolean foundSameBlock = false;
 		    for(SpecificationTransition tro: transitions) {
 			if (tro != tr) {
 			    if (tro.hasBlockOf(tr)) {
 				foundSameBlock = true;
+				//TraceManager.addDev("Found same block tr=" + tr + " tro=" + tro);
 				break;
 			    }
 			}

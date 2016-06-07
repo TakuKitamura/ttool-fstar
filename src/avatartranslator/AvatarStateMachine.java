@@ -286,7 +286,6 @@ public class AvatarStateMachine extends AvatarElement {
                 // tr with actions?
                 if (tr.getNbOfAction() > 0) {
                     previous = getPreviousElementOf(elt);
-                    next = elt.getNext(0);
 		    if (!(previous instanceof AvatarState)) {
                         // We create an intermediate state
                         AvatarState state = new AvatarState("IntermediateState__" + id, elt.getReferenceObject());
@@ -306,7 +305,7 @@ public class AvatarStateMachine extends AvatarElement {
 
 	for(AvatarStateMachineElement add: toAdd) {
             elements.add(add);
-        }
+	}
 	
     }
 

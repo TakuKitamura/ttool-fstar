@@ -121,7 +121,7 @@ public class SpecificationTransition  {
 
 	for (int i=0; i<blocks.length; i++) {
 	    for(int j=0; j<_tr.blocks.length; j++) {
-		if (blocks[i] == blocks[j]) {
+		if (blocks[i] == _tr.blocks[j]) {
 		    return true;
 		}
 	    }
