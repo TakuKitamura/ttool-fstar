@@ -147,12 +147,12 @@ public class AvatarModelChecker implements Runnable {
         // Compute initial state
         SpecificationState initialState = new SpecificationState();
         initialState.setInit(spec);
-	prepareTransitionsOfState(initialState);
-        blockValues = initialState.getBlockValues();
         initialState.id = getStateID();
 	if (ignoreEmptyTransitions) {
 	    handleNonEmptyUniqueTransition(initialState);
 	}
+	prepareTransitionsOfState(initialState);
+	blockValues = initialState.getBlockValues();
 	
         //TraceManager.addDev("initialState=" + initialState.toString());
 	initialState.computeHash(blockValues);
