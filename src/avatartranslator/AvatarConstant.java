@@ -71,6 +71,11 @@ public class AvatarConstant extends AvatarTerm {
     }
 
     @Override
+    public boolean containsAMethodCall () {
+        return false;
+    }
+
+    @Override
     public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) { }
 
     @Override

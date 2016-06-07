@@ -56,6 +56,13 @@ public interface AvatarAction {
     public String getName ();
 
     /**
+     * Returns True if the whole action contains a method call.
+     *
+     * @return True if the whole action contains a method call. False otherwise.
+     */
+    public boolean containsAMethodCall ();
+
+    /**
      * Returns a full clone of the action.
      *
      * @return A clone of the action.

@@ -146,6 +146,12 @@ public abstract class AvatarTerm extends AvatarElement {
         return (b1 && b2 && b3 && b4 && b5);
     }
 
+    /**
+     * Returns True if the whole action contains a method call.
+     *
+     * @return True if the whole action contains a method call. False otherwise.
+     */
+    public abstract boolean containsAMethodCall ();
 
     /**
      * Returns a full clone of the term.

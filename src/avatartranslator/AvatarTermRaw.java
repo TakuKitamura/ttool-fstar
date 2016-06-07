@@ -64,6 +64,11 @@ public class AvatarTermRaw extends AvatarTerm {
     }
 
     @Override
+    public boolean containsAMethodCall () {
+        return false;
+    }
+
+    @Override
     public AvatarTermRaw clone () {
         return new AvatarTermRaw (this.raw, this.referenceObject);
     }

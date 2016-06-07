@@ -104,6 +104,11 @@ public class AvatarArithmeticOp extends AvatarTerm {
     }
 
     @Override
+    public boolean containsAMethodCall () {
+        return this.term1.containsAMethodCall () || this.term2.containsAMethodCall ();
+    }
+
+    @Override
     public AvatarArithmeticOp clone () {
         return new AvatarArithmeticOp (this.term1.clone (), this.term2.clone (), this.operator, this.referenceObject);
     }

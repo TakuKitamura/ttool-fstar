@@ -117,6 +117,11 @@ public class AvatarTermFunction extends AvatarTerm implements AvatarAction {
     }
 
     @Override
+    public boolean containsAMethodCall () {
+        return true;
+    }
+
+    @Override
     public AvatarTermFunction clone () {
         return new AvatarTermFunction (this.method, this.args.clone (), this.referenceObject);
     }

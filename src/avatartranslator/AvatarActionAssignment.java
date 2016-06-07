@@ -87,6 +87,11 @@ public class AvatarActionAssignment implements AvatarAction {
     }
 
     @Override
+    public boolean containsAMethodCall () {
+        return this.rightHand.containsAMethodCall ();
+    }
+
+    @Override
     public AvatarActionAssignment clone () {
         return new AvatarActionAssignment (this.leftHand.clone (), this.rightHand.clone ());
     }
