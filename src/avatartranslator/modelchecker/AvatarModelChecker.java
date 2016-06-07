@@ -256,6 +256,8 @@ public class AvatarModelChecker implements Runnable {
 	
     }
 
+    // MAIN LOOP
+    /////////////////////////////////////////////
     public void run() {
         SpecificationState s;
 
@@ -470,6 +472,7 @@ public class AvatarModelChecker implements Runnable {
             links.add(link);
         }
 	_ss.finished();
+	mustStop();
     }
 
     private boolean guardResult(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb) {
@@ -899,6 +902,7 @@ public class AvatarModelChecker implements Runnable {
 		    re.result = SpecificationReachabilityType.REACHABLE;
 		    re.state = _ss;
 		    nbOfRemainingReachabilities --;
+		    TraceManager.addDev("Remaining reachabilities:" + nbOfRemainingReachabilities);
 		}
 	    }
 	}
