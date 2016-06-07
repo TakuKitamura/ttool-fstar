@@ -107,7 +107,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
     public boolean hasMethod() {
 	for(AvatarAction aa: actions) {
-	    if (aa.isAMethodCall()) {
+	    if (aa.containsAMethodCall()) {
 		return true;
 	    }
 	}
@@ -116,10 +116,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
     public boolean hasAction() {
 	for(AvatarAction aa: actions) {
-	    if (aa.isABasicVariableSetting()) {
-		return true;
-	    }
-	    if (aa.isAVariableSetting()) {
+	    if (!(aa.containsAMethodCall())) {
 		return true;
 	    }
 	}

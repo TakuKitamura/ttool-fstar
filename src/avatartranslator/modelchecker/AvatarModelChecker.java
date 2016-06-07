@@ -206,6 +206,9 @@ public class AvatarModelChecker implements Runnable {
         // Compute initial state
         SpecificationState initialState = new SpecificationState();
         initialState.setInit(spec);
+	for(AvatarBlock block: spec.getListOfBlocks()) {
+	    checkElement(block.getStateMachine().getStartState(), initialState);
+	}
         initialState.id = getStateID();
 	if (ignoreEmptyTransitions) {
 	    handleNonEmptyUniqueTransition(initialState);
@@ -713,7 +716,7 @@ public class AvatarModelChecker implements Runnable {
 
         for(AvatarAction aAction: _st.transitions[0].getActions()) {
             // Variable affectation
-            if (aAction instanceof AvatarActionAssignment) {
+            if (!(aAction.containsAMethodCall())) {
                 //if (!(aAction.isAMethodCall ())) {
                 /*String action = aAction.toString ();
                   int ind = action.indexOf("=");
