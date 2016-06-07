@@ -1496,7 +1496,7 @@ public class AvatarStateMachine extends AvatarElement {
 
     /**
      * Removes all empty transitions between two states.
-     * This concerns also the start state, and a end state
+     * This concerns also the start state, and end states.
      * DO NOT take into account code of states, and start states
      *
      * @param block
@@ -1531,9 +1531,14 @@ public class AvatarStateMachine extends AvatarElement {
         if (foundState1 != null) {
 	    if( foundState1 == foundState2) {
 		// We simply remove the transition
+		TraceManager.addDev("Found same state -> removing the transitions");
 		removeElement(foundAt);
+		// removing from the next of foundState1
+		foundState1.removeNext(foundAt);
+		
 	    } else {
 		// Must remove state1 and at, and link all previous of state 1 to state2
+		TraceManager.addDev("Found 2 states state1=" + foundState1.getName() + " state2=" + foundState2.getName());
 		for(AvatarStateMachineElement elt:  getPreviousElementsOf(foundState1)) {
 		    elt.replaceAllNext(foundState1, foundState2);
 		}
