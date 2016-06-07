@@ -133,6 +133,21 @@ public class AvatarModelChecker implements Runnable {
 	return nbOfRemainingReachabilities;
     }
 
+    public int setReachabilityOfAllStates() {
+	reachabilities = new ArrayList<SpecificationReachability>();
+	for(AvatarBlock block: spec.getListOfBlocks()) {
+	    for(AvatarStateMachineElement elt: block.getStateMachine().getListOfElements()) {
+		if (elt instanceof AvatarStateElement) {
+		    SpecificationReachability reach = new SpecificationReachability(elt);
+		    reachabilities.add(reach);
+		}
+	    }
+	}
+	nbOfRemainingReachabilities = reachabilities.size();
+	studyReachability = true;
+	return nbOfRemainingReachabilities;
+    }
+
     public ArrayList<SpecificationReachability> getReachabilities() {
 	return reachabilities;
     }
@@ -896,6 +911,10 @@ public class AvatarModelChecker implements Runnable {
 	}
 
 	stoppedConditionReached = true;
+
+	if (studyReachability && nbOfRemainingReachabilities==0) {
+	    TraceManager.addDev("All reachability found");
+	}
 	
 	if (studyReachability && nbOfRemainingReachabilities>0) {
 	    stoppedConditionReached = false;
