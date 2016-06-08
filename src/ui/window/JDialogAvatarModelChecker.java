@@ -50,17 +50,24 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import java.util.*;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.io.*;
 
 import myutil.*;
 import avatartranslator.*;
 import avatartranslator.modelchecker.*;
 import ui.*;
+import java.util.concurrent.TimeUnit;
 
 
 
 public class JDialogAvatarModelChecker extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {
+    public final static String [] INFOS = {"Not started", "Running", "Stopped by user", "Finished"};
+    public final static Color []  COLORS = {Color.darkGray, Color.magenta, Color.red, Color.blue};
+    
+
     public final static int REACHABILITY_ALL        = 1;
     public final static int REACHABILITY_SELECTED   = 2;
     public final static int REACHABILITY_NONE       = 3;
@@ -84,6 +91,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     private AvatarSpecification spec;
 
     private avatartranslator.modelchecker.AvatarModelChecker amc;
+    private ModelCheckerMonitor mcm;
+    private Date startDate, endDate;
+    private Date previousDate;
+    private int previousNbOfStates;
 
     //components
     protected JTextArea jta;
@@ -103,6 +114,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     protected JTextField graphPath, graphPathDot;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
+
+    // Information
+    protected JLabel nbOfStates, nbOfLinks, nbOfPendingStates, elapsedTime, nbOfStatesPerSecond, info;
 
 
     private Thread t;
@@ -238,6 +252,49 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         jpinfo.setLayout(gridbag02);
         jpinfo.setBorder(new javax.swing.border.TitledBorder("Graph information"));
 	jplow.add(jpinfo, BorderLayout.NORTH);
+	c02.gridheight = 1;
+	c02.weighty = 1.0;
+	c02.weightx = 1.0;
+	c02.fill = GridBagConstraints.HORIZONTAL;
+	
+	c02.gridwidth = 1;
+	jpinfo.add(new JLabel("Nb of states:"), c02);
+	//c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+	nbOfStates = new JLabel("-");
+	jpinfo.add(nbOfStates, c02);
+	
+
+	c02.gridwidth = 1;
+	jpinfo.add(new JLabel("Nb of transitions:"), c02);
+	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+	nbOfLinks = new JLabel("-");
+	jpinfo.add(nbOfLinks, c02);
+
+	c02.gridwidth = 1;
+	jpinfo.add(new JLabel("Nb of pending states:"), c02);
+	//c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+	nbOfPendingStates = new JLabel("-");
+	jpinfo.add(nbOfPendingStates, c02);
+
+	c02.gridwidth = 1;
+	jpinfo.add(new JLabel("Nb of states/seconds:"), c02);
+	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+	nbOfStatesPerSecond = new JLabel("-");
+	jpinfo.add(nbOfStatesPerSecond, c02);
+	
+
+	c02.gridwidth = 1;
+	jpinfo.add(new JLabel("Elapsed timed:"), c02);
+	elapsedTime = new JLabel("-");
+	jpinfo.add(elapsedTime, c02);
+
+	c02.gridwidth = 1;
+	jpinfo.add(new JLabel(""), c02);
+	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+	info = new JLabel();
+	info.setFont(new Font("Serif", Font.BOLD, 16));
+	updateInfo();
+	jpinfo.add(info, c02);
 
         JPanel jp2 = new JPanel();
         jp2.add(start);
@@ -314,6 +371,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         try {  
 	    jta.append("Starting the model checker\n");
 	    amc = new AvatarModelChecker(spec);
+	    endDate = null;
+	    previousNbOfStates = 0;
+	    startDate = new Date();
+	    mcm = new ModelCheckerMonitor(this);
+	    java.util.Timer timer = new java.util.Timer(true);
+	    timer.scheduleAtFixedRate(mcm, 0, 500);
 
 	    // Setting options
 	    amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
@@ -342,6 +405,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	    testGo();
 	    
 	    amc.startModelChecking();
+	    timer.cancel();
+	    endDate = new Date();
+	    updateValues();
             jta.append("\n\nModel checking done\n");
 	    jta.append("Nb of states:" + amc.getNbOfStates() + "\n");
 	    jta.append("Nb of links:" + amc.getNbOfLinks() + "\n");
@@ -442,5 +508,73 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
     public void setError() {
         hasError = true;
+    }
+
+    public void updateValues() {
+	try {
+	    if (amc != null) {
+		int nbOfStatess = amc.getNbOfStates();
+		nbOfStates.setText(""+nbOfStatess);
+		nbOfLinks.setText(""+amc.getNbOfLinks());
+		nbOfPendingStates.setText(""+amc.getNbOfPendingStates());
+		Date d;
+		previousDate = new Date();
+		if (endDate != null) {
+		    d = endDate;
+		} else {
+		    d = previousDate;
+		}
+		long duration  = d.getTime() - startDate.getTime();
+		long diffInSeconds = TimeUnit.MILLISECONDS.toSeconds(duration);
+		long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+		elapsedTime.setText("" + diffInMinutes + "mn " + diffInSeconds + "s");
+		long diff = 0;
+		if (endDate != null) {
+		    diff = nbOfStatess;
+		} else {
+		    diff = nbOfStatess - previousNbOfStates;
+		}
+		previousNbOfStates = nbOfStatess;
+		//if (diff == 0) {
+		
+		
+
+		nbOfStatesPerSecond.setText(""+1000*diff/duration);
+
+		updateInfo();
+			//}
+	    }
+	} catch (Exception e) {
+	}
+    }
+
+    public int getStateIndex() {
+	if (amc == null) {
+	    return 0;
+	}
+
+	if (endDate == null) {
+	    return 1;
+	}
+	
+	return amc.hasBeenStoppedBeforeCompletion() ? 2 : 3;
+	
+    }
+
+    public void updateInfo() {
+	info.setForeground(COLORS[getStateIndex()]);
+	info.setText(INFOS[getStateIndex()]);
+    }
+
+    private class ModelCheckerMonitor extends TimerTask {
+	private JDialogAvatarModelChecker jdamc;
+	public ModelCheckerMonitor(JDialogAvatarModelChecker _jdamc) {
+	    jdamc = _jdamc;
+	}
+	
+	public void run() {
+	    jdamc.updateValues();
+	}
+ 
     }
 }
