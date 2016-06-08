@@ -51,6 +51,8 @@ public interface Graph {
    
     
     public int getNbState();
+
+    // Returns 0 is no transition, 1 otherwise
     public int getWeightOfTransition(int originState, int destinationState);
     
 }
