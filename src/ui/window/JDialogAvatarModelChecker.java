@@ -229,12 +229,23 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         stop.addActionListener(this);
         close.addActionListener(this);
 
+	JPanel jplow = new JPanel(new BorderLayout());
+ 
+	// nb of states, nb of links, nb of pending states, elapsed time, nbOfStatesPerSeconds
+	JPanel jpinfo = new JPanel();
+        GridBagLayout gridbag02 = new GridBagLayout();
+        GridBagConstraints c02 = new GridBagConstraints();
+        jpinfo.setLayout(gridbag02);
+        jpinfo.setBorder(new javax.swing.border.TitledBorder("Graph information"));
+	jplow.add(jpinfo, BorderLayout.NORTH);
+
         JPanel jp2 = new JPanel();
         jp2.add(start);
         jp2.add(stop);
         jp2.add(close);
+	jplow.add(jp2, BorderLayout.SOUTH);
 
-        c.add(jp2, BorderLayout.SOUTH);
+        c.add(jplow, BorderLayout.SOUTH);
 
     }
 
