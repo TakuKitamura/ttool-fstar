@@ -56,7 +56,7 @@ public class GraphAlgorithms {
     // Assume that states are numbered from 0 to nbState - 1
 
     public static boolean hasCycle(Graph g){
-        int nbState = g.getNbState();
+        int nbState = g.getNbOfStates();
         int i,j;
 
         if (nbState == 0) {
@@ -133,7 +133,7 @@ public class GraphAlgorithms {
 
     public static DijkstraState[] ShortestPathFrom(Graph g, int startState){
 
-        int nbState = g.getNbState();
+        int nbState = g.getNbOfStates();
         if (nbState == 0) {
             return null;
         }
@@ -227,7 +227,7 @@ public class GraphAlgorithms {
           }*/
 
 
-        int nbState = g.getNbState();
+        int nbState = g.getNbOfStates();
         if (nbState == 0) {
             return null;
         }

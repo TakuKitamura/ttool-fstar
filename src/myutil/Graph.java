@@ -50,7 +50,7 @@ package myutil;
 public interface Graph {
    
     
-    public int getNbState();
+    public int getNbOfStates();
 
     // Returns 0 is no transition, 1 otherwise
     public int getWeightOfTransition(int originState, int destinationState);

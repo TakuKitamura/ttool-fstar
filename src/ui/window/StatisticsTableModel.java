@@ -164,7 +164,7 @@ public class StatisticsTableModel extends AbstractTableModel implements SteppedA
 		StatisticsItem si1 = null;
 		String array[];
 		int i;
-		int nb = graph.getNbTransition();
+		int nb = graph.getNbOfTransitions();
 		AUTTransition tr;
 		
 		percentage = 0;
@@ -172,7 +172,7 @@ public class StatisticsTableModel extends AbstractTableModel implements SteppedA
 		setGo();
 
 		try {
-			for(i=0; i<graph.getNbTransition(); i++) {
+			for(i=0; i<graph.getNbOfTransitions(); i++) {
 				
 				if (!go) {
 					return;

@@ -60,6 +60,7 @@ public class SpecificationState  {
     public int hashValue;
     public boolean hashComputed;
     public long id;
+    public LinkedList<SpecificationLink> nexts;
 
     public ArrayList<SpecificationTransition> transitions;
 
@@ -105,6 +106,9 @@ public class SpecificationState  {
     }
 
     public String toString() {
+	if (blocks == null) {
+	    return "";
+	}
         StringBuffer sb = new StringBuffer("id: " + id);
         for(int i=0; i<blocks.length; i++) {
             sb.append("\n  "+i + ": " + blocks[i].toString());
@@ -149,9 +153,21 @@ public class SpecificationState  {
         return cpt;
     }
 
+    public void addNext(SpecificationLink sl) {
+	if (nexts == null) {
+	    nexts = new LinkedList<SpecificationLink>();
+	}
+	nexts.add(sl);
+    }
+
     public void finished() {
         //blocks = null;
         transitions = null;
+    }
+
+    public void freeUselessAllocations() {
+	blocks = null;
+	transitions = null;
     }
 
 }

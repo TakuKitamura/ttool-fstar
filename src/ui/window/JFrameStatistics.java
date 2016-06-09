@@ -280,13 +280,13 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         jp.add(new JLabel("States:"));
         state = new JTextField(5);
         state.setEditable(false);
-        state.setText(String.valueOf(graph.getNbState()));
+        state.setText(String.valueOf(graph.getNbOfStates()));
         jp.add(state);
 
         jp.add(new JLabel("Transitions:"));
         transition = new JTextField(15);
         transition.setEditable(false);
-        transition.setText(String.valueOf(graph.getNbTransition()));
+        transition.setText(String.valueOf(graph.getNbOfTransitions()));
         jp.add(transition);
 
         if (shouldIStop()) {
@@ -392,7 +392,7 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
 
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         //combo2 = new JComboBox(tab2);
-        combo2 = new JTextField("" + (graph.getNbState() - 1), 10);
+        combo2 = new JTextField("" + (graph.getNbOfStates() - 1), 10);
         jp1.add(combo2, c1);
         //jp2.add(jp1, BorderLayout.NORTH);
 
@@ -432,7 +432,7 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
 
         cycleDone = true;
         //System.out.println("Searching for cycles");
-        if (graph.getNbTransition() < MAX_TRANSITIONS) {
+        if (graph.getNbOfTransitions() < MAX_TRANSITIONS) {
             hasCycle = GraphAlgorithms.hasCycle(graph);
             cycleComputed = true;
         } else {
@@ -480,7 +480,7 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
 
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         //combo4 = new JComboBox(tab2);
-        combo4 = new JTextField("" + (graph.getNbState() - 1), 10);
+        combo4 = new JTextField("" + (graph.getNbOfStates() - 1), 10);
         jp3.add(combo4, c2);
         //jp2.add(jp1, BorderLayout.NORTH);
 
@@ -630,13 +630,13 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
                 return;
             }
 
-            if(from>=graph.getNbState()) {
-                text1.setText("Invalid value:" + combo1.getText() + ". Maximum value is: " + (graph.getNbState()-1));
+            if(from>=graph.getNbOfStates()) {
+                text1.setText("Invalid value:" + combo1.getText() + ". Maximum value is: " + (graph.getNbOfStates()-1));
                 return;
             }
 
-            if(to>=graph.getNbState()) {
-                text1.setText("Invalid value:" + combo2.getText() + ". Maximum value is: " + (graph.getNbState()-1));
+            if(to>=graph.getNbOfStates()) {
+                text1.setText("Invalid value:" + combo2.getText() + ". Maximum value is: " + (graph.getNbOfStates()-1));
                 return;
             }
 
@@ -666,13 +666,13 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
                 return;
             }
 
-            if(from>=graph.getNbState()) {
-                text1.setText("Invalid value:" + combo3.getText() + ". Maximum value is: " + (graph.getNbState()-1));
+            if(from>=graph.getNbOfStates()) {
+                text1.setText("Invalid value:" + combo3.getText() + ". Maximum value is: " + (graph.getNbOfStates()-1));
                 return;
             }
 
-            if(to>=graph.getNbState()) {
-                text2.setText("Invalid value:" + combo4.getText() + ". Maximum value is: " + (graph.getNbState()-1));
+            if(to>=graph.getNbOfStates()) {
+                text2.setText("Invalid value:" + combo4.getText() + ". Maximum value is: " + (graph.getNbOfStates()-1));
                 return;
             }
 

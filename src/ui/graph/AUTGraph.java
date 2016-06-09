@@ -205,11 +205,11 @@ public class AUTGraph  implements myutil.Graph {
         return array;
     }
 
-    public int getNbState() {
+    public int getNbOfStates() {
         return nbState;
     }
 
-    public int getNbTransition() {
+    public int getNbOfTransitions() {
         //return nbTransition;
         return transitions.size();
     }

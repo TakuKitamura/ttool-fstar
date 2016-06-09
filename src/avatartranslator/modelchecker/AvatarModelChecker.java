@@ -52,7 +52,7 @@ import java.util.*;
 import avatartranslator.*;
 import myutil.*;
 
-public class AvatarModelChecker implements Runnable {
+public class AvatarModelChecker implements Runnable, myutil.Graph {
     private final static int DEFAULT_NB_OF_THREADS = 12;
     private final static int SLEEP_DURATION = 500;
 
@@ -67,9 +67,11 @@ public class AvatarModelChecker implements Runnable {
     // ReachabilityGraph
     private Map<Integer, SpecificationState> states;
     private List<SpecificationState> pendingStates;
-    private List<SpecificationLink> links;
+    //private List<SpecificationLink> links;
+    private int nbOfLinks;
     private long stateID = 0;
     private int blockValues;
+    private boolean freeIntermediateStateCoding;
 
 
     // Options
@@ -78,7 +80,7 @@ public class AvatarModelChecker implements Runnable {
 
     // RG
     private boolean computeRG;
-    
+
     // Reachability
     private boolean studyReachability;
     private ArrayList<SpecificationReachability> reachabilities;
@@ -87,9 +89,14 @@ public class AvatarModelChecker implements Runnable {
     public AvatarModelChecker(AvatarSpecification _spec) {
         spec = _spec;
         ignoreEmptyTransitions = true;
-	ignoreConcurrenceBetweenInternalActions = true;
-	studyReachability = false;
-	computeRG = false;
+        ignoreConcurrenceBetweenInternalActions = true;
+        studyReachability = false;
+        computeRG = false;
+	freeIntermediateStateCoding = true;
+    }
+
+    public int getWeightOfTransition(int originState, int destinationState) {
+	return 0;
     }
 
     public int getNbOfStates() {
@@ -97,7 +104,8 @@ public class AvatarModelChecker implements Runnable {
     }
 
     public int getNbOfLinks() {
-        return links.size();
+        //return links.size();
+        return nbOfLinks;
     }
 
     public int getNbOfPendingStates() {
@@ -110,54 +118,58 @@ public class AvatarModelChecker implements Runnable {
         return tmp;
     }
 
+    public void setFreeIntermediateStateCoding(boolean _b) {
+	freeIntermediateStateCoding = _b;
+    }
+
     public void setIgnoreEmptyTransitions(boolean _b) {
         ignoreEmptyTransitions = _b;
     }
 
     public void setIgnoreConcurrenceBetweenInternalActions(boolean _b) {
-	ignoreConcurrenceBetweenInternalActions = _b;
+        ignoreConcurrenceBetweenInternalActions = _b;
     }
 
     public int setReachabilityOfSelected() {
-	reachabilities = new ArrayList<SpecificationReachability>();
-	for(AvatarBlock block: spec.getListOfBlocks()) {
-	    for(AvatarStateMachineElement elt: block.getStateMachine().getListOfElements()) {
-		if (elt.isCheckable()) {
-		    SpecificationReachability reach = new SpecificationReachability(elt);
-		    reachabilities.add(reach);
-		}
-	    }
-	}
-	nbOfRemainingReachabilities = reachabilities.size();
-	studyReachability = true;
-	return nbOfRemainingReachabilities;
+        reachabilities = new ArrayList<SpecificationReachability>();
+        for(AvatarBlock block: spec.getListOfBlocks()) {
+            for(AvatarStateMachineElement elt: block.getStateMachine().getListOfElements()) {
+                if (elt.isCheckable()) {
+                    SpecificationReachability reach = new SpecificationReachability(elt);
+                    reachabilities.add(reach);
+                }
+            }
+        }
+        nbOfRemainingReachabilities = reachabilities.size();
+        studyReachability = true;
+        return nbOfRemainingReachabilities;
     }
 
     public int setReachabilityOfAllStates() {
-	reachabilities = new ArrayList<SpecificationReachability>();
-	for(AvatarBlock block: spec.getListOfBlocks()) {
-	    for(AvatarStateMachineElement elt: block.getStateMachine().getListOfElements()) {
-		if (elt instanceof AvatarStateElement) {
-		    SpecificationReachability reach = new SpecificationReachability(elt);
-		    reachabilities.add(reach);
-		}
-	    }
-	}
-	nbOfRemainingReachabilities = reachabilities.size();
-	studyReachability = true;
-	return nbOfRemainingReachabilities;
+        reachabilities = new ArrayList<SpecificationReachability>();
+        for(AvatarBlock block: spec.getListOfBlocks()) {
+            for(AvatarStateMachineElement elt: block.getStateMachine().getListOfElements()) {
+                if (elt instanceof AvatarStateElement) {
+                    SpecificationReachability reach = new SpecificationReachability(elt);
+                    reachabilities.add(reach);
+                }
+            }
+        }
+        nbOfRemainingReachabilities = reachabilities.size();
+        studyReachability = true;
+        return nbOfRemainingReachabilities;
     }
 
     public ArrayList<SpecificationReachability> getReachabilities() {
-	return reachabilities;
+        return reachabilities;
     }
 
     public int getNbOfRemainingReachabilities() {
-	return nbOfRemainingReachabilities;
+        return nbOfRemainingReachabilities;
     }
 
     public void setComputeRG(boolean _rg) {
-	computeRG = _rg;
+        computeRG = _rg;
     }
 
 
@@ -171,9 +183,9 @@ public class AvatarModelChecker implements Runnable {
         spec.removeCompositeStates();
         spec.removeRandoms();
         spec.makeFullStates();
-	if (ignoreEmptyTransitions) {
-	    spec.removeEmptyTransitions(nbOfRemainingReachabilities == 0);
-	}
+        if (ignoreEmptyTransitions) {
+            spec.removeEmptyTransitions(nbOfRemainingReachabilities == 0);
+        }
 
 
         TraceManager.addDev("Preparing Avatar specification");
@@ -196,28 +208,29 @@ public class AvatarModelChecker implements Runnable {
         // Init data stuctures
         states = Collections.synchronizedMap(new HashMap<Integer, SpecificationState>());
         pendingStates = Collections.synchronizedList(new LinkedList<SpecificationState>());
-        links = Collections.synchronizedList(new ArrayList<SpecificationLink>());
+        //links = Collections.synchronizedList(new ArrayList<SpecificationLink>());
+        nbOfLinks = 0;
 
-	// Check stop conditions
-	if (mustStop()) {
-	    return;
-	}
-	
+        // Check stop conditions
+        if (mustStop()) {
+            return;
+        }
+
         // Compute initial state
         SpecificationState initialState = new SpecificationState();
         initialState.setInit(spec);
-	for(AvatarBlock block: spec.getListOfBlocks()) {
-	    checkElement(block.getStateMachine().getStartState(), initialState);
-	}
+        for(AvatarBlock block: spec.getListOfBlocks()) {
+            checkElement(block.getStateMachine().getStartState(), initialState);
+        }
         initialState.id = getStateID();
-	if (ignoreEmptyTransitions) {
-	    handleNonEmptyUniqueTransition(initialState);
-	}
-	prepareTransitionsOfState(initialState);
-	blockValues = initialState.getBlockValues();
-	
+        if (ignoreEmptyTransitions) {
+            handleNonEmptyUniqueTransition(initialState);
+        }
+        prepareTransitionsOfState(initialState);
+        blockValues = initialState.getBlockValues();
+
         //TraceManager.addDev("initialState=" + initialState.toString());
-	initialState.computeHash(blockValues);
+        initialState.computeHash(blockValues);
         states.put(initialState.hashValue, initialState);
         pendingStates.add(initialState);
 
@@ -245,15 +258,15 @@ public class AvatarModelChecker implements Runnable {
                 ts[i].join();} catch (Exception e){}
         }
 
-	// Set to non reachable not computed elements
-	if ((studyReachability) && (!stoppedBeforeEnd)) {
-	    for(SpecificationReachability re: reachabilities) {
-		if (re.result == SpecificationReachabilityType.NOTCOMPUTED) {
-		    re.result = SpecificationReachabilityType.NONREACHABLE;
-		}
-	    }
-	}
-	
+        // Set to non reachable not computed elements
+        if ((studyReachability) && (!stoppedBeforeEnd)) {
+            for(SpecificationReachability re: reachabilities) {
+                if (re.result == SpecificationReachabilityType.NOTCOMPUTED) {
+                    re.result = SpecificationReachabilityType.NONREACHABLE;
+                }
+            }
+        }
+
     }
 
     // MAIN LOOP
@@ -264,16 +277,16 @@ public class AvatarModelChecker implements Runnable {
         boolean go = true;
         while(go) {
             // Pickup a state
-	    if ((stoppedBeforeEnd) || (stoppedConditionReached)) {
-		return;
-	    }
-	    
-	    // Pickup a state
+            if ((stoppedBeforeEnd) || (stoppedConditionReached)) {
+                return;
+            }
+
+            // Pickup a state
             s = pickupState();
 
-	    if ((stoppedBeforeEnd) || (stoppedConditionReached)) {
-		return;
-	    }
+            if ((stoppedBeforeEnd) || (stoppedConditionReached)) {
+                return;
+            }
 
             if (s == null) {
                 // Terminate
@@ -320,8 +333,8 @@ public class AvatarModelChecker implements Runnable {
     }
 
     private void prepareTransitionsOfState(SpecificationState _ss) {
-	int cpt;
-	_ss.transitions = new ArrayList<SpecificationTransition>();
+        int cpt;
+        _ss.transitions = new ArrayList<SpecificationTransition>();
 
         // At first, do not merge synchronous transitions
         // Simply get basics transitions
@@ -344,7 +357,7 @@ public class AvatarModelChecker implements Runnable {
 
 
     private void computeAllStatesFrom(SpecificationState _ss) {
-	ArrayList<SpecificationTransition> transitions = _ss.transitions;
+        ArrayList<SpecificationTransition> transitions = _ss.transitions;
 
         //TraceManager.addDev("Possible transitions 1:" + transitions.size());
 
@@ -365,10 +378,10 @@ public class AvatarModelChecker implements Runnable {
                     }
                 }
             } else if (AvatarTransition.isActionType(tr.getType())) {
-		newTransitions.add(tr);
-	    } else if (tr.getType() == AvatarTransition.TYPE_EMPTY) {
-		newTransitions.add(tr);
-	    }
+                newTransitions.add(tr);
+            } else if (tr.getType() == AvatarTransition.TYPE_EMPTY) {
+                newTransitions.add(tr);
+            }
         }
         transitions = newTransitions;
         //TraceManager.addDev("Possible transitions 2:" + transitions.size());
@@ -393,45 +406,45 @@ public class AvatarModelChecker implements Runnable {
         transitions = newTransitions;
         //TraceManager.addDev("Possible transitions 3:" + transitions.size());
 
-	if (ignoreConcurrenceBetweenInternalActions) {
-	    SpecificationTransition st = null;
-	    // See whether there is at least one transition with an immediate internal action with no alternative in the same block
-	    for(SpecificationTransition tr: transitions) {
-		if ((AvatarTransition.isActionType(tr.getType()) && (tr.clockMax ==  clockMin))|| tr.getType() == AvatarTransition.TYPE_EMPTY) {
-		    // Must look for similar transitions in the the same block
-		    //TraceManager.addDev("Lookin for same block for " + tr);
-		    boolean foundSameBlock = false;
-		    for(SpecificationTransition tro: transitions) {
-			if (tro != tr) {
-			    if (tro.hasBlockOf(tr)) {
-				foundSameBlock = true;
-				//TraceManager.addDev("Found same block tr=" + tr + " tro=" + tro);
-				break;
-			    }
-			}
-		    }
-		    if (!foundSameBlock) {
-			st = tr;
-			break;
-		    }
-		}
-	    }
-	    if (st != null) {
-		transitions.clear();
-		transitions.add(st);
-	    }
-	}
+        if (ignoreConcurrenceBetweenInternalActions) {
+            SpecificationTransition st = null;
+            // See whether there is at least one transition with an immediate internal action with no alternative in the same block
+            for(SpecificationTransition tr: transitions) {
+                if ((AvatarTransition.isActionType(tr.getType()) && (tr.clockMax ==  clockMin))|| tr.getType() == AvatarTransition.TYPE_EMPTY) {
+                    // Must look for similar transitions in the the same block
+                    //TraceManager.addDev("Lookin for same block for " + tr);
+                    boolean foundSameBlock = false;
+                    for(SpecificationTransition tro: transitions) {
+                        if (tro != tr) {
+                            if (tro.hasBlockOf(tr)) {
+                                foundSameBlock = true;
+                                //TraceManager.addDev("Found same block tr=" + tr + " tro=" + tro);
+                                break;
+                            }
+                        }
+                    }
+                    if (!foundSameBlock) {
+                        st = tr;
+                        break;
+                    }
+                }
+            }
+            if (st != null) {
+                transitions.clear();
+                transitions.add(st);
+            }
+        }
 
-	//TraceManager.addDev("Possible transitions 4:" + transitions.size());
+        //TraceManager.addDev("Possible transitions 4:" + transitions.size());
         // For each realizable transition
         //   Make it, reset clock of the involved blocks to 0, increase clockmin/clockhmax of each block
         //   compute new state, and compare with existing ones
         //   If not a new state, create the link rom the previous state to the new one
         //   Otherwise create the new state and its link, and add it to the pending list of states
-	int cptt = 0;
+        int cptt = 0;
         for(SpecificationTransition tr: transitions) {
-	    //TraceManager.addDev("Handling transitions #" + cptt + " type =" + tr.getType());
-	    cptt ++;
+            //TraceManager.addDev("Handling transitions #" + cptt + " type =" + tr.getType());
+            cptt ++;
 
             // Make tr
             // to do so, must create a new state
@@ -444,16 +457,16 @@ public class AvatarModelChecker implements Runnable {
             // doing the synchronization
             String action = executeTransition(_ss, newState, tr);
 
-	    // Remove empty transitions if applicable
-	    if (ignoreEmptyTransitions) {
-		handleNonEmptyUniqueTransition(newState);
-	    }
-	    prepareTransitionsOfState(newState);
+            // Remove empty transitions if applicable
+            if (ignoreEmptyTransitions) {
+                handleNonEmptyUniqueTransition(newState);
+            }
+            prepareTransitionsOfState(newState);
 
             // Compute the hash of the new state, and create the link to the right next state
             SpecificationLink link = new SpecificationLink();
             link.originState = _ss;
-	    action += " [" + tr.clockMin + " ..." + clockMax + "]";
+            action += " [" + tr.clockMin + " ..." + clockMax + "]";
             link.action = action;
             newState.computeHash(blockValues);
             SpecificationState similar = states.get(newState.getHash(blockValues));
@@ -470,17 +483,24 @@ public class AvatarModelChecker implements Runnable {
                 //TraceManager.addDev("Similar state found State=" + newState.getHash(blockValues) + "\n" + newState + "\nsimilar=" + similar.getHash(blockValues) + "\n" + similar);
                 link.destinationState = similar;
             }
-            links.add(link);
+            //links.add(link);
+            nbOfLinks ++;
+	    _ss.addNext(link);
         }
-	_ss.finished();
-	mustStop();
+	if (freeIntermediateStateCoding) {
+	    freeUselessAllocations();
+	} else {
+	    _ss.finished();
+	}
+	
+        mustStop();
     }
 
     private boolean guardResult(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb) {
         if (!_at.isGuarded()) {
             return true;
         }
-	
+
         // Must evaluate the guard
         String guard = _at.getGuard().toString ();
         String s = Conversion.replaceAllString(guard, "[", "").trim();
@@ -494,10 +514,10 @@ public class AvatarModelChecker implements Runnable {
         }
 
         // Must see whether the guard is ok or not
-	boolean guard = guardResult(_at, _block, _sb);
-	if (!guard) {
-	    return;
-	}
+        boolean guard = guardResult(_at, _block, _sb);
+        if (!guard) {
+            return;
+        }
 
         SpecificationTransition st = new SpecificationTransition();
         _transitionsToAdd.add(st);
@@ -514,8 +534,8 @@ public class AvatarModelChecker implements Runnable {
         if ((maxDelay == null) || (maxDelay.length() == 0)) {
             st.clockMax = 0 - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
         } else {
-	    int resMax = evaluateIntExpression(_at.getMaxDelay(), _block, _sb);
-	    _sb.maxClock = Math.max(_sb.maxClock, resMax);
+            int resMax = evaluateIntExpression(_at.getMaxDelay(), _block, _sb);
+            _sb.maxClock = Math.max(_sb.maxClock, resMax);
             st.clockMax = resMax - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
         }
 
@@ -558,19 +578,19 @@ public class AvatarModelChecker implements Runnable {
                                         }
                                     }
                                 } else {
-				    if (at.hasAction()) {
-					if (at.hasMethod()) {
-					    at.type = AvatarTransition.TYPE_ACTION_AND_METHOD;
-					} else {
-					    at.type = AvatarTransition.TYPE_ACTIONONLY;
-					}
-				    } else {
-					if (at.hasMethod()) {
-					    at.type = AvatarTransition.TYPE_METHODONLY;
-					} else {
-					     at.type = AvatarTransition.TYPE_EMPTY;
-					}
-				    }
+                                    if (at.hasAction()) {
+                                        if (at.hasMethod()) {
+                                            at.type = AvatarTransition.TYPE_ACTION_AND_METHOD;
+                                        } else {
+                                            at.type = AvatarTransition.TYPE_ACTIONONLY;
+                                        }
+                                    } else {
+                                        if (at.hasMethod()) {
+                                            at.type = AvatarTransition.TYPE_METHODONLY;
+                                        } else {
+                                            at.type = AvatarTransition.TYPE_EMPTY;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -619,7 +639,7 @@ public class AvatarModelChecker implements Runnable {
     }
 
     public int evaluateIntExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb) {
-	//TraceManager.addDev("Evaluating Int expression 1: " + _expr);
+        //TraceManager.addDev("Evaluating Int expression 1: " + _expr);
         String act = _expr;
         int cpt = 0;
         for(AvatarAttribute at: _block.getAttributes()) {
@@ -677,7 +697,7 @@ public class AvatarModelChecker implements Runnable {
         for(int i=0; i<_st.transitions.length; i++) {
             ase = getNextState(_st.transitions[i], _newState, 10);
             if (ase != null) {
-		checkElement(ase, _newState);
+                checkElement(ase, _newState);
                 int index = _st.blocks[i].getStateMachine().getIndexOfState(ase);
                 if (index > -1) {
                     _newState.blocks[_st.blocksInt[i]].values[SpecificationBlock.STATE_INDEX] = index;
@@ -697,16 +717,16 @@ public class AvatarModelChecker implements Runnable {
     }
 
     private AvatarStateElement getNextState(AvatarStateMachineElement e, SpecificationState _newState, int maxNbOfIterations) {
-	checkElement(e, _newState);
-	e = e.getNext(0);
-	if (e instanceof AvatarStateElement) {
-	    return (AvatarStateElement)e;
-	}
-	maxNbOfIterations --;
-	if (maxNbOfIterations == 0) {
-	    return null;
-	}
-	return getNextState(e, _newState, maxNbOfIterations);
+        checkElement(e, _newState);
+        e = e.getNext(0);
+        if (e instanceof AvatarStateElement) {
+            return (AvatarStateElement)e;
+        }
+        maxNbOfIterations --;
+        if (maxNbOfIterations == 0) {
+            return null;
+        }
+        return getNextState(e, _newState, maxNbOfIterations);
     }
 
     // Execute the actions of a transition, and correspondingly impact the variables of the
@@ -814,127 +834,127 @@ public class AvatarModelChecker implements Runnable {
     }
 
     public void handleNonEmptyUniqueTransition(SpecificationState _ss) {
-	int cpt = 0;
-	for(AvatarBlock block: spec.getListOfBlocks()) {
-	    AvatarStateMachine asm = block.getStateMachine();
-	    SpecificationBlock sb = _ss.blocks[cpt];
+        int cpt = 0;
+        for(AvatarBlock block: spec.getListOfBlocks()) {
+            AvatarStateMachine asm = block.getStateMachine();
+            SpecificationBlock sb = _ss.blocks[cpt];
             AvatarStateElement ase = asm.allStates[sb.values[SpecificationBlock.STATE_INDEX]];
-	
-	    
-	    AvatarStateElement aseAfter = getStateWithNonEmptyUniqueTransition(ase, block, sb, _ss);
-	    if (aseAfter != ase) {
-		checkElement(aseAfter, _ss);
-		// Must modify the state of the considered block
-		sb.values[SpecificationBlock.STATE_INDEX] = asm.getIndexOfState(aseAfter);
-	    }
-	    cpt ++;
-     	}
+
+
+            AvatarStateElement aseAfter = getStateWithNonEmptyUniqueTransition(ase, block, sb, _ss);
+            if (aseAfter != ase) {
+                checkElement(aseAfter, _ss);
+                // Must modify the state of the considered block
+                sb.values[SpecificationBlock.STATE_INDEX] = asm.getIndexOfState(aseAfter);
+            }
+            cpt ++;
+        }
     }
 
     private AvatarStateElement getStateWithNonEmptyUniqueTransition(AvatarStateElement _ase, AvatarBlock _block, SpecificationBlock _sb, SpecificationState _ss) {
-	return getStateWithNonEmptyUniqueTransitionArray(_ase, _block, _sb, _ss, null);
+        return getStateWithNonEmptyUniqueTransitionArray(_ase, _block, _sb, _ss, null);
     }
 
     private AvatarStateElement getStateWithNonEmptyUniqueTransitionArray(AvatarStateElement _ase, AvatarBlock _block, SpecificationBlock _sb, SpecificationState _ss, ArrayList<AvatarStateElement> listOfStates ) {
 
-	//	TraceManager.addDev("Handling Empty transition of previous=" + _ase.getName());
-	
-	if (_ase.getNexts().size() != 1) {
-	    return _ase;
-	}
+        //      TraceManager.addDev("Handling Empty transition of previous=" + _ase.getName());
 
-	
-	//TraceManager.addDev("Handling Empty transition of previous= 1 " + _ase.getName());
-	
-	AvatarTransition at = (AvatarTransition)(_ase.getNext(0));
+        if (_ase.getNexts().size() != 1) {
+            return _ase;
+        }
 
-	//TraceManager.addDev("Handling Empty transition of previous= 2 " + _ase.getName() + " trans=" + at.getName());
 
-	if(!((at.type == AvatarTransition.TYPE_EMPTY) || (at.type == AvatarTransition.TYPE_METHODONLY))) {
-	    return _ase;
-	}
+        //TraceManager.addDev("Handling Empty transition of previous= 1 " + _ase.getName());
 
-	//TraceManager.addDev("Handling Empty transition of previous= 3 " + _ase.getName() + " trans=" + at.getName());
-	
-	// Check guard;
-	boolean guard = guardResult(at, _block, _sb);
+        AvatarTransition at = (AvatarTransition)(_ase.getNext(0));
 
-	if (!guard) {
-	    return _ase;
-	}
+        //TraceManager.addDev("Handling Empty transition of previous= 2 " + _ase.getName() + " trans=" + at.getName());
 
-	//TraceManager.addDev("Handling Empty transition of previous= 4 " + _ase.getName() + " trans=" + at.getName());
+        if(!((at.type == AvatarTransition.TYPE_EMPTY) || (at.type == AvatarTransition.TYPE_METHODONLY))) {
+            return _ase;
+        }
 
-	
-	AvatarStateElement ase = (AvatarStateElement)(at.getNext(0));
-	checkElement(ase, _ss);
-	//TraceManager.addDev("Handling Empty transition of " + _block.getName() + " with nextState = " + ase.getName() + " and previous=" + _ase.getName());
+        //TraceManager.addDev("Handling Empty transition of previous= 3 " + _ase.getName() + " trans=" + at.getName());
 
-	if (listOfStates == null) {
-	    if (ase == _ase) {
-		return _ase; 
-	    }
-	    //TraceManager.addDev("New list of states " + _block.getName());
-	    listOfStates = new ArrayList<AvatarStateElement>();
-	} else {
-	    if (listOfStates.contains(ase)) {
-		return _ase;
-	    }
-	}
-	listOfStates.add(_ase);
+        // Check guard;
+        boolean guard = guardResult(at, _block, _sb);
 
-	return getStateWithNonEmptyUniqueTransitionArray(ase, _block, _sb, _ss, listOfStates);
-	
-	
-	}
+        if (!guard) {
+            return _ase;
+        }
+
+        //TraceManager.addDev("Handling Empty transition of previous= 4 " + _ase.getName() + " trans=" + at.getName());
+
+
+        AvatarStateElement ase = (AvatarStateElement)(at.getNext(0));
+        checkElement(ase, _ss);
+        //TraceManager.addDev("Handling Empty transition of " + _block.getName() + " with nextState = " + ase.getName() + " and previous=" + _ase.getName());
+
+        if (listOfStates == null) {
+            if (ase == _ase) {
+                return _ase;
+            }
+            //TraceManager.addDev("New list of states " + _block.getName());
+            listOfStates = new ArrayList<AvatarStateElement>();
+        } else {
+            if (listOfStates.contains(ase)) {
+                return _ase;
+            }
+        }
+        listOfStates.add(_ase);
+
+        return getStateWithNonEmptyUniqueTransitionArray(ase, _block, _sb, _ss, listOfStates);
+
+
+    }
 
 
     // Checking elements
     public void checkElement(AvatarStateMachineElement elt, SpecificationState _ss) {
-	if (studyReachability) {
-	    checkElementReachability(elt, _ss);
-	}
+        if (studyReachability) {
+            checkElementReachability(elt, _ss);
+        }
     }
 
     public void checkElementReachability(AvatarStateMachineElement elt, SpecificationState _ss) {
-	for(SpecificationReachability re: reachabilities) {
-	    if (re.result ==  SpecificationReachabilityType.NOTCOMPUTED) {
-		if (re.ref == elt) {
-		    re.result = SpecificationReachabilityType.REACHABLE;
-		    re.state = _ss;
-		    nbOfRemainingReachabilities --;
-		    TraceManager.addDev("Remaining reachabilities:" + nbOfRemainingReachabilities);
-		}
-	    }
-	}
+        for(SpecificationReachability re: reachabilities) {
+            if (re.result ==  SpecificationReachabilityType.NOTCOMPUTED) {
+                if (re.ref == elt) {
+                    re.result = SpecificationReachabilityType.REACHABLE;
+                    re.state = _ss;
+                    nbOfRemainingReachabilities --;
+                    TraceManager.addDev("Remaining reachabilities:" + nbOfRemainingReachabilities);
+                }
+            }
+        }
     }
-    
+
 
 
     // Stop condition
 
     public synchronized boolean mustStop() {
-	if (stoppedConditionReached) {
-	    return true;
-	}
+        if (stoppedConditionReached) {
+            return true;
+        }
 
-	stoppedConditionReached = true;
+        stoppedConditionReached = true;
 
-	if (studyReachability && nbOfRemainingReachabilities==0) {
-	    TraceManager.addDev("***** All reachability found");
-	}
-	
-	if (studyReachability && nbOfRemainingReachabilities>0) {
-	    stoppedConditionReached = false;
-	}
+        if (studyReachability && nbOfRemainingReachabilities==0) {
+            TraceManager.addDev("***** All reachability found");
+        }
 
-	if (computeRG) {
-	    stoppedConditionReached = false;
-	}
+        if (studyReachability && nbOfRemainingReachabilities>0) {
+            stoppedConditionReached = false;
+        }
 
-	return stoppedConditionReached;
+        if (computeRG) {
+            stoppedConditionReached = false;
+        }
+
+        return stoppedConditionReached;
     }
-    
+
 
     // Generators
 
@@ -944,8 +964,10 @@ public class AvatarModelChecker implements Runnable {
             sb.append(state.toString() + "\n");
         }
         sb.append("\nLinks:\n");
-        for(SpecificationLink link: links) {
-            sb.append(link.toString() + "\n");
+        for(SpecificationState state: states.values()) {
+            for(SpecificationLink link: state.nexts) {
+                sb.append(link.toString() + "\n");
+            }
         }
         return sb.toString();
     }
@@ -955,8 +977,10 @@ public class AvatarModelChecker implements Runnable {
         StringBuffer sb = new StringBuffer();
         sb.append("des(0," + getNbOfLinks() + "," + getNbOfStates() + ")\n");
 
-        for(SpecificationLink link: links){
-            sb.append("(" + link.originState.id + ",\"" + link.action + "\"," + link.destinationState.id + ")\n");
+        for(SpecificationState state: states.values()) {
+            for(SpecificationLink link: state.nexts) {
+                sb.append("(" + link.originState.id + ",\"" + link.action + "\"," + link.destinationState.id + ")\n");
+            }
         }
         return new String(sb);
     }
@@ -965,30 +989,40 @@ public class AvatarModelChecker implements Runnable {
         StringBuffer sb = new StringBuffer();
         sb.append("digraph TToolAvatarGraph {\n");
 
-        for(SpecificationLink link: links){
-            sb.append(" " + link.originState.id + " -> " + link.destinationState.id  + "[label=\"" + link.action + "\"];\n");
+        for(SpecificationState state: states.values()) {
+            for(SpecificationLink link: state.nexts) {
+
+                sb.append(" " + link.originState.id + " -> " + link.destinationState.id  + "[label=\"" + link.action + "\"];\n");
+            }
         }
         sb.append("}");
         return new String(sb);
     }
 
     public String reachabilityToString() {
-	if (!studyReachability) {
-	    return "Reachability not activated";
-	}
+        if (!studyReachability) {
+            return "Reachability not activated";
+        }
 
 
-	String ret = "";
-	if (stoppedBeforeEnd) {
-	    ret += "Beware: Full study of reacha&bility might not have been fully completed\n";
-	}
+        String ret = "";
+        if (stoppedBeforeEnd) {
+            ret += "Beware: Full study of reacha&bility might not have been fully completed\n";
+        }
 
-	int cpt=0;
-	for(SpecificationReachability re: reachabilities) {
-	    ret += cpt + ": " + re.toString() + "\n";
-	    cpt ++;
+        int cpt=0;
+        for(SpecificationReachability re: reachabilities) {
+            ret += cpt + ": " + re.toString() + "\n";
+            cpt ++;
+        }
+        return ret;
+    }
+
+    // Do not free the RG
+    public void freeUselessAllocations() {
+	for(SpecificationState state: states.values()) {
+	    state.freeUselessAllocations();
 	}
-	return ret;
     }
 
 
