@@ -66,6 +66,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     // ReachabilityGraph
     private Map<Integer, SpecificationState> states;
+    private Map<Long, SpecificationState> statesByID;
     private List<SpecificationState> pendingStates;
     //private List<SpecificationLink> links;
     private int nbOfLinks;
@@ -96,7 +97,15 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     public int getWeightOfTransition(int originState, int destinationState) {
-	return 0;
+	if (statesByID == null) {
+	    return 0;
+	}
+	SpecificationState st = statesByID.get(originState);
+	if (st == null) {
+	    return 0;
+	}
+	return st.getWeightOfTransitionTo(destinationState);
+
     }
 
     public int getNbOfStates() {
@@ -207,6 +216,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         // Init data stuctures
         states = Collections.synchronizedMap(new HashMap<Integer, SpecificationState>());
+	statesByID = Collections.synchronizedMap(new HashMap<Long, SpecificationState>());
         pendingStates = Collections.synchronizedList(new LinkedList<SpecificationState>());
         //links = Collections.synchronizedList(new ArrayList<SpecificationLink>());
         nbOfLinks = 0;
@@ -232,6 +242,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         //TraceManager.addDev("initialState=" + initialState.toString());
         initialState.computeHash(blockValues);
         states.put(initialState.hashValue, initialState);
+	statesByID.put(initialState.id, initialState);
         pendingStates.add(initialState);
 
         computeAllStates();
@@ -473,6 +484,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             if (similar == null) {
                 //  Unknown state
                 states.put(newState.getHash(blockValues), newState);
+		statesByID.put(newState.id, newState);
                 pendingStates.add(newState);
                 link.destinationState = newState;
                 newState.id = getStateID();

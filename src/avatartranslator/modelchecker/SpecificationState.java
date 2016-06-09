@@ -160,6 +160,25 @@ public class SpecificationState  {
 	nexts.add(sl);
     }
 
+    public boolean isDeadlock() {
+	if (nexts == null) {
+	    return true;
+	}
+	return (nexts.size() == 0);
+    }
+
+    public int getWeightOfTransitionTo(int destinationState) {
+	if (nexts == null) {
+	    return 0;
+	}
+	for(SpecificationLink sl: nexts) {
+	    if (sl.destinationState.id == destinationState) {
+		return 1;
+	    }
+	}
+	return 0;
+    }
+
     public void finished() {
         //blocks = null;
         transitions = null;
