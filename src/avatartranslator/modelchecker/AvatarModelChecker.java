@@ -87,6 +87,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private ArrayList<SpecificationReachability> reachabilities;
     private int nbOfRemainingReachabilities;
 
+    // Dealocks
+    private int nbOfDeadlocks;
+
     public AvatarModelChecker(AvatarSpecification _spec) {
         spec = _spec;
         ignoreEmptyTransitions = true;
@@ -177,6 +180,17 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         return nbOfRemainingReachabilities;
     }
 
+    public int getNbOfReachabilities() {
+	if (reachabilities == null) {
+	    return -1;
+	}
+        return reachabilities.size() - nbOfRemainingReachabilities;
+    }
+
+    public int getNbOfDeadlocks() {
+	return nbOfDeadlocks;
+    }
+
     public void setComputeRG(boolean _rg) {
         computeRG = _rg;
     }
@@ -185,6 +199,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public void startModelChecking() {
         stoppedBeforeEnd = false;
         stateID = 0;
+	nbOfDeadlocks = 0;
 
         // Remove timers, composite states, randoms
         TraceManager.addDev("Reworking Avatar specification");
@@ -453,6 +468,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 transitions.add(st);
             }
         }
+
+	if (transitions.size() == 0) {
+	    nbOfDeadlocks ++;
+	}
 
         //TraceManager.addDev("Possible transitions 4:" + transitions.size());
         // For each realizable transition

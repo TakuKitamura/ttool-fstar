@@ -116,7 +116,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     protected JScrollPane jsp;
 
     // Information
-    protected JLabel nbOfStates, nbOfLinks, nbOfPendingStates, elapsedTime, nbOfStatesPerSecond, info;
+    protected JLabel nbOfStates, nbOfLinks, nbOfPendingStates, elapsedTime, nbOfStatesPerSecond, nbOfDeadlocks, nbOfReachabilities, info;
 
 
     private Thread t;
@@ -269,6 +269,19 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
 	nbOfLinks = new JLabel("-");
 	jpinfo.add(nbOfLinks, c02);
+
+	c02.gridwidth = 1;
+	jpinfo.add(new JLabel("Reachability found:"), c02);
+	//c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+	nbOfReachabilities = new JLabel("-");
+	jpinfo.add(nbOfReachabilities, c02);
+	
+
+	c02.gridwidth = 1;
+	jpinfo.add(new JLabel("Nb of deadlock states:"), c02);
+	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+	nbOfDeadlocks = new JLabel("-");
+	jpinfo.add(nbOfDeadlocks, c02);
 
 	c02.gridwidth = 1;
 	jpinfo.add(new JLabel("Nb of pending states:"), c02);
@@ -516,6 +529,17 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 		int nbOfStatess = amc.getNbOfStates();
 		nbOfStates.setText(""+nbOfStatess);
 		nbOfLinks.setText(""+amc.getNbOfLinks());
+
+		// Reachability and deadlocks
+		int nb = amc.getNbOfReachabilities();
+		if (nb == -1) {
+		    //nbOfReachabilities.setText("-");
+		} else {
+		    nbOfReachabilities.setText("" + nb);
+		}
+		nbOfDeadlocks.setText(""+amc.getNbOfDeadlocks());
+
+		
 		nbOfPendingStates.setText(""+amc.getNbOfPendingStates());
 		Date d;
 		previousDate = new Date();
@@ -540,6 +564,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 		
 
 		nbOfStatesPerSecond.setText(""+1000*diff/duration);
+
+		
 
 		updateInfo();
 			//}
