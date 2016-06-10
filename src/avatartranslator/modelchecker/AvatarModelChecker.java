@@ -239,7 +239,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         prepareTransitionsOfState(initialState);
         blockValues = initialState.getBlockValues();
 
-        //TraceManager.addDev("initialState=" + initialState.toString());
+        //TraceManager.addDev("initialState=" + initialState.toString() + " nbOfTransitions" + initialState.transitions.size());
         initialState.computeHash(blockValues);
         states.put(initialState.hashValue, initialState);
 	statesByID.put(initialState.id, initialState);
@@ -368,7 +368,15 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
     private void computeAllStatesFrom(SpecificationState _ss) {
+	if (_ss == null) {
+	    mustStop();
+	    return;
+	}
         ArrayList<SpecificationTransition> transitions = _ss.transitions;
+	if (transitions == null) {
+	    mustStop();
+	    return;
+	}
 
         //TraceManager.addDev("Possible transitions 1:" + transitions.size());
 
@@ -977,9 +985,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         sb.append("\nLinks:\n");
         for(SpecificationState state: states.values()) {
-            for(SpecificationLink link: state.nexts) {
-                sb.append(link.toString() + "\n");
-            }
+	    if (state.nexts != null) {
+		for(SpecificationLink link: state.nexts) {
+		    sb.append(link.toString() + "\n");
+		}
+	    }
         }
         return sb.toString();
     }
@@ -990,9 +1000,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         sb.append("des(0," + getNbOfLinks() + "," + getNbOfStates() + ")\n");
 
         for(SpecificationState state: states.values()) {
-            for(SpecificationLink link: state.nexts) {
+	     if (state.nexts != null) {
+		 for(SpecificationLink link: state.nexts) {
                 sb.append("(" + link.originState.id + ",\"" + link.action + "\"," + link.destinationState.id + ")\n");
-            }
+		 }
+	     }
         }
         return new String(sb);
     }
@@ -1002,10 +1014,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         sb.append("digraph TToolAvatarGraph {\n");
 
         for(SpecificationState state: states.values()) {
-            for(SpecificationLink link: state.nexts) {
+	    if (state.nexts != null) {
+		for(SpecificationLink link: state.nexts) {
 
-                sb.append(" " + link.originState.id + " -> " + link.destinationState.id  + "[label=\"" + link.action + "\"];\n");
-            }
+		    sb.append(" " + link.originState.id + " -> " + link.destinationState.id  + "[label=\"" + link.action + "\"];\n");
+		}
+	    }
         }
         sb.append("}");
         return new String(sb);
