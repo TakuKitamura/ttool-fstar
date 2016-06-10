@@ -243,9 +243,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         stop.addActionListener(this);
         close.addActionListener(this);
 
+	// Information
 	JPanel jplow = new JPanel(new BorderLayout());
  
-	// nb of states, nb of links, nb of pending states, elapsed time, nbOfStatesPerSeconds
 	JPanel jpinfo = new JPanel();
         GridBagLayout gridbag02 = new GridBagLayout();
         GridBagConstraints c02 = new GridBagConstraints();
@@ -256,6 +256,16 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	c02.weighty = 1.0;
 	c02.weightx = 1.0;
 	c02.fill = GridBagConstraints.HORIZONTAL;
+	//c02.gridwidth = 1;
+	//jpinfo.add(new JLabel(""), c02);
+	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+	info = new JLabel();
+	info.setFont(new Font("Serif", Font.BOLD, 16));
+	updateInfo();
+	jpinfo.add(info, c02);
+
+	// nb of states, nb of links, nb of pending states, elapsed time, nbOfStatesPerSeconds
+	
 	
 	c02.gridwidth = 1;
 	jpinfo.add(new JLabel("Nb of states:"), c02);
@@ -301,13 +311,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	elapsedTime = new JLabel("-");
 	jpinfo.add(elapsedTime, c02);
 
-	c02.gridwidth = 1;
-	jpinfo.add(new JLabel(""), c02);
-	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
-	info = new JLabel();
-	info.setFont(new Font("Serif", Font.BOLD, 16));
-	updateInfo();
-	jpinfo.add(info, c02);
+	
 
         JPanel jp2 = new JPanel();
         jp2.add(start);

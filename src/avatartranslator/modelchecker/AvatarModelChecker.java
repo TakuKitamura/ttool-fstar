@@ -383,12 +383,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
     private void computeAllStatesFrom(SpecificationState _ss) {
+	//TraceManager.addDev("Compute all state");
 	if (_ss == null) {
+	    //TraceManager.addDev("null state");
 	    mustStop();
 	    return;
 	}
         ArrayList<SpecificationTransition> transitions = _ss.transitions;
 	if (transitions == null) {
+	    //TraceManager.addDev("null transitions");
+	    nbOfDeadlocks ++;
 	    mustStop();
 	    return;
 	}
@@ -469,8 +473,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             }
         }
 
+	//TraceManager.addDev("Possible transitions 4:" + transitions.size());
 	if (transitions.size() == 0) {
 	    nbOfDeadlocks ++;
+	    //TraceManager.addDev("Deadlock found");
 	}
 
         //TraceManager.addDev("Possible transitions 4:" + transitions.size());
