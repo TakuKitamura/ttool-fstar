@@ -480,7 +480,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             }
         }
 
-	//TraceManager.addDev("Possible transitions 4:" + transitions.size());
+	TraceManager.addDev("Possible transitions 4:" + transitions.size());
 	if (transitions.size() == 0) {
 	    nbOfDeadlocks ++;
 	    //TraceManager.addDev("Deadlock found");
