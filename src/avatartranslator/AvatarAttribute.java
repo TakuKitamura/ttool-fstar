@@ -189,4 +189,14 @@ public class AvatarAttribute extends AvatarLeftHand {
     public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
         /* !!! We should never arrive here !!! */
     }
+
+    public AvatarAttribute advancedClone(AvatarStateMachineOwner _block) {
+	AvatarAttribute aa = new AvatarAttribute(getName(), getType(), _block, getReferenceObject());
+	if (hasInitialValue()) {
+	    aa.setInitialValue(getInitialValue());
+	}
+
+	return aa;
+    }
+    
 }

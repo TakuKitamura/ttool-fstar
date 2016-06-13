@@ -82,4 +82,10 @@ public class AvatarConstant extends AvatarTerm {
     public String toString() {
 	return getName();
     }
+
+    public AvatarConstant advancedClone() {
+	AvatarConstant ac = new AvatarConstant(getName(), getReferenceObject());
+	cloneLinkToReferenceObjects(ac);
+	return ac;
+    }
 }

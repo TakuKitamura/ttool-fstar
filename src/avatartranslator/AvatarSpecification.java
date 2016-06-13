@@ -506,4 +506,44 @@ public class AvatarSpecification extends AvatarElement {
           }*/
     }
 
+    public AvatarSpecification advancedClone() {
+	AvatarSpecification spec = new AvatarSpecification(this.getName(), this.getReferenceObject());
+	HashMap<AvatarBlock, AvatarBlock> correspondenceBlocks = new HashMap<AvatarBlock, AvatarBlock>();
+
+	for(AvatarBlock block: blocks) {
+	    AvatarBlock nB = block.advancedClone();
+	    correspondenceBlocks.put(block, nB);
+	    spec.addBlock(nB);
+	}
+
+	for(AvatarRelation relation: relations) {
+	    AvatarRelation nR = relation.advancedClone(correspondenceBlocks);
+	    if (nR != null) {
+		spec.addRelation(nR);
+	    }
+	}
+
+	/*for(AvatarPragma pragma: pragmas) {
+	    AvatarPragma nP = pragma.advancedClone();
+	    spec.addPragma(nP);
+	    }*/
+
+	for(String safetyPragma: safety_pragmas) {
+	    spec.addSafetyPragma(safetyPragma);
+	}
+
+	for(AvatarConstant constant: constants) {
+	    AvatarConstant cN = constant.advancedClone();
+	    spec.addConstant(cN);
+	}
+
+	spec.setInformationSource(getInformationSource());
+	spec.addApplicationCode(getApplicationCode());
+
+	return spec;
+    }
+
+
+    
+
 }

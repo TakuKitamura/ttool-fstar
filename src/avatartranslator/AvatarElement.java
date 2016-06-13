@@ -126,4 +126,10 @@ public class AvatarElement {
     public String toString() {
 	return getName();
     }
+
+    public void cloneLinkToReferenceObjects(AvatarElement ae) {
+	for(Object o: getReferenceObjects()) {
+	    ae.addReferenceObject(o);
+	}
+    }
 }

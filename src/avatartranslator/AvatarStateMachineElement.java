@@ -248,6 +248,26 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 
     public abstract AvatarStateMachineElement basicCloneMe();
 
+    public void fillAdvancedValues(AvatarStateMachineElement asme, HashMap<AvatarStateMachineElement, AvatarStateMachineElement> correspondenceMap) {
+	// Fill all reference elements
+	cloneLinkToReferenceObjects(asme);
+
+	// Fill basic attributes
+	asme.setState(getState());
+	if (isCheckable()) {
+	    asme.setCheckable();
+	}
+	asme.setHidden(isHidden());
+
+	// Fill the nexts
+	for(AvatarStateMachineElement next: nexts) {
+	    AvatarStateMachineElement newNext = correspondenceMap.get(next);
+	    if (newNext != null) {
+		asme.addNext(newNext);
+	    }
+	}
+    }
+
 
     // Guard with an id and not(id)
     public boolean hasElseChoiceType1() {

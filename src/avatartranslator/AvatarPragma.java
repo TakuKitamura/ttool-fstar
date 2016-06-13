@@ -394,4 +394,7 @@ public abstract class AvatarPragma extends AvatarElement {
         TraceManager.addDev("Pragma Attribute Block not found");
         return null;
     }
+
+    //public abstract AvatarPragma advancedClone(); 
+
 }

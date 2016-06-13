@@ -92,4 +92,10 @@ public class AvatarSignal extends AvatarMethod {
         }
         return "in " + ret;
     }
+
+    public AvatarSignal advancedClone(AvatarStateMachineOwner _block) {
+	AvatarSignal as = new AvatarSignal(getName(), getInOut(), getReferenceObject());
+	setAdvancedClone((AvatarMethod)as, _block);
+	return as;
+    }
 }

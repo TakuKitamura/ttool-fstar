@@ -131,6 +131,15 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         return signals ;
     }
 
+    public AvatarSignal getSignalByName(String _name) {
+	for(AvatarSignal sig: signals) {
+	    if (sig.getName().compareTo(_name) == 0) {
+		return sig;
+	    }
+	}
+	return null;
+    }
+
     public int getNbOfASMGraphicalElements() {
 	if (asm == null) {
 	    return 0;
@@ -588,5 +597,33 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
 
 	return asm.getIndexOfStartState();
 	
+    }
+
+    public AvatarBlock advancedClone() {
+	AvatarBlock av = new AvatarBlock(this.getName(), this.getAvatarSpecification(), this.getReferenceObject());
+
+	cloneLinkToReferenceObjects(av);
+
+	// Father
+	av.setFather(getFather());
+
+	//Attributes, methods and signals
+	for(AvatarAttribute aa: attributes) {
+	    av.addAttribute(aa.advancedClone(av));
+	}
+	for(AvatarMethod am: methods) {
+	    av.addMethod(am.advancedClone(av));
+	}
+	for(AvatarSignal as: signals) {
+	    av.addSignal(as.advancedClone(av));
+	}
+
+	// State machine
+	getStateMachine().advancedClone(av.getStateMachine());
+
+	// global code
+	av.addGlobalCode(getGlobalCode());
+	
+	return av;
     }
 }

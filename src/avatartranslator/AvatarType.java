@@ -92,4 +92,9 @@ public enum AvatarType {
     public int getDefaultInitialValueInInt() {
         return this.defaultValueInInt;
     }
+
+    /*public AvatarType advancedClone() {
+	AvatarType at = new AvatarType(name, defaultValue, defaultValueTF, defaultValueInt);
+	return at;
+	}*/
 }

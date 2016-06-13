@@ -66,4 +66,5 @@ public class AvatarStartState extends AvatarStateElement {
     public void translate (AvatarTranslator translator, Object arg) {
         translator.translateStartState (this, arg);
     }
+
 }

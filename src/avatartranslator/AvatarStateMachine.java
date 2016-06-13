@@ -1580,4 +1580,29 @@ public class AvatarStateMachine extends AvatarElement {
 
         return -1;
     }
+
+
+    // Fills the current state machine by cloning the current one
+    
+    public void advancedClone(AvatarStateMachine _newAsm) {
+	// Elements
+	HashMap<AvatarStateMachineElement, AvatarStateMachineElement> correspondenceMap = new HashMap<AvatarStateMachineElement, AvatarStateMachineElement>();
+	for(AvatarStateMachineElement elt: elements) {
+	    AvatarStateMachineElement ae = elt.basicCloneMe();
+	    _newAsm.addElement(ae);
+	    
+	    if (ae instanceof AvatarStartState) {
+		_newAsm.setStartState((AvatarStartState) ae);
+	    }
+	    correspondenceMap.put(elt, ae);
+	}
+
+	// Other attributes 
+	for(AvatarStateMachineElement elt: elements) {
+	    AvatarStateMachineElement ae = correspondenceMap.get(elt);
+	    if (ae != null) {
+		elt.fillAdvancedValues(ae, correspondenceMap);
+	    }
+	}	
+    }
 }
