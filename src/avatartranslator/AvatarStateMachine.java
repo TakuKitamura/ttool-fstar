@@ -1586,7 +1586,7 @@ public class AvatarStateMachine extends AvatarElement {
 
     // Fills the current state machine by cloning the current one
     
-    public void advancedClone(AvatarStateMachine _newAsm, AvatarBlock _newBlock) {
+    public void advancedClone(AvatarStateMachine _newAsm, AvatarStateMachineOwner _newBlock) {
 	// Elements
 	HashMap<AvatarStateMachineElement, AvatarStateMachineElement> correspondenceMap = new HashMap<AvatarStateMachineElement, AvatarStateMachineElement>();
 	for(AvatarStateMachineElement elt: elements) {
