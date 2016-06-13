@@ -92,7 +92,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     public AvatarModelChecker(AvatarSpecification _spec) {
 	spec = _spec;
-	TraceManager.addDev("Before clone:\n" + spec);
+	//TraceManager.addDev("Before clone:\n" + spec);
         spec = _spec.advancedClone();
 	TraceManager.addDev("After clone:\n" + spec);
         ignoreEmptyTransitions = true;
@@ -389,7 +389,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
     private void computeAllStatesFrom(SpecificationState _ss) {
-	TraceManager.addDev("Compute all state: " + _ss);
+	//TraceManager.addDev("Compute all state: " + _ss);
 	if (_ss == null) {
 	    TraceManager.addDev("null state");
 	    mustStop();
@@ -480,7 +480,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             }
         }
 
-	TraceManager.addDev("Possible transitions 4:" + transitions.size());
+	//TraceManager.addDev("Possible transitions 4:" + transitions.size());
 	if (transitions.size() == 0) {
 	    nbOfDeadlocks ++;
 	    //TraceManager.addDev("Deadlock found");

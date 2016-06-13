@@ -137,6 +137,11 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
 		return sig;
 	    }
 	}
+
+	if (father != null) {
+	    return father.getSignalByName(_name);
+	}
+	
 	return null;
     }
 
@@ -601,12 +606,10 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
 
     @Override
     public AvatarBlock advancedClone(AvatarSpecification avspec) {
-	AvatarBlock av = new AvatarBlock(this.getName(), this.getAvatarSpecification(), this.getReferenceObject());
+	AvatarBlock av = new AvatarBlock(this.getName(), this.getAvatarSpecification(), this.getReferenceObject());	
 
 	cloneLinkToReferenceObjects(av);
 
-	// Father
-	av.setFather(getFather());
 
 	//Attributes, methods and signals
 	for(AvatarAttribute aa: attributes) {
@@ -618,9 +621,6 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
 	for(AvatarSignal as: signals) {
 	    av.addSignal(as.advancedClone(av));
 	}
-
-	// State machine
-	getStateMachine().advancedClone(av.getStateMachine(), av);
 
 	// global code
 	av.addGlobalCode(getGlobalCode());

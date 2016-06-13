@@ -510,12 +510,34 @@ public class AvatarSpecification extends AvatarElement {
 	AvatarSpecification spec = new AvatarSpecification(this.getName(), this.getReferenceObject());
 	HashMap<AvatarBlock, AvatarBlock> correspondenceBlocks = new HashMap<AvatarBlock, AvatarBlock>();
 
+	// Cloning block definition
 	for(AvatarBlock block: blocks) {
 	    AvatarBlock nB = block.advancedClone(spec);
 	    correspondenceBlocks.put(block, nB);
 	    spec.addBlock(nB);
 	}
 
+	// Handling the clone of fathers
+	for(AvatarBlock block: blocks) {
+	    AvatarBlock father = block.getFather();
+	    if (father != null) {
+		AvatarBlock nb = spec.getBlockWithName(block.getName());
+		if (nb != null) {
+		    AvatarBlock nf = spec.getBlockWithName(father.getName());
+		    if (nf != null) {
+			TraceManager.addDev("Setting "+ nf.getName() + " as the father of " + nb.getName());
+			nb.setFather(nf);
+		    }
+		}
+	    }
+	}
+
+	// Cloning asm
+	for(AvatarBlock block: blocks) {
+	    AvatarBlock nb = spec.getBlockWithName(block.getName());
+	    block.getStateMachine().advancedClone(nb.getStateMachine(), nb);
+	}
+	
 	for(AvatarRelation relation: relations) {
 	    AvatarRelation nR = relation.advancedClone(correspondenceBlocks);
 	    if (nR != null) {
