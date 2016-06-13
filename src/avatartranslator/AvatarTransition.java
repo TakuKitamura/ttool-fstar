@@ -276,8 +276,8 @@ public class AvatarTransition extends AvatarStateMachineElement {
         return at;
     }
 
-    public AvatarStateMachineElement basicCloneMe() {
-        AvatarTransition at = new AvatarTransition(block, getName() + "_clone", getReferenceObject());
+    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+	 AvatarTransition at = new AvatarTransition(_block, getName() + "_clone", getReferenceObject());
 
         at.setGuard(getGuard());
 
@@ -290,6 +290,9 @@ public class AvatarTransition extends AvatarStateMachineElement {
         return at;
     }
 
+    /*public AvatarStateMachineElement basicCloneMe() {
+      }*/
+ 
     public void removeAllActionsButTheFirstOne() {
         if (actions.size() < 2) {
             return;

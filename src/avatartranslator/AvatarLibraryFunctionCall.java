@@ -162,7 +162,7 @@ public class AvatarLibraryFunctionCall extends AvatarStateMachineElement {
     }
 
     @Override
-    public AvatarStateMachineElement basicCloneMe() {
+    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
         AvatarLibraryFunctionCall asme = new AvatarLibraryFunctionCall(this.name, this.libraryFunction, this.referenceObject);
         for (AvatarAttribute attr: this.parameters)
             asme.addParameter (attr);

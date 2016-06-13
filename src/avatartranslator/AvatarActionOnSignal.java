@@ -94,7 +94,7 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
         return signal.isIn();
     }
 
-    public AvatarActionOnSignal basicCloneMe() {
+    public AvatarActionOnSignal basicCloneMe(AvatarStateMachineOwner _block) {
         //TraceManager.addDev("I HAVE BEEN CLONED: " + this);
         AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "__clone", getSignal(), getReferenceObject(), isCheckable());
         for(int i=0; i<getNbOfValues(); i++) {

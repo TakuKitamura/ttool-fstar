@@ -55,7 +55,7 @@ public class AvatarStopState extends AvatarStateElement {
         super(_name, _referenceObject);
     }
 
-    public AvatarStateMachineElement basicCloneMe() {
+    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
         return new AvatarStopState(getName(), getReferenceObject());
     }
 

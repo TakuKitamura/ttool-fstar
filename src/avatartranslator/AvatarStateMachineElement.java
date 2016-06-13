@@ -246,7 +246,7 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
         return (element instanceof AvatarActionOnSignal);
     }
 
-    public abstract AvatarStateMachineElement basicCloneMe();
+    public abstract AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block);
 
     public void fillAdvancedValues(AvatarStateMachineElement asme, HashMap<AvatarStateMachineElement, AvatarStateMachineElement> correspondenceMap) {
 	// Fill all reference elements

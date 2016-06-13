@@ -69,7 +69,7 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         attributes = new LinkedList<AvatarAttribute>();
         methods = new LinkedList<AvatarMethod>();
         signals = new LinkedList<AvatarSignal>();
-        asm = new AvatarStateMachine("statemachineofblock__" + _name, _referenceObject);
+        asm = new AvatarStateMachine(this, "statemachineofblock__" + _name, _referenceObject);
     }
 
 
@@ -619,7 +619,7 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
 	}
 
 	// State machine
-	getStateMachine().advancedClone(av.getStateMachine());
+	getStateMachine().advancedClone(av.getStateMachine(), av);
 
 	// global code
 	av.addGlobalCode(getGlobalCode());

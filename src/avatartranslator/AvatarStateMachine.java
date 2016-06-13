@@ -63,10 +63,12 @@ public class AvatarStateMachine extends AvatarElement {
     private static int ID_ELT = 0;
 
     protected LinkedList<AvatarStateMachineElement> states;
+    protected AvatarStateMachineOwner block;
 
 
-    public AvatarStateMachine(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
+    public AvatarStateMachine(AvatarStateMachineOwner _block, String _name, Object _referenceObject) {
+	super(_name, _referenceObject);
+	block = _block;
         elements = new LinkedList<AvatarStateMachineElement>();
     }
 
@@ -579,7 +581,7 @@ public class AvatarStateMachine extends AvatarElement {
                 AvatarState as = new AvatarState(tmp, null);
                 as.setHidden(true);
                 as.setState(_currentState);
-                AvatarTransition at = (AvatarTransition)(_at.basicCloneMe());
+                AvatarTransition at = (AvatarTransition)(_at.basicCloneMe(block));
                 _at.removeAllActionsButTheFirstOne();
                 at.removeFirstAction();
                 at.addNext(_at.getNext(0));
@@ -819,7 +821,7 @@ public class AvatarStateMachine extends AvatarElement {
             AvatarState as = new AvatarState("splitstate", null);
             as.setHidden(true);
             as.setState(_currentState);
-            AvatarTransition at = (AvatarTransition)(_at.basicCloneMe());
+            AvatarTransition at = (AvatarTransition)(_at.basicCloneMe(block));
             _at.removeAllActionsButTheFirstOne();
             at.removeFirstAction();
             at.addNext(_at.getNext(0));
@@ -1295,7 +1297,7 @@ public class AvatarStateMachine extends AvatarElement {
         // We clone elements until we find a state!
         AvatarStateMachineElement tomake, current;
         AvatarStateMachineElement tmp;
-        AvatarTransition at = (AvatarTransition)(_at.basicCloneMe());
+        AvatarTransition at = (AvatarTransition)(_at.basicCloneMe(block));
         addElement(at);
 
         current = _at.getNext(0);
@@ -1303,7 +1305,7 @@ public class AvatarStateMachine extends AvatarElement {
 
         while((current != null) && !(current instanceof AvatarState)) {
             TraceManager.addDev("Cloning: " + current);
-            tmp = current.basicCloneMe();
+            tmp = current.basicCloneMe(block);
             addElement(tmp);
             tomake.addNext(tmp);
             tomake = tmp;
@@ -1584,11 +1586,13 @@ public class AvatarStateMachine extends AvatarElement {
 
     // Fills the current state machine by cloning the current one
     
-    public void advancedClone(AvatarStateMachine _newAsm) {
+    public void advancedClone(AvatarStateMachine _newAsm, AvatarBlock _newBlock) {
 	// Elements
 	HashMap<AvatarStateMachineElement, AvatarStateMachineElement> correspondenceMap = new HashMap<AvatarStateMachineElement, AvatarStateMachineElement>();
 	for(AvatarStateMachineElement elt: elements) {
-	    AvatarStateMachineElement ae = elt.basicCloneMe();
+	    AvatarStateMachineElement ae;
+	    ae = elt.basicCloneMe(_newBlock);
+	    
 	    _newAsm.addElement(ae);
 	    
 	    if (ae instanceof AvatarStartState) {

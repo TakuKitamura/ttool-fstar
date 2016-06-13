@@ -66,7 +66,7 @@ public class AvatarState extends AvatarStateElement {
         //TraceManager.addDev("CREATING state with name = "+ _name);
     }
 
-    public AvatarStateMachineElement basicCloneMe() {
+    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
         AvatarState as = new AvatarState(getName(), getReferenceObject(), isCheckable());
 	as.addEntryCode(getEntryCode());
         return as;

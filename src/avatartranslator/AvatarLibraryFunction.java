@@ -129,7 +129,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         this.attributes = new LinkedList<AvatarAttribute> ();
         this.methods = new LinkedList<AvatarMethod> ();
 
-        this.asm = new AvatarStateMachine ("statemachineoffunction__" + name, referenceObject);
+        this.asm = new AvatarStateMachine (this, "statemachineoffunction__" + name, referenceObject);
     }
 
     @Override

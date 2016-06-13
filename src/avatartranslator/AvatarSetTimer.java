@@ -63,7 +63,7 @@ public class AvatarSetTimer extends AvatarTimerOperator {
 		return setValue;
 	}
 	
-	public AvatarStateMachineElement basicCloneMe() {
+	public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
 		AvatarSetTimer ast = new AvatarSetTimer(getName(), getReferenceObject());
 		ast.setTimer(getTimer());
 		ast.setTimerValue(getTimerValue());
