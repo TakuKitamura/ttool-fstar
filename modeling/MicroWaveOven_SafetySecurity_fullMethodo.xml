@@ -5174,7 +5174,7 @@ or by a maintenance station
 </CONNECTOR>
 <COMPONENT type="302" id="2683" >
 <cdparam x="382" y="26" />
-<sizeparam width="668" height="97" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="616" height="97" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
 <infoparam name="Proverif Pragma" value="#InitialSystemKnowledge RemoteControl.PSK WirelessInterface.PSK

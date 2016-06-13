@@ -128,7 +128,10 @@ public class AvatarElement {
     }
 
     public void cloneLinkToReferenceObjects(AvatarElement ae) {
-	for(Object o: getReferenceObjects()) {
+	if (otherReferenceObjects == null) {
+	    return;
+	}
+	for(Object o: otherReferenceObjects) {
 	    ae.addReferenceObject(o);
 	}
     }

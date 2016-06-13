@@ -91,7 +91,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private int nbOfDeadlocks;
 
     public AvatarModelChecker(AvatarSpecification _spec) {
-        spec = _spec;
+	spec = _spec;
+        //spec = _spec.advancedClone();
         ignoreEmptyTransitions = true;
         ignoreConcurrenceBetweenInternalActions = true;
         studyReachability = false;
@@ -212,7 +213,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
 
-        TraceManager.addDev("Preparing Avatar specification");
+        //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
         prepareStates();
         prepareTransitions();
 
