@@ -116,7 +116,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     protected JScrollPane jsp;
 
     // Information
-    protected JLabel nbOfStates, nbOfLinks, nbOfPendingStates, elapsedTime, nbOfStatesPerSecond, nbOfDeadlocks, nbOfReachabilities, info;
+    protected JLabel nbOfStates, nbOfLinks, nbOfPendingStates, elapsedTime, nbOfStatesPerSecond, nbOfDeadlocks, nbOfReachabilities, nbOfReachabilitiesNotFound, info;
 
 
     private Thread t;
@@ -285,6 +285,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	//c02.gridwidth = GridBagConstraints.REMAINDER; //end row
 	nbOfReachabilities = new JLabel("-");
 	jpinfo.add(nbOfReachabilities, c02);
+
+	c02.gridwidth = 1;
+	jpinfo.add(new JLabel("Reachability not found:"), c02);
+	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+	nbOfReachabilitiesNotFound = new JLabel("-");
+	jpinfo.add(nbOfReachabilitiesNotFound, c02);
 	
 
 	c02.gridwidth = 1;
@@ -385,7 +391,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
         TraceManager.addDev("Thread started");
         File testFile;
-        try {  
+        try {
+	    reinitValues();
 	    jta.append("Starting the model checker\n");
 	    amc = new AvatarModelChecker(spec);
 	    endDate = null;
@@ -541,6 +548,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 		} else {
 		    nbOfReachabilities.setText("" + nb);
 		}
+		nb = amc.getNbOfRemainingReachabilities();
+		nbOfReachabilitiesNotFound.setText("" + nb);
+		
+		
 		nbOfDeadlocks.setText(""+amc.getNbOfDeadlocks());
 
 		
@@ -564,18 +575,26 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 		}
 		previousNbOfStates = nbOfStatess;
 		//if (diff == 0) {
-		
-		
+			
 
-		nbOfStatesPerSecond.setText(""+1000*diff/duration);
-
-		
+		nbOfStatesPerSecond.setText(""+1000*diff/duration);		
 
 		updateInfo();
 			//}
 	    }
 	} catch (Exception e) {
 	}
+    }
+
+    public void reinitValues() {
+	nbOfStates.setText("-");
+	nbOfLinks.setText("-");
+	nbOfReachabilities.setText("-");
+	nbOfReachabilitiesNotFound.setText("-");
+	nbOfDeadlocks.setText("-");
+	nbOfPendingStates.setText("-");
+	nbOfStatesPerSecond.setText("-");
+	elapsedTime.setText("-");
     }
 
     public int getStateIndex() {

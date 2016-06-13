@@ -1068,7 +1068,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         int cpt=0;
         for(SpecificationReachability re: reachabilities) {
-            ret += cpt + ": " + re.toString() + "\n";
+            ret += (cpt+1) + ". " + re.toString() + "\n";
             cpt ++;
         }
         return ret;
