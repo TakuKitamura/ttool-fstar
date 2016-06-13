@@ -91,10 +91,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private int nbOfDeadlocks;
 
     public AvatarModelChecker(AvatarSpecification _spec) {
-	spec = _spec;
+	//spec = _spec;
 	//TraceManager.addDev("Before clone:\n" + spec);
         spec = _spec.advancedClone();
-	TraceManager.addDev("After clone:\n" + spec);
+	//TraceManager.addDev("After clone:\n" + spec);
         ignoreEmptyTransitions = true;
         ignoreConcurrenceBetweenInternalActions = true;
         studyReachability = false;
@@ -150,7 +150,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         for(AvatarBlock block: spec.getListOfBlocks()) {
             for(AvatarStateMachineElement elt: block.getStateMachine().getListOfElements()) {
                 if (elt.isCheckable()) {
-                    SpecificationReachability reach = new SpecificationReachability(elt);
+                    SpecificationReachability reach = new SpecificationReachability(elt, block);
                     reachabilities.add(reach);
                 }
             }
@@ -165,7 +165,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         for(AvatarBlock block: spec.getListOfBlocks()) {
             for(AvatarStateMachineElement elt: block.getStateMachine().getListOfElements()) {
                 if (elt instanceof AvatarStateElement) {
-                    SpecificationReachability reach = new SpecificationReachability(elt);
+                    SpecificationReachability reach = new SpecificationReachability(elt, block);
                     reachabilities.add(reach);
                 }
             }
@@ -971,7 +971,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public void checkElementReachability(AvatarStateMachineElement elt, SpecificationState _ss) {
         for(SpecificationReachability re: reachabilities) {
             if (re.result ==  SpecificationReachabilityType.NOTCOMPUTED) {
-                if (re.ref == elt) {
+                if (re.ref1 == elt) {
                     re.result = SpecificationReachabilityType.REACHABLE;
                     re.state = _ss;
                     nbOfRemainingReachabilities --;
@@ -993,7 +993,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         stoppedConditionReached = true;
 
         if (studyReachability && nbOfRemainingReachabilities==0) {
-            TraceManager.addDev("***** All reachability found");
+            //TraceManager.addDev("***** All reachability found");
         }
 
         if (studyReachability && nbOfRemainingReachabilities>0) {

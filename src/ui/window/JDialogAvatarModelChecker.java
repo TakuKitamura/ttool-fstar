@@ -314,6 +314,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
 	c02.gridwidth = 1;
 	jpinfo.add(new JLabel("Elapsed timed:"), c02);
+	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
 	elapsedTime = new JLabel("-");
 	jpinfo.add(elapsedTime, c02);
 
@@ -499,7 +500,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	
         switch(mode) {
             case NOT_STARTED:
-                start.setEnabled(true);
+		if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL)  || graphSelected || graphSelectedDot) {
+		    start.setEnabled(true);
+		} else {
+		    start.setEnabled(false);
+		}
                 stop.setEnabled(false);
                 close.setEnabled(true);
                 //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -564,9 +569,17 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 		    d = previousDate;
 		}
 		long duration  = d.getTime() - startDate.getTime();
+
+		String t = String.format("%02d min %02d sec %03d msec", 
+			      TimeUnit.MILLISECONDS.toMinutes(duration),
+			      TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)),
+			      duration
+			      );
+		
 		long diffInSeconds = TimeUnit.MILLISECONDS.toSeconds(duration);
 		long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration);
-		elapsedTime.setText("" + diffInMinutes + "mn " + diffInSeconds + "s");
+		//long diffInMs = TimeUnit.MILLISECONDS.toMilliseconds(duration);
+		elapsedTime.setText(t);
 		long diff = 0;
 		if (endDate != null) {
 		    diff = nbOfStatess;

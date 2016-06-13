@@ -537,7 +537,8 @@ public class AvatarSpecification extends AvatarElement {
 	    AvatarBlock nb = spec.getBlockWithName(block.getName());
 	    block.getStateMachine().advancedClone(nb.getStateMachine(), nb);
 	}
-	
+
+	// Relations
 	for(AvatarRelation relation: relations) {
 	    AvatarRelation nR = relation.advancedClone(correspondenceBlocks);
 	    if (nR != null) {

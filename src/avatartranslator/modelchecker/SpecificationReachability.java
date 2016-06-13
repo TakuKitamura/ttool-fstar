@@ -53,22 +53,31 @@ import java.util.*;
 import myutil.*;
 
 public class SpecificationReachability  {
-    public Object ref;
+    public Object ref1, ref2; // ref1 must be provided, ref2 might be null
     public SpecificationReachabilityType result;
     public SpecificationState state;
     
-    public SpecificationReachability(Object _ref) {
-	ref = _ref;
+    public SpecificationReachability(Object _ref1, Object _ref2) {
+	ref1 = _ref1;
+	ref2 = _ref2;
 	result = SpecificationReachabilityType.NOTCOMPUTED;
 	state = null;
     }
 
     public String toString() {
 	String name;
-	if (ref instanceof AvatarStateMachineElement) {
-	    name = ((AvatarStateMachineElement)ref).getExtendedName();
+	if (ref1 instanceof AvatarStateMachineElement) {
+	    name = "Element " + ((AvatarStateMachineElement)ref1).getExtendedName();
 	} else {
-	    name = ref.toString();
+	    name = ref1.toString();
+	}
+
+	if (ref2 != null) {
+	    if (ref2 instanceof AvatarBlock) {
+		name += " of block " + ((AvatarBlock)ref2).getName();
+	    } else {
+		name += ref2.toString();
+	    }
 	}
 
 	
@@ -77,7 +86,7 @@ public class SpecificationReachability  {
 	}
 	
 	if (result == SpecificationReachabilityType.REACHABLE) {
-	    return name + " -> reachable in state " + state.id; 
+	    return name + " -> reachable in RG state " + state.id; 
 	}
 
 	return name + " -> NOT reachable";

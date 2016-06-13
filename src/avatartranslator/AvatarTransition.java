@@ -286,6 +286,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
         }
 
         at.setComputes(getMinCompute(), getMaxCompute());
+	at.setDelays(getMinDelay(), getMaxDelay());
 
         return at;
     }
