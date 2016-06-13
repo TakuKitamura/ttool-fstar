@@ -223,6 +223,9 @@ public class TML2AvatarDP {
 		    type=0;
 		}
 		bl.addAttribute(new TAttribute(0, attr.getName(), attr.getType().getDefaultInitialValue(), type));
+		if (attr.getName().equals("key")){
+		    bl.addCryptoElements();
+		}
 	    }
 	    xpos+=400;
 	    //Build the state machine
