@@ -64,4 +64,14 @@ public class AvatarAttributeState extends AvatarElement {
     public AvatarState getState(){
 	return state;
     }
+
+    public AvatarAttributeState advancedClone (AvatarSpecification avspec) {
+        AvatarAttribute aa = avspec.getMatchingAttribute (this.attribute);
+        if (aa == null)
+            return null;
+
+        AvatarAttributeState result = new AvatarAttributeState (this.name, this.referenceObject, aa, aa.getBlock().getStateMachine().getStateWithName(this.state.getName()));
+        this.cloneLinkToReferenceObjects (result);
+        return result;
+    }
 }

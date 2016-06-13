@@ -62,4 +62,13 @@ public class AvatarPragmaPublic extends AvatarPragma {
 	return arguments;
     }
 
+    @Override
+    public AvatarPragmaPublic advancedClone (AvatarSpecification avspec) {
+        LinkedList<AvatarAttribute> l = new LinkedList<AvatarAttribute> ();
+        for (AvatarAttribute aa: this.arguments)
+            l.add (avspec.getMatchingAttribute(aa));
+        AvatarPragmaPublic result = new AvatarPragmaPublic (this.name, this.referenceObject, l);
+        this.cloneLinkToReferenceObjects (result);
+        return result;
+    }
 }

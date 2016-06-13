@@ -84,6 +84,9 @@ public class AvatarConstant extends AvatarTerm {
     }
 
     public AvatarConstant advancedClone() {
+        if (this == AvatarConstant.TRUE || this == AvatarConstant.FALSE)
+            return this;
+
 	AvatarConstant ac = new AvatarConstant(getName(), getReferenceObject());
 	cloneLinkToReferenceObjects(ac);
 	return ac;

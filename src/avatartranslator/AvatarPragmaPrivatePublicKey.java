@@ -52,25 +52,18 @@ import myutil.*;
 
 public class AvatarPragmaPrivatePublicKey extends AvatarPragma {
 
-    private LinkedList<AvatarAttribute> arguments;
     private AvatarAttribute privateKey;
     private AvatarAttribute publicKey;
+
     public AvatarPragmaPrivatePublicKey(String _name, Object _referenceObject, LinkedList<AvatarAttribute> args) {
         super(_name, _referenceObject);
-        arguments = args;
 	this.privateKey = args.get(0);
 	this.publicKey = args.get(1);
     }
     public AvatarPragmaPrivatePublicKey(String _name, Object _referenceObject, AvatarAttribute privateKey, AvatarAttribute publicKey) {
         super(_name, _referenceObject);
-        arguments =new LinkedList<AvatarAttribute>();
-	arguments.add(privateKey);
-	arguments.add(publicKey);
 	this.privateKey = privateKey;
 	this.publicKey = publicKey;
-    }
-    public LinkedList<AvatarAttribute> getArgs(){
-	return arguments;
     }
     
     public AvatarAttribute getPrivateKey(){
@@ -81,4 +74,10 @@ public class AvatarPragmaPrivatePublicKey extends AvatarPragma {
 	return publicKey;
     }
 
+    @Override
+    public AvatarPragmaPrivatePublicKey advancedClone (AvatarSpecification avspec) {
+        AvatarPragmaPrivatePublicKey result = new AvatarPragmaPrivatePublicKey (this.name, this.referenceObject, avspec.getMatchingAttribute(this.privateKey), avspec.getMatchingAttribute(this.publicKey));
+        this.cloneLinkToReferenceObjects (result);
+        return result;
+    }
 }

@@ -52,27 +52,19 @@ import myutil.*;
 
 public class AvatarPragmaAuthenticity extends AvatarPragma {
 
-    private LinkedList<AvatarAttribute> arguments;
     private AvatarAttributeState attrA;
     private AvatarAttributeState attrB;
+
     public AvatarPragmaAuthenticity(String _name, Object _referenceObject, LinkedList<AvatarAttributeState> args) {
         super(_name, _referenceObject);
 	attrA= args.get(0);
 	attrB= args.get(1);
-	arguments =new LinkedList<AvatarAttribute>();
-	arguments.add(attrA.getAttribute());
-	arguments.add(attrB.getAttribute());
     }
+
     public AvatarPragmaAuthenticity(String _name, Object _referenceObject, AvatarAttributeState a, AvatarAttributeState b) {
         super(_name, _referenceObject);
-        arguments =new LinkedList<AvatarAttribute>();
-	arguments.add(a.getAttribute());
-	arguments.add(b.getAttribute());
 	attrA= a;
 	attrB= b;
-    }
-    public LinkedList<AvatarAttribute> getArgs(){
-	return arguments;
     }
     
     public AvatarAttributeState getAttrA(){
@@ -83,4 +75,10 @@ public class AvatarPragmaAuthenticity extends AvatarPragma {
 	return attrB;
     }
 
+    @Override
+    public AvatarPragmaAuthenticity advancedClone (AvatarSpecification avspec) {
+        AvatarPragmaAuthenticity result = new AvatarPragmaAuthenticity (this.name, this.referenceObject, this.attrA.advancedClone(avspec), this.attrB.advancedClone(avspec));
+        this.cloneLinkToReferenceObjects (result);
+        return result;
+    }
 }

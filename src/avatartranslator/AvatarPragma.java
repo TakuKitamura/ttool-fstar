@@ -54,16 +54,10 @@ public abstract class AvatarPragma extends AvatarElement {
     public static final String[] PRAGMAS =               {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "PublicConstant", "PrivateConstant"};
     public static final String[] PRAGMAS_TRANSLATION =    {"Secret",          "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "PublicConstant", "PrivateConstant"};
 
-    protected LinkedList<AvatarAttribute> arguments;
-
     private int proofStatus = 0;
 
     public AvatarPragma(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-    }
-
-    public LinkedList<AvatarAttribute> getArgs(){
-        return arguments;
     }
 
     public int getProofStatus(){
@@ -395,6 +389,13 @@ public abstract class AvatarPragma extends AvatarElement {
         return null;
     }
 
-    //public abstract AvatarPragma advancedClone(); 
-
+    /**
+     * Returns a full clone of the pragma.
+     *
+     * @param avspec
+     *      The AvatarSpecification that will contain the new pragma. Note that the specification should have already been populated with blocks and attributes.
+     *
+     * @return A full clone of the pragma.
+     */
+    public abstract AvatarPragma advancedClone(AvatarSpecification avspec); 
 }

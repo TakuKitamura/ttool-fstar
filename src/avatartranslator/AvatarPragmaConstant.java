@@ -57,7 +57,6 @@ public class AvatarPragmaConstant extends AvatarPragma {
 
     public AvatarPragmaConstant(String _name, Object _referenceObject, LinkedList<AvatarConstant> _consts, boolean _isPublic){
 	super(_name, _referenceObject);
-	arguments = new LinkedList<AvatarAttribute>();
 	constants = _consts;
         this.isPublic = _isPublic;
     }
@@ -79,5 +78,16 @@ public class AvatarPragmaConstant extends AvatarPragma {
 
     public boolean isPublic () {
         return this.isPublic;
+    }
+
+    @Override
+    public AvatarPragmaConstant advancedClone (AvatarSpecification avspec) {
+        LinkedList<AvatarConstant> cs = new LinkedList<AvatarConstant> ();
+        for (AvatarConstant c: this.constants)
+            cs.add (c.advancedClone ());
+
+        AvatarPragmaConstant result = new AvatarPragmaConstant (this.name, this.referenceObject, cs, this.isPublic);
+        this.cloneLinkToReferenceObjects (result);
+        return result;
     }
 }

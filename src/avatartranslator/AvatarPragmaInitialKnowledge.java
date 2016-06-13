@@ -67,4 +67,13 @@ public class AvatarPragmaInitialKnowledge extends AvatarPragma {
 	return isSystem;
     }
 
+    @Override
+    public AvatarPragmaInitialKnowledge advancedClone (AvatarSpecification avspec) {
+        LinkedList<AvatarAttribute> l = new LinkedList<AvatarAttribute> ();
+        for (AvatarAttribute aa: this.arguments)
+            l.add (avspec.getMatchingAttribute (aa));
+        AvatarPragmaInitialKnowledge result = new AvatarPragmaInitialKnowledge (this.name, this.referenceObject, l, this.isSystem);
+        this.cloneLinkToReferenceObjects (result);
+        return result;
+    }
 }

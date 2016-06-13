@@ -62,5 +62,13 @@ public class AvatarPragmaSecrecyAssumption extends AvatarPragma {
 	return arguments;
     }
 
-
+    @Override
+    public AvatarPragmaSecrecyAssumption advancedClone (AvatarSpecification avspec) {
+        LinkedList<AvatarAttribute> l = new LinkedList<AvatarAttribute> ();
+        for (AvatarAttribute aa: this.arguments)
+            l.add (avspec.getMatchingAttribute(aa));
+        AvatarPragmaSecrecyAssumption result = new AvatarPragmaSecrecyAssumption (this.name, this.referenceObject, l);
+        this.cloneLinkToReferenceObjects (result);
+        return result;
+    }
 }

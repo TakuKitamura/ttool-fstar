@@ -502,7 +502,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         TraceManager.addDev("Secrecy Assumptions");
         for (AvatarPragma pragma: this.avspec.getPragmas ())
             if (pragma instanceof AvatarPragmaSecrecyAssumption)
-                for (AvatarAttribute attribute: pragma.getArgs ()) {
+                for (AvatarAttribute attribute: ((AvatarPragmaSecrecyAssumption) pragma).getArgs ()) {
                     AvatarAttribute trueAttr = this.nameEquivalence.get (attribute);
                     if (trueAttr == null)
                         trueAttr = attribute;
@@ -523,7 +523,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         TraceManager.addDev("Queries Secret"); 
         for (AvatarPragma pragma: this.avspec.getPragmas ())
             if (pragma instanceof AvatarPragmaSecret)
-                for (AvatarAttribute attribute: pragma.getArgs ()) {
+                for (AvatarAttribute attribute: ((AvatarPragmaSecret) pragma).getArgs ()) {
                     AvatarAttribute trueAttr = this.nameEquivalence.get (attribute);
                     if (trueAttr == null)
                         trueAttr = attribute;
@@ -634,7 +634,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             if (pragma instanceof AvatarPragmaInitialKnowledge && ((AvatarPragmaInitialKnowledge) pragma).isSystem ()) {
                 AvatarAttribute first = null;
                 AvatarAttribute containsPublicKey = null;
-                for (AvatarAttribute arg: pragma.getArgs ()) {
+                for (AvatarAttribute arg: ((AvatarPragmaInitialKnowledge) pragma).getArgs ()) {
                     // ignore if the attribute was already declared
                     if (systemKnowledge.contains (arg)) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + arg.getBlock ().getName () + "." + arg.getName () + " already appears in another initial knowledge pragma or is a constant (ignored).");
@@ -732,7 +732,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             if (pragma instanceof AvatarPragmaInitialKnowledge && !((AvatarPragmaInitialKnowledge) pragma).isSystem ()) {
                 AvatarAttribute first = null;
                 AvatarAttribute containsPublicKey = null;
-                for (AvatarAttribute arg: pragma.getArgs ()) {
+                for (AvatarAttribute arg: ((AvatarPragmaInitialKnowledge) pragma).getArgs ()) {
                     // ignore if the attribute was already declared
                     if (sessionKnowledge.contains (arg)) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + arg.getBlock ().getName () + "." + arg.getName () + " already appears in another initial knowledge pragma (ignored).");
@@ -900,7 +900,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
         for (AvatarPragma pragma: this.avspec.getPragmas ())
             if (pragma instanceof AvatarPragmaPublic)
-                for (AvatarAttribute attr: pragma.getArgs ())
+                for (AvatarAttribute attr: ((AvatarPragmaPublic) pragma).getArgs ())
                     if (attr.getBlock () == ab)
                         lastInstr = lastInstr.setNextInstr ( new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + AVATAR2ProVerif.translateTerm (attr, null) + ");"));
 

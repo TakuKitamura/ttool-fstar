@@ -543,7 +543,13 @@ public class AvatarSpecification extends AvatarElement {
 	return spec;
     }
 
+    public AvatarAttribute getMatchingAttribute (AvatarAttribute aa) {
+        for (AvatarBlock block: this.blocks) {
+            if (block.getName().compareTo(aa.getBlock().getName()) == 0) {
+                return block.getAvatarAttributeWithName (aa.getName ());
+            }
+        }
 
-    
-
+        return null;
+    }
 }
