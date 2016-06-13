@@ -666,6 +666,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
             actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(true);
+	    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(true);
             break;
 
         case MODEL_UPPAAL_OK:
@@ -710,6 +711,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(false);
+	    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(true);
             break;
         case REQ_OK:
             //actions[TGUIAction.ACT_VIEW_MATRIX].setEnabled(true);
@@ -768,7 +770,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_GEN_CCODE].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
             actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
-	    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
+	    //actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_PROJECTION].setEnabled(false);

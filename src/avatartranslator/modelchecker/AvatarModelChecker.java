@@ -198,6 +198,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         computeRG = _rg;
     }
 
+    /*private synchronized boolean startMC() {
+	
+      }*/
 
     public void startModelChecking() {
         stoppedBeforeEnd = false;

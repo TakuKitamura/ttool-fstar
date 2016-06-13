@@ -263,7 +263,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 	info.setFont(new Font("Serif", Font.BOLD, 16));
 	updateInfo();
 	jpinfo.add(info, c02);
-
+	jpinfo.add(new JLabel(" "), c02);
 	// nb of states, nb of links, nb of pending states, elapsed time, nbOfStatesPerSeconds
 	
 	
@@ -359,7 +359,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         dispose();
     }
 
-    public void stopProcess() {
+    public synchronized void stopProcess() {
 	if (amc != null) {
 	    amc.stopModelChecking();
 	}
@@ -368,7 +368,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         go = false;
     }
 
-    public void startProcess() {
+    public synchronized void startProcess() {
+	if (mode == STARTED) {
+	    return;
+	}
         t = new Thread(this);
         mode = STARTED;
         setButtons();
@@ -540,6 +543,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     }
 
     public void updateValues() {
+	TraceManager.addDev("Updating values...");
 	try {
 	    if (amc != null) {
 		int nbOfStatess = amc.getNbOfStates();
