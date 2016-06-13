@@ -360,9 +360,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     private void prepareTransitionsOfState(SpecificationState _ss) {
+	
         int cpt;
         _ss.transitions = new ArrayList<SpecificationTransition>();
+	//TraceManager.addDev("Preparing transitions of state " + _ss);
 
+	
         // At first, do not merge synchronous transitions
         // Simply get basics transitions
         cpt = 0;
@@ -384,12 +387,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
     private void computeAllStatesFrom(SpecificationState _ss) {
-	//TraceManager.addDev("Compute all state");
+	//TraceManager.addDev("Compute all state: " + _ss);
 	if (_ss == null) {
 	    //TraceManager.addDev("null state");
 	    mustStop();
 	    return;
 	}
+	
         ArrayList<SpecificationTransition> transitions = _ss.transitions;
 	if (transitions == null) {
 	    //TraceManager.addDev("null transitions");
@@ -534,7 +538,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	    _ss.addNext(link);
         }
 	if (freeIntermediateStateCoding) {
-	    freeUselessAllocations();
+	    _ss.freeUselessAllocations();
 	} else {
 	    _ss.finished();
 	}
