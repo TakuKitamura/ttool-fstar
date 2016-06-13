@@ -64,4 +64,5 @@ public interface AvatarStateMachineOwner {
     public AvatarSpecification getAvatarSpecification ();
     public LinkedList<AvatarAttribute> getAttributes ();
     public void addAttribute (AvatarAttribute attribute);
+    public AvatarStateMachineOwner advancedClone(AvatarSpecification avspec);
 }

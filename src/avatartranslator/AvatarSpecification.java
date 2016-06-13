@@ -511,7 +511,7 @@ public class AvatarSpecification extends AvatarElement {
 	HashMap<AvatarBlock, AvatarBlock> correspondenceBlocks = new HashMap<AvatarBlock, AvatarBlock>();
 
 	for(AvatarBlock block: blocks) {
-	    AvatarBlock nB = block.advancedClone();
+	    AvatarBlock nB = block.advancedClone(spec);
 	    correspondenceBlocks.put(block, nB);
 	    spec.addBlock(nB);
 	}

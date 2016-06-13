@@ -589,4 +589,25 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
 
         this.translateNext (asme, _asme, arg);
     }
+
+    @Override
+    public AvatarLibraryFunction advancedClone(AvatarSpecification avspec) {
+        AvatarLibraryFunction result = new AvatarLibraryFunction(this.name, avspec, this.referenceObject);
+        this.cloneLinkToReferenceObjects (result);
+
+        for (AvatarAttribute aa: this.parameters)
+            result.addParameter(aa.advancedClone(result));
+        for (AvatarSignal sig: this.signals)
+            result.addSignal(sig.advancedClone(result));
+        for (AvatarAttribute aa: this.returnAttributes)
+            result.addReturnAttribute(aa.advancedClone(result));
+        for (AvatarAttribute aa: this.attributes)
+            result.addAttribute(aa.advancedClone(result));
+        for (AvatarMethod met: this.methods)
+            result.addMethod(met.advancedClone(result));
+
+        this.asm.advancedClone(result.getStateMachine(), result);
+
+        return result;
+    }
 }

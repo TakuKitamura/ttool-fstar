@@ -599,7 +599,8 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
 	
     }
 
-    public AvatarBlock advancedClone() {
+    @Override
+    public AvatarBlock advancedClone(AvatarSpecification avspec) {
 	AvatarBlock av = new AvatarBlock(this.getName(), this.getAvatarSpecification(), this.getReferenceObject());
 
 	cloneLinkToReferenceObjects(av);
