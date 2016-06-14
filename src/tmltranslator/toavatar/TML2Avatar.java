@@ -72,6 +72,7 @@ public class TML2Avatar {
     TMLMapping tmlmap;
     TMLModeling tmlmodel;
 
+    LinkedList<AvatarAttribute> keys = new LinkedList<AvatarAttribute>();
     public HashMap<TMLChannel, Integer> channelMap = new HashMap<TMLChannel,Integer>();
     public HashMap<TMLTask, AvatarBlock> taskBlockMap = new HashMap<TMLTask, AvatarBlock>();  
     public HashMap<String, Integer> originDestMap = new HashMap<String, Integer>();
@@ -1047,6 +1048,7 @@ public class TML2Avatar {
 	    AvatarAttribute tmp = new AvatarAttribute("tmp", AvatarType.INTEGER, block, null);
 	    block.addAttribute(tmp);
 	    AvatarAttribute key = new AvatarAttribute("key", AvatarType.INTEGER, block, null);
+	    keys.add(key);
 	    block.addAttribute(key);
 	 /*   tmp = new AvatarAttribute("aliceandbob", AvatarType.INTEGER, block, null);
 	    block.addAttribute(tmp);
@@ -1398,6 +1400,7 @@ public class TML2Avatar {
 	    }
 	}
 	//Check if we matched up all signals
+	avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSessionKnowledge", null, keys, false));
 	System.out.println(avspec);
 	
 	tmlmap.getTMLModeling().secChannelMap = secChannelMap;
