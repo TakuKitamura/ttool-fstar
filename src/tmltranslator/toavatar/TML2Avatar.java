@@ -372,22 +372,6 @@ public class TML2Avatar {
 	    else {
 		sig=signalMap.get(block.getName()+"__OUT__"+req.getName());
 	    }
-	    if (req.checkConf){
-		LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
-		if (!attrsToCheck.contains(req.getName()+"__reqData")){
-		    attrs.add(new AvatarAttribute(req.getName()+"__reqData", AvatarType.INTEGER, block, null));
-		    attrsToCheck.add(req.getName()+"__reqData");
-		}
-		for (int i=0; i<sr.getNbOfParams(); i++){
-		    if (block.getAvatarAttributeWithName(sr.getParam(i))!=null && !attrsToCheck.contains(sr.getParam(i))){
-		        attrs.add(block.getAvatarAttributeWithName(sr.getParam(i)));
-			attrsToCheck.add(sr.getParam(i));
-		    }
-	        }
-		if (attrs.size()>0){
-	            avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+req.getName()+"__reqData", req.getReferenceObject(), attrs));
-		}
-	    }
 
 	    AvatarActionOnSignal as= new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
 	    for (int i=0; i<sr.getNbOfParams(); i++){
@@ -551,32 +535,12 @@ public class TML2Avatar {
 		        as.addValue(aee.getParam(i));
 		    }
 		}
-	    	if (evt.checkConf){
-		    LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
-		    if (!attrsToCheck.contains(evt.getName()+"__eventData")){
-		    	attrs.add(new AvatarAttribute(evt.getName()+"__eventData", AvatarType.INTEGER, block, null));
-		    	attrsToCheck.add(evt.getName()+"__eventData");
-		    }
-		    for (int i=0; i<aee.getNbOfParams(); i++){
-		    	if (block.getAvatarAttributeWithName(aee.getParam(i))!=null && !attrsToCheck.contains(aee.getParam(i))){
-		    	    attrs.add(block.getAvatarAttributeWithName(aee.getParam(i)));
-			    attrsToCheck.add(aee.getParam(i));
-		        }
-	            }
-		    if (attrs.size()>0){
-	                avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+evt.getName()+"__eventData", evt.getReferenceObject(), attrs));
-		    }
-	            
-	        }
+	    	
  		AvatarAttribute eventData= new AvatarAttribute(evt.getName()+"__eventData", AvatarType.INTEGER, block, null);
 	        as.addValue(evt.getName()+"__eventData");
 		if (block.getAvatarAttributeWithName(evt.getName()+"__eventData")==null){
 	            block.addAttribute(eventData);
 		}
-	        if (evt.checkAuth){
-		    AvatarAttributeState authOrig = new AvatarAttributeState(evt.getName()+"__origin",ae.getReferenceObject(),eventData, signalState);
-		    signalAuthOriginMap.put(evt.getName(), authOrig);
-	    	}
 	        tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 		elementList.add(signalState);
 		signalState.addNext(signalTran);
@@ -623,16 +587,6 @@ public class TML2Avatar {
 	        elementList.add(as);
 	        as.addNext(tran);
 	        elementList.add(tran);
-	        if (evt.checkAuth){
-		    AvatarState afterSignalState = new AvatarState("aftersignalstate_"+ae.getName()+"_"+evt.getName(),ae.getReferenceObject());
-		    tran.addNext(afterSignalState);
-		    tran = new AvatarTransition(block, "__aftersignalstate_"+ae.getName(), ae.getReferenceObject());
-		    afterSignalState.addNext(tran);
-		    elementList.add(afterSignalState);
-		    elementList.add(tran);
-		    AvatarAttributeState authDest = new AvatarAttributeState(evt.getName()+"__destination",ae.getReferenceObject(),eventData, afterSignalState);
-		    signalAuthDestMap.put(evt.getName(), authDest);
-	        }
 	    }
 	    else {
 		//Notify Event, I don't know how to translate this
@@ -1400,7 +1354,7 @@ public class TML2Avatar {
 	    }
 	}
 	//Check if we matched up all signals
-	avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSessionKnowledge", null, keys, false));
+	avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSessionKnowledge", null, keys, true));
 	System.out.println(avspec);
 	
 	tmlmap.getTMLModeling().secChannelMap = secChannelMap;
