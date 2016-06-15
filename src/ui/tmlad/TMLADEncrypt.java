@@ -62,8 +62,9 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     private int textX, textY;
     private int ilength = 10;
     private int lineLength1 = 2;
-    public String MACSize="0";
-    public String keySize="0";
+    public String type="";
+    public String message_overhead="";
+    public String size="";
     public String securityContext="";
     public String calculationTime="100";
 	
@@ -116,29 +117,20 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     }
     
 public boolean editOndoubleClick(JFrame frame) {
-        String [] labels = new String[4];
-        String [] values = new String[4];
-	labels[0] = "Security Pattern";
-	values[0] = securityContext;
-	labels[1]="Key Size";
-	values[1]=keySize;
-	labels[2]="MAC Size";
-	values[2]=MACSize;
-	labels[3]="calcTime"; 
-	values[3]=calculationTime;
-	
 
-        //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
-	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 4, labels, values);
-        jdms.setSize(450, 300);
+        //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);]
+	String[] values=new String[]{securityContext, type, message_overhead, size, calculationTime};
+	JDialogCryptographicConfiguration jdms = new JDialogCryptographicConfiguration(frame, "Setting Cryptographic Configuration properties", values);
+        jdms.setSize(650, 300);
         GraphicLib.centerOnParent(jdms);
         jdms.show(); // blocked until dialog has been closed
 
         if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
 	    securityContext = jdms.getString(0);
-	    keySize=jdms.getString(1);
-	    MACSize=jdms.getString(2);
+	    type=jdms.getString(1);
+	    message_overhead=jdms.getString(2);
 	    calculationTime=jdms.getString(3);
+	    size=jdms.getString(4);
             return true;
         }
 
@@ -164,12 +156,14 @@ public boolean editOndoubleClick(JFrame frame) {
     
 	protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<Data secPattern=\"");
+        sb.append("<Data secContext=\"");
         sb.append(securityContext);
-        sb.append("\" keysize=\"");
-        sb.append(keySize);
-	sb.append("\" macsize=\"");
-        sb.append(MACSize);
+        sb.append("\" type=\"");
+        sb.append(type);
+        sb.append("\" overhead=\"");
+        sb.append(message_overhead);
+	sb.append("\" size=\"");
+        sb.append(size);
 	sb.append("\" calcTime=\"");
         sb.append(calculationTime);
         sb.append("\" />\n");
@@ -201,9 +195,10 @@ public boolean editOndoubleClick(JFrame frame) {
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Data")) {
-                                securityContext = elt.getAttribute("secPattern");
-                                keySize = elt.getAttribute("keysize");
-				MACSize = elt.getAttribute("macsize");
+                                securityContext = elt.getAttribute("secContext");
+				type= elt.getAttribute("type");
+				message_overhead= elt.getAttribute("overhead");
+				size= elt.getAttribute("size");
 				calculationTime = elt.getAttribute("calcTime");
                                 //System.out.println("eventName=" +eventName + " variable=" + result);
                             }

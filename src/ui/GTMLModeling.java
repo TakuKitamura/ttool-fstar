@@ -1300,8 +1300,8 @@ public class GTMLModeling  {
 	while(iterator.hasNext()){
 	    tgc = (TGComponent)(iterator.next());
 	    if (tgc instanceof TMLADEncrypt) {
-		SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).keySize, ((TMLADEncrypt)tgc).MACSize);
-		securityPatterns.put(((TMLADEncrypt)tgc).securityContext, securityPattern);
+		SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).calculationTime);
+		securityPatterns.put(securityPattern.name, securityPattern);
 	    }
 	}
     }
@@ -1499,19 +1499,18 @@ public class GTMLModeling  {
 
             } else if (tgc instanceof TMLADEncrypt) {
                 tmlexecc = new TMLExecC("encrypt", tgc);
-                tmlexecc.setAction(((TMLADEncrypt) tgc).calculationTime);
                 activity.addElement(tmlexecc);
-		SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).keySize, ((TMLADEncrypt)tgc).MACSize);
-		tmlexecc.securityPattern = securityPattern;
-		securityPatterns.put(((TMLADEncrypt)tgc).securityContext, securityPattern);
+		tmlexecc.securityPattern = securityPatterns.get(((TMLADEncrypt)tgc).securityContext);
+                tmlexecc.setAction(Integer.toString(tmlexecc.securityPattern.time));
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+
                 listE.addCor(tmlexecc, tgc);
 
             } else if (tgc instanceof TMLADDecrypt) {
                 tmlexecc = new TMLExecC("decrypt", tgc);
-                tmlexecc.setAction(((TMLADDecrypt) tgc).calculationTime);
                 activity.addElement(tmlexecc);
 		tmlexecc.securityPattern = securityPatterns.get(((TMLADDecrypt)tgc).securityContext);
+                tmlexecc.setAction(Integer.toString(tmlexecc.securityPattern.time));
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlexecc, tgc);
 
@@ -1638,7 +1637,7 @@ public class GTMLModeling  {
 			tmlreadchannel.securityPattern= securityPatterns.get(((TMLADReadChannel)tgc).securityContext);
 		    	//NbOfSamples will increase due to extra overhead from MAC
 		    	int cur = Integer.valueOf(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
-		    	int add = Integer.valueOf(tmlreadchannel.securityPattern.MACSize);
+		    	int add = Integer.valueOf(tmlreadchannel.securityPattern.overhead);
 		    	Double d= Math.ceil(add/4.0);
 			cur = cur+ d.intValue();
 		    	tmlreadchannel.setNbOfSamples(Integer.toString(cur));
@@ -1947,7 +1946,7 @@ public class GTMLModeling  {
 		    if (securityPatterns.get(((TMLADWriteChannel)tgc).securityContext)!=null){
 			tmlwritechannel.securityPattern= securityPatterns.get(((TMLADWriteChannel)tgc).securityContext);
 		 	int cur = Integer.valueOf(modifyString(((TMLADWriteChannel)tgc).getSamplesValue()));
-		    	int add = Integer.valueOf(tmlwritechannel.securityPattern.MACSize);
+		    	int add = Integer.valueOf(tmlwritechannel.securityPattern.overhead);
 		    	Double d= Math.ceil(add/4.0);
 			cur = cur+ d.intValue();
 		    	tmlwritechannel.setNbOfSamples(Integer.toString(cur));

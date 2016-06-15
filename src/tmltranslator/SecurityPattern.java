@@ -4,19 +4,25 @@ import avatartranslator.*;
 public class SecurityPattern {
 
 public String name;
-public int keySize;
-public int MACSize=0;
+public String type;
+public int overhead=0;
+public int size=0;
+public int time=0;
 public String originTask;
 public AvatarState state1;
 public AvatarState state2;
 
-public SecurityPattern(String _name, String _keySize, String _MACSize){
+public SecurityPattern(String _name, String _type, String _overhead, String _size, String _time){
     this.name=_name; 
-    if (!_keySize.equals("")){
-	this.keySize = Integer.valueOf(_keySize);
+    this.type=_type;
+    if (!_overhead.equals("")){
+	this.overhead = Integer.valueOf(_overhead);
     }
-    if (!_MACSize.equals("")){
-	MACSize=Integer.valueOf(_MACSize);
+    if (!_size.equals("")){
+	this.size = Integer.valueOf(_size);
+    }
+    if (!_time.equals("")){
+	this.time=Integer.valueOf(_time);
     }
 }
 
