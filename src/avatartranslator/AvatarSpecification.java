@@ -362,7 +362,7 @@ public class AvatarSpecification extends AvatarElement {
     private int removeFIFO(AvatarRelation _ar, AvatarSignal _sig1, AvatarSignal _sig2, int _sizeOfInfiniteFifo, LinkedList<AvatarRelation> _oldOnes, LinkedList<AvatarRelation> _newOnes, int FIFO_ID) {
 	// We create the new block, and the new relation towards the new block
 	String nameOfBlock = "FIFO__" + _sig1.getName() + "__" + _sig2.getName() + "__" + FIFO_ID;
-	AvatarBlock fifoBlock = AvatarBlockTemplate.getFifoBlock(nameOfBlock, this, _ar.getReferenceObject(), _sig1, _sig2, _sizeOfInfiniteFifo);
+	AvatarBlock fifoBlock = AvatarBlockTemplate.getFifoBlock(nameOfBlock, this, _ar, _ar.getReferenceObject(), _sig1, _sig2, _sizeOfInfiniteFifo, FIFO_ID);
 	blocks.add(fifoBlock);
 
 
