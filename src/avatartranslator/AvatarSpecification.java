@@ -318,6 +318,60 @@ public class AvatarSpecification extends AvatarElement {
 
     }
 
+    /**
+     * Removes all FIFOs by replacing them with
+     * synchronous relations and one block per FIFO
+     * The size of the infinite fifo is max 1024
+     * and min 1
+     */
+
+    
+    public void removeFIFOs(int _sizeOfInfiniteFifo) {
+	_sizeOfInfiniteFifo = Math.min(1024, _sizeOfInfiniteFifo);
+	_sizeOfInfiniteFifo = Math.max(1, _sizeOfInfiniteFifo);
+	
+	LinkedList<AvatarRelation> oldOnes = new LinkedList<AvatarRelation>();
+	LinkedList<AvatarRelation> newOnes = new LinkedList<AvatarRelation>();
+
+	int FIFO_ID = 0;
+	for(AvatarRelation ar: relations) {
+	    if (ar.isAsynchronous()) {
+		// Must be removed
+		FIFO_ID = removeFIFO(ar, _sizeOfInfiniteFifo, oldOnes, newOnes, FIFO_ID);
+	    }
+	}
+
+	for(AvatarRelation ar: oldOnes) {
+	    relations.remove(ar);
+	}
+
+	for(AvatarRelation ar: newOnes) {
+	    relations.add(ar);
+	}
+    }
+
+    private int removeFIFO(AvatarRelation _ar, int _sizeOfInfiniteFifo, LinkedList<AvatarRelation> _oldOnes, LinkedList<AvatarRelation> _newOnes, int FIFO_ID ) {
+	for(int i=0; i<_ar.nbOfSignals(); i++) {
+	    FIFO_ID = removeFIFO(_ar, _ar.getSignal1(i), _ar.getSignal2(i), _sizeOfInfiniteFifo, _oldOnes, _newOnes, FIFO_ID);
+	}
+	_oldOnes.add(_ar);
+	return FIFO_ID;
+    }
+
+    
+    private int removeFIFO(AvatarRelation _ar, AvatarSignal _sig1, AvatarSignal _sig2, int _sizeOfInfiniteFifo, LinkedList<AvatarRelation> _oldOnes, LinkedList<AvatarRelation> _newOnes, int FIFO_ID) {
+	// We create the new block, and the new relation towards the new block
+	String nameOfBlock = "FIFO__" + _sig1.getName() + "__" + _sig2.getName() + "__" + FIFO_ID;
+	AvatarBlock fifoBlock = AvatarBlockTemplate.getFifoBlock(nameOfBlock, this, _ar.getReferenceObject(), _sig1, _sig2, _sizeOfInfiniteFifo);
+	blocks.add(fifoBlock);
+
+
+	FIFO_ID ++;
+	return FIFO_ID;
+    }
+    
+    
+
     public boolean areSynchronized(AvatarSignal as1, AvatarSignal as2) {
 	AvatarRelation ar = getAvatarRelationWithSignal(as1);
 	if (ar == null) {

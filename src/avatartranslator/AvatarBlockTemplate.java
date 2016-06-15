@@ -142,4 +142,30 @@ public class AvatarBlockTemplate  {
 
         return at;
     }
+
+
+    public static AvatarBlock getFifoBlock(String _name, AvatarSpecification _avspec, Object _referenceRelation, AvatarSignal _sig1, AvatarSignal _sig2, int _sizeOfFifo) {
+        AvatarBlock ab = new AvatarBlock(_name, _avspec, _referenceRelation);
+
+	// Create the read and write signals
+	AvatarSignal read = new AvatarSignal("read", AvatarSignal.OUT, _referenceRelation);
+        AvatarSignal write = new AvatarSignal("write", AvatarSignal.IN, _referenceRelation);
+	ab.addSignal(read);  // corresponds to sig2
+	ab.addSignal(write); // corresponds to sig1
+
+	// Creating the attributes of the signals
+
+
+	// Creating the attributes to support the FIFO
+
+	// Creating the state machine
+
+	
+	return ab;
+    }
+	
+
+	
+
+    
 }
