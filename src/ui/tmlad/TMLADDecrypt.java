@@ -113,14 +113,14 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
     }
     
 public boolean editOndoubleClick(JFrame frame) {
-        String [] labels = new String[2];
-        String [] values = new String[2];
+        String [] labels = new String[1];
+        String [] values = new String[1];
 	labels[0] = "Security Pattern";
 	values[0] = securityContext;
 	
 
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
-	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 2, labels, values);
+	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 1, labels, values);
         jdms.setSize(450, 300);
         GraphicLib.centerOnParent(jdms);
         jdms.show(); // blocked until dialog has been closed

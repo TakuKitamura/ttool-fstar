@@ -73,6 +73,8 @@ public class TML2Avatar {
     TMLModeling tmlmodel;
 
     LinkedList<AvatarAttribute> keys = new LinkedList<AvatarAttribute>();
+    LinkedList<AvatarAttribute> pubKeys = new LinkedList<AvatarAttribute>();
+    AvatarAttribute pKey;
     public HashMap<TMLChannel, Integer> channelMap = new HashMap<TMLChannel,Integer>();
     public HashMap<TMLTask, AvatarBlock> taskBlockMap = new HashMap<TMLTask, AvatarBlock>();  
     public HashMap<String, Integer> originDestMap = new HashMap<String, Integer>();
@@ -627,11 +629,14 @@ public class TML2Avatar {
 		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
 		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
 
-		    AvatarMethod sencrypt = new AvatarMethod("aencrypt", ae);
-		    sencrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
-		    sencrypt.addParameter(block.getAvatarAttributeWithName("publickey"));
-		    block.addMethod(sencrypt);
-		    tran.addAction(ae.securityPattern.name+"_encrypted = aencrypt("+ae.securityPattern.name+", key)");
+		    AvatarMethod aencrypt = new AvatarMethod("aencrypt", ae);
+		    aencrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+		    AvatarAttribute pubKey= new AvatarAttribute("publickey", AvatarType.INTEGER, block, null);
+		    pubKeys.add(pubKey);
+		    block.addAttribute(pubKey);
+		    aencrypt.addParameter(pubKey);
+		    block.addMethod(aencrypt);
+		    tran.addAction(ae.securityPattern.name+"_encrypted = aencrypt("+ae.securityPattern.name+", publickey)");
 
 		    ae.securityPattern.originTask=block.getName();
 		    ae.securityPattern.state1=as;
@@ -649,7 +654,7 @@ public class TML2Avatar {
 		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
 
 		    AvatarMethod sdecrypt = new AvatarMethod("sdecrypt", ae);
-		    sdecrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+		    sdecrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted"));
 		    sdecrypt.addParameter(block.getAvatarAttributeWithName("key"));
 		    block.addMethod(sdecrypt);
 
@@ -658,7 +663,9 @@ public class TML2Avatar {
 
 
 		    ae.securityPattern.state2=as;
-	
+		    	elementList.add(as);
+	    		elementList.add(tran);
+			as.addNext(tran);
 
 		    AvatarState dummy = new AvatarState(ae.getName()+"_dummy", ae.getReferenceObject());
 		    tran.addNext(dummy);
@@ -669,9 +676,37 @@ public class TML2Avatar {
 		    AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"2",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
 		    signalAuthDestMap.put(ae.securityPattern.name, authDest);
 		}
-	    	elementList.add(as);
-	    	elementList.add(tran);
-		as.addNext(tran);
+		else if (ae.securityPattern.type.equals("Asymmetric Encryption")){
+		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
+		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
+
+		    AvatarMethod adecrypt = new AvatarMethod("adecrypt", ae);
+		    adecrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted"));
+		    AvatarAttribute privKey = new AvatarAttribute("privKey", AvatarType.INTEGER,block,null);
+		    AvatarAttribute pubKey = new AvatarAttribute("pubKey", AvatarType.INTEGER,block,null);
+		    pubKeys.add(0,pubKey);
+		    avspec.addPragma(new AvatarPragmaPrivatePublicKey("PrivPubKey" + block.getName(), null, privKey, pubKey));
+		    adecrypt.addParameter(privKey);
+		    block.addAttribute(pubKey);
+		    block.addAttribute(privKey);
+		    block.addMethod(adecrypt);
+		    tran.addAction(ae.securityPattern.name+" = adecrypt("+ae.securityPattern.name+"_encrypted, privKey)");
+
+
+		    ae.securityPattern.state2=as;
+			    	elementList.add(as);
+	    		elementList.add(tran);
+			as.addNext(tran);
+
+		    AvatarState dummy = new AvatarState(ae.getName()+"_dummy", ae.getReferenceObject());
+		    tran.addNext(dummy);
+	    	    tran = new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
+		    dummy.addNext(tran);
+	    	    elementList.add(dummy);
+	    	    elementList.add(tran);		
+		    AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"2",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
+		    signalAuthDestMap.put(ae.securityPattern.name, authDest);
+		}
 	    }
 	    else {
 	    	as.addNext(tran);
@@ -1023,6 +1058,7 @@ public class TML2Avatar {
 	    AvatarAttribute key = new AvatarAttribute("key", AvatarType.INTEGER, block, null);
 	    keys.add(key);
 	    block.addAttribute(key);
+
 	 /*   tmp = new AvatarAttribute("aliceandbob", AvatarType.INTEGER, block, null);
 	    block.addAttribute(tmp);
 	    tmp = new AvatarAttribute("aliceandbob_encrypted", AvatarType.INTEGER, block, null);
@@ -1373,10 +1409,15 @@ public class TML2Avatar {
 	    }
 	}
 	//Check if we matched up all signals
-	avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSessionKnowledge", null, keys, true));
-	System.out.println(avspec);
-	
+	if (keys.size()!=0){	
+	    avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSystemKnowledge", null, keys, true));
+	}
+	if (pubKeys.size()!=0){
+	    avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSystemKnowledge", null, pubKeys,true));
+	}
 	tmlmap.getTMLModeling().secChannelMap = secChannelMap;
+
+	System.out.println(avspec);
 	return avspec;
     }
 

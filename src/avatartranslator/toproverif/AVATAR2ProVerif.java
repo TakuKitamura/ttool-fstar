@@ -675,8 +675,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         // If there is a public key in the middle, ignore it
                         if (privateK != null) {
                             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "When defining equality between public keys, the first to appear in the pragma should be the one belonging to the block that owns the private key.");
-                            ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
-                            ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
+                            //ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+                            //ce.setTGComponent((TGComponent)pragma.getReferenceObject ());
                             warnings.add(ce);
                             continue;
                         }

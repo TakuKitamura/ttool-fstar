@@ -194,6 +194,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
     public void addAction(String _action) {
         AvatarAction aa = AvatarTerm.createActionFromString (block, _action);
+	System.out.println(aa);
         if (aa != null)
             actions.add(aa);
     }
