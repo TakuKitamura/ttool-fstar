@@ -71,14 +71,18 @@ public class SpecificationBlock  {
 	return Arrays.hashCode(values);
     }
 
-    public void init(AvatarBlock _block) {
+    public void init(AvatarBlock _block, boolean _ignoreEmptyTransitions) {
 	LinkedList<AvatarAttribute> attrs = _block.getAttributes();
 	//TraceManager.addDev("Nb of attributes:" + attrs.size());
 	//TraceManager.addDev("in block=" + _block.toString());
 	values = new int[HEADER_VALUES+attrs.size()];
 
 	// Initial state
-	values[STATE_INDEX] = _block.getIndexOfStartState();
+	if (_ignoreEmptyTransitions) {
+	    values[STATE_INDEX] = _block.getIndexOfRealStartState();
+	} else {
+	    values[STATE_INDEX] = _block.getIndexOfStartState();
+	}
 	
 	// Clock
 	values[CLOCKMIN_INDEX] = 0;

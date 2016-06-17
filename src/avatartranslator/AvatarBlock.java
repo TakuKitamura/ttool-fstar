@@ -604,6 +604,46 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
 	
     }
 
+    public int getIndexOfRealStartState() {
+	if (asm == null) {
+	    return -1;
+	}
+
+	int cpt = 0;
+	AvatarStateElement ase = asm.getStartState();
+	
+	while((ase != null) && (cpt<50)) {
+	    if (ase.getNexts().size() != 1) {
+		break;
+	    }
+
+	    AvatarTransition at = (AvatarTransition)(ase.getNext(0));
+	    if (!(at.isEmpty())) {
+		break;
+	    }
+
+	    if (ase.getNexts().size() != 1) {
+		break;
+	    }
+
+	    AvatarStateMachineElement next = at.getNext(0);
+	    if (!(next instanceof AvatarStateElement)) {
+		break;
+	    }
+
+	    ase = (AvatarStateElement) next;
+
+	    cpt ++;
+	}
+
+	if (ase != null) {
+	    return asm.getIndexOfState(ase);
+	}
+	    
+	return -1;
+	
+    }
+
     @Override
     public AvatarBlock advancedClone(AvatarSpecification avspec) {
 	AvatarBlock av = new AvatarBlock(this.getName(), this.getAvatarSpecification(), this.getReferenceObject());	

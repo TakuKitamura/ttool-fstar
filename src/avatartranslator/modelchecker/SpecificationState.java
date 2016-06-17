@@ -90,7 +90,7 @@ public class SpecificationState  {
         return hashValue;
     }
 
-    public void setInit(AvatarSpecification _spec) {
+    public void setInit(AvatarSpecification _spec, boolean _ignoreEmptyTransitions) {
         int cpt = 0;
         // Initialize blocks
         // Blocks : h to 0, variables to their starting values, state to starting state.
@@ -98,7 +98,7 @@ public class SpecificationState  {
 
         for(AvatarBlock block: _spec.getListOfBlocks()) {
             blocks[cpt] = new SpecificationBlock();
-            blocks[cpt].init(block);
+            blocks[cpt].init(block, _ignoreEmptyTransitions);
             cpt ++;
         }
 

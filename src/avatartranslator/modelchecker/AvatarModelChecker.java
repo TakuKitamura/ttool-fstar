@@ -212,6 +212,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         spec.removeTimers();
         spec.removeCompositeStates();
         spec.removeRandoms();
+	spec.removeFIFOs(4);
         spec.makeFullStates();
         if (ignoreEmptyTransitions) {
             spec.removeEmptyTransitions(nbOfRemainingReachabilities == 0);
@@ -249,7 +250,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         // Compute initial state
         SpecificationState initialState = new SpecificationState();
-        initialState.setInit(spec);
+        initialState.setInit(spec, ignoreEmptyTransitions);
         for(AvatarBlock block: spec.getListOfBlocks()) {
             checkElement(block.getStateMachine().getStartState(), initialState);
         }

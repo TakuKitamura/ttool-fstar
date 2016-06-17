@@ -163,6 +163,9 @@ public class AvatarSpecificationSimulation  {
         // Robustness
         avspec.makeRobustness();
 
+	// remove FIFOs
+	//avspec.removeFIFOs(2);
+
         TraceManager.addDev("-------Spec:" + avspec.toString() + "--------");
     }
 

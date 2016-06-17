@@ -341,7 +341,7 @@ public class BoolExpressionEvaluator {
 
         // Boolean ops
         if (resultRight[1] == BOOL_TOKEN) {
-            TraceManager.addDev("** Bool operator = " + typeOfOp);
+            //TraceManager.addDev("** Bool operator = " + typeOfOp);
             if (typeOfOp == EQUAL_TOKEN) {
                 if (result[0] == resultRight[0]) {
                     result[0] = 1;

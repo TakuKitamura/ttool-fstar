@@ -326,9 +326,7 @@ public class AvatarSpecification extends AvatarElement {
      */
 
     
-    public void removeFIFOs(int _sizeOfInfiniteFifo) {
-	_sizeOfInfiniteFifo = Math.min(1024, _sizeOfInfiniteFifo);
-	_sizeOfInfiniteFifo = Math.max(1, _sizeOfInfiniteFifo);
+    public void removeFIFOs(int _maxSizeOfInfiniteFifo) {
 	
 	LinkedList<AvatarRelation> oldOnes = new LinkedList<AvatarRelation>();
 	LinkedList<AvatarRelation> newOnes = new LinkedList<AvatarRelation>();
@@ -337,7 +335,9 @@ public class AvatarSpecification extends AvatarElement {
 	for(AvatarRelation ar: relations) {
 	    if (ar.isAsynchronous()) {
 		// Must be removed
-		FIFO_ID = removeFIFO(ar, _sizeOfInfiniteFifo, oldOnes, newOnes, FIFO_ID);
+		int size = Math.min(_maxSizeOfInfiniteFifo, ar.getSizeOfFIFO());
+		size = Math.max(1, size);
+		FIFO_ID = removeFIFO(ar, size, oldOnes, newOnes, FIFO_ID);
 	    }
 	}
 
@@ -365,7 +365,19 @@ public class AvatarSpecification extends AvatarElement {
 	AvatarBlock fifoBlock = AvatarBlockTemplate.getFifoBlock(nameOfBlock, this, _ar, _ar.getReferenceObject(), _sig1, _sig2, _sizeOfInfiniteFifo, FIFO_ID);
 	blocks.add(fifoBlock);
 
+	// We now need to create the new relation
+	AvatarRelation newAR1 = new AvatarRelation("FIFO__write_" + FIFO_ID, _ar.block1, fifoBlock, _ar.getReferenceObject());
+	newAR1.setAsynchronous(false);
+	newAR1.setPrivate(_ar.isPrivate());
+	newAR1.addSignals(_sig1, fifoBlock.getSignalByName("write"));
+	_newOnes.add(newAR1);
 
+	AvatarRelation newAR2 = new AvatarRelation("FIFO__read_" + FIFO_ID, fifoBlock, _ar.block2, _ar.getReferenceObject());
+	newAR2.setAsynchronous(false);
+	newAR2.setPrivate(_ar.isPrivate());
+	newAR2.addSignals(fifoBlock.getSignalByName("read"), _sig2);
+	_newOnes.add(newAR2);
+	
 	FIFO_ID ++;
 	return FIFO_ID;
     }

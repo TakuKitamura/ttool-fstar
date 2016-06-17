@@ -143,7 +143,8 @@ public class AvatarBlockTemplate  {
         return at;
     }
 
-
+    
+    // WARNING: Does not handle the non blocking case
     public static AvatarBlock getFifoBlock(String _name, AvatarSpecification _avspec, AvatarRelation _ar, Object _referenceRelation, AvatarSignal _sig1, AvatarSignal _sig2, int _sizeOfFifo, int FIFO_ID) {
         AvatarBlock ab = new AvatarBlock(_name, _avspec, _referenceRelation);
 
@@ -185,8 +186,17 @@ public class AvatarBlockTemplate  {
 	    }
 	}
 
+	// If non blocking, then, we need extra attributes
+	if (!(_ar.isBlocking())) {
+	    for(AvatarAttribute aa: _sig1.getListOfAttributes()) {
+		AvatarAttribute newL = aa.advancedClone(null);
+		newL.setName("bucket__" + aa.getName());
+		ab.addAttribute(newL);
+	    }
+	}
+
 	// We create the attribute to manage the FIFO
-	AvatarAttribute size = new AvatarAttribute("currentSize", AvatarType.INTEGER, ab, _referenceRelation);
+	AvatarAttribute size = new AvatarAttribute("size", AvatarType.INTEGER, ab, _referenceRelation);
 	size.setInitialValue("0");
 	ab.addAttribute(size);
 
@@ -238,7 +248,7 @@ public class AvatarBlockTemplate  {
 	    }
 	    asm.addElement(aaos_write);
 	    at = makeAvatarEmptyTransitionBetween(ab, asm, main, aaos_write, _referenceRelation);
-	    at.setGuard("[(size < maxSize) && (head==" + i + "]");
+	    at.setGuard("[(size < maxSize) && (head==" + i + ")]");
 	    at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_write, testHead, _referenceRelation);
 	    at.addAction("head = head + 1");
 	    at.addAction("size = size + 1");
@@ -256,6 +266,18 @@ public class AvatarBlockTemplate  {
 	    at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_write_loss, main, _referenceRelation);
 	}
 
+	// If it is blocking, then, the new message is written but not added
+	if (!(_ar.isBlocking())) {
+	    AvatarActionOnSignal aaos_write_bucket = new AvatarActionOnSignal("writebucket__", write, _referenceRelation);
+	    for(AvatarAttribute aa: _sig1.getListOfAttributes()) {
+		aaos_write_bucket.addValue("bucket__" + aa.getName());
+	    }
+	    asm.addElement(aaos_write_bucket);
+	    at = makeAvatarEmptyTransitionBetween(ab, asm, main, aaos_write_bucket, _referenceRelation);
+	    at.setGuard("[(size == maxSize)]");
+	    at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_write_bucket, main, _referenceRelation);
+	}
+
 	// Read
 	AvatarState testTail = new AvatarState("testTail", _referenceRelation);
         asm.addElement(testTail);
@@ -271,7 +293,7 @@ public class AvatarBlockTemplate  {
 	    }
 	    asm.addElement(aaos_read);
 	    at = makeAvatarEmptyTransitionBetween(ab, asm, main, aaos_read, _referenceRelation);
-	    at.setGuard("[(size > 0) && (tail==" + i + "]");
+	    at.setGuard("[(size > 0) && (tail==" + i + ")]");
 	    at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_read, testTail, _referenceRelation);
 	    at.addAction("tail = tail + 1");
 	    at.addAction("size = size - 1");
