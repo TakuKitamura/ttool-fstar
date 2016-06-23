@@ -1300,7 +1300,7 @@ public class GTMLModeling  {
 	while(iterator.hasNext()){
 	    tgc = (TGComponent)(iterator.next());
 	    if (tgc instanceof TMLADEncrypt) {
-		SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).calculationTime);
+		SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).calculationTime, ((TMLADEncrypt)tgc).nonce);
 		securityPatterns.put(securityPattern.name, securityPattern);
 	    }
 	}

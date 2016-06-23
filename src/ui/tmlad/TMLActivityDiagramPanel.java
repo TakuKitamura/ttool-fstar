@@ -169,5 +169,31 @@ public class TMLActivityDiagramPanel extends TDiagramPanel {
 	public boolean hasAutoConnect() {
 		return true;
 	}
-    
+    public ArrayList<String> getAllCryptoConfig(){
+	ArrayList<String> cc=new ArrayList<String>();
+	LinkedList<TGComponent> comps= getAllComponentList();
+	for (TGComponent c: comps){
+	    if (c instanceof TMLADEncrypt){
+		TMLADEncrypt en= (TMLADEncrypt) c;
+		if (!en.securityContext.isEmpty()){
+		    cc.add(en.securityContext);
+		}
+	    }
+	}
+	return cc;
+    }
+
+    public ArrayList<String> getAllNonce(){
+	ArrayList<String> ns=new ArrayList<String>();
+	LinkedList<TGComponent> comps= getAllComponentList();
+	for (TGComponent c: comps){
+	    if (c instanceof TMLADEncrypt){
+		TMLADEncrypt en= (TMLADEncrypt) c;
+		if (!en.securityContext.isEmpty() && en.type.equals("Nonce")){
+		     ns.add(en.securityContext);
+		}
+	    }
+	}
+	return ns;
+    }
 }

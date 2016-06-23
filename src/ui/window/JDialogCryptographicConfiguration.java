@@ -72,19 +72,21 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
-
+    String[] nonces;
     private ArrayList<String[]> possibleValues = null;
 
-
+    GridBagConstraints c0 = new GridBagConstraints();
+    Container c;
     /** Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-    public JDialogCryptographicConfiguration(Frame f, String title, String[] _values) {
+    public JDialogCryptographicConfiguration(Frame f, String title, String[] _values, String[] _nonces) {
 
         super(f, title, true);
 
-        nbString = 5;
+        nbString = 6;
 
 	values=_values;
+	nonces=_nonces;
         texts = new JTextField[nbString];
 
         initComponents();
@@ -100,90 +102,29 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 	inserts = new JButton[nbString];
 	helps = new JComboBox[nbString];
 
-        Container c = getContentPane();
+        c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
+
+
 
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
-
-        panel1.setBorder(new javax.swing.border.TitledBorder("Properties"));
-
-        panel1.setPreferredSize(new Dimension(600, 200));
-
-        // first line panel1
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 1;
-        panel1.add(new JLabel(" "), c1);
-
-        // second line panel1
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.anchor = GridBagConstraints.CENTER;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-	String[] vals = new String[]{"Symmetric Encryption", "Asymmetric Encryption","MAC", "Hash", "Message id"}; 
-        // String1
-      	c1.gridwidth = 1;
-	panel1.add(new JLabel("Cryptographic Configuration"),c1);
-	texts[0]=new JTextField(values[0],15);
-	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-	panel1.add(texts[0],c1);
-
-	c1.gridwidth=1;
-	panel1.add(new JLabel("Security Pattern"), c1);
-	helps[1]=new JComboBox(vals);
-	panel1.add(helps[1],c1);
-	c1.gridwidth=GridBagConstraints.REMAINDER;
-	inserts[0] = new JButton("Use");
-	inserts[0].addActionListener(this);
-	panel1.add(inserts[0], c1);
-	texts[1]=new JTextField(values[1], 15);
-        panel1.add(texts[1], c1);
-
-      	c1.gridwidth = 1;
-	panel1.add(new JLabel("Overhead"),c1);
-	texts[2]=new JTextField(values[2],15);
-	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-	panel1.add(texts[2],c1);
-
-      	c1.gridwidth = 1;
-	panel1.add(new JLabel("Computational Complexity"),c1);
-	texts[3]=new JTextField(values[3],15);
-	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-	panel1.add(texts[3],c1);
-
-      	c1.gridwidth = 1;
-	panel1.add(new JLabel("Size"),c1);
-	texts[4]=new JTextField(values[4],15);
-	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-	panel1.add(texts[4],c1);
-
+  
+	panel1= new EncryptPanel(this);
+	c0.gridwidth = 1;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c.add(panel1, c0);
 
 
 
 
         // main panel;
-        c0.gridwidth = 1;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-
-        c.add(panel1, c0);
-
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
@@ -208,10 +149,194 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
         } else if (inserts[0] != null) {
 	    if (evt.getSource() == inserts[0]) {
 		texts[1].setText(helps[1].getSelectedItem().toString());
+		boolean repanel = false;
+		if ((helps[1].getSelectedIndex() >1) && !(panel1 instanceof funcPanel)){
+		    values[1]=helps[1].getSelectedItem().toString();
+		    values[0]=texts[0].getText();
+		    values[3]=texts[3].getText();
+		    values[2]="";
+		    values[5]="";
+		    repanel=true;
+		    c.removeAll();
+		    panel1= new funcPanel(this);
+		}
+		else if ((helps[1].getSelectedIndex() <2) && !(panel1 instanceof EncryptPanel)){
+		    values[1]=helps[1].getSelectedItem().toString();
+		    values[0]=texts[0].getText();
+		    values[3]=texts[3].getText();
+		    values[4]="";
+		    c.removeAll();
+		    repanel=true;
+		    panel1= new EncryptPanel(this);
+
+		}
+		
+		if (repanel){
+		    c0.gridwidth = 1;
+        	    c0.gridheight = 10;
+        	    c0.weighty = 1.0;
+    		    c0.weightx = 1.0;
+    		    c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+
+		    c.add(panel1,c0);
+		    // main panel;
+  		    c0.gridwidth = 1;
+  		    c0.gridheight = 1;
+  		    c0.fill = GridBagConstraints.HORIZONTAL;
+ 		    closeButton = new JButton("Save and Close", IconManager.imgic25);
+ 		    //closeButton.setPreferredSize(new Dimension(600, 50));
+        	    closeButton.addActionListener(this);
+        	    c.add(closeButton, c0);
+        	    c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+        	    cancelButton = new JButton("Cancel", IconManager.imgic27);
+    		    cancelButton.addActionListener(this);
+   		    c.add(cancelButton, c0);
+		    this.invalidate();	   
+		    this.validate();
+		    this.repaint();
+		}
+	    }
+	    if (evt.getSource() == inserts[5]) {
+		texts[5].setText(helps[5].getSelectedItem().toString());
 	    }
 	}
     }
 
+
+
+    public class EncryptPanel extends JPanel {
+	public EncryptPanel(JDialogCryptographicConfiguration j){
+        GridBagConstraints c1 = new GridBagConstraints();
+        GridBagLayout gridbag1 = new GridBagLayout();
+
+        this.setLayout(gridbag1);
+
+        this.setBorder(new javax.swing.border.TitledBorder("Properties"));
+
+        this.setPreferredSize(new Dimension(600, 200));
+
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c1.fill = GridBagConstraints.BOTH;
+        c1.gridheight = 1;
+        add(new JLabel(" "), c1);
+
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.anchor = GridBagConstraints.CENTER;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+	String[] vals = new String[]{"Symmetric Encryption", "Asymmetric Encryption","MAC", "Hash", "Nonce"}; 
+        // String1
+      	c1.gridwidth = 1;
+	add(new JLabel("Cryptographic Configuration"),c1);
+	texts[0]=new JTextField(values[0],15);
+	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+	add(texts[0],c1);
+
+	c1.gridwidth=1;
+	add(new JLabel("Security Pattern"), c1);
+	helps[1]=new JComboBox(vals);
+	helps[1].setSelectedItem(values[1]);
+	add(helps[1],c1);
+	c1.gridwidth=GridBagConstraints.REMAINDER;
+	inserts[0] = new JButton("Use");
+	inserts[0].addActionListener(j);
+	add(inserts[0], c1);
+	texts[1]=new JTextField(values[1], 15);
+        add(texts[1], c1);
+
+      	c1.gridwidth = 1;
+	add(new JLabel("Overhead"),c1);
+	texts[2]=new JTextField(values[2],15);
+	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+	add(texts[2],c1);
+
+      	c1.gridwidth = 1;
+	add(new JLabel("Computational Complexity"),c1);
+	texts[3]=new JTextField(values[3],15);
+	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+	add(texts[3],c1);
+
+
+      	c1.gridwidth = 1;
+	add(new JLabel("Nonce"),c1);
+	helps[5]=new JComboBox(nonces);
+	helps[5].setSelectedItem(values[5]);
+	add(helps[5],c1);
+	c1.gridwidth=GridBagConstraints.REMAINDER;
+	inserts[5] = new JButton("Use");
+	inserts[5].addActionListener(j);
+	add(inserts[5], c1);
+	texts[5]=new JTextField(values[5], 15);
+        add(texts[5], c1);
+	}
+    }
+
+    public class funcPanel extends JPanel {
+      public funcPanel(JDialogCryptographicConfiguration j){
+        GridBagConstraints c1 = new GridBagConstraints();
+        GridBagLayout gridbag1 = new GridBagLayout();
+
+        setLayout(gridbag1);
+
+        setBorder(new javax.swing.border.TitledBorder("Properties"));
+
+        setPreferredSize(new Dimension(600, 200));
+
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c1.fill = GridBagConstraints.BOTH;
+        c1.gridheight = 1;
+        add(new JLabel(" "), c1);
+
+        // second line panel1
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.anchor = GridBagConstraints.CENTER;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+	String[] vals = new String[]{"Symmetric Encryption", "Asymmetric Encryption","MAC", "Hash", "Nonce"}; 
+        // String1
+      	c1.gridwidth = 1;
+	add(new JLabel("Cryptographic Configuration"),c1);
+	texts[0]=new JTextField(values[0],15);
+	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+	add(texts[0],c1);
+
+	c1.gridwidth=1;
+	add(new JLabel("Security Pattern"), c1);
+	helps[1]=new JComboBox(vals);
+	helps[1].setSelectedItem(values[1]);
+	add(helps[1],c1);
+
+	c1.gridwidth=GridBagConstraints.REMAINDER;
+	inserts[0] = new JButton("Use");
+	inserts[0].addActionListener(j);
+	add(inserts[0], c1);
+	texts[1]=new JTextField(values[1], 15);
+        add(texts[1], c1);
+
+      	c1.gridwidth = 1;
+	add(new JLabel("Computational Complexity"),c1);
+	texts[3]=new JTextField(values[3],15);
+	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+	add(texts[3],c1);
+
+      	c1.gridwidth = 1;
+	add(new JLabel("Size"),c1);
+	texts[4]=new JTextField(values[4],15);
+	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+	add(texts[4],c1);
+        
+       }
+    }
 
     public void closeDialog() {
         set = true;

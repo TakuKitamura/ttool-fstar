@@ -210,6 +210,25 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
             }
         }
     }
+    public ArrayList<String> getAllCryptoConfig(){
+	ArrayList<String> cryptoConfigs=new ArrayList<String>();
+	TMLActivityDiagramPanel tmladp;
+        for(int i=1; i<panels.size(); i++) {
+            tmladp = (TMLActivityDiagramPanel)(panels.elementAt(i));
+            cryptoConfigs.addAll(tmladp.getAllCryptoConfig());
+        }
+	return cryptoConfigs;
+    }
+    public ArrayList<String> getAllNonce(){
+	ArrayList<String> ns=new ArrayList<String>();
+	TMLActivityDiagramPanel tmladp;
+        for(int i=1; i<panels.size(); i++) {
+            tmladp = (TMLActivityDiagramPanel)(panels.elementAt(i));
+            ns.addAll(tmladp.getAllNonce());
+        }
+	return ns;
+    }
+
 
     public String[] getAllOutEvents(String nameOfComponent) {
 	return tmlctdp.getAllOutEvents(nameOfComponent);

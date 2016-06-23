@@ -306,7 +306,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     private Map<String, String> statusMap = new HashMap<String, String>();
     private JFrameInteractiveSimulation jfis;
     private JFrameAvatarInteractiveSimulation jfais;
-
+   
     // Invariants
     Invariant currentInvariant;
 
@@ -3773,6 +3773,26 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return tmlcomp.getAllInChannels(name);
     }
 
+    public String[] getAllCryptoConfig() {
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) {return null;}
+        if (!(tp instanceof TMLComponentDesignPanel)) {return null;}
+        TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
+        ArrayList<String> strlist = tmlcomp.getAllCryptoConfig();
+        String[] strarray = new String[strlist.size()];
+	strlist.toArray(strarray); 
+	return strarray;
+    }
+    public String[] getAllNonce(){
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) {return null;}
+        if (!(tp instanceof TMLComponentDesignPanel)) {return null;}
+        TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
+        ArrayList<String> strlist = tmlcomp.getAllNonce();
+        String[] strarray = new String[strlist.size()];
+	strlist.toArray(strarray); 
+	return strarray;
+    }
     public String[] getAllOutRequests() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {return null;}

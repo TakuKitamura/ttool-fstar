@@ -11,10 +11,11 @@ public int time=0;
 public String originTask;
 public AvatarState state1;
 public AvatarState state2;
-
-public SecurityPattern(String _name, String _type, String _overhead, String _size, String _time){
+public String nonce;
+public SecurityPattern(String _name, String _type, String _overhead, String _size, String _time, String _nonce){
     this.name=_name; 
     this.type=_type;
+    this.nonce=_nonce;
     if (!_overhead.equals("")){
 	this.overhead = Integer.valueOf(_overhead);
     }

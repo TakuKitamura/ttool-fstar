@@ -707,6 +707,8 @@ public class TML2Avatar {
 		    AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"2",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
 		    signalAuthDestMap.put(ae.securityPattern.name, authDest);
 		}
+		else if (ae.securityPattern.type.equals("MAC")){
+		}
 	    }
 	    else {
 	    	as.addNext(tran);
