@@ -120,7 +120,7 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
 public boolean editOndoubleClick(JFrame frame) {
 
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);]
-	String[] values=new String[]{securityContext, type, message_overhead, size, calculationTime, nonce};
+	String[] values=new String[]{securityContext, type, message_overhead, calculationTime, size, nonce};
 	String[] nonces=tdp.getMGUI().getAllNonce();
 	JDialogCryptographicConfiguration jdms = new JDialogCryptographicConfiguration(frame, "Setting Cryptographic Configuration properties", values, nonces);
         jdms.setSize(650, 300);
@@ -169,6 +169,8 @@ public boolean editOndoubleClick(JFrame frame) {
         sb.append(size);
 	sb.append("\" calcTime=\"");
         sb.append(calculationTime);
+	sb.append("\" nonce=\"");
+        sb.append(nonce);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -203,6 +205,7 @@ public boolean editOndoubleClick(JFrame frame) {
 				message_overhead= elt.getAttribute("overhead");
 				size= elt.getAttribute("size");
 				calculationTime = elt.getAttribute("calcTime");
+				nonce = elt.getAttribute("nonce");
                                 //System.out.println("eventName=" +eventName + " variable=" + result);
                             }
                         }

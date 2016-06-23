@@ -49,6 +49,7 @@ package ui.window;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Arrays;
 
 import ui.*;
 import java.util.ArrayList;
@@ -112,8 +113,12 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  
-	panel1= new EncryptPanel(this);
+  	if (values[1].contains("Encryption") || values[1].isEmpty()){
+	    panel1= new EncryptPanel(this);
+	}
+	else {
+	    panel1=new funcPanel(this);
+	}
 	c0.gridwidth = 1;
         c0.gridheight = 10;
         c0.weighty = 1.0;
@@ -344,11 +349,17 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
     }
 
     public String getString(int i) {
-        return texts[i].getText();
+	if (texts[i]!=null){
+            return texts[i].getText();
+	}
+	return "";
     }
 
     public boolean hasValidString(int i) {
-        return texts[i].getText().length() > 0;
+	if (texts[i]!=null){
+ 	   return texts[i].getText().length() > 0;
+	}
+	return false;
     }
 
 

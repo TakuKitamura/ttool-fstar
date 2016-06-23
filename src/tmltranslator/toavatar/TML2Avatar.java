@@ -610,11 +610,19 @@ public class TML2Avatar {
 	    //tran.addAction(((TMLActivityElementWithAction) ae).getAction());
 	    if (ae.securityPattern!=null && ae.getName().contains("encrypt")){
 		secPatterns.add(ae.securityPattern);
-
+		block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
+	    	block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
 		if (ae.securityPattern.type.equals("Symmetric Encryption")){
+		    if (!ae.securityPattern.nonce.isEmpty()){
+			block.addAttribute(new AvatarAttribute("nonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
+			AvatarMethod concat2 = new AvatarMethod("concat2",ae);
+			concat2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+			concat2.addParameter(block.getAvatarAttributeWithName("nonce_"+ae.securityPattern.nonce));
+			block.addMethod(concat2);
+			tran.addAction(ae.securityPattern.name+"=concat2("+ae.securityPattern.name + ",nonce_"+ae.securityPattern.nonce+")");
+		    }
 
-		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
-		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
+		    
 
 		    AvatarMethod sencrypt = new AvatarMethod("sencrypt", ae);
 		    sencrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
@@ -626,8 +634,6 @@ public class TML2Avatar {
 		    ae.securityPattern.state1=as;
 		}
 		else if (ae.securityPattern.type.equals("Asymmetric Encryption")){
-		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
-		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
 
 		    AvatarMethod aencrypt = new AvatarMethod("aencrypt", ae);
 		    aencrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
@@ -641,6 +647,23 @@ public class TML2Avatar {
 		    ae.securityPattern.originTask=block.getName();
 		    ae.securityPattern.state1=as;
 		}
+		else if (ae.securityPattern.type.equals("Nonce")){
+		    block.addAttribute(new AvatarAttribute("nonce_"+ae.securityPattern.name, AvatarType.INTEGER, block, null));
+		}
+		else if (ae.securityPattern.type.equals("Hash")){
+		    AvatarMethod hash = new AvatarMethod("hash", ae);
+		    hash.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+		    block.addMethod(hash);
+		    tran.addAction(ae.securityPattern.name+"_encrypted = hash("+ae.securityPattern.name+")");
+		}
+
+		else if (ae.securityPattern.type.equals("MAC")){
+ 		    AvatarMethod mac = new AvatarMethod("MAC", ae);
+		    mac.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+		    mac.addParameter(block.getAvatarAttributeWithName("key"));
+		    block.addMethod(mac);
+		    tran.addAction(ae.securityPattern.name+"_encrypted = MAC("+ae.securityPattern.name+",key)");
+		}
 		AvatarAttributeState authOrigin = new AvatarAttributeState(ae.securityPattern.name+"1",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), as);
 		signalAuthOriginMap.put(ae.securityPattern.name, authOrigin);
 	    	as.addNext(tran);
@@ -648,10 +671,10 @@ public class TML2Avatar {
 	    	elementList.add(tran);
 	    }	
 	    else if (ae.securityPattern!=null && ae.getName().contains("decrypt")){
+		block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
+		block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
 		if (ae.securityPattern.type.equals("Symmetric Encryption")){
 
-		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
-		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
 
 		    AvatarMethod sdecrypt = new AvatarMethod("sdecrypt", ae);
 		    sdecrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted"));
@@ -660,25 +683,48 @@ public class TML2Avatar {
 
 
 		    tran.addAction(ae.securityPattern.name+" = sdecrypt("+ae.securityPattern.name+"_encrypted, key)");
+		    elementList.add(as);
+	    	    elementList.add(tran);
+		    as.addNext(tran);
 
+		    if (!ae.securityPattern.nonce.isEmpty()){
+			block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
+			AvatarMethod get2 = new AvatarMethod("get2",ae);
+			get2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+			get2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+			get2.addParameter(block.getAvatarAttributeWithName("testnonce_"+ae.securityPattern.nonce));
+			block.addMethod(get2);
+			tran.addAction("get2("+ae.securityPattern.name + ","+ae.securityPattern.name+",testnonce_"+ae.securityPattern.nonce+")");
 
-		    ae.securityPattern.state2=as;
-		    	elementList.add(as);
-	    		elementList.add(tran);
-			as.addNext(tran);
+			AvatarState guardState = new AvatarState(ae.getName()+"_guarded", ae.getReferenceObject());
+			tran.addNext(guardState);
+			tran=new AvatarTransition(block, "__guard_"+ae.getName(), ae.getReferenceObject());
+			guardState.addNext(tran);
+
+			tran.setGuard("testnonce_"+ae.securityPattern.nonce+"== nonce_" + ae.securityPattern.nonce);
+		    }
+
 
 		    AvatarState dummy = new AvatarState(ae.getName()+"_dummy", ae.getReferenceObject());
+		    ae.securityPattern.state2=dummy;
 		    tran.addNext(dummy);
 	    	    tran = new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 		    dummy.addNext(tran);
 	    	    elementList.add(dummy);
 	    	    elementList.add(tran);		
-		    AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"2",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
-		    signalAuthDestMap.put(ae.securityPattern.name, authDest);
+		    if (ae.securityPattern.nonce.isEmpty()){
+		    	AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"2",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
+			signalAuthDestMap.put(ae.securityPattern.name, authDest);
+		    }
+		    else {
+			
+		    	AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"3",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
+		    	signalAuthDestMap.put(ae.securityPattern.name, authDest);
+		    }
+
+
 		}
 		else if (ae.securityPattern.type.equals("Asymmetric Encryption")){
-		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
-		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
 
 		    AvatarMethod adecrypt = new AvatarMethod("adecrypt", ae);
 		    adecrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted"));
@@ -693,10 +739,9 @@ public class TML2Avatar {
 		    tran.addAction(ae.securityPattern.name+" = adecrypt("+ae.securityPattern.name+"_encrypted, privKey)");
 
 
-		    ae.securityPattern.state2=as;
-			    	elementList.add(as);
-	    		elementList.add(tran);
-			as.addNext(tran);
+		    elementList.add(as);
+	    	    elementList.add(tran);
+		    as.addNext(tran);
 
 		    AvatarState dummy = new AvatarState(ae.getName()+"_dummy", ae.getReferenceObject());
 		    tran.addNext(dummy);
@@ -704,10 +749,18 @@ public class TML2Avatar {
 		    dummy.addNext(tran);
 	    	    elementList.add(dummy);
 	    	    elementList.add(tran);		
+		    ae.securityPattern.state2=dummy;
 		    AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"2",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
 		    signalAuthDestMap.put(ae.securityPattern.name, authDest);
 		}
 		else if (ae.securityPattern.type.equals("MAC")){
+		    AvatarMethod verifymac = new AvatarMethod("MAC", ae);
+		    verifymac.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted"));
+		    verifymac.addParameter(block.getAvatarAttributeWithName("key"));
+		    tran.addAction(ae.securityPattern.name+"=verifyMAC("+ae.securityPattern.name+"_encrypted, key)"); 
+	    	    elementList.add(tran);
+		    elementList.add(as);
+		    as.addNext(tran);
 		}
 	    }
 	    else {
@@ -746,10 +799,15 @@ public class TML2Avatar {
 		AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
 		
 		if (ae.securityPattern!=null){
-		    secChannelMap.put(ae.securityPattern.name,ch.getName());
-		    as.addValue(ae.securityPattern.name+"_encrypted");
-		    AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
-		    block.addAttribute(data);
+		    if (ae.securityPattern.type.equals("Nonce")){
+			as.addValue("nonce_"+ae.securityPattern.name);
+		    }
+		    else {
+		  	secChannelMap.put(ae.securityPattern.name,ch.getName());
+		 	as.addValue(ae.securityPattern.name+"_encrypted");
+			AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
+			block.addAttribute(data);
+		    }
 		}
 		else {
 	    	as.addValue(ch.getName()+"__chData");
@@ -813,10 +871,15 @@ public class TML2Avatar {
 	    	AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
 
 		if (ae.securityPattern!=null){
-		    as.addValue(ae.securityPattern.name+"_encrypted");
-		    AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
-		    block.addAttribute(data);
-		    secChannelMap.put(ae.securityPattern.name,ch.getName());
+		    if (ae.securityPattern.type.equals("Nonce")){
+			as.addValue("nonce_"+ae.securityPattern.name);
+		    }
+		    else {
+		    	as.addValue(ae.securityPattern.name+"_encrypted");
+		    	AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
+		    	block.addAttribute(data);
+		    	secChannelMap.put(ae.securityPattern.name,ch.getName());
+		    }
 		}
 		else {
 	  	   //No security pattern
