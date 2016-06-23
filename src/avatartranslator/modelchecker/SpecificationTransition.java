@@ -60,6 +60,9 @@ public class SpecificationTransition  {
     public int[] blocksInt;
 
     public AvatarTransition[] transitions;
+
+    public String infoForGraph;
+    public boolean livenessFound;
     
     
     public SpecificationTransition() {

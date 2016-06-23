@@ -90,6 +90,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     // Dealocks
     private int nbOfDeadlocks;
 
+    // Liveness
+    private boolean livenessDone;
+    private boolean studyLiveness;
+    private SpecificationLiveness livenessInfo;
+
     public AvatarModelChecker(AvatarSpecification _spec) {
 	//spec = _spec;
 	//TraceManager.addDev("Before clone:\n" + spec);
@@ -143,6 +148,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     public void setIgnoreConcurrenceBetweenInternalActions(boolean _b) {
         ignoreConcurrenceBetweenInternalActions = _b;
+    }
+
+    public void setLivenessofState(AvatarStateElement _ase, AvatarBlock _ab) {
+	livenessInfo = new SpecificationLiveness(_ase, _ab);
+	studyLiveness = true;
     }
 
     public int setReachabilityOfSelected() {
@@ -202,10 +212,27 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	
       }*/
 
+    public boolean startModelCheckingLiveness() {
+	// No other study are authorized at the same time
+	// 
+
+	if (livenessInfo == null) {
+	    return false;
+	}
+
+	studyLiveness = true;
+	livenessDone = false;
+	studyReachability = false;
+	computeRG = false;
+	startModelChecking();
+	return true;
+    }
+
     public void startModelChecking() {
         stoppedBeforeEnd = false;
         stateID = 0;
 	nbOfDeadlocks = 0;
+
 
         // Remove timers, composite states, randoms
         TraceManager.addDev("Reworking Avatar specification");
@@ -215,7 +242,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	spec.removeFIFOs(4);
         spec.makeFullStates();
         if (ignoreEmptyTransitions) {
-            spec.removeEmptyTransitions(nbOfRemainingReachabilities == 0);
+            spec.removeEmptyTransitions((nbOfRemainingReachabilities == 0)||studyLiveness);
         }
 
 
@@ -486,7 +513,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 	//TraceManager.addDev("Possible transitions 4:" + transitions.size());
 	if (transitions.size() == 0) {
-	    nbOfDeadlocks ++;
+	    if (studyLiveness) {
+		livenessInfo.result = false;
+		livenessInfo.state = _ss;
+		livenessDone = true;
+	    } else {
+		nbOfDeadlocks ++;
+	    }
 	    //TraceManager.addDev("Deadlock found");
 	}
 
@@ -510,7 +543,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
             // Impact the variable of the state, either by executing actions, or by
             // doing the synchronization
-            String action = executeTransition(_ss, newState, tr);
+	    executeTransition(_ss, newState, tr);
+            String action = tr.infoForGraph;
 
             // Remove empty transitions if applicable
             if (ignoreEmptyTransitions) {
@@ -529,7 +563,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //  Unknown state
                 states.put(newState.getHash(blockValues), newState);
 		statesByID.put(newState.id, newState);
-                pendingStates.add(newState);
+		if ((studyLiveness == false) || (studyLiveness && !(tr.livenessFound))) {
+		    pendingStates.add(newState);
+		}
+		
                 link.destinationState = newState;
                 newState.id = getStateID();
                 //TraceManager.addDev("Creating new state for newState=" + newState);
@@ -537,8 +574,15 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             } else {
                 // Create a link from former state to the existing one
                 //TraceManager.addDev("Similar state found State=" + newState.getHash(blockValues) + "\n" + newState + "\nsimilar=" + similar.getHash(blockValues) + "\n" + similar);
-                link.destinationState = similar;
+                
+		link.destinationState = similar;
             }
+	    if (studyLiveness && (!tr.livenessFound)) {
+		TraceManager.addDev("Liveness: path without the element found");
+		livenessInfo.result = false;
+		livenessInfo.state = newState;
+		livenessDone = true;
+	    }
             //links.add(link);
             nbOfLinks ++;
 	    _ss.addNext(link);
@@ -742,10 +786,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         return null;
-
     }
 
-    private String executeTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
+    
+    private void executeTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
         int type = _st.transitions[0].type;
         AvatarStateElement ase;
 
@@ -753,6 +797,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         for(int i=0; i<_st.transitions.length; i++) {
             ase = getNextState(_st.transitions[i], _newState, 10);
             if (ase != null) {
+
+		if (studyLiveness) {
+		    if (livenessInfo.ref1 == ase) {
+			TraceManager.addDev("Liveness found on a path");
+			_st.livenessFound = true;
+		    }
+		}
                 checkElement(ase, _newState);
                 int index = _st.blocks[i].getStateMachine().getIndexOfState(ase);
                 if (index > -1) {
@@ -764,12 +815,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
         if ((AvatarTransition.isActionType(type)) || (type == AvatarTransition.TYPE_EMPTY)) {
-            return executeActionTransition(_previousState, _newState, _st);
+            _st.infoForGraph = executeActionTransition(_previousState, _newState, _st);
         } else if (type == AvatarTransition.TYPE_SEND_SYNC) {
-            return executeSyncTransition(_previousState, _newState, _st);
+            _st.infoForGraph =  executeSyncTransition(_previousState, _newState, _st);
         }
 
-        return "not implemented";
+	_st.infoForGraph = "not implemented";
     }
 
     private AvatarStateElement getNextState(AvatarStateMachineElement e, SpecificationState _newState, int maxNbOfIterations) {
@@ -994,6 +1045,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             return true;
         }
 
+	if (studyLiveness && livenessDone) {
+	    return true;
+	}
+
         stoppedConditionReached = true;
 
         if (studyReachability && nbOfRemainingReachabilities==0) {
@@ -1007,6 +1062,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (computeRG) {
             stoppedConditionReached = false;
         }
+
+	if (studyLiveness) {
+	    stoppedConditionReached = false;
+	}
 
         return stoppedConditionReached;
     }
