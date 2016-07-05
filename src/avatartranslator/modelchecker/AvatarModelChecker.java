@@ -816,8 +816,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         if ((AvatarTransition.isActionType(type)) || (type == AvatarTransition.TYPE_EMPTY)) {
             _st.infoForGraph = executeActionTransition(_previousState, _newState, _st);
+	    return ;
         } else if (type == AvatarTransition.TYPE_SEND_SYNC) {
             _st.infoForGraph =  executeSyncTransition(_previousState, _newState, _st);
+	    return ;
         }
 
 	_st.infoForGraph = "not implemented";

@@ -5,13 +5,13 @@ PATH+=/opt/mutekh/bin
 export PATH
 
 updateruntime:
-	cp ~/TURTLE/executablecode/src/*.c ~/Prog/mutekh/libavatar/
-	cp ~/TURTLE/executablecode/src/*.h ~/Prog/mutekh/libavatar/include/  
+	cp ~/TTool/executablecode/src/*.c ~/Prog/mutekh/libavatar/
+	cp ~/TTool/executablecode/src/*.h ~/Prog/mutekh/libavatar/include/  
 
 updategeneratedcode:
-	cp ~/TURTLE/executablecode/generated_src/*.h ~/Prog/mutekh/examples/avatar
-	cp ~/TURTLE/executablecode/generated_src/*.c ~/Prog/mutekh/examples/avatar	
-	cp ~/TURTLE/executablecode/Makefile.soclib ~/Prog/mutekh/examples/avatar/Makefile
+	cp ~/TTool/executablecode/generated_src/*.h ~/Prog/mutekh/examples/avatar
+	cp ~/TTool/executablecode/generated_src/*.c ~/Prog/mutekh/examples/avatar	
+	cp ~/TTool/executablecode/Makefile.soclib ~/Prog/mutekh/examples/avatar/Makefile
 
 compilesoclib:
 	cd ~/Prog/mutekh; make CONF=examples/avatar/config BUILD=soclib-$(MUTEKH_CPU):pf-tutorial

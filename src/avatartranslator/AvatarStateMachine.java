@@ -213,7 +213,7 @@ public class AvatarStateMachine extends AvatarElement {
 
                 // If the next and previous are non states
                 if ((previous != null) && (next != null)) {
-                    if ((!(previous instanceof AvatarState)) && (!(next instanceof AvatarState))) {
+                    if ((!(previous instanceof AvatarStateElement)) && (!(next instanceof AvatarStateElement))) {
                         // We create an intermediate state
                         AvatarState state = new AvatarState("IntermediateState__" + id, elt.getReferenceObject());
                         toAdd.add(state);
