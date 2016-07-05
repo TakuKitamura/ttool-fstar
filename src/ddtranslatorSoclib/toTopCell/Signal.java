@@ -43,9 +43,14 @@ signal = signal +"caba::VciSignals<vci_param> signal_vci_mwmrd_ram(\"signal_vci_
 if(TopCellGenerator.avatardd.getAllCrossbar().size()==0){
 		for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM())
 					signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getNo_ram()
-							+ "(\"signal_vci_vciram" + ram.getNo_ram() + "\");" + CR2;															
-		for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY())
-		    signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" + CR2;			
+							+ "(\"signal_vci_vciram" + ram.getNo_ram() + "\");" + CR2;							
+		int i = 0;
+								
+		for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY()){
+		    //signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" + CR2;		
+signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+i+"\");" + CR2; 
+i++;		
+	}
 			
 		signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;
 		System.out.print("number of processors : " + TopCellGenerator.avatardd.getNbCPU()+"\n");
@@ -54,9 +59,13 @@ if(TopCellGenerator.avatardd.getAllCrossbar().size()==0){
 else{
     for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM())
 	signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getNo_ram()
-	    + "(\"signal_vci_vciram" + ram.getNo_ram() + "\");" + CR2;															
-		for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY())
-		    signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" + CR2;						
+	    + "(\"signal_vci_vciram" + ram.getNo_ram() + "\");" + CR2;													int i=0;		
+    for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY()){
+		    // signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" + CR2;		
+signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+i+"\");" + CR2;
+		i++;
+    }
+				
 		signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;
 		//System.out.print("number of processors : " + TopCellGenerator.avatardd.getNbCPU()+"\n");
 		System.out.print("number of clusters : " + TopCellGenerator.avatardd.getNbClusters()+"\n");

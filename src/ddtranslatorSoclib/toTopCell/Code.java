@@ -57,13 +57,13 @@ public class Code {
 
 	  "template <class Iss>" + CR +
 	  "INIT_TOOLS(initialize_tools){" + CR +
-	  "Iss::setBoostrapCpuId(0);" + CR +
+	  //"Iss::setBoostrapCpuId(0);" + CR + // ppc
 	  "/* Only processor 0 starts execution on reset */" + CR +
 	  "#if defined(CONFIG_GDB_SERVER)" + CR +
 	  "ISS_NEST(Iss)::set_loader(ldr);" + CR +
 	  "#endif" + CR +
 	  "#if defined(CONFIG_SOCLIB_MEMCHECK)" +CR +	
-	  " common::IssMemchecker<Iss>::init(maptab, ldr, \"vci_multi_tty,vci_xicu,vci_block_device,vci_fd_acccess,vci_ethernet,vci_fdt_rom,vci_rttimer\");" + CR +
+	  " common::IssMemchecker<Iss>::init(maptab, ldr, \"vci_multi_tty0,vci_xicu,vci_block_device,vci_fd_acccess,vci_ethernet,vci_fdt_rom,vci_rttimer\");" + CR +
 	  "#endif" + CR +
 	  "}" +CR2 ;
 

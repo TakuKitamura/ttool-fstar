@@ -20,7 +20,7 @@ struct asyncchannel {
 };
 
 typedef struct asyncchannel asyncchannel;
-//DG 7.9. add MWMR as parameter
+
 asyncchannel *getNewAsyncchannel(char *inname, char *outname, int isBlocking, int maxNbOfMessages, struct mwmr_s *fifo);
 void destroyAsyncchannel(asyncchannel *syncch);
 message* getAndRemoveOldestMessageFromAsyncChannel(asyncchannel *channel);

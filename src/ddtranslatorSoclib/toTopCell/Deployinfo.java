@@ -81,9 +81,19 @@ public class Deployinfo {
 		for (AvatarChannel channel : ram.getChannels()) {
 		    deployinfo_map = deployinfo_map +"\n .channel"+i+" : { \\" + CR;
 		    deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")\\"+ CR;
-		    i++;
+		   
 		    deployinfo_map=deployinfo_map+ "} > uram"+ram.getNo_ram()+"\\"+ CR;	
 		}
+		//DG ajoute 19.05. explicit mapping of locks
+
+	for (AvatarChannel channel : ram.getChannels()) {
+		    deployinfo_map = deployinfo_map +"\n .lock"+i+" : { \\" + CR;
+		    deployinfo_map = deployinfo_map + "*(section_lock"+i+ ")\\"+ CR;		   
+		    //  deployinfo_map=deployinfo_map+ "} > vci_locks\\"+ CR;
+		    deployinfo_map=deployinfo_map+ "} > uram0\\"+ CR;//DG 27.06. no ramlocks
+		    i++;
+		}
+
 	    }	    
 	}
 	return deployinfo_map;	

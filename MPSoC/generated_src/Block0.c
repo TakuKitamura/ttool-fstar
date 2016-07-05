@@ -14,7 +14,6 @@ static uint32_t _val;
 void *mainFunc__Block0(struct mwmr_s *channels_Block0[]){
   
   struct mwmr_s *Block0_val__Block1_val= channels_Block0[0];
-  int __timerValue = 0;
   
   int __currentState = STATE__START__STATE;
   __attribute__((unused)) request __req0;

@@ -42,9 +42,10 @@ public class TopCellGenerator
 	public final String TYPEDEF = "typedef";
 
         private final static String GENERATED_PATH = "generated_topcell" + File.separator;      
-	
-	public TopCellGenerator(AvatarddSpecification dd){
+	 private boolean tracing;
+    public TopCellGenerator(AvatarddSpecification dd, boolean _tracing){
 		avatardd = dd;
+		tracing=_tracing;
 	}
 
 	public String generateTopCell() {
@@ -87,7 +88,7 @@ public class TopCellGenerator
 		Loader.getLoader() +
 		Declaration.getDeclarations() +	
 		Signal.getSignal() +
-		NetList.getNetlist(icn) +
+		NetList.getNetlist(icn,tracing) +
 		Simulation.getSimulation();
 	    return (top);
 	}	

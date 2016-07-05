@@ -9,11 +9,8 @@
 #include "mytimelib.h"
 #include "random.h"
 #include "asyncchannel.h"
-#include "syncchannel.h" //ajoute DG
+#include "syncchannel.h"
 #include "tracemanager.h"
-
-
-//DG 6.7. ici, il faut qu'on transmet egalement par les canaux MWMR; pour les syncchannels, c'etait totalement implicite et fait par le request manager tout seul!! j'ai ajoute des fonctions addMessageToSyncChannel(req->syncChannel, msg); et getAndRemoveMessageFromSyncChannel au fichier syncchannel.c
 
 void executeSendSyncTransaction(request *req) {
   int cpt;
@@ -28,8 +25,6 @@ void executeSendSyncTransaction(request *req) {
   request* currentReq = req->syncChannel->inWaitQueue;
   debugMsg("*****Execute send sync tr");
 
-  //un syncchannel n'a qu'un seul message; il manque encore le test si on peut ecrire
-  
   while(currentReq != NULL) {
     cpt ++;
     currentReq = currentReq->next;
@@ -45,7 +40,7 @@ void executeSendSyncTransaction(request *req) {
   } 
 
   // Remove all related request from list requests
-  //req->syncChannel->inWaitQueue = removeRequestFromList(req->syncChannel->inWaitQueue, selectedReq);//enleve 21.09.
+  //req->syncChannel->inWaitQueue = removeRequestFromList(req->syncChannel->inWaitQueue, selectedReq);
   debugMsg("Setting related request");
   req->relatedRequest = selectedReq;
 
@@ -56,17 +51,12 @@ void executeSendSyncTransaction(request *req) {
   // Handle parameters
   copyParameters(req, selectedReq);
 
-  //ajoute DG 7.7. choix randomise du writer a deja ete fait
-  //actuellement sans mwmr, gestionnaire central
-  // sync_write(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID);//pas clair quell donne est a transmettre, choisi ID
-  //sync_write(channel->mwmr_fifo, &msg, 1 );
-  //debugMsg("before sync write\n");
   debugInt("syncchannel address \n", req->syncChannel->mwmr_fifo);
-  sync_write(req->syncChannel->mwmr_fifo, selectedReq->ID, 1 );//pas clair quelle donnee est a transmettre, choisi ID
+  sync_write(req->syncChannel->mwmr_fifo, selectedReq->ID, 1 );// transmit ID
   // debugMsg("after sync write\n");
-  // fin ajoute 
+ 
   debugMsg("Signaling");
-  //DG 21.09. faut changer?
+  
   pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
 
   traceSynchroRequest(req, selectedReq);
@@ -111,11 +101,10 @@ void executeReceiveSyncTransaction(request *req) {
   debugMsg("Signaling");
   pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
 
-  //ajoute DG async_read(channel->mwmr_fifo, &msg, 1);
   debugInt("syncchannel read: address \n",selectedReq->syncChannel->mwmr_fifo);
   sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID, 1);
-  //sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID); //pas clair quell donne est a transmettre, choisi ID
- //fin ajoute 
+  //transmit ID
+  
   debugMsg("after syncchannel read");
   traceSynchroRequest(selectedReq, req);
 }
@@ -522,9 +511,6 @@ request *private__executeRequests(setOfRequests *list) {
   return private__executeRequests0(list, nbOfRequests(list));
 }
 
-
-
-
 request *executeOneRequest(setOfRequests *list, request *req) {
   req->nextRequestInList = NULL;
   req->listOfRequests = list;
@@ -574,7 +560,7 @@ request *executeListOfRequests(setOfRequests *list) {
       pthread_cond_timedwait(list->wakeupCondition, list->mutex, &(list->minTimeToWait));
     } else {
       debug2Msg(list->owner, "Releasing mutex");
-      //DG 21.09. enlever 11.02. remis (ok for synchronous)
+     
       pthread_cond_wait(list->wakeupCondition, list->mutex);
     }
     debug2Msg(list->owner, "Waking up for requests! -> getting mutex");

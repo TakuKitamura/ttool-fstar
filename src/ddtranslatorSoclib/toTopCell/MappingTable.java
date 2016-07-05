@@ -17,7 +17,7 @@ public class MappingTable {
     private static String mapping;
       
     public static String getMappingTable() {
-
+ int l=0;
 	    int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
    
 	    if(nb_clusters == 0){
@@ -62,15 +62,15 @@ public class MappingTable {
 
     /* here we have a loop over the CHANNEL segments specified in the deployment diagram and we calculate their addresses in a loop; more intelligent algorithms will be proposed later */
 
-int j=0; int k=0; int l=0;
+int j=0; int k=0;
 
       if(TopCellGenerator.avatardd.getAllCrossbar().size()==0){	
       
       for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {						      
 	  if(ram.getNo_ram() ==0){
-          ram.setNo_target(2);	
-	  mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0000000, 0x00100000, IntTab("+(ram.getNo_target()+2)+"), false));" + CR;
-	  mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0200000, 0x00100000, IntTab("+(ram.getNo_target()+2)+"), false));" + CR;	   
+	      ram.setNo_target(2);//in the following assign target number 2	
+	  mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0000000, 0x00100000, IntTab("+(ram.getNo_target())+"), false));" + CR;
+	  mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0200000, 0x00100000, IntTab("+(ram.getNo_target())+"), false));" + CR;	   
         }
         else{
           ram.setNo_target(7+j);
@@ -79,15 +79,17 @@ int j=0; int k=0; int l=0;
 	  j++;	 
         }
       }
-     
+      int m=0;
       for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) {
 	  /* we calculate the target number of one or several (multi-) ttys which come after the j rams and the 7 compulsory targets */	
-        tty.setNo_target(7+j+k);
-	k++;		 
+        tty.setNo_target(7+j);		 
         /* we use a simple formula for calculating the TTY address in case of multiple (multi-) ttys */	
-	mapping += "maptab.add(Segment(\"vci_multi_tty\" , 0xd"+tty.getNo_tty()+"200000, 0x00000010, IntTab(" +tty.getNo_target() +"), false));" + CR;
-        j++;
-	l=tty.getNo_target();
+	/* attention this will not work for more than 10 TTYs */
+	mapping += "maptab.add(Segment(\"vci_multi_tty"+m+"\" , 0xd"+tty.getNo_tty()+"200000, 0x00000010, IntTab(" +tty.getNo_target() +"), false));" + CR;
+	//	mapping += "maptab.add(Segment(\"vci_multi_tty"+m+"\" , 0xe"+(m+1)+"200000, 0x00000010, IntTab(" +tty.getNo_target() +"), false));" + CR;
+
+        j++;m++;
+		l=tty.getNo_target();
       }
       }
 
@@ -110,21 +112,21 @@ int j=0; int k=0; int l=0;
       int m=0;
       for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) {
 	  /* we calculate the target number of one or several (multi-) ttys which come after the j rams and the 7 compulsory targets */	
-        tty.setNo_target(7+j+k);
-	k++;		 
+        tty.setNo_target(7+j);			 
         /* we use a simple formula for calculating the TTY address in case of multiple (multi-) ttys */
 	/* only one tty per cluster currently! */	
-	mapping += "maptab.add(Segment(\"vci_multi_tty\" , 0xd"+tty.getNo_tty()+"200000, 0x00000010, IntTab("+m+","+tty.getNo_target() +"), false));" + CR;
+	//	mapping += "maptab.add(Segment(\"vci_multi_tty\" , 0xd"+tty.getNo_tty()+"200000, 0x00000010, IntTab("+m+","+tty.getNo_target() +"), false));" + CR;
+	mapping += "maptab.add(Segment(\"vci_multi_tty"+m+"\", 0xe"+(m+1)+"200000, 0x00000010, IntTab("+m+","+tty.getNo_target() +"), false));" + CR;
         j++; m++;
-	l=tty.getNo_target();
+		l=tty.getNo_target();
       }
       }
       
       mapping = mapping + "maptab.add(Segment(\"vci_fd_access\", 0xd4200000, 0x00000100, IntTab("+(l+1)+"), false));" + CR;
       mapping = mapping + "maptab.add(Segment(\"vci_ethernet\",  0xd5000000, 0x00000020, IntTab("+(l+2)+"), false));" + CR;
       mapping = mapping + "maptab.add(Segment(\"vci_block_device\", 0xd1200000, 0x00000020, IntTab("+(l+3)+"), false));" + CR2;
-      mapping = mapping + "maptab.add(Segment(\"vci_locks\", 0xC0200000, 0x00000100, IntTab("+(l+4)+"), false));" + CR2;//DG 4.12. for coprocessor wrapper
-mapping = mapping + "maptab.add(Segment(\"mwmr_ram\", 0xA0200000,  0x00001000, IntTab("+(l+5)+"), false));" + CR2;//DG 4.12. for coprocessor wrapper
+      mapping = mapping + "maptab.add(Segment(\"vci_locks\", 0xC0200000, 0x00000100, IntTab("+(l+4)+"), false));" + CR2;
+mapping = mapping + "maptab.add(Segment(\"mwmr_ram\", 0xA0200000,  0x00001000, IntTab("+(l+5)+"), false));" + CR2;
 mapping = mapping + "maptab.add(Segment(\"mwmrd_ram\", 0xB0200000,  0x00003000, IntTab("+(l+6)+"), false));" + CR2;//DG 4.12.
      
 	    }
@@ -153,15 +155,12 @@ mapping = mapping + "maptab.add(Segment(\"mwmrd_ram\", 0xB0200000,  0x00003000, 
 	  mapping = mapping + "maptab.add(Segment(\"vci_fd_access\", 0xd4200000, 0x00000100, IntTab(0,7), false));" + CR;
 	  mapping = mapping + "maptab.add(Segment(\"vci_ethernet\",  0xd5000000, 0x00000020, IntTab(0,8), false));" + CR;
 	  mapping = mapping + "maptab.add(Segment(\"vci_block_device\", 0xd1200000, 0x00000020, IntTab(0,9), false));" + CR2;
-     
-      //DG 4.4. deal with mapping of channels: has to be revised 
-      //Attention: also ldscript becomes more complicated
-
+        
 	  int j=0; int c;
 	for (AvatarChannel channel : TopCellGenerator.avatardd.getAllMappedChannels()) {    		
 	    //we need to know on which cluster the channel is mapped
 
-	    //DG 5.4. calcul pas encore correct, il faut identifier compbien de canaux il y a par cluster, ou proceder par RAM et identifier les canaux mappe dessus puis incrementer si plusieurs canaux sur la meme ram
+	    //DG 5.4. calcul pas encore correct pour cluster, il faut identifier combien de canaux il y a par cluster, ou proceder par RAM et identifier les canaux mappe dessus puis incrementer si plusieurs canaux sur la meme ram
 	   	  
 	    mapping += "maptab.add(Segment(\"channel" + j+ "\", 0x" + channel.getNo_cluster() + "f000000, 0x00100000, IntTab("+channel.getNo_cluster()+","+channel.getRAMNo()+"), false));" + CR;	
 		  j++;
@@ -181,11 +180,14 @@ mapping = mapping + "maptab.add(Segment(\"mwmrd_ram\", 0xB0200000,  0x00003000, 
 	  }
 
 	  //one tty per cluster
+	  int i=0;
 	  for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) {	   
 	      c=tty.getIndex();	
 	      tty.setNo_target(5);
 		 
-	      mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0xd"+tty.getIndex()+"0200000, 0x00000010, IntTab("+tty.getIndex()+",5), false));" + CR;    
+	      // mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0xd"+tty.getIndex()+"0200000, 0x00000010, IntTab("+tty.getIndex()+",5), false));" + CR;    
+ mapping += "maptab.add(Segment(\"vci_multi_tty"+i+"\" , 0xd"+tty.getIndex()+"0200000, 0x00000010, IntTab("+tty.getIndex()+",5), false));" + CR;  
+ i++;  
 	  }
 	    }
                     

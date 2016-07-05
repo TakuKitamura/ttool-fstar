@@ -37,6 +37,13 @@ void async_read( struct mwmr_s *fifo, void *_ptr, int lensw ){
 }
 
 void async_write( struct mwmr_s *fifo, void *_ptr, int lensw ){
+  debugInt("debug fifo \n",fifo);
+  debugInt("debug ptr \n",_ptr);
+  debugInt("debug  lensw \n", lensw);
+  debugInt("debug  fifo status address \n", &(fifo->status));
+  debugInt("debug  fifo status \n", fifo->status);
+  debugInt("debug  fifo lock address\n", &(fifo->status->lock));
+  debugInt("debug  fifo lock \n", fifo->status->lock);
   mwmr_write(fifo,_ptr,lensw);
   }
 
@@ -103,14 +110,18 @@ void destroyAsyncchannel(asyncchannel *asyncch) {
 }
 
 void addMessageToAsyncChannel(asyncchannel *channel, message *msg) {
- 
   msg->next = channel->pendingMessages;
   channel->pendingMessages = msg;
   channel->currentNbOfMessages = channel->currentNbOfMessages+1;
-  debugInt("asyncchannel write: address %x \n",channel->mwmr_fifo);
+  debugInt("asyncchannel write: address \n",channel->mwmr_fifo);
   debugInt("asyncchannel \n",channel->mwmr_fifo->depth);
   debugInt("asyncchannel  \n",channel->mwmr_fifo->width); 
-  debugInt("channel->mwmr_fifo: \n",channel->mwmr_fifo);
+  debugInt("asyncchannel->mwmr_fifo: \n",channel->mwmr_fifo);  
+  debugInt("asyncchannel->fifo status address \n", &(channel->mwmr_fifo->status));
+  debugInt("asyncchannel->fifo lock address\n", &(channel->mwmr_fifo->status->lock));
+  debugInt("asyncchannel->fifo lock \n", channel->mwmr_fifo->status->lock);
+  debugInt("asyncchannel->fifo usage \n", channel->mwmr_fifo->status->usage);
+  debugInt("asyncchannel->fifo rptr \n", channel->mwmr_fifo->status->rptr);
+  debugInt("asyncchannel->fifo wptr \n", channel->mwmr_fifo->status->wptr);
   async_write(channel->mwmr_fifo, &msg, 1 );
-
 }

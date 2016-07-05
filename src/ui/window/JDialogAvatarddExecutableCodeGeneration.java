@@ -528,7 +528,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 		} else {
 		    System.err.println("**AVATAR TOPCELL found");
 
-		    TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec);
+		    TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec, tracemode.isSelected());
 		    testGo();
 		    jta.append("Generation of TopCell executable code: done\n");
 		    System.err.println("**get Text "+code2.getText());
@@ -603,7 +603,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 			System.err.println("AVATAR TOPCELL found");
 		    }
 
-		    TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec);
+		    TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec, tracemode.isSelected());
 		    testGo();
 		    jta.append("Generation of TopCell executable code: done\n");
 

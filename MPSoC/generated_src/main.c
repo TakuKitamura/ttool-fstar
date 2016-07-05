@@ -32,9 +32,8 @@ pthread_barrier_t barrier ;
 pthread_attr_t *attr_t;
 pthread_mutex_t __mainMutex;
 
-#define MWMRADDR 0xB0200000
-#define LOCKSADDR 0xC0200000
 #define CHANNEL0 __attribute__((section("section_channel0")))
+#define LOCK0 __attribute__((section("section_lock0")))
 #define base(arg) arg
 
 typedef struct mwmr_s mwmr_t;
@@ -42,10 +41,10 @@ typedef struct mwmr_s mwmr_t;
 /* Synchronous channels */
 /* Asynchronous channels */
 asyncchannel __Block0_val__Block1_val;
-uint32_t *const Block0_val__Block1_val_lock= LOCKSADDR+0x0;
+uint32_t const Block0_val__Block1_val_lock LOCK0;
 struct mwmr_status_s Block0_val__Block1_val_status CHANNEL0=  MWMR_STATUS_INITIALIZER(1, 1);
-uint8_t Block0_val__Block1_val_data[32*2];
-struct mwmr_s Block0_val__Block1_val CHANNEL0= MWMR_INITIALIZER(1, 1, Block0_val__Block1_val_data,&Block0_val__Block1_val_status,"Block0_val__Block1_val",Block0_val__Block1_val_lock);
+uint8_t Block0_val__Block1_val_data[32] CHANNEL0;
+struct mwmr_s Block0_val__Block1_val CHANNEL0= MWMR_INITIALIZER(1, 1, Block0_val__Block1_val_data,&Block0_val__Block1_val_status,"Block0_val__Block1_val",&Block0_val__Block1_val_lock);
 
 
 int main(int argc, char *argv[]) {
@@ -64,6 +63,11 @@ int main(int argc, char *argv[]) {
   __Block0_val__Block1_val.isBlocking = 0;
   __Block0_val__Block1_val.maxNbOfMessages = 1;
   __Block0_val__Block1_val.mwmr_fifo = &Block0_val__Block1_val;
+  Block0_val__Block1_val.status =&Block0_val__Block1_val_status;
+  Block0_val__Block1_val.status->lock=0;
+  Block0_val__Block1_val.status->rptr=0;
+  Block0_val__Block1_val.status->usage=0;
+  Block0_val__Block1_val.status->wptr=0;
   
   /* Threads of tasks */
   pthread_t thread__Block1;

@@ -126,14 +126,20 @@ else{
 	
       // There can be an arbitrary number of RAMS (at least one, RAM0 is distinguished) and TTY	
 	
-		if(nb_clusters==0){
-		    declaration += "caba::VciRam<vci_param>mwmr_ram(\"mwmr_ram\",IntTab("+(TopCellGenerator.avatardd.getNb_target()+3)+"),maptab);" + CR2; 
-		    declaration += "caba::VciRam<vci_param>mwmrd_ram(\"mwmrd_ram\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+4)+"),maptab);" + CR2; 
-}
 		    	
 		    if(nb_clusters==0){
+			int i=0;
 	 for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()){
-		    declaration += "caba::VciMultiTty<vci_param> " + tty.getTTYName()+ "(\"" + tty.getTTYName()+ "\", IntTab(" + tty.getNo_target()+ "), maptab, \"vci_multi_tty"+"\", NULL);"+ CR;}
+		    declaration += "caba::VciMultiTty<vci_param> " + tty.getTTYName()+ "(\"" + tty.getTTYName()+ "\", IntTab(" + tty.getNo_target()+ "), maptab, \"vci_multi_tty"+i+"\", NULL);"+ CR;
+		    i++;
+}
+
+	 //target address depends on number of TTYs
+	if(nb_clusters==0){
+		    declaration += "caba::VciRam<vci_param>mwmr_ram(\"mwmr_ram\",IntTab("+(TopCellGenerator.avatardd.getNb_target()+3+i)+"),maptab);" + CR2; 
+		    declaration += "caba::VciRam<vci_param>mwmrd_ram(\"mwmrd_ram\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+4+i)+"),maptab);" + CR2; 
+}
+	
 
 	 for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) 
 	     if(ram.getNo_ram()==0){
@@ -145,8 +151,10 @@ else{
 	     }
 	     }
 		else{
+		    int i=0;
  for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()){
-		    declaration += "caba::VciMultiTty<vci_param> " + tty.getTTYName()+ "(\"" + tty.getTTYName()+ "\", IntTab("+ tty.getNo_cluster()+"," + tty.getNo_target()+ "), maptab, \"vci_multi_tty"+"\", NULL);"+ CR;}
+		    declaration += "caba::VciMultiTty<vci_param> " + tty.getTTYName()+ "(\"" + tty.getTTYName()+ "\", IntTab("+ tty.getNo_cluster()+"," + tty.getNo_target()+ "), maptab, \"vci_multi_tty"+i+"\", NULL);"+ CR;
+		    i++;}
 
 	 for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) 
 	     declaration += "soclib::caba::VciRam<vci_param>" + ram.getMemoryName()+ "(\"" + ram.getMemoryName()+ "\"" + ", IntTab("+ram.getNo_cluster()+","
@@ -265,7 +273,7 @@ if(nb_clusters==0){
 	  }
 
           bus.setNbOfAttachedInitiators(1); 
-          bus.setnbOfAttachedTargets(6);
+          bus.setnbOfAttachedTargets(6);	  
   }	
 
          for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
