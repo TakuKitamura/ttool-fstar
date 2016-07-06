@@ -195,7 +195,7 @@ public class AvatarStateMachine extends AvatarElement {
     // Add missing implicit states.
     public void makeFullStates(AvatarBlock _block) {
         addStatesToTransitionsBetweenTwoNonStates(_block);
-        addStatesToTransitionsWithActions(_block);
+        addStatesToNonEmptyTransitions(_block);
     }
 
 
@@ -220,10 +220,10 @@ public class AvatarStateMachine extends AvatarElement {
                         AvatarTransition at1 = new AvatarTransition(_block, "TransitionForIntermediateState__" + id, elt.getReferenceObject());
                         toAdd.add(at1);
 
-                        tr.removeAllNexts();
-                        tr.addNext(state);
-                        state.addNext(at1);
-                        at1.addNext(next);
+			
+                        previous.removeAllNexts();
+                        previous.addNext(state);
+                        state.addNext(tr);
 
                         id ++;
                     }
@@ -243,7 +243,7 @@ public class AvatarStateMachine extends AvatarElement {
 
     // Then, handling transitions with actions which have a non state
     // before
-    private void addStatesToTransitionsWithActions(AvatarBlock _block) {
+    private void addStatesToNonEmptyTransitions(AvatarBlock _block) {
         AvatarStateMachineElement next;
         AvatarStateMachineElement previous;
         ArrayList<AvatarStateMachineElement> toAdd = new ArrayList<AvatarStateMachineElement>();
@@ -253,7 +253,7 @@ public class AvatarStateMachine extends AvatarElement {
                 AvatarTransition tr = (AvatarTransition)elt;
 
                 // tr with actions?
-                if (tr.getNbOfAction() > 0) {
+                if ((tr.getNbOfAction() > 0) || (tr.hasDelay()) || (tr.isGuarded())){
                     previous = getPreviousElementOf(elt);
                     next = elt.getNext(0);
 

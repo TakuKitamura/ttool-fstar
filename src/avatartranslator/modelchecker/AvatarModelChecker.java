@@ -246,7 +246,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
 
-        //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
+        TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
         prepareStates();
         prepareTransitions();
 
@@ -486,7 +486,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             SpecificationTransition st = null;
             // See whether there is at least one transition with an immediate internal action with no alternative in the same block
             for(SpecificationTransition tr: transitions) {
-                if ((AvatarTransition.isActionType(tr.getType()) && (tr.clockMax ==  clockMin))|| tr.getType() == AvatarTransition.TYPE_EMPTY) {
+                if ((AvatarTransition.isActionType(tr.getType()) && (tr.clockMin == tr.clockMax) && (tr.clockMin == 0)) || tr.getType() == AvatarTransition.TYPE_EMPTY) {
                     // Must look for similar transitions in the the same block
                     //TraceManager.addDev("Lookin for same block for " + tr);
                     boolean foundSameBlock = false;
@@ -985,6 +985,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         //TraceManager.addDev("Handling Empty transition of previous= 3 " + _ase.getName() + " trans=" + at.getName());
 
+	// Check time
+	boolean hasTime = at.hasDelay();
+	if (hasTime)  {
+	    return _ase;
+	}
+			 
+	
         // Check guard;
         boolean guard = guardResult(at, _block, _sb);
 
@@ -992,7 +999,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             return _ase;
         }
 
-        //TraceManager.addDev("Handling Empty transition of previous= 4 " + _ase.getName() + " trans=" + at.getName());
+        //TraceManager.addDev("Handling Empty transition of previous= 4 " + _ase.getName() + " trans=" + at.getName() + " delay=" + at.getMinDelay());
 
 
         AvatarStateElement ase = (AvatarStateElement)(at.getNext(0));
