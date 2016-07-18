@@ -120,7 +120,7 @@ public class IconManager {
 
     // TMLDD
     public static ImageIcon imgic1100, imgic1102, imgic1104, imgic1106, imgic1108;
-    public static ImageIcon imgic1110, imgic1112, imgic1114, imgic1116;
+    public static ImageIcon imgic1110, imgic1112, imgic1114, imgic1116, imgic1118;
 
     // TML component task diagram
     public static ImageIcon imgic1200, imgic1202, imgic1204, imgic1206, imgic1208;
@@ -475,6 +475,7 @@ public class IconManager {
     private static String icon1106 = "images/tmlhwanode.gif";
     private static String icon1108 = "images/tmlmemorynode.gif";
     private static String icon1110 = "images/tmldmanode.gif";
+    private static String icon1118 = "images/tmlkey.gif";
     // For ADD
     private static String icon1112 = "images/tmlicunode.gif";
     private static String icon1114 = "images/tmlcopromwmrnode.gif";
@@ -883,6 +884,7 @@ public class IconManager {
         imgic1112 = getIcon(icon1112);
         imgic1114 = getIcon(icon1114);
         imgic1116 = getIcon(icon1116);
+        imgic1118 = getIcon(icon1118);
 
         imgic1200 = getIcon(icon1200);
         imgic1202 = getIcon(icon1202);

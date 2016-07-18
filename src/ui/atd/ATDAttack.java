@@ -179,7 +179,6 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
                 setValue(value, g);
             }
         }
-
         // Core of the attack
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
@@ -208,7 +207,6 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 
             boolean cannotWriteAttack = (height < (2 * currentFontSize + (int)(textY1 * tdp.getZoom())));
             //TraceManager.addDev("Zoom=" + tdp.getZoom() + " Cannot write attack=" + cannotWriteAttack + "Font=" + f0);
-
             if (cannotWriteAttack) {
                 w  = g.getFontMetrics().stringWidth(value);
                 int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
@@ -236,6 +234,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
                     //TraceManager.addDev("Drawing value=" + value);
                     g.drawString(value, x + (width - w)/2, y + h);
                 } else {
+		    g.drawString(value, x + (width - w)/2, y + h);
                     //TraceManager.addDev("--------------------------------------------------- Cannot draw value=" + value);
                     //TraceManager.addDev("w=" + w + " val=" + (2*textX + width) + "h=" + h + " height=" + height + " zoom=" + tdp.getZoom() + " Font=" + f0);
                 }
@@ -252,7 +251,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 	    
 	    
         } else {
-            //TraceManager.addDev("-------------------------------------------------- Cannot display text of attack");
+            TraceManager.addDev("-------------------------------------------------- Cannot display text of attack");
         }
 
         g.setFont(fold);

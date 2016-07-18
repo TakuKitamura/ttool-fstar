@@ -250,6 +250,7 @@ public class TGComponentManager {
     public static final int TMLARCHI_CPNODE = 1108;
     public static final int TMLARCHI_EVENT_ARTIFACT = 1109;
     public static final int TMLARCHI_PORT_ARTIFACT = 1110;
+    public static final int TMLARCHI_KEY = 1111;
 
     public static final int TMLCTD_CCOMPONENT = 1200;
     public static final int TMLCTD_CPORT = 1201;
@@ -1120,7 +1121,9 @@ public class TGComponentManager {
         case TMLARCHI_EVENT_ARTIFACT:
             tgc = new TMLArchiEventArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-
+        case TMLARCHI_KEY:
+            tgc = new TMLArchiKey(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
 
             // Communication patterns + SD
         case TMLCP_CHOICE:
@@ -1780,6 +1783,8 @@ public class TGComponentManager {
             return TMLARCHI_PORT_ARTIFACT;
         } else if (tgc instanceof TMLArchiEventArtifact) {
             return TMLARCHI_EVENT_ARTIFACT;
+        } else if (tgc instanceof TMLArchiKey) {
+            return TMLARCHI_KEY;
 
             // Communication patterns
         } else if (tgc instanceof TMLCPChoice) {

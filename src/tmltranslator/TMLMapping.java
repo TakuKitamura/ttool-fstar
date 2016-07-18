@@ -65,7 +65,7 @@ public List<String> securityPatterns = new ArrayList<String>();
 
     private ArrayList<TMLCP> mappedCPs;
     private ArrayList<TMLElement> commEltsMappedOnCPs;
-
+    public HashMap<SecurityPattern, ArrayList<HwMemory>> mappedSecurity= new HashMap<SecurityPattern, ArrayList<HwMemory>>(); 
     private ArrayList<TMLCPLib> mappedCPLibs;
 
     private ArrayList<String[]> pragmas= new ArrayList<String[]>();
@@ -101,6 +101,19 @@ public List<String> securityPatterns = new ArrayList<String>();
 	TML2ProVerif spec = new TML2ProVerif(this);
     }
 
+    public ArrayList<HwMemory> getMappedMemory(SecurityPattern sp){
+	return mappedSecurity.get(sp);
+    }
+
+    public ArrayList<SecurityPattern> getMappedPatterns(HwMemory mem){
+	ArrayList<SecurityPattern> l = new ArrayList<SecurityPattern>();
+	for (SecurityPattern sp: mappedSecurity.keySet()){
+	    if (mappedSecurity.get(sp).contains(mem)){
+		l.add(sp);
+	    }
+	}
+	return l;
+    }
     public void makeMinimumMapping() {
         HwCPU cpu;
         HwMemory mem;

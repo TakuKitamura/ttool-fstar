@@ -232,7 +232,7 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
 	String[] allOutChannels = tdp.getMGUI().getAllOutChannels();
 	help.add(allOutChannels);
 	help.add(null);
-	help.add(tdp.getMGUI().getAllCryptoConfig());
+	help.add(tdp.getMGUI().getCurrentCryptoConfig());
 
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
 	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 3, labels, values, help);
@@ -310,6 +310,9 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
 
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_TMLAD;
+    }
+    public String getChannelName(){
+	return channelName;
     }
 
     public void setStateAction(int _stateAction) {

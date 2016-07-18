@@ -119,7 +119,7 @@ public boolean editOndoubleClick(JFrame frame) {
 	values[0] = securityContext;
 	
 	ArrayList<String []> help = new ArrayList<String []>();
-	help.add(tdp.getMGUI().getAllCryptoConfig());
+	help.add(tdp.getMGUI().getCurrentCryptoConfig());
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
 	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 1, labels, values,help);
         jdms.setSize(450, 300);

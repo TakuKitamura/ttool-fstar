@@ -201,6 +201,9 @@ public class TML2AvatarDP {
     public void translate() {
 	TML2Avatar tml2av = new TML2Avatar(tmlmap);
 	//Create AvatarDesignDiagram
+	if (adp ==null){
+	    return;
+	}
 	AvatarBDPanel abd = adp.abdp;
 	AvatarSpecification avspec = tml2av.generateAvatarSpec("1");
 	//Find all blocks, create blocks from left

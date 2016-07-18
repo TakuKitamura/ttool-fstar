@@ -115,6 +115,15 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
         }
         return v;
     }
+    public ArrayList<TMLArchiKey> getKeyList(){
+	ArrayList<TMLArchiKey> v = new ArrayList<TMLArchiKey>();
+        for( int i = 0; i < nbInternalTGComponent; i++ ) {
+            if( tgcomponent[i] instanceof TMLArchiKey )       {
+                v.add( (TMLArchiKey)( tgcomponent[i]) );
+            }
+        }
+        return v;
+    }
 
     public ArrayList<TMLArchiEventArtifact> getEventArtifactList() {
 

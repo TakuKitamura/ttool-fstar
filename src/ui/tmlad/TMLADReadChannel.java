@@ -226,7 +226,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
 	String[] allInChannels = tdp.getMGUI().getAllInChannels();
 	help.add(allInChannels);
 	help.add(null);
-	help.add(tdp.getMGUI().getAllCryptoConfig());
+	help.add(tdp.getMGUI().getCurrentCryptoConfig());
 
 
        // JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);

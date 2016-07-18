@@ -391,6 +391,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 TraceManager.addDev("Painting " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY());
                 tgc.draw(g);
             }
+	    else {
+	        TraceManager.addDev("Ignoring " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY()); 
+	    }
         }
     }
 
@@ -3123,7 +3126,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         TraceManager.addDev("Painting for svg done");
         sb.append(svgg.getSVGString());
         RepaintManager.currentManager(this).setDoubleBufferingEnabled(true);
-
+	
         sb.append("</svg>");
 
 

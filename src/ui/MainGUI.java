@@ -3772,8 +3772,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         String name =  getCurrentTDiagramPanel().getName();
         return tmlcomp.getAllInChannels(name);
     }
+    public Vector<String> getAllCryptoConfig(){
+	TURTLEPanel tp;
+        Vector<String> list = new Vector<String>();
 
-    public String[] getAllCryptoConfig() {
+        for(int i=0; i<tabs.size(); i++) {
+            tp = (TURTLEPanel)(tabs.elementAt(i));
+            if (tp instanceof TMLComponentDesignPanel) {
+		for (String s: ((TMLComponentDesignPanel)tp).getAllCryptoConfig()){
+		     list.add(mainTabbedPane.getTitleAt(i)+"::"+s);
+		}
+            }
+        }
+        return list;
+    }
+    public String[] getCurrentCryptoConfig() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {return null;}
         if (!(tp instanceof TMLComponentDesignPanel)) {return null;}
@@ -7160,7 +7173,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
 
     }
-
+    public void cloneRenameTab(int index, String s){
+	cloneTab(index);
+	mainTabbedPane.setTitleAt(tabs.size()-1, mainTabbedPane.getTitleAt(index)+"_"+s);
+    }
     public void requestRemoveTab(int index) {
         if (index >= tabs.size()) {
             return;
@@ -8716,6 +8732,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_ARTIFACT);
         } else if (command.equals(actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_COMMUNICATION_ARTIFACT);
+        } else if (command.equals(actions[TGUIAction.TMLARCHI_KEY].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_KEY);
         } else if (command.equals(actions[TGUIAction.TMLARCHI_PORT_ARTIFACT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_PORT_ARTIFACT);
 

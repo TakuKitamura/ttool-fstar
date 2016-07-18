@@ -66,7 +66,7 @@ public class TMLModeling {
     public ArrayList<SecurityPattern> secPatterns = new ArrayList<SecurityPattern>();
     private boolean optimized = false;
     public HashMap<String, String> secChannelMap = new HashMap<String, String>();
-
+    public HashMap<SecurityPattern, ArrayList<TMLTask>> securityTaskMap = new HashMap<SecurityPattern, ArrayList<TMLTask>>();
     private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ","};
 
     private int hashCode;
@@ -82,7 +82,19 @@ public class TMLModeling {
             DIPLOElement.resetID();
         }
     }
-
+    public void addSec(SecurityPattern sp){
+	if (!secPatterns.contains(sp)){
+	    secPatterns.add(sp);
+	}
+    }
+    public SecurityPattern getSecurityPattern(String s){
+	for (SecurityPattern sp:secPatterns){
+	    if (sp.name.equals(s)){
+		return sp;
+	    }
+	}
+	return null;
+    }
     public TMLMapping getDefaultMapping() {
         TMLMapping tmlmapping;
         tmlmapping = new TMLMapping(this, new TMLArchitecture(), false);
@@ -1095,6 +1107,8 @@ public class TMLModeling {
         events.addAll(tmlm.getEvents());
         requests.addAll(tmlm.getRequests());
         tasks.addAll(tmlm.getTasks());
+	secPatterns.addAll(tmlm.secPatterns);
+	securityTaskMap.putAll(tmlm.securityTaskMap);
     }
 
     // Elements with same names are not duplicated
@@ -1127,6 +1141,12 @@ public class TMLModeling {
 	for (String s: tmlm.securityPatterns){
 	    securityPatterns.add(s);
 	}
+	for (SecurityPattern sp: tmlm.secPatterns){
+	    if (!secPatterns.contains(sp)){
+	        secPatterns.add(sp);
+	    }
+	}
+	securityTaskMap.putAll(tmlm.securityTaskMap);
     }
 
 
