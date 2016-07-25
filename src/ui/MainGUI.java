@@ -660,6 +660,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_SAVE_TIF].setEnabled(true);
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(true);
+	    actions[TGUIAction.ACT_DSE].setEnabled(true);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);
             actions[TGUIAction.ACT_GEN_JAVA].setEnabled(true);
             actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(true);
@@ -735,6 +736,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_SAVE].setEnabled(true);
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(false);
+            actions[TGUIAction.ACT_DSE].setEnabled(false);
             actions[TGUIAction.ACT_GEN_JAVA].setEnabled(false);
             actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(false);
             actions[TGUIAction.ACT_GEN_DESIGN].setEnabled(false);
@@ -759,6 +761,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         case METHO_CHANGED:
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(false);
+	    actions[TGUIAction.ACT_DSE].setEnabled(false);
             actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
             actions[TGUIAction.ACT_SIMULATION].setEnabled(false);
             actions[TGUIAction.ACT_VALIDATION].setEnabled(false);
@@ -779,6 +782,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         case PANEL_CHANGED:
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(false);
+	    actions[TGUIAction.ACT_DSE].setEnabled(false);
             actions[TGUIAction.ACT_GEN_JAVA].setEnabled(false);
             actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(false);
             actions[TGUIAction.ACT_GEN_DESIGN].setEnabled(false);
@@ -4114,6 +4118,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         jgen.setVisible(true);
         dtree.toBeUpdated();
     }
+    
+    public void dse(){
+	TraceManager.addDev("Design space exploration");
+	JDialogDSE jdse= new JDialogDSE(frame, this, "Design Space Exploration");
+	jdse.setSize(500,450);
+        GraphicLib.centerOnParent(jdse);
+        jdse.setVisible(true);
+	dtree.toBeUpdated();
+    }
 
     public void avatarStaticAnalysis() {
         TraceManager.addDev("Avatar static analysis invariants");
@@ -4237,6 +4250,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
           }
           }*/
     }
+
 
     public LinkedList generateAllAUT(String path) {
         return gtm.generateAUT(path);
@@ -8083,6 +8097,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             generateUPPAAL();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_PROVERIF].getActionCommand())) {
             generateProVerif();
+        } else if (command.equals(actions[TGUIAction.ACT_DSE].getActionCommand())) {
+            dse();
         } else if (command.equals(actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].getActionCommand())) {
             avatarModelChecker();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_JAVA].getActionCommand())) {

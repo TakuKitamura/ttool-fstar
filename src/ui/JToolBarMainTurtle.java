@@ -62,7 +62,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif, avatarFVStaticAnalysis, avatarCodeGeneration, avatarMC;
 
     // Other
-    JButton genrtlotos, genlotos, genuppaal, gendesign;
+    JButton genrtlotos, genlotos, genuppaal, gendesign, dse;
     JButton checkcode, simulation, validation;
     JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genC, genjava, nc,externalSearch, internalSearch;
 
@@ -149,6 +149,10 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
         avatarSimu = add(mgui.actions[TGUIAction.ACT_AVATAR_SIM]);
         avatarSimu.addMouseListener(mgui.mouseHandler);
+
+
+	dse = add(mgui.actions[TGUIAction.ACT_DSE]);
+	dse.addMouseListener(mgui.mouseHandler);
 
         addSeparator();
 
@@ -312,6 +316,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     public void showAvatarActions(boolean b) {
 
         //TraceManager.addDev("Show avatar options with b = " + b);
+	dse.setVisible(!b);
 
         avatarSimu.setVisible(b);
         avatarFVUPPAAL.setVisible(b);
@@ -388,6 +393,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
         TraceManager.addDev("Show diplodocus options with b = " + b);
 
+	dse.setVisible(b);
         avatarSimu.setVisible(!b);
         avatarFVUPPAAL.setVisible(!b);
         if (avatarFVProVerif != null) {

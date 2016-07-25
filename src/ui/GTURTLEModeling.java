@@ -636,6 +636,265 @@ public class GTURTLEModeling {
     public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed){
 	return generateProVerifFromAVATAR(_path, _stateReachability, _typed, "1");
     }
+    public void autoSecure(MainGUI gui){
+	HashMap<TMLTask, java.util.List<TMLTask>> toSecure = new HashMap<TMLTask, java.util.List<TMLTask>>();
+	HashMap<TMLTask, java.util.List<String>> insecureOutChannels = new HashMap<TMLTask, java.util.List<String>>();
+	HashMap<TMLTask, java.util.List<String>> insecureInChannels = new HashMap<TMLTask, java.util.List<String>>();
+	for (TMLTask t: tmap.getTMLModeling().getTasks()){
+	    java.util.List<String> tmp = new ArrayList<String>();
+	    java.util.List<String> tmp2 = new ArrayList<String>();
+	    insecureInChannels.put(t, tmp);
+	    insecureOutChannels.put(t, tmp2);
+	}
+	int num=0;
+	java.util.List<TMLChannel> channels = tmap.getTMLModeling().getChannels();
+	for (TMLChannel channel: channels){
+	    for (TMLCPrimitivePort p: channel.ports){
+	        channel.checkConf = channel.checkConf || p.checkConf;
+		channel.checkAuth = channel.checkAuth || p.checkAuth;
+	    }
+	}
+	for (TMLChannel chan: channels){
+	    if (chan.checkConf){
+	    	if (!securePath(chan.getOriginTask(), chan.getDestinationTask())){
+		    insecureOutChannels.get(chan.getOriginTask()).add(chan.getName().split("__")[1]);
+		    insecureInChannels.get(chan.getDestinationTask()).add(chan.getName().split("__")[1]);
+		    if (!toSecure.containsKey(chan.getOriginTask())){
+			java.util.List<TMLTask> tmp = new ArrayList<TMLTask>();
+			tmp.add(chan.getDestinationTask());
+			toSecure.put(chan.getOriginTask(), tmp);
+		    }
+		    else {
+			toSecure.get(chan.getOriginTask()).add(chan.getDestinationTask());
+		    }
+	    	}
+	    }
+	}
+
+	//Create clone of architecture panel and map tasks to it
+	
+
+
+
+	//Create clone of Component Diagram + Activity diagrams to secure
+
+	TMLComponentDesignPanel tmlcdp = tmap.getTMLCDesignPanel();
+	int ind = gui.tabs.indexOf(tmlcdp);
+	String tabName = gui.getTitleAt(tmlcdp);
+	gui.cloneRenameTab(ind, "enc");
+	int arch = gui.tabs.indexOf(tmap.tmlap);
+	gui.cloneRenameTab(arch,"enc");
+	TMLComponentDesignPanel t = (TMLComponentDesignPanel) gui.tabs.get(gui.tabs.size()-2);
+	TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
+	newarch.renameMapping(tabName, tabName+"_enc");
+	for (TMLTask task:toSecure.keySet()){
+	    TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel(task.getName());
+	    //Get start state position, shift everything down 
+	    int xpos=0;
+	    int ypos=0;
+	    TGConnector fromStart= new TGConnectorTMLAD(0, 0, 0, 0, 0, 0, false, null, tad, null, null, new Vector());
+	    TGConnectingPoint point = new TGConnectingPoint(null, 0, 0, false, false);
+	    for (TGComponent tg: tad.getComponentList()){
+		if (tg instanceof TMLADStartState){
+		    xpos = tg.getX();
+		    ypos = tg.getY();
+		    fromStart = tad.findTGConnectorUsing(tg.getTGConnectingPointAtIndex(0));
+		    if (fromStart!=null){
+			point = fromStart.getTGConnectingPointP2();
+		    } 
+		}
+		
+	    }
+	
+	   
+	    int yShift=insecureOutChannels.size()*60;
+	    for (String channel: insecureOutChannels.get(task)){
+		ypos+=60;
+	    	TMLADEncrypt enc = new TMLADEncrypt(xpos+5, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+	    	enc.securityContext = "autoEncrypt_"+channel;
+	    	enc.type = "Symmetric Encryption";
+	    	enc.message_overhead = "100";
+	    	tad.addComponent(enc, xpos ,ypos, false, true);
+
+		fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
+		fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+		tad.addComponent(fromStart, xpos, ypos, false, true);
+		fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
+	    }
+	    if (insecureOutChannels.get(task).size()>0 && fromStart!=null){
+		fromStart.setP2(point);
+	    }
+	    for (TGComponent tg:tad.getComponentList()){
+		if (tg instanceof TMLADWriteChannel){
+		    TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
+		    TraceManager.addDev("Inspecting channel " + writeChannel.getChannelName());
+		    if (insecureOutChannels.get(task).contains(writeChannel.getChannelName()) && writeChannel.securityContext.equals("")){
+			TraceManager.addDev("Securing channel " + writeChannel.getChannelName());
+		        writeChannel.securityContext = "autoEncrypt_"+writeChannel.getChannelName();
+			tad.repaint();
+		    }
+		}
+		if (!(tg instanceof TMLADStartState) && !(tg instanceof TMLADEncrypt)){
+		    tg.setCd(tg.getX(), tg.getY()+yShift);
+		}
+	    }
+	    for (TMLTask task2: toSecure.get(task)){
+		TMLActivityDiagramPanel tad2 = t.getTMLActivityDiagramPanel(task2.getName());
+		for (TGComponent tg:tad2.getComponentList()){
+		    if (tg instanceof TMLADReadChannel){
+			TMLADReadChannel readChannel = (TMLADReadChannel) tg;
+			TraceManager.addDev("Inspecting channel " + readChannel.getChannelName());
+			if (insecureInChannels.get(task2).contains(readChannel.getChannelName()) && readChannel.securityContext.equals("")){
+			    TraceManager.addDev("Securing channel " + readChannel.getChannelName());
+			    readChannel.securityContext = "autoEncrypt_"+readChannel.getChannelName();
+			    tad2.repaint();
+			}
+		    }
+		}
+	    }
+
+	}
+
+    }
+    public boolean securePath(TMLTask t1, TMLTask t2){
+	//Check if a path between two tasks is secure
+	boolean secure=true;
+	java.util.List<HwLink> links = tmap.getTMLArchitecture().getHwLinks();
+	HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t1);
+	HwExecutionNode node2 = (HwExecutionNode) tmap.getHwNodeOf(t2);
+	java.util.List<HwNode> found = new ArrayList<HwNode>();	
+	java.util.List<HwNode> done = new ArrayList<HwNode>();
+	java.util.List<HwNode> path = new ArrayList<HwNode>();
+	Map<HwNode, java.util.List<HwNode>> pathMap = new HashMap<HwNode, java.util.List<HwNode>>();
+	if (node1==node2){
+	    return true;
+	}
+	for (HwLink link: links){
+	    if (link.hwnode == node1){
+		found.add(link.bus);
+		java.util.List<HwNode> tmp = new ArrayList<HwNode>();
+		tmp.add(link.bus);
+		pathMap.put(link.bus, tmp);
+	    }
+	}
+	outerloop:
+	while (found.size()>0){
+	    HwNode curr = found.remove(0);
+	    for (HwLink link: links){
+	        if (curr == link.bus){
+	    	    if (link.hwnode == node2){
+	      		path = pathMap.get(curr);
+	      		break outerloop;
+	    	    }
+	    	    if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+	      		found.add(link.hwnode);
+	      		java.util.List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+	      		tmp.add(link.hwnode);
+	      		pathMap.put(link.hwnode, tmp);
+	    	    }
+	  	}
+	        else if (curr == link.hwnode){
+	      	    if (!done.contains(link.bus) && !found.contains(link.bus)){
+	        	found.add(link.bus);
+	        	java.util.List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+	        	tmp.add(link.bus);
+	        	pathMap.put(link.bus, tmp);
+	      	    }
+	  	}
+	    }
+	    done.add(curr);
+	}
+	if (path.size() ==0){
+	    return true;
+	}
+	else {
+	    HwBus bus;
+	    //Check if all buses and bridges are private
+	    for (HwNode n: path){
+		if (n instanceof HwBus){
+		    bus = (HwBus) n;
+	   	    if (bus.privacy ==0){
+			return false;
+	   	    }
+	        }
+	    }
+	}
+	return secure;
+    }
+    public void autoMapKeys(){
+	java.util.List<HwLink> links = tmap.getArch().getHwLinks();
+	//Find all Security Patterns, if they don't have an associated memory at encrypt and decrypt, map them
+	for (SecurityPattern sp: tmlm.securityTaskMap.keySet()){
+	    if (sp.type.contains("Encryption") || sp.type.equals("MAC")){
+		TraceManager.addDev("Finding security "+sp);
+		for (TMLTask t:tmlm.securityTaskMap.get(sp)){
+		    ArrayList<HwMemory> mems = new ArrayList<HwMemory>();
+		    boolean keyFound=false;
+		    HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t);
+	   	//Try to find memory using only private buses
+	    	    java.util.List<HwNode> toVisit = new ArrayList<HwNode>();
+	    	    java.util.List<HwNode> toMemory = new ArrayList<HwNode>();
+	    	    java.util.List<HwNode> complete = new ArrayList<HwNode>();
+	    	    for (HwLink link:links){
+			if (link.hwnode==node1){
+		    	    if (link.bus.privacy==1){
+		        	toVisit.add(link.bus);
+		    	    }
+			}
+		    }
+	   	    memloop:
+		    while (toVisit.size()>0){
+		    	HwNode curr = toVisit.remove(0);
+			for (HwLink link: links){
+		    	    if (curr == link.bus){
+	     	        	if (link.hwnode instanceof HwMemory){
+			    	    mems.add((HwMemory) link.hwnode);
+			    	    ArrayList<SecurityPattern> patterns = tmap.getMappedPatterns((HwMemory) link.hwnode);
+				    String patternString= "";
+				    for (SecurityPattern pattern: patterns){
+					if (pattern.name.equals(sp.name)){
+					    keyFound=true;	
+					    break memloop;
+				        }
+					patternString += pattern.name;
+					patternString += " ";
+				    }
+				    TraceManager.addDev("Memory "+ link.hwnode.getName() + " has currently mapped: " + patternString);
+				}
+			    	if (!complete.contains(link.hwnode) && !toVisit.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+			    	    toVisit.add(link.hwnode);
+			        }
+		    	    }
+		    	    else if (curr == link.hwnode){
+				if (!complete.contains(link.bus) && !toVisit.contains(link.bus)){
+			    	    toVisit.add(link.bus);
+				}
+	  	    	    }
+	        	}
+	    		complete.add(curr);
+	    	    }
+	    	    if (!keyFound){
+			if (mems.size()>0){
+			    TMLArchiMemoryNode memNode= (TMLArchiMemoryNode) listE.getTG(mems.get(0));
+			    TMLArchiKey key = new TMLArchiKey(memNode.x, memNode.y, memNode.tdp.getMinX(), memNode.tdp.getMaxX(), memNode.tdp.getMinY(), memNode.tdp.getMaxY(), false, memNode, memNode.tdp);
+			    key.setReferenceKey(sp.name);
+			    key.makeFullValue();
+			    TraceManager.addDev("Adding " +sp.name+ " key to " +memNode.getName());
+			    TraceManager.addDev("Adding " +sp + " key to " +memNode.getName());
+			    memNode.tdp.addComponent(key, memNode.x, memNode.y, true,true);
+			    memNode.tdp.repaint();
+			}
+			else {
+			    CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Cannot map key in memory for " + sp.name + " on task " + t.getName());
+                            ce.setTDiagramPanel(tmap.tmlap.tmlap);
+                    	    ce.setTGComponent(null);
+                    	    checkingErrors.add(ce);
+			}
+	    	    }
+		}
+	    }
+	}	
+    }
     public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed, String loopLimit) {
 	if (avatarspec !=null){
 	     //use avspec

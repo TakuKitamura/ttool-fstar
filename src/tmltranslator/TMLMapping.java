@@ -74,6 +74,7 @@ public List<String> securityPatterns = new ArrayList<String>();
     private int hashCode;
     private boolean hashCodeComputed = false;
     private TMLComponentDesignPanel tmldp;
+    public TMLArchiPanel tmlap;
     public TMLMapping(TMLModeling _tmlm, TMLArchitecture _tmla, boolean reset) {
 
         tmlm = _tmlm;
@@ -97,6 +98,9 @@ public List<String> securityPatterns = new ArrayList<String>();
         }
     }
 
+    public TMLArchitecture getArch(){
+	return tmla;
+    }
     public void translate2ProVerif(){
 	TML2ProVerif spec = new TML2ProVerif(this);
     }
