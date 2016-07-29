@@ -4121,7 +4121,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     
     public void dse(){
 	TraceManager.addDev("Design space exploration");
-	JDialogDSE jdse= new JDialogDSE(frame, this, "Design Space Exploration");
+	JDialogDSE jdse= new JDialogDSE(frame, this, "Design Space Exploration", ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.TMLCodeDirectory);
 	jdse.setSize(500,450);
         GraphicLib.centerOnParent(jdse);
         jdse.setVisible(true);

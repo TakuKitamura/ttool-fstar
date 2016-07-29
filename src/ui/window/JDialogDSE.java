@@ -55,11 +55,10 @@ import java.util.*;
 import java.io.*;
 
 import myutil.*;
-import avatartranslator.toproverif.*;
 import avatartranslator.*;
-import proverifspec.*;
+import tmltranslator.*;
 import ui.*;
-
+import dseengine.*;
 import launcher.*;
 
 
@@ -83,9 +82,22 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     protected JButton start;
     protected JButton stop;
     protected JButton close;
-
+    String simulator;
+   
     protected JCheckBox autoSecure;
-
+    protected JTextField tmlDirectory, mappingFile, modelFile, simulationThreads, resultsDirectory, simulationCycles, minCPU, maxCPU, simulationsPerMapping;
+    protected JTextArea outputText;
+    protected String output = "";
+    String tmlDir;
+    String mapFile = "spec.tmap";
+    String modFile = "spec.tml";
+    String resDirect;
+    String simThreads="1000";
+    String simCycles="1000";
+    String NbMinCPU ="1";
+    String NbMaxCPU ="1";
+    String Nbsim ="1";
+    protected JTabbedPane jp1;
     private Thread t;
     private boolean go = false;
     private boolean hasError = false;
@@ -97,13 +109,13 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 
 
     /** Creates new form  */
-    public JDialogDSE(Frame f, MainGUI _mgui, String title) {
+    public JDialogDSE(Frame f, MainGUI _mgui, String title, String _simulator, String dir) {
         super(f, title, true);
 
         mgui = _mgui;
-
- 
-
+	simulator=_simulator;
+ 	tmlDir = dir+"/";
+	resDirect = _simulator + "results/";
         initComponents();
         myInitComponents();
         pack();
@@ -123,13 +135,13 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+        jp1 = new JTabbedPane();
 
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
         GridBagConstraints c01 = new GridBagConstraints();
         jp01.setLayout(gridbag01);
-        jp01.setBorder(new javax.swing.border.TitledBorder("Code generation"));
+        jp01.setBorder(new javax.swing.border.TitledBorder("Automated Security"));
 
     
         c01.weighty = 1.0;
@@ -141,7 +153,99 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         //genJava.addActionListener(this);
 	autoSecure= new JCheckBox("Add security");
         jp01.add(autoSecure, c01);
-	c.add(jp01, BorderLayout.NORTH);
+	
+	jp1.add("Automated Security", jp01);
+
+	JPanel jp03 = new JPanel();
+ 	GridBagLayout gridbag03 = new GridBagLayout();
+        GridBagConstraints c03 = new GridBagConstraints();
+        jp03.setLayout(gridbag03);
+        jp03.setBorder(new javax.swing.border.TitledBorder("Mapping Exploration"));
+
+
+
+	c03.weighty = 1.0;
+        c03.weightx = 1.0;
+        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c03.fill = GridBagConstraints.BOTH;
+        c03.gridheight = 1;
+		
+	jp03.add(new JLabel("Directory of TML specification files"),c03);
+	tmlDirectory = new JTextField(tmlDir);
+	jp03.add(tmlDirectory, c03);
+	
+	jp03.add(new JLabel("Mapping File name (.tmap)"),c03);
+	mappingFile = new JTextField(mapFile);
+	jp03.add(mappingFile,c03);
+	
+	jp03.add(new JLabel("Modeling File name (.tmap)"),c03);
+	modelFile = new JTextField(modFile);
+	jp03.add(modelFile,c03);
+
+	
+	jp03.add(new JLabel("Number of Simulation Threads"),c03);
+	simulationThreads = new JTextField(simThreads);
+	jp03.add(simulationThreads, c03);
+
+	
+	jp03.add(new JLabel("Results Directory"),c03);
+	resultsDirectory = new JTextField(resDirect);
+	jp03.add(resultsDirectory, c03);
+
+	
+	jp03.add(new JLabel("Number of Simulation Cycles"),c03);
+	simulationCycles = new JTextField(simCycles);
+	jp03.add(simulationCycles, c03);
+
+	
+	jp03.add(new JLabel("Minimum Number of CPUs"),c03);
+	minCPU = new JTextField(NbMinCPU);
+	jp03.add(minCPU, c03);
+
+	jp03.add(new JLabel("Maximum Number of CPUs"),c03);
+	maxCPU = new JTextField(NbMaxCPU);
+	jp03.add(maxCPU, c03);
+
+	jp03.add(new JLabel("Number of Simulations Per Mapping"),c03);
+	simulationsPerMapping = new JTextField(Nbsim);
+	jp03.add(simulationsPerMapping, c03);
+
+
+	jp1.add("Mapping Exploration", jp03);
+
+	JPanel jp04 = new JPanel();
+
+ 	GridBagLayout gridbag04 = new GridBagLayout();
+        GridBagConstraints c04 = new GridBagConstraints();
+        jp04.setLayout(gridbag04);
+
+	c04.weighty = 1.0;
+        c04.weightx = 1.0;
+        c04.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c04.fill = GridBagConstraints.BOTH;
+        c04.gridheight = 1;
+
+
+        jp04.setBorder(new javax.swing.border.TitledBorder("DSE Output"));
+	jp04.add(new JLabel("Design Space Exploration Output"), c04);
+
+
+
+	outputText = new ScrolledJTextArea();
+        outputText.setEditable(false);
+        outputText.setMargin(new Insets(10, 10, 10, 10));
+        outputText.setTabSize(3);
+	outputText.append("Text here");
+	JScrollPane jsp = new JScrollPane(outputText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        Font f = new Font("Courrier", Font.BOLD, 12);
+        outputText.setFont(f);
+	jp04.add(jsp, c04);
+	jp1.add("DSE Output", jp04);
+
+	
+
+	c.add(jp1, BorderLayout.NORTH);
+
 
         start = new JButton("Start", IconManager.imgic53);
         stop = new JButton("Stop", IconManager.imgic55);
@@ -216,10 +320,115 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         int cycle = 0;
 
         hasError = false;
-
+	try {
+	    mapFile = mappingFile.getText();
+	    modFile = modelFile.getText();
+	    tmlDir = tmlDirectory.getText();
+	    resDirect = resultsDirectory.getText();
+	    simThreads = simulationThreads.getText();
+	    simCycles = simulationCycles.getText();
+	    NbMinCPU = minCPU.getText();
+	    NbMaxCPU = maxCPU.getText();
+	    Nbsim = simulationsPerMapping.getText();
         TraceManager.addDev("Thread started");
         File testFile;
-	mgui.gtm.autoSecure(mgui);
+	if (jp1.getSelectedIndex() == 0){
+	    if (autoSecure.isSelected()){
+	    	mgui.gtm.autoSecure(mgui);
+	    }
+	}
+	else if (jp1.getSelectedIndex()==1){
+	    DSEConfiguration config = new DSEConfiguration();
+	    if (config.setModelPath(tmlDir) != 0) {
+		TraceManager.addDev("TML Directory file at " + tmlDir + " error");
+		checkMode();
+		return;
+	    }
+	    else {
+		TraceManager.addDev("Set model file to " + modFile);
+	    }
+	    if (config.setMappingFile(mapFile) <0) {
+		TraceManager.addDev("Mapping at " + mapFile + " error");
+		checkMode();
+		return;
+	    }
+	    else {
+		TraceManager.addDev("Set mapping file to " + mapFile);
+	    }
+	    if (config.setTaskModelFile(modFile)!=0){
+		TraceManager.addDev("Model File " + modFile +" error");
+		checkMode();
+		return;
+	    }
+	    else {
+		TraceManager.addDev("Set model file to " + modFile);
+	    }
+	    if (config.setPathToSimulator(simulator) != 0) {
+		TraceManager.addDev("Simulator at " + mapFile + " error");
+		checkMode();
+		return;
+	    }
+	    else {
+		TraceManager.addDev("Simulator set");
+	    }
+
+	    if (config.setPathToResults(resDirect) != 0) {
+		TraceManager.addDev("Results Directory at " + resDirect + " error");
+		return;
+	    }
+	    else {
+		TraceManager.addDev("Results Directory set");
+	    }
+
+	    if (config.setNbOfSimulationThreads(simThreads) != 0) {
+		TraceManager.addDev("Simulation threads error: "+simThreads);
+		return;
+	    }
+	    if (config.setSimulationCompilationCommand("make -j9 -C") !=0){
+		TraceManager.addDev("Simulation compilation error");
+		return;
+	    }
+	    if (config.setSimulationExecutionCommand("run.x") !=0){
+		TraceManager.addDev("Simulation execution error");
+		return;
+	    }
+	    if (config.setMinNbOfCPUs(NbMinCPU) != 0) {
+	    }
+	    if (config.setMaxNbOfCPUs(NbMaxCPU) != 0) {
+	    }
+	    config.setOutputTXT("true");
+	   // config.setOutputHTML("true");
+	   // config.setOutputVCD("true");
+	   // config.setOutputXML("true");
+	    config.setRecordResults("true");
+	    if (config.runParallelSimulation(Nbsim, true, true) != 0) {
+		output+="Simulation Failed";
+		outputText.setText(output);
+		checkMode();
+		return;
+	    }
+	    else {
+		output+="Simulation Succeeded";
+		outputText.setText(output);
+	    }
+	    if (config.runDSE("", true, true)!=0){
+		TraceManager.addDev("Can't run DSE");
+	    }
+	    System.out.println("DSE run");
+	    if (config.printAllResults("", true, true)!=0){
+		TraceManager.addDev("Can't print all results");
+	    }
+	    System.out.println("Results printed");
+	    if (config.printResultsSummary("", true, true)!=0){
+		TraceManager.addDev("Can't print result summary");
+	    }
+	    System.out.println("Results summary printed");
+	    jp1.setSelectedIndex(2);
+	    outputText.setText(output + "\n" + config.overallResults);
+	}
+	} catch (Exception e){
+	    System.out.println(e);
+	}
 	checkMode();
         setButtons();
 	
@@ -229,7 +438,6 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     protected String processCmd(String cmd) throws LauncherException {
         rshc.setCmd(cmd);
         String s = null;
-	mgui.gtm.autoSecure(mgui);
 	checkMode();
         return s;
     }
@@ -271,5 +479,20 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 
     public void setError() {
         hasError = true;
+    }
+    public void drawMapping(TMLMapping map){
+	int index = mgui.createTMLArchitecture("OptimalMapping");
+	TMLArchiPanel newarch = (TMLArchiPanel) mgui.tabs.get(mgui.tabs.size()-1);
+	TMLArchitecture arch = map.getArch();
+	ArrayList<HwNode> hwnodes = arch.getHwNodes();
+	ArrayList<HwLink> hwlinks = arch.getHwLinks();
+	for (HwNode node: hwnodes){
+	    if (node instanceof HwCPU){
+		//arch.add();
+	    }
+	    else if (node instanceof HwMemory){
+	    }
+
+	}
     }
 }

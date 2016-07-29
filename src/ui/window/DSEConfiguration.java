@@ -44,7 +44,7 @@ knowledge of the CeCILL license and that you accept its terms.
 * @see
 */
 
-package dseengine;
+package ui.window;
 
 import java.io.*;
 import java.util.*;
@@ -67,11 +67,11 @@ import myutil.*;
 public class DSEConfiguration implements Runnable  {
 	
 	private String errorMessage;
-	
+	public String overallResults;
 	private final String PATH_TO_CODE = "No directory selected for putting the generated code";
 	private final String PATH_TO_RESULTS = "No directory selected for putting the results";
 	private final String PATH_TO_SOURCE = "No source model selected";
-	private final String NO_OUTPUT_SELECTED = "No format ofr the output has been selected";
+	private final String NO_OUTPUT_SELECTED = "No format for the output has been selected";
 	private final String LOAD_MAPPING_FAILED = "Loading of the mapping failed";
 	private final String LOAD_TASKMODEL_FAILED = "Loading of the task model failed";
 	private final String SIMULATION_COMPILATION_COMMAND_NOT_SET = "Compilation command missing";
@@ -803,22 +803,24 @@ public class DSEConfiguration implements Runnable  {
 	
 	public int runParallelSimulation(String _arguments, boolean _debug, boolean _optimize) {
 		// Checking for valid arguments
+		System.out.println("...-1");
 		try {
 			nbOfRemainingSimulation = Integer.decode(_arguments).intValue();
 		} catch (Exception e) {
 			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
 			return -1;
 		}
-		
+		System.out.println("...0");
 		int nbconfigured = nbOfRemainingSimulation;
 		totalNbOfSimulations = nbconfigured;
 		
 		// Checking simulation Elements
 		int ret = checkingSimulationElements();
 		if (ret != 0) {
+			System.out.println(errorMessage);
 			return ret;
 		}
-		
+		System.out.println("...1");
 		// Loading model
 		ret = loadingModel(_debug, _optimize);
 		if (ret != 0) {
@@ -831,7 +833,7 @@ public class DSEConfiguration implements Runnable  {
 				results = new DSESimulationResult();
 			}
 		}
-		
+		System.out.println("...2");
 		// Executing the simulation
 		simulationCmd = prepareCommand();
 		
@@ -847,7 +849,7 @@ public class DSEConfiguration implements Runnable  {
 				nb --;
 			}
 		}
-		
+		System.out.println("...3");
 		run();
 		
 		// Must wait for all threads to terminate
@@ -862,7 +864,7 @@ public class DSEConfiguration implements Runnable  {
 				}
 			}
 		}
-		
+		System.out.println("...4");
 		long t1 = System.currentTimeMillis();
 		
 		if (recordResults) {
@@ -1062,7 +1064,9 @@ public class DSEConfiguration implements Runnable  {
 			
 			
 			try {
+			overallResults = sb.toString();
 				FileUtils.saveFile(pathToResults + "Overall_results_AllMappings_From_" + resultsID + ".txt", sb.toString());
+			
 			} catch (Exception e){
 					TraceManager.addDev("Error when saving results file" + e.getMessage());
 					return -1;
@@ -1217,7 +1221,7 @@ public class DSEConfiguration implements Runnable  {
 		if (ret != 0) {
 			return ret;
 		}
-		
+		System.out.println("!!!");
 		// Must generate all possible mappings.
 		// First : load the task model
 		if (!loadTaskModel(_optimize)) {
@@ -1248,7 +1252,7 @@ public class DSEConfiguration implements Runnable  {
 				dsemapresults = new DSEMappingSimulationResults();
 			}
 		}
-		
+		System.out.println("!!!!!!");
 		for(TMLMapping tmla: mappings) {
 			TraceManager.addDev("Handling mapping #" + cpt);
 			progression = (int)(cpt * 100 / (mappings.size()));

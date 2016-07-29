@@ -272,7 +272,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
+	jsp.setPreferredSize(new Dimension(300,300));
         c.add(jsp, BorderLayout.CENTER);
 
         start = new JButton("Start", IconManager.imgic53);
