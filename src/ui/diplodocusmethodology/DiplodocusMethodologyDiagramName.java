@@ -125,9 +125,14 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
             onMe = true;
         }
 
-        if ((y+Y_MARGIN) > (getFather().getY()+getFather().getHeight())) {
-            return;
-        }
+	if (getFather() == null) {
+	    return;
+	}
+	
+	if ((y+Y_MARGIN) > (getFather().getY()+getFather().getHeight())) {
+	    return;
+	}
+	
 
         //TraceManager.addDev("Internal drawing ...");
         int currentMaxX;

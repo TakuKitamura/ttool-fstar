@@ -81,7 +81,7 @@ public class DiplodocusMethodologyPanel extends TURTLEPanel {
         TGComponent tgc1 = dmd.addComponent(350, 100, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_APPLICATION, false);
         TGComponent tgc2 = dmd.addComponent(850, 100, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_ARCHITECTURE, false);
         TGComponent tgc3 = dmd.addComponent(600, 300, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_MAPPING, false);
-	TGComponent tgc4 = dmd.addComponent(600, 100, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_CP, false);
+        TGComponent tgc4 = dmd.addComponent(600, 100, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_CP, false);
 
         //Connectors
 
@@ -95,7 +95,7 @@ public class DiplodocusMethodologyPanel extends TURTLEPanel {
         p2.setFree(false);
         dmd.getComponentList().add(0, tgco);
 
-	// cp -> mapping
+        // cp -> mapping
         p1 = tgc4.getTGConnectingPointAtIndex(0);
         p2 = tgc3.getTGConnectingPointAtIndex(2);
         listPoint = new Vector();

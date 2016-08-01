@@ -96,10 +96,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private SpecificationLiveness livenessInfo;
 
     public AvatarModelChecker(AvatarSpecification _spec) {
-	//spec = _spec;
-	//TraceManager.addDev("Before clone:\n" + spec);
-        spec = _spec.advancedClone();
-	//TraceManager.addDev("After clone:\n" + spec);
+	if (_spec != null) {
+	    //spec = _spec;
+	    //TraceManager.addDev("Before clone:\n" + spec);
+	    spec = _spec.advancedClone();
+	    //TraceManager.addDev("After clone:\n" + spec);
+	}
         ignoreEmptyTransitions = true;
         ignoreConcurrenceBetweenInternalActions = true;
         studyReachability = false;
@@ -216,6 +218,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	// No other study are authorized at the same time
 	// 
 
+	if (spec == null) {
+	    return false;
+	}
+	
 	if (livenessInfo == null) {
 	    return false;
 	}
@@ -224,11 +230,18 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	livenessDone = false;
 	studyReachability = false;
 	computeRG = false;
+
+
+	
 	startModelChecking();
 	return true;
     }
 
     public void startModelChecking() {
+	if (spec == null) {
+	    return;
+	}
+	
         stoppedBeforeEnd = false;
         stateID = 0;
 	nbOfDeadlocks = 0;
@@ -576,6 +589,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //TraceManager.addDev("Similar state found State=" + newState.getHash(blockValues) + "\n" + newState + "\nsimilar=" + similar.getHash(blockValues) + "\n" + similar);
                 
 		link.destinationState = similar;
+
+		// If liveness, must verify that from similar it is possible to go to the considered
+		// state or not.
+
+		if (studyLiveness) {
+		}
+		
             }
 	    if (studyLiveness && (!tr.livenessFound)) {
 		TraceManager.addDev("Liveness: path without the element found");
