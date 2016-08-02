@@ -84,6 +84,7 @@ public class DSEConfiguration implements Runnable  {
 	private String pathToSimulator;
 	private String pathToResults;
 	
+	public String overallResults;
 	
 	private File mappingFile = null;
 	private String modelPath = "";
@@ -1031,6 +1032,11 @@ public class DSEConfiguration implements Runnable  {
 			sb.append("Mapping with Highest max Bus contention: " + dsemapresults.getMappingWithHighestMaxBusUsage() + "\n");
 			sb.append("Mapping with Lowest max Bus contention: " + dsemapresults.getMappingWithLowestMaxBusUsage() + "\n");
 			
+			sb.append("\nSecurity:\n");
+			sb.append("Mapping with Highest added security: " + dsemapresults.getMappingWithHighestAddedSecurity() + "\n");
+			sb.append("Mapping with Lowest added security: " + dsemapresults.getMappingWithLowestAddedSecurity() + "\n");
+			
+			
 			rankMappings(dsemapresults);
 			
 			sb.append("\nGrades: (Mapping#, grade)\n");
@@ -1062,7 +1068,9 @@ public class DSEConfiguration implements Runnable  {
 			
 			
 			try {
+				overallResults=sb.toString();
 				FileUtils.saveFile(pathToResults + "Overall_results_AllMappings_From_" + resultsID + ".txt", sb.toString());
+
 			} catch (Exception e){
 					TraceManager.addDev("Error when saving results file" + e.getMessage());
 					return -1;

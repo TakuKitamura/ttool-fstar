@@ -247,11 +247,56 @@ public class DSEMappingSimulationResults  {
 		
 		int currentIndex = 0;
 		int index = 0;
-		double value = -0.1;
+		double value = -1;
 		double valuetmp;
 		
 		for(DSESimulationResult dserr: results) {
 			valuetmp = dserr.getMinCPUUsage();
+			if (valuetmp < value) {
+				value = valuetmp;
+				index = currentIndex;
+			}
+			currentIndex ++;
+		}
+		
+		return index;
+	}
+	
+ 	public int getMappingWithLowestAddedSecurity(){
+		if (results.size() == 0) {
+			return -1;
+		}
+		
+		int currentIndex = 0;
+		int index = 0;
+		int value = Integer.MAX_VALUE;
+		int valuetmp;
+		
+		for(DSESimulationResult dserr: results) {
+			valuetmp = dserr.getAddedSecurity();
+			if (valuetmp < value) {
+				value = valuetmp;
+				index = currentIndex;
+			}
+			currentIndex ++;
+		}
+		
+		return index;
+	}
+	
+
+ 	public int getMappingWithHighestAddedSecurity(){
+		if (results.size() == 0) {
+			return -1;
+		}
+		
+		int currentIndex = 0;
+		int index = 0;
+		double value = -0.1;
+		double valuetmp;
+		
+		for(DSESimulationResult dserr: results) {
+			valuetmp = dserr.getAddedSecurity();
 			if (valuetmp > value) {
 				value = valuetmp;
 				index = currentIndex;

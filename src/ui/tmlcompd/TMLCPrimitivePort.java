@@ -602,7 +602,10 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         sb.append("\" dataFlowType=\"" + dataFlowType);
         sb.append("\" associatedEvent=\"" + associatedEvent);
         sb.append("\" checkConf=\"" + checkConf);
+        sb.append("\" checkConfStatus=\"" + checkConfStatus);
         sb.append("\" checkAuth=\"" + checkAuth);
+        sb.append("\" checkWeakAuthStatus=\"" + checkWeakAuthStatus);
+        sb.append("\" checkStrongAuthStatus=\"" + checkStrongAuthStatus);
         sb.append("\" />\n");
         for(int i=0; i<nbMaxAttribute; i++) {
             //System.out.println("Attribute:" + i);
@@ -681,6 +684,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                                     dataFlowType = elt.getAttribute("dataFlowType");
                                     associatedEvent = elt.getAttribute("associatedEvent");
                                     checkConf = (elt.getAttribute("checkConf").compareTo("true")==0);
+                                    checkConfStatus = Integer.valueOf(elt.getAttribute("checkConfStatus"));
+                                    checkStrongAuthStatus = Integer.valueOf(elt.getAttribute("checkStrongAuthStatus"));
+				    checkWeakAuthStatus = Integer.valueOf(elt.getAttribute("checkWeakAuthStatus"));
 				    checkAuth = (elt.getAttribute("checkAuth").compareTo("true")==0);
                                     isLossy = (elt.getAttribute("isLossy").compareTo("true") ==0);
                                     isPrex = (elt.getAttribute("isPrex").compareTo("true") ==0);

@@ -54,6 +54,9 @@ import javax.swing.event.*;
 import java.util.*;
 import java.io.*;
 
+import ui.*;
+import ui.tmldd.*;
+
 import myutil.*;
 import avatartranslator.*;
 import tmltranslator.*;
@@ -84,7 +87,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     protected JButton close;
     String simulator;
    
-    protected JCheckBox autoSecure;
+    protected JCheckBox autoSecure, autoMapKeys;
     protected JTextField tmlDirectory, mappingFile, modelFile, simulationThreads, resultsDirectory, simulationCycles, minCPU, maxCPU, simulationsPerMapping;
     protected JTextArea outputText;
     protected String output = "";
@@ -153,6 +156,8 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         //genJava.addActionListener(this);
 	autoSecure= new JCheckBox("Add security");
         jp01.add(autoSecure, c01);
+	autoMapKeys= new JCheckBox("Add Keys");
+	jp01.add(autoMapKeys, c01);
 	
 	jp1.add("Automated Security", jp01);
 
@@ -237,6 +242,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         outputText.setTabSize(3);
 	outputText.append("Text here");
 	JScrollPane jsp = new JScrollPane(outputText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	jsp.setPreferredSize(new Dimension(300,300));
         Font f = new Font("Courrier", Font.BOLD, 12);
         outputText.setFont(f);
 	jp04.add(jsp, c04);
@@ -320,7 +326,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         int cycle = 0;
 
         hasError = false;
-	try {
+	//try {
 	    mapFile = mappingFile.getText();
 	    modFile = modelFile.getText();
 	    tmlDir = tmlDirectory.getText();
@@ -334,7 +340,13 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         File testFile;
 	if (jp1.getSelectedIndex() == 0){
 	    if (autoSecure.isSelected()){
-	    	mgui.gtm.autoSecure(mgui);
+	    	TMLMapping map = mgui.gtm.autoSecure(mgui);
+		if (map!=null){
+		//drawMapping(map);
+		}
+	    }
+	    if (autoMapKeys.isSelected()){
+	    	mgui.gtm.autoMapKeys();
 	    }
 	}
 	else if (jp1.getSelectedIndex()==1){
@@ -426,9 +438,9 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    jp1.setSelectedIndex(2);
 	    outputText.setText(output + "\n" + config.overallResults);
 	}
-	} catch (Exception e){
-	    System.out.println(e);
-	}
+	//} catch (Exception e){
+	//    System.out.println(e);
+	//}
 	checkMode();
         setButtons();
 	
@@ -481,18 +493,32 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         hasError = true;
     }
     public void drawMapping(TMLMapping map){
+	Map<HwNode, TGConnectingPoint> connectMap; 
 	int index = mgui.createTMLArchitecture("OptimalMapping");
-	TMLArchiPanel newarch = (TMLArchiPanel) mgui.tabs.get(mgui.tabs.size()-1);
+	TMLArchiPanel archPanel = (TMLArchiPanel) mgui.tabs.get(mgui.tabs.size()-1);
+	TMLArchiDiagramPanel ap = archPanel.tmlap;
 	TMLArchitecture arch = map.getArch();
 	ArrayList<HwNode> hwnodes = arch.getHwNodes();
 	ArrayList<HwLink> hwlinks = arch.getHwLinks();
+	int x=10;
+	int y=10;
 	for (HwNode node: hwnodes){
 	    if (node instanceof HwCPU){
-		//arch.add();
+		TMLArchiCPUNode cpu = new TMLArchiCPUNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap);
+		x+=300;
+		cpu.setName(node.getName());
+		ap.addComponent(cpu, x, y, false, true);
 	    }
 	    else if (node instanceof HwMemory){
+		TMLArchiMemoryNode mem = new TMLArchiMemoryNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap);
+		x+=300;
+		mem.setName(node.getName());
+		ap.addComponent(mem, x, y, false, true);
 	    }
 
+	}
+	for (HwLink link: hwlinks){
+	    
 	}
     }
 }

@@ -80,7 +80,7 @@ public class DSESimulationResult  {
 	private Vector<CPUWholeResult> wcpus;
 	private Vector<BusWholeResult> wbusses;
 	private Vector<TaskWholeResult> wtasks;
-	
+	private int addedSecurity=0;
 
 	
 	public DSESimulationResult() {
@@ -99,6 +99,12 @@ public class DSESimulationResult  {
 		comments.add(_comment);
 	}
 	
+        public int getAddedSecurity(){
+	    return addedSecurity;
+	}
+	public void setAddedSecurity(int i){
+	    addedSecurity = i;
+	}
 	public int loadResultFromXMLFile(String pathToFile) {
 		File f = new File(pathToFile);
 		String data = FileUtils.loadFileData(f);
