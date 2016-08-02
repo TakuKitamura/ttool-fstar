@@ -46,9 +46,10 @@
 
 import java.util.LinkedList;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.LinkedList;
 
 import ui.TAttribute;
+import avatartranslator.ErrorAccumulator;
 import avatartranslator.AvatarStateMachine;
 import avatartranslator.AvatarState;
 import avatartranslator.AvatarAttribute;
@@ -97,7 +98,7 @@ public class AvatarPragmaTests extends TToolTest {
 	blocks.add(B);
         blocks.add(C);
 
-	HashMap<String, Vector> typeAttributesMap = new HashMap<String, Vector>();  
+	HashMap<String, LinkedList<TAttribute>> typeAttributesMap = new HashMap<String, LinkedList<TAttribute>>();  
         HashMap<String, String> nameTypeMap = new HashMap<String, String>();
 	LinkedList<AvatarPragma> res;
 
@@ -109,157 +110,162 @@ public class AvatarPragmaTests extends TToolTest {
 	nameTypeMap.put("C.m", "T1");
 	nameTypeMap.put("B.m", "T1");
 	nameTypeMap.put("C.d", "T2");
-	Vector t1s= new Vector();
-	Vector t2s= new Vector();
+	LinkedList<TAttribute> t1s = new LinkedList<TAttribute>();
+	LinkedList<TAttribute> t2s = new LinkedList<TAttribute>();
 	t1s.add(attr_a);
 	t1s.add(attr_b);
 	t2s.add(attr_c);
 	typeAttributesMap.put("T1", t1s);
 	typeAttributesMap.put("T2", t2s);	
 
+        ErrorAccumulator errorAcc = new ErrorAccumulator () {
+            public void addWarning (String s) { }
+            public void addError (String s) { }
+        };
+
 	//Test Bad keyword
-	res = AvatarPragma.createFromString("FakePragma A.key1", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("FakePragma A.key1", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Bad keyword: " + (res.size()==0));
 
 	//Handle whitespace
-	res = AvatarPragma.createFromString("Public      A.key1", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Public      A.key1", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Whitespace parsing: " + (res.size()!=0));
-	res = AvatarPragma.createFromString("Confidentiality   A.key1     B.key2", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Confidentiality   A.key1     B.key2", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Whitespace parsing: " + (res.size()!=0));
 
 	//Test missing block
-	res = AvatarPragma.createFromString("Confidentiality non.arrrrg", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Confidentiality non.arrrrg", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Missing Block: " + (res.size()==0));
-	res = AvatarPragma.createFromString("Confidentiality A.key1 B.key2 C.attr non.arrrrg", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Confidentiality A.key1 B.key2 C.attr non.arrrrg", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Missing Block: " + (res.size()==0));
 
 	//Test badly formed attribute
-	res = AvatarPragma.createFromString("Confidentiality attr", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Confidentiality attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Attribute formatting: " + (res.size()==0));
-	res = AvatarPragma.createFromString("Public A.a1.attr", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Public A.a1.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Attribute formatting: " + (res.size()==0));
 
 	//Test missing attribute
-	res = AvatarPragma.createFromString(" Confidentiality            ", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString(" Confidentiality            ", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Missing Attribute: " + (res.size()==0));
-	res = AvatarPragma.createFromString("Confidentiality A.arrrrg", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Confidentiality A.arrrrg", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Missing Attribute: " + (res.size()==0));
-	res = AvatarPragma.createFromString("Confidentiality C.attr C.attr B.key1 A.arrrrg", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Confidentiality C.attr C.attr B.key1 A.arrrrg", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Missing Attribute: " + (res.size()==0));
 	this.updateDigest("-------------------------------------");
 
 	//Test Confidentiality
 	this.updateDigest("Confidentiality Tests");
-	res = AvatarPragma.createFromString("Confidentiality A.key1", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("Confidentiality A.key1", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	//Check no error
 	this.updateDigest("No error: "+ (res.size()==1));
 	//Check Type
 	this.updateDigest("Right Type: " + (res.get(0) instanceof AvatarPragmaSecret));
 	//1 Attribute
-	this.updateDigest("# of Attributes: " + (res.get(0).getArgs().size() == 1));
-	this.updateDigest("Attr Name " + res.get(0).getArgs().get(0));
+	this.updateDigest("# of Attributes: " + (((AvatarPragmaSecret) res.get(0)).getArgs().size() == 1));
+	this.updateDigest("Attr Name " + ((AvatarPragmaSecret) res.get(0)).getArgs().get(0));
 	this.updateDigest("-------------------------------------");
 
 	//Test Secret
 	this.updateDigest("Secret Tests");
-	res = AvatarPragma.createFromString("Secret A.key1 A.key2", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("Secret A.key1 A.key2", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	//Check no error
 	this.updateDigest("No error: "+ (res.size()==1));
 	//Check Type
 	this.updateDigest("Right Type: " + (res.get(0) instanceof AvatarPragmaSecret));
 	//Attributes
-	this.updateDigest("# of Attributes: " + (res.get(0).getArgs().size() == 2));
-	this.updateDigest("Attr Name "+ (res.get(0).getArgs().get(0) +";"));
-	this.updateDigest("Attr Name "+ (res.get(0).getArgs().get(1)+";"));
+	this.updateDigest("# of Attributes: " + (((AvatarPragmaSecret) res.get(0)).getArgs().size() == 2));
+	this.updateDigest("Attr Name "+ (((AvatarPragmaSecret) res.get(0)).getArgs().get(0) +";"));
+	this.updateDigest("Attr Name "+ (((AvatarPragmaSecret) res.get(0)).getArgs().get(1)+";"));
 
 	//Composed Types
-	res = AvatarPragma.createFromString("Secret B.m C.d", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Secret B.m C.d", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("No error: "+ (res.size()==1));
-	this.updateDigest("# of Attributes: " + (res.get(0).getArgs().size() == 3));
+	this.updateDigest("# of Attributes: " + (((AvatarPragmaSecret) res.get(0)).getArgs().size() == 3));
 	this.updateDigest("-------------------------------------");
 	
 	//Test Secrecy Assumption
 	this.updateDigest("SecrecyAssumption Tests");
-	res = AvatarPragma.createFromString("SecrecyAssumption A.key1 A.key2 B.key1 C.attr", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("SecrecyAssumption A.key1 A.key2 B.key1 C.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	//Check no error
 	this.updateDigest("No error: "+ (res.size()==1));
 	//Check Type
 	this.updateDigest("Right Type: " + (res.get(0) instanceof AvatarPragmaSecrecyAssumption));
 	//Attributes
-	this.updateDigest("# of Attributes: " + (res.get(0).getArgs().size() == 4));
+	this.updateDigest("# of Attributes: " + (((AvatarPragmaSecrecyAssumption) res.get(0)).getArgs().size() == 4));
 	this.updateDigest("-------------------------------------");
 	
 	//Test System Knowledge
 	this.updateDigest("Initial System Knowledge Tests");
 
 	//Check composed types
-	res = AvatarPragma.createFromString("InitialSystemKnowledge B.key1 C.m", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("InitialSystemKnowledge B.key1 C.m", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	this.updateDigest("Fail if different types: "+ (res.size()==0));
-	res = AvatarPragma.createFromString("InitialSystemKnowledge B.d C.m", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("InitialSystemKnowledge B.d C.m", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	this.updateDigest("Fail if different types: "+ (res.size()==0));
 
-	res = AvatarPragma.createFromString("InitialSystemKnowledge A.key1 A.key2 B.key1 C.attr", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("InitialSystemKnowledge A.key1 A.key2 B.key1 C.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	//Check no error
 	this.updateDigest("No error: "+ (res.size()!=0));
 	//Check Type
 	this.updateDigest("Right Type: " + (res.get(0) instanceof AvatarPragmaInitialKnowledge));
 	//Attributes
-	this.updateDigest("# of Attributes: " + (res.get(0).getArgs().size() == 4));
+	this.updateDigest("# of Attributes: " + (((AvatarPragmaInitialKnowledge) res.get(0)).getArgs().size() == 4));
 	//Is system
 	AvatarPragmaInitialKnowledge res2 = (AvatarPragmaInitialKnowledge) res.get(0);
 	this.updateDigest("Is System: " + res2.isSystem());
 
 	//Check multiple creation
-	res = AvatarPragma.createFromString("InitialSystemKnowledge B.m C.m", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("InitialSystemKnowledge B.m C.m", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	this.updateDigest("Multiple creation: "+ (res.size()==2));
-	this.updateDigest("Attr Name " + res.get(0).getArgs().get(0));
-	this.updateDigest("Attr Name " + res.get(0).getArgs().get(1));
-	this.updateDigest("Attr Name " + res.get(1).getArgs().get(0));
-	this.updateDigest("Attr Name " + res.get(1).getArgs().get(1));
+	this.updateDigest("Attr Name " + ((AvatarPragmaInitialKnowledge) res.get(0)).getArgs().get(0));
+	this.updateDigest("Attr Name " + ((AvatarPragmaInitialKnowledge) res.get(0)).getArgs().get(1));
+	this.updateDigest("Attr Name " + ((AvatarPragmaInitialKnowledge) res.get(1)).getArgs().get(0));
+	this.updateDigest("Attr Name " + ((AvatarPragmaInitialKnowledge) res.get(1)).getArgs().get(1));
 	this.updateDigest("-------------------------------------");
 
 	//Test Session Knowledge
 	this.updateDigest("Initial Session Knowledge Tests");
-	res = AvatarPragma.createFromString("InitialSessionKnowledge A.key2 B.key1 C.attr", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("InitialSessionKnowledge A.key2 B.key1 C.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	//Check no error
 	this.updateDigest("No error: "+ (res.size()==1));
 	
 	//Check Type
 	this.updateDigest("Right Type: " + (res.get(0) instanceof AvatarPragmaInitialKnowledge));
 	//# Attributes
-	this.updateDigest("# of Attributes: " + (res.get(0).getArgs().size() == 3));
+	this.updateDigest("# of Attributes: " + (((AvatarPragmaInitialKnowledge) res.get(0)).getArgs().size() == 3));
 	//Is session
 	res2 = (AvatarPragmaInitialKnowledge) res.get(0);
 	this.updateDigest("Is Session: " + !res2.isSystem());
 
 	//Test for error on different base types
-	res = AvatarPragma.createFromString("InitialSessionKnowledge A.key2 B.key2",null, blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("InitialSessionKnowledge A.key2 B.key2",null, blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Fail on different base types " + (res.size()==0));
 	this.updateDigest("-------------------------------------");
 
 	//Test PrivatePublicKey
 	this.updateDigest("PrivatePublicKeys Tests");
 	//Fail if wrong # of args
-	res = AvatarPragma.createFromString("PrivatePublicKeys C.attr", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("PrivatePublicKeys C.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	this.updateDigest("PrivatePublicKeys args count " + (res.size()==0));
-	res = AvatarPragma.createFromString("PrivatePublicKeys A.key1 A.key2 B.key1 C.attr", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("PrivatePublicKeys A.key1 A.key2 B.key1 C.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	this.updateDigest("PrivatePublicKeys args count " + (res.size()==0));
 	//Check no error
-	res = AvatarPragma.createFromString("PrivatePublicKeys A key2 key1", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("PrivatePublicKeys A key2 key1", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	this.updateDigest("No error: "+ (res.size()!=0));
 	//Check Type
 	this.updateDigest("Right Type: " + (res.get(0) instanceof AvatarPragmaPrivatePublicKey));
 	//Attributes
 	AvatarPragmaPrivatePublicKey res4 = (AvatarPragmaPrivatePublicKey) res.get(0);
-	this.updateDigest("# of Attributes: " + (res4.getArgs().size() == 2));
+	// this.updateDigest("# of Attributes: " + (res4.getArgs().size() == 2));
 	this.updateDigest("Attr Name "+ res4.getPublicKey());
 	this.updateDigest("Attr Name "+ res4.getPrivateKey());
 
 	//Handle composed types
-	res = AvatarPragma.createFromString("PrivatePublicKeys C attr d", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("PrivatePublicKeys C attr d", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("PrivatePublicKeys composed types " + (res.size()!=0));
 	//Fail if more than 1 field
-	res = AvatarPragma.createFromString("PrivatePublicKeys C attr m", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("PrivatePublicKeys C attr m", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("PrivatePublicKeys multiple fields " + (res.size()==0));
 
 	
@@ -267,43 +273,43 @@ public class AvatarPragmaTests extends TToolTest {
 
 	//Test Public
 	this.updateDigest("Public Tests");
-	res = AvatarPragma.createFromString("Public A.key1 B.key2", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("Public A.key1 B.key2", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	//Check no error
 	this.updateDigest("No error: "+ (res.size()!=0));
 	//Check Type
 	this.updateDigest("Right Type: " + (res.get(0) instanceof AvatarPragmaPublic));
 	//1 Attribute
-	this.updateDigest("# of Attributes: " + (res.get(0).getArgs().size() == 2));
-	this.updateDigest("Attr Name " + res.get(0).getArgs().get(0));
-	this.updateDigest("Attr Name " + res.get(0).getArgs().get(1));
+	this.updateDigest("# of Attributes: " + (((AvatarPragmaPublic) res.get(0)).getArgs().size() == 2));
+	this.updateDigest("Attr Name " + ((AvatarPragmaPublic) res.get(0)).getArgs().get(0));
+	this.updateDigest("Attr Name " + ((AvatarPragmaPublic) res.get(0)).getArgs().get(1));
 	this.updateDigest("-------------------------------------");
 	
 	//Test Authenticity
 	this.updateDigest("Authenticity Tests");
 	//Fail if wrong # of args
-	res = AvatarPragma.createFromString("Authenticity A.key1 A.key2 B.key1 C.attr", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("Authenticity A.key1 A.key2 B.key1 C.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	this.updateDigest("Authenticity args count " + (res.size()==0));
-	res = AvatarPragma.createFromString("Authenticity C.attr", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("Authenticity C.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	this.updateDigest("Authenticity args count " + (res.size()==0));
 	//Fail if lack of state
-	res = AvatarPragma.createFromString("Authenticity A.state.attr", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("Authenticity A.state.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	this.updateDigest("Missing State " + (res.size()==0));
 	//Fail if attributes are not same type
-	res = AvatarPragma.createFromString("Authenticity A.a1.key1 C.c1.m", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Authenticity A.a1.key1 C.c1.m", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Incompatible types " + (res.size()==0));
-	res = AvatarPragma.createFromString("Authenticity B.b1.m C.c1.d", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Authenticity B.b1.m C.c1.d", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Incompatible types " + (res.size()==0));
-	res = AvatarPragma.createFromString("Authenticity B.b1.key2 A.a1.key1", null,blocks, typeAttributesMap, nameTypeMap);
+	res = AvatarPragma.createFromString("Authenticity B.b1.key2 A.a1.key1", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
 	this.updateDigest("Incompatible types " + (res.size()==0));	
 	//Check no error
-	res = AvatarPragma.createFromString("Authenticity A.a1.key1 C.c1.attr", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("Authenticity A.a1.key1 C.c1.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	this.updateDigest("No error: "+ (res.size()!=0));
 	//Check Type
 	this.updateDigest("Right Type: " + (res.get(0) instanceof AvatarPragmaAuthenticity));
 
 	//Attribute
 	AvatarPragmaAuthenticity res3 = (AvatarPragmaAuthenticity) res.get(0);
-	this.updateDigest("# of Attributes: " + (res3.getArgs().size() == 2));
+	// this.updateDigest("# of Attributes: " + (res3.getArgs().size() == 2));
 	//this.updateDigest("Attr "+ res3.getAttrA());
 	//this.updateDigest("Attr "+ res3.getAttrB());
 	this.updateDigest("Attr Name "+ res3.getAttrA().getName());
@@ -311,10 +317,10 @@ public class AvatarPragmaTests extends TToolTest {
 	this.updateDigest("Attr State "+ res3.getAttrA().getState());
 	this.updateDigest("Attr State "+ res3.getAttrB().getState());
 	//Check multi-creation
-	res = AvatarPragma.createFromString("Authenticity B.b1.m C.c1.m", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("Authenticity B.b1.m C.c1.m", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	this.updateDigest("Multiple creation pass: "+ (res.size()==2));
 	res3 = (AvatarPragmaAuthenticity) res.get(1);
-	this.updateDigest("# of Attributes: " + (res3.getArgs().size() == 2));
+	// this.updateDigest("# of Attributes: " + (res3.getArgs().size() == 2));
 	//this.updateDigest("Attr "+ res3.getAttrA());
 	//this.updateDigest("Attr "+ res3.getAttrB());
 	this.updateDigest("Attr Name "+ res3.getAttrA().getName());
@@ -322,7 +328,7 @@ public class AvatarPragmaTests extends TToolTest {
 	this.updateDigest("Attr State "+ res3.getAttrA().getState());
 	this.updateDigest("Attr State "+ res3.getAttrB().getState());
 	res3 = (AvatarPragmaAuthenticity) res.get(0);
-	this.updateDigest("# of Attributes: " + (res3.getArgs().size() == 2));
+	// this.updateDigest("# of Attributes: " + (res3.getArgs().size() == 2));
 	this.updateDigest("Attr Name "+ res3.getAttrA().getName());
 	this.updateDigest("Attr Name "+ res3.getAttrB().getName());
 	this.updateDigest("Attr State "+ res3.getAttrA().getState());
@@ -332,7 +338,7 @@ public class AvatarPragmaTests extends TToolTest {
 
 	//Test Constants
 	this.updateDigest("Constant Tests");
-	res = AvatarPragma.createFromString("Constant 1 0 a b", null,blocks, typeAttributesMap, nameTypeMap);	
+	res = AvatarPragma.createFromString("PublicConstant 1 0 a b", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 	this.updateDigest("Right type :" + (res.get(0) instanceof AvatarPragmaConstant));
 	AvatarPragmaConstant res5 = (AvatarPragmaConstant) res.get(0);
         this.updateDigest("Right number of constants " + (res5.getConstants().size() == 4));
@@ -345,8 +351,8 @@ public class AvatarPragmaTests extends TToolTest {
 	//Avatar Specification Tests
 	
 	this.updateDigest("Tests finished");
-	//this.printDigest();
-	if (!this.testDigest (new byte[] {-90, 49, 84, 60, -76, -16, -13, 79, -65, -123, 61, -9, 38, 110, -27, 80, 19, -15, 82, -36}))
+	// this.printDigest();
+	if (!this.testDigest (new byte[] {-20, 106, 33, 29, -66, -82, 7, 48, 95, -57, -92, -121, 42, 126, 78, -57, 91, 21, 8, 120}))
            this.error ("Unexpected result when testing AvatarPragmas...");
     }
     public static void main(String[] args){

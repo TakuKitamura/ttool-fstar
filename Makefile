@@ -443,14 +443,17 @@ updatesimulator:
 
 	cd /homes/apvrille/TechTTool/SystemCCode/generated/; make ultraclean
 
-test: $(TEST_MAKEFILES)
-	$(foreach m,$(TEST_MAKEFILES),$(MAKE) -s -C $(dir $(m)) -f $(TEST_MK);)
+test: basic $(TEST_DIRS)
 	@echo "Everything went fine"
 
 $(TEST_DIR)/%/$(TEST_MK): $(TEST_DIR)/$(TEST_MK)
 	@cp $< $@
 
+$(TEST_DIRS): %: %/$(TEST_MK) force
+	$(MAKE) -s -C $@ -f $(TEST_MK)
 
+.PHONY: force
+force:;
 
 publishjar: ttooljar
 	scp bin/ttool.jar apvrille@ssh.enst.fr:public_html/docs/
@@ -470,6 +473,7 @@ clean:
 		echo rm -f $$p/*.class;\
 		rm -f $(TTOOL_SRC)/$$p/*.class $(TTOOL_SRC)/$$p/*.java~; \
 	done
+	rm -f $(TEST_DIR)/*.class
 	@@for t in $(TEST_DIRS); do \
 		if [ -w $$t/$(TEST_MK) ]; \
 		then \

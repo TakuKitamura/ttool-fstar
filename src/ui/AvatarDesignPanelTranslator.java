@@ -127,7 +127,7 @@ public class AvatarDesignPanelTranslator {
         return as;
     }
 
-    public class ErrorAccumulator {
+    public class ErrorAccumulator extends avatartranslator.ErrorAccumulator {
         private TGComponent tgc;
         private TDiagramPanel tdp;
         private AvatarBlock ab;

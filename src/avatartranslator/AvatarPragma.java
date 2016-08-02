@@ -68,7 +68,7 @@ public abstract class AvatarPragma extends AvatarElement {
         proofStatus = status;
     }
 
-    public static LinkedList<AvatarPragma> createFromString(String str, Object obj, LinkedList<AvatarBlock> blocks, HashMap<String, LinkedList<TAttribute>> typeAttributesMap, HashMap<String, String> nameTypeMap, AvatarDesignPanelTranslator.ErrorAccumulator errorAcc){
+    public static LinkedList<AvatarPragma> createFromString(String str, Object obj, LinkedList<AvatarBlock> blocks, HashMap<String, LinkedList<TAttribute>> typeAttributesMap, HashMap<String, String> nameTypeMap, ErrorAccumulator errorAcc){
         //createFromString takes in a pragma string (with # removed), the containing object, and the list of AvatarBlocks, and returns the corresponding AvatarPragma or null if an error occurred
         //The attributes referenced must exist 
 
