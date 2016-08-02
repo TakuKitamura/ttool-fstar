@@ -62,11 +62,11 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /users/enseig/genius/TURTLE/uppaal/spec.xml"/>
 
-<LastOpenFile data="/home/andream/andreae/Zigbee/models/ZigBeeDEMO.xml"/>
+<LastOpenFile data="/users/enseig/genius/TURTLE/modeling/MicroWaveOven_SimpleAsynchronousDeploy2CPU2RAM.xml"/>
 
 
 
-<LastWindowAttributes x="65" y="24" width="1301" height="744" max="true" />
+<LastWindowAttributes x="397" y="25" width="1075" height="848" max="false" />
 
 
 <ProVerifHash data=""/>
