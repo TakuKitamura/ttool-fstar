@@ -47,6 +47,7 @@
 package ui.window;
 
 import java.awt.*;
+import java.math.*;
 import java.awt.event.*;
 import javax.swing.*;
 import ui.*;
@@ -439,10 +440,9 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	//Channel - TML_PORT_CHANNEL
 	Collections.sort(transactions, new Comparator<SimulationTransaction>(){
      	public int compare(SimulationTransaction o1, SimulationTransaction o2){
-	     if (o1.startTime.equals(o2.startTime)){
-		return 0;
-	     }
-        	return Integer.valueOf(o1.startTime) < Integer.valueOf(o2.startTime) ? -1 : 1;
+	     BigDecimal t1 = new BigDecimal(o1.startTime);
+	     BigDecimal t2 = new BigDecimal(o2.startTime);
+	     return t1.compareTo(t2);
 	     }
 	});
 	ArrayList<SimulationTransaction> tranList = new ArrayList<SimulationTransaction>(transactions);
