@@ -54,136 +54,136 @@ import avatartranslator.*;
 public class AvatarGuardTests extends TToolTest {	
 
 	public AvatarGuardTests () {
-        super ("AvatarGuards", false);
-    }
+		super ("AvatarGuards", false);
+	}
 
-    protected void test () {
-	AvatarSpecification as = new AvatarSpecification("avatarspecification", null);
-	AvatarBlock A = new AvatarBlock("A", as, null);
-	AvatarStateMachine Aasm = A.getStateMachine();
-	Aasm.addElement(new AvatarState("a1", null));
-	A.addAttribute(new AvatarAttribute("key1", AvatarType.INTEGER, A, null));
-	A.addAttribute(new AvatarAttribute("key2", AvatarType.INTEGER, A, null));
-	A.addAttribute(new AvatarAttribute("test", AvatarType.BOOLEAN, A, null));
-	A.addAttribute(new AvatarAttribute("test2", AvatarType.BOOLEAN, A, null));
+	protected void test () {
+		AvatarSpecification as = new AvatarSpecification("avatarspecification", null);
+		AvatarBlock A = new AvatarBlock("A", as, null);
+		AvatarStateMachine Aasm = A.getStateMachine();
+		Aasm.addElement(new AvatarState("a1", null));
+		A.addAttribute(new AvatarAttribute("key1", AvatarType.INTEGER, A, null));
+		A.addAttribute(new AvatarAttribute("key2", AvatarType.INTEGER, A, null));
+		A.addAttribute(new AvatarAttribute("test", AvatarType.BOOLEAN, A, null));
+		A.addAttribute(new AvatarAttribute("test2", AvatarType.BOOLEAN, A, null));
 
-	AvatarBlock B = new AvatarBlock("B", as, null);
-	AvatarStateMachine Basm = B.getStateMachine();
-	Basm.addElement(new AvatarState("b1", null));
-	B.addAttribute(new AvatarAttribute("key1", AvatarType.INTEGER, B, null));
-	B.addAttribute(new AvatarAttribute("key2", AvatarType.BOOLEAN, B, null));
-	B.addAttribute(new AvatarAttribute("m__a", AvatarType.UNDEFINED, B, null));
-	B.addAttribute(new AvatarAttribute("m__b", AvatarType.UNDEFINED, B, null));
+		AvatarBlock B = new AvatarBlock("B", as, null);
+		AvatarStateMachine Basm = B.getStateMachine();
+		Basm.addElement(new AvatarState("b1", null));
+		B.addAttribute(new AvatarAttribute("key1", AvatarType.INTEGER, B, null));
+		B.addAttribute(new AvatarAttribute("key2", AvatarType.BOOLEAN, B, null));
+		B.addAttribute(new AvatarAttribute("m__a", AvatarType.UNDEFINED, B, null));
+		B.addAttribute(new AvatarAttribute("m__b", AvatarType.UNDEFINED, B, null));
 
-	AvatarBlock C = new AvatarBlock("C", as, null);
-	AvatarStateMachine Casm = C.getStateMachine();
-	Casm.addElement(new AvatarState("c1", null));
-	C.addAttribute(new AvatarAttribute("attr", AvatarType.INTEGER, C, null));
-	C.addAttribute(new AvatarAttribute("m__a", AvatarType.UNDEFINED, C, null));	
-	C.addAttribute(new AvatarAttribute("m__b", AvatarType.UNDEFINED, C, null));
-	C.addAttribute(new AvatarAttribute("d__c", AvatarType.UNDEFINED, C, null));	
+		AvatarBlock C = new AvatarBlock("C", as, null);
+		AvatarStateMachine Casm = C.getStateMachine();
+		Casm.addElement(new AvatarState("c1", null));
+		C.addAttribute(new AvatarAttribute("attr", AvatarType.INTEGER, C, null));
+		C.addAttribute(new AvatarAttribute("m__a", AvatarType.UNDEFINED, C, null));	
+		C.addAttribute(new AvatarAttribute("m__b", AvatarType.UNDEFINED, C, null));
+		C.addAttribute(new AvatarAttribute("d__c", AvatarType.UNDEFINED, C, null));	
 
-	LinkedList<AvatarBlock> blocks = new LinkedList<AvatarBlock>();
-	blocks.add(A);
-	blocks.add(B);
-        blocks.add(C);
+		LinkedList<AvatarBlock> blocks = new LinkedList<AvatarBlock>();
+		blocks.add(A);
+		blocks.add(B);
+		blocks.add(C);
 
-	HashMap<String, Vector> typeAttributesMap = new HashMap<String, Vector>();  
-        HashMap<String, String> nameTypeMap = new HashMap<String, String>();
+		HashMap<String, Vector> typeAttributesMap = new HashMap<String, Vector>();  
+		HashMap<String, String> nameTypeMap = new HashMap<String, String>();
 
-	//Type T1: a,b
-	//Type T2: c
-	TAttribute attr_a = new TAttribute(2, "a", "0", 2);
-	TAttribute attr_b = new TAttribute(2, "b", "1", 1);
-	TAttribute attr_c = new TAttribute(2, "c", "true", 0);
-	nameTypeMap.put("C.m", "T1");
-	nameTypeMap.put("B.m", "T1");
-	nameTypeMap.put("C.d", "T2");
-	Vector t1s= new Vector();
-	Vector t2s= new Vector();
-	t1s.add(attr_a);
-	t1s.add(attr_b);
-	t2s.add(attr_c);
-	typeAttributesMap.put("T1", t1s);
-	typeAttributesMap.put("T2", t2s);	
-	AvatarGuard res;
-
-	
-	//Else Guard
-	res= AvatarGuard.createFromString(A, "else");
-	System.out.println("Created else guard " +(res instanceof AvatarGuardElse));
-	//Empty Guard
-	res= AvatarGuard.createFromString(A, "");
-	System.out.println("Created empty guard " +(res instanceof AvatarGuardEmpty));
-	//Fail if not valid expression
-	res= AvatarGuard.createFromString(A, "arg(key1==key2))");
-	System.out.println("Fail if nonvalid expression " +(res instanceof AvatarGuardEmpty));
-	res= AvatarGuard.createFromString(A, "key1=key2");
-	System.out.println("Fail if nonvalid expression " +(res instanceof AvatarGuardEmpty));
-	res= AvatarGuard.createFromString(A, "key1==)");
-	System.out.println("Fail if nonvalid expression " +(res instanceof AvatarGuardEmpty));
-	res= AvatarGuard.createFromString(A, "(key1==)))");
-	System.out.println("Fail if nonvalid expression " +(res instanceof AvatarGuardEmpty));
-
-	//Mono Guards
-	System.out.println("Mono Guard Tests");
-	res= AvatarGuard.createFromString(A, "test");
-	System.out.println("Created mono guard " +(res instanceof AvatarSimpleGuardMono));
-
-	//Duo Guards
-	System.out.println("Duo Guard Tests");	
-	res= AvatarGuard.createFromString(A, "test==test2");
-	System.out.println("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
-	res= AvatarGuard.createFromString(A, "key1==key2");
-	System.out.println("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
-	res= AvatarGuard.createFromString(A, "key1 != key2");
-	System.out.println("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
-	res= AvatarGuard.createFromString(A, "key1 != true");
-	System.out.println("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
-	res= AvatarGuard.createFromString(A, "key1 != false");
-	System.out.println("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
-	res= AvatarGuard.createFromString(A, "key1 != 1");
-	System.out.println("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
-	res= AvatarGuard.createFromString(A, "key1 != a1234");
-	System.out.println("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
-	res= AvatarGuard.createFromString(A, "(a,b)==(c,d)");
-	System.out.println("Created duo guard with tuple " +(res instanceof AvatarSimpleGuardDuo));
-
-	//Unary Guards	
-	System.out.println("Unary Guard Tests");
-	res= AvatarGuard.createFromString(A, "not(test)");
-	System.out.println("Created unary guard " +(res instanceof AvatarUnaryGuard));
-	res= AvatarGuard.createFromString(A, "not(test==test2)");
-	System.out.println("Created unary guard " +(res instanceof AvatarUnaryGuard));
-	res= AvatarGuard.createFromString(A, "not(key1==key2)");
-	System.out.println("Created unary guard " +(res instanceof AvatarUnaryGuard));
-	res= AvatarGuard.createFromString(B, "not(m__a==key2)");
-	System.out.println("Created unary guard " +(res instanceof AvatarUnaryGuard));
-	res= AvatarGuard.createFromString(B, "not(m__a==m__b)");
-	System.out.println("Created unary guard " +(res instanceof AvatarUnaryGuard));
-
-	//Binary Guards
-	System.out.println("Binary Guard Tests");
-	res= AvatarGuard.createFromString(A, "(key1==true) and (key2==false)");
-	System.out.println("Binary guard with and " +(res instanceof AvatarBinaryGuard));
-	res= AvatarGuard.createFromString(A, "(a) and (b)");
-	System.out.println("Binary guard with tuple " +(res instanceof AvatarBinaryGuard));
-	res= AvatarGuard.createFromString(A, "(key1==key1) or (key2==key1)");
-	System.out.println("Binary guard with or " +(res instanceof AvatarBinaryGuard));
-	res= AvatarGuard.createFromString(A, "((key1==key1) or (key2==key1)) and (m__a==m__b)");
-	System.out.println("Binary guard with and/or " +(res instanceof AvatarBinaryGuard));
-	this.updateDigest("-------------------------------------");
+		//Type T1: a,b
+		//Type T2: c
+		TAttribute attr_a = new TAttribute(2, "a", "0", 2);
+		TAttribute attr_b = new TAttribute(2, "b", "1", 1);
+		TAttribute attr_c = new TAttribute(2, "c", "true", 0);
+		nameTypeMap.put("C.m", "T1");
+		nameTypeMap.put("B.m", "T1");
+		nameTypeMap.put("C.d", "T2");
+		Vector t1s= new Vector();
+		Vector t2s= new Vector();
+		t1s.add(attr_a);
+		t1s.add(attr_b);
+		t2s.add(attr_c);
+		typeAttributesMap.put("T1", t1s);
+		typeAttributesMap.put("T2", t2s);	
+		AvatarGuard res;
 
 
-	//Avatar Specification Tests
-	
-	this.updateDigest("Tests finished");
-	//this.printDigest();
-//	if (!this.testDigest (new byte[] {-90, 49, 84, 60, -76, -16, -13, 79, -65, -123, 61, -9, 38, 110, -27, 80, 19, -15, 82, -36}))
-  //         this.error ("Unexpected result when testing AvatarPragmas...");
-    }
-    public static void main(String[] args){
-        AvatarGuardTests apt = new AvatarGuardTests ();
-        apt.runTest ();
-    }
+		//Else Guard
+		res= AvatarGuard.createFromString(A, "else");
+		this.updateDigest("Created else guard " +(res instanceof AvatarGuardElse));
+		//Empty Guard
+		res= AvatarGuard.createFromString(A, "");
+		this.updateDigest("Created empty guard " +(res instanceof AvatarGuardEmpty));
+		//Fail if not valid expression
+		res= AvatarGuard.createFromString(A, "arg(key1==key2))");
+		this.updateDigest("Fail if nonvalid expression " +(res instanceof AvatarGuardEmpty));
+		res= AvatarGuard.createFromString(A, "key1=key2");
+		this.updateDigest("Fail if nonvalid expression " +(res instanceof AvatarGuardEmpty));
+		res= AvatarGuard.createFromString(A, "key1==)");
+		this.updateDigest("Fail if nonvalid expression " +(res instanceof AvatarGuardEmpty));
+		res= AvatarGuard.createFromString(A, "(key1==)))");
+		this.updateDigest("Fail if nonvalid expression " +(res instanceof AvatarGuardEmpty));
+
+		//Mono Guards
+		this.updateDigest("Mono Guard Tests");
+		res= AvatarGuard.createFromString(A, "test");
+		this.updateDigest("Created mono guard " +(res instanceof AvatarSimpleGuardMono));
+
+		//Duo Guards
+		this.updateDigest("Duo Guard Tests");	
+		res= AvatarGuard.createFromString(A, "test==test2");
+		this.updateDigest("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
+		res= AvatarGuard.createFromString(A, "key1==key2");
+		this.updateDigest("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
+		res= AvatarGuard.createFromString(A, "key1 != key2");
+		this.updateDigest("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
+		res= AvatarGuard.createFromString(A, "key1 != true");
+		this.updateDigest("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
+		res= AvatarGuard.createFromString(A, "key1 != false");
+		this.updateDigest("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
+		res= AvatarGuard.createFromString(A, "key1 != 1");
+		this.updateDigest("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
+		res= AvatarGuard.createFromString(A, "key1 != a1234");
+		this.updateDigest("Created duo guard " +(res instanceof AvatarSimpleGuardDuo));
+		res= AvatarGuard.createFromString(A, "(a,b)==(c,d)");
+		this.updateDigest("Created duo guard with tuple " +(res instanceof AvatarSimpleGuardDuo));
+
+		//Unary Guards	
+		this.updateDigest("Unary Guard Tests");
+		res= AvatarGuard.createFromString(A, "not(test)");
+		this.updateDigest("Created unary guard " +(res instanceof AvatarUnaryGuard));
+		res= AvatarGuard.createFromString(A, "not(test==test2)");
+		this.updateDigest("Created unary guard " +(res instanceof AvatarUnaryGuard));
+		res= AvatarGuard.createFromString(A, "not(key1==key2)");
+		this.updateDigest("Created unary guard " +(res instanceof AvatarUnaryGuard));
+		res= AvatarGuard.createFromString(B, "not(m__a==key2)");
+		this.updateDigest("Created unary guard " +(res instanceof AvatarUnaryGuard));
+		res= AvatarGuard.createFromString(B, "not(m__a==m__b)");
+		this.updateDigest("Created unary guard " +(res instanceof AvatarUnaryGuard));
+
+		//Binary Guards
+		this.updateDigest("Binary Guard Tests");
+		res= AvatarGuard.createFromString(A, "(key1==true) and (key2==false)");
+		this.updateDigest("Binary guard with and " +(res instanceof AvatarBinaryGuard));
+		res= AvatarGuard.createFromString(A, "(a) and (b)");
+		this.updateDigest("Binary guard with tuple " +(res instanceof AvatarBinaryGuard));
+		res= AvatarGuard.createFromString(A, "(key1==key1) or (key2==key1)");
+		this.updateDigest("Binary guard with or " +(res instanceof AvatarBinaryGuard));
+		res= AvatarGuard.createFromString(A, "((key1==key1) or (key2==key1)) and (m__a==m__b)");
+		this.updateDigest("Binary guard with and/or " +(res instanceof AvatarBinaryGuard));
+		this.updateDigest("-------------------------------------");
+
+
+		//Avatar Specification Tests
+
+		this.updateDigest("Tests finished");
+		// this.printDigest();
+		if (!this.testDigest (new byte[] {-75, -74, 67, -89, -35, 97, -29, -67, -79, 8, -88, 104, 19, -20, 60, -45, 83, -105, -47, -98}))
+			this.error ("Unexpected result when testing AvatarPragmas...");
+	}
+	public static void main(String[] args){
+		AvatarGuardTests apt = new AvatarGuardTests ();
+		apt.runTest ();
+	}
 }
