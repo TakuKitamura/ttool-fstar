@@ -208,8 +208,6 @@ public class TasksAndMainGenerator {
 
 			mainFile.appendToBeforeMainCode("syncchannel __" +getChannelName(ar, i) + ";" + CR);
 
-			//DG 2.8. 
-			// In AVATAR, all channels are of width 1 signal but can have depth if asynchronous
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.rptr = 0;" + CR);		
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.wptr = 0;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
@@ -232,11 +230,11 @@ public class TasksAndMainGenerator {
 			mainFile.appendToMainCode(getChannelName(ar, i)+".status->lock=0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+ getChannelName(ar, i)+"_status->wptr=0;" + CR);
+			mainFile.appendToMainCode(getChannelName(ar, i) + ".status->wptr =0;" + CR);
 
 	//mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock= LOCK"+j+";" + CR); //DG 01.07. enleve *
 
-			mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock= LOCK"+i+";" + CR); //DG 2.8.
+			mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+i+";" + CR); //DG 2.8.
 
 			//mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+j+" = MWMR_STATUS_INITIALIZER(1, 1);" + CR); 	
 			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+j+";" + CR); 		
@@ -265,10 +263,7 @@ public class TasksAndMainGenerator {
 			mainFile.appendToHCode("extern asyncchannel __" + getChannelName(ar, i) + ";" + CR);
 
 			mainFile.appendToBeforeMainCode("asyncchannel __" +getChannelName(ar, i) + ";" + CR);
-
-
-			//DG 2.8. 
-			// In AVATAR, all channels are of width 1 signal but can have depths if asynchronous
+			//DG 2.8.
 			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.rptr = 0;" + CR);		
 			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.wptr = 0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
@@ -276,7 +271,7 @@ public class TasksAndMainGenerator {
 
 
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 1;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 1;" + CR);//provisional; to be changed for depth > 1
+			mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+"1;" + CR);// async fifo has depth >= 1
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = "+getChannelName(ar, i)+".depth;" + CR);//gdepth = depth becaus width = 1
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR);
@@ -300,8 +295,6 @@ public class TasksAndMainGenerator {
 		    mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
 		mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
 	    mainFile.appendToMainCode(getChannelName(ar, i)+".status->wptr=0;" + CR);
-
-
 
 	    //	mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+j+";" + CR); 
 	    mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+i+";" + CR); // DG 2.8.

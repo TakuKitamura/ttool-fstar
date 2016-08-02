@@ -49,56 +49,55 @@ pthread_mutex_t __mainMutex;
 typedef struct mwmr_s mwmr_t;
 
 /* Synchronous channels */
-/* Asynchronous channels */
-asyncchannel __Controller_ringBell__Bell_ring;
+syncchannel __Controller_ringBell__Bell_ring;
 uint32_t const Controller_ringBell__Bell_ring_lock LOCK0;
 struct mwmr_status_s Controller_ringBell__Bell_ring_status CHANNEL0;
 uint8_t Controller_ringBell__Bell_ring_data[32] CHANNEL0;
 struct mwmr_s Controller_ringBell__Bell_ring CHANNEL0;
 
-asyncchannel __Door_okDoor__Controller_okDoor;
+syncchannel __Door_okDoor__Controller_okDoor;
 uint32_t const Door_okDoor__Controller_okDoor_lock LOCK0;
 struct mwmr_status_s Door_okDoor__Controller_okDoor_status CHANNEL0;
 uint8_t Door_okDoor__Controller_okDoor_data[32] CHANNEL0;
 struct mwmr_s Door_okDoor__Controller_okDoor CHANNEL0;
 
-asyncchannel __Door_open__Controller_open;
+syncchannel __Door_open__Controller_open;
 uint32_t const Door_open__Controller_open_lock LOCK1;
 struct mwmr_status_s Door_open__Controller_open_status CHANNEL1;
 uint8_t Door_open__Controller_open_data[32] CHANNEL1;
 struct mwmr_s Door_open__Controller_open CHANNEL1;
 
-asyncchannel __Door_closed__Controller_closed;
+syncchannel __Door_closed__Controller_closed;
 uint32_t const Door_closed__Controller_closed_lock LOCK2;
 struct mwmr_status_s Door_closed__Controller_closed_status CHANNEL2;
 uint8_t Door_closed__Controller_closed_data[32] CHANNEL2;
 struct mwmr_s Door_closed__Controller_closed CHANNEL2;
 
-asyncchannel __Controller_startMagnetron__Magnetron_startM;
+syncchannel __Controller_startMagnetron__Magnetron_startM;
 uint32_t const Controller_startMagnetron__Magnetron_startM_lock LOCK0;
 struct mwmr_status_s Controller_startMagnetron__Magnetron_startM_status CHANNEL0;
 uint8_t Controller_startMagnetron__Magnetron_startM_data[32] CHANNEL0;
 struct mwmr_s Controller_startMagnetron__Magnetron_startM CHANNEL0;
 
-asyncchannel __Controller_stopMagnetron__Magnetron_stopM;
+syncchannel __Controller_stopMagnetron__Magnetron_stopM;
 uint32_t const Controller_stopMagnetron__Magnetron_stopM_lock LOCK1;
 struct mwmr_status_s Controller_stopMagnetron__Magnetron_stopM_status CHANNEL1;
 uint8_t Controller_stopMagnetron__Magnetron_stopM_data[32] CHANNEL1;
 struct mwmr_s Controller_stopMagnetron__Magnetron_stopM CHANNEL1;
 
-asyncchannel __ControlPanel_LEDOn__Controller_startCooking;
+syncchannel __ControlPanel_LEDOn__Controller_startCooking;
 uint32_t const ControlPanel_LEDOn__Controller_startCooking_lock LOCK0;
 struct mwmr_status_s ControlPanel_LEDOn__Controller_startCooking_status CHANNEL0;
 uint8_t ControlPanel_LEDOn__Controller_startCooking_data[32] CHANNEL0;
 struct mwmr_s ControlPanel_LEDOn__Controller_startCooking CHANNEL0;
 
-asyncchannel __ControlPanel_LEDoff__Controller_stopCooking;
+syncchannel __ControlPanel_LEDoff__Controller_stopCooking;
 uint32_t const ControlPanel_LEDoff__Controller_stopCooking_lock LOCK1;
 struct mwmr_status_s ControlPanel_LEDoff__Controller_stopCooking_status CHANNEL1;
 uint8_t ControlPanel_LEDoff__Controller_stopCooking_data[32] CHANNEL1;
 struct mwmr_s ControlPanel_LEDoff__Controller_stopCooking CHANNEL1;
 
-asyncchannel __ControlPanel_startButton__Controller_start;
+syncchannel __ControlPanel_startButton__Controller_start;
 uint32_t const ControlPanel_startButton__Controller_start_lock LOCK2;
 struct mwmr_status_s ControlPanel_startButton__Controller_start_status CHANNEL2;
 uint8_t ControlPanel_startButton__Controller_start_data[32] CHANNEL2;
@@ -115,7 +114,6 @@ int main(int argc, char *argv[]) {
   pthread_mutex_init(&__mainMutex, NULL);
   
   /* Synchronous channels */
-  /* Asynchronous channels */
   Controller_ringBell__Bell_ring_status.rptr = 0;
   Controller_ringBell__Bell_ring_status.wptr = 0;
   Controller_ringBell__Bell_ring_status.usage = 0;
@@ -123,19 +121,18 @@ int main(int argc, char *argv[]) {
   
   Controller_ringBell__Bell_ring.width = 1;
   Controller_ringBell__Bell_ring.depth = 1;
-  Controller_ringBell__Bell_ring.gdepth = Controller_ringBell__Bell_ring.depth;
+  Controller_ringBell__Bell_ring.gdepth = 1;
   Controller_ringBell__Bell_ring.buffer = Controller_ringBell__Bell_ring_data;
   Controller_ringBell__Bell_ring.status = &Controller_ringBell__Bell_ring_status;
+  
   __Controller_ringBell__Bell_ring.inname ="ring";
   __Controller_ringBell__Bell_ring.outname ="ringBell";
-  __Controller_ringBell__Bell_ring.isBlocking = 0;
-  __Controller_ringBell__Bell_ring.maxNbOfMessages = 4;
   __Controller_ringBell__Bell_ring.mwmr_fifo = &Controller_ringBell__Bell_ring;
   Controller_ringBell__Bell_ring.status =&Controller_ringBell__Bell_ring_status;
   Controller_ringBell__Bell_ring.status->lock=0;
   Controller_ringBell__Bell_ring.status->rptr=0;
   Controller_ringBell__Bell_ring.status->usage=0;
-  Controller_ringBell__Bell_ring.status->wptr=0;
+  Controller_ringBell__Bell_ring.status->wptr =0;
   Door_okDoor__Controller_okDoor_status.rptr = 0;
   Door_okDoor__Controller_okDoor_status.wptr = 0;
   Door_okDoor__Controller_okDoor_status.usage = 0;
@@ -143,19 +140,18 @@ int main(int argc, char *argv[]) {
   
   Door_okDoor__Controller_okDoor.width = 1;
   Door_okDoor__Controller_okDoor.depth = 1;
-  Door_okDoor__Controller_okDoor.gdepth = Door_okDoor__Controller_okDoor.depth;
+  Door_okDoor__Controller_okDoor.gdepth = 1;
   Door_okDoor__Controller_okDoor.buffer = Door_okDoor__Controller_okDoor_data;
   Door_okDoor__Controller_okDoor.status = &Door_okDoor__Controller_okDoor_status;
+  
   __Door_okDoor__Controller_okDoor.inname ="okDoor";
   __Door_okDoor__Controller_okDoor.outname ="okDoor";
-  __Door_okDoor__Controller_okDoor.isBlocking = 0;
-  __Door_okDoor__Controller_okDoor.maxNbOfMessages = 4;
   __Door_okDoor__Controller_okDoor.mwmr_fifo = &Door_okDoor__Controller_okDoor;
   Door_okDoor__Controller_okDoor.status =&Door_okDoor__Controller_okDoor_status;
   Door_okDoor__Controller_okDoor.status->lock=0;
   Door_okDoor__Controller_okDoor.status->rptr=0;
   Door_okDoor__Controller_okDoor.status->usage=0;
-  Door_okDoor__Controller_okDoor.status->wptr=0;
+  Door_okDoor__Controller_okDoor.status->wptr =0;
   Door_open__Controller_open_status.rptr = 0;
   Door_open__Controller_open_status.wptr = 0;
   Door_open__Controller_open_status.usage = 0;
@@ -163,19 +159,18 @@ int main(int argc, char *argv[]) {
   
   Door_open__Controller_open.width = 1;
   Door_open__Controller_open.depth = 1;
-  Door_open__Controller_open.gdepth = Door_open__Controller_open.depth;
+  Door_open__Controller_open.gdepth = 1;
   Door_open__Controller_open.buffer = Door_open__Controller_open_data;
   Door_open__Controller_open.status = &Door_open__Controller_open_status;
+  
   __Door_open__Controller_open.inname ="open";
   __Door_open__Controller_open.outname ="open";
-  __Door_open__Controller_open.isBlocking = 0;
-  __Door_open__Controller_open.maxNbOfMessages = 4;
   __Door_open__Controller_open.mwmr_fifo = &Door_open__Controller_open;
   Door_open__Controller_open.status =&Door_open__Controller_open_status;
   Door_open__Controller_open.status->lock=0;
   Door_open__Controller_open.status->rptr=0;
   Door_open__Controller_open.status->usage=0;
-  Door_open__Controller_open.status->wptr=0;
+  Door_open__Controller_open.status->wptr =0;
   Door_closed__Controller_closed_status.rptr = 0;
   Door_closed__Controller_closed_status.wptr = 0;
   Door_closed__Controller_closed_status.usage = 0;
@@ -183,19 +178,18 @@ int main(int argc, char *argv[]) {
   
   Door_closed__Controller_closed.width = 1;
   Door_closed__Controller_closed.depth = 1;
-  Door_closed__Controller_closed.gdepth = Door_closed__Controller_closed.depth;
+  Door_closed__Controller_closed.gdepth = 1;
   Door_closed__Controller_closed.buffer = Door_closed__Controller_closed_data;
   Door_closed__Controller_closed.status = &Door_closed__Controller_closed_status;
+  
   __Door_closed__Controller_closed.inname ="closed";
   __Door_closed__Controller_closed.outname ="closed";
-  __Door_closed__Controller_closed.isBlocking = 0;
-  __Door_closed__Controller_closed.maxNbOfMessages = 4;
   __Door_closed__Controller_closed.mwmr_fifo = &Door_closed__Controller_closed;
   Door_closed__Controller_closed.status =&Door_closed__Controller_closed_status;
   Door_closed__Controller_closed.status->lock=0;
   Door_closed__Controller_closed.status->rptr=0;
   Door_closed__Controller_closed.status->usage=0;
-  Door_closed__Controller_closed.status->wptr=0;
+  Door_closed__Controller_closed.status->wptr =0;
   Controller_startMagnetron__Magnetron_startM_status.rptr = 0;
   Controller_startMagnetron__Magnetron_startM_status.wptr = 0;
   Controller_startMagnetron__Magnetron_startM_status.usage = 0;
@@ -203,19 +197,18 @@ int main(int argc, char *argv[]) {
   
   Controller_startMagnetron__Magnetron_startM.width = 1;
   Controller_startMagnetron__Magnetron_startM.depth = 1;
-  Controller_startMagnetron__Magnetron_startM.gdepth = Controller_startMagnetron__Magnetron_startM.depth;
+  Controller_startMagnetron__Magnetron_startM.gdepth = 1;
   Controller_startMagnetron__Magnetron_startM.buffer = Controller_startMagnetron__Magnetron_startM_data;
   Controller_startMagnetron__Magnetron_startM.status = &Controller_startMagnetron__Magnetron_startM_status;
+  
   __Controller_startMagnetron__Magnetron_startM.inname ="startM";
   __Controller_startMagnetron__Magnetron_startM.outname ="startMagnetron";
-  __Controller_startMagnetron__Magnetron_startM.isBlocking = 0;
-  __Controller_startMagnetron__Magnetron_startM.maxNbOfMessages = 4;
   __Controller_startMagnetron__Magnetron_startM.mwmr_fifo = &Controller_startMagnetron__Magnetron_startM;
   Controller_startMagnetron__Magnetron_startM.status =&Controller_startMagnetron__Magnetron_startM_status;
   Controller_startMagnetron__Magnetron_startM.status->lock=0;
   Controller_startMagnetron__Magnetron_startM.status->rptr=0;
   Controller_startMagnetron__Magnetron_startM.status->usage=0;
-  Controller_startMagnetron__Magnetron_startM.status->wptr=0;
+  Controller_startMagnetron__Magnetron_startM.status->wptr =0;
   Controller_stopMagnetron__Magnetron_stopM_status.rptr = 0;
   Controller_stopMagnetron__Magnetron_stopM_status.wptr = 0;
   Controller_stopMagnetron__Magnetron_stopM_status.usage = 0;
@@ -223,19 +216,18 @@ int main(int argc, char *argv[]) {
   
   Controller_stopMagnetron__Magnetron_stopM.width = 1;
   Controller_stopMagnetron__Magnetron_stopM.depth = 1;
-  Controller_stopMagnetron__Magnetron_stopM.gdepth = Controller_stopMagnetron__Magnetron_stopM.depth;
+  Controller_stopMagnetron__Magnetron_stopM.gdepth = 1;
   Controller_stopMagnetron__Magnetron_stopM.buffer = Controller_stopMagnetron__Magnetron_stopM_data;
   Controller_stopMagnetron__Magnetron_stopM.status = &Controller_stopMagnetron__Magnetron_stopM_status;
+  
   __Controller_stopMagnetron__Magnetron_stopM.inname ="stopM";
   __Controller_stopMagnetron__Magnetron_stopM.outname ="stopMagnetron";
-  __Controller_stopMagnetron__Magnetron_stopM.isBlocking = 0;
-  __Controller_stopMagnetron__Magnetron_stopM.maxNbOfMessages = 4;
   __Controller_stopMagnetron__Magnetron_stopM.mwmr_fifo = &Controller_stopMagnetron__Magnetron_stopM;
   Controller_stopMagnetron__Magnetron_stopM.status =&Controller_stopMagnetron__Magnetron_stopM_status;
   Controller_stopMagnetron__Magnetron_stopM.status->lock=0;
   Controller_stopMagnetron__Magnetron_stopM.status->rptr=0;
   Controller_stopMagnetron__Magnetron_stopM.status->usage=0;
-  Controller_stopMagnetron__Magnetron_stopM.status->wptr=0;
+  Controller_stopMagnetron__Magnetron_stopM.status->wptr =0;
   ControlPanel_LEDOn__Controller_startCooking_status.rptr = 0;
   ControlPanel_LEDOn__Controller_startCooking_status.wptr = 0;
   ControlPanel_LEDOn__Controller_startCooking_status.usage = 0;
@@ -243,19 +235,18 @@ int main(int argc, char *argv[]) {
   
   ControlPanel_LEDOn__Controller_startCooking.width = 1;
   ControlPanel_LEDOn__Controller_startCooking.depth = 1;
-  ControlPanel_LEDOn__Controller_startCooking.gdepth = ControlPanel_LEDOn__Controller_startCooking.depth;
+  ControlPanel_LEDOn__Controller_startCooking.gdepth = 1;
   ControlPanel_LEDOn__Controller_startCooking.buffer = ControlPanel_LEDOn__Controller_startCooking_data;
   ControlPanel_LEDOn__Controller_startCooking.status = &ControlPanel_LEDOn__Controller_startCooking_status;
+  
   __ControlPanel_LEDOn__Controller_startCooking.inname ="LEDOn";
   __ControlPanel_LEDOn__Controller_startCooking.outname ="startCooking";
-  __ControlPanel_LEDOn__Controller_startCooking.isBlocking = 1;
-  __ControlPanel_LEDOn__Controller_startCooking.maxNbOfMessages = 1;
   __ControlPanel_LEDOn__Controller_startCooking.mwmr_fifo = &ControlPanel_LEDOn__Controller_startCooking;
   ControlPanel_LEDOn__Controller_startCooking.status =&ControlPanel_LEDOn__Controller_startCooking_status;
   ControlPanel_LEDOn__Controller_startCooking.status->lock=0;
   ControlPanel_LEDOn__Controller_startCooking.status->rptr=0;
   ControlPanel_LEDOn__Controller_startCooking.status->usage=0;
-  ControlPanel_LEDOn__Controller_startCooking.status->wptr=0;
+  ControlPanel_LEDOn__Controller_startCooking.status->wptr =0;
   ControlPanel_LEDoff__Controller_stopCooking_status.rptr = 0;
   ControlPanel_LEDoff__Controller_stopCooking_status.wptr = 0;
   ControlPanel_LEDoff__Controller_stopCooking_status.usage = 0;
@@ -263,19 +254,18 @@ int main(int argc, char *argv[]) {
   
   ControlPanel_LEDoff__Controller_stopCooking.width = 1;
   ControlPanel_LEDoff__Controller_stopCooking.depth = 1;
-  ControlPanel_LEDoff__Controller_stopCooking.gdepth = ControlPanel_LEDoff__Controller_stopCooking.depth;
+  ControlPanel_LEDoff__Controller_stopCooking.gdepth = 1;
   ControlPanel_LEDoff__Controller_stopCooking.buffer = ControlPanel_LEDoff__Controller_stopCooking_data;
   ControlPanel_LEDoff__Controller_stopCooking.status = &ControlPanel_LEDoff__Controller_stopCooking_status;
+  
   __ControlPanel_LEDoff__Controller_stopCooking.inname ="LEDoff";
   __ControlPanel_LEDoff__Controller_stopCooking.outname ="stopCooking";
-  __ControlPanel_LEDoff__Controller_stopCooking.isBlocking = 1;
-  __ControlPanel_LEDoff__Controller_stopCooking.maxNbOfMessages = 1;
   __ControlPanel_LEDoff__Controller_stopCooking.mwmr_fifo = &ControlPanel_LEDoff__Controller_stopCooking;
   ControlPanel_LEDoff__Controller_stopCooking.status =&ControlPanel_LEDoff__Controller_stopCooking_status;
   ControlPanel_LEDoff__Controller_stopCooking.status->lock=0;
   ControlPanel_LEDoff__Controller_stopCooking.status->rptr=0;
   ControlPanel_LEDoff__Controller_stopCooking.status->usage=0;
-  ControlPanel_LEDoff__Controller_stopCooking.status->wptr=0;
+  ControlPanel_LEDoff__Controller_stopCooking.status->wptr =0;
   ControlPanel_startButton__Controller_start_status.rptr = 0;
   ControlPanel_startButton__Controller_start_status.wptr = 0;
   ControlPanel_startButton__Controller_start_status.usage = 0;
@@ -283,19 +273,18 @@ int main(int argc, char *argv[]) {
   
   ControlPanel_startButton__Controller_start.width = 1;
   ControlPanel_startButton__Controller_start.depth = 1;
-  ControlPanel_startButton__Controller_start.gdepth = ControlPanel_startButton__Controller_start.depth;
+  ControlPanel_startButton__Controller_start.gdepth = 1;
   ControlPanel_startButton__Controller_start.buffer = ControlPanel_startButton__Controller_start_data;
   ControlPanel_startButton__Controller_start.status = &ControlPanel_startButton__Controller_start_status;
+  
   __ControlPanel_startButton__Controller_start.inname ="start";
   __ControlPanel_startButton__Controller_start.outname ="startButton";
-  __ControlPanel_startButton__Controller_start.isBlocking = 1;
-  __ControlPanel_startButton__Controller_start.maxNbOfMessages = 1;
   __ControlPanel_startButton__Controller_start.mwmr_fifo = &ControlPanel_startButton__Controller_start;
   ControlPanel_startButton__Controller_start.status =&ControlPanel_startButton__Controller_start_status;
   ControlPanel_startButton__Controller_start.status->lock=0;
   ControlPanel_startButton__Controller_start.status->rptr=0;
   ControlPanel_startButton__Controller_start.status->usage=0;
-  ControlPanel_startButton__Controller_start.status->wptr=0;
+  ControlPanel_startButton__Controller_start.status->wptr =0;
   
   /* Threads of tasks */
   pthread_t thread__MicroWaveOven;
