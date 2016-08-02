@@ -99,7 +99,7 @@ public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
     }
 
     public void setType(boolean _isAsync) {
-	isAsync = isAsync;
+        isAsync = _isAsync;
     }
 
     public int getType() {
@@ -110,7 +110,7 @@ public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
         }
     }
 
-     protected String translateExtraParam() {
+    protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<isAsync value=\"" + isAsync + "\" /> ");
         sb.append("</extraparam>\n");
@@ -143,13 +143,13 @@ public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
-			    if (elt.getTagName().equals("isAsync")) {
+                            if (elt.getTagName().equals("isAsync")) {
                                 s = elt.getAttribute("value");
                                 if (s.equals("true")) {
                                     isAsync = true;
                                 } else {
-				    isAsync = false;
-				}
+                                    isAsync = false;
+                                }
                             }
                         }
                     }
@@ -160,5 +160,5 @@ public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
             throw new MalformedModelingException();
         }
     }
-    
+
 }

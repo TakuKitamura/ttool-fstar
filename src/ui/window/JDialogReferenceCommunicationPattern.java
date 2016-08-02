@@ -59,46 +59,46 @@ import ui.tmldd.*;
 import myutil.*;
 
 
-public class JDialogReferenceCommunicationPattern extends javax.swing.JDialog implements ActionListener  {
-    
+public class JDialogReferenceCommunicationPattern Extends javax.swing.JDialog implements ActionListener  {
+
     private boolean regularClose;
-		private boolean emptyList = false;
-    
+    private boolean emptyList = false;
+
     private JPanel panel2;
     private Frame frame;
     private TMLArchiCPNode cp;
-    
+
     protected JTextField name;
-		protected JComboBox referenceCommunicationPattern;
-	
+    protected JComboBox referenceCommunicationPattern;
+
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
-    
+
     /** Creates new form  */
     public JDialogReferenceCommunicationPattern(Frame _frame, String _title, TMLArchiCPNode _cp) {
         super(_frame, _title, true);
         frame = _frame;
         cp = _cp;
-		
-		//System.out.println("New window");
-        
-		TraceManager.addDev("init components");
-		
+
+        //System.out.println("New window");
+
+        TraceManager.addDev("init components");
+
         initComponents();
-		
-		TraceManager.addDev("my init components");
-		
+
+        TraceManager.addDev("my init components");
+
         myInitComponents();
-		
-		TraceManager.addDev("pack");
+
+        TraceManager.addDev("pack");
         pack();
     }
-    
+
     private void myInitComponents() {
-		//selectPriority();
+        //selectPriority();
     }
-    
+
     private void initComponents() {
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
@@ -107,19 +107,19 @@ public class JDialogReferenceCommunicationPattern extends javax.swing.JDialog im
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
-        
+
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
-        
+
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        
+
+
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("CP attributes"));
         panel2.setPreferredSize(new Dimension(350, 250));
-        
-		c1.gridwidth = 1;
+
+        c1.gridwidth = 1;
         c1.gridheight = 1;
         c1.weighty = 1.0;
         c1.weightx = 1.0;
@@ -130,46 +130,46 @@ public class JDialogReferenceCommunicationPattern extends javax.swing.JDialog im
         panel2.add(name, c1);
         panel2.add(new JLabel("Reference:"), c2);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		TraceManager.addDev("Getting references");
-		Vector<String> list = cp.getTDiagramPanel().getMGUI().getAllTMLCP();
-		int index = 0;
-		if (list.size() == 0) {
-			list.add("No CP to reference");
-			emptyList = true;
-		} else {
-			
-			index = indexOf(list, cp.getReference());
-			//System.out.println("name=" + artifact.getFullValue() + " index=" + index);
-		}
-		
-		
+        TraceManager.addDev("Getting references");
+        Vector<String> list = cp.getTDiagramPanel().getMGUI().getAllTMLCP();
+        int index = 0;
+        if (list.size() == 0) {
+            list.add("No CP to reference");
+            emptyList = true;
+        } else {
+
+            index = indexOf(list, cp.getReference());
+            //System.out.println("name=" + artifact.getFullValue() + " index=" + index);
+        }
+
+
         referenceCommunicationPattern = new JComboBox(list);
-		referenceCommunicationPattern.setSelectedIndex(index);
-		referenceCommunicationPattern.addActionListener(this);
+        referenceCommunicationPattern.setSelectedIndex(index);
+        referenceCommunicationPattern.addActionListener(this);
         //referenceTaskName.setEditable(true);
         //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(referenceCommunicationPattern, c1);
-		
-		
-		/*c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Name:"), c2);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        taskName = new JTextField(artifact.getTaskName(), 30);
-        taskName.setEditable(true);
-        taskName.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(taskName, c1);*/
-        
+        panel2.add(referenceCommunicationPattern, c1);
+
+
+        /*c1.gridwidth = 1;
+          c1.gridheight = 1;
+          c1.weighty = 1.0;
+          c1.weightx = 1.0;
+          c1.fill = GridBagConstraints.HORIZONTAL;
+          panel2.add(new JLabel("Name:"), c2);
+          c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+          taskName = new JTextField(artifact.getTaskName(), 30);
+          taskName.setEditable(true);
+          taskName.setFont(new Font("times", Font.PLAIN, 12));
+          panel2.add(taskName, c1);*/
+
         // main panel;
         c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c.add(panel2, c0);
-        
+
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
@@ -182,20 +182,20 @@ public class JDialogReferenceCommunicationPattern extends javax.swing.JDialog im
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-       /* if (evt.getSource() == typeBox) {
-            boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-            initialValue.setEnabled(b);
-            return;
-        }*/
-		
-		/*if (evt.getSource() == referenceCommunicationPattern) {
-			selectReference();
-		}*/
-        
+
+    public void actionPerformed(ActionEvent evt)  {
+        /* if (evt.getSource() == typeBox) {
+           boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+           initialValue.setEnabled(b);
+           return;
+           }*/
+
+        /*if (evt.getSource() == referenceCommunicationPattern) {
+          selectReference();
+          }*/
+
         String command = evt.getActionCommand();
-        
+
         // Compare the action command to the known actions.
         if (command.equals("Save and Close"))  {
             closeDialog();
@@ -203,48 +203,48 @@ public class JDialogReferenceCommunicationPattern extends javax.swing.JDialog im
             cancelDialog();
         }
     }
-	
-	
-    
+
+
+
     public void closeDialog() {
         regularClose = true;
         dispose();
     }
-    
+
     public void cancelDialog() {
         dispose();
     }
-    
+
     public boolean isRegularClose() {
         return regularClose;
     }
-	
-	public String getReference() {
-		if (emptyList) {
-			return "";
-		}
-		String tmp = (String)(referenceCommunicationPattern.getSelectedItem());
-		return tmp;
-    }
-    
-   
-	
-	 public String getNodeName() {
-		return name.getText().trim();
-	 }
-	
-	
-	public int indexOf(Vector<String> _list, String name) {
-		int i = 0;
-		for(String s : _list) {
-			if (s.equals(name)) {
-				return i;
-			}
-			i++;
-		}
-		return 0;
-	}
-	
 
-    
+    public String getReference() {
+        if (emptyList) {
+            return "";
+        }
+        String tmp = (String)(referenceCommunicationPattern.getSelectedItem());
+        return tmp;
+    }
+
+
+
+    public String getNodeName() {
+        return name.getText().trim();
+    }
+
+
+    public int indexOf(Vector<String> _list, String name) {
+        int i = 0;
+        for(String s : _list) {
+            if (s.equals(name)) {
+                return i;
+            }
+            i++;
+        }
+        return 0;
+    }
+
+
+
 }
