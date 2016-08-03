@@ -68,8 +68,8 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     public String securityContext="";
     public String calculationTime="100";
     public String nonce="";
-	
-	protected int stateOfError = 0; // Not yet checked
+    public String formula="";
+    protected int stateOfError = 0; // Not yet checked
     
     public TMLADEncrypt(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -120,7 +120,7 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
 public boolean editOndoubleClick(JFrame frame) {
 
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);]
-	String[] values=new String[]{securityContext, type, message_overhead, calculationTime, size, nonce};
+	String[] values=new String[]{securityContext, type, message_overhead, calculationTime, size, nonce, formula};
 	String[] nonces=tdp.getMGUI().getAllNonce();
 	JDialogCryptographicConfiguration jdms = new JDialogCryptographicConfiguration(frame, "Setting Cryptographic Configuration properties", values, nonces);
         jdms.setSize(650, 300);
@@ -134,6 +134,7 @@ public boolean editOndoubleClick(JFrame frame) {
 	    calculationTime=jdms.getString(3);
 	    size=jdms.getString(4);
 	    nonce=jdms.getString(5);
+	    formula = jdms.getString(6);
             return true;
         }
 

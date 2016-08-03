@@ -433,8 +433,8 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	java.util.List<String> tasks=new ArrayList<String>();
 	Map<String, java.util.List<SimulationTransaction>> tasktrans = new HashMap<String, java.util.List<SimulationTransaction>>();
 	double incr=0.0;
-	int maxtime=0;
-	int mintime=999999999;
+	BigDecimal maxtime = new BigDecimal("0");
+	BigDecimal mintime=new BigDecimal("9999999999999999999999999999");
 	//Colors
 	//Exec- ColorManager.EXEC
 	//Channel - TML_PORT_CHANNEL
@@ -458,11 +458,13 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	    else {
 		tranList.remove(st);
 	    }
-	    if (Integer.valueOf(st.startTime)<mintime){
-		mintime=Integer.valueOf(st.startTime);
+	    BigDecimal start = new BigDecimal(st.startTime);
+	    BigDecimal end = new BigDecimal(st.endTime);
+	    if (start.compareTo(mintime)==-1){
+		mintime=start;
 	    }
-	    if (Integer.valueOf(st.endTime)>maxtime){
-		maxtime=Integer.valueOf(st.endTime);
+	    if (end.compareTo(maxtime)==1){
+		maxtime=end;
 	    }
 	}
 	String commandName="";
