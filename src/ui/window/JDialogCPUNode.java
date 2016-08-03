@@ -452,7 +452,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		java.util.List<SimulationTransaction> tmp = new ArrayList<SimulationTransaction>();
 		tasktrans.put(st.taskName, tmp);
 	    }
-	    if (tasktrans.get(st.taskName).size()==0 || !tasktrans.get(st.taskName).get(tasktrans.get(st.taskName).size()-1).command.equals(st.command)){
+	    if (tasktrans.get(st.taskName).size()==0 || !(tasktrans.get(st.taskName).get(tasktrans.get(st.taskName).size()-1).command+tasktrans.get(st.taskName).get(tasktrans.get(st.taskName).size()-1).startTime).equals(st.command+st.startTime)){
 		tasktrans.get(st.taskName).add(st);
 	    }
 	    else {
