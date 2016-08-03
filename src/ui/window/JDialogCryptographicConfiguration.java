@@ -384,12 +384,19 @@ public class advPanel extends JPanel {
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
 	String[] vals = new String[]{"Symmetric Encryption", "Asymmetric Encryption","MAC", "Hash", "Nonce"}; 
+
         // String1
       	c1.gridwidth = 1;
 	add(new JLabel("Cryptographic Configuration Name"),c1);
 	texts[0]=new JTextField(values[0],15);
 	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 	add(texts[0],c1);
+
+	c1.gridwidth=1;
+	add(new JLabel("Security Pattern"), c1);
+	helps[1]=new JComboBox(vals);
+	helps[1].setSelectedItem(values[1]);
+	add(helps[1],c1);
 
       	c1.gridwidth = 1;
 	add(new JLabel("Overhead"),c1);
