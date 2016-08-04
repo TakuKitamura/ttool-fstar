@@ -56,6 +56,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private final static int DEFAULT_NB_OF_THREADS = 12;
     private final static int SLEEP_DURATION = 500;
 
+    private AvatarSpecification initialSpec;
     private AvatarSpecification spec;
     private int nbOfThreads = DEFAULT_NB_OF_THREADS;
     private int nbOfCurrentComputations;
@@ -97,9 +98,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     public AvatarModelChecker(AvatarSpecification _spec) {
 	if (_spec != null) {
-	    //spec = _spec;
+	    initialSpec = _spec;
 	    //TraceManager.addDev("Before clone:\n" + spec);
-	    spec = _spec.advancedClone();
+	    //spec = _spec.advancedClone();
 	    //TraceManager.addDev("After clone:\n" + spec);
 	}
         ignoreEmptyTransitions = true;
@@ -238,9 +239,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     public void startModelChecking() {
+	TraceManager.addDev("String model checking");
+	
 	if (spec == null) {
 	    return;
 	}
+
+	spec = initialSpec.advancedClone();
 	
         stoppedBeforeEnd = false;
         stateID = 0;

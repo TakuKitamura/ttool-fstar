@@ -178,6 +178,10 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
     }
 
     public String toString() {
+	return toString(null);
+    }
+
+    public String toString(String val) {
         String ret = getExtendedName() + " ID=" + getID();
         if (myState == null) {
             ret += " / top level operator\n";
@@ -185,7 +189,11 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
             ret += " / in state " + myState.getName() + " ID=" + myState.getID() + "\n";
         }
 
-        ret += "nexts= ";
+	if (val != null) {
+	    ret += " value:" + val + "\n";
+	}
+
+        ret += " nexts= ";
         int cpt=0;
         for(AvatarStateMachineElement element: nexts) {
 	    if (element != null) {

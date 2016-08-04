@@ -361,6 +361,7 @@ private void addStatesToTransitionsBetweenTwoNonStates(AvatarBlock _block) {
     public void removeRandoms(AvatarBlock _block) {
         int id = 0;
         ArrayList<AvatarStateMachineElement> toRemove = new ArrayList<AvatarStateMachineElement>();
+	ArrayList<AvatarStateMachineElement> toAdd = new ArrayList<AvatarStateMachineElement>();
         AvatarStateMachineElement next;
         AvatarStateMachineElement previous;
 
@@ -372,18 +373,26 @@ private void addStatesToTransitionsBetweenTwoNonStates(AvatarBlock _block) {
                 toRemove.add(elt);
 
                 // Creating elements
-                AvatarTransition at1 = new AvatarTransition(_block, "Transition1ForRandom" + elt.getName() + "__" + id, elt.getReferenceObject());
+                AvatarTransition at1 = new AvatarTransition(_block, "Transition1ForRandom__ "+ elt.getName() + "__" + id, elt.getReferenceObject());
                 at1.addAction(random.getVariable() + "=" + random.getMinValue());
-                AvatarState randomState = new AvatarState("StateForRandom" + elt.getName() + "__" + id, elt.getReferenceObject());
-                AvatarTransition at2 = new AvatarTransition(_block, "Transition2ForRandom" + elt.getName() + "__" + id, elt.getReferenceObject());
+                AvatarState randomState = new AvatarState("StateForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
+		AvatarState beforeRandom = new AvatarState("StateBeforeRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
+                AvatarTransition at2 = new AvatarTransition(_block, "Transition2ForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
                 at2.addGuard("[" + random.getVariable() + " < " + random.getMaxValue() + "]");
-                at2.addAction(random.getVariable() + "=" + random.getVariable() + 1);
+                at2.addAction(random.getVariable() + "=" + random.getVariable() + "1");
+
+		// Adding elements
+		toAdd.add(at1);
+		toAdd.add(randomState);
+		toAdd.add(beforeRandom);
+		toAdd.add(at2);
 
                 // Linking elements
                 if (previous != null) {
                     previous.removeAllNexts();
-                    previous.addNext(at1);
+                    previous.addNext(beforeRandom);
                 }
+		beforeRandom.addNext(at1);
                 at1.addNext(randomState);
                 randomState.addNext(at2);
                 randomState.addNext(next);
@@ -396,6 +405,10 @@ private void addStatesToTransitionsBetweenTwoNonStates(AvatarBlock _block) {
 
         for(AvatarStateMachineElement trash: toRemove) {
             elements.remove(trash);
+        }
+
+	for(AvatarStateMachineElement newOnes: toAdd) {
+            elements.add(newOnes);
         }
     }
 

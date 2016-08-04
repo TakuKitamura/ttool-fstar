@@ -194,7 +194,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
     public void addAction(String _action) {
         AvatarAction aa = AvatarTerm.createActionFromString (block, _action);
-	System.out.println(aa);
+	TraceManager.addDev("Avatar action = " + aa);
         if (aa != null)
             actions.add(aa);
     }
@@ -266,6 +266,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
         at.setDelays(getMinDelay(), getMaxDelay());
         at.setComputes(getMinCompute(), getMaxCompute());
 
+	TraceManager.addDev("Cloning actions of " + this);
         for(int i=0; i<getNbOfAction(); i++) {
             at.addAction(getAction(i));
         }
@@ -282,6 +283,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
         at.setGuard(getGuard());
 
+	TraceManager.addDev("Cloning actions of " + this);
         for(int i=0; i<getNbOfAction(); i++) {
             at.addAction(getAction(i));
         }
@@ -388,6 +390,10 @@ public class AvatarTransition extends AvatarStateMachineElement {
                 return true;
 
         return false;
+    }
+
+    public String toString() {
+	return toString(getNiceName());
     }
 
     public String getNiceName() {
