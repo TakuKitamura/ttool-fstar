@@ -100,7 +100,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	if (_spec != null) {
 	    initialSpec = _spec;
 	    //TraceManager.addDev("Before clone:\n" + spec);
-	    //spec = _spec.advancedClone();
+	    spec = initialSpec.advancedClone();
 	    //TraceManager.addDev("After clone:\n" + spec);
 	}
         ignoreEmptyTransitions = true;
@@ -123,6 +123,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     public int getNbOfStates() {
+	if (states == null) {
+	    return 0;
+	}
         return states.size();
     }
 
@@ -244,8 +247,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	if (spec == null) {
 	    return;
 	}
-
-	spec = initialSpec.advancedClone();
 	
         stoppedBeforeEnd = false;
         stateID = 0;

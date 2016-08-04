@@ -378,8 +378,8 @@ private void addStatesToTransitionsBetweenTwoNonStates(AvatarBlock _block) {
                 AvatarState randomState = new AvatarState("StateForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
 		AvatarState beforeRandom = new AvatarState("StateBeforeRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
                 AvatarTransition at2 = new AvatarTransition(_block, "Transition2ForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
-                at2.addGuard("[" + random.getVariable() + " < " + random.getMaxValue() + "]");
-                at2.addAction(random.getVariable() + "=" + random.getVariable() + "1");
+                at2.setGuard("[" + random.getVariable() + " < " + random.getMaxValue() + "]");
+                at2.addAction(random.getVariable() + "=" + random.getVariable() + " + 1");
 
 		// Adding elements
 		toAdd.add(at1);

@@ -90,10 +90,12 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
     public void setGuard (String _guard) {
         this.guard = AvatarGuard.createFromString (this.block, _guard);
+	TraceManager.addDev("Setting guard = " + guard);
     }
 
     public void addGuard(String _g) {
         AvatarGuard guard = AvatarGuard.createFromString (this.block, _g);
+	TraceManager.addDev("Adding guard = " + guard);
         this.guard = AvatarGuard.addGuard (this.guard, guard, "and");
     }
 
@@ -194,7 +196,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
     public void addAction(String _action) {
         AvatarAction aa = AvatarTerm.createActionFromString (block, _action);
-	TraceManager.addDev("Avatar action = " + aa);
+	TraceManager.addDev("Avatar action : " + aa);
         if (aa != null)
             actions.add(aa);
     }

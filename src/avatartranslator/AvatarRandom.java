@@ -87,16 +87,21 @@ public class AvatarRandom extends AvatarStateMachineElement {
         functionId = _functionId;
     }
 
-    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-        AvatarRandom ar = new AvatarRandom(getName(), getReferenceObject());
-        return ar;
-    }
-
     public String getNiceName() {
         return "Random between " + minValue + " and " + maxValue + " stored in " + variable;
     }
 
     public void translate (AvatarTranslator translator, Object arg) {
         translator.translateRandom (this, arg);
+    }
+
+    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+	 AvatarRandom ar = new AvatarRandom(getName() + "_clone", getReferenceObject());
+
+	 ar.setVariable(variable);
+	 ar.setValues(minValue, maxValue);
+	 ar.setFunctionId(functionId);
+
+        return ar;
     }
 }
