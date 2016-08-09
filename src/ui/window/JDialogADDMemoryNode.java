@@ -58,13 +58,17 @@ import ui.avatardd.*;
 
 
 public class JDialogADDMemoryNode extends javax.swing.JDialog implements ActionListener  {
-    
+
+     private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
+
     private boolean regularClose;
     
     private JPanel panel2;
     private Frame frame;
     private ADDMemoryNode node;
     
+    protected JComboBox tracemode;
+    private static int  selectedTracemode = 0;
 	
     // Panel1
     protected JTextField nodeName;
@@ -144,11 +148,20 @@ public class JDialogADDMemoryNode extends javax.swing.JDialog implements ActionL
         dataSize = new JTextField(""+node.getDataSize(), 15);
         panel2.add(dataSize, c2);
         
-	c2.gridwidth = 1;
+	/*	c2.gridwidth = 1;
         panel2.add(new JLabel("Monitored:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         monitored = new JTextField(""+node.getMonitored(), 15);
-        panel2.add(monitored, c2);
+        panel2.add(monitored, c2);*/
+
+	c2.gridwidth = 1;
+        panel2.add(new JLabel("Monitored:"), c2);
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
+	tracemode = new JComboBox(tracemodeTab);
+        tracemode.setSelectedIndex(selectedTracemode);
+        tracemode.addActionListener(this);
+        panel2.add(tracemode, c2);
         
         // main panel;
         c0.gridheight = 10;
@@ -176,7 +189,9 @@ public class JDialogADDMemoryNode extends javax.swing.JDialog implements ActionL
             initialValue.setEnabled(b);
             return;
         }*/
-        
+	if (evt.getSource() == tracemode) {
+           selectedTracemode = tracemode.getSelectedIndex();                   
+	}
         
         String command = evt.getActionCommand();
         
@@ -213,8 +228,10 @@ public class JDialogADDMemoryNode extends javax.swing.JDialog implements ActionL
         return dataSize.getText();
     }
 
-    public String getMonitored() {
-        return monitored.getText();
+    public int getMonitored() {
+	//return tracemodeTab[tracemode.getSelectedIndex()];
+	return tracemode.getSelectedIndex();
+        //return monitored.getText();
     }
     
     

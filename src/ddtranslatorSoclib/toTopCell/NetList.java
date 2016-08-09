@@ -309,18 +309,9 @@ netlist = netlist + "vcifdtrom.begin_device_node(\"vci_multi_tty"+i+"\",\"soclib
   	netlist = netlist + "vcifdtrom.add_property(\"interrupts\", 2);" + CR;
   	netlist = netlist + "vcifdtrom.end_node();" + CR2;
 
-	//not all interfaces are of interest; non-clustered version
-
 	int j;
- 
 
-	/*if the channel is monitored, add it to the list */
-	/*	for (AvatarChannel channel : TopCellGenerator.avatardd.getAllMappedChannels()) { if (channel.monitored()){
-	      	      
-	    }	    
-	  }*/
-
-	i=0;
+	//i=0;
 
 	/* Which VCI interfaces are marked as monitored? */
 
@@ -348,7 +339,7 @@ netlist = netlist + "vcifdtrom.begin_device_node(\"vci_multi_tty"+i+"\",\"soclib
 
 	    i=0;
 	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
-	    if (ram.getMonitored()==1){	
+		if (ram.getMonitored()==1){	
 		int number = number = ram.getNo_ram();
 	        netlist += "logger"+i+".p_clk(signal_clk);" + CR;
 	        netlist += "logger"+i+".p_resetn(signal_resetn);" + CR; 
@@ -356,64 +347,61 @@ netlist = netlist + "vcifdtrom.begin_device_node(\"vci_multi_tty"+i+"\",\"soclib
 	    }	
 	    else{
 		if (ram.getMonitored()==2){
-		int number = number = ram.getNo_ram();	
-		netlist += "mwmr_stats"+i+".p_clk(signal_clk);" + CR;
-	        netlist += "mwmr_stats"+i+".p_resetn(signal_resetn);" + CR; 
-		netlist += "mwmr_stats"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;
-
-  //currently all channels mapped on this RAM are monitored
-	      i++;	      
-	    }	 
-	  }
-	}	
+		    int number = number = ram.getNo_ram();	
+		    netlist += "mwmr_stats"+i+".p_clk(signal_clk);" + CR;
+		    netlist += "mwmr_stats"+i+".p_resetn(signal_resetn);" + CR; 
+		    netlist += "mwmr_stats"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;
+		    //currently all channels mapped on this RAM are monitored
+		    i++;	      
+		}	 
+	    }
+	    }
 
 	    if (tracing){
-	    //RAM are monitored in trace file if marked trace option 3
+	    //RAM are monitored in trace file if marked trace option 
+
 	    netlist += "sc_trace_file *tf;" + CR;
 	    netlist += "tf=sc_create_vcd_trace_file(\"mytrace\");" + CR;
 	    netlist += "sc_trace(tf,signal_clk,\"CLK\");" + CR;
 	    netlist += "sc_trace(tf,signal_resetn,\"RESETN\");" + CR;
 
+	    netlist += "sc_trace(tf, signal_vci_xicu,\"signal_vci_xicu\");" + CR;
+	    netlist += "sc_trace(tf, signal_vci_vcifdtrom,\"signal_vci_vcifdtrom\");" + CR;
+	    netlist += "sc_trace(tf, signal_vci_vcihetrom,\"signal_vci_vcihetrom\");" + CR;
+	    netlist += "sc_trace(tf, signal_vci_vcirom ,\"signal_vci_vcirom\");" + CR;
+	    netlist += "sc_trace(tf, signal_vci_vcisimhelper,\"signal_vci_vcisimhelper\");" + CR;
+	    netlist += "sc_trace(tf, signal_vci_vcirttimer ,\"signal_vci_vcirttimer\");" + CR;
+	    netlist += "sc_trace(tf, signal_vci_vcilocks ,\"signal_vci_vcilocks\");" + CR;
+	    netlist += "sc_trace(tf, signal_vci_mwmr_ram ,\"signal_vci_mwmr_ram\");" + CR;
+	    netlist += "sc_trace(tf, signal_vci_mwmrd_ram ,\"signal_vci_mwmrd_ram\");" + CR;
+	    netlist += "sc_trace(tf, signal_vci_vcifdaccessi,\"signal_vci_vcifdaccessi\");" + CR;
+	    netlist += "sc_trace(tf,signal_vci_vcifdaccesst ,\"signal_vci_vcifdaccesst\");" + CR;
+	    netlist += "sc_trace(tf,signal_vci_bdi ,\"signal_vci_bdi\");" + CR;
+	    netlist += "sc_trace(tf, signal_vci_bdt,\"signal_vci_bdt\");" + CR;
+	    netlist += "sc_trace(tf, signal_vci_etherneti,\"signal_vci_etherneti\");" + CR;
+	    netlist += "sc_trace(tf,signal_vci_ethernett ,\"signal_vci_ethernett\");" + CR;
 
-
-netlist += "sc_trace(tf, signal_vci_xicu,\"signal_vci_xicu\");" + CR;
-netlist += "sc_trace(tf, signal_vci_vcifdtrom,\"signal_vci_vcifdtrom\");" + CR;
-netlist += "sc_trace(tf, signal_vci_vcihetrom,\"signal_vci_vcihetrom\");" + CR;
-netlist += "sc_trace(tf, signal_vci_vcirom ,\"signal_vci_vcirom\");" + CR;
-netlist += "sc_trace(tf, signal_vci_vcisimhelper,\"signal_vci_vcisimhelper\");" + CR;
-netlist += "sc_trace(tf, signal_vci_vcirttimer ,\"signal_vci_vcirttimer\");" + CR;
-netlist += "sc_trace(tf, signal_vci_vcilocks ,\"signal_vci_vcilocks\");" + CR;
-netlist += "sc_trace(tf, signal_vci_mwmr_ram ,\"signal_vci_mwmr_ram\");" + CR;
-netlist += "sc_trace(tf, signal_vci_mwmrd_ram ,\"signal_vci_mwmrd_ram\");" + CR;
-netlist += "sc_trace(tf, signal_vci_vcifdaccessi,\"signal_vci_vcifdaccessi\");" + CR;
-netlist += "sc_trace(tf,signal_vci_vcifdaccesst ,\"signal_vci_vcifdaccesst\");" + CR;
-netlist += "sc_trace(tf,signal_vci_bdi ,\"signal_vci_bdi\");" + CR;
-netlist += "sc_trace(tf, signal_vci_bdt,\"signal_vci_bdt\");" + CR;
-netlist += "sc_trace(tf, signal_vci_etherneti,\"signal_vci_etherneti\");" + CR;
-netlist += "sc_trace(tf,signal_vci_ethernett ,\"signal_vci_ethernett\");" + CR;
-
-for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
+	    for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
 	 
-         netlist += "sc_trace(tf,signal_vci_m["+ i +"] ,\"signal_vci_m["+ i +"]\");" + CR;
+		netlist += "sc_trace(tf,signal_vci_m["+ i +"] ,\"signal_vci_m["+ i +"]\");" + CR;
 }
 
-//more signals to be monitored?
-//netlist += " sc_trace(tf, ,\"\");" + CR;
-
-  for(i=0;i<(TopCellGenerator.avatardd.getNb_init()+4);i++){    
-      netlist += "sc_trace(tf,signal_xicu_irq["+ i +"] ,\"signal_xicu_irq["+ i +"]\");" + CR;   
-  }
-
-    for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) { 
+	    i=0;
+	    for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) { 
        
-	   netlist += "sc_trace(tf,signal_vci_tty"+tty.getNo_tty()+",\"TTY"+tty.getNo_tty()+"\");" + CR;
-     
-       }	
+		netlist += "sc_trace(tf,signal_vci_tty"+tty.getNo_tty()+",\"TTY"+tty.getNo_tty()+"\");" + CR; 
+		netlist += "sc_trace(tf,signal_xicu_irq["+ i +"] ,\"signal_xicu_irq["+ i +"]\");" + CR;    
+		i++;
+       }
+    
+	    netlist += "sc_trace(tf,signal_xicu_irq["+i+"] ,\"signal_xicu_irq["+i+"]\");" + CR;  
+	    netlist += "sc_trace(tf,signal_xicu_irq["+i+"] ,\"signal_xicu_irq["+i+"]\");" + CR; 
+	    netlist += "sc_trace(tf,signal_xicu_irq["+i+"] ,\"signal_xicu_irq["+i+"]\");" + CR; 
 
 	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
-		// if (ram.getMonitored()==3){	
+		 if (ram.getMonitored()==3){	
 		netlist += "sc_trace(tf,signal_vci_vciram"+ram.getNo_ram()+",\"Memory"+ram.getNo_ram()+"\");" + CR;
-		//}	
+		}	
 	    }
 	    }	   
 
