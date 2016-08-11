@@ -8447,6 +8447,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         else if (command.equals(actions[TGUIAction.ADD_VGMNNODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_VGMNNODE);
         }
+	else if (command.equals(actions[TGUIAction.ADD_CROSSBARNODE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_CROSSBARNODE);
+        }
         else if (command.equals(actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_BRIDGENODE);
         }  else if (command.equals(actions[TGUIAction.ADD_TTYNODE].getActionCommand())) {

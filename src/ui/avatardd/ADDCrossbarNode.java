@@ -36,7 +36,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class ADDVgmnNode
+* Class ADDCrossbarNode
 * Node. To be used in Avatar Deployment Diagram
 * Creation: 30/06/2014
 * @version 1.0 30/06/2014

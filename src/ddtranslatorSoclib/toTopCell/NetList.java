@@ -14,6 +14,7 @@ public class NetList {
 
     public static String getNetlist(String icn, boolean _tracing) {
 	int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
+	nb_clusters=2;
 	boolean trace_caba=true; //tracing is enabled in cycle accurate mode
 	tracing = _tracing;
 		String netlist;

@@ -17,9 +17,9 @@ public class MappingTable {
     private static String mapping;
       
     public static String getMappingTable() {
- int l=0;
+    int l=0;
 	    int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
-   
+	    nb_clusters=2;
 	    if(nb_clusters == 0){
 
       mapping = CR2 + "//-----------------------mapping table------------------------" + CR2;

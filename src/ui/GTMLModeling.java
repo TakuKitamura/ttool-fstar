@@ -2281,12 +2281,16 @@ public class GTMLModeling  {
         TMLArchiCPUNode node;
         TMLArchiHWANode hwanode;
         TMLArchiBUSNode busnode;
+	TMLArchiVGMNNode vgmnnode;
+	TMLArchiCrossbarNode crossbarnode;
         TMLArchiBridgeNode bridgenode;
         TMLArchiMemoryNode memorynode;
         TMLArchiDMANode dmanode;
         HwCPU cpu;
-        HwA hwa;
-        HwBus bus;
+        HwA hwa;	
+	HwBus bus;
+        HwVGMN vgmn;
+	HwCrossbar crossbar;
         HwBridge bridge;
         HwMemory memory;
         HwDMA dma;
@@ -2367,6 +2371,52 @@ public class GTMLModeling  {
                     listE.addCor(bus, busnode);
                     archi.addHwNode(bus);
                     TraceManager.addDev("BUS node added:" + bus.getName());
+                }
+            }
+
+if (tgc instanceof TMLArchiVGMNNode) {
+                vgmnnode = (TMLArchiVGMNNode)tgc;
+                if (nameInUse(names, vgmnnode.getName())) {
+                    // Node with the same name
+                    CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + vgmnnode.getName());
+                    ce.setTDiagramPanel(tmlap.tmlap);
+                    ce.setTGComponent(vgmnnode);
+                    checkingErrors.add(ce);
+                } else {
+                    names.add(vgmnnode.getName());
+                    vgmn = new HwVGMN(vgmnnode.getName());
+                    vgmn.byteDataSize = vgmnnode.getByteDataSize();
+		    /*   vgmn.pipelineSize = vgmnnode.getPipelineSize();
+                    vgmn.arbitration = vgmnnode.getArbitrationPolicy();
+                    vgmn.clockRatio = vgmnnode.getClockRatio();
+                    vgmn.sliceTime = vgmnnode.getSliceTime();
+		    vgmn.privacy = vgmnnode.getPrivacy();*/
+                    listE.addCor(vgmn, vgmnnode);
+                    archi.addHwNode(vgmn);
+                    TraceManager.addDev("VGMN node added:" + vgmn.getName());
+                }
+            }
+
+if (tgc instanceof TMLArchiCrossbarNode) {
+                crossbarnode = (TMLArchiCrossbarNode)tgc;
+                if (nameInUse(names, crossbarnode.getName())) {
+                    // Node with the same name
+                    CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + crossbarnode.getName());
+                    ce.setTDiagramPanel(tmlap.tmlap);
+                    ce.setTGComponent(crossbarnode);
+                    checkingErrors.add(ce);
+                } else {
+                    names.add(crossbarnode.getName());
+                    crossbar = new HwCrossbar(crossbarnode.getName());
+                    crossbar.byteDataSize = crossbarnode.getByteDataSize();
+                    /*crossbar.pipelineSize = crossbarnode.getPipelineSize();
+                    crossbar.arbitration = crossbarnode.getArbitrationPolicy();
+                    crossbar.clockRatio = crossbarnode.getClockRatio();
+                    crossbar.sliceTime = crossbarnode.getSliceTime();
+		    crossbar.privacy = crossbarnode.getPrivacy();*/
+                    listE.addCor(crossbar, crossbarnode);
+                    archi.addHwNode(crossbar);
+                    TraceManager.addDev("Crossbar node added:" + crossbar.getName());
                 }
             }
 
@@ -2453,7 +2503,8 @@ public class GTMLModeling  {
                     //TraceManager.addDev("Not null");
                     if (components.contains(tgc1) && components.contains(tgc2)) {
                         //TraceManager.addDev("Getting closer");
-                        if (tgc2 instanceof TMLArchiBUSNode) {
+
+			  if (tgc2 instanceof TMLArchiBUSNode) {
                             originNode = listE.getHwNode(tgc1);
                             bus  = (HwBus)(listE.getHwNode(tgc2));
                             if ((originNode != null) && (bus != null)) {
@@ -2465,7 +2516,38 @@ public class GTMLModeling  {
                                 archi.addHwLink(hwlink);
                                 //TraceManager.addDev("Link added");
                             }
+			    }
+
+			// DG added VGMN and crossbar
+                        if (tgc2 instanceof TMLArchiVGMNNode) {
+                            originNode = listE.getHwNode(tgc1);
+                            vgmn  = (HwVGMN)(listE.getHwNode(tgc2));
+                            if ((originNode != null) && (vgmn != null)) {
+                                hwlink = new HwLink("link_" +originNode.getName() + "_to_" + vgmn.getName());
+                                hwlink.setPriority(connector.getPriority());
+                                hwlink.vgmn = vgmn;
+                                hwlink.hwnode = originNode;
+                                listE.addCor(hwlink, connector);
+                                archi.addHwLink(hwlink);
+                                //TraceManager.addDev("Link added");
+                            }
                         }
+
+                        if (tgc2 instanceof TMLArchiCrossbarNode) {
+                            originNode = listE.getHwNode(tgc1);
+                            crossbar  = (HwCrossbar)(listE.getHwNode(tgc2));
+                            if ((originNode != null) && (crossbar != null)) {
+                                hwlink = new HwLink("link_" +originNode.getName() + "_to_" + crossbar.getName());
+                                hwlink.setPriority(connector.getPriority());
+                                hwlink.crossbar = crossbar;
+                                hwlink.hwnode = originNode;
+                                listE.addCor(hwlink, connector);
+                                archi.addHwLink(hwlink);
+                                //TraceManager.addDev("Link added");
+                            }
+                        }
+
+
                     }
                 }
             }
@@ -3151,9 +3233,9 @@ public class GTMLModeling  {
                 }
             }
 
-            // Other nodes (memory, bridge, bus)
+            // Other nodes (memory, bridge, bus, VGMN, crossbar)
             //}
-            if ((tgc instanceof TMLArchiBUSNode) || (tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode)|| (tgc instanceof TMLArchiDMANode)) {
+            if ((tgc instanceof TMLArchiBUSNode) ||(tgc instanceof TMLArchiVGMNNode) || (tgc instanceof TMLArchiCrossbarNode) ||(tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode)|| (tgc instanceof TMLArchiDMANode)) {
                 node = archi.getHwNodeByName(tgc.getName());
                 if ((node != null) && (node instanceof HwCommunicationNode)) {
                     artifactscomm = ((TMLArchiCommunicationNode)(tgc)).getChannelArtifactList();

@@ -50,9 +50,11 @@ import java.util.*;
 
 public class HwLink implements Comparable<HwLink> {
     public HwBus bus;
-	public HwNode hwnode;
-	protected String name;
-	protected int priority;
+    public HwVGMN vgmn;//DG 10.08.
+    public HwCrossbar crossbar;//DG 10.08.
+    public HwNode hwnode;
+    protected String name;
+    protected int priority;
  
     public HwLink(String _name) {
 		name = _name;

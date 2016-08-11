@@ -119,7 +119,7 @@ public class AvatarDeploymentPanelTranslator{
                 int nbOfAttachedTargets = bus.getNbOfAttachedTargets();
                 int fifoDepth = bus.getFifoDepth();
                 int minLatency = bus.getMinLatency();
-System.out.println("$$$$$$$ vgsb read in");
+System.out.println("vgsb read in");
                 AvatarBus avbus = new AvatarBus(busName,nbOfAttachedInitiators,nbOfAttachedTargets,fifoDepth,minLatency);
                 avatarComponents.add(avbus);
 
@@ -133,7 +133,7 @@ System.out.println("$$$$$$$ vgsb read in");
                 int nbOfAttachedTargets = vgmn.getNbOfAttachedTargets();
                 int fifoDepth = vgmn.getFifoDepth();
                 int minLatency = vgmn.getMinLatency();
-System.out.println("$$$$$$$ vgmn read in");
+System.out.println("vgmn read in");
                 AvatarVgmn avvgmn = new AvatarVgmn(vgmnName,nbOfAttachedInitiators,nbOfAttachedTargets,fifoDepth,minLatency);
                 avatarComponents.add(avvgmn);
 
@@ -149,7 +149,8 @@ System.out.println("$$$$$$$ vgmn read in");
                 int cluster_address = crossbar.getClusterAddress();
 
                 AvatarCrossbar avcrossbar = new AvatarCrossbar(crossbarName,nbOfAttachedInitiators,nbOfAttachedTargets,cluster_index,cluster_address);
-		nb_clusters++;System.out.println("$$$$$$$nb crossbars read in"+nb_clusters);
+		nb_clusters++;
+		System.out.println("nb crossbars read in"+nb_clusters);
                 avatarComponents.add(avcrossbar);
             }
             else if(dp instanceof ADDICUNode){

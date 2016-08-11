@@ -36,11 +36,11 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class TMLArchiBUSNode
+   * Class TMLArchiCrossbarNode
    * Node. To be used in TML architecture diagrams.
    * Creation: 31/10/2007
    * @version 1.0 31/10/2007
-   * @author Ludovic APVRILLE
+   * @author Ludovic APVRILLE, adapted for crossbar by Daniela Genius 10/08/2016
    * @see
    */
 
@@ -58,19 +58,19 @@ import ui.window.*;
 
 import tmltranslator.*;
 
-public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes {
+public class TMLArchiCrossbarNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes {
     private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;
     private int derivationy = 3;
-    private String stereotype = "BUS";
+    private String stereotype = "Crossbar";
 
     private int byteDataSize = HwBus.DEFAULT_BYTE_DATA_SIZE;
-    private int pipelineSize = HwBus.DEFAULT_PIPELINE_SIZE;
+    /*  private int pipelineSize = HwBus.DEFAULT_PIPELINE_SIZE;
     private int arbitrationPolicy = HwBus.DEFAULT_ARBITRATION;
     private int sliceTime = HwBus.DEFAULT_SLICE_TIME;
-    private int privacy = HwBus.BUS_PUBLIC;
-    public TMLArchiBUSNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    private int privacy = HwBus.BUS_PUBLIC;*/
+    public TMLArchiCrossbarNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         width = 250;
@@ -151,7 +151,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         c = g.getColor();
 
         //Draw bus privacy
-        if (privacy== HwBus.BUS_PUBLIC){
+	/* if (privacy== HwBus.BUS_PUBLIC){
 
         }
         else {
@@ -166,7 +166,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
             g.setColor(c);
             g.drawPolygon(xps, yps,10);
             //  g.drawRect(x+4, y+25, 18, 14);
-        }
+	    }*/
     }
 
     public TGComponent isOnOnlyMe(int x1, int y1) {
@@ -200,7 +200,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         int tmp;
         String tmpName;
 
-        JDialogBUSNode dialog = new JDialogBUSNode(frame, "Setting VGMN attributes", this);
+        JDialogCrossbarNode dialog = new JDialogCrossbarNode(frame, "Setting Crossbar attributes", this);
         dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
@@ -220,7 +220,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
             }
         }
 
-        arbitrationPolicy = dialog.getArbitrationPolicy();
+	/*      arbitrationPolicy = dialog.getArbitrationPolicy();
         privacy = dialog.getPrivacy();
         if (arbitrationPolicy == HwBus.BASIC_ROUND_ROBIN) {
             stereotype = "BUS-RR";
@@ -236,7 +236,9 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 
         if (arbitrationPolicy == HwBus.CROSSBAR) {
             stereotype = "CROSSBAR";
-        }
+	    }*/
+
+	// DG we need only data size
 
         if (dialog.getByteDataSize().length() != 0) {
             try {
@@ -253,7 +255,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
             }
         }
 
-        if (dialog.getSliceTime().length() != 0) {
+	/*   if (dialog.getSliceTime().length() != 0) {
             try {
                 tmp = sliceTime;
                 sliceTime = Integer.decode(dialog.getSliceTime()).intValue();
@@ -296,7 +298,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
                 error = true;
                 errors += "Clock diviser  ";
             }
-        }
+	    }*/
 
         if (error) {
             JOptionPane.showMessageDialog(frame,
@@ -311,7 +313,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 
 
     public int getType() {
-        return TGComponentManager.TMLARCHI_BUSNODE;
+        return TGComponentManager.TMLARCHI_CROSSBARNODE;
     }
 
     protected String translateExtraParam() {
@@ -319,11 +321,11 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
         sb.append("\" />\n");
         sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
-        sb.append(" arbitrationPolicy=\"" + arbitrationPolicy + "\" ");
+	/*  sb.append(" arbitrationPolicy=\"" + arbitrationPolicy + "\" ");
         sb.append(" sliceTime=\"" + sliceTime + "\" ");
         sb.append(" pipelineSize=\"" + pipelineSize + "\" ");
         sb.append(" clockRatio=\"" + clockRatio + "\" ");
-        sb.append(" privacy=\"" + privacy + "\" ");
+        sb.append(" privacy=\"" + privacy + "\" ");*/
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -359,7 +361,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
                             }
                             if (elt.getTagName().equals("attributes")) {
                                 byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
-                                arbitrationPolicy =Integer.decode(elt.getAttribute("arbitrationPolicy")).intValue();                                                                    pipelineSize = Integer.decode(elt.getAttribute("pipelineSize")).intValue();
+				/*              arbitrationPolicy =Integer.decode(elt.getAttribute("arbitrationPolicy")).intValue();                                                                    pipelineSize = Integer.decode(elt.getAttribute("pipelineSize")).intValue();
                                 if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
                                 }
@@ -367,15 +369,15 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
                                     sliceTime = Integer.decode(elt.getAttribute("sliceTime")).intValue();
                                 }
                                 if ((elt.getAttribute("privacy") != null) &&  (elt.getAttribute("privacy").length() > 0)){
-                                    privacy = Integer.decode(elt.getAttribute("privacy")).intValue();
+				privacy = Integer.decode(elt.getAttribute("privacy")).intValue();*/
                                 }
                             }
                         }
                     }
                 }
-            }
+	}
 
-        } catch (Exception e) {
+     catch (Exception e) {
             throw new MalformedModelingException();
         }
     }
@@ -385,7 +387,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         return byteDataSize;
     }
 
-    public int getPipelineSize(){
+/*   public int getPipelineSize(){
         return pipelineSize;
     }
 
@@ -398,19 +400,19 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
     }
     public int getPrivacy(){
         return privacy;
-    }
+	}*/
 
     public String getAttributes() {
         String attr = "";
         attr += "Data size (in byte) = " + byteDataSize + "\n";
-        attr += "Pipeline size = " + pipelineSize + "\n";
+	/*    attr += "Pipeline size = " + pipelineSize + "\n";
         if (arbitrationPolicy == HwBus.DEFAULT_ARBITRATION) {
             attr += "Arbitration policy = basic Round Robin\n";
         } else if (arbitrationPolicy == HwBus.PRIORITY_BASED) {
             attr += "Arbitration policy = priority based\n";
         }
         attr += "Slice time (in microseconds) = " + sliceTime + "\n";
-        attr += "Clock diviser = " + clockRatio + "\n";
+        attr += "Clock diviser = " + clockRatio + "\n";*/
         return attr;
     }
 

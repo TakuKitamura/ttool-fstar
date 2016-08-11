@@ -63,7 +63,8 @@ public class Declaration {
 	
 		//Is the platform clustered?
 	
-		int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();	
+		int nb_clusters = TopCellGenerator.avatardd.getAllCrossbar().size();	
+		nb_clusters=2;
 
 		boolean trace_caba=true; 
 
