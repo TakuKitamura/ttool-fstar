@@ -64,7 +64,7 @@ public class Declaration {
 		//Is the platform clustered?
 	
 		int nb_clusters = TopCellGenerator.avatardd.getAllCrossbar().size();	
-		nb_clusters=2;
+		//nb_clusters=2;
 
 		boolean trace_caba=true; 
 
@@ -267,19 +267,42 @@ if(nb_clusters==0){
           System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
           System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
       
-	  declaration += "soclib::caba::VciVgmn<vci_param> "+ vgmn.getVgmnName() +" (\"" + vgmn.getVgmnName() + "\"" + " , maptab, "+ 1 +"," + 6 +
-	     "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
-	  int i=0;
-	  if(trace_caba){
-	      for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
-		  declaration += "soclib::caba::VciLogger<vci_param> logger(\"logger" + i+"\",maptab);" + CR2;
-	      }
-	      int j=i;
-	      for(i=0;i<TopCellGenerator.avatardd.getAllRAM().size()+3;i++){
-		  declaration += "soclib::caba::VciLogger<vci_param> logger(\"logger" + j+"\",maptab);" + CR2;
-	      }
-    }
+	  //  declaration += "soclib::caba::VciVgmn<vci_param> "+ vgmn.getVgmnName() +" (\"" + vgmn.getVgmnName() + "\"" + " , maptab, "+ 1 +"," + 6 +
+	  //	     "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 
+	  //DG 10.08. only one central interconnect
+  declaration += "soclib::caba::VciVgmn<vci_param> vgmn (\"" + vgmn.getVgmnName() + "\"" + " , maptab, "+ 1 +"," + 6 +
+	  	     "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
+
+	  int i=0;
+	
+
+ //monitoring either by logger(1) ou stats (2) 
+	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
+
+	      if (ram.getMonitored()==1){
+		  int number = ram.getNo_target();
+		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
+		  i++;	      
+	      }	
+	      else{
+		  if (ram.getMonitored()==2){
+		      int number = ram.getNo_target();
+             
+		      String strArray="";
+
+		      for(AvatarChannel channel: ram.getChannels()){ 
+		   
+			  String chname = generateName(channel);
+		     
+			  strArray=strArray+"\""+chname+"\",";
+		      }   
+		
+		      declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr"+i+".log\",stringArray("+strArray+"NULL));" + CR2;
+		      i++;	      
+		  }	
+	     }
+	  }	 
 
 	  // if VGMN was not last in input file, update here 
           vgmn.setNbOfAttachedInitiators(1); 

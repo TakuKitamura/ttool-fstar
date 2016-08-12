@@ -46,8 +46,9 @@ int nb_clusters=5;
 				+ "#include \"vci_simhelper.h\"" + CR + "#include \"vci_fd_access.h\"" + CR
 + "#include \"vci_ethernet.h\"" + CR
 				+ "#include \"vci_rttimer.h\"" + CR
-	+ "#include \"vci_logger.h\"" + CR
-	+ "#include \"vci_mwmr_stats.h\"" + CR2;
+	+ "#include \"vci_logger.h\"" + CR	
++ "#include \"vci_logger.h\"" + CR
+	+ "#include \"vci_local_crossbar.h\"" + CR2;
 	
 	header = header +"namespace {" + CR
 +"std::vector<std::string> stringArray(" + CR

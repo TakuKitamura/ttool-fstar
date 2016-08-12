@@ -16,7 +16,7 @@ public class Signal {
 
 	public static String getSignal() {
 	    int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();	
-	    nb_clusters=2;
+	    //nb_clusters=2;
 		String signal = CR2 + "//-------------------------------signaux------------------------------------" + CR2;
 		
 		signal = signal + "caba::VciSignals<vci_param> signal_vci_m[cpus.size() + 1];"+ CR;

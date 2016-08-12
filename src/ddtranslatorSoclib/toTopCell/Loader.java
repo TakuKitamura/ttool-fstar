@@ -20,7 +20,7 @@ public class Loader {
 	public static String  getLoader() {
 
 	    int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();		
-	    nb_clusters=2;
+	    //nb_clusters=2;
 
 		loader = CR2 + "//-------------------------Call Loader---------------------------------" + CR2 ;
 		loader = loader + "std::cerr << \"caba-vgmn-mutekh_kernel_tutorial SoCLib simulator for MutekH\" << std::endl;"

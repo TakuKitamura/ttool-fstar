@@ -638,17 +638,11 @@ public class TGComponentManager {
         case ADD_BUSNODE:
             tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-        case ADD_VGMNNODE: 
-	    {
-		TraceManager.addDev("****vgmn");
-		tgc = new ADDVgmnNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-	    }
+        case ADD_VGMNNODE: 	   
+		tgc = new ADDVgmnNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);	   
             break;
-        case ADD_CROSSBARNODE:
-	    {
-		TraceManager.addDev("****crossbar");
-		tgc = new ADDCrossbarNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-	    }
+        case ADD_CROSSBARNODE:	   
+		tgc = new ADDCrossbarNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);	   
             break;
         case ADD_TTYNODE:
             tgc = new ADDTTYNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
