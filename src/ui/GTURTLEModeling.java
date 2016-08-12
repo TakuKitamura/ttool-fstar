@@ -433,6 +433,7 @@ public class GTURTLEModeling {
         syntax.check();
         if( syntax.hasErrors() )        {
             for( TMLCCodeGenerationError error: syntax.getErrors() ) {
+	    	TraceManager.addDev( "ERROR: " + error.toString() );
                 if( error.type == TMLCCodeGenerationError.ERROR_STRUCTURE ) {
                     type = CheckingError.STRUCTURE_ERROR;
                 }

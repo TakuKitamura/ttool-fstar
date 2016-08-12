@@ -133,7 +133,7 @@ public class TMLCCodeGeneration	{
 		prexList = new ArrayList<TMLPort>();
 		buffersList = new ArrayList<Buffer>();
 		dataTransfersList = new ArrayList<DataTransfer>();
-		debugFileName = ConfigurationTTool.CcodeDirectory + "/debugFile.txt";
+		debugFileName = ConfigurationTTool.CcodeDirectory + "debugFile.txt";
 		tmlcpsList = new ArrayList<TMLCP>();
 	}
 

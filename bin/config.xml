@@ -37,7 +37,7 @@
 <SystemCCodeExecuteCommand data="/home/andream/TURTLE/simulators/c++2/run.x -ovcd /home/andream/TURTLE/simulators/c++2/vcddump.vcd" />
 <SystemCCodeInteractiveExecuteCommand data="/home/andream/TURTLE/simulators/c++2/run.x -server" />
 <TMLCodeDirectory data="/home/andream/TURTLE/tmlcode" />
-<CCodeDirectory data="/home/andream/TURTLE/Ccode" />
+<CcodeDirectory data="/home/andream/TURTLE/Ccode" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
 <VCDPath data="/home/andream/TURTLE/vcd/" />
 <UPPAALCodeDirectory data="/home/andream/TURTLE/uppaal/" />
