@@ -216,7 +216,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
         panel2.add(execcTime, c2);
 
         c2.gridwidth = 1;
-        panel2.add(new JLabel("Clock diviser:"), c2);
+        panel2.add(new JLabel("Clock divider:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         clockRatio = new JTextField(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);

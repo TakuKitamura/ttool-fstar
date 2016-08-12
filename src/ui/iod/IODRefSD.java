@@ -140,7 +140,7 @@ public class IODRefSD extends TGCOneLineText {
         if (b) { 
             isSDCreated = new JMenuItem("Open diagram");
         } else {
-            isSDCreated = new JMenuItem("Create sequence diagram");
+            isSDCreated = new JMenuItem("Create Sequence Diagram");
         }
         
         isSDCreated.addActionListener(menuAL);

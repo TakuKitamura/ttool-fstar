@@ -290,11 +290,11 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
                 if (clockRatio <= 0) {
                     clockRatio = tmp;
                     error = true;
-                    errors += "Clock diviser  ";
+                    errors += "Clock divider  ";
                 }
             } catch (Exception e) {
                 error = true;
-                errors += "Clock diviser  ";
+                errors += "Clock divider  ";
             }
         }
 
@@ -410,7 +410,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
             attr += "Arbitration policy = priority based\n";
         }
         attr += "Slice time (in microseconds) = " + sliceTime + "\n";
-        attr += "Clock diviser = " + clockRatio + "\n";
+        attr += "Clock divider = " + clockRatio + "\n";
         return attr;
     }
 

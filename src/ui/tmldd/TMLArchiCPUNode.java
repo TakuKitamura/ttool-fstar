@@ -391,11 +391,11 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                 if (clockRatio < 1) {
                     clockRatio = tmp;
                     error = true;
-                    errors += "Clock diviser  ";
+                    errors += "Clock divider  ";
                 }
             } catch (Exception e) {
                 error = true;
-                errors += "Clock diviser  ";
+                errors += "Clock divider  ";
             }
         }
         encryption = dialog.getEncryption();
@@ -638,7 +638,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         attr += "EXECC exec. time (in cycle) = " + execcTime + "\n";
         attr += "Branch. pred. misrate (in %) = " + branchingPredictionPenalty + "\n";
         attr += "Cache miss (in %) = " + cacheMiss + "\n";
-        attr += "Clock diviser = " + clockRatio + "\n";
+        attr += "Clock divider = " + clockRatio + "\n";
         attr += "MECType = " + MECType.getIndex() + "\n";
         attr += "encryption = " + encryption+ "\n";
         return attr;

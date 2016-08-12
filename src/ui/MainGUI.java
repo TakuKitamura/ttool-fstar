@@ -4167,19 +4167,23 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void generateUPPAAL(boolean showWindow) {
-        //TraceManager.addDev("Generate UPPAAL!");
+        TraceManager.addDev("Generate UPPAAL!");
         //gtm.mergeChoices(true);
         if (gtm.getTURTLEModelingState() > 0) {
+        	TraceManager.addDev("4173");
             if (gtm.getTURTLEModelingState() == 3) {
                 //AVATAR
                 boolean result = gtm.generateUPPAALFromAVATAR(ConfigurationTTool.UPPAALCodeDirectory);
+        	TraceManager.addDev("4177");
                 if (showWindow) {
+        	TraceManager.addDev("4178");
                     if (result) {
                         JOptionPane.showMessageDialog(frame,
                                                       "0 error, " + getCheckingWarnings().size() + " warning(s). UPPAAL specification generated",
                                                       "Successful translation to UPPAAL",
                                                       JOptionPane.INFORMATION_MESSAGE);
-                    } else {
+                    }
+		    else {
                         JOptionPane.showMessageDialog(frame,
                                                       "" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). UPPAAL specification could NOT be generated",
                                                       "Translation to UPPAAL failed",
@@ -4188,13 +4192,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
                     }
                 }
+        		TraceManager.addDev("4196");
                 if (!result) {
                     return;
                 }
-            } else {
+            }
+	    else {
                 if (generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, UPPAAL) == -1) {
+        		TraceManager.addDev("4202");
                     return;
                 }
+		TraceManager.addDev( "About to open the window at line 4198" );
                 if (showWindow) {
                     JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.DIPLODOCUS_MODE);
                     jgen.setSize(450, 500);
@@ -4206,6 +4214,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             }
         }
 
+	TraceManager.addDev( "gtm.getTURTLEModelingState() <= 0)" );
         //TraceManager.addDev("After UPPAAL");
         if (showWindow) {
             JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.TURTLE_MODE);
@@ -8964,7 +8973,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             newTMLMethodo = createMenuItem("New DIPLODOCUS Methodology");
 
             newTMLDesign = createMenuItem("New Partitioning - Design");
-            newTMLComponentDesign = createMenuItem("New Partitioning - functional view");
+            newTMLComponentDesign = createMenuItem("New Partitioning - Functional view");
             newTMLArchi = createMenuItem("New Partitioning - Architecture and Mapping");
             newTMLCP = createMenuItem("New Partitioning - Communication Pattern");
             newProactiveDesign = createMenuItem("New Proactive Design");

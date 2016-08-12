@@ -234,11 +234,11 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
                 if (clockRatio <= 0) {
                     clockRatio = tmp;
                     error = true;
-                    errors += "Clock diviser  ";
+                    errors += "Clock divider  ";
                 }
             } catch (Exception e) {
                 error = true;
-                errors += "Clock diviser  ";
+                errors += "Clock divider  ";
             }
         }
 
@@ -379,7 +379,7 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         String attr = "";
         attr += "Data size (in byte) = " + byteDataSize + "\n";
         attr += "Execi execution time (in cycle) = " + execiTime + "\n";
-        attr += "Clock diviser = " + clockRatio + "\n";
+        attr += "Clock divider = " + clockRatio + "\n";
         return attr;
     }
 

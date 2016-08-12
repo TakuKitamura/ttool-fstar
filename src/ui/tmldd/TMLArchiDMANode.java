@@ -234,11 +234,11 @@ public class TMLArchiDMANode extends TMLArchiCommunicationNode implements Swallo
                 if (clockRatio <= 0) {
                     clockRatio = tmp;
                     error = true;
-                    errors += "Clock diviser  ";
+                    errors += "Clock divider  ";
                 }
             } catch (Exception e) {
                 error = true;
-                errors += "Clock diviser  ";
+                errors += "Clock divider  ";
             }
         }
 
@@ -330,7 +330,7 @@ public class TMLArchiDMANode extends TMLArchiCommunicationNode implements Swallo
         String attr = "";
         attr += "Data size (in byte) = " + byteDataSize + "\n";
         attr += "Nb of channels = " + nbOfChannels + "\n";
-        attr += "Clock diviser = " + clockRatio + "\n";
+        attr += "Clock divider = " + clockRatio + "\n";
         return attr;
     }
 

@@ -6,7 +6,7 @@
 <DTA2DOTPath data="/packages/RT-LOTOS.0.12/bin/dta2dot" />
 <RG2TLSAPath data="/packages/RT-LOTOS.0.12/bin/rg2tlsa" />
 <RGSTRAPPath data="/packages/RT-LOTOS.0.12/bin/rgstrap" />
-<DOTTYPath data="//opt/csw/bin/dotty" />
+<DOTTYPath data="/opt/csw/bin/dotty" />
 <DOTTYHost data="localhost" />
 <AldebaranHost data="localhost" />
 <AldebaranPath data="/packages/cadp/com/aldebaran" />
@@ -16,57 +16,58 @@
 <BcgmergePath data="/packages/cadp/com/bcg_merge" />
 <CaesarPath data="/packages/cadp/bin.iX86/caesar" />
 <CaesarOpenPath data="/packages/cadp/com/caesar.open" />
-<FILEPath data="/users/enseig/genius/TURTLE/modeling" />
-<LIBPath data="/users/enseig/genius/TURTLE/lib" />
-<IMGPath data="/users/enseig/genius/TURTLE/figure" />
-<LOTOSPath data="/users/enseig/genius/TURTLE/lotos" />
-<GGraphPath data="/users/enseig/genius/TURTLE/graphs" />
-<TGraphPath data="/users/enseig/genius/TURTLE/graphs" />
+<FILEPath data="/home/andream/TURTLE/modeling" />
+<LIBPath data="/home/andream/TURTLE/lib" />
+<IMGPath data="/home/andream/TURTLE/figure" />
+<LOTOSPath data="/home/andream/TURTLE/lotos" />
+<GGraphPath data="/home/andream/TURTLE/graphs" />
+<TGraphPath data="/home/andream/TURTLE/graphs" />
 <TToolUpdateURL data="" data1="http://labsoc.comelec.enst.fr/turtle/ttoolversion.html" />
 <TToolUpdateProxy data="false" />
 <TToolUpdateProxyPort data="8080" />
 <TToolUpdateProxyHost data="To Be Completed" />
-<JavaCodeDirectory data="/users/enseig/genius/TURTLE/javacode" />
+<JavaCodeDirectory data="/home/andream/TURTLE/javacode" />
 <JavaCompilerPath data="/usr/bin/javac" />
-<TToolClassPath data="/users/enseig/genius/TURTLE/javacode" />
+<TToolClassPath data="/home/andream/TURTLE/javacode" />
 <JavaExecutePath data="/usr/bin/java" />
 <JavaHeader data="import java.sql.*;" />
-<SystemCCodeDirectory data="/users/enseig/genius/TURTLE/simulators/c++2/" />
+<SystemCCodeDirectory data="/home/andream/TURTLE/simulators/c++2/" />
 <SystemCHost data="localhost"/>
-<SystemCCodeCompileCommand data="make -C /users/enseig/genius/TURTLE/simulators/c++2/" />
-<SystemCCodeExecuteCommand data="/users/enseig/genius/TURTLE/simulators/c++2/run.x -ovcd /users/enseig/genius/TURTLE/simulators/c++2/vcddump.vcd" />
-<SystemCCodeInteractiveExecuteCommand data="/users/enseig/genius/TURTLE/simulators/c++2/run.x -server" />
-<TMLCodeDirectory data="/users/enseig/genius/TURTLE/tmlcode" />
+<SystemCCodeCompileCommand data="make -C /home/andream/TURTLE/simulators/c++2/" />
+<SystemCCodeExecuteCommand data="/home/andream/TURTLE/simulators/c++2/run.x -ovcd /home/andream/TURTLE/simulators/c++2/vcddump.vcd" />
+<SystemCCodeInteractiveExecuteCommand data="/home/andream/TURTLE/simulators/c++2/run.x -server" />
+<TMLCodeDirectory data="/home/andream/TURTLE/tmlcode" />
+<CCodeDirectory data="/home/andream/TURTLE/Ccode" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
-<VCDPath data="/users/enseig/genius/TURTLE/vcd/" />
-<UPPAALCodeDirectory data="/users/enseig/genius/TURTLE/uppaal/" />
+<VCDPath data="/home/andream/TURTLE/vcd/" />
+<UPPAALCodeDirectory data="/home/andream/TURTLE/uppaal/" />
 <UPPAALVerifierPath data="/packages/uppaal-4.0.11/verifyta" />
 <UPPAALVerifierHost data="localhost" />
-<ProVerifCodeDirectory data="/users/enseig/genius/TURTLE/proverif/" />
+<ProVerifCodeDirectory data="/home/andream/TURTLE/proverif/" />
 <ProVerifVerifierPath data="/packages/proverif/proverif" />
 <ProVerifVerifierHost data="localhost" />
-<AVATARExecutableCodeDirectory data="/users/enseig/genius/TURTLE/executablecode/" />
-<AVATARMPSoCCodeDirectory data="/users/enseig/genius/TURTLE/MPSoC/" />
-<AVATARMPSoCCompileCommand data="make -C /users/enseig/genius/TURTLE/MPSoC updategeneratedcode compilesoclib" />
+<AVATARExecutableCodeDirectory data="/home/andream/TURTLE/executablecode/" />
+<AVATARMPSoCCodeDirectory data="/home/andream/TURTLE/MPSoC/" />
+<AVATARMPSoCCompileCommand data="make -C /home/andream/TURTLE/MPSoC updategeneratedcode compilesoclib" />
 <AVATARExecutableCodeHost data="localhost"/>
-<AVATARExecutableCodeCompileCommand data="make -C /users/enseig/genius/TURTLE/executablecode" />
-<AVATARExecutableCodeExecuteCommand data="/users/enseig/genius/TURTLE/executablecode/run.x" />
-<AVATARExecutableSoclibCodeCompileCommand data="make -C /users/enseig/genius/TURTLE/MPSoC updategeneratedcode compilesoclib" />
-<AVATARExecutableSoclibCodeExecuteCommand data="make -C /users/enseig/genius/TURTLE/MPSoC runsoclib" />
-<AVATARExecutableSoclibCodeTraceCommand data="make -C /users/enseig/genius/TURTLE/MPSoC runsoclib-trace" />
-<AVATARExecutableSoclibTraceFile data="/users/enseig/genius/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/trace" />
+<AVATARExecutableCodeCompileCommand data="make -C /home/andream/TURTLE/executablecode" />
+<AVATARExecutableCodeExecuteCommand data="/home/andream/TURTLE/executablecode/run.x" />
+<AVATARExecutableSoclibCodeCompileCommand data="make -C /home/andream/TURTLE/MPSoC updategeneratedcode compilesoclib" />
+<AVATARExecutableSoclibCodeExecuteCommand data="make -C /home/andream/TURTLE/MPSoC runsoclib" />
+<AVATARExecutableSoclibCodeTraceCommand data="make -C /home/andream/TURTLE/MPSoC runsoclib-trace" />
+<AVATARExecutableSoclibTraceFile data="/home/andream/TURTLE/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/trace" />
 
 
 <ExternalCommand1Host data="localhost"/>
-<ExternalCommand1 data="/opt/local/bin/gtkwave /users/enseig/genius/TURTLE/simulators/c++2/vcddump.vcd"/>
+<ExternalCommand1 data="/opt/local/bin/gtkwave /home/andream/TURTLE/simulators/c++2/vcddump.vcd"/>
 <ExternalCommand2Host data="localhost"/>
-<ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /users/enseig/genius/TURTLE/uppaal/spec.xml"/>
+<ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /home/andream/TURTLE/uppaal/spec.xml"/>
 
-<LastOpenFile data="/users/enseig/genius/TURTLE/modeling/MicroWaveOven_SimpleSynchronousDeploy2CPU2RAM.xml"/>
+<LastOpenFile data="/home/andream/TURTLE/papers/papersAndreaENRICI/Zigbee/models/ZigBeeDEMO.xml"/>
 
 
 
-<LastWindowAttributes x="1097" y="89" width="1075" height="848" max="false" />
+<LastWindowAttributes x="65" y="24" width="1301" height="744" max="true" />
 
 
 <ProVerifHash data=""/>

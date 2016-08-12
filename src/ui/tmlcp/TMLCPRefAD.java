@@ -79,7 +79,7 @@ public class TMLCPRefAD extends TGCOneLineText {
         editable = true;
         removable = true;
 
-        value = "Reference to a CP";
+        value = "Reference to an AD";
         name = "ActivityDiagram";
 
         myImageIcon = IconManager.imgic400;
@@ -146,7 +146,7 @@ public class TMLCPRefAD extends TGCOneLineText {
             isCPCreated = new JMenuItem("Open diagram");
         }
         else {
-            isCPCreated = new JMenuItem("Create communication pattern");
+            isCPCreated = new JMenuItem("Create Activity Diagram");
         }
 
         isCPCreated.addActionListener( menuAL );
