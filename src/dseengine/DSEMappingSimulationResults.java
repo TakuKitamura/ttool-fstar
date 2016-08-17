@@ -122,6 +122,9 @@ public class DSEMappingSimulationResults  {
 		int cpt = 0;
 		
 		for(TMLMapping map: maps) {
+			if (comments.get(cpt).contains("Secured")){
+			    sb.append("secured ");
+			}
 			sb.append("#" + cpt + ": " + map.getSummaryTaskMapping() + "\n");
 			cpt ++;
 		}
@@ -587,6 +590,7 @@ public class DSEMappingSimulationResults  {
 		
 		for(DSESimulationResult dserr: results) {
 			valuetmp = dserr.getMinSimulationDuration();
+			System.out.println("MIN SIMULATION DURATION " + valuetmp);
 			if (valuetmp > value) {
 				value = valuetmp;
 				index = currentIndex;
@@ -679,6 +683,7 @@ public class DSEMappingSimulationResults  {
 		
 		for(DSESimulationResult dserr: results) {
 			valuetmp = dserr.getMaxSimulationDuration();
+			System.out.println("MAX SIMULATION DURATION " + valuetmp);
 			if (valuetmp > value) {
 				value = valuetmp;
 				index = currentIndex;

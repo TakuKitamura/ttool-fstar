@@ -196,4 +196,19 @@ public class TMLActivityDiagramPanel extends TDiagramPanel {
 	}
 	return ns;
     }
+
+    public ArrayList<String> getAllKeys(){
+	ArrayList<String> ns=new ArrayList<String>();
+	LinkedList<TGComponent> comps= getAllComponentList();
+	for (TGComponent c: comps){
+	    if (c instanceof TMLADEncrypt){
+		TMLADEncrypt en= (TMLADEncrypt) c;
+		if (!en.securityContext.isEmpty() && (en.type.equals("Symmetric Encryption") || en.type.equals("Asymmetric Encryption") ||  en.type.equals("MAC"))){
+		    ns.add(en.securityContext);
+		}
+	    }
+	}
+	return ns;
+    }
+
 }

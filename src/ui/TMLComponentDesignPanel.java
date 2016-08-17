@@ -229,6 +229,15 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
 	return ns;
     }
 
+    public ArrayList<String> getAllKeys(){
+	ArrayList<String> ns=new ArrayList<String>();
+	TMLActivityDiagramPanel tmladp;
+        for(int i=1; i<panels.size(); i++) {
+            tmladp = (TMLActivityDiagramPanel)(panels.elementAt(i));
+            ns.addAll(tmladp.getAllKeys());
+        }
+	return ns;
+    }
 
     public String[] getAllOutEvents(String nameOfComponent) {
 	return tmlctdp.getAllOutEvents(nameOfComponent);

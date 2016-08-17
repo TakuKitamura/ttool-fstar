@@ -87,10 +87,17 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     protected JButton close;
     String simulator;
    
-    protected JCheckBox autoSecure, autoMapKeys;
+    protected JCheckBox autoConf, autoAuth, autoMapKeys, custom;
+	
+    protected JTextField encTime, decTime, secOverhead;
+
     protected JTextField tmlDirectory, mappingFile, modelFile, simulationThreads, resultsDirectory, simulationCycles, minCPU, maxCPU, simulationsPerMapping;
     protected JTextArea outputText;
     protected String output = "";
+    protected JCheckBox secAnalysis;
+    protected JTextField encTime2, decTime2, secOverhead2;
+
+
     String tmlDir;
     String mapFile = "spec.tmap";
     String modFile = "spec.tml";
@@ -99,7 +106,11 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     String simCycles="1000";
     String NbMinCPU ="1";
     String NbMaxCPU ="1";
-    String Nbsim ="1";
+    String Nbsim ="100";
+    String encCC="100";
+    String decCC="100";
+    String secOv = "100";
+
     protected JTabbedPane jp1;
     private Thread t;
     private boolean go = false;
@@ -154,10 +165,27 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         c01.gridheight = 1;
 
         //genJava.addActionListener(this);
-	autoSecure= new JCheckBox("Add security");
-        jp01.add(autoSecure, c01);
+	autoConf= new JCheckBox("Add security (Confidentiality)");
+        jp01.add(autoConf, c01);
+	autoAuth= new JCheckBox("Add security (Authenticity)");
+        jp01.add(autoAuth, c01);
 	autoMapKeys= new JCheckBox("Add Keys");
 	jp01.add(autoMapKeys, c01);
+	
+	custom = new JCheckBox("Custom performance attributes");
+	jp01.add(custom,c01);
+	
+	jp01.add(new JLabel("Encryption Computational Complexity"),c01);
+	encTime = new JTextField(encCC);
+	jp01.add(encTime,c01);
+
+	jp01.add(new JLabel("Decryption Computational Complexity"),c01);
+	decTime = new JTextField(decCC);
+	jp01.add(decTime,c01);
+
+	jp01.add(new JLabel("Data Overhead (bits)"),c01);
+	secOverhead = new JTextField(secOv);
+	jp01.add(secOverhead,c01);
 	
 	jp1.add("Automated Security", jp01);
 
@@ -215,6 +243,21 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	simulationsPerMapping = new JTextField(Nbsim);
 	jp03.add(simulationsPerMapping, c03);
 
+
+	secAnalysis = new JCheckBox("Security Analysis");
+	jp03.add(secAnalysis,c03);
+	
+	jp03.add(new JLabel("Encryption Computational Complexity"),c03);
+	encTime2 = new JTextField(encCC);
+	jp03.add(encTime2,c03);
+
+	jp03.add(new JLabel("Decryption Computational Complexity"),c03);
+	decTime2 = new JTextField(decCC);
+	jp03.add(decTime2,c03);
+
+	jp03.add(new JLabel("Data Overhead (bits)"),c03);
+	secOverhead2 = new JTextField(secOv);
+	jp03.add(secOverhead2,c03);
 
 	jp1.add("Mapping Exploration", jp03);
 
@@ -339,10 +382,16 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         TraceManager.addDev("Thread started");
         File testFile;
 	if (jp1.getSelectedIndex() == 0){
-	    if (autoSecure.isSelected()){
-	    	TMLMapping map = mgui.gtm.autoSecure(mgui);
-		if (map!=null){
-		//drawMapping(map);
+	    encCC=encTime.getText();
+	    decCC=decTime.getText();
+	    secOv = secOverhead.getText();
+	    TMLMapping map;
+	    if (autoConf.isSelected() || autoAuth.isSelected()){
+		if (custom.isSelected()){
+		    map = mgui.gtm.autoSecure(mgui, encCC,secOv,decCC,autoConf.isSelected(), autoAuth.isSelected());
+		}
+		else {
+	    	    map = mgui.gtm.autoSecure(mgui,autoConf.isSelected(), autoAuth.isSelected());
 		}
 	    }
 	    if (autoMapKeys.isSelected()){
@@ -350,7 +399,20 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    }
 	}
 	else if (jp1.getSelectedIndex()==1){
+	    encCC=encTime2.getText();
+	    decCC=decTime2.getText();
+	    secOv = secOverhead2.getText();
+
 	    DSEConfiguration config = new DSEConfiguration();
+	    config.addSecurity = secAnalysis.isSelected();
+	    config.encComp = encCC;
+	    config.overhead = secOv;
+	    config.decComp = decCC;
+
+	    config.mainGUI = mgui;
+	    TMLMapping map = mgui.gtm.getTMLMapping();
+	    config.tmlcdp = map.getTMLCDesignPanel();
+	    config.tmlap = map.tmlap;
 	    if (config.setModelPath(tmlDir) != 0) {
 		TraceManager.addDev("TML Directory file at " + tmlDir + " error");
 		checkMode();
@@ -405,8 +467,10 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 		return;
 	    }
 	    if (config.setMinNbOfCPUs(NbMinCPU) != 0) {
+		TraceManager.addDev("Can't set Min # CPUS to " + NbMinCPU);
 	    }
 	    if (config.setMaxNbOfCPUs(NbMaxCPU) != 0) {
+		TraceManager.addDev("Can't set Max # CPUS to " + NbMaxCPU);
 	    }
 	    config.setOutputTXT("true");
 	   // config.setOutputHTML("true");
@@ -423,7 +487,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 		output+="Simulation Succeeded";
 		outputText.setText(output);
 	    }
-	    if (config.runDSE("", true, true)!=0){
+	    if (config.runDSE("", false, false)!=0){
 		TraceManager.addDev("Can't run DSE");
 	    }
 	    System.out.println("DSE run");
@@ -492,33 +556,5 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     public void setError() {
         hasError = true;
     }
-    public void drawMapping(TMLMapping map){
-	Map<HwNode, TGConnectingPoint> connectMap; 
-	int index = mgui.createTMLArchitecture("OptimalMapping");
-	TMLArchiPanel archPanel = (TMLArchiPanel) mgui.tabs.get(mgui.tabs.size()-1);
-	TMLArchiDiagramPanel ap = archPanel.tmlap;
-	TMLArchitecture arch = map.getArch();
-	ArrayList<HwNode> hwnodes = arch.getHwNodes();
-	ArrayList<HwLink> hwlinks = arch.getHwLinks();
-	int x=10;
-	int y=10;
-	for (HwNode node: hwnodes){
-	    if (node instanceof HwCPU){
-		TMLArchiCPUNode cpu = new TMLArchiCPUNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap);
-		x+=300;
-		cpu.setName(node.getName());
-		ap.addComponent(cpu, x, y, false, true);
-	    }
-	    else if (node instanceof HwMemory){
-		TMLArchiMemoryNode mem = new TMLArchiMemoryNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap);
-		x+=300;
-		mem.setName(node.getName());
-		ap.addComponent(mem, x, y, false, true);
-	    }
 
-	}
-	for (HwLink link: hwlinks){
-	    
-	}
-    }
 }

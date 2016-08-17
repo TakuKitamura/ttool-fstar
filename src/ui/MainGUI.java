@@ -3810,6 +3810,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 	strlist.toArray(strarray); 
 	return strarray;
     }
+
+    public ArrayList<String> getAllKeys(){
+        TURTLEPanel tp;
+        ArrayList<String> list = new ArrayList<String>();
+
+        for(int i=0; i<tabs.size(); i++) {
+            tp = (TURTLEPanel)(tabs.elementAt(i));
+            if (tp instanceof TMLComponentDesignPanel) {
+        	for (String s:((TMLComponentDesignPanel)tp).getAllKeys()){
+		    list.add(s);
+		}
+	    }
+	}
+	return list;
+    }
+
     public String[] getAllOutRequests() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {return null;}
@@ -4122,7 +4138,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void dse(){
 	TraceManager.addDev("Design space exploration");
 	JDialogDSE jdse= new JDialogDSE(frame, this, "Design Space Exploration", ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.TMLCodeDirectory);
-	jdse.setSize(500,500);
+	jdse.setSize(500,800);
         GraphicLib.centerOnParent(jdse);
         jdse.setVisible(true);
 	dtree.toBeUpdated();
@@ -7267,7 +7283,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void requestRenameTab(int index) {
         String oldName = mainTabbedPane.getTitleAt(index);
-        String s = (String)JOptionPane.showInputDialog(frame, "Name: ", "Renaming a tab=", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, mainTabbedPane.getTitleAt(index));
+        String s = (String)JOptionPane.showInputDialog(frame, "Name: ", "Renaming a tab", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, mainTabbedPane.getTitleAt(index));
         if ((s != null) && (s.length() > 0)){
             // name already in use?
             if (s.compareTo(oldName) != 0) {

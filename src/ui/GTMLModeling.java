@@ -1302,7 +1302,7 @@ public class GTMLModeling  {
 	while(iterator.hasNext()){
 	    tgc = (TGComponent)(iterator.next());
 	    if (tgc instanceof TMLADEncrypt) {
-		SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).calculationTime, ((TMLADEncrypt)tgc).nonce);
+		SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).encTime, ((TMLADEncrypt)tgc).decTime, ((TMLADEncrypt)tgc).nonce, ((TMLADEncrypt)tgc).formula, ((TMLADEncrypt)tgc).key);
 		securityPatterns.put(securityPattern.name, securityPattern);
 		tmlm.addSec(securityPattern);
 		ArrayList<TMLTask> l = new ArrayList<TMLTask>();
@@ -1516,7 +1516,7 @@ public class GTMLModeling  {
                     checkingErrors.add(ce);
 		}
 		tmlexecc.securityPattern = sp;
-                tmlexecc.setAction(Integer.toString(sp.time));
+                tmlexecc.setAction(Integer.toString(sp.encTime));
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 		tmlm.securityTaskMap.get(sp).add(tmltask);
                 listE.addCor(tmlexecc, tgc);
@@ -1533,7 +1533,7 @@ public class GTMLModeling  {
                     checkingErrors.add(ce);
 		}
 		tmlexecc.securityPattern = sp;
-                tmlexecc.setAction(Integer.toString(sp.time));
+                tmlexecc.setAction(Integer.toString(sp.decTime));
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlexecc, tgc);
 		tmlm.securityTaskMap.get(sp).add(tmltask);
@@ -1662,6 +1662,12 @@ public class GTMLModeling  {
 		    	//NbOfSamples will increase due to extra overhead from MAC
 		    	int cur = Integer.valueOf(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
 		    	int add = Integer.valueOf(tmlreadchannel.securityPattern.overhead);
+			if (!tmlreadchannel.securityPattern.nonce.equals("")){
+			    SecurityPattern nonce = securityPatterns.get(tmlreadchannel.securityPattern.nonce);
+			    if (nonce!=null){
+			        add = Integer.valueOf(nonce.overhead);
+			    }
+			}
 		    	Double d= Math.ceil(add/4.0);
 			cur = cur+ d.intValue();
 		    	tmlreadchannel.setNbOfSamples(Integer.toString(cur));
@@ -1978,6 +1984,12 @@ public class GTMLModeling  {
 			tmlwritechannel.securityPattern= securityPatterns.get(((TMLADWriteChannel)tgc).securityContext);
 		 	int cur = Integer.valueOf(modifyString(((TMLADWriteChannel)tgc).getSamplesValue()));
 		    	int add = Integer.valueOf(tmlwritechannel.securityPattern.overhead);
+			if (!tmlwritechannel.securityPattern.nonce.equals("")){
+			    SecurityPattern nonce = securityPatterns.get(tmlwritechannel.securityPattern.nonce);
+			    if (nonce!=null){
+			        add = Integer.valueOf(nonce.overhead);
+			    }
+			}
 		    	Double d= Math.ceil(add/4.0);
 			cur = cur+ d.intValue();
 		    	tmlwritechannel.setNbOfSamples(Integer.toString(cur));
@@ -3303,6 +3315,9 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 			    	map.mappedSecurity.put(sp, mems);
 			    	TraceManager.addDev("Added key of " + key.getValue());
 			    }
+			}
+			else {
+			    System.out.println("Can't map key " + key.getValue());
 			}			
 		    }
                 }

@@ -74,20 +74,22 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
     private JButton closeButton;
     private JButton cancelButton;
     String[] nonces;
+    String[] keys;
     private ArrayList<String[]> possibleValues = null;
 
     GridBagConstraints c0 = new GridBagConstraints();
     Container c;
     /** Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-    public JDialogCryptographicConfiguration(Frame f, String title, String[] _values, String[] _nonces) {
+    public JDialogCryptographicConfiguration(Frame f, String title, String[] _values, String[] _nonces, String[] _keys) {
 
         super(f, title, true);
 
-        nbString = 7;
+        nbString = 9;
 
 	values=_values;
 	nonces=_nonces;
+	keys=_keys;
         texts = new JTextField[nbString];
 
         initComponents();
@@ -217,6 +219,9 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 	    if (evt.getSource() == inserts[5]) {
 		texts[5].setText(helps[5].getSelectedItem().toString());
 	    }
+	    if (evt.getSource() == inserts[8]) {
+		texts[8].setText(helps[8].getSelectedItem().toString());
+	    }
 	}
     }
 
@@ -274,11 +279,16 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 	add(texts[2],c1);
 
       	c1.gridwidth = 1;
-	add(new JLabel("Computational Complexity"),c1);
+	add(new JLabel("Encryption Computational Complexity"),c1);
 	texts[3]=new JTextField(values[3],15);
 	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 	add(texts[3],c1);
 
+      	c1.gridwidth = 1;
+	add(new JLabel("Decryption Computational Complexity"),c1);
+	texts[7]=new JTextField(values[7],15);
+	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+	add(texts[7],c1);
 
       	c1.gridwidth = 1;
 	add(new JLabel("Nonce"),c1);
@@ -291,6 +301,19 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 	add(inserts[5], c1);
 	texts[5]=new JTextField(values[5], 15);
         add(texts[5], c1);
+
+      	c1.gridwidth = 1;
+	add(new JLabel("Encrypted Key"),c1);
+	helps[8]=new JComboBox(keys);
+	helps[8].setSelectedItem(values[8]);
+	add(helps[8],c1);
+	c1.gridwidth=GridBagConstraints.REMAINDER;
+	inserts[8] = new JButton("Use");
+	inserts[8].addActionListener(j);
+	add(inserts[8], c1);
+	texts[8]=new JTextField(values[8], 15);
+        add(texts[8], c1);
+
 	}
     }
 
@@ -320,7 +343,7 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
         c1.anchor = GridBagConstraints.CENTER;
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
-	String[] vals = new String[]{"Symmetric Encryption", "Asymmetric Encryption","MAC", "Hash", "Nonce"}; 
+	String[] vals = new String[]{"Symmetric Encryption", "Asymmetric Encryption","MAC", "Hash", "Nonce", "Advanced"}; 
         // String1
       	c1.gridwidth = 1;
 	add(new JLabel("Cryptographic Configuration Name"),c1);
@@ -383,7 +406,7 @@ public class advPanel extends JPanel {
         c1.anchor = GridBagConstraints.CENTER;
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
-	String[] vals = new String[]{"Symmetric Encryption", "Asymmetric Encryption","MAC", "Hash", "Nonce"}; 
+	String[] vals = new String[]{"Symmetric Encryption", "Asymmetric Encryption","MAC", "Hash", "Nonce", "Advanced"}; 
 
         // String1
       	c1.gridwidth = 1;
@@ -397,6 +420,12 @@ public class advPanel extends JPanel {
 	helps[1]=new JComboBox(vals);
 	helps[1].setSelectedItem(values[1]);
 	add(helps[1],c1);
+	c1.gridwidth=GridBagConstraints.REMAINDER;
+	inserts[0] = new JButton("Use");
+	inserts[0].addActionListener(j);
+	add(inserts[0], c1);
+	texts[1]=new JTextField(values[1], 15);
+        add(texts[1], c1);
 
       	c1.gridwidth = 1;
 	add(new JLabel("Overhead"),c1);

@@ -66,7 +66,9 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     public String message_overhead="";
     public String size="";
     public String securityContext="";
-    public String calculationTime="100";
+    public String encTime="100";
+    public String decTime="100";	
+    public String key ="";
     public String nonce="";
     public String formula="";
     protected int stateOfError = 0; // Not yet checked
@@ -120,9 +122,10 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
 public boolean editOndoubleClick(JFrame frame) {
 
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);]
-	String[] values=new String[]{securityContext, type, message_overhead, calculationTime, size, nonce, formula};
+	String[] values=new String[]{securityContext, type, message_overhead, encTime, size, nonce, formula, decTime, key};
 	String[] nonces=tdp.getMGUI().getAllNonce();
-	JDialogCryptographicConfiguration jdms = new JDialogCryptographicConfiguration(frame, "Setting Cryptographic Configuration properties", values, nonces);
+	String[] keys = tdp.getMGUI().getAllKeys().toArray(new String[0]);
+	JDialogCryptographicConfiguration jdms = new JDialogCryptographicConfiguration(frame, "Setting Cryptographic Configuration properties", values, nonces, keys);
         jdms.setSize(650, 300);
         GraphicLib.centerOnParent(jdms);
         jdms.show(); // blocked until dialog has been closed
@@ -131,10 +134,12 @@ public boolean editOndoubleClick(JFrame frame) {
 	    securityContext = jdms.getString(0);
 	    type=jdms.getString(1);
 	    message_overhead=jdms.getString(2);
-	    calculationTime=jdms.getString(3);
+	    encTime=jdms.getString(3);
 	    size=jdms.getString(4);
 	    nonce=jdms.getString(5);
 	    formula = jdms.getString(6);
+	    decTime = jdms.getString(7);
+	    key = jdms.getString(8);
             return true;
         }
 
@@ -168,8 +173,10 @@ public boolean editOndoubleClick(JFrame frame) {
         sb.append(message_overhead);
 	sb.append("\" size=\"");
         sb.append(size);
-	sb.append("\" calcTime=\"");
-        sb.append(calculationTime);
+	sb.append("\" encTime=\"");
+        sb.append(encTime);
+	sb.append("\" decTime=\"");
+        sb.append(decTime);
 	sb.append("\" nonce=\"");
         sb.append(nonce);
         sb.append("\" />\n");
@@ -205,7 +212,8 @@ public boolean editOndoubleClick(JFrame frame) {
 				type= elt.getAttribute("type");
 				message_overhead= elt.getAttribute("overhead");
 				size= elt.getAttribute("size");
-				calculationTime = elt.getAttribute("calcTime");
+				encTime = elt.getAttribute("encTime");
+				decTime = elt.getAttribute("decTime");
 				nonce = elt.getAttribute("nonce");
                                 //System.out.println("eventName=" +eventName + " variable=" + result);
                             }

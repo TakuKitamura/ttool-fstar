@@ -61,6 +61,8 @@ import dseengine.*;
 
 import myutil.*;
 
+import ui.*;
+import ui.tmldd.*;
 
 //import uppaaldesc.*;
 
@@ -100,9 +102,13 @@ public class DSEConfiguration implements Runnable  {
 	
 	private boolean showSimulatorRawOutput = false;
 	
+	public TMLComponentDesignPanel tmlcdp;
+	public TMLArchiPanel tmlap;
 	
 	private TMLMapping tmap;
 	private TMLModeling tmlm;
+	
+	private TMLModeling stmlm;
 	
 	private boolean optionChanged = true;
 	
@@ -113,10 +119,18 @@ public class DSEConfiguration implements Runnable  {
 	private int simulationExplorationMinimumCommand = 100;
 	private int simulationExplorationMinimumBranch = 100;
 	
+
 	private int simulationMaxCycles = -1;
 	
 	private int nbOfSimulationThreads = 1;
 	
+	//Security
+	public boolean addSecurity=false;
+	public String encComp="100";
+	public String decComp="100";
+	public String overhead="0";
+	public String nonceSize="0";
+
 	// DSE
 	private int minNbOfCPUs = 1;
 	private int maxNbOfCPUs = 2;
@@ -124,10 +138,11 @@ public class DSEConfiguration implements Runnable  {
 	private int maxNbOfCoresPerCPU = 2;
 	private int nbOfSimulationsPerMapping = 1;
 	private TMLModeling taskModel = null;
+	private TMLModeling secModel = null;
 	private Vector<TMLMapping> mappings;
 	private DSEMappingSimulationResults dsemapresults;
-	
-	
+
+	public MainGUI mainGUI;
 	// Taps
 	private static String[] taps = {"MinSimulationDuration",  "AverageSimulationDuration", 
 	"MaxSimulationDuration", 
@@ -504,7 +519,6 @@ public class DSEConfiguration implements Runnable  {
 		if (ret) {
 			//System.out.println("Format OK");
 			taskModel = tmlts.getTMLModeling();
-			
 			//System.out.println("\n\n*** TML Modeling *** \n");
 			//TMLTextSpecification textspec = new TMLTextSpecification("toto");
 			//String s = textspec.toTextFormat(tmlm);
@@ -656,7 +670,9 @@ public class DSEConfiguration implements Runnable  {
 		}
 		return 0;
 	}
-	
+	public int generateSecMapping(){
+		return 0;
+	}
 	public int generateAndCompileMappingCode(TMLMapping _tmlmap, boolean _debug, boolean _optimize) {
 		
 		// Generating code
@@ -666,7 +682,7 @@ public class DSEConfiguration implements Runnable  {
 			map.generateSystemC(_debug, _optimize);
 			map.saveFile(pathToSimulator, "appmodel");
 		} catch (Exception e) {
-			TraceManager.addDev("SystemC generation failed: " + e + " msg=" + e.getMessage());
+			System.out.println("SystemC generation failed: " + e + " msg=" + e.getMessage());
 			e.printStackTrace();
 			return -1;
 		}
@@ -1295,10 +1311,108 @@ public class DSEConfiguration implements Runnable  {
 			} else {
 				return -1;
 			}
+
+		 if (addSecurity){
+		     System.out.println("ADDING SECURITY TO MAPPING " +(cpt-1));
+		     tmla.tmlap = tmlap;
+		     tmla.setTMLDesignPanel(tmlcdp);
+		     TMLArchiPanel newArch = drawMapping(tmla, "securedMapping"+(cpt-1));
+
+		     //Repeat for secured mapping
+		     TMLMapping secMapping = mainGUI.gtm.autoSecure(mainGUI, "mapping" +(cpt-1),tmla, newArch, encComp, overhead, decComp,true,false);
+
+		     //Run simulations on this mapping
+		     if (generateAndCompileMappingCode(secMapping, _debug, _optimize)  >= 0) {
+			     System.out.println("GENERATING>>>");
+				if (recordResults) {
+					results = new DSESimulationResult();
+					resultsID ++;
+				}
+				
+				//System.out.println("After Current TML Mapping: " + tmla.getSummaryTaskMapping());
+				
+				dsemapresults.addElement("Secured Mapping #" + (cpt-1), results, secMapping);
+				nbOfSimulations = nbOfSimulationsPerMapping;
+				// Executing the simulation
+				String cmd = prepareCommand();
+				String tmp;
+				
+				long t0 = System.currentTimeMillis();
+				
+				while(nbOfSimulations >0) {
+					tmp = putSimulationNbInCommand(cmd, simulationID);
+					TraceManager.addDev("Executing: " + tmp);
+					makeCommand(tmp);
+					
+					if (recordResults) {
+						if (loadSimulationResult(simulationID) <0) {
+							return -1;
+						}
+					}
+					simulationID ++;
+					nbOfSimulations --;
+				}
+			} else {
+				return -1;
+			}
+		    }
 		}	
 		return 0;
 	}
-	
+    public TMLArchiPanel drawMapping(TMLMapping map, String name){
+	Map<HwNode, TGConnectingPoint> connectMap; 
+	Map<HwNode, TMLArchiNode> objMap = new HashMap<HwNode, TMLArchiNode>();
+	int index = mainGUI.createTMLArchitecture(name);
+	TMLArchiPanel archPanel = (TMLArchiPanel) mainGUI.tabs.get(mainGUI.tabs.size()-1);
+	TMLArchiDiagramPanel ap = archPanel.tmlap;
+	TMLArchitecture arch = map.getArch();
+	ArrayList<HwNode> hwnodes = arch.getHwNodes();
+	ArrayList<HwLink> hwlinks = arch.getHwLinks();
+	int x=10;
+	int y=10;
+	for (HwNode node: hwnodes){
+	    if (node instanceof HwCPU){
+		TMLArchiCPUNode cpu = new TMLArchiCPUNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap);
+		x+=300;
+		cpu.setName(node.getName());
+		ap.addComponent(cpu, x, y, false, true);
+		objMap.put(node, cpu);
+	    }
+	    else if (node instanceof HwMemory){
+		TMLArchiMemoryNode mem = new TMLArchiMemoryNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap);
+		x+=300;
+		mem.setName(node.getName());
+		ap.addComponent(mem, x, y, false, true);
+		objMap.put(node, mem);
+	    }
+
+	}
+	y = 400;
+	x=10;
+	for (HwNode node:hwnodes){
+	   if (node instanceof HwBus){
+		TMLArchiBUSNode bus = new TMLArchiBUSNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap);
+		x+=300;
+		bus.setName(node.getName());
+		ap.addComponent(bus,x,y,false,true);
+		objMap.put(node,bus);
+	   }
+	}
+	for (HwLink link: hwlinks){
+	    TMLArchiNode n1 = objMap.get(link.bus);
+	    TMLArchiNode n2 = objMap.get(link.hwnode);	
+	    TMLArchiConnectorNode conn = new TMLArchiConnectorNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap, n1.getTGConnectingPointAtIndex(0), n2.getTGConnectingPointAtIndex(0), new Vector());
+	    ap.addComponent(conn,x,y,false,true);
+	}
+	for (TMLTask task:map.getTMLModeling().getTasks()){
+	   HwNode node = map.getHwNodeOf(task);
+	   TMLArchiArtifact art = new TMLArchiArtifact(objMap.get(node).getX(), objMap.get(node).getY(), ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, objMap.get(node), ap);
+	   ap.addComponent(art,objMap.get(node).getX(),objMap.get(node).getY(),true,true);
+	   art.setFullName(task.getName().split("__")[1], task.getName().split("__")[0]);
+	}
+	ap.repaint();
+	return archPanel;
+    }
 	public void makeCommand(String cmd) {
 		String str = null;
 		BufferedReader proc_in, proc_err;
@@ -1431,7 +1545,7 @@ public class DSEConfiguration implements Runnable  {
 		
 		Vector<TMLMapping> maps = new  Vector<TMLMapping>();
 		
-		for(int cpt=min; cpt<max; cpt++) {
+		for(int cpt=min; cpt<=max; cpt++) {
 			dseID = 0;
 			TraceManager.addDev("Generating mapping for nb of cpu = " + cpt);
 			generateMappings(_tmlm, maps, cpt);
@@ -1546,6 +1660,7 @@ public class DSEConfiguration implements Runnable  {
 		dseID ++;
 		
 		maps.add(tmap);
+		
 	}
 	
 	private int nbOfFreeCPUs(CPUWithTasks[] cpus_tasks) {

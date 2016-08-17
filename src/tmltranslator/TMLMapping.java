@@ -385,6 +385,9 @@ public List<String> securityPatterns = new ArrayList<String>();
     public TMLModeling getTMLModeling() {
         return tmlm;
     }
+    public void setTMLModeling(TMLModeling _tmlm){
+	tmlm=_tmlm;
+    }
     public TMLArchitecture getTMLArchitecture() {
         return tmla;
     }
@@ -465,6 +468,13 @@ public List<String> securityPatterns = new ArrayList<String>();
         return onnodes.get(index);
     }
 
+    public void removeTask(TMLTask _task){
+	int index = mappedtasks.indexOf(_task);
+	if (index >-1){
+	    onnodes.remove(index);
+	    mappedtasks.remove(index);
+	}
+    }
     public boolean isAUsedHwNode(HwNode _node) {
         return (onnodes.contains(_node));
     }

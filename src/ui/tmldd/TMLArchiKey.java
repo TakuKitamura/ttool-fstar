@@ -190,9 +190,6 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
 			typeName = dialog.getTypeName();
 		}
 		
-		priority = dialog.getPriority();
-		
-		((TMLArchiDiagramPanel)tdp).setPriority(getFullValue(), priority);
 		
 			
 		if (error) {

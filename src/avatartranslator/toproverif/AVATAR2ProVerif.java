@@ -638,7 +638,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     // ignore if the attribute was already declared
                     if (systemKnowledge.contains (arg)) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Attribute " + arg.getBlock ().getName () + "." + arg.getName () + " already appears in another initial knowledge pragma or is a constant (ignored).");
-                        ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
+                       // ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarBDPanel());
                         ce.setTGComponent((TGComponent)pragma.getReferenceObject());
                         warnings.add(ce);
                         continue;

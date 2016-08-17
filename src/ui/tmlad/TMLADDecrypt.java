@@ -62,9 +62,8 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
     private int textX, textY;
     private int ilength = 10;
     private int lineLength1 = 2;
-    public String securityContext="";
-	
-	protected int stateOfError = 0; // Not yet checked
+    public String securityContext="";	
+    protected int stateOfError = 0; // Not yet checked
     
     public TMLADDecrypt(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);

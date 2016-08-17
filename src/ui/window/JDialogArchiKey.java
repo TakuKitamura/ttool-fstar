@@ -68,7 +68,7 @@ public class JDialogArchiKey extends javax.swing.JDialog implements ActionListen
     private Frame frame;
     private TMLArchiKey artifact;
     
-	protected JComboBox referenceCommunicationName, priority;
+	protected JComboBox referenceCommunicationName;
 	
     // Main Panel
     private JButton closeButton;
@@ -95,7 +95,7 @@ public class JDialogArchiKey extends javax.swing.JDialog implements ActionListen
     }
     
     private void myInitComponents() {
-		selectPriority();
+		
     }
     
     private void initComponents() {
@@ -125,35 +125,34 @@ public class JDialogArchiKey extends javax.swing.JDialog implements ActionListen
         c1.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Key:"), c2);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		TraceManager.addDev("Getting key");
-		Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllCryptoConfig();
-		int index = 0;
-		if (list.size() == 0) {
-			list.add("No key to map");
+	TraceManager.addDev("Getting key");
+	ArrayList<String> list = artifact.getTDiagramPanel().getMGUI().getAllKeys();
+	int index = 0;
+	/*	if (list.size() == 0) {
 			emptyList = true;
 		} else {
 			
-			index = indexOf(list, artifact.getFullValue());
+			index = list.indexOf(artifact.getFullValue());
 			//System.out.println("name=" + artifact.getFullValue() + " index=" + index);
 		}
-		
+		*/
 		TraceManager.addDev("Got keyss");
 		
-        referenceCommunicationName = new JComboBox(list);
+        referenceCommunicationName = new JComboBox(list.toArray(new String[list.size()]));
 		referenceCommunicationName.setSelectedIndex(index);
 		referenceCommunicationName.addActionListener(this);
         //referenceTaskName.setEditable(true);
         //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
 		panel2.add(referenceCommunicationName, c1);
-		
-		list = new Vector<String>();
+		/*
+		Vector<String> list = new Vector<String>();
 		for(int i=0; i<11; i++) {
 			list.add(""+i);
 		}
 		priority = new JComboBox(list);
 		priority.setSelectedIndex(artifact.getPriority());
 		panel2.add(priority, c1);
-		
+		*/
 		/*c1.gridwidth = 1;
         c1.gridheight = 1;
         c1.weighty = 1.0;
@@ -193,9 +192,7 @@ public class JDialogArchiKey extends javax.swing.JDialog implements ActionListen
             return;
         }*/
 		
-		if (evt.getSource() == referenceCommunicationName) {
-			selectPriority();
-		}
+
         
         
         String command = evt.getActionCommand();
@@ -209,11 +206,7 @@ public class JDialogArchiKey extends javax.swing.JDialog implements ActionListen
     }
 	
 	
-	public void selectPriority() {
-		//System.out.println("Select priority");
-		int index = ((TMLArchiDiagramPanel)artifact.getTDiagramPanel()).getMaxPriority((String)(referenceCommunicationName.getSelectedItem()));
-		priority.setSelectedIndex(index);
-	}
+
     
     public void closeDialog() {
         regularClose = true;
@@ -278,8 +271,5 @@ public class JDialogArchiKey extends javax.swing.JDialog implements ActionListen
 		return 0;
 	}
 	
-	public int getPriority() {
-		return priority.getSelectedIndex();
-	}
     
 }

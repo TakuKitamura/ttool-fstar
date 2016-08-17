@@ -189,7 +189,7 @@ public class TML2MappingSystemC {
                     //tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime
                     //declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, 5, " + (int) Math.ceil(((float)exNode.execiTime)*(1+((float)exNode.branchingPredictionPenalty)/100)) + " ) " + SCCR;
                     declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime) + ", " + (int) Math.ceil((float)(exNode.clockRatio * Math.max(exNode.execiTime,exNode.execcTime) * (exNode.branchingPredictionPenalty * exNode.pipelineSize +100 - exNode.branchingPredictionPenalty))/100) + " ) " + SCCR;
-		System.out.println("cores " + exNode.nbOfCores);
+		TraceManager.addDev("cores " + exNode.nbOfCores);
                 for(int cores=0; cores<exNode.nbOfCores; cores++){
                 //for(int cores=0; cores<1; cores++){
                     //if (tmlmapping.isAUsedHwNode(node)) {
@@ -518,7 +518,7 @@ public class TML2MappingSystemC {
             //TraceManager.addDev("CommELem to process: " + commElem.getName());
             //String commElemName = commElem.getName();
             //if (commElem instanceof HwCPU) commElemName += "0";
-            //System.out.println("Next elem in path: " + commElem.getName());
+            //TraceManager.addDev("Next elem in path: " + commElem.getName());
             if (commElem instanceof HwMemory){
                 reverse=true;
                 slaves.str+= ",static_cast<Slave*>(" + commElem.getName() + "),static_cast<Slave*>(" + commElem.getName() + ")";
@@ -580,7 +580,7 @@ public class TML2MappingSystemC {
         }
         HwMemory memory = getMemConnectedToBusChannelMapped( commNodes, null, commElemToRoute );
         if( memory == null )    {
-            System.out.println( "no memories to map" );
+            TraceManager.addDev( "no memories to map" );
             exploreBuses( 0, commNodes, path, startNode, destNode, commElemToRoute );
         }
         else    {
@@ -663,8 +663,8 @@ public class TML2MappingSystemC {
     private HwMemory getMemConnectedToBusChannelMapped( LinkedList<HwCommunicationNode> _commNodes, HwBus _bus, TMLElement _channel )   {
         for( HwCommunicationNode commNode: _commNodes ) {
             if( commNode instanceof HwMemory )  {
-                if( _bus != null ) System.out.println(commNode.getName() + " connected to bus " + _bus.getName() + ": " + tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus));
-                System.out.println(_channel.getName() + " is mapped onto " + commNode.getName() + ": " + tmlmapping.isCommNodeMappedOn(_channel,commNode));
+                if( _bus != null ) TraceManager.addDev(commNode.getName() + " connected to bus " + _bus.getName() + ": " + tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus));
+                TraceManager.addDev(_channel.getName() + " is mapped onto " + commNode.getName() + ": " + tmlmapping.isCommNodeMappedOn(_channel,commNode));
                 if( ( _bus == null || tmlmapping.getTMLArchitecture().isNodeConnectedToBus( commNode, _bus ) )
                     && tmlmapping.isCommNodeMappedOn( _channel, commNode ) )    {
                     return (HwMemory)commNode;

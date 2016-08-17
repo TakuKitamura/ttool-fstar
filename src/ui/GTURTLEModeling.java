@@ -643,14 +643,57 @@ public class GTURTLEModeling {
 	//count # of insecure channels?
 	return overhead;
     }
-    public TMLMapping autoSecure(MainGUI gui){
-	HashMap<TMLTask, java.util.List<TMLTask>> toSecure = new HashMap<TMLTask, java.util.List<TMLTask>>();
-	HashMap<TMLTask, java.util.List<String>> insecureOutChannels = new HashMap<TMLTask, java.util.List<String>>();
-	HashMap<TMLTask, java.util.List<String>> insecureInChannels = new HashMap<TMLTask, java.util.List<String>>();
+ 
+
+
+    public TMLMapping autoSecure(MainGUI gui, boolean autoConf, boolean autoAuth){
 	if (tmap==null){
 	    return null;
 	}
-	TMLModeling tmlmodel = tmap.getTMLModeling();
+	int arch = gui.tabs.indexOf(tmap.tmlap);
+	gui.cloneRenameTab(arch,"enc");
+	TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
+	return autoSecure(gui, "enc", tmap,newarch,autoConf,autoAuth);
+    }
+    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch){
+	 return autoSecure(gui,name,map,newarch,"100","0","100",true,false);
+    }
+    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, boolean autoConf, boolean autoAuth){
+	 return autoSecure(gui,name,map,newarch,"100","0","100",autoConf,autoAuth);
+    }
+
+    public TMLMapping autoSecure(MainGUI gui, String encComp, String overhead, String decComp){
+	if (tmap==null){
+	    return null;
+	}
+	int arch = gui.tabs.indexOf(tmap.tmlap);
+	gui.cloneRenameTab(arch,"enc");
+	TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
+	return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,true,false);
+    }
+
+    public TMLMapping autoSecure(MainGUI gui, String encComp, String overhead, String decComp, boolean autoConf, boolean autoAuth){
+	if (tmap==null){
+	    return null;
+	}
+	int arch = gui.tabs.indexOf(tmap.tmlap);
+	gui.cloneRenameTab(arch,"enc");
+	TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
+	return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,autoConf,autoAuth);
+    }
+    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp){ 
+	return autoSecure(gui,name, tmap,newarch,encComp, overhead,decComp,true,false);
+    }
+
+
+    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoAuth){ 
+	HashMap<TMLTask, java.util.List<TMLTask>> toSecure = new HashMap<TMLTask, java.util.List<TMLTask>>();
+	HashMap<TMLTask, java.util.List<String>> insecureOutChannels = new HashMap<TMLTask, java.util.List<String>>();
+	HashMap<TMLTask, java.util.List<String>> insecureInChannels = new HashMap<TMLTask, java.util.List<String>>();
+	if (map==null){
+	    return null;
+	}
+	TMLModeling tmlmodel = map.getTMLModeling();
 	java.util.List<TMLChannel> channels = tmlmodel.getChannels();
 	for (TMLChannel channel: channels){
 	    for (TMLCPrimitivePort p: channel.ports){
@@ -661,20 +704,16 @@ public class GTURTLEModeling {
 
 	//Create clone of Component Diagram + Activity diagrams to secure
 
-	TMLComponentDesignPanel tmlcdp = tmap.getTMLCDesignPanel();
+	TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
 	int ind = gui.tabs.indexOf(tmlcdp);
 	String tabName = gui.getTitleAt(tmlcdp);
-	gui.cloneRenameTab(ind, "enc");
-	int arch = gui.tabs.indexOf(tmap.tmlap);
-	gui.cloneRenameTab(arch,"enc");
-	TMLComponentDesignPanel t = (TMLComponentDesignPanel) gui.tabs.get(gui.tabs.size()-2);
+	gui.cloneRenameTab(ind, name);
+	TMLComponentDesignPanel t = (TMLComponentDesignPanel) gui.tabs.get(gui.tabs.size()-1);
+	map.setTMLDesignPanel(t);
 	//Create clone of architecture panel and map tasks to it		
-	TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
-	newarch.renameMapping(tabName, tabName+"_enc");
-	for (TMLChannel c: tmlmodel.getChannels()){
-	    System.out.println(c.getName());
-	}
-	for (TMLTask task: tmap.getTMLModeling().getTasks()){
+	newarch.renameMapping(tabName, tabName+"_"+name);
+
+	for (TMLTask task: map.getTMLModeling().getTasks()){
 	    java.util.List<String> tmp = new ArrayList<String>();
 	    java.util.List<String> tmp2 = new ArrayList<String>();
 	    java.util.List<TMLTask> tmp3 = new ArrayList<TMLTask>();
@@ -682,18 +721,18 @@ public class GTURTLEModeling {
 	    insecureOutChannels.put(task, tmp2);
 	    toSecure.put(task,tmp3);
 	}
-	for (TMLTask task: tmap.getTMLModeling().getTasks()){   
+	for (TMLTask task: map.getTMLModeling().getTasks()){   
 	    TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel(task.getName());
 	    for (TGComponent tg:tad.getComponentList()){
 		if (tg instanceof TMLADWriteChannel){
 		    TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
-		    TraceManager.addDev("Inspecting channel " + writeChannel.getChannelName());
 		    if (writeChannel.securityContext.equals("")){
-			System.out.println(tabName+"__"+writeChannel.getChannelName());
 			TMLChannel chan = tmlmodel.getChannelByName(tabName+"__"+writeChannel.getChannelName());
 			if (chan!=null){
+			    chan.checkConf=true;
 			    if (chan.checkConf){
-			    	if (!securePath(chan.getOriginTask(), chan.getDestinationTask())){
+			    	if (!securePath(map, chan.getOriginTask(), chan.getDestinationTask())){
+				   
 		    		    insecureOutChannels.get(chan.getOriginTask()).add(writeChannel.getChannelName());
 		    		    insecureInChannels.get(chan.getDestinationTask()).add(writeChannel.getChannelName());
 				    toSecure.get(chan.getOriginTask()).add(chan.getDestinationTask());
@@ -704,7 +743,6 @@ public class GTURTLEModeling {
 		}
 	    }
 	}
-	System.out.println(toSecure);
 	int num=0;
 
 	for (TMLTask task:toSecure.keySet()){
@@ -731,7 +769,9 @@ public class GTURTLEModeling {
 	    	TMLADEncrypt enc = new TMLADEncrypt(xpos+5, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 	    	enc.securityContext = "autoEncrypt_"+channel;
 	    	enc.type = "Symmetric Encryption";
-	    	enc.message_overhead = "100";
+	    	enc.message_overhead = overhead;
+		enc.encTime= encComp;
+		enc.decTime=decComp;
 	    	tad.addComponent(enc, xpos ,ypos, false, true);
 
 		fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
@@ -776,7 +816,7 @@ public class GTURTLEModeling {
 				continue;
 			    }
 			    TGConnectingPoint next = conn.getTGConnectingPointP2();
-			    TMLADDecrypt dec = new TMLADDecrypt(x+40, y+40, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad);
+			    TMLADDecrypt dec = new TMLADDecrypt(x, y+40, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad);
 			    dec.securityContext = "autoEncrypt_" + readChannel.getChannelName();
 			    toadd.add(dec);
 			    conn.setP2(dec.getTGConnectingPointAtIndex(0));
@@ -795,14 +835,34 @@ public class GTURTLEModeling {
 	    }
 
 	}
-	return tmap;
+	GTMLModeling gtm = new GTMLModeling(t, false);
+	TMLModeling newmodel = gtm.translateToTMLModeling(false,false);
+	for (TMLTask task:newmodel.getTasks()){
+	    task.setName(tabName+"_"+name+"__"+task.getName());
+	}
+	for (TMLTask task: tmlmodel.getTasks()){
+	    System.out.println(task.getName());
+	    HwExecutionNode node =(HwExecutionNode) map.getHwNodeOf(task);
+	    if (newmodel.getTMLTaskByName(task.getName().replace(tabName,tabName+"_"+name))!=null){
+	        map.addTaskToHwExecutionNode(newmodel.getTMLTaskByName(task.getName().replace(tabName,tabName+"_"+name)), node);
+		map.removeTask(task);
+	    }
+	    else {
+		System.out.println("Can't find " + task.getName());
+	    }
+	}
+	//map.setTMLModeling(newmodel);
+	//System.out.println(map);
+	//TMLMapping newMap = gtm.translateToTMLMapping();
+	map.setTMLModeling(newmodel);
+	return map;
     }
-    public boolean securePath(TMLTask t1, TMLTask t2){
+    public boolean securePath(TMLMapping map, TMLTask t1, TMLTask t2){
 	//Check if a path between two tasks is secure
 	boolean secure=true;
-	java.util.List<HwLink> links = tmap.getTMLArchitecture().getHwLinks();
-	HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t1);
-	HwExecutionNode node2 = (HwExecutionNode) tmap.getHwNodeOf(t2);
+	java.util.List<HwLink> links = map.getTMLArchitecture().getHwLinks();
+	HwExecutionNode node1 = (HwExecutionNode) map.getHwNodeOf(t1);
+	HwExecutionNode node2 = (HwExecutionNode) map.getHwNodeOf(t2);
 	java.util.List<HwNode> found = new ArrayList<HwNode>();	
 	java.util.List<HwNode> done = new ArrayList<HwNode>();
 	java.util.List<HwNode> path = new ArrayList<HwNode>();
