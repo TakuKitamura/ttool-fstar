@@ -322,5 +322,8 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
+    public void setChannelName(String s){
+	channelName=s;
+    }
 
 }

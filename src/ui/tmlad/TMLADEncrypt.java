@@ -179,6 +179,8 @@ public boolean editOndoubleClick(JFrame frame) {
         sb.append(decTime);
 	sb.append("\" nonce=\"");
         sb.append(nonce);
+	sb.append("\" key=\"");
+        sb.append(key);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -215,6 +217,7 @@ public boolean editOndoubleClick(JFrame frame) {
 				encTime = elt.getAttribute("encTime");
 				decTime = elt.getAttribute("decTime");
 				nonce = elt.getAttribute("nonce");
+				key = elt.getAttribute("key");
                                 //System.out.println("eventName=" +eventName + " variable=" + result);
                             }
                         }

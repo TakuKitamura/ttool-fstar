@@ -71,10 +71,10 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected int widthSamples = 4;
     protected boolean isFinite = false;
     protected boolean isBlocking = false;
-    protected boolean isOrigin = true;
-    protected int typep = 0;
+    public boolean isOrigin = true;
+    public int typep = 0;
     protected int oldTypep = typep;
-    protected String commName;
+    public String commName;
 
     protected boolean isLossy;
     protected boolean isPostex = false;

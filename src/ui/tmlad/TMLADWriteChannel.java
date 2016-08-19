@@ -314,6 +314,9 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
     public String getChannelName(){
 	return channelName;
     }
+    public void setChannelName(String s){
+	channelName=s;
+    }
 
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
