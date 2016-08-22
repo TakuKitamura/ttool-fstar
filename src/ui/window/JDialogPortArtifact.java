@@ -63,12 +63,12 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	private boolean regularClose;
 	private boolean emptyList = false;
     
-  private JPanel panel2;
-  private Frame frame;
-  private TMLArchiPortArtifact artifact;
-  private String mappedMemory = "VOID"; 
+    private JPanel panel2;
+    private Frame frame;
+    private TMLArchiPortArtifact artifact;
+    private String mappedMemory = "VOID"; 
 
-	protected JComboBox referenceCommunicationName, priority, memoryCB;
+	protected JComboBox mappedPortCB, memoryCB;
 	protected JTextField baseAddressTF, numSamplesTF, bitsPerSymbolTF;
 	protected String baseAddress, mappedPort, sampleLength, numSamples, bitsPerSymbol;
 	protected String bank, dataType, symmetricalValue;
@@ -116,7 +116,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			frame = _frame;
 			artifact = _artifact;
 			mappedMemory = _mappedMemory;
-			bufferParameters = _bufferParameters;
+			bufferParameters = _bufferParameters; //contains a set of parameters that are read from the xml description. The first parameters is the buffer type
 			mappedPort = _mappedPort;
 			appName = mappedPort.split("::")[0];
 
@@ -124,19 +124,12 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 			initComponents();
 
-			TraceManager.addDev("my init components");
-
-			myInitComponents();
-
 			TraceManager.addDev("pack");
 			pack();
     }
     
-    private void myInitComponents() {
-			selectPriority();
-    }
-    
     private void initComponents() {
+
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
@@ -159,69 +152,66 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
         panel3.setLayout(gridbag2);
         panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
         panel3.setPreferredSize(new Dimension(650, 350));
-				
-				tabbedPane = new JTabbedPane();
-		  	panel4 = new JPanel();
-  			panel5 = new JPanel();
+
+        tabbedPane = new JTabbedPane();
+        panel4 = new JPanel();
+        panel5 = new JPanel();
         
 		c1.gridwidth = 1;
         c1.gridheight = 1;
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Port:"), c2);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		TraceManager.addDev("Getting communications");
 		Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllTMLCommunicationNames();
+   		Vector<String> portsList = new Vector<String>();
 
-		Vector<String> portsList = new Vector<String>();
-		int index = 0;
-		if (list.size() == 0) {
-			list.add("No communication to map");
-			emptyList = true;
-		} else {
-			
-			index = 0;//indexOf(list, artifact.getFullValue());
-			//parse each entry of list. Entry is in format AppName::chIn__chOut
-			for( String s: list )	{
-				if( s.contains( appName ) )	{	//build the DS for the mapped applications (filter out the case of multiple applications)
-					TraceManager.addDev( "Parsing: " + s );
-					String[] temp1 = s.split("__");
-					String[] temp2 = temp1[0].split( "::" );
-					String chOut = temp2[0] + "::" + temp1[1];
-					String chIn = temp2[0] + "::" + temp2[1];
-					if( !portsList.contains( chOut ) )	{
-						portsList.add( chOut );
-					}
-					if( !portsList.contains( chIn ) )	{
-						portsList.add( chIn );
-					}
-				}
-			}
+        // Build the list of available ports, if there is an applciation diagram
+        if( list.size() > 0 )   {
+	    	int index = 0;
+		    if (list.size() == 0) {
+    			list.add("No communication to map");
+	    		emptyList = true;
+		    }
+            else {
+                index = 0;//indexOf(list, artifact.getFullValue());
+    			//parse each entry of list. Entry is in format AppName::chIn__chOut
+	    		for( String s: list )	{
+		    		if( s.contains( appName ) )	{	//build the DS for the mapped applications (filter out the case of multiple applications)
+			    		//TraceManager.addDev( "Parsing: " + s );
+				    	String[] temp1 = s.split("__");
+					    String[] temp2 = temp1[0].split( "::" );
+    					String chOut = temp2[0] + "::" + temp1[1];
+	    				String chIn = temp2[0] + "::" + temp2[1];
+		    			if( !portsList.contains( chOut ) )	{
+			    			portsList.add( chOut );
+				    	}
+					    if( !portsList.contains( chIn ) )	{
+						    portsList.add( chIn );
+    					}
+	    			}
+		    	}
+            }
 		}
+        else    {
+            portsList.add( "No available port" );
+        }
 		
-		TraceManager.addDev("Got communications");
+		TraceManager.addDev( "Got communications" );
 
-    referenceCommunicationName = new JComboBox(portsList);
-		if( mappedPort.equals( "VOID" ) || mappedPort.equals( "" ) )	{
-			referenceCommunicationName.setSelectedIndex( 0 );
+        mappedPortCB = new JComboBox( portsList );
+		if( !mappedPort.equals( "VOID" ) && !mappedPort.equals( "" ) )	{
+			mappedPortCB.setSelectedIndex( portsList.indexOf( mappedPort ) );
 		}
 		else	{
-			referenceCommunicationName.setSelectedIndex( portsList.indexOf( mappedPort ) );
+			mappedPortCB.setSelectedIndex( 0 );
 		}
-		referenceCommunicationName.addActionListener(this);
-		panel2.add(referenceCommunicationName, c1);
+        panel2.add( new JLabel( "Port:" ), c2 );
+		mappedPortCB.addActionListener(this);
+		panel2.add( mappedPortCB, c1 );
 		
-		list = new Vector<String>();
-		for(int i=0; i<11; i++) {
-			list.add(""+i);
-		}
-		priority = new JComboBox(list);
-		priority.setSelectedIndex(artifact.getPriority());
-		panel2.add( new JLabel( "Priority: "),  c2 );
-		panel2.add(priority, c1);
-		
-		//Make the list of memories
+		//Make the list of memories that are available for being mapped
 		LinkedList componentList = artifact.getTDiagramPanel().getComponentList();
 		Vector<String> memoryList = new Vector<String>();
 		for( int k = 0; k < componentList.size(); k++ )	{
@@ -229,45 +219,47 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				memoryList.add( ( (TMLArchiMemoryNode) componentList.get(k) ).getName() );
 			}
 		}
+        if( memoryList.size() == 0 )    { // In case there are no memories in the design
+            memoryList.add( "No available memory" );              
+        }
 
 		memoryCB = new JComboBox( memoryList );
-		if( mappedMemory.equals( "VOID" ) || mappedMemory.equals( "" ) )	{
-			memoryCB.setSelectedIndex( 0 );
+		if( !mappedMemory.equals( "VOID" ) && !mappedMemory.equals( "" ) )	{
+			memoryCB.setSelectedIndex( memoryList.indexOf( mappedMemory ) );
 		}
 		else	{
-			memoryCB.setSelectedIndex( memoryList.indexOf( mappedMemory ) );
+			memoryCB.setSelectedIndex( 0 );
 		}
 		panel2.add( new JLabel( "Memory: "),  c2 );
 		memoryCB.addActionListener(this);
 		panel2.add( memoryCB, c1 );
 
-		/*if( bufferParameters.size() == 0 )	{
-			bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
-			TraceManager.addDev( "From if branch, the buffer type is: " + bufferType );
-		}
-		else	{*/
-			bufferType = Integer.parseInt( bufferParameters.get( Buffer.bufferTypeIndex ) );
-		//}
+        if( bufferParameters.size() == 0 )  {   //It means that nothing has been read from the xml file
+            bufferType = Buffer.ANOMALY;  //Signal anomaly
+        }
+        else    {
+            bufferType = Integer.parseInt( bufferParameters.get( Buffer.BUFFER_TYPE_INDEX ) );
+        }
 
 		ArrayList<JPanel> panelsList;
 
 		switch( bufferType )	{
-			case Buffer.FepBuffer:	
+			case Buffer.FEP_BUFFER:	
 				panelsList = FepBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				break;
-			case Buffer.InterleaverBuffer:	
+			case Buffer.INTERLEAVER_BUFFER:	
 				panelsList = InterleaverBuffer.makePanel( c1, c2 );
 				tabbedPane.addTab( "Data In", panelsList.get(0) );
 				tabbedPane.addTab( "Data Out", panelsList.get(1) );
 				tabbedPane.addTab( "Permutation Table", panelsList.get(2) );
 				tabbedPane.setSelectedIndex(0);
 				break;
-			case Buffer.AdaifBuffer:	
+			case Buffer.ADAIF_BUFFER:	
 				panelsList = AdaifBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				break;
-			case Buffer.MapperBuffer:	
+			case Buffer.MAPPER_BUFFER:	
 				tabbedPane.removeAll();
 				panelsList = MapperBuffer.makePanel( c1, c2 );
 				tabbedPane.addTab( "Data In", panelsList.get(0) );
@@ -275,11 +267,11 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				tabbedPane.addTab( "Look Up Table", panelsList.get(2) );
 				tabbedPane.setSelectedIndex(0);
 				break;
-			case Buffer.MainMemoryBuffer:	
+			case Buffer.MAIN_MEMORY_BUFFER:	
 				panelsList = MMBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				break;
-			default:	//the fep buffer 
+			default:	//the FEP buffer, arbitrary choice - Control flow goes here if there is an anomaly but no tabbedPane is added below
 				panelsList = FepBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				break;
@@ -292,13 +284,15 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 		c0.fill = GridBagConstraints.BOTH;
 		c.add( panel2, c0 );
-		if( ( bufferType == Buffer.MainMemoryBuffer ) || ( bufferType == Buffer.FepBuffer ) || ( bufferType == Buffer.AdaifBuffer) )	{
-      panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
+        if( ( bufferType == Buffer.MAIN_MEMORY_BUFFER ) || ( bufferType == Buffer.FEP_BUFFER ) || ( bufferType == Buffer.ADAIF_BUFFER ) )    {
+            panel3.setBorder( new javax.swing.border.TitledBorder( "Code generation: memory configuration" ) );
 			tabbedPane.removeAll();
 			tabbedPane.addTab( "Data", panel3 );
-			tabbedPane.setSelectedIndex(0);
+			tabbedPane.setSelectedIndex( 0 );
 		}
-		c.add( tabbedPane, c0 );
+        if( bufferType != Buffer.ANOMALY )  { //Don't add the tabbedPane is there is a bufferType anomaly (i.e., nothing has been read from the xml file)
+    		c.add( tabbedPane, c0 );
+        }
 
 		c0.gridwidth = 1;
 		c0.gridheight = 1;
@@ -331,9 +325,6 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
     
   public void	actionPerformed(ActionEvent evt)  {
 
-		if (evt.getSource() == referenceCommunicationName) {
-			selectPriority();
-		}
 		if( evt.getSource() == memoryCB )	{
 			updateBufferPanel();
 		}
@@ -364,13 +355,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		ArrayList<JPanel> panelsList;
 
 		switch( bufferType )	{
-			case Buffer.FepBuffer:	
+			case Buffer.FEP_BUFFER:	
 				tabbedPane.removeAll();
 				panelsList = FepBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
-			case Buffer.MapperBuffer:	
+			case Buffer.MAPPER_BUFFER:	
 				tabbedPane.removeAll();
 				panelsList = MapperBuffer.makePanel( c1, c2 );
 				tabbedPane.addTab( "Data In", panelsList.get(0) );
@@ -378,13 +369,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				tabbedPane.addTab( "Look Up Table", panelsList.get(2) );
 				tabbedPane.setSelectedIndex(0);
 				break;
-			case Buffer.AdaifBuffer:	
+			case Buffer.ADAIF_BUFFER:	
 				tabbedPane.removeAll();
 				panelsList = AdaifBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
 				tabbedPane.addTab( "Data", panel3 );
 				break;
-			case Buffer.InterleaverBuffer:
+			case Buffer.INTERLEAVER_BUFFER:
 				tabbedPane.removeAll();
 				panelsList = InterleaverBuffer.makePanel( c1, c2 );
 				tabbedPane.addTab( "Data In", panelsList.get(0) );
@@ -392,7 +383,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				tabbedPane.addTab( "Permutation Table", panelsList.get(2) );
 				tabbedPane.setSelectedIndex(0);
 				break;
-			case Buffer.MainMemoryBuffer:	
+			case Buffer.MAIN_MEMORY_BUFFER:	
 				tabbedPane.removeAll();
 				panelsList = MMBuffer.makePanel( c1, c2 );
 				panel3 = panelsList.get(0);
@@ -407,39 +398,33 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		}
 	}
 
-	public void selectPriority() {
-		//System.out.println("Select priority");
-		int index = ((TMLArchiDiagramPanel)artifact.getTDiagramPanel()).getMaxPriority((String)(referenceCommunicationName.getSelectedItem()));
-		priority.setSelectedIndex(index);
-	}
-    
     public void closeDialog() {
 
         regularClose = true;
 				mappedMemory = (String) memoryCB.getItemAt( memoryCB.getSelectedIndex() );
 				bufferType = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
 				switch ( bufferType )	{
-					case Buffer.FepBuffer:
+					case Buffer.FEP_BUFFER:
 						if( !FepBuffer.closePanel( frame ) )	{
 							return;
 						}
 						break;
-					case Buffer.MapperBuffer:	
+					case Buffer.MAPPER_BUFFER:	
 						if( !MapperBuffer.closePanel( frame ) )	{
 							return;
 						}
 						break;
-					case Buffer.AdaifBuffer:	
+					case Buffer.ADAIF_BUFFER:	
 						if( !AdaifBuffer.closePanel( frame ) )	{
 							return;
 						}
 						break;
-					case Buffer.InterleaverBuffer:	
+					case Buffer.INTERLEAVER_BUFFER:	
 						if( !InterleaverBuffer.closePanel( frame ) )	{
 							return;
 						}
 						break;
-					case Buffer.MainMemoryBuffer:	
+					case Buffer.MAIN_MEMORY_BUFFER:	
 						if( !MMBuffer.closePanel( frame ) )	{
 							return;
 						}
@@ -477,7 +462,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		if (emptyList) {
 			return null;
 		}
-		String tmp = (String)(referenceCommunicationName.getSelectedItem());
+		String tmp = (String)( mappedPortCB.getSelectedItem() );
 		int index = tmp.indexOf("::");
 		if (index == -1) {
 			return tmp;
@@ -486,7 +471,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
     }
     
     public String getCommunicationName() {
-        String tmp = (String)(referenceCommunicationName.getSelectedItem());
+        String tmp = (String)( mappedPortCB.getSelectedItem() );
 		int index = tmp.indexOf("::");
 		if (index == -1) {
 			return tmp;
@@ -501,7 +486,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
     }
 	
 	 public String getTypeName() {
-		String tmp = (String)(referenceCommunicationName.getSelectedItem());
+		String tmp = (String)( mappedPortCB.getSelectedItem() );
 		int index1 = tmp.indexOf("(");
 		int index2 = tmp.indexOf(")");
 		if ((index1 > -1) && (index2 > index1)) {
@@ -521,28 +506,24 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		return 0;
 	}
 	
-	public int getPriority() {
-		return priority.getSelectedIndex();
-	}
-
 	public ArrayList<String> getBufferParameters()	{
 
 		ArrayList<String> params = new ArrayList<String>();
 		params.add( String.valueOf( bufferType ) );
 		switch( bufferType )	{
-			case Buffer.FepBuffer:
+			case Buffer.FEP_BUFFER:
 				params = FepBuffer.getBufferParameters();
 				break;
-			case Buffer.InterleaverBuffer:	
+			case Buffer.INTERLEAVER_BUFFER:	
 				params = InterleaverBuffer.getBufferParameters();
 				break;
-			case Buffer.AdaifBuffer:
+			case Buffer.ADAIF_BUFFER:
 				params = AdaifBuffer.getBufferParameters();
 				break;
-			case Buffer.MapperBuffer:	
+			case Buffer.MAPPER_BUFFER:	
 				params = MapperBuffer.getBufferParameters();
 				break;
-			case Buffer.MainMemoryBuffer:	
+			case Buffer.MAIN_MEMORY_BUFFER:	
 				params = MMBuffer.getBufferParameters();
 				break;
 			default:	//the main memory buffer
