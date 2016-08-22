@@ -177,7 +177,7 @@ public class MapperBuffer extends Buffer	{
 	public static String appendBufferParameters( ArrayList<String> buffer )	{
 
 		StringBuffer sb = new StringBuffer();
-   	sb.append("\" bufferType=\"" + Integer.toString( Buffer.MapperBuffer ) );
+   	sb.append("\" bufferType=\"" + Integer.toString( Buffer.MAPPER_BUFFER ) );
 		if( buffer.size() == MAX_PARAMETERS+1 )	{	//because the first parameter is the bufferType
 			//data in
 			sb.append("\" numSamplesDataIn=\"" + buffer.get( NUM_SAMPLES_DATAIN_INDEX ) );
@@ -206,7 +206,7 @@ public class MapperBuffer extends Buffer	{
 	public static ArrayList<String> buildBufferParameters( Element elt )	{
 
 		ArrayList<String> buffer = new ArrayList<String>();
-		buffer.add( 0, Integer.toString( Buffer.MapperBuffer ) );
+		buffer.add( 0, Integer.toString( Buffer.MAPPER_BUFFER ) );
  		buffer.add( NUM_SAMPLES_DATAIN_INDEX, elt.getAttribute( "numSamplesDataIn" ) );
  		buffer.add( BASE_ADDRESS_DATAIN_INDEX, elt.getAttribute( "baseAddressDataIn" ) );
  		buffer.add( BITS_PER_SYMBOL_DATAIN_INDEX, elt.getAttribute( "bitsPerSymbolDataIn" ) );
@@ -356,7 +356,7 @@ public class MapperBuffer extends Buffer	{
 			bufferParams = new ArrayList<String>();
 		}
 		if( bufferParams.size() > 0 )	{
-			bufferParams.set( BUFFER_TYPE_INDEX, String.valueOf( Buffer.MapperBuffer ) );
+			bufferParams.set( BUFFER_TYPE_INDEX, String.valueOf( Buffer.MAPPER_BUFFER ) );
 			//data in
 			bufferParams.set( NUM_SAMPLES_DATAIN_INDEX, numSamplesDataIn );
 			bufferParams.set( BASE_ADDRESS_DATAIN_INDEX, baseAddressDataIn );
@@ -368,7 +368,7 @@ public class MapperBuffer extends Buffer	{
 			bufferParams.set( BASE_ADDRESS_LUT_INDEX, baseAddressLUT );
 		}
 		else	{
-			bufferParams.add( BUFFER_TYPE_INDEX, String.valueOf( Buffer.MapperBuffer ) );
+			bufferParams.add( BUFFER_TYPE_INDEX, String.valueOf( Buffer.MAPPER_BUFFER ) );
 			//data in
 			bufferParams.add( NUM_SAMPLES_DATAIN_INDEX, numSamplesDataIn );
 			bufferParams.add( BASE_ADDRESS_DATAIN_INDEX, baseAddressDataIn );

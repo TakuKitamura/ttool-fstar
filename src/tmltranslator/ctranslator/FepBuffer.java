@@ -148,7 +148,7 @@ public class FepBuffer extends Buffer	{
 	public static String appendBufferParameters( ArrayList<String> buffer )	{
 
 		StringBuffer sb = new StringBuffer();
-   	sb.append("\" bufferType=\"" + Integer.toString( Buffer.FepBuffer ) );
+   	sb.append("\" bufferType=\"" + Integer.toString( Buffer.FEP_BUFFER ) );
 		if( buffer.size() == maxParameters+1 )	{	//because the first parameter is the bufferType
 			sb.append("\" baseAddress=\"" + buffer.get( BASE_ADDRESS_INDEX ) );
   	  sb.append("\" numSamples=\"" + buffer.get( NUM_SAMPLES_INDEX ) );
@@ -167,7 +167,7 @@ public class FepBuffer extends Buffer	{
 	public static ArrayList<String> buildBufferParameters( Element elt )	{
 
 		ArrayList<String> buffer = new ArrayList<String>();
-		buffer.add( 0, Integer.toString( Buffer.FepBuffer ) );
+		buffer.add( 0, Integer.toString( Buffer.FEP_BUFFER ) );
 		buffer.add( NUM_SAMPLES_INDEX, elt.getAttribute( "numSamples" ) );
 		buffer.add( BASE_ADDRESS_INDEX, elt.getAttribute( "baseAddress" ) );
 		buffer.add( BANK_INDEX, elt.getAttribute( "bank" ) );
@@ -260,14 +260,14 @@ public class FepBuffer extends Buffer	{
 	private static void fillBufferParameters()	{
 
 		if( bufferParams.size() > 0 )	{
-			bufferParams.set( BUFFER_TYPE_INDEX, String.valueOf( Buffer.FepBuffer ) );
+			bufferParams.set( BUFFER_TYPE_INDEX, String.valueOf( Buffer.FEP_BUFFER ) );
 			bufferParams.set( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
 			bufferParams.set( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
 			bufferParams.set( BANK_INDEX, (String)bankCB.getSelectedItem() );
 			bufferParams.set( DATA_TYPE_INDEX, (String)dataTypeCB.getSelectedItem() );
 		}
 		else	{
-			bufferParams.add( BUFFER_TYPE_INDEX, String.valueOf( Buffer.FepBuffer ) );
+			bufferParams.add( BUFFER_TYPE_INDEX, String.valueOf( Buffer.FEP_BUFFER ) );
 			bufferParams.add( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
 			bufferParams.add( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
 			bufferParams.add( BANK_INDEX, (String)bankCB.getSelectedItem() );

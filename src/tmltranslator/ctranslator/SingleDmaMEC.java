@@ -68,19 +68,19 @@ public class SingleDmaMEC extends CPMEC	{
 	public SingleDmaMEC( String ctxName, ArchUnitMEC archMEC, int srcMemoryType, int dstMemoryType, int transferType, Vector<String> attributes )	{
 
 		switch( srcMemoryType )	{
-			case Buffer.FepBuffer:
+			case Buffer.FEP_BUFFER:
 				memoryBaseAddress = "fep_mss";
 				break;
-			case Buffer.AdaifBuffer:
+			case Buffer.ADAIF_BUFFER:
 				memoryBaseAddress = "adaif_mss";
 			break;
-			case Buffer.InterleaverBuffer:
+			case Buffer.INTERLEAVER_BUFFER:
 				memoryBaseAddress = "intl_mss";
 			break;
-			case Buffer.MapperBuffer:
+			case Buffer.MAPPER_BUFFER:
 				memoryBaseAddress = "mapper_mss";
 			break;
-			case Buffer.MainMemoryBuffer:
+			case Buffer.MAIN_MEMORY_BUFFER:
 				memoryBaseAddress = "0";
 			break;
 			default:

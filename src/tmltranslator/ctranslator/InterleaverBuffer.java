@@ -218,7 +218,7 @@ public class InterleaverBuffer extends Buffer	{
 	public static ArrayList<String> buildBufferParameters( Element elt )	{
 
 		ArrayList<String> buffer = new ArrayList<String>();
-		buffer.add( 0, Integer.toString( Buffer.InterleaverBuffer ) );
+		buffer.add( 0, Integer.toString( Buffer.INTERLEAVER_BUFFER ) );
 		//data in
 		buffer.add( elt.getAttribute( "packedBinaryIn" ) );
 	  buffer.add( elt.getAttribute( "width" ) );
@@ -237,7 +237,7 @@ public class InterleaverBuffer extends Buffer	{
 	public static String appendBufferParameters( ArrayList<String> buffer )	{
 
 		StringBuffer sb = new StringBuffer();
-   	sb.append("\" bufferType=\"" + Integer.toString( Buffer.InterleaverBuffer ) );
+   	sb.append("\" bufferType=\"" + Integer.toString( Buffer.INTERLEAVER_BUFFER ) );
 		if( buffer.size() == MAX_PARAMETERS+1 )	{	//because the first parameter is the bufferType
 			//data in
    		sb.append( "\" packedBinaryIn=\"" + buffer.get( PACKED_BINARY_IN_INDEX ) );
@@ -420,7 +420,7 @@ public class InterleaverBuffer extends Buffer	{
 	private static void fillBufferParameters()	{
 
 		if( bufferParams.size() > 0 )	{
-			bufferParams.set( BUFFER_TYPE_INDEX, String.valueOf( Buffer.InterleaverBuffer ) );
+			bufferParams.set( BUFFER_TYPE_INDEX, String.valueOf( Buffer.INTERLEAVER_BUFFER ) );
 			//data in
 			bufferParams.set( PACKED_BINARY_IN_INDEX, packedBinaryIn );
 			bufferParams.set( WIDTH_INDEX, width );
@@ -435,7 +435,7 @@ public class InterleaverBuffer extends Buffer	{
 			bufferParams.set( LENGTH_PERM_INDEX, lengthPerm );
 		}
 		else	{
-			bufferParams.add( BUFFER_TYPE_INDEX, String.valueOf( Buffer.InterleaverBuffer ) );
+			bufferParams.add( BUFFER_TYPE_INDEX, String.valueOf( Buffer.INTERLEAVER_BUFFER ) );
 			//data in
 			bufferParams.add( PACKED_BINARY_IN_INDEX, packedBinaryIn );
 			bufferParams.add( WIDTH_INDEX, width );

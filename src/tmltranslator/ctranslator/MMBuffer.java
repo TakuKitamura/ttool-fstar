@@ -120,7 +120,7 @@ public class MMBuffer extends Buffer	{
 	public static ArrayList<String> buildBufferParameters( Element elt )	{
 
 		ArrayList<String> buffer = new ArrayList<String>();
-		buffer.add( 0, Integer.toString( Buffer.AdaifBuffer ) );
+		buffer.add( 0, Integer.toString( Buffer.MAIN_MEMORY_BUFFER ) );
 		buffer.add( NUM_SAMPLES_INDEX, elt.getAttribute( "numSamples" ) );
 		buffer.add( BASE_ADDRESS_INDEX, elt.getAttribute( "baseAddress" ) );
 		return buffer;
@@ -129,7 +129,7 @@ public class MMBuffer extends Buffer	{
 	public static String appendBufferParameters( ArrayList<String> buffer )	{
 
 		StringBuffer sb = new StringBuffer();
-		sb.append("\" bufferType=\"" + Integer.toString( Buffer.AdaifBuffer ) );
+		sb.append("\" bufferType=\"" + Integer.toString( Buffer.MAIN_MEMORY_BUFFER ) );
 		if( buffer.size() == MAX_PARAMETERS+1 )	{	//because the first parameter is the bufferType
 			sb.append("\" numSamples=\"" + buffer.get( NUM_SAMPLES_INDEX ) );
   	  sb.append("\" baseAddress=\"" + buffer.get( BASE_ADDRESS_INDEX ) );
@@ -205,12 +205,12 @@ public class MMBuffer extends Buffer	{
 	private static void fillBufferParameters()	{
 
 		if( bufferParams.size() > 0 ) 	{
-			bufferParams.set( BUFFER_TYPE_INDEX, String.valueOf( Buffer.MainMemoryBuffer ) );
+			bufferParams.set( BUFFER_TYPE_INDEX, String.valueOf( Buffer.MAIN_MEMORY_BUFFER ) );
 			bufferParams.set( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
 			bufferParams.set( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
 		}
 		else	{
-			bufferParams.add( BUFFER_TYPE_INDEX, String.valueOf( Buffer.MainMemoryBuffer ) );
+			bufferParams.add( BUFFER_TYPE_INDEX, String.valueOf( Buffer.MAIN_MEMORY_BUFFER ) );
 			bufferParams.add( NUM_SAMPLES_INDEX, numSamplesTF.getText() );
 			bufferParams.add( BASE_ADDRESS_INDEX, baseAddressTF.getText() );
 		}

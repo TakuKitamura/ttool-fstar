@@ -84,19 +84,19 @@ public class DoubleDmaMEC extends CPMEC	{
 
 		for( int i = 0; i < numSrcMemories; i++ )	{
 			switch( srcMemoryTypes.get(i).intValue() )	{
-				case Buffer.FepBuffer:
+				case Buffer.FEP_BUFFER:
 					memoryBaseAddress.add( "fep_mss" );
 					break;
-				case Buffer.AdaifBuffer:
+				case Buffer.ADAIF_BUFFER:
 					memoryBaseAddress.add( "adaif_mss" );
 				break;
-				case Buffer.InterleaverBuffer:
+				case Buffer.INTERLEAVER_BUFFER:
 					memoryBaseAddress.add( "intl_mss" );
 				break;
-				case Buffer.MapperBuffer:
+				case Buffer.MAPPER_BUFFER:
 					memoryBaseAddress.add( "mapper_mss" );
 				break;
-				case Buffer.MainMemoryBuffer:
+				case Buffer.MAIN_MEMORY_BUFFER:
 					memoryBaseAddress.add( "0" );
 				break;
 				default:

@@ -60,16 +60,15 @@ public class Buffer	{
 
 	public static final String[] memoryTypesList = { "FEP memory", "MAPPER memory", "ADAIF memory", "INTERLEAVER memory", "MAIN MEMORY memory" };
 	public static final String[] onOffVector = { "ON", "OFF" };
-	public static final int FepBuffer = 0;
-	public static final int MapperBuffer = 1;
-	public static final int AdaifBuffer = 2;
-	public static final int InterleaverBuffer = 3;
-	public static final int MainMemoryBuffer = 4;
-	public static final int BaseBuffer = 5;
+	public static final int ANOMALY = -1;
+	public static final int FEP_BUFFER = 0;
+	public static final int MAPPER_BUFFER = 1;
+	public static final int ADAIF_BUFFER = 2;
+	public static final int INTERLEAVER_BUFFER = 3;
+	public static final int MAIN_MEMORY_BUFFER = 4;
+	public static final int BASE_BUFFER = 5;
 
-	public static final int BUFFER_TYPE_INDEX = 0;
-
-	public static final int bufferTypeIndex = 0;
+	public static final int BUFFER_TYPE_INDEX = 0; // the index of the buffer type in bufferParameters. The latter is retrieved from the xml description of a design
 
 	public static String CR = "\n";
 	public static String CR2 = "\n\n";
