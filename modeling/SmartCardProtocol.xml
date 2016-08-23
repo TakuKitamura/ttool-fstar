@@ -2006,7 +2006,7 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 
 
 <Modeling type="TML Component Design" nameTab="AppC" >
-<TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="0" maxX="1720" minY="0" maxY="912" channels="true" events="true" requests="true" zoom="1.0000000000000018" >
+<TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="0" maxX="1722" minY="0" maxY="914" channels="true" events="true" requests="true" zoom="1.0000000000000018" >
 <CONNECTOR type="126" id="1141" >
 <cdparam x="409" y="124" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -2219,9 +2219,9 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 </CONNECTOR>
 <COMPONENT type="1205" id="1175" >
 <cdparam x="1152" y="505" />
-<sizeparam width="206" height="105" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="206" height="105" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="1720" minY="0" maxY="912" />
+<cdrectangleparam minX="0" maxX="1722" minY="0" maxY="914" />
 <infoparam name="Record component" value="TCP_CTRL" />
 <TGConnectingPoint num="0" id="1167" />
 <TGConnectingPoint num="1" id="1168" />
@@ -2239,9 +2239,9 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 
 <COMPONENT type="1202" id="1198" >
 <cdparam x="164" y="97" />
-<sizeparam width="291" height="277" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="291" height="277" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="1720" minY="0" maxY="912" />
+<cdrectangleparam minX="0" maxX="1722" minY="0" maxY="914" />
 <infoparam name="TGComponent" value="InterfaceDevice" />
 <TGConnectingPoint num="0" id="1190" />
 <TGConnectingPoint num="1" id="1191" />
@@ -2261,13 +2261,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1177" >
 <father id="1198" num="0" />
 <cdparam x="389" y="84" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="278" minY="-13" maxY="264" />
 <infoparam name="TGComponent" value="Event reset, pTS" />
 <TGConnectingPoint num="0" id="1176" />
 <extraparam>
-<Prop commName="reset, pTS" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="reset, pTS" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2278,13 +2278,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1179" >
 <father id="1198" num="1" />
 <cdparam x="442" y="323" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="278" minY="-13" maxY="264" />
 <infoparam name="TGComponent" value="Event answerToReset, pTSConfirm" />
 <TGConnectingPoint num="0" id="1178" />
 <extraparam>
-<Prop commName="answerToReset, pTSConfirm" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="answerToReset, pTSConfirm" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2295,13 +2295,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1181" >
 <father id="1198" num="2" />
 <cdparam x="442" y="248" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="278" minY="-13" maxY="264" />
 <infoparam name="TGComponent" value="Channel fromSCtoD" />
 <TGConnectingPoint num="0" id="1180" />
 <extraparam>
-<Prop commName="fromSCtoD" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="fromSCtoD" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2312,13 +2312,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1183" >
 <father id="1198" num="3" />
 <cdparam x="442" y="203" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="278" minY="-13" maxY="264" />
 <infoparam name="TGComponent" value="Channel fromDtoSC" />
 <TGConnectingPoint num="0" id="1182" />
 <extraparam>
-<Prop commName="fromDtoSC" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="fromDtoSC" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2329,13 +2329,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1185" >
 <father id="1198" num="4" />
 <cdparam x="442" y="291" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="278" minY="-13" maxY="264" />
 <infoparam name="TGComponent" value="Event data_Ready_SC" />
 <TGConnectingPoint num="0" id="1184" />
 <extraparam>
-<Prop commName="data_Ready_SC" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="data_Ready_SC" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2346,13 +2346,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1187" >
 <father id="1198" num="5" />
 <cdparam x="442" y="157" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="278" minY="-13" maxY="264" />
 <infoparam name="TGComponent" value="Event data_Ready" />
 <TGConnectingPoint num="0" id="1186" />
 <extraparam>
-<Prop commName="data_Ready" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="data_Ready" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2363,13 +2363,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1189" >
 <father id="1198" num="6" />
 <cdparam x="445" y="117" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="281" minY="-10" maxY="267" />
 <infoparam name="TGComponent" value="Request activation" />
 <TGConnectingPoint num="0" id="1188" />
 <extraparam>
-<Prop commName="activation" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="activation" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2380,9 +2380,9 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 
 <COMPONENT type="1200" id="1347" >
 <cdparam x="535" y="94" />
-<sizeparam width="936" height="530" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="936" height="530" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="1720" minY="0" maxY="912" />
+<cdrectangleparam minX="0" maxX="1722" minY="0" maxY="914" />
 <infoparam name="TGComponent" value="SmartCard" />
 <TGConnectingPoint num="0" id="1339" />
 <TGConnectingPoint num="1" id="1340" />
@@ -2399,7 +2399,7 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1202" id="1221" >
 <father id="1347" num="0" />
 <cdparam x="565" y="418" />
-<sizeparam width="240" height="146" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="240" height="146" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="696" minY="0" maxY="384" />
 <infoparam name="TGComponent" value="Application" />
@@ -2417,13 +2417,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1200" >
 <father id="1221" num="0" />
 <cdparam x="742" y="408" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="230" minY="-10" maxY="136" />
 <infoparam name="TGComponent" value="Request start_TCP_IP" />
 <TGConnectingPoint num="0" id="1199" />
 <extraparam>
-<Prop commName="start_TCP_IP" commType="2" origin="true" finite="false" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="start_TCP_IP" commType="2" origin="true" finite="false" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2434,13 +2434,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1202" >
 <father id="1221" num="1" />
 <cdparam x="795" y="422" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="230" minY="-10" maxY="136" />
 <infoparam name="TGComponent" value="Channel fromTtoA" />
 <TGConnectingPoint num="0" id="1201" />
 <extraparam>
-<Prop commName="fromTtoA" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="fromTtoA" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2451,13 +2451,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1204" >
 <father id="1221" num="2" />
 <cdparam x="795" y="483" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="230" minY="-10" maxY="136" />
 <infoparam name="TGComponent" value="Event send_TCP" />
 <TGConnectingPoint num="0" id="1203" />
 <extraparam>
-<Prop commName="send_TCP" commType="1" origin="true" finite="false" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="send_TCP" commType="1" origin="true" finite="false" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2468,13 +2468,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1206" >
 <father id="1221" num="3" />
 <cdparam x="795" y="451" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="230" minY="-10" maxY="136" />
 <infoparam name="TGComponent" value="Event open, abort, close" />
 <TGConnectingPoint num="0" id="1205" />
 <extraparam>
-<Prop commName="open, abort, close" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="open, abort, close" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2485,13 +2485,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1208" >
 <father id="1221" num="4" />
 <cdparam x="795" y="512" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="230" minY="-10" maxY="136" />
 <infoparam name="TGComponent" value="Event receive_Application" />
 <TGConnectingPoint num="0" id="1207" />
 <extraparam>
-<Prop commName="receive_Application" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="receive_Application" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2502,13 +2502,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1210" >
 <father id="1221" num="5" />
 <cdparam x="795" y="544" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="230" minY="-10" maxY="136" />
 <infoparam name="TGComponent" value="Channel fromAtoT" />
 <TGConnectingPoint num="0" id="1209" />
 <extraparam>
-<Prop commName="fromAtoT" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="fromAtoT" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2519,13 +2519,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1212" >
 <father id="1221" num="6" />
 <cdparam x="661" y="408" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="230" minY="-10" maxY="136" />
 <infoparam name="TGComponent" value="Request start_Application" />
 <TGConnectingPoint num="0" id="1211" />
 <extraparam>
-<Prop commName="start_Application" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="start_Application" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2536,7 +2536,7 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1200" id="1303" >
 <father id="1347" num="1" />
 <cdparam x="844" y="134" />
-<sizeparam width="570" height="486" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="570" height="486" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="366" minY="0" maxY="44" />
 <infoparam name="TGComponent" value="TCPIP Entities" />
@@ -2555,7 +2555,7 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1201" id="1240" >
 <father id="1303" num="0" />
 <cdparam x="831" y="363" />
-<sizeparam width="26" height="26" minWidth="10" minHeight="10" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="10" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="557" minY="-13" maxY="473" />
 <infoparam name="Composite port" value="" />
@@ -2581,7 +2581,7 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1202" id="1255" >
 <father id="1303" num="1" />
 <cdparam x="1234" y="329" />
-<sizeparam width="141" height="142" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="141" height="142" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="429" minY="0" maxY="344" />
 <infoparam name="TGComponent" value="Timer" />
@@ -2600,13 +2600,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1242" >
 <father id="1255" num="0" />
 <cdparam x="1224" y="369" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="131" minY="-10" maxY="132" />
 <infoparam name="TGComponent" value="Event timeOut" />
 <TGConnectingPoint num="0" id="1241" />
 <extraparam>
-<Prop commName="timeOut" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="timeOut" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2617,13 +2617,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1244" >
 <father id="1255" num="1" />
 <cdparam x="1224" y="404" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="131" minY="-10" maxY="132" />
 <infoparam name="TGComponent" value="Request req_Timer" />
 <TGConnectingPoint num="0" id="1243" />
 <extraparam>
-<Prop commName="req_Timer" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="req_Timer" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2634,13 +2634,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1246" >
 <father id="1255" num="2" />
 <cdparam x="1224" y="432" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="131" minY="-10" maxY="132" />
 <infoparam name="TGComponent" value="Event stop" />
 <TGConnectingPoint num="0" id="1245" />
 <extraparam>
-<Prop commName="stop" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="stop" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2651,7 +2651,7 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1202" id="1294" >
 <father id="1303" num="2" />
 <cdparam x="932" y="173" />
-<sizeparam width="237" height="318" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="237" height="318" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="333" minY="0" maxY="168" />
 <infoparam name="TGComponent" value="TCPIP" />
@@ -2676,13 +2676,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1257" >
 <father id="1294" num="0" />
 <cdparam x="919" y="191" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="224" minY="-13" maxY="305" />
 <infoparam name="TGComponent" value="Event send" />
 <TGConnectingPoint num="0" id="1256" />
 <extraparam>
-<Prop commName="send" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="send" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2693,13 +2693,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1259" >
 <father id="1294" num="1" />
 <cdparam x="919" y="241" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="224" minY="-13" maxY="305" />
 <infoparam name="TGComponent" value="Event receive" />
 <TGConnectingPoint num="0" id="1258" />
 <extraparam>
-<Prop commName="receive" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="receive" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2710,13 +2710,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1261" >
 <father id="1294" num="2" />
 <cdparam x="919" y="284" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="224" minY="-13" maxY="305" />
 <infoparam name="TGComponent" value="Channel fromPtoT" />
 <TGConnectingPoint num="0" id="1260" />
 <extraparam>
-<Prop commName="fromPtoT" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="fromPtoT" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2727,13 +2727,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1263" >
 <father id="1294" num="3" />
 <cdparam x="919" y="323" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="224" minY="-13" maxY="305" />
 <infoparam name="TGComponent" value="Channel fromTtoP" />
 <TGConnectingPoint num="0" id="1262" />
 <extraparam>
-<Prop commName="fromTtoP" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="fromTtoP" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2744,13 +2744,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1265" >
 <father id="1294" num="4" />
 <cdparam x="922" y="358" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="227" minY="-10" maxY="308" />
 <infoparam name="TGComponent" value="Request start_TCP_IP" />
 <TGConnectingPoint num="0" id="1264" />
 <extraparam>
-<Prop commName="start_TCP_IP" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="start_TCP_IP" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2761,13 +2761,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1267" >
 <father id="1294" num="5" />
 <cdparam x="922" y="449" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="227" minY="-10" maxY="308" />
 <infoparam name="TGComponent" value="Event send_TCP" />
 <TGConnectingPoint num="0" id="1266" />
 <extraparam>
-<Prop commName="send_TCP" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="send_TCP" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2778,13 +2778,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1269" >
 <father id="1294" num="6" />
 <cdparam x="922" y="422" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="227" minY="-10" maxY="308" />
 <infoparam name="TGComponent" value="Event open, abort, close" />
 <TGConnectingPoint num="0" id="1268" />
 <extraparam>
-<Prop commName="open, abort, close" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="open, abort, close" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2795,13 +2795,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1271" >
 <father id="1294" num="7" />
 <cdparam x="922" y="393" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="227" minY="-10" maxY="308" />
 <infoparam name="TGComponent" value="Channel fromTtoA" />
 <TGConnectingPoint num="0" id="1270" />
 <extraparam>
-<Prop commName="fromTtoA" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="fromTtoA" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2812,13 +2812,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1273" >
 <father id="1294" num="8" />
 <cdparam x="961" y="481" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="227" minY="-10" maxY="308" />
 <infoparam name="TGComponent" value="Channel fromAtoT" />
 <TGConnectingPoint num="0" id="1272" />
 <extraparam>
-<Prop commName="fromAtoT" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="fromAtoT" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2829,13 +2829,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1275" >
 <father id="1294" num="9" />
 <cdparam x="922" y="472" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="227" minY="-10" maxY="308" />
 <infoparam name="TGComponent" value="Event receive_Application" />
 <TGConnectingPoint num="0" id="1274" />
 <extraparam>
-<Prop commName="receive_Application" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="receive_Application" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2846,13 +2846,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1277" >
 <father id="1294" num="10" />
 <cdparam x="1159" y="376" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="227" minY="-10" maxY="308" />
 <infoparam name="TGComponent" value="Event timeOut" />
 <TGConnectingPoint num="0" id="1276" />
 <extraparam>
-<Prop commName="timeOut" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="timeOut" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2863,13 +2863,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1279" >
 <father id="1294" num="11" />
 <cdparam x="1159" y="411" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="227" minY="-10" maxY="308" />
 <infoparam name="TGComponent" value="Request req_Timer" />
 <TGConnectingPoint num="0" id="1278" />
 <extraparam>
-<Prop commName="req_Timer" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="req_Timer" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2880,13 +2880,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1281" >
 <father id="1294" num="12" />
 <cdparam x="1159" y="204" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="227" minY="-10" maxY="308" />
 <infoparam name="TGComponent" value="Channel temp" />
 <TGConnectingPoint num="0" id="1280" />
 <extraparam>
-<Prop commName="temp" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="temp" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2897,13 +2897,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1283" >
 <father id="1294" num="13" />
 <cdparam x="1159" y="272" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="227" minY="-10" maxY="308" />
 <infoparam name="TGComponent" value="Channel temp" />
 <TGConnectingPoint num="0" id="1282" />
 <extraparam>
-<Prop commName="temp" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="temp" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2914,13 +2914,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1285" >
 <father id="1294" num="14" />
 <cdparam x="1159" y="451" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="227" minY="-10" maxY="308" />
 <infoparam name="TGComponent" value="Event stop" />
 <TGConnectingPoint num="0" id="1284" />
 <extraparam>
-<Prop commName="stop" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="stop" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2931,7 +2931,7 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1202" id="1338" >
 <father id="1347" num="2" />
 <cdparam x="535" y="98" />
-<sizeparam width="201" height="238" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="201" height="238" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="735" minY="0" maxY="292" />
 <infoparam name="TGComponent" value="SmartCard" />
@@ -2956,13 +2956,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1305" >
 <father id="1338" num="0" />
 <cdparam x="723" y="112" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="188" minY="-13" maxY="225" />
 <infoparam name="TGComponent" value="Event send" />
 <TGConnectingPoint num="0" id="1304" />
 <extraparam>
-<Prop commName="send" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="send" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2973,13 +2973,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1307" >
 <father id="1338" num="1" />
 <cdparam x="580" y="85" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="188" minY="-13" maxY="225" />
 <infoparam name="TGComponent" value="Event reset, pTS" />
 <TGConnectingPoint num="0" id="1306" />
 <extraparam>
-<Prop commName="reset, pTS" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="reset, pTS" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -2990,13 +2990,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1309" >
 <father id="1338" num="2" />
 <cdparam x="523" y="323" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="188" minY="-13" maxY="225" />
 <infoparam name="TGComponent" value="Event answerToReset, pTSConfirm" />
 <TGConnectingPoint num="0" id="1308" />
 <extraparam>
-<Prop commName="answerToReset, pTSConfirm" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="answerToReset, pTSConfirm" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3007,13 +3007,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1311" >
 <father id="1338" num="3" />
 <cdparam x="522" y="248" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="188" minY="-13" maxY="225" />
 <infoparam name="TGComponent" value="Channel fromSCtoD" />
 <TGConnectingPoint num="0" id="1310" />
 <extraparam>
-<Prop commName="fromSCtoD" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="fromSCtoD" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3024,13 +3024,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1313" >
 <father id="1338" num="4" />
 <cdparam x="522" y="203" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="188" minY="-13" maxY="225" />
 <infoparam name="TGComponent" value="Channel fromDtoSC" />
 <TGConnectingPoint num="0" id="1312" />
 <extraparam>
-<Prop commName="fromDtoSC" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkAuth="false" />
+<Prop commName="fromDtoSC" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3041,13 +3041,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1315" >
 <father id="1338" num="5" />
 <cdparam x="522" y="291" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="188" minY="-13" maxY="225" />
 <infoparam name="TGComponent" value="Event data_Ready_SC" />
 <TGConnectingPoint num="0" id="1314" />
 <extraparam>
-<Prop commName="data_Ready_SC" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="data_Ready_SC" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3058,13 +3058,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1317" >
 <father id="1338" num="6" />
 <cdparam x="522" y="157" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="188" minY="-13" maxY="225" />
 <infoparam name="TGComponent" value="Event data_Ready" />
 <TGConnectingPoint num="0" id="1316" />
 <extraparam>
-<Prop commName="data_Ready" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="data_Ready" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3075,13 +3075,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1319" >
 <father id="1338" num="7" />
 <cdparam x="723" y="271" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="188" minY="-13" maxY="225" />
 <infoparam name="TGComponent" value="Channel fromTtoP" />
 <TGConnectingPoint num="0" id="1318" />
 <extraparam>
-<Prop commName="fromTtoP" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="fromTtoP" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3092,13 +3092,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1321" >
 <father id="1338" num="8" />
 <cdparam x="723" y="235" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="188" minY="-13" maxY="225" />
 <infoparam name="TGComponent" value="Channel fromPtoT" />
 <TGConnectingPoint num="0" id="1320" />
 <extraparam>
-<Prop commName="fromPtoT" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="fromPtoT" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3109,13 +3109,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1323" >
 <father id="1338" num="9" />
 <cdparam x="723" y="191" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="188" minY="-13" maxY="225" />
 <infoparam name="TGComponent" value="Event receive" />
 <TGConnectingPoint num="0" id="1322" />
 <extraparam>
-<Prop commName="receive" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="receive" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3126,13 +3126,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1325" >
 <father id="1338" num="10" />
 <cdparam x="723" y="302" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="188" minY="-13" maxY="225" />
 <infoparam name="TGComponent" value="Request start_TCP_IP" />
 <TGConnectingPoint num="0" id="1324" />
 <extraparam>
-<Prop commName="start_TCP_IP" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="start_TCP_IP" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3143,13 +3143,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1327" >
 <father id="1338" num="11" />
 <cdparam x="525" y="117" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="191" minY="-10" maxY="228" />
 <infoparam name="TGComponent" value="Request activation" />
 <TGConnectingPoint num="0" id="1326" />
 <extraparam>
-<Prop commName="activation" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="activation" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3160,13 +3160,13 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <SUBCOMPONENT type="1203" id="1329" >
 <father id="1338" num="12" />
 <cdparam x="620" y="326" />
-<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="3600" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="21" height="21" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="191" minY="-10" maxY="228" />
 <infoparam name="TGComponent" value="Request start_Application" />
 <TGConnectingPoint num="0" id="1328" />
 <extraparam>
-<Prop commName="start_Application" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkAuth="false" />
+<Prop commName="start_Application" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />

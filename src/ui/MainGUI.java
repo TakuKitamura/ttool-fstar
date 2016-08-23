@@ -4184,7 +4184,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void generateUPPAAL(boolean showWindow) {
-        TraceManager.addDev("Generate UPPAAL!");
+        TraceManager.addDev("Generate UPPAAL! showwindow=" + showWindow);
         //gtm.mergeChoices(true);
         if (gtm.getTURTLEModelingState() > 0) {
         	TraceManager.addDev("4173");
@@ -4215,10 +4215,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 }
             }
 	    else {
-                if (generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, UPPAAL) == -1) {
+                /*if (generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, UPPAAL) == -1) {
 		    TraceManager.addDev("4202 - UPPAAL generation failed");
                     return;
-                }
+		    }*/
 		TraceManager.addDev( "About to open the window at line 4198" );
                 if (showWindow) {
                     JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.DIPLODOCUS_MODE);

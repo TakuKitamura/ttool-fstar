@@ -1231,7 +1231,7 @@ public class TMLModeling {
     public ArrayList<TMLError> optimize() {
         ArrayList<TMLError> warnings = new ArrayList<TMLError>();
         if (!optimized) {
-            System.out.println("Optimizing TML modeling");
+            TraceManager.addDev("Optimizing TML modeling");
             optimized = true;
             for(TMLTask task: tasks) {
                 optimize(task, warnings);

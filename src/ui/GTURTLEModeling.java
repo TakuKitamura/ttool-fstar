@@ -582,6 +582,7 @@ public class GTURTLEModeling {
     }
 
     public boolean generateUPPAALFromTML(String _path, boolean _debug, int _size, boolean choices) {
+	TraceManager.addDev("Generate UPPAAL from TML");
         TML2UPPAAL tml2uppaal = new TML2UPPAAL(tmlm);
         //tml2uppaal.setChoiceDeterministic(choices);
         tml2uppaal.setSizeInfiniteFIFO(_size);

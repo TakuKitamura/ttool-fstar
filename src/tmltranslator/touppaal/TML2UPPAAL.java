@@ -84,6 +84,7 @@ public class TML2UPPAAL {
 	
     public TML2UPPAAL(TMLModeling _tmlmodeling) {
         tmlmodeling = _tmlmodeling;
+	TraceManager.addDev("TML2UPPAAL");
     }
     
     // Returns a list of all file names ..
@@ -122,7 +123,7 @@ public class TML2UPPAAL {
 	}
     
     public UPPAALSpec generateUPPAAL(boolean _debug) {
-		TraceManager.addDev("Generating UPPAAL Specification");
+		TraceManager.addDev("Generating UPPAAL Specification from TML");
 		tmlmodeling.removeAllRandomSequences();
 		
         debug = _debug;
