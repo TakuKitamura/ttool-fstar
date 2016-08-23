@@ -3982,6 +3982,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // 1: ok, code already generated
     public int generateTURTLEModelingFromState(int state, boolean automatic, int generator) {
         if (state == 1) {
+	    TraceManager.addDev("Generating from state 1");
             if (generateTIFFromMapping(automatic, generator)) {
                 return 1;
             }
@@ -4215,7 +4216,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             }
 	    else {
                 if (generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, UPPAAL) == -1) {
-        		TraceManager.addDev("4202");
+		    TraceManager.addDev("4202 - UPPAAL generation failed");
                     return;
                 }
 		TraceManager.addDev( "About to open the window at line 4198" );

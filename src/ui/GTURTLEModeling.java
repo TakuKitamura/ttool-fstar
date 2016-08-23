@@ -7165,13 +7165,14 @@ public class GTURTLEModeling {
         TML2TURTLE tt = new TML2TURTLE(tmlm);
         tm = tt.generateTURTLEModeling();
         if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+	    TraceManager.addDev("Error in TURTLE generation");
             analyzeErrors();
             return false;
         } else {
             // Optimize
-            //TraceManager.addDev("Optimize");
+            TraceManager.addDev("Optimize");
             tm.optimize();
-            //TraceManager.addDev("Optimize done");
+            TraceManager.addDev("Optimize done");
             TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
             checkingErrors = tmc.syntaxAnalysisChecking();
             if ((checkingErrors != null) && (checkingErrors.size() > 0)){
