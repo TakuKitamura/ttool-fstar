@@ -412,6 +412,27 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
 		return list;
 	}
 
+    public ArrayList<String> getAllTMLChannelNames( String _topname )   {
+		TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
+		ArrayList<String> list = new ArrayList<String>();
+		String name = "";
+		String type = "";
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof TMLCompositionOperator) {
+				if (tgc instanceof TMLChannelOperator) {
+					name = ((TMLChannelOperator)tgc).getChannelName();
+					type = "Channel";
+				}
+				list.add(_topname + "::" + name );
+            }
+        }
+		
+		return list;
+    }
+
 	public ArrayList<String> getAllTMLEventNames( String _topname ) {
 		TGComponent tgc;
    	Iterator iterator = componentList.listIterator();

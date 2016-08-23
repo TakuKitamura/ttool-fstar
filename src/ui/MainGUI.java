@@ -1398,6 +1398,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return list;
     }
 
+    public Vector<String> getAllTMLInputPorts() {
+        TURTLEPanel tp;
+        Vector<String> list = new Vector<String>();
+
+        for(int i=0; i<tabs.size(); i++) {
+            tp = (TURTLEPanel)(tabs.elementAt(i));
+            /*if (tp instanceof TMLDesignPanel) {
+                list.addAll(((TMLDesignPanel)tp).getAllTMLChannelNames( mainTabbedPane.getTitleAt(i)) );
+            } else*/
+            if( tp instanceof TMLComponentDesignPanel ) {
+                list.addAll(((TMLComponentDesignPanel)tp).getAllTMLInputPorts( mainTabbedPane.getTitleAt(i)) );
+            }
+        }
+        return list;
+    }
+
     public Vector<String> getAllTMLEventNames() {
         TURTLEPanel tp;
         Vector<String> list = new Vector<String>();
@@ -3759,16 +3775,16 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return tmlcomp.getAllInEvents(name);
     }
 
-    public String[] getAllOutChannels() {
+    public String[] getAllOutChannels() {   //this routine can be called only from a TMLComponentDesignPanel
         TURTLEPanel tp = getCurrentTURTLEPanel();
-        if (tp == null) {return null;}
-        if (!(tp instanceof TMLComponentDesignPanel)) {return null;}
+        if (tp == null) { return null;}
+        if (!(tp instanceof TMLComponentDesignPanel)) { return null;}
         TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
         String name =  getCurrentTDiagramPanel().getName();
         return tmlcomp.getAllOutChannels(name);
     }
 
-    public String[] getAllInChannels() {
+    public String[] getAllInChannels() {    //this routine can be called only from a TMLComponentDesignPanel
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {return null;}
         if (!(tp instanceof TMLComponentDesignPanel)) {return null;}
@@ -3776,6 +3792,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         String name =  getCurrentTDiagramPanel().getName();
         return tmlcomp.getAllInChannels(name);
     }
+
     public Vector<String> getAllCryptoConfig(){
 	TURTLEPanel tp;
         Vector<String> list = new Vector<String>();

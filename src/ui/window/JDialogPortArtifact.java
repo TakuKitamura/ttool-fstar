@@ -61,7 +61,7 @@ import myutil.*;
 public class JDialogPortArtifact extends javax.swing.JDialog implements ActionListener  {
     
 	private boolean regularClose;
-	private boolean emptyList = false;
+	private boolean emptyPortsList = false;
     
     private JPanel panel2;
     private Frame frame;
@@ -164,39 +164,43 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		TraceManager.addDev("Getting communications");
-		Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllTMLCommunicationNames();
-   		Vector<String> portsList = new Vector<String>();
+		//Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllTMLCommunicationNames();
+		Vector<String> portsList = artifact.getTDiagramPanel().getMGUI().getAllTMLInputPorts();
+   		//Vector<String> portsList = new Vector<String>();
+        TraceManager.addDev( "The list of input ports is:\n" + portsList.toString() );
+        if( portsList.size() == 0 ) {
+            emptyPortsList = true;
+            portsList.add( "No available port" );
+        }
 
-        // Build the list of available ports, if there is an applciation diagram
-        if( list.size() > 0 )   {
+        // Build the list of available ports, if there is an application diagram
+        /*if( list.size() > 0 )   {
 	    	int index = 0;
-		    if (list.size() == 0) {
-    			list.add("No communication to map");
-	    		emptyList = true;
-		    }
-            else {
-                index = 0;//indexOf(list, artifact.getFullValue());
-    			//parse each entry of list. Entry is in format AppName::chIn__chOut
-	    		for( String s: list )	{
-		    		if( s.contains( appName ) )	{	//build the DS for the mapped applications (filter out the case of multiple applications)
-			    		//TraceManager.addDev( "Parsing: " + s );
-				    	String[] temp1 = s.split("__");
-					    String[] temp2 = temp1[0].split( "::" );
-    					String chOut = temp2[0] + "::" + temp1[1];
-	    				String chIn = temp2[0] + "::" + temp2[1];
-		    			if( !portsList.contains( chOut ) )	{
-			    			portsList.add( chOut );
-				    	}
-					    if( !portsList.contains( chIn ) )	{
-						    portsList.add( chIn );
-    					}
-	    			}
+            //parse each entry of list. Entry is in format AppName::chIn__chOut
+            for( String s: list )	{
+                TraceManager.addDev( "Testing if " + s + " contains " + appName + "...");
+                if( s.contains( appName ) )	{	//build the DS for the mapped applications (filter out the case of multiple applications)
+                    //TraceManager.addDev( "Parsing: " + s );
+                    String[] temp1 = s.split("__");
+					String[] temp2 = temp1[0].split( "::" );
+    				String chOut = temp2[0] + "::" + temp1[1];
+                    //TraceManager.addDev( "chOut = " + chOut );
+                    String chIn = temp2[0] + "::" + temp2[1];
+                    //TraceManager.addDev( "chIn = " + chIn );
+                    if( !portsList.contains( chOut ) )	{
+                        portsList.add( chOut );
+                    }
+                    if( !portsList.contains( chIn ) )	{
+                        portsList.add( chIn );
+                    }
 		    	}
             }
 		}
         else    {
+            list.add( "No communication to map" );
+            emptyPortsList = true;
             portsList.add( "No available port" );
-        }
+        }*/
 		
 		TraceManager.addDev( "Got communications" );
 
@@ -234,11 +238,29 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		memoryCB.addActionListener(this);
 		panel2.add( memoryCB, c1 );
 
-        if( bufferParameters.size() == 0 )  {   //It means that nothing has been read from the xml file
-            bufferType = Buffer.ANOMALY;  //Signal anomaly
+        if( (emptyPortsList) || (memoryList.size() == 0) )  {
+            //the project does not contain an application diagram, or the platform diagram does not contain any memory or both
+            bufferType = Buffer.ANOMALY;
         }
         else    {
-            bufferType = Integer.parseInt( bufferParameters.get( Buffer.BUFFER_TYPE_INDEX ) );
+            //Must distinguish between 2 cases:
+            // - bufferParameters is empty because the user has just instantiated the artifact
+            // - bufferParameters is not empty as the user had already done some mapping
+            if( bufferParameters.size() == 0 )  {   //assign to bufferType the type of the first memory in memoryList
+		        for( int k = 0; k < componentList.size(); k++ )	{
+        			if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
+		        		if( ((TMLArchiMemoryNode) componentList.get(k)).getName().equals( memoryList.get(0) ) ) {
+				            bufferType = ((TMLArchiMemoryNode)componentList.get(k)).getBufferType();
+                            break;
+                        }
+        			}
+		        }
+                String memoryName = memoryList.get(0);
+                //TraceManager.addDev( "bufferType of " + memoryName + " is " + bufferType );
+            }
+            else    {
+                bufferType = Integer.parseInt( bufferParameters.get( Buffer.BUFFER_TYPE_INDEX ) );
+            }
         }
 
 		ArrayList<JPanel> panelsList;
@@ -284,13 +306,14 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 		c0.fill = GridBagConstraints.BOTH;
 		c.add( panel2, c0 );
+
         if( ( bufferType == Buffer.MAIN_MEMORY_BUFFER ) || ( bufferType == Buffer.FEP_BUFFER ) || ( bufferType == Buffer.ADAIF_BUFFER ) )    {
             panel3.setBorder( new javax.swing.border.TitledBorder( "Code generation: memory configuration" ) );
 			tabbedPane.removeAll();
 			tabbedPane.addTab( "Data", panel3 );
 			tabbedPane.setSelectedIndex( 0 );
 		}
-        if( bufferType != Buffer.ANOMALY )  { //Don't add the tabbedPane is there is a bufferType anomaly (i.e., nothing has been read from the xml file)
+        if( bufferType != Buffer.ANOMALY )  { //Don't add the tabbedPane is there is a bufferType anomaly
     		c.add( tabbedPane, c0 );
         }
 
@@ -459,7 +482,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
     }
 	
 	public String getReferenceCommunicationName() {
-		if (emptyList) {
+		if (emptyPortsList) {
 			return null;
 		}
 		String tmp = (String)( mappedPortCB.getSelectedItem() );
