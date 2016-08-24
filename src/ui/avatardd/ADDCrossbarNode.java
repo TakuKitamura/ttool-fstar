@@ -65,9 +65,9 @@ public class ADDCrossbarNode extends ADDCommunicationNode implements WithAttribu
     private int derivationy = 3;
     private String stereotype = "CROSSBAR";
 
-    private int index = 0;
+    /* private int index = 0;
     private int nbOfAttachedInitiators = 0;
-    private int nbOfAttachedTargets = 0;
+    private int nbOfAttachedTargets = 0;*/
     private int cluster_index = 0;
     private int cluster_address = 0;
 
@@ -203,9 +203,7 @@ public class ADDCrossbarNode extends ADDCommunicationNode implements WithAttribu
             }
         }
 
-
-
-        if (dialog.getIndex().length() != 0) {
+	/*     if (dialog.getIndex().length() != 0) {
             try {
                 tmp = index;
                 index = Integer.decode(dialog.getIndex()).intValue();
@@ -218,9 +216,9 @@ public class ADDCrossbarNode extends ADDCommunicationNode implements WithAttribu
                 error = true;
                 errors += "index  ";
             }
-        }
+        }*/
 
-        if (dialog.getNbOfAttachedInitiators().length() != 0) {
+	/*	   if (dialog.getNbOfAttachedInitiators().length() != 0) {
             try {
                 tmp = nbOfAttachedInitiators;
                 nbOfAttachedInitiators = Integer.decode(dialog.getNbOfAttachedInitiators()).intValue();
@@ -233,10 +231,10 @@ public class ADDCrossbarNode extends ADDCommunicationNode implements WithAttribu
                 error = true;
                 errors += "nbOfAttachedInitiators  ";
             }
-        }
+        }*/
 
 
-        if (dialog.getNbOfAttachedTargets().length() != 0) {
+	   /*        if (dialog.getNbOfAttachedTargets().length() != 0) {
             try {
                 tmp = nbOfAttachedTargets;
                 nbOfAttachedTargets = Integer.decode(dialog.getNbOfAttachedTargets()).intValue();
@@ -249,7 +247,7 @@ public class ADDCrossbarNode extends ADDCommunicationNode implements WithAttribu
                 error = true;
                 errors += "nbOfAttachedTargets  ";
             }
-        }
+	    }*/
 
         if (dialog.getClusterIndex().length() != 0) {
             try {
@@ -302,10 +300,10 @@ public class ADDCrossbarNode extends ADDCommunicationNode implements WithAttribu
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
         sb.append("\" />\n");
-        sb.append("<attributes index=\"" + index + "\" ");
-        sb.append(" nbOfAttachedInitiators=\"" + nbOfAttachedInitiators + "\" ");
+        //sb.append("<attributes index=\"" + index + "\" ");
+        //sb.append(" nbOfAttachedInitiators=\"" + nbOfAttachedInitiators + "\" ");
 
-        sb.append(" nbOfAttachedTargets=\"" + nbOfAttachedTargets + "\" ");
+        //sb.append(" nbOfAttachedTargets=\"" + nbOfAttachedTargets + "\" ");
         sb.append(" cluster_index=\"" + cluster_index + "\" ");
         sb.append(" cluster_address=\"" + cluster_address + "\" ");
         sb.append("/>\n");
@@ -345,9 +343,9 @@ public class ADDCrossbarNode extends ADDCommunicationNode implements WithAttribu
                             }
 
                             if (elt.getTagName().equals("attributes")) {
-                                index = Integer.decode(elt.getAttribute("index")).intValue();
-                                nbOfAttachedInitiators =Integer.decode(elt.getAttribute("nbOfAttachedInitiators")).intValue();
-                                nbOfAttachedTargets = Integer.decode(elt.getAttribute("nbOfAttachedTargets")).intValue();
+				//   index = Integer.decode(elt.getAttribute("index")).intValue();
+				//     nbOfAttachedInitiators =Integer.decode(elt.getAttribute("nbOfAttachedInitiators")).intValue();
+				//    nbOfAttachedTargets = Integer.decode(elt.getAttribute("nbOfAttachedTargets")).intValue();
                                 cluster_index = Integer.decode(elt.getAttribute("cluster_index")).intValue();
                                 cluster_address = Integer.decode(elt.getAttribute("cluster_address")).intValue();
 
@@ -362,14 +360,11 @@ public class ADDCrossbarNode extends ADDCommunicationNode implements WithAttribu
         }
     }
 
-
-
-
     public String getAttributes() {
         String attr = "";
-        attr += "index = " + index + "\n";
-        attr += "nbOfAttachedInitiators = " + nbOfAttachedInitiators + "\n";
-        attr += "nbOfAttachedTargets = " + nbOfAttachedTargets + "\n";
+        //attr += "index = " + index + "\n";
+        //attr += "nbOfAttachedInitiators = " + nbOfAttachedInitiators + "\n";
+        //attr += "nbOfAttachedTargets = " + nbOfAttachedTargets + "\n";
         attr += "cluster_address = " + cluster_address+ "\n";
         attr += "cluster_index= " + cluster_index + "\n";
         return attr;
@@ -377,17 +372,17 @@ public class ADDCrossbarNode extends ADDCommunicationNode implements WithAttribu
 
     public String getAttributesToFile() {
         String attr = "";
-        attr += index + "\n";
-        attr += nbOfAttachedInitiators+ "\n";
-        attr += nbOfAttachedTargets+ "\n";
+        //attr += index + "\n";
+	// attr += nbOfAttachedInitiators+ "\n";
+	// attr += nbOfAttachedTargets+ "\n";
         attr += cluster_index + "\n";
         attr += cluster_address + "\n";
         return attr;
     }
 
-    public int getIndex() { return index;}
-    public int getNbOfAttachedInitiators() { return nbOfAttachedInitiators;}
-    public int getNbOfAttachedTargets() { return nbOfAttachedTargets;}
+    //public int getIndex() { return index;}
+    //public int getNbOfAttachedInitiators() { return nbOfAttachedInitiators;}
+    //public int getNbOfAttachedTargets() { return nbOfAttachedTargets;}
     public int getClusterIndex() { return cluster_index;}
     public int getClusterAddress() { return cluster_address;}
 

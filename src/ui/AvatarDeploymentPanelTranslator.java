@@ -143,8 +143,13 @@ System.out.println("vgmn read in");
                 ADDCrossbarNode crossbar = (ADDCrossbarNode)dp;
 
                 String crossbarName = crossbar.getNodeName();
-                int nbOfAttachedInitiators = crossbar.getNbOfAttachedInitiators();
-                int nbOfAttachedTargets = crossbar.getNbOfAttachedTargets();
+		// int nbOfAttachedInitiators = crossbar.getNbOfAttachedInitiators();
+		int nbOfAttachedInitiators = 0;
+	
+                //int nbOfAttachedTargets = crossbar.getNbOfAttachedTargets();
+
+		int nbOfAttachedTargets = 0;
+
                 int cluster_index = crossbar.getClusterIndex();
                 int cluster_address = crossbar.getClusterAddress();
 

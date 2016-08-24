@@ -70,8 +70,8 @@ public class JDialogADDCrossbarNode extends javax.swing.JDialog implements Actio
     protected JTextField nodeName;
 	
 	// Panel2
-    protected JTextField index, nbOfAttachedInitiators, nbOfAttachedTargets, cluster_index, cluster_address;
-	
+    //protected JTextField index, nbOfAttachedInitiators, nbOfAttachedTargets, cluster_index, cluster_address;
+    	protected JTextField cluster_index, cluster_address;
     
     // Main Panel
     private JButton closeButton;
@@ -130,21 +130,21 @@ public class JDialogADDCrossbarNode extends javax.swing.JDialog implements Actio
         c2.fill = GridBagConstraints.HORIZONTAL;
       
         
-        c2.gridwidth = 1;
+	/* c2.gridwidth = 1;
         panel2.add(new JLabel("Index:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         index = new JTextField(""+node.getIndex(), 15);
-        panel2.add(index, c2);
+        panel2.add(index, c2);*/
 	
 	/* This is generated automatically by the DD analyzer */ 
-	/*c2.gridwidth = 1;
-        panel2.add(new JLabel("Nb of attached initators:"), c2);
+	/*	c2.gridwidth = 1;
+        panel2.add(new JLabel("Nb of attached initators (optional):"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         nbAttachedInitiat = new JTextField(""+node.getNbAttachedInitiat(), 15);
-        panel2.add(nbAttachedInitiat, c2);*/
+        panel2.add(nbAttachedInitiat, c2);
         
-	/* c2.gridwidth = 1;
-        panel2.add(new JLabel("Nb of attached target:"), c2);
+	c2.gridwidth = 1;
+        panel2.add(new JLabel("Nb of attached targets (optional):"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         nbAttachedTarget = new JTextField(""+node.getNbAttachedTarget(), 15);
         panel2.add(nbAttachedTarget, c2);*/
@@ -161,8 +161,7 @@ public class JDialogADDCrossbarNode extends javax.swing.JDialog implements Actio
         cluster_address = new JTextField(""+node.getClusterAddress(), 15);
         panel2.add(cluster_address, c2);
         
-        
-        
+           
         // main panel;
         c0.gridheight = 10;
         c0.weighty = 1.0;
@@ -218,17 +217,17 @@ public class JDialogADDCrossbarNode extends javax.swing.JDialog implements Actio
         return nodeName.getText();
     }
     
-    public String getIndex() {
+    /*   public String getIndex() {
         return index.getText();
-    }
+	}*/
     
-    public String getNbOfAttachedInitiators() {
+    /*   public String getNbOfAttachedInitiators() {
         return nbOfAttachedInitiators.getText();
     }
 	
 	public String getNbOfAttachedTargets(){
 		  return nbOfAttachedTargets.getText();
-	  }
+		  }*/
 	  
 	public String getClusterIndex(){
 		  return cluster_index.getText();

@@ -137,16 +137,17 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       LinkedList<AvatarCrossbar> crossbars = new LinkedList<AvatarCrossbar>();
       for (AvatarComponent crossbar : components )
         {
+	    //Currently, at least one crossbar -> clustered
 	    if (crossbar instanceof AvatarCrossbar){
-	 System.out.println("@@@@@@@@@@@@@@@@@@@@@@ Clustered Interconnect found @@@@@@@@@@@@@@@@@");
-            crossbars.add((AvatarCrossbar)crossbar);	    
+		System.out.println("Clustered Interconnect found");
+		crossbars.add((AvatarCrossbar)crossbar);	    
 	    }
 
         }
       return crossbars;
     }
   
-    //Currently, we define 1 crossbar = 1 cluster
+   //Currently, we define 1 crossbar = 1 cluster
    public int getNbClusters(){      
        return getAllCrossbar().size();
     }
@@ -190,7 +191,7 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       return (getAllCoproMWMR()).size();
     }
 
-    // for construction of the central interconnect: currently unused, extracted from DDiagram
+    // for construction of the central interconnect
 
     public int getNb_init(){
       return nb_init ;

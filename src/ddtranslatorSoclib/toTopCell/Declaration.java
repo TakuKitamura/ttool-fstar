@@ -1,6 +1,7 @@
 
 /* authors: v1.0 Raja GATGOUT 2014
-            v2.0 Daniela GENIUS, Julien HENON 2015 */
+            v2.0 Daniela GENIUS, Julien HENON 2015 
+	    v2.1 Daniela GENIUS, summer 2016*/
 
 package ddtranslatorSoclib.toTopCell;
 import java.util.*;
@@ -61,11 +62,10 @@ public class Declaration {
 	   
 		String declaration = "//----------------------------Instantiation-------------------------------" + CR2;	
 	
-		//Is the platform clustered?
+		//Is the platform clustered (currently only 1 central ICN permitted)?
 	
 		int nb_clusters = TopCellGenerator.avatardd.getAllCrossbar().size();	
-		//nb_clusters=2;
-
+		
 		boolean trace_caba=true; 
 
 	if(nb_clusters==0){
@@ -170,17 +170,38 @@ if(nb_clusters==0){
 	     ");" + CR2;
 	  int i=0;
 
-	  //monitoring either by logger(1) ou stats (2) 
-	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
 
+	  //monitoring connectors marked by spy with the vci_ logger
+	  /*  for (AvatarConnector connector : TopCellGenerator.avatardd.getAllConnectors()) { 
+		    if (connector.getMonitored()==1){
+		      
+			
+			AvatarConnectingPoint point = connector.getconectingPoint1();
+			AvatarComponent component = point.getComponent();
+			declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
+			i++;
+			if(component instanceof AvatarRAM){ 		
+			   
+			}
+	
+			//cache monitoring not yet implemented
+			//	if(component instanceof AvatarCPU){ 
+			//	component.setMonitored(1);
+			//	}		
+			//}
+	       }*/
+
+
+	  //monitoring RAM either by logger(1) ou stats (2) 
+	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
+	     
 	      if (ram.getMonitored()==1){
-		  int number = ram.getNo_target();
+		 
 		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
 		  i++;	      
 	      }	
 	      else{
-		  if (ram.getMonitored()==2){
-		      int number = ram.getNo_target();
+		  if (ram.getMonitored()==2){		      
              
 		      String strArray="";
 
@@ -221,18 +242,18 @@ if(nb_clusters==0){
 
 		if (ram.getMonitored()==2){
 		int number = ram.getNo_target();
-
-                //LinkedList<AvatarChannel> channels=ram.getChannels();		
+               	
 		String strArray="";
 
                 for(AvatarChannel channel: ram.getChannels()){
-		    //   strArray=strArray+"\""+channel.getChannelName()+"\","; 
+		    
 		    String chname = generateName(channel);
-		     strArray=strArray+"\""+chname+"\",";
+
+		    strArray=strArray+"\""+chname+"\",";
 		}      
 		declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr0.log\",stringArray("+strArray+"NULL));" + CR2;
 	      i++;	      
-	    }	
+		}	
 	    }
 	  }	 
 
@@ -240,54 +261,90 @@ if(nb_clusters==0){
           vgmn.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
           vgmn.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target()+4);
 	 }
-}else
-    //clustered
-    {
-    for  (AvatarBus bus : TopCellGenerator.avatardd.getAllBus()) {
-       	  
-	  //for the moment we fix no of initiators and no of targets
-	  declaration += "soclib::caba::VciVgsb<vci_param> " + bus.getBusName() +"(\"" + bus.getBusName() + "\"" + " , maptab, "+ 1 +"," + 6+ ");" + CR2;
+}
+else {
 
-          //if BUS was not last in input file, update here
-	  int i=0;
-	  if(trace_caba){
-	      for(i=0;i<TopCellGenerator.avatardd.getNb_init();i++){
-		  declaration += "soclib::caba::VciLogger<vci_param> logger(\"logger" + i+"\",maptab);" + CR2;
-	      }
-	      int j=i;
-	      for(i=0;i<TopCellGenerator.avatardd.getAllRAM().size()+3;i++){
-		  declaration += "soclib::caba::VciLogger<vci_param> logger(\"logger" + j+"\",maptab);" + CR2;
-	      }
-	  }
-          bus.setNbOfAttachedInitiators(1); 
-          bus.setnbOfAttachedTargets(6);	  
-  }	
+    /***************************************/
+    /* clustered interconnect architecture */
+    /***************************************/
 
-         for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
-          System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
-          System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
-      
-	  //  declaration += "soclib::caba::VciVgmn<vci_param> "+ vgmn.getVgmnName() +" (\"" + vgmn.getVgmnName() + "\"" + " , maptab, "+ 1 +"," + 6 +
-	  //	     "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
+    //monitor connectors marked by spy with the vci_ logger
+    /*	  for (AvatarConnector connector : TopCellGenerator.avatardd.getAllConnectors()) { 
+		    if (connector.getMonitored()==1){		      		
 
-	  //DG 10.08. only one central interconnect
-  declaration += "soclib::caba::VciVgmn<vci_param> vgmn (\"" + vgmn.getVgmnName() + "\"" + " , maptab, "+ 1 +"," + 6 +
-	  	     "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
-
-	  int i=0;
+			AvatarConnectingPoint point = connector.getconectingPoint1();
+			AvatarComponent component = point.getComponent();
+			declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
+			i++;
+			if(component instanceof AvatarRAM){ 		
+			   
+			}
 	
-
- //monitoring either by logger(1) ou stats (2) 
+			//cache monitoring not yet implemented
+			//	if(component instanceof AvatarCPU){ 
+			//	component.setMonitored(1);
+			//	}		
+		    }
+	   }*/
+    
+    for  (AvatarBus bus : TopCellGenerator.avatardd.getAllBus()) {
+	// clustered around one bus
+	//for the moment we fix no of initiators and no of targets
+	  declaration += "soclib::caba::VciVgsb<vci_param>  vgsb(\"" + bus.getBusName() + "\"" + " , maptab, "+ 1 +"," + 6+ ");" + CR2;
+	  
+          //if BUS was not last in input file, update here	 
+	  int i=0;
 	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
 
 	      if (ram.getMonitored()==1){
-		  int number = ram.getNo_target();
+		
 		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
 		  i++;	      
 	      }	
 	      else{
 		  if (ram.getMonitored()==2){
-		      int number = ram.getNo_target();
+		    
+             
+		      String strArray="";
+
+		      for(AvatarChannel channel: ram.getChannels()){ 
+		   
+			  String chname = generateName(channel);
+		     
+			  strArray=strArray+"\""+chname+"\",";
+		      }   
+		
+		      declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr"+i+".log\",stringArray("+strArray+"NULL));" + CR2;
+		      i++;	      
+		  }	
+	     }
+	  }	 
+
+          bus.setNbOfAttachedInitiators(1); 
+          bus.setnbOfAttachedTargets(6);	  
+    }	
+
+         // currently clustered around one vgmn
+         for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
+          System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
+          System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
+      	 
+	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn (\"" + vgmn.getVgmnName() + "\"" + " , maptab, "+ 1 +"," + 6 +
+	      "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
+
+	  int i=0;	
+
+	  //monitoring either by logger(1) ou stats (2) 
+	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
+
+	      if (ram.getMonitored()==1){
+		
+		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
+		  i++;	      
+	      }	
+	      else{
+		  if (ram.getMonitored()==2){
+		    
              
 		      String strArray="";
 
@@ -309,16 +366,20 @@ if(nb_clusters==0){
           vgmn.setnbOfAttachedTargets(6);	
 	 }
 	
-
+	int i=0;
 	for  (AvatarCrossbar crossbar : TopCellGenerator.avatardd.getAllCrossbar()) {
           System.out.println("initiators: "+crossbar.getNbOfAttachedInitiators());	
           System.out.println("targets: "+crossbar.getNbOfAttachedTargets());
 	
-	  declaration += "soclib::caba::VciLocalCrossbar<vci_param> crossbar(\"" + crossbar.getCrossbarName() + "\"" + " , maptab, IntTab("+ crossbar.getClusterIndex()+"),IntTab("+crossbar.getClusterAddress()+"), "+crossbar.getNbOfAttachedInitiators()+", "+crossbar.getNbOfAttachedTargets()+");" + CR2;
+	  //declaration += "soclib::caba::VciLocalCrossbar<vci_param> crossbar"+crossbar.getClusterAddress()+"(\"" + crossbar.getCrossbarName() + "\"" + " , maptab, IntTab("+ crossbar.getClusterIndex()+"),IntTab("+crossbar.getClusterAddress()+"), "+crossbar.getNbOfAttachedInitiators()+", "+crossbar.getNbOfAttachedTargets()+");" + CR2;
+
+	  declaration += "soclib::caba::VciLocalCrossbar<vci_param> crossbar"+i+"(\"" + crossbar.getCrossbarName() + "\"" + " , maptab, IntTab("+ crossbar.getClusterIndex()+"),IntTab("+crossbar.getClusterAddress()+"), "+crossbar.getNbOfAttachedInitiators()+", "+crossbar.getNbOfAttachedTargets()+");" + CR2;
+
 
           //if CROSSBAR was not last in input file, update here 
           crossbar.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
           crossbar.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target());
+	  i++;
 	}	
     }
 return declaration;
