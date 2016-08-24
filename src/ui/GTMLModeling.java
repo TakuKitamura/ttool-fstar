@@ -301,7 +301,7 @@ public class GTMLModeling  {
 	        TGCNote note = (TGCNote) tgc;
 	        String[] vals = note.getValues();
 	        for (String s: vals){
-		    System.out.println("Val " + s);
+		    TraceManager.addDev("Val " + s);
 		    if (s.contains("#") && s.contains(" ")){
   		        map.addPragma(s.split(" "));
 	    	    }
