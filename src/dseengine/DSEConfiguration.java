@@ -470,7 +470,9 @@ public class DSEConfiguration implements Runnable  {
 			//System.out.println("Format OK");
 			tmap = spec.getTMLMapping(); 
 			tmlm = tmap.getTMLModeling();
-			
+			if (tmap==null || tmlm ==null){
+			    return false;
+			}
 			//System.out.println("\n\n*** TML Modeling *** \n");
 			//TMLTextSpecification textspec = new TMLTextSpecification("toto");
 			//String s = textspec.toTextFormat(tmlm);
@@ -1257,6 +1259,7 @@ public class DSEConfiguration implements Runnable  {
 			TraceManager.addDev("Mapping generated");
 		} else {
 			TraceManager.addDev("Mapping failure");
+			return -1;
 		}
 		
 		int cpt = 0;

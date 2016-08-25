@@ -211,7 +211,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	mappingFile = new JTextField(mapFile);
 	jp03.add(mappingFile,c03);
 	
-	jp03.add(new JLabel("Modeling File name (.tmap)"),c03);
+	jp03.add(new JLabel("Modeling File name (.tml)"),c03);
 	modelFile = new JTextField(modFile);
 	jp03.add(modelFile,c03);
 
@@ -419,7 +419,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 		return;
 	    }
 	    else {
-		TraceManager.addDev("Set model file to " + modFile);
+		TraceManager.addDev("Set directory to " + tmlDir);
 	    }
 	    if (config.setMappingFile(mapFile) <0) {
 		TraceManager.addDev("Mapping at " + mapFile + " error");
@@ -477,7 +477,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	   // config.setOutputVCD("true");
 	   // config.setOutputXML("true");
 	    config.setRecordResults("true");
-	    if (config.runParallelSimulation(Nbsim, true, true) != 0) {
+	    /*if (config.runParallelSimulation(Nbsim, true, true) != 0) {
 		output+="Simulation Failed";
 		outputText.setText(output);
 		checkMode();
@@ -486,7 +486,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    else {
 		output+="Simulation Succeeded";
 		outputText.setText(output);
-	    }
+	    }*/
 	    if (config.runDSE("", false, false)!=0){
 		TraceManager.addDev("Can't run DSE");
 	    }

@@ -851,8 +851,8 @@ public class GTURTLEModeling {
 		    enc.decTime=decComp;
 	    	    tad.addComponent(enc, xpos ,ypos, false, true);
 		    fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
-		    ypos+=30;
-		    TMLADWriteChannel wr = new TMLADWriteChannel(xpos+5, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+		    ypos+=50;
+		    TMLADWriteChannel wr = new TMLADWriteChannel(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 		    wr.setChannelName("nonceCh"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1]);
 		    wr.securityContext = "nonce_"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
 		    tad.addComponent(wr,xpos,ypos,false,true);
@@ -866,13 +866,13 @@ public class GTURTLEModeling {
 		}
 		//Receive nonces
 		for (String channel:insecureOutChannels.get(task)){
-		    ypos+=30;
+		    ypos+=50;
 		    yShift+=50;
 		    TMLChannel tmlc = tmlmodel.getChannelByName(title + "__"+channel);
 		    if (tmlc==null){
 			continue;
 		    }
-		    TMLADReadChannel rd = new TMLADReadChannel(xpos+5, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+		    TMLADReadChannel rd = new TMLADReadChannel(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 	 	    rd.setChannelName("nonceCh"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1]);
 		    rd.securityContext = "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1]+ "_"+tmlc.getOriginTask().getName().split("__")[1];
 		    tad.addComponent(rd,xpos,ypos,false,true);
@@ -896,8 +896,13 @@ public class GTURTLEModeling {
 			tad.repaint();
 		    }
 		}
+		
 		if (!(tg instanceof TMLADStartState) && !(tg instanceof TMLADEncrypt)){
-		    tg.setCd(tg.getX(), tg.getY()+yShift);
+		    if (tg instanceof TMLADWriteChannel && ((TMLADWriteChannel) tg).getChannelName().contains("nonceCh") || (tg instanceof TMLADReadChannel && ((TMLADReadChannel) tg).getChannelName().contains("nonceCh"))){
+		    }
+		    else {
+		        tg.setCd(tg.getX(), tg.getY()+yShift);
+		    }
 		}
 	    } 
 	    for (TMLTask task2: toSecure.get(task)){
@@ -920,7 +925,7 @@ public class GTURTLEModeling {
 				continue;
 			    }
 			    TGConnectingPoint next = conn.getTGConnectingPointP2();
-			    TMLADDecrypt dec = new TMLADDecrypt(x, y+40, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad);
+			    TMLADDecrypt dec = new TMLADDecrypt(x+10, y+40, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad);
 			    dec.securityContext = "autoEncrypt_" + readChannel.getChannelName();
 			    toadd.add(dec);
 			    conn.setP2(dec.getTGConnectingPointAtIndex(0));

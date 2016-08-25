@@ -60,6 +60,7 @@ import myutil.*;
 public class TMLADEncrypt extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 5;
     private int textX, textY;
+    private int ex=5;
     private int ilength = 10;
     private int lineLength1 = 2;
     public String type="";
@@ -76,8 +77,8 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     public TMLADEncrypt(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 10;
-        height = 30;
+        width = 60;
+        height = 50;
         textX = width + 5;
         textY = height/2 + 5;
         
@@ -97,26 +98,111 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     }
     
     public void internalDrawing(Graphics g) {
-		if (stateOfError > 0)  {
-			Color c = g.getColor();
-			switch(stateOfError) {
-			case ErrorHighlight.OK:
-				g.setColor(ColorManager.EXEC);
-				break;
-			default:
-				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-			}
-			g.fillRect(x, y, width, height);
-			g.setColor(c);
-		}
-        g.drawRect(x, y, width, height);
+	if (stateOfError > 0)  {
+	    Color c = g.getColor();
+	    switch(stateOfError) {
+		case ErrorHighlight.OK:
+		    g.setColor(ColorManager.EXEC);
+		    break;
+		default:
+		    g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+	    }
+	    g.fillRect(x, y, width, height);
+	    g.setColor(c);
+	}
+        g.drawLine(x, y, x+width, y);
+        g.drawLine(x, y, x, y+height);
+	g.drawLine(x+width, y, x+width, y+height);
+        g.drawLine(x, y+height, x+width/2, y+height+ex);
+        g.drawLine(x+width/2, y+height+ex, x+width, y+height);
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-        g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2);
-        g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength,  x + (width/2) + lineLength1, y+(height-ilength)/2 + ilength);
-        g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength/2,  x + (width/2) + lineLength1, y+(height-ilength)/2 + ilength/2);
-        g.drawLine(x + (width/2)- lineLength1, y+(height-ilength)/2, x + (width/2)- lineLength1, y+(height+ilength)/2);
+        g.drawLine(x+(width/2), y+height+ex, x+(width/2), y + lineLength + height+ex);
+
+	if (type.equals("Symmetric Encryption")){
+	    //S
+	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4,  x + (width/2) + lineLength1, y+(height-ilength)/4);
+
+
+            g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + ilength,  x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength);
+
+
+            g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + ilength/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength/2);
+        
+   	    g.drawLine(x + (width/2)- lineLength1, y+(height-ilength)/4, x + (width/2)- lineLength1, y+(height-ilength)/4 + ilength/2);
+	
+	    g.drawLine(x + (width/2) + lineLength1, y+(height-ilength)/4+ilength/2, x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength);
+	    //E
+
+	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + height/2 - ex/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + height/2 -ex/2);
+            g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + ilength + height/2 -ex/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength + height/2 -ex/2);
+            g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + ilength/2 + height/2 - ex/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength/2 + height/2 -ex/2);
+            g.drawLine(x + (width/2)- lineLength1, y+(height-ilength)/4 + height/2 - ex/2, x + (width/2)- lineLength1, y+(height-ilength)/4 + ilength +  height/2 -ex/2);
+
+
+
+	}
+	else if (type.equals("Asymmetric Encryption")) {
+
+	    //A
+	    g.drawLine(x + (width/2), y+(height-ilength)/4,  x + ex/2, y+(height-ilength)/4+ilength);
+
+
+            g.drawLine(x + (width/2), y+(height-ilength)/4,  x + (width) - ex/2, y+(height-ilength)/4 + ilength);
+
+
+            g.drawLine(x + 3*ex/2, y+(height-ilength)/4 + ilength/2 + ex/2,  x + width - 3*ex/2, y+(height-ilength)/4 + ilength/2+ex/2);
+	    //E
+
+	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + height/2 - ex/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + height/2 -ex/2);
+            g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + ilength + height/2 -ex/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength + height/2 -ex/2);
+            g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + ilength/2 + height/2 - ex/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength/2 + height/2 -ex/2);
+            g.drawLine(x + (width/2)- lineLength1, y+(height-ilength)/4 + height/2 - ex/2, x + (width/2)- lineLength1, y+(height-ilength)/4 + ilength +  height/2 -ex/2);
+
+
+
+	}
+
+	else if (type.equals("Nonce")){
+
+	    //N
+	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) - lineLength1, y+(height-ilength)/2+ilength);
+
+   	    g.drawLine(x + (width/2) + lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2+ilength);
+
+	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2, x + (width/2) + lineLength1, y+(height-ilength)/2+ilength);
+	
+	}
+	else if (type.equals("MAC")){
+
+	    //M
+	    g.drawLine(x + ex/2, y+(height-ilength)/2,  x + ex/2, y+(height-ilength)/2+ilength);
+
+   	    g.drawLine(x + width -ex/2, y+(height-ilength)/2,  x + width - ex/2, y+(height-ilength)/2+ilength);
+
+	    g.drawLine(x + ex/2, y+(height-ilength)/2, x+width/2, y+(height-ilength)/2+ilength);
+	    g.drawLine(x + width - ex/2, y+(height-ilength)/2, x + width/2, y+(height-ilength)/2+ilength);
+	}
+	else if (type.equals("Hash")){
+	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) - lineLength1, y+(height-ilength)/2+ilength);
+
+   	    g.drawLine(x + (width/2) + lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2+ilength);
+
+	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength/2,  x + (width/2) + lineLength1, y+(height-ilength)/2 + ilength/2);
+
+	}
+	else if (type.equals("Advanced")){
+
+	    //A
+	    g.drawLine(x + (width/2), y+(height-ilength)/2,  x + ex/2, y+(height-ilength)/2+ilength);
+
+
+            g.drawLine(x + (width/2), y+(height-ilength)/2,  x + (width) - ex/2, y+(height-ilength)/2 + ilength);
+
+
+            g.drawLine(x + 3*ex/2, y+(height-ilength)/2 + ilength/2 + ex/2,  x + width - 3*ex/2, y+(height-ilength)/2 + ilength/2+ex/2);
+	}
 	g.drawString("sec:"+ securityContext, x+3*width/2, y+ height/2);
+        g.drawImage(IconManager.imgic7000.getImage(), x - 22, y + height/2, null);
     }
     
 public boolean editOndoubleClick(JFrame frame) {
