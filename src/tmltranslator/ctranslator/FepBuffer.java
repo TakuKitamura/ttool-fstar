@@ -242,12 +242,12 @@ public class FepBuffer extends Buffer	{
 				return false;
 			}
 		}
-		if( ( numSamples.length() > 0 ) && !numSamples.matches( regex ) )	{
+		if( (numSamples.length() > 0) && !numSamples.matches( regex ) )	{
 			JOptionPane.showMessageDialog( frame, "The number of samples must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
-		if( Integer.parseInt( numSamples ) == 0 )	{
+		if( (numSamples.length() > 0) && (Integer.parseInt( numSamples ) == 0) )	{
 			JOptionPane.showMessageDialog( frame, "The number of samples must be greater than 0", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;

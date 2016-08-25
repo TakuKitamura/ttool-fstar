@@ -397,17 +397,17 @@ public class InterleaverBuffer extends Buffer	{
 		offsetPerm = (String) offsetPerm_TF.getText();
 		lengthPerm = (String) lengthPerm_TF.getText();
 		//check first entry offset
-		if( ( offsetPerm.length() > 0 ) && !offsetPerm.matches( regex ) )	{
+		if( (offsetPerm.length() > 0) && !offsetPerm.matches( regex ) )	{
 			JOptionPane.showMessageDialog( frame, "The offset must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
-		if( ( lengthPerm.length() > 0 ) && !lengthPerm.matches( regex ) )	{
+		if( (lengthPerm.length() > 0) && !lengthPerm.matches( regex ) )	{
 			JOptionPane.showMessageDialog( frame, "The length must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
 		}
-		if( Integer.parseInt( lengthPerm ) == 0 )	{
+		if( (lengthPerm.length() > 0) && (Integer.parseInt( lengthPerm ) == 0) )	{
 			JOptionPane.showMessageDialog( frame, "The length must be greater than 0", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
 			return false;
