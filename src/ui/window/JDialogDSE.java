@@ -477,7 +477,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	   // config.setOutputVCD("true");
 	   // config.setOutputXML("true");
 	    config.setRecordResults("true");
-	    /*if (config.runParallelSimulation(Nbsim, true, true) != 0) {
+	    if (config.runParallelSimulation(Nbsim, true, true) != 0) {
 		output+="Simulation Failed";
 		outputText.setText(output);
 		checkMode();
@@ -486,7 +486,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    else {
 		output+="Simulation Succeeded";
 		outputText.setText(output);
-	    }*/
+	    }
 	    if (config.runDSE("", false, false)!=0){
 		TraceManager.addDev("Can't run DSE");
 	    }
