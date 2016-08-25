@@ -61,8 +61,8 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     private int lineLength = 5;
     private int textX, textY;
     private int ex=5;
-    private int ilength = 10;
-    private int lineLength1 = 2;
+    private int ilength = 12;
+    private int lineLength1 = 3;
     public String type="";
     public String message_overhead="";
     public String size="";
@@ -77,8 +77,8 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     public TMLADEncrypt(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 40;
-        height = 50;
+        width = 15;
+        height = 35;
         textX = width + 5;
         textY = height/2 + 5;
         
@@ -120,23 +120,23 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
 
 	if (type.equals("Symmetric Encryption")){
 	    //S
-	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4,  x + (width/2) + lineLength1, y+(height-ilength)/4);
+	    g.drawLine(x + ex, y+(height-ilength)/4,  x + width -ex, y+(height-ilength)/4);
 
 
-            g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + ilength,  x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength);
+            g.drawLine(x + ex, y+(height-ilength)/4 + ilength,  x + width-ex, y+(height-ilength)/4 + ilength);
 
 
-            g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + ilength/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength/2);
+            g.drawLine(x + ex, y+(height-ilength)/4 + ilength/2,  x + width-ex, y+(height-ilength)/4 + ilength/2);
         
-   	    g.drawLine(x + (width/2)- lineLength1, y+(height-ilength)/4, x + (width/2)- lineLength1, y+(height-ilength)/4 + ilength/2);
+   	    g.drawLine(x + ex, y+(height-ilength)/4, x + ex, y+(height-ilength)/4 + ilength/2);
 	
-	    g.drawLine(x + (width/2) + lineLength1, y+(height-ilength)/4+ilength/2, x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength);
+	    g.drawLine(x + width-ex, y+(height-ilength)/4+ilength/2, x + width -ex, y+(height-ilength)/4 + ilength);
 	    //E
 
-	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + height/2 - ex/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + height/2 -ex/2);
-            g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + ilength + height/2 -ex/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength + height/2 -ex/2);
-            g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + ilength/2 + height/2 - ex/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength/2 + height/2 -ex/2);
-            g.drawLine(x + (width/2)- lineLength1, y+(height-ilength)/4 + height/2 - ex/2, x + (width/2)- lineLength1, y+(height-ilength)/4 + ilength +  height/2 -ex/2);
+	    g.drawLine(x + ex, y+(height-ilength)/4 + height/2 - ex/2,  x + width -ex, y+(height-ilength)/4 + height/2 -ex/2);
+            g.drawLine(x + ex, y+(height-ilength)/4 + ilength + height/2 -ex/2,  x + width -ex, y+(height-ilength)/4 + ilength + height/2 -ex/2);
+            g.drawLine(x + ex, y+(height-ilength)/4 + ilength/2 + height/2 - ex/2,  x + width-ex, y+(height-ilength)/4 + ilength/2 + height/2 -ex/2);
+            g.drawLine(x + ex, y+(height-ilength)/4 + height/2 - ex/2, x + ex, y+(height-ilength)/4 + ilength +  height/2 -ex/2);
 
 
 
@@ -144,19 +144,19 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
 	else if (type.equals("Asymmetric Encryption")) {
 
 	    //A
-	    g.drawLine(x + (width/2), y+(height-ilength)/4,  x + ex/2, y+(height-ilength)/4+ilength);
+	    g.drawLine(x + (width/2), y+(height-ilength)/4,  x + ex, y+(height-ilength)/4+ilength);
 
 
-            g.drawLine(x + (width/2), y+(height-ilength)/4,  x + (width) - ex/2, y+(height-ilength)/4 + ilength);
+            g.drawLine(x + (width/2), y+(height-ilength)/4,  x + (width) - ex, y+(height-ilength)/4 + ilength);
 
 
             g.drawLine(x + 3*ex/2, y+(height-ilength)/4 + ilength/2 + ex/2,  x + width - 3*ex/2, y+(height-ilength)/4 + ilength/2+ex/2);
 	    //E
 
-	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + height/2 - ex/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + height/2 -ex/2);
-            g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + ilength + height/2 -ex/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength + height/2 -ex/2);
-            g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/4 + ilength/2 + height/2 - ex/2,  x + (width/2) + lineLength1, y+(height-ilength)/4 + ilength/2 + height/2 -ex/2);
-            g.drawLine(x + (width/2)- lineLength1, y+(height-ilength)/4 + height/2 - ex/2, x + (width/2)- lineLength1, y+(height-ilength)/4 + ilength +  height/2 -ex/2);
+	    g.drawLine(x + ex, y+(height-ilength)/4 + height/2 - ex/2,  x +width-ex, y+(height-ilength)/4 + height/2 -ex/2);
+            g.drawLine(x + ex, y+(height-ilength)/4 + ilength + height/2 -ex/2,  x + width -ex, y+(height-ilength)/4 + ilength + height/2 -ex/2);
+            g.drawLine(x + ex, y+(height-ilength)/4 + ilength/2 + height/2 - ex/2,  x + width -ex, y+(height-ilength)/4 + ilength/2 + height/2 -ex/2);
+            g.drawLine(x + ex, y+(height-ilength)/4 + height/2 - ex/2, x + ex, y+(height-ilength)/4 + ilength +  height/2 -ex/2);
 
 
 
@@ -175,12 +175,12 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
 	else if (type.equals("MAC")){
 
 	    //M
-	    g.drawLine(x + ex/2, y+(height-ilength)/2,  x + ex/2, y+(height-ilength)/2+ilength);
+	    g.drawLine(x + ex/2+1, y+(height-ilength)/2,  x + ex/2+1, y+(height-ilength)/2+ilength);
 
-   	    g.drawLine(x + width -ex/2, y+(height-ilength)/2,  x + width - ex/2, y+(height-ilength)/2+ilength);
+   	    g.drawLine(x + width -ex/2-1, y+(height-ilength)/2,  x + width - ex/2-1, y+(height-ilength)/2+ilength);
 
-	    g.drawLine(x + ex/2, y+(height-ilength)/2, x+width/2, y+(height-ilength)/2+ilength);
-	    g.drawLine(x + width - ex/2, y+(height-ilength)/2, x + width/2, y+(height-ilength)/2+ilength);
+	    g.drawLine(x + ex/2+1, y+(height-ilength)/2, x+width/2, y+(height-ilength)/2+ilength);
+	    g.drawLine(x + width - ex/2-1, y+(height-ilength)/2, x + width/2, y+(height-ilength)/2+ilength);
 	}
 	else if (type.equals("Hash")){
 	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) - lineLength1, y+(height-ilength)/2+ilength);
@@ -193,10 +193,10 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
 	else if (type.equals("Advanced")){
 
 	    //A
-	    g.drawLine(x + (width/2), y+(height-ilength)/2,  x + ex/2, y+(height-ilength)/2+ilength);
+	    g.drawLine(x + (width/2), y+(height-ilength)/2,  x + ex, y+(height-ilength)/2+ilength);
 
 
-            g.drawLine(x + (width/2), y+(height-ilength)/2,  x + (width) - ex/2, y+(height-ilength)/2 + ilength);
+            g.drawLine(x + (width/2), y+(height-ilength)/2,  x + (width) - ex, y+(height-ilength)/2 + ilength);
 
 
             g.drawLine(x + 3*ex/2, y+(height-ilength)/2 + ilength/2 + ex/2,  x + width - 3*ex/2, y+(height-ilength)/2 + ilength/2+ex/2);

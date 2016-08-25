@@ -217,10 +217,14 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 		}
 	    }
 	    if (evt.getSource() == inserts[5]) {
-		texts[5].setText(helps[5].getSelectedItem().toString());
+		if (helps[5].getSelectedItem()!=null){
+		    texts[5].setText(helps[5].getSelectedItem().toString());
+		}
 	    }
 	    if (evt.getSource() == inserts[8]) {
-		texts[8].setText(helps[8].getSelectedItem().toString());
+		if (helps[8].getSelectedItem()!=null){
+		    texts[8].setText(helps[8].getSelectedItem().toString());
+		}
 	    }
 	}
     }
