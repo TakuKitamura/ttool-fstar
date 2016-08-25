@@ -1920,6 +1920,8 @@ public class TMLModeling {
 	forkActivity.setFirst(start);
 	TMLStopState stop = new TMLStopState("stopOfFork", null);
 	forkActivity.addElement(stop);
+	TMLStopState stop2 = new TMLStopState("stop2OfFork", null);
+	forkActivity.addElement(stop2);
         TMLForLoop junction = new TMLForLoop("junctionOfFork", null);
 	junction.setInit("i=0");
 	junction.setCondition("i<1");
@@ -1942,6 +1944,7 @@ public class TMLModeling {
 
         start.addNext(junction);
         junction.addNext(read);
+	junction.addNext(stop2);
         read.addNext(writes[0]);
         for(i=0; i<nb-1; i++) {
             writes[i].addNext(writes[i+1]);
@@ -2006,6 +2009,8 @@ public class TMLModeling {
 	joinActivity.setFirst(start);
 	TMLStopState stop = new TMLStopState("stopOfJoin", null);
 	joinActivity.addElement(stop);
+	TMLStopState stop2 = new TMLStopState("stop2OfFork", null);
+	joinActivity.addElement(stop2);
 	TMLForLoop junction = new TMLForLoop("junctionOfJoin", null);
 	junction.setInit("i=0");
 	junction.setCondition("i<1");
@@ -2029,6 +2034,7 @@ public class TMLModeling {
 	// Nexts
         start.addNext(junction);
         junction.addNext(reads[0]);
+	junction.addNext(stop2);
         write.addNext(stop);
         for(i=0; i<nb-1; i++) {
             reads[i].addNext(reads[i+1]);
