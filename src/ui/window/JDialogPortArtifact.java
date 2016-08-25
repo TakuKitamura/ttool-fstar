@@ -1,6 +1,6 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea ENRICI
  *
- * ludovic.apvrille AT enst.fr
+ * ludovic.apvrille AT enst.fr, andrea.enrici AT nokia.com
  *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -37,10 +37,10 @@
  *
  * /**
  * Class JDialogTMLTaskArtifact
- * Dialog for managing artifacts on hw nodes
+ * Dialog for managing artifact to map ports onto CPs
  * Creation: 19/09/2007
  * @version 1.0 19/09/2007
- * @author Ludovic APVRILLE
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 

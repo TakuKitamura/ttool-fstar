@@ -341,7 +341,9 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     }
 
     public ArrayList<String> getAllTMLInputPorts( String _topname ) {   //the destination ports
-        ArrayList<String> al = new ArrayList<String>();
+        
+        //Use HashSet to avoid returning multiple identical ports due to the presence of join nodes
+        HashSet<String> al = new HashSet<String>();
 
         TGComponent tgc;
         TMLCPrimitiveComponent tmlc;
@@ -351,7 +353,6 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         LinkedList ports, portstome;
         String name, name1, name2;
         TMLCPrimitivePort port1, port2;
-
         int j;
 
         while( iterator.hasNext() ) {
@@ -385,7 +386,8 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
                 }
             }
         }
-        return al;
+        return new ArrayList<String>(al);
+        //return ArrayList<String>( Arrays.asListal );
     }
 
     public ArrayList<String> getAllTMLEventNames( String _topname ) {
