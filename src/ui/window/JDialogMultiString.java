@@ -135,7 +135,7 @@ public class JDialogMultiString extends javax.swing.JDialog implements ActionLis
 
         panel1.setBorder(new javax.swing.border.TitledBorder("Properties"));
 
-        panel1.setPreferredSize(new Dimension(400, 200));
+        panel1.setPreferredSize(new Dimension(600, 300));
 
         // first line panel1
         c1.weighty = 1.0;

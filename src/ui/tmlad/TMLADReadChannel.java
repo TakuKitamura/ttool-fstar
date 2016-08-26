@@ -232,7 +232,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
        // JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
 
 	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 3, labels, values, help);
-        jdms.setSize(450, 300);
+        jdms.setSize(600, 300);
         GraphicLib.centerOnParent(jdms);
         jdms.show(); // blocked until dialog has been closed
 

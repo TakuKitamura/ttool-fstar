@@ -61,6 +61,7 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
     private int lineLength = 5;
     private int textX, textY;
     private int ilength = 10;
+    private int ex=5;
     private int lineLength1 = 2;
     public String securityContext="";	
     protected int stateOfError = 0; // Not yet checked
@@ -68,7 +69,7 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
     public TMLADDecrypt(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 10;
+        width = 15;
         height = 30;
         textX = width + 5;
         textY = height/2 + 5;
@@ -101,10 +102,18 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
 			g.fillRect(x, y, width, height);
 			g.setColor(c);
 		}
-        g.drawRect(x, y, width, height);
+	g.drawLine(x, y, x+width, y);
+        g.drawLine(x, y, x, y+height);
+	g.drawLine(x+width, y, x+width, y+height);
+        g.drawLine(x, y+height, x+width/2, y+height+ex);
+        g.drawLine(x+width/2, y+height+ex, x+width, y+height);
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
+        g.drawLine(x+(width/2), y+height+ex, x+(width/2), y + lineLength + height+ex);
+
+
         g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2);
+
+
         g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength,  x + (width/2) + lineLength1, y+(height-ilength)/2 + ilength);
         g.drawLine(x + (width/2)- lineLength1, y+(height-ilength)/2, x + (width/2)- lineLength1, y+(height+ilength)/2);
         g.drawLine(x + (width/2)+ lineLength1, y+(height-ilength)/2, x + (width/2)+ lineLength1, y+(height+ilength)/2);
@@ -120,8 +129,8 @@ public boolean editOndoubleClick(JFrame frame) {
 	ArrayList<String []> help = new ArrayList<String []>();
 	help.add(tdp.getMGUI().getCurrentCryptoConfig());
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
-	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 1, labels, values,help);
-        jdms.setSize(450, 300);
+	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting Decryption", 1, labels, values,help);
+        jdms.setSize(600, 300);
         GraphicLib.centerOnParent(jdms);
         jdms.show(); // blocked until dialog has been closed
 

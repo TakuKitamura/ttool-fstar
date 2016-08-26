@@ -1522,7 +1522,7 @@ public class GTMLModeling  {
                 listE.addCor(tmlexecc, tgc);
 
             } else if (tgc instanceof TMLADDecrypt) {
-                tmlexecc = new TMLExecC("decrypt", tgc);
+                tmlexecc = new TMLExecC("decrypt_"+((TMLADDecrypt)tgc).securityContext, tgc);
                 activity.addElement(tmlexecc);
 		SecurityPattern sp = securityPatterns.get(((TMLADDecrypt)tgc).securityContext);
 		if (sp ==null && !((TMLADDecrypt)tgc).securityContext.isEmpty()){

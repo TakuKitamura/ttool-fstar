@@ -79,7 +79,9 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     protected final static int STOPPED = 3;
     int mode;
   
-
+    JRadioButton dseButton;
+    JRadioButton simButton;
+    ButtonGroup group;
     //components
     
     protected JButton start;
@@ -133,7 +135,6 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         initComponents();
         myInitComponents();
         pack();
-
         //getGlassPane().addMouseListener( new MouseAdapter() {});
         getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
@@ -257,7 +258,16 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 
 	jp03.add(new JLabel("Data Overhead (bits)"),c03);
 	secOverhead2 = new JTextField(secOv);
+
 	jp03.add(secOverhead2,c03);
+
+	group = new ButtonGroup();
+	dseButton = new JRadioButton("Run Design Space Exploration");
+	jp03.add(dseButton,c03);
+	simButton = new JRadioButton("Run Lots of Simulations");
+	jp03.add(simButton,c03);
+	group.add(dseButton);
+	group.add(simButton);
 
 	jp1.add("Mapping Exploration", jp03);
 
@@ -272,6 +282,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         c04.gridwidth = GridBagConstraints.REMAINDER; //end row
         c04.fill = GridBagConstraints.BOTH;
         c04.gridheight = 1;
+
 
 
         jp04.setBorder(new javax.swing.border.TitledBorder("DSE Output"));
@@ -477,20 +488,24 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	   // config.setOutputVCD("true");
 	   // config.setOutputXML("true");
 	    config.setRecordResults("true");
-	    if (config.runParallelSimulation(Nbsim, true, true) != 0) {
-		output+="Simulation Failed";
-		outputText.setText(output);
-		checkMode();
-		return;
+	    if (simButton.isSelected()){
+		if (config.runParallelSimulation(Nbsim, true, true) != 0) {
+		    output+="Simulation Failed";
+		    outputText.setText(output);
+		    checkMode();
+		    return;
+	    	}
+	    	else {
+		    output+="Simulation Succeeded";
+		    outputText.setText(output);
+		}
 	    }
-	    else {
-		output+="Simulation Succeeded";
-		outputText.setText(output);
+	    else if (dseButton.isSelected()){
+	    	if (config.runDSE("", false, false)!=0){
+		    TraceManager.addDev("Can't run DSE");
+	   	}
+	        System.out.println("DSE run");
 	    }
-	    if (config.runDSE("", false, false)!=0){
-		TraceManager.addDev("Can't run DSE");
-	    }
-	    System.out.println("DSE run");
 	    if (config.printAllResults("", true, true)!=0){
 		TraceManager.addDev("Can't print all results");
 	    }
