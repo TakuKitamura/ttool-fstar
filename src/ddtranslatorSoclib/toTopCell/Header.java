@@ -17,7 +17,7 @@ int nb_clusters=5;
     Header(){
     }
     public static  String getHeader() {
-
+	int with_vgsb=TopCellGenerator.avatardd.getAllBus().size();
 		header = "//-------------------------------Header------------------------------------" + CR2
 		    + "#include <iostream>" + CR 
 		    + "#include <cstdlib>"  + CR 
@@ -39,16 +39,21 @@ int nb_clusters=5;
 	    + "#include \"mapping_table.h\"" + CR
 				+ "#include \"vci_fdt_rom.h\"" + CR + "#include \"vci_xcache_wrapper.h\"" + CR
 				+ "#include \"vci_ram.h\"" + CR + "#include \"vci_heterogeneous_rom.h\"" + CR
-				+ "#include \"vci_multi_tty.h\"" + CR + "#include \"vci_locks.h\"" + CR + "#include \"vci_xicu.h\""
-				+ CR + "#include \"vci_vgmn.h\""+ CR + "#include \"vci_vgsb.h\"" + CR 
-	    //+ "#include \"vci_local_crossbar.h\"" + CR 
-+ "#include \"vci_block_device.h\"" + CR
-				+ "#include \"vci_simhelper.h\"" + CR + "#include \"vci_fd_access.h\"" + CR
-+ "#include \"vci_ethernet.h\"" + CR
-				+ "#include \"vci_rttimer.h\"" + CR
-	+ "#include \"vci_logger.h\"" + CR	
-+ "#include \"vci_logger.h\"" + CR
-	+ "#include \"vci_local_crossbar.h\"" + CR2;
+	    + "#include \"vci_multi_tty.h\"" + CR + "#include \"vci_locks.h\"" + CR + "#include \"vci_xicu.h\""+ CR;
+
+	    if (with_vgsb>0){
+		header +="#include \"vci_vgsb.h\""+ CR;
+	    }
+	    else{
+		header +="#include \"vci_vgmn.h\""+ CR;
+	    }
+	    
+	    header+= "#include \"vci_block_device.h\"" + CR
+		+ "#include \"vci_simhelper.h\"" + CR + "#include \"vci_fd_access.h\"" + CR
+		+ "#include \"vci_ethernet.h\"" + CR
+				+ "#include \"vci_rttimer.h\"" + CR		
+		+ "#include \"vci_logger.h\"" + CR
+		+ "#include \"vci_local_crossbar.h\"" + CR2;
 	
 	header = header +"namespace {" + CR
 +"std::vector<std::string> stringArray(" + CR

@@ -26,6 +26,7 @@ public class TopCellGenerator
 	public String top;
         public String deployinfo;
         public String deployinfo_map; 
+        public String platform_desc;
         public String procinfo; 
         public String nbproc;
 	public final String DOTH = ".h";
@@ -119,7 +120,8 @@ public class TopCellGenerator
 			fw.close();
 		} catch (IOException ex) {
 		}
-		saveFileDeploy(path);
+		saveFileDeploy(path);	
+		saveFilePlatform(path);
 		saveFileProcinfo(path);
 		saveFileNBproc(path);
 	}
@@ -162,6 +164,18 @@ public class TopCellGenerator
 			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/nbproc");
 			nbproc = Deployinfo.getNbProc();
 			fw.write(nbproc);
+			fw.close();
+		} catch (IOException ex) {
+		}
+	}
+
+ public void saveFilePlatform(String path) {
+
+		try {
+          System.err.println(path + GENERATED_PATH + "platform_desc");
+			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/platform_desc");
+			platform_desc = Platforminfo.getPlatformInfo();
+			fw.write(platform_desc);
 			fw.close();
 		} catch (IOException ex) {
 		}
