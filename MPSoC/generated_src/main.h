@@ -3,13 +3,6 @@
 extern pthread_mutex_t __mainMutex;
 
 /* Synchronous channels */
-extern syncchannel __Controller_ringBell__Bell_ring;
-extern syncchannel __Door_okDoor__Controller_okDoor;
-extern syncchannel __Door_open__Controller_open;
-extern syncchannel __Door_closed__Controller_closed;
-extern syncchannel __Controller_startMagnetron__Magnetron_startM;
-extern syncchannel __Controller_stopMagnetron__Magnetron_stopM;
-extern syncchannel __ControlPanel_LEDOn__Controller_startCooking;
-extern syncchannel __ControlPanel_LEDoff__Controller_stopCooking;
-extern syncchannel __ControlPanel_startButton__Controller_start;
+/* Asynchronous channels */
+extern asyncchannel __Block0_val__Block1_val;
 #endif

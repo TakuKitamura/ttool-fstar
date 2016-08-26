@@ -27,6 +27,7 @@ compilesoclib:
 	cp ~/TURTLE/MPSoC/generated_topcell/top.cc  ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/
 	cp ~/TURTLE/MPSoC/generated_topcell/deployinfo.h  ~/Prog/mutekh/arch/soclib/
 	cp ~/TURTLE/MPSoC/generated_topcell/deployinfo_map.h  ~/Prog/mutekh/arch/soclib/
+	cp ~/TURTLE/MPSoC/generated_topcell/platform_desc  ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/platform_desc
 	cat ~/TURTLE/MPSoC/generated_topcell/config_noproc ~/TURTLE/MPSoC/generated_topcell/nbproc > ~/TURTLE/MPSoC/generated_topcell/config 
 	cp ~/TURTLE/MPSoC/generated_topcell/config  ~/Prog/mutekh/examples/avatar/
 	cd ~/Prog/mutekh; make CONF=examples/avatar/config BUILD=soclib-$(MUTEKH_CPU):pf-tutorial
