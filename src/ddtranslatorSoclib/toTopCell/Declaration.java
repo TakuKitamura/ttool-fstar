@@ -288,9 +288,8 @@ else {
 	   }*/
     
     for  (AvatarBus bus : TopCellGenerator.avatardd.getAllBus()) {
-	// clustered around one bus
-	//for the moment we fix no of initiators and no of targets
-	  declaration += "soclib::caba::VciVgsb<vci_param>  vgsb(\"" + bus.getBusName() + "\"" + " , maptab, "+ 1 +"," + 6+ ");" + CR2;
+	
+	declaration += "soclib::caba::VciVgsb<vci_param>  vgsb(\"" + bus.getBusName() + "\"" + " , maptab, "+ +nb_clusters+"," + nb_clusters + ");" + CR2;
 	  
           //if BUS was not last in input file, update here	 
 	  int i=0;
@@ -318,10 +317,7 @@ else {
 		      i++;	      
 		  }	
 	     }
-	  }	 
-
-          bus.setNbOfAttachedInitiators(1); 
-          bus.setnbOfAttachedTargets(6);	  
+	  }	           
     }	
 
          // currently clustered around one vgmn
@@ -329,7 +325,7 @@ else {
           System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
           System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
       	 
-	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn (\"" + vgmn.getVgmnName() + "\"" + " , maptab, "+ 1 +"," + 6 +
+	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn (\"" + vgmn.getVgmnName() + "\"" + " , maptab, "+ nb_clusters +"," + nb_clusters +
 	      "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 
 	  int i=0;	
@@ -359,11 +355,7 @@ else {
 		      i++;	      
 		  }	
 	     }
-	  }	 
-
-	  // if VGMN was not last in input file, update here 
-          vgmn.setNbOfAttachedInitiators(1); 
-          vgmn.setnbOfAttachedTargets(6);	
+	  }	 		
 	 }
 	
 	int i=0;

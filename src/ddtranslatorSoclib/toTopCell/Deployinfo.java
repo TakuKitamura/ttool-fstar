@@ -58,7 +58,11 @@ public class Deployinfo {
 	    deployinfo += "#define CACHED_RAM" + ram.getNo_ram()  + "_NAME cram" + ram.getNo_ram() + CR;
 	    //}
 	    deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_ADDR 0x" + (string_adress_start) + CR; // attention this must be hexadecimal	   
-	    int size = 65536;//ram.getDataSize(); DG 2.5.
+	    //DG 30.08.
+	    //int size = 65536;//ram.getDataSize();
+
+	    int size = ram.getDataSize();
+
 	    String string_size = (Integer.toHexString(size/2));//half is uram, half is cram
 	    deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_SIZE 0x"+ string_size + CR; 
 
