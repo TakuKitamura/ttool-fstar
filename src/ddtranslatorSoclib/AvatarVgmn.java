@@ -42,6 +42,14 @@ public class AvatarVgmn extends AvatarComponent{
 	return minLatency;
     }
 
+    public void setFifoDepth(int nb){
+	fifoDepth=nb;
+    }
+
+    public void setMinLatency(int nb){
+	minLatency=nb;
+    }
+
     public void setNbOfAttachedInitiators(int nb){
       nbOfAttachedInitiators = nb;
     }

@@ -105,8 +105,10 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       LinkedList<AvatarRAM> rams = new LinkedList<AvatarRAM>();
       for (AvatarComponent ram : components )
         {
-	    if (ram instanceof AvatarRAM){ 
-		rams.add((AvatarRAM)ram);
+	    if (ram instanceof AvatarRAM){  
+	
+		rams.add((AvatarRAM)ram);	
+		
 	    }
         }    
       return rams;
@@ -126,9 +128,10 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       LinkedList<AvatarVgmn> vgmns = new LinkedList<AvatarVgmn>();
       for (AvatarComponent vgmn : components )
         {
-          if (vgmn instanceof AvatarVgmn)
+	    if (vgmn instanceof AvatarVgmn){		
             vgmns.add((AvatarVgmn)vgmn);
-
+	   
+	    }
         }
       return vgmns;
     }

@@ -142,7 +142,7 @@ public class NetList {
 	    }
 	
 	    //MWMR RAM added transparently
-	    netlist = netlist +"mwmr_ram.p_clk(" + NAME_CLK + ");" + CR;
+	    /*    netlist = netlist +"mwmr_ram.p_clk(" + NAME_CLK + ");" + CR;
 	    netlist = netlist +"mwmr_ram.p_resetn(" + NAME_RST + ");" + CR;
 	    netlist = netlist +"mwmr_ram.p_vci(signal_vci_mwmr_ram);" + CR2;
 	    netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+4)+"](signal_vci_mwmr_ram);" + CR2;
@@ -151,7 +151,7 @@ public class NetList {
 	    netlist = netlist +"mwmrd_ram.p_clk(" + NAME_CLK + ");" + CR;
 	    netlist = netlist +"mwmrd_ram.p_resetn(" + NAME_RST + ");" + CR;
 	    netlist = netlist +"mwmrd_ram.p_vci(signal_vci_mwmrd_ram);" + CR2;
-	    netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+5)+"](signal_vci_mwmrd_ram);" + CR2;
+	    netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+5)+"](signal_vci_mwmrd_ram);" + CR2;*/
 	}
 
 	/* clustered version */
@@ -193,10 +193,12 @@ public class NetList {
 		netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target())+"](signal_vci_vcifdaccesst);" + CR; 
 		netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+1)+"](signal_vci_ethernett);" + CR;	
 		netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+2)+"](signal_vci_bdt);" + CR;	
+	netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+3)+"](signal_vci_vcilocks);" + CR;	
 	    }else{ /* vgsb */
 		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target())+"](signal_vci_vcifdaccesst);" + CR; 
 		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+1)+"](signal_vci_ethernett);" + CR;	
-		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+2)+"](signal_vci_bdt);" + CR;			   	
+		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+2)+"](signal_vci_bdt);" + CR;	
+		   		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+3)+"](signal_vci_vcilocks);" + CR;	
 		   }
 	}else{
 	    /* cluster case */
@@ -246,7 +248,7 @@ public class NetList {
 		}	 
 	    }
 	    i++;
-	    //One ICU per cluster would be more efficient
+	    //One ICU per cluster per default
 	    no_irq_tty+=6;//if there is more than one tty, irq >5
 	}
 
@@ -294,7 +296,13 @@ public class NetList {
   	netlist = netlist + "vcifdtrom.begin_device_node(\"vci_fd_access\", \"soclib:vci_fd_access\");" + CR;
   	netlist = netlist + "vcifdtrom.add_property(\"interrupts\", 2);" + CR;
   	netlist = netlist + "vcifdtrom.end_node();" + CR2;
-    
+
+	//////////////// locks
+ 
+  	netlist = netlist + "vcilocks.p_clk(signal_clk);" + CR;
+  	netlist = netlist + "vcilocks.p_resetn(signal_resetn);" + CR;     
+  	netlist = netlist + "vcilocks.p_vci(signal_vci_vcilocks);" + CR;	
+  
 	//int j;
 	/* netlist for connecting the monitoring infrastructure */	
 	/* Which VCI interfaces are marked for full log, with a spy sign? */
@@ -354,8 +362,8 @@ public class NetList {
 	netlist += "sc_trace(tf, signal_vci_vcirom ,\"signal_vci_vcirom\");" + CR;
 	netlist += "sc_trace(tf, signal_vci_vcisimhelper,\"signal_vci_vcisimhelper\");" + CR;
 	netlist += "sc_trace(tf, signal_vci_vcirttimer ,\"signal_vci_vcirttimer\");" + CR;	    
-	netlist += "sc_trace(tf, signal_vci_mwmr_ram ,\"signal_vci_mwmr_ram\");" + CR;
-	netlist += "sc_trace(tf, signal_vci_mwmrd_ram ,\"signal_vci_mwmrd_ram\");" + CR;
+	//netlist += "sc_trace(tf, signal_vci_mwmr_ram ,\"signal_vci_mwmr_ram\");" + CR;
+	//netlist += "sc_trace(tf, signal_vci_mwmrd_ram ,\"signal_vci_mwmrd_ram\");" + CR;
 	netlist += "sc_trace(tf, signal_vci_vcifdaccessi,\"signal_vci_vcifdaccessi\");" + CR;
 	netlist += "sc_trace(tf,signal_vci_vcifdaccesst ,\"signal_vci_vcifdaccesst\");" + CR;
 	netlist += "sc_trace(tf,signal_vci_bdi ,\"signal_vci_bdi\");" + CR;

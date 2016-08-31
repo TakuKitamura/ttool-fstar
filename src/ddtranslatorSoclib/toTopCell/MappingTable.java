@@ -17,7 +17,7 @@ public class MappingTable {
     public static String getMappingTable() {
     int l=0;
     int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
-    
+    System.out.println("Number of clusters : "+ nb_clusters);
     if(nb_clusters == 0){
 	mapping = CR2 + "//-----------------------mapping table------------------------" + CR2;
 	mapping = mapping + "// ppc segments" + CR2;
@@ -57,30 +57,55 @@ public class MappingTable {
 	mapping = mapping + "maptab.add(Segment(\"vci_rttimer\", 0xd6000000, 0x00000100, IntTab(5), false));" + CR2;
 	mapping = mapping + "maptab.add(Segment(\"vci_fdt_rom\", 0xe0000000, 0x00001000, IntTab(6), false));" + CR2;
 
-    /* here we have a loop over the CHANNEL segments specified in the deployment diagram and we calculate their addresses in a loop; more refined methods may be proposed later */
-
-	int j=0; 
-
+    
+	int address_start = 268435456;
+	int j=0; int i=0;
+	int size;
 	//if(TopCellGenerator.avatardd.getAllCrossbar().size()==0){	     
-	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {						      
+	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
+	
+			 if(ram.getDataSize()==0){
+	
+		if((nb_clusters<16)||(TopCellGenerator.avatardd.getAllRAM().size()<16)){
+		    size = 1073741824;
+		}
+		else {//smaller segments
+		    size = 268435456; 
+		} // to be refined, a la DSX
+	    }
+	    else{
+		size = ram.getDataSize();
+	    }
+	    ram.setDataSize(size);
+	    //ram.setDataSize(0);
+	    size = ram.getDataSize(); // this is the hardware RAM size 
+
+	    int cacheability_bit= 2097152; //0x00200000			      
 		/* Boot Ram segments 0,1,2 */
 		if(ram.getNo_ram() ==0){
 		    ram.setNo_target(2);//in the following assign target number 2	
 		    //mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0000000, 0x00100000, IntTab("+(ram.getNo_target())+"), true));" + CR;
 		    //mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0200000, 0x00100000, IntTab("+(ram.getNo_target())+"), false));" + CR;	
-    mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0000000, "+ram.getDataSize()+", IntTab("+(ram.getNo_target())+"), true));" + CR;
-		    mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0200000, "+ram.getDataSize()+", IntTab("+(ram.getNo_target())+"), false));" + CR;	
+
+		    /*   mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0000000, "+ram.getDataSize()+", IntTab("+(ram.getNo_target())+"), true));" + CR;
+			 mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0200000, "+ram.getDataSize()+", IntTab("+(ram.getNo_target())+"), false));" + CR;*/
+		   
+ mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x" +Integer.toHexString(address_start+i*size)+ ", 0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+(ram.getNo_target())+"), true));" + CR;
+ mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\", 0x" + Integer.toHexString(address_start+i*size+cacheability_bit+ram.getDataSize()/2)+ ", 0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+(ram.getNo_target())+"), false));" + CR;
+	
+	
 		}
 		else{
 		    ram.setNo_target(7+j);
 		    //mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0000000, 0x00100000, IntTab("+(ram.getNo_target())+"), true));" + CR;
 		    //mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0200000, 0x00100000, IntTab("+(ram.getNo_target())+"), false));" + CR;
- mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0000000, "+ram.getDataSize()+", IntTab("+(ram.getNo_target())+"), true));" + CR;
-		    mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\", 0x" +(ram.getNo_ram()+1)+ "0200000, "+ram.getDataSize()+", IntTab("+(ram.getNo_target())+"), false));" + CR;
+		    mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x" + Integer.toHexString(address_start+i*size)+ ",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+(ram.getNo_target())+"), true));" + CR;
+ mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\", 0x" + Integer.toHexString(address_start+i*size+size/2+cacheability_bit) + " ,  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+(ram.getNo_target())+"), false));" + CR;
 
 		    j++;	 
 		}
-      }
+		i++;
+	    }
       int m=0;
       for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) {
 	  /* we calculate the target number of one or several (multi-) ttys which come after the j rams and the 7 compulsory targets */	
@@ -184,7 +209,7 @@ public class MappingTable {
 
       int CLUSTER_SIZE  =  0x40000000;*/
 
-      int SEG_RAM_BASE   =          268435456;
+      
 
       int SEG_ICU_BASE   =          287309824;
       int SEG_ICU_SIZE   =          20;
@@ -200,11 +225,22 @@ public class MappingTable {
       int SEG_TTY_BASE   =        337641472;
       int SEG_TTY_SIZE   =        16;
 
-      int CLUSTER_SIZE  =         1073741824;
+       //int CLUSTER_SIZE  =         1073741824;
+       //int CLUSTER_SIZE  = calculated 
 
-    //uint32_t ram_base = SEG_RAM_BASE + c * CLUSTER_SIZE;
- 
-  int    cluster = 0;
+      int CLUSTER_SIZE;
+
+      if(nb_clusters<16) {
+	  CLUSTER_SIZE = 268435456;}
+      else {
+	  CLUSTER_SIZE = 134217728; 
+      }// to be refined, cf DSX -> dynamically adapt
+
+      /* RAM adresses always start at 0x10000000 dec 268435456*/
+
+      int SEG_RAM_BASE   =        268435456;    
+      int    cluster = 0;
+
   // mapping += "maptab.add(Segment(\"cram0\", "+ (SEG_RAM_BASE + cluster * CLUSTER_SIZE)+", 0x"+SEG_RAM0_SIZE+", IntTab(0,10), true));" + CR;
   // mapping += "maptab.add(Segment(\"uram0\", "+ (SEG_RAM_BASE+0x00200000)+", 0x"+SEG_RAM0_SIZE+", IntTab(0,11), false));" + CR;
 	 
@@ -223,14 +259,17 @@ public class MappingTable {
       mapping += "maptab.add(Segment(\"dma" + cluster + "\", 0x"+ Integer.toHexString(SEG_DMA_BASE + cluster * CLUSTER_SIZE)+", 0x"+Integer.toHexString(SEG_DMA_SIZE)+", IntTab("+cluster +","+2+"), false));" + CR;
 	 
  mapping += "maptab.add(Segment(\"timer" + cluster + "\", 0x"+ Integer.toHexString(SEG_TIM_BASE + cluster * CLUSTER_SIZE)+", 0x"+Integer.toHexString(SEG_TIM_SIZE)+", IntTab("+cluster +","+3+"), true));" + CR;
-//later we will add DMA etc.	   	   
+ 	   
   }
  
-  //currently one ram and one TTY per cluster
-    
+  int cacheability_bit= 2097152; //0x00200000
+  //RAM base address is SEG_RAM_BASE + CLUSTER_NUMBER * CLUSTER_SIZE;
+
+  // this is the memory space covered by the RAMs of a cluster
+ 
   for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {						      	
-      mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x"+Integer.toHexString(SEG_RAM_BASE+ ram.getNo_cluster()*CLUSTER_SIZE)+", "+Integer.toHexString(ram.getDataSize())+", IntTab("+ram.getNo_cluster()+","+(ram.getNo_target())+"), true));" + CR;	  
-      mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\",  0x"+Integer.toHexString(SEG_RAM_BASE + ram.getNo_cluster()*CLUSTER_SIZE+0x00200000)+",  0x"+Integer.toHexString(ram.getDataSize())+", IntTab("+ram.getNo_cluster()+","+(ram.getNo_target())+"), true));" + CR;	  
+      mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x"+Integer.toHexString(SEG_RAM_BASE+ ram.getNo_cluster()*CLUSTER_SIZE)+", "+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getNo_cluster()+","+(ram.getNo_target())+"), true));" + CR;	  
+      mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\",  0x"+Integer.toHexString(SEG_RAM_BASE + ram.getNo_cluster()*CLUSTER_SIZE+cacheability_bit)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getNo_cluster()+","+(ram.getNo_target())+"), true));" + CR;	  
       }                     
      
   int nb_ram=1; //currently 1 ram per cluster

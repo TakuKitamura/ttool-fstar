@@ -18,7 +18,8 @@ int nb_clusters=5;
     }
     public static  String getHeader() {
 	int with_vgsb=TopCellGenerator.avatardd.getAllBus().size();
-		header = "//-------------------------------Header------------------------------------" + CR2
+
+	header = "//-------------------------------Header------------------------------------" + CR2
 		    + "#include <iostream>" + CR 
 		    + "#include <cstdlib>"  + CR 
 		    + "#include <vector>" + CR

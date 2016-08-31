@@ -112,10 +112,10 @@ public class Declaration {
 	}
 
 	if(nb_clusters==0){
-	    declaration +=  "caba::VciLocks<vci_param> vci_locks(\"vci_locks\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+3)+"), maptab);" + CR;
+	    declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+3)+"), maptab);" + CR;
 	}	
 	else{
-	    declaration +=  "caba::VciLocks<vci_param> vci_locks(\"vci_locks\", IntTab(0,3), maptab);" + CR;
+	    declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab(0,3), maptab);" + CR;
 	}
 	   			    	
 	if(nb_clusters==0){
@@ -127,8 +127,8 @@ public class Declaration {
 
 	 //target address depends on number of TTYs and RAMs
 	if(nb_clusters==0){
-		    declaration += "caba::VciRam<vci_param>mwmr_ram(\"mwmr_ram\",IntTab("+(TopCellGenerator.avatardd.getNb_target()+3+i)+"),maptab);" + CR2; 
-		    declaration += "caba::VciRam<vci_param>mwmrd_ram(\"mwmrd_ram\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+4+i)+"),maptab);" + CR2; 
+	    //		    declaration += "caba::VciRam<vci_param>mwmr_ram(\"mwmr_ram\",IntTab("+(TopCellGenerator.avatardd.getNb_target()+3+i)+"),maptab);" + CR2; 
+	    //	    declaration += "caba::VciRam<vci_param>mwmrd_ram(\"mwmrd_ram\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+4+i)+"),maptab);" + CR2; 
 }
 	
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) 
@@ -166,8 +166,7 @@ if(nb_clusters==0){
           System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
           System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
 	  
-	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+6)+
-	     ");" + CR2;
+	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+");" + CR2;
 	  int i=0;
 
 
@@ -217,8 +216,9 @@ if(nb_clusters==0){
 		  }	
 	     }
 	  }	 
-
+ 
           //if BUS was not last in input file, update here
+
           bus.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
           bus.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target());
 	  }	
@@ -226,8 +226,15 @@ if(nb_clusters==0){
          for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
           System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
           System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
-      
-	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+6)+
+	  /* The user might have forgotten to specify the following, thus set default values */
+
+	  if(vgmn.getMinLatency()<2)
+	  vgmn.setMinLatency(10); //default value; must be > 2
+	  if(vgmn.getFifoDepth()<2)
+          vgmn.setFifoDepth(8); //default value; must be > 2
+
+
+	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+
 	     "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 	  int i=0;
 	
