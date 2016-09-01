@@ -60,7 +60,7 @@ import myutil.*;
 public class TMLADDecrypt extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 5;
     private int textX, textY;
-    private int ilength = 10;
+    private int ilength = 20;
     private int ex=5;
     private int lineLength1 = 2;
     public String securityContext="";	
@@ -70,14 +70,14 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         width = 15;
-        height = 30;
+        height = 35;
         textX = width + 5;
         textY = height/2 + 5;
         
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength, false, true, 0.5, 1.0);
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength+ex, false, true, 0.5, 1.0);
         
         
         moveable = true;
@@ -100,6 +100,9 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
 				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
 			}
 			g.fillRect(x, y, width, height);
+	    		int[] xP = new int[]{x,x+width,x+width/2};
+	    		int[] yP = new int[]{y+height, y+height, y+height+ex};
+	    		g.fillPolygon(xP,yP,3);
 			g.setColor(c);
 		}
 	g.drawLine(x, y, x+width, y);
@@ -110,13 +113,18 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height+ex, x+(width/2), y + lineLength + height+ex);
 
+        g.drawLine(x + (width/2)- lineLength1, y+(height-ilength)/2, x + (width/2)- lineLength1, y+(height+ilength)/2);
+	g.drawArc(x-ex, y+ex,width,height-2*ex,270,180);
 
+/*
         g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2);
 
 
         g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength,  x + (width/2) + lineLength1, y+(height-ilength)/2 + ilength);
-        g.drawLine(x + (width/2)- lineLength1, y+(height-ilength)/2, x + (width/2)- lineLength1, y+(height+ilength)/2);
+
         g.drawLine(x + (width/2)+ lineLength1, y+(height-ilength)/2, x + (width/2)+ lineLength1, y+(height+ilength)/2);
+*/
+	g.drawImage(IconManager.imgic7000.getImage(), x - 22, y + height/2, null);
 	g.drawString("sec:"+ securityContext, x+3*width/2, y+ height/2);
     }
     

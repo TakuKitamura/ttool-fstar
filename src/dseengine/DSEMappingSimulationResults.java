@@ -767,7 +767,7 @@ public class DSEMappingSimulationResults  {
 		return 0.0;
 	}
 	
-	private void computeGradesDouble(int []cumulativeGrades, int ID, int tap) {
+	private void computeGradesDouble(int []cumulativeGrades, int ID, double tap) {
 		double mind, maxd;
 		int i;
 		double valued;
@@ -799,7 +799,7 @@ public class DSEMappingSimulationResults  {
 		}
 	}
 	
-	private void computeGradesLong(int []cumulativeGrades, int ID, int tap) {
+	private void computeGradesLong(int []cumulativeGrades, int ID, double tap) {
 		long min, max;
 		int i;
 		long value;
@@ -827,7 +827,7 @@ public class DSEMappingSimulationResults  {
 		}
 	}
 	
-	public void computeGrades(int []tapValues) {
+	public void computeGrades(double []tapValues) {
 	
 		// Give a grade to each mapping
 		int nb = getNbOfMappings();
@@ -875,7 +875,7 @@ public class DSEMappingSimulationResults  {
 	}
 	
 	
-	public String makeHTMLTableOfResults(int[] tapValues) {
+	public String makeHTMLTableOfResults(double[] tapValues) {
 	
 	
 		int nb = getNbOfMappings();
@@ -977,7 +977,7 @@ public class DSEMappingSimulationResults  {
 		return sb.toString();
 	}
 	
-	public void makeAllSetOfValuesLong(StringBuffer sb, String title, int tapID, int tapValue) {
+	public void makeAllSetOfValuesLong(StringBuffer sb, String title, int tapID, double tapValue) {
 		int index, i;
 		long vall;
 		
@@ -1005,7 +1005,7 @@ public class DSEMappingSimulationResults  {
 		appendEndOfRow(sb, tapValue);
 	}
 	
-	public void makeAllSetOfValuesDouble(StringBuffer sb, String title, int tapID, int tapValue) {
+	public void makeAllSetOfValuesDouble(StringBuffer sb, String title, int tapID, double tapValue) {
 		int index, i;
 		double vall;
 		
@@ -1033,7 +1033,7 @@ public class DSEMappingSimulationResults  {
 		appendEndOfRow(sb, tapValue);
 	}
 	
-	public void makeSetOfValuesLong(StringBuffer sb, String title, long[] values, int minIndex, int maxIndex, long minl, long maxl, int tapValue) {
+	public void makeSetOfValuesLong(StringBuffer sb, String title, long[] values, int minIndex, int maxIndex, long minl, long maxl, double tapValue) {
 		int index;
 		double vald;
 		
@@ -1044,7 +1044,7 @@ public class DSEMappingSimulationResults  {
 		appendEndOfRow(sb, tapValue);
 	}
 	
-	public void makeSetOfValuesDouble(StringBuffer sb, String title, double[] values, int minIndex, int maxIndex, double mind, double maxd, int tapValue) {
+	public void makeSetOfValuesDouble(StringBuffer sb, String title, double[] values, int minIndex, int maxIndex, double mind, double maxd, double tapValue) {
 		int index;
 		double vald;
 		
@@ -1061,7 +1061,7 @@ public class DSEMappingSimulationResults  {
 		appendEndOfRow(sb, tapValue);
 	}
 	
-	public void makeSetOfValues(StringBuffer sb, String title, String[] values, int minIndex, int maxIndex, int tapValue) {
+	public void makeSetOfValues(StringBuffer sb, String title, String[] values, int minIndex, int maxIndex, double tapValue) {
 		sb.append("<tr>\n<th> " + title + " </th>\n");
 		for(int i=0; i<values.length; i++) {
 			if (i == minIndex) {
@@ -1083,13 +1083,17 @@ public class DSEMappingSimulationResults  {
 		sb.append("</tr>");
 	}
 	
+
+	public void appendEndOfRow(StringBuffer sb, double value) {
+	    appendEndOfRow(sb, (int) value);
+	}
 	public void appendEndOfRow(StringBuffer sb, int value) {
 		sb.append("<th> </th>");
 		sb.append("<td>" +  value + "</td>\n");
 		sb.append("</tr>\n");
 	}
 	
-	public String getColorLongTapValue(long min, long max, long value, int tapValue) {
+	public String getColorLongTapValue(long min, long max, long value, double tapValue) {
 		if (tapValue < 0) {
 			return getColorLong(max, min, value);
 		}
@@ -1107,7 +1111,7 @@ public class DSEMappingSimulationResults  {
 		}
 	}          
 	
-	public String getColorDoubleTapValue(double mind, double maxd, double value, int tapValue) {
+	public String getColorDoubleTapValue(double mind, double maxd, double value, double tapValue) {
 		if (tapValue < 0) {
 			return getColorDouble(maxd, mind, value);
 		}

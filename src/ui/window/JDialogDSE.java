@@ -99,7 +99,8 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     protected JCheckBox secAnalysis;
     protected JTextField encTime2, decTime2, secOverhead2;
 
-
+    protected JSlider JSMinSimulationDuration, JSAverageSimulationDuration, JSMaxSimulationDuration, JSArchitectureComplexity, JSMinCPUUsage, JSAverageCPUUsage, JSMaxCPUUsage, JSMinBusUsage, JSAverageBusUsage, JSMaxBusUsage, JSMinBusContention, JSAverageBusContention, JSMaxBusContention;
+    DSEConfiguration config;
     String tmlDir;
     String mapFile = "spec.tmap";
     String modFile = "spec.tml";
@@ -289,7 +290,6 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	jp04.add(new JLabel("Design Space Exploration Output"), c04);
 
 
-
 	outputText = new ScrolledJTextArea();
         outputText.setEditable(false);
         outputText.setMargin(new Insets(10, 10, 10, 10));
@@ -302,7 +302,242 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	jp04.add(jsp, c04);
 	jp1.add("DSE Output", jp04);
 
+	JPanel jp05 = new JPanel();
+	GridBagLayout gridbag05 = new GridBagLayout();
+        GridBagConstraints c05 = new GridBagConstraints();
+        jp05.setLayout(gridbag05);
+
+ 	c05.weighty = 1.0;
+        c05.weightx = 1.0;
+        c05.gridwidth = GridBagConstraints.RELATIVE; 
+        c05.fill = GridBagConstraints.BOTH;
+        c05.gridheight = 1;
 	
+	jp05.add(new JLabel("Minimum Simulation Duration"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSMinSimulationDuration = new JSlider(-10,10);
+	JSMinSimulationDuration.setMinorTickSpacing(5);
+	JSMinSimulationDuration.setMajorTickSpacing(1);
+	Hashtable labelTable = new Hashtable();
+	labelTable.put(new Integer(-10), new JLabel("-1.0"));
+	labelTable.put(new Integer(-5), new JLabel("-0.5"));
+	labelTable.put(new Integer(0), new JLabel("0.0"));
+	labelTable.put(new Integer(5), new JLabel("0.5"));
+	labelTable.put(new Integer(10), new JLabel("1.0"));
+	JSMinSimulationDuration.setLabelTable(labelTable);
+	JSMinSimulationDuration.setPaintTicks(true);
+	JSMinSimulationDuration.setPaintLabels(true);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	jp05.add(JSMinSimulationDuration, c05);
+	
+	
+	c05.gridwidth = GridBagConstraints.RELATIVE;
+	jp05.add(new JLabel("Average Simulation Duration"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSAverageSimulationDuration = new JSlider(-10,10);
+	JSAverageSimulationDuration.setMinorTickSpacing(5);
+	JSAverageSimulationDuration.setMajorTickSpacing(1);
+	labelTable = new Hashtable();
+	labelTable.put(new Integer(-10), new JLabel("-1.0"));
+	labelTable.put(new Integer(-5), new JLabel("-0.5"));
+	labelTable.put(new Integer(0), new JLabel("0.0"));
+	labelTable.put(new Integer(5), new JLabel("0.5"));
+	labelTable.put(new Integer(10), new JLabel("1.0"));
+	JSAverageSimulationDuration.setLabelTable(labelTable);
+	JSAverageSimulationDuration.setPaintTicks(true);
+	JSAverageSimulationDuration.setPaintLabels(true);
+	jp05.add(JSAverageSimulationDuration, c05);
+
+
+	c05.gridwidth = GridBagConstraints.RELATIVE;
+	jp05.add(new JLabel("Maximum Simulation Duration"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSMaxSimulationDuration = new JSlider(-10,10);
+	JSMaxSimulationDuration.setMinorTickSpacing(5);
+	JSMaxSimulationDuration.setMajorTickSpacing(1);
+	labelTable = new Hashtable();
+	labelTable.put(new Integer(-10), new JLabel("-1.0"));
+	labelTable.put(new Integer(-5), new JLabel("-0.5"));
+	labelTable.put(new Integer(0), new JLabel("0.0"));
+	labelTable.put(new Integer(5), new JLabel("0.5"));
+	labelTable.put(new Integer(10), new JLabel("1.0"));
+	JSMaxSimulationDuration.setLabelTable(labelTable);
+	JSMaxSimulationDuration.setPaintTicks(true);
+	JSMaxSimulationDuration.setPaintLabels(true);
+	jp05.add(JSMaxSimulationDuration, c05);
+
+
+	c05.gridwidth = GridBagConstraints.RELATIVE;
+	jp05.add(new JLabel("Architecture Complexity"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSArchitectureComplexity = new JSlider(-10,10);
+	JSArchitectureComplexity.setMinorTickSpacing(5);
+	JSArchitectureComplexity.setMajorTickSpacing(1);
+	labelTable = new Hashtable();
+	labelTable.put(new Integer(-10), new JLabel("-1.0"));
+	labelTable.put(new Integer(-5), new JLabel("-0.5"));
+	labelTable.put(new Integer(0), new JLabel("0.0"));
+	labelTable.put(new Integer(5), new JLabel("0.5"));
+	labelTable.put(new Integer(10), new JLabel("1.0"));
+	JSArchitectureComplexity.setLabelTable(labelTable);
+	JSArchitectureComplexity.setPaintTicks(true);
+	JSArchitectureComplexity.setPaintLabels(true);
+	jp05.add(JSArchitectureComplexity, c05);
+
+
+	c05.gridwidth = GridBagConstraints.RELATIVE;
+	jp05.add(new JLabel("Min CPU Usage"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSMinCPUUsage = new JSlider(-10,10);
+	JSMinCPUUsage.setMinorTickSpacing(5);
+	JSMinCPUUsage.setMajorTickSpacing(1);
+	labelTable = new Hashtable();
+	labelTable.put(new Integer(-10), new JLabel("-1.0"));
+	labelTable.put(new Integer(-5), new JLabel("-0.5"));
+	labelTable.put(new Integer(0), new JLabel("0.0"));
+	labelTable.put(new Integer(5), new JLabel("0.5"));
+	labelTable.put(new Integer(10), new JLabel("1.0"));
+	JSMinCPUUsage.setLabelTable(labelTable);
+	JSMinCPUUsage.setPaintTicks(true);
+	JSMinCPUUsage.setPaintLabels(true);
+	jp05.add(JSMinCPUUsage, c05);
+
+
+	c05.gridwidth = GridBagConstraints.RELATIVE;
+	jp05.add(new JLabel("Average CP UUsage"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSAverageCPUUsage = new JSlider(-10,10);
+	JSAverageCPUUsage.setMinorTickSpacing(5);
+	JSAverageCPUUsage.setMajorTickSpacing(1);
+	labelTable = new Hashtable();
+	labelTable.put(new Integer(-10), new JLabel("-1.0"));
+	labelTable.put(new Integer(-5), new JLabel("-0.5"));
+	labelTable.put(new Integer(0), new JLabel("0.0"));
+	labelTable.put(new Integer(5), new JLabel("0.5"));
+	labelTable.put(new Integer(10), new JLabel("1.0"));
+	JSAverageCPUUsage.setLabelTable(labelTable);
+	JSAverageCPUUsage.setPaintTicks(true);
+	JSAverageCPUUsage.setPaintLabels(true);
+	jp05.add(JSAverageCPUUsage, c05);
+
+
+	c05.gridwidth = GridBagConstraints.RELATIVE;
+	jp05.add(new JLabel("Max CPU Usage"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSMaxCPUUsage = new JSlider(-10,10);
+	JSMaxCPUUsage.setMinorTickSpacing(5);
+	JSMaxCPUUsage.setMajorTickSpacing(1);
+	labelTable = new Hashtable();
+	labelTable.put(new Integer(-10), new JLabel("-1.0"));
+	labelTable.put(new Integer(-5), new JLabel("-0.5"));
+	labelTable.put(new Integer(0), new JLabel("0.0"));
+	labelTable.put(new Integer(5), new JLabel("0.5"));
+	labelTable.put(new Integer(10), new JLabel("1.0"));
+	JSMaxCPUUsage.setLabelTable(labelTable);
+	JSMaxCPUUsage.setPaintTicks(true);
+	JSMaxCPUUsage.setPaintLabels(true);
+	jp05.add(JSMaxCPUUsage, c05);
+
+	c05.gridwidth = GridBagConstraints.RELATIVE;
+	jp05.add(new JLabel("Min Bus Usage"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSMinBusUsage = new JSlider(-10,10);
+	JSMinBusUsage.setMinorTickSpacing(5);
+	JSMinBusUsage.setMajorTickSpacing(1);
+	labelTable = new Hashtable();
+	labelTable.put(new Integer(-10), new JLabel("-1.0"));
+	labelTable.put(new Integer(-5), new JLabel("-0.5"));
+	labelTable.put(new Integer(0), new JLabel("0.0"));
+	labelTable.put(new Integer(5), new JLabel("0.5"));
+	labelTable.put(new Integer(10), new JLabel("1.0"));
+	JSMinBusUsage.setLabelTable(labelTable);
+	JSMinBusUsage.setPaintTicks(true);
+	JSMinBusUsage.setPaintLabels(true);
+	jp05.add(JSMinBusUsage, c05);
+
+
+	c05.gridwidth = GridBagConstraints.RELATIVE;
+	jp05.add(new JLabel("Average Bus Usage"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSAverageBusUsage = new JSlider(-10,10);
+	JSAverageBusUsage.setMinorTickSpacing(5);
+	JSAverageBusUsage.setMajorTickSpacing(1);
+	labelTable = new Hashtable();
+	labelTable.put(new Integer(-10), new JLabel("-1.0"));
+	labelTable.put(new Integer(-5), new JLabel("-0.5"));
+	labelTable.put(new Integer(0), new JLabel("0.0"));
+	labelTable.put(new Integer(5), new JLabel("0.5"));
+	labelTable.put(new Integer(10), new JLabel("1.0"));
+	JSAverageBusUsage.setLabelTable(labelTable);
+	JSAverageBusUsage.setPaintTicks(true);
+	JSAverageBusUsage.setPaintLabels(true);
+	jp05.add(JSAverageBusUsage, c05);
+
+
+	c05.gridwidth = GridBagConstraints.RELATIVE;
+	jp05.add(new JLabel("Max Bus Usage"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSMaxBusUsage = new JSlider(-10,10);
+	JSMaxBusUsage.setMinorTickSpacing(5);
+	JSMaxBusUsage.setMajorTickSpacing(1);
+	labelTable = new Hashtable();
+	labelTable.put(new Integer(-10), new JLabel("-1.0"));
+	labelTable.put(new Integer(-5), new JLabel("-0.5"));
+	labelTable.put(new Integer(0), new JLabel("0.0"));
+	labelTable.put(new Integer(5), new JLabel("0.5"));
+	labelTable.put(new Integer(10), new JLabel("1.0"));
+	JSMaxBusUsage.setLabelTable(labelTable);
+	JSMaxBusUsage.setPaintTicks(true);
+	JSMaxBusUsage.setPaintLabels(true);
+	jp05.add(JSMaxBusUsage, c05);
+
+	c05.gridwidth = GridBagConstraints.RELATIVE;
+	jp05.add(new JLabel("Minimum Bus Contention"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSMinBusContention = new JSlider(-10,10);
+	JSMinBusContention.setMinorTickSpacing(5);
+	JSMinBusContention.setMajorTickSpacing(1);
+	labelTable = new Hashtable();
+	labelTable.put(new Integer(-10), new JLabel("-1.0"));
+	labelTable.put(new Integer(-5), new JLabel("-0.5"));
+	labelTable.put(new Integer(0), new JLabel("0.0"));
+	labelTable.put(new Integer(5), new JLabel("0.5"));
+	labelTable.put(new Integer(10), new JLabel("1.0"));
+	JSMinBusContention.setLabelTable(labelTable);
+	JSMinBusContention.setPaintTicks(true);
+	JSMinBusContention.setPaintLabels(true);
+	jp05.add(JSMinBusContention, c05);
+
+	c05.gridwidth = GridBagConstraints.RELATIVE;
+	jp05.add(new JLabel("Average Bus Contention"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSAverageBusContention = new JSlider(-10,10);
+	JSAverageBusContention.setMinorTickSpacing(5);
+	JSAverageBusContention.setMajorTickSpacing(1);
+	labelTable = new Hashtable();
+	labelTable.put(new Integer(-10), new JLabel("-1.0"));
+	labelTable.put(new Integer(-5), new JLabel("-0.5"));
+	labelTable.put(new Integer(0), new JLabel("0.0"));
+	labelTable.put(new Integer(5), new JLabel("0.5"));
+	labelTable.put(new Integer(10), new JLabel("1.0"));
+	JSAverageBusContention.setLabelTable(labelTable);
+	JSAverageBusContention.setPaintTicks(true);
+	JSAverageBusContention.setPaintLabels(true);
+	jp05.add(JSAverageBusContention, c05);
+
+	c05.gridwidth = GridBagConstraints.RELATIVE;
+	jp05.add(new JLabel("Maximum Bus Contention"),c05);
+	c05.gridwidth = GridBagConstraints.REMAINDER; 
+	JSMaxBusContention = new JSlider(-10,10);
+	JSMaxBusContention.setMinorTickSpacing(5);
+	JSMaxBusContention.setMajorTickSpacing(1);
+	JSMaxBusContention.setLabelTable(labelTable);
+	JSMaxBusContention.setPaintTicks(true);
+	JSMaxBusContention.setPaintLabels(true);
+	jp05.add(JSMaxBusContention, c05);
+
+	jp1.add("DSE Custom", jp05);
+
 
 	c.add(jp1, BorderLayout.NORTH);
 
@@ -378,6 +613,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         String cmd;
         String list, data;
         int cycle = 0;
+	output="";
 
         hasError = false;
 	//try {
@@ -414,7 +650,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    decCC=decTime2.getText();
 	    secOv = secOverhead2.getText();
 
-	    DSEConfiguration config = new DSEConfiguration();
+	    config = new DSEConfiguration();
 	    config.addSecurity = secAnalysis.isSelected();
 	    config.encComp = encCC;
 	    config.overhead = secOv;
@@ -424,8 +660,10 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    TMLMapping map = mgui.gtm.getTMLMapping();
 	    config.tmlcdp = map.getTMLCDesignPanel();
 	    config.tmlap = map.tmlap;
+
 	    if (config.setModelPath(tmlDir) != 0) {
 		TraceManager.addDev("TML Directory file at " + tmlDir + " error");
+		output+="TML Directory file at " + tmlDir + " error \n";
 		checkMode();
 		return;
 	    }
@@ -434,6 +672,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    }
 	    if (config.setMappingFile(mapFile) <0) {
 		TraceManager.addDev("Mapping at " + mapFile + " error");
+		output+="Mapping at " + mapFile + " error";
 		checkMode();
 		return;
 	    }
@@ -442,6 +681,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    }
 	    if (config.setTaskModelFile(modFile)!=0){
 		TraceManager.addDev("Model File " + modFile +" error");
+		output+="Model File " + modFile +" error \n";
 		checkMode();
 		return;
 	    }
@@ -450,6 +690,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    }
 	    if (config.setPathToSimulator(simulator) != 0) {
 		TraceManager.addDev("Simulator at " + mapFile + " error");
+		output+="Simulator at " + mapFile + " error \n";
 		checkMode();
 		return;
 	    }
@@ -459,6 +700,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 
 	    if (config.setPathToResults(resDirect) != 0) {
 		TraceManager.addDev("Results Directory at " + resDirect + " error");
+		output+="Results Directory at " + resDirect + " error \n";
 		return;
 	    }
 	    else {
@@ -467,21 +709,26 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 
 	    if (config.setNbOfSimulationThreads(simThreads) != 0) {
 		TraceManager.addDev("Simulation threads error: "+simThreads);
+		output+="Simulation threads error: "+simThreads+"\n";
 		return;
 	    }
 	    if (config.setSimulationCompilationCommand("make -j9 -C") !=0){
 		TraceManager.addDev("Simulation compilation error");
+		output+="Simulation compilation error"+"\n";
 		return;
 	    }
 	    if (config.setSimulationExecutionCommand("run.x") !=0){
 		TraceManager.addDev("Simulation execution error");
+		output+="Simulation execution error \n";
 		return;
 	    }
 	    if (config.setMinNbOfCPUs(NbMinCPU) != 0) {
 		TraceManager.addDev("Can't set Min # CPUS to " + NbMinCPU);
+		output+="Can't set Min # CPUS to " + NbMinCPU+"\n";
 	    }
 	    if (config.setMaxNbOfCPUs(NbMaxCPU) != 0) {
 		TraceManager.addDev("Can't set Max # CPUS to " + NbMaxCPU);
+		output+="Can't set Max # CPUS to " + NbMaxCPU +"\n";
 	    }
 	    config.setOutputTXT("true");
 	   // config.setOutputHTML("true");
@@ -490,7 +737,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    config.setRecordResults("true");
 	    if (simButton.isSelected()){
 		if (config.runParallelSimulation(Nbsim, true, true) != 0) {
-		    output+="Simulation Failed";
+		    output+="Simulation Failed \n";
 		    outputText.setText(output);
 		    checkMode();
 		    return;
@@ -503,15 +750,18 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    else if (dseButton.isSelected()){
 	    	if (config.runDSE("", false, false)!=0){
 		    TraceManager.addDev("Can't run DSE");
+		    
 	   	}
 	        System.out.println("DSE run");
 	    }
 	    if (config.printAllResults("", true, true)!=0){
 		TraceManager.addDev("Can't print all results");
+		output+="Can't print all results \n";
 	    }
 	    System.out.println("Results printed");
 	    if (config.printResultsSummary("", true, true)!=0){
 		TraceManager.addDev("Can't print result summary");
+		output+="Can't print result summary \n";
 	    }
 	    System.out.println("Results summary printed");
 	    jp1.setSelectedIndex(2);
@@ -520,6 +770,22 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	//} catch (Exception e){
 	//    System.out.println(e);
 	//}
+	if (jp1.getSelectedIndex()==3){
+	    double[] tap = new double[]{JSMinSimulationDuration.getValue(), JSAverageSimulationDuration.getValue(), JSMaxSimulationDuration.getValue(), JSArchitectureComplexity.getValue(), JSMinCPUUsage.getValue(), JSAverageCPUUsage.getValue(), JSMaxCPUUsage.getValue(), JSMinBusUsage.getValue(), JSAverageBusUsage.getValue(), JSMaxBusUsage.getValue(), JSMinBusContention.getValue(), JSAverageBusContention.getValue(), JSMaxBusContention.getValue()};
+	    for (int i=0; i<tap.length; i++){
+		tap[i] = tap[i]/10.0;
+	    }
+	    if (config.replaceTapValues(tap)<0){
+		output+="Error changing values";
+	    }
+	    System.out.println(tap[0]);
+	    if (config.printResultsSummary("", true, true)!=0){
+		TraceManager.addDev("Can't print result summary");
+		output+="Can't print result summary \n";
+	    }
+	    jp1.setSelectedIndex(2);
+	    outputText.setText(output + "\n" + config.overallResults);
+	}
 	checkMode();
         setButtons();
 	

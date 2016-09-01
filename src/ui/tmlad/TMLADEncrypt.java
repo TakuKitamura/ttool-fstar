@@ -85,7 +85,7 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength, false, true, 0.5, 1.0);
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength+ex, false, true, 0.5, 1.0);
         
         
         moveable = true;
@@ -108,6 +108,9 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
 		    g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
 	    }
 	    g.fillRect(x, y, width, height);
+	    int[] xP = new int[]{x,x+width,x+width/2};
+	    int[] yP = new int[]{y+height, y+height, y+height+ex};
+	    g.fillPolygon(xP,yP,3);
 	    g.setColor(c);
 	}
         g.drawLine(x, y, x+width, y);

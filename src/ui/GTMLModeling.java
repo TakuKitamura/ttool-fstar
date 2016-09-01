@@ -1668,8 +1668,7 @@ public class GTMLModeling  {
 			        add = Integer.valueOf(nonce.overhead);
 			    }
 			}
-		    	Double d= Math.ceil(add/4.0);
-			cur = cur+ d.intValue();
+			cur = cur+ add;
 		    	tmlreadchannel.setNbOfSamples(Integer.toString(cur));
 		    }
 		    else if (!((TMLADReadChannel)tgc).securityContext.isEmpty()){
@@ -1990,8 +1989,7 @@ public class GTMLModeling  {
 			        add = Integer.valueOf(nonce.overhead);
 			    }
 			}
-		    	Double d= Math.ceil(add/4.0);
-			cur = cur+ d.intValue();
+			cur = cur+ add;
 		    	tmlwritechannel.setNbOfSamples(Integer.toString(cur));
 		    }
 		    else if (!((TMLADWriteChannel)tgc).securityContext.isEmpty()){

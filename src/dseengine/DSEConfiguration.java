@@ -151,12 +151,14 @@ public class DSEConfiguration implements Runnable  {
 	"MinBusUsage", "AverageBusUsage", "MaxBusUsage",
 	"MinBusContention", "AverageBusContentione", "MaxBusContention"};
 	
-	private int[] tapValues = {1, 1, 1, 
+/*	private int[] tapValues = {1, 1, 1, 
 	1, // 3
 	1, -10, 1,//4, 5, 6
 	1, 1, 1, // 7, 8, 9
 	1, 1, 1 // 10, 11, 12
-	};
+	}; */
+
+	double[] tapValues={1.0,1.0,1.0, 1.0, 1.0, -10.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0};
 	
 	
 	public static final int LONG_TYPE = 0;
@@ -926,6 +928,19 @@ public class DSEConfiguration implements Runnable  {
 		int tmp = nbOfRemainingSimulation;
 		nbOfRemainingSimulation --;
 		return tmp;
+	}
+	public int replaceTapValues(double[] tap){
+	    if (tap.length!=tapValues.length){
+
+		return -1;
+	    }
+	    for (double i:tap){
+		if (i>1 || i<-1){
+		    return -1;
+		}
+	    }
+	    tapValues = tap;
+	    return 0;
 	}
 	
 	public int printAllResults(String _arguments, boolean _debug, boolean _optimize) {
