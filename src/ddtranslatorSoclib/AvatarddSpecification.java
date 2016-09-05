@@ -138,12 +138,15 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
 
     public LinkedList<AvatarCrossbar> getAllCrossbar(){
       LinkedList<AvatarCrossbar> crossbars = new LinkedList<AvatarCrossbar>();
+      //int i=0;
       for (AvatarComponent crossbar : components )
         {
 	    //Currently, at least one crossbar -> clustered
 	    if (crossbar instanceof AvatarCrossbar){
 		System.out.println("Clustered Interconnect found");
-		crossbars.add((AvatarCrossbar)crossbar);	    
+		crossbars.add((AvatarCrossbar)crossbar);
+		//crossbar.setClusterIndex(i); 
+		//i++;
 	    }
 
         }

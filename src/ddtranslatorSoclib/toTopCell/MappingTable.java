@@ -17,6 +17,8 @@ public class MappingTable {
     public static String getMappingTable() {
     int l=0;
     int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
+    int nb_ram =TopCellGenerator.avatardd.getAllRAM().size();
+
     System.out.println("Number of clusters : "+ nb_clusters);
     if(nb_clusters == 0){
 	mapping = CR2 + "//-----------------------mapping table------------------------" + CR2;
@@ -180,12 +182,12 @@ public class MappingTable {
       mapping += "maptab.add(Segment(\"text\", 0x60000000, 0x00100000, IntTab(0,0), true));" + CR;
       mapping += "maptab.add(Segment(\"rodata\", 0x80000000, 0x01000000, IntTab(0,1), true));" + CR;
       mapping += "maptab.add(Segment(\"data\", 0x7f000000, 0x01000000, IntTab(0,2), false)); " + CR2;
-      mapping = mapping + "maptab.add(Segment(\"simhelper\", 0xd3200000, 0x00000100, IntTab(0,3), false));" + CR;	    
-      mapping = mapping + "maptab.add(Segment(\"vci_fdt_rom\", 0x16200000, 0x00001000, IntTab(0,6), false));" + CR2;
-      mapping = mapping + "maptab.add(Segment(\"vci_fd_access\", 0x17200000, 0x00000100, IntTab(0,7), false));" + CR;
-      mapping = mapping + "maptab.add(Segment(\"vci_ethernet\",  0x18200000, 0x00000020, IntTab(0,8), false));" + CR;
-      mapping = mapping + "maptab.add(Segment(\"vci_block_device\", 0x19200000, 0x00000020, IntTab(0,9), false));" + CR2;
-        
+      mapping = mapping + "maptab.add(Segment(\"simhelper\", 0x15200000, 0x00000100, IntTab(0,3), false));" + CR;	    
+      mapping = mapping + "maptab.add(Segment(\"vci_fdt_rom\", 0x16200000, 0x00001000, IntTab(0,4), false));" + CR2;
+      mapping = mapping + "maptab.add(Segment(\"vci_fd_access\", 0x17200000, 0x00000100, IntTab(0,5), false));" + CR;
+      mapping = mapping + "maptab.add(Segment(\"vci_ethernet\",  0x18200000, 0x00000020, IntTab(0,6), false));" + CR;
+      mapping = mapping + "maptab.add(Segment(\"vci_block_device\", 0x19200000, 0x00000020, IntTab(0,7), false));" + CR2;
+         mapping = mapping + "maptab.add(Segment(\"vci_locks\", 0x1A200000, 0x00000020, IntTab(0,8), false));" + CR2;
     
       // uint32_t ram_base = SEG_RAM_BASE + c * CLUSTER_SIZE;
       // soft/hard_config.h:#define	 CLUSTER_SIZE  0x40000000
@@ -193,7 +195,7 @@ public class MappingTable {
       //  int SEG_RAM_BASE   =        0x10000000;
      
       //the following three components are added transparently in the deployment diagram    
-      /* int SEG_ICU_BASE   =          0x11200000;
+      /* int SEG_ICU_BASE   =          0x11000000;
       int SEG_ICU_SIZE   =          0x00000014;
 
       int NB_DMAS  = 1;
@@ -211,25 +213,23 @@ public class MappingTable {
 
       
 
-      int SEG_ICU_BASE   =          287309824;
-      int SEG_ICU_SIZE   =          20;
+      int SEG_ICU_BASE  =          285212672;
+      int SEG_ICU_SIZE  =          20;
 
       int NB_DMAS  = 1;
-      int SEG_DMA_BASE   =          304087040;
+      int SEG_DMA_BASE  =          304087040;
       int SEG_DMA_SIZE  =           (NB_DMAS * 20);
 
       int NB_TIMERS  = 1;
-      int SEG_TIM_BASE   =          318767104;
+      int SEG_TIM_BASE  =          318767104;
       int SEG_TIM_SIZE  =           (NB_TIMERS * 16 );
 
-      int SEG_TTY_BASE   =        337641472;
-      int SEG_TTY_SIZE   =        16;
-
-       //int CLUSTER_SIZE  =         1073741824;
-       //int CLUSTER_SIZE  = calculated 
+      int SEG_TTY_BASE  =        337641472;
+      int SEG_TTY_SIZE  =        16;   
 
       int CLUSTER_SIZE;
 
+      //if the user does not specify the size, take default value
       if(nb_clusters<16) {
 	  CLUSTER_SIZE = 268435456;}
       else {
@@ -241,45 +241,52 @@ public class MappingTable {
       int SEG_RAM_BASE   =        268435456;    
       int    cluster = 0;
 
-  // mapping += "maptab.add(Segment(\"cram0\", "+ (SEG_RAM_BASE + cluster * CLUSTER_SIZE)+", 0x"+SEG_RAM0_SIZE+", IntTab(0,10), true));" + CR;
-  // mapping += "maptab.add(Segment(\"uram0\", "+ (SEG_RAM_BASE+0x00200000)+", 0x"+SEG_RAM0_SIZE+", IntTab(0,11), false));" + CR;
-	 
-  mapping += "maptab.add(Segment(\"icu" + cluster + "\",0x"+ Integer.toHexString(SEG_ICU_BASE)+", 0x"+ Integer.toHexString(SEG_ICU_SIZE)+", IntTab(0,10), false));" + CR;
-  mapping += "maptab.add(Segment(\"dma" + cluster + "\", 0x"+ Integer.toHexString(SEG_DMA_BASE)+", 0x"+ Integer.toHexString(SEG_DMA_SIZE)+", IntTab(0,11), false));" + CR;
-  mapping += "maptab.add(Segment(\"timer" + cluster + "\", 0x"+ Integer.toHexString(SEG_TIM_BASE)+", 0x"+ Integer.toHexString(SEG_TIM_SIZE)+", IntTab(0,12), true));" + CR;
+      //DG 1.9. on cluster 0 only	 
+      //   mapping += "maptab.add(Segment(\"icu" + cluster + "\",0x"+ Integer.toHexString(SEG_ICU_BASE)+", 0x"+ Integer.toHexString(SEG_ICU_SIZE)+", IntTab(0,9), false));" + CR;
+  mapping += "maptab.add(Segment(\"vci_xicu\",0x"+ Integer.toHexString(SEG_ICU_BASE)+", 0x"+ Integer.toHexString(SEG_ICU_SIZE)+", IntTab(0,9), false));" + CR;
+  //mapping += "maptab.add(Segment(\"dma" + cluster + "\", 0x"+ Integer.toHexString(SEG_DMA_BASE)+", 0x"+ Integer.toHexString(SEG_DMA_SIZE)+", IntTab(0,10), false));" + CR;
+mapping += "maptab.add(Segment(\"dma\", 0x"+ Integer.toHexString(SEG_DMA_BASE)+", 0x"+ Integer.toHexString(SEG_DMA_SIZE)+", IntTab(0,10), false));" + CR;
+  // mapping += "maptab.add(Segment(\"timer" + cluster + "\", 0x"+ Integer.toHexString(SEG_TIM_BASE)+", 0x"+ Integer.toHexString(SEG_TIM_SIZE)+", IntTab(0,11), true));" + CR;
+
+mapping += "maptab.add(Segment(\"vci_rttimer\", 0x"+ Integer.toHexString(SEG_TIM_BASE)+", 0x"+ Integer.toHexString(SEG_TIM_SIZE)+", IntTab(0,11), true));" + CR;
 
   // all other clusters  
-  for(cluster=1;cluster<nb_clusters; cluster++){
-      /*     mapping += "maptab.add(Segment(\"cram" +cluster+ "\", 0x"+ (SEG_RAM_BASE + cluster * CLUSTER_SIZE)+", 0x"+SEG_RAM_SIZE+", IntTab("+cluster+","+0+"), true));" + CR;
+//   for(cluster=1;cluster<nb_clusters; cluster++){
+      
+	  //	  mapping += "maptab.add(Segment(\"icu" + cluster + "\", 0x"+ Integer.toHexString(SEG_ICU_BASE + cluster * CLUSTER_SIZE)+", 0x"+Integer.toHexString(SEG_ICU_SIZE)+", IntTab("+cluster +","+1+"), true));" + CR;
 
-	     mapping += "maptab.add(Segment(\"uram" + cluster + "\", 0x"+ (SEG_RAM_BASE + cluster * CLUSTER_SIZE+0x00200000)+", 0x"+SEG_RAM_SIZE+", IntTab("+cluster+","+1+"), true));" + CR;*/
+//  mapping += "maptab.add(Segment(\"dma" + cluster + "\", 0x"+ Integer.toHexString(SEG_DMA_BASE + cluster * CLUSTER_SIZE)+", 0x"+Integer.toHexString(SEG_DMA_SIZE)+", IntTab("+cluster +","+2+"), false));" + CR;
 	 
-      mapping += "maptab.add(Segment(\"icu" + cluster + "\", 0x"+ Integer.toHexString(SEG_ICU_BASE + cluster * CLUSTER_SIZE)+", 0x"+Integer.toHexString(SEG_ICU_SIZE)+", IntTab("+cluster +","+1+"), true));" + CR;
-
-      mapping += "maptab.add(Segment(\"dma" + cluster + "\", 0x"+ Integer.toHexString(SEG_DMA_BASE + cluster * CLUSTER_SIZE)+", 0x"+Integer.toHexString(SEG_DMA_SIZE)+", IntTab("+cluster +","+2+"), false));" + CR;
-	 
- mapping += "maptab.add(Segment(\"timer" + cluster + "\", 0x"+ Integer.toHexString(SEG_TIM_BASE + cluster * CLUSTER_SIZE)+", 0x"+Integer.toHexString(SEG_TIM_SIZE)+", IntTab("+cluster +","+3+"), true));" + CR;
+	  //  mapping += "maptab.add(Segment(\"timer" + cluster + "\", 0x"+ Integer.toHexString(SEG_TIM_BASE + cluster * CLUSTER_SIZE)+", 0x"+Integer.toHexString(SEG_TIM_SIZE)+", IntTab("+cluster +","+3+"), true));" + CR;
  	   
-  }
+	  // }
  
-  int cacheability_bit= 2097152; //0x00200000
-  //RAM base address is SEG_RAM_BASE + CLUSTER_NUMBER * CLUSTER_SIZE;
+      int cacheability_bit= 2097152; //0x00200000
 
-  // this is the memory space covered by the RAMs of a cluster
+      /* RAM base address is SEG_RAM_BASE + CLUSTER_NUMBER * CLUSTER_SIZE;
+     this is the memory space covered by the RAMs of a cluster */
  
-  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {						      	
-      mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x"+Integer.toHexString(SEG_RAM_BASE+ ram.getNo_cluster()*CLUSTER_SIZE)+", "+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getNo_cluster()+","+(ram.getNo_target())+"), true));" + CR;	  
-      mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\",  0x"+Integer.toHexString(SEG_RAM_BASE + ram.getNo_cluster()*CLUSTER_SIZE+cacheability_bit)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getNo_cluster()+","+(ram.getNo_target())+"), true));" + CR;	  
-      }                     
-     
-  int nb_ram=1; //currently 1 ram per cluster
-  cluster=0;       
-  for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) {	   	 	  	  if(cluster==0){tty.setNo_target(13+nb_ram);}
-      else{tty.setNo_target(3+nb_ram);}	 	     
-          mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0x"+Integer.toHexString(SEG_TTY_BASE +  tty.getNo_cluster()* CLUSTER_SIZE)+", 0x00000010, IntTab("+tty.getNo_cluster()+","+(tty.getNo_target())+"), false));" + CR; 
-	  cluster ++;
-	  }
+      //we want to identify the RAMS on this cluster (not RAMs in total)
+
+      for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {						      	
+	  mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x"+Integer.toHexString(SEG_RAM_BASE+ ram.getNo_cluster()*CLUSTER_SIZE)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getNo_cluster()+","+(ram.getNo_target())+"), true));" + CR;
 	  
+	  mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\",  0x"+Integer.toHexString(SEG_RAM_BASE + ram.getNo_cluster()*CLUSTER_SIZE+cacheability_bit)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getNo_cluster()+","+(ram.getNo_target())+"), false));" + CR;	  
+      }                     
+         
+      //we want to identify the TTYS on this cluster (not TTYs in total)
+      //currently one tty per cluster
+ 
+      for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) {	   
+      /* the number of fixed targets varies depending on if we are on cluster 0 or on other clusters */
+	  if(tty.getNo_cluster()==0){
+	      tty.setNo_target(10+nb_ram);
+	  }
+	  else{
+	      tty.setNo_target(nb_ram);
+	  }	 	     
+	  mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0x"+Integer.toHexString(SEG_TTY_BASE +  tty.getNo_cluster()* CLUSTER_SIZE)+", 0x00000010, IntTab("+tty.getNo_cluster()+","+(tty.getNo_target())+"), false));" + CR; 	  
+      }	  
     }
     return mapping;   
     }

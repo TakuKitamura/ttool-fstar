@@ -76,12 +76,24 @@ public class Code {
 	  System.out.println("*DCACHEWAYS taken into account*"+cpu.getDCacheWays());
 	  System.out.println("*DCACHESETS taken into account*"+cpu.getDCacheSets());
 	  System.out.println("*DCACHEWORDS taken into account*"+cpu.getDCacheWords());*/
-	  
+
+      int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
+
+	  //DG 1.9.2016
+      if(nb_clusters==0){
 	  creation=creation +"template <class Iss>" + CR +	  
 	  "NEW_CPU(new_cpu){" + CR +
 	  "return new caba::VciXcacheWrapper<vci_param, ISS_NEST(Iss)>(e->name.c_str(), e->id, maptab, IntTab(e->id),"+
 	  cpu.getICacheWays()+","+cpu.getICacheSets()+","+cpu.getICacheWords()+","+cpu.getDCacheWays()+","+cpu.getDCacheSets()+","+cpu.getDCacheWords()+")"+";"+
 	    CR + "}" + CR2;
+      }
+      else{ //DG 01.09.2016
+	  creation=creation +"template <class Iss>" + CR +	  
+	  "NEW_CPU(new_cpu){" + CR +
+	  "return new caba::VciXcacheWrapper<vci_param, ISS_NEST(Iss)>(e->name.c_str(), e->id, maptab, IntTab(e->id,e->id),"+
+	  cpu.getICacheWays()+","+cpu.getICacheSets()+","+cpu.getICacheWords()+","+cpu.getDCacheWays()+","+cpu.getDCacheSets()+","+cpu.getDCacheWords()+")"+";"+
+	    CR + "}" + CR2;
+      }
 
 	  creation = creation +
 	  "/***************************************************************************"+ CR +

@@ -10,10 +10,11 @@ public class AvatarTTY extends AvatarComponent {
 
     private int index = 0;
     private String ttyName;
+
     public int no_tty;
-    private int no_target;
-    private int no_cluster;
-    //add a field cluster_index, a cluster can have more than one TTY
+    public int no_target;
+    public int no_cluster;
+    
     public AvatarTTY(String _ttyName, int _index, int _no_tty, int _no_cluster){
       index =  _index;
       ttyName =  _ttyName;

@@ -47,7 +47,18 @@ public class Deployinfo {
 
 	/* we will have to dimension the segments according to the number of clusters, number of RAMS etc. */
 
-	/* first, determine the "step" between segments */
+	/* first, determine the "step" between segments dedicated to a cluster */
+
+	int CLUSTER_SIZE;
+
+      //if the user does not specify the size, take default value
+      if(nb_clusters<16) {
+	  CLUSTER_SIZE = 268435456;
+      }
+      else {
+	  CLUSTER_SIZE = 134217728; 
+      } // to be refined, cf DSX -> dynamically adapt
+
 
 	int size;
 
@@ -84,7 +95,8 @@ public class Deployinfo {
 
 	    deployinfo += "#define CACHED_RAM" + ram.getNo_ram()  + "_NAME cram" + ram.getNo_ram() + CR;	    
   
-	     deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*size) + CR; 
+	    //  deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*size) + CR; 
+deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*CLUSTER_SIZE) + CR; 
 
 // 31.08. simplifie
 
@@ -98,7 +110,9 @@ public class Deployinfo {
 
 	    // deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*size+size/2) + CR; 
 
-deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*size+size/2+cacheability_bit) + CR; 
+	    //deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*size+size/2+cacheability_bit) + CR; 
+
+deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*CLUSTER_SIZE+size/2+cacheability_bit) + CR; 
 
 // 31.08. simplifie
 

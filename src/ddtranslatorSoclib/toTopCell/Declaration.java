@@ -115,21 +115,17 @@ public class Declaration {
 	    declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+3)+"), maptab);" + CR;
 	}	
 	else{
-	    declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab(0,3), maptab);" + CR;
+	    declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab(0,8), maptab);" + CR;
 	}
 	   			    	
 	if(nb_clusters==0){
 	    int i=0;
 	    for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()){
-		    declaration += "caba::VciMultiTty<vci_param> " + tty.getTTYName()+ "(\"" + tty.getTTYName()+ "\", IntTab(" + tty.getNo_target()+ "), maptab, \"vci_multi_tty"+i+"\", NULL);"+ CR;
-		    i++;
-}
+		declaration += "caba::VciMultiTty<vci_param> " + tty.getTTYName()+ "(\"" + tty.getTTYName()+ "\", IntTab(" + tty.getNo_target()+ "), maptab, \"vci_multi_tty"+i+"\", NULL);"+ CR;
+		i++;
+	    }
 
 	 //target address depends on number of TTYs and RAMs
-	if(nb_clusters==0){
-	    //		    declaration += "caba::VciRam<vci_param>mwmr_ram(\"mwmr_ram\",IntTab("+(TopCellGenerator.avatardd.getNb_target()+3+i)+"),maptab);" + CR2; 
-	    //	    declaration += "caba::VciRam<vci_param>mwmrd_ram(\"mwmrd_ram\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+4+i)+"),maptab);" + CR2; 
-}
 	
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) 
 	     if(ram.getNo_ram()==0){
@@ -139,18 +135,17 @@ public class Declaration {
 	     declaration += "soclib::caba::VciRam<vci_param>" + ram.getMemoryName()+ "(\"" + ram.getMemoryName()+ "\"" + ", IntTab("
 		 + ram.getNo_target() + "), maptab);" + CR; 
 	     }
-	     }
-		else{
-		    int i=0;
- for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()){
-		    declaration += "caba::VciMultiTty<vci_param> " + tty.getTTYName()+ "(\"" + tty.getTTYName()+ "\", IntTab("+ tty.getNo_cluster()+"," + tty.getNo_target()+ "), maptab, \"vci_multi_tty"+i+"\", NULL);"+ CR;
-		    i++;}
+	}
+	else{
+	    int i=0;
+	    for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()){
+		declaration += "caba::VciMultiTty<vci_param> " + tty.getTTYName()+ "(\"" + tty.getTTYName()+ "\", IntTab("+ tty.getNo_cluster()+"," + tty.getNo_target()+ "), maptab, \"vci_multi_tty"+i+"\", NULL);"+ CR;
+		i++;}
 
-	 for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) 
-	     declaration += "soclib::caba::VciRam<vci_param>" + ram.getMemoryName()+ "(\"" + ram.getMemoryName()+ "\"" + ", IntTab("+ram.getNo_cluster()+","
-		 + ram.getNo_target() + "), maptab);" + CR2; 
-
-		}
+	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) 
+		declaration += "soclib::caba::VciRam<vci_param>" + ram.getMemoryName()+ "(\"" + ram.getMemoryName()+ "\"" + ", IntTab("+ram.getNo_cluster()+","
+		    + ram.getNo_target() + "), maptab);" + CR2; 
+	}
 	if(nb_clusters==0){
 	declaration +=  "caba::VciFdAccess<vci_param> vcifd(\"vcifd\", maptab, IntTab(cpus.size()+1), IntTab("+(TopCellGenerator.avatardd.getNb_target())+"));" + CR;
 	declaration +=  "caba::VciEthernet<vci_param> vcieth(\"vcieth\", maptab, IntTab(cpus.size()+2), IntTab("+(TopCellGenerator.avatardd.getNb_target()+1)+"), \"soclib0\");" + CR;
@@ -365,21 +360,38 @@ else {
 	  }	 		
 	 }
 	
-	int i=0;
+	 int i=0;
 	for  (AvatarCrossbar crossbar : TopCellGenerator.avatardd.getAllCrossbar()) {
+	    
+	    /* attribution d'un index de cluster par ordre d'arrivee */
+	    //currently number on initiators and targets is fixed
+
+	  crossbar.setClusterIndex(i);
+
+	  if (crossbar.getClusterIndex()==0){
+		  crossbar.setNbOfAttachedInitiators(nb_clusters);		  
+		  crossbar.setNbOfAttachedTargets(13);
+	      }
+	  else{ 
+	      //processor(s) and link to central interconnect are initiators
+	      crossbar.setNbOfAttachedInitiators(2);	 
+	      crossbar.setNbOfAttachedTargets(2);
+	  }
+
           System.out.println("initiators: "+crossbar.getNbOfAttachedInitiators());	
           System.out.println("targets: "+crossbar.getNbOfAttachedTargets());
 	
 	  //declaration += "soclib::caba::VciLocalCrossbar<vci_param> crossbar"+crossbar.getClusterAddress()+"(\"" + crossbar.getCrossbarName() + "\"" + " , maptab, IntTab("+ crossbar.getClusterIndex()+"),IntTab("+crossbar.getClusterAddress()+"), "+crossbar.getNbOfAttachedInitiators()+", "+crossbar.getNbOfAttachedTargets()+");" + CR2;
 
-	  declaration += "soclib::caba::VciLocalCrossbar<vci_param> crossbar"+i+"(\"" + crossbar.getCrossbarName() + "\"" + " , maptab, IntTab("+ crossbar.getClusterIndex()+"),IntTab("+crossbar.getClusterAddress()+"), "+crossbar.getNbOfAttachedInitiators()+", "+crossbar.getNbOfAttachedTargets()+");" + CR2;
+	  declaration += "soclib::caba::VciLocalCrossbar<vci_param> crossbar"+crossbar.getClusterIndex()+"(\"" + crossbar.getCrossbarName() + "\"" + " , maptab, IntTab("+ crossbar.getClusterIndex()+"),IntTab("+crossbar.getClusterIndex()+"), "+crossbar.getNbOfAttachedInitiators()+", "+crossbar.getNbOfAttachedTargets()+");" + CR2;
 
 
           //if CROSSBAR was not last in input file, update here 
           crossbar.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
-          crossbar.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target());
+          crossbar.setNbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target());
+	 
 	  i++;
-	}	
+	}
     }
 return declaration;
 	}

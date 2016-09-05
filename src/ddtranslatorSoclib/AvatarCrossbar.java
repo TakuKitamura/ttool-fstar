@@ -42,11 +42,19 @@ public class AvatarCrossbar extends AvatarComponent{
 	return cluster_address;
     }
 
+    public void setClusterIndex(int nb){
+	cluster_index = nb;
+    }
+
+    public void setClusterAddress(int nb){
+	cluster_address = nb;
+    }
+
     public void setNbOfAttachedInitiators(int nb){
       nbOfAttachedInitiators = nb;
     }
 
-    public void setnbOfAttachedTargets(int nb){
+    public void setNbOfAttachedTargets(int nb){
       nbOfAttachedTargets = nb;
     }
  
