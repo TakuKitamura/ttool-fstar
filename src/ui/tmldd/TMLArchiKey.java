@@ -134,7 +134,7 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
     
     public void setValue(String val, Graphics g) {
         oldValue = value;
-        int w  = g.getFontMetrics().stringWidth(value);
+        int w  = 100+g.getFontMetrics().stringWidth(value);
 		int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
 		
         //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);

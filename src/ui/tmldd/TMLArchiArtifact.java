@@ -66,7 +66,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     protected int fileX = 20;
     protected int fileY = 25;
     protected int cran = 5;
-	
+
     protected String oldValue = "";
     protected String referenceTaskName = "referenceToTask";
 		protected String taskName = "name";
@@ -80,9 +80,9 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     public TMLArchiArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 75;
+        width = 100;
         height = 40;
-        minWidth = 75;
+        minWidth = 100;
         
         nbConnectingPoint = 0;
         addTGConnectingPointsComment();
@@ -90,8 +90,8 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         moveable = true;
         editable = true;
         removable = true;
-        
-        value = "TMLDesign::task";
+        userResizable=true;
+        value = "TMLDesign::task    ";
         taskName = "name";
 		referenceTaskName = "TMLTask";
         
@@ -113,7 +113,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         if (oldValue.compareTo(value) != 0) {
             setValue(value, g);
         }
-        
+        g.drawString(value, x + textX , y + textY);     
         g.drawRect(x, y, width, height);
 		Color c = g.getColor();
 
@@ -130,7 +130,8 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         }
 	g.fillRect(x+1, y+1, width-1, height-1);
         g.setColor(c);
-		
+        g.drawString(value, x + textX , y + textY);
+
         //g.drawRoundRect(x, y, width, height, arc, arc);
         g.drawLine(x+width-space-fileX, y + space, x+width-space-fileX, y+space+fileY);
         g.drawLine(x+width-space-fileX, y + space, x+width-space-cran, y+space);
@@ -139,11 +140,9 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         g.drawLine(x+width-space, y+space+fileY, x+width-space-fileX, y+space+fileY);
         g.drawLine(x+width-space-cran, y+space, x+width-space-cran, y+space+cran);
         g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
-		
-		g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
-        
         g.drawString(value, x + textX , y + textY);
-        
+	//g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
+
     }
     
     public void setValue(String val, Graphics g) {
