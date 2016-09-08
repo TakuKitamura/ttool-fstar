@@ -326,9 +326,10 @@ public class Main implements ActionListener {
         // loading configuration
 
         // starting application
-        if (mainGUI == null) {
-            ErrorGUI.exit(ErrorGUI.GUI);
-        }
+// DB: Useless
+//        if (mainGUI == null) {
+//            ErrorGUI.exit(ErrorGUI.GUI);
+//        }
 
         if (splashFrame != null) {
             splashFrame.setMessage("Starting TTool ...");
