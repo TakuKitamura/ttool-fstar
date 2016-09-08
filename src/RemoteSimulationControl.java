@@ -44,13 +44,13 @@ knowledge of the CeCILL license and that you accept its terms.
 * @see
 */
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-import remotesimulation.*;
-
-import myutil.*;
-//import uppaaldesc.*;
+import remotesimulation.CommandParser;
+import remotesimulation.RemoteConnection;
+import remotesimulation.RemoteConnectionException;
 
 public class RemoteSimulationControl extends Thread  {
 	

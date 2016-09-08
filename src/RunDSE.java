@@ -44,21 +44,7 @@ knowledge of the CeCILL license and that you accept its terms.
 * @see
 */
 
-import java.io.*;
-import java.util.*;
-
-//import tmltranslator.*;
-//import tmltranslator.touppaal.*;
-//import tmltranslator.tomappingsystemc.*;
-import tmltranslator.tomappingsystemc2.*;
-//import tmltranslator.toturtle.*;
-
-import translator.*;
-
-import dseengine.*;
-
-import myutil.*;
-//import uppaaldesc.*;
+import dseengine.DSEScriptReader;
 
 public class RunDSE  {
 

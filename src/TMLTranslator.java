@@ -45,19 +45,23 @@
    * @see
    */
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 
-import tmltranslator.*;
-import tmltranslator.touppaal.*;
-import tmltranslator.tomappingsystemc.*;
-import tmltranslator.tomappingsystemc2.*;
-import tmltranslator.toturtle.*;
-
-import translator.*;
-
-import myutil.*;
 //import uppaaldesc.*;
+import myutil.FileUtils;
+import tmltranslator.TMLError;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLMappingTextSpecification;
+import tmltranslator.TMLModeling;
+import tmltranslator.TMLSyntaxChecking;
+import tmltranslator.TMLTextSpecification;
+import tmltranslator.toturtle.Mapping2TIF;
+import tmltranslator.toturtle.TML2TURTLE;
+import tmltranslator.touppaal.TML2UPPAAL;
+import translator.TURTLEModeling;
+import translator.TURTLETranslator;
 
 public class TMLTranslator  {
     // 0 -> LOTOS
