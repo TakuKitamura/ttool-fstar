@@ -71,7 +71,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private final static int STORAGE = 0;
 	private final static int TRANSFER = 1;
 	private final static int CONTROLLER = 2;
-	private final static String EMPTY_MAPPABLE_ARCH_UNITS_LIST = "No mappable units";
+	private final static String EMPTY_MAPPABLE_ARCH_UNITS_LIST = "No units to map";
 	private final static String EMPTY_CPS_LIST = "No CPs to reference";
 	private final static String EMPTY_INSTANCES_LIST = "No instances to map";
 	
@@ -241,7 +241,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 			panel3 = new JPanel();
 			panel3.setLayout(gridbag3);
-			panel3.setBorder(new javax.swing.border.TitledBorder("Assigning value to message parameters"));
+			panel3.setBorder(new javax.swing.border.TitledBorder("Assigning a value to CP parameters"));
 			panel3.setPreferredSize(new Dimension(325, 300));
 			
 			panel4 = new JPanel();
@@ -269,7 +269,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c1.anchor = GridBagConstraints.CENTER;
 			
 			// third line panel1
-			panel1.add(new JLabel("Name:"), c1);
+			panel1.add(new JLabel("CP name:"), c1);
 			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 			nameOfCP = new JTextField( name );
 			nameOfCP.setPreferredSize( new Dimension(150, 30) );
@@ -313,7 +313,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			}
 			
 			//seventh line panel1
-			panel1.add( new JLabel( "Instance:" ), c1 );
+			panel1.add( new JLabel( "Available instances:" ), c1 );
 			sdInstancesCB = new JComboBox( sdInstancesSL );
 			sdInstancesCB.setSelectedIndex( 0 );
 			sdInstancesCB.addActionListener( this );
@@ -343,6 +343,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c1.gridheight = 5;
 			c1.weighty = 10.0;
 			c1.weightx = 10.0;
+			panel1.add( new JLabel( "Available platform units:"), c1 );
 			panel1.add( mappableArchUnitsSP, c1 );
 			
 			//tenth line panel1
@@ -1029,7 +1030,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			}
 			makeArchitectureUnitsScrollPane( mappableArchUnitsSL );
 		}
-
+        
+        // Returns the index of the selected CP in the combo box, otherwise returns -1 
 		private int getIndexOfSelectedCP()	{
 
 			if( listCPs.size() > 0 )	{
@@ -1484,7 +1486,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private void createAttributesAndAddressVector()	{
 
 		String selectedCPName = (String)communicationPatternsCB.getSelectedItem();
-		int index = getIndexOfSelectedCP();
+		int index = getIndexOfSelectedCP(); // returns -1 upon error
 
 		TraceManager.addDev( "The selected CP has index: " + index );
 		if( index >= 0 )	{
@@ -1516,6 +1518,12 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 				addressVector.add( attr.getType() + " " + attr.getName() );
 			}
 		}
+        else    {   // Data structures attributesVector and addressVector are not initialized
+			attributesVector = new Vector<String>();
+            attributesVector.add( "No attribute found" );
+			addressVector = new Vector<String>();
+            addressVector.add( "No address found" );
+        }
 	}
 
 	private void createApplicationAttributesVector()	{
