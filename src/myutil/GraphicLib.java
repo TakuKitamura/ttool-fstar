@@ -179,7 +179,7 @@ public final class GraphicLib {
         }
         
         // passage en cds polaires
-        double ro = Conversion.ro(x, y);
+       // double ro = Conversion.ro(x, y);
         double alpha = Conversion.theta(x, y);
         
         // tete de la fleche
@@ -391,7 +391,7 @@ public final class GraphicLib {
             double num = y3 - y1 + (x1*(y1-y2)/(x1-x2)) - (x3*(y3-y4)/(x3-x4));
             x = num / den;
             double ya = ((y3-y4)*(x-x3))/(x3-x4) + y3;
-            double yb = ((y1-y2)*(x-x1))/(x1-x2) + y1;
+            //double yb = ((y1-y2)*(x-x1))/(x1-x2) + y1;
             //System.out.println("Toto35 x=" + x + " ya=" + ya + " yb=" + yb);
             if ((pointBelongsToSegment(x, ya, x1, y1, x2, y2)) && (pointBelongsToSegment(x, ya, x3, y3, x4, y4))) {
                 return new Point((int)x, (int)ya);
@@ -511,7 +511,18 @@ public final class GraphicLib {
         w.setLocation((screen.width - w.getSize().width)/2,(screen.height - w.getSize().height)/2);
     }
     
-    public static void centerOnParent(Window w) {
+    public static void centerOnParent(	final Window window ) {
+    	centerOnParent( window, -1, -1 );
+    }
+    
+    public static void centerOnParent(	final Window w,
+    									final int width,
+    									final int heigth ) {
+    	if ( width > 0 && heigth > 0 ) {
+	        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	        w.setSize( Math.min( width, screenSize.width ), Math.min( heigth, screenSize.height ) );
+    	}
+    	
         Window parent = w.getOwner();
         if (parent == null) {
             centerOnScreen(w);
