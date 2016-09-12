@@ -47,14 +47,33 @@
 
 package ddtranslatorSoclib.toSoclib;
 
-import java.awt.*;
-import java.util.*;
+import java.io.File;
+import java.util.LinkedList;
+import java.util.Vector;
 
-import java.io.*;
-
-import myutil.*;
-import avatartranslator.*;
-import ddtranslatorSoclib.*;
+import avatartranslator.AvatarAction;
+import avatartranslator.AvatarActionAssignment;
+import avatartranslator.AvatarActionOnSignal;
+import avatartranslator.AvatarAttribute;
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarMethod;
+import avatartranslator.AvatarRandom;
+import avatartranslator.AvatarRelation;
+import avatartranslator.AvatarSignal;
+import avatartranslator.AvatarSpecification;
+import avatartranslator.AvatarStartState;
+import avatartranslator.AvatarState;
+import avatartranslator.AvatarStateMachine;
+import avatartranslator.AvatarStateMachineElement;
+import avatartranslator.AvatarStopState;
+import avatartranslator.AvatarTransition;
+import avatartranslator.AvatarType;
+import ddtranslatorSoclib.AvatarTask;
+import ddtranslatorSoclib.AvatarddSpecification;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
 
 public class TasksAndMainGenerator {
 
@@ -66,13 +85,13 @@ public class TasksAndMainGenerator {
     private final static String UNUSED_ATTR = "__attribute__((unused))";    
     //private final static String GENERATED_PATH = "generated_src_soclib" + File.separator; 
     private final static String GENERATED_PATH = "generated_src" + File.separator; 
-    private final static String UNKNOWN = "UNKNOWN";
+ //   private final static String UNKNOWN = "UNKNOWN";
     private final static String CR = "\n";
     private final static String CR2 = "\n\n";
 
     public static AvatarSpecification avspec;
     public static AvatarddSpecification avddspec;
-    private Vector warnings;
+    private Vector<?> warnings;
 
     private MainFileSoclib mainFile;
     private Vector<TaskFileSoclib> taskFiles;
@@ -129,7 +148,7 @@ public class TasksAndMainGenerator {
         FileUtils.saveFile(path + "Makefile.soclib", makefile_SocLib);
     }
 
-    public Vector getWarnings() {
+    public Vector<?> getWarnings() {
         return warnings;
     }
 
@@ -250,7 +269,7 @@ public class TasksAndMainGenerator {
 	    mainFile.appendToHCode("/* Asynchronous channels */" + CR);
 	    mainFile.appendToBeforeMainCode("/* Asynchronous channels */" + CR);
 	    mainFile.appendToMainCode("/* Asynchronous channels */" + CR);
-            int j=0;
+  //          int j=0;
 	    for(AvatarRelation ar: avspec.getRelations()) {
 		if (ar.isAsynchronous()) {
 		    for(int i=0; i<ar.nbOfSignals() ; i++) {
@@ -295,7 +314,7 @@ public class TasksAndMainGenerator {
 			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+i+";" + CR);								
 			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+i+";" + CR);
 	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) + " CHANNEL"+i+";" + CR2);
-			j++;		
+			//j++;		
 		    }
 		}
 	    }
@@ -510,7 +529,7 @@ public class TasksAndMainGenerator {
     private String makeChannelAction(AvatarBlock _block,AvatarStateMachineElement asme) {
 
         String ret2 = "";
-        int i;
+       // int i;
 
         if (asme instanceof AvatarActionOnSignal) {
             AvatarActionOnSignal aaos = (AvatarActionOnSignal)asme;
@@ -674,7 +693,7 @@ public class TasksAndMainGenerator {
     }
 
     public String makeBehaviourFromElement(AvatarBlock _block, AvatarStateMachineElement _asme, boolean firstCall) {
-        AvatarStateMachineElement asme0;
+     //   AvatarStateMachineElement asme0;
 
 
         if (_asme == null) {
@@ -707,7 +726,7 @@ public class TasksAndMainGenerator {
                 ret+= "waitFor(" + reworkDelay(at.getMinDelay()) + ", " + reworkDelay(at.getMaxDelay()) + ");" + CR;
             }
 
-            String act;
+        //    String act;
             ret += makeActionsOfTransaction(_block, at);
             /*for(i=0; i<at.getNbOfAction(); i++) {
             // Must know whether this is an action or a method call
@@ -1185,13 +1204,13 @@ public class TasksAndMainGenerator {
         return "debugMsg(\"" + s + "\");" + CR;
     }
 
-    private String taskDebugMsg(String s) {
-        if (!debug) {
-            return "";
-        }
-
-        return "debug2Msg(__myname, \"" + s + "\");" + CR;
-    }
+//    private String taskDebugMsg(String s) {
+//        if (!debug) {
+//            return "";
+//        }
+//
+//        return "debug2Msg(__myname, \"" + s + "\");" + CR;
+//    }
 
     public String makeActionsOfTransaction(AvatarBlock _block, AvatarTransition _at) {
         String ret = "";
