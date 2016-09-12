@@ -47,15 +47,18 @@
 package launcher;
 
 
-import myutil.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Vector;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import javax.crypto.*;
-import java.security.*;
-
-import myutil.*;
+import myutil.AESEncryptor;
+import myutil.TraceManager;
 
 public class RshServer {
     public static int PORT_NUMBER = 8375;
@@ -63,7 +66,7 @@ public class RshServer {
     private int port = PORT_NUMBER;
     private ServerSocket server = null;
     private int id = 0;
-    private Vector processes;
+    private Vector<ExecutionThread> processes;
     private int MAX_PROC = 255;
     public static final String VERSION = "0.61";
     private int BUFSIZE = 511;
@@ -87,7 +90,7 @@ public class RshServer {
     }
 
     private void startingServer() {
-	processes = new Vector();
+	processes = new Vector<ExecutionThread>();
 	int i = 0;
 	for(i=0; i<100; i++) {
 	    try {
@@ -161,14 +164,14 @@ public class RshServer {
         }
     }
 
-    private void respondNoln(PrintStream out, String s) {
-        //System.out.println("Sending: " + s);
-        try {
-            out.print(s);
-            out.flush();
-        } catch (Exception e) {
-        }
-    }
+//    private void respondNoln(PrintStream out, String s) {
+//        //System.out.println("Sending: " + s);
+//        try {
+//            out.print(s);
+//            out.flush();
+//        } catch (Exception e) {
+//        }
+//    }
 
     private int startNewProcess(String path) {
         if (processes.size() >= MAX_PROC) {
@@ -234,7 +237,7 @@ public class RshServer {
     private ExecutionThread getExecutionThread(int id) {
         ExecutionThread et;
         for(int i=0; i<processes.size(); i++) {
-            et = (ExecutionThread)(processes.elementAt(i));
+            et = processes.elementAt(i);
             if (et.getPort() == id) {
                 return et;
             }
@@ -280,7 +283,7 @@ public class RshServer {
     public void killProcess(int id) {
         ExecutionThread et;
         for(int i=0; i<processes.size(); i++) {
-            et = (ExecutionThread)(processes.elementAt(i));
+            et = processes.elementAt(i);
             if (et.getPort() == id) {
                 et.stopProcess();
                 processes.removeElement(et);
@@ -294,7 +297,7 @@ public class RshServer {
     public void killAllProcesses() {
         ExecutionThread et;
         for(int i=0; i<processes.size(); i++) {
-            et = (ExecutionThread)(processes.elementAt(i));
+            et = processes.elementAt(i);
             et.stopProcess();
             processes.removeElement(et);
             System.out.println("Process " + id + " killed");
