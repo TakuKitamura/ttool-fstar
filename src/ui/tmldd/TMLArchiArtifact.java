@@ -101,7 +101,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     }
 
     public boolean isHidden() {
-	TraceManager.addDev("Am I hidden?" + getValue());
+	//TraceManager.addDev("Am I hidden?" + getValue());
 	if (tdp != null) {
 	    if (tdp instanceof TMLArchiDiagramPanel) {
 		return !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
