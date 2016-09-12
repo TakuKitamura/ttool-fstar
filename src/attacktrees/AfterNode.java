@@ -45,9 +45,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package attacktrees;
 
-import java.util.*;
-
-
 public class AfterNode extends TimeNode { 
 
     public AfterNode(String _name, Object _referenceObject, int _time) {
