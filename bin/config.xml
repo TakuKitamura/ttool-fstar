@@ -16,65 +16,59 @@
 <BcgmergePath data="/packages/cadp/com/bcg_merge" />
 <CaesarPath data="/packages/cadp/bin.iX86/caesar" />
 <CaesarOpenPath data="/packages/cadp/com/caesar.open" />
-<FILEPath data="/home/andream/TURTLE/modeling" />
-<LIBPath data="/home/andream/TURTLE/lib" />
-<IMGPath data="/home/andream/TURTLE/figure" />
-<LOTOSPath data="/home/andream/TURTLE/lotos" />
-<GGraphPath data="/home/andream/TURTLE/graphs" />
-<TGraphPath data="/home/andream/TURTLE/graphs" />
+<FILEPath data="../modeling" />
+<LIBPath data="../lib" />
+<IMGPath data="../figure" />
+<LOTOSPath data="../lotos" />
+<GGraphPath data="../graphs" />
+<TGraphPath data="../graphs" />
 <TToolUpdateURL data="" data1="http://labsoc.comelec.enst.fr/turtle/ttoolversion.html" />
 <TToolUpdateProxy data="false" />
 <TToolUpdateProxyPort data="8080" />
 <TToolUpdateProxyHost data="To Be Completed" />
-<JavaCodeDirectory data="/home/andream/TURTLE/javacode" />
+<JavaCodeDirectory data="../javacode" />
 <JavaCompilerPath data="/usr/bin/javac" />
-<TToolClassPath data="/home/andream/TURTLE/javacode" />
+<TToolClassPath data="../javacode" />
 <JavaExecutePath data="/usr/bin/java" />
 <JavaHeader data="import java.sql.*;" />
-<SystemCCodeDirectory data="/home/andream/TURTLE/simulators/c++2/" />
+<SystemCCodeDirectory data="../simulators/c++2/" />
 <SystemCHost data="localhost"/>
-<SystemCCodeCompileCommand data="make -C /home/andream/TURTLE/simulators/c++2/" />
-<SystemCCodeExecuteCommand data="/home/andream/TURTLE/simulators/c++2/run.x -ovcd /home/andream/TURTLE/simulators/c++2/vcddump.vcd" />
-<SystemCCodeInteractiveExecuteCommand data="/home/andream/TURTLE/simulators/c++2/run.x -server" />
-<TMLCodeDirectory data="/home/andream/TURTLE/tmlcode" />
-<CcodeDirectory data="/home/andream/TURTLE/Ccode" />
+<SystemCCodeCompileCommand data="make -C ../simulators/c++2/" />
+<SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd ../simulators/c++2/vcddump.vcd" />
+<SystemCCodeInteractiveExecuteCommand data="../simulators/c++2/run.x -server" />
+<TMLCodeDirectory data="../simulators/c++2/tmlcode" />
+<CcodeDirectory data="../simulators/c++2/Ccode" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
-<VCDPath data="/home/andream/TURTLE/vcd/" />
-<UPPAALCodeDirectory data="/home/andream/TURTLE/uppaal/" />
+<VCDPath data="../simulators/c++2/" />
+<UPPAALCodeDirectory data="../uppaal/" />
 <UPPAALVerifierPath data="/packages/uppaal-4.0.11/verifyta" />
 <UPPAALVerifierHost data="localhost" />
-<ProVerifCodeDirectory data="/home/andream/TURTLE/proverif/" />
+<ProVerifCodeDirectory data="../proverif/" />
 <ProVerifVerifierPath data="/packages/proverif/proverif" />
 <ProVerifVerifierHost data="localhost" />
-<AVATARExecutableCodeDirectory data="/home/andream/TURTLE/executablecode/" />
-<AVATARMPSoCCodeDirectory data="/home/andream/TURTLE/MPSoC/" />
-<AVATARMPSoCCompileCommand data="make -C /home/andream/TURTLE/MPSoC updategeneratedcode compilesoclib" />
+<AVATARExecutableCodeDirectory data="../executablecode/" />
+<AVATARMPSoCCodeDirectory data="../MPSoC/" />
+<AVATARMPSoCCompileCommand data="make -C ../MPSoC updategeneratedcode compilesoclib" />
 <AVATARExecutableCodeHost data="localhost"/>
-<AVATARExecutableCodeCompileCommand data="make -C /home/andream/TURTLE/executablecode" />
-<AVATARExecutableCodeExecuteCommand data="/home/andream/TURTLE/executablecode/run.x" />
-<AVATARExecutableSoclibCodeCompileCommand data="make -C /home/andream/TURTLE/MPSoC updategeneratedcode compilesoclib" />
-<AVATARExecutableSoclibCodeExecuteCommand data="make -C /home/andream/TURTLE/MPSoC runsoclib" />
-<AVATARExecutableSoclibCodeTraceCommand data="make -C /home/andream/TURTLE/MPSoC runsoclib-trace" />
-<AVATARExecutableSoclibTraceFile data="/home/andream/TURTLE/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/trace" />
+<AVATARExecutableCodeCompileCommand data="make -C ../executablecode" />
+<AVATARExecutableCodeExecuteCommand data="../executablecode/run.x" />
+<AVATARExecutableSoclibCodeCompileCommand data="make -C ../MPSoC updategeneratedcode compilesoclib" />
+<AVATARExecutableSoclibCodeExecuteCommand data="make -C ../MPSoC runsoclib" />
+<AVATARExecutableSoclibCodeTraceCommand data="make -C ../MPSoC runsoclib-trace" />
+<AVATARExecutableSoclibTraceFile data="../Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/trace" />
 
 
 <ExternalCommand1Host data="localhost"/>
-<ExternalCommand1 data="/opt/local/bin/gtkwave /home/andream/TURTLE/simulators/c++2/vcddump.vcd"/>
+<ExternalCommand1 data="gtkwave ../simulators/c++2/vcddump.vcd"/>
 <ExternalCommand2Host data="localhost"/>
-<ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /home/andream/TURTLE/uppaal/spec.xml"/>
+<ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal ../uppaal/spec.xml"/>
 
-<LastOpenFile data="/home/andream/TURTLE/papers/papersAndreaENRICI/Zigbee/models/ZigBeeDEMO.xml"/>
+<LastOpenFile data="../modeling/BENCH3_new.xml"/>
 
 
 
-<LastWindowAttributes x="65" y="24" width="1301" height="744" max="true" />
+<LastWindowAttributes x="-8" y="-8" width="1382" height="744" max="true" />
 
 
 <ProVerifHash data=""/>
-
 </TURTLECONFIGURATION>
-
-
-
-
-
