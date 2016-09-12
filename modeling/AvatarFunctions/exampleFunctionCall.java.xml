@@ -28,7 +28,7 @@
 </CONNECTOR>
 <COMPONENT type="302" id="19" >
 <cdparam x="351" y="389" />
-<sizeparam width="409" height="97" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="375" height="97" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Proverif Pragma" value="#InitialSystemKnowledge Bob.skey Alice.skey
@@ -731,7 +731,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
+<Validated value="SendReceiveMessage;Alice;Bob;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="299" >
@@ -751,8 +751,8 @@
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="302" id="316" >
-<cdparam x="351" y="389" />
-<sizeparam width="409" height="97" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="350" y="372" />
+<sizeparam width="375" height="97" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Proverif Pragma" value="#InitialSystemKnowledge Bob.skey Alice.skey

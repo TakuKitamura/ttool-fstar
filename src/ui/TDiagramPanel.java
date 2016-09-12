@@ -388,11 +388,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         for(int i=componentList.size()-1; i>=0; i--) {
             tgc = this.componentList.get(i);
             if (!tgc.isHidden()) {
-                TraceManager.addDev("Painting " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY());
+                //TraceManager.addDev("Painting " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY());
                 tgc.draw(g);
             }
 	    else {
-	        TraceManager.addDev("Ignoring " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY()); 
+	        //TraceManager.addDev("Ignoring " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY()); 
 	    }
         }
     }

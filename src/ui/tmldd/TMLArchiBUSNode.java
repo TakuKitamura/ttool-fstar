@@ -58,7 +58,7 @@ import ui.window.*;
 
 import tmltranslator.*;
 
-public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes {
+public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiElement {
     private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;

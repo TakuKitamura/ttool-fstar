@@ -54,7 +54,15 @@ import java.util.*;
 import ui.*;
 
 public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
+
+    public static final int VIEW_ALL = 0;
+    public static final int VIEW_ARCHITECTURE_ONLY = 1;
+
     private int masterClockFrequency = 200; // in MHz
+
+    protected int view = VIEW_ALL;
+
+  
 
     public  TMLArchiDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
@@ -375,6 +383,22 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
             }
         }
         return prio;
+    }
+
+    public void setCurrentView(int _index) {
+	TraceManager.addDev("SelectedIndex=" + _index);
+	view = _index;
+    }
+
+    public boolean inCurrentView(TGComponent tgc) {
+	switch(view) {
+	case VIEW_ALL:
+	    return true;
+	case VIEW_ARCHITECTURE_ONLY:
+	    return (tgc instanceof TMLArchiElement);
+	default:
+	    return true;
+	}
     }
 
 }//End of class

@@ -57,7 +57,7 @@ import ui.*;
 import ui.window.*;
 import tmltranslator.modelcompiler.*;
 
-public class TMLArchiArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
+public class TMLArchiArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiTask {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -98,6 +98,16 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         makeFullValue();
 
         myImageIcon = IconManager.imgic702;
+    }
+
+    public boolean isHidden() {
+	TraceManager.addDev("Am I hidden?" + getValue());
+	if (tdp != null) {
+	    if (tdp instanceof TMLArchiDiagramPanel) {
+		return !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
+	    }
+	}
+	return false;
     }
 
     public int getPriority() {
