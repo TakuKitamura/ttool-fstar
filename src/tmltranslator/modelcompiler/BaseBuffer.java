@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
    ludovic.apvrille AT enst.fr
+   andrea.enrici AT enstr.fr
 
    This software is a computer program whose purpose is to allow the
    edition of TURTLE analysis, design and deployment diagrams, to
@@ -36,63 +37,57 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class TMLArchiNode
-   * Node. To be used in TML architecture diagrams.
-   * Creation: 02/05/2005
-   * @version 1.0 02/05/2005
-   * @author Ludovic APVRILLE
+   * Class BaseBuffer
+   * Creation: 11/02/2014
+   * @version 1.0 11/02/2014
+   * @author Andrea ENRICI
    * @see
    */
 
-package ui.tmldd;
+package tmltranslator.modelcompiler;;
 
-import java.awt.*;
 import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
+import java.nio.*;
 import myutil.*;
-import ui.*;
-import ui.window.*;
-
 import tmltranslator.*;
-import tmltranslator.modelcompiler.*;
 
-public abstract class TMLArchiNode extends TGCWithInternalComponent implements SwallowTGComponent {
-    protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;
+public class BaseBuffer extends Buffer	{
 
-    //the return type of method getComponentType
-    public final static int STORAGE = 0;
-    public final static int TRANSFER = 1;
-    public final static int CONTROLLER = 2;
-    public final static int OTHER = 3;  //for CPNodes
-		protected ArchUnitMEC MECType = new CpuMEC();
+	public static final int baseAddressIndex = 1;
 
-    public TMLArchiNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-    }
+	protected String baseAddressValue = USER_TO_DO;
+	protected static final String baseAddressType = "uint32_t*";
+	
+	private String Context = "BASE_BUFFER_CONTEXT";
 
-    public ArrayList<TMLArchiArtifact> getAllTMLArchiArtifacts() {
-        ArrayList<TMLArchiArtifact> artifacts = new ArrayList<TMLArchiArtifact>();
+	public static final String DECLARATION = "extern struct BASE_BUFFER_TYPE {" + CR + TAB +
+																						baseAddressType + SP + "base_address" + SC + CR + "};";
 
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof TMLArchiArtifact) {
-                artifacts.add((TMLArchiArtifact)(tgcomponent[i]));
-            }
-        }
+	public BaseBuffer( String _name, TMLTask _task )	{
+		type = "BASE_BUFFER_TYPE";
+		name = _name;
+		task = _task;
+	}
 
-        return artifacts;
-    }
+	@Override public String getInitCode()	{
+		StringBuffer s = new StringBuffer();
+		s.append( TAB + name + ".base_address = " + "(" + baseAddressType + ")" + baseAddressValue + ";" + CR );
+		return s.toString();
+	}
+	
+	public String toString()	{
 
-    public abstract int getComponentType();
-
-    public int getClockRatio(){
-        return clockRatio;
-    }
-
-		public ArchUnitMEC getMECType()	{
-			return MECType;
+		StringBuffer s = new StringBuffer( super.toString() );
+		if( bufferParameters != null )	{
+			s.append( TAB2 + "base_address = " + bufferParameters.get( baseAddressIndex ) + SC + CR );
 		}
+		else	{
+			s.append( TAB2 + "base_address = /* USER TO DO */;" + CR );
+		}
+		return s.toString();
+	}
 
-}
+	public String getContext()	{
+		return Context;
+	}
+}	//End of class

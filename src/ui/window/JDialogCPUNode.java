@@ -53,7 +53,7 @@ import javax.swing.*;
 import ui.*;
 import ui.tmlcd.*;
 import java.util.*;
-import tmltranslator.ctranslator.*;
+import tmltranslator.modelcompiler.*;
 import ui.*;
 import ui.tmldd.*;
 import ui.interactivesimulation.*;

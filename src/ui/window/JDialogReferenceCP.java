@@ -60,7 +60,7 @@ import ui.tmlsd.*;
 import ui.tmlcp.*;
 import ui.tmlcd.*;
 import ui.avatarbd.*;
-import tmltranslator.ctranslator.*;
+import tmltranslator.modelcompiler.*;
 import tmltranslator.tmlcp.*;
 import tmltranslator.*;
 import myutil.*;

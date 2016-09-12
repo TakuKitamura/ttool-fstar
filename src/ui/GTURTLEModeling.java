@@ -133,7 +133,7 @@ import proverifspec.*;
 
 import req.ebrdd.*;
 
-import tmltranslator.ctranslator.*;
+import tmltranslator.modelcompiler.*;
 import tmltranslator.toavatar.*;
 
 //Communication Pattern javaCC parser
@@ -424,18 +424,18 @@ public class GTURTLEModeling {
         int type;
         TGComponent tgc;
         String applicationName;
-        TMLCCodeGeneration Ccode;
+        TMLModelCompiler Ccode;
 
         if( tmap == null )      {
             JOptionPane.showMessageDialog(mgui.frame, "C code is only generated from an architecture diagram with mapping information", "Code generation failed", JOptionPane.INFORMATION_MESSAGE);
             return true;
         }
-        TMLCCodeGenerationSyntaxCheck syntax = new TMLCCodeGenerationSyntaxCheck( tmap, tmap.getTMLModeling(), tmap.getTMLArchitecture() );
+        TMLModelCompilerParser syntax = new TMLModelCompilerParser( tmap, tmap.getTMLModeling(), tmap.getTMLArchitecture() );
         syntax.check();
         if( syntax.hasErrors() )        {
-            for( TMLCCodeGenerationError error: syntax.getErrors() ) {
+            for( TMLModelCompilerError error: syntax.getErrors() ) {
 	    	TraceManager.addDev( "ERROR: " + error.toString() );
-                if( error.type == TMLCCodeGenerationError.ERROR_STRUCTURE ) {
+                if( error.type == TMLModelCompilerError.ERROR_STRUCTURE ) {
                     type = CheckingError.STRUCTURE_ERROR;
                 }
                 else {
@@ -456,7 +456,7 @@ public class GTURTLEModeling {
             return true;
         }
         applicationName = tmap.getMappedTasks().get(0).getName().split("__")[0];
-        Ccode = new TMLCCodeGeneration( _title, applicationName, mgui.frame, mgui.getAllTMLCP(), tmap );
+        Ccode = new TMLModelCompiler( _title, applicationName, mgui.frame, mgui.getAllTMLCP(), tmap );
         Ccode.toTextFormat();
         try {
             if( ConfigurationTTool.CcodeDirectory.equals("") )  {

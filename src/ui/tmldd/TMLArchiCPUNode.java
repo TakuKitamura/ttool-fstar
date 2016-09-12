@@ -58,7 +58,7 @@ import ui.window.*;
 import ui.interactivesimulation.*;
 
 import tmltranslator.*;
-import tmltranslator.ctranslator.*;
+import tmltranslator.modelcompiler.*;
 
 public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent, WithAttributes {
     private int textY1 = 15;

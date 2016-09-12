@@ -48,8 +48,8 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.tmldd;
 
 import javax.swing.*;
-//import java.awt.*;
-//import java.awt.event.*;
+import java.awt.*;
+import java.awt.event.*;
 
 import ui.*;
 
@@ -57,7 +57,6 @@ public class TMLArchiDiagramToolBar extends TToolBar {
     
     public TMLArchiDiagramToolBar(MainGUI _mgui) {
         super(_mgui);
-        
     }
     
     protected void setActive(boolean b) {
@@ -138,11 +137,11 @@ public class TMLArchiDiagramToolBar extends TToolBar {
         	button.addMouseListener(mgui.mouseHandler);
         }
 		button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button.addMouseListener(mgui.mouseHandler);
 		button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button.addMouseListener(mgui.mouseHandler);
 		button = this.add(mgui.actions[TGUIAction.TMLARCHI_KEY]);
-    button.addMouseListener(mgui.mouseHandler);
+        button.addMouseListener(mgui.mouseHandler);
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);

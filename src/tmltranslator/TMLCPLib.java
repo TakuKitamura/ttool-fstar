@@ -48,7 +48,7 @@ package tmltranslator;
 
 import java.util.*;
 import myutil.*;
-import tmltranslator.ctranslator.*;
+import tmltranslator.modelcompiler.*;
 
 public class TMLCPLib extends TMLElement {
 

@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
    ludovic.apvrille AT enst.fr
+   andrea.enrici AT enstr.fr
 
    This software is a computer program whose purpose is to allow the
    edition of TURTLE analysis, design and deployment diagrams, to
@@ -36,63 +37,58 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class TMLArchiNode
-   * Node. To be used in TML architecture diagrams.
-   * Creation: 02/05/2005
-   * @version 1.0 02/05/2005
-   * @author Ludovic APVRILLE
+   * Class ArchUnitMEC, Model Extension Construct (MEC) class for architecture units
+   * Creation: 05/02/2014
+   * @version 1.0 05/02/2014
+   * @author Andrea ENRICI
    * @see
    */
 
-package ui.tmldd;
+package tmltranslator.modelcompiler;
 
-import java.awt.*;
 import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
+import java.nio.*;
 import myutil.*;
-import ui.*;
-import ui.window.*;
 
-import tmltranslator.*;
-import tmltranslator.modelcompiler.*;
+public abstract class ArchUnitMEC	{
 
-public abstract class TMLArchiNode extends TGCWithInternalComponent implements SwallowTGComponent {
-    protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;
+	private static ArchUnitMEC[] typesArr = { new CpuMEC(), new FepMEC(), new InterleaverMEC(), new MapperMEC(), new AdaifMEC() };
+	public static final Vector<ArchUnitMEC> Types = new Vector<ArchUnitMEC>( Arrays.asList( typesArr ) );
+	private static String[] stringTypesArr = { "CPU", "FEP", "INTL", "MAPP", "ADAIF" };
+	public static final Vector<String> stringTypes = new Vector<String>( Arrays.asList( stringTypesArr ) );
+	public static final int CpuMECIndex = 0;
+	public static final int FepMECIndex = 1;
+	public static final int InterleaverMECIndex = 2;
+	public static final int MapperMECIndex = 3;
+	public static final int AdaifMECIndex = 4;
 
-    //the return type of method getComponentType
-    public final static int STORAGE = 0;
-    public final static int TRANSFER = 1;
-    public final static int CONTROLLER = 2;
-    public final static int OTHER = 3;  //for CPNodes
-		protected ArchUnitMEC MECType = new CpuMEC();
+	public String CR = "\n";
+	public String TAB = "\t";
 
-    public TMLArchiNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-    }
+	protected int index;
+	protected String initCtxRoutine;
+	protected String ctxCleanupRoutine;
+	protected String localMemoryPointer;
+	protected String context = "EMBB_CONTEXT";
+	
+	public int getIndex()	{
+		return index;
+	}
 
-    public ArrayList<TMLArchiArtifact> getAllTMLArchiArtifacts() {
-        ArrayList<TMLArchiArtifact> artifacts = new ArrayList<TMLArchiArtifact>();
+	public String getContext()	{
+		return context;
+	}
 
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof TMLArchiArtifact) {
-                artifacts.add((TMLArchiArtifact)(tgcomponent[i]));
-            }
-        }
+	public String getCtxInitCode()	{
+		return initCtxRoutine;
+	}
 
-        return artifacts;
-    }
+	public String getCtxCleanupCode()	{
+		return ctxCleanupRoutine;
+	}
 
-    public abstract int getComponentType();
+	public String getLocalMemoryPointer()	{
+		return localMemoryPointer;
+	}
 
-    public int getClockRatio(){
-        return clockRatio;
-    }
-
-		public ArchUnitMEC getMECType()	{
-			return MECType;
-		}
-
-}
+}	//End of class

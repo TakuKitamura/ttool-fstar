@@ -54,7 +54,7 @@ import java.util.*;
 
 import ui.*;
 import ui.tmldd.*;
-import tmltranslator.ctranslator.*;
+import tmltranslator.modelcompiler.*;
 
 
 public class JDialogMemoryNode extends javax.swing.JDialog implements ActionListener  {

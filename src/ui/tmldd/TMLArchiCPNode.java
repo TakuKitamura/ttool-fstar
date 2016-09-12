@@ -57,9 +57,9 @@ import ui.*;
 import ui.window.*;
 
 import tmltranslator.*;
-import tmltranslator.ctranslator.*;
+import tmltranslator.modelcompiler.*;
 
-public class TMLArchiCPNode extends TMLArchiCommunicationNode implements SwallowTGComponent {
+public class TMLArchiCPNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes {
     private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;
@@ -211,7 +211,12 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         transferType1 = dialog.getTransferTypes().get(0);
         transferType2 = dialog.getTransferTypes().get(1);
         assignedAttributes = dialog.getAssignedAttributes();
-				TraceManager.addDev( "RETRIEVING ASSIGNED ATTRIBUTES: " + assignedAttributes.toString() );
+        TraceManager.addDev( "name " + name );
+        TraceManager.addDev( "mappedUnits " + mappedUnits );
+        TraceManager.addDev( "cpMEC " + cpMEC );
+        TraceManager.addDev( "transferType1 " + transferType1 );
+        TraceManager.addDev( "transferType2 " + transferType2 );
+        TraceManager.addDev( "assignedAttributes " + assignedAttributes.toString() );
 
         if( !dialog.isRegularClose() )  {
             return false;
@@ -438,4 +443,17 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         transferTypes.add( transferType2 );
         return transferTypes;
     }
+
+    public String getAttributes()   {
+        String attr = "";
+        attr += assignedAttributes.toString(); // only the message attributes of the mapped CP are retrieved!
+        return attr;
+    }
+
+    public String getCodeGenerationAttributes()   {
+        String attr = "";
+        attr += cpMEC;
+        return attr;
+    }
+
 }

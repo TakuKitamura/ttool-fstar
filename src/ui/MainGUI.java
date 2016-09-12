@@ -87,6 +87,7 @@ import ui.tmlcompd.*;
 import ui.tmldd.*;
 import ui.tmlcp.*;
 import ui.tmlsd.*;
+import tmltranslator.modelcompiler.*;
 
 import ui.procsd.*;
 import ui.prosmd.*;
@@ -422,7 +423,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         } else {
             jfctgraph = new JFileChooser();
         }
-
 
         TFileFilter filter = new TFileFilter();
         jfc.setFileFilter(filter);

@@ -55,7 +55,7 @@ import org.w3c.dom.*;
 import myutil.*;
 import ui.*;
 import ui.window.*;
-import tmltranslator.ctranslator.*;
+import tmltranslator.modelcompiler.*;
 
 public class TMLArchiArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
     protected int lineLength = 5;

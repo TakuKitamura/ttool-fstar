@@ -1132,6 +1132,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
     public void drawWithAttributes(Graphics g) {
         if (this instanceof WithAttributes) {
+            /*TraceManager.addDev( "tdp is of " + tdp.getClass() );
+            TraceManager.addDev( "this is of " + this.getClass() );*/
             if (tdp.getAttributeState() == 2) {
                 drawAttributes(g, ((WithAttributes)this).getAttributes());
             } else {

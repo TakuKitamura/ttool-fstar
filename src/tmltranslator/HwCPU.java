@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator;
 
-import tmltranslator.ctranslator.*;
+import tmltranslator.modelcompiler.*;
 import java.util.*;
 
 

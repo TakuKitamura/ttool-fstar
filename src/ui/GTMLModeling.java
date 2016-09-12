@@ -62,7 +62,7 @@ import tmltranslator.tmlcp.*;
 import tmltranslator.toproverif.*;
 import proverifspec.*;
 import myutil.*;
-import tmltranslator.ctranslator.*;
+import tmltranslator.modelcompiler.*;
 import avatartranslator.*;
 
 
@@ -262,6 +262,10 @@ public class GTMLModeling  {
         }
 
         return tmlm;
+    }
+
+    public TMLDesignPanel getTMLDesignPanel()  {
+        return tmldp;
     }
 
     public CorrespondanceTGElement getCorrespondanceTable() {

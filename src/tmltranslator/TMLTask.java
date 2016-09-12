@@ -47,7 +47,7 @@ package tmltranslator;
 
 import myutil.*;
 import java.util.*;
-import tmltranslator.ctranslator.*;
+import tmltranslator.modelcompiler.*;
 
 
 public class TMLTask extends TMLElement {
