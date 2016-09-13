@@ -57,7 +57,7 @@ import ui.*;
 import ui.window.*;
 import tmltranslator.modelcompiler.*;
 
-public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
+public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiPortInterface {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -73,8 +73,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
     protected String typeName = "port";
     protected String startAddress = "";
     protected String endAddress = "";
-		protected ArrayList<String> bufferParameters = new ArrayList<String>();
-		protected String bufferType = "noBuffer";
+    protected ArrayList<String> bufferParameters = new ArrayList<String>();
+    protected String bufferType = "noBuffer";
     protected int priority = 5; // Between 0 and 10
 
     public TMLArchiPortArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -100,6 +100,19 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         //setPriority(((TMLArchiDiagramPanel)tdp).getPriority(getFullValue(), priority);
 
         myImageIcon = IconManager.imgic702;
+    }
+
+    public boolean isHidden() {
+	//TraceManager.addDev("Archi task artifact: Am I hidden?" + getValue());
+	boolean ret = false;
+	if (tdp != null) {
+	    if (tdp instanceof TMLArchiDiagramPanel) {
+		ret = !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
+		
+	    }
+	}
+	//TraceManager.addDev("Hidden? -> " + ret);
+	return ret;
     }
 
     public int getPriority() {
@@ -138,7 +151,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         g.setFont(f);
 
         // Link to selected memory
-	Color c = g.getColor();
+        Color c = g.getColor();
         if (c == ColorManager.POINTER_ON_ME_0) {
             TDiagramPanel tdp = getTDiagramPanel();
             TGComponent tgc;
@@ -187,13 +200,13 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         String tmp;
         boolean error = false;
 
-				TraceManager.addDev( "bufferParameters before opening the window: " + bufferParameters.toString() );
+        TraceManager.addDev( "bufferParameters before opening the window: " + bufferParameters.toString() );
         JDialogPortArtifact dialog = new JDialogPortArtifact(frame, "Setting port artifact attributes", this, mappedMemory, bufferParameters, value );
         dialog.setSize(700, 600);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
         mappedMemory = dialog.getMappedMemory();
-        bufferParameters = dialog.getBufferParameters();	//becomes empty if closing the window without pushing Save
+        bufferParameters = dialog.getBufferParameters();        //becomes empty if closing the window without pushing Save
         TraceManager.addDev( "bufferParameters after closing the window: " + bufferParameters.toString() );
         bufferType = bufferParameters.get( Buffer.BUFFER_TYPE_INDEX );
 
@@ -266,28 +279,28 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         sb.append(referenceCommunicationName);
         sb.append("\" typeName=\"" + typeName);
         sb.append("\" mappedMemory=\"" + mappedMemory );
-				if( !bufferType.equals( "" ) && !bufferType.equals( "noBuffer" ) )	{
-					switch( Integer.parseInt( bufferType ) )	{
-						case Buffer.FEP_BUFFER:
-							sb.append( FepBuffer.appendBufferParameters( bufferParameters ) );
-							break;
-						case Buffer.INTERLEAVER_BUFFER:	
-							sb.append( InterleaverBuffer.appendBufferParameters( bufferParameters ) );
-						break;
-						case Buffer.ADAIF_BUFFER:	
-							sb.append( AdaifBuffer.appendBufferParameters( bufferParameters ) );
-							break;
-						case Buffer.MAPPER_BUFFER:	
-							sb.append( MapperBuffer.appendBufferParameters( bufferParameters ) );
-							break;
-						case Buffer.MAIN_MEMORY_BUFFER:	
-							sb.append( MMBuffer.appendBufferParameters( bufferParameters ) );
-							break;
-						default:	//the fep buffer 
-							sb.append( FepBuffer.appendBufferParameters( bufferParameters ) );
-							break;
-					}
-				}
+        if( !bufferType.equals( "" ) && !bufferType.equals( "noBuffer" ) )      {
+            switch( Integer.parseInt( bufferType ) )    {
+            case Buffer.FEP_BUFFER:
+                sb.append( FepBuffer.appendBufferParameters( bufferParameters ) );
+                break;
+            case Buffer.INTERLEAVER_BUFFER:
+                sb.append( InterleaverBuffer.appendBufferParameters( bufferParameters ) );
+                break;
+            case Buffer.ADAIF_BUFFER:
+                sb.append( AdaifBuffer.appendBufferParameters( bufferParameters ) );
+                break;
+            case Buffer.MAPPER_BUFFER:
+                sb.append( MapperBuffer.appendBufferParameters( bufferParameters ) );
+                break;
+            case Buffer.MAIN_MEMORY_BUFFER:
+                sb.append( MMBuffer.appendBufferParameters( bufferParameters ) );
+                break;
+            default:    //the fep buffer
+                sb.append( FepBuffer.appendBufferParameters( bufferParameters ) );
+                break;
+            }
+        }
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -326,32 +339,32 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                                 mappedMemory = elt.getAttribute("mappedMemory");
                                 TraceManager.addDev( mappedMemory );
                                 TraceManager.addDev( "bufferType = " + elt.getAttribute("bufferType") );
-																if( (elt.getAttribute("bufferType") != null) &&  (elt.getAttribute("bufferType").length() > 0) )	{
-                                bufferType = elt.getAttribute("bufferType");
-                                TraceManager.addDev( bufferType );
-																//bufferParameters.add( bufferType );
-																switch( Integer.parseInt( bufferType ) )	{
-																	case Buffer.FEP_BUFFER:
-																		bufferParameters = FepBuffer.buildBufferParameters( elt );
-																		break;
-																	case Buffer.INTERLEAVER_BUFFER:	
-																		bufferParameters = InterleaverBuffer.buildBufferParameters( elt );
-																		break;
-																	case Buffer.ADAIF_BUFFER:	
-																		bufferParameters = AdaifBuffer.buildBufferParameters( elt );
-																		break;
-																	case Buffer.MAPPER_BUFFER:	
-																		bufferParameters = MapperBuffer.buildBufferParameters( elt );
-																		break;
-																	case Buffer.MAIN_MEMORY_BUFFER:	
-																		bufferParameters = MMBuffer.buildBufferParameters( elt );
-																		break;
-																	default:	//the main memory buffer 
-																		bufferParameters = FepBuffer.buildBufferParameters( elt );
-																		break;
-																}
-																}
-                            TraceManager.addDev( "Buffer parameters of " + sname + ":\n" + bufferParameters.toString() );
+                                if( (elt.getAttribute("bufferType") != null) &&  (elt.getAttribute("bufferType").length() > 0) )        {
+                                    bufferType = elt.getAttribute("bufferType");
+                                    TraceManager.addDev( bufferType );
+                                    //bufferParameters.add( bufferType );
+                                    switch( Integer.parseInt( bufferType ) )    {
+                                    case Buffer.FEP_BUFFER:
+                                        bufferParameters = FepBuffer.buildBufferParameters( elt );
+                                        break;
+                                    case Buffer.INTERLEAVER_BUFFER:
+                                        bufferParameters = InterleaverBuffer.buildBufferParameters( elt );
+                                        break;
+                                    case Buffer.ADAIF_BUFFER:
+                                        bufferParameters = AdaifBuffer.buildBufferParameters( elt );
+                                        break;
+                                    case Buffer.MAPPER_BUFFER:
+                                        bufferParameters = MapperBuffer.buildBufferParameters( elt );
+                                        break;
+                                    case Buffer.MAIN_MEMORY_BUFFER:
+                                        bufferParameters = MMBuffer.buildBufferParameters( elt );
+                                        break;
+                                    default:    //the main memory buffer
+                                        bufferParameters = FepBuffer.buildBufferParameters( elt );
+                                        break;
+                                    }
+                                }
+                                TraceManager.addDev( "Buffer parameters of " + sname + ":\n" + bufferParameters.toString() );
                                 //prio = elt.getAttribute("priority");
                             }
                             if (svalue != null) {
@@ -418,16 +431,16 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         return mappedMemory;
     }
 
-		public String getEndAddress()	{
-			return endAddress;
-		}
+    public String getEndAddress()       {
+        return endAddress;
+    }
 
-		public String getStartAddress()	{
-			return startAddress;
-		}
+    public String getStartAddress()     {
+        return startAddress;
+    }
 
-		public ArrayList<String> getBufferParameters()	{
-			return bufferParameters;
-		}
+    public ArrayList<String> getBufferParameters()      {
+        return bufferParameters;
+    }
 
 }

@@ -36,7 +36,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class TMLArchiTask
+   * Class TMLArchiTaskInterface
    * Interface of  a mapping task element
    * Creation: 12/09/2016
    * @version 1.0 12/09/2016
@@ -47,5 +47,5 @@
 package ui.tmldd;
 
 
-public interface TMLArchiTask {
+public interface TMLArchiTaskInterface {
 }

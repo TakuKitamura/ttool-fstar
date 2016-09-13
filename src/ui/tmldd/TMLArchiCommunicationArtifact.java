@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiChannel {
+public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiChannelInterface {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;

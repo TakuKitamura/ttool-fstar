@@ -59,7 +59,7 @@ import ui.window.*;
 import tmltranslator.*;
 import tmltranslator.modelcompiler.*;
 
-public class TMLArchiCPNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes {
+public class TMLArchiCPNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiCPInterface {
     private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;
@@ -98,6 +98,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 
         myImageIcon = IconManager.imgic700;
     }
+
+    
 
     public void internalDrawing(Graphics g) {
         Color c = g.getColor();

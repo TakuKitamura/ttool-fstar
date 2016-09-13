@@ -36,26 +36,16 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class TMLArchiElement
-   * Interface of  an architecture element
-   * Creation: 12/09/2016
-   * @version 1.0 12/09/2016
+   * Class TMLArchiPortInterface
+   * Interface of port artifact 
+   * Creation: 13/09/2016
+   * @version 1.0 13/09/2016
    * @author Ludovic APVRILLE
    * @see
    */
 
 package ui.tmldd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
 
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.*;
-import ui.window.*;
-import tmltranslator.modelcompiler.*;
-
-public interface TMLArchiElement  {
+public interface TMLArchiPortInterface  {
 }

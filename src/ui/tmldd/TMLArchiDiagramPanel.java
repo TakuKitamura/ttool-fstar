@@ -400,15 +400,15 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 	case VIEW_ALL:
 	    return true;
 	case VIEW_ARCHITECTURE_ONLY:
-	    return (tgc instanceof TMLArchiElement);
+	    return (tgc instanceof TMLArchiElementInterface);
 	case VIEW_TASK_MAPPING:
-	    return (tgc instanceof TMLArchiElement) || (tgc instanceof TMLArchiTask);
+	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiTaskInterface);
 	case VIEW_CHANNEL_MAPPING:
-	    return (tgc instanceof TMLArchiElement) || (tgc instanceof TMLArchiChannel);
+	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiChannelInterface);
 	case VIEW_COMM_PATTERN:
-	    return (tgc instanceof TMLArchiElement);
+	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiCPInterface);
 	case VIEW_COMM_PATTERN_MAPPING:
-	    return (tgc instanceof TMLArchiElement);
+	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiCPInterface) ||  (tgc instanceof TMLArchiPortInterface); 
 	default:
 	    return true;
 	}

@@ -57,7 +57,7 @@ import ui.*;
 import ui.window.*;
 import tmltranslator.modelcompiler.*;
 
-public class TMLArchiArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiTask {
+public class TMLArchiArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiTaskInterface {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;

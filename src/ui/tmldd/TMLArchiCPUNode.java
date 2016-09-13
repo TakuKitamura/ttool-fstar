@@ -60,7 +60,7 @@ import ui.interactivesimulation.*;
 import tmltranslator.*;
 import tmltranslator.modelcompiler.*;
 
-public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent, WithAttributes {
+public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent, WithAttributes, TMLArchiElementInterface {
     private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;
