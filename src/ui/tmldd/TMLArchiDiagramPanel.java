@@ -61,6 +61,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     public static final int VIEW_CHANNEL_MAPPING = 3;
     public static final int VIEW_COMM_PATTERN = 4;
     public static final int VIEW_COMM_PATTERN_MAPPING = 5;
+    public static final int VIEW_SECURITY_MAPPING = 6;
 
     private int masterClockFrequency = 200; // in MHz
 
@@ -408,7 +409,9 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 	case VIEW_COMM_PATTERN:
 	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiCPInterface);
 	case VIEW_COMM_PATTERN_MAPPING:
-	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiCPInterface) ||  (tgc instanceof TMLArchiPortInterface); 
+	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiCPInterface) ||  (tgc instanceof TMLArchiPortInterface);
+	case VIEW_SECURITY_MAPPING:
+	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiSecurityInterface);
 	default:
 	    return true;
 	}

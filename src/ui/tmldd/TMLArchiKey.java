@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TMLArchiKey extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
+public class TMLArchiKey extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiSecurityInterface {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -77,7 +77,7 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         width = 75;
         height = 40;
         minWidth = 75;
-	minHeight = fileY + 5;
+        minHeight = fileY + 5;
 
         nbConnectingPoint = 0;
         addTGConnectingPointsComment();
@@ -85,7 +85,7 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         moveable = true;
         editable = true;
         removable = true;
-	userResizable = true;
+        userResizable = true;
 
         value = "";
         referenceKey = "TMLKey";
@@ -97,6 +97,19 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         myImageIcon = IconManager.imgic1118;
     }
 
+
+    public boolean isHidden() {
+        //TraceManager.addDev("Archi task artifact: Am I hidden?" + getValue());
+        boolean ret = false;
+        if (tdp != null) {
+            if (tdp instanceof TMLArchiDiagramPanel) {
+                ret = !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
+
+            }
+        }
+        //TraceManager.addDev("Hidden? -> " + ret);
+        return ret;
+    }
     public int getPriority() {
         return priority;
     }
@@ -113,10 +126,10 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         }
 
         g.drawRect(x, y, width, height);
-	Color c = g.getColor();
-	g.setColor(ColorManager.MEMORY_BOX_2);
-	g.fillRect(x+1, y+1, width-1, height-1);
-	g.setColor(c);
+        Color c = g.getColor();
+        g.setColor(ColorManager.MEMORY_BOX_2);
+        g.fillRect(x+1, y+1, width-1, height-1);
+        g.setColor(c);
 
         //g.drawRoundRect(x, y, width, height, arc, arc);
         g.drawLine(x+width-space-fileX, y + space, x+width-space-fileX, y+space+fileY);
