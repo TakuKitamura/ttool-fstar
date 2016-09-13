@@ -101,13 +101,16 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     }
 
     public boolean isHidden() {
-	//TraceManager.addDev("Am I hidden?" + getValue());
+	//TraceManager.addDev("Archi task artifact: Am I hidden?" + getValue());
+	boolean ret = false;
 	if (tdp != null) {
 	    if (tdp instanceof TMLArchiDiagramPanel) {
-		return !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
+		ret = !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
+		
 	    }
 	}
-	return false;
+	//TraceManager.addDev("Hidden? -> " + ret);
+	return ret;
     }
 
     public int getPriority() {

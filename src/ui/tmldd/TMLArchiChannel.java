@@ -36,74 +36,16 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class TMLArchiNode
-   * Node. To be used in TML architecture diagrams.
-   * Creation: 02/05/2005
-   * @version 1.0 02/05/2005
+   * Class TMLArchiChannel
+   * Interface of  a mapping channel element
+   * Creation: 13/09/2016
+   * @version 1.0 13/09/2016
    * @author Ludovic APVRILLE
    * @see
    */
 
 package ui.tmldd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
 
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.*;
-import ui.window.*;
-
-import tmltranslator.*;
-import tmltranslator.modelcompiler.*;
-
-public abstract class TMLArchiNode extends TGCWithInternalComponent implements SwallowTGComponent {
-    protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;
-
-    //the return type of method getComponentType
-    public final static int STORAGE = 0;
-    public final static int TRANSFER = 1;
-    public final static int CONTROLLER = 2;
-    public final static int OTHER = 3;  //for CPNodes
-    protected ArchUnitMEC MECType = new CpuMEC();
-
-    public TMLArchiNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-    }
-
-    public boolean isHidden() {
-        //TraceManager.addDev("Am I hidden?" + getValue());
-        if (tdp != null) {
-            if (tdp instanceof TMLArchiDiagramPanel) {
-
-                return !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
-            }
-        }
-        return true;
-    }
-
-    public ArrayList<TMLArchiArtifact> getAllTMLArchiArtifacts() {
-        ArrayList<TMLArchiArtifact> artifacts = new ArrayList<TMLArchiArtifact>();
-
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof TMLArchiArtifact) {
-                artifacts.add((TMLArchiArtifact)(tgcomponent[i]));
-            }
-        }
-
-        return artifacts;
-    }
-
-    public abstract int getComponentType();
-
-    public int getClockRatio(){
-        return clockRatio;
-    }
-
-    public ArchUnitMEC getMECType()     {
-        return MECType;
-    }
-
+public interface TMLArchiChannel {
 }

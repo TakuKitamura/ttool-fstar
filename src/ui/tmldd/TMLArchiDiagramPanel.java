@@ -57,6 +57,10 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 
     public static final int VIEW_ALL = 0;
     public static final int VIEW_ARCHITECTURE_ONLY = 1;
+    public static final int VIEW_TASK_MAPPING = 2;
+    public static final int VIEW_CHANNEL_MAPPING = 3;
+    public static final int VIEW_COMM_PATTERN = 4;
+    public static final int VIEW_COMM_PATTERN_MAPPING = 5;
 
     private int masterClockFrequency = 200; // in MHz
 
@@ -386,8 +390,9 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     }
 
     public void setCurrentView(int _index) {
-	TraceManager.addDev("SelectedIndex=" + _index);
+	TraceManager.addDev("SelectedView=" + _index);
 	view = _index;
+	repaint();
     }
 
     public boolean inCurrentView(TGComponent tgc) {
@@ -395,6 +400,14 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 	case VIEW_ALL:
 	    return true;
 	case VIEW_ARCHITECTURE_ONLY:
+	    return (tgc instanceof TMLArchiElement);
+	case VIEW_TASK_MAPPING:
+	    return (tgc instanceof TMLArchiElement) || (tgc instanceof TMLArchiTask);
+	case VIEW_CHANNEL_MAPPING:
+	    return (tgc instanceof TMLArchiElement) || (tgc instanceof TMLArchiChannel);
+	case VIEW_COMM_PATTERN:
+	    return (tgc instanceof TMLArchiElement);
+	case VIEW_COMM_PATTERN_MAPPING:
 	    return (tgc instanceof TMLArchiElement);
 	default:
 	    return true;
