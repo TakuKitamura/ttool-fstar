@@ -411,7 +411,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 	case VIEW_COMM_PATTERN_MAPPING:
 	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiCPInterface) ||  (tgc instanceof TMLArchiPortInterface);
 	case VIEW_SECURITY_MAPPING:
-	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiSecurityInterface);
+	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiSecurityInterface) || (tgc instanceof TMLArchiTaskInterface);
 	default:
 	    return true;
 	}
