@@ -446,15 +446,17 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         return transferTypes;
     }
 
+    // Display the mapping of instances onto platform units
     public String getAttributes()   {
         String attr = "";
-        attr += assignedAttributes.toString(); // only the message attributes of the mapped CP are retrieved!
-        return attr;
-    }
-
-    public String getCodeGenerationAttributes()   {
-        String attr = "";
-        attr += cpMEC;
+        for( String s: mappedUnits )    {
+            if( s.split("\\.").length > 0 ) {   // Remove the trailing name of the CP
+                attr += s.split("\\.")[1] + "\n";
+            }
+            else    {
+                attr += s + "\n";
+            }
+        }
         return attr;
     }
 
