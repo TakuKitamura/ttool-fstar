@@ -439,7 +439,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
     private void computeAllStatesFrom(SpecificationState _ss) {
-	//TraceManager.addDev("Compute all state: " + _ss);
+	//TraceManager.addDev("Compute all state of: " + _ss);
 	if (_ss == null) {
 	    TraceManager.addDev("null state");
 	    mustStop();
@@ -664,6 +664,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             _sb.maxClock = Math.max(_sb.maxClock, resMax);
             st.clockMax = resMax - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
         }
+
+	if (st.clockMin > st.clockMax) {
+	    int tmp = st.clockMin;
+	    st.clockMin = st.clockMax;
+	    st.clockMax = tmp;
+	}
 
     }
 

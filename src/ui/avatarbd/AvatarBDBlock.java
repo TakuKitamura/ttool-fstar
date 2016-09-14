@@ -355,7 +355,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             }
 
             // Get the string for this method
-            String methodString = "~ " + method.toString ();
+            String methodString = "- " + method.toString ();
 
             w = graph.getFontMetrics ().stringWidth (methodString);
             if (w + 2*textX < this.width)
