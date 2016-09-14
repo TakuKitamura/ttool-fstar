@@ -57,7 +57,7 @@ import myutil.*;
 public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener {
 
     protected JComboBox box;
-    protected static String[] viewInfos = { "View all", "View architecture only", "View task mapping", "View channel mapping", "View Comm. Pattern", "View Comm. Pattern mapping", "Security mapping"};
+    protected static String[] viewInfos = { "View all", "View architecture only", "View task mapping", "View channel mapping", "View Comm. Pattern", "View Comm. Pattern mapping", "View security mapping"};
     protected TMLArchiDiagramPanel panel;
 
     public TMLArchiDiagramToolBar(MainGUI _mgui) {
