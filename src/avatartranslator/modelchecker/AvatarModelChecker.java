@@ -652,17 +652,17 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         // Must compute the clockmin and clockmax values
         String minDelay = _at.getMinDelay().trim();
         if ((minDelay == null) || (minDelay.length() == 0)) {
-            st.clockMin = 0 - _sb.values[SpecificationBlock.CLOCKMIN_INDEX];
+            st.clockMin = 0 - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
         } else {
-            st.clockMin = evaluateIntExpression(_at.getMinDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMIN_INDEX];
+            st.clockMin = evaluateIntExpression(_at.getMinDelay(), _block, _sb) - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
         }
         String maxDelay = _at.getMaxDelay().trim();
         if ((maxDelay == null) || (maxDelay.length() == 0)) {
-            st.clockMax = 0 - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
+            st.clockMax = 0 - _sb.values[SpecificationBlock.CLOCKMIN_INDEX];
         } else {
             int resMax = evaluateIntExpression(_at.getMaxDelay(), _block, _sb);
             _sb.maxClock = Math.max(_sb.maxClock, resMax);
-            st.clockMax = resMax - _sb.values[SpecificationBlock.CLOCKMAX_INDEX];
+            st.clockMax = resMax - _sb.values[SpecificationBlock.CLOCKMIN_INDEX];
         }
 
 	if (st.clockMin > st.clockMax) {

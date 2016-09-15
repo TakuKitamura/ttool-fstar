@@ -7,7 +7,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
+<Validated value="B3;B2;B1;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="2" >
@@ -551,8 +551,6 @@
 <afterMax value="30" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
