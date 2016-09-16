@@ -143,7 +143,6 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         }
         g.fillRect(x+1, y+1, width-1, height-1);
         g.setColor(c);
-        g.drawString(value, x + textX , y + textY);
 
         //g.drawRoundRect(x, y, width, height, arc, arc);
         g.drawLine(x+width-space-fileX, y + space, x+width-space-fileX, y+space+fileY);

@@ -699,6 +699,7 @@ public class GTURTLEModeling {
 	TMLModeling tmlmodel = map.getTMLModeling();
 	java.util.List<TMLChannel> channels = tmlmodel.getChannels();
 	for (TMLChannel channel: channels){
+	    System.out.println(channel.getName());
 	    for (TMLCPrimitivePort p: channel.ports){
 	        channel.checkConf = channel.checkConf || p.checkConf;
 		channel.checkAuth = channel.checkAuth || p.checkAuth;
@@ -733,9 +734,12 @@ public class GTURTLEModeling {
 		if (tg instanceof TMLADWriteChannel){
 		    TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
 		    if (writeChannel.securityContext.equals("")){
+
 			TMLChannel chan = tmlmodel.getChannelByName(tabName+"__"+writeChannel.getChannelName());
+			//System.out.println("channel " + chan);
 			if (chan!=null){
 			    if (chan.checkConf){
+				System.out.println("F#$%^&*( ");
 			    	if (!securePath(map, chan.getOriginTask(), chan.getDestinationTask())){
 		    		    insecureOutChannels.get(chan.getOriginTask()).add(writeChannel.getChannelName());
 		    		    insecureInChannels.get(chan.getDestinationTask()).add(writeChannel.getChannelName());
@@ -748,10 +752,10 @@ public class GTURTLEModeling {
 		}
 	    }
 	}
+	System.out.println("tosecure " + toSecure);
 	int num=0;
 	int nonceNum=0;
 	//Create reverse channels to send nonces if they don't already exist
-	System.out.println("tosecrev " +toSecureRev);
 	if (autoAuth){
 	    
 	    for (TMLTask task: toSecureRev.keySet()){
@@ -971,7 +975,6 @@ public class GTURTLEModeling {
 	    task.setName(tabName+"_"+name+"__"+task.getName());
 	}
 	for (TMLTask task: tmlmodel.getTasks()){
-	    System.out.println(task.getName());
 	    HwExecutionNode node =(HwExecutionNode) map.getHwNodeOf(task);
 	    if (newmodel.getTMLTaskByName(task.getName().replace(tabName,tabName+"_"+name))!=null){
 	        map.addTaskToHwExecutionNode(newmodel.getTMLTaskByName(task.getName().replace(tabName,tabName+"_"+name)), node);
@@ -997,6 +1000,7 @@ public class GTURTLEModeling {
 	java.util.List<HwNode> done = new ArrayList<HwNode>();
 	java.util.List<HwNode> path = new ArrayList<HwNode>();
 	Map<HwNode, java.util.List<HwNode>> pathMap = new HashMap<HwNode, java.util.List<HwNode>>();
+	System.out.println("Links " + links);
 	if (node1==node2){
 	    return true;
 	}
@@ -1036,6 +1040,7 @@ public class GTURTLEModeling {
 	    done.add(curr);
 	}
 	if (path.size() ==0){
+	    System.out.println("no path");
 	    return true;
 	}
 	else {

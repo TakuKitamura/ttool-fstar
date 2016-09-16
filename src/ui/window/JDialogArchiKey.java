@@ -139,8 +139,10 @@ public class JDialogArchiKey extends javax.swing.JDialog implements ActionListen
 		TraceManager.addDev("Got keyss");
 		
         referenceCommunicationName = new JComboBox(list.toArray(new String[list.size()]));
+	if (referenceCommunicationName.getItemCount() >index){
 		referenceCommunicationName.setSelectedIndex(index);
 		referenceCommunicationName.addActionListener(this);
+	}
         //referenceTaskName.setEditable(true);
         //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
 		panel2.add(referenceCommunicationName, c1);

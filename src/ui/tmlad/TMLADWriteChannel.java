@@ -176,7 +176,10 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
             g.fillRect(x-12, y-7, 9, 7);
             g.setColor(c);
             g.drawRect(x-12, y-7, 9, 7);
-
+	    if (reachabilityInformation==NOT_REACHABLE){
+	        g.drawLine(x-14, y-9, x-1, y+3);
+	    	g.drawLine(x-14, y+3, x-1, y-9);
+	    }
         }
     }
     public TGComponent isOnMe(int _x, int _y) {

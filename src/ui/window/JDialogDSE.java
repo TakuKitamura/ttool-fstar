@@ -105,8 +105,8 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     String mapFile = "spec.tmap";
     String modFile = "spec.tml";
     String resDirect;
-    String simThreads="1000";
-    String simCycles="1000";
+    String simThreads="10";
+    String simCycles="10000";
     String NbMinCPU ="1";
     String NbMaxCPU ="1";
     String Nbsim ="100";
@@ -712,6 +712,13 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 		output+="Simulation threads error: "+simThreads+"\n";
 		return;
 	    }
+
+	    if (config.setNbOfSimulationsPerMapping(Nbsim) != 0) {
+		TraceManager.addDev("Simulations per mapping error: "+Nbsim);
+		output+="Simulation per mapping error: "+Nbsim+"\n";
+		return;
+	    }
+
 	    if (config.setSimulationCompilationCommand("make -j9 -C") !=0){
 		TraceManager.addDev("Simulation compilation error");
 		output+="Simulation compilation error"+"\n";
@@ -730,6 +737,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 		TraceManager.addDev("Can't set Max # CPUS to " + NbMaxCPU);
 		output+="Can't set Max # CPUS to " + NbMaxCPU +"\n";
 	    }
+
 	    config.setOutputTXT("true");
 	   // config.setOutputHTML("true");
 	   // config.setOutputVCD("true");

@@ -2506,7 +2506,6 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             if (tgc instanceof TMLArchiConnectorNode) {
-                //TraceManager.addDev("Found link");
                 connector = (TMLArchiConnectorNode)tgc;
                 tgc1 = null; tgc2 = null;
                 p1 = connector.getTGConnectingPointP1();

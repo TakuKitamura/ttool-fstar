@@ -297,7 +297,9 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
       	c1.gridwidth = 1;
 	add(new JLabel("Nonce"),c1);
 	helps[5]=new JComboBox(nonces);
-	helps[5].setSelectedItem(values[5]);
+	if (helps[5].getItemCount() > 0){
+	    helps[5].setSelectedItem(values[5]);
+	}
 	add(helps[5],c1);
 	c1.gridwidth=GridBagConstraints.REMAINDER;
 	inserts[5] = new JButton("Use");
@@ -309,7 +311,9 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
       	c1.gridwidth = 1;
 	add(new JLabel("Encrypted Key"),c1);
 	helps[8]=new JComboBox(keys);
-	helps[8].setSelectedItem(values[8]);
+	if (helps[8].getItemCount() > 0){
+	    helps[8].setSelectedItem(values[8]);
+	}
 	add(helps[8],c1);
 	c1.gridwidth=GridBagConstraints.REMAINDER;
 	inserts[8] = new JButton("Use");

@@ -362,6 +362,14 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 	g.drawPolygon(xpw, ypw, 3);
 	g.drawString("S", x-18, y+30);
 	g.drawString("W", x-11, y+26);
+	if (checkSecStrongAuthStatus ==3){
+	    g.drawLine(x-19, y+22, x-12, y+30);
+	    g.drawLine(x-19, y+30, x-12, y+22);
+	}
+	if (checkSecWeakAuthStatus==3 || checkSecStrongAuthStatus==3 && checkWeakAuthStatus <2){
+	    g.drawLine(x-12, y+18, x-5, y+26);
+	    g.drawLine(x-12, y+26, x-5, y+18);
+	}
     }
     public void drawConfVerification(Graphics g){
         Color c = g.getColor();
@@ -385,7 +393,10 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         g.fillRect(x-12, y+3, 9, 7);
         g.setColor(c);
         g.drawRect(x-12, y+3, 9, 7);
-
+	if (checkConfStatus==3){
+	    g.drawLine(x-14, y+1, x-1, y+13);
+	    g.drawLine(x-14, y+13, x-1, y+1);
+	}
 
 
 	if (!secName.equals("")){
