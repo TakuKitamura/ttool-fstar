@@ -84,6 +84,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
     protected final static int RESIZE_SPACE = 2;
     protected final static int RESIZE_SPACE2 = 4;
 
+    public static final int ACCESSIBILITY_UNKNOWN = 0;
+    public static final int ACCESSIBILITY_OK = 1;
+    public static final int ACCESSIBILITY_KO = 2;
+
     protected ImageIcon myImageIcon = IconManager.imgic8;
 
 
@@ -174,7 +178,11 @@ public abstract class TGComponent implements CDElement, GenericTree {
     // internal comments
     protected String internalComment = null;
 
+
+    
     protected boolean accessibility;
+    protected int reachability = ACCESSIBILITY_UNKNOWN;
+    protected int liveness = ACCESSIBILITY_UNKNOWN;
 
     // Invariants and mutual exclusion
     protected boolean invariant;
@@ -889,6 +897,26 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	internalDrawing(g);
 	g.setColor(c);
     }
+
+    public void drawAccessibility(int type, Graphics g, int _x, int _y, String value) {
+	Color c;
+	switch(type) {
+	case ACCESSIBILITY_OK:
+	    c = ColorManager.ACCESSIBILITY_OK;
+	    break;
+	case ACCESSIBILITY_KO:
+	    c = ColorManager.ACCESSIBILITY_KO;
+	    break;
+	default:
+	    c = ColorManager.ACCESSIBILITY_UNKNOWN;
+	}
+
+	g.setColor(c);
+	g.drawString(value, _x, _y);
+
+    }
+    
+    
     public void draw(Graphics g) {
         RunningInfo ri;
         LoadInfo li;
@@ -911,11 +939,15 @@ public abstract class TGComponent implements CDElement, GenericTree {
         }
 
         if (accessibility) {
-            g.setColor(ColorManager.ACCESSIBILITY);
+	    drawAccessibility(reachability, g, x+width-20, y+10, "R");
+	    drawAccessibility(liveness, g, x+width-10, y+10, "L");
+	    
+	    // Old way to do ..
+            /*g.setColor(ColorManager.ACCESSIBILITY);
             GraphicLib.setMediumStroke(g);
             g.drawLine(x+width-2, y+2, x+width-6, y+6);
             g.drawLine(x+width-6, y+2, x+width-2, y+6);
-            GraphicLib.setNormalStroke(g);
+            GraphicLib.setNormalStroke(g);*/
         }
 
         if (invariant) {

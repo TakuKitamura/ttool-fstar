@@ -7,7 +7,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="B3;B2;B1;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="2" >
@@ -547,10 +547,12 @@
 <TGConnectingPoint num="3" id="213" />
 <extraparam>
 <guard value="[ ]" />
-<afterMin value="20" />
-<afterMax value="30" />
+<afterMin value="30" />
+<afterMax value="40" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
