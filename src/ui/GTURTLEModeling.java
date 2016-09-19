@@ -1279,7 +1279,12 @@ public class GTURTLEModeling {
                         s = uppaalTMLTable.getRQuery(task, elt);
                         if (s != null) {
                             //TraceManager.addDev("Adding query:" + s);
-			    tmpQ = new TGComponentAndUPPAALQuery((TGComponent)(elt.getReferenceObject()), s + "$" + elt);
+			    Object ref;
+			    if (elt.getReferenceObject() instanceof TGComponent) {
+				tmpQ = new TGComponentAndUPPAALQuery((TGComponent)(elt.getReferenceObject()), s + "$" + elt);
+			    } else {
+				tmpQ = new TGComponentAndUPPAALQuery(null, s + "$" + elt);
+			    }
 			    listQ.add(tmpQ);
                         }
                     }

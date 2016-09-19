@@ -326,6 +326,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         int trace_id = 0;
         int index;
         String fn;
+	int result;
 
         rshc = new RshClient(host);
         RshClient rshctmp = rshc;
@@ -358,18 +359,26 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                     for(TGComponentAndUPPAALQuery cq: list) {
 			String s = cq.uppaalQuery;
                         index = s.indexOf('$');
+			if (cq.tgc != null) {
+			    cq.tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);
+			}
                         if ((index != -1) && (mode != NOT_STARTED)) {
                             name = s.substring(index+1, s.length());
                             //TraceManager.addDev("****\n name=" + name + " list=" + list + "\n****\n");
                             query = s.substring(0, index);
                             //jta.append("\n\n--------------------------------------------\n");
                             jta.append("\nReachability of: " + name + "\n");
-                            workQuery("E<> " + query, fn, trace_id, rshc);
+                            result = workQuery("E<> " + query, fn, trace_id, rshc);
+			    if (cq.tgc != null) {
+				if (result == 0) {
+				    cq.tgc.setReachability(TGComponent.ACCESSIBILITY_KO);
+				    cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
+				} else if (result == 1) {
+				    cq.tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
+				}
+			    }
                             trace_id++;
                         } else {
-			    if (cq.tgc != null) {
-				tgc.reachability =  TGcomponent.ACCESSIBILITY_UNKNOWN;
-			    }
                             jta.append("A component could not be studied (internal error)\n");
                         }
                     }
@@ -542,9 +551,16 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         //translatedText.setText(finQuery);
         return finQuery;
     }
-    private void workQuery(String query, String fn, int trace_id, RshClient rshc) throws LauncherException {
 
+
+    // return: -1: error
+    // return: 0: property is NOt satisfied
+    // return: 1: property is satisfied
+    private int workQuery(String query, String fn, int trace_id, RshClient rshc) throws LauncherException {
+
+	int ret = -1;
         TraceManager.addDev("Working on query: " + query);
+
 
         String cmd1, data;
         if(showDetails.isSelected()) {
@@ -573,10 +589,12 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             else if (data.indexOf("Property is satisfied") >-1){
                 jta.append("-> property is satisfied\n");
 		status=1;
+		ret = 1;
             }
             else if (data.indexOf("Property is NOT satisfied") > -1) {
                 jta.append("-> property is NOT satisfied\n");
 		status = 0;
+		ret = 0;
             }
             else {
                 jta.append("ERROR -> property could not be studied\n");
@@ -590,6 +608,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         if (generateTrace.isSelected()) {
             generateTraceFile(fn, trace_id, rshc);
         }
+
+	return ret;
 	
     }
 

@@ -396,6 +396,15 @@ public abstract class TGComponent implements CDElement, GenericTree {
         return false;
     }
 
+    public void setReachability(int reach) {
+	reachability = reach;
+    }
+
+    public void setLiveness(int live) {
+	liveness = live;
+    }
+
+
     public LinkedList getAllCheckableInvariant() {
         LinkedList list = new LinkedList();
         getAllCheckableInvariant(list);
