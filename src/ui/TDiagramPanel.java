@@ -1407,7 +1407,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         removeInternalComment = new JMenuItem("Remove internal comment");
         removeInternalComment.addActionListener(menuAL);
 
-        checkAccessibility = new JMenuItem("Check for accessibility / liveness");
+        checkAccessibility = new JMenuItem("Check for Reachability / Liveness");
         checkAccessibility.addActionListener(menuAL);
 
         checkInvariant = new JMenuItem("Check for mutual exclusion");

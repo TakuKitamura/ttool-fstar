@@ -353,13 +353,14 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             }
 
             if (stateE.isSelected()&& (mode != NOT_STARTED)) {
-                ArrayList<String> list = mgui.gtm.getUPPAALQueries(tp);
+                ArrayList<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp);
                 if ((list != null) && (list.size() > 0)){
-                    for(String s: list) {
+                    for(TGComponentAndUPPAALQuery cq: list) {
+			String s = cq.uppaalQuery;
                         index = s.indexOf('$');
                         if ((index != -1) && (mode != NOT_STARTED)) {
                             name = s.substring(index+1, s.length());
-                            TraceManager.addDev("****\n name=" + name + " list=" + list + "\n****\n");
+                            //TraceManager.addDev("****\n name=" + name + " list=" + list + "\n****\n");
                             query = s.substring(0, index);
                             //jta.append("\n\n--------------------------------------------\n");
                             jta.append("\nReachability of: " + name + "\n");
@@ -375,9 +376,10 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             }
 
             if (stateA.isSelected() && (mode != NOT_STARTED)) {
-                ArrayList<String> list = mgui.gtm.getUPPAALQueries(tp);
+                ArrayList<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp);
                 if ((list != null) && (list.size() > 0)){
-                    for(String s: list) {
+		    for(TGComponentAndUPPAALQuery cq: list) {
+			String s = cq.uppaalQuery;
                         index = s.indexOf('$');
                         if ((index != -1) && (mode != NOT_STARTED)) {
                             name = s.substring(index+1, s.length());
@@ -395,14 +397,14 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 }
             }
             if (stateL.isSelected() && (mode != NOT_STARTED)) {
-                ArrayList<String> list = mgui.gtm.getUPPAALQueries(tp);
+                ArrayList<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp);
                 String s1, s2, name1, name2, query1, query2;
                 int index1, index2;
                 if ((list != null) && (list.size() > 0)){
                     for(int i=0; i<list.size()-1; i++) {
                         for(int j=i+1; j<list.size(); j++) {
-                            s1 = list.get(i);
-                            s2 = list.get(j);
+                            s1 = list.get(i).uppaalQuery;
+                            s2 = list.get(j).uppaalQuery;
                             index1 = s1.indexOf('$');
                             index2 = s2.indexOf('$');
                             //TraceManager.addDev("\n******\n\n\n");

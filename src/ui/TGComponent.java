@@ -939,8 +939,11 @@ public abstract class TGComponent implements CDElement, GenericTree {
         }
 
         if (accessibility) {
-	    drawAccessibility(reachability, g, x+width-20, y+10, "R");
-	    drawAccessibility(liveness, g, x+width-10, y+10, "L");
+	    drawAccessibility(reachability, g, x+width-18, y-1, "R");
+	    drawAccessibility(liveness, g, x+width-10, y-1, "L");
+	    if ((reachability ==  ACCESSIBILITY_UNKNOWN) && (liveness ==  ACCESSIBILITY_UNKNOWN)) {
+		drawAccessibility(liveness, g, x+width-2, y-2, "?");
+	    }
 	    
 	    // Old way to do ..
             /*g.setColor(ColorManager.ACCESSIBILITY);

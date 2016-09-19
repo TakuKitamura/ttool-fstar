@@ -1217,17 +1217,18 @@ public class GTURTLEModeling {
       return false;
       }*/
 
-    public ArrayList<String> getUPPAALQueries() {
+    public ArrayList<TGComponentAndUPPAALQuery> getUPPAALQueries() {
         return getUPPAALQueries(mgui.getCurrentTURTLEPanel());
     }
 
-    public ArrayList<String> getUPPAALQueries(TURTLEPanel tp) {
+    public ArrayList<TGComponentAndUPPAALQuery> getUPPAALQueries(TURTLEPanel tp) {
         TraceManager.addDev("Searching for queries on " + mgui.getTabName(tp));
         ArrayList<TGComponent> list = new ArrayList<TGComponent>();
         ArrayList<TClass> tclasses;
         tp.getAllCheckableTGComponent(list);
+	TGComponentAndUPPAALQuery tmpQ;
 
-        ArrayList<String> listQ = new ArrayList<String>();
+        ArrayList<TGComponentAndUPPAALQuery> listQ = new ArrayList<TGComponentAndUPPAALQuery>();
 
         if (tp instanceof DesignPanel) {
             ArrayList<ADComponent> listAD = listE.getADComponentCorrespondance(list);
@@ -1254,7 +1255,8 @@ public class GTURTLEModeling {
                             s = uppaalTIFTable.getRQuery(tc, adc);
                             if (s != null) {
                                 //TraceManager.addDev("Adding query:" + s);
-                                listQ.add(s + "$" + adc);
+				tmpQ = new TGComponentAndUPPAALQuery(null, s + "$" + adc);
+                                listQ.add(tmpQ);
                             }
                         }
                     }
@@ -1277,7 +1279,8 @@ public class GTURTLEModeling {
                         s = uppaalTMLTable.getRQuery(task, elt);
                         if (s != null) {
                             //TraceManager.addDev("Adding query:" + s);
-                            listQ.add(s + "$" + elt);
+			    tmpQ = new TGComponentAndUPPAALQuery((TGComponent)(elt.getReferenceObject()), s + "$" + elt);
+			    listQ.add(tmpQ);
                         }
                     }
                 }
@@ -1291,7 +1294,7 @@ public class GTURTLEModeling {
                 TraceManager.addDev("Query: " + s);
                 if ((s!= null) && (s.length() > 0)) {
                     AvatarBlock block = avatar2uppaal.getBlockFromReferenceObject(tgc);
-                    listQ.add(s + "$" + block.getName() + "." + tgc);
+		    listQ.add(new TGComponentAndUPPAALQuery(tgc, s + "$" + block.getName() + "." + tgc));
                 } else {
                     TraceManager.addDev("Could not make query for " + tgc);
                 }
@@ -1304,7 +1307,7 @@ public class GTURTLEModeling {
                 TraceManager.addDev("Query: " + s);
                 if ((s!= null) && (s.length() > 0)) {
                     AvatarBlock block = avatar2uppaal.getBlockFromReferenceObject(tgc);
-                    listQ.add(s + "$" + block.getName() + "." + tgc);
+                    listQ.add(new TGComponentAndUPPAALQuery(tgc, s + "$" + block.getName() + "." + tgc));
                 } else {
                     TraceManager.addDev("Could not make query for " + tgc);
                 }
