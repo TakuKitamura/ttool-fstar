@@ -367,6 +367,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                             workQuery("E<> " + query, fn, trace_id, rshc);
                             trace_id++;
                         } else {
+			    if (cq.tgc != null) {
+				tgc.reachability =  TGcomponent.ACCESSIBILITY_UNKNOWN;
+			    }
                             jta.append("A component could not be studied (internal error)\n");
                         }
                     }
