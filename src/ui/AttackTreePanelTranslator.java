@@ -300,6 +300,9 @@ public class AttackTreePanelTranslator {
         // One block per attack -> syncho
         // One mast block with all channels declared at that level
         AvatarBlock mainBlock = new AvatarBlock("MainBlock", as, null);
+	AvatarStartState ass = new AvatarStartState("StartStateOfMainBlock", null);
+	mainBlock.getStateMachine().setStartState(ass);
+	mainBlock.getStateMachine().addElement(ass);
         as.addBlock(mainBlock);
 
         // Declare all attacks
