@@ -180,7 +180,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         reachabilities = new ArrayList<SpecificationReachability>();
         for(AvatarBlock block: spec.getListOfBlocks()) {
             for(AvatarStateMachineElement elt: block.getStateMachine().getListOfElements()) {
-                if (elt instanceof AvatarStateElement) {
+                if ((elt instanceof AvatarStateElement) || (elt.isCheckable())){
                     SpecificationReachability reach = new SpecificationReachability(elt, block);
                     reachabilities.add(reach);
                 }
@@ -407,7 +407,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     private synchronized void emptyPendingStates() {
-        pendingStates.clear();
+	if (pendingStates != null) {
+	    pendingStates.clear();
+	}
         nbOfCurrentComputations = 0;
     }
 
@@ -1159,6 +1161,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         sb.append("}");
         return new String(sb);
+    }
+
+    public ArrayList<SpecificationReachability> getAllReachabilities() {
+	return reachabilities;
     }
 
     public String reachabilityToString() {

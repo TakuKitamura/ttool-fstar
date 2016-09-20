@@ -909,6 +909,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
     public void drawAccessibility(int type, Graphics g, int _x, int _y, String value) {
 	Color c;
+	Color oldC = g.getColor();
+	Font f = g.getFont();
+	g.setFont(f.deriveFont(Font.BOLD));
 	switch(type) {
 	case ACCESSIBILITY_OK:
 	    c = ColorManager.ACCESSIBILITY_OK;
@@ -919,9 +922,12 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	default:
 	    c = ColorManager.ACCESSIBILITY_UNKNOWN;
 	}
-
+	
+	g.drawString(value, _x-1, _y-1);
 	g.setColor(c);
 	g.drawString(value, _x, _y);
+	g.setFont(f);
+	g.setColor(oldC);
 
     }
     
@@ -947,7 +953,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
             drawOutFreeTGConnectingPointsCompatibleWith(g, getDefaultConnector());
         }
 
-        if (accessibility) {
+        if ((accessibility) || (reachability !=  ACCESSIBILITY_UNKNOWN) || (liveness !=  ACCESSIBILITY_UNKNOWN)) {
 	    drawAccessibility(reachability, g, x+width-18, y-1, "R");
 	    drawAccessibility(liveness, g, x+width-10, y-1, "L");
 	    if ((reachability ==  ACCESSIBILITY_UNKNOWN) && (liveness ==  ACCESSIBILITY_UNKNOWN)) {

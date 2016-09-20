@@ -1577,7 +1577,7 @@ public class AvatarStateMachine extends AvatarElement {
                     AvatarTransition at = (AvatarTransition)(elt.getNext(0));
                     if (at.getNext(0) instanceof AvatarStateElement) {
                         if (at.isEmpty() && at.hasNonDeterministicGuard()) {
-                            if ((_canOptimize) || (!(elt.isCheckable()))){
+                            if ((_canOptimize) && (!(elt.isCheckable()))){
                                 foundState1 = (AvatarStateElement) elt;
                                 foundAt = at;
                                 foundState2 = (AvatarStateElement)(at.getNext(0));

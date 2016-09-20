@@ -391,6 +391,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 ArrayList<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp);
                 if ((list != null) && (list.size() > 0)){
 		    for(TGComponentAndUPPAALQuery cq: list) {
+			if (cq.tgc != null) {
+			    cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
+			}
 			String s = cq.uppaalQuery;
                         index = s.indexOf('$');
                         if ((index != -1) && (mode != NOT_STARTED)) {
@@ -398,7 +401,14 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                             query = s.substring(0, index);
                             //jta.append("\n--------------------------------------------\n");
                             jta.append("\nLiveness of: " + name + "\n");
-                            workQuery("A<> " + query, fn, trace_id, rshc);
+                            result = workQuery("A<> " + query, fn, trace_id, rshc);
+			    if (cq.tgc != null) {
+				if (result == 0) {
+				    cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
+				} else if (result == 1) {
+				    cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_OK);
+				}
+			    }
                             trace_id++;
                         } else {
                             jta.append("A component could not be studied (internal error)\n");

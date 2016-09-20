@@ -61,7 +61,7 @@ public class ColorManager {
     public static final Color POINTER_ON_ME_0 = Color.red;
     public static final Color ACCESSIBILITY = Color.red;
     public static final Color ACCESSIBILITY_UNKNOWN = Color.DARK_GRAY;
-    public static final Color ACCESSIBILITY_OK = Color.green;
+    public static final Color ACCESSIBILITY_OK = new Color(0, 232, 0);
     public static final Color ACCESSIBILITY_KO = Color.red;
     public static final Color MUTEX_OK = new Color(5, 100, 7);
     public static final Color BREAKPOINT = new Color(13, 248, 18);

@@ -66,12 +66,12 @@ import java.util.concurrent.TimeUnit;
 public class JDialogAvatarModelChecker extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {
     public final static String [] INFOS = {"Not started", "Running", "Stopped by user", "Finished"};
     public final static Color []  COLORS = {Color.darkGray, Color.magenta, Color.red, Color.blue};
-    
+
 
     public final static int REACHABILITY_ALL        = 1;
     public final static int REACHABILITY_SELECTED   = 2;
     public final static int REACHABILITY_NONE       = 3;
-   
+
     protected static String graphDir;
     protected static boolean graphSelected = false;
     protected static String graphDirDot;
@@ -79,7 +79,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     protected static boolean ignoreEmptyTransitionsSelected = true;
     protected static boolean ignoreConcurrenceBetweenInternalActionsSelected = true;
     protected static int reachabilitySelected = REACHABILITY_NONE;
-    
+
     protected MainGUI mgui;
 
     protected final static int NOT_STARTED = 1;
@@ -106,10 +106,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     //protected ButtonGroup exegroup;
     //protected JLabel gen, comp;
     //protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int, loopLimit;
-    
+
     protected JRadioButton noReachability, reachabilityCheckable, reachabilityAllStates;
     protected ButtonGroup reachabilities;
-    
+
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreConcurrenceBetweenInternalActions;
     protected JTextField graphPath, graphPathDot;
     protected JTabbedPane jp1;
@@ -124,7 +124,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     private boolean hasError = false;
     //protected boolean startProcess = false;
 
- 
+
 
 
     /** Creates new form  */
@@ -132,16 +132,16 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         super(f, title, true);
 
         mgui = _mgui;
-	spec = _spec;
+        spec = _spec;
 
-	if (graphDir == null) {
-	    graphDir = _graphDir + File.separator + "avatar.aut";
-	}
-	if (graphDirDot == null) {
-	    graphDirDot = _graphDir + File.separator + "avatar.dot";
-	}
+        if (graphDir == null) {
+            graphDir = _graphDir + File.separator + "avatar.aut";
+        }
+        if (graphDirDot == null) {
+            graphDirDot = _graphDir + File.separator + "avatar.dot";
+        }
 
-	initComponents();
+        initComponents();
         myInitComponents();
         pack();
 
@@ -169,55 +169,55 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         jp01.setLayout(gridbag01);
         jp01.setBorder(new javax.swing.border.TitledBorder("Options"));
 
-	c01.gridwidth = 1;
-	c01.gridheight = 1;
-	c01.weighty = 1.0;
-	c01.weightx = 1.0;
-	c01.fill = GridBagConstraints.HORIZONTAL;
-	c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-	ignoreEmptyTransitions = new JCheckBox("Do not display empty transitions as internal actions", ignoreEmptyTransitionsSelected);
-	ignoreEmptyTransitions.addActionListener(this);
-	jp01.add(ignoreEmptyTransitions, c01);
-	ignoreConcurrenceBetweenInternalActions = new JCheckBox("Ignore concurrency between internal actions", ignoreConcurrenceBetweenInternalActionsSelected);
-	ignoreConcurrenceBetweenInternalActions.addActionListener(this);
-	jp01.add(ignoreConcurrenceBetweenInternalActions, c01);
+        c01.gridwidth = 1;
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.fill = GridBagConstraints.HORIZONTAL;
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        ignoreEmptyTransitions = new JCheckBox("Do not display empty transitions as internal actions", ignoreEmptyTransitionsSelected);
+        ignoreEmptyTransitions.addActionListener(this);
+        jp01.add(ignoreEmptyTransitions, c01);
+        ignoreConcurrenceBetweenInternalActions = new JCheckBox("Ignore concurrency between internal actions", ignoreConcurrenceBetweenInternalActionsSelected);
+        ignoreConcurrenceBetweenInternalActions.addActionListener(this);
+        jp01.add(ignoreConcurrenceBetweenInternalActions, c01);
 
-	
-	// Reachability
-	reachabilities = new ButtonGroup();
-	
-	noReachability = new JRadioButton("No reachability");
-	noReachability.addActionListener(this);
-	jp01.add(noReachability, c01);
-	reachabilities.add(noReachability);
 
-	reachabilityCheckable = new JRadioButton("Reachability of selected states");
-	reachabilityCheckable.addActionListener(this);
-	jp01.add(reachabilityCheckable, c01);
-	reachabilities.add(reachabilityCheckable);
-	
-	reachabilityAllStates = new JRadioButton("Reachability of all states");
-	reachabilityAllStates.addActionListener(this);
-	jp01.add(reachabilityAllStates, c01);
-	reachabilities.add(reachabilityAllStates);
+        // Reachability
+        reachabilities = new ButtonGroup();
 
-	noReachability.setSelected(reachabilitySelected ==  REACHABILITY_NONE);
-	reachabilityCheckable.setSelected(reachabilitySelected ==  REACHABILITY_SELECTED);
-	reachabilityAllStates.setSelected(reachabilitySelected ==  REACHABILITY_ALL);
+        noReachability = new JRadioButton("No reachability");
+        noReachability.addActionListener(this);
+        jp01.add(noReachability, c01);
+        reachabilities.add(noReachability);
 
-	// RG
-	saveGraphAUT = new JCheckBox("Save RG (AUT format) in:", graphSelected);
-	saveGraphAUT.addActionListener(this);
-	jp01.add(saveGraphAUT, c01);
-	graphPath = new JTextField(graphDir);
-	jp01.add(graphPath, c01);
-	saveGraphDot = new JCheckBox("Save RG (dotty format) in:", graphSelectedDot);
-	saveGraphDot.addActionListener(this);
-	jp01.add(saveGraphDot, c01);
-	graphPathDot = new JTextField(graphDirDot);
-	jp01.add(graphPathDot, c01);
-	c.add(jp01, BorderLayout.NORTH);
- 
+        reachabilityCheckable = new JRadioButton("Reachability of selected states");
+        reachabilityCheckable.addActionListener(this);
+        jp01.add(reachabilityCheckable, c01);
+        reachabilities.add(reachabilityCheckable);
+
+        reachabilityAllStates = new JRadioButton("Reachability of all states");
+        reachabilityAllStates.addActionListener(this);
+        jp01.add(reachabilityAllStates, c01);
+        reachabilities.add(reachabilityAllStates);
+
+        noReachability.setSelected(reachabilitySelected ==  REACHABILITY_NONE);
+        reachabilityCheckable.setSelected(reachabilitySelected ==  REACHABILITY_SELECTED);
+        reachabilityAllStates.setSelected(reachabilitySelected ==  REACHABILITY_ALL);
+
+        // RG
+        saveGraphAUT = new JCheckBox("Save RG (AUT format) in:", graphSelected);
+        saveGraphAUT.addActionListener(this);
+        jp01.add(saveGraphAUT, c01);
+        graphPath = new JTextField(graphDir);
+        jp01.add(graphPath, c01);
+        saveGraphDot = new JCheckBox("Save RG (dotty format) in:", graphSelectedDot);
+        saveGraphDot.addActionListener(this);
+        jp01.add(saveGraphDot, c01);
+        graphPathDot = new JTextField(graphDirDot);
+        jp01.add(graphPathDot, c01);
+        c.add(jp01, BorderLayout.NORTH);
+
 
 
         jta = new ScrolledJTextArea();
@@ -243,88 +243,88 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         stop.addActionListener(this);
         close.addActionListener(this);
 
-	// Information
-	JPanel jplow = new JPanel(new BorderLayout());
- 
-	JPanel jpinfo = new JPanel();
+        // Information
+        JPanel jplow = new JPanel(new BorderLayout());
+
+        JPanel jpinfo = new JPanel();
         GridBagLayout gridbag02 = new GridBagLayout();
         GridBagConstraints c02 = new GridBagConstraints();
         jpinfo.setLayout(gridbag02);
         jpinfo.setBorder(new javax.swing.border.TitledBorder("Graph information"));
-	jplow.add(jpinfo, BorderLayout.NORTH);
-	c02.gridheight = 1;
-	c02.weighty = 1.0;
-	c02.weightx = 1.0;
-	c02.fill = GridBagConstraints.HORIZONTAL;
-	//c02.gridwidth = 1;
-	//jpinfo.add(new JLabel(""), c02);
-	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
-	info = new JLabel();
-	info.setFont(new Font("Serif", Font.BOLD, 16));
-	updateInfo();
-	jpinfo.add(info, c02);
-	jpinfo.add(new JLabel(" "), c02);
-	// nb of states, nb of links, nb of pending states, elapsed time, nbOfStatesPerSeconds
-	
-	
-	c02.gridwidth = 1;
-	jpinfo.add(new JLabel("Nb of states:"), c02);
-	//c02.gridwidth = GridBagConstraints.REMAINDER; //end row
-	nbOfStates = new JLabel("-");
-	jpinfo.add(nbOfStates, c02);
-	
+        jplow.add(jpinfo, BorderLayout.NORTH);
+        c02.gridheight = 1;
+        c02.weighty = 1.0;
+        c02.weightx = 1.0;
+        c02.fill = GridBagConstraints.HORIZONTAL;
+        //c02.gridwidth = 1;
+        //jpinfo.add(new JLabel(""), c02);
+        c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+        info = new JLabel();
+        info.setFont(new Font("Serif", Font.BOLD, 16));
+        updateInfo();
+        jpinfo.add(info, c02);
+        jpinfo.add(new JLabel(" "), c02);
+        // nb of states, nb of links, nb of pending states, elapsed time, nbOfStatesPerSeconds
 
-	c02.gridwidth = 1;
-	jpinfo.add(new JLabel("Nb of transitions:"), c02);
-	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
-	nbOfLinks = new JLabel("-");
-	jpinfo.add(nbOfLinks, c02);
 
-	c02.gridwidth = 1;
-	jpinfo.add(new JLabel("Reachability found:"), c02);
-	//c02.gridwidth = GridBagConstraints.REMAINDER; //end row
-	nbOfReachabilities = new JLabel("-");
-	jpinfo.add(nbOfReachabilities, c02);
+        c02.gridwidth = 1;
+        jpinfo.add(new JLabel("Nb of states:"), c02);
+        //c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nbOfStates = new JLabel("-");
+        jpinfo.add(nbOfStates, c02);
 
-	c02.gridwidth = 1;
-	jpinfo.add(new JLabel("Reachability not found:"), c02);
-	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
-	nbOfReachabilitiesNotFound = new JLabel("-");
-	jpinfo.add(nbOfReachabilitiesNotFound, c02);
-	
 
-	c02.gridwidth = 1;
-	jpinfo.add(new JLabel("Nb of deadlock states:"), c02);
-	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
-	nbOfDeadlocks = new JLabel("-");
-	jpinfo.add(nbOfDeadlocks, c02);
+        c02.gridwidth = 1;
+        jpinfo.add(new JLabel("Nb of transitions:"), c02);
+        c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nbOfLinks = new JLabel("-");
+        jpinfo.add(nbOfLinks, c02);
 
-	c02.gridwidth = 1;
-	jpinfo.add(new JLabel("Nb of pending states:"), c02);
-	//c02.gridwidth = GridBagConstraints.REMAINDER; //end row
-	nbOfPendingStates = new JLabel("-");
-	jpinfo.add(nbOfPendingStates, c02);
+        c02.gridwidth = 1;
+        jpinfo.add(new JLabel("Reachability found:"), c02);
+        //c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nbOfReachabilities = new JLabel("-");
+        jpinfo.add(nbOfReachabilities, c02);
 
-	c02.gridwidth = 1;
-	jpinfo.add(new JLabel("Nb of states/seconds:"), c02);
-	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
-	nbOfStatesPerSecond = new JLabel("-");
-	jpinfo.add(nbOfStatesPerSecond, c02);
-	
+        c02.gridwidth = 1;
+        jpinfo.add(new JLabel("Reachability not found:"), c02);
+        c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nbOfReachabilitiesNotFound = new JLabel("-");
+        jpinfo.add(nbOfReachabilitiesNotFound, c02);
 
-	c02.gridwidth = 1;
-	jpinfo.add(new JLabel("Elapsed timed:"), c02);
-	c02.gridwidth = GridBagConstraints.REMAINDER; //end row
-	elapsedTime = new JLabel("-");
-	jpinfo.add(elapsedTime, c02);
 
-	
+        c02.gridwidth = 1;
+        jpinfo.add(new JLabel("Nb of deadlock states:"), c02);
+        c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nbOfDeadlocks = new JLabel("-");
+        jpinfo.add(nbOfDeadlocks, c02);
+
+        c02.gridwidth = 1;
+        jpinfo.add(new JLabel("Nb of pending states:"), c02);
+        //c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nbOfPendingStates = new JLabel("-");
+        jpinfo.add(nbOfPendingStates, c02);
+
+        c02.gridwidth = 1;
+        jpinfo.add(new JLabel("Nb of states/seconds:"), c02);
+        c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nbOfStatesPerSecond = new JLabel("-");
+        jpinfo.add(nbOfStatesPerSecond, c02);
+
+
+        c02.gridwidth = 1;
+        jpinfo.add(new JLabel("Elapsed timed:"), c02);
+        c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+        elapsedTime = new JLabel("-");
+        jpinfo.add(elapsedTime, c02);
+
+
 
         JPanel jp2 = new JPanel();
         jp2.add(start);
         jp2.add(stop);
         jp2.add(close);
-	jplow.add(jp2, BorderLayout.SOUTH);
+        jplow.add(jp2, BorderLayout.SOUTH);
 
         c.add(jplow, BorderLayout.SOUTH);
 
@@ -340,16 +340,16 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         } else if (command.equals("Close")) {
             closeDialog();
         } else if (evt.getSource() == saveGraphAUT) {
-	    setButtons();
-	} else if (evt.getSource() == saveGraphDot) {
-	    setButtons();
-	} else if (evt.getSource() == ignoreEmptyTransitions) {
-	    setButtons();
-	} else if (evt.getSource() == ignoreConcurrenceBetweenInternalActions) {
-	    setButtons();
-	} else {
-	    setButtons();
-	}
+            setButtons();
+        } else if (evt.getSource() == saveGraphDot) {
+            setButtons();
+        } else if (evt.getSource() == ignoreEmptyTransitions) {
+            setButtons();
+        } else if (evt.getSource() == ignoreConcurrenceBetweenInternalActions) {
+            setButtons();
+        } else {
+            setButtons();
+        }
     }
 
     public void closeDialog() {
@@ -360,18 +360,18 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     }
 
     public synchronized void stopProcess() {
-	if (amc != null) {
-	    amc.stopModelChecking();
-	}
+        if (amc != null) {
+            amc.stopModelChecking();
+        }
         mode =  STOPPED;
         setButtons();
         go = false;
     }
 
     public synchronized void startProcess() {
-	if (mode == STARTED) {
-	    return;
-	}
+        if (mode == STARTED) {
+            return;
+        }
         t = new Thread(this);
         mode = STARTED;
         setButtons();
@@ -381,7 +381,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
     private void testGo() throws InterruptedException {
         if (go == false) {
-	    TraceManager.addDev("Interrupted by user");
+            TraceManager.addDev("Interrupted by user");
             throw new InterruptedException("Stopped by user");
         }
     }
@@ -396,78 +396,92 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         TraceManager.addDev("Thread started");
         File testFile;
         try {
-	    reinitValues();
-	    jta.append("Starting the model checker\n");
-	    amc = new AvatarModelChecker(spec);
-	    endDate = null;
-	    previousNbOfStates = 0;
-	    startDate = new Date();
-	    mcm = new ModelCheckerMonitor(this);
-	    java.util.Timer timer = new java.util.Timer(true);
-	    timer.scheduleAtFixedRate(mcm, 0, 500);
+            reinitValues();
+            jta.append("Starting the model checker\n");
+            amc = new AvatarModelChecker(spec);
+            endDate = null;
+            previousNbOfStates = 0;
+            startDate = new Date();
+            mcm = new ModelCheckerMonitor(this);
+            java.util.Timer timer = new java.util.Timer(true);
+            timer.scheduleAtFixedRate(mcm, 0, 500);
 
-	    // Setting options
-	    amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
-	    amc.setIgnoreConcurrenceBetweenInternalActions(ignoreConcurrenceBetweenInternalActionsSelected);
+            // Setting options
+            amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
+            amc.setIgnoreConcurrenceBetweenInternalActions(ignoreConcurrenceBetweenInternalActionsSelected);
 
-	    // Reachability
-	    int res;
-	    if (reachabilitySelected ==  REACHABILITY_SELECTED) {
-		res = amc.setReachabilityOfSelected();
-		jta.append("Reachability of " + res + " selected elements activated\n");
-		
-	    }
+            // Reachability
+            int res;
+            if (reachabilitySelected ==  REACHABILITY_SELECTED) {
+                res = amc.setReachabilityOfSelected();
+                jta.append("Reachability of " + res + " selected elements activated\n");
 
-	    if (reachabilitySelected ==  REACHABILITY_ALL) {
-		res = amc.setReachabilityOfAllStates();
-		jta.append("Reachability of " + res +  " states activated\n");
-	    }
-	    
-	    // RG?
-	    if (graphSelected || graphSelectedDot) {
-		amc.setComputeRG(true);
-		jta.append("Computation of Reachability Graph activated\n");
-	    }
-	    
-	    // Starting model checking
-	    testGo();
-	    
-	    amc.startModelChecking();
-	    timer.cancel();
-	    endDate = new Date();
-	    updateValues();
+                for(SpecificationReachability sr: amc.getReachabilities()){
+                    handleReachability(sr.ref1, sr.result);
+                    handleReachability(sr.ref1, sr.result);
+                }
+            }
+
+            if (reachabilitySelected ==  REACHABILITY_ALL) {
+                res = amc.setReachabilityOfAllStates();
+                jta.append("Reachability of " + res +  " states activated\n");
+                for(SpecificationReachability sr: amc.getReachabilities()){
+                    handleReachability(sr.ref1, sr.result);
+                    handleReachability(sr.ref1, sr.result);
+                }
+            }
+
+            // RG?
+            if (graphSelected || graphSelectedDot) {
+                amc.setComputeRG(true);
+                jta.append("Computation of Reachability Graph activated\n");
+            }
+
+            // Starting model checking
+            testGo();
+
+            amc.startModelChecking();
+            timer.cancel();
+            endDate = new Date();
+            updateValues();
             jta.append("\n\nModel checking done\n");
-	    jta.append("Nb of states:" + amc.getNbOfStates() + "\n");
-	    jta.append("Nb of links:" + amc.getNbOfLinks() + "\n");
+            jta.append("Nb of states:" + amc.getNbOfStates() + "\n");
+            jta.append("Nb of links:" + amc.getNbOfLinks() + "\n");
 
-	    if ((reachabilitySelected ==  REACHABILITY_SELECTED) || (reachabilitySelected ==  REACHABILITY_ALL)) {
-		jta.append("\nReachabilities found:\n");
-		jta.append(amc.reachabilityToString());
-	    }
-	    
-	    //TraceManager.addDev(amc.toString());
-	    //TraceManager.addDev(amc.toString());
-	    if (saveGraphAUT.isSelected()) {
-		try {
-		    String graph = amc.toAUT();
-		    //TraceManager.addDev("graph AUT=\n" + graph);
-		    FileUtils.saveFile(graphPath.getText(), graph);
-		    jta.append("Graph saved in " + graphPath.getText() + "\n");
-		} catch (Exception e) {
-		    jta.append("Graph could not be saved in " + graphPath.getText() + "\n");
-		}
-	    }
-	    if (saveGraphDot.isSelected()) {
-		try {
-		    String graph = amc.toDOT();
-		    //TraceManager.addDev("graph AUT=\n" + graph);
-		    FileUtils.saveFile(graphPathDot.getText(), graph);
-		    jta.append("Graph saved in " + graphPathDot.getText()+ "\n");
-		} catch (Exception e) {
-		    jta.append("Graph could not be saved in " + graphPathDot.getText()+ "\n");
-		}
-	    }
-	    
+            if ((reachabilitySelected ==  REACHABILITY_SELECTED) || (reachabilitySelected ==  REACHABILITY_ALL)) {
+                jta.append("\nReachabilities found:\n");
+                jta.append(amc.reachabilityToString());
+
+                // Back annotation on diagrams
+                for(SpecificationReachability sr: amc.getReachabilities()){
+                    //TraceManager.addDev("Handing reachability of " + sr);
+                    handleReachability(sr.ref1, sr.result);
+                    handleReachability(sr.ref1, sr.result);
+                }
+            }
+
+            //TraceManager.addDev(amc.toString());
+            //TraceManager.addDev(amc.toString());
+            if (saveGraphAUT.isSelected()) {
+                try {
+                    String graph = amc.toAUT();
+                    //TraceManager.addDev("graph AUT=\n" + graph);
+                    FileUtils.saveFile(graphPath.getText(), graph);
+                    jta.append("Graph saved in " + graphPath.getText() + "\n");
+                } catch (Exception e) {
+                    jta.append("Graph could not be saved in " + graphPath.getText() + "\n");
+                }
+            }
+            if (saveGraphDot.isSelected()) {
+                try {
+                    String graph = amc.toDOT();
+                    //TraceManager.addDev("graph AUT=\n" + graph);
+                    FileUtils.saveFile(graphPathDot.getText(), graph);
+                    jta.append("Graph saved in " + graphPathDot.getText()+ "\n");
+                } catch (Exception e) {
+                    jta.append("Graph could not be saved in " + graphPathDot.getText()+ "\n");
+                }
+            }
 
         } catch (InterruptedException ie) {
             jta.append("Interrupted\n");
@@ -481,52 +495,76 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         //System.out.println("Selected item=" + selectedItem);
     }
 
+    protected void handleReachability(Object _o, SpecificationReachabilityType _res) {
+        if (_o instanceof AvatarStateMachineElement) {
+            Object o = ((AvatarStateMachineElement)_o).getReferenceObject();
+            if (o instanceof TGComponent) {
+                TGComponent tgc = (TGComponent)(o);
+                //TraceManager.addDev("Reachability of tgc=" + tgc);
+                switch(_res) {
+                case NOTCOMPUTED:
+                    tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);
+		    tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
+                    break;
+                case REACHABLE:
+                    tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
+                    break;
+                case NONREACHABLE:
+                    tgc.setReachability(TGComponent.ACCESSIBILITY_KO);
+		    tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
+                    break;
+                }
+		tgc.getTDiagramPanel().repaint();
+            }
+        }
+    }
+
     protected void checkMode() {
         mode = NOT_STARTED;
     }
 
     protected void setButtons() {
-	graphSelected = saveGraphAUT.isSelected();
-	graphPath.setEnabled(saveGraphAUT.isSelected());
-	graphSelectedDot = saveGraphDot.isSelected();
-	graphPathDot.setEnabled(saveGraphDot.isSelected());
-	ignoreEmptyTransitionsSelected = ignoreEmptyTransitions.isSelected();
-	ignoreConcurrenceBetweenInternalActionsSelected = ignoreConcurrenceBetweenInternalActions.isSelected();
+        graphSelected = saveGraphAUT.isSelected();
+        graphPath.setEnabled(saveGraphAUT.isSelected());
+        graphSelectedDot = saveGraphDot.isSelected();
+        graphPathDot.setEnabled(saveGraphDot.isSelected());
+        ignoreEmptyTransitionsSelected = ignoreEmptyTransitions.isSelected();
+        ignoreConcurrenceBetweenInternalActionsSelected = ignoreConcurrenceBetweenInternalActions.isSelected();
 
-	if (noReachability.isSelected()) {
-	    reachabilitySelected = REACHABILITY_NONE;
-	} else if ( reachabilityCheckable.isSelected()) {
-	    reachabilitySelected = REACHABILITY_SELECTED;
-	} else {
-	    reachabilitySelected = REACHABILITY_ALL;
-	}
-	
+        if (noReachability.isSelected()) {
+            reachabilitySelected = REACHABILITY_NONE;
+        } else if ( reachabilityCheckable.isSelected()) {
+            reachabilitySelected = REACHABILITY_SELECTED;
+        } else {
+            reachabilitySelected = REACHABILITY_ALL;
+        }
+
         switch(mode) {
-            case NOT_STARTED:
-		if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL)  || graphSelected || graphSelectedDot) {
-		    start.setEnabled(true);
-		} else {
-		    start.setEnabled(false);
-		}
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                getGlassPane().setVisible(false);
-                break;
-            case STARTED:
+        case NOT_STARTED:
+            if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL)  || graphSelected || graphSelectedDot) {
+                start.setEnabled(true);
+            } else {
                 start.setEnabled(false);
-                stop.setEnabled(true);
-                close.setEnabled(false);
-                getGlassPane().setVisible(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                break;
-            case STOPPED:
-            default:
-                start.setEnabled(false);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                getGlassPane().setVisible(false);
-                break;
+            }
+            stop.setEnabled(false);
+            close.setEnabled(true);
+            //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            getGlassPane().setVisible(false);
+            break;
+        case STARTED:
+            start.setEnabled(false);
+            stop.setEnabled(true);
+            close.setEnabled(false);
+            getGlassPane().setVisible(true);
+            //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            break;
+        case STOPPED:
+        default:
+            start.setEnabled(false);
+            stop.setEnabled(false);
+            close.setEnabled(true);
+            getGlassPane().setVisible(false);
+            break;
         }
     }
 
@@ -543,104 +581,104 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     }
 
     public void updateValues() {
-	TraceManager.addDev("Updating values...");
-	try {
-	    if (amc != null) {
-		int nbOfStatess = amc.getNbOfStates();
-		nbOfStates.setText(""+nbOfStatess);
-		nbOfLinks.setText(""+amc.getNbOfLinks());
+        TraceManager.addDev("Updating values...");
+        try {
+            if (amc != null) {
+                int nbOfStatess = amc.getNbOfStates();
+                nbOfStates.setText(""+nbOfStatess);
+                nbOfLinks.setText(""+amc.getNbOfLinks());
 
-		// Reachability and deadlocks
-		int nb = amc.getNbOfReachabilities();
-		if (nb == -1) {
-		    //nbOfReachabilities.setText("-");
-		} else {
-		    nbOfReachabilities.setText("" + nb);
-		}
-		nb = amc.getNbOfRemainingReachabilities();
-		nbOfReachabilitiesNotFound.setText("" + nb);
-		
-		
-		nbOfDeadlocks.setText(""+amc.getNbOfDeadlocks());
+                // Reachability and deadlocks
+                int nb = amc.getNbOfReachabilities();
+                if (nb == -1) {
+                    //nbOfReachabilities.setText("-");
+                } else {
+                    nbOfReachabilities.setText("" + nb);
+                }
+                nb = amc.getNbOfRemainingReachabilities();
+                nbOfReachabilitiesNotFound.setText("" + nb);
 
-		
-		nbOfPendingStates.setText(""+amc.getNbOfPendingStates());
-		Date d;
-		previousDate = new Date();
-		if (endDate != null) {
-		    d = endDate;
-		} else {
-		    d = previousDate;
-		}
-		long duration  = d.getTime() - startDate.getTime();
 
-		String t = String.format("%02d min %02d sec %03d msec", 
-			      TimeUnit.MILLISECONDS.toMinutes(duration),
-			      TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)),
-			      duration
-			      );
-		
-		long diffInSeconds = TimeUnit.MILLISECONDS.toSeconds(duration);
-		long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration);
-		//long diffInMs = TimeUnit.MILLISECONDS.toMilliseconds(duration);
-		elapsedTime.setText(t);
-		long diff = 0;
-		if (endDate != null) {
-		    diff = nbOfStatess;
-		} else {
-		    diff = nbOfStatess - previousNbOfStates;
-		}
-		previousNbOfStates = nbOfStatess;
-		//if (diff == 0) {
-			
+                nbOfDeadlocks.setText(""+amc.getNbOfDeadlocks());
 
-		nbOfStatesPerSecond.setText(""+1000*diff/duration);		
 
-		updateInfo();
-			//}
-	    }
-	} catch (Exception e) {
-	}
+                nbOfPendingStates.setText(""+amc.getNbOfPendingStates());
+                Date d;
+                previousDate = new Date();
+                if (endDate != null) {
+                    d = endDate;
+                } else {
+                    d = previousDate;
+                }
+                long duration  = d.getTime() - startDate.getTime();
+
+                String t = String.format("%02d min %02d sec %03d msec",
+                                         TimeUnit.MILLISECONDS.toMinutes(duration),
+                                         TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)),
+                                         duration
+                                         );
+
+                long diffInSeconds = TimeUnit.MILLISECONDS.toSeconds(duration);
+                long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+                //long diffInMs = TimeUnit.MILLISECONDS.toMilliseconds(duration);
+                elapsedTime.setText(t);
+                long diff = 0;
+                if (endDate != null) {
+                    diff = nbOfStatess;
+                } else {
+                    diff = nbOfStatess - previousNbOfStates;
+                }
+                previousNbOfStates = nbOfStatess;
+                //if (diff == 0) {
+
+
+                nbOfStatesPerSecond.setText(""+1000*diff/duration);
+
+                updateInfo();
+                //}
+            }
+        } catch (Exception e) {
+        }
     }
 
     public void reinitValues() {
-	nbOfStates.setText("-");
-	nbOfLinks.setText("-");
-	nbOfReachabilities.setText("-");
-	nbOfReachabilitiesNotFound.setText("-");
-	nbOfDeadlocks.setText("-");
-	nbOfPendingStates.setText("-");
-	nbOfStatesPerSecond.setText("-");
-	elapsedTime.setText("-");
+        nbOfStates.setText("-");
+        nbOfLinks.setText("-");
+        nbOfReachabilities.setText("-");
+        nbOfReachabilitiesNotFound.setText("-");
+        nbOfDeadlocks.setText("-");
+        nbOfPendingStates.setText("-");
+        nbOfStatesPerSecond.setText("-");
+        elapsedTime.setText("-");
     }
 
     public int getStateIndex() {
-	if (amc == null) {
-	    return 0;
-	}
+        if (amc == null) {
+            return 0;
+        }
 
-	if (endDate == null) {
-	    return 1;
-	}
-	
-	return amc.hasBeenStoppedBeforeCompletion() ? 2 : 3;
-	
+        if (endDate == null) {
+            return 1;
+        }
+
+        return amc.hasBeenStoppedBeforeCompletion() ? 2 : 3;
+
     }
 
     public void updateInfo() {
-	info.setForeground(COLORS[getStateIndex()]);
-	info.setText(INFOS[getStateIndex()]);
+        info.setForeground(COLORS[getStateIndex()]);
+        info.setText(INFOS[getStateIndex()]);
     }
 
     private class ModelCheckerMonitor extends TimerTask {
-	private JDialogAvatarModelChecker jdamc;
-	public ModelCheckerMonitor(JDialogAvatarModelChecker _jdamc) {
-	    jdamc = _jdamc;
-	}
-	
-	public void run() {
-	    jdamc.updateValues();
-	}
- 
+        private JDialogAvatarModelChecker jdamc;
+        public ModelCheckerMonitor(JDialogAvatarModelChecker _jdamc) {
+            jdamc = _jdamc;
+        }
+
+        public void run() {
+            jdamc.updateValues();
+        }
+
     }
 }
