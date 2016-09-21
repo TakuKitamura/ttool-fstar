@@ -265,7 +265,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
 
-        TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
+        //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
         prepareStates();
         prepareTransitions();
 
@@ -296,7 +296,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         // Compute initial state
         SpecificationState initialState = new SpecificationState();
-        initialState.setInit(spec, ignoreEmptyTransitions);
+        //initialState.setInit(spec, ignoreEmptyTransitions);
+	initialState.setInit(spec, false);
         for(AvatarBlock block: spec.getListOfBlocks()) {
             checkElement(block.getStateMachine().getStartState(), initialState);
         }
@@ -992,7 +993,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
             AvatarStateElement aseAfter = getStateWithNonEmptyUniqueTransition(ase, block, sb, _ss);
             if (aseAfter != ase) {
-                checkElement(aseAfter, _ss);
+                //checkElement(aseAfter, _ss);
                 // Must modify the state of the considered block
                 sb.values[SpecificationBlock.STATE_INDEX] = asm.getIndexOfState(aseAfter);
             }
@@ -1044,7 +1045,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         AvatarStateElement ase = (AvatarStateElement)(at.getNext(0));
         checkElement(ase, _ss);
-        //TraceManager.addDev("Handling Empty transition of " + _block.getName() + " with nextState = " + ase.getName() + " and previous=" + _ase.getName());
+        TraceManager.addDev("Handling Empty transition of " + _block.getName() + " with nextState = " + ase.getName() + " and previous=" + _ase.getName());
 
         if (listOfStates == null) {
             if (ase == _ase) {
@@ -1079,7 +1080,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     re.result = SpecificationReachabilityType.REACHABLE;
                     re.state = _ss;
                     nbOfRemainingReachabilities --;
-                    TraceManager.addDev("Remaining reachabilities:" + nbOfRemainingReachabilities);
+                    //TraceManager.addDev("Remaining reachabilities:" + nbOfRemainingReachabilities);
                 }
             }
         }

@@ -1564,7 +1564,9 @@ public class AvatarStateMachine extends AvatarElement {
      */
     public void removeEmptyTransitions (AvatarBlock _block, boolean _canOptimize) {
 
-        // Look for such a transition
+	TraceManager.addDev("Remove empty transitions with optimize=" + _canOptimize);
+
+	// Look for such a transition
         // states -> tr -> state with tr is empty
         // a tr is empty when it has no action or guard
         AvatarStateElement foundState1 = null, foundState2=null;
@@ -1578,6 +1580,7 @@ public class AvatarStateMachine extends AvatarElement {
                     if (at.getNext(0) instanceof AvatarStateElement) {
                         if (at.isEmpty() && at.hasNonDeterministicGuard()) {
                             if ((_canOptimize) && (!(elt.isCheckable()))){
+				TraceManager.addDev("State found:" + elt);
                                 foundState1 = (AvatarStateElement) elt;
                                 foundAt = at;
                                 foundState2 = (AvatarStateElement)(at.getNext(0));
