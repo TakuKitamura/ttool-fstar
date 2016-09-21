@@ -122,6 +122,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     private Thread t;
     private boolean go = false;
     private boolean hasError = false;
+    private java.util.Timer timer;
     //protected boolean startProcess = false;
 
 
@@ -357,6 +358,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             stopProcess();
         }
         dispose();
+	if (timer != null) {
+	    timer.cancel();
+	    timer.purge();
+	}
     }
 
     public synchronized void stopProcess() {
@@ -366,6 +371,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         mode =  STOPPED;
         setButtons();
         go = false;
+	if (timer != null) {
+	    timer.cancel();
+	    timer.purge();
+	}
+	updateValues();
+	
     }
 
     public synchronized void startProcess() {
@@ -403,7 +414,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             previousNbOfStates = 0;
             startDate = new Date();
             mcm = new ModelCheckerMonitor(this);
-            java.util.Timer timer = new java.util.Timer(true);
+            timer = new java.util.Timer(true);
             timer.scheduleAtFixedRate(mcm, 0, 500);
 
             // Setting options
@@ -418,7 +429,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
                 for(SpecificationReachability sr: amc.getReachabilities()){
                     handleReachability(sr.ref1, sr.result);
-                    handleReachability(sr.ref1, sr.result);
+		    if (sr.ref2 != sr.ref1) {
+			handleReachability(sr.ref2, sr.result);
+		    }
                 }
             }
 
@@ -427,7 +440,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
                 jta.append("Reachability of " + res +  " states activated\n");
                 for(SpecificationReachability sr: amc.getReachabilities()){
                     handleReachability(sr.ref1, sr.result);
-                    handleReachability(sr.ref1, sr.result);
+		    if (sr.ref2 != sr.ref1) {
+			handleReachability(sr.ref2, sr.result);
+		    }
                 }
             }
 
@@ -441,6 +456,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             testGo();
 
             amc.startModelChecking();
+	    TraceManager.addDev("Model checking done");
             timer.cancel();
             endDate = new Date();
             updateValues();
@@ -456,7 +472,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
                 for(SpecificationReachability sr: amc.getReachabilities()){
                     //TraceManager.addDev("Handing reachability of " + sr);
                     handleReachability(sr.ref1, sr.result);
-                    handleReachability(sr.ref1, sr.result);
+		    if (sr.ref2 != sr.ref1) {
+			handleReachability(sr.ref2, sr.result);
+		    }
                 }
             }
 
@@ -500,7 +518,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             Object o = ((AvatarStateMachineElement)_o).getReferenceObject();
             if (o instanceof TGComponent) {
                 TGComponent tgc = (TGComponent)(o);
-                //TraceManager.addDev("Reachability of tgc=" + tgc);
+                TraceManager.addDev("Reachability of tgc=" + tgc + " value=" + tgc.getValue() + " class=" + tgc.getClass());
                 switch(_res) {
                 case NOTCOMPUTED:
                     tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);
@@ -657,7 +675,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             return 0;
         }
 
-        if (endDate == null) {
+	
+        if ((endDate == null) && (go == true)) {
             return 1;
         }
 

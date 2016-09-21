@@ -68,6 +68,7 @@ public class AvatarState extends AvatarStateElement {
 
     public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
         AvatarState as = new AvatarState(getName(), getReferenceObject(), isCheckable());
+	as.setAsVerifiable(canBeVerified());
 	as.addEntryCode(getEntryCode());
         return as;
     }

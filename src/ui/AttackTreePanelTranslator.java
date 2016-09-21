@@ -387,13 +387,21 @@ public class AttackTreePanelTranslator {
     private void makeAttackBlockSMD(AvatarBlock _ab, avatartranslator.AvatarSignal _sigAttack, avatartranslator.AvatarSignal _sigStop, boolean isEnabled, Object _ref) {
         Object _ref1 = _ref;
         _ref = null;
+
+	boolean isCheckable = false;
+	
         AvatarStateMachine asm = _ab.getStateMachine();
 
         if (isEnabled) {
 
+	    if (_ref1 instanceof TGComponent) {
+		isCheckable = ((TGComponent)(_ref1)).hasCheckableAccessibility();
+	    }
+	    
             AvatarStartState start = new AvatarStartState("start", _ref);
             AvatarState mainState = new AvatarState("main", _ref, false);
-            AvatarState performedState = new AvatarState("main", _ref1, true);
+            AvatarState performedState = new AvatarState("main", _ref1, isCheckable);
+	    performedState.setAsVerifiable(true);
             AvatarState mainStop = new AvatarState("stop", _ref, false);
             AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingAttack", _sigAttack, _ref1);
             AvatarActionOnSignal getStop = new AvatarActionOnSignal("GettingStop", _sigStop, _ref);
@@ -471,14 +479,20 @@ public class AttackTreePanelTranslator {
         Object _ref1 = _ref;
         _ref = null;
         AvatarStateMachine asm = _ab.getStateMachine();
+	boolean isCheckable = false;
 
         if (isEnabled) {
-
+	    if (_ref1 instanceof TGComponent) {
+		isCheckable = ((TGComponent)(_ref1)).hasCheckableAccessibility();
+	    }
             AvatarStartState start = new AvatarStartState("start", _ref);
             AvatarState activateState = new AvatarState("activate", _ref, false);
             AvatarState mainState = new AvatarState("main", _ref, false);
-            AvatarState activatedState = new AvatarState("main", _ref1, true);
-            AvatarState performedState = new AvatarState("main", _ref, false);
+            AvatarState activatedState = new AvatarState("activated", _ref1, isCheckable);
+	    if (_ref1 instanceof ATDAttack) {
+		activatedState.setAsVerifiable(true);
+	    }
+            AvatarState performedState = new AvatarState("performed", _ref, false);
             AvatarState mainStop = new AvatarState("stop", _ref, false);
             AvatarState stopBeforeActivate = new AvatarState("stopBeforeActivate", _ref, false);
             AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingAttack", _sigAttack, _ref1);
@@ -572,7 +586,7 @@ public class AttackTreePanelTranslator {
             AvatarStartState start = new AvatarStartState("start", _ref);
             AvatarState activateState = new AvatarState("activate", _ref, false);
             AvatarState mainState = new AvatarState("main", _ref, false);
-            AvatarState activatedState = new AvatarState("main", _ref1, true);
+            AvatarState activatedState = new AvatarState("main", _ref1, isCheckable);
             AvatarState mainStop = new AvatarState("stop", _ref, false);
             AvatarState stopBeforeActivate = new AvatarState("stopBeforeActivate", _ref, false);
             AvatarActionOnSignal getStop = new AvatarActionOnSignal("GettingStop", _sigStop, _ref);

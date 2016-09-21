@@ -50,13 +50,15 @@ import java.util.*;
 
 public class AvatarStopState extends AvatarStateElement {
 
-
     public AvatarStopState(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
 
     public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-        return new AvatarStopState(getName(), getReferenceObject());
+        AvatarStopState astop = new AvatarStopState(getName(), getReferenceObject());
+	astop.setAsVerifiable(canBeVerified());
+	return astop;
+	//return null;
     }
 
     public String getNiceName() {

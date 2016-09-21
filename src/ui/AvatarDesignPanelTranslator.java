@@ -1123,6 +1123,7 @@ public class AvatarDesignPanelTranslator {
         AvatarState astate = asm.getStateWithName(tgc.getValue());
         if (astate == null) {
             astate = new AvatarState (tgc.getValue(), tgc);
+	    astate.setAsVerifiable(true);
             asm.addElement (astate);
         }
 
@@ -1320,11 +1321,13 @@ public class AvatarDesignPanelTranslator {
                     this.listE.addCor (astart, tgc);
                     tgc.setAVATARID (astart.getID());
                     asm.addElement(astart);
+		    astart.setAsVerifiable(true);
                     if (tgc.getFather() == null)
                         asm.setStartState(astart);
                 // Stop state
                 } else if (tgc instanceof AvatarSMDStopState) {
                     AvatarStopState astop = new AvatarStopState ("stop", tgc);
+		    astop.setAsVerifiable(true);
                     this.listE.addCor(astop, tgc);
                     tgc.setAVATARID(astop.getID());
                     asm.addElement(astop);

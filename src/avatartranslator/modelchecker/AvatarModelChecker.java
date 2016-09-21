@@ -180,9 +180,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         reachabilities = new ArrayList<SpecificationReachability>();
         for(AvatarBlock block: spec.getListOfBlocks()) {
             for(AvatarStateMachineElement elt: block.getStateMachine().getListOfElements()) {
-                if ((elt instanceof AvatarStateElement) || (elt.isCheckable())){
-                    SpecificationReachability reach = new SpecificationReachability(elt, block);
-                    reachabilities.add(reach);
+                if (((elt instanceof AvatarStateElement) && (elt.canBeVerified())) || (elt.isCheckable())){
+		    SpecificationReachability reach = new SpecificationReachability(elt, block);
+		    reachabilities.add(reach);
                 }
             }
         }
@@ -321,6 +321,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public void stopModelChecking() {
         emptyPendingStates();
         stoppedBeforeEnd = true;
+	TraceManager.addDev("Model checking stopped");
     }
 
     private void computeAllStates() {
@@ -332,20 +333,23 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             ts[i].start();
         }
 
+	TraceManager.addDev("Waiting for threads termination (nb of threads:" + nbOfThreads + ")");
         for(i=0; i<nbOfThreads; i++) {
             try {
-                ts[i].join();} catch (Exception e){}
+                ts[i].join();} catch (Exception e){TraceManager.addDev("Join on avatar model checker thread failed for thread #" + i);}
         }
+
+	TraceManager.addDev("Threads terminated");
 
         // Set to non reachable not computed elements
         if ((studyReachability) && (!stoppedBeforeEnd)) {
             for(SpecificationReachability re: reachabilities) {
-                if (re.result == SpecificationReachabilityType.NOTCOMPUTED) {
-                    re.result = SpecificationReachabilityType.NONREACHABLE;
-                }
+		if (re.result == SpecificationReachabilityType.NOTCOMPUTED) {
+		    re.result = SpecificationReachabilityType.NONREACHABLE;
+		}
             }
-        }
-
+	}
+	
     }
 
     // MAIN LOOP
@@ -357,6 +361,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         while(go) {
             // Pickup a state
             if ((stoppedBeforeEnd) || (stoppedConditionReached)) {
+		TraceManager.addDev("In Avatar modelchecher thread: stopped before end or terminated");
                 return;
             }
 
@@ -388,6 +393,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 try {
                     wait(SLEEP_DURATION);
                 } catch (Exception e) {}
+		size = pendingStates.size();
             }
         }
 
@@ -1089,13 +1095,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
 	if (studyLiveness && livenessDone) {
+	    stoppedConditionReached = true;
 	    return true;
 	}
 
-        stoppedConditionReached = true;
 
         if (studyReachability && nbOfRemainingReachabilities==0) {
             //TraceManager.addDev("***** All reachability found");
+	     stoppedConditionReached = true;
         }
 
         if (studyReachability && nbOfRemainingReachabilities>0) {
@@ -1175,7 +1182,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         String ret = "";
         if (stoppedBeforeEnd) {
-            ret += "Beware: Full study of reacha&bility might not have been fully completed\n";
+            ret += "Beware: Full study of reachability might not have been fully completed\n";
         }
 
         int cpt=0;

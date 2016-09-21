@@ -395,6 +395,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 			    cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
 			}
 			String s = cq.uppaalQuery;
+			if (cq.tgc != null) {
+			    cq.tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);
+			}
                         index = s.indexOf('$');
                         if ((index != -1) && (mode != NOT_STARTED)) {
                             name = s.substring(index+1, s.length());

@@ -1267,7 +1267,7 @@ A sensor attached to the door enables detection of
 
 
 <Modeling type="AttackTree" nameTab="Attack Trees" >
-<AttackTreeDiagramPanel name="Microwave Flashing" minX="10" maxX="1400" minY="10" maxY="1400" zoom="1.0" >
+<AttackTreeDiagramPanel name="Microwave Flashing" minX="10" maxX="900" minY="10" maxY="1400" zoom="1.0" >
 <CONNECTOR type="133" id="693" >
 <cdparam x="182" y="647" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -1399,7 +1399,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="714" />
-<P1  x="713" y="322" id="800" />
+<P1  x="714" y="324" id="800" />
 <P2  x="714" y="239" id="837" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1409,7 +1409,7 @@ A sensor attached to the door enables detection of
 <infoparam name="connector from TGComponent to TGComponent" value="2" />
 <TGConnectingPoint num="0" id="716" />
 <P1  x="405" y="342" id="1125" />
-<P2  x="651" y="342" id="801" />
+<P2  x="652" y="344" id="801" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="133" id="721" >
@@ -1532,7 +1532,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="0" id="743" />
 <TGConnectingPoint num="1" id="744" />
 <P1  x="549" y="598" id="906" />
-<P2  x="713" y="362" id="803" />
+<P2  x="714" y="364" id="803" />
 <Point x="712" y="598" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="742" >
@@ -1634,7 +1634,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="764" />
-<P1  x="496" y="810" id="865" />
+<P1  x="511" y="803" id="865" />
 <P2  x="427" y="787" id="863" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1660,7 +1660,7 @@ A sensor attached to the door enables detection of
 <cdparam x="425" y="10" />
 <sizeparam width="375" height="39" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="10" maxX="900" minY="10" maxY="1400" />
 <infoparam name="UML Note" value="Attacks on the flashing process of the microwave
 We assume the flashing can be done remotely (Internet)
 or by a maintenance station
@@ -1692,7 +1692,7 @@ or by a maintenance station
 <cdparam x="430" y="225" />
 <sizeparam width="125" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="10" maxX="900" minY="10" maxY="1400" />
 <infoparam name="TGComponent" value="&lt;&lt;SEQUENCE&gt;&gt;" />
 <TGConnectingPoint num="0" id="787" />
 <TGConnectingPoint num="1" id="788" />
@@ -1712,10 +1712,10 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="1402" id="812" >
-<cdparam x="651" y="322" />
+<cdparam x="652" y="324" />
 <sizeparam width="125" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="10" maxX="900" minY="10" maxY="1400" />
 <infoparam name="TGComponent" value="&lt;&lt;SEQUENCE&gt;&gt;" />
 <TGConnectingPoint num="0" id="800" />
 <TGConnectingPoint num="1" id="801" />
@@ -1738,7 +1738,7 @@ or by a maintenance station
 <cdparam x="569" y="114" />
 <sizeparam width="125" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="10" maxX="900" minY="10" maxY="1400" />
 <infoparam name="TGComponent" value="&lt;&lt;SEQUENCE&gt;&gt;" />
 <TGConnectingPoint num="0" id="813" />
 <TGConnectingPoint num="1" id="814" />
@@ -1761,7 +1761,7 @@ or by a maintenance station
 <cdparam x="621" y="199" />
 <sizeparam width="125" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="10" maxX="900" minY="10" maxY="1400" />
 <infoparam name="TGComponent" value="&lt;&lt;OR&gt;&gt;" />
 <TGConnectingPoint num="0" id="826" />
 <TGConnectingPoint num="1" id="827" />
@@ -1784,7 +1784,7 @@ or by a maintenance station
 <cdparam x="1191" y="400" />
 <sizeparam width="125" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="10" maxX="900" minY="10" maxY="1400" />
 <infoparam name="TGComponent" value="&lt;&lt;OR&gt;&gt;" />
 <TGConnectingPoint num="0" id="839" />
 <TGConnectingPoint num="1" id="840" />
@@ -1807,7 +1807,7 @@ or by a maintenance station
 <cdparam x="334" y="747" />
 <sizeparam width="125" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="10" maxX="900" minY="10" maxY="1400" />
 <infoparam name="TGComponent" value="&lt;&lt;OR&gt;&gt;" />
 <TGConnectingPoint num="0" id="852" />
 <TGConnectingPoint num="1" id="853" />
@@ -1830,7 +1830,7 @@ or by a maintenance station
 <cdparam x="245" y="436" />
 <sizeparam width="328" height="429" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="10" maxX="900" minY="10" maxY="1400" />
 <infoparam name="Block2" value="InOvenCommunication" />
 <TGConnectingPoint num="0" id="956" />
 <TGConnectingPoint num="1" id="957" />
@@ -1859,7 +1859,7 @@ or by a maintenance station
 </COMPONENT>
 <SUBCOMPONENT type="1401" id="877" >
 <father id="980" num="0" />
-<cdparam x="446" y="810" />
+<cdparam x="461" y="803" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
@@ -1877,6 +1877,7 @@ or by a maintenance station
 <TGConnectingPoint num="9" id="874" />
 <TGConnectingPoint num="10" id="875" />
 <TGConnectingPoint num="11" id="876" />
+<accessibility />
 <extraparam>
 <info description="" root="false" />
 </extraparam>
@@ -1925,6 +1926,7 @@ or by a maintenance station
 <TGConnectingPoint num="9" id="900" />
 <TGConnectingPoint num="10" id="901" />
 <TGConnectingPoint num="11" id="902" />
+<accessibility />
 <extraparam>
 <info description="Exploit vulnerability or implementation error" root="false" />
 </extraparam>
@@ -1955,7 +1957,7 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="929" >
 <father id="980" num="4" />
-<cdparam x="310" y="633" />
+<cdparam x="313" y="637" />
 <sizeparam width="160" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
@@ -2030,7 +2032,7 @@ or by a maintenance station
 <cdparam x="784" y="56" />
 <sizeparam width="376" height="465" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="10" maxX="900" minY="10" maxY="1400" />
 <infoparam name="Block1" value="Microcontroller" />
 <TGConnectingPoint num="0" id="1085" />
 <TGConnectingPoint num="1" id="1086" />
@@ -2254,7 +2256,7 @@ or by a maintenance station
 <cdparam x="51" y="60" />
 <sizeparam width="354" height="313" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="10" maxX="900" minY="10" maxY="1400" />
 <infoparam name="Block0" value="OvenWirelessCommunicationUnit" />
 <TGConnectingPoint num="0" id="1175" />
 <TGConnectingPoint num="1" id="1176" />
@@ -4239,7 +4241,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="2157" >
 <father id="2164" num="0" />
 <cdparam x="127" y="638" />
-<sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="44" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ else ]" />
@@ -4247,7 +4249,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="2158" >
 <father id="2164" num="1" />
 <cdparam x="219" y="638" />
-<sizeparam width="12" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="14" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ ]" />
@@ -4255,7 +4257,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="2159" >
 <father id="2164" num="2" />
 <cdparam x="222" y="673" />
-<sizeparam width="135" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="146" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ cookingTimeElapsed ]" />
@@ -4371,7 +4373,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="2247" >
 <father id="2254" num="0" />
 <cdparam x="254" y="473" />
-<sizeparam width="12" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="14" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ ]" />
@@ -4379,7 +4381,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="2248" >
 <father id="2254" num="1" />
 <cdparam x="314" y="473" />
-<sizeparam width="12" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="14" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ ]" />
@@ -4387,7 +4389,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="2249" >
 <father id="2254" num="2" />
 <cdparam x="299" y="508" />
-<sizeparam width="12" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="14" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ ]" />
@@ -4581,7 +4583,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="2401" >
 <father id="2408" num="0" />
 <cdparam x="346" y="183" />
-<sizeparam width="12" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="14" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ ]" />
@@ -4589,7 +4591,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="2402" >
 <father id="2408" num="1" />
 <cdparam x="406" y="183" />
-<sizeparam width="12" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="14" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ ]" />
@@ -4597,7 +4599,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="2403" >
 <father id="2408" num="2" />
 <cdparam x="391" y="218" />
-<sizeparam width="12" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="14" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ ]" />
@@ -5038,8 +5040,8 @@ or by a maintenance station
 <MainCode value="  }"/>
 <MainCode value=""/>
 <MainCode value="}"/>
-<Optimized value="false" />
-<Validated value="ObserverProp1;RemotelyControlledMicrowave;MicroWaveOven;WirelessInterface;Door;Magnetron;Controller;ControlPanel;Bell;RemoteControl;" />
+<Optimized value="true" />
+<Validated value="ObserverProp1;RemotelyControlledMicrowave;RemoteControl;MicroWaveOven;Bell;ControlPanel;Controller;Magnetron;Door;WirelessInterface;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="2650" >
@@ -5174,7 +5176,7 @@ or by a maintenance station
 </CONNECTOR>
 <COMPONENT type="302" id="2683" >
 <cdparam x="382" y="26" />
-<sizeparam width="616" height="97" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="668" height="97" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
 <infoparam name="Proverif Pragma" value="#InitialSystemKnowledge RemoteControl.PSK WirelessInterface.PSK
@@ -6102,8 +6104,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="3080" >
-<cdparam x="325" y="408" />
-<sizeparam width="141" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="317" y="408" />
+<sizeparam width="157" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="obs_magnetronStart()" />
@@ -6120,8 +6122,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="3091" >
-<cdparam x="366" y="260" />
-<sizeparam width="141" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="358" y="260" />
+<sizeparam width="157" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="obs_magnetronStart()" />
@@ -6138,8 +6140,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="3102" >
-<cdparam x="183" y="407" />
-<sizeparam width="90" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="179" y="407" />
+<sizeparam width="98" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="obs_closed()" />
@@ -6206,8 +6208,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="3154" >
-<cdparam x="234" y="261" />
-<sizeparam width="82" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="231" y="261" />
+<sizeparam width="89" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="obs_open()" />
@@ -6494,7 +6496,7 @@ or by a maintenance station
 </CONNECTOR><SUBCOMPONENT type="-1" id="3277" >
 <father id="3279" num="0" />
 <cdparam x="459" y="317" />
-<sizeparam width="177" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="193" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -6620,8 +6622,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="3345" >
-<cdparam x="383" y="437" />
-<sizeparam width="182" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="372" y="437" />
+<sizeparam width="204" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="remoteStart(selectedDuration)" />
@@ -6698,8 +6700,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="3399" >
-<cdparam x="311" y="166" />
-<sizeparam width="180" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="304" y="166" />
+<sizeparam width="195" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="wirelessChannelRead(msg2)" />
@@ -6739,7 +6741,7 @@ or by a maintenance station
 </CONNECTOR><SUBCOMPONENT type="-1" id="3406" >
 <father id="3408" num="0" />
 <cdparam x="407" y="249" />
-<sizeparam width="47" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="52" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -6768,7 +6770,7 @@ or by a maintenance station
 </CONNECTOR><SUBCOMPONENT type="-1" id="3413" >
 <father id="3415" num="0" />
 <cdparam x="414" y="365" />
-<sizeparam width="59" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="64" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -6826,7 +6828,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="3423" >
 <father id="3428" num="3" />
 <cdparam x="246" y="301" />
-<sizeparam width="47" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="53" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -6855,7 +6857,7 @@ or by a maintenance station
 </CONNECTOR><SUBCOMPONENT type="-1" id="3433" >
 <father id="3435" num="0" />
 <cdparam x="412" y="172" />
-<sizeparam width="59" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="64" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -6952,8 +6954,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="3494" >
-<cdparam x="380" y="379" />
-<sizeparam width="55" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="377" y="379" />
+<sizeparam width="61" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="closed()" />
@@ -6970,8 +6972,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="3505" >
-<cdparam x="384" y="184" />
-<sizeparam width="47" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="381" y="184" />
+<sizeparam width="52" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="open()" />
@@ -7094,7 +7096,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="3556" >
 <father id="3561" num="3" />
 <cdparam x="418" y="343" />
-<sizeparam width="29" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="33" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -7151,7 +7153,7 @@ or by a maintenance station
 </CONNECTOR><SUBCOMPONENT type="-1" id="3573" >
 <father id="3575" num="0" />
 <cdparam x="417" y="195" />
-<sizeparam width="26" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="28" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -7226,8 +7228,8 @@ or by a maintenance station
 </SUBCOMPONENT>
 
 <COMPONENT type="5104" id="3600" >
-<cdparam x="377" y="285" />
-<sizeparam width="61" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="374" y="285" />
+<sizeparam width="66" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="stopM()" />
@@ -7295,8 +7297,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="3652" >
-<cdparam x="376" y="158" />
-<sizeparam width="62" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="373" y="158" />
+<sizeparam width="68" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="startM()" />
@@ -7923,7 +7925,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="3828" >
 <father id="3833" num="3" />
 <cdparam x="158" y="477" />
-<sizeparam width="205" height="60" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="212" height="60" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -7953,7 +7955,7 @@ or by a maintenance station
 </CONNECTOR><SUBCOMPONENT type="-1" id="3838" >
 <father id="3840" num="0" />
 <cdparam x="513" y="302" />
-<sizeparam width="201" height="60" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="208" height="60" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -7983,7 +7985,7 @@ or by a maintenance station
 </CONNECTOR><SUBCOMPONENT type="-1" id="3845" >
 <father id="3847" num="0" />
 <cdparam x="397" y="475" />
-<sizeparam width="130" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="137" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -8011,7 +8013,7 @@ or by a maintenance station
 </CONNECTOR><SUBCOMPONENT type="-1" id="3852" >
 <father id="3854" num="0" />
 <cdparam x="252" y="341" />
-<sizeparam width="166" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="181" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -8081,7 +8083,7 @@ or by a maintenance station
 <SUBCOMPONENT type="-1" id="3863" >
 <father id="3869" num="4" />
 <cdparam x="448" y="590" />
-<sizeparam width="59" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="64" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -8239,8 +8241,8 @@ or by a maintenance station
 </SUBCOMPONENT>
 
 <COMPONENT type="5103" id="3915" >
-<cdparam x="605" y="562" />
-<sizeparam width="133" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="597" y="562" />
+<sizeparam width="149" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="obs_magnetronStart()" />
@@ -8257,8 +8259,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="3926" >
-<cdparam x="630" y="493" />
-<sizeparam width="82" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="626" y="493" />
+<sizeparam width="90" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="obs_closed()" />
@@ -8275,8 +8277,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="3937" >
-<cdparam x="634" y="307" />
-<sizeparam width="74" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="631" y="307" />
+<sizeparam width="81" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="obs_open()" />
@@ -8293,8 +8295,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="3948" >
-<cdparam x="620" y="185" />
-<sizeparam width="82" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="616" y="185" />
+<sizeparam width="90" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="obs_closed()" />
@@ -8311,8 +8313,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="3959" >
-<cdparam x="624" y="70" />
-<sizeparam width="74" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="621" y="70" />
+<sizeparam width="81" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="obs_open()" />
@@ -8380,8 +8382,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="4011" >
-<cdparam x="287" y="184" />
-<sizeparam width="141" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="279" y="184" />
+<sizeparam width="157" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="remoteStart(duration)" />
@@ -8398,8 +8400,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="4022" >
-<cdparam x="643" y="262" />
-<sizeparam width="55" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="640" y="262" />
+<sizeparam width="60" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="open()" />
@@ -8467,8 +8469,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="4074" >
-<cdparam x="398" y="554" />
-<sizeparam width="60" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="395" y="554" />
+<sizeparam width="66" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="ringBell()" />
@@ -8486,8 +8488,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="4085" >
-<cdparam x="634" y="36" />
-<sizeparam width="55" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="631" y="36" />
+<sizeparam width="60" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="open()" />
@@ -8555,8 +8557,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="4137" >
-<cdparam x="442" y="183" />
-<sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="437" y="183" />
+<sizeparam width="111" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="start(duration)" />
@@ -8582,8 +8584,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="4150" >
-<cdparam x="619" y="350" />
-<sizeparam width="104" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="613" y="350" />
+<sizeparam width="116" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="stopMagnetron()" />
@@ -8600,8 +8602,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="4161" >
-<cdparam x="376" y="512" />
-<sizeparam width="104" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="370" y="512" />
+<sizeparam width="116" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="stopMagnetron()" />
@@ -8618,8 +8620,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="4172" >
-<cdparam x="619" y="527" />
-<sizeparam width="105" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="612" y="527" />
+<sizeparam width="118" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="startMagnetron()" />
@@ -8636,8 +8638,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="4183" >
-<cdparam x="376" y="309" />
-<sizeparam width="105" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="369" y="309" />
+<sizeparam width="118" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="startMagnetron()" />
@@ -8654,8 +8656,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="4194" >
-<cdparam x="640" y="460" />
-<sizeparam width="63" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="637" y="460" />
+<sizeparam width="69" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="closed()" />
@@ -8672,8 +8674,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="4205" >
-<cdparam x="630" y="150" />
-<sizeparam width="63" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="627" y="150" />
+<sizeparam width="69" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="closed()" />
@@ -8791,8 +8793,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="4298" >
-<cdparam x="362" y="355" />
-<sizeparam width="133" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="354" y="355" />
+<sizeparam width="149" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="obs_magnetronStart()" />
@@ -8809,7 +8811,7 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5106" id="4339" >
-<cdparam x="237" y="234" />
+<cdparam x="251" y="240" />
 <sizeparam width="543" height="394" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -9037,8 +9039,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="4420" >
-<cdparam x="440" y="207" />
-<sizeparam width="128" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="432" y="207" />
+<sizeparam width="145" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="startButton(duration)" />
@@ -9078,7 +9080,7 @@ or by a maintenance station
 </CONNECTOR><SUBCOMPONENT type="-1" id="4427" >
 <father id="4429" num="0" />
 <cdparam x="429" y="249" />
-<sizeparam width="47" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="53" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -9256,7 +9258,6 @@ or by a maintenance station
 <TGConnectingPoint num="37" id="4494" />
 <TGConnectingPoint num="38" id="4495" />
 <TGConnectingPoint num="39" id="4496" />
-<accessibility />
 <extraparam>
 <entryCode value="" />
 <entryCode value="printf(&quot;\nDRING DRING DRING !!!!\n\n&quot;);" />
@@ -9264,8 +9265,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5104" id="4508" >
-<cdparam x="395" y="184" />
-<sizeparam width="48" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="393" y="184" />
+<sizeparam width="52" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="ring()" />
@@ -9327,7 +9328,6 @@ or by a maintenance station
 <TGConnectingPoint num="37" id="4546" />
 <TGConnectingPoint num="38" id="4547" />
 <TGConnectingPoint num="39" id="4548" />
-<accessibility />
 <extraparam>
 </extraparam>
 </COMPONENT>
@@ -9349,7 +9349,7 @@ or by a maintenance station
 <cdparam x="516" y="268" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from List of all parameters of an Avatar SMD transition to UML Note" value="null" />
-<P1  x="503" y="132" id="4555" />
+<P1  x="516" y="129" id="4555" />
 <P2  x="661" y="85" id="4625" />
 <AutomaticDrawing  data="false" />
 </CONNECTOR>
@@ -9364,7 +9364,7 @@ or by a maintenance station
 </CONNECTOR><SUBCOMPONENT type="-1" id="4557" >
 <father id="4559" num="0" />
 <cdparam x="343" y="131" />
-<sizeparam width="160" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="173" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -9445,11 +9445,11 @@ or by a maintenance station
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="4579" />
 <P1  x="373" y="427" id="4587" />
-<P2  x="373" y="494" id="4680" />
+<P2  x="375" y="442" id="4680" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="4578" >
 <father id="4580" num="0" />
-<cdparam x="382" y="458" />
+<cdparam x="373" y="467" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -9519,7 +9519,7 @@ or by a maintenance station
 
 <COMPONENT type="301" id="4638" >
 <cdparam x="661" y="78" />
-<sizeparam width="251" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="271" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="UML Note" value="Encrypting data with the pre shared key
@@ -9596,7 +9596,7 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5101" id="4681" >
-<cdparam x="363" y="499" />
+<cdparam x="365" y="447" />
 <sizeparam width="20" height="20" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -9605,8 +9605,8 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="5103" id="4692" >
-<cdparam x="266" y="296" />
-<sizeparam width="163" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="258" y="296" />
+<sizeparam width="179" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="wirelessChannelWrite(msg)" />

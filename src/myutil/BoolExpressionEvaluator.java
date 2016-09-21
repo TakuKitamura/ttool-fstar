@@ -361,7 +361,7 @@ public class BoolExpressionEvaluator {
                 if (result[0] > 1) {
                     result[0] = 1;
                 }
-                TraceManager.addDev("Or result=" + result[0]);
+                //TraceManager.addDev("Or result=" + result[0]);
 
             } else if (typeOfOp == AND_TOKEN) {
                 result[0] = (result[0] * resultRight[0]);

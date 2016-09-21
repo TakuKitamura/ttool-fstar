@@ -56,7 +56,9 @@ public class AvatarStartState extends AvatarStateElement {
     }
 
     public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-        return new AvatarStartState(getName(), getReferenceObject());
+	AvatarStartState astart = new AvatarStartState(getName(), getReferenceObject());
+	astart.setAsVerifiable(canBeVerified());
+        return astart;
     }
 
     public String getNiceName() {

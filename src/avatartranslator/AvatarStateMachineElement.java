@@ -57,18 +57,29 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
     private AvatarState myState;
 
     private boolean isCheckable;
+    private boolean canBeVerified; //Right or not to check liveness / reachability / etc.
 
     private boolean isHidden = false;
 
     public AvatarStateMachineElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         nexts = new LinkedList<AvatarStateMachineElement>();
+	canBeVerified = false;
     }
 
     public AvatarStateMachineElement(String _name, Object _referenceObject, boolean _isCheckable) {
         super(_name, _referenceObject);
         nexts = new LinkedList<AvatarStateMachineElement>();
         isCheckable = _isCheckable;
+	canBeVerified = false;
+    }
+
+    public void setAsVerifiable(boolean _canBeVerified) {
+	canBeVerified = _canBeVerified;
+    }
+
+    public boolean canBeVerified() {
+	return canBeVerified;
     }
 
     public void setCheckable() {
