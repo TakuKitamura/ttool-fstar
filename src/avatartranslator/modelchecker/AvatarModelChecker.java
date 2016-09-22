@@ -394,6 +394,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 try {
                     wait(SLEEP_DURATION);
                 } catch (Exception e) {}
+		if ((stoppedBeforeEnd) || (stoppedConditionReached)) {
+		    return null;
+		}
 		size = pendingStates.size();
             }
         }
