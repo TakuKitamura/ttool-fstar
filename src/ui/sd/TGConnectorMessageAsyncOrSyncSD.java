@@ -106,7 +106,7 @@ public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
         if (isAsync) {
             return TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD;
         } else {
-            return  return TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD;
+            return  TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD;
         }
     }
 

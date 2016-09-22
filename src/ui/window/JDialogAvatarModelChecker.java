@@ -72,6 +72,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     public final static int REACHABILITY_SELECTED   = 2;
     public final static int REACHABILITY_NONE       = 3;
 
+    public final static int LIVENESS_ALL        = 4;
+    public final static int LIVENESS_SELECTED   = 5;
+    public final static int LIVENESS_NONE       = 6;
+    
+
     protected static String graphDir;
     protected static boolean graphSelected = false;
     protected static String graphDirDot;
@@ -79,6 +84,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     protected static boolean ignoreEmptyTransitionsSelected = true;
     protected static boolean ignoreConcurrenceBetweenInternalActionsSelected = true;
     protected static int reachabilitySelected = REACHABILITY_NONE;
+    protected static int livenessSelected = LIVENESS_NONE;
 
     protected MainGUI mgui;
 
@@ -109,6 +115,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
     protected JRadioButton noReachability, reachabilityCheckable, reachabilityAllStates;
     protected ButtonGroup reachabilities;
+    protected JRadioButton noLiveness, livenessCheckable, livenessAllStates;
+    protected ButtonGroup liveness;
 
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreConcurrenceBetweenInternalActions;
     protected JTextField graphPath, graphPathDot;
@@ -205,6 +213,30 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         noReachability.setSelected(reachabilitySelected ==  REACHABILITY_NONE);
         reachabilityCheckable.setSelected(reachabilitySelected ==  REACHABILITY_SELECTED);
         reachabilityAllStates.setSelected(reachabilitySelected ==  REACHABILITY_ALL);
+
+
+	// Liveness
+        liveness = new ButtonGroup();
+
+        noLiveness = new JRadioButton("No liveness");
+        noLiveness.addActionListener(this);
+        jp01.add(noLiveness, c01);
+        liveness.add(noLiveness);
+
+        livenessCheckable = new JRadioButton("Liveness of selected states");
+        livenessCheckable.addActionListener(this);
+        jp01.add(livenessCheckable, c01);
+        liveness.add(livenessCheckable);
+
+        livenessAllStates = new JRadioButton("Liveness of all states");
+        livenessAllStates.addActionListener(this);
+        jp01.add(livenessAllStates, c01);
+        liveness.add(livenessAllStates);
+
+        noLiveness.setSelected(livenessSelected ==  LIVENESS_NONE);
+        livenessCheckable.setSelected(livenessSelected ==  LIVENESS_SELECTED);
+        livenessAllStates.setSelected(livenessSelected ==  LIVENESS_ALL);
+	
 
         // RG
         saveGraphAUT = new JCheckBox("Save RG (AUT format) in:", graphSelected);
