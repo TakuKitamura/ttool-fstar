@@ -134,7 +134,7 @@ public class TMLADForLoop extends TGCWithoutInternalComponent implements Embedde
         
         
         JDialogMultiString jdms = new JDialogMultiString(frame, "Setting loop's properties", 3, labels, values);
-        jdms.setSize(350, 300);
+        jdms.setSize(600, 300);
         GraphicLib.centerOnParent(jdms);
         jdms.show(); // blocked until dialog has been closed
         
