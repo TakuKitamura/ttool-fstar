@@ -71,12 +71,13 @@ public class DSESimulationResult  {
 	private Vector<String> comments;
 	
 	private Vector<Long> simulationDurations;
-	
+	private Vector<Long> cycleDurations;
 	private Vector<CPUResult> cpus;
 	private Vector<BusResult> busses;
 	private Vector<TaskResult> tasks;
 	
 	private SimulationDurationWholeResult sdwr;
+	private SimulationDurationWholeResult cdwr;
 	private Vector<CPUWholeResult> wcpus;
 	private Vector<BusWholeResult> wbusses;
 	private Vector<TaskWholeResult> wtasks;
@@ -93,6 +94,7 @@ public class DSESimulationResult  {
 		tasks = new Vector<TaskResult>();
 		comments = new Vector<String>();
 		simulationDurations = new Vector<Long>();
+		cycleDurations = new Vector<Long>();
 	}
 	
 	public void addComment(String _comment) {
@@ -292,6 +294,10 @@ public class DSESimulationResult  {
 						//System.out.println("Simulation duration=" + simdur);
 						simulationDurations.add(new Long(simdur));
 					}
+					if (elt.getTagName().compareTo("EndTime")==0){
+						String end = elt.getTextContent();
+						cycleDurations.add(new Long(end));
+					}
 					
 					if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
 						id = null;
@@ -473,6 +479,13 @@ public class DSESimulationResult  {
 			}
 		}
 		
+		for(Long l: cycleDurations) {
+			if (cdwr == null) {
+				cdwr = new SimulationDurationWholeResult(l.longValue());
+			} else {
+				cdwr.updateResults(l.longValue());
+			}
+		}
 		// CPUs
 		wcpus = new Vector<CPUWholeResult>();
 		for(CPUResult rescpu: cpus) {
@@ -527,7 +540,7 @@ public class DSESimulationResult  {
 		StringBuffer sb = new StringBuffer("");
 		
 		sb.append(sdwr.toStringResult() + "\n");
-		
+		sb.append("CYCLE "+cdwr.toStringResult() + "\n");		
 		for(CPUWholeResult reswcpu: wcpus) {
 			sb.append(reswcpu.toStringResult() + "\n");
 		}
@@ -548,6 +561,9 @@ public class DSESimulationResult  {
 		
 		for(Long l: simulationDurations) {
 			sb.append("DURATION " + l + "\n");
+		}
+		for(Long l: cycleDurations) {
+			sb.append("CYCLES " + l + "\n");
 		}
 		
 		for(CPUResult rescpu: cpus) {
@@ -578,7 +594,8 @@ public class DSESimulationResult  {
 	
 	public static String getExplanationHeader() {
 		String s;
-		s = "# Simulation duration: DURATION  nbOfResults minDuration averageDuration maxDuration\n";
+		s = "# Simulation duration: DURATION nbOfResults minDuration averageDuration maxDuration\n";
+		s += "# Cycle duration: DURATION nbOfResults minCycles averageCycles maxCycles\n";
 		s += "# CPUs: CPU ID Name nbOfResults minUtilization averageUtilization maxUtilization\n";
 		s += "# Contention on busses: CPU_BUS_CONTENTION CPUID CPUName BusID BusName nbOfResults minContentionCycles averageContentionCycles maxContentionCycles\n";
 		s += "# Busses: BUS ID Name nbOfResults minUtilization averageUtilization maxUtilization\n";
@@ -592,6 +609,7 @@ public class DSESimulationResult  {
 	public static String getAllExplanationHeader() {
 		String s;
 		s = "# Simulation duration: DURATION value (in us)\n";
+		s += "# Cycle duration: DURATION value (in cycles)\n";
 		s += "# CPUs: CPU ID Name utilization\n";
 		s += "# Contention on busses: CPU_BUS_CONTENTION CPUID CPUName BusID BusName contentionCycle\n";
 		s += "# Busses: BUS ID Name utilization\n";
@@ -697,16 +715,24 @@ public class DSESimulationResult  {
 	public double getAverageSimulationDuration() {
 		return sdwr.averageDuration;
 	}
-	
+	public double getAverageCycleDuration(){
+		return cdwr.averageDuration;
+	}
 	public long getMaxSimulationDuration() {
 		return sdwr.maxDuration;
+	}
+	
+	public long getMaxCycleDuration() {
+		return cdwr.maxDuration;
 	}
 	
 	public long getMinSimulationDuration() {
 		return sdwr.minDuration;
 	}
 	
-	
+	public long getMinCycleDuration() {
+		return cdwr.minDuration;
+	}
 	
 	
 	

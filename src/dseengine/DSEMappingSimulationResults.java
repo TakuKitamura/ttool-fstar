@@ -577,6 +577,49 @@ public class DSEMappingSimulationResults  {
 		
 		return index;
 	}
+	public int getMappingWithHighestAverageCycleDuration(){
+		if (results.size() == 0) {
+			return -1;
+		}
+		
+		int currentIndex = 0;
+		int index = 0;
+		double value = 0;
+		double valuetmp;
+
+		for(DSESimulationResult dserr: results) {
+			valuetmp = dserr.getAverageCycleDuration();
+			System.out.println(currentIndex + " "+ valuetmp);
+			if (valuetmp > value) {
+				value = valuetmp;
+				index = currentIndex;
+			}
+			currentIndex ++;
+		}
+		
+		return index;
+	}
+	public int getMappingWithLowestAverageCycleDuration(){
+		if (results.size() == 0) {
+			return -1;
+		}
+		
+		int currentIndex = 0;
+		int index = 0;
+		double value = Long.MAX_VALUE;
+		double valuetmp;
+		
+		for(DSESimulationResult dserr: results) {
+			valuetmp = dserr.getAverageCycleDuration();
+			if (valuetmp < value) {
+				value = valuetmp;
+				index = currentIndex;
+			}
+			currentIndex ++;
+		}
+		
+		return index;
+	}
 	
 	public int getMappingWithHighestMinSimulationDuration() {
 		if (results.size() == 0) {
@@ -754,13 +797,13 @@ public class DSEMappingSimulationResults  {
 		case 5: 
 			return results.get(index).getAverageCPUUsage();
 		case 6: 
-			return results.get(index).getAverageCPUUsage();
+			return results.get(index).getMaxCPUUsage();
 		case 7: 
 			return results.get(index).getMinBusUsage();
 		case 8: 
 			return results.get(index).getAverageBusUsage();
 		case 9: 
-			return results.get(index).getAverageBusUsage();
+			return results.get(index).getMaxBusUsage();
 		case 11:
 			return results.get(index).getAverageBusContention();
 		}

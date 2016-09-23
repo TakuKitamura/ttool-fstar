@@ -1022,6 +1022,10 @@ public class DSEConfiguration implements Runnable  {
 			StringBuffer sb = new StringBuffer("# Overall results\n");
 			sb.append("#Mappings:\n" + dsemapresults.getDescriptionOfAllMappings() + "\n\n");
 			
+			sb.append("\nNumber of cycles:\n");
+			sb.append("Mapping with Highest Average Cycle duration: " + dsemapresults.getMappingWithHighestAverageCycleDuration() + "\n");
+			sb.append("Mapping with Lowest Average Cycle duration: " + dsemapresults.getMappingWithLowestAverageCycleDuration() + "\n");
+	
 			sb.append("\nSimulation duration:\n");
 			sb.append("Mapping with Highest min simulation duration: " + dsemapresults.getMappingWithHighestMinSimulationDuration() + "\n");
 			sb.append("Mapping with Lowest min simulation duration: " + dsemapresults.getMappingWithLowestMinSimulationDuration() + "\n");
@@ -1065,10 +1069,10 @@ public class DSEConfiguration implements Runnable  {
 			sb.append("Mapping with Highest max Bus contention: " + dsemapresults.getMappingWithHighestMaxBusUsage() + "\n");
 			sb.append("Mapping with Lowest max Bus contention: " + dsemapresults.getMappingWithLowestMaxBusUsage() + "\n");
 			
-			sb.append("\nSecurity:\n");
+			/*sb.append("\nSecurity:\n");
 			sb.append("Mapping with Highest added security: " + dsemapresults.getMappingWithHighestAddedSecurity() + "\n");
 			sb.append("Mapping with Lowest added security: " + dsemapresults.getMappingWithLowestAddedSecurity() + "\n");
-			
+			*/
 			
 			rankMappings(dsemapresults);
 			
@@ -1335,7 +1339,9 @@ public class DSEConfiguration implements Runnable  {
 		     tmla.tmlap = tmlap;
 		     tmla.setTMLDesignPanel(tmlcdp);
 		     TMLArchiPanel newArch = drawMapping(tmla, "securedMapping"+(cpt-1));
-
+		     GTMLModeling gtml =new GTMLModeling(newArch, true);
+		     tmla = gtml.translateToTMLMapping();
+		     //
 		     //Repeat for secured mapping
 		     TMLMapping secMapping = mainGUI.gtm.autoSecure(mainGUI, "mapping" +(cpt-1),tmla, newArch, encComp, overhead, decComp,true,false);
 
@@ -1417,8 +1423,8 @@ public class DSEConfiguration implements Runnable  {
 	   }
 	}
 	for (HwLink link: hwlinks){
-	    TMLArchiNode n1 = objMap.get(link.bus);
-	    TMLArchiNode n2 = objMap.get(link.hwnode);	
+	    TMLArchiNode n1 = objMap.get(link.hwnode);
+	    TMLArchiNode n2 = objMap.get(link.bus);	
 	    TMLArchiConnectorNode conn = new TMLArchiConnectorNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap, n1.getTGConnectingPointAtIndex(0), n2.getTGConnectingPointAtIndex(0), new Vector());
 	    ap.addComponent(conn,x,y,false,true);
 	}

@@ -366,7 +366,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 	    g.drawLine(x-19, y+22, x-12, y+30);
 	    g.drawLine(x-19, y+30, x-12, y+22);
 	}
-	if (checkSecWeakAuthStatus==3 || checkSecStrongAuthStatus==3 && checkWeakAuthStatus <2){
+	if (checkSecWeakAuthStatus==3 || checkSecStrongAuthStatus==3 && checkSecWeakAuthStatus <2){
 	    g.drawLine(x-12, y+18, x-5, y+26);
 	    g.drawLine(x-12, y+26, x-5, y+18);
 	}
@@ -695,9 +695,6 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                                     dataFlowType = elt.getAttribute("dataFlowType");
                                     associatedEvent = elt.getAttribute("associatedEvent");
                                     checkConf = (elt.getAttribute("checkConf").compareTo("true")==0);
-                                    checkConfStatus = Integer.valueOf(elt.getAttribute("checkConfStatus"));
-                                    checkStrongAuthStatus = Integer.valueOf(elt.getAttribute("checkStrongAuthStatus"));
-				    checkWeakAuthStatus = Integer.valueOf(elt.getAttribute("checkWeakAuthStatus"));
 				    checkAuth = (elt.getAttribute("checkAuth").compareTo("true")==0);
                                     isLossy = (elt.getAttribute("isLossy").compareTo("true") ==0);
                                     isPrex = (elt.getAttribute("isPrex").compareTo("true") ==0);
