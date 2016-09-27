@@ -374,8 +374,10 @@ else {
 	      }
 	  else{ 
 	      //processor(s) and link to central interconnect are initiators
-	      crossbar.setNbOfAttachedInitiators(2);	 
-	      crossbar.setNbOfAttachedTargets(2);
+	      //crossbar.setNbOfAttachedInitiators(2);	 
+	      //crossbar.setNbOfAttachedTargets(2);
+	      crossbar.setNbOfAttachedInitiators(1);//DG 27.09.	 
+	      crossbar.setNbOfAttachedTargets(1);//DG 27.09.
 	  }
 
           System.out.println("initiators: "+crossbar.getNbOfAttachedInitiators());	

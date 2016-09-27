@@ -241,7 +241,7 @@ public class MappingTable {
       int SEG_RAM_BASE   =        268435456;    
       int    cluster = 0;
 
-      //DG 1.9. on cluster 0 only	 
+      	 
       //   mapping += "maptab.add(Segment(\"icu" + cluster + "\",0x"+ Integer.toHexString(SEG_ICU_BASE)+", 0x"+ Integer.toHexString(SEG_ICU_SIZE)+", IntTab(0,9), false));" + CR;
   mapping += "maptab.add(Segment(\"vci_xicu\",0x"+ Integer.toHexString(SEG_ICU_BASE)+", 0x"+ Integer.toHexString(SEG_ICU_SIZE)+", IntTab(0,9), false));" + CR;
   //mapping += "maptab.add(Segment(\"dma" + cluster + "\", 0x"+ Integer.toHexString(SEG_DMA_BASE)+", 0x"+ Integer.toHexString(SEG_DMA_SIZE)+", IntTab(0,10), false));" + CR;
