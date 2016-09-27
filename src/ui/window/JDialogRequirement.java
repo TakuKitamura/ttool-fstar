@@ -57,7 +57,7 @@ import ui.*;
 
 public class JDialogRequirement extends javax.swing.JDialog implements ActionListener  {
     
-	public static String[] kinds = {"Functional", "Non-functional", "Performance", "Privacy", "Confidentiality", "Non-repudiation", "Controlled access (authorization)", "Availability", "Immunity", "Integrity", "Data origin authenticity", "Freshness", "Other"};
+    public static String[] kinds = {"Functional", "Non-functional", "Performance", "Privacy", "Confidentiality", "Non-repudiation", "Controlled access (authorization)", "Availability", "Immunity", "Integrity", "Data origin authenticity", "Freshness", "Business", "Stakeholder need", "Other"};
     
 	
     private boolean regularClose;
