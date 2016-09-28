@@ -1477,6 +1477,19 @@ public class TML2Avatar {
 		else {
 	            ar.setPrivate(originDestMap.get(channel.getOriginTask().getName()+"__"+channel.getDestinationTask().getName())==1);
 		}
+		if (channel.getType()==TMLChannel.BRBW){
+		    ar.setAsynchronous(false);		
+		}
+		else if (channel.getType()==TMLChannel.BRNBW){
+		    ar.setAsynchronous(true);
+		    ar.setSizeOfFIFO(channel.getSize());
+		}
+		else {
+			//Create new block, hope for best
+		    createFIFO();
+		   
+	
+		}
 	        //Find in signal
 	        List<AvatarSignal> sig1 = new ArrayList<AvatarSignal>();
 	        List<AvatarSignal> sig2 = new ArrayList<AvatarSignal>();
@@ -1504,7 +1517,11 @@ public class TML2Avatar {
 		    sig2.add(new AvatarSignal(channel.getOriginTask().getName()+"__OUT__"+channel.getName(), AvatarSignal.OUT, null));
 	    	}
 	    	if (sig1.size()==1 && sig2.size()==1){
-		    ar.addSignals(sig2.get(0), sig1.get(0));
+		    if (channel.getType()==TMLChannel.NBRNBW){
+		    }
+		    else {
+		    	ar.addSignals(sig2.get(0), sig1.get(0));
+		    }
 	    	}
 	    	else {
 		    System.out.println("Failure to match signals for TMLChannel "+ channel.getName());
@@ -1754,4 +1771,45 @@ public class TML2Avatar {
 	    }
 	}
     }
+    public void createFifo(){
+	AvatarBlock fifo = new AvatarBlock("FIFO", avspec, null);
+	AvatarState root = new AvatarState("root",null, false);
+    	AvatarSignal read = new AvatarSignal("readSignal", AvatarSignal.OUT, null);
+	AvatarSignal write = new AvatarSignal("writeSignal", AvatarSignal.IN, null);
+	AvatarStartState start = new AvatarStartState("start", null);
+	AvatarTransition afterStart = new AvatarTransition(fifo, "afterStart", null);
+	fifo.addSignal(read);
+	fifo.addSignal(write);
+	AvatarTransition toRead = new AvatarTransition(fifo, "toReadSignal", null);
+	AvatarTransition toWrite = new AvatarTransition(fifo, "toWriteSignal", null);
+	AvatarTransition afterRead = new AvatarTransition(fifo, "afterReadSignal", null);
+	AvatarTransition afterWrite = new AvatarTransition(fifo, "afterWriteSignal", null);
+	AvatarActionOnSignal readAction= new AvatarActionOnSignal("read", read, null);	
+	AvatarActionOnSignal writeAction= new AvatarActionOnSignal("write", write, null);	
+	
+	AvatarStateMachine asm = fifo.getStateMachine();
+	asm.addElement(start);
+	asm.addElement(afterStart);
+	asm.addElement(root);
+	asm.addElement(toRead);
+	asm.addElement(toWrite);
+	asm.addElement(afterRead);
+	asm.addElement(afterWrite);
+	asm.addElement(readAction);
+	asm.addElement(writeAction);
+	
+	start.addNext(afterStart);
+	afterStart.addNext(root);
+	root.addNext(toRead);
+	root.addNext(toWrite);
+	toRead.addNext(readAction);
+	toWrite.addNext(writeAction);
+	readAction.addNext(afterRead);
+	writeAction.addNext(afterWrite);
+	afterRead.addNext(root);
+	afterWrite.addNext(root);
+
+	avspec.addBlock(fifo);
+    }
+
 }

@@ -630,6 +630,7 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
   aInpStream >> aCmd;
   //std::cout << "Not crashed. I: " << iCmd << std::endl;
   //std::cout << "Decoding command: d" << iCmd << " " << aCmd<<std::endl;
+  TMLTransaction* oLastTrans;
   switch (aCmd){
   case 0: //Quit simulation
     std::cout << "QUIT SIMULATION from Decode Command"  << std::endl;
@@ -647,13 +648,15 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     }
     aInpStream >> aParam1;
     std::cout << "Not crashed. I: " << iCmd << " param= " << aParam1 << std::endl;
-    TMLTransaction* oLastTrans;
+
     switch (aParam1){
+      _end =oLastTrans->printEnd();
     case 0:     //Run to next breakpoint
       std::cout << "Run to next breakpoint." << std::endl;
       aGlobMsg << TAG_MSGo << "Run to next breakpoint" << TAG_MSGc << std::endl;
       _simTerm=runToNextBreakpoint(oLastTrans);
       std::cout << "End Run to next breakpoint." << std::endl;
+      _end =oLastTrans->printEnd();
       break;
     case 1:     //Run up to trans x
       std::cout << "Run to transaction x." << std::endl;
@@ -1096,6 +1099,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
   case 10:{ //Save benchmarks in file x
     std::cout << "Save benchmarks in file x." << std::endl;
     aInpStream >> aParam1;
+
+      std::cout<< "printhtis"<<std::endl;
+      std::cout<< TAG_MSGo << oLastTrans->toString() << aStrParam << TAG_MSGc << std::endl;
     switch (aParam1){
     case 0: _simComp->streamBenchmarks(std::cout);
       aGlobMsg << TAG_MSGo << "Benchmarks written to screen " << TAG_MSGc << std::endl;

@@ -257,6 +257,8 @@ public:
 	\return Simulation duration
 	*/
 	inline long getSimDuration(){ return _simDuration;}
+
+	inline std::string getEnd(){return _end;}
 protected:
 	///Runs the simulation
 	/**
@@ -341,5 +343,6 @@ protected:
 	bool _terminateExplore;
 	///Duration of Simulation
 	long _simDuration;
+	std::string _end;
 };
 #endif

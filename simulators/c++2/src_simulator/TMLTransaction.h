@@ -202,6 +202,7 @@ public:
 	/**
 	\return Detailed string representation
 	*/
+	std::string printEnd() const;
 	std::string toString() const;
 	///Returns a short string representation of the transaction
 	/**

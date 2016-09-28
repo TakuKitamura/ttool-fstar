@@ -60,6 +60,12 @@ TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, T
                                                                                                                             _channel(iChannel),_stateID(0) {
 }
 
+std::string TMLTransaction::printEnd() const{
+  std::ostringstream outp;
+  outp << getEndTime();
+  return outp.str();
+}
+
 std::string TMLTransaction::toString() const{
   std::ostringstream outp;
   outp << _command->toString() << std::endl << "Transaction runnable:" << _runnableTime << " len:" << _length << " start:" << _startTime << " vLength:" << _virtualLength;
@@ -70,7 +76,7 @@ std::string TMLTransaction::toString() const{
 std::string TMLTransaction::toShortString() const{
   std::ostringstream outp;
   if (_command==0)
-    outp << "Sytem State ID: " <<  _virtualLength;
+    outp << "System State ID: " <<  _virtualLength;
   else{
     outp << _command->toShortString() << " t:" << _startTime << " l:" << _length << " (vl:"<<  _virtualLength << ")";
     if (_channel!=0) outp << " Ch: " << _channel->toShortString();
