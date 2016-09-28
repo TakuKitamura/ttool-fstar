@@ -1460,6 +1460,7 @@ public class TML2Avatar {
 	//Channels are ?? to ??
 	//Requests are n to 1
 	//Events are ?? to ??
+	AvatarBlock fifo = new AvatarBlock("FIFO", avspec,null);
 	for (TMLChannel channel:tmlmodel.getChannels()){
 	    if (channel.isBasicChannel()){
 		AvatarRelation ar= new AvatarRelation(channel.getName(), taskBlockMap.get(channel.getOriginTask()), taskBlockMap.get(channel.getDestinationTask()), channel.getReferenceObject());
@@ -1486,8 +1487,8 @@ public class TML2Avatar {
 		}
 		else {
 			//Create new block, hope for best
-		    createFIFO();
-		   
+		   fifo = createFifo();
+		   ar.setAsynchronous(false);
 	
 		}
 	        //Find in signal
@@ -1518,6 +1519,12 @@ public class TML2Avatar {
 	    	}
 	    	if (sig1.size()==1 && sig2.size()==1){
 		    if (channel.getType()==TMLChannel.NBRNBW){
+			AvatarSignal read = fifo.getSignalByName("readSignal");
+			ar.block2= fifo;
+			ar.addSignals(sig2.get(0), read);
+			AvatarRelation ar2= new AvatarRelation(channel.getName()+"2", fifo, taskBlockMap.get(channel.getDestinationTask()), channel.getReferenceObject());
+			ar2.setAsynchronous(true);
+			avspec.addRelation(ar2);
 		    }
 		    else {
 		    	ar.addSignals(sig2.get(0), sig1.get(0));
@@ -1771,7 +1778,7 @@ public class TML2Avatar {
 	    }
 	}
     }
-    public void createFifo(){
+    public AvatarBlock createFifo(){
 	AvatarBlock fifo = new AvatarBlock("FIFO", avspec, null);
 	AvatarState root = new AvatarState("root",null, false);
     	AvatarSignal read = new AvatarSignal("readSignal", AvatarSignal.OUT, null);
@@ -1810,6 +1817,7 @@ public class TML2Avatar {
 	afterWrite.addNext(root);
 
 	avspec.addBlock(fifo);
+	return fifo;
     }
 
 }
