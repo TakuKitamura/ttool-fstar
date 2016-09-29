@@ -2091,6 +2091,23 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return mgui;
     }
 
+
+    public int getRawMinX() {
+	return minLimit;
+    }
+
+    public int getRawMaxX() {
+	return maxX;
+    }
+
+    public int getRawMinY() {
+	return minLimit;
+    }
+
+    public int getRawMaxY() {
+	return maxY;
+    }
+    
     public int getMaxX() {
         //return maxX;
         return (int)(Math.ceil(maxX * zoom));
@@ -2106,6 +2123,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public int getMaxY() {
+	//return maxY;
         return (int)(Math.ceil(maxY * zoom));
     }
 
@@ -2154,10 +2172,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public String sizeParam() {
-        String s = " minX=\"" + getMinX() + "\"";
-        s += " maxX=\"" + getMaxX() + "\"";
-        s += " minY=\"" + getMinY() + "\"";
-        s += " maxY=\"" + getMaxY() + "\"";
+        String s = " minX=\"" + getRawMinX() + "\"";
+        s += " maxX=\"" + getRawMaxX() + "\"";
+        s += " minY=\"" + getRawMinY() + "\"";
+        s += " maxY=\"" + getRawMaxY() + "\"";
         return s;
     }
 

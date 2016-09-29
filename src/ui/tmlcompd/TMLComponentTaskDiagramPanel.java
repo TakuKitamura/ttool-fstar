@@ -341,7 +341,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     }
 
     public ArrayList<String> getAllTMLInputPorts( String _topname ) {   //the destination ports
-        
+
         //Use HashSet to avoid returning multiple identical ports due to the presence of join nodes
         HashSet<String> al = new HashSet<String>();
 
@@ -482,7 +482,6 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     }
 
     public String getXMLHead() {
-        //System.out.println("Name=" + name);
         return "<TMLComponentTaskDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + zoomParam() +" >";
     }
 
@@ -1293,26 +1292,26 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
       return null;
       }*/
-		public Vector getAllTMLTasksAttributes() {
+    public Vector getAllTMLTasksAttributes() {
 
-			TGComponent tgc;
-			Iterator iterator = componentList.listIterator();
-			Vector list = new Vector();
-        
-  	  while(iterator.hasNext()) {
-				tgc = (TGComponent)(iterator.next());
-				if( tgc instanceof TMLCCompositeComponent )	{
-					for( TMLCPrimitiveComponent primComp: ((TMLCCompositeComponent)tgc).getAllPrimitiveComponents() )	{
-						for( Object o: primComp.getAttributes() )	{
-							String s = o.toString();
-							list.add( primComp.getValue() + "." + s.substring( 2, s.length()-1 ) );
-						}
-						//list.add( primComp.getAttributes() );
-					}
-				}
-			}
-			return list;
-		}
+        TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
+        Vector list = new Vector();
+
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if( tgc instanceof TMLCCompositeComponent ) {
+                for( TMLCPrimitiveComponent primComp: ((TMLCCompositeComponent)tgc).getAllPrimitiveComponents() )       {
+                    for( Object o: primComp.getAttributes() )   {
+                        String s = o.toString();
+                        list.add( primComp.getValue() + "." + s.substring( 2, s.length()-1 ) );
+                    }
+                    //list.add( primComp.getAttributes() );
+                }
+            }
+        }
+        return list;
+    }
 
     public Vector<String> getAllRecords(TMLCPrimitiveComponent tgc) {
         Vector<String> list = new Vector<String>();
@@ -1594,97 +1593,97 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
 
     public String[] getAllOutEvents(String nameOfComponent) {
-	TMLCPrimitiveComponent comp = getPrimitiveComponentByName(nameOfComponent);
-	if (comp == null) {
-	    return null;
-	}
-	
-	LinkedList ll = comp.getAllEventsOriginPorts();
-	String[]terms = new String[ll.size()];
-	ListIterator ite = ll.listIterator();
-	int i = 0;
-	while(ite.hasNext()) {
-	    TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
-	    terms[i] = port.getPortName();
-	    i ++;
-	}
-	
-	return terms;
+        TMLCPrimitiveComponent comp = getPrimitiveComponentByName(nameOfComponent);
+        if (comp == null) {
+            return null;
+        }
+
+        LinkedList ll = comp.getAllEventsOriginPorts();
+        String[]terms = new String[ll.size()];
+        ListIterator ite = ll.listIterator();
+        int i = 0;
+        while(ite.hasNext()) {
+            TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
+            terms[i] = port.getPortName();
+            i ++;
+        }
+
+        return terms;
     }
 
     public String[] getAllInEvents(String nameOfComponent) {
-	TMLCPrimitiveComponent comp = getPrimitiveComponentByName(nameOfComponent);
-	if (comp == null) {
-	    return null;
-	}
-	
-	LinkedList ll = comp.getAllEventsDestinationPorts();
-	String[]terms = new String[ll.size()];
-	ListIterator ite = ll.listIterator();
-	int i = 0;
-	while(ite.hasNext()) {
-	    TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
-	    terms[i] = port.getPortName();
-	    i ++;
-	}
-	
-	return terms;
+        TMLCPrimitiveComponent comp = getPrimitiveComponentByName(nameOfComponent);
+        if (comp == null) {
+            return null;
+        }
+
+        LinkedList ll = comp.getAllEventsDestinationPorts();
+        String[]terms = new String[ll.size()];
+        ListIterator ite = ll.listIterator();
+        int i = 0;
+        while(ite.hasNext()) {
+            TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
+            terms[i] = port.getPortName();
+            i ++;
+        }
+
+        return terms;
     }
 
     public String[] getAllOutChannels(String nameOfComponent) {
-	TMLCPrimitiveComponent comp = getPrimitiveComponentByName(nameOfComponent);
-	if (comp == null) {
-	    return null;
-	}
-	
-	LinkedList ll = comp.getAllChannelsOriginPorts();
-	String[]terms = new String[ll.size()];
-	ListIterator ite = ll.listIterator();
-	int i = 0;
-	while(ite.hasNext()) {
-	    TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
-	    terms[i] = port.getPortName();
-	    i++;
-	}
-	
-	return terms;
+        TMLCPrimitiveComponent comp = getPrimitiveComponentByName(nameOfComponent);
+        if (comp == null) {
+            return null;
+        }
+
+        LinkedList ll = comp.getAllChannelsOriginPorts();
+        String[]terms = new String[ll.size()];
+        ListIterator ite = ll.listIterator();
+        int i = 0;
+        while(ite.hasNext()) {
+            TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
+            terms[i] = port.getPortName();
+            i++;
+        }
+
+        return terms;
     }
 
     public String[] getAllOutRequests(String nameOfComponent) {
-	TMLCPrimitiveComponent comp = getPrimitiveComponentByName(nameOfComponent);
-	if (comp == null) {
-	    return null;
-	}
-	
-	LinkedList ll = comp.getAllRequestsOriginPorts();
-	String[]terms = new String[ll.size()];
-	ListIterator ite = ll.listIterator();
-	int i = 0;
-	while(ite.hasNext()) {
-	    TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
-	    terms[i] = port.getPortName();
-	    i ++;
-	}
-	
-	return terms;
+        TMLCPrimitiveComponent comp = getPrimitiveComponentByName(nameOfComponent);
+        if (comp == null) {
+            return null;
+        }
+
+        LinkedList ll = comp.getAllRequestsOriginPorts();
+        String[]terms = new String[ll.size()];
+        ListIterator ite = ll.listIterator();
+        int i = 0;
+        while(ite.hasNext()) {
+            TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
+            terms[i] = port.getPortName();
+            i ++;
+        }
+
+        return terms;
     }
 
     public String[] getAllInChannels(String nameOfComponent) {
-	TMLCPrimitiveComponent comp = getPrimitiveComponentByName(nameOfComponent);
-	if (comp == null) {
-	    return null;
-	}
-	
-	LinkedList ll = comp.getAllChannelsDestinationPorts();
-	String[]terms = new String[ll.size()];
-	ListIterator ite = ll.listIterator();
-	int i = 0;
-	while(ite.hasNext()) {
-	    TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
-	    terms[i] = port.getPortName();
-	    i++;
-	}
-	
-	return terms;
+        TMLCPrimitiveComponent comp = getPrimitiveComponentByName(nameOfComponent);
+        if (comp == null) {
+            return null;
+        }
+
+        LinkedList ll = comp.getAllChannelsDestinationPorts();
+        String[]terms = new String[ll.size()];
+        ListIterator ite = ll.listIterator();
+        int i = 0;
+        while(ite.hasNext()) {
+            TMLCPrimitivePort port = (TMLCPrimitivePort)(ite.next());
+            terms[i] = port.getPortName();
+            i++;
+        }
+
+        return terms;
     }
 }
