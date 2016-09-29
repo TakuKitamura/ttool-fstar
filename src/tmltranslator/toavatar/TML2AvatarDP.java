@@ -75,9 +75,9 @@ public class TML2AvatarDP {
         tmlmap = tmlmapping;
     }
 
-    public void commMap(){
+    public void commMap(AvatarSpecification avspec){
 	//Create a map of all connections
-	TMLModeling tmlmodel=tmlmap.getTMLModeling();
+	/*TMLModeling tmlmodel=tmlmap.getTMLModeling();
 	for (TMLTask t: tmlmodel.getTasks()){
 	    Set<String> hs = new HashSet<String>();
 	    //Iterate through channels
@@ -96,10 +96,23 @@ public class TML2AvatarDP {
 	    }
 	    name=t.getName();
 	    originDestMap.put(name.split("__")[name.split("__").length-1], hs);
-	    
+	    */
+	for (AvatarRelation ar: avspec.getRelations()){
+
+	    String bl1 = ar.block1.getName();
+	    String bl2 = ar.block2.getName();
+	    if (originDestMap.containsKey(bl1.split("__")[bl1.split("__").length-1])){
+		originDestMap.get(bl1.split("__")[bl1.split("__").length-1]).add(bl2.split("__")[bl2.split("__").length-1]);
+	    }
+	    else {
+ 	    	Set<String> hs= new HashSet<String>();
+		hs.add(bl2.split("__")[bl2.split("__").length-1]);
+		originDestMap.put(bl1.split("__")[bl1.split("__").length-1], hs);
+	    }
+	}
 	    //get connections
 	//Do we care about requests/events
-	}
+	
     }
     public void addStates(AvatarStateMachineElement asme, int x, int y, AvatarSMDPanel smp, AvatarBDBlock bl){
 	TGConnectingPoint tp = new TGConnectingPoint(null, x, y, false, false);
@@ -268,9 +281,10 @@ public class TML2AvatarDP {
 	}
 
 	
-	commMap();
-
+	commMap(avspec);
+	System.out.println("ORIGINDESTMAP " + originDestMap);
 	//Add Relations
+	
 	for (String bl1: originDestMap.keySet()){
 	    for (String bl2:originDestMap.get(bl1)){ 
 		Vector points=new Vector();
@@ -279,14 +293,23 @@ public class TML2AvatarDP {
 		AvatarBDPortConnector conn = new AvatarBDPortConnector(0, 0, 0, 0, 0, 0, true, null, abd, p1, p2, points);
 
 		//Add Relations to connector
-		for (ui.AvatarSignal sig:blockMap.get(bl1).getSignalList()){
+		for (AvatarRelation ar:avspec.getRelations()){
+		    System.out.println(bl1 +" "+ ar.block1.getName() + " "+ ar.block2.getName());
+		    if (ar.block1.getName().contains(bl1) && ar.block2.getName().contains(bl2) || ar.block1.getName().contains(bl2) && ar.block2.getName().contains(bl1)){
+			conn.addSignal("in " +ar.getSignal1(0).getName(),true,true);
+			conn.addSignal("out " +ar.getSignal2(0).getName(), false,false);
+			System.out.println("Added Signals");
+			conn.updateAllSignals();
+		    }
+		}
+		/*for (ui.AvatarSignal sig:blockMap.get(bl1).getSignalList()){
 		    for (ui.AvatarSignal sig2: blockMap.get(bl2).getSignalList()){
 			if (sig.getId().equals(sig2.getId())){
 			    conn.addSignal("in "+sig.getId(), true, true);
 			    conn.addSignal("out "+sig.getId(), false, false);
 			}
 		    }
-		}
+		}*/
 		abd.addComponent(conn, 0,0,false,true);
 		System.out.println("size " +conn.getAssociationSignals().size());
 	    }

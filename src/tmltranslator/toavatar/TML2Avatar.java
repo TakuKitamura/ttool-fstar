@@ -1523,6 +1523,8 @@ public class TML2Avatar {
 			ar.block2= fifo;
 			ar.addSignals(sig2.get(0), read);
 			AvatarRelation ar2= new AvatarRelation(channel.getName()+"2", fifo, taskBlockMap.get(channel.getDestinationTask()), channel.getReferenceObject());
+			AvatarSignal write = fifo.getSignalByName("writeSignal");
+			ar2.addSignals(write, sig1.get(0));
 			ar2.setAsynchronous(true);
 			avspec.addRelation(ar2);
 		    }
@@ -1779,7 +1781,7 @@ public class TML2Avatar {
 	}
     }
     public AvatarBlock createFifo(){
-	AvatarBlock fifo = new AvatarBlock("FIFO", avspec, null);
+	AvatarBlock fifo = new AvatarBlock("FIFO__FIFO", avspec, null);
 	AvatarState root = new AvatarState("root",null, false);
     	AvatarSignal read = new AvatarSignal("readSignal", AvatarSignal.OUT, null);
 	AvatarSignal write = new AvatarSignal("writeSignal", AvatarSignal.IN, null);
@@ -1795,6 +1797,7 @@ public class TML2Avatar {
 	AvatarActionOnSignal writeAction= new AvatarActionOnSignal("write", write, null);	
 	
 	AvatarStateMachine asm = fifo.getStateMachine();
+	asm.setStartState(start);
 	asm.addElement(start);
 	asm.addElement(afterStart);
 	asm.addElement(root);
