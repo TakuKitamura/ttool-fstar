@@ -178,7 +178,8 @@ class ExecutionThread extends Thread {
                 waitingForPipe();
                 TraceManager.addDev("Got pipe");
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-		proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+                proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+               
                 try {
                     while (((str = proc_in.readLine()) != null) && (go == true)){
                         pipe.write((str + "\n").getBytes());
@@ -233,7 +234,9 @@ class ExecutionThread extends Thread {
                     TraceManager.addDev("out " + str);
                     respond(out, "4" + str);
                 }
-		proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+                
+                proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+                
                 while (((str = proc_err.readLine()) != null) && (go == true)){
                 	//System.out.println("error out:" + str);
                     TraceManager.addDev("error out " + str);
