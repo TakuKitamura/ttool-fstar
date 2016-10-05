@@ -104,7 +104,8 @@ public class TML2Avatar {
 	this.tmlmodel = tmlmap.getTMLModeling();
 	allStates = new ArrayList<String>();
 	attrsToCheck=new ArrayList<String>();
-	
+	mc=modelcheck;
+	security=sec;
     }
     
     public void checkConnections(){

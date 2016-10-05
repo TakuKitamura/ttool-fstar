@@ -118,8 +118,6 @@ public class TML2AvatarDP {
 		originDestMap.put(bl1.split("__")[bl1.split("__").length-1], hs);
 	    }
 	}
-	    //get connections
-	//Do we care about requests/events
 	
     }
     public void addStates(AvatarStateMachineElement asme, int x, int y, AvatarSMDPanel smp, AvatarBDBlock bl){
@@ -297,7 +295,6 @@ public class TML2AvatarDP {
 
 	
 	commMap(avspec);
-	System.out.println("ORIGINDESTMAP " + originDestMap);
 	//Add Relations
 	
 	for (String bl1: originDestMap.keySet()){
