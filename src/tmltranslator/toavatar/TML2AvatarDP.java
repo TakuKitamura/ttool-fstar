@@ -70,11 +70,18 @@ public class TML2AvatarDP {
     private Map<AvatarStateMachineElement, TGComponent> SMDMap = new HashMap<AvatarStateMachineElement, TGComponent>();
     public Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
     public Map<String, AvatarBDBlock> blockMap = new HashMap<String, AvatarBDBlock>();
-    public TML2AvatarDP(TMLMapping tmlmapping) {
+    boolean mc;
+    boolean security;
+    AvatarSpecification avspec;
+    public TML2AvatarDP(TMLMapping tmlmapping, boolean modelcheck, boolean sec) {
   
         tmlmap = tmlmapping;
+	mc= modelcheck;
+	security=sec;
     }
-
+    public TML2AvatarDP(AvatarSpecification av) {
+	  avspec=av;
+    }
     public void commMap(AvatarSpecification avspec){
 	//Create a map of all connections
 	/*TMLModeling tmlmodel=tmlmap.getTMLModeling();
@@ -212,13 +219,20 @@ public class TML2AvatarDP {
 	return;
     }
     public void translate() {
-	TML2Avatar tml2av = new TML2Avatar(tmlmap);
+	TML2Avatar tml2av = new TML2Avatar(tmlmap,mc,security);
+	avspec = tml2av.generateAvatarSpec("1");
+	drawPanel();
 	//Create AvatarDesignDiagram
+    }
+    public void drawPanel(){
 	if (adp ==null){
 	    return;
 	}
+	if (avspec==null){
+	    return;
+	}
 	AvatarBDPanel abd = adp.abdp;
-	AvatarSpecification avspec = tml2av.generateAvatarSpec("1");
+
 	//Find all blocks, create blocks from left
 	int xpos=10;
 	int ypos=10;
@@ -288,19 +302,28 @@ public class TML2AvatarDP {
 	for (String bl1: originDestMap.keySet()){
 	    for (String bl2:originDestMap.get(bl1)){ 
 		Vector points=new Vector();
-		TGConnectingPoint p1= blockMap.get(bl1).getFreeTGConnectingPoint(blockMap.get(bl1).getX(), blockMap.get(bl1).getY());
-		TGConnectingPoint p2=blockMap.get(bl2).getFreeTGConnectingPoint(blockMap.get(bl2).getX(),blockMap.get(bl2).getY());
-		AvatarBDPortConnector conn = new AvatarBDPortConnector(0, 0, 0, 0, 0, 0, true, null, abd, p1, p2, points);
 
 		//Add Relations to connector
 		for (AvatarRelation ar:avspec.getRelations()){
-		    System.out.println(bl1 +" "+ ar.block1.getName() + " "+ ar.block2.getName());
 		    if (ar.block1.getName().contains(bl1) && ar.block2.getName().contains(bl2) || ar.block1.getName().contains(bl2) && ar.block2.getName().contains(bl1)){
+			//TGConnectingPoint p1= blockMap.get(bl1).getFreeTGConnectingPoint(blockMap.get(bl1).getX(), blockMap.get(bl1).getY());
+			TGConnectingPoint p1= blockMap.get(bl1).findFirstFreeTGConnectingPoint(true,true);
+			TGConnectingPoint p2= blockMap.get(bl2).findFirstFreeTGConnectingPoint(true,true);
+		//	TGConnectingPoint p2=blockMap.get(bl2).getFreeTGConnectingPoint(blockMap.get(bl2).getX(),blockMap.get(bl2).getY());
+		    	AvatarBDPortConnector conn = new AvatarBDPortConnector(0, 0, 0, 0, 0, 0, true, null, abd, p1, p2, points);
+		    	conn.setAsynchronous(ar.isAsynchronous());
+		    	conn.setBlocking(ar.isBlocking());
+		    	conn.setPrivate(ar.isPrivate());
+		    	conn.setSizeOfFIFO(ar.getSizeOfFIFO());
+		    	System.out.println(bl1 +" "+ ar.block1.getName() + " "+ ar.block2.getName());
 			conn.addSignal("in " +ar.getSignal1(0).getName(),true,true);
 			conn.addSignal("out " +ar.getSignal2(0).getName(), false,false);
 			System.out.println("Added Signals");
 			conn.updateAllSignals();
-		    }
+			p1.setFree(false);
+			p2.setFree(false);
+			abd.addComponent(conn, 0,0,false,true);
+		    }		    
 		}
 		/*for (ui.AvatarSignal sig:blockMap.get(bl1).getSignalList()){
 		    for (ui.AvatarSignal sig2: blockMap.get(bl2).getSignalList()){
@@ -310,8 +333,6 @@ public class TML2AvatarDP {
 			}
 		    }
 		}*/
-		abd.addComponent(conn, 0,0,false,true);
-		System.out.println("size " +conn.getAssociationSignals().size());
 	    }
 	}
 	ypos+=100;

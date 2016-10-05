@@ -713,18 +713,27 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         return asynchronous;
     }
 
+    public void setAsynchronous(boolean asy){
+	asynchronous=asy;
+    }
     public int getSizeOfFIFO() {
         return sizeOfFIFO;
     }
-
+    public void setSizeOfFIFO(int size){
+	sizeOfFIFO=size;
+    }
     public boolean isBlocking() {
         return blockingFIFO;
     }
-
+    public void setBlocking(boolean b){
+	blockingFIFO=b;
+    }
     public boolean isPrivate() {
         return isPrivate;
     }
-
+    public void setPrivate(boolean pr){
+	isPrivate=pr;
+    }
     public boolean isBroadcast() {
         return isBroadcast;
     }

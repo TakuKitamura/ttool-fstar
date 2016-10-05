@@ -97,11 +97,14 @@ public class TML2Avatar {
     AvatarSpecification avspec;
     ArrayList<String> attrsToCheck;
     List<String> allStates;
-    public TML2Avatar(TMLMapping tmlmap) {
+    boolean mc = false;
+    boolean security=false;
+    public TML2Avatar(TMLMapping tmlmap, boolean modelcheck, boolean sec) {
         this.tmlmap = tmlmap;
 	this.tmlmodel = tmlmap.getTMLModeling();
 	allStates = new ArrayList<String>();
 	attrsToCheck=new ArrayList<String>();
+	
     }
     
     public void checkConnections(){
@@ -650,263 +653,240 @@ public class TML2Avatar {
 	    //Might be encrypt or decrypt
 	    AvatarState as = new AvatarState(ae.getValue()+"_"+ae.getName(), ae.getReferenceObject());
 	    tran = new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
-	    //For now, get rid of the action. It won't translate anyway
-	    //tran.addAction(((TMLActivityElementWithAction) ae).getAction());
-	    if (ae.securityPattern!=null && ae.getName().contains("encrypt")){
-		secPatterns.add(ae.securityPattern);
-		block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
-	    	block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
-		if (ae.securityPattern.type.equals("Advanced")){
-		    tran.addAction(ae.securityPattern.formula);
-		}
-		else if (ae.securityPattern.type.equals("Symmetric Encryption")){
-		    if (!ae.securityPattern.nonce.isEmpty()){
-			block.addAttribute(new AvatarAttribute("nonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
-			AvatarMethod concat2 = new AvatarMethod("concat2",ae);
-			concat2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
-			concat2.addParameter(block.getAvatarAttributeWithName("nonce_"+ae.securityPattern.nonce));
-			if (block.getAvatarAttributeWithName(ae.securityPattern.name) !=null && block.getAvatarAttributeWithName("nonce_"+ae.securityPattern.nonce)!=null){
-			    block.addMethod(concat2);
-			}
-			tran.addAction(ae.securityPattern.name+"=concat2("+ae.securityPattern.name + ",nonce_"+ae.securityPattern.nonce+")");
+	    if (security || ae.securityPattern==null){
+	        if (ae.securityPattern!=null && ae.getName().contains("encrypt")){
+		    secPatterns.add(ae.securityPattern);
+		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
+	    	    block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
+		    if (ae.securityPattern.type.equals("Advanced")){
+		    	tran.addAction(ae.securityPattern.formula);
 		    }
-		    //Securing a key instead of data
-		    if (!ae.securityPattern.key.isEmpty()){
-			block.addAttribute(new AvatarAttribute(ae.securityPattern.key, AvatarType.INTEGER, block,null));
-			AvatarMethod sencrypt = new AvatarMethod("sencrypt", ae);
-		    	sencrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.key));
-		    	sencrypt.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.name));
-		    	if (block.getAvatarAttributeWithName(ae.securityPattern.key)!=null && block.getAvatarAttributeWithName("key_"+ae.securityPattern.name)!=null){
-		    	    block.addMethod(sencrypt);
+		    else if (ae.securityPattern.type.equals("Symmetric Encryption")){
+		    	if (!ae.securityPattern.nonce.isEmpty()){
+			    block.addAttribute(new AvatarAttribute("nonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
+			    AvatarMethod concat2 = new AvatarMethod("concat2",ae);
+			    concat2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+			    concat2.addParameter(block.getAvatarAttributeWithName("nonce_"+ae.securityPattern.nonce));
+			    if (block.getAvatarAttributeWithName(ae.securityPattern.name) !=null && block.getAvatarAttributeWithName("nonce_"+ae.securityPattern.nonce)!=null){
+			    	block.addMethod(concat2);
+			    }
+			    tran.addAction(ae.securityPattern.name+"=concat2("+ae.securityPattern.name + ",nonce_"+ae.securityPattern.nonce+")");
 		    	}
-		    	tran.addAction("encryptedKey_"+ ae.securityPattern.key + " = sencrypt(key_"+ae.securityPattern.key+", key_"+ae.securityPattern.name+")");
+		        //Securing a key instead of data
+		    	if (!ae.securityPattern.key.isEmpty()){
+			    block.addAttribute(new AvatarAttribute(ae.securityPattern.key, AvatarType.INTEGER, block,null));
+			    AvatarMethod sencrypt = new AvatarMethod("sencrypt", ae);
+		    	    sencrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.key));
+		    	    sencrypt.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.name));
+		    	    if (block.getAvatarAttributeWithName(ae.securityPattern.key)!=null && block.getAvatarAttributeWithName("key_"+ae.securityPattern.name)!=null){
+		    	    	block.addMethod(sencrypt);
+		    	    }
+		    	    tran.addAction("encryptedKey_"+ ae.securityPattern.key + " = sencrypt(key_"+ae.securityPattern.key+", key_"+ae.securityPattern.name+")");
 
+		    	}
+		        else {
+			    block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block,null));
+		    	    AvatarMethod sencrypt = new AvatarMethod("sencrypt", ae);
+		    	    sencrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+		    	    sencrypt.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.name));
+		    	    if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName("key_"+ae.securityPattern.name)!=null){
+		    	    	block.addMethod(sencrypt);
+		    	    }
+		    	    tran.addAction(ae.securityPattern.name+"_encrypted = sencrypt("+ae.securityPattern.name+", key_"+ae.securityPattern.name+")");
+		    	}
+		    	ae.securityPattern.originTask=block.getName();
+		    	ae.securityPattern.state1=as;
 		    }
-		    else {
-			block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block,null));
-		    	AvatarMethod sencrypt = new AvatarMethod("sencrypt", ae);
-		    	sencrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
-		    	sencrypt.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.name));
+		    else if (ae.securityPattern.type.equals("Asymmetric Encryption")){
+		    	if (!ae.securityPattern.nonce.isEmpty()){
+			    block.addAttribute(new AvatarAttribute("nonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
+			    AvatarMethod concat2 = new AvatarMethod("concat2",ae);
+			    concat2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+			    concat2.addParameter(block.getAvatarAttributeWithName("nonce_"+ae.securityPattern.nonce));
+			    if (block.getAvatarAttributeWithName(ae.securityPattern.name) !=null && block.getAvatarAttributeWithName("nonce_"+ae.securityPattern.nonce)!=null){
+			    	block.addMethod(concat2);
+			    }
+			    tran.addAction(ae.securityPattern.name+"=concat2("+ae.securityPattern.name + ",nonce_"+ae.securityPattern.nonce+")");
+		        }
+		    	//Securing a key instead of data
+		    	if (!ae.securityPattern.key.isEmpty()){
+			    AvatarMethod aencrypt = new AvatarMethod("aencrypt", ae);
+			    block.addAttribute(new AvatarAttribute("encryptedKey_"+ae.securityPattern.key, AvatarType.INTEGER, block,null));
+		    	    aencrypt.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.key));
+		    	    aencrypt.addParameter(block.getAvatarAttributeWithName("pubKey_"+ae.securityPattern.name));
+		    	    if (block.getAvatarAttributeWithName("key_"+ae.securityPattern.key)!=null && block.getAvatarAttributeWithName("pubKey_"+ae.securityPattern.name)!=null){
+		    	    	block.addMethod(aencrypt);
+		    	    }
+		    	    tran.addAction("encryptedKey_"+ ae.securityPattern.key + " = aencrypt(key_"+ae.securityPattern.key+", pubKey_"+ae.securityPattern.name+")");
+		    	}
+		    	else {
+		    	    AvatarMethod aencrypt = new AvatarMethod("aencrypt", ae);
+		    	    aencrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+		    	    aencrypt.addParameter(block.getAvatarAttributeWithName("pubKey_"+ae.securityPattern.name));
+		    	    if (block.getAvatarAttributeWithName("pubKey_"+ae.securityPattern.name)!=null && block.getAvatarAttributeWithName(ae.securityPattern.name)!=null){
+		     	    	block.addMethod(aencrypt);
+		    	    }
+		    	    tran.addAction(ae.securityPattern.name+"_encrypted = aencrypt("+ae.securityPattern.name+", pubKey_"+ae.securityPattern.name+")");
+		    	}
+		    	ae.securityPattern.originTask=block.getName();
+		    	ae.securityPattern.state1=as;
+		    }
+		    else if (ae.securityPattern.type.equals("Nonce")){
+		    	block.addAttribute(new AvatarAttribute("nonce_"+ae.securityPattern.name, AvatarType.INTEGER, block, null));
+		    }
+		    else if (ae.securityPattern.type.equals("Hash")){
+		    	AvatarMethod hash = new AvatarMethod("hash", ae);
+		    	hash.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+		    	if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null){
+		    	    block.addMethod(hash);
+		    	}
+		    	tran.addAction(ae.securityPattern.name+"_encrypted = hash("+ae.securityPattern.name+")");
+		    }
+		    else if (ae.securityPattern.type.equals("MAC")){
+ 		    	AvatarMethod mac = new AvatarMethod("MAC", ae);
+		    	mac.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+		    	mac.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.name));
 		    	if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName("key_"+ae.securityPattern.name)!=null){
-		    	    block.addMethod(sencrypt);
+		    	    block.addMethod(mac);
 		    	}
-		    	tran.addAction(ae.securityPattern.name+"_encrypted = sencrypt("+ae.securityPattern.name+", key_"+ae.securityPattern.name+")");
-			
-
+		    	tran.addAction(ae.securityPattern.name+"_encrypted = MAC("+ae.securityPattern.name+",key_"+ae.securityPattern.name+")");
 		    }
-		    ae.securityPattern.originTask=block.getName();
-		    ae.securityPattern.state1=as;
-		}
-		else if (ae.securityPattern.type.equals("Asymmetric Encryption")){
-		    System.out.println("AENCRYPT " + ae.securityPattern.name + " " + ae.securityPattern.key);
-		    if (!ae.securityPattern.nonce.isEmpty()){
-			block.addAttribute(new AvatarAttribute("nonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
-			AvatarMethod concat2 = new AvatarMethod("concat2",ae);
-			concat2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
-			concat2.addParameter(block.getAvatarAttributeWithName("nonce_"+ae.securityPattern.nonce));
-			if (block.getAvatarAttributeWithName(ae.securityPattern.name) !=null && block.getAvatarAttributeWithName("nonce_"+ae.securityPattern.nonce)!=null){
-			    block.addMethod(concat2);
-			}
-			tran.addAction(ae.securityPattern.name+"=concat2("+ae.securityPattern.name + ",nonce_"+ae.securityPattern.nonce+")");
-		    }
-		    //Securing a key instead of data
-		    if (!ae.securityPattern.key.isEmpty()){
-			AvatarMethod aencrypt = new AvatarMethod("aencrypt", ae);
-			block.addAttribute(new AvatarAttribute("encryptedKey_"+ae.securityPattern.key, AvatarType.INTEGER, block,null));
-		    	aencrypt.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.key));
-		    	aencrypt.addParameter(block.getAvatarAttributeWithName("pubKey_"+ae.securityPattern.name));
-		    	if (block.getAvatarAttributeWithName("key_"+ae.securityPattern.key)!=null && block.getAvatarAttributeWithName("pubKey_"+ae.securityPattern.name)!=null){
-		    	    block.addMethod(aencrypt);
+		    AvatarAttributeState authOrigin = new AvatarAttributeState(ae.securityPattern.name+"1",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), as);
+		    signalAuthOriginMap.put(ae.securityPattern.name, authOrigin);
+	    	    as.addNext(tran);
+	    	    elementList.add(as);
+	    	    elementList.add(tran);
+	    	}	
+	    	else if (ae.securityPattern!=null && ae.getName().contains("decrypt")){
+		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
+		    block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
+		    if (ae.securityPattern.type.equals("Symmetric Encryption")){
+			if (ae.securityPattern.key.isEmpty()){
+		    	    AvatarMethod sdecrypt = new AvatarMethod("sdecrypt", ae);
+			    block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block,null));
+		    	    sdecrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted"));
+		    	    sdecrypt.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.name));
+		    	    if (block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted")!=null && block.getAvatarAttributeWithName("key_"+ae.securityPattern.name)!=null){
+		            	block.addMethod(sdecrypt);
+		    	    }
+		    	    tran.addAction(ae.securityPattern.name+" = sdecrypt("+ae.securityPattern.name+"_encrypted, key_"+ae.securityPattern.name+")");
 		    	}
-		    	tran.addAction("encryptedKey_"+ ae.securityPattern.key + " = aencrypt(key_"+ae.securityPattern.key+", pubKey_"+ae.securityPattern.name+")");
-
-		    }
-		    else {
-		    	AvatarMethod aencrypt = new AvatarMethod("aencrypt", ae);
-		    	aencrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
-		    	aencrypt.addParameter(block.getAvatarAttributeWithName("pubKey_"+ae.securityPattern.name));
-		    	if (block.getAvatarAttributeWithName("pubKey_"+ae.securityPattern.name)!=null && block.getAvatarAttributeWithName(ae.securityPattern.name)!=null){
-		     	    block.addMethod(aencrypt);
+		    	else {
+		    	    AvatarMethod sdecrypt = new AvatarMethod("sdecrypt", ae);
+		    	    sdecrypt.addParameter(block.getAvatarAttributeWithName("encryptedKey_"+ae.securityPattern.key));
+			    block.addAttribute(new AvatarAttribute("key_"+ae.securityPattern.key, AvatarType.INTEGER, block,null));
+		    	    sdecrypt.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.key));
+		    	    if (block.getAvatarAttributeWithName("encryptedKey_"+ae.securityPattern.key)!=null && block.getAvatarAttributeWithName("key_"+ae.securityPattern.name)!=null){
+		                block.addMethod(sdecrypt);
+		    	    }
+		    	    tran.addAction(ae.securityPattern.key+" = sdecrypt(encryptedKey_"+ae.securityPattern.key+", key_"+ae.securityPattern.name+")");
 		    	}
-		    	tran.addAction(ae.securityPattern.name+"_encrypted = aencrypt("+ae.securityPattern.name+", pubKey_"+ae.securityPattern.name+")");
+		    	elementList.add(as);
+	    	    	elementList.add(tran);
+		    	as.addNext(tran);
+		    	if (!ae.securityPattern.nonce.isEmpty()){
+			    block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
+			    AvatarMethod get2 = new AvatarMethod("get2",ae);
+			    get2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+			    get2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+			    get2.addParameter(block.getAvatarAttributeWithName("testnonce_"+ae.securityPattern.nonce));
+			    if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName("testnonce_"+ae.securityPattern.nonce)!=null) {
+			    	block.addMethod(get2);
+			    }
+			    tran.addAction("get2("+ae.securityPattern.name + ","+ae.securityPattern.name+",testnonce_"+ae.securityPattern.nonce+")");
+			    AvatarState guardState = new AvatarState(ae.getName()+"_guarded", ae.getReferenceObject());
+			    tran.addNext(guardState);
+			    tran=new AvatarTransition(block, "__guard_"+ae.getName(), ae.getReferenceObject());
+			    guardState.addNext(tran);
+			    tran.setGuard("testnonce_"+ae.securityPattern.nonce+"== nonce_" + ae.securityPattern.nonce);
+		    	}
+		    	AvatarState dummy = new AvatarState(ae.getName()+"_dummy", ae.getReferenceObject());
+		    	ae.securityPattern.state2=dummy;
+		    	tran.addNext(dummy);
+	    	    	tran = new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
+		    	dummy.addNext(tran);
+	    	    	elementList.add(dummy);
+	    	    	elementList.add(tran);		
+		    	if (ae.securityPattern.nonce.isEmpty()){
+		    	    AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"2",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
+			    signalAuthDestMap.put(ae.securityPattern.name, authDest);
+		        }
+		    	else {
+		    	    AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"3",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
+		    	    signalAuthDestMap.put(ae.securityPattern.name, authDest);
+		    	}
 		    }
-		    ae.securityPattern.originTask=block.getName();
-		    ae.securityPattern.state1=as;
-		}
-		else if (ae.securityPattern.type.equals("Nonce")){
-		    block.addAttribute(new AvatarAttribute("nonce_"+ae.securityPattern.name, AvatarType.INTEGER, block, null));
-		}
-		else if (ae.securityPattern.type.equals("Hash")){
-		    AvatarMethod hash = new AvatarMethod("hash", ae);
-		    hash.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
-		    if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null){
-		    	block.addMethod(hash);
-		    }
-		    tran.addAction(ae.securityPattern.name+"_encrypted = hash("+ae.securityPattern.name+")");
-		}
-
-		else if (ae.securityPattern.type.equals("MAC")){
- 		    AvatarMethod mac = new AvatarMethod("MAC", ae);
-		    mac.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
-		    mac.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.name));
-		    if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName("key_"+ae.securityPattern.name)!=null){
-		    	block.addMethod(mac);
-		    }
-		    tran.addAction(ae.securityPattern.name+"_encrypted = MAC("+ae.securityPattern.name+",key_"+ae.securityPattern.name+")");
-		}
-		AvatarAttributeState authOrigin = new AvatarAttributeState(ae.securityPattern.name+"1",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), as);
-		signalAuthOriginMap.put(ae.securityPattern.name, authOrigin);
-	    	as.addNext(tran);
-	    	elementList.add(as);
-	    	elementList.add(tran);
-	    }	
-	    else if (ae.securityPattern!=null && ae.getName().contains("decrypt")){
-		block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
-		block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null));
-		if (ae.securityPattern.type.equals("Symmetric Encryption")){
-
-		    if (ae.securityPattern.key.isEmpty()){
-		    	AvatarMethod sdecrypt = new AvatarMethod("sdecrypt", ae);
-			block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block,null));
-		    	sdecrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted"));
-		    	sdecrypt.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.name));
+		    else if (ae.securityPattern.type.equals("Asymmetric Encryption")){
+			AvatarMethod adecrypt = new AvatarMethod("adecrypt", ae);
+		    	if (ae.securityPattern.key.isEmpty()){
+			    block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted",AvatarType.INTEGER,block,null));
+			    block.addAttribute(new AvatarAttribute(ae.securityPattern.name,AvatarType.INTEGER,block,null));
+		    	    adecrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted"));
+		    	    adecrypt.addParameter(block.getAvatarAttributeWithName("privKey_"+ae.securityPattern.name));
+		    	    if (block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted")!=null && block.getAvatarAttributeWithName("privKey_"+ae.securityPattern.name)!= null){
+		    	    	block.addMethod(adecrypt);
+		    	    }
+		    	    tran.addAction(ae.securityPattern.name+" = adecrypt("+ae.securityPattern.name+"_encrypted, privKey_"+ae.securityPattern.name+")");
+		    	}
+		    	else {
+			    block.addAttribute(new AvatarAttribute("encryptedKey_"+ae.securityPattern.key,AvatarType.INTEGER,block,null));
+			    adecrypt.addParameter(block.getAvatarAttributeWithName("encryptedKey_"+ae.securityPattern.key));
+		    	    adecrypt.addParameter(block.getAvatarAttributeWithName("privKey_"+ae.securityPattern.name));
+			    block.addAttribute(new AvatarAttribute("key_"+ae.securityPattern.key, AvatarType.INTEGER, block,null));
+		    	    if (block.getAvatarAttributeWithName("encryptedKey_"+ae.securityPattern.key)!=null && block.getAvatarAttributeWithName("privKey_"+ae.securityPattern.name)!= null){
+		    	    	block.addMethod(adecrypt);
+		    	    }
+		    	    tran.addAction("key_"+ae.securityPattern.key+" = adecrypt(encryptedKey_"+ae.securityPattern.key+", privKey_"+ae.securityPattern.name+")");
+		    	}
+		    	elementList.add(as);
+	    	    	elementList.add(tran);
+		    	as.addNext(tran);
+		    	if (!ae.securityPattern.nonce.isEmpty()){
+			    block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
+			    AvatarMethod get2 = new AvatarMethod("get2",ae);
+			    get2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+			    get2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+			    get2.addParameter(block.getAvatarAttributeWithName("testnonce_"+ae.securityPattern.nonce));
+			    if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName("testnonce_"+ae.securityPattern.nonce)!=null) {
+			    	block.addMethod(get2);
+			    }
+			    tran.addAction("get2("+ae.securityPattern.name + ","+ae.securityPattern.name+",testnonce_"+ae.securityPattern.nonce+")");
+			    AvatarState guardState = new AvatarState(ae.getName()+"_guarded", ae.getReferenceObject());
+			    tran.addNext(guardState);
+			    tran=new AvatarTransition(block, "__guard_"+ae.getName(), ae.getReferenceObject());
+			    guardState.addNext(tran);
+			    tran.setGuard("testnonce_"+ae.securityPattern.nonce+"== nonce_" + ae.securityPattern.nonce);
+		    	}
+		    	AvatarState dummy = new AvatarState(ae.getName()+"_dummy", ae.getReferenceObject());
+		    	tran.addNext(dummy);
+	    	    	tran = new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
+		    	dummy.addNext(tran);
+	    	    	elementList.add(dummy);
+	    	    	elementList.add(tran);		
+		    	ae.securityPattern.state2=dummy;
+		    	if (ae.securityPattern.nonce.isEmpty()){
+			    AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"2",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
+		    	    signalAuthDestMap.put(ae.securityPattern.name, authDest);
+		    	}
+		    	else {	
+		    	    AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"3",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
+		    	    signalAuthDestMap.put(ae.securityPattern.name, authDest);
+		    	}
+	       	    }
+		    else if (ae.securityPattern.type.equals("MAC")){
+		    	AvatarMethod verifymac = new AvatarMethod("MAC", ae);
+		    	verifymac.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted"));
+		    	verifymac.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.name));
 		    	if (block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted")!=null && block.getAvatarAttributeWithName("key_"+ae.securityPattern.name)!=null){
-		            block.addMethod(sdecrypt);
+			    block.addMethod(verifymac);
 		    	}
-		    	tran.addAction(ae.securityPattern.name+" = sdecrypt("+ae.securityPattern.name+"_encrypted, key_"+ae.securityPattern.name+")");
-
+		    	tran.addAction(ae.securityPattern.name+"=verifyMAC("+ae.securityPattern.name+"_encrypted, key_"+ae.securityPattern.name+")"); 
+	    	    	elementList.add(tran);
+		    	elementList.add(as);
+		    	as.addNext(tran);
 		    }
-		    else {
-		    	AvatarMethod sdecrypt = new AvatarMethod("sdecrypt", ae);
-		    	sdecrypt.addParameter(block.getAvatarAttributeWithName("encryptedKey_"+ae.securityPattern.key));
-			block.addAttribute(new AvatarAttribute("key_"+ae.securityPattern.key, AvatarType.INTEGER, block,null));
-		    	sdecrypt.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.key));
-		    	if (block.getAvatarAttributeWithName("encryptedKey_"+ae.securityPattern.key)!=null && block.getAvatarAttributeWithName("key_"+ae.securityPattern.name)!=null){
-		            block.addMethod(sdecrypt);
-		    	}
-		    	tran.addAction(ae.securityPattern.key+" = sdecrypt(encryptedKey_"+ae.securityPattern.key+", key_"+ae.securityPattern.name+")");
-
-		    }
-		
-		    elementList.add(as);
-	    	    elementList.add(tran);
-		    as.addNext(tran);
-
-		    if (!ae.securityPattern.nonce.isEmpty()){
-			block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
-			AvatarMethod get2 = new AvatarMethod("get2",ae);
-			get2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
-			get2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
-			get2.addParameter(block.getAvatarAttributeWithName("testnonce_"+ae.securityPattern.nonce));
-			if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName("testnonce_"+ae.securityPattern.nonce)!=null) {
-			    block.addMethod(get2);
-			}
-			tran.addAction("get2("+ae.securityPattern.name + ","+ae.securityPattern.name+",testnonce_"+ae.securityPattern.nonce+")");
-
-			AvatarState guardState = new AvatarState(ae.getName()+"_guarded", ae.getReferenceObject());
-			tran.addNext(guardState);
-			tran=new AvatarTransition(block, "__guard_"+ae.getName(), ae.getReferenceObject());
-			guardState.addNext(tran);
-
-			tran.setGuard("testnonce_"+ae.securityPattern.nonce+"== nonce_" + ae.securityPattern.nonce);
-		    }
-
-
-		    AvatarState dummy = new AvatarState(ae.getName()+"_dummy", ae.getReferenceObject());
-		    ae.securityPattern.state2=dummy;
-		    tran.addNext(dummy);
-	    	    tran = new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
-		    dummy.addNext(tran);
-	    	    elementList.add(dummy);
-	    	    elementList.add(tran);		
-		    if (ae.securityPattern.nonce.isEmpty()){
-		    	AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"2",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
-			signalAuthDestMap.put(ae.securityPattern.name, authDest);
-		    }
-		    else {
-			
-		    	AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"3",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
-		    	signalAuthDestMap.put(ae.securityPattern.name, authDest);
-		    }
-
-
-		}
-		else if (ae.securityPattern.type.equals("Asymmetric Encryption")){
-
-		    AvatarMethod adecrypt = new AvatarMethod("adecrypt", ae);
-
-		    if (ae.securityPattern.key.isEmpty()){
-			block.addAttribute(new AvatarAttribute(ae.securityPattern.name+"_encrypted",AvatarType.INTEGER,block,null));
-			block.addAttribute(new AvatarAttribute(ae.securityPattern.name,AvatarType.INTEGER,block,null));
-		    	adecrypt.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted"));
-		    	adecrypt.addParameter(block.getAvatarAttributeWithName("privKey_"+ae.securityPattern.name));
-		    	if (block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted")!=null && block.getAvatarAttributeWithName("privKey_"+ae.securityPattern.name)!= null){
-		    	    block.addMethod(adecrypt);
-		    	}
-		    	tran.addAction(ae.securityPattern.name+" = adecrypt("+ae.securityPattern.name+"_encrypted, privKey_"+ae.securityPattern.name+")");
-		    }
-		    else {
-			block.addAttribute(new AvatarAttribute("encryptedKey_"+ae.securityPattern.key,AvatarType.INTEGER,block,null));
-			adecrypt.addParameter(block.getAvatarAttributeWithName("encryptedKey_"+ae.securityPattern.key));
-		    	adecrypt.addParameter(block.getAvatarAttributeWithName("privKey_"+ae.securityPattern.name));
-			block.addAttribute(new AvatarAttribute("key_"+ae.securityPattern.key, AvatarType.INTEGER, block,null));
-		    	if (block.getAvatarAttributeWithName("encryptedKey_"+ae.securityPattern.key)!=null && block.getAvatarAttributeWithName("privKey_"+ae.securityPattern.name)!= null){
-		    	    block.addMethod(adecrypt);
-		    	}
-		    	tran.addAction("key_"+ae.securityPattern.key+" = adecrypt(encryptedKey_"+ae.securityPattern.key+", privKey_"+ae.securityPattern.name+")");
-		    }
-		    elementList.add(as);
-	    	    elementList.add(tran);
-		    as.addNext(tran);
-		    if (!ae.securityPattern.nonce.isEmpty()){
-			block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
-			AvatarMethod get2 = new AvatarMethod("get2",ae);
-			get2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
-			get2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
-			get2.addParameter(block.getAvatarAttributeWithName("testnonce_"+ae.securityPattern.nonce));
-			if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName("testnonce_"+ae.securityPattern.nonce)!=null) {
-			    block.addMethod(get2);
-			}
-			tran.addAction("get2("+ae.securityPattern.name + ","+ae.securityPattern.name+",testnonce_"+ae.securityPattern.nonce+")");
-
-			AvatarState guardState = new AvatarState(ae.getName()+"_guarded", ae.getReferenceObject());
-			tran.addNext(guardState);
-			tran=new AvatarTransition(block, "__guard_"+ae.getName(), ae.getReferenceObject());
-			guardState.addNext(tran);
-
-			tran.setGuard("testnonce_"+ae.securityPattern.nonce+"== nonce_" + ae.securityPattern.nonce);
-		    }
-
-
-		    AvatarState dummy = new AvatarState(ae.getName()+"_dummy", ae.getReferenceObject());
-		    tran.addNext(dummy);
-	    	    tran = new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
-		    dummy.addNext(tran);
-	    	    elementList.add(dummy);
-	    	    elementList.add(tran);		
-		    ae.securityPattern.state2=dummy;
-		    if (ae.securityPattern.nonce.isEmpty()){
-			AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"2",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
-		    	signalAuthDestMap.put(ae.securityPattern.name, authDest);
-		    }
-		    else {	
-		    	AvatarAttributeState authDest = new AvatarAttributeState(ae.securityPattern.name+"3",ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), dummy);
-		    	signalAuthDestMap.put(ae.securityPattern.name, authDest);
-		    }
-	       }
-		else if (ae.securityPattern.type.equals("MAC")){
-		    AvatarMethod verifymac = new AvatarMethod("MAC", ae);
-		    verifymac.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted"));
-		    verifymac.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.name));
-		    if (block.getAvatarAttributeWithName(ae.securityPattern.name+"_encrypted")!=null && block.getAvatarAttributeWithName("key_"+ae.securityPattern.name)!=null){
-			block.addMethod(verifymac);
-		    }
-		    tran.addAction(ae.securityPattern.name+"=verifyMAC("+ae.securityPattern.name+"_encrypted, key_"+ae.securityPattern.name+")"); 
-	    	    elementList.add(tran);
-		    elementList.add(as);
-		    as.addNext(tran);
-		}
-		//Can't decrypt hash or nonce
+		    //Can't decrypt hash or nonce
+	    	}
 	    }
 	    else {
 	    	as.addNext(tran);
@@ -1268,10 +1248,14 @@ public class TML2Avatar {
 		request.checkAuth = p.checkAuth || request.checkAuth;
 	    }
 	}
-
+	//AvatarBlock top = new AvatarBlock("TOP__TOP", avspec, null);
+	//avspec.addBlock(top);
+	//asm = top.getAvatarStateMachine();
+	
 	ArrayList<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
 	for (TMLTask task:tasks){
 	    AvatarBlock block = new AvatarBlock(task.getName(), avspec, task.getReferenceObject());
+	  //  block.setFather(top);
 	    taskBlockMap.put(task, block);
 	    avspec.addBlock(block);
 	}
@@ -1479,16 +1463,21 @@ public class TML2Avatar {
 	            ar.setPrivate(originDestMap.get(channel.getOriginTask().getName()+"__"+channel.getDestinationTask().getName())==1);
 		}
 		if (channel.getType()==TMLChannel.BRBW){
-		    ar.setAsynchronous(false);		
+		    ar.setAsynchronous(true);		
+		    ar.setSizeOfFIFO(channel.getSize());
+		    ar.setBlocking(true);
 		}
 		else if (channel.getType()==TMLChannel.BRNBW){
 		    ar.setAsynchronous(true);
 		    ar.setSizeOfFIFO(channel.getSize());
+		    ar.setBlocking(false);
 		}
 		else {
 			//Create new block, hope for best
-		   fifo = createFifo();
-		   ar.setAsynchronous(false);
+		   if (mc){
+		   	fifo = createFifo();
+		   	ar.setAsynchronous(false);
+		   }
 	
 		}
 	        //Find in signal
@@ -1518,14 +1507,14 @@ public class TML2Avatar {
 		    sig2.add(new AvatarSignal(channel.getOriginTask().getName()+"__OUT__"+channel.getName(), AvatarSignal.OUT, null));
 	    	}
 	    	if (sig1.size()==1 && sig2.size()==1){
-		    if (channel.getType()==TMLChannel.NBRNBW){
+		    if (channel.getType()==TMLChannel.NBRNBW && mc){
 			AvatarSignal read = fifo.getSignalByName("readSignal");
 			ar.block2= fifo;
 			ar.addSignals(sig2.get(0), read);
 			AvatarRelation ar2= new AvatarRelation(channel.getName()+"2", fifo, taskBlockMap.get(channel.getDestinationTask()), channel.getReferenceObject());
 			AvatarSignal write = fifo.getSignalByName("writeSignal");
 			ar2.addSignals(write, sig1.get(0));
-			ar2.setAsynchronous(true);
+			ar2.setAsynchronous(false);
 			avspec.addRelation(ar2);
 		    }
 		    else {
@@ -1615,6 +1604,7 @@ public class TML2Avatar {
 		    //Throw error
 		    System.out.println("Could not match for " + request.getName());
 	    	}
+		ar.setAsynchronous(false);
 	    	avspec.addRelation(ar);
 	    }
 	}
@@ -1653,6 +1643,17 @@ public class TML2Avatar {
 	    else {
 		//Throw error
 		System.out.println("Could not match for " + event.getName());
+	    }
+	    if (event.isBlocking()){
+		ar.setAsynchronous(true);
+		ar.setBlocking(true);
+		ar.setSizeOfFIFO(event.getMaxSize());
+	    }
+	    else {
+		ar.setAsynchronous(true);
+		ar.setBlocking(false);
+		ar.setSizeOfFIFO(event.getMaxSize());
+		
 	    }
 	    avspec.addRelation(ar);
 	}

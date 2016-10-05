@@ -1144,13 +1144,29 @@ public class GTURTLEModeling {
 	}	
 	System.out.println("Mapping finished");
     }
+    public AvatarSpecification translateTML2AvatarMC(){
+	if (tmap !=null){
+	    t2a=new TML2Avatar(tmap,true,false);
+	    TML2AvatarDP tml2avatardp = new TML2AvatarDP(tmap,true,false);
+	    tml2avatardp.adp = mgui.getFirstAvatarDesignPanelFound();
+	    tml2avatardp.translate(); 
+	    avatarspec = t2a.generateAvatarSpec("10");
+	}
+	else if (tmlm!=null){
+	    tmap = tmlm.getDefaultMapping();
+	    tmap.setTMLDesignPanel((TMLComponentDesignPanel)mgui.getCurrentTURTLEPanel());
+	    t2a=new TML2Avatar(tmap,false,true);
+	    avatarspec = t2a.generateAvatarSpec("10");
+	}
+	return avatarspec;
+    }
     public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed, String loopLimit) {
 	if (avatarspec !=null){
 	     //use avspec
 	}
 	else if (tmap!=null){
-	    t2a = new TML2Avatar(tmap);
-	    TML2AvatarDP tml2avatardp = new TML2AvatarDP(tmap);
+	    t2a = new TML2Avatar(tmap,false,true);
+	    TML2AvatarDP tml2avatardp = new TML2AvatarDP(tmap,false,true);
 	    tml2avatardp.adp = mgui.getFirstAvatarDesignPanelFound();
 	    tml2avatardp.translate(); 
 	    avatarspec = t2a.generateAvatarSpec(loopLimit);
@@ -1159,7 +1175,7 @@ public class GTURTLEModeling {
 	    //Generate default mapping
 	    tmap = tmlm.getDefaultMapping();
 	    tmap.setTMLDesignPanel((TMLComponentDesignPanel)mgui.getCurrentTURTLEPanel());
-	    t2a=new TML2Avatar(tmap);
+	    t2a=new TML2Avatar(tmap,false,true);
 	    avatarspec = t2a.generateAvatarSpec(loopLimit);
 	}
 	else if (avatarspec == null){
