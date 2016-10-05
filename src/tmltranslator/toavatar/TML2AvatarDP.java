@@ -36,9 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarDesignPanelTranslator
- * Creation: 18/05/2010
- * @author Ludovic APVRILLE
+ * Class TML2AvatarDP
+ * Creation: 05/10/2016
+ * @author Letitia LI, Ludovic APVRILLE
  * @see
  */
 
@@ -59,7 +59,6 @@ import ui.window.*;
 
 public class TML2AvatarDP {
 
-
     //protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
     protected TMLMapping tmlmap;
     public AvatarDesignPanel adp;
@@ -73,15 +72,17 @@ public class TML2AvatarDP {
     boolean mc;
     boolean security;
     AvatarSpecification avspec;
+    
     public TML2AvatarDP(TMLMapping tmlmapping, boolean modelcheck, boolean sec) {
-  
         tmlmap = tmlmapping;
 	mc= modelcheck;
 	security=sec;
     }
+    
     public TML2AvatarDP(AvatarSpecification av) {
 	  avspec=av;
     }
+    
     public void commMap(AvatarSpecification avspec){
 	//Create a map of all connections
 	/*TMLModeling tmlmodel=tmlmap.getTMLModeling();
