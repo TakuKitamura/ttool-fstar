@@ -7527,7 +7527,12 @@ public class GTURTLEModeling {
 	    }
 	    AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, father, abd);
 	    tranSourceMap.clear();
-	    bl.setValue(ab.getName().split("__")[1]);
+	    if (ab.getName().contains("__")){
+	        bl.setValue(ab.getName().split("__")[1]);
+	    }
+	    else {
+		bl.setValue(ab.getName());
+	    }
 	    abd.changeStateMachineTabName ("Block0", bl.getValue());
 	    blockMap.put(bl.getValue(), bl);
 	    abd.addComponent(bl, xpos, ypos, false, true);
