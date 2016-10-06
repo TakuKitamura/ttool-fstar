@@ -1807,6 +1807,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return null;
     }
 
+    public void drawAvatarSpecification(AvatarSpecification av) {
+	int index = createAvatarDesign("GeneratedDesign");
+	AvatarDesignPanel adp = (AvatarDesignPanel)(tabs.elementAt(index));
+	gtm.drawPanel(av, adp);
+    }
+
 
     // Creates the status bar.
     private     JLabel createStatusBar()  {

@@ -122,6 +122,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     }
 
+    public AvatarSpecification getReworkedAvatarSpecification() {
+	return spec;
+    }
+
     public int getNbOfStates() {
 	if (states == null) {
 	    return 0;
