@@ -4262,7 +4262,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void avatarModelChecker() {
 	TraceManager.addDev("Execute avatar model checker");
 	if (gtm.getAvatarSpecification()==null){
-	    gtm.translateTML2AvatarMC();
+	    return;
+		/*	    gtm.translateTML2AvatarMC();
+		/*
 	}
 	JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(), ConfigurationTTool.TGraphPath);
         jmc.setSize(550, 600);

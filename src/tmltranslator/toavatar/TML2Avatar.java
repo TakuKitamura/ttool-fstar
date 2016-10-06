@@ -1249,14 +1249,17 @@ public class TML2Avatar {
 		request.checkAuth = p.checkAuth || request.checkAuth;
 	    }
 	}
-	//AvatarBlock top = new AvatarBlock("TOP__TOP", avspec, null);
-	//avspec.addBlock(top);
-	//asm = top.getAvatarStateMachine();
+	AvatarBlock top = new AvatarBlock("TOP__TOP", avspec, null);
+	avspec.addBlock(top);
+	AvatarStateMachine topasm = top.getStateMachine();
+	AvatarStartState topss = new AvatarStartState("start", null);
+	topasm.setStartState(topss);
+	topasm.addElement(topss);
 	
 	ArrayList<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
 	for (TMLTask task:tasks){
 	    AvatarBlock block = new AvatarBlock(task.getName(), avspec, task.getReferenceObject());
-	  //  block.setFather(top);
+	    block.setFather(top);
 	    taskBlockMap.put(task, block);
 	    avspec.addBlock(block);
 	}

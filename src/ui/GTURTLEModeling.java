@@ -7521,7 +7521,11 @@ public class GTURTLEModeling {
 	int ypos=10;
 	for (AvatarBlock ab:avspec.getListOfBlocks()){
 	//Crypto blocks?
-	    AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null, abd);
+	    AvatarBDBlock father=null;
+	    if (ab.getFather()!=null){
+		father = blockMap.get(ab.getFather().getName().split("__")[1]);
+	    }
+	    AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, father, abd);
 	    tranSourceMap.clear();
 	    bl.setValue(ab.getName().split("__")[1]);
 	    abd.changeStateMachineTabName ("Block0", bl.getValue());
@@ -7540,7 +7544,7 @@ public class GTURTLEModeling {
 		    bl.addCryptoElements();
 		}
 	    }
-	    xpos+=400;
+	   // xpos+=300;
 	    //Build the state machine
 	    int smx=400;
 	    int smy=40;
