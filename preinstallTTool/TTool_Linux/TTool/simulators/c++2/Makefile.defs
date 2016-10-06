@@ -15,8 +15,10 @@ $(EXE): makedir $(OBJS) $(OBJS_simulator)
 ifeq ($(OS), SunOS) 
 	$(CC) $(LFLAGS_SOLARIS) -lsocket $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt	      
  endif
-ifneq ($(OS), SunOS) 
-	$(CC) $(LFLAGS) $(LTHREAD) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt
+ifneq ($(OS), SunOS)
+# DB: On Ubuntu 16.04 GCC 5.4.0, we get the error "undefined reference to dlopen" when the linking flags are set before the files so moved after the files
+	$(CC) $(LTHREAD) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) $(LFLAGS) 2>&1 | c++filt
+#	$(CC) $(LFLAGS) $(LTHREAD) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt
 endif 	
 
 makedir:
@@ -36,7 +38,10 @@ $(OBJDIR)/%.o: $(SRCS_base_DIR)/%.cpp
 $(OBJDIR)/%.o: ./%.cpp
 	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
 
-clean::
+test:
+	./run.x -oxml answer.xml -cmd '1 2 1000000;22 100;7 0 vcddump.vcd' 
+
+clean:
 	rm -f $(OBJS_simulator) $(OBJS) *~ $(EXE) core 
 
 ultraclean: clean

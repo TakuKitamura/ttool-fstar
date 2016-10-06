@@ -102,6 +102,12 @@ public:
 	*/
 	std::string toShortString() const;
 	///Writes a HTML representation of the schedule to an output file
+
+	/**
+      	\param glob refers to the output stream
+    	*/
+	int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
+
 	/**
       	\param myfile Reference to the ofstream object representing the output file
     	*/
@@ -111,6 +117,7 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	void schedule2TXT(std::ofstream& myfile) const;
+	
 	void getNextSignalChange(bool iInit, SignalChangeData* oSigData);
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();

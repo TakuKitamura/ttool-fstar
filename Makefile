@@ -412,6 +412,12 @@ preinstall_linux:
 	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_TARGET)/bin
 	cp $(TTOOL_TARGET)/bin/config_linux.xml $(TTOOL_TARGET)/bin/config.xml
 
+#Make the tgz file
+	tar -czvf $(TTOOL_PREINSTALL_LINUX)/../ttoollinux.tgz $(TTOOL_PREINSTALL_LINUX)/*
+
+
+#Publish it
+	scp $(TTOOL_PREINSTALL_LINUX)/../ttoollinux.tgz apvrille@ssh.enst.fr:public_html/docs/
 
 jttooljar:
 	cd $(JTTOOL);$(JAVAC) $(JTTOOL_DIR)/*.java;$(JAR) cmf $(TTOOL_SRC)/$(TTOOL_JAR_TXT) $(TTOOL_BIN)/$(JTTOOL_JAR) $(JTTOOL_DIR)/*.class 
@@ -429,7 +435,7 @@ $(TEST_DIRS): %: %/$(TEST_MK) force
 .PHONY: force
 force:;
 
-publishjar: ttooljar
+publish_jar: ttooljar
 	scp bin/ttool.jar apvrille@ssh.enst.fr:public_html/docs/
 	ssh apvrille@ssh.enst.fr "chmod a+r public_html/docs/ttool.jar"
 

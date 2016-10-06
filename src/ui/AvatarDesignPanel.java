@@ -318,14 +318,14 @@ public class AvatarDesignPanel extends TURTLEPanel {
         for(AvatarBDBlock block1: abdp.getFullBlockList()) {
             block1.resetConfidentialityOfAttributes();
         }
-	for (Object tgc: abdp.getComponentList()){
-	    if (tgc instanceof AvatarBDPragma){
-		AvatarBDPragma pragma = (AvatarBDPragma) tgc;
-		pragma.authStrongMap.clear();
-		pragma.authWeakMap.clear();	
-	
-	    }
-	}
+        for (Object tgc: abdp.getComponentList()){
+            if (tgc instanceof AvatarBDPragma){
+                AvatarBDPragma pragma = (AvatarBDPragma) tgc;
+                pragma.authStrongMap.clear();
+                pragma.authWeakMap.clear();
+
+            }
+        }
         // Reset reachable states
         for(int i=0; i<panels.size(); i++) {
             tdp = (TDiagramPanel)(panels.get(i));
@@ -334,15 +334,15 @@ public class AvatarDesignPanel extends TURTLEPanel {
             }
         }
     }
-    
+
 
     public void modelBacktracingUppaal(HashMap verifMap){
-	for (Object ob: abdp.getComponentList()) {
-          if (ob instanceof AvatarBDSafetyPragma) {
-            AvatarBDSafetyPragma pragma = (AvatarBDSafetyPragma) ob;
-            pragma.verifMap = verifMap;
-	  }
-	}	
+        for (Object ob: abdp.getComponentList()) {
+            if (ob instanceof AvatarBDSafetyPragma) {
+                AvatarBDSafetyPragma pragma = (AvatarBDSafetyPragma) ob;
+                pragma.verifMap = verifMap;
+            }
+        }
     }
 
 
@@ -457,82 +457,82 @@ public class AvatarDesignPanel extends TURTLEPanel {
         LinkedList<String> satisfiedWeak = pvoa.getSatisfiedWeakAuthenticity ();
         LinkedList<String> nonSatisfied = pvoa.getNonSatisfiedAuthenticity ();
 
-          for (Object ob: abdp.getComponentList())
-              if (ob instanceof AvatarBDPragma) {
-                  AvatarBDPragma pragma = (AvatarBDPragma) ob;
-                  for (String prop: pragma.getProperties()) {
-                      String[] split = prop.trim ().split ("\\s+");
-                      if (split.length != 3)
-                          continue;
-                      if (split[0].equals ("#Authenticity")) {
-                          String[] argA = split[1].split("\\.");
-                          String[] argB = split[2].split("\\.");
+        for (Object ob: abdp.getComponentList())
+            if (ob instanceof AvatarBDPragma) {
+                AvatarBDPragma pragma = (AvatarBDPragma) ob;
+                for (String prop: pragma.getProperties()) {
+                    String[] split = prop.trim ().split ("\\s+");
+                    if (split.length != 3)
+                        continue;
+                    if (split[0].equals ("#Authenticity")) {
+                        String[] argA = split[1].split("\\.");
+                        String[] argB = split[2].split("\\.");
 
-                          if (argA.length != 3 || argB.length != 3)
-                              continue;
+                        if (argA.length != 3 || argB.length != 3)
+                            continue;
 
-                          TAttribute tattrA = abdp.getAttributeByBlockName (argA[0], argA[2]);
-                          TAttribute tattrB = abdp.getAttributeByBlockName (argB[0], argB[2]);
+                        TAttribute tattrA = abdp.getAttributeByBlockName (argA[0], argA[2]);
+                        TAttribute tattrB = abdp.getAttributeByBlockName (argB[0], argB[2]);
 
-                          if (tattrA == null || tattrB == null)
-                              continue;
+                        if (tattrA == null || tattrB == null)
+                            continue;
 
-                          if (tattrA.getType () != tattrB.getType ())
-                              continue;
+                        if (tattrA.getType () != tattrB.getType ())
+                            continue;
 
-                          if (tattrA.getType () == TAttribute.OTHER) {
-                              if (! tattrA.getTypeOther ().equals (tattrB.getTypeOther ()))
-                                  continue;
+                        if (tattrA.getType () == TAttribute.OTHER) {
+                            if (! tattrA.getTypeOther ().equals (tattrB.getTypeOther ()))
+                                continue;
 
-                              LinkedList<TAttribute> types = abdp.getAttributesOfDataType (tattrA.getTypeOther ());
-                              int toBeFound = types.size ();
-                              int weakLeft = types.size();
-                              boolean ko = false;
-                              boolean isNotProved = false;
+                            LinkedList<TAttribute> types = abdp.getAttributesOfDataType (tattrA.getTypeOther ());
+                            int toBeFound = types.size ();
+                            int weakLeft = types.size();
+                            boolean ko = false;
+                            boolean isNotProved = false;
 
-                              for (TAttribute type: types) {
-                                  String evA = argA[0] + "__" + argA[2] + "__"+ type.getId () + "__" + argA[1];
-                                  String evB = argB[0] + "__" + argB[2] + "__"+ type.getId () + "__" + argB[1];
-                                  String ev = evB + " ==> " + evA;
-				  if (satisfiedWeak.contains (ev)) {
-                                      weakLeft--;
-                                  } 
-                                  if (nonSatisfied.contains (ev)) {
-                                      ko = true;
-                                  } else if (notProved.contains (ev)) {
-                                      toBeFound --;
-                                      isNotProved = true;
-                                  } else if (satisfied.contains (ev)) {
-                                      toBeFound --;
-                                  }
-                              }
-                              if (weakLeft==0){
-	                          pragma.authWeakMap.put(prop, 1);			
-			      }
-                              if (ko)
-                                  pragma.authStrongMap.put(prop, 2);
-                              else if (toBeFound == 0) {
-                                  if (isNotProved)
-                                      pragma.authStrongMap.put(prop, 3);
-                                  else
-			              pragma.authStrongMap.put(prop, 1);
-                              }
-                          } else {
-                              String evA = argA[0] + "__" + argA[2] + "__" + argA[1];
-                              String evB = argB[0] + "__" + argB[2] + "__" + argB[1];
-                              String ev = evB + " ==> " + evA;
-			      if (satisfiedWeak.contains (ev))
-                                  pragma.authWeakMap.put(prop, 1);
-                              if (nonSatisfied.contains (ev))
-                                  pragma.authStrongMap.put(prop, 2);
-                              else if (notProved.contains (ev))
-                                  pragma.authStrongMap.put(prop, 3);
-                              else if (satisfied.contains (ev))
-                                  pragma.authStrongMap.put(prop, 1);
-                          }
-                      }
-                  }
-              }
+                            for (TAttribute type: types) {
+                                String evA = argA[0] + "__" + argA[2] + "__"+ type.getId () + "__" + argA[1];
+                                String evB = argB[0] + "__" + argB[2] + "__"+ type.getId () + "__" + argB[1];
+                                String ev = evB + " ==> " + evA;
+                                if (satisfiedWeak.contains (ev)) {
+                                    weakLeft--;
+                                }
+                                if (nonSatisfied.contains (ev)) {
+                                    ko = true;
+                                } else if (notProved.contains (ev)) {
+                                    toBeFound --;
+                                    isNotProved = true;
+                                } else if (satisfied.contains (ev)) {
+                                    toBeFound --;
+                                }
+                            }
+                            if (weakLeft==0){
+                                pragma.authWeakMap.put(prop, 1);
+                            }
+                            if (ko)
+                                pragma.authStrongMap.put(prop, 2);
+                            else if (toBeFound == 0) {
+                                if (isNotProved)
+                                    pragma.authStrongMap.put(prop, 3);
+                                else
+                                    pragma.authStrongMap.put(prop, 1);
+                            }
+                        } else {
+                            String evA = argA[0] + "__" + argA[2] + "__" + argA[1];
+                            String evB = argB[0] + "__" + argB[2] + "__" + argB[1];
+                            String ev = evB + " ==> " + evA;
+                            if (satisfiedWeak.contains (ev))
+                                pragma.authWeakMap.put(prop, 1);
+                            if (nonSatisfied.contains (ev))
+                                pragma.authStrongMap.put(prop, 2);
+                            else if (notProved.contains (ev))
+                                pragma.authStrongMap.put(prop, 3);
+                            else if (satisfied.contains (ev))
+                                pragma.authStrongMap.put(prop, 1);
+                        }
+                    }
+                }
+            }
     }
 
     public ArrayList<String> getAllNonMappedAvatarBlockNames(String _name, ADDDiagramPanel _tadp, boolean ref, String name) {

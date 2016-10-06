@@ -62,7 +62,7 @@ enum vcdCPUVisState
 };
 
 ///Represents the base class for CPUs
-class CPU: public SchedulableDevice, public TraceableDevice{
+class CPU: public SchedulableDevice, public TraceableDevice {
 public:
 	///Constructor
 	/**

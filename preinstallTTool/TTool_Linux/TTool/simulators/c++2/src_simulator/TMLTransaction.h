@@ -47,7 +47,7 @@ Ludovic Apvrille, Renaud Pacalet
 class TMLCommand;
 class TMLChannel;
 
-class TMLTransaction{
+class TMLTransaction {
 public:
 	///Constructor
     	/**
@@ -168,7 +168,7 @@ public:
 		_idlePenalty=iIdlePenalty;
 #endif
 	}
-	///Returns the task switching panalty of the transaction
+	///Returns the task switching penalty of the transaction
 	/**
       	\return Task switching penalty
     	*/	
@@ -179,7 +179,7 @@ public:
 		return 0;
 #endif
 	}
-	///Sets the task switching panalty of the transaction
+	///Sets the task switching penalty of the transaction
 	/**
       	\param iTaskSwitchingPenalty Task switching penalty
     	*/	
@@ -202,6 +202,7 @@ public:
 	/**
 	\return Detailed string representation
 	*/
+	std::string printEnd() const;
 	std::string toString() const;
 	///Returns a short string representation of the transaction
 	/**
@@ -214,6 +215,8 @@ public:
 	*/
 	inline void setChannel(TMLChannel* iChannel) {_channel=iChannel;}
 	///Get channel on which data was conveyed
+
+	
 	/**
 	\return Pointer to channel
 	*/
@@ -226,6 +229,10 @@ public:
 	inline static void resetID() {_ID=1;}
 	inline void setStateID(ID iID) {_stateID=iID;}
 	inline ID getStateID() {return _stateID;}
+
+	void toXML(std::ostringstream& glob, int deviceID, std::string deviceName) const;
+	
+
 protected:
 	///Time when the transaction became runnable
 	TMLTime _runnableTime;
