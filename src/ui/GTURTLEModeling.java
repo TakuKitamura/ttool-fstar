@@ -7527,12 +7527,12 @@ public class GTURTLEModeling {
 	    }
 	    AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, father, abd);
 	    tranSourceMap.clear();
-	    if (ab.getName().contains("__")){
+/*	    if (ab.getName().contains("__")){
 	        bl.setValue(ab.getName().split("__")[1]);
 	    }
-	    else {
+	    else {*/
 		bl.setValue(ab.getName());
-	    }
+	    //}
 	    abd.changeStateMachineTabName ("Block0", bl.getValue());
 	    blockMap.put(bl.getValue(), bl);
 	    abd.addComponent(bl, xpos, ypos, false, true);
@@ -7591,13 +7591,13 @@ public class GTURTLEModeling {
 
 	    String bl1 = ar.block1.getName();
 	    String bl2 = ar.block2.getName();
-	    if (originDestMap.containsKey(bl1.split("__")[bl1.split("__").length-1])){
-		originDestMap.get(bl1.split("__")[bl1.split("__").length-1]).add(bl2.split("__")[bl2.split("__").length-1]);
+	    if (originDestMap.containsKey(bl1)){
+		originDestMap.get(bl1).add(bl2);
 	    }
 	    else {
  	    	Set<String> hs= new HashSet<String>();
-		hs.add(bl2.split("__")[bl2.split("__").length-1]);
-		originDestMap.put(bl1.split("__")[bl1.split("__").length-1], hs);
+		hs.add(bl2);
+		originDestMap.put(bl1, hs);
 	    }
 	}
 	//Add Relations
@@ -7654,7 +7654,6 @@ public class GTURTLEModeling {
 		    if (str.contains(".")){
 			String tmp = str.split("\\.")[0];
 			String tmp2 = str.split("\\.")[1];
-			System.out.println("TMP " + tmp + " "+ tmp2);
 		    	t=t.concat(tmp.split("__")[tmp.split("__").length-1] + "." + tmp2.split("__")[Math.max(tmp2.split("__").length-2,0)] + " ");
 		    }
 		    else {
