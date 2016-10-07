@@ -4555,7 +4555,7 @@ public class GTURTLEModeling {
                     } catch (MalformedModelingException mme) {
                         Element elt = (Element) node;
                         String type = elt.getAttribute("type");
-                        TraceManager.addDev("Error when loading diagram: " + type);
+                        TraceManager.addDev("Error when loading diagram: " + elt + " " +type);
                         error = true;
                     }
                 }
@@ -7402,14 +7402,17 @@ public class GTURTLEModeling {
     }
 
 
-    public void addStates(AvatarStateMachineElement asme, int x, int y, AvatarSMDPanel smp, AvatarBDBlock bl, Map<AvatarStateMachineElement, TGComponent> SMDMap, Map<AvatarStateMachineElement, TGConnectingPoint> locMap, Map<AvatarTransition, AvatarStateMachineElement> tranDestMap, Map<AvatarTransition, TGConnectingPoint> tranSourceMap){
+    public void addStates(AvatarStateMachineElement asme, int x, int y, AvatarSMDPanel smp, AvatarBDBlock bl, Map<AvatarStateMachineElement, TGComponent> SMDMap, Map<AvatarStateMachineElement, TGComponent> locMap, Map<AvatarTransition, AvatarStateMachineElement> tranDestMap, Map<AvatarTransition, TGComponent> tranSourceMap){
 	TGConnectingPoint tp = new TGConnectingPoint(null, x, y, false, false);
+	//Create dummy tgcomponent
+	TGComponent tgcomp = new AvatarSMDStartState(x,y,x,x*2,y,y*2,false,null,smp);
 	if (asme instanceof AvatarStartState){
 	    AvatarSMDStartState smdss = new AvatarSMDStartState(x, y, x, x*2, y, y*2, false, null, smp);
+	    tgcomp = smdss;
 	    smp.addComponent(smdss, x, y, false, true);
 	    SMDMap.put(asme, smdss);
 	    tp = smdss.tgconnectingPointAtIndex(0);
-	    locMap.put(asme, tp);
+	    locMap.put(asme, smdss);
 	}
 	if (asme instanceof AvatarTransition){
 	   //
@@ -7418,6 +7421,7 @@ public class GTURTLEModeling {
 	    avatartranslator.AvatarSignal sig = ((AvatarActionOnSignal) asme).getSignal();
 	    if (sig.isIn()){
 		AvatarSMDReceiveSignal smdrs = new AvatarSMDReceiveSignal(x, y, x, x*2, y, y*2, false, null, smp);
+		tgcomp=smdrs;
 		smp.addComponent(smdrs, x, y, false, true);
 		String name=sig.getName().split("__")[sig.getName().split("__").length-1];
 	        smdrs.setValue(name+"()");
@@ -7426,7 +7430,7 @@ public class GTURTLEModeling {
 		SMDMap.put(asme, smdrs);
 	        tp = smdrs.getFreeTGConnectingPoint(x+smdrs.getWidth()/2,y+smdrs.getHeight());
 		TGConnectingPoint tp2 = smdrs.getFreeTGConnectingPoint(x+smdrs.getWidth()/2,y);
-	    	locMap.put(asme, tp2);
+	    	locMap.put(asme, smdrs);
 		if (bl.getAvatarSignalFromName(name) ==null){
 		    bl.addSignal(new ui.AvatarSignal(0, name, new String[0], new String[0]));
 		}
@@ -7434,6 +7438,7 @@ public class GTURTLEModeling {
 	    }
 	    else {
 		AvatarSMDSendSignal smdss = new AvatarSMDSendSignal(x, y, x, x*2, y, y*2, false, null, smp);
+		tgcomp=smdss;
 		smp.addComponent(smdss, x, y, false, true);
 	        String name=sig.getName().split("__")[sig.getName().split("__").length-1];
 	        smdss.setValue(name+"()");
@@ -7442,7 +7447,7 @@ public class GTURTLEModeling {
 		SMDMap.put(asme, smdss);
 	    	tp = smdss.getFreeTGConnectingPoint(x+smdss.getWidth()/2,y+smdss.getHeight());
 		TGConnectingPoint tp2 = smdss.getFreeTGConnectingPoint(x+smdss.getWidth()/2,y);
-	    	locMap.put(asme, tp2);
+	    	locMap.put(asme, smdss);
 		if (bl.getAvatarSignalFromName(name)  == null){
 		    bl.addSignal(new ui.AvatarSignal(1, name, new String[0], new String[0]));
 		}
@@ -7451,14 +7456,15 @@ public class GTURTLEModeling {
 	}
 	if (asme instanceof AvatarStopState){
 	    AvatarSMDStopState smdstop = new AvatarSMDStopState(x, y, x, x*2, y, y*2, false, null, smp);
+	    tgcomp=smdstop;
 	    SMDMap.put(asme, smdstop);
 	    smp.addComponent(smdstop, x, y, false, true);
 	    tp = smdstop.tgconnectingPointAtIndex(0);
-	    locMap.put(asme, tp);
+	    locMap.put(asme, smdstop);
 	}
 	if (asme instanceof AvatarState){
 	    //check if empty checker state
-	    if (asme.getName().contains("signalstate_")){
+	   /* if (asme.getName().contains("signalstate_")){
 		//don't add the state, ignore next transition, 
 		if (asme.getNexts().size()==1){
 		    AvatarStateMachineElement next = asme.getNext(0).getNext(0);
@@ -7471,40 +7477,43 @@ public class GTURTLEModeling {
 		    addStates(next, x, y, smp,bl, SMDMap, locMap, tranDestMap, tranSourceMap);
 		    return;
 		}
-	    }
+	    }*/
 	    AvatarSMDState smdstate = new AvatarSMDState(x, y, x, x*2, y, y*2, false, null, smp);
+	    tgcomp=smdstate;
 	    smp.addComponent(smdstate, x, y, false, true);
 	    smdstate.setValue(asme.getName());
 	    smdstate.recalculateSize();
 	    SMDMap.put(asme, smdstate);
 	    tp = smdstate.getFreeTGConnectingPoint(x+smdstate.getWidth()/2,y+smdstate.getHeight());
 	    TGConnectingPoint tp2 = smdstate.getFreeTGConnectingPoint(x+smdstate.getWidth()/2,y);
-	    locMap.put(asme, tp2);
+	    locMap.put(asme, smdstate);
 	}
-	int i=1;
-	int diff=400;
+	int i=0;
+	int diff=100;
 	int ydiff=50;
+	int num = asme.nbOfNexts();
 	for (AvatarStateMachineElement el:asme.getNexts()){
 	    if (el instanceof AvatarTransition){
-		tranSourceMap.put((AvatarTransition) el, tp);
+		tranSourceMap.put((AvatarTransition) el, tgcomp);
 	    }
 	    else {
 		AvatarTransition t = (AvatarTransition) asme;
 		tranDestMap.put(t, el);
 	    }
 	    if (!SMDMap.containsKey(el)){
-	    	addStates(el, diff*i, y+ydiff, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
-	    	i++;  
+	    	addStates(el, x+diff*(i-num/2), y+ydiff, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);  
 	    }
+	    i++;
 	}
 	return;
     }
 
 
     public void drawPanel(AvatarSpecification avspec, AvatarDesignPanel adp){
-	Map<AvatarTransition, TGConnectingPoint> tranSourceMap = new HashMap<AvatarTransition, TGConnectingPoint>();
+
+	Map<AvatarTransition, TGComponent> tranSourceMap = new HashMap<AvatarTransition, TGComponent>();
 	Map<AvatarTransition, AvatarStateMachineElement> tranDestMap = new HashMap<AvatarTransition, AvatarStateMachineElement>();
-    	Map<AvatarStateMachineElement, TGConnectingPoint> locMap = new HashMap<AvatarStateMachineElement, TGConnectingPoint>();
+    	Map<AvatarStateMachineElement, TGComponent> locMap = new HashMap<AvatarStateMachineElement, TGComponent>();
     	Map<AvatarStateMachineElement, TGComponent> SMDMap = new HashMap<AvatarStateMachineElement, TGComponent>();
     	Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
     	Map<String, AvatarBDBlock> blockMap = new HashMap<String, AvatarBDBlock>();
@@ -7549,7 +7558,7 @@ public class GTURTLEModeling {
 		    bl.addCryptoElements();
 		}
 	    }
-	   // xpos+=300;
+	    xpos+=300;
 	    //Build the state machine
 	    int smx=400;
 	    int smy=40;
@@ -7566,14 +7575,42 @@ public class GTURTLEModeling {
 	    addStates(start, smx, smy, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
 	    //Add transitions
 	    for (AvatarTransition t: tranSourceMap.keySet()){
-		TGConnectingPoint p1 = tranSourceMap.get(t);
-		TGConnectingPoint p2 = locMap.get(tranDestMap.get(t));
+		int x=tranSourceMap.get(t).getX()+tranSourceMap.get(t).getWidth()/2;
+		int y=tranSourceMap.get(t).getY()+tranSourceMap.get(t).getHeight();
+
+	//	TGConnectingPoint p1 = tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,false);
+		TGConnectingPoint p1 = tranSourceMap.get(t).closerFreeTGConnectingPoint(x, y, true, false);
+		if (p1==null){
+		  //  p1= tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,true);
+		    p1=tranSourceMap.get(t).closerFreeTGConnectingPoint(x,y,true, true);
+		}
+		x= locMap.get(tranDestMap.get(t)).getX()+ locMap.get(tranDestMap.get(t)).getWidth()/2;
+		y = locMap.get(tranDestMap.get(t)).getY();
+		if (tranSourceMap.get(t).getY() > locMap.get(tranDestMap.get(t)).getY()){
+		    y=locMap.get(tranDestMap.get(t)).getY()+locMap.get(tranDestMap.get(t)).getHeight()/2;
+		    if (tranSourceMap.get(t).getX() < locMap.get(tranDestMap.get(t)).getX()){
+			x = locMap.get(tranDestMap.get(t)).getX();
+		    }
+		    else {
+			x= locMap.get(tranDestMap.get(t)).getX()+locMap.get(tranDestMap.get(t)).getWidth();
+		    }
+		}
+		TGConnectingPoint p2 = locMap.get(tranDestMap.get(t)).closerFreeTGConnectingPoint(x,y,false, true);
+		if (p2==null){
+		    p2=locMap.get(tranDestMap.get(t)).closerFreeTGConnectingPoint(x,y,true, true);
+		}
 		Vector points = new Vector();
 		if (p1==null || p2 ==null){
-		    System.out.println("Missing point");
+		    System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
+		
+		    System.out.println("Missing point "+ p1 + " "+p2);
 		    return;
 		}
 		AvatarSMDConnector SMDcon = new AvatarSMDConnector((int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), true, null, smp, p1, p2, points);	
+	  	//System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
+		///System.out.println("FREE " +p1.isFree() + " "+ p2.isFree());
+		p1.setFree(false);
+		p2.setFree(false);
 		String action="";
 		if (t.getActions().size()==0){
 		    action="";
@@ -7618,10 +7655,10 @@ public class GTURTLEModeling {
 		    	conn.setBlocking(ar.isBlocking());
 		    	conn.setPrivate(ar.isPrivate());
 		    	conn.setSizeOfFIFO(ar.getSizeOfFIFO());
-		    	System.out.println(bl1 +" "+ ar.block1.getName() + " "+ ar.block2.getName());
+		    	//System.out.println(bl1 +" "+ ar.block1.getName() + " "+ ar.block2.getName());
 			conn.addSignal("in " +ar.getSignal1(0).getName(),true,true);
 			conn.addSignal("out " +ar.getSignal2(0).getName(), false,false);
-			System.out.println("Added Signals");
+			//System.out.println("Added Signals");
 			conn.updateAllSignals();
 			p1.setFree(false);
 			p2.setFree(false);
