@@ -336,6 +336,7 @@ public class AvatarSpecification extends AvatarElement {
 	    if (ar.isAsynchronous()) {
 		// Must be removed
 		int size = Math.min(_maxSizeOfInfiniteFifo, ar.getSizeOfFIFO());
+		TraceManager.addDev("***************************** Size of FIFO:" + size);
 		size = Math.max(1, size);
 		FIFO_ID = removeFIFO(ar, size, oldOnes, newOnes, FIFO_ID);
 	    }

@@ -201,6 +201,7 @@ public class AvatarBlockTemplate  {
 	ab.addAttribute(size);
 
 	AvatarAttribute maxSize = new AvatarAttribute("maxSize", AvatarType.INTEGER, ab, _referenceRelation);
+	TraceManager.addDev("*********************************** Size of FIFO=" + _sizeOfFifo);
 	maxSize.setInitialValue("" + _sizeOfFifo);
 	ab.addAttribute(maxSize);
 

@@ -269,7 +269,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
 
-        //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
+        TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
         prepareStates();
         prepareTransitions();
 
