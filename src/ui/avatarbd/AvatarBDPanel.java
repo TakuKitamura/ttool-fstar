@@ -90,7 +90,6 @@ public class AvatarBDPanel extends TDiagramPanel {
     }
 
     public boolean actionOnAdd(TGComponent tgc) {
-        //System.out.println("Action on add!");
         if (tgc instanceof AvatarBDBlock) {
             AvatarBDBlock abdb = (AvatarBDBlock)(tgc);
             //TraceManager.addDev(" *** add Avatar block *** name=" + abdb.getBlockName());

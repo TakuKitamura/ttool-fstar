@@ -7540,9 +7540,10 @@ public class GTURTLEModeling {
 	        bl.setValue(ab.getName().split("__")[1]);
 	    }
 	    else {*/
-		bl.setValue(ab.getName());
+		bl.setValueWithChange(ab.getName());
 	    //}
-	    abd.changeStateMachineTabName ("Block0", bl.getValue());
+	 //   if (!bl.getValue().equals("Block0")
+	   // abd.changeStateMachineTabName ("Block0", bl.getValue());
 	    blockMap.put(bl.getValue(), bl);
 	    abd.addComponent(bl, xpos, ypos, false, true);
 	    for (AvatarAttribute attr: ab.getAttributes()){
@@ -7553,7 +7554,12 @@ public class GTURTLEModeling {
 		if (attr.getType()==AvatarType.INTEGER){
 		    type=0;
 		}
-		bl.addAttribute(new TAttribute(0, attr.getName(), attr.getType().getDefaultInitialValue(), type));
+		if (attr.hasInitialValue()){
+		    bl.addAttribute(new TAttribute(0, attr.getName(), attr.getInitialValue(), type));
+		}
+		else {
+		    bl.addAttribute(new TAttribute(0, attr.getName(), attr.getType().getDefaultInitialValue(), type));
+		}
 		if (attr.getName().equals("key")){
 		    bl.addCryptoElements();
 		}
