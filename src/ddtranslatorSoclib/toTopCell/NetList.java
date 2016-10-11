@@ -139,19 +139,7 @@ public class NetList {
 		else{
 		    netlist = netlist + "vgsb.p_to_target["+(ram.getNo_target())+"](signal_vci_vciram"+ram.getNo_ram()+");" + CR2;
 		}		   
-	    }
-	
-	    //MWMR RAM added transparently
-	    /*    netlist = netlist +"mwmr_ram.p_clk(" + NAME_CLK + ");" + CR;
-	    netlist = netlist +"mwmr_ram.p_resetn(" + NAME_RST + ");" + CR;
-	    netlist = netlist +"mwmr_ram.p_vci(signal_vci_mwmr_ram);" + CR2;
-	    netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+4)+"](signal_vci_mwmr_ram);" + CR2;
-
-	    //MWMRd RAM added transparently
-	    netlist = netlist +"mwmrd_ram.p_clk(" + NAME_CLK + ");" + CR;
-	    netlist = netlist +"mwmrd_ram.p_resetn(" + NAME_RST + ");" + CR;
-	    netlist = netlist +"mwmrd_ram.p_vci(signal_vci_mwmrd_ram);" + CR2;
-	    netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+5)+"](signal_vci_mwmrd_ram);" + CR2;*/
+	    }		  
 	}
 
 	/* clustered version */
@@ -351,7 +339,7 @@ public class NetList {
 	}
 		
 	//generate trace file if marked trace option 
-	netlist += "sc_trace_file *tf;" + CR;
+	/*	netlist += "sc_trace_file *tf;" + CR;
 	netlist += "tf=sc_create_vcd_trace_file(\"mytrace\");" + CR;
 	netlist += "sc_trace(tf,signal_clk,\"CLK\");" + CR;
 	netlist += "sc_trace(tf,signal_resetn,\"RESETN\");" + CR;
@@ -391,16 +379,16 @@ public class NetList {
 	    if (ram.getMonitored()==0){			
 		netlist += "sc_trace(tf,signal_vci_vciram"+ram.getNo_ram()+",\"Memory"+ram.getNo_ram()+"\");" + CR;
 	    }
-	}	   
+	    }*/	   
     	
     netlist = netlist + "  sc_core::sc_start(sc_core::sc_time(0, sc_core::SC_NS));" + CR;
     netlist = netlist + "  signal_resetn = false;" + CR;
     netlist = netlist + "  sc_core::sc_start(sc_core::sc_time(1, sc_core::SC_NS));" + CR;
     netlist = netlist + "  signal_resetn = true;" + CR;
     netlist = netlist + "  sc_core::sc_start();" + CR;
-    if(tracing){
-	netlist += "sc_close_vcd_trace_file(tf);" + CR;
-    }
+    //if(tracing){
+    //	netlist += "sc_close_vcd_trace_file(tf);" + CR;
+    //	}
     netlist = netlist + CR + "  return EXIT_SUCCESS;"+ CR;
     netlist = netlist +"}" + CR;
     return netlist;		
