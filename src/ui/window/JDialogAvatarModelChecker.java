@@ -83,6 +83,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     protected static boolean graphSelectedDot = false;
     protected static boolean ignoreEmptyTransitionsSelected = true;
     protected static boolean ignoreConcurrenceBetweenInternalActionsSelected = true;
+    protected static boolean generateDesignSelected = false;
     protected static int reachabilitySelected = REACHABILITY_NONE;
     protected static int livenessSelected = LIVENESS_NONE;
 
@@ -118,7 +119,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     protected JRadioButton noLiveness, livenessCheckable, livenessAllStates;
     protected ButtonGroup liveness;
 
-    protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreConcurrenceBetweenInternalActions;
+    protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreConcurrenceBetweenInternalActions, generateDesign;
     protected JTextField graphPath, graphPathDot;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
@@ -184,6 +185,13 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         c01.weightx = 1.0;
         c01.fill = GridBagConstraints.HORIZONTAL;
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+
+	if (TraceManager.devPolicy == TraceManager.TO_CONSOLE) {
+	    generateDesign = new JCheckBox("[For testing purpose only] Generate Design", generateDesignSelected);
+	    generateDesign.addActionListener(this);
+	    jp01.add(generateDesign, c01);
+	}
+	
         ignoreEmptyTransitions = new JCheckBox("Do not display empty transitions as internal actions", ignoreEmptyTransitionsSelected);
         ignoreEmptyTransitions.addActionListener(this);
         jp01.add(ignoreEmptyTransitions, c01);
@@ -490,10 +498,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             amc.startModelChecking();
 	    TraceManager.addDev("Model checking done");
 
-	    TraceManager.addDev("Drawing modified avatar spec");
-	    AvatarSpecification reworkedSpec = amc.getReworkedAvatarSpecification();
-	    if ((mgui != null) && (reworkedSpec != null)) {
-		mgui.drawAvatarSpecification(reworkedSpec);
+	    if (generateDesignSelected) {
+		TraceManager.addDev("Drawing modified avatar spec");
+		AvatarSpecification reworkedSpec = amc.getReworkedAvatarSpecification();
+		if ((mgui != null) && (reworkedSpec != null)) {
+		    mgui.drawAvatarSpecification(reworkedSpec);
+		}
 	    }
 	    
             timer.cancel();
@@ -585,6 +595,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         graphPath.setEnabled(saveGraphAUT.isSelected());
         graphSelectedDot = saveGraphDot.isSelected();
         graphPathDot.setEnabled(saveGraphDot.isSelected());
+	if (generateDesign != null) {
+	    generateDesignSelected = generateDesign.isSelected();
+	}
         ignoreEmptyTransitionsSelected = ignoreEmptyTransitions.isSelected();
         ignoreConcurrenceBetweenInternalActionsSelected = ignoreConcurrenceBetweenInternalActions.isSelected();
 
