@@ -314,6 +314,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // Thread fof autosave
     PeriodicBehaviorThread pbt;
 
+    private TMLArchiPanel tmlap;    // USed to retrieve the currently opened architecture panel
+
     public MainGUI(boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
                    _avatarOnly, boolean _experimental) {
         turtleOn = _turtleOn;
@@ -3488,7 +3490,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 }
             }
         } else if (tp instanceof TMLArchiPanel) {
-            TMLArchiPanel tmlap = (TMLArchiPanel)tp;
+            tmlap = (TMLArchiPanel)tp;
             JDialogSelectTMLNodes.validated = tmlap.validated;
             JDialogSelectTMLNodes.ignored = tmlap.ignored;
             Vector tmlNodesToValidate = new Vector();
@@ -4269,9 +4271,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 	TraceManager.addDev("Execute avatar model checker");
 	if (gtm.getAvatarSpecification()==null){
 	    return;
-		/*	    gtm.translateTML2AvatarMC();
-		*/
-	}
+    }
+	//	   gtm.translateTML2AvatarMC();
 	JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(), ConfigurationTTool.TGraphPath);
         jmc.setSize(550, 600);
         GraphicLib.centerOnParent(jmc);
@@ -9263,5 +9264,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 }
             }
         }
+    }
+
+    // Get the currently opened architecture panel
+    public TMLArchiPanel getCurrentArchiPanel() {
+        return tmlap;
     }
 } // Class MainGUI
