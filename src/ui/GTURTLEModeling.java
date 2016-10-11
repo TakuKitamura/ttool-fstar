@@ -7625,6 +7625,9 @@ public class GTURTLEModeling {
 		    action=t.getActions().get(0).toString();
 		}
 		SMDcon.setTransitionInfo(t.getGuard().toString(), action);
+		for (int i=1; i<t.getActions().size(); i++){
+		    SMDcon.setTransitionInfo("", t.getActions().get(i).toString());
+		}
 		smp.addComponent(SMDcon, (int) p1.getX(), (int) p1.getY(), false, true);
 	    }
 	}
