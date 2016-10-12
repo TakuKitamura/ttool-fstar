@@ -52,7 +52,7 @@ public class VCDTimeChange  {
 	private ArrayList<VCDVariable> variables;
 	private ArrayList<String> values; // In binary format, without the "b"
 	
-	private static int IDShortcut;
+	//private static int IDShortcut;
     
     public VCDTimeChange(String _timeValue) {
       timeValue = _timeValue;
