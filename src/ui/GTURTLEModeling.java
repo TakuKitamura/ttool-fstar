@@ -46,95 +46,186 @@
 
 package ui;
 
-import java.io.*;
-import java.awt.*;
-import javax.swing.*;
-import java.util.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
-import javax.xml.parsers.*;
-//import java.nio.charset.*;
-//import java.nio.*;
+import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
-import tmatrix.*;
-import translator.*;
-//import translator.tojava.*;
-import translator.totpn.*;
-import translator.touppaal.*;
-import launcher.*;
-import myutil.*;
-import nc.*;
-import ui.ad.*;
-import ui.atd.*;
-import ui.cd.*;
-import ui.dd.*;
-import ui.iod.*;
-import ui.ebrdd.*;
-import ui.req.*;
-import ui.sd.*;
-import ui.ucd.*;
-import ui.tree.*;
-import ui.window.*;
-import ui.ConfigurationTTool;
+import javax.swing.JOptionPane;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import avatartranslator.AvatarActionOnSignal;
+import avatartranslator.AvatarAttribute;
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarPragma;
+import avatartranslator.AvatarRelation;
+import avatartranslator.AvatarSpecification;
+import avatartranslator.AvatarStartState;
+import avatartranslator.AvatarState;
+import avatartranslator.AvatarStateMachine;
+import avatartranslator.AvatarStateMachineElement;
+import avatartranslator.AvatarStopState;
+import avatartranslator.AvatarTransition;
+import avatartranslator.AvatarType;
+import avatartranslator.toproverif.AVATAR2ProVerif;
+import avatartranslator.totpn.AVATAR2TPN;
+import avatartranslator.toturtle.AVATAR2TURTLE;
+import avatartranslator.touppaal.AVATAR2UPPAAL;
+import ddtranslator.DDSyntaxException;
+import ddtranslator.DDTranslator;
+import launcher.LauncherException;
+import launcher.RemoteExecutionThread;
+import launcher.RshClient;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import nc.NCStructure;
+import proverifspec.ProVerifOutputAnalyzer;
+import proverifspec.ProVerifSpec;
+import req.ebrdd.EBRDD;
+import sddescription.HMSC;
+import sddescription.MSC;
+import sddescription.SDExchange;
+import sdtranslator.SDTranslationException;
+import sdtranslator.SDTranslator;
+import tmatrix.RequirementModeling;
+import tmltranslator.HwBridge;
+import tmltranslator.HwBus;
+import tmltranslator.HwExecutionNode;
+import tmltranslator.HwLink;
+import tmltranslator.HwMemory;
+import tmltranslator.HwNode;
+import tmltranslator.SecurityPattern;
+import tmltranslator.TMLActivityElement;
+import tmltranslator.TMLCP;
+import tmltranslator.TMLCPTextSpecification;
+import tmltranslator.TMLChannel;
+import tmltranslator.TMLError;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLMappingTextSpecification;
+import tmltranslator.TMLModeling;
+import tmltranslator.TMLTask;
+import tmltranslator.TMLTextSpecification;
+import tmltranslator.modelcompiler.TMLModelCompiler;
+import tmltranslator.modelcompiler.TMLModelCompilerError;
+import tmltranslator.modelcompiler.TMLModelCompilerParser;
+import tmltranslator.modelcompiler.TMLPECParser;
+import tmltranslator.modelcompiler.TMLPECParserError;
+import tmltranslator.toautomata.TML2AUT;
+import tmltranslator.toautomata.TML2AUTviaLOTOS;
+import tmltranslator.toavatar.TML2Avatar;
+import tmltranslator.tosystemc.TML2SystemC;
+import tmltranslator.toturtle.Mapping2TIF;
+import tmltranslator.toturtle.TML2TURTLE;
+import tmltranslator.touppaal.RelationTMLUPPAAL;
+import tmltranslator.touppaal.TML2UPPAAL;
+import tpndescription.TPN;
+import translator.ADComponent;
+import translator.Gate;
+import translator.GroupOfGates;
+import translator.MasterGateManager;
+import translator.TClass;
+import translator.TIFExchange;
+import translator.TURTLEModelChecker;
+import translator.TURTLEModeling;
+import translator.TURTLETranslator;
+import translator.totpn.TURTLE2TPN;
+import translator.touppaal.RelationTIFUPPAAL;
+import translator.touppaal.TURTLE2UPPAAL;
+import ui.ad.TActivityDiagramPanel;
+import ui.atd.AttackTreeDiagramPanel;
+import ui.avatarad.AvatarADPanel;
+import ui.avatarbd.AvatarBDBlock;
+import ui.avatarbd.AvatarBDLibraryFunction;
+import ui.avatarbd.AvatarBDPanel;
+import ui.avatarbd.AvatarBDPortConnector;
+import ui.avatarbd.AvatarBDPragma;
+import ui.avatarbd.AvatarBDStateMachineOwner;
+import ui.avatarcd.AvatarCDPanel;
 // AVATAR
-import ui.avatardd.*;
-import ui.avatarbd.*;
-import ui.avatarsmd.*;
-import ui.avatarrd.*;
-import ui.avatarmad.*;
-import ui.avatarpd.*;
-import ui.avatarcd.*;
-import ui.avatarad.*;
-
-import avatartranslator.*;
-import avatartranslator.toturtle.*;
-import avatartranslator.touppaal.*;
-import avatartranslator.toproverif.*;
-import avatartranslator.totpn.*;
-
-import attacktrees.*;
-
-import tpndescription.*;
-
-import ui.diplodocusmethodology.*;
-import ui.avatarmethodology.*;
-import ui.sysmlsecmethodology.*;
-import ui.tmlad.*;
-import ui.tmlcd.*;
-import ui.tmlcompd.*;
-
-import ui.tmldd.*;
-import ui.tmlcp.*;
-import ui.tmlsd.*;
-import tmltranslator.*;
-import tmltranslator.tosystemc.*;
-import tmltranslator.toturtle.*;
-import tmltranslator.toautomata.*;
-import tmltranslator.touppaal.*;
-
-import ui.oscd.*;
-import ui.osad.*;
-
-import ui.procsd.*;
-import ui.prosmd.*;
-
-import ui.ncdd.*;
-
-import ui.graph.*;
-
-import ddtranslator.*;
-import sddescription.*;
-import sdtranslator.*;
-
-import uppaaldesc.*;
-
-import proverifspec.*;
-
-import req.ebrdd.*;
-
-import tmltranslator.modelcompiler.*;
-import tmltranslator.toavatar.*;
+// AVATAR
+import ui.avatardd.ADDDiagramPanel;
+import ui.avatarmad.AvatarMADPanel;
+import ui.avatarmethodology.AvatarMethodologyDiagramPanel;
+import ui.avatarpd.AvatarPDPanel;
+import ui.avatarrd.AvatarRDPanel;
+import ui.avatarsmd.AvatarSMDConnector;
+import ui.avatarsmd.AvatarSMDPanel;
+import ui.avatarsmd.AvatarSMDReceiveSignal;
+import ui.avatarsmd.AvatarSMDSendSignal;
+import ui.avatarsmd.AvatarSMDStartState;
+import ui.avatarsmd.AvatarSMDState;
+import ui.avatarsmd.AvatarSMDStopState;
+import ui.cd.TCDTClass;
+import ui.cd.TCDTObject;
+import ui.cd.TClassDiagramPanel;
+import ui.dd.TDDArtifact;
+import ui.dd.TDDNode;
+import ui.dd.TDeploymentDiagramPanel;
+import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
+import ui.ebrdd.EBRDDPanel;
+import ui.iod.InteractionOverviewDiagramPanel;
+import ui.ncdd.NCDiagramPanel;
+import ui.osad.TURTLEOSActivityDiagramPanel;
+import ui.oscd.TOSClass;
+import ui.oscd.TURTLEOSClassDiagramPanel;
+import ui.procsd.ProCSDComponent;
+import ui.procsd.ProactiveCSDPanel;
+import ui.prosmd.ProactiveSMDPanel;
+import ui.req.RequirementDiagramPanel;
+import ui.sd.SequenceDiagramPanel;
+import ui.sysmlsecmethodology.SysmlsecMethodologyDiagramPanel;
+import ui.tmlad.TGConnectorTMLAD;
+import ui.tmlad.TMLADDecrypt;
+import ui.tmlad.TMLADEncrypt;
+import ui.tmlad.TMLADReadChannel;
+import ui.tmlad.TMLADStartState;
+import ui.tmlad.TMLADWriteChannel;
+import ui.tmlad.TMLActivityDiagramPanel;
+import ui.tmlcd.TMLTaskDiagramPanel;
+import ui.tmlcd.TMLTaskOperator;
+import ui.tmlcompd.TMLCChannelOutPort;
+import ui.tmlcompd.TMLCCompositeComponent;
+import ui.tmlcompd.TMLCPortConnector;
+import ui.tmlcompd.TMLCPrimitiveComponent;
+import ui.tmlcompd.TMLCPrimitivePort;
+import ui.tmlcompd.TMLComponentTaskDiagramPanel;
+import ui.tmlcp.TMLCPPanel;
+import ui.tmldd.DiplodocusPECPragma;
+import ui.tmldd.TMLArchiCPNode;
+import ui.tmldd.TMLArchiDiagramPanel;
+import ui.tmldd.TMLArchiKey;
+import ui.tmldd.TMLArchiMemoryNode;
+import ui.tmlsd.TMLSDPanel;
+import ui.tree.InvariantDataTree;
+import ui.tree.SearchTree;
+import ui.tree.SyntaxAnalysisTree;
+import ui.ucd.UseCaseDiagramPanel;
+import ui.window.JFrameSimulationTrace;
+import uppaaldesc.UPPAALSpec;
 
 //Communication Pattern javaCC parser
 //import compiler.tmlCPparser.*;
@@ -150,7 +241,7 @@ public class GTURTLEModeling {
     private Vector panels; /* analysis, design, deployment, tml design */
     private TURTLEModeling tm;
     private AvatarSpecification avatarspec;
-    private AttackTree attackTree;
+  //  private AttackTree attackTree;
     private AVATAR2UPPAAL avatar2uppaal;
     private AVATAR2ProVerif avatar2proverif;
     private boolean optimizeAvatar;
@@ -193,8 +284,8 @@ public class GTURTLEModeling {
 
     private int nbRTLOTOS;
     private int nbSuggestedDesign;
-    private int nbSuggestedAnalysis;
-    private int nbTPN;
+//    private int nbSuggestedAnalysis;
+//    private int nbTPN;
 
     //private ValidationDataTree vdt;
     private SearchTree st;
@@ -395,7 +486,7 @@ public class GTURTLEModeling {
         tpn = t2tpn.generateTPN(false).toString();
         warnings = t2tpn.getWarnings();
 
-        nbTPN ++;
+      //  nbTPN ++;
         if (f != null) {
             TraceManager.addDev("Saving in file: " + f);
             saveInFile(f, tpn);
@@ -1079,7 +1170,7 @@ public class GTURTLEModeling {
 		    HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t);
 	   	//Try to find memory using only private buses
 	    	    java.util.List<HwNode> toVisit = new ArrayList<HwNode>();
-	    	    java.util.List<HwNode> toMemory = new ArrayList<HwNode>();
+	    	  //  java.util.List<HwNode> toMemory = new ArrayList<HwNode>();
 	    	    java.util.List<HwNode> complete = new ArrayList<HwNode>();
 	    	    for (HwLink link:links){
 			if (link.hwnode==node1){
@@ -1474,8 +1565,8 @@ public class GTURTLEModeling {
         if (sim != null) {
             JFrameSimulationTrace jfst = new JFrameSimulationTrace("Last simulation trace", sim, type);
             jfst.setIconImage(IconManager.img8);
-            jfst.setSize(900, 600);
-            GraphicLib.centerOnParent(jfst);
+          //  jfst.setSize(900, 600);
+            GraphicLib.centerOnParent( jfst, 900, 600 );
             jfst.setVisible(true);
         }
     }
@@ -7029,7 +7120,7 @@ public class GTURTLEModeling {
 
     public boolean translateAttackTreePanel(AttackTreePanel atp) {
         AttackTreePanelTranslator att = new AttackTreePanelTranslator(atp);
-        attackTree = att.translateToAttackTreeDataStructure();
+        /*attackTree =*/ att.translateToAttackTreeDataStructure();
         checkingErrors = att.getCheckingErrors();
         warnings = att.getWarnings();
         if ((checkingErrors != null) && (checkingErrors.size() > 0)){
@@ -7127,8 +7218,8 @@ public class GTURTLEModeling {
         }
     }
 
-    public Vector convertToCheckingErrorTMLErrors(ArrayList<TMLError> warningsOptimize, TDiagramPanel _tdp) {
-        Vector v = new Vector();
+    public Vector<CheckingError> convertToCheckingErrorTMLErrors(ArrayList<TMLError> warningsOptimize, TDiagramPanel _tdp) {
+        Vector<CheckingError> v = new Vector<CheckingError>();
         CheckingError warning;
         for(TMLError error: warningsOptimize) {
             warning = new CheckingError(CheckingError.BEHAVIOR_ERROR, error.message);
@@ -7141,7 +7232,7 @@ public class GTURTLEModeling {
 
     public boolean translateTMLComponentDesign(Vector componentsToTakeIntoAccount, TMLComponentDesignPanel tmlcdp, boolean optimize) {
         nullifyTMLModeling();
-        ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
+    //    ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
         warnings = new LinkedList<CheckingError> ();
         mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
 
@@ -7164,11 +7255,12 @@ public class GTURTLEModeling {
         if ((checkingErrors != null) && (checkingErrors.size() > 0)){
             analyzeErrors();
             return false;
-        } else {
-            if (optimize) {
-                //TraceManager.addDev("OPTIMIZE");
-                warningsOptimize = tmlm.optimize();
-            }
+        }
+        else {
+//            if (optimize) {
+//                //TraceManager.addDev("OPTIMIZE");
+//                warningsOptimize = tmlm.optimize();
+//            }
 
             tmState = 2;
             //TraceManager.addDev("tm generated:");
