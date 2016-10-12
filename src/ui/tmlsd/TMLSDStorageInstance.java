@@ -47,18 +47,16 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlsd;
 
-import java.awt.*;
-import javax.swing.*;
-import org.w3c.dom.*;
-import java.awt.event.*;
-import java.util.*;
+import javax.swing.JFrame;
 
-import myutil.*;
-import ui.*;
-import ui.tmldd.*;
-import ui.window.*;
-
-import tmltranslator.tmlcp.*;
+import myutil.GraphicLib;
+import ui.IconManager;
+import ui.SwallowTGComponent;
+import ui.TAttribute;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.window.JDialogTMLCPStorageInstance;
 
 public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComponent {
 	
@@ -94,13 +92,12 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 	}
     
 	public boolean editOndoubleClick(JFrame frame) {
-
 		JDialogTMLCPStorageInstance jdab = new JDialogTMLCPStorageInstance( myAttributes, null, frame,
 																											"Setting properties of " + name, "Attribute", name );
 		setJDialogOptions(jdab);
-    jdab.setSize(650, 575);
-    GraphicLib.centerOnParent(jdab);
-    jdab.setVisible(true); // blocked until dialog has been closed
+  //  jdab.setSize(650, 575);
+		GraphicLib.centerOnParent( jdab, 650, 575 );
+		jdab.setVisible(true); // blocked until dialog has been closed
 		name = jdab.getName();																											
     //makeValue();
     //if (oldValue.equals(value)) {
