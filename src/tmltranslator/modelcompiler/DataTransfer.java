@@ -44,13 +44,12 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
-import java.util.*;
-import java.nio.*;
-import myutil.*;
+import java.util.ArrayList;
 
-import tmltranslator.*;
+import tmltranslator.TMLCP;
+import tmltranslator.TMLCPLib;
 
 public class DataTransfer	{
 

@@ -46,9 +46,8 @@
 
 package tmltranslator.modelcompiler;
 
-import java.util.*;
-import java.nio.*;
-import myutil.*;
+import java.util.Arrays;
+import java.util.Vector;
 
 public abstract class ArchUnitMEC	{
 

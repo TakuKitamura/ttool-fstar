@@ -44,10 +44,9 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
-import java.util.*;
-import myutil.*;
+import java.util.Vector;
 
 public class SingleDmaMEC extends CPMEC	{
 

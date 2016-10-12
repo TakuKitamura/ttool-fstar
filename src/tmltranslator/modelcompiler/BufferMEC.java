@@ -43,17 +43,15 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
-import java.util.*;
-import java.nio.*;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.util.ArrayList;
+
+import javax.swing.JPanel;
+
 import org.w3c.dom.Element;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-
-import myutil.*;
-import tmltranslator.*;
 
 public interface BufferMEC	{
 

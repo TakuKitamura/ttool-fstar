@@ -46,19 +46,35 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
-import java.util.*;
-import java.io.*;
-import java.nio.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import myutil.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Vector;
 
-import tmltranslator.*;
-import ui.tmlcompd.*;
+import javax.swing.JFrame;
+
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
+import tmltranslator.HwNode;
+import tmltranslator.TMLArchitecture;
+import tmltranslator.TMLCP;
+import tmltranslator.TMLCPLib;
+import tmltranslator.TMLChannel;
+import tmltranslator.TMLElement;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLModeling;
+import tmltranslator.TMLPort;
+import tmltranslator.TMLReadChannel;
+import tmltranslator.TMLTask;
+import tmltranslator.TMLWriteChannel;
 import ui.ConfigurationTTool;
-import ui.*;
+import ui.GTMLModeling;
+import ui.TMLCommunicationPatternPanel;
 
 public class TMLModelCompiler	{
 
@@ -67,15 +83,15 @@ public class TMLModelCompiler	{
 	private String CR = "\n";
 	private String CR2 = "\n\n";
 	private String TAB = "\t";
-	private String TAB2 = "\t\t";
-	private String TAB3 = "\t\t\t";
-	private String TAB4 = "\t\t\t\t";
+//	private String TAB2 = "\t\t";
+//	private String TAB3 = "\t\t\t";
+//	private String TAB4 = "\t\t\t\t";
 	private String SP = " ";
 	private String SC = ";";
-	private String COLON = ",";
+//	private String COLON = ",";
 
 	private TMLMapping tmap;
-	private TMLCP tmlcp;
+//	private TMLCP tmlcp;
 	private TMLModeling tmlm;
 	private TMLArchitecture tmla;
 	private String applicationName;
@@ -83,11 +99,11 @@ public class TMLModelCompiler	{
 	private StringBuffer headerString;
 	private StringBuffer programString;
 	private StringBuffer initFileString;
-	private ArrayList<TMLTask> mappedTasks;
-	private ArrayList<TMLElement> commElts;
+//	private ArrayList<TMLTask> mappedTasks;
+//	private ArrayList<TMLElement> commElts;
 	private ArrayList<Operation> operationsList;
-	private int SDRoperationsCounter;
-	private int signalsCounter;
+//	private int SDRoperationsCounter;
+//	private int signalsCounter;
 	private ArrayList<Signal> signalsList;
 	private ArrayList<TMLCPLib> mappedCPLibs;
 	private ArrayList<TMLPort> postexList;
@@ -97,8 +113,8 @@ public class TMLModelCompiler	{
 	private ArrayList<TMLCommunicationPatternPanel> tmlcpps;
 	private ArrayList<TMLCP> tmlcpsList;
 
-	private ArrayList<TMLModelCompilerError> errors;
-	private ArrayList<TMLModelCompilerError> warnings;
+//	private ArrayList<TMLModelCompilerError> errors;
+//	private ArrayList<TMLModelCompilerError> warnings;
 
 	private String debugFileName;
 	PrintWriter outputStream;
@@ -120,16 +136,16 @@ public class TMLModelCompiler	{
 	}
 
 	private void init()	{
-		mappedTasks = new ArrayList<TMLTask>();
-		commElts = new ArrayList<TMLElement>();
-		errors = new ArrayList<TMLModelCompilerError>();
+	//	mappedTasks = new ArrayList<TMLTask>();
+	//	commElts = new ArrayList<TMLElement>();
+		//errors = new ArrayList<TMLModelCompilerError>();
 		mainFileString = new StringBuffer();
 		headerString = new StringBuffer();
 		programString = new StringBuffer();
 		initFileString = new StringBuffer();
 		operationsList = new ArrayList<Operation>();
-		SDRoperationsCounter = 0;
-		signalsCounter = 0;
+	//	SDRoperationsCounter = 0;
+//		signalsCounter = 0;
 		signalsList = new ArrayList<Signal>();
 		postexList = new ArrayList<TMLPort>();
 		prexList = new ArrayList<TMLPort>();
@@ -219,7 +235,7 @@ public class TMLModelCompiler	{
 					inBuffer = createInBuffer( xTask, tmap.getHwNodeOf( xTask ) );	//null for Source
 					outBuffer = createOutBuffer( xTask, tmap.getHwNodeOf( xTask ) );	//null for Sink
 					operationsList.add( new Operation( fTask, xTask, tmap.getHwNodeOf( xTask ), tmap.getHwNodeOf( fTask ), inSignals, outSignal, inBuffer, outBuffer, prexPostexList[0], prexPostexList[1] ) );
-					SDRoperationsCounter++;
+					//SDRoperationsCounter++;
 				}
 			}
 		}
@@ -376,7 +392,7 @@ public class TMLModelCompiler	{
 
 	private ArrayList<Signal> getInSignals( TMLTask task )	{	//Find the signal associated to the write channel of task
 
-		TMLPort originPort, destinationPortCh, originPortSigChannel, destinationPortSigChannel;
+		TMLPort originPort, destinationPortCh,/* originPortSigChannel,*/ destinationPortSigChannel;
 		TMLChannel sigChannel;
 		ArrayList<Signal> sigsList = new ArrayList<Signal>();
 
@@ -424,7 +440,7 @@ public class TMLModelCompiler	{
 
 	private Signal getOutSignal( TMLTask task )	{	//Find the signal associated to the write channel of task
 		
-		TMLPort originPort, destinationPort, originPortSigChannel;
+		TMLPort originPort,/* destinationPort,*/ originPortSigChannel;
 		TMLChannel sigChannel;
 
 		for( TMLChannel ch: task.getWriteTMLChannels() )	{
@@ -493,7 +509,7 @@ public class TMLModelCompiler	{
 	private void makeDataTransfersList()	{
 
 		ArrayList<Signal> inSignals;
-		Signal outSignal;
+		//Signal outSignal;
 
 		for( TMLCPLib cplib: mappedCPLibs )	{
 			if( cplib.getArtifacts().size() == 1 )	{
@@ -948,7 +964,7 @@ public class TMLModelCompiler	{
 	private void generateCodeForOperations()	{ //generate the code for the execution operations
 		
 		//for each operations add the exec code + the info for all the signals and stuff
-		String exec_code = "";
+		//String exec_code = "";
 
 		for( Operation op: operationsList )	{
 			if( op.getType() == Operation.SDR )	{
@@ -1495,7 +1511,7 @@ public class TMLModelCompiler	{
 					transferType = tmlcplib.getTransferTypes().get(0);
 					for( String s: tmlcplib.getMappedUnits() )	{
 						if( s.contains( CPMEC.dmaController ) )	{
-							String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
+							//String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
 							//dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
 							break;
 						}

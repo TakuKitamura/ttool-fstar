@@ -44,17 +44,13 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
-import java.util.*;
-import java.nio.*;
-import org.w3c.dom.Element;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.util.ArrayList;
 
-import myutil.*;
-import tmltranslator.*;
+import tmltranslator.TMLCPLibArtifact;
+import tmltranslator.TMLPort;
+import tmltranslator.TMLTask;
 
 public class Buffer	{
 

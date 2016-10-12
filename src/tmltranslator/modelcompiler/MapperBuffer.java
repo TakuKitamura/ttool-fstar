@@ -44,17 +44,25 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
-import java.util.*;
-import java.nio.*;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Vector;
+
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import org.w3c.dom.Element;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 
-import myutil.*;
-import tmltranslator.*;
+import tmltranslator.TMLTask;
 
 public class MapperBuffer extends Buffer	{
 

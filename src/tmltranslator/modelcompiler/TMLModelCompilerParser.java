@@ -47,7 +47,7 @@
  */
 
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
 import tmltranslator.*;
 import java.util.*;
@@ -57,10 +57,10 @@ public class TMLModelCompilerParser {
     
 		public TMLActivityElement element;
 		private ArrayList<TMLModelCompilerError> errors;
-		private ArrayList<TMLTask> mappedTasks;
+	//	private ArrayList<TMLTask> mappedTasks;
 		private TMLMapping tmap;
 		private TMLModeling tmlm;
-		private TMLArchitecture tmla;
+		//private TMLArchitecture tmla;
 		private ArrayList<TMLCPLib> mappedCPLibs;
 
     public final static int ERROR_STRUCTURE = 0;
@@ -76,7 +76,7 @@ public class TMLModelCompilerParser {
 			errors = new ArrayList<TMLModelCompilerError>();
 			tmap = _tmap;
 			tmlm = _tmlm;
-			tmla = _tmla;
+		//	tmla = _tmla;
 			mappedCPLibs = _tmap.getMappedTMLCPLibs();
     }
 

@@ -46,18 +46,7 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
-
-import java.util.*;
-import java.io.*;
-import java.nio.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import myutil.*;
-
-import tmltranslator.*;
-import ui.tmlcompd.*;
-import ui.ConfigurationTTool;
+package tmltranslator.modelcompiler;
 
 public class TMLModelCompilerMakefile	{
 

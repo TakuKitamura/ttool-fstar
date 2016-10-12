@@ -44,9 +44,7 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
-
-import java.util.*;
+package tmltranslator.modelcompiler;
 
 public class MappOperationMEC extends OperationMEC	{
 

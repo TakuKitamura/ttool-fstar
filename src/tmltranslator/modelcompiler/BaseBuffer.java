@@ -44,12 +44,9 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
-import java.util.*;
-import java.nio.*;
-import myutil.*;
-import tmltranslator.*;
+import tmltranslator.TMLTask;
 
 public class BaseBuffer extends Buffer	{
 

@@ -1921,3 +1921,739 @@ public class TMLPECParser	{
 //	}
 
 }	//End of class
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
+
+   ludovic.apvrille AT enst.fr
+   andrea.enrici AT enstr.fr
+
+   This software is a computer program whose purpose is to allow the
+   edition of TURTLE analysis, design and deployment diagrams, to
+   allow the generation of RT-LOTOS or Java code from this diagram,
+   and at last to allow the analysis of formal validation traces
+   obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+   from INRIA Rhone-Alpes.
+
+   This software is governed by the CeCILL  license under French law and
+   abiding by the rules of distribution of free software.  You can  use,
+   modify and/ or redistribute the software under the terms of the CeCILL
+   license as circulated by CEA, CNRS and INRIA at the following URL
+   "http://www.cecill.info".
+
+   As a counterpart to the access to the source code and  rights to copy,
+   modify and redistribute granted by the license, users are provided only
+   with a limited warranty  and the software's author,  the holder of the
+   economic rights,  and the successive licensors  have only  limited
+   liability.
+
+   In this respect, the user's attention is drawn to the risks associated
+   with loading,  using,  modifying and/or developing or reproducing the
+   software by the user in light of its specific status of free software,
+   that may mean  that it is complicated to manipulate,  and  that  also
+   therefore means  that it is reserved for developers  and  experienced
+   professionals having in-depth computer knowledge. Users are therefore
+   encouraged to load and test the software's suitability as regards their
+   requirements in conditions enabling the security of their systems and/or
+   data to be ensured and,  more generally, to use and operate it in the
+   same conditions as regards security.
+
+   The fact that you are presently reading this means that you have had
+   knowledge of the CeCILL license and that you accept its terms.
+
+   /**
+   * Class TMLPECParser: this class parses the Platform Extension Contruct (PEC) file and the files containing the code
+   * snippets that are referenced by the PEC file
+   * Creation: 01/09/2016
+   * @version 1.0 01/09/2016
+   * @author Andrea ENRICI
+   * @see
+   */
+
+package tmltranslator.modelcompiler;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashSet;
+
+import javax.swing.JFrame;
+
+import myutil.TraceManager;
+
+public class TMLPECParser	{
+
+	public String title;
+
+//	private String CR = "\n";
+//	private String CR2 = "\n\n";
+//	private String TAB = "\t";
+//	private String TAB2 = "\t\t";
+//	private String TAB3 = "\t\t\t";
+//	private String TAB4 = "\t\t\t\t";
+	private String SPACE = " ";
+//	private String COLON = ":";
+	private String SEMICOLON = ";";
+//	private String COMMA = ",";
+    private String FORBIDDEN_CHARACTERS = ";|é|è|ê|ë|ù|ü|à|â|ö|ï|ç|\"|\\/|\\%|\\(|\\)|\\.|\\'|\\?|\\!|\\,|\\@|\\$|\\#|\\-";   // Characters forbidden in ID names
+
+    // List of reserved keywords
+    private final static String DMA_KW = "DMA";
+    private final static String CPU_KW = "CPU";
+    private final static String MEMORY_KW = "MEMORY";
+    private final static String HWA_KW = "HWA";
+    private final static String TYPE_KW = "TYPE";
+    private final static String OPERATION_KW = "Operation";
+    private final static String EXECUTE_KW = "executes";
+    private final static String INCLUDE_KW = "#include";
+    private final static String TYPE_INCLUDE_KW = "#typeinclude";
+    private final static String INIT_CATEGORY = "init";
+    private final static String CLEANUP_CATEGORY = "cleanup";
+    private final static String EXECUTION_CATEGORY = "execution";
+
+    // List of error codes
+    public final static int ERROR_SEPARATOR = 0;
+    public final static int ERROR_SEMICOLON = 1;
+    public final static int ERROR_MULTIPLE_DECLARATION = 2;
+    public final static int ERROR_UNVALID_CHARACTERS = 3;
+    public final static int ERROR_FILE_NOT_FOUND = 4;
+    public final static int ERROR_UNDECLARED_UNIT = 5;
+    public final static int ERROR_SYMBOL_NOT_FOUND = 6;
+    public final static int ERROR_INVALID_LINE_TERMINATOR = 7;
+    public final static int ERROR_INVALID_CATEGORY_TYPE = 8;
+    public final static int ERROR_INVALID_STATEMENT = 9;
+    public final static int ERROR_INVALID_TYPE = 10;
+    public final static int ERROR_INVALID_IDENTIFIER = 11;
+    public final static int ERROR_INVALID_PARAMETER_DECLARATION = 12;
+    public final static int ERROR_UNHANDLED = 13;
+
+    public final static String ERROR = "ERROR";
+
+    // Parser data structures
+    private ArrayList<String> cpus;
+    private ArrayList<String> dmas;
+    private ArrayList<String> memories;
+    private ArrayList<String> hwas;
+
+    private ArrayList<String> operations;
+    private ArrayList<ArrayList<String>> unitsOps;
+
+    private HashSet<String> typesDataBase;
+    private ArrayList<String> includeTypeLines;
+
+	private ArrayList<TMLPECParserError> errors;
+	//private ArrayList<TMLPECParserError> warnings;
+
+    private File file;
+
+    private ArrayList<CFunctionPrototype> initializationFunctions;
+    private ArrayList<CFunctionPrototype> executionFunctions;
+    private ArrayList<CFunctionPrototype> cleanupFunctions;
+
+	//private String debugFileName;
+	PrintWriter outputStream;
+
+    JFrame frame;
+
+	public TMLPECParser( File _file )	{
+        file = _file;
+		init();
+	}
+
+    private void init() {
+        cpus = new ArrayList<String>();
+        dmas = new ArrayList<String>();
+        memories = new ArrayList<String>();
+        hwas = new ArrayList<String>();
+        operations = new ArrayList<String>();
+        unitsOps = new ArrayList<ArrayList<String>>();
+        errors = new ArrayList<TMLPECParserError>();
+        //warnings = new ArrayList<TMLPECParserError>();
+        initializationFunctions = new ArrayList<CFunctionPrototype>();
+        executionFunctions = new ArrayList<CFunctionPrototype>();
+        cleanupFunctions = new ArrayList<CFunctionPrototype>();
+        includeTypeLines = new ArrayList<String>();
+        typesDataBase = new HashSet<String>();
+    }
+
+    public void parsePEC()  {
+
+        // Temporary data structures to store the three sections of a .pec file
+        ArrayList<String> unitDeclarationLines = new ArrayList<String>();
+        ArrayList<String> opLines = new ArrayList<String>();
+        ArrayList<String> unitToOpsLines = new ArrayList<String>();
+        ArrayList<String> includeLines = new ArrayList<String>();
+        String id;
+
+        Charset charset = Charset.forName("US-ASCII");
+        try( BufferedReader reader = Files.newBufferedReader( Paths.get( file.getAbsolutePath() ), charset ) ) {
+            int lineCounter = 0;
+            String line = null;
+            while( (line = reader.readLine()) != null ) {
+                lineCounter++;
+                if( line.length() > 0 ) { // Filter empty lines
+                    if( line.charAt(0) != '%' ) {   // Ignore lines starting with % as they are comments
+                        // So far there are three cases: diplodocus-to-unit mapping, operation declatation, operation-to-unit mapping
+                        // Therefore trim the file in 3 separate data structures, then parse each of these
+                        // data-structures
+                        String arr[] = line.split( SPACE );
+                        String word = arr[0];
+                        switch( word )  {
+                            case OPERATION_KW:
+                                opLines.add( String.valueOf(lineCounter) + " * " + line );
+                                break;
+                            case DMA_KW:
+                                unitDeclarationLines.add( String.valueOf(lineCounter) + " * " + line );
+                                break;
+                            case CPU_KW:
+                                unitDeclarationLines.add( String.valueOf(lineCounter) + " * " + line );
+                                break;
+                            case HWA_KW:
+                                unitDeclarationLines.add( String.valueOf(lineCounter) + " * " + line );
+                                break;
+                            case MEMORY_KW:
+                                unitDeclarationLines.add( String.valueOf(lineCounter) + " * " + line );
+                                break;
+                            case INCLUDE_KW:
+                                includeLines.add( String.valueOf(lineCounter) + " * " + line );
+                                break;
+                            case TYPE_INCLUDE_KW:
+                                includeTypeLines.add( String.valueOf(lineCounter) + " * " + line );
+                                break;
+                            default:
+                                if( arr[1].equals( EXECUTE_KW ) )   {
+                                    unitToOpsLines.add( String.valueOf(lineCounter) + " * " + line );
+                                }
+                                else    {
+                                    addError( "Unrecognized error in " + file.getAbsolutePath() + ", at line " + String.valueOf(lineCounter) + ":" + SPACE + arr[1], ERROR_UNHANDLED );
+                                }
+                                break;
+                        }
+                        // Associate each unit to an index that will be used in the data structure unitsOps to access
+                        // the list of operations that are associated to that unit, e.g., FEP_PSS has index 0 and
+                        // operations FFT, CWL, CWP, CWA, CWM, CWS, MOV.
+                        // Then unitsOps[0] contains the list FFT, CWL, CWP, CWA, CWM, CWS, MOV*
+                    }
+                }
+            }   // End of while loop
+            // Parse the lines the include the declaration of data types
+            for( String s: includeTypeLines )   {
+                int lineCnt = Integer.parseInt( s.split( " \\* " )[0] );
+                String s1 = s.split( "\\* " )[1].trim();
+                String[] tokensArray = s1.split( SPACE );
+               // String keyword = tokensArray[0];
+                for( int i = 1; i < tokensArray.length; i++ )   {
+                    String token = tokensArray[i];
+                    if( (token.charAt(token.length()-1) == ',') || (token.charAt(token.length()-1) == ';') )   {
+                        token = token.substring(0,token.length()-1);
+                        if( parseIdentifier( token ).equals(ERROR) )    {
+                            addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ": + " + token + " invalid data type" , ERROR_INVALID_TYPE );
+                        }
+                        else    {
+                            typesDataBase.add( token );
+                        }
+                    }
+                    else    {
+                        addError( "Error in " + file.getAbsolutePath() + ", at line " + String.valueOf(lineCounter) + ":" + SPACE + token, ERROR_SEPARATOR );   // ERROR: missing comma separator
+                    }
+                }
+            }
+            // Parse the declaration of operations: at this point the only certain thing is that the line begins with
+            // the keyword Operation
+            for( String s: opLines )    {
+                int lineCnt = Integer.parseInt( s.split( " \\* " )[0] );
+                String s1 = s.split( "\\* " )[1];
+                String[] opArray = s1.split( SPACE );
+                for( int i = 1; i < opArray.length; i++ )    {  // i = 1 to skip the keyword Operation
+                    char c = opArray[i].charAt( opArray[i].length()-1 );
+                    if( c == ',' )   {
+                        id = parseIdentifier( opArray[i] );
+                        if( id.equals(ERROR) )  {
+                            addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                        }
+                        else    {
+                            operations.add(id);
+                        }
+                    }
+                    else    {   // Test if the last character of the identier is a semicolon
+                        if( (c == ';') && (i != (opArray.length-1)) )    {
+                            addError( "Error in " + file.getAbsolutePath() + ", at line " + String.valueOf(lineCounter) + ":" + SPACE + opArray[i], ERROR_SEMICOLON );   // ERROR: semicolon has been used as a wrong separator
+                        }
+                        else    {
+                            if( (c == ';') && (i == (opArray.length-1)) )    {
+                                id = parseIdentifier( opArray[i] );
+                                if( id.equals(ERROR) )  {
+                                    addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                                }
+                                else    {
+                                    operations.add(id);
+                                }
+                            }
+                            else    {   // ERROR: the identifier is not followed by a valid separator
+                                addError( "Error in " + file.getAbsolutePath() + ", at line " + String.valueOf(lineCounter) + ":" + SPACE + opArray[i], ERROR_SEPARATOR );
+                            }
+                        }
+                    }
+                }
+            }
+            // Parse the declaration of units: at this point the only certain thing is that the line begins with a valid keyword
+            for( String s: unitDeclarationLines )    {
+                int lineCnt = Integer.parseInt( s.split( " \\* " )[0] );
+                String s1 = s.split( "\\* " )[1];
+                String[] unitArray = s1.split( SPACE );
+                for( int i = 1; i < unitArray.length; i++ )    {  // i = 1 to skip the keyword Operation
+                    char c = unitArray[i].charAt( unitArray[i].length()-1 );
+                    if( c == ',' )   {
+                        switch( unitArray[0] )  {
+                            case DMA_KW:
+                                id = parseIdentifier( unitArray[i] );
+                                if( id.equals(ERROR) )  {
+                                    addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                                }
+                                else    {
+                                    dmas.add(id);
+                                }
+                                break;
+                            case MEMORY_KW:
+                                id = parseIdentifier( unitArray[i] );
+                                if( id.equals(ERROR) )  {
+                                    addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                                }
+                                else    {
+                                    memories.add(id);
+                                }
+                                break;
+                            case CPU_KW:
+                                id = parseIdentifier( unitArray[i] );
+                                if( id.equals(ERROR) )  {
+                                    addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                                }
+                                else    {
+                                    cpus.add(id);
+                                }
+                                break;
+                            case HWA_KW:
+                                id = parseIdentifier( unitArray[i] );
+                                if( id.equals(ERROR) )  {
+                                    addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                                }
+                                else    {
+                                    hwas.add(id);
+                                }
+                                break;
+                        }
+                    }
+                    else    {   // Test if the last character of the identier is a semicolon
+                        if( (c == ';') && (i != (unitArray.length-1)) )    {
+                            addError( "Error in " + file.getAbsolutePath() + ", at line " + String.valueOf(lineCounter) + ":" + SPACE + unitArray[i], ERROR_SEMICOLON );   // ERROR: semicolon has been used as a wrong separator
+                        }
+                        else    {
+                            if( (c == ';') && (i == (unitArray.length-1)) )    {
+                                id = parseIdentifier( unitArray[i] );
+                                if( id.equals(ERROR) )  {
+                                    addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                                }
+                                else    {
+                                    operations.add(id);
+                                }
+                                switch( unitArray[0] )  {
+                                    case DMA_KW:
+                                        id = parseIdentifier( unitArray[i] );
+                                        if( id.equals(ERROR) )  {
+                                            addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                                        }
+                                        else    {
+                                            dmas.add(id);
+                                        }
+                                        break;
+                                    case MEMORY_KW:
+                                        id = parseIdentifier( unitArray[i] );
+                                        if( id.equals(ERROR) )  {
+                                            addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                                        }
+                                        else    {
+                                            memories.add(id);
+                                        }
+                                        break;
+                                    case CPU_KW:
+                                        id = parseIdentifier( unitArray[i] );
+                                        if( id.equals(ERROR) )  {
+                                            addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                                        }
+                                        else    {
+                                            cpus.add(id);
+                                        }
+                                        break;
+                                    case HWA_KW:
+                                        id = parseIdentifier( unitArray[i] );
+                                        if( id.equals(ERROR) )  {
+                                            addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                                        }
+                                        else    {
+                                            hwas.add(id);
+                                        }
+                                        break;
+                                }
+                            }
+                            else    {   // ERROR: the identifier is not followed by a valid separator
+                                addError( "Error in " + file.getAbsolutePath() + ", at line " + String.valueOf(lineCounter) + ":" + SPACE + unitArray[i], ERROR_SEPARATOR );
+                            }
+                        }
+                    }
+                }
+            }
+            // Parse the mapping of operations to units
+            for( String s: unitToOpsLines )    {
+                int lineCnt = Integer.parseInt( s.split( " \\* " )[0] );
+                String s1 = s.split( "\\* " )[1];
+                //String[] unitArray = s1.split( SPACE );
+                String[] mapArray = s1.split( SPACE );
+                ArrayList<String> mappingLine = new ArrayList<String>();
+                mappingLine.add( mapArray[0] );
+                id = parseIdentifier( mapArray[0] );
+                if( id.equals(ERROR) )  {
+                    addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ": " + id + " invalid parameter type" , ERROR_INVALID_TYPE );
+                }
+                /*else    {
+                    mappingLine.add(id);
+                }*/
+                for( int i = 2; i < mapArray.length; i++ )    {  // i = 1 to skip the keyword Operation
+                    char c = mapArray[i].charAt( mapArray[i].length()-1 );
+                    if( c == ',' )   {
+                        id = parseIdentifier( mapArray[i] );
+                        if( id.equals(ERROR) )  {
+                            addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ": " + id + " invalid parameter type" , ERROR_INVALID_TYPE );
+                        }
+                        else    {
+                            mappingLine.add(id);
+                        }
+                    }
+                    else    {   // Test if the last character of the identier is a semicolon
+                        if( (c == ';') && (i != (mapArray.length-1)) )    {
+                            addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", wrong semicolon: " + mapArray[i], ERROR_SEMICOLON );   // ERROR: semicolon has been used as a wrong separator
+                        }
+                        else    {
+                            if( (c == ';') && (i == (mapArray.length-1)) )    {
+                                id = parseIdentifier( mapArray[i] );
+                                if( id.equals(ERROR) )  {
+                                    addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ": " + id + " invalid parameter type" , ERROR_INVALID_TYPE );
+                                }
+                                else    {
+                                    mappingLine.add(id);
+                                }
+                            }
+                            else    {   // ERROR: the identifier is not followed by a valid separator
+                                addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", no valid separator : " + mapArray[i], ERROR_SEPARATOR );
+                            }
+                        }
+                    }
+                }
+                unitsOps.add( mappingLine );
+            }
+            // Parse the include lines for single files of code snippets associated to units
+            for( String s: includeLines )   {
+                int lineCnt = Integer.parseInt( s.split( " \\* " )[0] );
+                String s1 = s.split( "\\* " )[1];
+                String[] tokensArray = s1.split( SPACE );
+                File f1 = new File( tokensArray[1] );
+                String keyword = tokensArray[2];
+                String unit = tokensArray[3];
+                if( !f1.exists() )    {
+                    addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", file " + f1.getAbsolutePath() + " not found", ERROR_FILE_NOT_FOUND );
+                }
+                else    {   // Parse the content of each file containing file snippets (C function prototypes)
+                    parseCodeSnippet( f1 );
+                }
+                if( !cpus.contains( unit ) && !dmas.contains( unit ) && !memories.contains( unit ) && !hwas.contains( unit ) )   {
+                    addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", unit " + unit + " has not been declared", ERROR_UNDECLARED_UNIT );
+                }
+                if( !keyword.equals( "for" ) )  {
+                    addError( "Error in " + file.getAbsolutePath() + " at line " + String.valueOf(lineCnt) + ", symbol not found: " + keyword, ERROR_SYMBOL_NOT_FOUND );
+                }
+            }
+        } catch( IOException x ) {
+                System.err.format( "IOException: %s%n", x );
+        }
+        TraceManager.addDev( "Printing the data base of types:" );
+        for( String dt: typesDataBase )    {
+            TraceManager.addDev( dt );
+        }
+        TraceManager.addDev( "Printing parsed code snippets INITIALIZATION:" );
+        for( CFunctionPrototype function: initializationFunctions )    {
+            TraceManager.addDev( function.toString() );
+        }
+        TraceManager.addDev( "Printing parsed code snippets EXECUTION:" );
+        for( CFunctionPrototype function: executionFunctions )    {
+            TraceManager.addDev( function.toString() );
+        }
+        TraceManager.addDev( "Printing parsed code snippets CLEANUP:" );
+        for( CFunctionPrototype function: cleanupFunctions )    {
+            TraceManager.addDev( function.toString() );
+        }
+    }
+
+    private void parseCodeSnippet( File f )  {
+        // boolean flags used to select the storage of code snippets into the appropriate data structure
+        boolean init_category = false;
+        boolean execution_category = false;
+        boolean cleanup_category = false;
+
+        Charset charset = Charset.forName("US-ASCII");
+        try( BufferedReader reader = Files.newBufferedReader( Paths.get( f.getAbsolutePath() ), charset ) ) {
+            int lineCounter = 0;
+            String line = null;
+            while( (line = reader.readLine()) != null ) {
+                lineCounter++;
+                if( line.length() > 0 ) { // Filter empty lines
+                    if( line.charAt(0) != '%' ) {   // Ignore lines starting with % as they are comments
+                        // Parse the line that defines the category of code snippets
+                        if( line.substring(0,4).equals(TYPE_KW) )    {   // ubstring() cuts from startIndex to endIndex-1
+                            String[] arr = line.split(" ");
+                            if( arr.length != 2 ) {
+                                addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                            }
+                            else    {
+                                switch( arr[1] )    {
+                                    case INIT_CATEGORY:
+                                        init_category = true;
+                                        execution_category = false;
+                                        cleanup_category = false;
+                                        break;
+                                    case CLEANUP_CATEGORY:
+                                        init_category = false;
+                                        execution_category = false;
+                                        cleanup_category = true;
+                                        break;
+                                    case EXECUTION_CATEGORY:
+                                        init_category = false;
+                                        execution_category = true;
+                                        cleanup_category = false;
+                                        break;
+                                    default:
+                                        addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid category type" , ERROR_INVALID_CATEGORY_TYPE );
+                                        break;
+                                }
+                            }
+                            
+                        }
+                        // Parse the line for a code snippet
+                        else    {
+                            // Check that only one flag is active per each line being parsed
+                            if( init_category && execution_category && cleanup_category )   {
+                                addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid category type" , ERROR_INVALID_CATEGORY_TYPE );
+                            }
+                            if( init_category ) {
+                                if( execution_category || cleanup_category )    {
+                                    addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid category type" , ERROR_INVALID_CATEGORY_TYPE );
+                                }
+                                else    {
+                                    CFunctionPrototype func = parseFunctionPrototype( f, line, lineCounter ); // return an ADT for a C function protype
+                                    initializationFunctions.add( func );
+                                }
+                            }
+                            if( execution_category )    {
+                                if( init_category || cleanup_category )    {
+                                    addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid category type" , ERROR_INVALID_CATEGORY_TYPE );
+                                }
+                                else    {
+                                    CFunctionPrototype func = parseFunctionPrototype( f, line, lineCounter );
+                                    executionFunctions.add( func );
+                                }
+                            }
+                            if( cleanup_category )    {
+                                if( init_category || execution_category )    {
+                                    addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid category type" , ERROR_INVALID_CATEGORY_TYPE );
+                                }
+                                else    {
+                                    CFunctionPrototype func = parseFunctionPrototype( f, line, lineCounter );
+                                    cleanupFunctions.add( func );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch( IOException x ) {
+                System.err.format( "IOException: %s%n", x );
+        }
+        return;
+    }
+
+    // This routine must be completed with more checks and it must return a complete object CFunctionPrototype!
+    private CFunctionPrototype parseFunctionPrototype( File f, String line, int lineCounter )   {
+        String trailingString = "#";
+        String returnType = "";
+        String functionName = "";
+       // String token = "";
+        String[] tokens;
+        String name = "";
+        String type = "";
+        String parameterList = "";
+        CFunctionPrototype functionPrototype = new CFunctionPrototype( line ); // Temporary object creation
+
+        int index = line.indexOf( SPACE );
+
+        if( index == -1 )   {
+            addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+            return new CFunctionPrototype( "ERROR_INVALID_STATEMENT" );    // Stop parsing when error occurs
+        }
+        else    {
+            returnType = line.substring(0,index);  // If there is no match the input string is returned
+            // TO DO: must distinguish the case of a function returning a pointer. Check returnType and functionName!
+            /*if( returnType.charAt(returnType.length()-1) == '*' )   {
+            }*/
+            if( parseIdentifier( returnType ).equals(ERROR) )   {
+                addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                return new CFunctionPrototype( "ERROR_INVALID_STATEMENT" );
+            }
+            else    {
+                if( !verifyType(returnType) )    {
+                    addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ": " + returnType + " invalid return type" , ERROR_INVALID_TYPE );
+                }
+                else    {
+                    functionPrototype.setReturnType( returnType );
+                }
+            }
+        }
+        line = line.substring(index+1,line.length());
+        index = line.indexOf("(");
+        if( index == -1 )   {
+            addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+            return new CFunctionPrototype( "ERROR_INVALID_STATEMENT" );
+        }
+        else    {
+            functionName = line.substring(0,index);
+            if( parseIdentifier( functionName).equals(ERROR) )  {
+                addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid statement" , ERROR_INVALID_STATEMENT );
+                return new CFunctionPrototype( "ERROR_INVALID_STATEMENT" );
+            }
+            else    {
+                functionPrototype.setFunctionName( functionName );
+            }
+            parameterList = line.substring(index+1,line.indexOf(")"));
+            tokens = parameterList.split(",");  // Each token is a pair type - parameter
+            for( int i = 0; i < tokens.length; i++ )    {
+                tokens[i] = tokens[i].trim();   // Eliminate leading and trailing whitespaces
+                if( tokens[i].split( SPACE ).length == 2 )  {
+                    type = tokens[i].split( SPACE )[0];
+                    name = tokens[i].split( SPACE )[1];
+                    if( (type.charAt(type.length()-1) == '*') )    {  // Test if the parameter type is an address or an array
+                        type = parseIdentifier( type.substring(0,type.length()-1) ) + '*';
+                        if( type.equals(ERROR) )   {
+                            addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ": " + type + " invalid parameter type" , ERROR_INVALID_TYPE );
+                            return new CFunctionPrototype( "ERROR_INVALID_STATEMENT" );
+                        }
+                    }
+                    else    {
+                        if( type.substring(type.length()-2,type.length()-1).equals("[]") )  {   // Test if the parameter type is an array
+                            type = parseIdentifier( type.substring(type.length()-2,type.length()-1) ) + "[]";
+                            if( type.equals(ERROR) )   {
+                                addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ": " + type + " invalid parameter type" , ERROR_INVALID_TYPE );
+                                return new CFunctionPrototype( "ERROR_INVALID_STATEMENT" );
+                            }
+                        }
+                        else    {
+                            type = parseIdentifier( type );
+                            if( !verifyType( type ) )    {
+                                addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ": " + type + " invalid parameter identifier" , ERROR_INVALID_TYPE );
+                            }
+                        }
+                    }
+                    if( name.charAt(0) == '*')    {   // Test if the parameter name is an address
+                        name = '*' + parseIdentifier( name.substring(1,name.length()) );
+                        if( name.equals(ERROR) )   {
+                            addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ": " + name + " invalid identifier" , ERROR_INVALID_TYPE );
+                            return new CFunctionPrototype( "ERROR_INVALID_STATEMENT" );
+                        }
+                    }
+                    else    {
+                        if( name.substring(0,1).equals("[]") )  {   // Test if the parameter name is an array
+                            name = parseIdentifier( name.substring(2,name.length()-1) ) + "[]";
+                            if( name.equals(ERROR) )   {
+                                addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ": " + name + " invalid parameter type" , ERROR_INVALID_TYPE );
+                                return new CFunctionPrototype( "ERROR_INVALID_STATEMENT" );
+                            }
+                        }
+                        name = parseIdentifier( name );
+                    }
+                    functionPrototype.setParameter( type, name );
+                }
+                else    {
+                    addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid parameter declaration" , ERROR_INVALID_PARAMETER_DECLARATION );
+                    return new CFunctionPrototype( "ERROR_INVALID_STATEMENT" );
+                }
+            }
+        }
+        index = line.indexOf(")");
+        line = line.substring(index+1,line.length());
+        if( index == -1 )   {
+            addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid line terminator" , ERROR_INVALID_LINE_TERMINATOR );
+            return new CFunctionPrototype( "ERROR_INVALID_STATEMENT" );
+        }
+        else {
+            trailingString = line.substring(0,line.length());
+            if( !trailingString.equals(SEMICOLON) )   {
+                addError( "Error in " + f.getAbsolutePath() + " at line " + String.valueOf(lineCounter) + ", invalid line terminator" , ERROR_INVALID_LINE_TERMINATOR );
+                return new CFunctionPrototype( "ERROR_INVALID_STATEMENT" );
+            }
+        }
+        return functionPrototype;
+    }
+
+    // Parse the identifier passed as 1rst parameter and return the identifier if correct or ERROR string
+    private String parseIdentifier( String id )   {
+        
+        // Remove trailing character: comma or semicolon
+        if( (id.charAt( id.length()-1) == ',') || (id.charAt( id.length()-1) == ';') )  {
+            id = id.substring( 0, id.length()-1 );
+        }
+        // Test that it does not contain special characters at the beginning and at the end
+        if( id.split( FORBIDDEN_CHARACTERS ).length == 1 )  {   // There are no special characters
+            return id;
+        }
+        else    {   // ERROR: the identifier contains special characters
+            return ERROR;
+        }
+    }
+
+    private boolean verifyType( String type )   {
+        if( typesDataBase.contains( type ) )    {
+            return true;
+        }
+        return false;
+    }
+
+    public void addError( String message, int type )	{
+        TMLPECParserError error = new TMLPECParserError( type );
+        error.message = message;
+        errors.add( error );
+    }
+
+  	public ArrayList<TMLPECParserError> getErrors() {
+        return errors;
+    }
+
+    public boolean hasErrors()	{
+        if( errors.size() > 0 )	{
+            return true;
+        }
+        return false;
+    }
+
+    // Accessor methods to return data structures of code snippets
+    public ArrayList<CFunctionPrototype> getInitializationFunctions()   {
+        return initializationFunctions;
+    }
+
+    public ArrayList<CFunctionPrototype> getExecutionFunctions()    {
+        return executionFunctions;
+    }
+
+    public ArrayList<CFunctionPrototype> getCleanupFunctions()  {
+        return cleanupFunctions;
+    }
+
+}	//End of class

@@ -44,12 +44,10 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
-import java.util.*;
-import java.nio.*;
-import myutil.*;
-import tmltranslator.*;
+import tmltranslator.TMLChannel;
+import tmltranslator.TMLEvent;
 
 public class Signal	{
 
@@ -59,8 +57,8 @@ public class Signal	{
 	public String CR = "\n";
 	public String SC = ";";
 	
-	private boolean status = false;
-	private Buffer buffPointer = null;
+	//private boolean status = false;
+	//private Buffer buffPointer = null;
 	private String name;
 	private TMLChannel channel;
 	private TMLEvent event;

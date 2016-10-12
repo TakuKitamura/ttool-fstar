@@ -44,10 +44,10 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
-import java.util.*;
-import myutil.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class DoubleDmaMEC extends CPMEC	{
 
@@ -73,8 +73,8 @@ public class DoubleDmaMEC extends CPMEC	{
 	private String srcAddress1 = USER_TO_DO;
 	private String dstAddress2 = USER_TO_DO;
 	private String srcAddress2 = USER_TO_DO;
-	private String memoryBaseAddress1 = USER_TO_DO;
-	private String memoryBaseAddress2 = USER_TO_DO;
+//	private String memoryBaseAddress1 = USER_TO_DO;
+//	private String memoryBaseAddress2 = USER_TO_DO;
 	private String ctxName1 = USER_TO_DO;
 	private String ctxName2 = USER_TO_DO;
 
@@ -105,7 +105,7 @@ public class DoubleDmaMEC extends CPMEC	{
 			}
 		}
 
-		int dstMemoryType = dstMemoryTypes.get(0).intValue();
+		//int dstMemoryType = dstMemoryTypes.get(0).intValue();
 		ArchUnitMEC archMEC = archMECs.get(0);
 
 		if( attributes.size() > 0 )	{

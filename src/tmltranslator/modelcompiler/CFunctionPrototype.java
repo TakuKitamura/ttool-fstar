@@ -1,7 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
-
-   ludovic.apvrille AT enst.fr
-   andrea.enrici AT enstr.fr
+/**Copyright or (C)
 
    This software is a computer program whose purpose is to allow the
    edition of TURTLE analysis, design and deployment diagrams, to
@@ -37,37 +34,65 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class MapperMEC, Model Extension Construct (MEC) class for Embb Mapper operations
-   * Creation: 05/02/2014
-   * @version 1.0 05/02/2014
+   * Class CFunctionPrototype: an Abstract Data Type for the prototype of a C function
+   * Creation: 05/10/2016
+   * @version 1.0 05/10/2016
    * @author Andrea ENRICI
    * @see
    */
 
 package tmltranslator.modelcompiler;
 
-import java.util.*;
+import java.util.ArrayList;
 
-public class FepMEC extends ArchUnitMEC	{
+public class CFunctionPrototype	{
 
-	public static final String Ctx_cleanup = "fep_ctx_cleanup";
+    private final static String SPACE = " ";
+    private final static String COMMA = ",";
+    private final static String SEMICOLON = ";";
+   // private String declarationLine;
+    private String returnType;
+    private String functionName;
+    private ArrayList<CVariable> parameters;
 
-	private static String[] opArr = { "CWA", "CWP", "CWM", "CWL", "SUM", "FFT" };
-	public static final Vector<String> operationsList = new Vector<String>( Arrays.asList( opArr ) );
-	public static final int CWAIndex = 0;
-	public static final int CWPIndex = 1;
-	public static final int CWMIndex = 2;
-	public static final int CWLIndex = 3;
-	public static final int SUMIndex = 4;
-	public static final int FFTIndex = 5;
+    public CFunctionPrototype( String _line ) {
+       // declarationLine = _line;
+        init();
+    }
 
-	public FepMEC()	{
+    private void init() {
+        returnType = new String("");
+        functionName = new String("");
+        parameters = new ArrayList<CVariable>();
+    }
 
-		index = 1;
-		context = "FEP_CONTEXT";
-		initCtxRoutine = "fep_ctx_init";
-		localMemoryPointer = "fep_mss";
-		ctxCleanupRoutine = "fep_ctx_cleanup";
-	}
+    public void setReturnType( String s )   {
+        returnType = s;
+    }
 
-}	//End of class
+    public String getReturnType()   {
+        return returnType;
+    }
+
+    public void setFunctionName( String s )   {
+        functionName = s;
+    }
+
+    public String getFunctionName()   {
+        return functionName;
+    }
+
+    public void setParameter( String type, String name )  {
+        parameters.add( new CVariable( type, name ) );
+    }
+
+    @Override public String toString()    {
+        StringBuffer strBuf = new StringBuffer( returnType + SPACE + functionName + "(" );
+        for( int i = 0; i < parameters.size()-1; i++ ) {
+            strBuf.append( SPACE + parameters.get(i).toString() + COMMA );
+        }
+        strBuf.append( SPACE + parameters.get(parameters.size()-1).toString() );
+        strBuf.append( SPACE + ")" + SEMICOLON );
+        return strBuf.toString();
+    }
+}

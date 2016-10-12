@@ -44,13 +44,12 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
-import java.util.*;
-import java.nio.*;
-import myutil.*;
+import java.util.ArrayList;
 
-import tmltranslator.*;
+import tmltranslator.HwNode;
+import tmltranslator.TMLTask;
 
 public class Operation	{
 
@@ -62,8 +61,8 @@ public class Operation	{
 	private String name = "";
 	private TMLTask fTask;
 	private TMLTask xTask;
-	private boolean prex;
-	private boolean postex;
+//	private boolean prex;
+//	private boolean postex;
 	private ArrayList<Signal> inSignals = new ArrayList<Signal>();
 	private Signal outSignal;
 	private Buffer inBuffer;

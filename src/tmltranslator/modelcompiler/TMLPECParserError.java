@@ -46,9 +46,7 @@
  */
 
 
-package tmltranslator.modelcompiler;;
-
-import tmltranslator.*;
+package tmltranslator.modelcompiler;
 
 public class TMLPECParserError {
     

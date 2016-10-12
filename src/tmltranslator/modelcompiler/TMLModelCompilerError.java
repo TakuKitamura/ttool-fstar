@@ -47,7 +47,7 @@
  */
 
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
 import tmltranslator.*;
 

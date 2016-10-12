@@ -44,10 +44,7 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
-
-import java.util.*;
-//import Ctranslator.*;
+package tmltranslator.modelcompiler;
 
 public class AdaifOperationMEC extends OperationMEC	{
 

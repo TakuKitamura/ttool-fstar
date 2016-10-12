@@ -44,12 +44,7 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
-
-import java.util.*;
-import java.nio.*;
-import myutil.*;
-//import Ctranslator.*;
+package tmltranslator.modelcompiler;
 
 public abstract class CPMEC	{
 	

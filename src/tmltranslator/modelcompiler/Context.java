@@ -44,28 +44,20 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
-
-import java.util.*;
-import java.nio.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import myutil.*;
-
-import tmltranslator.*;
+package tmltranslator.modelcompiler;
 
 public abstract class Context	{
 
 	private String code = "";
-	private String declaration = "";
-	private String CR = "\n";
-	private String CR2 = "\n\n";
-	private String TAB = "\t";
-	private String TAB2 = "\t\t";
-	private String TAB3 = "\t\t\t";
-	private String TAB4 = "\t\t\t\t";
-	private String SP = " ";
-	private String SC = ";";
+//	private String declaration = "";
+//	private String CR = "\n";
+//	private String CR2 = "\n\n";
+//	private String TAB = "\t";
+//	private String TAB2 = "\t\t";
+//	private String TAB3 = "\t\t\t";
+//	private String TAB4 = "\t\t\t\t";
+//	private String SP = " ";
+//	private String SC = ";";
 
 	public Context()	{
 
