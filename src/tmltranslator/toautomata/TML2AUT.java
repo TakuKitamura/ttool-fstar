@@ -57,9 +57,9 @@ public class TML2AUT {
     //private static int gateId;
     
     private TMLModeling tmlmodeling;
-    private LinkedList automatas;
+    private LinkedList<Automata> automatas;
     
-    private boolean debug;
+    //private boolean debug;
     
     
     public static String AUT_EXTENSION = "aut";
@@ -71,13 +71,13 @@ public class TML2AUT {
     }
     
     // Returns a list of all file names ..
-    public LinkedList saveInFiles(String path) throws FileException {
+    public LinkedList<String> saveInFiles(String path) throws FileException {
         //print();
         
-        ListIterator iterator = automatas.listIterator();
+        ListIterator<Automata> iterator = automatas.listIterator();
         Automata aut;
         String name;
-        LinkedList ll = new LinkedList();
+        LinkedList<String> ll = new LinkedList<String>();
         
         while(iterator.hasNext()) {
             aut = (Automata)(iterator.next());
@@ -92,21 +92,21 @@ public class TML2AUT {
     
     public void print() {
         // Print each automatas
-        ListIterator iterator = automatas.listIterator();
+        ListIterator<Automata> iterator = automatas.listIterator();
         Automata aut;
         
         while(iterator.hasNext()) {
-            aut = (Automata)(iterator.next());
+            aut = iterator.next();
             System.out.println("Automata: " + aut.getName());
             System.out.println(aut.toAUT());
         }
     }
     
     public void generateAutomatas(boolean _debug) {
-        debug = _debug;
+  //      debug = _debug;
 		tmlmodeling.removeAllRandomSequences();
 		
-        automatas = new LinkedList();
+        automatas = new LinkedList<Automata>();
         
         // Generate one automata per TMLTask
         generateAUTTMLTasks();
@@ -123,16 +123,16 @@ public class TML2AUT {
     }
     
     public void generateAUTTMLTasks() {
-        ListIterator iterator = tmlmodeling.getTasks().listIterator();
+        ListIterator<TMLTask> iterator = tmlmodeling.getTasks().listIterator();
         while(iterator.hasNext()) {
-            automatas.add(generateAUTTMLTask((TMLTask)(iterator.next())));
+            automatas.add( generateAUTTMLTask( iterator.next() ) );
         }
     }
     
     public Automata generateAUTTMLTask(TMLTask task) {
         Automata aut = new Automata();
         aut.setName(task.getName());
-        TMLRequest request;
+    //    TMLRequest request;
         State s, init;
         Transition t;
         String action;
@@ -140,7 +140,7 @@ public class TML2AUT {
         init = aut.getInitState();
         
         if (task.isRequested()) {
-            request = task.getRequest();
+       //     request = task.getRequest();
             s = aut.newState();
             action = "waitInit " + task.getName() + "(";
             for (int i=0; i<task.getRequest().getNbOfParams(); i++) {
@@ -359,9 +359,10 @@ public class TML2AUT {
     
     private void removeImmTransitions(Automata aut) {
         Transition t1, t2;
-        LinkedList states;
+        LinkedList<State> states;
         State s1, s2;
-        ListIterator st, tr;
+        ListIterator<State> st;
+        ListIterator<Transition> tr;
         
         states = aut.getStates();
         st = states.listIterator();
