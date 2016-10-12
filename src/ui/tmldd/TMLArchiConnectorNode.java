@@ -46,20 +46,30 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmldd;
 
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
+import javax.swing.JFrame;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.*;
-import ui.cd.*;
-import ui.window.*;
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import ui.IconManager;
+import ui.MalformedModelingException;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
+import ui.TGConnector;
+import ui.WithAttributes;
+import ui.window.JDialogTMLConnectorNode;
 
 public  class TMLArchiConnectorNode extends TGConnector implements WithAttributes {
     protected int arrowLength = 10;
@@ -78,9 +88,9 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
     
     public boolean editOndoubleClick(JFrame frame) {
         JDialogTMLConnectorNode dialog = new JDialogTMLConnectorNode(frame, "Setting connector attributes", this);
-		dialog.setSize(350, 300);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+		//dialog.setSize(350, 300);
+        GraphicLib.centerOnParent(dialog, 350, 300 );
+        dialog.setVisible( true ); // blocked until dialog has been closed
         
 		if (!dialog.isRegularClose()) {
 			return false;
@@ -141,7 +151,7 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+            //int t1id;
 			String prio;
             
             for(int i=0; i<nl.getLength(); i++) {
@@ -177,20 +187,23 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
         }
     }
 	
-        public boolean eventOnPopup(ActionEvent e) {
+    public boolean eventOnPopup(ActionEvent e) {
         String s = e.getActionCommand();
-	TraceManager.addDev("action: " + s);
+        TraceManager.addDev("action: " + s);
+      
         if (s.indexOf(NO_SPY) > -1) {
-	    hasASpy = false;
-	    tdp.repaint();
+        	hasASpy = false;
+        	tdp.repaint();
         }
-	if (s.indexOf(ADD_SPY) > -1) {
-	    hasASpy = true;
-	    tdp.repaint();
+	
+        if (s.indexOf(ADD_SPY) > -1) {
+        	hasASpy = true;
+        	tdp.repaint();
         } 
             
         return true;
     }
+    
     public TMLArchiCPUNode getOriginNode() {
         TGComponent tgc = tdp.getComponentToWhichBelongs(getTGConnectingPointP1());
         if (tgc instanceof TMLArchiCPUNode) {
