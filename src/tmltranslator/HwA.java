@@ -45,9 +45,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator;
 
-import java.util.*;
-
-
 public class HwA extends HwExecutionNode  {
 	
 	public static final int DEFAULT_BYTE_DATA_SIZE = 4;
