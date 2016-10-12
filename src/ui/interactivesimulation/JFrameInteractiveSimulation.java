@@ -45,34 +45,87 @@
 
 package ui.interactivesimulation;
 
-//import java.io.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Vector;
 
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-import myutil.*;
-import ui.*;
-import ui.file.*;
-
-import tmltranslator.*;
-
-import launcher.*;
-import remotesimulation.*;
-
-import org.w3c.dom.*;
-import org.xml.sax.*;
-import javax.xml.parsers.*;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.Conversion;
+import myutil.ScrolledJTextArea;
+import myutil.TableSorter;
+import myutil.TraceManager;
+import remotesimulation.CommandParser;
+import remotesimulation.RemoteConnection;
+import remotesimulation.RemoteConnectionException;
+import tmltranslator.HwA;
+import tmltranslator.HwBus;
+import tmltranslator.HwCPU;
+import tmltranslator.HwMemory;
+import tmltranslator.HwNode;
+import tmltranslator.TMLElement;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLTask;
+import ui.ColorManager;
+import ui.ConfigurationTTool;
+import ui.IconManager;
+import ui.MainGUI;
+import ui.TGComponent;
 
 
 public  class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener, ChangeListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 
-    protected static final int NB_OF_TRANSACTIONS = 10;
+	protected static final int NB_OF_TRANSACTIONS = 10;
 
     protected static final String SIMULATION_HEADER = "siminfo";
     protected static final String SIMULATION_GLOBAL = "global";
@@ -83,18 +136,18 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     protected static final String SIMULATION_TRANS_NB = "transnb";
     protected static final String SIMULATION_COMMAND = "cmd";
 
-    private static String buttonStartS = "Start simulator";
-    private static String buttonCloseS = "Close";
-    private static String buttonStopAndCloseS = "Stop simulator and close";
+    //private static String buttonStartS = "Start simulator";
+    //private static String buttonCloseS = "Close";
+    //private static String buttonStopAndCloseS = "Stop simulator and close";
 
     private static int NOT_STARTED = 0;
     private static int STARTING = 1;
     private static int STARTED_NOT_CONNECTED = 2;
     private static int STARTED_AND_CONNECTED = 3;
 
-    private Frame f;
+    //private Frame f;
     private MainGUI mgui;
-    private String title;
+   // private String title;
     private String hostSystemC;
     private String pathExecute;
 
@@ -134,7 +187,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     protected JTextField saveFileName;
     protected JTextField stateFileName;
     protected JTextField benchmarkFileName;
-    protected JComboBox cpus, busses, mems, tasks, chans;
+    protected JComboBox<String> cpus, busses, mems, tasks, chans;
 
 
     private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
@@ -215,9 +268,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap, ArrayList<Point> _points) {
         super(_title);
 
-        f = _f;
+       // f = _f;
         mgui = _mgui;
-        title = _title;
+        //title = _title;
         hostSystemC = _hostSystemC;
         pathExecute = _pathExecute;
 
@@ -324,7 +377,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         jta.setEditable(false);
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
-        jta.append("Click on \"Connect\" to start the remote simulator and connect to it\n");
+        jta.append("Click on \"Connect to simulator\" to start the remote simulator and connect to it\n");
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -386,9 +439,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         jp02.add(new JLabel("CPUs and HwA: "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         if (cpuIDs == null) {
-            cpus = new JComboBox();
+            cpus = new JComboBox<String>();
         } else {
-            cpus = new JComboBox(cpuIDs);
+            cpus = new JComboBox<String>(cpuIDs);
         }
         jp02.add(cpus, c01);
 
@@ -396,9 +449,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         jp02.add(new JLabel("Busses: "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         if (busIDs == null) {
-            busses = new JComboBox();
+            busses = new JComboBox<String>();
         } else {
-            busses = new JComboBox(busIDs);
+            busses = new JComboBox<String>(busIDs);
         }
         jp02.add(busses, c01);
 
@@ -406,9 +459,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         jp02.add(new JLabel("Memories: "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         if (memIDs == null) {
-            mems = new JComboBox();
+            mems = new JComboBox<String>();
         } else {
-            mems = new JComboBox(memIDs);
+            mems = new JComboBox<String>(memIDs);
         }
         jp02.add(mems, c01);
 
@@ -416,9 +469,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         jp02.add(new JLabel("Tasks: "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         if (taskIDs == null) {
-            tasks = new JComboBox();
+            tasks = new JComboBox<String>();
         } else {
-            tasks = new JComboBox(taskIDs);
+            tasks = new JComboBox<String>(taskIDs);
         }
         jp02.add(tasks, c01);
 
@@ -426,9 +479,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         jp02.add(new JLabel("Channels: "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         if (chanIDs == null) {
-            chans = new JComboBox();
+            chans = new JComboBox<String>();
         } else {
-            chans = new JComboBox(chanIDs);
+            chans = new JComboBox<String>(chanIDs);
         }
         jp02.add(chans, c01);
 
@@ -1038,7 +1091,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                     testGo();
 
                     // Wait for the server to start
-                    Thread.currentThread().sleep(1000);
+                    Thread.sleep(1000);
 
                     //jta.append("Simulator started\n\n");
                     jta.append("Connecting to simulation server ...\n");
@@ -1098,7 +1151,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                 threadStarted();
                 while(true) {
                     testGo();
-                    Thread.currentThread().sleep(500);
+                    Thread.sleep(500);
                     if (busyMode == 2 && gotTimeAnswerFromServer) {
                         gotTimeAnswerFromServer = false;
                         askForUpdate();
@@ -1119,6 +1172,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             rc.connect();
             return true;
         } catch (RemoteConnectionException rce) {
+        	rce.printStackTrace();
+        	
             return false;
         }
     }
@@ -1304,10 +1359,10 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         NodeList nl, nl0;
 
 
-        String tmp;
-        int val;
+       // String tmp;
+        //int val;
 
-        int[] colors;
+       // int[] colors;
         String msg = null;
         String error = null;
         String hash = null;
@@ -2303,8 +2358,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             jta.append("\\hline\n");
         } else {
             String name;
-            String tmp, tmp1;
-            int index, index1;
+            String tmp;//, tmp1;
+            int index;//, index1;
             jta.append("\nCPUs:\n");
             for(int i=0; i<cputm.getRowCount(); i++) {
                 name = (String)(cputm.getValueAt(i, 0));
@@ -2325,7 +2380,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         if (latex.isSelected()) {
             String name;
             String tmp, tmp1;
-            int index, index1;
+            int index;//, index1;
             jta.append("\\begin{tabular}{|l|c|c|}\n");
             jta.append("\\hline\n");
             jta.append("\\texbf{CPU} & \\textbf{Load} & \\textbf{Contention delay}\n");
