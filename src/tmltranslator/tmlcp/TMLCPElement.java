@@ -44,7 +44,7 @@
    * @see
    */
 
-package tmltranslator.tmlcp;;
+package tmltranslator.tmlcp;
 
 import tmltranslator.*;
 import java.util.*;

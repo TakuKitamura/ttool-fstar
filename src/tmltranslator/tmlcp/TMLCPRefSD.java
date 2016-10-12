@@ -44,7 +44,7 @@ knowledge of the CeCILL license and that you accept its terms.
 * @see
 */
 
-package tmltranslator.tmlcp;;
+package tmltranslator.tmlcp;
 
 import java.util.*;
 
