@@ -1,8 +1,5 @@
 package tmltranslator.tomappingsystemc2;
 
-import java.util.*;
-import tmltranslator.*;
-
 public class CheckpointInfo{
 
 	public int[] _depChannels = null;
