@@ -47,23 +47,50 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Vector;
 
-import myutil.*;
-import ui.interactivesimulation.*;
-import tmltranslator.tomappingsystemc.*;
-import tmltranslator.tomappingsystemc2.*;
-import ui.*;
-import ui.avatarpd.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.FileUtils;
+import myutil.GraphicLib;
+import myutil.MasterProcessInterface;
+import myutil.ScrolledJTextArea;
+import myutil.TraceManager;
 //import ui.ebrdd.*;
-import req.ebrdd.*;
-import tepe.*;
-
-import launcher.*;
+import req.ebrdd.EBRDD;
+import tepe.TEPE;
+import ui.AvatarRequirementPanelTranslator;
+import ui.IconManager;
+import ui.MainGUI;
+import ui.avatarpd.AvatarPDPanel;
 
 
 public class JDialogSystemCGeneration extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface, ListSelectionListener  {
@@ -610,8 +637,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     }
 
     public void run() {
-        String cmd;
-        String data;
+       // String cmd;
+       // String data;
 
 
         hasError = false;
@@ -667,7 +694,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 
     private void generateCode() throws InterruptedException {
         String list;
-        int cycle = 0;
+     //   int cycle = 0;
 
 
         jta.append("Generating SystemC code\n");
@@ -703,7 +730,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 
         try {
             unitCycle = unitcycle.getText();
-            cycle = Integer.valueOf(unitCycle).intValue();
+          //  cycle = Integer.valueOf(unitCycle).intValue();
         } catch (Exception e) {
             jta.append("Wrong number of cycles: " + unitcycle.getText());
             jta.append("Aborting");
@@ -871,7 +898,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         }
 
 
-        String cmd;
+       // String cmd;
 
         switch(toDo) {
         case ONE_TRACE:
