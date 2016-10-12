@@ -50,17 +50,17 @@ import java.util.*;
 
 public class Automata {
     private State initState;
-    private LinkedList states;
+    private LinkedList<State> states;
     private String name;
  
     public Automata() {
-         states = new LinkedList();
+         states = new LinkedList<State>();
          initState = new State("0");
          states.add(initState);
     }
     
     public Automata(String init) {
-         states = new LinkedList();
+         states = new LinkedList<State>();
          initState = new State(init);
          states.add(initState);
     }
@@ -95,15 +95,15 @@ public class Automata {
         return states.size();
     }
     
-    public LinkedList getStates() {
+    public LinkedList<State> getStates() {
         return states;
     }
     
     public int nbOfTransitions() {
         int nb = 0;
-        ListIterator iterator = states.listIterator();
+        ListIterator<State> iterator = states.listIterator();
         while(iterator.hasNext()) {
-            nb+= ((State)iterator.next()).nbOfTransitions();
+            nb+= iterator.next().nbOfTransitions();
         }
         return nb;
     }
@@ -111,9 +111,9 @@ public class Automata {
     public String toAUT() {
         StringBuffer sb = new StringBuffer();
         sb.append("des(" + initState.getName() + "," + nbOfTransitions() + "," + nbOfStates() + ")\n");
-        ListIterator iterator = states.listIterator();
+        ListIterator<State> iterator = states.listIterator();
         while(iterator.hasNext()) {
-            sb.append(((State)iterator.next()).toAUT());
+            sb.append(iterator.next().toAUT());
         }
         return new String(sb);
     }
@@ -121,9 +121,9 @@ public class Automata {
     public void renameStates() {
         State s;
         int cpt = 0;
-        ListIterator iterator = states.listIterator();
+        ListIterator<State> iterator = states.listIterator();
         while(iterator.hasNext()) {
-            s = (State)(iterator.next());
+            s = iterator.next();
             s.setName(""+cpt);
             cpt ++;
         }
