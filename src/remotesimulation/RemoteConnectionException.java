@@ -48,8 +48,17 @@ package remotesimulation;
 
 public class RemoteConnectionException extends Exception {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -447120015571366123L;
+
 	public RemoteConnectionException(String s) {
 		super(s);
 	}
     
+	public RemoteConnectionException(	final String message,
+										final Throwable th ) {
+		super(message, th );
+	}
 }
