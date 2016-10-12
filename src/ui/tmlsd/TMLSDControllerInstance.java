@@ -47,18 +47,16 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlsd;
 
-import java.awt.*;
-import javax.swing.*;
-import org.w3c.dom.*;
-import java.awt.event.*;
+import javax.swing.JFrame;
 
-import java.util.*;
-import ui.tmldd.*;
-import myutil.*;
-import ui.*;
-import ui.window.*;
-
-import tmltranslator.tmlcp.*;
+import myutil.GraphicLib;
+import ui.IconManager;
+import ui.SwallowTGComponent;
+import ui.TAttribute;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.window.JDialogTMLCPControllerInstance;
 
 public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGComponent {
 
@@ -98,8 +96,8 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
 		JDialogTMLCPControllerInstance jdab = new JDialogTMLCPControllerInstance( myAttributes, null, frame,
 																											"Setting properties of " + name, "Attribute", name );
 		setJDialogOptions(jdab);
-    jdab.setSize(650, 575);
-    GraphicLib.centerOnParent(jdab);
+   // jdab.setSize(650, 575);
+    GraphicLib.centerOnParent(jdab, 650, 575 );
     jdab.setVisible(true); // blocked until dialog has been closed
 		name = jdab.getName();																											
     //makeValue();
