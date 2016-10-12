@@ -46,19 +46,33 @@
 
 package ui.tmldd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Polygon;
+import java.util.Vector;
 
-import org.w3c.dom.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
-import myutil.*;
-import ui.*;
-import ui.window.*;
-import ui.interactivesimulation.*;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import tmltranslator.*;
-import tmltranslator.modelcompiler.*;
+import myutil.GraphicLib;
+import tmltranslator.HwCPU;
+import tmltranslator.modelcompiler.ArchUnitMEC;
+import ui.ColorManager;
+import ui.IconManager;
+import ui.MalformedModelingException;
+import ui.SwallowTGComponent;
+import ui.TAttribute;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
+import ui.WithAttributes;
+import ui.window.JDialogCPUNode;
 
 public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent, WithAttributes, TMLArchiElementInterface {
     private int textY1 = 15;
@@ -191,8 +205,9 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 
         JDialogCPUNode dialog = new JDialogCPUNode(frame, "Setting CPU attributes", this, MECType, transactions );
         dialog.setSize(500, 450);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+        GraphicLib.centerOnParent(dialog, 500, 450 );
+       // dialog.show(); // blocked until dialog has been closed
+        dialog.setVisible( true );
         MECType = dialog.getMECType();
 
         if (!dialog.isRegularClose()) {
@@ -492,7 +507,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+           // int t1id;
             String sstereotype = null, snodeName = null;
 
             for(int i=0; i<nl.getLength(); i++) {
