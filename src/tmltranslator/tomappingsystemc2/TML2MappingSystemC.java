@@ -56,12 +56,12 @@ import tepe.*;
 public class TML2MappingSystemC {
 
     private final static String CR = "\n";
-    private final static String CR2 = "\n\n";
+  //  private final static String CR2 = "\n\n";
     private final static String SCCR = ";\n";
-    private final static String EFCR = "}\n";
-    private final static String EFCR2 = "}\n\n";
-    private final static String EF = "}";
-    private final static int MAX_EVENT = 1024;
+  //  private final static String EFCR = "}\n";
+  //  private final static String EFCR2 = "}\n\n";
+  //  private final static String EF = "}";
+    //private final static int MAX_EVENT = 1024;
 
     private TMLModeling tmlmodeling;
     private TMLMapping tmlmapping;
@@ -202,12 +202,12 @@ public class TML2MappingSystemC {
             }
             if (node instanceof HwA) {
                 HwA hwaNode = (HwA)node;
-                declaration += "RRScheduler* " + hwaNode.getName() + "_scheduler = new RRScheduler(\"" + hwaNode.getName() + "_RRSched\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * hwaNode.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float)(hwaNode.clockRatio * Math.max(hwaNode.execiTime,hwaNode.execcTime) * (hwaNode.DEFAULT_BRANCHING_PREDICTION_PENALTY * hwaNode.DEFAULT_PIPELINE_SIZE +100 - hwaNode.DEFAULT_BRANCHING_PREDICTION_PENALTY))/100) + " ) " + SCCR;
+                declaration += "RRScheduler* " + hwaNode.getName() + "_scheduler = new RRScheduler(\"" + hwaNode.getName() + "_RRSched\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * HwA.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float)(hwaNode.clockRatio * Math.max(hwaNode.execiTime,hwaNode.execcTime) * (HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY * HwA.DEFAULT_PIPELINE_SIZE +100 - HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY))/100) + " ) " + SCCR;
                 for(int cores=0; cores<1; cores++){
                     //if (tmlmapping.isAUsedHwNode(node)) {
                     declaration += "CPU* " + hwaNode.getName() + cores + " = new SingleCoreCPU(" + hwaNode.getID() + ", \"" + hwaNode.getName() + "_" + cores + "\", " + hwaNode.getName() + "_scheduler" + ", ";
 
-                    declaration  += hwaNode.clockRatio + ", " + hwaNode.execiTime + ", " + hwaNode.execcTime + ", " + hwaNode.DEFAULT_PIPELINE_SIZE + ", " + hwaNode.DEFAULT_TASK_SWITCHING_TIME + ", " + hwaNode.DEFAULT_BRANCHING_PREDICTION_PENALTY + ", " + hwaNode.DEFAULT_GO_IDLE_TIME + ", "  + hwaNode.DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES + ", " + hwaNode.byteDataSize + ")" + SCCR;
+                    declaration  += hwaNode.clockRatio + ", " + hwaNode.execiTime + ", " + hwaNode.execcTime + ", " + HwA.DEFAULT_PIPELINE_SIZE + ", " + HwA.DEFAULT_TASK_SWITCHING_TIME + ", " + HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY + ", " + HwA.DEFAULT_GO_IDLE_TIME + ", "  + HwA.DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES + ", " + hwaNode.byteDataSize + ")" + SCCR;
                     if (cores!=0) declaration+= node.getName() + cores + "->setScheduler(" + hwaNode.getName() + "_scheduler,false)" + SCCR;
                     declaration += "addCPU("+ node.getName() + cores +")"+ SCCR;
                 }
@@ -408,7 +408,7 @@ public class TML2MappingSystemC {
 
 
         //Declaration of Tasks
-        ListIterator iterator = tmlmapping.getNodes().listIterator();
+        ListIterator<HwExecutionNode> iterator = tmlmapping.getNodes().listIterator();
         declaration += "//Declaration of tasks" + CR;
         HwExecutionNode node;
         //for(TMLTask task: tmlmodeling.getTasks()) {
@@ -418,8 +418,8 @@ public class TML2MappingSystemC {
         int[] aStatistics = new int[8];
         Set<Integer> mappedChannels = new HashSet<Integer>();
         for(TMLTask task: tmlmapping.getMappedTasks()){
-            node=(HwExecutionNode)iterator.next();
-            int noOfCores;
+            node= iterator.next();
+           // int noOfCores;
             declaration += task.getName() + "* task__" + task.getName() + " = new " + task.getName() + "("+ task.getID() +","+ task.getPriority() + ",\"" + task.getName() + "\", array(";
 
             if (node instanceof HwCPU){
@@ -468,7 +468,8 @@ public class TML2MappingSystemC {
             declaration += "addTask(task__"+ task.getName() +")"+ SCCR;
         }
         //int[] aStatistics = new int[8];
-        declaration += "\n}\n\n";
+        
+        declaration += "}\n\n";
 
         //Declaration of TEPEs
         declaration += "void generateTEPEs(){" + CR;
@@ -701,14 +702,14 @@ public class TML2MappingSystemC {
         return false;
     }
 
-    private String getIdentifierNameByID(int id){
-
-        for(MappedSystemCTask task: tasks){
-            String tmp = task.getIdentifierNameByID(id);
-            if (tmp!=null) return tmp;
-        }
-        return null;
-    }
+//    private String getIdentifierNameByID(int id){
+//
+//        for(MappedSystemCTask task: tasks){
+//            String tmp = task.getIdentifierNameByID(id);
+//            if (tmp!=null) return tmp;
+//        }
+//        return null;
+//    }
 
     /*private void generateEBRDDs(){
       for(EBRDD ebrdd: ebrdds){
