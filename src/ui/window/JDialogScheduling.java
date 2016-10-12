@@ -46,16 +46,32 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import launcher.*;
-import myutil.*;
-import ui.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import myutil.ProcessThread;
+import myutil.ScrolledJTextArea;
+import ui.IconManager;
+import ui.MainGUI;
 
 public class JDialogScheduling extends javax.swing.JDialog implements ActionListener, Runnable  {
+	
 	private static boolean sampleChecked=false, channelChecked= false, eventChecked = false, requestChecked = false, execChecked = false, busTransferChecked = false, schedulingChecked = false, taskStateChecked = false, channelStateChecked = false, branchingChecked = false, terminateCPUChecked = false, terminateCPUsChecked = true, clockedChecked = false, clockedEndChecked = false, countTickChecked=false, maxCountTickChecked=false, randomTaskChecked = true;
 	private static String tickIntervalValue = "1", maxCountTickValue = "1000";
 	
@@ -81,7 +97,7 @@ public class JDialogScheduling extends javax.swing.JDialog implements ActionList
 	public boolean cancelled = false;
 	
 	private Thread t;
-    private boolean go = false;
+  //  private boolean go = false;
     private ProcessThread pt;
     private boolean hasError = false;
 	
@@ -304,7 +320,7 @@ public class JDialogScheduling extends javax.swing.JDialog implements ActionList
     }
 	
 	public void stopProcess() {
-        go = false;
+     //   go = false;
         if (pt != null) {
             pt.stopProcess();
         }
@@ -316,24 +332,24 @@ public class JDialogScheduling extends javax.swing.JDialog implements ActionList
         t = new Thread(this);
         mode = STARTED;
         setButtons();
-        go = true;
+    //    go = true;
         t.start();
     }
-	
-	private void testGo() throws InterruptedException {
-        if (go == false) {
-            throw new InterruptedException("Stopped by user");
-        }
-    }
+//	
+//	private void testGo() throws InterruptedException {
+//        if (go == false) {
+//            throw new InterruptedException("Stopped by user");
+//        }
+//    }
 	
 	public void run() {
         String cmd;
 		
-		boolean debug, choices;
-		int nb = 0;
-		int nb1;
+		boolean debug;//, choices;
+	//	int nb = 0;
+	//	int nb1;
 		
-		int size=0, size1;
+	//	int size=0, size1;
 		
 		jta.append("Generating TIF specification, please wait\n");
 		sampleChecked = sample.isSelected();
