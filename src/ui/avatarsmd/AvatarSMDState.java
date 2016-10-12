@@ -203,7 +203,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
             // If font is less than 4, no text is displayed
 
             int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
-            int w0, w1, w2;
+            int w0;//, w1, w2;
             f = f.deriveFont((float)maxCurrentFontSize);
             g.setFont(f);
             //System.out.println("max current font size:" + maxCurrentFontSize);
@@ -352,8 +352,8 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 
 
         JDialogAvatarState jdas = new JDialogAvatarState(frame, "Setting state parameters", value, entryCode);
-        jdas.setSize(600, 550);
-        GraphicLib.centerOnParent(jdas);
+       // jdas.setSize(600, 550);
+        GraphicLib.centerOnParent(jdas, 600, 550 );
         jdas.show(); // blocked until dialog has been closed
 
 
