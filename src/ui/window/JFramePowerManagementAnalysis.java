@@ -45,18 +45,34 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-//import java.io.*;
-import javax.swing.*;
-//import javax.swing.event.*;
-import javax.swing.table.*;
-import java.awt.*;
-import java.awt.event.*;
-//import java.util.*;
-import ui.graph.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
-import myutil.*;
-import ui.*;
+import myutil.FileException;
+import myutil.GraphicLib;
+import myutil.ScrolledJTextArea;
+import ui.ConfigurationTTool;
+import ui.FormatManager;
+import ui.IconManager;
+import ui.StoppableGUIElement;
+import ui.graph.AUTGraph;
+import ui.graph.VCDGenerator;
 
 
 public	class JFramePowerManagementAnalysis extends JFrame implements ActionListener, StoppableGUIElement, Runnable {
@@ -80,7 +96,7 @@ public	class JFramePowerManagementAnalysis extends JFrame implements ActionListe
 	private JTextField pcInHighToLowMode;   
 	private JTextField pcInHighMode;
 	
-	private JComboBox simulationAlgorithm;
+	private JComboBox<String> simulationAlgorithm;
 	
 	protected JButton start;
     protected JButton stop;
@@ -180,7 +196,7 @@ public	class JFramePowerManagementAnalysis extends JFrame implements ActionListe
 		c0.gridwidth = 1;
 		label = new JLabel("Simulation algorithm:");
 		jp2.add(label, c0);
-		simulationAlgorithm = new JComboBox();
+		simulationAlgorithm = new JComboBox<String>();
 		simulationAlgorithm.addItem(new String("Random"));
 		jp2.add(simulationAlgorithm, c0);
 		c0.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -346,10 +362,11 @@ public	class JFramePowerManagementAnalysis extends JFrame implements ActionListe
 	public void run() {
 		if (jdc == null) {
 			jdc = new JDialogCancel(this, "Generating VCD trace", "Generating VCD", this);
-			GraphicLib.centerOnParent(jdc);
+			GraphicLib.centerOnParent( jdc, 500, 200 );
 			notifyJDCDone();
+			
 			if (jdc != null) {
-				jdc.setSize(500, 200);
+			//	jdc.setSize(500, 200);
 				jdc.setVisible(true);
 			}
 		} else {
