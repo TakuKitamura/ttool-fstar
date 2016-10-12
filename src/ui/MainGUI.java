@@ -47,68 +47,162 @@
  */
 
 package ui;
-import ddtranslatorSoclib.*;
-import ddtranslatorSoclib.toSoclib.*;
-import ddtranslatorSoclib.toTopCell.*;
-import ddtranslatorSoclib.*;
-import java.io.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Vector;
 
-import java.awt.image.*;
-import javax.imageio.*;
-
-import launcher.*;
-import translator.*;
-import myutil.*;
-
-import ui.ad.*;
-import ui.atd.*;
-import ui.cd.*;
-import ui.file.*;
-import ui.avatarinteractivesimulation.*;
-import ui.interactivesimulation.*;
-import ui.iod.*;
-import ui.req.*;
-import ui.ebrdd.*;
-import ui.sd.*;
-import ui.ucd.*;
-import ui.tree.*;
-import ui.window.*;
-
-import ui.osad.*;
-
-import ui.tmlad.*;
-import ui.tmlcd.*;
-import ui.tmlcompd.*;
-import ui.tmldd.*;
-import ui.tmlcp.*;
-import ui.tmlsd.*;
+import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import tmltranslator.modelcompiler.*;
 
-import ui.procsd.*;
-import ui.prosmd.*;
-
+import avatartranslator.AvatarSpecification;
+import ddtranslatorSoclib.AvatarddSpecification;
+import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
+import launcher.RemoteExecutionThread;
+import launcher.RshClient;
+import myutil.BrowserControl;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.GraphicLib;
+import myutil.PeriodicBehavior;
+import myutil.PeriodicBehaviorThread;
+import myutil.TraceManager;
+import proverifspec.ProVerifOutputAnalyzer;
+import translator.MasterGateManager;
+import ui.ad.TActivityDiagramPanel;
+import ui.atd.AttackTreeDiagramPanel;
+import ui.avatarad.AvatarADPanel;
 // AVATAR
-import ui.avatarbd.*;
-import ui.avatarsmd.*;
-import ui.avatarrd.*;
-import ui.avatarmad.*;
-import ui.avatarpd.*;
-import ui.avatarcd.*;
-import ui.avatarad.*;
-import ui.avatardd.*;
-
-import proverifspec.*;
-
-
-import ddtranslatorSoclib.toSoclib.*;
-import ddtranslatorSoclib.toTopCell.*;
-import ddtranslatorSoclib.*;
-import avatartranslator.*;
+import ui.avatarbd.AvatarBDLibraryFunction;
+import ui.avatarbd.AvatarBDPortConnector;
+import ui.avatarbd.AvatarBDStateMachineOwner;
+import ui.avatarcd.AvatarCDPanel;
+import ui.avatardd.ADDDiagramPanel;
+import ui.avatarinteractivesimulation.JFrameAvatarInteractiveSimulation;
+import ui.avatarmad.AvatarMADPanel;
+import ui.avatarpd.AvatarPDPanel;
+import ui.avatarrd.AvatarRDPanel;
+import ui.avatarsmd.AvatarSMDPanel;
+import ui.cd.TClassDiagramPanel;
+import ui.ebrdd.EBRDDPanel;
+import ui.file.AUTFileFilter;
+import ui.file.DTAFileFilter;
+import ui.file.MSCFilter;
+import ui.file.RGFileFilter;
+import ui.file.RTLFileFilter;
+import ui.file.TDotFilter;
+import ui.file.TFileFilter;
+import ui.file.TImgFilter;
+import ui.file.TLSAFileFilter;
+import ui.file.TLibFilter;
+import ui.file.TSVGFilter;
+import ui.file.TTIFFilter;
+import ui.interactivesimulation.JFrameInteractiveSimulation;
+import ui.interactivesimulation.SimulationTransaction;
+import ui.iod.InteractionOverviewDiagramPanel;
+import ui.osad.TURTLEOSActivityDiagramPanel;
+import ui.prosmd.ProactiveSMDPanel;
+import ui.req.RequirementDiagramPanel;
+import ui.sd.SequenceDiagramPanel;
+import ui.tmlad.TMLActivityDiagramPanel;
+import ui.tmlcd.TMLTaskDiagramPanel;
+import ui.tmlcd.TMLTaskOperator;
+import ui.tmlcompd.TMLCCompositeComponent;
+import ui.tmlcompd.TMLComponentTaskDiagramPanel;
+import ui.tmlcp.TMLCPPanel;
+import ui.tmldd.TMLArchiDiagramPanel;
+import ui.tmlsd.TMLSDPanel;
+import ui.tree.DiagramTreeModel;
+import ui.tree.DiagramTreeRenderer;
+import ui.tree.JDiagramTree;
+import ui.ucd.UseCaseDiagramPanel;
+import ui.window.JBirdPanel;
+import ui.window.JDialogAvatarExecutableCodeGeneration;
+import ui.window.JDialogAvatarModelChecker;
+import ui.window.JDialogAvatarddExecutableCodeGeneration;
+import ui.window.JDialogBisimulation;
+import ui.window.JDialogBisimulationBisimulator;
+import ui.window.JDialogCCodeGeneration;
+import ui.window.JDialogDSE;
+import ui.window.JDialogFormalValidation;
+import ui.window.JDialogGenAUT;
+import ui.window.JDialogGenAUTS;
+import ui.window.JDialogGraphModification;
+import ui.window.JDialogInvariantAnalysis;
+import ui.window.JDialogJavaGeneration;
+import ui.window.JDialogJavaSimulation;
+import ui.window.JDialogLOTOSAnalysis;
+import ui.window.JDialogLOTOSValidation;
+import ui.window.JDialogModelChecking;
+import ui.window.JDialogProVerifGeneration;
+import ui.window.JDialogProjection;
+import ui.window.JDialogRequirementTable;
+import ui.window.JDialogScheduling;
+import ui.window.JDialogSearchBox;
+import ui.window.JDialogSelectAvatarBlock;
+import ui.window.JDialogSelectCPDiagrams;
+import ui.window.JDialogSelectRequirements;
+import ui.window.JDialogSelectTMLComponent;
+import ui.window.JDialogSelectTMLNodes;
+import ui.window.JDialogSelectTMLTask;
+import ui.window.JDialogSimulation;
+import ui.window.JDialogSystemCGeneration;
+import ui.window.JDialogTMatrixManagement;
+import ui.window.JDialogTextProcess;
+import ui.window.JDialogUPPAALGeneration;
+import ui.window.JDialogUPPAALValidation;
+import ui.window.JFrameBasicText;
+import ui.window.JFrameBird;
+import ui.window.JFrameCode;
+import ui.window.JFrameDeadlock;
+import ui.window.JFrameNC;
+import ui.window.JFramePowerManagementAnalysis;
+import ui.window.JFrameRequirementTable;
+import ui.window.JFrameText;
 
 public  class MainGUI implements ActionListener, WindowListener, KeyListener, PeriodicBehavior {
 
@@ -1486,7 +1580,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public Vector<String> getAllCompositeComponent(TMLComponentTaskDiagramPanel tcdp) {
         TURTLEPanel tp;
         Vector<String> list = new Vector<String>();
-        boolean b;
+       // boolean b;
 
         for(int i=0; i<tabs.size(); i++) {
             tp = (TURTLEPanel)(tabs.elementAt(i));
@@ -4394,8 +4488,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             }
         }
         jfis.setIconImage(IconManager.img9);
-        jfis.setSize(1024, 900);
-        GraphicLib.centerOnParent(jfis);
+        //jfis.setSize(1024, 900);
+        GraphicLib.centerOnParent( jfis, 1024, 900 );
         jfis.setVisible(true);
 
     }
@@ -4464,10 +4558,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public String generateCcode() {
 
-        String path = ConfigurationTTool.FILEPath;
-        if( file != null ) {
-            path = file.getAbsolutePath();
-        }
+//        String path = ConfigurationTTool.FILEPath;
+//        if( file != null ) {
+//            path = file.getAbsolutePath();
+//        }
         JDialogCCodeGeneration jgen = new JDialogCCodeGeneration( frame, this, "Application code generation and compilation",
                                                                   ConfigurationTTool.SystemCHost, ConfigurationTTool.CcodeDirectory,
                                                                   "make -C " + ConfigurationTTool.CcodeDirectory,
@@ -7028,31 +7122,31 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         activetdp.setDraw(false);
     }
 
-    private void activateDrawing(TDiagramPanel tdp, JTabbedPane good, Vector goodV, JTabbedPane wrong, Vector wrongV) {
-        int i;
-        TDiagramPanel tdp2;
-
-        for(i=0; i<good.getTabCount(); i++) {
-            tdp2 = (TDiagramPanel)(goodV.elementAt(i));
-            if (tdp2 == tdp) {
-                tdp2.setDraw(true);
-                if (tdp2.mode == TDiagramPanel.SELECTED_COMPONENTS) {
-                    setMode(MainGUI.CUTCOPY_OK);
-                    setMode(MainGUI.EXPORT_LIB_OK);
-                } else {
-                    setMode(MainGUI.CUTCOPY_KO);
-                    setMode(MainGUI.EXPORT_LIB_KO);
-                }
-            } else {
-                tdp2.setDraw(false);
-            }
-        }
-
-        for(i=0; i<wrong.getTabCount(); i++) {
-            tdp2 = (TDiagramPanel)(wrongV.elementAt(i));
-            tdp2.setDraw(false);
-        }
-    }
+//    private void activateDrawing(TDiagramPanel tdp, JTabbedPane good, Vector goodV, JTabbedPane wrong, Vector wrongV) {
+//        int i;
+//        TDiagramPanel tdp2;
+//
+//        for(i=0; i<good.getTabCount(); i++) {
+//            tdp2 = (TDiagramPanel)(goodV.elementAt(i));
+//            if (tdp2 == tdp) {
+//                tdp2.setDraw(true);
+//                if (tdp2.mode == TDiagramPanel.SELECTED_COMPONENTS) {
+//                    setMode(MainGUI.CUTCOPY_OK);
+//                    setMode(MainGUI.EXPORT_LIB_OK);
+//                } else {
+//                    setMode(MainGUI.CUTCOPY_KO);
+//                    setMode(MainGUI.EXPORT_LIB_KO);
+//                }
+//            } else {
+//                tdp2.setDraw(false);
+//            }
+//        }
+//
+//        for(i=0; i<wrong.getTabCount(); i++) {
+//            tdp2 = (TDiagramPanel)(wrongV.elementAt(i));
+//            tdp2.setDraw(false);
+//        }
+//    }
 
     public void paneAction(ChangeEvent e) {
         //TraceManager.addDev("Pane action");
