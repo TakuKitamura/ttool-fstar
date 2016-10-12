@@ -47,29 +47,51 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.io.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
-import myutil.*;
-import ui.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
-
-import avatartranslator.*;
-import avatartranslator.toexecutable.*;
-import launcher.*;
-
-import ui.interactivesimulation.*;
-import ddtranslatorSoclib.toSoclib.*;
-import ddtranslatorSoclib.*;
-import ui.avatardd.*;
+import avatartranslator.AvatarSpecification;
+import avatartranslator.toexecutable.AVATAR2CPOSIX;
+import ddtranslatorSoclib.AvatarddSpecification;
+import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.FileUtils;
+import myutil.GraphicLib;
+import myutil.MasterProcessInterface;
+import myutil.ScrolledJTextArea;
+import myutil.TraceManager;
+import ui.AvatarDeploymentPanelTranslator;
+import ui.IconManager;
+import ui.MainGUI;
+import ui.avatardd.ADDDiagramPanel;
+import ui.interactivesimulation.JFrameSimulationSDPanel;
 
 public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
 
-    private static String[] unitTab = {"usec", "msec", "sec"};
+	private static String[] unitTab = {"usec", "msec", "sec"};
 
     protected Frame f;
     protected MainGUI mgui;
@@ -84,7 +106,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     private String textSysC8 = "Show trace from file:";
     private String textSysC9 = "Show trace from soclib file:";
 
-    private static String unitCycle = "1";
+   // private static String unitCycle = "1";
 
     //modif DG
     private static String[] codes = {"AVATAR CPOSIX", "AVATAR SOCLIB"};
@@ -126,7 +148,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
     protected JCheckBox removeCFiles, removeXFiles, debugmode, tracemode, optimizemode, putUserCode;
-    protected JComboBox versionCodeGenerator, units;
+    protected JComboBox<String> versionCodeGenerator, units;
     protected JButton showSimulationTrace;
 
     private static int selectedUnit = 2;
@@ -134,7 +156,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     private static boolean removeXFilesValue = true;
     private static boolean debugValue = false;
     private static boolean tracingValue = true;
-    private static boolean optimizeValue = true;
+    //private static boolean optimizeValue = true;
 
     private Thread t;
     private boolean go = false;
@@ -279,7 +301,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
         jp01.add(new JLabel("Code generator used:"), c01);
 
-        versionCodeGenerator = new JComboBox(codes);
+        versionCodeGenerator = new JComboBox<String>(codes);
         versionCodeGenerator.setSelectedIndex(selectedItem);
         versionCodeGenerator.addActionListener(this);
         jp01.add(versionCodeGenerator, c01);
@@ -553,8 +575,8 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
     public void run() {
         String cmd;
-        String list, data;
-        int cycle = 0;
+        String list/*, data*/;
+      //  int cycle = 0;
 
         hasError = false;
 
