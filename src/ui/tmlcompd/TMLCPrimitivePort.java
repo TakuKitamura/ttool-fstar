@@ -521,9 +521,10 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             otherTypes = tgc.getAllRecords();
         }
         JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf, checkAuth);
-        jda.setSize(350, 700);
-        GraphicLib.centerOnParent(jda);
-        jda.show(); // blocked until dialog has been closed
+       // jda.setSize(350, 700);
+        GraphicLib.centerOnParent(jda, 350, 700 );
+       // jda.show(); // blocked until dialog has been closed
+        jda.setVisible( true );
         dataFlowType = jda.getDataFlowType();
         associatedEvent = jda.getAssociatedEvent();
         isPrex = jda.isChannelPrex();
