@@ -340,8 +340,8 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
 
         JDialogAssumption jda = new JDialogAssumption(tdp.getGUI().getFrame(), "Setting attributes of Assumption " + getAssumptionName(), getAssumptionName(), text, type, durability, source, status, limitation);
-        jda.setSize(750, 550);
-        GraphicLib.centerOnParent(jda);
+     //   jda.setSize(750, 550);
+        GraphicLib.centerOnParent(jda, 750, 550 );
         jda.show();
 
         if (!jda.isRegularClose()) {
