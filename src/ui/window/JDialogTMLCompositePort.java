@@ -46,16 +46,31 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import ui.*;
-import ui.tmlcd.*;
-import java.util.*;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
-import myutil.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-public class JDialogTMLCompositePort extends javax.swing.JDialog implements ActionListener {
+import ui.IconManager;
+import ui.TType;
+import ui.tmlcd.TMLDataFlowType;
+
+public class JDialogTMLCompositePort extends JDialog implements ActionListener {
 	
     private JPanel panel1, panel2, panel3, panel4;
     private Frame frame;
