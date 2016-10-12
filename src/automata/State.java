@@ -50,10 +50,10 @@ import java.util.*;
 
 public class State {
     private String name;
-    private LinkedList transitions;
+    private LinkedList<Transition> transitions;
     
     public State(String _name) {
-         transitions = new LinkedList();
+         transitions = new LinkedList<Transition>();
          name = _name;
     }
     
@@ -61,12 +61,12 @@ public class State {
         return transitions.size();
     }
     
-    public LinkedList getTransitions() {
+    public LinkedList<Transition> getTransitions() {
         return transitions;
     }
     
     public Transition getTransition(int index) {
-        return (Transition)(transitions.get(index));
+        return transitions.get(index);
     }
     
     public String getName() {
@@ -86,9 +86,9 @@ public class State {
         StringBuffer sb = new StringBuffer("");
         Transition tr;
         
-        ListIterator iterator = transitions.listIterator();
+        ListIterator<Transition> iterator = transitions.listIterator();
         while(iterator.hasNext()) {
-            tr = (Transition)(iterator.next());
+            tr = iterator.next();
             sb.append("(" + name + ", \"" + tr.getValue() + "\", " + tr.getNextState().getName() + ")\n");
         }
         return new String(sb);
