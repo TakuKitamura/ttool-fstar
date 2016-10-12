@@ -97,8 +97,8 @@ public class ThreadGUIElement extends Thread {
         if (ec != null) {
             start();
             jdc = new JDialogCancel(frame, param0, param1, sge);
-            GraphicLib.centerOnParent(jdc);
-            jdc.setSize(300, 200);
+            GraphicLib.centerOnParent(jdc, 300, 200 );
+         //   jdc.setSize(300, 200);
             jdc.setVisible(true);
             jdc = null;
         } else {
@@ -115,8 +115,8 @@ public class ThreadGUIElement extends Thread {
             }
             start();
             jdc = new JDialogCancel(frame, param0, param2, sge);
-            jdc.setSize(400, 200);
-            GraphicLib.centerOnParent(jdc);
+          //  jdc.setSize(400, 200);
+            GraphicLib.centerOnParent(jdc, 400, 200 );
             jdc.setVisible(true);
             jdc = null;
         }
@@ -163,8 +163,8 @@ public class ThreadGUIElement extends Thread {
                     jdc.stopAll();
                 }
                 jfs.setIconImage(IconManager.img8);
-                jfs.setSize(600, 600);
-                GraphicLib.centerOnParent(jfs);
+              //  jfs.setSize(600, 600);
+                GraphicLib.centerOnParent(jfs, 600, 600 );
                 jfs.setVisible(true);
                 //System.out.println("setting visible");
             }
