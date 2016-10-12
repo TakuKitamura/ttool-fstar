@@ -68,7 +68,7 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
     //protected int iconSize = 30;
 	
 	private Font myFont, myFontB;
-	private int maxFontSize = 30;
+//	private int maxFontSize = 30;
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;
@@ -79,7 +79,7 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 	protected String violatedAction = "noAction";
 	
 	private int iconSize = 18;
-	private boolean iconIsDrawn = false;
+	//private boolean iconIsDrawn = false;
     
     public RequirementObserver(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -113,7 +113,7 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
         nbInternalTGComponent = 0;
         //tgcomponent = new TGComponent[nbInternalTGComponent];
         
-        int h = 1;
+    //    int h = 1;
         //TAttributeRequirement tgc0;
         //tgc0 = new TAttributeRequirement(x, y+height+h, 0, 0, height + h, height+h, true, this, _tdp);
         //tgcomponent[0] = tgc0;
@@ -141,8 +141,8 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
     
    public void internalDrawing(Graphics g) {
 		Font f = g.getFont();
-		Font fold = f;
-		int w, c;
+		//Font fold = f;
+		//int w, c;
 		int size;
 		
         if (!tdp.isScaled()) {
@@ -166,7 +166,7 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 			displayText = true;
 		}
 		
-		int h  = g.getFontMetrics().getHeight();
+	//	int h  = g.getFontMetrics().getHeight();
         
 		g.drawRect(x, y, width, height);
         
@@ -188,7 +188,7 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 			drawLimitedString(g, TOBSERVER, x, y + size, width, 1);
 			size += currentFontSize;
 			g.setFont(myFontB);
-			w = g.getFontMetrics().stringWidth(value);
+			//w = g.getFontMetrics().stringWidth(value);
 			drawLimitedString(g, value, x, y + size, width, 1);
 			
 		}
@@ -265,9 +265,10 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 	
 	public boolean editAttributes() {
 		JDialogObserver jdo = new JDialogObserver(tdp.getGUI().getFrame(), "Setting diagrams of Observer " + getRequirementObserverName(), diagramText, violatedAction);
-		jdo.setSize(750, 400);
-		GraphicLib.centerOnParent(jdo);
-		jdo.show();
+		//jdo.setSize(750, 400);
+		GraphicLib.centerOnParent(jdo, 750, 400 );
+		//jdo.show();
+		jdo.setVisible( true );
 		
 		if (!jdo.isRegularClose()) {
 			return false;
@@ -427,7 +428,7 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 		Font f2 = f.deriveFont((float)(currentFontSize - 2));
 		
 		// Must find for both modes which width is desirable
-		String s0, s1;
+		String s0;//, s1;
 		
 		s0 = TOBSERVER;
 		
