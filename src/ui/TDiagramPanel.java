@@ -46,47 +46,61 @@
 
 package ui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-
-import java.awt.image.*;
-
-
-import myutil.*;
-import ui.oscd.*;
-import ui.cd.*;
-import ui.window.*;
-import ui.tree.*;
-import ui.tmlcd.*;
-import ui.tmlcompd.*;
-import ui.req.*;
-import ui.ncdd.*;
-
-import ui.atd.*;
-
-
-// AVATAR
-import ui.avatarbd.*;
-import ui.avatarsmd.*;
-import ui.avatarrd.*;
-import ui.avatarmad.*;
-import ui.avatarad.*;
-import ui.avatarcd.*;
-
-// Added by Solange
-import ui.procsd.*;
-
-import java.text.*;
-import java.awt.Rectangle;
-import java.awt.Graphics2D;
 import java.awt.Color;
-import java.awt.font.*;
-import java.awt.geom.*;
-import java.io.Writer;
-import java.io.OutputStreamWriter;
-import java.io.IOException;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Vector;
+
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.RepaintManager;
+
+import myutil.GenericTree;
+import myutil.GraphicLib;
+import myutil.SVGGraphics;
+import myutil.TraceManager;
+import ui.atd.ATDBlock;
+import ui.avatarad.AvatarADActivity;
+// AVATAR
+import ui.avatarbd.AvatarBDBlock;
+import ui.avatarbd.AvatarBDDataType;
+import ui.avatarbd.AvatarBDLibraryFunction;
+import ui.avatarcd.AvatarCDBlock;
+import ui.avatarmad.AvatarMADAssumption;
+import ui.avatarrd.AvatarRDRequirement;
+import ui.avatarsmd.AvatarSMDState;
+import ui.cd.TCDCompositionOperatorWithSynchro;
+import ui.cd.TCDSynchroGateList;
+import ui.cd.TCDTClass;
+import ui.cd.TCDTData;
+import ui.cd.TCDTObject;
+import ui.cd.TGConnectorAssociation;
+import ui.ncdd.NCConnectorNode;
+import ui.ncdd.NCEqNode;
+import ui.ncdd.NCRouteArtifact;
+import ui.ncdd.NCSwitchNode;
+import ui.ncdd.NCTrafficArtifact;
+import ui.oscd.TOSClass;
+import ui.req.Requirement;
+import ui.tmlcd.TMLTaskOperator;
+import ui.tmlcompd.TMLCCompositeComponent;
+import ui.tmlcompd.TMLCPrimitiveComponent;
+import ui.tmlcompd.TMLCRecordComponent;
+import ui.window.JDialogCode;
+import ui.window.JDialogNote;
+import ui.window.JDialogSearchBox;
 
 
 
@@ -153,7 +167,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected final int increment = 500;
 
     private double zoom = 1.0;
-    private boolean zoomed = false;
+    //private boolean zoomed = false;
 
     private boolean draw;
 
@@ -602,7 +616,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         StringBuffer s;
 
         //Added by Solange to see the components in the list
-        LinkedList<TGComponent> ruteoList=this.componentList;
+        //LinkedList<TGComponent> ruteoList=this.componentList;
         //
 
         for (TGComponent tgc: this.componentList)
