@@ -2019,16 +2019,16 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <cdparam x="652" y="444" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="805" y="544" id="1209" />
-<P2  x="971" y="481" id="1272" />
+<P1  x="816" y="554" id="1209" />
+<P2  x="971" y="502" id="1272" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1143" >
 <cdparam x="652" y="418" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="805" y="512" id="1207" />
-<P2  x="932" y="472" id="1274" />
+<P1  x="816" y="522" id="1207" />
+<P2  x="922" y="482" id="1274" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1144" >
@@ -2036,134 +2036,134 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="752" y="408" id="1199" />
-<P2  x="844" y="363" id="1223" />
+<P2  x="831" y="376" id="1223" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1145" >
 <cdparam x="685" y="310" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="844" y="389" id="1227" />
-<P2  x="932" y="358" id="1264" />
+<P1  x="857" y="376" id="1227" />
+<P2  x="922" y="368" id="1264" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1146" >
 <cdparam x="652" y="395" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="805" y="483" id="1203" />
-<P2  x="932" y="449" id="1266" />
+<P1  x="816" y="493" id="1203" />
+<P2  x="922" y="459" id="1266" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1147" >
 <cdparam x="652" y="369" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="805" y="451" id="1205" />
-<P2  x="932" y="422" id="1268" />
+<P1  x="816" y="461" id="1205" />
+<P2  x="922" y="432" id="1268" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1148" >
 <cdparam x="737" y="314" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="932" y="393" id="1270" />
-<P2  x="805" y="422" id="1201" />
+<P1  x="922" y="403" id="1270" />
+<P2  x="816" y="432" id="1201" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1149" >
 <cdparam x="735" y="260" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="932" y="323" id="1262" />
-<P2  x="736" y="271" id="1318" />
+<P1  x="919" y="336" id="1262" />
+<P2  x="749" y="284" id="1318" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1150" >
 <cdparam x="641" y="230" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="736" y="235" id="1320" />
-<P2  x="932" y="284" id="1260" />
+<P1  x="749" y="248" id="1320" />
+<P2  x="919" y="297" id="1260" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1151" >
 <cdparam x="641" y="195" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="736" y="191" id="1322" />
-<P2  x="932" y="241" id="1258" />
+<P1  x="749" y="204" id="1322" />
+<P2  x="919" y="254" id="1258" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1152" >
 <cdparam x="740" y="353" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="844" y="363" id="1222" />
-<P2  x="736" y="302" id="1324" />
+<P1  x="831" y="376" id="1222" />
+<P2  x="749" y="315" id="1324" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1153" >
 <cdparam x="460" y="270" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="535" y="291" id="1314" />
-<P2  x="455" y="291" id="1184" />
+<P1  x="522" y="304" id="1314" />
+<P2  x="468" y="304" id="1184" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1154" >
 <cdparam x="387" y="129" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="455" y="117" id="1188" />
-<P2  x="535" y="117" id="1326" />
+<P1  x="466" y="127" id="1188" />
+<P2  x="525" y="127" id="1326" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1155" >
 <cdparam x="389" y="200" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="455" y="203" id="1182" />
-<P2  x="535" y="203" id="1312" />
+<P1  x="468" y="216" id="1182" />
+<P2  x="522" y="216" id="1312" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1156" >
 <cdparam x="460" y="236" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="535" y="248" id="1310" />
-<P2  x="455" y="248" id="1180" />
+<P1  x="522" y="261" id="1310" />
+<P2  x="468" y="261" id="1180" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1157" >
 <cdparam x="460" y="296" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="536" y="323" id="1308" />
-<P2  x="455" y="323" id="1178" />
+<P1  x="536" y="349" id="1308" />
+<P2  x="468" y="336" id="1178" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1158" >
 <cdparam x="389" y="163" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="455" y="157" id="1186" />
-<P2  x="535" y="157" id="1316" />
+<P1  x="468" y="170" id="1186" />
+<P2  x="522" y="170" id="1316" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1159" >
 <cdparam x="967" y="190" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="932" y="191" id="1256" />
-<P2  x="736" y="112" id="1304" />
+<P1  x="919" y="204" id="1256" />
+<P2  x="749" y="125" id="1304" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1160" >
 <cdparam x="1028" y="535" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="630" y="326" id="1328" />
+<P1  x="630" y="347" id="1328" />
 <P2  x="671" y="408" id="1211" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2171,24 +2171,24 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <cdparam x="1304" y="321" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="1234" y="369" id="1241" />
-<P2  x="1169" y="376" id="1276" />
+<P1  x="1224" y="379" id="1241" />
+<P2  x="1180" y="386" id="1276" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1162" >
 <cdparam x="1168" y="455" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="1169" y="411" id="1278" />
-<P2  x="1234" y="404" id="1243" />
+<P1  x="1180" y="421" id="1278" />
+<P2  x="1224" y="414" id="1243" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1165" >
 <cdparam x="1037" y="180" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="1169" y="204" id="1280" />
-<P2  x="1169" y="272" id="1282" />
+<P1  x="1180" y="214" id="1280" />
+<P2  x="1180" y="282" id="1282" />
 <Point x="1224" y="226" />
 <Point x="1224" y="266" />
 <AutomaticDrawing  data="true" />
@@ -2213,15 +2213,15 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <cdparam x="873" y="361" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="1169" y="451" id="1284" />
-<P2  x="1234" y="432" id="1245" />
+<P1  x="1180" y="461" id="1284" />
+<P2  x="1224" y="442" id="1245" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="1205" id="1175" >
 <cdparam x="1152" y="505" />
 <sizeparam width="206" height="105" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="1724" minY="0" maxY="916" />
+<cdrectangleparam minX="0" maxX="1725" minY="0" maxY="917" />
 <infoparam name="Record component" value="TCP_CTRL" />
 <TGConnectingPoint num="0" id="1167" />
 <TGConnectingPoint num="1" id="1168" />
@@ -2241,7 +2241,7 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <cdparam x="164" y="97" />
 <sizeparam width="291" height="277" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="1724" minY="0" maxY="916" />
+<cdrectangleparam minX="0" maxX="1725" minY="0" maxY="917" />
 <infoparam name="TGComponent" value="InterfaceDevice" />
 <TGConnectingPoint num="0" id="1190" />
 <TGConnectingPoint num="1" id="1191" />
@@ -2382,7 +2382,7 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <cdparam x="535" y="94" />
 <sizeparam width="936" height="530" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="1724" minY="0" maxY="916" />
+<cdrectangleparam minX="0" maxX="1725" minY="0" maxY="917" />
 <infoparam name="TGComponent" value="SmartCard" />
 <TGConnectingPoint num="0" id="1339" />
 <TGConnectingPoint num="1" id="1340" />
@@ -3179,6 +3179,22 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 </TMLComponentTaskDiagramPanel>
 
 <TMLActivityDiagramPanel name="InterfaceDevice" minX="10" maxX="1400" minY="10" maxY="900" >
+<CONNECTOR type="115" id="2787" >
+<cdparam x="434" y="312" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="434" y="312" id="1421" />
+<P2  x="392" y="375" id="1423" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="115" id="2786" >
+<cdparam x="561" y="301" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="561" y="301" id="1420" />
+<P2  x="568" y="366" id="1351" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
 <COMPONENT type="1012" id="1355" >
 <cdparam x="553" y="376" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -3610,28 +3626,12 @@ A sensor attached to the door enables detection of &quot;open door&quot;.
 <P2  x="659" y="769" id="1417" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<CONNECTOR type="115" id="1442" >
-<cdparam x="491" y="302" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="600" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector from for loop to choice" value="null" />
-<P1  x="561" y="301" id="1420" />
-<P2  x="568" y="366" id="1351" />
-<AutomaticDrawing  data="true" />
-</CONNECTOR>
 <CONNECTOR type="115" id="1443" >
 <cdparam x="403" y="190" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="600" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from wait event to for loop" value="null" />
 <P1  x="403" y="190" id="1379" />
 <P2  x="434" y="282" id="1419" />
-<AutomaticDrawing  data="true" />
-</CONNECTOR>
-<CONNECTOR type="115" id="1444" >
-<cdparam x="437" y="313" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="600" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector from for loop to stop state" value="null" />
-<P1  x="434" y="312" id="1421" />
-<P2  x="392" y="375" id="1423" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="115" id="1445" >
@@ -8415,10 +8415,10 @@ On prend b=1 comme exemple
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="2665" >
 <father id="2690" num="0" />
-<cdparam x="160" y="445" />
-<sizeparam width="172" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="167" y="445" />
+<sizeparam width="163" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="-7" minY="0" maxY="86" />
+<cdrectangleparam minX="0" maxX="2" minY="0" maxY="86" />
 <infoparam name="TGComponent" value="AppC::InterfaceDevice" />
 <TGConnectingPoint num="0" id="2657" />
 <TGConnectingPoint num="1" id="2658" />
@@ -8471,9 +8471,9 @@ On prend b=1 comme exemple
 <SUBCOMPONENT type="1101" id="2699" >
 <father id="2742" num="0" />
 <cdparam x="486" y="303" />
-<sizeparam width="141" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="136" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="109" minY="0" maxY="106" />
+<cdrectangleparam minX="0" maxX="114" minY="0" maxY="106" />
 <infoparam name="TGComponent" value="AppC::SmartCard" />
 <TGConnectingPoint num="0" id="2691" />
 <TGConnectingPoint num="1" id="2692" />
@@ -8490,9 +8490,9 @@ On prend b=1 comme exemple
 <SUBCOMPONENT type="1101" id="2708" >
 <father id="2742" num="1" />
 <cdparam x="415" y="349" />
-<sizeparam width="144" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="139" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="106" minY="0" maxY="106" />
+<cdrectangleparam minX="0" maxX="111" minY="0" maxY="106" />
 <infoparam name="TGComponent" value="AppC::Application" />
 <TGConnectingPoint num="0" id="2700" />
 <TGConnectingPoint num="1" id="2701" />
@@ -8509,9 +8509,9 @@ On prend b=1 comme exemple
 <SUBCOMPONENT type="1101" id="2717" >
 <father id="2742" num="2" />
 <cdparam x="396" y="258" />
-<sizeparam width="109" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="108" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="141" minY="0" maxY="106" />
+<cdrectangleparam minX="0" maxX="142" minY="0" maxY="106" />
 <infoparam name="TGComponent" value="AppC::TCPIP" />
 <TGConnectingPoint num="0" id="2709" />
 <TGConnectingPoint num="1" id="2710" />
@@ -8576,6 +8576,145 @@ On prend b=1 comme exemple
 </CONNECTOR>
 
 </TMLArchiDiagramPanel>
+
+</Modeling>
+
+
+
+
+<Modeling type="Diplodocus Methodology" nameTab="DIPLODOCUS_Methodology" >
+<DiplodocusMethodologyDiagramPanel name="DIPLODOCUS_Methodology" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
+<COMPONENT type="6003" id="2751" >
+<cdparam x="60" y="417" />
+<sizeparam width="200" height="120" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="TGComponent" value="Requirements" />
+<TGConnectingPoint num="0" id="2747" />
+<TGConnectingPoint num="1" id="2748" />
+<TGConnectingPoint num="2" id="2749" />
+<TGConnectingPoint num="3" id="2750" />
+</COMPONENT>
+
+<COMPONENT type="6006" id="2756" >
+<cdparam x="600" y="100" />
+<sizeparam width="200" height="120" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="TGComponent" value="Com. Patterns" />
+<TGConnectingPoint num="0" id="2752" />
+<TGConnectingPoint num="1" id="2753" />
+<TGConnectingPoint num="2" id="2754" />
+<TGConnectingPoint num="3" id="2755" />
+</COMPONENT>
+
+<COMPONENT type="6002" id="2765" >
+<cdparam x="518" y="306" />
+<sizeparam width="318" height="136" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="TGComponent" value="Mapping" />
+<TGConnectingPoint num="0" id="2759" />
+<TGConnectingPoint num="1" id="2760" />
+<TGConnectingPoint num="2" id="2761" />
+<TGConnectingPoint num="3" id="2762" />
+<TGConnectingPoint num="4" id="2763" />
+<TGConnectingPoint num="5" id="2764" />
+</COMPONENT>
+<SUBCOMPONENT type="6005" id="2757" >
+<father id="2765" num="0" />
+<cdparam x="523" y="361" />
+<sizeparam width="10" height="10" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="605" maxX="605" minY="355" maxY="355" />
+<infoparam name="value " value="Mapping2" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="6005" id="2758" >
+<father id="2765" num="1" />
+<cdparam x="523" y="346" />
+<sizeparam width="10" height="10" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="605" maxX="605" minY="340" maxY="340" />
+<infoparam name="value " value="Mapping1" />
+</SUBCOMPONENT>
+
+<COMPONENT type="6001" id="2772" >
+<cdparam x="850" y="100" />
+<sizeparam width="200" height="120" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="TGComponent" value="Architecture" />
+<TGConnectingPoint num="0" id="2768" />
+<TGConnectingPoint num="1" id="2769" />
+<TGConnectingPoint num="2" id="2770" />
+<TGConnectingPoint num="3" id="2771" />
+</COMPONENT>
+<SUBCOMPONENT type="6005" id="2766" >
+<father id="2772" num="0" />
+<cdparam x="855" y="155" />
+<sizeparam width="10" height="10" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="855" maxX="855" minY="155" maxY="155" />
+<infoparam name="value " value="Mapping2" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="6005" id="2767" >
+<father id="2772" num="1" />
+<cdparam x="855" y="140" />
+<sizeparam width="10" height="10" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="855" maxX="855" minY="140" maxY="140" />
+<infoparam name="value " value="Mapping1" />
+</SUBCOMPONENT>
+
+<COMPONENT type="6000" id="2778" >
+<cdparam x="233" y="101" />
+<sizeparam width="334" height="161" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="TGComponent" value="Application" />
+<TGConnectingPoint num="0" id="2774" />
+<TGConnectingPoint num="1" id="2775" />
+<TGConnectingPoint num="2" id="2776" />
+<TGConnectingPoint num="3" id="2777" />
+</COMPONENT>
+<SUBCOMPONENT type="6005" id="2773" >
+<father id="2778" num="0" />
+<cdparam x="238" y="141" />
+<sizeparam width="10" height="10" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="355" maxX="355" minY="140" maxY="140" />
+<infoparam name="value " value="AppC" />
+</SUBCOMPONENT>
+
+<CONNECTOR type="6004" id="2780" >
+<cdparam x="950" y="220" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="&lt;&lt;deriveReqt&gt;&gt;" />
+<TGConnectingPoint num="0" id="2779" />
+<P1  x="950" y="220" id="2768" />
+<P2  x="740" y="306" id="2760" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="6004" id="2782" >
+<cdparam x="700" y="220" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="&lt;&lt;deriveReqt&gt;&gt;" />
+<TGConnectingPoint num="0" id="2781" />
+<P1  x="700" y="220" id="2752" />
+<P2  x="677" y="306" id="2761" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="6004" id="2784" >
+<cdparam x="450" y="220" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="&lt;&lt;deriveReqt&gt;&gt;" />
+<TGConnectingPoint num="0" id="2783" />
+<P1  x="400" y="262" id="2774" />
+<P2  x="613" y="306" id="2759" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+
+</DiplodocusMethodologyDiagramPanel>
 
 </Modeling>
 
