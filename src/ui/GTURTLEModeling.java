@@ -7584,13 +7584,22 @@ public class GTURTLEModeling {
 	int diff=100;
 	int ydiff=50;
 	int num = asme.nbOfNexts();
+	if (!(asme instanceof AvatarTransition)){
+	    for (AvatarStateMachineElement el:asme.getNexts()){
+		if (!(el instanceof AvatarTransition)){
+		    System.out.println("ERROR: non-Transition " + asme + " connected to non-Transition " + el);
+		}
+	    }
+	}
 	for (AvatarStateMachineElement el:asme.getNexts()){
 	    if (el instanceof AvatarTransition){
 		tranSourceMap.put((AvatarTransition) el, tgcomp);
 	    }
 	    else {
-		AvatarTransition t = (AvatarTransition) asme;
-		tranDestMap.put(t, el);
+		if (asme instanceof AvatarTransition){
+			AvatarTransition t = (AvatarTransition) asme;
+			tranDestMap.put(t, el);
+		}
 	    }
 	    if (!SMDMap.containsKey(el)){
 	    	addStates(el, x+diff*(i-num/2), y+ydiff, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);  
