@@ -2081,13 +2081,27 @@ public class GTMLModeling  {
             }
         }
 
+	
+
         // Check that each "for" has two nexts
         // Check that TMLChoice have compatible guards
         // Check TML select evts
         iterator = list.listIterator();
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TMLADChoice) {
+
+	    if ((tgc instanceof TMLADForLoop) || (tgc instanceof TMLADForStaticLoop)) {
+		ae1 = activity.findReferenceElement(tgc);
+		if (ae1 != null) {
+		    if (ae1.getNbNext() != 2) {
+			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted for loop: a loop must have an internal behavior, and an exit behavior ");
+			ce.setTMLTask(tmltask);
+			ce.setTDiagramPanel(tadp);
+			ce.setTGComponent(tgc);
+			checkingErrors.add(ce);
+		    }
+		}
+	    } else if (tgc instanceof TMLADChoice) {
                 tmlchoice = (TMLChoice)(activity.findReferenceElement(tgc));
                 tmlchoice.orderGuards();
 
@@ -2388,7 +2402,7 @@ public class GTMLModeling  {
                 }
             }
 
-if (tgc instanceof TMLArchiVGMNNode) {
+	    if (tgc instanceof TMLArchiVGMNNode) {
                 vgmnnode = (TMLArchiVGMNNode)tgc;
                 if (nameInUse(names, vgmnnode.getName())) {
                     // Node with the same name
