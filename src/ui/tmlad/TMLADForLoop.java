@@ -125,6 +125,8 @@ public class TMLADForLoop extends TGCWithoutInternalComponent implements Embedde
         //g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
 
         g.drawString(value, x + (width - w) / 2 , y + textY);
+
+	// Info on loops
 	g.drawString(IN_LOOP, x+width+2, y+height/2);
 	//int wTmp =  g.getFontMetrics().stringWidth(EXIT_LOOP);
 	g.drawString(EXIT_LOOP, x+width/2+2, y+height+10);
