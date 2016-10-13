@@ -626,10 +626,10 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_NEW] = new TAction("new-command", "New", IconManager.imgic20, IconManager.imgic21, "New", "New modeling", 'N');
         actions[ACT_NEW_DESIGN] = new TAction("new-command-design", "New design", IconManager.imgic14, IconManager.imgic14, "New design", "New TURTLE design", 0);
         actions[ACT_NEW_ANALYSIS] = new TAction("new-command-analysis", "New analysis", IconManager.imgic17, IconManager.imgic17, "New analysis", "New TURTLE analysis", 0);
-        actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TURTLE modeling",'O');
+        actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TURTLE modeling",'O', true);
         actions[ACT_OPEN_LAST] = new TAction("openlast-command","Open file: " + ConfigurationTTool.LastOpenFile, IconManager.imgic22, IconManager.imgic23, "Open: " + ConfigurationTTool.LastOpenFile, "Open the lastly saved TTool model", 0);
         actions[ACT_MERGE] = new TAction("merge-command","Merge", IconManager.imgic22, IconManager.imgic23, "Merge", "Merge the current TTool modeling with another one saved in a file ", 0);
-        actions[ACT_SAVE] = new TAction("save-command", "Save",IconManager.imgic24, IconManager.imgic25, "Save", "Save an opened or a new TTool modeling", 'S');
+        actions[ACT_SAVE] = new TAction("save-command", "Save",IconManager.imgic24, IconManager.imgic25, "Save", "Save an opened or a new TTool modeling", 'S', true);
         actions[ACT_SAVE_TIF] = new TAction("save-tif-command", "Save TIF specification",IconManager.imgic24, IconManager.imgic25, "Save TIF Specification", "Save in TIF a TURTLE modeling", 0);
         actions[ACT_OPEN_TIF] = new TAction("open-tif-command", "Open TIF specification",IconManager.imgic24, IconManager.imgic25, "Open TIF Specification", "Open a TURTLE modeling given in TIF", 0);
         actions[ACT_OPEN_SD] = new TAction("open-sd-command", "Open MSC specification",IconManager.imgic24, IconManager.imgic25, "Open MSC Specification", "Open a MSC specification given in xml format", 0);
@@ -647,17 +647,17 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_IMPORT_LIB] = new TAction("import-lib-command", "Import library", IconManager.imgic338, IconManager.imgic339, "Import library",  "Import a TTool library", 'E');
         actions[ACT_EXPORT_LIB] = new TAction("export-lib-command", "Export library", IconManager.imgic340, IconManager.imgic341, "Export library",  "Export a TTool library", 'I');
 
-        actions[ACT_CUT] = new TAction("cut-command", "Cut",IconManager.imgic330, IconManager.imgic331, "Cut", "Cut selected components", 'X');
-        actions[ACT_COPY] = new TAction("copy-command", "Copy", IconManager.imgic332, IconManager.imgic333, "Copy", "Copy selected components", 'C');
-        actions[ACT_PASTE] = new TAction("paste-command", "Paste",IconManager.imgic334, IconManager.imgic335, "Paste", "Paste - if possible - previously cut / copied components at the minimal position of the currently opened diagram", 'V');
+        actions[ACT_CUT] = new TAction("cut-command", "Cut",IconManager.imgic330, IconManager.imgic331, "Cut", "Cut selected components", 'X', true);
+        actions[ACT_COPY] = new TAction("copy-command", "Copy", IconManager.imgic332, IconManager.imgic333, "Copy", "Copy selected components", 'C', true);
+        actions[ACT_PASTE] = new TAction("paste-command", "Paste",IconManager.imgic334, IconManager.imgic335, "Paste", "Paste - if possible - previously cut / copied components at the minimal position of the currently opened diagram", 'V', true);
         actions[ACT_DELETE] = new TAction("delete-command", "Delete", IconManager.imgic336, IconManager.imgic337, "Delete", "Delete selected components", KeyEvent.VK_BACK_SPACE);
 
         actions[ACT_ZOOM_MORE] = new TAction("zoommore-command", "Zoom +", IconManager.imgic316, IconManager.imgic317, "Zoom +", "Zoom +", '0');
         actions[ACT_ZOOM_LESS] = new TAction("zoomless-command", "Zoom -", IconManager.imgic314, IconManager.imgic315, "Zoom -", "Zoom -", '0');
         actions[ACT_SHOW_ZOOM] = new TAction("showzoom-command", "100%", null, null, "Zoom value", "Zoom value", '0');
 
-        actions[ACT_BACKWARD] = new TAction("backward-command", "Undo",IconManager.imgic40, IconManager.imgic41, "Undo", "One operation before", 'Z');
-        actions[ACT_FORWARD] = new TAction("forward-command", "Redo", IconManager.imgic42, IconManager.imgic43, "Redo", "One operation ahead", 'Y');
+        actions[ACT_BACKWARD] = new TAction("backward-command", "Undo",IconManager.imgic40, IconManager.imgic41, "Undo", "One operation before", 'Z', true);
+        actions[ACT_FORWARD] = new TAction("forward-command", "Redo", IconManager.imgic42, IconManager.imgic43, "Redo", "One operation ahead", 'Y', true);
 
         actions[ACT_FIRST_DIAG] = new TAction("firstdiag-command", "First diagram",IconManager.imgic44, IconManager.imgic45, "First diagram", "Open the first diagram", 'A');
         actions[ACT_BACK_DIAG] = new TAction("backdiag-command", "Previous diagram", IconManager.imgic46, IconManager.imgic47, "Previous diagram", "Open the previous diagram", 'P', true);
