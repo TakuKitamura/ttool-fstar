@@ -165,8 +165,159 @@ import ui.avatarbd.AvatarBDPortConnector;
 import ui.avatarbd.AvatarBDPragma;
 import ui.avatarbd.AvatarBDStateMachineOwner;
 import ui.avatarcd.AvatarCDPanel;
+import avatartranslator.AvatarActionOnSignal;
+import avatartranslator.AvatarAttribute;
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarPragma;
+import avatartranslator.AvatarRelation;
+import avatartranslator.AvatarSpecification;
+import avatartranslator.AvatarStartState;
+import avatartranslator.AvatarState;
+import avatartranslator.AvatarStateMachine;
+import avatartranslator.AvatarStateMachineElement;
+import avatartranslator.AvatarStopState;
+import avatartranslator.AvatarTransition;
+import avatartranslator.AvatarType;
+import avatartranslator.toproverif.AVATAR2ProVerif;
+import avatartranslator.totpn.AVATAR2TPN;
+import avatartranslator.toturtle.AVATAR2TURTLE;
+import avatartranslator.touppaal.AVATAR2UPPAAL;
+import ddtranslator.DDSyntaxException;
+import ddtranslator.DDTranslator;
+import launcher.LauncherException;
+import launcher.RemoteExecutionThread;
+import launcher.RshClient;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import nc.NCStructure;
+import proverifspec.ProVerifOutputAnalyzer;
+import proverifspec.ProVerifSpec;
+import req.ebrdd.EBRDD;
+import sddescription.HMSC;
+import sddescription.MSC;
+import sddescription.SDExchange;
+import sdtranslator.SDTranslationException;
+import sdtranslator.SDTranslator;
+import tmatrix.RequirementModeling;
+import tmltranslator.HwBridge;
+import tmltranslator.HwBus;
+import tmltranslator.HwExecutionNode;
+import tmltranslator.HwLink;
+import tmltranslator.HwMemory;
+import tmltranslator.HwNode;
+import tmltranslator.SecurityPattern;
+import tmltranslator.TMLActivityElement;
+import tmltranslator.TMLCP;
+import tmltranslator.TMLCPTextSpecification;
+import tmltranslator.TMLChannel;
+import tmltranslator.TMLError;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLMappingTextSpecification;
+import tmltranslator.TMLModeling;
+import tmltranslator.TMLTask;
+import tmltranslator.TMLTextSpecification;
+import tmltranslator.modelcompiler.TMLModelCompiler;
+import tmltranslator.modelcompiler.TMLModelCompilerError;
+import tmltranslator.modelcompiler.TMLModelCompilerParser;
+import tmltranslator.modelcompiler.TMLPECParser;
+import tmltranslator.modelcompiler.TMLPECParserError;
+import tmltranslator.toautomata.TML2AUT;
+import tmltranslator.toautomata.TML2AUTviaLOTOS;
+import tmltranslator.toavatar.TML2Avatar;
+import tmltranslator.tosystemc.TML2SystemC;
+import tmltranslator.toturtle.Mapping2TIF;
+import tmltranslator.toturtle.TML2TURTLE;
+import tmltranslator.touppaal.RelationTMLUPPAAL;
+import tmltranslator.touppaal.TML2UPPAAL;
+import tpndescription.TPN;
+import translator.ADComponent;
+import translator.Gate;
+import translator.GroupOfGates;
+import translator.MasterGateManager;
+import translator.TClass;
+import translator.TIFExchange;
+import translator.TURTLEModelChecker;
+import translator.TURTLEModeling;
+import translator.TURTLETranslator;
+import translator.totpn.TURTLE2TPN;
+import translator.touppaal.RelationTIFUPPAAL;
+import translator.touppaal.TURTLE2UPPAAL;
+import ui.ad.TActivityDiagramPanel;
+import ui.atd.AttackTreeDiagramPanel;
+import ui.avatarad.AvatarADPanel;
+import ui.avatarbd.AvatarBDBlock;
+import ui.avatarbd.AvatarBDLibraryFunction;
+import ui.avatarbd.AvatarBDPanel;
+import ui.avatarbd.AvatarBDPortConnector;
+import ui.avatarbd.AvatarBDPragma;
+import ui.avatarbd.AvatarBDStateMachineOwner;
+import ui.avatarcd.AvatarCDPanel;
 // AVATAR
 // AVATAR
+// AVATAR
+import ui.avatardd.ADDDiagramPanel;
+import ui.avatarmad.AvatarMADPanel;
+import ui.avatarmethodology.AvatarMethodologyDiagramPanel;
+import ui.avatarpd.AvatarPDPanel;
+import ui.avatarrd.AvatarRDPanel;
+import ui.avatarsmd.AvatarSMDConnector;
+import ui.avatarsmd.AvatarSMDPanel;
+import ui.avatarsmd.AvatarSMDReceiveSignal;
+import ui.avatarsmd.AvatarSMDSendSignal;
+import ui.avatarsmd.AvatarSMDStartState;
+import ui.avatarsmd.AvatarSMDState;
+import ui.avatarsmd.AvatarSMDStopState;
+import ui.cd.TCDTClass;
+import ui.cd.TCDTObject;
+import ui.cd.TClassDiagramPanel;
+import ui.dd.TDDArtifact;
+import ui.dd.TDDNode;
+import ui.dd.TDeploymentDiagramPanel;
+import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
+import ui.ebrdd.EBRDDPanel;
+import ui.iod.InteractionOverviewDiagramPanel;
+import ui.ncdd.NCDiagramPanel;
+import ui.osad.TURTLEOSActivityDiagramPanel;
+import ui.oscd.TOSClass;
+import ui.oscd.TURTLEOSClassDiagramPanel;
+import ui.procsd.ProCSDComponent;
+import ui.procsd.ProactiveCSDPanel;
+import ui.prosmd.ProactiveSMDPanel;
+import ui.req.RequirementDiagramPanel;
+import ui.sd.SequenceDiagramPanel;
+import ui.sysmlsecmethodology.SysmlsecMethodologyDiagramPanel;
+import ui.tmlad.TGConnectorTMLAD;
+import ui.tmlad.TMLADDecrypt;
+import ui.tmlad.TMLADEncrypt;
+import ui.tmlad.TMLADReadChannel;
+import ui.tmlad.TMLADStartState;
+import ui.tmlad.TMLADWriteChannel;
+import ui.tmlad.TMLActivityDiagramPanel;
+import ui.tmlcd.TMLTaskDiagramPanel;
+import ui.tmlcd.TMLTaskOperator;
+import ui.tmlcompd.TMLCChannelOutPort;
+import ui.tmlcompd.TMLCCompositeComponent;
+import ui.tmlcompd.TMLCPortConnector;
+import ui.tmlcompd.TMLCPrimitiveComponent;
+import ui.tmlcompd.TMLCPrimitivePort;
+import ui.tmlcompd.TMLComponentTaskDiagramPanel;
+import ui.tmlcp.TMLCPPanel;
+import ui.tmldd.DiplodocusPECPragma;
+import ui.tmldd.TMLArchiCPNode;
+import ui.tmldd.TMLArchiDiagramPanel;
+import ui.tmldd.TMLArchiKey;
+import ui.tmldd.TMLArchiMemoryNode;
+import ui.tmlsd.TMLSDPanel;
+import ui.tree.InvariantDataTree;
+import ui.tree.SearchTree;
+import ui.tree.SyntaxAnalysisTree;
+import ui.ucd.UseCaseDiagramPanel;
+import ui.window.JFrameSimulationTrace;
+import uppaaldesc.UPPAALSpec;
+
 import ui.avatardd.ADDDiagramPanel;
 import ui.avatarmad.AvatarMADPanel;
 import ui.avatarmethodology.AvatarMethodologyDiagramPanel;
@@ -509,16 +660,16 @@ public class GTURTLEModeling {
         }
     }
 
-    public boolean generateCcode( String _title )       {
+    public boolean generateCCode( String _title )       {
 
         CheckingError ce;
         int type;
         TGComponent tgc;
         String applicationName;
-        TMLModelCompiler Ccode;
+        TMLModelCompiler CCode;
 
         if( tmap == null )      {
-            JOptionPane.showMessageDialog(mgui.frame, "C code is only generated from an architecture diagram with mapping information", "Code generation failed", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog( mgui.frame, "C code is only generated from an architecture diagram with mapping information", "Control code generation failed", JOptionPane.INFORMATION_MESSAGE);
             return true;
         }
         TMLModelCompilerParser syntax = new TMLModelCompilerParser( tmap, tmap.getTMLModeling(), tmap.getTMLArchitecture() );
@@ -543,28 +694,25 @@ public class GTURTLEModeling {
             }
             JOptionPane.showMessageDialog(      mgui.frame,
                                                 "The system design contains several errors: the application C code could not be generated",
-                                                "Code generation failed", JOptionPane.INFORMATION_MESSAGE );
+                                                "Control code generation failed", JOptionPane.INFORMATION_MESSAGE );
             return true;
         }
         applicationName = tmap.getMappedTasks().get(0).getName().split("__")[0];
-        Ccode = new TMLModelCompiler( _title, applicationName, mgui.frame, mgui.getAllTMLCP(), tmap );
-        Ccode.toTextFormat();
+        CCode = new TMLModelCompiler( _title, applicationName, mgui.frame, mgui.getAllTMLCP(), tmap );
+        CCode.toTextFormat();
         try {
-            if( ConfigurationTTool.CcodeDirectory.equals("") )  {
+            if( ConfigurationTTool.CCodeDirectory.equals("") )  {
                 JOptionPane.showMessageDialog(  mgui.frame,
                                                 "No directory for C code generation found in config.xml. The C code cannot be generated.",
-                                                "Code generation failed", JOptionPane.INFORMATION_MESSAGE );
+                                                "Control code generation failed", JOptionPane.INFORMATION_MESSAGE );
                 return true;
             }
             else        {
-                Ccode.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, applicationName );
-                /*JOptionPane.showMessageDialog(  mgui.frame, "The application C code has been successfully generated in: "
-                  + ConfigurationTTool.CcodeDirectory + "/", "C code generation successful",
-                  JOptionPane.INFORMATION_MESSAGE);*/
+                CCode.saveFile( ConfigurationTTool.CCodeDirectory + File.separator, applicationName );
             }
         }
         catch( Exception e ) {
-            TraceManager.addError( "Application C files could not be saved: " + e.getMessage() );
+            JOptionPane.showMessageDialog(  mgui.frame, "The application C files could not be saved: " + e.getMessage(), "Control code generation failed", JOptionPane.INFORMATION_MESSAGE );
             return true;
         }
         return false;

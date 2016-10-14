@@ -242,6 +242,7 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
         jp01.add(gen, c01);
 
         code1 = new JTextField(pathCode, 100);
+        code1.setEnabled(false);
         jp01.add(code1, c01);
 
         jp01.add(new JLabel(" "), c01);
@@ -279,11 +280,13 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
         jp02.add(comp, c02);
 
         code2 = new JTextField(pathCode, 100);
+        code2.setEnabled(false);
         jp02.add(code2, c02);
 
         jp02.add(new JLabel("with"), c02);
 
         compiler1 = new JTextField(pathCompiler, 100);
+        compiler1.setEnabled(false);
         jp02.add(compiler1, c02);
 
         jp02.add(new JLabel(" "), c02);
@@ -531,7 +534,7 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
           }
         }
         testGo();
-    		error = gtm.generateCcode( code1.getText() );
+    		error = gtm.generateCCode( code1.getText() );
 				if( !error )	{
 					File dir = new File( code1.getText() );
 					StringBuffer s = new StringBuffer();

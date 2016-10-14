@@ -4556,15 +4556,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //TraceManager.addDev("Done");
     }
 
-    public String generateCcode() {
+    public String generateCCode() {
 
 //        String path = ConfigurationTTool.FILEPath;
 //        if( file != null ) {
 //            path = file.getAbsolutePath();
 //        }
         JDialogCCodeGeneration jgen = new JDialogCCodeGeneration( frame, this, "Application code generation and compilation",
-                                                                  ConfigurationTTool.SystemCHost, ConfigurationTTool.CcodeDirectory,
-                                                                  "make -C " + ConfigurationTTool.CcodeDirectory,
+                                                                  ConfigurationTTool.SystemCHost, ConfigurationTTool.CCodeDirectory,
+                                                                  "make -C " + ConfigurationTTool.CCodeDirectory,
                                                                   ConfigurationTTool.SystemCCodeExecuteCommand,
                                                                   ConfigurationTTool.SystemCCodeInteractiveExecuteCommand,
                                                                   ConfigurationTTool.GGraphPath, gtm );
@@ -4572,7 +4572,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         GraphicLib.centerOnParent(jgen);
         jgen.setVisible(true);
         //dtree.toBeUpdated();
-        //gtm.generateCcode( path );
+        //gtm.generateCCode( path );
         return null;
     }
 
@@ -8261,7 +8261,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         } else if (command.equals(actions[TGUIAction.ACT_GEN_TMLTXT].getActionCommand())) {
             generateTMLTxt();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_CCODE].getActionCommand())) {
-            generateCcode();
+            generateCCode();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_DESIGN].getActionCommand())) {
             generateDesign();
         } else if (command.equals(actions[TGUIAction.ACT_CHECKCODE].getActionCommand())) {

@@ -98,7 +98,7 @@ public class ConfigurationTTool {
     public static String NCDirectory = "";
     public static String SystemCCodeDirectory = "";
     public static String TMLCodeDirectory = "";
-    public static String CcodeDirectory = "";
+    public static String CCodeDirectory = "";
     public static String SystemCCodeCompileCommand = "";
     public static String SystemCCodeExecuteCommand = "";
     public static String SystemCCodeInteractiveExecuteCommand = "";
@@ -421,7 +421,7 @@ sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
 	    sb.append("TMLCodeDirectory: " + TMLCodeDirectory + "\n");
 
 	     //Application C code
-	     sb.append("CcodeDirectory: " + CcodeDirectory + "\n");
+	     sb.append("CCodeDirectory: " + CCodeDirectory + "\n");
         }
 
        
@@ -648,10 +648,10 @@ sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
             nl = doc.getElementsByTagName("TMLCodeDirectory");
             if (nl.getLength() > 0)
                 TMLCodeDirectory(nl);
-
-            nl = doc.getElementsByTagName("CcodeDirectory");
+                
+            nl = doc.getElementsByTagName("CCodeDirectory");
             if (nl.getLength() > 0)
-                CcodeDirectory(nl);
+                CCodeDirectory(nl);
 
             nl = doc.getElementsByTagName("VCDPath");
             if (nl.getLength() > 0)
@@ -1104,10 +1104,10 @@ sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
         }
     }
 
-    private static void CcodeDirectory(NodeList nl) throws MalformedConfigurationException {
+    private static void CCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
-            CcodeDirectory = elt.getAttribute("data") + "/";
+            CCodeDirectory = elt.getAttribute("data") + "/";
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
