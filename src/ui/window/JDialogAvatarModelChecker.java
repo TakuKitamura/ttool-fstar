@@ -498,7 +498,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             amc.startModelChecking();
 	    TraceManager.addDev("Model checking done");
 
-	    if (true) {
+	    if (generateDesignSelected) {
 		TraceManager.addDev("Drawing modified avatar spec");
 		AvatarSpecification reworkedSpec = amc.getReworkedAvatarSpecification();
 		if ((mgui != null) && (reworkedSpec != null)) {
