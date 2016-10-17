@@ -218,14 +218,14 @@ public class AvatarStateMachine extends AvatarElement {
                     if ((previous != null) && (next != null)) {
                         if ((!(previous instanceof AvatarStateElement)) && (next instanceof AvatarStateElement)) {
                             // We create an intermediate state
-                            AvatarState state = new AvatarState("IntermediateState__" + id, elt.getReferenceObject());
+                            AvatarState state = new AvatarState("IntermediateState1__" + id, elt.getReferenceObject());
                             toAdd.add(state);
-                            AvatarTransition at1 = new AvatarTransition(_block, "TransitionForIntermediateState__" + id, elt.getReferenceObject());
+                            AvatarTransition at1 = new AvatarTransition(_block, "TransitionForIntermediateState1__" + id, elt.getReferenceObject());
                             toAdd.add(at1);
 
-
                             previous.removeAllNexts();
-                            previous.addNext(state);
+                            previous.addNext(at1);
+			    at1.addNext(state);
                             state.addNext(tr);
 
                             id ++;
@@ -258,14 +258,15 @@ public class AvatarStateMachine extends AvatarElement {
                 if ((previous != null) && (next != null)) {
                     if ((!(previous instanceof AvatarStateElement)) && (!(next instanceof AvatarStateElement))) {
                         // We create an intermediate state
-                        AvatarState state = new AvatarState("IntermediateState__" + id, elt.getReferenceObject());
+                        AvatarState state = new AvatarState("IntermediateState2__" + id, elt.getReferenceObject());
                         toAdd.add(state);
-                        AvatarTransition at1 = new AvatarTransition(_block, "TransitionForIntermediateState__" + id, elt.getReferenceObject());
+                        AvatarTransition at1 = new AvatarTransition(_block, "TransitionForIntermediateState2__" + id, elt.getReferenceObject());
                         toAdd.add(at1);
 
 
                         previous.removeAllNexts();
-                        previous.addNext(state);
+                        previous.addNext(at1);
+			at1.addNext(state);
                         state.addNext(tr);
 
                         id ++;
@@ -303,9 +304,9 @@ public class AvatarStateMachine extends AvatarElement {
 
                     if (!(next instanceof AvatarState)) {
                         // We create an intermediate state
-                        AvatarState state = new AvatarState("IntermediateState__" + id, elt.getReferenceObject());
+                        AvatarState state = new AvatarState("IntermediateState3__" + id, elt.getReferenceObject());
                         toAdd.add(state);
-                        AvatarTransition at1 = new AvatarTransition(_block, "TransitionForIntermediateState__" + id, elt.getReferenceObject());
+                        AvatarTransition at1 = new AvatarTransition(_block, "TransitionForIntermediateState3__" + id, elt.getReferenceObject());
                         toAdd.add(at1);
 
                         tr.removeAllNexts();
