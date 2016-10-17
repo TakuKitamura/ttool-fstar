@@ -222,6 +222,7 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLARCHI_DMANODE = 364;
     public static final int TMLARCHI_BRIDGENODE = 225;
     public static final int TMLARCHI_KEY = 435;
+    public static final int TMLARCHI_FIREWALL = 436;
 
     public static final int TMLCP_EDIT = 378;
     public static final int TMLCP_CONNECTOR = 379;
@@ -394,7 +395,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ADD_CHANNELARTIFACT = 411;
     public static final int ADD_VGMNNODE = 401;
     public static final int ADD_CROSSBARNODE = 421;
-   
+ 
   // -------------------------------------------------------------    
     public static final int DEPLOY_AVATAR_DIAGRAM = 418;
     public static final int EXTRAC_DEPLOY_PARAM_TO_FILE = 419;
@@ -965,6 +966,7 @@ public class TGUIAction extends AbstractAction {
         actions[TMLARCHI_MEMORYNODE] = new TAction("add-tmlarchi-memorynode", "Add a memory node", IconManager.imgic1108, IconManager.imgic1108, "Memory node", "Add a memory node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_DMANODE] = new TAction("add-tmlarchi-dmanode", "Add a DMA node", IconManager.imgic1110, IconManager.imgic1110, "DMA node", "Add a DMA node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_KEY] = new TAction("add-tmlarchi-key", "Map a key", IconManager.imgic1118, IconManager.imgic1118, "Map a key", "Map a key onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
+	actions[TMLARCHI_FIREWALL] = new TAction("add-tmlarchi-firewall", "Add a Firewall", IconManager.imgic7001, IconManager.imgic7001, "Add a Firewall", "Add a Firewall in the currently opened DIPLODOCUS architecture diagram",0);
 
         actions[TMLCP_EDIT] = new TAction("edit-tmlcp-diagram", "Edit communication pattern diagram", IconManager.imgic100, IconManager.imgic101, "Edit communication pattern diagram", "Make it possible to edit the currently opened communication pattern diagram", 0);
         actions[TMLCP_CONNECTOR] = new TAction("add-tmlcp-connector", "Add CP Connector", IconManager.imgic202, IconManager.imgic202, "Connector", "Add a Connector between two components of the currently opened communication pattern diagram", 0);

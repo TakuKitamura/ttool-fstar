@@ -1208,20 +1208,20 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         }
     }
 
-    /*public ArrayList<String> getAllTMLTaskNames(String _topname) {
+    public ArrayList<String> getAllTMLTaskNames(String _topname) {
       TGComponent tgc;
       Iterator iterator = componentList.listIterator();
       ArrayList<String> list = new ArrayList<String>();
 
       while(iterator.hasNext()) {
       tgc = (TGComponent)(iterator.next());
-      if (tgc instanceof TMLTaskOperator) {
-      list.add(_topname + "::" + ((TMLTaskOperator)tgc).getTaskName());
+      if (tgc instanceof TMLCPrimitiveComponent) {
+      list.add(_topname + "::" + ((TMLCPrimitiveComponent)tgc).getValue());
       }
       }
 
       return list;
-      }*/
+      }
 
     /*public ArrayList<String> getAllTMLCommunicationNames(String _topname) {
       TGComponent tgc;

@@ -1427,7 +1427,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
         return list;
     }
+    public Vector<String> getTMLTasks(){
+        TURTLEPanel tp;
+        Vector<String> list = new Vector<String>();
 
+        for(int i=0; i<tabs.size(); i++) {
+            tp = (TURTLEPanel)(tabs.elementAt(i));
+            if (tp instanceof TMLDesignPanel) {
+                list.addAll(((TMLDesignPanel)tp).getAllTMLTaskNames(mainTabbedPane.getTitleAt(i)));
+            }
+	    if (tp instanceof TMLComponentDesignPanel) {
+                list.addAll(((TMLComponentDesignPanel)tp).getAllTMLTaskNames(mainTabbedPane.getTitleAt(i)));
+            }
+        }
+	
+        return list;
+    }
     public Vector getAllApplicationTMLTasksAttributes() {
 
         TURTLEPanel tp;
@@ -8902,9 +8917,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_COMMUNICATION_ARTIFACT);
         } else if (command.equals(actions[TGUIAction.TMLARCHI_KEY].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_KEY);
+        } else if (command.equals(actions[TGUIAction.TMLARCHI_FIREWALL].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_FIREWALL);
         } else if (command.equals(actions[TGUIAction.TMLARCHI_PORT_ARTIFACT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_PORT_ARTIFACT);
-
+	
 
 
             // Communication patterns

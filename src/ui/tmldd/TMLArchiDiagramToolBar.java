@@ -77,6 +77,7 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         mgui.actions[TGUIAction.TMLARCHI_ARTIFACT].setEnabled(b);
         mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].setEnabled(b);
         mgui.actions[TGUIAction.TMLARCHI_KEY].setEnabled(b);
+        mgui.actions[TGUIAction.TMLARCHI_FIREWALL].setEnabled(b);
         mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT].setEnabled(b);
         mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT].setEnabled(b);
         mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE].setEnabled(b);
@@ -155,6 +156,8 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
         button.addMouseListener(mgui.mouseHandler);
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_KEY]);
+        button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TMLARCHI_FIREWALL]);
         button.addMouseListener(mgui.mouseHandler);
         this.addSeparator();
 

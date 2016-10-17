@@ -153,7 +153,8 @@ public class IconManager {
     public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
     public static ImageIcon imgic5110, imgic5112, imgic5113,imgic5114;
     public static ImageIcon imgic5200;
-    public static ImageIcon imgic7000;
+    //Security
+    public static ImageIcon imgic7000, imgic7001;
 
     // Delegate ports image removed, by Solange
     //public static ImageIcon imgic2102;
@@ -591,6 +592,7 @@ public class IconManager {
     private static String icon6003 = "images/toolbarButtonGraphics/general/safepragma24.gif";
     //Security stuff
     private static String icon7000 = "images/tmlcrypto.gif";
+    private static String icon7001 = "images/tmlfirewallnode.gif";
     public IconManager() {
 
     }
@@ -1001,6 +1003,7 @@ public class IconManager {
         imgic6002 = getIcon(icon6002);
 	imgic6003 = getIcon(icon6003);
 	imgic7000 = getIcon(icon7000);
+	imgic7001 = getIcon(icon7001);
     }
 
 } // Class

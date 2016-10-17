@@ -191,6 +191,9 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
 		public Vector getAllTMLTasksAttributes() {
 			return tmlctdp.getAllTMLTasksAttributes();
 		}
+    public ArrayList<String> getAllTMLTaskNames(String _name) {
+	return tmlctdp.getAllTMLTaskNames(_name);
+    }
 
     public void getListOfBreakPoints(ArrayList<Point> points) {
         TGComponent tgc;
