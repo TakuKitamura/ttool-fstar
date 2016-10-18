@@ -146,7 +146,7 @@ gitpull:
 	date
 	git pull
 	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
-	git commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
+	git commit -m 'update on build version: builder.txt' build.txt src/ui/DefaultText.java
 	git push
 
 
@@ -190,9 +190,10 @@ webcrawler:
 	cd $(TTOOL_SRC);$(JAR) cmf $(WEBCRAWLER_CLIENT_JAR_TXT) $(TTOOL_BIN)/$(WEBCRAWLER_CLIENT_BINARY)  web/crawler/*.class myutil/*.class myutil/*/*.class
 
 documentation:
-	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_DOC_HTML) $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
+	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC):$(TTOOL_CLASSPATH_BINARY) -d $(TTOOL_DOC_HTML) $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
+	cd $(TTOOL_PATH)/doc/document_soclib&&make all
 
-release: jttooljar launcher tiftranslator tmltranslator rundse remotesimulator ttooljar stdrelease 
+release: jttooljar launcher tiftranslator tmltranslator rundse remotesimulator ttooljar documentation stdrelease 
 	@echo release done
 
 ########## RELEASE
