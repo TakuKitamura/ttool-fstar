@@ -1159,9 +1159,11 @@ public class TML2Avatar {
 		//tran.setGuard(c.getGuard(i));
 		as.addNext(tran);
 		List<AvatarStateMachineElement> nexts = translateState(ae.getNextElement(i), block);
-		tran.addNext(nexts.get(0));
-		elementList.add(tran);
-		elementList.addAll(nexts);
+		if (nexts.size()>0){
+		    tran.addNext(nexts.get(0));
+		    elementList.add(tran);
+		    elementList.addAll(nexts);
+		}
 	    }
 	    return elementList;
 

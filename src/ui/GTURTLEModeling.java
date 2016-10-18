@@ -1384,6 +1384,17 @@ public class GTURTLEModeling {
 	TraceManager.addDev("Mapping finished");
     }
 
+    public void generateAvatarFromTML(boolean mc, boolean security){
+	System.out.println("generating...");
+	if (avatarspec!=null){
+	    return;
+	}
+	else if (tmap!=null){
+	    t2a = new TML2Avatar(tmap, mc, security);
+	    avatarspec = t2a.generateAvatarSpec("1");
+	}
+    }
+
     public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed, String loopLimit) {
 	if (avatarspec !=null){
 	     //use avspec
