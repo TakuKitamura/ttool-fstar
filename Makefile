@@ -111,7 +111,7 @@ make all                        builds TTool and produces the jar files in bin/
 Usual targets:
 ---------------
 make (help)                     prints this help
-make svn                        produces the .class files and commit a new build version in the svn
+make git                        produces the .class files and commit a new build version in the git
 make basic                      generates the .class files
 make documentation              generates the documentation of java classes using javadoc
 make release                    to prepare a new release for the website. It produces the release.tgz files in releases/
@@ -122,7 +122,6 @@ make ultraclean                 runs clean and then removes the jar files in bin
 
 Other targets:
 --------------
-make basicsvnapvrille           produces the .class files and commit a new build version in the svn with username "apvrille"
 make jar                        generates the .jar files in bin/
 make publish_jar                places ttool.jar in perso.telecom-paristech.fr/docs/ttool.jar. Must have the right ssh key installed for this
 make preinstall			generates a preinstall version of TTool for Linux
@@ -141,21 +140,15 @@ help:
 
 all: basic jar
 
-svn: svnup jar
+git: gitpull jar
 
-svnup:
+gitpull:
 	date
-	svn update build.txt src/ui/DefaultText.java
+	git pull
 	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
-	svn --username apvrille commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
+	git commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
+	git push
 
-basicsvnapvrille: svupapvrille jar
-
-svnupapvrille:
-	date
-	svn --username apvrille update build.txt src/ui/DefaultText.java
-	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
-	svn --username apvrille commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
 
 myrelease: basic launcher ttooljar 
 
