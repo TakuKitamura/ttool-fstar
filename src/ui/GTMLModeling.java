@@ -2314,6 +2314,7 @@ public class GTMLModeling  {
         TMLArchiBridgeNode bridgenode;
         TMLArchiMemoryNode memorynode;
         TMLArchiDMANode dmanode;
+	TMLArchiFirewallNode firewallnode;
         HwCPU cpu;
         HwA hwa;	
 	HwBus bus;
@@ -2467,6 +2468,28 @@ if (tgc instanceof TMLArchiCrossbarNode) {
                     TraceManager.addDev("Bridge node added:" + bridge.getName());
                 }
             }
+
+            if (tgc instanceof TMLArchiFirewallNode) {
+                firewallnode = (TMLArchiFirewallNode)tgc;
+                if (nameInUse(names, firewallnode.getName())) {
+                    // Node with the same name
+                    CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + firewallnode.getName());
+                    ce.setTDiagramPanel(tmlap.tmlap);
+                    ce.setTGComponent(firewallnode);
+                    checkingErrors.add(ce);
+                } else {
+                    names.add(firewallnode.getName());
+                    bridge = new HwBridge(firewallnode.getName());
+		    bridge.isFirewall=true;
+		    bridge.firewallRules = ((TMLArchiFirewallNode) tgc).getRules();
+                    bridge.bufferByteSize = 1;
+                    bridge.clockRatio = 1;
+                    listE.addCor(bridge, firewallnode);
+                    archi.addHwNode(bridge);
+                    TraceManager.addDev("Bridge node added:" + bridge.getName());
+                }
+            }
+
 
             if (tgc instanceof TMLArchiMemoryNode) {
                 memorynode = (TMLArchiMemoryNode)tgc;
@@ -3262,9 +3285,12 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 
             // Other nodes (memory, bridge, bus, VGMN, crossbar)
             //}
-            if ((tgc instanceof TMLArchiBUSNode) ||(tgc instanceof TMLArchiVGMNNode) || (tgc instanceof TMLArchiCrossbarNode) ||(tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode)|| (tgc instanceof TMLArchiDMANode)) {
+            if ((tgc instanceof TMLArchiBUSNode) ||(tgc instanceof TMLArchiVGMNNode) || (tgc instanceof TMLArchiCrossbarNode) ||(tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode)|| (tgc instanceof TMLArchiDMANode) || (tgc instanceof TMLArchiFirewallNode)) {
                 node = archi.getHwNodeByName(tgc.getName());
                 if ((node != null) && (node instanceof HwCommunicationNode)) {
+		    if (tgc instanceof TMLArchiFirewallNode){
+			map.firewall=true;
+		    }
                     artifactscomm = ((TMLArchiCommunicationNode)(tgc)).getChannelArtifactList();
                     for( TMLArchiCommunicationArtifact artifact:artifactscomm ) {
                         TraceManager.addDev("Exploring artifact " + artifact.getValue());
@@ -3339,8 +3365,151 @@ if (tgc instanceof TMLArchiCrossbarNode) {
             }
 
         }
+	if (map.firewall){
+	    TMLTask firewall = new TMLTask("Firewall", null,null);
+	    HashMap<TMLChannel, TMLChannel> inChans = new HashMap<TMLChannel, TMLChannel>();
+	    HashMap<TMLChannel, TMLChannel> outChans = new HashMap<TMLChannel, TMLChannel>();	
+	    ArrayList<TMLChannel> channelsCopy = tmlm.getChannels();
+	    ArrayList<TMLChannel> toAdd = new ArrayList<TMLChannel>();	
+	//tmlm.removeAllChannels();
+	    for (TMLChannel chan: channelsCopy){
+	    	TMLTask orig = chan.getOriginTask();
+	    	TMLTask dest = chan.getDestinationTask();   
+	    	TMLChannel wr = new TMLChannel(chan.getName()+"_firewallIn",chan.getReferenceObject());
+	    	wr.setTasks(orig, firewall);
+	    	TMLChannel rd = new TMLChannel(chan.getName()+"_firewallOut", chan.getReferenceObject());
+	    	rd.setTasks(firewall,dest);
+	    	inChans.put(chan,wr);
+	    	outChans.put(chan,rd);
+	    	toAdd.add(rd);
+	    	toAdd.add(wr);
+	    }
+	    tmlm.removeAllChannels();
+	    for (TMLChannel c:toAdd){
+	    	tmlm.addChannel(c);
+	    }
+	TMLActivity act = firewall.getActivityDiagram();
+	TMLStartState start = new TMLStartState("start", null);
+	act.setFirst(start);
+	tmlm.addTask(firewall);
+	TMLForLoop loop = new TMLForLoop("infiniteloop",null);
+	loop.setInfinite(true);
+	start.addNext(loop);
+	act.addElement(loop);
+	TMLChoice choice = new TMLChoice("chooseChannel", null);
+	act.addElement(choice);
+	loop.addNext(choice);
+	for (TMLChannel chan: inChans.keySet()){
+	    TMLChannel newChan = inChans.get(chan);
+	    TMLReadChannel rd = new TMLReadChannel(newChan.getName(), chan.getReferenceObject());
+	    rd.setNbOfSamples("1");
+	    rd.addChannel(newChan);
+	    choice.addNext(rd);
+	    choice.addGuard("[]");
+	    act.addElement(rd);
+	    if (channelAllowed(chan)){
+	        TMLChannel wrChan = outChans.get(chan);
+	        TMLWriteChannel wr = new TMLWriteChannel(wrChan.getName(), chan.getReferenceObject());
+	        wr.setNbOfSamples("1");
+	        wr.addChannel(wrChan);
+		rd.addNext(wr);
+		act.addElement(wr);
+	    }
+	    for (TMLTask t:tmlm.getTasks()){
+	        TMLActivity actd = t.getActivityDiagram();
+	        actd.replaceWriteChannelWith(chan,newChan);
+		actd.replaceReadChannelWith(chan, outChans.get(chan));
+	    }
+	}
+	}
+/*	for (TMLActivityElement el:act.getElements()){
+	    System.out.println(el);
+	}*/
+	/*
+	TMLCPrimitiveComponent firewall = new TMLCPrimitiveComponent(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxY(), false, null, tmlcdp.tmlctdp);
+	firewall.setValueWithChange("Firewall");
+	tmlcdp.tmlctdp.addComponent(firewall,0,0,false,true);
+	TMLActivityDiagramPanel firewallAct = tmlcdp.getTMLActivityDiagramPanel("Firewall");
+	ArrayList<TMLChannel> channelsCopy = tmlm.getTMLChannels();
+	ArrayList<TMLChannel> toAdd = new ArrayList<TMLChannel>();	
+	for (TMLChannel chan: channelsCopy){
+	    TMLTask orig = chan.getOriginTask();
+	    TMLTask dest = chan.getDestinationTask();   
+	}
+	TMLADChoice choice = new TMLADChoice(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, null, TDiagramPanel _tdp);
+	firewallAct.addComponent(choice, */
     }
 
+
+    public boolean channelAllowed(TMLChannel chan){
+	TMLTask orig = chan.getOriginTask();
+	TMLTask dest = chan.getDestinationTask();
+	List<HwNode> path = getPath(orig, dest);
+	for (HwNode node:path){
+	    if (node instanceof HwBridge){
+		for (String rule:((HwBridge) node).firewallRules){
+		    String t1 = rule.split("->")[0];
+		    String t2 = rule.split("->")[1];
+		    if (t1.equals(orig.getName().replaceAll("__","::")) && t2.equals(dest.getName().replaceAll("__","::"))){
+			return false;
+		    }
+		}
+	    }
+	}
+	return true;
+    }
+    public List<HwNode> getPath(TMLTask t1, TMLTask t2){
+	HwNode node1 = map.getHwNodeOf(t1);
+	HwNode node2 = map.getHwNodeOf(t2);
+	List<HwNode> path = new ArrayList<HwNode>();
+	if (node1==node2){
+	    return path;
+	}
+	if (node1!=node2){
+	    //Navigate architecture for node
+	    List<HwLink> links = map.getTMLArchitecture().getHwLinks();
+	    HwNode last = node1;
+	    List<HwNode> found = new ArrayList<HwNode>();	
+	    List<HwNode> done = new ArrayList<HwNode>();
+	    Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
+	    for (HwLink link: links){
+		if (link.hwnode == node1){
+		    found.add(link.bus);
+		    List<HwNode> tmp = new ArrayList<HwNode>();
+		    tmp.add(link.bus);
+		    pathMap.put(link.bus, tmp);
+		}
+	    }
+	    outerloop:
+	    while (found.size()>0){
+		HwNode curr = found.remove(0);
+		for (HwLink link: links){
+		    if (curr == link.bus){
+		        if (link.hwnode == node2){
+		      	    path = pathMap.get(curr);
+		      	    break outerloop;
+		    	}
+		    	if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+		      	    found.add(link.hwnode);
+		      	    List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+		      	    tmp.add(link.hwnode);
+		      	    pathMap.put(link.hwnode, tmp);
+		    	}
+		    }
+		    else if (curr == link.hwnode){
+		    	if (!done.contains(link.bus) && !found.contains(link.bus)){
+		            found.add(link.bus);
+		            List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+		            tmp.add(link.bus);
+		       	    pathMap.put(link.bus, tmp);
+	      	        }
+	  	    }
+	        }
+	    done.add(curr);
+	    }
+	}
+	return path;
+    }
     public void addToTable(String s1, String s2) {
         //TraceManager.addDev("Adding to Table s1= "+ s1 + " s2=" + s2);
         table.put(s1, s2);

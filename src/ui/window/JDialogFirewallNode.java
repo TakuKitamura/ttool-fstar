@@ -137,7 +137,10 @@ public class JDialogFirewallNode extends javax.swing.JDialog implements ActionLi
         c2.weighty = 1.0;
         c2.weightx = 1.0;
         c2.fill = GridBagConstraints.HORIZONTAL;
-	JLabel rulesLabel = new JLabel("Rules");
+	for (String s: node.getRules()){
+	    rules.add(s);
+	}
+	JLabel rulesLabel = new JLabel("Blocking Rules");
 	panel2.add(rulesLabel, c2);
 
 	listRules = new JList<String>(rules);
@@ -145,12 +148,16 @@ public class JDialogFirewallNode extends javax.swing.JDialog implements ActionLi
         listRules.addListSelectionListener(this);
 	JScrollPane scrollPane = new JScrollPane(listRules);
         scrollPane.setSize(500, 250);
-        c2.gridwidth = 1; //end row
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         c2.fill = GridBagConstraints.BOTH;
-        c2.gridheight = 5;
+        c2.gridheight = 10;
         c2.weighty = 10.0;
         c2.weightx = 10.0;
         panel2.add(scrollPane, c2);
+	c2.gridheight=1;
+	c2.gridwidth=1;
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
 	task1 = new JComboBox();
 	for (String task: node.getTDiagramPanel().getMGUI().getTMLTasks()){
 	    task1.addItem(task);
@@ -258,5 +265,11 @@ public class JDialogFirewallNode extends javax.swing.JDialog implements ActionLi
     public String getLatency() {
         return latency.getText();
     }
-	
+    public ArrayList<String> getRules(){
+	ArrayList<String> r = new ArrayList<String>();
+	for (int i=0; i<rules.size(); i++){
+	    r.add((String) rules.get(i));
+	}
+	return r;
+    }
 }

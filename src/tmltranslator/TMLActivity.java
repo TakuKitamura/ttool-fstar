@@ -405,7 +405,9 @@ public class TMLActivity extends TMLElement {
         }
 
     }
-
+    public Vector<TMLActivityElement> getElements(){
+	return elements;
+    }
     public void replaceReadChannelWith(TMLChannel oldChan, TMLChannel newChan) {
 	TMLActivityElement ae;
 

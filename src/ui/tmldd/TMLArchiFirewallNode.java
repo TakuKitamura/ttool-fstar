@@ -64,7 +64,7 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
     private int derivationx = 2;
     private int derivationy = 3;
     private String stereotype = "FIREWALL";
-	
+    private ArrayList<String> rules = new ArrayList<String>();
 	private int latency = 0;
     
     public TMLArchiFirewallNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -193,7 +193,7 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
 			 }
 		}
 		
-		
+		rules = dialog.getRules();
 		
 		if (error) {
 			JOptionPane.showMessageDialog(frame,
@@ -215,8 +215,12 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
         sb.append("\" />\n");
-		sb.append("<attributes latency=\"" + latency + "\" ");
+	sb.append("<attributes latency=\"" + latency + "\" ");
         sb.append("/>\n");
+	for (String rule:rules){
+	sb.append("<rule value=\"" + rule + "\" ");
+        sb.append("/>\n");
+	}
         sb.append("</extraparam>\n");
         return new String(sb);
     }
@@ -258,6 +262,9 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
 									clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
 								}
                             }
+			    if (elt.getTagName().equals("rule")){
+				rules.add(elt.getAttribute("value"));
+			    }
                         }
                     }
                 }
@@ -272,7 +279,10 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
 	  public int getLatency(){
 		  return latency;
 	  }
-	  
+	public ArrayList<String> getRules(){
+	    System.out.println("FIREWALL rules " + rules);
+	    return rules;
+	}
 	  public String getAttributes() {
 		  String attr = "";
 		  attr += "Latency = " + latency + "\n";

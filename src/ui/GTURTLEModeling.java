@@ -7795,6 +7795,7 @@ public class GTURTLEModeling {
 		father = blockMap.get(ab.getFather().getName().split("__")[1]);
 	    }
 	    AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, father, abd);
+	    bl.addCryptoElements();
 	    tranSourceMap.clear();
 /*	    if (ab.getName().contains("__")){
 	        bl.setValue(ab.getName().split("__")[1]);

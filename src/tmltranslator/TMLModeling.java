@@ -181,7 +181,9 @@ public class TMLModeling {
     public boolean checkConsistency() {
         return true;
     }
-
+    public void removeAllChannels(){
+	channels.clear();
+    }
     public TMLTask findTMLTask(TMLActivityElement _elt) {
         TMLTask tmp;
         for(int i=0; i<tasks.size(); i++) {

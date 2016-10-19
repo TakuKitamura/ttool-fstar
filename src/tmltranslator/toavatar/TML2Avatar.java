@@ -1063,8 +1063,10 @@ public class TML2Avatar {
 		    if (e instanceof AvatarStopState){
 		    }
 		    else if (e.getNexts().size()==0){
-			e.addNext(as);
-			elementList.add(e);
+			if (e instanceof AvatarTransition){
+			    e.addNext(as);
+			    elementList.add(e);
+			}
 		    }
 		    else if (e.getNext(0) instanceof AvatarStopState){
 			//Remove the transition to AvatarStopState
@@ -1251,17 +1253,21 @@ public class TML2Avatar {
 		request.checkAuth = p.checkAuth || request.checkAuth;
 	    }
 	}
+
 	AvatarBlock top = new AvatarBlock("TOP__TOP", avspec, null);
+	if (mc){
 	avspec.addBlock(top);
 	AvatarStateMachine topasm = top.getStateMachine();
 	AvatarStartState topss = new AvatarStartState("start", null);
 	topasm.setStartState(topss);
 	topasm.addElement(topss);
-	
+	}
 	ArrayList<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
 	for (TMLTask task:tasks){
 	    AvatarBlock block = new AvatarBlock(task.getName(), avspec, task.getReferenceObject());
+	    if (mc){
 	    block.setFather(top);
+	    }
 	    taskBlockMap.put(task, block);
 	    avspec.addBlock(block);
 	}
