@@ -1,33 +1,16 @@
 For users of TTool: (e.g., for users having a read-only access to the svn)
 ------------------- 
 
-* Access to the documentation:
-
-1) from Eurecom: http://jabba/TURTLE/ttool.html
-2) from outside Eurecom: http://labsoc.comelec.enst.fr/TURTLE/ttool.html
-
-* Getting the latest version:
-svn update
-
-* Compiling locally TTool:
-make myrelease
-
-* Starting TTool:
-./ttool.exe
+Go to: http://ttool.telecom-paristech.fr
 
 Beware, if you want to use other options of TTool, please, start it with the needed command line, or make your own ttool.exe. See the online documentation for more information
 
 
-For developers: (rw access to the svn)
+For developers: (rw access to the git)
 ---------------
 
 * Compiling the latest version:
-make
-
-note: the compilation generated a new build version.
-
-* Generating a jar archive in the bin subdirectory:
-make ttooljar_std
+make all
 
 * Generating a release:
 make release
