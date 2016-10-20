@@ -280,7 +280,6 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
 		  return latency;
 	  }
 	public ArrayList<String> getRules(){
-	    System.out.println("FIREWALL rules " + rules);
 	    return rules;
 	}
 	  public String getAttributes() {

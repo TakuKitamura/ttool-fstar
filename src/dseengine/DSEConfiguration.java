@@ -94,7 +94,7 @@ public class DSEConfiguration implements Runnable  {
 	private File taskModelFile = null;
 	
 	private boolean outputVCD = false;
-	private boolean outputHTML = false;
+	private boolean outputHTML = true;
 	private boolean outputTXT = false;
 	private boolean outputXML = false;
 	

@@ -50,11 +50,10 @@ import java.util.*;
 
 public class HwBridge extends HwCommunicationNode  {
 	
-	public static final int DEFAULT_BUFFER_BYTE_DATA_SIZE = 4;
-	
-    public int bufferByteSize = DEFAULT_BUFFER_BYTE_DATA_SIZE; // In bytes. Should more than 0
+    public static final int DEFAULT_BUFFER_BYTE_DATA_SIZE = 4;
     public boolean isFirewall;
-    public ArrayList<String> firewallRules = new ArrayList<String>();
+    public ArrayList<String> firewallRules = new ArrayList<String>();	
+    public int bufferByteSize = DEFAULT_BUFFER_BYTE_DATA_SIZE; // In bytes. Should more than 0
     public HwBridge(String _name) {
 		super(_name);
     }

@@ -79,7 +79,6 @@ public class HwCPU extends HwExecutionNode  {
 	public int sliceTime = DEFAULT_SLICE_TIME;
 	public ArchUnitMEC MEC = DEFAULT_MODEL_EXTENSION_CONSTRUCT;
 	
-	
     public HwCPU(String _name) {
 		super(_name);
 		maximumNbOfTasks = 100;

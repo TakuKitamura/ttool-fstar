@@ -286,7 +286,18 @@ public class TMLArchitecture {
         }
         return null;
     }
-
+    public List<HwBridge> getFirewalls(){
+	List<HwBridge> firewalls= new ArrayList<HwBridge>();
+	for (HwNode node:hwnodes){
+	    if (node instanceof HwBridge){
+		HwBridge bridge= (HwBridge)node;
+		if (bridge.isFirewall){
+		    firewalls.add(bridge);
+		}
+	    }
+	}
+	return firewalls;
+    }
     public HwCPU getHwCPUByName(String _name) {
         for(HwNode node: hwnodes) {
             if (node.getName().equals(_name)) {
@@ -384,5 +395,13 @@ public class TMLArchitecture {
 
         return complexity;
     }
-
+    public void replaceFirewall(HwBridge firewall, HwCPU newCPU){
+	hwnodes.remove(firewall);
+	addHwNode(newCPU);
+	for (HwLink link:hwlinks){
+	    if (link.hwnode==firewall){
+		link.hwnode=newCPU;
+	    }
+	}
+    }
 }

@@ -978,7 +978,6 @@ public class GTURTLEModeling {
 			//System.out.println("channel " + chan);
 			if (chan!=null){
 			    if (chan.checkConf){
-				System.out.println("F#$%^&*( ");
 			    	if (!securePath(map, chan.getOriginTask(), chan.getDestinationTask())){
 		    		    insecureOutChannels.get(chan.getOriginTask()).add(writeChannel.getChannelName());
 		    		    insecureInChannels.get(chan.getDestinationTask()).add(writeChannel.getChannelName());
@@ -991,7 +990,6 @@ public class GTURTLEModeling {
 		}
 	    }
 	}
-	System.out.println("tosecure " + toSecure);
 	int num=0;
 	int nonceNum=0;
 	//Create reverse channels to send nonces if they don't already exist
@@ -7842,6 +7840,9 @@ public class GTURTLEModeling {
 	    addStates(start, smx, smy, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
 	    //Add transitions
 	    for (AvatarTransition t: tranSourceMap.keySet()){
+		if (tranSourceMap.get(t)==null || tranDestMap.get(t)==null){
+		    continue;
+		}
 		int x=tranSourceMap.get(t).getX()+tranSourceMap.get(t).getWidth()/2;
 		int y=tranSourceMap.get(t).getY()+tranSourceMap.get(t).getHeight();
 

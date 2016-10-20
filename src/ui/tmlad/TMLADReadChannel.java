@@ -262,7 +262,10 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         return false;
 
     }
-
+    public void setSamples(String sp){
+	nbOfSamples=sp;
+	makeValue();
+    }
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data channelName=\"");
@@ -327,6 +330,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
     }
     public void setChannelName(String s){
 	channelName=s;
+	makeValue();
     }
 
 }

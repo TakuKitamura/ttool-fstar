@@ -739,7 +739,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    }
 
 	    config.setOutputTXT("true");
-	   // config.setOutputHTML("true");
+	    config.setOutputHTML("true");
 	   // config.setOutputVCD("true");
 	   // config.setOutputXML("true");
 	    config.setRecordResults("true");

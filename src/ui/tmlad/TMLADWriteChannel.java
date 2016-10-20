@@ -319,8 +319,12 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
     }
     public void setChannelName(String s){
 	channelName=s;
+	makeValue();
+    } 
+    public void setSamples(String sp){
+	nbOfSamples=sp;
+	makeValue();
     }
-
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
