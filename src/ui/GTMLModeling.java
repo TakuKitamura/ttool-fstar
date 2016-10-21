@@ -3382,10 +3382,22 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 	    for (TMLChannel chan: channelsCopy){
 	    	TMLTask orig = chan.getOriginTask();
 	    	TMLTask dest = chan.getDestinationTask();   
+		TMLPort origPort = chan.getOriginPort();
+		TMLPort destPort = chan.getDestinationPort();
 	    	TMLChannel wr = new TMLChannel(chan.getName()+"_firewallIn",chan.getReferenceObject());
+	        wr.setSize(chan.getSize());
+                wr.setMax(chan.getMax());
+		wr.setPorts(origPort,destPort);
+                wr.setType(TMLChannel.BRBW);
+		wr.setPriority(chan.getPriority());
 	    	wr.setTasks(orig, firewall);
 	    	TMLChannel rd = new TMLChannel(chan.getName()+"_firewallOut", chan.getReferenceObject());
 	    	rd.setTasks(firewall,dest);
+	        rd.setSize(chan.getSize());
+                rd.setMax(chan.getMax());
+		rd.setPorts(origPort,destPort);
+                rd.setType(TMLChannel.BRBW);
+		rd.setPriority(chan.getPriority());
 	    	inChans.put(chan,wr);
 	    	outChans.put(chan,rd);
 	    	toAdd.add(rd);
