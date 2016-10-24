@@ -88,8 +88,6 @@ int main(int argc, char *argv[]) {
   } else {
     activeTracingInConsole();
   }
-  /* Activating debug messages */
-  activeDebug();
   /* Activating randomness */
   initRandom();
   /* Initializing the main mutex */
@@ -99,7 +97,6 @@ if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}
   __user_init();
   
   
-  debugMsg("Starting tasks");
   struct mwmr_s *channels_array_Block1[1];
   channels_array_Block1[0]=&Block0_val__Block1_val;
   
@@ -109,7 +106,6 @@ if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}
   pthread_attr_affinity(attr_t, 0);  
   
   
-  debugMsg("Starting tasks");
   pthread_create(&thread__Block1, attr_t, mainFunc__Block1, (void *)channels_array_Block1);
   
   struct mwmr_s *channels_array_Block0[1];
@@ -121,17 +117,14 @@ if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}
   pthread_attr_affinity(attr_t, 1);  
   
   
-  debugMsg("Starting tasks");
   pthread_create(&thread__Block0, attr_t, mainFunc__Block0, (void *)channels_array_Block0);
   
   
   
-  debugMsg("Joining tasks");
   pthread_join(thread__Block1, NULL);
   pthread_join(thread__Block0, NULL);
   
   
-  debugMsg("Application terminated");
   return 0;
   
 }

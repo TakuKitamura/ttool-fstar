@@ -1080,7 +1080,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
 				}				
 			    }
 			}
-			synchronized(this) {
 			Map<String, String> statMap = tdp.getMGUI().getStatus(getDIPLOID());
 			for (String name:statMap.keySet()){
 			    String stat =statMap.get(name);
@@ -1098,7 +1097,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
 			}
 		    
                     }
-		    }
                     /*if (this instanceof TMLArchiCPUNode) {
 
                       }

@@ -34,7 +34,6 @@ void *mainFunc__Block1(struct mwmr_s *channels_Block1[]){
     switch(__currentState) {
       case STATE__START__STATE: 
       traceStateEntering(__myname, "__StartState");
-      debug2Msg(__myname, "-> (=====) Entering state + state0");
       __currentState = STATE__state0;
       break;
       

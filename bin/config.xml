@@ -63,11 +63,11 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal ../uppaal/spec.xml"/>
 
-<LastOpenFile data="../modeling/BENCH3_new.xml"/>
+<LastOpenFile data="/users/enseig/genius/TTool/modeling/miniAsynchronousDeploy.xml"/>
 
 
 
-<LastWindowAttributes x="-8" y="-8" width="1382" height="744" max="true" />
+<LastWindowAttributes x="758" y="181" width="790" height="596" max="false" />
 
 
 <ProVerifHash data=""/>
