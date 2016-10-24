@@ -1054,8 +1054,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
                       drawDiploID(g);
                       }*/
                 } else if (tdp instanceof TMLArchiDiagramPanel) {
-		    if (false){
-                  //  if (getDIPLOID() != -1) {
+		  //  if (false){
+                    if (getDIPLOID() != -1) {
                         if (tdp.DIPLO_ID_ON) {
                             drawDiploID(g);
                         }
