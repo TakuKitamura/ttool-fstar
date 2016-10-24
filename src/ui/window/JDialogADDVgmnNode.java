@@ -223,13 +223,16 @@ public class JDialogADDVgmnNode extends javax.swing.JDialog implements ActionLis
     }
     
     public String getNbOfAttachedInitiators() {
-        return nbOfAttachedInitiators.getText();
+        //return nbOfAttachedInitiators.getText();
+	return "0";
     }
-	
-	public String getNbOfAttachedTargets(){
-		  return nbOfAttachedTargets.getText();
-	  }
-	  
+       
+
+    public String getNbOfAttachedTargets(){
+	    //return nbOfAttachedTargets.getText();
+	return "0";
+    }
+    
 	public String getFifoDepth(){
 		  return fifoDepth.getText();
 	  }
