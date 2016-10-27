@@ -1004,7 +1004,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
 
         if (tdp.DIPLO_ANIMATE_ON) {
-	    System.out.println(getName());
             if (breakpoint) {
                 //System.out.println("breakpoint");
                 g.setColor(ColorManager.BREAKPOINT);
@@ -1054,8 +1053,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
                       drawDiploID(g);
                       }*/
                 } else if (tdp instanceof TMLArchiDiagramPanel) {
-		  //  if (false){
-                    if (getDIPLOID() != -1) {
+		     if (getDIPLOID() != -1) {
                         if (tdp.DIPLO_ID_ON) {
                             drawDiploID(g);
                         }
@@ -1067,7 +1065,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 			if (ts !=null && ts.size()>0){
 			    transactions = new ArrayList<SimulationTransaction>(ts);
 			    transaction = transactions.get(transactions.size()-1).taskName+ ":" +transactions.get(transactions.size()-1).command;
-			  //  drawTransaction(g);
+			    drawTransaction(g);
 			    for (int i=0; i< nbInternalTGComponent; i++){
 				Object ob = getChild(i);
 				if (ob instanceof TMLArchiArtifact){
