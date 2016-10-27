@@ -598,6 +598,36 @@ public class DSEConfiguration implements Runnable  {
 		
 		return -1;
 	}
+	public int checkingDSEElements() {
+		if (pathToSimulator == null) {
+			errorMessage = PATH_TO_CODE;
+			return -1;
+		}
+		
+		if (pathToResults == null) {
+			errorMessage = PATH_TO_RESULTS;
+			return -1;
+		}
+		
+		
+		if (!outputVCD && !outputHTML && !outputTXT) {
+			errorMessage = NO_OUTPUT_SELECTED;
+			return -1;
+		}
+		
+		if (simulationCompilationCommand == null) {
+			errorMessage = SIMULATION_COMPILATION_COMMAND_NOT_SET;
+			return -1;
+		}
+		
+		
+		if (simulationExecutionCommand == null) {
+			errorMessage = SIMULATION_EXECUTION_COMMAND_NOT_SET;
+			return -1;
+		}
+		
+		return 0;
+	}
 	
 	public int checkingSimulationElements() {
 		if (pathToSimulator == null) {
@@ -1252,13 +1282,13 @@ public class DSEConfiguration implements Runnable  {
 		}
 		
 		// Checking simulation Elements
-		int ret = checkingSimulationElements();
+		int ret = checkingDSEElements();
 		if (ret != 0) {
 			return ret;
 		}
 		
 		// Checking simulation Elements
-		ret = checkingSimulationElements();
+		ret = checkingDSEElements();
 		if (ret != 0) {
 			return ret;
 		}

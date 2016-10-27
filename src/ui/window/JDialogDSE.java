@@ -658,8 +658,6 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 
 	    config.mainGUI = mgui;
 	    TMLMapping map = mgui.gtm.getTMLMapping();
-	    config.tmlcdp = map.getTMLCDesignPanel();
-	    config.tmlap = map.tmlap;
 
 	    if (config.setModelPath(tmlDir) != 0) {
 		TraceManager.addDev("TML Directory file at " + tmlDir + " error");
@@ -670,14 +668,16 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	    else {
 		TraceManager.addDev("Set directory to " + tmlDir);
 	    }
-	    if (config.setMappingFile(mapFile) <0) {
-		TraceManager.addDev("Mapping at " + mapFile + " error");
-		output+="Mapping at " + mapFile + " error";
-		checkMode();
-		return;
-	    }
-	    else {
-		TraceManager.addDev("Set mapping file to " + mapFile);
+	    if (!mapFile.isEmpty()){
+	 	if (config.setMappingFile(mapFile) <0) {
+		    TraceManager.addDev("Mapping at " + mapFile + " error");
+		    output+="Mapping at " + mapFile + " error";
+		    mode = STOPPED;
+		    return;
+	    	}
+	    	else {
+		    TraceManager.addDev("Set mapping file to " + mapFile);
+	    	}
 	    }
 	    if (config.setTaskModelFile(modFile)!=0){
 		TraceManager.addDev("Model File " + modFile +" error");
