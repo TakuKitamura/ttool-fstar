@@ -155,6 +155,8 @@ public class IconManager {
     public static ImageIcon imgic5200;
     //Security
     public static ImageIcon imgic7000, imgic7001;
+    //Safety
+    public static ImageIcon imgic7002, imgic7003, imgic7004, imgic7005, imgic7006;
 
     // Delegate ports image removed, by Solange
     //public static ImageIcon imgic2102;
@@ -593,7 +595,13 @@ public class IconManager {
     //Security stuff
     private static String icon7000 = "images/tmlcrypto.gif";
     private static String icon7001 = "images/tmlfirewallnode.gif";
+    private static String icon7002 = "images/A1.gif";
+    private static String icon7003 = "images/A2.gif";
+    private static String icon7004 = "images/E1.gif";
+    private static String icon7005 = "images/E2.gif";
+    private static String icon7006 = "images/imply.gif";	
     public IconManager() {
+
 
     }
 
@@ -1004,6 +1012,11 @@ public class IconManager {
 	imgic6003 = getIcon(icon6003);
 	imgic7000 = getIcon(icon7000);
 	imgic7001 = getIcon(icon7001);
+	imgic7002 = getIcon(icon7002);
+	imgic7003 = getIcon(icon7003);
+	imgic7004 = getIcon(icon7004);
+	imgic7005 = getIcon(icon7005);
+	imgic7006 = getIcon(icon7006);
     }
 
 } // Class
