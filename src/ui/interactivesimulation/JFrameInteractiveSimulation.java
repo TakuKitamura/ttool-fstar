@@ -1172,7 +1172,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             rc.connect();
             return true;
         } catch (RemoteConnectionException rce) {
-        	rce.printStackTrace();
+	    //rce.printStackTrace();
         	
             return false;
         }
