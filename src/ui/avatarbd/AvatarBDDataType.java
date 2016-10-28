@@ -453,5 +453,8 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent  {
 	public LinkedList<TAttribute> getAttributeList() {
 		return myAttributes;
 	}
+	public void addAttribute(TAttribute ta){
+	    myAttributes.add(ta);
+	}
     
 }

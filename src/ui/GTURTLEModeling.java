@@ -255,6 +255,7 @@ import ui.avatarbd.AvatarBDPortConnector;
 import ui.avatarbd.AvatarBDPragma;
 import ui.avatarbd.AvatarBDStateMachineOwner;
 import ui.avatarcd.AvatarCDPanel;
+import ui.avatarbd.AvatarBDDataType;
 // AVATAR
 // AVATAR
 // AVATAR
@@ -7793,7 +7794,7 @@ public class GTURTLEModeling {
 		father = blockMap.get(ab.getFather().getName().split("__")[1]);
 	    }
 	    AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, father, abd);
-	    bl.addCryptoElements();
+
 	    for (avatartranslator.AvatarSignal sig:ab.getSignals()){
 		String name=sig.getName().split("__")[sig.getName().split("__").length-1];
 		sig.setName(name);
@@ -7824,7 +7825,7 @@ public class GTURTLEModeling {
 		else {
 		    bl.addAttribute(new TAttribute(0, attr.getName(), attr.getType().getDefaultInitialValue(), type));
 		}
-		if (attr.getName().equals("key")){
+		if (attr.getName().contains("key_")){
 		    bl.addCryptoElements();
 		}
 	    }
@@ -7981,6 +7982,20 @@ public class GTURTLEModeling {
 	pragma.setValue(s);
 	pragma.makeValue();
 	abd.addComponent(pragma, xpos, ypos, false,true);
+	//Add message and key datatype
+	xpos=100;
+	ypos+=200;
+	AvatarBDDataType message = new AvatarBDDataType(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
+	message.setValue("Message");
+	
+	abd.addComponent(message, xpos, ypos, false,true);
+
+	AvatarBDDataType key = new AvatarBDDataType(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
+	key.setValue("Key");
+	TAttribute attr = new TAttribute(2, "data", "0", 8);
+	message.addAttribute(attr);
+	key.addAttribute(attr);
+	abd.addComponent(key, xpos, ypos, false,true);
     }    
 
     // Generates for all observers, a TURTLE modeling for checking it
