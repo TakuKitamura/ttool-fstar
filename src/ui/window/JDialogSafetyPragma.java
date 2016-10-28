@@ -232,12 +232,13 @@ public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionLi
         helpPopup = new JPopupMenu();
 	//JTextArea jft = new JTextArea("UPPAAL pragmas");
 	//helpPopup.add(jft);
-	helpPopup.add(new JLabel("UPPAAL safety query format"));
+	helpPopup.add(new JLabel("UPPAAL safety query"));
 	helpPopup.add(new JLabel(new ImageIcon("src/ui/images/A1.gif")));	
 	helpPopup.add(new JLabel(new ImageIcon("src/ui/images/A2.gif")));
 	helpPopup.add(new JLabel(new ImageIcon("src/ui/images/E1.gif")));
 	helpPopup.add(new JLabel(new ImageIcon("src/ui/images/E2.gif")));
 	helpPopup.add(new JLabel(new ImageIcon("src/ui/images/imply.gif")));
+	helpPopup.setPreferredSize(new Dimension(150,650));
         textarea = new JTextArea();
 
         textarea.setEditable(true);
