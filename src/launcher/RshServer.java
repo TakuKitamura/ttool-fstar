@@ -287,7 +287,7 @@ public class RshServer {
             if (et.getPort() == id) {
                 et.stopProcess();
                 processes.removeElement(et);
-                System.out.println("Process " + id + " killed");
+                TraceManager.addDev("Process " + id + " killed");
                 return;
             }
         }
@@ -300,7 +300,7 @@ public class RshServer {
             et = processes.elementAt(i);
             et.stopProcess();
             processes.removeElement(et);
-            System.out.println("Process " + id + " killed");
+            TraceManager.addDev("Process " + id + " killed");
         }
         printProcessRunning();
     }
