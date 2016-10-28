@@ -1280,9 +1280,26 @@ public class TML2Avatar {
 	System.out.println("ACCESSKEYS " +accessKeys);
 
 	for (TMLTask task:tasks){
-
+	   
 	    AvatarBlock block = avspec.getBlockWithName(task.getName());
 	    //Add temp variable for unsendable signals
+
+	    //Add all signals
+	    for (TMLChannel chan: tmlmodel.getChannels(task)){
+		System.out.println("adding channel " + chan);
+		if (chan.hasOriginTask(task)){
+		AvatarSignal sig = new AvatarSignal(block.getName()+"__OUT__"+chan.getName(), AvatarSignal.OUT, chan.getReferenceObject());
+		block.addSignal(sig);
+		signals.add(sig);
+		signalMap.put(block.getName()+"__OUT__"+chan.getName(),sig);
+		}
+		else if (chan.hasDestinationTask(task)){
+		AvatarSignal sig = new AvatarSignal(block.getName()+"__IN__"+chan.getName(), AvatarSignal.IN, chan.getReferenceObject());
+		block.addSignal(sig);
+		signals.add(sig);
+		signalMap.put(block.getName()+"__IN__"+chan.getName(),sig);
+		}
+	    }
 	    AvatarAttribute tmp = new AvatarAttribute("tmp", AvatarType.INTEGER, block, null);
 	    block.addAttribute(tmp);
 

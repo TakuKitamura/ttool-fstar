@@ -7794,6 +7794,11 @@ public class GTURTLEModeling {
 	    }
 	    AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, father, abd);
 	    bl.addCryptoElements();
+	    for (avatartranslator.AvatarSignal sig:ab.getSignals()){
+		String name=sig.getName().split("__")[sig.getName().split("__").length-1];
+		sig.setName(name);
+		bl.addSignal(new ui.AvatarSignal(sig.getInOut(), name, new String[0], new String[0]));
+	    }
 	    tranSourceMap.clear();
 /*	    if (ab.getName().contains("__")){
 	        bl.setValue(ab.getName().split("__")[1]);
@@ -7896,8 +7901,7 @@ public class GTURTLEModeling {
 
 	
 	for (AvatarRelation ar: avspec.getRelations()){
-
-	    String bl1 = ar.block1.getName();
+	    String bl1 = ar.block1.getName();	
 	    String bl2 = ar.block2.getName();
 	    if (originDestMap.containsKey(bl1)){
 		originDestMap.get(bl1).add(bl2);
