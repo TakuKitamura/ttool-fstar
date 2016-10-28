@@ -7989,7 +7989,7 @@ public class GTURTLEModeling {
 	message.setValue("Message");
 	
 	abd.addComponent(message, xpos, ypos, false,true);
-
+	xpos+=100;
 	AvatarBDDataType key = new AvatarBDDataType(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
 	key.setValue("Key");
 	TAttribute attr = new TAttribute(2, "data", "0", 8);
