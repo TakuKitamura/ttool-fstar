@@ -61,13 +61,13 @@ public class RTLLauncher implements Runnable {
                     try {
                         int port = Integer.decode(args[i+1]).intValue();
                         RshServer.PORT_NUMBER = port;
-                        System.out.println("Port number set to " + port);
+                        TraceManager.addDev("Port number set to " + port);
                     } catch (Exception e) {
-                        System.out.println("Wrong port number");
+                        TraceManager.addDev("Wrong port number");
                     }
-                    System.out.println("SystemC features activated - these are beta features that are meant to be used only for research purpose");
+                    
                 } else {
-                    System.out.println("Missing port number");
+                    TraceManager.addDev("Missing port number");
                 }
             }
         }
@@ -76,17 +76,17 @@ public class RTLLauncher implements Runnable {
     }
 
     public String getKey() {
-	sk = "";
-	for(int i=0; i<16; i++) {
-	    int cpt = (int)(Math.random()*60) + 50;
-	    sk += (char)cpt;
-	}
-	TraceManager.addDev("Key=" + sk);
-	return sk;
+        sk = "";
+        for(int i=0; i<16; i++) {
+            int cpt = (int)(Math.random()*60) + 50;
+            sk += (char)cpt;
+        }
+        TraceManager.addDev("Key=" + sk);
+        return sk;
     }
-    
+
     public void run() {
-        System.out.println("Server side of the launcher\nVersion: " + RshServer.VERSION);
+        TraceManager.addDev("Server side of the launcher\nVersion: " + RshServer.VERSION);
         (new RshServer(sk)).startServer();
     }
 

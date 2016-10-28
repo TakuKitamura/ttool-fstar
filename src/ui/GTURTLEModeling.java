@@ -1383,7 +1383,7 @@ public class GTURTLEModeling {
     }
 
     public void generateAvatarFromTML(boolean mc, boolean security){
-	System.out.println("generating...");
+	TraceManager.addDev("Generating Avatar from TML");
 	if (avatarspec!=null){
 	    return;
 	}

@@ -101,7 +101,7 @@ public class RshServer {
 	    }
 	}
 	if (i == 100) {
-	    System.out.println("Launching external applications is disabled: no socket is available");
+	    TraceManager.addDev("Launching external applications is disabled: no socket is available");
 	} else {
 	    port = port +i;
 	    launcher.RshClient.PORT_NUMBER = port;
@@ -123,7 +123,7 @@ public class RshServer {
     }
 
     private void printProcessRunning() {
-        System.out.println("Process running:" + processes.size());
+        TraceManager.addDev("Process running:" + processes.size());
     }
 
 
@@ -146,7 +146,7 @@ public class RshServer {
 
     private Socket waitForClient() {
         Socket s = null;
-        System.out.println("Waiting for command");
+        TraceManager.addDev("Waiting for command");
         try {
             s = server.accept();
         } catch (Exception e) {
@@ -337,13 +337,13 @@ public class RshServer {
             if (info.substring(0, 1).equals("0")) { // Session id
                 if (info.substring(1, 2).equals("0")) { // Get session id
                     int id = getSessionId();
-                    System.out.println("-> New session id = " + id);
+                    TraceManager.addDev("-> New session id = " + id);
                     respond(out, ""+id); // A zero response means error
                 } else {
                     try {
                         int id = Integer.decode(info.substring(1, 2)).intValue();
                         freeSessionId(id);
-                        System.out.println("-> Session id=" + id + " terminated");
+                        TraceManager.addDev("-> Session id=" + id + " terminated");
                         respond(out, ""+id);
                     } catch (Exception e) {
                         respond(out, "0");
@@ -355,29 +355,29 @@ public class RshServer {
                 if (id <0) {
                     respond(out, "2");       // fail
                 } else {
-                    System.out.println("Process accepted on port " + id);
+                    TraceManager.addDev("Process accepted on port " + id);
                     respond(out, "3" + id); // process created
                 }
             } else if (info.substring(0, 1).equals("2")) {
                 // Piped processes
-                System.out.println("Piped processes");
+                TraceManager.addDev("Piped processes");
                 String str = info.substring(1, info.length());
                 String str1, str2;
                 int index = str.indexOf(' ');
-                System.out.println("index = " + index);
+                TraceManager.addDev("index = " + index);
                 if (index > 0) {
                     str1 = str.substring(0, index);
                     str2 = str.substring(index + 1, str.length());
-                    System.out.println("str = " + str + " str1 = *" + str1 + "* str2 = *" + str2 + "*");
+                    TraceManager.addDev("str = " + str + " str1 = *" + str1 + "* str2 = *" + str2 + "*");
                     if (pipeProcesses(str1, str2)) {
-                        System.out.println("Making piped processes");
+                        TraceManager.addDev("Making piped processes");
                         respond(out, "3");   // OK
                     } else {
-                        System.out.println("Making piped processes FAILED");
+                        TraceManager.addDev("Making piped processes FAILED");
                         respond(out, "2");   // fail
                     }
                 }  else {
-                    System.out.println("Making piped processes FAILED");
+                    TraceManager.addDev("Making piped processes FAILED");
                     respond(out, "2");       // fail
                 }
 
@@ -387,13 +387,13 @@ public class RshServer {
                 if (id <0) {
                     respond(out, "2");       // fail
                 } else {
-                    System.out.println("Process accepted on port " + id);
+                    TraceManager.addDev("Process accepted on port " + id);
                     respond(out, "3" + id); // process created
                 }
             } else if (info.substring(0, 1).equals("4")) {
                 // start already created process
                 if (startProcess(info.substring(1, info.length()))) {
-                    System.out.println("Process started on port " + id);
+                    TraceManager.addDev("Process started on port " + id);
                     respond(out, "3" + id); // process created
                 } else {
                     respond(out, "2");       // fail
@@ -409,7 +409,7 @@ public class RshServer {
                 // kill process
                 try {
                     int id = Integer.decode(info.substring(1, info.length())).intValue();
-                    System.out.println("Demand to kill: " + id);
+                    TraceManager.addDev("Demand to kill: " + id);
                     killProcess(id);
                 } catch (Exception e) {
 
@@ -437,7 +437,7 @@ public class RshServer {
         File file = new File(fileName);
 
         if (!isFileOkForSave(file)) {
-            System.out.println("Cannot make file");
+            TraceManager.addDev("Cannot make file");
             respond(out, "2");   // fail
             return;
         }
@@ -445,7 +445,7 @@ public class RshServer {
         StringBuffer fileData = new StringBuffer();
         String info;
 
-        System.out.println("Waiting for file data");
+        TraceManager.addDev("Waiting for file data");
         while(true) {
             try {
                 info = in.readLine();
@@ -459,13 +459,13 @@ public class RshServer {
 
             if ((info == null) || (info.length() == 0)) {
                 // Assumes it is an EOF
-                System.out.println("Wrong EOF -> assumes it is an EOF");
+                TraceManager.addDev("Wrong EOF -> assumes it is an EOF");
                 try {
                     FileOutputStream fos = new FileOutputStream(file);
                     fos.write((new String(fileData)).getBytes());
                     fos.close();
                 } catch (Exception e) {
-                    System.out.println("Error when feeding file");
+                    TraceManager.addDev("Error when feeding file");
                     respond(out, "2");   // fail
                     return;
                 }
@@ -477,20 +477,20 @@ public class RshServer {
                 fileData.append(info.substring(1, info.length()) + "\n");
             } else if (info.substring(0, 1).equals("7")) {
                 // EOF
-                System.out.println("EOF");
+                TraceManager.addDev("EOF");
                 try {
                     FileOutputStream fos = new FileOutputStream(file);
                     fos.write((new String(fileData)).getBytes());
                     fos.close();
                 } catch (Exception e) {
-                    System.out.println("Error when feeding file");
+                    TraceManager.addDev("Error when feeding file");
                     respond(out, "2");   // fail
                     return;
                 }
                 respond(out, "3");      // file created
                 return;
             } else {
-                System.out.println("Unknown PDU (file)=" + info);
+                TraceManager.addDev("Unknown PDU (file)=" + info);
                 respond(out, "2");       // fail
                 return;
             }
@@ -498,7 +498,7 @@ public class RshServer {
     }
 
     private void sendDataFile(BufferedReader in, PrintStream out, String fileName) {
-        System.out.println("Sending data of file " + fileName);
+        TraceManager.addDev("Sending data of file " + fileName);
         File file = new File(fileName);
 
         if (!isFileOkForRead(file)) {
@@ -520,18 +520,18 @@ public class RshServer {
                 //System.out.println("Sending 3 info to say OK");
                 respond(out, "3");
             } else {
-                System.out.println("Sending failed");
+                TraceManager.addDev("Sending failed");
                 respond(out, "2");
             }
         } catch(Exception e) {
             respond(out, "2");   // fail
             return;
         }
-        System.out.println("Sending completed");
+        TraceManager.addDev("Sending completed");
     }
 
     private void deleteFile(BufferedReader in, PrintStream out, String fileName) {
-        System.out.println("Deleting " + fileName);
+        TraceManager.addDev("Deleting " + fileName);
         File file = new File(fileName);
 
         try {
@@ -588,12 +588,12 @@ public class RshServer {
         try {
             if (!file.exists()) {
                 if (!file.createNewFile()) {
-                    System.out.println("creation pb");
+                    TraceManager.addDev("creation pb");
                     return false;
                 }
             }
             if (!file.canWrite()) {
-                System.out.println("write pb");
+                TraceManager.addDev("write pb");
                 return false;
             }
         } catch (Exception e) {
@@ -605,7 +605,7 @@ public class RshServer {
     }
 
     private boolean sendData(PrintStream out, FileInputStream fis) throws LauncherException {
-        System.out.println("Send data ");
+        TraceManager.addDev("Send data ");
 
         byte [] ba = new byte[BUFSIZE];
         int nbRead;
@@ -622,10 +622,10 @@ public class RshServer {
                 out.write(ba, 0, nbRead);
                 cpt += nbRead;
             }
-            System.out.println("Nb written:" + cpt);
+            TraceManager.addDev("Nb written:" + cpt);
             fis.close();
         } catch (Exception e) {
-            System.out.println("Exception when sending file: " + e.getMessage());
+            TraceManager.addDev("Exception when sending file: " + e.getMessage());
             return false;
         }
         return true;

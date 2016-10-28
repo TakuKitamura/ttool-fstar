@@ -178,11 +178,11 @@ public class Main implements ActionListener {
               }*/
             if (args[i].compareTo("-lotos") == 0) {
                 lotos = true;
-                System.out.println("LOTOS features activated");
+                //System.out.println("LOTOS features activated");
             }
             if (args[i].compareTo("-nolotos") == 0) {
                 lotos = false;
-                System.out.println("LOTOS features activated");
+                //System.out.println("LOTOS features activated");
             }
             if (args[i].compareTo("-launcher") == 0) {
                 startLauncher = true;
@@ -193,7 +193,7 @@ public class Main implements ActionListener {
             if (args[i].compareTo("-diplodocus") == 0) {
                 systemc = true;
                 lotos = true;
-                System.out.println("Diplodocus features activated");
+                //System.out.println("Diplodocus features activated");
             }
             if (args[i].compareTo("-experimental") == 0) {
                 experimental = true;
@@ -201,12 +201,12 @@ public class Main implements ActionListener {
             }
             if (args[i].compareTo("-nodiplodocus") == 0) {
                 systemc = false;
-                System.out.println("Diplodocus features deactivated");
+                //System.out.println("Diplodocus features deactivated");
             }
             if (args[i].compareTo("-proactive") == 0) {
                 proactive = true;
                 lotos = true;
-                System.out.println("Proactive features activated - these are beta features that are meant to be used only for research purpose");
+                //System.out.println("Proactive features activated - these are beta features that are meant to be used only for research purpose");
             }
             if (args[i].compareTo("-tpn") == 0) {
                 tpn = true;
@@ -215,31 +215,31 @@ public class Main implements ActionListener {
 
             if (args[i].compareTo("-nonc") ==0 )  {
                 nc = false;
-                System.out.println("Network calculus features unactivated - these are beta features that are meant to be used only for research purpose");
+                //System.out.println("Network calculus features unactivated - these are beta features that are meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-avatar") ==0 )  {
                 avatar = true;
-                System.out.println("AVATAR activated - these are beta features that are meant to be used only for research purpose");
+                //System.out.println("AVATAR activated - these are beta features that are meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-noavatar") ==0 )  {
                 avatar = false;
-                System.out.println("AVATAR unactivated - these are beta features that are meant to be used only for research purpose");
+                //System.out.println("AVATAR unactivated - these are beta features that are meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-avataronly") ==0 )  {
                 avataronly = true;
-                System.out.println("Only the AVATAR is activated");
+                System.out.println("Only AVATAR is activated");
             }
             if (args[i].compareTo("-proverif") ==0 )  {
                 proverif = true;
-                System.out.println("ProVerif activated - these are beta features that are meant to be used only for research purpose");
+                //System.out.println("ProVerif activated - these are beta features that are meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-noproverif") ==0 )  {
                 proverif = false;
-                System.out.println("ProVerif unactivated - these are beta features that are meant to be used only for research purpose");
+                //System.out.println("ProVerif unactivated - these are beta features that are meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-os") == 0) {
@@ -249,11 +249,11 @@ public class Main implements ActionListener {
 
             if (args[i].compareTo("-uppaal") == 0) {
                 uppaal = true;
-                System.out.println("UPPAAL features activated - these are beta features that are meant to be used only for research purpose");
+                //System.out.println("UPPAAL features activated - these are beta features that are meant to be used only for research purpose");
             }
             if (args[i].compareTo("-nouppaal") == 0) {
                 uppaal = false;
-                System.out.println("UPPAAL features activated - these are beta features that are meant to be used only for research purpose");
+                //System.out.println("UPPAAL features activated - these are beta features that are meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-config") == 0) {
