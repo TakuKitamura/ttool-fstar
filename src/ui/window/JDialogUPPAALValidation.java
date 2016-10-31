@@ -474,6 +474,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                     if (j.isSelected()){
                         jta.append(j.getText()+"\n");
                         String translation = translateCustomQuery(j.getText());
+			jta.append(translation);
 			status = -1;
                         workQuery(translation, fn, trace_id, rshc);
 			verifMap.put(j.getText(), status);
