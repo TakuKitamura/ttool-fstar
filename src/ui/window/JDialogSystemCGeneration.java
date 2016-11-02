@@ -831,7 +831,9 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
                 }
             } else {
                 tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping(), al, alTepe);
+				mgui.gtm.drawFirewall(mgui.gtm.getTMLMapping());
             }
+
             tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
             testGo();
             jta.append("SystemC code generation done\n");

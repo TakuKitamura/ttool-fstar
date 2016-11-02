@@ -62,6 +62,7 @@ public List<String> securityPatterns = new ArrayList<String>();
     private ArrayList<TMLTask> mappedtasks;
     private ArrayList<HwCommunicationNode> oncommnodes;
     public ArrayList<TMLElement> mappedcommelts;
+	public CorrespondanceTGElement listE;
     public boolean firewall = false;
     private ArrayList<TMLCP> mappedCPs;
     private ArrayList<TMLElement> commEltsMappedOnCPs;
