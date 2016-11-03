@@ -609,6 +609,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             }
             else {
                 jta.append("ERROR -> property could not be studied\n");
+				status=2;
+				
+				
             }
         } else {
             jta.append("** verification stopped **\n");

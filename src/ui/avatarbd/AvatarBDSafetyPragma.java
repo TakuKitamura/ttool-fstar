@@ -78,6 +78,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
     private int minFontSize = 4;
     public final static int PROVED_TRUE = 1;
     public final static int PROVED_FALSE = 0; 
+	public final static int PROVED_ERROR=2;
     private int currentFontSize = -1;
     private final String[] pPragma = {"A[]", "A<>", "E[]", "E<>"};
     public HashMap<String, Integer> verifMap = new HashMap<String, Integer>();
@@ -316,12 +317,19 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 		g.fillPolygon(xp1, yp1, 4);
 		g.fillPolygon(xp2, yp2, 4);
 	    } 
+
+		else if (status==PROVED_ERROR){
+		Font f= g.getFont();
+		g.setFont(new Font("TimesRoman", Font.BOLD, 14)); 
+		g.drawString("?",_x-15,_y);
+		g.setFont(f);
+		}
 	    else {
 		g.setColor(Color.red);
 		int[] xp1 = new int[]{_x-17, _x-15, _x-6, _x-8};
-		int[] yp1 = new int[]{_y-8, _y-6, _y+2, _y+4};
+		int[] yp1 = new int[]{_y-12, _y-10, _y-2, _y};
 		int[] xp2 = new int[]{_x-15, _x-17, _x-8, _x-6};
-		int[] yp2 = new int[]{_y+4, _y+2, _y-8, _y-6};	
+		int[] yp2 = new int[]{_y, _y-2, _y-12, _y-10};	
 		g.fillPolygon(xp1, yp1, 4);
 		g.fillPolygon(xp2, yp2, 4);
 	    }

@@ -192,6 +192,7 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
 				 name = tmpName;
 			 }
 		}
+		latency = Integer.valueOf(dialog.getLatency());
 		
 		rules = dialog.getRules();
 		
@@ -284,7 +285,7 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
 	}
 	  public String getAttributes() {
 		  String attr = "";
-		  attr += "Latency = " + latency + "\n";
+		  attr += "latency = " + latency + "\n";
 		  return attr;
 	  }
 	   

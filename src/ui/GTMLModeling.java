@@ -2215,6 +2215,7 @@ public class GTMLModeling  {
 	autoMapKeys();*/
         removeActionsWithRecords();
 	map.setTMLDesignPanel(this.tmlcdp);
+		tmlap.getMainGUI().gtm.drawFirewall(map);
         return map;     // the data structure map is returned to CheckSyntaxTMLMapping in GTURTLEModeling
     }
 
@@ -2481,8 +2482,9 @@ if (tgc instanceof TMLArchiCrossbarNode) {
                 } else {
                     names.add(firewallnode.getName());
                     bridge = new HwBridge(firewallnode.getName());
-		    bridge.isFirewall=true;
-		    bridge.firewallRules = ((TMLArchiFirewallNode) tgc).getRules();
+		    		bridge.isFirewall=true;
+		    		bridge.firewallRules = ((TMLArchiFirewallNode) tgc).getRules();
+					bridge.latency = ((TMLArchiFirewallNode) tgc).getLatency();
                     bridge.bufferByteSize = 1;
                     bridge.clockRatio = 1;
                     listE.addCor(bridge, firewallnode);
