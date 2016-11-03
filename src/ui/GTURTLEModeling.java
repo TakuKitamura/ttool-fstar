@@ -1005,7 +1005,7 @@ HashMap<TMLChannel, TMLChannel> inChans = new HashMap<TMLChannel, TMLChannel>();
 	    		firewallComp.setValueWithChange(firewallNode.getName());
 				firewallADP = tmlcdp.getTMLActivityDiagramPanel(firewallNode.getName());
 			}
-			TMLTask firewall = new TMLTask("Design__"+firewallNode.getName(), firewallComp,firewallADP);
+			TMLTask firewall = new TMLTask("TASK__"+firewallNode.getName(), firewallComp,firewallADP);
 	    	
 	
 			tmlm.addTask(firewall);

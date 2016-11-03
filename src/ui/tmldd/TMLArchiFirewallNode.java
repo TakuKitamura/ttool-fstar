@@ -125,7 +125,7 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
         g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
 		
 		// Filling color
-		g.setColor(ColorManager.BRIDGE_BOX);
+		g.setColor(ColorManager.FIREWALL_BOX);
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
 		g.setColor(c);
         

@@ -2480,8 +2480,8 @@ if (tgc instanceof TMLArchiCrossbarNode) {
                     ce.setTGComponent(firewallnode);
                     checkingErrors.add(ce);
                 } else {
-                    names.add(firewallnode.getName());
-                    bridge = new HwBridge(firewallnode.getName());
+                    names.add("CPU__"+firewallnode.getName());
+                    bridge = new HwBridge("CPU__"+firewallnode.getName());
 		    		bridge.isFirewall=true;
 		    		bridge.firewallRules = ((TMLArchiFirewallNode) tgc).getRules();
 					bridge.latency = ((TMLArchiFirewallNode) tgc).getLatency();

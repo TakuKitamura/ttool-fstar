@@ -118,6 +118,7 @@ public class ColorManager {
     public static  Color CPU_BOX_2 = new Color(198, 227, 249);
     //public static final Color BUS_BOX = new Color(255, 207, 114);
     public static  Color BUS_BOX = new Color(215, 188, 128);
+    public static  Color FIREWALL_BOX = new Color(130, 15, 15);
     public static  Color BRIDGE_BOX = new Color(215, 166, 72);
     public static  Color MEMORY_BOX = new Color(172, 234, 211);
     public static  Color MEMORY_BOX_2 = new Color(172, 226, 211);
