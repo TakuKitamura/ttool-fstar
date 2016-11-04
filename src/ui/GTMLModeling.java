@@ -2215,7 +2215,9 @@ public class GTMLModeling  {
 	autoMapKeys();*/
         removeActionsWithRecords();
 	map.setTMLDesignPanel(this.tmlcdp);
+		if (map.firewall){
 		tmlap.getMainGUI().gtm.drawFirewall(map);
+		}
         return map;     // the data structure map is returned to CheckSyntaxTMLMapping in GTURTLEModeling
     }
 
@@ -2311,17 +2313,17 @@ public class GTMLModeling  {
         TMLArchiCPUNode node;
         TMLArchiHWANode hwanode;
         TMLArchiBUSNode busnode;
-	TMLArchiVGMNNode vgmnnode;
-	TMLArchiCrossbarNode crossbarnode;
+		TMLArchiVGMNNode vgmnnode;
+		TMLArchiCrossbarNode crossbarnode;
         TMLArchiBridgeNode bridgenode;
         TMLArchiMemoryNode memorynode;
         TMLArchiDMANode dmanode;
-	TMLArchiFirewallNode firewallnode;
+		TMLArchiFirewallNode firewallnode;
         HwCPU cpu;
         HwA hwa;	
-	HwBus bus;
+		HwBus bus;
         HwVGMN vgmn;
-	HwCrossbar crossbar;
+		HwCrossbar crossbar;
         HwBridge bridge;
         HwMemory memory;
         HwDMA dma;

@@ -60,6 +60,14 @@ public class TMLActivity extends TMLElement {
         elements = new Vector();
     }
 
+	public TMLActivity copy(){
+		TMLActivity newAct = new TMLActivity(this.name, this.referenceObject);
+		newAct.setFirst(this.first);
+		for (TMLActivityElement act: elements){
+			newAct.addElement(act);
+		}
+		return newAct;
+	}
     public boolean contains(TMLActivityElement _elt) {
         return elements.contains(_elt);
     }

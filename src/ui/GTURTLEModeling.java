@@ -972,25 +972,12 @@ public class GTURTLEModeling {
 	return path;
     }
 	public TMLMapping drawFirewall(TMLMapping map){
-		
+		System.out.println("DRAWING FIREWALL");
 		TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
 		TMLModeling tmlm = map.getTMLModeling();
 		TMLActivityDiagramPanel firewallADP = null;
 		TMLComponentTaskDiagramPanel tcdp = tmlcdp.tmlctdp;
-		for (HwBridge firewallNode:map.getTMLArchitecture().getFirewalls()){
-			TMLCPrimitiveComponent firewallComp = null;
-			TMLADStartState adStart=null;
-			TMLADForEverLoop adLoop = null;
-			TMLADChoice adChoice =null;
-			TMLADReadChannel adRC=null;
-			TMLADExecI exec=null;
-			TMLADWriteChannel adWC=null;
-			TMLADStopState adStop =null;
-HashMap<TMLChannel, TMLChannel> inChans = new HashMap<TMLChannel, TMLChannel>();
-	    	HashMap<TMLChannel, TMLChannel> outChans = new HashMap<TMLChannel, TMLChannel>();	
-	    	ArrayList<TMLChannel> channelsCopy = tmlm.getChannels();
-	    	ArrayList<TMLChannel> toAdd = new ArrayList<TMLChannel>();	
-			if (TraceManager.devPolicy == TraceManager.TO_CONSOLE){
+		if (TraceManager.devPolicy == TraceManager.TO_CONSOLE){
 				MainGUI gui = tmlcdp.getMainGUI();
 				int arch = mgui.tabs.indexOf(map.tmlap);
 				gui.cloneRenameTab(arch,"firewallArch");
@@ -1000,22 +987,52 @@ HashMap<TMLChannel, TMLChannel> inChans = new HashMap<TMLChannel, TMLChannel>();
 				gui.cloneRenameTab(ind, "firewallDesign");
 				TMLComponentDesignPanel tcp = (TMLComponentDesignPanel) gui.tabs.get(gui.tabs.size()-1);
 				newarch.renameMapping(tabName, tabName+"_firewallDesign");
+
+		}
+		for (HwBridge firewallNode:map.getTMLArchitecture().getFirewalls()){
+			TraceManager.addDev("Found firewall " + firewallNode.getName());
+			TMLCPrimitiveComponent firewallComp = null;
+			TMLADStartState adStart=null;
+			TMLADForEverLoop adLoop = null;
+			TMLADChoice adChoice =null;
+			TMLADReadChannel adRC=null;
+			TMLADExecI exec=null;
+			TMLADWriteChannel adWC=null;
+			TMLADStopState adStop =null;
+
+	
+			
+			int links = map.getArch().getLinkByHwNode(firewallNode).size();
+			TraceManager.addDev("Links " + links);
+
+			HwCPU cpu = new HwCPU(firewallNode.getName());
+			map.getTMLArchitecture().replaceFirewall(firewallNode,cpu);
+			for (int link =0; link< links/2; link++){
+			HashMap<TMLChannel, TMLChannel> inChans = new HashMap<TMLChannel, TMLChannel>();
+	    	HashMap<TMLChannel, TMLChannel> outChans = new HashMap<TMLChannel, TMLChannel>();
+			if (TraceManager.devPolicy == TraceManager.TO_CONSOLE){
 			    firewallComp = new TMLCPrimitiveComponent(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxY(), false, null, tmlcdp.tmlctdp);
 				tmlcdp.tmlctdp.addComponent(firewallComp,0,0,false,true);
-	    		firewallComp.setValueWithChange(firewallNode.getName());
-				firewallADP = tmlcdp.getTMLActivityDiagramPanel(firewallNode.getName());
-			}
-			TMLTask firewall = new TMLTask("TASK__"+firewallNode.getName(), firewallComp,firewallADP);
+	    		firewallComp.setValueWithChange(firewallNode.getName()+link);
+				firewallADP = tmlcdp.getTMLActivityDiagramPanel(firewallNode.getName()+link);
+			}	
+	    	ArrayList<TMLChannel> channelsCopy = tmlm.getChannels();
+	    	ArrayList<TMLChannel> toAdd = new ArrayList<TMLChannel>();	
+			
+			TMLTask firewall = new TMLTask("TASK__"+firewallNode.getName()+"_"+link, firewallComp,firewallADP);
 	    	
-	
+
 			tmlm.addTask(firewall);
+			map.addTaskToHwExecutionNode(firewall,cpu);
 			TMLActivity act = firewall.getActivityDiagram();
+			
+			TraceManager.addDev("FirewallADP " + firewallADP);
 		    for (TMLChannel chan: channelsCopy){
 		    	TMLTask orig = chan.getOriginTask();
 		    	TMLTask dest = chan.getDestinationTask();   
 				TMLPort origPort = chan.getOriginPort();
 				TMLPort destPort = chan.getDestinationPort();
-		    	TMLChannel wr = new TMLChannel(chan.getName()+"_firewallIn",chan.getReferenceObject());
+		    	TMLChannel wr = new TMLChannel(chan.getName()+"_firewallIn"+link,chan.getReferenceObject());
 				//Specify new channel attributes
 		        wr.setSize(chan.getSize());
 	            wr.setMax(chan.getMax());
@@ -1023,7 +1040,7 @@ HashMap<TMLChannel, TMLChannel> inChans = new HashMap<TMLChannel, TMLChannel>();
 	            wr.setType(TMLChannel.BRBW);
 				wr.setPriority(chan.getPriority());
 		    	wr.setTasks(orig, firewall);
-		    	TMLChannel rd = new TMLChannel(chan.getName()+"_firewallOut", chan.getReferenceObject());
+		    	TMLChannel rd = new TMLChannel(chan.getName()+"_firewallOut"+link, chan.getReferenceObject());
 		    	rd.setTasks(firewall,dest);
 		        rd.setSize(chan.getSize());
 	            rd.setMax(chan.getMax());
@@ -1102,7 +1119,6 @@ HashMap<TMLChannel, TMLChannel> inChans = new HashMap<TMLChannel, TMLChannel>();
 				int xpos=200;
 				int i=1;
 				for (TMLChannel chan: inChans.keySet()){
-		   		//Add Ports to Component Diagram
 		    		TMLChannel newChan = inChans.get(chan);
 		    		adRC = new TMLADReadChannel(xpos,350, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
 		    		adRC.setChannelName(newChan.getName());
@@ -1216,12 +1232,12 @@ HashMap<TMLChannel, TMLChannel> inChans = new HashMap<TMLChannel, TMLChannel>();
 					actd.replaceReadChannelWith(chan, outChans.get(chan));
 	    		}
 			}
-			HwCPU cpu = new HwCPU(firewallNode.getName());
-			map.getTMLArchitecture().replaceFirewall(firewallNode,cpu);
-			map.addTaskToHwExecutionNode(firewall,cpu);
+			
+		}
+
 		}
 		//Redo all reference objects
-		
+
 		map.listE.useDIPLOIDs();
 		return map;
 	}
