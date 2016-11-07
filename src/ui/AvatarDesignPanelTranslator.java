@@ -246,14 +246,29 @@ public class AvatarDesignPanelTranslator {
 						s1p1=true;
 					}
 					else {
-						AvatarStateMachine asm = bl1.getStateMachine();
-						if (asm.getStateWithName(attr1)!=null){
-							s1p1=true;
-						}
+						return false;
 					}
 				}
+				else {
+					return false;
+				}
 				if (p2.contains(".")){
-					//					
+					//parse attr
+					block1=p2.split("\\.")[0];
+					attr1=p2.split("\\.")[1];
+					bl1 = as.getBlockWithName(block1);
+					if (bl1 !=null){
+						if (bl1.getIndexOfAvatarAttributeWithName(attr1)!=-1){
+							s1p2=true;
+						}
+						else {
+							return false;
+						}
+					}
+					else {
+						return false;
+					}
+					
 				}
 				else {
 					s1p2=true;
