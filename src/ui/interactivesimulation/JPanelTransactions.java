@@ -157,11 +157,13 @@ public  class JPanelTransactions extends JPanel  {
     }
 
     public int getNbOfTransactions() {
+	
 	try {
 	    defaultNbOfTransactions = Integer.decode(nbOfTransactions.getText()).intValue();
 	} catch (Exception e) {
-	    TraceManager.addDev(nbOfTransactions.getText());
-	    TraceManager.addDev("Invalid default transaction");
+	    //TraceManager.addDev(nbOfTransactions.getText());
+	    //TraceManager.addDev("Invalid default transaction");
+	    defaultNbOfTransactions = 0;
 	}
 	return defaultNbOfTransactions;
     }

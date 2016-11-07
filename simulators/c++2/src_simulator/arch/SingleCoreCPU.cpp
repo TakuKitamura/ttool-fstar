@@ -65,7 +65,7 @@ SingleCoreCPU::SingleCoreCPU(ID iID, std::string iName, WorkloadSource* iSchedul
                                                                                                                                                                                                                                                                                                                                                                         //, _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci)
                                                                                                                                                                                                                                                                                                                                                                         //,_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize)
 {
-  std::cout << "Time per EXECIiiiiiiiiiiiiiiiiiiiiii: " << _timePerExeci << "\n";
+  //std::cout << "Time per EXECIiiiiiiiiiiiiiiiiiiiiii: " << _timePerExeci << "\n";
   //_transactList.reserve(BLOCK_SIZE);
 }
 
@@ -129,7 +129,7 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
   TMLTime aStartTime = max(_endSchedule,_nextTransaction->getRunnableTime());
   TMLTime aReminder = aStartTime % _timePerCycle;
   if (aReminder!=0) aStartTime+=_timePerCycle - aReminder;
-  //std::cout << "starttime=" << aStartTime << "\n"; 
+  std::cout << "CPU: set starttime in CPU=" << aStartTime << "\n"; 
 
   _nextTransaction->setStartTime(aStartTime);
 
@@ -151,6 +151,7 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
     _nextTransaction->setTaskSwitchingPenalty(_taskSwitchingTime);
   }
 
+  //std::cout << "starttime=" <<  _nextTransaction->getStartTime() << "\n"; 
   if ((_nextTransaction->getStartTime()-_endSchedule) >=_timeBeforeIdle){
     _nextTransaction->setIdlePenalty(_changeIdleModeTime);
   }
@@ -183,7 +184,12 @@ void SingleCoreCPU::truncateAndAddNextTransAt(TMLTime iTime){
 TMLTime SingleCoreCPU::truncateNextTransAt(TMLTime iTime){
   if (_masterNextTransaction==0){
 #ifdef PENALTIES_ENABLED
-    if (iTime < _nextTransaction->getStartTime()) return 0;
+
+    std::cout << "CPU:nt.startTime: " << _nextTransaction->getStartTime() << std::endl;
+    if (iTime < _nextTransaction->getStartTime()) {
+      return 0;
+    }
+
     TMLTime aNewDuration = iTime - _nextTransaction->getStartTime();
     TMLTime aStaticPenalty = _nextTransaction->getIdlePenalty() + _nextTransaction->getTaskSwitchingPenalty();
     if (aNewDuration<=aStaticPenalty){

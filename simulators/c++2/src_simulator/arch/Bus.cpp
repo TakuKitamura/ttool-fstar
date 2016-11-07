@@ -113,7 +113,15 @@ bool Bus::addTransaction(TMLTransaction* iTransToBeAdded){
 
 //Calculates the start time and the length of the next transaction
 void Bus::calcStartTimeLength(TMLTime iTimeSlice) const{
-	_nextTransaction->setStartTime(max(static_cast<TMLTime>(_endSchedule)-static_cast<TMLTime>(_nextTransaction->getPenalties()),static_cast<TMLTime>(_nextTransaction->getStartTime())));
+  TMLTime tmp1 = static_cast<TMLTime>(_endSchedule);
+  TMLTime tmp2  = static_cast<TMLTime>(_nextTransaction->getPenalties());
+  TMLTime tmp3 = static_cast<TMLTime>(_nextTransaction->getStartTime());
+  //std::cout << "BUS   ------------- tmp1:" << tmp1 << " tmp2:" << tmp2 << " tmp3:" << tmp3 << "\n";
+  if (tmp1 < tmp2) { tmp1 = tmp2;}
+  
+  
+  //_nextTransaction->setStartTime(max(tmp1+tmp2, tmp3));
+  _nextTransaction->setStartTime(max(tmp1+tmp2, tmp3));
 	
 	//if (_nextTransaction->getOperationLength()!=-1){
 	if (iTimeSlice!=0){

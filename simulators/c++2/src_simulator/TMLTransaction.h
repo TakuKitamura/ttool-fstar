@@ -80,6 +80,7 @@ public:
     	*/
 	inline TMLTime getStartTimeOperation() const {
 #ifdef PENALTIES_ENABLED
+	  //std::cout << "astartime: " << _startTime << " idlePenatly:" << _idlePenalty  << " switching penalty:" << _taskSwitchingPenalty<< std::endl;
 		return _startTime + _idlePenalty + _taskSwitchingPenalty;
 #else
 		return _startTime;
@@ -90,7 +91,7 @@ public:
       	\param iStartTime Start time
     	*/
 	inline void setStartTime(TMLTime iStartTime) {_startTime=iStartTime;
-	  
+	  //std::cout << "setting startime: " << _startTime << std::endl;
 
 	}
 	///Returns the length of the operational part of the transaction
@@ -191,7 +192,7 @@ public:
 	_taskSwitchingPenalty=iTaskSwitchingPenalty;
 #endif	
 	}
-	/////Returns the branching panalty of the transaction
+	/////Returns the branching penalty of the transaction
 	////**
       	//\return Branching penalty
     	//*/	
