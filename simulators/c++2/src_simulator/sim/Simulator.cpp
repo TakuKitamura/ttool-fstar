@@ -1525,9 +1525,9 @@ void Simulator::printCommandsOfTask(TMLTask* iTask, std::ostream& ioMessage){
     ioMessage << TAG_STARTTIMEo << currCommand->getCommandStartTime() << TAG_STARTTIMEc;
     TMLTransaction* currTrans = currCommand->getCurrTransaction();
     if (currTrans==0 || currTrans->getOverallLength()==0 || currTrans->getVirtualLength()==0){
-      ioMessage << TAG_FINISHTIMEo << "-1" << TAG_FINISHTIMEc;
-      ioMessage << TAG_FINISHTIMETRANSo << "-1" << TAG_FINISHTIMETRANSc;
-      ioMessage << TAG_STARTTIMETRANSo << "-1" << TAG_STARTTIMETRANSc;
+      ioMessage << TAG_FINISHTIMEo << "0" << TAG_FINISHTIMEc;
+      ioMessage << TAG_FINISHTIMETRANSo << "0" << TAG_FINISHTIMETRANSc;
+      ioMessage << TAG_STARTTIMETRANSo << "0" << TAG_STARTTIMETRANSc;
     }else{
       ioMessage << TAG_FINISHTIMEo << (currTrans->getEndTime() + currTrans->getOverallLength()*(currCommand->getLength()-currCommand->getProgress()-currTrans->getVirtualLength())/currTrans->getVirtualLength()) << TAG_FINISHTIMEc;
       //if (currCommand->getLength()==currCommand->getProgress())

@@ -89,7 +89,10 @@ public:
 	/**
       	\param iStartTime Start time
     	*/
-	inline void setStartTime(TMLTime iStartTime) {_startTime=iStartTime;}
+	inline void setStartTime(TMLTime iStartTime) {_startTime=iStartTime;
+	  
+
+	}
 	///Returns the length of the operational part of the transaction
 	/**
       	\return Length of the operational part

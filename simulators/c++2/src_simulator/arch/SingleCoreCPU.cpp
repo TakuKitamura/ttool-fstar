@@ -47,6 +47,7 @@
 #include <TMLChannel.h>
 //#include <TransactionListener.h>
 
+
 SingleCoreCPU::SingleCoreCPU(ID iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iID, iName, iScheduler), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle)
 #ifdef PENALTIES_ENABLED
                                                                                                                                                                                                                                                                                                                                                                       , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
@@ -69,8 +70,8 @@ SingleCoreCPU::SingleCoreCPU(ID iID, std::string iName, WorkloadSource* iSchedul
 }
 
 SingleCoreCPU::~SingleCoreCPU(){
-  std::cout << _transactList.size() << " elements in List of " << _name << ", busy cycles: " << _busyCycles << std::endl;
-  std::cout << " consumption value " << ((_simulatedTime/_timePerCycle)*_static_consumPerCycle) + ((_busyCycles/_timePerCycle)*_dynamic_consumPerCycle)<< std::endl;
+  //std::cout << _transactList.size() << " elements in List of " << _name << ", busy cycles: " << _busyCycles << std::endl;
+  //std::cout << " consumption value " << ((_simulatedTime/_timePerCycle)*_static_consumPerCycle) + ((_busyCycles/_timePerCycle)*_dynamic_consumPerCycle)<< std::endl;
 
   //delete _scheduler;
 }
@@ -128,6 +129,8 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
   TMLTime aStartTime = max(_endSchedule,_nextTransaction->getRunnableTime());
   TMLTime aReminder = aStartTime % _timePerCycle;
   if (aReminder!=0) aStartTime+=_timePerCycle - aReminder;
+  //std::cout << "starttime=" << aStartTime << "\n"; 
+
   _nextTransaction->setStartTime(aStartTime);
 
 #ifdef BUS_ENABLED
