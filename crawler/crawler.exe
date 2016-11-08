@@ -1,2 +1,0 @@
-cd bin
-java  -Djavax.net.ssl.keyStore=ServerKeyStore -Djavax.net.ssl.keyStorePassword=123456 -jar crawler.jar

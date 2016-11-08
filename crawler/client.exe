@@ -1,3 +1,0 @@
-cd bin
-java -Djavax.net.ssl.trustStore=ServerKeyStore -Djavax.net.ssl.trustStorePassword=123456 -Djava.protocol.handler.pkgs=com.sun.net.ssl.internal.www.protocol -Djavax.net.debug=ssl -jar client.jar
-
