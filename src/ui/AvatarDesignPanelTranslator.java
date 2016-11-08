@@ -217,8 +217,11 @@ public class AvatarDesignPanelTranslator {
         }
     }
 	public boolean checkSafetyPragma(String _pragma, LinkedList<AvatarBDBlock> _blocks, AvatarSpecification as){
+		//Todo: check types
+		//Todo: handle complex types
 		_pragma = _pragma.trim();
-		if (_pragma.contains("=") && !_pragma.contains("==")){
+		if (_pragma.contains("=") && !(_pragma.contains("==") || _pragma.contains("<=") || _pragma.contains(">=") || _pragma.contains("!="))){
+			//not a query
 			return false;
 		}
 		String header = _pragma.split(" ")[0];
@@ -229,9 +232,9 @@ public class AvatarDesignPanelTranslator {
 			if (!state1.contains(".") || !state2.contains(".")){
 				return false;
 			}
-			if (state1.contains("==")){
-				String p1 = state1.split("==")[0];
-				String p2 = state1.split("==")[1];
+			if (state1.contains("=")){
+				String p1 = state1.split("==|>=|!=|<=")[0];
+				String p2 = state1.split("==|>=|!=|<=")[1];
 				String block1 = p1.split("\\.")[0];
 				String attr1 = p1.split("\\.")[1];
 				AvatarBlock bl1 = as.getBlockWithName(block1);
@@ -274,9 +277,9 @@ public class AvatarDesignPanelTranslator {
 				}
 			}
 			//check the second half of implies
-			if (state2.contains("==")){
-				String p1 = state2.split("==")[0];
-				String p2 = state2.split("==")[1];
+			if (state2.contains("=")){
+				String p1 = state2.split("==|>=|!=|<=")[0];
+				String p2 = state2.split("==|>=|!=|<=")[1];
 				String block1 = p1.split("\\.")[0];
 				String attr1 = p1.split("\\.")[1];
 				AvatarBlock bl1 = as.getBlockWithName(block1);
@@ -320,12 +323,57 @@ public class AvatarDesignPanelTranslator {
 			}
 		}
 		else if (header.equals("E[]") || header.equals("E<>") || header.equals("A[]") || header.equals("A<>")){
-			return true;
+			String state = _pragma.replace("E[]","").replace("A[]","").replace("E<>","").replace("E<>","");
+
+			state = state.trim();
+			if (state.contains("=")){
+				String state1 = state.split("==|>=|!=|<=")[0];
+				String state2 = state.split("==|>=|!=|<=")[1];
+				String block1 = state1.split("\\.")[0];
+				String attr1 = state1.split("\\.")[1];
+				AvatarBlock bl1 = as.getBlockWithName(block1);
+				if (bl1 !=null){
+					AvatarStateMachine asm = bl1.getStateMachine();
+					if (bl1.getIndexOfAvatarAttributeWithName(attr1)==-1){
+						return false;	
+					}
+				}
+				else {
+					return false;
+				}
+				if (state2.contains(".")){
+					String block2 = state2.split("\\.")[0];
+					String attr2= state2.split("\\.")[1];
+					AvatarBlock bl2 = as.getBlockWithName(block2);
+					if (bl2!=null){
+						if (bl2.getIndexOfAvatarAttributeWithName(attr1)==-1){
+							return false;
+						}
+					}
+					else {
+						return false;
+					}		
+				}
+			}
+			else {
+			    String block1 = state.split("\\.")[0];
+				String attr1 = state.split("\\.")[1];
+				AvatarBlock bl1 = as.getBlockWithName(block1);
+				if (bl1 !=null){
+					AvatarStateMachine asm = bl1.getStateMachine();
+					if (bl1.getIndexOfAvatarAttributeWithName(attr1)==-1 && asm.getStateWithName(attr1)==null){
+						return false;	
+					}
+				}
+				else {
+					return false;
+				}
+			}
 		}
 		else {
 			return false;
 		}
-		return false;
+		return true;
 	}
     public String reworkPragma(String _pragma, LinkedList<AvatarBDBlock> _blocks) {
         String ret = "";
