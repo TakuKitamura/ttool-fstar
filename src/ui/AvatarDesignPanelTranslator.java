@@ -220,7 +220,7 @@ public class AvatarDesignPanelTranslator {
 		//Todo: check types
 		//Todo: handle complex types
 		_pragma = _pragma.trim();
-		
+	
 		if (_pragma.contains("=") && !(_pragma.contains("==") || _pragma.contains("<=") || _pragma.contains(">=") || _pragma.contains("!="))){
 			//not a query
 			TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
@@ -261,6 +261,11 @@ public class AvatarDesignPanelTranslator {
 	}
 	public boolean statementParser(String state, AvatarSpecification as, String _pragma){
 		//check the syntax of a single statement
+		
+		//Divide into simple statements
+		String[] split = state.split("(|)|\\|\
+		if (){
+		}
 		String number= "[0-9]+";
 		String bo = "(?i)true|false";
 		if (state.contains("=") || state.contains("<") || state.contains(">")){
