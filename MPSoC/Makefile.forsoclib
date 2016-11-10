@@ -16,9 +16,10 @@ export PATH
 updateruntime:
 	cp ~/TTool/MPSoC/src/*.c ~/Prog/mutekh/libavatar/
 	cp ~/TTool/MPSoC/src/*.h ~/Prog/mutekh/libavatar/include/  
-	//cp ~/TTool/MPSoC/src/Makefile ~/Prog/mutekh/libavatar/
+	cp ~/TTool/MPSoC/src/Makefile ~/Prog/mutekh/libavatar/
 	
 updategeneratedcode:
+	cp ~/TTool/MPSoC/src/defs.h ~/Prog/mutekh/examples/avatar
 	cp ~/TTool/MPSoC/generated_src/*.h ~/Prog/mutekh/examples/avatar 
 	cp ~/TTool/MPSoC/generated_src/*.c ~/Prog/mutekh/examples/avatar 
 	cp ~/TTool/MPSoC/Makefile.soclib ~/Prog/mutekh/examples/avatar/Makefile
