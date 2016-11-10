@@ -264,7 +264,15 @@ public class AvatarDesignPanelTranslator {
 		
 		//Divide into simple statements
 		String[] split = state.split("(|)|\\|&");
-		
+		if (split.length >1){
+			boolean validity = true;
+			for (String fragment: split){
+				if (fragment.length()>2){
+					validity = validity && statementParser(fragment, as, _pragma);
+				}
+			}
+			return validity;
+		}
 		String number= "[0-9]+";
 		String bo = "(?i)true|false";
 		if (state.contains("=") || state.contains("<") || state.contains(">")){
