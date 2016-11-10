@@ -263,9 +263,8 @@ public class AvatarDesignPanelTranslator {
 		//check the syntax of a single statement
 		
 		//Divide into simple statements
-		String[] split = state.split("(|)|\\|\
-		if (){
-		}
+		String[] split = state.split("(|)|\\|&");
+		
 		String number= "[0-9]+";
 		String bo = "(?i)true|false";
 		if (state.contains("=") || state.contains("<") || state.contains(">")){
