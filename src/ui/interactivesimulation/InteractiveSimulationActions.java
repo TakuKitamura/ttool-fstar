@@ -92,6 +92,8 @@ public class InteractiveSimulationActions extends AbstractAction {
     public static final int ACT_UPDATE_BUS = 18;
     public static final int ACT_UPDATE_TASKS = 19;
     public static final int ACT_UPDATE_TRANSACTIONS = 33;
+	public static final int ACT_UPDATE_LATENCY = 34;
+	public static final int ACT_ADD_LATENCY = 35;
 
     public static final int ACT_REFRESH = 32;
 
@@ -101,7 +103,7 @@ public class InteractiveSimulationActions extends AbstractAction {
     public static final int ACT_ANALYSIS_RG = 30;
     public static final int ACT_VIEW_RG = 31;
 
-    public static final int NB_ACTION = 34;
+    public static final int NB_ACTION = 36;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -183,6 +185,8 @@ public class InteractiveSimulationActions extends AbstractAction {
 
         actions[ACT_ANALYSIS_RG] = new TAction("analysis-rg", "Analysis of last RG", IconManager.imgic29, IconManager.imgic29, "Analysis of last RG", "Analyzis of the lastly generated RG", '0');
         actions[ACT_VIEW_RG] = new TAction("view-rg", "View last RG", IconManager.imgic344, IconManager.imgic344, "View last RG", "View last RG with Dotty (note: Dotty must be installed and configured to do so)", '0');
+	    actions[ACT_UPDATE_LATENCY] = new TAction("update-latency", "Update latencies", IconManager.imgic75, IconManager.imgic75, "Update latencies", "Update latencies", '0');
+	    actions[ACT_ADD_LATENCY] = new TAction("add-latency", "Measure Latency", null, null, "Measure Latency", "Measure Latency", '0');
 
 
     }

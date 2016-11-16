@@ -126,7 +126,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected JPopupMenu selectedMenu;
     protected int popupX, popupY;
     protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide,search, enableDisable, setAsCryptoBlock, setAsRegularBlock;
-    protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex;
+    protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex, checkLatency;
     protected JMenuItem breakpoint;
     protected JMenuItem paste, insertLibrary, upX, upY, downX, downY;
     protected JMenuItem cut, copy, saveAsLibrary, captureSelected;
@@ -1309,6 +1309,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         componentMenu.add(removeInternalComment);
         componentMenu.add(checkAccessibility);
         componentMenu.add(checkInvariant);
+		componentMenu.add(checkLatency);
         componentMenu.add(checkMasterMutex);
         componentMenu.add(breakpoint);
 
@@ -1412,6 +1413,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         checkInvariant = new JMenuItem("Check for mutual exclusion");
         checkInvariant.addActionListener(menuAL);
+
+		checkLatency = new JMenuItem("Set latency measurement checkpoint");
+		checkLatency.addActionListener(menuAL);
 
         checkMasterMutex = new JMenuItem("Search for other states in mutual exclusion with");
         checkMasterMutex.addActionListener(menuAL);
@@ -1611,7 +1615,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 componentPopup.setCheckableInvariant(!componentPopup.getCheckableInvariant());
             }
         }
-
+		if (e.getSource() == checkLatency) {
+			if (componentPopup instanceof CheckableAccessibility){
+				componentPopup.setCheckLatency(!componentPopup.getCheckLatency());
+			}
+		}
         if (e.getSource() == checkMasterMutex) {
 
             if (componentPopup instanceof CheckableInvariant) {
@@ -1840,6 +1848,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             checkAccessibility.setEnabled(true);
         } else {
             checkAccessibility.setEnabled(false);
+
+        }
+
+        if (componentPointed instanceof CheckableAccessibility){
+            checkLatency.setEnabled(true);
+        } else {
+            checkLatency.setEnabled(false);
 
         }
 
@@ -2285,6 +2300,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return null;
     }
 
+	public void getAllLatencyChecks(ArrayList<TGComponent> _list){
+		for (TGComponent tgc: this.componentList) {
+			if (tgc.getCheckLatency()){
+				_list.add(tgc);
+			}
+		}
+	}
     public void getAllCheckableTGComponent(ArrayList<TGComponent> _list) {
         for (TGComponent tgc: this.componentList)
             if (tgc.hasCheckableAccessibility())

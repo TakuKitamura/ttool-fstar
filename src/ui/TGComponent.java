@@ -181,6 +181,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
     
     protected boolean accessibility;
+	protected boolean latencyCheck;
     protected int reachability = ACCESSIBILITY_UNKNOWN;
     protected int liveness = ACCESSIBILITY_UNKNOWN;
 
@@ -404,6 +405,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	liveness = live;
     }
 
+	public boolean getCheckLatency(){
+		return latencyCheck;
+	}
+	
+	public void setCheckLatency(boolean b) {	
+		latencyCheck=b;
+	}
 
     public LinkedList getAllCheckableInvariant() {
         LinkedList list = new LinkedList();
@@ -931,6 +939,19 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
     }
     
+	public void drawLatencyCheck(Graphics g, int _x, int _y){
+		Color c= g.getColor();
+		g.setColor(Color.BLUE);
+		int[] xs = new int[]{_x-12,_x-4, _x-12};
+		int[] ys= new int[]{_y, _y+5, _y+10};
+		g.fillPolygon(xs,ys,3);
+		g.setColor(Color.BLACK);
+		g.drawLine(_x-12, _y, _x-12, _y+20);
+		g.drawLine(_x-12, _y, _x-4, _y+5);
+		g.drawLine(_x-12, _y+10, _x-4, _y+5);	
+
+	}
+
     
     public void draw(Graphics g) {
         RunningInfo ri;
@@ -1124,6 +1145,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         } else {
 	    runningStatus="";
 	    transactions.clear();
+
 	}
 
         if (tdp.AVATAR_ANIMATE_ON) {
@@ -1163,7 +1185,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
             drawInvariantInformation(g);
 
         }
-
+		if (latencyCheck){
+			drawLatencyCheck(g,x,y);
+		}
     }
 
     public void drawInvariantInformation(Graphics g) {
@@ -2882,6 +2906,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         sb.append(translateJavaCode());
         sb.append(translateInternalComment());
         sb.append(translateAccessibility());
+		sb.append(translateCheckLatency());
         sb.append(translateInvariant());
         sb.append(translateMasterMutex());
         sb.append(translateBreakpoint());
@@ -2934,6 +2959,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
         return new String(sb);
     }
 
+	protected String translateCheckLatency(){
+        StringBuffer sb = new StringBuffer();
+        if (latencyCheck) {
+            sb.append("<latencyCheck />\n");
+        }
+        return new String(sb);
+	}
     protected String translateInvariant() {
         StringBuffer sb = new StringBuffer();
         if (invariant) {

@@ -1451,7 +1451,11 @@ public class GTMLModeling  {
         iterator = list.listIterator();
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
-
+			if (tgc.getCheckLatency()){
+				String name = tmltask.getName() + ":" +  tgc.getName();
+				TraceManager.addDev("To check " + name);
+				tmlm.addCheckedActivity(name);
+			}
             if (tgc instanceof TMLADActionState) {
                 tmlaction = new TMLActionState("action", tgc);
                 tmp = ((TMLADActionState)(tgc)).getAction();

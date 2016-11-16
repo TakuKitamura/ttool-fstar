@@ -240,7 +240,16 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     JButton updateBusInformationButton;
     private JScrollPane jspBusInfo;
     private JPanel panelBus;
-
+	
+	//Latency
+	JPanel latencyPanel;
+	JComboBox transaction1;
+	JComboBox transaction2;
+	JButton addLatencyCheckButton;
+	JButton updateLatencyInformationButton;
+	LatencyTableModel latm;
+	public Vector checkedTransactions = new Vector();
+	private JScrollPane jspLatency;
 
     private int mode = 0;
     //private boolean busyStatus = false;
@@ -303,6 +312,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         initActions();
         makeComponents();
         setComponents();
+		
     }
 
     private JLabel createStatusBar()  {
@@ -951,7 +961,38 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         panelBus.add(printBusInfo);
         busPanel.add(panelBus, BorderLayout.SOUTH);
 
+		//Latency
+		latencyPanel = new JPanel();
+		GridBagLayout gridbag0 = new GridBagLayout();
+		GridBagConstraints c0 = new GridBagConstraints();
+		latencyPanel.setLayout(gridbag0);
+        infoTab.addTab("Latency", null, latencyPanel, "Latency Measurements");
+		transaction1 = new JComboBox(checkedTransactions);
+		transaction1.setPrototypeDisplayValue("Transaction1");
+	
+		transaction2 = new JComboBox(checkedTransactions);	
+		transaction2.setPrototypeDisplayValue("Transaction2");
+		latencyPanel.add(transaction1, c0);
+		c0.gridwidth = GridBagConstraints.RELATIVE;
+		latencyPanel.add(transaction2, c0);
+		c0.gridwidth = GridBagConstraints.REMAINDER;
+		addLatencyCheckButton = new JButton(actions[InteractiveSimulationActions.ACT_ADD_LATENCY]);
+		latencyPanel.add(addLatencyCheckButton,c0);
+        latm = new LatencyTableModel(this);
+		sorterPI = new TableSorter(latm);
+        jtablePI = new JTable(sorterPI);
+        sorterPI.setTableHeader(jtablePI.getTableHeader());
+        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(100);
+        ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(50);
+        jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jspLatency = new JScrollPane(jtablePI);
+        jspLatency.setWheelScrollingEnabled(true);
+        jspLatency.getVerticalScrollBar().setUnitIncrement(10);
+        jspLatency.setPreferredSize(new Dimension(260, 300));
+        latencyPanel.add(jspLatency, c0);
 
+		
         if (!hashOK) {
             wrongHashCode();
         }
@@ -974,6 +1015,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         memIDs = makeMemIDs();
         taskIDs = makeTasksIDs();
         chanIDs = makeChanIDs();
+		fillCheckedTrans();
     }
 
 
@@ -2214,6 +2256,20 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         sendCommand("lt " + nb);
     }
 
+	private void addLatency(){
+		Vector latencies = new Vector();
+		SimulationLatency sl = new SimulationLatency();
+		sl.trans1 = transaction1.getSelectedItem().toString();
+		sl.trans2 = transaction2.getSelectedItem().toString();
+		sl.time="0";
+		latencies.add(sl);
+		latm.setData(latencies);
+	}
+	
+	private void updateLatency(){
+		
+	}
+
     private void updateTaskCommands() {
         if (tmap == null) {
             return;
@@ -2665,6 +2721,10 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             updateTasks();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS].getActionCommand())) {
             updateTransactions();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_ADD_LATENCY].getActionCommand())) {
+            addLatency();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_LATENCY].getActionCommand())) {
+            updateLatency();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_PRINT_CPUS].getActionCommand())) {
             printCPUs();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_PRINT_BUS].getActionCommand())) {
@@ -2891,7 +2951,15 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
         return tmap.makeVariableIDs(index);
     }
-
+	public void fillCheckedTrans(){
+		if (tmap==null){
+			return;
+		}
+		for (String s: tmap.getTMLModeling().getCheckedActivities()){
+			TraceManager.addDev(s);
+			checkedTransactions.add(s.split("__")[s.split("__").length-1]);
+		}
+	}
     public void activeBreakPoint(boolean active) {
         if (mode == STARTED_AND_CONNECTED) {
             if (active) {

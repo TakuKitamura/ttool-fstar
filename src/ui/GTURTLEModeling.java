@@ -1819,6 +1819,7 @@ public class GTURTLEModeling {
       return false;
       }*/
 
+
     public ArrayList<TGComponentAndUPPAALQuery> getUPPAALQueries() {
         return getUPPAALQueries(mgui.getCurrentTURTLEPanel());
     }
@@ -6864,6 +6865,7 @@ public class GTURTLEModeling {
             String pre = "", post = "";
             String internalComment = "";
             boolean accessibility = false;
+			boolean latencyCheck = false;
             boolean invariant = false;
             boolean breakpoint = false;
             boolean hidden = false;
@@ -6911,6 +6913,8 @@ public class GTURTLEModeling {
                         internalComment += elt.getAttribute("value") + "\n";
                     } else if (elt.getTagName().equals("accessibility")) {
                         accessibility = true;
+                    } else if (elt.getTagName().equals("latencyCheck")) {
+                        latencyCheck = true;
                     } else if (elt.getTagName().equals("invariant")) {
                         invariant = true;
                     } else if (elt.getTagName().equals("mastermutex")) {
@@ -7077,6 +7081,10 @@ public class GTURTLEModeling {
 
             }
 
+            if (latencyCheck) {
+                tgc.setCheckLatency(latencyCheck);
+
+            }
             if (invariant) {
                 tgc.setCheckableInvariant(invariant);
             }

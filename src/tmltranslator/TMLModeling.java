@@ -68,7 +68,7 @@ public class TMLModeling {
     public HashMap<String, String> secChannelMap = new HashMap<String, String>();
     public HashMap<SecurityPattern, ArrayList<TMLTask>> securityTaskMap = new HashMap<SecurityPattern, ArrayList<TMLTask>>();
     private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ","};
-
+	private ArrayList<String> checkedActivity = new ArrayList<String>();
     private int hashCode;
     private boolean hashCodeComputed = false;
 
@@ -83,10 +83,17 @@ public class TMLModeling {
         }
     }
     public void addSec(SecurityPattern sp){
-	if (!secPatterns.contains(sp)){
-	    secPatterns.add(sp);
-	}
+		if (!secPatterns.contains(sp)){
+		    secPatterns.add(sp);
+		}
     }
+
+	public void addCheckedActivity(String s){
+		checkedActivity.add(s);
+	}
+	public ArrayList<String> getCheckedActivities(){
+		return checkedActivity;
+	}
     public SecurityPattern getSecurityPattern(String s){
 	for (SecurityPattern sp:secPatterns){
 	    if (sp.name.equals(s)){
@@ -1111,6 +1118,7 @@ public class TMLModeling {
         tasks.addAll(tmlm.getTasks());
 	secPatterns.addAll(tmlm.secPatterns);
 	securityTaskMap.putAll(tmlm.securityTaskMap);
+		checkedActivity.addAll(tmlm.getCheckedActivities());
     }
 
     // Elements with same names are not duplicated
@@ -1149,6 +1157,11 @@ public class TMLModeling {
 	    }
 	}
 	securityTaskMap.putAll(tmlm.securityTaskMap);
+	for (String s: tmlm.getCheckedActivities()){
+		if (!checkedActivity.contains(s)){
+			checkedActivity.add(s);
+		}
+	}
     }
 
 
