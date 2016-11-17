@@ -69,6 +69,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Vector;
 
 import javax.swing.AbstractButton;
@@ -246,7 +247,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 	JComboBox transaction1;
 	JComboBox transaction2;
 	JButton addLatencyCheckButton;
-	JButton updateLatencyInformationButton;
+	JButton updateLatencyButton;
 	LatencyTableModel latm;
 	public Vector checkedTransactions = new Vector();
 	private JScrollPane jspLatency;
@@ -273,7 +274,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     private Hashtable <String, String> diagramTable;
 
     private ArrayList<Point> points;
-
+	private HashMap<String, String> checkTable=new HashMap<String, String>();
+	private HashMap<String, ArrayList<String>> transTimes = new HashMap<String, ArrayList<String>>();
+	private Vector latencies=new Vector();
     public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap, ArrayList<Point> _points) {
         super(_title);
 
@@ -966,32 +969,35 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 		GridBagLayout gridbag0 = new GridBagLayout();
 		GridBagConstraints c0 = new GridBagConstraints();
 		latencyPanel.setLayout(gridbag0);
-        infoTab.addTab("Latency", null, latencyPanel, "Latency Measurements");
-		transaction1 = new JComboBox(checkedTransactions);
-		transaction1.setPrototypeDisplayValue("Transaction1");
-	
-		transaction2 = new JComboBox(checkedTransactions);	
-		transaction2.setPrototypeDisplayValue("Transaction2");
-		latencyPanel.add(transaction1, c0);
-		c0.gridwidth = GridBagConstraints.RELATIVE;
-		latencyPanel.add(transaction2, c0);
+		infoTab.addTab("Latency", null, latencyPanel, "Latency Measurements");
 		c0.gridwidth = GridBagConstraints.REMAINDER;
-		addLatencyCheckButton = new JButton(actions[InteractiveSimulationActions.ACT_ADD_LATENCY]);
-		latencyPanel.add(addLatencyCheckButton,c0);
         latm = new LatencyTableModel(this);
+		latm.setData(latencies);	
 		sorterPI = new TableSorter(latm);
         jtablePI = new JTable(sorterPI);
         sorterPI.setTableHeader(jtablePI.getTableHeader());
-        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(100);
+        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(200);
+        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(200);
         ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(50);
+
         jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jspLatency = new JScrollPane(jtablePI);
         jspLatency.setWheelScrollingEnabled(true);
         jspLatency.getVerticalScrollBar().setUnitIncrement(10);
-        jspLatency.setPreferredSize(new Dimension(260, 300));
+        jspLatency.setMinimumSize(new Dimension(300, 300));
+        jspLatency.setPreferredSize(new Dimension(300, 300));
         latencyPanel.add(jspLatency, c0);
 
+		transaction1 = new JComboBox(checkedTransactions);
+		transaction2 = new JComboBox(checkedTransactions);	
+		latencyPanel.add(transaction1, c0);
+		latencyPanel.add(transaction2, c0);
+
+		addLatencyCheckButton = new JButton(actions[InteractiveSimulationActions.ACT_ADD_LATENCY]);
+		latencyPanel.add(addLatencyCheckButton,c0);
+
+		updateLatencyButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_LATENCY]);
+		latencyPanel.add(updateLatencyButton,c0);
 		
         if (!hashOK) {
             wrongHashCode();
@@ -1518,6 +1524,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
                     if (hashOK) {
                         if (elt.getTagName().compareTo(SIMULATION_TASK) == 0) {
+		//					for (int i=0; i<elt.getAttributes().getLength(); i++){
+	//							System.out.println(elt.getAttributes().item(i));
+//							}
                             id = null;
                             name = null;
                             command = null;
@@ -1602,6 +1611,18 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                                     nextCommand = "-1";
                                 }
                                 updateRunningCommand(id, command, progression, startTime, finishTime, nextCommand, transStartTime, transFinishTime, state);
+								if (checkTable.containsKey(command)){
+									//System.out.println("added trans " + command + " " +finishTime);
+									if (!transTimes.containsKey(command)){
+										ArrayList<String> timeList = new ArrayList<String>();
+										transTimes.put(command, timeList);
+									}
+									if (!transTimes.get(command).contains(finishTime)){
+										transTimes.get(command).add(finishTime);
+									}
+                                    //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                	
+								}
                             }
 
                             if (openDiagram.isEnabled() && openDiagram.isSelected() && (name != null) && (command != null)) {
@@ -1684,6 +1705,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
                           }*/
                         if (elt.getTagName().compareTo(SIMULATION_TRANS) == 0) {
+
                             SimulationTransaction st = new SimulationTransaction();
                             st.nodeType = elt.getAttribute("deviceid");
 
@@ -1700,19 +1722,32 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                                     st.command = commandT.substring(index+1, commandT.length()).trim();
                                 }
                             }
+							
                             //TraceManager.addDev("Command handled");
                             st.startTime = elt.getAttribute("starttime");
-			    st.endTime = elt.getAttribute("endtime");
+						    st.endTime = elt.getAttribute("endtime");
+							if (checkTable.containsKey(commandT)){
+								//System.out.println("added trans " + commandT + " " +st.endTime);
+								if (!transTimes.containsKey(commandT)){
+									ArrayList<String> timeList = new ArrayList<String>();
+									transTimes.put(commandT, timeList);
+								}
+								if (!transTimes.get(commandT).contains(st.endTime)){
+									transTimes.get(commandT).add(st.endTime);
+								}
+                                    //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                	
+							}
                             st.length = elt.getAttribute("length");
                             st.virtualLength = elt.getAttribute("virtuallength");
                             st.channelName = elt.getAttribute("ch");
-
+						//	st.id = id;
                             if (trans == null) {
                                 trans = new Vector<SimulationTransaction>();
                             }
 
                             trans.add(st);
-			    addTransactionToNode(st);
+			    			addTransactionToNode(st);
                             transInfo = true;
                         }
 
@@ -2249,6 +2284,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         }
 
         trans = null;
+
 	int nb = NB_OF_TRANSACTIONS;
 	if (transactionPanel != null) {
 	    nb = transactionPanel.getNbOfTransactions();
@@ -2257,17 +2293,55 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     }
 
 	private void addLatency(){
-		Vector latencies = new Vector();
 		SimulationLatency sl = new SimulationLatency();
 		sl.trans1 = transaction1.getSelectedItem().toString();
 		sl.trans2 = transaction2.getSelectedItem().toString();
 		sl.time="0";
-		latencies.add(sl);
+		boolean found=false;
+		for (Object o:latencies){
+			SimulationLatency s = (SimulationLatency) o;
+			if (s.trans1 == sl.trans1 && s.trans2 == sl.trans2){
+				found=true;
+			}
+		}
+		if (!found){
+			latencies.add(sl);
+		}
+		updateLatency();
 		latm.setData(latencies);
 	}
 	
 	private void updateLatency(){
-		
+		System.out.println(transTimes);
+		for (Object o: latencies){
+		SimulationLatency sl = (SimulationLatency) o;
+		for (String st1:transTimes.keySet()){
+			if (checkTable.containsKey(st1)){
+				for (String st2:transTimes.keySet()){
+					if (st1!=st2){
+						if (checkTable.containsKey(st2)){
+							if (checkTable.get(st2).contains(sl.trans2) && checkTable.get(st1).contains(sl.trans1)){
+								int time = 0;
+								for(String time1: transTimes.get(st1)){
+									for (String time2: transTimes.get(st2)){
+										int diff = Integer.valueOf(time1) - Integer.valueOf(time2);
+										if (diff > time && diff >0){
+											time=diff;
+										}
+									}
+								}
+								sl.time=Integer.toString(time);	
+								//System.out.println(sl.trans2 + " "+sl.trans1 + " " + time);
+								//sl.time= Integer.toString(Math.abs(Integer.valueOf(st.startTime)-Integer.valueOf(st2.startTime)));
+							
+							}
+						}
+					}
+				}
+			}
+		}
+		}
+		latm.setData(latencies);
 	}
 
     private void updateTaskCommands() {
@@ -2310,7 +2384,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         }
 
         TraceManager.addDev("state:" + _state);
-
+		
         if ((i != null) && (c != null)) {
             try {
                 //System.out.println("Searching for old value");
@@ -2955,9 +3029,15 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 		if (tmap==null){
 			return;
 		}
+		
+		System.out.println(tmap.getTMLModeling().getCheckedComps());
 		for (String s: tmap.getTMLModeling().getCheckedActivities()){
 			TraceManager.addDev(s);
 			checkedTransactions.add(s.split("__")[s.split("__").length-1]);
+		}
+		for (String s: tmap.getTMLModeling().getCheckedComps().keySet()){
+			//System.out.println(tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID() + " "+s);
+			checkTable.put(Integer.toString(tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()),s);
 		}
 	}
     public void activeBreakPoint(boolean active) {

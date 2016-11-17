@@ -47,6 +47,7 @@ package tmltranslator;
 
 import java.util.*;
 import myutil.*;
+import ui.TGComponent;
 import ui.tmlcompd.*;
 import ui.TAttribute;
 import avatartranslator.*;
@@ -69,6 +70,7 @@ public class TMLModeling {
     public HashMap<SecurityPattern, ArrayList<TMLTask>> securityTaskMap = new HashMap<SecurityPattern, ArrayList<TMLTask>>();
     private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ","};
 	private ArrayList<String> checkedActivity = new ArrayList<String>();
+	private HashMap<String, TGComponent> checkedActivities = new HashMap<String, TGComponent>();
     private int hashCode;
     private boolean hashCodeComputed = false;
 
@@ -91,8 +93,16 @@ public class TMLModeling {
 	public void addCheckedActivity(String s){
 		checkedActivity.add(s);
 	}
+
+	public void addCheckedActivity(String s, TGComponent tgc){
+		checkedActivities.put(s,tgc);
+	}
 	public ArrayList<String> getCheckedActivities(){
 		return checkedActivity;
+	}
+
+	public HashMap<String, TGComponent> getCheckedComps(){
+		return checkedActivities;
 	}
     public SecurityPattern getSecurityPattern(String s){
 	for (SecurityPattern sp:secPatterns){
@@ -1119,6 +1129,7 @@ public class TMLModeling {
 	secPatterns.addAll(tmlm.secPatterns);
 	securityTaskMap.putAll(tmlm.securityTaskMap);
 		checkedActivity.addAll(tmlm.getCheckedActivities());
+		checkedActivities.putAll(tmlm.getCheckedComps());
     }
 
     // Elements with same names are not duplicated
@@ -1162,6 +1173,13 @@ public class TMLModeling {
 			checkedActivity.add(s);
 		}
 	}
+
+	for (String s: tmlm.getCheckedComps().keySet()){
+		if (!checkedActivities.containsKey(s)){
+			checkedActivities.put(s, tmlm.getCheckedComps().get(s));
+		}
+	}
+
     }
 
 

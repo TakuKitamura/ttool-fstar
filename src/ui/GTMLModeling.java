@@ -1455,6 +1455,7 @@ public class GTMLModeling  {
 				String name = tmltask.getName() + ":" +  tgc.getName();
 				TraceManager.addDev("To check " + name);
 				tmlm.addCheckedActivity(name);
+				tmlm.addCheckedActivity(name,tgc);
 			}
             if (tgc instanceof TMLADActionState) {
                 tmlaction = new TMLActionState("action", tgc);

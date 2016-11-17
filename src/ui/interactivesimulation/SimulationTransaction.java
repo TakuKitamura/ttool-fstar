@@ -66,7 +66,7 @@ public class SimulationTransaction  {
     public String length; /* Used for identifiying asynchronous messages */
     public String virtualLength;
     public String channelName;
-
+	public String id;
     public SimulationTransaction() {
     }
 
