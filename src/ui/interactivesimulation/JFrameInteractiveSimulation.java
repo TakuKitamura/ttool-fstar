@@ -71,6 +71,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.Collections;
 
 import javax.swing.AbstractButton;
 import javax.swing.Action;
@@ -970,31 +971,37 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 		GridBagConstraints c0 = new GridBagConstraints();
 		latencyPanel.setLayout(gridbag0);
 		infoTab.addTab("Latency", null, latencyPanel, "Latency Measurements");
-		c0.gridwidth = GridBagConstraints.REMAINDER;
+
+		c0.gridwidth=1;
+		transaction1 = new JComboBox(checkedTransactions);
+		latencyPanel.add(transaction1, c0);
+	
+		c0.gridwidth= GridBagConstraints.REMAINDER;
+		transaction2 = new JComboBox(checkedTransactions);	
+		latencyPanel.add(transaction2, c0);
+
+	
+		addLatencyCheckButton = new JButton(actions[InteractiveSimulationActions.ACT_ADD_LATENCY]);
+		latencyPanel.add(addLatencyCheckButton,c0);
+
         latm = new LatencyTableModel(this);
 		latm.setData(latencies);	
 		sorterPI = new TableSorter(latm);
         jtablePI = new JTable(sorterPI);
         sorterPI.setTableHeader(jtablePI.getTableHeader());
-        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(200);
-        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(200);
+        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(100);
         ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(50);
 
         jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jspLatency = new JScrollPane(jtablePI);
         jspLatency.setWheelScrollingEnabled(true);
         jspLatency.getVerticalScrollBar().setUnitIncrement(10);
-        jspLatency.setMinimumSize(new Dimension(300, 300));
-        jspLatency.setPreferredSize(new Dimension(300, 300));
+        jspLatency.setMinimumSize(new Dimension(250, 300));
+        jspLatency.setPreferredSize(new Dimension(250, 300));
         latencyPanel.add(jspLatency, c0);
 
-		transaction1 = new JComboBox(checkedTransactions);
-		transaction2 = new JComboBox(checkedTransactions);	
-		latencyPanel.add(transaction1, c0);
-		latencyPanel.add(transaction2, c0);
 
-		addLatencyCheckButton = new JButton(actions[InteractiveSimulationActions.ACT_ADD_LATENCY]);
-		latencyPanel.add(addLatencyCheckButton,c0);
 
 		updateLatencyButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_LATENCY]);
 		latencyPanel.add(updateLatencyButton,c0);
@@ -1726,6 +1733,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                             //TraceManager.addDev("Command handled");
                             st.startTime = elt.getAttribute("starttime");
 						    st.endTime = elt.getAttribute("endtime");
+						//	System.out.println("command " +commandT);
 							if (checkTable.containsKey(commandT)){
 								//System.out.println("added trans " + commandT + " " +st.endTime);
 								if (!transTimes.containsKey(commandT)){
@@ -1741,6 +1749,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                             st.length = elt.getAttribute("length");
                             st.virtualLength = elt.getAttribute("virtuallength");
                             st.channelName = elt.getAttribute("ch");
+						
 						//	st.id = id;
                             if (trans == null) {
                                 trans = new Vector<SimulationTransaction>();
@@ -1844,6 +1853,10 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                 //TraceManager.addDev("Transinfo -> " + trans.size());
 		if (transactionPanel != null) {
 		    transactionPanel.setData(trans);
+		}
+		if (latencyPanel !=null){
+			System.out.println("Processing latencies...");
+			processLatency();
 		}
                 //ttm.setData(trans);
             }
@@ -2310,36 +2323,38 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 		updateLatency();
 		latm.setData(latencies);
 	}
-	
 	private void updateLatency(){
+	   //sendCommand("lt 100");
+	}
+
+	private void processLatency(){
+ 
 		System.out.println(transTimes);
 		for (Object o: latencies){
-		SimulationLatency sl = (SimulationLatency) o;
-		for (String st1:transTimes.keySet()){
-			if (checkTable.containsKey(st1)){
+			SimulationLatency sl = (SimulationLatency) o;
+			for (String st1:transTimes.keySet()){
 				for (String st2:transTimes.keySet()){
 					if (st1!=st2){
-						if (checkTable.containsKey(st2)){
-							if (checkTable.get(st2).contains(sl.trans2) && checkTable.get(st1).contains(sl.trans1)){
-								int time = 0;
-								for(String time1: transTimes.get(st1)){
-									for (String time2: transTimes.get(st2)){
-										int diff = Integer.valueOf(time1) - Integer.valueOf(time2);
-										if (diff > time && diff >0){
-											time=diff;
-										}
-									}
+						if (checkTable.get(st2).contains(sl.trans2) && checkTable.get(st1).contains(sl.trans1)){
+							ArrayList<Integer> minTimes = new ArrayList<Integer>();							
+							for(String time1: transTimes.get(st1)){
+								//Find the first subsequent transaction
+								int time = Integer.MAX_VALUE;
+								for (String time2: transTimes.get(st2)){
+									int diff = Integer.valueOf(time1) - Integer.valueOf(time2);
+									if (diff < time && diff >0){
+										time=diff;
+									}	
 								}
-								sl.time=Integer.toString(time);	
-								//System.out.println(sl.trans2 + " "+sl.trans1 + " " + time);
-								//sl.time= Integer.toString(Math.abs(Integer.valueOf(st.startTime)-Integer.valueOf(st2.startTime)));
-							
+								minTimes.add(time);						
 							}
+							sl.time=Integer.toString(Collections.max(minTimes));	
 						}
+						
 					}
 				}
+
 			}
-		}
 		}
 		latm.setData(latencies);
 	}
@@ -3030,7 +3045,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 			return;
 		}
 		
-		System.out.println(tmap.getTMLModeling().getCheckedComps());
+		//System.out.println(tmap.getTMLModeling().getCheckedComps());
 		for (String s: tmap.getTMLModeling().getCheckedActivities()){
 			TraceManager.addDev(s);
 			checkedTransactions.add(s.split("__")[s.split("__").length-1]);
