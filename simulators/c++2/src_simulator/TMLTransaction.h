@@ -233,7 +233,7 @@ public:
 	inline static void resetID() {_ID=1;}
 	inline void setStateID(ID iID) {_stateID=iID;}
 	inline ID getStateID() {return _stateID;}
-
+	inline void setTaskID(ID iID) {_taskID=iID;}
 	void toXML(std::ostringstream& glob, int deviceID, std::string deviceName) const;
 	
 
@@ -259,6 +259,7 @@ protected:
 	///Channel on which data was conveyed
 	TMLChannel* _channel;
 	ID _stateID;
+	ID _taskID;
 	///Memory pool for transactions
 	static MemPoolNoDel<TMLTransaction> memPool;
 	///Current Transaction ID

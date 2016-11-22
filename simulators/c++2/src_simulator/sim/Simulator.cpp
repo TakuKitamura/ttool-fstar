@@ -389,6 +389,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
     std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
 #endif
     commandLET=transLET->getCommand();
+	//if (depTask!=NULL){
+//	transLET->setTaskID(commandLET->getID());
+	//}
 #ifdef DEBUG_KERNEL
     std::cout << "kernel:simulate: add trans " << commandLET->toString() << std::endl;
 #endif
@@ -473,8 +476,10 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
     }
     oLastTrans=transLET;
+
     //std::cout << "kernel:simulate: getTransLowestEndTime" << std::endl;
     transLET=getTransLowestEndTime(cpuLET);
+
     //_syncInfo->_server->sendReply("Sleep once again\n");
     //sleep(1);
   }

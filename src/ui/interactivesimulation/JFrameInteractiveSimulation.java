@@ -973,9 +973,14 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 		infoTab.addTab("Latency", null, latencyPanel, "Latency Measurements");
 
 		c0.gridwidth=1;
+		c0.gridheight=1;
+		latencyPanel.add(new JLabel("Checkpoint 1:"),c0);
+		c0.gridwidth = GridBagConstraints.REMAINDER;
 		transaction1 = new JComboBox(checkedTransactions);
 		latencyPanel.add(transaction1, c0);
 	
+		c0.gridwidth=1;
+		latencyPanel.add(new JLabel("Checkpoint 2:"),c0);
 		c0.gridwidth= GridBagConstraints.REMAINDER;
 		transaction2 = new JComboBox(checkedTransactions);	
 		latencyPanel.add(transaction2, c0);
@@ -989,16 +994,16 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 		sorterPI = new TableSorter(latm);
         jtablePI = new JTable(sorterPI);
         sorterPI.setTableHeader(jtablePI.getTableHeader());
-        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(100);
+        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(400);
+        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(400);
         ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(50);
 
-        jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jspLatency = new JScrollPane(jtablePI);
         jspLatency.setWheelScrollingEnabled(true);
         jspLatency.getVerticalScrollBar().setUnitIncrement(10);
-        jspLatency.setMinimumSize(new Dimension(250, 300));
-        jspLatency.setPreferredSize(new Dimension(250, 300));
+        jspLatency.setMinimumSize(new Dimension(300, 250));
+        jspLatency.setPreferredSize(new Dimension(450, 250));
         latencyPanel.add(jspLatency, c0);
 
 
@@ -1733,15 +1738,16 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                             //TraceManager.addDev("Command handled");
                             st.startTime = elt.getAttribute("starttime");
 						    st.endTime = elt.getAttribute("endtime");
-						//	System.out.println("command " +commandT);
-							if (checkTable.containsKey(commandT)){
+							String taskId= elt.getAttribute("id");
+							//System.out.println(elt.getAttribute("id"));
+							if (checkTable.containsKey(taskId)){
 								//System.out.println("added trans " + commandT + " " +st.endTime);
-								if (!transTimes.containsKey(commandT)){
+								if (!transTimes.containsKey(taskId)){
 									ArrayList<String> timeList = new ArrayList<String>();
-									transTimes.put(commandT, timeList);
+									transTimes.put(taskId, timeList);
 								}
-								if (!transTimes.get(commandT).contains(st.endTime)){
-									transTimes.get(commandT).add(st.endTime);
+								if (!transTimes.get(taskId).contains(st.endTime)){
+									transTimes.get(taskId).add(st.endTime);
 								}
                                     //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
                                 	
@@ -1855,7 +1861,6 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 		    transactionPanel.setData(trans);
 		}
 		if (latencyPanel !=null){
-			System.out.println("Processing latencies...");
 			processLatency();
 		}
                 //ttm.setData(trans);
@@ -2324,14 +2329,15 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 		latm.setData(latencies);
 	}
 	private void updateLatency(){
-	   //sendCommand("lt 100");
+	   sendCommand("lt 20");
 	}
 
 	private void processLatency(){
  
-		System.out.println(transTimes);
+//		TraceManager.addDev(transTimes.toString());
 		for (Object o: latencies){
 			SimulationLatency sl = (SimulationLatency) o;
+			sl.time="??";
 			for (String st1:transTimes.keySet()){
 				for (String st2:transTimes.keySet()){
 					if (st1!=st2){
@@ -2342,11 +2348,13 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 								int time = Integer.MAX_VALUE;
 								for (String time2: transTimes.get(st2)){
 									int diff = Integer.valueOf(time1) - Integer.valueOf(time2);
-									if (diff < time && diff >0){
+									if (diff < time && diff >=0){
 										time=diff;
 									}	
 								}
-								minTimes.add(time);						
+								if (time!=Integer.MAX_VALUE){
+									minTimes.add(time);						
+								}
 							}
 							sl.time=Integer.toString(Collections.max(minTimes));	
 						}
@@ -2795,6 +2803,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             mgui.resetTransactions();
             mgui.resetStatus();
             sendCommand("reset");
+			transTimes=new HashMap<String, ArrayList<String>>();
+			processLatency();
             askForUpdate();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
             sendCommand("stop");
