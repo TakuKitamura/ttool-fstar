@@ -49,6 +49,7 @@ import java.util.*;
 import java.io.*;
 
 import myutil.*;
+import org.graphstream.graph.implementations.*;
 
 public class AUTGraph  implements myutil.Graph {
 
@@ -383,6 +384,26 @@ public class AUTGraph  implements myutil.Graph {
             transitions.remove(aut2);
             transitions.add(0, aut2);
         }
+    }
+
+    public void display() {
+	MultiNode node;
+	AbstractEdge edge;
+	
+	MultiGraph graph = new MultiGraph("TTool graph");
+	for(AUTState state: states) {
+	    node = graph.addNode("" + state.id);
+	    node.addAttribute("ui.label", "" + state.id);
+	}
+	int cpt = 0;
+	for(AUTTransition transition: transitions) {
+	    edge = graph.addEdge(""+cpt, ""+transition.origin, ""+transition.destination, true);
+	    edge.addAttribute("ui.label", transition.transition);
+	    cpt ++;
+	}
+	//graph.addAttribute("ui.stylesheet", "graph { fill-color: red; }");
+	graph.display();
+
     }
 
 }

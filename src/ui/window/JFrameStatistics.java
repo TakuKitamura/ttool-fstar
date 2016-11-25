@@ -99,6 +99,7 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
     JTextField combo1, combo2, combo3, combo4;
     JTextField text1, text2;
     JButton goPath, goPathL, savePath, savePathL;
+    private JButton showGraph;
 
     public synchronized void stopElement() {
         if (computingPath) {
@@ -288,6 +289,14 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         transition.setEditable(false);
         transition.setText(String.valueOf(graph.getNbOfTransitions()));
         jp.add(transition);
+
+	showGraph = new JButton("Display graph");
+	showGraph.addActionListener(this);
+	if (graph.getNbOfStates() < 10000) {
+	    jp.add(showGraph);
+	}
+
+	
 
         if (shouldIStop()) {
             return;
@@ -555,7 +564,9 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
             saveAutomata(lastShortestAutomata);
         } else if (evt.getSource() == savePathL) {
             saveAutomata(lastLongestAutomata);
-        }
+        } else if (evt.getSource() == showGraph) {
+	    graph.display();
+	}
     }
 
     private void saveAutomata(Automata aut) {
