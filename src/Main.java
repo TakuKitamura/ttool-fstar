@@ -291,7 +291,7 @@ public class Main implements ActionListener {
         try {
             ConfigurationTTool.loadConfiguration(config, systemc);
         } catch (Exception e) {
-            System.out.println("Couldn't load configuration properly : " + e.toString());
+            System.out.println("Couldn't load configuration from file: " + config);
         }
         TraceManager.addDev("\nConfiguration:\n--------------");
         TraceManager.addDev(ConfigurationTTool.getConfiguration(systemc));
