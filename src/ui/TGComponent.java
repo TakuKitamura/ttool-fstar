@@ -53,7 +53,7 @@ import java.awt.event.*;
 import java.awt.geom.*;
 
 import java.util.*;
-
+import java.util.concurrent.*;
 import org.w3c.dom.*;
 
 import myutil.*;
@@ -1101,7 +1101,20 @@ public abstract class TGComponent implements CDElement, GenericTree {
 				}				
 			    }
 			}
-			Map<String, String> statMap = tdp.getMGUI().getStatus(getDIPLOID());
+			for (int i=0; i<nbInternalTGComponent; i++){
+				Object ob = getChild(i);
+				if (ob instanceof TMLArchiArtifact){
+					TMLArchiArtifact art = (TMLArchiArtifact) ob;
+					String stat=tdp.getMGUI().getStatus(art.getValue().replaceAll(":","_"));
+					if (stat!=null){
+						art.runningStatus=stat;
+						art.drawStatus(g);
+						tdp.repaint();
+					}
+				}
+			}/*
+			//This code is horrible and I should fix it 
+			ConcurrentHashMap<String, String> statMap = tdp.getMGUI().getStatus(getDIPLOID());
 			for (String name:statMap.keySet()){
 			    String stat =statMap.get(name);
 			    for (int i=0; i< nbInternalTGComponent; i++){	
@@ -1115,8 +1128,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
 				     }
 				}
 			    }
-			}
-		    
+			
+		    }*/
+	
                     }
                     /*if (this instanceof TMLArchiCPUNode) {
 

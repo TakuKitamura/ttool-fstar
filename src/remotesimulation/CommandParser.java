@@ -136,7 +136,7 @@ public class CommandParser {
         int cpt = 0;
 
         String cmds[] = cmd.split(" ");
-        //System.out.println("cmd " + cmd + " has " + cmds.length + " elements");
+      //  System.out.println("cmd " + cmd + " has " + cmds.length + " elements");
 
         for(SimulationCommand sc: commandList) {
             // Same command name?
@@ -478,6 +478,18 @@ public class CommandParser {
         paramNames[0] = "Max. nb of transactions";
         sc = new SimulationCommand("list-transactions", "lt", "22", params, paramNames, "Get the most recent transactions");
         commandList.add(sc);
+
+
+	// Get latencies
+		params = new int[2];
+		paramNames = new String[2];
+		params[0] = 1;
+		paramNames[0]="Checkpoint 1 id";
+		params[1] = 1;
+		paramNames[1] = "Checkpoint2 id";
+		sc = new SimulationCommand("calculate-latencies", "cl", "23", params, paramNames, "Calculate latencies between checkpoints");
+		commandList.add(sc);
+		
     }
 
     

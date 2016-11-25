@@ -74,7 +74,7 @@ public class LatencyTableModel extends AbstractTableModel {
     }
 
     public int getColumnCount() {
-        return 3;
+        return 6;
     }
 
     public synchronized Object getValueAt(int row, int column) {
@@ -94,7 +94,13 @@ public class LatencyTableModel extends AbstractTableModel {
         case 1:
             return st.trans2;
         case 2:
-            return st.time;
+            return st.minTime;
+		case 3:
+			return st.maxTime;
+		case 4:	
+			return st.avTime;
+		case 5:
+			return st.stDev;
         }
         return "unknown";		
     }
@@ -106,8 +112,15 @@ public class LatencyTableModel extends AbstractTableModel {
         case 1:
             return "Transaction 2";
         case 2:
-            return "Time";
+            return "Min";
+		case 3:
+			return "Max";
+		case 4:
+			return "Average";
+		case 5:
+			return "St Dev";
         }
+		
         return "unknown";
     }
 

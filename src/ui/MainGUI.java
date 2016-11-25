@@ -7843,6 +7843,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         return statusMap;
     }
+
+	public String getStatus(String s){
+		if (statusMap==null){
+			return null;
+		}
+		return statusMap.get(s);
+	}
     public synchronized LoadInfo isLoadID(int id) {
         if (loadIDs == null) {
             return null;

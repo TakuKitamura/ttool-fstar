@@ -92,7 +92,7 @@ public:
       	\param glob references the output stream object 
     	*/
 	virtual int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const =0;
-	
+	virtual void latencies2XML(std::ostringstream& glob, int id1, int id2)=0;
 	virtual std::string toString() const =0;
 	virtual std::istream& readObject(std::istream &is){
 		READ_STREAM(is,_endSchedule);

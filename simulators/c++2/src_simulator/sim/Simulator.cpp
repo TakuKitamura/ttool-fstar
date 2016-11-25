@@ -229,6 +229,15 @@ int Simulator::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const{
   return total;
 }
 
+void Simulator::latencies2XML(std::ostringstream& glob, int id1, int id2) {
+	for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+    (*i)->latencies2XML(glob, id1, id2);
+  }
+
+  for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+    (*j)->latencies2XML(glob, id1,id2);
+  }
+}
 
 
 void Simulator::schedule2HTML(std::string& iTraceFileName) const{
@@ -1254,6 +1263,13 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     anEntityMsg << TAG_TRANSACTION_NBo << "nb=\"" << returnedNbOfTransactions << "\"" << TAG_TRANSACTION_NBc <<  std::endl;
     std::cout << "End list of transactions." << std::endl;
     break;
+  case 23:
+	aInpStream >> aParam1;
+	aInpStream >> aParam2;
+	std::cout <<"Calculate latencies between " << aParam1 << " and " << aParam2 << std::endl;
+	latencies2XML(anEntityMsg, aParam1, aParam2);
+	std::cout << "latencies " << &anEntityMsg << std::endl;
+	break;
   default:
     anEntityMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
     anErrorCode=3;

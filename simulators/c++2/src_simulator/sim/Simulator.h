@@ -246,6 +246,7 @@ public:
 	*/
 	int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
 	
+	void latencies2XML(std::ostringstream& glob, int id1, int id2);
 	
 	///Is true if the simulator is busy
 	/**
