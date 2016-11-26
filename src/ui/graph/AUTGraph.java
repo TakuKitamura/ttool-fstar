@@ -170,10 +170,10 @@ public class AUTGraph  implements myutil.Graph {
             s2 = s.substring(index1+1, s.length());
             s2 = s2.substring(0, s2.indexOf("\""));
             //System.out.println("Guillemets on " + s2);
-            index2 = s2.indexOf("(");
+            /*index2 = s2.indexOf("(");
             if (index2 > -1) {
                 s2 = s2.substring(index2+1, s2.indexOf(")"));
-            }
+		}*/
             //System.out.println("Guillemets on " + s2);
 
         } else {
@@ -398,6 +398,10 @@ public class AUTGraph  implements myutil.Graph {
 	int cpt = 0;
 	for(AUTTransition transition: transitions) {
 	    edge = graph.addEdge(""+cpt, ""+transition.origin, ""+transition.destination, true);
+	    /*TraceManager.addDev("Transition=" + transition.transition);
+	    String tmp = Conversion.replaceAllChar(transition.transition, '(', "$");
+	    tmp = Conversion.replaceAllChar(tmp, ')', "$");
+	    TraceManager.addDev("Transition=" + tmp);*/
 	    edge.addAttribute("ui.label", transition.transition);
 	    cpt ++;
 	}
