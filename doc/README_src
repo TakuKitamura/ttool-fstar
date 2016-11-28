@@ -1,0 +1,15 @@
+TTool, an open-source UML toolkit for modeling emebedded systems and procotols.
+TTool is developed at ENST, http://labsoc.comelec.enst.fr/turtle/
+-------------------------------------------------------------------------------
+
+The src directory contains all Java sources and images used to generate the jar archive of TTool, and of the launcher.
+Basically, sources are dispatched in subdirectories as follows:
+* ddtranslator: source files to translate a TURTLE deployment diagram into a RT-LOTOS specification
+* launcher: source files of the launcher
+* myutil: various fonctions such as graphical functions, graph functions, etc.
+* sddescription: source files for textually describing sequence diagrams and interaction overview diagrams
+* sdtranslator: source files implementing the translation of sequence and interaction overview diagrams textual description into RT-LOTOS specifications
+* translator: source files implementing the translation of TURTLE designs into RT-LOTOS specifications. Also, trasnlation of TURTLE designs into Java code
+* ui: all files implementing TTool's graphical interface
+
+In the src directory, the top root file of TTool is provided, as well as other files explaining different ways of starting TTool.

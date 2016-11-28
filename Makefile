@@ -190,8 +190,8 @@ webcrawler:
 	cd $(TTOOL_SRC);$(JAR) cmf $(WEBCRAWLER_CLIENT_JAR_TXT) $(TTOOL_BIN)/$(WEBCRAWLER_CLIENT_BINARY)  web/crawler/*.class myutil/*.class myutil/*/*.class
 
 documentation:
-	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC):$(TTOOL_CLASSPATH_BINARY) -d $(TTOOL_DOC_HTML) $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java 2>/dev/null
-	cd $(TTOOL_PATH)/doc/document_soclib&&make all 2>/dev/null
+	-$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC):$(TTOOL_CLASSPATH_BINARY) -d $(TTOOL_DOC_HTML) $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
+	-cd $(TTOOL_PATH)/doc/document_soclib&&make all
 
 release: jttooljar launcher tiftranslator tmltranslator rundse remotesimulator ttooljar documentation stdrelease 
 	@echo release done

@@ -1,0 +1,1 @@
+cd bin; java -Xmx1024m -jar ttool.jar -launcher -config config_linux.xml -nc -diplodocus -avatar -proverif
