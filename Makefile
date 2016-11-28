@@ -198,6 +198,7 @@ release: jttooljar launcher tiftranslator tmltranslator rundse remotesimulator t
 
 ########## RELEASE
 stdrelease:
+	echo "stdrelease"
 	mkdir -p $(TTOOL_TARGET)
 	rm -rf $(TTOOL_TARGET)/*
 # java
