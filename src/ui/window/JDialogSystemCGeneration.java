@@ -125,7 +125,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     protected final static int NOT_STARTED = 1;
     protected final static int STARTED = 2;
     protected final static int STOPPED = 3;
-
+	protected final static int ERROR=4;
     int mode;
 
 
@@ -865,8 +865,14 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         // Command
         try {
             processCmd(cmd, jta);
+			if (jta.getText().contains("Error ")){
+				mode = ERROR;
+				setButtons();
+				return;
+			}
             //jta.append(data);
             jta.append("Compilation done\n");
+
         } catch (LauncherException le) {
             jta.append("Error: " + le.getMessage() + "\n");
             mode =      STOPPED;
@@ -953,13 +959,16 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         String s = null;
         rshc.sendProcessRequest();
         rshc.fillJTA(_jta);
+		//if (
         //s = rshc.getDataFromProcess();
         //return s;
         return;
     }
 
     protected void checkMode() {
-        mode = NOT_STARTED;
+		if (mode!=ERROR){
+        	mode = NOT_STARTED;
+		}
     }
 
     protected void setButtons() {
@@ -980,6 +989,12 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
                 //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 break;
             case STOPPED:
+				break;
+			case ERROR:
+				start.setEnabled(false);
+				stop.setEnabled(false);
+				close.setEnabled(true);
+				break;
             default:
                 start.setEnabled(false);
                 stop.setEnabled(false);

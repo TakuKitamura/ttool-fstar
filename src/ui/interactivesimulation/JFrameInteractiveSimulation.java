@@ -1074,6 +1074,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             }
         }
         mgui.resetRunningID();
+		mgui.resetStatus();
+		mgui.resetTransactions();
         mgui.resetLoadID();
         mgui.setDiploAnimate(false);
         dispose();
