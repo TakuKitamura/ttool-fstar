@@ -50,6 +50,8 @@ import java.io.*;
 
 import myutil.*;
 import org.graphstream.graph.implementations.*;
+import org.graphstream.ui.view.*;
+import org.graphstream.ui.view.Viewer.*;
 
 public class AUTGraph  implements myutil.Graph {
 
@@ -391,11 +393,16 @@ public class AUTGraph  implements myutil.Graph {
 	AbstractEdge edge;
 	
 	MultiGraph graph = new MultiGraph("TTool graph");
+	int cpt = 0;
 	for(AUTState state: states) {
 	    node = graph.addNode("" + state.id);
 	    node.addAttribute("ui.label", "" + state.id);
+	    if (cpt == 0) {
+		node.addAttribute("ui.fill-color", "red");
+	    }
+	    cpt ++;
 	}
-	int cpt = 0;
+	cpt = 0;
 	for(AUTTransition transition: transitions) {
 	    edge = graph.addEdge(""+cpt, ""+transition.origin, ""+transition.destination, true);
 	    /*TraceManager.addDev("Transition=" + transition.transition);
@@ -406,7 +413,8 @@ public class AUTGraph  implements myutil.Graph {
 	    cpt ++;
 	}
 	//graph.addAttribute("ui.stylesheet", "graph { fill-color: red; }");
-	graph.display();
+	Viewer viewer = graph.display();
+	viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.CLOSE_VIEWER);
 
     }
 

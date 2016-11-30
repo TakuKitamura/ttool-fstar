@@ -75,7 +75,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     public final static int LIVENESS_ALL        = 4;
     public final static int LIVENESS_SELECTED   = 5;
     public final static int LIVENESS_NONE       = 6;
-    
+
 
     protected static String graphDir;
     protected static boolean graphSelected = false;
@@ -95,6 +95,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
     private int mode;
 
+    protected final static int NO_GRAPH = 1;
+    protected final static int GRAPH_OK = 2;
+
+    private int graphMode;
+    private String graphAUT;
+
     private AvatarSpecification spec;
 
     private avatartranslator.modelchecker.AvatarModelChecker amc;
@@ -108,6 +114,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
     protected JButton start;
     protected JButton stop;
     protected JButton close;
+    protected JButton show;
 
     //protected JRadioButton exe, exeint;
     //protected ButtonGroup exegroup;
@@ -161,6 +168,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
     protected void myInitComponents() {
         mode = NOT_STARTED;
+        graphMode = NO_GRAPH;
         setButtons();
     }
 
@@ -186,12 +194,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         c01.fill = GridBagConstraints.HORIZONTAL;
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 
-	if (TraceManager.devPolicy == TraceManager.TO_CONSOLE) {
-	    generateDesign = new JCheckBox("[For testing purpose only] Generate Design", generateDesignSelected);
-	    generateDesign.addActionListener(this);
-	    jp01.add(generateDesign, c01);
-	}
-	
+        if (TraceManager.devPolicy == TraceManager.TO_CONSOLE) {
+            generateDesign = new JCheckBox("[For testing purpose only] Generate Design", generateDesignSelected);
+            generateDesign.addActionListener(this);
+            jp01.add(generateDesign, c01);
+        }
+
         ignoreEmptyTransitions = new JCheckBox("Do not display empty transitions as internal actions", ignoreEmptyTransitionsSelected);
         ignoreEmptyTransitions.addActionListener(this);
         jp01.add(ignoreEmptyTransitions, c01);
@@ -223,7 +231,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         reachabilityAllStates.setSelected(reachabilitySelected ==  REACHABILITY_ALL);
 
 
-	// Liveness
+        // Liveness
         liveness = new ButtonGroup();
 
         noLiveness = new JRadioButton("No liveness");
@@ -244,7 +252,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         noLiveness.setSelected(livenessSelected ==  LIVENESS_NONE);
         livenessCheckable.setSelected(livenessSelected ==  LIVENESS_SELECTED);
         livenessAllStates.setSelected(livenessSelected ==  LIVENESS_ALL);
-	
+
 
         // RG
         saveGraphAUT = new JCheckBox("Save RG (AUT format) in:", graphSelected);
@@ -275,14 +283,17 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         start = new JButton("Start", IconManager.imgic53);
         stop = new JButton("Stop", IconManager.imgic55);
         close = new JButton("Close", IconManager.imgic27);
+        show = new JButton("RG analysis", IconManager.imgic28);
 
         start.setPreferredSize(new Dimension(100, 30));
         stop.setPreferredSize(new Dimension(100, 30));
         close.setPreferredSize(new Dimension(120, 30));
+        show.setPreferredSize(new Dimension(150, 30));
 
         start.addActionListener(this);
         stop.addActionListener(this);
         close.addActionListener(this);
+        show.addActionListener(this);
 
         // Information
         JPanel jplow = new JPanel(new BorderLayout());
@@ -365,6 +376,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         jp2.add(start);
         jp2.add(stop);
         jp2.add(close);
+        jp2.add(show);
         jplow.add(jp2, BorderLayout.SOUTH);
 
         c.add(jplow, BorderLayout.SOUTH);
@@ -380,6 +392,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
+        } else if (evt.getSource() == show) {
+            showGraph();
         } else if (evt.getSource() == saveGraphAUT) {
             setButtons();
         } else if (evt.getSource() == saveGraphDot) {
@@ -398,9 +412,15 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             stopProcess();
         }
         dispose();
-	if (timer != null) {
-	    timer.cancel();
-	    timer.purge();
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+        }
+    }
+
+    public void showGraph() {
+	if (graphAUT != null) {
+	    mgui.showAUT("Last RG", graphAUT);
 	}
     }
 
@@ -411,12 +431,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         mode =  STOPPED;
         setButtons();
         go = false;
-	if (timer != null) {
-	    timer.cancel();
-	    timer.purge();
-	}
-	updateValues();
-	
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+        }
+        updateValues();
+
     }
 
     public synchronized void startProcess() {
@@ -425,6 +445,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         }
         t = new Thread(this);
         mode = STARTED;
+        graphMode = NO_GRAPH;
         setButtons();
         go = true;
         t.start();
@@ -469,9 +490,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
                 for(SpecificationReachability sr: amc.getReachabilities()){
                     handleReachability(sr.ref1, sr.result);
-		    if (sr.ref2 != sr.ref1) {
-			handleReachability(sr.ref2, sr.result);
-		    }
+                    if (sr.ref2 != sr.ref1) {
+                        handleReachability(sr.ref2, sr.result);
+                    }
                 }
             }
 
@@ -480,9 +501,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
                 jta.append("Reachability of " + res +  " states activated\n");
                 for(SpecificationReachability sr: amc.getReachabilities()){
                     handleReachability(sr.ref1, sr.result);
-		    if (sr.ref2 != sr.ref1) {
-			handleReachability(sr.ref2, sr.result);
-		    }
+                    if (sr.ref2 != sr.ref1) {
+                        handleReachability(sr.ref2, sr.result);
+                    }
                 }
             }
 
@@ -496,16 +517,16 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             testGo();
 
             amc.startModelChecking();
-	    TraceManager.addDev("Model checking done");
+            TraceManager.addDev("Model checking done");
 
-	    if (generateDesignSelected) {
-		TraceManager.addDev("Drawing modified avatar spec");
-		AvatarSpecification reworkedSpec = amc.getReworkedAvatarSpecification();
-		if ((mgui != null) && (reworkedSpec != null)) {
-		    mgui.drawAvatarSpecification(reworkedSpec);
-		}
-	    }
-	    
+            if (generateDesignSelected) {
+                TraceManager.addDev("Drawing modified avatar spec");
+                AvatarSpecification reworkedSpec = amc.getReworkedAvatarSpecification();
+                if ((mgui != null) && (reworkedSpec != null)) {
+                    mgui.drawAvatarSpecification(reworkedSpec);
+                }
+            }
+
             timer.cancel();
             endDate = new Date();
             updateValues();
@@ -521,9 +542,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
                 for(SpecificationReachability sr: amc.getReachabilities()){
                     //TraceManager.addDev("Handing reachability of " + sr);
                     handleReachability(sr.ref1, sr.result);
-		    if (sr.ref2 != sr.ref1) {
-			handleReachability(sr.ref2, sr.result);
-		    }
+                    if (sr.ref2 != sr.ref1) {
+                        handleReachability(sr.ref2, sr.result);
+                    }
                 }
             }
 
@@ -531,9 +552,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             //TraceManager.addDev(amc.toString());
             if (saveGraphAUT.isSelected()) {
                 try {
-                    String graph = amc.toAUT();
+                    graphAUT = amc.toAUT();
+                    graphMode = GRAPH_OK;
                     //TraceManager.addDev("graph AUT=\n" + graph);
-                    FileUtils.saveFile(graphPath.getText(), graph);
+                    FileUtils.saveFile(graphPath.getText(), graphAUT);
                     jta.append("Graph saved in " + graphPath.getText() + "\n");
                 } catch (Exception e) {
                     jta.append("Graph could not be saved in " + graphPath.getText() + "\n");
@@ -571,17 +593,17 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
                 switch(_res) {
                 case NOTCOMPUTED:
                     tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);
-		    tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
+                    tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
                     break;
                 case REACHABLE:
                     tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
                     break;
                 case NONREACHABLE:
                     tgc.setReachability(TGComponent.ACCESSIBILITY_KO);
-		    tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
+                    tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
                     break;
                 }
-		tgc.getTDiagramPanel().repaint();
+                tgc.getTDiagramPanel().repaint();
             }
         }
     }
@@ -595,9 +617,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
         graphPath.setEnabled(saveGraphAUT.isSelected());
         graphSelectedDot = saveGraphDot.isSelected();
         graphPathDot.setEnabled(saveGraphDot.isSelected());
-	if (generateDesign != null) {
-	    generateDesignSelected = generateDesign.isSelected();
-	}
+        if (generateDesign != null) {
+            generateDesignSelected = generateDesign.isSelected();
+        }
         ignoreEmptyTransitionsSelected = ignoreEmptyTransitions.isSelected();
         ignoreConcurrenceBetweenInternalActionsSelected = ignoreConcurrenceBetweenInternalActions.isSelected();
 
@@ -636,6 +658,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             getGlassPane().setVisible(false);
             break;
         }
+
+        show.setEnabled(graphMode == GRAPH_OK);
     }
 
     public boolean hasToContinue() {
@@ -727,7 +751,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
             return 0;
         }
 
-	
+
         if ((endDate == null) && (go == true)) {
             return 1;
         }
