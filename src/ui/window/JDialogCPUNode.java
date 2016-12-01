@@ -257,6 +257,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
         }
         MECTypeCB.addActionListener(this);
         panel4.add( MECTypeCB, c4);
+
 	if (transactions.size()!=0) {
 		panel5=new JPanel();
 		panel5.setPreferredSize(new Dimension(400,300));
@@ -266,12 +267,12 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		tabbedPane.addTab("Simulation Transactions", panel5);
 	//Draw from transactions
  	}
-
+	else {
         tabbedPane.addTab( "Simulation", panel2 );
         tabbedPane.addTab( "Code generation", panel4 );
 
         tabbedPane.setSelectedIndex(0);
-
+	}
         // main panel;
         c0.gridheight = 10;
         c0.weighty = 1.0;
@@ -406,25 +407,48 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	    return false;
 	}
   }
-  class MyFrame extends JPanel implements MouseMotionListener{
+  class MyFrame extends JPanel implements MouseMotionListener, MouseListener{
 	Map<Range, String> toolMap = new HashMap<Range, String>();
 	public MyFrame(){
+		ToolTipManager.sharedInstance().setInitialDelay(0);
+
 	    addMouseMotionListener(this);
+		addMouseListener(this);
 	}
 	public void mouseDragged(MouseEvent e) {
        //do something
-        }
-    	public void mouseMoved(MouseEvent e) {
+    }
+	public void mouseMoved(MouseEvent e){
+		drawToolTip(e);
+	}
+    public void mouseClicked(MouseEvent e) {
+		drawToolTip(e);
+    }
+    public void mousePressed(MouseEvent e) {
+		drawToolTip(e);
+    }
+	public void mouseExited(MouseEvent e){
+		///
+	}
+	public void mouseReleased(MouseEvent e){
+		///
+	}
+	public void mouseEntered(MouseEvent e){
+	}
+	public void drawToolTip(MouseEvent e){
+	
 	    setToolTipText(null);
 	    for (Range r:toolMap.keySet()){
-		int x=e.getX();
-		int y=e.getY();
-		if (r.inRange(x,y)){
-		    setToolTipText(toolMap.get(r));
-		    break;
-		}
+
+			int x=e.getX();
+			int y=e.getY();
+			if (r.inRange(x,y)){
+			    setToolTipText(toolMap.get(r));
+			    break;
+			}
 	    }
-    	}
+	}
+
     public void paint(Graphics g) {
 	
 	//Draw Axis
