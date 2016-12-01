@@ -63,7 +63,7 @@ import java.util.concurrent.TimeUnit;
 
 
 
-public class JDialogAvatarModelChecker extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {
+public class JDialogAvatarModelChecker extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
     public final static String [] INFOS = {"Not started", "Running", "Stopped by user", "Finished"};
     public final static Color []  COLORS = {Color.darkGray, Color.magenta, Color.red, Color.blue};
 
@@ -146,7 +146,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JDialog implements Ac
 
     /** Creates new form  */
     public JDialogAvatarModelChecker(Frame f, MainGUI _mgui, String title, AvatarSpecification _spec, String _graphDir)  {
-        super(f, title, true);
+        super(title);
 
         mgui = _mgui;
         spec = _spec;
