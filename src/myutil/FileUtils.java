@@ -55,6 +55,7 @@ public class FileUtils {
     public final static String rtl = "lot";
     public final static String lib = "lib";
     public final static String img = "png";
+    public final static String png = "png";
     public final static String dta = "dta";
     public final static String rg = "rg";
     public final static String aut = "aut";

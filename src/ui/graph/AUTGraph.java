@@ -49,9 +49,6 @@ import java.util.*;
 import java.io.*;
 
 import myutil.*;
-import org.graphstream.graph.implementations.*;
-import org.graphstream.ui.view.*;
-import org.graphstream.ui.view.Viewer.*;
 
 public class AUTGraph  implements myutil.Graph {
 
@@ -64,6 +61,24 @@ public class AUTGraph  implements myutil.Graph {
     protected boolean[] hasExitTransition;
     protected boolean[] hasEntryTransition;
     protected boolean statesComputed;
+
+    protected static String STYLE_SHEET =
+            "node {" +
+            "	fill-color: blue;" +
+            "} " +
+	//	    "edge.defaultedge {" +
+	//  "	shape: cubic-curve;" +
+	//   "}" +
+	//    "edge {shape: cubic-curve}" +
+	    "edge.external {" +
+            "	text-style: bold;" +
+            "} " +
+	    "node.deadlock {" +
+            "	fill-color: green;" +
+            "} " +
+            "node.init {" +
+            "	fill-color: red;" +
+            "} ";
 
     public AUTGraph() {
         transitions = new ArrayList<AUTTransition>();
@@ -220,6 +235,16 @@ public class AUTGraph  implements myutil.Graph {
     public AUTTransition getAUTTransition(int index) {
         return transitions.get(index);
     }
+
+    public ArrayList<AUTState> getStates() {
+	return states;
+    }
+
+    public ArrayList<AUTTransition> getTransitions() {
+	return transitions;
+    }
+    
+    
 
     public int getNbPotentialDeadlocks(){
         int nb = 0;
@@ -389,33 +414,8 @@ public class AUTGraph  implements myutil.Graph {
     }
 
     public void display() {
-	MultiNode node;
-	AbstractEdge edge;
-	
-	MultiGraph graph = new MultiGraph("TTool graph");
-	int cpt = 0;
-	for(AUTState state: states) {
-	    node = graph.addNode("" + state.id);
-	    node.addAttribute("ui.label", "" + state.id);
-	    if (cpt == 0) {
-		node.addAttribute("ui.fill-color", "red");
-	    }
-	    cpt ++;
-	}
-	cpt = 0;
-	for(AUTTransition transition: transitions) {
-	    edge = graph.addEdge(""+cpt, ""+transition.origin, ""+transition.destination, true);
-	    /*TraceManager.addDev("Transition=" + transition.transition);
-	    String tmp = Conversion.replaceAllChar(transition.transition, '(', "$");
-	    tmp = Conversion.replaceAllChar(tmp, ')', "$");
-	    TraceManager.addDev("Transition=" + tmp);*/
-	    edge.addAttribute("ui.label", transition.transition);
-	    cpt ++;
-	}
-	//graph.addAttribute("ui.stylesheet", "graph { fill-color: red; }");
-	Viewer viewer = graph.display();
-	viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.CLOSE_VIEWER);
-
+	AUTGraphDisplay display = new AUTGraphDisplay(this);
+	display.display();	
     }
 
 }

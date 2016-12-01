@@ -255,7 +255,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
 
         // RG
-        saveGraphAUT = new JCheckBox("Save RG (AUT format) in:", graphSelected);
+        saveGraphAUT = new JCheckBox("Save RG (AUT format) in: (this option enables graph analysis)", graphSelected);
         saveGraphAUT.addActionListener(this);
         jp01.add(saveGraphAUT, c01);
         graphPath = new JTextField(graphDir);
