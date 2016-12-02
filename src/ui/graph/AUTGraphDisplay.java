@@ -323,6 +323,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
 	    close = new JButton("Close", IconManager.imgic27);
             close.addActionListener(this);
 	    screenshot = new JButton("Screenshot in png", IconManager.imgic28);
+	    screenshot.addActionListener(this);
             close.addActionListener(this);
 	    help = new JLabel("Zoom with PageUp/PageDown, move with cursor keys");
 	    
@@ -349,6 +350,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         }
 
 	public void screenshot() {
+	    TraceManager.addDev("Screenshot");
 	    JFileChooser jfcggraph;
             if (ConfigurationTTool.GGraphPath.length() > 0) {
 		jfcggraph = new JFileChooser(ConfigurationTTool.GGraphPath);
@@ -357,11 +359,17 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
 	    }
 	    PNGFilter filter = new PNGFilter();
 	    jfcggraph.setFileFilter(filter);
+	    int returnVal = jfcggraph.showDialog(this, "Graph capture (in png)");
+	    if(returnVal != JFileChooser.APPROVE_OPTION) {
+		return;
+	    }
+	    File pngFile = jfcggraph.getSelectedFile();
+	    TraceManager.addDev("Making the screenshot in " + pngFile.getAbsolutePath());
+	    vGraph.addAttribute("ui.screenshot", pngFile.getAbsolutePath());
+	    //vGraph.addAttribute("ui.screenshot", "/tmp/toto.png");
+	    TraceManager.addDev("Screenshot performed");
         }
 	
-
-
     }
-
 
 }
