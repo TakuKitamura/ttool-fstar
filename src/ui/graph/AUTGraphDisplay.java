@@ -91,7 +91,8 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         "       text-style: bold;" +
         "} " +
         "node.deadlock {" +
-        "       fill-color: green;" +
+        "       fill-color: green; text-color: black; " +
+	
         "} " +
         "node.init {" +
         "       fill-color: red;" +
@@ -314,6 +315,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
 	protected JButton screenshot;
 	protected JCheckBox internalActions;
 	protected JCheckBox readActions;
+	protected JCheckBox higherQuality, antialiasing;
 	protected JLabel help;
 	
 
@@ -338,7 +340,11 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
 	    internalActions.addActionListener(this);
 	    readActions = new JCheckBox("Display read/write actions", true);
 	    readActions.addActionListener(this);
-
+	    higherQuality =  new JCheckBox("Higher drawing quality", false);
+	    higherQuality.addActionListener(this);
+	    antialiasing =  new JCheckBox("Anti aliasing", false);
+	    antialiasing.addActionListener(this);
+	    
 
 	    JPanel jp01 = new JPanel();
 	    GridBagLayout gridbag01 = new GridBagLayout();
@@ -354,6 +360,8 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
 	    jp01.add(screenshot);
 	    jp01.add(internalActions);
 	    jp01.add(readActions);
+	    jp01.add(higherQuality);
+	    jp01.add(antialiasing);
 	    
 	    JPanel infoPanel = new JPanel(new BorderLayout());
 	    infoPanel.add(help, BorderLayout.NORTH);
@@ -376,6 +384,10 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
 		manageInternalActions();
 	    } else if (evt.getSource() == readActions) {
 		manageReadActions();
+	    } else if (evt.getSource() == higherQuality) {
+		manageHigherQuality();
+	    } else if (evt.getSource() == antialiasing) {
+		manageAntialiasing();
 	    }
         }
 
@@ -428,8 +440,29 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
 	    }
 	}
 
-     
-    }
+	public void manageHigherQuality() {
+	    viewer.disableAutoLayout();
+	    if (higherQuality.isSelected()) {
+		vGraph.addAttribute("ui.quality");
+	    } else {
+		vGraph.removeAttribute("ui.quality");
+	    }
+	    viewer.enableAutoLayout();
+	}
+
+	public void manageAntialiasing() {
+	    viewer.disableAutoLayout();
+	    if (antialiasing.isSelected()) {
+		vGraph.addAttribute("ui.antialias");
+	    } else {
+		vGraph.removeAttribute("ui.antialias");
+	    }
+	    viewer.enableAutoLayout();
+	}
+
+	
+	
+    } // Basic Frame
     
     
-}
+} // Main class

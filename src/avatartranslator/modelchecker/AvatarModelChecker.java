@@ -142,11 +142,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         return pendingStates.size();
     }
 
-    public synchronized long getStateID() {
+    /*public synchronized long getStateID() {
         long tmp = stateID;
         stateID ++;
         return tmp;
-    }
+	}*/
 
     public void setFreeIntermediateStateCoding(boolean _b) {
 	freeIntermediateStateCoding = _b;
@@ -305,7 +305,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         for(AvatarBlock block: spec.getListOfBlocks()) {
             checkElement(block.getStateMachine().getStartState(), initialState);
         }
-        initialState.id = getStateID();
+        //initialState.id = 0//getStateID();
         if (ignoreEmptyTransitions) {
             handleNonEmptyUniqueTransition(initialState);
         }
@@ -314,8 +314,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         //TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
         initialState.computeHash(blockValues);
-        states.put(initialState.hashValue, initialState);
-	statesByID.put(initialState.id, initialState);
+	addState(initialState);
+        //states.put(initialState.hashValue, initialState);
+	//statesByID.put(initialState.id, initialState);
         pendingStates.add(initialState);
 
         computeAllStates();
@@ -596,14 +597,18 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             SpecificationState similar = states.get(newState.getHash(blockValues));
             if (similar == null) {
                 //  Unknown state
-                states.put(newState.getHash(blockValues), newState);
-		statesByID.put(newState.id, newState);
+		
+                //states.put(newState.getHash(blockValues), newState);
+		addState(newState);
+		//newState.id = getStateID();
+		//TraceManager.addDev("Putting new state with id = " +  newState.id + " stateID = " + stateID + " states size = " + states.size() + " states by id size = " + statesByID.size());
+		//statesByID.put(newState.id, newState);
 		if ((studyLiveness == false) || (studyLiveness && !(tr.livenessFound))) {
 		    pendingStates.add(newState);
 		}
 		
                 link.destinationState = newState;
-                newState.id = getStateID();
+                //newState.id = getStateID();
                 //TraceManager.addDev("Creating new state for newState=" + newState);
 
             } else {
@@ -1052,7 +1057,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         AvatarStateElement ase = (AvatarStateElement)(at.getNext(0));
         checkElement(ase, _ss);
-        TraceManager.addDev("Handling Empty transition of " + _block.getName() + " with nextState = " + ase.getName() + " and previous=" + _ase.getName());
+        //TraceManager.addDev("Handling Empty transition of " + _block.getName() + " with nextState = " + ase.getName() + " and previous=" + _ase.getName());
 
         if (listOfStates == null) {
             if (ase == _ase) {
@@ -1149,16 +1154,18 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
     public String toAUT() {
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();	
         sb.append("des(0," + getNbOfLinks() + "," + getNbOfStates() + ")\n");
 
         for(SpecificationState state: states.values()) {
+	    //TraceManager.addDev("State:" + state.id);
 	     if (state.nexts != null) {
 		 for(SpecificationLink link: state.nexts) {
                 sb.append("(" + link.originState.id + ",\"" + link.action + "\"," + link.destinationState.id + ")\n");
 		 }
 	     }
         }
+	//TraceManager.addDev("StateID=" + stateID);
         return new String(sb);
     }
 
@@ -1206,6 +1213,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	for(SpecificationState state: states.values()) {
 	    state.freeUselessAllocations();
 	}
+    }
+
+    private synchronized void addState(SpecificationState newState) {
+	newState.id = states.size();
+	//newState.computeHash(blockValues);
+	states.put(newState.getHash(blockValues), newState);
+	statesByID.put(newState.id, newState);
+	stateID ++;
     }
 
 
