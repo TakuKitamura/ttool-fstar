@@ -77,10 +77,11 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
     protected MultiGraph vGraph;
     protected boolean loop;
     protected MultiNode firstNode;
+    protected ArrayList<AbstractEdge> edges;
 
     public static String STYLE_SHEET =
         "node {" +
-        "       fill-color: blue;" +
+        "       fill-color: blue; text-color: white; " +
         "} " +
         //          "edge.defaultedge {" +
         //  "   shape: cubic-curve;" +
@@ -124,6 +125,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
             cpt ++;
         }
         cpt = 0;
+	edges = new ArrayList<AbstractEdge>(graph.getTransitions().size());
         for(AUTTransition transition: graph.getTransitions()) {
             edge = vGraph.addEdge(""+cpt, ""+transition.origin, ""+transition.destination, true);
             /*TraceManager.addDev("Transition=" + transition.transition);
@@ -135,6 +137,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
             if (!(transition.transition.startsWith("i("))) {
                 edge.addAttribute("ui.class", "external");
             }
+	    edges.add(edge);
             cpt ++;
         }
         //viewer = vGraph.display();
@@ -146,7 +149,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         //View   vi = viewer.addDefaultView(true);
 
         viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.CLOSE_VIEWER);
-        BasicFrame bf = new BasicFrame(viewer, vGraph, graph);
+        BasicFrame bf = new BasicFrame(viewer, vGraph, graph, edges);
 
         //vi.addMouseListener(this);
 
@@ -305,14 +308,20 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         protected MultiGraph vGraph;
         protected Viewer viewer;
         protected AUTGraph graph;
+	protected ArrayList<AbstractEdge> edges;
+	
         protected JButton close;
 	protected JButton screenshot;
+	protected JCheckBox internalActions;
+	protected JCheckBox readActions;
 	protected JLabel help;
+	
 
-        public BasicFrame(Viewer viewer, MultiGraph vGraph, AUTGraph autgraph) {
+        public BasicFrame(Viewer viewer, MultiGraph vGraph, AUTGraph autgraph, ArrayList<AbstractEdge>_edges) {
             this.viewer = viewer;
             this.vGraph = vGraph;
             this.graph = autgraph;
+	    edges = _edges;
             makeComponents();
 
         }
@@ -323,14 +332,35 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
 	    close = new JButton("Close", IconManager.imgic27);
             close.addActionListener(this);
 	    screenshot = new JButton("Screenshot in png", IconManager.imgic28);
-	    screenshot.addActionListener(this);
             close.addActionListener(this);
 	    help = new JLabel("Zoom with PageUp/PageDown, move with cursor keys");
+	    internalActions = new JCheckBox("Display internal actions", true);
+	    internalActions.addActionListener(this);
+	    readActions = new JCheckBox("Display read/write actions", true);
+	    readActions.addActionListener(this);
+
+
+	    JPanel jp01 = new JPanel();
+	    GridBagLayout gridbag01 = new GridBagLayout();
+	    GridBagConstraints c01 = new GridBagConstraints();
+	    jp01.setLayout(gridbag01);
+	    jp01.setBorder(new javax.swing.border.TitledBorder("Options"));
+	    //c01.gridwidth = 1;
+	    c01.gridheight = 1;
+	    c01.weighty = 1.0;
+	    c01.weightx = 1.0;
+	    c01.fill = GridBagConstraints.HORIZONTAL;
+	    c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+	    jp01.add(screenshot);
+	    jp01.add(internalActions);
+	    jp01.add(readActions);
 	    
 	    JPanel infoPanel = new JPanel(new BorderLayout());
 	    infoPanel.add(help, BorderLayout.NORTH);
 	    infoPanel.add(close, BorderLayout.SOUTH);
-	    infoPanel.add(screenshot, BorderLayout.CENTER);
+	    infoPanel.add(jp01, BorderLayout.CENTER);
+
+	    
 	    add(infoPanel, BorderLayout.SOUTH);
             //setDefaultCloseOperation(EXIT_ON_CLOSE);
             setSize(800, 600);
@@ -342,6 +372,10 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
                 closeFrame();
             } else if (evt.getSource() == screenshot) {
 		screenshot();
+	    } else if (evt.getSource() == internalActions) {
+		manageInternalActions();
+	    } else if (evt.getSource() == readActions) {
+		manageReadActions();
 	    }
         }
 
@@ -350,7 +384,6 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         }
 
 	public void screenshot() {
-	    TraceManager.addDev("Screenshot");
 	    JFileChooser jfcggraph;
             if (ConfigurationTTool.GGraphPath.length() > 0) {
 		jfcggraph = new JFileChooser(ConfigurationTTool.GGraphPath);
@@ -359,17 +392,44 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
 	    }
 	    PNGFilter filter = new PNGFilter();
 	    jfcggraph.setFileFilter(filter);
-	    int returnVal = jfcggraph.showDialog(this, "Graph capture (in png)");
-	    if(returnVal != JFileChooser.APPROVE_OPTION) {
+        }
+
+	public void manageInternalActions() {
+	    if (edges == null) {
 		return;
 	    }
-	    File pngFile = jfcggraph.getSelectedFile();
-	    TraceManager.addDev("Making the screenshot in " + pngFile.getAbsolutePath());
-	    vGraph.addAttribute("ui.screenshot", pngFile.getAbsolutePath());
-	    //vGraph.addAttribute("ui.screenshot", "/tmp/toto.png");
-	    TraceManager.addDev("Screenshot performed");
-        }
-	
-    }
+	    int cpt =0;
+	    for(AUTTransition transition: graph.getTransitions()) {
+		if (transition.transition.startsWith("i(")) {
+		    if (internalActions.isSelected()) {
+			edges.get(cpt).addAttribute("ui.label", transition.transition);
+		    } else {
+			edges.get(cpt).addAttribute("ui.label", "");
+		    }
+		}
+		cpt ++;
+	    }
+	}
 
+	public void manageReadActions() {
+	    if (edges == null) {
+		return;
+	    }
+	    int cpt =0;
+	    for(AUTTransition transition: graph.getTransitions()) {
+		if (transition.transition.contains("?")) {
+		    if (readActions.isSelected()) {
+			edges.get(cpt).addAttribute("ui.label", transition.transition);
+		    } else {
+			edges.get(cpt).addAttribute("ui.label", "");
+		    }
+		}
+		cpt ++;
+	    }
+	}
+
+     
+    }
+    
+    
 }
