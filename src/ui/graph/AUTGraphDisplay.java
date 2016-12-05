@@ -81,7 +81,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
     
     public static String STYLE_SHEET =
         "node {" +
-        "       fill-color: blue; text-color: white; " +
+        "       fill-color: #B1CAF1; text-color: black; size: 11px, 11px;" +
         "} " +
         //          "edge.defaultedge {" +
         //  "   shape: cubic-curve;" +
@@ -95,7 +95,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         
         "} " +
         "node.init {" +
-        "       fill-color: red;" +
+        "       fill-color: red; text-color: white; size: 15px, 15px;" +
         "} ";
     
     public AUTGraphDisplay(AUTGraph _graph) {
