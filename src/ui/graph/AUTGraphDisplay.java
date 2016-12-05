@@ -627,6 +627,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import java.util.logging.*;
+
 
 import myutil.*;
 import org.graphstream.graph.implementations.*;
@@ -675,6 +677,9 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
     public void display() {
         MultiNode node;
         AbstractEdge edge;
+
+	Logger l0 = Logger.getLogger("");
+	l0.removeHandler(l0.getHandlers()[0]);
         
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
         
