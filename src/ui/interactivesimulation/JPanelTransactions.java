@@ -138,7 +138,7 @@ public  class JPanelTransactions extends JPanel  {
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         c2.fill = GridBagConstraints.HORIZONTAL;
 
-	nbOfTransactions = new JTextField(defaultNbOfTransactions);
+		nbOfTransactions = new JTextField(Integer.toString(defaultNbOfTransactions), defaultNbOfTransactions);
         add(nbOfTransactions, c2);
 
         add(new JLabel(" "), c2);

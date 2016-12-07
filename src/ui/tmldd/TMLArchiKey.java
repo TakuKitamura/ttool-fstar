@@ -131,6 +131,11 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         g.fillRect(x+1, y+1, width-1, height-1);
         g.setColor(c);
 
+		g.fillOval(x+width-fileX, y+space, height/3, height/3);
+		g.fillRect(x+width-space-fileX/2,y+space, 3, height*3/4-space);
+		g.fillRect(x+width-space-fileX/2, y+height*3/4, 8,3);
+		g.fillRect(x+width-space-fileX/2, y+height*2/3, 8,3);
+/*
         //g.drawRoundRect(x, y, width, height, arc, arc);
         g.drawLine(x+width-space-fileX, y + space, x+width-space-fileX, y+space+fileY);
         g.drawLine(x+width-space-fileX, y + space, x+width-space-cran, y+space);
@@ -139,7 +144,7 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         g.drawLine(x+width-space, y+space+fileY, x+width-space-fileX, y+space+fileY);
         g.drawLine(x+width-space-cran, y+space, x+width-space-cran, y+space+cran);
         g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
-
+*/
         g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
 
         g.drawString(value, x + textX , y + textY);
