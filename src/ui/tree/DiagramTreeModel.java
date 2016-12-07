@@ -159,6 +159,10 @@ public class DiagramTreeModel implements TreeModel {
             if (node instanceof InvariantDataTree) {
                 return false;
             }
+
+	    if (node instanceof GraphTree) {
+                return false;
+            }
             
             if (node instanceof Invariant) {
                 return false;
@@ -185,6 +189,7 @@ public class DiagramTreeModel implements TreeModel {
              if (node instanceof InvariantSynchro) {
              	 return false;
              }
+
             return true;
         }
     }

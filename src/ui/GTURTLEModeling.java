@@ -390,10 +390,15 @@ import ui.tmlsd.TMLSDPanel;
 import ui.tree.InvariantDataTree;
 import ui.tree.SearchTree;
 import ui.tree.SyntaxAnalysisTree;
+import ui.tree.SyntaxAnalysisTree.*;
 import ui.ucd.UseCaseDiagramPanel;
 import ui.window.JFrameSimulationTrace;
 import uppaaldesc.UPPAALSpec;
 import java.util.*;
+import ui.tree.*;
+
+import ui.graph.*;
+
 //Communication Pattern javaCC parser
 //import compiler.tmlCPparser.*;
 
@@ -448,6 +453,9 @@ public class GTURTLEModeling {
     private String rgautprojdot;
     private String tlsa;
     private String tlsadot;
+
+    private ArrayList<RG> graphs;
+    private GraphTree gt;
 
     private int nbRTLOTOS;
     private int nbSuggestedDesign;
@@ -507,12 +515,14 @@ public class GTURTLEModeling {
         savedPanels = new Vector();
         pointerOperation = -1;
 
+	graphs = new ArrayList<RG>();
         invariants = new LinkedList<Invariant>();
 
         //vdt = new ValidationDataTree(mgui);
         mcvdt = new SyntaxAnalysisTree(mgui);
         idt = new InvariantDataTree(mgui);
         st = new SearchTree(mgui);
+	gt = new GraphTree(mgui);
 
         /*if (!Charset.isSupported("UTF-8")) {
           ErrorGUI.exit(ErrorGUI.ERROR_CHARSET);
@@ -532,9 +542,20 @@ public class GTURTLEModeling {
         return tm.isARegularTIFSpec();
     }
 
+    public ArrayList<RG> getRGs() {
+        return graphs;
+    }
+
+    public void addRG(RG newGraph) {
+        graphs.add(newGraph);
+    }
+
+    
     public LinkedList<Invariant> getInvariants() {
         return invariants;
     }
+
+    
 
     public void addInvariant(Invariant _inv) {
         invariants.add(_inv);
@@ -2453,7 +2474,7 @@ public class GTURTLEModeling {
     }
 
     public int getChildCount() {
-        return panels.size() + 3;
+        return panels.size() + 4;
     }
 
     public Object getChild(int index) {
@@ -2462,6 +2483,8 @@ public class GTURTLEModeling {
         } else if (index == panels.size()) {
             return mcvdt;
         } else if (index == (panels.size() + 1)) {
+            return gt;
+        }  else if (index == (panels.size() + 2)) {
             return idt;
         } else {
             return st;
@@ -2480,11 +2503,15 @@ public class GTURTLEModeling {
             return panels.size();
         }
 
-        if (child == idt) {
+        if (child == gt) {
             return panels.size() + 1;
         }
 
-        return panels.size()+2;
+	if (child == idt) {
+            return panels.size() + 2;
+        }
+
+        return panels.size()+3;
     }
 
     // Projection management

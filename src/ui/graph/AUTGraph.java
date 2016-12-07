@@ -50,7 +50,7 @@ import java.io.*;
 
 import myutil.*;
 
-public class AUTGraph  implements myutil.Graph {
+public class AUTGraph implements myutil.Graph {
 
     protected ArrayList<AUTTransition> transitions;
     protected ArrayList<AUTState> states;

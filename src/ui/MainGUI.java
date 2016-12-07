@@ -141,6 +141,7 @@ import ui.file.TLSAFileFilter;
 import ui.file.TLibFilter;
 import ui.file.TSVGFilter;
 import ui.file.TTIFFilter;
+import ui.graph.*;
 import ui.interactivesimulation.JFrameInteractiveSimulation;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.iod.InteractionOverviewDiagramPanel;
@@ -1102,6 +1103,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public LinkedList<Invariant> getInvariants() {
         return gtm.getInvariants();
+    }
+
+    public ArrayList<RG> getRGs() {
+	return gtm.getRGs();
+    }
+
+    public void addRG(RG _newGraph) {
+	gtm.addRG(_newGraph);
     }
 
 

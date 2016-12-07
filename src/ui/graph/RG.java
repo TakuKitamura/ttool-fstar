@@ -36,71 +36,37 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class InvariantSynchro implements GenericTree
-   * InvariantSynchro is a synchro inside of a invanriant
-   * Creation: 29/03/2012
-   * @version 1.0 29/03/2012
+   * Class RG
+   * Creation : 07/12/2016
+   ** @version 1.0 07/12/2016
    * @author Ludovic APVRILLE
-   * @see TGComponent
+   * @see
    */
 
-package ui;
+package ui.graph;
+
+import java.util.*;
+import java.io.*;
 
 import myutil.*;
 
-import java.util.*;
+public class RG {
 
-
-public class InvariantSynchro implements GenericTree {
-
-    private TGComponent from;
-    private TGComponent to;
-    private String name;
-
-    public InvariantSynchro(String _name, TGComponent _from, TGComponent _to) {
-        from = _from;
-        to = _to;
-        name = _name;
+    public String name;
+    public AUTGraph graph;
+    public String data;
+    public String fileName;
+    
+    public RG(String _name) {
+	name = _name;
     }
 
-
+    public String getToolTip() {
+	return name;
+    }
 
     public String toString() {
-        return name;
+	return name;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public TGComponent getFrom() {
-        return from;
-    }
-
-    public TGComponent getTo() {
-        return to;
-    }
-
-    public int getChildCount() {
-        return 2;
-    }
-
-    public Object getChild(int index) {
-        if (index == 0) {
-            return from;
-        }
-
-        return to;
-    }
-
-    public int getIndexOfChild(Object child) {
-        if (child == from) {
-            return 0;
-        }
-        return 1;
-    }
-
-    public boolean containsComponent(TGComponent tgc) {
-        return (from == tgc) || (to == tgc);
-    }
 }

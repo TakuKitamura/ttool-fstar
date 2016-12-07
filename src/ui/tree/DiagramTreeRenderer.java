@@ -70,6 +70,8 @@ import ui.tmlsd.*;
 
 import ui.ncdd.*;
 
+import ui.graph.*;
+
 import ui.oscd.*;
 import ui.osad.*;
 
@@ -85,6 +87,9 @@ import ui.avatardd.*;
 import ui.diplodocusmethodology.*;
 import ui.avatarmethodology.*;
 import ui.sysmlsecmethodology.*;
+
+import ui.graph.*;
+
 
 
 public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
@@ -275,6 +280,10 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         }  else if (value instanceof CheckingError) {
             setIcon(IconManager.imgic322);
             setToolTipText(value.toString());
+        } else if (value instanceof RG) {
+            RG rg = (RG)value;
+            setIcon(IconManager.imgic310);
+            setToolTipText("Graph: " + rg.getToolTip());
         } else if (value instanceof Invariant) {
             Invariant inv = (Invariant)value;
             setIcon(IconManager.imgic5110);
@@ -286,6 +295,9 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         } else if (value instanceof InvariantDataTree) {
             setIcon(IconManager.imgic5112);
             setToolTipText("List of invariants");
+        } else if (value instanceof GraphTree) {
+            setIcon(IconManager.imgic310);
+            setToolTipText("List of RG");
         } else if (value instanceof TAttribute) {
             setIcon(IconManager.imgic5106);
             setToolTipText(value.toString());

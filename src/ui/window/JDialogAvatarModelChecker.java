@@ -61,6 +61,8 @@ import avatartranslator.modelchecker.*;
 import ui.*;
 import java.util.concurrent.TimeUnit;
 
+import ui.graph.*;
+
 
 
 public class JDialogAvatarModelChecker extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
@@ -419,9 +421,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     }
 
     public void showGraph() {
-	if (graphAUT != null) {
-	    mgui.showAUT("Last RG", graphAUT);
-	}
+        if (graphAUT != null) {
+            mgui.showAUT("Last RG", graphAUT);
+        }
     }
 
     public synchronized void stopProcess() {
@@ -555,6 +557,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                     graphAUT = amc.toAUT();
                     graphMode = GRAPH_OK;
                     //TraceManager.addDev("graph AUT=\n" + graph);
+                    RG rg = new RG("from avatar");
+                    rg.data = graphAUT;
+                    rg.fileName = graphPath.getText();
+                    mgui.addRG(rg);
                     FileUtils.saveFile(graphPath.getText(), graphAUT);
                     jta.append("Graph saved in " + graphPath.getText() + "\n");
                 } catch (Exception e) {
