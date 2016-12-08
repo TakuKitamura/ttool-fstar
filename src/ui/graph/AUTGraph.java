@@ -52,7 +52,7 @@ import myutil.*;
 
 public class AUTGraph implements myutil.Graph {
 
-    protected ArrayList<AUTTransition> transitions;
+    protected ArrayList<AUTTransition> transitions ;
     protected ArrayList<AUTState> states;
     protected int nbState;
     protected BufferedReader br;
@@ -230,6 +230,10 @@ public class AUTGraph implements myutil.Graph {
         return nbState;
     }
 
+    public void setNbOfStates(int _nb) {
+	nbState = _nb;
+    }
+
     public int getNbOfTransitions() {
         //return nbTransition;
         return transitions.size();
@@ -245,6 +249,11 @@ public class AUTGraph implements myutil.Graph {
 
     public ArrayList<AUTTransition> getTransitions() {
 	return transitions;
+    }
+
+    public void addTransition(AUTTransition _tr) {
+	transitions.add(_tr);
+	statesComputed = false;
     }
     
     
@@ -420,5 +429,75 @@ public class AUTGraph implements myutil.Graph {
 	AUTGraphDisplay display = new AUTGraphDisplay(this);
 	display.display();	
     }
+
+
+    public AUTGraph cloneMe() {
+	AUTGraph newGraph = new AUTGraph();
+	newGraph.setNbOfStates(getNbOfStates());
+	for(AUTTransition tr: transitions) {
+	    AUTTransition newTr = new AUTTransition(tr.origin, tr.transition, tr.destination);
+	    newGraph.addTransition(newTr);
+	}
+	newGraph.computeStates();
+	return newGraph;
+    }
+
+    public void minimize(String [] tauTransitions) {
+	String s = "tau";
+	
+	// mark all transitions as non tau
+	for(AUTTransition tr: transitions) {
+	    tr.isTau = false;
+	}
+		
+	// Mark all tau transitions as tau
+	for(AUTTransition tr: transitions) {
+	    for (int i=0; i<tauTransitions.length; i++) {
+		if (tr.transition.compareTo(tauTransitions[i]) == 0) {
+		    tr.isTau = true;
+		    tr.transition = s;
+		} 
+	    }
+	}
+	
+	// Remove transition going from one state with only one tau transition as output
+
+	boolean modif = true;
+	while(modif) {
+	    modif = removeTauTr();
+	}
+	
+    }
+
+    private boolean removeTauTr() {
+	AUTTransition tr;
+	ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
+	// Remove in case state with one outgoing and outgoing is tau -> remove tr
+	for(AUTState st: states) {
+	    if (st.outTransitions.size() == 1) {
+		tr = st.outTransitions.get(0);
+		if (tr.isTau) {
+		    transitions.remove(tr);
+		    
+		    AUTState st1 = states.get(tr.destination);
+		    if (st1 != st) {
+			toRemoveStates.add(st1);
+			// Must put all incoming transition to the new state
+			for(AUTTransition trM :st.inTransitions) {
+			    trM.destination = tr.destination;
+			}
+			st1.inTransitions = st.inTransitions;
+		    }
+		}
+	    }
+	}
+
+	// Remove all states and adapt the id in the graph
+	    
+	
+	return false;
+    }
+
+    
 
 }
