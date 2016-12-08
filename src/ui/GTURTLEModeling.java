@@ -547,6 +547,7 @@ public class GTURTLEModeling {
     }
 
     public void addRG(RG newGraph) {
+	TraceManager.addDev("Adding new graph " + newGraph);
         graphs.add(newGraph);
     }
 

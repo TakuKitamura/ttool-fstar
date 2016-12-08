@@ -55,6 +55,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.io.*;
 
+import java.text.*;
+
 import myutil.*;
 import avatartranslator.*;
 import avatartranslator.modelchecker.*;
@@ -154,10 +156,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         spec = _spec;
 
         if (graphDir == null) {
-            graphDir = _graphDir + File.separator + "avatar.aut";
+            graphDir = _graphDir + File.separator + "rgavatar$.aut";
         }
         if (graphDirDot == null) {
-            graphDirDot = _graphDir + File.separator + "avatar.dot";
+            graphDirDot = _graphDir + File.separator + "rgavatar$.dot";
         }
 
         initComponents();
@@ -552,29 +554,47 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
             //TraceManager.addDev(amc.toString());
             //TraceManager.addDev(amc.toString());
+	    DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+	    Date date = new Date();
+	    String dateAndTime=dateFormat.format(date);
+
             if (saveGraphAUT.isSelected()) {
-                try {
-                    graphAUT = amc.toAUT();
-                    graphMode = GRAPH_OK;
-                    //TraceManager.addDev("graph AUT=\n" + graph);
-                    RG rg = new RG("from avatar");
+		graphAUT = amc.toAUT();
+		graphMode = GRAPH_OK;
+		//TraceManager.addDev("graph AUT=\n" + graph);
+		
+		String autfile;
+		if (graphPath.getText().indexOf("$") != -1) {
+		    autfile = Conversion.replaceAllChar(graphPath.getText(), '$', dateAndTime);
+		} else {
+		    autfile = graphPath.getText();
+		} 
+		
+		try {
+                    RG rg = new RG(autfile);
                     rg.data = graphAUT;
-                    rg.fileName = graphPath.getText();
+                    rg.fileName = autfile;
                     mgui.addRG(rg);
-                    FileUtils.saveFile(graphPath.getText(), graphAUT);
-                    jta.append("Graph saved in " + graphPath.getText() + "\n");
+                    FileUtils.saveFile(autfile, graphAUT);
+                    jta.append("Graph saved in " + autfile + "\n");
                 } catch (Exception e) {
-                    jta.append("Graph could not be saved in " + graphPath.getText() + "\n");
+                    jta.append("Graph could not be saved in " + autfile + "\n");
                 }
             }
             if (saveGraphDot.isSelected()) {
+		String dotfile;
+		if (graphPathDot.getText().indexOf("$") == -1) {
+		    dotfile = Conversion.replaceAllChar(graphPathDot.getText(), '$', dateAndTime);
+		} else {
+		    dotfile = graphPathDot.getText();
+		} 
                 try {
                     String graph = amc.toDOT();
                     //TraceManager.addDev("graph AUT=\n" + graph);
-                    FileUtils.saveFile(graphPathDot.getText(), graph);
-                    jta.append("Graph saved in " + graphPathDot.getText()+ "\n");
+                    FileUtils.saveFile(dotfile, graph);
+                    jta.append("Graph saved in " + dotfile + "\n");
                 } catch (Exception e) {
-                    jta.append("Graph could not be saved in " + graphPathDot.getText()+ "\n");
+                    jta.append("Graph could not be saved in " + dotfile + "\n");
                 }
             }
 

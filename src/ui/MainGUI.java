@@ -1111,6 +1111,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void addRG(RG _newGraph) {
 	gtm.addRG(_newGraph);
+	dtree.toBeUpdated();
     }
 
 
