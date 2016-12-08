@@ -56,6 +56,8 @@ public class RG {
     public AUTGraph graph;
     public String fileName;
     public String data;
+    public int nbOfStates = - 1;
+    public int nbOfTransitions = -1;
     
     public RG(String _name) {
 	name = _name;
@@ -66,7 +68,10 @@ public class RG {
     }
 
     public String toString() {
-	return name;
+	if (nbOfStates == -1) {
+	    return name;
+	}
+	return name + " " + nbOfStates + " states, " + nbOfTransitions + " transitions";
     }
 
 }

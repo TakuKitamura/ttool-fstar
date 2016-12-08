@@ -82,7 +82,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     public JDiagramTree(MainGUI _mgui) {
         super(new DiagramTreeModel(_mgui));
 
-        TraceManager.addDev("TREE CREATED");
+        //TraceManager.addDev("TREE CREATED");
 
         mgui = _mgui;
         getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -151,7 +151,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
         Object obj = path.getLastPathComponent();
 
         //String label = "popup: " + obj.getTreeLabel();
-        TraceManager.addDev("Adding popup menu to " + obj.getClass() + "/" + obj);
+        //TraceManager.addDev("Adding popup menu to " + obj.getClass() + "/" + obj);
         if (obj instanceof RG) {
 	    selectedRG = (RG)obj;
             if (popupTree == null) {
@@ -162,7 +162,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 		jmiShow.addActionListener(this);
 		jmiMinimize = new JMenuItem("Minimize");
 		jmiMinimize.addActionListener(this);
-		jmiRemove = new JMenuItem("Remove");
+		jmiRemove = new JMenuItem("Remove from tree");
 		jmiRemove.addActionListener(this);
 		popupTree.add(jmiAnalyze);
 		popupTree.add(jmiShow);
@@ -338,9 +338,21 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
     public void actionPerformed(ActionEvent ae) {
 	if (selectedRG != null) {
-	    if (ae.getSource() == jmiShow) {
-		mgui.showAUTFromRG("Last RG", selectedRG);
-	    }   
+	    if (ae.getSource() == jmiAnalyze) {
+		mgui.showAUTFromRG(selectedRG.name, selectedRG);
+	    } else if (ae.getSource() == jmiShow) {
+		if (selectedRG.graph != null) {
+		    selectedRG.graph.display();
+		} else {
+		    mgui.displayAUTFromRG(selectedRG.name, selectedRG);
+		}
+	    } else if (ae.getSource() == jmiRemove) {
+		if (selectedRG != null) {
+		    mgui.removeRG(selectedRG);
+		    selectedRG = null;
+		}
+		
+	    }
 	}
     }
 }

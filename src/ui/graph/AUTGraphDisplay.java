@@ -679,7 +679,11 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         AbstractEdge edge;
 
 	Logger l0 = Logger.getLogger("");
-	l0.removeHandler(l0.getHandlers()[0]);
+	try {
+	    if (l0 != null) {
+		l0.removeHandler(l0.getHandlers()[0]);
+	    }
+	} catch (Exception e) {}
         
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
         

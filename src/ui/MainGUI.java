@@ -1114,6 +1114,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         dtree.toBeUpdated();
     }
 
+    public void removeRG(RG _toBeRemoved) {
+	gtm.removeRG(_toBeRemoved);
+	dtree.toBeUpdated();
+    }
+
 
     public void setCurrentInvariant(Invariant inv) {
         currentInvariant = inv;
@@ -4904,7 +4909,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
           jfs.setSize(600, 600);
           GraphicLib.centerOnParent(jfs);
           jfs.setVisible(true);*/
-        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, data, "Analyzing graph... Please wait", null, null);
+        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, data, "Analyzing graph... Please wait", null, null, true);
         t.go();
     }
 
@@ -4914,17 +4919,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
           jfs.setSize(600, 600);
           GraphicLib.centerOnParent(jfs);
           jfs.setVisible(true);*/
-        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, null, "Analyzing graph... Please wait", graph, null);
+        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, null, "Analyzing graph... Please wait", graph, null, true);
         t.go();
     }
 
     public void  showAUT(String title, String data, AUTGraph graph) {
-        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, data, "Analyzing graph... Please wait", graph, null);
+        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, data, "Analyzing graph... Please wait", graph, null, true);
         t.go();
     }
 
     public void  showAUTFromRG(String title, RG rg) {
-        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, rg.data, "Analyzing graph... Please wait", rg.graph, rg);
+        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, rg.data, "Analyzing graph... Please wait", rg.graph, rg, true);
+        t.go();
+    }
+
+    public void  displayAUTFromRG(String title, RG rg) {
+        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, rg.data, "Analyzing graph... Please wait", rg.graph, rg, false);
         t.go();
     }
 

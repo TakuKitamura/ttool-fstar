@@ -413,7 +413,7 @@ public class GTURTLEModeling {
     private Vector panels; /* analysis, design, deployment, tml design */
     private TURTLEModeling tm;
     private AvatarSpecification avatarspec;
-  //  private AttackTree attackTree;
+    //  private AttackTree attackTree;
     private AVATAR2UPPAAL avatar2uppaal;
     private AVATAR2ProVerif avatar2proverif;
     private boolean optimizeAvatar;
@@ -459,8 +459,8 @@ public class GTURTLEModeling {
 
     private int nbRTLOTOS;
     private int nbSuggestedDesign;
-//    private int nbSuggestedAnalysis;
-//    private int nbTPN;
+    //    private int nbSuggestedAnalysis;
+    //    private int nbTPN;
 
     //private ValidationDataTree vdt;
     private SearchTree st;
@@ -515,14 +515,14 @@ public class GTURTLEModeling {
         savedPanels = new Vector();
         pointerOperation = -1;
 
-	graphs = new ArrayList<RG>();
+        graphs = new ArrayList<RG>();
         invariants = new LinkedList<Invariant>();
 
         //vdt = new ValidationDataTree(mgui);
         mcvdt = new SyntaxAnalysisTree(mgui);
         idt = new InvariantDataTree(mgui);
         st = new SearchTree(mgui);
-	gt = new GraphTree(mgui);
+        gt = new GraphTree(mgui);
 
         /*if (!Charset.isSupported("UTF-8")) {
           ErrorGUI.exit(ErrorGUI.ERROR_CHARSET);
@@ -547,16 +547,21 @@ public class GTURTLEModeling {
     }
 
     public void addRG(RG newGraph) {
-	TraceManager.addDev("Adding new graph " + newGraph);
+        //TraceManager.addDev("Adding new graph " + newGraph);
         graphs.add(newGraph);
     }
 
-    
+    public void removeRG(RG oldGraph) {
+        //TraceManager.addDev("Adding new graph " + newGraph);
+        graphs.remove(oldGraph);
+    }
+
+
     public LinkedList<Invariant> getInvariants() {
         return invariants;
     }
 
-    
+
 
     public void addInvariant(Invariant _inv) {
         invariants.add(_inv);
@@ -675,7 +680,7 @@ public class GTURTLEModeling {
         tpn = t2tpn.generateTPN(false).toString();
         warnings = t2tpn.getWarnings();
 
-      //  nbTPN ++;
+        //  nbTPN ++;
         if (f != null) {
             TraceManager.addDev("Saving in file: " + f);
             saveInFile(f, tpn);
@@ -714,7 +719,7 @@ public class GTURTLEModeling {
         syntax.check();
         if( syntax.hasErrors() )        {
             for( TMLModelCompilerError error: syntax.getErrors() ) {
-	    	TraceManager.addDev( "ERROR: " + error.toString() );
+                TraceManager.addDev( "ERROR: " + error.toString() );
                 if( error.type == TMLModelCompilerError.ERROR_STRUCTURE ) {
                     type = CheckingError.STRUCTURE_ERROR;
                 }
@@ -859,7 +864,7 @@ public class GTURTLEModeling {
     }
 
     public boolean generateUPPAALFromTML(String _path, boolean _debug, int _size, boolean choices) {
-	TraceManager.addDev("Generate UPPAAL from TML");
+        TraceManager.addDev("Generate UPPAAL from TML");
         TML2UPPAAL tml2uppaal = new TML2UPPAAL(tmlm);
         //tml2uppaal.setChoiceDeterministic(choices);
         tml2uppaal.setSizeInfiniteFIFO(_size);
@@ -907,889 +912,889 @@ public class GTURTLEModeling {
     }
 
     public AVATAR2UPPAAL getAvatar2Uppaal(){
-	return avatar2uppaal;
+        return avatar2uppaal;
     }
     public ProVerifOutputAnalyzer getProVerifOutputAnalyzer () {
         return this.avatar2proverif.getOutputAnalyzer ();
     }
 
     public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed){
-	return generateProVerifFromAVATAR(_path, _stateReachability, _typed, "1");
+        return generateProVerifFromAVATAR(_path, _stateReachability, _typed, "1");
     }
 
     public int calcSec(){
-	int overhead=0;
-	//count # of insecure channels?
-	return overhead;
+        int overhead=0;
+        //count # of insecure channels?
+        return overhead;
     }
- 	public boolean channelAllowed(TMLMapping map, TMLChannel chan){
-		TMLTask orig = chan.getOriginTask();
-		TMLTask dest = chan.getDestinationTask();
-		List<HwNode> path = getPath(map,orig, dest);
-		for (HwNode node:path){
-		    if (node instanceof HwBridge){
-				for (String rule:((HwBridge) node).firewallRules){
-				    String t1 = rule.split("->")[0];
-				    String t2 = rule.split("->")[1];
-		    		if (t1.equals(orig.getName().replaceAll("__","::")) || t1.equals("*")){
-						if (t2.equals(dest.getName().replaceAll("__","::")) || t2.equals("*")){
-							return false;
-						}
-		    		}
-				}
-	    	}
-		}
-		return true;
+    public boolean channelAllowed(TMLMapping map, TMLChannel chan){
+        TMLTask orig = chan.getOriginTask();
+        TMLTask dest = chan.getDestinationTask();
+        List<HwNode> path = getPath(map,orig, dest);
+        for (HwNode node:path){
+            if (node instanceof HwBridge){
+                for (String rule:((HwBridge) node).firewallRules){
+                    String t1 = rule.split("->")[0];
+                    String t2 = rule.split("->")[1];
+                    if (t1.equals(orig.getName().replaceAll("__","::")) || t1.equals("*")){
+                        if (t2.equals(dest.getName().replaceAll("__","::")) || t2.equals("*")){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
     public List<HwNode> getPath(TMLMapping map, TMLTask t1, TMLTask t2){
-	HwNode node1 = map.getHwNodeOf(t1);
-	HwNode node2 = map.getHwNodeOf(t2);
-	List<HwNode> path = new ArrayList<HwNode>();
-	if (node1==node2){
-	    return path;
-	}
-	if (node1!=node2){
-	    //Navigate architecture for node
-	    List<HwLink> links = map.getTMLArchitecture().getHwLinks();
-	    HwNode last = node1;
-	    List<HwNode> found = new ArrayList<HwNode>();	
-	    List<HwNode> done = new ArrayList<HwNode>();
-	    Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
-	    for (HwLink link: links){
-		if (link.hwnode == node1){
-		    found.add(link.bus);
-		    List<HwNode> tmp = new ArrayList<HwNode>();
-		    tmp.add(link.bus);
-		    pathMap.put(link.bus, tmp);
-		}
-	    }
-	    outerloop:
-	    while (found.size()>0){
-		HwNode curr = found.remove(0);
-		for (HwLink link: links){
-		    if (curr == link.bus){
-		        if (link.hwnode == node2){
-		      	    path = pathMap.get(curr);
-		      	    break outerloop;
-		    	}
-		    	if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
-		      	    found.add(link.hwnode);
-		      	    List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
-		      	    tmp.add(link.hwnode);
-		      	    pathMap.put(link.hwnode, tmp);
-		    	}
-		    }
-		    else if (curr == link.hwnode){
-		    	if (!done.contains(link.bus) && !found.contains(link.bus)){
-		            found.add(link.bus);
-		            List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
-		            tmp.add(link.bus);
-		       	    pathMap.put(link.bus, tmp);
-	      	        }
-	  	    }
-	        }
-	    done.add(curr);
-	    }
-	}
-	return path;
+        HwNode node1 = map.getHwNodeOf(t1);
+        HwNode node2 = map.getHwNodeOf(t2);
+        List<HwNode> path = new ArrayList<HwNode>();
+        if (node1==node2){
+            return path;
+        }
+        if (node1!=node2){
+            //Navigate architecture for node
+            List<HwLink> links = map.getTMLArchitecture().getHwLinks();
+            HwNode last = node1;
+            List<HwNode> found = new ArrayList<HwNode>();
+            List<HwNode> done = new ArrayList<HwNode>();
+            Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
+            for (HwLink link: links){
+                if (link.hwnode == node1){
+                    found.add(link.bus);
+                    List<HwNode> tmp = new ArrayList<HwNode>();
+                    tmp.add(link.bus);
+                    pathMap.put(link.bus, tmp);
+                }
+            }
+            outerloop:
+            while (found.size()>0){
+                HwNode curr = found.remove(0);
+                for (HwLink link: links){
+                    if (curr == link.bus){
+                        if (link.hwnode == node2){
+                            path = pathMap.get(curr);
+                            break outerloop;
+                        }
+                        if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+                            found.add(link.hwnode);
+                            List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+                            tmp.add(link.hwnode);
+                            pathMap.put(link.hwnode, tmp);
+                        }
+                    }
+                    else if (curr == link.hwnode){
+                        if (!done.contains(link.bus) && !found.contains(link.bus)){
+                            found.add(link.bus);
+                            List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+                            tmp.add(link.bus);
+                            pathMap.put(link.bus, tmp);
+                        }
+                    }
+                }
+                done.add(curr);
+            }
+        }
+        return path;
     }
-	public TMLMapping drawFirewall(TMLMapping map){
-		System.out.println("DRAWING FIREWALL");
-		TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
-		TMLModeling tmlm = map.getTMLModeling();
-		TMLActivityDiagramPanel firewallADP = null;
-		TMLComponentTaskDiagramPanel tcdp = tmlcdp.tmlctdp;
-		if (TraceManager.devPolicy == TraceManager.TO_CONSOLE){
-				MainGUI gui = tmlcdp.getMainGUI();
-				int arch = mgui.tabs.indexOf(map.tmlap);
-				gui.cloneRenameTab(arch,"firewallArch");
-				TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
-				int ind = gui.tabs.indexOf(tmlcdp);
-				String tabName = gui.getTitleAt(tmlcdp);
-				gui.cloneRenameTab(ind, "firewallDesign");
-				TMLComponentDesignPanel tcp = (TMLComponentDesignPanel) gui.tabs.get(gui.tabs.size()-1);
-				newarch.renameMapping(tabName, tabName+"_firewallDesign");
+    public TMLMapping drawFirewall(TMLMapping map){
+        System.out.println("DRAWING FIREWALL");
+        TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
+        TMLModeling tmlm = map.getTMLModeling();
+        TMLActivityDiagramPanel firewallADP = null;
+        TMLComponentTaskDiagramPanel tcdp = tmlcdp.tmlctdp;
+        if (TraceManager.devPolicy == TraceManager.TO_CONSOLE){
+            MainGUI gui = tmlcdp.getMainGUI();
+            int arch = mgui.tabs.indexOf(map.tmlap);
+            gui.cloneRenameTab(arch,"firewallArch");
+            TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
+            int ind = gui.tabs.indexOf(tmlcdp);
+            String tabName = gui.getTitleAt(tmlcdp);
+            gui.cloneRenameTab(ind, "firewallDesign");
+            TMLComponentDesignPanel tcp = (TMLComponentDesignPanel) gui.tabs.get(gui.tabs.size()-1);
+            newarch.renameMapping(tabName, tabName+"_firewallDesign");
 
-		}
-		for (HwBridge firewallNode:map.getTMLArchitecture().getFirewalls()){
-			TraceManager.addDev("Found firewall " + firewallNode.getName());
-			TMLCPrimitiveComponent firewallComp = null;
-			TMLADStartState adStart=null;
-			TMLADForEverLoop adLoop = null;
-			TMLADChoice adChoice =null;
-			TMLADReadChannel adRC=null;
-			TMLADExecI exec=null;
-			TMLADWriteChannel adWC=null;
-			TMLADStopState adStop =null;
+        }
+        for (HwBridge firewallNode:map.getTMLArchitecture().getFirewalls()){
+            TraceManager.addDev("Found firewall " + firewallNode.getName());
+            TMLCPrimitiveComponent firewallComp = null;
+            TMLADStartState adStart=null;
+            TMLADForEverLoop adLoop = null;
+            TMLADChoice adChoice =null;
+            TMLADReadChannel adRC=null;
+            TMLADExecI exec=null;
+            TMLADWriteChannel adWC=null;
+            TMLADStopState adStop =null;
 
-	
-			
-			int links = map.getArch().getLinkByHwNode(firewallNode).size();
-			TraceManager.addDev("Links " + links);
 
-			HwCPU cpu = new HwCPU(firewallNode.getName());
-			map.getTMLArchitecture().replaceFirewall(firewallNode,cpu);
-			for (int link =0; link< links/2; link++){
-			HashMap<TMLChannel, TMLChannel> inChans = new HashMap<TMLChannel, TMLChannel>();
-	    	HashMap<TMLChannel, TMLChannel> outChans = new HashMap<TMLChannel, TMLChannel>();
-			if (TraceManager.devPolicy == TraceManager.TO_CONSOLE){
-			    firewallComp = new TMLCPrimitiveComponent(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxY(), false, null, tmlcdp.tmlctdp);
-				tmlcdp.tmlctdp.addComponent(firewallComp,0,0,false,true);
-	    		firewallComp.setValueWithChange(firewallNode.getName()+link);
-				firewallADP = tmlcdp.getTMLActivityDiagramPanel(firewallNode.getName()+link);
-			}	
-	    	ArrayList<TMLChannel> channelsCopy = tmlm.getChannels();
-	    	ArrayList<TMLChannel> toAdd = new ArrayList<TMLChannel>();	
-			
-			TMLTask firewall = new TMLTask("TASK__"+firewallNode.getName()+"_"+link, firewallComp,firewallADP);
-	    	
 
-			tmlm.addTask(firewall);
-			map.addTaskToHwExecutionNode(firewall,cpu);
-			TMLActivity act = firewall.getActivityDiagram();
-			
-			TraceManager.addDev("FirewallADP " + firewallADP);
-		    for (TMLChannel chan: channelsCopy){
-		    	TMLTask orig = chan.getOriginTask();
-		    	TMLTask dest = chan.getDestinationTask();   
-				TMLPort origPort = chan.getOriginPort();
-				TMLPort destPort = chan.getDestinationPort();
-		    	TMLChannel wr = new TMLChannel(chan.getName()+"_firewallIn"+link,chan.getReferenceObject());
-				//Specify new channel attributes
-		        wr.setSize(chan.getSize());
-	            wr.setMax(chan.getMax());
-				wr.setPorts(origPort,destPort);
-	            wr.setType(TMLChannel.BRBW);
-				wr.setPriority(chan.getPriority());
-		    	wr.setTasks(orig, firewall);
-		    	TMLChannel rd = new TMLChannel(chan.getName()+"_firewallOut"+link, chan.getReferenceObject());
-		    	rd.setTasks(firewall,dest);
-		        rd.setSize(chan.getSize());
-	            rd.setMax(chan.getMax());
-				rd.setPorts(origPort,destPort);
-	            rd.setType(TMLChannel.BRBW);
-				rd.setPriority(chan.getPriority());
-		    	inChans.put(chan,wr);
-		    	outChans.put(chan,rd);
-		    	toAdd.add(rd);
-		    	toAdd.add(wr);
-				map.listE.addCor(rd, (TGComponent) rd.getReferenceObject());
-				map.listE.addCor(wr, (TGComponent) wr.getReferenceObject());
-		    }
-		    tmlm.removeAllChannels();
-		    for (TMLChannel c:toAdd){
-		    	tmlm.addChannel(c);
-		    }
-			
-		
-			if (TraceManager.devPolicy == TraceManager.TO_CONSOLE){
-				//Build activity diagram
-				//Get start state
-				adStart = (TMLADStartState) firewallADP.getComponentList().get(0);
-				//add loop
-				adLoop = new TMLADForEverLoop(400,150,firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
-				firewallADP.addComponent(adLoop,400,150,false,true);
-				TGConnector tmp =new TGConnectorTMLAD(adLoop.getX(), adLoop.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,adStart.getTGConnectingPointAtIndex(0),adLoop.getTGConnectingPointAtIndex(0), new Vector());
-				firewallADP.addComponent(tmp, adLoop.getX(),adLoop.getY(),false,true);
-				//add choice
-				adChoice = new TMLADChoice(400,300, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
-				firewallADP.addComponent(adChoice, 400,300,false,true);
-	
-				tmp =new TGConnectorTMLAD(adChoice.getX(), adChoice.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,adLoop.getTGConnectingPointAtIndex(1), adChoice.getTGConnectingPointAtIndex(0), new Vector());
-				firewallADP.addComponent(tmp, adChoice.getX(),adChoice.getY(),false,true);
-				for (TMLChannel chan: inChans.keySet()){
-			    	TMLChannel newChan = inChans.get(chan);
-			    	TMLCChannelOutPort originPort = new TMLCChannelOutPort(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp);
-			    	TMLCChannelOutPort destPort = new TMLCChannelOutPort(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp);
-			    	for (TGComponent tg: tcdp.getComponentList()){
-						if (tg instanceof TMLCPrimitiveComponent){
-						    if (tg.getValue().equals(newChan.getOriginTask().getName().split("__")[1])){
-								originPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
-								originPort.commName=newChan.getName();
-								tcdp.addComponent(originPort,tg.getX(), tg.getY(),true,true);
-		    				}
-		    				else if (tg.getValue().equals(firewallNode.getName())){
-								destPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
-								destPort.isOrigin=false;
-								destPort.commName=newChan.getName();
-								tcdp.addComponent(destPort,tg.getX(), tg.getY(),true,true);
-		    				}
-	    				}
-	    			}
-		    		TMLCPortConnector conn = new TMLCPortConnector(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector());
-	    		tcdp.addComponent(conn, 0,0,false,true);
-		     
-		    		TMLChannel wrChan = outChans.get(chan);
-		    		for (TGComponent tg: tcdp.getComponentList()){
-						if (tg instanceof TMLCPrimitiveComponent){
-						    if (tg.getValue().equals(firewallNode.getName())){
-								originPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
-								originPort.commName=wrChan.getName();
-								tcdp.addComponent(originPort,tg.getX(), tg.getY(),true,true);
-						    }
-			    			else if (tg.getValue().equals(wrChan.getDestinationTask().getName().split("__")[1])){
-								destPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
-								destPort.isOrigin=false;
-								destPort.commName=wrChan.getName();
-								tcdp.addComponent(destPort,tg.getX(), tg.getY(),true,true);
-			    			}
-		    			}
-		    		}
-		    		conn = new TMLCPortConnector(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector());
-		    		tcdp.addComponent(conn, 0,0,false,true);
-				}
-				int xpos=200;
-				int i=1;
-				for (TMLChannel chan: inChans.keySet()){
-		    		TMLChannel newChan = inChans.get(chan);
-		    		adRC = new TMLADReadChannel(xpos,350, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
-		    		adRC.setChannelName(newChan.getName());
-		    		adRC.setSamples("1");
+            int links = map.getArch().getLinkByHwNode(firewallNode).size();
+            TraceManager.addDev("Links " + links);
 
-		    		tmp =new TGConnectorTMLAD(adRC.getX(), adRC.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,adChoice.getTGConnectingPointAtIndex(i), adRC.getTGConnectingPointAtIndex(0), new Vector());
-		    		firewallADP.addComponent(tmp, adRC.getX(),adRC.getY(),false,true);
+            HwCPU cpu = new HwCPU(firewallNode.getName());
+            map.getTMLArchitecture().replaceFirewall(firewallNode,cpu);
+            for (int link =0; link< links/2; link++){
+                HashMap<TMLChannel, TMLChannel> inChans = new HashMap<TMLChannel, TMLChannel>();
+                HashMap<TMLChannel, TMLChannel> outChans = new HashMap<TMLChannel, TMLChannel>();
+                if (TraceManager.devPolicy == TraceManager.TO_CONSOLE){
+                    firewallComp = new TMLCPrimitiveComponent(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxY(), false, null, tmlcdp.tmlctdp);
+                    tmlcdp.tmlctdp.addComponent(firewallComp,0,0,false,true);
+                    firewallComp.setValueWithChange(firewallNode.getName()+link);
+                    firewallADP = tmlcdp.getTMLActivityDiagramPanel(firewallNode.getName()+link);
+                }
+                ArrayList<TMLChannel> channelsCopy = tmlm.getChannels();
+                ArrayList<TMLChannel> toAdd = new ArrayList<TMLChannel>();
 
-		    		firewallADP.addComponent(adRC,xpos,350,false,true);	
+                TMLTask firewall = new TMLTask("TASK__"+firewallNode.getName()+"_"+link, firewallComp,firewallADP);
 
-					//Execute for latency value
-					exec = new TMLADExecI(xpos,400,firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
 
-					exec.setDelayValue(Integer.toString(firewallNode.latency));
-					firewallADP.addComponent(exec,400,200,false,true);
-	
-					tmp =new TGConnectorTMLAD(exec.getX(), exec.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,adRC.getTGConnectingPointAtIndex(1), exec.getTGConnectingPointAtIndex(0), new Vector());
-					firewallADP.addComponent(tmp, exec.getX(),exec.getY(),false,true);
-	
-	    			if (channelAllowed(map,chan)){
-	    	    		TMLChannel wrChan = outChans.get(chan);
+                tmlm.addTask(firewall);
+                map.addTaskToHwExecutionNode(firewall,cpu);
+                TMLActivity act = firewall.getActivityDiagram();
 
-						adWC = new TMLADWriteChannel(xpos,400, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
-			    	    adWC.setChannelName(wrChan.getName());
-			    		adWC.setSamples("1");
-						firewallADP.addComponent(adWC, xpos,400, false,true);
+                TraceManager.addDev("FirewallADP " + firewallADP);
+                for (TMLChannel chan: channelsCopy){
+                    TMLTask orig = chan.getOriginTask();
+                    TMLTask dest = chan.getDestinationTask();
+                    TMLPort origPort = chan.getOriginPort();
+                    TMLPort destPort = chan.getDestinationPort();
+                    TMLChannel wr = new TMLChannel(chan.getName()+"_firewallIn"+link,chan.getReferenceObject());
+                    //Specify new channel attributes
+                    wr.setSize(chan.getSize());
+                    wr.setMax(chan.getMax());
+                    wr.setPorts(origPort,destPort);
+                    wr.setType(TMLChannel.BRBW);
+                    wr.setPriority(chan.getPriority());
+                    wr.setTasks(orig, firewall);
+                    TMLChannel rd = new TMLChannel(chan.getName()+"_firewallOut"+link, chan.getReferenceObject());
+                    rd.setTasks(firewall,dest);
+                    rd.setSize(chan.getSize());
+                    rd.setMax(chan.getMax());
+                    rd.setPorts(origPort,destPort);
+                    rd.setType(TMLChannel.BRBW);
+                    rd.setPriority(chan.getPriority());
+                    inChans.put(chan,wr);
+                    outChans.put(chan,rd);
+                    toAdd.add(rd);
+                    toAdd.add(wr);
+                    map.listE.addCor(rd, (TGComponent) rd.getReferenceObject());
+                    map.listE.addCor(wr, (TGComponent) wr.getReferenceObject());
+                }
+                tmlm.removeAllChannels();
+                for (TMLChannel c:toAdd){
+                    tmlm.addChannel(c);
+                }
 
-						tmp =new TGConnectorTMLAD(exec.getX(), exec.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,exec.getTGConnectingPointAtIndex(1), adWC.getTGConnectingPointAtIndex(0), new Vector());
-						firewallADP.addComponent(tmp, exec.getX(),exec.getY(),false,true);
-	
-						adStop = new TMLADStopState(xpos,500, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
-						firewallADP.addComponent(adStop, xpos,500, false,true);
-						tmp =new TGConnectorTMLAD(adStop.getX(), adStop.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,adWC.getTGConnectingPointAtIndex(1), adStop.getTGConnectingPointAtIndex(0), new Vector());
-						firewallADP.addComponent(tmp, adStop.getX(),adStop.getY(),false,true);
-	    			}	
-	    			else {
-						adStop = new TMLADStopState(xpos,500, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
-						firewallADP.addComponent(adStop, xpos,500, false,true);
-	
-						tmp =new TGConnectorTMLAD(adStop.getX(), adStop.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,exec.getTGConnectingPointAtIndex(1), adStop.getTGConnectingPointAtIndex(0), new Vector());
-						firewallADP.addComponent(tmp, adStop.getX(),adStop.getY(),false,true);
-	    			}
-			    	xpos+=100;
-	    			i++;
-				}
-			}
-	   		
-			TMLStartState start = new TMLStartState("start", adStart);
-			act.setFirst(start);
-			map.listE.addCor(start,adStart);
 
-			//Add infinite loop
+                if (TraceManager.devPolicy == TraceManager.TO_CONSOLE){
+                    //Build activity diagram
+                    //Get start state
+                    adStart = (TMLADStartState) firewallADP.getComponentList().get(0);
+                    //add loop
+                    adLoop = new TMLADForEverLoop(400,150,firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
+                    firewallADP.addComponent(adLoop,400,150,false,true);
+                    TGConnector tmp =new TGConnectorTMLAD(adLoop.getX(), adLoop.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,adStart.getTGConnectingPointAtIndex(0),adLoop.getTGConnectingPointAtIndex(0), new Vector());
+                    firewallADP.addComponent(tmp, adLoop.getX(),adLoop.getY(),false,true);
+                    //add choice
+                    adChoice = new TMLADChoice(400,300, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
+                    firewallADP.addComponent(adChoice, 400,300,false,true);
 
-			TMLForLoop loop = new TMLForLoop("infiniteloop",adLoop);
-			loop.setInit("");
-	        loop.setCondition("");
-	        loop.setIncrement("");
-			loop.setInfinite(true);
-			start.addNext(loop);
-			act.addElement(loop);
-			//Add choice
-		
-			TMLChoice choice = new TMLChoice("chooseChannel", adChoice);
-			act.addElement(choice);
-			loop.addNext(choice);
-			map.listE.addCor(choice,adChoice);
-		
+                    tmp =new TGConnectorTMLAD(adChoice.getX(), adChoice.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,adLoop.getTGConnectingPointAtIndex(1), adChoice.getTGConnectingPointAtIndex(0), new Vector());
+                    firewallADP.addComponent(tmp, adChoice.getX(),adChoice.getY(),false,true);
+                    for (TMLChannel chan: inChans.keySet()){
+                        TMLChannel newChan = inChans.get(chan);
+                        TMLCChannelOutPort originPort = new TMLCChannelOutPort(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp);
+                        TMLCChannelOutPort destPort = new TMLCChannelOutPort(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp);
+                        for (TGComponent tg: tcdp.getComponentList()){
+                            if (tg instanceof TMLCPrimitiveComponent){
+                                if (tg.getValue().equals(newChan.getOriginTask().getName().split("__")[1])){
+                                    originPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
+                                    originPort.commName=newChan.getName();
+                                    tcdp.addComponent(originPort,tg.getX(), tg.getY(),true,true);
+                                }
+                                else if (tg.getValue().equals(firewallNode.getName())){
+                                    destPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
+                                    destPort.isOrigin=false;
+                                    destPort.commName=newChan.getName();
+                                    tcdp.addComponent(destPort,tg.getX(), tg.getY(),true,true);
+                                }
+                            }
+                        }
+                        TMLCPortConnector conn = new TMLCPortConnector(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector());
+                        tcdp.addComponent(conn, 0,0,false,true);
 
-			
-		
-			for (TMLChannel chan: inChans.keySet()){
-				TMLChannel newChan = inChans.get(chan);
-				TMLChannel wrChan = outChans.get(chan);
-				//Add channels into firewall activity diagram
-		    	TMLReadChannel rd = new TMLReadChannel(newChan.getName(), adRC);
-		    	rd.setNbOfSamples("1");
-		    	rd.addChannel(newChan);
-		    	choice.addNext(rd);
-		    	choice.addGuard("");
+                        TMLChannel wrChan = outChans.get(chan);
+                        for (TGComponent tg: tcdp.getComponentList()){
+                            if (tg instanceof TMLCPrimitiveComponent){
+                                if (tg.getValue().equals(firewallNode.getName())){
+                                    originPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
+                                    originPort.commName=wrChan.getName();
+                                    tcdp.addComponent(originPort,tg.getX(), tg.getY(),true,true);
+                                }
+                                else if (tg.getValue().equals(wrChan.getDestinationTask().getName().split("__")[1])){
+                                    destPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
+                                    destPort.isOrigin=false;
+                                    destPort.commName=wrChan.getName();
+                                    tcdp.addComponent(destPort,tg.getX(), tg.getY(),true,true);
+                                }
+                            }
+                        }
+                        conn = new TMLCPortConnector(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector());
+                        tcdp.addComponent(conn, 0,0,false,true);
+                    }
+                    int xpos=200;
+                    int i=1;
+                    for (TMLChannel chan: inChans.keySet()){
+                        TMLChannel newChan = inChans.get(chan);
+                        adRC = new TMLADReadChannel(xpos,350, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
+                        adRC.setChannelName(newChan.getName());
+                        adRC.setSamples("1");
 
-		    	act.addElement(rd);
+                        tmp =new TGConnectorTMLAD(adRC.getX(), adRC.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,adChoice.getTGConnectingPointAtIndex(i), adRC.getTGConnectingPointAtIndex(0), new Vector());
+                        firewallADP.addComponent(tmp, adRC.getX(),adRC.getY(),false,true);
 
-				//Execute for latency value
-		
-				TMLExecI ex = new TMLExecI("execi", exec);
-				ex.setAction(Integer.toString(firewallNode.latency));
-				act.addElement(ex);
-				rd.addNext(ex);
-	
-	    		if (channelAllowed(map,chan)){
+                        firewallADP.addComponent(adRC,xpos,350,false,true);
 
-		        	TMLWriteChannel wr = new TMLWriteChannel(wrChan.getName(), adWC);
-		        	wr.setNbOfSamples("1");
-		        	wr.addChannel(wrChan);
-					ex.addNext(wr);
-					act.addElement(wr);
-	
-					TMLStopState stop = new TMLStopState("stop", adStop);
-					wr.addNext(stop);
-					act.addElement(stop);
+                        //Execute for latency value
+                        exec = new TMLADExecI(xpos,400,firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
 
-		    	}	
-		    	else {
-					TMLStopState stop = new TMLStopState("stop", adStop);
-					ex.addNext(stop);
-					act.addElement(stop);
-	 		   	}
-		    	for (TMLTask t:tmlm.getTasks()){
-	        		TMLActivity actd = t.getActivityDiagram();
-	        		actd.replaceWriteChannelWith(chan,newChan);
-					actd.replaceReadChannelWith(chan, outChans.get(chan));
-	    		}
-			}
-			
-		}
+                        exec.setDelayValue(Integer.toString(firewallNode.latency));
+                        firewallADP.addComponent(exec,400,200,false,true);
 
-		}
-		//Redo all reference objects
+                        tmp =new TGConnectorTMLAD(exec.getX(), exec.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,adRC.getTGConnectingPointAtIndex(1), exec.getTGConnectingPointAtIndex(0), new Vector());
+                        firewallADP.addComponent(tmp, exec.getX(),exec.getY(),false,true);
 
-		map.listE.useDIPLOIDs();
-		return map;
-	}
+                        if (channelAllowed(map,chan)){
+                            TMLChannel wrChan = outChans.get(chan);
+
+                            adWC = new TMLADWriteChannel(xpos,400, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
+                            adWC.setChannelName(wrChan.getName());
+                            adWC.setSamples("1");
+                            firewallADP.addComponent(adWC, xpos,400, false,true);
+
+                            tmp =new TGConnectorTMLAD(exec.getX(), exec.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,exec.getTGConnectingPointAtIndex(1), adWC.getTGConnectingPointAtIndex(0), new Vector());
+                            firewallADP.addComponent(tmp, exec.getX(),exec.getY(),false,true);
+
+                            adStop = new TMLADStopState(xpos,500, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
+                            firewallADP.addComponent(adStop, xpos,500, false,true);
+                            tmp =new TGConnectorTMLAD(adStop.getX(), adStop.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,adWC.getTGConnectingPointAtIndex(1), adStop.getTGConnectingPointAtIndex(0), new Vector());
+                            firewallADP.addComponent(tmp, adStop.getX(),adStop.getY(),false,true);
+                        }
+                        else {
+                            adStop = new TMLADStopState(xpos,500, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false,null, firewallADP);
+                            firewallADP.addComponent(adStop, xpos,500, false,true);
+
+                            tmp =new TGConnectorTMLAD(adStop.getX(), adStop.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null,firewallADP,exec.getTGConnectingPointAtIndex(1), adStop.getTGConnectingPointAtIndex(0), new Vector());
+                            firewallADP.addComponent(tmp, adStop.getX(),adStop.getY(),false,true);
+                        }
+                        xpos+=100;
+                        i++;
+                    }
+                }
+
+                TMLStartState start = new TMLStartState("start", adStart);
+                act.setFirst(start);
+                map.listE.addCor(start,adStart);
+
+                //Add infinite loop
+
+                TMLForLoop loop = new TMLForLoop("infiniteloop",adLoop);
+                loop.setInit("");
+                loop.setCondition("");
+                loop.setIncrement("");
+                loop.setInfinite(true);
+                start.addNext(loop);
+                act.addElement(loop);
+                //Add choice
+
+                TMLChoice choice = new TMLChoice("chooseChannel", adChoice);
+                act.addElement(choice);
+                loop.addNext(choice);
+                map.listE.addCor(choice,adChoice);
+
+
+
+
+                for (TMLChannel chan: inChans.keySet()){
+                    TMLChannel newChan = inChans.get(chan);
+                    TMLChannel wrChan = outChans.get(chan);
+                    //Add channels into firewall activity diagram
+                    TMLReadChannel rd = new TMLReadChannel(newChan.getName(), adRC);
+                    rd.setNbOfSamples("1");
+                    rd.addChannel(newChan);
+                    choice.addNext(rd);
+                    choice.addGuard("");
+
+                    act.addElement(rd);
+
+                    //Execute for latency value
+
+                    TMLExecI ex = new TMLExecI("execi", exec);
+                    ex.setAction(Integer.toString(firewallNode.latency));
+                    act.addElement(ex);
+                    rd.addNext(ex);
+
+                    if (channelAllowed(map,chan)){
+
+                        TMLWriteChannel wr = new TMLWriteChannel(wrChan.getName(), adWC);
+                        wr.setNbOfSamples("1");
+                        wr.addChannel(wrChan);
+                        ex.addNext(wr);
+                        act.addElement(wr);
+
+                        TMLStopState stop = new TMLStopState("stop", adStop);
+                        wr.addNext(stop);
+                        act.addElement(stop);
+
+                    }
+                    else {
+                        TMLStopState stop = new TMLStopState("stop", adStop);
+                        ex.addNext(stop);
+                        act.addElement(stop);
+                    }
+                    for (TMLTask t:tmlm.getTasks()){
+                        TMLActivity actd = t.getActivityDiagram();
+                        actd.replaceWriteChannelWith(chan,newChan);
+                        actd.replaceReadChannelWith(chan, outChans.get(chan));
+                    }
+                }
+
+            }
+
+        }
+        //Redo all reference objects
+
+        map.listE.useDIPLOIDs();
+        return map;
+    }
 
     public TMLMapping autoSecure(MainGUI gui, boolean autoConf, boolean autoAuth){
-	if (tmap==null){
-	    return null;
-	}
-	int arch = gui.tabs.indexOf(tmap.tmlap);
-	gui.cloneRenameTab(arch,"enc");
-	TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
-	return autoSecure(gui, "enc", tmap,newarch,autoConf,autoAuth);
+        if (tmap==null){
+            return null;
+        }
+        int arch = gui.tabs.indexOf(tmap.tmlap);
+        gui.cloneRenameTab(arch,"enc");
+        TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
+        return autoSecure(gui, "enc", tmap,newarch,autoConf,autoAuth);
     }
     public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch){
-	 return autoSecure(gui,name,map,newarch,"100","0","100",true,false);
+        return autoSecure(gui,name,map,newarch,"100","0","100",true,false);
     }
     public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, boolean autoConf, boolean autoAuth){
-	 return autoSecure(gui,name,map,newarch,"100","0","100",autoConf,autoAuth);
+        return autoSecure(gui,name,map,newarch,"100","0","100",autoConf,autoAuth);
     }
 
     public TMLMapping autoSecure(MainGUI gui, String encComp, String overhead, String decComp){
-	if (tmap==null){
-	    return null;
-	}
-	int arch = gui.tabs.indexOf(tmap.tmlap);
-	gui.cloneRenameTab(arch,"enc");
-	TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
-	return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,true,false);
+        if (tmap==null){
+            return null;
+        }
+        int arch = gui.tabs.indexOf(tmap.tmlap);
+        gui.cloneRenameTab(arch,"enc");
+        TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
+        return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,true,false);
     }
 
     public TMLMapping autoSecure(MainGUI gui, String encComp, String overhead, String decComp, boolean autoConf, boolean autoAuth){
-	if (tmap==null){
-	    return null;
-	}
-	int arch = gui.tabs.indexOf(tmap.tmlap);
-	gui.cloneRenameTab(arch,"enc");
-	TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
-	return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,autoConf,autoAuth);
+        if (tmap==null){
+            return null;
+        }
+        int arch = gui.tabs.indexOf(tmap.tmlap);
+        gui.cloneRenameTab(arch,"enc");
+        TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
+        return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,autoConf,autoAuth);
     }
-    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp){ 
-	return autoSecure(gui,name, tmap,newarch,encComp, overhead,decComp,true,false);
+    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp){
+        return autoSecure(gui,name, tmap,newarch,encComp, overhead,decComp,true,false);
     }
 
 
-    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoAuth){ 
-	HashMap<TMLTask, java.util.List<TMLTask>> toSecure = new HashMap<TMLTask, java.util.List<TMLTask>>();
-	HashMap<TMLTask, java.util.List<TMLTask>> toSecureRev = new HashMap<TMLTask, java.util.List<TMLTask>>();
-	HashMap<TMLTask, java.util.List<String>> insecureOutChannels = new HashMap<TMLTask, java.util.List<String>>();
-	HashMap<TMLTask, java.util.List<String>> insecureInChannels = new HashMap<TMLTask, java.util.List<String>>();
-	if (map==null){
-	    return null;
-	}
-	TMLModeling tmlmodel = map.getTMLModeling();
-	java.util.List<TMLChannel> channels = tmlmodel.getChannels();
-	for (TMLChannel channel: channels){
-	    System.out.println(channel.getName());
-	    for (TMLCPrimitivePort p: channel.ports){
-	        channel.checkConf = channel.checkConf || p.checkConf;
-		channel.checkAuth = channel.checkAuth || p.checkAuth;
-	    }
-	}
+    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoAuth){
+        HashMap<TMLTask, java.util.List<TMLTask>> toSecure = new HashMap<TMLTask, java.util.List<TMLTask>>();
+        HashMap<TMLTask, java.util.List<TMLTask>> toSecureRev = new HashMap<TMLTask, java.util.List<TMLTask>>();
+        HashMap<TMLTask, java.util.List<String>> insecureOutChannels = new HashMap<TMLTask, java.util.List<String>>();
+        HashMap<TMLTask, java.util.List<String>> insecureInChannels = new HashMap<TMLTask, java.util.List<String>>();
+        if (map==null){
+            return null;
+        }
+        TMLModeling tmlmodel = map.getTMLModeling();
+        java.util.List<TMLChannel> channels = tmlmodel.getChannels();
+        for (TMLChannel channel: channels){
+            System.out.println(channel.getName());
+            for (TMLCPrimitivePort p: channel.ports){
+                channel.checkConf = channel.checkConf || p.checkConf;
+                channel.checkAuth = channel.checkAuth || p.checkAuth;
+            }
+        }
 
-	//Create clone of Component Diagram + Activity diagrams to secure
+        //Create clone of Component Diagram + Activity diagrams to secure
 
-	TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
-	int ind = gui.tabs.indexOf(tmlcdp);
-	String tabName = gui.getTitleAt(tmlcdp);
-	gui.cloneRenameTab(ind, name);
-	TMLComponentDesignPanel t = (TMLComponentDesignPanel) gui.tabs.get(gui.tabs.size()-1);
-	map.setTMLDesignPanel(t);
-	TMLComponentTaskDiagramPanel tcdp = t.tmlctdp;
-	//Create clone of architecture panel and map tasks to it		
-	newarch.renameMapping(tabName, tabName+"_"+name);
+        TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
+        int ind = gui.tabs.indexOf(tmlcdp);
+        String tabName = gui.getTitleAt(tmlcdp);
+        gui.cloneRenameTab(ind, name);
+        TMLComponentDesignPanel t = (TMLComponentDesignPanel) gui.tabs.get(gui.tabs.size()-1);
+        map.setTMLDesignPanel(t);
+        TMLComponentTaskDiagramPanel tcdp = t.tmlctdp;
+        //Create clone of architecture panel and map tasks to it
+        newarch.renameMapping(tabName, tabName+"_"+name);
 
-	for (TMLTask task: map.getTMLModeling().getTasks()){
-	    java.util.List<String> tmp = new ArrayList<String>();
-	    java.util.List<String> tmp2 = new ArrayList<String>();
-	    java.util.List<TMLTask> tmp3 = new ArrayList<TMLTask>();
-	    java.util.List<TMLTask> tmp4 = new ArrayList<TMLTask>();
-	    insecureInChannels.put(task, tmp);
-	    insecureOutChannels.put(task, tmp2);
-	    toSecure.put(task,tmp3);
-	    toSecureRev.put(task,tmp4);
-	}
-	for (TMLTask task: map.getTMLModeling().getTasks()){   
-	    TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel(task.getName());
-	    for (TGComponent tg:tad.getComponentList()){
-		if (tg instanceof TMLADWriteChannel){
-		    TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
-		    if (writeChannel.securityContext.equals("")){
+        for (TMLTask task: map.getTMLModeling().getTasks()){
+            java.util.List<String> tmp = new ArrayList<String>();
+            java.util.List<String> tmp2 = new ArrayList<String>();
+            java.util.List<TMLTask> tmp3 = new ArrayList<TMLTask>();
+            java.util.List<TMLTask> tmp4 = new ArrayList<TMLTask>();
+            insecureInChannels.put(task, tmp);
+            insecureOutChannels.put(task, tmp2);
+            toSecure.put(task,tmp3);
+            toSecureRev.put(task,tmp4);
+        }
+        for (TMLTask task: map.getTMLModeling().getTasks()){
+            TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel(task.getName());
+            for (TGComponent tg:tad.getComponentList()){
+                if (tg instanceof TMLADWriteChannel){
+                    TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
+                    if (writeChannel.securityContext.equals("")){
 
-			TMLChannel chan = tmlmodel.getChannelByName(tabName+"__"+writeChannel.getChannelName());
-			//System.out.println("channel " + chan);
-			if (chan!=null){
-			    if (chan.checkConf){
-			    	if (!securePath(map, chan.getOriginTask(), chan.getDestinationTask())){
-		    		    insecureOutChannels.get(chan.getOriginTask()).add(writeChannel.getChannelName());
-		    		    insecureInChannels.get(chan.getDestinationTask()).add(writeChannel.getChannelName());
-				    toSecure.get(chan.getOriginTask()).add(chan.getDestinationTask());
-				    toSecureRev.get(chan.getDestinationTask()).add(chan.getOriginTask());
-			    	}
-			    }
-			}
-		    }
-		}
-	    }
-	}
-	int num=0;
-	int nonceNum=0;
-	//Create reverse channels to send nonces if they don't already exist
-	if (autoAuth){
-	    
-	    for (TMLTask task: toSecureRev.keySet()){
-		TraceManager.addDev("Adding nonce to " + task.getName());
-		LinkedList<TMLChannel> chans = tmlmodel.getChannelsFromMe(task);
-		for (TMLTask task2: toSecureRev.get(task)){
-		    boolean addChan = true;
-		    for (TMLChannel chan:chans){
-			if (chan.getDestinationTask()==task2){
-			    addChan=false;
-			}
-		    } 
-		    if (addChan){
-			TMLCChannelOutPort originPort = new TMLCChannelOutPort(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp);
-			TMLCChannelOutPort destPort = new TMLCChannelOutPort(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp);
-			for (TGComponent tg: tcdp.getComponentList()){
-			    if (tg instanceof TMLCPrimitiveComponent){
-				if (tg.getValue().equals(task.getName().split("__")[1])){
-				    originPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
-				    originPort.commName="nonceCh"+task.getName().split("__")[1] + "_"+task2.getName().split("__")[1];
-				    tcdp.addComponent(originPort,tg.getX(), tg.getY(),true,true);
-				}
-				else if (tg.getValue().equals(task2.getName().split("__")[1])){
-				    destPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
-				    destPort.isOrigin=false;
-				    destPort.commName="nonceCh"+task.getName().split("__")[1] + "_"+ task2.getName().split("__")[1];
-				    tcdp.addComponent(destPort,tg.getX(), tg.getY(),true,true);
-				}
-			    }
-			}
-			tmlmodel.addChannel(new TMLChannel("nonceCh"+task.getName().split("__")[1] + "_"+ task2.getName().split("__")[1], originPort));
-			//Add connection
-			TMLCPortConnector conn = new TMLCPortConnector(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector());
-			tcdp.addComponent(conn, 0,0,false,true);
-		    }
-		}
-	    }
-	}
+                        TMLChannel chan = tmlmodel.getChannelByName(tabName+"__"+writeChannel.getChannelName());
+                        //System.out.println("channel " + chan);
+                        if (chan!=null){
+                            if (chan.checkConf){
+                                if (!securePath(map, chan.getOriginTask(), chan.getDestinationTask())){
+                                    insecureOutChannels.get(chan.getOriginTask()).add(writeChannel.getChannelName());
+                                    insecureInChannels.get(chan.getDestinationTask()).add(writeChannel.getChannelName());
+                                    toSecure.get(chan.getOriginTask()).add(chan.getDestinationTask());
+                                    toSecureRev.get(chan.getDestinationTask()).add(chan.getOriginTask());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        int num=0;
+        int nonceNum=0;
+        //Create reverse channels to send nonces if they don't already exist
+        if (autoAuth){
 
-	for (TMLTask task:toSecure.keySet()){
-	    String title = task.getName().split("__")[0];
-	    TraceManager.addDev("Securing task " + task.getName());
-	    TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel(task.getName());
-	    //Get start state position, shift everything down 
-	    int xpos=0;
-	    int ypos=0;
-	    TGConnector fromStart= new TGConnectorTMLAD(0, 0, 0, 0, 0, 0, false, null, tad, null, null, new Vector());
-	    TGConnectingPoint point = new TGConnectingPoint(null, 0, 0, false, false);
-	    for (TGComponent tg: tad.getComponentList()){
-		if (tg instanceof TMLADStartState){
-		    xpos = tg.getX();
-		    ypos = tg.getY();
-		    fromStart = tad.findTGConnectorUsing(tg.getTGConnectingPointAtIndex(0));
-		    if (fromStart!=null){
-			point = fromStart.getTGConnectingPointP2();
-		    } 
-		    break;
-		}
-	    }
-	    int yShift=insecureOutChannels.get(task).size()*60;
-	    for (String channel: insecureOutChannels.get(task)){
-		ypos+=60;
-	    	TMLADEncrypt enc = new TMLADEncrypt(xpos+5, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-	    	enc.securityContext = "autoEncrypt_"+channel;
+            for (TMLTask task: toSecureRev.keySet()){
+                TraceManager.addDev("Adding nonce to " + task.getName());
+                LinkedList<TMLChannel> chans = tmlmodel.getChannelsFromMe(task);
+                for (TMLTask task2: toSecureRev.get(task)){
+                    boolean addChan = true;
+                    for (TMLChannel chan:chans){
+                        if (chan.getDestinationTask()==task2){
+                            addChan=false;
+                        }
+                    }
+                    if (addChan){
+                        TMLCChannelOutPort originPort = new TMLCChannelOutPort(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp);
+                        TMLCChannelOutPort destPort = new TMLCChannelOutPort(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp);
+                        for (TGComponent tg: tcdp.getComponentList()){
+                            if (tg instanceof TMLCPrimitiveComponent){
+                                if (tg.getValue().equals(task.getName().split("__")[1])){
+                                    originPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
+                                    originPort.commName="nonceCh"+task.getName().split("__")[1] + "_"+task2.getName().split("__")[1];
+                                    tcdp.addComponent(originPort,tg.getX(), tg.getY(),true,true);
+                                }
+                                else if (tg.getValue().equals(task2.getName().split("__")[1])){
+                                    destPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
+                                    destPort.isOrigin=false;
+                                    destPort.commName="nonceCh"+task.getName().split("__")[1] + "_"+ task2.getName().split("__")[1];
+                                    tcdp.addComponent(destPort,tg.getX(), tg.getY(),true,true);
+                                }
+                            }
+                        }
+                        tmlmodel.addChannel(new TMLChannel("nonceCh"+task.getName().split("__")[1] + "_"+ task2.getName().split("__")[1], originPort));
+                        //Add connection
+                        TMLCPortConnector conn = new TMLCPortConnector(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector());
+                        tcdp.addComponent(conn, 0,0,false,true);
+                    }
+                }
+            }
+        }
 
-		if (autoAuth){
-		    TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
- 		    if (tmlc!=null){
-		    	enc.nonce= "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
-		    }
-		}
-	    	enc.type = "Symmetric Encryption";
-	    	enc.message_overhead = overhead;
-		enc.encTime= encComp;
-		enc.decTime=decComp;
-	    	tad.addComponent(enc, xpos ,ypos, false, true);
+        for (TMLTask task:toSecure.keySet()){
+            String title = task.getName().split("__")[0];
+            TraceManager.addDev("Securing task " + task.getName());
+            TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel(task.getName());
+            //Get start state position, shift everything down
+            int xpos=0;
+            int ypos=0;
+            TGConnector fromStart= new TGConnectorTMLAD(0, 0, 0, 0, 0, 0, false, null, tad, null, null, new Vector());
+            TGConnectingPoint point = new TGConnectingPoint(null, 0, 0, false, false);
+            for (TGComponent tg: tad.getComponentList()){
+                if (tg instanceof TMLADStartState){
+                    xpos = tg.getX();
+                    ypos = tg.getY();
+                    fromStart = tad.findTGConnectorUsing(tg.getTGConnectingPointAtIndex(0));
+                    if (fromStart!=null){
+                        point = fromStart.getTGConnectingPointP2();
+                    }
+                    break;
+                }
+            }
+            int yShift=insecureOutChannels.get(task).size()*60;
+            for (String channel: insecureOutChannels.get(task)){
+                ypos+=60;
+                TMLADEncrypt enc = new TMLADEncrypt(xpos+5, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+                enc.securityContext = "autoEncrypt_"+channel;
 
-		fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
-		fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
-		tad.addComponent(fromStart, xpos, ypos, false, true);
-		fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
-	    }
-	    if (autoAuth){
-		//Add nonces and write channel
-		for (String channel: insecureInChannels.get(task)){
-		    ypos+=60;
-		    TMLADEncrypt enc = new TMLADEncrypt(xpos+5, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-		    TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
-		    
-		    if (tmlc==null){
-			continue;
-		    }
-	    	    enc.securityContext = "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
-	    	    enc.type = "Nonce";
-	    	    enc.message_overhead = overhead;
-		    enc.encTime= encComp;
-		    enc.decTime=decComp;
-	    	    tad.addComponent(enc, xpos ,ypos, false, true);
-		    fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
-		    ypos+=50;
-		    TMLADWriteChannel wr = new TMLADWriteChannel(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-		    wr.setChannelName("nonceCh"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1]);
-		    wr.securityContext = "nonce_"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
-		    tad.addComponent(wr,xpos,ypos,false,true);
-		    wr.makeValue();
-		    TGConnector tmp =new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null,tad,enc.getTGConnectingPointAtIndex(1), wr.getTGConnectingPointAtIndex(0), new Vector());
-		    tad.addComponent(tmp, xpos,ypos,false,true);
+                if (autoAuth){
+                    TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
+                    if (tmlc!=null){
+                        enc.nonce= "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
+                    }
+                }
+                enc.type = "Symmetric Encryption";
+                enc.message_overhead = overhead;
+                enc.encTime= encComp;
+                enc.decTime=decComp;
+                tad.addComponent(enc, xpos ,ypos, false, true);
 
-		    fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, wr.getTGConnectingPointAtIndex(1), null, new Vector());
-		    tad.addComponent(fromStart, xpos, ypos, false, true);
-		    yShift+=90;
-		}
-		//Receive nonces
-		for (String channel:insecureOutChannels.get(task)){
-		    ypos+=50;
-		    yShift+=50;
-		    TMLChannel tmlc = tmlmodel.getChannelByName(title + "__"+channel);
-		    if (tmlc==null){
-			continue;
-		    }
-		    TMLADReadChannel rd = new TMLADReadChannel(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-	 	    rd.setChannelName("nonceCh"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1]);
-		    rd.securityContext = "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1]+ "_"+tmlc.getOriginTask().getName().split("__")[1];
-		    tad.addComponent(rd,xpos,ypos,false,true);
-		    rd.makeValue();
-		    fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
-		    fromStart = new TGConnectorTMLAD(rd.getX(),rd.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(),false,null,tad,rd.getTGConnectingPointAtIndex(1), null, new Vector());
-		    tad.addComponent(fromStart,xpos,ypos,false,true);
-		   
-		}
-	    }
-	    if (insecureOutChannels.get(task).size()>0 && fromStart!=null || insecureInChannels.get(task).size()>0 && autoAuth){
-		fromStart.setP2(point);
-	    }
-	    for (TGComponent tg:tad.getComponentList()){
-		if (tg instanceof TMLADWriteChannel){
-		    TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
-		    TraceManager.addDev("Inspecting write channel " + writeChannel.getChannelName());
-		    if (insecureOutChannels.get(task).contains(writeChannel.getChannelName()) && writeChannel.securityContext.equals("")){
-			TraceManager.addDev("Securing write channel " + writeChannel.getChannelName());
-		        writeChannel.securityContext = "autoEncrypt_"+writeChannel.getChannelName();
-			tad.repaint();
-		    }
-		}
-		
-		if (!(tg instanceof TMLADStartState) && !(tg instanceof TMLADEncrypt)){
-		    if (tg instanceof TMLADWriteChannel && ((TMLADWriteChannel) tg).getChannelName().contains("nonceCh") || (tg instanceof TMLADReadChannel && ((TMLADReadChannel) tg).getChannelName().contains("nonceCh"))){
-		    }
-		    else {
-		        tg.setCd(tg.getX(), tg.getY()+yShift);
-		    }
-		}
-	    } 
-	    for (TMLTask task2: toSecure.get(task)){
-		TMLActivityDiagramPanel tad2 = t.getTMLActivityDiagramPanel(task2.getName());
-		ArrayList<TGComponent> toadd = new ArrayList<TGComponent>();
-		for (TGComponent tg:tad2.getComponentList()){
-		    if (tg instanceof TMLADReadChannel){
-			TMLADReadChannel readChannel = (TMLADReadChannel) tg;
-			TraceManager.addDev("Inspecting read channel " + readChannel.getChannelName());
-			if (insecureInChannels.get(task2).contains(readChannel.getChannelName()) && readChannel.securityContext.equals("")){
-			    TraceManager.addDev("Securing read channel " + readChannel.getChannelName());
-			    readChannel.securityContext = "autoEncrypt_"+readChannel.getChannelName();
-			    tad2.repaint();
-			    //Add decryption operator if it does not already exist
-			    int x = readChannel.getX();
-			    int y = readChannel.getY();	
-			    TGConnector conn = tad2.findTGConnectorStartingAt(tg.getTGConnectingPointAtIndex(1));
-			    if (conn==null){
-				System.out.println("no connection");
-				continue;
-			    }
-			    TGConnectingPoint next = conn.getTGConnectingPointP2();
-			    TMLADDecrypt dec = new TMLADDecrypt(x+10, y+40, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad);
-			    dec.securityContext = "autoEncrypt_" + readChannel.getChannelName();
-			    toadd.add(dec);
-			    conn.setP2(dec.getTGConnectingPointAtIndex(0));
-			    conn = new TGConnectorTMLAD(x,y, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad2, dec.getTGConnectingPointAtIndex(1), next, new Vector());
-			    conn.setP1(dec.getTGConnectingPointAtIndex(1));
-			    conn.setP2(next);
-			    
-			    toadd.add(conn);
-			}
-		    }
-		}
-	   	for (TGComponent tgc:toadd){
-		    tad2.addComponent(tgc, tgc.getX(), tgc.getY(), false,true);
-	 	}
+                fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
+                fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+                tad.addComponent(fromStart, xpos, ypos, false, true);
+                fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
+            }
+            if (autoAuth){
+                //Add nonces and write channel
+                for (String channel: insecureInChannels.get(task)){
+                    ypos+=60;
+                    TMLADEncrypt enc = new TMLADEncrypt(xpos+5, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+                    TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
+
+                    if (tmlc==null){
+                        continue;
+                    }
+                    enc.securityContext = "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
+                    enc.type = "Nonce";
+                    enc.message_overhead = overhead;
+                    enc.encTime= encComp;
+                    enc.decTime=decComp;
+                    tad.addComponent(enc, xpos ,ypos, false, true);
+                    fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
+                    ypos+=50;
+                    TMLADWriteChannel wr = new TMLADWriteChannel(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+                    wr.setChannelName("nonceCh"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1]);
+                    wr.securityContext = "nonce_"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
+                    tad.addComponent(wr,xpos,ypos,false,true);
+                    wr.makeValue();
+                    TGConnector tmp =new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null,tad,enc.getTGConnectingPointAtIndex(1), wr.getTGConnectingPointAtIndex(0), new Vector());
+                    tad.addComponent(tmp, xpos,ypos,false,true);
+
+                    fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, wr.getTGConnectingPointAtIndex(1), null, new Vector());
+                    tad.addComponent(fromStart, xpos, ypos, false, true);
+                    yShift+=90;
+                }
+                //Receive nonces
+                for (String channel:insecureOutChannels.get(task)){
+                    ypos+=50;
+                    yShift+=50;
+                    TMLChannel tmlc = tmlmodel.getChannelByName(title + "__"+channel);
+                    if (tmlc==null){
+                        continue;
+                    }
+                    TMLADReadChannel rd = new TMLADReadChannel(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+                    rd.setChannelName("nonceCh"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1]);
+                    rd.securityContext = "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1]+ "_"+tmlc.getOriginTask().getName().split("__")[1];
+                    tad.addComponent(rd,xpos,ypos,false,true);
+                    rd.makeValue();
+                    fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
+                    fromStart = new TGConnectorTMLAD(rd.getX(),rd.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(),false,null,tad,rd.getTGConnectingPointAtIndex(1), null, new Vector());
+                    tad.addComponent(fromStart,xpos,ypos,false,true);
+
+                }
+            }
+            if (insecureOutChannels.get(task).size()>0 && fromStart!=null || insecureInChannels.get(task).size()>0 && autoAuth){
+                fromStart.setP2(point);
+            }
+            for (TGComponent tg:tad.getComponentList()){
+                if (tg instanceof TMLADWriteChannel){
+                    TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
+                    TraceManager.addDev("Inspecting write channel " + writeChannel.getChannelName());
+                    if (insecureOutChannels.get(task).contains(writeChannel.getChannelName()) && writeChannel.securityContext.equals("")){
+                        TraceManager.addDev("Securing write channel " + writeChannel.getChannelName());
+                        writeChannel.securityContext = "autoEncrypt_"+writeChannel.getChannelName();
+                        tad.repaint();
+                    }
+                }
+
+                if (!(tg instanceof TMLADStartState) && !(tg instanceof TMLADEncrypt)){
+                    if (tg instanceof TMLADWriteChannel && ((TMLADWriteChannel) tg).getChannelName().contains("nonceCh") || (tg instanceof TMLADReadChannel && ((TMLADReadChannel) tg).getChannelName().contains("nonceCh"))){
+                    }
+                    else {
+                        tg.setCd(tg.getX(), tg.getY()+yShift);
+                    }
+                }
+            }
+            for (TMLTask task2: toSecure.get(task)){
+                TMLActivityDiagramPanel tad2 = t.getTMLActivityDiagramPanel(task2.getName());
+                ArrayList<TGComponent> toadd = new ArrayList<TGComponent>();
+                for (TGComponent tg:tad2.getComponentList()){
+                    if (tg instanceof TMLADReadChannel){
+                        TMLADReadChannel readChannel = (TMLADReadChannel) tg;
+                        TraceManager.addDev("Inspecting read channel " + readChannel.getChannelName());
+                        if (insecureInChannels.get(task2).contains(readChannel.getChannelName()) && readChannel.securityContext.equals("")){
+                            TraceManager.addDev("Securing read channel " + readChannel.getChannelName());
+                            readChannel.securityContext = "autoEncrypt_"+readChannel.getChannelName();
+                            tad2.repaint();
+                            //Add decryption operator if it does not already exist
+                            int x = readChannel.getX();
+                            int y = readChannel.getY();
+                            TGConnector conn = tad2.findTGConnectorStartingAt(tg.getTGConnectingPointAtIndex(1));
+                            if (conn==null){
+                                System.out.println("no connection");
+                                continue;
+                            }
+                            TGConnectingPoint next = conn.getTGConnectingPointP2();
+                            TMLADDecrypt dec = new TMLADDecrypt(x+10, y+40, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad);
+                            dec.securityContext = "autoEncrypt_" + readChannel.getChannelName();
+                            toadd.add(dec);
+                            conn.setP2(dec.getTGConnectingPointAtIndex(0));
+                            conn = new TGConnectorTMLAD(x,y, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad2, dec.getTGConnectingPointAtIndex(1), next, new Vector());
+                            conn.setP1(dec.getTGConnectingPointAtIndex(1));
+                            conn.setP2(next);
+
+                            toadd.add(conn);
+                        }
+                    }
+                }
+                for (TGComponent tgc:toadd){
+                    tad2.addComponent(tgc, tgc.getX(), tgc.getY(), false,true);
+                }
 
 
-	    }
-	    //if we need to add nonces
-	    /*if (autoAuth){
-	
-	      for (String channel:insecureInChannels.get(task)){
-		ypos+=60;
-	    	TMLADEncrypt enc = new TMLADEncrypt(xpos+5, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-	    	enc.securityContext = "autoEncrypt_"+channel;
-	    	enc.type = "Symmetric Encryption";
-	    	enc.message_overhead = overhead;
-		enc.encTime= encComp;
-		enc.decTime=decComp;
-	    	tad.addComponent(enc, xpos ,ypos, false, true);
+            }
+            //if we need to add nonces
+            /*if (autoAuth){
 
-		fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
-		fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
-		tad.addComponent(fromStart, xpos, ypos, false, true);
-		fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
-	       }
-	    }*/
+              for (String channel:insecureInChannels.get(task)){
+              ypos+=60;
+              TMLADEncrypt enc = new TMLADEncrypt(xpos+5, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+              enc.securityContext = "autoEncrypt_"+channel;
+              enc.type = "Symmetric Encryption";
+              enc.message_overhead = overhead;
+              enc.encTime= encComp;
+              enc.decTime=decComp;
+              tad.addComponent(enc, xpos ,ypos, false, true);
 
-	}
+              fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
+              fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+              tad.addComponent(fromStart, xpos, ypos, false, true);
+              fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
+              }
+              }*/
 
-	GTMLModeling gtm = new GTMLModeling(t, false);
-	TMLModeling newmodel = gtm.translateToTMLModeling(false,false);
-	for (TMLTask task:newmodel.getTasks()){
-	    task.setName(tabName+"_"+name+"__"+task.getName());
-	}
-	for (TMLTask task: tmlmodel.getTasks()){
-	    HwExecutionNode node =(HwExecutionNode) map.getHwNodeOf(task);
-	    if (newmodel.getTMLTaskByName(task.getName().replace(tabName,tabName+"_"+name))!=null){
-	        map.addTaskToHwExecutionNode(newmodel.getTMLTaskByName(task.getName().replace(tabName,tabName+"_"+name)), node);
-		map.removeTask(task);
-	    }
-	    else {
-		System.out.println("Can't find " + task.getName());
-	    }
-	}
-	//map.setTMLModeling(newmodel);
-	//System.out.println(map);
-	//TMLMapping newMap = gtm.translateToTMLMapping();
-	map.setTMLModeling(newmodel);
-	return map;
+        }
+
+        GTMLModeling gtm = new GTMLModeling(t, false);
+        TMLModeling newmodel = gtm.translateToTMLModeling(false,false);
+        for (TMLTask task:newmodel.getTasks()){
+            task.setName(tabName+"_"+name+"__"+task.getName());
+        }
+        for (TMLTask task: tmlmodel.getTasks()){
+            HwExecutionNode node =(HwExecutionNode) map.getHwNodeOf(task);
+            if (newmodel.getTMLTaskByName(task.getName().replace(tabName,tabName+"_"+name))!=null){
+                map.addTaskToHwExecutionNode(newmodel.getTMLTaskByName(task.getName().replace(tabName,tabName+"_"+name)), node);
+                map.removeTask(task);
+            }
+            else {
+                System.out.println("Can't find " + task.getName());
+            }
+        }
+        //map.setTMLModeling(newmodel);
+        //System.out.println(map);
+        //TMLMapping newMap = gtm.translateToTMLMapping();
+        map.setTMLModeling(newmodel);
+        return map;
     }
     public boolean securePath(TMLMapping map, TMLTask t1, TMLTask t2){
-	//Check if a path between two tasks is secure
-	boolean secure=true;
-	java.util.List<HwLink> links = map.getTMLArchitecture().getHwLinks();
-	HwExecutionNode node1 = (HwExecutionNode) map.getHwNodeOf(t1);
-	HwExecutionNode node2 = (HwExecutionNode) map.getHwNodeOf(t2);
-	java.util.List<HwNode> found = new ArrayList<HwNode>();	
-	java.util.List<HwNode> done = new ArrayList<HwNode>();
-	java.util.List<HwNode> path = new ArrayList<HwNode>();
-	Map<HwNode, java.util.List<HwNode>> pathMap = new HashMap<HwNode, java.util.List<HwNode>>();
-	System.out.println("Links " + links);
-	if (node1==node2){
-	    return true;
-	}
-	for (HwLink link: links){
-	    if (link.hwnode == node1){
-		found.add(link.bus);
-		java.util.List<HwNode> tmp = new ArrayList<HwNode>();
-		tmp.add(link.bus);
-		pathMap.put(link.bus, tmp);
-	    }
-	}
-	outerloop:
-	while (found.size()>0){
-	    HwNode curr = found.remove(0);
-	    for (HwLink link: links){
-	        if (curr == link.bus){
-	    	    if (link.hwnode == node2){
-	      		path = pathMap.get(curr);
-	      		break outerloop;
-	    	    }
-	    	    if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
-	      		found.add(link.hwnode);
-	      		java.util.List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
-	      		tmp.add(link.hwnode);
-	      		pathMap.put(link.hwnode, tmp);
-	    	    }
-	  	}
-	        else if (curr == link.hwnode){
-	      	    if (!done.contains(link.bus) && !found.contains(link.bus)){
-	        	found.add(link.bus);
-	        	java.util.List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
-	        	tmp.add(link.bus);
-	        	pathMap.put(link.bus, tmp);
-	      	    }
-	  	}
-	    }
-	    done.add(curr);
-	}
-	if (path.size() ==0){
-	    System.out.println("no path");
-	    return true;
-	}
-	else {
-	    HwBus bus;
-	    //Check if all buses and bridges are private
-	    for (HwNode n: path){
-		if (n instanceof HwBus){
-		    bus = (HwBus) n;
-	   	    if (bus.privacy ==0){
-			return false;
-	   	    }
-	        }
-	    }
-	}
-	return secure;
+        //Check if a path between two tasks is secure
+        boolean secure=true;
+        java.util.List<HwLink> links = map.getTMLArchitecture().getHwLinks();
+        HwExecutionNode node1 = (HwExecutionNode) map.getHwNodeOf(t1);
+        HwExecutionNode node2 = (HwExecutionNode) map.getHwNodeOf(t2);
+        java.util.List<HwNode> found = new ArrayList<HwNode>();
+        java.util.List<HwNode> done = new ArrayList<HwNode>();
+        java.util.List<HwNode> path = new ArrayList<HwNode>();
+        Map<HwNode, java.util.List<HwNode>> pathMap = new HashMap<HwNode, java.util.List<HwNode>>();
+        System.out.println("Links " + links);
+        if (node1==node2){
+            return true;
+        }
+        for (HwLink link: links){
+            if (link.hwnode == node1){
+                found.add(link.bus);
+                java.util.List<HwNode> tmp = new ArrayList<HwNode>();
+                tmp.add(link.bus);
+                pathMap.put(link.bus, tmp);
+            }
+        }
+        outerloop:
+        while (found.size()>0){
+            HwNode curr = found.remove(0);
+            for (HwLink link: links){
+                if (curr == link.bus){
+                    if (link.hwnode == node2){
+                        path = pathMap.get(curr);
+                        break outerloop;
+                    }
+                    if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+                        found.add(link.hwnode);
+                        java.util.List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+                        tmp.add(link.hwnode);
+                        pathMap.put(link.hwnode, tmp);
+                    }
+                }
+                else if (curr == link.hwnode){
+                    if (!done.contains(link.bus) && !found.contains(link.bus)){
+                        found.add(link.bus);
+                        java.util.List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+                        tmp.add(link.bus);
+                        pathMap.put(link.bus, tmp);
+                    }
+                }
+            }
+            done.add(curr);
+        }
+        if (path.size() ==0){
+            System.out.println("no path");
+            return true;
+        }
+        else {
+            HwBus bus;
+            //Check if all buses and bridges are private
+            for (HwNode n: path){
+                if (n instanceof HwBus){
+                    bus = (HwBus) n;
+                    if (bus.privacy ==0){
+                        return false;
+                    }
+                }
+            }
+        }
+        return secure;
     }
     public void autoMapKeys(){
-	System.out.println("Mapping keys");
-	TraceManager.addDev("auto map keys");
-	if (tmap==null){
-	    return;
-	}
-	java.util.List<HwLink> links = tmap.getArch().getHwLinks();
-	//Find all Security Patterns, if they don't have an associated memory at encrypt and decrypt, map them
-	TMLModeling tmlm = tmap.getTMLModeling();
-	if (tmlm.securityTaskMap ==null){
-	    return;
-	}
-	System.out.println(tmlm.securityTaskMap);
-	for (SecurityPattern sp: tmlm.securityTaskMap.keySet()){
-	    if (sp.type.contains("Encryption") || sp.type.equals("MAC")){
-		TraceManager.addDev("Finding security "+sp);
-		for (TMLTask t:tmlm.securityTaskMap.get(sp)){
-		    ArrayList<HwMemory> mems = new ArrayList<HwMemory>();
-		    boolean keyFound=false;
-		    HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t);
-	   	//Try to find memory using only private buses
-	    	    java.util.List<HwNode> toVisit = new ArrayList<HwNode>();
-	    	  //  java.util.List<HwNode> toMemory = new ArrayList<HwNode>();
-	    	    java.util.List<HwNode> complete = new ArrayList<HwNode>();
-	    	    for (HwLink link:links){
-			if (link.hwnode==node1){
-		    	    if (link.bus.privacy==1){
-		        	toVisit.add(link.bus);
-		    	    }
-			}
-		    }
-	   	    memloop:
-		    while (toVisit.size()>0){
-		    	HwNode curr = toVisit.remove(0);
-			for (HwLink link: links){
-		    	    if (curr == link.bus){
-	     	        	if (link.hwnode instanceof HwMemory){
-			    	    mems.add((HwMemory) link.hwnode);
-			    	    ArrayList<SecurityPattern> patterns = tmap.getMappedPatterns((HwMemory) link.hwnode);
-				    String patternString= "";
-				    for (SecurityPattern pattern: patterns){
-					if (pattern.name.equals(sp.name)){
-					    
-					    keyFound=true;	
-					    break memloop;
-				        }
-					patternString += pattern.name;
-					patternString += " ";
-				    }
-				    TraceManager.addDev("Memory "+ link.hwnode.getName() + " has currently mapped: " + patternString);
-				}
-			    	if (!complete.contains(link.hwnode) && !toVisit.contains(link.hwnode) && link.hwnode instanceof HwBridge){
-			    	    toVisit.add(link.hwnode);
-			        }
-		    	    }
-		    	    else if (curr == link.hwnode){
-				if (!complete.contains(link.bus) && !toVisit.contains(link.bus)){
-			    	    toVisit.add(link.bus);
-				}
-	  	    	    }
-	        	}
-	    		complete.add(curr);
-	    	    }
-	    	    if (!keyFound){
-			if (mems.size()>0){
-			    TMLArchiMemoryNode memNode= (TMLArchiMemoryNode) listE.getTG(mems.get(0));
-			    TMLArchiKey key = new TMLArchiKey(memNode.x, memNode.y, memNode.tdp.getMinX(), memNode.tdp.getMaxX(), memNode.tdp.getMinY(), memNode.tdp.getMaxY(), false, memNode, memNode.tdp);
-			    key.setReferenceKey(sp.name);
-			    key.makeFullValue();
-			    TraceManager.addDev("Adding " +sp.name+ " key to " +memNode.getName());
-			    TraceManager.addDev("Adding " +sp + " key to " +memNode.getName());
-			    memNode.tdp.addComponent(key, memNode.x, memNode.y, true,true);
-			    memNode.tdp.repaint();
-			}
-			else {
-			    System.out.println("Can't map key to memory for " + sp.name + " on task " + t.getName());
-			    CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Cannot map key in memory for " + sp.name + " on task " + t.getName());
+        System.out.println("Mapping keys");
+        TraceManager.addDev("auto map keys");
+        if (tmap==null){
+            return;
+        }
+        java.util.List<HwLink> links = tmap.getArch().getHwLinks();
+        //Find all Security Patterns, if they don't have an associated memory at encrypt and decrypt, map them
+        TMLModeling tmlm = tmap.getTMLModeling();
+        if (tmlm.securityTaskMap ==null){
+            return;
+        }
+        System.out.println(tmlm.securityTaskMap);
+        for (SecurityPattern sp: tmlm.securityTaskMap.keySet()){
+            if (sp.type.contains("Encryption") || sp.type.equals("MAC")){
+                TraceManager.addDev("Finding security "+sp);
+                for (TMLTask t:tmlm.securityTaskMap.get(sp)){
+                    ArrayList<HwMemory> mems = new ArrayList<HwMemory>();
+                    boolean keyFound=false;
+                    HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t);
+                    //Try to find memory using only private buses
+                    java.util.List<HwNode> toVisit = new ArrayList<HwNode>();
+                    //  java.util.List<HwNode> toMemory = new ArrayList<HwNode>();
+                    java.util.List<HwNode> complete = new ArrayList<HwNode>();
+                    for (HwLink link:links){
+                        if (link.hwnode==node1){
+                            if (link.bus.privacy==1){
+                                toVisit.add(link.bus);
+                            }
+                        }
+                    }
+                    memloop:
+                    while (toVisit.size()>0){
+                        HwNode curr = toVisit.remove(0);
+                        for (HwLink link: links){
+                            if (curr == link.bus){
+                                if (link.hwnode instanceof HwMemory){
+                                    mems.add((HwMemory) link.hwnode);
+                                    ArrayList<SecurityPattern> patterns = tmap.getMappedPatterns((HwMemory) link.hwnode);
+                                    String patternString= "";
+                                    for (SecurityPattern pattern: patterns){
+                                        if (pattern.name.equals(sp.name)){
+
+                                            keyFound=true;
+                                            break memloop;
+                                        }
+                                        patternString += pattern.name;
+                                        patternString += " ";
+                                    }
+                                    TraceManager.addDev("Memory "+ link.hwnode.getName() + " has currently mapped: " + patternString);
+                                }
+                                if (!complete.contains(link.hwnode) && !toVisit.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+                                    toVisit.add(link.hwnode);
+                                }
+                            }
+                            else if (curr == link.hwnode){
+                                if (!complete.contains(link.bus) && !toVisit.contains(link.bus)){
+                                    toVisit.add(link.bus);
+                                }
+                            }
+                        }
+                        complete.add(curr);
+                    }
+                    if (!keyFound){
+                        if (mems.size()>0){
+                            TMLArchiMemoryNode memNode= (TMLArchiMemoryNode) listE.getTG(mems.get(0));
+                            TMLArchiKey key = new TMLArchiKey(memNode.x, memNode.y, memNode.tdp.getMinX(), memNode.tdp.getMaxX(), memNode.tdp.getMinY(), memNode.tdp.getMaxY(), false, memNode, memNode.tdp);
+                            key.setReferenceKey(sp.name);
+                            key.makeFullValue();
+                            TraceManager.addDev("Adding " +sp.name+ " key to " +memNode.getName());
+                            TraceManager.addDev("Adding " +sp + " key to " +memNode.getName());
+                            memNode.tdp.addComponent(key, memNode.x, memNode.y, true,true);
+                            memNode.tdp.repaint();
+                        }
+                        else {
+                            System.out.println("Can't map key to memory for " + sp.name + " on task " + t.getName());
+                            CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Cannot map key in memory for " + sp.name + " on task " + t.getName());
                             ce.setTDiagramPanel(tmap.tmlap.tmlap);
-                    	    ce.setTGComponent(null);
-                    	    checkingErrors.add(ce);
-			}
-	    	    }
-		}
-	    }
-	}	
-	TraceManager.addDev("Mapping finished");
+                            ce.setTGComponent(null);
+                            checkingErrors.add(ce);
+                        }
+                    }
+                }
+            }
+        }
+        TraceManager.addDev("Mapping finished");
     }
 
     public void generateAvatarFromTML(boolean mc, boolean security){
-	TraceManager.addDev("Generating Avatar from TML");
-	if (avatarspec!=null){
-	    return;
-	}
-	else if (tmap!=null){
-	    t2a = new TML2Avatar(tmap, mc, security);
-	    avatarspec = t2a.generateAvatarSpec("1");
-	}
+        TraceManager.addDev("Generating Avatar from TML");
+        if (avatarspec!=null){
+            return;
+        }
+        else if (tmap!=null){
+            t2a = new TML2Avatar(tmap, mc, security);
+            avatarspec = t2a.generateAvatarSpec("1");
+        }
     }
 
     public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed, String loopLimit) {
-	if (avatarspec !=null){
-	     //use avspec
-	}
-	else if (tmap!=null){
-	    t2a = new TML2Avatar(tmap,false,true);
-	    avatarspec = t2a.generateAvatarSpec(loopLimit);
-	    drawPanel(avatarspec, mgui.getFirstAvatarDesignPanelFound());
-	}
-	else if (tmlm!=null){
-	    //Generate default mapping
-	    tmap = tmlm.getDefaultMapping();
-	    tmap.setTMLDesignPanel((TMLComponentDesignPanel)mgui.getCurrentTURTLEPanel());
-	    t2a=new TML2Avatar(tmap,false,true);
-	    avatarspec = t2a.generateAvatarSpec(loopLimit);
-	}
-	else if (avatarspec == null){
-	    return false;
-	}
-	
+        if (avatarspec !=null){
+            //use avspec
+        }
+        else if (tmap!=null){
+            t2a = new TML2Avatar(tmap,false,true);
+            avatarspec = t2a.generateAvatarSpec(loopLimit);
+            drawPanel(avatarspec, mgui.getFirstAvatarDesignPanelFound());
+        }
+        else if (tmlm!=null){
+            //Generate default mapping
+            tmap = tmlm.getDefaultMapping();
+            tmap.setTMLDesignPanel((TMLComponentDesignPanel)mgui.getCurrentTURTLEPanel());
+            t2a=new TML2Avatar(tmap,false,true);
+            avatarspec = t2a.generateAvatarSpec(loopLimit);
+        }
+        else if (avatarspec == null){
+            return false;
+        }
+
         avatar2proverif = new AVATAR2ProVerif(avatarspec);
         //tml2uppaal.setChoiceDeterministic(choices);
         //tml2uppaal.setSizeInfiniteFIFO(_size);
@@ -1851,7 +1856,7 @@ public class GTURTLEModeling {
         ArrayList<TGComponent> list = new ArrayList<TGComponent>();
         ArrayList<TClass> tclasses;
         tp.getAllCheckableTGComponent(list);
-	TGComponentAndUPPAALQuery tmpQ;
+        TGComponentAndUPPAALQuery tmpQ;
 
         ArrayList<TGComponentAndUPPAALQuery> listQ = new ArrayList<TGComponentAndUPPAALQuery>();
 
@@ -1880,7 +1885,7 @@ public class GTURTLEModeling {
                             s = uppaalTIFTable.getRQuery(tc, adc);
                             if (s != null) {
                                 //TraceManager.addDev("Adding query:" + s);
-				tmpQ = new TGComponentAndUPPAALQuery(null, s + "$" + adc);
+                                tmpQ = new TGComponentAndUPPAALQuery(null, s + "$" + adc);
                                 listQ.add(tmpQ);
                             }
                         }
@@ -1904,13 +1909,13 @@ public class GTURTLEModeling {
                         s = uppaalTMLTable.getRQuery(task, elt);
                         if (s != null) {
                             //TraceManager.addDev("Adding query:" + s);
-			    Object ref;
-			    if (elt.getReferenceObject() instanceof TGComponent) {
-				tmpQ = new TGComponentAndUPPAALQuery((TGComponent)(elt.getReferenceObject()), s + "$" + elt);
-			    } else {
-				tmpQ = new TGComponentAndUPPAALQuery(null, s + "$" + elt);
-			    }
-			    listQ.add(tmpQ);
+                            Object ref;
+                            if (elt.getReferenceObject() instanceof TGComponent) {
+                                tmpQ = new TGComponentAndUPPAALQuery((TGComponent)(elt.getReferenceObject()), s + "$" + elt);
+                            } else {
+                                tmpQ = new TGComponentAndUPPAALQuery(null, s + "$" + elt);
+                            }
+                            listQ.add(tmpQ);
                         }
                     }
                 }
@@ -1924,7 +1929,7 @@ public class GTURTLEModeling {
                 TraceManager.addDev("Query: " + s);
                 if ((s!= null) && (s.length() > 0)) {
                     AvatarBlock block = avatar2uppaal.getBlockFromReferenceObject(tgc);
-		    listQ.add(new TGComponentAndUPPAALQuery(tgc, s + "$" + block.getName() + "." + tgc));
+                    listQ.add(new TGComponentAndUPPAALQuery(tgc, s + "$" + block.getName() + "." + tgc));
                 } else {
                     TraceManager.addDev("Could not make query for " + tgc);
                 }
@@ -2100,7 +2105,7 @@ public class GTURTLEModeling {
         if (sim != null) {
             JFrameSimulationTrace jfst = new JFrameSimulationTrace("Last simulation trace", sim, type);
             jfst.setIconImage(IconManager.img8);
-          //  jfst.setSize(900, 600);
+            //  jfst.setSize(900, 600);
             GraphicLib.centerOnParent( jfst, 900, 600 );
             jfst.setVisible(true);
         }
@@ -2454,7 +2459,7 @@ public class GTURTLEModeling {
         return tmlm;
     }
     public TML2Avatar getTML2Avatar(){
-	return t2a;
+        return t2a;
     }
     public TMLMapping getArtificialTMLMapping() {
         return artificialtmap;
@@ -2508,7 +2513,7 @@ public class GTURTLEModeling {
             return panels.size() + 1;
         }
 
-	if (child == idt) {
+        if (child == idt) {
             return panels.size() + 2;
         }
 
@@ -4237,7 +4242,7 @@ public class GTURTLEModeling {
                         //TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
                     }
                 }
-	    }else if (tdp instanceof SysmlsecMethodologyDiagramPanel) {
+            }else if (tdp instanceof SysmlsecMethodologyDiagramPanel) {
                 nl = doc.getElementsByTagName("SysmlsecMethodologyDiagramPanelCopy");
                 docCopy = doc;
 
@@ -5245,7 +5250,7 @@ public class GTURTLEModeling {
             loadDiplodocusMethodology(node);
         } else if (type.compareTo("Avatar Methodology") == 0) {
             loadAvatarMethodology(node);
-	} else if (type.compareTo("Sysmlsec Methodology") == 0) {
+        } else if (type.compareTo("Sysmlsec Methodology") == 0) {
             loadSysmlsecMethodology(node);
         } else if (type.compareTo("TML Design") == 0) {
             loadTMLDesign(node);
@@ -5366,8 +5371,8 @@ public class GTURTLEModeling {
         String nameTab;
         NodeList diagramNl;
         int indexTree;
-	int cpttdp = 0;
-	
+        int cpttdp = 0;
+
 
         nameTab = elt.getAttribute("nameTab");
 
@@ -5382,7 +5387,7 @@ public class GTURTLEModeling {
                 elt = (Element)node;
                 if (elt.getTagName().compareTo("AttackTreeDiagramPanel") == 0) {
                     loadAttackTreeDiagram(elt, indexTree, cpttdp);
-		    cpttdp ++;
+                    cpttdp ++;
                 }
             }
         }
@@ -5657,7 +5662,7 @@ public class GTURTLEModeling {
         }
     }
 
-    
+
 
     public void loadDiplodocusMethodology(Node node) throws  MalformedModelingException, SAXException {
         Element elt = (Element) node;
@@ -6093,12 +6098,12 @@ public class GTURTLEModeling {
         TraceManager.addDev("ADD 3.1");
 
         if (tdp == null) {
-	    // Try to get the first diagram of the panel
-	    tdp = mgui.getAvatarADDPanelByIndex(indexAnalysis, indexTab);
-	    if (tdp == null) {
-		TraceManager.addDev("ADD 3.2");
-		throw new MalformedModelingException();
-	    }
+            // Try to get the first diagram of the panel
+            tdp = mgui.getAvatarADDPanelByIndex(indexAnalysis, indexTab);
+            if (tdp == null) {
+                TraceManager.addDev("ADD 3.2");
+                throw new MalformedModelingException();
+            }
         }
         tdp.removeAll();
         TraceManager.addDev("ADD 4");
@@ -6461,7 +6466,7 @@ public class GTURTLEModeling {
     public void loadAttackTreeDiagram(Element elt, int indexDiag, int indexTab) throws  MalformedModelingException, SAXException {
         String name;
 
-	//TraceManager.addDev("indexDiag=" + indexDiag);
+        //TraceManager.addDev("indexDiag=" + indexDiag);
 
         name = elt.getAttribute("name");
         mgui.createAttackTreeDiagram(indexDiag, name);
@@ -6893,7 +6898,7 @@ public class GTURTLEModeling {
             String pre = "", post = "";
             String internalComment = "";
             boolean accessibility = false;
-			boolean latencyCheck = false;
+            boolean latencyCheck = false;
             boolean invariant = false;
             boolean breakpoint = false;
             boolean hidden = false;
@@ -7748,7 +7753,7 @@ public class GTURTLEModeling {
         //TraceManager.addDev(tmlm.toString());
         //TraceManager.addDev("------------------------");
         checkingErrors = gtmlm.getCheckingErrors();
-	
+
         if ((checkingErrors != null) && (checkingErrors.size() > 0)){
             analyzeErrors();
             return false;
@@ -7780,7 +7785,7 @@ public class GTURTLEModeling {
 
     public boolean translateTMLComponentDesign(Vector componentsToTakeIntoAccount, TMLComponentDesignPanel tmlcdp, boolean optimize) {
         nullifyTMLModeling();
-    //    ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
+        //    ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
         warnings = new LinkedList<CheckingError> ();
         mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
 
@@ -7805,10 +7810,10 @@ public class GTURTLEModeling {
             return false;
         }
         else {
-//            if (optimize) {
-//                //TraceManager.addDev("OPTIMIZE");
-//                warningsOptimize = tmlm.optimize();
-//            }
+            //            if (optimize) {
+            //                //TraceManager.addDev("OPTIMIZE");
+            //                warningsOptimize = tmlm.optimize();
+            //            }
 
             tmState = 2;
             //TraceManager.addDev("tm generated:");
@@ -7823,7 +7828,7 @@ public class GTURTLEModeling {
         TML2TURTLE tt = new TML2TURTLE(tmlm);
         tm = tt.generateTURTLEModeling();
         if ((checkingErrors != null) && (checkingErrors.size() > 0)){
-	    TraceManager.addDev("Error in TURTLE generation");
+            TraceManager.addDev("Error in TURTLE generation");
             analyzeErrors();
             return false;
         } else {
@@ -7861,7 +7866,7 @@ public class GTURTLEModeling {
         listE = gtmlm.getCorrespondanceTable();
 
         checkingErrors = gtmlm.getCheckingErrors();
-	avatarspec = gtmlm.avspec;
+        avatarspec = gtmlm.avspec;
         if ((checkingErrors != null) && (checkingErrors.size() > 0)){
             analyzeErrors();
             warnings = gtmlm.getCheckingWarnings();
@@ -8043,350 +8048,350 @@ public class GTURTLEModeling {
 
 
     public void addStates(AvatarStateMachineElement asme, int x, int y, AvatarSMDPanel smp, AvatarBDBlock bl, Map<AvatarStateMachineElement, TGComponent> SMDMap, Map<AvatarStateMachineElement, TGComponent> locMap, Map<AvatarTransition, AvatarStateMachineElement> tranDestMap, Map<AvatarTransition, TGComponent> tranSourceMap){
-	TGConnectingPoint tp = new TGConnectingPoint(null, x, y, false, false);
-	//Create dummy tgcomponent
-	TGComponent tgcomp = new AvatarSMDStartState(x,y,x,x*2,y,y*2,false,null,smp);
-	if (asme instanceof AvatarStartState){
-	    AvatarSMDStartState smdss = new AvatarSMDStartState(x, y, x, x*2, y, y*2, false, null, smp);
-	    tgcomp = smdss;
-	    smp.addComponent(smdss, x, y, false, true);
-	    SMDMap.put(asme, smdss);
-	    tp = smdss.tgconnectingPointAtIndex(0);
-	    locMap.put(asme, smdss);
-	}
-	if (asme instanceof AvatarTransition){
-	   //
-	}
-	if (asme instanceof AvatarActionOnSignal){
-	    avatartranslator.AvatarSignal sig = ((AvatarActionOnSignal) asme).getSignal();
-	    if (sig.isIn()){
-		AvatarSMDReceiveSignal smdrs = new AvatarSMDReceiveSignal(x, y, x, x*2, y, y*2, false, null, smp);
-		tgcomp=smdrs;
-		smp.addComponent(smdrs, x, y, false, true);
-		String name=sig.getName().split("__")[sig.getName().split("__").length-1];
-	        smdrs.setValue(name+"()");
-		sig.setName(name);
-	        smdrs.recalculateSize();
-		SMDMap.put(asme, smdrs);
-	        tp = smdrs.getFreeTGConnectingPoint(x+smdrs.getWidth()/2,y+smdrs.getHeight());
-		TGConnectingPoint tp2 = smdrs.getFreeTGConnectingPoint(x+smdrs.getWidth()/2,y);
-	    	locMap.put(asme, smdrs);
-		if (bl.getAvatarSignalFromName(name) ==null){
-		    bl.addSignal(new ui.AvatarSignal(0, name, new String[0], new String[0]));
-		}
+        TGConnectingPoint tp = new TGConnectingPoint(null, x, y, false, false);
+        //Create dummy tgcomponent
+        TGComponent tgcomp = new AvatarSMDStartState(x,y,x,x*2,y,y*2,false,null,smp);
+        if (asme instanceof AvatarStartState){
+            AvatarSMDStartState smdss = new AvatarSMDStartState(x, y, x, x*2, y, y*2, false, null, smp);
+            tgcomp = smdss;
+            smp.addComponent(smdss, x, y, false, true);
+            SMDMap.put(asme, smdss);
+            tp = smdss.tgconnectingPointAtIndex(0);
+            locMap.put(asme, smdss);
+        }
+        if (asme instanceof AvatarTransition){
+            //
+        }
+        if (asme instanceof AvatarActionOnSignal){
+            avatartranslator.AvatarSignal sig = ((AvatarActionOnSignal) asme).getSignal();
+            if (sig.isIn()){
+                AvatarSMDReceiveSignal smdrs = new AvatarSMDReceiveSignal(x, y, x, x*2, y, y*2, false, null, smp);
+                tgcomp=smdrs;
+                smp.addComponent(smdrs, x, y, false, true);
+                String name=sig.getName().split("__")[sig.getName().split("__").length-1];
+                smdrs.setValue(name+"()");
+                sig.setName(name);
+                smdrs.recalculateSize();
+                SMDMap.put(asme, smdrs);
+                tp = smdrs.getFreeTGConnectingPoint(x+smdrs.getWidth()/2,y+smdrs.getHeight());
+                TGConnectingPoint tp2 = smdrs.getFreeTGConnectingPoint(x+smdrs.getWidth()/2,y);
+                locMap.put(asme, smdrs);
+                if (bl.getAvatarSignalFromName(name) ==null){
+                    bl.addSignal(new ui.AvatarSignal(0, name, new String[0], new String[0]));
+                }
 
-	    }
-	    else {
-		AvatarSMDSendSignal smdss = new AvatarSMDSendSignal(x, y, x, x*2, y, y*2, false, null, smp);
-		tgcomp=smdss;
-		smp.addComponent(smdss, x, y, false, true);
-	        String name=sig.getName().split("__")[sig.getName().split("__").length-1];
-	        smdss.setValue(name+"()");
-		sig.setName(name);
-	        smdss.recalculateSize();
-		SMDMap.put(asme, smdss);
-	    	tp = smdss.getFreeTGConnectingPoint(x+smdss.getWidth()/2,y+smdss.getHeight());
-		TGConnectingPoint tp2 = smdss.getFreeTGConnectingPoint(x+smdss.getWidth()/2,y);
-	    	locMap.put(asme, smdss);
-		if (bl.getAvatarSignalFromName(name)  == null){
-		    bl.addSignal(new ui.AvatarSignal(1, name, new String[0], new String[0]));
-		}
-	    }
+            }
+            else {
+                AvatarSMDSendSignal smdss = new AvatarSMDSendSignal(x, y, x, x*2, y, y*2, false, null, smp);
+                tgcomp=smdss;
+                smp.addComponent(smdss, x, y, false, true);
+                String name=sig.getName().split("__")[sig.getName().split("__").length-1];
+                smdss.setValue(name+"()");
+                sig.setName(name);
+                smdss.recalculateSize();
+                SMDMap.put(asme, smdss);
+                tp = smdss.getFreeTGConnectingPoint(x+smdss.getWidth()/2,y+smdss.getHeight());
+                TGConnectingPoint tp2 = smdss.getFreeTGConnectingPoint(x+smdss.getWidth()/2,y);
+                locMap.put(asme, smdss);
+                if (bl.getAvatarSignalFromName(name)  == null){
+                    bl.addSignal(new ui.AvatarSignal(1, name, new String[0], new String[0]));
+                }
+            }
 
-	}
-	if (asme instanceof AvatarStopState){
-	    AvatarSMDStopState smdstop = new AvatarSMDStopState(x, y, x, x*2, y, y*2, false, null, smp);
-	    tgcomp=smdstop;
-	    SMDMap.put(asme, smdstop);
-	    smp.addComponent(smdstop, x, y, false, true);
-	    tp = smdstop.tgconnectingPointAtIndex(0);
-	    locMap.put(asme, smdstop);
-	}
-	if (asme instanceof AvatarState){
-	    //check if empty checker state
-	   /* if (asme.getName().contains("signalstate_")){
-		//don't add the state, ignore next transition, 
-		if (asme.getNexts().size()==1){
-		    AvatarStateMachineElement next = asme.getNext(0).getNext(0);
-		    //Reroute transition
-		    for (AvatarTransition at: tranDestMap.keySet()){
-			if (tranDestMap.get(at) == asme){
-			    tranDestMap.put(at, next);
-			}
-		    }
-		    addStates(next, x, y, smp,bl, SMDMap, locMap, tranDestMap, tranSourceMap);
-		    return;
-		}
-	    }*/
-	    AvatarSMDState smdstate = new AvatarSMDState(x, y, x, x*2, y, y*2, false, null, smp);
-	    tgcomp=smdstate;
-	    smp.addComponent(smdstate, x, y, false, true);
-	    smdstate.setValue(asme.getName());
-	    smdstate.recalculateSize();
-	    SMDMap.put(asme, smdstate);
-	    tp = smdstate.getFreeTGConnectingPoint(x+smdstate.getWidth()/2,y+smdstate.getHeight());
-	    TGConnectingPoint tp2 = smdstate.getFreeTGConnectingPoint(x+smdstate.getWidth()/2,y);
-	    locMap.put(asme, smdstate);
-	}
-	int i=0;
-	int diff=100;
-	int ydiff=50;
-	int num = asme.nbOfNexts();
-	if (!(asme instanceof AvatarTransition)){
-	    for (AvatarStateMachineElement el:asme.getNexts()){
-		if (!(el instanceof AvatarTransition)){
-		    System.out.println("ERROR: non-Transition " + asme + " connected to non-Transition " + el);
-		}
-	    }
-	}
-	for (AvatarStateMachineElement el:asme.getNexts()){
-	    if (el instanceof AvatarTransition){
-		tranSourceMap.put((AvatarTransition) el, tgcomp);
-	    }
-	    else {
-		if (asme instanceof AvatarTransition){
-			AvatarTransition t = (AvatarTransition) asme;
-			tranDestMap.put(t, el);
-		}
-	    }
-	    if (!SMDMap.containsKey(el)){
-	    	addStates(el, x+diff*(i-num/2), y+ydiff, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);  
-	    }
-	    i++;
-	}
-	return;
+        }
+        if (asme instanceof AvatarStopState){
+            AvatarSMDStopState smdstop = new AvatarSMDStopState(x, y, x, x*2, y, y*2, false, null, smp);
+            tgcomp=smdstop;
+            SMDMap.put(asme, smdstop);
+            smp.addComponent(smdstop, x, y, false, true);
+            tp = smdstop.tgconnectingPointAtIndex(0);
+            locMap.put(asme, smdstop);
+        }
+        if (asme instanceof AvatarState){
+            //check if empty checker state
+            /* if (asme.getName().contains("signalstate_")){
+            //don't add the state, ignore next transition,
+            if (asme.getNexts().size()==1){
+            AvatarStateMachineElement next = asme.getNext(0).getNext(0);
+            //Reroute transition
+            for (AvatarTransition at: tranDestMap.keySet()){
+            if (tranDestMap.get(at) == asme){
+            tranDestMap.put(at, next);
+            }
+            }
+            addStates(next, x, y, smp,bl, SMDMap, locMap, tranDestMap, tranSourceMap);
+            return;
+            }
+            }*/
+            AvatarSMDState smdstate = new AvatarSMDState(x, y, x, x*2, y, y*2, false, null, smp);
+            tgcomp=smdstate;
+            smp.addComponent(smdstate, x, y, false, true);
+            smdstate.setValue(asme.getName());
+            smdstate.recalculateSize();
+            SMDMap.put(asme, smdstate);
+            tp = smdstate.getFreeTGConnectingPoint(x+smdstate.getWidth()/2,y+smdstate.getHeight());
+            TGConnectingPoint tp2 = smdstate.getFreeTGConnectingPoint(x+smdstate.getWidth()/2,y);
+            locMap.put(asme, smdstate);
+        }
+        int i=0;
+        int diff=100;
+        int ydiff=50;
+        int num = asme.nbOfNexts();
+        if (!(asme instanceof AvatarTransition)){
+            for (AvatarStateMachineElement el:asme.getNexts()){
+                if (!(el instanceof AvatarTransition)){
+                    System.out.println("ERROR: non-Transition " + asme + " connected to non-Transition " + el);
+                }
+            }
+        }
+        for (AvatarStateMachineElement el:asme.getNexts()){
+            if (el instanceof AvatarTransition){
+                tranSourceMap.put((AvatarTransition) el, tgcomp);
+            }
+            else {
+                if (asme instanceof AvatarTransition){
+                    AvatarTransition t = (AvatarTransition) asme;
+                    tranDestMap.put(t, el);
+                }
+            }
+            if (!SMDMap.containsKey(el)){
+                addStates(el, x+diff*(i-num/2), y+ydiff, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
+            }
+            i++;
+        }
+        return;
     }
 
 
     public void drawPanel(AvatarSpecification avspec, AvatarDesignPanel adp){
 
-	Map<AvatarTransition, TGComponent> tranSourceMap = new HashMap<AvatarTransition, TGComponent>();
-	Map<AvatarTransition, AvatarStateMachineElement> tranDestMap = new HashMap<AvatarTransition, AvatarStateMachineElement>();
-    	Map<AvatarStateMachineElement, TGComponent> locMap = new HashMap<AvatarStateMachineElement, TGComponent>();
-    	Map<AvatarStateMachineElement, TGComponent> SMDMap = new HashMap<AvatarStateMachineElement, TGComponent>();
-    	Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
-    	Map<String, AvatarBDBlock> blockMap = new HashMap<String, AvatarBDBlock>();
-	if (adp ==null){
-	    return;
-	}
-	if (avspec==null){
-	    return;
-	}
-	AvatarBDPanel abd = adp.abdp;
+        Map<AvatarTransition, TGComponent> tranSourceMap = new HashMap<AvatarTransition, TGComponent>();
+        Map<AvatarTransition, AvatarStateMachineElement> tranDestMap = new HashMap<AvatarTransition, AvatarStateMachineElement>();
+        Map<AvatarStateMachineElement, TGComponent> locMap = new HashMap<AvatarStateMachineElement, TGComponent>();
+        Map<AvatarStateMachineElement, TGComponent> SMDMap = new HashMap<AvatarStateMachineElement, TGComponent>();
+        Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
+        Map<String, AvatarBDBlock> blockMap = new HashMap<String, AvatarBDBlock>();
+        if (adp ==null){
+            return;
+        }
+        if (avspec==null){
+            return;
+        }
+        AvatarBDPanel abd = adp.abdp;
 
-	//Find all blocks, create blocks from left
-	int xpos=10;
-	int ypos=10;
-	for (AvatarBlock ab:avspec.getListOfBlocks()){
-	//Crypto blocks?
-	    AvatarBDBlock father=null;
-	    if (ab.getFather()!=null){
-		father = blockMap.get(ab.getFather().getName().split("__")[1]);
-	    }
-	    AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, father, abd);
+        //Find all blocks, create blocks from left
+        int xpos=10;
+        int ypos=10;
+        for (AvatarBlock ab:avspec.getListOfBlocks()){
+            //Crypto blocks?
+            AvatarBDBlock father=null;
+            if (ab.getFather()!=null){
+                father = blockMap.get(ab.getFather().getName().split("__")[1]);
+            }
+            AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, father, abd);
 
-	    for (avatartranslator.AvatarSignal sig:ab.getSignals()){
-		String name=sig.getName().split("__")[sig.getName().split("__").length-1];
-		sig.setName(name);
-		bl.addSignal(new ui.AvatarSignal(sig.getInOut(), name, new String[0], new String[0]));
-	    }
-	    tranSourceMap.clear();
-/*	    if (ab.getName().contains("__")){
-	        bl.setValue(ab.getName().split("__")[1]);
-	    }
-	    else {*/
-		bl.setValueWithChange(ab.getName());
-	    //}
-	 //   if (!bl.getValue().equals("Block0")
-	   // abd.changeStateMachineTabName ("Block0", bl.getValue());
-	    blockMap.put(bl.getValue(), bl);
-	    abd.addComponent(bl, xpos, ypos, false, true);
-	    for (AvatarAttribute attr: ab.getAttributes()){
-		int type=5;
-		if (attr.getType()==AvatarType.BOOLEAN){
-		    type=4;
-		}
-		if (attr.getType()==AvatarType.INTEGER){
-		    type=0;
-		}
-		if (attr.hasInitialValue()){
-		    bl.addAttribute(new TAttribute(0, attr.getName(), attr.getInitialValue(), type));
-		}
-		else {
-		    bl.addAttribute(new TAttribute(0, attr.getName(), attr.getType().getDefaultInitialValue(), type));
-		}
-		if (attr.getName().contains("key_")){
-		    bl.addCryptoElements();
-		}
-	    }
-	    xpos+=300;
-	    //Build the state machine
-	    int smx=400;
-	    int smy=40;
-	    AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
-	    if (smp==null){
-		System.out.println("can't find");
-		return;
-	    }
-	    smp.removeAll();
-	    AvatarStateMachine asm = ab.getStateMachine();
-	    //Remove the empty check states
-	    
-	    AvatarStartState start= asm.getStartState();
-	    addStates(start, smx, smy, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
-	    //Add transitions
-	    for (AvatarTransition t: tranSourceMap.keySet()){
-		if (tranSourceMap.get(t)==null || tranDestMap.get(t)==null){
-		    continue;
-		}
-		int x=tranSourceMap.get(t).getX()+tranSourceMap.get(t).getWidth()/2;
-		int y=tranSourceMap.get(t).getY()+tranSourceMap.get(t).getHeight();
+            for (avatartranslator.AvatarSignal sig:ab.getSignals()){
+                String name=sig.getName().split("__")[sig.getName().split("__").length-1];
+                sig.setName(name);
+                bl.addSignal(new ui.AvatarSignal(sig.getInOut(), name, new String[0], new String[0]));
+            }
+            tranSourceMap.clear();
+            /*      if (ab.getName().contains("__")){
+                    bl.setValue(ab.getName().split("__")[1]);
+                    }
+                    else {*/
+            bl.setValueWithChange(ab.getName());
+            //}
+            //   if (!bl.getValue().equals("Block0")
+            // abd.changeStateMachineTabName ("Block0", bl.getValue());
+            blockMap.put(bl.getValue(), bl);
+            abd.addComponent(bl, xpos, ypos, false, true);
+            for (AvatarAttribute attr: ab.getAttributes()){
+                int type=5;
+                if (attr.getType()==AvatarType.BOOLEAN){
+                    type=4;
+                }
+                if (attr.getType()==AvatarType.INTEGER){
+                    type=0;
+                }
+                if (attr.hasInitialValue()){
+                    bl.addAttribute(new TAttribute(0, attr.getName(), attr.getInitialValue(), type));
+                }
+                else {
+                    bl.addAttribute(new TAttribute(0, attr.getName(), attr.getType().getDefaultInitialValue(), type));
+                }
+                if (attr.getName().contains("key_")){
+                    bl.addCryptoElements();
+                }
+            }
+            xpos+=300;
+            //Build the state machine
+            int smx=400;
+            int smy=40;
+            AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
+            if (smp==null){
+                System.out.println("can't find");
+                return;
+            }
+            smp.removeAll();
+            AvatarStateMachine asm = ab.getStateMachine();
+            //Remove the empty check states
 
-	//	TGConnectingPoint p1 = tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,false);
-		TGConnectingPoint p1 = tranSourceMap.get(t).closerFreeTGConnectingPoint(x, y, true, false);
-		if (p1==null){
-		  //  p1= tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,true);
-		    p1=tranSourceMap.get(t).closerFreeTGConnectingPoint(x,y,true, true);
-		}
-		x= locMap.get(tranDestMap.get(t)).getX()+ locMap.get(tranDestMap.get(t)).getWidth()/2;
-		y = locMap.get(tranDestMap.get(t)).getY();
-		if (tranSourceMap.get(t).getY() > locMap.get(tranDestMap.get(t)).getY()){
-		    y=locMap.get(tranDestMap.get(t)).getY()+locMap.get(tranDestMap.get(t)).getHeight()/2;
-		    if (tranSourceMap.get(t).getX() < locMap.get(tranDestMap.get(t)).getX()){
-			x = locMap.get(tranDestMap.get(t)).getX();
-		    }
-		    else {
-			x= locMap.get(tranDestMap.get(t)).getX()+locMap.get(tranDestMap.get(t)).getWidth();
-		    }
-		}
-		TGConnectingPoint p2 = locMap.get(tranDestMap.get(t)).closerFreeTGConnectingPoint(x,y,false, true);
-		if (p2==null){
-		    p2=locMap.get(tranDestMap.get(t)).closerFreeTGConnectingPoint(x,y,true, true);
-		}
-		Vector points = new Vector();
-		if (p1==null || p2 ==null){
-		    System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
-		
-		    System.out.println("Missing point "+ p1 + " "+p2);
-		    return;
-		}
-		AvatarSMDConnector SMDcon = new AvatarSMDConnector((int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), true, null, smp, p1, p2, points);	
-	  	//System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
-		///System.out.println("FREE " +p1.isFree() + " "+ p2.isFree());
-		p1.setFree(false);
-		p2.setFree(false);
-		String action="";
-		if (t.getActions().size()==0){
-		    action="";
-		}
-		else {
-		    action=t.getActions().get(0).toString();
-		}
-		SMDcon.setTransitionInfo(t.getGuard().toString(), action);
-		for (int i=1; i<t.getActions().size(); i++){
-		    SMDcon.setTransitionInfo("", t.getActions().get(i).toString());
-		}
-		smp.addComponent(SMDcon, (int) p1.getX(), (int) p1.getY(), false, true);
-	    }
-	}
+            AvatarStartState start= asm.getStartState();
+            addStates(start, smx, smy, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
+            //Add transitions
+            for (AvatarTransition t: tranSourceMap.keySet()){
+                if (tranSourceMap.get(t)==null || tranDestMap.get(t)==null){
+                    continue;
+                }
+                int x=tranSourceMap.get(t).getX()+tranSourceMap.get(t).getWidth()/2;
+                int y=tranSourceMap.get(t).getY()+tranSourceMap.get(t).getHeight();
 
-	
-	for (AvatarRelation ar: avspec.getRelations()){
-	    String bl1 = ar.block1.getName();	
-	    String bl2 = ar.block2.getName();
-	    if (originDestMap.containsKey(bl1)){
-		originDestMap.get(bl1).add(bl2);
-	    }
-	    else {
- 	    	Set<String> hs= new HashSet<String>();
-		hs.add(bl2);
-		originDestMap.put(bl1, hs);
-	    }
-	}
-	//Add Relations
-	
-	for (String bl1: originDestMap.keySet()){
-	    for (String bl2:originDestMap.get(bl1)){ 
-		Vector points=new Vector();
+                //      TGConnectingPoint p1 = tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,false);
+                TGConnectingPoint p1 = tranSourceMap.get(t).closerFreeTGConnectingPoint(x, y, true, false);
+                if (p1==null){
+                    //  p1= tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,true);
+                    p1=tranSourceMap.get(t).closerFreeTGConnectingPoint(x,y,true, true);
+                }
+                x= locMap.get(tranDestMap.get(t)).getX()+ locMap.get(tranDestMap.get(t)).getWidth()/2;
+                y = locMap.get(tranDestMap.get(t)).getY();
+                if (tranSourceMap.get(t).getY() > locMap.get(tranDestMap.get(t)).getY()){
+                    y=locMap.get(tranDestMap.get(t)).getY()+locMap.get(tranDestMap.get(t)).getHeight()/2;
+                    if (tranSourceMap.get(t).getX() < locMap.get(tranDestMap.get(t)).getX()){
+                        x = locMap.get(tranDestMap.get(t)).getX();
+                    }
+                    else {
+                        x= locMap.get(tranDestMap.get(t)).getX()+locMap.get(tranDestMap.get(t)).getWidth();
+                    }
+                }
+                TGConnectingPoint p2 = locMap.get(tranDestMap.get(t)).closerFreeTGConnectingPoint(x,y,false, true);
+                if (p2==null){
+                    p2=locMap.get(tranDestMap.get(t)).closerFreeTGConnectingPoint(x,y,true, true);
+                }
+                Vector points = new Vector();
+                if (p1==null || p2 ==null){
+                    System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
 
-		//Add Relations to connector
-		for (AvatarRelation ar:avspec.getRelations()){
-		    if (ar.block1.getName().contains(bl1) && ar.block2.getName().contains(bl2) || ar.block1.getName().contains(bl2) && ar.block2.getName().contains(bl1)){
-			//TGConnectingPoint p1= blockMap.get(bl1).getFreeTGConnectingPoint(blockMap.get(bl1).getX(), blockMap.get(bl1).getY());
-			TGConnectingPoint p1= blockMap.get(bl1).findFirstFreeTGConnectingPoint(true,true);
-			TGConnectingPoint p2= blockMap.get(bl2).findFirstFreeTGConnectingPoint(true,true);
-		//	TGConnectingPoint p2=blockMap.get(bl2).getFreeTGConnectingPoint(blockMap.get(bl2).getX(),blockMap.get(bl2).getY());
-		    	AvatarBDPortConnector conn = new AvatarBDPortConnector(0, 0, 0, 0, 0, 0, true, null, abd, p1, p2, points);
-		    	conn.setAsynchronous(ar.isAsynchronous());
-		    	conn.setBlocking(ar.isBlocking());
-		    	conn.setPrivate(ar.isPrivate());
-		    	conn.setSizeOfFIFO(ar.getSizeOfFIFO());
-		    	//System.out.println(bl1 +" "+ ar.block1.getName() + " "+ ar.block2.getName());
-			conn.addSignal("in " +ar.getSignal1(0).getName(),true,true);
-			conn.addSignal("out " +ar.getSignal2(0).getName(), false,false);
-			//System.out.println("Added Signals");
-			conn.updateAllSignals();
-			p1.setFree(false);
-			p2.setFree(false);
-			abd.addComponent(conn, 0,0,false,true);
-		    }		    
-		}
-		/*for (ui.AvatarSignal sig:blockMap.get(bl1).getSignalList()){
-		    for (ui.AvatarSignal sig2: blockMap.get(bl2).getSignalList()){
-			if (sig.getId().equals(sig2.getId())){
-			    conn.addSignal("in "+sig.getId(), true, true);
-			    conn.addSignal("out "+sig.getId(), false, false);
-			}
-		    }
-		}*/
-	    }
-	}
-	ypos+=100;
-	//Add Pragmas
-	AvatarBDPragma pragma=new AvatarBDPragma(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
-	String[] arr = new String[avspec.getPragmas().size()];
-	String s="";
-	int i=0;
-	for (AvatarPragma p: avspec.getPragmas()){
-	    
-//	    arr[i] = p.getName();
-	    String t= "";
-	    String[] split = p.getName().split(" ");
-	    if (p.getName().contains("#Confidentiality")){
-	        for (String str:split){
-		    if (str.contains(".")){
-			String tmp = str.split("\\.")[0];
-			String tmp2 = str.split("\\.")[1];
-		    	t=t.concat(tmp.split("__")[tmp.split("__").length-1] + "." + tmp2.split("__")[Math.max(tmp2.split("__").length-2,0)] + " ");
-		    }
-		    else {
-			t=t.concat(str+" ");
-		    }
-		}
-	    }
-	    else if (p.getName().contains("Authenticity")){
-	    }
-	    s=s.concat(t+"\n");
-	    i++;
-	}
-	pragma.setValue(s);
-	pragma.makeValue();
-	abd.addComponent(pragma, xpos, ypos, false,true);
-	//Add message and key datatype
-	xpos=100;
-	ypos+=200;
-	AvatarBDDataType message = new AvatarBDDataType(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
-	message.setValue("Message");
-	
-	abd.addComponent(message, xpos, ypos, false,true);
-	xpos+=100;
-	AvatarBDDataType key = new AvatarBDDataType(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
-	key.setValue("Key");
-	TAttribute attr = new TAttribute(2, "data", "0", 8);
-	message.addAttribute(attr);
-	key.addAttribute(attr);
-	abd.addComponent(key, xpos, ypos, false,true);
-    }    
+                    System.out.println("Missing point "+ p1 + " "+p2);
+                    return;
+                }
+                AvatarSMDConnector SMDcon = new AvatarSMDConnector((int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), true, null, smp, p1, p2, points);
+                //System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
+                ///System.out.println("FREE " +p1.isFree() + " "+ p2.isFree());
+                p1.setFree(false);
+                p2.setFree(false);
+                String action="";
+                if (t.getActions().size()==0){
+                    action="";
+                }
+                else {
+                    action=t.getActions().get(0).toString();
+                }
+                SMDcon.setTransitionInfo(t.getGuard().toString(), action);
+                for (int i=1; i<t.getActions().size(); i++){
+                    SMDcon.setTransitionInfo("", t.getActions().get(i).toString());
+                }
+                smp.addComponent(SMDcon, (int) p1.getX(), (int) p1.getY(), false, true);
+            }
+        }
+
+
+        for (AvatarRelation ar: avspec.getRelations()){
+            String bl1 = ar.block1.getName();
+            String bl2 = ar.block2.getName();
+            if (originDestMap.containsKey(bl1)){
+                originDestMap.get(bl1).add(bl2);
+            }
+            else {
+                Set<String> hs= new HashSet<String>();
+                hs.add(bl2);
+                originDestMap.put(bl1, hs);
+            }
+        }
+        //Add Relations
+
+        for (String bl1: originDestMap.keySet()){
+            for (String bl2:originDestMap.get(bl1)){
+                Vector points=new Vector();
+
+                //Add Relations to connector
+                for (AvatarRelation ar:avspec.getRelations()){
+                    if (ar.block1.getName().contains(bl1) && ar.block2.getName().contains(bl2) || ar.block1.getName().contains(bl2) && ar.block2.getName().contains(bl1)){
+                        //TGConnectingPoint p1= blockMap.get(bl1).getFreeTGConnectingPoint(blockMap.get(bl1).getX(), blockMap.get(bl1).getY());
+                        TGConnectingPoint p1= blockMap.get(bl1).findFirstFreeTGConnectingPoint(true,true);
+                        TGConnectingPoint p2= blockMap.get(bl2).findFirstFreeTGConnectingPoint(true,true);
+                        //      TGConnectingPoint p2=blockMap.get(bl2).getFreeTGConnectingPoint(blockMap.get(bl2).getX(),blockMap.get(bl2).getY());
+                        AvatarBDPortConnector conn = new AvatarBDPortConnector(0, 0, 0, 0, 0, 0, true, null, abd, p1, p2, points);
+                        conn.setAsynchronous(ar.isAsynchronous());
+                        conn.setBlocking(ar.isBlocking());
+                        conn.setPrivate(ar.isPrivate());
+                        conn.setSizeOfFIFO(ar.getSizeOfFIFO());
+                        //System.out.println(bl1 +" "+ ar.block1.getName() + " "+ ar.block2.getName());
+                        conn.addSignal("in " +ar.getSignal1(0).getName(),true,true);
+                        conn.addSignal("out " +ar.getSignal2(0).getName(), false,false);
+                        //System.out.println("Added Signals");
+                        conn.updateAllSignals();
+                        p1.setFree(false);
+                        p2.setFree(false);
+                        abd.addComponent(conn, 0,0,false,true);
+                    }
+                }
+                /*for (ui.AvatarSignal sig:blockMap.get(bl1).getSignalList()){
+                  for (ui.AvatarSignal sig2: blockMap.get(bl2).getSignalList()){
+                  if (sig.getId().equals(sig2.getId())){
+                  conn.addSignal("in "+sig.getId(), true, true);
+                  conn.addSignal("out "+sig.getId(), false, false);
+                  }
+                  }
+                  }*/
+            }
+        }
+        ypos+=100;
+        //Add Pragmas
+        AvatarBDPragma pragma=new AvatarBDPragma(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
+        String[] arr = new String[avspec.getPragmas().size()];
+        String s="";
+        int i=0;
+        for (AvatarPragma p: avspec.getPragmas()){
+
+            //      arr[i] = p.getName();
+            String t= "";
+            String[] split = p.getName().split(" ");
+            if (p.getName().contains("#Confidentiality")){
+                for (String str:split){
+                    if (str.contains(".")){
+                        String tmp = str.split("\\.")[0];
+                        String tmp2 = str.split("\\.")[1];
+                        t=t.concat(tmp.split("__")[tmp.split("__").length-1] + "." + tmp2.split("__")[Math.max(tmp2.split("__").length-2,0)] + " ");
+                    }
+                    else {
+                        t=t.concat(str+" ");
+                    }
+                }
+            }
+            else if (p.getName().contains("Authenticity")){
+            }
+            s=s.concat(t+"\n");
+            i++;
+        }
+        pragma.setValue(s);
+        pragma.makeValue();
+        abd.addComponent(pragma, xpos, ypos, false,true);
+        //Add message and key datatype
+        xpos=100;
+        ypos+=200;
+        AvatarBDDataType message = new AvatarBDDataType(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
+        message.setValue("Message");
+
+        abd.addComponent(message, xpos, ypos, false,true);
+        xpos+=100;
+        AvatarBDDataType key = new AvatarBDDataType(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
+        key.setValue("Key");
+        TAttribute attr = new TAttribute(2, "data", "0", 8);
+        message.addAttribute(attr);
+        key.addAttribute(attr);
+        abd.addComponent(key, xpos, ypos, false,true);
+    }
 
     // Generates for all observers, a TURTLE modeling for checking it
     public boolean generateTMsForRequirementAnalysis(Vector reqs, RequirementDiagramPanel rdp) {

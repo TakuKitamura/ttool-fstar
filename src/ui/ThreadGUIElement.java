@@ -68,8 +68,9 @@ public class ThreadGUIElement extends Thread {
     private ExternalCall ec;
     private AUTGraph graph;
     private RG rg;
+    private boolean showStat;
 
-    public ThreadGUIElement (Frame _frame, int _function, String _param0, String _param1, String _param2, AUTGraph _graph, RG _rg) {
+    public ThreadGUIElement (Frame _frame, int _function, String _param0, String _param1, String _param2, AUTGraph _graph, RG _rg, boolean _showStat) {
         frame = _frame;
         function = _function;
         param0 = _param0;
@@ -77,6 +78,7 @@ public class ThreadGUIElement extends Thread {
         param2 = _param2;
         graph = _graph;
         rg = _rg;
+	showStat = _showStat;
     }
 
     public ThreadGUIElement (Frame _frame, int _function, String _param0, String _param1, String _param2) {
@@ -175,10 +177,23 @@ public class ThreadGUIElement extends Thread {
                 if (jdc != null) {
                     jdc.stopAll();
                 }
-                jfs.setIconImage(IconManager.img8);
+                
                 //  jfs.setSize(600, 600);
+		if (showStat) {
+		    jfs.setIconImage(IconManager.img8);
                 GraphicLib.centerOnParent(jfs, 600, 600 );
                 jfs.setVisible(true);
+		} else {
+		    // Display graph
+		    jfs.displayGraph();
+		    
+		}
+		if (rg != null) {
+		    rg.graph = jfs.getGraph();
+		    if (rg.graph != null) {
+			rg.data = null;
+		    }
+		}
                 //System.out.println("setting visible");
             }
         }

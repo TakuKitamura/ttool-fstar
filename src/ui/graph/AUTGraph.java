@@ -94,6 +94,9 @@ public class AUTGraph implements myutil.Graph {
     }
 
     public void buildGraph(String data) {
+	if (data == null) {
+	    return;
+	}
 
         StringReader sr = new StringReader(data);
         br = new BufferedReader(sr);

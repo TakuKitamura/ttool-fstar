@@ -574,6 +574,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                     RG rg = new RG(autfile);
                     rg.data = graphAUT;		   
                     rg.fileName = autfile;
+		    rg.nbOfStates = amc.getNbOfStates();
+		    rg.nbOfTransitions = amc.getNbOfLinks();
                     mgui.addRG(rg);
                     FileUtils.saveFile(autfile, graphAUT);
                     jta.append("Graph saved in " + autfile + "\n");

@@ -155,6 +155,10 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         }
     }
 
+    public AUTGraph getGraph() {
+	return graph;
+    }
+
     public String getCurrentActivity() {
         if (computingPath) {
             return "Path is being calculated";
@@ -570,6 +574,10 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         } else if (evt.getSource() == showGraph) {
 	    graph.display();
 	}
+    }
+
+    public void displayGraph() {
+	graph.display();
     }
 
     private void saveAutomata(Automata aut) {
