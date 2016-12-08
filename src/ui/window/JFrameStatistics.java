@@ -179,14 +179,16 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
     }
 
     public void goElement() {
-        graph = new AUTGraph();
-        //System.out.println("Building graph : " + data);
-        graph.buildGraph(data);
-        graph.computeStates();
-        //System.out.println("Build is done");
-        if (stopped) {
-            return;
-        }
+	if (graph == null) {
+	    graph = new AUTGraph();
+	    //System.out.println("Building graph : " + data);
+	    graph.buildGraph(data);
+	    graph.computeStates();
+	    //System.out.println("Build is done");
+	    if (stopped) {
+		return;
+	    }
+	}
         graphDone = true;
         //System.out.println("making components");
         makeComponents();
@@ -195,9 +197,10 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         //System.out.println("Done");
     }
 
-    public JFrameStatistics(String title, String dataAUT) {
+    public JFrameStatistics(String title, String dataAUT, AUTGraph graphAUT) {
         super(title);
         data = dataAUT;
+	graph = graphAUT;
         //System.out.println("dataAUT = " + dataAUT);
         stopAsSoonAsPossible = false;
     }

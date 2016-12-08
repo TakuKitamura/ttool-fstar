@@ -53,10 +53,11 @@ import javax.swing.*;
 
 import myutil.*;
 import ui.window.*;
+import ui.graph.*;
 
 
 public class ThreadGUIElement extends Thread {
-    private String param0, param1, param2;
+    private String param0, param1, param2, param3;
     private Object obj0, obj1, obj2, obj3;
     private int function;
     private StoppableGUIElement sge;
@@ -65,6 +66,18 @@ public class ThreadGUIElement extends Thread {
     private JDialogCancel jdc;
     private Frame frame;
     private ExternalCall ec;
+    private AUTGraph graph;
+    private RG rg;
+
+    public ThreadGUIElement (Frame _frame, int _function, String _param0, String _param1, String _param2, AUTGraph _graph, RG _rg) {
+        frame = _frame;
+        function = _function;
+        param0 = _param0;
+        param1 = _param1;
+        param2 = _param2;
+        graph = _graph;
+        rg = _rg;
+    }
 
     public ThreadGUIElement (Frame _frame, int _function, String _param0, String _param1, String _param2) {
         frame = _frame;
@@ -98,7 +111,7 @@ public class ThreadGUIElement extends Thread {
             start();
             jdc = new JDialogCancel(frame, param0, param1, sge);
             GraphicLib.centerOnParent(jdc, 300, 200 );
-         //   jdc.setSize(300, 200);
+            //   jdc.setSize(300, 200);
             jdc.setVisible(true);
             jdc = null;
         } else {
@@ -110,12 +123,12 @@ public class ThreadGUIElement extends Thread {
                 break;
             case 0:
             default:
-                jfs = new JFrameStatistics(param0, param1);
+                jfs = new JFrameStatistics(param0, param1, graph);
                 sge = (StoppableGUIElement)jfs;
             }
             start();
             jdc = new JDialogCancel(frame, param0, param2, sge);
-          //  jdc.setSize(400, 200);
+            //  jdc.setSize(400, 200);
             GraphicLib.centerOnParent(jdc, 400, 200 );
             jdc.setVisible(true);
             jdc = null;
@@ -163,7 +176,7 @@ public class ThreadGUIElement extends Thread {
                     jdc.stopAll();
                 }
                 jfs.setIconImage(IconManager.img8);
-              //  jfs.setSize(600, 600);
+                //  jfs.setSize(600, 600);
                 GraphicLib.centerOnParent(jfs, 600, 600 );
                 jfs.setVisible(true);
                 //System.out.println("setting visible");

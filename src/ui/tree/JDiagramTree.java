@@ -59,7 +59,7 @@ import ui.graph.*;
 import myutil.*;
 
 
-public class JDiagramTree extends javax.swing.JTree implements MouseListener, TreeExpansionListener, TreeSelectionListener, Runnable   {
+public class JDiagramTree extends javax.swing.JTree implements ActionListener, MouseListener, TreeExpansionListener, TreeSelectionListener, Runnable   {
     private boolean toUpdate = false;
     private MainGUI mgui;
     private DiagramTreeModel dtm;
@@ -68,6 +68,14 @@ public class JDiagramTree extends javax.swing.JTree implements MouseListener, Tr
     private Set m_expandedTreePaths = new HashSet();
     private TreePath[] m_selectedTreePaths = new TreePath[0];
     //private boolean m_nodeWasSelected = false;
+
+    protected JMenuItem jmiAnalyze;
+    protected JMenuItem jmiShow;
+    protected JMenuItem jmiMinimize;
+    protected JMenuItem jmiRemove;
+    protected JPopupMenu popupTree;
+    protected RG selectedRG;
+
 
 
     /** Creates new form  */
@@ -107,13 +115,13 @@ public class JDiagramTree extends javax.swing.JTree implements MouseListener, Tr
     }
 
     public void mousePressed(MouseEvent e) {
-	if(SwingUtilities.isRightMouseButton(e)){
-	    if (e.isPopupTrigger()) myPopupEvent(e);
-	}
+        if(SwingUtilities.isRightMouseButton(e)){
+            if (e.isPopupTrigger()) myPopupEvent(e);
+        }
     }
 
     public void mouseReleased(MouseEvent e) {
-	if (e.isPopupTrigger()) myPopupEvent(e);
+        //if (e.isPopupTrigger()) myPopupEvent(e);
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -131,25 +139,40 @@ public class JDiagramTree extends javax.swing.JTree implements MouseListener, Tr
 
 
     private void myPopupEvent(MouseEvent e) {
-            int x = e.getX();
-            int y = e.getY();
-            JTree tree = (JTree)e.getSource();
-            TreePath path = tree.getPathForLocation(x, y);
-            if (path == null)
-                return; 
+        int x = e.getX();
+        int y = e.getY();
+        JTree tree = (JTree)e.getSource();
+        TreePath path = tree.getPathForLocation(x, y);
+        if (path == null)
+            return;
 
-            tree.setSelectionPath(path);
+        tree.setSelectionPath(path);
 
-            Object obj = path.getLastPathComponent();
+        Object obj = path.getLastPathComponent();
 
-            //String label = "popup: " + obj.getTreeLabel();
-	    TraceManager.addDev("Adding popup menu to " + obj.getClass() + "/" + obj);
-            JPopupMenu popup = new JPopupMenu();
-	    if (obj instanceof RG) {
-		popup.add(new JMenuItem("toto"));
-		popup.show(tree, x, y);
+        //String label = "popup: " + obj.getTreeLabel();
+        TraceManager.addDev("Adding popup menu to " + obj.getClass() + "/" + obj);
+        if (obj instanceof RG) {
+	    selectedRG = (RG)obj;
+            if (popupTree == null) {
+                popupTree = new JPopupMenu();
+		jmiAnalyze = new JMenuItem("Analyze");
+		jmiAnalyze.addActionListener(this);
+		jmiShow = new JMenuItem("Show");
+		jmiShow.addActionListener(this);
+		jmiMinimize = new JMenuItem("Minimize");
+		jmiMinimize.addActionListener(this);
+		jmiRemove = new JMenuItem("Remove");
+		jmiRemove.addActionListener(this);
+		popupTree.add(jmiAnalyze);
+		popupTree.add(jmiShow);
+		popupTree.add(jmiMinimize);
+		popupTree.addSeparator();
+		popupTree.add(jmiRemove);
 	    }
+	    popupTree.show(tree, x, y);
         }
+    }
 
     public synchronized void run(){
         checkPaths();
@@ -305,12 +328,19 @@ public class JDiagramTree extends javax.swing.JTree implements MouseListener, Tr
                 mgui.selectTab(ce.getTMLTask().getName());
             }
         } else if (nodeInfo instanceof RG) {
-	    /*RG rg = (RG)nodeInfo;
-	    if (rg.data != null) {
-		mgui.showAUT("Last RG", rg.data);
-		}*/
-	    
-	}
+            /*RG rg = (RG)nodeInfo;
+              if (rg.data != null) {
+              mgui.showAUT("Last RG", rg.data);
+              }*/
+
+        }
     }
 
+    public void actionPerformed(ActionEvent ae) {
+	if (selectedRG != null) {
+	    if (ae.getSource() == jmiShow) {
+		mgui.showAUTFromRG("Last RG", selectedRG);
+	    }   
+	}
+    }
 }

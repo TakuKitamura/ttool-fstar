@@ -424,7 +424,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
     public void showGraph() {
         if (graphAUT != null) {
-            mgui.showAUT("Last RG", graphAUT);
+            mgui.showAUTFromString("Last RG", graphAUT);
         }
     }
 
@@ -572,7 +572,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 		
 		try {
                     RG rg = new RG(autfile);
-                    rg.data = graphAUT;
+                    rg.data = graphAUT;		   
                     rg.fileName = autfile;
                     mgui.addRG(rg);
                     FileUtils.saveFile(autfile, graphAUT);

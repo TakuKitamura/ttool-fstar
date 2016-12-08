@@ -402,7 +402,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     private Map<String, String> statusMap = new HashMap<String, String>();
     private JFrameInteractiveSimulation jfis;
     private JFrameAvatarInteractiveSimulation jfais;
-   
+
     // Invariants
     Invariant currentInvariant;
 
@@ -694,7 +694,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_TTOOL_CONFIGURATION].setEnabled(true);
             actions[TGUIAction.ACT_TURTLE_WEBSITE].setEnabled(true);
             actions[TGUIAction.ACT_TURTLE_DOCUMENTATION].setEnabled(true);
-	    actions[TGUIAction.ACT_SYSMLSEC_DOCUMENTATION].setEnabled(true);
+            actions[TGUIAction.ACT_SYSMLSEC_DOCUMENTATION].setEnabled(true);
             actions[TGUIAction.ACT_DIPLODOCUS_DOCUMENTATION].setEnabled(true);
             actions[TGUIAction.ACT_VIEW_SAVED_LOT].setEnabled(true);
             actions[TGUIAction.ACT_VIEW_SAVED_DOT].setEnabled(true);
@@ -735,7 +735,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_DIAGRAM_CAPTURE].setEnabled(true);
             actions[TGUIAction.ACT_SVG_DIAGRAM_CAPTURE].setEnabled(true);
             actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE].setEnabled(true);
-	    actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE_SVG].setEnabled(true);
+            actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE_SVG].setEnabled(true);
             actions[TGUIAction.ACT_GEN_DOC].setEnabled(true);
             actions[TGUIAction.ACT_GEN_DOC_REQ].setEnabled(true);
             actions[TGUIAction.ACT_VIEW_JAVA].setEnabled(true);
@@ -757,14 +757,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_SAVE_TIF].setEnabled(true);
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(true);
-	    actions[TGUIAction.ACT_DSE].setEnabled(true);
+            actions[TGUIAction.ACT_DSE].setEnabled(true);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);
             actions[TGUIAction.ACT_GEN_JAVA].setEnabled(true);
             actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(true);
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
             actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(true);
-	    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(true);
+            actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(true);
             break;
 
         case MODEL_UPPAAL_OK:
@@ -779,7 +779,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             break;
         case MODEL_PROVERIF_OK:
             actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(true);
-	    
+
             break;
         case EDIT_PROVERIF_OK:
             actions[TGUIAction.ACT_VIEW_RTLOTOS].setEnabled(true);
@@ -801,7 +801,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(true);
             actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS].setEnabled(true);
             actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(true);
-	    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(true);
+            actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(true);
             break;
         case ATTACKTREE_SYNTAXCHECKING_OK:
             actions[TGUIAction.ACT_AVATAR_SIM].setEnabled(true);
@@ -809,7 +809,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(false);
-	    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(true);
+            actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(true);
             break;
         case REQ_OK:
             //actions[TGUIAction.ACT_VIEW_MATRIX].setEnabled(true);
@@ -844,7 +844,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
             actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
-	    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
+            actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
             actions[TGUIAction.ACT_SIMULATION].setEnabled(false);
             actions[TGUIAction.ACT_VALIDATION].setEnabled(false);
@@ -858,7 +858,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         case METHO_CHANGED:
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(false);
-	    actions[TGUIAction.ACT_DSE].setEnabled(false);
+            actions[TGUIAction.ACT_DSE].setEnabled(false);
             actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
             actions[TGUIAction.ACT_SIMULATION].setEnabled(false);
             actions[TGUIAction.ACT_VALIDATION].setEnabled(false);
@@ -870,7 +870,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_GEN_CCODE].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
             actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
-	    //actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
+            //actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
@@ -879,7 +879,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         case PANEL_CHANGED:
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(false);
-	    actions[TGUIAction.ACT_DSE].setEnabled(false);
+            actions[TGUIAction.ACT_DSE].setEnabled(false);
             actions[TGUIAction.ACT_GEN_JAVA].setEnabled(false);
             actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(false);
             actions[TGUIAction.ACT_GEN_DESIGN].setEnabled(false);
@@ -890,7 +890,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
             actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
-	    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
+            actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
             actions[TGUIAction.ACT_SIMULATION].setEnabled(false);
             actions[TGUIAction.ACT_VALIDATION].setEnabled(false);
@@ -1106,12 +1106,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public ArrayList<RG> getRGs() {
-	return gtm.getRGs();
+        return gtm.getRGs();
     }
 
     public void addRG(RG _newGraph) {
-	gtm.addRG(_newGraph);
-	dtree.toBeUpdated();
+        gtm.addRG(_newGraph);
+        dtree.toBeUpdated();
     }
 
 
@@ -1446,11 +1446,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             if (tp instanceof TMLDesignPanel) {
                 list.addAll(((TMLDesignPanel)tp).getAllTMLTaskNames(mainTabbedPane.getTitleAt(i)));
             }
-	    if (tp instanceof TMLComponentDesignPanel) {
+            if (tp instanceof TMLComponentDesignPanel) {
                 list.addAll(((TMLComponentDesignPanel)tp).getAllTMLTaskNames(mainTabbedPane.getTitleAt(i)));
             }
         }
-	
+
         return list;
     }
     public Vector getAllApplicationTMLTasksAttributes() {
@@ -1526,8 +1526,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         for(int i=0; i<tabs.size(); i++) {
             tp = (TURTLEPanel)(tabs.elementAt(i));
             /*if (tp instanceof TMLDesignPanel) {
-                list.addAll(((TMLDesignPanel)tp).getAllTMLChannelNames( mainTabbedPane.getTitleAt(i)) );
-            } else*/
+              list.addAll(((TMLDesignPanel)tp).getAllTMLChannelNames( mainTabbedPane.getTitleAt(i)) );
+              } else*/
             if( tp instanceof TMLComponentDesignPanel ) {
                 list.addAll(((TMLComponentDesignPanel)tp).getAllTMLInputPorts( mainTabbedPane.getTitleAt(i)) );
             }
@@ -1605,7 +1605,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public Vector<String> getAllCompositeComponent(TMLComponentTaskDiagramPanel tcdp) {
         TURTLEPanel tp;
         Vector<String> list = new Vector<String>();
-       // boolean b;
+        // boolean b;
 
         for(int i=0; i<tabs.size(); i++) {
             tp = (TURTLEPanel)(tabs.elementAt(i));
@@ -1929,9 +1929,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void drawAvatarSpecification(AvatarSpecification av) {
-	int index = createAvatarDesign("GeneratedDesign");
-	AvatarDesignPanel adp = (AvatarDesignPanel)(tabs.elementAt(index));
-	gtm.drawPanel(av, adp);
+        int index = createAvatarDesign("GeneratedDesign");
+        AvatarDesignPanel adp = (AvatarDesignPanel)(tabs.elementAt(index));
+        gtm.drawPanel(av, adp);
     }
 
 
@@ -2026,19 +2026,19 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void setStatusBarText(String s) {
         // captitalizeFirstLetter
-	if (s == null)  {
-	    return;
-	}
+        if (s == null)  {
+            return;
+        }
 
-	if (s.length() == 0) {
-	    return;
-	}
+        if (s.length() == 0) {
+            return;
+        }
 
-	if (s.length() > 1) {
-	    status.setText(s.substring(0, 1).toUpperCase() + s.substring(1, s.length()));
-	} else {
-	    status.setText(s);
-	}
+        if (s.length() > 1) {
+            status.setText(s.substring(0, 1).toUpperCase() + s.substring(1, s.length()));
+        } else {
+            status.setText(s);
+        }
     }
 
     public void reinitMainTabbedPane() {
@@ -3495,12 +3495,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     //setMode(MainGUI.MODEL_PROVERIF_OK);
                     //setMode(MainGUI.GEN_DESIGN_OK);
                     /*
-                    if (!automatic) {
-                        JOptionPane.showMessageDialog(frame,
-                                                      "0 error, " + getCheckingWarnings().size() + " warning(s). You can now perform simulations or formal proofs (UPPAAL)",
-                                                      "Syntax analysis successful on avatar design diagrams",
-                                                      JOptionPane.INFORMATION_MESSAGE);
-                    }
+                      if (!automatic) {
+                      JOptionPane.showMessageDialog(frame,
+                      "0 error, " + getCheckingWarnings().size() + " warning(s). You can now perform simulations or formal proofs (UPPAAL)",
+                      "Syntax analysis successful on avatar design diagrams",
+                      JOptionPane.INFORMATION_MESSAGE);
+                      }
                     */
                 } else {
                     if (!automatic) {
@@ -3921,15 +3921,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public Vector<String> getAllCryptoConfig(){
-	TURTLEPanel tp;
+        TURTLEPanel tp;
         Vector<String> list = new Vector<String>();
 
         for(int i=0; i<tabs.size(); i++) {
             tp = (TURTLEPanel)(tabs.elementAt(i));
             if (tp instanceof TMLComponentDesignPanel) {
-		for (String s: ((TMLComponentDesignPanel)tp).getAllCryptoConfig()){
-		     list.add(mainTabbedPane.getTitleAt(i)+"::"+s);
-		}
+                for (String s: ((TMLComponentDesignPanel)tp).getAllCryptoConfig()){
+                    list.add(mainTabbedPane.getTitleAt(i)+"::"+s);
+                }
             }
         }
         return list;
@@ -3941,8 +3941,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
         ArrayList<String> strlist = tmlcomp.getAllCryptoConfig();
         String[] strarray = new String[strlist.size()];
-	strlist.toArray(strarray); 
-	return strarray;
+        strlist.toArray(strarray);
+        return strarray;
     }
     public String[] getAllNonce(){
         TURTLEPanel tp = getCurrentTURTLEPanel();
@@ -3951,8 +3951,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
         ArrayList<String> strlist = tmlcomp.getAllNonce();
         String[] strarray = new String[strlist.size()];
-	strlist.toArray(strarray); 
-	return strarray;
+        strlist.toArray(strarray);
+        return strarray;
     }
 
     public ArrayList<String> getAllKeys(){
@@ -3962,12 +3962,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         for(int i=0; i<tabs.size(); i++) {
             tp = (TURTLEPanel)(tabs.elementAt(i));
             if (tp instanceof TMLComponentDesignPanel) {
-        	for (String s:((TMLComponentDesignPanel)tp).getAllKeys()){
-		    list.add(s);
-		}
-	    }
-	}
-	return list;
+                for (String s:((TMLComponentDesignPanel)tp).getAllKeys()){
+                    list.add(s);
+                }
+            }
+        }
+        return list;
     }
 
     public String[] getAllOutRequests() {
@@ -4014,25 +4014,25 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             adp.modelBacktracingProVerif(pvoa);
             getCurrentTDiagramPanel().repaint();
         }
-	else if (tp instanceof TMLArchiPanel) {
-	  /*  for (int i=0; i<tabs.size(); i++){
-		tp = (TURTLEPanel)(tabs.elementAt(i));
+        else if (tp instanceof TMLArchiPanel) {
+            /*  for (int i=0; i<tabs.size(); i++){
+                tp = (TURTLEPanel)(tabs.elementAt(i));
                 if (tp instanceof TMLComponentDesignPanel) {
-                    ((TMLComponentDesignPanel)tp).modelBacktracingProVerif(pvoa);
+                ((TMLComponentDesignPanel)tp).modelBacktracingProVerif(pvoa);
                 }
-	    }*/
-	    gtm.getTMLMapping().getTMLModeling().clearBacktracing();
-	    gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, getTabName(tp));
-	    gtm.getTML2Avatar().backtraceReachability(pvoa.getReachableEvents(), pvoa.getNonReachableEvents());
-	    gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getSatisfiedAuthenticity(), pvoa.getSatisfiedWeakAuthenticity(), pvoa.getNonSatisfiedAuthenticity(), getTabName(tp));
-	}
-	else if (tp instanceof TMLComponentDesignPanel){
-	    gtm.getTMLMapping().getTMLModeling().clearBacktracing();
-	    gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, "Default Mapping");
-	    gtm.getTML2Avatar().backtraceReachability(pvoa.getReachableEvents(), pvoa.getNonReachableEvents());
-	    gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getSatisfiedAuthenticity(), pvoa.getSatisfiedWeakAuthenticity(), pvoa.getNonSatisfiedAuthenticity(), "Default Mapping");
-	}
-	return;
+                }*/
+            gtm.getTMLMapping().getTMLModeling().clearBacktracing();
+            gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, getTabName(tp));
+            gtm.getTML2Avatar().backtraceReachability(pvoa.getReachableEvents(), pvoa.getNonReachableEvents());
+            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getSatisfiedAuthenticity(), pvoa.getSatisfiedWeakAuthenticity(), pvoa.getNonSatisfiedAuthenticity(), getTabName(tp));
+        }
+        else if (tp instanceof TMLComponentDesignPanel){
+            gtm.getTMLMapping().getTMLModeling().clearBacktracing();
+            gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, "Default Mapping");
+            gtm.getTML2Avatar().backtraceReachability(pvoa.getReachableEvents(), pvoa.getNonReachableEvents());
+            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getSatisfiedAuthenticity(), pvoa.getSatisfiedWeakAuthenticity(), pvoa.getNonSatisfiedAuthenticity(), "Default Mapping");
+        }
+        return;
     }
 
     public void modelBacktracingUPPAAL(HashMap<String, Integer> verifMap) {
@@ -4126,7 +4126,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // 1: ok, code already generated
     public int generateTURTLEModelingFromState(int state, boolean automatic, int generator) {
         if (state == 1) {
-	    TraceManager.addDev("Generating from state 1");
+            TraceManager.addDev("Generating from state 1");
             if (generateTIFFromMapping(automatic, generator)) {
                 return 1;
             }
@@ -4279,14 +4279,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         jgen.setVisible(true);
         dtree.toBeUpdated();
     }
-    
+
     public void dse(){
-	TraceManager.addDev("Design space exploration");
-	JDialogDSE jdse= new JDialogDSE(frame, this, "Design Space Exploration", ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.TMLCodeDirectory);
-	jdse.setSize(600,800);
+        TraceManager.addDev("Design space exploration");
+        JDialogDSE jdse= new JDialogDSE(frame, this, "Design Space Exploration", ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.TMLCodeDirectory);
+        jdse.setSize(600,800);
         GraphicLib.centerOnParent(jdse);
         jdse.setVisible(true);
-	dtree.toBeUpdated();
+        dtree.toBeUpdated();
     }
 
     public void avatarStaticAnalysis() {
@@ -4331,20 +4331,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TraceManager.addDev("Generate UPPAAL! showwindow=" + showWindow);
         //gtm.mergeChoices(true);
         if (gtm.getTURTLEModelingState() > 0) {
-        	TraceManager.addDev("4173");
+            TraceManager.addDev("4173");
             if (gtm.getTURTLEModelingState() == 3) {
                 //AVATAR
                 boolean result = gtm.generateUPPAALFromAVATAR(ConfigurationTTool.UPPAALCodeDirectory);
-        	TraceManager.addDev("4177");
+                TraceManager.addDev("4177");
                 if (showWindow) {
-        	TraceManager.addDev("4178");
+                    TraceManager.addDev("4178");
                     if (result) {
                         JOptionPane.showMessageDialog(frame,
                                                       "0 error, " + getCheckingWarnings().size() + " warning(s). UPPAAL specification generated",
                                                       "Successful translation to UPPAAL",
                                                       JOptionPane.INFORMATION_MESSAGE);
                     }
-		    else {
+                    else {
                         JOptionPane.showMessageDialog(frame,
                                                       "" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). UPPAAL specification could NOT be generated",
                                                       "Translation to UPPAAL failed",
@@ -4353,17 +4353,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
                     }
                 }
-        		TraceManager.addDev("4196");
+                TraceManager.addDev("4196");
                 if (!result) {
                     return;
                 }
             }
-	    else {
+            else {
                 /*if (generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, UPPAAL) == -1) {
-		    TraceManager.addDev("4202 - UPPAAL generation failed");
-                    return;
-		    }*/
-		TraceManager.addDev( "About to open the window at line 4198" );
+                  TraceManager.addDev("4202 - UPPAAL generation failed");
+                  return;
+                  }*/
+                TraceManager.addDev( "About to open the window at line 4198" );
                 if (showWindow) {
                     JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.DIPLODOCUS_MODE);
                     jgen.setSize(450, 500);
@@ -4375,7 +4375,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             }
         }
 
-	TraceManager.addDev( "gtm.getTURTLEModelingState() <= 0)" );
+        TraceManager.addDev( "gtm.getTURTLEModelingState() <= 0)" );
         //TraceManager.addDev("After UPPAAL");
         if (showWindow) {
             JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.TURTLE_MODE);
@@ -4387,17 +4387,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void avatarModelChecker() {
-	TraceManager.addDev("Execute avatar model checker");
-	gtm.generateAvatarFromTML(true,false);
-	if (gtm.getAvatarSpecification()==null){
-	    return;
-    }
-	JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(), ConfigurationTTool.TGraphPath);
+        TraceManager.addDev("Execute avatar model checker");
+        gtm.generateAvatarFromTML(true,false);
+        if (gtm.getAvatarSpecification()==null){
+            return;
+        }
+        JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(), ConfigurationTTool.TGraphPath);
         jmc.setSize(550, 600);
         GraphicLib.centerOnParent(jmc);
         jmc.setVisible(true);
     }
-    
+
 
     public void generateProVerif() {
         TraceManager.addDev("Generate ProVerif!");
@@ -4583,10 +4583,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public String generateCCode() {
 
-//        String path = ConfigurationTTool.FILEPath;
-//        if( file != null ) {
-//            path = file.getAbsolutePath();
-//        }
+        //        String path = ConfigurationTTool.FILEPath;
+        //        if( file != null ) {
+        //            path = file.getAbsolutePath();
+        //        }
         JDialogCCodeGeneration jgen = new JDialogCCodeGeneration( frame, this, "Application code generation and compilation",
                                                                   ConfigurationTTool.SystemCHost, ConfigurationTTool.CCodeDirectory,
                                                                   "make -C " + ConfigurationTTool.CCodeDirectory,
@@ -4898,13 +4898,33 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
     }
 
-    public void showAUT(String title, String data) {
+    public void showAUTFromString(String title, String data) {
         /*JFrameStatistics jfs = new JFrameStatistics(title, data);
           jfs.setIconImage(IconManager.img8);
           jfs.setSize(600, 600);
           GraphicLib.centerOnParent(jfs);
           jfs.setVisible(true);*/
-        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, data, "Analyzing graph... Please wait");
+        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, data, "Analyzing graph... Please wait", null, null);
+        t.go();
+    }
+
+    public void showAUTFromGraph(String title, AUTGraph graph) {
+        /*JFrameStatistics jfs = new JFrameStatistics(title, data);
+          jfs.setIconImage(IconManager.img8);
+          jfs.setSize(600, 600);
+          GraphicLib.centerOnParent(jfs);
+          jfs.setVisible(true);*/
+        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, null, "Analyzing graph... Please wait", graph, null);
+        t.go();
+    }
+
+    public void  showAUT(String title, String data, AUTGraph graph) {
+        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, data, "Analyzing graph... Please wait", graph, null);
+        t.go();
+    }
+
+    public void  showAUTFromRG(String title, RG rg) {
+        ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, rg.data, "Analyzing graph... Please wait", rg.graph, rg);
         t.go();
     }
 
@@ -4934,7 +4954,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void statAUT() {
-        showAUT("Analysis on the last RG (AUT format)", gtm.getLastTextualRGAUT());
+        showAUTFromString("Analysis on the last RG (AUT format)", gtm.getLastTextualRGAUT());
     }
 
     public void statAUTDiplodocus() {
@@ -4947,18 +4967,18 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             return;
         }
 
-        showAUT("Analysis on the last DIPLODOCUS RG", spec);
+        showAUTFromString("Analysis on the last DIPLODOCUS RG", spec);
     }
 
     public void statAUTProj() {
-        showAUT("Analysis on the last minimized RG (AUT format)", gtm.getLastTextualRGAUTProj());
+        showAUTFromString("Analysis on the last minimized RG (AUT format)", gtm.getLastTextualRGAUTProj());
     }
 
     public void statSavedAUT() {
         //TraceManager.addDev("toto");
         String graph[] = loadAUTGraph();
         if (graph != null) {
-            showAUT("Analysis on " + graph[0], graph[1]);
+            showAUTFromString("Analysis on " + graph[0], graph[1]);
         }
     }
 
@@ -5293,7 +5313,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         File file = selectFileForCapture();
         if (file == null)
-	return;
+            return;
 
         TURTLEPanel tp = getCurrentTURTLEPanel();
         TDiagramPanel tdp1;
@@ -5314,18 +5334,18 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             }
             file1 = FileUtils.addFileExtensionIfMissing(file1, TImgFilter.getExtension());
             if (!writeImageCapture(image, file1, false)) {
-		JOptionPane.showMessageDialog(frame,
-                                      "Diagrams could NOT be captured in png format",
-                                      "Capture failed",
-                                      JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame,
+                                              "Diagrams could NOT be captured in png format",
+                                              "Capture failed",
+                                              JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
             if (i ==0) {
                 if (!writeImageCapture(image, file, false)) {
-		    JOptionPane.showMessageDialog(frame,
-                                      "Diagrams could NOT be captured in png format",
-                                      "Capture failed",
-                                      JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(frame,
+                                                  "Diagrams could NOT be captured in png format",
+                                                  "Capture failed",
+                                                  JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
             }
@@ -5358,34 +5378,34 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         name = name.substring(0, name.length() - 4);
 
         //boolean actions;
-	for(int j=0; j<tabs.size(); j++) {
-	    tp = (TURTLEPanel)(tabs.get(j));
-	    for(int i=0; i<tp.panels.size(); i++) {
-		tdp1 = (TDiagramPanel)(tp.panels.elementAt(i));
-		tdp1.repaint();
+        for(int j=0; j<tabs.size(); j++) {
+            tp = (TURTLEPanel)(tabs.get(j));
+            for(int i=0; i<tp.panels.size(); i++) {
+                tdp1 = (TDiagramPanel)(tp.panels.elementAt(i));
+                tdp1.repaint();
 
-		tdp1.performMinimalCapture();
-		String svgImg = tdp1.svgCapture();
-		
-		if (i < 10) {
-		    file1 = new File(name + j + "_" + "0" + i);
-		} else {
-		    file1 = new File(name + j + "_" + i);
-		}
-		file1 = FileUtils.addFileExtensionIfMissing(file1, TSVGFilter.getExtension());
-		try {
-		    FileUtils.saveFile(file1, svgImg);
-		} catch(Exception e) {
-		    JOptionPane.showMessageDialog(frame,
-						  "Diagrams could NOT be captured in svg format",
-						  "Capture failed",
-						  JOptionPane.INFORMATION_MESSAGE);
-		    return;
-		}
-		
-	    }
-	}
-	
+                tdp1.performMinimalCapture();
+                String svgImg = tdp1.svgCapture();
+
+                if (i < 10) {
+                    file1 = new File(name + j + "_" + "0" + i);
+                } else {
+                    file1 = new File(name + j + "_" + i);
+                }
+                file1 = FileUtils.addFileExtensionIfMissing(file1, TSVGFilter.getExtension());
+                try {
+                    FileUtils.saveFile(file1, svgImg);
+                } catch(Exception e) {
+                    JOptionPane.showMessageDialog(frame,
+                                                  "Diagrams could NOT be captured in svg format",
+                                                  "Capture failed",
+                                                  JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+
+            }
+        }
+
         JOptionPane.showMessageDialog(frame,
                                       "All diagrams were sucessfully captured in svg format",
                                       "Capture ok",
@@ -6641,7 +6661,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return getAvatarADDPanel(tp, indexTab, s);
     }
 
-     public ADDDiagramPanel getAvatarADDPanelByIndex(int index, int indexTab) {
+    public ADDDiagramPanel getAvatarADDPanelByIndex(int index, int indexTab) {
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
         return getAvatarADDPanelByIndex(tp, indexTab);
     }
@@ -6667,9 +6687,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //TraceManager.addDev("index=" + indexTab + " s=" + s + "title=" +tp.tabbedPane.getTitleAt(indexTab));
 
         //if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
-            return (ADDDiagramPanel)(tp.panelAt(indexTab));
-	    //}
-        
+        return (ADDDiagramPanel)(tp.panelAt(indexTab));
+        //}
+
     }
 
     public AvatarCDPanel getAvatarCDPanel(int index, int indexTab, String s) {
@@ -7147,31 +7167,31 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         activetdp.setDraw(false);
     }
 
-//    private void activateDrawing(TDiagramPanel tdp, JTabbedPane good, Vector goodV, JTabbedPane wrong, Vector wrongV) {
-//        int i;
-//        TDiagramPanel tdp2;
-//
-//        for(i=0; i<good.getTabCount(); i++) {
-//            tdp2 = (TDiagramPanel)(goodV.elementAt(i));
-//            if (tdp2 == tdp) {
-//                tdp2.setDraw(true);
-//                if (tdp2.mode == TDiagramPanel.SELECTED_COMPONENTS) {
-//                    setMode(MainGUI.CUTCOPY_OK);
-//                    setMode(MainGUI.EXPORT_LIB_OK);
-//                } else {
-//                    setMode(MainGUI.CUTCOPY_KO);
-//                    setMode(MainGUI.EXPORT_LIB_KO);
-//                }
-//            } else {
-//                tdp2.setDraw(false);
-//            }
-//        }
-//
-//        for(i=0; i<wrong.getTabCount(); i++) {
-//            tdp2 = (TDiagramPanel)(wrongV.elementAt(i));
-//            tdp2.setDraw(false);
-//        }
-//    }
+    //    private void activateDrawing(TDiagramPanel tdp, JTabbedPane good, Vector goodV, JTabbedPane wrong, Vector wrongV) {
+    //        int i;
+    //        TDiagramPanel tdp2;
+    //
+    //        for(i=0; i<good.getTabCount(); i++) {
+    //            tdp2 = (TDiagramPanel)(goodV.elementAt(i));
+    //            if (tdp2 == tdp) {
+    //                tdp2.setDraw(true);
+    //                if (tdp2.mode == TDiagramPanel.SELECTED_COMPONENTS) {
+    //                    setMode(MainGUI.CUTCOPY_OK);
+    //                    setMode(MainGUI.EXPORT_LIB_OK);
+    //                } else {
+    //                    setMode(MainGUI.CUTCOPY_KO);
+    //                    setMode(MainGUI.EXPORT_LIB_KO);
+    //                }
+    //            } else {
+    //                tdp2.setDraw(false);
+    //            }
+    //        }
+    //
+    //        for(i=0; i<wrong.getTabCount(); i++) {
+    //            tdp2 = (TDiagramPanel)(wrongV.elementAt(i));
+    //            tdp2.setDraw(false);
+    //        }
+    //    }
 
     public void paneAction(ChangeEvent e) {
         //TraceManager.addDev("Pane action");
@@ -7362,8 +7382,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     }
     public void cloneRenameTab(int index, String s){
-	cloneTab(index);
-	mainTabbedPane.setTitleAt(tabs.size()-1, mainTabbedPane.getTitleAt(index)+"_"+s);
+        cloneTab(index);
+        mainTabbedPane.setTitleAt(tabs.size()-1, mainTabbedPane.getTitleAt(index)+"_"+s);
     }
     public void requestRemoveTab(int index) {
         if (index >= tabs.size()) {
@@ -7854,12 +7874,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return statusMap;
     }
 
-	public String getStatus(String s){
-		if (statusMap==null){
-			return null;
-		}
-		return statusMap.get(s);
-	}
+    public String getStatus(String s){
+        if (statusMap==null){
+            return null;
+        }
+        return statusMap.get(s);
+    }
     public synchronized LoadInfo isLoadID(int id) {
         if (loadIDs == null) {
             return null;
@@ -7896,15 +7916,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
     }
     public synchronized void resetTransactions() {
-	transactionMap.clear();
-	TDiagramPanel tdp = getCurrentTDiagramPanel();
+        transactionMap.clear();
+        TDiagramPanel tdp = getCurrentTDiagramPanel();
         if (tdp != null) {
             tdp.repaint();
         }
     }
     public synchronized void resetStatus() {
-	statusMap.clear();
-	TDiagramPanel tdp = getCurrentTDiagramPanel();
+        statusMap.clear();
+        TDiagramPanel tdp = getCurrentTDiagramPanel();
         if (tdp != null) {
             tdp.repaint();
         }
@@ -7957,25 +7977,25 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
     }
     public synchronized void addTransaction(int _id, SimulationTransaction st){
-	if (transactionMap.containsKey(_id)){
-	    if (!transactionMap.get(_id).contains(st)){
-	    	transactionMap.get(_id).add(st);	
-	    }
-	}
-	else {
-	    ArrayList<SimulationTransaction> ts = new ArrayList<SimulationTransaction>();
-	    ts.add(st);
-	    transactionMap.put(_id, ts);
-	}
-	TDiagramPanel tdp = getCurrentTDiagramPanel();
+        if (transactionMap.containsKey(_id)){
+            if (!transactionMap.get(_id).contains(st)){
+                transactionMap.get(_id).add(st);
+            }
+        }
+        else {
+            ArrayList<SimulationTransaction> ts = new ArrayList<SimulationTransaction>();
+            ts.add(st);
+            transactionMap.put(_id, ts);
+        }
+        TDiagramPanel tdp = getCurrentTDiagramPanel();
         if (tdp != null) {
             tdp.repaint();
         }
     }
 
     public synchronized void addStatus(String task, String stat){
-	statusMap.put(task, stat);
-	TDiagramPanel tdp = getCurrentTDiagramPanel();
+        statusMap.put(task, stat);
+        TDiagramPanel tdp = getCurrentTDiagramPanel();
         if (tdp != null) {
             tdp.repaint();
         }
@@ -8260,8 +8280,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             aboutTURTLE();
         } else if (command.equals(actions[TGUIAction.ACT_TURTLE_DOCUMENTATION].getActionCommand())) {
             helpTURTLE();
-	} else if (command.equals(actions[TGUIAction.ACT_SYSMLSEC_DOCUMENTATION].getActionCommand())) {
-            helpSysMLSec();   
+        } else if (command.equals(actions[TGUIAction.ACT_SYSMLSEC_DOCUMENTATION].getActionCommand())) {
+            helpSysMLSec();
         } else if (command.equals(actions[TGUIAction.ACT_DIPLODOCUS_DOCUMENTATION].getActionCommand())) {
             helpDIPLODOCUS();
         } else if (command.equals(actions[TGUIAction.ACT_MODEL_CHECKING].getActionCommand())) {
@@ -8376,7 +8396,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             svgDiagramCapture();
         } else if (command.equals(actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE].getActionCommand())) {
             allDiagramCapture();
-	} else if (command.equals(actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE_SVG].getActionCommand())) {
+        } else if (command.equals(actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE_SVG].getActionCommand())) {
             allDiagramCaptureSvg();
         } else if (command.equals(actions[TGUIAction.ACT_SELECTED_CAPTURE].getActionCommand())) {
             selectedCapture();
@@ -8512,7 +8532,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARRD_REQUIREMENT);
         } else if (command.equals(actions[TGUIAction.ARD_PROPERTY].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARRD_PROPERTY);
-	} else if (command.equals(actions[TGUIAction.ARD_ELEMENT_REFERENCE].getActionCommand())) {
+        } else if (command.equals(actions[TGUIAction.ARD_ELEMENT_REFERENCE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARRD_ELEMENT_REFERENCE);
         } else if (command.equals(actions[TGUIAction.ARD_DERIVE_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_DERIVE_CONNECTOR);
@@ -8520,7 +8540,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_REFINE_CONNECTOR);
         } else if (command.equals(actions[TGUIAction.ARD_VERIFY_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_VERIFY_CONNECTOR);
-	} else if (command.equals(actions[TGUIAction.ARD_SATISFY_CONNECTOR].getActionCommand())) {
+        } else if (command.equals(actions[TGUIAction.ARD_SATISFY_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_SATISFY_CONNECTOR);
         } else if (command.equals(actions[TGUIAction.ARD_COPY_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_COPY_CONNECTOR);
@@ -8628,7 +8648,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         else if (command.equals(actions[TGUIAction.ADD_VGMNNODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_VGMNNODE);
         }
-	else if (command.equals(actions[TGUIAction.ADD_CROSSBARNODE].getActionCommand())) {
+        else if (command.equals(actions[TGUIAction.ADD_CROSSBARNODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_CROSSBARNODE);
         }
         else if (command.equals(actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) {
@@ -8887,9 +8907,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_SELECT_EVT);
         } else if (command.equals(actions[TGUIAction.TMLAD_RANDOM].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_RANDOM);
- 	} else if (command.equals(actions[TGUIAction.TMLAD_ENCRYPT].getActionCommand())) {
+        } else if (command.equals(actions[TGUIAction.TMLAD_ENCRYPT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_ENCRYPT);
- 	} else if (command.equals(actions[TGUIAction.TMLAD_DECRYPT].getActionCommand())) {
+        } else if (command.equals(actions[TGUIAction.TMLAD_DECRYPT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_DECRYPT);
         } else if (command.equals(actions[TGUIAction.TMLCTD_CCOMPONENT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCTD_CCOMPONENT);
@@ -8938,7 +8958,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_FIREWALL);
         } else if (command.equals(actions[TGUIAction.TMLARCHI_PORT_ARTIFACT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_PORT_ARTIFACT);
-	
+
 
 
             // Communication patterns

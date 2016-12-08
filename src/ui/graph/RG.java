@@ -54,8 +54,8 @@ public class RG {
 
     public String name;
     public AUTGraph graph;
-    public String data;
     public String fileName;
+    public String data;
     
     public RG(String _name) {
 	name = _name;
