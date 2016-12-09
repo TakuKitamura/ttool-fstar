@@ -352,6 +352,10 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 		    selectedRG = null;
 		}
 		
+	    } else if (ae.getSource() == jmiMinimize) {
+		if (selectedRG != null) {
+		    mgui.minimizeRG(selectedRG);
+		}		
 	    }
 	}
     }

@@ -101,4 +101,15 @@ public class AUTState  {
 
     }
 
+    public void updateID(int _newID) {
+	id = _newID;
+	for(AUTTransition inT: inTransitions) {
+	    inT.destination = id;
+	}
+	
+	for(AUTTransition outT: outTransitions) {
+	    outT.origin = id;
+	}
+    }
+
 }

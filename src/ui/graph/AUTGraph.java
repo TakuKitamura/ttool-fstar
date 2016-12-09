@@ -63,22 +63,22 @@ public class AUTGraph implements myutil.Graph {
     protected boolean statesComputed;
 
     protected static String STYLE_SHEET =
-            "node {" +
-            "	fill-color: blue;" +
-            "} " +
-	//	    "edge.defaultedge {" +
-	//  "	shape: cubic-curve;" +
-	//   "}" +
-	//    "edge {shape: cubic-curve}" +
-	    "edge.external {" +
-            "	text-style: bold;" +
-            "} " +
-	    "node.deadlock {" +
-            "	fill-color: green;" +
-            "} " +
-            "node.init {" +
-            "	fill-color: red;" +
-            "} ";
+        "node {" +
+        "       fill-color: blue;" +
+        "} " +
+        //          "edge.defaultedge {" +
+        //  "   shape: cubic-curve;" +
+        //   "}" +
+        //    "edge {shape: cubic-curve}" +
+        "edge.external {" +
+        "       text-style: bold;" +
+        "} " +
+        "node.deadlock {" +
+        "       fill-color: green;" +
+        "} " +
+        "node.init {" +
+        "       fill-color: red;" +
+        "} ";
 
     public AUTGraph() {
         transitions = new ArrayList<AUTTransition>();
@@ -94,9 +94,9 @@ public class AUTGraph implements myutil.Graph {
     }
 
     public void buildGraph(String data) {
-	if (data == null) {
-	    return;
-	}
+        if (data == null) {
+            return;
+        }
 
         StringReader sr = new StringReader(data);
         br = new BufferedReader(sr);
@@ -191,9 +191,9 @@ public class AUTGraph implements myutil.Graph {
             s2 = s2.substring(0, s2.indexOf("\""));
             //System.out.println("Guillemets on " + s2);
             /*index2 = s2.indexOf("(");
-            if (index2 > -1) {
-                s2 = s2.substring(index2+1, s2.indexOf(")"));
-		}*/
+              if (index2 > -1) {
+              s2 = s2.substring(index2+1, s2.indexOf(")"));
+              }*/
             //System.out.println("Guillemets on " + s2);
 
         } else {
@@ -231,7 +231,7 @@ public class AUTGraph implements myutil.Graph {
     }
 
     public void setNbOfStates(int _nb) {
-	nbState = _nb;
+        nbState = _nb;
     }
 
     public int getNbOfTransitions() {
@@ -244,19 +244,19 @@ public class AUTGraph implements myutil.Graph {
     }
 
     public ArrayList<AUTState> getStates() {
-	return states;
+        return states;
     }
 
     public ArrayList<AUTTransition> getTransitions() {
-	return transitions;
+        return transitions;
     }
 
     public void addTransition(AUTTransition _tr) {
-	transitions.add(_tr);
-	statesComputed = false;
+        transitions.add(_tr);
+        statesComputed = false;
     }
-    
-    
+
+
 
     public int getNbPotentialDeadlocks(){
         int nb = 0;
@@ -390,6 +390,15 @@ public class AUTGraph implements myutil.Graph {
         return statesComputed;
     }
 
+    public HashSet<String> getAllActions() {
+	HashSet<String> hs = new HashSet<String>();
+	for(AUTTransition tr: transitions) {
+	    hs.add(tr.transition);
+	}
+	return hs;
+    }
+    
+
     public void reinitMet() {
         for(AUTState state: states) {
             state.met = false;
@@ -426,78 +435,121 @@ public class AUTGraph implements myutil.Graph {
     }
 
     public void display() {
-	AUTGraphDisplay display = new AUTGraphDisplay(this);
-	display.display();	
+        AUTGraphDisplay display = new AUTGraphDisplay(this);
+        display.display();
     }
 
 
     public AUTGraph cloneMe() {
-	AUTGraph newGraph = new AUTGraph();
-	newGraph.setNbOfStates(getNbOfStates());
-	for(AUTTransition tr: transitions) {
-	    AUTTransition newTr = new AUTTransition(tr.origin, tr.transition, tr.destination);
-	    newGraph.addTransition(newTr);
-	}
-	newGraph.computeStates();
-	return newGraph;
+        AUTGraph newGraph = new AUTGraph();
+        newGraph.setNbOfStates(getNbOfStates());
+        for(AUTTransition tr: transitions) {
+            AUTTransition newTr = new AUTTransition(tr.origin, tr.transition, tr.destination);
+            newGraph.addTransition(newTr);
+        }
+        newGraph.computeStates();
+        return newGraph;
     }
+
+
+    public void minimizeRemoveInternal() {
+        String s = "tau";
+
+        // mark all transitions as non tau
+        for(AUTTransition tr: transitions) {
+            tr.isTau = false;
+        }
+
+        // Mark all tau transitions as tau
+        for(AUTTransition tr: transitions) {
+	    
+	    if (tr.transition.startsWith("i(")) {
+		tr.isTau = true;
+		tr.transition = s;
+	    }
+ 
+        }
+
+        minimizeTau();
+    }
+
 
     public void minimize(String [] tauTransitions) {
-	String s = "tau";
-	
-	// mark all transitions as non tau
-	for(AUTTransition tr: transitions) {
-	    tr.isTau = false;
-	}
-		
-	// Mark all tau transitions as tau
-	for(AUTTransition tr: transitions) {
-	    for (int i=0; i<tauTransitions.length; i++) {
-		if (tr.transition.compareTo(tauTransitions[i]) == 0) {
-		    tr.isTau = true;
-		    tr.transition = s;
-		} 
-	    }
-	}
-	
-	// Remove transition going from one state with only one tau transition as output
+        String s = "tau";
 
-	boolean modif = true;
-	while(modif) {
-	    modif = removeTauTr();
-	}
-	
+        // mark all transitions as non tau
+        for(AUTTransition tr: transitions) {
+            tr.isTau = false;
+        }
+
+        // Mark all tau transitions as tau
+        for(AUTTransition tr: transitions) {
+            for (int i=0; i<tauTransitions.length; i++) {
+                if (tr.transition.compareTo(tauTransitions[i]) == 0) {
+                    tr.isTau = true;
+                    tr.transition = s;
+                }
+            }
+        }
+
+        minimizeTau();
+
     }
 
+    public void minimizeTau() {
+        boolean modif = true;
+        while(modif) {
+            modif = removeTauTr();
+        }
+    }
+
+    // Remove transition going from one state with only one tau transition as output
     private boolean removeTauTr() {
-	AUTTransition tr;
-	ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
-	// Remove in case state with one outgoing and outgoing is tau -> remove tr
-	for(AUTState st: states) {
-	    if (st.outTransitions.size() == 1) {
-		tr = st.outTransitions.get(0);
-		if (tr.isTau) {
-		    transitions.remove(tr);
-		    
-		    AUTState st1 = states.get(tr.destination);
-		    if (st1 != st) {
-			toRemoveStates.add(st1);
-			// Must put all incoming transition to the new state
-			for(AUTTransition trM :st.inTransitions) {
-			    trM.destination = tr.destination;
-			}
-			st1.inTransitions = st.inTransitions;
-		    }
-		}
-	    }
-	}
+        AUTTransition tr;
+        ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
+        // Remove in case state with one outgoing and outgoing is tau -> remove tr
+        for(AUTState st: states) {
+            if (st.outTransitions.size() == 1) {
+                tr = st.outTransitions.get(0);
+                if (tr.isTau) {
+                    transitions.remove(tr);
 
-	// Remove all states and adapt the id in the graph
-	    
-	
-	return false;
+                    AUTState st1 = states.get(tr.destination);
+                    if (st1 != st) {
+                        toRemoveStates.add(st1);
+                        // Must put all incoming transition to the new state
+                        for(AUTTransition trM :st.inTransitions) {
+                            trM.destination = tr.destination;
+                        }
+                        st1.inTransitions = st.inTransitions;
+                    }
+                }
+            }
+        }
+
+        // Remove all states and adapt the id in the graph
+        for(AUTState str: toRemoveStates) {
+            // Last state of the array?
+            if (str.id == nbState - 1) {
+                nbState --;
+                states.remove(str.id);
+
+                // str not at the end: we replace it with the last state
+                // We need to accordingly update
+            } else {
+                AUTState moved = states.get(nbState-1);
+                states.set(str.id, moved);
+            states.remove(nbState-1);
+            nbState --;
+            moved.updateID(str.id);
+        }
     }
 
-    
+
+
+    return false;
+}
+
+
 
 }

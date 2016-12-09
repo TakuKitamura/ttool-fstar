@@ -204,6 +204,7 @@ import ui.window.JFrameNC;
 import ui.window.JFramePowerManagementAnalysis;
 import ui.window.JFrameRequirementTable;
 import ui.window.JFrameText;
+import ui.window.*;
 
 public  class MainGUI implements ActionListener, WindowListener, KeyListener, PeriodicBehavior {
 
@@ -1117,6 +1118,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void removeRG(RG _toBeRemoved) {
 	gtm.removeRG(_toBeRemoved);
 	dtree.toBeUpdated();
+    }
+
+    public void minimizeRG(RG toBeMinimized) {
+	JFrameMinimize jfm = new JFrameMinimize(frame, this, "Graph minimization", toBeMinimized);
+	jfm.setSize(900, 700);
+        GraphicLib.centerOnParent(jfm);
+        jfm.setVisible(true);
     }
 
 
