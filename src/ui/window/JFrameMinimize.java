@@ -365,7 +365,7 @@ public class JFrameMinimize extends javax.swing.JFrame implements ActionListener
                 listProjected.setEnabled(true);
                 listIgnored.setEnabled(true);
                 setButtonsList();
-                start.setEnabled(sortedListProjected.size() > 0);
+                start.setEnabled(sortedListIgnored.size() > 0);
                 stop.setEnabled(false);
                 close.setEnabled(true);
                 getGlassPane().setVisible(false);
@@ -504,14 +504,13 @@ public class JFrameMinimize extends javax.swing.JFrame implements ActionListener
 	    computeListOfActions();
 	    return;
 	}
-
-
+	
 	jta.append("\nMinimizing graph...\n");
-	String[] strarray = new String[sortedListProjected.size()];
-	sortedListProjected.toArray(strarray );
+	String[] strarray = new String[sortedListIgnored.size()];
+	sortedListIgnored.toArray(strarray );
 	newRG.graph.minimize(strarray);
-	newRG.nbOfStates = rg.graph.getNbOfStates();
-	newRG.nbOfTransitions = rg.graph.getTransitions().size();
+	newRG.nbOfStates = newRG.graph.getNbOfStates();
+	newRG.nbOfTransitions = newRG.graph.getTransitions().size();
 	mgui.addRG(newRG);
 	
 	jta.append("\nGraph minimized: " + newRG.nbOfStates + " states, " + newRG.nbOfTransitions + " transitions\n");

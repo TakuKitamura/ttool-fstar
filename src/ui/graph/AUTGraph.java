@@ -501,6 +501,7 @@ public class AUTGraph implements myutil.Graph {
         while(modif) {
             modif = removeTauTr();
         }
+	statesComputed = false;
     }
 
     // Remove transition going from one state with only one tau transition as output
@@ -513,15 +514,31 @@ public class AUTGraph implements myutil.Graph {
                 tr = st.outTransitions.get(0);
                 if (tr.isTau) {
                     transitions.remove(tr);
+		    st.outTransitions.clear();
+		    
 
                     AUTState st1 = states.get(tr.destination);
                     if (st1 != st) {
                         toRemoveStates.add(st1);
-                        // Must put all incoming transition to the new state
-                        for(AUTTransition trM :st.inTransitions) {
-                            trM.destination = tr.destination;
+			TraceManager.addDev("Removing state " + st1.id);
+			
+                        // Must put all incoming transition to the first state
+			st1.inTransitions.remove(tr);
+                        for(AUTTransition trM: st1.inTransitions) {
+                            trM.destination = st.id;
+			    st.inTransitions.add(trM);
+			    TraceManager.addDev("New in transitions " + trM);
                         }
-                        st1.inTransitions = st.inTransitions;
+			st1.inTransitions.clear();
+
+			// Out transitions
+			st.outTransitions.clear();
+			for(AUTTransition trM: st1.outTransitions) {
+			    st.outTransitions.add(trM);
+			    trM.origin = st.id;
+			    TraceManager.addDev("New out transitions " + trM);
+                        }
+			st1.outTransitions.clear();
                     }
                 }
             }
@@ -529,27 +546,49 @@ public class AUTGraph implements myutil.Graph {
 
         // Remove all states and adapt the id in the graph
         for(AUTState str: toRemoveStates) {
+	    TraceManager.addDev("Removing really state " + str.id);
             // Last state of the array?
-            if (str.id == nbState - 1) {
+            if (str.id == (nbState - 1)) {
+		 TraceManager.addDev("Last state " + str.id);
                 nbState --;
                 states.remove(str.id);
 
                 // str not at the end: we replace it with the last state
                 // We need to accordingly update
             } else {
+
                 AUTState moved = states.get(nbState-1);
+		TraceManager.addDev("Moving state " + moved.id +  " to index " + str.id);	    
                 states.set(str.id, moved);
-            states.remove(nbState-1);
-            nbState --;
-            moved.updateID(str.id);
-        }
+		states.remove(nbState-1);
+		nbState --;
+		AUTTransition tt = findTransitionWithId(nbState);
+		if (tt != null) {
+		    TraceManager.addDev("1) Transition with id not normal" + tt);
+		}
+		moved.updateID(str.id);
+		tt = findTransitionWithId(nbState);
+		if (tt != null) {
+		    TraceManager.addDev("2) Transition with id not normal" + tt);
+		}
+	    }
+	    return true;
+	}
+	
+	
+	
+	return false;
     }
 
-
-
-    return false;
-}
-
+    private AUTTransition findTransitionWithId(int id) {
+	for (AUTTransition tr: transitions) {
+	    if ((tr.origin == id) || (tr.destination == id)) {
+		return tr;
+	    }
+	}
+	return null;
+    }
+    
 
 
 }
