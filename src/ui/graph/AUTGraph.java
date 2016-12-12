@@ -502,6 +502,9 @@ public class AUTGraph implements myutil.Graph {
             modif = removeOnlyOneTauTr();
 	    if (! modif) {
 		modif = removeMultipleTauOutputTr();
+		if (! modif) {
+		    modif = removeTauWithOneFollower();
+		}
 	    }
         }
 	statesComputed = false;
@@ -549,6 +552,110 @@ public class AUTGraph implements myutil.Graph {
         }
 
         // Remove all states and adapt the id in the graph
+	if (toRemoveStates.size() > 0) {
+	    removeStates(toRemoveStates);
+	    return true;
+	}
+	
+	return false;
+    }
+
+
+    // Rework states with at least 2 tau transition
+    private boolean removeMultipleTauOutputTr() {
+        AUTTransition tr1, tr2, trtmp;
+	AUTState st1, st2, sttmp;
+	ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
+	AUTTransition [] ret;
+	boolean modif = false;
+	
+        // Remove in case state with one outgoing and outgoing is tau -> remove tr
+        for(AUTState st: states) {
+	    ret = st.getAtLeastTwoOutTauTransitions();
+            if (ret != null) {
+                tr1 = ret[0];
+		tr2 = ret[1];
+		tr2 = st.outTransitions.get(1);
+		st1 = states.get(tr1.destination);
+		st2 = states.get(tr2.destination);
+
+		// Same states
+		if (st1 == st2) {
+		    //We can simply remove the transition
+		    transitions.remove(tr2);
+		    st.outTransitions.remove(tr2);
+		    modif = true;
+		}
+
+		// We can merge st1 or st2 because one has no other incoming transition than
+		// the tau transition
+		else if ((st1.inTransitions.size() == 1) && (st2.inTransitions.size() == 1)) {
+		    //We can remove st2 and the tau transition
+		    toRemoveStates.add(st2);
+		    transitions.remove(tr2);
+		    st.outTransitions.remove(tr2);
+
+		    // All transitions leaving st2 must now leave from st1 as well
+		    for (AUTTransition trf: st2.outTransitions) {
+			trf.origin = st1.id;
+			st1.outTransitions.add(trf);
+		    }
+		}
+		
+	    }
+	}
+
+	// Remove all states and adapt the id in the graph
+	if (toRemoveStates.size() > 0) {
+	    removeStates(toRemoveStates);
+	    modif = true;
+	}
+
+	
+
+	return modif;
+    }
+    
+    // Rework states with only one tau before, and only one action after
+    private boolean removeTauWithOneFollower() {
+        AUTTransition tr1, tr2;
+	AUTState st1, st2;
+	ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
+	boolean modif = false;
+	
+        // Remove in case state with one outgoing and outgoing is tau -> remove tr
+        for(AUTState st: states) {
+	    if (st.hasOneIncomingTauAndOneFollower()) {
+		//We can remove the previous tau transaction, and the current state
+		tr1 = st.inTransitions.get(0);
+		st1 = states.get(tr1.origin);
+		if (st1 != st) {
+		    tr2 = st.outTransitions.get(0);
+		    tr2.origin = st1.id;
+		    st1.outTransitions.remove(tr1);
+		    st1.outTransitions.add(tr2);
+		    transitions.remove(tr1);
+		    toRemoveStates.add(st);
+		    break;
+		}
+	    }
+	    
+	}
+
+	// Remove all states and adapt the id in the graph
+	if (toRemoveStates.size() > 0) {
+	    removeStates(toRemoveStates);
+	    modif = true;
+	}
+
+	
+
+	return modif;
+    }
+    
+
+    private void removeStates(ArrayList<AUTState> toRemoveStates) {
+	// Remove all states and adapt the id in the graph
         for(AUTState str: toRemoveStates) {
 	    //TraceManager.addDev("Removing really state " + str.id);
             // Last state of the array?
@@ -576,35 +683,7 @@ public class AUTGraph implements myutil.Graph {
 		    //TraceManager.addDev("2) Transition with id not normal" + tt);
 		}
 	    }
-	    return true;
 	}
-	
-	
-	
-	return false;
-    }
-
-
-    // Rework states with at least 2 tau transition
-    private boolean removeMultipleTauOutputTr() {
-        AUTTransition tr1, tr2;
-	AUTState st1, st2;
-        ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
-	AUTTransition [] ret;
-        // Remove in case state with one outgoing and outgoing is tau -> remove tr
-        for(AUTState st: states) {
-	    ret = st.getAtLeastTwoOutTauTransitions();
-            if (ret != null) {
-                tr1 = ret[0];
-		tr2 = ret[1];
-		tr2 = st.outTransitions.get(1);
-		st1 = states.get(tr1.destination);
-		st2 = states.get(tr2.destination);
-		
-	    }
-	}
-
-	return false;
     }
 
     

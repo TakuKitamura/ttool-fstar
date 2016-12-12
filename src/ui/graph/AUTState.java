@@ -131,4 +131,16 @@ public class AUTState  {
 	return null;
     }
 
+    public boolean hasOneIncomingTauAndOneFollower() {
+	if (outTransitions.size() != 1) {
+	    return false;
+	}
+
+	if (inTransitions.size() != 1) {
+	    return false;
+	}
+
+	return inTransitions.get(0).isTau;
+    }
+
 }
