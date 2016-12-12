@@ -460,6 +460,12 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
     public String getComputeMaxDelay() {
         return computeMax;
     }
+	public void setTimes(String minDelay, String maxDelay, String minCompute, String maxCompute){
+		computeMin= minCompute;
+		computeMax = maxCompute;
+		afterMin= minDelay;
+		afterMax=maxDelay;
+	}
 
     public Vector<String> getActions() {
         return listOfActions;

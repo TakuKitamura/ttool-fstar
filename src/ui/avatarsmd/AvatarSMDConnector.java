@@ -115,6 +115,10 @@ public  class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints 
 	    tgc.addAction(action);
 	}
     }
+	public void setTransitionTime(String minDelay, String maxDelay, String minCompute, String maxCompute){
+		AvatarSMDTransitionInfo tgc = (AvatarSMDTransitionInfo) getInternalTGComponent(0);
+		tgc.setTimes(minDelay, maxDelay, minCompute, maxCompute);
+	}
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
             g.drawLine(x1, y1, x2, y2);
