@@ -93,8 +93,8 @@ TTOOL_EXE = $(TTOOL_DOC)/ttool_linux.exe  $(TTOOL_DOC)/ttool_macosx.exe  $(TTOOL
 RELEASE_STD_FILES_LINUX_EXE = ttool_unix
 RELEASE_STD_FILES_WINDIWS_EXE = ttool_windows.bat
 
-RELEASE_STD_FILES_XML = manual-HW.xml DrinkMachineV10.xml WebV01.xml Protocol_example1.xml BasicExchange.xml SmartCardProtocol.xml ProtocolPatterns.xml COCOME_V50.xml CoffeeMachine_Avatar.xml Network_Avatar.xml MicroWaveOven_SafetySecurity_fullMethodo.xml
-RELEASE_STD_FILES_LIB =  TClock1.lib TTimerv01.lib
+RELEASE_STD_FILES_XML = TURTLE/manual-HW.xml AVATAR/DrinkMachineV10.xml TURTLE/WebV01.xml TURTLE/Protocol_example1.xml TURTLE/BasicExchange.xml DIPLODOCUS/SmartCardProtocol.xml TURTLE/ProtocolPatterns.xml CTTool/COCOME_V50.xml AVATAR/CoffeeMachine_Avatar.xml AVATAR/Network_Avatar.xml AVATAR/MicroWaveOven_SafetySecurity_fullMethodo.xml
+RELEASE_STD_FILES_LIB =  TURTLE/TClock1.lib TURTLE/TTimerv01.lib
 RELEASE_STD_FILES_BIN = $(LAUNCHER_BINARY) $(TTOOL_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(REMOTESIMULATOR_BINARY) $(RUNDSE_BINARY) $(WEBCRAWLER_SERVER_BINARY) $(WEBCRAWLER_CLIENT_BINARY)
 RELEASE_STD_FILES_LICENSES = LICENSE LICENSE_CECILL_ENG LICENSE_CECILL_FR
 
