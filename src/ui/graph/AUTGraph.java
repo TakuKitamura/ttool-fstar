@@ -499,13 +499,16 @@ public class AUTGraph implements myutil.Graph {
     public void minimizeTau() {
         boolean modif = true;
         while(modif) {
-            modif = removeTauTr();
+            modif = removeOnlyOneTauTr();
+	    if (! modif) {
+		modif = removeMultipleTauOutputTr();
+	    }
         }
 	statesComputed = false;
     }
 
     // Remove transition going from one state with only one tau transition as output
-    private boolean removeTauTr() {
+    private boolean removeOnlyOneTauTr() {
         AUTTransition tr;
         ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
         // Remove in case state with one outgoing and outgoing is tau -> remove tr
@@ -539,6 +542,7 @@ public class AUTGraph implements myutil.Graph {
 			    TraceManager.addDev("New out transitions " + trM);
                         }
 			st1.outTransitions.clear();
+			break;
                     }
                 }
             }
@@ -546,10 +550,10 @@ public class AUTGraph implements myutil.Graph {
 
         // Remove all states and adapt the id in the graph
         for(AUTState str: toRemoveStates) {
-	    TraceManager.addDev("Removing really state " + str.id);
+	    //TraceManager.addDev("Removing really state " + str.id);
             // Last state of the array?
             if (str.id == (nbState - 1)) {
-		 TraceManager.addDev("Last state " + str.id);
+		//TraceManager.addDev("Last state " + str.id);
                 nbState --;
                 states.remove(str.id);
 
@@ -558,18 +562,18 @@ public class AUTGraph implements myutil.Graph {
             } else {
 
                 AUTState moved = states.get(nbState-1);
-		TraceManager.addDev("Moving state " + moved.id +  " to index " + str.id);	    
+		//TraceManager.addDev("Moving state " + moved.id +  " to index " + str.id);	    
                 states.set(str.id, moved);
 		states.remove(nbState-1);
 		nbState --;
 		AUTTransition tt = findTransitionWithId(nbState);
 		if (tt != null) {
-		    TraceManager.addDev("1) Transition with id not normal" + tt);
+		    //TraceManager.addDev("1) Transition with id not normal" + tt);
 		}
 		moved.updateID(str.id);
 		tt = findTransitionWithId(nbState);
 		if (tt != null) {
-		    TraceManager.addDev("2) Transition with id not normal" + tt);
+		    //TraceManager.addDev("2) Transition with id not normal" + tt);
 		}
 	    }
 	    return true;
@@ -579,6 +583,31 @@ public class AUTGraph implements myutil.Graph {
 	
 	return false;
     }
+
+
+    // Rework states with at least 2 tau transition
+    private boolean removeMultipleTauOutputTr() {
+        AUTTransition tr1, tr2;
+	AUTState st1, st2;
+        ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
+	AUTTransition [] ret;
+        // Remove in case state with one outgoing and outgoing is tau -> remove tr
+        for(AUTState st: states) {
+	    ret = st.getAtLeastTwoOutTauTransitions();
+            if (ret != null) {
+                tr1 = ret[0];
+		tr2 = ret[1];
+		tr2 = st.outTransitions.get(1);
+		st1 = states.get(tr1.destination);
+		st2 = states.get(tr2.destination);
+		
+	    }
+	}
+
+	return false;
+    }
+
+    
 
     private AUTTransition findTransitionWithId(int id) {
 	for (AUTTransition tr: transitions) {

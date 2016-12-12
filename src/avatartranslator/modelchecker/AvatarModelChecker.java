@@ -259,8 +259,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         // Remove timers, composite states, randoms
         TraceManager.addDev("Reworking Avatar specification");
+	spec.removeCompositeStates();
         spec.removeTimers();
-        spec.removeCompositeStates();
         spec.removeRandoms();
 	spec.removeFIFOs(4);
         spec.makeFullStates();
@@ -446,7 +446,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
             for(AvatarStateMachineElement elt: ase.getNexts()) {
                 if (elt instanceof AvatarTransition) {
-                    handleAvatarTransition((AvatarTransition)elt, block, sb, cpt, _ss.transitions);
+                    handleAvatarTransition((AvatarTransition)elt, block, sb, cpt, _ss.transitions, ase.getNexts().size() > 1);
                 }
             }
 
@@ -523,22 +523,32 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             // See whether there is at least one transition with an immediate internal action with no alternative in the same block
             for(SpecificationTransition tr: transitions) {
                 if ((AvatarTransition.isActionType(tr.getType()) && (tr.clockMin == tr.clockMax) && (tr.clockMin == 0)) || tr.getType() == AvatarTransition.TYPE_EMPTY) {
+		    // Must look for possible transitions from the same state
+		    if (!(tr.fromStateWithMoreThanOneTransition)) {
+			st = tr;
+                        break;
+		    }
+		    
                     // Must look for similar transitions in the the same block
-                    //TraceManager.addDev("Lookin for same block for " + tr);
+                    /*TraceManager.addDev("\n *** Looking for same block for " + tr);
                     boolean foundSameBlock = false;
                     for(SpecificationTransition tro: transitions) {
-                        if (tro != tr) {
-                            if (tro.hasBlockOf(tr)) {
-                                foundSameBlock = true;
-                                //TraceManager.addDev("Found same block tr=" + tr + " tro=" + tro);
-                                break;
-                            }
-                        }
+			if (tro != tr) {
+			    TraceManager.addDev("\tAnalyzing a candidate " + tro);
+			    if (tro.hasBlockOf(tr)) {
+				foundSameBlock = true;
+				TraceManager.addDev("\tFound same block tr=" + tr + " tro=" + tro);
+				break;
+			    }
+                        } else {
+			    TraceManager.addDev("\t-> not a candidate");
+			}
                     }
                     if (!foundSameBlock) {
+			TraceManager.addDev("\tFound no same block for " + tr);
                         st = tr;
                         break;
-                    }
+			}*/
                 }
             }
             if (st != null) {
@@ -655,7 +665,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         return evaluateBoolExpression(s, _block, _sb);
     }
 
-    private void handleAvatarTransition(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb,  int _indexOfBlock, ArrayList<SpecificationTransition> _transitionsToAdd) {
+    private void handleAvatarTransition(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb,  int _indexOfBlock, ArrayList<SpecificationTransition> _transitionsToAdd, boolean _fromStateWithMoreThanOneTransition) {
         if (_at.type == AvatarTransition.UNDEFINED) {
             return;
         }
@@ -667,6 +677,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         SpecificationTransition st = new SpecificationTransition();
+	st.fromStateWithMoreThanOneTransition = _fromStateWithMoreThanOneTransition;
         _transitionsToAdd.add(st);
         st.init(1, _at, _block, _sb, _indexOfBlock);
 

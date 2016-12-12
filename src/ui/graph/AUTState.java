@@ -112,4 +112,23 @@ public class AUTState  {
 	}
     }
 
+    public AUTTransition[] getAtLeastTwoOutTauTransitions() {
+	if (outTransitions == null) {
+	    return null;
+	}
+
+	int cpt = 0;
+	AUTTransition[] trans = new AUTTransition[2];
+	for(AUTTransition tr: outTransitions) {
+	    if (tr.isTau) {
+		trans[cpt] = tr;
+		cpt ++;
+		if (cpt == 2) {
+		    return trans;
+		}
+	    }
+	}
+	return null;
+    }
+
 }

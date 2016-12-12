@@ -54,6 +54,8 @@ import myutil.*;
 
 public class SpecificationTransition  {
     public int clockMin, clockMax;
+
+    public boolean fromStateWithMoreThanOneTransition;
     
     public AvatarBlock[] blocks;
     public SpecificationBlock[] specBlocks;
@@ -63,90 +65,107 @@ public class SpecificationTransition  {
 
     public String infoForGraph;
     public boolean livenessFound;
-    
-    
+
+
     public SpecificationTransition() {
     }
 
     public void init(int _nbOfElements, AvatarTransition _at, AvatarBlock _ab, SpecificationBlock _sb, int _blockIndex) {
-	transitions = new AvatarTransition[_nbOfElements];
-	transitions[0] = _at;
-	    
-	blocks = new AvatarBlock[_nbOfElements];
-	blocks[0] = _ab;
+        transitions = new AvatarTransition[_nbOfElements];
+        transitions[0] = _at;
 
-	specBlocks = new SpecificationBlock[_nbOfElements];
-	specBlocks[0] = _sb;
+        blocks = new AvatarBlock[_nbOfElements];
+        blocks[0] = _ab;
 
-	blocksInt = new int[_nbOfElements];
-	blocksInt[0] = _blockIndex;	
+        specBlocks = new SpecificationBlock[_nbOfElements];
+        specBlocks[0] = _sb;
+
+        blocksInt = new int[_nbOfElements];
+        blocksInt[0] = _blockIndex;
     }
 
     public int getType() {
-	if (transitions == null) {
-	    return AvatarTransition.UNDEFINED;
-	}
-	return transitions[0].type;
-	
+        if (transitions == null) {
+            return AvatarTransition.UNDEFINED;
+        }
+        return transitions[0].type;
+
     }
 
     public void makeFromTwoSynchronous(SpecificationTransition _tr1, SpecificationTransition _tr2) {
-	int nbOfElements = 2;
-	transitions = new AvatarTransition[nbOfElements];
-	transitions[0] = _tr1.transitions[0];
-	transitions[1] = _tr2.transitions[0];
-	    
-	blocks = new AvatarBlock[nbOfElements];
-	blocks[0] = _tr1.blocks[0];
-	blocks[1] = _tr2.blocks[0];
+        int nbOfElements = 2;
+        transitions = new AvatarTransition[nbOfElements];
+        transitions[0] = _tr1.transitions[0];
+        transitions[1] = _tr2.transitions[0];
 
-	specBlocks = new SpecificationBlock[nbOfElements];
-	specBlocks[0] = _tr1.specBlocks[0];
-	specBlocks[1] = _tr2.specBlocks[0];
+        blocks = new AvatarBlock[nbOfElements];
+        blocks[0] = _tr1.blocks[0];
+        blocks[1] = _tr2.blocks[0];
 
-	blocksInt = new int[nbOfElements];
-	blocksInt[0] = _tr1.blocksInt[0];
-	blocksInt[1] = _tr2.blocksInt[0];
+        specBlocks = new SpecificationBlock[nbOfElements];
+        specBlocks[0] = _tr1.specBlocks[0];
+        specBlocks[1] = _tr2.specBlocks[0];
 
-	clockMin = Math.max(_tr1.clockMin, _tr2.clockMin);
-	clockMax = Math.max(_tr1.clockMax, _tr2.clockMax);
-	
+        blocksInt = new int[nbOfElements];
+        blocksInt[0] = _tr1.blocksInt[0];
+        blocksInt[1] = _tr2.blocksInt[0];
+
+        clockMin = Math.max(_tr1.clockMin, _tr2.clockMin);
+        clockMax = Math.max(_tr1.clockMax, _tr2.clockMax);
+
     }
 
     public boolean hasBlockOf(SpecificationTransition _tr) {
-	if (blocks == null) {
-	    return false;
-	}
+        if (blocks == null) {
+            return false;
+        }
 
-	if (_tr.blocks == null) {
-	    return false;
-	}
+        if (_tr.blocks == null) {
+            return false;
+        }
 
-	for (int i=0; i<blocks.length; i++) {
-	    for(int j=0; j<_tr.blocks.length; j++) {
-		if (blocks[i] == _tr.blocks[j]) {
-		    return true;
-		}
-	    }
-	}
+        for (int i=0; i<blocks.length; i++) {
+            for(int j=0; j<_tr.blocks.length; j++) {
+                if (blocks[i] == _tr.blocks[j]) {
+                    return true;
+                }
+            }
+        }
 
-	return false;
+        return false;
     }
 
     public boolean hasBlockIndex(int _index) {
-	if (blocksInt == null) {
-	    return false;
-	}
+        if (blocksInt == null) {
+            return false;
+        }
 
-	for(int i=0; i<blocksInt.length; i++) {
-	    if (blocksInt[i] == _index) {
-		return true;
-	    }
-	}
+        for(int i=0; i<blocksInt.length; i++) {
+            if (blocksInt[i] == _index) {
+                return true;
+            }
+        }
 
-	return false;
+        return false;
     }
 
+    public String toString() {
+        String ret = "Trans: ";
 
-
-}
+        if (blocks != null) {
+            for (int i=0; i<blocks.length; i++) {
+                ret += "/ Block" + i  + ": " + blocks[i].getName();
+            }
+        }
+        
+	
+	
+	if (transitions != null) {
+	    for (int i=0; i<transitions.length; i++) {
+		ret += "/" + transitions[i];
+	    }
+	}
+        return ret;
+    }
+    
+} // Class
