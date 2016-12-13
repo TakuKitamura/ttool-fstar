@@ -1133,7 +1133,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
     }
 
-    private void addMethodIfApplicable (String methodString) {
+    public void addMethodIfApplicable (String methodString) {
         for (AvatarMethod am: this.myMethods)
             // TODO: replace by a more OO way...
             if (am.toString ().equals (methodString))

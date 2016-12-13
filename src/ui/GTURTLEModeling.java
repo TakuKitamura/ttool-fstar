@@ -16519,14 +16519,42 @@ public class GTURTLEModeling {
         return;
     }
 
+    public void drawBlockProperties(AvatarBlock ab, AvatarBDBlock bl){
+		for (avatartranslator.AvatarSignal sig:ab.getSignals()){
+        	String name=sig.getName().split("__")[sig.getName().split("__").length-1];
+            sig.setName(name);
+            bl.addSignal(new ui.AvatarSignal(sig.getInOut(), name, new String[0], new String[0]));
+        }
 
+		bl.setValueWithChange(ab.getName());
+
+        for (AvatarAttribute attr: ab.getAttributes()){
+            int type=5;
+            if (attr.getType()==AvatarType.BOOLEAN){
+                type=4;
+			}
+			if (attr.getType()==AvatarType.INTEGER){
+				type=0;
+			}
+			if (attr.hasInitialValue()){
+				bl.addAttribute(new TAttribute(0, attr.getName(), attr.getInitialValue(), type));
+				}
+			else {
+				bl.addAttribute(new TAttribute(0, attr.getName(), attr.getType().getDefaultInitialValue(), type));
+				}
+			if (attr.getName().contains("key_")){
+				bl.addCryptoElements();
+            }
+        }
+		for (avatartranslator.AvatarMethod method: ab.getMethods()){
+			System.out.println("method " +method.toString());
+			bl.addMethodIfApplicable(method.toString().replaceAll(" = 0",""));
+		}
+	}
     public void drawPanel(AvatarSpecification avspec, AvatarDesignPanel adp){
 
-        Map<AvatarTransition, TGComponent> tranSourceMap = new HashMap<AvatarTransition, TGComponent>();
-        Map<AvatarTransition, AvatarStateMachineElement> tranDestMap = new HashMap<AvatarTransition, AvatarStateMachineElement>();
-        Map<AvatarStateMachineElement, TGComponent> locMap = new HashMap<AvatarStateMachineElement, TGComponent>();
-        Map<AvatarStateMachineElement, TGComponent> SMDMap = new HashMap<AvatarStateMachineElement, TGComponent>();
-        Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
+   
+      Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
         Map<String, AvatarBDBlock> blockMap = new HashMap<String, AvatarBDBlock>();
         if (adp ==null){
             return;
@@ -16539,119 +16567,41 @@ public class GTURTLEModeling {
         //Find all blocks, create blocks from left
         int xpos=10;
         int ypos=10;
+
+		for (AvatarBlock ab:avspec.getListOfBlocks()){
+            //Crypto blocks?
+            AvatarBDBlock father=null;
+            if (ab.getFather()==null){
+            	AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null, abd);
+		        abd.addComponent(bl, xpos, ypos, false, true);
+				bl.resize(400, 250);
+            	drawBlockProperties(ab,bl);
+	            AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
+				buildStateMachine(ab, bl, smp);
+				blockMap.put(bl.getValue(), bl);
+            	xpos+=400;
+
+			}
+		}
+		int inc = 10;
         for (AvatarBlock ab:avspec.getListOfBlocks()){
             //Crypto blocks?
             AvatarBDBlock father=null;
             if (ab.getFather()!=null){
-               father = blockMap.get(ab.getFather().getName().split("__")[ab.getFather().getName().split("__").length-1]);
-            }
-            AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, father, abd);
-
-            for (avatartranslator.AvatarSignal sig:ab.getSignals()){
-                String name=sig.getName().split("__")[sig.getName().split("__").length-1];
-                sig.setName(name);
-                bl.addSignal(new ui.AvatarSignal(sig.getInOut(), name, new String[0], new String[0]));
-            }
-            tranSourceMap.clear();
-            /*      if (ab.getName().contains("__")){
-                    bl.setValue(ab.getName().split("__")[1]);
-                    }
-                    else {*/
-            bl.setValueWithChange(ab.getName());
-            //}
-            //   if (!bl.getValue().equals("Block0")
-            // abd.changeStateMachineTabName ("Block0", bl.getValue());
-            blockMap.put(bl.getValue(), bl);
-            abd.addComponent(bl, xpos, ypos, false, true);
-            for (AvatarAttribute attr: ab.getAttributes()){
-                int type=5;
-                if (attr.getType()==AvatarType.BOOLEAN){
-                    type=4;
-                }
-                if (attr.getType()==AvatarType.INTEGER){
-                    type=0;
-                }
-                if (attr.hasInitialValue()){
-                    bl.addAttribute(new TAttribute(0, attr.getName(), attr.getInitialValue(), type));
-                }
-                else {
-                    bl.addAttribute(new TAttribute(0, attr.getName(), attr.getType().getDefaultInitialValue(), type));
-                }
-                if (attr.getName().contains("key_")){
-                    bl.addCryptoElements();
-                }
-            }
-            xpos+=300;
-            //Build the state machine
-            int smx=400;
-            int smy=40;
-            AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
-            if (smp==null){
-                System.out.println("can't find");
-                return;
-            }
-            smp.removeAll();
-            AvatarStateMachine asm = ab.getStateMachine();
-            //Remove the empty check states
-
-            AvatarStartState start= asm.getStartState();
-            addStates(start, smx, smy, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
-            //Add transitions
-            for (AvatarTransition t: tranSourceMap.keySet()){
-                if (tranSourceMap.get(t)==null || tranDestMap.get(t)==null){
-                    continue;
-                }
-                int x=tranSourceMap.get(t).getX()+tranSourceMap.get(t).getWidth()/2;
-                int y=tranSourceMap.get(t).getY()+tranSourceMap.get(t).getHeight();
-
-                //      TGConnectingPoint p1 = tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,false);
-                TGConnectingPoint p1 = tranSourceMap.get(t).closerFreeTGConnectingPoint(x, y, true, false);
-                if (p1==null){
-                    //  p1= tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,true);
-                    p1=tranSourceMap.get(t).closerFreeTGConnectingPoint(x,y,true, true);
-                }
-                x= locMap.get(tranDestMap.get(t)).getX()+ locMap.get(tranDestMap.get(t)).getWidth()/2;
-                y = locMap.get(tranDestMap.get(t)).getY();
-                if (tranSourceMap.get(t).getY() > locMap.get(tranDestMap.get(t)).getY()){
-                    y=locMap.get(tranDestMap.get(t)).getY()+locMap.get(tranDestMap.get(t)).getHeight()/2;
-                    if (tranSourceMap.get(t).getX() < locMap.get(tranDestMap.get(t)).getX()){
-                        x = locMap.get(tranDestMap.get(t)).getX();
-                    }
-                    else {
-                        x= locMap.get(tranDestMap.get(t)).getX()+locMap.get(tranDestMap.get(t)).getWidth();
-                    }
-                }
-                TGConnectingPoint p2 = locMap.get(tranDestMap.get(t)).closerFreeTGConnectingPoint(x,y,false, true);
-                if (p2==null){
-                    p2=locMap.get(tranDestMap.get(t)).closerFreeTGConnectingPoint(x,y,true, true);
-                }
-                Vector points = new Vector();
-                if (p1==null || p2 ==null){
-                    System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
-
-                    System.out.println("Missing point "+ p1 + " "+p2);
-                    return;
-                }
-                AvatarSMDConnector SMDcon = new AvatarSMDConnector((int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), true, null, smp, p1, p2, points);
-                //System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
-                ///System.out.println("FREE " +p1.isFree() + " "+ p2.isFree());
-                p1.setFree(false);
-                p2.setFree(false);
-                String action="";
-                if (t.getActions().size()==0){
-                    action="";
-                }
-                else {
-                    action=t.getActions().get(0).toString();
-                }
-                SMDcon.setTransitionInfo(t.getGuard().toString(), action);
-                for (int i=1; i<t.getActions().size(); i++){
-                    SMDcon.setTransitionInfo("", t.getActions().get(i).toString());
-                }
-				SMDcon.setTransitionTime(t.getMinDelay(), t.getMaxDelay(), t.getMinCompute(), t.getMaxCompute());
-                smp.addComponent(SMDcon, (int) p1.getX(), (int) p1.getY(), false, true);
-            }
-        }
+                father = blockMap.get(ab.getFather().getName().split("__")[ab.getFather().getName().split("__").length-1]);
+				System.out.println(father);
+			
+            AvatarBDBlock bl = new AvatarBDBlock(father.getX()+inc, father.getY()+inc, abd.getMinX(), abd.getMaxX(), abd.getMinY(), abd.getMaxY(), false, null, abd);
+	        abd.addComponent(bl, father.getX()+inc, father.getY()+inc, false, true);
+			bl.resize(100, 100);
+			abd.attach(bl);
+            drawBlockProperties(ab,bl);
+			AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
+			buildStateMachine(ab, bl, smp);
+	        blockMap.put(bl.getValue(), bl);
+            inc+=150;
+			}
+		}
 
 
         for (AvatarRelation ar: avspec.getRelations()){
@@ -16671,29 +16621,35 @@ public class GTURTLEModeling {
         for (String bl1: originDestMap.keySet()){
             for (String bl2:originDestMap.get(bl1)){
                 Vector points=new Vector();
+				TGConnectingPoint p1= blockMap.get(bl1).findFirstFreeTGConnectingPoint(true,true);
+                TGConnectingPoint p2= blockMap.get(bl2).findFirstFreeTGConnectingPoint(true,true);
 
+                AvatarBDPortConnector conn = new AvatarBDPortConnector(0, 0, 0, 0, 0, 0, true, null, abd, p1, p2, points);
+                abd.addComponent(conn, 0,0,false,true);
+                p1.setFree(false);
+                p2.setFree(false);
                 //Add Relations to connector
                 for (AvatarRelation ar:avspec.getRelations()){
                     if (ar.block1.getName().contains(bl1) && ar.block2.getName().contains(bl2) || ar.block1.getName().contains(bl2) && ar.block2.getName().contains(bl1)){
+						System.out.println("ADDING " + ar + " " + bl1 + " " + bl2);
                         //TGConnectingPoint p1= blockMap.get(bl1).getFreeTGConnectingPoint(blockMap.get(bl1).getX(), blockMap.get(bl1).getY());
-                        TGConnectingPoint p1= blockMap.get(bl1).findFirstFreeTGConnectingPoint(true,true);
-                        TGConnectingPoint p2= blockMap.get(bl2).findFirstFreeTGConnectingPoint(true,true);
-                        //      TGConnectingPoint p2=blockMap.get(bl2).getFreeTGConnectingPoint(blockMap.get(bl2).getX(),blockMap.get(bl2).getY());
-                        AvatarBDPortConnector conn = new AvatarBDPortConnector(0, 0, 0, 0, 0, 0, true, null, abd, p1, p2, points);
+                        
                         conn.setAsynchronous(ar.isAsynchronous());
                         conn.setBlocking(ar.isBlocking());
                         conn.setPrivate(ar.isPrivate());
                         conn.setSizeOfFIFO(ar.getSizeOfFIFO());
                         //System.out.println(bl1 +" "+ ar.block1.getName() + " "+ ar.block2.getName());
-                        conn.addSignal("in " +ar.getSignal1(0).getName(),true,true);
-                        conn.addSignal("out " +ar.getSignal2(0).getName(), false,false);
+						for (int i =0; i< ar.nbOfSignals(); i++){
+                        conn.addSignal("in " +ar.getSignal1(i).getName(),true,true);
+                        conn.addSignal("out " +ar.getSignal2(i).getName(), false,false);
+						}
                         //System.out.println("Added Signals");
                         conn.updateAllSignals();
-                        p1.setFree(false);
-                        p2.setFree(false);
-                        abd.addComponent(conn, 0,0,false,true);
+
+
                     }
                 }
+
                 /*for (ui.AvatarSignal sig:blockMap.get(bl1).getSignalList()){
                   for (ui.AvatarSignal sig2: blockMap.get(bl2).getSignalList()){
                   if (sig.getId().equals(sig2.getId())){
@@ -16750,6 +16706,82 @@ public class GTURTLEModeling {
         key.addAttribute(attr);
         abd.addComponent(key, xpos, ypos, false,true);
     }
+
+	public void buildStateMachine(AvatarBlock ab, AvatarBDBlock bl, AvatarSMDPanel smp){
+		Map<AvatarTransition, TGComponent> tranSourceMap = new HashMap<AvatarTransition, TGComponent>();
+ 		Map<AvatarTransition, AvatarStateMachineElement> tranDestMap = new HashMap<AvatarTransition, AvatarStateMachineElement>();
+        Map<AvatarStateMachineElement, TGComponent> locMap = new HashMap<AvatarStateMachineElement, TGComponent>();	
+        Map<AvatarStateMachineElement, TGComponent> SMDMap = new HashMap<AvatarStateMachineElement, TGComponent>();
+      	
+            //Build the state machine
+            int smx=400;
+            int smy=40;
+
+            if (smp==null){
+                System.out.println("can't find");
+                return;
+            }
+            smp.removeAll();
+            AvatarStateMachine asm = ab.getStateMachine();
+            //Remove the empty check states
+
+            AvatarStartState start= asm.getStartState();
+            addStates(start, smx, smy, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
+            //Add transitions
+            for (AvatarTransition t: tranSourceMap.keySet()){
+                if (tranSourceMap.get(t)==null || tranDestMap.get(t)==null){
+                    continue;
+                }
+                int x=tranSourceMap.get(t).getX()+tranSourceMap.get(t).getWidth()/2;
+                int y=tranSourceMap.get(t).getY()+tranSourceMap.get(t).getHeight();
+
+                //      TGConnectingPoint p1 = tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,false);
+                TGConnectingPoint p1 = tranSourceMap.get(t).closerFreeTGConnectingPoint(x, y, true, false);
+                if (p1==null){
+                    //  p1= tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,true);
+                    p1=tranSourceMap.get(t).closerFreeTGConnectingPoint(x,y,true, true);
+                }
+                x= locMap.get(tranDestMap.get(t)).getX()+ locMap.get(tranDestMap.get(t)).getWidth()/2;
+                y = locMap.get(tranDestMap.get(t)).getY();
+                if (tranSourceMap.get(t).getY() > locMap.get(tranDestMap.get(t)).getY()){
+                    y=locMap.get(tranDestMap.get(t)).getY()+locMap.get(tranDestMap.get(t)).getHeight()/2;
+                    if (tranSourceMap.get(t).getX() < locMap.get(tranDestMap.get(t)).getX()){
+                        x = locMap.get(tranDestMap.get(t)).getX();
+                    }
+                    else {
+                        x= locMap.get(tranDestMap.get(t)).getX()+locMap.get(tranDestMap.get(t)).getWidth();
+                    }
+                }
+                TGConnectingPoint p2 = locMap.get(tranDestMap.get(t)).closerFreeTGConnectingPoint(x,y,false, true);
+                if (p2==null){
+                    p2=locMap.get(tranDestMap.get(t)).closerFreeTGConnectingPoint(x,y,true, true);
+                }
+                Vector points = new Vector();
+                if (p1==null || p2 ==null){
+                    System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
+
+                    System.out.println("Missing point "+ p1 + " "+p2);
+                    return;
+                }
+                AvatarSMDConnector SMDcon = new AvatarSMDConnector((int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), true, null, smp, p1, p2, points);
+                //System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
+                ///System.out.println("FREE " +p1.isFree() + " "+ p2.isFree());
+                p1.setFree(false);
+                p2.setFree(false);
+                String action="";
+                if (t.getActions().size()==0){
+                    action="";
+                }
+                else {
+                    action=t.getActions().get(0).toString().replaceAll(" ","");
+                }
+                SMDcon.setTransitionInfo(t.getGuard().toString(), action);
+                for (int i=1; i<t.getActions().size(); i++){
+                    SMDcon.setTransitionInfo("", t.getActions().get(i).toString().replaceAll(" ",""));
+                }
+                smp.addComponent(SMDcon, (int) p1.getX(), (int) p1.getY(), false, true);
+            }
+        }
 
     // Generates for all observers, a TURTLE modeling for checking it
     public boolean generateTMsForRequirementAnalysis(Vector reqs, RequirementDiagramPanel rdp) {
