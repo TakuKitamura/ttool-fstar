@@ -504,6 +504,9 @@ public class AUTGraph implements myutil.Graph {
 		modif = removeMultipleTauOutputTr();
 		if (! modif) {
 		    modif = removeTauWithOneFollower();
+		    if (! modif) {
+			modif = removeSimilarTransitions();
+		    }
 		}
 	    }
         }
@@ -649,6 +652,36 @@ public class AUTGraph implements myutil.Graph {
 	}
 
 	
+
+	return modif;
+    }
+
+    private boolean removeSimilarTransitions() {
+	boolean modif = false;
+	
+        // Remove in case state with one outgoing and outgoing is tau -> remove tr
+        for(AUTState st: states) {
+	    if (st.outTransitions.size() > 1) {
+		for(int i=0; i<st.outTransitions.size(); i++) {
+		    for(int j=i+1; j<st.outTransitions.size(); j++) {
+			AUTTransition tri = st.outTransitions.get(i);
+			AUTTransition trj = st.outTransitions.get(j);
+			if (tri.destination == trj.destination) {
+			    if (tri.transition.compareTo(trj.transition) == 0) {
+				modif = true;
+				//We remove trj
+				st.outTransitions.remove(trj);
+				transitions.remove(trj);
+				i--;				
+				j--;
+			    }
+			}
+		    }
+		}
+		    
+		
+	    }
+	}
 
 	return modif;
     }
