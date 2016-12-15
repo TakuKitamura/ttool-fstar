@@ -353,7 +353,11 @@ public class AvatarSpecification extends AvatarElement {
 
     private int removeFIFO(AvatarRelation _ar, int _sizeOfInfiniteFifo, LinkedList<AvatarRelation> _oldOnes, LinkedList<AvatarRelation> _newOnes, int FIFO_ID ) {
 	for(int i=0; i<_ar.nbOfSignals(); i++) {
-	    FIFO_ID = removeFIFO(_ar, _ar.getSignal1(i), _ar.getSignal2(i), _sizeOfInfiniteFifo, _oldOnes, _newOnes, FIFO_ID);
+	    if (_ar.getSignal1(i).isIn()) {
+		FIFO_ID = removeFIFO(_ar, _ar.getSignal2(i), _ar.getSignal1(i), _sizeOfInfiniteFifo, _oldOnes, _newOnes, FIFO_ID);
+	    } else {
+		FIFO_ID = removeFIFO(_ar, _ar.getSignal1(i), _ar.getSignal2(i), _sizeOfInfiniteFifo, _oldOnes, _newOnes, FIFO_ID);
+	    }
 	}
 	_oldOnes.add(_ar);
 	return FIFO_ID;
