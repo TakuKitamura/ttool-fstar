@@ -76,6 +76,10 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     protected JPopupMenu popupTree;
     protected RG selectedRG;
 
+    protected JPopupMenu popupGraphTree;
+    protected JMenuItem jmiAddFromFile;
+    protected GraphTree selectedGT;
+
 
 
     /** Creates new form  */
@@ -150,27 +154,39 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
         Object obj = path.getLastPathComponent();
 
-        //String label = "popup: " + obj.getTreeLabel();
         //TraceManager.addDev("Adding popup menu to " + obj.getClass() + "/" + obj);
+
+        if (obj instanceof GraphTree){
+            selectedGT = (GraphTree)obj;
+            if (popupGraphTree == null) {
+                popupGraphTree = new JPopupMenu();
+                jmiAddFromFile = new JMenuItem("Add graph from file (.aut)");
+                jmiAddFromFile.addActionListener(this);
+                popupGraphTree.add(jmiAddFromFile);
+            }
+            popupGraphTree.show(tree, x, y);
+        }
+
+
         if (obj instanceof RG) {
-	    selectedRG = (RG)obj;
+            selectedRG = (RG)obj;
             if (popupTree == null) {
                 popupTree = new JPopupMenu();
-		jmiAnalyze = new JMenuItem("Analyze");
-		jmiAnalyze.addActionListener(this);
-		jmiShow = new JMenuItem("Show");
-		jmiShow.addActionListener(this);
-		jmiMinimize = new JMenuItem("Minimize");
-		jmiMinimize.addActionListener(this);
-		jmiRemove = new JMenuItem("Remove from tree");
-		jmiRemove.addActionListener(this);
-		popupTree.add(jmiAnalyze);
-		popupTree.add(jmiShow);
-		popupTree.add(jmiMinimize);
-		popupTree.addSeparator();
-		popupTree.add(jmiRemove);
-	    }
-	    popupTree.show(tree, x, y);
+                jmiAnalyze = new JMenuItem("Analyze");
+                jmiAnalyze.addActionListener(this);
+                jmiShow = new JMenuItem("Show");
+                jmiShow.addActionListener(this);
+                jmiMinimize = new JMenuItem("Minimize");
+                jmiMinimize.addActionListener(this);
+                jmiRemove = new JMenuItem("Remove from tree");
+                jmiRemove.addActionListener(this);
+                popupTree.add(jmiAnalyze);
+                popupTree.add(jmiShow);
+                popupTree.add(jmiMinimize);
+                popupTree.addSeparator();
+                popupTree.add(jmiRemove);
+            }
+            popupTree.show(tree, x, y);
         }
     }
 
@@ -337,26 +353,42 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     }
 
     public void actionPerformed(ActionEvent ae) {
-	if (selectedRG != null) {
-	    if (ae.getSource() == jmiAnalyze) {
-		mgui.showAUTFromRG(selectedRG.name, selectedRG);
-	    } else if (ae.getSource() == jmiShow) {
-		if (selectedRG.graph != null) {
-		    selectedRG.graph.display();
-		} else {
-		    mgui.displayAUTFromRG(selectedRG.name, selectedRG);
+        if (selectedRG != null) {
+            if (ae.getSource() == jmiAnalyze) {
+                mgui.showAUTFromRG(selectedRG.name, selectedRG);
+            } else if (ae.getSource() == jmiShow) {
+                if (selectedRG.graph != null) {
+                    selectedRG.graph.display();
+                } else {
+                    mgui.displayAUTFromRG(selectedRG.name, selectedRG);
+                }
+            } else if (ae.getSource() == jmiRemove) {
+                if (selectedRG != null) {
+                    mgui.removeRG(selectedRG);
+                    selectedRG = null;
+                }
+
+            } else if (ae.getSource() == jmiMinimize) {
+                if (selectedRG != null) {
+                    mgui.minimizeRG(selectedRG);
+                }
+            }
+
+        }
+
+        if (selectedGT != null) {
+            if (ae.getSource() == jmiAddFromFile) {
+
+                //TraceManager.addDev("Adding graph from file");
+                String [] graph = mgui.loadAUTGraph();
+		if (graph != null) {
+		    RG rg = new RG(graph[0]);
+		    rg.fileName = graph[0];
+		    rg.data = graph[1];
+		    mgui.addRG(rg);
 		}
-	    } else if (ae.getSource() == jmiRemove) {
-		if (selectedRG != null) {
-		    mgui.removeRG(selectedRG);
-		    selectedRG = null;
-		}
-		
-	    } else if (ae.getSource() == jmiMinimize) {
-		if (selectedRG != null) {
-		    mgui.minimizeRG(selectedRG);
-		}		
-	    }
-	}
+
+            }
+        }
     }
 }
