@@ -698,13 +698,13 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
                 return;
             }
 
-            if (!cycleComputed) {
+            /*if (!cycleComputed) {
                 hasCycle = GraphAlgorithms.hasCycle(graph);
                 cycleComputed = true;
-            }
+		}*/
         }
 
-        ThreadGUIElement t = new ThreadGUIElement(this, idFunc, info, "Please wait", "");
+        ThreadGUIElement t = new ThreadGUIElement(this, idFunc, info, "Computing, please wait", "");
         t.setExternalCall((ExternalCall)this);
         t.setStoppableGUIElement((StoppableGUIElement)this);
         t.go();
@@ -716,6 +716,11 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         int from;
         int to;
         JTextField text;
+
+	if (!cycleComputed) {
+	    hasCycle = GraphAlgorithms.hasCycle(graph);
+	    cycleComputed = true;
+	}
 
         DijkstraState[] dss;
         if (id == 1) {

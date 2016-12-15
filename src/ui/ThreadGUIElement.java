@@ -78,7 +78,7 @@ public class ThreadGUIElement extends Thread {
         param2 = _param2;
         graph = _graph;
         rg = _rg;
-	showStat = _showStat;
+        showStat = _showStat;
     }
 
     public ThreadGUIElement (Frame _frame, int _function, String _param0, String _param1, String _param2) {
@@ -110,12 +110,12 @@ public class ThreadGUIElement extends Thread {
 
     public void go() {
         if (ec != null) {
-            start();
             jdc = new JDialogCancel(frame, param0, param1, sge);
+	    start();
             GraphicLib.centerOnParent(jdc, 300, 200 );
             //   jdc.setSize(300, 200);
             jdc.setVisible(true);
-            jdc = null;
+            //jdc = null;
         } else {
             switch(function) {
             case 1:
@@ -125,26 +125,30 @@ public class ThreadGUIElement extends Thread {
                 break;
             case 0:
             default:
+		TraceManager.addDev("Creating jframe statistics");
                 jfs = new JFrameStatistics(param0, param1, graph);
                 sge = (StoppableGUIElement)jfs;
             }
-            start();
+	    TraceManager.addDev("Dialog creation");
             jdc = new JDialogCancel(frame, param0, param2, sge);
+	    start();
             //  jdc.setSize(400, 200);
             GraphicLib.centerOnParent(jdc, 400, 200 );
             jdc.setVisible(true);
-            jdc = null;
+            //jdc = null;
         }
     }
 
     public void run() {
         Thread.currentThread().setPriority(Thread.NORM_PRIORITY - 1);
         if (ec != null) {
-            //System.out.println("Starting computing function");
+            //TraceManager.addDev("Starting computing function");
             ec.computeFunction(function);
-            //System.out.println("Ending computing function");
+            //TraceManager.addDev("Ending computing function");
             if (jdc != null) {
+		//TraceManager.addDev("Stopping jdc");
                 jdc.stopAll();
+		jdc = null;
             }
         } else {
             switch(function) {
@@ -167,34 +171,34 @@ public class ThreadGUIElement extends Thread {
                 break;
             case 0:
             default:
+		//TraceManager.addDev("JFrameStatistics go Element");
                 jfs.goElement();
-                //System.out.println("go is done");
+                //TraceManager.addDev("go is done");
 
                 if (jfs.hasBeenStopped()) {
-                    //System.out.println("Stopped: not showing");
+                    //TraceManager.addDev("Stopped: not showing");
                     return;
                 }
                 if (jdc != null) {
                     jdc.stopAll();
                 }
-                
+
                 //  jfs.setSize(600, 600);
-		if (showStat) {
-		    jfs.setIconImage(IconManager.img8);
-                GraphicLib.centerOnParent(jfs, 600, 600 );
-                jfs.setVisible(true);
-		} else {
-		    // Display graph
-		    jfs.displayGraph();
-		    
-		}
-		if (rg != null) {
-		    rg.graph = jfs.getGraph();
-		    if (rg.graph != null) {
-			rg.data = null;
-		    }
-		}
-                //System.out.println("setting visible");
+                if (showStat) {
+                    jfs.setIconImage(IconManager.img8);
+                    GraphicLib.centerOnParent(jfs, 600, 600 );
+                    jfs.setVisible(true);
+                } else {
+                    // Display graph
+                    jfs.displayGraph();
+
+                }
+                if (rg != null) {
+                    rg.graph = jfs.getGraph();
+                    if (rg.graph != null) {
+                        rg.data = null;
+                    }
+                }
             }
         }
 
