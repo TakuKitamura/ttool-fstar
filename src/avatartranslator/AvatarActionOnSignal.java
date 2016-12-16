@@ -111,6 +111,15 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
     }
 
     public String getExtendedName() {
+	if (getSignal() == null) {
+	    String s = getName() + " refobjt=" + referenceObject.toString();
+	    TraceManager.addDev("Null signal" + " res=" + s);	    
+	    return s;
+	}
+	if (getName() == null) {
+	    TraceManager.addDev("Null name");
+	}
+	
         return getName() + ":" + getSignal().getName();
     }
 

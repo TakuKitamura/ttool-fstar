@@ -242,6 +242,9 @@ public class AvatarSpecification extends AvatarElement {
         return null;
     }
 
+
+    
+
     public AvatarConstant getAvatarConstantWithName(String _name) {
         for(AvatarConstant constant: constants) {
             if (constant.getName().compareTo(_name)== 0) {
@@ -283,7 +286,7 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public void removeTimers() {
-        renameTimers();
+        //renameTimers();
 
         LinkedList<AvatarBlock> addedBlocks = new LinkedList<AvatarBlock>();
         for(AvatarBlock block: blocks) {

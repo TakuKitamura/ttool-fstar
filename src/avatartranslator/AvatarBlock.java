@@ -454,7 +454,11 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
                 addSignal(new AvatarSignal("expire__" + aa.getName(), AvatarSignal.IN, aa.getReferenceObject()));
 
                 // Create a timer block, and connect signals
-                AvatarBlock ab = AvatarBlockTemplate.getTimerBlock("Timer__" + aa.getName(), _spec, getReferenceObject(), null, null, null);
+		String blockName = "Timer__" + aa.getName() + "__" + getName();
+		while( _spec.getBlockWithName(blockName) != null) {
+		    blockName += "_";
+		}
+                AvatarBlock ab = AvatarBlockTemplate.getTimerBlock(blockName, _spec, getReferenceObject(), null, null, null);
                 _addedBlocks.add(ab);
 
                 AvatarRelation ar;

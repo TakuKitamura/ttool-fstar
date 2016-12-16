@@ -100,6 +100,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	if (_spec != null) {
 	    initialSpec = _spec;
 	    //TraceManager.addDev("Before clone:\n" + spec);
+	    initialSpec.removeLibraryFunctionCalls ();
 	    spec = initialSpec.advancedClone();
 	    //TraceManager.addDev("After clone:\n" + spec);
 	}
