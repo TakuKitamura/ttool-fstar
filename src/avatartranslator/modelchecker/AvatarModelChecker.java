@@ -101,6 +101,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	    initialSpec = _spec;
 	    //TraceManager.addDev("Before clone:\n" + spec);
 	    initialSpec.removeLibraryFunctionCalls ();
+	    initialSpec.removeCompositeStates();
 	    spec = initialSpec.advancedClone();
 	    //TraceManager.addDev("After clone:\n" + spec);
 	}
@@ -260,7 +261,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         // Remove timers, composite states, randoms
         TraceManager.addDev("Reworking Avatar specification");
-	spec.removeCompositeStates();
         spec.removeTimers();
         spec.removeRandoms();
 	spec.removeFIFOs(4);
