@@ -129,6 +129,42 @@ public class AvatarMethod extends AvatarElement {
         return ret;
     }
 
+    public String toBasicString() {
+        int cpt = 0;
+        String ret = "";
+
+        if (returnParameters.size() != 0) {
+            if (returnParameters.size() == 1) {
+                ret += returnParameters.get(0).getType().getStringType() + " ";
+            } else {
+                int index = 0;
+                for(AvatarAttribute aa: returnParameters) {
+                    if (index == 0) {
+                        index ++;
+                    } else {
+                        ret = ret + ",";
+                    }
+                    ret += aa.getType().getStringType();
+                }
+                ret = "(" + ret + ") ";
+            }
+
+        }
+
+        ret += getName() + "(";
+
+        for(AvatarAttribute attribute: parameters) {
+            if (cpt != 0) {
+                ret += ",";
+            }
+            cpt ++;
+            ret += attribute.toBasicString();
+        }
+
+        ret += ")";
+        return ret;
+    }
+
     public boolean isCompatibleWith(AvatarMethod _am) {
         if (parameters.size() != _am.getListOfAttributes().size()) {
             return false;

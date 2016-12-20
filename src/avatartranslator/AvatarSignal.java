@@ -93,6 +93,30 @@ public class AvatarSignal extends AvatarMethod {
         return "in " + ret;
     }
 
+
+    public String toBasicString() {
+        String ret = super.toBasicString();
+        if (isOut()) {
+            return "out " + ret;
+        }
+        return "in " + ret;
+    }
+
+	public String minString(){
+        int cpt = 0;
+		String ret = getName() + "(";
+        for(AvatarAttribute attribute: parameters) {
+            if (cpt != 0) {
+                ret += ",";
+            }
+            cpt ++;
+            ret += attribute.getName();
+        }
+
+        ret += ")";
+        return ret;
+	}
+
     public AvatarSignal advancedClone(AvatarStateMachineOwner _block) {
 	AvatarSignal as = new AvatarSignal(getName(), getInOut(), getReferenceObject());
 	setAdvancedClone((AvatarMethod)as, _block);

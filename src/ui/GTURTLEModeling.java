@@ -16425,9 +16425,9 @@ public class GTURTLEModeling {
                 AvatarSMDReceiveSignal smdrs = new AvatarSMDReceiveSignal(x, y, x, x*2, y, y*2, false, null, smp);
                 tgcomp=smdrs;
                 smp.addComponent(smdrs, x, y, false, true);
-                String name=sig.getName().split("__")[sig.getName().split("__").length-1];
-                smdrs.setValue(name+"()");
-                sig.setName(name);
+                String name=sig.minString();
+                smdrs.setValue(name);
+               // sig.setName(name);
                 smdrs.recalculateSize();
                 SMDMap.put(asme, smdrs);
                 tp = smdrs.getFreeTGConnectingPoint(x+smdrs.getWidth()/2,y+smdrs.getHeight());
@@ -16442,8 +16442,8 @@ public class GTURTLEModeling {
                 AvatarSMDSendSignal smdss = new AvatarSMDSendSignal(x, y, x, x*2, y, y*2, false, null, smp);
                 tgcomp=smdss;
                 smp.addComponent(smdss, x, y, false, true);
-                String name=sig.getName().split("__")[sig.getName().split("__").length-1];
-                smdss.setValue(name+"()");
+                String name=sig.minString();
+                smdss.setValue(name);
                 sig.setName(name);
                 smdss.recalculateSize();
                 SMDMap.put(asme, smdss);
@@ -16522,8 +16522,16 @@ public class GTURTLEModeling {
     public void drawBlockProperties(AvatarBlock ab, AvatarBDBlock bl){
 		for (avatartranslator.AvatarSignal sig:ab.getSignals()){
         	String name=sig.getName().split("__")[sig.getName().split("__").length-1];
-            sig.setName(name);
-            bl.addSignal(new ui.AvatarSignal(sig.getInOut(), name, new String[0], new String[0]));
+   //         sig.setName(name);
+			String[] types = new String[sig.getListOfAttributes().size()];
+			String[] typeIds = new String[sig.getListOfAttributes().size()];
+			int i=0;
+			for (AvatarAttribute attr: sig.getListOfAttributes()){
+				types[i]=attr.getType().getStringType();
+				typeIds[i]=attr.getName();
+				i++;
+			}
+            bl.addSignal(new ui.AvatarSignal(sig.getInOut(), name, types, typeIds));
         }
 
 		bl.setValueWithChange(ab.getName());
@@ -16547,7 +16555,6 @@ public class GTURTLEModeling {
             }
         }
 		for (avatartranslator.AvatarMethod method: ab.getMethods()){
-			System.out.println("method " +method.toString());
 			bl.addMethodIfApplicable(method.toString().replaceAll(" = 0",""));
 		}
 	}
@@ -16589,7 +16596,7 @@ public class GTURTLEModeling {
             AvatarBDBlock father=null;
             if (ab.getFather()!=null){
                 father = blockMap.get(ab.getFather().getName().split("__")[ab.getFather().getName().split("__").length-1]);
-				System.out.println(father);
+				//System.out.println(father);
 			
             AvatarBDBlock bl = new AvatarBDBlock(father.getX()+inc, father.getY()+inc, abd.getMinX(), abd.getMaxX(), abd.getMinY(), abd.getMaxY(), false, null, abd);
 	        abd.addComponent(bl, father.getX()+inc, father.getY()+inc, false, true);
@@ -16631,7 +16638,7 @@ public class GTURTLEModeling {
                 //Add Relations to connector
                 for (AvatarRelation ar:avspec.getRelations()){
                     if (ar.block1.getName().contains(bl1) && ar.block2.getName().contains(bl2) || ar.block1.getName().contains(bl2) && ar.block2.getName().contains(bl1)){
-						System.out.println("ADDING " + ar + " " + bl1 + " " + bl2);
+						
                         //TGConnectingPoint p1= blockMap.get(bl1).getFreeTGConnectingPoint(blockMap.get(bl1).getX(), blockMap.get(bl1).getY());
                         
                         conn.setAsynchronous(ar.isAsynchronous());
@@ -16640,8 +16647,9 @@ public class GTURTLEModeling {
                         conn.setSizeOfFIFO(ar.getSizeOfFIFO());
                         //System.out.println(bl1 +" "+ ar.block1.getName() + " "+ ar.block2.getName());
 						for (int i =0; i< ar.nbOfSignals(); i++){
-                        conn.addSignal("in " +ar.getSignal1(i).getName(),true,true);
-                        conn.addSignal("out " +ar.getSignal2(i).getName(), false,false);
+                        	conn.addSignal(ar.getSignal1(i).toBasicString(),true,true);
+                        	conn.addSignal(ar.getSignal2(i).toBasicString(), false,false);
+					//	System.out.println("adding signal " +ar.getSignal1(i).toBasicString());
 						}
                         //System.out.println("Added Signals");
                         conn.updateAllSignals();

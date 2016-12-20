@@ -162,6 +162,11 @@ public class AvatarAttribute extends AvatarLeftHand {
         return ret + " = " + initialValue;
     }
 
+   public String toBasicString() {
+        String ret = this.type.getStringType() + " " + getName();
+        return ret;
+    }
+
     public String toStringType() {
         String ret = type.getStringType() + " " + getName() + " typeid= " + getType();
         if (initialValue  == null) {

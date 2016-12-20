@@ -1081,9 +1081,11 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
         _id = _id.trim();
         //TraceManager.addDev("Searching for signal with id=" + _id);
-        for (AvatarSignal as: this.mySignals)
+        for (AvatarSignal as: this.mySignals){
+		//	System.out.println(as.getId() + " " 
             if (as.getId().compareTo(_id) == 0)
                 return as;
+		}
         //TraceManager.addDev("Not found");
         return null;
     }
