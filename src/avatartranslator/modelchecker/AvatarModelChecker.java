@@ -1165,6 +1165,21 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
 
+    public String statesToString() {
+	StringBuffer sb = new StringBuffer("States:\n");
+	List<SpecificationState> sortedStates = new ArrayList<SpecificationState>(states.values());
+	Collections.sort(sortedStates);
+	
+	for (SpecificationState state: sortedStates) { 
+	    sb.append(state.toString() + "\n");
+	}
+        /*for(SpecificationState state: states.values()) {
+            sb.append(state.toString() + "\n");
+	    }*/
+         return sb.toString();
+    }
+
+
     public String toAUT() {
         StringBuffer sb = new StringBuffer();	
         sb.append("des(0," + getNbOfLinks() + "," + getNbOfStates() + ")\n");
@@ -1228,7 +1243,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     private synchronized void addState(SpecificationState newState) {
-	newState.id = states.size();
+	newState.id = stateID;;
 	//newState.computeHash(blockValues);
 	states.put(newState.getHash(blockValues), newState);
 	statesByID.put(newState.id, newState);

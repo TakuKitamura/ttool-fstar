@@ -54,7 +54,7 @@ import java.util.*;
 import avatartranslator.*;
 import myutil.*;
 
-public class SpecificationState  {
+public class SpecificationState implements Comparable<SpecificationState>  {
 
     public SpecificationBlock [] blocks;
     public int hashValue;
@@ -106,13 +106,12 @@ public class SpecificationState  {
     }
 
     public String toString() {
-	if (blocks == null) {
-	    return "";
-	}
         StringBuffer sb = new StringBuffer("id: " + id);
-        for(int i=0; i<blocks.length; i++) {
-            sb.append("\n  "+i + ": " + blocks[i].toString());
-        }
+	if (blocks != null) {
+	    for(int i=0; i<blocks.length; i++) {
+		sb.append("\n  "+i + ": " + blocks[i].toString());
+	    }
+	}
         return sb.toString();
     }
 
@@ -187,6 +186,10 @@ public class SpecificationState  {
     public void freeUselessAllocations() {
 	blocks = null;
 	transitions = null;
+    }
+
+    public int compareTo( SpecificationState _s ) {
+	return ((int)id) - (int)(_s.id);
     }
 
 }

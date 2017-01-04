@@ -564,7 +564,7 @@ public class AUTGraph implements myutil.Graph {
     }
 
 
-    // Rework states with at least 2 tau transition
+    // Rework states with at least 2 tau transitions
     private boolean removeMultipleTauOutputTr() {
         AUTTransition tr1, tr2, trtmp;
 	AUTState st1, st2, sttmp;
@@ -572,7 +572,7 @@ public class AUTGraph implements myutil.Graph {
 	AUTTransition [] ret;
 	boolean modif = false;
 	
-        // Remove in case state with one outgoing and outgoing is tau -> remove tr
+        // Remove in case state with one outgoing and outgoing is tau -> remove transition
         for(AUTState st: states) {
 	    ret = st.getAtLeastTwoOutTauTransitions();
             if (ret != null) {
@@ -626,7 +626,7 @@ public class AUTGraph implements myutil.Graph {
 	ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
 	boolean modif = false;
 	
-        // Remove in case state with one outgoing and outgoing is tau -> remove tr
+        // Remove stgate in case state with one outgoing and outgoing is tau
         for(AUTState st: states) {
 	    if (st.hasOneIncomingTauAndOneFollower()) {
 		//We can remove the previous tau transaction, and the current state
@@ -659,7 +659,7 @@ public class AUTGraph implements myutil.Graph {
     private boolean removeSimilarTransitions() {
 	boolean modif = false;
 	
-        // Remove in case state with one outgoing and outgoing is tau -> remove tr
+        // Remove tr if it is duplicated
         for(AUTState st: states) {
 	    if (st.outTransitions.size() > 1) {
 		for(int i=0; i<st.outTransitions.size(); i++) {
