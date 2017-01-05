@@ -14,6 +14,12 @@ For developers: (rw access to the git)
 * Compiling the latest version:
 make all
 
+If the compilation fails with the following error: 'unmappable character for encoding ASCII', you need to do, before the compilation process:
+export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8
+
+
+
+
 * Generating a release:
 make release
 
