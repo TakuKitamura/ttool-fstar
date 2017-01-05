@@ -1,8 +1,9 @@
 
 # TTool Makefile
 # Tested under Linux *only*
-# Meant to work with svn
-export
+# Meant to work with git
+
+export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8
 
 TARGET_ARCH = linux
 
