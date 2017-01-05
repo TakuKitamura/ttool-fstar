@@ -143,5 +143,94 @@ public class AUTState  {
 	return inTransitions.get(0).isTau;
     }
 
+    public boolean hasOutputTauTransition() {
+	if (outTransitions.size() < 1) {
+	    return false;
+	}
+
+	for(AUTTransition outT: outTransitions) {
+	    if (outT.isTau) {
+		return true;
+	    }
+	}
+
+	return false;
+    }
+
+    public boolean hasSimilarTransition(AUTTransition _tr) {
+	if (outTransitions.size() == 0) {
+	    return false;
+	}
+	for(AUTTransition tr: outTransitions) {
+	    if ((tr.origin == _tr.origin) && (tr.destination == _tr.destination) && (tr.transition.compareTo(_tr.transition) == 0)) {
+		return true;
+	    }
+	}
+	
+	return false;
+    }
+
+    public void removeAllOutTauTransitions(ArrayList<AUTTransition> _transitions, ArrayList<AUTState> _states) {
+	ArrayList<AUTTransition> outTransitions2 = new ArrayList<AUTTransition>();
+	for(AUTTransition tr: outTransitions) {
+	    if (!(tr.isTau)) {
+		outTransitions.add(tr);
+	    } else {
+		_transitions.remove(tr);
+		_states.get(tr.destination).removeInTransition(tr);
+	    }
+	}
+	outTransitions = outTransitions2;
+    }
+
+    public void removeInTransition(AUTTransition _tr) {
+	inTransitions.remove(_tr);
+    }
+
+
+    public void createTransitionsButNotDuplicate(LinkedList<AUTTransition> _newTransitions, ArrayList<AUTState> _states, ArrayList<AUTTransition> _transitions) {
+	for(AUTTransition tr: _newTransitions) {
+	    if (!(hasSimilarTransition(tr))) {
+		AUTTransition ntr = tr.basicClone();
+		ntr.origin = id;
+		outTransitions.add(tr);
+		_states.get(ntr.destination).addInTransition(ntr);
+		_transitions.add(ntr);
+	    }
+	}
+    }
+
+    public void removeAllTransitionsWithId(int id) {
+	ArrayList<AUTTransition> toBeRemoved = new 	ArrayList<AUTTransition>();
+	for(AUTTransition tr: outTransitions) {
+	    if (tr.destination == id) {
+		toBeRemoved.add(tr);
+	    }
+	}
+	for(AUTTransition tr: toBeRemoved) {
+	    outTransitions.remove(tr);
+	}
+	toBeRemoved.clear();
+	for(AUTTransition tr: inTransitions) {
+	    if (tr.origin == id) {
+		toBeRemoved.add(tr);
+	    }
+	}
+	for(AUTTransition tr: toBeRemoved) {
+	    inTransitions.remove(tr);
+	}
+    }
+
+    public String toString() {
+	String s = "" + id + "\n";
+	for(AUTTransition tr: inTransitions) {
+	    s += "\t" + tr.toString() + "\n";
+	}
+	for(AUTTransition tr: outTransitions) {
+	    s += "\t" + tr.toString() + "\n";
+	}
+	return s;
+    }
+
 
 }

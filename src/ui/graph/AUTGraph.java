@@ -283,10 +283,16 @@ public class AUTGraph implements myutil.Graph {
     }
 
     public boolean hasEntryTransition(int state) {
+	if (hasEntryTransition == null) {
+	    computeEntryExitTransitions();
+	}
         return hasEntryTransition[state];
     }
 
     public boolean hasExitTransition(int state) {
+	if (hasExitTransition == null) {
+	    computeEntryExitTransitions();
+	}
         return hasExitTransition[state];
     }
 
@@ -365,6 +371,20 @@ public class AUTGraph implements myutil.Graph {
         return graph.toString();
     }
 
+
+    public String toFullString() {
+	StringBuffer graph = new StringBuffer("Transitions:");
+	for(AUTTransition aut1 : transitions) {
+	    graph.append(aut1.toString());
+	}
+	graph.append("\nstates:\n");
+	for(AUTState str: states) {
+	    graph.append(str.toString());
+	}
+	return graph.toString();
+	
+    }
+
     public void computeStates() {
         if (!statesComputed) {
             states = new ArrayList<AUTState>(nbState);
@@ -391,13 +411,13 @@ public class AUTGraph implements myutil.Graph {
     }
 
     public HashSet<String> getAllActions() {
-	HashSet<String> hs = new HashSet<String>();
-	for(AUTTransition tr: transitions) {
-	    hs.add(tr.transition);
-	}
-	return hs;
+        HashSet<String> hs = new HashSet<String>();
+        for(AUTTransition tr: transitions) {
+            hs.add(tr.transition);
+        }
+        return hs;
     }
-    
+
 
     public void reinitMet() {
         for(AUTState state: states) {
@@ -462,12 +482,12 @@ public class AUTGraph implements myutil.Graph {
 
         // Mark all tau transitions as tau
         for(AUTTransition tr: transitions) {
-	    
-	    if (tr.transition.startsWith("i(")) {
-		tr.isTau = true;
-		tr.transition = s;
-	    }
- 
+
+            if (tr.transition.startsWith("i(")) {
+                tr.isTau = true;
+                tr.transition = s;
+            }
+
         }
 
         minimizeTau();
@@ -498,19 +518,23 @@ public class AUTGraph implements myutil.Graph {
 
     public void minimizeTau() {
         boolean modif = true;
-        while(modif) {
+
+	factorizeNonTauTransitions();
+
+	
+        /*while(modif) {
             modif = removeOnlyOneTauTr();
-	    if (! modif) {
-		modif = removeMultipleTauOutputTr();
-		if (! modif) {
-		    modif = removeTauWithOneFollower();
-		    if (! modif) {
-			modif = removeSimilarTransitions();
-		    }
-		}
-	    }
-        }
-	statesComputed = false;
+            if (! modif) {
+                modif = removeMultipleTauOutputTr();
+                if (! modif) {
+                    modif = removeTauWithOneFollower();
+                    if (! modif) {
+                        modif = removeSimilarTransitions();
+                    }
+                }
+            }
+	    }*/
+        statesComputed = false;
     }
 
     // Remove transition going from one state with only one tau transition as output
@@ -523,177 +547,205 @@ public class AUTGraph implements myutil.Graph {
                 tr = st.outTransitions.get(0);
                 if (tr.isTau) {
                     transitions.remove(tr);
-		    st.outTransitions.clear();
-		    
+                    st.outTransitions.clear();
+
 
                     AUTState st1 = states.get(tr.destination);
                     if (st1 != st) {
                         toRemoveStates.add(st1);
-			TraceManager.addDev("Removing state " + st1.id);
-			
+                        //TraceManager.addDev("Removing state " + st1.id);
+
                         // Must put all incoming transition to the first state
-			st1.inTransitions.remove(tr);
+                        st1.inTransitions.remove(tr);
                         for(AUTTransition trM: st1.inTransitions) {
                             trM.destination = st.id;
-			    st.inTransitions.add(trM);
-			    TraceManager.addDev("New in transitions " + trM);
+                            st.inTransitions.add(trM);
+                            //TraceManager.addDev("New in transitions " + trM);
                         }
-			st1.inTransitions.clear();
+                        st1.inTransitions.clear();
 
-			// Out transitions
-			st.outTransitions.clear();
-			for(AUTTransition trM: st1.outTransitions) {
-			    st.outTransitions.add(trM);
-			    trM.origin = st.id;
-			    TraceManager.addDev("New out transitions " + trM);
+                        // Out transitions
+                        st.outTransitions.clear();
+                        for(AUTTransition trM: st1.outTransitions) {
+                            st.outTransitions.add(trM);
+                            trM.origin = st.id;
+                            //TraceManager.addDev("New out transitions " + trM);
                         }
-			st1.outTransitions.clear();
-			break;
+                        st1.outTransitions.clear();
+                        break;
                     }
                 }
             }
         }
 
         // Remove all states and adapt the id in the graph
-	if (toRemoveStates.size() > 0) {
-	    removeStates(toRemoveStates);
-	    return true;
-	}
-	
-	return false;
+        if (toRemoveStates.size() > 0) {
+            removeStates(toRemoveStates);
+            return true;
+        }
+
+        return false;
     }
 
 
     // Rework states with at least 2 tau transitions
     private boolean removeMultipleTauOutputTr() {
         AUTTransition tr1, tr2, trtmp;
-	AUTState st1, st2, sttmp;
-	ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
-	AUTTransition [] ret;
-	boolean modif = false;
-	
+        AUTState st1, st2, sttmp;
+        ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
+        AUTTransition [] ret;
+        boolean modif = false;
+
         // Remove in case state with one outgoing and outgoing is tau -> remove transition
         for(AUTState st: states) {
-	    ret = st.getAtLeastTwoOutTauTransitions();
+            ret = st.getAtLeastTwoOutTauTransitions();
             if (ret != null) {
                 tr1 = ret[0];
-		tr2 = ret[1];
-		tr2 = st.outTransitions.get(1);
-		st1 = states.get(tr1.destination);
-		st2 = states.get(tr2.destination);
+                tr2 = ret[1];
+                tr2 = st.outTransitions.get(1);
+                st1 = states.get(tr1.destination);
+                st2 = states.get(tr2.destination);
 
-		// Same states
-		if (st1 == st2) {
-		    //We can simply remove the transition
-		    transitions.remove(tr2);
-		    st.outTransitions.remove(tr2);
-		    modif = true;
-		}
+                // Same states
+                if (st1 == st2) {
+                    //We can simply remove the transition
+                    transitions.remove(tr2);
+                    st.outTransitions.remove(tr2);
+                    modif = true;
+                }
 
-		// We can merge st1 or st2 because one has no other incoming transition than
-		// the tau transition
-		else if ((st1.inTransitions.size() == 1) && (st2.inTransitions.size() == 1)) {
-		    //We can remove st2 and the tau transition
-		    toRemoveStates.add(st2);
-		    transitions.remove(tr2);
-		    st.outTransitions.remove(tr2);
+                // We can merge st1 or st2 because one has no other incoming transition than
+                // the tau transition
+                else if ((st1.inTransitions.size() == 1) && (st2.inTransitions.size() == 1)) {
+                    //We can remove st2 and the tau transition
+                    toRemoveStates.add(st2);
+                    transitions.remove(tr2);
+                    st.outTransitions.remove(tr2);
 
-		    // All transitions leaving st2 must now leave from st1 as well
-		    for (AUTTransition trf: st2.outTransitions) {
-			trf.origin = st1.id;
-			st1.outTransitions.add(trf);
-		    }
-		}
-		
-	    }
-	}
+                    // All transitions leaving st2 must now leave from st1 as well
+                    for (AUTTransition trf: st2.outTransitions) {
+                        trf.origin = st1.id;
+                        st1.outTransitions.add(trf);
+                    }
+                }
 
-	// Remove all states and adapt the id in the graph
-	if (toRemoveStates.size() > 0) {
-	    removeStates(toRemoveStates);
-	    modif = true;
-	}
+            }
+        }
 
-	
+        // Remove all states and adapt the id in the graph
+        if (toRemoveStates.size() > 0) {
+            removeStates(toRemoveStates);
+            modif = true;
+        }
 
-	return modif;
+
+
+        return modif;
     }
-    
+
     // Rework states with only one tau before, and only one action after
     private boolean removeTauWithOneFollower() {
         AUTTransition tr1, tr2;
-	AUTState st1, st2;
-	ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
-	boolean modif = false;
-	
+        AUTState st1, st2;
+        ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
+        boolean modif = false;
+
         // Remove stgate in case state with one outgoing and outgoing is tau
         for(AUTState st: states) {
-	    if (st.hasOneIncomingTauAndOneFollower()) {
-		//We can remove the previous tau transaction, and the current state
-		tr1 = st.inTransitions.get(0);
-		st1 = states.get(tr1.origin);
-		if (st1 != st) {
-		    tr2 = st.outTransitions.get(0);
-		    tr2.origin = st1.id;
-		    st1.outTransitions.remove(tr1);
-		    st1.outTransitions.add(tr2);
-		    transitions.remove(tr1);
-		    toRemoveStates.add(st);
-		    break;
-		}
-	    }
-	    
-	}
+            if (st.hasOneIncomingTauAndOneFollower()) {
+                //We can remove the previous tau transaction, and the current state
+                tr1 = st.inTransitions.get(0);
+                st1 = states.get(tr1.origin);
+                if (st1 != st) {
+                    tr2 = st.outTransitions.get(0);
+                    tr2.origin = st1.id;
+                    st1.outTransitions.remove(tr1);
+                    st1.outTransitions.add(tr2);
+                    transitions.remove(tr1);
+                    toRemoveStates.add(st);
+                    break;
+                }
+            }
 
-	// Remove all states and adapt the id in the graph
-	if (toRemoveStates.size() > 0) {
-	    removeStates(toRemoveStates);
-	    modif = true;
-	}
+        }
 
-	
+        // Remove all states and adapt the id in the graph
+        if (toRemoveStates.size() > 0) {
+            removeStates(toRemoveStates);
+            modif = true;
+        }
 
-	return modif;
-    }
 
-    private boolean removeSimilarTransitions() {
-	boolean modif = false;
-	
-        // Remove tr if it is duplicated
-        for(AUTState st: states) {
-	    if (st.outTransitions.size() > 1) {
-		for(int i=0; i<st.outTransitions.size(); i++) {
-		    for(int j=i+1; j<st.outTransitions.size(); j++) {
-			AUTTransition tri = st.outTransitions.get(i);
-			AUTTransition trj = st.outTransitions.get(j);
-			if (tri.destination == trj.destination) {
-			    if (tri.transition.compareTo(trj.transition) == 0) {
-				modif = true;
-				//We remove trj
-				st.outTransitions.remove(trj);
-				transitions.remove(trj);
-				i--;				
-				j--;
-			    }
-			}
-		    }
-		}
-		    
-		
-	    }
-	}
 
-	return modif;
+        return modif;
     }
     
 
+    private boolean removeSimilarTransitions() {
+        boolean modif = false;
+
+        // Remove tr if it is duplicated
+        for(AUTState st: states) {
+
+	    // May modify the outTransitions list, and result in exception.
+	    // The try .. catch clause protects from this
+            try {
+                if (st.outTransitions.size() > 1) {
+                    for(int i=0; i<st.outTransitions.size(); i++) {
+                        for(int j=i+1; j<st.outTransitions.size(); j++) {
+                            AUTTransition tri = st.outTransitions.get(i);
+                            AUTTransition trj = st.outTransitions.get(j);
+                            if (tri.destination == trj.destination) {
+                                if (tri.transition.compareTo(trj.transition) == 0) {
+                                    modif = true;
+                                    //We remove trj
+                                    st.outTransitions.remove(trj);
+                                    transitions.remove(trj);
+                                    i--;
+                                    j--;
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+            } catch (Exception e) {}
+        }
+
+        return modif;
+    }
+
+
     private void removeStates(ArrayList<AUTState> toRemoveStates) {
-	// Remove all states and adapt the id in the graph
+
+	if (toRemoveStates.size() > 0) {
+	    hasExitTransition = null;
+	    hasEntryTransition = null;
+	}
+	
+        // Remove all states and adapt the id in the graph
+	TraceManager.addDev("nbState=" + nbState + " states size = " + states.size());
+	
         for(AUTState str: toRemoveStates) {
-	    //TraceManager.addDev("Removing really state " + str.id);
+	    // We need to remove all transitions of the removed state
+	    TraceManager.addDev("Removing transitions of state:" + str.id + "\n" + toFullString());
+	    for(AUTTransition trin: str.inTransitions) {
+		transitions.remove(trin);
+	    }
+	    for(AUTTransition trout: str.outTransitions) {
+		transitions.remove(trout);
+	    }
+
+	    for(AUTState state: states) {
+		state.removeAllTransitionsWithId(str.id);
+	    }
+
+	    TraceManager.addDev("Done removing transitions of state:" + str.id + "\n" + toFullString());
+	    
             // Last state of the array?
             if (str.id == (nbState - 1)) {
-		//TraceManager.addDev("Last state " + str.id);
+                TraceManager.addDev("Last state " + str.id);
                 nbState --;
                 states.remove(str.id);
 
@@ -702,34 +754,184 @@ public class AUTGraph implements myutil.Graph {
             } else {
 
                 AUTState moved = states.get(nbState-1);
-		//TraceManager.addDev("Moving state " + moved.id +  " to index " + str.id);	    
+                TraceManager.addDev("Moving state " + moved.id +  " to index " + str.id);
                 states.set(str.id, moved);
-		states.remove(nbState-1);
-		nbState --;
+                states.remove(nbState-1);
+                nbState --;
+		TraceManager.addDev("nbState=" + nbState + " states size = " + states.size());
 		AUTTransition tt = findTransitionWithId(nbState);
 		if (tt != null) {
-		    //TraceManager.addDev("1) Transition with id not normal" + tt);
+                    TraceManager.addDev("1) Transition with id not normal" + tt);
 		}
+		TraceManager.addDev("Update id\n" + toAUTStringFormat());
 		moved.updateID(str.id);
-		tt = findTransitionWithId(nbState);
-		if (tt != null) {
-		    //TraceManager.addDev("2) Transition with id not normal" + tt);
+                tt = findTransitionWithId(nbState);
+                if (tt != null) {
+                    TraceManager.addDev("2) Transition with id not normal" + tt);
+		}
+            }
+	    TraceManager.addDev(toFullString());
+
+        }
+    }
+
+    // Removes all tau transition of a state, replacing them with reachable non tau transitions
+    // A tau transition reaching a end state cannot be removed but can be replaced with a unique transition
+    private void factorizeNonTauTransitions() {
+	boolean modif = false;
+	boolean endState = false;
+	// met is used to specify states that have a tau-path to a termination state
+	for(AUTState st1: states) {
+	    st1.met = false;
+	}
+	
+        // Remove tr if it is duplicated
+        for(AUTState st: states) {
+	    // We ignore states with no input tr apart from the start state (id 0)
+	    TraceManager.addDev("0. state " + st.id);
+	    if ((st.id == 0) || (st.getNbInTransitions() > 0)) {
+		TraceManager.addDev("  1. state " + st.id);
+		if (st.hasOutputTauTransition()) {
+		    TraceManager.addDev("  2. state " + st.id);
+		    LinkedList<AUTTransition> nonTauTransitions = new LinkedList<AUTTransition>();
+		    boolean canReachAnEndStateWithTau = getAllNonTauTransitionsFrom(st, nonTauTransitions);
+
+		    TraceManager.addDev("State " + st.id + " has the following real transitions:");
+		    for(AUTTransition tr: nonTauTransitions) {
+			TraceManager.addDev("\t" + tr);
+		    }
+		    
+		    st.met = canReachAnEndStateWithTau;
+		    endState = endState || canReachAnEndStateWithTau;
+		    
+		    // Create these transitions in st if not yet existing
+		    st.removeAllOutTauTransitions(transitions, states);
+		    st.createTransitionsButNotDuplicate(nonTauTransitions, states, transitions);
 		}
 	    }
 	}
-    }
 
-    
-
-    private AUTTransition findTransitionWithId(int id) {
-	for (AUTTransition tr: transitions) {
-	    if ((tr.origin == id) || (tr.destination == id)) {
-		return tr;
+	// If end state: we must create a new end state, and all "met" states should have a tau transition
+	// to this state
+	if (endState) {
+	    int newId = states.size();
+	    AUTState endSt = new AUTState(newId);
+	    states.add(endSt);
+	    nbState = states.size();
+	    for(AUTState st: states) {
+		if (st.met) {
+		    AUTTransition tr = new AUTTransition(st.id, "tau", endSt.id);
+		    tr.isTau = true;
+		    transitions.add(tr);
+		    st.addOutTransition(tr);
+		    endSt.addInTransition(tr);
+		}
+		st.met = false;
 	    }
 	}
-	return null;
+	TraceManager.addDev(toAUTStringFormat());
+
+	// Remove all non reachable state
+	removeAllNonReachableStates();
+
+
+	// Print graph in AUT
+	TraceManager.addDev(toAUTStringFormat());
+
+	
+    }
+
+    private boolean getAllNonTauTransitionsFrom(AUTState st, LinkedList<AUTTransition> nonTauTransitions) {
+	LinkedList<AUTState> metStates = new LinkedList<AUTState>();
+	//metStates.add(st);
+
+	return getAllNonTauTransitions(st, metStates, nonTauTransitions);
+    }
+
+
+    private boolean getAllNonTauTransitions(AUTState st, LinkedList<AUTState> metStates, LinkedList<AUTTransition> nonTauTransitions) {
+	if (metStates.contains(st)) {
+	    return false;
+	}
+
+	if (st.getNbOutTransitions() == 0) {
+	    return true;
+	}
+
+	boolean ret = false;
+	for(AUTTransition at: st.outTransitions) {
+	    if (!(at.isTau)) {
+		nonTauTransitions.add(at);		
+	    } else {
+		ret = ret || getAllNonTauTransitions(states.get(at.destination), metStates, nonTauTransitions);
+	    }
+	}
+	
+	return ret;
     }
     
+    private AUTTransition findTransitionWithId(int id) {
+        for (AUTTransition tr: transitions) {
+            if ((tr.origin == id) || (tr.destination == id)) {
+                return tr;
+            }
+        }
+        return null;
+    }
+
+
+    private void removeAllNonReachableStates() {
+	// reset met of states
+	for(AUTState st1: states) {
+	    st1.met = false;
+	}
+
+	int cpt = 0;
+
+	LinkedList<AUTState> statesToConsider = new LinkedList<AUTState>();
+	LinkedList<AUTState> nextStatesToConsider = new LinkedList<AUTState>();
+	statesToConsider.add(states.get(0));
+
+	while(statesToConsider.size() > 0) {
+	    nextStatesToConsider.clear();
+	    for(AUTState st: statesToConsider) {
+		st.met = true;
+		cpt ++;
+		for(AUTTransition tr: st.outTransitions) {
+		    AUTState s = states.get(tr.destination);
+		    if (!(s.met)) {
+			nextStatesToConsider.add(s);
+		    }
+		}
+	    }
+	    statesToConsider.clear();
+	    statesToConsider.addAll(nextStatesToConsider);
+	}
+
+	TraceManager.addDev("Found " + cpt + " reachable states");
+	ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
+	for(AUTState st2: states) {
+	    if (!(st2.met)) {
+		toRemoveStates.add(st2);
+		TraceManager.addDev("Removing state: " + st2.id);
+	    }
+	}
+
+	removeStates(toRemoveStates);
+	
+    }
+
+
+    private void computeEntryExitTransitions() {
+	hasExitTransition = new boolean[nbState];
+        hasEntryTransition = new boolean[nbState];
+
+	for(AUTTransition t: transitions) {
+	    hasExitTransition[t.origin] = true;
+	    hasEntryTransition[t.destination] = true;
+	}
+    }
+
 
 
 }

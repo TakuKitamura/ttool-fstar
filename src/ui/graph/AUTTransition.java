@@ -139,4 +139,10 @@ public class AUTTransition  {
         return -1;
     }
 
+    public AUTTransition basicClone() {
+	AUTTransition tr = new AUTTransition(origin, transition, destination);
+	tr.isTau = isTau;
+	return tr;
+    }
+
 }

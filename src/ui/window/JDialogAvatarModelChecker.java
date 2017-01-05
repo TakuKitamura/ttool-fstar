@@ -586,7 +586,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             }
             if (saveGraphDot.isSelected()) {
 		String dotfile;
-		if (graphPathDot.getText().indexOf("$") == -1) {
+		if (graphPathDot.getText().indexOf("$") != -1) {
 		    dotfile = Conversion.replaceAllChar(graphPathDot.getText(), '$', dateAndTime);
 		} else {
 		    dotfile = graphPathDot.getText();

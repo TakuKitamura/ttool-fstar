@@ -605,12 +605,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             action += " [" + tr.clockMin + " ..." + clockMax + "]";
             link.action = action;
             newState.computeHash(blockValues);
-            SpecificationState similar = states.get(newState.getHash(blockValues));
+	    //SpecificationState similar = states.get(newState.getHash(blockValues));
+	    SpecificationState similar = addStateIfNotExisting(newState);
             if (similar == null) {
                 //  Unknown state
 		
                 //states.put(newState.getHash(blockValues), newState);
-		addState(newState);
+		//addState(newState);
 		//newState.id = getStateID();
 		//TraceManager.addDev("Putting new state with id = " +  newState.id + " stateID = " + stateID + " states size = " + states.size() + " states by id size = " + statesByID.size());
 		//statesByID.put(newState.id, newState);
@@ -1249,6 +1250,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	statesByID.put(newState.id, newState);
 	stateID ++;
     }
+
+    private synchronized SpecificationState addStateIfNotExisting(SpecificationState newState) {
+	SpecificationState similar = states.get(newState.getHash(blockValues));
+	if (similar == null) {
+	    addState(newState);
+	}
+	return similar;
+    }
+
+    
 
 
 }
