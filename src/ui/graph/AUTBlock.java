@@ -74,5 +74,51 @@ public class AUTBlock  {
 	return sb.toString();
     }
 
+    public boolean hasInTransitionWith(AUTElement _elt) {
+	for(AUTState st: states) {
+	    for(AUTTransition tr: st.inTransitions) {
+		if (tr.elt == _elt) {
+		    return true;
+		}
+	    }
+	}
+	return false;
+    }
+
+    public AUTBlock getIntersectWithInTransition(AUTElement _elt, ArrayList<AUTState> states) {
+	AUTBlock inter = new AUTBlock();
+	for(AUTState st: states) {
+	    for(AUTTransition tr: st.inTransitions) {
+		if (tr.elt == _elt) {
+		    AUTState s = states.get(tr.origin);
+		    if (!(inter.contains(s))) {
+			inter.addState(s);
+		    }
+		    break;
+		}
+	    }
+	}
+	return inter;
+    }
+
+    public AUTBlock getNotIntersectWithInTransition(AUTElement _elt) {
+	AUTBlock inter = new AUTBlock();
+	boolean intersect;
+	
+	for(AUTState st: states) {
+	    intersect = false;
+	    for(AUTTransition tr: st.inTransitions) {
+		if (tr.elt == _elt) {
+		    intersect = true;
+		    break;
+		}
+	    }
+	    if (!(intersect)) {
+		inter.addState(st);
+	    }
+	}
+	return inter;
+    }
+
 
 }

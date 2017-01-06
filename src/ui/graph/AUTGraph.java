@@ -1027,8 +1027,16 @@ public class AUTGraph implements myutil.Graph {
 		for(AUTElement elt: sortedAlphabet) {
 		    TraceManager.addDev("Considering alphabet element = " + elt.value); 
 		    printConfiguration(partition, w);
-		    // Look for states of the leading to another state by a
-		    // 
+		    // Look for states of the leading to another state by a = T
+		    // Construct I = all blocks of P that have at least an element in T
+		    LinkedList<AUTBlock> I = partition.getI(elt);
+		    printI(I);
+		    for(AUTBlock blockX: I) {
+			AUTBlock blockX1 = blockX.getIntersectWithInTransition(elt);
+			AUTBlock blockX2 = blockX.getNotIntersectWithInTransition(elt);
+			TraceManager.addDev("X1=" + blockX1);
+			TraceManager.addDev("X2=" + blockX2);		    }
+		    
 		}
 		
 	    }	    
@@ -1048,6 +1056,15 @@ public class AUTGraph implements myutil.Graph {
     private void printConfiguration(AUTPartition _part, AUTSplitter _w) {
 	TraceManager.addDev("P={" + _part.toString() + "}");
 	TraceManager.addDev("W={" + _w.toString() + "}");
+    }
+
+    private void printI(LinkedList<AUTBlock> I) {
+	StringBuffer sb = new StringBuffer("I:");
+	for(AUTBlock b: I) {
+	    sb.append(" " + b);
+	}
+	TraceManager.addDev(sb.toString());
+	
     }
     
 

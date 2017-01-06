@@ -71,4 +71,17 @@ public class AUTPartition  {
     }
 
 
+    // List of blocks that has a state that has an
+    // output "elt" transition
+    public LinkedList<AUTBlock> getI(AUTElement _elt) {
+	LinkedList<AUTBlock> listI = new LinkedList<AUTBlock>();
+	for(AUTBlock b: blocks) {
+	    if (b.hasInTransitionWith(_elt)) {
+		listI.add(b);
+	    }
+	}
+	return listI;
+    }
+
+
 }
