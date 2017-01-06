@@ -798,6 +798,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return null;
     }
 
+    public TGConnector findTGConnectorEndingAt(CDElement c) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc instanceof TGConnector) {
+                TGConnector tgco = (TGConnector) tgc;
+                if (tgco.isP2(c))
+                    return tgco;
+            }
+
+        return null;
+    }
+
+
     public TGConnector findTGConnectorUsing(CDElement c) {
         for (TGComponent tgc: this.componentList)
             if (tgc instanceof TGConnector) {

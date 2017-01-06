@@ -63,7 +63,8 @@ public  class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints 
 
         //nbInternalTGComponent = 1;
         //tgcomponent = new TGComponent[nbInternalTGComponent];
-        AvatarSMDTransitionInfo tgc = new AvatarSMDTransitionInfo(x, y+40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, this, _tdp);
+		
+        AvatarSMDTransitionInfo tgc = new AvatarSMDTransitionInfo((_p1.getX()+_p2.getX())/2, (_p1.getY()+_p2.getY())/2, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, this, _tdp);
         tgc.setValue("");
         tgc.setName("List of all parameters of an Avatar SMD transition");
         tgc.setMoveWithFather(false);

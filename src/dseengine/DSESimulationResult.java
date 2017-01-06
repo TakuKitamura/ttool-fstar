@@ -539,7 +539,7 @@ public class DSESimulationResult  {
 	public String getWholeResults() {
 		StringBuffer sb = new StringBuffer("");
 		
-		sb.append(sdwr.toStringResult() + "\n");
+	//	sb.append(sdwr.toStringResult() + "\n");
 		sb.append("CYCLE "+cdwr.toStringResult() + "\n");		
 		for(CPUWholeResult reswcpu: wcpus) {
 			sb.append(reswcpu.toStringResult() + "\n");

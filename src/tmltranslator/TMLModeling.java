@@ -632,6 +632,18 @@ public class TMLModeling {
         }
         return list;
     }
+	public ArrayList<TMLChannel> getChannels(TMLTask originTask, TMLTask destTask){
+        TMLChannel ch;
+        ArrayList<TMLChannel> list = new ArrayList<TMLChannel>();
+        ListIterator iterator = getListIteratorChannels();
+        while(iterator.hasNext()) {
+            ch = (TMLChannel)(iterator.next());
+            if ((ch.getOriginTask() == originTask) && (ch.getDestinationTask() == destTask)) {
+                list.add(ch);
+            }
+        }
+        return list;
+	}
     public void backtrace(ProVerifOutputAnalyzer pvoa, String mappingName){
  	LinkedList<AvatarAttribute> secretAttributes = pvoa.getSecretTerms ();
         LinkedList<AvatarAttribute> nonSecretAttributes = pvoa.getNonSecretTerms ();
