@@ -193,7 +193,7 @@ public class AUTState  {
 	    if (!(hasSimilarTransition(tr))) {
 		AUTTransition ntr = tr.basicClone();
 		ntr.origin = id;
-		outTransitions.add(tr);
+		outTransitions.add(ntr);
 		_states.get(ntr.destination).addInTransition(ntr);
 		_transitions.add(ntr);
 	    }

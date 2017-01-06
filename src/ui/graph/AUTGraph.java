@@ -519,6 +519,8 @@ public class AUTGraph implements myutil.Graph {
     public void minimizeTau() {
         boolean modif = true;
 
+	//TraceManager.addDev(toFullString());
+	
 	factorizeNonTauTransitions();
 
 	
@@ -725,11 +727,11 @@ public class AUTGraph implements myutil.Graph {
 	}
 	
         // Remove all states and adapt the id in the graph
-	TraceManager.addDev("nbState=" + nbState + " states size = " + states.size());
+	//TraceManager.addDev("nbState=" + nbState + " states size = " + states.size());
 	
         for(AUTState str: toRemoveStates) {
 	    // We need to remove all transitions of the removed state
-	    TraceManager.addDev("Removing transitions of state:" + str.id + "\n" + toFullString());
+	    //TraceManager.addDev("Removing transitions of state:" + str.id + "\n" + toFullString());
 	    for(AUTTransition trin: str.inTransitions) {
 		transitions.remove(trin);
 	    }
@@ -741,11 +743,11 @@ public class AUTGraph implements myutil.Graph {
 		state.removeAllTransitionsWithId(str.id);
 	    }
 
-	    TraceManager.addDev("Done removing transitions of state:" + str.id + "\n" + toFullString());
+	    //TraceManager.addDev("Done removing transitions of state:" + str.id + "\n" + toFullString());
 	    
             // Last state of the array?
             if (str.id == (nbState - 1)) {
-                TraceManager.addDev("Last state " + str.id);
+                //TraceManager.addDev("Last state " + str.id);
                 nbState --;
                 states.remove(str.id);
 
@@ -754,23 +756,23 @@ public class AUTGraph implements myutil.Graph {
             } else {
 
                 AUTState moved = states.get(nbState-1);
-                TraceManager.addDev("Moving state " + moved.id +  " to index " + str.id);
+                //TraceManager.addDev("Moving state " + moved.id +  " to index " + str.id);
                 states.set(str.id, moved);
                 states.remove(nbState-1);
                 nbState --;
-		TraceManager.addDev("nbState=" + nbState + " states size = " + states.size());
-		AUTTransition tt = findTransitionWithId(nbState);
+		//TraceManager.addDev("nbState=" + nbState + " states size = " + states.size());
+		/*AUTTransition tt = findTransitionWithId(nbState);
 		if (tt != null) {
                     TraceManager.addDev("1) Transition with id not normal" + tt);
-		}
-		TraceManager.addDev("Update id\n" + toAUTStringFormat());
+		    }*/
+		//TraceManager.addDev("Update id\n" + toAUTStringFormat());
 		moved.updateID(str.id);
-                tt = findTransitionWithId(nbState);
+                /*tt = findTransitionWithId(nbState);
                 if (tt != null) {
                     TraceManager.addDev("2) Transition with id not normal" + tt);
-		}
+		    }*/
             }
-	    TraceManager.addDev(toFullString());
+	    //TraceManager.addDev(toFullString());
 
         }
     }
@@ -788,25 +790,28 @@ public class AUTGraph implements myutil.Graph {
         // Remove tr if it is duplicated
         for(AUTState st: states) {
 	    // We ignore states with no input tr apart from the start state (id 0)
-	    TraceManager.addDev("0. state " + st.id);
+	    //TraceManager.addDev("0. state " + st.id);
 	    if ((st.id == 0) || (st.getNbInTransitions() > 0)) {
-		TraceManager.addDev("  1. state " + st.id);
+		//TraceManager.addDev("  1. state " + st.id);
 		if (st.hasOutputTauTransition()) {
-		    TraceManager.addDev("  2. state " + st.id);
+		    //TraceManager.addDev("  2. state " + st.id);
 		    LinkedList<AUTTransition> nonTauTransitions = new LinkedList<AUTTransition>();
 		    boolean canReachAnEndStateWithTau = getAllNonTauTransitionsFrom(st, nonTauTransitions);
 
-		    TraceManager.addDev("State " + st.id + " has the following real transitions:");
-		    for(AUTTransition tr: nonTauTransitions) {
+		    //TraceManager.addDev("State " + st.id + " has the following real transitions:");
+		    /*for(AUTTransition tr: nonTauTransitions) {
 			TraceManager.addDev("\t" + tr);
-		    }
+			}*/
 		    
 		    st.met = canReachAnEndStateWithTau;
 		    endState = endState || canReachAnEndStateWithTau;
 		    
 		    // Create these transitions in st if not yet existing
+		    //TraceManager.addDev("Remove tau\n" + toFullString());
 		    st.removeAllOutTauTransitions(transitions, states);
+		    //TraceManager.addDev("Done remove tau. create trans\n" + toFullString());
 		    st.createTransitionsButNotDuplicate(nonTauTransitions, states, transitions);
+		    //TraceManager.addDev("Done create trans\n" + toFullString());
 		}
 	    }
 	}
@@ -829,14 +834,14 @@ public class AUTGraph implements myutil.Graph {
 		st.met = false;
 	    }
 	}
-	TraceManager.addDev(toAUTStringFormat());
+	//TraceManager.addDev(toFullString());
 
 	// Remove all non reachable state
 	removeAllNonReachableStates();
 
 
 	// Print graph in AUT
-	TraceManager.addDev(toAUTStringFormat());
+	//TraceManager.addDev(toAUTStringFormat());
 
 	
     }
@@ -845,11 +850,12 @@ public class AUTGraph implements myutil.Graph {
 	LinkedList<AUTState> metStates = new LinkedList<AUTState>();
 	//metStates.add(st);
 
-	return getAllNonTauTransitions(st, metStates, nonTauTransitions);
+	return getAllNonTauTransitionsIterative(st, metStates, nonTauTransitions);
+	//return getAllNonTauTransitionsRecursive(st, metStates, nonTauTransitions);
     }
 
 
-    private boolean getAllNonTauTransitions(AUTState st, LinkedList<AUTState> metStates, LinkedList<AUTTransition> nonTauTransitions) {
+    private boolean getAllNonTauTransitionsRecursive(AUTState st, LinkedList<AUTState> metStates, LinkedList<AUTTransition> nonTauTransitions) {
 	if (metStates.contains(st)) {
 	    return false;
 	}
@@ -863,10 +869,46 @@ public class AUTGraph implements myutil.Graph {
 	    if (!(at.isTau)) {
 		nonTauTransitions.add(at);		
 	    } else {
-		ret = ret || getAllNonTauTransitions(states.get(at.destination), metStates, nonTauTransitions);
+		ret = ret || getAllNonTauTransitionsRecursive(states.get(at.destination), metStates, nonTauTransitions);
 	    }
 	}
 	
+	return ret;
+    }
+
+
+    private boolean getAllNonTauTransitionsIterative(AUTState _st, LinkedList<AUTState> metStates, LinkedList<AUTTransition> nonTauTransitions) {
+
+	boolean ret = false;
+	
+	LinkedList<AUTState> toExplore = new LinkedList<AUTState>();
+	LinkedList<AUTState> toExploreTmp = new LinkedList<AUTState>();
+	toExplore.add(_st);
+	
+	while (toExplore.size() > 0) {
+	    toExploreTmp.clear();
+	    for(AUTState st: toExplore) {
+		if (!(metStates.contains(st))) {
+		    metStates.add(st);
+		    if (st.getNbOutTransitions() == 0) {
+			ret = true;
+		    } else {
+			for(AUTTransition at: st.outTransitions) {
+			    if (!(at.isTau)) {
+				nonTauTransitions.add(at);		
+			    } else {
+				toExploreTmp.add(states.get(at.destination));
+			    }
+			}
+		    }
+		    
+		}
+	    } // for
+	    toExplore.clear();
+	    toExplore.addAll(toExploreTmp);
+	    
+	}// While
+
 	return ret;
     }
     
@@ -908,12 +950,12 @@ public class AUTGraph implements myutil.Graph {
 	    statesToConsider.addAll(nextStatesToConsider);
 	}
 
-	TraceManager.addDev("Found " + cpt + " reachable states");
+	//TraceManager.addDev("Found " + cpt + " reachable states");
 	ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
 	for(AUTState st2: states) {
 	    if (!(st2.met)) {
 		toRemoveStates.add(st2);
-		TraceManager.addDev("Removing state: " + st2.id);
+		//TraceManager.addDev("Removing state: " + st2.id);
 	    }
 	}
 
@@ -931,6 +973,12 @@ public class AUTGraph implements myutil.Graph {
 	    hasEntryTransition[t.destination] = true;
 	}
     }
+
+
+    private void partitionGraph() {
+	
+    }
+    
 
 
 
