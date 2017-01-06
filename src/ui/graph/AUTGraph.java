@@ -536,6 +536,9 @@ public class AUTGraph implements myutil.Graph {
                 }
             }
 	    }*/
+
+	partitionGraph();
+	
         statesComputed = false;
     }
 
@@ -975,8 +978,76 @@ public class AUTGraph implements myutil.Graph {
     }
 
 
-    private void partitionGraph() {
+    public void partitionGraph() {
 	
+	// Create the alphabet
+	HashMap<String, AUTElement> alphabet = new HashMap<String, AUTElement>();
+	for(AUTTransition tr: transitions) {
+	    AUTElement tmp = alphabet.get(tr.transition);
+	    if (tmp == null) {
+		AUTElement elt = new AUTElement(tr.transition);
+		alphabet.put(tr.transition, elt);
+		tr.elt = elt;
+	    }
+	}
+
+	TraceManager.addDev("Alphabet size:" + alphabet.size());
+
+	// Create the first block that contains all states
+	AUTBlock b0 = new AUTBlock();
+	for(AUTState st: states) {
+	    b0.addState(st);
+	}
+
+	// Create the first partition containing only block B0
+	AUTPartition partition = new AUTPartition();
+	partition.addBlock(b0);
+
+	// Create the splitter that contains partitions
+	AUTPartition partitionForSplitter = new AUTPartition();
+	partitionForSplitter.addBlock(b0);
+	AUTSplitter w = new AUTSplitter();
+	w.addPartition(partitionForSplitter);
+
+	printConfiguration(partition, w);
+
+	int maxIte = 1000;
+
+	AUTPartition currentP;
+	while((w.size()>0) && (maxIte >0)) {
+	    maxIte --;
+	    currentP = w.partitions.get(0);
+	    w.partitions.remove(0);
+
+	    // Simple splitter?
+	    if (currentP.blocks.size() == 1) {
+		AUTBlock currentBlock = currentP.blocks.get(0);
+		List<AUTElement> sortedAlphabet = new ArrayList<AUTElement>(alphabet.values());
+		Collections.sort(sortedAlphabet);
+		for(AUTElement elt: sortedAlphabet) {
+		    TraceManager.addDev("Considering alphabet element = " + elt.value); 
+		    printConfiguration(partition, w);
+		    // Look for states of the leading to another state by a
+		    // 
+		}
+		
+	    }	    
+	    // Compound splitter
+	    else {
+
+	    }
+	}
+	    
+ 
+	
+       
+	
+	
+    }
+
+    private void printConfiguration(AUTPartition _part, AUTSplitter _w) {
+	TraceManager.addDev("P={" + _part.toString() + "}");
+	TraceManager.addDev("W={" + _w.toString() + "}");
     }
     
 

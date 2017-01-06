@@ -36,7 +36,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AUTBlock
+   * Class AUTElement
    * Creation : 06/01/2017
    ** @version 1.0 06/01/2017
    * @author Ludovic APVRILLE
@@ -47,32 +47,18 @@ package ui.graph;
 
 import java.util.*;
 
-public class AUTBlock  {
+public class AUTElement implements Comparable<AUTElement> {
 
+    public String value;
 
-    public ArrayList<AUTState> states; // Arriving to that state
-
-    public AUTBlock() {
-	states = new ArrayList<AUTState>();
+    public AUTElement(String _value) {
+	value = _value;
     }
 
-    public void addState(AUTState _st) {
-        states.add(_st);
+    @Override
+    public int compareTo(AUTElement o1) {
+	return this.value.compareTo(o1.value);
     }
-
-    public String toString() {
-	boolean first = true;
-	StringBuffer sb = new StringBuffer("");
-	for(AUTState state: states) {
-	    if (!first) {
-		sb.append("," + state.id);
-	    } else {
-		sb.append(state.id);
-		first = false;
-	    }
-	}
-	return sb.toString();
-    }
-
+    
 
 }

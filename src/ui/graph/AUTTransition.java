@@ -50,6 +50,7 @@ public class AUTTransition  {
     public int origin;
     public int destination;
     public String transition;
+    public AUTElement elt;
     public boolean isTau;
 
     public AUTTransition(int _origin, String _transition, int _destination) {

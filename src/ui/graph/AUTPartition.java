@@ -36,7 +36,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class AUTBlock
+   * Class AUTPartition
    * Creation : 06/01/2017
    ** @version 1.0 06/01/2017
    * @author Ludovic APVRILLE
@@ -47,29 +47,25 @@ package ui.graph;
 
 import java.util.*;
 
-public class AUTBlock  {
+public class AUTPartition  {
 
+    
+    public ArrayList<AUTBlock> blocks;
+    // Blocks are expected to be mutually exclusive
+    // in terms of states they contain.
 
-    public ArrayList<AUTState> states; // Arriving to that state
-
-    public AUTBlock() {
-	states = new ArrayList<AUTState>();
+    public AUTPartition() {
+	blocks = new ArrayList<AUTBlock>();
     }
 
-    public void addState(AUTState _st) {
-        states.add(_st);
+    public void addBlock(AUTBlock _bl) {
+        blocks.add(_bl);
     }
 
     public String toString() {
-	boolean first = true;
 	StringBuffer sb = new StringBuffer("");
-	for(AUTState state: states) {
-	    if (!first) {
-		sb.append("," + state.id);
-	    } else {
-		sb.append(state.id);
-		first = false;
-	    }
+	for(AUTBlock block: blocks) {
+	    sb.append("(" + block.toString() + ")");
 	}
 	return sb.toString();
     }

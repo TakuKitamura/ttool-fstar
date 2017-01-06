@@ -47,13 +47,14 @@ knowledge of the CeCILL license and that you accept its terms.
 
 
 import myutil.*;
+import ui.graph.*;
 
 
 public class Test  {
    
 	
     public static void main(String[] args) {
-    	
+    	testAUTGraph();
     	testBoolExpr();
     	
     }
@@ -118,6 +119,36 @@ public class Test  {
     	
     	
     }
+
+
+    public static void testAUTGraph() {
+	AUTGraph graph = new AUTGraph();
+
+	graph.setNbOfStates(6);
+	
+	graph.addTransition(new AUTTransition(0, "a", 1));
+	graph.addTransition(new AUTTransition(0, "b", 3));
+
+	graph.addTransition(new AUTTransition(1, "a", 2));
+	graph.addTransition(new AUTTransition(1, "b", 3));
+	graph.addTransition(new AUTTransition(1, "b", 4));
+
+	graph.addTransition(new AUTTransition(2, "a", 1));
+	graph.addTransition(new AUTTransition(2, "b", 4));
+
+	graph.addTransition(new AUTTransition(3, "c", 5));
+	graph.addTransition(new AUTTransition(4, "c", 5));
+
+	graph.computeStates();
+
+	TraceManager.addDev("Graph:" + graph.toFullString());
+
+	graph.partitionGraph();
+	
+
+	
+    }
+    
 
 } // Class Test
 
