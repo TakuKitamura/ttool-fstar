@@ -91,7 +91,7 @@ public class AUTBlock  {
 	    for(AUTTransition tr: st.inTransitions) {
 		if (tr.elt == _elt) {
 		    AUTState s = states.get(tr.origin);
-		    if (!(inter.contains(s))) {
+		    if (!(inter.states.contains(s))) {
 			inter.addState(s);
 		    }
 		    break;

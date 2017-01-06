@@ -1032,10 +1032,11 @@ public class AUTGraph implements myutil.Graph {
 		    LinkedList<AUTBlock> I = partition.getI(elt);
 		    printI(I);
 		    for(AUTBlock blockX: I) {
-			AUTBlock blockX1 = blockX.getIntersectWithInTransition(elt);
+			/*AUTBlock blockX1 = blockX.getIntersectWithInTransition(elt);
 			AUTBlock blockX2 = blockX.getNotIntersectWithInTransition(elt);
 			TraceManager.addDev("X1=" + blockX1);
-			TraceManager.addDev("X2=" + blockX2);		    }
+			TraceManager.addDev("X2=" + blockX2);		    */
+			}
 		    
 		}
 		
