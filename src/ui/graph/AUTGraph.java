@@ -994,6 +994,9 @@ public class AUTGraph implements myutil.Graph {
 	    //TraceManager.addDev("Transition "+ tr + " has element " + tr.elt);
 	}
 
+	List<AUTElement> sortedAlphabet = new ArrayList<AUTElement>(alphabet.values());
+	Collections.sort(sortedAlphabet);
+	
 	TraceManager.addDev("Alphabet size:" + alphabet.size());
 
 
@@ -1004,6 +1007,23 @@ public class AUTGraph implements myutil.Graph {
 	for(AUTState st: states) {
 	    b0.addState(st);
 	}
+	b0.computeHash();
+	allBlocks.put(new Integer(b0.hashValue), b0);
+
+	
+	AUTBlock b0Test = new AUTBlock();
+	for(AUTState st: states) {
+	    b0Test.addState(st);
+	}
+	b0Test.computeHash();
+
+	AUTBlock B0Ret = allBlocks.get(new Integer(b0Test.hashValue));
+	if (B0Ret == null) {
+	    TraceManager.addDev("ERROR: hash not working for blocks");
+	} else {
+	    TraceManager.addDev("Hash working for blocks");
+	}
+	
 	
 
 	// Create the first partition containing only block B0
@@ -1011,6 +1031,7 @@ public class AUTGraph implements myutil.Graph {
 	partition.addBlock(b0);
 
 	// Create the splitter that contains partitions
+	
 	AUTPartition partitionForSplitter = new AUTPartition();
 	partitionForSplitter.addBlock(b0);
 	AUTSplitter w = new AUTSplitter();
@@ -1028,11 +1049,12 @@ public class AUTGraph implements myutil.Graph {
 
 	    // Simple splitter?
 	    if (currentP.blocks.size() == 1) {
+		TraceManager.addDev("Simple splitter = " + currentP);
 		AUTBlock currentBlock = currentP.blocks.get(0);
-		List<AUTElement> sortedAlphabet = new ArrayList<AUTElement>(alphabet.values());
-		Collections.sort(sortedAlphabet);
+		//List<AUTElement> sortedAlphabet = new ArrayList<AUTElement>(alphabet.values());
+		//Collections.sort(sortedAlphabet);
 		for(AUTElement elt: sortedAlphabet) {
-		    TraceManager.addDev("Considering alphabet element = " + elt.value); 
+		    TraceManager.addDev("\n*** Considering alphabet element = " + elt.value); 
 		    printConfiguration(partition, w);
 		    // Look for states of the leading to another state by a = T
 		    // Construct I = all blocks of P that have at least an element in T
@@ -1044,16 +1066,19 @@ public class AUTGraph implements myutil.Graph {
 		    printI(I);
 		    for(AUTBlock blockX: I) {
 			AUTBlock blockX1 = blockX.getStateIntersectWith(T_minus1_elt_B);
+			blockX1.computeHash();
 			AUTBlock blockX2 = blockX.getStateDifferenceWith(T_minus1_elt_B);
+			blockX2.computeHash();
 			TraceManager.addDev("X1=" + blockX1);
 			TraceManager.addDev("X2=" + blockX2);
 
 			if (blockX1.isEmpty() || blockX2.isEmpty()) {
+			    TraceManager.addDev("Nothing to do");
 			    // Nothing to do!
 			} else {
 			    boolean b = partition.removeBlock(blockX);
 			    if (!b) {
-				TraceManager.addDev("Block " + blockX + " could ne be removed from partition");
+				TraceManager.addDev("Block " + blockX + " could not be removed from partition");
 			    }
 			    partition.addBlock(blockX1);
 			    partition.addBlock(blockX2);
@@ -1066,13 +1091,67 @@ public class AUTGraph implements myutil.Graph {
 			    printConfiguration(partition, w);
 			    TraceManager.addDev("-----------------\n");
 			}
+			
 		    }
+<<<<<<< Upstream, based on aa363fe017f226394c627b60189e75002e6b1199
+=======
+		    TraceManager.addDev("-----------------\n");
+>>>>>>> d0df681 Update on algo management
 		    
 		}
 		
-	    }	    
+	    }
+	    
 	    // Compound splitter
-	    else {
+	    else if (currentP.blocks.size() == 3){
+		TraceManager.addDev("Complexe splitter (b, bi, bii) =" + currentP);
+		AUTBlock b = currentP.blocks.get(0);
+		AUTBlock bi = currentP.blocks.get(1);
+		AUTBlock bii = currentP.blocks.get(2);
+
+		if (bi.size() > bii.size()) {
+		    bi = currentP.blocks.get(2);
+		    bii = currentP.blocks.get(1);
+		}
+
+		TraceManager.addDev("B= " + b +  " bi=" + bi + " bii=" + bii);
+
+		for(AUTElement elt: sortedAlphabet) {
+		    TraceManager.addDev("\n*** Considering alphabet element = " + elt.value);
+		    printConfiguration(partition, w);
+		    AUTBlock T_minus1_elt_B = b.getMinus1(elt, states);
+		    TraceManager.addDev("T_minus1_elt_B=" + T_minus1_elt_B);
+		    LinkedList<AUTBlock> I = partition.getI(elt, T_minus1_elt_B);
+		    printI(I);
+		    for(AUTBlock blockX: I) {
+			// Compute block X1 = set of states in blockX that goes to Bi, but not to Bii
+			// with current action
+			AUTBlock blockX1 = new AUTBlock();
+			
+			// Compute block X2 = set of states in blockX that goes to Bii, but not to Bi
+			// with current action
+			AUTBlock blockX2 = new AUTBlock();
+
+			// Compute block X3 = set of states in blockX that goes to both Bi and Bii
+			// with current action
+			boolean b1, b2;
+			AUTBlock blockX3 = new AUTBlock();
+			for(AUTState st: blockX.states) {
+			    b1 = blockX.leadsTo(bi, elt);
+			    b2 = blockX.leadsTo(bii, elt);
+			    if (b1 && !b2) {
+				blockX1.addState(st);
+			    } else if (!b1 && b2) {
+				blockX2.addState(st);
+			    } else {
+				blockX3.addState(st);
+			    }
+			}
+			TraceManager.addDev("Block1,2,3 computed\n\tX1 = " + blockX1 + "\n\tX2 = " + blockX2 + "\n\tX3 = " + blockX3); 
+			
+		    }
+		    
+		}
 
 	    }
 	}

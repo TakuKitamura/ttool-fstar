@@ -49,7 +49,7 @@ import myutil.*;
 
 import java.util.*;
 
-public class AUTBlock  {
+public class AUTBlock  implements Comparable<AUTBlock> {
 
 
     public ArrayList<AUTState> states; // Arriving to that state   
@@ -63,6 +63,7 @@ public class AUTBlock  {
     public void addState(AUTState _st) {
         states.add(_st);
     }
+
 
     public String toString() {
         boolean first = true;
@@ -157,6 +158,38 @@ public class AUTBlock  {
         }
         hashValue = Arrays.hashCode(hash);
         hashComputed = true;
+    }
+
+    public int compareTo( AUTBlock _b ) {
+	if (!hashComputed) {
+	    computeHash();
+	}
+	if (!_b.hashComputed) {
+	    _b.computeHash();
+	}
+	return (hashValue - _b.hashValue);
+    }
+
+    public boolean hasState(int _id) {
+	for(AUTState st: states) {
+	    if (st.id == _id) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+
+    public boolean leadsTo(AUTBlock _b, AUTElement _elt) {
+	for(AUTState st: states) {
+	    for(AUTTransition tr: st.outTransitions) {
+		if (_b.hasState(tr.destination)) {
+		    TraceManager.addDev("Transition from block " + _b + " from state " + st + " to state " + tr.destination +  " with elt=" + _elt);
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
 
