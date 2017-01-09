@@ -52,10 +52,10 @@ import java.util.*;
 public class AUTBlock  implements Comparable<AUTBlock> {
 
 
-    public ArrayList<AUTState> states; // Arriving to that state   
+    public ArrayList<AUTState> states; // Arriving to that state
     public int hashValue;
     public boolean hashComputed;
-    
+
     public AUTBlock() {
         states = new ArrayList<AUTState>();
     }
@@ -94,103 +94,115 @@ public class AUTBlock  implements Comparable<AUTBlock> {
     public AUTBlock getMinus1(AUTElement _elt, ArrayList<AUTState> _states) {
         AUTBlock b = new AUTBlock();
         for(AUTState st: states) {
-	    //TraceManager.addDev("Considering state" + st);
+            //TraceManager.addDev("Considering state" + st);
             for(AUTTransition tr: st.inTransitions) {
-		//TraceManager.addDev("Considering transition:" + tr + " with elt " + tr.elt +  ". Is it equal to " + _elt + "?");
+                //TraceManager.addDev("Considering transition:" + tr + " with elt " + tr.elt +  ". Is it equal to " + _elt + "?");
                 if (tr.elt == _elt) {
                     AUTState tmp = _states.get(tr.origin);
-		    //TraceManager.addDev("Yes! Found state for minus-1=" + tmp);
+                    //TraceManager.addDev("Yes! Found state for minus-1=" + tmp);
                     if (!(b.states.contains(tmp))) {
                         b.states.add(tmp);
                     }
                 } else {
-		    //TraceManager.addDev("No...");
-		}
+                    //TraceManager.addDev("No...");
+                }
             }
         }
         return b;
     }
 
     public AUTBlock getStateIntersectWith(AUTBlock _b) {
-	AUTBlock b = new AUTBlock();
-	for(AUTState st: states) {
-	    if (_b.states.contains(st)) {
-		b.addState(st);
-	    }
-	}
-	return b;
+        AUTBlock b = new AUTBlock();
+        for(AUTState st: states) {
+            if (_b.states.contains(st)) {
+                b.addState(st);
+            }
+        }
+        return b;
     }
 
     public AUTBlock getStateDifferenceWith(AUTBlock _b) {
-	AUTBlock b = new AUTBlock();
-	for(AUTState st: states) {
-	    if (!(_b.states.contains(st))) {
-		b.addState(st);
-	    }
-	}
-	return b;
+        AUTBlock b = new AUTBlock();
+        for(AUTState st: states) {
+            if (!(_b.states.contains(st))) {
+                b.addState(st);
+            }
+        }
+        return b;
     }
 
-    
+
     public boolean hasStateOf(AUTBlock _b) {
-	for(AUTState st: states) {
-	    if (_b.states.contains(st)) {
-		return true;
-	    }
-	}
-	return false;
+        for(AUTState st: states) {
+            if (_b.states.contains(st)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int size() {
-	return states.size();
+        return states.size();
     }
 
     public boolean isEmpty() {
-	return (states.size() == 0);
+        return (states.size() == 0);
     }
 
     public void computeHash() {
-	Collections.sort(states);
-	int[] hash = new int[states.size()];
+        Collections.sort(states);
+        int[] hash = new int[states.size()];
         int cpt = 0;
         for(int i=0; i<hash.length; i++) {
-	    hash[i] = states.get(i).id;		
+            hash[i] = states.get(i).id;
         }
         hashValue = Arrays.hashCode(hash);
         hashComputed = true;
     }
 
     public int compareTo( AUTBlock _b ) {
-	if (!hashComputed) {
-	    computeHash();
-	}
-	if (!_b.hashComputed) {
-	    _b.computeHash();
-	}
-	return (hashValue - _b.hashValue);
+        if (!hashComputed) {
+            computeHash();
+        }
+        if (!_b.hashComputed) {
+            _b.computeHash();
+        }
+        return (hashValue - _b.hashValue);
     }
 
     public boolean hasState(int _id) {
-	for(AUTState st: states) {
-	    if (st.id == _id) {
-		return true;
-	    }
-	}
-	return false;
+        for(AUTState st: states) {
+            if (st.id == _id) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
     public boolean leadsTo(AUTBlock _b, AUTElement _elt) {
-	for(AUTState st: states) {
-	    for(AUTTransition tr: st.outTransitions) {
-		if (_b.hasState(tr.destination)) {
-		    TraceManager.addDev("Transition from block " + _b + " from state " + st + " to state " + tr.destination +  " with elt=" + _elt);
-		    return true;
-		}
-	    }
-	}
-	return false;
+        for(AUTState st: states) {
+            for(AUTTransition tr: st.outTransitions) {
+                if (tr.elt == _elt) {
+                    if (_b.hasState(tr.destination)) {
+                        //TraceManager.addDev("Transition from block " + _b + " from state " + st + " to state " + tr.destination +  " with elt=" + _elt);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
+    public static AUTBlock concat(AUTBlock b1, AUTBlock b2) {
+	AUTBlock ret = new AUTBlock();
+	for(AUTState st1: b1.states) {
+	    ret.addState(st1);
+	}
+	for(AUTState st2: b2.states) {
+	    ret.addState(st2);
+	}
+	return ret;
+    }
 
 }

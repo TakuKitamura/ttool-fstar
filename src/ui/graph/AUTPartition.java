@@ -62,6 +62,12 @@ public class AUTPartition  {
         blocks.add(_bl);
     }
 
+    public void addIfNonEmpty(AUTBlock _b) {
+	if (_b.size() > 0) {
+	    addBlock(_b);
+	}
+    }
+
     public String toString() {
 	StringBuffer sb = new StringBuffer("");
 	for(AUTBlock block: blocks) {

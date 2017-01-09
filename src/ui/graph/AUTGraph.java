@@ -1086,6 +1086,7 @@ public class AUTGraph implements myutil.Graph {
 			    X_X1_X2.addBlock(blockX);
 			    X_X1_X2.addBlock(blockX1);
 			    X_X1_X2.addBlock(blockX2);
+			    TraceManager.addDev("Test concat X1+X2=" + AUTBlock.concat(blockX1, blockX2));
 			    w.addPartition( X_X1_X2);
 			    TraceManager.addDev("Modifying P and W:");
 			    printConfiguration(partition, w);
@@ -1147,18 +1148,69 @@ public class AUTGraph implements myutil.Graph {
 				blockX3.addState(st);
 			    }
 			}
-			TraceManager.addDev("Block1,2,3 computed\n\tX1 = " + blockX1 + "\n\tX2 = " + blockX2 + "\n\tX3 = " + blockX3); 
+			TraceManager.addDev("Block X = " + blockX + " Block1,2,3 computed\n\tX1 = " + blockX1 + "\n\tX2 = " + blockX2 + "\n\tX3 = " + blockX3);
 			
+			if ((blockX.compareTo(blockX1) == 0) || (blockX.compareTo(blockX2) == 0) || (blockX.compareTo(blockX2) == 0)) {
+			    // do nothing
+			    TraceManager.addDev("Identical blocks! X");
+			}  else  {
+			    TraceManager.addDev("Non Identical blocks! X");
+			    // Modifying partition
+			    partition.removeBlock(blockX);
+			    partition.addIfNonEmpty(blockX1);
+			    partition.addIfNonEmpty(blockX2);
+			    partition.addIfNonEmpty(blockX3);
+
+
+			    // Add two splitter to W if all are non null
+			    if (!(blockX1.isEmpty()) && !(blockX2.isEmpty()) && !(blockX3.isEmpty())) {
+				// Add splitter (X, X1, X23) && (X23, X2, X3)
+				AUTPartition tmpP = new AUTPartition();
+				tmpP.addBlock(blockX);
+				tmpP.addBlock(blockX1);
+				tmpP.addBlock(AUTBlock.concat(blockX2, blockX3));
+				w.addPartition(tmpP);
+				tmpP = new AUTPartition();
+				tmpP.addBlock(AUTBlock.concat(blockX2, blockX3));
+				tmpP.addBlock(blockX2);
+				tmpP.addBlock(blockX3);
+				w.addPartition(tmpP);
+				
+				    
+			    } else {
+				// Add non empty individual block to W
+				AUTPartition tmpP;
+				if (!(blockX1.isEmpty())) {
+				    tmpP = new AUTPartition();
+				    tmpP.addBlock(blockX1);
+				    w.addPartition(tmpP);
+				}
+				if (!(blockX2.isEmpty())) {
+				    tmpP = new AUTPartition();
+				    tmpP.addBlock(blockX2);
+				    w.addPartition(tmpP);
+				}
+				if (!(blockX3.isEmpty())) {
+				    tmpP = new AUTPartition();
+				    tmpP.addBlock(blockX3);
+				    w.addPartition(tmpP);
+				}
+			    }
+			    
+			}
 		    }
 		    
 		}
-
+		
 	    }
 	}
-	    
- 
 	
-       
+	TraceManager.addDev("\nAll done:\n---------");
+	printConfiguration(partition, w);
+	TraceManager.addDev("------------------");
+ 
+	// Generating new graph
+	
 	
 	
     }
