@@ -988,16 +988,23 @@ public class AUTGraph implements myutil.Graph {
 		AUTElement elt = new AUTElement(tr.transition);
 		alphabet.put(tr.transition, elt);
 		tr.elt = elt;
+	    } else {
+		tr.elt = tmp;
 	    }
+	    //TraceManager.addDev("Transition "+ tr + " has element " + tr.elt);
 	}
 
 	TraceManager.addDev("Alphabet size:" + alphabet.size());
 
+
+	Map<Integer, AUTBlock> allBlocks = Collections.synchronizedMap(new HashMap<Integer, AUTBlock>());
+	
 	// Create the first block that contains all states
 	AUTBlock b0 = new AUTBlock();
 	for(AUTState st: states) {
 	    b0.addState(st);
 	}
+	
 
 	// Create the first partition containing only block B0
 	AUTPartition partition = new AUTPartition();
@@ -1029,14 +1036,37 @@ public class AUTGraph implements myutil.Graph {
 		    printConfiguration(partition, w);
 		    // Look for states of the leading to another state by a = T
 		    // Construct I = all blocks of P that have at least an element in T
-		    LinkedList<AUTBlock> I = partition.getI(elt);
+		    AUTBlock T_minus1_elt_B = currentBlock.getMinus1(elt, states);
+
+		    TraceManager.addDev("T_minus1_elt_B=" + T_minus1_elt_B);
+		    
+		    LinkedList<AUTBlock> I = partition.getI(elt, T_minus1_elt_B);
 		    printI(I);
 		    for(AUTBlock blockX: I) {
-			/*AUTBlock blockX1 = blockX.getIntersectWithInTransition(elt);
-			AUTBlock blockX2 = blockX.getNotIntersectWithInTransition(elt);
+			AUTBlock blockX1 = blockX.getStateIntersectWith(T_minus1_elt_B);
+			AUTBlock blockX2 = blockX.getStateDifferenceWith(T_minus1_elt_B);
 			TraceManager.addDev("X1=" + blockX1);
-			TraceManager.addDev("X2=" + blockX2);		    */
+			TraceManager.addDev("X2=" + blockX2);
+
+			if (blockX1.isEmpty() || blockX2.isEmpty()) {
+			    // Nothing to do!
+			} else {
+			    boolean b = partition.removeBlock(blockX);
+			    if (!b) {
+				TraceManager.addDev("Block " + blockX + " could ne be removed from partition");
+			    }
+			    partition.addBlock(blockX1);
+			    partition.addBlock(blockX2);
+			    AUTPartition X_X1_X2 = new AUTPartition();
+			    X_X1_X2.addBlock(blockX);
+			    X_X1_X2.addBlock(blockX1);
+			    X_X1_X2.addBlock(blockX2);
+			    w.addPartition( X_X1_X2);
+			    TraceManager.addDev("Modifying P and W:");
+			    printConfiguration(partition, w);
+			    TraceManager.addDev("-----------------\n");
 			}
+		    }
 		    
 		}
 		

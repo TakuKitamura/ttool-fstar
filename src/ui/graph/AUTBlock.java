@@ -45,15 +45,19 @@
 
 package ui.graph;
 
+import myutil.*;
+
 import java.util.*;
 
 public class AUTBlock  {
 
 
-    public ArrayList<AUTState> states; // Arriving to that state
-
+    public ArrayList<AUTState> states; // Arriving to that state   
+    public int hashValue;
+    public boolean hashComputed;
+    
     public AUTBlock() {
-	states = new ArrayList<AUTState>();
+        states = new ArrayList<AUTState>();
     }
 
     public void addState(AUTState _st) {
@@ -61,63 +65,98 @@ public class AUTBlock  {
     }
 
     public String toString() {
-	boolean first = true;
-	StringBuffer sb = new StringBuffer("");
-	for(AUTState state: states) {
-	    if (!first) {
-		sb.append("," + state.id);
-	    } else {
-		sb.append(state.id);
-		first = false;
-	    }
-	}
-	return sb.toString();
+        boolean first = true;
+        StringBuffer sb = new StringBuffer("");
+        for(AUTState state: states) {
+            if (!first) {
+                sb.append("," + state.id);
+            } else {
+                sb.append(state.id);
+                first = false;
+            }
+        }
+        return sb.toString();
     }
 
     public boolean hasInTransitionWith(AUTElement _elt) {
-	for(AUTState st: states) {
-	    for(AUTTransition tr: st.inTransitions) {
-		if (tr.elt == _elt) {
-		    return true;
+        for(AUTState st: states) {
+            for(AUTTransition tr: st.inTransitions) {
+                if (tr.elt == _elt) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public AUTBlock getMinus1(AUTElement _elt, ArrayList<AUTState> _states) {
+        AUTBlock b = new AUTBlock();
+        for(AUTState st: states) {
+	    //TraceManager.addDev("Considering state" + st);
+            for(AUTTransition tr: st.inTransitions) {
+		//TraceManager.addDev("Considering transition:" + tr + " with elt " + tr.elt +  ". Is it equal to " + _elt + "?");
+                if (tr.elt == _elt) {
+                    AUTState tmp = _states.get(tr.origin);
+		    //TraceManager.addDev("Yes! Found state for minus-1=" + tmp);
+                    if (!(b.states.contains(tmp))) {
+                        b.states.add(tmp);
+                    }
+                } else {
+		    //TraceManager.addDev("No...");
 		}
+            }
+        }
+        return b;
+    }
+
+    public AUTBlock getStateIntersectWith(AUTBlock _b) {
+	AUTBlock b = new AUTBlock();
+	for(AUTState st: states) {
+	    if (_b.states.contains(st)) {
+		b.addState(st);
+	    }
+	}
+	return b;
+    }
+
+    public AUTBlock getStateDifferenceWith(AUTBlock _b) {
+	AUTBlock b = new AUTBlock();
+	for(AUTState st: states) {
+	    if (!(_b.states.contains(st))) {
+		b.addState(st);
+	    }
+	}
+	return b;
+    }
+
+    
+    public boolean hasStateOf(AUTBlock _b) {
+	for(AUTState st: states) {
+	    if (_b.states.contains(st)) {
+		return true;
 	    }
 	}
 	return false;
     }
 
-    public AUTBlock getIntersectWithInTransition(AUTElement _elt, ArrayList<AUTState> states) {
-	AUTBlock inter = new AUTBlock();
-	for(AUTState st: states) {
-	    for(AUTTransition tr: st.inTransitions) {
-		if (tr.elt == _elt) {
-		    AUTState s = states.get(tr.origin);
-		    if (!(inter.states.contains(s))) {
-			inter.addState(s);
-		    }
-		    break;
-		}
-	    }
-	}
-	return inter;
+    public int size() {
+	return states.size();
     }
 
-    public AUTBlock getNotIntersectWithInTransition(AUTElement _elt) {
-	AUTBlock inter = new AUTBlock();
-	boolean intersect;
-	
-	for(AUTState st: states) {
-	    intersect = false;
-	    for(AUTTransition tr: st.inTransitions) {
-		if (tr.elt == _elt) {
-		    intersect = true;
-		    break;
-		}
-	    }
-	    if (!(intersect)) {
-		inter.addState(st);
-	    }
-	}
-	return inter;
+    public boolean isEmpty() {
+	return (states.size() == 0);
+    }
+
+    public void computeHash() {
+	Collections.sort(states);
+	int[] hash = new int[states.size()];
+        int cpt = 0;
+        for(int i=0; i<hash.length; i++) {
+	    hash[i] = states.get(i).id;		
+        }
+        hashValue = Arrays.hashCode(hash);
+        hashComputed = true;
     }
 
 

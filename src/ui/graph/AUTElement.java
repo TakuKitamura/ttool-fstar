@@ -59,6 +59,10 @@ public class AUTElement implements Comparable<AUTElement> {
     public int compareTo(AUTElement o1) {
 	return this.value.compareTo(o1.value);
     }
+
+    public String toString() {
+	return value;
+    }
     
 
 }

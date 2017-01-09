@@ -47,7 +47,7 @@ package ui.graph;
 
 import java.util.*;
 
-public class AUTState  {
+public class AUTState implements Comparable<AUTState> {
 
     public int id;
     public ArrayList<AUTTransition> inTransitions; // Arriving to that state
@@ -58,6 +58,10 @@ public class AUTState  {
         id = _id;
         inTransitions = new ArrayList<AUTTransition>();
         outTransitions = new ArrayList<AUTTransition>();
+    }
+
+    public int compareTo( AUTState _s ) {
+	return ((int)id) - (int)(_s.id);
     }
 
     public void addInTransition(AUTTransition tr) {

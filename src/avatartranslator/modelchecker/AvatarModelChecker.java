@@ -63,8 +63,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private boolean stoppedBeforeEnd;
     private boolean stoppedConditionReached;
 
-
-
     // ReachabilityGraph
     private Map<Integer, SpecificationState> states;
     private Map<Long, SpecificationState> statesByID;
