@@ -902,7 +902,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         protected JCheckBox internalActions;
         protected JCheckBox readActions;
         protected JCheckBox higherQuality, antialiasing;
-        protected JLabel help;
+        protected JLabel help, info;
 
 	protected boolean exitOnClose;
         
@@ -914,6 +914,9 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
             edges = _edges;
 	    exitOnClose = _exitOnClose;
             makeComponents();
+	    if (exitOnClose) {
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	    }
             
         }
         
@@ -926,6 +929,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
             screenshot.addActionListener(this);
             close.addActionListener(this);
             help = new JLabel("Zoom with PageUp/PageDown, move with cursor keys");
+	    info = new JLabel("Graph: " + graph.getNbOfStates() + " states, " + graph.getNbOfTransitions() + " transitions");
             internalActions = new JCheckBox("Display internal actions", true);
             internalActions.addActionListener(this);
             readActions = new JCheckBox("Display read/write actions", true);
@@ -954,7 +958,10 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
             jp01.add(antialiasing);
             
             JPanel infoPanel = new JPanel(new BorderLayout());
-            infoPanel.add(help, BorderLayout.NORTH);
+	    JPanel labelPanel = new JPanel(new BorderLayout());
+	    labelPanel.add(help, BorderLayout.EAST);
+	    labelPanel.add(info, BorderLayout.WEST);
+            infoPanel.add(labelPanel, BorderLayout.NORTH);
             infoPanel.add(close, BorderLayout.SOUTH);
             infoPanel.add(jp01, BorderLayout.CENTER);
             
