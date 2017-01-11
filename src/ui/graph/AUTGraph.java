@@ -86,10 +86,10 @@ public class AUTGraph implements myutil.Graph {
     }
 
     public AUTGraph(ArrayList<AUTState> _st, ArrayList<AUTTransition> _tr) {
-	states = _st;
-	transitions = _tr;
-	nbState = states.size();
-	statesComputed = true;
+        states = _st;
+        transitions = _tr;
+        nbState = states.size();
+        statesComputed = true;
     }
 
     public void stopBuildGraph() {
@@ -290,16 +290,16 @@ public class AUTGraph implements myutil.Graph {
     }
 
     public boolean hasEntryTransition(int state) {
-	if (hasEntryTransition == null) {
-	    computeEntryExitTransitions();
-	}
+        if (hasEntryTransition == null) {
+            computeEntryExitTransitions();
+        }
         return hasEntryTransition[state];
     }
 
     public boolean hasExitTransition(int state) {
-	if (hasExitTransition == null) {
-	    computeEntryExitTransitions();
-	}
+        if (hasExitTransition == null) {
+            computeEntryExitTransitions();
+        }
         return hasExitTransition[state];
     }
 
@@ -380,16 +380,16 @@ public class AUTGraph implements myutil.Graph {
 
 
     public String toFullString() {
-	StringBuffer graph = new StringBuffer("Transitions:");
-	for(AUTTransition aut1 : transitions) {
-	    graph.append(aut1.toString());
-	}
-	graph.append("\nstates:\n");
-	for(AUTState str: states) {
-	    graph.append(str.toString());
-	}
-	return graph.toString();
-	
+        StringBuffer graph = new StringBuffer("Transitions:");
+        for(AUTTransition aut1 : transitions) {
+            graph.append(aut1.toString());
+        }
+        graph.append("\nstates:\n");
+        for(AUTState str: states) {
+            graph.append(str.toString());
+        }
+        return graph.toString();
+
     }
 
     public void computeStates() {
@@ -418,9 +418,9 @@ public class AUTGraph implements myutil.Graph {
     }
 
     public void setStates(ArrayList<AUTState> _states) {
-	states = _states;
-	nbState = states.size();
-	statesComputed = true;
+        states = _states;
+        nbState = states.size();
+        statesComputed = true;
     }
 
     public HashSet<String> getAllActions() {
@@ -468,9 +468,9 @@ public class AUTGraph implements myutil.Graph {
     }
 
     public void display() {
-	display(false);
+        display(false);
     }
-    
+
     public void display(boolean exitOnClose) {
         AUTGraphDisplay display = new AUTGraphDisplay(this, exitOnClose);
         display.display();
@@ -489,7 +489,7 @@ public class AUTGraph implements myutil.Graph {
     }
 
 
-    public void minimizeRemoveInternal() {
+    public void minimizeRemoveInternal(boolean tauOnly) {
         String s = "tau";
 
         // mark all transitions as non tau
@@ -507,11 +507,11 @@ public class AUTGraph implements myutil.Graph {
 
         }
 
-        minimizeTau();
+        minimizeTau(tauOnly);
     }
 
 
-    public void minimize(String [] tauTransitions) {
+    public void minimize(String [] tauTransitions, boolean tauOnly) {
         String s = "tau";
 
         // mark all transitions as non tau
@@ -529,34 +529,37 @@ public class AUTGraph implements myutil.Graph {
             }
         }
 
-        minimizeTau();
+        minimizeTau(tauOnly);
 
     }
 
-    public void minimizeTau() {
+    public void minimizeTau(boolean tauOnly) {
         boolean modif = true;
 
-	//TraceManager.addDev(toFullString());
-	
-	factorizeNonTauTransitions();
+        //TraceManager.addDev(toFullString());
 
-	
+        factorizeNonTauTransitions();
+
+        if (tauOnly) {
+            return;
+        }
+
+
         /*while(modif) {
-            modif = removeOnlyOneTauTr();
-            if (! modif) {
-                modif = removeMultipleTauOutputTr();
-                if (! modif) {
-                    modif = removeTauWithOneFollower();
-                    if (! modif) {
-                        modif = removeSimilarTransitions();
-                    }
-                }
-            }
-	    }*/
+          modif = removeOnlyOneTauTr();
+          if (! modif) {
+          modif = removeMultipleTauOutputTr();
+          if (! modif) {
+          modif = removeTauWithOneFollower();
+          if (! modif) {
+          modif = removeSimilarTransitions();
+          }
+          }
+          }
+          }*/
 
-	partitionGraph();
-	
-        statesComputed = false;
+        partitionGraph();
+
     }
 
     // Remove transition going from one state with only one tau transition as output
@@ -701,7 +704,7 @@ public class AUTGraph implements myutil.Graph {
 
         return modif;
     }
-    
+
 
     private boolean removeSimilarTransitions() {
         boolean modif = false;
@@ -709,8 +712,8 @@ public class AUTGraph implements myutil.Graph {
         // Remove tr if it is duplicated
         for(AUTState st: states) {
 
-	    // May modify the outTransitions list, and result in exception.
-	    // The try .. catch clause protects from this
+            // May modify the outTransitions list, and result in exception.
+            // The try .. catch clause protects from this
             try {
                 if (st.outTransitions.size() > 1) {
                     for(int i=0; i<st.outTransitions.size(); i++) {
@@ -741,30 +744,30 @@ public class AUTGraph implements myutil.Graph {
 
     private void removeStates(ArrayList<AUTState> toRemoveStates) {
 
-	if (toRemoveStates.size() > 0) {
-	    hasExitTransition = null;
-	    hasEntryTransition = null;
-	}
-	
+        if (toRemoveStates.size() > 0) {
+            hasExitTransition = null;
+            hasEntryTransition = null;
+        }
+
         // Remove all states and adapt the id in the graph
-	//TraceManager.addDev("nbState=" + nbState + " states size = " + states.size());
-	
+        //TraceManager.addDev("nbState=" + nbState + " states size = " + states.size());
+
         for(AUTState str: toRemoveStates) {
-	    // We need to remove all transitions of the removed state
-	    //TraceManager.addDev("Removing transitions of state:" + str.id + "\n" + toFullString());
-	    for(AUTTransition trin: str.inTransitions) {
-		transitions.remove(trin);
-	    }
-	    for(AUTTransition trout: str.outTransitions) {
-		transitions.remove(trout);
-	    }
+            // We need to remove all transitions of the removed state
+            //TraceManager.addDev("Removing transitions of state:" + str.id + "\n" + toFullString());
+            for(AUTTransition trin: str.inTransitions) {
+                transitions.remove(trin);
+            }
+            for(AUTTransition trout: str.outTransitions) {
+                transitions.remove(trout);
+            }
 
-	    for(AUTState state: states) {
-		state.removeAllTransitionsWithId(str.id);
-	    }
+            for(AUTState state: states) {
+                state.removeAllTransitionsWithId(str.id);
+            }
 
-	    //TraceManager.addDev("Done removing transitions of state:" + str.id + "\n" + toFullString());
-	    
+            //TraceManager.addDev("Done removing transitions of state:" + str.id + "\n" + toFullString());
+
             // Last state of the array?
             if (str.id == (nbState - 1)) {
                 //TraceManager.addDev("Last state " + str.id);
@@ -773,165 +776,195 @@ public class AUTGraph implements myutil.Graph {
 
                 // str not at the end: we replace it with the last state
                 // We need to accordingly update
-            } else {
+            }  else  {
 
                 AUTState moved = states.get(nbState-1);
                 //TraceManager.addDev("Moving state " + moved.id +  " to index " + str.id);
                 states.set(str.id, moved);
                 states.remove(nbState-1);
                 nbState --;
-		//TraceManager.addDev("nbState=" + nbState + " states size = " + states.size());
-		/*AUTTransition tt = findTransitionWithId(nbState);
-		if (tt != null) {
-                    TraceManager.addDev("1) Transition with id not normal" + tt);
-		    }*/
-		//TraceManager.addDev("Update id\n" + toAUTStringFormat());
-		moved.updateID(str.id);
+                //TraceManager.addDev("nbState=" + nbState + " states size = " + states.size());
+                /*AUTTransition tt = findTransitionWithId(nbState);
+                  if (tt != null) {
+                  TraceManager.addDev("1) Transition with id not normal" + tt);
+                  }*/
+                //TraceManager.addDev("Update id\n" + toAUTStringFormat());
+                moved.updateID(str.id);
                 /*tt = findTransitionWithId(nbState);
-                if (tt != null) {
-                    TraceManager.addDev("2) Transition with id not normal" + tt);
-		    }*/
+                  if (tt != null) {
+                  TraceManager.addDev("2) Transition with id not normal" + tt);
+                  }*/
             }
-	    //TraceManager.addDev(toFullString());
 
         }
     }
 
     // Removes all tau transition of a state, replacing them with reachable non tau transitions
-    // A tau transition reaching a end state cannot be removed but can be replaced with a unique transition
+    // A tau transition reaching an end state cannot be removed but can be replaced with a unique transition
     private void factorizeNonTauTransitions() {
-	boolean modif = false;
-	boolean endState = false;
-	// met is used to specify states that have a tau-path to a termination state
-	for(AUTState st1: states) {
-	    st1.met = false;
-	}
-	
+        boolean modif = false;
+        boolean endState = false;
+        // met is used to specify states that have a tau-path to a termination state
+        for(AUTState st1: states) {
+            st1.met = false;
+        }
+
+        for (AUTState st: states) {
+            if ((st.id == 0) || (st.getNbInTransitions() > 0)) {
+                //TraceManager.addDev("  1. state " + st.id);
+                if (st.hasOutputTauTransition()) {
+                    //TraceManager.addDev("  2. state " + st.id);
+                    LinkedList<AUTTransition> nonTauTransitions = new LinkedList<AUTTransition>();
+                    boolean canReachAnEndStateWithTau = getAllNonTauTransitionsFrom(st, nonTauTransitions);
+
+                    //TraceManager.addDev("State " + st.id + " has the following real transitions:");
+                    /*for(AUTTransition tr: nonTauTransitions) {
+                      TraceManager.addDev("\t" + tr);
+                      }*/
+
+		    //TraceManager.addDev("State " + st.id + " can reach an end state with tau tr only?" + canReachAnEndStateWithTau);
+                    st.met = canReachAnEndStateWithTau;
+                    endState = endState || canReachAnEndStateWithTau;
+                }
+            }
+        }
+
         // Remove tr if it is duplicated
         for(AUTState st: states) {
-	    // We ignore states with no input tr apart from the start state (id 0)
-	    //TraceManager.addDev("0. state " + st.id);
-	    if ((st.id == 0) || (st.getNbInTransitions() > 0)) {
-		//TraceManager.addDev("  1. state " + st.id);
-		if (st.hasOutputTauTransition()) {
-		    //TraceManager.addDev("  2. state " + st.id);
-		    LinkedList<AUTTransition> nonTauTransitions = new LinkedList<AUTTransition>();
-		    boolean canReachAnEndStateWithTau = getAllNonTauTransitionsFrom(st, nonTauTransitions);
+            // We ignore states with no input tr apart from the start state (id 0)
+            //TraceManager.addDev("0. state " + st.id);
+            if ((st.id == 0) || (st.getNbInTransitions() > 0)) {
+                //TraceManager.addDev("  1. state " + st.id);
+                if (st.hasOutputTauTransition()) {
+                    //TraceManager.addDev("  2. state " + st.id);
+                    LinkedList<AUTTransition> nonTauTransitions = new LinkedList<AUTTransition>();
+		     getAllNonTauTransitionsFrom(st, nonTauTransitions);
 
-		    //TraceManager.addDev("State " + st.id + " has the following real transitions:");
-		    /*for(AUTTransition tr: nonTauTransitions) {
-			TraceManager.addDev("\t" + tr);
-			}*/
-		    
-		    st.met = canReachAnEndStateWithTau;
-		    endState = endState || canReachAnEndStateWithTau;
-		    
-		    // Create these transitions in st if not yet existing
-		    //TraceManager.addDev("Remove tau\n" + toFullString());
-		    st.removeAllOutTauTransitions(transitions, states);
-		    //TraceManager.addDev("Done remove tau. create trans\n" + toFullString());
-		    st.createTransitionsButNotDuplicate(nonTauTransitions, states, transitions);
-		    //TraceManager.addDev("Done create trans\n" + toFullString());
-		}
-	    }
-	}
+                    // Create these transitions in st if not yet existing
+                    //TraceManager.addDev("Remove tau\n" + toFullString());
+                    st.removeAllOutTauTransitions(transitions, states);
+                    //TraceManager.addDev("Done remove tau. create trans\n" + toFullString());
+                    st.createTransitionsButNotDuplicate(nonTauTransitions, states, transitions);
+                    //TraceManager.addDev("Done create trans\n" + toFullString());
+                }
+            }
+        }
 
-	// If end state: we must create a new end state, and all "met" states should have a tau transition
-	// to this state
-	if (endState) {
-	    int newId = states.size();
-	    AUTState endSt = new AUTState(newId);
-	    states.add(endSt);
-	    nbState = states.size();
-	    for(AUTState st: states) {
-		if (st.met) {
-		    AUTTransition tr = new AUTTransition(st.id, "tau", endSt.id);
-		    tr.isTau = true;
-		    transitions.add(tr);
-		    st.addOutTransition(tr);
-		    endSt.addInTransition(tr);
-		}
-		st.met = false;
-	    }
-	}
-	//TraceManager.addDev(toFullString());
+        // Remove all non reachable state
+        //removeAllNonReachableStates();
 
-	// Remove all non reachable state
-	removeAllNonReachableStates();
+        // If end state: we must create a new end state, and all "met" states should have a tau transition
+        // to this state
+        if (endState) {
+            // We must see if at least one met state has output transitions
+            boolean hasEndState = false;
+            for(AUTState st: states) {
+                if (st.met) {
+                    if (st.outTransitions.size() > 0) {
+                        hasEndState = true;
+                        break;
+                    }
+
+                }
+            }
+            if (hasEndState) {
+                int newId = states.size();
+                AUTState endSt = new AUTState(newId);
+                states.add(endSt);
+                nbState = states.size();
+                for(AUTState st1: states) {
+                    if (st1.met) {
+                        if (st1.outTransitions.size() > 0) {
+			    TraceManager.addDev("Adding an end tau to state " + st1.id);
+                            AUTTransition tr = new AUTTransition(st1.id, "tau", endSt.id);
+                            tr.isTau = true;
+                            transitions.add(tr);
+                            st1.addOutTransition(tr);
+                            endSt.addInTransition(tr);
+                        }
+                    }
+                    st1.met = false;
+                }
+            }
+        }
+        //TraceManager.addDev(toFullString());
+
+        // Remove all non reachable state
+        removeAllNonReachableStates();
 
 
-	// Print graph in AUT
-	//TraceManager.addDev(toAUTStringFormat());
+        // Print graph in AUT
+        //TraceManager.addDev(toAUTStringFormat());
 
-	
+
     }
 
     private boolean getAllNonTauTransitionsFrom(AUTState st, LinkedList<AUTTransition> nonTauTransitions) {
-	LinkedList<AUTState> metStates = new LinkedList<AUTState>();
-	//metStates.add(st);
+        LinkedList<AUTState> metStates = new LinkedList<AUTState>();
+        //metStates.add(st);
 
-	return getAllNonTauTransitionsIterative(st, metStates, nonTauTransitions);
-	//return getAllNonTauTransitionsRecursive(st, metStates, nonTauTransitions);
+        return getAllNonTauTransitionsIterative(st, metStates, nonTauTransitions);
+        //return getAllNonTauTransitionsRecursive(st, metStates, nonTauTransitions);
     }
 
 
     private boolean getAllNonTauTransitionsRecursive(AUTState st, LinkedList<AUTState> metStates, LinkedList<AUTTransition> nonTauTransitions) {
-	if (metStates.contains(st)) {
-	    return false;
-	}
+        if (metStates.contains(st)) {
+            return false;
+        }
 
-	if (st.getNbOutTransitions() == 0) {
-	    return true;
-	}
+        if (st.getNbOutTransitions() == 0) {
+            return true;
+        }
 
-	boolean ret = false;
-	for(AUTTransition at: st.outTransitions) {
-	    if (!(at.isTau)) {
-		nonTauTransitions.add(at);		
-	    } else {
-		ret = ret || getAllNonTauTransitionsRecursive(states.get(at.destination), metStates, nonTauTransitions);
-	    }
-	}
-	
-	return ret;
+        boolean ret = false;
+        for(AUTTransition at: st.outTransitions) {
+            if (!(at.isTau)) {
+                nonTauTransitions.add(at);
+            } else {
+                ret = ret || getAllNonTauTransitionsRecursive(states.get(at.destination), metStates, nonTauTransitions);
+            }
+        }
+
+        return ret;
     }
 
 
     private boolean getAllNonTauTransitionsIterative(AUTState _st, LinkedList<AUTState> metStates, LinkedList<AUTTransition> nonTauTransitions) {
 
-	boolean ret = false;
-	
-	LinkedList<AUTState> toExplore = new LinkedList<AUTState>();
-	LinkedList<AUTState> toExploreTmp = new LinkedList<AUTState>();
-	toExplore.add(_st);
-	
-	while (toExplore.size() > 0) {
-	    toExploreTmp.clear();
-	    for(AUTState st: toExplore) {
-		if (!(metStates.contains(st))) {
-		    metStates.add(st);
-		    if (st.getNbOutTransitions() == 0) {
-			ret = true;
-		    } else {
-			for(AUTTransition at: st.outTransitions) {
-			    if (!(at.isTau)) {
-				nonTauTransitions.add(at);		
-			    } else {
-				toExploreTmp.add(states.get(at.destination));
-			    }
-			}
-		    }
-		    
-		}
-	    } // for
-	    toExplore.clear();
-	    toExplore.addAll(toExploreTmp);
-	    
-	}// While
+        boolean ret = false;
 
-	return ret;
+        LinkedList<AUTState> toExplore = new LinkedList<AUTState>();
+        LinkedList<AUTState> toExploreTmp = new LinkedList<AUTState>();
+        toExplore.add(_st);
+
+        while (toExplore.size() > 0) {
+            toExploreTmp.clear();
+            for(AUTState st: toExplore) {
+                if (!(metStates.contains(st))) {
+                    metStates.add(st);
+                    if (st.getNbOutTransitions() == 0) {
+                        ret = true;
+                    } else {
+                        for(AUTTransition at: st.outTransitions) {
+                            if (!(at.isTau)) {
+                                nonTauTransitions.add(at);
+                            } else {
+                                toExploreTmp.add(states.get(at.destination));
+                            }
+                        }
+                    }
+
+                }
+            } // for
+            toExplore.clear();
+            toExplore.addAll(toExploreTmp);
+
+        }// While
+
+        return ret;
     }
-    
+
     private AUTTransition findTransitionWithId(int id) {
         for (AUTTransition tr: transitions) {
             if ((tr.origin == id) || (tr.destination == id)) {
@@ -943,364 +976,369 @@ public class AUTGraph implements myutil.Graph {
 
 
     private void removeAllNonReachableStates() {
-	// reset met of states
-	for(AUTState st1: states) {
-	    st1.met = false;
-	}
+        // reset met of states
+        for(AUTState st1: states) {
+            st1.met = false;
+        }
 
-	int cpt = 0;
+        int cpt = 0;
 
-	LinkedList<AUTState> statesToConsider = new LinkedList<AUTState>();
-	LinkedList<AUTState> nextStatesToConsider = new LinkedList<AUTState>();
-	statesToConsider.add(states.get(0));
+        LinkedList<AUTState> statesToConsider = new LinkedList<AUTState>();
+        LinkedList<AUTState> nextStatesToConsider = new LinkedList<AUTState>();
+        statesToConsider.add(states.get(0));
 
-	while(statesToConsider.size() > 0) {
-	    nextStatesToConsider.clear();
-	    for(AUTState st: statesToConsider) {
-		st.met = true;
-		cpt ++;
-		for(AUTTransition tr: st.outTransitions) {
-		    AUTState s = states.get(tr.destination);
-		    if (!(s.met)) {
-			nextStatesToConsider.add(s);
-		    }
-		}
-	    }
-	    statesToConsider.clear();
-	    statesToConsider.addAll(nextStatesToConsider);
-	}
+        while(statesToConsider.size() > 0) {
+            nextStatesToConsider.clear();
+            for(AUTState st: statesToConsider) {
+                st.met = true;
+                cpt ++;
+                for(AUTTransition tr: st.outTransitions) {
+                    AUTState s = states.get(tr.destination);
+                    if (!(s.met)) {
+                        nextStatesToConsider.add(s);
+                    }
+                }
+            }
+            statesToConsider.clear();
+            statesToConsider.addAll(nextStatesToConsider);
+        }
 
-	//TraceManager.addDev("Found " + cpt + " reachable states");
-	ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
-	for(AUTState st2: states) {
-	    if (!(st2.met)) {
-		toRemoveStates.add(st2);
-		//TraceManager.addDev("Removing state: " + st2.id);
-	    }
-	}
+        TraceManager.addDev("Found " + cpt + " reachable states");
+        ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
+        for(AUTState st2: states) {
+            if (!(st2.met)) {
+                toRemoveStates.add(st2);
+                //TraceManager.addDev("Removing state: " + st2.id);
+            }
+        }
 
-	removeStates(toRemoveStates);
-	
+        //TraceManager.addDev(toFullString());
+        removeStates(toRemoveStates);
+        //TraceManager.addDev(toFullString());
+
+        //statesComputed = false;
+        //states = null;
+        //computeStates();
+
     }
 
 
     private void computeEntryExitTransitions() {
-	hasExitTransition = new boolean[nbState];
+        hasExitTransition = new boolean[nbState];
         hasEntryTransition = new boolean[nbState];
 
-	for(AUTTransition t: transitions) {
-	    hasExitTransition[t.origin] = true;
-	    hasEntryTransition[t.destination] = true;
-	}
+        for(AUTTransition t: transitions) {
+            hasExitTransition[t.origin] = true;
+            hasEntryTransition[t.destination] = true;
+        }
     }
 
 
     public void partitionGraph() {
-	
-	// Create the alphabet
-	HashMap<String, AUTElement> alphabet = new HashMap<String, AUTElement>();
-	for(AUTTransition tr: transitions) {
-	    AUTElement tmp = alphabet.get(tr.transition);
-	    if (tmp == null) {
-		AUTElement elt = new AUTElement(tr.transition);
-		alphabet.put(tr.transition, elt);
-		tr.elt = elt;
-	    } else {
-		tr.elt = tmp;
-	    }
-	    //TraceManager.addDev("Transition "+ tr + " has element " + tr.elt);
-	}
 
-	List<AUTElement> sortedAlphabet = new ArrayList<AUTElement>(alphabet.values());
-	Collections.sort(sortedAlphabet);
-	
-	TraceManager.addDev("Alphabet size:" + alphabet.size());
+        // Create the alphabet
+        HashMap<String, AUTElement> alphabet = new HashMap<String, AUTElement>();
+        for(AUTTransition tr: transitions) {
+            AUTElement tmp = alphabet.get(tr.transition);
+            if (tmp == null) {
+                AUTElement elt = new AUTElement(tr.transition);
+                alphabet.put(tr.transition, elt);
+                tr.elt = elt;
+            } else {
+                tr.elt = tmp;
+            }
+            //TraceManager.addDev("Transition "+ tr + " has element " + tr.elt);
+        }
 
+        List<AUTElement> sortedAlphabet = new ArrayList<AUTElement>(alphabet.values());
+        Collections.sort(sortedAlphabet);
 
-	Map<Integer, AUTBlock> allBlocks = Collections.synchronizedMap(new HashMap<Integer, AUTBlock>());
-	
-	// Create the first block that contains all states
-	AUTBlock b0 = new AUTBlock();
-	for(AUTState st: states) {
-	    b0.addState(st);
-	}
-	b0.computeHash();
-	allBlocks.put(new Integer(b0.hashValue), b0);
-
-	
-	AUTBlock b0Test = new AUTBlock();
-	for(AUTState st: states) {
-	    b0Test.addState(st);
-	}
-	b0Test.computeHash();
-
-	AUTBlock B0Ret = allBlocks.get(new Integer(b0Test.hashValue));
-	if (B0Ret == null) {
-	    TraceManager.addDev("ERROR: hash not working for blocks");
-	} else {
-	    TraceManager.addDev("Hash working for blocks");
-	}
-	
-	
-
-	// Create the first partition containing only block B0
-	AUTPartition partition = new AUTPartition();
-	partition.addBlock(b0);
-
-	// Create the splitter that contains partitions
-	
-	AUTPartition partitionForSplitter = new AUTPartition();
-	partitionForSplitter.addBlock(b0);
-	AUTSplitter w = new AUTSplitter();
-	w.addPartition(partitionForSplitter);
-
-	printConfiguration(partition, w);
-
-	int maxIte = 1000;
-
-	AUTPartition currentP;
-	while((w.size()>0) && (maxIte >0)) {
-	    maxIte --;
-	    currentP = w.partitions.get(0);
-	    w.partitions.remove(0);
-
-	    // Simple splitter?
-	    if (currentP.blocks.size() == 1) {
-		TraceManager.addDev("Simple splitter = " + currentP);
-		AUTBlock currentBlock = currentP.blocks.get(0);
-		//List<AUTElement> sortedAlphabet = new ArrayList<AUTElement>(alphabet.values());
-		//Collections.sort(sortedAlphabet);
-		for(AUTElement elt: sortedAlphabet) {
-		    TraceManager.addDev("\n*** Considering alphabet element = " + elt.value); 
-		    printConfiguration(partition, w);
-		    // Look for states of the leading to another state by a = T
-		    // Construct I = all blocks of P that have at least an element in T
-		    AUTBlock T_minus1_elt_B = currentBlock.getMinus1(elt, states);
-
-		    TraceManager.addDev("T_minus1_elt_B=" + T_minus1_elt_B);
-		    
-		    LinkedList<AUTBlock> I = partition.getI(elt, T_minus1_elt_B);
-		    printI(I);
-		    for(AUTBlock blockX: I) {
-			AUTBlock blockX1 = blockX.getStateIntersectWith(T_minus1_elt_B);
-			blockX1.computeHash();
-			AUTBlock blockX2 = blockX.getStateDifferenceWith(T_minus1_elt_B);
-			blockX2.computeHash();
-			TraceManager.addDev("X1=" + blockX1);
-			TraceManager.addDev("X2=" + blockX2);
-
-			if (blockX1.isEmpty() || blockX2.isEmpty()) {
-			    TraceManager.addDev("Nothing to do");
-			    // Nothing to do!
-			} else {
-			    boolean b = partition.removeBlock(blockX);
-			    if (!b) {
-				TraceManager.addDev("Block " + blockX + " could not be removed from partition");
-			    }
-			    partition.addBlock(blockX1);
-			    partition.addBlock(blockX2);
-			    AUTPartition X_X1_X2 = new AUTPartition();
-			    X_X1_X2.addBlock(blockX);
-			    X_X1_X2.addBlock(blockX1);
-			    X_X1_X2.addBlock(blockX2);
-			    TraceManager.addDev("Test concat X1+X2=" + AUTBlock.concat(blockX1, blockX2));
-			    w.addPartition( X_X1_X2);
-			    TraceManager.addDev("Modifying P and W:");
-			    printConfiguration(partition, w);
-			    TraceManager.addDev("-----------------\n");
-			}
-			
-		    }
-<<<<<<< Upstream, based on aa363fe017f226394c627b60189e75002e6b1199
-=======
-		    TraceManager.addDev("-----------------\n");
->>>>>>> d0df681 Update on algo management
-		    
-		}
-		
-	    }
-	    
-	    // Compound splitter
-	    else if (currentP.blocks.size() == 3){
-		TraceManager.addDev("Complexe splitter (b, bi, bii) =" + currentP);
-		AUTBlock b = currentP.blocks.get(0);
-		AUTBlock bi = currentP.blocks.get(1);
-		AUTBlock bii = currentP.blocks.get(2);
-
-		if (bi.size() > bii.size()) {
-		    bi = currentP.blocks.get(2);
-		    bii = currentP.blocks.get(1);
-		}
-
-		TraceManager.addDev("B= " + b +  " bi=" + bi + " bii=" + bii);
-
-		for(AUTElement elt: sortedAlphabet) {
-		    TraceManager.addDev("\n*** Considering alphabet element = " + elt.value);
-		    printConfiguration(partition, w);
-		    AUTBlock T_minus1_elt_B = b.getMinus1(elt, states);
-		    TraceManager.addDev("T_minus1_elt_B=" + T_minus1_elt_B);
-		    LinkedList<AUTBlock> I = partition.getI(elt, T_minus1_elt_B);
-		    printI(I);
-		    for(AUTBlock blockX: I) {
-			// Compute block X1 = set of states in blockX that goes to Bi, but not to Bii
-			// with current action
-			AUTBlock blockX1 = new AUTBlock();
-			
-			// Compute block X2 = set of states in blockX that goes to Bii, but not to Bi
-			// with current action
-			AUTBlock blockX2 = new AUTBlock();
-
-			// Compute block X3 = set of states in blockX that goes to both Bi and Bii
-			// with current action
-			boolean b1, b2;
-			AUTBlock blockX3 = new AUTBlock();
-			for(AUTState st: blockX.states) {
-			    b1 = blockX.leadsTo(bi, elt);
-			    b2 = blockX.leadsTo(bii, elt);
-			    if (b1 && !b2) {
-				blockX1.addState(st);
-			    } else if (!b1 && b2) {
-				blockX2.addState(st);
-			    } else {
-				blockX3.addState(st);
-			    }
-			}
-			TraceManager.addDev("Block X = " + blockX + " Block1,2,3 computed\n\tX1 = " + blockX1 + "\n\tX2 = " + blockX2 + "\n\tX3 = " + blockX3);
-			
-			if ((blockX.compareTo(blockX1) == 0) || (blockX.compareTo(blockX2) == 0) || (blockX.compareTo(blockX2) == 0)) {
-			    // do nothing
-			    TraceManager.addDev("Identical blocks! X");
-			}  else  {
-			    TraceManager.addDev("Non Identical blocks! X");
-			    // Modifying partition
-			    partition.removeBlock(blockX);
-			    partition.addIfNonEmpty(blockX1);
-			    partition.addIfNonEmpty(blockX2);
-			    partition.addIfNonEmpty(blockX3);
+        TraceManager.addDev("Alphabet size:" + alphabet.size());
 
 
-			    // Add two splitter to W if all are non null
-			    if (!(blockX1.isEmpty()) && !(blockX2.isEmpty()) && !(blockX3.isEmpty())) {
-				// Add splitter (X, X1, X23) && (X23, X2, X3)
-				AUTPartition tmpP = new AUTPartition();
-				tmpP.addBlock(blockX);
-				tmpP.addBlock(blockX1);
-				tmpP.addBlock(AUTBlock.concat(blockX2, blockX3));
-				w.addPartition(tmpP);
-				tmpP = new AUTPartition();
-				tmpP.addBlock(AUTBlock.concat(blockX2, blockX3));
-				tmpP.addBlock(blockX2);
-				tmpP.addBlock(blockX3);
-				w.addPartition(tmpP);
-				
-				    
-			    } else {
-				// Add non empty individual block to W
-				AUTPartition tmpP;
-				if (!(blockX1.isEmpty())) {
-				    tmpP = new AUTPartition();
-				    tmpP.addBlock(blockX1);
-				    w.addPartition(tmpP);
-				}
-				if (!(blockX2.isEmpty())) {
-				    tmpP = new AUTPartition();
-				    tmpP.addBlock(blockX2);
-				    w.addPartition(tmpP);
-				}
-				if (!(blockX3.isEmpty())) {
-				    tmpP = new AUTPartition();
-				    tmpP.addBlock(blockX3);
-				    w.addPartition(tmpP);
-				}
-			    }
-			    
-			}
-		    }
-		    
-		}
-		
-	    }
-	}
-	
-	TraceManager.addDev("\nAll done:\n---------");
-	printConfiguration(partition, w);
-	TraceManager.addDev("------------------");
- 
-	// Generating new graph
-	generateGraph(partition, alphabet);
-	
+        Map<Integer, AUTBlock> allBlocks = Collections.synchronizedMap(new HashMap<Integer, AUTBlock>());
+
+        // Create the first block that contains all states
+        AUTBlock b0 = new AUTBlock();
+        for(AUTState st: states) {
+            b0.addState(st);
+        }
+        b0.computeHash();
+        allBlocks.put(new Integer(b0.hashValue), b0);
+
+
+        AUTBlock b0Test = new AUTBlock();
+        for(AUTState st: states) {
+            b0Test.addState(st);
+        }
+        b0Test.computeHash();
+
+        AUTBlock B0Ret = allBlocks.get(new Integer(b0Test.hashValue));
+        if (B0Ret == null) {
+            TraceManager.addDev("ERROR: hash not working for blocks");
+        } else {
+            TraceManager.addDev("Hash working for blocks");
+        }
+
+
+
+        // Create the first partition containing only block B0
+        AUTPartition partition = new AUTPartition();
+        partition.addBlock(b0);
+
+        // Create the splitter that contains partitions
+
+        AUTPartition partitionForSplitter = new AUTPartition();
+        partitionForSplitter.addBlock(b0);
+        AUTSplitter w = new AUTSplitter();
+        w.addPartition(partitionForSplitter);
+
+        printConfiguration(partition, w);
+
+        int maxIte = 1000;
+
+        AUTPartition currentP;
+        while((w.size()>0) && (maxIte >0)) {
+            maxIte --;
+            currentP = w.partitions.get(0);
+            w.partitions.remove(0);
+
+            // Simple splitter?
+            if (currentP.blocks.size() == 1) {
+                TraceManager.addDev("Simple splitter = " + currentP);
+                AUTBlock currentBlock = currentP.blocks.get(0);
+                //List<AUTElement> sortedAlphabet = new ArrayList<AUTElement>(alphabet.values());
+                //Collections.sort(sortedAlphabet);
+                for(AUTElement elt: sortedAlphabet) {
+                    TraceManager.addDev("\n*** Considering alphabet element = " + elt.value);
+                    printConfiguration(partition, w);
+                    // Look for states of the leading to another state by a = T
+                    // Construct I = all blocks of P that have at least an element in T
+                    AUTBlock T_minus1_elt_B = currentBlock.getMinus1(elt, states);
+
+                    TraceManager.addDev("T_minus1_elt_B=" + T_minus1_elt_B);
+
+                    LinkedList<AUTBlock> I = partition.getI(elt, T_minus1_elt_B);
+                    printI(I);
+                    for(AUTBlock blockX: I) {
+                        AUTBlock blockX1 = blockX.getStateIntersectWith(T_minus1_elt_B);
+                        blockX1.computeHash();
+                        AUTBlock blockX2 = blockX.getStateDifferenceWith(T_minus1_elt_B);
+                        blockX2.computeHash();
+                        TraceManager.addDev("X1=" + blockX1);
+                        TraceManager.addDev("X2=" + blockX2);
+
+                        if (blockX1.isEmpty() || blockX2.isEmpty()) {
+                            TraceManager.addDev("Nothing to do");
+                            // Nothing to do!
+                        } else {
+                            boolean b = partition.removeBlock(blockX);
+                            if (!b) {
+                                TraceManager.addDev("Block " + blockX + " could not be removed from partition");
+                            }
+                            partition.addBlock(blockX1);
+                            partition.addBlock(blockX2);
+                            AUTPartition X_X1_X2 = new AUTPartition();
+                            X_X1_X2.addBlock(blockX);
+                            X_X1_X2.addBlock(blockX1);
+                            X_X1_X2.addBlock(blockX2);
+                            TraceManager.addDev("Test concat X1+X2=" + AUTBlock.concat(blockX1, blockX2));
+                            w.addPartition( X_X1_X2);
+                            TraceManager.addDev("Modifying P and W:");
+                            printConfiguration(partition, w);
+                            TraceManager.addDev("-----------------\n");
+                        }
+
+                    }
+                    TraceManager.addDev("-----------------\n");
+
+                }
+
+            }
+
+            // Compound splitter
+            else if (currentP.blocks.size() == 3){
+                TraceManager.addDev("Complexe splitter (b, bi, bii) =" + currentP);
+                AUTBlock b = currentP.blocks.get(0);
+                AUTBlock bi = currentP.blocks.get(1);
+                AUTBlock bii = currentP.blocks.get(2);
+
+                if (bi.size() > bii.size()) {
+                    bi = currentP.blocks.get(2);
+                    bii = currentP.blocks.get(1);
+                }
+
+                TraceManager.addDev("B= " + b +  " bi=" + bi + " bii=" + bii);
+
+                for(AUTElement elt: sortedAlphabet) {
+                    TraceManager.addDev("\n*** Considering alphabet element = " + elt.value);
+                    printConfiguration(partition, w);
+                    AUTBlock T_minus1_elt_B = b.getMinus1(elt, states);
+                    TraceManager.addDev("T_minus1_elt_B=" + T_minus1_elt_B);
+                    LinkedList<AUTBlock> I = partition.getI(elt, T_minus1_elt_B);
+                    printI(I);
+                    for(AUTBlock blockX: I) {
+                        // Compute block X1 = set of states in blockX that goes to Bi, but not to Bii
+                        // with current action
+                        AUTBlock blockX1 = new AUTBlock();
+
+                        // Compute block X2 = set of states in blockX that goes to Bii, but not to Bi
+                        // with current action
+                        AUTBlock blockX2 = new AUTBlock();
+
+                        // Compute block X3 = set of states in blockX that goes to both Bi and Bii
+                        // with current action
+                        boolean b1, b2;
+                        AUTBlock blockX3 = new AUTBlock();
+                        for(AUTState st: blockX.states) {
+                            b1 = blockX.leadsTo(bi, elt);
+                            b2 = blockX.leadsTo(bii, elt);
+                            if (b1 && !b2) {
+                                blockX1.addState(st);
+                            } else if (!b1 && b2) {
+                                blockX2.addState(st);
+                            } else {
+                                blockX3.addState(st);
+                            }
+                        }
+                        TraceManager.addDev("Block X = " + blockX + " Block1,2,3 computed\n\tX1 = " + blockX1 + "\n\tX2 = " + blockX2 + "\n\tX3 = " + blockX3);
+
+                        if ((blockX.compareTo(blockX1) == 0) || (blockX.compareTo(blockX2) == 0) || (blockX.compareTo(blockX2) == 0)) {
+                            // do nothing
+                            TraceManager.addDev("Identical blocks! X");
+                        }  else  {
+                            TraceManager.addDev("Non Identical blocks! X");
+                            // Modifying partition
+                            partition.removeBlock(blockX);
+                            partition.addIfNonEmpty(blockX1);
+                            partition.addIfNonEmpty(blockX2);
+                            partition.addIfNonEmpty(blockX3);
+
+
+                            // Add two splitter to W if all are non null
+                            if (!(blockX1.isEmpty()) && !(blockX2.isEmpty()) && !(blockX3.isEmpty())) {
+                                // Add splitter (X, X1, X23) && (X23, X2, X3)
+                                AUTPartition tmpP = new AUTPartition();
+                                tmpP.addBlock(blockX);
+                                tmpP.addBlock(blockX1);
+                                tmpP.addBlock(AUTBlock.concat(blockX2, blockX3));
+                                w.addPartition(tmpP);
+                                tmpP = new AUTPartition();
+                                tmpP.addBlock(AUTBlock.concat(blockX2, blockX3));
+                                tmpP.addBlock(blockX2);
+                                tmpP.addBlock(blockX3);
+                                w.addPartition(tmpP);
+
+
+                            } else {
+                                // Add non empty individual block to W
+                                AUTPartition tmpP;
+                                if (!(blockX1.isEmpty())) {
+                                    tmpP = new AUTPartition();
+                                    tmpP.addBlock(blockX1);
+                                    w.addPartition(tmpP);
+                                }
+                                if (!(blockX2.isEmpty())) {
+                                    tmpP = new AUTPartition();
+                                    tmpP.addBlock(blockX2);
+                                    w.addPartition(tmpP);
+                                }
+                                if (!(blockX3.isEmpty())) {
+                                    tmpP = new AUTPartition();
+                                    tmpP.addBlock(blockX3);
+                                    w.addPartition(tmpP);
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        TraceManager.addDev("\nAll done:\n---------");
+        printConfiguration(partition, w);
+        TraceManager.addDev("------------------");
+
+        // Generating new graph
+        generateGraph(partition, alphabet);
+
     }
 
     // Assumes AUTElement have been added to transitions
-    public AUTGraph generateGraph(AUTPartition partition, HashMap<String, AUTElement> _alphabet) {
-	ArrayList<AUTState> sts = new ArrayList<AUTState>();
-	ArrayList<AUTTransition> trs = new ArrayList<AUTTransition>();
-	HashMap<AUTBlock, AUTState> blockToNewStates = new HashMap<AUTBlock, AUTState>();
-	
-	int stID = 1;
-	// We create one state per block
-	// We look to the block that contains state 0 and we create the state id = 0
-	for(AUTBlock bl: partition.blocks) {
-	    if (bl.hasState(0)) {
-		AUTState st0 = new AUTState(0);
-		blockToNewStates.put(bl, st0);
-		sts.add(0, st0);
-	    } else {
-		AUTState st = new AUTState(stID);
-		stID ++;
-		blockToNewStates.put(bl, st);
-		sts.add(st);
-	    }
-	}
+    public void generateGraph(AUTPartition partition, HashMap<String, AUTElement> _alphabet) {
+        ArrayList<AUTState> sts = new ArrayList<AUTState>();
+        ArrayList<AUTTransition> trs = new ArrayList<AUTTransition>();
+        HashMap<AUTBlock, AUTState> blockToNewStates = new HashMap<AUTBlock, AUTState>();
 
-	// We now need to create the transitions
-	// We parse all states in blocks, and consider their transition
-	// We look for the destination and create a transition accordingly
-	for(AUTBlock bl: partition.blocks) {
-	    AUTState newOrigin =  blockToNewStates.get(bl);
-	    for(AUTState src: bl.states) {
-		for(AUTTransition tr: src.outTransitions) {
-		    AUTState newDestination = blockToNewStates.get(partition.getBlockWithState(tr.destination));
+        int stID = 1;
+        // We create one state per block
+        // We look to the block that contains state 0 and we create the state id = 0
+        for(AUTBlock bl: partition.blocks) {
+            if (bl.hasState(0)) {
+                AUTState st0 = new AUTState(0);
+                blockToNewStates.put(bl, st0);
+                sts.add(0, st0);
+            } else {
+                AUTState st = new AUTState(stID);
+                stID ++;
+                blockToNewStates.put(bl, st);
+                sts.add(st);
+            }
+        }
 
-		    boolean foundSimilar = false;
-		    AUTTransition newT = new AUTTransition(newOrigin.id, tr.transition, newDestination.id);
-		    newT.elt = tr.elt;
-		    for(AUTTransition testT: trs) {
-			if (testT.compareTo(newT) == 0) {
-			    foundSimilar = true;
-			    break;
-			}
-		    }
-		    if (!foundSimilar) {
-			trs.add(newT);
-			newOrigin.outTransitions.add(newT);
-			newDestination.inTransitions.add(newT);
-		    }
-		}
-	    }
-	}
-       	
-	AUTGraph newGraph = new AUTGraph(sts, trs);
-	TraceManager.addDev("New graph: " + newGraph.toFullString());
-	return newGraph;
-	
+        // We now need to create the transitions
+        // We parse all states in blocks, and consider their transition
+        // We look for the destination and create a transition accordingly
+        for(AUTBlock bl: partition.blocks) {
+            AUTState newOrigin =  blockToNewStates.get(bl);
+            for(AUTState src: bl.states) {
+                for(AUTTransition tr: src.outTransitions) {
+                    AUTState newDestination = blockToNewStates.get(partition.getBlockWithState(tr.destination));
+
+                    boolean foundSimilar = false;
+                    AUTTransition newT = new AUTTransition(newOrigin.id, tr.transition, newDestination.id);
+                    newT.elt = tr.elt;
+                    for(AUTTransition testT: trs) {
+                        if (testT.compareTo(newT) == 0) {
+                            foundSimilar = true;
+                            break;
+                        }
+                    }
+                    if (!foundSimilar) {
+                        trs.add(newT);
+                        newOrigin.outTransitions.add(newT);
+                        newDestination.inTransitions.add(newT);
+                    }
+                }
+            }
+        }
+
+        states = sts;
+        transitions = trs;
+        nbState = sts.size();
+
+        TraceManager.addDev("New graph: " + toFullString());
+
     }
-    
+
 
     private void printConfiguration(AUTPartition _part, AUTSplitter _w) {
-	TraceManager.addDev("P={" + _part.toString() + "}");
-	TraceManager.addDev("W={" + _w.toString() + "}");
+        TraceManager.addDev("P={" + _part.toString() + "}");
+        TraceManager.addDev("W={" + _w.toString() + "}");
     }
 
     private void printI(LinkedList<AUTBlock> I) {
-	StringBuffer sb = new StringBuffer("I:");
-	for(AUTBlock b: I) {
-	    sb.append(" " + b);
-	}
-	TraceManager.addDev(sb.toString());
-	
+        StringBuffer sb = new StringBuffer("I:");
+        for(AUTBlock b: I) {
+            sb.append(" " + b);
+        }
+        TraceManager.addDev(sb.toString());
+
     }
-    
+
 
 
 

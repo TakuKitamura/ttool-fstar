@@ -178,7 +178,7 @@ public class AUTState implements Comparable<AUTState> {
 	ArrayList<AUTTransition> outTransitions2 = new ArrayList<AUTTransition>();
 	for(AUTTransition tr: outTransitions) {
 	    if (!(tr.isTau)) {
-		outTransitions.add(tr);
+		outTransitions2.add(tr);
 	    } else {
 		_transitions.remove(tr);
 		_states.get(tr.destination).removeInTransition(tr);
@@ -215,6 +215,7 @@ public class AUTState implements Comparable<AUTState> {
 	    outTransitions.remove(tr);
 	}
 	toBeRemoved.clear();
+	
 	for(AUTTransition tr: inTransitions) {
 	    if (tr.origin == id) {
 		toBeRemoved.add(tr);

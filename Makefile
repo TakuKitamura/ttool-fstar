@@ -23,6 +23,7 @@ BUILD_TO_MODIFY = src/ui/DefaultText.java
 TTOOL_BINARY = ttool.jar
 LAUNCHER_BINARY = launcher.jar
 GRAPHSHOW_BINARY = graphshow.jar
+GRAPHMINIMIZE_BINARY = graphminimize.jar
 TIFTRANSLATOR_BINARY = tiftranslator.jar
 TMLTRANSLATOR_BINARY = tmltranslator.jar
 GSCORE_BINARY = gs-core-1.3.jar
@@ -36,6 +37,7 @@ RUNDSE_JAR_TXT  = rundse.txt
 TTOOL_JAR_TXT = ttool.txt
 LAUNCHER_JAR_TXT = launcher.txt
 GRAPHSHOW_JAR_TXT = graphshow.txt
+GRAPHMINIMIZE_JAR_TXT = graphminimize.txt
 TIFTRANSLATOR_JAR_TXT = tiftranslator.txt
 TMLTRANSLATOR_JAR_TXT = tmltranslator.txt
 WEBCRAWLER_SERVER_JAR_TXT = webcrawler.txt
@@ -98,7 +100,7 @@ RELEASE_STD_FILES_WINDIWS_EXE = ttool_windows.bat
 
 RELEASE_STD_FILES_XML = TURTLE/manual-HW.xml AVATAR/DrinkMachineV10.xml TURTLE/WebV01.xml TURTLE/Protocol_example1.xml TURTLE/BasicExchange.xml DIPLODOCUS/SmartCardProtocol.xml TURTLE/ProtocolPatterns.xml CTTool/COCOME_V50.xml AVATAR/CoffeeMachine_Avatar.xml AVATAR/Network_Avatar.xml AVATAR/MicroWaveOven_SafetySecurity_fullMethodo.xml
 RELEASE_STD_FILES_LIB =  TURTLE/TClock1.lib TURTLE/TTimerv01.lib
-RELEASE_STD_FILES_BIN = $(LAUNCHER_BINARY) $(TTOOL_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(REMOTESIMULATOR_BINARY) $(RUNDSE_BINARY) $(WEBCRAWLER_SERVER_BINARY) $(WEBCRAWLER_CLIENT_BINARY) $(GRAPHSHOW_BINARY)
+RELEASE_STD_FILES_BIN = $(LAUNCHER_BINARY) $(TTOOL_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(REMOTESIMULATOR_BINARY) $(RUNDSE_BINARY) $(WEBCRAWLER_SERVER_BINARY) $(WEBCRAWLER_CLIENT_BINARY) $(GRAPHSHOW_BINARY) $(GRAPHMINIMIZE_BINARY)
 RELEASE_STD_FILES_LICENSES = LICENSE LICENSE_CECILL_ENG LICENSE_CECILL_FR
 
 TEST_DIR        = $(TTOOL_PATH)/tests
@@ -165,7 +167,7 @@ basic:
 
 jarttool:  launcher ttooljar
 
-jar: launcher ttooljar tiftranslator tmltranslator rundse remotesimulator webcrawler graphshow
+jar: launcher ttooljar tiftranslator tmltranslator rundse remotesimulator webcrawler graphshow graphminimize
 
 ttooljar:
 	rm -f $(TTOOL_BIN)/$(TTOOL_BINARY)
@@ -176,8 +178,12 @@ launcher:
 	rm -f $(TTOOL_BIN)/$(LAUNCHER_BINARY)
 	cd $(TTOOL_SRC);$(JAR) cmf $(LAUNCHER_JAR_TXT) $(TTOOL_BIN)/$(LAUNCHER_BINARY)  RTLLauncher.class launcher/*.class myutil/*.class
 
+graphminimize:
+	rm -f $(TTOOL_BIN)/$(GRAPHMINIMIZE_BINARY)
+	cd $(TTOOL_SRC);$(JAR) cmf $(GRAPHMINIMIZE_JAR_TXT) $(TTOOL_BIN)/$(GRAPHMINIMIZE_BINARY)  GraphMinimize.class myutil/*.class ui/graph/*.class
+
 graphshow:
-	rm -f $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY)
+	rm -f $(TTOOL_BIN)/$(GRAPHSHOW_BINARY)
 	cd $(TTOOL_SRC);$(JAR) cmf $(GRAPHSHOW_JAR_TXT) $(TTOOL_BIN)/$(GRAPHSHOW_BINARY)  GraphShow.class myutil/*.class ui/graph/*.class ui/IconManager.class ui/file/PNGFilter.class
 
 tiftranslator:

@@ -93,7 +93,8 @@ public class JFrameMinimize extends javax.swing.JFrame implements ActionListener
     protected JTextArea jta;
     
     private JCheckBox removeInternalActions;
-
+    private JRadioButton tauOnly;
+    private JRadioButton allMinimization;
     
     
     // Main Panel
@@ -168,7 +169,14 @@ public class JFrameMinimize extends javax.swing.JFrame implements ActionListener
         panel4.setBorder(new javax.swing.border.TitledBorder("Minimization: tools and options"));
         removeInternalActions = new JCheckBox("Remove internal actions");
         removeInternalActions.setEnabled(true);
-        
+	tauOnly = new JRadioButton("Only remove tau transitions");
+	tauOnly.setEnabled(true);
+	allMinimization = new JRadioButton("Complete minimization [Experimental]");
+	allMinimization.setEnabled(true);
+	ButtonGroup bt = new ButtonGroup();
+	bt.add(tauOnly);
+	bt.add(allMinimization);
+	allMinimization.setSelected(true);
 
         //c4.anchor = GridBagConstraints.EAST;
         c4.weighty = 1.0;
@@ -177,6 +185,8 @@ public class JFrameMinimize extends javax.swing.JFrame implements ActionListener
         c4.fill = GridBagConstraints.HORIZONTAL;
         c4.gridheight = 1;
         panel4.add(removeInternalActions, c4);
+	panel4.add(tauOnly, c4);
+	panel4.add(allMinimization, c4);
 
         panelTop.add(panel4, BorderLayout.SOUTH);
         
@@ -365,7 +375,7 @@ public class JFrameMinimize extends javax.swing.JFrame implements ActionListener
                 listProjected.setEnabled(true);
                 listIgnored.setEnabled(true);
                 setButtonsList();
-                start.setEnabled(sortedListIgnored.size() > 0);
+                start.setEnabled(true);
                 stop.setEnabled(false);
                 close.setEnabled(true);
                 getGlassPane().setVisible(false);
@@ -508,7 +518,31 @@ public class JFrameMinimize extends javax.swing.JFrame implements ActionListener
 	jta.append("\nMinimizing graph...\n");
 	String[] strarray = new String[sortedListIgnored.size()];
 	sortedListIgnored.toArray(strarray );
-	newRG.graph.minimize(strarray);
+	if (removeInternalActions.isSelected()) {
+	    int toBeRemoved = 0;
+	    for(String s: sortedListProjected) {
+		if (s.startsWith("i(")) {
+		    toBeRemoved ++;
+		}
+	    }
+	    if (toBeRemoved > 0) {
+		String[] allstr = new String[strarray.length + toBeRemoved];
+		for(int i=0; i<strarray.length; i++) {
+		    allstr[i] = strarray[i];
+		}
+		int index = strarray.length;
+		for(String s: sortedListProjected) {
+		    if (s.startsWith("i(")) {
+			allstr[index] = s;
+			index++;
+		    }
+		    
+		}
+		strarray = allstr;
+		
+	    }
+	}
+	newRG.graph.minimize(strarray, tauOnly.isSelected());
 	newRG.nbOfStates = newRG.graph.getNbOfStates();
 	newRG.nbOfTransitions = newRG.graph.getTransitions().size();
 	mgui.addRG(newRG);
