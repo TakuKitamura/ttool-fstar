@@ -37,11 +37,12 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class TIFTranslator
-   * Linecommand application for translating TIF to other languages
-   * Creation: 29/06/2007
-   * @version 1.1 30/05/2014
-   * @author Ludovic APVRILLE, Andrea ENRICI
+   * Class GraphShow
+   * Command line application for displaying graphs
+   * Apps of the package minimize and convert
+   * Creation: 11/01/2017
+   * @version 1.10 11/01/2017
+   * @author Ludovic APVRILLE
    * @see
    */
 
