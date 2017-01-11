@@ -228,10 +228,10 @@ public class AUTState implements Comparable<AUTState> {
     public String toString() {
 	String s = "" + id + "\n";
 	for(AUTTransition tr: inTransitions) {
-	    s += "\t" + tr.toString() + "\n";
+	    s += "\t in: " + tr.toString() + "\n";
 	}
 	for(AUTTransition tr: outTransitions) {
-	    s += "\t" + tr.toString() + "\n";
+	    s += "\tout: " + tr.toString() + "\n";
 	}
 	return s;
     }

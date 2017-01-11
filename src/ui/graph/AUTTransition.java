@@ -45,7 +45,7 @@
 
 package ui.graph;
 
-public class AUTTransition  {
+public class AUTTransition implements Comparable<AUTTransition> {
 
     public int origin;
     public int destination;
@@ -63,6 +63,24 @@ public class AUTTransition  {
         origin = Integer.decode(_origin).intValue();
         destination = Integer.decode(_destination).intValue();
         transition = _transition;
+    }
+
+    public int compareTo( AUTTransition _t ) {
+	if (origin != _t.origin) {
+	    return -1;
+	}
+	if (destination != _t.destination) {
+	    return -1;
+	}
+	if(elt != null) {
+	    if (elt != _t.elt) {
+		return -1;
+	    } else {
+		return 0;
+	    }
+	}
+	
+	return transition.compareTo(_t.transition);
     }
 
     public String toString() {
@@ -145,5 +163,7 @@ public class AUTTransition  {
 	tr.isTau = isTau;
 	return tr;
     }
+
+    
 
 }

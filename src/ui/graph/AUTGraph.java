@@ -85,6 +85,13 @@ public class AUTGraph implements myutil.Graph {
         //buildGraph(dataAUT);
     }
 
+    public AUTGraph(ArrayList<AUTState> _st, ArrayList<AUTTransition> _tr) {
+	states = _st;
+	transitions = _tr;
+	nbState = states.size();
+	statesComputed = true;
+    }
+
     public void stopBuildGraph() {
         br = null;
     }
@@ -410,6 +417,12 @@ public class AUTGraph implements myutil.Graph {
         return statesComputed;
     }
 
+    public void setStates(ArrayList<AUTState> _states) {
+	states = _states;
+	nbState = states.size();
+	statesComputed = true;
+    }
+
     public HashSet<String> getAllActions() {
         HashSet<String> hs = new HashSet<String>();
         for(AUTTransition tr: transitions) {
@@ -455,7 +468,11 @@ public class AUTGraph implements myutil.Graph {
     }
 
     public void display() {
-        AUTGraphDisplay display = new AUTGraphDisplay(this);
+	display(false);
+    }
+    
+    public void display(boolean exitOnClose) {
+        AUTGraphDisplay display = new AUTGraphDisplay(this, exitOnClose);
         display.display();
     }
 
@@ -1210,10 +1227,65 @@ public class AUTGraph implements myutil.Graph {
 	TraceManager.addDev("------------------");
  
 	// Generating new graph
-	
-	
+	generateGraph(partition, alphabet);
 	
     }
+
+    // Assumes AUTElement have been added to transitions
+    public AUTGraph generateGraph(AUTPartition partition, HashMap<String, AUTElement> _alphabet) {
+	ArrayList<AUTState> sts = new ArrayList<AUTState>();
+	ArrayList<AUTTransition> trs = new ArrayList<AUTTransition>();
+	HashMap<AUTBlock, AUTState> blockToNewStates = new HashMap<AUTBlock, AUTState>();
+	
+	int stID = 1;
+	// We create one state per block
+	// We look to the block that contains state 0 and we create the state id = 0
+	for(AUTBlock bl: partition.blocks) {
+	    if (bl.hasState(0)) {
+		AUTState st0 = new AUTState(0);
+		blockToNewStates.put(bl, st0);
+		sts.add(0, st0);
+	    } else {
+		AUTState st = new AUTState(stID);
+		stID ++;
+		blockToNewStates.put(bl, st);
+		sts.add(st);
+	    }
+	}
+
+	// We now need to create the transitions
+	// We parse all states in blocks, and consider their transition
+	// We look for the destination and create a transition accordingly
+	for(AUTBlock bl: partition.blocks) {
+	    AUTState newOrigin =  blockToNewStates.get(bl);
+	    for(AUTState src: bl.states) {
+		for(AUTTransition tr: src.outTransitions) {
+		    AUTState newDestination = blockToNewStates.get(partition.getBlockWithState(tr.destination));
+
+		    boolean foundSimilar = false;
+		    AUTTransition newT = new AUTTransition(newOrigin.id, tr.transition, newDestination.id);
+		    newT.elt = tr.elt;
+		    for(AUTTransition testT: trs) {
+			if (testT.compareTo(newT) == 0) {
+			    foundSimilar = true;
+			    break;
+			}
+		    }
+		    if (!foundSimilar) {
+			trs.add(newT);
+			newOrigin.outTransitions.add(newT);
+			newDestination.inTransitions.add(newT);
+		    }
+		}
+	    }
+	}
+       	
+	AUTGraph newGraph = new AUTGraph(sts, trs);
+	TraceManager.addDev("New graph: " + newGraph.toFullString());
+	return newGraph;
+	
+    }
+    
 
     private void printConfiguration(AUTPartition _part, AUTSplitter _w) {
 	TraceManager.addDev("P={" + _part.toString() + "}");

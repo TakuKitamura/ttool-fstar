@@ -93,5 +93,14 @@ public class AUTPartition  {
 	return blocks.remove(_b);
     }
 
+    public AUTBlock getBlockWithState(int id) {
+	for(AUTBlock b: blocks) {
+	    if (b.hasState(id)) {
+		return b;
+	    }
+	}
+	return null;
+    }
+
 
 }

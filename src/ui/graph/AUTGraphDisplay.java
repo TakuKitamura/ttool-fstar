@@ -648,6 +648,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
     protected boolean loop;
     protected MultiNode firstNode;
     protected ArrayList<AbstractEdge> edges;
+    protected boolean exitOnClose = false;
     
     public static String STYLE_SHEET =
         "node {" +
@@ -668,11 +669,11 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         "       fill-color: green; text-color: black; size: 15px, 15px;" +
         "} ";
     
-    public AUTGraphDisplay(AUTGraph _graph) {
+    public AUTGraphDisplay(AUTGraph _graph, boolean _exitOnClose) {
         graph = _graph;
+	exitOnClose = _exitOnClose;
     }
-    
-    
+
     
     public void display() {
         MultiNode node;
@@ -690,6 +691,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         vGraph = new MultiGraph("TTool graph");
         vGraph.addAttribute("ui.stylesheet", STYLE_SHEET);
         int cpt = 0;
+	graph.computeStates();
         for(AUTState state: graph.getStates()) {
             node = vGraph.addNode("" + state.id);
             node.addAttribute("ui.label", "" + state.id);
@@ -727,7 +729,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         //View   vi = viewer.addDefaultView(true);
         
         viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.CLOSE_VIEWER);
-        BasicFrame bf = new BasicFrame(viewer, vGraph, graph, edges);
+        BasicFrame bf = new BasicFrame(viewer, vGraph, graph, edges, exitOnClose);
         
         //vi.addMouseListener(this);
         
@@ -754,7 +756,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         // our thread
         
         int cpt = 0;
-        TraceManager.addDev("Starting loop:" + cpt);
+        //TraceManager.addDev("Starting loop:" + cpt);
         while(loop) {
             try {
                 //TraceManager.addDev("beg of loop:" + cpt);
@@ -765,6 +767,9 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
             if (vGraph.hasAttribute("ui.viewClosed")) {
                 TraceManager.addDev("View was closed");
                 loop = false;
+		if (exitOnClose) {
+		    System.exit(1);
+		}
             } /*else if (firstNode.hasAttribute("ui.clicked")) {
                 TraceManager.addDev("Init node was clicked");
                 firstNode.removeAttribute("ui.clicked");
@@ -794,6 +799,9 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
     public void viewClosed(String id) {
         TraceManager.addDev("View closed");
         loop = false;
+	if (exitOnClose) {
+	    System.exit(1);
+	}
     }
     
     
@@ -895,13 +903,16 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         protected JCheckBox readActions;
         protected JCheckBox higherQuality, antialiasing;
         protected JLabel help;
+
+	protected boolean exitOnClose;
         
         
-        public BasicFrame(Viewer viewer, MultiGraph vGraph, AUTGraph autgraph, ArrayList<AbstractEdge>_edges) {
+        public BasicFrame(Viewer viewer, MultiGraph vGraph, AUTGraph autgraph, ArrayList<AbstractEdge>_edges, boolean _exitOnClose) {
             this.viewer = viewer;
             this.vGraph = vGraph;
             this.graph = autgraph;
             edges = _edges;
+	    exitOnClose = _exitOnClose;
             makeComponents();
             
         }
@@ -950,7 +961,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
             
             add(infoPanel, BorderLayout.SOUTH);
             //setDefaultCloseOperation(EXIT_ON_CLOSE);
-            setSize(800, 600);
+            setSize(1000, 700);
             setVisible(true);
         }
         
@@ -971,6 +982,9 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         }
         
         public void closeFrame() {
+	    if (exitOnClose) {
+		System.exit(1);
+	    }
             dispose();
         }
         
