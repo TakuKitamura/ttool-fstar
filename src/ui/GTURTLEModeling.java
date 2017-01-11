@@ -9816,7 +9816,7 @@ public class GTURTLEModeling {
     	        		rd.setChannelName("nonceCh"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1]);
 					}
 					rd.securityContext = "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
-					tad.addComponent(rd, xpos, ypos, false,true);
+					tad.addComponent(rd, xpos, ypos+yShift, false,true);
 					fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
                 	fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
                 	tad.addComponent(fromStart, xpos, ypos, false, true);
@@ -9855,17 +9855,13 @@ public class GTURTLEModeling {
                 	        tad.repaint();
                     	}
                 	}
-                	if (tg.getY() >= ypos && tg !=enc && (rd!=null && tg!=rd)){
+                	if (tg.getY() >= ypos && tg !=enc && tg!=rd){
                     	tg.setCd(tg.getX(), tg.getY()+yShift);
                 	}
             	}	
 			}
-			//Add decryption and send nonces
-           /* for (TMLTask task2: toSecureRev.keySet()){*/
-                TMLActivityDiagramPanel tad2 = t.getTMLActivityDiagramPanel(task.getName());
-				int yShift=50;
-				//Add nonces if authenticity 
 				for (String channel: insecureInChannels.get(task)){
+					int yShift=50;
 					TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
 					TGConnector conn =new TGConnectorTMLAD(0, 0, 0, 0, 0, 0, false, null, tad, null, null, new Vector());
 					TGConnectingPoint next = new TGConnectingPoint(null, 0, 0, false, false);
@@ -9875,14 +9871,14 @@ public class GTURTLEModeling {
 	            	    if (tg instanceof TMLADReadChannel){
 							readChannel = (TMLADReadChannel) tg;
                 	    	if (readChannel.getChannelName().equals(channel) && readChannel.securityContext.equals("")){                     						
-	                    		fromStart = tad2.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
+	                    		fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
 	                    		if (fromStart!=null){
 	                    		    point = fromStart.getTGConnectingPointP2();
 	                    		}
 								else {
 									continue;
 								}
-								conn = tad2.findTGConnectorStartingAt(tg.getTGConnectingPointAtIndex(1));
+								conn = tad.findTGConnectorStartingAt(tg.getTGConnectingPointAtIndex(1));
 	            	        	xpos = fromStart.getX();
 	                    		ypos = fromStart.getY();
 	                            if (conn==null){
@@ -9898,18 +9894,19 @@ public class GTURTLEModeling {
 					if (fromStart==null){
 						continue;
 					}
+					TMLADWriteChannel wr = new TMLADWriteChannel(0, 0, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					if (autoAuth){
 						//Create a nonce operator and a write channel operator
-						TMLADEncrypt nonce = new TMLADEncrypt(xpos, ypos+yShift, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad);
+						TMLADEncrypt nonce = new TMLADEncrypt(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 						nonce.securityContext = "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
 						nonce.type = "Nonce";
 						nonce.message_overhead = overhead;
 						nonce.encTime= encComp;
 						nonce.decTime=decComp;
-						tad.addComponent(nonce, xpos ,ypos, false, true);
+						tad.addComponent(nonce, xpos ,ypos+yShift, false, true);
 						fromStart.setP2(nonce.getTGConnectingPointAtIndex(0));
 						yShift+=50;
-						TMLADWriteChannel wr = new TMLADWriteChannel(xpos, ypos+yShift, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad);
+						wr = new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 						//Send nonce along channel, the newly created nonce channel or an existing channel with the matching sender and receiver
 						//Find matching channels
 						ArrayList<TMLChannel> matches = tmlmodel.getChannels(tmlc.getDestinationTask(), tmlc.getOriginTask());
@@ -9921,42 +9918,41 @@ public class GTURTLEModeling {
 						}
 						//send the nonce along the channel
 						wr.securityContext = "nonce_"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
-						tad.addComponent(wr,xpos,ypos,false,true);
+						tad.addComponent(wr,xpos,ypos+yShift,false,true);
 						wr.makeValue();
-						TGConnector tmp =new TGConnectorTMLAD(wr.getX(), wr.getY()+yShift, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null,tad2,nonce.getTGConnectingPointAtIndex(1), wr.getTGConnectingPointAtIndex(0), new Vector());
-						tad2.addComponent(tmp, xpos,ypos,false,true);
-						fromStart=new TGConnectorTMLAD(wr.getX(), wr.getY(), tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad2, wr.getTGConnectingPointAtIndex(1), null, new Vector());
-						tad2.addComponent(fromStart, xpos, ypos+yShift, false, true);
-						yShift+=90;
+						TGConnector tmp =new TGConnectorTMLAD(wr.getX(), wr.getY()+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null,tad,nonce.getTGConnectingPointAtIndex(1), wr.getTGConnectingPointAtIndex(0), new Vector());
+						tad.addComponent(tmp, xpos,ypos,false,true);
+						fromStart=new TGConnectorTMLAD(wr.getX(), wr.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, wr.getTGConnectingPointAtIndex(1), null, new Vector());
+						tad.addComponent(fromStart, xpos, ypos, false, true);
 						//Connect created write channel operator to start of read channel operator
 						fromStart.setP1(wr.getTGConnectingPointAtIndex(1));
 						fromStart.setP2(point);
 						//Shift everything from the read channel on down
-						for (TGComponent tg:tad2.getComponentList()){
+						for (TGComponent tg:tad.getComponentList()){
 	                		if (tg.getY() >= ypos && tg!=nonce && tg!=wr){
 	                	    	tg.setCd(tg.getX(), tg.getY()+yShift);
 	                		}
 	            		}	
 					}
-
+					tad.repaint();
 		
        				//Now add the decrypt operator
-			
+					yShift=50;
                     TraceManager.addDev("Securing read channel " + readChannel.getChannelName());
 					readChannel.securityContext = "autoEncrypt_"+readChannel.getChannelName();
-					tad2.repaint();
+					tad.repaint();
                     //Add decryption operator if it does not already exist
                     xpos = conn.getX();
                     ypos = conn.getY();
-					TMLADDecrypt dec = new TMLADDecrypt(xpos+10, ypos+yShift, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad);
+					TMLADDecrypt dec = new TMLADDecrypt(xpos+10, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					dec.securityContext = "autoEncrypt_" + readChannel.getChannelName();
-					tad2.addComponent(dec, dec.getX(), dec.getY(), false, true);
+					tad.addComponent(dec, dec.getX(), dec.getY(), false, true);
 					conn.setP2(dec.getTGConnectingPointAtIndex(0));
-					yShift+=100;
-					conn = new TGConnectorTMLAD(xpos,ypos+yShift, tad2.getMinX(), tad2.getMaxX(), tad2.getMinY(), tad2.getMaxY(), false, null, tad2, dec.getTGConnectingPointAtIndex(1), next, new Vector());
+					yShift+=60;
+					conn = new TGConnectorTMLAD(xpos,ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, dec.getTGConnectingPointAtIndex(1), next, new Vector());
 					conn.setP1(dec.getTGConnectingPointAtIndex(1));
 					conn.setP2(next);
-					tad2.addComponent(conn, conn.getX(), conn.getY(), false,true);
+					tad.addComponent(conn, conn.getX(), conn.getY(), false,true);
 		            //Shift everything down
 					for (TGComponent tg:tad.getComponentList()){
 	            		if (tg instanceof TMLADReadChannel){
@@ -9965,10 +9961,10 @@ public class GTURTLEModeling {
 	               		    if (channel.equals(readChannel.getChannelName()) && readChannel.securityContext.equals("")){
 	               		        TraceManager.addDev("Securing read channel " + readChannel.getChannelName());
 	               		        readChannel.securityContext = "autoEncrypt_"+readChannel.getChannelName();
-	               		        tad2.repaint();
+	               		        
 	                 	  	}
 	               		}
-                		if (tg.getY() >= ypos && tg!=dec){
+                		if (tg.getY() >= ypos && tg!=dec && tg!=wr){
 							
 	                    	tg.setCd(tg.getX(), tg.getY()+yShift);
                 		}
@@ -9976,7 +9972,7 @@ public class GTURTLEModeling {
 				}
 
 
-
+			tad.repaint();
         }
 
         GTMLModeling gtm = new GTMLModeling(t, false);
@@ -10174,6 +10170,7 @@ public class GTURTLEModeling {
             t2a = new TML2Avatar(tmap,false,true);
             avatarspec = t2a.generateAvatarSpec(loopLimit);
             drawPanel(avatarspec, mgui.getFirstAvatarDesignPanelFound());
+
         }
         else if (tmlm!=null){
             //Generate default mapping
@@ -16468,7 +16465,7 @@ public class GTURTLEModeling {
                 TGConnectingPoint tp2 = smdrs.getFreeTGConnectingPoint(x+smdrs.getWidth()/2,y);
                 locMap.put(asme, smdrs);
                 if (bl.getAvatarSignalFromName(name) ==null){
-                    bl.addSignal(new ui.AvatarSignal(0, name, new String[0], new String[0]));
+                    //bl.addSignal(new ui.AvatarSignal(0, name, new String[0], new String[0]));
                 }
 
             }
@@ -16478,14 +16475,13 @@ public class GTURTLEModeling {
                 smp.addComponent(smdss, x, y, false, true);
                 String name=sig.minString();
                 smdss.setValue(name);
-                sig.setName(name);
                 smdss.recalculateSize();
                 SMDMap.put(asme, smdss);
                 tp = smdss.getFreeTGConnectingPoint(x+smdss.getWidth()/2,y+smdss.getHeight());
                 TGConnectingPoint tp2 = smdss.getFreeTGConnectingPoint(x+smdss.getWidth()/2,y);
                 locMap.put(asme, smdss);
                 if (bl.getAvatarSignalFromName(name)  == null){
-                    bl.addSignal(new ui.AvatarSignal(1, name, new String[0], new String[0]));
+                   // bl.addSignal(new ui.AvatarSignal(1, name, new String[0], new String[0]));
                 }
             }
 
@@ -16565,6 +16561,7 @@ public class GTURTLEModeling {
 				typeIds[i]=attr.getName();
 				i++;
 			}
+			TraceManager.addDev("Adding signal "+sig);
             bl.addSignal(new ui.AvatarSignal(sig.getInOut(), name, types, typeIds));
         }
 

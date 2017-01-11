@@ -696,6 +696,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                                     dataFlowType = elt.getAttribute("dataFlowType");
                                     associatedEvent = elt.getAttribute("associatedEvent");
                                     checkConf = (elt.getAttribute("checkConf").compareTo("true")==0);
+									if (checkConf){
+										checkConfStatus=TOCHECK;
+									}
 				    checkAuth = (elt.getAttribute("checkAuth").compareTo("true")==0);
                                     isLossy = (elt.getAttribute("isLossy").compareTo("true") ==0);
                                     isPrex = (elt.getAttribute("isPrex").compareTo("true") ==0);
