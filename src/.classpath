@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="android/|tmltranslator/modelcompiler/DMAContext.java|tmltranslator/toavatar/TML2AvatarDP.java|ui/sd/TGConnectorMessageAsyncOrSyncSD.java|tmltranslator/modelcompiler/PECUnit.java" kind="src" path=""/>
+	<classpathentry excluding="android/|tmltranslator/modelcompiler/DMAContext.java|tmltranslator/toavatar/TML2AvatarDP.java|ui/sd/TGConnectorMessageAsyncOrSyncSD.java|tmltranslator/modelcompiler/PECUnit.java|launch_configurations/" kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/bin/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="/bin/commons-io-2.4.jar"/>
