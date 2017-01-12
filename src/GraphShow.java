@@ -47,12 +47,10 @@
    */
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
 
-
-import myutil.*;
-import ui.graph.*; 
+import myutil.FileUtils;
+import myutil.TraceManager;
+import ui.graph.AUTGraph; 
 
 public class GraphShow  {
 
@@ -108,7 +106,7 @@ public class GraphShow  {
 
 
     public static void main(String[] args) {
-        String[] tmp;
+//        String[] tmp;
 
         printCopyright();
 
@@ -117,7 +115,7 @@ public class GraphShow  {
             return;
         }
 
-        int nbOfOptions = 0;
+  //      int nbOfOptions = 0;
         if (hasDebug(args)) {
 	    TraceManager.devPolicy = TraceManager.TO_CONSOLE;
         } else {
