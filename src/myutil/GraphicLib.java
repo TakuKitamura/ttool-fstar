@@ -519,7 +519,7 @@ public final class GraphicLib {
     									final int width,
     									final int heigth ) {
     	if ( width > 0 && heigth > 0 ) {
-	        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	        Dimension screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize();
 	        w.setSize( Math.min( width, screenSize.width ), Math.min( heigth, screenSize.height ) );
     	}
     	
