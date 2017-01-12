@@ -130,9 +130,9 @@ public class TADArraySetState extends TGCWithoutInternalComponent implements Bas
         String oldValue = value;
         
         JDialogArraySet jdas = new JDialogArraySet(frame, array, index, expr, "Setting value of an array location");
-        jdas.setSize(350, 300);
-        GraphicLib.centerOnParent(jdas);
-        jdas.show(); // blocked until dialog has been closed
+     //   jdas.setSize(350, 300);
+        GraphicLib.centerOnParent(jdas, 350, 300);
+        jdas.setVisible( true ); // blocked until dialog has been closed
         
         if (jdas.hasNewData() && jdas.hasValidData()) {
             expr = jdas.getExprName();
@@ -183,8 +183,8 @@ public class TADArraySetState extends TGCWithoutInternalComponent implements Bas
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
