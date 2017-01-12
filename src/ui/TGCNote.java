@@ -46,14 +46,18 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Graphics;
 
+import javax.swing.JFrame;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import myutil.*;
-import ui.window.*;
+import myutil.Conversion;
+import myutil.GraphicLib;
+import ui.window.JDialogNote;
 
 public class TGCNote extends TGCScalableWithoutInternalComponent {
 
@@ -67,9 +71,9 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
 
     protected Color myColor;
 
-    private Font myFontB;
-    private int maxFontSize = 30;
-    private int minFontSize = 4;
+//    private Font myFontB;
+ //   private int maxFontSize = 30;
+ //   private int minFontSize = 4;
     private int currentFontSize;
 
     protected Graphics graphics;
@@ -128,7 +132,7 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
         if (this.values == null)
             this.makeValue ();
 
-        int h  = graph.getFontMetrics ().getHeight();
+       // int h  = graph.getFontMetrics ().getHeight();
         Color c = graph.getColor();
 
         int desiredWidth = this.minWidth;
@@ -188,7 +192,7 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
 
         JDialogNote jdn = new JDialogNote(frame, "Setting the note", value);
         GraphicLib.centerOnParent(jdn);
-        jdn.show(); // blocked until dialog has been closed
+        jdn.setVisible( true ); // blocked until dialog has been closed
 
         String s = jdn.getText ();
         if (s != null && s.length() > 0 && !s.equals(oldValue)) {
