@@ -137,9 +137,9 @@ public class TADArrayGetState extends TGCWithoutInternalComponent implements Bas
         String oldValue = value;
         
         JDialogArrayGet jdag = new JDialogArrayGet(frame, variable, array, index, "Getting value from an array");
-        jdag.setSize(350, 300);
-        GraphicLib.centerOnParent(jdag);
-        jdag.show(); // blocked until dialog has been closed
+       // jdag.setSize(350, 300);
+        GraphicLib.centerOnParent(jdag, 350, 300);
+        jdag.setVisible( true ); // blocked until dialog has been closed
         
         if (jdag.hasNewData() && jdag.hasValidData()) {
             variable = jdag.getVariableName();
