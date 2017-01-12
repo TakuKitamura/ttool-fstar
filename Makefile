@@ -286,6 +286,9 @@ stdrelease:
 # Proverif
 	mkdir -p $(TTOOL_TARGET)/proverif
 	cp $(TTOOL_DOC)/README_proverif $(TTOOL_TARGET)/proverif
+# Graphs
+	mkdir -p $(TTOOL_TARGET)/graphs
+	cp $(TTOOL_DOC)/README_graph $(TTOOL_TARGET)/graph
 # Figure
 	mkdir -p $(TTOOL_TARGET)/figures
 	cp $(TTOOL_DOC)/README_figure $(TTOOL_TARGET)/figures
