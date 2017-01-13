@@ -915,8 +915,8 @@ public class TML2Avatar {
 	            signals.add(sig);
 		    	signalInMap.put(ch.getName(), sig);
 		    	block.addSignal(sig);
-	    	    AvatarAttribute channelData= new AvatarAttribute(ch.getName()+"__chData", AvatarType.INTEGER, block, null);
-		    	if (block.getAvatarAttributeWithName(ch.getName()+"__chData")==null){
+	    	    AvatarAttribute channelData= new AvatarAttribute(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData", AvatarType.INTEGER, block, null);
+		    	if (block.getAvatarAttributeWithName(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData")==null){
 	    	        block.addAttribute(channelData);
 		    	}
 				sig.addParameter(channelData);
@@ -944,7 +944,7 @@ public class TML2Avatar {
 		    }
 		}
 		else {
-	    	as.addValue(ch.getName()+"__chData");
+	    	as.addValue(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData");
 		}
 
 	    	tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
@@ -963,11 +963,11 @@ public class TML2Avatar {
 		    afterSignalState.addNext(tran);
 		    elementList.add(afterSignalState);
 		    elementList.add(tran);
-		    if (block.getAvatarAttributeWithName(ch.getName()+"__chData")==null){
-		        AvatarAttribute channelData= new AvatarAttribute(ch.getName()+"__chData", AvatarType.INTEGER, block, null);
+		    if (block.getAvatarAttributeWithName(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData")==null){
+		        AvatarAttribute channelData= new AvatarAttribute(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData", AvatarType.INTEGER, block, null);
 	    	        block.addAttribute(channelData);
 		    }
-		    AvatarAttributeState authDest = new AvatarAttributeState(ch.getName()+"__destination",ae.getReferenceObject(),block.getAvatarAttributeWithName(ch.getName()+"__chData"), afterSignalState);
+		    AvatarAttributeState authDest = new AvatarAttributeState(ch.getName()+"__destination",ae.getReferenceObject(),block.getAvatarAttributeWithName(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData"), afterSignalState);
 		    signalAuthDestMap.put(ch.getName(), authDest);
 	    	}
 	    }
@@ -979,8 +979,8 @@ public class TML2Avatar {
 	            signals.add(sig);
 	    	    block.addSignal(sig);
 		    	signalOutMap.put(ch.getName(), sig);
-		    	AvatarAttribute channelData= new AvatarAttribute(ch.getName()+"__chData", AvatarType.INTEGER, block, null);
-		    	if (block.getAvatarAttributeWithName(ch.getName()+"__chData")==null){
+		    	AvatarAttribute channelData= new AvatarAttribute(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData", AvatarType.INTEGER, block, null);
+		    	if (block.getAvatarAttributeWithName(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData")==null){
 	    	        block.addAttribute(channelData);
 		    	}
 				sig.addParameter(channelData);
@@ -990,18 +990,18 @@ public class TML2Avatar {
 	    	}
 	        if (ch.checkConf){
 		    LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
-		    if (!attrsToCheck.contains(ch.getName()+"__chData")){
-		        attrs.add(new AvatarAttribute(ch.getName()+"__chData", AvatarType.INTEGER, block, null));
-		    	attrsToCheck.add(ch.getName()+"__chData");
-		    	avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ch.getName()+"__chData", ch.getReferenceObject(), attrs));
+		    if (!attrsToCheck.contains(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData")){
+		        attrs.add(new AvatarAttribute(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData", AvatarType.INTEGER, block, null));
+		    	attrsToCheck.add(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData");
+		    	avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ch.getName()+"_chData", ch.getReferenceObject(), attrs));
 	            }
 	    	}
 	        if (ch.checkAuth){
-		    if (block.getAvatarAttributeWithName(ch.getName()+"__chData")==null){
-		        AvatarAttribute channelData= new AvatarAttribute(ch.getName()+"__chData", AvatarType.INTEGER, block, null);
+		    if (block.getAvatarAttributeWithName(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData")==null){
+		        AvatarAttribute channelData= new AvatarAttribute(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData", AvatarType.INTEGER, block, null);
 	    	        block.addAttribute(channelData);
 		    }
-		    AvatarAttributeState authOrigin = new AvatarAttributeState(ch.getName()+"__destination",ae.getReferenceObject(),block.getAvatarAttributeWithName(ch.getName()+"__chData"), signalState);
+		    AvatarAttributeState authOrigin = new AvatarAttributeState(ch.getName()+"__destination",ae.getReferenceObject(),block.getAvatarAttributeWithName(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData"), signalState);
 		    signalAuthOriginMap.put(ch.getName(), authOrigin);
 	    	}  
 	    	AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
@@ -1024,7 +1024,7 @@ public class TML2Avatar {
 		}
 		else {
 	  	   //No security pattern
-	    	    as.addValue(ch.getName()+"__chData");
+	    	    as.addValue(ch.getName().split("_")[ch.getName().split("_").length-1]+"_chData");
 		}
 
 	    	tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
@@ -1219,14 +1219,14 @@ public class TML2Avatar {
 
     public AvatarSpecification generateAvatarSpec(String _loopLimit){
 
-	TraceManager.addDev("security patterns " + tmlmodel.secPatterns);
-	TraceManager.addDev("keys " + tmlmap.mappedSecurity);
+		TraceManager.addDev("security patterns " + tmlmodel.secPatterns);
+		TraceManager.addDev("keys " + tmlmap.mappedSecurity);
+	
 
-	//TODO: Add pragmas
 	//TODO: Make state names readable
 	//TODO: Put back numeric guards
 	//TODO: Calcuate for temp variable
-	//TODO: Cry
+
 	this.avspec = new AvatarSpecification("spec", tmlmap.getTMLCDesignPanel());
 	if (tmlmap.getTMLCDesignPanel()==null){
 	    System.out.println("Failed to generate specification");
@@ -1268,7 +1268,7 @@ public class TML2Avatar {
 	}
 	ArrayList<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
 	for (TMLTask task:tasks){
-	    AvatarBlock block = new AvatarBlock(task.getName(), avspec, task.getReferenceObject());
+	    AvatarBlock block = new AvatarBlock(task.getName().split("__")[task.getName().split("__").length-1], avspec, task.getReferenceObject());
 	    if (mc){
 	    block.setFather(top);
 	    }
@@ -1285,7 +1285,7 @@ public class TML2Avatar {
 
 	for (TMLTask task:tasks){
 	   
-	    AvatarBlock block = avspec.getBlockWithName(task.getName());
+	    AvatarBlock block = taskBlockMap.get(task);
 	    //Add temp variable for unsendable signals
 
 	    //Add all signals
@@ -1295,8 +1295,8 @@ public class TML2Avatar {
 
 				block.addSignal(sig);
 				signals.add(sig);
-				AvatarAttribute channelData= new AvatarAttribute(chan.getName()+"__chData", AvatarType.INTEGER, block, null);
-		    	if (block.getAvatarAttributeWithName(chan.getName()+"__chData")==null){
+				AvatarAttribute channelData= new AvatarAttribute(chan.getName().split("_")[chan.getName().split("_").length-1]+"_chData", AvatarType.INTEGER, block, null);
+		    	if (block.getAvatarAttributeWithName(chan.getName().split("_")[chan.getName().split("_").length-1]+"_chData")==null){
 	    	        block.addAttribute(channelData);
 		    	}
 				sig.addParameter(channelData);
@@ -1307,8 +1307,8 @@ public class TML2Avatar {
 				block.addSignal(sig);
 				signals.add(sig);
 				signalInMap.put(chan.getName(),sig);
-				AvatarAttribute channelData= new AvatarAttribute(chan.getName()+"__chData", AvatarType.INTEGER, block, null);
-		    	if (block.getAvatarAttributeWithName(chan.getName()+"__chData")==null){
+				AvatarAttribute channelData= new AvatarAttribute(chan.getName().split("_")[chan.getName().split("_").length-1]+"_chData", AvatarType.INTEGER, block, null);
+		    	if (block.getAvatarAttributeWithName(chan.getName().split("_")[chan.getName().split("_").length-1]+"_chData")==null){
 	    	        block.addAttribute(channelData);
 		    	}
 				sig.addParameter(channelData);

@@ -904,13 +904,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	Color c=g.getColor();
 	Color textColor=Color.BLACK;
 	g.setColor(textColor);
-	g.drawString(transaction, x, y+height+10);
+	//g.drawString(transaction, x, y+height+10);
 	g.setColor(c);
     }
     public void drawStatus(Graphics g){
 	Color c=g.getColor();
 	g.setColor(Color.BLACK);
-	g.drawString(runningStatus, x+width, y);
+	//g.drawString(runningStatus, x+width, y);
 	internalDrawing(g);
 	g.setColor(c);
     }

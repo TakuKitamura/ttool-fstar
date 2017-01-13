@@ -8818,7 +8818,7 @@ public class GTURTLEModeling {
 
     private boolean undoRunning = false;
 
-
+	boolean hasCrypto=false;
     //private Charset chset1, chset2;
 
     public GTURTLEModeling(MainGUI _mgui, Vector _panels) {
@@ -9627,6 +9627,8 @@ public class GTURTLEModeling {
     }
 
     public TMLMapping autoSecure(MainGUI gui, boolean autoConf, boolean autoAuth){
+		//TODO add more options
+		//
         if (tmap==null){
             return null;
         }
@@ -16582,6 +16584,7 @@ public class GTURTLEModeling {
 				bl.addAttribute(new TAttribute(0, attr.getName(), attr.getType().getDefaultInitialValue(), type));
 				}
 			if (attr.getName().contains("key_")){
+				hasCrypto=true;
 				bl.addCryptoElements();
             }
         }
@@ -16591,8 +16594,8 @@ public class GTURTLEModeling {
 	}
     public void drawPanel(AvatarSpecification avspec, AvatarDesignPanel adp){
 
-   
-      Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
+		hasCrypto=false;
+	    Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
         Map<String, AvatarBDBlock> blockMap = new HashMap<String, AvatarBDBlock>();
         if (adp ==null){
             return;
@@ -16604,7 +16607,7 @@ public class GTURTLEModeling {
 
         //Find all blocks, create blocks from left
         int xpos=10;
-        int ypos=10;
+        int ypos=40;
 
 		for (AvatarBlock ab:avspec.getListOfBlocks()){
             //Crypto blocks?
@@ -16612,7 +16615,7 @@ public class GTURTLEModeling {
             if (ab.getFather()==null){
             	AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null, abd);
 		        abd.addComponent(bl, xpos, ypos, false, true);
-				bl.resize(400, 250);
+				bl.resize(300, 250);
             	drawBlockProperties(ab,bl);
 	            AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
 				buildStateMachine(ab, bl, smp);
@@ -16715,7 +16718,7 @@ public class GTURTLEModeling {
                     if (str.contains(".")){
                         String tmp = str.split("\\.")[0];
                         String tmp2 = str.split("\\.")[1];
-                        t=t.concat(tmp.split("__")[tmp.split("__").length-1] + "." + tmp2.split("__")[Math.max(tmp2.split("__").length-2,0)] + " ");
+                        t=t.concat(tmp.split("__")[tmp.split("__").length-1] + "." + tmp2.split("__")[tmp2.split("__").length-1] + " ");
                     }
                     else {
                         t=t.concat(str+" ");
@@ -16730,20 +16733,26 @@ public class GTURTLEModeling {
         pragma.setValue(s);
         pragma.makeValue();
         abd.addComponent(pragma, xpos, ypos, false,true);
-        //Add message and key datatype
-        xpos=100;
-        ypos+=200;
-        AvatarBDDataType message = new AvatarBDDataType(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
-        message.setValue("Message");
+        //Add message and key datatype if there is a cryptoblock
 
-        abd.addComponent(message, xpos, ypos, false,true);
-        xpos+=100;
-        AvatarBDDataType key = new AvatarBDDataType(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
-        key.setValue("Key");
-        TAttribute attr = new TAttribute(2, "data", "0", 8);
-        message.addAttribute(attr);
-        key.addAttribute(attr);
-        abd.addComponent(key, xpos, ypos, false,true);
+        xpos=50;
+        ypos+=200;
+		if (hasCrypto){
+        	AvatarBDDataType message = new AvatarBDDataType(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
+        	message.setValue("Message");
+
+        	abd.addComponent(message, xpos, ypos, false,true);
+			message.resize(200,100);
+        	xpos+=400;
+
+        	AvatarBDDataType key = new AvatarBDDataType(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null,abd);
+        	key.setValue("Key");
+        	TAttribute attr = new TAttribute(2, "data", "0", 8);
+        	message.addAttribute(attr);
+        	key.addAttribute(attr);
+			key.resize(200,100);
+        	abd.addComponent(key, xpos, ypos, false,true);
+		}
     }
 
 	public void buildStateMachine(AvatarBlock ab, AvatarBDBlock bl, AvatarSMDPanel smp){
