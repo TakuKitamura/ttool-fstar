@@ -151,7 +151,7 @@ public class TMLModelCompiler	{
 		prexList = new ArrayList<TMLPort>();
 		buffersList = new ArrayList<Buffer>();
 		dataTransfersList = new ArrayList<DataTransfer>();
-		debugFileName = ConfigurationTTool.CcodeDirectory + "debugFile.txt";
+		debugFileName = ConfigurationTTool.CCodeDirectory + "debugFile.txt";
 		tmlcpsList = new ArrayList<TMLCP>();
 	}
 

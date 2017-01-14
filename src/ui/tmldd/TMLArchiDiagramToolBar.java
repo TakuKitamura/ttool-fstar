@@ -193,6 +193,5 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
 	    }
 	}
     }
-}
     
 } // Class
