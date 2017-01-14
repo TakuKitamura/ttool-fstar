@@ -171,29 +171,30 @@ public class AvatarBDFirewall extends TGCScalableWithoutInternalComponent {
 		String errors = "";
 		int tmp;
 		String tmpName;
-        
-		JDialogAvatarFirewall dialog = new JDialogAvatarFirewall(frame, "Setting firewall attributes", this);
-		dialog.setSize(600, 600);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
-        
-		if (!dialog.isRegularClose()) {
-			return false;
-		}
+
+		// DB: commented until JDialogAvatarFirewall is added to repository
+//		JDialogAvatarFirewall dialog = new JDialogAvatarFirewall(frame, "Setting firewall attributes", this);
+//		dialog.setSize(600, 600);
+//        GraphicLib.centerOnParent(dialog);
+//        dialog.show(); // blocked until dialog has been closed
+//        
+//		if (!dialog.isRegularClose()) {
+//			return false;
+//		}
+//		
+//		if (dialog.getNodeName().length() != 0) {
+//			tmpName = dialog.getNodeName();
+//			tmpName = tmpName.trim();
+//			 if (!TAttribute.isAValidId(tmpName, false, false)) {
+//                error = true;
+//				errors += "Name of the node  ";
+//			 } else {
+//				 name = tmpName;
+//			 }
+//		}
+//		latency = Integer.valueOf(dialog.getLatency());
 		
-		if (dialog.getNodeName().length() != 0) {
-			tmpName = dialog.getNodeName();
-			tmpName = tmpName.trim();
-			 if (!TAttribute.isAValidId(tmpName, false, false)) {
-                error = true;
-				errors += "Name of the node  ";
-			 } else {
-				 name = tmpName;
-			 }
-		}
-		latency = Integer.valueOf(dialog.getLatency());
-		
-		rules = dialog.getRules();
+//		rules = dialog.getRules();
 		
 		if (error) {
 			JOptionPane.showMessageDialog(frame,
