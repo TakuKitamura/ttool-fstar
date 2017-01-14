@@ -399,8 +399,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // Interaction with simulators
     private ArrayList<RunningInfo> runningIDs;
     private ArrayList<LoadInfo> loadIDs;
-    private Map<Integer, ArrayList<SimulationTransaction>> transactionMap = new HashMap<Integer, ArrayList<SimulationTransaction>>();
-    private Map<String, String> statusMap = new HashMap<String, String>();
+    private ConcurrentHashMap<Integer, ArrayList<SimulationTransaction>> transactionMap = new ConcurrentHashMap<Integer, ArrayList<SimulationTransaction>>();
+    private ConcurrentHashMap<String, String> statusMap = new ConcurrentHashMap<String, String>();
     private JFrameInteractiveSimulation jfis;
     private JFrameAvatarInteractiveSimulation jfais;
 
@@ -1466,6 +1466,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         return list;
     }
+	public Vector<String> getAvatarBlocks(){
+		Vector<String> list=new Vector<String>();
+		return list;
+	}
     public Vector getAllApplicationTMLTasksAttributes() {
 
         TURTLEPanel tp;
@@ -7884,7 +7888,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         return transactionMap.get(id);
     }
-    public synchronized Map<String,String> getStatus(int id){
+    public synchronized ConcurrentHashMap<String,String> getStatus(int id){
         if (statusMap == null) {
             return null;
         }
