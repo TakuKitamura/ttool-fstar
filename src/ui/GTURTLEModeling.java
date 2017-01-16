@@ -8068,45 +8068,75 @@ public class GTURTLEModeling {
         }
         AvatarBDPanel abd = adp.abdp;
 
-        //Find all blocks, create blocks from left
+        //Find all blocks, create nested blocks starting from top left
         int xpos=10;
         int ypos=40;
-
-		for (AvatarBlock ab:avspec.getListOfBlocks()){
-            //Crypto blocks?
-            AvatarBDBlock father=null;
-            if (ab.getFather()==null){
-            	AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, xpos, xpos*2, ypos, ypos*2, false, null, abd);
-		        abd.addComponent(bl, xpos, ypos, false, true);
-				bl.resize(300, 250);
-            	drawBlockProperties(ab,bl);
-	            AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
-				buildStateMachine(ab, bl, smp);
-				blockMap.put(bl.getValue(), bl);
-            	xpos+=400;
-
+		
+		//Create blocks recursively, starting from top level ones with no father
+		//Lowest level blocks should be 100x100, next should be 100x(number of children*100+50)...etc,
+		//Find level #, 0 refers to no father, etc
+		Map<AvatarBlock, Integer> blockLevelMap = new HashMap<AvatarBlock, Integer>();
+		Map<AvatarBlock, Integer> blockSizeMap = new HashMap<AvatarBlock, Integer>();
+		Map<AvatarBlock, Integer> blockIncMap = new HashMap<AvatarBlock, Integer>();
+		int maxLevel=0;
+		for (AvatarBlock ab: avspec.getListOfBlocks()){
+			int level=0;
+			AvatarBlock block=ab;
+			while (block.getFather()!=null){
+				if (blockSizeMap.containsKey(block.getFather())){
+					blockSizeMap.put(block.getFather(), blockSizeMap.get(block.getFather())+1);
+				}
+				else {
+					blockSizeMap.put(block.getFather(),1);
+					blockIncMap.put(block.getFather(), 10);
+				}
+				level++;
+				block=block.getFather();
 			}
-		}
-		int inc = 10;
-        for (AvatarBlock ab:avspec.getListOfBlocks()){
-            //Crypto blocks?
-            AvatarBDBlock father=null;
-            if (ab.getFather()!=null){
-                father = blockMap.get(ab.getFather().getName().split("__")[ab.getFather().getName().split("__").length-1]);
-				//System.out.println(father);
-			
-            AvatarBDBlock bl = new AvatarBDBlock(father.getX()+inc, father.getY()+inc, abd.getMinX(), abd.getMaxX(), abd.getMinY(), abd.getMaxY(), false, null, abd);
-	        abd.addComponent(bl, father.getX()+inc, father.getY()+inc, false, true);
-			bl.resize(100, 100);
-			abd.attach(bl);
-            drawBlockProperties(ab,bl);
-			AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
-			buildStateMachine(ab, bl, smp);
-	        blockMap.put(bl.getValue(), bl);
-            inc+=150;
+			if (level>maxLevel){
+				maxLevel=level;
 			}
+			if (!blockSizeMap.containsKey(block)){
+				blockSizeMap.put(block, 0);
+				blockIncMap.put(block,10);
+			}
+			blockLevelMap.put(ab, level);
 		}
 
+
+		for (int level=0; level<maxLevel+1; level++){
+			for (AvatarBlock ab:avspec.getListOfBlocks()){
+           		if (blockLevelMap.get(ab)==level){
+					if (level==0){
+						AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, abd.getMinX(), abd.getMaxX(), abd.getMinY(), abd.getMaxY(), false, null, abd);
+						abd.addComponent(bl, xpos, ypos, false, true);
+						bl.resize(100*blockSizeMap.get(ab)+100, 100+(maxLevel-level)*50);
+						drawBlockProperties(ab,bl);
+						AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
+						buildStateMachine(ab, bl, smp);
+						blockMap.put(bl.getValue(), bl);
+						xpos+=100*blockSizeMap.get(ab)+200;
+					}
+					else {
+						AvatarBDBlock father= blockMap.get(ab.getFather().getName().split("__")[ab.getFather().getName().split("__").length-1]);
+						AvatarBDBlock bl = new AvatarBDBlock(father.getX()+blockIncMap.get(ab.getFather()), father.getY()+10, abd.getMinX(), abd.getMaxX(), abd.getMinY(), abd.getMaxY(), false, father, abd);
+						abd.addComponent(bl, father.getX()+blockIncMap.get(ab.getFather()), father.getY()+10, false, true);
+						int size=100;
+						if (blockSizeMap.containsKey(ab)){
+							size=100*blockSizeMap.get(ab)+50;
+						}
+						bl.resize(size, 100+(maxLevel-level)*50);					
+						drawBlockProperties(ab,bl);
+						abd.attach(bl);
+						AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
+						buildStateMachine(ab, bl, smp);
+						blockMap.put(bl.getValue(), bl);
+						blockIncMap.put(ab.getFather(), blockIncMap.get(ab.getFather())+size+10);
+					}
+				}
+			}
+		}
+		
 
         for (AvatarRelation ar: avspec.getRelations()){
             String bl1 = ar.block1.getName();

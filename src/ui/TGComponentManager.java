@@ -1781,6 +1781,8 @@ public class TGComponentManager {
             return TMLARCHI_BRIDGENODE;
         } else if (tgc instanceof TMLArchiFirewallNode) {
             return TMLARCHI_FIREWALL;
+        } else if (tgc instanceof AvatarBDFirewall) {
+            return AVATAR_FIREWALL;
         } else if (tgc instanceof TMLArchiHWANode) {
             return TMLARCHI_HWANODE;
         } else if (tgc instanceof TMLArchiMemoryNode) {

@@ -8496,6 +8496,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_LIBRARYFUNCTION);
         } else if (command.equals(actions[TGUIAction.ABD_CRYPTOLIBRARYFUNCTION].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_CRYPTOLIBRARYFUNCTION);
+		} else if (command.equals(actions[TGUIAction.AVATAR_FIREWALL].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATAR_FIREWALL);
 
             // AVATAR SMD
         } else if (command.equals(actions[TGUIAction.ASMD_EDIT].getActionCommand())) {
