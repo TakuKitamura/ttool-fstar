@@ -166,6 +166,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         myInitComponents();
         pack();
 
+	/*if ((mgui != null) && (spec != null)) {
+	    mgui.drawAvatarSpecification(spec);
+	    }*/
+
         //getGlassPane().addMouseListener( new MouseAdapter() {});
         getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
