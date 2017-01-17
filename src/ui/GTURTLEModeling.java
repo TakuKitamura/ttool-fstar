@@ -8156,12 +8156,21 @@ public class GTURTLEModeling {
             for (String bl2:originDestMap.get(bl1)){
                 Vector points=new Vector();
 				TGConnectingPoint p1= blockMap.get(bl1).findFirstFreeTGConnectingPoint(true,true);
-                TGConnectingPoint p2= blockMap.get(bl2).findFirstFreeTGConnectingPoint(true,true);
+                p1.setFree(false);
 
+                TGConnectingPoint p2= blockMap.get(bl2).findFirstFreeTGConnectingPoint(true,true);
+                p2.setFree(false);
+
+				if (bl2.equals(bl1)){
+					//Add 2 point so the connection looks square
+					Point p = new Point(p1.getX(), p1.getY()-10);
+					points.add(p);
+					p = new Point(p2.getX(), p2.getY()-10);
+					points.add(p);
+				}
                 AvatarBDPortConnector conn = new AvatarBDPortConnector(0, 0, 0, 0, 0, 0, true, null, abd, p1, p2, points);
                 abd.addComponent(conn, 0,0,false,true);
-                p1.setFree(false);
-                p2.setFree(false);
+
                 //Add Relations to connector
                 for (AvatarRelation ar:avspec.getRelations()){
                     if (ar.block1.getName().contains(bl1) && ar.block2.getName().contains(bl2) || ar.block1.getName().contains(bl2) && ar.block2.getName().contains(bl1)){
