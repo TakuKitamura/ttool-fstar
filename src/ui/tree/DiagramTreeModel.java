@@ -184,6 +184,9 @@ public class DiagramTreeModel implements TreeModel {
                     if (((TGCAttributeBox)node).getChildCount() > 0)
                         return false;
                 }
+		if (node instanceof AvatarBDDataType) {
+		    return (((AvatarBDDataType)node).getChildCount() == 0);
+            	}
             }
             
              if (node instanceof InvariantSynchro) {
