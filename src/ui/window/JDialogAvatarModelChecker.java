@@ -526,7 +526,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
             amc.startModelChecking();
             TraceManager.addDev("Model checking done");
-	    TraceManager.addDev("RG:" + amc.statesToString() + "\n\n");
+	    //TraceManager.addDev("RG:" + amc.statesToString() + "\n\n");
 
             if (generateDesignSelected) {
                 TraceManager.addDev("Drawing modified avatar spec");
@@ -708,7 +708,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     }
 
     public void updateValues() {
-        TraceManager.addDev("Updating values...");
+        //TraceManager.addDev("Updating values...");
         try {
             if (amc != null) {
                 int nbOfStatess = amc.getNbOfStates();
