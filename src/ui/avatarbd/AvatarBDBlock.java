@@ -1218,4 +1218,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     public String getOwnerName () {
         return this.getBlockName ();
     }
+    
+    public String toString() {
+	return "Block: " + getValue();
+    }
+    
 }

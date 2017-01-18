@@ -64,7 +64,7 @@ public class AvatarDesignPanelTranslator {
     protected CorrespondanceTGElement listE; // usual list
     //protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
     protected LinkedList <TDiagramPanel> panels;
-    protected HashMap<String, LinkedList<TAttribute>> typeAttributesMap;    
+    protected HashMap<String, LinkedList<TAttribute>> typeAttributesMap;
     protected HashMap<String, String> nameTypeMap;
     public AvatarDesignPanelTranslator(AvatarDesignPanel _adp) {
         adp = _adp;
@@ -209,161 +209,161 @@ public class AvatarDesignPanelTranslator {
                 tgsp = (AvatarBDSafetyPragma)tgc;
                 values = tgsp.getValues();
                 for (String s: values){
-					if (checkSafetyPragma(s, _blocks, _as)){
-                    	_as.addSafetyPragma(s);
-					}
+                    if (checkSafetyPragma(s, _blocks, _as)){
+                        _as.addSafetyPragma(s);
+                    }
                 }
             }
         }
     }
-	public boolean checkSafetyPragma(String _pragma, LinkedList<AvatarBDBlock> _blocks, AvatarSpecification as){
-		//Todo: check types
-		//Todo: handle complex types
-		_pragma = _pragma.trim();
-	
-		if (_pragma.contains("=") && !(_pragma.contains("==") || _pragma.contains("<=") || _pragma.contains(">=") || _pragma.contains("!="))){
-			//not a query
-			TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
-			return false;
-		}
-		String header = _pragma.split(" ")[0];
-		if (_pragma.contains("-->")){
-			//will be implies
-			_pragma = _pragma.replaceAll(" ","");
-			String state1 = _pragma.split("-->")[0];
-			String state2 = _pragma.split("-->")[1];
-			if (!state1.contains(".") || !state2.contains(".")){
-				TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
-				return false;
-			}
-			if (!statementParser(state1, as, _pragma)){
-				return false;
-			}
-			//check the second half of implies
-			if (!statementParser(state2,as, _pragma)){
-				return false;
-			}
-		}
-		else if (header.equals("E[]") || header.equals("E<>") || header.equals("A[]") || header.equals("A<>")){
-			String state = _pragma.replace("E[]","").replace("A[]","").replace("E<>","").replace("A<>","").replaceAll(" ","");
-			state = state.trim();
-			if (!state.contains("||") && !state.contains("&&")){
-				if (!statementParser(state, as, _pragma)){
-					return false;
-				}
-			}
-		}
-		else {
-			TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
-			return false;
-		}
-		return true;
-	}
-	public boolean statementParser(String state, AvatarSpecification as, String _pragma){
-		//check the syntax of a single statement
-		
-		//Divide into simple statements
-		String[] split = state.split("(|)|\\|&");
-		if (split.length >1){
-			boolean validity = true;
-			for (String fragment: split){
-				if (fragment.length()>2){
-					validity = validity && statementParser(fragment, as, _pragma);
-				}
-			}
-			return validity;
-		}
-		String number= "[0-9]+";
-		String bo = "(?i)true|false";
-		if (state.contains("=") || state.contains("<") || state.contains(">")){
-			String state1 = state.split("==|>(=)?|!=|<(=)?")[0];
-			String state2 = state.split("==|>(=)?|!=|<(=)?")[1];
-			String block1 = state1.split("\\.",2)[0];
-			String attr1 = state1.split("\\.",2)[1];
-			attr1 = attr1.replace(".","__");
-			AvatarType p1Type= AvatarType.UNDEFINED;
-			AvatarBlock bl1 = as.getBlockWithName(block1);
-			if (bl1 !=null){
-				AvatarStateMachine asm = bl1.getStateMachine();
-				if (bl1.getIndexOfAvatarAttributeWithName(attr1)==-1){
-					TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr1);
-					return false;	
-				}
-				else {
-					int ind = bl1.getIndexOfAvatarAttributeWithName(attr1);
-					AvatarAttribute attr = bl1.getAttribute(ind);
-					p1Type = attr.getType();
-				}
-			}
-			else {
-				TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid block name " + block1);
-				return false;
-			}
-			if (state2.contains(".")){
-				String block2 = state2.split("\\.",2)[0];
-				String attr2= state2.split("\\.",2)[1];
-				attr2 = attr2.replace(".","__");
-				AvatarBlock bl2 = as.getBlockWithName(block2);
-				if (bl2!=null){
-					if (bl2.getIndexOfAvatarAttributeWithName(attr2)==-1){
-						TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr2);
-						return false;
-					}
-					int ind = bl2.getIndexOfAvatarAttributeWithName(attr2);
-					AvatarAttribute attr = bl2.getAttribute(ind);
-					p1Type = attr.getType();	
-					
-				}
-				else {
-					TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid block name " + block2);
-					return false;
-				}		
-			}
-			else {
-				if (state2.matches(number)){
-					if (p1Type != AvatarType.INTEGER){
-						TraceManager.addDev("UPPAAL Pragma " + _pragma + " has incompatible types");
-						return false;
-					}
-				}
-				else if (state2.matches(bo)){
-					if (p1Type != AvatarType.BOOLEAN){
-						TraceManager.addDev("UPPAAL Pragma " + _pragma + " has incompatible types");
-						return false;
-					}
-				}
-				else {
-					TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
-					return false;
-				}
-			}
-		}
-		else {
-			String block1 = state.split("\\.",2)[0];
-			String attr1 = state.split("\\.",2)[1];
-			attr1 = attr1.replace(".", "__");
-			AvatarBlock bl1 = as.getBlockWithName(block1);
-			if (bl1 !=null){
-				AvatarStateMachine asm = bl1.getStateMachine();
-				if (bl1.getIndexOfAvatarAttributeWithName(attr1)==-1 && asm.getStateWithName(attr1)==null){
-					TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid attribute or state name " + attr1);
-					return false;	
-				}
-				int ind = bl1.getIndexOfAvatarAttributeWithName(attr1);
-				if (ind !=-1){
-					AvatarAttribute attr = bl1.getAttribute(ind);
-					if (attr.getType()!=AvatarType.BOOLEAN){
-						TraceManager.addDev("UPPAAL Pragma " + _pragma + " performs query on non-boolean attribute"); 
-					}
-				}
-			}
-			else {
-				TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid block name " + block1);
-				return false;
-			}
-		}
-		return true;
-	}
+    public boolean checkSafetyPragma(String _pragma, LinkedList<AvatarBDBlock> _blocks, AvatarSpecification as){
+        //Todo: check types
+        //Todo: handle complex types
+        _pragma = _pragma.trim();
+
+        if (_pragma.contains("=") && !(_pragma.contains("==") || _pragma.contains("<=") || _pragma.contains(">=") || _pragma.contains("!="))){
+            //not a query
+            TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
+            return false;
+        }
+        String header = _pragma.split(" ")[0];
+        if (_pragma.contains("-->")){
+            //will be implies
+            _pragma = _pragma.replaceAll(" ","");
+            String state1 = _pragma.split("-->")[0];
+            String state2 = _pragma.split("-->")[1];
+            if (!state1.contains(".") || !state2.contains(".")){
+                TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
+                return false;
+            }
+            if (!statementParser(state1, as, _pragma)){
+                return false;
+            }
+            //check the second half of implies
+            if (!statementParser(state2,as, _pragma)){
+                return false;
+            }
+        }
+        else if (header.equals("E[]") || header.equals("E<>") || header.equals("A[]") || header.equals("A<>")){
+            String state = _pragma.replace("E[]","").replace("A[]","").replace("E<>","").replace("A<>","").replaceAll(" ","");
+            state = state.trim();
+            if (!state.contains("||") && !state.contains("&&")){
+                if (!statementParser(state, as, _pragma)){
+                    return false;
+                }
+            }
+        }
+        else {
+            TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
+            return false;
+        }
+        return true;
+    }
+    public boolean statementParser(String state, AvatarSpecification as, String _pragma){
+        //check the syntax of a single statement
+
+        //Divide into simple statements
+        String[] split = state.split("(|)|\\|&");
+        if (split.length >1){
+            boolean validity = true;
+            for (String fragment: split){
+                if (fragment.length()>2){
+                    validity = validity && statementParser(fragment, as, _pragma);
+                }
+            }
+            return validity;
+        }
+        String number= "[0-9]+";
+        String bo = "(?i)true|false";
+        if (state.contains("=") || state.contains("<") || state.contains(">")){
+            String state1 = state.split("==|>(=)?|!=|<(=)?")[0];
+            String state2 = state.split("==|>(=)?|!=|<(=)?")[1];
+            String block1 = state1.split("\\.",2)[0];
+            String attr1 = state1.split("\\.",2)[1];
+            attr1 = attr1.replace(".","__");
+            AvatarType p1Type= AvatarType.UNDEFINED;
+            AvatarBlock bl1 = as.getBlockWithName(block1);
+            if (bl1 !=null){
+                AvatarStateMachine asm = bl1.getStateMachine();
+                if (bl1.getIndexOfAvatarAttributeWithName(attr1)==-1){
+                    TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr1);
+                    return false;
+                }
+                else {
+                    int ind = bl1.getIndexOfAvatarAttributeWithName(attr1);
+                    AvatarAttribute attr = bl1.getAttribute(ind);
+                    p1Type = attr.getType();
+                }
+            }
+            else {
+                TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid block name " + block1);
+                return false;
+            }
+            if (state2.contains(".")){
+                String block2 = state2.split("\\.",2)[0];
+                String attr2= state2.split("\\.",2)[1];
+                attr2 = attr2.replace(".","__");
+                AvatarBlock bl2 = as.getBlockWithName(block2);
+                if (bl2!=null){
+                    if (bl2.getIndexOfAvatarAttributeWithName(attr2)==-1){
+                        TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr2);
+                        return false;
+                    }
+                    int ind = bl2.getIndexOfAvatarAttributeWithName(attr2);
+                    AvatarAttribute attr = bl2.getAttribute(ind);
+                    p1Type = attr.getType();
+
+                }
+                else {
+                    TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid block name " + block2);
+                    return false;
+                }
+            }
+            else {
+                if (state2.matches(number)){
+                    if (p1Type != AvatarType.INTEGER){
+                        TraceManager.addDev("UPPAAL Pragma " + _pragma + " has incompatible types");
+                        return false;
+                    }
+                }
+                else if (state2.matches(bo)){
+                    if (p1Type != AvatarType.BOOLEAN){
+                        TraceManager.addDev("UPPAAL Pragma " + _pragma + " has incompatible types");
+                        return false;
+                    }
+                }
+                else {
+                    TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
+                    return false;
+                }
+            }
+        }
+        else {
+            String block1 = state.split("\\.",2)[0];
+            String attr1 = state.split("\\.",2)[1];
+            attr1 = attr1.replace(".", "__");
+            AvatarBlock bl1 = as.getBlockWithName(block1);
+            if (bl1 !=null){
+                AvatarStateMachine asm = bl1.getStateMachine();
+                if (bl1.getIndexOfAvatarAttributeWithName(attr1)==-1 && asm.getStateWithName(attr1)==null){
+                    TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid attribute or state name " + attr1);
+                    return false;
+                }
+                int ind = bl1.getIndexOfAvatarAttributeWithName(attr1);
+                if (ind !=-1){
+                    AvatarAttribute attr = bl1.getAttribute(ind);
+                    if (attr.getType()!=AvatarType.BOOLEAN){
+                        TraceManager.addDev("UPPAAL Pragma " + _pragma + " performs query on non-boolean attribute");
+                    }
+                }
+            }
+            else {
+                TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid block name " + block1);
+                return false;
+            }
+        }
+        return true;
+    }
     public String reworkPragma(String _pragma, LinkedList<AvatarBDBlock> _blocks) {
         String ret = "";
         int i;
@@ -441,17 +441,17 @@ public class AvatarDesignPanelTranslator {
                           if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
                           ret = ret  + tmp + " ";
                           } else if (ta.getType() == TAttribute.OTHER) {
-                        // Must find all subsequent types
-                        types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
-                        if (types == null) {
-                        TraceManager.addDev("Invalid Pragma " + 1);
-                        return null;
+                          // Must find all subsequent types
+                          types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
+                          if (types == null) {
+                          TraceManager.addDev("Invalid Pragma " + 1);
+                          return null;
 
-                        } else {
-                        for(int j=0; j<types.size(); j++) {
-                        ret = ret + tmp + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
-                        }
-                        }
+                          } else {
+                          for(int j=0; j<types.size(); j++) {
+                          ret = ret + tmp + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
+                          }
+                          }
                           }
 
                           }
@@ -633,9 +633,9 @@ public class AvatarDesignPanelTranslator {
             // Create parameters
             for (TAttribute attr: libraryFunction.getParameters ())
                 if (attr.getType() == TAttribute.INTEGER
-                        || attr.getType() == TAttribute.NATURAL
-                        || attr.getType() == TAttribute.BOOLEAN
-                        || attr.getType() == TAttribute.TIMER)
+                    || attr.getType() == TAttribute.NATURAL
+                    || attr.getType() == TAttribute.BOOLEAN
+                    || attr.getType() == TAttribute.TIMER)
                     alf.addParameter (this.createRegularAttribute (alf, attr, ""));
                 else {
                     // other
@@ -664,9 +664,9 @@ public class AvatarDesignPanelTranslator {
             // Create return values
             for (TAttribute attr: libraryFunction.getReturnAttributes ())
                 if (attr.getType() == TAttribute.INTEGER
-                        || attr.getType() == TAttribute.NATURAL
-                        || attr.getType() == TAttribute.BOOLEAN
-                        || attr.getType() == TAttribute.TIMER)
+                    || attr.getType() == TAttribute.NATURAL
+                    || attr.getType() == TAttribute.BOOLEAN
+                    || attr.getType() == TAttribute.TIMER)
                     alf.addReturnAttribute (this.createRegularAttribute (alf, attr, ""));
                 else {
                     // other
@@ -693,9 +693,9 @@ public class AvatarDesignPanelTranslator {
             // Create attributes
             for (TAttribute attr: libraryFunction.getAttributes ())
                 if (attr.getType() == TAttribute.INTEGER
-                        || attr.getType() == TAttribute.NATURAL
-                        || attr.getType() == TAttribute.BOOLEAN
-                        || attr.getType() == TAttribute.TIMER)
+                    || attr.getType() == TAttribute.NATURAL
+                    || attr.getType() == TAttribute.BOOLEAN
+                    || attr.getType() == TAttribute.TIMER)
                     alf.addAttribute (this.createRegularAttribute (alf, attr, ""));
                 else {
                     // other
@@ -719,26 +719,26 @@ public class AvatarDesignPanelTranslator {
                     }
                 }
 
-                // Create methods
-                for (ui.AvatarMethod uiam: libraryFunction.getMethods ()) {
-                    avatartranslator.AvatarMethod atam = new avatartranslator.AvatarMethod (uiam.getId (), uiam);
-                    atam.setImplementationProvided (uiam.isImplementationProvided());
-                    alf.addMethod (atam);
-                    this.makeParameters (alf, atam, uiam);
-                    this.makeReturnParameters (alf, libraryFunction, atam, uiam);
-                }
+            // Create methods
+            for (ui.AvatarMethod uiam: libraryFunction.getMethods ()) {
+                avatartranslator.AvatarMethod atam = new avatartranslator.AvatarMethod (uiam.getId (), uiam);
+                atam.setImplementationProvided (uiam.isImplementationProvided());
+                alf.addMethod (atam);
+                this.makeParameters (alf, atam, uiam);
+                this.makeReturnParameters (alf, libraryFunction, atam, uiam);
+            }
 
-                // Create signals
-                for (ui.AvatarSignal uias: libraryFunction.getSignals ()) {
-                    avatartranslator.AvatarSignal atas;
-                    if (uias.getInOut() == uias.IN)
-                        atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.IN, uias);
-                    else
-                        atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.OUT, uias);
+            // Create signals
+            for (ui.AvatarSignal uias: libraryFunction.getSignals ()) {
+                avatartranslator.AvatarSignal atas;
+                if (uias.getInOut() == uias.IN)
+                    atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.IN, uias);
+                else
+                    atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.OUT, uias);
 
-                    alf.addSignal (atas);
-                    this.makeParameters (alf, atas, uias);
-                }
+                alf.addSignal (atas);
+                this.makeParameters (alf, atas, uias);
+            }
         }
     }
 
@@ -1042,9 +1042,9 @@ public class AvatarDesignPanelTranslator {
             /* Creates all the parameters corresponding to this parameter */
             LinkedList<String> parameterNames = new LinkedList<String> ();
             if (ta.getType() == TAttribute.INTEGER
-                    || ta.getType() == TAttribute.NATURAL
-                    || ta.getType() == TAttribute.BOOLEAN
-                    || ta.getType() == TAttribute.TIMER)
+                || ta.getType() == TAttribute.NATURAL
+                || ta.getType() == TAttribute.BOOLEAN
+                || ta.getType() == TAttribute.TIMER)
                 parameterNames.add (ta.getId ());
             else {
                 LinkedList<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (ta.getTypeOther ());
@@ -1110,9 +1110,9 @@ public class AvatarDesignPanelTranslator {
 
                 /* Creates all the attributes corresponding to this return attribute */
                 if (returnTA.getType() == TAttribute.INTEGER
-                        || returnTA.getType() == TAttribute.NATURAL
-                        || returnTA.getType() == TAttribute.BOOLEAN
-                        || returnTA.getType() == TAttribute.TIMER) {
+                    || returnTA.getType() == TAttribute.NATURAL
+                    || returnTA.getType() == TAttribute.BOOLEAN
+                    || returnTA.getType() == TAttribute.TIMER) {
                     AvatarAttribute attr = _ab.getAvatarAttributeWithName (dummyName);
                     if (attr == null) {
                         attr = this.createRegularAttribute (_ab, returnTA, "__dummy_return_attribute_");
@@ -1143,9 +1143,9 @@ public class AvatarDesignPanelTranslator {
                 /* Creates all the attributes corresponding to this return attribute */
                 LinkedList<String> attributeNames = new LinkedList<String> ();
                 if (ta.getType() == TAttribute.INTEGER
-                        || ta.getType() == TAttribute.NATURAL
-                        || ta.getType() == TAttribute.BOOLEAN
-                        || ta.getType() == TAttribute.TIMER)
+                    || ta.getType() == TAttribute.NATURAL
+                    || ta.getType() == TAttribute.BOOLEAN
+                    || ta.getType() == TAttribute.TIMER)
                     attributeNames.add (ta.getId ());
                 else {
                     LinkedList<TAttribute> types = adp.getAvatarBDPanel ().getAttributesOfDataType (ta.getTypeOther ());
@@ -1179,9 +1179,9 @@ public class AvatarDesignPanelTranslator {
             LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute> ();
             /* Creates all the attributes corresponding to this return attribute */
             if (returnTA.getType() == TAttribute.INTEGER
-                    || returnTA.getType() == TAttribute.NATURAL
-                    || returnTA.getType() == TAttribute.BOOLEAN
-                    || returnTA.getType() == TAttribute.TIMER) {
+                || returnTA.getType() == TAttribute.NATURAL
+                || returnTA.getType() == TAttribute.BOOLEAN
+                || returnTA.getType() == TAttribute.TIMER) {
                 AvatarAttribute attr = _ab.getAvatarAttributeWithName (dummyName);
                 if (attr == null) {
                     attr = this.createRegularAttribute (_ab, returnTA, "__dummy_return_attribute_");
@@ -1272,7 +1272,7 @@ public class AvatarDesignPanelTranslator {
         AvatarState astate = asm.getStateWithName(tgc.getValue());
         if (astate == null) {
             astate = new AvatarState (tgc.getValue(), tgc);
-	    astate.setAsVerifiable(true);
+            astate.setAsVerifiable(true);
             asm.addElement (astate);
         }
 
@@ -1470,13 +1470,13 @@ public class AvatarDesignPanelTranslator {
                     this.listE.addCor (astart, tgc);
                     tgc.setAVATARID (astart.getID());
                     asm.addElement(astart);
-		    astart.setAsVerifiable(true);
+                    astart.setAsVerifiable(true);
                     if (tgc.getFather() == null)
                         asm.setStartState(astart);
-                // Stop state
+                    // Stop state
                 } else if (tgc instanceof AvatarSMDStopState) {
                     AvatarStopState astop = new AvatarStopState ("stop", tgc);
-		    astop.setAsVerifiable(true);
+                    astop.setAsVerifiable(true);
                     this.listE.addCor(astop, tgc);
                     tgc.setAVATARID(astop.getID());
                     asm.addElement(astop);
@@ -1705,10 +1705,19 @@ public class AvatarDesignPanelTranslator {
                         //TraceManager.addDev("Searching signal with name " + name1 +  " in block " + b1.getName());
                         atas1 = b1.getAvatarSignalWithName(name1);
                         atas2 = b2.getAvatarSignalWithName(name2);
-                        if ((atas1 != null) && (atas2 != null)) {
-                            r.addSignals(atas1, atas2);
+                        if(atas1.isCompatibleWith(atas2)) {
+                            if ((atas1 != null) && (atas2 != null)) {
+                                r.addSignals(atas1, atas2);
+                            } else {
+                                TraceManager.addDev("Null signals in AVATAR relation: " + name1 + " " + name2);
+                            }
                         } else {
-                            TraceManager.addDev("null gates in AVATAR relation: " + name1 + " " + name2);
+			    CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Wrong signal association betwen " + atas1 + " and " + atas2);
+			    // TODO: adapt
+			    // ce.setAvatarBlock(_ab);
+			    ce.setTDiagramPanel(tgc.getTDiagramPanel());
+			    ce.setTGComponent(tgc);
+			    addCheckingError(ce);
                         }
                     }
 

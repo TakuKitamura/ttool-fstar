@@ -166,6 +166,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         myInitComponents();
         pack();
 
+	/*if ((mgui != null) && (spec != null)) {
+	    mgui.drawAvatarSpecification(spec);
+	    }*/
+
         //getGlassPane().addMouseListener( new MouseAdapter() {});
         getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
@@ -522,7 +526,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
             amc.startModelChecking();
             TraceManager.addDev("Model checking done");
-	    TraceManager.addDev("RG:" + amc.statesToString() + "\n\n");
+	    //TraceManager.addDev("RG:" + amc.statesToString() + "\n\n");
 
             if (generateDesignSelected) {
                 TraceManager.addDev("Drawing modified avatar spec");
@@ -704,7 +708,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     }
 
     public void updateValues() {
-        TraceManager.addDev("Updating values...");
+        //TraceManager.addDev("Updating values...");
         try {
             if (amc != null) {
                 int nbOfStatess = amc.getNbOfStates();

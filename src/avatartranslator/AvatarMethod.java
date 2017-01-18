@@ -211,4 +211,6 @@ public class AvatarMethod extends AvatarElement {
 	setAdvancedClone(am, _block);	
 	return am;
     }
+
+
 }

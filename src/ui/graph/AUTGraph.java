@@ -1320,7 +1320,7 @@ public class AUTGraph implements myutil.Graph {
         transitions = trs;
         nbState = sts.size();
 
-        TraceManager.addDev("New graph: " + toFullString());
+        //TraceManager.addDev("New graph: " + toFullString());
 
     }
 
