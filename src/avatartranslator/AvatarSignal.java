@@ -122,4 +122,13 @@ public class AvatarSignal extends AvatarMethod {
 	setAdvancedClone((AvatarMethod)as, _block);
 	return as;
     }
+
+
+    public boolean isCompatibleWith(AvatarSignal _as) {
+	if (getInOut() == _as.getInOut()) {
+	    return false;
+	}
+
+	return super.isCompatibleWith((AvatarMethod)_as);
+    }
 }
