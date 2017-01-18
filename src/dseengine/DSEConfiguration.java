@@ -73,7 +73,7 @@ public class DSEConfiguration implements Runnable  {
 	private final String PATH_TO_CODE = "No directory selected for putting the generated code";
 	private final String PATH_TO_RESULTS = "No directory selected for putting the results";
 	private final String PATH_TO_SOURCE = "No source model selected";
-	private final String NO_OUTPUT_SELECTED = "No format ofr the output has been selected";
+	private final String NO_OUTPUT_SELECTED = "No format for the output has been selected";
 	private final String LOAD_MAPPING_FAILED = "Loading of the mapping failed";
 	private final String LOAD_TASKMODEL_FAILED = "Loading of the task model failed";
 	private final String SIMULATION_COMPILATION_COMMAND_NOT_SET = "Compilation command missing";
@@ -1157,7 +1157,6 @@ public class DSEConfiguration implements Runnable  {
 			return 0;
 			
 		} else {
-			
 			if (results == null) {
 				TraceManager.addDev("No results");
 				return -1;
@@ -1165,7 +1164,7 @@ public class DSEConfiguration implements Runnable  {
 			
 			// Must compute results
 			results.computeResults();
-			
+			overallResults = results.getExplanationHeader() + "\n" + results.getAllComments() + "\n" + results.getWholeResults();
 			TraceManager.addDev("Results: #" + resultsID + "\n" +  results.getWholeResults());
 			
 			// Saving to file
