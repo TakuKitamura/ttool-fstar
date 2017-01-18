@@ -196,6 +196,21 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
 		return true;
 	}
 	
+
+	public List<String> getAllStates(){
+		TGComponent tgc;
+		Iterator iterator = componentList.listIterator();
+        
+		ArrayList<String> list = new ArrayList<String>();
+		
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof AvatarSMDState) {
+				list.add(tgc.getValue());
+			}
+		}
+		return list;
+	}
 	public void autoConnect(TGComponent added) {
 		
 		

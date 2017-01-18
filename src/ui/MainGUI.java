@@ -1466,10 +1466,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         return list;
     }
-	public Vector<String> getAvatarBlocks(){
-		Vector<String> list=new Vector<String>();
-		return list;
-	}
+
     public Vector getAllApplicationTMLTasksAttributes() {
 
         TURTLEPanel tp;

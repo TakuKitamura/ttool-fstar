@@ -159,17 +159,19 @@ public class JDialogAvatarFirewall extends javax.swing.JDialog implements Action
         c2.weighty = 1.0;
         c2.weightx = 1.0;
 	task1 = new JComboBox();
-	for (String task: node.getTDiagramPanel().getMGUI().getAvatarBlocks()){
-	    task1.addItem(task);
-	}
-	task1.addItem("*");
+	if (node.getTDiagramPanel() instanceof AvatarBDPanel){
+		AvatarBDPanel abdp = (AvatarBDPanel) node.getTDiagramPanel();
+		for (AvatarBDBlock block: abdp.getFullBlockList()){
+		    task1.addItem(block.getName());
+		}
+		task1.addItem("*");
 	
-	task2= new JComboBox();
-	for (String task: node.getTDiagramPanel().getMGUI().getAvatarBlocks()){
-	    task2.addItem(task);
+		task2= new JComboBox();
+		for (AvatarBDBlock block: abdp.getFullBlockList()){
+		    task2.addItem(block.getName());
+		}
+		task2.addItem("*");
 	}
-	task2.addItem("*");
-
 	panel2.add(task1, c2);
 	panel2.add(new JLabel("--->"),c2);
 	c2.gridwidth=GridBagConstraints.REMAINDER;

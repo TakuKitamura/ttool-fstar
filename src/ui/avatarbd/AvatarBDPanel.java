@@ -52,7 +52,7 @@ import org.w3c.dom.*;
 import ui.*;
 import ui.avatardd.*;
 import java.util.*;
-
+import ui.avatarsmd.AvatarSMDPanel;
 import myutil.*;
 
 public class AvatarBDPanel extends TDiagramPanel {
@@ -423,6 +423,20 @@ public class AvatarBDPanel extends TDiagramPanel {
             }
         }
     }
+
+	public HashMap<String, List<String>> getBlockStrings(){
+		HashMap<String,List<String>> blockAttributeMap = new HashMap<String, List<String>>();
+		for (AvatarBDBlock block: getFullBlockList()){
+			List<String> attrs = new ArrayList<String>();
+			for (TAttribute attr: getAllAttributesOfBlock(block.getBlockName())){
+				attrs.add(attr.getId());
+			}
+			AvatarSMDPanel smd = block.getAvatarSMDPanel();
+			attrs.addAll(smd.getAllStates());
+			blockAttributeMap.put(block.getBlockName(), attrs);		
+		}
+		return blockAttributeMap;
+	}
 
     public LinkedList<AvatarBDStateMachineOwner> getFullStateMachineOwnerList() {
         LinkedList<AvatarBDStateMachineOwner> list = new LinkedList<AvatarBDStateMachineOwner>();

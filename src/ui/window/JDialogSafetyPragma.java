@@ -64,7 +64,7 @@ public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionLi
     protected JMenuBar menuBar;
     protected JMenu help;
     protected JPopupMenu helpPopup;
-
+	public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
     /** Creates new form  */
     public JDialogSafetyPragma(Frame f, String title, String _text) {
         super(f, title, true);
@@ -77,23 +77,27 @@ public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionLi
 
     public class SuggestionPanel {
 	private final String[] pragma = {"A[]", "E<>", "A<>", "E[]"};
+	//Form list of all blocks
+	//For each block, create a list of all attribute strings and states
+	
         private JList list;
         private JPopupMenu popupMenu;
         private String subWord;
         private final int insertionPosition;
 
-        public SuggestionPanel(JTextArea textarea, int position, String subWord, Point location) {
+        public SuggestionPanel(JTextArea textarea, int position, String subWord, Point location, int linePosition) {
             this.insertionPosition = position;
             this.subWord = subWord;
             popupMenu = new JPopupMenu();
             popupMenu.removeAll();
             popupMenu.setOpaque(false);
             popupMenu.setBorder(null);
-            popupMenu.add(list = createSuggestionList(position, subWord), BorderLayout.CENTER);
+			
+            popupMenu.add(list = createSuggestionList(linePosition ,position, subWord), BorderLayout.CENTER);
 	    //Show popupMenu only if there are matching suggestions
-	    if (list.getModel().getSize() >0){
+	    	if (list.getModel().getSize() >0){
                 popupMenu.show(textarea, location.x, textarea.getBaseline(0, 0) + location.y);
-	    }
+	    	}
         }
 
         public void hide() {
@@ -103,15 +107,31 @@ public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionLi
             }
         }
 
-        private JList createSuggestionList(final int position, final String subWord) {
+	private JList createSuggestionList(int linePosition, final int position, final String subWord) {
 	    ArrayList<String> matches = new ArrayList<String>();
-	    if (subWord.startsWith("#")){
+	    if (linePosition<3){
 	        for (String p: pragma) {
           	    if (p.startsWith(subWord)){
-			matches.add(p);
-		    }
-		}
+					matches.add(p);
+			    }
+			}
 	    }
+		
+		if (!subWord.contains(".")){
+			for (String block: blockAttributeMap.keySet()){
+				if (block.startsWith(subWord)){
+					matches.add(block);
+				}
+			}
+		}
+		else {
+			String block = subWord.split("\\.")[0];
+			for (String attr: blockAttributeMap.get(block)){
+				if (attr.startsWith(subWord.split("\\.")[1])){
+					matches.add(block+"."+attr);
+				}
+			}
+		}
 	    Object[] data = new Object[matches.size()];
             data = matches.toArray(data);
             JList list = new JList(data);
@@ -132,6 +152,7 @@ public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionLi
 
 	
         public boolean insertSelection() {
+		//Note that it will not add if the selection will not fit on the current line
 	    if (!popupMenu.isVisible()){
 		return false;
 	    }
@@ -207,7 +228,17 @@ public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionLi
         if (subWord.length() < 1) {
             return;
         }
-        suggestion = new SuggestionPanel(textarea, position, subWord, location);
+		start=Math.max(0,position-1);
+		while (start>0){
+			//Find previous new line position
+			if (!String.valueOf(text.charAt(start)).matches(".")){
+				break;
+			}
+			else {
+				start--;
+			}
+		}
+        suggestion = new SuggestionPanel(textarea, position, subWord, location, position-start-1);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -230,15 +261,15 @@ public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionLi
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
         helpPopup = new JPopupMenu();
-	//JTextArea jft = new JTextArea("UPPAAL pragmas");
-	//helpPopup.add(jft);
-	helpPopup.add(new JLabel("UPPAAL safety query"));
-	helpPopup.add(new JLabel(IconManager.imgic7002));	
-	helpPopup.add(new JLabel(IconManager.imgic7003));
-	helpPopup.add(new JLabel(IconManager.imgic7004));
-	helpPopup.add(new JLabel(IconManager.imgic7005));
-	helpPopup.add(new JLabel(IconManager.imgic7006));
-	helpPopup.setPreferredSize(new Dimension(150,650));
+		//JTextArea jft = new JTextArea("UPPAAL pragmas");
+		//helpPopup.add(jft);
+		helpPopup.add(new JLabel("UPPAAL safety queries determine if the behavior of a system. They must appear in one of the following formats."));
+		helpPopup.add(new JLabel(IconManager.imgic7002));	
+		helpPopup.add(new JLabel(IconManager.imgic7003));
+		helpPopup.add(new JLabel(IconManager.imgic7004));
+		helpPopup.add(new JLabel(IconManager.imgic7005));
+		helpPopup.add(new JLabel(IconManager.imgic7006));
+		helpPopup.setPreferredSize(new Dimension(150,650));
         textarea = new JTextArea();
 
         textarea.setEditable(true);
@@ -246,12 +277,12 @@ public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionLi
         textarea.setTabSize(3);
         textarea.append(text);
         textarea.setFont(new Font("times", Font.PLAIN, 12));
-	JMenuBar menuBar = new JMenuBar();
-	menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-	help = new JMenu("?");
-	menuBar.add(help);
-	setJMenuBar(menuBar);
-	textarea.addKeyListener(new KeyListener() {
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		help = new JMenu("?");
+		menuBar.add(help);
+		setJMenuBar(menuBar);
+		textarea.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyChar() == KeyEvent.VK_TAB) {
