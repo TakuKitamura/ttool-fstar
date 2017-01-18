@@ -123,6 +123,10 @@ public class AvatarBDPanel extends TDiagramPanel {
         return false;
     }
 
+    public void updateSignalAttachement(AvatarBDBlock _b, AvatarBDPortConnector _conn) {
+    }
+    
+
     public boolean actionOnValueChanged(TGComponent tgc) {
         if (tgc instanceof AvatarBDBlock) {
             //updateAllSignalsOnConnectors();

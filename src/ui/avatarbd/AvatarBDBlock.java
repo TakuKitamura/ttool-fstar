@@ -152,9 +152,11 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         this.internalDrawingAux (graph);
         graph.setFont (font);
     }
+    
     public void addSignal(AvatarSignal sig){
 	this.mySignals.add(sig);
     }
+    
     public void internalDrawingAux (Graphics graph) {
         // Draw outer rectangle (for border)
         Color c = graph.getColor ();
@@ -397,9 +399,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
             String signalString = "~ " + signal.toString ();
             w = graph.getFontMetrics ().stringWidth (signalString);
-            if (w + 2*textX < this.width)
+            if (w + 2*textX < this.width) {
                 graph.drawString (signalString, this.x + textX, this.y + h);
-            else {
+		drawInfoAttachement(signal, graph, x, y+h);
+			
+	    }
+	    else {
                 // If we can't, try to draw with "..." instead
                 int stringLength;
                 for (stringLength = signalString.length ()-1; stringLength >= 0; stringLength--) {
@@ -407,6 +412,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                     w = graph.getFontMetrics ().stringWidth (abbrev);
                     if (w + 2*textX < this.width) {
                         graph.drawString (abbrev, this.x + textX, this.y + h);
+			drawInfoAttachement(signal, graph, x, y+h);		       
+			
+			
                         break;
                     }
                 }
@@ -434,6 +442,31 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             if (w + 2*textX < this.width)
                 graph.drawString (GLOBAL_CODE_INFO, this.x + (this.width - w)/2, this.y + h);
         }
+    }
+
+    private void drawInfoAttachement(AvatarSignal _as,  Graphics g, int _x, int _y) {
+	if (_as.attachedToARelation) {
+	    return;
+	}
+	Color c = g.getColor();
+	g.setColor(Color.RED);
+	int []xA = new int[3];
+	int []yA = new int[3];
+	//top of triangle
+	xA[0] = _x + 5;
+	yA[0] = _y - 7;
+	
+	// Right bottom point
+	xA[1] = _x + 2;
+	yA[1] = _y;
+
+	// Left bottom point
+	xA[2] = _x + 8;
+	yA[2] = _y;
+
+	g.fillPolygon(xA, yA, 3);
+
+	g.setColor(c);
     }
 
 
@@ -724,6 +757,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         for (AvatarSignal as: this.mySignals) {
             sb.append("<Signal value=\"");
             sb.append(as.toString());
+	    sb.append("\" attached=\"");
+	    sb.append(as.attachedToARelation);
             sb.append("\" />\n");
         }
         if (hasGlobalCode()) {
@@ -755,6 +790,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             AvatarSignal as;
             boolean implementation = false;
             String crypt;
+	    String attached;
 
 
             //System.out.println("Loading attributes");
@@ -829,6 +865,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                             if (elt.getTagName().equals("Signal")) {
                                 //System.out.println("Analyzing attribute");
                                 signal = elt.getAttribute("value");
+				attached = elt.getAttribute("attached");
 
                                 if (signal.equals("null")) {
                                     signal = "";
@@ -836,6 +873,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 as = AvatarSignal.isAValidSignal(signal);
                                 if (as != null) {
                                     this.mySignals.add(as);
+				    if (attached != null) {
+					as.attachedToARelation = (attached.compareTo("true") == 0);
+				    }
                                 } else {
                                     TraceManager.addDev("Invalid signal:" + signal);
                                 }

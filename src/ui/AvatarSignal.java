@@ -61,6 +61,8 @@ public class AvatarSignal extends AvatarMethod {
 
     private int inout;
 
+    public boolean attachedToARelation;
+
 
     public AvatarSignal(int _inout, String _id, String _types[], String _typeIds[]) {
         super(_id, _types, _typeIds);

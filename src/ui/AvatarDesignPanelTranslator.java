@@ -962,6 +962,9 @@ public class AvatarDesignPanelTranslator {
             // Note that for library functions, signals are just placeholders so they don't need to be connected to anything
             AvatarRelation ar = _as.getAvatarRelationWithSignal (atas);
             if (ar == null)
+		if (atas.getReferenceObject() instanceof ui.AvatarSignal) {
+		    ((ui.AvatarSignal) atas.getReferenceObject()).attachedToARelation = false;
+		}
                 throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Signal used for sending in " + asmdss.getValue() + " is not connected to a channel");
         }
 
@@ -1225,9 +1228,15 @@ public class AvatarDesignPanelTranslator {
             // Note that for library functions, signals are just placeholders so they don't need to be connected to anything
             AvatarRelation ar = _as.getAvatarRelationWithSignal (atas);
             if (ar == null)
+		if (atas.getReferenceObject() instanceof ui.AvatarSignal) {
+		    ((ui.AvatarSignal) atas.getReferenceObject()).attachedToARelation = false;
+		}
                 throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Signal used for receiving in " + asmdrs.getValue() + " is not connected to a channel");
         }
-
+	if (atas.getReferenceObject() instanceof ui.AvatarSignal) {
+	    ((ui.AvatarSignal) atas.getReferenceObject()).attachedToARelation = true;
+	}
+	
         AvatarActionOnSignal aaos = new AvatarActionOnSignal ("action_on_signal", atas, asmdrs);
         if (asmdrs.hasCheckableAccessibility())
             aaos.setCheckable();
