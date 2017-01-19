@@ -123,6 +123,46 @@ public class AvatarBDPanel extends TDiagramPanel {
         return false;
     }
 
+    public void updateSignalAttachement(AvatarBDBlock _b, AvatarBDPortConnector _conn) {
+
+	
+	// Set all signals of B as non connected
+	_b.setSignalsAsNonAttached();
+	
+	
+	Iterator iterator = getComponentList().listIterator();
+	while(iterator.hasNext()) {
+            TGComponent tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof AvatarBDPortConnector) {
+		AvatarBDPortConnector port = (AvatarBDPortConnector)tgc;
+                AvatarBDBlock block1 = port.getAvatarBDBlock1();
+                AvatarBDBlock block2 = port.getAvatarBDBlock2();
+		if ((block1 != null) && (block2 != null)) {
+		    if ((_b == block1) || (_b == block2)) {
+			//TraceManager.addDev("Relation found");
+			LinkedList<String> l;
+			if (_b == block1) {
+			    l = port.getListOfSignalsOrigin();
+			} else {
+			    l = port.getListOfSignalsDestination();
+			}
+
+			for(String name: l) {
+			    name = AvatarSignal.getSignalNameFromFullSignalString(name);
+			    //TraceManager.addDev("Searching for " + name + " in block " + _b);
+			    AvatarSignal sig = _b.getAvatarSignalFromName(name);
+			    if (sig != null) {
+				//TraceManager.addDev("Sig " + name + " is attached to a relation");
+				sig.attachedToARelation = true;
+			    }
+			}
+		    }
+		}
+	    }
+	}
+    }
+    
+
     public boolean actionOnValueChanged(TGComponent tgc) {
         if (tgc instanceof AvatarBDBlock) {
             //updateAllSignalsOnConnectors();

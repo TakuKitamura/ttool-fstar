@@ -334,6 +334,9 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             }
         }
 
+	((AvatarBDPanel)tdp).updateSignalAttachement(block2, this);
+	((AvatarBDPanel)tdp).updateSignalAttachement(block1, this);
+
         asynchronous = jdas.isAsynchronous();
         blockingFIFO = jdas.isBlocking();
         isPrivate = jdas.isPrivate();
@@ -657,6 +660,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 	    }
 	}
     }
+
     public void updateAllSignals() {
         try {
             Vector v = getAssociationSignals();

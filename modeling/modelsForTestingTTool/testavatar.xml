@@ -210,9 +210,9 @@
 <TGConnectingPoint num="23" id="129" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="in m0()" />
-<Signal value="in m1()" />
-<Signal value="out m2()" />
+<Signal value="in m0()" attached="false" />
+<Signal value="in m1()" attached="false" />
+<Signal value="out m2()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -248,9 +248,9 @@
 <TGConnectingPoint num="23" id="154" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="out m0()" />
-<Signal value="out m1()" />
-<Signal value="in m2()" />
+<Signal value="out m0()" attached="false" />
+<Signal value="out m1()" attached="false" />
+<Signal value="in m2()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -977,7 +977,7 @@
 <TGConnectingPoint num="23" id="428" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="out writing()" />
+<Signal value="out writing()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -1039,7 +1039,7 @@
 <Attribute access="0" id="x" value="" type="8" typeOther="" />
 <Attribute access="0" id="y" value="" type="8" typeOther="" />
 <Method value="pickingupflowers(int x)" />
-<Signal value="in reading()" />
+<Signal value="in reading()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -1616,8 +1616,8 @@
 <TGConnectingPoint num="23" id="719" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="out toto()" />
-<Signal value="out titi()" />
+<Signal value="out toto()" attached="false" />
+<Signal value="out titi()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -1653,8 +1653,8 @@
 <TGConnectingPoint num="23" id="744" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="in toto()" />
-<Signal value="in titi()" />
+<Signal value="in toto()" attached="false" />
+<Signal value="in titi()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -2862,8 +2862,8 @@
 <CryptoBlock value="false" />
 <Attribute access="0" id="x" value="1" type="8" typeOther="" />
 <Attribute access="0" id="y" value="1" type="8" typeOther="" />
-<Signal value="in titi(int input)" />
-<Signal value="in titi1()" />
+<Signal value="in titi(int input)" attached="false" />
+<Signal value="in titi1()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -2900,8 +2900,8 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="x" value="1" type="8" typeOther="" />
-<Signal value="out toto(int a)" />
-<Signal value="out toto1()" />
+<Signal value="out toto(int a)" attached="false" />
+<Signal value="out toto1()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -3191,8 +3191,8 @@
 <CryptoBlock value="false" />
 <Attribute access="0" id="x" value="1" type="8" typeOther="" />
 <Attribute access="0" id="y" value="5" type="8" typeOther="" />
-<Signal value="in titi(int input)" />
-<Signal value="in titi1()" />
+<Signal value="in titi(int input)" attached="false" />
+<Signal value="in titi1()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -3229,8 +3229,8 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="x" value="1" type="8" typeOther="" />
-<Signal value="out toto(int a)" />
-<Signal value="out toto1()" />
+<Signal value="out toto(int a)" attached="false" />
+<Signal value="out toto1()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -3920,8 +3920,8 @@
 <TGConnectingPoint num="23" id="1774" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="in receive()" />
-<Signal value="in fail()" />
+<Signal value="in receive()" attached="false" />
+<Signal value="in fail()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -3957,8 +3957,8 @@
 <TGConnectingPoint num="23" id="1799" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="out send()" />
-<Signal value="out fail()" />
+<Signal value="out send()" attached="false" />
+<Signal value="out fail()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -4690,7 +4690,7 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="y" value="" type="8" typeOther="" />
-<Signal value="in toto(int x)" />
+<Signal value="in toto(int x)" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -4728,7 +4728,7 @@
 <CryptoBlock value="false" />
 <Attribute access="0" id="x" value="0" type="8" typeOther="" />
 <Attribute access="0" id="maxX" value="100" type="8" typeOther="" />
-<Signal value="out toto(int y)" />
+<Signal value="out toto(int y)" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -5327,9 +5327,9 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="x" value="" type="8" typeOther="" />
-<Signal value="in msg1(int v)" />
-<Signal value="in msg2(int val)" />
-<Signal value="out okS()" />
+<Signal value="in msg1(int v)" attached="false" />
+<Signal value="in msg2(int val)" attached="false" />
+<Signal value="out okS()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -5368,9 +5368,9 @@
 <Attribute access="0" id="val1" value="2" type="8" typeOther="" />
 <Attribute access="0" id="val2" value="4" type="8" typeOther="" />
 <Attribute access="0" id="y" value="5" type="8" typeOther="" />
-<Signal value="out msg1(int v)" />
-<Signal value="out msg2(int val)" />
-<Signal value="in okS()" />
+<Signal value="out msg1(int v)" attached="false" />
+<Signal value="out msg2(int val)" attached="false" />
+<Signal value="in okS()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -6078,8 +6078,8 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="x" value="" type="8" typeOther="" />
-<Signal value="in msg1(int v)" />
-<Signal value="out okS()" />
+<Signal value="in msg1(int v)" attached="true" />
+<Signal value="out okS()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -6116,8 +6116,8 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="val1" value="6" type="8" typeOther="" />
-<Signal value="out msg1(int v)" />
-<Signal value="in okS()" />
+<Signal value="out msg1(int v)" attached="false" />
+<Signal value="in okS()" attached="true" />
 </extraparam>
 </COMPONENT>
 
@@ -6746,7 +6746,7 @@
 <CryptoBlock value="false" />
 <Attribute access="0" id="timer1" value="" type="9" typeOther="" />
 <Attribute access="0" id="timer2" value="" type="9" typeOther="" />
-<Signal value="in recv()" />
+<Signal value="in recv()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -6783,7 +6783,7 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="timer1" value="" type="9" typeOther="" />
-<Signal value="out send()" />
+<Signal value="out send()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -7575,7 +7575,7 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="timer1" value="" type="9" typeOther="" />
-<Signal value="in recv()" />
+<Signal value="in recv()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -7611,7 +7611,7 @@
 <TGConnectingPoint num="23" id="3544" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="out send()" />
+<Signal value="out send()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -8263,7 +8263,7 @@
 <AutomaticDrawing  data="true" />
 <extraparam>
 <iso value="in sig(int val)" />
-<osd value="out sig(bool b)" />
+<osd value="out sig(int b)" />
 <FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
 </extraparam>
 </CONNECTOR>
@@ -8299,7 +8299,8 @@
 <TGConnectingPoint num="23" id="3840" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="out sig(bool b)" />
+<Attribute access="0" id="b" value="2" type="8" typeOther="" />
+<Signal value="out sig(int b)" attached="true" />
 </extraparam>
 </COMPONENT>
 
@@ -8336,7 +8337,8 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="val" value="" type="8" typeOther="" />
-<Signal value="in sig(int val)" />
+<Signal value="in sig(int val)" attached="true" />
+<Signal value="in sig2()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -8349,7 +8351,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="3872" />
-<P1  x="407" y="70" id="3894" />
+<P1  x="400" y="77" id="3894" />
 <P2  x="399" y="121" id="3883" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="3871" >
@@ -8410,11 +8412,11 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="3893" >
-<cdparam x="380" y="126" />
-<sizeparam width="38" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="376" y="126" />
+<sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="Send signal" value="sig()" />
+<infoparam name="Send signal" value="sig(b)" />
 <TGConnectingPoint num="0" id="3883" />
 <TGConnectingPoint num="1" id="3884" />
 <TGConnectingPoint num="2" id="3885" />
@@ -8428,7 +8430,7 @@
 </COMPONENT>
 
 <COMPONENT type="5100" id="3895" >
-<cdparam x="400" y="50" />
+<cdparam x="393" y="57" />
 <sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -8441,16 +8443,16 @@
 
 <AVATARStateMachineDiagramPanel name="Block0" minX="10" maxX="2500" minY="10" maxY="1500" >
 <CONNECTOR type="5102" id="3902" >
-<cdparam x="478" y="164" />
+<cdparam x="475" y="233" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="3901" />
-<P1  x="478" y="164" id="3923" />
-<P2  x="475" y="203" id="3910" />
+<P1  x="475" y="233" id="3911" />
+<P2  x="555" y="393" id="3921" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="3900" >
 <father id="3902" num="0" />
-<cdparam x="476" y="183" />
+<cdparam x="515" y="313" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -8469,16 +8471,16 @@
 </SUBCOMPONENT>
 
 <CONNECTOR type="5102" id="3909" >
-<cdparam x="475" y="233" />
+<cdparam x="478" y="164" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="3908" />
-<P1  x="475" y="233" id="3911" />
-<P2  x="467" y="272" id="3921" />
+<P1  x="478" y="164" id="3923" />
+<P2  x="475" y="203" id="3910" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="3907" >
 <father id="3909" num="0" />
-<cdparam x="471" y="252" />
+<cdparam x="476" y="183" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -8515,7 +8517,7 @@
 </COMPONENT>
 
 <COMPONENT type="5101" id="3922" >
-<cdparam x="457" y="277" />
+<cdparam x="545" y="398" />
 <sizeparam width="20" height="20" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
