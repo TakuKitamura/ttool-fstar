@@ -256,7 +256,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         //jdn.setLocation(200, 150);
         GraphicLib.centerOnParent(jdn);
 		AvatarBDPanel abdp = (AvatarBDPanel) tdp;
-		jdn.blockAttributeMap = abdp.getBlockStrings();
+		jdn.blockAttributeMap = abdp.getBlockStrings(true,true);
         jdn.show(); // blocked until dialog has been closed
 
         String s = jdn.getText();

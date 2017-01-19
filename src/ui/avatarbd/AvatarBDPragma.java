@@ -94,28 +94,28 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         height = 30;
         minWidth = 80;
         minHeight = 10;
-	models = new LinkedList<String>();
-	properties = new LinkedList<String>();
-	authStrongMap = new HashMap<String, Integer>();
-	authWeakMap = new HashMap<String, Integer>();
+		models = new LinkedList<String>();
+		properties = new LinkedList<String>();
+		authStrongMap = new HashMap<String, Integer>();
+		authWeakMap = new HashMap<String, Integer>();
         oldScaleFactor = tdp.getZoom();
 
         nbConnectingPoint = 0;
         //addTGConnectingPointsComment();
-	int len = makeTGConnectingPointsComment(16);
-	int decw = 0;
-	int dech = 0;
-	for(int i=0; i<2; i++) {
-	    connectingPoint[len] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.0 + dech);
-	    connectingPoint[len + 1 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 0.0 + dech);
-	    connectingPoint[len + 2 ] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.0 + dech);
-	    connectingPoint[len + 3 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.5 + dech);
-	    connectingPoint[len + 4 ] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.5 + dech);
-	    connectingPoint[len + 5 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 1.0 + dech);
-	    connectingPoint[len + 6 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 1.0 + dech);
-	    connectingPoint[len + 7 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.9 + decw, 1.0 + dech);
-	    len += 8;
-	}
+		int len = makeTGConnectingPointsComment(16);
+		int decw = 0;
+		int dech = 0;
+		for(int i=0; i<2; i++) {
+		    connectingPoint[len] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.0 + dech);
+		    connectingPoint[len + 1 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 0.0 + dech);
+		    connectingPoint[len + 2 ] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.0 + dech);
+		    connectingPoint[len + 3 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.5 + dech);
+		    connectingPoint[len + 4 ] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.5 + dech);
+		    connectingPoint[len + 5 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 1.0 + dech);
+		    connectingPoint[len + 6 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 1.0 + dech);
+		    connectingPoint[len + 7 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.9 + decw, 1.0 + dech);
+		    len += 8;
+		}
 
         moveable = true;
         editable = true;
@@ -131,11 +131,11 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         return values;
     }
     public void setValues(String[] v){
-	values=v;
-	makeValue();
+		values=v;
+		makeValue();
     }
     public LinkedList<String> getProperties() {
-	return properties;
+		return properties;
     }
 
     public void internalDrawing(Graphics g) {
@@ -177,11 +177,11 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
          * from the Graphics object.
          * Thus we use a saved FontMetrics object in TDiagramPanel that only changes when zoom changes.
          */
-	int desiredWidth = Math.max(this.minWidth, 2*this.tdp.stringWidth(g, "Property Pragma") + marginX+ textX);
+		int desiredWidth = Math.max(this.minWidth, 2*this.tdp.stringWidth(g, "Property Pragma") + marginX+ textX);
         for(int i=0; i< values.length; i++)
             desiredWidth = Math.max(desiredWidth, this.tdp.stringWidth(g, values[i]) + marginX+textX);
 
-//	currentFontSize= 5;
+		//	currentFontSize= 5;
         int desiredHeight = ((models.size() + properties.size()+4)*currentFontSize) + textY + 1;
 
         //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
@@ -212,32 +212,32 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
         g.setColor(c);	
 	
-	int i = 1;
-	Font heading = new Font("heading", Font.BOLD, this.tdp.getFontSize ()*7/6);
-	g.setFont(heading);
-	g.drawString("Model Pragma", x+textX, y+textY + currentFontSize);
-	g.setFont(fold);
-	for (String s: models){
-	    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
-	    i++;
-	}
-        // FIXME: why the empty string ?
-	g.drawString(" ", x+ textX, y+ textY+(i+1)*currentFontSize);
-	i++;
-	g.drawLine(x, y+textY/2+i*currentFontSize, x+width, y+textY/2+i*currentFontSize);
-	g.setFont(heading);
-	g.drawString("Property Pragma", x+textX, y+textY+(i+1)* currentFontSize);
-	g.setFont(fold);
-	i++;
-	for (String s: properties){
-	    if (authStrongMap.containsKey(s) || authWeakMap.containsKey(s)){
-		g.setFont(new Font("tmp", Font.PLAIN, 7));
-		drawConfidentialityVerification(s, g, x+ lockX, y + lockY + (i+1)*currentFontSize);
+		int i = 1;
+		Font heading = new Font("heading", Font.BOLD, this.tdp.getFontSize ()*7/6);
+		g.setFont(heading);
+		g.drawString("Model Pragma", x+textX, y+textY + currentFontSize);
 		g.setFont(fold);
-	    }
-	    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
-	    i++;
-	}
+		for (String s: models){
+		    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
+		    i++;
+		}
+        // FIXME: why the empty string ?
+		g.drawString(" ", x+ textX, y+ textY+(i+1)*currentFontSize);
+		i++;
+		g.drawLine(x, y+textY/2+i*currentFontSize, x+width, y+textY/2+i*currentFontSize);
+		g.setFont(heading);
+		g.drawString("Property Pragma", x+textX, y+textY+(i+1)* currentFontSize);
+		g.setFont(fold);
+		i++;
+		for (String s: properties){
+		    if (authStrongMap.containsKey(s) || authWeakMap.containsKey(s)){
+				g.setFont(new Font("tmp", Font.PLAIN, 7));
+				drawConfidentialityVerification(s, g, x+ lockX, y + lockY + (i+1)*currentFontSize);
+				g.setFont(fold);
+	   		}
+	    	g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
+	    	i++;
+		}
 
 /*        for (int i = 0; i<values.length; i++) {
             //TraceManager.addDev("x+texX=" + (x + textX) + " y+textY=" + y + textY + i* h + ": " + values[i]);
@@ -250,24 +250,24 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
     public void makeValue() {
         values = Conversion.wrapText(value);
-	models.clear();
-	properties.clear();
-	for (String s: values){
-	    if (s.isEmpty() || s.split(" ").length < 1){
-		//Ignore
-	    }
-	    else if (Arrays.asList(mPragma).contains(s.split(" ")[0])){
-		models.add(s);
-	    }
-	    else if (Arrays.asList(pPragma).contains(s.split(" ")[0])){
-		properties.add(s);
-	    }
-	    else {
-		//Warning Message
-		JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
+		models.clear();
+		properties.clear();
+		for (String s: values){
+		    if (s.isEmpty() || s.split(" ").length < 1){
+				//Ignore
+			}
+	    	else if (Arrays.asList(mPragma).contains(s.split(" ")[0])){
+				models.add(s);
+	    	}
+	    	else if (Arrays.asList(pPragma).contains(s.split(" ")[0])){
+				properties.add(s);
+	    	}
+	    	else {
+			//Warning Message
+				JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
                                                   JOptionPane.INFORMATION_MESSAGE);
-	    }
-	}
+			}
+		}
         //checkMySize();
     }
 
@@ -289,64 +289,63 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
     private void drawConfidentialityVerification(String s, Graphics g, int _x, int _y) {
         Color c = g.getColor();
         Color c1;
-	Color c2;
-	int confStatus;
-	if (authStrongMap.containsKey(s)){
-	    confStatus = authStrongMap.get(s);
-	    switch(confStatus) {
- 	        case PROVED_TRUE:
+		Color c2;
+		int confStatus;
+		if (authStrongMap.containsKey(s)){
+		    confStatus = authStrongMap.get(s);
+		    switch(confStatus) {
+	 	        case PROVED_TRUE:
                     c1 = Color.green;
-        	    break;
-        	case PROVED_FALSE:
+	        	    break;
+	        	case PROVED_FALSE:
             	    c1 = Color.red;
             	    break;
-		case NOT_PROVED:
-	    	    c1 = Color.gray; 
-	    	    break;
-        	default:
+				case NOT_PROVED:
+		    	    c1 = Color.gray; 
+		    	    break;
+	        	default:
             	    return;
             }
-	} else {
-	    c1 = Color.gray;
-	}
-
-	if (authWeakMap.containsKey(s)){
-	    confStatus = authWeakMap.get(s);
-	    switch(confStatus) {
- 	        case PROVED_TRUE:
+		} else {
+		    c1 = Color.gray;
+		}
+		if (authWeakMap.containsKey(s)){
+		    confStatus = authWeakMap.get(s);
+		    switch(confStatus) {
+ 		        case PROVED_TRUE:
                     c2 = Color.green;
-        	    break;
-        	case PROVED_FALSE:
+    	    	    break;
+    	    	case PROVED_FALSE:
             	    c2 = Color.red;
             	    break;
-		case NOT_PROVED:
-	    	    c2 = Color.gray; 
-	    	    break;
-        	default:
+				case NOT_PROVED:
+		    	    c2 = Color.gray; 
+		    	    break;
+    	    	default:
             	    return;
             }
-	} else {
-	    c2 = c1;
-	}
+		} else {
+		    c2 = c1;
+		}
 	
-        g.drawOval(_x+6, _y-16, 10, 15);
-        g.setColor(c1);
-	int[] xps = new int[]{_x+4, _x+4, _x+20};
-	int[] yps = new int[]{_y-10, _y+4, _y+4};
-	int[] xpw = new int[]{_x+20, _x+20, _x+4};
-	int[] ypw = new int[]{_y+4, _y-10, _y-10};
-	g.fillPolygon(xps, yps,3);	
+		g.drawOval(_x+6, _y-16, 10, 15);
+		g.setColor(c1);
+		int[] xps = new int[]{_x+4, _x+4, _x+20};
+		int[] yps = new int[]{_y-10, _y+4, _y+4};
+		int[] xpw = new int[]{_x+20, _x+20, _x+4};
+		int[] ypw = new int[]{_y+4, _y-10, _y-10};
+		g.fillPolygon(xps, yps,3);	
 	
-	g.setColor(c2);	
-	g.fillPolygon(xpw, ypw, 3);
+		g.setColor(c2);	
+		g.fillPolygon(xpw, ypw, 3);
 
 //        g.fillRect(_x+4, _y-7, 18, 14);
-        g.setColor(c);
+    	g.setColor(c);
 //        g.drawRect(_x+4, _y-7, 18, 14);
-	g.drawPolygon(xps, yps,3);
-	g.drawPolygon(xpw, ypw, 3);
-	g.drawString("S", _x+6, _y+2);
-	g.drawString("W", _x+13, _y-2);
+		g.drawPolygon(xps, yps,3);
+		g.drawPolygon(xpw, ypw, 3);
+		g.drawString("S", _x+6, _y+2);
+		g.drawString("W", _x+13, _y-2);
 //	if (c1==Color.gray){
 //	    g.drawString("?", _x+4, _y+2);
 //	}
@@ -357,6 +356,9 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
         JDialogPragma jdn = new JDialogPragma(frame, "Setting the pragma", value);
         //jdn.setLocation(200, 150);
+		AvatarBDPanel abdp = (AvatarBDPanel) tdp;
+		jdn.blockAttributeMap = abdp.getBlockStrings(true,false);
+		jdn.blockStateMap = abdp.getBlockStrings(false,true);
         GraphicLib.centerOnParent(jdn);
         jdn.show(); // blocked until dialog has been closed
 

@@ -420,18 +420,22 @@ public class AvatarBDPanel extends TDiagramPanel {
         }
     }
 
-	public HashMap<String, List<String>> getBlockStrings(){
-		HashMap<String,List<String>> blockAttributeMap = new HashMap<String, List<String>>();
+	public HashMap<String, List<String>> getBlockStrings(boolean addAttributes, boolean addStates){
+		HashMap<String,List<String>> blockStringMap = new HashMap<String, List<String>>();
 		for (AvatarBDBlock block: getFullBlockList()){
-			List<String> attrs = new ArrayList<String>();
-			for (TAttribute attr: getAllAttributesOfBlock(block.getBlockName())){
-				attrs.add(attr.getId());
+			List<String> strs = new ArrayList<String>();
+			if (addAttributes){
+				for (TAttribute attr: getAllAttributesOfBlock(block.getBlockName())){
+					strs.add(attr.getId());
+				}
 			}
-			AvatarSMDPanel smd = block.getAvatarSMDPanel();
-			attrs.addAll(smd.getAllStates());
-			blockAttributeMap.put(block.getBlockName(), attrs);		
+			if (addStates){
+				AvatarSMDPanel smd = block.getAvatarSMDPanel();
+				strs.addAll(smd.getAllStates());
+			}
+			blockStringMap.put(block.getBlockName(), strs);		
 		}
-		return blockAttributeMap;
+		return blockStringMap;
 	}
 
     public LinkedList<AvatarBDStateMachineOwner> getFullStateMachineOwnerList() {

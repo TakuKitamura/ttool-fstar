@@ -52,6 +52,7 @@ import javax.swing.*;
 import javax.swing.text.*;
 import ui.*;
 import java.util.*;
+import java.util.regex.*;
 
 public class JDialogPragma extends javax.swing.JDialog implements ActionListener {
     
@@ -64,7 +65,8 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
     protected JMenuBar menuBar;
     protected JMenu help;
     protected JPopupMenu helpPopup;
-
+	public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
+	public HashMap<String, java.util.List<String>> blockStateMap = new HashMap<String, java.util.List<String>>();
     /** Creates new form  */
     public JDialogPragma(Frame f, String title, String _text) {
         super(f, title, true);
@@ -76,24 +78,24 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
 //Suggestion Panel code from: http://stackoverflow.com/questions/10873748/how-to-show-autocomplete-as-i-type-in-jtextarea
 
     public class SuggestionPanel {
-	private final String[] pragma = {"#Authenticity", "#Confidentiality", "#PublicConstant", "#PrivateConstant", "#InitialSessionKnowledge", "#InitialSystemKnowledge", "#PrivatePublicKeys", "#Public", "#SecrecyAssumption", "#Secret"};
-        private JList list;
+		private final String[] pragma = {"#Authenticity", "#Confidentiality", "#PublicConstant", "#PrivateConstant", "#InitialSessionKnowledge", "#InitialSystemKnowledge", "#PrivatePublicKeys", "#Public", "#SecrecyAssumption", "#Secret"};
+		private JList list;
         private JPopupMenu popupMenu;
         private String subWord;
         private final int insertionPosition;
 
-        public SuggestionPanel(JTextArea textarea, int position, String subWord, Point location) {
+        public SuggestionPanel(JTextArea textarea, int position, String subWord, Point location, String header) {
             this.insertionPosition = position;
             this.subWord = subWord;
             popupMenu = new JPopupMenu();
             popupMenu.removeAll();
             popupMenu.setOpaque(false);
             popupMenu.setBorder(null);
-            popupMenu.add(list = createSuggestionList(position, subWord), BorderLayout.CENTER);
-	    //Show popupMenu only if there are matching suggestions
-	    if (list.getModel().getSize() >0){
+            popupMenu.add(list = createSuggestionList(position, subWord, header), BorderLayout.CENTER);
+	    	//Show popupMenu only if there are matching suggestions
+	    	if (list.getModel().getSize() >0){
                 popupMenu.show(textarea, location.x, textarea.getBaseline(0, 0) + location.y);
-	    }
+	    	}
         }
 
         public void hide() {
@@ -103,16 +105,62 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
             }
         }
 
-        private JList createSuggestionList(final int position, final String subWord) {
-	    ArrayList<String> matches = new ArrayList<String>();
-	    if (subWord.startsWith("#")){
-	        for (String p: pragma) {
-          	    if (p.startsWith(subWord)){
-			matches.add(p);
-		    }
-		}
-	    }
-	    Object[] data = new Object[matches.size()];
+		private JList createSuggestionList(final int position, final String subWord, String header) {
+			ArrayList<String> matches = new ArrayList<String>();
+	    	if (subWord.startsWith("#")){
+	    	    for (String p: pragma) {
+        	  	    if (p.startsWith(subWord)){
+						matches.add(p);
+				    }
+				}
+			}
+			else if (header.contains("#")){
+				//Find instances of '.'
+				Pattern p = Pattern.compile("\\.");
+				Matcher m = p.matcher(subWord);
+				int count = 0;
+				while (m.find()){
+				    count +=1;
+				}
+				if (count==0){
+					//Suggest block names
+					for (String block: blockAttributeMap.keySet()){
+						if (block.startsWith(subWord)){
+							matches.add(block);
+						}
+					}
+				}
+				else if (count==1){
+					if (header.contains("Authenticity")){
+						//Suggest state names
+						String block = subWord.split("\\.")[0];
+						for (String st: blockStateMap.get(block)){
+							if (st.startsWith(subWord.split("\\.")[1])){
+								matches.add(block+"."+st);
+							}
+						}
+					}
+					else {					
+						String block = subWord.split("\\.")[0];
+						for (String attr: blockAttributeMap.get(block)){
+							if (attr.startsWith(subWord.split("\\.")[1])){
+								matches.add(block+"."+attr);
+							}
+						}
+					}
+				}
+				else {
+					String block = subWord.split("\\.")[0];
+					String state = subWord.split("\\.")[1];
+					for (String attr: blockAttributeMap.get(block)){
+						if (attr.startsWith(subWord.split("\\.")[2])){
+							matches.add(block+"."+state+"."+attr);
+						}
+					}
+				
+				}
+			}
+		    Object[] data = new Object[matches.size()];
             data = matches.toArray(data);
             JList list = new JList(data);
             list.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
@@ -207,7 +255,25 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
         if (subWord.length() < 1) {
             return;
         }
-        suggestion = new SuggestionPanel(textarea, position, subWord, location);
+		String header="";
+		//Find the most recent pragma name
+		start=Math.max(0,position-1);
+		while (start>0){
+			//Find previous new line position
+			if (!String.valueOf(text.charAt(start)).matches(".")){
+				break;
+			}
+			else {
+				start--;
+			}
+		}
+		if (start==0){
+			header = text.substring(start, position).split(" ")[0];
+		}
+		else {
+			header = text.substring(start+1,position).split(" ")[0];
+		}
+        suggestion = new SuggestionPanel(textarea, position, subWord, location, header);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
