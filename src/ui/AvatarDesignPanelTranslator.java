@@ -961,13 +961,20 @@ public class AvatarDesignPanelTranslator {
         if (_ab instanceof AvatarBlock) {
             // Note that for library functions, signals are just placeholders so they don't need to be connected to anything
             AvatarRelation ar = _as.getAvatarRelationWithSignal (atas);
-            if (ar == null)
+            if (ar == null) {
 		if (atas.getReferenceObject() instanceof ui.AvatarSignal) {
+		    //TraceManager.addDev("Send/ Setting as attached " + atas);
 		    ((ui.AvatarSignal) atas.getReferenceObject()).attachedToARelation = false;
 		}
-                throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Signal used for sending in " + asmdss.getValue() + " is not connected to a channel");
+		//TraceManager.addDev("Spec:" + _as.toString());
+		throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Signal used for sending in " + asmdss.getValue() + " is not connected to a channel");
+	    }
+	    if (atas.getReferenceObject() instanceof ui.AvatarSignal) {
+		//TraceManager.addDev("Send/ Setting as attached " + atas);
+		((ui.AvatarSignal) atas.getReferenceObject()).attachedToARelation = true;
+	    }
         }
-
+	
         AvatarActionOnSignal aaos = new AvatarActionOnSignal ("action_on_signal", atas, asmdss);
         if (asmdss.hasCheckableAccessibility())
             aaos.setCheckable();
@@ -1227,11 +1234,17 @@ public class AvatarDesignPanelTranslator {
         if (_ab instanceof AvatarBlock) {
             // Note that for library functions, signals are just placeholders so they don't need to be connected to anything
             AvatarRelation ar = _as.getAvatarRelationWithSignal (atas);
-            if (ar == null)
+            if (ar == null) {
 		if (atas.getReferenceObject() instanceof ui.AvatarSignal) {
+		    TraceManager.addDev("Receive/ Setting as attached " + atas);
 		    ((ui.AvatarSignal) atas.getReferenceObject()).attachedToARelation = false;
 		}
                 throw new CheckingError (CheckingError.BEHAVIOR_ERROR, "Signal used for receiving in " + asmdrs.getValue() + " is not connected to a channel");
+	    }
+	    if (atas.getReferenceObject() instanceof ui.AvatarSignal) {
+		TraceManager.addDev("Receive/ Setting as attached " + atas);
+		((ui.AvatarSignal) atas.getReferenceObject()).attachedToARelation = true;
+	    }
         }
 	if (atas.getReferenceObject() instanceof ui.AvatarSignal) {
 	    ((ui.AvatarSignal) atas.getReferenceObject()).attachedToARelation = true;
@@ -1697,12 +1710,12 @@ public class AvatarDesignPanelTranslator {
                 block1 = port.getAvatarBDBlock1();
                 block2 = port.getAvatarBDBlock2();
 
-                //TraceManager.addDev("Searching block with name " + block1.getBlockName());
+                TraceManager.addDev("Searching block #1 with name " + block1.getBlockName() + " and block #2 with name " + block2.getBlockName());
                 b1 = _as.getBlockWithName(block1.getBlockName());
                 b2 = _as.getBlockWithName(block2.getBlockName());
 
                 if ((b1 != null) && (b2 != null)) {
-
+		    TraceManager.addDev("B1 and B2 are not null");
                     r = new AvatarRelation("relation", b1, b2, tgc);
                     // Signals of l1
                     l1 = port.getListOfSignalsOrigin();
@@ -1714,22 +1727,25 @@ public class AvatarDesignPanelTranslator {
                         //TraceManager.addDev("Searching signal with name " + name1 +  " in block " + b1.getName());
                         atas1 = b1.getAvatarSignalWithName(name1);
                         atas2 = b2.getAvatarSignalWithName(name2);
-                        if(atas1.isCompatibleWith(atas2)) {
-                            if ((atas1 != null) && (atas2 != null)) {
-                                r.addSignals(atas1, atas2);
-                            } else {
-                                TraceManager.addDev("Null signals in AVATAR relation: " + name1 + " " + name2);
-                            }
-                        } else {
-			    CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Wrong signal association betwen " + atas1 + " and " + atas2);
+			if ((atas1 != null) && (atas2 != null)) {
+			    if(atas1.isCompatibleWith(atas2)) {
+				TraceManager.addDev("Signals " + atas1 + " and " + atas2 + " are compatible");
+				r.addSignals(atas1, atas2);
+			    } else {
+				TraceManager.addDev("Signals " + atas1 + " and " + atas2 + " are NOT compatible");
+				CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Wrong signal association betwen " + atas1 + " and " + atas2);
 			    // TODO: adapt
 			    // ce.setAvatarBlock(_ab);
-			    ce.setTDiagramPanel(tgc.getTDiagramPanel());
+				ce.setTDiagramPanel(tgc.getTDiagramPanel());
 			    ce.setTGComponent(tgc);
 			    addCheckingError(ce);
-                        }
+			    }
+			} else {
+			    TraceManager.addDev("Null signals in AVATAR relation: " + name1 + " " + name2);
+			}
+			
                     }
-
+		    
                     // Attribute of the relation
                     r.setBlocking(port.isBlocking());
                     r.setAsynchronous(port.isAsynchronous());
