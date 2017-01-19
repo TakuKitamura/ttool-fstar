@@ -18,9 +18,12 @@ If the compilation fails with the following error: 'unmappable character for enc
 export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8
 
 
-
-
 * Generating a release:
 make release
+
+* Starting TTool from the git clone
+You should not modify bin/config.xml. Create your own config.xml (e.g. myconfig.xml), and create your own "ttool.exe" file (e.g., myttool.exe) 
+if you need to modify the config.xml file
+
 
 
