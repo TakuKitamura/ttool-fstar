@@ -45,9 +45,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator;
 
-import java.util.*;
-
-
 public class HwBus extends HwCommunicationNode  {
 	
 	public static final int BASIC_ROUND_ROBIN = 0;

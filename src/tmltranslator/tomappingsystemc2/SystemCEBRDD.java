@@ -322,7 +322,7 @@ public class SystemCEBRDD {
             		}
 		} else if(currElem instanceof EBRDDERC){
 			cmdName= "_erc" + currElem.getID();
-			strwrap ETDeclare=new strwrap(), ETInit=new strwrap();
+			StrWrap ETDeclare=new StrWrap(), ETInit=new StrWrap();
 			LinkedList<String> erbFuncs = new LinkedList<String>();
 			hcode+= cmdName + "_class " + cmdName + SCCR;
 			//ERC declaration!!!
@@ -447,7 +447,7 @@ public class SystemCEBRDD {
 		hcode += "};" + CR + "#endif" + CR;
 	}
 
-	private int buildET(ERCElement currElem, String ancestor, int newID, strwrap ETDeclare, strwrap ETInit, LinkedList<String> erbFuncs){
+	private int buildET(ERCElement currElem, String ancestor, int newID, StrWrap ETDeclare, StrWrap ETInit, LinkedList<String> erbFuncs){
 		if (currElem==null) return newID;
 		String negated = (currElem.isNegated())? "true":"false";
 		newID++;

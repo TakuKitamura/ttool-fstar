@@ -54,9 +54,9 @@ public class MappedSystemCTask {
     //private TMLModeling tmlm;
     private TMLTask task;
     private String reference, cppcode, hcode, initCommand, functions, functionSig, chaining, firstCommand, commentText;
-    private ArrayList<TMLChannel> channels;
-    private ArrayList<TMLEvent> events;
-    private ArrayList<TMLRequest> requests;
+    private List<TMLChannel> channels;
+    private List<TMLEvent> events;
+    private List<TMLRequest> requests;
     private TMLMapping tmlmapping;
     private int commentNum;
     private boolean debug;
@@ -66,16 +66,16 @@ public class MappedSystemCTask {
 
     private final static String DOTH = ".h";
     private final static String DOTCPP = ".cpp";
-    private final static String SYSTEM_INCLUDE = "#include \"systemc.h\"";
+//    private final static String SYSTEM_INCLUDE = "#include \"systemc.h\"";
     private final static String CR = "\n";
     private final static String CR2 = "\n\n";
     private final static String SCCR = ";\n";
-    private final static String EFCR = "}\n";
-    private final static String EFCR2 = "}\n\n";
-    private final static String EF = "}";
+//    private final static String EFCR = "}\n";
+//    private final static String EFCR2 = "}\n\n";
+//    private final static String EF = "}";
 
 
-    public MappedSystemCTask(TMLTask _task, ArrayList<TMLChannel> _channels, ArrayList<TMLEvent> _events, ArrayList<TMLRequest> _requests, TMLMapping _tmlmapping, Set<Integer> _depChannels) {
+    public MappedSystemCTask(TMLTask _task, List<TMLChannel> _channels, List<TMLEvent> _events, List<TMLRequest> _requests, TMLMapping _tmlmapping, Set<Integer> _depChannels) {
         task = _task;
         channels = _channels;
         events = _events;
@@ -92,10 +92,6 @@ public class MappedSystemCTask {
         commentText="";
         commentNum=0;
         optimize=false;
-
-        //for(TMLAttribute att: task.getAttributes()) {
-        //       TraceManager.addDev ("************ Attribute: " + att.name);
-        //}
 
         _analysis = new StaticAnalysis(_task, _channels, _events, _requests, _depChannels);
         _startAnaNode = _analysis.startAnalysis();
@@ -152,9 +148,9 @@ public class MappedSystemCTask {
         code += "extern \"C\" bool condFunc(TMLTask* _ioTask_);\n";
         return code;
     }
-
-    private void classHCode() {
-    }
+//
+//    private void classHCode() {
+//    }
 
     // CPP Code
     private void basicCPPCode() {

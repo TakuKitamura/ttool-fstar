@@ -87,6 +87,8 @@ import myutil.TraceManager;
 //import ui.ebrdd.*;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
+import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
+import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import ui.AvatarRequirementPanelTranslator;
 import ui.IconManager;
 import ui.MainGUI;
@@ -788,7 +790,6 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
               break;
               }*/
         case 0: {       //Simulator without CPs (Daniel's version)
-            tmltranslator.tomappingsystemc2.TML2MappingSystemC tml2systc;
             // Making EBRDDs
             ArrayList<EBRDD> al = new ArrayList<EBRDD>();
             ArrayList<TEPE> alTepe = new ArrayList<TEPE>();
@@ -822,16 +823,23 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
               }
               }*/
 
+            final IDiploSimulatorCodeGenerator tml2systc;
+
             // Generating code
             if (mgui.gtm.getTMLMapping() == null) {
                 if (mgui.gtm.getArtificialTMLMapping() == null) {
-                    tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLModeling(), al, alTepe);
-                } else {
-                    TraceManager.addDev("Using artifical mapping");
-                    tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping(), al, alTepe);
+                	tml2systc = DiploSimulatorFactory.INSTANCE.createTranslator( mgui.gtm.getTMLModeling(), al, alTepe );
+                    //tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLModeling(), al, alTepe);
                 }
-            } else {
-                tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping(), al, alTepe);
+                else {
+                    TraceManager.addDev("Using artifical mapping");
+                    tml2systc = DiploSimulatorFactory.INSTANCE.createTranslator( mgui.gtm.getArtificialTMLMapping(), al, alTepe );
+                    //tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping(), al, alTepe);
+                }
+            } 
+            else {
+            	tml2systc = DiploSimulatorFactory.INSTANCE.createTranslator( mgui.gtm.getTMLMapping(), al, alTepe );
+//                tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping(), al, alTepe);
             }
 
             tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
