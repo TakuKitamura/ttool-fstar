@@ -46,6 +46,7 @@
 package myutil;
 
 public class TraceManager {
+	
     public final static int TO_CONSOLE = 0;
     public final static int TO_FILE = 1;
     public final static int TO_BUFFER = 2;
@@ -74,6 +75,15 @@ public class TraceManager {
             default:
                 System.out.println(_s);
         }
+    }
+
+    public static void addError( 	final String message,
+    								final Throwable error ) {
+    	addError( message );
+    	
+    	if ( error != null ) {
+    		error.printStackTrace();
+    	}
     }
 
     public static void addError(String _s) {

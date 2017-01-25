@@ -671,7 +671,7 @@ public class DSEConfiguration implements Runnable  {
 		
 			// Generating code
 			TraceManager.addDev("\n\n\n**** Generating simulation code...");
-			final IDiploSimulatorCodeGenerator map = DiploSimulatorFactory.INSTANCE.createTranslator( tmap );
+			final IDiploSimulatorCodeGenerator map = DiploSimulatorFactory.INSTANCE.createCodeGenerator( tmap );
 //			TML2MappingSystemC map = new TML2MappingSystemC(tmap);
 			
 			try {
@@ -709,7 +709,7 @@ public class DSEConfiguration implements Runnable  {
 		
 		// Generating code
 		TraceManager.addDev("\n\n\n**** Generating simulation code from mapping...");
-		final IDiploSimulatorCodeGenerator map = DiploSimulatorFactory.INSTANCE.createTranslator( _tmlmap );
+		final IDiploSimulatorCodeGenerator map = DiploSimulatorFactory.INSTANCE.createCodeGenerator( _tmlmap );
 		
 		try {
 			map.generateSystemC(_debug, _optimize);
@@ -1247,7 +1247,7 @@ public class DSEConfiguration implements Runnable  {
 		
 		
 			TraceManager.addDev("\n\n\n**** Generating simulation code...");
-			final IDiploSimulatorCodeGenerator map = DiploSimulatorFactory.INSTANCE.createTranslator( tmap );
+			final IDiploSimulatorCodeGenerator map = DiploSimulatorFactory.INSTANCE.createCodeGenerator( tmap );
 //			TML2MappingSystemC map = new TML2MappingSystemC(tmap);
 			try {
 				map.generateSystemC(_debug, _optimize);

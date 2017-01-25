@@ -353,10 +353,10 @@ public class TMLTranslator  {
         final IDiploSimulatorCodeGenerator map;
 //        tmltranslator.tomappingsystemc2.TML2MappingSystemC map;
         if (tmap == null) {
-            map = DiploSimulatorFactory.INSTANCE.createTranslator( tmlm );
+            map = DiploSimulatorFactory.INSTANCE.createCodeGenerator( tmlm );
         } 
         else {
-            map = DiploSimulatorFactory.INSTANCE.createTranslator( tmap );
+            map = DiploSimulatorFactory.INSTANCE.createCodeGenerator( tmap );
         }
         
         map.generateSystemC(debug, true);
