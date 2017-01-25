@@ -187,11 +187,11 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         // Declaration of HW nodes
         declaration += "//Declaration of CPUs" + CR;
         for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
-            if (node instanceof HwCPU) {
-                HwCPU exNode = (HwCPU)node;
+            if ( node instanceof HwCPU ) {
+                final HwCPU exNode = (HwCPU) node;
                 final String schedulerInstName;
                 
-                if (exNode.getType().equals("CPURRPB")) {
+                if ( exNode.getType().equals( "CPURRPB" ) ) {
                 	schedulerInstName = namesGen.prioSchedulerInstanceName( exNode );
                     declaration += "PrioScheduler* " + schedulerInstName + " = new PrioScheduler(\"" + namesGen.prioSchedulerName( exNode ) + "\", 0)" + SCCR;
                 }
@@ -216,9 +216,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                     declaration += "addCPU(" + cpuInstName + ")"+ SCCR;
                 }
             }
-            
-            if ( node instanceof HwA ) {
-                HwA hwaNode = (HwA) node;
+            else if ( node instanceof HwA ) {
+                final HwA hwaNode = (HwA) node;
                 final String schedulerInstName = namesGen.rrSchedulerInstanceName( hwaNode );
                 final String schedulerName = namesGen.rrSchedulerName( hwaNode );
                 declaration += "RRScheduler* " + schedulerInstName + " = new RRScheduler(\"" + schedulerName + "\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * HwA.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float)(hwaNode.clockRatio * Math.max(hwaNode.execiTime,hwaNode.execcTime) * (HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY * HwA.DEFAULT_PIPELINE_SIZE +100 - HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY))/100) + " ) " + SCCR;
@@ -506,13 +505,13 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         declaration += "//Declaration of tasks" + CR;
         HwExecutionNode node;
         //for(TMLTask task: tmlmodeling.getTasks()) {
-        List<TMLChannel> channels;
-        List<TMLEvent> events;
-        List<TMLRequest> requests;
+       // List<TMLChannel> channels;
+       // List<TMLEvent> events;
+       // List<TMLRequest> requests;
         int[] aStatistics = new int[8];
         Set<Integer> mappedChannels = new HashSet<Integer>();
         
-        for(TMLTask task: tmlmapping.getMappedTasks()){
+        for ( final TMLTask task: tmlmapping.getMappedTasks() ) {
             node= iterator.next();
             
             final String taskClassName = namesGen.taskTypeName( task );
@@ -520,18 +519,19 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
             if ( node instanceof HwCPU ) {
             	final HwCPU hwCpu = (HwCPU) node;
-                declaration+= hwCpu.nbOfCores;
+                declaration += hwCpu.nbOfCores;
 
-                for ( int cores=0; cores< hwCpu.nbOfCores; cores++ ) {
+                for ( int cores = 0; cores< hwCpu.nbOfCores; cores++ ) {
                     declaration+= "," + namesGen.cpuInstanceName( hwCpu, cores );
                 }
 
-                declaration+= "),1" + CR;
+//                declaration+= "),1" + CR;
             }
             else if ( node instanceof HwA ) {
-            	throw new UnsupportedOperationException( "Not implemented for HWA!" );
+            	final HwA hwAcc = (HwA) node;
+                declaration+= "1 ," + namesGen.hwAccInstanceName( hwAcc );
 
-            	// DB: TODO copy paste error?? This will cause class cast exception
+            	// DB Issue #22: copy paste error?? This causes class cast exception
 //            	declaration+= ((HwCPU)node).nbOfCores; 
 //
 //                for (int cores=0; cores< ((HwCPU)node).nbOfCores; cores++){
@@ -542,16 +542,15 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
             }
             else {
             	throw new UnsupportedOperationException( "Not implemented for " + node.getClass().getSimpleName() + "!" );
-            	// DB: TODO what other type could this be? Only HwA and HwCPU extends the abstract class HwExecutionNode
-                //declaration += "1," + node.getName() + "),1" + CR;
             }
 
-            MappedSystemCTask mst;
-            channels = new ArrayList<TMLChannel>(tmlmodeling.getChannels(task));
-            events = new ArrayList<TMLEvent>(tmlmodeling.getEvents(task));
-            requests = new ArrayList<TMLRequest>(tmlmodeling.getRequests(task));
+            declaration+= "), 1" + CR;
 
-            mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping, mappedChannels);
+            final List<TMLChannel> channels = new ArrayList<TMLChannel>( tmlmodeling.getChannels( task ) );
+            final List<TMLEvent> events = new ArrayList<TMLEvent>( tmlmodeling.getEvents( task ) );
+            final List<TMLRequest> requests = new ArrayList<TMLRequest>( tmlmodeling.getRequests( task ) );
+
+            final MappedSystemCTask mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping, mappedChannels);
             tasks.add(mst);
 
             for( final TMLChannel channelb : channels ) {
@@ -568,7 +567,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 }
             }
             
-            if (task.isRequested()) {
+            if ( task.isRequested() ) {
             	declaration += "," + namesGen.requestChannelInstanceName( task ) + CR;
             }
             
