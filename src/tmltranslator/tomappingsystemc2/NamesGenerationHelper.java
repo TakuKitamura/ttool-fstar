@@ -320,7 +320,7 @@ public class NamesGenerationHelper {
     }
 
     String bridgeInstanceName( 	final HwBridge element ) {
-    	return normalize( bridgeName( element ) + "brd" );
+    	return normalize( bridgeName( element ) );
     }
 
     String bridgeName( final HwBridge element ) {
@@ -422,11 +422,11 @@ public class NamesGenerationHelper {
     	return index >= 0 ? "_" + index : "";
     }
 
-	public static String normalize( final String name ) {
+	private static String normalize( final String name ) {
 		return CPPCodeGenerationHelper.normalize( removeReservedWords( name ) );
 	}
 
-	public static String removeReservedWords( final String name ) {
+	private static String removeReservedWords( final String name ) {
 		if ( RESERVED_WORDS_LIST.contains( name ) ) {
 			return normalize( name + CPPCodeGenerationHelper.NORMALIZATION_SUFFIX );
 		}
