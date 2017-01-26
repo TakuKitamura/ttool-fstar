@@ -74,6 +74,9 @@ import myutil.Conversion;
 import myutil.FileException;
 import myutil.FileUtils;
 import myutil.TraceManager;
+import ddtranslatorSoclib.toTopCell.TopCellGenerator;
+import ddtranslatorSoclib.AvatarRAM;
+import ddtranslatorSoclib.AvatarChannel;
 
 public class TasksAndMainGenerator {
 
@@ -192,11 +195,14 @@ public class TasksAndMainGenerator {
                
 	int d=0;
 
-	for(AvatarRelation ar: avspec.getRelations()) {
-	    mainFile.appendToBeforeMainCode("#define CHANNEL"+d+" __attribute__((section(\"section_channel"+d+"\")))" + CR ); 
-
-	mainFile.appendToBeforeMainCode("#define LOCK"+d+" __attribute__((section(\"section_lock"+d+"\")))" + CR );//one lock per channel
+	//for(AvatarRelation ar: avspec.getRelations()) {
+	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
+	//for(AvatarChannel ar: avspec.getChannels()) {
+	    for(AvatarChannel channel: ram.getChannels()){ 
+		mainFile.appendToBeforeMainCode("#define CHANNEL"+d+" __attribute__((section(\"section_channel"+d+"\")))" + CR ); 	
+		mainFile.appendToBeforeMainCode("#define LOCK"+d+" __attribute__((section(\"section_lock"+d+"\")))" + CR );//one lock per channel
 	    d++;
+	    }
 	}
 
 
@@ -214,14 +220,15 @@ public class TasksAndMainGenerator {
     }
   
     public void makeSynchronousChannels() {
-	int i=0;        
-        // Create a synchronous channel per relation/signal
+	int i=0;   int j=0;     
+        // Create synchronous channel signals
         mainFile.appendToHCode("/* Synchronous channels */" + CR);
         mainFile.appendToBeforeMainCode("/* Synchronous channels */" + CR);
         mainFile.appendToMainCode("/* Synchronous channels */" + CR);
         for(AvatarRelation ar: avspec.getRelations()) {
-	    int j=0;
+	    
 	if (!ar.isAsynchronous()) {
+	ar.setId(j); j++;
 		    for(i=0; i<ar.nbOfSignals() ; i++) {
 			mainFile.appendToHCode("extern syncchannel __" + getChannelName(ar, i) + ";" + CR);
 
@@ -250,17 +257,24 @@ public class TasksAndMainGenerator {
 			mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".status->wptr =0;" + CR);
 
-			mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+i+";" + CR); 
+			//mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+i+";" + CR); 
 
-			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+j+";" + CR); 		
+	//DG 26.01.2017 corrected gros bug i remplace
+			/*	mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+i+";" + CR); 
+	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+j+";" + CR); 		
 	       
-			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+i+";" + CR);
+	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+i+";" + CR);
 		
-			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+i+";" + CR2);		
-			j++;	
-	  }
+	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+i+";" + CR2);*/		     
+			mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
+	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
+	       
+	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
+		
+	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);					
+		    }
 	}
-      }
+      }	
     }
 
     public void makeAsynchronousChannels() {
@@ -269,8 +283,9 @@ public class TasksAndMainGenerator {
 	    mainFile.appendToHCode("/* Asynchronous channels */" + CR);
 	    mainFile.appendToBeforeMainCode("/* Asynchronous channels */" + CR);
 	    mainFile.appendToMainCode("/* Asynchronous channels */" + CR);
-  //          int j=0;
+            int j=0;
 	    for(AvatarRelation ar: avspec.getRelations()) {
+		ar.setId(j); j++;//DG
 		if (ar.isAsynchronous()) {
 		    for(int i=0; i<ar.nbOfSignals() ; i++) {
 			mainFile.appendToHCode("extern asyncchannel __" + getChannelName(ar, i) + ";" + CR);
@@ -308,12 +323,19 @@ public class TasksAndMainGenerator {
 		mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
 	    mainFile.appendToMainCode(getChannelName(ar, i)+".status->wptr=0;" + CR);
 	    
-	    mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+i+";" + CR); 
+	    /* mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+i+";" + CR); 
 
 
 			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+i+";" + CR);								
 			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+i+";" + CR);
-	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) + " CHANNEL"+i+";" + CR2);
+			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) + " CHANNEL"+i+";" + CR2);*/
+  int seg_no=0;
+        mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
+	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
+	       
+	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
+		
+	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);		
 			//j++;		
 		    }
 		}
