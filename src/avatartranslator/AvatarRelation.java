@@ -58,7 +58,7 @@ public class AvatarRelation extends AvatarElement {
     private LinkedList<AvatarSignal> signals1, signals2;
     private boolean blocking, asynchronous, isPrivate, isBroadcast, isLossy;
     private int sizeOfFIFO; // -1 means infinite
-
+    public int id;//DG
 
     public AvatarRelation(String _name, AvatarBlock _block1, AvatarBlock _block2, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -70,8 +70,17 @@ public class AvatarRelation extends AvatarElement {
         sizeOfFIFO = 1024;
         asynchronous = false;
         isBroadcast = false;
-
+	id = 0;//DG
     }
+  
+    public void setId(int newid) {//DG
+        id=newid;
+    }
+
+    public int getId() {//DG
+        return id;
+    }
+
 
     public boolean containsSignal(AvatarSignal _as) {
         return (signals1.contains(_as) || signals2.contains(_as));
@@ -264,13 +273,12 @@ public class AvatarRelation extends AvatarElement {
 	    AvatarSignal ns2 = b2.getSignalByName(s2.getName());
 	    if ((ns1 == null) || (ns2 == null)) {
 		continue;
-	    }
-	    
+	    }	   	
 	    ar.addSignals(ns1, ns2);
 	}
 
-	cloneLinkToReferenceObjects(ar);
-	
+	cloneLinkToReferenceObjects(ar);	
+
 	return ar;
     }
 
