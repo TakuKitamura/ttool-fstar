@@ -994,18 +994,18 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 		sorterPI = new TableSorter(latm);
         jtablePI = new JTable(sorterPI);
         sorterPI.setTableHeader(jtablePI.getTableHeader());
-        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(400);
-        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(400);
-        ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(50);
-        ((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(50);
-        ((jtablePI.getColumnModel()).getColumn(4)).setPreferredWidth(50);
-        ((jtablePI.getColumnModel()).getColumn(5)).setPreferredWidth(50);
+        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(700);
+        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(700);
+        ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+        ((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
+        ((jtablePI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
+        ((jtablePI.getColumnModel()).getColumn(5)).setPreferredWidth(100);
         jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jspLatency = new JScrollPane(jtablePI);
         jspLatency.setWheelScrollingEnabled(true);
         jspLatency.getVerticalScrollBar().setUnitIncrement(10);
         jspLatency.setMinimumSize(new Dimension(400, 250));
-        jspLatency.setPreferredSize(new Dimension(1050, 250));
+        jspLatency.setPreferredSize(new Dimension(1400, 250));
         latencyPanel.add(jspLatency, c0);
 
 

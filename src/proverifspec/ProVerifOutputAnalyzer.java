@@ -249,6 +249,10 @@ public class ProVerifOutputAnalyzer {
 
     // FIXME what about cannot be proved ?
 
+	public LinkedList<String> getNonSecretStrings(){
+		return nonSecretTerms;
+	}
+
     public LinkedList<AvatarAttribute> getNonSecretTerms() {
         LinkedList<AvatarAttribute> result = new LinkedList<AvatarAttribute> ();
         for (AvatarBlock block: this.avatar2proverif.getAvatarSpecification ().getListOfBlocks ())

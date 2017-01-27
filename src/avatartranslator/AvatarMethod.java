@@ -116,7 +116,6 @@ public class AvatarMethod extends AvatarElement {
         }
 
         ret += getName() + "(";
-
         for(AvatarAttribute attribute: parameters) {
             if (cpt != 0) {
                 ret += ",";
