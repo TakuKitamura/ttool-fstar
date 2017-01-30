@@ -61,7 +61,7 @@ import ui.interactivesimulation.*;
 import myutil.*;
 
 public class JDialogCPUNode extends javax.swing.JDialog implements ActionListener  {
-
+    private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
     private boolean regularClose;
 
     private JPanel panel2, panel4, panel5;
@@ -70,12 +70,13 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 
     private ArchUnitMEC MECType;
 
-
+    protected JComboBox tracemode;
+    private static int selectedTracemode = 0;
     // Panel1
     protected JTextField nodeName;
 
     // Panel2
-    protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles, taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime;
+    protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles, taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime, monitored;
     protected JComboBox schedulingPolicy, MECTypeCB, encryption;
 
     // Tabbed pane for panel1 and panel2
@@ -221,6 +222,20 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
         clockRatio = new JTextField(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
 
+	// monitored
+   c2.gridwidth = 1;
+        panel2.add(new JLabel("Monitored:"), c2);
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
+	tracemode = new JComboBox(tracemodeTab);
+        tracemode.setSelectedIndex(selectedTracemode);
+        tracemode.addActionListener(this);
+        panel2.add(tracemode, c2);
+
+        monitored = new JTextField("", 15);
+        panel2.add(monitored, c2);
+
+
         // Code generation
         panel4 = new JPanel();
         panel4.setLayout( gridbag4 );
@@ -303,6 +318,9 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
            return;
            }*/
 
+	if (evt.getSource() == tracemode) {
+           selectedTracemode = tracemode.getSelectedIndex();                   
+           }
 
         String command = evt.getActionCommand();
 
@@ -374,6 +392,11 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 
     public String getCacheMiss(){
         return cacheMiss.getText();
+    }
+
+    public int getMonitored() {
+	return tracemode.getSelectedIndex();
+        //return monitored.getText();
     }
 
     public String getClockRatio(){

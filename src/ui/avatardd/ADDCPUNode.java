@@ -73,6 +73,8 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
     private int dCacheSets = 0;
     private int dCacheWords = 0;
 
+    protected int index = 0;
+    protected int monitored = 0;
 
 
     public ADDCPUNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -327,6 +329,37 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
           }
           }*/
 
+	if (dialog.getIndex().length() != 0) {
+            try {
+                tmp = index;
+                index = Integer.decode(dialog.getIndex()).intValue();
+                if (index < 0) {
+                    index = tmp;
+                    error = true;
+                    errors += "index ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "index  ";
+            }
+        }
+
+
+	if (dialog.getMonitored() != 0) {
+            try {
+                tmp = monitored;
+                monitored = dialog.getMonitored();//Integer.decode(dialog.getMonitored()).intValue();
+                if (index < 0) {
+                    monitored = tmp;
+                    error = true;
+                    errors += "monitored ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "monitored  ";
+            }
+        }
+
         if (error) {
             JOptionPane.showMessageDialog(frame,
                                           "Invalid value for the following attributes: " + errors,
@@ -505,6 +538,14 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
 
     public int getDCacheWords() {
         return dCacheWords;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public int getMonitored() {
+        return monitored;
     }
 
 

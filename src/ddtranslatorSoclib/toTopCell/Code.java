@@ -94,9 +94,29 @@ public class Code {
 	  "  for ( size_t irq = 0; irq < (size_t)Iss::n_irq; ++irq )" + CR +
 	  "     cpu->p_irq[irq](e->irq_sig[irq]); " + CR +
 	  "     cpu->p_vci(m);" +CR +
-	  "  }" + CR2 +
+	  "  }" + CR2;
 
-	  "template <class Iss>" + CR +
+      //If there is a spy, add spy to vci interface
+for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) { 
+    // if(){
+	  if(cpu.getMonitored()==1){
+	  creation=creation+
+	  "vci_logger0.p_clk(signal_clk);" +CR+
+	  "vci_logger0.p_resetn(signal_resetn);" +CR+
+	  "vci_logger0.p_vci(p_vci(m));" +CR2;
+
+	      }
+	  else{
+	      if(cpu.getMonitored()==2){ 
+		  creation=creation+
+	  "mwmr_stats0.p_clk(signal_clk);" +CR+
+	  "mwmr_stats0.p_resetn(signal_resetn);" +CR+
+	  "mwmr_stats0.p_vci(p_vci(m));" +CR2;
+	      }
+	  }
+      }
+//}
+	  creation=creation+"template <class Iss>" + CR +
 	  "INIT_TOOLS(initialize_tools){" + CR +
 	  //"Iss::setBoostrapCpuId(0);" + CR + // ppc
 	  "/* Only processor 0 starts execution on reset */" + CR +

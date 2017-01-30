@@ -58,12 +58,16 @@ import ui.avatardd.*;
 
 
 public class JDialogADDCPUNode extends javax.swing.JDialog implements ActionListener {
-	
+	 private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
+
 	private boolean regularClose;
 	
 	private JPanel panel2;
 	private Frame frame;
 	private ADDCPUNode node;
+
+        protected JComboBox tracemode;
+        private static int  selectedTracemode = 0;
 	
 	
 	// Panel1
@@ -71,8 +75,9 @@ public class JDialogADDCPUNode extends javax.swing.JDialog implements ActionList
 	
 	// Panel2
 	protected JTextField nbOfIrq, iCacheWays, iCacheSets, iCacheWords, dCacheWays, dCacheSets, dCacheWords;
-	
-	
+	 protected JTextField index;
+	 protected JTextField monitored;	
+
 	// Main Panel
 	private JButton closeButton;
 	private JButton cancelButton;
@@ -172,7 +177,20 @@ public class JDialogADDCPUNode extends javax.swing.JDialog implements ActionList
 		dCacheWords = new JTextField(""+node.getDCacheWords(), 15);
 		panel2.add(dCacheWords, c2);
 		
-		
+		c2.gridwidth = 1;
+		panel2.add(new JLabel("Index:"), c2);
+		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+		index = new JTextField(""+node.getIndex(), 15);
+		panel2.add(index, c2);
+
+		c2.gridwidth = 1;
+		panel2.add(new JLabel("Monitored:"), c2);
+		//c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+		//monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
+		tracemode = new JComboBox(tracemodeTab);
+		tracemode.setSelectedIndex(selectedTracemode);
+		tracemode.addActionListener(this);
+		panel2.add(tracemode, c2);
 		
 		/*c2.gridwidth = 1;
 		panel2.add(new JLabel("Clock ratio:"), c2);
@@ -207,6 +225,9 @@ public class JDialogADDCPUNode extends javax.swing.JDialog implements ActionList
 		return;
 		}*/
 		
+	    	if (evt.getSource() == tracemode) {
+		    selectedTracemode = tracemode.getSelectedIndex();          
+		}
 		
 		String command = evt.getActionCommand();
 		
@@ -262,8 +283,17 @@ public class JDialogADDCPUNode extends javax.swing.JDialog implements ActionList
 	public String getDCacheWords() {
 			return dCacheWords.getText();
 	}
-	
-	
+
+	 public String getIndex() {
+        return index.getText();
+	 }
+    
+	public int getMonitored() {
+	//return tracemodeTab[tracemode.getSelectedIndex()];
+	return tracemode.getSelectedIndex();
+        //return monitored.getText();
+    }
+
 	/*public String getClockRatio(){
 		return clockRatio.getText();
 	} */ 

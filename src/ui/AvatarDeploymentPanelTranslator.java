@@ -72,7 +72,8 @@ public class AvatarDeploymentPanelTranslator{
                 int dCacheWords = addCPUNode.getDCacheWords();
 
                 AvatarCPU avcpu;
-                avcpu = new AvatarCPU(cpuName,nbOfIRQs,ICacheWays,ICacheSets,ICacheWords,dCacheWays,dCacheSets,dCacheWords,nb_init,no_proc );
+		int monitored = addCPUNode.getMonitored();
+                avcpu = new AvatarCPU(cpuName,nbOfIRQs,ICacheWays,ICacheSets,ICacheWords,dCacheWays,dCacheSets,dCacheWords,nb_init,no_proc,monitored);
                 nb_init++;
                 nb_proc++;
                 no_proc++;
