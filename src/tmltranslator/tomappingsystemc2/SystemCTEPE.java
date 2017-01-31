@@ -46,7 +46,6 @@ knowledge of the CeCILL license and that you accept its terms.
 package tmltranslator.tomappingsystemc2;
 
 import java.util.*;
-import tmltranslator.*;
 import myutil.*;
 import tepe.*;
 import java.util.regex.*;
@@ -54,26 +53,26 @@ import java.util.regex.*;
 
 public class SystemCTEPE {
     
-	private final static String CR = "\n";
-	private final static String CR2 = "\n\n";
+//	private final static String CR = "\n";
+//	private final static String CR2 = "\n\n";
 	private final static String SCCR = ";\n";
-	private final static String EFCR = "}\n";
-	private final static String EFCR2 = "}\n\n";
-	private final static String EF = "}";
+//	private final static String EFCR = "}\n";
+//	private final static String EFCR2 = "}\n\n";
+//	private final static String EF = "}";
 	private final static Pattern _varPattern = Pattern.compile("[\\w&&\\D]+[\\w]*");
-	private ArrayList<TEPE> _tepes;
+	private List<TEPE> _tepes;
 	private int _nbOfFloatingSig=0,_nbOfStartNodes=0;
-	private String _floatingSigProc="", _floatingSigComp="", _floatingEnaComp="", _connect="", _declare="", _evtRegister="", _code="", _listeners="", _eqFuncs="", _eqFuncDecl="";
-	TML2MappingSystemC _tmltranslator;
+	private String _floatingSigProc="", _floatingSigComp="", _floatingEnaComp="", _connect="", _declare="", /*_evtRegister="", */_code="", _listeners="", _eqFuncs="", _eqFuncDecl="";
+	IDiploSimulatorCodeGenerator _tmltranslator;
 
-	public SystemCTEPE(ArrayList<TEPE> tepes, TML2MappingSystemC tmltranslator){
+	public SystemCTEPE( List<TEPE> tepes, IDiploSimulatorCodeGenerator tmltranslator){
 		_tepes=tepes;
 		_tmltranslator=tmltranslator;
 	}
 	
 	public void generateTEPEs(){
 		_nbOfFloatingSig=0; _nbOfStartNodes=0;
-		_floatingSigProc=""; _floatingSigComp=""; _floatingEnaComp=""; _connect=""; _declare=""; _evtRegister=""; _listeners=""; _eqFuncs=""; _eqFuncDecl="";	
+		_floatingSigProc=""; _floatingSigComp=""; _floatingEnaComp=""; _connect=""; _declare=""; /*_evtRegister="";*/ _listeners=""; _eqFuncs=""; _eqFuncDecl="";	
 		if (!_tepes.isEmpty()){
 			TraceManager.addDev("And the TEPEs are...............");
 			for(TEPE tepe: _tepes) {

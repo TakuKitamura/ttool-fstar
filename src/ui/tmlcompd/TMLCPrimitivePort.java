@@ -86,8 +86,6 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     public int checkConfStatus;
 
     public int checkSecConfStatus;
-    public int checkSecWeakAuthStatus;
-    public int checkSecStrongAuthStatus;
     public String secName="";
 
     public int checkWeakAuthStatus;
@@ -310,7 +308,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         if (checkConf && isOrigin){
             drawConfVerification(g);
         }
-	if (checkAuth && !isOrigin && !secName.equals("")){
+	if (checkAuth && !isOrigin){
 	    drawAuthVerification(g);
 	}
         g.setFont(fold);
@@ -326,7 +324,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 	Color c = g.getColor();
         Color c1;
 	Color c2;
-	switch(checkSecStrongAuthStatus) {
+	switch(checkStrongAuthStatus) {
  	    case 2:
                 c1 = Color.green;
         	break;
@@ -336,7 +334,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             default:
                 c1 = Color.gray;
 	}
-	switch(checkSecWeakAuthStatus) {
+	switch(checkWeakAuthStatus) {
  	    case 2:
                 c2 = Color.green;
                 break;
@@ -362,11 +360,11 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 	g.drawPolygon(xpw, ypw, 3);
 	g.drawString("S", x-18, y+30);
 	g.drawString("W", x-11, y+26);
-	if (checkSecStrongAuthStatus ==3){
+	if (checkStrongAuthStatus ==3){
 	    g.drawLine(x-19, y+22, x-12, y+30);
 	    g.drawLine(x-19, y+30, x-12, y+22);
 	}
-	if (checkSecWeakAuthStatus==3 || checkSecStrongAuthStatus==3 && checkSecWeakAuthStatus <2){
+	if (checkWeakAuthStatus==3 || checkStrongAuthStatus==3 && checkWeakAuthStatus <2){
 	    g.drawLine(x-12, y+18, x-5, y+26);
 	    g.drawLine(x-12, y+26, x-5, y+18);
 	}

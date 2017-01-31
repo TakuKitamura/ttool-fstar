@@ -1,11 +1,11 @@
 package tmltranslator.tomappingsystemc2;
 
-public class strwrap{
+public class StrWrap{
 	String str;
-	strwrap(String iStr){
+	StrWrap(String iStr){
 		str=iStr;
 	}
-	strwrap(){
+	StrWrap(){
 		str="";
 	}
 }

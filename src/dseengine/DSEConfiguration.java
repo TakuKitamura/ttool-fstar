@@ -55,10 +55,6 @@ import tmltranslator.*;
 import tmltranslator.tomappingsystemc2.*;
 //import tmltranslator.toturtle.*;
 
-import translator.*;
-
-import dseengine.*;
-
 import myutil.*;
 
 import ui.*;
@@ -73,7 +69,7 @@ public class DSEConfiguration implements Runnable  {
 	private final String PATH_TO_CODE = "No directory selected for putting the generated code";
 	private final String PATH_TO_RESULTS = "No directory selected for putting the results";
 	private final String PATH_TO_SOURCE = "No source model selected";
-	private final String NO_OUTPUT_SELECTED = "No format for the output has been selected";
+	private final String NO_OUTPUT_SELECTED = "No format ofr the output has been selected";
 	private final String LOAD_MAPPING_FAILED = "Loading of the mapping failed";
 	private final String LOAD_TASKMODEL_FAILED = "Loading of the task model failed";
 	private final String SIMULATION_COMPILATION_COMMAND_NOT_SET = "Compilation command missing";
@@ -675,7 +671,9 @@ public class DSEConfiguration implements Runnable  {
 		
 			// Generating code
 			TraceManager.addDev("\n\n\n**** Generating simulation code...");
-			TML2MappingSystemC map = new TML2MappingSystemC(tmap);
+			final IDiploSimulatorCodeGenerator map = DiploSimulatorFactory.INSTANCE.createCodeGenerator( tmap );
+//			TML2MappingSystemC map = new TML2MappingSystemC(tmap);
+			
 			try {
 				map.generateSystemC(_debug, _optimize);
 				map.saveFile(pathToSimulator, "appmodel");
@@ -711,7 +709,8 @@ public class DSEConfiguration implements Runnable  {
 		
 		// Generating code
 		TraceManager.addDev("\n\n\n**** Generating simulation code from mapping...");
-		TML2MappingSystemC map = new TML2MappingSystemC(_tmlmap);
+		final IDiploSimulatorCodeGenerator map = DiploSimulatorFactory.INSTANCE.createCodeGenerator( _tmlmap );
+		
 		try {
 			map.generateSystemC(_debug, _optimize);
 			map.saveFile(pathToSimulator, "appmodel");
@@ -1157,6 +1156,7 @@ public class DSEConfiguration implements Runnable  {
 			return 0;
 			
 		} else {
+			
 			if (results == null) {
 				TraceManager.addDev("No results");
 				return -1;
@@ -1164,7 +1164,7 @@ public class DSEConfiguration implements Runnable  {
 			
 			// Must compute results
 			results.computeResults();
-			overallResults = results.getExplanationHeader() + "\n" + results.getAllComments() + "\n" + results.getWholeResults();
+			
 			TraceManager.addDev("Results: #" + resultsID + "\n" +  results.getWholeResults());
 			
 			// Saving to file
@@ -1247,7 +1247,8 @@ public class DSEConfiguration implements Runnable  {
 		
 		
 			TraceManager.addDev("\n\n\n**** Generating simulation code...");
-			TML2MappingSystemC map = new TML2MappingSystemC(tmap);
+			final IDiploSimulatorCodeGenerator map = DiploSimulatorFactory.INSTANCE.createCodeGenerator( tmap );
+//			TML2MappingSystemC map = new TML2MappingSystemC(tmap);
 			try {
 				map.generateSystemC(_debug, _optimize);
 				map.saveFile(pathToSimulator, "appmodel");

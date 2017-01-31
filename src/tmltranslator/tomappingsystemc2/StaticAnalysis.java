@@ -8,12 +8,12 @@ import myutil.*;
 //import java.util.HashSet;
 
 public class StaticAnalysis{
-	private ArrayList<LiveVariableNode> liveNodes= new ArrayList<LiveVariableNode>();
+	private List<LiveVariableNode> liveNodes= new ArrayList<LiveVariableNode>();
 	private final static Pattern _varPattern = Pattern.compile("[\\w&&\\D]+[\\w]*");
 	private TMLTask _task;
-	private ArrayList<TMLChannel> _channels;
-	private ArrayList<TMLEvent> _events;
-	private ArrayList<TMLRequest> _requests;
+	private List<TMLChannel> _channels;
+	private List<TMLEvent> _events;
+	private List<TMLRequest> _requests;
 	
 	private int _nextDefID=0;
 	private int[][] _varToDefs=null;
@@ -22,7 +22,7 @@ public class StaticAnalysis{
 	private LiveVariableNode[] _defLookup=null;
 	private Set<Integer> _depChannels;
 
-	public StaticAnalysis(TMLTask iTask, ArrayList<TMLChannel>iChannels, ArrayList<TMLEvent> iEvents, ArrayList<TMLRequest> iRequests, Set<Integer> iDepChannels){
+	public StaticAnalysis(TMLTask iTask, List<TMLChannel>iChannels, List<TMLEvent> iEvents, List<TMLRequest> iRequests, Set<Integer> iDepChannels){
 		_task = iTask;
 		_channels=iChannels;
 		_events=iEvents;
@@ -135,27 +135,27 @@ public class StaticAnalysis{
 		//anEvalFunc += "}\n\n";
 		return anEvalFunc;
 	}*/
-
-	private void printLiveVarNode(LiveVariableNode iNode){
-		int aSeq=0;
-		for(TMLAttribute att: _task.getAttributes()) {
-			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
-				TraceManager.addDev(att.getName() + ": significant");
-			aSeq++;
-		}
-		for(TMLChannel ch: _channels) {
-			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
-				TraceManager.addDev(ch.getName() + ": significant");
-			aSeq++;
-		}
-		for(TMLEvent evt: _events) {
-			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
-				TraceManager.addDev(evt.getName() + ": significant");
-			aSeq++;
-		}
-		if (_task.isRequested() && (iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
-			TraceManager.addDev("reqChannel: significant");
-	}
+//
+//	private void printLiveVarNode(LiveVariableNode iNode){
+//		int aSeq=0;
+//		for(TMLAttribute att: _task.getAttributes()) {
+//			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
+//				TraceManager.addDev(att.getName() + ": significant");
+//			aSeq++;
+//		}
+//		for(TMLChannel ch: _channels) {
+//			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
+//				TraceManager.addDev(ch.getName() + ": significant");
+//			aSeq++;
+//		}
+//		for(TMLEvent evt: _events) {
+//			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
+//				TraceManager.addDev(evt.getName() + ": significant");
+//			aSeq++;
+//		}
+//		if (_task.isRequested() && (iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
+//			TraceManager.addDev("reqChannel: significant");
+//	}
 
 	public String printVariables(int[] iVariables){
 		String aResult="";
@@ -299,7 +299,7 @@ public class StaticAnalysis{
 			TraceManager.addDev("No checkpoint candidates");
 		else{
 			TraceManager.addDev("a: " + _task.getAttributes().size() + " c: " + _channels.size() + " e: " + _events.size());
-			int aNbOfLiveElements = _task.getAttributes().size() + _channels.size() + _events.size();
+			//int aNbOfLiveElements = _task.getAttributes().size() + _channels.size() + _events.size();
 			int nbOfVars=0, nbOfChannels=0, nbOfEvents=0;
 			for(int i=0; i<_task.getAttributes().size(); i++)
 				nbOfVars += aStatistics[i];

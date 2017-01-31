@@ -828,9 +828,9 @@ public class TGComponentManager {
         case SAFETY_PRAGMA:
             tgc = new AvatarBDSafetyPragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-        case AVATAR_FIREWALL:
-            tgc = new AvatarBDFirewall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
+//        case AVATAR_FIREWALL:
+//            tgc = new AvatarBDFirewall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+//            break;
         case IOD_CHOICE:
             tgc = new IODChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
@@ -1781,8 +1781,8 @@ public class TGComponentManager {
             return TMLARCHI_BRIDGENODE;
         } else if (tgc instanceof TMLArchiFirewallNode) {
             return TMLARCHI_FIREWALL;
-        } else if (tgc instanceof AvatarBDFirewall) {
-            return AVATAR_FIREWALL;
+//        } else if (tgc instanceof AvatarBDFirewall) {
+//            return AVATAR_FIREWALL;
         } else if (tgc instanceof TMLArchiHWANode) {
             return TMLARCHI_HWANODE;
         } else if (tgc instanceof TMLArchiMemoryNode) {

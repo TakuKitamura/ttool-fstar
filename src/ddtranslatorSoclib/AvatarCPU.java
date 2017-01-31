@@ -21,11 +21,11 @@ public class AvatarCPU extends AvatarComponent{
     private int dCacheWords;
     private int nb_init;
     private int no_proc;
-   
+    public int monitored;
 
     private LinkedList<AvatarTask> tasksMapped;
 
-    public AvatarCPU(String _cpuName, int _nbOfIRQs,int _ICacheWays, int _ICacheSets, int _ICacheWords, int  _DCacheWays, int _DCacheSets, int _DCacheWords , int _nb_init , int _no_proc ){
+    public AvatarCPU(String _cpuName, int _nbOfIRQs,int _ICacheWays, int _ICacheSets, int _ICacheWords, int  _DCacheWays, int _DCacheSets, int _DCacheWords , int _nb_init , int _no_proc, int _monitored){
       
       cpuName = _cpuName;
       nbOfIRQs = _nbOfIRQs;
@@ -37,7 +37,8 @@ public class AvatarCPU extends AvatarComponent{
       dCacheWords = _DCacheWords;
       nb_init = _nb_init;
       no_proc = _no_proc;
-      tasksMapped = new LinkedList<AvatarTask>();
+      tasksMapped = new LinkedList<AvatarTask>(); 
+      monitored=_monitored;
     }
 
     public int getNb_init(){
@@ -88,5 +89,11 @@ public class AvatarCPU extends AvatarComponent{
       tasksMapped.add(task);
     }
 
+    public int getMonitored(){
+	return monitored;
+    }
+    public void setMonitored(int _monitored){
+	monitored = _monitored;
+    }
 }
 

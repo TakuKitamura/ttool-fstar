@@ -2768,7 +2768,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
         });
     }
-
+	public void setMaxPanelSize(int x, int y){
+		maxX=x;
+		maxY=y;
+		updateSize();
+	}
     // For compatibility with ttool v0.41
     // Assumes no internal duplicate id
     public void checkForDuplicateId() {

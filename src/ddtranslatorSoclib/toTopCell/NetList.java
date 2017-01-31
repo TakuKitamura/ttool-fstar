@@ -376,7 +376,28 @@ public class NetList {
 			//	}		
 		    }
 	   }*/
-	 
+	
+i=0;
+   for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) { 
+    // if(){
+	  if(cpu.getMonitored()==1){
+	  netlist=netlist+
+	  "vci_logger0.p_clk(signal_clk);" +CR+
+	  "vci_logger0.p_resetn(signal_resetn);" +CR+
+	  "vci_logger0.p_vci(p_vci(m));" +CR2;
+
+	      }
+	  else{
+	      if(cpu.getMonitored()==2){ 
+		  netlist=netlist+
+	  "mwmr_stats0.p_clk(signal_clk);" +CR+
+	  "mwmr_stats0.p_resetn(signal_resetn);" +CR+
+	  "mwmr_stats0.p_vci(p_vci(i));" +CR2;
+	      }
+	  }
+	  i++;
+   }
+ 
 	i=0;
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
 	    if (ram.getMonitored()==1){	

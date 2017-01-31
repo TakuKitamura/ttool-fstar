@@ -53,7 +53,7 @@ import req.ebrdd.*;
 import tepe.*;
 
 
-public class TML2MappingSystemC {
+public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
 
     private final static String CR = "\n";
   //  private final static String CR2 = "\n\n";
@@ -91,7 +91,7 @@ public class TML2MappingSystemC {
         tepeTranslator = new  SystemCTEPE(new ArrayList<TEPE>(), this);
     }
 
-    public TML2MappingSystemC(TMLModeling _tmlm, ArrayList<EBRDD> _ebrdds, ArrayList<TEPE> _tepes) {
+    public TML2MappingSystemC(TMLModeling _tmlm, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
         tmlmodeling = _tmlm;
         //ebrdds = _ebrdds;
         tmlmapping = tmlmodeling.getDefaultMapping();
@@ -99,7 +99,7 @@ public class TML2MappingSystemC {
         //tepeTranslator.generateTEPEs();
     }
 
-    public TML2MappingSystemC(TMLMapping _tmlmapping, ArrayList<EBRDD> _ebrdds, ArrayList<TEPE> _tepes) {
+    public TML2MappingSystemC(TMLMapping _tmlmapping, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
         tmlmapping = _tmlmapping;
 	tmlmapping.handleCPs();
 	tmlmapping.removeForksAndJoins();
@@ -502,7 +502,7 @@ public class TML2MappingSystemC {
     }
 
 
-    private int extractPath(LinkedList<HwCommunicationNode> path, strwrap masters, strwrap slaves, HwNode startNode, HwNode destNode, boolean reverseIn){
+    private int extractPath(LinkedList<HwCommunicationNode> path, StrWrap masters, StrWrap slaves, HwNode startNode, HwNode destNode, boolean reverseIn){
         String firstPart=""; //lastBus="";
         int masterCount=0;
         boolean reverse=reverseIn;
@@ -563,7 +563,7 @@ public class TML2MappingSystemC {
     private String determineRouting( HwNode startNode, HwNode destNode, TMLElement commElemToRoute ){
 
         //TraceManager.addDev( "Determine routing from " + startNode.getName() + " to " + destNode.getName() );
-        strwrap masters=new strwrap(), slaves=new strwrap();
+        StrWrap masters=new StrWrap(), slaves=new StrWrap();
         LinkedList<HwCommunicationNode> path = new LinkedList<HwCommunicationNode>();
         LinkedList<HwCommunicationNode> commNodes = new LinkedList<HwCommunicationNode>();
 

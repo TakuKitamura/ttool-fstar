@@ -57,6 +57,8 @@ import tmltranslator.TMLMappingTextSpecification;
 import tmltranslator.TMLModeling;
 import tmltranslator.TMLSyntaxChecking;
 import tmltranslator.TMLTextSpecification;
+import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
+import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.toturtle.Mapping2TIF;
 import tmltranslator.toturtle.TML2TURTLE;
 import tmltranslator.touppaal.TML2UPPAAL;
@@ -348,13 +350,17 @@ public class TMLTranslator  {
 
     public static boolean convertToSystemC2() {
         //System.out.println("Converting to SystemC2 ... yo!");
-        tmltranslator.tomappingsystemc2.TML2MappingSystemC map;
+        final IDiploSimulatorCodeGenerator map;
+//        tmltranslator.tomappingsystemc2.TML2MappingSystemC map;
         if (tmap == null) {
-            map = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(tmlm);
-        } else {
-            map = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(tmap);
+            map = DiploSimulatorFactory.INSTANCE.createCodeGenerator( tmlm );
+        } 
+        else {
+            map = DiploSimulatorFactory.INSTANCE.createCodeGenerator( tmap );
         }
+        
         map.generateSystemC(debug, true);
+        
         try {
             map.saveFile(outputFileName, "appmodel");
         } catch (Exception e) {

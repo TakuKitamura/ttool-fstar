@@ -87,6 +87,8 @@ import myutil.TraceManager;
 //import ui.ebrdd.*;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
+import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
+import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import ui.AvatarRequirementPanelTranslator;
 import ui.IconManager;
 import ui.MainGUI;
@@ -695,8 +697,6 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 
     private void generateCode() throws InterruptedException {
         String list;
-     //   int cycle = 0;
-
 
         jta.append("Generating SystemC code\n");
 
@@ -731,64 +731,21 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 
         try {
             unitCycle = unitcycle.getText();
-          //  cycle = Integer.valueOf(unitCycle).intValue();
-        } catch (Exception e) {
+        }
+        catch ( Exception e) {
             jta.append("Wrong number of cycles: " + unitcycle.getText());
             jta.append("Aborting");
             jta.append("\n\nReady to process next command\n");
             checkMode();
             setButtons();
+            
             return;
         }
 
-        /*TML2SystemC tml2systc = new TML2SystemC(mgui.gtm.getTMLModeling());
-          tml2systc.generateSystemC(debugmode.isSelected());
-
-          testGo();
-          jta.append("SystemC code generation done\n");
-          //t2j.printJavaClasses();
-          try {
-          jta.append("Generating SystemC file\n");
-          pathCode = code1.getText();
-          tml2systc.saveFile(pathCode, "appmodel");
-          jta.append("SystemC file generated\n");
-          } catch (Exception e) {
-          jta.append("Could not generate SystemC file\n");
-          }*/
-
         selectedItem = versionSimulator.getSelectedIndex();
-        //System.out.println("Selected item=" + selectedItem);
+
         switch( selectedItem ) {        //Old SystemC generator
-            /*case 0: {
-              tmltranslator.tomappingsystemc.TML2MappingSystemC tml2systc;
-              if (mgui.gtm.getTMLMapping() == null) {
-              if (mgui.gtm.getArtificialTMLMapping() == null) {
-              tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getTMLModeling());
-              } else {
-              TraceManager.addDev("Using artifical mapping");
-              tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping());
-              }
-              }
-              else {
-              tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getTMLMapping());
-              }
-              tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
-              testGo();
-              jta.append("SystemC code generation done\n");
-              //t2j.printJavaClasses();
-              try {
-              jta.append("Generating SystemC file\n");
-              pathCode = code1.getText();
-              tml2systc.saveFile(pathCode, "appmodel");
-              jta.append("SystemC files generated\n");
-              }
-              catch( Exception e ) {
-              jta.append("Could not generate SystemC file\n");
-              }
-              break;
-              }*/
         case 0: {       //Simulator without CPs (Daniel's version)
-            tmltranslator.tomappingsystemc2.TML2MappingSystemC tml2systc;
             // Making EBRDDs
             ArrayList<EBRDD> al = new ArrayList<EBRDD>();
             ArrayList<TEPE> alTepe = new ArrayList<TEPE>();
@@ -803,56 +760,46 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
                 alTepe.add(tepe);
                 jta.append("Done.\n");
             }
-            /*EBRDDTranslator ebrddt;
-              EBRDDPanel ep;
-              EBRDD ebrdd;
 
-              for(int k=0; k<val.size(); k++) {
-              testGo();
-              ebrddt = new EBRDDTranslator();
-              ep = (EBRDDPanel)(val.get(k));
-              jta.append("EBRDD: " + ep.getName() + "\n");
-              ebrdd = ebrddt.generateEBRDD(ep, ep.getName());
-              jta.append("Checking syntax\n");
-              if (ebrddt.getErrors().size() > 0) {
-              jta.append("Syntax error: ignoring EBRDD\n\n");
-              } else {
-              jta.append("No Syntax error: EBRDD taken into account\n\n");
-              al.add(ebrdd);
-              }
-              }*/
+            final IDiploSimulatorCodeGenerator tml2systc;
 
             // Generating code
             if (mgui.gtm.getTMLMapping() == null) {
                 if (mgui.gtm.getArtificialTMLMapping() == null) {
-                    tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLModeling(), al, alTepe);
-                } else {
-                    TraceManager.addDev("Using artifical mapping");
-                    tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping(), al, alTepe);
+                	tml2systc = DiploSimulatorFactory.INSTANCE.createCodeGenerator( mgui.gtm.getTMLModeling(), al, alTepe );
+                    //tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLModeling(), al, alTepe);
                 }
-            } else {
-                tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping(), al, alTepe);
+                else {
+                    TraceManager.addDev("Using artifical mapping");
+                    tml2systc = DiploSimulatorFactory.INSTANCE.createCodeGenerator( mgui.gtm.getArtificialTMLMapping(), al, alTepe );
+                    //tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping(), al, alTepe);
+                }
+            } 
+            else {
+            	tml2systc = DiploSimulatorFactory.INSTANCE.createCodeGenerator( mgui.gtm.getTMLMapping(), al, alTepe );
+//                tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping(), al, alTepe);
             }
 
-            tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
-            testGo();
-            jta.append("SystemC code generation done\n");
-
-            for(TEPE tep: alTepe) {
-                TraceManager.addDev(tep.toString());
-            }
-            //t2j.printJavaClasses();
             try {
+	            tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
+	            testGo();
+	            jta.append("SystemC code generation done\n");
+	
+	            for(TEPE tep: alTepe) {
+	                TraceManager.addDev(tep.toString());
+	            }
                 jta.append("Generating SystemC file\n");
                 pathCode = code1.getText();
                 tml2systc.saveFile(pathCode, "appmodel");
                 jta.append("SystemC files generated\n");
-            } catch (Exception e) {
-                jta.append("Could not generate SystemC file\n");
+            }
+            catch ( final Exception ex ) {
+            	final String message = "Could not generate simulator code!";
+            	jta.append( message + System.lineSeparator() );
+            	TraceManager.addError( message );ex.printStackTrace();
             }
             break;
         }
-
         }
     }   //End of method generateCode()
 
