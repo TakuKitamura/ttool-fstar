@@ -4990,7 +4990,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void statAUTProj() {
-        showAUTFromString("Analysis on the last minimized RG (AUT format)", gtm.getLastTextualRGAUTProj());
+        showAUTFromString("Analysis on the last minimized RG (A>UT format)", gtm.getLastTextualRGAUTProj());
     }
 
     public void statSavedAUT() {

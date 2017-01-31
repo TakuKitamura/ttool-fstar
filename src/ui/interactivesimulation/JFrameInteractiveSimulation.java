@@ -127,7 +127,7 @@ import ui.TGComponent;
 
 public  class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener, ChangeListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 
-	protected static final int NB_OF_TRANSACTIONS = 10;
+    protected static final int NB_OF_TRANSACTIONS = 10;
 
     protected static final String SIMULATION_HEADER = "siminfo";
     protected static final String SIMULATION_GLOBAL = "global";
@@ -149,7 +149,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
     //private Frame f;
     private MainGUI mgui;
-   // private String title;
+    // private String title;
     private String hostSystemC;
     private String pathExecute;
 
@@ -242,16 +242,16 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     JButton updateBusInformationButton;
     private JScrollPane jspBusInfo;
     private JPanel panelBus;
-	
-	//Latency
-	JPanel latencyPanel;
-	JComboBox transaction1;
-	JComboBox transaction2;
-	JButton addLatencyCheckButton;
-	JButton updateLatencyButton;
-	LatencyTableModel latm;
-	public Vector checkedTransactions = new Vector();
-	private JScrollPane jspLatency;
+
+    //Latency
+    JPanel latencyPanel;
+    JComboBox transaction1;
+    JComboBox transaction2;
+    JButton addLatencyCheckButton;
+    JButton updateLatencyButton;
+    LatencyTableModel latm;
+    public Vector checkedTransactions = new Vector();
+    private JScrollPane jspLatency;
 
     private int mode = 0;
     //private boolean busyStatus = false;
@@ -275,13 +275,13 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     private Hashtable <String, String> diagramTable;
 
     private ArrayList<Point> points;
-	private HashMap<String, String> checkTable=new HashMap<String, String>();
-	private HashMap<String, ArrayList<String>> transTimes = new HashMap<String, ArrayList<String>>();
-	private Vector latencies=new Vector();
+    private HashMap<String, String> checkTable=new HashMap<String, String>();
+    private HashMap<String, ArrayList<String>> transTimes = new HashMap<String, ArrayList<String>>();
+    private Vector latencies=new Vector();
     public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap, ArrayList<Point> _points) {
         super(_title);
 
-       // f = _f;
+        // f = _f;
         mgui = _mgui;
         //title = _title;
         hostSystemC = _hostSystemC;
@@ -316,7 +316,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         initActions();
         makeComponents();
         setComponents();
-		
+
     }
 
     private JLabel createStatusBar()  {
@@ -880,22 +880,22 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         //transactionPanel.setLayout(new BorderLayout());
         infoTab.addTab("Transactions", null, transactionPanel, "Recent transactions");
         /*ttm = new TransactionTableModel(this);
-        sorterPI = new TableSorter(ttm);
-        jtablePI = new JTable(sorterPI);
-        sorterPI.setTableHeader(jtablePI.getTableHeader());
-        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(150);
-        ((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
-        jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        jspTransactionInfo = new JScrollPane(jtablePI);
-        jspTransactionInfo.setWheelScrollingEnabled(true);
-        jspTransactionInfo.getVerticalScrollBar().setUnitIncrement(10);
-        jspTransactionInfo.setPreferredSize(new Dimension(500, 300));
-        transactionPanel.add(jspTransactionInfo, BorderLayout.NORTH);
-        updateTransactionInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS]);
-        transactionPanel.add(updateTransactionInformationButton, BorderLayout.SOUTH);*/
+          sorterPI = new TableSorter(ttm);
+          jtablePI = new JTable(sorterPI);
+          sorterPI.setTableHeader(jtablePI.getTableHeader());
+          ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+          ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(100);
+          ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(150);
+          ((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
+          ((jtablePI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
+          jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+          jspTransactionInfo = new JScrollPane(jtablePI);
+          jspTransactionInfo.setWheelScrollingEnabled(true);
+          jspTransactionInfo.getVerticalScrollBar().setUnitIncrement(10);
+          jspTransactionInfo.setPreferredSize(new Dimension(500, 300));
+          transactionPanel.add(jspTransactionInfo, BorderLayout.NORTH);
+          updateTransactionInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS]);
+          transactionPanel.add(updateTransactionInformationButton, BorderLayout.SOUTH);*/
 
         // CPUs
         cpuPanel = new JPanel();
@@ -965,33 +965,33 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         panelBus.add(printBusInfo);
         busPanel.add(panelBus, BorderLayout.SOUTH);
 
-		//Latency
-		latencyPanel = new JPanel();
-		GridBagLayout gridbag0 = new GridBagLayout();
-		GridBagConstraints c0 = new GridBagConstraints();
-		latencyPanel.setLayout(gridbag0);
-		infoTab.addTab("Latency", null, latencyPanel, "Latency Measurements");
+        //Latency
+        latencyPanel = new JPanel();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        latencyPanel.setLayout(gridbag0);
+        infoTab.addTab("Latency", null, latencyPanel, "Latency Measurements");
 
-		c0.gridwidth=1;
-		c0.gridheight=1;
-		latencyPanel.add(new JLabel("Checkpoint 1:"),c0);
-		c0.gridwidth = GridBagConstraints.REMAINDER;
-		transaction1 = new JComboBox(checkedTransactions);
-		latencyPanel.add(transaction1, c0);
-	
-		c0.gridwidth=1;
-		latencyPanel.add(new JLabel("Checkpoint 2:"),c0);
-		c0.gridwidth= GridBagConstraints.REMAINDER;
-		transaction2 = new JComboBox(checkedTransactions);	
-		latencyPanel.add(transaction2, c0);
+        c0.gridwidth=1;
+        c0.gridheight=1;
+        latencyPanel.add(new JLabel("Checkpoint 1:"),c0);
+        c0.gridwidth = GridBagConstraints.REMAINDER;
+        transaction1 = new JComboBox(checkedTransactions);
+        latencyPanel.add(transaction1, c0);
 
-	
-		addLatencyCheckButton = new JButton(actions[InteractiveSimulationActions.ACT_ADD_LATENCY]);
-		latencyPanel.add(addLatencyCheckButton,c0);
+        c0.gridwidth=1;
+        latencyPanel.add(new JLabel("Checkpoint 2:"),c0);
+        c0.gridwidth= GridBagConstraints.REMAINDER;
+        transaction2 = new JComboBox(checkedTransactions);
+        latencyPanel.add(transaction2, c0);
+
+
+        addLatencyCheckButton = new JButton(actions[InteractiveSimulationActions.ACT_ADD_LATENCY]);
+        latencyPanel.add(addLatencyCheckButton,c0);
 
         latm = new LatencyTableModel(this);
-		latm.setData(latencies);	
-		sorterPI = new TableSorter(latm);
+        latm.setData(latencies);
+        sorterPI = new TableSorter(latm);
         jtablePI = new JTable(sorterPI);
         sorterPI.setTableHeader(jtablePI.getTableHeader());
         ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(400);
@@ -1010,9 +1010,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
 
 
-		updateLatencyButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_LATENCY]);
-		latencyPanel.add(updateLatencyButton,c0);
-		
+        updateLatencyButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_LATENCY]);
+        latencyPanel.add(updateLatencyButton,c0);
+
         if (!hashOK) {
             wrongHashCode();
         }
@@ -1035,7 +1035,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         memIDs = makeMemIDs();
         taskIDs = makeTasksIDs();
         chanIDs = makeChanIDs();
-		fillCheckedTrans();
+        fillCheckedTrans();
     }
 
 
@@ -1074,8 +1074,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             }
         }
         mgui.resetRunningID();
-		mgui.resetStatus();
-		mgui.resetTransactions();
+        mgui.resetStatus();
+        mgui.resetTransactions();
         mgui.resetLoadID();
         mgui.setDiploAnimate(false);
         dispose();
@@ -1236,8 +1236,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             rc.connect();
             return true;
         } catch (RemoteConnectionException rce) {
-	    //rce.printStackTrace();
-        	
+            //rce.printStackTrace();
+
             return false;
         }
     }
@@ -1403,15 +1403,15 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
     }
     protected void addTransactionToNode(SimulationTransaction tran){
-	String nodename = tran.deviceName;
-	for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
+        String nodename = tran.deviceName;
+        for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
             if ((node.getName()+"_0").equals(nodename)){
                 mgui.addTransaction(node.getID(), tran);
             }
-	}
+        }
     }
     protected void addStatusToNode(String status, String task){
-            mgui.addStatus(task,status);
+        mgui.addStatus(task,status);
     }
     protected boolean loadConfiguration(Node node1) {
         NodeList diagramNl = node1.getChildNodes();
@@ -1423,10 +1423,10 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         NodeList nl, nl0;
 
 
-       // String tmp;
+        // String tmp;
         //int val;
 
-       // int[] colors;
+        // int[] colors;
         String msg = null;
         String error = null;
         String hash = null;
@@ -1540,9 +1540,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
                     if (hashOK) {
                         if (elt.getTagName().compareTo(SIMULATION_TASK) == 0) {
-		//					for (int i=0; i<elt.getAttributes().getLength(); i++){
-	//							System.out.println(elt.getAttributes().item(i));
-//							}
+                            //                                  for (int i=0; i<elt.getAttributes().getLength(); i++){
+                            //                                                  System.out.println(elt.getAttributes().item(i));
+                            //                                                  }
                             id = null;
                             name = null;
                             command = null;
@@ -1617,7 +1617,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                             }
 
                             if ((id != null) && ((extime != null) || (state != null))) {
-				addStatusToNode(state, name);
+                                addStatusToNode(state, name);
                                 updateTaskCyclesAndState(id, extime, state);
                             }
 
@@ -1627,18 +1627,18 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                                     nextCommand = "-1";
                                 }
                                 updateRunningCommand(id, command, progression, startTime, finishTime, nextCommand, transStartTime, transFinishTime, state);
-								if (checkTable.containsKey(command)){
-									//System.out.println("added trans " + command + " " +finishTime);
-									if (!transTimes.containsKey(command)){
-										ArrayList<String> timeList = new ArrayList<String>();
-										transTimes.put(command, timeList);
-									}
-									if (!transTimes.get(command).contains(finishTime)){
-										transTimes.get(command).add(finishTime);
-									}
+                                if (checkTable.containsKey(command)){
+                                    //System.out.println("added trans " + command + " " +finishTime);
+                                    if (!transTimes.containsKey(command)){
+                                        ArrayList<String> timeList = new ArrayList<String>();
+                                        transTimes.put(command, timeList);
+                                    }
+                                    if (!transTimes.get(command).contains(finishTime)){
+                                        transTimes.get(command).add(finishTime);
+                                    }
                                     //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-                                	
-								}
+
+                                }
                             }
 
                             if (openDiagram.isEnabled() && openDiagram.isSelected() && (name != null) && (command != null)) {
@@ -1737,35 +1737,35 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                                     st.command = commandT.substring(index+1, commandT.length()).trim();
                                 }
                             }
-							
+
                             //TraceManager.addDev("Command handled");
                             st.startTime = elt.getAttribute("starttime");
-						    st.endTime = elt.getAttribute("endtime");
-							String taskId= elt.getAttribute("id");
-							//System.out.println(elt.getAttribute("id"));
-							if (checkTable.containsKey(taskId)){
-								//System.out.println("added trans " + commandT + " " +st.endTime);
-								if (!transTimes.containsKey(taskId)){
-									ArrayList<String> timeList = new ArrayList<String>();
-									transTimes.put(taskId, timeList);
-								}
-								if (!transTimes.get(taskId).contains(st.endTime)){
-									transTimes.get(taskId).add(st.endTime);
-								}
-                                    //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-                                	
-							}
+                            st.endTime = elt.getAttribute("endtime");
+                            String taskId= elt.getAttribute("id");
+                            //System.out.println(elt.getAttribute("id"));
+                            if (checkTable.containsKey(taskId)){
+                                //System.out.println("added trans " + commandT + " " +st.endTime);
+                                if (!transTimes.containsKey(taskId)){
+                                    ArrayList<String> timeList = new ArrayList<String>();
+                                    transTimes.put(taskId, timeList);
+                                }
+                                if (!transTimes.get(taskId).contains(st.endTime)){
+                                    transTimes.get(taskId).add(st.endTime);
+                                }
+                                //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+
+                            }
                             st.length = elt.getAttribute("length");
                             st.virtualLength = elt.getAttribute("virtuallength");
                             st.channelName = elt.getAttribute("ch");
-						
-						//	st.id = id;
+
+                            //  st.id = id;
                             if (trans == null) {
                                 trans = new Vector<SimulationTransaction>();
                             }
 
                             trans.add(st);
-			    			addTransactionToNode(st);
+                            addTransactionToNode(st);
                             transInfo = true;
                         }
 
@@ -1860,12 +1860,12 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                     trans = new Vector<SimulationTransaction>();
                 }
                 //TraceManager.addDev("Transinfo -> " + trans.size());
-		if (transactionPanel != null) {
-		    transactionPanel.setData(trans);
-		}
-		if (latencyPanel !=null){
-			processLatency();
-		}
+                if (transactionPanel != null) {
+                    transactionPanel.setData(trans);
+                }
+                if (latencyPanel !=null){
+                    processLatency();
+                }
                 //ttm.setData(trans);
             }
         } catch (Exception e) {
@@ -2306,102 +2306,102 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
         trans = null;
 
-	int nb = NB_OF_TRANSACTIONS;
-	if (transactionPanel != null) {
-	    nb = transactionPanel.getNbOfTransactions();
-	}
+        int nb = NB_OF_TRANSACTIONS;
+        if (transactionPanel != null) {
+            nb = transactionPanel.getNbOfTransactions();
+        }
         sendCommand("lt " + nb);
     }
 
-	private void addLatency(){
-		SimulationLatency sl = new SimulationLatency();
-		sl.trans1 = transaction1.getSelectedItem().toString();
-		sl.trans2 = transaction2.getSelectedItem().toString();
-		sl.minTime="??";
-		sl.maxTime="??";
-		sl.avTime="??";
-		sl.stDev="??";
-		boolean found=false;
-		for (Object o:latencies){
-			SimulationLatency s = (SimulationLatency) o;
-			if (s.trans1 == sl.trans1 && s.trans2 == sl.trans2){
-				found=true;
-			}
-		}
-		if (!found){
-			latencies.add(sl);
-		}
-		updateLatency();
-		if (latm !=null && latencies.size()>0){
-			latm.setData(latencies);
-		}
-	}
-	private void updateLatency(){
-		for (Object o:latencies){
-			SimulationLatency sl = (SimulationLatency) o;
-			//calcuate response + checkpoint 1 id + checkpoint 2 id
-			sendCommand("cl " + sl.trans1.split("ID: ")[1].split("\\)")[0] + " " + sl.trans2.split("ID: ")[1].split("\\)")[0]);
-		}
-	}
+    private void addLatency(){
+        SimulationLatency sl = new SimulationLatency();
+        sl.trans1 = transaction1.getSelectedItem().toString();
+        sl.trans2 = transaction2.getSelectedItem().toString();
+        sl.minTime="??";
+        sl.maxTime="??";
+        sl.avTime="??";
+        sl.stDev="??";
+        boolean found=false;
+        for (Object o:latencies){
+            SimulationLatency s = (SimulationLatency) o;
+            if (s.trans1 == sl.trans1 && s.trans2 == sl.trans2){
+                found=true;
+            }
+        }
+        if (!found){
+            latencies.add(sl);
+        }
+        updateLatency();
+        if (latm !=null && latencies.size()>0){
+            latm.setData(latencies);
+        }
+    }
+    private void updateLatency(){
+        for (Object o:latencies){
+            SimulationLatency sl = (SimulationLatency) o;
+            //calcuate response + checkpoint 1 id + checkpoint 2 id
+            sendCommand("cl " + sl.trans1.split("ID: ")[1].split("\\)")[0] + " " + sl.trans2.split("ID: ")[1].split("\\)")[0]);
+        }
+    }
 
-	private void processLatency(){
- 
-		TraceManager.addDev(transTimes.toString());
-		for (Object o: latencies){
-			SimulationLatency sl = (SimulationLatency) o;
-			sl.minTime="??";
-			sl.maxTime="??";
-			sl.avTime="??";
-			sl.stDev="??";
-			for (String st1:transTimes.keySet()){
-				for (String st2:transTimes.keySet()){
-					if (st1!=st2){
-						if (checkTable.get(st2).contains(sl.trans2) && checkTable.get(st1).contains(sl.trans1)){
-							ArrayList<Integer> minTimes = new ArrayList<Integer>();		
-							if (transTimes.get(st1) !=null && transTimes.get(st2)!=null){
-								for(String time1: transTimes.get(st1)){
-								//Find the first subsequent transaction
-									int time = Integer.MAX_VALUE;
-									for (String time2: transTimes.get(st2)){
-										int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
-										if (diff < time && diff >=0){
-											time=diff;
-										}	
-									}
-									if (time!=Integer.MAX_VALUE){
-										minTimes.add(time);						
-									}
-								}
-								if (minTimes.size()>0){
-									int sum=0;
-									sl.minTime=Integer.toString(Collections.min(minTimes));
-									sl.maxTime=Integer.toString(Collections.max(minTimes));	
-									for (int time: minTimes){
-										sum+=time;
-									}
-									double average = (double) sum/ (double) minTimes.size();
-									double stdev =0.0;
-									for (int time:minTimes){
-										stdev +=(time - average)*(time-average);
-									}
-									stdev= stdev/minTimes.size();
-									stdev = Math.sqrt(stdev);
-									sl.avTime= String.format("%.1f",average);	
-									sl.stDev = String.format("%.1f",stdev);
-								}
-							}
-							
-						}
-						
-					}
-				}
+    private void processLatency(){
 
-			}
-		}
-		if (latm!=null && latencies.size()>0){
-			latm.setData(latencies);
-		}
-	}
+        TraceManager.addDev(transTimes.toString());
+        for (Object o: latencies){
+            SimulationLatency sl = (SimulationLatency) o;
+            sl.minTime="??";
+            sl.maxTime="??";
+            sl.avTime="??";
+            sl.stDev="??";
+            for (String st1:transTimes.keySet()){
+                for (String st2:transTimes.keySet()){
+                    if (st1!=st2){
+                        if (checkTable.get(st2).contains(sl.trans2) && checkTable.get(st1).contains(sl.trans1)){
+                            ArrayList<Integer> minTimes = new ArrayList<Integer>();
+                            if (transTimes.get(st1) !=null && transTimes.get(st2)!=null){
+                                for(String time1: transTimes.get(st1)){
+                                    //Find the first subsequent transaction
+                                    int time = Integer.MAX_VALUE;
+                                    for (String time2: transTimes.get(st2)){
+                                        int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
+                                        if (diff < time && diff >=0){
+                                            time=diff;
+                                        }
+                                    }
+                                    if (time!=Integer.MAX_VALUE){
+                                        minTimes.add(time);
+                                    }
+                                }
+                                if (minTimes.size()>0){
+                                    int sum=0;
+                                    sl.minTime=Integer.toString(Collections.min(minTimes));
+                                    sl.maxTime=Integer.toString(Collections.max(minTimes));
+                                    for (int time: minTimes){
+                                        sum+=time;
+                                    }
+                                    double average = (double) sum/ (double) minTimes.size();
+                                    double stdev =0.0;
+                                    for (int time:minTimes){
+                                        stdev +=(time - average)*(time-average);
+                                    }
+                                    stdev= stdev/minTimes.size();
+                                    stdev = Math.sqrt(stdev);
+                                    sl.avTime= String.format("%.1f",average);
+                                    sl.stDev = String.format("%.1f",stdev);
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+
+            }
+        }
+        if (latm!=null && latencies.size()>0){
+            latm.setData(latencies);
+        }
+    }
 
     private void updateTaskCommands() {
         if (tmap == null) {
@@ -2443,7 +2443,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         }
 
         TraceManager.addDev("state:" + _state);
-		
+
         if ((i != null) && (c != null)) {
             try {
                 //System.out.println("Searching for old value");
@@ -2631,7 +2631,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             s+= _extime;
         }
 
-	
+
 
         if ((i != null) && (ex != null)) {
             try {
@@ -2839,8 +2839,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             mgui.resetTransactions();
             mgui.resetStatus();
             sendCommand("reset");
-			transTimes=new HashMap<String, ArrayList<String>>();
-			processLatency();
+            transTimes=new HashMap<String, ArrayList<String>>();
+            processLatency();
             askForUpdate();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
             sendCommand("stop");
@@ -3086,25 +3086,25 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
         return tmap.makeVariableIDs(index);
     }
-	public void fillCheckedTrans(){
-		if (tmap==null){
-			return;
-		}
-		
-		//System.out.println(tmap.getTMLModeling().getCheckedComps());
-		for (String s: tmap.getTMLModeling().getCheckedActivities()){
-			
-			//checkedTransactions.add(s.split("__")[s.split("__").length-1]);
-		}
-		for (String s: tmap.getTMLModeling().getCheckedComps().keySet()){
-			//System.out.println(tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID() + " "+s);
-			TraceManager.addDev(s);
-			checkedTransactions.add(s+"(ID: " + tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()+")");
-			checkTable.put(Integer.toString(tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()),s+"(ID: " + tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()+")");
-		}
-		//System.out.println(checkedTransactions);
-		//System.out.println(checkTable);
-	}
+    public void fillCheckedTrans(){
+        if (tmap==null){
+            return;
+        }
+
+        //System.out.println(tmap.getTMLModeling().getCheckedComps());
+        for (String s: tmap.getTMLModeling().getCheckedActivities()){
+
+            //checkedTransactions.add(s.split("__")[s.split("__").length-1]);
+        }
+        for (String s: tmap.getTMLModeling().getCheckedComps().keySet()){
+            //System.out.println(tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID() + " "+s);
+            TraceManager.addDev(s);
+            checkedTransactions.add(s+"(ID: " + tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()+")");
+            checkTable.put(Integer.toString(tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()),s+"(ID: " + tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()+")");
+        }
+        //System.out.println(checkedTransactions);
+        //System.out.println(checkTable);
+    }
     public void activeBreakPoint(boolean active) {
         if (mode == STARTED_AND_CONNECTED) {
             if (active) {
@@ -3114,7 +3114,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             }
         }
     }
-    
+
     public void setVariables(int _idTask, int _idVariable, String _value) {
         sendCommand("set-variable " + _idTask + " " + _idVariable + " " + _value);
         sendCommand("get-variable-of-task " + _idTask + " " + _idVariable);
