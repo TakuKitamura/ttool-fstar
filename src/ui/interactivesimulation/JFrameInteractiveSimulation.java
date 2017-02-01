@@ -38,7 +38,7 @@
    /**
    * Class JFrameInteractiveSimulation
    * Creation: 21/04/2009
-   * version 1.0 21/04/2009
+   * version 1.1 01/02/2017
    * @author Ludovic APVRILLE
    * @see
    */
@@ -104,10 +104,6 @@ import org.xml.sax.SAXException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.text.*;
-
-
-
-
 
 import launcher.LauncherException;
 import launcher.RshClient;
@@ -1889,6 +1885,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                 if (msg.indexOf("reset") != -1) {
                     time.setText("0");
                 }
+		if (msg.compareTo("Tree was explored") == 0) {
+		    addGraph();
+		}
             } else {
                 printFromServer(msg + ": command failed (error=" + error + ")");
             }
@@ -2225,6 +2224,11 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         openDiagram.setEnabled(animate.isSelected());
         update.setSelected(false);
         sendCommand("run-exploration " + minimalCommandCoverage.getValue() + " " + minimalBranchCoverage.getValue() + " " + getCurrentRGName());
+
+    }
+
+    private void addGraph() {
+	TraceManager.addDev("Adding graph");
 	mgui.setLastRGDiplodocus(lastGraphName);
     }
 

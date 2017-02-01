@@ -230,7 +230,7 @@ int Simulator::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const{
 }
 
 void Simulator::latencies2XML(std::ostringstream& glob, int id1, int id2) {
-	for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+  for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
     (*i)->latencies2XML(glob, id1, id2);
   }
 
@@ -398,9 +398,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
     std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
 #endif
     commandLET=transLET->getCommand();
-	//if (depTask!=NULL){
-//	transLET->setTaskID(commandLET->getID());
-	//}
+    //if (depTask!=NULL){
+    //  transLET->setTaskID(commandLET->getID());
+    //}
 #ifdef DEBUG_KERNEL
     std::cout << "kernel:simulate: add trans " << commandLET->toString() << std::endl;
 #endif
@@ -1115,8 +1115,8 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     std::cout << "Save benchmarks in file x." << std::endl;
     aInpStream >> aParam1;
 
-      std::cout<< "printhtis"<<std::endl;
-      std::cout<< TAG_MSGo << oLastTrans->toString() << aStrParam << TAG_MSGc << std::endl;
+    std::cout<< "printhtis"<<std::endl;
+    std::cout<< TAG_MSGo << oLastTrans->toString() << aStrParam << TAG_MSGc << std::endl;
     switch (aParam1){
     case 0: _simComp->streamBenchmarks(std::cout);
       aGlobMsg << TAG_MSGo << "Benchmarks written to screen " << TAG_MSGc << std::endl;
@@ -1265,12 +1265,12 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     std::cout << "End list of transactions." << std::endl;
     break;
   case 23:
-	aInpStream >> aParam1;
-	aInpStream >> aParam2;
-	std::cout <<"Calculate latencies between " << aParam1 << " and " << aParam2 << std::endl;
-	latencies2XML(anEntityMsg, aParam1, aParam2);
-	std::cout << "latencies " << &anEntityMsg << std::endl;
-	break;
+    aInpStream >> aParam1;
+    aInpStream >> aParam2;
+    std::cout <<"Calculate latencies between " << aParam1 << " and " << aParam2 << std::endl;
+    latencies2XML(anEntityMsg, aParam1, aParam2);
+    std::cout << "latencies " << &anEntityMsg << std::endl;
+    break;
   default:
     anEntityMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
     anErrorCode=3;

@@ -451,7 +451,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
     public void build() {
-
         // Swing look and feel
 
         try {
@@ -4979,7 +4978,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void setLastRGDiplodocus(String graphName) {
+	TraceManager.addDev("setting last RG diplodocus");
 	lastDiploRG = graphName;
+	// Loadng the graph
+	// Adding RG to the tree on the left
+	try {
+	    String fileName = ConfigurationTTool.TGraphPath + "/" + lastDiploRG + ".aut";
+	    File f = new File(fileName);
+	    String spec = loadFile(f);
+	    RG rg = new RG(fileName);
+	    rg.data = spec;		   
+	    //rg.nbOfStates = amc.getNbOfStates();
+	    //rg.nbOfTransitions = amc.getNbOfLinks();
+	    addRG(rg);
+	} catch (Exception e) {
+	    TraceManager.addDev("RG creation in the left tree failed");
+	}
     }
 
     public void statAUTDiplodocus() {
