@@ -722,11 +722,12 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       _commandCoverage=100; _branchCoverage=100;
       aInpStream >> _commandCoverage;
       aInpStream >> _branchCoverage;
+      aInpStream >> aStrParam;
       std::stringstream aPath;
-      aPath << _graphOutPath << "tree.dot";
+      aPath << _graphOutPath << aStrParam << ".dot";
       std::ofstream myDOTfile (aPath.str().c_str());
       aPath.str("");
-      aPath << _graphOutPath << "tree.aut.tmp";
+      aPath << _graphOutPath << aStrParam << ".aut.tmp";
       std::ofstream myAUTfile (aPath.str().c_str());
       aPath.str("");
       //std::ofstream myfile2 ("tree.txt");
@@ -753,10 +754,10 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
           //system ("cat header tree.aut.tmp > tree.aut");
           //system ("rm header tree.aut.tmp");
           aPath.str("");
-          aPath << "cat " << _graphOutPath << "header " << _graphOutPath << "tree.aut.tmp > " << _graphOutPath << "tree.aut";
+          aPath << "cat " << _graphOutPath << "header " << _graphOutPath << aStrParam << ".aut.tmp > " << _graphOutPath << aStrParam << ".aut";
           system(aPath.str().c_str());
           aPath.str("");
-          aPath << "rm " <<  _graphOutPath << "header " << _graphOutPath << "tree.aut.tmp";
+          aPath << "rm " <<  _graphOutPath << "header " << _graphOutPath << aStrParam << ".aut.tmp";
           system(aPath.str().c_str());
         }
         //#endif

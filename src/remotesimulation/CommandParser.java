@@ -136,7 +136,7 @@ public class CommandParser {
         int cpt = 0;
 
         String cmds[] = cmd.split(" ");
-      //  System.out.println("cmd " + cmd + " has " + cmds.length + " elements");
+        //  System.out.println("cmd " + cmd + " has " + cmds.length + " elements");
 
         for(SimulationCommand sc: commandList) {
             // Same command name?
@@ -337,12 +337,14 @@ public class CommandParser {
         commandList.add(sc);
 
         // run-exploration
-        params = new int[2];
-        paramNames = new String[2];
+        params = new int[3];
+        paramNames = new String[3];
         params[0] = 6;
         params[1] = 6;
+        params[2] = 2;
         paramNames[0] = "Minimum number of explored commands";
         paramNames[1] = "Minimum number of explored branches";
+        paramNames[1] = "File name of the resulting graph, with NO extension";
         sc = new SimulationCommand("run-exploration", "re", "1 7", params, paramNames, "Runs the simulation in exploration mode");
         commandList.add(sc);
 
@@ -471,7 +473,7 @@ public class CommandParser {
         commandList.add(sc);
 
 
-	// Get transactions
+        // Get transactions
         params = new int[1];
         paramNames = new String[1];
         params[0] = 2;
@@ -480,19 +482,19 @@ public class CommandParser {
         commandList.add(sc);
 
 
-	// Get latencies
-		params = new int[2];
-		paramNames = new String[2];
-		params[0] = 1;
-		paramNames[0]="Checkpoint 1 id";
-		params[1] = 1;
-		paramNames[1] = "Checkpoint2 id";
-		sc = new SimulationCommand("calculate-latencies", "cl", "23", params, paramNames, "Calculate latencies between checkpoints");
-		commandList.add(sc);
-		
+        // Get latencies
+        params = new int[2];
+        paramNames = new String[2];
+        params[0] = 1;
+        paramNames[0]="Checkpoint 1 id";
+        params[1] = 1;
+        paramNames[1] = "Checkpoint2 id";
+        sc = new SimulationCommand("calculate-latencies", "cl", "23", params, paramNames, "Calculate latencies between checkpoints");
+        commandList.add(sc);
+
     }
 
-    
+
 
 
 
