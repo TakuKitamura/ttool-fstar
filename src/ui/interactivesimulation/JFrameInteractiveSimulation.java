@@ -127,6 +127,7 @@ import ui.ConfigurationTTool;
 import ui.IconManager;
 import ui.MainGUI;
 import ui.TGComponent;
+import ui.graph.*;
 
 
 
@@ -223,7 +224,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     JSlider minimalCommandCoverage, minimalBranchCoverage;
     JLabel labelMinimalCommandCoverage, labelMinimalBranchCoverage;
     private String lastGraphName;
-
+    private RG lastRG;
+    
     // Tasks
     JPanel taskPanel;
     TaskTableModel tasktm;
@@ -2229,7 +2231,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
     private void addGraph() {
 	TraceManager.addDev("Adding graph");
-	mgui.setLastRGDiplodocus(lastGraphName);
+	lastRG = mgui.setLastRGDiplodocus(lastGraphName);
     }
 
     private String getCurrentRGName() {
@@ -2772,7 +2774,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     }
 
     private void analyzeRG() {
-        mgui.statAUTDiplodocus();
+	mgui.statAUTDiplodocus();
+        //mgui.statAUTDiplodocus();
     }
 
     private void viewRG() {

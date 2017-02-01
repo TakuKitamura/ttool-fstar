@@ -362,7 +362,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     private String modifiedaut;
     private String modifiedautdot;
 
-    private String lastDiploRG;
+    private RG lastDiploRG;
 
 
     // JBirdPanel
@@ -4977,36 +4977,40 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         showAUTFromString("Analysis on the last RG (AUT format)", gtm.getLastTextualRGAUT());
     }
 
-    public void setLastRGDiplodocus(String graphName) {
+    public RG setLastRGDiplodocus(String graphName) {
 	TraceManager.addDev("setting last RG diplodocus");
-	lastDiploRG = graphName;
+	//lastDiploRG = graphName;
 	// Loadng the graph
 	// Adding RG to the tree on the left
 	try {
-	    String fileName = ConfigurationTTool.TGraphPath + "/" + lastDiploRG + ".aut";
+	    String fileName = ConfigurationTTool.TGraphPath + "/" + graphName + ".aut";
 	    File f = new File(fileName);
 	    String spec = loadFile(f);
-	    RG rg = new RG(fileName);
+	    RG rg = new RG(graphName);
 	    rg.data = spec;		   
 	    //rg.nbOfStates = amc.getNbOfStates();
 	    //rg.nbOfTransitions = amc.getNbOfLinks();
 	    addRG(rg);
+	    lastDiploRG = rg;
+	    return rg;
 	} catch (Exception e) {
 	    TraceManager.addDev("RG creation in the left tree failed");
+	    return null;
 	}
     }
 
     public void statAUTDiplodocus() {
-        String spec = loadFile(new File(ConfigurationTTool.TGraphPath + "/" + lastDiploRG + ".aut"));
-        if (spec == null) {
-            JOptionPane.showMessageDialog(frame,
+	if (lastDiploRG == null) {
+	    JOptionPane.showMessageDialog(frame,
                                           "The fill could not be loaded:",
                                           "Error",
                                           JOptionPane.INFORMATION_MESSAGE);
             return;
-        }
-
-        showAUTFromString("Analysis on the last DIPLODOCUS RG", spec);
+	}
+	showAUTFromRG(lastDiploRG.name, lastDiploRG);
+        //String spec = loadFile(new File(ConfigurationTTool.TGraphPath + "/" + lastDiploRG + ".aut"));
+        
+        //showAUTFromString("Analysis on the last DIPLODOCUS RG", spec);
     }
 
     public void statAUTProj() {
@@ -5220,13 +5224,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                           JOptionPane.INFORMATION_MESSAGE);
 	    return ;
 	}
-        String s = gtm.showRGDiplodocus(lastDiploRG);
-        if (s != null) {
-            JOptionPane.showMessageDialog(frame,
-                                          "The RG could not be displayed: " + s,
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
-        }
+	TraceManager.addDev("Showing diplo RG");
+	displayAUTFromRG(lastDiploRG.name, lastDiploRG);
+
     }
 
     public void showModifiedAUTDOT() {

@@ -92,8 +92,8 @@ public class InteractiveSimulationActions extends AbstractAction {
     public static final int ACT_UPDATE_BUS = 18;
     public static final int ACT_UPDATE_TASKS = 19;
     public static final int ACT_UPDATE_TRANSACTIONS = 33;
-	public static final int ACT_UPDATE_LATENCY = 34;
-	public static final int ACT_ADD_LATENCY = 35;
+    public static final int ACT_UPDATE_LATENCY = 34;
+    public static final int ACT_ADD_LATENCY = 35;
 
     public static final int ACT_REFRESH = 32;
 
@@ -174,7 +174,7 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_UPDATE_MEMS] = new TAction("update-mems", "Update Memories information", IconManager.imgic75, IconManager.imgic75, "Update Memories information", "Update information on Memories", 'R');
         actions[ACT_UPDATE_BUS] = new TAction("update-bus", "Update bus info", IconManager.imgic75, IconManager.imgic75, "Update bus information", "Update information on buses", 'R');
         actions[ACT_UPDATE_TASKS] = new TAction("update-tasks", "Update task information", IconManager.imgic75, IconManager.imgic75, "Update task information", "Update information on tasks", 'R');
-	actions[ACT_UPDATE_TRANSACTIONS] = new TAction("update-transactions", "Update transactions", IconManager.imgic75, IconManager.imgic75, "Update the list of recent transactions", "Update information on recent transactions", 'T');
+        actions[ACT_UPDATE_TRANSACTIONS] = new TAction("update-transactions", "Update transactions", IconManager.imgic75, IconManager.imgic75, "Update the list of recent transactions", "Update information on recent transactions", 'T');
         actions[ACT_REFRESH] = new TAction("refresh", "Refresh transactions", IconManager.imgic75, IconManager.imgic75, "Refresh", "Refresh the Sequence Diagram representing transactions", 'R');
 
         actions[ACT_PRINT_CPUS] = new TAction("print-cpus", "Print CPU info", IconManager.imgic75, IconManager.imgic75, "Print CPU information", "Print information on CPUs", 'R');
@@ -184,9 +184,9 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_SAVE_BENCHMARK] = new TAction("save-benchmark", "Save benchmark", IconManager.imgic25, IconManager.imgic25, "Save benchmark", "Save benchmark at simulator side", 'R');
 
         actions[ACT_ANALYSIS_RG] = new TAction("analysis-rg", "Analysis of last RG", IconManager.imgic29, IconManager.imgic29, "Analysis of last RG", "Analyzis of the lastly generated RG", '0');
-        actions[ACT_VIEW_RG] = new TAction("view-rg", "View last RG", IconManager.imgic344, IconManager.imgic344, "View last RG", "View last RG with Dotty (note: Dotty must be installed and configured to do so)", '0');
-	    actions[ACT_UPDATE_LATENCY] = new TAction("update-latency", "Update latencies", IconManager.imgic75, IconManager.imgic75, "Update latencies", "Update latencies", '0');
-	    actions[ACT_ADD_LATENCY] = new TAction("add-latency", "Measure Latency", null, null, "Measure Latency", "Measure Latency", '0');
+        actions[ACT_VIEW_RG] = new TAction("view-rg", "View last RG", IconManager.imgic344, IconManager.imgic344, "View last RG", "View last RG", '0');
+        actions[ACT_UPDATE_LATENCY] = new TAction("update-latency", "Update latencies", IconManager.imgic75, IconManager.imgic75, "Update latencies", "Update latencies", '0');
+        actions[ACT_ADD_LATENCY] = new TAction("add-latency", "Measure Latency", null, null, "Measure Latency", "Measure Latency", '0');
 
 
     }
