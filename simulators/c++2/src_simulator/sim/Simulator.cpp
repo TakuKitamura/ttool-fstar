@@ -130,11 +130,14 @@ ID Simulator::schedule2GraphAUT(std::ostream& iAUTFile, ID iStartState, unsigned
     //13 -> 17 [label = "i(CPU0__test1__TMLTask_1__wro__test1__ch<4 ,4>)"];
     oTransCounter++;
     //(20,"i(CPU0__test1__TMLTask_1__wr__test1__ch<4 ,4>)", 24)
+    std::cout << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
     iAUTFile << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
     if (aTopElement->getChannel()!=0){
       iAUTFile << "__" << aTopElement->getChannel()->toShortString();
+      std::cout << "__" << aTopElement->getChannel()->toShortString();
     }
     iAUTFile << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
+    std::cout << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
     aStartState = aEndState;
     aQueue.pop();
     aTrans = aCPU->getTransactions1By1(false);
@@ -1440,7 +1443,7 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUT
   do{
     aSimTerminated=runToNextRandomCommand(aLastTrans);
     aRandomCmd = _simComp->getCurrentRandomCmd();
-    std::cout << "Random command:" << aRandomCmd <<std::endl;
+    //std::cout << "Random command:" << aRandomCmd <<std::endl;
   }while (!aSimTerminated && aRandomCmd==0 && _simComp->wasKnownStateReached()==0);
 #ifdef EXPLOGRAPH_ENABLED
   aLastID = schedule2GraphAUT(iAUTFile, iPrevID,oTransCounter);
@@ -1460,6 +1463,7 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUT
       //_syncInfo->_terminate=true;
     }
   } else if (_simComp->wasKnownStateReached()==0){
+    std::cout << "No known state reached" << std::endl;
     if(aRandomCmd==0){
       std::cout << "We should never get here\n";
     } else{
@@ -1473,9 +1477,10 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUT
       if ((aNbNextCmds & INT_MSB)==0){
         //for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_syncInfo->_terminate; aBranch++){
         for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_terminateExplore; aBranch++){
+	  std::cout << "Exploring a branch 1 from " << iPrevID << std::endl;
           _simComp->reset();
           aStreamBuffer.str(aStringBuffer);
-          std::cout << "Read 1 in exploreTree\n";
+          //std::cout << "Read 1 in exploreTree\n";
           _simComp->readObject(aStreamBuffer);
           aRandomCmd->setRandomValue(aBranch);
           exploreTree(iDepth+1, aLastID, iAUTFile, oTransCounter);
@@ -1485,10 +1490,11 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUT
         aNbNextCmds ^= INT_MSB;
         //while (aNbNextCmds!=0 && !_syncInfo->_terminate){
         while (aNbNextCmds!=0 && !_terminateExplore){
+	  std::cout << "Exploring a branch 2 from " << iPrevID << std::endl;
           if ((aNbNextCmds & 1)!=0){
             _simComp->reset();
             aStreamBuffer.str(aStringBuffer);
-            std::cout << "Read 2 in exploreTree\n";
+            //std::cout << "Read 2 in exploreTree\n";
             _simComp->readObject(aStreamBuffer);
             aRandomCmd->setRandomValue(aBranch);
             exploreTree(iDepth+1, aLastID, iAUTFile, oTransCounter);
