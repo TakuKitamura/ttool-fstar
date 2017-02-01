@@ -94,7 +94,5 @@ public class FormalVerificationToolBar extends InteractiveSimulationBar {
         button = this.add(jfis.actions[InteractiveSimulationActions.ACT_VIEW_RG]);
         button.addMouseListener(jfis.mouseHandler);
 
-
-
     }
 } // Class

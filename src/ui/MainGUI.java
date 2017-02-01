@@ -362,6 +362,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     private String modifiedaut;
     private String modifiedautdot;
 
+    private String lastDiploRG;
+
 
     // JBirdPanel
     private JBirdPanel jbp;
@@ -4976,8 +4978,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         showAUTFromString("Analysis on the last RG (AUT format)", gtm.getLastTextualRGAUT());
     }
 
+    public void setLastRGDiplodocus(String graphName) {
+	lastDiploRG = graphName;
+    }
+
     public void statAUTDiplodocus() {
-        String spec = loadFile(new File(ConfigurationTTool.TGraphPath + "/tree.aut"));
+        String spec = loadFile(new File(ConfigurationTTool.TGraphPath + "/" + lastDiploRG + ".aut"));
         if (spec == null) {
             JOptionPane.showMessageDialog(frame,
                                           "The fill could not be loaded:",
@@ -5193,7 +5199,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void showRGDiplodocus() {
-        String s = gtm.showRGDiplodocus();
+	if (lastDiploRG == null) {
+	    JOptionPane.showMessageDialog(frame,
+                                          "The RG was not yet generated",
+                                          "Error",
+                                          JOptionPane.INFORMATION_MESSAGE);
+	    return ;
+	}
+        String s = gtm.showRGDiplodocus(lastDiploRG);
         if (s != null) {
             JOptionPane.showMessageDialog(frame,
                                           "The RG could not be displayed: " + s,

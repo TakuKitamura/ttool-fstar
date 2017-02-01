@@ -101,6 +101,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+import java.text.*;
+
+
+
+
+
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.Conversion;
@@ -123,6 +131,7 @@ import ui.ConfigurationTTool;
 import ui.IconManager;
 import ui.MainGUI;
 import ui.TGComponent;
+
 
 
 public  class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener, ChangeListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
@@ -217,6 +226,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     // Formal verification
     JSlider minimalCommandCoverage, minimalBranchCoverage;
     JLabel labelMinimalCommandCoverage, labelMinimalBranchCoverage;
+    private String lastGraphName;
 
     // Tasks
     JPanel taskPanel;
@@ -2214,7 +2224,16 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         animateWithInfo.setEnabled(animate.isSelected());
         openDiagram.setEnabled(animate.isSelected());
         update.setSelected(false);
-        sendCommand("run-exploration " + minimalCommandCoverage.getValue() + " " + minimalBranchCoverage.getValue());
+        sendCommand("run-exploration " + minimalCommandCoverage.getValue() + " " + minimalBranchCoverage.getValue() + " " + getCurrentRGName());
+	mgui.setLastRGDiplodocus(lastGraphName);
+    }
+
+    private String getCurrentRGName() {
+	DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+	Date date = new Date();
+	String dateAndTime=dateFormat.format(date);
+	lastGraphName = "RG_Diplo_" + dateAndTime;
+	return lastGraphName;
     }
 
 

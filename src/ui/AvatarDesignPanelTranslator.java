@@ -1710,7 +1710,7 @@ public class AvatarDesignPanelTranslator {
                 block1 = port.getAvatarBDBlock1();
                 block2 = port.getAvatarBDBlock2();
 
-                TraceManager.addDev("Searching block #1 with name " + block1.getBlockName() + " and block #2 with name " + block2.getBlockName());
+                //TraceManager.addDev("Searching block #1 with name " + block1.getBlockName() + " and block #2 with name " + block2.getBlockName());
                 b1 = _as.getBlockWithName(block1.getBlockName());
                 b2 = _as.getBlockWithName(block2.getBlockName());
 
