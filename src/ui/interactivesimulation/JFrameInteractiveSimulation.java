@@ -308,7 +308,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
         points = _points;
 
-        //System.out.println("Tmap=" + tmap);
+        System.out.println("Path execute=" + _pathExecute);
 
         valueTable = new Hashtable<Integer, String>();
         rowTable = new Hashtable<Integer, Integer>();

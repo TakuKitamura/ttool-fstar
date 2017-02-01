@@ -1117,13 +1117,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void removeRG(RG _toBeRemoved) {
-	gtm.removeRG(_toBeRemoved);
-	dtree.toBeUpdated();
+        gtm.removeRG(_toBeRemoved);
+        dtree.toBeUpdated();
     }
 
     public void minimizeRG(RG toBeMinimized) {
-	JFrameMinimize jfm = new JFrameMinimize(frame, this, "Graph minimization", toBeMinimized);
-	//jfm.setSize(900, 700);
+        JFrameMinimize jfm = new JFrameMinimize(frame, this, "Graph minimization", toBeMinimized);
+        //jfm.setSize(900, 700);
         GraphicLib.centerOnParent(jfm, 900, 700);
         jfm.setVisible(true);
     }
@@ -2958,7 +2958,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         try {
             if (file != null) {
                 if (!file.exists()) {
-                    pb  = "File doesn't exit";
+                    pb  = "File " + file + " doesn't exist";
                     ok = false;
                 }
                 if ((ok == true) && (!file.canRead())) {
@@ -4226,7 +4226,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void generateAUT() {
         JDialogGenAUT jdgaut = new JDialogGenAUT(frame, this, "Generation of automata", ConfigurationTTool.BcgioPath, ConfigurationTTool.AldebaranHost, ConfigurationTTool.TGraphPath);
-      //  jdgaut.setSize(450, 600);
+        //  jdgaut.setSize(450, 600);
         GraphicLib.centerOnParent(jdgaut, 450, 600);
         jdgaut.setVisible(true);
 
@@ -4247,7 +4247,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                     gtm.getPathBcgio(),
                                                     REMOTE_RTL_LOTOS_FILE,
                                                     gtm.getCaesarHost(), ConfigurationTTool.TGraphPath);
-      //  jdgauts.setSize(450, 600);
+        //  jdgauts.setSize(450, 600);
         GraphicLib.centerOnParent(jdgauts, 450, 600);
         jdgauts.setVisible(true);
 
@@ -4267,7 +4267,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TraceManager.addDev("Avatar simulation");
         jfais = new JFrameAvatarInteractiveSimulation(frame, this, "Interactive simulation", gtm.getAvatarSpecification());
         jfais.setIconImage(IconManager.img9);
-       // jfais.setSize(900, 600);
+        // jfais.setSize(900, 600);
         GraphicLib.centerOnParent(jfais, 900, 600);
         jfais.setVisible(true);
     }
@@ -4289,7 +4289,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void avatarProVerifVerification() {
         TraceManager.addDev("Avatar proverif fv");
         JDialogProVerifGeneration jgen = new JDialogProVerifGeneration(frame, this, "ProVerif: code generation and verification", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
-       // jgen.setSize(500, 450);
+        // jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);
         dtree.toBeUpdated();
@@ -4298,7 +4298,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void dse(){
         TraceManager.addDev("Design space exploration");
         JDialogDSE jdse= new JDialogDSE(frame, this, "Design Space Exploration", ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.TMLCodeDirectory);
-     //   jdse.setSize(600,800);
+        //   jdse.setSize(600,800);
         GraphicLib.centerOnParent(jdse, 600,800);
         jdse.setVisible(true);
         dtree.toBeUpdated();
@@ -4307,7 +4307,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void avatarStaticAnalysis() {
         TraceManager.addDev("Avatar static analysis invariants");
         JDialogInvariantAnalysis jgen = new JDialogInvariantAnalysis(frame, this, "Static analysis: invariants computation");
-     //   jgen.setSize(500, 450);
+        //   jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);
         dtree.toBeUpdated();
@@ -4316,7 +4316,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void avatarExecutableCodeGeneration() {
         TraceManager.addDev("Avatar code generation");
         JDialogAvatarExecutableCodeGeneration jgen = new JDialogAvatarExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution", ConfigurationTTool.AVATARExecutableCodeHost, ConfigurationTTool.AVATARExecutableCodeDirectory,  ConfigurationTTool.AVATARExecutableCodeCompileCommand, ConfigurationTTool.AVATARExecutableCodeExecuteCommand, ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand, ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand,  ConfigurationTTool.AVATARExecutableSoclibTraceFile);
-     //   jgen.setSize(500, 450);
+        //   jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);
         dtree.toBeUpdated();
@@ -4330,7 +4330,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                                                    ConfigurationTTool.AVATARMPSoCCodeDirectory,
                                                                                                    ConfigurationTTool.AVATARMPSoCCompileCommand,
                                                                                                    ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand);
-       // jgen.setSize(500, 450);
+        // jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450 );
         jgen.setVisible(true);
         dtree.toBeUpdated();
@@ -4381,7 +4381,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 TraceManager.addDev( "About to open the window at line 4198" );
                 if (showWindow) {
                     JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.DIPLODOCUS_MODE);
-                  //  jgen.setSize(450, 500);
+                    //  jgen.setSize(450, 500);
                     GraphicLib.centerOnParent(jgen, 450, 500);
                     jgen.setVisible(true);
 
@@ -4408,7 +4408,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             return;
         }
         JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(), ConfigurationTTool.TGraphPath);
-       // jmc.setSize(550, 600);
+        // jmc.setSize(550, 600);
         GraphicLib.centerOnParent(jmc, 550, 600);
         jmc.setVisible(true);
     }
@@ -4458,7 +4458,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
 
         JDialogJavaGeneration jgen = new JDialogJavaGeneration(frame, this, "Java code generation and compilation", ConfigurationTTool.JavaCodeDirectory, ConfigurationTTool.JavaCompilerPath, ConfigurationTTool.TToolClassPath, ConfigurationTTool.JavaExecutePath, ConfigurationTTool.JavaHeader);
-      //  jgen.setSize(450, 600);
+        //  jgen.setSize(450, 600);
         GraphicLib.centerOnParent(jgen, 450, 600);
         jgen.setVisible(true);
         dtree.toBeUpdated();
@@ -4474,7 +4474,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
           dtree.toBeUpdated();*/
 
         JDialogJavaSimulation jgen = new JDialogJavaSimulation(frame, this, "Java simulation", ConfigurationTTool.SimuJavaCodeDirectory, ConfigurationTTool.JavaCompilerPath, ConfigurationTTool.TToolSimuClassPath, ConfigurationTTool.JavaExecutePath);
-       // jgen.setSize(450, 600);
+        // jgen.setSize(450, 600);
         GraphicLib.centerOnParent(jgen, 450, 600);
         jgen.setVisible(true);
         dtree.toBeUpdated();
@@ -4505,11 +4505,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void interactiveSimulationSystemC() {
-        interactiveSimulationSystemC(ConfigurationTTool.SystemCCodeInteractiveExecuteCommand);
+        interactiveSimulationSystemC(ConfigurationTTool.SystemCCodeInteractiveExecuteCommand + " -gpath " + ConfigurationTTool.GGraphPath);
     }
 
     public void interactiveSimulationSystemC(String executePath) {
-        //TraceManager.addDev("toto0");
+        TraceManager.addDev("MainGUI / Execute path=" + executePath);
         ArrayList<Point> points = getListOfBreakPoints();
         if (gtm == null) {
             jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, null, points);
@@ -4608,7 +4608,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                   ConfigurationTTool.SystemCCodeExecuteCommand,
                                                                   ConfigurationTTool.SystemCCodeInteractiveExecuteCommand,
                                                                   ConfigurationTTool.GGraphPath, gtm );
-     //   jgen.setSize(500, 750);
+        //   jgen.setSize(500, 750);
         GraphicLib.centerOnParent(jgen, 500, 750);
         jgen.setVisible(true);
         //dtree.toBeUpdated();
@@ -4702,7 +4702,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                  REMOTE_RTL_LOTOS_FILE,
                                                                  gtm.getLastRTLOTOSSpecification(),
                                                                  gtm.getCaesarHost());
-          //  jdla.setSize(450, 600);
+            //  jdla.setSize(450, 600);
             GraphicLib.centerOnParent(jdla, 450, 600);
             jdla.setVisible(true);
             dtree.toBeUpdated();
@@ -4761,7 +4761,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                        gtm.getHostAldebaran(),
                                                                        gtm.getPathBcgio());
             jdfv.setAutomatic(automatic);
-         //   jdfv.setSize(450, 600);
+            //   jdfv.setSize(450, 600);
             GraphicLib.centerOnParent(jdfv, 450, 600);
             jdfv.setVisible(true);
             dtree.toBeUpdated();
@@ -4776,7 +4776,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                      gtm.getLastRTLOTOSSpecification(),
                                                                      gtm.getCaesarHost());
             jdla.setAutomatic(automatic);
-           // jdla.setSize(450, 600);
+            // jdla.setSize(450, 600);
             GraphicLib.centerOnParent(jdla, 450, 600);
             jdla.setVisible(true);
             dtree.toBeUpdated();
@@ -4789,7 +4789,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                        gtm.getLastUPPAALSpecification().getStringSpec(),
                                                                        gtm.getUPPAALVerifierHost(),
                                                                        _tp);
-           // jduv.setSize(450, 600);
+            // jduv.setSize(450, 600);
             GraphicLib.centerOnParent(jduv, 450, 600);
             jduv.setVisible(true);
             dtree.toBeUpdated();
@@ -4806,7 +4806,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                          gtm.getHost(),
                                                                          GTURTLEModeling.getHostAldebaran(),
                                                                          gtm.getPathBcgio());
-           // jdfv.setSize(550, 600);
+            // jdfv.setSize(550, 600);
             jdfv.setIconImage(IconManager.img8);
             GraphicLib.centerOnParent(jdfv, 550, 600);
             jdfv.setVisible(true);
@@ -4830,7 +4830,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                        gtm.getLastRGAUT(),
                                                        REMOTE_ALDEBARAN_AUT_FILE,
                                                        "Minimization using Aldebaran");
-       // jdfv.setSize(900, 700);
+        // jdfv.setSize(900, 700);
         GraphicLib.centerOnParent(jdfv, 900, 700);
         jdfv.setVisible(true);
     }
@@ -4872,7 +4872,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                           REMOTE_ALDEBARAN_BISIMU_FILE1,
                                                           REMOTE_ALDEBARAN_BISIMU_FILE2,
                                                           "Bisimulation using Aldebaran");
-      //  jdb.setSize(650, 800);
+        //  jdb.setSize(650, 800);
         GraphicLib.centerOnParent(jdb, 650, 800);
         jdb.setVisible(true);
         //TraceManager.addDev("Bisimulation");
@@ -4886,7 +4886,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                                 REMOTE_BISIMULATOR_FILE1,
                                                                                 REMOTE_BISIMULATOR_FILE2,
                                                                                 "Bisimulation using BISIMULATOR");
-     //   jdb.setSize(650, 800);
+        //   jdb.setSize(650, 800);
         GraphicLib.centerOnParent(jdb, 650, 800);
         jdb.setVisible(true);
         //TraceManager.addDev("Bisimulation");
@@ -4907,7 +4907,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (graph != null) {
             JFrameDeadlock jfd = new JFrameDeadlock("Potential deadlocks on " + graph[0], graph[1]);
             jfd.setIconImage(IconManager.img8);
-           // jfd.setSize(600, 600);
+            // jfd.setSize(600, 600);
             GraphicLib.centerOnParent(jfd, 600, 600);
             jfd.setVisible(true);
         }
@@ -4952,7 +4952,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TraceManager.addDev("Power management analysis");
         JFramePowerManagementAnalysis jfpma = new JFramePowerManagementAnalysis(title, data);
         jfpma.setIconImage(IconManager.img8);
-      //  jfpma.setSize(600, 600);
+        //  jfpma.setSize(600, 600);
         GraphicLib.centerOnParent(jfpma, 600, 600);
         jfpma.setVisible(true);
     }
@@ -4961,7 +4961,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TraceManager.addDev("NC");
         JFrameNC jfnc = new JFrameNC("Network calculus", gtm.getNCS());
         jfnc.setIconImage(IconManager.img8);
-     //   jfnc.setSize(600, 600);
+        //   jfnc.setSize(600, 600);
         GraphicLib.centerOnParent(jfnc, 600, 600);
         jfnc.setVisible(true);
         TraceManager.addDev("Done");
@@ -4978,38 +4978,38 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public RG setLastRGDiplodocus(String graphName) {
-	TraceManager.addDev("setting last RG diplodocus");
-	//lastDiploRG = graphName;
-	// Loadng the graph
-	// Adding RG to the tree on the left
-	try {
-	    String fileName = ConfigurationTTool.TGraphPath + "/" + graphName + ".aut";
-	    File f = new File(fileName);
-	    String spec = loadFile(f);
-	    RG rg = new RG(graphName);
-	    rg.data = spec;		   
-	    //rg.nbOfStates = amc.getNbOfStates();
-	    //rg.nbOfTransitions = amc.getNbOfLinks();
-	    addRG(rg);
-	    lastDiploRG = rg;
-	    return rg;
-	} catch (Exception e) {
-	    TraceManager.addDev("RG creation in the left tree failed");
-	    return null;
-	}
+        TraceManager.addDev("setting last RG diplodocus");
+        //lastDiploRG = graphName;
+        // Loadng the graph
+        // Adding RG to the tree on the left
+        try {
+            String fileName = ConfigurationTTool.TGraphPath + "/" + graphName + ".aut";
+            File f = new File(fileName);
+            String spec = loadFile(f);
+            RG rg = new RG(graphName);
+            rg.data = spec;
+            //rg.nbOfStates = amc.getNbOfStates();
+            //rg.nbOfTransitions = amc.getNbOfLinks();
+            addRG(rg);
+            lastDiploRG = rg;
+            return rg;
+        } catch (Exception e) {
+            TraceManager.addDev("RG creation in the left tree failed");
+            return null;
+        }
     }
 
     public void statAUTDiplodocus() {
-	if (lastDiploRG == null) {
-	    JOptionPane.showMessageDialog(frame,
+        if (lastDiploRG == null) {
+            JOptionPane.showMessageDialog(frame,
                                           "The fill could not be loaded:",
                                           "Error",
                                           JOptionPane.INFORMATION_MESSAGE);
             return;
-	}
-	showAUTFromRG(lastDiploRG.name, lastDiploRG);
+        }
+        showAUTFromRG(lastDiploRG.name, lastDiploRG);
         //String spec = loadFile(new File(ConfigurationTTool.TGraphPath + "/" + lastDiploRG + ".aut"));
-        
+
         //showAUTFromString("Analysis on the last DIPLODOCUS RG", spec);
     }
 
@@ -5054,7 +5054,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void showFormalSpecification(String title, String data) {
         JFrameText jft = new JFrameText(title, data);
         jft.setIconImage(IconManager.img8);
-    //    jft.setSize(600, 600);
+        //    jft.setSize(600, 600);
         GraphicLib.centerOnParent(jft, 600, 600);
         jft.setVisible(true);
     }
@@ -5063,7 +5063,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (javaframe == null) {
             javaframe = new JFrameCode("JavaCode", "", "");
             javaframe.setIconImage(IconManager.img8);
-           // javaframe.setSize(350, 350);
+            // javaframe.setSize(350, 350);
             GraphicLib.centerOnParent(javaframe, 350, 350);
             javaframe.setVisible(true);
         } else {
@@ -5075,7 +5075,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (birdframe == null) {
             birdframe = new JFrameBird(this);
             birdframe.setIconImage(IconManager.img8);
-         //   birdframe.setSize(150, 100);
+            //   birdframe.setSize(150, 100);
             GraphicLib.centerOnParent(birdframe, 150, 100);
             birdframe.setVisible(true);
         } else {
@@ -5137,7 +5137,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void showSuggestedDesign() {
         JFrameText jft = new JFrameText("Suggested Design #" + gtm.getNbSuggestedDesign(), gtm.getLastTextualDesign());
         jft.setIconImage(IconManager.img8);
-      //  jft.setSize(600, 600);
+        //  jft.setSize(600, 600);
         GraphicLib.centerOnParent(jft, 600, 600);
         jft.setVisible(true);
     }
@@ -5147,7 +5147,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if ((spec != null) && (spec[0] != null) && (spec[1] != null)) {
             JFrameText jft = new JFrameText("RT-LOTOS Specification: " + spec[0], spec[1]);
             jft.setIconImage(IconManager.img8);
-           // jft.setSize(600, 600);
+            // jft.setSize(600, 600);
             GraphicLib.centerOnParent(jft, 600, 600);
             jft.setVisible(true);
         }
@@ -5217,15 +5217,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void showRGDiplodocus() {
-	if (lastDiploRG == null) {
-	    JOptionPane.showMessageDialog(frame,
+        if (lastDiploRG == null) {
+            JOptionPane.showMessageDialog(frame,
                                           "The RG was not yet generated",
                                           "Error",
                                           JOptionPane.INFORMATION_MESSAGE);
-	    return ;
-	}
-	TraceManager.addDev("Showing diplo RG");
-	displayAUTFromRG(lastDiploRG.name, lastDiploRG);
+            return ;
+        }
+        TraceManager.addDev("Showing diplo RG");
+        displayAUTFromRG(lastDiploRG.name, lastDiploRG);
 
     }
 
@@ -8520,7 +8520,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_LIBRARYFUNCTION);
         } else if (command.equals(actions[TGUIAction.ABD_CRYPTOLIBRARYFUNCTION].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_CRYPTOLIBRARYFUNCTION);
-		} else if (command.equals(actions[TGUIAction.AVATAR_FIREWALL].getActionCommand())) {
+        } else if (command.equals(actions[TGUIAction.AVATAR_FIREWALL].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATAR_FIREWALL);
 
             // AVATAR SMD
