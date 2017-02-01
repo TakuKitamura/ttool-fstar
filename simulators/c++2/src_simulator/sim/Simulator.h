@@ -213,9 +213,20 @@ public:
 	\param iAUTFile Handle of AUT file
 	\param oTransCounter Reference to transaction counter
 	*/
-	void exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iDOTFile, std::ofstream& iAUTFile, unsigned int& oTransCounter);
+	void exploreTreeDOT(unsigned int iDepth, ID iPrevID, std::ofstream& iDOTFile, std::ofstream& iAUTFile, unsigned int& oTransCounter);
+
+	///Runs the automatic exploration of several branches of control flow. Choice commands to be explored must be marked with a breakpoint.
+	/**
+	\param iDepth Maximal recursion depth
+	\param iPrevID ID of the parent leaf
+	\param iAUTFile Handle of AUT file
+	\param oTransCounter Reference to transaction counter
+	*/
+	void exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUTFile, unsigned int& oTransCounter);
+
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file
 	void schedule2HTML(std::string& iTraceFileName) const;
+
 	///Writes simulation traces in VCD format to an output file
 	/**
 	\param iTraceFileName Name of the output trace file
@@ -235,6 +246,14 @@ public:
 	\return ID of the last state writte to the files
 	*/
 	ID schedule2GraphDOT(std::ostream& iDOTFile, std::ostream& iAUTFile, ID iStartState, unsigned int& oTransCounter) const;
+	///Writes the simulation graph to a AUT file, for exploration mode
+	/**
+	\param iAUTFile Handle of AUT file
+	\param iStartState ID of the state to begin with
+	\param oTransCounter Reference to a transation counter
+	\return ID of the last state writte to the files
+	*/
+	ID schedule2GraphAUT(std::ostream& iAUTFile, ID iStartState, unsigned int& oTransCounter) const;
 	///Writes a plain text representation of the schedule of CPUs to an output file
 	/**
 	\param iTraceFileName Name of the output trace file
