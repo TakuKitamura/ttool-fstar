@@ -2372,8 +2372,11 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     private void processLatency(){
 
         TraceManager.addDev(transTimes.toString());
+		//System.out.println(transTimes.toString());
+		//System.out.println(checkTable.toString());
         for (Object o: latencies){
             SimulationLatency sl = (SimulationLatency) o;
+			//System.out.println(sl.trans2 + " " + sl.trans1);
             sl.minTime="??";
             sl.maxTime="??";
             sl.avTime="??";
@@ -3118,15 +3121,14 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         }
 
         //System.out.println(tmap.getTMLModeling().getCheckedComps());
-        for (String s: tmap.getTMLModeling().getCheckedActivities()){
-
-            //checkedTransactions.add(s.split("__")[s.split("__").length-1]);
-        }
-        for (String s: tmap.getTMLModeling().getCheckedComps().keySet()){
+       
+        for (TGComponent tgc: tmap.getTMLModeling().getCheckedComps().keySet()){
             //System.out.println(tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID() + " "+s);
-            TraceManager.addDev(s);
-            checkedTransactions.add(s+"(ID: " + tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()+")");
-            checkTable.put(Integer.toString(tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()),s+"(ID: " + tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()+")");
+            TraceManager.addDev(tmap.getTMLModeling().getCheckedComps().get(tgc)+" (ID: " + tgc.getDIPLOID() + ")");
+			checkedTransactions.add(tmap.getTMLModeling().getCheckedComps().get(tgc)+" (ID: " + tgc.getDIPLOID() + ")");
+            checkTable.put(Integer.toString(tgc.getDIPLOID()),tmap.getTMLModeling().getCheckedComps().get(tgc)+" (ID: " + tgc.getDIPLOID() + ")");
+        //    checkedTransactions.add(s+"(ID: " + tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()+")");
+          //  checkTable.put(Integer.toString(tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()),s+"(ID: " + tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()+")");
         }
         //System.out.println(checkedTransactions);
         //System.out.println(checkTable);

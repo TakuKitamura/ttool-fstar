@@ -1,1 +1,1 @@
-SRCS = generated_src/main.c generated_src/InterfaceDevice.c generated_src/SmartCard.c generated_src/TCPIP.c generated_src/TCPPacketManager.c generated_src/Application.c generated_src/SmartCardController.c generated_src/Timer__mainTimer__TCPIP.c generated_src/Timer__timerP__TCPPacketManager.c 
+SRCS = generated_src/main.c generated_src/System.c generated_src/Bob.c generated_src/Alice.c 

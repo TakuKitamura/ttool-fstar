@@ -69,8 +69,7 @@ public class TMLModeling {
     public HashMap<String, String> secChannelMap = new HashMap<String, String>();
     public HashMap<SecurityPattern, ArrayList<TMLTask>> securityTaskMap = new HashMap<SecurityPattern, ArrayList<TMLTask>>();
     private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ","};
-	private ArrayList<String> checkedActivity = new ArrayList<String>();
-	private HashMap<String, TGComponent> checkedActivities = new HashMap<String, TGComponent>();
+	private HashMap<TGComponent, String> checkedActivities = new HashMap<TGComponent, String>();
     private int hashCode;
     private boolean hashCodeComputed = false;
 
@@ -90,18 +89,12 @@ public class TMLModeling {
 		}
     }
 
-	public void addCheckedActivity(String s){
-		checkedActivity.add(s);
+
+	public void addCheckedActivity(TGComponent tgc, String s){
+		checkedActivities.put(tgc,s);
 	}
 
-	public void addCheckedActivity(String s, TGComponent tgc){
-		checkedActivities.put(s,tgc);
-	}
-	public ArrayList<String> getCheckedActivities(){
-		return checkedActivity;
-	}
-
-	public HashMap<String, TGComponent> getCheckedComps(){
+	public HashMap<TGComponent, String> getCheckedComps(){
 		return checkedActivities;
 	}
     public SecurityPattern getSecurityPattern(String s){
@@ -1159,7 +1152,6 @@ public class TMLModeling {
         tasks.addAll(tmlm.getTasks());
 	secPatterns.addAll(tmlm.secPatterns);
 	securityTaskMap.putAll(tmlm.securityTaskMap);
-		checkedActivity.addAll(tmlm.getCheckedActivities());
 		checkedActivities.putAll(tmlm.getCheckedComps());
     }
 
@@ -1199,15 +1191,10 @@ public class TMLModeling {
 	    }
 	}
 	securityTaskMap.putAll(tmlm.securityTaskMap);
-	for (String s: tmlm.getCheckedActivities()){
-		if (!checkedActivity.contains(s)){
-			checkedActivity.add(s);
-		}
-	}
 
-	for (String s: tmlm.getCheckedComps().keySet()){
-		if (!checkedActivities.containsKey(s)){
-			checkedActivities.put(s, tmlm.getCheckedComps().get(s));
+	for (TGComponent tgc: tmlm.getCheckedComps().keySet()){
+		if (!checkedActivities.containsKey(tgc)){
+			checkedActivities.put(tgc, tmlm.getCheckedComps().get(tgc));
 		}
 	}
 
