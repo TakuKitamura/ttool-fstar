@@ -53,38 +53,65 @@ import java.net.*;
 
 
 class ExecutionThread extends Thread {
-    private String cmd;
-    private int port;
-    private RshServer rsh;
-    private ServerSocket server = null;
+    private final String cmd;
+    private final int port;
+    private final RshServer rsh;
+    private ServerSocket server;// = null;
     private boolean go;
-    BufferedReader proc_in, proc_err;
+    private BufferedReader proc_in;
+    private BufferedReader proc_err;
     private Process proc;
     
-    private boolean piped;
-    private ExecutionThread et;
+    //private boolean piped;
+    private ExecutionThread parentExecThread;
     
     private boolean mustWaitForPiped;
     private OutputStream pipe;
     
     private boolean isStarted = false;
     
+    private boolean sendReturnCode;
     
-    public ExecutionThread(String _cmd, int _port, RshServer _rsh) {
+    private Integer returnCode;
+
+	public ExecutionThread(	final String _cmd,
+    						final int startPortnumber,
+    						final RshServer _rsh ) {
         cmd = _cmd;
+        //port = _port;
         rsh = _rsh;
-        port = _port;
-        findPortNumber();
+        server = null;
         go = true;
+        returnCode = null;
+        mustWaitForPiped = false;
+        parentExecThread = null;
+        pipe = null;
+        proc = null;
+        proc_in = null;
+        proc_err = null;
+
+        port = findPortNumber( startPortnumber );
     }
+
+	public Integer getReturnCode() {
+		return returnCode;
+	}
+    
+    public boolean isSendReturnCode() {
+		return sendReturnCode;
+	}
+
+	public void setSendReturnCode(boolean sendReturnCode) {
+		this.sendReturnCode = sendReturnCode;
+	}
     
     public boolean isStarted() {
         return isStarted;
     }
     
     public void setPiped(ExecutionThread _et) {
-        et = _et;
-        piped = true;
+        parentExecThread = _et;
+        //piped = true;
     }
     
     public void setWaitForPipe() {
@@ -102,7 +129,7 @@ class ExecutionThread extends Thread {
         }
     }
     
-    public synchronized void setMyPipe(OutputStream os) {
+    public synchronized void setMyPipe(	final OutputStream os ) {
         pipe = os;
         notifyAll();
     }
@@ -112,157 +139,220 @@ class ExecutionThread extends Thread {
         return port;
     }
     
-    private void findPortNumber() {
-        for(int i=port + 1; i<port + 1000; i++) {
+    private int findPortNumber( final int startPortnumber ) {
+        for( int i = startPortnumber + 1; i < startPortnumber + 1000; i++ ) {
             try {
                 server = new ServerSocket(i);
                 server.setSoTimeout(60000);
-                port = i;
-                return;
-            } catch (Exception e) {
+                
+                return i;
+                //return;
+            }
+            catch (Exception e) {
             }
         }
+        
+        return startPortnumber;
     }
     
     private Socket waitForClient() {
-        Socket s = null;
-        TraceManager.addDev("process " + port + " is waiting for client");
+        TraceManager.addDev( "process # " + port + " is waiting for client..." );
+        
         try {
-            s = server.accept();
-        } catch (Exception e) {
+            final Socket socket = server.accept();
+            
+            TraceManager.addDev( "Processe # " + port + " got client." );
+            
+            return socket;
+        }
+        catch (Exception e) {
+        	TraceManager.addError( e );
+        	
             return null;
         }
-        TraceManager.addDev("processe " + port + " got client");
-        return s;
     }
     
     public void closeConnect(Socket s)  {
         try {
             s.close();
-        } catch (IOException io) {
+        }
+        catch (IOException io) {
+        	TraceManager.addError( io );
         }
     }
     
     public void stopProcess() {
         go = false;
-        proc.destroy();
-        proc_in = null;
-        //TraceManager.addDev("Stop process");
-    }
-    
-    private void respond(PrintStream out, String s) {
-        try {
-            out.println(s);
-            out.flush();
-        } catch (Exception e) {
+        
+        // Issue #18: It may happen that the process is requested to be stopped before it had time to start
+        // in which case it will be null
+        if ( proc != null && proc.isAlive() ) {
+        	proc.destroy();
+        }
+        
+        if ( proc_in != null ) {
+            try {
+				proc_in.close();
+			} 
+            catch (IOException e) {
+				e.printStackTrace();
+			}
+
+            proc_in = null;
+        }
+        
+        if ( proc_err != null ) {
+        	try {
+				proc_err.close();
+			}
+        	catch (IOException e) {
+				e.printStackTrace();
+			}
+        	
+        	proc_err = null;
         }
     }
     
+    private void respond(	final PrintStream out,
+    						final ResponseCode code,
+    						final String message ) {
+    	SocketComHelper.send( out, code, message);
+        //try {
+            //out.println( co de.name() + message );
+            //out.flush();
+//        } catch ( IOException e) {
+//        }
+    }
     
+    private void handleReturnCode( PrintStream out ) 
+    throws InterruptedException {
+        if ( sendReturnCode ) {
+        	returnCode = proc.waitFor();
+        	final String message = "Ended command " + cmd + " with return code " + returnCode + ".";
+            TraceManager.addDev( message );
+            respond( out, ResponseCode.PROCESS_OUTPUT, message );
+        }
+        else {
+        	returnCode = null;
+        	respond( out, ResponseCode.PROCESS_END, null );//"5");
+        }
+    }
+    
+    @Override
     public void run() {
         isStarted = true;
-        TraceManager.addDev("Starting process for command " + cmd);
+        TraceManager.addDev( "Starting process for command " + cmd );
         proc = null;
-        BufferedReader in = null;
-        String str;
+    //    BufferedReader in = null;
+        //String str;
 
+        try {
         // print output in pipe
-        if (mustWaitForPiped) {
-            try {
-                proc = Runtime.getRuntime().exec(cmd);
-                if (piped) {
-                    TraceManager.addDev("Giving my pipe to the other");
-                    et.setMyPipe(proc.getOutputStream());
+        	if ( mustWaitForPiped ) {
+            //try {
+                proc = Runtime.getRuntime().exec( cmd );
+                
+                if ( parentExecThread != null ) {
+                    TraceManager.addDev( "Giving my pipe to the other..." );
+                    parentExecThread.setMyPipe( proc.getOutputStream() );
                 }
-                TraceManager.addDev("Waiting for pipe");
+                
+                TraceManager.addDev( "Waiting for pipe..." );
+                
                 waitingForPipe();
-                TraceManager.addDev("Got pipe");
-                proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-                proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-               
+                
+                TraceManager.addDev( "Got pipe." );
+                
+                proc_in = new BufferedReader( new InputStreamReader( proc.getInputStream() ) );
+                proc_err = new BufferedReader( new InputStreamReader( proc.getErrorStream() ) );
+                String str;
+                
                 try {
-                    while (((str = proc_in.readLine()) != null) && (go == true)){
-                        pipe.write((str + "\n").getBytes());
+                    while ( go && ( str = proc_in.readLine() ) != null ) {
+                    	TraceManager.addDev( "Writing " + str + " to pipe..." );
+                        pipe.write( ( str + "\n" ).getBytes() );
                     }
-                    while (((str = proc_err.readLine()) != null) && (go == true)){
-                        pipe.write((str + "\n").getBytes());
-                    }
-                } catch (IOException e) {
                     
+                    while ( go && ( str = proc_err.readLine() ) != null ) {
+                    	TraceManager.addError( "Writing " + str + " to pipe..." );
+                        pipe.write( (str + "\n").getBytes() );
+                    }
+//                }
+//                catch (IOException e) {
+//                	TraceManager.addError( e );
+//                }
+//            }
+//            catch (Exception e) {
+//                TraceManager.addError("Exception [" + e.getMessage() + "] occured when executing " + cmd, e );
+//            }
+            
+//	            try {
+	            }
+	            catch (IOException e) {
+	                TraceManager.addError("Exception [" + e.getMessage() + "] occured when executing " + cmd + "!", e );
+	            }
+                finally {
+	                pipe.flush();
+	                pipe.close();
                 }
-            } catch (Exception e) {
-                TraceManager.addDev("Exception [" + e.getMessage() + "] occured when executing " + cmd);
-            }
-            try {
-                pipe.flush();
-                pipe.close();
-            } catch (Exception e) {
-                TraceManager.addDev("Exception [" + e.getMessage() + "] occured when executing " + cmd);
-            }
-            TraceManager.addDev("Ending command " + cmd);
             
+	            TraceManager.addDev( "Ending piped command " + cmd + "..." );
+        	}
+        	else {
+                // print output on socket
+        		Socket s =  waitForClient();
             
-            // print output on socket
-        } else {
-            Socket s =  waitForClient();
-            if (s == null) {
-                TraceManager.addDev("Client did not connect on time");
-                rsh.removeProcess(this);
-                return;
-            }
+        		if (s == null) {
+        			TraceManager.addDev("Client did not connect on time!");
+        			rsh.removeProcess( this );
+                
+        			return;
+        		}
             
-            PrintStream out = null;
-            
-            try {
-                TraceManager.addDev("Going to start command " + cmd);
-                out = new PrintStream(s.getOutputStream(), true);
+                TraceManager.addDev("Going to start command " + cmd + "..." );
+                final PrintStream out = new PrintStream( s.getOutputStream(), true );
                 
                 proc = Runtime.getRuntime().exec(cmd);
                 
-                if (piped) {
-                    TraceManager.addDev("Giving my pipe to the other");
-                    et.setMyPipe(proc.getOutputStream());
+                if ( parentExecThread != null ) {
+                    TraceManager.addDev( "Giving my pipe to the other..." );
+                    parentExecThread.setMyPipe( proc.getOutputStream() );
                 }
                 
-                in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-                
-                proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+                proc_in = new BufferedReader( new InputStreamReader( proc.getInputStream() ) );
+                String str;
                 
                 //TraceManager.addDev("Reading the output stream of the process " + cmd);
-                while (((str = proc_in.readLine()) != null) && (go == true)){
-                	//System.out.println("out:" + str);
-                    TraceManager.addDev("out " + str);
-                    respond(out, "4" + str);
+                while ( go && ( str = proc_in.readLine() ) != null ) {
+                    TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+                    respond( out, ResponseCode.PROCESS_OUTPUT, str );
                 }
                 
                 proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
                 
-                while (((str = proc_err.readLine()) != null) && (go == true)){
-                	//System.out.println("error out:" + str);
-                    TraceManager.addDev("error out " + str);
-                    respond(out, "4" + str);
+                while ( go && ( str = proc_err.readLine() ) != null ) {
+                    TraceManager.addError( str );
+                    respond( out, ResponseCode.PROCESS_OUTPUT_ERROR, str );
                 }
-                /*int c;
-                while (((c = proc_in.read()) > 0) && (go == true)){
-                	System.out.println("char:" + (char)c);
-                    TraceManager.addDev("out " + (char)c);
-                    respond(out, "4" + c);
-                }*/
                 
-            } catch (Exception e) {
-                TraceManager.addDev("Exception [" + e.getMessage() + "] occured when executing " + cmd);
-            }
-            TraceManager.addDev("Ending command " + cmd);
-            respond(out, "5");
-            if (s != null) {
-                closeConnect(s);
-            }
+                handleReturnCode( out );
+
+	            if ( s != null ) {
+	            	closeConnect( s );
+                }
+        	}
         }
-        
-        if (proc != null) {
-            proc.destroy();
+        catch ( Throwable ex ) {
+            TraceManager.addError( "Exception occured when executing " + cmd, ex );
         }
-        
-        rsh.removeProcess(this);
+        finally {
+	        if ( proc != null ) {
+	            proc.destroy();
+	        }
+	        
+	        if ( !sendReturnCode ) {
+	        	rsh.removeProcess(this);
+	        }
+        }
     }
 }

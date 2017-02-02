@@ -299,7 +299,7 @@ public class JDialogBisimulation extends javax.swing.JDialog implements ActionLi
     public void stopProcess() {
         if (rshc != null) {
             try {
-                rshc.stopFillJTA();
+                rshc.stopCommand();
             } catch (LauncherException le) {
                 
             }
@@ -378,7 +378,7 @@ public class JDialogBisimulation extends javax.swing.JDialog implements ActionLi
     protected String processCmd(String cmd) throws LauncherException {
         rshc.setCmd(cmd);
         String s = null;
-        rshc.sendProcessRequest();
+        rshc.sendExecuteCommandRequest();
         s = rshc.getDataFromProcess();
         return s;
     }

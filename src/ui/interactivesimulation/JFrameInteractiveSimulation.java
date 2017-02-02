@@ -1252,7 +1252,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
     protected void processCmd(String cmd) throws LauncherException {
         rshc.setCmd(cmd);
-        rshc.sendProcessRequest();
+        rshc.sendExecuteCommandRequest();
         startThread(1);
         //t = new Thread(this);
         ////go = true;

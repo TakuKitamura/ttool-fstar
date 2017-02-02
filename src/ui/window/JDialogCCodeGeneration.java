@@ -421,7 +421,7 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
 
     public void stopProcess() {
         try {
-            rshc.stopFillJTA();
+            rshc.stopCommand();
         } catch (LauncherException le) {
 
         }
