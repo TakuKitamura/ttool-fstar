@@ -69,7 +69,7 @@ public class ErrorThread extends Thread {
         String err;
         
         try {
-            while (((err = br.readLine()) != null) && (go == true) && (mpi.hasToContinue())) {
+            while (((err = br.readLine()) != null) && go && mpi.hasToContinue() ) {
                 System.out.println("Error " + err);
                 mpi.appendOut(err+"\n");
                 mpi.setError();
