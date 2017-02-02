@@ -4494,7 +4494,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                          ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand,
                                                                          ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath, _mode);
             //jgen.setSize(500, 750);
-            GraphicLib.centerOnParent( jgen, 500, 750 );
+            GraphicLib.centerOnParent( jgen, 700, 750 );
             jgen.setVisible(true);
             dtree.toBeUpdated();
 
