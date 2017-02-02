@@ -72,6 +72,7 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
   TMLTransaction *aMarker=0, *aTempTrans;
   TMLTime aLowestTime=-1;
   SchedulableDevice* aTempDevice;
+  
   //static unsigned int aTransitionNo=0;
 #ifdef DEBUG_KERNEL
   std::cout << "kernel:getTLET: before loop" << std::endl;
@@ -780,6 +781,8 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
         //#endif
         unsigned int aTransCounter=0;
         _terminateExplore=false;
+	_nbOfBranchesToExplore = 1;
+	_nbOfBranchesExplored = 0;
         exploreTree(0, 0, myAUTfile, aTransCounter);
         //#ifdef DOT_GRAPH_ENABLED
         //myDOTfile << "}\n";
@@ -1435,11 +1438,15 @@ bool Simulator::runUntilCondition(std::string& iCond, TMLTask* iTask, TMLTransac
 }
 
 void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUTFile, unsigned int& oTransCounter){
+  
   TMLTransaction* aLastTrans;
   //if (iDepth<RECUR_DEPTH){
   ID aLastID;
   bool aSimTerminated=false;
   IndeterminismSource* aRandomCmd;
+
+  //std::cout << "Command coverage current:"<<  TMLCommand::getCmdCoverage() << " to reach:" << _commandCoverage << " nbOfBranchesExplored:"<< _nbOfBranchesExplored << " nbOfBranchesToExplore:" << _nbOfBranchesToExplore << " branch coverage:" <<_branchCoverage <<std::endl;
+  
   do{
     aSimTerminated=runToNextRandomCommand(aLastTrans);
     aRandomCmd = _simComp->getCurrentRandomCmd();
@@ -1454,44 +1461,61 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUT
     //#else
     //(21,"i(allCPUsTerminated)", 25)
     iAUTFile << "(" << aLastID << "," << "\"i(allCPUsTerminated<" << SchedulableDevice::getSimulatedTime() << ">)\"," << TMLTransaction::getID() << ")\n";
+    _nbOfBranchesExplored ++;
     //#endif
     TMLTransaction::incID();
 
-    if(_commandCoverage <= TMLCommand::getCmdCoverage() && _branchCoverage <= TMLCommand::getBranchCoverage()){
-      _simComp->setStopFlag(true, MSG_COVREACHED);
-      _terminateExplore=true;
-      //_syncInfo->_terminate=true;
+    //if(_commandCoverage <= TMLCommand::getCmdCoverage() && _branchCoverage <= TMLCommand::getBranchCoverage()){
+    //std::cout << "Command coverage current:"<<  TMLCommand::getCmdCoverage() << " to reach:" << _commandCoverage << " nbOfBranchesExplored:"<< _nbOfBranchesExplored << " nbOfBranchesToExplore:" << _nbOfBranchesToExplore<< std::endl;
+    if (_commandCoverage <= TMLCommand::getCmdCoverage()) {
+      if (_nbOfBranchesExplored > 0) {
+	if (100 * _nbOfBranchesExplored / _nbOfBranchesToExplore >= _branchCoverage) {
+	  //std::cout << "*********************************** 100% REACH" << std::endl;
+	  _simComp->setStopFlag(true, MSG_COVREACHED);
+	  _terminateExplore=true;
+	  //_syncInfo->_terminate=true;
+	}
+      }
     }
   } else if (_simComp->wasKnownStateReached()==0){
-    std::cout << "No known state reached" << std::endl;
+    //std::cout << "No known state reached" << std::endl;
     if(aRandomCmd==0){
-      std::cout << "We should never get here\n";
-    } else{
+      //std::cout << "We should never get here\n";
+    } else {
+      //std::cout << "Command coverage current:"<<  TMLCommand::getCmdCoverage() << " to reach:" << _commandCoverage << " nbOfBranchesExplored:"<< _nbOfBranchesExplored << " nbOfBranchesToExplore:" << _nbOfBranchesToExplore<< std::endl;
+      
       unsigned int aNbNextCmds;
       std::stringstream aStreamBuffer;
       std::string aStringBuffer;
       aNbNextCmds = aRandomCmd->getRandomRange();
-      std::cout << "Simulation " << iPrevID << "_" << "continued " << aNbNextCmds << std::endl;
+      //std::cout << "Simulation " << iPrevID << "_" << "continued nb of nexts commands:" << aNbNextCmds << std::endl;
       _simComp->writeObject(aStreamBuffer);
       aStringBuffer=aStreamBuffer.str();
       if ((aNbNextCmds & INT_MSB)==0){
+	_nbOfBranchesToExplore += aNbNextCmds-1;
         //for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_syncInfo->_terminate; aBranch++){
         for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_terminateExplore; aBranch++){
-	  std::cout << "Exploring a branch 1 from " << iPrevID << std::endl;
+	  //for (unsigned int aBranch=0; aBranch<aNbNextCmds; aBranch++){
+	  //std::cout << "1. Exploring branch #" << aBranch << " from " << iPrevID << std::endl;
           _simComp->reset();
           aStreamBuffer.str(aStringBuffer);
           //std::cout << "Read 1 in exploreTree\n";
           _simComp->readObject(aStreamBuffer);
           aRandomCmd->setRandomValue(aBranch);
           exploreTree(iDepth+1, aLastID, iAUTFile, oTransCounter);
+	  if (_terminateExplore && aBranch<aNbNextCmds-1) {
+	    //std::cout << "Terminate explore but still branches to execute ...\n";
+	  }
         }
       } else{
         unsigned int aBranch=0;
         aNbNextCmds ^= INT_MSB;
         //while (aNbNextCmds!=0 && !_syncInfo->_terminate){
-        while (aNbNextCmds!=0 && !_terminateExplore){
-	  std::cout << "Exploring a branch 2 from " << iPrevID << std::endl;
+	while (aNbNextCmds!=0 && !_terminateExplore){
+	  //while (aNbNextCmds!=0){
+	  //std::cout << "2. Exploring branch #" << aNbNextCmds << " from " << iPrevID << std::endl;
           if ((aNbNextCmds & 1)!=0){
+	    //_nbOfBranchesToExplore += 1;
             _simComp->reset();
             aStreamBuffer.str(aStringBuffer);
             //std::cout << "Read 2 in exploreTree\n";
