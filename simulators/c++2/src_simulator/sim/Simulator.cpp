@@ -131,14 +131,14 @@ ID Simulator::schedule2GraphAUT(std::ostream& iAUTFile, ID iStartState, unsigned
     //13 -> 17 [label = "i(CPU0__test1__TMLTask_1__wro__test1__ch<4 ,4>)"];
     oTransCounter++;
     //(20,"i(CPU0__test1__TMLTask_1__wr__test1__ch<4 ,4>)", 24)
-    std::cout << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+    //std::cout << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
     iAUTFile << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
     if (aTopElement->getChannel()!=0){
       iAUTFile << "__" << aTopElement->getChannel()->toShortString();
-      std::cout << "__" << aTopElement->getChannel()->toShortString();
+      //std::cout << "__" << aTopElement->getChannel()->toShortString();
     }
     iAUTFile << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
-    std::cout << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
+    //std::cout << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
     aStartState = aEndState;
     aQueue.pop();
     aTrans = aCPU->getTransactions1By1(false);
@@ -950,6 +950,8 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     _simComp->resetStateHash();
     _simTerm=false;
     _simDuration=0;
+    _longRunTime = 0;
+    _shortRunTime = -1;
     aGlobMsg << TAG_MSGo << "Simulator reset" << TAG_MSGc << std::endl;
     std::cout << "End Simulator reset." << std::endl;
     break;
@@ -1650,7 +1652,11 @@ bool Simulator::execAsyncCmd(const std::string& iCmd){
     _syncInfo->_terminate=true;
     return false;
   case 13://get current time
-    aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_TIMEo << SchedulableDevice::getSimulatedTime() << TAG_TIMEc << std::endl << TAG_MSGo << "Simulation time" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
+    if (_longRunTime > 0) {
+    aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_TIMEo << SchedulableDevice::getSimulatedTime() << TAG_TIMEc << std::endl << TAG_TIME_MINo << _shortRunTime << TAG_TIME_MINc << std::endl << TAG_TIME_MAXo << _longRunTime << TAG_TIME_MAXc <<  std::endl << TAG_MSGo << "Simulation time" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
+    } else {
+      aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_TIMEo << SchedulableDevice::getSimulatedTime() << TAG_TIMEc <<  std::endl << TAG_MSGo << "Simulation time" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
+    }
     //if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
     writeSimState(aMessage);
     aMessage << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;

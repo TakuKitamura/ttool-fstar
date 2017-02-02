@@ -129,7 +129,7 @@ void MultiCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
   TMLTime aStartTime = max(_endSchedule,_nextTransaction->getRunnableTime());
   TMLTime aReminder = aStartTime % _timePerCycle;
   if (aReminder!=0) aStartTime+=_timePerCycle - aReminder;
-  std::cout << "CPU: set starttime in CPU=" << aStartTime << "\n"; 
+  //std::cout << "CPU: set starttime in CPU=" << aStartTime << "\n"; 
 
   _nextTransaction->setStartTime(aStartTime);
 
