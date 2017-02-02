@@ -478,7 +478,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
     public void stopProcess() {
         try {
-            rshc.stopFillJTA();
+            rshc.stopCommand();
         } catch (LauncherException le) {
 
         }
@@ -710,8 +710,11 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
     protected void processCmd(String cmd, JTextArea _jta) throws LauncherException {
         rshc.setCmd(cmd);
-        rshc.sendProcessRequest();
-        rshc.fillJTA(_jta);
+        rshc.sendExecuteCommandRequest();
+        final Writer output = new StringWriter();
+        rshc.writeCommandMessages( output );
+        _jta.append( output.toString() );
+
         return;
     }
 
