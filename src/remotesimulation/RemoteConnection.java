@@ -139,7 +139,8 @@ public class RemoteConnection {
         }
     }
 
-    public String readOneLine() throws RemoteConnectionException {
+    public String readOneLine()
+    throws RemoteConnectionException {
        // int nb;
         String s = null;
         try {
