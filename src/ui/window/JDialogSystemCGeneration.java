@@ -125,7 +125,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     protected final static int NOT_STARTED = 1;
     protected final static int STARTED = 2;
     protected final static int STOPPED = 3;
-	protected final static int ERROR=4;
+    protected final static int ERROR=4;
     int mode;
 
     //components
@@ -157,7 +157,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 
     private Thread t;
     private boolean go = false;
-//    private boolean hasError = false;
+    //    private boolean hasError = false;
     private int errorTabIndex = -1;
     protected boolean startProcess = false;
 
@@ -204,7 +204,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
             int index = pathFormalExecute.indexOf("-server");
             if (index != -1) {
                 pathFormalExecute = pathFormalExecute.substring(0, index) + pathFormalExecute.substring(index+7, pathFormalExecute.length());
-                pathFormalExecute += " -explo";
+                pathFormalExecute += " -gname graph -explo";
             }
         }
 
@@ -479,15 +479,15 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         if (automatic > 0) {
             GraphicLib.enableComponents(tabbedPane, false);
         }
-        
+
         // Issue #18
         tabbedPane.addChangeListener( new ChangeListener() {
-			
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				setButtons();
-			}
-		} );
+
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    setButtons();
+                }
+            } );
 
         jta = new ScrolledJTextArea();
         jta.setEditable(false);
@@ -573,7 +573,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         if (mode == STARTED) {
             stopProcess();
         }
-        
+
         updateStaticList();
         optimizeModeSelected = optimizemode.isSelected();
         wasClosed = true;
@@ -623,22 +623,22 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
             throw new InterruptedException("Stopped by user");
         }
     }
-   
+
     private boolean hasError() {
-    	return errorTabIndex > -1;
+        return errorTabIndex > -1;
     }
-    
+
     private void resetError() {
-    	mode = NOT_STARTED;
-    	errorTabIndex = - 1;
+        mode = NOT_STARTED;
+        errorTabIndex = - 1;
     }
-    
+
     private boolean canSwitchNextTab() {
-    	return !hasError() && tabbedPane.getSelectedIndex() < 2;
+        return !hasError() && tabbedPane.getSelectedIndex() < 2;
     }
-    
+
     private boolean canExecute() {
-    	return errorTabIndex < 0 || tabbedPane.getSelectedIndex() <= errorTabIndex;
+        return errorTabIndex < 0 || tabbedPane.getSelectedIndex() <= errorTabIndex;
     }
 
     public void run() {
@@ -646,33 +646,33 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
             if ( automatic > 0 ) {
                 generateCode();
                 testGo();
-                
+
                 if ( canExecute() ) {
-                	compileCode();
-                	
+                    compileCode();
+
                     if ( canExecute() ) {
-                    	testGo();
-                    	executeSimulation();
+                        testGo();
+                        executeSimulation();
                     }
                 }
             }
             else {
                 if ( canExecute() ) {
-                	resetError();
-                	
-                	if ( tabbedPane.getSelectedIndex() == 0 ) {
-        	        	generateCode();
-        	        }
-        	        else if ( tabbedPane.getSelectedIndex() == 1 ) {
-        	        	compileCode();
-        	        }
-        	        else {
-        	        	executeSimulation();
-        	        }
-            	
-	            	if ( canSwitchNextTab() ) {
-	            		tabbedPane.setSelectedIndex( tabbedPane.getSelectedIndex() + 1 );
-	            	}
+                    resetError();
+
+                    if ( tabbedPane.getSelectedIndex() == 0 ) {
+                        generateCode();
+                    }
+                    else if ( tabbedPane.getSelectedIndex() == 1 ) {
+                        compileCode();
+                    }
+                    else {
+                        executeSimulation();
+                    }
+
+                    if ( canSwitchNextTab() ) {
+                        tabbedPane.setSelectedIndex( tabbedPane.getSelectedIndex() + 1 );
+                    }
                 }
             }
         }
@@ -681,10 +681,10 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         }
 
         if ( hasError() ) {
-        	jta.append("\nAn error occured when processing command!\n");
+            jta.append("\nAn error occured when processing command!\n");
         }
         else {
-        	jta.append("\nReady to process next command.\n");
+            jta.append("\nReady to process next command.\n");
         }
 
         //updateMode();
@@ -692,7 +692,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     }
 
     private void generateCode()
-    throws InterruptedException {
+        throws InterruptedException {
         String list;
 
         jta.append("Generating simulator C++ code\n");
@@ -725,165 +725,165 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         }
 
         testGo();
-        
+
         if ( !validateData() ) {
-        	return;
+            return;
         }
 
-//        try {
-//            defaultUnitCycleValue = unitcycle.getText();
-//        }
-//        catch ( final Throwable th ) {
-//        	final String message = "Wrong number of cycles: " + unitcycle.getText() + "!";
-//            jta.append( message );
-//            jta.append("Aborting");
-//            jta.append("\n\nReady to process next command\n");
-//            //checkMode();
-//            TraceManager.addError( message, th );
-//            setError();
-//            
-//            return;
-//        }
+        //        try {
+        //            defaultUnitCycleValue = unitcycle.getText();
+        //        }
+        //        catch ( final Throwable th ) {
+        //              final String message = "Wrong number of cycles: " + unitcycle.getText() + "!";
+        //            jta.append( message );
+        //            jta.append("Aborting");
+        //            jta.append("\n\nReady to process next command\n");
+        //            //checkMode();
+        //            TraceManager.addError( message, th );
+        //            setError();
+        //
+        //            return;
+        //        }
 
         selectedItem = versionSimulator.getSelectedIndex();
 
         switch( selectedItem ) {        //Old SystemC generator
-	        case 0: {       //Simulator without CPs (Daniel's version)
-	            // Making EBRDDs
-	            List<EBRDD> al = new ArrayList<EBRDD>();
-	            List<TEPE> alTepe = new ArrayList<TEPE>();
-	            TEPE tepe;
-	            AvatarRequirementPanelTranslator arpt = new AvatarRequirementPanelTranslator();
-	            
-	            for(int k=0; k<valTepe.size(); k++) {
-	                testGo();
-	                tepe = arpt.generateTEPESpecification( valTepe.get(k) );
-	                jta.append("TEPE: " + tepe.getName() + "\n");
-	                jta.append("Checking syntax\n");
-	                // tepe.checkSyntax();
-	                alTepe.add(tepe);
-	                jta.append("Done.\n");
-	            }
-	
-	            final IDiploSimulatorCodeGenerator tml2systc;
-	
-	            // Generating code
-	            if (mgui.gtm.getTMLMapping() == null) {
-	                if (mgui.gtm.getArtificialTMLMapping() == null) {
-	                	tml2systc = DiploSimulatorFactory.INSTANCE.createCodeGenerator( mgui.gtm.getTMLModeling(), al, alTepe );
-	                    //tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLModeling(), al, alTepe);
-	                }
-	                else {
-	                    TraceManager.addDev("Using artifical mapping");
-	                    tml2systc = DiploSimulatorFactory.INSTANCE.createCodeGenerator( mgui.gtm.getArtificialTMLMapping(), al, alTepe );
-	                    //tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping(), al, alTepe);
-	                }
-	            } 
-	            else {
-	            	tml2systc = DiploSimulatorFactory.INSTANCE.createCodeGenerator( mgui.gtm.getTMLMapping(), al, alTepe );
-	//                tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping(), al, alTepe);
-	            }
-	
-	            try {
-		            tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
-		            testGo();
-		            jta.append("Simulator code generation done\n");
-		
-		            for( final TEPE tep : alTepe ) {
-		                TraceManager.addDev( tep.toString() );
-		            }
-		            
-	                jta.append("Saving C++ files...\n");
-	                
-	                pathCode = code1.getText();
-	                tml2systc.saveFile(pathCode, "appmodel");
-	                
-	                jta.append( "C++ files saved." + System.lineSeparator() );
-	            }
-	            catch ( final Throwable th ) {
-	            	final String message = "Could not generate simulator code!";
-	            	jta.append( System.lineSeparator() + message + System.lineSeparator() );
-	            	
-	            	TraceManager.addError( message, th );
-	                setError();
-	            }
-	            
-	            break;
-	        }
+        case 0: {       //Simulator without CPs (Daniel's version)
+            // Making EBRDDs
+            List<EBRDD> al = new ArrayList<EBRDD>();
+            List<TEPE> alTepe = new ArrayList<TEPE>();
+            TEPE tepe;
+            AvatarRequirementPanelTranslator arpt = new AvatarRequirementPanelTranslator();
+
+            for(int k=0; k<valTepe.size(); k++) {
+                testGo();
+                tepe = arpt.generateTEPESpecification( valTepe.get(k) );
+                jta.append("TEPE: " + tepe.getName() + "\n");
+                jta.append("Checking syntax\n");
+                // tepe.checkSyntax();
+                alTepe.add(tepe);
+                jta.append("Done.\n");
+            }
+
+            final IDiploSimulatorCodeGenerator tml2systc;
+
+            // Generating code
+            if (mgui.gtm.getTMLMapping() == null) {
+                if (mgui.gtm.getArtificialTMLMapping() == null) {
+                    tml2systc = DiploSimulatorFactory.INSTANCE.createCodeGenerator( mgui.gtm.getTMLModeling(), al, alTepe );
+                    //tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLModeling(), al, alTepe);
+                }
+                else {
+                    TraceManager.addDev("Using artifical mapping");
+                    tml2systc = DiploSimulatorFactory.INSTANCE.createCodeGenerator( mgui.gtm.getArtificialTMLMapping(), al, alTepe );
+                    //tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping(), al, alTepe);
+                }
+            }
+            else {
+                tml2systc = DiploSimulatorFactory.INSTANCE.createCodeGenerator( mgui.gtm.getTMLMapping(), al, alTepe );
+                //                tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping(), al, alTepe);
+            }
+
+            try {
+                tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
+                testGo();
+                jta.append("Simulator code generation done\n");
+
+                for( final TEPE tep : alTepe ) {
+                    TraceManager.addDev( tep.toString() );
+                }
+
+                jta.append("Saving C++ files...\n");
+
+                pathCode = code1.getText();
+                tml2systc.saveFile(pathCode, "appmodel");
+
+                jta.append( "C++ files saved." + System.lineSeparator() );
+            }
+            catch ( final Throwable th ) {
+                final String message = "Could not generate simulator code!";
+                jta.append( System.lineSeparator() + message + System.lineSeparator() );
+
+                TraceManager.addError( message, th );
+                setError();
+            }
+
+            break;
+        }
         }
     }   //End of method generateCode()
 
     private boolean validateData() {
-    	switch ( tabbedPane.getSelectedIndex() ) {
-			case 0: {
-				try {
-					unitCycleValue = Float.parseFloat( unitcycle.getText() );
-				}
-				catch ( final NumberFormatException ex ) {
-			    	final String message = "Wrong number of cycles: " + unitcycle.getText() + "!";
-			        jta.append( message );
-			        jta.append("Aborting");
-			        jta.append("\n\nReady to process next command\n");
-			        TraceManager.addError( message, ex );
-			        setError();
-			        
-			        return false;
-				}
+        switch ( tabbedPane.getSelectedIndex() ) {
+        case 0: {
+            try {
+                unitCycleValue = Float.parseFloat( unitcycle.getText() );
+            }
+            catch ( final NumberFormatException ex ) {
+                final String message = "Wrong number of cycles: " + unitcycle.getText() + "!";
+                jta.append( message );
+                jta.append("Aborting");
+                jta.append("\n\nReady to process next command\n");
+                TraceManager.addError( message, ex );
+                setError();
 
-				break;
-			}
-			default:
-				break;
-		}
-    
-    	return true;
+                return false;
+            }
+
+            break;
+        }
+        default:
+            break;
+        }
+
+        return true;
     }
     private void compileCode()
-    throws InterruptedException {
+        throws InterruptedException {
         String cmd = compiler1.getText();
 
         jta.append("Compiling simulator code with command: \n" + cmd + "\n");
 
         rshc = new RshClient( simulatorHost );
-        
+
         // Assume data are on the remote host Command
         try {
             if ( !processCmd( cmd, jta, 0 ) ) {
-			
-            	// Issue #18: This check does not work when for example the locale is French so we 
-            	// explicitly return and test the value of the return code
-            //if ( jta.getText().contains("Error ") ) {
-//				mode = ERROR;
-//				setButtons();
-	            setError();
-				
-				return;
-			}
+
+                // Issue #18: This check does not work when for example the locale is French so we
+                // explicitly return and test the value of the return code
+                //if ( jta.getText().contains("Error ") ) {
+                //                              mode = ERROR;
+                //                              setButtons();
+                setError();
+
+                return;
+            }
 
             jta.append("Compilation done.\n");
         }
         catch ( final Throwable th ) {
             jta.append( "Error: " + th.getMessage() + ".\n");
-           // mode = STOPPED;
+            // mode = STOPPED;
             //setButtons();
             TraceManager.addError( th );
             setError();
-			
-			return;
-        } 
-//        catch (Exception e) {
-//            mode =      STOPPED;
-//            setButtons();
-//            return;
-//        }
+
+            return;
+        }
+        //        catch (Exception e) {
+        //            mode =      STOPPED;
+        //            setButtons();
+        //            return;
+        //        }
     }
 
 
     private void executeSimulation() throws InterruptedException {
-//        if (hasError) {
-//            jta.append("Simulation not executed: error");
-//            return;
-//        }
+        //        if (hasError) {
+        //            jta.append("Simulation not executed: error");
+        //            return;
+        //        }
         int toDo = automatic;
 
         if (toDo == 0) {
@@ -897,16 +897,16 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         }
 
         switch(toDo) {
-	        case ONE_TRACE:
-	            executeSimulationCmd(exe2.getText(), "Generating one simulation trace");
-	            break;
-	        case ANIMATION:
-	            dispose();
-	            mgui.interactiveSimulationSystemC(getPathInteractiveExecute());
-	            break;
-	        case FORMAL_VERIFICATION:
-	            executeSimulationCmd(exe2formal.getText(), "Running formal verification");
-	            break;
+        case ONE_TRACE:
+            executeSimulationCmd(exe2.getText(), "Generating one simulation trace");
+            break;
+        case ANIMATION:
+            dispose();
+            mgui.interactiveSimulationSystemC(getPathInteractiveExecute());
+            break;
+        case FORMAL_VERIFICATION:
+            executeSimulationCmd(exe2formal.getText(), "Running formal verification");
+            break;
         }
     }
 
@@ -920,7 +920,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 
             processCmd(cmd, jta, 0 );
             jta.append("Execution done\n");
-        } 
+        }
         catch (LauncherException le) {
             jta.append("Error: " + le.getMessage() + "\n");
             mode =      STOPPED;
@@ -933,23 +933,23 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         }
     }
 
-    protected boolean processCmd( 	final String cmd, 
-    								final JTextArea _jta,
-    								final Integer okReturnCode ) 
-    throws LauncherException {
+    protected boolean processCmd(       final String cmd,
+                                        final JTextArea _jta,
+                                        final Integer okReturnCode )
+        throws LauncherException {
         rshc.setCmd( cmd );
         rshc.sendExecuteCommandRequest( okReturnCode != null );
 
         rshc.writeCommandMessages( textAreaWriter );
-        
+
         return okReturnCode == null || okReturnCode.equals( rshc.getProcessReturnCode() );
     }
-//
-//    protected void checkMode() {
-//		if (mode!=ERROR){
-//        	mode = NOT_STARTED;
-//		}
-//    }
+    //
+    //    protected void checkMode() {
+    //          if (mode!=ERROR){
+    //          mode = NOT_STARTED;
+    //          }
+    //    }
 
     protected void setButtons() {
         if (automatic == 0) {
@@ -959,7 +959,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
                 stop.setEnabled(false);
                 close.setEnabled(true);
                 getGlassPane().setVisible(false);
-                
+
                 break;
             case STARTED:
                 start.setEnabled(false);
@@ -969,16 +969,16 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 
                 break;
             case STOPPED:
-				break;
-			case ERROR:
-				start.setEnabled( canExecute() );
-				stop.setEnabled( false );
-				close.setEnabled(true);
-				
-				// Issue #18: Resets the busy cursor to normal
+                break;
+            case ERROR:
+                start.setEnabled( canExecute() );
+                stop.setEnabled( false );
+                close.setEnabled(true);
+
+                // Issue #18: Resets the busy cursor to normal
                 getGlassPane().setVisible(false);
 
-				break;
+                break;
             default:
                 start.setEnabled(false);
                 stop.setEnabled(false);
@@ -987,7 +987,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 
                 break;
             }
-        } 
+        }
         else {
             close.setEnabled(true);
         }
@@ -1003,8 +1003,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     }
 
     public void setError() {
-    	errorTabIndex = tabbedPane.getSelectedIndex();
-    	mode = ERROR;
+        errorTabIndex = tabbedPane.getSelectedIndex();
+        mode = ERROR;
         //hasError = true;
     }
 
@@ -1075,7 +1075,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         Vector<AvatarPDPanel> v = new Vector<AvatarPDPanel>();
         //Object o;
         for (int i=0; i<list.length; i++){
-        	final AvatarPDPanel panel = ignTepe.elementAt(list[i]);
+            final AvatarPDPanel panel = ignTepe.elementAt(list[i]);
             valTepe.addElement( panel );
             v.addElement( panel );
         }
