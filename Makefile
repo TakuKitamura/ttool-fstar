@@ -311,7 +311,7 @@ stdrelease:
 	cp $(TTOOL_DOC)/README_doc $(TTOOL_TARGET)/doc
 	cp $(TTOOL_DOC_SOCLIB)/doc_ttool_soclib.pdf  $(TTOOL_TARGET)/doc/
 # AVATAR executable code
-	mkdir -p $(TTOOL_TARGET)/executablecode
+	mkdir -p $(TTOOL_TARGET)/TToolexecutablecode
 	mkdir -p $(TTOOL_TARGET)/executablecode/src
 	mkdir -p $(TTOOL_TARGET)/executablecode/generated_src
 	cp $(TTOOL_EXECUTABLECODE)/Makefile $(TTOOL_TARGET)/executablecode/
@@ -353,8 +353,10 @@ stdrelease:
 	cp -R $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
 	cd $(TTOOL_TARGET_RELEASE);$(TAR) cvzf $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz *
 
-preinstall: jar preinstall_linux preinstall_windows preinstall_macos
+preinstall: jar remove_preinstall preinstall_linux preinstall_windows preinstall_macos
 
+remove_preinstall:
+	rm -rf $(TTOOL_PREINSTALL)
 
 define functionCommonPreinstall
 #Main directories
@@ -417,8 +419,6 @@ define functionCommonPreinstall
 # Proverif
 	mkdir -p $(1)/TTool/proverif
 	cp $(TTOOL_DOC)/README_proverif $(1)/TTool/proverif
-	cp $(TTOOL_PRIVATE)/stocks/proverif_linux.tar.gz $(1)/
-	cd $(1)/ && gunzip -f proverif_linux.tar.gz && tar -xof proverif_linux.tar && rm proverif_linux.tar
 
 # Figure
 	mkdir -p $(1)/TTool/figure
@@ -430,16 +430,28 @@ define functionCommonPreinstall
 	mkdir -p $(TTOOL_TARGET)/doc
 	cp $(TTOOL_DOC)/README_doc $(TTOOL_TARGET)/doc
 # AVATAR executable code
-	mkdir -p $(TTOOL_TARGET)/executablecode
-	mkdir -p $(TTOOL_TARGET)/executablecode/src
-	mkdir -p $(TTOOL_TARGET)/executablecode/generated_src
-	cp $(TTOOL_EXECUTABLECODE)/Makefile $(TTOOL_TARGET)/executablecode/
-	cp $(TTOOL_EXECUTABLECODE)/Makefile.defs $(TTOOL_TARGET)/executablecode/
-	cp $(TTOOL_EXECUTABLECODE)/Makefile.forsoclib $(TTOOL_TARGET)/executablecode/
-	cp $(TTOOL_EXECUTABLECODE)/src/*.c $(TTOOL_TARGET)/executablecode/src/
-	cp $(TTOOL_EXECUTABLECODE)/src/*.h $(TTOOL_TARGET)/executablecode/src/
-	cp $(TTOOL_EXECUTABLECODE)/generated_src/README $(TTOOL_TARGET)/executablecode/generated_src/
-
+	mkdir -p $(1)/TTool/executablecode
+	mkdir -p $(1)/TTool/executablecode/src
+	mkdir -p $(1)/TTool/executablecode/generated_src
+	cp $(TTOOL_EXECUTABLECODE)/Makefile $(1)/TTool/executablecode/
+	cp $(TTOOL_EXECUTABLECODE)/Makefile.defs $(1)/TTool/executablecode/
+	cp $(TTOOL_EXECUTABLECODE)/Makefile.forsoclib $(1)/TTool/executablecode/
+	cp $(TTOOL_EXECUTABLECODE)/src/*.c $(1)/TTool/executablecode/src/
+	cp $(TTOOL_EXECUTABLECODE)/src/*.h $(1)/TTool/executablecode/src/
+	cp $(TTOOL_EXECUTABLECODE)/generated_src/README $(1)/TTool/executablecode/generated_src/
+# MPSOC
+	mkdir -p $(1)/TTool/MPSoC
+	mkdir -p $(1)/TTool/MPSoC/generated_topcell
+	mkdir -p $(1)/TTool/MPSoC/generated_src
+	mkdir -p $(1)/TTool/MPSoC/src
+	cp $(TTOOL_MPSOC)/Makefile $(1)/TTool/MPSoC/
+	cp $(TTOOL_MPSOC)/Makefile.defs $(1)/TTool/MPSoC/
+	cp $(TTOOL_MPSOC)/Makefile.forsoclib $(1)/TTool/MPSoC/
+	cp $(TTOOL_MPSOC)/src/*.c $(1)/TTool/MPSoC/src/
+	cp $(TTOOL_MPSOC)/src/*.h $(1)/TTool/MPSoC/src/
+	cp $(TTOOL_MPSOC)/generated_src/README $(1)/TTool/MPSoC/generated_src/
+	cp $(TTOOL_MPSOC)/generated_topcell/nbproc $(1)/TTool/MPSoC/generated_topcell/
+	cp $(TTOOL_MPSOC)/generated_topcell/config_noproc $(1)/TTool/MPSoC/generated_topcell/
 # Basic bin
 	mkdir -p $(TTOOL_TARGET)/bin
 	cp $(TTOOL_DOC)/README_bin $(1)/TTool/bin
@@ -452,8 +464,11 @@ endef
 
 preinstall_windows:
 	$(call functionCommonPreinstall,$(TTOOL_PREINSTALL_WINDOWS)/)
+#Proverif	
+	cp $(TTOOL_PRIVATE)/stocks/proverif_linux.tar.gz $(TTOOL_PREINSTALL_WINDOWS)/
+	cd $(TTOOL_PREINSTALL_WINDOWS)/ && gunzip -f proverif_linux.tar.gz && tar -xof proverif_linux.tar && rm proverif_linux.tar
 #UPPAAL
-	cp $(TTOOL_PRIVATE)/stocks/uppaal.tar.gz $(TTOOL_PREINSTAL_WINDOWS)/
+	cp $(TTOOL_PRIVATE)/stocks/uppaal.tar.gz $(TTOOL_PREINSTALL_WINDOWS)/
 	cd $(TTOOL_PREINSTALL_WINDOWS)/ && gunzip -f uppaal.tar.gz && tar -xof uppaal.tar && rm uppaal.tar
 #bin
 	cp $(TTOOL_DOC)/config_windows.xml $(TTOOL_PREINSTALL_WINDOWS)/TTool/bin/config.xml
@@ -463,9 +478,13 @@ preinstall_windows:
 
 preinstall_macos:
 	$(call functionCommonPreinstall,$(TTOOL_PREINSTALL_MACOS)/)
+#Proverif	
+	cp $(TTOOL_PRIVATE)/stocks/proverif_macos.tar.gz $(TTOOL_PREINSTALL_MACOS)/
+	cd $(TTOOL_PREINSTALL_MACOS)/ && gunzip -f proverif_macos.tar.gz && tar -xof proverif_macos.tar && rm proverif_macos.tar
 #UPPAAL
 	cp $(TTOOL_PRIVATE)/stocks/uppaal_macos.tar.gz $(TTOOL_PREINSTALL_MACOS)/
 	cd $(TTOOL_PREINSTALL_MACOS)/ && gunzip -f uppaal_macos.tar.gz && tar -xof uppaal_macos.tar && rm uppaal_macos.tar
+	mv $(TTOOL_PREINSTALL_MACOS)/uppaal* $(TTOOL_PREINSTALL_MACOS)/uppaal
 #bin
 	cp $(TTOOL_DOC)/config_macosx.xml $(TTOOL_PREINSTALL_MACOS)/TTool/bin/config.xml
 	cp $(TTOOL_DOC)/ttool4preinstalllinux.exe $(TTOOL_PREINSTALL_MACOS)/ttool.exe
@@ -475,6 +494,10 @@ preinstall_macos:
 preinstall_linux:
 # Common part
 	$(call functionCommonPreinstall,$(TTOOL_PREINSTALL_LINUX)/)
+#Proverif	
+	cp $(TTOOL_PRIVATE)/stocks/proverif_linux.tar.gz $(TTOOL_PREINSTALL_LINUX)/
+	cd $(TTOOL_PREINSTALL_LINUX)/ && gunzip -f proverif_linux.tar.gz && tar -xof proverif_linux.tar && rm proverif_linux.tar
+#UPPAAL
 	cp $(TTOOL_PRIVATE)/stocks/uppaal.tar.gz $(TTOOL_PREINSTALL_LINUX)/
 	cd $(TTOOL_PREINSTALL_LINUX)/ && gunzip -f uppaal.tar.gz && tar -xof uppaal.tar && rm uppaal.tar
 # Configuration and executable
