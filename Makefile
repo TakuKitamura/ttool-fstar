@@ -91,6 +91,8 @@ TTOOL_TARGET_RELEASE = $(TTOOL_PATH)/TTool_install
 TTOOL_PRIVATE = $(TTOOL_PATH)/../TTool-Private
 TTOOL_PREINSTALL = $(TTOOL_PRIVATE)/preinstallTTool
 TTOOL_PREINSTALL_LINUX = $(TTOOL_PREINSTALL)/TTool_Linux
+TTOOL_PREINSTALL_WINDOWS = $(TTOOL_PREINSTALL)/TTool_Windows
+TTOOL_PREINSTALL_MACOS = $(TTOOL_PREINSTALL)/TTool_MacOS
 PACKAGE = $(shell cd $(TTOOL_SRC); find . -type d)
 
 TTOOL_CONFIG_SRC = $(TTOOL_DOC)/config_linux.xml  $(TTOOL_DOC)/config_macosx.xml  $(TTOOL_DOC)/config_windows.xml
@@ -109,6 +111,12 @@ TEST_MK         = test.mk
 TEST_DIRS       = $(shell find $(TEST_DIR)/* -type d)
 TEST_MAKEFILES  = $(patsubst %,%/$(TEST_MK),$(TEST_DIRS))
 
+define functionEcho
+    echo $1
+endef
+
+all:
+    $(call generate_file,John Doe,101)
 
 
 define HELP_message
@@ -345,72 +353,78 @@ stdrelease:
 	cp -R $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
 	cd $(TTOOL_TARGET_RELEASE);$(TAR) cvzf $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz *
 
-preinstall: jar preinstall_linux
+preinstall: jar preinstall_linux preinstall_windows preinstall_macos
 
-preinstall_linux:
-#jars
+
+define functionCommonPreinstall
+#Main directories
 	mkdir -p $(TTOOL_PREINSTALL)
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/bin/
-	cp $(TTOOL_BIN)/*.jar $(TTOOL_PREINSTALL_LINUX)/TTool/bin/
+	mkdir -p $(1)
+	mkdir -p $(1)/TTool/
+#jars
+	mkdir -p $(1)/TTool/bin
+	cp $(TTOOL_BIN)/*.jar $(1)/TTool/bin/
 #models
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/modeling/
-	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_XML) $(TTOOL_PREINSTALL_LINUX)/TTool/modeling/
-	cp $(TTOOL_DOC)/README_modeling $(TTOOL_PREINSTALL_LINUX)/TTool/modeling/
+	mkdir -p $(1)/TTool/modeling/
+	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_XML) $(1)/TTool/modeling/
+	cp $(TTOOL_DOC)/README_modeling $(1)/TTool/modeling/
+#models
+	mkdir -p $(1)/TTool/modeling/
+	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_XML) $(1)/TTool/modeling/
+	cp $(TTOOL_DOC)/README_modeling $(1)/TTool/modeling/
 # lib
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/lib
-	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_LIB) $(TTOOL_PREINSTALL_LINUX)/TTool/lib
-	cp $(TTOOL_DOC)/README_lib $(TTOOL_PREINSTALL_LINUX)/TTool/lib
+	mkdir -p $(1)/TTool/lib
+	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_LIB) $(1)/TTool/lib
+	cp $(TTOOL_DOC)/README_lib $(1)/TTool/lib
 # DIPLODOCUS simulators
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/app
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/arch
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/ebrdd
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/evt
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/sim
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/TEPE
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/lib
-	cp  $(TTOOL_SIMULATORS)/c++2/lib/README $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/lib/
-	cp  $(TTOOL_SIMULATORS)/c++2/Makefile $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2
-	cp  $(TTOOL_SIMULATORS)/c++2/Makefile.defs $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2
-	cp  $(TTOOL_SIMULATORS)/c++2/schedstyle.css $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/app/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/app
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/app/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/app
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/arch/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/arch
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/arch/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/arch
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/ebrdd/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/ebrdd
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/ebrdd/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/ebrdd
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/evt/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/evt
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/evt/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/evt
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/sim/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/sim
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/sim/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/sim
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/TEPE/*.cpp $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/TEPE
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/TEPE/*.h $(TTOOL_PREINSTALL_LINUX)/TTool/simulators/c++2/src_simulator/TEPE
+	mkdir -p $(1)/TTool/simulators/c++2/src_simulator
+	mkdir -p $(1)/TTool/simulators/c++2/src_simulator/app
+	mkdir -p $(1)/TTool/simulators/c++2/src_simulator/arch
+	mkdir -p $(1)/TTool/simulators/c++2/src_simulator/ebrdd
+	mkdir -p $(1)/TTool/simulators/c++2/src_simulator/evt
+	mkdir -p $(1)/TTool/simulators/c++2/src_simulator/sim
+	mkdir -p $(1)/TTool/simulators/c++2/src_simulator/TEPE
+	mkdir -p $(1)/TTool/simulators/c++2/lib
+	cp  $(TTOOL_SIMULATORS)/c++2/lib/README $(1)/TTool/simulators/c++2/lib/
+	cp  $(TTOOL_SIMULATORS)/c++2/Makefile $(1)/TTool/simulators/c++2
+	cp  $(TTOOL_SIMULATORS)/c++2/Makefile.defs $(1)/TTool/simulators/c++2
+	cp  $(TTOOL_SIMULATORS)/c++2/schedstyle.css $(1)/TTool/simulators/c++2
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.cpp $(1)/TTool/simulators/c++2/src_simulator
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.h $(1)/TTool/simulators/c++2/src_simulator
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/app/*.cpp $(1)/TTool/simulators/c++2/src_simulator/app
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/app/*.h $(1)/TTool/simulators/c++2/src_simulator/app
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/arch/*.cpp $(1)/TTool/simulators/c++2/src_simulator/arch
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/arch/*.h $(1)/TTool/simulators/c++2/src_simulator/arch
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/ebrdd/*.cpp $(1)/TTool/simulators/c++2/src_simulator/ebrdd
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/ebrdd/*.h $(1)/TTool/simulators/c++2/src_simulator/ebrdd
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/evt/*.cpp $(1)/TTool/simulators/c++2/src_simulator/evt
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/evt/*.h $(1)/TTool/simulators/c++2/src_simulator/evt
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/sim/*.cpp $(1)/TTool/simulators/c++2/src_simulator/sim
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/sim/*.h $(1)/TTool/simulators/c++2/src_simulator/sim
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/TEPE/*.cpp $(1)/TTool/simulators/c++2/src_simulator/TEPE
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/TEPE/*.h $(1)/TTool/simulators/c++2/src_simulator/TEPE
 # Licenses
-	cd $(TTOOL_DOC); cp $(RELEASE_STD_FILES_LICENSES) $(TTOOL_PREINSTALL_LINUX)/TTool
+	cd $(TTOOL_DOC); cp $(RELEASE_STD_FILES_LICENSES) $(1)/TTool
 # Main readme
-	cp $(TTOOL_DOC)/README $(TTOOL_PREINSTALL_LINUX)/TTool
+	cp $(TTOOL_DOC)/README $(1)/TTool
 #TML
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/tmlcode
-	cp $(TTOOL_DOC)/README_tml $(TTOOL_PREINSTALL_LINUX)/TTool/tmlcode
+	mkdir -p $(1)/TTool/tmlcode
+	cp $(TTOOL_DOC)/README_tml $(1)/TTool/tmlcode
 #UPPAAL
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/uppaal
-	cp $(TTOOL_DOC)/README_uppaal $(TTOOL_PREINSTALL_LINUX)/TTool/uppaal
+	mkdir -p $(1)/TTool/uppaal
+	cp $(TTOOL_DOC)/README_uppaal $(1)/TTool/uppaal
 # Proverif
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/proverif
-	cp $(TTOOL_DOC)/README_proverif $(TTOOL_PREINSTALL_LINUX)/TTool/proverif
-	cp $(TTOOL_PRIVATE)/stocks/proverif_linux.tar.gz $(TTOOL_PREINSTALL_LINUX)/
-	cd $(TTOOL_PREINSTALL_LINUX)/ && gunzip -f proverif_linux.tar.gz && tar -xof proverif_linux.tar && rm proverif_linux.tar
+	mkdir -p $(1)/TTool/proverif
+	cp $(TTOOL_DOC)/README_proverif $(1)/TTool/proverif
+	cp $(TTOOL_PRIVATE)/stocks/proverif_linux.tar.gz $(1)/
+	cd $(1)/ && gunzip -f proverif_linux.tar.gz && tar -xof proverif_linux.tar && rm proverif_linux.tar
 
 # Figure
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/figure
-	cp $(TTOOL_DOC)/README_figure $(TTOOL_PREINSTALL_LINUX)/TTool/figure
+	mkdir -p $(1)/TTool/figure
+	cp $(TTOOL_DOC)/README_figure $(1)/TTool/figure
 # VCD
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/vcd
-	cp $(TTOOL_DOC)/README_vcd $(TTOOL_PREINSTALL_LINUX)/TTool/vcd
+	mkdir -p $(1)/TTool/vcd
+	cp $(TTOOL_DOC)/README_vcd $(1)/TTool/vcd
 # Basic doc
 	mkdir -p $(TTOOL_TARGET)/doc
 	cp $(TTOOL_DOC)/README_doc $(TTOOL_TARGET)/doc
@@ -427,16 +441,36 @@ preinstall_linux:
 
 # Basic bin
 	mkdir -p $(TTOOL_TARGET)/bin
-	cp $(TTOOL_DOC)/README_bin $(TTOOL_PREINSTALL_LINUX)/TTool/bin
-	cp $(TTOOL_BIN)/configuration.gcf $(TTOOL_PREINSTALL_LINUX)/TTool/bin
-	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_BIN)/$(GSCORE_BINARY) $(TTOOL_BIN)/$(GSUI_BINARY)  $(TTOOL_PREINSTALL_LINUX)/TTool/bin
-	cp $(TTOOL_DOC)/config_linux.xml $(TTOOL_PREINSTALL_LINUX)/TTool/bin/config.xml
+	cp $(TTOOL_DOC)/README_bin $(1)/TTool/bin
+	cp $(TTOOL_BIN)/configuration.gcf $(1)/TTool/bin
+	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_BIN)/$(GSCORE_BINARY) $(TTOOL_BIN)/$(GSUI_BINARY)  $(1)/TTool/bin
+
+
+endef
+
+
+preinstall_windows:
+	$(call functionCommonPreinstall,$(TTOOL_PREINSTALL_WINDOWS)/)
+	cp $(TTOOL_DOC)/config_windows.xml $(TTOOL_PREINSTALL_WINDOWS)/TTool/bin/config.xml
+	cp $(TTOOL_DOC)/ttool_windows.bat $(TTOOL_PREINSTALL_WINDOWS)/ttool.bat
+# Make the tgz file
+	tar -czvf $(TTOOL_PREINSTALL_WINDOWS)/../ttoolwindows.tgz $(TTOOL_PREINSTALL_WINDOWS)/*
+
+preinstall_macos:
+	$(call functionCommonPreinstall,$(TTOOL_PREINSTALL_MACOS)/)
+	cp $(TTOOL_DOC)/config_macosx.xml $(TTOOL_PREINSTALL_MACOS)/TTool/bin/config.xml
+	cp $(TTOOL_DOC)/ttool4preinstalllinux.exe $(TTOOL_PREINSTALL_MACOS)/ttool.exe
+# Make the tgz file
+	tar -czvf $(TTOOL_PREINSTALL_MACOS)/../ttoolmacos.tgz $(TTOOL_PREINSTALL_MACOS)/*
+
+preinstall_linux:
+# Common part
+	$(call functionCommonPreinstall,$(TTOOL_PREINSTALL_LINUX)/)
+# Configuration and executable
+	cp $(TTOOL_DOC)/config_windows.xml $(TTOOL_PREINSTALL_LINUX)/TTool/bin/config.xml
 	cp $(TTOOL_DOC)/ttool4preinstalllinux.exe $(TTOOL_PREINSTALL_LINUX)/ttool.exe
-
-#Make the tgz file
+# Make the tgz file
 	tar -czvf $(TTOOL_PREINSTALL_LINUX)/../ttoollinux.tgz $(TTOOL_PREINSTALL_LINUX)/*
-
-
 #Publish it
 	scp $(TTOOL_PREINSTALL_LINUX)/../ttoollinux.tgz apvrille@ssh.enst.fr:public_html/docs/
 
