@@ -600,7 +600,12 @@ void Simulator::run(){
 
 ServerIF* Simulator::run(int iLen, char ** iArgs){
   std::string aArgString;
+  std::string graphName = "";
   std::cout << "Starting up...\n";
+   graphName = getArgs("-graphName", "", iLen, iArgs);
+   if (graphName.empty()) {
+     graphName = "graph";
+   }
   _graphOutPath = getArgs("-gpath", "", iLen, iArgs);
   if (_graphOutPath.length()>0 && _graphOutPath[_graphOutPath.length()-1]!='/')
     _graphOutPath+="/";
@@ -610,7 +615,11 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
   if (!aArgString.empty()) return new ServerLocal(aArgString);
   aArgString =getArgs("-explo", "file", iLen, iArgs);
   std::cout << "Just analyzed explo 1->" + aArgString + "<-\n";
-  if (!aArgString.empty()) decodeCommand("1 7 100 100");
+  if (!aArgString.empty()) {
+    std::string command = "1 7 100 100 " + graphName;
+    std::cout << "Just analyzed explo 1->" + aArgString + "<- with command: " + command + "\n";
+    decodeCommand(command);
+  }
   std::cout << "Just analyzed explo 2\n";
   //if (!aArgString.empty()) return new ServerExplore();
   std::cout << "Running in command line mode.\n";
