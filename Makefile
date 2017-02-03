@@ -419,7 +419,9 @@ define functionCommonPreinstall
 # Proverif
 	mkdir -p $(1)/TTool/proverif
 	cp $(TTOOL_DOC)/README_proverif $(1)/TTool/proverif
-
+#Graphs
+	mkdir -p $(1)/TTool/graphs
+	cp $(TTOOL_DOC)/README_graph $(1)/TTool/graphs
 # Figure
 	mkdir -p $(1)/TTool/figure
 	cp $(TTOOL_DOC)/README_figure $(1)/TTool/figure
