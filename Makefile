@@ -88,7 +88,8 @@ JTTOOL = $(TTOOL_PATH)/javacode
 JTTOOL_DIR = jttool
 TTOOL_TARGET = $(TTOOL_PATH)/TTool_install/TTool
 TTOOL_TARGET_RELEASE = $(TTOOL_PATH)/TTool_install
-TTOOL_PREINSTALL = $(TTOOL_PATH)/preinstallTTool
+TTOOL_PRIVATE = $(TTOOL_PATH)/../TTool-Private
+TTOOL_PREINSTALL = $(TTOOL_PRIVATE)/preinstallTTool
 TTOOL_PREINSTALL_LINUX = $(TTOOL_PREINSTALL)/TTool_Linux
 PACKAGE = $(shell cd $(TTOOL_SRC); find . -type d)
 
@@ -98,7 +99,7 @@ TTOOL_EXE = $(TTOOL_DOC)/ttool_linux.exe  $(TTOOL_DOC)/ttool_macosx.exe  $(TTOOL
 RELEASE_STD_FILES_LINUX_EXE = ttool_unix
 RELEASE_STD_FILES_WINDIWS_EXE = ttool_windows.bat
 
-RELEASE_STD_FILES_XML = TURTLE/manual-HW.xml AVATAR/DrinkMachineV10.xml TURTLE/WebV01.xml TURTLE/Protocol_example1.xml TURTLE/BasicExchange.xml DIPLODOCUS/SmartCardProtocol.xml TURTLE/ProtocolPatterns.xml CTTool/COCOME_V50.xml AVATAR/CoffeeMachine_Avatar.xml AVATAR/Network_Avatar.xml AVATAR/MicroWaveOven_SafetySecurity_fullMethodo.xml
+RELEASE_STD_FILES_XML = TURTLE/manual-HW.xml TURTLE/WebV01.xml TURTLE/Protocol_example1.xml TURTLE/BasicExchange.xml DIPLODOCUS/SmartCardProtocol.xml TURTLE/ProtocolPatterns.xml CTTool/COCOME_V50.xml AVATAR/CoffeeMachine_Avatar.xml AVATAR/Network_Avatar.xml AVATAR/MicroWaveOven_SafetySecurity_fullMethodo.xml
 RELEASE_STD_FILES_LIB =  TURTLE/TClock1.lib TURTLE/TTimerv01.lib
 RELEASE_STD_FILES_BIN = $(LAUNCHER_BINARY) $(TTOOL_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(REMOTESIMULATOR_BINARY) $(RUNDSE_BINARY) $(WEBCRAWLER_SERVER_BINARY) $(WEBCRAWLER_CLIENT_BINARY) $(GRAPHSHOW_BINARY) $(GRAPHMINIMIZE_BINARY)
 RELEASE_STD_FILES_LICENSES = LICENSE LICENSE_CECILL_ENG LICENSE_CECILL_FR
@@ -348,8 +349,13 @@ preinstall: jar preinstall_linux
 
 preinstall_linux:
 #jars
+	mkdir -p $(TTOOL_PREINSTALL)
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/bin/
 	cp $(TTOOL_BIN)/*.jar $(TTOOL_PREINSTALL_LINUX)/TTool/bin/
 #models
+	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/modeling/
 	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_XML) $(TTOOL_PREINSTALL_LINUX)/TTool/modeling/
 	cp $(TTOOL_DOC)/README_modeling $(TTOOL_PREINSTALL_LINUX)/TTool/modeling/
 # lib
@@ -387,12 +393,6 @@ preinstall_linux:
 	cd $(TTOOL_DOC); cp $(RELEASE_STD_FILES_LICENSES) $(TTOOL_PREINSTALL_LINUX)/TTool
 # Main readme
 	cp $(TTOOL_DOC)/README $(TTOOL_PREINSTALL_LINUX)/TTool
-# LOTOS
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/lotos
-	cp $(TTOOL_DOC)/README_lotos $(TTOOL_PREINSTALL_LINUX)/TTool/lotos
-#NC
-	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/nc
-	cp $(TTOOL_DOC)/README_nc $(TTOOL_TARGET)/nc
 #TML
 	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/tmlcode
 	cp $(TTOOL_DOC)/README_tml $(TTOOL_PREINSTALL_LINUX)/TTool/tmlcode
@@ -402,6 +402,9 @@ preinstall_linux:
 # Proverif
 	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/proverif
 	cp $(TTOOL_DOC)/README_proverif $(TTOOL_PREINSTALL_LINUX)/TTool/proverif
+	cp $(TTOOL_PRIVATE)/stocks/proverif_linux.tar.gz $(TTOOL_PREINSTALL_LINUX)/
+	cd $(TTOOL_PREINSTALL_LINUX)/ && gunzip -f proverif_linux.tar.gz && tar -xof proverif_linux.tar && rm proverif_linux.tar
+
 # Figure
 	mkdir -p $(TTOOL_PREINSTALL_LINUX)/TTool/figure
 	cp $(TTOOL_DOC)/README_figure $(TTOOL_PREINSTALL_LINUX)/TTool/figure
@@ -424,11 +427,11 @@ preinstall_linux:
 
 # Basic bin
 	mkdir -p $(TTOOL_TARGET)/bin
-	cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin
-	cp $(TTOOL_BIN)/configuration.gcf $(TTOOL_TARGET)/bin
-	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
-	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_BIN)/$(GSCORE_BINARY) $(TTOOL_BIN)/$(GSUI_BINARY)  $(TTOOL_TARGET)/bin
-	cp $(TTOOL_TARGET)/bin/config_linux.xml $(TTOOL_TARGET)/bin/config.xml
+	cp $(TTOOL_DOC)/README_bin $(TTOOL_PREINSTALL_LINUX)/TTool/bin
+	cp $(TTOOL_BIN)/configuration.gcf $(TTOOL_PREINSTALL_LINUX)/TTool/bin
+	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_BIN)/$(GSCORE_BINARY) $(TTOOL_BIN)/$(GSUI_BINARY)  $(TTOOL_PREINSTALL_LINUX)/TTool/bin
+	cp $(TTOOL_DOC)/config_linux.xml $(TTOOL_PREINSTALL_LINUX)/TTool/bin/config.xml
+	cp $(TTOOL_DOC)/ttool4preinstalllinux.exe $(TTOOL_PREINSTALL_LINUX)/ttool.exe
 
 #Make the tgz file
 	tar -czvf $(TTOOL_PREINSTALL_LINUX)/../ttoollinux.tgz $(TTOOL_PREINSTALL_LINUX)/*
