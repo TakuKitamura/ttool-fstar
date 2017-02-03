@@ -411,6 +411,7 @@ define functionCommonPreinstall
 	mkdir -p $(1)/TTool/tmlcode
 	cp $(TTOOL_DOC)/README_tml $(1)/TTool/tmlcode
 #UPPAAL
+
 	mkdir -p $(1)/TTool/uppaal
 	cp $(TTOOL_DOC)/README_uppaal $(1)/TTool/uppaal
 # Proverif
@@ -451,6 +452,10 @@ endef
 
 preinstall_windows:
 	$(call functionCommonPreinstall,$(TTOOL_PREINSTALL_WINDOWS)/)
+#UPPAAL
+	cp $(TTOOL_PRIVATE)/stocks/uppaal.tar.gz $(TTOOL_PREINSTAL_WINDOWS)/
+	cd $(TTOOL_PREINSTALL_WINDOWS)/ && gunzip -f uppaal.tar.gz && tar -xof uppaal.tar && rm uppaal.tar
+#bin
 	cp $(TTOOL_DOC)/config_windows.xml $(TTOOL_PREINSTALL_WINDOWS)/TTool/bin/config.xml
 	cp $(TTOOL_DOC)/ttool_windows.bat $(TTOOL_PREINSTALL_WINDOWS)/ttool.bat
 # Make the tgz file
@@ -458,6 +463,10 @@ preinstall_windows:
 
 preinstall_macos:
 	$(call functionCommonPreinstall,$(TTOOL_PREINSTALL_MACOS)/)
+#UPPAAL
+	cp $(TTOOL_PRIVATE)/stocks/uppaal_macos.tar.gz $(TTOOL_PREINSTALL_MACOS)/
+	cd $(TTOOL_PREINSTALL_MACOS)/ && gunzip -f uppaal_macos.tar.gz && tar -xof uppaal_macos.tar && rm uppaal_macos.tar
+#bin
 	cp $(TTOOL_DOC)/config_macosx.xml $(TTOOL_PREINSTALL_MACOS)/TTool/bin/config.xml
 	cp $(TTOOL_DOC)/ttool4preinstalllinux.exe $(TTOOL_PREINSTALL_MACOS)/ttool.exe
 # Make the tgz file
@@ -466,6 +475,8 @@ preinstall_macos:
 preinstall_linux:
 # Common part
 	$(call functionCommonPreinstall,$(TTOOL_PREINSTALL_LINUX)/)
+	cp $(TTOOL_PRIVATE)/stocks/uppaal.tar.gz $(TTOOL_PREINSTALL_LINUX)/
+	cd $(TTOOL_PREINSTALL_LINUX)/ && gunzip -f uppaal.tar.gz && tar -xof uppaal.tar && rm uppaal.tar
 # Configuration and executable
 	cp $(TTOOL_DOC)/config_windows.xml $(TTOOL_PREINSTALL_LINUX)/TTool/bin/config.xml
 	cp $(TTOOL_DOC)/ttool4preinstalllinux.exe $(TTOOL_PREINSTALL_LINUX)/ttool.exe
