@@ -131,7 +131,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         debug = _debug;
         optimize = _optimize;
         tmlmapping.removeAllRandomSequences();
-	tmlmapping.handleCPs();
+        tmlmapping.handleCPs();
         tmlmodeling = tmlmapping.getTMLModeling();
         tasks = new ArrayList<MappedSystemCTask>();
         //generateSystemCTasks();

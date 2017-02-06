@@ -85,6 +85,7 @@ import myutil.ScrolledJTextArea;
 import myutil.TraceManager;
 import ui.AvatarDeploymentPanelTranslator;
 import ui.IconManager;
+import ui.JTextAreaWriter;
 import ui.MainGUI;
 import ui.avatardd.ADDDiagramPanel;
 import ui.interactivesimulation.JFrameSimulationSDPanel;
@@ -137,6 +138,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
     //components
     protected JTextArea jta;
+    private JTextAreaWriter textAreaWriter;
     protected JButton start;
     protected JButton stop;
     protected JButton close;
@@ -441,6 +443,8 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         jta.append("Select options and then, click on 'start' to launch code generation / compilation / execution\n");
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
+        textAreaWriter = new JTextAreaWriter( jta );
+
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         c.add(jsp, BorderLayout.CENTER);
@@ -548,7 +552,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
     public void stopProcess() {
         try {
-            rshc.stopFillJTA();
+            rshc.stopCommand();
         } catch (LauncherException le) {
 
         }
@@ -881,8 +885,9 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
 
     protected void processCmd(String cmd, JTextArea _jta) throws LauncherException {
         rshc.setCmd(cmd);
-        rshc.sendProcessRequest();
-        rshc.fillJTA(_jta);
+        rshc.sendExecuteCommandRequest();
+        rshc.writeCommandMessages( textAreaWriter );
+        
         return;
     }
 

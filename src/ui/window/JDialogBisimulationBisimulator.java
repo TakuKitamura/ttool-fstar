@@ -348,7 +348,7 @@ public class JDialogBisimulationBisimulator extends javax.swing.JDialog implemen
     public void stopProcess() {
         if (rshc != null) {
             try {
-                rshc.stopFillJTA();
+                rshc.stopCommand();
             } catch (LauncherException le) {
                 
             }
@@ -467,7 +467,7 @@ public class JDialogBisimulationBisimulator extends javax.swing.JDialog implemen
     protected String processCmd(String cmd) throws LauncherException {
         rshc.setCmd(cmd);
         String s = null;
-        rshc.sendProcessRequest();
+        rshc.sendExecuteCommandRequest();
         s = rshc.getDataFromProcess();
         return s;
     }

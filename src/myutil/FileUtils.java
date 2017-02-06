@@ -79,8 +79,8 @@ public class FileUtils {
     }
 
     public static boolean checkFileForSave(File file) throws FileException {
-        boolean ok = true;
-        String pb = "";
+   //     boolean ok = true;
+    //    String pb = "";
 
         if (file == null) {
             return false;

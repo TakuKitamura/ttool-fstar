@@ -48,6 +48,7 @@ package ui.window;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 import launcher.*;
 import myutil.*;
@@ -70,6 +71,7 @@ public class JDialogTextProcess extends javax.swing.JDialog implements ActionLis
 	
 	//components
 	protected JTextArea jta; 
+    private JTextAreaWriter textAreaWriter;
 	protected JButton start;
 	protected JButton stop;
 	protected JButton close;
@@ -110,7 +112,8 @@ public class JDialogTextProcess extends javax.swing.JDialog implements ActionLis
 		Font f = new Font("Courrier", Font.BOLD, 12); 
 		jta.setFont(f);
 		JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		
+        textAreaWriter = new JTextAreaWriter( jta );
+	
 		c.add(jsp, BorderLayout.CENTER);
 		
 		start = new JButton("Start", IconManager.imgic53);
@@ -155,7 +158,7 @@ public class JDialogTextProcess extends javax.swing.JDialog implements ActionLis
 	
 	public void stopProcess() {
                 try {
-                    rshc.stopFillJTA();
+                    rshc.stopCommand();
                 } catch (LauncherException le) {
                     
                 }
@@ -184,7 +187,7 @@ public class JDialogTextProcess extends javax.swing.JDialog implements ActionLis
 			rshc.sendFileData(fileName, spec);
 			jta.append("Sending process request\n");
 			rshc.setCmd(Conversion.replaceAllString(cmd, "__FILENAME", fileName));
-			rshc.sendProcessRequest();
+			rshc.sendExecuteCommandRequest();
 
 		} catch (LauncherException le) {
 			jta.append(le.getMessage() + "\n");
@@ -199,7 +202,7 @@ public class JDialogTextProcess extends javax.swing.JDialog implements ActionLis
 			
 		try {
 			jta.append("\nRTL Process:\n------------------\n");
-			rshc.fillJTA(jta);
+	        rshc.writeCommandMessages( textAreaWriter );
 
 			rshc.deleteFile(fileName);
 			rshc.deleteFile(fileName+".sim");

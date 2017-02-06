@@ -72,6 +72,7 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
   TMLTransaction *aMarker=0, *aTempTrans;
   TMLTime aLowestTime=-1;
   SchedulableDevice* aTempDevice;
+  
   //static unsigned int aTransitionNo=0;
 #ifdef DEBUG_KERNEL
   std::cout << "kernel:getTLET: before loop" << std::endl;
@@ -130,14 +131,14 @@ ID Simulator::schedule2GraphAUT(std::ostream& iAUTFile, ID iStartState, unsigned
     //13 -> 17 [label = "i(CPU0__test1__TMLTask_1__wro__test1__ch<4 ,4>)"];
     oTransCounter++;
     //(20,"i(CPU0__test1__TMLTask_1__wr__test1__ch<4 ,4>)", 24)
-    std::cout << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+    //std::cout << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
     iAUTFile << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
     if (aTopElement->getChannel()!=0){
       iAUTFile << "__" << aTopElement->getChannel()->toShortString();
-      std::cout << "__" << aTopElement->getChannel()->toShortString();
+      //std::cout << "__" << aTopElement->getChannel()->toShortString();
     }
     iAUTFile << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
-    std::cout << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
+    //std::cout << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
     aStartState = aEndState;
     aQueue.pop();
     aTrans = aCPU->getTransactions1By1(false);
@@ -573,6 +574,7 @@ void Simulator::printHelp(){
     "-otxt ofile            simulate and write traces to ofile in text format\n"
     "-ovcd ofile            simulate and write traces to ofile in vcd format\n"
     "-ograph ofile          simulate and write traces to ofile in aut format\n"
+    "-gname ofile           name of the file WITHOUT extension storing the reachability graph\n"
     "-explo                 generate the reachability graph                 \n"
     "-cmd \'c1 p1 p2;c2\'     execute commands c1 with parameters p1 and p2 and c2\n"
     "-oxml ofile            xml reply is written to ofile, in case the -cmd option is used\n"
@@ -599,7 +601,12 @@ void Simulator::run(){
 
 ServerIF* Simulator::run(int iLen, char ** iArgs){
   std::string aArgString;
+  std::string graphName = "";
   std::cout << "Starting up...\n";
+   graphName = getArgs("-gname", "", iLen, iArgs);
+   if (graphName.empty()) {
+     graphName = "graph";
+   }
   _graphOutPath = getArgs("-gpath", "", iLen, iArgs);
   if (_graphOutPath.length()>0 && _graphOutPath[_graphOutPath.length()-1]!='/')
     _graphOutPath+="/";
@@ -609,7 +616,11 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
   if (!aArgString.empty()) return new ServerLocal(aArgString);
   aArgString =getArgs("-explo", "file", iLen, iArgs);
   std::cout << "Just analyzed explo 1->" + aArgString + "<-\n";
-  if (!aArgString.empty()) decodeCommand("1 7 100 100");
+  if (!aArgString.empty()) {
+    std::string command = "1 7 100 100 " + graphName;
+    std::cout << "Just analyzed explo 1->" + aArgString + "<- with command: " + command + "\n";
+    decodeCommand(command);
+  }
   std::cout << "Just analyzed explo 2\n";
   //if (!aArgString.empty()) return new ServerExplore();
   std::cout << "Running in command line mode.\n";
@@ -780,6 +791,8 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
         //#endif
         unsigned int aTransCounter=0;
         _terminateExplore=false;
+	_nbOfBranchesToExplore = 1;
+	_nbOfBranchesExplored = 0;
         exploreTree(0, 0, myAUTfile, aTransCounter);
         //#ifdef DOT_GRAPH_ENABLED
         //myDOTfile << "}\n";
@@ -947,6 +960,8 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     _simComp->resetStateHash();
     _simTerm=false;
     _simDuration=0;
+    _longRunTime = 0;
+    _shortRunTime = -1;
     aGlobMsg << TAG_MSGo << "Simulator reset" << TAG_MSGc << std::endl;
     std::cout << "End Simulator reset." << std::endl;
     break;
@@ -1435,11 +1450,15 @@ bool Simulator::runUntilCondition(std::string& iCond, TMLTask* iTask, TMLTransac
 }
 
 void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUTFile, unsigned int& oTransCounter){
+  
   TMLTransaction* aLastTrans;
   //if (iDepth<RECUR_DEPTH){
   ID aLastID;
   bool aSimTerminated=false;
   IndeterminismSource* aRandomCmd;
+
+  //std::cout << "Command coverage current:"<<  TMLCommand::getCmdCoverage() << " to reach:" << _commandCoverage << " nbOfBranchesExplored:"<< _nbOfBranchesExplored << " nbOfBranchesToExplore:" << _nbOfBranchesToExplore << " branch coverage:" <<_branchCoverage <<std::endl;
+  
   do{
     aSimTerminated=runToNextRandomCommand(aLastTrans);
     aRandomCmd = _simComp->getCurrentRandomCmd();
@@ -1454,44 +1473,61 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUT
     //#else
     //(21,"i(allCPUsTerminated)", 25)
     iAUTFile << "(" << aLastID << "," << "\"i(allCPUsTerminated<" << SchedulableDevice::getSimulatedTime() << ">)\"," << TMLTransaction::getID() << ")\n";
+    _nbOfBranchesExplored ++;
     //#endif
     TMLTransaction::incID();
 
-    if(_commandCoverage <= TMLCommand::getCmdCoverage() && _branchCoverage <= TMLCommand::getBranchCoverage()){
-      _simComp->setStopFlag(true, MSG_COVREACHED);
-      _terminateExplore=true;
-      //_syncInfo->_terminate=true;
+    //if(_commandCoverage <= TMLCommand::getCmdCoverage() && _branchCoverage <= TMLCommand::getBranchCoverage()){
+    //std::cout << "Command coverage current:"<<  TMLCommand::getCmdCoverage() << " to reach:" << _commandCoverage << " nbOfBranchesExplored:"<< _nbOfBranchesExplored << " nbOfBranchesToExplore:" << _nbOfBranchesToExplore<< std::endl;
+    if (_commandCoverage <= TMLCommand::getCmdCoverage()) {
+      if (_nbOfBranchesExplored > 0) {
+	if (100 * _nbOfBranchesExplored / _nbOfBranchesToExplore >= _branchCoverage) {
+	  //std::cout << "*********************************** 100% REACH" << std::endl;
+	  _simComp->setStopFlag(true, MSG_COVREACHED);
+	  _terminateExplore=true;
+	  //_syncInfo->_terminate=true;
+	}
+      }
     }
   } else if (_simComp->wasKnownStateReached()==0){
-    std::cout << "No known state reached" << std::endl;
+    //std::cout << "No known state reached" << std::endl;
     if(aRandomCmd==0){
-      std::cout << "We should never get here\n";
-    } else{
+      //std::cout << "We should never get here\n";
+    } else {
+      //std::cout << "Command coverage current:"<<  TMLCommand::getCmdCoverage() << " to reach:" << _commandCoverage << " nbOfBranchesExplored:"<< _nbOfBranchesExplored << " nbOfBranchesToExplore:" << _nbOfBranchesToExplore<< std::endl;
+      
       unsigned int aNbNextCmds;
       std::stringstream aStreamBuffer;
       std::string aStringBuffer;
       aNbNextCmds = aRandomCmd->getRandomRange();
-      std::cout << "Simulation " << iPrevID << "_" << "continued " << aNbNextCmds << std::endl;
+      //std::cout << "Simulation " << iPrevID << "_" << "continued nb of nexts commands:" << aNbNextCmds << std::endl;
       _simComp->writeObject(aStreamBuffer);
       aStringBuffer=aStreamBuffer.str();
       if ((aNbNextCmds & INT_MSB)==0){
+	_nbOfBranchesToExplore += aNbNextCmds-1;
         //for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_syncInfo->_terminate; aBranch++){
         for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_terminateExplore; aBranch++){
-	  std::cout << "Exploring a branch 1 from " << iPrevID << std::endl;
+	  //for (unsigned int aBranch=0; aBranch<aNbNextCmds; aBranch++){
+	  //std::cout << "1. Exploring branch #" << aBranch << " from " << iPrevID << std::endl;
           _simComp->reset();
           aStreamBuffer.str(aStringBuffer);
           //std::cout << "Read 1 in exploreTree\n";
           _simComp->readObject(aStreamBuffer);
           aRandomCmd->setRandomValue(aBranch);
           exploreTree(iDepth+1, aLastID, iAUTFile, oTransCounter);
+	  if (_terminateExplore && aBranch<aNbNextCmds-1) {
+	    //std::cout << "Terminate explore but still branches to execute ...\n";
+	  }
         }
       } else{
         unsigned int aBranch=0;
         aNbNextCmds ^= INT_MSB;
         //while (aNbNextCmds!=0 && !_syncInfo->_terminate){
-        while (aNbNextCmds!=0 && !_terminateExplore){
-	  std::cout << "Exploring a branch 2 from " << iPrevID << std::endl;
+	while (aNbNextCmds!=0 && !_terminateExplore){
+	  //while (aNbNextCmds!=0){
+	  //std::cout << "2. Exploring branch #" << aNbNextCmds << " from " << iPrevID << std::endl;
           if ((aNbNextCmds & 1)!=0){
+	    //_nbOfBranchesToExplore += 1;
             _simComp->reset();
             aStreamBuffer.str(aStringBuffer);
             //std::cout << "Read 2 in exploreTree\n";
@@ -1626,7 +1662,11 @@ bool Simulator::execAsyncCmd(const std::string& iCmd){
     _syncInfo->_terminate=true;
     return false;
   case 13://get current time
-    aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_TIMEo << SchedulableDevice::getSimulatedTime() << TAG_TIMEc << std::endl << TAG_MSGo << "Simulation time" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
+    if (_longRunTime > 0) {
+    aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_TIMEo << SchedulableDevice::getSimulatedTime() << TAG_TIMEc << std::endl << TAG_TIME_MINo << _shortRunTime << TAG_TIME_MINc << std::endl << TAG_TIME_MAXo << _longRunTime << TAG_TIME_MAXc <<  std::endl << TAG_MSGo << "Simulation time" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
+    } else {
+      aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_TIMEo << SchedulableDevice::getSimulatedTime() << TAG_TIMEc <<  std::endl << TAG_MSGo << "Simulation time" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
+    }
     //if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
     writeSimState(aMessage);
     aMessage << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;

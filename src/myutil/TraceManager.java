@@ -79,22 +79,27 @@ public class TraceManager {
 
     public static void addError( 	final String message,
     								final Throwable error ) {
-    	addError( message );
+    	if ( message != null ) {
+	        switch( errPolicy ) {
+		        case TO_CONSOLE:
+		            System.err.println( message );
+		            break;
+		        default:
+		            System.err.println( message );
+		    }
+    	}
     	
     	if ( error != null ) {
     		error.printStackTrace();
     	}
     }
 
-    public static void addError(String _s) {
-        switch(errPolicy) {
-            case TO_CONSOLE:
-                System.err.println(_s);
-                break;
-            default:
-                System.err.println(_s);
-        }
+    public static void addError( final String message ) {
+    	addError( message, null );
     }
 
 
+    public static void addError( final Throwable error ) {
+    	addError( null, error );
+    }
 } // Class TraceManager

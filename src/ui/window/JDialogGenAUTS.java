@@ -216,7 +216,7 @@ public class JDialogGenAUTS extends javax.swing.JDialog implements ActionListene
     
     public void stopProcess() {
         try {
-            rshc.stopFillJTA();
+            rshc.stopCommand();
         } catch (LauncherException le) {
         }
         rshc = null;
@@ -344,7 +344,7 @@ public class JDialogGenAUTS extends javax.swing.JDialog implements ActionListene
     protected String processCmd(String cmd) throws LauncherException {
         rshc.setCmd(cmd);
         String s = null;
-        rshc.sendProcessRequest();
+        rshc.sendExecuteCommandRequest();
         s = rshc.getDataFromProcess();
         return s;
     }

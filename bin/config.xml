@@ -63,11 +63,11 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal ../uppaal/spec.xml"/>
 
-<LastOpenFile data="/users/enseig/genius/TTool/modeling/DASIP2016/DASIP2016_2RAM.xml"/>
+<LastOpenFile data="/Users/localapvrille/TToolgit/TTool/modeling/Letitia/latency.xml"/>
 
 
 
-<LastWindowAttributes x="376" y="118" width="1470" height="1000" max="false" />
+<LastWindowAttributes x="281" y="52" width="1470" height="1000" max="false" />
 
 
 <ProVerifHash data=""/>
