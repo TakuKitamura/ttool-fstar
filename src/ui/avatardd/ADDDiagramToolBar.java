@@ -93,9 +93,9 @@ public class ADDDiagramToolBar extends TToolBar {
 
       // --------------------------------------------------------
 
-      /*mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+      mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
         mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);*/
+		mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
 		
 		mgui.updateZoomInfo();
     }
