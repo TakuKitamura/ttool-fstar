@@ -108,8 +108,8 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
    // private static String unitCycle = "1";
 
-    //modif DG
-    private static String[] codes = {"AVATAR CPOSIX", "AVATAR SOCLIB"};
+    
+    private static String[] codes = {"AVATAR CPOSIX"};
     private static int selectedItem = 0;
     private static int selectedRun = 1;
     private static int selectedCompile = 0;
@@ -716,8 +716,8 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
                 }
             }
 
-            //ajoute DG
-            if (selectedItem == 1) {
+            //enleve 06.02.2017
+	    /*  if (selectedItem == 1) {
                 // Code generation
                 if (jp1.getSelectedIndex() == 0) {
                     jta.append("Generating executable code (SOCLIB version)\n");
@@ -762,10 +762,10 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
                     if (avspec == null) {
                         jta.append("Error: No AVATAR specification\n");
                     } else {
-			/* AVATAR2SOCLIB avatartocposix = new AVATAR2SOCLIB(avspec);
-                        avatartocposix.includeUserCode(putUserCode.isSelected());
-                        avatartocposix.setTimeUnit(selectedUnit);
-                        avatartocposix.generateCPOSIX(debugmode.isSelected(), tracemode.isSelected());*/
+			//AVATAR2SOCLIB avatartocposix = new AVATAR2SOCLIB(avspec);
+                      //  avatartocposix.includeUserCode(putUserCode.isSelected());
+                       // avatartocposix.setTimeUnit(selectedUnit);
+                       // avatartocposix.generateCPOSIX(debugmode.isSelected(), tracemode.isSelected());
 		      // julien -----------------------------------------
                       ADDDiagramPanel deploymentDiagramPanel = mgui.getFirstAvatarDeploymentPanelFound();
                       AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
@@ -808,8 +808,7 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
                     jta.append("Compiling executable code with command: \n" + cmd + "\n");
 
                     rshc = new RshClient(hostExecute);
-                    // Assuma data are on the remote host
-                    // Command
+               
                     try {
                         processCmd(cmd, jta);
                         //data = processCmd(cmd);
@@ -863,7 +862,7 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
                 if ((hasError == false) && (jp1.getSelectedIndex() < 2)) {
                     jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
                 }
-            }
+	     } */
 
             //fin ajoute DG
 
