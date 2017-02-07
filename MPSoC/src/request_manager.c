@@ -52,7 +52,9 @@ void executeSendSyncTransaction(request *req) {
   copyParameters(req, selectedReq);
 
   debugInt("syncchannel address \n", req->syncChannel->mwmr_fifo);
-  sync_write(req->syncChannel->mwmr_fifo, selectedReq->ID, 1 );// transmit ID
+  //DG 7.2. req->params
+  //sync_write(req->syncChannel->mwmr_fifo, selectedReq->ID, 1 );// transmit ID
+  sync_write(req->syncChannel->mwmr_fifo, selectedReq->ID,  req->params );
   // debugMsg("after sync write\n");
  
   debugMsg("Signaling");
@@ -101,10 +103,11 @@ void executeReceiveSyncTransaction(request *req) {
   debugMsg("Signaling");
   pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
 
-  debugInt("syncchannel read: address \n",selectedReq->syncChannel->mwmr_fifo);
-  sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID, 1);
+  debugInt("syncchannel read: address \n",selectedReq->syncChannel->mwmr_fifo);  
+  //sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID, 1);
   //transmit ID
-  
+  //DG 7.2. params
+  sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID, &req->params);
   debugMsg("after syncchannel read");
   traceSynchroRequest(selectedReq, req);
 }
