@@ -20,13 +20,19 @@ void mwmr_sync_flush(struct mwmr_s *fifo){
 
 /* all synchronous communications use MWMR channels of size 1, enforcing synchronization */
 
-void sync_read( struct mwmr_s *fifo, void *_ptr){
+/*void sync_read( struct mwmr_s *fifo, void *_ptr){
   int in;
   while(1){
-    /* loop until one single message has been read successfully */     
-    if(!(in=mwmr_try_read(fifo,_ptr,1))) continue;   //le contenu de _ptr ne joue aucun role
+     
+    if(!(in=mwmr_try_read(fifo,_ptr,1))) continue;  
     }
   return;
+  }*/
+//DG 7.2.2017
+int sync_read( struct mwmr_s *fifo, void *_ptr, int lensw ){
+  int i;
+  i = mwmr_try_read(fifo,_ptr,lensw);
+  return i;
 }
 
 /* in the case of multi_writer one channel per writer */
@@ -44,7 +50,7 @@ void sync_read_random( struct mwmr_s *fifo[], void *_ptr, int nb_writers){
   return;
 }
 
-void sync_write(struct mwmr_s *fifo, void *_ptr){ 
+/*void sync_write(struct mwmr_s *fifo, void *_ptr){ 
   int out;   
     out=mwmr_try_write(fifo,NULL,1);
     if(out==0){      
@@ -52,6 +58,20 @@ void sync_write(struct mwmr_s *fifo, void *_ptr){
       printf("message lost\n");
     }  
    return; 
+   }*/
+//DG 7.2.2017
+int sync_write( struct mwmr_s *fifo, void *_ptr, int lensw ){
+  int i; 
+  i = mwmr_try_write(fifo,_ptr,lensw);
+  if (i<lensw){
+    /* the data item is thrown away */
+    //debugInt("data thrown away");
+    return i;
+  }
+  else{
+    //debugInt("data transmitted");
+  }
+  return i;
 }
 
 /* the task issueing the message does not continue until THIS PARTICULAR message has been successfully taken by another task; an additional empty sync message is issued for that purpose, in a busy waiting loop; once synchronization has been achieved, this message is flushed and a blocking write initiated */
