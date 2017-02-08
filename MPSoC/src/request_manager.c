@@ -23,7 +23,7 @@ void executeSendSyncTransaction(request *req) {
 
   cpt = 0;
   request* currentReq = req->syncChannel->inWaitQueue;
-  debugMsg("*****Execute send sync tr");
+  //debugMsg("*****Execute send sync transaction");
 
   while(currentReq != NULL) {
     cpt ++;
@@ -52,10 +52,18 @@ void executeSendSyncTransaction(request *req) {
   copyParameters(req, selectedReq);
 
   debugInt("syncchannel address \n", req->syncChannel->mwmr_fifo);
+  debugInt("***syncchannel nbOfParams \n", req->nbOfParams);
   //DG 7.2. req->params
   //sync_write(req->syncChannel->mwmr_fifo, selectedReq->ID, 1 );// transmit ID
-  sync_write(req->syncChannel->mwmr_fifo, selectedReq->ID,  req->params );
-  // debugMsg("after sync write\n");
+  //sync_write(req->syncChannel->mwmr_fifo, selectedReq->ID,  req->params );
+  sync_write(req->syncChannel->mwmr_fifo, req->params,  req->nbOfParams*sizeof(req->params));
+
+  sync_read(req->syncChannel->mwmr_fifo, req->params,  req->nbOfParams*sizeof(req->params));
+
+  //DG 8.2. a-t-on besoin de ID?
+  debugInt("***** req->params", req->params);
+  debugMsg("\n");
+// debugMsg("after sync write\n");
  
   debugMsg("Signaling");
   
@@ -67,7 +75,7 @@ void executeSendSyncTransaction(request *req) {
 void executeReceiveSyncTransaction(request *req) {
   int cpt;
   request *selectedReq;
-  
+  //debugMsg("*****Execute receive sync transaction");
   // At least one transaction available -> must select one randomly
   // First: count how many of them are available
   // Then, select one
@@ -75,7 +83,7 @@ void executeReceiveSyncTransaction(request *req) {
 
   request* currentReq = req->syncChannel->outWaitQueue;
   cpt = 0;
-  debugMsg("Execute receive sync tr");
+  debugMsg("*****Execute receive sync tr");
 
   while(currentReq != NULL) {
     cpt ++;
@@ -104,11 +112,17 @@ void executeReceiveSyncTransaction(request *req) {
   pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
 
   debugInt("syncchannel read: address \n",selectedReq->syncChannel->mwmr_fifo);  
+debugInt("syncchannel read: nbOfParams \n",selectedReq->nbOfParams);  
   //sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID, 1);
   //transmit ID
-  //DG 7.2. params
-  sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID, &req->params);
+  //DG 8.2. params
+sync_write(selectedReq->syncChannel->mwmr_fifo, selectedReq->params,  selectedReq->nbOfParams*sizeof(selectedReq->params) );
+
+sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->params,  selectedReq->nbOfParams*sizeof(selectedReq->params) );
+ //DG 7.2. params
+  //sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID, &req->params);
   debugMsg("after syncchannel read");
+  debugInt("***** req->params \n", req->params);
   traceSynchroRequest(selectedReq, req);
 }
 
@@ -271,24 +285,31 @@ int executable(setOfRequests *list, int nb) {
     req->executable = 0;
     if (req->delayElapsed) {
       if (req->type == SEND_SYNC_REQUEST) {
+	//DG 8.2. ici le probleme! wait queue empty pour B0 :(
 	debugMsg("Send sync");
-
-	if (req->syncChannel->inWaitQueue != NULL) {
+	debugInt("req->syncChannel->inWaitQueue ",req->syncChannel->inWaitQueue);
+	if (req->syncChannel->inWaitQueue != NULL) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
+        //if (req->syncChannel->outWaitQueue != NULL) {//DG 8.2.??
 	  debugMsg("Send sync executable");
 	  req->executable = 1;
 	  cpt ++;
-	}  else {
+	  }  else {
 	  debugMsg("Send sync not executable");
-	}
-	//index ++;
+	  }
+	  ////index ++;
       }
 
       if (req->type == RECEIVE_SYNC_REQUEST) {
 	debugMsg("receive sync");
-	if (req->syncChannel->outWaitQueue != NULL) {
+	if (req->syncChannel->outWaitQueue != NULL) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
+        //if (req->syncChannel->inWaitQueue != NULL) {//DG 8.2.??
 	  req->executable = 1;
+	  debugMsg("Receive sync executable");
 	  cpt ++;
 	}
+ else {
+	  debugMsg("Receive sync not executable");
+	  }
 	//index ++;
       }
 
@@ -362,8 +383,9 @@ void private__makeRequestPending(setOfRequests *list) {
   while(req != NULL) {
     if ((req->delayElapsed) && (!(req->alreadyPending))) {
       if (req->type == SEND_SYNC_REQUEST) {
-	debugMsg("Adding pending request in outWaitqueue");
+	debug2Msg(list->owner,"Adding pending sync request in outWaitqueue");
 	req->syncChannel->outWaitQueue = addToRequestQueue(req->syncChannel->outWaitQueue, req);
+
 	req->alreadyPending = 1;
       }
 
@@ -374,7 +396,7 @@ void private__makeRequestPending(setOfRequests *list) {
       }
 
       if (req->type == SEND_ASYNC_REQUEST) {
-	debugMsg("Adding pending request in outWaitqueue");
+	debugMsg("Adding pending async request in outWaitqueue");
 	req->asyncChannel->outWaitQueue = addToRequestQueue(req->asyncChannel->outWaitQueue, req);
 	req->alreadyPending = 1;
       }
@@ -405,10 +427,12 @@ void private__makeRequestPending(setOfRequests *list) {
 
 void private__makeRequest(request *req) {
   if (req->type == SEND_SYNC_REQUEST) {
+  debugMsg("@@@@@@@@@@@@@@@@@@@@@@@@@@@send");
     executeSendSyncTransaction(req);
   }
 
   if (req->type == RECEIVE_SYNC_REQUEST) {
+debugMsg("##########################receive");
     executeReceiveSyncTransaction(req);
   }
 
@@ -454,11 +478,11 @@ request *private__executeRequests0(setOfRequests *list, int nb) {
   request *req;
   
   // Compute which requests can be executed
-  debugMsg("Counting requests");
+ 
   howMany = executable(list, nb);
-
+ 
   debugInt("Counting requests=", howMany);
-
+ 
   if (howMany == 0) {
     debugMsg("**No pending requests");
     // Must make them pending
@@ -473,6 +497,7 @@ request *private__executeRequests0(setOfRequests *list, int nb) {
   
   // Select a request
   req = list->head;
+
   selectedIndex = (rand() % howMany)+1;
   debugInt("selectedIndex=", selectedIndex);
   realIndex = 0;
@@ -509,7 +534,7 @@ request *private__executeRequests(setOfRequests *list) {
     return list->selectedRequest;
   }
 
-  debugMsg("No request selected -> looking for one!");
+  debug2Msg(list->owner,"No request selected -> looking for one!");
 
   return private__executeRequests0(list, nbOfRequests(list));
 }

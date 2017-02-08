@@ -100,10 +100,12 @@ request *getRequestAtIndex(setOfRequests *list, int index) {
 
 request * addToRequestQueue(request *list, request *requestToAdd) {
   request *origin = list;
+  debugMsg("addToRequestQueue");
 
   if (list == NULL) {
     return requestToAdd;
   }
+debugMsg("addToRequestQueue1");
 
   while(list->next != NULL) {
     list = list->next;

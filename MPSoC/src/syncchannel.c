@@ -28,12 +28,22 @@ void mwmr_sync_flush(struct mwmr_s *fifo){
     }
   return;
   }*/
-//DG 7.2.2017
+//DG 8.2.2017
 int sync_read( struct mwmr_s *fifo, void *_ptr, int lensw ){
-  int i;
-  i = mwmr_try_read(fifo,_ptr,lensw);
-  return i;
+  // debugMsg("###before write ");
+  mwmr_write(fifo,_ptr,1);
+  debugMsg("###before read ");
+  mwmr_read(fifo,_ptr,1);
+  debugMsg("###after read ");
 }
+//DG 7.2.2017
+/*int sync_read( struct mwmr_s *fifo, void *_ptr, int lensw ){
+  int in;
+debugMsg("###before try read \n");
+  in = mwmr_try_read(fifo,_ptr,lensw);
+debugInt("###after try read: %x \n",in);
+  return in;
+  }*/
 
 /* in the case of multi_writer one channel per writer */
 /* we choose ramdomly one of the channels */
@@ -45,7 +55,10 @@ void sync_read_random( struct mwmr_s *fifo[], void *_ptr, int nb_writers){
   while(1){
     /* loop until one single message has been read successfully */  
     rand = computeRandom(0, nb_writers-1); 
+debugMsg("####mwmr channel before try readn");
     if(!(in=mwmr_try_read(fifo[rand],_ptr,1))) continue;   
+ debugInt("####mwmr channel after try read: ",in);
+debugMsg("\n");
     }
   return;
 }
@@ -59,19 +72,11 @@ void sync_read_random( struct mwmr_s *fifo[], void *_ptr, int nb_writers){
     }  
    return; 
    }*/
-//DG 7.2.2017
+//DG 8.2.2017
 int sync_write( struct mwmr_s *fifo, void *_ptr, int lensw ){
-  int i; 
-  i = mwmr_try_write(fifo,_ptr,lensw);
-  if (i<lensw){
-    /* the data item is thrown away */
-    //debugInt("data thrown away");
-    return i;
-  }
-  else{
-    //debugInt("data transmitted");
-  }
-  return i;
+  debugMsg("###mwmr channel before write ");
+  mwmr_write(fifo,_ptr,1);
+  debugMsg("####mwmr channel  after write: "); 
 }
 
 /* the task issueing the message does not continue until THIS PARTICULAR message has been successfully taken by another task; an additional empty sync message is issued for that purpose, in a busy waiting loop; once synchronization has been achieved, this message is flushed and a blocking write initiated */
