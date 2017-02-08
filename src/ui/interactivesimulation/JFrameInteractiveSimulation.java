@@ -308,7 +308,6 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
         points = _points;
 
-        System.out.println("Path execute=" + _pathExecute);
 
         valueTable = new Hashtable<Integer, String>();
         rowTable = new Hashtable<Integer, Integer>();
@@ -1000,16 +999,31 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         latm = new LatencyTableModel(this);
         latm.setData(latencies);
         sorterPI = new TableSorter(latm);
-        jtablePI = new JTable(sorterPI);
-        sorterPI.setTableHeader(jtablePI.getTableHeader());
-        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(700);
-        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(700);
-        ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(5)).setPreferredWidth(100);
-        jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        jspLatency = new JScrollPane(jtablePI);
+        final JTable latTable = new JTable(sorterPI);
+		latTable.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+ 			public void mouseClicked(java.awt.event.MouseEvent evt) {
+    			int row = latTable.rowAtPoint(evt.getPoint());
+    			int col = latTable.columnAtPoint(evt.getPoint());
+    			if (row >= 0 && col >= 0 && col <2) {
+					for (TGComponent tgc: tmap.getTMLModeling().getCheckedComps().keySet()){
+						if (tmap.getTMLModeling().getCheckedComps().get(tgc).equals(latm.getValueAt(row,col).toString().split(" ")[0])){
+        				    mgui.selectTab(tgc.getTDiagramPanel());
+            				tgc.getTDiagramPanel().highlightTGComponent(tgc);
+						}
+					}
+    			}
+ 			}
+		});
+        sorterPI.setTableHeader(latTable.getTableHeader());
+        ((latTable.getColumnModel()).getColumn(0)).setPreferredWidth(700);
+        ((latTable.getColumnModel()).getColumn(1)).setPreferredWidth(700);
+        ((latTable.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+        ((latTable.getColumnModel()).getColumn(3)).setPreferredWidth(100);
+        ((latTable.getColumnModel()).getColumn(4)).setPreferredWidth(100);
+        ((latTable.getColumnModel()).getColumn(5)).setPreferredWidth(100);
+        latTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jspLatency = new JScrollPane(latTable);
         jspLatency.setWheelScrollingEnabled(true);
         jspLatency.getVerticalScrollBar().setUnitIncrement(10);
         jspLatency.setMinimumSize(new Dimension(400, 250));

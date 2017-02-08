@@ -1486,6 +1486,7 @@ public class GTURTLEModeling {
 								ypos = fromStart.getY();
 								if (conn==null){
 									System.out.println("no connection");
+									break;
 									//Create a connector to decrypt operator
 								}
 								next = conn.getTGConnectingPointP2();

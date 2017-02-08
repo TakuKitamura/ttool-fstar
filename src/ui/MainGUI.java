@@ -2241,7 +2241,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //frame.repaint();
     }
 
-
     // Action listeners
     public void newProject() {
         if (mode == NOT_OPENED) {
