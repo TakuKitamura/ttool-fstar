@@ -2,6 +2,6 @@
 
 java -version
 cd bin;
-java -Xmx1024m -Djavax.net.ssl.trustStore=ServerKeyStore -Djavax.net.ssl.trustStorePassword=123456  -jar ttool.jar -config config.xml -experimental -debug -avatar -uppaal -launcher 
+java -Xmx1024m -Djavax.net.ssl.trustStore=ServerKeyStore -Djavax.net.ssl.trustStorePassword=123456  -jar ttool.jar -config config-daniela.xml -experimental -debug -avatar -uppaal -launcher 
 
  

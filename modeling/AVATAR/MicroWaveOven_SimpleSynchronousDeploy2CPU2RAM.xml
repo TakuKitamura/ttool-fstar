@@ -7,7 +7,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
+<Validated value="MicroWaveOven;Bell;ControlPanel;Controller;Magnetron;Door;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="2" >
@@ -143,7 +143,7 @@
 <TGConnectingPoint num="23" id="32" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="in ring()" />
+<Signal value="in ring()" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="58" >
@@ -180,9 +180,9 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="duration" value="5" type="8" typeOther="" />
-<Signal value="in LEDOn()" />
-<Signal value="in LEDoff()" />
-<Signal value="out startButton(int duration)" />
+<Signal value="in LEDOn()" attached="false" />
+<Signal value="in LEDoff()" attached="false" />
+<Signal value="out startButton(int duration)" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="83" >
@@ -220,15 +220,15 @@
 <CryptoBlock value="false" />
 <Attribute access="0" id="duration" value="5" type="8" typeOther="" />
 <Attribute access="0" id="remainingTime" value="0" type="8" typeOther="" />
-<Signal value="in start(int duration)" />
-<Signal value="in closed()" />
-<Signal value="in open()" />
-<Signal value="out ringBell()" />
-<Signal value="out startMagnetron()" />
-<Signal value="out stopMagnetron()" />
-<Signal value="out startCooking()" />
-<Signal value="out stopCooking()" />
-<Signal value="out okDoor()" />
+<Signal value="in start(int duration)" attached="true" />
+<Signal value="in closed()" attached="true" />
+<Signal value="in open()" attached="true" />
+<Signal value="out ringBell()" attached="true" />
+<Signal value="out startMagnetron()" attached="true" />
+<Signal value="out stopMagnetron()" attached="true" />
+<Signal value="out startCooking()" attached="false" />
+<Signal value="out stopCooking()" attached="false" />
+<Signal value="out okDoor()" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="108" >
@@ -265,8 +265,8 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="power" value="0" type="8" typeOther="" />
-<Signal value="in startM()" />
-<Signal value="in stopM()" />
+<Signal value="in startM()" attached="true" />
+<Signal value="in stopM()" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="133" >
@@ -302,9 +302,9 @@
 <TGConnectingPoint num="23" id="132" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="out closed()" />
-<Signal value="out open()" />
-<Signal value="in okDoor()" />
+<Signal value="out closed()" attached="true" />
+<Signal value="out open()" attached="true" />
+<Signal value="in okDoor()" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3058,7 +3058,7 @@
 <TGConnectingPoint num="23" id="1413" />
 <extraparam>
 <info stereotype="RAM" nodeName="Memory1" />
-<attributes byteDataSize="4"  index="1024" />
+<attributes byteDataSize="4096"  index="1024" />
 </extraparam>
 </COMPONENT>
 
@@ -3094,7 +3094,7 @@
 <TGConnectingPoint num="23" id="1474" />
 <extraparam>
 <info stereotype="RAM" nodeName="Memory0" />
-<attributes byteDataSize="1024"  index="3" />
+<attributes byteDataSize="4096"  index="3" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="5362" id="1423" >
