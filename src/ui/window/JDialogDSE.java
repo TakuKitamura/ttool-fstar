@@ -586,7 +586,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     public void stopProcess() {
         if (rshc != null ){
             try {
-                rshc.stopFillJTA();
+                rshc.stopCommand();
             } catch (LauncherException le) {
             }
         }

@@ -723,7 +723,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_MERGE].setEnabled(true);
             actions[TGUIAction.ACT_NEW_DESIGN].setEnabled(true);
             actions[TGUIAction.ACT_NEW_ANALYSIS].setEnabled(true);
-            //actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(true);
+            actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(true);//DG 06.02.
             //actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG].setEnabled(true);
             //actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(true);
             actions[TGUIAction.ACT_SAVE_AS].setEnabled(true);
@@ -3528,7 +3528,70 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
             // NC
-        } else if (tp instanceof NCPanel) {
+        } 
+	//DG 6.2. 2017
+
+	else if (tp instanceof ADDPanel) {
+            //Design
+	    AvatarDesignPanel adp = getFirstAvatarDesignPanelFound();
+
+            //JDialogModelChecking.validated = adp.validated;
+            //JDialogModelChecking.ignored = adp.ignored;
+            LinkedList<AvatarBDStateMachineOwner> blocksToValidate = new LinkedList<AvatarBDStateMachineOwner> ();
+            JDialogSelectAvatarBlock jdmc = new JDialogSelectAvatarBlock(frame, blocksToValidate, adp.getAvatarBDPanel().getFullStateMachineOwnerList(), "Choosing blocks to validate", adp.getValidated(), adp.getIgnored(), adp.getOptimized());
+            if (!automatic) {
+                GraphicLib.centerOnParent(jdmc);
+                jdmc.setVisible(true); // blocked until dialog has been closed
+            } else {
+                jdmc.closeDialog();
+            }
+
+            if (jdmc.hasBeenCancelled()) {
+                return false;
+            }
+
+            adp.resetModelBacktracingProVerif();
+
+            adp.setValidated(jdmc.getValidated());
+            adp.setIgnored(jdmc.getIgnored());
+            adp.setOptimized(jdmc.getOptimized());
+
+
+            boolean optimize = jdmc.getOptimized();
+            if (blocksToValidate.size() > 0) {
+                /*adp.validated = JDialogModelChecking.validated;
+                  adp.ignored = JDialogModelChecking.ignored;*/
+                b = gtm.checkAvatarDesign(blocksToValidate, adp, optimize);
+                if (b) {
+                    ret = true;
+                    setMode(MainGUI.AVATAR_SYNTAXCHECKING_OK);
+                    //setMode(MainGUI.MODEL_PROVERIF_OK);
+                    //setMode(MainGUI.GEN_DESIGN_OK);
+                    /*
+                      if (!automatic) {
+                      JOptionPane.showMessageDialog(frame,
+                      "0 error, " + getCheckingWarnings().size() + " warning(s). You can now perform simulations or formal proofs (UPPAAL)",
+                      "Syntax analysis successful on avatar design diagrams",
+                      JOptionPane.INFORMATION_MESSAGE);
+                      }
+                    */
+                } else {
+                    if (!automatic) {
+                        JOptionPane.showMessageDialog(frame,
+                                                      "The Avatar modeling contains several errors",
+                                                      "Syntax analysis failed",
+                                                      JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+
+
+            // NC
+        } 
+
+
+	//fin DG
+else if (tp instanceof NCPanel) {
             NCPanel ncp = (NCPanel) tp;
             b = gtm.translateNC(ncp);
             if (b) {
@@ -4493,7 +4556,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                          ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand,
                                                                          ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath, _mode);
             //jgen.setSize(500, 750);
-            GraphicLib.centerOnParent( jgen, 500, 750 );
+            GraphicLib.centerOnParent( jgen, 700, 750 );
             jgen.setVisible(true);
             dtree.toBeUpdated();
 
@@ -7724,7 +7787,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //tofile =  new AvatarToFile(components,avaspec);
         //tofile.extracParamToFile();
     }
+
     public void avatarToSoclib(){
+	//DG 6.2. appelee nulle part?
 
         ADDDiagramPanel deploymentDiagramPanel = getDeploymentPanel();
         AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
@@ -7734,9 +7799,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
         AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator( designDiagramPanel);
+
         LinkedList<AvatarBDStateMachineOwner> adp =  designDiagramPanel.getAvatarBDPanel().getFullStateMachineOwnerList();
         AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(adp);
 
+	System.out.println("@@@@@@@@@@ I an here @@@@@@@@@@@@");
+System.err.println("@@@@@@@@@@ I an here @@@@@@@@@@@@");
         // Generator for block tasks and application main file
 
         TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec,avaspec);
@@ -7748,7 +7816,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             System.err.println("FileException : MainGUI.avatarToSoclib()");
         }
 
-    }
+	}
     //--------------------end DDD------------------------------------------------
 
     public boolean selectMainTab(String id) {

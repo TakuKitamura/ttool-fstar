@@ -300,7 +300,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
     public void stopProcess() {
         try {
-            rshc.stopFillJTA();
+            rshc.stopCommand();
         } catch (LauncherException le) {
         }
         rshc = null;
@@ -651,7 +651,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     protected String processCmd(String cmd) throws LauncherException {
         rshc.setCmd(cmd);
         String s = null;
-        rshc.sendProcessRequest();
+        rshc.sendExecuteCommandRequest();
         s = rshc.getDataFromProcess();
         return s;
     }

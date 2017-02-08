@@ -160,7 +160,7 @@ public class RemoteSimulationControl extends Thread  {
 				System.out.println("Could not connect to host: " + host + " on port: " + port + ". Retrying soon.");
 			}
 			try {
-				Thread.currentThread().sleep(2000);
+				Thread.sleep(2000);
 			} catch (InterruptedException ie) {
 			}
 		}

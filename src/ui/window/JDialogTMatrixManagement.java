@@ -241,7 +241,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
     
     public void stopProcess() {
         try {
-            rshc.stopFillJTA();
+            rshc.stopCommand();
         } catch (LauncherException le) {
             
         }
@@ -380,17 +380,17 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
     protected String processCmd(String cmd) throws LauncherException {
         rshc.setCmd(cmd);
         String s = null;
-        rshc.sendProcessRequest();
+        rshc.sendExecuteCommandRequest();
         s = rshc.getDataFromProcess();
         return s;
     }
-    
-    protected String processPipedCmd(String cmd1, String cmd2) throws LauncherException {
-        String s = null;
-        rshc.sendProcessRequest(cmd1, cmd2);
-        s = rshc.getDataFromProcess();
-        return s;
-    }
+//    DB: Issue #18: This method is not used
+//    protected String processPipedCmd(String cmd1, String cmd2) throws LauncherException {
+//        String s = null;
+//        rshc.sendExecutePipedCommandsRequest(cmd1, cmd2);
+//        s = rshc.getDataFromProcess();
+//        return s;
+//    }
     
     protected void checkMode() {
         

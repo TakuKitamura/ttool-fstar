@@ -55,6 +55,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Iterator;
 import java.util.Vector;
 
 import myutil.AESEncryptor;
@@ -65,7 +66,7 @@ public class RshServer {
 
     private int port = PORT_NUMBER;
     private ServerSocket server = null;
-    private int id = 0;
+    //private int id = 0;
     private Vector<ExecutionThread> processes;
     private int MAX_PROC = 255;
     public static final String VERSION = "0.61";
@@ -80,46 +81,50 @@ public class RshServer {
     public static String iv = "Wh4t4b0utThisKe?";
 
     public RshServer() {
-	startingServer();
+    	startingServer();
     }
 
     
     public RshServer(String _sk) {
-	sk = _sk;
-	startingServer();
+		sk = _sk;
+		startingServer();
     }
 
     private void startingServer() {
-	processes = new Vector<ExecutionThread>();
-	int i = 0;
-	for(i=0; i<100; i++) {
-	    try {
-		server = new ServerSocket(port+i);
-		break;
-	    } catch (Exception e) {
-		//System.out.println("Server could not start(Socket pb)");
-	    }
-	}
-	if (i == 100) {
-	    TraceManager.addDev("Launching external applications is disabled: no socket is available");
-	} else {
-	    port = port +i;
-	    launcher.RshClient.PORT_NUMBER = port;
-	    TraceManager.addDev("Using port: " + port);
-	}
-    }
+		processes = new Vector<ExecutionThread>();
+		int i = 0;
 
+		for(i=0; i < 100; i++) {
+		    try {
+		    	server = new ServerSocket(port+i);
+		    	
+		    	break;
+		    }
+		    catch (Exception e) {
+			//System.out.println("Server could not start(Socket pb)");
+		    }
+		}
+		
+		if (i == 100) {
+		    TraceManager.addDev("Launching external applications is disabled: no socket is available");
+		}
+		else {
+		    port = port +i;
+		    launcher.RshClient.PORT_NUMBER = port;
+		    TraceManager.addDev("Using port: " + port);
+		}
+    }
 
     public void setNonSecure() {
         isSecure = false;
     }
 
     public String getSecretKey() {
-	return sk;
+    	return sk;
     }
 
     public String getIV() {
-	return iv;
+    	return iv;
     }
 
     private void printProcessRunning() {
@@ -145,22 +150,50 @@ public class RshServer {
     }
 
     private Socket waitForClient() {
-        Socket s = null;
+        //Socket s = null;
         TraceManager.addDev("Waiting for command");
+        
         try {
-            s = server.accept();
-        } catch (Exception e) {
+            return server.accept();
+        }
+        catch (Exception e) {
             nbTry ++;
+            
             return null;
         }
-        return s;
+       // return s;
     }
 
-    private void respond(PrintStream out, String s) {
+    private void respond(	final PrintStream out,
+    						final ResponseCode code ) {
+    	respond( out, code, null );
+    }
+
+    private void respond(	final PrintStream out,
+    						final String message ) {
+    	respond( out, null, message );
+    }
+
+    private void respond(	final PrintStream out,
+    						final ResponseCode code,
+    						final String message ) {
         try {
-            out.println(s);
-            out.flush();
-        } catch (Exception e) {
+        	SocketComHelper.send( out, code, message );
+//        	final StringBuilder sentMess = new StringBuilder();
+//        	
+//        	if ( code != null ) {
+//        		sentMess.append( code.name() );
+//        	}
+//        	
+//        	if ( message != null ) {
+//        		sentMess.append( message );
+//        	}
+//
+//            out.println( sentMess.toString() );
+//            out.flush();
+        }
+        catch (Exception e) {
+        	TraceManager.addError( e );
         }
     }
 
@@ -173,7 +206,7 @@ public class RshServer {
 //        }
 //    }
 
-    private int startNewProcess(String path) {
+    private int startNewProcess( String path ) {
         if (processes.size() >= MAX_PROC) {
             return -1;
         }
@@ -192,7 +225,7 @@ public class RshServer {
 
     }
 
-    private int createNewProcess(String path) {
+    private int createNewProcess( final String path ) {
         if (processes.size() >= MAX_PROC) {
             return -1;
         }
@@ -220,18 +253,26 @@ public class RshServer {
     }
 
     private boolean startProcess(int id) {
-        ExecutionThread et;
-        for(int i=0; i<processes.size(); i++) {
-            et = (ExecutionThread)(processes.elementAt(i));
-            if (et.getPort() == id) {
-                if (et.isStarted()) {
-                    return false;
-                }
-                et.start();
-                return true;
-            }
+        ExecutionThread et = getExecutionThread( id );
+        
+        if ( et == null || et.isStarted() ) {
+        	return false;
         }
-        return false;
+        
+        et.start();
+
+        return true;
+//        for(int i=0; i<processes.size(); i++) {
+//            et = (ExecutionThread)(processes.elementAt(i));
+//            if (et.getPort() == id) {
+//                if (et.isStarted()) {
+//                    return false;
+//                }
+//                et.start();
+//                return true;
+//            }
+//        }
+//        return false;
     }
 
     private ExecutionThread getExecutionThread(int id) {
@@ -280,28 +321,46 @@ public class RshServer {
         printProcessRunning();
     }
 
-    public void killProcess(int id) {
+    public boolean killProcess(int id) {
         ExecutionThread et;
         for(int i=0; i<processes.size(); i++) {
             et = processes.elementAt(i);
+            
             if (et.getPort() == id) {
                 et.stopProcess();
                 processes.removeElement(et);
                 TraceManager.addDev("Process " + id + " killed");
-                return;
+                
+                return true;
             }
         }
+        
         printProcessRunning();
+        
+        return false;
     }
 
     public void killAllProcesses() {
-        ExecutionThread et;
-        for(int i=0; i<processes.size(); i++) {
-            et = processes.elementAt(i);
-            et.stopProcess();
-            processes.removeElement(et);
-            TraceManager.addDev("Process " + id + " killed");
+        //ExecutionThread et;
+    	final Iterator<ExecutionThread> procIt = processes.iterator();
+    	
+        while ( procIt.hasNext() ) {
+        	final ExecutionThread et = procIt.next();
+        	et.stopProcess();
+        	procIt.remove();
+
+            TraceManager.addDev( "Process " + et.getId() + " killed." );
         }
+
+    	// DB: Issue #18: This code does not iterate through all the elements because process.size() changes at every iteration
+//        ExecutionThread et;
+//        for(int i=0; i<processes.size(); i++) {
+//            et = processes.elementAt(i);
+//            et.stopProcess();
+//            processes.removeElement(et);
+//            TraceManager.addDev("Process " + id + " killed");
+//        }
+
         printProcessRunning();
     }
 
@@ -320,114 +379,221 @@ public class RshServer {
 
         try {
             info = in.readLine();
-        } catch (Exception e) {
-	    TraceManager.addDev("Exception when reading client information=" + info);
-            return;
+        }
+        catch (Exception e) {
+        	TraceManager.addError("Exception when reading client information=" + info, e );
+            
+        	return;
         }
 
         if (sk != null) {
             info = checkSecurity(info);
-	    
         }
 
-	TraceManager.addDev("Got from client:" + info);
+        TraceManager.addDev("Got from client:" + info);
 
-        if (info != null) {
+        if ( info != null ) {
+        	final RequestCode reqCode = SocketComHelper.requestCode( info );
+            TraceManager.addDev("Received request code " + reqCode + "." );
+        	final String message = SocketComHelper.message( reqCode, info );
+            TraceManager.addDev("Received request message '" + message + "'." );
 
-            if (info.substring(0, 1).equals("0")) { // Session id
-                if (info.substring(1, 2).equals("0")) { // Get session id
+        	switch ( reqCode ) { 
+            	// Session id
+            	case GET_SESSION_ID: {
+//            if (info.substring(0, 1).equals("0")) { // Session id
+                //if (info.substring(1, 2).equals("0")) { // Get session id
                     int id = getSessionId();
                     TraceManager.addDev("-> New session id = " + id);
-                    respond(out, ""+id); // A zero response means error
-                } else {
+                    respond(out, "" + id ); // A zero response means error
+                    
+                    break;
+            	}
+            	case FREE_SESSION_ID: {
+                //} else {
                     try {
-                        int id = Integer.decode(info.substring(1, 2)).intValue();
-                        freeSessionId(id);
-                        TraceManager.addDev("-> Session id=" + id + " terminated");
-                        respond(out, ""+id);
-                    } catch (Exception e) {
-                        respond(out, "0");
+                        int id = Integer.decode( message );//.intValue();
+                        freeSessionId( id );
+                        TraceManager.addDev("-> Free session id=" + id + " terminated");
+                        respond( out, "" + id );
                     }
+                    catch ( Exception e ) {
+                        respond( out, ResponseCode.FAILED );
+
+                        TraceManager.addError( e );
+                    }
+                    
+                    break;
                 }
-            } else if (info.substring(0, 1).equals("1")) {
+            	case PROCESS_CREATE_START: {
+            //} else if (info.substring(0, 1).equals("1")) {
                 // start process at once
-                int id = startNewProcess(info.substring(1, info.length()));
-                if (id <0) {
-                    respond(out, "2");       // fail
-                } else {
-                    TraceManager.addDev("Process accepted on port " + id);
-                    respond(out, "3" + id); // process created
-                }
-            } else if (info.substring(0, 1).equals("2")) {
-                // Piped processes
-                TraceManager.addDev("Piped processes");
-                String str = info.substring(1, info.length());
-                String str1, str2;
-                int index = str.indexOf(' ');
-                TraceManager.addDev("index = " + index);
-                if (index > 0) {
-                    str1 = str.substring(0, index);
-                    str2 = str.substring(index + 1, str.length());
-                    TraceManager.addDev("str = " + str + " str1 = *" + str1 + "* str2 = *" + str2 + "*");
-                    if (pipeProcesses(str1, str2)) {
-                        TraceManager.addDev("Making piped processes");
-                        respond(out, "3");   // OK
-                    } else {
-                        TraceManager.addDev("Making piped processes FAILED");
-                        respond(out, "2");   // fail
-                    }
-                }  else {
-                    TraceManager.addDev("Making piped processes FAILED");
-                    respond(out, "2");       // fail
-                }
-
-            } else if (info.substring(0, 1).equals("3")) {
+	                int id = startNewProcess( message );//info.substring(1, info.length()));
+	                
+	                if ( id < 0 ) {
+	                    respond(out, ResponseCode.FAILED );       // fail
+	                }
+	                else {
+	                    TraceManager.addDev("Process accepted on port " + id);
+	                    respond( out, ResponseCode.SUCCESS, Integer.toString( id ) ); // process created
+	                }
+	                
+	                break;
+            	}
+            	case PROCESS_CHECK_RETURN_CODE: {
+            		final ExecutionThread process = getExecutionThread( Integer.decode( message ) );
+            		
+            		if ( process == null ) {
+	                    TraceManager.addError( "Process " + message + " not created!" );
+            			respond( out, ResponseCode.FAILED );
+            		}
+            		else {
+            			TraceManager.addDev("Process " + message + " will send its return code." );
+            			process.setSendReturnCode( true );
+            			respond( out, ResponseCode.SUCCESS ); // process created
+            		}
+	                
+	                break;
+            	}
+            	case PROCESS_GET_RETURN_CODE: {
+            		final ExecutionThread process = getExecutionThread( Integer.decode( message ) );
+            		
+            		if ( process == null ) {
+	                    TraceManager.addError( "Process " + message + " not created!" );
+            			respond( out, ResponseCode.FAILED );
+            		}
+            		else {
+            			final String retCodeStr = String.valueOf( process.getReturnCode() );
+            			TraceManager.addDev("Sending return code " + retCodeStr + " for process " + message + "." );
+            			respond( out, ResponseCode.SUCCESS, retCodeStr );
+            		}
+            		
+            		break;
+            	}
+            	case PROCESS_PIPE: {
+            	//else if (info.substring(0, 1).equals("2")) {
+	                // Piped processes
+	                TraceManager.addDev("Piped processes.");
+	                //String str = info.substring(1, info.length());
+	                //String str1, str2;
+	                final int index = message.indexOf(' ');
+	                //TraceManager.addDev("index = " + index);
+	                
+	                if (index > 0) {
+	                    final String str1 = message.substring(0, index);
+	                    final String str2 = message.substring(index + 1 );
+	                    TraceManager.addDev("str = " + message + " str1 = *" + str1 + "* str2 = *" + str2 + "*");
+	                    
+	                    if (pipeProcesses(str1, str2)) {
+	                        TraceManager.addDev("Making piped processes...");
+	                        respond( out, ResponseCode.SUCCESS );   // OK
+	                    }
+	                    else {
+	                        TraceManager.addDev("Making piped processes failed!");
+	                        respond(out, ResponseCode.FAILED );   // fail
+	                    }
+	                }
+	                else {
+	                    TraceManager.addDev("Making piped processes FAILED");
+	                    respond(out, ResponseCode.FAILED );       // fail
+	                }
+	                
+	                break;
+            	}
+            	case PROCESS_CREATE: {
+          //  } else if (info.substring(0, 1).equals("3")) {
                 // create process
-                int id = createNewProcess(info.substring(1, info.length()));
-                if (id <0) {
-                    respond(out, "2");       // fail
-                } else {
-                    TraceManager.addDev("Process accepted on port " + id);
-                    respond(out, "3" + id); // process created
-                }
-            } else if (info.substring(0, 1).equals("4")) {
+	                int id = createNewProcess( message );
+	                
+	                if ( id < 0 ) {
+	                    respond( out, ResponseCode.FAILED );       // fail
+	                }
+	                else {
+	                    TraceManager.addDev( "Process accepted on port " + id );
+	                    respond( out, ResponseCode.SUCCESS, Integer.toString( id ) ); // process created
+	                }
+	                
+	                break;
+            	}
+            	case PROCESS_START: {
+            //} else if (info.substring(0, 1).equals("4")) {
                 // start already created process
-                if (startProcess(info.substring(1, info.length()))) {
-                    TraceManager.addDev("Process started on port " + id);
-                    respond(out, "3" + id); // process created
-                } else {
-                    respond(out, "2");       // fail
-                }
-            } else if (info.substring(0, 1).equals("5")) {
-                // kill all processes
-                try {
-                    killAllProcesses();
-                } catch (Exception e) {
+	                if ( startProcess( message ) ) {
+	                    TraceManager.addDev("Process started on port " + message );
+	                    respond(out, ResponseCode.SUCCESS, message ); // process created
+	                }
+	                else {
+	                    respond( out, ResponseCode.FAILED );       // fail
+	                }
+	                
+	                break;
+            	}
+            	case PROCESS_KILL_ALL: {
+            //} else if (info.substring(0, 1).equals("5")) {
+	                // kill all processes
+	                try {
+	                    killAllProcesses();
+                        
+	                    respond( out, ResponseCode.SUCCESS );
+	                }
+	                catch (Exception e) {
+                        TraceManager.addError( e );
 
-                }
-            }else if (info.substring(0, 1).equals("6")) {
+                        respond( out, ResponseCode.FAILED );       // fail
+	                }
+	                
+	                break;
+            	}
+            	case PROCESS_KILL: {
+            //}else if (info.substring(0, 1).equals("6")) {
                 // kill process
-                try {
-                    int id = Integer.decode(info.substring(1, info.length())).intValue();
-                    TraceManager.addDev("Demand to kill: " + id);
-                    killProcess(id);
-                } catch (Exception e) {
+	                try {
+	                    int id = Integer.decode( message );
+	                    TraceManager.addDev("Demand to kill: " + id);
+	                    
+	                    if ( killProcess( id ) ) {
+	                        respond( out, ResponseCode.SUCCESS );
+	                    }
+	                    else {
+	                        respond( out, ResponseCode.FAILED );
+	                    }
+	                }
+	                catch (Exception e) {
+                        TraceManager.addError( e );
 
-                }
-            } else if (info.substring(0, 1).equals("7")) {
-                //file : put
-                String fileName = info.substring(1, info.length());
-                makeFileFromData(in, out, fileName);
-            } else if (info.substring(0, 1).equals("8")) {
-                //file : get
-                String fileName = info.substring(1, info.length());
-                sendDataFile(in, out, fileName);
-            } else if (info.substring(0, 1).equals("9")) {
-                //file : delete
-                String fileName = info.substring(1, info.length());
-                deleteFile(in, out, fileName);
-            } else {
-                System.exit(0);
+                        respond( out, ResponseCode.FAILED );       // fail
+	                }
+	                
+	                break;
+            	}
+            	case FILE_PUT: {
+            //} else if (info.substring(0, 1).equals("7")) {
+            		//file : put
+	                //String fileName = info.substring(1, info.length());
+	                makeFileFromData( in, out, message );
+	                
+	                break;
+            	}
+            	case FILE_GET: {
+//            } else if (info.substring(0, 1).equals("8")) {
+	                //file : get
+	                //String fileName = info.substring(1, info.length());
+	                sendDataFile( in, out, message );
+	                
+	                break;
+            	}
+            	case FILE_DELETE: {
+            //} else if (info.substring(0, 1).equals("9")) {
+	                //file : delete
+	                //String fileName = info.substring(1, info.length());
+	                deleteFile( in, out, message );
+	                
+	                break;
+            	}
+            	default:
+            //} else {
+            		// TODO: Is this really a good behavior?
+            		System.exit(0);
             }
         }
     }
@@ -438,7 +604,8 @@ public class RshServer {
 
         if (!isFileOkForSave(file)) {
             TraceManager.addDev("Cannot make file");
-            respond(out, "2");   // fail
+            respond( out, ResponseCode.FAILED );  // fail
+            
             return;
         }
 
@@ -446,52 +613,75 @@ public class RshServer {
         String info;
 
         TraceManager.addDev("Waiting for file data");
-        while(true) {
+        
+        while( true ) {
             try {
                 info = in.readLine();
-            } catch (Exception e) {
-                return;
+            } 
+            catch (Exception e) {
+            	TraceManager.addError( e );
+                
+            	return;
             }
 
-	    if (sk != null) {
-		info = checkSecurity(info);
-	    }
+		    if ( sk != null ) {
+		    	info = checkSecurity(info);
+		    }
+		    
+		    final RequestCode code = SocketComHelper.requestCode( info );
+		    final String message = SocketComHelper.message( code, info );
 
-            if ((info == null) || (info.length() == 0)) {
+            if ( code == null || code == RequestCode.FILE_SAVE ) {//|| (info.length() == 0)) {
                 // Assumes it is an EOF
                 TraceManager.addDev("Wrong EOF -> assumes it is an EOF");
+                
                 try {
                     FileOutputStream fos = new FileOutputStream(file);
                     fos.write((new String(fileData)).getBytes());
                     fos.close();
-                } catch (Exception e) {
-                    TraceManager.addDev("Error when feeding file");
-                    respond(out, "2");   // fail
+                }
+                catch (Exception e) {
+                    TraceManager.addError("Error when feeding file", e );
+                    
+                    respond( out, ResponseCode.FAILED );   // fail
+                    
                     return;
                 }
-                respond(out, "3");      // file created
+                
+                respond( out, ResponseCode.SUCCESS );      // file created
+            
                 return;
 
-            } else if (info.substring(0, 1).equals("8")) {
+            } 
+            else if ( code == RequestCode.FILE_APPEND ) {//== info.substring(0, 1).equals("8")) {
                 // fileData
-                fileData.append(info.substring(1, info.length()) + "\n");
-            } else if (info.substring(0, 1).equals("7")) {
-                // EOF
-                TraceManager.addDev("EOF");
-                try {
-                    FileOutputStream fos = new FileOutputStream(file);
-                    fos.write((new String(fileData)).getBytes());
-                    fos.close();
-                } catch (Exception e) {
-                    TraceManager.addDev("Error when feeding file");
-                    respond(out, "2");   // fail
-                    return;
-                }
-                respond(out, "3");      // file created
-                return;
-            } else {
+                fileData.append( message + "\n" );
+            } 
+//            else if ( code == RequestCode.FILE_SAVE ) {
+//                // EOF
+//                TraceManager.addDev("EOF");
+//                
+//                try {
+//                    FileOutputStream fos = new FileOutputStream(file);
+//                    fos.write((new String(fileData)).getBytes());
+//                    fos.close();
+//                }
+//                catch (Exception e) {
+//                    TraceManager.addError("Error when feeding file", e );
+//                    
+//                    respond( out, ResponseCode.FAILED );   // fail
+//                    
+//                    return;
+//                }
+//                
+//                respond( out, ResponseCode.SUCCESS );      // file created
+//                
+//                return;
+//            }
+            else {
                 TraceManager.addDev("Unknown PDU (file)=" + info);
-                respond(out, "2");       // fail
+                respond( out, ResponseCode.FAILED );       // fail
+                
                 return;
             }
         }
@@ -502,31 +692,30 @@ public class RshServer {
         File file = new File(fileName);
 
         if (!isFileOkForRead(file)) {
-            //System.out.println("Cannot read file");
-            respond(out, "2");   // fail
+            respond( out, ResponseCode.FAILED );   // fail
+
             return;
         }
 
         try {
             FileInputStream fis = new FileInputStream(file);
-            /*int nb = fis.available();
 
-              System.out.println("New byte " + fileName);
-              byte [] ba = new byte[nb];
-              fis.read(ba);
-              System.out.println("Reading " + fileName);
-              fis.close();*/
             if (sendData(out, fis)) {
                 //System.out.println("Sending 3 info to say OK");
-                respond(out, "3");
-            } else {
-                TraceManager.addDev("Sending failed");
-                respond(out, "2");
+                respond( out, ResponseCode.SUCCESS );
             }
-        } catch(Exception e) {
-            respond(out, "2");   // fail
+            else {
+                TraceManager.addDev("Sending failed");
+                respond( out, ResponseCode.FAILED );
+            }
+        }
+        catch(Exception e) {
+        	TraceManager.addError( e );
+            respond( out, ResponseCode.FAILED );   // fail
+            
             return;
         }
+        
         TraceManager.addDev("Sending completed");
     }
 
@@ -536,11 +725,15 @@ public class RshServer {
 
         try {
             file.delete();
-        } catch(Exception e) {
-            respond(out, "2");   // fail
+            
+            respond( out, ResponseCode.SUCCESS );
+        }
+        catch(Exception e) {
+        	TraceManager.addError( e );
+            respond( out, ResponseCode.FAILED );   // fail
+
             return;
         }
-        respond(out, "3");
     }
 
     public void startServer() {
@@ -573,9 +766,11 @@ public class RshServer {
                 return false;
             }
         } catch (Exception e) {
-            System.out.println("Exception file " + e.getMessage());
-            return false;
+        	TraceManager.addError( "Exception file " + e.getMessage(), e );
+            
+        	return false;
         }
+        
         return true;
     }
 
@@ -588,16 +783,18 @@ public class RshServer {
         try {
             if (!file.exists()) {
                 if (!file.createNewFile()) {
-                    TraceManager.addDev("creation pb");
+                    TraceManager.addError("creation pb");
                     return false;
                 }
             }
             if (!file.canWrite()) {
-                TraceManager.addDev("write pb");
+                TraceManager.addError("write pb");
                 return false;
             }
-        } catch (Exception e) {
-            System.out.println("Exception file " + e.getMessage());
+        }
+        catch (Exception e) {
+            TraceManager.addError( e );
+            
             return false;
         }
 
@@ -614,7 +811,8 @@ public class RshServer {
         //BufferedReader br = new BufferedReader(sr);
         try {
             // Sending first line : 8 + nbByte
-            respond(out, new String("8" + fis.available()));
+            respond(out, ResponseCode.FILE_DATA, Integer.toString( fis.available() ) );
+//            respond(out, new String("8" + fis.available()));
             int cpt = 0;
 
             while((nbRead = fis.read(ba, 0, BUFSIZE)) > -1) {
@@ -622,29 +820,32 @@ public class RshServer {
                 out.write(ba, 0, nbRead);
                 cpt += nbRead;
             }
+            
             TraceManager.addDev("Nb written:" + cpt);
             fis.close();
-        } catch (Exception e) {
-            TraceManager.addDev("Exception when sending file: " + e.getMessage());
+        }
+        catch (Exception e) {
+            TraceManager.addError( "Exception when sending file: " + e.getMessage(), e );
+        
             return false;
         }
+        
         return true;
     }
 
     private String checkSecurity(String _ciphered) {
-	if (!isSecure) {
-	    return _ciphered; // The string is in fact not ciphered
-	}
-
-	if (sk == null) {
-	    return null;
-	}
-
-	String deciphered = AESEncryptor.decrypt(sk, iv, _ciphered);
-
-	TraceManager.addDev("Deciphered=" + deciphered);
-	return deciphered;
+		if (!isSecure) {
+		    return _ciphered; // The string is in fact not ciphered
+		}
 	
+		if (sk == null) {
+		    return null;
+		}
+	
+		String deciphered = AESEncryptor.decrypt(sk, iv, _ciphered);
+	
+		TraceManager.addDev("Deciphered=" + deciphered);
 
+		return deciphered;
     }
 }

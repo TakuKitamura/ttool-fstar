@@ -48,8 +48,21 @@ package launcher;
 
 public class LauncherException extends Exception {
 	
-	public LauncherException(String s) {
-		super(s);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 490922511550027307L;
+
+	public LauncherException( String message ) {
+		super( message );
 	}
-    
+
+	public LauncherException( Throwable cause ) {
+		super( cause );
+	}
+
+	public LauncherException(	String message,
+								Throwable cause ) {
+		super ( message, cause );
+	}
 }

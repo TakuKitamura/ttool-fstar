@@ -1266,7 +1266,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
     protected void processCmd(String cmd) throws LauncherException {
         rshc.setCmd(cmd);
-        rshc.sendProcessRequest();
+        rshc.sendExecuteCommandRequest();
         startThread(1);
         //t = new Thread(this);
         ////go = true;
@@ -1488,6 +1488,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
                     // Status
                     if (elt.getTagName().compareTo(SIMULATION_GLOBAL) == 0) {
+			String minT = "";
+			String maxT = "";
+			    
 
                         nl = elt.getElementsByTagName("status");
                         if ((nl != null) && (nl.getLength() > 0)) {
@@ -1511,6 +1514,26 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                             node0 = nl.item(0);
                             //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
                             time.setText(node0.getTextContent());
+                        }
+
+			nl = elt.getElementsByTagName("simtimemin");
+                        if ((nl != null) && (nl.getLength() > 0)) {
+                            gotTimeAnswerFromServer = true;
+                            node0 = nl.item(0);
+                            //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+			    minT = node0.getTextContent();
+                            //time.setText(minT + " ... " + maxT);
+                        }
+
+			nl = elt.getElementsByTagName("simtimemax");
+                        if ((nl != null) && (nl.getLength() > 0)) {
+                            gotTimeAnswerFromServer = true;
+                            node0 = nl.item(0);
+                            //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+			    maxT = node0.getTextContent();
+			    if (minT.compareTo(maxT) != 0) {
+				time.setText(minT + " ... " + maxT);
+			    }
                         }
 
                         nl = elt.getElementsByTagName("msg");

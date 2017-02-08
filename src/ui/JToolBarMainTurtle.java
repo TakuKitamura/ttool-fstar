@@ -142,8 +142,10 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         button.addMouseListener(mgui.mouseHandler);
         addSeparator();
 
-        gendesign = add(mgui.actions[TGUIAction.ACT_GEN_DESIGN]);
-        gendesign.addMouseListener(mgui.mouseHandler);
+	if (MainGUI.experimentalOn) {
+	    gendesign = add(mgui.actions[TGUIAction.ACT_GEN_DESIGN]);
+	    gendesign.addMouseListener(mgui.mouseHandler);
+	}
 
         addSeparator();
 

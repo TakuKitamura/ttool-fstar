@@ -357,7 +357,7 @@ public class JDialogFormalValidation extends javax.swing.JDialog implements Acti
     
     public void stopProcess() {
         try {
-            rshc.stopFillJTA();
+            rshc.stopCommand();
         } catch (LauncherException le) {
             
         }
@@ -597,14 +597,14 @@ public class JDialogFormalValidation extends javax.swing.JDialog implements Acti
     protected String processCmd(String cmd) throws LauncherException {
         rshc.setCmd(cmd);
         String s = null;
-        rshc.sendProcessRequest();
+        rshc.sendExecuteCommandRequest();
         s = rshc.getDataFromProcess();
         return s;
     }
     
     protected String processPipedCmd(String cmd1, String cmd2) throws LauncherException {
         String s = null;
-        rshc.sendProcessRequest(cmd1, cmd2);
+        rshc.sendExecutePipedCommandsRequest(cmd1, cmd2);
         s = rshc.getDataFromProcess();
         return s;
     }

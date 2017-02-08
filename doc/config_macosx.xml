@@ -43,7 +43,7 @@
 <ExternalCommand1Host data="localhost"/>
 <ExternalCommand1 data="/usr/bin/gtkwave ../simulators/c++2/vcddump.vcd"/>
 
-<LastOpenFile data="/Users/ludovicapvrille/tmp/installTTool/macos/TTool/modeling/MicroWaveOven_SafetySecurity_fullMethodo.xml"/>
+<LastOpenFile data=""/>
 
 <ExternalServer data="localhost:12345"/>
 

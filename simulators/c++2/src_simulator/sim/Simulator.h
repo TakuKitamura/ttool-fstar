@@ -363,6 +363,9 @@ protected:
 	bool _terminateExplore;
 	///Duration of Simulation
 	long _simDuration;
+	//branch coverage in exploration
+	long _nbOfBranchesToExplore;
+	long _nbOfBranchesExplored;
 	std::string _end;
 };
 #endif

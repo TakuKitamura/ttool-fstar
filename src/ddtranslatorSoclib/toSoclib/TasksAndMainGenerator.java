@@ -170,8 +170,13 @@ public class TasksAndMainGenerator {
             //mainFile.appendToBeforeMainCode("\n/* End of User code */\n\n");
         }
         
-        makeTasks();
+	//DG 6.2.
+        int test = makeTasks();
 
+        if (test != 0) {
+	    System.out.println("Warning: blocks not all mapped!");
+	}
+ 
         makeMainHeader();
 
         makeMainMutex();
@@ -350,13 +355,23 @@ public class TasksAndMainGenerator {
 		return task.getCPUNo();
 	    }
 	}
-	return 0;
+	//return 0;//DG 6.2.
+	return -1;
     }
 
-    public void makeTasks() {
+    //DG 6.2. en cours de modification
+    public int makeTasks() {
+	LinkedList<AvatarBlock> unmappedBlocks = new LinkedList<AvatarBlock>();//DG
         for(AvatarBlock block: avspec.getListOfBlocks()) {
-	    makeTask(block,FindCPUidFromTask(block));
+	    makeTask(block,FindCPUidFromTask(block));	   
+	    if (FindCPUidFromTask(block)==-1){
+		System.out.println("******Block "+block.getName()+" not mapped********");
+		unmappedBlocks.add((AvatarBlock)block);          
+	    } 
+	    //ToDo afficher une fenetre avec la liste des blocks non mappes
+	    return 1;
         }
+	return 0;
     }
 
     public void makeTask(AvatarBlock block , int cpuId) {

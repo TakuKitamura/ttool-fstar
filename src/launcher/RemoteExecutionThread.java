@@ -67,7 +67,7 @@ public class RemoteExecutionThread extends Thread {
                 rshc.sendFileData(fileName, data);
             }
             rshc.setCmd(cmd);
-            rshc.sendProcessRequest();
+            rshc.sendExecuteCommandRequest();
             rshc.getDataFromProcess();
         } catch (Exception e) {
         }
