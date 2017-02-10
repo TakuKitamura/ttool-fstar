@@ -183,7 +183,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     public JDialogSearchBox(Frame _frame, String _title, ArrayList<String> l) {
         //super(_frame, _title, true);
         initComponents();
-        this.tdmm = tdmm;
+        //this.tdmm = tdmm;
         this.setTitle("External Search");
         GraphicLib.centerOnParent(this);
         //String s="";
