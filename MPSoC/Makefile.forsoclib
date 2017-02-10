@@ -14,31 +14,32 @@ PATH+=/opt/mutekh/bin
 export PATH
 
 updateruntime:
-	cp ~/TTool/MPSoC/src/*.c ~/Prog/mutekh/libavatar/
-	cp ~/TTool/MPSoC/src/*.h ~/Prog/mutekh/libavatar/include/  
-	cp ~/TTool/MPSoC/src/Makefile ~/Prog/mutekh/libavatar/
+	cp src/*.c mutekh/libavatar/
+	cp src/*.h mutekh/libavatar/include/  
+	cp src/Makefile mutekh/libavatar/
 	
 updategeneratedcode:
-	cp ~/TTool/MPSoC/src/defs.h ~/Prog/mutekh/examples/avatar
-	cp ~/TTool/MPSoC/generated_src/*.h ~/Prog/mutekh/examples/avatar 
-	cp ~/TTool/MPSoC/generated_src/*.c ~/Prog/mutekh/examples/avatar 
-	cp ~/TTool/MPSoC/Makefile.soclib ~/Prog/mutekh/examples/avatar/Makefile
+	cp src/defs.h mutekh/examples/avatar
+	cp generated_src/*.h mutekh/examples/avatar 
+	cp generated_src/*.c mutekh/examples/avatar 
+	cp Makefile.soclib mutekh/examples/avatar/Makefile
 
 compilesoclib:
-	cp ~/TTool/MPSoC/generated_topcell/top.cc  ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/
-	cp ~/TTool/MPSoC/generated_topcell/deployinfo.h  ~/Prog/mutekh/arch/soclib/
-	cp ~/TTool/MPSoC/generated_topcell/deployinfo_map.h  ~/Prog/mutekh/arch/soclib/
-	cp ~/TTool/MPSoC/generated_topcell/platform_desc  ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/platform_desc
-	cat ~/TTool/MPSoC/generated_topcell/config_noproc ~/TTool/MPSoC/generated_topcell/nbproc > ~/TTool/MPSoC/generated_topcell/config 
-	cp ~/TTool/MPSoC/generated_topcell/config  ~/Prog/mutekh/examples/avatar/
-	cd ~/Prog/mutekh; make CONF=examples/avatar/config BUILD=soclib-$(MUTEKH_CPU):pf-tutorial
+	cp generated_topcell/top.cc  oclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/
+	cp generated_topcell/deployinfo.h  mutekh/arch/soclib/
+	cp generated_topcell/deployinfo_map.h  mutekh/arch/soclib/
+	cp generated_topcell/platform_desc  soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/platform_desc
+	cat generated_topcell/config_noproc enerated_topcell/nbproc > generated_topcell/config 
+	cp generated_topcell/config  mutekh/examples/avatar/
+	cd mutekh; make CONF=examples/avatar/config BUILD=soclib-$(MUTEKH_CPU):pf-tutorial
 
 runsoclib-trace:
 	echo "running soclib"
-	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ~/Prog/mutekh/avatar-soclib-$(MUTEKH_CPU).out > trace
+	cd soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ../../../../../mutekh/avatar-soclib-$(MUTEKH_CPU).out > ../../../../trace
 
 runsoclib:
 	echo "running soclib"
-	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ~/Prog/mutekh/avatar-soclib-$(MUTEKH_CPU).out 
+	cd soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ../../../../../mutekh/avatar-soclib-$(MUTEKH_CPU).out
+	
 allsoclib: updateruntime updategeneratedcode updateruntimesoclib updategeneratedcodesoclib  compilesoclib runsoclib
 
