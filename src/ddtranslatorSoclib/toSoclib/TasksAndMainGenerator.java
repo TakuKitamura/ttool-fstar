@@ -238,10 +238,10 @@ public class TasksAndMainGenerator {
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.wptr = 0;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
-
+	//DG 10.0.2 width=1??
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 1;" + CR);
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 1;" + CR);
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = 1;" + CR);
+	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 4;" + CR);//DG 10.02.2017 systematiquement des entiers pour le moment
+	mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = " +getChannelName(ar, i)+".depth;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR2);
 
@@ -256,16 +256,7 @@ public class TasksAndMainGenerator {
 			mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".status->wptr =0;" + CR);
-
-			//mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+i+";" + CR); 
-
-	//DG 26.01.2017 corrected gros bug i remplace
-			/*	mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+i+";" + CR); 
-	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+j+";" + CR); 		
-	       
-	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+i+";" + CR);
-		
-	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+i+";" + CR2);*/		     
+				     
 			mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
 	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
 	       
@@ -297,7 +288,7 @@ public class TasksAndMainGenerator {
 			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
 
-
+			//DG 10.2. width=1??
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 1;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+"1;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = "+getChannelName(ar, i)+".depth;" + CR); //gdepth = depth for sync fifo
@@ -318,25 +309,20 @@ public class TasksAndMainGenerator {
 	/* force init because mutekh initializer does not work her */		
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".status =&"+ getChannelName(ar, i)+"_status;" + CR);
 
-			mainFile.appendToMainCode(getChannelName(ar, i) +".status->lock=0;" + CR);
-		    mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
-		mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
-	    mainFile.appendToMainCode(getChannelName(ar, i)+".status->wptr=0;" + CR);
+	mainFile.appendToMainCode(getChannelName(ar, i) +".status->lock=0;" + CR);
+	mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
+	mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
+	mainFile.appendToMainCode(getChannelName(ar, i)+".status->wptr=0;" + CR);
 	    
-	    /* mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+i+";" + CR); 
-
-
-			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+i+";" + CR);								
-			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+i+";" + CR);
-			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) + " CHANNEL"+i+";" + CR2);*/
-  int seg_no=0;
+	    
+	int seg_no=0;
         mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
 	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
 	       
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
 		
 	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);		
-			//j++;		
+		
 		    }
 		}
 	    }
@@ -350,7 +336,7 @@ public class TasksAndMainGenerator {
 		return task.getCPUNo();
 	    }
 	}
-	//return 0;
+
 	return -1;
     }
 
@@ -366,8 +352,7 @@ public class TasksAndMainGenerator {
 
     public void makeTask(AvatarBlock block , int cpuId) {
 	TaskFileSoclib taskFile = new TaskFileSoclib(block.getName(),cpuId);
-        //taskFile.addToHeaderCode("#include \"main.h\"" + CR);	
-        //taskFile.addToMainCode("#include \"" + block.getName() + ".h\"");
+        
         if (includeUserCode) {
             String tmp = block.getGlobalCode();
             if (tmp != null) {

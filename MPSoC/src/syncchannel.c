@@ -16,18 +16,30 @@ void mwmr_sync_flush(struct mwmr_s *fifo){
   }
 }
 
-/* all synchronous communications use MWMR channels of size 1, enforcing synchronization */
-
 int sync_read( struct mwmr_s *fifo, void *_ptr, int lensw ){  
-  debugMsg("###before read ");
-  mwmr_read(fifo,_ptr,1);
-  debugMsg("###after read ");
+ 
+  debugInt("debug fifo \n",fifo);
+  debugInt("debug ptr \n",_ptr);
+  debugInt("debug  lensw \n", lensw);
+  debugInt("debug  fifo status address \n", &(fifo->status));
+  debugInt("debug  fifo status \n", (fifo->status));
+  debugInt("debug  fifo lock address\n", &(fifo->status->lock));
+  debugInt("debug  fifo lock \n", fifo->status->lock);
+  mwmr_read(fifo,_ptr,lensw);
+ 
 }
 
 int sync_write( struct mwmr_s *fifo, void *_ptr, int lensw ){
-  debugMsg("###mwmr channel before write ");
-  mwmr_write(fifo,_ptr,1);
-  debugMsg("####mwmr channel  after write: "); 
+ 
+  debugInt("debug fifo \n",fifo);
+  debugInt("debug ptr \n",_ptr);
+  debugInt("debug  lensw \n", lensw);
+  debugInt("debug  fifo status address \n", &(fifo->status));
+  debugInt("debug  fifo status \n", (fifo->status));
+  debugInt("debug  fifo lock address\n", &(fifo->status->lock));
+  debugInt("debug  fifo lock \n", fifo->status->lock);
+  mwmr_write(fifo,_ptr,lensw);
+  
 }
 
 syncchannel *getNewSyncchannel(char *outname, char *inname, struct mwmr_s *fifo) {
@@ -41,6 +53,9 @@ syncchannel *getNewSyncchannel(char *outname, char *inname, struct mwmr_s *fifo)
   syncch->outWaitQueue = NULL;
   syncch->isBroadcast = false;
   syncch->mwmr_fifo=fifo;
+  debugInt("syncchannel address \n",syncch->mwmr_fifo);
+  debugInt("syncchannel depth \n", syncch->mwmr_fifo->depth);
+  debugInt("syncchannel width \n",syncch->mwmr_fifo->width);
   return syncch;
 }
 
