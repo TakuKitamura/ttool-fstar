@@ -1,1 +1,1 @@
-objs = main.o B2.o B0.o B1.o 
+objs = main.o InterfaceDevice.o SmartCard.o TCPIP.o TCPPacketManager.o Application.o SmartCardController.o 
