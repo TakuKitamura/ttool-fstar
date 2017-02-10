@@ -138,7 +138,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     private javax.swing.JLabel jLabel_Result;
     private JTextField jTextaddressDB;
 
-    private String search;
+    //private String search;
 
     private TableSorter sortTableGS;
     private TableSorter sortTableGSc;
@@ -711,7 +711,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         resultTable_googleScholar.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
                     int row = resultTable_googleScholar.getSelectedRow();
-                    int col = resultTable_googleScholar.getSelectedColumn();
+                    //int col = resultTable_googleScholar.getSelectedColumn();
 
                     if (e.getClickCount() == 2) {
                         String st = (String) resultTable_googleScholar.getValueAt(row, 3);

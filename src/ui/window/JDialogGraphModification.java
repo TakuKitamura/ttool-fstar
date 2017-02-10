@@ -366,11 +366,11 @@ public class JDialogGraphModification extends javax.swing.JDialog implements Act
     }
 
     public void run() {
-        String data1, data2;
-        String result;
-        String cmd;
+        String data1;//, data2;
+       // String result;
+      //  String cmd;
         int id = 0;
-        String remote1, remote2;
+    //    String remote1, remote2;
         String data, cmd1;
         String tmp1 = remoteFile1;
         String fileName;
