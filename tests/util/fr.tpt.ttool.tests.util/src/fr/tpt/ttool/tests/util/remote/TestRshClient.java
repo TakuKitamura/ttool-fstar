@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -55,6 +56,12 @@ public class TestRshClient {
 	public void setUp()
 	throws Exception {
 		client = new RshClient( "localhost" );
+	}
+
+	@After
+	public void tearDown()
+	throws Exception {
+		client = null;
 	}
 
 	@AfterClass
