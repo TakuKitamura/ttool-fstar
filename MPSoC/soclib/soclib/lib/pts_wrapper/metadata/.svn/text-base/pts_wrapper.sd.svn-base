@@ -1,0 +1,15 @@
+
+# -*- python -*-
+
+__id__ = "$Id$"
+__version__ = "$Revision$"
+
+Module('common:pts_wrapper',
+	classname = 'soclib::common::PtsWrapper',
+	header_files = ['../include/pts_wrapper.h',],
+	implementation_files = ['../src/pts_wrapper.cpp',],
+	uses = [
+		Uses('common:exception'),
+		Uses('common:fd_poller'),
+		],
+)

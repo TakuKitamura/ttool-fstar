@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/2278/trunk/soclib/soclib/module/internal_component/fifo_virtual_copro_wrapper/caba/source/src
+END
+srl_log.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/2265/trunk/soclib/soclib/module/internal_component/fifo_virtual_copro_wrapper/caba/source/src/srl_log.cpp
+END
+srl_endianness.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/!svn/ver/2265/trunk/soclib/soclib/module/internal_component/fifo_virtual_copro_wrapper/caba/source/src/srl_endianness.cpp
+END
+fifo_virtual_copro_wrapper.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/!svn/ver/2278/trunk/soclib/soclib/module/internal_component/fifo_virtual_copro_wrapper/caba/source/src/fifo_virtual_copro_wrapper.cpp
+END

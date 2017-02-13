@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/1363/trunk/soclib/benchmarks/rtems/soclib/startup
+END
+bspstart.c
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/1363/trunk/soclib/benchmarks/rtems/soclib/startup/bspstart.c
+END
+linkcmds
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/1363/trunk/soclib/benchmarks/rtems/soclib/startup/linkcmds
+END
+bspclean.c
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/1363/trunk/soclib/benchmarks/rtems/soclib/startup/bspclean.c
+END

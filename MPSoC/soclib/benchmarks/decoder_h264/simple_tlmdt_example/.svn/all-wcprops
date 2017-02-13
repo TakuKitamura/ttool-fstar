@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/1785/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example
+END
+platform_desc
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/platform_desc
+END
+top.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1635/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/top.cpp
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/Makefile
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/README
+END
+soclib_addresses.h
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/soclib_addresses.h
+END

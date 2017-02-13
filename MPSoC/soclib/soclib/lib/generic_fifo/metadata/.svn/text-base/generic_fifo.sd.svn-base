@@ -1,0 +1,10 @@
+
+# -*- python -*-
+
+__id__ = "$Id$"
+__version__ = "$Revision$"
+
+Module('caba:generic_fifo',
+	classname = 'soclib::caba::GenericFifo',
+	header_files = ['../include/caba/generic_fifo.h',],
+)

@@ -1,0 +1,16 @@
+
+# -*- python -*-
+
+__id__ = "$Id$"
+__version__ = "$Revision$"
+
+Module('caba:generic_cache',
+	classname = 'soclib::GenericCache',
+	header_files = ['../include/generic_cache.h',],
+	   tmpl_parameters = [
+	parameter.Type('addr_t'),
+	],
+	uses = [Uses('common:mapping_table'),
+			Uses('common:address_masking_table',
+				 data_t = parameter.Reference('addr_t')),],
+)

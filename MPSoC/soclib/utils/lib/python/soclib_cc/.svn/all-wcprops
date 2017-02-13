@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2025/trunk/soclib/utils/lib/python/soclib_cc
+END
+bugreport.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/1063/trunk/soclib/utils/lib/python/soclib_cc/bugreport.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/946/trunk/soclib/utils/lib/python/soclib_cc/__init__.py
+END
+exceptions.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/1065/trunk/soclib/utils/lib/python/soclib_cc/exceptions.py
+END
+formatter.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/1746/trunk/soclib/utils/lib/python/soclib_cc/formatter.py
+END

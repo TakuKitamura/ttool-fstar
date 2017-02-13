@@ -1,0 +1,15 @@
+
+# -*- python -*-
+
+__id__ = "$Id$"
+__version__ = "$Revision$"
+
+Module('common:process_wrapper',
+	classname = 'soclib::common::ProcessWrapper',
+	header_files = ['../include/process_wrapper.h',],
+	implementation_files = ['../src/process_wrapper.cpp',],
+	uses = [
+		Uses('common:exception'),
+		Uses('common:fd_poller'),
+		],
+)

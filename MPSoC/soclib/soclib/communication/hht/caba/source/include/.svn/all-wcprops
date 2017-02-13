@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/1221/trunk/soclib/soclib/communication/hht/caba/source/include
+END
+hht_target.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1221/trunk/soclib/soclib/communication/hht/caba/source/include/hht_target.h
+END
+hht_param.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1219/trunk/soclib/soclib/communication/hht/caba/source/include/hht_param.h
+END
+hht_signals.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1221/trunk/soclib/soclib/communication/hht/caba/source/include/hht_signals.h
+END
+hht_flits.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1219/trunk/soclib/soclib/communication/hht/caba/source/include/hht_flits.h
+END
+hht_initiator.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/1221/trunk/soclib/soclib/communication/hht/caba/source/include/hht_initiator.h
+END

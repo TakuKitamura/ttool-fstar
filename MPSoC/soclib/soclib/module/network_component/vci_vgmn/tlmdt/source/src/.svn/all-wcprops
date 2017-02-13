@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/2070/trunk/soclib/soclib/module/network_component/vci_vgmn/tlmdt/source/src
+END
+vci_vgmn.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/2010/trunk/soclib/soclib/module/network_component/vci_vgmn/tlmdt/source/src/vci_vgmn.cpp
+END
+interconnect.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/2070/trunk/soclib/soclib/module/network_component/vci_vgmn/tlmdt/source/src/interconnect.cpp
+END
+centralized_buffer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/2010/trunk/soclib/soclib/module/network_component/vci_vgmn/tlmdt/source/src/centralized_buffer.cpp
+END

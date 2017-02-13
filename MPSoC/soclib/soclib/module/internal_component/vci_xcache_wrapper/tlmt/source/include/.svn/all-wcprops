@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/1012/trunk/soclib/soclib/module/internal_component/vci_xcache_wrapper/tlmt/source/include
+END
+buffer.h
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/387/trunk/soclib/soclib/module/internal_component/vci_xcache_wrapper/tlmt/source/include/buffer.h
+END
+vci_xcache_wrapper.h
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/!svn/ver/1012/trunk/soclib/soclib/module/internal_component/vci_xcache_wrapper/tlmt/source/include/vci_xcache_wrapper.h
+END
+generic_cache.h
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/387/trunk/soclib/soclib/module/internal_component/vci_xcache_wrapper/tlmt/source/include/generic_cache.h
+END

@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/2340/trunk/soclib/soclib/module/infrastructure_component/interrupt_infrastructure/vci_xicu/include/soclib
+END
+xicu.h
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/!svn/ver/2340/trunk/soclib/soclib/module/infrastructure_component/interrupt_infrastructure/vci_xicu/include/soclib/xicu.h
+END

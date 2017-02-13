@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_excep_intr
+END
+test.S
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_excep_intr/test.S
+END
+ldscript
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_excep_intr/ldscript
+END
+run
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_excep_intr/run
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_excep_intr/Makefile
+END

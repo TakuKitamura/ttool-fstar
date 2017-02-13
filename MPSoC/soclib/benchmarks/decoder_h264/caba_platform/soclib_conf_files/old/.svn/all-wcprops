@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/1592/trunk/soclib/benchmarks/decoder_h264/caba_platform/soclib_conf_files/old
+END
+pf_soclib_eval_arm.dts
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1592/trunk/soclib/benchmarks/decoder_h264/caba_platform/soclib_conf_files/old/pf_soclib_eval_arm.dts
+END
+pf_soclib_eval_ppc.dts
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1592/trunk/soclib/benchmarks/decoder_h264/caba_platform/soclib_conf_files/old/pf_soclib_eval_ppc.dts
+END
+pf_soclib_eval_mips.dts
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/1592/trunk/soclib/benchmarks/decoder_h264/caba_platform/soclib_conf_files/old/pf_soclib_eval_mips.dts
+END

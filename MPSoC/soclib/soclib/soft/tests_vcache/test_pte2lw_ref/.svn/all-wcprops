@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_pte2lw_ref
+END
+test.S
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_pte2lw_ref/test.S
+END
+ldscript
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_pte2lw_ref/ldscript
+END
+run
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_pte2lw_ref/run
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_pte2lw_ref/Makefile
+END

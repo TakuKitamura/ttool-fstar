@@ -1,0 +1,13 @@
+
+# -*- python -*-
+
+__id__ = "$Id$"
+__version__ = "$Revision$"
+
+Module('caba:generic_tlb',
+	classname = 'soclib::GenericTlb',
+	header_files = ['../include/generic_tlb.h',],
+	   tmpl_parameters = [
+	parameter.Type('addr_t'),
+	],
+)

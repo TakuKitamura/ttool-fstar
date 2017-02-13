@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/2235/trunk/soclib/soclib/soft/tests_vcache
+END
+Makefile.inc
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/Makefile.inc
+END
+run_tests
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/2233/trunk/soclib/soclib/soft/tests_vcache/run_tests
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/2231/trunk/soclib/soclib/soft/tests_vcache/README
+END

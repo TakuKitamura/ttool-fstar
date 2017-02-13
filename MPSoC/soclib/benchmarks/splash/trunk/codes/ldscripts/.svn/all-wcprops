@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/ldscripts
+END
+mips_vgmn_1p
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/ldscripts/mips_vgmn_1p
+END
+mips_dspin_4p_lm
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/ldscripts/mips_dspin_4p_lm
+END
+mips_vgmn_4p
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/ldscripts/mips_vgmn_4p
+END
+mips_dspin_16p_lm
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/ldscripts/mips_dspin_16p_lm
+END
+mips_vgmn_4p_gm
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/ldscripts/mips_vgmn_4p_gm
+END
+mips_dspin_4p_gm
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/ldscripts/mips_dspin_4p_gm
+END
+mips_dspin_16p_gm
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/ldscripts/mips_dspin_16p_gm
+END

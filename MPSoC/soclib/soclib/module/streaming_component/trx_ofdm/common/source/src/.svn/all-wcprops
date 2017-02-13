@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/1512/trunk/soclib/soclib/module/streaming_component/trx_ofdm/common/source/src
+END
+trx_ofdm_core_config.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/739/trunk/soclib/soclib/module/streaming_component/trx_ofdm/common/source/src/trx_ofdm_core_config.cpp
+END
+trx_ofdm_core_ro_config.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/739/trunk/soclib/soclib/module/streaming_component/trx_ofdm/common/source/src/trx_ofdm_core_ro_config.cpp
+END
+FixC.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/739/trunk/soclib/soclib/module/streaming_component/trx_ofdm/common/source/src/FixC.cpp
+END
+fft_radix_4_2.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/1512/trunk/soclib/soclib/module/streaming_component/trx_ofdm/common/source/src/fft_radix_4_2.cpp
+END
+trx_ofdm_core.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/739/trunk/soclib/soclib/module/streaming_component/trx_ofdm/common/source/src/trx_ofdm_core.cpp
+END

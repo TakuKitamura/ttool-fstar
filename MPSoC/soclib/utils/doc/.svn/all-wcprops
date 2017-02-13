@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/2052/trunk/soclib/utils/doc
+END
+soclib.ico
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/2023/trunk/soclib/utils/doc/soclib.ico
+END
+soclib-cc.rst
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/2051/trunk/soclib/utils/doc/soclib-cc.rst
+END
+build.rst
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/2036/trunk/soclib/utils/doc/build.rst
+END
+metadata.rst
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/2037/trunk/soclib/utils/doc/metadata.rst
+END
+platform_desc.rst
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/2036/trunk/soclib/utils/doc/platform_desc.rst
+END
+images.mk
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/2023/trunk/soclib/utils/doc/images.mk
+END
+conf.py
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/2030/trunk/soclib/utils/doc/conf.py
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/2023/trunk/soclib/utils/doc/Makefile
+END
+configuration.rst
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/2037/trunk/soclib/utils/doc/configuration.rst
+END
+index.rst
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/2038/trunk/soclib/utils/doc/index.rst
+END
+soclib.png
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/2023/trunk/soclib/utils/doc/soclib.png
+END

@@ -1,0 +1,64 @@
+10
+
+dir
+2456
+https://www.soclib.fr/svn/trunk/soclib/soclib/communication
+https://www.soclib.fr/svn
+
+
+
+2013-09-27T14:29:53.932736Z
+2455
+bouyer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2cf4c1f0-a32b-0410-9068-d80f8be93c97
+
+ring
+dir
+
+anoc
+dir
+
+gate
+dir
+
+vci
+dir
+
+pibus
+dir
+
+fifo
+dir
+
+hht
+dir
+
+avalonbus
+dir
+
+xcache
+dir
+
+virtual_dspin_network
+dir
+
+dspin
+dir
+
+wishbone
+dir
+

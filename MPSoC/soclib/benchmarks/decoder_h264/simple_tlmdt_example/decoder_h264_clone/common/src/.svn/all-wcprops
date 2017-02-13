@@ -1,0 +1,227 @@
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src
+END
+mocomp.h
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/mocomp.h
+END
+block.h
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/block.h
+END
+nal_thread.c
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/nal_thread.c
+END
+slicehdr.h
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/slicehdr.h
+END
+yuv_write.h
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/yuv_write.h
+END
+nal_thread.h
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/nal_thread.h
+END
+intra_pred.c
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/intra_pred.c
+END
+cavlc_tables.h
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/cavlc_tables.h
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/Makefile
+END
+intra_pred.h
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/intra_pred.h
+END
+mode_pred.c
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/mode_pred.c
+END
+input.c
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/input.c
+END
+coretrans.c
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/coretrans.c
+END
+results.c
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/results.c
+END
+mode_pred.h
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/mode_pred.h
+END
+input.h
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/input.h
+END
+in_file.c
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/in_file.c
+END
+coretrans.h
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/coretrans.h
+END
+global.h
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/global.h
+END
+results.h
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/results.h
+END
+residual.c
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/residual.c
+END
+nal.c
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/nal.c
+END
+residual.h
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/residual.h
+END
+nal.h
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/nal.h
+END
+params.c
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/params.c
+END
+mbmodes.c
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/mbmodes.c
+END
+common.c
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/common.c
+END
+params.h
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/params.h
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/Makefile.am
+END
+cavlc.c
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/cavlc.c
+END
+mocomp.c
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/mocomp.c
+END
+block.c
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/block.c
+END
+mbmodes.h
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/mbmodes.h
+END
+cavlc.h
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/cavlc.h
+END
+yuv_write.c
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/yuv_write.c
+END
+common.h
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/common.h
+END
+slicehdr.c
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/simple_tlmdt_example/decoder_h264_clone/common/src/slicehdr.c
+END

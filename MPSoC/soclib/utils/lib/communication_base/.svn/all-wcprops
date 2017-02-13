@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/1850/trunk/soclib/utils/lib/communication_base
+END
+rtl.sd
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/1752/trunk/soclib/utils/lib/communication_base/rtl.sd
+END
+caba.sd
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/1850/trunk/soclib/utils/lib/communication_base/caba.sd
+END

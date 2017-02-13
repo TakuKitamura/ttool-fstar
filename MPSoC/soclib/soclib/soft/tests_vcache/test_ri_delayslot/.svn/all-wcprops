@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_ri_delayslot
+END
+test.S
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_ri_delayslot/test.S
+END
+run
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_ri_delayslot/run
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_ri_delayslot/Makefile
+END

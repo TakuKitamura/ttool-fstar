@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/1707/trunk/soclib/soclib/communication/wishbone/caba/source/include
+END
+wb_slave.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/1655/trunk/soclib/soclib/communication/wishbone/caba/source/include/wb_slave.h
+END
+wb_master.h
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/1655/trunk/soclib/soclib/communication/wishbone/caba/source/include/wb_master.h
+END
+wb_signal.h
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/1655/trunk/soclib/soclib/communication/wishbone/caba/source/include/wb_signal.h
+END
+wb_param.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/1707/trunk/soclib/soclib/communication/wishbone/caba/source/include/wb_param.h
+END

@@ -1,0 +1,12 @@
+
+# -*- python -*-
+
+__id__ = "$Id$"
+__version__ = "$Revision$"
+
+Module('common:fd_poller',
+	classname = 'soclib::common::FdPoller',
+	header_files = ['../include/fd_poller.h',],
+	implementation_files = ['../src/fd_poller.cpp',],
+#	   debug = True,
+)

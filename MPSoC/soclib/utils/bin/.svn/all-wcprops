@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/1980/trunk/soclib/utils/bin
+END
+soclib-test-build
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/1400/trunk/soclib/utils/bin/soclib-test-build
+END
+soclib-cleanup-terms
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/404/trunk/soclib/utils/bin/soclib-cleanup-terms
+END
+soclib-test-cpu
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/1401/trunk/soclib/utils/bin/soclib-test-cpu
+END
+soclib-test-platforms
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/1400/trunk/soclib/utils/bin/soclib-test-platforms
+END
+soclib-cc
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/1980/trunk/soclib/utils/bin/soclib-cc
+END

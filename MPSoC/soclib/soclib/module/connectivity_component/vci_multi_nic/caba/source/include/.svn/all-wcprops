@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/2422/trunk/soclib/soclib/module/connectivity_component/vci_multi_nic/caba/source/include
+END
+nic_rx_chbuf.h
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/2389/trunk/soclib/soclib/module/connectivity_component/vci_multi_nic/caba/source/include/nic_rx_chbuf.h
+END
+nic_tx_gmii.h
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/2389/trunk/soclib/soclib/module/connectivity_component/vci_multi_nic/caba/source/include/nic_tx_gmii.h
+END
+nic_tx_chbuf.h
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/2392/trunk/soclib/soclib/module/connectivity_component/vci_multi_nic/caba/source/include/nic_tx_chbuf.h
+END
+vci_multi_nic.h
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/2422/trunk/soclib/soclib/module/connectivity_component/vci_multi_nic/caba/source/include/vci_multi_nic.h
+END
+fifo_multi_buffer.h
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/!svn/ver/2389/trunk/soclib/soclib/module/connectivity_component/vci_multi_nic/caba/source/include/fifo_multi_buffer.h
+END
+nic_rx_gmii.h
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/2422/trunk/soclib/soclib/module/connectivity_component/vci_multi_nic/caba/source/include/nic_rx_gmii.h
+END

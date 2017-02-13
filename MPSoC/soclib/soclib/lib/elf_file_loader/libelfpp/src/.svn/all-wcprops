@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/projets/!svn/ver/793/trunk/libelfpp/src
+END
+elfpp_symbol.cc
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/projets/!svn/ver/556/trunk/libelfpp/src/elfpp_symbol.cc
+END
+elfpp_object.cc
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/projets/!svn/ver/725/trunk/libelfpp/src/elfpp_object.cc
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/projets/!svn/ver/793/trunk/libelfpp/src/Makefile.am
+END
+elfpp_access.cc
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/projets/!svn/ver/725/trunk/libelfpp/src/elfpp_access.cc
+END
+elfpp_reloc.cc
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/projets/!svn/ver/556/trunk/libelfpp/src/elfpp_reloc.cc
+END
+elfpp_section.cc
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/projets/!svn/ver/450/trunk/libelfpp/src/elfpp_section.cc
+END

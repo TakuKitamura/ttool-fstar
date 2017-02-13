@@ -1,0 +1,22 @@
+
+# -*- python -*-
+
+__id__ = "$Id$"
+__version__ = "$Revision$"
+
+Module('common:iss2_profiler',
+	classname = 'soclib::common::Iss2Profiler',
+	header_files = ["../include/iss2_profiler.h",],
+	implementation_files = [
+		"../src/iss2_profiler.cpp",
+		],
+	   tmpl_parameters = [
+	parameter.Module('profiler_iss_t'),
+	],
+	   uses = [
+	Uses('common:iss2'),
+	],
+	   extensions = [
+	'dsx:cpu=wrapper:profiler_iss_t',
+   ],
+)

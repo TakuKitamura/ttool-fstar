@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/2004/trunk/soclib/doc/sty
+END
+lang.sty
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/2004/trunk/soclib/doc/sty/lang.sty
+END
+common.sty
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/2004/trunk/soclib/doc/sty/common.sty
+END
+lang_deps.sty
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/2004/trunk/soclib/doc/sty/lang_deps.sty
+END
+soclib.cls
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/2004/trunk/soclib/doc/sty/soclib.cls
+END

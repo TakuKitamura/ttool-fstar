@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/2341/trunk/soclib/soclib/lib/loader/include
+END
+loader.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/2341/trunk/soclib/soclib/lib/loader/include/loader.h
+END
+binary_file_section.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/2341/trunk/soclib/soclib/lib/loader/include/binary_file_section.h
+END
+binary_file_symbol.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/2331/trunk/soclib/soclib/lib/loader/include/binary_file_symbol.h
+END

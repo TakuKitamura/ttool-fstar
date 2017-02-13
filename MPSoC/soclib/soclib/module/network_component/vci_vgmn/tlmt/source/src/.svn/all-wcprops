@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1195/trunk/soclib/soclib/module/network_component/vci_vgmn/tlmt/source/src
+END
+vci_cmd_arb_rsp_rout.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/1195/trunk/soclib/soclib/module/network_component/vci_vgmn/tlmt/source/src/vci_cmd_arb_rsp_rout.cpp
+END
+vci_rsp_arb_cmd_rout.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/1195/trunk/soclib/soclib/module/network_component/vci_vgmn/tlmt/source/src/vci_rsp_arb_cmd_rout.cpp
+END
+vci_vgmn.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/1195/trunk/soclib/soclib/module/network_component/vci_vgmn/tlmt/source/src/vci_vgmn.cpp
+END

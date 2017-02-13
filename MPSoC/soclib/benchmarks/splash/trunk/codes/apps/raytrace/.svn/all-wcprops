@@ -1,0 +1,137 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace
+END
+trace.C
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/trace.C
+END
+tri.C
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/tri.C
+END
+cr.C
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/cr.C
+END
+matrix.C
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/matrix.C
+END
+isect.C
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/isect.C
+END
+memory.C
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/memory.C
+END
+geo.C
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/geo.C
+END
+workpool.C
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/workpool.C
+END
+raystack.C
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/raystack.C
+END
+fbuf.C
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/fbuf.C
+END
+poly.C
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/poly.C
+END
+main.C
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/main.C
+END
+shade.C
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/shade.C
+END
+README.raytrace
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/README.raytrace
+END
+hutv.C
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/hutv.C
+END
+env.C
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/env.C
+END
+rt.H
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/rt.H
+END
+sph.C
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/sph.C
+END
+bbox.C
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/bbox.C
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/Makefile
+END
+huprn.C
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/huprn.C
+END
+husetup.C
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/husetup.C
+END

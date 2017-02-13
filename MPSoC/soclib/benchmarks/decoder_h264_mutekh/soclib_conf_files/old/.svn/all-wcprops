@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1566/trunk/soclib/benchmarks/decoder_h264_mutekh/soclib_conf_files/old
+END
+pf_soclib_eval_arm.dts
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/1566/trunk/soclib/benchmarks/decoder_h264_mutekh/soclib_conf_files/old/pf_soclib_eval_arm.dts
+END
+pf_soclib_eval_ppc.dts
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/1566/trunk/soclib/benchmarks/decoder_h264_mutekh/soclib_conf_files/old/pf_soclib_eval_ppc.dts
+END
+pf_soclib_eval_mips.dts
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/1566/trunk/soclib/benchmarks/decoder_h264_mutekh/soclib_conf_files/old/pf_soclib_eval_mips.dts
+END

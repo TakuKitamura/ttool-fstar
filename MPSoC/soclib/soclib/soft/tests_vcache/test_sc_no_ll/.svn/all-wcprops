@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/2235/trunk/soclib/soclib/soft/tests_vcache/test_sc_no_ll
+END
+test.S
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/2235/trunk/soclib/soclib/soft/tests_vcache/test_sc_no_ll/test.S
+END
+run
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/2235/trunk/soclib/soclib/soft/tests_vcache/test_sc_no_ll/run
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/2233/trunk/soclib/soclib/soft/tests_vcache/test_sc_no_ll/Makefile
+END

@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/1879/trunk/soclib/soclib/module/network_component/vci_target_transactor/tlmdt/metadata
+END
+vci_target_transactor_buffer.sd
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/!svn/ver/1879/trunk/soclib/soclib/module/network_component/vci_target_transactor/tlmdt/metadata/vci_target_transactor_buffer.sd
+END
+vci_target_transactor.sd
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/!svn/ver/1879/trunk/soclib/soclib/module/network_component/vci_target_transactor/tlmdt/metadata/vci_target_transactor.sd
+END

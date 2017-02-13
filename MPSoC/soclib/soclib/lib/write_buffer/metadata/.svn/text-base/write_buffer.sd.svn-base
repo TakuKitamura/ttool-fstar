@@ -1,0 +1,10 @@
+
+# -*- python -*-
+
+__id__ = "$Id$"
+__version__ = "$Revision$"
+
+Module('caba:write_buffer',
+	classname = 'soclib::WriteBuffer',
+	header_files = ['../include/write_buffer.h',],
+)

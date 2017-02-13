@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/884/trunk/soclib/soclib/communication/anoc/common/source/src
+END
+anoc_transaction.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/884/trunk/soclib/soclib/communication/anoc/common/source/src/anoc_transaction.cpp
+END
+res_path.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/884/trunk/soclib/soclib/communication/anoc/common/source/src/res_path.cpp
+END
+tlm_tac2.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/742/trunk/soclib/soclib/communication/anoc/common/source/src/tlm_tac2.cpp
+END
+anoc_common.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/737/trunk/soclib/soclib/communication/anoc/common/source/src/anoc_common.cpp
+END
+anoc_stopper.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/884/trunk/soclib/soclib/communication/anoc/common/source/src/anoc_stopper.cpp
+END

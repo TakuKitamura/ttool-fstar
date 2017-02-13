@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/2118/trunk/soclib/soclib/iss/lm32/src
+END
+lm32_debug.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/2086/trunk/soclib/soclib/iss/lm32/src/lm32_debug.cpp
+END
+lm32_load_store.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/2076/trunk/soclib/soclib/iss/lm32/src/lm32_load_store.cpp
+END
+lm32_isa.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/2090/trunk/soclib/soclib/iss/lm32/src/lm32_isa.cpp
+END
+lm32.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/2118/trunk/soclib/soclib/iss/lm32/src/lm32.cpp
+END

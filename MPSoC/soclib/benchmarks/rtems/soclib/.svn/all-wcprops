@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1558/trunk/soclib/benchmarks/rtems/soclib
+END
+bsp_specs
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1363/trunk/soclib/benchmarks/rtems/soclib/bsp_specs
+END
+configure.ac
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/1363/trunk/soclib/benchmarks/rtems/soclib/configure.ac
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/1558/trunk/soclib/benchmarks/rtems/soclib/Makefile.am
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1558/trunk/soclib/benchmarks/rtems/soclib/README
+END

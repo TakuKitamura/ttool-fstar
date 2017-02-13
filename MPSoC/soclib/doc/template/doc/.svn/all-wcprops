@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/2004/trunk/soclib/doc/template/doc
+END
+document.tex.sed
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/2004/trunk/soclib/doc/template/doc/document.tex.sed
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/2004/trunk/soclib/doc/template/doc/Makefile
+END

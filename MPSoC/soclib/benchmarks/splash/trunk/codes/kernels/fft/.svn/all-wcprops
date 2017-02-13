@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/kernels/fft
+END
+fft.C
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/kernels/fft/fft.C
+END
+README.fft
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/kernels/fft/README.fft
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/kernels/fft/Makefile
+END

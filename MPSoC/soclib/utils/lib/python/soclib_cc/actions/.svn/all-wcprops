@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/1750/trunk/soclib/utils/lib/python/soclib_cc/actions
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/1750/trunk/soclib/utils/lib/python/soclib_cc/actions/__init__.py
+END
+cxx.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/1750/trunk/soclib/utils/lib/python/soclib_cc/actions/cxx.py
+END
+hdl.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/1750/trunk/soclib/utils/lib/python/soclib_cc/actions/hdl.py
+END

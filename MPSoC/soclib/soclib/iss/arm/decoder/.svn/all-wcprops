@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/2333/trunk/soclib/soclib/iss/arm/decoder
+END
+arm_uncond_table.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/2333/trunk/soclib/soclib/iss/arm/decoder/arm_uncond_table.py
+END
+arm_thumb_table.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/2333/trunk/soclib/soclib/iss/arm/decoder/arm_thumb_table.py
+END
+arm_global_table.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/2333/trunk/soclib/soclib/iss/arm/decoder/arm_global_table.py
+END

@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1656/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files
+END
+pf_decoder_h264_1_mips32el.dts
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/1628/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_1_mips32el.dts
+END
+pf_decoder_h264_2_mips32el.dts
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/1628/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_2_mips32el.dts
+END
+pf_decoder_h264_3_mips32el.dts
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/1628/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_3_mips32el.dts
+END
+pf_decoder_h264_4_mips32el.dts
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/1628/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_4_mips32el.dts
+END
+pf_decoder_h264_6_mips32el.dts
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/1628/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_6_mips32el.dts
+END
+platforms.conf
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/1592/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/platforms.conf
+END
+build_options.conf
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/1592/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/build_options.conf
+END
+platforms-soclib.conf
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/1656/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/platforms-soclib.conf
+END
+pf_decoder_h264_1_arm.dts
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_1_arm.dts
+END
+pf_decoder_h264_2_arm.dts
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_2_arm.dts
+END
+pf_decoder_h264_3_arm.dts
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_3_arm.dts
+END
+pf_decoder_h264_4_arm.dts
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_4_arm.dts
+END
+pf_decoder_h264_1_ppc.dts
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_1_ppc.dts
+END
+pf_decoder_h264_2_ppc.dts
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_2_ppc.dts
+END
+pf_decoder_h264_3_ppc.dts
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_3_ppc.dts
+END
+pf_decoder_h264_6_arm.dts
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_6_arm.dts
+END
+pf_decoder_h264_4_ppc.dts
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_4_ppc.dts
+END
+pf_decoder_h264_6_ppc.dts
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/1613/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/pf_decoder_h264_6_ppc.dts
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/1592/trunk/soclib/benchmarks/decoder_h264/tlmdt_platform/soclib_conf_files/Makefile
+END

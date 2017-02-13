@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_interrupt_extended3
+END
+test.S
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_interrupt_extended3/test.S
+END
+run
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_interrupt_extended3/run
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_interrupt_extended3/Makefile
+END

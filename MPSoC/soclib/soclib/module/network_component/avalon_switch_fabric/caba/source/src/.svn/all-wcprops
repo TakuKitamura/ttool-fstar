@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/1478/trunk/soclib/soclib/module/network_component/avalon_switch_fabric/caba/source/src
+END
+avalon_address_decoding_logic.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/!svn/ver/1195/trunk/soclib/soclib/module/network_component/avalon_switch_fabric/caba/source/src/avalon_address_decoding_logic.cpp
+END
+avalon_switch_fabric.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/!svn/ver/1478/trunk/soclib/soclib/module/network_component/avalon_switch_fabric/caba/source/src/avalon_switch_fabric.cpp
+END
+avalon_mux.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/1195/trunk/soclib/soclib/module/network_component/avalon_switch_fabric/caba/source/src/avalon_mux.cpp
+END

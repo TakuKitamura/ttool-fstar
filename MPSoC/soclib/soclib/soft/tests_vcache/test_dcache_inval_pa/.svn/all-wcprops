@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_dcache_inval_pa
+END
+test.S
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_dcache_inval_pa/test.S
+END
+run
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_dcache_inval_pa/run
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/2230/trunk/soclib/soclib/soft/tests_vcache/test_dcache_inval_pa/Makefile
+END

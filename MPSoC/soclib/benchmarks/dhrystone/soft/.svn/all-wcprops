@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/1160/trunk/soclib/benchmarks/dhrystone/soft
+END
+main.c
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/1160/trunk/soclib/benchmarks/dhrystone/soft/main.c
+END
+dhry_1.c
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/1160/trunk/soclib/benchmarks/dhrystone/soft/dhry_1.c
+END
+dhry_2.c
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/1160/trunk/soclib/benchmarks/dhrystone/soft/dhry_2.c
+END
+dhry.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/1160/trunk/soclib/benchmarks/dhrystone/soft/dhry.h
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/1160/trunk/soclib/benchmarks/dhrystone/soft/Makefile
+END

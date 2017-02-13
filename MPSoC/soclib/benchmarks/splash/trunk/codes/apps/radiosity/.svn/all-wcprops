@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity
+END
+taskman.C
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/taskman.C
+END
+parallel.H
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/parallel.H
+END
+smallobj.C
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/smallobj.C
+END
+patch.H
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/patch.H
+END
+model.H
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/model.H
+END
+display.C
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/display.C
+END
+task.H
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/task.H
+END
+rad_main.C
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/rad_main.C
+END
+radiosity.H
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/radiosity.H
+END
+structs.H
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/structs.H
+END
+elemman.C
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/elemman.C
+END
+README.radiosity
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/README.radiosity
+END
+rad_tools.C
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/rad_tools.C
+END
+patchman.C
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/patchman.C
+END
+room_model.C
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/room_model.C
+END
+modelman.C
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/modelman.C
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/Makefile
+END
+visible.C
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/radiosity/visible.C
+END

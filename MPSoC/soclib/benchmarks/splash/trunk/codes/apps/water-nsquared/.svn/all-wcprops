@@ -1,0 +1,173 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared
+END
+predcor.C
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/predcor.C
+END
+mddata.H
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/mddata.H
+END
+split.H
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/split.H
+END
+syscons.C
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/syscons.C
+END
+random.in
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/random.in
+END
+frcnst.H
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/frcnst.H
+END
+mdmain.C
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/mdmain.C
+END
+global.H
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/global.H
+END
+parameters.H
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/parameters.H
+END
+cnstnt.C
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/cnstnt.C
+END
+fileio.H
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/fileio.H
+END
+cnst.H
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/cnst.H
+END
+README.water-nsquared
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/README.water-nsquared
+END
+initia.C
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/initia.C
+END
+mdvar.H
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/mdvar.H
+END
+bndry.C
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/bndry.C
+END
+input
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/input
+END
+cshift.C
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/cshift.C
+END
+water.C
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/water.C
+END
+intraf.C
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/intraf.C
+END
+kineti.C
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/kineti.C
+END
+wwpot.H
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/wwpot.H
+END
+randno.H
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/randno.H
+END
+interf.C
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/interf.C
+END
+water.H
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/water.H
+END
+Makefile.back
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/Makefile.back
+END
+poteng.C
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/poteng.C
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/water-nsquared/Makefile
+END

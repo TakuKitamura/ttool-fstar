@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/platform_configurations
+END
+natif_1p
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/platform_configurations/natif_1p
+END
+soclib_dspin_16p_gm
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/platform_configurations/soclib_dspin_16p_gm
+END
+soclib_dspin_4p_lm
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/platform_configurations/soclib_dspin_4p_lm
+END
+soclib_dspin_16p_lm
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/platform_configurations/soclib_dspin_16p_lm
+END
+soclib_vgmn_4p_gm
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/platform_configurations/soclib_vgmn_4p_gm
+END
+soclib_dspin_4p_gm
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/platform_configurations/soclib_dspin_4p_gm
+END

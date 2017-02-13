@@ -1,0 +1,10 @@
+
+# -*- python -*-
+
+__id__ = "$Id$"
+__version__ = "$Revision$"
+
+Module('common:iss',
+	   classname = 'soclib::common::Iss',
+	   header_files = ["../include/iss/iss.h",],
+)

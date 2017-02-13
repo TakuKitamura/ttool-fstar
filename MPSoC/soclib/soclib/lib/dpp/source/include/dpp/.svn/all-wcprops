@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/projets/!svn/ver/823/trunk/libdpp/include
+END
+vlarray
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/projets/!svn/ver/804/trunk/libdpp/include/vlarray
+END
+bitfield
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/projets/!svn/ver/788/trunk/libdpp/include/bitfield
+END
+cow_map
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/projets/!svn/ver/822/trunk/libdpp/include/cow_map
+END
+vector_pool
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/projets/!svn/ver/815/trunk/libdpp/include/vector_pool
+END
+template_switch
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/projets/!svn/ver/792/trunk/libdpp/include/template_switch
+END
+interval_set
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/projets/!svn/ver/782/trunk/libdpp/include/interval_set
+END
+xml
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/projets/!svn/ver/820/trunk/libdpp/include/xml
+END
+linked_list
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/projets/!svn/ver/803/trunk/libdpp/include/linked_list
+END
+foreach
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/projets/!svn/ver/362/trunk/libdpp/include/foreach
+END
+json
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/projets/!svn/ver/823/trunk/libdpp/include/json
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/projets/!svn/ver/801/trunk/libdpp/include/Makefile.am
+END
+delegate
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/projets/!svn/ver/782/trunk/libdpp/include/delegate
+END
+weak_ptr
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/projets/!svn/ver/805/trunk/libdpp/include/weak_ptr
+END
+ref
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/projets/!svn/ver/808/trunk/libdpp/include/ref
+END
+fstring
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/projets/!svn/ver/782/trunk/libdpp/include/fstring
+END
+float16
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/projets/!svn/ver/807/trunk/libdpp/include/float16
+END
+radix_sort
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/projets/!svn/ver/816/trunk/libdpp/include/radix_sort
+END

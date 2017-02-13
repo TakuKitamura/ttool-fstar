@@ -1,0 +1,118 @@
+10
+
+dir
+2456
+https://www.soclib.fr/svn/trunk/soclib/soclib/module/internal_component
+https://www.soclib.fr/svn
+
+
+
+2013-09-03T11:43:41.283770Z
+2422
+meunier
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2cf4c1f0-a32b-0410-9068-d80f8be93c97
+
+vci_iss_nocache
+dir
+
+vci_gcd_coprocessor
+dir
+
+fifo_writer
+dir
+
+vci_ram
+dir
+
+vci_timer
+dir
+
+wb_xcache_wrapper
+dir
+
+vci_blackhole
+dir
+
+vci_vcache_wrapper2_multi
+dir
+
+vci_mwmr_controller
+dir
+
+vci_rttimer
+dir
+
+vci_simple_ram
+dir
+
+vci_heterogeneous_rom
+dir
+
+vci_vcache_wrapper
+dir
+
+vci_ramdisk
+dir
+
+mailbox
+dir
+
+fifo_virtual_copro_wrapper
+dir
+
+vci_xcache_wrapper
+dir
+
+vci_rom
+dir
+
+vci_simple_target
+dir
+
+vci_vcache_wrapper_multi
+dir
+
+fifo_reader
+dir
+
+vci_xcache_wrapper_multi
+dir
+
+vci_simple_rom
+dir
+
+vci_mwmr_controller_lf
+dir
+
+vci_xram
+dir
+
+vci_pci
+dir
+
+vci_mwmr_controller_cas
+dir
+
+vci_locks
+dir
+
+vci_simple_initiator
+dir
+
+vci_vcache_wrapper2
+dir
+

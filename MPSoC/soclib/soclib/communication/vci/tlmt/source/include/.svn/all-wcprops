@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/613/trunk/soclib/soclib/communication/vci/tlmt/source/include
+END
+vci_packets.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/332/trunk/soclib/soclib/communication/vci/tlmt/source/include/vci_packets.h
+END
+vci_param.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/331/trunk/soclib/soclib/communication/vci/tlmt/source/include/vci_param.h
+END
+vci_ports.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/613/trunk/soclib/soclib/communication/vci/tlmt/source/include/vci_ports.h
+END

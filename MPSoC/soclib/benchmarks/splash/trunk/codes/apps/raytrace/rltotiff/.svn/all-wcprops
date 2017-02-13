@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/rltotiff
+END
+tiff_rgba_io.h
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/rltotiff/tiff_rgba_io.h
+END
+rltotiff.c
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/rltotiff/rltotiff.c
+END
+tiff_rgba_io.c
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/rltotiff/tiff_rgba_io.c
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/1158/trunk/soclib/benchmarks/splash/trunk/codes/apps/raytrace/rltotiff/Makefile
+END

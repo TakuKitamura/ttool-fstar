@@ -1,0 +1,139 @@
+@moduledef{Hexo}
+ @short Processor and platform hardware abstraction layer
+ @order 100
+@end moduledef
+
+@moduledef{Mutek}
+ @short Non hardware specific kernel code
+ @order 99
+@end moduledef
+
+@moduledef{Device drivers}
+ @short Hardware device driver classes API
+ @order 98
+@end moduledef
+
+@moduledef{C library}
+ @short Standard C library
+ @order 90
+@end moduledef
+
+@moduledef{Math library}
+ @short Standard math library
+ @order 89
+@end moduledef
+
+@moduledef{Virtual File System}
+ @short Virtual file system library and file system drivers
+ @order 88
+
+ @section{Virtual File System design}
+
+ Virtual File System (VFS) abstract low-level file system in an
+ uniform manner. It also caches open files and directories for
+ faster access.
+
+ VFS represents any file or directory as a node. This is the @ref
+ vfs_node_s type.
+
+ All nodes are reference-counted. All functions returning a node give
+ a reference to caller. No function except @ref vfs_node_refdrop steals
+ a reference. This is caller's responsibility to @ref vfs_node_refdrop
+ nodes when not needed any more.
+
+ VFS is made of two separate layers. One is operating on a path-string
+ level, closer to the user's habits (@ref @vfs/helpers.h); the other
+ is operating on a node level, closer to the VFS internal structure
+ (@ref @vfs/ops.h). The former is using null-terminated strings, the
+ latter is using explicit-length strings. This avoids most of the
+ copies of user-passed read-only string.
+
+ VFS also implement root directory and current-working-directory
+ through @ref vfs_get_cwd and @ref vfs_get_root (@ref
+ @vfs/globals.h). Configuration can make them system-wise or
+ thread-local (@ref #CONFIG_VFS_GLOBAL_CWD and @ref
+ #CONFIG_VFS_GLOBAL_ROOT).
+
+ File handles are also reference-counted. On most filesystems, nodes
+ may be opened more than once at the same time, each instance of an
+ open file is a @ref vfs_file_s.
+
+ @end section
+
+@end moduledef
+
+@moduledef{Pthread library}
+ @short POSIX threads library
+ @order 87
+@end moduledef
+
+@moduledef{Cryptographic algorithms}
+ @short Ciphers, random generators and hash functions library
+@end moduledef
+
+@moduledef{Network library}
+ @short Network protocols handling
+@end moduledef
+
+@moduledef{MWMR}
+  @short Multi-Writer Multi-Reader channels API
+
+  Multi-Writer Multi-Reader API is designed for streaming
+  applications.
+
+  MWMR channels are basically FIFOs with concurrent access to either
+  ends. Data integrity is asserted for a given fixed @em item @em
+  width.
+
+  MWMR comes with an hardware MWMR controller able to use the same
+  protocol as the software implementation. This controller is
+  available as a SoCLib component.
+
+  This library also implements a software-only version of the API,
+  using pthread's mutexes and conditions, but more elegant when only
+  accessing channels from software tasks. @see CONFIG_MWMR_PTHREAD
+@end moduledef
+
+@moduledef{SRL}
+  @short MutekS API
+
+  This module implements the MutekS API,
+  mainly used by the DSX software.
+
+  See @url https://www-asim.lip6.fr/trac/dsx/
+@end moduledef
+
+@moduledef{Capsule}
+ @short Capsule threading library
+
+ Environment aiming at easing parallel programming, see
+ @url https://alchemy.futurs.inria.fr/capsule/
+@end moduledef
+
+@moduledef{FDT access library}
+ @short Flattened device tree access library
+ This library offers a mid-level access to Flattened Device Tree blobs
+ without the need of dynamic memory allocation. This is mostly intended
+ for system initialization stage.
+
+ See @url https://www.mutek.fr/trac/mutekh/wiki/FlattenedDeviceTree
+@end moduledef
+
+@moduledef{Elf loader library}
+ @short dynamic Elf object files loader
+@end moduledef
+
+@moduledef{OpenMP runtime library}
+  @short GNU OpenMP runtime library
+@end moduledef
+
+@moduledef{Terminal driver library}
+  @short Terminal user interface services with readline feature
+  See @url http://savannah.nongnu.org/projects/libtermui/
+@end moduledef
+
+@moduledef{Unix OS library}
+  @hidden
+  @short Unix syscalls implementation stub
+@end moduledef
+
