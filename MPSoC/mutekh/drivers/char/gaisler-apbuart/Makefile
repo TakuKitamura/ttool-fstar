@@ -1,0 +1,4 @@
+
+objs = gaisler-apbuart.o
+
+

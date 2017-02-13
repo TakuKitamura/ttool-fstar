@@ -1,0 +1,66 @@
+/dts-v1/;
+
+/ {
+	model = "SoCLib_TinyGL";
+	compatible = "caba";
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+m4_forloop(i, 0, CONFIG_CPU_MAXCOUNT-1, `
+
+		CONFIG_CPU_NAME@i {
+			name = "CONFIG_CPU_NAME";
+			device_type = "cpu";
+			reg = <i>;
+			icudev_type = "cpu:CONFIG_CPU_ARCHNAME";
+			ipi = <&{/xicu@0/out@i} i>;
+		};
+')
+	};
+
+	tty@0 {
+	    device_type = "soclib:tty";
+		tty_count = <1>;
+		reg = <0xd0200000 0x10>;
+		irq = <&{/xicu@0/out@0} 0>;
+	};
+
+	fb@0 {
+	    device_type = "soclib:fb";
+		reg = <0xd1200000 0x100000>;
+	};
+
+	xicu@0 {
+	    device_type = "soclib:xicu:root";
+		input_lines = <1>;
+		ipis = <CONFIG_CPU_MAXCOUNT>;
+		timers = <1>;
+		reg = <0xd2200000 0x1000>;
+
+m4_forloop(i, 0, CONFIG_CPU_MAXCOUNT-1, `
+
+	    	out@i {
+	    	    device_type = "soclib:xicu:filter";
+	    	    parent = &{/xicu@0};
+	    		output_line = <i>;
+	    		irq = <&{/cpus/CONFIG_CPU_NAME@i} 0>;
+	    	};
+')
+	};
+
+	memory@0 {
+		device_type = "memory";
+		cached;
+		memreg: reg = <0x10000000 0x00100000>;
+	};
+
+	chosen {
+		console = &{/tty@0};
+//        timer = &{/xicu@0};
+	};
+
+};
