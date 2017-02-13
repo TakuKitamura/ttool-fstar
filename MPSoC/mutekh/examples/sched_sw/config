@@ -1,0 +1,16 @@
+
+  %set OUTPUT_NAME sched_sw
+
+  # New source code module to be compiled
+  %append MODULES $(OUTPUT_NAME):$(CONFIGPATH)
+
+  # Application license
+  CONFIG_LICENSE_APP_LGPL
+
+  # Libs
+  CONFIG_PTHREAD
+%include $(SRC_DIR)/examples/common/build_options.conf
+%include $(SRC_DIR)/examples/common/platforms.conf
+
+  CONFIG_ARCH_SMP undefined
+  CONFIG_CPU_MAXCOUNT 1

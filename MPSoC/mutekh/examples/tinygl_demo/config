@@ -1,0 +1,82 @@
+
+%set OUTPUT_NAME test
+
+# New source code module to be compiled
+%append MODULES $(OUTPUT_NAME):$(CONFIGPATH)
+
+# Application license
+CONFIG_LICENSE_APP_LGPL
+
+# Libs
+CONFIG_PTHREAD
+CONFIG_PTHREAD_STACK_SIZE 16384
+
+# for stderr, etc. required by tinygl
+CONFIG_MUTEK_CONSOLE
+CONFIG_LIBC_STREAM_STD
+
+# required by tinygl
+CONFIG_LIBM
+
+# tinygl
+CONFIG_LIBTINYGL
+CONFIG_LIBTINYGL_VGAFB
+
+# tweaking for soclib
+%section soclib-*
+
+  %subsection pf-tinygl
+    %types platform
+
+    %notice Targetting FB enabled SoCLib platforms
+
+    # Memory layout
+    CONFIG_RAM_ADDR 0x10000000
+    CONFIG_RAM_SIZE 0x00100000
+    CONFIG_ROM_ADDR 0x00400000
+    CONFIG_ROM_SIZE 0x00100000
+
+    CONFIG_MUTEK_PRINTK_KEEP_EARLY
+    CONFIG_SOCLIB_EARLY_CONSOLE
+    CONFIG_SOCLIB_EARLY_CONSOLE_ADDR 0xd0200000
+    %set platform_name pf_soclib_tinygl
+
+    # Device and drivers
+    CONFIG_DRIVER_CHAR_SOCLIBTTY
+    CONFIG_DRIVER_ICU_SOCLIB_XICU
+    CONFIG_DRIVER_TIMER_SOCLIB
+    CONFIG_DRIVER_FB_SOCLIB
+
+    # use FPU
+    CONFIG_COMPILE_SOFTFLOAT undefined
+
+  %end
+
+# re-switch to common
+%common
+
+%include $(SRC_DIR)/examples/common/build_options.conf
+%include $(SRC_DIR)/examples/common/platforms.conf
+
+# tweaking for ibmpc
+%section ibmpc-*
+
+    # disable vgatty, enable fb and uart
+    CONFIG_DRIVER_CHAR_VGATTY undefined
+    CONFIG_DRIVER_FB_VGA
+    CONFIG_DRIVER_CHAR_UART8250
+
+    # otherwise fpu support does not work
+    CONFIG_HEXO_LAZY_SWITCH
+
+# re-switch to common
+%common
+
+# by default
+%set DEMO_NAME gears
+
+%section gears
+    %set DEMO_NAME gears
+
+%section spin
+    %set DEMO_NAME spin
