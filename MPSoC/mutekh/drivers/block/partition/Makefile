@@ -1,4 +1,0 @@
-
-objs = block-partition.o
-
-

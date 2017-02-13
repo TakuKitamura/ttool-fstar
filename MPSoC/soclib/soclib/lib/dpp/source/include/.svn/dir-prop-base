@@ -1,6 +1,0 @@
-K 13
-svn:externals
-V 60
-dpp	  https://www.ssji.net/svn/projets/trunk/libdpp/include
-
-END

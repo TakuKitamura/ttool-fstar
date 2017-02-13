@@ -1,2 +1,0 @@
-
-objs = sort.o

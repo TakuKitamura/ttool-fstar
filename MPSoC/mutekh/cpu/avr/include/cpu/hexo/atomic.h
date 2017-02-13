@@ -1,1 +1,0 @@
-../../../../common/include/cpu/hexo/atomic_na.h

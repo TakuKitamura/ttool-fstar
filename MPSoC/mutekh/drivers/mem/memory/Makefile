@@ -1,2 +1,0 @@
-
-objs = memory.o

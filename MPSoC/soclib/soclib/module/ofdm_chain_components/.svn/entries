@@ -1,49 +1,0 @@
-10
-
-dir
-2456
-https://www.soclib.fr/svn/trunk/soclib/soclib/module/ofdm_chain_components
-https://www.soclib.fr/svn
-
-
-
-2010-04-14T03:30:30.924872Z
-1699
-nipo
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-2cf4c1f0-a32b-0410-9068-d80f8be93c97
-
-upsampling
-dir
-
-synchronization
-dir
-
-downsampling
-dir
-
-channel_estimation
-dir
-
-demapping
-dir
-
-fir128
-dir
-
-mapping
-dir
-

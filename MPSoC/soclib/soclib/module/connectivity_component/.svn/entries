@@ -1,52 +1,0 @@
-10
-
-dir
-2456
-https://www.soclib.fr/svn/trunk/soclib/soclib/module/connectivity_component
-https://www.soclib.fr/svn
-
-
-
-2013-09-22T19:55:07.484054Z
-2439
-cfuguet
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-2cf4c1f0-a32b-0410-9068-d80f8be93c97
-
-vci_ethernet
-dir
-
-vci_log_console
-dir
-
-vci_multi_nic
-dir
-
-vci_audio_fifo
-dir
-
-vci_framebuffer
-dir
-
-vci_block_device
-dir
-
-vci_fd_access
-dir
-
-vci_multi_tty
-dir
-

@@ -1,4 +1,0 @@
-
-objs =	net-tuntap.o
-
-

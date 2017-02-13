@@ -1,3 +1,0 @@
-
-objs += setjmp.o
-
