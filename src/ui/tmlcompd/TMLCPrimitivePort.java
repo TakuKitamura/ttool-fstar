@@ -320,6 +320,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
 
     public void drawAuthVerification(Graphics g){
+		int lockwidth=(int) (9*tdp.getZoom());
+		int lockheight=(int) (7*tdp.getZoom());
+		int yoffset = (int) (3*lockheight);
+
+		int ovalwidth=(int) (6*tdp.getZoom());
+		int ovalheight=(int) (9*tdp.getZoom());
         g.drawString(secName, x-20, y+10);
 	Color c = g.getColor();
         Color c1;
@@ -370,6 +376,14 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 	}
     }
     public void drawConfVerification(Graphics g){
+
+		int lockwidth=(int) (9*tdp.getZoom());
+		int lockheight=(int) (7*tdp.getZoom());
+		int yoffset = (int) (3*lockheight);
+
+		int ovalwidth=(int) (6*tdp.getZoom());
+		int ovalheight=(int) (9*tdp.getZoom());
+
         Color c = g.getColor();
         Color c1;
         switch(checkConfStatus) {
@@ -385,15 +399,15 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         default:
             return;
         }
-        g.drawString(mappingName, x-15, y-8);
-        g.drawOval(x-10, y, 6, 9);
+        g.drawString(mappingName, x-lockwidth*2, y-lockheight);
+        g.drawOval(x-ovalwidth*2, y, ovalwidth, ovalheight);
         g.setColor(c1);
-        g.fillRect(x-12, y+3, 9, 7);
+        g.fillRect(x-lockwidth*3/2, y+lockheight/2, lockwidth, lockheight);
         g.setColor(c);
-        g.drawRect(x-12, y+3, 9, 7);
+        g.drawRect(x-lockwidth*3/2, y+lockheight/2, lockwidth, lockheight);
 	if (checkConfStatus==3){
-	    g.drawLine(x-14, y+1, x-1, y+13);
-	    g.drawLine(x-14, y+13, x-1, y+1);
+	    g.drawLine(x-lockwidth*2, y, x, y+lockheight*2);
+	    g.drawLine(x-lockwidth*2, y+lockheight*2, x, y);
 	}
 
 
@@ -411,12 +425,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         default:
             return;
         }
-        g.drawString(secName, x-20, y+20);
-        g.drawOval(x-10, y+22, 6, 9);
+        g.drawString(secName, x-lockwidth*2, y+lockheight*3);
+        g.drawOval(x-ovalwidth*2, y+yoffset, ovalwidth, ovalheight);
         g.setColor(c1);
-        g.fillRect(x-12, y+24, 9, 7);
+        g.fillRect(x-lockwidth*3/2, y+lockheight/2+yoffset, lockwidth, lockheight);
         g.setColor(c);
-        g.drawRect(x-12, y+24, 9, 7);
+        g.drawRect(x-lockwidth*3/2, y+lockheight/2+yoffset, lockwidth, lockheight);
 	}
     }
 
