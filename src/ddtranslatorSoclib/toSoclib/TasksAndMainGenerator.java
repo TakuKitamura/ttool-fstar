@@ -240,7 +240,8 @@ public class TasksAndMainGenerator {
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
 	//DG 10.0.2 width=1??
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 1;" + CR);
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 4;" + CR);//DG 10.02.2017 systematiquement des entiers pour le moment
+	//	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 4;" + CR);//DG 10.02.2017 systematiquement des entiers pour le moment	
+mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 32;" + CR);//DG 14.02.
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = " +getChannelName(ar, i)+".depth;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR2);

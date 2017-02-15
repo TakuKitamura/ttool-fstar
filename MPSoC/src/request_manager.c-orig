@@ -23,7 +23,8 @@ void executeSendSyncTransaction(request *req) {
 
   cpt = 0;
   request* currentReq = req->syncChannel->inWaitQueue;
- 
+  //debugMsg("*****Execute send sync transaction");
+
   while(currentReq != NULL) {
     cpt ++;
     currentReq = currentReq->next;
@@ -39,8 +40,6 @@ void executeSendSyncTransaction(request *req) {
   } 
 
   // Remove all related request from list requests
-  //DG 10.02. einkommentiert
-
   //req->syncChannel->inWaitQueue = removeRequestFromList(req->syncChannel->inWaitQueue, selectedReq);
   debugMsg("Setting related request");
   req->relatedRequest = selectedReq;
@@ -53,16 +52,18 @@ void executeSendSyncTransaction(request *req) {
   copyParameters(req, selectedReq);
 
   debugInt("syncchannel address \n", req->syncChannel->mwmr_fifo);
-  debugInt("syncchannel nbOfParams \n", req->nbOfParams);
-  debugInt("syncchannel burst \n", req->nbOfParams*sizeof(req->params));
-   debugInt("syncchannel params \n", req->params[0]);
-  sync_write(req->syncChannel->mwmr_fifo, &(req->params),  req->nbOfParams*sizeof(req->params));
+  debugInt("***syncchannel nbOfParams \n", req->nbOfParams);
+  //DG 7.2. req->params
+  //sync_write(req->syncChannel->mwmr_fifo, selectedReq->ID, 1 );// transmit ID
+  //sync_write(req->syncChannel->mwmr_fifo, selectedReq->ID,  req->params );
+  sync_write(req->syncChannel->mwmr_fifo, req->params,  req->nbOfParams*sizeof(req->params));
 
-  sync_read(req->syncChannel->mwmr_fifo, &(req->params),  req->nbOfParams*sizeof(req->params));
+  sync_read(req->syncChannel->mwmr_fifo, req->params,  req->nbOfParams*sizeof(req->params));
 
   //DG 8.2. a-t-on besoin de ID?
-  debugInt("req->params", req->params);
+  debugInt("***** req->params", req->params);
   debugMsg("\n");
+// debugMsg("after sync write\n");
  
   debugMsg("Signaling");
   
@@ -74,10 +75,15 @@ void executeSendSyncTransaction(request *req) {
 void executeReceiveSyncTransaction(request *req) {
   int cpt;
   request *selectedReq;
- 
+  //debugMsg("*****Execute receive sync transaction");
+  // At least one transaction available -> must select one randomly
+  // First: count how many of them are available
+  // Then, select one
+  // Broadcast the new condition! DG ce n'est pas un broadcast sur canal
+
   request* currentReq = req->syncChannel->outWaitQueue;
   cpt = 0;
-  debugMsg("Execute receive sync tr");
+  debugMsg("*****Execute receive sync tr");
 
   while(currentReq != NULL) {
     cpt ++;
@@ -90,7 +96,6 @@ void executeReceiveSyncTransaction(request *req) {
     selectedReq = selectedReq->next;
     cpt --;
   } 
-  //DG 10.02. einkommentiert
 
   //req->syncChannel->outWaitQueue = removeRequestFromList(req->syncChannel->outWaitQueue, selectedReq);
   debugMsg("Setting related request");
@@ -107,16 +112,17 @@ void executeReceiveSyncTransaction(request *req) {
   pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
 
   debugInt("syncchannel read: address \n",selectedReq->syncChannel->mwmr_fifo);  
-  debugInt("syncchannel read: nbOfParams \n",selectedReq->nbOfParams);  
-  debugInt("syncchannel burst \n", req->nbOfParams*sizeof(req->params));
-  debugInt("syncchannel params \n", req->params[0]);
-  
-  sync_write(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params) );
+debugInt("syncchannel read: nbOfParams \n",selectedReq->nbOfParams);  
+  //sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID, 1);
+  //transmit ID
+  //DG 8.2. params
+sync_write(selectedReq->syncChannel->mwmr_fifo, selectedReq->params,  selectedReq->nbOfParams*sizeof(selectedReq->params) );
 
-  sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params) );
- 
+sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->params,  selectedReq->nbOfParams*sizeof(selectedReq->params) );
+ //DG 7.2. params
+  //sync_read(selectedReq->syncChannel->mwmr_fifo, selectedReq->ID, &req->params);
   debugMsg("after syncchannel read");
-  debugInt("req->params \n", req->params);
+  debugInt("***** req->params \n", req->params);
   traceSynchroRequest(selectedReq, req);
 }
 
@@ -414,16 +420,19 @@ void private__makeRequestPending(setOfRequests *list) {
       }
       
     }
+
     req = req->nextRequestInList;
   }
 }
 
 void private__makeRequest(request *req) {
   if (req->type == SEND_SYNC_REQUEST) {
+  debugMsg("@@@@@@@@@@@@@@@@@@@@@@@@@@@send");
     executeSendSyncTransaction(req);
   }
 
   if (req->type == RECEIVE_SYNC_REQUEST) {
+debugMsg("##########################receive");
     executeReceiveSyncTransaction(req);
   }
 

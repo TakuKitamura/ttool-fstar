@@ -33,7 +33,14 @@ int async_write_nonblocking( struct mwmr_s *fifo, void *_ptr, int lensw ){
 
 
 void async_read( struct mwmr_s *fifo, void *_ptr, int lensw ){
-    mwmr_read(fifo,_ptr,lensw);
+  debugInt("debug fifo \n",fifo);
+  debugInt("debug ptr \n",_ptr);
+  debugInt("debug  lensw \n", lensw);
+  debugInt("debug  fifo status address \n", &(fifo->status));
+  debugInt("debug  fifo status \n", fifo->status);
+  debugInt("debug  fifo lock address\n", &(fifo->status->lock));
+  debugInt("debug  fifo lock \n", fifo->status->lock);
+  mwmr_read(fifo,_ptr,lensw);
 }
 
 void async_write( struct mwmr_s *fifo, void *_ptr, int lensw ){
@@ -60,9 +67,9 @@ asyncchannel *getNewAsyncchannel(char *outname, char *inname, int isBlocking, in
   asyncch->mwmr_fifo=fifo;
   asyncch->mwmr_fifo->depth=fifo->depth;
   asyncch->mwmr_fifo->width=fifo->width;
-  debugInt("asyncchannel getNew \n",asyncch->mwmr_fifo);
-  debugInt("asyncchannel \n",asyncch->mwmr_fifo->depth);
-  debugInt("asyncchannel \n",asyncch->mwmr_fifo->width);
+  debugInt("asyncchannel address \n",asyncch->mwmr_fifo);
+  debugInt("asyncchannel depth \n",asyncch->mwmr_fifo->depth);
+  debugInt("asyncchannel width \n",asyncch->mwmr_fifo->width);
 
   return asyncch;
 }
