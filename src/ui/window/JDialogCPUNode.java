@@ -92,7 +92,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
         frame = _frame;
         node = _node;
         MECType = _MECType;
-	transactions = _transactions;
+        transactions = _transactions;
         initComponents();
         myInitComponents();
         pack();
@@ -222,18 +222,18 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
         clockRatio = new JTextField(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
 
-	// monitored
-   c2.gridwidth = 1;
+        // monitored
+        /*c2.gridwidth = 1;
         panel2.add(new JLabel("Monitored:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         //monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
-	tracemode = new JComboBox(tracemodeTab);
+        tracemode = new JComboBox(tracemodeTab);
         tracemode.setSelectedIndex(selectedTracemode);
         tracemode.addActionListener(this);
         panel2.add(tracemode, c2);
 
         monitored = new JTextField("", 15);
-        panel2.add(monitored, c2);
+        panel2.add(monitored, c2);*/
 
 
         // Code generation
@@ -273,21 +273,21 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
         MECTypeCB.addActionListener(this);
         panel4.add( MECTypeCB, c4);
 
-	if (transactions.size()!=0) {
-		panel5=new JPanel();
-		panel5.setPreferredSize(new Dimension(400,300));
-		MyFrame f =new MyFrame();
-		f.setPreferredSize(new Dimension(400,300));
-		panel5.add(f,c4);
-		tabbedPane.addTab("Simulation Transactions", panel5);
-	//Draw from transactions
- 	}
-	else {
-        tabbedPane.addTab( "Simulation", panel2 );
-        tabbedPane.addTab( "Code generation", panel4 );
+        if (transactions.size()!=0) {
+            panel5=new JPanel();
+            panel5.setPreferredSize(new Dimension(400,300));
+            MyFrame f =new MyFrame();
+            f.setPreferredSize(new Dimension(400,300));
+            panel5.add(f,c4);
+            tabbedPane.addTab("Simulation Transactions", panel5);
+            //Draw from transactions
+        }
+        else {
+            tabbedPane.addTab( "Simulation", panel2 );
+            tabbedPane.addTab( "Code generation", panel4 );
 
-        tabbedPane.setSelectedIndex(0);
-	}
+            tabbedPane.setSelectedIndex(0);
+        }
         // main panel;
         c0.gridheight = 10;
         c0.weighty = 1.0;
@@ -318,9 +318,9 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
            return;
            }*/
 
-	if (evt.getSource() == tracemode) {
-           selectedTracemode = tracemode.getSelectedIndex();                   
-           }
+        if (evt.getSource() == tracemode) {
+            selectedTracemode = tracemode.getSelectedIndex();
+        }
 
         String command = evt.getActionCommand();
 
@@ -395,7 +395,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
     }
 
     public int getMonitored() {
-	return tracemode.getSelectedIndex();
+        return tracemode.getSelectedIndex();
         //return monitored.getText();
     }
 
@@ -413,149 +413,149 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
     public ArchUnitMEC getMECType()     {
         return MECType;
     }
-  class Range {
-	int xi, yi, xf, yf;
-	public Range(int xa, int ya, int xb, int yb){
-	    xi=xa;
-	    yi=ya;
-	    xf=xb;
-	    yf=yb;
-	}
-	public boolean inRange(int x, int y){
-	    if (y>yi && y<yf){
-	    	if (x>xi && x<xf){
-		    return true;
-	    	}
-	    }
-	    return false;
-	}
-  }
-  class MyFrame extends JPanel implements MouseMotionListener, MouseListener{
-	Map<Range, String> toolMap = new HashMap<Range, String>();
-	public MyFrame(){
-		ToolTipManager.sharedInstance().setInitialDelay(0);
+    class Range {
+        int xi, yi, xf, yf;
+        public Range(int xa, int ya, int xb, int yb){
+            xi=xa;
+            yi=ya;
+            xf=xb;
+            yf=yb;
+        }
+        public boolean inRange(int x, int y){
+            if (y>yi && y<yf){
+                if (x>xi && x<xf){
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    class MyFrame extends JPanel implements MouseMotionListener, MouseListener{
+        Map<Range, String> toolMap = new HashMap<Range, String>();
+        public MyFrame(){
+            ToolTipManager.sharedInstance().setInitialDelay(0);
 
-	    addMouseMotionListener(this);
-		addMouseListener(this);
-	}
-	public void mouseDragged(MouseEvent e) {
-       //do something
-    }
-	public void mouseMoved(MouseEvent e){
-		drawToolTip(e);
-	}
-    public void mouseClicked(MouseEvent e) {
-		drawToolTip(e);
-    }
-    public void mousePressed(MouseEvent e) {
-		drawToolTip(e);
-    }
-	public void mouseExited(MouseEvent e){
-		///
-	}
-	public void mouseReleased(MouseEvent e){
-		///
-	}
-	public void mouseEntered(MouseEvent e){
-	}
-	public void drawToolTip(MouseEvent e){
-	
-	    setToolTipText(null);
-	    for (Range r:toolMap.keySet()){
+            addMouseMotionListener(this);
+            addMouseListener(this);
+        }
+        public void mouseDragged(MouseEvent e) {
+            //do something
+        }
+        public void mouseMoved(MouseEvent e){
+            drawToolTip(e);
+        }
+        public void mouseClicked(MouseEvent e) {
+            drawToolTip(e);
+        }
+        public void mousePressed(MouseEvent e) {
+            drawToolTip(e);
+        }
+        public void mouseExited(MouseEvent e){
+            ///
+        }
+        public void mouseReleased(MouseEvent e){
+            ///
+        }
+        public void mouseEntered(MouseEvent e){
+        }
+        public void drawToolTip(MouseEvent e){
 
-			int x=e.getX();
-			int y=e.getY();
-			if (r.inRange(x,y)){
-			    setToolTipText(toolMap.get(r));
-			    break;
-			}
-	    }
-	}
+            setToolTipText(null);
+            for (Range r:toolMap.keySet()){
 
-    public void paint(Graphics g) {
-	
-	//Draw Axis
-	g.drawLine(70,0,70,300);
-	int i=0;
-	java.util.List<String> tasks=new ArrayList<String>();
-	Map<String, java.util.List<SimulationTransaction>> tasktrans = new HashMap<String, java.util.List<SimulationTransaction>>();
-	double incr=0.0;
-	BigDecimal maxtime = new BigDecimal("0");
-	BigDecimal mintime=new BigDecimal("9999999999999999999999999999");
-	//Colors
-	//Exec- ColorManager.EXEC
-	//Channel - TML_PORT_CHANNEL
-	Collections.sort(transactions, new Comparator<SimulationTransaction>(){
-     	public int compare(SimulationTransaction o1, SimulationTransaction o2){
-	     BigDecimal t1 = new BigDecimal(o1.startTime);
-	     BigDecimal t2 = new BigDecimal(o2.startTime);
-	     return t1.compareTo(t2);
-	     }
-	});
-	ArrayList<SimulationTransaction> tranList = new ArrayList<SimulationTransaction>(transactions);
-    	for (SimulationTransaction st: transactions){
-	    if (!tasks.contains(st.taskName)){
-		tasks.add(st.taskName);
-		java.util.List<SimulationTransaction> tmp = new ArrayList<SimulationTransaction>();
-		tasktrans.put(st.taskName, tmp);
-	    }
-	    if (tasktrans.get(st.taskName).size()==0 || !(tasktrans.get(st.taskName).get(tasktrans.get(st.taskName).size()-1).command+tasktrans.get(st.taskName).get(tasktrans.get(st.taskName).size()-1).startTime).equals(st.command+st.startTime)){
-		tasktrans.get(st.taskName).add(st);
-	    }
-	    else {
-		tranList.remove(st);
-	    }
-	    BigDecimal start = new BigDecimal(st.startTime);
-	    BigDecimal end = new BigDecimal(st.endTime);
-	    if (start.compareTo(mintime)==-1){
-		mintime=start;
-	    }
-	    if (end.compareTo(maxtime)==1){
-		maxtime=end;
-	    }
-	}
-	String commandName="";
-	for (String s:tasks){
-	    i++;
-	    g.drawString(s.split("__")[1],0, i*50+50);
-	    for (SimulationTransaction tran: tasktrans.get(s)){
-		//Fill rectangle with color
-		if (tran.command.contains("Read")) {
-		    commandName="RD";
-		    g.setColor(ColorManager.TML_PORT_CHANNEL);
-		}
-		else if (tran.command.contains("Write")){
-		    g.setColor(ColorManager.TML_PORT_CHANNEL);
-		    commandName="WR";
-		}
-		else if (tran.command.contains("Send")){
-		    g.setColor(ColorManager.TML_PORT_EVENT);
-		    commandName="SND";
-		}
-		else if (tran.command.contains("Wait")){
-		    g.setColor(ColorManager.TML_PORT_EVENT);
-		    commandName="WT";
-		}
-		else if (tran.command.contains("Request")){
-		    g.setColor(ColorManager.TML_PORT_REQUEST);
-		    commandName="REQ";
-		}
-		else {
-		    commandName="EX";
-		    g.setColor(ColorManager.EXEC);
-		}
-		int start = 30*tranList.indexOf(tran)+70;
-		g.fillRect(start, i*50+40, 30, 20);
-		g.setColor(Color.black);
-		g.drawRect(start, i*50+40, 30, 20);
-		g.drawString(commandName, start+2, i*50+55);
-		toolMap.put(new Range(start, i*50+40, start+30, i*50+40+20), tran.command+ " Time "+ tran.startTime + "-" + tran.endTime);
-	    }
-	}
-	//g.drawString(Integer.toString(mintime), 70, 250);
-	//g.drawString(Integer.toString(maxtime), 350, 250);
-     // g.setColor(Color.red);
-      //g.fillRect(10,10,100,100);
+                int x=e.getX();
+                int y=e.getY();
+                if (r.inRange(x,y)){
+                    setToolTipText(toolMap.get(r));
+                    break;
+                }
+            }
+        }
+
+        public void paint(Graphics g) {
+
+            //Draw Axis
+            g.drawLine(70,0,70,300);
+            int i=0;
+            java.util.List<String> tasks=new ArrayList<String>();
+            Map<String, java.util.List<SimulationTransaction>> tasktrans = new HashMap<String, java.util.List<SimulationTransaction>>();
+            double incr=0.0;
+            BigDecimal maxtime = new BigDecimal("0");
+            BigDecimal mintime=new BigDecimal("9999999999999999999999999999");
+            //Colors
+            //Exec- ColorManager.EXEC
+            //Channel - TML_PORT_CHANNEL
+            Collections.sort(transactions, new Comparator<SimulationTransaction>(){
+                    public int compare(SimulationTransaction o1, SimulationTransaction o2){
+                        BigDecimal t1 = new BigDecimal(o1.startTime);
+                        BigDecimal t2 = new BigDecimal(o2.startTime);
+                        return t1.compareTo(t2);
+                    }
+                });
+            ArrayList<SimulationTransaction> tranList = new ArrayList<SimulationTransaction>(transactions);
+            for (SimulationTransaction st: transactions){
+                if (!tasks.contains(st.taskName)){
+                    tasks.add(st.taskName);
+                    java.util.List<SimulationTransaction> tmp = new ArrayList<SimulationTransaction>();
+                    tasktrans.put(st.taskName, tmp);
+                }
+                if (tasktrans.get(st.taskName).size()==0 || !(tasktrans.get(st.taskName).get(tasktrans.get(st.taskName).size()-1).command+tasktrans.get(st.taskName).get(tasktrans.get(st.taskName).size()-1).startTime).equals(st.command+st.startTime)){
+                    tasktrans.get(st.taskName).add(st);
+                }
+                else {
+                    tranList.remove(st);
+                }
+                BigDecimal start = new BigDecimal(st.startTime);
+                BigDecimal end = new BigDecimal(st.endTime);
+                if (start.compareTo(mintime)==-1){
+                    mintime=start;
+                }
+                if (end.compareTo(maxtime)==1){
+                    maxtime=end;
+                }
+            }
+            String commandName="";
+            for (String s:tasks){
+                i++;
+                g.drawString(s.split("__")[1],0, i*50+50);
+                for (SimulationTransaction tran: tasktrans.get(s)){
+                    //Fill rectangle with color
+                    if (tran.command.contains("Read")) {
+                        commandName="RD";
+                        g.setColor(ColorManager.TML_PORT_CHANNEL);
+                    }
+                    else if (tran.command.contains("Write")){
+                        g.setColor(ColorManager.TML_PORT_CHANNEL);
+                        commandName="WR";
+                    }
+                    else if (tran.command.contains("Send")){
+                        g.setColor(ColorManager.TML_PORT_EVENT);
+                        commandName="SND";
+                    }
+                    else if (tran.command.contains("Wait")){
+                        g.setColor(ColorManager.TML_PORT_EVENT);
+                        commandName="WT";
+                    }
+                    else if (tran.command.contains("Request")){
+                        g.setColor(ColorManager.TML_PORT_REQUEST);
+                        commandName="REQ";
+                    }
+                    else {
+                        commandName="EX";
+                        g.setColor(ColorManager.EXEC);
+                    }
+                    int start = 30*tranList.indexOf(tran)+70;
+                    g.fillRect(start, i*50+40, 30, 20);
+                    g.setColor(Color.black);
+                    g.drawRect(start, i*50+40, 30, 20);
+                    g.drawString(commandName, start+2, i*50+55);
+                    toolMap.put(new Range(start, i*50+40, start+30, i*50+40+20), tran.command+ " Time "+ tran.startTime + "-" + tran.endTime);
+                }
+            }
+            //g.drawString(Integer.toString(mintime), 70, 250);
+            //g.drawString(Integer.toString(maxtime), 350, 250);
+            // g.setColor(Color.red);
+            //g.fillRect(10,10,100,100);
+        }
     }
-  }
 }
