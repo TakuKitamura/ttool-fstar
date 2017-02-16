@@ -477,6 +477,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     private void drawConfidentialityVerification(int confidentialityVerification, Graphics g, int _x, int _y) {
         Color c = g.getColor();
         Color c1;
+		int xc=(int)(6*tdp.getZoom());
+		int yc=(int)(10*tdp.getZoom());
+		int lockwidth=(int) (9*tdp.getZoom());
+		int lockheight=(int) (7*tdp.getZoom());
+		int ovalwidth=(int) (6*tdp.getZoom());
+		int ovalheight=(int) (9*tdp.getZoom());
         switch(confidentialityVerification) {
         case TAttribute.CONFIDENTIALITY_OK:
             c1 = Color.green;
@@ -491,11 +497,11 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             return;
         }
 
-        g.drawOval(_x+6, _y-10, 6, 9);
+        g.drawOval(_x+xc, _y-yc, ovalwidth, ovalheight);
         g.setColor(c1);
-        g.fillRect(_x+4, _y-7, 9, 7);
+        g.fillRect(_x+xc*2/3, _y-yc*2/3, lockwidth, lockheight);
         g.setColor(c);
-        g.drawRect(_x+4, _y-7, 9, 7);
+        g.drawRect(_x+xc*2/3, _y-yc*2/3, lockwidth, lockheight);
 
     }
 
