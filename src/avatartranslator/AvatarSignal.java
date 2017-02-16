@@ -117,6 +117,16 @@ public class AvatarSignal extends AvatarMethod {
         return ret;
 	}
 
+	public int getNbParams(){
+        int cpt = 0;
+	
+        for(AvatarAttribute attribute: parameters) {           
+           cpt ++;            
+        }
+        return cpt;
+	}
+
+
     public AvatarSignal advancedClone(AvatarStateMachineOwner _block) {
 	AvatarSignal as = new AvatarSignal(getName(), getInOut(), getReferenceObject());
 	setAdvancedClone((AvatarMethod)as, _block);
