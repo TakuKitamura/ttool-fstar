@@ -320,18 +320,23 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
 
     public void drawAuthVerification(Graphics g){
-		int lockwidth=(int) (9*tdp.getZoom());
-		int lockheight=(int) (7*tdp.getZoom());
-		int yoffset = (int) (3*lockheight);
+		int lockwidth=(int) (16*tdp.getZoom());
+		int lockheight=(int) (16*tdp.getZoom());
 
-		int ovalwidth=(int) (6*tdp.getZoom());
-		int ovalheight=(int) (9*tdp.getZoom());
-        g.drawString(secName, x-20, y+10);
-	Color c = g.getColor();
+		int xc=(int) (18*tdp.getZoom());
+		int yc= (int) (12*tdp.getZoom());
+
+		int xoffset= (int) (20*tdp.getZoom());
+		int yoffset= (int) (18*tdp.getZoom());
+
+		int ovalwidth=(int) (10*tdp.getZoom());
+		int ovalheight=(int) (15*tdp.getZoom());
+        g.drawString(secName, x-xc*2/3, y+yc*2/3);
+		Color c = g.getColor();
         Color c1;
-	Color c2;
-	switch(checkStrongAuthStatus) {
- 	    case 2:
+		Color c2;
+		switch(checkStrongAuthStatus) {
+ 		    case 2:
                 c1 = Color.green;
         	break;
             case 3:
@@ -339,9 +344,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                 break;
             default:
                 c1 = Color.gray;
-	}
-	switch(checkWeakAuthStatus) {
- 	    case 2:
+		}
+		switch(checkWeakAuthStatus) {
+ 	    	case 2:
                 c2 = Color.green;
                 break;
             case 3:
@@ -349,31 +354,31 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                 break;
             default:
                 c2= c1;
-	}
+		}
 	
-        g.drawOval(x-18, y+12, 10, 15);
+        g.drawOval(x-xc, y+yc, ovalwidth, ovalheight);
         g.setColor(c1);
-	int[] xps = new int[]{x-20, x-20, x-4};
-	int[] yps = new int[]{y+18, y+32, y+32};
-	int[] xpw = new int[]{x-4, x-4, x-20};
-	int[] ypw = new int[]{y+32, y+18, y+18};
-	g.fillPolygon(xps, yps,3);	
+		int[] xps = new int[]{x-xoffset, x-xoffset, x-xoffset+lockwidth};
+		int[] yps = new int[]{y+yoffset, y+yoffset+lockheight, y+yoffset+lockheight};
+		int[] xpw = new int[]{x-xoffset+lockwidth, x-xoffset+lockwidth, x-xoffset};
+		int[] ypw = new int[]{y+yoffset+lockheight, y+yoffset, y+yoffset};
+		g.fillPolygon(xps, yps,3);	
 	
-	g.setColor(c2);	
-	g.fillPolygon(xpw, ypw, 3);
+		g.setColor(c2);	
+		g.fillPolygon(xpw, ypw, 3);
         g.setColor(c);
-	g.drawPolygon(xps, yps,3);
-	g.drawPolygon(xpw, ypw, 3);
-	g.drawString("S", x-18, y+30);
-	g.drawString("W", x-11, y+26);
-	if (checkStrongAuthStatus ==3){
-	    g.drawLine(x-19, y+22, x-12, y+30);
-	    g.drawLine(x-19, y+30, x-12, y+22);
-	}
-	if (checkWeakAuthStatus==3 || checkStrongAuthStatus==3 && checkWeakAuthStatus <2){
-	    g.drawLine(x-12, y+18, x-5, y+26);
-	    g.drawLine(x-12, y+26, x-5, y+18);
-	}
+		g.drawPolygon(xps, yps,3);
+		g.drawPolygon(xpw, ypw, 3);
+		g.drawString("S", x-xoffset+1, y+yc+yoffset);
+		g.drawString("W", x-xoffset+lockwidth/2, y+yc+ovalheight);
+		if (checkStrongAuthStatus ==3){
+		    g.drawLine(x-xoffset, y+yoffset*3/2, x-xoffset/2, y+yoffset+yc);
+		    g.drawLine(x-xoffset, y+yoffset+yc, x-xoffset/2, y+yoffset*3/2);
+		}
+		if (checkWeakAuthStatus==3 || checkStrongAuthStatus==3 && checkWeakAuthStatus <2){
+		    g.drawLine(x-xc*2/3, y+yoffset, x-xc/3, y+yc+lockheight);
+		    g.drawLine(x-xc*2/3, y+yc+lockheight, x-xc/3, y+yoffset);
+		}
     }
     public void drawConfVerification(Graphics g){
 
