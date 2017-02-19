@@ -161,50 +161,7 @@ import ui.tree.DiagramTreeModel;
 import ui.tree.DiagramTreeRenderer;
 import ui.tree.JDiagramTree;
 import ui.ucd.UseCaseDiagramPanel;
-import ui.window.JBirdPanel;
-import ui.window.JDialogAvatarExecutableCodeGeneration;
-import ui.window.JDialogAvatarModelChecker;
-import ui.window.JDialogAvatarddExecutableCodeGeneration;
-import ui.window.JDialogBisimulation;
-import ui.window.JDialogBisimulationBisimulator;
-import ui.window.JDialogCCodeGeneration;
-import ui.window.JDialogDSE;
-import ui.window.JDialogFormalValidation;
-import ui.window.JDialogGenAUT;
-import ui.window.JDialogGenAUTS;
-import ui.window.JDialogGraphModification;
-import ui.window.JDialogInvariantAnalysis;
-import ui.window.JDialogJavaGeneration;
-import ui.window.JDialogJavaSimulation;
-import ui.window.JDialogLOTOSAnalysis;
-import ui.window.JDialogLOTOSValidation;
-import ui.window.JDialogModelChecking;
-import ui.window.JDialogProVerifGeneration;
-import ui.window.JDialogProjection;
-import ui.window.JDialogRequirementTable;
-import ui.window.JDialogScheduling;
-import ui.window.JDialogSearchBox;
-import ui.window.JDialogSelectAvatarBlock;
-import ui.window.JDialogSelectCPDiagrams;
-import ui.window.JDialogSelectRequirements;
-import ui.window.JDialogSelectTMLComponent;
-import ui.window.JDialogSelectTMLNodes;
-import ui.window.JDialogSelectTMLTask;
-import ui.window.JDialogSimulation;
-import ui.window.JDialogSystemCGeneration;
-import ui.window.JDialogTMatrixManagement;
-import ui.window.JDialogTextProcess;
-import ui.window.JDialogUPPAALGeneration;
-import ui.window.JDialogUPPAALValidation;
-import ui.window.JFrameBasicText;
-import ui.window.JFrameBird;
-import ui.window.JFrameCode;
-import ui.window.JFrameDeadlock;
-import ui.window.JFrameMinimize;
-import ui.window.JFrameNC;
-import ui.window.JFramePowerManagementAnalysis;
-import ui.window.JFrameRequirementTable;
-import ui.window.JFrameText;
+import ui.window.*;
 
 public  class MainGUI implements ActionListener, WindowListener, KeyListener, PeriodicBehavior {
 
@@ -4350,7 +4307,8 @@ else if (tp instanceof NCPanel) {
 
     public void avatarProVerifVerification() {
         TraceManager.addDev("Avatar proverif fv");
-        JDialogProVerifGeneration jgen = new JDialogProVerifGeneration(frame, this, "ProVerif: code generation and verification", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
+        //JDialogProVerifGeneration jgen = new JDialogProVerifGeneration(frame, this, "ProVerif: code generation and verification", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
+	JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
         // jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);
