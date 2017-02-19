@@ -178,9 +178,32 @@ important so that other developers can understand why the changes were made.
 Ideally, the issue number should be mentioned within the modified code and
 commit messages.  \\
 
-\section{Development with Basic Text Editor and Make}
+\section{Development with Text Editor (emacs, vi) and Make}
 
-TODO
+The text editor of your choice can be used to edit the files of TTool. Yet, you must be sure that the correct indentation is respected. Use \textbf{4 spaces for each indentation level}.\\
+
+Also, don't forget to insert your name at the top of the file in the authors list.\\
+
+The main Makefile can be used to compile the source files of TTool, and to generate the jar libraries in bin/.
+To compile TTool, do as follows, from the top directory of TTool:
+\begin{verbatim}
+$ make all
+\end{verbatim}
+or:
+\begin{verbatim}
+$ make
+\end{verbatim}
+
+Other compilation targets can be obtained with:
+\begin{verbatim}
+$ make help
+\end{verbatim}
+In particular, to compile the sources without generating the \textit{jar} files can be done with the \textit{ttool} target:
+  \begin{verbatim}
+$ make ttool
+\end{verbatim}
+
+
 
 \section{Development with Eclipse}
 
