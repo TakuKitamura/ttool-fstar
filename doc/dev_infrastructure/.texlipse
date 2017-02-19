@@ -1,0 +1,14 @@
+#TeXlipse project settings
+#Fri Feb 17 15:46:18 CET 2017
+markTmpDer=true
+builderNum=2
+outputDir=
+makeIndSty=
+bibrefDir=
+outputFormat=pdf
+tempDir=tmp
+mainTexFile=ttool_development_infrastructure.tex
+outputFile=ttool_development_infrastructure.pdf
+langSpell=en
+markDer=true
+srcDir=
