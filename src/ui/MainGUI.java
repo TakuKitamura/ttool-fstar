@@ -3485,12 +3485,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
             // NC
-        } 
-	//DG 6.2. 2017
+        }
+        //DG 6.2. 2017
 
-	else if (tp instanceof ADDPanel) {
+        else if (tp instanceof ADDPanel) {
             //Design
-	    AvatarDesignPanel adp = getFirstAvatarDesignPanelFound();
+            AvatarDesignPanel adp = getFirstAvatarDesignPanelFound();
 
             //JDialogModelChecking.validated = adp.validated;
             //JDialogModelChecking.ignored = adp.ignored;
@@ -3544,11 +3544,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
             // NC
-        } 
+        }
 
 
-	//fin DG
-else if (tp instanceof NCPanel) {
+        //fin DG
+        else if (tp instanceof NCPanel) {
             NCPanel ncp = (NCPanel) tp;
             b = gtm.translateNC(ncp);
             if (b) {
@@ -4308,7 +4308,7 @@ else if (tp instanceof NCPanel) {
     public void avatarProVerifVerification() {
         TraceManager.addDev("Avatar proverif fv");
         //JDialogProVerifGeneration jgen = new JDialogProVerifGeneration(frame, this, "ProVerif: code generation and verification", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
-	JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
+        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
         // jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);
@@ -7233,32 +7233,6 @@ else if (tp instanceof NCPanel) {
         activetdp.setDraw(false);
     }
 
-    //    private void activateDrawing(TDiagramPanel tdp, JTabbedPane good, Vector goodV, JTabbedPane wrong, Vector wrongV) {
-    //        int i;
-    //        TDiagramPanel tdp2;
-    //
-    //        for(i=0; i<good.getTabCount(); i++) {
-    //            tdp2 = (TDiagramPanel)(goodV.elementAt(i));
-    //            if (tdp2 == tdp) {
-    //                tdp2.setDraw(true);
-    //                if (tdp2.mode == TDiagramPanel.SELECTED_COMPONENTS) {
-    //                    setMode(MainGUI.CUTCOPY_OK);
-    //                    setMode(MainGUI.EXPORT_LIB_OK);
-    //                } else {
-    //                    setMode(MainGUI.CUTCOPY_KO);
-    //                    setMode(MainGUI.EXPORT_LIB_KO);
-    //                }
-    //            } else {
-    //                tdp2.setDraw(false);
-    //            }
-    //        }
-    //
-    //        for(i=0; i<wrong.getTabCount(); i++) {
-    //            tdp2 = (TDiagramPanel)(wrongV.elementAt(i));
-    //            tdp2.setDraw(false);
-    //        }
-    //    }
-
     public void paneAction(ChangeEvent e) {
         //TraceManager.addDev("Pane action");
         TDiagramPanel tdp1 = getCurrentTDiagramPanel();
@@ -7747,7 +7721,7 @@ else if (tp instanceof NCPanel) {
     }
 
     public void avatarToSoclib(){
-	//DG 6.2. appelee nulle part?
+        //DG 6.2. appelee nulle part?
 
         ADDDiagramPanel deploymentDiagramPanel = getDeploymentPanel();
         AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
@@ -7761,8 +7735,8 @@ else if (tp instanceof NCPanel) {
         LinkedList<AvatarBDStateMachineOwner> adp =  designDiagramPanel.getAvatarBDPanel().getFullStateMachineOwnerList();
         AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(adp);
 
-	System.out.println("@@@@@@@@@@ I an here @@@@@@@@@@@@");
-System.err.println("@@@@@@@@@@ I an here @@@@@@@@@@@@");
+        System.out.println("@@@@@@@@@@ I an here @@@@@@@@@@@@");
+        System.err.println("@@@@@@@@@@ I an here @@@@@@@@@@@@");
         // Generator for block tasks and application main file
 
         TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec,avaspec);
@@ -7774,7 +7748,7 @@ System.err.println("@@@@@@@@@@ I an here @@@@@@@@@@@@");
             System.err.println("FileException : MainGUI.avatarToSoclib()");
         }
 
-	}
+    }
     //--------------------end DDD------------------------------------------------
 
     public boolean selectMainTab(String id) {
@@ -8266,9 +8240,9 @@ System.err.println("@@@@@@@@@@ I an here @@@@@@@@@@@@");
             tdp1.stopAddingConnector();
         }
 
-	ActionPerformer.actionPerformed(this, evt, command, tdp1);
+        ActionPerformer.actionPerformed(this, evt, command, tdp1);
 
-        
+
     }
 
     private  class PopupListener extends MouseAdapter /* popup menus onto tabs */ {
