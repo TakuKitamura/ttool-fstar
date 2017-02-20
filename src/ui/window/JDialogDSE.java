@@ -267,10 +267,12 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         jp03.add(secOverhead2,c03);
 
         outputTXT = new JCheckBox("Save text files?");
+	outputTXT.addActionListener(this);
 	outputTXT.setSelected(outputTXTState);
         jp03.add(outputTXT, c03);
 
         outputHTML = new JCheckBox("Save html files?");
+	outputHTML.addActionListener(this);
 	outputHTML.setSelected(outputHTMLState);
         jp03.add(outputHTML, c03);
 
@@ -598,12 +600,20 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 
 
     private void handleStartButton() {
-	if (dseButton.isSelected() || simButton.isSelected()) {
-	    if (mode == NOT_SELECTED) {
-		mode = NOT_STARTED;
-		setButtons();
-	    }
+	if (mode != NOT_STARTED  && mode != NOT_SELECTED) {
+	    return;
 	}
+	boolean oneResult, oneAction;
+	oneResult = outputHTML.isSelected() || outputTXT.isSelected();
+	oneAction = dseButton.isSelected() || simButton.isSelected();
+
+	if (oneAction == false || oneResult == false) {
+	    mode = NOT_SELECTED;
+	} else {
+	    mode = NOT_STARTED;
+	}
+	setButtons();
+	
     }
     
 
@@ -616,7 +626,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
-        } else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton)) {
+        } else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == outputHTML) || (evt.getSource() == outputTXT)) {
 	    handleStartButton();
 	}
     }
