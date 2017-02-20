@@ -1515,21 +1515,39 @@ public class TMLTextSpecification {
                 return -1;
             }
             forp = forp.substring(tmp0+1, tmp1);
-            forps = forp.split(";");
-            if (forps.length != 3) {
-                error = "FOR operation: badly formed parameters";
+	    int first = forp.indexOf(";");
+	    String init = "";
+	    if (first > -1) {
+		init = forp.substring(0, first);
+	    } else {
+		error = "FOR operation: badly formed parameters";
                 addError(0, _lineNb, 0, error);
                 return -1;
-            }
+	    }
 
-            // All is ok: constructing the FOR
+	    String condition = "";
+	    String increment = "";
+	    forp = forp.substring(first+1, forp.length()).trim();
+
+	    int second = forp.indexOf(";");
+	    if (second == -1) {
+		error = "FOR operation: badly formed parameters ";
+                addError(0, _lineNb, 0, error);
+                return -1;
+	    }
+
+	    condition = forp.substring(0, second);
+	    increment = forp.substring(second+1, forp.length());
+	    
+	    
+                        // All is ok: constructing the FOR
             parseElt = new TMLParserSaveElt();
             parseElt.type = TMLParserSaveElt.FOR;
             parses.add(0, parseElt);
             TMLForLoop loop = new TMLForLoop("loop", null);
-            loop.setInit(forps[0].trim());
-            loop.setCondition(forps[1].trim());
-            loop.setIncrement(forps[2].trim());
+            loop.setInit(init);
+            loop.setCondition(condition);
+            loop.setIncrement(increment);
             task.getActivityDiagram().addElement(loop);
             parseElt.tmlae = loop;
             tmlae.addNext(loop);
