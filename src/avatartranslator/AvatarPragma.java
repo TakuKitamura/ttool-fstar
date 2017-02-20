@@ -48,6 +48,7 @@ package avatartranslator;
 import java.util.*;
 import myutil.*;
 import ui.*;
+import ui.avatarbd.AvatarBDPragma;
 
 public abstract class AvatarPragma extends AvatarElement {
     public static final String[] PRAGMAS =               {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "PublicConstant", "PrivateConstant"};
@@ -72,8 +73,8 @@ public abstract class AvatarPragma extends AvatarElement {
         //The attributes referenced must exist 
 
         LinkedList<AvatarPragma> pragmas = new LinkedList<AvatarPragma>();
-
-        //Remove leading spaces
+		AvatarBDPragma pragmaObj = (AvatarBDPragma) obj;
+        //Remove leading spaces	
         str = str.trim();
 
         String[] split = str.split("\\s+");
@@ -88,6 +89,7 @@ public abstract class AvatarPragma extends AvatarElement {
             if (args.length != 2){
                 TraceManager.addDev("Wrong number of attributes for Authenticity Pragma " + str);
                 errorAcc.addWarning("Wrong number of attributes for Authenticity Pragma " + str);
+				pragmaObj.syntaxErrors.add("#" +str);
                 return pragmas;
             }
             String[] split1 = args[0].split("\\.");
@@ -96,6 +98,7 @@ public abstract class AvatarPragma extends AvatarElement {
             if (split1.length != 3 || split2.length != 3){
                 TraceManager.addDev("Badly Formatted Pragma Attribute "+ str);
                 errorAcc.addWarning("Badly Formatted Pragma Attribute "+ str);
+				pragmaObj.syntaxErrors.add("#"+str);
                 return pragmas;
             }
             String blockName1 = split1[0];
@@ -110,6 +113,7 @@ public abstract class AvatarPragma extends AvatarElement {
                     if (res ==null){
                         TraceManager.addDev("Can't find Pragma Attribute " + arg);
                         errorAcc.addWarning("Can't find Pragma Attribute " + arg);
+						pragmaObj.syntaxErrors.add("#"+str);  
                         return pragmas;
                     }
                     attrStates.add(res);
@@ -118,6 +122,7 @@ public abstract class AvatarPragma extends AvatarElement {
                 if (attrStates.get(0).getAttribute().getType() != attrStates.get(1).getAttribute().getType()){
                     TraceManager.addDev("Incompatible types "+ str);
                     errorAcc.addWarning("Incompatible types "+ str);
+					pragmaObj.syntaxErrors.add("#"+str);
                     return pragmas;
                 }
                 pragmas.add(new AvatarPragmaAuthenticity(str, obj, attrStates));
@@ -126,6 +131,7 @@ public abstract class AvatarPragma extends AvatarElement {
                 //1 composed type, 1 not
                 TraceManager.addDev("Incompatible types " + str);
                 errorAcc.addWarning("Incompatible types " + str);
+				pragmaObj.syntaxErrors.add("#"+str);
                 return pragmas;
             } else {
                 //Yay composed types
@@ -133,6 +139,7 @@ public abstract class AvatarPragma extends AvatarElement {
                     //Different types
                     TraceManager.addDev("Incompatible types " + str);
                     errorAcc.addWarning("Incompatible types " + str);
+					pragmaObj.syntaxErrors.add("#"+str);
                     return pragmas;
                 }
                 //Generate a fun lot of pragmas...
@@ -146,6 +153,7 @@ public abstract class AvatarPragma extends AvatarElement {
                         if (res ==null){
                             TraceManager.addDev("Can't find Pragma Attribute " + arg+"__"+suffix);
                             errorAcc.addWarning("Can't find Pragma Attribute " + arg+"__"+suffix);
+							pragmaObj.syntaxErrors.add("#"+str);
                             return pragmas;
                         }
                         attrStates.add(res);
@@ -182,6 +190,7 @@ public abstract class AvatarPragma extends AvatarElement {
             if (args.length != 3){
                 TraceManager.addDev("Wrong number of attributes for PrivatePublicKeys Pragma " + str);
                 errorAcc.addWarning ("Wrong number of attributes for PrivatePublicKeys Pragma " + str);
+				pragmaObj.syntaxErrors.add("#"+str);
                 return pragmas;
             }
             String blockName = args[0];
@@ -205,6 +214,7 @@ public abstract class AvatarPragma extends AvatarElement {
                 if (typeAttributesMap.get(type).size()!=1){
                     TraceManager.addDev("PrivatePublicKey cannot have more than 1 attribute "+ attr2);
                     errorAcc.addWarning ("PrivatePublicKey cannot have more than 1 attribute "+ attr2);
+					pragmaObj.syntaxErrors.add("#"+str);
                     return pragmas;
                 }
                 TAttribute ta = typeAttributesMap.get(type).get (0);
@@ -215,6 +225,7 @@ public abstract class AvatarPragma extends AvatarElement {
                 if (res ==null){
                     TraceManager.addDev("Can't find Pragma Attribute "+ attr);
                     errorAcc.addWarning ("Can't find Pragma Attribute "+ attr);
+					pragmaObj.syntaxErrors.add("#"+str);
                     return pragmas;
                 }
                 attrs.add(res);
@@ -230,6 +241,7 @@ public abstract class AvatarPragma extends AvatarElement {
                 if (sp.length != 2){
                     TraceManager.addDev("Badly Formatted Pragma Attribute " + str);
                     errorAcc.addWarning ("Badly Formatted Pragma Attribute " + str);
+					pragmaObj.syntaxErrors.add("#"+str);
                     return pragmas;
                 }
                 String blockName = sp[0];
@@ -244,6 +256,7 @@ public abstract class AvatarPragma extends AvatarElement {
             if (types.size()!=1){
                 TraceManager.addDev("Initial Knowledge Pragma attributes must be same type "+ str);
                 errorAcc.addWarning ("Initial Knowledge Pragma attributes must be same type "+ str);
+				pragmaObj.syntaxErrors.add("#"+str);
                 return pragmas;
             }
             if (types.first().equals("base")){
@@ -257,6 +270,7 @@ public abstract class AvatarPragma extends AvatarElement {
                     if (res ==null){
                         TraceManager.addDev("Can't find Pragma Attribute "+ arg);
                         errorAcc.addWarning ("Can't find Pragma Attribute "+ arg);
+						pragmaObj.syntaxErrors.add("#"+str);
                         return pragmas;
                     }
                     attrs.add(res);
@@ -267,6 +281,7 @@ public abstract class AvatarPragma extends AvatarElement {
                     if (type != attrs.get(i).getType()){
                         TraceManager.addDev("Incompatible types "+ str);
                         errorAcc.addWarning("Incompatible types "+ str);
+						pragmaObj.syntaxErrors.add("#"+str);
                         return pragmas;
                     }
                 }
@@ -284,6 +299,7 @@ public abstract class AvatarPragma extends AvatarElement {
                         if (res ==null){
                             TraceManager.addDev("Can't find Pragma Attribute "+ attrName+"__"+suffix);
                             errorAcc.addWarning ("Can't find Pragma Attribute "+ attrName+"__"+suffix);
+							pragmaObj.syntaxErrors.add("#"+str);
                             return pragmas;
                         }
                         attrs.add(res);
@@ -300,6 +316,7 @@ public abstract class AvatarPragma extends AvatarElement {
                 if (sp.length != 2){
                     TraceManager.addDev("Badly Formatted Pragma Attribute "+str);
                     errorAcc.addWarning ("Badly Formatted Pragma Attribute in '"+str+"'");
+					pragmaObj.syntaxErrors.add("#"+str);
                     return pragmas;
                 }
                 String blockName = sp[0];
@@ -313,6 +330,7 @@ public abstract class AvatarPragma extends AvatarElement {
                         if (res ==null){
                             TraceManager.addDev("Can't find Pragma Attribute "+ attrName+"__"+suffix);
                             errorAcc.addWarning ("Can't find Pragma Attribute "+ attrName+"__"+suffix);
+							pragmaObj.syntaxErrors.add("#"+str);
                             return pragmas;
                         }
                         attrs.add(res);
@@ -322,6 +340,7 @@ public abstract class AvatarPragma extends AvatarElement {
                     if (res ==null){
                         TraceManager.addDev("Can't find Pragma Attribute "+ arg);
                         errorAcc.addWarning ("Can't find Pragma Attribute "+ arg);
+						pragmaObj.syntaxErrors.add("#"+str);
                         return pragmas;
                     }
                     attrs.add(res);

@@ -181,6 +181,7 @@ public class AvatarDesignPanelTranslator {
             if (tgc instanceof AvatarBDPragma) {
                 ErrorAccumulator errorAcc = new ErrorAccumulator (tgc, adp.getAvatarBDPanel());
                 tgcn = (AvatarBDPragma)tgc;
+				tgcn.syntaxErrors.clear();
                 values = tgcn.getValues();
                 for(int i=0; i<values.length; i++) {
                     tmp = values[i].trim();
