@@ -50,13 +50,14 @@ package ui;
 
 import java.awt.event.*;
 import javax.swing.*;
+import myutil.*;
 
 public class ModeManager {
 
-    public static void setMode(byt m, TGUIAction [] actions, MainGUI mgui) {
+    public static void setMode(byte mode, TGUIAction [] actions, JToolBarMainTurtle mainBar, MainGUI mgui) {
 	 switch(mode) {
         case MainGUI.NOT_OPENED:
-            activeActions(false);
+            mgui.activeActions(false);
             actions[TGUIAction.ACT_NEW].setEnabled(true);
             actions[TGUIAction.ACT_OPEN].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_TIF].setEnabled(true);
@@ -360,7 +361,7 @@ public class ModeManager {
             actions[TGUIAction.ACT_SAVE_AUT].setEnabled(true);
             actions[TGUIAction.ACT_VIEW_RGAUTDOT].setEnabled(true);
             break;
-        caseMainGUI. RGAUTDOT_KO:
+        case MainGUI. RGAUTDOT_KO:
             actions[TGUIAction.ACT_VIEW_STAT_AUT].setEnabled(false);
             actions[TGUIAction.ACT_VIEW_PM_AUT].setEnabled(false);
             actions[TGUIAction.ACT_SAVE_AUT].setEnabled(false);
@@ -407,7 +408,7 @@ public class ModeManager {
             break;
         default:
             TraceManager.addDev("DEFAULT");
-            activeActions(false);
+            mgui.activeActions(false);
         }
 
     }

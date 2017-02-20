@@ -229,9 +229,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     //@author: Huy TRUONG
     public JDialogSearchBox searchBox;
-    //--
-
-    //public final static boolean analysis = false;
+ 
 
     public final static byte NOT_OPENED = 0;
     public final static byte OPENED = 1;
@@ -640,7 +638,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void setMode(byte m) {
         mode = m;
-	ModeManager.setMode(mode);
+	ModeManager.setMode(mode, actions, mainBar, this);
     }
 
 
@@ -650,7 +648,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
     //--
 
-    private void activeActions(boolean b) {
+    public void activeActions(boolean b) {
         for(int i=0; i<TGUIAction.NB_ACTION; i++) {
             actions[i].setEnabled(b);
         }
@@ -2781,40 +2779,19 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void firstDiag() {
         getCurrentJTabbedPane().setSelectedIndex(0);
-        /*if (methoMode == METHO_ANALYSIS) {
-          mainAnalysisTabbedPane.setSelectedIndex(0);
-          } else {
-          mainDesignTabbedPane.setSelectedIndex(0);
-          }*/
     }
 
     public void backDiag() {
         getCurrentJTabbedPane().setSelectedIndex(Math.max(0, getCurrentJTabbedPane().getSelectedIndex() - 1));
-        /*if (methoMode == METHO_ANALYSIS) {
-          mainAnalysisTabbedPane.setSelectedIndex(Math.max(0, mainAnalysisTabbedPane.getSelectedIndex() - 1));
-          } else {
-          mainDesignTabbedPane.setSelectedIndex(Math.max(0, mainDesignTabbedPane.getSelectedIndex() - 1));
-          }*/
-
     }
 
     public void nextDiag() {
         getCurrentJTabbedPane().setSelectedIndex(Math.min(getCurrentJTabbedPane().getTabCount(), getCurrentJTabbedPane().getSelectedIndex() + 1));
-        /*if (methoMode == METHO_ANALYSIS) {
-          mainAnalysisTabbedPane.setSelectedIndex(Math.min(mainAnalysisTabbedPane.getTabCount(), mainAnalysisTabbedPane.getSelectedIndex() + 1));
-          } else {
-          mainDesignTabbedPane.setSelectedIndex(Math.min(mainDesignTabbedPane.getTabCount(), mainDesignTabbedPane.getSelectedIndex() + 1));
-          }*/
-    }
+     }
 
     public void lastDiag() {
         getCurrentJTabbedPane().setSelectedIndex(getCurrentJTabbedPane().getTabCount() - 1);
-        /*if (methoMode == METHO_ANALYSIS) {
-          mainAnalysisTabbedPane.setSelectedIndex(mainAnalysisTabbedPane.getTabCount() - 1);
-          } else {
-          mainDesignTabbedPane.setSelectedIndex(mainDesignTabbedPane.getTabCount() - 1);
-          }*/
-    }
+     }
 
     //@author: Huy TRUONG
     //open a new External Search Dialog
@@ -2851,28 +2828,16 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         search(mainBar.search.getText());
     }
 
-
-    //--
-
     public void aboutVersion() {
-        /*JOptionPane.showMessageDialog(frame,
-          "TTool version 0.2 - Ludovic Apvrille",
-          "About Ttool",
-          JOptionPane.INFORMATION_MESSAGE);*/
-        JFrameBasicText jft = new JFrameBasicText("About TTool ...", DefaultText.getAboutText(), IconManager.imgic324);
+         JFrameBasicText jft = new JFrameBasicText("About TTool ...", DefaultText.getAboutText(), IconManager.imgic324);
         jft.setIconImage(IconManager.img8);
-        //jft.setSize(700, 800);
         GraphicLib.centerOnParent(jft, 700, 800 );
         jft.setVisible(true);
 
     }
 
     public void showTToolConfiguration() {
-        /*JOptionPane.showMessageDialog(frame,
-          "TTool version 0.2 - Ludovic Apvrille",
-          "About Ttool",
-          JOptionPane.INFORMATION_MESSAGE);*/
-        JFrameBasicText jft = new JFrameBasicText("Your configuration of TTool ...", ConfigurationTTool.getConfiguration(systemcOn), IconManager.imgic76);
+         JFrameBasicText jft = new JFrameBasicText("Your configuration of TTool ...", ConfigurationTTool.getConfiguration(systemcOn), IconManager.imgic76);
         jft.setIconImage(IconManager.img8);
         //jft.setSize(700, 800);
         GraphicLib.centerOnParent(jft, 700, 800 );
@@ -7381,14 +7346,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         LinkedList<AvatarBDStateMachineOwner> adp =  designDiagramPanel.getAvatarBDPanel().getFullStateMachineOwnerList();
         AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(adp);
 
-        System.out.println("@@@@@@@@@@ I an here @@@@@@@@@@@@");
-        System.err.println("@@@@@@@@@@ I an here @@@@@@@@@@@@");
         // Generator for block tasks and application main file
 
         TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec,avaspec);
         gene.generateSoclib(false,false);
         try{
-            System.err.println("ok");
+            //System.err.println("ok");
             gene.saveInFiles(TasksAndMainGenerator.getGeneratedPath());
         }catch(FileException e){
             System.err.println("FileException : MainGUI.avatarToSoclib()");
