@@ -197,9 +197,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         g.drawLine(x+width, y, x+width, y+height - limit);
 
         g.setColor(ColorManager.PRAGMA_BG);
-		if (syntaxErrors.size()>0 && System.currentTimeMillis()/1000 % 2==0){
-			g.setColor(Color.red);
-		}
+		
         int [] px1 = {x+1, x+width, x + width, x + width-limit, x+1};
         int [] py1 = {y+1, y+1, y+height-limit, y+height, y+height};
         g.fillPolygon(px1, py1, 5);
@@ -224,7 +222,11 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 		for (String s: models){
 		    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
 			if (syntaxErrors.contains(s)){
-				g.drawLine(x,y, x+width, y+textY);
+				Color ctmp= g.getColor();
+				g.setColor(Color.red);
+				g.drawLine(x+textX/2,y+textY*3/2 + i*currentFontSize, x+width-textX/2, y+textY*3/2 +(i+1)*currentFontSize);
+				g.drawLine(x+width-textX/2,y+textY*3/2 + i*currentFontSize, x+textX/2, y+textY*3/2 +(i+1)*currentFontSize);
+				g.setColor(ctmp);
 			}
 		    i++;
 		}
