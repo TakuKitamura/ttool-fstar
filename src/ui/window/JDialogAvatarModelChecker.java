@@ -129,6 +129,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected ButtonGroup reachabilities;
     protected JRadioButton noLiveness, livenessCheckable, livenessAllStates;
     protected ButtonGroup liveness;
+    protected boolean showLiveness;
 
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreConcurrenceBetweenInternalActions, generateDesign;
     protected JTextField graphPath, graphPathDot;
@@ -149,7 +150,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
 
     /** Creates new form  */
-    public JDialogAvatarModelChecker(Frame f, MainGUI _mgui, String title, AvatarSpecification _spec, String _graphDir)  {
+    public JDialogAvatarModelChecker(Frame f, MainGUI _mgui, String title, AvatarSpecification _spec, String _graphDir, boolean _showLiveness)  {
         super(title);
 
         mgui = _mgui;
@@ -162,6 +163,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             graphDirDot = _graphDir + File.separator + "rgavatar$.dot";
         }
 
+	showLiveness = _showLiveness;
+	
         initComponents();
         myInitComponents();
         pack();
@@ -244,17 +247,17 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         noLiveness = new JRadioButton("No liveness");
         noLiveness.addActionListener(this);
-        jp01.add(noLiveness, c01);
+        if (showLiveness) {jp01.add(noLiveness, c01);}
         liveness.add(noLiveness);
 
         livenessCheckable = new JRadioButton("Liveness of selected states");
         livenessCheckable.addActionListener(this);
-        jp01.add(livenessCheckable, c01);
+        if (showLiveness) {jp01.add(livenessCheckable, c01);}
         liveness.add(livenessCheckable);
 
         livenessAllStates = new JRadioButton("Liveness of all states");
         livenessAllStates.addActionListener(this);
-        jp01.add(livenessAllStates, c01);
+        if (showLiveness){jp01.add(livenessAllStates, c01);}
         liveness.add(livenessAllStates);
 
         noLiveness.setSelected(livenessSelected ==  LIVENESS_NONE);

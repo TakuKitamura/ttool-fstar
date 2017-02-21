@@ -158,10 +158,10 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
         addSeparator();
 
-        if (MainGUI.experimentalOn) {
+        //if (MainGUI.experimentalOn) {
             avatarMC = add(mgui.actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER]);
             avatarMC.addMouseListener(mgui.mouseHandler);
-        }
+	    //}
         avatarFVUPPAAL = add(mgui.actions[TGUIAction.ACT_AVATAR_FV_UPPAAL]);
         avatarFVUPPAAL.addMouseListener(mgui.mouseHandler);
         if (MainGUI.proverifOn) {
