@@ -36,7 +36,7 @@
 \large
 \centering
 \begin{adjustbox}{width=\textwidth}
-\begin{tabular}{ |p{0.79in}|p{2.56in}|p{1.87in}|p{1.45in}| }
+\begin{tabular}{ |p{1.6cm}|p{6.0cm}|p{4.2cm}|p{4.2cm}| }
 \hhline{----}
  & \textbf{Document Manager} & \textbf{Contributors}  & \textbf{Checked by}  \\ 
 \hhline{----}
@@ -66,13 +66,14 @@
 \large
 \centering
 \begin{adjustbox}{width=\textwidth}
-\begin{tabular}{ |p{0.95in}|p{1.12in}|p{3.06in}|p{1.56in}| }
+\begin{tabular}{ |p{1.5cm}|p{2.5cm}|p{9.0cm}|p{3.0cm}| }
 \hhline{----}
 \textbf{Version} & \textbf{Date} & \textbf{Description  $  \&  $  Rationale of
 Modifications} & \textbf{Sections Modified} \\
 \hhline{----}
 1.0 & 17/10/2016 & First draft &  \\ 
-1.1 & 10/02/2017 & Added Eclipse IDE development + tests &  \\ 
+1.1 & 10/02/2017 & Added Eclipse IDE development + tests & All \\ 
+1.2 & 11/02/2017 & Added more info on tests & Tests \\ 
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -120,6 +121,7 @@ development process with basic editor and command lines, with the Eclipse IDE,
 as well as the testing, building and installation procedures.
 
 \section{Source Configuration Management}
+\label{sec:scm}
 
 \subsection{Gitlab Server}
 
@@ -456,53 +458,60 @@ can be changed by editing the debug launch configuration.
 
 \section{Testing}
 
-It is planned to develop more and more tests for TTool in order to improve the product quality.
+It is planned to develop more and more tests for TTool in order to improve the
+product quality. Test architectures are defined for each languages used to
+develop TTool; Java and C++.
+
+The testing code of TTool is located under the \textit{test} directory of the TTool
+repository. A structure where a subdirectory is created for each
+component of TTool to be tested (e.g.: Avatar, Diplodocus, shared utility
+functions, etc.) is recommended. Each subdirectory can be further subdivided for
+the different subcomponents of the component. For example, the Diplodocus component can be
+further divided into its simulator and GUI components, which are not tested
+under the same test environement and framework due to the different languages
+used to develop these components.
+
+A recommended practice consists of naming the folders containing the classes
+with the same name of root package of the provided classes such as
+$fr.tpt.ttool.tests.component\_name$, where $component\_name$ is the name of the
+component of TTool being tested.
 
 \subsection{Java}
 
-The TTool Java code is tested using the JUnit framework.
+The TTool Java code is tested using JUnit (\url{http://junit.org/}), which is a
+unit test framework allowing to write, execute and display the results of
+repeatable tests.
 
-\subsubsection{Test Projects}
+\subsubsection{Coding the Tests}
 
-Test projects can be found under the \textit{test} directory of the TTool
-repository. The projects are typically named
-fr.tpt.ttool.tests.\textit{component $  \_  $ name} where \textit{component $ 
-\_  $ name} is the name of the component of TTool being tested.
+JUnit builds on a set of assertions for evaluating test results
+and a set of annotations for qualifying test classes and methods. A test unit in
+JUnit consists of a Java class grouping a set of test cases implemented as
+methods of the class and identified with the $@Test$ annotation.
+Other methods of the class to be executed only once before or after the
+execution of all test cases of the classe can be identified from the annotations
+$@BeforeClass$ and $@AfterClass$. Methods to be executed before or after each
+test case is executed can be identified from the annotations $@Before$ and
+$@After$.
 
-An example project is \textit{fr.tpt.ttool.tests.util}, which provides test
-cases for the TTool utility classes such as those for client-server remote
-communication.
+When using the Eclipse IDE, test classes can be automatically generated for a
+given class to be tested and will includ annotated methods for the selected
+methods of the class to be tested.
+
+See folder $test/fr.tpt.ttool.tests.util$ of the TTool source code repository
+for an examp;e test class $TestRshClient$ providing test cases for the TTool
+utility class $RshClient$ used for client-server remote communications.
 
 \subsubsection{Executing the Tests}
 
-\textbf{\emph{Manual Execution}}
+\textbf{\emph{Using the JUnit Execution API}}
 
-Like for C++ and Java applications, JUnit launch configurations can be defined
-in Eclipse as shown in figure~\ref{fig:image13}. This configuration will execute all unit tests
-for class \textit{RSHClient} and display within the IDE a view of the status of
-the tests (passed of failed) as shown in figure~\ref{fig:image14}.
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=\textwidth]{images/image13.png}
-\end{center}
-\caption{}
-\label{fig:image13}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=\textwidth]{images/image14.png}
-\end{center}
-\caption{}
-\label{fig:image14}
-\end{figure}
-
-\textbf{\emph{Automated Execution}}
-
-JUnit tests can also be launched outside the IDE for automated tests executed
-for example at the beginning of a tool release. An example code snippet is
-provided in the following:
+A JUnit test class can be executed automatically by passing
+it to a JUnit test runner service that will take care of calling the appropriate
+methods in the appropriate order to execute the tests, and return a test result
+object that can be inspected to determine the succes or failure of the test
+cases and provide more details in case of failure. An example code snippet is
+showned below:
 
 \begin{verbatim}
 import org.junit.runner.JUnitCore;
@@ -531,12 +540,47 @@ public class TToolUtilTestsRunner  {
 }
 \end{verbatim}
 
+\textbf{\emph{Within the Eclipse IDE}}
+
+Like for C++ and Java applications, JUnit launch configurations can be defined
+in Eclipse as shown in figure~\ref{fig:image13}. This configuration will execute all unit tests
+for class \textit{RSHClient} and display within the IDE a view of the status of
+the tests (passed of failed) as shown in figure~\ref{fig:image14}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/image13.png}
+\end{center}
+\caption{}
+\label{fig:image13}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/image14.png}
+\end{center}
+\caption{}
+\label{fig:image14}
+\end{figure}
+
 \subsection{C++}
 
 TODO
 
 \section{Building}
 
+\subsection{Compiling and Packaging}
+
+First obtain the TTool repository from the Gitlab server as explaines in section
+\ref{sec:scm}. From a Linux shell, CD to the root TTool directory and execute
+\emph{make all} to compile the code. If the compilation fails with the following error:
+``unmappable character for encoding ASCII'', you need to do:
+
+\emph{export JAVA\_TOOL\_OPTIONS=-Dfile.encoding=UTF8} \\
+
+For generating a release, execute \emph{make release}.
+
+\subsection{Automated Tests}
 TODO
 
 \section{Installing}
