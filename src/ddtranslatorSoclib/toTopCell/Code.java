@@ -146,27 +146,7 @@ public class Code {
 	}
     }
     } */
-  
-      //If there is a spy, add logger or stats to vci interface
-  for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) { 
-    // if(){
-	  if(cpu.getMonitored()==1){
-	  creation=creation+
-	  "vci_logger0.p_clk(signal_clk);" +CR+
-	  "vci_logger0.p_resetn(signal_resetn);" +CR+
-	  "vci_logger0.p_vci(p_vci(m));" +CR2;
-
-	      }
-	  else{
-	      if(cpu.getMonitored()==2){ 
-		  creation=creation+
-	  "mwmr_stats0.p_clk(signal_clk);" +CR+
-	  "mwmr_stats0.p_resetn(signal_resetn);" +CR+
-	  "mwmr_stats0.p_vci(p_vci(m));" +CR2;
-	      }
-	  }
-}
-//}
+    
 	  creation=creation+"template <class Iss>" + CR +
 	  "INIT_TOOLS(initialize_tools){" + CR ;
 	    

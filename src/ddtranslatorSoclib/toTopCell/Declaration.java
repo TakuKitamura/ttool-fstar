@@ -230,21 +230,21 @@ if(nb_clusters==0){
 	     
 	      if (cpu.getMonitored()==1){
 		 
-		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
+		  declaration += "soclib::caba::VciLogger<vci_param> vci_logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
 		  i++;	      
 	      }	
-	      else{
-		  if (cpu.getMonitored()==2){		      
+	      /* else{
+		  	  if (cpu.getMonitored()==2){		      
              
 		      String strArray="";		      
 		      //DG 30.01. no channels in case of cpu monitoring; does this make sense? channels associated to RAM not CPU and potentially any CPU can access any RAM...think about	
 		      declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr"+i+".log\",stringArray("+strArray+"NULL));" + CR2;
 		      i++;	      
 		  }	
-	     }
+		  }*/
 	  }	 
  
-
+ i=0;
 	  //monitoring RAM either by logger(1) ou stats (2) 
 	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
 	     
