@@ -1832,7 +1832,9 @@ public class GTURTLEModeling {
         }
         else if (tmap!=null){
             t2a = new TML2Avatar(tmap, mc, security);
+	    TraceManager.addDev("Avatar spec generation");
             avatarspec = t2a.generateAvatarSpec("1");
+	    TraceManager.addDev("Avatar spec generation: done");
         }
     }
 
