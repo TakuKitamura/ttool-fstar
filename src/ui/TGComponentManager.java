@@ -477,6 +477,13 @@ public class TGComponentManager {
     public static final int CONNECTOR = 1;
 
 
+    public  static LinkedList<ADDConnector> addconnectors = new LinkedList<ADDConnector>(); //DG 21.02.
+
+
+public static LinkedList<ADDConnector> getAllADDConnectors(){     
+      return addconnectors;
+    }//DG 21.02.
+
     public final static TGComponent addComponent(int x, int y, int id, TDiagramPanel tdp) {
         TGComponent tgc = null;
         switch (id) {
@@ -1936,6 +1943,7 @@ public class TGComponentManager {
 
     public final static TGConnector addConnector(int x, int y, int id, TDiagramPanel tdp, TGConnectingPoint p1, TGConnectingPoint p2, Vector listPoint) {
         TGConnector tgc = null;
+	
         switch(id) {
             // AVATAR
             // AVATAR BD
@@ -2015,6 +2023,9 @@ public class TGComponentManager {
             // AVATAR DD
         case ADD_CONNECTOR:
             tgc = new ADDConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+	    //DG 21.02.
+	    
+addconnectors.add((ADDConnector)tgc);//DG 21.02.
             break;
 
             // AVATAR PD

@@ -377,24 +377,25 @@ public class NetList {
 		    }
 	   }*/
 	
-i=0;
+   //If there is a spy, add logger or stats to vci interface
+
+	    i=0;
    for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) { 
-    // if(){
+       int number = cpu.getNo_proc();	
 	  if(cpu.getMonitored()==1){
 	  netlist=netlist+
-	  "vci_logger0.p_clk(signal_clk);" +CR+
-	  "vci_logger0.p_resetn(signal_resetn);" +CR+
-	  "vci_logger0.p_vci(p_vci(m));" +CR2;
-
+	  "vci_logger"+i+".p_clk(signal_clk);" +CR+
+	  "vci_logger"+i+".p_resetn(signal_resetn);" +CR+	     
+	  "vci_logger"+i+".p_vci(signal_vci_m["+number+"]);" +CR2;
 	      }
-	  else{
+	  /* else{//stats pas encore pour CPU
 	      if(cpu.getMonitored()==2){ 
 		  netlist=netlist+
-	  "mwmr_stats0.p_clk(signal_clk);" +CR+
-	  "mwmr_stats0.p_resetn(signal_resetn);" +CR+
-	  "mwmr_stats0.p_vci(p_vci(i));" +CR2;
+	  "mwmr_stats"+i+".p_clk(signal_clk);" +CR+
+	  "mwmr_stats"+i+".p_resetn(signal_resetn);" +CR+	     
+	  "mwmr_stats"+i+".p_vci(signal_vci_m["+number+"]);" +CR2;
 	      }
-	  }
+	      }*/
 	  i++;
    }
  

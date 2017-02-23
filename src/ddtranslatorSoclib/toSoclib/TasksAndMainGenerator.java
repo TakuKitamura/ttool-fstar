@@ -244,9 +244,9 @@ public class TasksAndMainGenerator {
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 4;" + CR);
 	//DG 16.02.
 	AvatarSignal sig = ar.getSignal1(0);//DG boucle?
-        int nbParams= sig.getNbParams();
-
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+(nbParams*4)+";" + CR);
+        int nbParams= sig.getNbParams();	
+	//DG 23.02. if getNbParams=0 transmit 1 word
+	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+((nbParams*4)+4)+";" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = " +getChannelName(ar, i)+".depth;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR2);

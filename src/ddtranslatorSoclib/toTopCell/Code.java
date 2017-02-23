@@ -47,20 +47,29 @@
 package ddtranslatorSoclib.toTopCell;
 import java.util.*;
 import ddtranslatorSoclib.*;
+import java.io.*;
+import myutil.FileException;
+import myutil.FileUtils;
+import ui.*;//DG
+import ui.MainGUI;//DG
+import ui.avatardd.*;//DG
+import ui.window.*;//DG 
+import tmltranslator.*;//DG 
+//import TGComponentManager.*;//DG 
 
 public class Code {
-    
+   
     static private  String creation;
     static private  String creation2;
    
     private final static String CR = "\n";
-	private final static String CR2 = "\n\n";       
+    private final static String CR2 = "\n\n";       
+    private final static String GENERATED_PATH = "generated_topcell" + File.separator; 
 
-    Code(){
-    }
-    
+    protected MainGUI mgui;
+
     public static String getCode(){
-		 
+  
       creation =      CR +	
 	  "//**********************************************************************" + CR + 
 	  "//               Processor entry and connection code"	+ CR + 
@@ -96,30 +105,75 @@ public class Code {
 	  "     cpu->p_vci(m);" +CR +
 	  "  }" + CR2;
 
-      //If there is a spy, add spy to vci interface
-for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) { 
-    // if(){
-	  if(cpu.getMonitored()==1){
-	  creation=creation+
-	  "vci_logger0.p_clk(signal_clk);" +CR+
-	  "vci_logger0.p_resetn(signal_resetn);" +CR+
-	  "vci_logger0.p_vci(p_vci(m));" +CR2;
+     
+      // If there is a spy, add spy component to vci interface
+      // both adjacent componants are spied
+      // currently applies to CPU and RAM
+      // RAM monitoring required for buffer size, RAM and CPU for latency
+      // of memory accesses other than channel
 
-	      }
-	  else{
-	      if(cpu.getMonitored()==2){ 
-		  creation=creation+
-	  "mwmr_stats0.p_clk(signal_clk);" +CR+
-	  "mwmr_stats0.p_resetn(signal_resetn);" +CR+
-	  "mwmr_stats0.p_vci(p_vci(m));" +CR2;
-	      }
+      /*   ADDDiagramPanel panel = mgui.getFirstAvatarDeploymentPanelFound();//??
+
+  for  (ADDConnector connector : TGComponentManager.getAllADDConnectors()) {
+      TGConnectingPoint my_p1= connector.get_p1();
+      TGConnectingPoint my_p2= connector.get_p2();    
+     
+      TGComponent comp1 = panel.getComponentToWhichBelongs(my_p1) ;
+      TGComponent comp2 = panel.getComponentToWhichBelongs(my_p2) ;  
+
+      //If a spy glass symbol is found, and component itself not yet marked 
+      
+      if (connector.hasASpy()){
+
+	  if (comp1 instanceof ADDRAMNode){
+	      ADDRAMNode comp1ram = (ADDRAMNode)comp1;
+	      comp1ram.setMonitored(1);
 	  }
-      }
-//}
+
+	  if (comp1 instanceof ADDCPUNode){ 
+	      ADDCPUNode comp1cpu = (ADDCPUNode)comp1;
+	      comp1cpu.setMonitored(1);
+	  }
+
+	if (comp2 instanceof ADDRAMNode){ 
+	    ADDRAMNode comp2ram = (ADDRAMNode)comp1;
+	    comp2ram.setMonitored(1);
+	}
+
+	if (comp2 instanceof ADDCPUNode){ 
+	    ADDCPUNode comp2cpu = (ADDCPUNode)comp2;
+	    comp2cpu.setMonitored(1);
+	}
+    }
+    } */
+    
 	  creation=creation+"template <class Iss>" + CR +
-	  "INIT_TOOLS(initialize_tools){" + CR +
-	  //"Iss::setBoostrapCpuId(0);" + CR + // ppc
-	  "/* Only processor 0 starts execution on reset */" + CR +
+	  "INIT_TOOLS(initialize_tools){" + CR ;
+	    
+        int isMipsArchitecture = 0;
+        
+    try {
+	String path = ConfigurationTTool.AVATARMPSoCCodeDirectory;
+	BufferedReader in = new BufferedReader(new FileReader(path+"/Makefile.forsoclib"));
+		    String line = null;
+			while ((line = in.readLine()) != null) {
+			   
+			    if( line.equals("SOCLIB_CPU=mips32el")) 
+				{				 
+				    isMipsArchitecture = 1;
+				}
+			}
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+if(isMipsArchitecture == 1){
+   creation=creation+
+	  "Iss::setBoostrapCpuId(0);" + CR + 
+	  "/* Only processor 0 starts execution on reset */" + CR;
+}
+	  creation=creation+
 	  "#if defined(CONFIG_GDB_SERVER)" + CR +
 	  "ISS_NEST(Iss)::set_loader(ldr);" + CR +
 	  "#endif" + CR +
