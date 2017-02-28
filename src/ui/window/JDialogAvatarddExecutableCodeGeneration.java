@@ -531,19 +531,19 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 		    TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec, tracemode.isSelected());
 		    testGo();
 		    jta.append("Generation of TopCell executable code: done\n");
-		    System.err.println("**get Text "+code2.getText());
+		   
 		    try {
-			jta.append("Saving code in files\n");
-			System.err.println("**Saving code in files\n");
+			jta.append("Saving  MPSoC code in files\n");
+			System.err.println("Saving MPSoC code in files\n");
 			pathCode = code2.getText();
 
-			System.err.println("**AVATAR TOPCELL saved in "+code2.getText());
-
+			System.err.println("AVATAR TOPCELL saved in "+code2.getText());
 			topCellGenerator.saveFile(pathCode);
 
 			jta.append("Code saved\n");
 		    } catch (Exception e) {
-			jta.append("Could not generate files\n"); System.err.println("**Could not generate files\n");
+			jta.append("Could not generate files\n"); 
+			System.err.println("Could not generate MPSoC files\n");
 		    }
 		}
 						     

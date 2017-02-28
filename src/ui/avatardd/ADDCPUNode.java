@@ -348,6 +348,7 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
 	if (dialog.getMonitored() != 0) {
             try {
                 tmp = monitored;
+
                 monitored = dialog.getMonitored();//Integer.decode(dialog.getMonitored()).intValue();
                 if (index < 0) {
                     monitored = tmp;
@@ -548,5 +549,8 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
         return monitored;
     }
 
+    public void setMonitored(int _monitored){
+	monitored = _monitored;
+    }
 
 }

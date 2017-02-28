@@ -50,6 +50,7 @@ import java.util.*;
 public class AvatarddSpecification{
 	
     private LinkedList<AvatarComponent> components;
+    private LinkedList<AvatarConnector> connectors;
     private LinkedList<AvatarMappedObject> mappedObjects;
 		
     private int nb_init = 0;
@@ -74,8 +75,9 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
     int nb_target = 6; 
     int nb_mwmr_segments = 0;
 	
-    public AvatarddSpecification(LinkedList<AvatarComponent> _components,  LinkedList<AvatarMappedObject> _mappedObjects, int _nb_target, int _nb_init){
+    public AvatarddSpecification(LinkedList<AvatarComponent> _components, LinkedList<AvatarConnector> _connectors, LinkedList<AvatarMappedObject> _mappedObjects, int _nb_target, int _nb_init){
 	components = _components ;
+	connectors = _connectors ;
 	mappedObjects = _mappedObjects ;
         nb_target = _nb_target;
         nb_init = _nb_init;
@@ -83,6 +85,10 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
     
     public LinkedList<AvatarComponent> getComponents(){
       return components;
+    }
+
+    public LinkedList<AvatarConnector> getConnectors(){
+      return connectors;
     }
 
     public LinkedList<AvatarMappedObject> getMappedObjects(){
@@ -109,15 +115,15 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       return channels;
     }
     
-    /*   public LinkedList<AvatarConnector> getAllConnectors(){
+    public LinkedList<AvatarConnector> getAllConnectors(){
       LinkedList<AvatarConnector> connectors = new LinkedList<AvatarConnector>();
-      for (AvatarComponent connector: components )
+      for (AvatarConnector connector: connectors )
         {
           if (connector instanceof AvatarConnector)
 	      connectors.add((AvatarConnector)connector);
         }
       return connectors;
-      }*/
+      }
 
     public LinkedList<AvatarTTY> getAllTTY(){
 	int i=0;

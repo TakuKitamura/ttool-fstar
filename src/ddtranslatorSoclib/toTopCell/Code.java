@@ -43,19 +43,19 @@
 /* authors: v1.0 Raja GATGOUT 2014
             v2.0 Daniela GENIUS, Julien HENON 2015 */
 
-
 package ddtranslatorSoclib.toTopCell;
 import java.util.*;
 import ddtranslatorSoclib.*;
 import java.io.*;
 import myutil.FileException;
 import myutil.FileUtils;
-import ui.*;//DG
-import ui.MainGUI;//DG
-import ui.avatardd.*;//DG
-import ui.window.*;//DG 
-import tmltranslator.*;//DG 
-//import TGComponentManager.*;//DG 
+import ui.*;
+import ui.avatardd.*;
+import ui.window.*;
+import tmltranslator.*;
+//import ui.TGComponentManager;
+//import ui.TDiagramPanel;
+//import ui.TURTLEPanel;
 
 public class Code {
    
@@ -65,8 +65,6 @@ public class Code {
     private final static String CR = "\n";
     private final static String CR2 = "\n\n";       
     private final static String GENERATED_PATH = "generated_topcell" + File.separator; 
-
-    protected MainGUI mgui;
 
     public static String getCode(){
   
@@ -103,55 +101,15 @@ public class Code {
 	  "  for ( size_t irq = 0; irq < (size_t)Iss::n_irq; ++irq )" + CR +
 	  "     cpu->p_irq[irq](e->irq_sig[irq]); " + CR +
 	  "     cpu->p_vci(m);" +CR +
-	  "  }" + CR2;
-
+	  "  }" + CR2;     
      
-      // If there is a spy, add spy component to vci interface
-      // both adjacent componants are spied
-      // currently applies to CPU and RAM
-      // RAM monitoring required for buffer size, RAM and CPU for latency
-      // of memory accesses other than channel
-
-      /*   ADDDiagramPanel panel = mgui.getFirstAvatarDeploymentPanelFound();//??
-
-  for  (ADDConnector connector : TGComponentManager.getAllADDConnectors()) {
-      TGConnectingPoint my_p1= connector.get_p1();
-      TGConnectingPoint my_p2= connector.get_p2();    
-     
-      TGComponent comp1 = panel.getComponentToWhichBelongs(my_p1) ;
-      TGComponent comp2 = panel.getComponentToWhichBelongs(my_p2) ;  
-
-      //If a spy glass symbol is found, and component itself not yet marked 
-      
-      if (connector.hasASpy()){
-
-	  if (comp1 instanceof ADDRAMNode){
-	      ADDRAMNode comp1ram = (ADDRAMNode)comp1;
-	      comp1ram.setMonitored(1);
-	  }
-
-	  if (comp1 instanceof ADDCPUNode){ 
-	      ADDCPUNode comp1cpu = (ADDCPUNode)comp1;
-	      comp1cpu.setMonitored(1);
-	  }
-
-	if (comp2 instanceof ADDRAMNode){ 
-	    ADDRAMNode comp2ram = (ADDRAMNode)comp1;
-	    comp2ram.setMonitored(1);
-	}
-
-	if (comp2 instanceof ADDCPUNode){ 
-	    ADDCPUNode comp2cpu = (ADDCPUNode)comp2;
-	    comp2cpu.setMonitored(1);
-	}
-    }
-    } */
-    
-	  creation=creation+"template <class Iss>" + CR +
+      creation=creation+"template <class Iss>" + CR +
 	  "INIT_TOOLS(initialize_tools){" + CR ;
-	    
+
+      // Mips based platform requires a special bootstrap where only cpu 0 starts first
+
         int isMipsArchitecture = 0;
-        
+	
     try {
 	String path = ConfigurationTTool.AVATARMPSoCCodeDirectory;
 	BufferedReader in = new BufferedReader(new FileReader(path+"/Makefile.forsoclib"));
@@ -184,17 +142,10 @@ if(isMipsArchitecture == 1){
 
 	  // currently, all caches must have the same parameters : take one
       AvatarCPU cpu = TopCellGenerator.avatardd.getAllCPU().getFirst();
-
-      /* System.out.println("*ICACHEWAYS taken into account*"+cpu.getICacheWays());
-	  System.out.println("*ICACHESETS taken into account*"+cpu.getICacheSets());
-	  System.out.println("*ICACHEWORDS taken into account*"+cpu.getICacheWords());
-	  System.out.println("*DCACHEWAYS taken into account*"+cpu.getDCacheWays());
-	  System.out.println("*DCACHESETS taken into account*"+cpu.getDCacheSets());
-	  System.out.println("*DCACHEWORDS taken into account*"+cpu.getDCacheWords());*/
-
+     
       int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
 
-	  //DG 1.9.2016
+	 
       if(nb_clusters==0){
 	  creation=creation +"template <class Iss>" + CR +	  
 	  "NEW_CPU(new_cpu){" + CR +
@@ -202,7 +153,7 @@ if(isMipsArchitecture == 1){
 	  cpu.getICacheWays()+","+cpu.getICacheSets()+","+cpu.getICacheWords()+","+cpu.getDCacheWays()+","+cpu.getDCacheSets()+","+cpu.getDCacheWords()+")"+";"+
 	    CR + "}" + CR2;
       }
-      else{ //DG 01.09.2016
+      else{
 	  creation=creation +"template <class Iss>" + CR +	  
 	  "NEW_CPU(new_cpu){" + CR +
 	  "return new caba::VciXcacheWrapper<vci_param, ISS_NEST(Iss)>(e->name.c_str(), e->id, maptab, IntTab(e->id,e->id),"+

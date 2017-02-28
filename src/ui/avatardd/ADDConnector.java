@@ -76,8 +76,19 @@ public  class ADDConnector extends TGConnector  {
         myImageIcon = IconManager.imgic202;
         value = "{info}";
         editable = true;
+	p1 = _p1;	
+	p2 = _p2;
     }
     
+
+        public TGConnectingPoint get_p1(){
+	return p1;
+	}
+
+        public TGConnectingPoint get_p2(){
+	return p2;
+	}
+
     public boolean editOndoubleClick(JFrame frame) {
         /*JDialogTMLConnectorNode dialog = new JDialogTMLConnectorNode(frame, "Setting connector attributes", this);
 		dialog.setSize(350, 300);

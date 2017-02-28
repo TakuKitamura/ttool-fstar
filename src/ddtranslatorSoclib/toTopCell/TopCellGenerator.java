@@ -115,8 +115,59 @@ public class TopCellGenerator
 		System.out.println("***VGSB based ***");
 		icn="vgsb";
 	    }
-	    /* More complicate dto detect : central crossbar or local crossbars : ToDo */
+      // If there is a spy, add spy component to vci interface;
+      // both adjacent componants are spied.
+      // Currently for CPU and RAM only.
+      // RAM monitoring is required for determining the buffer size and
+      // various infos on MWMR channels 
+      // RAM and CPU  monitoring are for  required for determining latency
+      // of memory accesses other than channel    
+     
+      System.out.println("@@@@@@@BEFORE SPY@@@@@@@");
+
+      for  (AvatarConnector connector : TopCellGenerator.avatardd.getAllConnectors()){
+     AvatarConnectingPoint my_p1= (AvatarConnectingPoint)connector.get_p1(); 
+     AvatarConnectingPoint my_p2= (AvatarConnectingPoint)connector.get_p2(); 
+
+     System.out.println("@@@@@@@BEFORE SPY2@@@@@@@");
+ 
+      //If a spy glass symbol is found, and component itself not yet marked 
+      
+  AvatarComponent comp1 = my_p1.getComponent();
+  AvatarComponent comp2 = my_p2.getComponent(); 
+
+  if (connector.getMonitored()==1){
+  System.out.println("@@@@@@@SPY@@@@@@@");
+	  if (comp1 instanceof AvatarRAM){
+	      AvatarRAM comp1ram = (AvatarRAM)comp1;
+	      System.out.println("@@@@@@@RAM1@@@@@@@");
+	      comp1ram.setMonitored(1);
+	  }
+
+	  if (comp1 instanceof AvatarCPU){ 
+	      AvatarCPU comp1cpu = (AvatarCPU)comp1;
+	      System.out.println("@@@@@@@CPU1@@@@@@@");
+	      comp1cpu.setMonitored(1);
+	  }
+
+	if (comp2 instanceof AvatarRAM){ 
+	    AvatarRAM comp2ram = (AvatarRAM)comp1;
+	    System.out.println("@@@@@@@RAM2@@@@@@@");
+	    comp2ram.setMonitored(1);
+	}
+
+	if (comp2 instanceof AvatarCPU){ 
+	    AvatarCPU comp2cpu = (AvatarCPU)comp2;
+	     System.out.println("@@@@@@@CPU2@@@@@@@");
+	    comp2cpu.setMonitored(1);
+	}
+  }
+}
+    
+
+	    /* Central crossbar or local crossbars : ToDo */
 	   
+
 	    if(TopCellGenerator.avatardd.getNbCrossbar()>0){
 		 System.out.println("***Clustered Interconnect***");
 	    }

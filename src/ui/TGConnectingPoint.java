@@ -292,6 +292,13 @@ public class TGConnectingPoint implements CDElement {
       protected TGComponent getFather() {
       return father;
       }*/
+
+    //DG 27.02.
+    public TGComponent getOwner()        {
+        return father;
+    }
+    //fin DG
+
     public void setReferenceToConnector( TGConnector _ref )     {
         referenceToConnector = _ref;
     }

@@ -2,240 +2,298 @@
 
 package ui;
 
-import ddtranslatorSoclib.*;
-import ui.avatardd.*;
-import ui.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Vector;
 
-public class AvatarDeploymentPanelTranslator{
+import ddtranslatorSoclib.AvatarBridge;
+import ddtranslatorSoclib.AvatarBus;
+import ddtranslatorSoclib.AvatarCPU;
+import ddtranslatorSoclib.AvatarChannel;
+import ddtranslatorSoclib.AvatarComponent;
+import ddtranslatorSoclib.AvatarConnectingPoint;
+import ddtranslatorSoclib.AvatarConnector;
+import ddtranslatorSoclib.AvatarCoproMWMR;
+import ddtranslatorSoclib.AvatarCrossbar;
+import ddtranslatorSoclib.AvatarICU;
+import ddtranslatorSoclib.AvatarMappedObject;
+import ddtranslatorSoclib.AvatarRAM;
+import ddtranslatorSoclib.AvatarTTY;
+import ddtranslatorSoclib.AvatarTask;
+import ddtranslatorSoclib.AvatarTimer;
+import ddtranslatorSoclib.AvatarVgmn;
+import ddtranslatorSoclib.AvatarddSpecification;
+import ui.avatardd.ADDBlockArtifact;
+import ui.avatardd.ADDBridgeNode;
+import ui.avatardd.ADDBusNode;
+import ui.avatardd.ADDCPUNode;
+import ui.avatardd.ADDChannelArtifact;
+import ui.avatardd.ADDConnectingPoint;
+import ui.avatardd.ADDConnector;
+import ui.avatardd.ADDCoproMWMRNode;
+import ui.avatardd.ADDCrossbarNode;
+import ui.avatardd.ADDDiagramPanel;
+import ui.avatardd.ADDICUNode;
+import ui.avatardd.ADDMemoryNode;
+import ui.avatardd.ADDRAMNode;
+import ui.avatardd.ADDTTYNode;
+import ui.avatardd.ADDTimerNode;
+import ui.avatardd.ADDVgmnNode;
 
-    private int nb_init = 0;
+public class AvatarDeploymentPanelTranslator {
 
-    /*there are seven targets which are fixed but which are invisible to the user of thr TTool deployment diagram) :
+	private int nb_init = 0;
 
-      Targets on RAM0 :
-      the text segment (target 0)
-      the reset segment (target 1)
-      the data segment (target 2)
+	/*
+	 * there are seven targets which are fixed but which are invisible to the user of thr TTool deployment diagram) :
+	 * 
+	 * Targets on RAM0 :
+	 * the text segment (target 0)
+	 * the reset segment (target 1)
+	 * the data segment (target 2)
+	 * 
+	 * Other targets :
+	 * the simhelper segment (target 3)
+	 * the icu segment (target 4)
+	 * the timer segment (target 5)
+	 * the fdt segment (target 6)
+	 * 
+	 * There always is a RAM0
+	 */
 
-      Other targets :
-      the simhelper segment (target 3)
-      the icu segment (target 4)
-      the timer segment (target 5)
-      the fdt segment (target 6)
+	private int nb_target = 6;
+	private int no_proc = 0;
+	private int no_ram = 0;
+	private int no_tty = 0;
 
-      There always is a RAM0
-    */
+	private int nb_clusters = 0;
+	private LinkedList<TGComponent> tgcComponents;
 
-    private int nb_target = 6;
-    private int nb_proc = 0;
-    private int no_proc = 0;
-    private int nb_ram = 0;
-    private int no_ram = 0;
-    private int nb_tty = 0;
-    private int no_tty = 0;
-    private int nb_mwmr_segments = 0;
-    //private int no_cluster = 0;//DG 4.4. works for 1 RAM per cluster ans does nor respect the name given by the user
-    private int nb_clusters = 0;
-    private LinkedList TGCComponents ;
+	private LinkedList<AvatarComponent> avatarComponents;
+	private LinkedList<AvatarConnector> avatarConnectors;
+	private LinkedList<AvatarMappedObject> avatarMappedObject;
 
-    private LinkedList<AvatarComponent> avatarComponents ;
-    private LinkedList<AvatarMappedObject> avatarMappedObject ;
+	public AvatarDeploymentPanelTranslator(ADDDiagramPanel _avatarddDiagramPanel) {
+		tgcComponents = _avatarddDiagramPanel.getComponentList();
 
-    public AvatarDeploymentPanelTranslator(ADDDiagramPanel _avatarddDiagramPanel ){
+		avatarComponents = new LinkedList<AvatarComponent>();
+		avatarConnectors = new LinkedList<AvatarConnector>();
+		avatarMappedObject = new LinkedList<AvatarMappedObject>();
 
-        TGCComponents = _avatarddDiagramPanel.getComponentList();
+		MakeListOfComponentAndMappedObject();
+	}
 
-        avatarComponents = new   LinkedList<AvatarComponent>();
-        avatarMappedObject = new LinkedList<AvatarMappedObject>();
+	private void MakeListOfComponentAndMappedObject() {
 
-        MakeListOfComponentAndMappedObject();
-    }
+		Map<TGComponent, AvatarComponent> avatarMap = new HashMap<TGComponent, AvatarComponent>();
 
-    private void MakeListOfComponentAndMappedObject(){
+		for (TGComponent dp : tgcComponents) {
+			if (dp instanceof ADDCPUNode) {
+				ADDCPUNode addCPUNode = (ADDCPUNode) dp;
+				String cpuName = addCPUNode.getNodeName();
+				int nbOfIRQs = addCPUNode.getNbOfIRQs();
+				int ICacheWays = addCPUNode.getICacheWays();
+				int ICacheSets = addCPUNode.getICacheSets();
+				int ICacheWords = addCPUNode.getICacheWords();
+				int dCacheWays = addCPUNode.getDCacheWays();
+				int dCacheSets = addCPUNode.getDCacheSets();
+				int dCacheWords = addCPUNode.getDCacheWords();
+				AvatarCPU avcpu;
+				int monitored = addCPUNode.getMonitored();
+				avcpu = new AvatarCPU(cpuName, nbOfIRQs, ICacheWays, ICacheSets, ICacheWords, dCacheWays, dCacheSets, dCacheWords, nb_init, no_proc, monitored);
+				nb_init++;
+				no_proc++;
 
-        TGComponent dp = null;
-        ListIterator iterator = TGCComponents.listIterator();
+				Vector tasks = addCPUNode.getArtifactList();
+				for (int i = 0; i < tasks.size(); i++) {
+					ADDBlockArtifact task = (ADDBlockArtifact) tasks.get(i);
 
-        while(iterator.hasNext()) {
-            dp = (TGComponent)iterator.next();
-            if (dp instanceof ADDCPUNode){
+					String taskName = task.getTaskName();
+					String referenceTaskName = task.getReferenceTaskName();
 
-                ADDCPUNode addCPUNode = (ADDCPUNode)dp;
-                String cpuName = addCPUNode.getNodeName();
-                int nbOfIRQs = addCPUNode.getNbOfIRQs();
-                int ICacheWays = addCPUNode.getICacheWays();
-                int ICacheSets = addCPUNode.getICacheSets() ;
-                int ICacheWords = addCPUNode.getICacheWords();
-                int dCacheWays = addCPUNode.getDCacheWays();
-                int dCacheSets = addCPUNode.getDCacheSets();
-                int dCacheWords = addCPUNode.getDCacheWords();
+					AvatarTask avtask = new AvatarTask(taskName, referenceTaskName, avcpu);
+					avcpu.addTask(avtask);
+					avatarMappedObject.add(avtask);
+				}
+				avatarMap.put(dp, avcpu);
+				avatarComponents.add(avcpu);
 
-                AvatarCPU avcpu;
-		int monitored = addCPUNode.getMonitored();
-                avcpu = new AvatarCPU(cpuName,nbOfIRQs,ICacheWays,ICacheSets,ICacheWords,dCacheWays,dCacheSets,dCacheWords,nb_init,no_proc,monitored);
-                nb_init++;
-                nb_proc++;
-                no_proc++;
+			} else if (dp instanceof ADDTTYNode) {
+				ADDTTYNode tty = (ADDTTYNode) dp;
 
-                Vector tasks = addCPUNode.getArtifactList();
-                for (int i = 0 ; i < tasks.size() ; i ++){
-                    ADDBlockArtifact task = (ADDBlockArtifact)tasks.get(i);
+				int index = tty.getIndex();
+				String ttyName = tty.getNodeName();
 
-                    String taskName = task.getTaskName();
-                    String referenceTaskName = task.getReferenceTaskName() ;
+				AvatarTTY avtty = new AvatarTTY(ttyName, index, no_tty, index);
+				nb_target++;
 
-                    AvatarTask avtask = new AvatarTask(taskName ,referenceTaskName,avcpu);
-                    avcpu.addTask(avtask);
-                    avatarMappedObject.add(avtask);
-                }
-                avatarComponents.add(avcpu);
+				avatarMap.put(dp, avtty);
+				avatarComponents.add(avtty);
 
+			} else if (dp instanceof ADDBridgeNode) {
+				ADDBridgeNode bridge = (ADDBridgeNode) dp;
 
-            }else if(dp instanceof ADDTTYNode){
-                ADDTTYNode tty = (ADDTTYNode)dp;
+				String bridgeName = bridge.getNodeName();
+				AvatarBridge avbridge = new AvatarBridge(bridgeName);
 
-                int index = tty.getIndex();
-                String ttyName = tty.getNodeName();
-	
-                AvatarTTY avtty =  new AvatarTTY(ttyName,index,no_tty,index);
-                nb_tty++;
-                nb_target++;
+				avatarMap.put(dp, avbridge);
+				avatarComponents.add(avbridge);
 
-                avatarComponents.add(avtty);
-            }else if(dp instanceof ADDBridgeNode){
-                ADDBridgeNode bridge= (ADDBridgeNode)dp;
+			} else if (dp instanceof ADDBusNode) {
 
-                String bridgeName = bridge.getNodeName();
-                AvatarBridge avbridge = new AvatarBridge(bridgeName);
+				ADDBusNode bus = (ADDBusNode) dp;
 
-                avatarComponents.add(avbridge);
+				String busName = bus.getNodeName();
+				int nbOfAttachedInitiators = bus.getNbOfAttachedInitiators();
+				int nbOfAttachedTargets = bus.getNbOfAttachedTargets();
+				int fifoDepth = bus.getFifoDepth();
+				int minLatency = bus.getMinLatency();
+				System.out.println("vgsb read in");
+				AvatarBus avbus = new AvatarBus(busName, nbOfAttachedInitiators, nbOfAttachedTargets, fifoDepth, minLatency);
+				avatarMap.put(dp, avbus);
+				avatarComponents.add(avbus);
 
-            }else if(dp instanceof ADDBusNode){
+			} else if (dp instanceof ADDVgmnNode) {
 
-                ADDBusNode bus = (ADDBusNode)dp;
+				ADDVgmnNode vgmn = (ADDVgmnNode) dp;
 
-                String busName = bus.getNodeName();
-                int nbOfAttachedInitiators = bus.getNbOfAttachedInitiators();
-                int nbOfAttachedTargets = bus.getNbOfAttachedTargets();
-                int fifoDepth = bus.getFifoDepth();
-                int minLatency = bus.getMinLatency();
-System.out.println("vgsb read in");
-                AvatarBus avbus = new AvatarBus(busName,nbOfAttachedInitiators,nbOfAttachedTargets,fifoDepth,minLatency);
-                avatarComponents.add(avbus);
+				String vgmnName = vgmn.getNodeName();
+				int nbOfAttachedInitiators = vgmn.getNbOfAttachedInitiators();
+				int nbOfAttachedTargets = vgmn.getNbOfAttachedTargets();
+				int fifoDepth = vgmn.getFifoDepth();
+				int minLatency = vgmn.getMinLatency();
+				System.out.println("vgmn read in");
+				AvatarVgmn avvgmn = new AvatarVgmn(vgmnName, nbOfAttachedInitiators, nbOfAttachedTargets, fifoDepth, minLatency);
+				avatarMap.put(dp, avvgmn);
+				avatarComponents.add(avvgmn);
 
-            }
-            else if(dp instanceof ADDVgmnNode){
+			} else if (dp instanceof ADDCrossbarNode) {
 
-                ADDVgmnNode vgmn = (ADDVgmnNode)dp;
+				ADDCrossbarNode crossbar = (ADDCrossbarNode) dp;
 
-                String vgmnName = vgmn.getNodeName();
-                int nbOfAttachedInitiators = vgmn.getNbOfAttachedInitiators();
-                int nbOfAttachedTargets = vgmn.getNbOfAttachedTargets();
-                int fifoDepth = vgmn.getFifoDepth();
-                int minLatency = vgmn.getMinLatency();
-System.out.println("vgmn read in");
-                AvatarVgmn avvgmn = new AvatarVgmn(vgmnName,nbOfAttachedInitiators,nbOfAttachedTargets,fifoDepth,minLatency);
-                avatarComponents.add(avvgmn);
+				String crossbarName = crossbar.getNodeName();
+				// int nbOfAttachedInitiators = crossbar.getNbOfAttachedInitiators();
+				int nbOfAttachedInitiators = 0;
 
-            }
-            else if(dp instanceof ADDCrossbarNode){
+				// int nbOfAttachedTargets = crossbar.getNbOfAttachedTargets();
 
-                ADDCrossbarNode crossbar = (ADDCrossbarNode)dp;
+				int nbOfAttachedTargets = 0;
 
-                String crossbarName = crossbar.getNodeName();
-		// int nbOfAttachedInitiators = crossbar.getNbOfAttachedInitiators();
-		int nbOfAttachedInitiators = 0;
-	
-                //int nbOfAttachedTargets = crossbar.getNbOfAttachedTargets();
+				int cluster_index = crossbar.getClusterIndex();
+				int cluster_address = crossbar.getClusterAddress();
 
-		int nbOfAttachedTargets = 0;
+				AvatarCrossbar avcrossbar = new AvatarCrossbar(crossbarName, nbOfAttachedInitiators, nbOfAttachedTargets, cluster_index, cluster_address);
+				nb_clusters++;
+				System.out.println("nb crossbars read in" + nb_clusters);
+				avatarMap.put(dp, avcrossbar);
+				avatarComponents.add(avcrossbar);
+			} else if (dp instanceof ADDICUNode) {
 
-                int cluster_index = crossbar.getClusterIndex();
-                int cluster_address = crossbar.getClusterAddress();
+				ADDICUNode icu = (ADDICUNode) dp;
 
-                AvatarCrossbar avcrossbar = new AvatarCrossbar(crossbarName,nbOfAttachedInitiators,nbOfAttachedTargets,cluster_index,cluster_address);
-		nb_clusters++;
-		System.out.println("nb crossbars read in"+nb_clusters);
-                avatarComponents.add(avcrossbar);
-            }
-            else if(dp instanceof ADDICUNode){
+				String ICUName = icu.getNodeName();
+				int index = icu.getIndex();
+				int nbIRQ = icu.getNIrq();
 
-                ADDICUNode icu = (ADDICUNode)dp;
+				AvatarICU avicu = new AvatarICU(ICUName, index, nbIRQ);
+				avatarMap.put(dp, avicu);
+				avatarComponents.add(avicu);
 
-                String ICUName = icu.getNodeName();
-                int index =  icu.getIndex();
-                int nbIRQ =  icu.getNIrq();
+			} else if (dp instanceof ADDTimerNode) {
+				ADDTimerNode timer = (ADDTimerNode) dp;
 
-                AvatarICU avicu = new AvatarICU(ICUName,index,nbIRQ);
-                avatarComponents.add(avicu);
+				String timerName = timer.getNodeName();
+				int nIrq = timer.getNIrq();
+				int index = timer.getIndex();
 
-            }else if(dp instanceof ADDTimerNode){
-                ADDTimerNode timer = (ADDTimerNode)dp;
+				AvatarTimer avtimer = new AvatarTimer(timerName, index, nIrq);
+				avatarMap.put(dp, avtimer);
+				avatarComponents.add(avtimer);
 
-                String timerName = timer.getNodeName();
-                int nIrq = timer.getNIrq();
-                int index = timer.getIndex();
+			} else if (dp instanceof ADDCoproMWMRNode) {
 
-                AvatarTimer avtimer = new AvatarTimer(timerName,index, nIrq );
-                avatarComponents.add(avtimer);
+				ADDCoproMWMRNode addCoproMWMRNode = (ADDCoproMWMRNode) dp;
 
-            }else if(dp instanceof ADDCoproMWMRNode){
+				String timerName = addCoproMWMRNode.getNodeName();
+				int srcid = addCoproMWMRNode.getSrcid(); // initiator id
+				int tgtid = addCoproMWMRNode.getTgtid(); // target id
+				int plaps = addCoproMWMRNode.getPlaps(); // configuration of integrated timer
+				int fifoToCoprocDepth = addCoproMWMRNode.getFifoToCoprocDepth();
+				int fifoFromCoprocDepth = addCoproMWMRNode.getFifoFromCoprocDepth();
+				int nToCopro = addCoproMWMRNode.getNToCopro(); // Nb of channels going to copro
+				int nFromCopro = addCoproMWMRNode.getNFromCopro(); // Nb of channels coming from copro
+				int nConfig = addCoproMWMRNode.getNConfig(); // Nb of configuration registers
+				int nStatus = addCoproMWMRNode.getNStatus(); // nb of status registers
+				boolean useLLSC = addCoproMWMRNode.getUseLLSC(); // more efficient protocol. 0: not used. 1 or more -> used
 
-                ADDCoproMWMRNode addCoproMWMRNode = (ADDCoproMWMRNode)dp;
+				AvatarCoproMWMR acpMWMR;
+				acpMWMR = new AvatarCoproMWMR(timerName, srcid, srcid, tgtid, plaps, fifoToCoprocDepth, fifoFromCoprocDepth, nToCopro, nFromCopro, nConfig, nStatus, useLLSC);
+				avatarMap.put(dp, acpMWMR);
 
-                String timerName = addCoproMWMRNode.getNodeName();
-                int srcid = addCoproMWMRNode.getSrcid() ; // initiator id
-                int tgtid = addCoproMWMRNode.getTgtid(); // target id
-                int plaps = addCoproMWMRNode.getPlaps() ; // configuration of integrated timer
-                int fifoToCoprocDepth = addCoproMWMRNode.getFifoToCoprocDepth();
-                int fifoFromCoprocDepth = addCoproMWMRNode.getFifoFromCoprocDepth() ;
-                int nToCopro = addCoproMWMRNode.getNToCopro(); // Nb of channels going to copro
-                int nFromCopro = addCoproMWMRNode.getNFromCopro(); // Nb of channels coming from copro
-                int nConfig = addCoproMWMRNode.getNConfig(); // Nb of configuration registers
-                int nStatus = addCoproMWMRNode.getNStatus(); // nb of status registers
-                boolean useLLSC = addCoproMWMRNode.getUseLLSC() ; // more efficient protocol. 0: not used. 1 or more -> used
+			} else if (dp instanceof ADDMemoryNode) {
 
-                AvatarCoproMWMR acpMWMR;
-                acpMWMR = new AvatarCoproMWMR(timerName,srcid,srcid,tgtid, plaps,fifoToCoprocDepth,fifoFromCoprocDepth,nToCopro,nFromCopro,nConfig,nStatus,useLLSC);
+				if (dp instanceof ADDRAMNode) {
 
-            }else if(dp instanceof ADDMemoryNode){
+					ADDRAMNode addRamNode = (ADDRAMNode) dp;
+					String name = addRamNode.getNodeName();
+					int index = addRamNode.getIndex();
+					int byteDataSize = addRamNode.getDataSize();
 
-                if (dp instanceof ADDRAMNode){
+					int monitored = addRamNode.getMonitored();
 
-                    ADDRAMNode addRamNode = (ADDRAMNode)dp;
-                    String name = addRamNode.getNodeName();
-                    int index = addRamNode.getIndex();
-                    int byteDataSize = addRamNode.getDataSize();
+					AvatarRAM avram = new AvatarRAM(name, index, byteDataSize, no_ram, index, monitored);
+					int cluster_index = avram.getIndex();
 
-		    int monitored = addRamNode.getMonitored();
+					no_ram++;
+					nb_target++;
 
-                    AvatarRAM avram = new AvatarRAM(name,index,byteDataSize,no_ram,index,monitored);
-                    int cluster_index = avram.getIndex();
-		    
-                    no_ram++;
-                    nb_ram++;
-                    nb_target++;
+					Vector channels = addRamNode.getArtifactList();
+					for (int i = 0; i < channels.size(); i++) {
+						ADDChannelArtifact c = (ADDChannelArtifact) channels.get(i);
 
-                    Vector channels = addRamNode.getArtifactList();
-                    for(int i=0 ; i < channels.size() ; i++ ) {
-                        ADDChannelArtifact c = (ADDChannelArtifact)channels.get(i);
+						String referenceDiagram = c.getReferenceDiagram();
+						String channelName = c.getChannelName();
+						// DG channel is inevitably on same cluster as RAM it is mapped on :)
+						AvatarChannel avcl = new AvatarChannel(referenceDiagram, channelName, avram, cluster_index, monitored);
+						avram.addChannel(avcl);
+						avatarMappedObject.add(avcl);
+					}
+					avatarMap.put(dp, avram);
+					avatarComponents.add(avram);
+				}
+			}
+		}
+		
+		
+		for (TGComponent dp : tgcComponents) {
+			
+			if (dp instanceof ADDConnector) {
+				ADDConnector connector = (ADDConnector) dp;
+				ADDConnectingPoint connectingPoint1 = (ADDConnectingPoint) connector.get_p1();
+				ADDConnectingPoint connectingPoint2 = (ADDConnectingPoint) connector.get_p2();			
 
-                        String referenceDiagram = c.getReferenceDiagram();
-                        String  channelName = c.getChannelName();
-			//DG channel is inevitably on same cluster as RAM it is mapped on :)
-                        AvatarChannel avcl = new AvatarChannel(referenceDiagram,channelName,avram,cluster_index, monitored);
-                        avram.addChannel(avcl);
-                        avatarMappedObject.add(avcl);
-                    }
-                    avatarComponents.add(avram);
-                }
-            }
-        }
-    }
+				TGComponent owner_p1 = connectingPoint1.getOwner();
+				TGComponent owner_p2 = connectingPoint2.getOwner();
 
-    public AvatarddSpecification getAvatarddSpecification(){
-        return new AvatarddSpecification(avatarComponents,avatarMappedObject,nb_target,nb_init);
-    }
+				AvatarComponent avowner_p1 = avatarMap.get(owner_p1);
+				AvatarComponent avowner_p2 = avatarMap.get(owner_p2);
+
+				AvatarConnectingPoint avconnectingPoint1 = new AvatarConnectingPoint(avowner_p1);
+				AvatarConnectingPoint avconnectingPoint2 = new AvatarConnectingPoint(avowner_p2);
+				boolean spy = connector.hasASpy();
+				int monitored = 0;
+				if (spy == true)
+					monitored = 1;
+				AvatarConnector avconnector = new AvatarConnector(avconnectingPoint1, avconnectingPoint2, monitored);
+
+				avatarConnectors.add(avconnector);
+			}
+		}
+	}
+
+	public AvatarddSpecification getAvatarddSpecification() {
+		return new AvatarddSpecification(avatarComponents, avatarConnectors, avatarMappedObject, nb_target, nb_init);
+	}
 
 }

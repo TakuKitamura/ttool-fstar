@@ -58,7 +58,10 @@ import ui.window.*;
 
 import tmltranslator.*;
 
+
 public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, WithAttributes {
+
+    protected int monitored = 0;
 
     public ADDRAMNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -163,6 +166,12 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
     }
 
 
+    public int getMonitored() {
+        return monitored;
+    }
 
+    public void setMonitored(int _monitored){
+	monitored = _monitored;
+    }
 
 }
