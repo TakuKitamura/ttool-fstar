@@ -220,7 +220,7 @@ webcrawler:
 
 documentation:
 	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC):-$(TTOOL_CLASSPATH_BINARY) -d $(TTOOL_DOC_HTML) $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
-	cd $(TTOOL_PATH)/doc/document_soclib&&-make all
+#	cd $(TTOOL_PATH)/doc/document_soclib&&make all
 
 release: jttooljar launcher tiftranslator tmltranslator rundse remotesimulator ttooljar documentation stdrelease 
 	@echo release done

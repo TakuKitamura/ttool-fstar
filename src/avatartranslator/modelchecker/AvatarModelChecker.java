@@ -259,6 +259,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         // Remove timers, composite states, randoms
         TraceManager.addDev("Reworking Avatar specification");
+	spec.removeElseGuards();
         spec.removeTimers();
         spec.removeRandoms();
 	spec.removeFIFOs(4);
@@ -266,7 +267,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (ignoreEmptyTransitions) {
             spec.removeEmptyTransitions((nbOfRemainingReachabilities == 0)||studyLiveness);
         }
-
 
         //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
         prepareStates();
