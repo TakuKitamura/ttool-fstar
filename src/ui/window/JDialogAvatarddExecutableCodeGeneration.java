@@ -78,7 +78,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
     private String textSysC1 = "Base directory of code generation:";
     private String textSysC2 = "Compile soclib executable with";   
-    private String textSysC3 = "Run code and trace traffic on interconnect :";
+    //private String textSysC3 = "Run code and trace traffic on interconnect :";
     private String textSysC4 = "Run code in soclib / mutekh:";
     private String textSysC5 = "Show AVATAR trace from file w/o hardware:";
     private String textSysC6 = "Show cycle accurate trace from MPSoC file:";
@@ -127,7 +127,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     private static boolean removeCFilesValue = true;
     private static boolean removeXFilesValue = true;
     private static boolean debugValue = false;
-    private static boolean tracingValue = true;
+    private static boolean tracingValue = false;
     private static boolean optimizeValue = true;
 
     private Thread t;
@@ -316,12 +316,12 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
 	exegroup = new ButtonGroup();      
 
-        exetrace = new JRadioButton(textSysC3, false);
+        /*exetrace = new JRadioButton(textSysC3, false);
         exetrace.addActionListener(this);
         exegroup.add(exetrace);
         jp03.add(exetrace, c03);
         exe3 = new JTextField(pathExecuteMPSoC+"-trace", 100);
-        jp03.add(exe3, c03);
+        jp03.add(exe3, c03);*/
 
         exesoclib = new JRadioButton(textSysC4, false);
         exesoclib.addActionListener(this);
@@ -331,7 +331,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
         jp03.add(exe4, c03);
 
         //exe.setSelected(selectedRun == 0);
-        exetrace.setSelected(selectedRun == 1);
+        //exetrace.setSelected(selectedRun == 1);
         exesoclib.setSelected(selectedRun == 2);        
 
         jp03.add(new JLabel(" "), c03);
@@ -447,14 +447,14 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
     public void makeSelectionExecute() {
       
-	if (exetrace.isSelected()) {
-	    selectedRun = 1;
-	} else {
+	//if (exetrace.isSelected()) {
+	//    selectedRun = 1;
+	//} else {
 	    selectedRun = 2;
-	}
+	    //}
 	
 	// exe2.setEnabled(selectedRun == 0);
-        exe3.setEnabled(selectedRun == 1);
+        //exe3.setEnabled(selectedRun == 1);
         exe4.setEnabled(selectedRun == 2);
     }
 
@@ -661,11 +661,11 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
 	    if (jp1.getSelectedIndex() == 2) {
 		try {
-		    if (selectedRun == 1) {
-			cmd = exe3.getText();
-		    } else {
+		    // if (selectedRun == 1) {
+			//cmd = exe3.getText();
+		    //} else {
 			cmd = exe4.getText();
-		    }
+			// }
 		
 		    jta.append("Executing code with command: \n" + cmd + "\n");
 

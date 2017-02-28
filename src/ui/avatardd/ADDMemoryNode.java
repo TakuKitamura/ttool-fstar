@@ -207,7 +207,14 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
 	if (dialog.getMonitored() != 0) {
             try {
                 tmp = monitored;
+
+		System.out.println("@@@@ ADDMemoryNode monitored"+monitored);
+
                 monitored = dialog.getMonitored();//Integer.decode(dialog.getMonitored()).intValue();
+
+		System.out.println("@@@@ ADDMemoryNode monitored"+monitored);
+
+
                 if (index < 0) {
                     monitored = tmp;
                     error = true;

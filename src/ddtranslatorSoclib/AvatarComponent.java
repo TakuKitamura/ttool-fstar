@@ -47,5 +47,12 @@
 package ddtranslatorSoclib;
 
 public abstract class AvatarComponent {
+    public String name;
 
+    public String getName(){
+	return name;
+    }
+    public void setName(String _name){
+	name=_name;
+    }
 }

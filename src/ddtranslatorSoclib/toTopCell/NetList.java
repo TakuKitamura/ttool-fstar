@@ -56,8 +56,8 @@ public class NetList {
     public static String getNetlist(String icn, boolean _tracing) {
 	int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
 	
-	boolean trace_caba=true; //tracing is enabled in cycle accurate mode
 	tracing = _tracing;
+	
 	String netlist;
 
 	netlist = CR2 + "//------------------------------Netlist---------------------------------" + CR2;
@@ -347,35 +347,7 @@ public class NetList {
 		netlist = netlist + "mwmr"+i+".p_vci_target(signal_mwmr_"+i+"_target);" + CR;	
                 netlist = netlist + copro.getCoprocName()+".p_"+i+"_ctrl(signal_fifo_"+i+"_ctrl);" + CR;
           }
-	    //	}
-
-	//int j;
-	/* netlist for connecting the monitoring infrastructure */	
-	/* Which VCI interfaces are marked for full log, with a spy sign? */
-	/* Attention we do not want two loggers if RAM ist already logged (currently not checked) */
-	/* vci_stats only possible for RAMS with mapped channels */
-		
-	/*  for (AvatarConnector connector : TopCellGenerator.avatardd.getAllConnectors()) { 
-		    if (connector.getMonitored()==1){
-		      
-			// we identify the component on the interface 
-
-			AvatarConnectingPoint point = connector.getconectingPoint1();
-			AvatarComponent component = point.getComponent();
-
-			if(component instanceof AvatarRAM){ 		
-			    int number = number = ram.getNo_ram();
-			    netlist += "logger"+i+".p_clk(signal_clk);" + CR;
-			    netlist += "logger"+i+".p_resetn(signal_resetn);" + CR; 
-			    netlist += "logger"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;  		    
-			}
-	
-			//cache monitoring not yet implemented
-			//	if(component instanceof AvatarCPU){ 
-			//	component.setMonitored(1);
-			//	}		
-		    }
-	   }*/
+	   
 	
    //If there is a spy, add logger or stats to vci interface
 
@@ -383,43 +355,40 @@ public class NetList {
    for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) { 
        int number = cpu.getNo_proc();	
 	  if(cpu.getMonitored()==1){
-	  netlist=netlist+
-	  "vci_logger"+i+".p_clk(signal_clk);" +CR+
-	  "vci_logger"+i+".p_resetn(signal_resetn);" +CR+	     
-	  "vci_logger"+i+".p_vci(signal_vci_m["+number+"]);" +CR2;
-	      }
-	  /* else{//stats pas encore pour CPU
-	      if(cpu.getMonitored()==2){ 
-		  netlist=netlist+
-	  "mwmr_stats"+i+".p_clk(signal_clk);" +CR+
-	  "mwmr_stats"+i+".p_resetn(signal_resetn);" +CR+	     
-	  "mwmr_stats"+i+".p_vci(signal_vci_m["+number+"]);" +CR2;
-	      }
-	      }*/
+	  netlist=netlist+CR+
+	  "logger"+i+".p_clk(signal_clk);" +CR+
+	  "logger"+i+".p_resetn(signal_resetn);" +CR+	     
+	  "logger"+i+".p_vci(signal_vci_m["+number+"]);" +CR2;
 	  i++;
+	  }	
+	  
    }
- 
-	i=0;
+   int j=0;
+  
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
 	    if (ram.getMonitored()==1){	
 		int number = number = ram.getNo_ram();
 		netlist += "logger"+i+".p_clk(signal_clk);" + CR;
 		netlist += "logger"+i+".p_resetn(signal_resetn);" + CR; 
-		netlist += "logger"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;  	     
+		netlist += "logger"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;  	  
+		i++;   
 	    }	
 	    else{
+		
 		if (ram.getMonitored()==2){
 		    int number = number = ram.getNo_ram();	
-		    netlist += "mwmr_stats"+i+".p_clk(signal_clk);" + CR;
-		    netlist += "mwmr_stats"+i+".p_resetn(signal_resetn);" + CR; 
-		    netlist += "mwmr_stats"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;		    
-		    i++;	      
+		    netlist += "mwmr_stats"+j+".p_clk(signal_clk);" + CR;
+		    netlist += "mwmr_stats"+j+".p_resetn(signal_resetn);" + CR; 
+		    netlist += "mwmr_stats"+j+".p_vci(signal_vci_vciram"+number+");" + CR2;		    
+		    j++;	      
 		}	 		
-	    }
+	    }	   	   
 	}
 		
 	//generate trace file if marked trace option 
-	/*	netlist += "sc_trace_file *tf;" + CR;
+	
+	if(tracing){
+		netlist += "sc_trace_file *tf;" + CR;
 	netlist += "tf=sc_create_vcd_trace_file(\"mytrace\");" + CR;
 	netlist += "sc_trace(tf,signal_clk,\"CLK\");" + CR;
 	netlist += "sc_trace(tf,signal_resetn,\"RESETN\");" + CR;
@@ -430,8 +399,6 @@ public class NetList {
 	netlist += "sc_trace(tf, signal_vci_vcirom ,\"signal_vci_vcirom\");" + CR;
 	netlist += "sc_trace(tf, signal_vci_vcisimhelper,\"signal_vci_vcisimhelper\");" + CR;
 	netlist += "sc_trace(tf, signal_vci_vcirttimer ,\"signal_vci_vcirttimer\");" + CR;	    
-	//netlist += "sc_trace(tf, signal_vci_mwmr_ram ,\"signal_vci_mwmr_ram\");" + CR;
-	//netlist += "sc_trace(tf, signal_vci_mwmrd_ram ,\"signal_vci_mwmrd_ram\");" + CR;
 	netlist += "sc_trace(tf, signal_vci_vcifdaccessi,\"signal_vci_vcifdaccessi\");" + CR;
 	netlist += "sc_trace(tf,signal_vci_vcifdaccesst ,\"signal_vci_vcifdaccesst\");" + CR;
 	netlist += "sc_trace(tf,signal_vci_bdi ,\"signal_vci_bdi\");" + CR;
@@ -459,16 +426,16 @@ public class NetList {
 	    if (ram.getMonitored()==0){			
 		netlist += "sc_trace(tf,signal_vci_vciram"+ram.getNo_ram()+",\"Memory"+ram.getNo_ram()+"\");" + CR;
 	    }
-	    }*/	   
-    	
+	    }	   
+    	}
     netlist = netlist + "  sc_core::sc_start(sc_core::sc_time(0, sc_core::SC_NS));" + CR;
     netlist = netlist + "  signal_resetn = false;" + CR;
     netlist = netlist + "  sc_core::sc_start(sc_core::sc_time(1, sc_core::SC_NS));" + CR;
     netlist = netlist + "  signal_resetn = true;" + CR;
     netlist = netlist + "  sc_core::sc_start();" + CR;
-    //if(tracing){
-    //	netlist += "sc_close_vcd_trace_file(tf);" + CR;
-    //	}
+    if(tracing){
+    	netlist += "sc_close_vcd_trace_file(tf);" + CR;
+    	}
     netlist = netlist + CR + "  return EXIT_SUCCESS;"+ CR;
     netlist = netlist +"}" + CR;
     return netlist;		

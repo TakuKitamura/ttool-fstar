@@ -203,74 +203,6 @@ if(nb_clusters==0){
 	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+");" + CR2;
 	  int i=0;
 
-
-	  //monitoring connectors marked by spy with the vci_ logger
-	  /*  for (AvatarConnector connector : TopCellGenerator.avatardd.getAllConnectors()) { 
-		    if (connector.getMonitored()==1){
-		      
-			
-			AvatarConnectingPoint point = connector.getconectingPoint1();
-			AvatarComponent component = point.getComponent();
-			declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
-			i++;
-			if(component instanceof AvatarRAM){ 		
-			   
-			}
-	
-			//cache monitoring not yet implemented
-			//	if(component instanceof AvatarCPU){ 
-			//	component.setMonitored(1);
-			//	}		
-			//}
-	       }*/
-
-
-//monitoring CPU either by logger(1) ou stats (2) 
- for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) { 
-	     
-	      if (cpu.getMonitored()==1){
-		 
-		  declaration += "soclib::caba::VciLogger<vci_param> vci_logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
-		  i++;	      
-	      }	
-	      /* else{
-		  	  if (cpu.getMonitored()==2){		      
-             
-		      String strArray="";		      
-		      //DG 30.01. no channels in case of cpu monitoring; does this make sense? channels associated to RAM not CPU and potentially any CPU can access any RAM...think about	
-		      declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr"+i+".log\",stringArray("+strArray+"NULL));" + CR2;
-		      i++;	      
-		  }	
-		  }*/
-	  }	 
- 
- i=0;
-	  //monitoring RAM either by logger(1) ou stats (2) 
-	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
-	     
-	      if (ram.getMonitored()==1){
-		 
-		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
-		  i++;	      
-	      }	
-	      else{
-		  if (ram.getMonitored()==2){		      
-             
-		      String strArray="";
-
-		      for(AvatarChannel channel: ram.getChannels()){ 
-		   
-			  String chname = generateName(channel);
-		     
-			  strArray=strArray+"\""+chname+"\",";
-		      }   
-		
-		      declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr"+i+".log\",stringArray("+strArray+"NULL));" + CR2;
-		      i++;	      
-		  }	
-	     }
-	  }	 
- 
           //if BUS was not last in input file, update here
 
           bus.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
@@ -290,33 +222,14 @@ if(nb_clusters==0){
 
 	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+
 	     "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
-	  int i=0;
-	
-	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
 
-	    if (ram.getMonitored()==1){
-		int number = ram.getNo_target();
-		declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
-	      i++;	      
-	    }	
-	    else{
+	  // if VGMN was not last in input file, update here 
+          vgmn.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
+          vgmn.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target()+4);
 
-		if (ram.getMonitored()==2){
-		int number = ram.getNo_target();
-               	
-		String strArray="";
+	 }
 
-                for(AvatarChannel channel: ram.getChannels()){
-		    
-		    String chname = generateName(channel);
 
-		    strArray=strArray+"\""+chname+"\",";
-		}      
-		declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr0.log\",stringArray("+strArray+"NULL));" + CR2;
-	      i++;	      
-		}	
-	    }
-	  }	
 
 	  /*	VciMwmrController(
 		sc_module_name name,
@@ -330,18 +243,14 @@ if(nb_clusters==0){
 		const size_t n_from_coproc,
 		const size_t n_config,
 		const size_t n_status,
-        const bool use_llsc );
+		const bool use_llsc );
 	  */
 
 	  //only non-clustered version
 	  for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
 		      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", maptab, IntTab("+copro.getSrcid() + "), IntTab("+copro.getTgtid() + "),copro.getPlaps(),copro.getFifoToCoProcDepth(),copro.getNToCopro(),copro.getNFromCopro(),copro.getNConfig(),copro.getNStatus(), copro.getUseLLSC());"+ CR;
-		i++;}
-
-	  // if VGMN was not last in input file, update here 
-          vgmn.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
-          vgmn.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target()+4);
-	 }
+	
+	  }
 }
 else {
 
@@ -349,101 +258,29 @@ else {
     /* clustered interconnect architecture */
     /***************************************/
 
-    //monitor connectors marked by spy with the vci_ logger
-    /*	  for (AvatarConnector connector : TopCellGenerator.avatardd.getAllConnectors()) { 
-		    if (connector.getMonitored()==1){		      		
-
-			AvatarConnectingPoint point = connector.getconectingPoint1();
-			AvatarComponent component = point.getComponent();
-			declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
-			i++;
-			if(component instanceof AvatarRAM){ 		
-			   
-			}
-	
-			//cache monitoring not yet implemented
-			//	if(component instanceof AvatarCPU){ 
-			//	component.setMonitored(1);
-			//	}		
-		    }
-	   }*/
-    
+       
     for  (AvatarBus bus : TopCellGenerator.avatardd.getAllBus()) {
 	
 	declaration += "soclib::caba::VciVgsb<vci_param>  vgsb(\"" + bus.getBusName() + "\"" + " , maptab, "+ +nb_clusters+"," + nb_clusters + ");" + CR2;
 	  
           //if BUS was not last in input file, update here	 
-	  int i=0;
-	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
-
-	      if (ram.getMonitored()==1){
-		
-		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
-		  i++;	      
-	      }	
-	      else{
-		  if (ram.getMonitored()==2){
-		    
-             
-		      String strArray="";
-
-		      for(AvatarChannel channel: ram.getChannels()){ 
-		   
-			  String chname = generateName(channel);
-		     
-			  strArray=strArray+"\""+chname+"\",";
-		      }   
-		
-		      declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr"+i+".log\",stringArray("+strArray+"NULL));" + CR2;
-		      i++;	      
-		  }	
-	     }
-	  }	           
+	  int i=0;	
     }	
 
-         // currently clustered around one vgmn
-         for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
+         
+    for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
           System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
           System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
       	 
 	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn (\"" + vgmn.getVgmnName() + "\"" + " , maptab, "+ nb_clusters +"," + nb_clusters +
 	      "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
-
-	  int i=0;	
-
-	  //monitoring either by logger(1) ou stats (2) 
-	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
-
-	      if (ram.getMonitored()==1){
-		
-		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
-		  i++;	      
-	      }	
-	      else{
-		  if (ram.getMonitored()==2){
-		    
-             
-		      String strArray="";
-
-		      for(AvatarChannel channel: ram.getChannels()){ 
-		   
-			  String chname = generateName(channel);
-		     
-			  strArray=strArray+"\""+chname+"\",";
-		      }   
-		
-		      declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+i+"(\"mwmr_stats" + i+"\",maptab, data_ldr, \"mwmr"+i+".log\",stringArray("+strArray+"NULL));" + CR2;
-		      i++;	      
-		  }	
-	     }
-	  }	 		
+	 	
 	 }
 	
 	 int i=0;
-	for  (AvatarCrossbar crossbar : TopCellGenerator.avatardd.getAllCrossbar()) {
-	    
-	    /* attribution d'un index de cluster par ordre d'arrivee */
-	    //currently number on initiators and targets is fixed
+	for  (AvatarCrossbar crossbar : TopCellGenerator.avatardd.getAllCrossbar()) {	    
+	  
+	    //currently the number on initiators and targets is fixed
 
 	  crossbar.setClusterIndex(i);
 
@@ -455,8 +292,8 @@ else {
 	      //processor(s) and link to central interconnect are initiators
 	      //crossbar.setNbOfAttachedInitiators(2);	 
 	      //crossbar.setNbOfAttachedTargets(2);
-	      crossbar.setNbOfAttachedInitiators(1);//DG 27.09.	 
-	      crossbar.setNbOfAttachedTargets(1);//DG 27.09.
+	      crossbar.setNbOfAttachedInitiators(1);
+	      crossbar.setNbOfAttachedTargets(1);
 	  }
 
           System.out.println("initiators: "+crossbar.getNbOfAttachedInitiators());	
@@ -469,11 +306,51 @@ else {
 
           //if CROSSBAR was not last in input file, update here 
           crossbar.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
-          crossbar.setNbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target());
-	 
-	  i++;
+          crossbar.setNbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target());	 
+
 	}
-    }
+}
+int  i=0;
+	 //monitoring CPU by logger(1)
+	  for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) { 
+	     
+	      if (cpu.getMonitored()==1){
+		  System.out.println("Spy CPU");
+		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
+		  i++;	      
+	      }		    
+	  }	 
+  
+	  int j=0;
+	  //monitoring RAM either by logger(1) ou stats (2) 
+	  for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
+	     if (ram.getMonitored()==0){
+ 
+	     }
+	      if (ram.getMonitored()==1){
+		  System.out.println("Spy RAM : Logger");
+		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
+		  i++;	      
+	      }	
+	      else{
+		  if (ram.getMonitored()==2){		      
+              System.out.println("Spy RAM : Stats");
+		      String strArray="";
+
+		      for(AvatarChannel channel: ram.getChannels()){ 
+		   
+			  String chname = generateName(channel);
+		     
+			  strArray=strArray+"\""+chname+"\",";
+		      }   
+		
+		      declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+j+"(\"mwmr_stats" + j+"\",maptab, data_ldr, \"mwmr"+j+".log\",stringArray("+strArray+"NULL));" + CR2;
+		      j++;	      
+		  }	
+	     }
+	  }	 
+ 	
 return declaration;
 	}
+
 }

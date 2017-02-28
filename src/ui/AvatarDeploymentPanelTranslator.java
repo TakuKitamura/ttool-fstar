@@ -254,7 +254,7 @@ public class AvatarDeploymentPanelTranslator {
 
 						String referenceDiagram = c.getReferenceDiagram();
 						String channelName = c.getChannelName();
-						// DG channel is inevitably on same cluster as RAM it is mapped on :)
+						//channel is inevitably on same cluster as RAM it is mapped on :)
 						AvatarChannel avcl = new AvatarChannel(referenceDiagram, channelName, avram, cluster_index, monitored);
 						avram.addChannel(avcl);
 						avatarMappedObject.add(avcl);
@@ -269,25 +269,20 @@ public class AvatarDeploymentPanelTranslator {
 		for (TGComponent dp : tgcComponents) {
 		  
 			if (dp instanceof ADDConnector) {
-System.out.println("@@@@@@@CONNECTOR FOUND@@@@@@@");	
+
 				ADDConnector connector = (ADDConnector) dp;
-				//ADDConnectingPoint connectingPoint1 = (ADDConnectingPoint) connector.get_p1();
-				//ADDConnectingPoint connectingPoint2 = (ADDConnectingPoint) connector.get_p2();			
+			
 				TGConnectingPoint connectingPoint1 =  connector.get_p1();
 				TGConnectingPoint connectingPoint2 =  connector.get_p2();	
 	
 				TGComponent owner_p1 = avatarddDiagramPanel.getComponentToWhichBelongs(connectingPoint1);
 				TGComponent owner_p2 = avatarddDiagramPanel.getComponentToWhichBelongs(connectingPoint2);
 
-System.out.println("@@@@@@@@@@@@@"+owner_p1.getName()+" connected to "+owner_p2.getName());	
+				System.out.println(owner_p1.getName()+" connected to "+owner_p2.getName());	
 
 				AvatarComponent avowner_p1 = avatarMap.get(owner_p1);	
 				AvatarComponent avowner_p2 = avatarMap.get(owner_p2);
-
-				if(avowner_p1 instanceof AvatarCPU)
-				    System.out.println("@@@@@@IS A CPU @@@@@@@");  
-				if(avowner_p1 instanceof AvatarRAM)
-				    System.out.println("@@@@@@IS A RAM @@@@@@@");  
+			       
 				//create Avatar connecting points
 
 				AvatarConnectingPoint avconnectingPoint1 = new AvatarConnectingPoint(avowner_p1);
@@ -296,11 +291,12 @@ System.out.println("@@@@@@@@@@@@@"+owner_p1.getName()+" connected to "+owner_p2.
 				int monitored = 0;
 				if (spy == true){
 					monitored = 1; 
-					System.out.println("@@@@@@HAS A SPY @@@@@@@");  
+				
 				}
 				AvatarConnector avconnector = new AvatarConnector(avconnectingPoint1, avconnectingPoint2, monitored);
 
 				avatarConnectors.add(avconnector);
+
 			}
 		}
 	}
