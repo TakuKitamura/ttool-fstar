@@ -61,7 +61,8 @@ import ui.interactivesimulation.*;
 import myutil.*;
 
 public class JDialogCPUNode extends javax.swing.JDialog implements ActionListener  {
-    private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
+    //private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
+    private static String[] tracemodeTab = {"VCI logger"};
     private boolean regularClose;
 
     private JPanel panel2, panel4, panel5;

@@ -59,8 +59,8 @@ import ui.avatardd.*;
 
 public class JDialogADDMemoryNode extends javax.swing.JDialog implements ActionListener  {
 
-     private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
-
+    //private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
+    private static String[] tracemodeTab = {"VCI logger","VCI stats"};
     private boolean regularClose;
     
     private JPanel panel2;
@@ -148,7 +148,7 @@ public class JDialogADDMemoryNode extends javax.swing.JDialog implements ActionL
         dataSize = new JTextField(""+node.getDataSize(), 15);
         panel2.add(dataSize, c2);
         
-	/*	c2.gridwidth = 1;
+	/*		c2.gridwidth = 1;
         panel2.add(new JLabel("Monitored:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         monitored = new JTextField(""+node.getMonitored(), 15);

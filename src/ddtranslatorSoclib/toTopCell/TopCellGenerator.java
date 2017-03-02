@@ -138,13 +138,13 @@ public class TopCellGenerator
 	  if (comp1 instanceof AvatarRAM){
 	      AvatarRAM comp1ram = (AvatarRAM)comp1;
 	      System.out.println("RAM  monitored "+comp1ram.getMonitored());
-	      comp1ram.setMonitored(comp1ram.getMonitored());
+	    
 	  }
 
 	  if (comp1 instanceof AvatarCPU){ 
 	      AvatarCPU comp1cpu = (AvatarCPU)comp1;
 	    System.out.println("CPU monitored "+comp1cpu.getMonitored());
-	      comp1cpu.setMonitored(comp1cpu.getMonitored());
+	     
 	  }
 
 	  /*	if (comp2 instanceof AvatarRAM){ 
@@ -161,7 +161,7 @@ public class TopCellGenerator
   }
 }
     
-	    /* Central crossbar or local crossbars : ToDo */
+	    /* Central interconnect or local crossbars */
 	   
 	    if(TopCellGenerator.avatardd.getNbCrossbar()>0){
 		 System.out.println("***Clustered Interconnect***");

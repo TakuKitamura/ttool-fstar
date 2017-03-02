@@ -59,7 +59,7 @@ import tmltranslator.modelcompiler.*;
 
 public class JDialogMemoryNode extends javax.swing.JDialog implements ActionListener  {
 
-    private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
+    private static String[] tracemodeTab = {"VCI logger", "VCI stats"};
 
     private boolean regularClose;
 
