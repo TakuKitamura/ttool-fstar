@@ -1089,7 +1089,56 @@ public class GTURTLEModeling {
         return map;
     }
 
+	public void addHSM(MainGUI gui, String compName){	
+		List<String> hsmInChans = new ArrayList<String>();
+		String name="hsm";
+		if (tmap==null){
+			return;
+		}
+		//Clone diagrams
+		int arch = gui.tabs.indexOf(tmap.tmlap);
+        gui.cloneRenameTab(arch,"enc");
+        TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
 
+		TMLComponentDesignPanel tmlcdp = tmap.getTMLCDesignPanel();
+		int ind = gui.tabs.indexOf(tmlcdp);
+		String tabName = gui.getTitleAt(tmlcdp);
+		gui.cloneRenameTab(ind, name);
+		TMLComponentDesignPanel t = (TMLComponentDesignPanel) gui.tabs.get(gui.tabs.size()-1);
+		TMLComponentTaskDiagramPanel tcdp = t.tmlctdp;
+		//Create clone of architecture panel and map tasks to it
+		newarch.renameMapping(tabName, tabName+"_"+name);
+	
+		TMLCPrimitiveComponent comp =null;
+		for (TGComponent tg: tcdp.getComponentList()){
+			if (tg instanceof TMLCPrimitiveComponent){
+				if (tg.getValue().equals(compName)){
+					comp = (TMLCPrimitiveComponent) tg;
+				}
+			}
+		}
+		if (comp==null){
+			return;
+		}
+		TMLCPrimitiveComponent hsm = new TMLCPrimitiveComponent(0, 500, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxY(), false, null, tcdp);
+		hsm.setValue("HSM");
+		tcdp.addComponent(hsm, 0,500,false,true);
+	
+		for (String hsmChan: hsmInChans){
+			TMLCChannelOutPort originPort =new TMLCChannelOutPort(comp.getX(), comp.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, hsm, tcdp);
+			TMLCChannelOutPort destPort = new TMLCChannelOutPort(comp.getX(), comp.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, comp, tcdp);
+			originPort.commName=hsmChan;
+			tcdp.addComponent(originPort,comp.getX(), comp.getY(),true,true);
+			
+			destPort.isOrigin=false;
+			destPort.commName=hsmChan;
+			tcdp.addComponent(destPort,comp.getX(), comp.getY(),true,true);
+			
+			TMLCPortConnector conn = new TMLCPortConnector(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector());
+			tcdp.addComponent(conn, 0,0,false,true);
+		}
+
+	}
 
     public TMLMapping autoSecure(MainGUI gui, boolean autoConf, boolean autoAuth){
 		//TODO add more options
