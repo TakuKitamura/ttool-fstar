@@ -1295,26 +1295,27 @@ public class GTMLModeling  {
     }
     
     private void createSecurityPatterns(TMLTask tmltask){
-	TMLActivity activity = tmltask.getActivityDiagram();
+		TMLActivity activity = tmltask.getActivityDiagram();
         TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel)(activity.getReferenceObject());
-	TGComponent tgc;
+		TGComponent tgc;
         TraceManager.addDev("Generating activity diagram of:" + tmltask.getName());
 
         // search for start state
         LinkedList list = tadp.getComponentList();
         Iterator iterator = list.listIterator();
-	while(iterator.hasNext()){
-	    tgc = (TGComponent)(iterator.next());
-	    if (tgc instanceof TMLADEncrypt) {
-		SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).encTime, ((TMLADEncrypt)tgc).decTime, ((TMLADEncrypt)tgc).nonce, ((TMLADEncrypt)tgc).formula, ((TMLADEncrypt)tgc).key);
-		securityPatterns.put(securityPattern.name, securityPattern);
-		tmlm.addSec(securityPattern);
-		ArrayList<TMLTask> l = new ArrayList<TMLTask>();
-		tmlm.securityTaskMap.put(securityPattern, l);
-		TraceManager.addDev("Adding Security Pattern " + securityPattern.name);
-	    }
-	}
-
+		while(iterator.hasNext()){
+	    	tgc = (TGComponent)(iterator.next());
+	    	if (tgc instanceof TMLADEncrypt) {
+				if (!((TMLADEncrypt)tgc).securityContext.isEmpty()){
+					SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).encTime, ((TMLADEncrypt)tgc).decTime, ((TMLADEncrypt)tgc).nonce, ((TMLADEncrypt)tgc).formula, ((TMLADEncrypt)tgc).key);
+					securityPatterns.put(securityPattern.name, securityPattern);
+					tmlm.addSec(securityPattern);
+					ArrayList<TMLTask> l = new ArrayList<TMLTask>();
+					tmlm.securityTaskMap.put(securityPattern, l);
+					TraceManager.addDev("Adding Security Pattern " + securityPattern.name);
+		   		}
+			}
+		}
     }
     private void generateTasksActivityDiagrams() throws MalformedTMLDesignException {
         TMLTask tmltask;
@@ -1517,37 +1518,39 @@ public class GTMLModeling  {
             } else if (tgc instanceof TMLADEncrypt) {
                 tmlexecc = new TMLExecC("encrypt", tgc);
                 activity.addElement(tmlexecc);
-		SecurityPattern sp = securityPatterns.get(((TMLADEncrypt)tgc).securityContext);
-		if (sp ==null && !((TMLADEncrypt)tgc).securityContext.isEmpty()){
-		    //Throw error for missing security pattern
+				SecurityPattern sp = securityPatterns.get(((TMLADEncrypt)tgc).securityContext);
+				if (sp ==null){
+		    		//Throw error for missing security pattern
                     CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADEncrypt)tgc).securityContext + " not found");
                     ce.setTDiagramPanel(tadp);
                     ce.setTGComponent(tgc);
                     checkingErrors.add(ce);
-		}
-		tmlexecc.securityPattern = sp;
-                tmlexecc.setAction(Integer.toString(sp.encTime));
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
-		tmlm.securityTaskMap.get(sp).add(tmltask);
-                listE.addCor(tmlexecc, tgc);
-
+				}
+				else {
+					tmlexecc.securityPattern = sp;
+                	tmlexecc.setAction(Integer.toString(sp.encTime));
+                	((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+					tmlm.securityTaskMap.get(sp).add(tmltask);
+                	listE.addCor(tmlexecc, tgc);
+				}
             } else if (tgc instanceof TMLADDecrypt) {
                 tmlexecc = new TMLExecC("decrypt_"+((TMLADDecrypt)tgc).securityContext, tgc);
                 activity.addElement(tmlexecc);
-		SecurityPattern sp = securityPatterns.get(((TMLADDecrypt)tgc).securityContext);
-		if (sp ==null && !((TMLADDecrypt)tgc).securityContext.isEmpty()){
-		    //Throw error for missing security pattern
+				SecurityPattern sp = securityPatterns.get(((TMLADDecrypt)tgc).securityContext);
+				if (sp ==null){
+		    		//Throw error for missing security pattern
                     CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADDecrypt)tgc).securityContext + " not found");
                     ce.setTDiagramPanel(tadp);
                     ce.setTGComponent(tgc);
                     checkingErrors.add(ce);
-		}
-		tmlexecc.securityPattern = sp;
-                tmlexecc.setAction(Integer.toString(sp.decTime));
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
-                listE.addCor(tmlexecc, tgc);
-		tmlm.securityTaskMap.get(sp).add(tmltask);
-
+				}
+				else {
+					tmlexecc.securityPattern = sp;
+                	tmlexecc.setAction(Integer.toString(sp.decTime));
+                	((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                	listE.addCor(tmlexecc, tgc);
+					tmlm.securityTaskMap.get(sp).add(tmltask);
+				}
 
             } else if (tgc instanceof TMLADExecC) {
                 tmlexecc = new TMLExecC("execc", tgc);
@@ -1666,33 +1669,32 @@ public class GTMLModeling  {
                     tmlreadchannel = new TMLReadChannel("read channel", tgc);
                     tmlreadchannel.setNbOfSamples(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
                     tmlreadchannel.addChannel(channel);
-		//security pattern
-		    if (securityPatterns.get(((TMLADReadChannel)tgc).securityContext)!=null){
-			tmlreadchannel.securityPattern= securityPatterns.get(((TMLADReadChannel)tgc).securityContext);
-		    	//NbOfSamples will increase due to extra overhead from MAC
-		    	int cur = Integer.valueOf(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
-		    	int add = Integer.valueOf(tmlreadchannel.securityPattern.overhead);
-			if (!tmlreadchannel.securityPattern.nonce.equals("")){
-			    SecurityPattern nonce = securityPatterns.get(tmlreadchannel.securityPattern.nonce);
-			    if (nonce!=null){
-			        add = Integer.valueOf(nonce.overhead);
-			    }
-			}
-			cur = cur+ add;
-		    	tmlreadchannel.setNbOfSamples(Integer.toString(cur));
-		    }
-		    else if (!((TMLADReadChannel)tgc).securityContext.isEmpty()){
-			//Throw error for missing security pattern
-                        CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADReadChannel)tgc).securityContext + " not found");
-                    	ce.setTDiagramPanel(tadp);
-                    	ce.setTGComponent(tgc);
-                    	checkingErrors.add(ce);
-		    }
-                    activity.addElement(tmlreadchannel);
-                    ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
-                    listE.addCor(tmlreadchannel, tgc);
-                }
-
+					//security pattern
+		    		if (securityPatterns.get(((TMLADReadChannel)tgc).securityContext)!=null){
+						tmlreadchannel.securityPattern= securityPatterns.get(((TMLADReadChannel)tgc).securityContext);
+		    			//NbOfSamples will increase due to extra overhead from MAC
+		    			int cur = Integer.valueOf(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
+		    			int add = Integer.valueOf(tmlreadchannel.securityPattern.overhead);
+						if (!tmlreadchannel.securityPattern.nonce.equals("")){
+						    SecurityPattern nonce = securityPatterns.get(tmlreadchannel.securityPattern.nonce);
+						    if (nonce!=null){
+						        add = Integer.valueOf(nonce.overhead);
+					    	}
+						}
+						cur = cur+ add;
+		    			tmlreadchannel.setNbOfSamples(Integer.toString(cur));
+		    		}
+		   			else if (!((TMLADReadChannel)tgc).securityContext.isEmpty()){
+						//Throw error for missing security pattern
+						CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADReadChannel)tgc).securityContext + " not found");
+        	    	   	ce.setTDiagramPanel(tadp);
+        	    	  	ce.setTGComponent(tgc);
+        	    	    checkingErrors.add(ce);
+			    	}
+        	        activity.addElement(tmlreadchannel);
+        	        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+        	        listE.addCor(tmlreadchannel, tgc);
+        	    }
             } else if (tgc instanceof TMLADSendEvent) {
                 event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADSendEvent)tgc).getEventName()));
                 if (event == null) {

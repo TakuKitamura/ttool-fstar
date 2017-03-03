@@ -394,6 +394,9 @@ public class TMLSyntaxChecking {
      * The second parsing is performed iff the first one succeeds
      */
     public void parsing(TMLTask t, TMLActivityElement elt, String parseCmd, String action) {
+		if (action==null){
+			return;
+		}
         TMLExprParser parser;
         SimpleNode root;
 
@@ -419,7 +422,6 @@ public class TMLSyntaxChecking {
         if (parseCmd.compareTo("natnumeral") == 0) {
             return;
         }
-
         int index = action.indexOf('=');
         String modif = action;
 

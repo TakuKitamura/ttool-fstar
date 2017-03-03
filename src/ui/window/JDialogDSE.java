@@ -607,7 +607,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	oneResult = outputHTML.isSelected() || outputTXT.isSelected();
 	oneAction = dseButton.isSelected() || simButton.isSelected();
 
-	if (oneAction == false || oneResult == false) {
+	if ((oneAction == false || oneResult == false) && jp1.getSelectedIndex() == 1) {
 	    mode = NOT_SELECTED;
 	} else {
 	    mode = NOT_STARTED;
