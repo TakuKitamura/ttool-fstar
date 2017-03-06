@@ -46,7 +46,7 @@
 package myutil;
 
 import java.io.*;
-
+import java.nio.file.*;
 
 
 public class FileUtils {
@@ -78,9 +78,14 @@ public class FileUtils {
         return ext;
     }
 
+
+    public static boolean checkPath(String path) {
+	return new File(path).isDirectory();
+    }
+
     public static boolean checkFileForSave(File file) throws FileException {
-   //     boolean ok = true;
-    //    String pb = "";
+        //     boolean ok = true;
+        //    String pb = "";
 
         if (file == null) {
             return false;
@@ -238,8 +243,8 @@ public class FileUtils {
     }
 
     public static void saveFile(String name, String data) throws FileException {
-	 File f = new File(name);
-	 saveFile(f, data);
+        File f = new File(name);
+        saveFile(f, data);
     }
 
 
