@@ -1291,7 +1291,7 @@ public class GTURTLEModeling {
 						if (chan!=null){
 							if (chan.checkConf){
 							//	System.out.println(chan.getOriginTask().getName().split("__")[1]);
-								if (nonSecChans.contains(chan.getOriginTask().getName().split("__")[1]+"__"+writeChannel.getChannelName()+"_chData")){
+								if (nonSecChans.contains(chan.getOriginTask().getName().split("__")[1]+"__"+writeChannel.getChannelName()+"_chData") && !secInChannels.get(chan.getDestinationTask()).contains(writeChannel.getChannelName())){
 	//							if (!securePath(map, chan.getOriginTask(), chan.getDestinationTask())){
 									secOutChannels.get(chan.getOriginTask()).add(writeChannel.getChannelName());
 									secInChannels.get(chan.getDestinationTask()).add(writeChannel.getChannelName());
@@ -1325,7 +1325,7 @@ public class GTURTLEModeling {
 	//	System.out.println(secOutChanannels.toString());
 		int num=0;
 		int nonceNum=0;
-		//Create reverse channels to send nonces if they don't already exist
+		//Create reverse channels on component diagram to send nonces if they don't already exist
 	  //  if (autoAuth){
 		for (TMLTask task: toSecureRev.keySet()){
 			TraceManager.addDev("Adding nonces to " + task.getName());
@@ -1376,7 +1376,9 @@ public class GTURTLEModeling {
 			//Find states immediately before the write channel operator
 
 			//For each occurence of a write channel operator, add encryption/nonces before it
+			
 			for (String channel: secOutChannels.get(task)){
+				HashSet<TGComponent> channelInstances = new HashSet<TGComponent>(); 
 				int yShift=50;
 				TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
 				//First, find the connector that points to it. We will add the encryption, nonce operators directly before the write channel operator
@@ -1384,16 +1386,20 @@ public class GTURTLEModeling {
 					if (tg instanceof TMLADWriteChannel){
 						TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
 						if (writeChannel.getChannelName().equals(channel) && writeChannel.securityContext.equals("")){					 						
-							xpos = tg.getX();
-							ypos = tg.getY();
-							fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
+
 							if (fromStart!=null){
-								point = fromStart.getTGConnectingPointP2();
+								channelInstances.add(tg);
+								
 							}
-							break;
 						}
 					}
 				}
+			for (TGComponent comp: channelInstances){
+				TMLADWriteChannel writeChannel = (TMLADWriteChannel) comp;
+				xpos = comp.getX();
+				ypos = comp.getY();
+				fromStart = tad.findTGConnectorEndingAt(comp.getTGConnectingPointAtIndex(0));
+				point = fromStart.getTGConnectingPointP2();
 				//Add encryption operator
 				TMLADEncrypt enc = new TMLADEncrypt(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 				TMLADReadChannel rd=new TMLADReadChannel(0, 0, 0, 0, 0, 0, false, null, tad);
@@ -1440,12 +1446,12 @@ public class GTURTLEModeling {
 				//Shift components down to make room for the added ones, and add security contexts to write channels
 				for (TGComponent tg:tad.getComponentList()){
 					if (tg instanceof TMLADWriteChannel){
-						TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
-						TraceManager.addDev("Inspecting write channel " + writeChannel.getChannelName());
-						if (channel.equals(writeChannel.getChannelName()) && writeChannel.securityContext.equals("")){
-							TraceManager.addDev("Securing write channel " + writeChannel.getChannelName());
-							writeChannel.securityContext = "autoEncrypt_"+writeChannel.getChannelName();
-							tad.repaint();
+						TMLADWriteChannel wChannel = (TMLADWriteChannel) tg;
+						TraceManager.addDev("Inspecting write channel " + wChannel.getChannelName());
+						if (channel.equals(wChannel.getChannelName()) && wChannel.securityContext.equals("")){
+							TraceManager.addDev("Securing write channel " + wChannel.getChannelName());
+							wChannel.securityContext = "autoEncrypt_"+wChannel.getChannelName();
+
 						}
 					}
 					if (tg.getY() >= ypos && tg !=enc && tg!=rd){
@@ -1453,13 +1459,16 @@ public class GTURTLEModeling {
 					}
 				}	
 				tad.setMaxPanelSize(tad.getMaxX(), tad.getMaxY()+yShift);
+				tad.repaint();
 			}
+		}
 
 			for (String channel: macOutChannels.get(task)){
 				//Add MAC before writechannel
 				int yShift=50;
 				//TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
 				//First, find the connector that points to it. We will add the encryption, nonce operators directly before the write channel operator
+				HashSet<TGComponent> channelInstances = new HashSet<TGComponent>(); 
 				for (TGComponent tg: tad.getComponentList()){
 					if (tg instanceof TMLADWriteChannel){
 						TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
@@ -1468,12 +1477,18 @@ public class GTURTLEModeling {
 							ypos = tg.getY();
 							fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
 							if (fromStart!=null){
-								point = fromStart.getTGConnectingPointP2();
+								channelInstances.add(tg);
 							}
 							break;
 						}
 					}
 				}
+			for (TGComponent comp: channelInstances){
+				TMLADWriteChannel writeChannel = (TMLADWriteChannel) comp;
+				xpos = comp.getX();
+				ypos = comp.getY();
+				fromStart = tad.findTGConnectorEndingAt(comp.getTGConnectingPointAtIndex(0));
+				point = fromStart.getTGConnectingPointP2();
 				//Add encryption operator
 				TMLADEncrypt enc = new TMLADEncrypt(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 				enc.securityContext = "autoEncrypt_"+channel;
@@ -1495,11 +1510,11 @@ public class GTURTLEModeling {
 				//Shift components down to make room for the added ones, and add security contexts to write channels
 				for (TGComponent tg:tad.getComponentList()){
 					if (tg instanceof TMLADWriteChannel){
-						TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
-						TraceManager.addDev("Inspecting write channel " + writeChannel.getChannelName());
-						if (channel.equals(writeChannel.getChannelName()) && writeChannel.securityContext.equals("")){
-							TraceManager.addDev("Securing write channel " + writeChannel.getChannelName());
-							writeChannel.securityContext = "autoEncrypt_"+writeChannel.getChannelName();
+						TMLADWriteChannel wChannel = (TMLADWriteChannel) tg;
+						TraceManager.addDev("Inspecting write channel " + wChannel.getChannelName());
+						if (channel.equals(wChannel.getChannelName()) && wChannel.securityContext.equals("")){
+							TraceManager.addDev("Securing write channel " + wChannel.getChannelName());
+							wChannel.securityContext = "autoEncrypt_"+wChannel.getChannelName();
 							tad.repaint();
 						}
 					}
@@ -1509,47 +1524,46 @@ public class GTURTLEModeling {
 				}	
 				tad.setMaxPanelSize(tad.getMaxX(), tad.getMaxY()+yShift);
 			}
-			
+			}
 			for (String channel: macInChannels.get(task)){
 				//Add decryptmac after readchannel
 				int yShift=50;
+				HashSet<TGComponent> channelInstances = new HashSet<TGComponent>();
 				TGConnector conn =new TGConnectorTMLAD(0, 0, 0, 0, 0, 0, false, null, tad, null, null, new Vector());
 					TGConnectingPoint next = new TGConnectingPoint(null, 0, 0, false, false);
 					//Find read channel operator
-					TMLADReadChannel readChannel = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+					
 					for (TGComponent tg: tad.getComponentList()){
 						if (tg instanceof TMLADReadChannel){
-							readChannel = (TMLADReadChannel) tg;
+							TMLADReadChannel readChannel = (TMLADReadChannel) tg;
 							if (readChannel.getChannelName().equals(channel) && readChannel.securityContext.equals("")){					 						
 								fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
 								if (fromStart!=null){
-									point = fromStart.getTGConnectingPointP2();
+									channelInstances.add(tg);
 								}
-								else {
-									continue;
-								}
-								conn = tad.findTGConnectorStartingAt(tg.getTGConnectingPointAtIndex(1));
-								xpos = fromStart.getX();
-								ypos = fromStart.getY();
-								if (conn==null){
-									System.out.println("no connection");
-									//Create a connector to decrypt operator
-								}
-								next = conn.getTGConnectingPointP2();
-								break;
 							}
 						}
 					}
-					//Check if there is an operator to secure
-					if (fromStart==null){
-						continue;
-					}
+
+
+				for (TGComponent comp: channelInstances){
+
+					fromStart = tad.findTGConnectorEndingAt(comp.getTGConnectingPointAtIndex(0));
+					point = fromStart.getTGConnectingPointP2();
+					conn = tad.findTGConnectorStartingAt(comp.getTGConnectingPointAtIndex(1));
+					next= conn.getTGConnectingPointP2();
+					xpos = fromStart.getX();
+					ypos = fromStart.getY();
+
+
+					TMLADReadChannel readChannel = (TMLADReadChannel) comp;
 					TraceManager.addDev("Securing read channel " + readChannel.getChannelName());
 					readChannel.securityContext = "autoEncrypt_"+readChannel.getChannelName();
 					tad.repaint();
 					//Add decryption operator if it does not already exist
 					xpos = conn.getX();
 					ypos = conn.getY();
+
 					TMLADDecrypt dec = new TMLADDecrypt(xpos+10, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					dec.securityContext = "autoEncrypt_" + readChannel.getChannelName();
 					tad.addComponent(dec, dec.getX(), dec.getY(), false, true);
@@ -1579,10 +1593,10 @@ public class GTURTLEModeling {
 
 				tad.setMaxPanelSize(tad.getMaxX(), tad.getMaxY()+yShift);
 				tad.repaint();
-				
+				}
 			}
 			for (String channel: secInChannels.get(task)){
-					System.out.println("securting channel "+channel);
+					TraceManager.addDev("securing channel "+channel);
 					int yShift=20;
 				//	String title = task.getName().split("__")[0];
 					TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
@@ -1590,33 +1604,27 @@ public class GTURTLEModeling {
 					TGConnectingPoint next = new TGConnectingPoint(null, 0, 0, false, false);
 					//Find read channel operator
 					TMLADReadChannel readChannel = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+					HashSet<TGComponent> channelInstances = new HashSet<TGComponent>();
 					for (TGComponent tg: tad.getComponentList()){
 						if (tg instanceof TMLADReadChannel){
 							readChannel = (TMLADReadChannel) tg;
 							if (readChannel.getChannelName().equals(channel) && readChannel.securityContext.equals("")){					 						
 								fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
 								if (fromStart!=null){
-									point = fromStart.getTGConnectingPointP2();
+									channelInstances.add(tg);
 								}
-								else {
-									continue;
-								}
-								conn = tad.findTGConnectorStartingAt(tg.getTGConnectingPointAtIndex(1));
-								xpos = fromStart.getX();
-								ypos = fromStart.getY();
-								if (conn==null){
-									System.out.println("no connection");
-									//Create a connector to decrypt operator
-								}
-								next = conn.getTGConnectingPointP2();
-								break;
 							}
 						}
 					}
-					//Check if there is an operator to secure
-					if (fromStart==null){
-						continue;
-					}
+		
+				for (TGComponent comp: channelInstances){
+
+					fromStart = tad.findTGConnectorEndingAt(comp.getTGConnectingPointAtIndex(0));
+					point = fromStart.getTGConnectingPointP2();
+					conn = tad.findTGConnectorStartingAt(comp.getTGConnectingPointAtIndex(1));
+					next = conn.getTGConnectingPointP2();
+					xpos = fromStart.getX();
+					ypos = fromStart.getY();
 					TMLADWriteChannel wr = new TMLADWriteChannel(0, 0, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					if (nonceInChannels.get(task).contains(channel)){
 						//Create a nonce operator and a write channel operator
@@ -1665,8 +1673,8 @@ public class GTURTLEModeling {
 					readChannel.securityContext = "autoEncrypt_"+readChannel.getChannelName();
 					tad.repaint();
 					//Add decryption operator if it does not already exist
-					xpos = next.getX();
-					ypos = next.getY();
+					xpos = fromStart.getX();
+					ypos = fromStart.getY();
 					TMLADDecrypt dec = new TMLADDecrypt(xpos+10, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					dec.securityContext = "autoEncrypt_" + readChannel.getChannelName();
 					tad.addComponent(dec, dec.getX(), dec.getY(), false, true);
@@ -1674,6 +1682,7 @@ public class GTURTLEModeling {
 					yShift+=100;
 					conn = new TGConnectorTMLAD(xpos,ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, dec.getTGConnectingPointAtIndex(1), next, new Vector());
 					conn.setP1(dec.getTGConnectingPointAtIndex(1));
+
 					conn.setP2(next);
 					tad.addComponent(conn, conn.getX(), conn.getY(), false,true);
 					//Shift everything down
@@ -1696,7 +1705,8 @@ public class GTURTLEModeling {
 			tad.setMaxPanelSize(tad.getMaxX(), tad.getMaxY()+yShift);
 
 			tad.repaint();
-		}
+			}
+			}
 		}
 		GTMLModeling gtm = new GTMLModeling(t, false);
 		TMLModeling newmodel = gtm.translateToTMLModeling(false,false);
