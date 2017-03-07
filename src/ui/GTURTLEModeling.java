@@ -1380,8 +1380,9 @@ public class GTURTLEModeling {
 			//Find states immediately before the write channel operator
 
 			//For each occurence of a write channel operator, add encryption/nonces before it
+			
 			for (String channel: secOutChannels.get(task)){
-				HashSet<TGComponent> channelInstances = new HashSet<TGComponent>(); 
+				Set<TGComponent> channelInstances = new HashSet<TGComponent>(); 
 				int yShift=50;
 				TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
 				//First, find the connector that points to it. We will add the encryption, nonce operators directly before the write channel operator
@@ -1396,74 +1397,74 @@ public class GTURTLEModeling {
 						}
 					}
 				}
-			for (TGComponent comp: channelInstances){
-				//TMLADWriteChannel writeChannel = (TMLADWriteChannel) comp;
-				xpos = comp.getX();
-				ypos = comp.getY();
-				fromStart = tad.findTGConnectorEndingAt(comp.getTGConnectingPointAtIndex(0));
-				point = fromStart.getTGConnectingPointP2();
-				//Add encryption operator
-				TMLADEncrypt enc = new TMLADEncrypt(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-				TMLADReadChannel rd=new TMLADReadChannel(0, 0, 0, 0, 0, 0, false, null, tad);
-				if (nonceOutChannels.get(task).contains(channel)){
-					//Receive any nonces if ensuring authenticity
-					rd = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-					List<TMLChannel> matches = tmlmodel.getChannels(tmlc.getDestinationTask(), tmlc.getOriginTask());
-					
-					if (matches.size()>0){
-						rd.setChannelName(matches.get(0).getName().replaceAll(title+"__",""));
-					}
-					else {
-						rd.setChannelName("nonceCh"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1]);
-					}
-					rd.securityContext = "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
-					tad.addComponent(rd, xpos, ypos+yShift, false,true);
-					fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
-					fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
-					tad.addComponent(fromStart, xpos, ypos, false, true);
-					fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
-					yShift+=60;
-					//Move encryption operator after receive nonce component
-					enc.setCd(xpos, ypos+yShift);
-					if (tmlc!=null){
-						enc.nonce= "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
-					}
-				}
-
-				enc.securityContext = "autoEncrypt_"+channel;
-				enc.type = "Symmetric Encryption";
-				enc.message_overhead = overhead;
-				enc.encTime= encComp;
-				enc.decTime=decComp;
-				tad.addComponent(enc, xpos ,ypos+yShift, false, true);
- 				yShift+=60;
-				fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
-				fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
-				tad.addComponent(fromStart, xpos, ypos, false, true);
-				fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
-			
-				//Direct the last TGConnector back to the start of the write channel operator
-			
-					fromStart.setP2(point);
-				//Shift components down to make room for the added ones, and add security contexts to write channels
-				for (TGComponent tg:tad.getComponentList()){
-					if (tg instanceof TMLADWriteChannel){
-						TMLADWriteChannel wChannel = (TMLADWriteChannel) tg;
-						TraceManager.addDev("Inspecting write channel " + wChannel.getChannelName());
-						if (channel.equals(wChannel.getChannelName()) && wChannel.securityContext.equals("")){
-							TraceManager.addDev("Securing write channel " + wChannel.getChannelName());
-							wChannel.securityContext = "autoEncrypt_"+wChannel.getChannelName();
-
+				for (TGComponent comp: channelInstances){
+					//TMLADWriteChannel writeChannel = (TMLADWriteChannel) comp;
+					xpos = comp.getX();
+					ypos = comp.getY();
+					fromStart = tad.findTGConnectorEndingAt(comp.getTGConnectingPointAtIndex(0));
+					point = fromStart.getTGConnectingPointP2();
+					//Add encryption operator
+					TMLADEncrypt enc = new TMLADEncrypt(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+					TMLADReadChannel rd=new TMLADReadChannel(0, 0, 0, 0, 0, 0, false, null, tad);
+					if (nonceOutChannels.get(task).contains(channel)){
+						//Receive any nonces if ensuring authenticity
+						rd = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+						List<TMLChannel> matches = tmlmodel.getChannels(tmlc.getDestinationTask(), tmlc.getOriginTask());
+						
+						if (matches.size()>0){
+							rd.setChannelName(matches.get(0).getName().replaceAll(title+"__",""));
+						}
+						else {
+							rd.setChannelName("nonceCh"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1]);
+						}
+						rd.securityContext = "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
+						tad.addComponent(rd, xpos, ypos+yShift, false,true);
+						fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
+						fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
+						tad.addComponent(fromStart, xpos, ypos, false, true);
+						fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
+						yShift+=60;
+						//Move encryption operator after receive nonce component
+						enc.setCd(xpos, ypos+yShift);
+						if (tmlc!=null){
+							enc.nonce= "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
 						}
 					}
-					if (tg.getY() >= ypos && tg !=enc && tg!=rd){
-						tg.setCd(tg.getX(), tg.getY()+yShift);
-					}
-				}	
-				tad.setMaxPanelSize(tad.getMaxX(), tad.getMaxY()+yShift);
-				tad.repaint();
+	
+					enc.securityContext = "autoEncrypt_"+channel;
+					enc.type = "Symmetric Encryption";
+					enc.message_overhead = overhead;
+					enc.encTime= encComp;
+					enc.decTime=decComp;
+					tad.addComponent(enc, xpos ,ypos+yShift, false, true);
+	 				yShift+=60;
+					fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
+					fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
+					tad.addComponent(fromStart, xpos, ypos, false, true);
+					fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
+				
+					//Direct the last TGConnector back to the start of the write channel operator
+				
+						fromStart.setP2(point);
+					//Shift components down to make room for the added ones, and add security contexts to write channels
+					for (TGComponent tg:tad.getComponentList()){
+						if (tg instanceof TMLADWriteChannel){
+							TMLADWriteChannel wChannel = (TMLADWriteChannel) tg;
+							TraceManager.addDev("Inspecting write channel " + wChannel.getChannelName());
+							if (channel.equals(wChannel.getChannelName()) && wChannel.securityContext.equals("")){
+								TraceManager.addDev("Securing write channel " + wChannel.getChannelName());
+								wChannel.securityContext = "autoEncrypt_"+wChannel.getChannelName();
+	
+							}
+						}
+						if (tg.getY() >= ypos && tg !=enc && tg!=rd){
+							tg.setCd(tg.getX(), tg.getY()+yShift);
+						}
+					}	
+					tad.setMaxPanelSize(tad.getMaxX(), tad.getMaxY()+yShift);
+					tad.repaint();
+				}
 			}
-		}
 
 			for (String channel: macOutChannels.get(task)){
 				//Add MAC before writechannel
@@ -1530,22 +1531,22 @@ public class GTURTLEModeling {
 			for (String channel: macInChannels.get(task)){
 				//Add decryptmac after readchannel
 				int yShift=50;
-				HashSet<TGComponent> channelInstances = new HashSet<TGComponent>();
+				Set<TGComponent> channelInstances = new HashSet<TGComponent>();
 				TGConnector conn =new TGConnectorTMLAD(0, 0, 0, 0, 0, 0, false, null, tad, null, null, new Vector<Point>());
-					TGConnectingPoint next = new TGConnectingPoint(null, 0, 0, false, false);
+				TGConnectingPoint next = new TGConnectingPoint(null, 0, 0, false, false);
 					//Find read channel operator
 					
-					for (TGComponent tg: tad.getComponentList()){
-						if (tg instanceof TMLADReadChannel){
-							TMLADReadChannel readChannel = (TMLADReadChannel) tg;
-							if (readChannel.getChannelName().equals(channel) && readChannel.securityContext.equals("")){					 						
-								fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
-								if (fromStart!=null){
-									channelInstances.add(tg);
-								}
+				for (TGComponent tg: tad.getComponentList()){
+					if (tg instanceof TMLADReadChannel){
+						TMLADReadChannel readChannel = (TMLADReadChannel) tg;
+						if (readChannel.getChannelName().equals(channel) && readChannel.securityContext.equals("")){					 						
+							fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
+							if (fromStart!=null){
+								channelInstances.add(tg);
 							}
 						}
 					}
+				}
 
 
 				for (TGComponent comp: channelInstances){

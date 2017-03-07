@@ -1300,6 +1300,7 @@ public class GTMLModeling  {
         Iterator<TGComponent> iterator = list.listIterator();
 		while(iterator.hasNext()){
 	    	tgc = iterator.next();
+
 	    	if (tgc instanceof TMLADEncrypt) {
 				if (!((TMLADEncrypt)tgc).securityContext.isEmpty()){
 					SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).encTime, ((TMLADEncrypt)tgc).decTime, ((TMLADEncrypt)tgc).nonce, ((TMLADEncrypt)tgc).formula, ((TMLADEncrypt)tgc).key);
