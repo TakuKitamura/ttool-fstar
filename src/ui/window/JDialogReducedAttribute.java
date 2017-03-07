@@ -55,7 +55,7 @@ import java.util.*;
 import ui.*;
 
 public class JDialogReducedAttribute extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    private LinkedList<TAttribute> attributesPar, setList, unsetList, tclassAttributes;
+    private java.util.List<TAttribute> attributesPar, setList, unsetList, tclassAttributes;
     
     private JPanel panel1, panel2;
     
@@ -80,7 +80,7 @@ public class JDialogReducedAttribute extends javax.swing.JDialog implements Acti
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogReducedAttribute(LinkedList<TAttribute> _attributes, LinkedList<TAttribute> _tclassAttributes, Frame f, String title, String  _attrib, String _nameTObject, String _nameTClass) {
+    public JDialogReducedAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute> _tclassAttributes, Frame f, String title, String  _attrib, String _nameTObject, String _nameTClass) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;

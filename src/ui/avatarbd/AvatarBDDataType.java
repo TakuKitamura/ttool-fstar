@@ -55,7 +55,6 @@ import org.w3c.dom.*;
 import myutil.*;
 import ui.*;
 import ui.window.*;
-import ui.avatarsmd.*;
 
 
 public class AvatarBDDataType extends TGCScalableWithInternalComponent implements GenericTree  {
@@ -69,12 +68,12 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
     private int textX = 7;
 
     private int limitName = -1;
-    private int limitAttr = -1;
-    private int limitMethod = -1;
+ //   private int limitAttr = -1;
+   // private int limitMethod = -1;
 
     // Icon
     private int iconSize = 15;
-    private boolean iconIsDrawn = false;
+   // private boolean iconIsDrawn = false;
 
 
     // TAttribute, AvatarMethod, AvatarSignal
@@ -206,16 +205,17 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
 
         // Icon
         if ((width>30) && (height > (iconSize + 2*textX))) {
-            iconIsDrawn = true;
+          //  iconIsDrawn = true;
             g.drawImage(IconManager.img5100, x + width - iconSize - textX, y + textX, null);
-        } else {
-            iconIsDrawn = false;
         }
+//        else {
+//            iconIsDrawn = false;
+//        }
 
         int cpt = h;
         // Attributes
         if (((AvatarBDPanel)tdp).areAttributesVisible()) {
-            limitAttr = -1;
+          //  limitAttr = -1;
             int index = 0;
             String attr;
 
@@ -238,13 +238,13 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
                 w = g.getFontMetrics().stringWidth(attr);
                 if ((w + (2 * textX) + 1) < width) {
                     g.drawString(attr, x + textX, y + cpt);
-                    limitAttr = y + cpt;
+                 //   limitAttr = y + cpt;
                 } else {
                     attr = "...";
                     w = g.getFontMetrics().stringWidth(attr);
                     if ((w + textX + 2) < width) {
                         g.drawString(attr, x + textX + 1, y + cpt);
-                        limitAttr = y + cpt;
+                   //     limitAttr = y + cpt;
                     } else {
                         // skip attribute
                         cpt -= step;
@@ -252,9 +252,10 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
                 }
                 index ++;
             }
-        } else {
-            limitAttr = -1;
-        }
+        } 
+//        else {
+//            limitAttr = -1;
+//        }
 
         g.setFont(fold);
 
@@ -332,8 +333,8 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
 
         JDialogAvatarBlock jdab = new JDialogAvatarBlock(myAttributes, null, null, null, frame, "Setting attributes of " + value, "Attribute", 0, null, false, null);
         setJDialogOptions(jdab);
-        jdab.setSize(650, 575);
-        GraphicLib.centerOnParent(jdab);
+      //  jdab.setSize(650, 575);
+        GraphicLib.centerOnParent(jdab, 650, 575);
         jdab.setVisible(true); // blocked until dialog has been closed
         //makeValue();
         //if (oldValue.equals(value)) {

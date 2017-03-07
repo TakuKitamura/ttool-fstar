@@ -87,11 +87,11 @@ public class TCDAttributeBox extends TGCAttributeBox {
         jda.enableJavaKeyword(false);
         //jda.enableOtherTypes(true);
         
-        LinkedList ll = tdp.getComponentList();
-        Iterator iterator = ll.listIterator();
+        List<TGComponent> ll = tdp.getComponentList();
+        Iterator<TGComponent> iterator = ll.listIterator();
         TGComponent tgc;
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TCDTData) {
                 jda.addType(tgc.getValue(), false);
             }

@@ -51,16 +51,13 @@ package ui.window;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import java.io.*;
-import java.util.*;
 
 import myutil.*;
 import ui.*;
 
 
 import avatartranslator.*;
-import avatartranslator.toexecutable.*;
 import launcher.*;
 
 import ui.interactivesimulation.*;
@@ -84,7 +81,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     private String textSysC6 = "Show cycle accurate trace from MPSoC file:";
     private String textSysC7 = "Base directory of topcell generation:";
 
-    private static String unitCycle = "1";
+    //private static String unitCycle = "1";
     
     private static String[] codes = {"AVATAR SOCLIB"};
    
@@ -128,7 +125,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     private static boolean removeXFilesValue = true;
     private static boolean debugValue = false;
     private static boolean tracingValue = false;
-    private static boolean optimizeValue = true;
+//    private static boolean optimizeValue = true;
 
     private Thread t;
     private boolean go = false;
@@ -505,8 +502,8 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
     public void run() {
         String cmd;
-        String list, data;
-        int cycle = 0;
+        String list;//, data;
+     //   int cycle = 0;
 
         hasError = false;
 
@@ -763,8 +760,8 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     public void showSimulationTrace() {
         JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(f, mgui, "Simulation trace of " + simulationTraceFile.getText());
         jfssdp.setIconImage(IconManager.img8);
-        jfssdp.setSize(600, 600);
-        GraphicLib.centerOnParent(jfssdp);
+      //  jfssdp.setSize(600, 600);
+        GraphicLib.centerOnParent(jfssdp, 600, 600);
         if (selectedViewTrace == 0) {
             jfssdp.setFileReference(simulationTraceFile.getText());
         } else {

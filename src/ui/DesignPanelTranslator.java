@@ -46,17 +46,13 @@ package ui;
 
 import java.util.*;
 
-
-
 import myutil.*;
 import ui.ad.*;
 import ui.cd.*;
 
 import translator.*;
-import ui.window.*;
 
 import ui.osad.*;
-
 
 public class DesignPanelTranslator {
     protected TURTLEDesignPanelInterface dp;
@@ -136,7 +132,7 @@ public class DesignPanelTranslator {
     }
 
     private void addTClassesFromPanel(TDiagramPanel diag, ClassDiagramPanelInterface tdp, LinkedList<TClassInterface> tclasses, String preName, TURTLEModeling tm) {
-        LinkedList list = tdp.getComponentList();
+       // LinkedList list = tdp.getComponentList();
 
         // search for tclasses
         for (Object tgc: tdp.getComponentList ())
@@ -148,7 +144,7 @@ public class DesignPanelTranslator {
         //System.out.println("Adding TClass: " + tgc.getClassName());
         TClass t = new TClass(preName + tgc.getClassName(), tgc.isStart());
 
-        int i, j;
+        int j;
         Param p;
         Gate g; boolean internal; int type;
         int value;
@@ -317,13 +313,13 @@ public class DesignPanelTranslator {
         }
 
         // search for start state
-        LinkedList list = adpi.getComponentList();
-        Iterator iterator = list.listIterator();
+        List<TGComponent> list = adpi.getComponentList();
+        Iterator<TGComponent> iterator = list.listIterator();
         TGComponent tgc;
         TGComponent tss = null;
         int cptStart = 0;
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TADStartState){
                 tss = tgc;
                 cptStart ++;
@@ -355,7 +351,7 @@ public class DesignPanelTranslator {
         //ADActionState ada;
         ADActionStateWithGate adag;
         ADActionStateWithParam adap;
-        ADActionStateWithMultipleParam adamp;
+        //ADActionStateWithMultipleParam adamp;
         ADChoice adch;
         ADDelay add;
         ADJunction adj;
@@ -374,7 +370,7 @@ public class DesignPanelTranslator {
         int nbActions;
         String sTmp;
 
-        int startIndex = listE.getSize();
+      //  int startIndex = listE.getSize();
 
         // Creation of the activity diagram
         ads = new ADStart();
@@ -460,7 +456,7 @@ public class DesignPanelTranslator {
                     //System.out.println("Action state with multi param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
                     // Checking params
                     CheckingError ce;
-                    Vector v;
+                 //   Vector v;
                     for(j=0; j<nbActions; j++) {
                         sTmp = TURTLEModeling.manageDataStructures(t,((TADActionState)(tgc)).getAction(j));
                         if (sTmp == null) {
@@ -525,11 +521,11 @@ public class DesignPanelTranslator {
                             tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
 
                             String nameTmp;
-                            Vector v0 = t.getParamStartingWith(ta0.getId()+ "__");
+                            Vector<Param> v0 = t.getParamStartingWith(ta0.getId()+ "__");
                             ADComponent adtmp = null;
 
                             for(j=0; j<v0.size(); j++) {
-                                p = (Param)(v0.get(j));
+                                p = v0.get(j);
                                 adap = new ADActionStateWithParam(p);
                                 ad.addElement(adap);
                                 if (adtmp != null) {
@@ -1080,13 +1076,13 @@ public class DesignPanelTranslator {
     }
 
     private void addRelationFromPanel(ClassDiagramPanelInterface tdp, String prename, TURTLEModeling tm) {
-        LinkedList list = tdp.getComponentList();
-        Iterator iterator = list.listIterator();
+        List<TGComponent> list = tdp.getComponentList();
+        Iterator<TGComponent> iterator = list.listIterator();
         // search for Composition Operator
         TGComponent tgc;
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof CompositionOperatorInterface) {
                 addRelationFromCompositionOperator((CompositionOperatorInterface)tgc, tdp, prename, tm);
             }

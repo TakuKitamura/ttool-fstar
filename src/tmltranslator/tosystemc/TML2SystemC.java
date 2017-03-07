@@ -56,9 +56,9 @@ public class TML2SystemC {
     //private static int gateId;
 
     private TMLModeling tmlmodeling;
-    private LinkedList tasks;
+    private List<SystemCTask> tasks;
     
-    private boolean debug;
+  //  private boolean debug;
     
     
     public static String SYSTEMC_EXTENSION = "cpp";
@@ -81,9 +81,9 @@ public class TML2SystemC {
     }
     
     public void generateSystemC(boolean _debug) {
-        debug = _debug;
+       // debug = _debug;
         
-        tasks = new LinkedList();
+        tasks = new LinkedList<SystemCTask>();
         
         generateSystemCTasks();
         
@@ -118,13 +118,13 @@ public class TML2SystemC {
     }
     
     public String getFullCodeTasks() {
-        ListIterator iterator = tasks.listIterator();
+        Iterator<SystemCTask> iterator = tasks.listIterator();
         SystemCTask st;
         
         String output = "\n\n";
         
         while(iterator.hasNext()) {
-            st = (SystemCTask)(iterator.next());
+            st = iterator.next();
            output += st.getFullCode() + "\n\n";
         }
         
@@ -147,12 +147,12 @@ public class TML2SystemC {
         referencesToTMLTasks = "// references to each TML tasks (Task_ID)\n";
         referencesToTMLTasks += "TML_tasks ";
         
-        ListIterator iterator = tasks.listIterator();
+        Iterator<SystemCTask> iterator = tasks.listIterator();
         SystemCTask st;
         boolean first = true;
         
         while(iterator.hasNext()) {
-            st = (SystemCTask)(iterator.next());
+            st = iterator.next();
             if (!first) {
                 referencesToTMLTasks += ", ";
             }
@@ -165,11 +165,11 @@ public class TML2SystemC {
     public void generateChannelsDec() {
         channelsDec = "// Communication channels declaration (see channels.h)\n";
         
-        ListIterator iterator = tmlmodeling.getListIteratorChannels();
+        Iterator<TMLChannel> iterator = tmlmodeling.getListIteratorChannels();
         TMLChannel channel;
         
         while (iterator.hasNext()) {
-            channel = (TMLChannel)(iterator.next());
+            channel = iterator.next();
             channelsDec += "channel" + channel.getType()+"<s" + channel.getSize() + "> " + channel.getName() + ";\n";
         }
     }
@@ -177,11 +177,11 @@ public class TML2SystemC {
     public void generateEventsDec() {
         eventsDec = "// Events declaration (for NOTIFY)\n";
         
-        ListIterator iterator = tmlmodeling.getListIteratorEvents();
+        Iterator<TMLEvent> iterator = tmlmodeling.getListIteratorEvents();
         TMLEvent event;
         
         while (iterator.hasNext()) {
-            event = (TMLEvent)(iterator.next());
+            event = iterator.next();
             eventsDec += "sc_event " + event.getName() + ";\n";
         }
     }
@@ -189,11 +189,11 @@ public class TML2SystemC {
     public void generateRequestsDec() {
         requestsDec = "// Events declaration (for requests)\n";
         
-        ListIterator iterator = tmlmodeling.getListIteratorRequests();
+        Iterator<TMLRequest> iterator = tmlmodeling.getListIteratorRequests();
         TMLRequest request;
         
         while (iterator.hasNext()) {
-            request = (TMLRequest)(iterator.next());
+            request = iterator.next();
             requestsDec += "sc_event " + request.getName() + ";\n";
         }
     }
@@ -205,14 +205,14 @@ public class TML2SystemC {
     public void generateTestBench() {
         testBench = "testbench(sc_module_name nm) { \n";
         
-        ListIterator iterator = tmlmodeling.getListIteratorTasks();
+        Iterator<TMLTask> iterator = tmlmodeling.getListIteratorTasks();
         TMLTask task;
-        LinkedList ll;
-        ListIterator itereq;
+        List<TMLRequest> ll;
+        Iterator<TMLRequest> itereq;
         TMLRequest req;
         
         while (iterator.hasNext()) {
-            task = (TMLTask)(iterator.next());
+            task = iterator.next();
             testBench += "SC_THREAD(" + task.getName() + ");\n";
             ll = tmlmodeling.getRequestsToMe(task);
             if (ll.size() == 0) {
@@ -220,10 +220,11 @@ public class TML2SystemC {
             } else {
                 itereq = ll.listIterator();
                 while(itereq.hasNext()) {
-                    req = (TMLRequest)(itereq.next());
+                    req = itereq.next();
                     testBench += "sensitive<<" + req.getName() + ";\n";
                 }
             }
+            
             testBench += "dont_initialize();\n\n";
         }
         
@@ -235,7 +236,7 @@ public class TML2SystemC {
     }
     
     public void generateMainFunction() {
-        ListIterator iterator;
+        Iterator<SystemCTask> iterator;
         SystemCTask st;
         TMLChannel channel;
         
@@ -249,14 +250,15 @@ public class TML2SystemC {
         mainFunction += "// Task req tracings\n";
         iterator = tasks.listIterator();
         while(iterator.hasNext()) {
-            st = (SystemCTask)(iterator.next());
+            st = iterator.next();
             mainFunction += "sc_trace(tf, tb." + st.reference + ".active, \"TASK_" + st.reference + "\");\n";
         }
         
         mainFunction += "\n// Channel RD/WR tracings\n";
-        iterator = tmlmodeling.getListIteratorChannels();
-        while (iterator.hasNext()) {
-            channel = (TMLChannel)(iterator.next());
+        final Iterator<TMLChannel> chanIterator = tmlmodeling.getListIteratorChannels();
+        
+        while (chanIterator.hasNext()) {
+            channel = chanIterator.next();
             mainFunction += "sc_trace(tf, tb." + channel.getName() + ".wr, \"" + channel.getName() + "_WR\");\n";
             mainFunction += "sc_trace(tf, tb." + channel.getName() + ".rd, \"" + channel.getName() + "_RD\");\n\n";
         }
@@ -281,12 +283,12 @@ public class TML2SystemC {
      // *************** Internal structure manipulation ******************************* /
     
     public void generateSystemCTasks() {
-        ListIterator iterator = tmlmodeling.getTasks().listIterator();
+        Iterator<TMLTask> iterator = tmlmodeling.getTasks().listIterator();
         TMLTask t;
         SystemCTask st;
         
         while(iterator.hasNext()) {
-            t = (TMLTask)(iterator.next());
+            t = iterator.next();
             st = new SystemCTask(t);
             tasks.add(st);
         }

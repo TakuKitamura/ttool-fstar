@@ -47,6 +47,7 @@
  */
 
 package ui;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -70,8 +71,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -147,11 +149,11 @@ import ui.interactivesimulation.SimulationTransaction;
 import ui.iod.InteractionOverviewDiagramPanel;
 import ui.osad.TURTLEOSActivityDiagramPanel;
 import ui.prosmd.ProactiveSMDPanel;
+import ui.req.Requirement;
 import ui.req.RequirementDiagramPanel;
 import ui.sd.SequenceDiagramPanel;
 import ui.tmlad.TMLActivityDiagramPanel;
 import ui.tmlcd.TMLTaskDiagramPanel;
-import ui.tmlcd.TMLTaskOperator;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLComponentTaskDiagramPanel;
 import ui.tmlcp.TMLCPPanel;
@@ -189,11 +191,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public Container panelForTab, panelForTree; //panelForAnalysisTab; //panelForDesignTab;
     public JSplitPane split;
 
-
-
-
     // Multi analysis / design / deployment
-    public Vector tabs;
+    public Vector<TURTLEPanel> tabs;
     /* This dummySelectedTab is used when loading a model from XML.
      * It enables to use standard getCurrentTURTLEPanel even though
      * the mainTabbedPane has not yet been created.
@@ -694,7 +693,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         TURTLEPanel panel;
         for(int i=0; i<tabs.size(); i++) {
-            panel = (TURTLEPanel)(tabs.get(i));
+            panel = tabs.get(i);
             panel.searchForText(text.toLowerCase(), elements);
         }
 
@@ -704,11 +703,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
 
-    public LinkedList<Invariant> getInvariants() {
+    public List<Invariant> getInvariants() {
         return gtm.getInvariants();
     }
 
-    public ArrayList<RG> getRGs() {
+    public List<RG> getRGs() {
         return gtm.getRGs();
     }
 
@@ -1069,17 +1068,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return list;
     }
 
-    public Vector getAllApplicationTMLTasksAttributes() {
-
+    public Vector<String> getAllApplicationTMLTasksAttributes() {
         TURTLEPanel tp;
-        Vector<TMLTaskOperator> list = new Vector<TMLTaskOperator>();
+        Vector<String> list = new Vector<String>();
 
         for( int i = 0; i < tabs.size(); i++ )  {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if( tp instanceof TMLComponentDesignPanel ) {
                 list.addAll( ((TMLComponentDesignPanel)tp).getAllTMLTasksAttributes() );
             }
         }
+        
         return list;
     }
 
@@ -1503,12 +1502,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         panelForTab.add(mainTabbedPane, BorderLayout.CENTER);
         mainTabbedPane.addMouseListener(new PopupListener(this));
 
-        tabs = new Vector();
+        tabs = new Vector<TURTLEPanel>();
 
         frame.setVisible(true);
     }
 
-    public Vector getTabs() {
+    public Vector<TURTLEPanel> getTabs() {
         return tabs;
     }
 
@@ -1616,7 +1615,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
             // tabbed pane
             for(int i=0; i<tabs.size(); i++) {
-                ((TURTLEPanel)(tabs.elementAt(i))).tabbedPane.removeAll();
+                tabs.elementAt(i).tabbedPane.removeAll();
             }
 
             tabs = null;
@@ -1817,8 +1816,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void newProactiveDesign() {
         //TraceManager.addDev("NEW DESIGN");
-        int index = addProActiveDesignPanel("ProActive Design", -1);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        /*int index = */addProActiveDesignPanel("ProActive Design", -1);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
         //frame.repaint();*/
@@ -2798,7 +2797,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     //open a new External Search Dialog
     public void showExternalSearch(){
         String textSearchField = mainBar.search.getText();
-        ArrayList<String> listSearch = new ArrayList<String>();
+        List<String> listSearch = new ArrayList<String>();
 
         if (null == this.searchBox) {
             if (getCurrentTDiagramPanel()!=null) {
@@ -2816,7 +2815,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
         else {
             if (this.searchBox.isShowing()) {
-                this.searchBox.show();
+                this.searchBox.setVisible( true );
             }
             else {
                 this.searchBox = null;
@@ -2863,7 +2862,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void oneClickLOTOSRG() {
-        boolean ret;
+       // boolean ret;
         if (!checkModelingSyntax(true)) {
             TraceManager.addDev("Syntax error");
             return;
@@ -2878,7 +2877,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void oneClickRTLOTOSRG() {
-        boolean ret;
+       // boolean ret;
         if (!checkModelingSyntax(true)) {
             TraceManager.addDev("Syntax error");
             return;
@@ -2915,7 +2914,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean checkModelingSyntax(TURTLEPanel tp, boolean automatic) {
-        String msg = "";
+        //String msg = "";
         boolean b = false;
         boolean ret = false;
 
@@ -2933,7 +2932,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 b = gtm.buildTURTLEModelingFromAnalysis((AnalysisPanel)tp);
             } catch (AnalysisSyntaxException ae) {
                 //TraceManager.addDev("Exception AnalysisSyntaxException");
-                msg = ae.getMessage();
+                //msg = ae.getMessage();
                 b = false;
             }
             if (b) {
@@ -3186,7 +3185,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             TMLDesignPanel tmldp = (TMLDesignPanel)tp;
             JDialogSelectTMLTask.validated = tmldp.validated;
             JDialogSelectTMLTask.ignored = tmldp.ignored;
-            Vector tmlTasksToValidate = new Vector();
+            Vector<TGComponent> tmlTasksToValidate = new Vector<TGComponent>();
             JDialogSelectTMLTask jdstmlt = new JDialogSelectTMLTask(frame, tmlTasksToValidate, tmldp.tmltdp.getComponentList(), "Choosing TML tasks to validate");
             if (!automatic) {
                 GraphicLib.centerOnParent(jdstmlt);
@@ -3222,7 +3221,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             TMLComponentDesignPanel tmlcdp = (TMLComponentDesignPanel)tp;
             JDialogSelectTMLComponent.validated = tmlcdp.validated;
             JDialogSelectTMLComponent.ignored = tmlcdp.ignored;
-            Vector tmlComponentsToValidate = new Vector();
+            Vector<TGComponent> tmlComponentsToValidate = new Vector<TGComponent>();
             JDialogSelectTMLComponent jdstmlc = new JDialogSelectTMLComponent(frame, tmlComponentsToValidate, tmlcdp.tmlctdp.getComponentList(), "Choosing TML components to validate");
             if (!automatic) {
                 GraphicLib.centerOnParent(jdstmlc);
@@ -3258,7 +3257,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             tmlap = (TMLArchiPanel)tp;
             JDialogSelectTMLNodes.validated = tmlap.validated;
             JDialogSelectTMLNodes.ignored = tmlap.ignored;
-            Vector tmlNodesToValidate = new Vector();
+            Vector<TGComponent> tmlNodesToValidate = new Vector<TGComponent>();
             JDialogSelectTMLNodes jdstmln = new JDialogSelectTMLNodes(frame, tmlNodesToValidate, tmlap.tmlap.getComponentList(), "Choosing Nodes to validate", tmlap.tmlap.getMasterClockFrequency());
             if (!automatic) {
                 GraphicLib.centerOnParent(jdstmln);
@@ -3298,7 +3297,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             TMLCommunicationPatternPanel tmlcpp = (TMLCommunicationPatternPanel) tp;
             JDialogSelectCPDiagrams.validated =  tmlcpp.validated;
             JDialogSelectCPDiagrams.ignored =  tmlcpp.ignored;
-            Vector tmlDiagramsToValidate = new Vector();
+            Vector<TGComponent> tmlDiagramsToValidate = new Vector<TGComponent>();
             JDialogSelectCPDiagrams jdscpd = new JDialogSelectCPDiagrams( frame, tmlDiagramsToValidate, tmlcpp.tmlcpp.getComponentList(),
                                                                           "Choosing Diagrams to validate" );
             if( !automatic ) {
@@ -3360,12 +3359,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 RequirementDiagramPanel rdp= (RequirementDiagramPanel)tdp;
                 JDialogSelectRequirements.validated = rdp.validated;
                 JDialogSelectRequirements.ignored = rdp.ignored;
-                Vector reqsToValidate = new Vector();
+                Vector<Requirement> reqsToValidate = new Vector<Requirement>();
                 JDialogSelectRequirements jdsreq = new JDialogSelectRequirements(frame, reqsToValidate, rdp.getComponentList(), "Choosing requirements to verify");
+                
                 if (!automatic) {
                     GraphicLib.centerOnParent(jdsreq);
                     jdsreq.setVisible(true); // Blocked until dialog has been closed
                 }
+                
                 if (reqsToValidate.size() > 0) {
                     rdp.validated = JDialogSelectRequirements.validated;
                     rdp.ignored = JDialogSelectRequirements.ignored;
@@ -3641,11 +3642,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return adp.getAllTimers(name);
     }
 
-    public LinkedList<CheckingError> getCheckingErrors() {
+    public List<CheckingError> getCheckingErrors() {
         return gtm.getCheckingErrors();
     }
 
-    public LinkedList<CheckingError> getCheckingWarnings() {
+    public List<CheckingError> getCheckingWarnings() {
         return gtm.getCheckingWarnings();
     }
 
@@ -3681,7 +3682,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return;
     }
 
-    public void modelBacktracingUPPAAL(HashMap<String, Integer> verifMap) {
+    public void modelBacktracingUPPAAL( Map<String, Integer> verifMap) {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {
             return;
@@ -3862,7 +3863,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         jdgaut.setVisible(true);
 
         //Update menu
-        Vector v = jdgaut.getFiles();
+        Vector<String> v = jdgaut.getFiles();
         JMenu menu = jmenubarturtle.getJMenuGraph();
         menu.removeAll();
         String s;
@@ -3875,9 +3876,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void generateAUTS() {
         JDialogGenAUTS jdgauts = new JDialogGenAUTS(frame, this, "Generation of automata via LOTOS", gtm.getPathCaesar(),
-                                                    gtm.getPathBcgio(),
+        											GTURTLEModeling.getPathBcgio(),
                                                     REMOTE_RTL_LOTOS_FILE,
-                                                    gtm.getCaesarHost(), ConfigurationTTool.TGraphPath);
+                                                    GTURTLEModeling.getCaesarHost(), ConfigurationTTool.TGraphPath);
         //  jdgauts.setSize(450, 600);
         GraphicLib.centerOnParent(jdgauts, 450, 600);
         jdgauts.setVisible(true);
@@ -4026,8 +4027,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //TraceManager.addDev("After UPPAAL");
         if (showWindow) {
             JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.TURTLE_MODE);
-            jgen.setSize(450, 600);
-            GraphicLib.centerOnParent(jgen);
+            //jgen.setSize(450, 600);
+            GraphicLib.centerOnParent(jgen, 450, 600);
             jgen.setVisible(true);
             //dtree.toBeUpdated();
         }
@@ -4074,11 +4075,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
 
-    public LinkedList generateAllAUT(String path) {
+    public List<String> generateAllAUT(String path) {
         return gtm.generateAUT(path);
     }
 
-    public LinkedList generateAllLOTOS(String path) {
+    public List<String> generateAllLOTOS(String path) {
         return gtm.generateLOTOSAUT(path);
     }
 
@@ -4334,7 +4335,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                  gtm.getPathCaesar(),
                                                                  REMOTE_RTL_LOTOS_FILE,
                                                                  gtm.getLastRTLOTOSSpecification(),
-                                                                 gtm.getCaesarHost());
+                                                                 GTURTLEModeling.getCaesarHost());
             //  jdla.setSize(450, 600);
             GraphicLib.centerOnParent(jdla, 450, 600);
             jdla.setVisible(true);
@@ -4391,8 +4392,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                        REMOTE_RTL_LOTOS_FILE,
                                                                        gtm.getLastRTLOTOSSpecification(),
                                                                        gtm.getHost(),
-                                                                       gtm.getHostAldebaran(),
-                                                                       gtm.getPathBcgio());
+                                                                       GTURTLEModeling.getHostAldebaran(),
+                                                                       GTURTLEModeling.getPathBcgio());
             jdfv.setAutomatic(automatic);
             //   jdfv.setSize(450, 600);
             GraphicLib.centerOnParent(jdfv, 450, 600);
@@ -4403,11 +4404,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                      this, "Generating RG with CAESAR",
                                                                      gtm.getPathCaesar(),
                                                                      gtm.getPathCaesarOpen(),
-                                                                     gtm.getPathBcgio(),
+                                                                     GTURTLEModeling.getPathBcgio(),
                                                                      gtm.getPathBcgmerge(),
                                                                      REMOTE_RTL_LOTOS_FILE,
                                                                      gtm.getLastRTLOTOSSpecification(),
-                                                                     gtm.getCaesarHost());
+                                                                     GTURTLEModeling.getCaesarHost());
             jdla.setAutomatic(automatic);
             // jdla.setSize(450, 600);
             GraphicLib.centerOnParent(jdla, 450, 600);
@@ -4438,7 +4439,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                          REMOTE_RTL_LOTOS_FILE,
                                                                          gtm.getHost(),
                                                                          GTURTLEModeling.getHostAldebaran(),
-                                                                         gtm.getPathBcgio());
+                                                                         GTURTLEModeling.getPathBcgio());
             // jdfv.setSize(550, 600);
             jdfv.setIconImage(IconManager.img8);
             GraphicLib.centerOnParent(jdfv, 550, 600);
@@ -4459,7 +4460,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                        GTURTLEModeling.getHostAldebaran(),
                                                        GTURTLEModeling.getPathAldebaran(),
                                                        gtm.getPathBcgmin(),
-                                                       gtm.getPathBcgio(),
+                                                       GTURTLEModeling.getPathBcgio(),
                                                        gtm.getLastRGAUT(),
                                                        REMOTE_ALDEBARAN_AUT_FILE,
                                                        "Minimization using Aldebaran");
@@ -4480,7 +4481,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         } else {
             jdgm = new JDialogGraphModification(frame,
                                                 GTURTLEModeling.getHostAldebaran(),
-                                                gtm.getPathBcgio(),
+                                                GTURTLEModeling.getPathBcgio(),
                                                 "graph",
                                                 "Minimization using Aldebaran",
                                                 gtm.getLastRGAUT(),
@@ -5051,7 +5052,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         TURTLEPanel tp;// = getCurrentTURTLEPanel();
         TDiagramPanel tdp1;
-        BufferedImage image;
+      //  BufferedImage image;
         File file1;
         String name = file.getAbsolutePath();
         name = name.substring(0, name.length() - 4);
@@ -5339,15 +5340,18 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return al;
     }
 
-    public LinkedList getAllTMLComponents() {
+    public List<TGComponent> getAllTMLComponents() {
         TURTLEPanel tp;
-        LinkedList ll = new LinkedList();
+        List<TGComponent> ll = new LinkedList<TGComponent>();
+        
         for(int i=0; i<tabs.size(); i++) {
             tp = (TURTLEPanel)(tabs.elementAt(i));
+            
             if (tp instanceof TMLComponentDesignPanel) {
                 ll.addAll(((TMLComponentDesignPanel)tp).tmlctdp.getComponentList());
             }
         }
+        
         return ll;
     }
 
@@ -6297,7 +6301,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void generateOntologyForAllDiagrams() {
         TraceManager.addDev("Ontology for all diagrams");
         try {
-            String modeling = gtm.makeXMLFromTurtleModeling(-1);
+            /*String modeling =*/ gtm.makeXMLFromTurtleModeling(-1);
             TraceManager.addDev("Model made");
         } catch (Exception e) {
         }
@@ -7094,14 +7098,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         mainTabbedPane.setForegroundAt(dst, fg);
         mainTabbedPane.setBackgroundAt(dst, bg);
 
-        Object o = tabs.elementAt(src);
+        TURTLEPanel o = tabs.elementAt(src);
         tabs.removeElementAt(src);
         tabs.insertElementAt(o, dst);
 
         mainTabbedPane.setSelectedIndex(dst);
     }
-
-
 
     public void requestRenameTab(int index) {
         String oldName = mainTabbedPane.getTitleAt(index);
@@ -7111,7 +7113,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             if (s.compareTo(oldName) != 0) {
                 if (isAValidTabName(s)) {
                     mainTabbedPane.setTitleAt(index, s);
-                    changeMade(getCurrentTDiagramPanel(), ((TURTLEPanel)(tabs.elementAt(index))).tdp.MOVE_COMPONENT);
+                    changeMade(getCurrentTDiagramPanel(), /*((TURTLEPanel)(tabs.elementAt(index))).tdp*/TDiagramPanel.MOVE_COMPONENT);
 
                     TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
                     if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
@@ -7319,12 +7321,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
 
         AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
-        AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();
+        /*AvatarddSpecification avddspec =*/ avdeploymenttranslator.getAvatarddSpecification();
 
 
         AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator( designDiagramPanel);
-        LinkedList<AvatarBDStateMachineOwner> adp =  designDiagramPanel.getAvatarBDPanel().getFullStateMachineOwnerList();
-        AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(adp);
+        List<AvatarBDStateMachineOwner> adp =  designDiagramPanel.getAvatarBDPanel().getFullStateMachineOwnerList();
+        /*AvatarSpecification avaspec =*/ avdesigntranslator.generateAvatarSpecification(adp);
 
         //DG
         //LinkedList<AvatarComponent> components = AvatarddSpecification.getComponents();
@@ -7860,7 +7862,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         private MainGUI mgui;
         private JPopupMenu menu;
 
-        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign,
+        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement/*, newTMLDesign*/, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign,
             newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo;
         private JMenuItem newAVATARAnalysis;
 
@@ -7904,7 +7906,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
             newTMLMethodo = createMenuItem("New DIPLODOCUS Methodology");
 
-            newTMLDesign = createMenuItem("New Partitioning - Design");
+            /*newTMLDesign =*/ createMenuItem("New Partitioning - Design");
             newTMLComponentDesign = createMenuItem("New Partitioning - Functional view");
             newTMLArchi = createMenuItem("New Partitioning - Architecture and Mapping");
             newTMLCP = createMenuItem("New Partitioning - Communication Pattern");

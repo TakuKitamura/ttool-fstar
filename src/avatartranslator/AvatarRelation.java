@@ -49,13 +49,11 @@ package avatartranslator;
 
 import java.util.*;
 
-import myutil.*;
-
 public class AvatarRelation extends AvatarElement {
 
 
     public AvatarBlock block1, block2;
-    private LinkedList<AvatarSignal> signals1, signals2;
+    private List<AvatarSignal> signals1, signals2;
     private boolean blocking, asynchronous, isPrivate, isBroadcast, isLossy;
     private int sizeOfFIFO; // -1 means infinite
     public int id;//DG
@@ -249,39 +247,36 @@ public class AvatarRelation extends AvatarElement {
       signals2 = signals2_tmp;
       }*/
 
-    public AvatarRelation advancedClone(HashMap<AvatarBlock, AvatarBlock> correspondenceBlocks) {
-	AvatarBlock b1, b2;
-	b1 = correspondenceBlocks.get(block1);
-	b2 = correspondenceBlocks.get(block2);
-	if ((b1 == null) || (b2 == null)) {
-	    return null;
-	}
-	AvatarRelation ar = new AvatarRelation(getName(), b1, b2, getReferenceObject());
-	ar.setAsynchronous(isAsynchronous());
-	ar.setBlocking(isBlocking());
-	ar.setPrivate(isPrivate());
-	ar.setBroadcast(isBroadcast());
-	ar.setLossy(isLossy());
-	ar.setSizeOfFIFO(getSizeOfFIFO());
-
-	// Signals
-	for(int i=0; i<signals1.size(); i++) {
-	    AvatarSignal s1 = getSignal1(i);
-	    AvatarSignal s2 = getSignal2(i);
-	    
-	    AvatarSignal ns1 = b1.getSignalByName(s1.getName());
-	    AvatarSignal ns2 = b2.getSignalByName(s2.getName());
-	    if ((ns1 == null) || (ns2 == null)) {
-		continue;
-	    }	   	
-	    ar.addSignals(ns1, ns2);
-	}
-
-	cloneLinkToReferenceObjects(ar);	
-
-	return ar;
+    public AvatarRelation advancedClone( Map<AvatarBlock, AvatarBlock> correspondenceBlocks) {
+		AvatarBlock b1, b2;
+		b1 = correspondenceBlocks.get(block1);
+		b2 = correspondenceBlocks.get(block2);
+		if ((b1 == null) || (b2 == null)) {
+		    return null;
+		}
+		AvatarRelation ar = new AvatarRelation(getName(), b1, b2, getReferenceObject());
+		ar.setAsynchronous(isAsynchronous());
+		ar.setBlocking(isBlocking());
+		ar.setPrivate(isPrivate());
+		ar.setBroadcast(isBroadcast());
+		ar.setLossy(isLossy());
+		ar.setSizeOfFIFO(getSizeOfFIFO());
+	
+		// Signals
+		for(int i=0; i<signals1.size(); i++) {
+		    AvatarSignal s1 = getSignal1(i);
+		    AvatarSignal s2 = getSignal2(i);
+		    
+		    AvatarSignal ns1 = b1.getSignalByName(s1.getName());
+		    AvatarSignal ns2 = b2.getSignalByName(s2.getName());
+		    if ((ns1 == null) || (ns2 == null)) {
+			continue;
+		    }	   	
+		    ar.addSignals(ns1, ns2);
+		}
+	
+		cloneLinkToReferenceObjects(ar);	
+	
+		return ar;
     }
-
-
-
 }

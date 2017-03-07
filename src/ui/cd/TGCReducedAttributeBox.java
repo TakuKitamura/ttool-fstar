@@ -61,7 +61,7 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
     protected String attributeText;
     protected int textX = 5;
     protected int textY = 20;
-    protected LinkedList<TAttribute> myAttributes;
+    protected java.util.List<TAttribute> myAttributes;
     protected Graphics myG;
     protected Color myColor;
     protected boolean attributes;
@@ -89,11 +89,11 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
         myAttributes = new LinkedList<TAttribute> ();
     }
     
-    public LinkedList<TAttribute> getAttributes() {
+    public java.util.List<TAttribute> getAttributes() {
         return myAttributes;
     }
     
-    public void setAttributes(LinkedList<TAttribute> v) {
+    public void setAttributes( java.util.List<TAttribute> v) {
         myAttributes = v;
     }
     
@@ -207,15 +207,15 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
         
         JDialogReducedAttribute jda = new JDialogReducedAttribute(myAttributes, getCustomAttributes(), frame, "Setting initial values of " + attributeText + "s of " + father.getValue(),  attributeText, to.getObjectName(), tc.getClassName());
         setJDialogOptions(jda);
-        jda.setSize(650, 375);
-        GraphicLib.centerOnParent(jda);
-        jda.show(); // blocked until dialog has been closed
+    //    jda.setSize(650, 375);
+        GraphicLib.centerOnParent(jda, 650, 375);
+        jda.setVisible( true ); // blocked until dialog has been closed
      
         return true;
     }
     
     protected abstract void setJDialogOptions(JDialogReducedAttribute jda);
-    protected abstract LinkedList<TAttribute> getCustomAttributes();
+    protected abstract java.util.List<TAttribute> getCustomAttributes();
     
     public TGComponent isOnMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {

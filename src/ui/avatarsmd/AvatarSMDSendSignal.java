@@ -52,8 +52,6 @@ import javax.swing.*;
 
 import java.util.*;
 
-import org.w3c.dom.*;
-
 import myutil.*;
 import ui.*;
 import ui.window.*;
@@ -224,9 +222,9 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
         //TraceManager.addDev("Nb of signals:" + signals.size());
 
         JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting send signal",  value, signals, true);
-        jdas.setSize(350, 300);
-        GraphicLib.centerOnParent(jdas);
-        jdas.show(); // blocked until dialog has been closed
+   //     jdas.setSize(350, 300);
+        GraphicLib.centerOnParent(jdas, 350, 300);
+        jdas.setVisible( true ); // blocked until dialog has been closed
 
         if (jdas.hasBeenCancelled()) {
             return false;

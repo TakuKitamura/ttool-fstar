@@ -57,17 +57,17 @@ import ui.tmldd.*;
 
 
 public class JDialogSelectTMLNodes extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    public static Vector validated, ignored;
+    public static Vector<TGComponent> validated, ignored;
     private static boolean optimized = true;
 
     private int clock;
 
-    private Vector val, ign, back;
+    private Vector<TGComponent> val, ign, back;
 
     //subpanels
     private JPanel panel1, panel2, panel3, panel4, panel5, panel6;
-    private JList listIgnored;
-    private JList listValidated;
+    private JList<TGComponent> listIgnored;
+    private JList<TGComponent> listValidated;
     private JButton allValidated;
     private JButton addOneValidated;
     private JButton addOneIgnored;
@@ -80,7 +80,7 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
     private JButton cancelButton;
 
     /** Creates new form  */
-    public JDialogSelectTMLNodes(Frame f, Vector _back, LinkedList componentList, String title, int _clock) {
+    public JDialogSelectTMLNodes(Frame f, Vector<TGComponent> _back, java.util.List<TGComponent> componentList, String title, int _clock) {
         super(f, title, true);
 
         back = _back;
@@ -89,7 +89,7 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
 
         if ((validated == null) || (ignored == null)) {
             val = makeNewVal(componentList);
-            ign = new Vector();
+            ign = new Vector<TGComponent>();
         } else {
             val = validated;
             ign = ignored;
@@ -103,25 +103,27 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
         pack();
     }
 
-    private Vector makeNewVal(LinkedList list) {
-        Vector v = new Vector();
+    private Vector<TGComponent> makeNewVal( java.util.List<TGComponent> list) {
+        Vector<TGComponent> v = new Vector<TGComponent>();
         TGComponent tgc;
 
         for(int i=0; i<list.size(); i++) {
-            tgc = (TGComponent)(list.get(i));
+            tgc = list.get(i);
             //System.out.println(tgc);
             if (tgc instanceof TMLArchiNode) {
                 v.addElement(tgc);
             }
         }
+        
         return v;
     }
 
-    private void checkNode(Vector tobeChecked, LinkedList source) {
-        TMLArchiNode t;
+    private void checkNode(Vector<TGComponent> tobeChecked, java.util.List<TGComponent> source) {
+    	TGComponent t;
 
         for(int i=0; i<tobeChecked.size(); i++) {
-            t = (TMLArchiNode)(tobeChecked.elementAt(i));
+            t = tobeChecked.elementAt(i);
+            
             if (!source.contains(t)) {
                 tobeChecked.removeElementAt(i);
                 i--;
@@ -129,11 +131,12 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
         }
     }
 
-    public void addNewNode(Vector added, LinkedList source, Vector notSource) {
+    public void addNewNode(Vector<TGComponent> added, java.util.List<TGComponent> source, Vector<TGComponent> notSource) {
         TGComponent tgc;
 
         for(int i=0; i<source.size(); i++) {
-            tgc = (TGComponent)(source.get(i));
+            tgc = source.get(i);
+            
             if ((tgc instanceof TMLArchiNode) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
                 added.addElement(tgc);
                 //System.out.println("New element");
@@ -165,7 +168,7 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
         panel1.setBorder(new javax.swing.border.TitledBorder("Nodes ignored"));
-        listIgnored = new JList(ign);
+        listIgnored = new JList<TGComponent>(ign);
         //listIgnored.setPreferredSize(new Dimension(200, 250));
         listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listIgnored.addListSelectionListener(this);
@@ -218,7 +221,7 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
         panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
         panel2.setBorder(new javax.swing.border.TitledBorder("Nodes taken into account"));
-        listValidated = new JList(val);
+        listValidated = new JList<TGComponent>(val);
         //listValidated.setPreferredSize(new Dimension(200, 250));
         listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listValidated.addListSelectionListener(this);
@@ -233,7 +236,7 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
         panel6.setLayout(new BorderLayout());
 
         panel5 = new JPanel();
-        GridBagLayout gridbag3 = new GridBagLayout();
+        //GridBagLayout gridbag3 = new GridBagLayout();
         GridBagConstraints c3 = new GridBagConstraints();
         panel5.setLayout(gridbag2);
 
@@ -296,8 +299,8 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
 
     private void addOneIgnored() {
         int [] list = listValidated.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        TGComponent o;
         for (int i=0; i<list.length; i++){
             o = val.elementAt(list[i]);
             ign.addElement(o);
@@ -312,8 +315,9 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
 
     private void addOneValidated() {
         int [] list = listIgnored.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        TGComponent o;
+        
         for (int i=0; i<list.length; i++){
             o = ign.elementAt(list[i]);
             val.addElement(o);

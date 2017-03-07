@@ -52,24 +52,23 @@ import ui.tmlcompd.*;
 import ui.TAttribute;
 import avatartranslator.*;
 import proverifspec.*;
-//import compiler.expression.*;
 
 
 public class TMLModeling {
 
-    private ArrayList<TMLTask> tasks;
-    private ArrayList<TMLChannel> channels;
-    private ArrayList<TMLRequest> requests;
-    private ArrayList<TMLEvent> events;
-    private ArrayList<String[]> pragmas;
-    public ArrayList<String> securityPatterns=new ArrayList<String>();
+    private List<TMLTask> tasks;
+    private List<TMLChannel> channels;
+    private List<TMLRequest> requests;
+    private List<TMLEvent> events;
+    private List<String[]> pragmas;
+    public List<String> securityPatterns=new ArrayList<String>();
     private TMLElement correspondance[];
-    public ArrayList<SecurityPattern> secPatterns = new ArrayList<SecurityPattern>();
+    public List<SecurityPattern> secPatterns = new ArrayList<SecurityPattern>();
     private boolean optimized = false;
-    public HashMap<String, String> secChannelMap = new HashMap<String, String>();
-    public HashMap<SecurityPattern, ArrayList<TMLTask>> securityTaskMap = new HashMap<SecurityPattern, ArrayList<TMLTask>>();
+    public Map<String, String> secChannelMap = new HashMap<String, String>();
+    public Map<SecurityPattern, List<TMLTask>> securityTaskMap = new HashMap<SecurityPattern, List<TMLTask>>();
     private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ","};
-	private HashMap<TGComponent, String> checkedActivities = new HashMap<TGComponent, String>();
+	private Map<TGComponent, String> checkedActivities = new HashMap<TGComponent, String>();
     private int hashCode;
     private boolean hashCodeComputed = false;
 
@@ -94,7 +93,7 @@ public class TMLModeling {
 		checkedActivities.put(tgc,s);
 	}
 
-	public HashMap<TGComponent, String> getCheckedComps(){
+	public Map<TGComponent, String> getCheckedComps(){
 		return checkedActivities;
 	}
     public SecurityPattern getSecurityPattern(String s){
@@ -261,23 +260,26 @@ public class TMLModeling {
     }
 
 
-    public String listToString(ArrayList ll) {
+    public String listToString( List<? extends TMLElement> ll) {
         String s="";
-        ListIterator iterator = ll.listIterator();
+        Iterator<? extends TMLElement> iterator = ll.listIterator();
         TMLElement tmle;
 
         while(iterator.hasNext()) {
-            tmle = (TMLElement)(iterator.next());
+            tmle = iterator.next();
             s += tmle.getName() + " ";
         }
+        
         return s;
     }
 
     public boolean hasSameChannelName(TMLChannel _channel) {
         TMLChannel channel;
-        ListIterator iterator = channels.listIterator();
+        Iterator<TMLChannel> iterator = channels.listIterator();
+        
         while(iterator.hasNext()) {
-            channel = (TMLChannel)(iterator.next());
+            channel = iterator.next();
+            
             if (channel.getName().compareTo(_channel.getName()) == 0) {
                 return true;
             }
@@ -288,9 +290,11 @@ public class TMLModeling {
 
     public boolean hasAlmostSimilarChannel(TMLChannel _channel) {
         TMLChannel channel;
-        ListIterator iterator = channels.listIterator();
+        Iterator<TMLChannel> iterator = channels.listIterator();
+        
         while(iterator.hasNext()) {
-            channel = (TMLChannel)(iterator.next());
+            channel = iterator.next();
+            
             if (channel.getName().compareTo(_channel.getName()) == 0) {
                 if (channel.getSize() != _channel.getSize()) {
                     return true;
@@ -313,7 +317,8 @@ public class TMLModeling {
 
     public boolean hasSameRequestName(TMLRequest _request) {
         TMLRequest request;
-        ListIterator iterator = requests.listIterator();
+        Iterator<TMLRequest> iterator = requests.listIterator();
+        
         while(iterator.hasNext()) {
             request = (TMLRequest)(iterator.next());
             if (request != _request) {
@@ -327,9 +332,10 @@ public class TMLModeling {
 
     public TMLRequest getRequestNamed(String name) {
         TMLRequest request;
-        ListIterator iterator = requests.listIterator();
+        Iterator<TMLRequest> iterator = requests.listIterator();
+        
         while(iterator.hasNext()) {
-            request = (TMLRequest)(iterator.next());
+            request = iterator.next();
             //System.out.println("Request=" +request.getName() + " name=" + name);
             if (request.getName().compareTo(name) == 0) {
                 return request;
@@ -341,13 +347,14 @@ public class TMLModeling {
 
     // Returns a similar request if found
     public TMLRequest hasSimilarRequest(TMLRequest _request) {
-        TMLRequest request;
+    	TMLRequest request;
         int i;
 
-        ListIterator iterator = requests.listIterator();
+        Iterator<TMLRequest> iterator = requests.listIterator();
 
         while(iterator.hasNext()) {
-            request = (TMLRequest)(iterator.next());
+            request = iterator.next();
+           
             if (request.getName().compareTo(_request.getName()) == 0) {
                 // must verify whether a param is different or not.
                 if (request.getNbOfParams() != _request.getNbOfParams()) {
@@ -375,9 +382,11 @@ public class TMLModeling {
 
     public boolean hasSameEventName(TMLEvent _event) {
         TMLEvent event;
-        ListIterator iterator = events.listIterator();
+        Iterator<TMLEvent> iterator = events.listIterator();
+        
         while(iterator.hasNext()) {
-            event = (TMLEvent)(iterator.next());
+            event = iterator.next();
+            
             if (event.getName().compareTo(_event.getName()) == 0) {
                 return true;
             }
@@ -389,7 +398,7 @@ public class TMLModeling {
         TMLEvent event;
         int i;
 
-        ListIterator iterator = events.listIterator();
+        Iterator<TMLEvent> iterator = events.listIterator();
 
         while(iterator.hasNext()) {
             event = (TMLEvent)(iterator.next());
@@ -419,9 +428,11 @@ public class TMLModeling {
 
     public TMLTask getTMLTaskByName(String _name) {
         TMLTask task;
-        ListIterator iterator = tasks.listIterator();
+        Iterator<TMLTask> iterator = tasks.listIterator();
+        
         while(iterator.hasNext()) {
-            task = (TMLTask)(iterator.next());
+            task = iterator.next();
+            
             if (task.getName().compareTo(_name) == 0) {
                 return task;
             }
@@ -436,10 +447,11 @@ public class TMLModeling {
 
         String [] list = new String[tasks.size()];
         TMLTask task;
-        ListIterator iterator = tasks.listIterator();
+        Iterator<TMLTask> iterator = tasks.listIterator();
         int cpt = 0;
+        
         while(iterator.hasNext()) {
-            task = (TMLTask)(iterator.next());
+            task = iterator.next();
             list[cpt] = task.getName() + " (" + task.getID() + ")";
             cpt ++;
         }
@@ -453,13 +465,15 @@ public class TMLModeling {
 
         String [] list = new String[channels.size()];
         TMLChannel ch;
-        ListIterator iterator = channels.listIterator();
+        Iterator<TMLChannel> iterator = channels.listIterator();
         int cpt = 0;
+        
         while(iterator.hasNext()) {
-            ch = (TMLChannel)(iterator.next());
+            ch = iterator.next();
             list[cpt] = ch.getName() + " (" + ch.getID() + ")";
             cpt ++;
         }
+        
         return list;
     }
 
@@ -491,13 +505,16 @@ public class TMLModeling {
 
     public TMLTask getTMLTaskByCommandID(int id) {
         TMLTask task;
-        ListIterator iterator = tasks.listIterator();
+        Iterator<TMLTask> iterator = tasks.listIterator();
+        
         while(iterator.hasNext()) {
-            task = (TMLTask)(iterator.next());
+            task = iterator.next();
+            
             if (task.hasCommand(id)) {
                 return task;
             }
         }
+        
         return null;
     }
 
@@ -517,61 +534,76 @@ public class TMLModeling {
 
     public TMLChannel getChannelByName(String _name) {
         TMLChannel ch;
-        ListIterator iterator = channels.listIterator();
+        Iterator<TMLChannel> iterator = channels.listIterator();
+        
         while(iterator.hasNext()) {
-            ch = (TMLChannel)(iterator.next());
+            ch = iterator.next();
+            
             if (ch.getName().compareTo(_name) == 0) {
                 return ch;
             }
         }
+        
         return null;
     }
 
     public TMLChannel getChannelByShortName(String _name) {
         TMLChannel ch;
-        ListIterator iterator = channels.listIterator();
+        Iterator<TMLChannel> iterator = channels.listIterator();
+        
         while(iterator.hasNext()) {
-            ch = (TMLChannel)(iterator.next());
+            ch = iterator.next();
+            
             if (ch.getName().endsWith(_name)) {
                 return ch;
             }
         }
+        
         return null;
     }
 
     public TMLChannel getChannelByDestinationPortName(String _portName) {
         TMLChannel ch;
-        ListIterator iterator = channels.listIterator();
+        Iterator<TMLChannel> iterator = channels.listIterator();
+
         while(iterator.hasNext()) {
-            ch = (TMLChannel)(iterator.next());
+            ch = iterator.next();
+            
             if (ch.hasDestinationPort(_portName) != null) {
                 return ch;
             }
         }
+        
         return null;
     }
 
     public TMLEvent getEventByName(String _name) {
         TMLEvent evt;
-        ListIterator iterator = events.listIterator();
+        Iterator<TMLEvent> iterator = events.listIterator();
+        
         while(iterator.hasNext()) {
-            evt = (TMLEvent)(iterator.next());
+            evt = iterator.next();
+            
             if (evt.getName().compareTo(_name) == 0) {
                 return evt;
             }
         }
+        
         return null;
     }
 
     public TMLRequest getRequestByName(String _name) {
         TMLRequest req;
-        ListIterator iterator = requests.listIterator();
+        Iterator<TMLRequest> iterator = requests.listIterator();
+        
         while(iterator.hasNext()) {
-            req = (TMLRequest)(iterator.next());
+            req = iterator.next();
+            
             if (req.getName().compareTo(_name) == 0) {
                 return req;
             }
         }
+        
         return null;
     }
 
@@ -581,74 +613,83 @@ public class TMLModeling {
         }
 
         TMLRequest req;
-        ListIterator iterator = requests.listIterator();
+        Iterator<TMLRequest> iterator = requests.listIterator();
+        
         while(iterator.hasNext()) {
-            req = (TMLRequest)(iterator.next());
+            req = iterator.next();
+            
             if (req.getDestinationTask() == tmlt) {
                 return req;
             }
         }
+        
         return null;
     }
 
-    public ArrayList<TMLTask> getTasks() {
+    public List<TMLTask> getTasks() {
         return tasks;
     }
-    public ArrayList<String[]> getPragmas(){
+    public List<String[]> getPragmas(){
 	return pragmas;
     }
-    public ListIterator getListIteratorTasks() {
+    public Iterator<TMLTask> getListIteratorTasks() {
         return tasks.listIterator();
     }
 
-    public ArrayList<TMLChannel> getChannels() {
+    public List<TMLChannel> getChannels() {
         return channels;
     }
 
-    public ArrayList<TMLEvent> getEvents() {
+    public List<TMLEvent> getEvents() {
         return events;
     }
 
-    public ArrayList<TMLRequest> getRequests() {
+    public List<TMLRequest> getRequests() {
         return requests;
     }
 
-    public ListIterator getListIteratorChannels() {
+    public Iterator<TMLChannel> getListIteratorChannels() {
         return channels.listIterator();
     }
 
-    public ListIterator getListIteratorEvents() {
+    public Iterator<TMLEvent> getListIteratorEvents() {
         return events.listIterator();
     }
 
-    public ListIterator getListIteratorRequests() {
+    public Iterator<TMLRequest> getListIteratorRequests() {
         return requests.listIterator();
     }
 
-    public ArrayList<TMLChannel> getChannels(TMLTask t) {
+    public List<TMLChannel> getChannels(TMLTask t) {
         TMLChannel ch;
-        ArrayList<TMLChannel> list = new ArrayList<TMLChannel>();
-        ListIterator iterator = getListIteratorChannels();
+        List<TMLChannel> list = new ArrayList<TMLChannel>();
+        Iterator<TMLChannel> iterator = getListIteratorChannels();
+        
         while(iterator.hasNext()) {
-            ch = (TMLChannel)(iterator.next());
+            ch = iterator.next();
             if ((ch.getOriginTask() == t) || (ch.getDestinationTask() == t)) {
                 list.add(ch);
             }
         }
+        
         return list;
     }
-	public ArrayList<TMLChannel> getChannels(TMLTask originTask, TMLTask destTask){
+	public List<TMLChannel> getChannels(TMLTask originTask, TMLTask destTask){
         TMLChannel ch;
-        ArrayList<TMLChannel> list = new ArrayList<TMLChannel>();
-        ListIterator iterator = getListIteratorChannels();
+        List<TMLChannel> list = new ArrayList<TMLChannel>();
+        Iterator<TMLChannel> iterator = getListIteratorChannels();
+        
         while(iterator.hasNext()) {
-            ch = (TMLChannel)(iterator.next());
+            ch = iterator.next();
+            
             if ((ch.getOriginTask() == originTask) && (ch.getDestinationTask() == destTask)) {
                 list.add(ch);
             }
         }
+        
         return list;
 	}
+	
     public void backtrace(ProVerifOutputAnalyzer pvoa, String mappingName){
 		//System.out.println("Backtracing Confidentiality");
  		LinkedList<AvatarAttribute> secretAttributes = pvoa.getSecretTerms ();
@@ -975,90 +1016,99 @@ public class TMLModeling {
 	return;
     }
     public void clearBacktracing(){
-	for (TMLChannel channel: getChannels()){
-	    for (TMLCPrimitivePort port:channel.ports){
-		if (port.checkConfStatus>1){
-		    port.checkConfStatus=1;
-		    port.mappingName="???";
-		    port.secName="";
+		for (TMLChannel channel: getChannels()){
+		    for (TMLCPrimitivePort port:channel.ports){
+			if (port.checkConfStatus>1){
+			    port.checkConfStatus=1;
+			    port.mappingName="???";
+			    port.secName="";
+			}
+			if (port.checkStrongAuthStatus>1 || port.checkWeakAuthStatus>1){
+			    port.checkStrongAuthStatus = 1;
+			    port.checkWeakAuthStatus=1;
+			}
+		    }
 		}
-		if (port.checkStrongAuthStatus>1 || port.checkWeakAuthStatus>1){
-		    port.checkStrongAuthStatus = 1;
-		    port.checkWeakAuthStatus=1;
+		for (TMLRequest req: getRequests()){
+		    for (TMLCPrimitivePort port:req.ports){
+			if (port.checkConfStatus>1){
+			    port.checkConfStatus=1;
+			    port.mappingName="???";
+			}
+			if (port.checkStrongAuthStatus>1 || port.checkWeakAuthStatus>1){
+			    port.checkStrongAuthStatus = 1;
+			    port.checkWeakAuthStatus=1;
+			}
+		    }
 		}
-	    }
-	}
-	for (TMLRequest req: getRequests()){
-	    for (TMLCPrimitivePort port:req.ports){
-		if (port.checkConfStatus>1){
-		    port.checkConfStatus=1;
-		    port.mappingName="???";
+		for (TMLEvent evt: getEvents()){
+		    if (evt.port!=null && evt.port2!=null){
+		        if (evt.port.checkConfStatus>1){
+			    evt.port.checkConfStatus=1;
+			    evt.port.mappingName="???";
+		        }
+			if (evt.port.checkStrongAuthStatus>1 || evt.port.checkWeakAuthStatus>1){
+			    evt.port.checkStrongAuthStatus=1;
+			    evt.port.checkWeakAuthStatus=1;
+			}
+		        if (evt.port2.checkConfStatus>1){
+			    evt.port2.checkConfStatus=1;
+			    evt.port2.mappingName="???";
+		        }
+			if (evt.port2.checkStrongAuthStatus>1 || evt.port2.checkWeakAuthStatus>1){
+			    evt.port2.checkStrongAuthStatus=1;
+			    evt.port2.checkWeakAuthStatus=1;
+			}
+		    }
 		}
-		if (port.checkStrongAuthStatus>1 || port.checkWeakAuthStatus>1){
-		    port.checkStrongAuthStatus = 1;
-		    port.checkWeakAuthStatus=1;
-		}
-	    }
-	}
-	for (TMLEvent evt: getEvents()){
-	    if (evt.port!=null && evt.port2!=null){
-	        if (evt.port.checkConfStatus>1){
-		    evt.port.checkConfStatus=1;
-		    evt.port.mappingName="???";
-	        }
-		if (evt.port.checkStrongAuthStatus>1 || evt.port.checkWeakAuthStatus>1){
-		    evt.port.checkStrongAuthStatus=1;
-		    evt.port.checkWeakAuthStatus=1;
-		}
-	        if (evt.port2.checkConfStatus>1){
-		    evt.port2.checkConfStatus=1;
-		    evt.port2.mappingName="???";
-	        }
-		if (evt.port2.checkStrongAuthStatus>1 || evt.port2.checkWeakAuthStatus>1){
-		    evt.port2.checkStrongAuthStatus=1;
-		    evt.port2.checkWeakAuthStatus=1;
-		}
-	    }
-	}
-	return;
+
+		return;
     }
-    public ArrayList<TMLEvent> getEvents(TMLTask t) {
+    
+    public List<TMLEvent> getEvents(TMLTask t) {
         TMLEvent evt;
-        ArrayList<TMLEvent> list = new ArrayList<TMLEvent>();
-        ListIterator iterator = getListIteratorEvents();
+        List<TMLEvent> list = new ArrayList<TMLEvent>();
+        Iterator<TMLEvent> iterator = getListIteratorEvents();
+        
         while(iterator.hasNext()) {
-            evt= (TMLEvent)(iterator.next());
+            evt= iterator.next();
+            
             if ((evt.origin == t) || (evt.destination == t)) {
                 list.add(evt);
             }
         }
+        
         return list;
     }
 
-    public ArrayList<TMLRequest> getRequests(TMLTask t) {
+    public List<TMLRequest> getRequests(TMLTask t) {
         TMLRequest request;
-        ArrayList<TMLRequest> list = new ArrayList<TMLRequest>();
-        ListIterator iterator = getListIteratorRequests();
+        List<TMLRequest> list = new ArrayList<TMLRequest>();
+        Iterator<TMLRequest> iterator = getListIteratorRequests();
+        
         while(iterator.hasNext()) {
-            request = (TMLRequest)(iterator.next());
+            request = iterator.next();
+            
             if ((request.getDestinationTask() == t) || (request.isAnOriginTask(t))) {
                 list.add(request);
             }
         }
+        
         return list;
     }
 
 
-    public LinkedList getRequestsToMe(TMLTask task) {
+    public List<TMLRequest> getRequestsToMe(TMLTask task) {
         TMLRequest req;
 
-        LinkedList ll = new LinkedList();
+        List<TMLRequest> ll = new LinkedList<TMLRequest>();
 
         // Must search each task for SendRequest operator, check the request for destination class
-        ListIterator iterator= getListIteratorRequests();
+        Iterator<TMLRequest> iterator= getListIteratorRequests();
 
         while (iterator.hasNext()) {
-            req = (TMLRequest)(iterator.next());
+            req = iterator.next();
+            
             if (req.getDestinationTask() == task) {
                 ll.add(req);
             }
@@ -1068,23 +1118,26 @@ public class TMLModeling {
     }
 
     public TMLRequest getRequestToMe(TMLTask task) {
-        LinkedList ll = getRequestsToMe(task);
+        List<TMLRequest> ll = getRequestsToMe(task);
+        
         if ((ll == null) || (ll.size() == 0)) {
             return null;
         }
-        return (TMLRequest)(ll.get(0));
+        
+        return ll.get(0);
     }
 
-    public LinkedList getChannelsToMe(TMLTask task) {
+    public List<TMLChannel> getChannelsToMe(TMLTask task) {
         TMLChannel chan;
 
-        LinkedList ll = new LinkedList();
+        List<TMLChannel> ll = new LinkedList<TMLChannel>();
 
         // Must search each task for SendRequest operator, check the request for destination class
-        ListIterator iterator= getListIteratorChannels();
+        Iterator<TMLChannel> iterator= getListIteratorChannels();
 
         while (iterator.hasNext()) {
-            chan = (TMLChannel)(iterator.next());
+            chan = iterator.next();
+            
             if (chan.hasDestinationTask(task)) {
                 ll.add(chan);
             }
@@ -1094,23 +1147,26 @@ public class TMLModeling {
     }
 
     public TMLChannel getChannelToMe(TMLTask task) {
-        LinkedList ll = getChannelsToMe(task);
+        List<TMLChannel> ll = getChannelsToMe(task);
+        
         if ((ll == null) || (ll.size() == 0)) {
             return null;
         }
-        return (TMLChannel)(ll.get(0));
+        
+        return ll.get(0);
     }
 
-    public LinkedList getChannelsFromMe(TMLTask task) {
+    public List<TMLChannel> getChannelsFromMe(TMLTask task) {
         TMLChannel chan;
 
-        LinkedList ll = new LinkedList();
+        List<TMLChannel> ll = new LinkedList<TMLChannel>();
 
         // Must search each task for SendRequest operator, check the request for destination class
-        ListIterator iterator= getListIteratorChannels();
+        Iterator<TMLChannel> iterator = getListIteratorChannels();
 
         while (iterator.hasNext()) {
-            chan = (TMLChannel)(iterator.next());
+            chan = iterator.next();
+           
             if (chan.hasOriginTask(task)) {
                 ll.add(chan);
             }
@@ -1120,11 +1176,13 @@ public class TMLModeling {
     }
 
     public TMLChannel getChannelFromMe(TMLTask task) {
-        LinkedList ll = getChannelsFromMe(task);
+        List<TMLChannel> ll = getChannelsFromMe(task);
+        
         if ((ll == null) || (ll.size() == 0)) {
             return null;
         }
-        return (TMLChannel)(ll.get(0));
+        
+        return ll.get(0);
     }
 
     public void prefixAllNamesWith(String _prefix) {
@@ -1268,7 +1326,7 @@ public class TMLModeling {
         }
     }
 
-    public String printSummary(ArrayList<TMLError> warnings) {
+    public String printSummary( List<TMLError> warnings) {
         String ret = "Optimization warnings:\n";
         int cpt = 1;
         for(TMLError error: warnings) {
@@ -1279,8 +1337,9 @@ public class TMLModeling {
         return ret;
     }
 
-    public ArrayList<TMLError> optimize() {
-        ArrayList<TMLError> warnings = new ArrayList<TMLError>();
+    public List<TMLError> optimize() {
+        List<TMLError> warnings = new ArrayList<TMLError>();
+        
         if (!optimized) {
             TraceManager.addDev("Optimizing TML modeling");
             optimized = true;
@@ -1291,7 +1350,7 @@ public class TMLModeling {
         return warnings;
     }
 
-    public void optimize(TMLTask task, ArrayList<TMLError> warnings) {
+    public void optimize(TMLTask task, List<TMLError> warnings) {
         TMLActivity activity = task.getActivityDiagram();
         optimizeVariables(task, activity, warnings);
         optimizeMergeEXECs(activity);
@@ -1304,11 +1363,11 @@ public class TMLModeling {
      *  Constant variables are also removed from the class, and each time
      *  they are used, they are replaced by their respective value.
      */
-    public void optimizeVariables(TMLTask task,  TMLActivity activity, ArrayList<TMLError> warnings) {
+    public void optimizeVariables(TMLTask task,  TMLActivity activity, List<TMLError> warnings) {
         int i;
         int usage;
         TMLAttribute attr;
-        ArrayList<TMLAttribute> attributes = task.getAttributes();
+        List<TMLAttribute> attributes = task.getAttributes();
         String name;
         TMLError error;
 
@@ -1372,8 +1431,8 @@ public class TMLModeling {
         int index;
         String s, s0, s1;
         String name = " " + attr.getName() +  " ";
-        String namebis = attr.getName() +  " ";
-        String nameter = attr.getName();
+        //String namebis = attr.getName() +  " ";
+        //String nameter = attr.getName();
 
         for(i=0; i<activity.nElements(); i++) {
             element = activity.get(i);
@@ -1545,11 +1604,11 @@ public class TMLModeling {
         TMLSendRequest tmlasr;
         TMLRandom tmlrandom;
         int i, j;
-        int usage = 0;
-        int index;
-        String s, s0, s1;
-        String name = " " + attr.getName() +  " ";
-        String namebis = attr.getName() +  " ";
+       // int usage = 0;
+       // int index;
+       // String s;//, s0, s1;
+      //  String name = " " + attr.getName() +  " ";
+        //String namebis = attr.getName() +  " ";
 
         for(i=0; i<activity.nElements(); i++) {
             element = activity.get(i);
@@ -1620,7 +1679,7 @@ public class TMLModeling {
      */
     public void optimizeMergeEXECs(TMLActivity activity) {
         TMLActivityElement elt0, elt1;
-        String action0, action1;
+        //String action0, action1;
         TMLExecIInterval int0, int1;
         TMLExecCInterval exec0, exec1;
 
@@ -1755,7 +1814,7 @@ public class TMLModeling {
      */
     public void optimizeMergeDELAYSs(TMLActivity activity) {
         TMLActivityElement elt0, elt1;
-        String action0, action1;
+       // String action0, action1;
         TMLDelay del0, del1;
 
 

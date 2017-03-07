@@ -51,16 +51,12 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
 
-import ui.iod.*;
-import ui.sd.*;
-import ui.ucd.*;
 import ui.tmlcp.*;
 import ui.tmlsd.*;
-import myutil.*;
 
 public class TMLCommunicationPatternPanel extends TURTLEPanel {
     public TMLCPPanel tmlcpp;
-    public Vector validated, ignored;
+    public Vector<TGComponent> validated, ignored;
 
     public TMLCommunicationPatternPanel(MainGUI _mgui) {
         super(_mgui);
@@ -92,7 +88,7 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmlcpp);
         tmlcpp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         toolBarPanel.add(toolBarMainCP, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab("MainCP", IconManager.imgic17, toolBarPanel, "Opens the main communication pattern");
@@ -116,7 +112,7 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel( sdp );
         sdp.jsp = jsp;
         jsp.setWheelScrollingEnabled( true );
-        jsp.getVerticalScrollBar().setUnitIncrement( mgui.INCREMENT );
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         toolBarPanel.add(toolBarSequence, BorderLayout.NORTH );
         toolBarPanel.add( jsp, BorderLayout.CENTER );
         tabbedPane.addTab( s, IconManager.imgic18, toolBarPanel, "Open the communication pattern sequence diagram of " + s );
@@ -158,7 +154,7 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmlcppNew);
         tmlcppNew.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         toolBarPanel.add(toolBarMainCP, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic17, toolBarPanel, "Opens communication pattern diagram");

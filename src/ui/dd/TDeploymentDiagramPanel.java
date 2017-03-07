@@ -134,10 +134,11 @@ public class TDeploymentDiagramPanel extends TDiagramPanel {
     public boolean isFree(ArtifactTClassGate atg) {
         TGConnectorLinkNode tgco;
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TGConnectorLinkNode) {
                 tgco = (TGConnectorLinkNode)tgc;
                 if (tgco.hasArtifactTClassGate(atg)) {
@@ -149,30 +150,30 @@ public class TDeploymentDiagramPanel extends TDiagramPanel {
         return true;
     }
     
-    public LinkedList getListOfNodes() {
-        LinkedList ll = new LinkedList();
+    public List<TDDNode> getListOfNodes() {
+        List<TDDNode> ll = new LinkedList<TDDNode>();
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TDDNode) {
-                ll.add(tgc);
+                ll.add( (TDDNode) tgc );
             }
         }
         
         return ll;
     }
     
-     public LinkedList getListOfLinks() {
-        LinkedList ll = new LinkedList();
+     public List<TGConnectorLinkNode> getListOfLinks() {
+        List<TGConnectorLinkNode> ll = new LinkedList<TGConnectorLinkNode>();
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TGConnectorLinkNode) {
-                ll.add(tgc);
+                ll.add( (TGConnectorLinkNode) tgc);
             }
         }
         

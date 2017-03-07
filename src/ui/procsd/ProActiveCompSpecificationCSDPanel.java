@@ -3,8 +3,6 @@ package ui.procsd;
 import java.util.Vector;
 
 import ui.MainGUI;
-import ui.TDiagramMouseManager;
-import ui.TGConnectingPoint;
 import ui.TToolBar;
 
 public class ProActiveCompSpecificationCSDPanel extends ProactiveCSDPanel{

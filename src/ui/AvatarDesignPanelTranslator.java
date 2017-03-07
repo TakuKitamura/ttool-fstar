@@ -46,26 +46,22 @@ package ui;
 
 import java.util.*;
 
-
-
 import myutil.*;
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
 
 import avatartranslator.*;
-//import translator.*;
-import ui.window.*;
-
 
 public class AvatarDesignPanelTranslator {
 
     protected AvatarDesignPanel adp;
-    protected LinkedList<CheckingError> checkingErrors, warnings;
+    protected List<CheckingError> checkingErrors, warnings;
     protected CorrespondanceTGElement listE; // usual list
     //protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
-    protected LinkedList <TDiagramPanel> panels;
-    protected HashMap<String, LinkedList<TAttribute>> typeAttributesMap;
-    protected HashMap<String, String> nameTypeMap;
+    protected List <TDiagramPanel> panels;
+    protected Map<String, List<TAttribute>> typeAttributesMap;
+    protected Map<String, String> nameTypeMap;
+    
     public AvatarDesignPanelTranslator(AvatarDesignPanel _adp) {
         adp = _adp;
         reinit();
@@ -78,11 +74,11 @@ public class AvatarDesignPanelTranslator {
         panels = new LinkedList <TDiagramPanel>();
     }
 
-    public LinkedList<CheckingError> getErrors() {
+    public List<CheckingError> getErrors() {
         return checkingErrors;
     }
 
-    public LinkedList<CheckingError> getWarnings() {
+    public List<CheckingError> getWarnings() {
         return warnings;
     }
 
@@ -90,9 +86,9 @@ public class AvatarDesignPanelTranslator {
         return listE;
     }
 
-    public AvatarSpecification generateAvatarSpecification(LinkedList<AvatarBDStateMachineOwner> _blocks) {
-        LinkedList<AvatarBDBlock> blocks = new LinkedList<AvatarBDBlock>();
-        LinkedList<AvatarBDLibraryFunction> libraryFunctions = new LinkedList<AvatarBDLibraryFunction>();
+    public AvatarSpecification generateAvatarSpecification( List<AvatarBDStateMachineOwner> _blocks) {
+        List<AvatarBDBlock> blocks = new LinkedList<AvatarBDBlock>();
+        List<AvatarBDLibraryFunction> libraryFunctions = new LinkedList<AvatarBDLibraryFunction>();
 
         for (AvatarBDStateMachineOwner owner: _blocks)
             if (owner instanceof AvatarBDBlock)
@@ -108,7 +104,7 @@ public class AvatarDesignPanelTranslator {
                 as.addApplicationCode(abdp.getMainCode());
             }
         }
-        typeAttributesMap = new HashMap<String, LinkedList<TAttribute>>();
+        typeAttributesMap = new HashMap<String, List<TAttribute>>();
         nameTypeMap = new HashMap<String,String>();
         createLibraryFunctions (as, libraryFunctions);
         createBlocks(as, blocks);
@@ -169,16 +165,17 @@ public class AvatarDesignPanelTranslator {
         }
     }
 
-    public void createPragmas(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
-        Iterator iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
+    public void createPragmas(AvatarSpecification _as, List<AvatarBDBlock> _blocks) {
+        Iterator<TGComponent> iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
         TGComponent tgc;
         AvatarBDPragma tgcn;
         AvatarBDSafetyPragma tgsp;
         String values [];
         String tmp;
-        LinkedList<AvatarPragma> pragmaList;
+        List<AvatarPragma> pragmaList;
+        
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof AvatarBDPragma) {
                 ErrorAccumulator errorAcc = new ErrorAccumulator (tgc, adp.getAvatarBDPanel());
                 tgcn = (AvatarBDPragma)tgc;
@@ -218,7 +215,7 @@ public class AvatarDesignPanelTranslator {
             }
         }
     }
-    public boolean checkSafetyPragma(String _pragma, LinkedList<AvatarBDBlock> _blocks, AvatarSpecification as){
+    public boolean checkSafetyPragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as){
         //Todo: check types
         //Todo: handle complex types
         _pragma = _pragma.trim();
@@ -286,7 +283,7 @@ public class AvatarDesignPanelTranslator {
             AvatarType p1Type= AvatarType.UNDEFINED;
             AvatarBlock bl1 = as.getBlockWithName(block1);
             if (bl1 !=null){
-                AvatarStateMachine asm = bl1.getStateMachine();
+                //AvatarStateMachine asm = bl1.getStateMachine();
                 if (bl1.getIndexOfAvatarAttributeWithName(attr1)==-1){
                     TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr1);
                     return false;
@@ -409,7 +406,7 @@ public class AvatarDesignPanelTranslator {
         LinkedList<TAttribute> types;
         AvatarBDBlock block;
         TAttribute ta;
-        AvatarBlock ab;
+     //   AvatarBlock ab;
         String myBlockName = "";
 
 
@@ -625,7 +622,7 @@ public class AvatarDesignPanelTranslator {
         _ab.addAttribute(this.createRegularAttribute (_ab, _a, _preName));
     }
 
-    public void createLibraryFunctions (AvatarSpecification _as, LinkedList<AvatarBDLibraryFunction> _libraryFunctions) {
+    public void createLibraryFunctions (AvatarSpecification _as, List<AvatarBDLibraryFunction> _libraryFunctions) {
         for (AvatarBDLibraryFunction libraryFunction: _libraryFunctions) {
             AvatarLibraryFunction alf = new AvatarLibraryFunction (libraryFunction.getFunctionName (), _as, libraryFunction);
             _as.addLibraryFunction (alf);
@@ -731,9 +728,9 @@ public class AvatarDesignPanelTranslator {
             }
 
             // Create signals
-            for (ui.AvatarSignal uias: libraryFunction.getSignals ()) {
+            for ( AvatarSignal uias: libraryFunction.getSignals ()) {
                 avatartranslator.AvatarSignal atas;
-                if (uias.getInOut() == uias.IN)
+                if (uias.getInOut() == AvatarSignal.IN)
                     atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.IN, uias);
                 else
                     atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.OUT, uias);
@@ -744,7 +741,7 @@ public class AvatarDesignPanelTranslator {
         }
     }
 
-    public void createBlocks(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
+    public void createBlocks(AvatarSpecification _as, List<AvatarBDBlock> _blocks) {
         for(AvatarBDBlock block: _blocks) {
             AvatarBlock ab = new AvatarBlock(block.getBlockName(), _as, block);
             _as.addBlock(ab);
@@ -800,7 +797,7 @@ public class AvatarDesignPanelTranslator {
             // Create signals
             for (ui.AvatarSignal uias: block.getSignalList ()) {
                 avatartranslator.AvatarSignal atas;
-                if (uias.getInOut() == uias.IN) {
+                if (uias.getInOut() == AvatarSignal.IN) {
                     atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.IN, uias);
                 } else {
                     atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.OUT, uias);
@@ -1644,7 +1641,7 @@ public class AvatarDesignPanelTranslator {
         asm.handleUnfollowedStartState(_ab);
 
         // Investigate all states -> put warnings for all empty transitions from a state to the same one (infinite loop)
-        int nb;
+      //  int nb;
         for (AvatarStateMachineElement asmee: asm.getListOfElements())
             if (asmee instanceof AvatarState && ((AvatarState)asmee).hasEmptyTransitionsOnItself(asm) > 0) {
                 CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "State(s) " + asmee.getName() + " has empty transitions on itself");
@@ -1677,9 +1674,11 @@ public class AvatarDesignPanelTranslator {
     // Checks whether all states with internal state machines have at most one start state
     private TGComponent checkForStartStateOfCompositeStates(AvatarSMDPanel _panel) {
         TGComponent tgc;
-        ListIterator iterator = _panel.getComponentList().listIterator();
+        Iterator<TGComponent> iterator = _panel.getComponentList().listIterator();
+        
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof AvatarSMDState) {
                 tgc = (((AvatarSMDState)(tgc)).checkForStartStateOfCompositeStates());
                 if (tgc != null) {
@@ -1687,13 +1686,14 @@ public class AvatarDesignPanelTranslator {
                 }
             }
         }
+        
         return null;
     }
 
 
-    public void createRelationsBetweenBlocks(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
+    public void createRelationsBetweenBlocks(AvatarSpecification _as, List<AvatarBDBlock> _blocks) {
         adp.getAvatarBDPanel().updateAllSignalsOnConnectors();
-        Iterator iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
+        Iterator<TGComponent> iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
 
         TGComponent tgc;
         AvatarBDPortConnector port;
@@ -1706,7 +1706,8 @@ public class AvatarDesignPanelTranslator {
         avatartranslator.AvatarSignal atas1, atas2;
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+           
             if (tgc instanceof AvatarBDPortConnector) {
                 port = (AvatarBDPortConnector)tgc;
                 block1 = port.getAvatarBDBlock1();
@@ -1793,7 +1794,7 @@ public class AvatarDesignPanelTranslator {
 
 
         String s = _input.substring(index0+1, index1).trim();
-        String output = "";
+       // String output = "";
 
         if (s.length() == 0) {
             return _input;

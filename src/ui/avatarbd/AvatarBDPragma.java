@@ -75,9 +75,9 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
     protected Color myColor;
 
-    private Font myFont, myFontB;
-    private int maxFontSize = 30;
-    private int minFontSize = 4;
+    private Font myFont;//, myFontB;
+   // private int maxFontSize = 30;
+   // private int minFontSize = 4;
     private int currentFontSize = -1;
     private final String[] mPragma = {"#PublicConstant", "#PrivateConstant", "#InitialSystemKnowledge", "#InitialSessionKnowledge", "#PrivatePublicKeys", "#Public"};
     private final String[] pPragma = {"#Confidentiality", "#Secret", "#SecrecyAssumption", "#Authenticity"};
@@ -162,7 +162,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
             makeValue();
         }
 
-        int h  = g.getFontMetrics().getHeight();
+//        int h  = g.getFontMetrics().getHeight();
         Color c = g.getColor();
 
         /* !!! WARNING !!!
@@ -379,7 +379,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 		jdn.blockAttributeMap = abdp.getBlockStrings(true,false);
 		jdn.blockStateMap = abdp.getBlockStrings(false,true);
         GraphicLib.centerOnParent(jdn);
-        jdn.show(); // blocked until dialog has been closed
+        jdn.setVisible( true ); // blocked until dialog has been closed
 
         String s = jdn.getText();
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {

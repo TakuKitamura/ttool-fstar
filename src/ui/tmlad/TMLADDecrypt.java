@@ -59,7 +59,7 @@ import myutil.*;
 
 public class TMLADDecrypt extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 5;
-    private int textX, textY;
+//    private int textX, textY;
     private int ilength = 20;
     private int ex=5;
     private int lineLength1 = 2;
@@ -71,9 +71,9 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
         
         width = 15;
         height = 35;
-        textX = width + 5;
-        textY = height/2 + 5;
-        
+//        textX = width + 5;
+//        textY = height/2 + 5;
+       
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
@@ -128,22 +128,22 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
 	g.drawString("sec:"+ securityContext, x+3*width/2, y+ height/2);
     }
     
-public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOndoubleClick(JFrame frame) {
         String [] labels = new String[1];
         String [] values = new String[1];
-	labels[0] = "Security Pattern";
-	values[0] = securityContext;
+		labels[0] = "Security Pattern";
+		values[0] = securityContext;
 	
-	ArrayList<String []> help = new ArrayList<String []>();
-	help.add(tdp.getMGUI().getCurrentCryptoConfig());
+		ArrayList<String []> help = new ArrayList<String []>();
+		help.add(tdp.getMGUI().getCurrentCryptoConfig());
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
-	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting Decryption", 1, labels, values,help);
-        jdms.setSize(600, 300);
-        GraphicLib.centerOnParent(jdms);
-        jdms.show(); // blocked until dialog has been closed
+		JDialogMultiString jdms = new JDialogMultiString(frame, "Setting Decryption", 1, labels, values,help);
+       // jdms.setSize(600, 300);
+        GraphicLib.centerOnParent(jdms, 600, 300);
+        jdms.setVisible( true ); // blocked until dialog has been closed
 
         if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
-	    securityContext = jdms.getString(0);
+        	securityContext = jdms.getString(0);
             return true;
         }
 
@@ -183,8 +183,8 @@ public boolean editOndoubleClick(JFrame frame) {
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int k;
-            String s;
+//            int k;
+//            String s;
             
             //System.out.println("Loading Synchronization gates");
             //System.out.println(nl.toString());
@@ -194,8 +194,8 @@ public boolean editOndoubleClick(JFrame frame) {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

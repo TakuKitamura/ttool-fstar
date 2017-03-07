@@ -54,8 +54,8 @@ public class TClass {
     private boolean activeClass;
     private Process process;
     private HLProcess hlprocess;
-    private Vector gateList; // list of the gate
-    private Vector paramList; // list of parameters
+    private Vector<Gate> gateList; // list of the gate
+    private Vector<Param> paramList; // list of parameters
     private boolean selected = false;
     private ActivityDiagram ad;
     private String packageName = "";
@@ -65,16 +65,16 @@ public class TClass {
     public TClass(String name, boolean isActive) {
         this.name = name;
         activeClass = isActive;
-        gateList = new Vector();
-        paramList = new Vector();
+        gateList = new Vector<Gate>();
+        paramList = new Vector<Param>();
     }
     
     public void removeAllAttributes() {
-      paramList = new Vector();
+      paramList = new Vector<Param>();
     }
     
     public void removeAllGates() {
-      gateList = new Vector();
+      gateList = new Vector<Gate>();
     }
 	
 	public boolean has(ADComponent adc) {
@@ -191,7 +191,7 @@ public class TClass {
     public Param getParamByName(String s) {
         Param p;
         for(int i=0; i<paramList.size(); i++) {
-            p = (Param)(paramList.elementAt(i));
+            p = paramList.elementAt(i);
             if (p.getName().equals(s)) {
                 return p;
             }
@@ -199,18 +199,20 @@ public class TClass {
         return null;
     }
     
-    public Vector getParamStartingWith(String name) {
-       Param p;
-       Vector v = new Vector();
-        for(int i=0; i<paramList.size(); i++) {
-            p = (Param)(paramList.elementAt(i));
+    public Vector<Param> getParamStartingWith(String name) {
+    	Param p;
+    	Vector<Param> v = new Vector<Param>();
+    	
+    	for(int i=0; i<paramList.size(); i++) {
+            p = paramList.elementAt(i);
             //System.out.println("Param=" + p.getName() + " vs " + name);
+            
             if (p.getName().startsWith(name)) {
                 v.add(p);
             }
         }
+    	
         return v;
-        
     }
     
     public void setProcess(Process _process) {
@@ -221,7 +223,7 @@ public class TClass {
         hlprocess = _hlprocess;
     }
     
-    public void setGateList(Vector v) {
+    public void setGateList(Vector<Gate> v) {
         gateList = v;
     }
     
@@ -276,7 +278,7 @@ public class TClass {
         return ad;
     }
     
-    public Vector getGateList() {
+    public Vector<Gate> getGateList() {
         return gateList;
     }
     
@@ -288,7 +290,7 @@ public class TClass {
 		return (Gate)(gateList.get(index));
 	}
     
-    public Vector getParamList() {
+    public Vector<Param> getParamList() {
         return paramList;
     }
     

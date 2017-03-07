@@ -46,13 +46,13 @@
 
 package ui.req;
 
-//import java.awt.*;
 import java.util.*;
 
 import ui.*;
 
 public class RequirementDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
-    public Vector validated, ignored;
+    
+	public Vector<Requirement> validated, ignored;
     
     public  RequirementDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
@@ -149,14 +149,14 @@ public class RequirementDiagramPanel extends TDiagramPanel implements TDPWithAtt
    }*/
     
     public int nbOfVerifyStartingAt(TGComponent tgc) {
-        ListIterator iterator = getComponentList().listIterator();
-        TGComponent tgc1, tgc2;
+        Iterator<TGComponent> iterator = getComponentList().listIterator();
+        TGComponent tgc1;//, tgc2;
         TGConnectingPoint p;
         
         int cpt = 0;
         
         while(iterator.hasNext()) {
-            tgc1 = (TGComponent)(iterator.next());
+            tgc1 = iterator.next();
             if (tgc1 instanceof TGConnectorVerify) {
                 p = ((TGConnectorVerify)(tgc1)).getTGConnectingPointP1();
                 if (tgc.belongsToMeOrSon(p) != null) {
@@ -172,10 +172,11 @@ public class RequirementDiagramPanel extends TDiagramPanel implements TDPWithAtt
 		LinkedList<TGComponent> list = new LinkedList<TGComponent>();
 		TGComponent tgc;
 		
-		ListIterator iterator = getComponentList().listIterator();
+		Iterator<TGComponent> iterator = getComponentList().listIterator();
 		
 		while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof Requirement) {
 				list.add(tgc);
 			}
@@ -186,12 +187,13 @@ public class RequirementDiagramPanel extends TDiagramPanel implements TDPWithAtt
 	}
     
     public boolean isLinkedByVerifyTo(TGComponent tgc1, TGComponent tgc2) {
-        ListIterator iterator = getComponentList().listIterator();
+        Iterator<TGComponent> iterator = getComponentList().listIterator();
         TGComponent tgc;
         TGConnectingPoint p1, p2;
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TGConnectorVerify) {
                 p1 = ((TGConnectorVerify)(tgc)).getTGConnectingPointP1();
                 p2 = ((TGConnectorVerify)(tgc)).getTGConnectingPointP2();

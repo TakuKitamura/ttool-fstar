@@ -129,7 +129,7 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
     
     public void recalculateSize() {
         //System.out.println("Recalculate size of " + this);
-        int i, j;
+        int i;//, j;
      
         for(i=0; i<nbInternalTGComponent; i++) {
             tgcomponent[i].calculateMyDesiredSize();
@@ -167,13 +167,13 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
         return minDesiredWidth;
     }
     
-    
-    private int calculateDesiredWidth() {
-        int w = Math.max(minDesiredWidth, tgcomponent[0].getMinDesiredWidth());
-        w = Math.max(w, tgcomponent[1].getMinDesiredWidth());
-        return w;
-    }
-    
+//    
+//    private int calculateDesiredWidth() {
+//        int w = Math.max(minDesiredWidth, tgcomponent[0].getMinDesiredWidth());
+//        w = Math.max(w, tgcomponent[1].getMinDesiredWidth());
+//        return w;
+//    }
+//    
     
     public void internalDrawing(Graphics g) {
         if (!tdp.isScaled()) {
@@ -182,7 +182,7 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
         
         //System.out.println("My width = " + width + " this=" + this);
         Font f = g.getFont();
-        int size = f.getSize();
+      //  int size = f.getSize();
         g.drawRect(x, y, width, height);
         g.setColor(Color.yellow);
         g.fillRect(x+1, y+1, width-1, height-1);
@@ -293,11 +293,11 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
         return TGComponentManager.TCD_TCLASS;
     }
     
-    public LinkedList<TAttribute> getAttributes(){
+    public java.util.List<TAttribute> getAttributes(){
         return ((TGCAttributeBox)(tgcomponent[0])).getAttributeList();
     }
     
-    public LinkedList<TAttribute> getGates() {
+    public java.util.List<TAttribute> getGates() {
         return ((TGCAttributeBox)(tgcomponent[1])).getAttributeList();
     }
     
@@ -310,19 +310,19 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
         ((TGCAttributeBox)(tgcomponent[0])).setAttributeList(attributes);
     }
     
-    public void setGates(LinkedList<TAttribute> gates) {
+    public void setGates(java.util.List<TAttribute> gates) {
         ((TGCAttributeBox)(tgcomponent[1])).setAttributeList(gates);
     }
     
     // builds a new LinkedList
-    public LinkedList<TAttribute> gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl) {
-        LinkedList<TAttribute> v = (LinkedList<TAttribute>)(getGates().clone());
+    public java.util.List<TAttribute> gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl) {
+    	java.util.List<TAttribute> v = new LinkedList<TAttribute>( getGates() );//.clone());
         tdp.removeSynchronizedGates(v, this, tcdsgl);
         return v;
     }
     
     public TAttribute getGateById(String name) {
-        LinkedList<TAttribute> list = ((TGCAttributeBox)(tgcomponent[1])).getAttributeList();
+    	java.util.List<TAttribute> list = ((TGCAttributeBox)(tgcomponent[1])).getAttributeList();
         for (TAttribute ta: list)
             if (ta.getId().equals(name))
                 return ta;

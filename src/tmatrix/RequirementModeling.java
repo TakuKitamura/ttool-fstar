@@ -62,16 +62,16 @@ public class RequirementModeling {
     protected static final String UNKNOWN_DIAGRAM_NAME = "is an unknown diagram";
     protected static final String BAD_FORMATTING = "Bad formal description";
     
-    private LinkedList matrix;
-    private LinkedList<CheckingError> errors, warnings;
+    private List<Requirements> matrix;
+    private List<CheckingError> errors, warnings;
     
     private MainGUI mgui;
     
     // reqs should contain only formal requirement
-    public RequirementModeling(Vector reqs, RequirementDiagramPanel rdp, MainGUI _mgui) {
+    public RequirementModeling(Vector<Requirement> reqs, RequirementDiagramPanel rdp, MainGUI _mgui) {
         mgui = _mgui;
         
-        matrix = new LinkedList();
+        matrix = new LinkedList<Requirements>();
         errors = new LinkedList<CheckingError> ();
         warnings = new LinkedList<CheckingError> ();
         
@@ -82,19 +82,19 @@ public class RequirementModeling {
     }
     
     
-    public void generateFirstMatrix(Vector reqs, RequirementDiagramPanel rdp) {
+    public void generateFirstMatrix(Vector<Requirement> reqs, RequirementDiagramPanel rdp) {
         Requirement r;
         int i, j;
         CheckingError ce;
         Requirements rs;
-        ListIterator iterator;
+        Iterator<TGComponent> iterator;
         TGComponent tgc;
         int cpt;
         String tab[];
         RequirementObserver ro;
         
         for(i=0; i<reqs.size(); i++) {
-            r = (Requirement)(reqs.elementAt(i));
+            r = reqs.elementAt(i);
             if (!(r.isFormal())) {
                 ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, NOT_FORMAL);
                 ce.setTDiagramPanel(rdp);
@@ -105,7 +105,7 @@ public class RequirementModeling {
                 // Search for all observers linked only to this formal requirement with a "verify" semantics
                 iterator = rdp.getComponentList().listIterator();
                 while(iterator.hasNext()) {
-                    tgc = (TGComponent)(iterator.next());
+                    tgc = iterator.next();
                     if (tgc instanceof RequirementObserver) {
                         ro = (RequirementObserver)tgc;
                         cpt = rdp.nbOfVerifyStartingAt(tgc);
@@ -139,7 +139,7 @@ public class RequirementModeling {
     // For each (req,obs,diagram), a TURTLE modeling is generated
     public void generateTURTLEModelings() {
         Requirements reqs;
-        ListIterator iterator = matrix.listIterator();
+        Iterator<Requirements> iterator = matrix.listIterator();
         TURTLEPanel tp;
         CheckingError ce;
         //int sizee;
@@ -171,7 +171,7 @@ public class RequirementModeling {
     // RT-LOTOS is used by default
     public void generateFormalSpecification() {
         Requirements reqs;
-        ListIterator iterator = matrix.listIterator();
+        Iterator<Requirements> iterator = matrix.listIterator();
         //TURTLEPanel tp;
         //CheckingError ce;
         
@@ -186,15 +186,15 @@ public class RequirementModeling {
         }
     }
     
-    public LinkedList<CheckingError> getCheckingErrors() {
+    public List<CheckingError> getCheckingErrors() {
         return errors;
     }
     
-    public LinkedList<CheckingError> getWarnings() {
+    public List<CheckingError> getWarnings() {
         return warnings;
     }
     
-    public LinkedList getMatrix() {
+    public List<Requirements> getMatrix() {
         return matrix;
     }
     
@@ -212,11 +212,11 @@ public class RequirementModeling {
     
     public String toString() {
         Requirements reqs;
-        ListIterator iterator = matrix.listIterator();
+        Iterator<Requirements> iterator = matrix.listIterator();
         String ret = "";
         
         while(iterator.hasNext()) {
-            reqs = (Requirements)(iterator.next());
+            reqs = iterator.next();
             ret += reqs.toString() + "\n";
         }
         
@@ -225,7 +225,7 @@ public class RequirementModeling {
     
     private void buildTURTLEModelingFromTURTLEPanel(Requirements reqs, TURTLEPanel tp) {
         TURTLEModeling tm;
-        CorrespondanceTGElement listE;
+    //    CorrespondanceTGElement listE;
         LinkedList<CheckingError> errorstmp;
         CheckingError ce;
         
@@ -274,7 +274,7 @@ public class RequirementModeling {
             
             //tm.print();
             
-            listE = dpt.getCorrespondanceTGElement();
+       //     listE = dpt.getCorrespondanceTGElement();
             errors = dpt.getErrors();
             if ((errors != null) && (errors.size()>0)) {
                 //System.out.println("Errors 1");
@@ -465,7 +465,7 @@ public class RequirementModeling {
     
     public boolean analysisTime(Requirements reqs, String time) {
         try {
-            int i = Integer.decode(time).intValue();
+            /*int i =*/ Integer.decode(time).intValue();
         } catch (NumberFormatException nfe) {
             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, reqs.req.getValue() + ", value: " + time + " " + "is not a correct time value");
             ce.setTDiagramPanel(reqs.req.getTDiagramPanel());
@@ -895,7 +895,7 @@ public class RequirementModeling {
             System.out.println("Criticality: MEDIUM");
             ADStop adstop; 
             ADParallel adpar = new ADParallel();
-            Vector tclasses = new Vector();
+            Vector<TClass> tclasses = new Vector<TClass>();
             Gate g, go;
             TClass to;
             ADActionStateWithGate action;

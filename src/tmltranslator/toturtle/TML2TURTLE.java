@@ -59,7 +59,7 @@ public class TML2TURTLE {
 
     private static String nameChannelNBRNBW = "ChannelNBRNBW__";
     private static String nameChannelBRNBW = "ChannelBRNBW__";
-    private static String nameChannelBRBW = "ChannelBRBW__";
+  //  private static String nameChannelBRBW = "ChannelBRBW__";
 
     private static String nameEvent = "Event__";
 
@@ -67,7 +67,7 @@ public class TML2TURTLE {
 
     private TMLModeling tmlmodeling;
     private TURTLEModeling tm;
-    private Vector checkingErrors;
+    private Vector<CheckingError> checkingErrors;
 
     private int nbClass;
 
@@ -76,7 +76,7 @@ public class TML2TURTLE {
         tmlmodeling = _tmlmodeling;
     }
 
-    public Vector getCheckingErrors() {
+    public Vector<CheckingError> getCheckingErrors() {
         return checkingErrors;
     }
 
@@ -86,7 +86,7 @@ public class TML2TURTLE {
         tmlmodeling.removeAllRandomSequences();
 
         tm = new TURTLEModeling();
-        checkingErrors = new Vector();
+        checkingErrors = new Vector<CheckingError>();
 
         // Create TClasses -> same name as TML tasks
         nbClass = 0;
@@ -106,12 +106,12 @@ public class TML2TURTLE {
     }
 
     private void createTClasses() {
-        ListIterator iterator = tmlmodeling.getListIteratorTasks();
+        Iterator<TMLTask> iterator = tmlmodeling.getListIteratorTasks();
         TMLTask task;
         TClass tcl;
 
         while(iterator.hasNext()) {
-            task = (TMLTask)(iterator.next());
+            task = iterator.next();
 
             tcl = new TClass(task.getName(), true);
             tm.addTClass(tcl);
@@ -122,7 +122,7 @@ public class TML2TURTLE {
     }
 
     private void createChannelTClasses() {
-        ListIterator iterator = tmlmodeling.getListIteratorChannels();
+        Iterator<TMLChannel> iterator = tmlmodeling.getListIteratorChannels();
         TMLChannel channel;
         TClassChannelBRNBW tch1;
         TClassChannelNBRNBW tch2;
@@ -130,7 +130,7 @@ public class TML2TURTLE {
         String name;
 
         while(iterator.hasNext()) {
-            channel = (TMLChannel)(iterator.next());
+            channel = iterator.next();
             name = getChannelString(channel);
             switch(channel.getType()) {
             case TMLChannel.BRNBW:
@@ -164,14 +164,14 @@ public class TML2TURTLE {
     }
 
     private void createEventTClasses() {
-        ListIterator iterator = tmlmodeling.getListIteratorEvents();
+        Iterator<TMLEvent> iterator = tmlmodeling.getListIteratorEvents();
         TMLEvent event;
         TClassEventInfinite tce;
         TClassEventFinite tcef;
         TClassEventFiniteBlocking tcefb;
 
         while(iterator.hasNext()) {
-            event = (TMLEvent)(iterator.next());
+            event = iterator.next();
             TraceManager.addDev("Making event");
             if (event.isInfinite()) {
                 TraceManager.addDev("Making event infinite");
@@ -208,18 +208,18 @@ public class TML2TURTLE {
     }
 
     private void createRequestTClasses() {
-        ListIterator iterator = tmlmodeling.getListIteratorRequests();
+        Iterator<TMLRequest> iterator = tmlmodeling.getListIteratorRequests();
         TMLRequest request;
         TClassRequest tcr;
-        ListIterator ite;
+        Iterator<TMLTask> ite;
         TMLTask task;
 
         while(iterator.hasNext()) {
-            request = (TMLRequest)(iterator.next());
+            request = iterator.next();
             tcr = new TClassRequest(nameRequest + request.getName(), request.getName(), request.getNbOfParams());
             ite = request.getOriginTasks().listIterator();
             while(ite.hasNext()) {
-                task = (TMLTask)(ite.next());
+                task = ite.next();
                 tcr.addWriteGate(task.getName());
             }
             tcr.addReadGate(); // Assume that request is going to only one class
@@ -241,8 +241,8 @@ public class TML2TURTLE {
 
     private void createADOfTClass(TClass tclass, TMLTask task) {
         // For each element, make a translation
-        Vector newElements = new Vector(); // elements of AD
-        Vector baseElements = new Vector(); // elements of basic task
+        Vector<ADComponent> newElements = new Vector<ADComponent>(); // elements of AD
+        Vector<TMLActivityElement> baseElements = new Vector<TMLActivityElement>(); // elements of basic task
 
         //System.out.println("Making AD of " + tclass.getName());
         translateAD(newElements, baseElements, tclass, task, task.getActivityDiagram().getFirst(), null, null);
@@ -258,7 +258,7 @@ public class TML2TURTLE {
     }
 
     /* ADJunction adjunc represents the junction to which the activity should be branched when it terminates */
-    private ADComponent translateAD(Vector newElements, Vector baseElements, TClass tclass, TMLTask task, TMLActivityElement tmle, ADComponent previous, ADJunction adjunc) {
+    private ADComponent translateAD(Vector<ADComponent> newElements, Vector<TMLActivityElement> baseElements, TClass tclass, TMLTask task, TMLActivityElement tmle, ADComponent previous, ADJunction adjunc) {
         //ADEmpty empty;
         ADActionStateWithParam adacparam, adacparam1, adacparam2, adacparam3, adacparam4;
         ADChoice adchoice;
@@ -300,7 +300,7 @@ public class TML2TURTLE {
             if (tmle instanceof TMLStartState) {
                 adc = tclass.getActivityDiagram().getStartState();
                 baseElements.add(tmle);
-                newElements.add(adc);
+                newElements.add( adc );
                 adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adc, adjunc);
                 adc.addNext(adc1);
                 return adc;
@@ -1072,13 +1072,13 @@ public class TML2TURTLE {
     }
 
     private void setGatesEvt(TClass tclass, TMLTask task) {
-        ListIterator iterator = tmlmodeling.getListIteratorEvents();
+        Iterator<TMLEvent> iterator = tmlmodeling.getListIteratorEvents();
         TMLEvent event;
         Gate g, g1;
         TClass tcl;
 
         while(iterator.hasNext()) {
-            event = (TMLEvent)(iterator.next());
+            event = iterator.next();
 
             if (task == event.getOriginTask()) {
                 g = tclass.addNewGateIfApplicable("notify__" + event.getName());
@@ -1104,14 +1104,14 @@ public class TML2TURTLE {
     }
 
     private void setGatesRequest(TClass tclass, TMLTask task) {
-        ListIterator iterator = tmlmodeling.getListIteratorRequests();
+        Iterator<TMLRequest> iterator = tmlmodeling.getListIteratorRequests();
         TMLRequest request;
         Gate g, g1;
         TClass tcl;
         int index;
 
         while(iterator.hasNext()) {
-            request = (TMLRequest)(iterator.next());
+            request = iterator.next();
             g = tclass.addNewGateIfApplicable("sendReq__" + request.getName() + "__" + task.getName());
             tcl = tm.getTClassWithName(nameRequest + request.getName());
             //g1 = tcl.getGateByName("sendReq");
@@ -1126,7 +1126,7 @@ public class TML2TURTLE {
     }
 
     private void setGatesChannel(TClass tclass, TMLTask task) {
-        ListIterator iterator = tmlmodeling.getListIteratorChannels();
+        Iterator<TMLChannel> iterator = tmlmodeling.getListIteratorChannels();
         TMLChannel channel;
         Gate g, g1;
         TClass tcl;
@@ -1134,7 +1134,7 @@ public class TML2TURTLE {
         //String name;
 
         while(iterator.hasNext()) {
-            channel = (TMLChannel)(iterator.next());
+            channel = iterator.next();
 
             if (task == channel.getOriginTask()) {
                 g = tclass.addNewGateIfApplicable("wr__" + channel.getName());
@@ -1153,14 +1153,13 @@ public class TML2TURTLE {
         }
     }
 
-
-
-
-    private ADComponent endOfActivity(Vector newElements, Vector baseElements, TClass tclass, ADJunction adjunc) {
+    private ADComponent endOfActivity(Vector<ADComponent> newElements, Vector<TMLActivityElement> baseElements, TClass tclass, ADJunction adjunc) {
         if (adjunc == null) {
             ADStop adstop = new ADStop();
             newElements.add(adstop);
-            baseElements.add(adstop);
+            
+            // DB Issue #17: This is not a type that can be added to this list
+            //baseElements.add(adstop);
             tclass.getActivityDiagram().add(adstop);
             return adstop;
         } else {
@@ -1196,12 +1195,12 @@ public class TML2TURTLE {
     }
 
     private void makeAttributes(TMLTask task, TClass tcl) {
-        ListIterator iterator = task.getAttributes().listIterator();
+        Iterator<TMLAttribute> iterator = task.getAttributes().listIterator();
         TMLAttribute tmla;
         //Param para;
 
         while(iterator.hasNext()) {
-            tmla = (TMLAttribute)(iterator.next());
+            tmla = iterator.next();
             switch (tmla.type.getType()) {
             case TMLType.NATURAL:
                 //System.out.println("Adding nat attribute:" + modifyString(tmla.name));

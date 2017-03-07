@@ -59,6 +59,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JMenuItem;
@@ -101,8 +102,6 @@ import ui.tmlcompd.TMLCRecordComponent;
 import ui.window.JDialogCode;
 import ui.window.JDialogNote;
 import ui.window.JDialogSearchBox;
-
-
 
 public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
@@ -167,7 +166,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected final int increment = 500;
 
     private double zoom = 1.0;
-    private boolean zoomed = false;
+ //   private boolean zoomed = false;
 
     private boolean draw;
 
@@ -191,7 +190,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected int y1;
     protected int x2;
     protected int y2;
-    protected Vector listPoint;
+    protected Vector<Point> listPoint;
     protected TGConnectingPoint p1, p2;
     protected int type;
 
@@ -535,11 +534,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         int s = listPoint.size();
         Point p3, p4;
         if (s > 0) {
-            p3 = (Point)(listPoint.elementAt(0));
+            p3 = listPoint.elementAt(0);
             g.drawLine(p1.getX(), p1.getY(), p3.x, p3.y);
             for (int i=0; i< s - 1; i++) {
-                p3 = (Point)(listPoint.elementAt(i));
-                p4 = (Point)(listPoint.elementAt(i+1));
+                p3 = listPoint.elementAt(i);
+                p4 = listPoint.elementAt(i+1);
                 g.drawLine(p3.x, p3.y, p4.x, p4.y);
             }
         }
@@ -566,7 +565,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
       }*/
 
     public void loadFromXML(String s) {
-        this.componentList = new LinkedList();
+        this.componentList = new LinkedList<TGComponent>();
 
         mode = NORMAL;
     }
@@ -616,7 +615,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         StringBuffer s;
 
         //Added by Solange to see the components in the list
-        LinkedList<TGComponent> ruteoList=this.componentList;
+    //    LinkedList<TGComponent> ruteoList = this.componentList;
         //
 
         for (TGComponent tgc: this.componentList)
@@ -889,7 +888,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public boolean highlightInAndFreeConnectingPoint(int x, int y, int type) {
         TGConnectingPoint cp;
-        int state;
+     //   int state;
         boolean b = false;
         boolean pointedElementFound = false;
         selectedConnectingPoint = null;
@@ -988,7 +987,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
-    public LinkedList<TGComponent> getComponentList() {
+    public List<TGComponent> getComponentList() {
         return this.componentList;
     }
 
@@ -1005,7 +1004,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     // Adding connector
     public void addingTGConnector() {
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         p1 = getSelectedTGConnectingPoint();
         x1 = p1.getX(); y1 = p1.getY();
         selectedConnectingPoint.setFree(false);
@@ -1616,10 +1615,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         if (e.getSource() == setInternalComment) {
             JDialogNote jdn = new JDialogNote(mgui.getFrame(), "Setting an internal comment", componentPopup.getInternalComment());
             GraphicLib.centerOnParent(jdn);
-            jdn.show(); // blocked until dialog has been closed
+            jdn.setVisible( true ); // blocked until dialog has been closed
             componentPopup.setInternalComment(jdn.getText());
             mgui.changeMade(this, CHANGE_VALUE_COMPONENT);
             repaint();
+            
             return;
         }
 
@@ -2286,7 +2286,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public TGConnector getNextTGConnector(TGComponent tgc, int index) {
-        TGConnectingPoint pt1, pt2;
+        TGConnectingPoint pt1;//, pt2;
 
         pt1 = tgc.getNextTGConnectingPoint(index);
 
@@ -2316,7 +2316,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return null;
     }
 
-    public static TGComponent getComponentToWhichBelongs (LinkedList<TGComponent> components, TGConnectingPoint p) {
+    public static TGComponent getComponentToWhichBelongs ( List<TGComponent> components, TGConnectingPoint p) {
         for (TGComponent tgc1: components) {
             TGComponent tgc2 = tgc1.belongsToMeOrSon(p);
             if (tgc2 != null)
@@ -2819,7 +2819,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return v;
     }
 
-    public void removeSynchronizedGates(LinkedList<TAttribute> v, TClassInterface t, TCDSynchroGateList tcdsgl ) {
+    public void removeSynchronizedGates(List<TAttribute> v, TClassInterface t, TCDSynchroGateList tcdsgl ) {
         for (TGComponent tgc: this.componentList)
             if (tgc instanceof TCDCompositionOperatorWithSynchro) {
                 TCDCompositionOperatorWithSynchro tgso = (TCDCompositionOperatorWithSynchro)tgc;
@@ -3077,9 +3077,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         //TraceManager.addDev("Autoconnect");
 
-        Vector listPoint = new Vector();
+        Vector<Point> listPoint = new Vector<Point>();
 
-        Vector v = new Vector();
+       // Vector v = new Vector();
 
         int distance = 100;
         TGConnectingPoint found = null;

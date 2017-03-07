@@ -46,17 +46,9 @@
 
 package ui.avatardd;
 
-import java.awt.*;
 import java.util.*;
-import javax.swing.*;
 
-import org.w3c.dom.*;
-
-import myutil.*;
 import ui.*;
-import ui.window.*;
-
-import tmltranslator.*;
 
 
 public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, WithAttributes {
@@ -146,11 +138,12 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
     }
 
 
-    public Vector getArtifactList() {
-        Vector v = new Vector();
+    public Vector<ADDChannelArtifact> getArtifactList() {
+        Vector<ADDChannelArtifact> v = new Vector<ADDChannelArtifact>();
+        
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof ADDChannelArtifact) {
-                v.add(tgcomponent[i]);
+                v.add( (ADDChannelArtifact) tgcomponent[i] );
             }
         }
         return v;

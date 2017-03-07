@@ -144,7 +144,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(asmdp);
         asmdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
         toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         panels.add(asmdp);
@@ -171,7 +171,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(abdp);
         abdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(toolBarAvatarBD, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab("Design", IconManager.imgic80, toolBarPanel, "Opens the Design");
@@ -220,9 +220,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
         TGComponent tgc;
 
         for(int i=0; i<panels.size(); i++) {
-            ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+            Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
             while(iterator.hasNext()) {
-                tgc = (TGComponent)(iterator.next());
+                tgc = iterator.next();
                 tgc.setAVATARMet(0);
                 tgc.setInternalAvatarMet(0);
 
@@ -242,9 +242,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
         for(int i=0; i<panels.size(); i++) {
             tdp = (TDiagramPanel)(panels.get(i));
             if (tdp instanceof AvatarSMDPanel) {
-                ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+                Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
                 while(iterator.hasNext()) {
-                    tgc = (TGComponent)(iterator.next());
+                    tgc = iterator.next();
                     tgc.getAllCheckableInvariant(list);
                 }
             }
@@ -259,9 +259,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
         for(int i=0; i<panels.size(); i++) {
             tdp = (TDiagramPanel)(panels.get(i));
             if (tdp instanceof AvatarSMDPanel) {
-                ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+                Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
                 while(iterator.hasNext()) {
-                    tgc = (TGComponent)(iterator.next());
+                    tgc = iterator.next();
                     tgctmp = tgc.hasCheckableMasterMutex();
                     if (tgctmp != null) {
                         //TraceManager.addDev("Found element with master mutex: " + tgctmp);
@@ -279,9 +279,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
         for(int i=0; i<panels.size(); i++) {
             tdp = (TDiagramPanel)(panels.get(i));
             if (tdp instanceof AvatarSMDPanel) {
-                ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+                Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
                 while(iterator.hasNext()) {
-                    tgc = (TGComponent)(iterator.next());
+                    tgc = iterator.next();
                     tgc.removeAllMutualExclusionWithMasterMutex();
                 }
             }
@@ -293,9 +293,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
         for(int i=0; i<panels.size(); i++) {
             tdp = (TDiagramPanel)(panels.get(i));
             if (tdp instanceof AvatarSMDPanel) {
-                ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+                Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
                 while(iterator.hasNext()) {
-                    tgc = (TGComponent)(iterator.next());
+                    tgc = iterator.next();
                     if (tgc instanceof AvatarSMDState) {
                         ((AvatarSMDState)tgc).reinitMutualExclusionStates();
                     }
@@ -336,7 +336,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
     }
 
 
-    public void modelBacktracingUppaal(HashMap verifMap){
+    public void modelBacktracingUppaal( Map<String, Integer> verifMap){
         for (Object ob: abdp.getComponentList()) {
             if (ob instanceof AvatarBDSafetyPragma) {
                 AvatarBDSafetyPragma pragma = (AvatarBDSafetyPragma) ob;
@@ -397,7 +397,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         String block, state;
         int index;
         int i;
-        ListIterator iterator;
+        Iterator<TGComponent> iterator;
         TGComponent tgc;
 
         // Reachable states
@@ -415,7 +415,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
                         if ((tdp instanceof AvatarSMDPanel) && (tdp.getName().compareTo(block) == 0)){
                             iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
                             while(iterator.hasNext()) {
-                                tgc = (TGComponent)(iterator.next());
+                                tgc = iterator.next();
                                 if (tgc instanceof AvatarSMDState) {
                                     ((AvatarSMDState)tgc).setSecurityInfo(AvatarSMDState.REACHABLE, state);
                                 }

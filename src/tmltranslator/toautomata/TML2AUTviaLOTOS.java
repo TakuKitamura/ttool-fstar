@@ -59,10 +59,10 @@ public class TML2AUTviaLOTOS {
     
     private TMLModeling tmlmodeling;
     private TURTLEModeling tm;
-    private LinkedList automatas;
-    private LinkedList specs; /* name, then spec, then name, then spec. All specs are in LOTOS !*/
+    private List<Automata> automatas;
+    private List<String> specs; /* name, then spec, then name, then spec. All specs are in LOTOS !*/
     
-    private boolean debug;
+   // private boolean debug;
     
     public static String FC2_EXTENSION = "fc2";
     public static String AUT_EXTENSION = "aut";
@@ -78,40 +78,41 @@ public class TML2AUTviaLOTOS {
     }
 
     // Returns a list of all file names ..
-    public LinkedList saveInFiles(String path) throws FileException {
+    public List<String> saveInFiles(String path) throws FileException {
         //print();
         
-        ListIterator iterator = automatas.listIterator();
+        Iterator<Automata> iterator = automatas.listIterator();
         Automata aut;
         String name;
-        LinkedList ll = new LinkedList();
+        List<String> ll = new LinkedList<String>();
         
         while(iterator.hasNext()) {
-            aut = (Automata)(iterator.next());
+            aut = iterator.next();
             name = aut.getName() + "." + AUT_EXTENSION;
             ll.add(name);
             System.out.println("File: " + path + aut.getName() + "." + AUT_EXTENSION);
             FileUtils.saveFile(path + aut.getName() + "." + AUT_EXTENSION, aut.toAUT());
         }
+        
         return ll;
         
     }
     
     public void print() {
         // Print each automatas
-        ListIterator iterator = automatas.listIterator();
+        Iterator<Automata> iterator = automatas.listIterator();
         Automata aut;
         
         while(iterator.hasNext()) {
-            aut = (Automata)(iterator.next());
+            aut = iterator.next();
             System.out.println("Automata: " + aut.getName());
             System.out.println(aut.toAUT());
         }
     }
     
     public void generateLOTOS(boolean _debug) {
-        debug = _debug;
-        specs = new LinkedList();
+      //  debug = _debug;
+        specs = new LinkedList<String>();
         
         // Generate one LOTOS spec per TMLTask
         generateLOTOSTMLTasks();
@@ -119,17 +120,18 @@ public class TML2AUTviaLOTOS {
     }
     
     public void generateLOTOSTMLTasks() {
-      TMLTask task;
-        ListIterator iterator = tmlmodeling.getTasks().listIterator();
+    	TMLTask task;
+        Iterator<TMLTask> iterator = tmlmodeling.getTasks().listIterator();
+        
         while(iterator.hasNext()) {
-          task = (TMLTask)(iterator.next());
+          task = iterator.next();
           specs.add(task.getName());
           specs.add(generateLOTOS(task));
         }
     }
     
-    public LinkedList getSpecs() {
-           return specs;
+    public List<String> getSpecs() {
+    	return specs;
     }
 
     public String generateLOTOS(TMLTask task) {

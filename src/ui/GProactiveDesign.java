@@ -50,7 +50,6 @@ package ui;
 import java.util.*;
 
 import fr.inria.oasis.vercors.cttool.model.Attribute;
-import fr.inria.oasis.vercors.cttool.model.AttributeImpl;
 import fr.inria.oasis.vercors.cttool.model.Component;
 import fr.inria.oasis.vercors.cttool.model.ComponentImpl;
 import fr.inria.oasis.vercors.cttool.model.InPort;
@@ -70,12 +69,12 @@ import ui.prosmd.util.CorrespondanceSMDManager;
 public class GProactiveDesign  {
     private TURTLEModeling tm;
     private ProactiveDesignPanel pdp;
-    private LinkedList portsList=new LinkedList(); //list of ProCSDPort 
-    private LinkedList connectorsList =new LinkedList(); //list of TGConnectorProCSD
-    private LinkedList connectorsPortInterfacesList=new LinkedList();
-    private LinkedList interfacesList =new LinkedList(); //list of ProCSDInterface
-    private LinkedList ProCSDComponentsList=new LinkedList();
-    private LinkedList<CheckingError> checkingErrors=new LinkedList<CheckingError> (); 
+    private List<ProCSDPort> portsList=new LinkedList<ProCSDPort>(); //list of ProCSDPort 
+    private List<TGConnectorProCSD> connectorsList =new LinkedList<TGConnectorProCSD>(); //list of TGConnectorProCSD
+    private List<TGConnectorPortInterface> connectorsPortInterfacesList=new LinkedList<TGConnectorPortInterface>();
+    private List<ProCSDInterface> interfacesList =new LinkedList<ProCSDInterface>(); //list of ProCSDInterface
+    private List<ProCSDComponent> proCSDComponentsList=new LinkedList<ProCSDComponent>();
+    private List<CheckingError> checkingErrors=new LinkedList<CheckingError> (); 
   //  private CorrespondanceTGElement listE;
     private CorrespondanceSMDManager corespManager;
     private boolean buildErrors;
@@ -95,12 +94,12 @@ public class GProactiveDesign  {
     private void init()
     {   checkingErrors = new LinkedList<CheckingError> ();
       //  listE = new CorrespondanceTGElement();
-    	portsList=new LinkedList(); //list of ProCSDPort 
-        connectorsList =new LinkedList(); //list of TGConnectorProCSD
-        interfacesList =new LinkedList(); //list of ProCSDInterface
-        ProCSDComponentsList=new LinkedList();
+    	portsList=new LinkedList<ProCSDPort>(); //list of ProCSDPort 
+        connectorsList =new LinkedList<TGConnectorProCSD>(); //list of TGConnectorProCSD
+        interfacesList =new LinkedList<ProCSDInterface>(); //list of ProCSDInterface
+        proCSDComponentsList=new LinkedList<ProCSDComponent>();
     	ProactiveCSDPanel csd = (ProactiveCSDPanel)(pdp.panels.elementAt(0));
-     	LinkedList list = csd.getComponentList();
+     	List<TGComponent> list = csd.getComponentList();
      	boolean cyclefound=false;
      	  for (int i=0;i<list.size();i++)
         {
@@ -146,10 +145,10 @@ public class GProactiveDesign  {
     	
     	
      //we add attributes
-      LinkedList attribs=comp.getMyAttributes();
+      List<TAttribute> attribs=comp.getMyAttributes();
 	  for (int at=0;at<attribs.size();at++)
 		{
-			TAttribute a=(TAttribute)attribs.get(at);
+			TAttribute a= attribs.get(at);
 			Attribute attrib=new fr.inria.oasis.vercors.cttool.model.AttributeImpl(a.getId(),a.getType(),a.getAccess(),a.getInitialValue());		
 			modelComp.addAttribute(attrib);			
 		}
@@ -160,7 +159,7 @@ public class GProactiveDesign  {
 	  //are not already
 	  //created
 	  
-	  Vector portsList=comp.getPortsList();
+	  Vector<ProCSDPort> portsList=comp.getPortsList();
 	  for (int k=0;k<portsList.size();k++)
 	  {
 		  ProCSDPort p =(ProCSDPort)portsList.get(k);
@@ -177,11 +176,11 @@ public class GProactiveDesign  {
 		  {
 			  ProCSDInterface proI=p.getMyInterface();
 			  Interface modelI=new InterfaceImpl(proI.getValue(),proI.isMandatory());
-			  LinkedList proMsgs=proI.getMyMessages();
+			  List<TAttribute> proMsgs=proI.getMyMessages();
 			  
 			  for(int i=0; i<proMsgs.size(); i++) 
 			  {
-	               TAttribute a = (TAttribute)(proMsgs.get(i));
+	               TAttribute a = proMsgs.get(i);
 	               Message m=new MessageImpl(a.getId());
 	               modelI.addMessage(m);	            		   
 			  }
@@ -194,10 +193,10 @@ public class GProactiveDesign  {
 	  modelComp.setBehaviour(comp.getMySMD());
 	  
 	  
-    	Vector subComps=comp.getComponentList();
+    	Vector<ProCSDComponent> subComps=comp.getComponentList();
 		for (int k=0;k<subComps.size();k++)
 		{
-			ProCSDComponent subComp=(ProCSDComponent)subComps.get(k);
+			ProCSDComponent subComp= subComps.get(k);
 			Component sc=createModelComp(subComp);
 			
 			
@@ -214,10 +213,10 @@ public class GProactiveDesign  {
     private Component initModel(ProactiveCSDPanel mainCsd) throws Exception
     {
     	Component mainAppComp=new ComponentImpl("Application");
-    	LinkedList comps = mainCsd.getComponentList();
+    	List<TGComponent> comps = mainCsd.getComponentList();
     	for (int k=0;k<comps.size();k++)
     	{
-    		TGComponent t=(TGComponent)comps.get(k);
+    		TGComponent t= comps.get(k);
     		if (t instanceof ProCSDComponent)
     		{
     			ProCSDComponent comp=(ProCSDComponent)t;
@@ -253,10 +252,10 @@ public class GProactiveDesign  {
     private void updatePortsBindingInModel(Component modelComp, ProCSDComponent proComp) throws Exception
     {
     	//we consider pairs of  (model Out Port, ProCSDOutPort)
-    	Vector ports=proComp.getPortsList();
+    	Vector<ProCSDPort> ports=proComp.getPortsList();
     	for (int k=0;k<ports.size();k++)
     	{
-    		ProCSDPort p=(ProCSDPort)ports.get(k);
+    		ProCSDPort p= ports.get(k);
     		if (p instanceof ProCSDOutPort)
     		{
     			ProCSDOutPort proPort=(ProCSDOutPort)p;
@@ -293,7 +292,7 @@ public class GProactiveDesign  {
     			if (proFromPort!=null)
     			{
     				Port modelFromPort=null;
-    				ProCSDComponent proFromPortFather =(ProCSDComponent)proFromPort.getFather();
+    				//ProCSDComponent proFromPortFather =(ProCSDComponent)proFromPort.getFather();
     				
     				String modelFromPortFatherName=proPort.getFromPort().getFather().getValue();
 					if (proFromPort!=proPort.getFromPort())
@@ -348,7 +347,8 @@ public class GProactiveDesign  {
     	
     	if (proComp.getThisCompDesign()!=null)
     		proComp=proComp.getThisCompDesign();
-    	Vector v=proComp.getComponentList();
+    	Vector<ProCSDComponent> v = proComp.getComponentList();
+    	
     	for (int k=0;k<v.size();k++)
     	{
     		ProCSDComponent proSubComp=(ProCSDComponent)v.get(k);
@@ -370,10 +370,10 @@ public class GProactiveDesign  {
    {
 	   //we consider pairs of components (Component c, ProCSDComponent pc) and update potrs bindings in 
 	   
-	  LinkedList comps = mainCsd.getComponentList();
+	   	List<TGComponent> comps = mainCsd.getComponentList();
    		for (int k=0;k<comps.size();k++)
    		{
-   			TGComponent t=(TGComponent)comps.get(k);
+   			TGComponent t= comps.get(k);
    			if (t instanceof ProCSDComponent)
    				{
    					ProCSDComponent proComp=(ProCSDComponent)t;
@@ -639,7 +639,7 @@ public class GProactiveDesign  {
     
     private boolean isPrimitive(ProCSDComponent comp)
     {
-    	LinkedList l=getSubComponents(comp,TGComponentManager.PROCSD_COMPONENT);
+    	List<TGComponent> l=getSubComponents(comp,TGComponentManager.PROCSD_COMPONENT);
     	if (l==null) return true;
     	if (l.size()==0) return true;
     	else return false;	
@@ -652,14 +652,14 @@ public class GProactiveDesign  {
      * @param tgc A component
      * @return selectedSubComps A LinkedList of subcomponents of the type
      */
-    private LinkedList getSubComponents(TGComponent tgc, int type)
+    private List<TGComponent> getSubComponents(TGComponent tgc, int type)
     {
     	if (!(tgc.getType()==TGComponentManager.PROCSD_COMPONENT)) return null;
-    	LinkedList subcompList=getSubComponents(tgc);
-    	LinkedList selectedSubComps=new LinkedList();
+    	List<TGComponent> subcompList=getSubComponents(tgc);
+    	List<TGComponent> selectedSubComps=new LinkedList<TGComponent>();
         for (int i=0;i<subcompList.size();i++)
         {
-        	TGComponent tmp=(TGComponent)subcompList.get(i);
+        	TGComponent tmp=subcompList.get(i);
         	if (tmp.getType()==type)
         		selectedSubComps.add(tmp);
         	
@@ -675,9 +675,9 @@ public class GProactiveDesign  {
      * @param tgc A component
      * @return subcompList A LinkedList of subcomponents
      */
-    private LinkedList getSubComponents(TGComponent tgc)
+    private List<TGComponent> getSubComponents(TGComponent tgc)
     {
-    	LinkedList subcompList=new LinkedList();
+    	List<TGComponent> subcompList=new LinkedList<TGComponent>();
     	int nb=tgc.getNbInternalTGComponent();
     	for (int j=0;j<nb;j++)
 		{
@@ -693,62 +693,62 @@ public class GProactiveDesign  {
      * @param tgc A component
      * @return portsList A LinkedList with ports of the component
      */
-    private LinkedList getPorts(TGComponent tgc)
-    {
-    	if (!(tgc.getType()==TGComponentManager.PROCSD_COMPONENT)) return null;
-    	LinkedList subcompList=getSubComponents(tgc);
-    	LinkedList portsList=new LinkedList();
-        for (int i=0;i<subcompList.size();i++)
-        {
-        	TGComponent tmp=(TGComponent)subcompList.get(i);
-            //Remove option delegate ports, by Solange
-        	if ((tmp.getType()==TGComponentManager.PROCSD_IN_PORT) || (tmp.getType()==TGComponentManager.PROCSD_OUT_PORT))// || ( tmp.getType()==TGComponentManager.PROCSD_DELEGATE_PORT))
-        		portsList.add(tmp);
-        }
-    	return portsList;
-    }
+//    private List<ProCSDPort> getPorts(TGComponent tgc)
+//    {
+//    	if (!(tgc.getType()==TGComponentManager.PROCSD_COMPONENT)) return null;
+//    	List<TGComponent> subcompList=getSubComponents(tgc);
+//    	List<ProCSDPort> portsList=new LinkedList<ProCSDPort>();
+//        for (int i=0;i<subcompList.size();i++)
+//        {
+//        	TGComponent tmp=subcompList.get(i);
+//            //Remove option delegate ports, by Solange
+//        	if ((tmp.getType()==TGComponentManager.PROCSD_IN_PORT) || (tmp.getType()==TGComponentManager.PROCSD_OUT_PORT))// || ( tmp.getType()==TGComponentManager.PROCSD_DELEGATE_PORT))
+//        		portsList.add( (ProCSDPort) tmp);
+//        }
+//    	return portsList;
+//    }
     
     /*
 	 * gets the port connected to the port in parameter via a TGConnector ProCSD if there is one, null if not
 	 * @param port A port
 	 * @return p1 (or p2) The connected port, or null if not connected 
 	 */
-    private ProCSDPort getConnectedProCSDPort(ProCSDPort port)
-    {
-         //Remove option delegate ports, by Solange
-    	//if (port.getType()==TGComponentManager.PROCSD_DELEGATE_PORT) return null;
-    	
-    	 //System.out.println("cherche un port pour le port " +port.getValue()); comented by Emil 
-    	
-    		TGConnectorProCSD myConnector=port.getTGConnector();
-    		
-    		if (myConnector==null)
-    		{
-                //Commented because is not always an error to be free, by Solange 
-    			//addCheckingError(CheckingError.STRUCTURE_ERROR,"We didn't find any connector for the port " +port.getValue());
-    			return null;
-    		}
-    		
-   // 		System.out.println("...... (ProCSDPort).. my connector is "+myConnector.toString());
-    	
-    		//ProCSDPort p1=myConnector.getMyPort1(portsList);
-    		ProCSDPort p1=myConnector.getMyPort1();
-            
-   /* 		if (p1!=null) System.out.println(p1.toString());
-    		else 
-    			System.out.println("NULL!!!!!!!!!");
-    */
-    		
-    		//System.out.println("......... my connector's Port1 is "+p1.toString());
-    		
-    				if ((p1!=null) && (!p1.equals(port))) return p1;
-    		 
-    		 ProCSDPort p2=myConnector.getMyPort2();
-    			
-    		 if ((p2!=null) && (!p2.equals(port))) return p2;
-    			
-    		return null;	
-    }
+//    private ProCSDPort getConnectedProCSDPort(ProCSDPort port)
+//    {
+//         //Remove option delegate ports, by Solange
+//    	//if (port.getType()==TGComponentManager.PROCSD_DELEGATE_PORT) return null;
+//    	
+//    	 //System.out.println("cherche un port pour le port " +port.getValue()); comented by Emil 
+//    	
+//    		TGConnectorProCSD myConnector=port.getTGConnector();
+//    		
+//    		if (myConnector==null)
+//    		{
+//                //Commented because is not always an error to be free, by Solange 
+//    			//addCheckingError(CheckingError.STRUCTURE_ERROR,"We didn't find any connector for the port " +port.getValue());
+//    			return null;
+//    		}
+//    		
+//   // 		System.out.println("...... (ProCSDPort).. my connector is "+myConnector.toString());
+//    	
+//    		//ProCSDPort p1=myConnector.getMyPort1(portsList);
+//    		ProCSDPort p1=myConnector.getMyPort1();
+//            
+//   /* 		if (p1!=null) System.out.println(p1.toString());
+//    		else 
+//    			System.out.println("NULL!!!!!!!!!");
+//    */
+//    		
+//    		//System.out.println("......... my connector's Port1 is "+p1.toString());
+//    		
+//    				if ((p1!=null) && (!p1.equals(port))) return p1;
+//    		 
+//    		 ProCSDPort p2=myConnector.getMyPort2();
+//    			
+//    		 if ((p2!=null) && (!p2.equals(port))) return p2;
+//    			
+//    		return null;	
+//    }
     
     //Added by Solange for the subcomponents
     /*
@@ -924,17 +924,17 @@ public class GProactiveDesign  {
    	
    	if (t.getType()==TGComponentManager.PROCSD_INTERFACE) 
    		{
-   		  interfacesList.add(t);
+   		  interfacesList.add( (ProCSDInterface) t);
    		}
    
    	if (t.getType()==TGComponentManager.CONNECTOR_PROCSD) 
    	  {
-   		connectorsList.add(t);
+   		connectorsList.add( (TGConnectorProCSD) t);
    	  }
    	
    	if (t.getType()==TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE) 
  	  {
- 		connectorsPortInterfacesList.add(t);
+ 		connectorsPortInterfacesList.add( (TGConnectorPortInterface) t);
  	  }
  	 	
    /*	
@@ -949,7 +949,7 @@ public class GProactiveDesign  {
 //   		return false;
 //   		else
    	{
-   		ProCSDComponentsList.add(t);
+   		proCSDComponentsList.add( (ProCSDComponent) t);
 	
 	
    		int nb=t.getNbInternalTGComponent();
@@ -989,23 +989,23 @@ public class GProactiveDesign  {
     	
     	if (t.getType()==TGComponentManager.PROCSD_INTERFACE) 
     		{
-    		  interfacesList.add(t);
+    		  interfacesList.add((ProCSDInterface) t);
     		}
     
     	if (t.getType()==TGComponentManager.CONNECTOR_PROCSD) 
     	  {
-    		connectorsList.add(t);
+    		connectorsList.add( (TGConnectorProCSD) t);
     	  }
     	
     	if (t.getType()==TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE) 
   	  {
-  		connectorsPortInterfacesList.add(t);
+  		connectorsPortInterfacesList.add( (TGConnectorPortInterface) t );
   	  }
   	 	
     	
     	//Delegate ports removed, by Solange
     	if ( (t.getType()==TGComponentManager.PROCSD_IN_PORT) || (t.getType()==TGComponentManager.PROCSD_OUT_PORT))// || (t.getType()==TGComponentManager.PROCSD_DELEGATE_PORT))
-      		 portsList.add(t);      	    	
+      		 portsList.add( (ProCSDPort) t);      	    	
   
     
     	if ((t.getType()==TGComponentManager.PROCSD_COMPONENT) )
@@ -1016,8 +1016,7 @@ public class GProactiveDesign  {
 //    			return false;
 //    		}
     	
-    		
-    		ProCSDComponentsList.add(t);
+    		proCSDComponentsList.add( (ProCSDComponent) t);
 	
 	
     		int nb=t.getNbInternalTGComponent();
@@ -1183,17 +1182,17 @@ public class GProactiveDesign  {
      * Fill the primitive LinkedList
      * @return primitives The List of primitive components
      */
-     private LinkedList getPrimitives()
-     {
-       LinkedList primitives=new LinkedList();	 
-     
-    	 for (int i=0;i<ProCSDComponentsList.size();i++)
-         {
-         	ProCSDComponent comp=(ProCSDComponent)ProCSDComponentsList.get(i);
-        	  if (isPrimitive(comp)) primitives.add(comp);
-         }       
-      return primitives;
-     }
+//     private List<ProCSDComponent> getPrimitives()
+//     {
+//       List<ProCSDComponent> primitives=new LinkedList<ProCSDComponent>();	 
+//     
+//    	 for (int i=0;i< proCSDComponentsList.size();i++)
+//         {
+//         	ProCSDComponent comp= proCSDComponentsList.get(i);
+//        	  if (isPrimitive(comp)) primitives.add(comp);
+//         }       
+//      return primitives;
+//     }
      
      
      /*
@@ -1272,57 +1271,57 @@ public class GProactiveDesign  {
       * Method implementing the algorithm used to create TClasses from a ProCSDComponent
       * @param tm TurtleModeling to be updated with TClasses
       */
-     private void addTClasses(TURTLEModeling tm)
-     {
-    	LinkedList primitives=getPrimitives();
-    	for (int i=0;i<primitives.size();i++)
-    	{
-    		ProCSDComponent comp=(ProCSDComponent)primitives.get(i);
-    		 TClass tclass =new TClass(comp.getValue(),true);
-    		 // System.out.println("tClass created: "+comp.getValue());  
-    		LinkedList attribs=comp.getMyAttributes();
-    		
-    		for (int at=0;at<attribs.size();at++)
-    		{
-    			TAttribute a=(TAttribute)attribs.get(at);
-    			 //if (a.getType() == TAttribute.NATURAL) 
-    			   {
-    	                Param p = new Param(a.getId(), Param.NAT, a.getInitialValue());
-    	                p.setAccess(a.getAccessString());
-    	                tclass.addParameter(p);
-    	            }
-                
-    		}
-    		LinkedList ports=getPorts(comp);
-     	             for (int j=0;j<ports.size();j++)
-     	             {
-     	            	ProCSDPort p=(ProCSDPort)ports.get(j);
-     	            	 ProCSDInterface myInterface=p.getMyInterface(interfacesList);
-     	            	 if (myInterface==null)
-     	            	 {
-     	            		 addCheckingError(CheckingError.STRUCTURE_ERROR,"No interface found for the port " +p.getValue()+" in component "+p.getFather().getValue());
-     	            		 return;
-     	            		 
-     	            	 }
-           	    	  LinkedList gates=myInterface.getMyMessages();
-           	    	  
-           	    	  for (int g=0;g<gates.size();g++)
-           	    	  {
-           	    		  TAttribute ta=(TAttribute)gates.get(g);
-           	    		 //!!!! to see:
-           	    		 // the gate type
-           	    		  // internal gates           	    		
-           	    		  Gate gt=new Gate(p.getValue()+"_"+ta.getId(),Gate.GATE,false);	  
-           	    	      tclass.addGate(gt);
-           	    	  }
-           	    	 
-     	             }//for ports
-    	  tm.addTClass(tclass);
-    	  ProactiveSMDPanel psmdp=pdp.getSMDPanel(tclass.getName());
-    	  buildErrors=false;
-    	  buildActivityDiagram(tclass,psmdp,false,comp.getName()+"_SMD");    	  
-    	}//for all primitives
-     }
+//     private void addTClasses(TURTLEModeling tm)
+//     {
+//    	List<ProCSDComponent> primitives=getPrimitives();
+//    	for (int i=0;i<primitives.size();i++)
+//    	{
+//    		ProCSDComponent comp= primitives.get(i);
+//    		 TClass tclass =new TClass(comp.getValue(),true);
+//    		 // System.out.println("tClass created: "+comp.getValue());  
+//    		List<TAttribute> attribs=comp.getMyAttributes();
+//    		
+//    		for (int at=0;at<attribs.size();at++)
+//    		{
+//    			TAttribute a= attribs.get(at);
+//    			 //if (a.getType() == TAttribute.NATURAL) 
+//    			   {
+//    	                Param p = new Param(a.getId(), Param.NAT, a.getInitialValue());
+//    	                p.setAccess(a.getAccessString());
+//    	                tclass.addParameter(p);
+//    	            }
+//                
+//    		}
+//    		List<ProCSDPort> ports=getPorts(comp);
+//     	             for (int j=0;j<ports.size();j++)
+//     	             {
+//     	            	ProCSDPort p= ports.get(j);
+//     	            	 ProCSDInterface myInterface=p.getMyInterface(interfacesList);
+//     	            	 if (myInterface==null)
+//     	            	 {
+//     	            		 addCheckingError(CheckingError.STRUCTURE_ERROR,"No interface found for the port " +p.getValue()+" in component "+p.getFather().getValue());
+//     	            		 return;
+//     	            		 
+//     	            	 }
+//           	    	  List<TAttribute> gates=myInterface.getMyMessages();
+//           	    	  
+//           	    	  for (int g=0;g<gates.size();g++)
+//           	    	  {
+//           	    		  TAttribute ta= gates.get(g);
+//           	    		 //!!!! to see:
+//           	    		 // the gate type
+//           	    		  // internal gates           	    		
+//           	    		  Gate gt=new Gate(p.getValue()+"_"+ta.getId(),Gate.GATE,false);	  
+//           	    	      tclass.addGate(gt);
+//           	    	  }
+//           	    	 
+//     	             }//for ports
+//    	  tm.addTClass(tclass);
+//    	  ProactiveSMDPanel psmdp=pdp.getSMDPanel(tclass.getName());
+//    	  buildErrors=false;
+//    	  buildActivityDiagram(tclass,psmdp,false,comp.getName()+"_SMD");    	  
+//    	}//for all primitives
+//     }
     
      
      
@@ -1333,7 +1332,7 @@ public class GProactiveDesign  {
     	 int iSend=action.indexOf("!");
     	 int iReceived=action.indexOf("?");
     	 int end=action.length();
-    	 boolean finished=false;
+    	// boolean finished=false;
     	
     	if (iSend==-1) iSend=end;
  		if(iReceived==-1) iReceived=end;
@@ -1407,19 +1406,19 @@ public class GProactiveDesign  {
     	// System.out.println("building activity diagram for "+t.getName() + " from panel "+psmdp.getName());
     	 String name=t.getName();
          
-         
-         if (psmdp == null) {
-             return;
-         }
+         // DB Issue #17 Dead code
+//         if (psmdp == null) {
+//             return;
+//         }
    
-         LinkedList list = psmdp.getComponentList();
-         Iterator iterator = list.listIterator();
+         List<TGComponent> list = psmdp.getComponentList();
+         Iterator<TGComponent> iterator = list.listIterator();
          TGComponent tgc;
          ProSMDStartState proStart = null;
          int cptStart = 0;
         // System.out.println(t.getName()+" smd elements: ");
          while(iterator.hasNext()) {
-             tgc = (TGComponent)(iterator.next());
+             tgc = iterator.next();
              //System.out.println(tgc.getName()+":"+tgc.getValue());
              if (tgc instanceof ProSMDStartState) {
                  proStart = (ProSMDStartState) tgc;
@@ -1754,8 +1753,8 @@ public class GProactiveDesign  {
      private TGComponent getStartComp(ProSMDSubmachine subMachine)
      {
     	   ProactiveSMDPanel subMachinePanel=pdp.getSMDPanel(subMachine.getValue());
-    	   LinkedList list = subMachinePanel.getComponentList();
-           Iterator iterator = list.listIterator();
+    	   List<TGComponent> list = subMachinePanel.getComponentList();
+           Iterator<TGComponent> iterator = list.listIterator();
            TGComponent tgc;
            ProSMDStartState proStart = null;
             while(iterator.hasNext()) {
@@ -1774,27 +1773,22 @@ public class GProactiveDesign  {
     
      
 
-     private TGComponent getStopComp(ProSMDSubmachine subMachine)
-     {
-    	   ProactiveSMDPanel subMachinePanel=pdp.getSMDPanel(subMachine.getValue());
-    	   LinkedList list = subMachinePanel.getComponentList();
-           Iterator iterator = list.listIterator();
-           TGComponent tgc;
-           ProSMDStopState proStop = null;
-            while(iterator.hasNext()) {
-               tgc = (TGComponent)(iterator.next());
-                 if (tgc instanceof ProSMDStopState) {
-                   proStop = (ProSMDStopState) tgc;
-                  return proStop;  
-                 }//if
-            }//while
-            	
-         return null; 
-    	   
-    	   
+     private TGComponent getStopComp(ProSMDSubmachine subMachine) {
+    	 ProactiveSMDPanel subMachinePanel=pdp.getSMDPanel(subMachine.getValue());
+    	 List<TGComponent> list = subMachinePanel.getComponentList();
+    	 Iterator<TGComponent> iterator = list.listIterator();
+    	 TGComponent tgc;
+    	 ProSMDStopState proStop = null;
+    	 while(iterator.hasNext()) {
+    		 tgc = iterator.next();
+    		 if (tgc instanceof ProSMDStopState) {
+    			 proStop = (ProSMDStopState) tgc;
+    			 return proStop;  
+    		 }//if
+    	 }//while
+
+    	 return null; 
      }
-    
-     
      
      /*
       * Method used when converting from ProactiveDesign to TurtleModeling
@@ -1977,62 +1971,61 @@ public class GProactiveDesign  {
       * Tclasses.
       * @param tm TurtleModeling to be updated
       */
-     private void addSynchronisations(TURTLEModeling tm)
-     {
-    	 String gname1="", gname2="";
-    	 LinkedList primitives=getPrimitives();
-     	for (int i=0;i<primitives.size();i++)
-     	{
-     		ProCSDComponent comp=(ProCSDComponent)primitives.get(i);
-         	      LinkedList ports=getPorts(comp);
-         	      
-         	       for (int j=0;j<ports.size();j++)
-         	    {
-         	    	ProCSDPort p=(ProCSDPort)ports.get(j);
-         	        ProCSDPort toP=p.getToFinalPort();
-         	        ProCSDPort fromP=p.getFromFinalPort();
-         	        
-         	        //Added by Solange
-         	        TClass t1=tm.getTClassWithName(p.getFather().getValue());
-         	        //Added by Solange
-         	       TClass t2=null;
-         	       ProCSDPort connectedPort=null; 
-         	       
-         	       if (toP!=null)
-         	        {
-         	        	connectedPort=toP;
-         	    	    }
-         	        else if (fromP!=null)
-         	       {
-         	        	connectedPort=fromP;
-         	        	         	        }	
-         	        else
-         	        {
-         	      //  	System.out.println("Problem in finding conection for "+p.toString());
-         	      addCheckingError(CheckingError.STRUCTURE_ERROR,"Problem in finding conection for "+p.toString()+" in component "+p.getFather().toString());
-         	        	//TODO add an error here
-         	        }
-         	         t2=tm.getTClassWithName(connectedPort.getFather().getValue());     	        
-         	    	 ProCSDInterface myInterface=p.getMyInterface();
-         	    	  LinkedList gates=myInterface.getMyMessages();
-         	    	  for (int k=0;k<gates.size();k++)
-         	    	  {
-         	    		TAttribute a = (TAttribute)(gates.get(k));
-         	    		gname1=p.getValue()+"_"+a.getId();
-         	    		gname2=connectedPort.getValue()+"_"+a.getId();
-         	    		//i want to see the value, by Solange
-                        // Added by Solange to handle messages not received
-         	    		if((t1!=null)&&(t2!=null))
-         	    		{
-         	    		Gate h=t1.getGateByName(gname1);
-         	    		Gate y=t2.getGateByName(gname2);
-         	    		tm.addSynchroRelation(t1,h,t2,y);
-         	    		}
-         	    	  }
-          	       }
-
-         }//for all components
-     }
+//     private void addSynchronisations(TURTLEModeling tm)    {
+//    	 String gname1="", gname2="";
+//    	 List<ProCSDComponent> primitives=getPrimitives();
+//     	for (int i=0;i<primitives.size();i++)
+//     	{
+//     		ProCSDComponent comp= primitives.get(i);
+//         	      List<ProCSDPort> ports=getPorts(comp);
+//         	      
+//         	       for (int j=0;j<ports.size();j++)
+//         	    {
+//         	    	ProCSDPort p=ports.get(j);
+//         	        ProCSDPort toP=p.getToFinalPort();
+//         	        ProCSDPort fromP=p.getFromFinalPort();
+//         	        
+//         	        //Added by Solange
+//         	        TClass t1=tm.getTClassWithName(p.getFather().getValue());
+//         	        //Added by Solange
+//         	       TClass t2=null;
+//         	       ProCSDPort connectedPort=null; 
+//         	       
+//         	       if (toP!=null)
+//         	        {
+//         	        	connectedPort=toP;
+//         	    	    }
+//         	        else if (fromP!=null)
+//         	       {
+//         	        	connectedPort=fromP;
+//         	        	         	        }	
+//         	        else
+//         	        {
+//         	      //  	System.out.println("Problem in finding conection for "+p.toString());
+//         	      addCheckingError(CheckingError.STRUCTURE_ERROR,"Problem in finding conection for "+p.toString()+" in component "+p.getFather().toString());
+//         	        	//TODO add an error here
+//         	        }
+//         	         t2=tm.getTClassWithName(connectedPort.getFather().getValue());     	        
+//         	    	 ProCSDInterface myInterface=p.getMyInterface();
+//         	    	  LinkedList gates=myInterface.getMyMessages();
+//         	    	  for (int k=0;k<gates.size();k++)
+//         	    	  {
+//         	    		TAttribute a = (TAttribute)(gates.get(k));
+//         	    		gname1=p.getValue()+"_"+a.getId();
+//         	    		gname2=connectedPort.getValue()+"_"+a.getId();
+//         	    		//i want to see the value, by Solange
+//                        // Added by Solange to handle messages not received
+//         	    		if((t1!=null)&&(t2!=null))
+//         	    		{
+//         	    		Gate h=t1.getGateByName(gname1);
+//         	    		Gate y=t2.getGateByName(gname2);
+//         	    		tm.addSynchroRelation(t1,h,t2,y);
+//         	    		}
+//         	    	  }
+//          	       }
+//
+//         }//for all components
+//     }
    
   //Method created by Solange
 //   and removed by emil 
@@ -2097,11 +2090,11 @@ public class GProactiveDesign  {
     */ 
    
     
-    public LinkedList<CheckingError> getCheckingWarnings() {
+    public List<CheckingError> getCheckingWarnings() {
         return null;
     }
     
-    public LinkedList<CheckingError> getCheckingErrors() {
+    public List<CheckingError> getCheckingErrors() {
     	return checkingErrors;
     }
     

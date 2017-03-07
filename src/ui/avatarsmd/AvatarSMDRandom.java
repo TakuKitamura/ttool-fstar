@@ -135,13 +135,13 @@ public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements Embedde
     public boolean editOndoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
-        int tmp;
+        //int tmp;
         String tmpName;
 
         JDialogTMLADRandom dialog = new JDialogTMLADRandom(frame, "Setting RANDOM attributes", getVariable(), getMinValue(), getMaxValue(), getFunctionId());
-        dialog.setSize(500, 450);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+        //dialog.setSize(500, 450);
+        GraphicLib.centerOnParent(dialog, 500, 450);
+        dialog.setVisible( true ); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -241,7 +241,7 @@ public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements Embedde
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int k;
+        //    int k;
             String s;
 
             //System.out.println("Loading Synchronization gates");
@@ -252,8 +252,8 @@ public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements Embedde
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

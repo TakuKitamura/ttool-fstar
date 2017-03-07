@@ -53,13 +53,13 @@ import myutil.*;
 public class UPPAALSpec {
     private String header = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n";
     private String globalDeclaration = "";
-    private LinkedList templates;
+    private List<UPPAALTemplate> templates;
     private String instanciations = "";
     private String fullSpec;
 
 
     public UPPAALSpec() {
-        templates = new LinkedList();
+        templates = new LinkedList<UPPAALTemplate>();
     }
 
     public String getStringSpec() {
@@ -67,7 +67,7 @@ public class UPPAALSpec {
     }
 
     public String makeSpec() {
-        ListIterator iterator = templates.listIterator();
+        Iterator<UPPAALTemplate> iterator = templates.listIterator();
         UPPAALTemplate template;
 
         globalDeclaration = "<declaration>\n//Global declarations\n" + Conversion.transformToXMLString(globalDeclaration) + "</declaration>\n";
@@ -75,7 +75,7 @@ public class UPPAALSpec {
 
         while(iterator.hasNext()) {
             //System.out.println("Template!");
-            template = (UPPAALTemplate)(iterator.next());
+            template = iterator.next();
             templatesString.append(template.makeTemplate());
         }
 
@@ -85,7 +85,7 @@ public class UPPAALSpec {
         return fullSpec;
     }
 
-    public LinkedList getTemplates() {
+    public List<UPPAALTemplate> getTemplates() {
         return templates;
     }
 
@@ -96,10 +96,10 @@ public class UPPAALSpec {
 
     public UPPAALTemplate getTemplateByName(String name) {
         UPPAALTemplate template;
-        ListIterator ite = templates.listIterator();
+        Iterator<UPPAALTemplate> ite = templates.listIterator();
 
         while(ite.hasNext()){
-            template = (UPPAALTemplate)(ite.next());
+            template = ite.next();
             if (template.getName().compareTo(name) == 0) {
                 return template;
             }
@@ -124,26 +124,23 @@ public class UPPAALSpec {
     }
 
     public void enhanceGraphics() {
-        ListIterator iterator = templates.listIterator();
+        Iterator<UPPAALTemplate> iterator = templates.listIterator();
         UPPAALTemplate template;
-
 
         while(iterator.hasNext()) {
             //System.out.println("Template!");
-            template = (UPPAALTemplate)(iterator.next());
+            template = iterator.next();
             template.enhanceGraphics();
         }
     }
 
     public void optimize() {
-
-        ListIterator iterator = templates.listIterator();
+        Iterator<UPPAALTemplate> iterator = templates.listIterator();
         UPPAALTemplate template;
-
 
         while(iterator.hasNext()) {
             //System.out.println("Template!");
-            template = (UPPAALTemplate)(iterator.next());
+            template = iterator.next();
             template.optimize();
         }
 

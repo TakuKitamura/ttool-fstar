@@ -49,9 +49,7 @@ package ui.window;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.io.*;
 import java.util.*;
-import java.util.regex.*;
 
 import avatartranslator.*;
 import avatartranslator.touppaal.*;
@@ -61,7 +59,7 @@ import myutil.*;
 import ui.*;
 
 public class JDialogUPPAALValidation extends javax.swing.JDialog implements ActionListener, Runnable  {
-    private static boolean deadlockAChecked, deadlockEChecked, generateTraceChecked, customChecked, stateAChecked, stateEChecked, stateLChecked, showDetailsChecked, translateChecked;
+    private static boolean deadlockAChecked/*, deadlockEChecked*/, generateTraceChecked, customChecked, stateAChecked, stateEChecked, stateLChecked, showDetailsChecked, translateChecked;
 
     protected MainGUI mgui;
 
@@ -89,10 +87,10 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     protected JTextField customText;
     protected JTextField translatedText;
     protected TURTLEPanel tp;
-    protected LinkedList<JCheckBox> customChecks;
+    protected java.util.List<JCheckBox> customChecks;
 
-    protected LinkedList<String> customQueries;
-    public HashMap<String, Integer> verifMap;
+    protected java.util.List<String> customQueries;
+    public Map<String, Integer> verifMap;
     protected int status = -1;
     /** Creates new form  */
     public JDialogUPPAALValidation(Frame f, MainGUI _mgui, String title, String _cmdVerifyta, String _pathTrace, String _fileName, String _spec, String _host, TURTLEPanel _tp) {
@@ -318,8 +316,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
     public void run() {
 
-        String cmd1 = "";
-        String data1;
+      //  String cmd1 = "";
+       // String data1;
         int id = 0;
         String query;
         String name;
@@ -481,7 +479,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                         trace_id++;
                     }
                 }
-		mgui.modelBacktracingUPPAAL(verifMap);
+                
+                mgui.modelBacktracingUPPAAL(verifMap);
             }
 
             //Removing files
@@ -551,7 +550,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             return "";
         }
 
-        LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
+        java.util.List<AvatarBlock> blocks = avspec.getListOfBlocks();
         for (AvatarBlock block:blocks){
             UPPAALTemplate temp = spec.getTemplateByName(block.getName());
             if (temp !=null){

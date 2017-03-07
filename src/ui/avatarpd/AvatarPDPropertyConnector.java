@@ -53,11 +53,8 @@ import java.awt.geom.*;
 import javax.swing.*;
 import java.util.*;
 
-import org.w3c.dom.*;
-
 import myutil.*;
 import ui.*;
-import ui.cd.*;
 import ui.window.*;
 
 public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
@@ -152,10 +149,10 @@ public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnection
     }
 	
 	public boolean editOndoubleClick(JFrame frame) {
-        String oldValue = value;
+      //  String oldValue = value;
 		JDialogAvatarPropertyConnector jdapc = new JDialogAvatarPropertyConnector(frame, getValue().compareTo("not") == 0);
-		jdapc.setSize(300, 200);
-        GraphicLib.centerOnParent(jdapc);
+	//	jdapc.setSize(300, 200);
+        GraphicLib.centerOnParent(jdapc, 300, 200);
         jdapc.setVisible(true); // blocked until dialog has been closed
 		
 		if (jdapc.hasBeenCancelled()) {
