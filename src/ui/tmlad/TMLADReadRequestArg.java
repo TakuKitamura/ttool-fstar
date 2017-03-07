@@ -117,6 +117,9 @@ public class TMLADReadRequestArg extends TGCWithoutInternalComponent implements 
 	public int nbOfParams() {
 		return nParam;
 	}
+	public void setParam(int i, String s){
+		params[i] = s;
+	}
 	
 	public String getRealParamValue(int index) {
 		int cpt = 0;
