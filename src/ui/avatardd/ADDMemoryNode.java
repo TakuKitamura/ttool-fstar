@@ -47,7 +47,6 @@
 package ui.avatardd;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 
 import org.w3c.dom.*;
@@ -152,9 +151,9 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         String tmpName;
 
         JDialogADDMemoryNode dialog = new JDialogADDMemoryNode(frame, "Setting " + stereotype + " attributes", this);
-        dialog.setSize(500, 450);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+       // dialog.setSize(500, 450);
+        GraphicLib.centerOnParent(dialog, 500, 450);
+        dialog.setVisible( true ); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -260,7 +259,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+          //  int t1id;
             String sstereotype = null, snodeName = null;
 	    monitored = 0;
 
@@ -269,8 +268,8 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

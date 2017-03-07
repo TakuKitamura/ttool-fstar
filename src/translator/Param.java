@@ -46,7 +46,6 @@ knowledge of the CeCILL license and that you accept its terms.
 package translator;
 
 import translator.tojava.*;
-import myutil.*;
 
 public class Param {
     private String name;
@@ -139,7 +138,7 @@ public class Param {
         }
         
         String lowerid = id.toLowerCase();
-        boolean b1, b2, b3, b4, b5;
+        boolean b1, b2, b3, b5;
         b1 = (id.substring(0,1)).matches("[a-zA-Z]");
         b2 = id.matches("\\w*");
         b3 = !RTLOTOSKeyword.isAKeyword(lowerid);

@@ -46,9 +46,10 @@
 
 
 package ui;
+
 import java.util.*;
 
 
 public interface ActivityDiagramPanelInterface {
-  public LinkedList getComponentList();
+  public List<TGComponent> getComponentList();
 }

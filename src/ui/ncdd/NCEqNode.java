@@ -50,8 +50,6 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
-import org.w3c.dom.*;
-
 import myutil.*;
 import ui.*;
 import ui.window.*;
@@ -177,15 +175,15 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
 		return type;
 	}
 	
-	 public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOndoubleClick(JFrame frame) {
 	//System.out.println("Double click");
         String oldName = name;
 		String tmp;
         
         JDialogNCEqNode jdncen = new JDialogNCEqNode(frame, "Setting equipment parameters", name, schedulingPolicy, type);
         jdncen.setSize(350, 250);
-        GraphicLib.centerOnParent(jdncen);
-        jdncen.show(); // Blocked until dialog has been closed
+        GraphicLib.centerOnParent(jdncen, 350, 250);
+        jdncen.setVisible( true ); // Blocked until dialog has been closed
        
 		if (jdncen.hasBeenCancelled()) {
 			return false;

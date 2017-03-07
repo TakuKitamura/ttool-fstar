@@ -55,9 +55,9 @@ public class MappedSystemCTask {
 	//private TMLModeling tmlm;
     private TMLTask task;
     private String reference, cppcode, hcode;
-	private ArrayList<TMLChannel> channels;
-	private ArrayList<TMLEvent> events;
-	private ArrayList<TMLRequest> requests;
+	private List<TMLChannel> channels;
+	private List<TMLEvent> events;
+	private List<TMLRequest> requests;
 	
 	private int nbOfFunc = 0;
     
@@ -74,7 +74,7 @@ public class MappedSystemCTask {
 	private final static String EF = "}";
 	
 	
-    public MappedSystemCTask(TMLTask _task, ArrayList<TMLChannel> _channels, ArrayList<TMLEvent> _events, ArrayList<TMLRequest> _requests) {
+    public MappedSystemCTask(TMLTask _task, List<TMLChannel> _channels, List<TMLEvent> _events, List<TMLRequest> _requests) {
         task = _task;
 		channels = _channels;
 		events = _events;
@@ -321,12 +321,12 @@ public class MappedSystemCTask {
 	private String makeAttributesCode() {
         String code = "";
         TMLAttribute att;
-        int i;
+       // int i;
         
-        ListIterator iterator = task.getAttributes().listIterator();
+        Iterator<TMLAttribute> iterator = task.getAttributes().listIterator();
         
         while(iterator.hasNext()) {
-            att = (TMLAttribute)(iterator.next());
+            att = iterator.next();
             if (att.hasInitialValue()) {
                 code += att.name + " = " + att.initialValue;
 				code += ";\n";
@@ -340,12 +340,12 @@ public class MappedSystemCTask {
 	private String makeAttributesDeclaration() {
         String code = "";
         TMLAttribute att;
-        int i;
+     //   int i;
         
-        ListIterator iterator = task.getAttributes().listIterator();
+        Iterator<TMLAttribute> iterator = task.getAttributes().listIterator();
         
         while(iterator.hasNext()) {
-            att = (TMLAttribute)(iterator.next());
+            att = iterator.next();
             code += TMLType.getStringType(att.type.getType()) + " " + att.name;
             code += ";\n";
         }

@@ -68,20 +68,20 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
     private TMLArchiPortArtifact artifact;
     private String mappedMemory = "VOID"; 
 
-	protected JComboBox mappedPortCB, memoryCB;
+	protected JComboBox<String> mappedPortCB, memoryCB;
 	protected JTextField baseAddressTF, numSamplesTF, bitsPerSymbolTF;
 	protected String baseAddress, mappedPort, sampleLength, numSamples, bitsPerSymbol;
 	protected String bank, dataType, symmetricalValue;
-	protected JComboBox dataTypeCB, bankCB, symmetricalValueCB;
+	protected JComboBox<String> dataTypeCB, bankCB, symmetricalValueCB;
 
 	//Intl Data In
 	protected JTextField widthIntl_TF, bitInOffsetIntl_TF, inputOffsetIntl_TF;
 	protected String widthIntl, bitInOffsetIntl, inputOffsetIntl, packedBinaryInIntl;
-	protected JComboBox packedBinaryInIntl_CB;
+	protected JComboBox<String> packedBinaryInIntl_CB;
 
 	//Intl Data Out
 	protected JTextField bitOutOffsetIntl_TF, outputOffsetIntl_TF;
-	protected JComboBox packedBinaryOutIntl_CB;
+	protected JComboBox<String> packedBinaryOutIntl_CB;
 	protected String packedBinaryOutIntl, bitOutOffsetIntl, outputOffsetIntl;
 
 	//Intl Perm
@@ -91,7 +91,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	//Mapper Data In
 	protected JTextField baseAddressDataInMapp_TF, numSamplesDataInMapp_TF, bitsPerSymbolDataInMapp_TF;
 	protected String baseAddressDataInMapp, numSamplesDataInMapp, bitsPerSymbolDataInMapp, symmetricalValueDataInMapp;
-	protected JComboBox symmetricalValueDataInMapp_CB;
+	protected JComboBox<String> symmetricalValueDataInMapp_CB;
 	//Mapper Data Out
 	protected JTextField baseAddressDataOutMapp_TF;
 	protected String baseAddressDataOutMapp;
@@ -104,11 +104,11 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
   private JButton cancelButton;
 
 	//Code generation
-	private JPanel panel3, panel4, panel5;
+	private JPanel panel3; /*panel4, panel5*/;
 	private JTabbedPane tabbedPane;
 	private int bufferType = 0;
 	private ArrayList<String> bufferParameters;
-	private String appName = "";
+//private String appName = "";
     
     /** Creates new form  */
     public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory, ArrayList<String> _bufferParameters, String _mappedPort ) {
@@ -118,7 +118,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 			mappedMemory = _mappedMemory;
 			bufferParameters = _bufferParameters; //contains a set of parameters that are read from the xml description. The first parameters is the buffer type
 			mappedPort = _mappedPort;
-			appName = mappedPort.split("::")[0];
+			//appName = mappedPort.split("::")[0];
 
 			TraceManager.addDev("init components");
 
@@ -132,7 +132,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
+      //  GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
@@ -154,8 +154,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
         panel3.setPreferredSize(new Dimension(650, 350));
 
         tabbedPane = new JTabbedPane();
-        panel4 = new JPanel();
-        panel5 = new JPanel();
+//        panel4 = new JPanel();
+//        panel5 = new JPanel();
         
 		c1.gridwidth = 1;
         c1.gridheight = 1;
@@ -204,7 +204,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		
 		TraceManager.addDev( "Got communications" );
 
-        mappedPortCB = new JComboBox( portsList );
+        mappedPortCB = new JComboBox<String>( portsList );
 		if( !mappedPort.equals( "VOID" ) && !mappedPort.equals( "" ) )	{
 			mappedPortCB.setSelectedIndex( portsList.indexOf( mappedPort ) );
 		}
@@ -216,7 +216,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		panel2.add( mappedPortCB, c1 );
 		
 		//Make the list of memories that are available for being mapped
-		LinkedList componentList = artifact.getTDiagramPanel().getComponentList();
+		java.util.List<TGComponent> componentList = artifact.getTDiagramPanel().getComponentList();
 		Vector<String> memoryList = new Vector<String>();
 		for( int k = 0; k < componentList.size(); k++ )	{
 			if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
@@ -227,7 +227,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
             memoryList.add( "No available memory" );              
         }
 
-		memoryCB = new JComboBox( memoryList );
+		memoryCB = new JComboBox<String>( memoryList );
 		if( !mappedMemory.equals( "VOID" ) && !mappedMemory.equals( "" ) )	{
 			memoryCB.setSelectedIndex( memoryList.indexOf( mappedMemory ) );
 		}
@@ -255,7 +255,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
                         }
         			}
 		        }
-                String memoryName = memoryList.get(0);
+               // String memoryName = memoryList.get(0);
                 //TraceManager.addDev( "bufferType of " + memoryName + " is " + bufferType );
             }
             else    {
@@ -332,8 +332,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 	private int getBufferTypeFromSelectedMemory( String mappedMemory )	{
 		
-		LinkedList componentList = artifact.getTDiagramPanel().getComponentList();
-		Vector<String> list = new Vector<String>();
+		java.util.List<TGComponent> componentList = artifact.getTDiagramPanel().getComponentList();
+		//Vector<String> list = new Vector<String>();
 		
 		for( int k = 0; k < componentList.size(); k++ )	{
 			if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
@@ -555,21 +555,21 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		}
 		return params;
 	}
-
-	private void cleanPanels()	{
-		panel3.removeAll();
-		panel4.removeAll();
-		panel5.removeAll();
-		tabbedPane.removeAll();
-	}
-
-	private void revalidateAndRepaintPanels()	{
-		panel3.revalidate();
-		panel3.repaint();
-		panel4.revalidate();
-		panel4.repaint();
-		panel5.revalidate();
-		panel5.repaint();
-	}
+//
+//	private void cleanPanels()	{
+//		panel3.removeAll();
+//		panel4.removeAll();
+//		panel5.removeAll();
+//		tabbedPane.removeAll();
+//	}
+//
+//	private void revalidateAndRepaintPanels()	{
+//		panel3.revalidate();
+//		panel3.repaint();
+//		panel4.revalidate();
+//		panel4.repaint();
+//		panel5.revalidate();
+//		panel5.repaint();
+//	}
 
 }	//End of class

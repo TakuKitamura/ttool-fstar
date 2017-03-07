@@ -47,7 +47,6 @@
 package ui.avatarpd;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 
 import org.w3c.dom.*;
@@ -58,7 +57,7 @@ import ui.window.*;
 
 public class AvatarPDProperty extends TGCScalableWithInternalComponent implements  WithAttributes {
     private int textY1 = 3;
-    private int textY2 = 3;
+    //private int textY2 = 3;
     //private int textX = 10;
 
     protected String oldValue = "";
@@ -240,8 +239,8 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
         JDialogAvatarProperty jdap = new JDialogAvatarProperty(frame, value, kind, not);
-        jdap.setSize(300, 280);
-        GraphicLib.centerOnParent(jdap);
+     //   jdap.setSize(300, 280);
+        GraphicLib.centerOnParent(jdap, 300, 280);
         jdap.setVisible(true); // blocked until dialog has been closed
 
         if (jdap.hasBeenCancelled()) {

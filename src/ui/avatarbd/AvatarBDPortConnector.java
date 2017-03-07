@@ -48,7 +48,6 @@ package ui.avatarbd;
 
 
 import java.awt.*;
-import java.awt.geom.*;
 import javax.swing.*;
 import java.util.*;
 
@@ -57,7 +56,6 @@ import org.w3c.dom.*;
 import myutil.*;
 import ui.*;
 import ui.window.*;
-import myutil.*;
 
 public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
     //protected int arrowLength = 10;
@@ -297,13 +295,13 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         AvatarBDBlock block1 = getAvatarBDBlock1();
         AvatarBDBlock block2 = getAvatarBDBlock2();
 
-	Vector v = getAssociationSignals();
+        Vector v = getAssociationSignals();
 	
 
         JDialogSignalAssociation jdas = new JDialogSignalAssociation(frame, block1, block2, v, this, "Setting signal association");
-        jdas.setSize(800, 550);
-        GraphicLib.centerOnParent(jdas);
-        jdas.show(); // blocked until dialog has been closed
+        //jdas.setSize(800, 550);
+        GraphicLib.centerOnParent(jdas, 800, 550);
+        jdas.setVisible( true ); // blocked until dialog has been closed
 
         if (jdas.hasBeenCancelled()) {
             return false;

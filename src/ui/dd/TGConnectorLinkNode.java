@@ -111,9 +111,9 @@ public  class TGConnectorLinkNode extends TGConnector {
         //Vector v = tdp.getAllNotSelectedGatesFromNode(list);
         
         JDialogLinkNode jdln = new JDialogLinkNode(frame, delay, lossRate, implementation, oport, dport, llist, rlist, list);
-        jdln.setSize(800, 600);
-        GraphicLib.centerOnParent(jdln);
-        jdln.show(); // blocked until dialog has been closed
+//        jdln.setSize(800, 600);
+        GraphicLib.centerOnParent(jdln, 800, 600);
+        jdln.setVisible( true ); // blocked until dialog has been closed
         
         delay = jdln.getDelay();
         lossRate = jdln.getLossRate();
@@ -257,7 +257,7 @@ public  class TGConnectorLinkNode extends TGConnector {
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+      //      int t1id;
             String sdelay = null, slossRate = null;
             
             for(int i=0; i<nl.getLength(); i++) {
@@ -265,8 +265,8 @@ public  class TGConnectorLinkNode extends TGConnector {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
@@ -337,7 +337,7 @@ public  class TGConnectorLinkNode extends TGConnector {
             return false;
         }
         
-        TAttribute ta = tc.getGateById(atg.gat);
+    //    TAttribute ta = tc.getGateById(atg.gat);
         
         return (atg.gat != null);
     }

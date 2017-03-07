@@ -70,14 +70,14 @@ public class DDTranslator {
     public void translateLinks() throws DDSyntaxException {
         
         // We go throughout links
-        LinkedList ll;
-        ListIterator iterator;
-        TDDNode node;
+        List<TGConnectorLinkNode> ll;
+        Iterator<TGConnectorLinkNode> iterator;
+        //TDDNode node;
         TGConnectorLinkNode link;
         VectorLRArtifactTClassGate assocs;
         LRArtifactTClassGate lratg;
         TClassLinkNode t;
-        TClass tcl;
+       // TClass tcl;
         int i;
         
         ll = dp.tddp.getListOfLinks();
@@ -87,7 +87,7 @@ public class DDTranslator {
         
         // Loop on links
         while(iterator.hasNext()) {
-            link = (TGConnectorLinkNode)(iterator.next());
+            link = iterator.next();
             assocs = link.getList();
             System.out.println("assocs=" + assocs);
             if (assocs.size() > 0) {
@@ -181,7 +181,7 @@ public class DDTranslator {
         // Analyse Tclass1
         
         System.out.println("Toto02");
-        LinkedList synchros = new LinkedList();
+        List<DDStructSynchro> synchros = new LinkedList<DDStructSynchro>();
         ad = tclass1.getActivityDiagram();
         
         for(i=0; i<ad.size(); i++) {

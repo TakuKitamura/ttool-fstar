@@ -60,8 +60,8 @@ import ui.window.*;
 
 public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 
-    private static String FILE_INFO = "(user files specified)";
-    private static String CODE_INFO = "(user code specified)";
+//    private static String FILE_INFO = "(user files specified)";
+ //   private static String CODE_INFO = "(user code specified)";
 
 
     protected String guard;
@@ -270,9 +270,9 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
         LinkedList<TAttribute> attributes = tdp.getMGUI().getAllAttributes();
         LinkedList<AvatarMethod> methods = tdp.getMGUI().getAllMethods();
         JDialogAvatarTransition jdat = new JDialogAvatarTransition(frame, "Setting transition parameters", guard, afterMin, afterMax, computeMin, computeMax, listOfActions, attributes, methods, filesToInclude, codeToInclude);
-        jdat.setSize(600, 550);
-        GraphicLib.centerOnParent(jdat);
-        jdat.show(); // blocked until dialog has been closed
+      //  jdat.setSize(600, 550);
+        GraphicLib.centerOnParent(jdat, 600, 550);
+        jdat.setVisible( true ); // blocked until dialog has been closed
 
 
         if (jdat.hasBeenCancelled()) {
@@ -360,8 +360,8 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element)n2;

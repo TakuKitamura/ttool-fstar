@@ -49,13 +49,12 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import java.util.*;
 import ui.cd.*;
 import ui.ad.*;
 
 public class DesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterface {
     public TClassDiagramPanel tcdp; 
-    public LinkedList<TClassInterface> validated, ignored;
+    public java.util.List<TClassInterface> validated, ignored;
 
 
     public DesignPanel(MainGUI _mgui) {
@@ -102,7 +101,7 @@ public class DesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterfa
         JScrollDiagramPanel jsp	= new JScrollDiagramPanel(tadp);
         tadp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         panels.add(tadp);
@@ -133,7 +132,7 @@ public class DesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterfa
         JScrollDiagramPanel jsp	= new JScrollDiagramPanel(tcdp);
         tcdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         toolBarPanel.add(toolBarClass, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab("Class Diagram", IconManager.imgic14, toolBarPanel, "Opens class diagram");

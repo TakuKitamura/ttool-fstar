@@ -62,8 +62,8 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
     protected String attributeText;
     protected int textX = 5;
     protected int textY = 20;
-    protected LinkedList<TAttribute> myAttributes;
-    protected LinkedList<TAttribute> forbiddenNames;
+    protected java.util.List<TAttribute> myAttributes;
+    protected java.util.List<TAttribute> forbiddenNames;
     protected Graphics myG;
     protected Color myColor;
     protected boolean attributes;
@@ -91,15 +91,15 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
         myAttributes = new LinkedList<TAttribute> ();
     }
     
-    public LinkedList<TAttribute> getAttributeList() {
+    public java.util.List<TAttribute> getAttributeList() {
         return myAttributes;
     }
     
-    public void setAttributeList(LinkedList<TAttribute> attributes) {
+    public void setAttributeList(java.util.List<TAttribute> attributes) {
         myAttributes = attributes;
     }
     
-    public void setForbiddenNames(LinkedList<TAttribute> v) {
+    public void setForbiddenNames(java.util.List<TAttribute> v) {
         forbiddenNames = v;
     }
     

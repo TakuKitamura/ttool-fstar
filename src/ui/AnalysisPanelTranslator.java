@@ -95,25 +95,25 @@ public class AnalysisPanelTranslator {
         int i, j;
         TDiagramPanel thmsc, thmsctmp;
         int nodeCounter = 0;
-        HMSCNode node, node1, node2;
-        LinkedList list;
+        HMSCNode node, node1;//, node2;
+        List<TGComponent> list;
         TGComponent tgc;
         MSC msc;
         int startCounter = 0;
         HMSCNode start = null;
-        ListIterator iterator;
+        Iterator<TGComponent> iterator;
         String action;
         boolean test = false;
         
         // For each IOD, we create a node
-        Vector iodsPanels = new Vector();
-        Vector iodsNodes = new Vector() ;
+        Vector<InteractionOverviewDiagramPanel> iodsPanels = new Vector<InteractionOverviewDiagramPanel>();
+        Vector<HMSCNode> iodsNodes = new Vector<HMSCNode>() ;
         
         for(i=0; i<ap.panels.size(); i++) {
             thmsc = (TDiagramPanel)(ap.panels.elementAt(i));
             if (thmsc instanceof InteractionOverviewDiagramPanel) {
                 System.out.println("Dealing with " + thmsc.getName());
-                iodsPanels.add(thmsc);
+                iodsPanels.add( (InteractionOverviewDiagramPanel) thmsc);
                 node = new HMSCNode("n"+nodeCounter + "choice_refiod", HMSCNode.CHOICE);
                 iodsNodes.add(node);
             }
@@ -131,7 +131,7 @@ public class AnalysisPanelTranslator {
                 list = thmsc.getComponentList();
                 iterator = list.listIterator();
                 while(iterator.hasNext()) {
-                    tgc = (TGComponent)(iterator.next());
+                    tgc = iterator.next();
                     node = null;
                     if (tgc instanceof IODChoice) {
                         node = new HMSCNode("n"+nodeCounter + "choice", HMSCNode.CHOICE);
@@ -325,11 +325,11 @@ public class AnalysisPanelTranslator {
         MSC msc;
         SequenceDiagramPanel sdp;
         
-        LinkedList ll = hmsc.getMSCs();
-        Iterator iterator = ll.listIterator();
+        //List ll = hmsc.getMSCs();
+        Iterator<MSC> iterator = hmsc.getMSCs().listIterator();
         
         while(iterator.hasNext()) {
-            msc = (MSC)(iterator.next());
+            msc = iterator.next();
             sdp = mgui.getSequenceDiagramPanel(ap, msc.getName());
             if (sdp == null) {
                 throw new AnalysisSyntaxException("No Sequence Diagram named " + msc.getName());
@@ -356,12 +356,12 @@ public class AnalysisPanelTranslator {
     }
     
     private void createAllNecessaryInstances(HMSC hmsc, SequenceDiagramPanel sdp) throws AnalysisSyntaxException {
-        LinkedList list = sdp.getComponentList();
-        Iterator iterator = list.listIterator();
+        List<TGComponent> list = sdp.getComponentList();
+        Iterator<TGComponent> iterator = list.listIterator();
         TGComponent tgc;
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             
             if (tgc instanceof SDInstance) {
                 hmsc.getCreateInstanceIfNecessary(((SDInstance)tgc).getInstanceName());
@@ -371,8 +371,8 @@ public class AnalysisPanelTranslator {
     
     private void createEvt(HMSC hmsc, MSC msc, SequenceDiagramPanel sdp, CorrespondanceTGElement correspondance) throws AnalysisSyntaxException {
         // regular evt i.e. not message sending / receiving
-        LinkedList list = sdp.getComponentList();
-        Iterator iterator = list.listIterator();
+        List<TGComponent> list = sdp.getComponentList();
+        Iterator<TGComponent> iterator = list.listIterator();
         TGComponent tgc, tgc1, tgc2, tgc3;
         TGComponent internal;
         TGConnectingPoint p1, p2;
@@ -390,7 +390,7 @@ public class AnalysisPanelTranslator {
         
         // internal component of instances
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             
             if (tgc instanceof SDInstance) {
                 sdi = (SDInstance)tgc;
@@ -530,7 +530,7 @@ public class AnalysisPanelTranslator {
     
     private void createTimeConstraints(HMSC hmsc, MSC msc, SequenceDiagramPanel sdp, CorrespondanceTGElement correspondance) throws AnalysisSyntaxException {
         // regular evt i.e. not message sending / receiving
-        Iterator iterator = sdp.getComponentList().listIterator();
+        Iterator<TGComponent> iterator = sdp.getComponentList().listIterator();
         TGComponent tgc, tgc1, tgc4;
         TGComponent internal;
         //TGConnectingPoint p1, p2;
@@ -549,7 +549,7 @@ public class AnalysisPanelTranslator {
         
         // internal component of instances
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             //System.out.println("i=" + i);
             
             if (tgc instanceof SDInstance) {
@@ -738,12 +738,12 @@ public class AnalysisPanelTranslator {
     }
     
     private void createEvtsOrder(HMSC hmsc, MSC msc, SequenceDiagramPanel sdp, CorrespondanceTGElement correspondance) throws AnalysisSyntaxException {
-        LinkedList ll = hmsc.getInstances();
-        Iterator iterator = ll.listIterator();
+        List<Instance> ll = hmsc.getInstances();
+        Iterator<Instance> iterator = ll.listIterator();
         Instance ins;
         
         while(iterator.hasNext()) {
-            ins = (Instance)(iterator.next());
+            ins = iterator.next();
             createEvtsOrderForInstance(msc, ins, sdp, correspondance);
         }
     }
@@ -751,10 +751,10 @@ public class AnalysisPanelTranslator {
     private void  createEvtsOrderForInstance(MSC msc, Instance ins, SequenceDiagramPanel sdp, CorrespondanceTGElement correspondance) throws AnalysisSyntaxException {
         
         Evt evt, evt1, nextEvt, lastEvt;
-        LinkedList ll = msc.getEvts();
-        Iterator iterator = ll.listIterator();
-        LinkedList orderedy = new LinkedList();
-        LinkedList grouped = new LinkedList();
+        List<Evt> ll = msc.getEvts();
+        Iterator<Evt> iterator = ll.listIterator();
+        List<Evt> orderedy = new LinkedList<Evt>();
+        List<List<Evt>> grouped = new LinkedList<List<Evt>>();
         
         SDInstance sdi = sdp.getSDInstance(ins.getName());
         
@@ -777,7 +777,7 @@ public class AnalysisPanelTranslator {
             iterator = ll.listIterator();
             y = Integer.MAX_VALUE;
             while(iterator.hasNext()) {
-                evt = (Evt)(iterator.next());
+                evt = iterator.next();
                 if ((evt.y <= y) && (!orderedy.contains(evt)) && (evt.getInstance() == ins)) {
                     nextEvt = evt;
                     y = evt.y;
@@ -798,7 +798,7 @@ public class AnalysisPanelTranslator {
         
         //System.out.println("Order on " + msc.getName() + " and on instance " + sdi.getValue());
         while(iterator.hasNext()) {
-            evt = (Evt)(iterator.next());
+            evt = iterator.next();
             //System.out.println("Evt=" + evt.getActionId());
         }
         //events in the same coregion are regrouped:
@@ -806,8 +806,8 @@ public class AnalysisPanelTranslator {
         iterator = orderedy.listIterator();
         // first evt -> special algorithm
         if (iterator.hasNext()) {
-            evt = (Evt)(iterator.next());
-            ll = new LinkedList();
+            evt = iterator.next();
+            ll = new LinkedList<Evt>();
             ll.add(evt);
             grouped.add(ll);
             lastEvt = evt;
@@ -825,7 +825,7 @@ public class AnalysisPanelTranslator {
                 ll.add(evt);
                 lastEvt = evt;
             } else {
-                ll = new LinkedList();
+                ll = new LinkedList<Evt>();
                 ll.add(evt);
                 grouped.add(ll);
                 lastEvt = evt;
@@ -837,22 +837,22 @@ public class AnalysisPanelTranslator {
         }
         
         // Orders are created!
-        Iterator iterator1, iterator2, iterator3;
-        iterator1 = grouped.listIterator();
-        LinkedList previous, current;
+        //Iterator iterator1, iterator2, iterator3;
+        Iterator<List<Evt>> iterator1 = grouped.listIterator();
+        List<Evt> previous, current;
         Order order;
         
         // first groups has no previous evts
-        previous = (LinkedList)(iterator1.next());
+        previous = iterator1.next();
         
         while(iterator1.hasNext()) {
-            current = (LinkedList)(iterator1.next());
-            iterator2 = current.listIterator();
+            current = iterator1.next();
+            Iterator<Evt> iterator2 = current.listIterator();
             while(iterator2.hasNext()) {
-                evt = (Evt)(iterator2.next());
-                iterator3 = previous.listIterator();
+                evt = iterator2.next();
+                Iterator<Evt> iterator3 = previous.listIterator();
                 while(iterator3.hasNext()) {
-                    evt1 = (Evt)(iterator3.next());
+                    evt1 = iterator3.next();
                     order = new Order(evt1, evt);
                     //System.out.println("New order between " + evt1.getActionId() + " and " + evt.getActionId());
                     msc.addOrder(order);
@@ -868,5 +868,4 @@ public class AnalysisPanelTranslator {
         }
         checkingErrors.add (ce);
     }
-    
 }

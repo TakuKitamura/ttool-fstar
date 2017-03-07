@@ -59,23 +59,23 @@ import ui.cd.*;
 import tepe.*;
 
 public class CorrespondanceTGElement {
-    private Vector tg; //tgelement
-    private Vector names; //prename
-    private Vector data; // turtle modeling elements
-    private Vector panelNames; //to look for an element only in it's panel
+    private Vector<TGComponent> tg; //tgelement
+    private Vector<String> names; //prename
+    private Vector<Object> data; // turtle modeling elements
+    private Vector<String> panelNames; //to look for an element only in it's panel
                                //It is more natural than using indexes and easyer to use in a recursive context  
     
     public CorrespondanceTGElement() {
-        tg = new Vector();
-        data = new Vector();
-        names = new Vector();
-        panelNames=new Vector();
+        tg = new Vector<TGComponent>();
+        data = new Vector<Object>();
+        names = new Vector<String>();
+        panelNames=new Vector<String>();
     }
     
-    public Vector getTG() { return tg;}
-    public Vector getNames() { return names;}
-    public Vector getData() { return data;}
-    public Vector getPanelNames() { return panelNames;}
+    public Vector<TGComponent> getTG() { return tg;}
+    public Vector<String> getNames() { return names;}
+    public Vector<Object> getData() { return data;}
+    public Vector<String> getPanelNames() { return panelNames;}
     
     public void merge(CorrespondanceTGElement ce) {
            tg.addAll(ce.getTG());
@@ -99,7 +99,7 @@ public class CorrespondanceTGElement {
     public TGComponent getTG(Object o) {
         int index = data.indexOf(o);
         if ((index != -1) && (tg.size() > index)) {
-            return	(TGComponent)(tg.elementAt(index));
+            return	tg.elementAt(index);
         }
         return null;
     }

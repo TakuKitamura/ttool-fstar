@@ -56,7 +56,6 @@ import org.w3c.dom.*;
 import myutil.*;
 import ui.window.*;
 import ui.*;
-import avatartranslator.*;
 
 public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
@@ -73,15 +72,15 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
     protected Color myColor;
 
-    private Font myFont, myFontB;
-    private int maxFontSize = 30;
-    private int minFontSize = 4;
+    private Font myFont;//, myFontB;
+//    private int maxFontSize = 30;
+//    private int minFontSize = 4;
     public final static int PROVED_TRUE = 1;
     public final static int PROVED_FALSE = 0; 
 	public final static int PROVED_ERROR=2;
     private int currentFontSize = -1;
     private final String[] pPragma = {"A[]", "A<>", "E[]", "E<>"};
-    public HashMap<String, Integer> verifMap = new HashMap<String, Integer>();
+    public Map<String, Integer> verifMap = new HashMap<String, Integer>();
 
     protected Graphics graphics;
     public AvatarBDSafetyPragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -150,16 +149,16 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
             makeValue();
         }
 
-        int h  = g.getFontMetrics().getHeight();
+      //  int h  = g.getFontMetrics().getHeight();
         Color c = g.getColor();
 
         int desiredWidth = minWidth;
-	desiredWidth = Math.max(desiredWidth, 2*g.getFontMetrics().stringWidth("Safety Pragma") + marginX+ textX);
+        desiredWidth = Math.max(desiredWidth, 2*g.getFontMetrics().stringWidth("Safety Pragma") + marginX+ textX);
 	
         for(int i=0; i< values.length; i++) {
             desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX+textX);
         }
-//	currentFontSize= 5;
+
         int desiredHeight = (properties.size()+2)*currentFontSize + textY + 1;
 
         //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
@@ -257,11 +256,11 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         GraphicLib.centerOnParent(jdn);
 		AvatarBDPanel abdp = (AvatarBDPanel) tdp;
 		jdn.blockAttributeMap = abdp.getBlockStrings(true,true);
-        jdn.show(); // blocked until dialog has been closed
+        jdn.setVisible( true ); // blocked until dialog has been closed
 
         String s = jdn.getText();
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-            String tmp = s;
+            //String tmp = s;
             setValue(s);
             makeValue();
             return true;
@@ -306,7 +305,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
     }
     private void drawVerification(String s, Graphics g, int _x, int _y){
         Color c = g.getColor();
-        Color c1;
+     //   Color c1;
 	int status;
 	if (verifMap.containsKey(s)){
 	    status = verifMap.get(s);

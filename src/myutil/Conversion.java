@@ -336,7 +336,7 @@ public class Conversion {
         //System.out.println("Replace op s=" + s + " from=" + from + " to=" + to);
         int fromIndex = 0;
         int index;
-        int len;
+    //    int len;
         boolean b1, b2;
         String s1, s2;
 
@@ -423,17 +423,17 @@ public class Conversion {
         return output + _input;
     }
 
-    public static boolean containsStringInList(LinkedList ll, String s) {
-        ListIterator iterator = ll.listIterator();
-        Object o;
+    public static boolean containsStringInList( List<String> ll, String s) {
+        Iterator<String> iterator = ll.listIterator();
+        String o;
 
         while(iterator.hasNext()) {
             o = iterator.next();
-            if (o instanceof String) {
-                if (s.compareTo((String)o) == 0) {
+            //if (o instanceof String) {
+                if (s.compareTo(o) == 0) {
                     return true;
                 }
-            }
+           // }
         }
 
         return false;
@@ -459,8 +459,8 @@ public class Conversion {
         boolean inQuote = false;
         boolean isSlashed = false;
         boolean isEscaped = false;
-        boolean inStarComment = false;
-        boolean inLineComment = false;
+      //  boolean inStarComment = false;
+//        boolean inLineComment = false;
         String ret = "";
         char c;
 
@@ -603,7 +603,7 @@ public class Conversion {
      */
     public static int findMatchingParenthesis(String expr, int indexFirst, char openPar, char closePar) {
         int index = indexFirst + 1;
-        boolean found = true;
+    //    boolean found = true;
         int total = 0;
         while(index < expr.length()) {
             if (expr.charAt(index) == openPar) {

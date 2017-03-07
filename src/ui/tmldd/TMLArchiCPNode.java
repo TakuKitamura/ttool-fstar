@@ -56,7 +56,6 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-import tmltranslator.*;
 import tmltranslator.modelcompiler.*;
 
 public class TMLArchiCPNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiCPInterface {
@@ -149,9 +148,11 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
                         for (int i=0; i<tabOfNames.length; i++) {
                             String s = tabOfNames[i].trim();
                             if (s.length() > 0) {
-                                ListIterator iterator = tdp.getComponentList().listIterator();
+                                ListIterator<TGComponent> iterator = tdp.getComponentList().listIterator();
+                               
                                 while(iterator.hasNext()) {
-                                    tgc = (TGComponent)(iterator.next());
+                                    tgc = iterator.next();
+                                 
                                     if (tgc instanceof TMLArchiNode) {
                                         //TraceManager.addDev("Testing |" + tgc.getName() + "|  vs | " + s + "|");
                                         if (tgc.getName().compareTo(s) == 0) {
@@ -203,9 +204,9 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         String tmpName;
 
         JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Communication Pattern mapping", this, mappedUnits, name, cpMEC, assignedAttributes, transferType1, transferType2 );
-        dialog.setSize( 700, 550 );
-        GraphicLib.centerOnParent( dialog );
-        dialog.show(); // blocked until dialog has been closed
+        //dialog.setSize( 700, 550 );
+        GraphicLib.centerOnParent( dialog, 700, 550 );
+        dialog.setVisible( true ); // blocked until dialog has been closed
         //setJDialogOptions(jdab);
         name = dialog.getNodeName();
         mappedUnits = dialog.getMappedUnits();
@@ -281,7 +282,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+     //       int t1id;
             String sstereotype = null, snodeName = null;
 
             mappedUnits.removeAllElements();
@@ -291,7 +292,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
+                    for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(i);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {

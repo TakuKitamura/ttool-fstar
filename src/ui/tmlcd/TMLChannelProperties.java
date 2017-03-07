@@ -134,14 +134,14 @@ public class TMLChannelProperties extends TGCWithoutInternalComponent {
     public boolean editOndoubleClick(JFrame frame) {
         
         String oldValue = value;
-        String oldName = channelName;
-        int oldType = type;
+      //  String oldName = channelName;
+//        int oldType = type;
         int oldSize = size;
-        int oldMax = maxElt;
+  //      int oldMax = maxElt;
         JDialogChannel jda = new JDialogChannel(channelName, size, type, maxElt, frame, "Setting channel's properties");
         jda.setSize(350, 300);
-        GraphicLib.centerOnParent(jda);
-        jda.show(); // blocked until dialog has been closed
+        GraphicLib.centerOnParent(jda, 350, 300);
+        jda.setVisible( true ); // blocked until dialog has been closed
         
         if (jda.hasNewData()) {
             try {
@@ -202,8 +202,8 @@ public class TMLChannelProperties extends TGCWithoutInternalComponent {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

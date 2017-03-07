@@ -165,7 +165,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     private ArrayList<Object[]> rowsGoogleScholar;
     private ArrayList<Object[]> rowsDB;
     /** Creates new form  */
-    public JDialogSearchBox(Frame _frame, String _title, ArrayList<String> l, TDiagramMouseManager tdmm) {
+    public JDialogSearchBox(Frame _frame, String _title, java.util.List<String> l, TDiagramMouseManager tdmm) {
         //super(_frame, _title, true);
         initComponents();
         this.tdmm = tdmm;
@@ -402,7 +402,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         javax.swing.GroupLayout jPanel_GoogleScholarTabLayout = new javax.swing.GroupLayout(jPanel_GoogleScholarTab);
         jPanel_GoogleScholarTab.setLayout(jPanel_GoogleScholarTabLayout);
 
-        GroupLayout.ParallelGroup groupScholar = jPanel_GoogleScholarTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
+       // GroupLayout.ParallelGroup groupScholar = jPanel_GoogleScholarTabLayout.createParallelGroup(GroupLayout.Alignment.LEADING);
         jPanel_GoogleScholarTabLayout.setHorizontalGroup(
                                                          jPanel_GoogleScholarTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                          .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 729, Short.MAX_VALUE)
@@ -799,15 +799,15 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                     };
 
                     JOptionPane joptionpane = new JOptionPane();
-                    int i = joptionpane.showOptionDialog(null, inputs, SETUP_ADDRESS_DB,
-                                                         joptionpane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                    int i = JOptionPane.showOptionDialog(null, inputs, SETUP_ADDRESS_DB,
+                    		JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                                                          null, new Object[]{"Save", "Cancel"}, "OK");
-                    if (i == joptionpane.OK_OPTION) {
+                    if (i == JOptionPane.OK_OPTION) {
                         while (!isAddressDBFormatted()) {
                             JOptionPane.showMessageDialog(null, "Address:Port", "Wrong format",
                                                           JOptionPane.WARNING_MESSAGE);
-                            i = joptionpane.showOptionDialog(null, inputs, SETUP_ADDRESS_DB,
-                                                             joptionpane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                            i = JOptionPane.showOptionDialog(null, inputs, SETUP_ADDRESS_DB,
+                            		JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                                                              null, new Object[]{"Save", "Cancel"}, "OK");
                         }
                         ConfigurationTTool.ExternalServer = jTextaddressDB.getText();
@@ -861,7 +861,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                 }
             });
 
-        jTextaddressDB.getDocument().addDocumentListener(new DocumentListener() {
+        	jTextaddressDB.getDocument().addDocumentListener(new DocumentListener() {
                 @Override
                 public void insertUpdate(DocumentEvent documentEvent) {
 

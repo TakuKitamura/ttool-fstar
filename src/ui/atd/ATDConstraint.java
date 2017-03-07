@@ -47,7 +47,6 @@
 package ui.atd;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 
 import org.w3c.dom.*;
@@ -68,7 +67,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
     private static int minFontSize = 4;
     private int currentFontSize = -1;
     private boolean displayText = true;
-    private int textX = 1;
+ //   private int textX = 1;
 
     private static int arc = 7;
 
@@ -114,7 +113,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
     public void internalDrawing(Graphics g) {
 
         Font f = g.getFont();
-        Font fold = f;
+   //     Font fold = f;
 
         if (currentFontSize == -1) {
             currentFontSize = f.getSize();
@@ -182,13 +181,13 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
 
 
     public boolean editOndoubleClick(JFrame frame) {
-        String tmp;
-        boolean error = false;
+//        String tmp;
+//        boolean error = false;
 
         JDialogConstraintText dialog = new JDialogConstraintText(frame, "Setting constraint attributes", (ConstraintListInterface)this, equation, "Equation");
-        dialog.setSize(450, 350);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+     //   dialog.setSize(450, 350);
+        GraphicLib.centerOnParent(dialog, 450, 350);
+        dialog.setVisible( true ); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -272,18 +271,18 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
-            String sdescription = null;
-            String prio;
-            String isRoot = null;
+//            int t1id;
+//            String sdescription = null;
+//            String prio;
+//            String isRoot = null;
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

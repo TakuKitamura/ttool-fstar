@@ -52,8 +52,6 @@ import javax.swing.*;
 
 import java.util.*;
 
-import org.w3c.dom.*;
-
 import myutil.*;
 import ui.*;
 import ui.window.*;
@@ -193,9 +191,9 @@ public class AvatarSMDExpireTimer extends AvatarSMDBasicComponent implements Bas
         TraceManager.addDev("Nb of timers:" + timers.size());
 
         JDialogAvatarTimer jdat = new JDialogAvatarTimer(frame, "Timer expiration",  getTimerName(), "", timers, false);
-        jdat.setSize(350, 300);
-        GraphicLib.centerOnParent(jdat);
-        jdat.show(); // blocked until dialog has been closed
+       // jdat.setSize(350, 300);
+        GraphicLib.centerOnParent(jdat, 350, 300);
+        jdat.setVisible( true ); // blocked until dialog has been closed
 
         if (jdat.hasBeenCancelled()) {
             return false;

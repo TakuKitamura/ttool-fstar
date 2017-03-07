@@ -47,7 +47,6 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.ncdd;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 
 import org.w3c.dom.*;
@@ -152,9 +151,9 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 		String oldValue = value;
 		
 		JDialogNCTraffic dialog = new JDialogNCTraffic(frame, "Setting traffic attributes", value, periodicType, period, periodUnit, deadline, deadlineUnit, minPacketSize, maxPacketSize, priority);
-		dialog.setSize(300, 350);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+	//	dialog.setSize(300, 350);
+        GraphicLib.centerOnParent(dialog, 300, 350);
+        dialog.setVisible( true ); // blocked until dialog has been closed
         
 		if (dialog.hasBeenCancelled()) {
 			return false;
@@ -242,7 +241,7 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+         //   int t1id;
             String svalue = null, s0 = null, s1 = null, s2 = null, s3 = null, s4 = null, s5 = null, s6 = null, s7 = null;
             
             for(int i=0; i<nl.getLength(); i++) {
@@ -250,8 +249,8 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

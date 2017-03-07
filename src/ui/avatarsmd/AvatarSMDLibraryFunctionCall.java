@@ -41,7 +41,6 @@ package ui.avatarsmd;
 import java.util.LinkedList;
 
 import java.awt.Graphics;
-import java.awt.Font;
 import java.awt.Color;
 
 import javax.swing.JFrame;
@@ -150,11 +149,11 @@ public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComp
             return;
 
         int stringWidth = this.tdp.stringWidth (graph, this.value);
-        if (stringWidth + 2*AvatarSMDLibraryFunctionCall.paddingHorizontal >= this.width-2*this.linebreak) {
+        if (stringWidth + 2*AvatarSMDLibraryFunctionCall.paddingHorizontal >= this.width-2*linebreak) {
             for (int stringLength = this.value.length ()-1; stringLength >= 0; stringLength--) {
                 String abbrev = this.value.substring (0, stringLength) + "...";
                 int w = this.tdp.stringWidth (graph, abbrev);
-                if (w + 2*AvatarSMDLibraryFunctionCall.paddingHorizontal < this.width-2*this.linebreak) {
+                if (w + 2*AvatarSMDLibraryFunctionCall.paddingHorizontal < this.width-2*linebreak) {
                     graph.drawString (abbrev, this.x + (this.width - w)/2, this.y + (this.height+h)/2);
                     break;
                 }
@@ -194,10 +193,10 @@ public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComp
                 this,
                 frame,
                 "Setting of library function call");
-        dialog.setSize (650, 590);
-        GraphicLib.centerOnParent(dialog);
+        //dialog.setSize (650, 590);
+        GraphicLib.centerOnParent(dialog, 650, 590);
 
-        dialog.show(); // blocked until dialog has been closed
+        dialog.setVisible( true ); // blocked until dialog has been closed
 
         return true;
     }

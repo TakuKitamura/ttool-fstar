@@ -56,22 +56,20 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-import tmltranslator.*;
-
 public class TMLCRecordComponent extends TGCScalableWithInternalComponent implements SwallowedTGComponent {
 	private int maxFontSize = 14;
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;
-	private int spacePt = 3;
+//	private int spacePt = 3;
 	private Color myColor;
 	
 	// Icon
 	private int iconSize = 15;
-	private boolean iconIsDrawn = false;
+	//private boolean iconIsDrawn = false;
 	
 	// Attributes
-	private boolean attributesAreDrawn = false;
+	//private boolean attributesAreDrawn = false;
 	protected LinkedList<TAttribute> myAttributes;
 	private int textX = 15; // border for ports
 	private double dtextX = 0.0;
@@ -183,11 +181,12 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 		
 		// Icon
 		if ((width>30) && (height > (iconSize + 2*textX))) {
-			iconIsDrawn = true;
+			//iconIsDrawn = true;
 			g.drawImage(IconManager.imgic1200.getImage(), x + width - iconSize - textX, y + textX, null);
-		} else {
-			iconIsDrawn = false;
-		}
+		} 
+//		else {
+//			iconIsDrawn = false;
+//		}
 		
 		// Attributes
 		if (((TMLComponentTaskDiagramPanel)tdp).areAttributesVisible()) {
@@ -289,8 +288,8 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 		// And so -> attributes!
 		JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame, "Setting fields of " + value, "Field");
         setJDialogOptions(jda);
-        jda.setSize(650, 375);
-        GraphicLib.centerOnParent(jda);
+      //  jda.setSize(650, 375);
+        GraphicLib.centerOnParent(jda, 650, 375);
         jda.setVisible(true); // blocked until dialog has been closed
         //makeValue();
         //if (oldValue.equals(value)) {
@@ -361,7 +360,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 		if (child instanceof String) {
 			return 0;
 		} else {
-			Object o;
+			//Object o;
 			return myAttributes.indexOf(child) + 1;
 		}
     }

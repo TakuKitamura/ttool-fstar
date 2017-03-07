@@ -137,31 +137,34 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 		return true;
 	}
 	
-    @Override public boolean editOndoubleClick( JFrame frame ) {
-			
-			String [] labels = new String[nParam + 1];
-      String [] values = new String[nParam + 1];
-      labels[0] = "Message name";
-      values[0] = this.name;
-      for( int i = 0; i< nParam; i++ ) {
-				labels[i+1] = "Param #" + (i+1);
+    @Override
+    public boolean editOndoubleClick( JFrame frame ) {
+		String [] labels = new String[nParam + 1];
+		String [] values = new String[nParam + 1];
+		labels[0] = "Message name";
+		values[0] = this.name;
+      
+		for( int i = 0; i< nParam; i++ ) {
+			labels[i+1] = "Param #" + (i+1);
         	values[i+1] = params[i];
-      }
+		}
          
-      JDialogMultiStringCP jdms = new JDialogMultiStringCP( frame, "Setting message properties", nParam+1, labels, values );
-      jdms.setSize( 350, 300 );
-      GraphicLib.centerOnParent(jdms);
-      jdms.show(); // blocked until dialog has been closed
+		JDialogMultiStringCP jdms = new JDialogMultiStringCP( frame, "Setting message properties", nParam+1, labels, values );
+		//jdms.setSize( 350, 300 );
+		GraphicLib.centerOnParent(jdms, 350, 300 );
+		jdms.setVisible( true ); // blocked until dialog has been closed
        
-      if(jdms.hasBeenSet() && (jdms.hasValidString(0))) {
-				this.name = jdms.getString(0);
-        for( int i = 0; i < nParam; i++ ) {
-					params[i] = jdms.getString(i+1);
-        }
-      makeValue();
-      return true;
-      }
-    	return false;
+		if(jdms.hasBeenSet() && (jdms.hasValidString(0))) {
+			this.name = jdms.getString(0);
+			
+			for( int i = 0; i < nParam; i++ ) {
+				params[i] = jdms.getString(i+1);
+			}
+			makeValue();
+			return true;
+		}
+    	
+		return false;
     }
 
     public void makeValue() {
@@ -224,17 +227,17 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
           NodeList nli;
           Node n1, n2;
           Element elt;
-          int access, type, k = 0;
-          String typeOther;
-          String id, valueAtt;
+          int /*access, type,*/ k = 0;
+//          String typeOther;
+          String id;//, valueAtt;
           
           for( int i = 0; i < nl.getLength(); i++ ) {
               n1 = nl.item(i);
               //System.out.println(n1);
               if( n1.getNodeType() == Node.ELEMENT_NODE ) {
 							nli = n1.getChildNodes();
-							for( int j = 0; i < nli.getLength(); i++ ) {
-								n2 = nli.item(i);
+							for( int j = 0; j < nli.getLength(); j++ ) {
+								n2 = nli.item(j);
 								//System.out.println(n2);
 								if( n2.getNodeType() == Node.ELEMENT_NODE ) {
 									elt = (Element) n2;

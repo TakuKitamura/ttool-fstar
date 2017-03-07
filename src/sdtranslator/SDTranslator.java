@@ -53,10 +53,10 @@ import java.util.*;
 
 public class SDTranslator {
     private HMSC hmsc;
-    private LinkedList instances;
-    private LinkedList evtstolink;
-    private LinkedList tctolink;
-    private LinkedList actionInstances; // for managing instances having no action in sds.
+    private List<Instance> instances;
+    private List<EvtToLink> evtstolink;
+    private List<TimeConstraintLink> tctolink;
+ //   private List<Instance> actionInstances; // for managing instances having no action in sds.
     private TURTLEModeling tm;
     
     
@@ -70,10 +70,10 @@ public class SDTranslator {
     }
     
     public TURTLEModeling toTURTLEModeling() throws SDTranslationException {
-        evtstolink = new LinkedList();
-        tctolink = new LinkedList();
+        evtstolink = new LinkedList<EvtToLink>();
+        tctolink = new LinkedList<TimeConstraintLink>();
         tm = new TURTLEModeling();
-        actionInstances = new LinkedList();
+    //    actionInstances = new LinkedList<Instance>();
         //renameMessages(); //should be unique -> a from I1 to I2 : a__I1__to__I2
         //System.out.println("\n\ntoTURTLEModeling:\nMaking instances");
         addClasses();
@@ -132,9 +132,9 @@ public class SDTranslator {
     private void addClasses() throws SDTranslationException {
         Instance ins;
         TClass t;
-        ListIterator iterator = instances.listIterator();
+        Iterator<Instance> iterator = instances.listIterator();
         while(iterator.hasNext()) {
-            ins = (Instance)(iterator.next());
+            ins = iterator.next();
             t = new TClass(ins.getName(), true);
             //System.out.println("Adding TClass: " + t.getName());
             tm.addTClass(t);
@@ -143,10 +143,10 @@ public class SDTranslator {
     
     private void makeInstancesBehavior() throws SDTranslationException{
         Instance ins;
-        ListIterator iterator = instances.listIterator();
+        Iterator<Instance> iterator = instances.listIterator();
 		TClass t;
         while(iterator.hasNext()) {
-            ins = (Instance)(iterator.next());
+            ins = iterator.next();
             t = tm.getTClassWithName(ins.getName());
             //System.out.println("Managing instance: " + ins.getName());
             makeInstanceBehavior(ins, t);
@@ -155,11 +155,11 @@ public class SDTranslator {
     
     // The hmsc is considered to be safe
     private void makeInstanceBehavior(Instance ins, TClass t) throws SDTranslationException {
-        ListIterator iterator = instances.listIterator();
+        //Iterator<Instance> iterator = instances.listIterator();
         ActivityDiagram ad;
-        LinkedList nodes;
-        LinkedList nodesUsed;
-        LinkedList adcomponents;
+        List<HMSCNode> nodes;
+     //   List<HMSCNode> nodesUsed;
+        List<ADComponent> adcomponents;
         int i;
         int type;
         ADJunction adj;
@@ -183,11 +183,11 @@ public class SDTranslator {
         // Building correspondance between nodes and junction + choice
         //hmsc.print();
         nodes = hmsc.getListOfNodes();
-        adcomponents = new LinkedList();
-        iterator = nodes.listIterator();
+        adcomponents = new LinkedList<ADComponent>();
+        Iterator<HMSCNode> iterator = nodes.listIterator();
         
         while(iterator.hasNext()) {
-            node = (HMSCNode)(iterator.next());
+            node = iterator.next();
             type = node.getType();
             switch(type) {
                 case HMSCNode.STOP:
@@ -241,14 +241,14 @@ public class SDTranslator {
         }
     }
     
-    private void translateNode(Instance ins, TClass t, HMSCNode n, ADComponent adc, ActivityDiagram ad, LinkedList nodes, LinkedList adcomponents) throws SDTranslationException {
+    private void translateNode(Instance ins, TClass t, HMSCNode n, ADComponent adc, ActivityDiagram ad, List<HMSCNode> nodes, List<ADComponent> adcomponents) throws SDTranslationException {
         translateNodetoNodes(ins, n, adc, nodes, adcomponents);
         translateNodetoMSCs(ins, t, n, adc, ad, nodes, adcomponents);
     }
     
-    private void translateNodetoNodes(Instance ins, HMSCNode n, ADComponent adc,  LinkedList nodes, LinkedList adcomponents) {
-        LinkedList list = n.getNextNodes();
-        ListIterator iterator = list.listIterator();
+    private void translateNodetoNodes(Instance ins, HMSCNode n, ADComponent adc,  List<HMSCNode> nodes, List<ADComponent> adcomponents) {
+        List<HMSCNode> list = n.getNextNodes();
+        Iterator<HMSCNode> iterator = list.listIterator();
         HMSCNode node;
         ADComponent adc1;
         int index;
@@ -275,14 +275,14 @@ public class SDTranslator {
         }
     }
     
-    private void translateNodetoMSCs(Instance ins, TClass t, HMSCNode n, ADComponent adc, ActivityDiagram ad, LinkedList nodes, LinkedList adcomponents) throws SDTranslationException{
+    private void translateNodetoMSCs(Instance ins, TClass t, HMSCNode n, ADComponent adc, ActivityDiagram ad, List<HMSCNode> nodes, List<ADComponent> adcomponents) throws SDTranslationException{
         MSC msc;
-        LinkedList mscs = n.getNextMSCs();
+        List<MSC> mscs = n.getNextMSCs();
         int id = 0;
         
-        ListIterator iterator = mscs.listIterator();
+        Iterator<MSC> iterator = mscs.listIterator();
         while(iterator.hasNext()) {
-            msc = (MSC)(iterator.next());
+            msc = iterator.next();
             translateNodeToMSC(ins, t, msc, n, adc, id, ad,  nodes, adcomponents);
             id ++;
         }
@@ -292,19 +292,21 @@ public class SDTranslator {
     // for example, if e1 < e2 and e2 <e3, the list does not contain e1 < e3
     // If an event is not ordered with regard to another one -> link to the last Parallel bar
     // id of the MSCs in the list of next MSCs ...
-    private void translateNodeToMSC(Instance ins, TClass t, MSC msc, HMSCNode n, ADComponent adc, int id, ActivityDiagram ad, LinkedList nodes, LinkedList adcomponents) throws SDTranslationException{
+    private void translateNodeToMSC(Instance ins, TClass t, MSC msc, HMSCNode n, ADComponent adc, int id, ActivityDiagram ad, List<HMSCNode> nodes, List<ADComponent> adcomponents) throws SDTranslationException{
         HMSCNode node;
         int index;
         ADParallel last, first;
         //ADParallel bar1, bar2;
-        LinkedList evts, orders, actions;
+        List<Evt> evts;
+        List<Order> orders;
+        List<ActionEvt> actions;
         Evt evt1;
-        ListIterator iterator, iterator1;
+        //Iterator iterator, iterator1;
         Order order1;
         ActionEvt aevt, aevt1, aevt2;
         EvtToLink etl;
         String guard;
-		ADChoice adch;
+		//ADChoice adch;
         
         // Settling the last bar and its link to next ADComponent
         last = new ADParallel();
@@ -335,12 +337,12 @@ public class SDTranslator {
         }
         
         // Building an action per event
-        actions = new LinkedList();
+        actions = new LinkedList<ActionEvt>();
         evts = msc.getEvts();
         
-        iterator = evts.listIterator();
+        Iterator<Evt> iterator = evts.listIterator();
         while(iterator.hasNext()) {
-            evt1 = (Evt)(iterator.next());
+            evt1 = iterator.next();
             if (evt1.getInstance() == ins){
                 aevt = new ActionEvt(evt1, ad);
                 
@@ -365,17 +367,17 @@ public class SDTranslator {
         // Dealing with orders between events
         // first iteration -> link those leading ordered
         orders = msc.getOrders();
-        iterator = orders.listIterator();
+        Iterator<Order> ordIterator = orders.listIterator();
         
         //System.out.println("Dealing with order ");
-        while(iterator.hasNext()) {
-            order1 = (Order)(iterator.next());
+        while(ordIterator.hasNext()) {
+            order1 = ordIterator.next();
             //System.out.println("order ");
             // if the two evts are involved -> used at activity diagram level
-            iterator1 = actions.listIterator();
+            Iterator<ActionEvt> actIt = actions.listIterator();
             aevt1 = null; aevt2 = null;
-            while(iterator1.hasNext()) {
-                aevt = (ActionEvt)(iterator1.next());
+            while( actIt.hasNext()) {
+                aevt = actIt.next();
                 if (aevt.evt == order1.evt1)
                     aevt1 = aevt;
                 if (aevt.evt == order1.evt2)
@@ -424,9 +426,9 @@ public class SDTranslator {
         }
         
         // second iteration -> when no order, executed at the beginning, and when no following order -> linked to last one
-        iterator1 = actions.listIterator();
-        while(iterator1.hasNext()) {
-            aevt = (ActionEvt)(iterator1.next());
+        Iterator<ActionEvt> actIterator = actions.listIterator();
+        while( actIterator.hasNext()) {
+            aevt = actIterator.next();
             
             //order before?
             if (ad.getNbComponentLeadingTo(aevt.getFirst()) == 0) {
@@ -477,26 +479,27 @@ public class SDTranslator {
     
     // sync, inv between instances
     private void makeInstancesRelations() throws SDTranslationException {
-        Iterator iterator1, iterator2, iterator3;
-        LinkedList mscs, links;
+        //Iterator iterator1, iterator2, iterator3;
+        List<MSC> mscs;
+        List<LinkEvts> links;
         MSC msc;
         LinkEvts le;
         EvtToLink evtlink, evtlk1, evtlk2;
         Relation r;
         
         mscs = hmsc.getMSCs();
-        iterator1 = mscs.listIterator();
+        Iterator<MSC> mscIterator = mscs.listIterator();
         
-        while(iterator1.hasNext()) {
-            msc = (MSC)(iterator1.next());
+        while( mscIterator.hasNext()) {
+            msc = mscIterator.next();
             links = msc.getLinksEvts();
-            iterator2 = links.listIterator();
-            while(iterator2.hasNext()) {
-                le = (LinkEvts)(iterator2.next());
-                iterator3 = evtstolink.listIterator();
+            Iterator<LinkEvts> linksIterator = links.listIterator();
+            while( linksIterator.hasNext()) {
+                le = linksIterator.next();
+                Iterator<EvtToLink> evtLinkIterator = evtstolink.listIterator();
                 evtlk1 = null; evtlk2 = null;
-                while(iterator3.hasNext()) {
-                    evtlink = (EvtToLink)(iterator3.next());
+                while( evtLinkIterator.hasNext()) {
+                    evtlink = evtLinkIterator.next();
                     if (evtlink.evt == le.evt1) {
                         evtlk1 = evtlink;
                     }
@@ -622,55 +625,55 @@ public class SDTranslator {
             }
         }
     }
-    
-    private void makeChannelsRelations() {
-        
-        // Synchro between in channels and out channels (same name : Channel__msg__IN and Channel__msg__OUT)
-        TClass tin, tout;
-        int i, j, k;
-        String sin, sout, param;
-        Relation r;
-        Gate gin, gout;
-        
-        for(i=0; i<tm.classNb(); i++) {
-            tin = tm.getTClassAtIndex(i);
-            if (tin instanceof TClassBufferIn) {
-                for(j=0; j<tm.classNb(); j++) {
-                    tout = tm.getTClassAtIndex(j);
-                    if (tout instanceof TClassBufferOut) {
-                        //System.out.println("Found corresponding tin and tout");
-                        sin = tin.getName();
-                        sin = sin.substring(0, sin.length() - 2);
-                        sout = tout.getName();
-                        sout = sout.substring(0, sout.length() - 3);
-                        //System.out.println("name tin = " + sin + " name tout = " + sout);
-                        if (sin.compareTo(sout) ==0) {
-                            //System.out.println("Same name!");
-                            r = tm.syncRelationBetween(tin, tout);
-                            if (r == null) {
-                                r = new Relation(Relation.SYN, tin, tout, false);
-                                tm.addRelation(r);
-                            }
-                            // Obtain param
-                            for(k=0; k<((TClassBuffer)tin).getParamInNb(); k++) {
-                                param = ((TClassBuffer)tin).getParamInAt(k);
-                                gin = tin.getGateByName(param);
-                                gout = tout.getGateByName(param);
-                                if ((gin != null) && (gout != null)) {
-                                    r.addGates(gin, gout);
-                                }
-                            }
-                            // Get gates
-                            // Connect gates
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
+//    
+//    private void makeChannelsRelations() {
+//        
+//        // Synchro between in channels and out channels (same name : Channel__msg__IN and Channel__msg__OUT)
+//        TClass tin, tout;
+//        int i, j, k;
+//        String sin, sout, param;
+//        Relation r;
+//        Gate gin, gout;
+//        
+//        for(i=0; i<tm.classNb(); i++) {
+//            tin = tm.getTClassAtIndex(i);
+//            if (tin instanceof TClassBufferIn) {
+//                for(j=0; j<tm.classNb(); j++) {
+//                    tout = tm.getTClassAtIndex(j);
+//                    if (tout instanceof TClassBufferOut) {
+//                        //System.out.println("Found corresponding tin and tout");
+//                        sin = tin.getName();
+//                        sin = sin.substring(0, sin.length() - 2);
+//                        sout = tout.getName();
+//                        sout = sout.substring(0, sout.length() - 3);
+//                        //System.out.println("name tin = " + sin + " name tout = " + sout);
+//                        if (sin.compareTo(sout) ==0) {
+//                            //System.out.println("Same name!");
+//                            r = tm.syncRelationBetween(tin, tout);
+//                            if (r == null) {
+//                                r = new Relation(Relation.SYN, tin, tout, false);
+//                                tm.addRelation(r);
+//                            }
+//                            // Obtain param
+//                            for(k=0; k<((TClassBuffer)tin).getParamInNb(); k++) {
+//                                param = ((TClassBuffer)tin).getParamInAt(k);
+//                                gin = tin.getGateByName(param);
+//                                gout = tout.getGateByName(param);
+//                                if ((gin != null) && (gout != null)) {
+//                                    r.addGates(gin, gout);
+//                                }
+//                            }
+//                            // Get gates
+//                            // Connect gates
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    
     private void makeTimers() throws SDTranslationException {
-        Iterator iterator1;
+        //Iterator iterator1;
         
         //LinkedList mscs, links;
         //MSC msc;
@@ -682,9 +685,9 @@ public class SDTranslator {
         
         String timerName, tclassName;
         
-        iterator1 = evtstolink.listIterator();
+        Iterator<EvtToLink> iterator1 = evtstolink.listIterator();
         while(iterator1.hasNext()) {
-            evtlink = (EvtToLink)(iterator1.next());
+            evtlink = iterator1.next();
             if (evtlink.evt.getType() == Evt.TIMER_SET) {
                 //System.out.println("Timer set");
                 timerName = evtlink.evt.getTimerName();
@@ -854,8 +857,9 @@ public class SDTranslator {
     }
     
     private void makeTimeConstraints() {
-        LinkedList mscs, tcs;
-        ListIterator iterator1, iterator2;
+        List<MSC> mscs;
+        List<TimeConstraint> tcs;
+        //ListIterator iterator1, iterator2;
         TimeConstraint tc;
         TimeConstraintLink tcl;
         MSC msc;
@@ -865,14 +869,14 @@ public class SDTranslator {
         
         // For each time constraint, a TimeConstraintLink is built
         mscs = hmsc.getMSCs();
-        iterator1 = mscs.listIterator();
+        Iterator<MSC> iterator1 = mscs.listIterator();
         
         while(iterator1.hasNext()) {
-            msc = (MSC)(iterator1.next());
+            msc = iterator1.next();
             tcs = msc.getTimeConstraints();
-            iterator2 = tcs.listIterator();
+            Iterator<TimeConstraint> iterator2 = tcs.listIterator();
             while(iterator2.hasNext()) {
-                tc = (TimeConstraint)(iterator2.next());
+                tc = iterator2.next();
                 //System.out.println("tc found");
                 tcl = new TimeConstraintLink(tc, msc);
                 tcl.build();
@@ -888,9 +892,9 @@ public class SDTranslator {
         // * no absolute constraint on the end
         TimeConstraintLink tclink;
         
-        iterator1 = tctolink.listIterator();
-        while(iterator1.hasNext()) {
-            tclink = (TimeConstraintLink)(iterator1.next());
+        Iterator<TimeConstraintLink> tclIterator = tctolink.listIterator();
+        while( tclIterator.hasNext()) {
+            tclink = tclIterator.next();
             if (tclink.tc.type == TimeConstraint.RELATIVE) {
                 evt1 = null;
                 evt1 = tclink.msc.hasExactlyOnePreviousEvt(tclink.tc.evt2);
@@ -908,13 +912,13 @@ public class SDTranslator {
     private void manageTimeConstraint(ActionEvt aevt, TClass t) {
         // Is there a time constraint regarding this evt ?
         
-        ListIterator iterator1;
+       // ListIterator iterator1;
         TimeConstraintLink tclink;
-        Param p;
+       // Param p;
         
-        iterator1 = tctolink.listIterator();
+        Iterator<TimeConstraintLink> iterator1 = tctolink.listIterator();
         while(iterator1.hasNext()) {
-            tclink = (TimeConstraintLink)(iterator1.next());
+            tclink = iterator1.next();
             if (tclink.tc.type == TimeConstraint.RELATIVE) {
                 //System.out.println("*** -> Relative time constraint");
                 if (tclink.tc.evt1 == aevt.evt) {
@@ -957,67 +961,67 @@ public class SDTranslator {
         }
     }
     
-    private void manageInfiniteLoops() {
-        ActionInstance ai1, ai2;
-        boolean found;
-        Iterator iterator1, iterator2;
-        ADActionStateWithGate adsg1, adsg2;
-        ADStop adstop;
-        Gate g1, g2;
-        
-        //looks for instances with no action in sd;
-        iterator1 = actionInstances.listIterator();
-        
-        while (iterator1.hasNext()) {
-            ai1 = (ActionInstance)(iterator1.next());
-            if (ai1.nbAction == 0) {
-                // look for another instance with actions and in the same msc
-                iterator2 = actionInstances.listIterator();
-                found = false;
-                ai2 = null;
-                while (iterator2.hasNext()) {
-                    ai2 = (ActionInstance)(iterator2.next());
-                    if ((ai2.msc == ai1.msc) && (ai2.nbAction >0)) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (found) {
-                    g1 = ai1.t.addNewGateIfApplicable("NoAction__" + ai1.ins.getName() + "__" + ai2.ins.getName() + "__" + ai1.msc.getName());
-                    adsg1 = new ADActionStateWithGate(g1);
-                    adsg1.setActionValue("");
-                    ai1.first.addNext(adsg1);
-                    adsg1.addNext(ai1.last);
-                    ai1.t.getActivityDiagram().add(adsg1);
-                    
-                    g2 = ai2.t.addNewGateIfApplicable("NoAction__" + ai1.ins.getName() + "__" + ai2.ins.getName() + "__" + ai1.msc.getName());
-                    adsg2 = new ADActionStateWithGate(g2);
-                    adsg2.setActionValue("");
-                    ai2.first.addNext(adsg2);
-                    adstop = new ADStop();
-                    adsg2.addNext(adstop);
-                    ai2.t.getActivityDiagram().add(adsg2);
-                    ai2.t.getActivityDiagram().add(adstop);
-                    
-                    // synchro link between the two tclasses
-                    tm.addSynchroRelation(ai1.t, g1, ai2.t, g2);
-                    //System.out.println("Adding synchro relation between " + ai1.t.getName() + " and " + ai2.t.getName());
-                    
-                } else {
-                    // potential infinite loop
-                    System.out.println("Warning: instance " + ai1.ins + " has no action in scenario " + ai1.msc.getName());
-                    ai1.first.addNext(ai1.last);
-                }
-            }
-        }
-    }
+//    private void manageInfiniteLoops() {
+//        ActionInstance ai1, ai2;
+//        boolean found;
+//        Iterator iterator1, iterator2;
+//        ADActionStateWithGate adsg1, adsg2;
+//        ADStop adstop;
+//        Gate g1, g2;
+//        
+//        //looks for instances with no action in sd;
+//        iterator1 = actionInstances.listIterator();
+//        
+//        while (iterator1.hasNext()) {
+//            ai1 = (ActionInstance)(iterator1.next());
+//            if (ai1.nbAction == 0) {
+//                // look for another instance with actions and in the same msc
+//                iterator2 = actionInstances.listIterator();
+//                found = false;
+//                ai2 = null;
+//                while (iterator2.hasNext()) {
+//                    ai2 = (ActionInstance)(iterator2.next());
+//                    if ((ai2.msc == ai1.msc) && (ai2.nbAction >0)) {
+//                        found = true;
+//                        break;
+//                    }
+//                }
+//                if (found) {
+//                    g1 = ai1.t.addNewGateIfApplicable("NoAction__" + ai1.ins.getName() + "__" + ai2.ins.getName() + "__" + ai1.msc.getName());
+//                    adsg1 = new ADActionStateWithGate(g1);
+//                    adsg1.setActionValue("");
+//                    ai1.first.addNext(adsg1);
+//                    adsg1.addNext(ai1.last);
+//                    ai1.t.getActivityDiagram().add(adsg1);
+//                    
+//                    g2 = ai2.t.addNewGateIfApplicable("NoAction__" + ai1.ins.getName() + "__" + ai2.ins.getName() + "__" + ai1.msc.getName());
+//                    adsg2 = new ADActionStateWithGate(g2);
+//                    adsg2.setActionValue("");
+//                    ai2.first.addNext(adsg2);
+//                    adstop = new ADStop();
+//                    adsg2.addNext(adstop);
+//                    ai2.t.getActivityDiagram().add(adsg2);
+//                    ai2.t.getActivityDiagram().add(adstop);
+//                    
+//                    // synchro link between the two tclasses
+//                    tm.addSynchroRelation(ai1.t, g1, ai2.t, g2);
+//                    //System.out.println("Adding synchro relation between " + ai1.t.getName() + " and " + ai2.t.getName());
+//                    
+//                } else {
+//                    // potential infinite loop
+//                    System.out.println("Warning: instance " + ai1.ins + " has no action in scenario " + ai1.msc.getName());
+//                    ai1.first.addNext(ai1.last);
+//                }
+//            }
+//        }
+//    }
 	
-	private ActionEvt getActionEvt(LinkedList actions, Evt evtToFind) {
-		ListIterator iterator = actions.listIterator();
+	private ActionEvt getActionEvt( List<ActionEvt> actions, Evt evtToFind) {
+		Iterator<ActionEvt> iterator = actions.listIterator();
 		ActionEvt ae;
 		
 		while(iterator.hasNext()) {
-			ae = (ActionEvt)(iterator.next());
+			ae = iterator.next();
 			if (ae.evt == evtToFind) {
 				return ae;
 			}

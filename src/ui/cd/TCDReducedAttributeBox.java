@@ -79,7 +79,7 @@ public class TCDReducedAttributeBox extends TGCReducedAttributeBox {
     protected void setJDialogOptions(JDialogReducedAttribute jda) {
     }
     
-    protected LinkedList<TAttribute> getCustomAttributes() {
+    protected List<TAttribute> getCustomAttributes() {
         TCDTObject to = (TCDTObject)(getFather());
         TCDTClass tc = to.getMasterTClass();
         return tc.getAttributes();

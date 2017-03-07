@@ -64,12 +64,9 @@ import org.w3c.dom.NodeList;
 import myutil.GraphicLib;
 
 import java.util.Collection;
-import java.util.Vector;
 import java.util.LinkedList;
 import ui.cd.TCDCompositionOperator;
 import ui.cd.TCDTClass;
-import ui.cd.TGConnectingPointCompositionOperator;
-import ui.window.JDialogAttribute;
 import ui.*;
 
 public class ProCSDInterface extends TCDCompositionOperator implements  ActionListener {
@@ -275,9 +272,9 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	        dialog.addType("void");
 	        dialog.addType("return result");
 	        
-	        dialog.setSize(650, 375);
+	       // dialog.setSize(650, 375);
 	        
-	        GraphicLib.centerOnParent(dialog);
+	        GraphicLib.centerOnParent(dialog, 650, 375);
 	      //  dialog.show(); // blocked until dialog has been closed
 	        dialog.setVisible(true);
 	        

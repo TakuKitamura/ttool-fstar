@@ -49,12 +49,9 @@ package ui;
 import java.awt.*;
 import java.awt.event.*;
 
-import myutil.*;
-
 import java.util.ArrayList;
 
 import ui.window.JDialogSearchBox;
-import myutil.TraceManager;
 
 public class TDiagramMouseManager implements MouseListener, MouseMotionListener  {
 
@@ -88,7 +85,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
     private boolean isOut;
 
     //store selected components
-    private ArrayList selectedMultiComponents=new ArrayList<String>();
+    private java.util.List<String> selectedMultiComponents=new ArrayList<String>();
 
     // Constructor
     public TDiagramMouseManager(TDiagramPanel _tdp) {
@@ -357,7 +354,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
                 else {
                     if (tdp.mgui.searchBox.isShowing()) {
                         tdp.mgui.searchBox.addValueListKeyword(search);
-                        tdp.mgui.searchBox.show();
+                        tdp.mgui.searchBox.setVisible( true );
                     } else{
                         tdp.mgui.searchBox=null;
                         tdp.mgui.searchBox = new JDialogSearchBox(tdp.getGUI().getFrame(), "Search Box", selectedMultiComponents, this);
@@ -649,7 +646,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
     }
 
     //Author: huytruong
-    public ArrayList getSelectComponents(){
+    public java.util.List<String> getSelectComponents(){
         return selectedMultiComponents  ;
     }
     public void clearSelectComponents(){

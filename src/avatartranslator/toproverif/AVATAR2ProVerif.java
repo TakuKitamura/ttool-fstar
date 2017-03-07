@@ -46,14 +46,12 @@
 package avatartranslator.toproverif;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Vector;
 import java.io.*;
 import javax.swing.*;
 
-
-import javax.xml.parsers.*;
 import ui.ConfigurationTTool;
 import ui.CheckingError;
 import ui.AvatarDesignPanel;
@@ -125,7 +123,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         //Our hash is saved in config
         String hashCode= Integer.toString(this.spec.getStringSpec().hashCode());
         File file = new File(path);
-        BufferedReader br;
+        BufferedReader br = null;
         if (file.exists()){
             String hash = ConfigurationTTool.ProVerifHash;
             if (!hash.equals("")){
@@ -142,9 +140,18 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             return false;
                         }
                     }
-                    br.close();
+//                    br.close();
                 } catch (Exception e) {
-                    //
+					e.printStackTrace();
+                }
+                finally {
+                	if ( br != null ) {
+                		try {
+							br.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+                	}
                 }
             }
         }
@@ -184,7 +191,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
         this.dummyDataCounter = 0;
 
-        LinkedList<AvatarAttribute> allKnowledge = this.makeStartingProcess();
+        List<AvatarAttribute> allKnowledge = this.makeStartingProcess();
 
         this.makeHeader();
 
@@ -474,8 +481,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         this.spec.addDeclaration (new ProVerifFunc       (PEANO_N, new String[] {"bitstring"}, "bitstring"));
 
         /* Declare all the call__*** variables */
-        LinkedList<AvatarBlock> blocks = this.avspec.getListOfBlocks();
-        String action = "(";
+        List<AvatarBlock> blocks = this.avspec.getListOfBlocks();
+      //  String action = "(";
         for(AvatarBlock block: blocks) {
             HashMap<AvatarStateMachineElement, Integer> simplifiedElements = block.getStateMachine ().getSimplifiedElements ();
             if (simplifiedElements.get (block.getStateMachine ().getStartState ()) == null)
@@ -588,7 +595,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             }
     }
 
-    private LinkedList<AvatarAttribute> makeStartingProcess() {
+    private List<AvatarAttribute> makeStartingProcess() {
         TraceManager.addDev("\n\n=+=+=+ Making Starting Process +=+=+=");
 
         // Create starting process
@@ -596,7 +603,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         ProVerifProcInstr lastInstr = p;
 
         // Get all the blocks
-        LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
+        List<AvatarBlock> blocks = avspec.getListOfBlocks();
 
         // Used to store the names that are public keys
         this.pubs = new HashMap<AvatarAttribute, AvatarAttribute> ();
@@ -604,11 +611,11 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             if (pragma instanceof AvatarPragmaPrivatePublicKey)
                 this.pubs.put (((AvatarPragmaPrivatePublicKey) pragma).getPublicKey (), ((AvatarPragmaPrivatePublicKey) pragma).getPrivateKey ());
 
-        String blockName, paramName;
+        //String blockName, paramName;
 
         // Store all the names that are system knowledge
         // Enable to raise warning when an attribute is both system and session knowledge
-        LinkedList<AvatarAttribute> systemKnowledge = new LinkedList<AvatarAttribute> ();
+        List<AvatarAttribute> systemKnowledge = new LinkedList<AvatarAttribute> ();
 
         this.nameEquivalence = new HashMap<AvatarAttribute, AvatarAttribute> ();
 
@@ -664,7 +671,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             containsPublicKey = this.nameEquivalence.get (privateK);
 
                             // Let the public key
-                            lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (AVATAR2ProVerif.translateTerm (first, null), "bitstring")}, PK_PK + "(" + privateKStr + ")"));;
+                            lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (AVATAR2ProVerif.translateTerm (first, null), "bitstring")}, PK_PK + "(" + privateKStr + ")"));
                             // Make the public key public
                             tmpInstr = new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + AVATAR2ProVerif.translateTerm (first, null) + ");");
                         } else
@@ -807,7 +814,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         // Concatenate system and session knowledge
         systemKnowledge.addAll (sessionKnowledge);
 
-        LinkedList<ProVerifVar> processArgs = this.getProVerifVarFromAttr (systemKnowledge);
+        List<ProVerifVar> processArgs = this.getProVerifVarFromAttr (systemKnowledge);
         processArgs.add (new ProVerifVar ("sessionID", "bitstring"));
 
         // Call every start process
@@ -826,18 +833,21 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     /**
      * Generate ProVerif code for each process for each Avatar block
      */
-    private void makeBlocks(LinkedList<AvatarAttribute> allKnowledge) {
+    private void makeBlocks( List<AvatarAttribute> allKnowledge) {
         TraceManager.addDev("\n\n=+=+=+ Making Blocks +=+=+=");
 
-        LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
+        List<AvatarBlock> blocks = avspec.getListOfBlocks();
+        
         for(AvatarBlock block: blocks)
             makeBlock(block, allKnowledge);
     }
 
-    private LinkedList<ProVerifVar> getProVerifVarFromAttr (LinkedList<AvatarAttribute> attrs) {
-        LinkedList<ProVerifVar> result = new LinkedList<ProVerifVar> ();
+    private List<ProVerifVar> getProVerifVarFromAttr (List<AvatarAttribute> attrs) {
+        List<ProVerifVar> result = new LinkedList<ProVerifVar> ();
+        
         for(AvatarAttribute aa: attrs)
             result.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (aa, null), "bitstring"));
+        
         return result;
     }
 
@@ -845,20 +855,21 @@ public class AVATAR2ProVerif implements AvatarTranslator {
      * Compute a list of ProVerifVar corresponding to the attributes of the block
      */
     private ProVerifVar[] getAttributesFromBlock (AvatarBlock ab) {
-        LinkedList<ProVerifVar> result = this.getProVerifVarFromAttr (ab.getAttributes ());
+        List<ProVerifVar> result = this.getProVerifVarFromAttr (ab.getAttributes ());
+       
         return result.toArray (new ProVerifVar[result.size ()]);
     }
 
     /**
      * Generate ProVerif code for one Avatar block
      */
-    private void makeBlock(AvatarBlock ab, LinkedList<AvatarAttribute> _allKnowledge) {
+    private void makeBlock(AvatarBlock ab, List<AvatarAttribute> _allKnowledge) {
         TraceManager.addDev("\nAvatarBlock: " + ab.getName ());
-        LinkedList<AvatarAttribute> allKnowledge = (LinkedList<AvatarAttribute>) _allKnowledge.clone ();
+        List<AvatarAttribute> allKnowledge = new LinkedList<AvatarAttribute>( _allKnowledge );//.clone();
 
         // Create first ProVerif process for this block and add it to the ProVerif specification
-        LinkedList<ProVerifVar> knowledgeArray = this.getProVerifVarFromAttr (allKnowledge);
-        LinkedList<ProVerifVar> processArgs = (LinkedList<ProVerifVar>) knowledgeArray.clone ();
+        List<ProVerifVar> knowledgeArray = this.getProVerifVarFromAttr (allKnowledge);
+        List<ProVerifVar> processArgs = new LinkedList<ProVerifVar>( knowledgeArray );//.clone ();
         processArgs.add (new ProVerifVar ("sessionID", "bitstring"));
 
         ProVerifProcInstr lastInstr = new ProVerifProcess(ab.getName() + "__start", processArgs.toArray (new ProVerifVar[processArgs.size ()]));

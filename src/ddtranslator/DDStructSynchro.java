@@ -50,14 +50,14 @@ import java.util.*;
 import translator.*;
 
 public class DDStructSynchro  {
-    private LinkedList list;
+    private List<String> list;
     
     public DDStructSynchro() {
-        list = new LinkedList();
+        list = new LinkedList<String>();
     }
     
     public DDStructSynchro(String actionValue, TClass t) {
-        list = new LinkedList();
+        list = new LinkedList<String>();
         constructList(actionValue, t);
     }
     
@@ -115,10 +115,10 @@ public class DDStructSynchro  {
         int b = 0;
         String type;
         
-        ListIterator iterator = list.listIterator();
+        Iterator<String> iterator = list.listIterator();
         
         while(iterator.hasNext()) {
-            type = (String)(iterator.next());
+            type = iterator.next();
             if (type.compareTo(Param.NAT) ==0) {
                 call += "?x" + x + ":nat";
                 x ++;
@@ -133,11 +133,11 @@ public class DDStructSynchro  {
     
     public int nbNat() {
         int nb = 0;
-        ListIterator iterator = list.listIterator();
+        Iterator<String> iterator = list.listIterator();
         String type;
         
         while(iterator.hasNext()) {
-            type = (String)(iterator.next());
+            type = iterator.next();
             if (type.compareTo(Param.NAT) ==0) {
                 nb ++;
             }
@@ -148,10 +148,10 @@ public class DDStructSynchro  {
     
     public int nbBool() {
         int nb = 0;
-        ListIterator iterator = list.listIterator();
+        Iterator<String> iterator = list.listIterator();
         String type;
         while(iterator.hasNext()) {
-            type = (String)(iterator.next());
+            type = iterator.next();
             if (type.compareTo(Param.BOOL) ==0) {
                 nb ++;
             }
@@ -163,14 +163,14 @@ public class DDStructSynchro  {
     public int compareTo(Object o) {
         if (o instanceof DDStructSynchro) {
             DDStructSynchro ddss = (DDStructSynchro)o;
-            LinkedList listd = ddss.getList();
+            List<String> listd = ddss.getList();
             if (list.size() == listd.size()) {
-                ListIterator li1 = list.listIterator();
-                ListIterator li2 = listd.listIterator();
+                Iterator<String> li1 = list.listIterator();
+                Iterator<String> li2 = listd.listIterator();
                 String s1, s2;
                 while(li1.hasNext()) {
-                    s1 = (String)(li1.next());
-                    s2 = (String)(li2.next());
+                    s1 = li1.next();
+                    s2 = li2.next();
                     if (s1.compareTo(s2) != 0) {
                         return -1;
                     }
@@ -182,7 +182,7 @@ public class DDStructSynchro  {
         return -1;
     }
     
-    public LinkedList getList() {
+    public List<String> getList() {
         return list;
     }
     
@@ -190,18 +190,15 @@ public class DDStructSynchro  {
         return list.size();
     }
     
-    public boolean isInList(LinkedList _list) {
-        ListIterator iterator = _list.listIterator();
+    public boolean isInList(List<DDStructSynchro> _list) {
+        Iterator<DDStructSynchro> iterator = _list.listIterator();
         DDStructSynchro ddss;
         while(iterator.hasNext()) {
-            ddss = (DDStructSynchro)(iterator.next());
+            ddss = iterator.next();
             if (compareTo(ddss) == 0) {
                 return true;
             }
         }
         return false;
     }
-    
-    
-    
 } // Class

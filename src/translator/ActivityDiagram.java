@@ -48,9 +48,8 @@ package translator;
 import java.util.*;
 
 import myutil.*;
-import ui.*;
 
-public class ActivityDiagram extends Vector{
+public class ActivityDiagram extends Vector<ADComponent>{
     
     protected ADStart ads;
     
@@ -203,7 +202,7 @@ public class ActivityDiagram extends Vector{
         ADComponent adc;
         ADActionStateWithGate adg, adg1;
         Gate g1;
-        Vector next;
+        Vector<ADComponent> next;
         String s, s1;
         int sizeBegin = size();
         for(int i=0; i<sizeBegin; i++) {
@@ -218,7 +217,7 @@ public class ActivityDiagram extends Vector{
                     // link the old one to the new one
                     adg1.setNewNext(adg.getAllNext());
                     //link the new one to the previous next of the old one.
-                    next = new Vector();
+                    next = new Vector<ADComponent>();
                     next.add(adg1);
                     adg.setNewNext(next);
                     // add new component to activity diagram
@@ -329,7 +328,7 @@ public class ActivityDiagram extends Vector{
     
     public StringBuffer printNextsToStringBuffer(ADComponent adc) {
         String s = "";
-        Vector v = adc.getAllNext();
+        Vector<ADComponent> v = adc.getAllNext();
         ADComponent adcbis;
         //System.out.println("Size of v:" + v.size());
         s = s+"\n\tNext: ";
@@ -402,8 +401,8 @@ public class ActivityDiagram extends Vector{
     public void setRegularJunctions() {
         ADComponent adc, adc2;
         int i, j, cpt, index1, index2;
-        Vector list;
-        Vector junctions = new Vector();
+        Vector<ADComponent> list;
+        Vector<ADComponent> junctions = new Vector<ADComponent>();
         ADJunction adj1, adj2;
         for(i=0; i<size(); i++) {
             adc = (ADComponent)(elementAt(i));
@@ -526,7 +525,7 @@ public class ActivityDiagram extends Vector{
       ADChoice adch1;
       boolean go = true;
       int delay = 0;
-      LinkedList met;
+      List<ADComponent> met;
       ADActionStateWithGate adag, adag1;
       ADJunction adj;
 
@@ -537,7 +536,7 @@ public class ActivityDiagram extends Vector{
         if (!adch.isSpecialChoice(i, variableAsActions)) {
            // Go through the elements
            adc = adch.getNext(i);
-           met = new LinkedList();
+           met = new LinkedList<ADComponent>();
            while(go) {
              if (met.contains(adc)) {
                go = false;

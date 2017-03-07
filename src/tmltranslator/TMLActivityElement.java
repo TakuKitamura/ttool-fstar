@@ -54,7 +54,7 @@ public class TMLActivityElement extends TMLElement{
     private String value="";
     public TMLActivityElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-        nexts = new Vector();
+        nexts = new Vector<TMLActivityElement>();
 
     }
 
@@ -91,7 +91,7 @@ public class TMLActivityElement extends TMLElement{
         return nexts;
     }
 
-    public void setNexts(Vector _nexts) {
+    public void setNexts(Vector<TMLActivityElement> _nexts) {
         nexts = _nexts;
     }
 

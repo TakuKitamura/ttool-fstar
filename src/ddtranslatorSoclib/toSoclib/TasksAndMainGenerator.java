@@ -49,6 +49,7 @@ package ddtranslatorSoclib.toSoclib;
 
 import java.io.File;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 import avatartranslator.AvatarAction;
@@ -185,38 +186,35 @@ public class TasksAndMainGenerator {
 
     public void makeMainMutex() {
         // Create a main mutex
-        mainFile.appendToBeforeMainCode("/* Main mutex */" + CR);
-	
-	mainFile.appendToHCode("extern pthread_mutex_t __mainMutex;" + CR + CR);
-	//  mainFile.appendToBeforeMainCode("pthread_mutex_t __mainMutex;" + CR + CR);
-        mainFile.appendToBeforeMainCode("pthread_barrier_t barrier ;" + CR );
-        mainFile.appendToBeforeMainCode("pthread_attr_t *attr_t;" + CR );
-        mainFile.appendToBeforeMainCode("pthread_mutex_t __mainMutex;" + CR2 );
-               
-	int d=0;
+    	mainFile.appendToBeforeMainCode("/* Main mutex */" + CR);
 
-	//for(AvatarRelation ar: avspec.getRelations()) {
-	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
-	//for(AvatarChannel ar: avspec.getChannels()) {
-	    for(AvatarChannel channel: ram.getChannels()){ 
-		mainFile.appendToBeforeMainCode("#define CHANNEL"+d+" __attribute__((section(\"section_channel"+d+"\")))" + CR ); 	
-		mainFile.appendToBeforeMainCode("#define LOCK"+d+" __attribute__((section(\"section_lock"+d+"\")))" + CR );//one lock per channel
-	    d++;
-	    }
-	}
+    	mainFile.appendToHCode("extern pthread_mutex_t __mainMutex;" + CR + CR);
+    	//  mainFile.appendToBeforeMainCode("pthread_mutex_t __mainMutex;" + CR + CR);
+    	mainFile.appendToBeforeMainCode("pthread_barrier_t barrier ;" + CR );
+    	mainFile.appendToBeforeMainCode("pthread_attr_t *attr_t;" + CR );
+    	mainFile.appendToBeforeMainCode("pthread_mutex_t __mainMutex;" + CR2 );
 
+    	int d=0;
 
-        mainFile.appendToBeforeMainCode("#define base(arg) arg" + CR2 );
-        mainFile.appendToBeforeMainCode("typedef struct mwmr_s mwmr_t;" + CR2);
+    	//for(AvatarRelation ar: avspec.getRelations()) {
+    	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
+    		//for(AvatarChannel ar: avspec.getChannels()) {
+    		for(AvatarChannel channel: ram.getChannels()){ 
+    			mainFile.appendToBeforeMainCode("#define CHANNEL"+d+" __attribute__((section(\"section_channel"+d+"\")))" + CR ); 	
+    			mainFile.appendToBeforeMainCode("#define LOCK"+d+" __attribute__((section(\"section_lock"+d+"\")))" + CR );//one lock per channel
+    			d++;
+    		}
+    	}
 
 
+    	mainFile.appendToBeforeMainCode("#define base(arg) arg" + CR2 );
+    	mainFile.appendToBeforeMainCode("typedef struct mwmr_s mwmr_t;" + CR2);
 
-
-        mainFile.appendToMainCode("void *ptr;" + CR);
-        mainFile.appendToMainCode("pthread_barrier_init(&barrier,NULL, NB_PROC);" +CR);
-        mainFile.appendToMainCode("pthread_attr_t *attr_t = malloc(sizeof(pthread_attr_t));" +CR);
-        mainFile.appendToMainCode("pthread_attr_init(attr_t);" + CR );
-        mainFile.appendToMainCode("pthread_mutex_init(&__mainMutex, NULL);" +CR2);       
+    	mainFile.appendToMainCode("void *ptr;" + CR);
+    	mainFile.appendToMainCode("pthread_barrier_init(&barrier,NULL, NB_PROC);" +CR);
+    	mainFile.appendToMainCode("pthread_attr_t *attr_t = malloc(sizeof(pthread_attr_t));" +CR);
+    	mainFile.appendToMainCode("pthread_attr_init(attr_t);" + CR );
+    	mainFile.appendToMainCode("pthread_mutex_init(&__mainMutex, NULL);" +CR2);       
     }
   
     public void makeSynchronousChannels() {
@@ -321,7 +319,7 @@ public class TasksAndMainGenerator {
 	mainFile.appendToMainCode(getChannelName(ar, i)+".status->wptr=0;" + CR);
 	    
 	    
-	int seg_no=0;
+	//int seg_no=0;
         mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
 	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
 	       
@@ -336,14 +334,15 @@ public class TasksAndMainGenerator {
     }
       
     public int FindCPUidFromTask(AvatarBlock block){
-	LinkedList<AvatarTask> tasks = avddspec.getAllMappedTask();
-	for (AvatarTask task : tasks){
-	    if (task.getTaskName().equals(block.getName())){
-		return task.getCPUNo();
-	    }
-	}
+    	List<AvatarTask> tasks = avddspec.getAllMappedTask();
+	
+    	for (AvatarTask task : tasks){
+    		if (task.getTaskName().equals(block.getName())){
+    			return task.getCPUNo();
+    		}
+    	}
 
-	return -1;
+    	return -1;
     }
 
     public void makeTasks() {
@@ -762,7 +761,7 @@ public class TasksAndMainGenerator {
 
         if (_asme instanceof AvatarState) {
 	   
-	    int cpuid = FindCPUidFromTask(_block);
+	    //int cpuid = FindCPUidFromTask(_block);
 	    //   ret += "printf(\"tracing cycles --- block: "+_block.getName()+" cpu: %d cycle count: %d \\n\","+ cpuid+", cpu_cycle_count());"+CR;
             if (!firstCall) {
 		if (debug) {
@@ -859,8 +858,8 @@ public class TasksAndMainGenerator {
         if (_asme instanceof AvatarActionOnSignal) {
             AvatarActionOnSignal aaos = (AvatarActionOnSignal)_asme;
             ret += makeSignalAction(aaos, 0, false, "", "");
-            AvatarSignal as = aaos.getSignal();
-            AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
+           // AvatarSignal as = aaos.getSignal();
+           // AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
             ret += executeOneRequest("__req0");
             ret += traceRequest();
         }

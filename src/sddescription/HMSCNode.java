@@ -57,22 +57,22 @@ public class HMSCNode extends HMSCElement {
     public static final int SEQUENCE = 5;
     
     private int type;
-    private LinkedList nextMSCs;
-    protected LinkedList nextNodes;
-    private LinkedList nextInformationMSCs;
-    private LinkedList nextInformationNodes;
-    private LinkedList nextMSCGuards;
-    private LinkedList nextNodeGuards;
+    private List<MSC> nextMSCs;
+    protected List<HMSCNode> nextNodes;
+    private List<MSC> nextInformationMSCs;
+    private List<HMSCNode> nextInformationNodes;
+    private List<String> nextMSCGuards;
+    private List<String> nextNodeGuards;
     
     public HMSCNode(String _name, int _type) {
         super(_name);
         type = _type;
-        nextMSCs = new LinkedList();
-        nextNodes = new LinkedList();
-        nextInformationMSCs = new LinkedList();
-        nextInformationNodes = new LinkedList();
-        nextMSCGuards = new LinkedList();
-        nextNodeGuards = new LinkedList();
+        nextMSCs = new LinkedList<MSC>();
+        nextNodes = new LinkedList<HMSCNode>();
+        nextInformationMSCs = new LinkedList<MSC>();
+        nextInformationNodes = new LinkedList<HMSCNode>();
+        nextMSCGuards = new LinkedList<String>();
+        nextNodeGuards = new LinkedList<String>();
     }
     
     public void addNextNode(HMSCNode c) {
@@ -114,25 +114,24 @@ public class HMSCNode extends HMSCElement {
      public int getType() { return type; }
     
     
-    public LinkedList getNextNodes() {
+    public List<HMSCNode> getNextNodes() {
         return nextNodes;
     }
     
-    public LinkedList getNextMSCs() {
+    public List<MSC> getNextMSCs() {
         return nextMSCs;
     } 
     
-    public LinkedList getInformationNextNodes() {
+    public List<HMSCNode> getInformationNextNodes() {
         return nextInformationNodes;
     }
     
-     public LinkedList getInformationNextMSCs() {
+     public List<MSC> getInformationNextMSCs() {
         return nextInformationMSCs;
     }
     
     public String toString() {
-        LinkedList ll;
-        ListIterator iterator;
+       // List ll;
         int index = 0;
         HMSCNode n;
         MSC msc;
@@ -141,9 +140,9 @@ public class HMSCNode extends HMSCElement {
         s += "Name=" + getName();
         s += "\n\tnextNodes= ";
         
-        iterator = getNextNodes().listIterator();
-        while(iterator.hasNext()) {
-            n = (HMSCNode)(iterator.next());
+        final Iterator<HMSCNode> nodeIterator = getNextNodes().listIterator();
+        while( nodeIterator.hasNext()) {
+            n = nodeIterator.next();
             s += n.getName() + " ";
             if (sizeNodeGuard() > index) {
                 s += "guard= " + getNodeGuard(index) +  " ";
@@ -153,9 +152,9 @@ public class HMSCNode extends HMSCElement {
         
         s += "\n\tnextMSCs= ";
         index = 0;
-        iterator = getNextMSCs().listIterator();
-        while(iterator.hasNext()) {
-            msc = (MSC)(iterator.next());
+        final Iterator<MSC> mscIterator = getNextMSCs().listIterator();
+        while( mscIterator.hasNext()) {
+            msc = mscIterator.next();
             s += msc.getName() + " ";
             if (sizeMSCGuard() > index) {
                 s += "guard= " + getMSCGuard(index) + " ";
@@ -164,6 +163,5 @@ public class HMSCNode extends HMSCElement {
         }
         //s+="\n";
         return s;
-        
     }
 }

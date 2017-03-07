@@ -141,9 +141,9 @@ public class TMLEventProperties extends TGCWithoutInternalComponent {
         String oldValue = valueOCL;
         int oldSample = maxSamples;
         JDialogParamFIFO jda = new JDialogParamFIFO(eventName, list[0].getType(), list[1].getType(), list[2].getType(), isFinite, isBlocking, ""+maxSamples, frame, "Setting properties");
-        jda.setSize(350, 350);
-        GraphicLib.centerOnParent(jda);
-        jda.show(); // blocked until dialog has been closed
+       // jda.setSize(350, 350);
+        GraphicLib.centerOnParent(jda, 350, 350);
+        jda.setVisible( true ); // blocked until dialog has been closed
         
         if (jda.hasNewData()) {
           try {

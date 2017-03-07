@@ -86,7 +86,7 @@ public class JDialogGenAUTS extends javax.swing.JDialog implements ActionListene
     
     protected JCheckBox makeDOT, fc2;
     
-    protected SortedVector files;
+    protected SortedVector<String> files;
     
     /** Creates new form  */
     public JDialogGenAUTS(Frame f, MainGUI _mgui, String title, String _cmdCaesar, String _cmdBcgio, String _fileName, String _host, String _path) {
@@ -231,7 +231,7 @@ public class JDialogGenAUTS extends javax.swing.JDialog implements ActionListene
         t.start();
     }
     
-    public SortedVector getFiles() {
+    public SortedVector<String> getFiles() {
         return files;
     }
     
@@ -239,15 +239,15 @@ public class JDialogGenAUTS extends javax.swing.JDialog implements ActionListene
         
         String cmd1 = "";
         String data;
-        LinkedList ll;
-        ListIterator iterator;
+        java.util.List<String> ll;
+        Iterator<String> iterator;
         path = jtf.getText();
-        files =  new SortedVector();
-        Point p;
+        files =  new SortedVector<String>();
+       // Point p;
         String taskName;
         String saveFileName;
         String spec;
-        int i = 0;
+     //   int i = 0;
         
         rshc = new RshClient(host);
         String basicFileName = fileName.substring(0, fileName.length()-4);
@@ -263,13 +263,13 @@ public class JDialogGenAUTS extends javax.swing.JDialog implements ActionListene
                 iterator = ll.listIterator();
 
                 while(iterator.hasNext()) {
-                  taskName =(String)(iterator.next());
+                  taskName = iterator.next();
                   jta.append("Generating RG of name=" + taskName + "\n");
-                  spec =(String)(iterator.next());
+                  spec = iterator.next();
                   //jta.append("spec=" + (String)(iterator.next()));
                   jta.append("Sending LOTOS specification data\n");
                   saveFileName = basicFileName + "_" + taskName;
-                  i ++;
+               //   i ++;
                   rshc.deleteFile(basicFileName+".lot");
             
             // file data

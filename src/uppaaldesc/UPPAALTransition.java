@@ -54,7 +54,7 @@ import myutil.Conversion;
 public class UPPAALTransition {
 	public UPPAALLocation destinationLoc, sourceLoc;
 	
-	public LinkedList points; //nails -> intermediate graphical points on transitions
+	public List<Point> points; //nails -> intermediate graphical points on transitions
 	
 	public String guard = "";
 	public Point guardPoint;
@@ -64,7 +64,7 @@ public class UPPAALTransition {
 	public Point assignmentPoint;
 	
     public UPPAALTransition() {
-		points = new LinkedList();
+		points = new LinkedList<Point>();
 		guardPoint = new Point();
 		synchronizationPoint = new Point();
 		assignmentPoint = new Point();
@@ -90,10 +90,10 @@ public class UPPAALTransition {
 		ret += "<label kind=\"synchronisation\" x=\"" + synchronizationPoint.x + "\" y=\"" +  synchronizationPoint.y + "\">" + Conversion.transformToXMLString(synchronization) + "</label>\n";
 		ret += "<label kind=\"assignment\" x=\"" + assignmentPoint.x + "\" y=\"" +  assignmentPoint.y + "\">" + Conversion.transformToXMLString(assignment) + "</label>\n";
 		
-		ListIterator iterator = points.listIterator();
+		Iterator<Point> iterator = points.listIterator();
 		Point p;
 		while(iterator.hasNext()) {
-			p = (Point)(iterator.next());
+			p = iterator.next();
 			ret += "<nail x=\"" + p.x + "\" y=\"" +  p.y + "\" />\n";
 		}
 		

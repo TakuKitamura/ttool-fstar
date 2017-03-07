@@ -47,7 +47,6 @@
 package ui.avatarmad;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 
@@ -111,9 +110,9 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
     
     public boolean editOndoubleClick(JFrame frame) {
     	JDialogVersioningConnector jdvc = new JDialogVersioningConnector(frame, oldVersion, newVersion);
-        jdvc.setSize(400, 300);
-        GraphicLib.centerOnParent(jdvc);
-        jdvc.show(); // blocked until dialog has been closed
+     //   jdvc.setSize(400, 300);
+        GraphicLib.centerOnParent(jdvc, 400, 300);
+        jdvc.setVisible( true ); // blocked until dialog has been closed
         
         if (jdvc.hasBeenCancelled()) {
         	return false;
