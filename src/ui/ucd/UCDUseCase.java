@@ -56,7 +56,7 @@ import ui.*;
 
 import ui.window.*;
 
-public class UCDUseCase extends TGCWithoutInternalComponent {
+public class UCDUseCase extends TGCScalableWithoutInternalComponent {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -90,6 +90,9 @@ public class UCDUseCase extends TGCWithoutInternalComponent {
         moveable = true;
         editable = true;
         removable = true;
+
+	super.oldScaleFactor = tdp.getZoom();
+        //currentFontSize = (int) (maxFontSize*oldScaleFactor);
         
         value = "My use case";
         name = "Use case";

@@ -57,11 +57,11 @@ public class UCDActor extends TGCScalableWithoutInternalComponent {
     protected int textY =  15;
     protected int arc = 5;*/
     protected int w, h; //w1;
-    private int textX = 7;
+    /*private int textX = 7;
 
     private int maxFontSize = 12;
     private int minFontSize = 4;
-    private int currentFontSize = -1;
+    private int currentFontSize = -1;*/
     
     public UCDActor(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -91,7 +91,7 @@ public class UCDActor extends TGCScalableWithoutInternalComponent {
         removable = true;
 
 	super.oldScaleFactor = tdp.getZoom();
-        currentFontSize = (int) (maxFontSize*oldScaleFactor);
+        //currentFontSize = (int) (maxFontSize*oldScaleFactor);
         
         value = "Actor";
         name = "actor";
