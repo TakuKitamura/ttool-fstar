@@ -2774,6 +2774,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         } else {
             s += zoom + "%";
         }
+	TraceManager.addDev("Seeting zoom in " + getCurrentTDiagramPanel());
         actions[TGUIAction.ACT_SHOW_ZOOM].setName(TGUIAction.ACT_SHOW_ZOOM, s);
     }
 
