@@ -57,14 +57,15 @@ import ui.req.*;
 
 
 public class JDialogSelectRequirements extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    public static Vector validated, ignored;
     
-    private Vector val, ign, back;
+	public static Vector<Requirement> validated, ignored;
+    
+    private Vector<Requirement> val, ign, back;
     
     //subpanels
     private JPanel panel1, panel2, panel3, panel4;
-    private JList listIgnored;
-    private JList listValidated;
+    private JList<TGComponent> listIgnored;
+    private JList<TGComponent> listValidated;
     private JButton allValidated;
     private JButton addOneValidated;
     private JButton addOneIgnored;
@@ -75,14 +76,14 @@ public class JDialogSelectRequirements extends javax.swing.JDialog implements Ac
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogSelectRequirements(Frame f, Vector _back, LinkedList componentList, String title) {
+    public JDialogSelectRequirements(Frame f, Vector<Requirement> _back, java.util.List<TGComponent> componentList, String title) {
         super(f, title, true);
         
         back = _back;
         
         if ((validated == null) || (ignored == null)) {
             val = makeNewVal(componentList);
-            ign = new Vector();
+            ign = new Vector<Requirement>();
         } else {
             val = validated;
             ign = ignored;
@@ -96,27 +97,29 @@ public class JDialogSelectRequirements extends javax.swing.JDialog implements Ac
         pack();
     }
     
-    private Vector makeNewVal(LinkedList list) {
-        Vector v = new Vector();
+    private Vector<Requirement> makeNewVal( java.util.List<TGComponent> list) {
+        Vector<Requirement> v = new Vector<Requirement>();
         TGComponent tgc;
         
         for(int i=0; i<list.size(); i++) {
-            tgc = (TGComponent)(list.get(i));
+            tgc = list.get(i);
             //System.out.println(tgc);
             if (tgc instanceof Requirement) {
                 if (((Requirement)tgc).isFormal()) {
-                    v.addElement(tgc);
+                    v.addElement( (Requirement) tgc );
                 }
             }
         }
+        
         return v;
     }
     
-    private void checkRequirement(Vector tobeChecked, LinkedList source) {
+    private void checkRequirement(Vector<Requirement> tobeChecked, java.util.List<TGComponent> source) {
         Requirement r;
         
         for(int i=0; i<tobeChecked.size(); i++) {
-            r = (Requirement)(tobeChecked.elementAt(i));
+            r = tobeChecked.elementAt(i);
+            
             if (!source.contains(r)) {
                 tobeChecked.removeElementAt(i);
                 i--;
@@ -124,13 +127,14 @@ public class JDialogSelectRequirements extends javax.swing.JDialog implements Ac
         }
     }
     
-    public void addNewRequirement(Vector added, LinkedList source, Vector notSource) {
+    public void addNewRequirement(Vector<Requirement> added, java.util.List<TGComponent> source, Vector<Requirement> notSource) {
         TGComponent tgc;
         
         for(int i=0; i<source.size(); i++) {
-            tgc = (TGComponent)(source.get(i));
+            tgc = source.get(i);
+            
             if ((tgc instanceof Requirement) && (((Requirement)tgc).isFormal()) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
-                added.addElement(tgc);
+                added.addElement( (Requirement) tgc);
                 //System.out.println("New element");
             }
         }
@@ -152,7 +156,7 @@ public class JDialogSelectRequirements extends javax.swing.JDialog implements Ac
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
         panel1.setBorder(new javax.swing.border.TitledBorder("Ignored formal requirements"));
-        listIgnored = new JList(ign);
+        listIgnored = new JList<TGComponent>(ign);
         //listIgnored.setPreferredSize(new Dimension(200, 250));
         listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listIgnored.addListSelectionListener(this);
@@ -165,7 +169,7 @@ public class JDialogSelectRequirements extends javax.swing.JDialog implements Ac
         panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
         panel2.setBorder(new javax.swing.border.TitledBorder("Formal requirements taken into account"));
-        listValidated = new JList(val);
+        listValidated = new JList<TGComponent>(val);
         //listValidated.setPreferredSize(new Dimension(200, 250));
         listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listValidated.addListSelectionListener(this);
@@ -253,8 +257,8 @@ public class JDialogSelectRequirements extends javax.swing.JDialog implements Ac
     
     private void addOneIgnored() {
         int [] list = listValidated.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        Requirement o;
         for (int i=0; i<list.length; i++){
             o = val.elementAt(list[i]);
             ign.addElement(o);
@@ -269,8 +273,8 @@ public class JDialogSelectRequirements extends javax.swing.JDialog implements Ac
     
     private void addOneValidated() {
         int [] list = listIgnored.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        Requirement o;
         for (int i=0; i<list.length; i++){
             o = ign.elementAt(list[i]);
             val.addElement(o);

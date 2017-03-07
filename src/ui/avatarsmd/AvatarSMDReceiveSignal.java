@@ -51,8 +51,6 @@ import java.awt.geom.*;
 import javax.swing.*;
 import java.util.*;
 
-import org.w3c.dom.*;
-
 import myutil.*;
 import ui.*;
 import ui.window.*;
@@ -226,9 +224,9 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		TraceManager.addDev("Nb of signals:" + signals.size());
 		
 		JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting receive signal",  value, signals, false);
-		jdas.setSize(350, 300);
-        GraphicLib.centerOnParent(jdas);
-        jdas.show(); // blocked until dialog has been closed
+		//jdas.setSize(350, 300);
+        GraphicLib.centerOnParent(jdas, 350, 300);
+        jdas.setVisible( true ); // blocked until dialog has been closed
 		
 		if (jdas.hasBeenCancelled()) {
 			return false;

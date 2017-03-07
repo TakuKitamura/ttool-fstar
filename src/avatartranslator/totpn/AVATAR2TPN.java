@@ -45,7 +45,6 @@
 
 package avatartranslator.totpn;
 
-import java.awt.*;
 import java.util.*;
 
 import tpndescription.*;
@@ -54,20 +53,20 @@ import avatartranslator.*;
 
 public class AVATAR2TPN {
 
-    private static int GENERAL_ID = 0;
+  //  private static int GENERAL_ID = 0;
 
 
 
     private TPN tpn;
     private AvatarSpecification avspec;
 
-    private Hashtable<AvatarStateMachineElement, Place> entryPlaces;
-    private Hashtable<AvatarStateMachineElement, Place> exitPlaces;
-    private LinkedList<AvatarActionOnSignal> sendActions;
-    private LinkedList<AvatarActionOnSignal> receiveActions;
+    private Map<AvatarStateMachineElement, Place> entryPlaces;
+    private Map<AvatarStateMachineElement, Place> exitPlaces;
+    private List<AvatarActionOnSignal> sendActions;
+    private List<AvatarActionOnSignal> receiveActions;
 
 
-    private Vector warnings;
+ //   private Vector warnings;
 
 
 
@@ -77,13 +76,13 @@ public class AVATAR2TPN {
 
 
 
-    public Vector getWarnings() {
-        return warnings;
-    }
+//    public Vector getWarnings() {
+//        return warnings;
+//    }
 
 
     public TPN generateTPN(boolean _debug, boolean _optimize) {
-        GENERAL_ID = 0;
+       // GENERAL_ID = 0;
 
         entryPlaces = new Hashtable<AvatarStateMachineElement, Place>();
         exitPlaces = new Hashtable<AvatarStateMachineElement, Place>();
@@ -91,7 +90,7 @@ public class AVATAR2TPN {
         sendActions = new LinkedList<AvatarActionOnSignal>();
         receiveActions = new LinkedList<AvatarActionOnSignal>();
 
-        warnings = new Vector();
+      //  warnings = new Vector();
         tpn = new TPN();
 
         avspec.removeCompositeStates();
@@ -112,7 +111,8 @@ public class AVATAR2TPN {
     }
 
     public void makeBlocks() {
-        LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
+        java.util.List<AvatarBlock> blocks = avspec.getListOfBlocks();
+        
         for(AvatarBlock block: blocks) {
             makeBlock(block);
         }

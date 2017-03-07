@@ -63,11 +63,11 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal ../uppaal/spec.xml"/>
 
-<LastOpenFile data="/Users/ludovicapvrille/TTool/modeling/DIPLODOCUS/SmartCardProtocol.xml"/>
+<LastOpenFile data="/home/dblouin/Projets/TTool/git/TTool/modeling/AVATAR/CoffeeMachine_Avatar.xml"/>
 
 
 
-<LastWindowAttributes x="369" y="23" width="1098" height="1000" max="false" />
+<LastWindowAttributes x="65" y="24" width="1295" height="640" max="true" />
 
 
 <ProVerifHash data=""/>

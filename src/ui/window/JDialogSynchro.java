@@ -57,15 +57,15 @@ import ui.cd.*;
 
 
 public class JDialogSynchro extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    private LinkedList<TAttribute> gatesOfT1, gatesOfT2;
-    private LinkedList<TTwoAttributes> synchro, newSynchro;
+    private java.util.List<TAttribute> gatesOfT1, gatesOfT2;
+    private java.util.List<TTwoAttributes> synchro, newSynchro;
     private TClassSynchroInterface t1, t2;
     //private TDiagramPanel _tdp;
     
     private JPanel panel1, panel2;
     
     // Panel1
-    private JComboBox gatesBox1, gatesBox2;
+    private JComboBox<String> gatesBox1, gatesBox2;
     private JButton addButton;
     
     //Panel2
@@ -79,7 +79,7 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogSynchro(Frame f, TClassSynchroInterface _t1, TClassSynchroInterface _t2, LinkedList<TTwoAttributes> _synchro, TCDSynchroGateList _tcdsgl, String title) {
+    public JDialogSynchro(Frame f, TClassSynchroInterface _t1, TClassSynchroInterface _t2, java.util.List<TTwoAttributes> _synchro, TCDSynchroGateList _tcdsgl, String title) {
         super(f, title, true);
         t1 = _t1;
         t2 = _t2;
@@ -93,7 +93,7 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
         checkGates(synchro);
         
         // clone synchronization gates -> for cancel
-        newSynchro = (LinkedList<TTwoAttributes>)(synchro.clone());
+        newSynchro = new LinkedList<TTwoAttributes>( synchro );//.clone());
         
         // remove gates involved in synchro
         adjustGatesOfTClasses();
@@ -103,7 +103,7 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
         pack();
     }
     
-    private void checkGates(LinkedList<TTwoAttributes> sync) {
+    private void checkGates( java.util.List<TTwoAttributes> sync) {
         for(int i=0; i<sync.size(); i++) {
             TTwoAttributes tt = sync.get (i);
             if ((tt.t1 != t1) || (tt.t2 != t2) || (!gatesOfT1.contains(tt.ta1)) || (!gatesOfT2.contains(tt.ta2))) {
@@ -193,13 +193,13 @@ public class JDialogSynchro extends javax.swing.JDialog implements ActionListene
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
         
-        gatesBox1 = new JComboBox();
+        gatesBox1 = new JComboBox<String>();
         panel1.add(gatesBox1, c1);
         c1.gridwidth = 1;
         panel1.add(new JLabel(" = "), c1);
         
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        gatesBox2 = new JComboBox();
+        gatesBox2 = new JComboBox<String>();
         panel1.add(gatesBox2, c1);
         
         // third line panel1

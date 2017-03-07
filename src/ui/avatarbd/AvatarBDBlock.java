@@ -605,8 +605,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
         JDialogAvatarBlock jdab = new JDialogAvatarBlock(this.myAttributes, this.myMethods, this.mySignals, null, frame, "Setting attributes of " + value, "Attribute", tab, globalCode, true, mainCode);
         setJDialogOptions(jdab);
-        jdab.setSize(650, 575);
-        GraphicLib.centerOnParent(jdab);
+//        jdab.setSize(650, 575);
+        GraphicLib.centerOnParent(jdab, 650, 575);
         jdab.setVisible(true); // blocked until dialog has been closed
         //makeValue();
         //if (oldValue.equals(value)) {

@@ -48,7 +48,6 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.tmldd;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 
 import org.w3c.dom.*;
@@ -166,9 +165,9 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
 		boolean error = false;
 		
 		JDialogEventArtifact dialog = new JDialogEventArtifact(frame, "Setting artifact attributes", this);
-		dialog.setSize(400, 350);
-    GraphicLib.centerOnParent(dialog);
-    dialog.show(); // blocked until dialog has been closed
+	//	dialog.setSize(400, 350);
+		GraphicLib.centerOnParent(dialog, 400, 350);
+		dialog.setVisible( true ); // blocked until dialog has been closed
         
 		if( !dialog.isRegularClose() ) {
 			return false;
@@ -242,7 +241,7 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+         //   int t1id;
             String svalue = null, sname = null, sreferenceCommunication = null, stype = null;
 						String prio = null;
             
@@ -251,8 +250,8 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
                 //System.out.println(n1);
                 if( n1.getNodeType() == Node.ELEMENT_NODE ) {
                     nli = n1.getChildNodes();
-                    for( int j = 0; i < nli.getLength(); i++ ) {
-                        n2 = nli.item(i);
+                    for( int j = 0; j < nli.getLength(); j++ ) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if( n2.getNodeType() == Node.ELEMENT_NODE ) {
                             elt = (Element) n2;

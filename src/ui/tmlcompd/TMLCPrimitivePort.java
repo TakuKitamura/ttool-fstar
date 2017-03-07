@@ -56,8 +56,6 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-import tmltranslator.*;
-
 public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes {
     protected Color myColor;
     protected int orientation;
@@ -460,7 +458,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     // TGConnecting points ..
     public void setOrientation(int orientation) {
         currentOrientation = orientation;
-        double w0, h0,w1, h1;
+        double w0, h0;//,w1, h1;
 
         switch(orientation) {
         case GraphicLib.NORTH:
@@ -526,7 +524,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         //System.out.println("Double click!");
         //String oldValue = valueOCL;
         int oldSample = maxSamples;
-        int oldWidthSample = widthSamples;
+     //   int oldWidthSample = widthSamples;
 
 
         Vector<String> otherTypes;
@@ -841,7 +839,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             // Event and Request
         } else {
             attr += "(";
-            TType type1;
+          //  TType type1;
             for(int i=0; i<nbMaxAttribute; i++) {
                 if (i!=0) {
                     attr += ",";

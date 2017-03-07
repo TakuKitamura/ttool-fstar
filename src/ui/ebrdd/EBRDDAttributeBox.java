@@ -209,8 +209,8 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
         String oldValue = value;
         JDialogAttribute jda = new JDialogAttribute(myAttributes, forbiddenNames, frame, "Setting variables", attributeText);
         setJDialogOptions(jda);
-        jda.setSize(650, 375);
-        GraphicLib.centerOnParent(jda);
+      //  jda.setSize(650, 375);
+        GraphicLib.centerOnParent(jda, 650, 375);
         jda.setVisible(true); // blocked until dialog has been closed
         makeValue();
         if (oldValue.equals(value)) {

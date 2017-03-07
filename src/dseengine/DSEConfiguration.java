@@ -46,6 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package dseengine;
 
+import java.awt.Point;
 import java.io.*;
 import java.util.*;
 
@@ -104,7 +105,7 @@ public class DSEConfiguration implements Runnable  {
 	private TMLMapping tmap;
 	private TMLModeling tmlm;
 	
-	private TMLModeling stmlm;
+//	private TMLModeling stmlm;
 	
 	private boolean optionChanged = true;
 	
@@ -134,7 +135,7 @@ public class DSEConfiguration implements Runnable  {
 	private int maxNbOfCoresPerCPU = 2;
 	private int nbOfSimulationsPerMapping = 1;
 	private TMLModeling taskModel = null;
-	private TMLModeling secModel = null;
+//	private TMLModeling secModel = null;
 	private Vector<TMLMapping> mappings;
 	private DSEMappingSimulationResults dsemapresults;
 
@@ -458,7 +459,7 @@ public class DSEConfiguration implements Runnable  {
 		TMLMappingTextSpecification spec = new TMLMappingTextSpecification("LoadedSpecification");
 		ret = spec.makeTMLMapping(inputData, modelPath);
 		TraceManager.addDev("load ended");
-		ArrayList<TMLError> warnings;
+		List<TMLError> warnings;
 		
 		if (!ret) {
 			TraceManager.addDev("Compilation:\n" + spec.printSummary());
@@ -510,7 +511,7 @@ public class DSEConfiguration implements Runnable  {
 		TMLTextSpecification tmlts = new TMLTextSpecification("LoadedTaskModel");
 		ret = tmlts.makeTMLModeling(inputData);
 		TraceManager.addDev("Load of task model done");
-		ArrayList<TMLError> warnings;
+		List<TMLError> warnings;
 		
 		if (!ret) {
 			TraceManager.addDev("Compilation:\n" + tmlts.printSummary());
@@ -982,7 +983,7 @@ public class DSEConfiguration implements Runnable  {
 			for(int i=0; i<dsemapresults.nbOfElements(); i++) {
 				res = dsemapresults.getResults(i);
 				try {
-					sres =  res.getAllExplanationHeader() + "\n";
+					sres =  DSESimulationResult.getAllExplanationHeader() + "\n";
 					sres += "#Mapping description: " + dsemapresults.getMapping(i).getSummaryTaskMapping() + "\n";
 					sres += res.getAllComments() + "\n" + res.getAllResults();
 					FileUtils.saveFile(pathToResults + "alldseresults_mapping" + cpt + ".txt", sres);
@@ -1012,9 +1013,9 @@ public class DSEConfiguration implements Runnable  {
 			
 			// Saving to file
 			try {
-				TraceManager.addDev(results.getAllExplanationHeader());
+				TraceManager.addDev(DSESimulationResult.getAllExplanationHeader());
 				TraceManager.addDev("----\n" + results.getAllResults());
-				FileUtils.saveFile(pathToResults + "allresults" + resultsID + ".txt", results.getAllExplanationHeader() + "\n" + results.getAllComments() + "\n" + results.getAllResults());
+				FileUtils.saveFile(pathToResults + "allresults" + resultsID + ".txt", DSESimulationResult.getAllExplanationHeader() + "\n" + results.getAllComments() + "\n" + results.getAllResults());
 			} catch (Exception e){
 				TraceManager.addDev("Error when saving results file" + e.getMessage());
 				return -1;
@@ -1037,7 +1038,7 @@ public class DSEConfiguration implements Runnable  {
 				
 				res = dsemapresults.getResults(i);
 				try {
-					sres =  res.getExplanationHeader() + "\n";
+					sres =  DSESimulationResult.getExplanationHeader() + "\n";
 					sres += "#Mapping description: " + dsemapresults.getMapping(i).getSummaryTaskMapping() + "\n";
 					sres += res.getAllComments() + "\n" + res.getWholeResults();
 					FileUtils.saveFile(pathToResults + "summary_dseresults_ofmapping" + cpt + ".txt", sres);
@@ -1169,7 +1170,7 @@ public class DSEConfiguration implements Runnable  {
 			
 			// Saving to file
 			try {
-				FileUtils.saveFile(pathToResults + "summary" + resultsID + ".txt", results.getExplanationHeader() + "\n" + results.getAllComments() + "\n" + results.getWholeResults());
+				FileUtils.saveFile(pathToResults + "summary" + resultsID + ".txt", DSESimulationResult.getExplanationHeader() + "\n" + results.getAllComments() + "\n" + results.getWholeResults());
 			} catch (Exception e){
 				TraceManager.addDev("Error when saving results file");
 				return -1;
@@ -1345,7 +1346,7 @@ public class DSEConfiguration implements Runnable  {
 				String cmd = prepareCommand();
 				String tmp;
 				
-				long t0 = System.currentTimeMillis();
+				//long t0 = System.currentTimeMillis();
 				
 				while(nbOfSimulations >0) {
 					tmp = putSimulationNbInCommand(cmd, simulationID);
@@ -1391,7 +1392,7 @@ public class DSEConfiguration implements Runnable  {
 				String cmd = prepareCommand();
 				String tmp;
 				
-				long t0 = System.currentTimeMillis();
+				//long t0 = System.currentTimeMillis();
 				
 				while(nbOfSimulations >0) {
 					tmp = putSimulationNbInCommand(cmd, simulationID);
@@ -1414,9 +1415,9 @@ public class DSEConfiguration implements Runnable  {
 		return 0;
 	}
     public TMLArchiPanel drawMapping(TMLMapping map, String name){
-	Map<HwNode, TGConnectingPoint> connectMap; 
+	//Map<HwNode, TGConnectingPoint> connectMap; 
 	Map<HwNode, TMLArchiNode> objMap = new HashMap<HwNode, TMLArchiNode>();
-	int index = mainGUI.createTMLArchitecture(name);
+	/*int index =*/ mainGUI.createTMLArchitecture(name);
 	TMLArchiPanel archPanel = (TMLArchiPanel) mainGUI.tabs.get(mainGUI.tabs.size()-1);
 	TMLArchiDiagramPanel ap = archPanel.tmlap;
 	TMLArchitecture arch = map.getArch();
@@ -1455,7 +1456,7 @@ public class DSEConfiguration implements Runnable  {
 	for (HwLink link: hwlinks){
 	    TMLArchiNode n1 = objMap.get(link.hwnode);
 	    TMLArchiNode n2 = objMap.get(link.bus);	
-	    TMLArchiConnectorNode conn = new TMLArchiConnectorNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap, n1.getTGConnectingPointAtIndex(0), n2.getTGConnectingPointAtIndex(0), new Vector());
+	    TMLArchiConnectorNode conn = new TMLArchiConnectorNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap, n1.getTGConnectingPointAtIndex(0), n2.getTGConnectingPointAtIndex(0), new Vector<Point>());
 	    ap.addComponent(conn,x,y,false,true);
 	}
 	for (TMLTask task:map.getTMLModeling().getTasks()){
@@ -1476,7 +1477,7 @@ public class DSEConfiguration implements Runnable  {
             //TraceManager.addDev("Going to start command " + cmd);
 			
 			ProcessBuilder pb = new ProcessBuilder(constructCommandList(cmd));
-			Map<String, String> env = pb.environment();
+			/*Map<String, String> env =*/ pb.environment();
 			java.lang.Process proc = pb.start();
             
             proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -1614,7 +1615,7 @@ public class DSEConfiguration implements Runnable  {
 	}
 	
 	private void generateMappings(TMLModeling _tmlm, Vector<TMLMapping> maps, int nbOfCPUs) {
-		ArrayList<TMLTask> tasks = _tmlm.getTasks();
+		List<TMLTask> tasks = _tmlm.getTasks();
 		CPUWithTasks cpus_tasks[] = new CPUWithTasks[nbOfCPUs];
 		
 		TraceManager.addDev("Nb of cpus = " + nbOfCPUs);

@@ -159,9 +159,9 @@ public class TDDNode extends TGCWithInternalComponent implements SwallowTGCompon
         array[0] = getStereotype(); array[1] = getNodeName();
         
         JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting stereotype and name", "Stereotype", "Node's identifier");
-        jdti.setSize(350, 250);
-        GraphicLib.centerOnParent(jdti);
-        jdti.show(); // blocked until dialog has been closed
+       // jdti.setSize(350, 250);
+        GraphicLib.centerOnParent(jdti, 350, 250);
+        jdti.setVisible( true ); // blocked until dialog has been closed
         
         stereotype = array[0].trim(); nodeName = array[1].trim();
         
@@ -216,11 +216,11 @@ public class TDDNode extends TGCWithInternalComponent implements SwallowTGCompon
     }
     
     
-    public Vector getArtifactList() {
-        Vector v = new Vector();
+    public Vector<TDDArtifact> getArtifactList() {
+        Vector<TDDArtifact> v = new Vector<TDDArtifact>();
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TDDArtifact) {
-                v.add(tgcomponent[i]);
+                v.add( (TDDArtifact) tgcomponent[i]);
             }
         }
         return v;
@@ -250,7 +250,7 @@ public class TDDNode extends TGCWithInternalComponent implements SwallowTGCompon
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+       //     int t1id;
             String sstereotype = null, snodeName = null;
             
             for(int i=0; i<nl.getLength(); i++) {
@@ -258,8 +258,8 @@ public class TDDNode extends TGCWithInternalComponent implements SwallowTGCompon
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

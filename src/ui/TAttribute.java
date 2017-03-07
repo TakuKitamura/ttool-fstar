@@ -49,8 +49,6 @@ package ui;
 
 import java.util.*;
 
-
-import myutil.*;
 import translator.*;
 import translator.tojava.*;
 import tmltranslator.*;
@@ -199,7 +197,7 @@ public class TAttribute {
     }
     
     public static boolean isAValidInitialValue(int type, String value) {
-		boolean b;
+		//boolean b;
 		int val;
 		
 		//TraceManager.addDev("Is A Valid Inital Value type=" + type + " value=" + value);
@@ -243,7 +241,7 @@ public class TAttribute {
         }
     }
     
-    public static boolean notIn(String s, LinkedList<TAttribute> forbidden) {
+    public static boolean notIn(String s, List<TAttribute> forbidden) {
         if (forbidden == null)
             return true;
         

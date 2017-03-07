@@ -71,7 +71,7 @@ public class TML2AUT {
     }
     
     // Returns a list of all file names ..
-    public LinkedList<String> saveInFiles(String path) throws FileException {
+    public List<String> saveInFiles(String path) throws FileException {
         //print();
         
         ListIterator<Automata> iterator = automatas.listIterator();

@@ -120,9 +120,9 @@ public  class TGConnectorRelativeTimeSD extends TGConnector {
         array[0] = getMinConstraint(); array[1] = getMaxConstraint();
         
         JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting relative time constraints");
-        jdti.setSize(350, 250);
-        GraphicLib.centerOnParent(jdti);
-        jdti.show(); // blocked until dialog has been closed
+        //jdti.setSize(350, 250);
+        GraphicLib.centerOnParent(jdti, 350, 250);
+        jdti.setVisible( true ); // blocked until dialog has been closed
         
         minConstraint = array[0]; maxConstraint = array[1];
         
@@ -159,8 +159,8 @@ public  class TGConnectorRelativeTimeSD extends TGConnector {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

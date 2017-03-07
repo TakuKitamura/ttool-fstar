@@ -198,9 +198,9 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
 		String tmp;
         
         JDialogNCSwitchNode jdncsn = new JDialogNCSwitchNode(frame, "Setting switch parameters", name, schedulingPolicy, switchingTechnique, capacity, capacityUnit, technicalLatency);
-        jdncsn.setSize(350, 300);
-        GraphicLib.centerOnParent(jdncsn);
-        jdncsn.show(); // Blocked until dialog has been closed
+      //  jdncsn.setSize(350, 300);
+        GraphicLib.centerOnParent(jdncsn, 350, 300);
+        jdncsn.setVisible( true ); // Blocked until dialog has been closed
        
 		if (jdncsn.hasBeenCancelled()) {
 			return false;
@@ -348,8 +348,8 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

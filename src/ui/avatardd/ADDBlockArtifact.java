@@ -47,7 +47,6 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.avatardd;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 
 import org.w3c.dom.*;
@@ -149,9 +148,9 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
 		boolean error = false;
 		
 		JDialogAvatarBlockArtifact dialog = new JDialogAvatarBlockArtifact(frame, "Setting artifact attributes", this);
-		dialog.setSize(400, 350);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+		//dialog.setSize(400, 350);
+        GraphicLib.centerOnParent(dialog, 400, 350);
+        dialog.setVisible( true ); // blocked until dialog has been closed
         
 		if (!dialog.isRegularClose()) {
 			return false;
@@ -224,17 +223,17 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+          //  int t1id;
             String svalue = null, sname = null, sreferenceTask = null;
-			String prio;
+			//String prio;
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

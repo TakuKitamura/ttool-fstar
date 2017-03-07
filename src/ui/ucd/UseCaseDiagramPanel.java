@@ -106,7 +106,7 @@ public class UseCaseDiagramPanel extends TDiagramPanel {
     }
 
     public String getXMLHead() {
-        return "<UseCaseDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
+        return "<UseCaseDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
     }
 
     public String getXMLTail() {

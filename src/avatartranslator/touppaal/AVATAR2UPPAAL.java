@@ -67,11 +67,11 @@ public class AVATAR2UPPAAL {
 
     private int currentX, currentY;
 
-    private LinkedList gatesNotSynchronized; // String
-    private LinkedList gatesSynchronized;
-    private LinkedList gatesSynchronizedRelations;
-    private LinkedList gatesAsynchronized;
-    private LinkedList<String> unoptStates;
+    private java.util.List<String> gatesNotSynchronized; // String
+    private java.util.List<String> gatesSynchronized;
+    private java.util.List<AvatarRelation> gatesSynchronizedRelations;
+    private java.util.List<String> gatesAsynchronized;
+    private java.util.List<String> unoptStates;
     private int nbOfIntParameters, nbOfBooleanParameters;
 
     private Hashtable <AvatarStateMachineElement, UPPAALLocation> hash;
@@ -161,7 +161,7 @@ public class AVATAR2UPPAAL {
         avspec.removeTimers();
 	//avspec.removeFIFOs(2);
         avspec.makeRobustness();
-	LinkedList<String> uppaalPragmas = avspec.getSafetyPragmas();
+	java.util.List<String> uppaalPragmas = avspec.getSafetyPragmas();
 	unoptStates= new LinkedList<String>();
 	for (String s: uppaalPragmas){
 	    String[] split = s.split("[^a-zA-Z0-9\\.]");
@@ -175,11 +175,11 @@ public class AVATAR2UPPAAL {
         //TraceManager.addDev("->   Spec:" + avspec.toString());
 
         UPPAALLocation.reinitID();
-        gatesNotSynchronized = new LinkedList();
+        gatesNotSynchronized = new LinkedList<String>();
         gatesNotSynchronized.add("makeChoice");
-        gatesSynchronized = new LinkedList();
-        gatesSynchronizedRelations = new LinkedList();
-        gatesAsynchronized = new LinkedList();
+        gatesSynchronized = new LinkedList<String>();
+        gatesSynchronizedRelations = new LinkedList<AvatarRelation>();
+        gatesAsynchronized = new LinkedList<String>();
 
         // Deal with blocks
         translateBlocks();
@@ -258,7 +258,7 @@ public class AVATAR2UPPAAL {
     }
 
     public void translationRelations() {
-        AvatarSignal si1, sig2;
+       // AvatarSignal si1, sig2;
         for(AvatarRelation ar: avspec.getRelations()) {
             if (ar.isAsynchronous()) {
                 for(int i=0; i<ar.nbOfSignals(); i++) {
@@ -356,7 +356,7 @@ public class AVATAR2UPPAAL {
     }
 
     public void makeMethods(AvatarBlock _block, UPPAALTemplate _template) {
-        String s;
+        //String s;
         for(AvatarMethod method: _block.getMethods()) {
             gatesNotSynchronized.add(_block.getName() + "__" + method.getName());
         }
@@ -380,9 +380,9 @@ public class AVATAR2UPPAAL {
         spec.addGlobalDeclaration("\n//Declarations used for non synchronized gates\n");
 
         String action;
-        ListIterator iterator = gatesNotSynchronized.listIterator();
+        Iterator<String> iterator = gatesNotSynchronized.listIterator();
         while(iterator.hasNext()) {
-            action = (String)(iterator.next());
+            action = iterator.next();
             tr = addTransition(templateNotSynchronized, loc, loc);
             setSynchronization(tr, action+"?");
             //addGuard(tr, action + TURTLE2UPPAAL.SYNCID + " == 0");
@@ -411,13 +411,13 @@ public class AVATAR2UPPAAL {
         spec.addTemplate(templateAsynchronous);
         UPPAALLocation loc = addLocation(templateAsynchronous);
         templateAsynchronous.setInitLocation(loc);
-        UPPAALTransition tr, tr1;
+        UPPAALTransition tr;//, tr1;
 
         spec.addGlobalDeclaration("\n//Declarations for asynchronous channels\n");
         String action;
-        ListIterator iterator = gatesAsynchronized.listIterator();
+        Iterator<String> iterator = gatesAsynchronized.listIterator();
         while(iterator.hasNext()) {
-            action = (String)(iterator.next());
+            action = iterator.next();
             spec.addGlobalDeclaration("urgent chan " + action + ";\n");
         }
 
@@ -515,11 +515,11 @@ public class AVATAR2UPPAAL {
 
         String action;
         AvatarRelation ar;
-        ListIterator iterator = gatesSynchronized.listIterator();
-        ListIterator iterator0 = gatesSynchronizedRelations.listIterator();
+        Iterator<String> iterator = gatesSynchronized.listIterator();
+        Iterator<AvatarRelation> iterator0 = gatesSynchronizedRelations.listIterator();
         while(iterator.hasNext()) {
-            action = (String)(iterator.next());
-            ar = (AvatarRelation)(iterator0.next());
+            action = iterator.next();
+            ar = iterator0.next();
             if (!(ar.isBroadcast())) {
                 spec.addGlobalDeclaration("urgent chan " + action + ";\n");
             } else {
@@ -549,13 +549,13 @@ public class AVATAR2UPPAAL {
     }
 
     public void makeElementBehavior(AvatarBlock _block, UPPAALTemplate _template, AvatarStateMachineElement _elt, UPPAALLocation _previous, UPPAALLocation _end, String _guard, boolean _previousState, boolean _severalTransitions) {
-        AvatarActionOnSignal aaos;
+       // AvatarActionOnSignal aaos;
         UPPAALLocation loc, loc1;
         UPPAALTransition tr;
         AvatarTransition at;
-        int i, j;
-        String tmps, tmps0;
-        AvatarAttribute aa;
+        int i;//, j;
+        String tmps;//, tmps0;
+      //  AvatarAttribute aa;
         AvatarState state;
         AvatarRandom arand;
 
@@ -740,7 +740,7 @@ public class AVATAR2UPPAAL {
             TraceManager.addDev("[CHECKING] Action on signal ??? " + _aaos.getSignal().getName());
             if (hashChecking.get(_aaos) == null) {
                 UPPAALLocation loc1 = addLocation(_template);
-                UPPAALTransition tr1 = addTransition(_template, loc, loc1);
+                /*UPPAALTransition tr1 =*/ addTransition(_template, loc, loc1);
                 TraceManager.addDev("[CHECKING] +-+-+-+- action on signal " + _aaos + " is selected for checking");
                 hashChecking.put(_aaos, loc);
                 loc.unsetOptimizable();
@@ -873,8 +873,8 @@ public class AVATAR2UPPAAL {
         UPPAALLocation loc1, loc2;
         String tmps, tmps0;
         AvatarTransition at;
-        UPPAALLocation loc;
-        UPPAALTransition tr, tr1;
+      //  UPPAALLocation loc;
+        UPPAALTransition tr;//, tr1;
         AvatarActionOnSignal aaos;
 
 
@@ -1024,12 +1024,12 @@ public class AVATAR2UPPAAL {
     }
 
     public void makeMethodCall(AvatarBlock _block, UPPAALTransition _tr, AvatarTermFunction action) {
-        int j;
+     //   int j;
         AvatarAttribute aa;
         String result = "";
         int nbOfInt = 0;
         int nbOfBool = 0;
-        String tmps;
+    //    String tmps;
 
         TraceManager.addDev("Making method call:" + action.toString ());
 
@@ -1097,7 +1097,7 @@ public class AVATAR2UPPAAL {
     }
 
     public String [] manageSynchro(AvatarBlock _block, AvatarActionOnSignal _aaos) {
-        AvatarSignal as = _aaos.getSignal();
+       // AvatarSignal as = _aaos.getSignal();
         return manageSynchroSynchronous(_block, _aaos);
 
 
@@ -1177,7 +1177,7 @@ public class AVATAR2UPPAAL {
                         nbOfBool++;
                     } else {
                         try {
-                            int myint = Integer.decode(val);
+                            /*int myint =*/ Integer.decode(val);
                             result[1] = result[1] + ACTION_INT + nbOfInt + " = " + val;
                             nbOfInt++;
                         } catch (Exception e) {
@@ -1338,12 +1338,12 @@ public class AVATAR2UPPAAL {
     }
 
     public void makeSystem() {
-        ListIterator iterator = spec.getTemplates().listIterator();
+        Iterator<UPPAALTemplate> iterator = spec.getTemplates().listIterator();
         UPPAALTemplate template;
         String system = "system ";
         String dec = "";
         int id = 0;
-        int i;
+     //   int i;
 
         while(iterator.hasNext()) {
             template = (UPPAALTemplate)(iterator.next());
@@ -1431,15 +1431,15 @@ public class AVATAR2UPPAAL {
     }
 
     public int getIndexOfTranslatedTemplate(UPPAALTemplate _temp) {
-        ListIterator iterator = spec.getTemplates().listIterator();
+        Iterator<UPPAALTemplate> iterator = spec.getTemplates().listIterator();
         UPPAALTemplate template;
-        String system = "system ";
-        String dec = "";
+    //    String system = "system ";
+  //      String dec = "";
         int id = 0;
-        int i;
+    //    int i;
 
         while(iterator.hasNext()) {
-            template = (UPPAALTemplate)(iterator.next());
+            template = iterator.next();
             if (template == _temp) {
                 return id;
             }

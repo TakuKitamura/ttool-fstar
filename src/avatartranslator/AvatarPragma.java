@@ -68,11 +68,11 @@ public abstract class AvatarPragma extends AvatarElement {
         proofStatus = status;
     }
 
-    public static LinkedList<AvatarPragma> createFromString(String str, Object obj, LinkedList<AvatarBlock> blocks, HashMap<String, LinkedList<TAttribute>> typeAttributesMap, HashMap<String, String> nameTypeMap, ErrorAccumulator errorAcc){
+    public static List<AvatarPragma> createFromString(String str, Object obj, List<AvatarBlock> blocks, Map<String, List<TAttribute>> typeAttributesMap, Map<String, String> nameTypeMap, ErrorAccumulator errorAcc){
         //createFromString takes in a pragma string (with # removed), the containing object, and the list of AvatarBlocks, and returns the corresponding AvatarPragma or null if an error occurred
         //The attributes referenced must exist 
 
-        LinkedList<AvatarPragma> pragmas = new LinkedList<AvatarPragma>();
+        List<AvatarPragma> pragmas = new LinkedList<AvatarPragma>();
 		AvatarBDPragma pragmaObj = (AvatarBDPragma) obj;
         //Remove leading spaces	
         str = str.trim();
@@ -144,9 +144,10 @@ public abstract class AvatarPragma extends AvatarElement {
                 }
                 //Generate a fun lot of pragmas...
                 //For each attribute, generate an authenticity pragma
-                LinkedList<TAttribute> typeAttrs = typeAttributesMap.get(nameTypeMap.get(blockName1+"."+attrName1));
+                List<TAttribute> typeAttrs = typeAttributesMap.get(nameTypeMap.get(blockName1+"."+attrName1));
+                
                 for (TAttribute ta: typeAttrs) {
-                    LinkedList<AvatarAttributeState> attrStates = new LinkedList<AvatarAttributeState>();
+                    List<AvatarAttributeState> attrStates = new LinkedList<AvatarAttributeState>();
                     String suffix = ta.getId();
                     for (String arg: args){
                         AvatarAttributeState res = parseAuthAttr(arg+"__"+suffix, blocks);
@@ -287,10 +288,12 @@ public abstract class AvatarPragma extends AvatarElement {
                 }
                 pragmas.add(new AvatarPragmaInitialKnowledge(str, obj, attrs, header.equals("InitialSystemKnowledge"))); 
             } else {
-                LinkedList<TAttribute> typeAttrs = typeAttributesMap.get(types.first());
+                List<TAttribute> typeAttrs = typeAttributesMap.get(types.first());
+                
                 for (TAttribute ta: typeAttrs) {
-                    LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
+                    List<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
                     String suffix = ta.getId();
+                    
                     for (String arg: args){
                         String[] sp = arg.split("\\.");
                         String blockName = sp[0];
@@ -323,7 +326,8 @@ public abstract class AvatarPragma extends AvatarElement {
                 String attrName = sp[1];
                 if (nameTypeMap.containsKey(blockName+"."+attrName)){
                     //Composed type, YAY#$%^&*
-                    LinkedList<TAttribute> typeAttrs = typeAttributesMap.get(nameTypeMap.get(blockName+"."+attrName));
+                    List<TAttribute> typeAttrs = typeAttributesMap.get(nameTypeMap.get(blockName+"."+attrName));
+                    
                     for (TAttribute ta: typeAttrs) {
                         String suffix = ta.getId();
                         AvatarAttribute res = parseAttr(blockName, attrName+"__"+suffix, blocks);
@@ -368,7 +372,7 @@ public abstract class AvatarPragma extends AvatarElement {
         }
         return pragmas;
     }
-    public static AvatarAttribute parseAttr(String blockName, String attrName, LinkedList<AvatarBlock> blocks){
+    public static AvatarAttribute parseAttr(String blockName, String attrName, List<AvatarBlock> blocks){
         //Iterate through blocks
         for (AvatarBlock block:blocks){
             if (block.getName().equals(blockName)){
@@ -379,7 +383,7 @@ public abstract class AvatarPragma extends AvatarElement {
         TraceManager.addDev("Pragma Attribute Block not found "+ blockName);
         return null;
     }
-    public static AvatarAttributeState parseAuthAttr(String arg, LinkedList<AvatarBlock> blocks){
+    public static AvatarAttributeState parseAuthAttr(String arg, List<AvatarBlock> blocks){
         //Iterate through the list of blocks
         String[] split = arg.split("\\.");
         String blockName = split[0];

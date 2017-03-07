@@ -49,9 +49,14 @@ package myutil;
 import java.util.Vector;
 
 
-public class SortedVector extends Vector{
+public class SortedVector<T> extends Vector<T>{
     
-    public SortedVector(int cpt) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7882498373642597896L;
+
+	public SortedVector(int cpt) {
         super(cpt);
     }
     
@@ -59,8 +64,8 @@ public class SortedVector extends Vector{
         super();
     }
     
-    public boolean  add(Object o) {
-        if (o instanceof Comparable) {
+    public boolean add(T o) {
+        if (o instanceof Comparable<?>) {
             int i = 0;
             while((i<size()) && (((Comparable)o).compareTo(elementAt(i)) >= 0)) {
                 i++;

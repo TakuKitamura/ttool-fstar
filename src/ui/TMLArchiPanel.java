@@ -54,7 +54,7 @@ import ui.tmldd.*;
 
 public class TMLArchiPanel extends TURTLEPanel {
     public TMLArchiDiagramPanel tmlap; 
-    public Vector validated, ignored;
+    public Vector<TGComponent> validated, ignored;
     
     public TMLArchiPanel(MainGUI _mgui) {
         super(_mgui);
@@ -90,7 +90,7 @@ public class TMLArchiPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp	= new JScrollDiagramPanel(tmlap);
         tmlap.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         toolBarPanel.add(toolBarTML, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab("DIPLODOCUS architecture and mapping Diagram", IconManager.imgic60, toolBarPanel, "Opens DIPLODOCUS architecture diagram");

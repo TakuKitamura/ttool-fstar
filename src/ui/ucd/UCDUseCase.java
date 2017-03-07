@@ -56,7 +56,7 @@ import ui.*;
 
 import ui.window.*;
 
-public class UCDUseCase extends TGCWithoutInternalComponent {
+public class UCDUseCase extends TGCScalableWithoutInternalComponent {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -67,9 +67,9 @@ public class UCDUseCase extends TGCWithoutInternalComponent {
     
     public UCDUseCase(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 50;
-        height = 40;
+
+	width = (int)(50 * tdp.getZoom());
+        height = (int)(40 * tdp.getZoom());
         //minWidth = 30;
         
         nbConnectingPoint = 16;
@@ -90,6 +90,9 @@ public class UCDUseCase extends TGCWithoutInternalComponent {
         moveable = true;
         editable = true;
         removable = true;
+
+	super.oldScaleFactor = tdp.getZoom();
+        //currentFontSize = (int) (maxFontSize*oldScaleFactor);
         
         value = "My use case";
         name = "Use case";
@@ -149,15 +152,15 @@ public class UCDUseCase extends TGCWithoutInternalComponent {
     } 
     
     public boolean editOndoubleClick(JFrame frame) {
-        boolean error = false;
-		String errors = "";
-		int tmp;
+//        boolean error = false;
+//		String errors = "";
+//		int tmp;
 		String tmpName;
         
 		JDialogUseCase dialog = new JDialogUseCase(frame, "Setting Use Case attributes", value, extension);
-		dialog.setSize(500, 450);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+	//	dialog.setSize(500, 450);
+        GraphicLib.centerOnParent(dialog, 500, 450);
+        dialog.setVisible( true ); // blocked until dialog has been closed
         
 		if (!dialog.isRegularClose()) {
 			return false;
@@ -189,7 +192,7 @@ public class UCDUseCase extends TGCWithoutInternalComponent {
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+   //         int t1id;
             String sextension = null;
             
             for(int i=0; i<nl.getLength(); i++) {
@@ -197,8 +200,8 @@ public class UCDUseCase extends TGCWithoutInternalComponent {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

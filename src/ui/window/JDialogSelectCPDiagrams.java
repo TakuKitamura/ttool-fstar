@@ -52,25 +52,25 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
+import java.util.List;
 
 import myutil.*;
 
 import ui.*;
-import ui.tmldd.*;
 import ui.tmlcp.*;
 
 
 public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
 
-    public static Vector validated, ignored;
+    public static Vector<TGComponent> validated, ignored;
     private static boolean optimized = true;
 
-    private Vector val, ign, back;      //val for validated, ign for ignored
+    private Vector<TGComponent> val, ign, back;      //val for validated, ign for ignored
 
     //subpanels
     private JPanel panel1, panel2, panel3, panel4, panel5, panel6;
-    private JList listIgnored;
-    private JList listValidated;
+    private JList<TGComponent> listIgnored;
+    private JList<TGComponent> listValidated;
     private JButton allValidated;
     private JButton addOneValidated;
     private JButton addOneIgnored;
@@ -83,7 +83,7 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
     private JButton cancelButton;
 
     /** Creates new form  */
-    public JDialogSelectCPDiagrams( Frame f, Vector _back, LinkedList componentList, String title ) {
+    public JDialogSelectCPDiagrams( Frame f, Vector<TGComponent> _back, List<TGComponent> componentList, String title ) {
 
         super(f, title, true);
 
@@ -93,7 +93,7 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
         if( ( validated == null ) || ( ignored == null ) ) {
             val = makeNewVal( componentList );  //componentList must already contain something. Val contains a list of all TMLArchiNodes
             //originally contained in componentList
-            ign = new Vector(); //empty
+            ign = new Vector<TGComponent>(); //empty
             //val and ign are the lists that are printed in the Syntax Analysis window
         }
         else {
@@ -110,13 +110,13 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
     }
 
     //From componentList, filter out all the elements which are not TMLArchiNode
-    private Vector makeNewVal( LinkedList list ) {
+    private Vector<TGComponent> makeNewVal( List<TGComponent> list ) {
 
-        Vector v = new Vector();
+        Vector<TGComponent> v = new Vector<TGComponent>();
         TGComponent tgc;
 
         for( int i = 0; i < list.size(); i++ ) {
-            tgc = (TGComponent)( list.get(i) );
+            tgc = list.get(i);
             //System.out.println(tgc);
             if ( ( tgc instanceof TMLCPRefSD ) || ( tgc instanceof TMLCPRefAD ) ) {
                 v.addElement( tgc );
@@ -125,7 +125,7 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
         return v;
     }
 
-    private void checkDiagram( Vector tobeChecked, LinkedList source ) {
+    private void checkDiagram( Vector<TGComponent> tobeChecked, List<TGComponent> source ) {
 
         TMLCPRefSD sd;
         TMLCPRefAD cp;
@@ -168,12 +168,12 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
       return ignored;
       }*/
 
-    public void addNewDiagram( Vector added, LinkedList source, Vector notSource ) {
+    public void addNewDiagram( Vector<TGComponent> added, List<TGComponent> source, Vector<TGComponent> notSource ) {
 
         TGComponent tgc;
 
         for( int i = 0; i < source.size(); i++ ) {
-            tgc = (TGComponent)( source.get(i) );
+            tgc = source.get(i);
             if( ( tgc instanceof TMLCPRefSD ) && ( tgc instanceof TMLCPRefAD ) && ( !added.contains(tgc) ) && ( !notSource.contains(tgc) ) )    {
                 added.addElement( tgc );
                 //System.out.println("New element");
@@ -207,7 +207,7 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
         panel1 = new JPanel();
         panel1.setLayout( new BorderLayout() );
         panel1.setBorder( new javax.swing.border.TitledBorder( "Diagrams ignored" ) );
-        listIgnored = new JList( ign );
+        listIgnored = new JList<TGComponent>( ign );
         //listIgnored.setPreferredSize(new Dimension(200, 250));
         listIgnored.setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listIgnored.addListSelectionListener( this );
@@ -260,7 +260,7 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
         panel2 = new JPanel();
         panel2.setLayout( new BorderLayout() );
         panel2.setBorder( new javax.swing.border.TitledBorder( "Diagrams taken into account" ) );
-        listValidated = new JList( val );
+        listValidated = new JList<TGComponent>( val );
         //listValidated.setPreferredSize(new Dimension(200, 250));
         listValidated.setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listValidated.addListSelectionListener( this );
@@ -338,8 +338,8 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
 
     private void addOneIgnored() {
         int [] list = listValidated.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        TGComponent o;
         for (int i=0; i<list.length; i++){
             o = val.elementAt(list[i]);
             ign.addElement(o);
@@ -354,8 +354,9 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
 
     private void addOneValidated() {
         int [] list = listIgnored.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        TGComponent o;
+        
         for (int i=0; i<list.length; i++){
             o = ign.elementAt(list[i]);
             val.addElement(o);

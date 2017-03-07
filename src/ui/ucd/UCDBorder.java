@@ -51,7 +51,7 @@ import java.awt.*;
 import myutil.*;
 import ui.*;
 
-public class UCDBorder extends TGCOneLineText {
+public class UCDBorder extends TGCScalableWithoutInternalComponent {
     /*protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -62,15 +62,17 @@ public class UCDBorder extends TGCOneLineText {
     public UCDBorder(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 250;
-        height = 250;
-        minWidth = 100;
-        minHeight = 100;
+        width = (int)(250 * tdp.getZoom());
+        height = (int)(250 * tdp.getZoom());
+        minWidth = (int)(100* tdp.getZoom());
+        minHeight = (int)(100* tdp.getZoom());
         
         nbConnectingPoint = 0;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         addTGConnectingPointsComment();
-        
+
+	super.oldScaleFactor = tdp.getZoom();
+	
         moveable = true;
         editable = true;
         removable = true;

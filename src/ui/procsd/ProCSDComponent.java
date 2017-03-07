@@ -48,30 +48,22 @@ package ui.procsd;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayInputStream;
 
 
 import javax.swing.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.*;
-import org.xml.sax.SAXException;
 
 import myutil.*;
 import ui.*;
 
-import ui.cd.TCDTClass;
-import ui.cd.TCDTObject;
-import ui.oscd.TOSClass;
 import ui.prosmd.ProSMDStartState;
 import ui.prosmd.ProSMDStopState;
 import ui.prosmd.ProSMDSubmachine;
 import ui.prosmd.ProactiveSMDPanel;
-import ui.tmlcd.TMLTaskOperator;
 import ui.window.*;
 
 public class ProCSDComponent extends TGCWithInternalComponent implements
@@ -129,7 +121,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 	}
 
 	
-	public void setAttributes(Collection attribs)
+	public void setAttributes(Collection<TAttribute> attribs)
 	{
 		myAttributes=new LinkedList<TAttribute> (attribs);
 	}
@@ -299,11 +291,11 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		removeInternalComponent(tgc);
 	}
 
-	public Vector getComponentList() {
-		Vector v = new Vector();
+	public Vector<ProCSDComponent> getComponentList() {
+		Vector<ProCSDComponent> v = new Vector<ProCSDComponent>();
 		for (int i = 0; i < nbInternalTGComponent; i++) {
 			if (tgcomponent[i] instanceof ProCSDComponent) {
-				v.add(tgcomponent[i]);
+				v.add((ProCSDComponent)tgcomponent[i]);
 			}
 		}
 		return v;
@@ -351,8 +343,8 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 	 */
 	
 
-	public LinkedList getMyAttributes() {
-		return new LinkedList(myAttributes);
+	public List<TAttribute> getMyAttributes() {
+		return new LinkedList<TAttribute>(myAttributes);
 	}
 
 	// Attributes will be seen on the screen. Unimplemented
@@ -474,7 +466,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 			ProactiveDesignPanel pdp=(ProactiveDesignPanel)tdp.getGUI().getCurrentTURTLEPanel();
 			ProActiveCompSpecificationCSDPanel myPanel=pdp.addProActiveCompSpecificationPanel(this.value);
 			
-			ProCSDComponent designComp=myPanel.createBlackBoxComp(this);
+			/*ProCSDComponent designComp=*/myPanel.createBlackBoxComp(this);
 			
 			
 			
@@ -492,7 +484,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		
 		if (e.getActionCommand().equals("chooose digram for this comp design")) {
 			
-			ProactiveDesignPanel pdp=(ProactiveDesignPanel)tdp.getGUI().getCurrentTURTLEPanel();
+			//ProactiveDesignPanel pdp=(ProactiveDesignPanel)tdp.getGUI().getCurrentTURTLEPanel();
 			
 			String s = (String) JOptionPane.showInputDialog(tdp, "Choose a component diagram",
 					"Diagram name", JOptionPane.PLAIN_MESSAGE,
@@ -531,9 +523,9 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 			// must see in GProactiveDesign for bool params
 			// dialog.addType("Boolean");
 			dialog.enableInitialValue(true);
-			dialog.setSize(650, 375);
+		//	dialog.setSize(650, 375);
 
-			GraphicLib.centerOnParent(dialog);
+			GraphicLib.centerOnParent(dialog, 650, 375);
 			//dialog.show(); // blocked until dialog has been closed
               dialog.setVisible(true);
 		}
@@ -871,10 +863,10 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 				}
 			}//if we have ports 
 		
-		Vector compList=this.getComponentList();
+		Vector<ProCSDComponent> compList=this.getComponentList();
 		for (int k=0;k<compList.size();k++)
 		{
-			ProCSDComponent pcomp=(ProCSDComponent)compList.get(k);
+			ProCSDComponent pcomp= compList.get(k);
 			pcomp.selectComponent(value);
 		}
 		
@@ -1063,7 +1055,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		out+="   **PROCSDCOMPONENT**\n";
 		out+="Name "+this.value+" design diagram: " +diag+"\n";
 		out+="---> Ports List \n";
-		Vector v=this.getPortsList();
+		Vector<ProCSDPort> v=this.getPortsList();
 		  for (int i=0;i<v.size();i++)
 		  {
 			  ProCSDPort port=(ProCSDPort)v.get(i);
@@ -1074,13 +1066,13 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		if (getMySMD()!=null)
 		out+="My SMD: "+getMySMD().getName()+"\n";
 		
-		Vector comps=this.getComponentList();
+		Vector<ProCSDComponent> comps=this.getComponentList();
 		if (comps.size()>0)
 		{
 		out+="---->SubComponents of "+this.value+"--->\n";
 		  for (int i=0;i<comps.size();i++)
 		  {
-			  ProCSDComponent cmp=(ProCSDComponent)comps.get(i);
+			  ProCSDComponent cmp= comps.get(i);
 			  out+=cmp.prettyPrint();
 		  }
 		  out+="<----SubComponents of "+this.value+"<---\n";
@@ -1324,7 +1316,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		
 		TGConnectingPoint p1 = start_state.getTGConnectingPointAtIndex(0);
 		TGConnectingPoint p2 = initActive_submachine.getTGConnectingPointAtIndex(0);
-		TGConnector conn01 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector());
+		TGConnector conn01 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector<Point>());
 		mySMD.addBuiltConnector(conn01);
 		
 		
@@ -1338,7 +1330,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		
 		p1 = initActive_submachine.getTGConnectingPointAtIndex(1);
 		p2 = runActive_submachine.getTGConnectingPointAtIndex(0);
-		TGConnector conn02 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector());
+		TGConnector conn02 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector<Point>());
 		mySMD.addBuiltConnector(conn02);
 		
 		
@@ -1351,7 +1343,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		
 		p1 = runActive_submachine.getTGConnectingPointAtIndex(1);
 		p2 = endActive_submachine.getTGConnectingPointAtIndex(0);
-		TGConnector conn03 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector());
+		TGConnector conn03 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector<Point>());
 		mySMD.addBuiltConnector(conn03);
 		
 		
@@ -1361,7 +1353,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		
 		p1 = endActive_submachine.getTGConnectingPointAtIndex(1);
 		p2 = stop_state.getTGConnectingPointAtIndex(0);
-		TGConnector conn04 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector());
+		TGConnector conn04 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector<Point>());
 		mySMD.addBuiltConnector(conn04);
 		
 	}

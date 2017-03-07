@@ -222,26 +222,26 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
     }
 
     public boolean editOndoubleClick(JFrame frame) {
-	String [] labels = new String[3];
+    	String [] labels = new String[3];
         String [] values = new String[3];
         labels[0] = "Channel name";
         values[0] = channelName;
-	labels[1] = "Nb of samples";
+        labels[1] = "Nb of samples";
         values[1] = nbOfSamples;
-	labels[2] = "Security Pattern";
-	values[2] = securityContext;
+        labels[2] = "Security Pattern";
+        values[2] = securityContext;
 	
         ArrayList<String []> help = new ArrayList<String []>();
-	String[] allOutChannels = tdp.getMGUI().getAllOutChannels();
-	help.add(allOutChannels);
-	help.add(null);
-	help.add(tdp.getMGUI().getCurrentCryptoConfig());
+		String[] allOutChannels = tdp.getMGUI().getAllOutChannels();
+		help.add(allOutChannels);
+		help.add(null);
+		help.add(tdp.getMGUI().getCurrentCryptoConfig());
 
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
-	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 3, labels, values, help);
-        jdms.setSize(600, 300);
-        GraphicLib.centerOnParent(jdms);
-        jdms.show(); // blocked until dialog has been closed
+		JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 3, labels, values, help);
+        //jdms.setSize(600, 300);
+        GraphicLib.centerOnParent(jdms, 600, 300);
+        jdms.setVisible( true ); // blocked until dialog has been closed
 
         if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
             channelName = jdms.getString(0);
@@ -285,8 +285,8 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

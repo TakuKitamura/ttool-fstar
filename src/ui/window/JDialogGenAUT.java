@@ -50,6 +50,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
+import java.util.List;
 
 import launcher.*;
 import myutil.*;
@@ -82,7 +83,7 @@ public class JDialogGenAUT extends javax.swing.JDialog implements ActionListener
     
     protected JCheckBox makeDOT;
     
-    protected SortedVector files;
+    protected SortedVector<String> files;
     
     /** Creates new form  */
     public JDialogGenAUT(Frame f, MainGUI _mgui, String title, String _cmdbcgio, String _host, String _path) {
@@ -218,7 +219,7 @@ public class JDialogGenAUT extends javax.swing.JDialog implements ActionListener
         t.start();
     }
     
-    public SortedVector getFiles() {
+    public SortedVector<String> getFiles() {
         return files;
     }
     
@@ -227,10 +228,10 @@ public class JDialogGenAUT extends javax.swing.JDialog implements ActionListener
         String cmd1 = "";
         String data;
         String fileName;
-        LinkedList ll;
-        ListIterator iterator;
+        List<String> ll;
+        Iterator<String> iterator;
         path = jtf.getText();
-        files =  new SortedVector();
+        files =  new SortedVector<String>();
         
         rshc = new RshClient(host);
         
@@ -244,7 +245,7 @@ public class JDialogGenAUT extends javax.swing.JDialog implements ActionListener
                 jta.append("Generation successful of:\n");
                 iterator = ll.listIterator();
                 while(iterator.hasNext()) {
-                        fileName = (String)(iterator.next());
+                        fileName = iterator.next();
                         jta.append(fileName + "\n");
                 }
                 

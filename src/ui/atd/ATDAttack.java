@@ -47,7 +47,6 @@
 package ui.atd;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 
 import org.w3c.dom.*;
@@ -58,9 +57,9 @@ import ui.window.*;
 
 public class ATDAttack extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes, CheckableAccessibility, CanBeDisabled {
     private int textY1 = 3;
-    private int textY2 = 3;
+ //   private int textY2 = 3;
 
-    private static int arc = 7;
+   // private static int arc = 7;
     //private int textX = 10;
 
     protected String oldValue = "";
@@ -243,7 +242,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 	    if (!isEnabled()) {
 		String val = "disabled";
 		w = g.getFontMetrics().stringWidth(val);
-		int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+		//int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
 		g.setFont(f.deriveFont(Font.ITALIC));
 		g.drawString(val, x + (width - w - 5), y + height - 2);
 	    }
@@ -305,9 +304,9 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         boolean error = false;
 
         JDialogAttack dialog = new JDialogAttack(frame, "Setting attack attributes", this);
-        dialog.setSize(450, 350);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+   //     dialog.setSize(450, 350);
+        GraphicLib.centerOnParent(dialog, 450, 350);
+        dialog.setVisible( true ); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -371,9 +370,9 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+      //      int t1id;
             String sdescription = null;
-            String prio;
+       //     String prio;
             String isRoot = null;
 
             for(int i=0; i<nl.getLength(); i++) {
@@ -381,8 +380,8 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

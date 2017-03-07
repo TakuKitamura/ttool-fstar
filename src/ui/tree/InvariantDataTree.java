@@ -74,7 +74,7 @@ public class InvariantDataTree implements GenericTree {
     }
     
     public Object getChild(int index) {
-    	LinkedList<Invariant> invs = mgui.getInvariants();
+    	List<Invariant> invs = mgui.getInvariants();
     	if (invs.size() == 0) {
     		return "No invariant";
     	}

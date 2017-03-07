@@ -670,8 +670,8 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
                 "Settings of library function " + value,
                 "Library Function");
         this.setJDialogOptions (dialog);
-        dialog.setSize (650, 575);
-        GraphicLib.centerOnParent (dialog);
+     //   dialog.setSize (650, 575);
+        GraphicLib.centerOnParent (dialog,650, 575);
 
         // Focus on the right input depending on the part that was clicked.
         // FIXME: if nothing is displayed, focus will go on tab 2 instead of tab 0

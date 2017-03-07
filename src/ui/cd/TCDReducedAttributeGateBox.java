@@ -48,7 +48,6 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.cd;
 
 import java.awt.*;
-import java.util.*;
 
 import ui.*;
 import ui.window.*;
@@ -100,7 +99,7 @@ public class TCDReducedAttributeGateBox extends TGCReducedAttributeBox {
         ColorManager.setColor(g, getState(), 0);
     }
     
-    protected LinkedList<TAttribute> getCustomAttributes() {
+    protected java.util.List<TAttribute> getCustomAttributes() {
         TCDTObject to = (TCDTObject)(getFather());
         TCDTClass tc = to.getMasterTClass();
         return tc.getGates();

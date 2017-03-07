@@ -49,33 +49,34 @@ import java.util.*;
 
 public class MSC extends HMSCElement {
     private HMSCNode nextNode;
-    private LinkedList evts;
-    private LinkedList orders;
-    private LinkedList linkevts;
-    private LinkedList timeconstraints;
+    private List<Evt> evts;
+    private List<Order> orders;
+    private List<LinkEvts> linkevts;
+    private List<TimeConstraint> timeconstraints;
     
     public MSC(String _name, HMSCNode _nextNode) {
         super(_name);
+        
         nextNode = _nextNode;   
-        evts = new LinkedList();
-        orders = new LinkedList();
-        linkevts = new LinkedList();
-        timeconstraints = new LinkedList();
+        evts = new LinkedList<Evt>();
+        orders = new LinkedList<Order>();
+        linkevts = new LinkedList<LinkEvts>();
+        timeconstraints = new LinkedList<TimeConstraint>();
     }
     
     public MSC(String _name) {
         super(_name);
-        evts = new LinkedList();
-        orders = new LinkedList();
-        linkevts = new LinkedList();
-        timeconstraints = new LinkedList();
+        evts = new LinkedList<Evt>();
+        orders = new LinkedList<Order>();
+        linkevts = new LinkedList<LinkEvts>();
+        timeconstraints = new LinkedList<TimeConstraint>();
     }
     
     public HMSCNode getNextNode() { return nextNode; }  
-    public LinkedList getEvts() { return evts; }
-    public LinkedList getOrders() { return orders; }
-    public LinkedList getLinksEvts() { return linkevts; }
-    public LinkedList getTimeConstraints() { return timeconstraints; }
+    public List<Evt> getEvts() { return evts; }
+    public List<Order> getOrders() { return orders; }
+    public List<LinkEvts> getLinksEvts() { return linkevts; }
+    public List<TimeConstraint> getTimeConstraints() { return timeconstraints; }
     
     public void addEvt(Evt evt) {
         evts.add(evt);
@@ -99,9 +100,9 @@ public class MSC extends HMSCElement {
 	
 	public Evt getEvtByID(int _id) {
 		Evt evt;
-		Iterator li = evts.listIterator();
+		Iterator<Evt> li = evts.listIterator();
 		while(li.hasNext()) {
-			evt = (Evt)(li.next());
+			evt = li.next();
 			if (evt.getID() == _id) {
 				return evt;
 			}
@@ -112,10 +113,10 @@ public class MSC extends HMSCElement {
     public Evt hasExactlyOnePreviousEvt(Evt evt) {
         Evt evtret = null;
         Order order;
-        Iterator li = orders.listIterator();
+        Iterator<Order> li = orders.listIterator();
         
         while(li.hasNext()) {
-            order = (Order)(li.next());
+            order = li.next();
             if (order.evt2 == evt) {
                 if (evtret != null) {
                     // at least two previous events
@@ -130,10 +131,10 @@ public class MSC extends HMSCElement {
     public boolean isEndOfExactlyOneRelativeTC(Evt evt) {
         boolean ret = false;
         TimeConstraint tc;
-        Iterator li = timeconstraints.listIterator();
+        Iterator<TimeConstraint> li = timeconstraints.listIterator();
         
         while(li.hasNext()) {
-            tc = (TimeConstraint)(li.next());
+            tc = li.next();
             if (tc.evt2 == evt) {
                 if (ret == true) {
                     // at least two tcs
@@ -151,7 +152,7 @@ public class MSC extends HMSCElement {
 			return "";
 		}
 		
-		ArrayList<Evt> al = getEffectiveGuardEvtsBefore(evt);
+		List<Evt> al = getEffectiveGuardEvtsBefore(evt);
 		
 		if ((al == null) || (al.size() == 0)) {
 			return "";
@@ -177,9 +178,9 @@ public class MSC extends HMSCElement {
 		return guard;
 	}
 	
-	private ArrayList<Evt> getEffectiveGuardEvtsBefore(Evt evt) {
-		ArrayList<Evt> al = new ArrayList();
-		ArrayList<Evt> tmp = getAllPredecesorsOf(evt);
+	private List<Evt> getEffectiveGuardEvtsBefore(Evt evt) {
+		List<Evt> al = new ArrayList<Evt>();
+		List<Evt> tmp = getAllPredecesorsOf(evt);
 		
 		int i;
 		Evt evt1;
@@ -188,7 +189,7 @@ public class MSC extends HMSCElement {
 			evt1 = tmp.get(i);
 			if ((evt1 != evt) && (evt1.getType() == Evt.GUARD)) {
 				// test if no [end] guard which is after evt1 but before evt
-				ArrayList<Evt> intersec = getIntersecOf(tmp, getAllNextsOf(evt1));
+				List<Evt> intersec = getIntersecOf(tmp, getAllNextsOf(evt1));
 				if (!hasEndGuard(intersec)) {
 					al.add(evt1);
 				}
@@ -199,10 +200,10 @@ public class MSC extends HMSCElement {
 	}
 	
 	public  Evt getEndGuard(Evt evt) {
-		ArrayList<Evt> al = getAllNextsOf(evt);
-		ArrayList<Evt> eal = new ArrayList<Evt>();
+		List<Evt> al = getAllNextsOf(evt);
+		List<Evt> eal = new ArrayList<Evt>();
 		
-		int i;
+		//int i;
 		
 		for(Evt evt1: al) {
 			if (evt1.getType() == Evt.END_GUARD) {
@@ -219,10 +220,10 @@ public class MSC extends HMSCElement {
 	}
 	
 	public Evt getPreviousGuardEvt(Evt evt) {
-		ArrayList<Evt> al = getAllPredecesorsOf(evt);
-		ArrayList<Evt> eal = new ArrayList<Evt>();
+		List<Evt> al = getAllPredecesorsOf(evt);
+		List<Evt> eal = new ArrayList<Evt>();
 		
-		int i;
+		//int i;
 		
 		for(Evt evt1: al) {
 			if (evt1.isAGuardEvt()) {
@@ -243,7 +244,7 @@ public class MSC extends HMSCElement {
 	}
 	
 	
-	private boolean hasEndGuard(ArrayList<Evt> list) {
+	private boolean hasEndGuard( List<Evt> list) {
 		for(Evt evt:list) {
 			if (evt.getType() == Evt.END_GUARD) {
 				return true;
@@ -252,9 +253,9 @@ public class MSC extends HMSCElement {
 		return false;
 	}
 	
-	private ArrayList<Evt> getAllPredecesorsOf(Evt evt) {
-		ArrayList<Evt> al = getImmediatePredecessorsOf(evt);
-		ArrayList<Evt> tmp;
+	private List<Evt> getAllPredecesorsOf(Evt evt) {
+		List<Evt> al = getImmediatePredecessorsOf(evt);
+		List<Evt> tmp;
 		Evt evt1, evt2;
 		int i, j;
 		
@@ -276,14 +277,14 @@ public class MSC extends HMSCElement {
 		return al;
 	}
 	
-	private ArrayList<Evt> getImmediatePredecessorsOf(Evt evt) {
-		ArrayList<Evt> al = new ArrayList<Evt>();
+	private List<Evt> getImmediatePredecessorsOf(Evt evt) {
+		List<Evt> al = new ArrayList<Evt>();
 		Order order;
 		
-		ListIterator iterator = orders.listIterator();
+		Iterator<Order> iterator = orders.listIterator();
 		
 		while(iterator.hasNext()) {
-			order = (Order)(iterator.next());
+			order = iterator.next();
 			if (order.evt2 == evt) {
 				if (order.evt1 != evt) {
 					al.add(order.evt1);
@@ -294,9 +295,9 @@ public class MSC extends HMSCElement {
 		return al;
 	}
 	
-	private ArrayList<Evt> getAllNextsOf(Evt evt) {
-		ArrayList<Evt> al = getAllImmediateNextsOf(evt);
-		ArrayList<Evt> tmp;
+	private List<Evt> getAllNextsOf(Evt evt) {
+		List<Evt> al = getAllImmediateNextsOf(evt);
+		List<Evt> tmp;
 		Evt evt1, evt2;
 		int i, j;
 		
@@ -317,14 +318,14 @@ public class MSC extends HMSCElement {
 		return al;
 	}
 	
-	private ArrayList<Evt> getAllImmediateNextsOf(Evt evt) {
-		ArrayList<Evt> al = new ArrayList<Evt>();
+	private List<Evt> getAllImmediateNextsOf(Evt evt) {
+		List<Evt> al = new ArrayList<Evt>();
 		Order order;
 		
-		ListIterator iterator = orders.listIterator();
+		Iterator<Order> iterator = orders.listIterator();
 		
 		while(iterator.hasNext()) {
-			order = (Order)(iterator.next());
+			order = iterator.next();
 			if (order.evt1 == evt) {
 				if (order.evt2 != evt) {
 					al.add(order.evt2);
@@ -335,8 +336,8 @@ public class MSC extends HMSCElement {
 		return al;
 	}
 	
-	private ArrayList<Evt> getIntersecOf(ArrayList<Evt> list1, ArrayList<Evt> list2) {
-		ArrayList<Evt> list = new ArrayList<Evt>();
+	private List<Evt> getIntersecOf( List<Evt> list1, List<Evt> list2) {
+		List<Evt> list = new ArrayList<Evt>();
 		for(Evt evt:list1) {
 			if (list2.contains(evt)) {
 				list.add(evt);
@@ -349,7 +350,7 @@ public class MSC extends HMSCElement {
 		// Computes the nb of evts that occur in the instance before
 		// the evt given as parameter
 		
-		ArrayList<Evt> metEvts = new ArrayList<Evt>();
+		List<Evt> metEvts = new ArrayList<Evt>();
 		
 		
 		computeAllEvtsBefore(metEvts, _evt);
@@ -357,15 +358,15 @@ public class MSC extends HMSCElement {
 		return (metEvts.size() - 1);
 	}
 	
-	private void computeAllEvtsBefore(ArrayList<Evt> _metEvts, Evt _evt) {
-		ListIterator iterator;
+	private void computeAllEvtsBefore( List<Evt> _metEvts, Evt _evt) {
+		Iterator<Order> iterator;
 		Order order;
 		
 		_metEvts.add(_evt);
 		
 		iterator = orders.listIterator();
 		while(iterator.hasNext()) {
-			order = (Order)(iterator.next());
+			order = iterator.next();
 			if(order.evt2 == _evt) {
 				if (order.evt1.getInstance() == _evt.getInstance()) {
 					if (!_metEvts.contains(order.evt1)) {

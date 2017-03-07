@@ -56,8 +56,8 @@ import ui.*;
 
 
 public class JDialogAttribute extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    protected LinkedList<TAttribute> attributes, attributesPar, forbidden;
-    protected LinkedList<Boolean> initValues;
+    protected java.util.List<TAttribute> attributes, attributesPar, forbidden;
+    protected java.util.List<Boolean> initValues;
     protected boolean checkKeyword, checkJavaKeyword, checkTMLKeyword;
     
     protected JPanel panel1, panel2;
@@ -67,7 +67,7 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
     protected String attrib; // "Attributes", "Gates", etc.
     
     // Panel1
-    protected JComboBox accessBox, typeBox;
+    protected JComboBox<String> accessBox, typeBox;
     protected JTextField identifierText;
     protected JTextField initialValue;
     protected JButton addButton;
@@ -83,7 +83,7 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
     protected JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogAttribute(LinkedList<TAttribute> _attributes, LinkedList<TAttribute>_forbidden, Frame f, String title, String attrib) {
+    public JDialogAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute>_forbidden, Frame f, String title, String attrib) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
@@ -161,7 +161,7 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
         c1.gridwidth = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
-        accessBox = new JComboBox();
+        accessBox = new JComboBox<String>();
         panel1.add(accessBox, c1);
         identifierText = new JTextField();
         identifierText.setColumns(15);
@@ -179,7 +179,7 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
         
         panel1.add(new JLabel(" : "), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeBox = new JComboBox();
+        typeBox = new JComboBox<>();
         typeBox.addActionListener(this);
         panel1.add(typeBox, c1);
         
@@ -445,11 +445,11 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
             TAttribute a = attributes.get (i);
             identifierText.setText(a.getId());
             initialValue.setText(a.getInitialValue());
-            select(accessBox, a.getStringAccess(a.getAccess()));
+            select(accessBox, TAttribute.getStringAccess(a.getAccess()));
             if (a.getType() == TAttribute.OTHER) {
                 select(typeBox, a.getTypeOther());
             } else {
-                select(typeBox, a.getStringType(a.getType()));
+                select(typeBox, TAttribute.getStringType(a.getType()));
             }
             removeButton.setEnabled(true);
             if (i > 0) {
@@ -465,10 +465,10 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
         }
     }
     
-    public void select(JComboBox jcb, String text) {
+    public void select(JComboBox<String> jcb, String text) {
         String s;
         for(int i=0; i<jcb.getItemCount(); i++) {
-            s = (String)(jcb.getItemAt(i));
+            s = jcb.getItemAt(i);
             //System.out.println("String found: *" + s + "* *" + text + "*");
             if (s.equals(text)) {
                 jcb.setSelectedIndex(i);

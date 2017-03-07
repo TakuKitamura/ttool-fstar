@@ -47,33 +47,36 @@ package avatartranslator;
 
 import java.util.*;
 
-import myutil.*;
-
-
 public class AvatarPragmaInitialKnowledge extends AvatarPragma {
 
-    private LinkedList<AvatarAttribute> arguments;
+    private List<AvatarAttribute> arguments;
     private boolean isSystem;
 
-    public AvatarPragmaInitialKnowledge(String _name, Object _referenceObject, LinkedList<AvatarAttribute> args, boolean isSystem) {
+    public AvatarPragmaInitialKnowledge(String _name, Object _referenceObject, List<AvatarAttribute> args, boolean isSystem) {
         super(_name, _referenceObject);
+        
         arguments = args;
-	this.isSystem = isSystem;
+        this.isSystem = isSystem;
     }
-    public LinkedList<AvatarAttribute> getArgs(){
-	return arguments;
+    
+    public List<AvatarAttribute> getArgs(){
+    	return arguments;
     }
+    
     public boolean isSystem(){	
-	return isSystem;
+    	return isSystem;
     }
 
     @Override
     public AvatarPragmaInitialKnowledge advancedClone (AvatarSpecification avspec) {
-        LinkedList<AvatarAttribute> l = new LinkedList<AvatarAttribute> ();
+        List<AvatarAttribute> l = new LinkedList<AvatarAttribute> ();
+        
         for (AvatarAttribute aa: this.arguments)
             l.add (avspec.getMatchingAttribute (aa));
+        
         AvatarPragmaInitialKnowledge result = new AvatarPragmaInitialKnowledge (this.name, this.referenceObject, l, this.isSystem);
         this.cloneLinkToReferenceObjects (result);
+        
         return result;
     }
 }

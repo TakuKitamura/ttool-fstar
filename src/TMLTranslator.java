@@ -47,9 +47,8 @@
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
+import java.util.List;
 
-//import uppaaldesc.*;
 import myutil.FileUtils;
 import tmltranslator.TMLError;
 import tmltranslator.TMLMapping;
@@ -190,7 +189,7 @@ public class TMLTranslator  {
         TMLMappingTextSpecification spec = new TMLMappingTextSpecification(title);
         ret = spec.makeTMLMapping(inputData, path);
         System.out.println("load ended");
-        ArrayList<TMLError> warnings;
+        List<TMLError> warnings;
 
         if (!ret) {
             System.out.println("Compilation:\n" + spec.printSummary());
@@ -232,7 +231,7 @@ public class TMLTranslator  {
 
     public static boolean loadTML(String title) {
         boolean ret = false;
-        ArrayList<TMLError> warnings;
+        List<TMLError> warnings;
         //System.out.println("load");
         TMLTextSpecification spec = new TMLTextSpecification(title, true);
         ret = spec.makeTMLModeling(inputData);

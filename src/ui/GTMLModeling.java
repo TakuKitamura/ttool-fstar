@@ -54,13 +54,9 @@ import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmlcompd.*;
 import ui.tmldd.*;
-import ui.tmlcp.*;
 import ui.tmlsd.*;
 import tmltranslator.*;
-import tmltranslator.toavatar.*;
 import tmltranslator.tmlcp.*;
-import tmltranslator.toproverif.*;
-import proverifspec.*;
 import myutil.*;
 import tmltranslator.modelcompiler.*;
 import avatartranslator.*;
@@ -71,29 +67,27 @@ public class GTMLModeling  {
     private TMLComponentDesignPanel tmlcdp;
     private TMLArchiPanel tmlap;
     private TMLModeling tmlm;
-    private LinkedList<CheckingError> checkingErrors, warnings;
-    private LinkedList tasksToTakeIntoAccount;
-    private LinkedList componentsToTakeIntoAccount;
-    private LinkedList components;
-    private LinkedList removedChannels, removedRequests, removedEvents;
+    private List<CheckingError> checkingErrors, warnings;
+    private List<? extends TGComponent> tasksToTakeIntoAccount;
+    private List<? extends TGComponent> componentsToTakeIntoAccount;
+    private List<? extends TGComponent> components;
+    private List<String> removedChannels, removedRequests, removedEvents;
     private static CorrespondanceTGElement listE;
-    private Hashtable<String, String> table;
+    private Map<String, String> table;
     public AvatarSpecification avspec;
     //private ArrayList<HwNode> nodesToTakeIntoAccount;
-    private LinkedList nodesToTakeIntoAccount;
+    private List<TGComponent> nodesToTakeIntoAccount;
 
     private TMLMapping map;
     private TMLArchitecture archi;
 
-
-
     //Attributes specific to Communication Patterns
     private TMLCP tmlcp;
     private TMLCommunicationPatternPanel tmlcpp;
-    private Vector<TDiagramPanel> diagramPanelsToTakeIntoAccount;
-    private Vector<TDiagramPanel> panels;
+ //   private Vector<TDiagramPanel> diagramPanelsToTakeIntoAccount;
+//    private Vector<TDiagramPanel> panels;
 
-    private HashMap<String, SecurityPattern> securityPatterns = new HashMap<String, SecurityPattern>();
+    private Map<String, SecurityPattern> securityPatterns = new HashMap<String, SecurityPattern>();
 
     private boolean putPrefixName = false;
 
@@ -153,9 +147,9 @@ public class GTMLModeling  {
             if (tasksToTakeIntoAccount == null) {
                 tasksToTakeIntoAccount = components;
             }
-            removedChannels = new LinkedList();
-            removedRequests = new LinkedList();
-            removedEvents = new LinkedList();
+            removedChannels = new LinkedList<String>();
+            removedRequests = new LinkedList<String>();
+            removedEvents = new LinkedList<String>();
 
             try {
                 addTMLTasks();
@@ -212,9 +206,9 @@ public class GTMLModeling  {
                 }
             }
 
-            removedChannels = new LinkedList();
-            removedRequests = new LinkedList();
-            removedEvents = new LinkedList();
+            removedChannels = new LinkedList<String>();
+            removedRequests = new LinkedList<String>();
+            removedEvents = new LinkedList<String>();
 
             try {
                 addTMLComponents();
@@ -272,56 +266,57 @@ public class GTMLModeling  {
         return listE;
     }
 
-    public void setTasks(Vector tasks) {
-        tasksToTakeIntoAccount = new LinkedList(tasks);
+    public void setTasks(Vector<? extends TGComponent> tasks) {
+        tasksToTakeIntoAccount = new LinkedList<TGComponent>(tasks);
     }
 
-    public void setComponents(Vector components) {
-        componentsToTakeIntoAccount = new LinkedList(components);
+    public void setComponents(Vector<? extends TGComponent> components) {
+        componentsToTakeIntoAccount = new LinkedList<TGComponent>(components);
     }
 
-    public void setNodes(Vector nodes) {
-        nodesToTakeIntoAccount = new LinkedList(nodes);
+    public void setNodes(Vector<TGComponent> nodes) {
+        nodesToTakeIntoAccount = new LinkedList<TGComponent>(nodes);
     }
 
-    public void setDiagramPanels( Vector panels ) {
-        diagramPanelsToTakeIntoAccount = new Vector<TDiagramPanel>( panels );
-    }
+//    public void setDiagramPanels( Vector<TDiagramPanel> panels ) {
+//        diagramPanelsToTakeIntoAccount = new Vector<TDiagramPanel>( panels );
+//    }
 
-    public LinkedList<CheckingError> getCheckingErrors() {
+    public List<CheckingError> getCheckingErrors() {
         return checkingErrors;
     }
 
-    public LinkedList<CheckingError> getCheckingWarnings() {
+    public List<CheckingError> getCheckingWarnings() {
         return warnings;
     }
-    private void addTMLPragmas(){
-	TGComponent tgc;
-	components = tmlap.tmlap.getComponentList();
-	ListIterator iterator = components.listIterator();
-	while(iterator.hasNext()) {
-	    tgc = (TGComponent)(iterator.next());
-	    if (tgc instanceof TGCNote){
-	        TGCNote note = (TGCNote) tgc;
-	        String[] vals = note.getValues();
-	        for (String s: vals){
-		    TraceManager.addDev("Val " + s);
-		    if (s.contains("#") && s.contains(" ")){
-  		        map.addPragma(s.split(" "));
-	    	    }
-	        }
-	    }
-        }
-    }
+//    
+//    private void addTMLPragmas(){
+//	TGComponent tgc;
+//	components = tmlap.tmlap.getComponentList();
+//	ListIterator iterator = components.listIterator();
+//	while(iterator.hasNext()) {
+//	    tgc = (TGComponent)(iterator.next());
+//	    if (tgc instanceof TGCNote){
+//	        TGCNote note = (TGCNote) tgc;
+//	        String[] vals = note.getValues();
+//	        for (String s: vals){
+//		    TraceManager.addDev("Val " + s);
+//		    if (s.contains("#") && s.contains(" ")){
+//  		        map.addPragma(s.split(" "));
+//	    	    }
+//	        }
+//	    }
+//        }
+//    }
     private void addTMLTasks() throws MalformedTMLDesignException {
         TGComponent tgc;
         TMLTask tmlt;
         TMLTaskOperator tmlto;
         TMLActivityDiagramPanel tmladp;
 
-        ListIterator iterator = tasksToTakeIntoAccount.listIterator();
+        Iterator<? extends TGComponent> iterator = tasksToTakeIntoAccount.listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLTaskOperator) {
                 tmlto = (TMLTaskOperator)tgc;
                 tmladp = tmldp.getTMLActivityDiagramPanel(tmlto.getValue());
@@ -359,9 +354,9 @@ public class GTMLModeling  {
         TMLTask tmlt;
         TMLComponentDesignPanel tmlcdptmp;
 
-        ListIterator iterator = componentsToTakeIntoAccount.listIterator();
+        Iterator<? extends TGComponent> iterator = componentsToTakeIntoAccount.listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLCPrimitiveComponent) {
                 tmlcpc = (TMLCPrimitiveComponent)tgc;
                 tmlcdptmp = (TMLComponentDesignPanel)(tmlcpc.getTDiagramPanel().getMGUI().getTURTLEPanelOfTDiagramPanel(tmlcpc.getTDiagramPanel()));
@@ -396,14 +391,14 @@ public class GTMLModeling  {
     private void addTMLChannels() throws MalformedTMLDesignException {
         TGComponent tgc;
         TMLChannelOperator tmlco;
-        ListIterator iterator = components.listIterator();
+        Iterator<? extends TGComponent> iterator = components.listIterator();
         TMLTaskInterface t1, t2;
         TMLChannel channel;
         TMLTask tt1, tt2;
         String name;
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLChannelOperator) {
                 tmlco = (TMLChannelOperator)tgc;
                 //TraceManager.addDev("Found channel: " + tmlco.getChannelName());
@@ -449,7 +444,7 @@ public class GTMLModeling  {
     private void addTMLEvents() throws MalformedTMLDesignException {
         TGComponent tgc;
         TMLEventOperator tmleo;
-        ListIterator iterator = components.listIterator();
+        Iterator<? extends TGComponent> iterator = components.listIterator();
         TMLTaskInterface t1, t2;
         TMLEvent event;
         TType tt;
@@ -509,7 +504,7 @@ public class GTMLModeling  {
     private void addTMLRequests() throws MalformedTMLDesignException {
         TGComponent tgc;
         TMLRequestOperator tmlro;
-        ListIterator iterator = components.listIterator();
+        Iterator<? extends TGComponent> iterator = components.listIterator();
         TMLTaskInterface t1, t2;
         TMLRequest request;
         TType tt;
@@ -651,9 +646,9 @@ public class GTMLModeling  {
 
         TGComponent tgc;
         TMLCPrimitiveComponent tmlc;
-        ListIterator iterator = components.listIterator();
-        ListIterator li, li2;
-        LinkedList ports, portstome;
+        Iterator<? extends TGComponent> iterator = components.listIterator();
+        Iterator<TMLCPrimitivePort> li;//, li2;
+        List<TMLCPrimitivePort> ports, portstome;
         String name, name1, name2;
         TMLCPrimitivePort port1, port2;
 
@@ -663,12 +658,12 @@ public class GTMLModeling  {
         TMLChannel channel;
         TMLTask tt1, tt2;
 
-        ArrayList<TGComponent> alreadyConsidered = new ArrayList<TGComponent>();
+        List<TGComponent> alreadyConsidered = new ArrayList<TGComponent>();
 
         TraceManager.addDev("*** Adding channels ***");
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLCPrimitiveComponent) {
                 tmlc = (TMLCPrimitiveComponent)tgc;
                 //TraceManager.addDev("Component:" + tmlc.getValue());
@@ -681,7 +676,7 @@ public class GTMLModeling  {
                         portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
                         TraceManager.addDev("******** Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 
-                        ListIterator ite = portstome.listIterator();
+                        Iterator<TMLCPrimitivePort> ite = portstome.listIterator();
                         while(ite.hasNext()) {
                             TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
                         }
@@ -886,9 +881,9 @@ public class GTMLModeling  {
     private void addTMLCEvents() throws MalformedTMLDesignException {
         TGComponent tgc;
         TMLCPrimitiveComponent tmlc;
-        ListIterator iterator = components.listIterator();
-        ListIterator li, li2;
-        LinkedList ports, portstome;
+        Iterator<? extends TGComponent> iterator = components.listIterator();
+        Iterator<TMLCPrimitivePort> li;//, li2;
+        List<TMLCPrimitivePort> ports, portstome;
         String name;
         TMLCPrimitivePort port1, port2;
 
@@ -918,7 +913,7 @@ public class GTMLModeling  {
                     portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
                     TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 
-                    ListIterator ite = portstome.listIterator();
+                    Iterator<?> ite = portstome.listIterator();
                     while(ite.hasNext()) {
                         TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
                     }
@@ -1038,9 +1033,9 @@ public class GTMLModeling  {
     private void addTMLCRequests() throws MalformedTMLDesignException {
         TGComponent tgc;
         TMLCPrimitiveComponent tmlc;
-        ListIterator iterator = components.listIterator();
-        ListIterator li, li2;
-        LinkedList ports, portstome;
+        Iterator<? extends TGComponent> iterator = components.listIterator();
+        Iterator<TMLCPrimitivePort> li;//, li2;
+        List<TMLCPrimitivePort> ports, portstome;
         String name;
         TMLCPrimitivePort port1, port2, port3;
 
@@ -1072,7 +1067,7 @@ public class GTMLModeling  {
                     portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
                     //TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 
-                    ListIterator ite = portstome.listIterator();
+ //                   ListIterator ite = portstome.listIterator();
                     //while(ite.hasNext()) {
                     //TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
                     //}
@@ -1224,15 +1219,15 @@ public class GTMLModeling  {
     }
 
     private void addAttributesTo(TMLTask tmltask, TMLCPrimitiveComponent tmlcpc) {
-        LinkedList<TAttribute> attributes = tmlcpc.getAttributes();
+        List<TAttribute> attributes = tmlcpc.getAttributes();
         addAttributesTo(tmlcpc, tmltask, attributes);
     }
 
-    private void addAttributesTo(TGComponent tgc, TMLTask tmltask, LinkedList<TAttribute> attributes) {
+    private void addAttributesTo(TGComponent tgc, TMLTask tmltask, List<TAttribute> attributes) {
         TMLType tt;
-        String name;
+      //  String name;
         TMLAttribute tmlt;
-        TMLRequest req;
+      //  TMLRequest req;
         TMLCRecordComponent rc;
 
         for (TAttribute ta: attributes) {
@@ -1301,10 +1296,11 @@ public class GTMLModeling  {
         TraceManager.addDev("Generating activity diagram of:" + tmltask.getName());
 
         // search for start state
-        LinkedList list = tadp.getComponentList();
-        Iterator iterator = list.listIterator();
+        List<TGComponent> list = tadp.getComponentList();
+        Iterator<TGComponent> iterator = list.listIterator();
 		while(iterator.hasNext()){
-	    	tgc = (TGComponent)(iterator.next());
+	    	tgc = iterator.next();
+
 	    	if (tgc instanceof TMLADEncrypt) {
 				if (!((TMLADEncrypt)tgc).securityContext.isEmpty()){
 					SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).encTime, ((TMLADEncrypt)tgc).decTime, ((TMLADEncrypt)tgc).nonce, ((TMLADEncrypt)tgc).formula, ((TMLADEncrypt)tgc).key);
@@ -1317,14 +1313,15 @@ public class GTMLModeling  {
 			}
 		}
     }
+
     private void generateTasksActivityDiagrams() throws MalformedTMLDesignException {
         TMLTask tmltask;
 
-	//First generate security patterns over all tasks
-	ListIterator iterator = tmlm.getTasks().listIterator();
+        //First generate security patterns over all tasks
+        Iterator<TMLTask> iterator = tmlm.getTasks().listIterator();
 
         while(iterator.hasNext()) {
-            tmltask = (TMLTask)(iterator.next());
+            tmltask = iterator.next();
             createSecurityPatterns(tmltask);
         }	
 
@@ -1382,15 +1379,16 @@ public class GTMLModeling  {
         TraceManager.addDev("Generating activity diagram of:" + tmltask.getName());
 
         // search for start state
-        LinkedList list = tadp.getComponentList();
-        Iterator iterator = list.listIterator();
+        List<TGComponent> list = tadp.getComponentList();
+        Iterator<TGComponent> iterator = list.listIterator();
         TGComponent tgc;
         TMLADStartState tss = null;
         int cptStart = 0;
-        boolean rndAdded = false;
+    //    boolean rndAdded = false;
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TMLADStartState) {
                 tss = (TMLADStartState) tgc;
                 cptStart ++;
@@ -2298,7 +2296,7 @@ public class GTMLModeling  {
         return tmlcp;
     }
 
-    private boolean nameInUse(ArrayList<String> _names, String _name) {
+    private boolean nameInUse( List<String> _names, String _name) {
         for(String s: _names) {
             if (s.equals(_name)) {
                 return true;
@@ -2313,9 +2311,10 @@ public class GTMLModeling  {
         if (nodesToTakeIntoAccount == null) {
             components = tmlap.tmlap.getComponentList();
         } else {
+        	// DB: TODO this is a bug. Stuff in nodesToTakeIntoAccount are not components
             components = nodesToTakeIntoAccount;
         }
-        ListIterator iterator = components.listIterator();
+        Iterator<? extends TGComponent> iterator = components.listIterator();
         TGComponent tgc;
 
         TMLArchiCPUNode node;
@@ -2336,10 +2335,11 @@ public class GTMLModeling  {
         HwMemory memory;
         HwDMA dma;
 
-        ArrayList<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<String>();
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TMLArchiCPUNode) {
                 node = (TMLArchiCPUNode)tgc;
                 if (nameInUse(names, node.getName())) {
@@ -2619,12 +2619,12 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 
     private void makeCPDataStructure() throws MalformedTMLDesignException {
 
-        TGComponent tgc;
-        ui.tmlsd.TMLSDPanel SDpanel;
-        ui.tmlcp.TMLCPPanel ADpanel;
-        ArrayList<String> names = new ArrayList<String>();
-        TMLCPSequenceDiagram SD;
-        TMLCPActivityDiagram AD;
+       // TGComponent tgc;
+      //  ui.tmlsd.TMLSDPanel SDpanel;
+     //   ui.tmlcp.TMLCPPanel ADpanel;
+        List<String> names = new ArrayList<String>();
+     //   TMLCPSequenceDiagram SD;
+      //  TMLCPActivityDiagram AD;
 
         Vector<TDiagramPanel> panelList = tmlcpp.getPanels();
 
@@ -2657,15 +2657,15 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 
 
     private tmltranslator.tmlcp.TMLCPActivityDiagram createActivityDiagramDataStructure( ui.tmlcp.TMLCPPanel panel,
-                                                                                         ArrayList<String> names )      throws MalformedTMLDesignException {
-
+                                                                                         List<String> names )
+    throws MalformedTMLDesignException {
         tmltranslator.tmlcp.TMLCPStart start;
         tmltranslator.tmlcp.TMLCPStop stop;
         tmltranslator.tmlcp.TMLCPJunction junction;
         tmltranslator.tmlcp.TMLCPJoin join;
         tmltranslator.tmlcp.TMLCPFork fork;
         tmltranslator.tmlcp.TMLCPChoice choice;
-        tmltranslator.tmlcp.TMLCPConnector TMLCPconnector;
+       // tmltranslator.tmlcp.TMLCPConnector TMLCPconnector;
         tmltranslator.tmlcp.TMLCPRefAD refAD;
         tmltranslator.tmlcp.TMLCPRefSD refSD;
         tmltranslator.tmlcp.TMLCPForLoop loop;
@@ -2679,7 +2679,8 @@ if (tgc instanceof TMLArchiCrossbarNode) {
           throw new MalformedTMLDesignException(tmlto.getValue() + " msg");
           }*/
 
-        LinkedList components = panel.getComponentList();
+        List<TGComponent> components = panel.getComponentList();
+        
         if( nameInUse( names, panel.getName() ) ) {
             String msg = panel.getName() + " already exists";
             CheckingError ce = new CheckingError( CheckingError.STRUCTURE_ERROR, "Two diagrams have the same name: " + panel.getName() );
@@ -2802,20 +2803,20 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 
 
     private tmltranslator.tmlcp.TMLCPSequenceDiagram createSequenceDiagramDataStructure( ui.tmlsd.TMLSDPanel panel,
-                                                                                         ArrayList<String> names )      throws MalformedTMLDesignException {
+                                                                                         List<String> names )      throws MalformedTMLDesignException {
 
         LinkedList<TAttribute> attributes;
         int index1;
         int index2;
         TGComponent[] components;
         TMLType type;
-        String toParse;
+      //  String toParse;
         TAttribute attribute;
         TGConnectorMessageTMLSD connector;
         TMLSDMessage message;
         tmltranslator.tmlcp.TMLSDInstance instance;
-        String[] tokens;                                                        //used to get the tokens of the string for a SD attribute
-        String delims = "[ +=:;]+";             //the delimiter chars used to parse attributes of SD instance
+    //    String[] tokens;                                                        //used to get the tokens of the string for a SD attribute
+  //      String delims = "[ +=:;]+";             //the delimiter chars used to parse attributes of SD instance
 
         //TraceManager.addDev( "ADDING TO DATA STRUCTURE THE DIAGRAM " + panel.getName() );
         if( nameInUse( names, panel.getName() ) ) {
@@ -2831,7 +2832,7 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         else {
             names.add( panel.getName() );
             tmltranslator.tmlcp.TMLCPSequenceDiagram SD = new tmltranslator.tmlcp.TMLCPSequenceDiagram( panel.getName(), panel );
-            LinkedList elemList = panel.getComponentList();
+            List<TGComponent> elemList = panel.getComponentList();
             //TraceManager.addDev("Adding to the data structure the elements of: " + panel.getName() );
             //order messages according to the inverse of Y coordinate
             int j;
@@ -2952,11 +2953,10 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 
     private boolean makeTMLModeling() {
         // Determine all TML Design to be used -> TMLDesignPanels
-        ArrayList<TMLDesignPanel> panels = new ArrayList<TMLDesignPanel>();
-        ArrayList<TMLComponentDesignPanel> cpanels = new ArrayList<TMLComponentDesignPanel>();
-        Vector taskss = new Vector();
-        Vector allcomp = new Vector();
-        Vector tmp;
+        List<TMLDesignPanel> panels = new ArrayList<TMLDesignPanel>();
+        List<TMLComponentDesignPanel> cpanels = new ArrayList<TMLComponentDesignPanel>();
+        Vector<Vector<TGComponent>> taskss = new Vector<Vector<TGComponent>>();
+        Vector<TMLCPrimitiveComponent> allcomp = new Vector<TMLCPrimitiveComponent>();
         int index;
 
         if (nodesToTakeIntoAccount == null) {
@@ -2964,11 +2964,12 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         } else {
             components = nodesToTakeIntoAccount;
         }
-        ListIterator iterator = components.listIterator();
+        
+        Iterator<? extends TGComponent> iterator = components.listIterator();
 
-        TGComponent tgc, tgctask;
-        TMLArchiNode node;
-        ArrayList<TMLArchiArtifact> artifacts;
+        TGComponent tgc;//, tgctask;
+      //  TMLArchiNode node;
+        List<TMLArchiArtifact> artifacts;
         String namePanel;
         TMLDesignPanel tmldp;
         TURTLEPanel tup;
@@ -2977,11 +2978,15 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         TMLCPrimitiveComponent pc;
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TMLArchiNode) {
+                Vector<TGComponent> tmp;
+
                 artifacts = ((TMLArchiNode)(tgc)).getAllTMLArchiArtifacts();
-                for(TMLArchiArtifact artifact:artifacts) {
+                for( TMLArchiArtifact artifact:artifacts) {
                     namePanel = artifact.getReferenceTaskName();
+                    
                     try {
                         tup = (TURTLEPanel)(tmlap.getMainGUI().getTURTLEPanel(namePanel));
 
@@ -2990,19 +2995,21 @@ if (tgc instanceof TMLArchiCrossbarNode) {
                             tmldp = (TMLDesignPanel)tup;
                             if (panels.contains(tmldp)) {
                                 index = panels.indexOf(tmldp);
-                                tmp = (Vector)(taskss.get(index));
+                                tmp = taskss.get(index);
                             } else {
                                 panels.add(tmldp);
-				this.tmldp = tmldp;
-                                tmp = new Vector();
+                                this.tmldp = tmldp;
+                                tmp = new Vector<TGComponent>();
                                 taskss.add(tmp);
                             }
 
                             // Search for the corresponding TMLTask
                             task = tmldp.getTaskByName(artifact.getTaskName());
+                            
                             if (task != null) {
                                 tmp.add(task);
-                            } else {
+                            } 
+                            else {
                                 CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Task " + artifact.getTaskName() + " referenced by artifact " + artifact.getValue() + " is unknown");
                                 //ce.setTMLTask(tmltask);
                                 ce.setTDiagramPanel(tmlap.tmlap);
@@ -3015,10 +3022,10 @@ if (tgc instanceof TMLArchiCrossbarNode) {
                             tmlcdp = (TMLComponentDesignPanel)(tup);
                             if (cpanels.contains(tmlcdp)) {
                                 index = cpanels.indexOf(tmlcdp);
-                                tmp = (Vector)(taskss.get(index));
+                                tmp = taskss.get(index);
                             } else {
                                 cpanels.add(tmlcdp);
-                                tmp = new Vector();
+                                tmp = new Vector<TGComponent>();
                                 taskss.add(tmp);
 
                             }
@@ -3053,7 +3060,7 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         for(TMLDesignPanel panel: panels) {
             gtml =  new GTMLModeling(panel, false);
             gtml.putPrefixName(true);
-            gtml.setTasks((Vector)(taskss.get(index)));
+            gtml.setTasks( taskss.get(index) );
             index ++;
             tmpm = gtml.translateToTMLModeling(false);
             warnings.addAll(gtml.getCheckingWarnings());
@@ -3070,7 +3077,7 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 
         if (cpanels.size() > 0) {
             for(TMLComponentDesignPanel panel: cpanels) {
-		this.tmlcdp = panel;
+            	this.tmlcdp = panel;
                 gtml =  new GTMLModeling(panel, false);
                 gtml.setComponents(allcomp);
                 gtml.putPrefixName(true);
@@ -3149,65 +3156,64 @@ if (tgc instanceof TMLArchiCrossbarNode) {
     }
 
     //Inspect the architecture diagrams and retrieve mapping of channels onto CPs
-    private void makeCPMapping()        {
-
-        //Why this code?
-        //if( nodesToTakeIntoAccount == null ) {
-
-        //take the architecture panel if it exists, otherwise return
-        Vector<TDiagramPanel> panelList = tmlap.getPanels();
-        for( TDiagramPanel panel: panelList )   {
-            TraceManager.addDev( "Name of Panel: " + panel.getName() );
-        }
-        //}
-        //else  {
-        //      components = nodesToTakeIntoAccount;
-        //}
-        ListIterator iterator = components.listIterator();
-
-        TGComponent tgc;
-        ArrayList<TMLArchiArtifact> artifacts;
-        ArrayList<TMLArchiCommunicationArtifact> artifactscomm;
-        ArrayList<TMLArchiEventArtifact> artifactsEvt;
-        HwNode node;
-        TMLTask task;
-        TMLElement elt;
-        String s;
-
-        while( iterator.hasNext() ) {
-            TraceManager.addDev( "makeCPMapping 1" );
-            tgc = (TGComponent)( iterator.next() );
-            if( tgc instanceof TMLArchiCPNode ) {
-                TraceManager.addDev( "makeCPMapping 2" );
-                node = archi.getHwNodeByName( tgc.getName() );
-                if ( ( node != null ) && ( node instanceof HwCommunicationNode ) ) {
-                    TraceManager.addDev( "makeCPMapping 3" );
-                    artifactscomm = ( (TMLArchiCommunicationNode)(tgc) ).getChannelArtifactList();
-                    for( TMLArchiCommunicationArtifact artifact: artifactscomm )        {
-                        TraceManager.addDev("Exploring artifact " + artifact.getValue());
-                        s = artifact.getReferenceCommunicationName();
-                        s = s.replaceAll("\\s", "");
-                        s = s + "__" + artifact.getCommunicationName();
-                        TraceManager.addDev("Searching for:" + s);
-                        elt = tmlm.getCommunicationElementByName(s);
-                        TraceManager.addDev("comm elts:" + tmlm.getStringListCommunicationElements());
-                        if( elt instanceof TMLChannel ) {
-                            //TraceManager.addDev("Setting priority");
-                            ( (TMLChannel)(elt) ).setPriority( artifact.getPriority() );
-                        }
-                        if (elt != null) {
-                            map.addCommToHwCommNode( elt, (HwCommunicationNode)node );
-                        } else {
-                            TraceManager.addDev("Null mapping: no element named: " + artifact.getCommunicationName());
-                        }
-                    }
-
-		    
-                }
-            }
-        }
-    }   //End of method
-
+//    private void makeCPMapping()        {
+//
+//        //Why this code?
+//        //if( nodesToTakeIntoAccount == null ) {
+//
+//        //take the architecture panel if it exists, otherwise return
+//        Vector<TDiagramPanel> panelList = tmlap.getPanels();
+//        for( TDiagramPanel panel: panelList )   {
+//            TraceManager.addDev( "Name of Panel: " + panel.getName() );
+//        }
+//        //}
+//        //else  {
+//        //      components = nodesToTakeIntoAccount;
+//        //}
+//        ListIterator iterator = components.listIterator();
+//
+//        TGComponent tgc;
+//        ArrayList<TMLArchiArtifact> artifacts;
+//        ArrayList<TMLArchiCommunicationArtifact> artifactscomm;
+//        ArrayList<TMLArchiEventArtifact> artifactsEvt;
+//        HwNode node;
+//        TMLTask task;
+//        TMLElement elt;
+//        String s;
+//
+//        while( iterator.hasNext() ) {
+//            TraceManager.addDev( "makeCPMapping 1" );
+//            tgc = (TGComponent)( iterator.next() );
+//            if( tgc instanceof TMLArchiCPNode ) {
+//                TraceManager.addDev( "makeCPMapping 2" );
+//                node = archi.getHwNodeByName( tgc.getName() );
+//                if ( ( node != null ) && ( node instanceof HwCommunicationNode ) ) {
+//                    TraceManager.addDev( "makeCPMapping 3" );
+//                    artifactscomm = ( (TMLArchiCommunicationNode)(tgc) ).getChannelArtifactList();
+//                    for( TMLArchiCommunicationArtifact artifact: artifactscomm )        {
+//                        TraceManager.addDev("Exploring artifact " + artifact.getValue());
+//                        s = artifact.getReferenceCommunicationName();
+//                        s = s.replaceAll("\\s", "");
+//                        s = s + "__" + artifact.getCommunicationName();
+//                        TraceManager.addDev("Searching for:" + s);
+//                        elt = tmlm.getCommunicationElementByName(s);
+//                        TraceManager.addDev("comm elts:" + tmlm.getStringListCommunicationElements());
+//                        if( elt instanceof TMLChannel ) {
+//                            //TraceManager.addDev("Setting priority");
+//                            ( (TMLChannel)(elt) ).setPriority( artifact.getPriority() );
+//                        }
+//                        if (elt != null) {
+//                            map.addCommToHwCommNode( elt, (HwCommunicationNode)node );
+//                        } else {
+//                            TraceManager.addDev("Null mapping: no element named: " + artifact.getCommunicationName());
+//                        }
+//                    }
+//
+//		    
+//                }
+//            }
+//        }
+//    }   //End of method
 
     private void makeTMLCPLib() {
         if (nodesToTakeIntoAccount == null) {
@@ -3215,16 +3221,16 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         } else {
             components = nodesToTakeIntoAccount;
         }
-        ListIterator iterator = components.listIterator();
+        Iterator<? extends TGComponent> iterator = components.listIterator();
 
         TGComponent tgc;
-        ArrayList<TMLArchiArtifact> artifacts;
-        ArrayList<TMLArchiCommunicationArtifact> artifactscomm;
-        ArrayList<TMLArchiEventArtifact> artifactsEvt;
-        HwNode node;
-        TMLTask task;
-        TMLElement elt;
-        String s;
+//        ArrayList<TMLArchiArtifact> artifacts;
+//        ArrayList<TMLArchiCommunicationArtifact> artifactscomm;
+//        ArrayList<TMLArchiEventArtifact> artifactsEvt;
+   //     HwNode node;
+    //    TMLTask task;
+    //    TMLElement elt;
+   //     String s;
         TMLArchiCPNode cp;
 
         while(iterator.hasNext()) {
@@ -3255,12 +3261,13 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         } else {
             components = nodesToTakeIntoAccount;
         }
-        ListIterator iterator = components.listIterator();
+        
+        Iterator<? extends TGComponent> iterator = components.listIterator();
 
         TGComponent tgc;
-        ArrayList<TMLArchiArtifact> artifacts;
-        ArrayList<TMLArchiCommunicationArtifact> artifactscomm;
-        ArrayList<TMLArchiEventArtifact> artifactsEvt;
+        List<TMLArchiArtifact> artifacts;
+        List<TMLArchiCommunicationArtifact> artifactscomm;
+        List<TMLArchiEventArtifact> artifactsEvt;
         HwNode node;
         TMLTask task;
         TMLElement elt;

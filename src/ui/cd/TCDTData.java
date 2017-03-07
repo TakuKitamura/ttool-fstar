@@ -170,7 +170,7 @@ public class TCDTData extends TGCWithInternalComponent {
     
     public void recalculateSize() {
         //System.out.println("Recalculate size of " + this);
-        int i, j;
+        int i;//, j;
      
         for(i=0; i<nbInternalTGComponent; i++) {
             tgcomponent[i].calculateMyDesiredSize();
@@ -208,12 +208,12 @@ public class TCDTData extends TGCWithInternalComponent {
         minDesiredWidth = Math.max(size, minWidth);
         return minDesiredWidth;
     }
-    
-    private int calculateDesiredWidth() {
-        int w = Math.max(minDesiredWidth, tgcomponent[0].getMinDesiredWidth());
-        w = Math.max(w, tgcomponent[1].getMinDesiredWidth());
-        return w;
-    }
+//    
+//    private int calculateDesiredWidth() {
+//        int w = Math.max(minDesiredWidth, tgcomponent[0].getMinDesiredWidth());
+//        w = Math.max(w, tgcomponent[1].getMinDesiredWidth());
+//        return w;
+//    }
     
     
     public void internalDrawing(Graphics g) {
@@ -229,7 +229,7 @@ public class TCDTData extends TGCWithInternalComponent {
             graphics = g;
         }
         Font f = g.getFont();
-        int size = f.getSize();
+        //int size = f.getSize();
         g.drawRect(x, y, width, height);
         g.setColor(Color.yellow);
         g.fillRect(x+1, y+1, width-1, height-1);
@@ -298,8 +298,8 @@ public class TCDTData extends TGCWithInternalComponent {
         ((TCDReducedAttributeBox)tgcomponent[0]).checkMySize();
     }
     
-    public void updateAttributes(LinkedList<TAttribute> v) {
-        LinkedList<TAttribute> setV = ((TCDReducedAttributeBox)tgcomponent[0]).getAttributes();
+    public void updateAttributes( java.util.List<TAttribute> v) {
+    	java.util.List<TAttribute> setV = ((TCDReducedAttributeBox)tgcomponent[0]).getAttributes();
         int size = setV.size();
         
         // adapt old vector to the new attributes
@@ -338,7 +338,7 @@ public class TCDTData extends TGCWithInternalComponent {
         return TGComponentManager.TCD_TDATA;
     }
     
-    public LinkedList<TAttribute> getAttributes(){
+    public java.util.List<TAttribute> getAttributes(){
         return ((TGCAttributeBox)(tgcomponent[0])).getAttributeList();
     }
     

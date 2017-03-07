@@ -48,10 +48,14 @@ package translator;
 
 
 import myutil.*;
-import ui.tree.*;
 
-public class GroupOfGates extends SortedVector implements Comparable, GenericTree {
-    private Gate masterGate;
+public class GroupOfGates extends SortedVector implements Comparable<GroupOfGates>, GenericTree {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2577784112172937239L;
+	
+	private Gate masterGate;
     
     public GroupOfGates() {
     }
@@ -123,12 +127,13 @@ public class GroupOfGates extends SortedVector implements Comparable, GenericTre
         return s;
     }
     
-    public int compareTo(Object o) {
-        if (!(o instanceof GroupOfGates)) {
-            return 0;
-        } else {
+    @Override
+    public int compareTo( GroupOfGates o) {
+//        if (!(o instanceof GroupOfGates)) {
+//            return 0;
+//        } else {
             return toString().compareTo(o.toString());
-        }
+//        }
         
     }
     

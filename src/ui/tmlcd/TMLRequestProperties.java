@@ -126,9 +126,9 @@ public class TMLRequestProperties extends TGCWithoutInternalComponent {
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = valueOCL;
         JDialogParam jda = new JDialogParam(reqName, list[0].getType(), list[1].getType(), list[2].getType(), frame, "Setting properties");
-        jda.setSize(350, 350);
-        GraphicLib.centerOnParent(jda);
-        jda.show(); // blocked until dialog has been closed
+      //  jda.setSize(350, 350);
+        GraphicLib.centerOnParent(jda, 350, 350);
+        jda.setVisible( true ); // blocked until dialog has been closed
         
         if (jda.hasNewData()) {
             reqName = jda.getParamName();

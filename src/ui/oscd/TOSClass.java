@@ -137,7 +137,7 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
 
     public void recalculateSize() {
         //System.out.println("Recalculate size of " + this);
-        int i, j;
+        int i;//, j;
 
         for(i=0; i<nbInternalTGComponent; i++) {
             tgcomponent[i].calculateMyDesiredSize();
@@ -175,12 +175,12 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
         return minDesiredWidth;
     }
 
-
-    private int calculateDesiredWidth() {
-        int w = Math.max(minDesiredWidth, tgcomponent[0].getMinDesiredWidth());
-        w = Math.max(w, tgcomponent[1].getMinDesiredWidth());
-        return w;
-    }
+//
+//    private int calculateDesiredWidth() {
+//        int w = Math.max(minDesiredWidth, tgcomponent[0].getMinDesiredWidth());
+//        w = Math.max(w, tgcomponent[1].getMinDesiredWidth());
+//        return w;
+//    }
 
 
     public void internalDrawing(Graphics g) {
@@ -190,7 +190,7 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
 
         //System.out.println("My width = " + width + " this=" + this);
         Font f = g.getFont();
-        int size = f.getSize();
+    //    int size = f.getSize();
         g.drawRect(x, y, width, height);
         g.setColor(Color.yellow);
         g.fillRect(x+1, y+1, width-1, height-1);
@@ -216,8 +216,8 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
         }
 
         JDialogTOSClass jdtosc = new JDialogTOSClass(frame, text, this);
-        jdtosc.setSize(350, 400);
-        GraphicLib.centerOnParent(jdtosc);
+     //   jdtosc.setSize(350, 400);
+        GraphicLib.centerOnParent(jdtosc, 350, 400);
         jdtosc.setVisible(true);
         //System.out.println("toto");
 
@@ -316,11 +316,11 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
         return TGComponentManager.TOSCD_TCLASS;
     }
 
-    public LinkedList<TAttribute> getAttributes(){
+    public java.util.List<TAttribute> getAttributes(){
         return ((TGCAttributeBox)(tgcomponent[0])).getAttributeList();
     }
 
-    public LinkedList<TAttribute> getGates() {
+    public java.util.List<TAttribute> getGates() {
         return ((TGCAttributeBox)(tgcomponent[1])).getAttributeList();
     }
 
@@ -345,7 +345,7 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
     } */
 
     public TAttribute getGateById(String name) {
-        LinkedList<TAttribute> list = ((TGCAttributeBox)(tgcomponent[1])).getAttributeList();
+    	java.util.List<TAttribute> list = ((TGCAttributeBox)(tgcomponent[1])).getAttributeList();
         for (TAttribute ta: list)
             if (ta.getId().equals(name))
                 return ta;

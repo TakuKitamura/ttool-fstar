@@ -49,20 +49,18 @@ package avatartranslator;
 
 import java.util.*;
 
-
-import avatartranslator.modelchecker.*;
 import myutil.*;
 
 public class AvatarSpecification extends AvatarElement {
     public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}", "|", "&"};
     
-    private LinkedList<AvatarBlock> blocks;
-    private LinkedList<AvatarRelation> relations;
+    private List<AvatarBlock> blocks;
+    private List<AvatarRelation> relations;
 
     /**
      * The list of all library functions that can be called.
      */
-    private LinkedList<AvatarLibraryFunction> libraryFunctions;
+    private List<AvatarLibraryFunction> libraryFunctions;
 
     private String applicationCode;
 
@@ -91,7 +89,7 @@ public class AvatarSpecification extends AvatarElement {
         this.libraryFunctions = new LinkedList<AvatarLibraryFunction> ();
     }
 
-    public LinkedList<AvatarLibraryFunction> getListOfLibraryFunctions () {
+    public List<AvatarLibraryFunction> getListOfLibraryFunctions () {
         return this.libraryFunctions;
     }
 
@@ -134,21 +132,21 @@ public class AvatarSpecification extends AvatarElement {
         return informationSource;
     }
 
-    public LinkedList<AvatarBlock> getListOfBlocks() {
+    public List<AvatarBlock> getListOfBlocks() {
         return blocks;
     }
 
-    public LinkedList<AvatarRelation> getRelations() {
+    public List<AvatarRelation> getRelations() {
         return relations;
     }
 
-    public LinkedList<AvatarPragma> getPragmas() {
+    public List<AvatarPragma> getPragmas() {
         return pragmas;
     }
-    public LinkedList<String> getSafetyPragmas() {
+    public List<String> getSafetyPragmas() {
         return safety_pragmas;
     }
-    public LinkedList<AvatarConstant> getAvatarConstants() {
+    public List<AvatarConstant> getAvatarConstants() {
         return constants;
     }
 
@@ -172,13 +170,16 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     //DG
- public boolean ASynchronousExist(){
-      LinkedList<AvatarRelation> asynchro = getRelations();
-      for ( AvatarRelation ar : asynchro )
-        if (ar.isAsynchronous())
-          return true;
-      return false;
+    public boolean ASynchronousExist(){
+    	List<AvatarRelation> asynchro = getRelations();
+      
+    	for ( AvatarRelation ar : asynchro )
+    		if (ar.isAsynchronous())
+    			return true;
+      
+    	return false;
     }
+    
     // end DG
     public void addBlock(AvatarBlock _block) {
         blocks.add(_block);
@@ -299,27 +300,27 @@ public class AvatarSpecification extends AvatarElement {
             addBlock(addedBlocks.get(i));
         }
     }
-
-    private void renameTimers() {
-        // Check whether timers have the same name in different blocks
-        ArrayList<AvatarAttribute> allTimers = new ArrayList<AvatarAttribute>();
-        for(AvatarBlock block: blocks) {
-            allTimers.clear();
-            block.putAllTimers(allTimers);
-            for(AvatarAttribute att: allTimers) {
-                for(AvatarBlock bl: blocks) {
-                    if (block != bl) {
-                        if (bl.hasTimer(att.getName())) {
-                            // Must change name of timer
-                            TraceManager.addDev("Changing name of Timer:" + att);
-                            att.setName(att.getName() + "__" + block.getName());
-                        }
-                    }
-                }
-            }
-        }
-
-    }
+//
+//    private void renameTimers() {
+//        // Check whether timers have the same name in different blocks
+//        ArrayList<AvatarAttribute> allTimers = new ArrayList<AvatarAttribute>();
+//        for(AvatarBlock block: blocks) {
+//            allTimers.clear();
+//            block.putAllTimers(allTimers);
+//            for(AvatarAttribute att: allTimers) {
+//                for(AvatarBlock bl: blocks) {
+//                    if (block != bl) {
+//                        if (bl.hasTimer(att.getName())) {
+//                            // Must change name of timer
+//                            TraceManager.addDev("Changing name of Timer:" + att);
+//                            att.setName(att.getName() + "__" + block.getName());
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//    }
 
     /**
      * Removes all FIFOs by replacing them with
@@ -581,63 +582,63 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public AvatarSpecification advancedClone() {
-	AvatarSpecification spec = new AvatarSpecification(this.getName(), this.getReferenceObject());
-	HashMap<AvatarBlock, AvatarBlock> correspondenceBlocks = new HashMap<AvatarBlock, AvatarBlock>();
-
-	// Cloning block definition
-	for(AvatarBlock block: blocks) {
-	    AvatarBlock nB = block.advancedClone(spec);
-	    correspondenceBlocks.put(block, nB);
-	    spec.addBlock(nB);
-	}
-
-	// Handling the clone of fathers
-	for(AvatarBlock block: blocks) {
-	    AvatarBlock father = block.getFather();
-	    if (father != null) {
-		AvatarBlock nb = spec.getBlockWithName(block.getName());
-		if (nb != null) {
-		    AvatarBlock nf = spec.getBlockWithName(father.getName());
-		    if (nf != null) {
-			TraceManager.addDev("Setting "+ nf.getName() + " as the father of " + nb.getName());
-			nb.setFather(nf);
+		AvatarSpecification spec = new AvatarSpecification(this.getName(), this.getReferenceObject());
+		Map<AvatarBlock, AvatarBlock> correspondenceBlocks = new HashMap<AvatarBlock, AvatarBlock>();
+	
+		// Cloning block definition
+		for(AvatarBlock block: blocks) {
+		    AvatarBlock nB = block.advancedClone(spec);
+		    correspondenceBlocks.put(block, nB);
+		    spec.addBlock(nB);
+		}
+	
+		// Handling the clone of fathers
+		for(AvatarBlock block: blocks) {
+		    AvatarBlock father = block.getFather();
+		    if (father != null) {
+				AvatarBlock nb = spec.getBlockWithName(block.getName());
+				if (nb != null) {
+				    AvatarBlock nf = spec.getBlockWithName(father.getName());
+				    if (nf != null) {
+						TraceManager.addDev("Setting "+ nf.getName() + " as the father of " + nb.getName());
+						nb.setFather(nf);
+				    }
+				}
 		    }
 		}
-	    }
-	}
+	
+		// Cloning asm
+		for(AvatarBlock block: blocks) {
+		    AvatarBlock nb = spec.getBlockWithName(block.getName());
+		    block.getStateMachine().advancedClone(nb.getStateMachine(), nb);
+		}
+	
+		// Relations
+		for(AvatarRelation relation: relations) {
+		    AvatarRelation nR = relation.advancedClone(correspondenceBlocks);
+		    if (nR != null) {
+		    	spec.addRelation(nR);
+		    }
+		}
+	
+		/*for(AvatarPragma pragma: pragmas) {
+		    AvatarPragma nP = pragma.advancedClone();
+		    spec.addPragma(nP);
+		    }*/
+	
+		for(String safetyPragma: safety_pragmas) {
+		    spec.addSafetyPragma(safetyPragma);
+		}
+	
+		for(AvatarConstant constant: constants) {
+		    AvatarConstant cN = constant.advancedClone();
+		    spec.addConstant(cN);
+		}
 
-	// Cloning asm
-	for(AvatarBlock block: blocks) {
-	    AvatarBlock nb = spec.getBlockWithName(block.getName());
-	    block.getStateMachine().advancedClone(nb.getStateMachine(), nb);
-	}
+		spec.setInformationSource(getInformationSource());
+		spec.addApplicationCode(getApplicationCode());
 
-	// Relations
-	for(AvatarRelation relation: relations) {
-	    AvatarRelation nR = relation.advancedClone(correspondenceBlocks);
-	    if (nR != null) {
-		spec.addRelation(nR);
-	    }
-	}
-
-	/*for(AvatarPragma pragma: pragmas) {
-	    AvatarPragma nP = pragma.advancedClone();
-	    spec.addPragma(nP);
-	    }*/
-
-	for(String safetyPragma: safety_pragmas) {
-	    spec.addSafetyPragma(safetyPragma);
-	}
-
-	for(AvatarConstant constant: constants) {
-	    AvatarConstant cN = constant.advancedClone();
-	    spec.addConstant(cN);
-	}
-
-	spec.setInformationSource(getInformationSource());
-	spec.addApplicationCode(getApplicationCode());
-
-	return spec;
+		return spec;
     }
 
     public AvatarAttribute getMatchingAttribute (AvatarAttribute aa) {

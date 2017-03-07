@@ -47,7 +47,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.procsd;
 
-import ui.CheckingError;
 import ui.IconManager;
 import ui.MalformedModelingException;
 import ui.TDiagramPanel;
@@ -55,17 +54,15 @@ import ui.TGCWithoutInternalComponent;
 import ui.TGComponent;
 import ui.TGComponentManager;
 import ui.TGConnectingPoint;
-import ui.cd.TGConnectorAssociation;
-//Added by Solange
 import ui.TGConnectorAttribute;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Method;
-import java.util.Iterator;
 import java.util.Vector;
 import ui.TAttribute;
-import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -74,6 +71,7 @@ import javax.swing.JPopupMenu;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements ActionListener {
 
 	private ProCSDInterface myInterface=null;
@@ -83,7 +81,7 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
     public boolean hidden=false;
 	private String portCode;
 	
-	private Class javaInterface=null;
+	//private Class javaInterface=null;
 	
     
 	public String getPortCode() {
@@ -152,7 +150,7 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	
 		TGConnectingPoint point1=this.getTGConnectingPointAtIndex(0);
 		TGConnectingPoint point2=newInterface.getTGConnectingPointAtIndex(0);
-		TGConnectorPortInterface connector=new TGConnectorPortInterface(0,0,0,0,0,0,false,null,this.tdp,point1,point2,new Vector());
+		TGConnectorPortInterface connector=new TGConnectorPortInterface(0,0,0,0,0,0,false,null,this.tdp,point1,point2,new Vector<Point>());
 	    this.tdp.addBuiltConnector(connector);
 		return true;
 	
@@ -166,7 +164,7 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	 * for the delegate ports we return myInterface 
 	 */
 	
-	public ProCSDInterface getMyInterface(LinkedList interfacesList)
+	public ProCSDInterface getMyInterface( List<ProCSDInterface> interfacesList)
 	{
 
 		if (myInterface!=null)
@@ -206,10 +204,10 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	 private TGConnectorAttribute getMyTGConnectorAttribute()
 	 {
 
-		 	LinkedList cmps=this.tdp.getComponentList();
+		 	List<TGComponent> cmps=this.tdp.getComponentList();
 		 	for (int i=0;i<cmps.size();i++)
 		 		{
-		 		TGComponent tgc = (TGComponent)cmps.get(i);
+		 		TGComponent tgc = cmps.get(i);
 				if ( (tgc.getType()== TGComponentManager.CONNECTOR_ATTRIBUTE) || (tgc.getType()== TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE))
 					if (isMyAttribute((TGConnectorAttribute)tgc)) return (TGConnectorAttribute)tgc;	 			 		
 		 		}
@@ -233,12 +231,12 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	
 		
 	//Added by Solange from TGConnectorProCSD.java
-	public ProCSDInterface getMyInterface2(LinkedList interfacesList)
+	public ProCSDInterface getMyInterface2( List<ProCSDInterface> interfacesList)
 	{
-	  TGConnectorAttribute tgca=getMyTGConnectorAttribute();
-	  if(tgca!=null)
-	  {
-		  LinkedList cmps=interfacesList;
+		TGConnectorAttribute tgca=getMyTGConnectorAttribute();
+		
+		if(tgca!=null) {
+			List<ProCSDInterface> cmps=interfacesList;
 		 	for (int i=0;i<cmps.size();i++)
 		 		{
 		 		TGComponent tgc = (TGComponent)cmps.get(i);
@@ -378,10 +376,10 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	public TGConnectorProCSD getTGConnector()
 	{
 		
-		LinkedList cmps=this.tdp.getComponentList();
+		List<TGComponent> cmps=this.tdp.getComponentList();
 		for (int i=0;i<cmps.size();i++)
 		{
-			TGComponent tgc = (TGComponent)cmps.get(i);
+			TGComponent tgc = cmps.get(i);
 			if (tgc.getType()== TGComponentManager.CONNECTOR_PROCSD)
 			{
 				if (isMyConnector((TGConnectorProCSD)tgc)) return (TGConnectorProCSD)tgc;
@@ -398,10 +396,10 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	 */
 	public TGConnectorAttribute getTGConnectorInterface()
 	{
-		LinkedList cmps=this.tdp.getComponentList();
+		List<TGComponent> cmps=this.tdp.getComponentList();
 		for (int i=0;i<cmps.size();i++)
 		{
-			TGComponent tgc = (TGComponent)cmps.get(i);
+			TGComponent tgc = cmps.get(i);
 			if ((tgc.getType()== TGComponentManager.CONNECTOR_ATTRIBUTE)|| (tgc.getType()== TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE))
 			{
 				if (isMyAttribute((TGConnectorAttribute)tgc)) return (TGConnectorAttribute)tgc;
@@ -417,10 +415,10 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	 */
 	public TGConnectorDelegateProCSD getTGConnectorDelegateOut()
 	{
-		LinkedList cmps=this.tdp.getComponentList();
+		List<TGComponent> cmps=this.tdp.getComponentList();
 		for (int i=0;i<cmps.size();i++)
 		{
-			TGComponent tgc = (TGComponent)cmps.get(i);
+			TGComponent tgc = cmps.get(i);
 			if (tgc.getType()== TGComponentManager.CONNECTOR_DELEGATE_PROCSD)
 			{
 				if (isMyConnectorOut((TGConnectorDelegateProCSD)tgc)) return (TGConnectorDelegateProCSD)tgc;
@@ -438,10 +436,10 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	 */
 	public TGConnectorProCSD getBindingIn()
 	{
-		LinkedList cmps=this.tdp.getComponentList();
+		List<TGComponent> cmps=this.tdp.getComponentList();
 		for (int i=0;i<cmps.size();i++)
 		{
-			TGComponent tgc = (TGComponent)cmps.get(i);
+			TGComponent tgc = cmps.get(i);
 			if (tgc instanceof TGConnectorProCSD)
 			{
 				if (isMyConnectorIn((TGConnectorProCSD)tgc)) return (TGConnectorProCSD)tgc;
@@ -456,10 +454,10 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	 */
 	public TGConnectorProCSD getBindingOut()
 	{
-		LinkedList cmps=this.tdp.getComponentList();
+		List<TGComponent> cmps=this.tdp.getComponentList();
 		for (int i=0;i<cmps.size();i++)
 		{
-			TGComponent tgc = (TGComponent)cmps.get(i);
+			TGComponent tgc = cmps.get(i);
 			if (tgc instanceof TGConnectorProCSD)
 			{
 				if (isMyConnectorOut((TGConnectorProCSD)tgc)) return (TGConnectorProCSD)tgc;
@@ -474,10 +472,10 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	 */
 	public TGConnectorDelegateProCSD getTGConnectorDelegateIn()
 	{
-		LinkedList cmps=this.tdp.getComponentList();
+		List<TGComponent> cmps=this.tdp.getComponentList();
 		for (int i=0;i<cmps.size();i++)
 		{
-			TGComponent tgc = (TGComponent)cmps.get(i);
+			TGComponent tgc = cmps.get(i);
 			if (tgc.getType()== TGComponentManager.CONNECTOR_DELEGATE_PROCSD)
 			{
 				if (isMyConnectorIn((TGConnectorDelegateProCSD)tgc)) return (TGConnectorDelegateProCSD)tgc;
@@ -498,7 +496,7 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	}
 	
 	
-    public LinkedList getMyMessages()
+    public List<TAttribute> getMyMessages()
     {
     	return null;
     }
@@ -525,24 +523,26 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	* @param p port connected to the interface
 	* @return msgMandatory Vector of messages
 	**/
-    public Vector getMsgMandatory(ProCSDPort p, ProCSDInterface it){
-	Vector msgMandatory=new Vector();
-	if(it==null)
-		{
-		 System.out.println("Interface not found for this port");
-		 return(null);
+    public Vector<TAttribute> getMsgMandatory(ProCSDPort p, ProCSDInterface it){
+    	Vector<TAttribute> msgMandatory=new Vector<TAttribute>();
+	
+    	if(it==null) {
+    		System.out.println("Interface not found for this port");
+    		return(null);
 		}
-	LinkedList myMessages= it.getMyMessages();
-	TAttribute a;
-	if(isMandatory(it))
-	{
-	 for(int i=0; i<myMessages.size(); i++)
-	 {
-        a = (TAttribute)(myMessages.get(i));
-		 msgMandatory.addElement(a);
-	 }
-	}
-	return(msgMandatory);
+    	
+    	List<TAttribute> myMessages= it.getMyMessages();
+    	TAttribute a;
+    	
+    	if(isMandatory(it))
+    	{
+    		for(int i=0; i<myMessages.size(); i++) {
+    			a = myMessages.get(i);
+    			msgMandatory.addElement(a);
+    		}
+    	}
+    	
+    	return(msgMandatory);
 	}
 	
     //Method Added by Solange
@@ -552,98 +552,98 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
      * @param it the interface
      * @param interfacelist A LinkedList of interfaces
      */
-    public int Compatibility(ProCSDPort p, ProCSDInterface it,LinkedList interfacelist)
+    public int Compatibility(ProCSDPort p, ProCSDInterface it, List<ProCSDInterface> interfacelist)
     {
-    LinkedList myMessages1;
-    TGConnectorProCSD tgc;
-    ProCSDPort p2;
-    ProCSDInterface it2;
-    LinkedList myMessages2;
-    
-    if(it!=null)
-    {
-    	myMessages1= it.getMyMessages();
-    	if (isMandatory(it))
+    	List<TAttribute> myMessages1;
+    	TGConnectorProCSD tgc;
+    	ProCSDPort p2;
+    	ProCSDInterface it2;
+    	List<TAttribute> myMessages2;
+
+    	if(it!=null)
     	{
-    		tgc=p.getTGConnector(); //reviso si puerto esta conectado
-    		if (tgc==null)  //no conectado
+    		myMessages1= it.getMyMessages();
+    		if (isMandatory(it))
     		{
-    		//	System.out.println(p.toString() + " not connected");
-    			return(1);
-    		}
-    		else
-    		{
-    			p2=p.getFromPort();
-    			if(p2!=null)
+    			tgc=p.getTGConnector(); //reviso si puerto esta conectado
+    			if (tgc==null)  //no conectado
     			{
-    				it2=p2.getMyInterface(interfacelist);
-    				//it2=p2.getMyInterface();
-    				if(it2!=null)
-    				{
-    					myMessages2= it2.getMyMessages();
-    					if(myMessages2.containsAll(myMessages1))
-    					{
-    					//	System.out.println(it2.toString() + " is compatible with mandatory " + it.toString());
-    						return(0);
-    					}
-    					else
-    					{
-    				//		System.out.println("ERROR: " + it2.toString() + " is not compatible with mandatory " + it.toString());
-    						return(2);
-    					}
-    				}
-    				else
-    				{
-    				//	System.out.println(p2.toString() + " doesn't have an Interface connected. No compatibility with mandatory " + it.toString());
-						return(2);
-    				}
+    				return(1);
     			}
     			else
     			{
-    			 	p2=p.getToPort();
-    			 	if(p2!=null)
-    			 	{
+    				p2=p.getFromPort();
+
+    				if(p2!=null)
+    				{
     					it2=p2.getMyInterface(interfacelist);
-    					//it2=p2.getMyInterface();
+
     					if(it2!=null)
     					{
     						myMessages2= it2.getMyMessages();
     						if(myMessages2.containsAll(myMessages1))
     						{
-    					//		System.out.println(it2.toString() + " is compatible with mandatory " + it.toString());
+    							//	System.out.println(it2.toString() + " is compatible with mandatory " + it.toString());
     							return(0);
     						}
     						else
     						{
-    					//		System.out.println("ERROR: " + it2.toString() + " is not compatible with mandatory " + it.toString());
+    							//		System.out.println("ERROR: " + it2.toString() + " is not compatible with mandatory " + it.toString());
     							return(2);
     						}
     					}
     					else
     					{
-    				//		System.out.println("ERROR!!!!!");
-    						return(3);
+    						//	System.out.println(p2.toString() + " doesn't have an Interface connected. No compatibility with mandatory " + it.toString());
+    						return(2);
     					}
-    			 	}
-    			 	else
-    			 	{
-    			 	//	System.out.println(p2.toString() + " doesn't have an Interface connected. No compatibility with mandatory " + it.toString());
-						return(2);
-    			 	}
+    				}
+    				else
+    				{
+    					p2=p.getToPort();
+    					if(p2!=null)
+    					{
+    						it2=p2.getMyInterface(interfacelist);
+    						//it2=p2.getMyInterface();
+    						if(it2!=null)
+    						{
+    							myMessages2= it2.getMyMessages();
+    							if(myMessages2.containsAll(myMessages1))
+    							{
+    								//		System.out.println(it2.toString() + " is compatible with mandatory " + it.toString());
+    								return(0);
+    							}
+    							else
+    							{
+    								//		System.out.println("ERROR: " + it2.toString() + " is not compatible with mandatory " + it.toString());
+    								return(2);
+    							}
+    						}
+    						else
+    						{
+    							//		System.out.println("ERROR!!!!!");
+    							return(3);
+    						}
+    					}
+    					else
+    					{
+    						//	System.out.println(p2.toString() + " doesn't have an Interface connected. No compatibility with mandatory " + it.toString());
+    						return(2);
+    					}
+    				}
     			}
     		}
+    		else			//not mandatory
+    		{
+    			//		System.out.println(it.toString() + " is OPTIONAL so can be connected or not, and is compatible with any interface");
+    			return(0);
+    		}
     	}
-    	else			//not mandatory
+    	else
     	{
-    //		System.out.println(it.toString() + " is OPTIONAL so can be connected or not, and is compatible with any interface");
-    		return(0);
+    		//   	System.out.println(p.toString() + " doesn't have an Interface connected");
+    		return(2);
     	}
-    }
-    else
-    {
- //   	System.out.println(p.toString() + " doesn't have an Interface connected");
-		return(2);
-    }
    }//end method
     
     //Method added by Solange to put this option in the right click button menu of the mouse
@@ -669,72 +669,71 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
         componentMenu.add(pp);
    
     }
-    
-    
-    
+  
     public void actionPerformed(ActionEvent e)
     {
-    	Class javaInt=null;
+    	Class<?> javaInt=null;
     	if (e.getActionCommand().equals("bind java interface"))
     	{
     		String currentInterface="";
-    		if (javaInt!=null) currentInterface=javaInt.getName();
+    		// DB Ticket #17 Dead code
+    		//if (javaInt!=null) currentInterface=javaInt.getName();
     		String className = (String) JOptionPane.showInputDialog(tdp, "java interface name",
-					"choosing java interface", JOptionPane.PLAIN_MESSAGE,
-					IconManager.imgic101, null, currentInterface);
-    	
-    	
-		    if (className==null) return;
-		    
-    		try{
-		    		javaInt=Class.forName(className);
-		    	}
-		    	catch(ClassNotFoundException ex)
-		    	{
-		    		JOptionPane.showMessageDialog(tdp,"Class "+className+" not found. Verify the class is in your classpath");
-		    		return;
-		    	}
-    	
+    				"choosing java interface", JOptionPane.PLAIN_MESSAGE,
+    				IconManager.imgic101, null, currentInterface);
 
-		    	
-		    	if (!javaInt.isInterface())
-		    	{
-		    		JOptionPane.showMessageDialog(tdp,"Class "+className+" is not an interface. Please choose an interface");
-		    		return;
-		    	}
-		    	
-		    	this.javaInterface=javaInt;
-		    	if (this.getMyInterface()!=null)
-		    	{
-		    	
-		    		
-		    		// setting messages for myInterface
-		    		Vector<TAttribute> msgs=new Vector<TAttribute>();
-		    		
-		    		Method[] mthds=javaInt.getMethods();
-			    	for (int k=0;k<mthds.length;k++)
-			    	{
-			    		Method m=mthds[k];
-			    		TAttribute ta=new TAttribute(TAttribute.PUBLIC,m.getName(),"",m.getReturnType().getName());
-			    		msgs.add(ta);
-			    	}	
-			    	
-			    	myInterface.setMessages(msgs);			    
-		    	}		    			    	
+
+    		if (className==null) return;
+
+    		try{
+    			javaInt=Class.forName(className);
+    		}
+    		catch(ClassNotFoundException ex)
+    		{
+    			JOptionPane.showMessageDialog(tdp,"Class "+className+" not found. Verify the class is in your classpath");
+    			return;
+    		}
+
+
+
+    		if (!javaInt.isInterface())
+    		{
+    			JOptionPane.showMessageDialog(tdp,"Class "+className+" is not an interface. Please choose an interface");
+    			return;
+    		}
+
+    		//this.javaInterface=javaInt;
+    		if (this.getMyInterface()!=null)
+    		{
+
+
+    			// setting messages for myInterface
+    			Vector<TAttribute> msgs=new Vector<TAttribute>();
+
+    			Method[] mthds=javaInt.getMethods();
+    			for (int k=0;k<mthds.length;k++)
+    			{
+    				Method m=mthds[k];
+    				TAttribute ta=new TAttribute(TAttribute.PUBLIC,m.getName(),"",m.getReturnType().getName());
+    				msgs.add(ta);
+    			}	
+
+    			myInterface.setMessages(msgs);			    
+    		}		    			    	
     	}
 
-    	
+
     	if (e.getActionCommand().equals("hide/show interface"))
     	{
     		if (myInterface==null) return;
-    		
+
     		if(myInterface.shome==true)
-    			{
-    			 myInterface.shome=false;
-    			 myInterface.getMyConnector().show=false;
-    			 hidden=true;
-    			
-    			}
+    		{
+    			myInterface.shome=false;
+    			myInterface.getMyConnector().show=false;
+    			hidden=true;
+
+    		}
     		else
     		{
     			myInterface.shome=true;
@@ -746,10 +745,8 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
     	{
     		System.out.println(this.prettyPrint());
     	}
-    	
+
     }
-  
-    
     
     public String prettyPrint()
     {

@@ -53,8 +53,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 
-import org.w3c.dom.*;
-
 import myutil.*;
 import ui.*;
 import ui.window.*;
@@ -114,7 +112,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         nbInternalTGComponent = 0;
         //tgcomponent = new TGComponent[nbInternalTGComponent];
 
-        int h = 1;
+    //    int h = 1;
         //TAttributeRequirement tgc0;
         //tgc0 = new TAttributeRequirement(x, y+height+h, 0, 0, height + h, height+h, true, this, _tdp);
         //tgcomponent[0] = tgc0;
@@ -138,8 +136,8 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
 
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
-        Font fold = f;
-        int w, c;
+      //  Font fold = f;
+    //    int w, c;
         int size;
 
         value = TYPE_STR[typeOfReference];
@@ -165,7 +163,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
             displayText = true;
         }
 
-        int h  = g.getFontMetrics().getHeight();
+     //   int h  = g.getFontMetrics().getHeight();
 
         g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
         g.fillRect(x, y, width, height);
@@ -372,7 +370,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
     }
 
     public boolean eventOnPopup(ActionEvent e) {
-        String s = e.getActionCommand();
+     //   String s = e.getActionCommand();
 
         if (e.getSource() == diagramReference) {
             addDiagramReference(null);
@@ -392,9 +390,9 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         fillIgnoredSelectedFromInternalComponents(ignored, selected);
 
         jdmlos = new JDialogManageListOfString(frame, ignored, selected, "Selection of diagrams");
-        jdmlos.setSize(550, 350);
-        GraphicLib.centerOnParent(jdmlos);
-        jdmlos.show();
+        //jdmlos.setSize(550, 350);
+        GraphicLib.centerOnParent(jdmlos, 550, 350);
+        jdmlos.setVisible( true );
 
         ignored = jdmlos.getIgnored();
         selected = jdmlos.getSelected();

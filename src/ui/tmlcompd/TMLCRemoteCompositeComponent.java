@@ -56,14 +56,12 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-import tmltranslator.*;
-
 public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
 	private int maxFontSize = 20;
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;
-	private int spacePt = 3;
+//	private int spacePt = 3;
 	private Color myColor;
 	private int iconSize = 17;
 	private boolean iconIsDrawn = false;
@@ -295,9 +293,9 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		}
 		
 		JDialogTMLRemoteCompositeComponent dialog = new JDialogTMLRemoteCompositeComponent(frame, "Setting referenced component", this);
-		dialog.setSize(400, 350);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+	//	dialog.setSize(400, 350);
+        GraphicLib.centerOnParent(dialog, 400, 350);
+        dialog.setVisible( true ); // blocked until dialog has been closed
         
 		if (!dialog.isRegularClose()) {
 			return false;
@@ -348,25 +346,25 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+       //     int t1id;
 			int j, k;
 			int index;
-			int cpt;
+	//		int cpt;
 			int cptk = 0;
-			TMLCReferencePortConnectingPoint point;
+		//	TMLCReferencePortConnectingPoint point;
 			TMLCRemotePortCompositeComponent pcc;
 			TGConnectingPoint[] old = null;
 			
 			ArrayList<TMLCCompositePort> tmp = null;
-			ArrayList<TMLCReferencePortConnectingPoint> points = new ArrayList<TMLCReferencePortConnectingPoint>();
+			//ArrayList<TMLCReferencePortConnectingPoint> points = new ArrayList<TMLCReferencePortConnectingPoint>();
 			
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //TraceManager.addDev(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //TraceManager.addDev(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
@@ -513,22 +511,22 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
         }
     }
 	
-	public ArrayList<TMLCPrimitiveComponent> getAllPrimitiveComponents() {
+	public java.util.List<TMLCPrimitiveComponent> getAllPrimitiveComponents() {
 		if (tmlcc == null) {
 			return new ArrayList<TMLCPrimitiveComponent>();
 		}
 		return tmlcc.getAllPrimitiveComponents();
 	}
 	
-	public ArrayList<TMLCRecordComponent> getAllRecordComponents() {
+	public java.util.List<TMLCRecordComponent> getAllRecordComponents() {
 		if (tmlcc == null) {
 			return new ArrayList<TMLCRecordComponent>();
 		}
 		return tmlcc.getAllRecordComponents();
 	}
 	
-	public ArrayList<TMLCCompositePort> getAllInternalCompositePorts() {
-		ArrayList<TMLCCompositePort> list = new ArrayList<TMLCCompositePort>();
+	public java.util.List<TMLCCompositePort> getAllInternalCompositePorts() {
+		java.util.List<TMLCCompositePort> list = new ArrayList<TMLCCompositePort>();
 		if (tmlcc == null) {
 			return list;
 		}
@@ -588,7 +586,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		int i, j;
 		TMLCCompositePort tmp;
 		TMLCReferencePortConnectingPoint point;
-		int x1, y1, x2, y2, w, h;
+	//	int x1, y1, x2, y2, w, h;
 		
 		
 		// Close attention to the list
