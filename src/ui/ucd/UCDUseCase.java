@@ -67,9 +67,9 @@ public class UCDUseCase extends TGCScalableWithoutInternalComponent {
     
     public UCDUseCase(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 50;
-        height = 40;
+
+	width = (int)(50 * tdp.getZoom());
+        height = (int)(40 * tdp.getZoom());
         //minWidth = 30;
         
         nbConnectingPoint = 16;
