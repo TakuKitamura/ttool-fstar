@@ -69,6 +69,7 @@ public class UCDActor extends TGCScalableWithoutInternalComponent {
 	
         width = (int)(30 * tdp.getZoom());
         height = (int)(70 * tdp.getZoom());
+	oldScaleFactor = tdp.getZoom();
         //minWidth = 30;
         
         nbConnectingPoint = 24;

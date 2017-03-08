@@ -52,25 +52,25 @@ import java.awt.geom.*;
 import myutil.*;
 import ui.*;
 
-public abstract class AvatarADBasicComponent extends TGCWithoutInternalComponent implements SwallowedTGComponent {
+public abstract class AvatarADBasicComponent extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
     private int lineLength = 5;
-    
+
     public AvatarADBasicComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
     }
-    
+
     public int getDefaultConnector() {
-      return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
+        return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
     }
-	
-	public void resizeWithFather() {
+
+    public void resizeWithFather() {
         if ((father != null) && (father instanceof AvatarADActivity)) {
-			// Too large to fit in the father? -> resize it!
-			resizeToFatherSize();
-			
+            // Too large to fit in the father? -> resize it!
+            resizeToFatherSize();
+
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             setMoveCd(x, y);
         }
     }
-    
+
 }

@@ -60,9 +60,8 @@ public class AvatarADParallel extends AvatarADBasicComponent{
     public AvatarADParallel(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        
-        width = 150;
-        height = 5;
+        initScaling(150, 5);
+        oldScaleFactor = tdp.getZoom();
         
         textX = width - 10;
         textY = height - 8;
