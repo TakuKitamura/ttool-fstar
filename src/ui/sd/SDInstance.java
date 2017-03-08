@@ -57,12 +57,12 @@ import ui.window.*;
 
 
 
-public class SDInstance extends TGCWithInternalComponent implements SwallowTGComponent {
+public class SDInstance extends TGCScalableWithInternalComponent implements SwallowTGComponent {
     //private int lineLength = 5;
     //private int textX, textY;
     private int spacePt = 10;
     private int wText = 10, hText = 15;
-    private int increaseSlice = 250;
+    //private int increaseSlice = 250;
     private boolean isActor;
     private static int heightActor = 30;
     private static int widthActor = 16;
@@ -71,16 +71,16 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
     public SDInstance(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 10;
-        height = 500;
-        //textX = 0;
-        //textY = 2;
-        minWidth = 10;
-        maxWidth = 10;
-        minHeight = 250;
-        maxHeight = 1500;
-
-
+	width = (int)(10 * tdp.getZoom());
+        height = (int)(500 * tdp.getZoom());
+	minWidth = (int)(10 * tdp.getZoom());
+	maxWidth = (int)(10 * tdp.getZoom());
+	minHeight = (int)(250 * tdp.getZoom());
+	maxHeight = (int)(1500 * tdp.getZoom());
+	//TraceManager.addDev("Init tgc= " + this + " minHeight=" + minHeight);
+	//TraceManager.addDev("Init tgc= " + this + " maxHeight=" + maxHeight);
+	oldScaleFactor = tdp.getZoom();
+	
         makeTGConnectingPoints();
         //addTGConnectingPointsComment();
 
@@ -164,16 +164,51 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
         return TGComponentManager.SD_INSTANCE;
     }
 
-    private void makeTGConnectingPoints() {
+    public int spacePt() {
+	return (int)(Math.floor(spacePt*tdp.getZoom()));
+    }
 
-        nbConnectingPoint = ((height - (2 * spacePt)) / spacePt) + 1;
+    public double spacePtDouble() {
+	return spacePt*tdp.getZoom();
+    }
+
+    public void rescale(double scaleFactor){
+	//TraceManager.addDev("my rescale");
+	
+	super.rescale(scaleFactor);
+
+	// update TG Connecting Points
+	int yh = spacePt();
+	for(int i=0; i<nbConnectingPoint; i++, yh+=spacePt()) {
+	    connectingPoint[i].setCdX(width/2);
+	    connectingPoint[i].setCdY(yh);
+	}
+
+	height = Math.max(getMinHeightSize(), height);
+	hasBeenResized();
+    }
+
+    public void computeMinHeight() {
+	height = Math.max(getMinHeightSize(), height);
+    }
+
+    public int getNbOfConnectingPoints() {
+	return (int)(((height - (2 * spacePt())) / spacePt()));
+    }
+    
+
+    private void makeTGConnectingPoints() {
+	TraceManager.addDev("Making TG connecting points of " + name);
+        nbConnectingPoint = getNbOfConnectingPoints();
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
 
-        int yh = spacePt;
+        int yh = spacePt();
 
-        for(int i=0; i<nbConnectingPoint; i ++, yh+=spacePt) {
+        for(int i=0; i<nbConnectingPoint; i ++, yh+=spacePt()) {
             connectingPoint[i] = new TGConnectingPointMessageSD(this, (width/2), yh, true, true);
         }
+
+	
 
     }
 
@@ -245,8 +280,8 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
 
         //System.out.println("Add swallow component");
         // Choose its position
-        int realY = Math.max(y, getY() + spacePt);
-        realY = Math.min(realY, getY() + height + spacePt);
+        int realY = Math.max(y, getY() + spacePt());
+        realY = Math.min(realY, getY() + height + spacePt());
         int realX = tgc.getX();
 
 
@@ -383,117 +418,72 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
 
     }
 
-    /*public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-        componentMenu.addSeparator();
 
-        JMenuItem decrease = new JMenuItem("Decrease size");
-        decrease.addActionListener(menuAL);
-        componentMenu.add(decrease);
-        decrease.setEnabled(canDecreaseSize());
-        JMenuItem increase = new JMenuItem("Increase size");
-        increase.addActionListener(menuAL);
-        componentMenu.add(increase);
+    
+    public Point modifyInHeight(int newy) {
+	((SequenceDiagramPanel)(tdp)).updateAllInstanceMinMaxSize();
+	return super.modifyInHeight(newy);
     }
 
-    public boolean eventOnPopup(ActionEvent e) {
-        if ((e.getActionCommand().compareTo("Decrease size")) == 0) {
-            decreaseSize();
-        } else {
-            increaseSize();
-        }
-        return true;
-	}*/
 
-    public void updateMinMaxSize() {
-	((SequenceDiagramPanel)tdp).updateAllInstanceMinMaxSize();
-    }
-
-    public void setMinHeight(int _min) {
-	minHeight = _min;
-    }
-
+    // Used when there is a rescale or a component added
     public int getMinHeightSize() {
-	int msize = 250;
+	int msize = (int)(250*tdp.getZoom());
         int i;
 
         for(i=0; i<connectingPoint.length ; i++) {
             if (!(connectingPoint[i].isFree())) {
-                msize = Math.max(msize, connectingPoint[i].getY() - y +spacePt );
+		TraceManager.addDev("Found a non free connecting point y=" + connectingPoint[i].getY() + " heightOfPt=" + (connectingPoint[i].getY() - y + spacePt()));
+                msize = Math.max(msize, connectingPoint[i].getY() - y + spacePt() );
             }
         }
 
         for(i=0; i<nbInternalTGComponent ; i++) {
-            msize = Math.max(msize, tgcomponent[i].getY() + tgcomponent[i].getHeight()- y + spacePt);
+            msize = Math.max(msize, tgcomponent[i].getY() + tgcomponent[i].getHeight()- y + spacePt());
         }
+
+	TraceManager.addDev("Min height size of " + name + " =" + msize + " height=" + height);
 
 	return msize;
     }
 
-    public boolean canDecreaseSize() {
-	//TraceManager.addDev("Can decrease my size? " + getValue());
-	
-        if (height <= increaseSlice) {
-            return false;
-        }
-
-        int newNbConnectingPoint = (((height-increaseSlice) - (2 * spacePt)) / spacePt) + 1;
-        int i;
-
-        for(i=newNbConnectingPoint; i<connectingPoint.length ; i++) {
-            if (!connectingPoint[i].isFree()) {
-                //System.out.println("Cannot reduce size because of a connecting point");
-                return false;
-            }
-        }
-
-        //SwallowedComponents
-        for(i=0; i<nbInternalTGComponent ; i++) {
-            //System.out.println("tgcomponent =" + tgc + "
-            if ((tgcomponent[i].getY() + tgcomponent[i].getHeight()) > (getY() + getHeight() - increaseSlice)) {
-                //System.out.println("Cannot reduce size because of a swallowed component");
-                return false;
-            }
-        }
-
-	//TraceManager.addDev("Can decrease my size! " + getValue());
-
-        return true;
-    }
-
+    // Method called when there is a resize order
     public void setUserResize(int desired_x, int desired_y, int desired_width, int desired_height) {
         //System.out.println("newx = " + desired_x + " newy = " + desired_y + " minWidth = " + minWidth);
+	
         setCd(desired_x, desired_y);
         actionOnUserResize(desired_width, desired_height);
 	((SequenceDiagramPanel)tdp).instanceHasBeenResized(this,  desired_width, desired_height);
     }
 
-    public void decreaseSize() {
-        //System.out.println("Decrease size");
-        //Check whether it is possible or not (swallowed components and tgconnecting points used
-        if (!canDecreaseSize()) {
-            return;
-        }
-        // new nb of connectingPoints
-
-        // If ok, do the modification
-        height = height - increaseSlice;
-        hasBeenResized();
-    }
-
-    public void increaseSize() {
-        //System.out.println("Increase size");
-        height = height + increaseSlice;
-        hasBeenResized();
-    }
-
+ 
     public void hasBeenResized(){
+	TraceManager.addDev("Has been resized: " + name + " height=" + height);
         int i;
 
+	for (int k=0; k<nbConnectingPoint; k++) {
+	    if (!connectingPoint[k].isFree()) {
+		TraceManager.addDev("Non free TG point in " + name);
+	    }
+	}
+
         TGConnectingPoint [] connectingPointTmp = connectingPoint;
-        makeTGConnectingPoints();
-        for(i=0; i<Math.min(connectingPointTmp.length, connectingPoint.length) ; i++) {
+	makeTGConnectingPoints();
+	//nbConnectingPoint = getNbOfConnectingPoints();
+	//connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        for(i=0; i<Math.min(connectingPointTmp.length, connectingPoint.length); i++) {
             connectingPoint[i] = connectingPointTmp[i];
+
+	    if (!connectingPoint[i].isFree()) {
+		TraceManager.addDev("Non free point in " + name);
+	    }
         }
+
+	for (int j=nbConnectingPoint; j<connectingPointTmp.length; j++) {
+	    if (!connectingPointTmp[j].isFree()) {
+		TraceManager.addDev("Non free TG point");
+	    }
+	}
 
         // Increase tdp if necessary?
 
@@ -505,23 +495,23 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
 
     private void setCDRectangleOfSwallowed(TGComponent tgc) {
         if ((tgc instanceof SDAbsoluteTimeConstraint) || (tgc instanceof SDRelativeTimeConstraint)){
-            tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
+            tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), (int)(spacePt()), height-(int)(spacePt()));
         }
 
         if ((tgc instanceof SDActionState) || (tgc instanceof SDGuard) || (tgc instanceof SDCoregion) || (tgc instanceof SDTimeInterval)) {
-            tgc.setCdRectangle((width/2), (width/2), spacePt, height-spacePt-tgc.getHeight());
+            tgc.setCdRectangle((width/2), (width/2), (int)(spacePt()), height-(int)(spacePt())-tgc.getHeight());
         }
 
         if (tgc instanceof SDTimerSetting) {
-            tgc.setCdRectangle((width/2) + ((SDTimerSetting)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerSetting)tgc).getLineLength() - tgc.getWidth()/2, spacePt - tgc.getHeight()/2, height-spacePt-tgc.getHeight() / 2);
+            tgc.setCdRectangle((width/2) + ((SDTimerSetting)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerSetting)tgc).getLineLength() - tgc.getWidth()/2, (int)(spacePt()) - tgc.getHeight()/2, height-(int)(spacePt())-tgc.getHeight() / 2);
         }
 
         if (tgc instanceof SDTimerExpiration) {
-            tgc.setCdRectangle((width/2) + ((SDTimerExpiration)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerExpiration)tgc).getLineLength() - tgc.getWidth()/2, spacePt - tgc.getHeight()/2, height-spacePt-tgc.getHeight() / 2);
+            tgc.setCdRectangle((width/2) + ((SDTimerExpiration)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerExpiration)tgc).getLineLength() - tgc.getWidth()/2, (int)(spacePt()) - tgc.getHeight()/2, height-(int)(spacePt())-tgc.getHeight() / 2);
         }
 
         if (tgc instanceof SDTimerCancellation) {
-            tgc.setCdRectangle((width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2, spacePt - tgc.getHeight()/2, height-spacePt-tgc.getHeight() / 2);
+            tgc.setCdRectangle((width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2, (int)(spacePt()) - tgc.getHeight()/2, height-(int)(spacePt())-tgc.getHeight() / 2);
         }
     }
 

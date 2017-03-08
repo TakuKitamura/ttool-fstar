@@ -15,6 +15,7 @@
    license as circulated by CEA, CNRS and INRIA at the following URL
    "http://www.cecill.info".
 
+
    As a counterpart to the access to the source code and  rights to copy,
    modify and redistribute granted by the license, users are provided only
    with a limited warranty  and the software's author,  the holder of the
@@ -36,59 +37,91 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class SDCoregion
-   * Action state of a sequence diagram
-   * Creation: 07/10/2004
-   * @version 2.0 08/03/2017
+   * Class TGCScalableWithoutInternalComponent
+   * Graphical component that contains no internal components, and which is scalable
+   * Creation: 08/03/2017
+   * @version 1.0 08/03/2017
    * @author Ludovic APVRILLE
    * @see
    */
 
-package ui.sd;
-
-import java.awt.*;
+package ui;
 
 import myutil.*;
-import ui.*;
+import java.awt.*;
+//import java.awt.geom.*;
+import javax.swing.*;
 
-public class SDCoregion extends TGCScalableOneLineText implements SwallowedTGComponent {
+//import java.awt.*;
 
-    public SDCoregion(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+public abstract class TGCScalableWithoutInternalComponentOneLineText extends TGCScalableWithoutInternalComponent implements ScalableTGComponent {
+ 
+    protected boolean emptyText;
+    
+
+    public TGCScalableWithoutInternalComponentOneLineText(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = (int)(20 * tdp.getZoom());
-        height = (int)(100 * tdp.getZoom());
-        minWidth = (int)(20 * tdp.getZoom());
-        oldScaleFactor = tdp.getZoom();
-
         nbConnectingPoint = 0;
-        addTGConnectingPointsComment();
+        minWidth = 10;
+        nbInternalTGComponent = 0;
 
         moveable = true;
-        editable = false;
-        removable = true;
+        editable = true;
+        removable = false;
 
-        value = "action";
-        name = "action state";
+        emptyText = false;
 
-        myImageIcon = IconManager.imgic520;
+        name = "value ";
 
+        myImageIcon = IconManager.imgic302;
     }
 
+
     public void internalDrawing(Graphics g) {
-        g.drawRect(x - width/2, y, width, height);
+        if (!tdp.isScaled()) {
+            width = g.getFontMetrics().stringWidth(value);
+            height = g.getFontMetrics().getHeight();
+        }
+        g.drawString(value, x, y);
+        if (value.equals("")) {
+            g.drawString("value?", x, y);
+        }
     }
 
     public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x - width/2, y, width, height)) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
             return this;
         }
         return null;
     }
 
+    public boolean editOndoubleClick(JFrame frame) {
+        String oldValue = value;
+        String text = getName() + ": ";
+        if (hasFather()) {
+            text = getTopLevelName() + " / " + text;
+        }
+        String s = (String)JOptionPane.showInputDialog(frame, text,
+                                                       "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+                                                       null,
+                                                       getValue());
 
-    public int getType() {
-        return TGComponentManager.SD_COREGION;
+        if (s != null) {
+            s = Conversion.removeFirstSpaces(s);
+        }
+
+        //System.out.println("emptytext=" + emptyText);
+
+        if ((s != null) && ((emptyText) || s.length() > 0) && (!s.equals(oldValue))) {
+            setValue(s);
+            //System.out.println("Value ok");
+            return true;
+        }
+
+
+        return false;
     }
+
 
 }

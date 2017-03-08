@@ -51,7 +51,7 @@ import java.awt.*;
 import myutil.*;
 import ui.*;
 
-public class UCDBorder extends TGCScalableWithoutInternalComponent {
+public class UCDBorder extends TGCScalableWithoutInternalComponentOneLineText {
     /*protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;

@@ -54,16 +54,17 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class SDAbsoluteTimeConstraint extends TGCWithoutInternalComponent implements SwallowedTGComponent {
+public class SDAbsoluteTimeConstraint extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
     private String minConstraint = "0";
     private String maxConstraint = "0";
     private int widthValue, heightValue;
     
     public SDAbsoluteTimeConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 40;
-        height = 15;
+
+	width = (int)(40 * tdp.getZoom());
+        height = (int)(15 * tdp.getZoom());
+	oldScaleFactor = tdp.getZoom();
         
         nbConnectingPoint = 0;
         nbInternalTGComponent = 0;
@@ -81,10 +82,12 @@ public class SDAbsoluteTimeConstraint extends TGCWithoutInternalComponent implem
     }
     
     public void internalDrawing(Graphics g) {
-        if (!tdp.isScaled()) {
+	 widthValue  = g.getFontMetrics().stringWidth(value);
+	 heightValue = g.getFontMetrics().getHeight();
+        /*if (!tdp.isScaled()) {
             widthValue  = g.getFontMetrics().stringWidth(value);
             heightValue = g.getFontMetrics().getHeight();
-        }
+	    }*/
         g.drawString(value, x-widthValue-2, y);
         g.drawLine(x, y, x+width, y);
     }
@@ -102,7 +105,6 @@ public class SDAbsoluteTimeConstraint extends TGCWithoutInternalComponent implem
     
     public int getMyCurrentMinX() {
         return Math.min(x-widthValue, x);
-
     }
     
     

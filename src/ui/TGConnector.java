@@ -97,13 +97,13 @@ public abstract class TGConnector extends TGCWithInternalComponent      {
     }
 
     public Vector<Point> getListOfPoints() {
-		Vector<Point> v = new Vector<Point>();
-		
-		for(int i=0; i<nbInternalTGComponent; i++) {
-		    v.add(new Point(tgcomponent[i].getX(), tgcomponent[i].getY()));
-		}
+        Vector<Point> v = new Vector<Point>();
 
-		return v;
+        for(int i=0; i<nbInternalTGComponent; i++) {
+            v.add(new Point(tgcomponent[i].getX(), tgcomponent[i].getY()));
+        }
+
+        return v;
     }
 
     public int getIndexOfLastTGCPointOfConnector() {
@@ -144,14 +144,14 @@ public abstract class TGConnector extends TGCWithInternalComponent      {
             p3 = tgcomponent[0];
             p4 = tgcomponent[0];
             //TraceManager.addDev("p3.x " + p3.getX() + " p3.y " + p3.getY());
-            drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY());
+            drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getXZoom(), p3.getYZoom());
 
             for(int i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
                 p3 = tgcomponent[i];
                 p4 = tgcomponent[i+1];
-                drawMiddleSegment(g, p3.getX(), p3.getY(), p4.getX(), p4.getY());
+                drawMiddleSegment(g, p3.getXZoom(), p3.getYZoom(), p4.getXZoom(), p4.getYZoom());
             }
-            drawLastSegment(g, p4.getX(), p4.getY(), p2.getX(), p2.getY());
+            drawLastSegment(g, p4.getXZoom(), p4.getYZoom(), p2.getX(), p2.getY());
         } else {
             drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
         }

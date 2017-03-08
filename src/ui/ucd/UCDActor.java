@@ -51,7 +51,7 @@ import java.awt.*;
 import myutil.*;
 import ui.*;
 
-public class UCDActor extends TGCScalableWithoutInternalComponent {
+public class UCDActor extends TGCScalableWithoutInternalComponentOneLineText {
     /*protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
