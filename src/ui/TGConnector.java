@@ -136,7 +136,6 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         return -1;
     }
 
-
     public void internalDrawing(Graphics g) {
 
         TGComponent p3, p4;

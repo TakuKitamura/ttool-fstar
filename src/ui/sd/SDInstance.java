@@ -81,11 +81,13 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 	//TraceManager.addDev("Init tgc= " + this + " maxHeight=" + maxHeight);
 	oldScaleFactor = tdp.getZoom();
 
-	makePortMessage();
+	
         //makeTGConnectingPoints();
         //addTGConnectingPointsComment();
 
         nbInternalTGComponent = 0;
+
+	makePortMessage();
 
         moveable = true;
         editable = true;
@@ -93,7 +95,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
         userResizable = true;
 
         value = "Instance name";
-        name = "instance";
+	name = "instance";
         isActor = false;
 
         myImageIcon = IconManager.imgic500;
@@ -200,17 +202,24 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
 
     private void makePortMessage() {
-	int nbOfInternal = 50;
+	int nbOfInternal = 30;
 	for(int i=0; i<nbOfInternal; i ++) {
 	    double ratio = ((i)/(double)(nbOfInternal));//+(spacePt*tdp.getZoom()/height);
-	    SDPortForMessage port = new SDPortForMessage(100, 100+ (int)(y + ratio*height), tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-	    tdp.addComponent(x, y, false);
+	    SDPortForMessage port = new SDPortForMessage(100, 200+ (int)(y + ratio*height), tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
 	    
-	    TraceManager.addDev("Adding internal components");
-	    /*if (!addSwallowedTGComponent(port, x+width/2, (int)(y + ratio*height))) {
+	    //tdp.addComponent(port, x+width/2, y+100, true, true);
+	    
+	    //TraceManager.addDev("Adding internal components");
+	    if (!addSwallowedTGComponent(port, x+width/2, (int)(5*spacePt*tdp.getZoom()) + (int)(y + ratio*height))) {
 		TraceManager.addDev("Adding PortForMessage failed");
-		}*/
+	    } else {
+		port.wasSwallowed();
+	    }
+	    port.setMoveCd(0, (int)(10*spacePt*tdp.getZoom()) + (int)(ratio*height), false);
+	    //TraceManager.addDev("Nb of internal components:" + nbInternalTGComponent);
+
 	}
+
     }
 
     private void makeTGConnectingPoints() {
@@ -296,10 +305,12 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+	TraceManager.addDev("Element 0" + tgc + " added to SDInstance");
         if (!acceptSwallowedTGComponent(tgc)) {
             return false;
         }
 
+	TraceManager.addDev("Element 1" + tgc + " added to SDInstance");
 
         //System.out.println("Add swallow component");
         // Choose its position
@@ -353,6 +364,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
         //add it
         addInternalComponent(tgc, 0);
+	TraceManager.addDev("Element " + tgc + " added to SDInstance");
 
         return true;
     }
@@ -454,12 +466,12 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 	int msize = (int)(250*tdp.getZoom());
         int i;
 
-        for(i=0; i<connectingPoint.length ; i++) {
+        /*for(i=0; i<connectingPoint.length ; i++) {
             if (!(connectingPoint[i].isFree())) {
 		TraceManager.addDev("Found a non free connecting point y=" + connectingPoint[i].getY() + " heightOfPt=" + (connectingPoint[i].getY() - y + spacePt()));
                 msize = Math.max(msize, connectingPoint[i].getY() - y + spacePt() );
             }
-        }
+	    }*/
 
         for(i=0; i<nbInternalTGComponent ; i++) {
             msize = Math.max(msize, tgcomponent[i].getY() + tgcomponent[i].getHeight()- y + spacePt());
