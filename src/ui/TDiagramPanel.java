@@ -451,6 +451,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 continue;
 
             tgc.draw (g);
+	    
+	    // CONNECTING POINTS
             if (this.mgui.getTypeButtonSelected () != TGComponentManager.EDIT)
                 tgc.drawTGConnectingPoint (g, this.mgui.getIdButtonSelected());
 
@@ -858,35 +860,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return b;
     }
 
-    /*public boolean highlightOutAndFreeConnectingPoint(int x, int y) {
-      TGComponent tgc;
-      TGConnectingPoint cp;
-      int state;
-      boolean b = false;
-      boolean pointedElementFound = false;
-      selectedConnectingPoint = null;
-      Iterator iterator = componentList.listIterator();
-
-      while(iterator.hasNext()) {
-      tgc = (TGComponent)(iterator.next());
-      if (pointedElementFound == true) {
-      b =  tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
-      }
-      if (pointedElementFound == false) {
-      cp = tgc.getFreeTGConnectingPointAtAndCompatible(x, y, type);
-      if ((cp != null) && (cp.isOut()) && (cp.isFree())) {
-      selectedConnectingPoint = cp;
-      pointedElementFound = true;
-      b = cp.setState(TGConnectingPoint.SELECTED) || b;
-      } else {
-      b =  tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
-      }
-      }
-      }
-      return b;
-      }*/
-
-    public boolean highlightInAndFreeConnectingPoint(int x, int y, int type) {
+     public boolean highlightInAndFreeConnectingPoint(int x, int y, int type) {
         TGConnectingPoint cp;
      //   int state;
         boolean b = false;

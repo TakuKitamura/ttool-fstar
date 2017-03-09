@@ -2032,7 +2032,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
 
-
     public TGConnectingPoint getFreeTGConnectingPoint(int x, int y) {
         for (int i=0; i<nbConnectingPoint; i++) {
             if (connectingPoint[i].isCloseTo(x, y)) {

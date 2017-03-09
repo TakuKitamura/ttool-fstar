@@ -179,12 +179,12 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
 	// update TG Connecting Points
 	int yh = spacePt();
-	for(int i=0; i<nbConnectingPoint; i++, yh+=spacePt()) {
+	/*for(int i=0; i<nbConnectingPoint; i++, yh+=spacePt()) {
 	    connectingPoint[i].setCdX(width/2);
 	    connectingPoint[i].setCdY(yh);
-	}
+	    }*/
 
-	height = Math.max(getMinHeightSize(), height);
+	//height = Math.max(getMinHeightSize(), height);
 	hasBeenResized();
     }
 
@@ -193,22 +193,25 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     }
 
     public int getNbOfConnectingPoints() {
-	return (int)(((height - (2 * spacePt())) / spacePt()));
+	return 100;
+	//return (int)(((height - (2 * spacePt())) / spacePt()));
     }
     
 
     private void makeTGConnectingPoints() {
-	TraceManager.addDev("Making TG connecting points of " + name);
+	//TraceManager.addDev("Making TG connecting points of " + name);
         nbConnectingPoint = getNbOfConnectingPoints();
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
 
-        int yh = spacePt();
+        //int yh = spacePt();
+	double div = 1.0/height - (nbConnectingPoint);
+	//TraceManager.addDev("Div=" + div);
 
-        for(int i=0; i<nbConnectingPoint; i ++, yh+=spacePt()) {
-            connectingPoint[i] = new TGConnectingPointMessageSD(this, (width/2), yh, true, true);
+        for(int i=0; i<nbConnectingPoint; i ++) {
+	    double ratio = ((i)/(double)(nbConnectingPoint));//+(spacePt*tdp.getZoom()/height);
+	    //TraceManager.addDev("Ratio=" + ratio);
+            connectingPoint[i] = new TGConnectingPointMessageSD(this, 0, 0, true, true, 0.5, ratio);
         }
-
-	
 
     }
 
@@ -458,7 +461,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
  
     public void hasBeenResized(){
-	TraceManager.addDev("Has been resized: " + name + " height=" + height);
+	/*TraceManager.addDev("Has been resized: " + name + " height=" + height);
         int i;
 
 	for (int k=0; k<nbConnectingPoint; k++) {
@@ -483,12 +486,12 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 	    if (!connectingPointTmp[j].isFree()) {
 		TraceManager.addDev("Non free TG point");
 	    }
-	}
+	    }*/
 
         // Increase tdp if necessary?
 
         // Reposition each swallowed component
-        for(i=0; i<nbInternalTGComponent ; i++) {
+        for(int i=0; i<nbInternalTGComponent ; i++) {
             setCDRectangleOfSwallowed(tgcomponent[i]);
         }
     }

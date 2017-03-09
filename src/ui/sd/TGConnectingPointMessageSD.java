@@ -50,15 +50,18 @@ package ui.sd;
 
 import ui.*;
 
-public class TGConnectingPointMessageSD extends  TGConnectingPoint {
+import myutil.*;
 
-    public TGConnectingPointMessageSD(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
-        super(_container, _x, _y, _in, _out);
+public class TGConnectingPointMessageSD extends  TGConnectingPointWidthHeight {
+
+    public TGConnectingPointMessageSD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
     }
 
     public boolean isCompatibleWith(int type) {
-        //System.out.println("is compatible with " + type);
+        //TraceManager.addDev("is compatible with " + type);
         if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD)  || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD)) {
+	    //TraceManager.addDev("is compatible with " + type + " x= " + getX() + " y=" + getY()) ;
             //System.out.println("is compatible with:true");
             return true;
         }
