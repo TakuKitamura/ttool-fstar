@@ -795,6 +795,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     public TType getParamAt(int index) {
         return list[index];
     }
+	public void setParam(int index, TType t){
+		list[index] = t;
+	}
 
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_PORT_TMLC;

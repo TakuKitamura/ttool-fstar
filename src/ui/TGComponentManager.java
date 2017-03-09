@@ -170,7 +170,7 @@ public class TGComponentManager {
     public static final int PRAGMA = 302;
     public static final int SAFETY_PRAGMA = 303;
     public static final int INFO_PANEL = 304;
-	public static final int AVATAR_FIREWALL = 306;
+    public static final int AVATAR_FIREWALL = 306;
 
     public static final int IOD_CHOICE = 501;
     public static final int IOD_START_STATE = 502;
@@ -481,8 +481,8 @@ public class TGComponentManager {
     public  static LinkedList<ADDConnector> addconnectors = new LinkedList<ADDConnector>(); //DG 21.02.
 
 
-public static LinkedList<ADDConnector> getAllADDConnectors(){     
-      return addconnectors;
+    public static LinkedList<ADDConnector> getAllADDConnectors(){
+        return addconnectors;
     }//DG 21.02.
 
     public final static TGComponent addComponent(int x, int y, int id, TDiagramPanel tdp) {
@@ -648,11 +648,11 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
         case ADD_BUSNODE:
             tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-        case ADD_VGMNNODE: 	   
-		tgc = new ADDVgmnNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);	   
+        case ADD_VGMNNODE:
+            tgc = new ADDVgmnNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-        case ADD_CROSSBARNODE:	   
-		tgc = new ADDCrossbarNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);	   
+        case ADD_CROSSBARNODE:
+            tgc = new ADDCrossbarNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case ADD_TTYNODE:
             tgc = new ADDTTYNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -827,7 +827,7 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
         case UML_NOTE:
             tgc = new TGCNote(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-	case INFO_PANEL:
+        case INFO_PANEL:
             tgc = new TGCPanelInfo(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case PRAGMA:
@@ -836,9 +836,9 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
         case SAFETY_PRAGMA:
             tgc = new AvatarBDSafetyPragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-//        case AVATAR_FIREWALL:
-//            tgc = new AvatarBDFirewall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-//            break;
+            //        case AVATAR_FIREWALL:
+            //            tgc = new AvatarBDFirewall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            //            break;
         case IOD_CHOICE:
             tgc = new IODChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
@@ -869,7 +869,7 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
         case SD_INSTANCE:
             tgc = new SDInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-	case SD_PORT_MESSAGE:
+        case SD_PORT_MESSAGE:
             tgc = new SDPortForMessage(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SD_ABSOLUTE_TIME_CONSTRAINT:
@@ -1098,10 +1098,10 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
         case TMLARCHI_BUSNODE:
             tgc = new TMLArchiBUSNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
- case TMLARCHI_VGMNNODE:
+        case TMLARCHI_VGMNNODE:
             tgc = new TMLArchiVGMNNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
- case TMLARCHI_CROSSBARNODE:
+        case TMLARCHI_CROSSBARNODE:
             tgc = new TMLArchiCrossbarNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case TMLARCHI_CPNODE:
@@ -1340,9 +1340,9 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             return ADD_CHANNELARTIFACT;
         } else if (tgc instanceof ADDBusNode) {
             return ADD_BUSNODE;
-	} else if (tgc instanceof ADDVgmnNode) {
+        } else if (tgc instanceof ADDVgmnNode) {
             return ADD_VGMNNODE;
-	} else if (tgc instanceof ADDCrossbarNode) {
+        } else if (tgc instanceof ADDCrossbarNode) {
             return ADD_CROSSBARNODE;
         } else if (tgc instanceof ADDTTYNode) {
             return ADD_TTYNODE;
@@ -1575,7 +1575,7 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             return      CONNECTOR_INTERACTION;
         } else if (tgc instanceof TGCNote) {
             return      UML_NOTE;
-	} else if (tgc instanceof TGCPanelInfo) {
+        } else if (tgc instanceof TGCPanelInfo) {
             return      INFO_PANEL;
         } else if (tgc instanceof IODChoice) {
             return IOD_CHOICE;
@@ -1603,8 +1603,8 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             return CONNECTOR_RELATIVE_TIME_SD;
         } else if (tgc instanceof SDInstance) {
             return SD_INSTANCE;
-	} else if (tgc instanceof SDPortForMessage) {
-            return SD_PORT_MESSAGE;  
+        } else if (tgc instanceof SDPortForMessage) {
+            return SD_PORT_MESSAGE;
         } else if (tgc instanceof SDAbsoluteTimeConstraint) {
             return SD_ABSOLUTE_TIME_CONSTRAINT;
         } else if (tgc instanceof SDRelativeTimeConstraint) {
@@ -1782,11 +1782,11 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             return CONNECTOR_NODE_TMLARCHI;
         } else if (tgc instanceof TMLArchiCPUNode) {
             return TMLARCHI_CPUNODE;
-	} else if (tgc instanceof TMLArchiBUSNode) {
+        } else if (tgc instanceof TMLArchiBUSNode) {
             return TMLARCHI_BUSNODE;
-	} else if (tgc instanceof TMLArchiVGMNNode) {
+        } else if (tgc instanceof TMLArchiVGMNNode) {
             return TMLARCHI_VGMNNODE;
-	} else if (tgc instanceof TMLArchiCrossbarNode) {
+        } else if (tgc instanceof TMLArchiCrossbarNode) {
             return TMLARCHI_CROSSBARNODE;
         } else if (tgc instanceof TMLArchiCPNode) {
             return TMLARCHI_CPNODE;
@@ -1794,8 +1794,8 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             return TMLARCHI_BRIDGENODE;
         } else if (tgc instanceof TMLArchiFirewallNode) {
             return TMLARCHI_FIREWALL;
-//        } else if (tgc instanceof AvatarBDFirewall) {
-//            return AVATAR_FIREWALL;
+            //        } else if (tgc instanceof AvatarBDFirewall) {
+            //            return AVATAR_FIREWALL;
         } else if (tgc instanceof TMLArchiHWANode) {
             return TMLARCHI_HWANODE;
         } else if (tgc instanceof TMLArchiMemoryNode) {
@@ -1949,7 +1949,7 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
 
     public final static TGConnector addConnector(int x, int y, int id, TDiagramPanel tdp, TGConnectingPoint p1, TGConnectingPoint p2, Vector listPoint) {
         TGConnector tgc = null;
-	
+
         switch(id) {
             // AVATAR
             // AVATAR BD
@@ -1996,7 +1996,7 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             // AVATAR RD
         case AVATARRD_DERIVE_CONNECTOR:
             tgc = new AvatarRDDeriveConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-	    break;
+            break;
         case AVATARRD_SATISFY_CONNECTOR:
             tgc = new AvatarRDSatisfyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
@@ -2029,9 +2029,9 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             // AVATAR DD
         case ADD_CONNECTOR:
             tgc = new ADDConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-	    //DG 21.02.
-	    
-addconnectors.add((ADDConnector)tgc);//DG 21.02.
+            //DG 21.02.
+
+            addconnectors.add((ADDConnector)tgc);//DG 21.02.
             break;
 
             // AVATAR PD

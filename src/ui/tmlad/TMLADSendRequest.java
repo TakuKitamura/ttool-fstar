@@ -214,10 +214,19 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
         return requestName;
     }
 
+
+	public void setRequestName(String name){
+		requestName=name;
+		makeValue();
+	}	
+
     public String getParamValue(int i) {
         return params[i];
     }
 
+	public void setParam(int i, String s){
+		params[i]=s;
+	}
     public int nbOfParams() {
         return nParam;
     }

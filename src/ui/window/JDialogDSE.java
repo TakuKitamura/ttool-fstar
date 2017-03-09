@@ -91,8 +91,8 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 
     protected JCheckBox autoConf, autoAuth, autoMapKeys, custom, outputTXT, outputHTML, addHSM;
 
-    protected JTextField encTime, decTime, secOverhead;
-
+    protected JTextField encTime, decTime, secOverhead, addToComp;
+	String compName="";
     protected JTextField tmlDirectory, mappingFile, modelFile, simulationThreads, resultsDirectory, simulationCycles, minCPU, maxCPU, simulationsPerMapping;
     protected JTextArea outputText;
     protected String output = "";
@@ -185,6 +185,11 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 
         addHSM = new JCheckBox("Add HSM");
         jp01.add(addHSM,c01);
+
+		jp01.add(new JLabel("Add HSM to component:"),c01);
+        addToComp = new JTextField(compName);
+        jp01.add(addToComp,c01);
+
 
         custom = new JCheckBox("Custom performance attributes");
         jp01.add(custom,c01);
@@ -597,6 +602,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	Nbsim = simulationsPerMapping.getText();
 	encCC = encTime2.getText();
 	decCC = decTime2.getText();
+	compName=addToComp.getText();
 	secAnalysisState = secAnalysis.isSelected();
 	secOv = secOverhead2.getText();
 	outputTXTState = outputTXT.isSelected();
@@ -709,7 +715,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
                 }
             }
 			else if (addHSM.isSelected()){
-				mgui.gtm.addHSM(mgui, "comp0");
+				mgui.gtm.addHSM(mgui, addToComp.getText());
 			}
             if (autoMapKeys.isSelected()){
                 mgui.gtm.autoMapKeys();

@@ -399,6 +399,10 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         return privacy;
     }
 
+
+    public void setPrivacy(int p){
+        privacy=p;
+    }
     public String getAttributes() {
         String attr = "";
         attr += "Data size (in byte) = " + byteDataSize + "\n";
