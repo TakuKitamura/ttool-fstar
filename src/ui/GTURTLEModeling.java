@@ -227,9 +227,14 @@ import ui.tmlad.TMLADStopState;
 import ui.tmlcompd.TMLComponentTaskDiagramPanel;
 import ui.tmlcp.TMLCPPanel;
 import ui.tmldd.TMLArchiCPNode;
+import ui.tmldd.TMLArchiCPUNode;
 import ui.tmldd.TMLArchiDiagramPanel;
 import ui.tmldd.TMLArchiKey;
+import ui.tmldd.TMLArchiArtifact;
+import ui.tmldd.TMLArchiBUSNode;
+import ui.tmldd.TMLArchiHWANode;
 import ui.tmldd.TMLArchiMemoryNode;
+import ui.tmldd.TMLArchiConnectorNode;
 import ui.tmlsd.TMLSDPanel;
 import ui.tree.InvariantDataTree;
 import ui.tree.SearchTree;
@@ -1115,7 +1120,7 @@ public class GTURTLEModeling {
 		}
 		//Clone diagrams
 		int arch = gui.tabs.indexOf(tmap.tmlap);
-        gui.cloneRenameTab(arch,"enc");
+        gui.cloneRenameTab(arch,"hsm");
         TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
 
 		TMLComponentDesignPanel tmlcdp = tmap.getTMLCDesignPanel();
@@ -1127,11 +1132,25 @@ public class GTURTLEModeling {
 		//Create clone of architecture panel and map tasks to it
 		newarch.renameMapping(tabName, tabName+"_"+name);
 	
+		
+		
+		//Find the component to add a HSM to
 		TMLCPrimitiveComponent comp =null;
 		for (TGComponent tg: tcdp.getComponentList()){
 			if (tg instanceof TMLCPrimitiveComponent){
 				if (tg.getValue().equals(compName)){
 					comp = (TMLCPrimitiveComponent) tg;
+					break;
+				}
+			}
+			else if (tg instanceof TMLCCompositeComponent){
+				TMLCCompositeComponent cc = (TMLCCompositeComponent) tg;
+				List<TMLCPrimitiveComponent> pcomps =cc.getAllPrimitiveComponents();
+				for (TMLCPrimitiveComponent pc: pcomps){
+					if (pc.getValue().equals(compName)){
+						comp=(TMLCPrimitiveComponent) pc;
+						break;
+					}
 				}
 			}
 		}
@@ -1140,7 +1159,7 @@ public class GTURTLEModeling {
 		}
 		TGConnector fromStart;
 		HashSet<String> chanNames = new HashSet<String>();
-		TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel("comp0");
+		TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel(compName);
 		HashSet<TGComponent> channelInstances = new HashSet<TGComponent>(); 
 		for (TGComponent tg: tad.getComponentList()){
 			if (tg instanceof TMLADWriteChannel){
@@ -1150,6 +1169,16 @@ public class GTURTLEModeling {
 					if (fromStart!=null){
 						channelInstances.add(tg);
 						chanNames.add(writeChannel.getChannelName());
+					}
+				}
+			}
+			if (tg instanceof TMLADReadChannel){
+				TMLADReadChannel readChannel = (TMLADReadChannel) tg;
+				if (readChannel.securityContext.equals("")){
+					fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
+					if (fromStart!=null){
+						channelInstances.add(tg);
+						chanNames.add(readChannel.getChannelName());
 					}
 				}
 			}
@@ -1171,6 +1200,8 @@ public class GTURTLEModeling {
 		tcdp.addComponent(hsm, 0,500,false,true);
 		hsm.setValueWithChange("HSM");
 	
+		comp.getAttributes().add(isEnc);
+
 		for (ChannelData hsmChan: hsmChans){
 			TMLCChannelOutPort originPort =new TMLCChannelOutPort(comp.getX(), comp.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, hsm, tcdp);
 			TMLCChannelOutPort destPort = new TMLCChannelOutPort(comp.getX(), comp.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, comp, tcdp);
@@ -1196,9 +1227,18 @@ public class GTURTLEModeling {
 
 		//Modify component activity diagram to add read/write to HSM
 
+		//Add actions before Write Channel
 		for (TGComponent chan: channelInstances){
-			TMLADWriteChannel writeChannel = (TMLADWriteChannel) chan;
-			writeChannel.securityContext = "hsmSec_"+writeChannel.getChannelName();
+			String chanName="";
+			if (chan instanceof TMLADWriteChannel){
+				TMLADWriteChannel writeChannel = (TMLADWriteChannel) chan;
+				chanName=writeChannel.getChannelName();		
+				writeChannel.securityContext = "hsmSec_"+chanName;	
+			}
+			else {
+				continue;
+			}
+
 			xpos = chan.getX();
 			ypos = chan.getY();
 			fromStart = tad.findTGConnectorEndingAt(chan.getTGConnectingPointAtIndex(0));
@@ -1208,7 +1248,7 @@ public class GTURTLEModeling {
 
 			TMLADSendRequest req = new TMLADSendRequest(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 			req.setRequestName("startHSM");
-			req.setParam(0,"true");
+			req.setParam(0,"isEnc");
 			tad.addComponent(req, xpos, ypos+yShift, false,true);
 			fromStart.setP2(req.getTGConnectingPointAtIndex(0));
 
@@ -1216,8 +1256,8 @@ public class GTURTLEModeling {
 			yShift+=50;
 			//Add write channel operator
 			TMLADWriteChannel wr = new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-			wr.setChannelName("data_"+writeChannel.getChannelName());
-			wr.securityContext = "hsmSec_"+writeChannel.getChannelName();
+			wr.setChannelName("data_"+chanName);
+			wr.securityContext = "hsmSec_"+chanName;
 			tad.addComponent(wr, xpos, ypos+yShift, false,true);
 
 
@@ -1231,8 +1271,8 @@ public class GTURTLEModeling {
 
 			yShift+=60;
 			TMLADReadChannel rd = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-			rd.setChannelName("retData_"+writeChannel.getChannelName());
-			rd.securityContext = "hsmSec_"+writeChannel.getChannelName();		
+			rd.setChannelName("retData_"+chanName);
+			rd.securityContext = "hsmSec_"+chanName;		
 			tad.addComponent(rd, xpos, ypos+yShift, false,true);
 			
 			fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
@@ -1261,6 +1301,88 @@ public class GTURTLEModeling {
 			tad.repaint();
 			
 		}
+		//Add actions after Read Channel
+		for (TGComponent chan: channelInstances){
+			String chanName="";
+			if (chan instanceof TMLADReadChannel) {
+				TMLADReadChannel readChannel = (TMLADReadChannel) chan;
+				chanName=readChannel.getChannelName();	
+				readChannel.securityContext = "hsmSec_"+chanName;
+			}
+			else {
+				continue;
+			}
+			xpos = chan.getX()+10;
+			ypos = chan.getY();
+			fromStart = tad.findTGConnectorStartingAt(chan.getTGConnectingPointAtIndex(1));
+			if (fromStart==null){
+				fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+				fromStart.setP1(chan.getTGConnectingPointAtIndex(1));
+				tad.addComponent(fromStart, xpos,ypos,false,true);
+			}
+			TGConnectingPoint point = fromStart.getTGConnectingPointP2();
+			//Add send request operator
+			int yShift=50;
+
+			TMLADSendRequest req = new TMLADSendRequest(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+			req.setRequestName("startHSM");
+			req.setParam(0,"isEnc");
+			req.makeValue();
+			tad.addComponent(req, xpos, ypos+yShift, false,true);
+			fromStart.setP2(req.getTGConnectingPointAtIndex(0));
+
+
+			yShift+=50;
+			//Add write channel operator
+			TMLADWriteChannel wr = new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+			wr.setChannelName("data_"+chanName);
+			wr.securityContext = "hsmSec_"+chanName;
+			tad.addComponent(wr, xpos, ypos+yShift, false,true);
+
+
+			//Add connection
+			fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());			
+			fromStart.setP1(req.getTGConnectingPointAtIndex(1));
+			fromStart.setP2(wr.getTGConnectingPointAtIndex(0));
+			tad.addComponent(fromStart, xpos, ypos, false, true);
+
+			//Add read channel operator
+
+			yShift+=60;
+			TMLADReadChannel rd = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+			rd.setChannelName("retData_"+chanName);
+			rd.securityContext = "hsmSec_"+chanName;		
+			tad.addComponent(rd, xpos, ypos+yShift, false,true);
+			
+			fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+			tad.addComponent(fromStart, xpos, ypos, false, true);
+			fromStart.setP1(wr.getTGConnectingPointAtIndex(1));
+			fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
+			yShift+=50;
+		
+			if (point!=null){
+				fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+				tad.addComponent(fromStart, xpos, ypos, false, true);
+				fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
+				//Direct the last TGConnector back to the start of the write channel operator
+				
+				fromStart.setP2(point);
+			}
+			yShift+=50;
+			
+
+			//Shift components down to make room for the added ones, and add security contexts to write channels
+			for (TGComponent tg:tad.getComponentList()){
+				if (tg.getY() >= ypos && tg !=wr && tg!=req && tg!=rd && tg!=chan){
+					tg.setCd(tg.getX(), tg.getY()+yShift);
+				}
+			}	
+			tad.setMaxPanelSize(tad.getMaxX(), tad.getMaxY()+yShift);
+			tad.repaint();
+		}
+
+		//Build HSM
+
 		tad = t.getTMLActivityDiagramPanel("HSM");
 
 		TMLADStartState start = (TMLADStartState) tad.getComponentList().get(0);
@@ -1270,6 +1392,7 @@ public class GTURTLEModeling {
 		TMLADReadRequestArg req = new TMLADReadRequestArg(300, 100, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 		tad.addComponent(req, 300,100,false,true);
 		req.setParam(0, "isEnc");
+		req.makeValue();
 
 		//Connect start and readrequest
 		fromStart.setP1(start.getTGConnectingPointAtIndex(0));
@@ -1278,6 +1401,7 @@ public class GTURTLEModeling {
 	
 		TMLADChoice choice = new TMLADChoice(300, 200, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 		tad.addComponent(choice, 300,200,false,true);
+
 
 		//Connect readrequest and choice
 		fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
@@ -1288,7 +1412,7 @@ public class GTURTLEModeling {
 	
 
 		int xc = 150;
-		//Allows 3 channels max
+		//Allows 3 channels max to simplify the diagram
 		int i=1;
 		for (String chan: chanNames){
 			if (i>3){
@@ -1306,6 +1430,8 @@ public class GTURTLEModeling {
 
 			TMLADChoice choice2 = new TMLADChoice(xc, 400, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 			tad.addComponent(choice2, xc, 400,false,true);
+			choice2.setGuard("[isEnc]", 0);
+			choice2.setGuard("[else]",1);
 
 			//connect readchannel and choice 2
 			fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
@@ -1330,6 +1456,7 @@ public class GTURTLEModeling {
 			TMLADWriteChannel wr = new TMLADWriteChannel(xc-75, 600, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 			wr.setChannelName("retData_"+chan);
 			tad.addComponent(wr, xc-75, 600,false,true);
+			wr.securityContext = "hsmSec_"+chan;
 
 			//Connect encrypt and writeChannel
 			fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
@@ -1351,6 +1478,7 @@ public class GTURTLEModeling {
 
 			TMLADWriteChannel wr2 = new TMLADWriteChannel(xc+75, 600, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 			wr2.setChannelName("retData_"+chan);
+			wr2.securityContext = "hsmSec_"+chan;
 			tad.addComponent(wr2, xc+75, 600,false,true);
 
 			//Connect decrypt and writeChannel
@@ -1362,7 +1490,7 @@ public class GTURTLEModeling {
 			xc+=300;
 			i++;
 		}	
-
+	//For all the tasks that receive encrypted data, decrypt it
 		for (TMLTask task: tmap.getTMLModeling().getTasks()){
 			tad = t.getTMLActivityDiagramPanel(task.getName());
 			for (String chan: chanNames){
@@ -1371,7 +1499,7 @@ public class GTURTLEModeling {
 					if (tg instanceof TMLADReadChannel){
 						TMLADReadChannel readChannel = (TMLADReadChannel) tg;
 						if (readChannel.getChannelName().equals(chan) && readChannel.securityContext.equals("")){					 						
-							fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
+							fromStart = tad.findTGConnectorStartingAt(tg.getTGConnectingPointAtIndex(1));
 							if (fromStart!=null){
 								channelInstances.add(tg);
 							}
@@ -1382,27 +1510,34 @@ public class GTURTLEModeling {
 				TMLADReadChannel readChannel = (TMLADReadChannel) chI;
 				readChannel.securityContext="hsmSec_"+chan;
 				xpos = chI.getX();
-				ypos = chI.getY();
-				fromStart = tad.findTGConnectorEndingAt(chI.getTGConnectingPointAtIndex(0));
+				ypos = chI.getY()+10;
+				fromStart = tad.findTGConnectorStartingAt(chI.getTGConnectingPointAtIndex(1));
+				if (fromStart==null){
+					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+					fromStart.setP1(chI.getTGConnectingPointAtIndex(1));
+					tad.addComponent(fromStart, xpos,ypos,false,true);
+				}
 				TGConnectingPoint point = fromStart.getTGConnectingPointP2();
-				//Add encryption operator
-				int yShift=60;
-				TMLADDecrypt dec = new TMLADDecrypt(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+				//Add decryption operator
+				int yShift=100;
+				TMLADDecrypt dec = new TMLADDecrypt(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 				dec.securityContext = "hsmSec_"+chan;
-				tad.addComponent(dec, xpos,ypos, false, true);
+				tad.addComponent(dec, xpos,ypos+yShift, false, true);
 
 
 				fromStart.setP2(dec.getTGConnectingPointAtIndex(0));
+				if (point!=null){
 				fromStart=new TGConnectorTMLAD(dec.getX(), dec.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
 				tad.addComponent(fromStart, xpos, ypos, false, true);
 				fromStart.setP1(dec.getTGConnectingPointAtIndex(1));
 			
-				//Direct the last TGConnector back to the start of the write channel operator
+				//Direct the last TGConnector back to the next action
 			
 				fromStart.setP2(point);
+				}
 				//Shift components down to make room for the added ones, and add security contexts to write channels
 				for (TGComponent tg:tad.getComponentList()){
-					if (tg.getY() >= ypos && tg !=dec){
+					if (tg.getY() >= ypos && tg!=dec){
 						tg.setCd(tg.getX(), tg.getY()+yShift);
 					}
 				}	
@@ -1411,7 +1546,147 @@ public class GTURTLEModeling {
 			
 			}
 			}
+			//Next find channels that send encrypted data, and add the encryption operator
+			for (String chan: chanNames){
+				channelInstances.clear(); 
+				for (TGComponent tg: tad.getComponentList()){
+					if (tg instanceof TMLADWriteChannel){
+						TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
+						if (writeChannel.getChannelName().equals(chan) && writeChannel.securityContext.equals("")){					 						
+							fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
+							if (fromStart!=null){
+								channelInstances.add(tg);
+							}
+						}
+					}
+				}
+			for (TGComponent chI: channelInstances){
+				TMLADWriteChannel writeChannel = (TMLADWriteChannel) chI;
+				writeChannel.securityContext="hsmSec_"+chan;
+				xpos = chI.getX();
+				ypos = chI.getY()-10;
+				fromStart = tad.findTGConnectorEndingAt(chI.getTGConnectingPointAtIndex(0));
+				TGConnectingPoint point = fromStart.getTGConnectingPointP2();
+				//Add encryption operator
+				int yShift=100;
+
+				TMLADEncrypt enc = new TMLADEncrypt(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+				tad.addComponent(enc,xpos, ypos, false,true);
+				enc.securityContext = "hsmSec_"+chan;
+				enc.type = "Symmetric Encryption";
+				enc.message_overhead = overhead;
+				enc.encTime= encComp;
+				enc.decTime=decComp;
+				enc.size=overhead;
+
+
+				fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
+				fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+				tad.addComponent(fromStart, xpos, ypos, false, true);
+				fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
+			
+				//Direct the last TGConnector back to the start of the write channel operator
+			
+				fromStart.setP2(point);
+				//Shift components down to make room for the added ones, and add security contexts to write channels
+				for (TGComponent tg:tad.getComponentList()){
+					if (tg.getY() >= ypos && tg !=enc){
+						tg.setCd(tg.getX(), tg.getY()+yShift);
+					}
+				}	
+				tad.setMaxPanelSize(tad.getMaxX(), tad.getMaxY()+yShift);
+				tad.repaint();
+			
+			}
+			}
+
+
 		}
+
+		//Add a private bus to Hardware Accelerator with the task for hsm
+	
+		//Find the CPU the task is mapped to
+		TMLArchiDiagramPanel archPanel = newarch.tmlap;
+		TMLArchiCPUNode cpu=null;
+		String refTask="";
+		loop:
+		for (TGComponent tg: archPanel.getComponentList()){
+			if (tg instanceof TMLArchiCPUNode){
+				TMLArchiCPUNode cp = (TMLArchiCPUNode) tg;
+				Vector v= cp.getArtifactList();
+				for (int j=0; j< v.size(); j++){
+					TMLArchiArtifact art = (TMLArchiArtifact) v.elementAt(j);
+					if (art.getTaskName().equals(compName)){
+						//CPU and Artifact found
+						cpu=cp;
+						refTask= art.getReferenceTaskName();
+						break loop;
+					}
+				}
+			}
+		}
+
+		if (cpu==null){
+			return;
+		}
+
+		//Add new memory
+		TMLArchiMemoryNode mem = new TMLArchiMemoryNode(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, null, archPanel); 
+		archPanel.addComponent(mem, cpu.getX()+100, cpu.getY()+100, false, true);
+		mem.setName("HSMMemory");
+		//Add Hardware Accelerator
+		
+		TMLArchiHWANode hwa = new TMLArchiHWANode(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, null, archPanel); 
+		archPanel.addComponent(hwa, cpu.getX()+100, cpu.getY()+100, false, true);
+		hwa.setName("HSM");
+		//Add hsm task to hwa
+			
+
+		TMLArchiArtifact hsmArt = new TMLArchiArtifact(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, hwa, archPanel); 
+		archPanel.addComponent(hsmArt, cpu.getX()+100, cpu.getY()+100, true, true);
+		hsmArt.setFullName("HSM", refTask);
+		//Add bus connecting the cpu and HWA
+		
+		TMLArchiBUSNode bus = new TMLArchiBUSNode(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, null, archPanel); 
+		bus.setPrivacy(1);
+		bus.setName("HSMBus");
+		archPanel.addComponent(bus, cpu.getX()+200, cpu.getY()+200, false, true);
+
+		//Connect Bus and CPU
+		TMLArchiConnectorNode connect =new  TMLArchiConnectorNode(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, null, archPanel, null, null, new Vector());
+		TGConnectingPoint p1 = bus.findFirstFreeTGConnectingPoint(true,true);
+        p1.setFree(false);
+		connect.setP2(p1);
+
+
+
+		TGConnectingPoint p2 = cpu.findFirstFreeTGConnectingPoint(true,true);
+        p1.setFree(false);
+		connect.setP1(p2);
+		archPanel.addComponent(connect, cpu.getX()+100, cpu.getY()+100, false, true);
+		//Connect Bus and HWA
+
+		connect = new TMLArchiConnectorNode(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, null, archPanel, null, null, new Vector());
+		p1 = bus.findFirstFreeTGConnectingPoint(true,true);
+        p1.setFree(false);
+		connect.setP2(p1);
+
+		p2 = hwa.findFirstFreeTGConnectingPoint(true,true);
+        p1.setFree(false);
+		connect.setP1(p2);
+
+		archPanel.addComponent(connect, cpu.getX()+100, cpu.getY()+100, false, true);
+		//Connect Bus and Memory
+
+		connect = new TMLArchiConnectorNode(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, null, archPanel, null, null, new Vector());
+		p1 = bus.findFirstFreeTGConnectingPoint(true,true);
+        p1.setFree(false);
+		connect.setP2(p1);
+
+		p2 = mem.findFirstFreeTGConnectingPoint(true,true);
+        p1.setFree(false);
+		connect.setP1(p2);
+		archPanel.addComponent(connect, cpu.getX()+100, cpu.getY()+100, false, true);
 
 	}
 
@@ -2073,7 +2348,6 @@ public class GTURTLEModeling {
         return secure;
     }
     public void autoMapKeys(){
-        System.out.println("Mapping keys");
         TraceManager.addDev("auto map keys");
         if (tmap==null){
             return;
@@ -2084,7 +2358,7 @@ public class GTURTLEModeling {
         if (tmlm.securityTaskMap ==null){
             return;
         }
-        System.out.println(tmlm.securityTaskMap);
+    //    System.out.println(tmlm.securityTaskMap);
         for (SecurityPattern sp: tmlm.securityTaskMap.keySet()){
             if (sp.type.contains("Encryption") || sp.type.equals("MAC")){
                 TraceManager.addDev("Finding security "+sp);
@@ -2110,15 +2384,16 @@ public class GTURTLEModeling {
                             if (curr == link.bus){
                                 if (link.hwnode instanceof HwMemory){
                                     mems.add((HwMemory) link.hwnode);
-                                    ArrayList<SecurityPattern> patterns = tmap.getMappedPatterns((HwMemory) link.hwnode);
+									TMLArchiMemoryNode memNode= (TMLArchiMemoryNode) listE.getTG(link.hwnode);
+                                    ArrayList<TMLArchiKey> keys = memNode.getKeyList();
                                     String patternString= "";
-                                    for (SecurityPattern pattern: patterns){
-                                        if (pattern.name.equals(sp.name)){
+                                    for (TMLArchiKey key: keys){
+                                        if (key.getValue().equals(sp.name)){
 
                                             keyFound=true;
                                             break memloop;
                                         }
-                                        patternString += pattern.name;
+                                        patternString += key.getValue();
                                         patternString += " ";
                                     }
                                     TraceManager.addDev("Memory "+ link.hwnode.getName() + " has currently mapped: " + patternString);

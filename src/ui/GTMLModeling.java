@@ -1671,7 +1671,12 @@ public class GTMLModeling  {
 		    		if (securityPatterns.get(((TMLADReadChannel)tgc).securityContext)!=null){
 						tmlreadchannel.securityPattern= securityPatterns.get(((TMLADReadChannel)tgc).securityContext);
 		    			//NbOfSamples will increase due to extra overhead from MAC
-		    			int cur = Integer.valueOf(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
+						int cur=1;
+						try {
+			    			cur = Integer.valueOf(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
+						} catch(NumberFormatException e) { 
+   						} catch(NullPointerException e) {
+    					}
 		    			int add = Integer.valueOf(tmlreadchannel.securityPattern.overhead);
 						if (!tmlreadchannel.securityPattern.nonce.equals("")){
 						    SecurityPattern nonce = securityPatterns.get(tmlreadchannel.securityPattern.nonce);
