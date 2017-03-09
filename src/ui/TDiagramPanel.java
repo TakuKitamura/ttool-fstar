@@ -848,6 +848,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             if (pointedElementFound)
                 b =  tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
             else {
+		b =  tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
                 TGConnectingPoint cp = tgc.getFreeTGConnectingPointAtAndCompatible(x, y, type);
                 if ((cp != null) && (cp.isOut()) && (cp.isFree()) && (cp.isCompatibleWith(type))) {
                     selectedConnectingPoint = cp;

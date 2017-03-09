@@ -80,8 +80,9 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 	//TraceManager.addDev("Init tgc= " + this + " minHeight=" + minHeight);
 	//TraceManager.addDev("Init tgc= " + this + " maxHeight=" + maxHeight);
 	oldScaleFactor = tdp.getZoom();
-	
-        makeTGConnectingPoints();
+
+	makePortMessage();
+        //makeTGConnectingPoints();
         //addTGConnectingPointsComment();
 
         nbInternalTGComponent = 0;
@@ -196,7 +197,21 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 	return 100;
 	//return (int)(((height - (2 * spacePt())) / spacePt()));
     }
-    
+
+
+    private void makePortMessage() {
+	int nbOfInternal = 50;
+	for(int i=0; i<nbOfInternal; i ++) {
+	    double ratio = ((i)/(double)(nbOfInternal));//+(spacePt*tdp.getZoom()/height);
+	    SDPortForMessage port = new SDPortForMessage(100, 100+ (int)(y + ratio*height), tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+	    tdp.addComponent(x, y, false);
+	    
+	    TraceManager.addDev("Adding internal components");
+	    /*if (!addSwallowedTGComponent(port, x+width/2, (int)(y + ratio*height))) {
+		TraceManager.addDev("Adding PortForMessage failed");
+		}*/
+	}
+    }
 
     private void makeTGConnectingPoints() {
 	//TraceManager.addDev("Making TG connecting points of " + name);
@@ -271,6 +286,11 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
         if (tgc instanceof SDTimerCancellation) {
             return true;
         }
+	
+	if (tgc instanceof SDPortForMessage) {
+            return true;
+        }
+	
 
         return false;
     }
@@ -301,7 +321,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
             tgc.setCd(realX, realY);
         }
 
-        if ((tgc instanceof SDActionState) || (tgc instanceof SDCoregion)|| (tgc instanceof SDGuard)) {
+        if ((tgc instanceof SDActionState) || (tgc instanceof SDCoregion)|| (tgc instanceof SDGuard) || (tgc instanceof SDPortForMessage)) {
             realX = getX()+(width/2);
             //tgc.setCdRectangle((width/2), (width/2), spacePt, height-spacePt-tgc.getHeight());
             tgc.setCd(realX, realY);
@@ -501,7 +521,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
             tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), (int)(spacePt()), height-(int)(spacePt()));
         }
 
-        if ((tgc instanceof SDActionState) || (tgc instanceof SDGuard) || (tgc instanceof SDCoregion) || (tgc instanceof SDTimeInterval)) {
+        if ((tgc instanceof SDActionState) || (tgc instanceof SDGuard) || (tgc instanceof SDCoregion) || (tgc instanceof SDTimeInterval) || (tgc instanceof SDPortForMessage)) {
             tgc.setCdRectangle((width/2), (width/2), (int)(spacePt()), height-(int)(spacePt())-tgc.getHeight());
         }
 

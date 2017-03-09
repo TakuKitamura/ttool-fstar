@@ -192,6 +192,7 @@ public class TGComponentManager {
     public static final int SD_TIMER_EXPIRATION = 605;
     public static final int SD_TIME_INTERVAL = 608;
     public static final int SD_COREGION = 600;
+    public static final int SD_PORT_MESSAGE = 610;
 
     public static final int UCD_ACTOR = 700;
     public static final int UCD_ACTORBOX = 703;
@@ -867,6 +868,9 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             break;
         case SD_INSTANCE:
             tgc = new SDInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+	case SD_PORT_MESSAGE:
+            tgc = new SDPortForMessage(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SD_ABSOLUTE_TIME_CONSTRAINT:
             tgc = new SDAbsoluteTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1599,6 +1603,8 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             return CONNECTOR_RELATIVE_TIME_SD;
         } else if (tgc instanceof SDInstance) {
             return SD_INSTANCE;
+	} else if (tgc instanceof SDPortForMessage) {
+            return SD_PORT_MESSAGE;  
         } else if (tgc instanceof SDAbsoluteTimeConstraint) {
             return SD_ABSOLUTE_TIME_CONSTRAINT;
         } else if (tgc instanceof SDRelativeTimeConstraint) {

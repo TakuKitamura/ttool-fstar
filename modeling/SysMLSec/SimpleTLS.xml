@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<TURTLEGMODELING version="0.98-beta4">
+<TURTLEGMODELING version="0.99-beta1">
 
 <Modeling type="Sysmlsec Methodology" nameTab="SysMLSec_Methodology" >
 <SysmlsecMethodologyDiagramPanel name="SysMLSec_Methodology" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
@@ -797,8 +797,8 @@
 <TGConnectingPoint num="23" id="430" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="in chIn(Message m)" />
-<Signal value="out chOut(Message m)" />
+<Signal value="in chIn(Message m)" attached="false" />
+<Signal value="out chOut(Message m)" attached="false" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="5000" id="381" >
@@ -3068,7 +3068,7 @@
 
 <COMPONENT type="302" id="1436" >
 <cdparam x="710" y="44" />
-<sizeparam width="798" height="149" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="608" height="149" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Proverif Pragma" value="#PrivatePublicKeys Server serverPrivK serverPubK
@@ -3178,8 +3178,8 @@
 <TGConnectingPoint num="23" id="1528" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="in chIn(Message m)" />
-<Signal value="out chOut(Message m)" />
+<Signal value="in chIn(Message m)" attached="true" />
+<Signal value="out chOut(Message m)" attached="true" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="5000" id="1479" >
