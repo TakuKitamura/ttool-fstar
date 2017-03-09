@@ -2221,22 +2221,22 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	y = Math.min(maxY, y);*/
     }
 
-    public final int getX() {
+    public int getX() {
         return x;
     }
 
-    public final int getY() {
+    public int getY() {
         return y;
     }
 
-    public final int getXZoom() {
+    public int getXZoom() {
 	if (tdp == null) {
 	    return x;
 	}
 	return (int)(x*tdp.getZoom());
     }
 
-    public final int getYZoom() {
+    public int getYZoom() {
 	if (tdp == null) {
 	    return y;
 	}

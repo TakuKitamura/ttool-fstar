@@ -55,7 +55,7 @@ import java.util.*;
 
 import myutil.*;
 
-public abstract class TGConnector extends TGCWithInternalComponent      {
+public abstract class TGConnector extends TGCScalableWithInternalComponent      {
 
     protected final static String XML_CONNECTOR_HEAD = "<CONNECTOR type=\"";
     protected final static String XML_ID = "\" id=\"";
@@ -79,6 +79,8 @@ public abstract class TGConnector extends TGCWithInternalComponent      {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         p1 = _p1;
         p2 = _p2;
+	
+	initScaling(0, 0);
 
         nbInternalTGComponent = _listPoint.size();
         tgcomponent = new TGComponent[nbInternalTGComponent];
@@ -144,14 +146,15 @@ public abstract class TGConnector extends TGCWithInternalComponent      {
             p3 = tgcomponent[0];
             p4 = tgcomponent[0];
             //TraceManager.addDev("p3.x " + p3.getX() + " p3.y " + p3.getY());
-            drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getXZoom(), p3.getYZoom());
+            //drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getXZoom(), p3.getYZoom());
+	    drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY());
 
             for(int i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
                 p3 = tgcomponent[i];
                 p4 = tgcomponent[i+1];
-                drawMiddleSegment(g, p3.getXZoom(), p3.getYZoom(), p4.getXZoom(), p4.getYZoom());
+                drawMiddleSegment(g, p3.getX(), p3.getY(), p4.getX(), p4.getY());
             }
-            drawLastSegment(g, p4.getXZoom(), p4.getYZoom(), p2.getX(), p2.getY());
+            drawLastSegment(g, p4.getX(), p4.getY(), p2.getX(), p2.getY());
         } else {
             drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
         }

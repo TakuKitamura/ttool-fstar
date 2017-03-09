@@ -52,7 +52,7 @@ import java.awt.*;
 
 import myutil.*;
 
-public class TGCPointOfConnector extends TGCWithoutInternalComponent {
+public class TGCPointOfConnector extends TGCScalableWithoutInternalComponent {
     private int width = 8;
     private int height = 8;
     
@@ -60,6 +60,8 @@ public class TGCPointOfConnector extends TGCWithoutInternalComponent {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         nbConnectingPoint = 0;
+
+	initScaling(0, 0);
         
         nbInternalTGComponent = 0;
         
@@ -95,6 +97,14 @@ public class TGCPointOfConnector extends TGCWithoutInternalComponent {
             }
         }
     }
+
+    /*public int getX() {
+        return getXZoom();
+    }
+
+    public int getY() {
+        return getYZoom();
+	}*/
     
         /*public void postLoading(int decId) throws MalformedModelingException {
             if (decId == 0) {
@@ -102,9 +112,6 @@ public class TGCPointOfConnector extends TGCWithoutInternalComponent {
             }
          
         }*/
-    
-    
-    
 }
 
 
