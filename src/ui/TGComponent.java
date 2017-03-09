@@ -195,7 +195,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     protected boolean breakpoint;
 
     // Zoom
-    public double dx=0, dy=0, dwidth, dheight, dMaxWidth, dMaxHeight;
+    public double dx=0, dy=0, dwidth, dheight, dMaxWidth, dMaxHeight, dMinWidth, dMinHeight;
 
 
     //Constructor
@@ -2032,7 +2032,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
 
-
     public TGConnectingPoint getFreeTGConnectingPoint(int x, int y) {
         for (int i=0; i<nbConnectingPoint; i++) {
             if (connectingPoint[i].isCloseTo(x, y)) {
@@ -2214,6 +2213,12 @@ public abstract class TGComponent implements CDElement, GenericTree {
         minY = y1;
         maxX = x2;
         maxY = y2;
+
+	/*x = Math.max(minX, x);
+	x = Math.min(maxX, x);
+	
+	y = Math.max(minY, y);
+	y = Math.min(maxY, y);*/
     }
 
     public final int getX() {
@@ -2222,6 +2227,20 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
     public final int getY() {
         return y;
+    }
+
+    public final int getXZoom() {
+	if (tdp == null) {
+	    return x;
+	}
+	return (int)(x*tdp.getZoom());
+    }
+
+    public final int getYZoom() {
+	if (tdp == null) {
+	    return y;
+	}
+	return (int)(y*tdp.getZoom());
     }
 
     public final int getWidth() {

@@ -57,58 +57,61 @@ public class SDTimeInterval extends TGCTimeInterval implements SwallowedTGCompon
     private int segment = 4;
     private int wtext = 0;
     private int htext = 0;
-    
+
     public SDTimeInterval(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 10;
-        height = 30;
-        textX = width/2 + 5;
-        textY = height/2 + 5;
-        
+
+        width = (int)(10 * tdp.getZoom());
+        height = (int)(30 * tdp.getZoom());
+	oldScaleFactor = tdp.getZoom();
+
         nbConnectingPoint = 0;
         addTGConnectingPointsCommentMiddle();
-        
+
         nbInternalTGComponent = 0;
         tgcomponent = new TGComponent[nbInternalTGComponent];
-        
-        
+
+
         moveable = true;
         editable = true;
         removable = true;
-        
+
         name = "time interval";
         makeValue();
-        
+
         myImageIcon = IconManager.imgic512;
     }
-    
+
     public void internalDrawing(Graphics g) {
+	textX = width/2 + 5;
+        textY = height/2 + 5;
+	
         g.drawRect(x-width/2, y, width, height);
         //g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         //g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-         //w  = g.getFontMetrics().stringWidth(value);
-        
+        //w  = g.getFontMetrics().stringWidth(value);
+
         g.drawString(value, x + textX, y + textY);
-        
+
         if (!tdp.isScaled()) {
             wtext = g.getFontMetrics().stringWidth(value);
             htext = g.getFontMetrics().getHeight();
             //System.out.println("wtext=" + wtext + " htext=" + htext);
         }
-        
+
         int y1 = y + 4;
         int x1 = x + 2 - width/2;
         int width1 = width - 4;
-        
+	int incrementYtmp = (int)(incrementY*tdp.getZoom());
+
         for (int i=0; i<segment; i++) {
-            g.drawLine(x1, y1, x1+width1, y1+incrementY);
-            y1 += incrementY;
-            g.drawLine(x1+width1, y1, x1, y1+incrementY);
-            y1 += incrementY;
+            g.drawLine(x1, y1, x1+width1, y1+incrementYtmp);
+            y1 += incrementYtmp;
+            g.drawLine(x1+width1, y1, x1, y1+incrementYtmp);
+            y1 += incrementYtmp;
         }
     }
-    
+
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x - width/2, y, width, height)) {
             return this;
@@ -118,9 +121,9 @@ public class SDTimeInterval extends TGCTimeInterval implements SwallowedTGCompon
         }
         return null;
     }
-    
+
     public int getType() {
         return TGComponentManager.SD_TIME_INTERVAL;
     }
-    
+
 }

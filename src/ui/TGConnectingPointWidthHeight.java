@@ -51,26 +51,26 @@ package ui;
 public class TGConnectingPointWidthHeight extends TGConnectingPoint{
     protected double w;
     protected double h;
-    
+
     public TGConnectingPointWidthHeight(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
         super(_container, _x, _y, _in, _out);
         w = _w;
         h = _h;
     }
-    
+
     public int getX() {
         return x + container.getX() + (int)(container.getWidth() * w);
     }
-    
+
     public int getY() {
         return y + container.getY() + (int)(container.getHeight() * h);
     }
-	
-	public void setW(double _w) {
-		w = _w;
-	}
-	
-	public void setH(double _h) {
-		h = _h;
-	}
+
+    public void setW(double _w) {
+        w = _w;
+    }
+
+    public void setH(double _h) {
+        h = _h;
+    }
 } // Class

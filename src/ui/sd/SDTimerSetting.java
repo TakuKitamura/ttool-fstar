@@ -54,7 +54,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class SDTimerSetting extends TGCWithoutInternalComponent implements SwallowedTGComponent {
+public class SDTimerSetting extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
     private String timer = "myTimer";
     private String duration = "10";
     private int widthValue, heightValue;
@@ -62,10 +62,11 @@ public class SDTimerSetting extends TGCWithoutInternalComponent implements Swall
     
     public SDTimerSetting(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 15;
-        height = 25;
-        
+
+	width = (int)(15 * tdp.getZoom());
+        height = (int)(25 * tdp.getZoom());
+        oldScaleFactor = tdp.getZoom();
+	
         nbConnectingPoint = 0;
         addTGConnectingPointsComment();
         

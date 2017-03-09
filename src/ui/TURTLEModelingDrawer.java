@@ -59,7 +59,7 @@ public class TURTLEModelingDrawer {
     private DesignPanel dp;
     private Vector telements;
     private Vector gelements;
-    
+
     private double radius;
     private double centerX;
     private double centerY;
@@ -67,13 +67,13 @@ public class TURTLEModelingDrawer {
     public TURTLEModelingDrawer(MainGUI _mgui) {
         mgui = _mgui;
     }
-    
+
     public void setTURTLEModeling(TURTLEModeling _tm) {
         tm = _tm;
         //tm.simplify(true, false);
         //tm.countJunctions();
     }
-    
+
     public boolean draw(int designNb) {
         telements = new Vector();
         gelements = new Vector();
@@ -89,13 +89,13 @@ public class TURTLEModelingDrawer {
             drawRelations();
             //System.out.println("all done");
         } catch (MalformedTURTLEModelingException mtm) {
-        	System.out.println(mtm.getMessage());
+            System.out.println(mtm.getMessage());
             return false;
         }
-        
+
         return true;
     }
-    
+
     private void addDesign(int designNb) throws MalformedTURTLEModelingException {
         indexDesign = mgui.createDesign("Generated Design " + designNb);
         //System.out.println("indexDesign=" + indexDesign);
@@ -107,21 +107,21 @@ public class TURTLEModelingDrawer {
         } catch (Exception e) {
             throw new MalformedTURTLEModelingException("design panel not found");
         }
-        
+
         dp.tcdp.setMinX(10);
         dp.tcdp.setMaxX(1900);
         dp.tcdp.setMinY(10);
         dp.tcdp.setMaxY(900);
         //dp.tcdp.updateSize();
     }
-    
+
     private void drawTClasses() throws MalformedTURTLEModelingException {
         TClass t;
         int total = tm.classNb();
         radius = 200 + 30 * total;
         centerX = radius + 50;
         centerY = radius + 50;
-        
+
         int maxX = 1900;
         int maxY = 900;
         while(maxX < (radius *2 + 200)) {
@@ -133,47 +133,47 @@ public class TURTLEModelingDrawer {
             dp.tcdp.setMaxY(maxY);
         }
         dp.tcdp.updateSize();
-        
+
         for(int i=0; i<total; i++) {
             drawTClass(tm.getTClassAtIndex(i), i, total);
         }
     }
-    
+
     private void drawTClass(TClass t, int index, int total) throws MalformedTURTLEModelingException {
         // Calculate where the class should be added
         // We use a circle to dipose classes
         double angle = 2*Math.PI*index/total;
         int myX = (int)(Math.cos(angle)*radius + centerX);
         int myY = (int)(Math.sin(angle)*radius + centerY);
-        
+
         // Creating tclass
         TGComponent tgc = TGComponentManager.addComponent(myX, myY, TGComponentManager.TCD_TCLASS, dp.tcdp);
         TCDTClass tcd = (TCDTClass)tgc;
-        
+
         telements.add(t);
         gelements.add(tgc);
-        
+
         // setting tclass properties
         tgc.setValue(t.getName());
         tgc.setValueWithChange(t.getName());
         tcd.setStart(t.isActive());
-        
+
         // Adding tclass to the diagram
         dp.tcdp.addBuiltComponent(tgc);
         tcd.recalculateSize();
-        
+
         // Managing gates
         addAttributes(t, tcd);
         addGates(t, tcd);
         tcd.checkSizeOfSons();
     }
-    
+
     public void addAttributes(TClass t, TCDTClass tcd) throws MalformedTURTLEModelingException {
         Vector params = t.getParamList();
         LinkedList<TAttribute> attributes = new LinkedList<TAttribute> ();
         Param p;
         TAttribute ta;
-        
+
         for(int i=0; i<params.size(); i++) {
             p = (Param)(params.elementAt(i));
             ta = null;
@@ -190,32 +190,32 @@ public class TURTLEModelingDrawer {
                 attributes.add(ta);
             }
         }
-        
+
         tcd.setAttributes(attributes);
     }
-    
+
     public void addGates(TClass t, TCDTClass tcd) throws MalformedTURTLEModelingException {
         Vector tmgates = t.getGateList();
         LinkedList<TAttribute> gates = new LinkedList<TAttribute> ();
         Gate g;
         TAttribute ta;
-        
+
         for(int i=0; i<tmgates.size(); i++) {
             g = (Gate)(tmgates.elementAt(i));
             ta = new TAttribute(TAttribute.PUBLIC, g.getName(), "", g.getType()+1);
             gates.add(ta);
         }
-        
+
         tcd.setGates(gates);
     }
-    
+
     private void drawActivityDiagrams()  throws MalformedTURTLEModelingException {
         int total = tm.classNb();
         for(int i=0; i<total; i++) {
             drawActivityDiagram(tm.getTClassAtIndex(i));
         }
     }
-    
+
     private void drawActivityDiagram(TClass t) throws MalformedTURTLEModelingException {
         ActivityDiagram ad = t.getActivityDiagram();
         ADStart ads = ad.getStartState();
@@ -225,7 +225,7 @@ public class TURTLEModelingDrawer {
         makeADOf(ads, tadp, null, 0, 0);
         tadp.makeGraphicalOptimizations();
     }
-    
+
     private void makeADOf(ADComponent adc, TActivityDiagramPanel tadp, TGComponent previous, int indexNext, int totalNext) throws MalformedTURTLEModelingException {
         // Check if component has already been computed
         if (telements.contains(adc)) {
@@ -238,7 +238,7 @@ public class TURTLEModelingDrawer {
             }
             return;
         }
-        
+
         // make component from adc
         //System.out.println("Make component");
         TGComponent tgc = addToAD(adc, tadp);
@@ -246,37 +246,37 @@ public class TURTLEModelingDrawer {
             System.out.println("null component");
             throw new MalformedTURTLEModelingException("null component");
         }
-        
+
         // Adding component
         tadp.addBuiltComponent(tgc);
         telements.add(adc);
         gelements.add(tgc);
-        
+
         // Linking component to the previous one
         if (!(tgc instanceof TADStartState)) {
             TGConnector tgco = connectAD(tgc, previous, tadp, true, indexNext, totalNext);
             tadp.addBuiltConnector(tgco);
         }
-        
+
         // Managing nexts of this component
         ADComponent nextAdc;
         for(int i=0; i<adc.getNbNext(); i++) {
             makeADOf(adc.getNext(i), tadp, tgc, i, adc.getNbNext());
         }
     }
-    
+
     public TGComponent addToAD(ADComponent adc, TDiagramPanel tadp) throws MalformedTURTLEModelingException {
         int i;
-        
+
         if (adc instanceof ADActionStateWithGate) {
             ADActionStateWithGate adasw = (ADActionStateWithGate)adc;
             TADActionState tadas = (TADActionState)(TGComponentManager.addComponent(10, 10, TGComponentManager.TAD_ACTION_STATE, tadp));
-			//System.out.println("action = " + adasw.getActionValue()
-			try {
-				tadas.setValue(adasw.getGate().getName() + adasw.getLimitOnGate() + adasw.getActionValue());
-			} catch (Exception e) {
-				tadas.setValue("Unknown gate");
-			}
+            //System.out.println("action = " + adasw.getActionValue()
+            try {
+                tadas.setValue(adasw.getGate().getName() + adasw.getLimitOnGate() + adasw.getActionValue());
+            } catch (Exception e) {
+                tadas.setValue("Unknown gate");
+            }
             return tadas;
         } else if(adc instanceof ADActionStateWithMultipleParam) {
             ADActionStateWithMultipleParam adawp = ((ADActionStateWithMultipleParam)adc);
@@ -286,19 +286,19 @@ public class TURTLEModelingDrawer {
         } else if(adc instanceof ADActionStateWithParam) {
             ADActionStateWithParam adawp = ((ADActionStateWithParam)adc);
             TADActionState tadas = (TADActionState)(TGComponentManager.addComponent(10, 10, TGComponentManager.TAD_ACTION_STATE, tadp));
-			try {
-				//System.out.println("name = " + adawp.getParam().getName());
-				//System.out.println("action=" + adawp.getActionValue());
-				tadas.setValue(adawp.getParam().getName() + " = " + adawp.getActionValue());
-			} catch (Exception e) {
-				tadas.setValue("unknown = unknown");
-			}
+            try {
+                //System.out.println("name = " + adawp.getParam().getName());
+                //System.out.println("action=" + adawp.getActionValue());
+                tadas.setValue(adawp.getParam().getName() + " = " + adawp.getActionValue());
+            } catch (Exception e) {
+                tadas.setValue("unknown = unknown");
+            }
             return tadas;
         } else if (adc instanceof ADChoice) {
             TADChoice tadc = (TADChoice)(TGComponentManager.addComponent(10, 10, TGComponentManager.TAD_CHOICE, tadp));
             /*if (adc.getNbNext() > 3) {
-               System.out.println("Malformed choice... : TOO MANY next");
-            }*/
+              System.out.println("Malformed choice... : TOO MANY next");
+              }*/
             for(i=0; i<3; i++) {
                 if (((ADChoice)(adc)).isGuarded(i)) {
                     tadc.setGuard(((ADChoice)adc).getGuard(i), i);
@@ -344,66 +344,66 @@ public class TURTLEModelingDrawer {
             adti.setMaxValue(((ADTimeInterval)adc).getMaxValue());
             return adti;
         }
-        
+
         System.out.println("adc = " + adc);
         throw new MalformedTURTLEModelingException("unknown component ->"+adc);
     }
-    
+
     public TGConnector connectAD(TGComponent tgc, TGComponent previous, TActivityDiagramPanel tadp, boolean move, int indexNext, int totalNext) throws MalformedTURTLEModelingException {
         boolean makeSquare = true;
         int index = -1;
-        
+
         // Find TGconnectingPoints
-        
+
         //P1
         TGConnectingPoint p1 = null;
-        
+
         if ((previous instanceof TADParallel) || (previous instanceof TADPreemption) || (previous instanceof TADSequence)) {
             switch(totalNext) {
-                case 1:
-                    index=7;
-                    break;
-                case 2:
-                    switch(indexNext) {
-                        case 0:
-                            index = 6;
-                            break;
-                        default:
-                            index = 8;
-                            break;
-                    }
-                    break;
-                case 3:
-                    switch(indexNext) {
-                        case 0:
-                            index = 5;
-                            break;
-                        case 1:
-                            index = 7;
-                            break;
-                        default:
-                            index = 9;
-                            break;
-                    }
+            case 1:
+                index=7;
+                break;
+            case 2:
+                switch(indexNext) {
+                case 0:
+                    index = 6;
                     break;
                 default:
+                    index = 8;
+                    break;
+                }
+                break;
+            case 3:
+                switch(indexNext) {
+                case 0:
+                    index = 5;
+                    break;
+                case 1:
+                    index = 7;
+                    break;
+                default:
+                    index = 9;
+                    break;
+                }
+                break;
+            default:
             }
         }
-        
+
         if ((index != -1) && ((previous instanceof TADPreemption) || (previous instanceof TADSequence))) {
             index = index - 4;
         }
-        
+
         if (index > -1 ) {
             p1 = previous.tgconnectingPointAtIndex(index);
         } else {
             p1 = previous.findFirstFreeTGConnectingPoint(true, false);
         }
-        
+
         if (p1 == null) {
             throw new MalformedTURTLEModelingException("p1 connecting point not found");
         }
-        
+
         TGConnectingPoint p2 = null;
         if (tgc instanceof TADJunction) {
             if (tgc.tgconnectingPointAtIndex(0).isFree()) {
@@ -414,12 +414,12 @@ public class TURTLEModelingDrawer {
         } else {
             p2 = tgc.findFirstFreeTGConnectingPoint(false, true);
         }
-        
-        
+
+
         if (p2 == null) {
             throw new MalformedTURTLEModelingException("p2 connecting point not found on component:" + tgc);
         }
-        
+
         // Move tgc component according to points
         if (move) {
             int decX = 0;
@@ -434,13 +434,13 @@ public class TURTLEModelingDrawer {
                 }
                 decY = 20;
             }
-            
+
             if (previous instanceof TADTimeLimitedOfferWithLatency) {
                 if (p1 == previous.tgconnectingPointAtIndex(2)) {
                     decX = 50;
                 }
             }
-            
+
             if ((previous instanceof TADSequence) || (previous instanceof TADPreemption)) {
                 makeSquare = false;
                 if (p1 == previous.tgconnectingPointAtIndex(1)) {
@@ -457,7 +457,7 @@ public class TURTLEModelingDrawer {
                 }
                 decY = 20;
             }
-            
+
             if (previous instanceof TADParallel) {
                 makeSquare = false;
                 if (p1 == previous.tgconnectingPointAtIndex(5)) {
@@ -474,37 +474,37 @@ public class TURTLEModelingDrawer {
                 }
                 decY = 20;
             }
-            
+
             decX = Math.max(p1.getX() - p2.getX() + tgc.getX() + decX, tadp.getMinX());
             decY = Math.max(p1.getY() - p2.getY() + tgc.getY() + decY, tadp.getMinY());
-            
+
             if (decX > tadp.getMaxX()) {
                 tadp.setMaxX(tadp.getMaxX() + 500);
                 tadp.updateSize();
             }
-            
+
             if (decY > tadp.getMaxY()) {
                 //System.out.println("Increasing vertical size");
                 tadp.setMaxY(tadp.getMaxY() + 500);
                 tadp.updateSize();
             }
-            
+
             tgc.setMoveCd(decX, decY);
         }
-        
+
         // Connect both points
         p1.setFree(false);
         p2.setFree(false);
-        
+
         TGConnector tgco = TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_AD_DIAGRAM, tadp, p1, p2, new Vector());
-        
+
         if (makeSquare) {
             tgco.makeSquareWithoutMovingTGComponents();
         }
-        
+
         return tgco;
     }
-    
+
     private void drawRelations()  throws MalformedTURTLEModelingException {
         Relation r;
         for(int i = 0; i < tm.relationNb(); i++) {
@@ -512,26 +512,26 @@ public class TURTLEModelingDrawer {
             drawRelation(r);
         }
     }
-    
+
     private void drawRelation(Relation r) throws MalformedTURTLEModelingException {
         // Identify invloved TClasses
         int index1 = telements.indexOf(r.t1);
         int index2 = telements.indexOf(r.t2);
-        
+
         if ((index1 <0) ||(index2 <0)) {
             throw new MalformedTURTLEModelingException("relation with no tclasses");
         }
-        
+
         try {
             TCDTClass t1 = (TCDTClass)(gelements.elementAt(index1));
             TCDTClass t2 = (TCDTClass)(gelements.elementAt(index2));
-            
+
             // Make connector
             //System.out.println("Make association between " + t1.getValue() + " and " + t2.getValue());
             TGConnector tgco = makeAssociation(r, t1, t2);
             tgco.makeSquareWithoutMovingTGComponents();
             dp.tcdp.addBuiltConnector(tgco);
-            
+
             // Add relation semantics to connector (and gates if necessary)
             TGComponent operator = makeSemantics(r, tgco, t1, t2);
             if ((r.type == Relation.SYN) || (r.type == Relation.INV)) {
@@ -540,13 +540,13 @@ public class TURTLEModelingDrawer {
         } catch (Exception e) {
             throw new MalformedTURTLEModelingException("error happened when making a relation");
         }
-        
+
     }
-    
+
     private TGConnector makeAssociation(Relation r, TCDTClass t1, TCDTClass t2) throws MalformedTURTLEModelingException {
         TGConnectingPoint p1 = t1.closerFreeTGConnectingPoint(t2.getX(), t2.getY());
         TGConnectingPoint p2 = t2.closerFreeTGConnectingPoint(t1.getX(), t1.getY());
-        
+
         if ((p1 != null) && (p2 != null)) {
             p1.setFree(false);
             p2.setFree(false);
@@ -556,56 +556,56 @@ public class TURTLEModelingDrawer {
                 return TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_ASSOCIATION, dp.tcdp, p1, p2, new Vector());
             }
         }
-        
+
         return null;
     }
-    
-    
+
+
     private TGComponent makeSemantics(Relation r, TGConnector tgco, TCDTClass t1, TCDTClass t2) throws MalformedTURTLEModelingException {
         // has at leat 3 tgconnecting points -> take the one in thne middle
         TGConnectingPoint pt;
         if (tgco.getNbConnectingPoint() < 1) {
             throw new MalformedTURTLEModelingException("No connecting point");
         }
-        
+
         pt = tgco.getTGConnectingPointAtIndex(Math.min(1, tgco.getNbConnectingPoint()-1));
-        
+
         TGComponent operator = null;
         int type = 0;
         // Add a operator corresponding to the relation semantics
         switch(r.type) {
-            case   Relation.PAR:
-                type = TGComponentManager.TCD_PARALLEL_OPERATOR;
-                break;
-            case Relation.SYN:
-                type = TGComponentManager.TCD_SYNCHRO_OPERATOR;
-                break;
-            case Relation.INV:
-                type = TGComponentManager.TCD_INVOCATION_OPERATOR;
-                break;
-            case Relation.SEQ:
-                type = TGComponentManager.TCD_SEQUENCE_OPERATOR;
-                break;
-            case Relation.PRE:
-                type = TGComponentManager.TCD_PREEMPTION_OPERATOR;
-                break;
-            default:
-                type = -1;
+        case   Relation.PAR:
+            type = TGComponentManager.TCD_PARALLEL_OPERATOR;
+            break;
+        case Relation.SYN:
+            type = TGComponentManager.TCD_SYNCHRO_OPERATOR;
+            break;
+        case Relation.INV:
+            type = TGComponentManager.TCD_INVOCATION_OPERATOR;
+            break;
+        case Relation.SEQ:
+            type = TGComponentManager.TCD_SEQUENCE_OPERATOR;
+            break;
+        case Relation.PRE:
+            type = TGComponentManager.TCD_PREEMPTION_OPERATOR;
+            break;
+        default:
+            type = -1;
         }
-        
+
         // Add operator if non null
         if (type == -1) {
             throw new MalformedTURTLEModelingException("Unknown relation type");
         }
-        
+
         // Is the line horizontal or vertical?
         boolean vertical = true ;
         if (tgco.isPtOnVerticalSegment(pt)) {
             vertical = false;
         }
-        
+
         int myX, myY;
-        
+
         if (vertical) {
             myX = pt.getX() - 50;
             myY = pt.getY() - 100;
@@ -613,34 +613,34 @@ public class TURTLEModelingDrawer {
             myX = pt.getX() + 75;
             myY = pt.getY() - 12;
         }
-        
+
         operator = TGComponentManager.addComponent(myX, myY, type, dp.tcdp);
         telements.add(r);
         gelements.add(operator);
         dp.tcdp.addBuiltComponent(operator);
-        
+
         TGConnectingPoint pop;
         if (vertical) {
             pop = operator.getTGConnectingPointAtIndex(2);
         } else {
             pop = operator.getTGConnectingPointAtIndex(0);
         }
-        
+
         // Connects the connector to the operator
         pt.setFree(false);
         pop.setFree(false);
         TGConnector dashco = TGComponentManager.addConnector(pt.x, pt.y, TGComponentManager.CONNECTOR_ATTRIBUTE, dp.tcdp, pt, pop, new Vector());
         //dashco.makeSquareWithoutMovingTGComponents();
         dp.tcdp.addBuiltConnector(dashco);
-        
+
         if (operator instanceof TCDCompositionOperatorWithSynchro) {
             ((TCDCompositionOperatorWithSynchro)(operator)).structureChanged();
         }
-        
+
         return operator;
-        
+
     }
-    
+
     // If invocation / synchro -> set synchronization gates
     public void makeGates(TGComponent operator, Relation r, TCDTClass t1, TCDTClass t2)  throws MalformedTURTLEModelingException {
         LinkedList<TTwoAttributes> gates = null;
@@ -649,11 +649,11 @@ public class TURTLEModelingDrawer {
         Gate g1, g2;
         try {
             gates = ((TCDCompositionOperatorWithSynchro)operator).getGates();
-            
+
         } catch (Exception e){
             throw new MalformedTURTLEModelingException("Gates of synchro relation may not be set");
         }
-        
+
         for(int i=0; i<r.gatesOfT1.size(); i++) {
             g1 = (Gate)(r.gatesOfT1.elementAt(i));
             g2 = (Gate)(r.gatesOfT2.elementAt(i));
@@ -662,29 +662,29 @@ public class TURTLEModelingDrawer {
             tt = new TTwoAttributes(t1, t2, ta1, ta2);
             gates.add(tt);
         }
-        
+
         ((TCDCompositionOperatorWithSynchro)operator).getSynchroGateList().makeValue();
-        
+
     }
-    
+
     public void makeDrawable() {
         tm.unmergeChoices();
-		
+
         TClass t;
         for(int i=0; i<tm.classNb(); i++) {
             t = tm.getTClassAtIndex(i);
             makeDrawable(t.getActivityDiagram(), false);
         }
     }
-    
+
     public int makeDrawable(ActivityDiagram ad, boolean debug) {
         ADComponent adc, adc1;
         ADJunction adj1, adj2 = null;
         int i=0;
-        
+
         while(i<ad.size()) {
             adc = (ADComponent)(ad.elementAt(i));
-            
+
             // Ensure that at most 3 elements lead to a junction -> if more, remove one
             if (adc instanceof ADJunction) {
                 adj1 = (ADJunction)adc;
@@ -712,9 +712,9 @@ public class TURTLEModelingDrawer {
                     adc1.updateNext(adj1, adj2);
                     return makeDrawable(ad, debug);
                 }
-            }      
+            }
             i++;
-        }   
+        }
         return 0;
     }
 }

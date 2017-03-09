@@ -54,7 +54,7 @@ import org.w3c.dom.*;
 import myutil.*;
 import ui.window.*;
 
-public class TGCTimeInterval extends TGCWithoutInternalComponent{
+public class TGCTimeInterval extends TGCScalableWithoutInternalComponent{
     protected int minWidth = 10;
     private String minDelay = "";
     private String maxDelay = "";

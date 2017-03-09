@@ -66,15 +66,25 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
         dheight = (height + dheight) / oldScaleFactor * scaleFactor;
         dx = (dx + x) / oldScaleFactor * scaleFactor;
         dy = (dy + y) / oldScaleFactor * scaleFactor;
+	dMinWidth = (minWidth + dMinWidth) / oldScaleFactor * scaleFactor;
+        dMinHeight = (minHeight + dMinHeight) / oldScaleFactor * scaleFactor;
         dMaxWidth = (maxWidth + dMaxWidth) / oldScaleFactor * scaleFactor;
-        dMaxHeight = (maxWidth + dMaxWidth) / oldScaleFactor * scaleFactor;
+        dMaxHeight = (maxHeight + dMaxHeight) / oldScaleFactor * scaleFactor;
 
         width = (int)(dwidth);
         dwidth = dwidth - width;
         height = (int)(dheight);
         dheight = dheight - height;
+	minWidth = (int)(dMinWidth);
+        minHeight = (int)(dMinHeight);
         maxWidth = (int)(dMaxWidth);
         maxHeight = (int)(dMaxHeight);
+
+	//TraceManager.addDev("tgc= " + this + " minHeight=" + minHeight);
+	//TraceManager.addDev("tgc= " + this + " maxHeight=" + maxHeight);
+	
+	dMinWidth = dMinWidth - minWidth;
+        dMinHeight = dMinHeight - minHeight;
         dMaxWidth = dMaxWidth - maxWidth;
         dMaxHeight = dMaxHeight - maxHeight;
         x = (int)(dx);
@@ -87,8 +97,8 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
         if (father != null) {
             // Must rescale my zone...
             resizeWithFather();
-
         }
+	setMoveCd(x, y);
 
     }
 
