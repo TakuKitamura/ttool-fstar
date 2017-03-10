@@ -36,148 +36,119 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class SDTimerExpiration
- * Setting of a timer for a given duration. To be used in Sequence Diagrams.
+ * Class TGConnectorRelativeTimeSD
+ * Connector used in SD for connecting relative time constraint lines
  * Creation: 06/10/2004
  * @version 1.0 06/10/2004
  * @author Ludovic APVRILLE
  * @see
  */
 
-package ui.sd;
+package ui.sd2;
 
 import java.awt.*;
+import java.awt.geom.*;
 import javax.swing.*;
+import java.util.*;
 import org.w3c.dom.*;
 
 import myutil.*;
 import ui.*;
+import ui.window.*;
 
-public class SDTimerExpiration extends TGCWithoutInternalComponent implements SwallowedTGComponent {
-    private String timer = "myTimer";
+public  class TGConnectorRelativeTimeSD extends TGConnector {
+    protected int arrowLength = 10;
+    private String minConstraint = "0";
+    private String maxConstraint = "0";
     private int widthValue, heightValue;
-    private int lineWidth = 20;
     
-    public SDTimerExpiration(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 15;
-        height = 25;
-        
-        nbConnectingPoint = 0;
-        addTGConnectingPointsComment();
-        
-        nbInternalTGComponent = 0;
-        
-        moveable = true;
+    public TGConnectorRelativeTimeSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        myImageIcon = IconManager.imgic510;
+        name = "relative time constraint";
+        value = "{0..0}";
         editable = true;
-        removable = true;
-        
-        name = "timer expiration";
-        makeValue();
-        widthValue = 0; heightValue=0;
-        
-        myImageIcon = IconManager.imgic516;
     }
     
-    public void internalDrawing(Graphics g) {
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
+        if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+            g.drawLine(x1, y1, x2, y2);
+        } else {
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+        }
+        
         if (!tdp.isScaled()) {
             widthValue  = g.getFontMetrics().stringWidth(value);
             heightValue = g.getFontMetrics().getHeight();
         }
         
-        g.drawString(value, x+width, y+height/2+3);
-        
-        g.drawLine(x, y, x+width, y+height);
-        g.drawLine(x, y, x+width, y);
-        g.drawLine(x, y+height, x+width, y+height);
-        g.drawLine(x+width, y, x, y+height);
-        
-        GraphicLib.arrowWithLine(g, 2, 0, 10, x+width/2-lineWidth, y+height/2, x+width/2, y+height/2, true);
+        g.drawString(value, ((p1.getX() + p2.getX()) / 2) - widthValue - 2, ((p1.getY() + p2.getY()) / 2));
     }
     
-    public int getLineLength() {
-        return lineWidth;
-    }
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        
-        /* text */
-        if (GraphicLib.isInRectangle(_x, _y, x+width, y+height/2-heightValue+3, widthValue, heightValue)) {
-            return this;
-        }
-        
-        /* line */
-        if (GraphicLib.isInRectangle(_x, _y, x+width/2-lineWidth, y+height/2-2, lineWidth, 4)) {
+    public TGComponent extraIsOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1,  ((p1.getX() + p2.getX()) / 2) - widthValue - 2, ((p1.getY() + p2.getY()) / 2 - heightValue), widthValue, heightValue)) {
             return this;
         }
         return null;
     }
     
-    public int getMyCurrentMaxX() {
-        return x+width + widthValue;
+    public int getMyCurrentMinX() {
+        return ((p1.getX() + p2.getX()) / 2) - widthValue - 2;
     }
     
     public int getType() {
-        return TGComponentManager.SD_TIMER_EXPIRATION;
+        return TGComponentManager.CONNECTOR_RELATIVE_TIME_SDZV;
     }
     
-    public String getTimer() {
-        return timer;
+    public String getMinConstraint() {
+        return minConstraint;
     }
     
-    public int getYOrder() {
-        return y+height/2;
+    public String getMaxConstraint() {
+        return maxConstraint;
     }
     
     public void makeValue() {
-        value = "{timer=" + timer + "}";
+        //System.out.println("Making value with min=" + minConstraint + " max= " + maxConstraint);
+        value = "{" + minConstraint + ".." + maxConstraint + "}";
     }
     
     public boolean editOndoubleClick(JFrame frame) {
-        String oldValue = timer;
-        String text = getName() + ": ";
-        if (hasFather()) {
-            text = getTopLevelName() + " / " + text;
-        }
-        String s = (String)JOptionPane.showInputDialog(frame, text,
-        "setting timer value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-        null,
-        getTimer());
+        String oldMin = getMinConstraint();
+        String oldMax = getMaxConstraint();
+        String[] array = new String[2];
+        array[0] = getMinConstraint(); array[1] = getMaxConstraint();
         
-        if (s != null) {
-            s = s.trim();
-        }
-        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-            if (!TAttribute.isAValidId(s, false, false)) {
-                JOptionPane.showMessageDialog(frame,
-                "Could not perform any change: the new name is not a valid name",
-                "Error",
-                JOptionPane.INFORMATION_MESSAGE);
-                return false;
-            }
-            timer = s;
+        JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting relative time constraints");
+        //jdti.setSize(350, 250);
+        GraphicLib.centerOnParent(jdti, 350, 250);
+        jdti.setVisible( true ); // blocked until dialog has been closed
+        
+        minConstraint = array[0]; maxConstraint = array[1];
+        
+        if ((minConstraint != null) && (maxConstraint != null) && ((!minConstraint.equals(oldMin)) || (!maxConstraint.equals(oldMax)))){
             makeValue();
             return true;
         }
+        minConstraint = oldMin;
+        maxConstraint = oldMax;
         return false;
     }
     
     protected String translateExtraParam() {
+        //System.out.println("Translate extra");
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<Interval timer=\"");
-        sb.append(getTimer());
+        sb.append("<Interval minConstraint=\"");
+        sb.append(getMinConstraint());
+        sb.append("\" maxConstraint=\"");
+        sb.append(getMaxConstraint());
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
     }
     
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
-		boolean timerSet = false;
+        //System.out.println("*** load extra relative time ***");
         try {
             NodeList nli;
             Node n1, n2;
@@ -188,14 +159,15 @@ public class SDTimerExpiration extends TGCWithoutInternalComponent implements Sw
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
+                            //System.out.println("Reading constraints");
                             if (elt.getTagName().equals("Interval")) {
-                                timer = elt.getAttribute("timer");
-								timerSet = true;
+                                minConstraint = elt.getAttribute("minConstraint");
+                                maxConstraint = elt.getAttribute("maxConstraint");
                             }
                         }
                     }
@@ -203,11 +175,15 @@ public class SDTimerExpiration extends TGCWithoutInternalComponent implements Sw
             }
             
         } catch (Exception e) {
-			//System.out.println("Exception =" + e.getMessage());
-			if (!timerSet) {
-				throw new MalformedModelingException();
-			}
+            throw new MalformedModelingException();
         }
         makeValue();
     }
 }
+
+
+
+
+
+
+

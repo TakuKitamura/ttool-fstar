@@ -147,6 +147,23 @@ public class TGUIAction extends AbstractAction {
     public static final int SD_COREGION = 96;
     public static final int SD_ALIGN_INSTANCES = 97;
 
+    public static final int SDZV_EDIT = 440;
+    public static final int SDZV_INSTANCE = 441;
+    public static final int SDZV_CONNECTOR_MESSAGE_ASYNC = 442;
+    public static final int SDZV_CONNECTOR_MESSAGE_SYNC = 443;
+    public static final int SDZV_ABSOLUTE_TIME_CONSTRAINT = 444;
+    public static final int SDZV_TIME_INTERVAL = 445;
+    public static final int SDZV_RELATIVE_TIME_CONSTRAINT = 446;
+    public static final int SDZV_RELATIVE_TIME_CONSTRAINT_CONNECTOR = 447;
+    public static final int SDZV_ACTION_STATE = 448;
+    public static final int SDZV_GUARD = 449;
+    public static final int SDZV_TIMER_SETTING = 450;
+    public static final int SDZV_TIMER_EXPIRATION = 451;
+    public static final int SDZV_TIMER_CANCELLATION = 452;
+    public static final int SDZV_COREGION = 453;
+    public static final int SDZV_ALIGN_INSTANCES = 454;
+    
+
     public static final int UCD_EDIT = 104;
     public static final int UCD_ACTOR = 105;
     public static final int UCD_ACTORBOX = 333;
@@ -582,7 +599,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_INTERNAL_SEARCH = 415;
     //--
 
-    public static final int NB_ACTION = 440;
+    public static final int NB_ACTION = 455;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -861,6 +878,22 @@ public class TGUIAction extends AbstractAction {
         actions[SD_TIMER_CANCELLATION] = new TAction("add-sd-timer-cancellation-state", "Timer cancellation", IconManager.imgic518, IconManager.imgic518, "Timer cancellation", "Add a timer cancellation to the currently opened sequence diagram", 0);
         actions[SD_COREGION] = new TAction("add-sd-coregion", "Coregion", IconManager.imgic520, IconManager.imgic520, "Coregion", "Add a coregion to the currently opened sequence diagram", 0);
         actions[SD_ALIGN_INSTANCES] = new TAction("add-sd-align_instances", "Align instances", IconManager.imgic522, IconManager.imgic522, "Align instances", "align instances of the currently opened sequence diagram", 0);
+
+	actions[SDZV_EDIT] = new TAction("edit-sdzv-diagram", "Edit sequence diagram", IconManager.imgic100, IconManager.imgic101, "Edit sequence diagram", "Make it possible to edit the currently opened sequence diagram", 0);
+        actions[SDZV_INSTANCE] = new TAction("add-sdzv-instance", "Add an instance", IconManager.imgic500, IconManager.imgic500, "Instance", "Add a new instance  to the currently opened sequence diagram", 0);
+        actions[SDZV_CONNECTOR_MESSAGE_ASYNC] = new TAction("add-sdzv-connector-message-async", "Add asynchronous message", IconManager.imgic504, IconManager.imgic504, "Asynchronous message", "Add an asynchronous message between two instances of the currently opened sequence diagram", 0);
+        actions[SDZV_CONNECTOR_MESSAGE_SYNC] = new TAction("add-sdzv-connector-message-sync", "Add synchronous message", IconManager.imgic502, IconManager.imgic502, "Synchronous message", "Add an synchronous message between two instances of the currently opened sequence diagram", 0);
+        actions[SDZV_ABSOLUTE_TIME_CONSTRAINT] = new TAction("add-sdzv-atc", "Absolute time constraint", IconManager.imgic506, IconManager.imgic506, "Absolute time constraint", "Add an absolute time constraint to the currently opened sequence diagram", 0);
+        actions[SDZV_RELATIVE_TIME_CONSTRAINT] = new TAction("add-sdzv-rtc", "Relative time constraint", IconManager.imgic508, IconManager.imgic508, "Relative time constraint", "Add a relative time constraint to the currently opened sequence diagram", 0);
+        actions[SDZV_RELATIVE_TIME_CONSTRAINT_CONNECTOR] = new TAction("add-sdzv-rtc-c", "Connect two relative time constraint lines", IconManager.imgic510, IconManager.imgic510, "Relative time constraint connector", "Add a connection between two relative time constraint lines of the currently opened sequence diagram", 0);
+        actions[SDZV_ACTION_STATE] = new TAction("add-sdzv-action-state", "Action state", IconManager.imgic512, IconManager.imgic512, "Action state", "Add an action state to the currently opened sequence diagram", 0);
+        actions[SDZV_GUARD] = new TAction("add-sdzv-guard", "Guard", IconManager.imgic524, IconManager.imgic524, "Guard", "Add a guard (non-deterministic, else, end) to the currently opened sequence diagram", 0);
+        actions[SDZV_TIMER_SETTING] = new TAction("add-sdzv-timer-set-state", "Timer setting", IconManager.imgic514, IconManager.imgic514, "Timer setting", "Add a timer setting to the currently opened sequence diagram", 0);
+        actions[SDZV_TIME_INTERVAL] = new TAction("add-sdzv-time-interval", "Time interval", IconManager.imgic224, IconManager.imgic224, "Time interval", "Add a time interval to the currently opened sequence diagram", 0);
+        actions[SDZV_TIMER_EXPIRATION] = new TAction("add-sdzv-timer-expiration-state", "Timer expiration", IconManager.imgic516, IconManager.imgic516, "Timer expiration", "Add a timer expiration to the currently opened sequence diagram", 0);
+        actions[SDZV_TIMER_CANCELLATION] = new TAction("add-sdzv-timer-cancellation-state", "Timer cancellation", IconManager.imgic518, IconManager.imgic518, "Timer cancellation", "Add a timer cancellation to the currently opened sequence diagram", 0);
+        actions[SDZV_COREGION] = new TAction("add-sdzv-coregion", "Coregion", IconManager.imgic520, IconManager.imgic520, "Coregion", "Add a coregion to the currently opened sequence diagram", 0);
+        actions[SDZV_ALIGN_INSTANCES] = new TAction("add-sdzv-align_instances", "Align instances", IconManager.imgic522, IconManager.imgic522, "Align instances", "align instances of the currently opened sequence diagram", 0);
 
         actions[UCD_EDIT] = new TAction("edit-ucd-diagram", "Edit use case diagram", IconManager.imgic100, IconManager.imgic101, "Edit use case diagram", "Make it possible to edit the currently opened use case diagram", 0);
         actions[UCD_ACTOR] = new TAction("add-actor", "Add an actor", IconManager.imgic600, IconManager.imgic600, "Actor", "Add an actor to the currently opened use case diagram", 0);
