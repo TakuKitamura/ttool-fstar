@@ -8728,6 +8728,9 @@ public class GTURTLEModeling {
        // TGConnectingPoint tp = new TGConnectingPoint(null, x, y, false, false);
         //Create dummy tgcomponent
         TGComponent tgcomp = new AvatarSMDStartState(x,y,x,x*2,y,y*2,false,null,smp);
+		if (asme==null){
+			return;
+		}
         if (asme instanceof AvatarStartState){
             AvatarSMDStartState smdss = new AvatarSMDStartState(x, y, x, x*2, y, y*2, false, null, smp);
             tgcomp = smdss;
@@ -8854,7 +8857,7 @@ public class GTURTLEModeling {
             bl.addSignal(new ui.AvatarSignal(sig.getInOut(), name, types, typeIds));
         }
 
-		bl.setValueWithChange(ab.getName());
+		bl.setValueWithChange(ab.getName().split("__")[ab.getName().split("__").length-1]);
 
         for (AvatarAttribute attr: ab.getAttributes()){
             int type=5;
@@ -8880,7 +8883,7 @@ public class GTURTLEModeling {
 		}
 	}
     public void drawPanel(AvatarSpecification avspec, AvatarDesignPanel adp){
-
+		//System.out.println(avspec.toString());
 		hasCrypto=false;
 	    Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
         Map<String, AvatarBDBlock> blockMap = new HashMap<String, AvatarBDBlock>();
@@ -8938,11 +8941,17 @@ public class GTURTLEModeling {
 						drawBlockProperties(ab,bl);
 						AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
 						buildStateMachine(ab, bl, smp);
-						blockMap.put(bl.getValue(), bl);
+						blockMap.put(bl.getValue().split("__")[bl.getValue().split("__").length-1], bl);
 						xpos+=100*blockSizeMap.get(ab)+200;
 					}
 					else {
+
 						AvatarBDBlock father= blockMap.get(ab.getFather().getName().split("__")[ab.getFather().getName().split("__").length-1]);
+						System.out.println("blockmap " + blockMap);
+						if (father==null){
+							System.out.println("Missing father block " + ab.getFather().getName());
+							continue;
+						}
 						AvatarBDBlock bl = new AvatarBDBlock(father.getX()+blockIncMap.get(ab.getFather()), father.getY()+10, abd.getMinX(), abd.getMaxX(), abd.getMinY(), abd.getMaxY(), false, father, abd);
 						abd.addComponent(bl, father.getX()+blockIncMap.get(ab.getFather()), father.getY()+10, false, true);
 						int size=100;
@@ -8954,7 +8963,7 @@ public class GTURTLEModeling {
 						abd.attach(bl);
 						AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
 						buildStateMachine(ab, bl, smp);
-						blockMap.put(bl.getValue(), bl);
+						blockMap.put(bl.getValue().split("__")[bl.getValue().split("__").length-1], bl);
 						blockIncMap.put(ab.getFather(), blockIncMap.get(ab.getFather())+size+10);
 					}
 				}
@@ -8965,13 +8974,13 @@ public class GTURTLEModeling {
         for (AvatarRelation ar: avspec.getRelations()){
             String bl1 = ar.block1.getName();
             String bl2 = ar.block2.getName();
-            if (originDestMap.containsKey(bl1)){
-                originDestMap.get(bl1).add(bl2);
+            if (originDestMap.containsKey(bl1.split("__")[bl1.split("__").length-1])){
+                originDestMap.get(bl1.split("__")[bl1.split("__").length-1]).add(bl2.split("__")[bl2.split("__").length-1]);
             }
             else {
                 Set<String> hs= new HashSet<String>();
-                hs.add(bl2);
-                originDestMap.put(bl1, hs);
+                hs.add(bl2.split("__")[bl2.split("__").length-1]);
+                originDestMap.put(bl1.split("__")[bl1.split("__").length-1], hs);
             }
         }
         //Add Relations
@@ -8979,6 +8988,10 @@ public class GTURTLEModeling {
         for (String bl1: originDestMap.keySet()){
             for (String bl2:originDestMap.get(bl1)){
                 Vector<Point> points=new Vector<Point>();
+				System.out.println("Finding " + bl1 + " and bl2 "+ bl2);
+				if (blockMap.get(bl1)==null || blockMap.get(bl2)==null){
+					continue;
+				}
 				TGConnectingPoint p1= blockMap.get(bl1).findFirstFreeTGConnectingPoint(true,true);
                 p1.setFree(false);
 
@@ -9007,8 +9020,8 @@ public class GTURTLEModeling {
                         conn.setSizeOfFIFO(ar.getSizeOfFIFO());
                         //System.out.println(bl1 +" "+ ar.block1.getName() + " "+ ar.block2.getName());
 						for (int i =0; i< ar.nbOfSignals(); i++){
-                        	conn.addSignal(ar.getSignal1(i).toBasicString(),true,true);
-                        	conn.addSignal(ar.getSignal2(i).toBasicString(), false,false);
+                        	conn.addSignal(ar.getSignal1(i).toBasicString(),ar.getSignal1(i).getInOut()==0,false);
+                        	conn.addSignal(ar.getSignal2(i).toBasicString(), ar.getSignal2(i).getInOut()==0,true);
 					//	System.out.println("adding signal " +ar.getSignal1(i).toBasicString());
 						}
                         //System.out.println("Added Signals");
@@ -9016,6 +9029,7 @@ public class GTURTLEModeling {
 
 
                     }
+					conn.updateAllSignals();
                 }
 
                 /*for (ui.AvatarSignal sig:blockMap.get(bl1).getSignalList()){

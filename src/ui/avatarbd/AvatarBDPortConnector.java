@@ -677,11 +677,11 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             AvatarSignal as1, as2;
             int index;
             for(int i=0; i<v.size(); i++) {
+
                 assoc = (String)(v.get(i));
                 //TraceManager.addDev("assoc=" + assoc);
                 as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
                 as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
-
                 if ((as1 != null) && (as2 != null)) {
                     index = assoc.indexOf("->");
                     if (index > -1) {

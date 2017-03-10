@@ -1571,12 +1571,13 @@ public class TML2Avatar {
 			else {
 				//Create new block, hope for best
 		   		if (mc){
-		   			fifo = createFifo();
+		   			fifo = createFifo(channel.getName());
 		   			ar.setAsynchronous(false);
 		   		}
 			}
 			//Find in signal
 			List<AvatarSignal> sig1 = new ArrayList<AvatarSignal>();
+			//Sig1 contains IN Signals, Sig2 contains OUT signals
 			List<AvatarSignal> sig2 = new ArrayList<AvatarSignal>();
 			for (AvatarSignal sig: signals){
 				if (sig.getInOut()==AvatarSignal.IN){
@@ -1604,11 +1605,15 @@ public class TML2Avatar {
 			if (sig1.size()==1 && sig2.size()==1){
 				if (channel.getType()==TMLChannel.NBRNBW && mc){
 					AvatarSignal read = fifo.getSignalByName("readSignal");
+			
 					ar.block2= fifo;
-					ar.addSignals(sig2.get(0), read);
+					//Set IN signal with read
+					ar.addSignals(sig1.get(0), read);
 					AvatarRelation ar2= new AvatarRelation(channel.getName()+"2", fifo, taskBlockMap.get(channel.getDestinationTask()), channel.getReferenceObject());
 					AvatarSignal write = fifo.getSignalByName("writeSignal");
-					ar2.addSignals(write, sig1.get(0));
+					//set OUT signal with write
+					ar2.addSignals(write, sig2.get(0));
+					System.out.println("Set " + sig2.get(0) + " and write");
 					ar2.setAsynchronous(false);
 					avspec.addRelation(ar2);
 				}
@@ -1772,7 +1777,7 @@ public class TML2Avatar {
 	}
 	tmlmap.getTMLModeling().secChannelMap = secChannelMap;
 	
-		TraceManager.addDev("avatar spec\n" +avspec);
+	//	TraceManager.addDev("avatar spec\n" +avspec);
 		return avspec;
 	}
 
@@ -1876,11 +1881,15 @@ public class TML2Avatar {
 			}
 		}
 	}
-	public AvatarBlock createFifo(){
-	AvatarBlock fifo = new AvatarBlock("FIFO__FIFO", avspec, null);
+	public AvatarBlock createFifo(String name){
+	AvatarBlock fifo = new AvatarBlock("FIFO__FIFO"+name, avspec, null);
 	AvatarState root = new AvatarState("root",null, false);
 		AvatarSignal read = new AvatarSignal("readSignal", AvatarSignal.OUT, null);
+	AvatarAttribute data = new AvatarAttribute("data", AvatarType.INTEGER, fifo, null);
+	fifo.addAttribute(data); 
+	read.addParameter(data);
 	AvatarSignal write = new AvatarSignal("writeSignal", AvatarSignal.IN, null);
+	write.addParameter(data);
 	AvatarStartState start = new AvatarStartState("start", null);
 	AvatarTransition afterStart = new AvatarTransition(fifo, "afterStart", null);
 	fifo.addSignal(read);
