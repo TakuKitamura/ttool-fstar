@@ -151,7 +151,8 @@ import ui.osad.TURTLEOSActivityDiagramPanel;
 import ui.prosmd.ProactiveSMDPanel;
 import ui.req.Requirement;
 import ui.req.RequirementDiagramPanel;
-import ui.sd.SequenceDiagramPanel;
+import ui.sd.*;
+import ui.sd2.*;
 import ui.tmlad.TMLActivityDiagramPanel;
 import ui.tmlcd.TMLTaskDiagramPanel;
 import ui.tmlcompd.TMLCCompositeComponent;
@@ -5693,7 +5694,19 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (index == -1) {
             return false;
         }
-        return (tp.panelAt(index) instanceof SequenceDiagramPanel);
+        return (tp.panelAt(index) instanceof ui.sd.SequenceDiagramPanel);
+    }
+
+    public boolean isSDZVCreated(int index, String s) {
+        return isSDZVCreated(((TURTLEPanel) (tabs.elementAt(index))), s);
+    }
+
+    public boolean isSDZVCreated(TURTLEPanel tp, String s) {
+        int index = tp.tabbedPane.indexOfTab(s);
+        if (index == -1) {
+            return false;
+        }
+        return (tp.panelAt(index) instanceof ui.sd2.SequenceDiagramPanel);
     }
 
     public boolean isUseCaseDiagramCreated(TURTLEPanel tp, String s) {
@@ -5745,6 +5758,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return false;
     }
 
+     public boolean openSequenceDiagramZV(String s) {
+        int index = getCurrentJTabbedPane().indexOfTab(s);
+        if (index > -1) {
+            getCurrentJTabbedPane().setSelectedIndex(index);
+            return true;
+        }
+        return false;
+    }
+
     public boolean openIODiagram(String s) {
         int index = getCurrentJTabbedPane().indexOfTab(s);
         if (index > -1) {
@@ -5754,6 +5776,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return false;
     }
 
+    // TMLCP
     public boolean openTMLCPSequenceDiagram(String s) {
         int index = getCurrentJTabbedPane().indexOfTab(s);
         if (index > -1) {
@@ -5772,9 +5795,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return false;
     }
 
-
-
-    // TMLCP
 
     public boolean createTMLCPSequenceDiagram(int index, String s) {
         return createTMLCPSequenceDiagram((TURTLEPanel) (tabs.elementAt(index)), s);
@@ -5796,7 +5816,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return true;
     }
 
-
     public boolean createUniqueTMLCPSequenceDiagram(TURTLEPanel tp, String s) {
         int i;
         for(i=0; i<1000; i++) {
@@ -5810,9 +5829,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         setPanelMode();
         return true;
     }
-
-
-
 
     public boolean createTMLCPDiagram(int index, String s) {
         return createTMLCPDiagram((TURTLEPanel) (tabs.elementAt(index)), s);
@@ -5835,12 +5851,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // End of TMLCP
 
 
-    public SequenceDiagramPanel getSequenceDiagramPanel(int index, String s) {
+    public ui.sd.SequenceDiagramPanel getSequenceDiagramPanel(int index, String s) {
         //TraceManager.addDev("Searching for " + s);
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
         return getSequenceDiagramPanel(tp, s);
     }
 
+    
+    public ui.sd2.SequenceDiagramPanel getSequenceDiagramPanelZV(int index, String s) {
+        //TraceManager.addDev("Searching for " + s);
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getSequenceDiagramPanelZV(tp, s);
+    }
+
+    
     public AttackTreeDiagramPanel getAttackTreeDiagramPanel(int index, int indexTab, String s) {
         //TraceManager.addDev("Searching for " + s);
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
@@ -5900,11 +5924,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return getIODiagramPanel(tp, s);
     }
 
-    public SequenceDiagramPanel getSequenceDiagramPanel(TURTLEPanel tp, String s) {
+    public ui.sd.SequenceDiagramPanel getSequenceDiagramPanel(TURTLEPanel tp, String s) {
         for(int i=0; i<tp.tabbedPane.getTabCount(); i++) {
             if (tp.tabbedPane.getTitleAt(i).equals(s)) {
-                if (tp.panelAt(i) instanceof SequenceDiagramPanel)
-                    return  (SequenceDiagramPanel)(tp.panelAt(i));
+                if (tp.panelAt(i) instanceof ui.sd.SequenceDiagramPanel)
+                    return  (ui.sd.SequenceDiagramPanel)(tp.panelAt(i));
+            }
+        }
+        return null;
+    }
+
+    public ui.sd2.SequenceDiagramPanel getSequenceDiagramPanelZV(TURTLEPanel tp, String s) {
+        for(int i=0; i<tp.tabbedPane.getTabCount(); i++) {
+            if (tp.tabbedPane.getTitleAt(i).equals(s)) {
+                if (tp.panelAt(i) instanceof ui.sd2.SequenceDiagramPanel)
+                    return  (ui.sd2.SequenceDiagramPanel)(tp.panelAt(i));
             }
         }
         return null;
@@ -5954,8 +5988,28 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         setPanelMode();
         return true;
     }
+    public boolean createSequenceDiagramZV(int index, String s) {
+        return createSequenceDiagramZV((TURTLEPanel)(tabs.elementAt(index)), s);
+    }
 
+    public boolean createSequenceDiagramZV(TURTLEPanel tp, String s) {
+        if(isSDCreated(tp, s)) {
+            return false;
+        }
 
+        if (!((tp instanceof AnalysisPanel) || (tp instanceof AvatarAnalysisPanel))) {
+            return false;
+        }
+
+        if (tp instanceof AnalysisPanel) {
+            ((AnalysisPanel)tp).addSequenceDiagramZV(s);
+        } else if (tp instanceof AvatarAnalysisPanel) {
+            ((AvatarAnalysisPanel)tp).addSequenceDiagramZV(s);
+        }
+        setPanelMode();
+        return true;
+    }
+    
     public boolean createUniqueSequenceDiagram(TURTLEPanel tp, String s) {
         int i;
         for(i=0; i<1000; i++) {
@@ -5973,9 +6027,28 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         setPanelMode();
         return true;
     }
+    
+
+    public boolean createUniqueSequenceDiagramZV(TURTLEPanel tp, String s) {
+        int i;
+        for(i=0; i<1000; i++) {
+            if(!isSDCreated(tp, s+i)) {
+                break;
+            }
+        }
+
+        if (tp instanceof AnalysisPanel) {
+            ((AnalysisPanel)tp).addSequenceDiagramZV(s+i);
+        } else if (tp instanceof AvatarAnalysisPanel) {
+            ((AvatarAnalysisPanel)tp).addSequenceDiagramZV(s+i);
+        }
+
+        setPanelMode();
+        return true;
+    }
 
     public boolean createSequenceDiagramFromUCD(TURTLEPanel tp, String s, UseCaseDiagramPanel _ucdp) {
-        if (!createUniqueSequenceDiagram(tp, s)) {
+        if (!createUniqueSequenceDiagramZV(tp, s)) {
             return false;
         }
 
@@ -6462,8 +6535,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void alignInstances() {
         //TraceManager.addDev("Align instances");
-        if (getCurrentTDiagramPanel() instanceof SequenceDiagramPanel) {
-            ((SequenceDiagramPanel)(getCurrentTDiagramPanel())).alignInstances();
+        if (getCurrentTDiagramPanel() instanceof ui.sd.SequenceDiagramPanel) {
+            ((ui.sd.SequenceDiagramPanel)(getCurrentTDiagramPanel())).alignInstances();
+            changeMade(getCurrentTDiagramPanel(), TDiagramPanel.MOVE_COMPONENT);
+            getCurrentTDiagramPanel().repaint();
+        }
+
+	if (getCurrentTDiagramPanel() instanceof ui.sd2.SequenceDiagramPanel) {
+            ((ui.sd2.SequenceDiagramPanel)(getCurrentTDiagramPanel())).alignInstances();
             changeMade(getCurrentTDiagramPanel(), TDiagramPanel.MOVE_COMPONENT);
             getCurrentTDiagramPanel().repaint();
         }
@@ -6474,6 +6553,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             getCurrentTDiagramPanel().repaint();
         }
     }
+
 
     public void alignPartitions() {
         //TraceManager.addDev("Align instances");

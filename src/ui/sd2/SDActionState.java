@@ -36,60 +36,100 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class SDRelativeTimeConstraint
- * Line of the relative time constraint. To be used in Sequence Diagrams.
- * Creation: 30/09/2004
- * @version 1.0 30/09/2004
+ * Class SDActionState
+ * Action state of a sequence diagram
+ * Creation: 06/10/2004
+ * @version 1.0 06/10/2004
  * @author Ludovic APVRILLE
  * @see
  */
 
-package ui.sd;
+package ui.sd2;
 
 import java.awt.*;
 
 import myutil.*;
 import ui.*;
 
-public class SDRelativeTimeConstraint extends TGCWithoutInternalComponent implements SwallowedTGComponent {
+public class SDActionState extends TGCScalableOneLineText implements SwallowedTGComponent {
+    protected int lineLength = 5;
+    protected int textX =  5;
+    protected int textY =  15;
+    protected int arc = 5;
+    protected int w; //w1;
     
-    public SDRelativeTimeConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public SDActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 40;
-        height = 15;
-        
-        nbConnectingPoint = 1;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new TGConnectingPointTimeConstraintSD(this, 10, 0, true, true);
-        addTGConnectingPointsComment();
-        
-        nbInternalTGComponent = 0;
+
+	width = (int)(30 * tdp.getZoom());
+        height = (int)(20 * tdp.getZoom());
+	minWidth = (int)(30 * tdp.getZoom());
+	oldScaleFactor = tdp.getZoom();
+	
+        nbConnectingPoint = 0;
+        addTGConnectingPointsCommentMiddle();
         
         moveable = true;
-        editable = false;
+        editable = true;
         removable = true;
         
-        name = "Line of relative time constraint";
-        value = "rtc";
+        value = "action";
+        name = "action state";
         
-        myImageIcon = IconManager.imgic508;
+        myImageIcon = IconManager.imgic512;
     }
     
     public void internalDrawing(Graphics g) {
-        g.drawLine(x, y, x+width, y);
+        w  = g.getFontMetrics().stringWidth(value);
+	int h = g.getFontMetrics().getHeight();
+        int w1 = Math.max(minWidth, w + 2 * textX);
+        if ((w1 != width) && (!tdp.isScaled())) {
+            width = w1;
+        }
+        g.drawRoundRect(x - width/2, y, width, height, arc, arc);
+        
+        g.drawString(value, x - w / 2 , y + (int)(textY*tdp.getZoom()));
     }
     
     public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y - height/2, width, height)) {
+        if (GraphicLib.isInRectangle(_x, _y, x - width/2, y, width, height)) {
             return this;
         }
-        
         return null;
     }
     
-
-    public int getType() {
-        return TGComponentManager.SD_RELATIVE_TIME_CONSTRAINT;
+ 
+    public String getAction() {
+        return value;
     }
+    
+    public String getAction(int cpt) {
+        if (cpt <0) {
+            return value;
+        }
+        
+        String ret;
+        
+        try {
+            ret = value;
+            while(cpt >0) {
+                ret = ret.substring(ret.indexOf(';') + 1, ret.length());
+                cpt --;
+            }
+            
+            int index = ret.indexOf(';');
+            
+            if (index > 0) {
+                ret = ret.substring(0, index+1);
+            }
+        } catch (Exception e) {
+            return value;
+        }
+        return ret;
+    }
+    
+    public int getType() {
+        return TGComponentManager.SDZV_ACTION_STATE;
+    }
+  
 }

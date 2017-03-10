@@ -51,7 +51,7 @@ import java.awt.*;
 import myutil.*;
 import ui.*;
 
-public class SDActionState extends TGCScalableOneLineText implements SwallowedTGComponent {
+public class SDActionState extends TGCOneLineText implements SwallowedTGComponent {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -60,12 +60,11 @@ public class SDActionState extends TGCScalableOneLineText implements SwallowedTG
     
     public SDActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
-	width = (int)(30 * tdp.getZoom());
-        height = (int)(20 * tdp.getZoom());
-	minWidth = (int)(30 * tdp.getZoom());
-	oldScaleFactor = tdp.getZoom();
-	
+        
+        width = 30;
+        height = 20;
+        minWidth = 30;
+        
         nbConnectingPoint = 0;
         addTGConnectingPointsCommentMiddle();
         
@@ -81,14 +80,13 @@ public class SDActionState extends TGCScalableOneLineText implements SwallowedTG
     
     public void internalDrawing(Graphics g) {
         w  = g.getFontMetrics().stringWidth(value);
-	int h = g.getFontMetrics().getHeight();
         int w1 = Math.max(minWidth, w + 2 * textX);
         if ((w1 != width) && (!tdp.isScaled())) {
             width = w1;
         }
         g.drawRoundRect(x - width/2, y, width, height, arc, arc);
         
-        g.drawString(value, x - w / 2 , y + (int)(textY*tdp.getZoom()));
+        g.drawString(value, x - w / 2 , y + textY);
     }
     
     public TGComponent isOnMe(int _x, int _y) {

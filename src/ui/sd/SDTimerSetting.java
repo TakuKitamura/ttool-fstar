@@ -54,7 +54,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class SDTimerSetting extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
+public class SDTimerSetting extends TGCWithoutInternalComponent implements SwallowedTGComponent {
     private String timer = "myTimer";
     private String duration = "10";
     private int widthValue, heightValue;
@@ -62,11 +62,10 @@ public class SDTimerSetting extends TGCScalableWithoutInternalComponent implemen
     
     public SDTimerSetting(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
-	width = (int)(15 * tdp.getZoom());
-        height = (int)(25 * tdp.getZoom());
-        oldScaleFactor = tdp.getZoom();
-	
+        
+        width = 15;
+        height = 25;
+        
         nbConnectingPoint = 0;
         addTGConnectingPointsComment();
         
@@ -151,9 +150,9 @@ public class SDTimerSetting extends TGCScalableWithoutInternalComponent implemen
         array[0] = getTimer(); array[1] = getDuration();
         
         JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting absolute time constraints", "timer", "duration");
-        //jdti.setSize(350, 250);
-        GraphicLib.centerOnParent(jdti, 350, 250);
-        jdti.setVisible( true ); // blocked until dialog has been closed
+        jdti.setSize(350, 250);
+        GraphicLib.centerOnParent(jdti);
+        jdti.show(); // blocked until dialog has been closed
         
         timer = array[0]; duration = array[1];
         
@@ -172,7 +171,7 @@ public class SDTimerSetting extends TGCScalableWithoutInternalComponent implemen
             
             boolean isInteger = true;
             try {
-                /*int tg =*/ Integer.parseInt(duration);
+                int tg = Integer.parseInt(duration);
             } catch (NumberFormatException nfe) {
                 isInteger = false;
             }
@@ -219,8 +218,8 @@ public class SDTimerSetting extends TGCScalableWithoutInternalComponent implemen
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
+                    for(int j=0; i<nli.getLength(); i++) {
+                        n2 = nli.item(i);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

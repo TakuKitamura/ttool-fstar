@@ -644,6 +644,36 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SD_COREGION);
         } else if (command.equals(mgui.actions[TGUIAction.SD_ALIGN_INSTANCES].getActionCommand())) {
             mgui.alignInstances();
+	} else if (command.equals(mgui.actions[TGUIAction.SDZV_EDIT].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.EDIT, -1);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_INSTANCE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SDZV_INSTANCE);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_CONNECTOR_MESSAGE_SYNC].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_MESSAGE_SYNC_SDZV);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_CONNECTOR_MESSAGE_ASYNC].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SDZV);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_ABSOLUTE_TIME_CONSTRAINT].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SDZV_ABSOLUTE_TIME_CONSTRAINT);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_RELATIVE_TIME_CONSTRAINT].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SDZV_RELATIVE_TIME_CONSTRAINT);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_RELATIVE_TIME_CONSTRAINT_CONNECTOR].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_RELATIVE_TIME_SDZV);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_ACTION_STATE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SDZV_ACTION_STATE);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_GUARD].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SDZV_GUARD);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_TIME_INTERVAL].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SDZV_TIME_INTERVAL);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_TIMER_SETTING].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SDZV_TIMER_SETTING);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_TIMER_EXPIRATION].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SDZV_TIMER_EXPIRATION);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_TIMER_CANCELLATION].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SDZV_TIMER_CANCELLATION);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_COREGION].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SDZV_COREGION);
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_ALIGN_INSTANCES].getActionCommand())) {
+            mgui.alignInstances();
         } else if (command.equals(mgui.actions[TGUIAction.UCD_EDIT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(mgui.actions[TGUIAction.UCD_ACTOR].getActionCommand())) {

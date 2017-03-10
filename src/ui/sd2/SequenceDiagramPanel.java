@@ -44,7 +44,7 @@
    * @see
    */
 
-package ui.sd;
+package ui.sd2;
 
 import myutil.*;
 
@@ -53,7 +53,7 @@ import java.util.*;
 
 import ui.*;
 
-public class SequenceDiagramPanel extends TDiagramPanel{
+public class SequenceDiagramPanel extends TDiagramPanel {
 
     public  SequenceDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
@@ -88,6 +88,9 @@ public class SequenceDiagramPanel extends TDiagramPanel{
           mgui.addTClass(tgcc.getClassName());
           return true;
           }*/
+
+
+	//TraceManager.addDev("Added elt");
         return false;
     }
 
@@ -98,6 +101,7 @@ public class SequenceDiagramPanel extends TDiagramPanel{
           resetAllInstancesOf(tgcc);
           return true;
           }*/
+	//TraceManager.addDev("Removed elt");
         return false;
     }
 
@@ -105,31 +109,32 @@ public class SequenceDiagramPanel extends TDiagramPanel{
         /*if (tgc instanceof TCDTClass) {
           return actionOnDoubleClick(tgc);
           }*/
+	//TraceManager.addDev("Value changed");
         return false;
     }
 
     public String getXMLHead() {
-        return "<SequenceDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
+        return "<SequenceDiagramPanelZV name=\"" + name + "\"" + sizeParam() + " >";
     }
 
     public String getXMLTail() {
-        return "</SequenceDiagramPanel>";
+        return "</SequenceDiagramPanelZV>";
     }
 
     public String getXMLSelectedHead() {
-        return "<SequenceDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+        return "<SequenceDiagramPanelZVCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
 
     public String getXMLSelectedTail() {
-        return "</SequenceDiagramPanelCopy>";
+        return "</SequenceDiagramPanelZVCopy>";
     }
 
     public String getXMLCloneHead() {
-        return "<SequenceDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
+        return "<SequenceDiagramPanelZVCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
 
     public String getXMLCloneTail() {
-        return "</SequenceDiagramPanelCopy>";
+        return "</SequenceDiagramPanelZVCopy>";
     }
 
     public void makePostLoadingProcessing() throws MalformedModelingException {
@@ -308,6 +313,7 @@ public class SequenceDiagramPanel extends TDiagramPanel{
         return found;
     }
 
+    // For MSCDrawer
     public void increaseInstanceSize(int size) {
         Iterator iterator = componentList.listIterator();
         TGComponent tgc;
@@ -341,26 +347,16 @@ public class SequenceDiagramPanel extends TDiagramPanel{
             tgc = (TGComponent)(iterator.next());
 
             if (tgc instanceof SDInstance) {
-		minSize = Math.max(((SDInstance)tgc).getMinHeightSize(), minSize);
+		((SDInstance)tgc).computeMinHeight();
             }
         }
 
-	iterator = componentList.listIterator();
-	 while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-
-            if (tgc instanceof SDInstance) {
-		((SDInstance)tgc).setMinHeight(minSize);
-            }
-        }
-	
     }
 
 
     public void instanceHasBeenResized(SDInstance _ins, int _w, int _h) {
 	Iterator iterator = componentList.listIterator();
         TGComponent tgc;
-
 
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());

@@ -36,7 +36,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class SDTimerExpiration
+ * Class SDTimerSetting
  * Setting of a timer for a given duration. To be used in Sequence Diagrams.
  * Creation: 06/10/2004
  * @version 1.0 06/10/2004
@@ -44,7 +44,7 @@ knowledge of the CeCILL license and that you accept its terms.
  * @see
  */
 
-package ui.sd;
+package ui.sd2;
 
 import java.awt.*;
 import javax.swing.*;
@@ -52,18 +52,21 @@ import org.w3c.dom.*;
 
 import myutil.*;
 import ui.*;
+import ui.window.*;
 
-public class SDTimerExpiration extends TGCWithoutInternalComponent implements SwallowedTGComponent {
+public class SDTimerSetting extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
     private String timer = "myTimer";
+    private String duration = "10";
     private int widthValue, heightValue;
     private int lineWidth = 20;
     
-    public SDTimerExpiration(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public SDTimerSetting(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 15;
-        height = 25;
-        
+
+	width = (int)(15 * tdp.getZoom());
+        height = (int)(25 * tdp.getZoom());
+        oldScaleFactor = tdp.getZoom();
+	
         nbConnectingPoint = 0;
         addTGConnectingPointsComment();
         
@@ -73,11 +76,11 @@ public class SDTimerExpiration extends TGCWithoutInternalComponent implements Sw
         editable = true;
         removable = true;
         
-        name = "timer expiration";
+        name = "setting timer";
         makeValue();
         widthValue = 0; heightValue=0;
         
-        myImageIcon = IconManager.imgic516;
+        myImageIcon = IconManager.imgic514;
     }
     
     public void internalDrawing(Graphics g) {
@@ -93,11 +96,15 @@ public class SDTimerExpiration extends TGCWithoutInternalComponent implements Sw
         g.drawLine(x, y+height, x+width, y+height);
         g.drawLine(x+width, y, x, y+height);
         
-        GraphicLib.arrowWithLine(g, 2, 0, 10, x+width/2-lineWidth, y+height/2, x+width/2, y+height/2, true);
+        g.drawLine(x+width/2-lineWidth, y+height/2, x+width/2, y+height/2);
     }
     
     public int getLineLength() {
         return lineWidth;
+    }
+    
+    public int getYOrder() {
+        return y+height/2;
     }
     
     public TGComponent isOnMe(int _x, int _y) {
@@ -122,47 +129,69 @@ public class SDTimerExpiration extends TGCWithoutInternalComponent implements Sw
     }
     
     public int getType() {
-        return TGComponentManager.SD_TIMER_EXPIRATION;
+        return TGComponentManager.SDZV_TIMER_SETTING;
     }
     
     public String getTimer() {
         return timer;
     }
     
-    public int getYOrder() {
-        return y+height/2;
+    public String getDuration() {
+        return duration;
     }
     
     public void makeValue() {
-        value = "{timer=" + timer + "}";
+        value = "{timer=" + timer + ", duration=" + duration + "}";
     }
     
     public boolean editOndoubleClick(JFrame frame) {
-        String oldValue = timer;
-        String text = getName() + ": ";
-        if (hasFather()) {
-            text = getTopLevelName() + " / " + text;
-        }
-        String s = (String)JOptionPane.showInputDialog(frame, text,
-        "setting timer value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-        null,
-        getTimer());
+        String oldMin = getTimer();
+        String oldMax = getDuration();
+        String[] array = new String[2];
+        array[0] = getTimer(); array[1] = getDuration();
         
-        if (s != null) {
-            s = s.trim();
-        }
-        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-            if (!TAttribute.isAValidId(s, false, false)) {
+        JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting absolute time constraints", "timer", "duration");
+        //jdti.setSize(350, 250);
+        GraphicLib.centerOnParent(jdti, 350, 250);
+        jdti.setVisible( true ); // blocked until dialog has been closed
+        
+        timer = array[0]; duration = array[1];
+        
+        if ((timer != null) && (duration != null) && ((!timer.equals(oldMin)) || (!duration.equals(oldMax)))){
+            timer = timer.trim();
+            duration = duration.trim();
+            if (!TAttribute.isAValidId(timer, false, false)) {
                 JOptionPane.showMessageDialog(frame,
                 "Could not perform any change: the new name is not a valid name",
                 "Error",
                 JOptionPane.INFORMATION_MESSAGE);
+                timer = oldMin;
+                duration = oldMax;
                 return false;
             }
-            timer = s;
+            
+            boolean isInteger = true;
+            try {
+                /*int tg =*/ Integer.parseInt(duration);
+            } catch (NumberFormatException nfe) {
+                isInteger = false;
+            }
+            
+            if ((!TAttribute.isAValidId(duration, false, false)) && (isInteger == false)) {
+                JOptionPane.showMessageDialog(frame,
+                "Could not perform any change: the new duration is not a valid duration",
+                "Error",
+                JOptionPane.INFORMATION_MESSAGE);
+                timer = oldMin;
+                duration = oldMax;
+                return false;
+            }
             makeValue();
             return true;
         }
+        
+        timer = oldMin;
+        duration = oldMax;
         return false;
     }
     
@@ -170,6 +199,8 @@ public class SDTimerExpiration extends TGCWithoutInternalComponent implements Sw
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Interval timer=\"");
         sb.append(getTimer());
+        sb.append("\" duration=\"");
+        sb.append(getDuration());
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -188,13 +219,14 @@ public class SDTimerExpiration extends TGCWithoutInternalComponent implements Sw
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Interval")) {
                                 timer = elt.getAttribute("timer");
+                                duration = elt.getAttribute("duration");
 								timerSet = true;
                             }
                         }
@@ -203,7 +235,6 @@ public class SDTimerExpiration extends TGCWithoutInternalComponent implements Sw
             }
             
         } catch (Exception e) {
-			//System.out.println("Exception =" + e.getMessage());
 			if (!timerSet) {
 				throw new MalformedModelingException();
 			}

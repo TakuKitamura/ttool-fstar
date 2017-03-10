@@ -1,7 +1,6 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
-   ludovic.apvrille AT telecom-paristech.fr
-   andrea.enrici AT telecom-paritech.fr
+   ludovic.apvrille AT enst.fr
 
    This software is a computer program whose purpose is to allow the
    edition of TURTLE analysis, design and deployment diagrams, to
@@ -37,80 +36,63 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class SDPortMessage
-   * Handling of port for messages
-   * Creation: 09/03/2017
-   * @version 1.1 09/03/2017
+   * Class SDRelativeTimeConstraint
+   * Line of the relative time constraint. To be used in Sequence Diagrams.
+   * Creation: 30/09/2004
+   * @version 1.0 30/09/2004
    * @author Ludovic APVRILLE
    * @see
    */
 
-package ui.sd;
+package ui.sd2;
 
 import java.awt.*;
-import javax.swing.*;
-import org.w3c.dom.*;
 
 import myutil.*;
 import ui.*;
-import ui.window.*;
 
+public class SDRelativeTimeConstraint extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
 
-
-public class SDPortForMessage extends TGCScalableWithoutInternalComponent  implements SwallowedTGComponent {
-    //private int lineLength = 5;
-    //private int textX, textY;
-
-    public SDPortForMessage(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public SDRelativeTimeConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-	width = (int)(15 * tdp.getZoom());
+        width = (int)(40 * tdp.getZoom());
         height = (int)(15 * tdp.getZoom());
-	//TraceManager.addDev("Init tgc= " + this + " minHeight=" + minHeight);
-	//TraceManager.addDev("Init tgc= " + this + " maxHeight=" + maxHeight);
 	oldScaleFactor = tdp.getZoom();
-	
-        makeTGConnectingPoints();
-        //addTGConnectingPointsComment();
+        //width = 40;
+        //height = 15;
+
+        nbConnectingPoint = 1;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new TGConnectingPointTimeConstraintSD(this, 10, 0, true, true);
+        addTGConnectingPointsComment();
 
         nbInternalTGComponent = 0;
 
         moveable = true;
-	editable = true;
-	removable = false;
-        userResizable = false;
+        editable = false;
+        removable = true;
 
-        value = "port";
-        name = "port";
+        name = "Line of relative time constraint";
+        value = "rtc";
 
-        myImageIcon = IconManager.imgic500;
+        myImageIcon = IconManager.imgic508;
     }
 
-    
     public void internalDrawing(Graphics g) {
-	//TraceManager.addDev("Internal drawing of SDProtForMessage");
-	//g.drawString("Coucou", x, y);
-	g.drawOval(x-width/2, y, width, height);
+        g.drawLine(x, y, x+width, y);
     }
 
-    
     public TGComponent isOnMe(int _x, int _y) {
-	if (GraphicLib.isInRectangle(_x, _y, x - width/2, y, width, height)) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y - height/2, width, height)) {
             return this;
         }
-        return null;
 
+        return null;
     }
 
 
     public int getType() {
-        return TGComponentManager.SD_PORT_MESSAGE;
+        return TGComponentManager.SDZV_RELATIVE_TIME_CONSTRAINT;
     }
-
-    private void makeTGConnectingPoints() {
-	nbConnectingPoint = 1;
-        connectingPoint = new TGConnectingPoint[1];
-	connectingPoint[0] = new TGConnectingPointMessageSD(this, 0, 0, true, true, 0, 0.5);
-    }
-
 }

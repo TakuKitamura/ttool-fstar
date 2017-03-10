@@ -202,7 +202,8 @@ import ui.procsd.ProactiveCSDPanel;
 import ui.prosmd.ProactiveSMDPanel;
 import ui.req.Requirement;
 import ui.req.RequirementDiagramPanel;
-import ui.sd.SequenceDiagramPanel;
+import ui.sd.*;
+import ui.sd2.*;
 import ui.sysmlsecmethodology.SysmlsecMethodologyDiagramPanel;
 import ui.tmlad.TGConnectorTMLAD;
 import ui.tmlad.TMLADDecrypt;
@@ -4505,7 +4506,7 @@ public class GTURTLEModeling {
                         makePostLoading(iodp, beginIndex);
                     }
                 }
-            } else if (tdp instanceof SequenceDiagramPanel) {
+            } else if (tdp instanceof ui.sd.SequenceDiagramPanel) {
                 //TraceManager.addDev("Sequence diagram!");
                 nl = doc.getElementsByTagName("SequenceDiagramPanelCopy");
 
@@ -4513,7 +4514,7 @@ public class GTURTLEModeling {
                     return;
                 }
 
-                SequenceDiagramPanel sdp = (SequenceDiagramPanel)tdp;
+                ui.sd.SequenceDiagramPanel sdp = (ui.sd.SequenceDiagramPanel)tdp;
 
                 //TraceManager.addDev("Sequence diagram!");
 
@@ -4547,6 +4548,49 @@ public class GTURTLEModeling {
                         makePostLoading(sdp, beginIndex);
                     }
                 }
+	    } else if (tdp instanceof ui.sd2.SequenceDiagramPanel) {
+                //TraceManager.addDev("Sequence diagram!");
+                nl = doc.getElementsByTagName("SequenceDiagramPanelCopy");
+
+                if (nl == null) {
+                    return;
+                }
+
+                ui.sd2.SequenceDiagramPanel sdp = (ui.sd2.SequenceDiagramPanel)tdp;
+
+                //TraceManager.addDev("Sequence diagram!");
+
+                for(i=0; i<nl.getLength(); i++) {
+                    adn = nl.item(i);
+                    if (adn.getNodeType() == Node.ELEMENT_NODE) {
+                        elt = (Element) adn;
+
+                        if (sdp == null) {
+                            throw new MalformedModelingException();
+                        }
+
+                        //int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+                        //int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+                        //int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+                        //int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+                        decX = _decX;
+                        decY = _decY;
+
+                        //TraceManager.addDev("Sequence diagram: " + sdp.getName() + " components");
+                        makeXMLComponents(elt.getElementsByTagName("COMPONENT"), sdp);
+                        //TraceManager.addDev("Sequence diagram: " + sdp.getName() + " connectors");
+                        makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), sdp);
+                        //TraceManager.addDev("Sequence diagram: " + sdp.getName() + " subcomponents");
+                        makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), sdp);
+                        //TraceManager.addDev("Sequence diagram: " + sdp.getName() + " real points");
+                        connectConnectorsToRealPoints(sdp);
+                        sdp.structureChanged();
+                        //TraceManager.addDev("Sequence diagram: " + sdp.getName() + " post loading");
+                        makePostLoading(sdp, beginIndex);
+                    }
+                }
+		
             } else if (tdp instanceof UseCaseDiagramPanel) {
                 nl = doc.getElementsByTagName("UseCaseDiagramPanelCopy");
 
@@ -6158,7 +6202,10 @@ public class GTURTLEModeling {
                     if (elt.getTagName().compareTo("SequenceDiagramPanel") == 0) {
                         loadSequenceDiagram(elt, indexAnalysis);
                         cpt ++;
-                    } else if (elt.getTagName().compareTo("UseCaseDiagramPanel") == 0) {
+                    } else if (elt.getTagName().compareTo("SequenceDiagramPanelZV") == 0) {
+                        loadSequenceDiagramZV(elt, indexAnalysis);
+                        cpt ++;
+		    } else if (elt.getTagName().compareTo("UseCaseDiagramPanel") == 0) {
                         // Managing use case diagrams
                         loadUseCaseDiagram(elt, indexAnalysis, cpt);
                         cpt ++;
@@ -6232,6 +6279,11 @@ public class GTURTLEModeling {
                 if (elt.getTagName().compareTo("SequenceDiagramPanel") == 0) {
                     //TraceManager.addDev("Loading seq diag");
                     loadSequenceDiagram(elt, indexAnalysis);
+                    //TraceManager.addDev("Loading seq diag done");
+                    cpt ++;
+                } else if (elt.getTagName().compareTo("SequenceDiagramPanelZV") == 0) {
+                    //TraceManager.addDev("Loading seq diag");
+                    loadSequenceDiagramZV(elt, indexAnalysis);
                     //TraceManager.addDev("Loading seq diag done");
                     cpt ++;
                 } else if (elt.getTagName().compareTo("UseCaseDiagramPanel") == 0) {
@@ -7164,7 +7216,30 @@ public class GTURTLEModeling {
             mgui.createSequenceDiagram(indexAnalysis, name);
         }
         //TraceManager.addDev("Loading seq diag1");
-        SequenceDiagramPanel sdp = mgui.getSequenceDiagramPanel(indexAnalysis, name);
+        ui.sd.SequenceDiagramPanel sdp = mgui.getSequenceDiagramPanel(indexAnalysis, name);
+        //TraceManager.addDev("Loading seq diag2");
+
+        if (sdp == null) {
+            throw new MalformedModelingException();
+        }
+        //TraceManager.addDev("Loading seq diag3");
+
+        sdp.removeAll();
+        //TraceManager.addDev("Loading seq diag4");
+
+        loadDiagram(elt, sdp);
+        //TraceManager.addDev("Loading seq diag5");
+    }
+
+    public void loadSequenceDiagramZV(Element elt, int indexAnalysis) throws  MalformedModelingException, SAXException {
+        String name;
+
+        name = elt.getAttribute("name");
+        if (!(mgui.isSDZVCreated(indexAnalysis, name))) {
+            mgui.createSequenceDiagramZV(indexAnalysis, name);
+        }
+        //TraceManager.addDev("Loading seq diag1");
+        ui.sd2.SequenceDiagramPanel sdp = mgui.getSequenceDiagramPanelZV(indexAnalysis, name);
         //TraceManager.addDev("Loading seq diag2");
 
         if (sdp == null) {

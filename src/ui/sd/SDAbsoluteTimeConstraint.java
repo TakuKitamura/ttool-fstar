@@ -54,17 +54,16 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class SDAbsoluteTimeConstraint extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
+public class SDAbsoluteTimeConstraint extends TGCWithoutInternalComponent implements SwallowedTGComponent {
     private String minConstraint = "0";
     private String maxConstraint = "0";
     private int widthValue, heightValue;
     
     public SDAbsoluteTimeConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
-	width = (int)(40 * tdp.getZoom());
-        height = (int)(15 * tdp.getZoom());
-	oldScaleFactor = tdp.getZoom();
+        
+        width = 40;
+        height = 15;
         
         nbConnectingPoint = 0;
         nbInternalTGComponent = 0;
@@ -82,12 +81,10 @@ public class SDAbsoluteTimeConstraint extends TGCScalableWithoutInternalComponen
     }
     
     public void internalDrawing(Graphics g) {
-	 widthValue  = g.getFontMetrics().stringWidth(value);
-	 heightValue = g.getFontMetrics().getHeight();
-        /*if (!tdp.isScaled()) {
+        if (!tdp.isScaled()) {
             widthValue  = g.getFontMetrics().stringWidth(value);
             heightValue = g.getFontMetrics().getHeight();
-	    }*/
+        }
         g.drawString(value, x-widthValue-2, y);
         g.drawLine(x, y, x+width, y);
     }
@@ -105,6 +102,7 @@ public class SDAbsoluteTimeConstraint extends TGCScalableWithoutInternalComponen
     
     public int getMyCurrentMinX() {
         return Math.min(x-widthValue, x);
+
     }
     
     
@@ -135,9 +133,9 @@ public class SDAbsoluteTimeConstraint extends TGCScalableWithoutInternalComponen
         array[0] = getMinConstraint(); array[1] = getMaxConstraint();
         
         JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting absolute time constraints");
-    //    jdti.setSize(350, 250);
-        GraphicLib.centerOnParent(jdti, 350, 250);
-        jdti.setVisible( true ); // blocked until dialog has been closed
+        jdti.setSize(350, 250);
+        GraphicLib.centerOnParent(jdti);
+        jdti.show(); // blocked until dialog has been closed
         
         minConstraint = array[0]; maxConstraint = array[1];
         
@@ -173,8 +171,8 @@ public class SDAbsoluteTimeConstraint extends TGCScalableWithoutInternalComponen
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
+                    for(int j=0; i<nli.getLength(); i++) {
+                        n2 = nli.item(i);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
