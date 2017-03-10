@@ -92,7 +92,6 @@ public class SDPortForMessage extends TGCScalableWithoutInternalComponent implem
 	//g.drawString("Coucou", x, y
 
 	if (state == TGState.POINTER_ON_ME){
-	
 	    int r = width/2;
 	    int xOrigin = x - r/2;
 	    int yOrigin = y + (height/2) - (r/2);
@@ -101,7 +100,7 @@ public class SDPortForMessage extends TGCScalableWithoutInternalComponent implem
 	
 	    g.fillOval(xOrigin, yOrigin, r, r);
 	    g.drawRect(x-width/2, y, width, height);
-	    }
+	}
     }
 
     
