@@ -57,7 +57,7 @@ import ui.window.*;
 
 
 
-public class SDPortForMessage extends TGCScalableWithoutInternalComponent  implements SwallowedTGComponent {
+public class SDPortForMessage extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
     //private int lineLength = 5;
     //private int textX, textY;
 
@@ -89,8 +89,19 @@ public class SDPortForMessage extends TGCScalableWithoutInternalComponent  imple
     
     public void internalDrawing(Graphics g) {
 	//TraceManager.addDev("Internal drawing of SDProtForMessage");
-	//g.drawString("Coucou", x, y);
-	g.drawOval(x-width/2, y, width, height);
+	//g.drawString("Coucou", x, y
+
+	if (state == TGState.POINTER_ON_ME){
+	
+	    int r = width/2;
+	    int xOrigin = x - r/2;
+	    int yOrigin = y + (height/2) - (r/2);
+
+	    //TraceManager.addDev("xOrigin=" + xOrigin + " y=" + yOrigin);
+	
+	    g.fillOval(xOrigin, yOrigin, r, r);
+	    g.drawRect(x-width/2, y, width, height);
+	    }
     }
 
     

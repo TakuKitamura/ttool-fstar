@@ -899,6 +899,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public TGComponent addComponent(int x, int y, int id, boolean swallow) {
         TGComponent tgc = TGComponentManager.addComponent(x, y, id, this);
         addComponent(tgc, x, y, swallow, true);
+	
         return tgc;
     }
 

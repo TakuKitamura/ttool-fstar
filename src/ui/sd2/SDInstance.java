@@ -57,7 +57,7 @@ import ui.window.*;
 
 
 
-public class SDInstance extends TGCScalableWithInternalComponent implements SwallowTGComponent {
+public class SDInstance extends TGCScalableWithInternalComponent implements SwallowTGComponent, SpecificActionAfterAdd {
     //private int lineLength = 5;
     //private int textX, textY;
     private int spacePt = 10;
@@ -87,7 +87,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
         nbInternalTGComponent = 0;
 
-	makePortMessage();
+	//makePortMessage();
 
         moveable = true;
         editable = true;
@@ -201,7 +201,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     }
 
 
-    private void makePortMessage() {
+    public void makePortMessage() {
 	int nbOfInternal = 30;
 	for(int i=0; i<nbOfInternal; i ++) {
 	    double ratio = ((i)/(double)(nbOfInternal));//+(spacePt*tdp.getZoom()/height);
@@ -222,7 +222,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
     }
 
-    private void makeTGConnectingPoints() {
+    /*private void makeTGConnectingPoints() {
 	//TraceManager.addDev("Making TG connecting points of " + name);
         nbConnectingPoint = getNbOfConnectingPoints();
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
@@ -237,7 +237,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
             connectingPoint[i] = new TGConnectingPointMessageSD(this, 0, 0, true, true, 0.5, ratio);
         }
 
-    }
+	}*/
 
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = name;
@@ -284,19 +284,19 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
             return true;
         }
 
-        if (tgc instanceof SDTimerSetting) {
+        if (tgc instanceof ui.sd2.SDTimerSetting) {
             return true;
         }
 
-        if (tgc instanceof SDTimerExpiration) {
+        if (tgc instanceof ui.sd2.SDTimerExpiration) {
             return true;
         }
 
-        if (tgc instanceof SDTimerCancellation) {
+        if (tgc instanceof ui.sd2.SDTimerCancellation) {
             return true;
         }
 	
-	if (tgc instanceof SDPortForMessage) {
+	if (tgc instanceof ui.sd2.SDPortForMessage) {
             return true;
         }
 	
@@ -305,12 +305,12 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-	TraceManager.addDev("Element 0" + tgc + " added to SDInstance");
+	//TraceManager.addDev("Element 0" + tgc + " added to SDInstance");
         if (!acceptSwallowedTGComponent(tgc)) {
             return false;
         }
 
-	TraceManager.addDev("Element 1" + tgc + " added to SDInstance");
+	//TraceManager.addDev("Element 1" + tgc + " added to SDInstance");
 
         //System.out.println("Add swallow component");
         // Choose its position
@@ -593,6 +593,10 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
     public void setActor(boolean b) {
         isActor = b;
+    }
+
+    public void specificActionAfterAdd() {
+	makePortMessage();
     }
 
 }

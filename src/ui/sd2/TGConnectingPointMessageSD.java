@@ -60,7 +60,7 @@ public class TGConnectingPointMessageSD extends  TGConnectingPointWidthHeight {
 
     public boolean isCompatibleWith(int type) {
         //TraceManager.addDev("is compatible with " + type);
-        if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD)  || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD)) {
+        if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SDZV)  || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SDZV)) {
 	    //TraceManager.addDev("is compatible with " + type + " x= " + getX() + " y=" + getY()) ;
             //System.out.println("is compatible with:true");
             return true;
