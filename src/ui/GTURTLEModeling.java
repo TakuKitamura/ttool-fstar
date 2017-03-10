@@ -6281,6 +6281,11 @@ public class GTURTLEModeling {
                     loadSequenceDiagram(elt, indexAnalysis);
                     //TraceManager.addDev("Loading seq diag done");
                     cpt ++;
+                } else if (elt.getTagName().compareTo("SequenceDiagramPanelZV") == 0) {
+                    //TraceManager.addDev("Loading seq diag");
+                    loadSequenceDiagramZV(elt, indexAnalysis);
+                    //TraceManager.addDev("Loading seq diag done");
+                    cpt ++;
                 } else if (elt.getTagName().compareTo("UseCaseDiagramPanel") == 0) {
                     // Managing use case diagrams
                     //TraceManager.addDev("Loading ucd diag");
