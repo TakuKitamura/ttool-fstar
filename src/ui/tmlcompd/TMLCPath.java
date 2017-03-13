@@ -220,7 +220,7 @@ public class TMLCPath  {
         }
 
 	//rule6: events cannot be connected through fork or join
-	if ((forks.size() > 0) || (joins.size() >0)) {
+	/*if ((forks.size() > 0) || (joins.size() >0)) {
 	    // Look for event, either at origin, or at destination
 	    for(TMLCPrimitivePort porto: producerPorts) {
                 if (porto.getPortType() == 1) {
@@ -235,7 +235,7 @@ public class TMLCPath  {
                 }
             }
 	    
-	}
+	    }*/
 
 	//rule7: requests cannot be connected through fork or join
 	if ((forks.size() > 0) || (joins.size() >0)) {
