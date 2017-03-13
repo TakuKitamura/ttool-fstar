@@ -9095,8 +9095,9 @@ public class GTURTLEModeling {
                         conn.setSizeOfFIFO(ar.getSizeOfFIFO());
                         //System.out.println(bl1 +" "+ ar.block1.getName() + " "+ ar.block2.getName());
 						for (int i =0; i< ar.nbOfSignals(); i++){
-                        	conn.addSignal(ar.getSignal1(i).toBasicString(),ar.getSignal1(i).getInOut()==0,false);
-                        	conn.addSignal(ar.getSignal2(i).toBasicString(), ar.getSignal2(i).getInOut()==0,true);
+							//System.out.println("Adding relation " + ar.getSignal1(i).toString() + " " + ar.getSignal2(i).toBasicString());
+                        	conn.addSignal(ar.getSignal1(i).toString(),ar.getSignal1(i).getInOut()==0,ar.block1.getName().contains(bl1));
+                        	conn.addSignal(ar.getSignal2(i).toString(), ar.getSignal2(i).getInOut()==0,!ar.block1.getName().contains(bl1));
 					//	System.out.println("adding signal " +ar.getSignal1(i).toBasicString());
 						}
                         //System.out.println("Added Signals");
