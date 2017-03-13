@@ -319,7 +319,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             assoc = (String)(v.get(i));
             as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
             as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
-
+			System.out.println(as1 + " " + as2 + " " + assoc);
             if ((as1 != null) && (as2 != null)) {
                 index = assoc.indexOf("->");
                 if (index > -1) {
@@ -657,11 +657,13 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 		outSignalsAtDestination.add(signal);
 	    }
 	}
+		
     }
 
     public void updateAllSignals() {
         try {
             Vector v = getAssociationSignals();
+		//	System.out.println(inSignalsAtOrigin + " " + inSignalsAtDestination + " " + outSignalsAtOrigin + " " + outSignalsAtDestination);
             inSignalsAtOrigin.clear();
             inSignalsAtDestination.clear();
             outSignalsAtOrigin.clear();

@@ -1884,11 +1884,11 @@ public class TML2Avatar {
 	public AvatarBlock createFifo(String name){
 	AvatarBlock fifo = new AvatarBlock("FIFO__FIFO"+name, avspec, null);
 	AvatarState root = new AvatarState("root",null, false);
-		AvatarSignal read = new AvatarSignal("readSignal", AvatarSignal.OUT, null);
+		AvatarSignal read = new AvatarSignal("readSignal", AvatarSignal.IN, null);
 	AvatarAttribute data = new AvatarAttribute("data", AvatarType.INTEGER, fifo, null);
 	fifo.addAttribute(data); 
 	read.addParameter(data);
-	AvatarSignal write = new AvatarSignal("writeSignal", AvatarSignal.IN, null);
+	AvatarSignal write = new AvatarSignal("writeSignal", AvatarSignal.OUT, null);
 	write.addParameter(data);
 	AvatarStartState start = new AvatarStartState("start", null);
 	AvatarTransition afterStart = new AvatarTransition(fifo, "afterStart", null);
