@@ -54,7 +54,8 @@ public class TMLEvent extends TMLCommunicationElement {
     protected int maxEvt = -1; // maxEvt = -1 -> infinite nb of evts: default behaviour
     protected boolean isBlocking = false; // By default, latest events is removed when the FIFO is full
     protected boolean canBeNotified = false;
-
+    public ArrayList<TMLCPrimitivePort> ports;
+    
     // Used for 1 -> 1
     protected TMLTask origin, destination;
     protected TMLPort originPort, destinationPort; // Not used by the simulator
@@ -78,6 +79,11 @@ public class TMLEvent extends TMLCommunicationElement {
         maxEvt = _maxEvt;
         isBlocking = _isBlocking;
         checkMaxEvt();
+	originTasks = new ArrayList<TMLTask>();
+        destinationTasks = new ArrayList<TMLTask>();
+        originPorts = new ArrayList<TMLPort>();
+        destinationPorts = new ArrayList<TMLPort>();
+	ports = new ArrayList<TMLCPrimitivePort>();
 	checkConf=false;
         //System.out.println("New event: " + name + " max=" + _maxEvt + " blocking=" + isBlocking);
     }
@@ -101,10 +107,24 @@ public class TMLEvent extends TMLCommunicationElement {
     }
 
     public TMLTask getOriginTask() {
+	if (origin == null) {
+	    if (destinationTasks.size() == 0) {
+		return null;
+	    } else {
+		return destinationTasks.get(0);
+	    }
+	} 
         return origin;
     }
 
     public TMLTask getDestinationTask() {
+	if (destination == null) {
+	    if (destinationTasks.size() == 0) {
+		return null;
+	    } else {
+		return destinationTasks.get(0);
+	    }
+	} 
         return destination;
     }
 
@@ -242,6 +262,20 @@ public class TMLEvent extends TMLCommunicationElement {
         destinationTasks = new ArrayList<TMLTask>();
         originPorts = new ArrayList<TMLPort>();
         destinationPorts = new ArrayList<TMLPort>();
+    }
+
+    public void addTaskPort(TMLTask _task, TMLPort _port, boolean isOrigin) {
+        if (isOrigin) {
+            originTasks.add(_task);
+            originPorts.add(_port);
+        } else {
+            destinationTasks.add(_task);
+            destinationPorts.add(_port);
+        }
+    }
+
+    public boolean isBasicEvent() {
+        return (originTasks.size() == 0);
     }
 
     
