@@ -48,7 +48,7 @@
 <ProVerifVerifierHost data="localhost" />
 <AVATARExecutableCodeDirectory data="../executablecode/" />
 <AVATARMPSoCCodeDirectory data="../MPSoC/" />
-<AVATARMPSoCCompileCommand data="make -C ../MPSoC updateruntime updategeneratedcode compilesoclib" />
+<AVATARMPSoCCompileCommand data="make -C ../MPSoC updategeneratedcode compilesoclib" />
 <AVATARExecutableCodeHost data="localhost"/>
 <AVATARExecutableCodeCompileCommand data="make -C ../executablecode" />
 <AVATARExecutableCodeExecuteCommand data="../executablecode/run.x" />
@@ -63,11 +63,11 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal ../uppaal/spec.xml"/>
 
-<LastOpenFile data="/Users/ludovicapvrille/TTool/modeling/DIPLODOCUS/SmartCardProtocol.xml"/>
+<LastOpenFile data="/users/enseig/genius/modeling-dg/miniAsynchronousDeploy2DD.xml"/>
 
 
 
-<LastWindowAttributes x="369" y="23" width="1098" height="1000" max="false" />
+<LastWindowAttributes x="412" y="25" width="1098" height="1000" max="false" />
 
 
 <ProVerifHash data=""/>
