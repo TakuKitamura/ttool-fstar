@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<TURTLECONFIGURATION>
+<RTLHost data="localhost" />
+<RTLPath data="/packages/RT-LOTOS.0.12/bin/rtl" />
+<DTA2DOTPath data="/packages/RT-LOTOS.0.12/bin/dta2dot" />
+<RG2TLSAPath data="/packages/RT-LOTOS.0.12/bin/rg2tlsa" />
+<RGSTRAPPath data="/packages/RT-LOTOS.0.12/bin/rgstrap" />
+<DOTTYPath data="/opt/csw/bin/dotty" />
+<DOTTYHost data="localhost" />
+<AldebaranHost data="localhost" />
+<AldebaranPath data="/packages/cadp/com/aldebaran" />
+<BcgioPath data="/packages/cadp/bin.iX86/bcg_io" />
+<BcgminPath data="/packages/cadp/bin.iX86/bcg_min" />
+<BisimulatorPath data="/packages/cadp/com/bcg_open" />
+<BcgmergePath data="/packages/cadp/com/bcg_merge" />
+<CaesarPath data="/packages/cadp/bin.iX86/caesar" />
+<CaesarOpenPath data="/packages/cadp/com/caesar.open" />
+<FILEPath data="../modeling" />
+<LIBPath data="../lib" />
+<IMGPath data="../figure" />
+<LOTOSPath data="../lotos" />
+<GGraphPath data="../graphs" />
+<TGraphPath data="../graphs" />
+<TToolUpdateURL data="" data1="http://labsoc.comelec.enst.fr/turtle/ttoolversion.html" />
+<TToolUpdateProxy data="false" />
+<TToolUpdateProxyPort data="8080" />
+<TToolUpdateProxyHost data="To Be Completed" />
+<JavaCodeDirectory data="../javacode" />
+<JavaCompilerPath data="/usr/bin/javac" />
+<TToolClassPath data="../javacode" />
+<JavaExecutePath data="/usr/bin/java" />
+<JavaHeader data="import java.sql.*;" />
+<SystemCCodeDirectory data="../simulators/c++2/" />
+<SystemCHost data="localhost"/>
+<SystemCCodeCompileCommand data="make -C ../simulators/c++2/" />
+<SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd ../simulators/c++2/vcddump.vcd" />
+<SystemCCodeInteractiveExecuteCommand data="../simulators/c++2/run.x -server" />
+<TMLCodeDirectory data="../simulators/c++2/tmlcode" />
+<CcodeDirectory data="../simulators/c++2/Ccode" />
+<GTKWavePath data="/opt/local/bin/gtkwave" />
+<VCDPath data="../simulators/c++2/" />
+<UPPAALCodeDirectory data="../uppaal/" />
+<UPPAALVerifierPath data="/packages/uppaal-4.0.11/verifyta" />
+<UPPAALVerifierHost data="localhost" />
+<ProVerifCodeDirectory data="../proverif/" />
+<ProVerifVerifierPath data="/packages/proverif/proverif" />
+<ProVerifVerifierHost data="localhost" />
+<AVATARExecutableCodeDirectory data="../executablecode/" />
+<AVATARMPSoCCodeDirectory data="../MPSoC/" />
+<AVATARMPSoCCompileCommand data="make -C ../MPSoC updateruntime updategeneratedcode compilesoclib" />
+<AVATARExecutableCodeHost data="localhost"/>
+<AVATARExecutableCodeCompileCommand data="make -C ../executablecode" />
+<AVATARExecutableCodeExecuteCommand data="../executablecode/run.x" />
+<AVATARExecutableSoclibCodeCompileCommand data="make -C ../MPSoC updategeneratedcode compilesoclib" />
+<AVATARExecutableSoclibCodeExecuteCommand data="make -C ../MPSoC runsoclib" />
+<AVATARExecutableSoclibCodeTraceCommand data="make -C ../MPSoC runsoclib-trace" />
+<AVATARExecutableSoclibTraceFile data="../Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/trace" />
+
+
+<ExternalCommand1Host data="localhost"/>
+<ExternalCommand1 data="gtkwave ../simulators/c++2/vcddump.vcd"/>
+<ExternalCommand2Host data="localhost"/>
+<ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal ../uppaal/spec.xml"/>
+
+<LastOpenFile data="/home/dblouin/Projets/TTool/git/TTool/modeling/AVATAR/CoffeeMachine_Avatar.xml"/>
+
+
+
+<LastWindowAttributes x="65" y="24" width="1295" height="640" max="true" />
+
+
+<ProVerifHash data=""/>
+</TURTLECONFIGURATION>
