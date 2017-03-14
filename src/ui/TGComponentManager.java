@@ -56,6 +56,7 @@ import ui.cd.*;
 import ui.dd.*;
 import ui.iod.*;
 import ui.sd.*;
+import ui.sd2.*;
 import ui.ucd.*;
 
 import ui.req.*;
@@ -156,6 +157,10 @@ public class TGComponentManager {
     public static final int ATD_COMPOSITION_CONNECTOR = 132;
     public static final int ATD_ATTACK_CONNECTOR = 133;
 
+    public static final int CONNECTOR_MESSAGE_ASYNC_SDZV = 134;
+    public static final int CONNECTOR_MESSAGE_SYNC_SDZV = 135;
+    public static final int CONNECTOR_RELATIVE_TIME_SDZV = 136;
+
     public static final int TCD_TCLASS = 201;
     public static final int TCD_PARALLEL_OPERATOR = 202;
     public static final int TCD_SEQUENCE_OPERATOR = 203;
@@ -170,7 +175,7 @@ public class TGComponentManager {
     public static final int PRAGMA = 302;
     public static final int SAFETY_PRAGMA = 303;
     public static final int INFO_PANEL = 304;
-	public static final int AVATAR_FIREWALL = 306;
+    public static final int AVATAR_FIREWALL = 306;
 
     public static final int IOD_CHOICE = 501;
     public static final int IOD_START_STATE = 502;
@@ -192,6 +197,19 @@ public class TGComponentManager {
     public static final int SD_TIMER_EXPIRATION = 605;
     public static final int SD_TIME_INTERVAL = 608;
     public static final int SD_COREGION = 600;
+
+    
+    public static final int SDZV_INSTANCE = 620;
+    public static final int SDZV_ABSOLUTE_TIME_CONSTRAINT = 621;
+    public static final int SDZV_RELATIVE_TIME_CONSTRAINT = 622;
+    public static final int SDZV_ACTION_STATE = 623;
+    public static final int SDZV_GUARD = 624;
+    public static final int SDZV_TIMER_SETTING = 625;
+    public static final int SDZV_TIMER_CANCELLATION = 626;
+    public static final int SDZV_TIMER_EXPIRATION = 627;
+    public static final int SDZV_TIME_INTERVAL = 628;
+    public static final int SDZV_COREGION = 629;
+    public static final int SDZV_PORT_MESSAGE = 630;
 
     public static final int UCD_ACTOR = 700;
     public static final int UCD_ACTORBOX = 703;
@@ -480,8 +498,8 @@ public class TGComponentManager {
     public  static LinkedList<ADDConnector> addconnectors = new LinkedList<ADDConnector>(); //DG 21.02.
 
 
-public static LinkedList<ADDConnector> getAllADDConnectors(){     
-      return addconnectors;
+    public static LinkedList<ADDConnector> getAllADDConnectors(){
+        return addconnectors;
     }//DG 21.02.
 
     public final static TGComponent addComponent(int x, int y, int id, TDiagramPanel tdp) {
@@ -647,11 +665,11 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
         case ADD_BUSNODE:
             tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-        case ADD_VGMNNODE: 	   
-		tgc = new ADDVgmnNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);	   
+        case ADD_VGMNNODE:
+            tgc = new ADDVgmnNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-        case ADD_CROSSBARNODE:	   
-		tgc = new ADDCrossbarNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);	   
+        case ADD_CROSSBARNODE:
+            tgc = new ADDCrossbarNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case ADD_TTYNODE:
             tgc = new ADDTTYNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -826,7 +844,7 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
         case UML_NOTE:
             tgc = new TGCNote(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-	case INFO_PANEL:
+        case INFO_PANEL:
             tgc = new TGCPanelInfo(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case PRAGMA:
@@ -835,9 +853,9 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
         case SAFETY_PRAGMA:
             tgc = new AvatarBDSafetyPragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-//        case AVATAR_FIREWALL:
-//            tgc = new AvatarBDFirewall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-//            break;
+            //        case AVATAR_FIREWALL:
+            //            tgc = new AvatarBDFirewall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            //            break;
         case IOD_CHOICE:
             tgc = new IODChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
@@ -866,35 +884,70 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             tgc = new IODSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SD_INSTANCE:
-            tgc = new SDInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            tgc = new ui.sd.SDInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SD_ABSOLUTE_TIME_CONSTRAINT:
-            tgc = new SDAbsoluteTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            tgc = new ui.sd.SDAbsoluteTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SD_RELATIVE_TIME_CONSTRAINT:
-            tgc = new SDRelativeTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            tgc = new ui.sd.SDRelativeTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SD_ACTION_STATE:
-            tgc = new SDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            tgc = new ui.sd.SDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SD_GUARD:
-            tgc = new SDGuard(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            tgc = new ui.sd.SDGuard(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SD_TIME_INTERVAL:
-            tgc = new SDTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            tgc = new ui.sd.SDTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SD_TIMER_SETTING:
-            tgc = new SDTimerSetting(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            tgc = new ui.sd.SDTimerSetting(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SD_TIMER_EXPIRATION:
-            tgc = new SDTimerExpiration(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            tgc = new ui.sd.SDTimerExpiration(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SD_TIMER_CANCELLATION:
-            tgc = new SDTimerCancellation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            tgc = new ui.sd.SDTimerCancellation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case SD_COREGION:
-            tgc = new SDCoregion(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            tgc = new ui.sd.SDCoregion(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
+	    
+	case SDZV_INSTANCE:
+            tgc = new ui.sd2.SDInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SDZV_PORT_MESSAGE:
+            tgc = new ui.sd2.SDPortForMessage(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SDZV_ABSOLUTE_TIME_CONSTRAINT:
+            tgc = new ui.sd2.SDAbsoluteTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SDZV_RELATIVE_TIME_CONSTRAINT:
+            tgc = new ui.sd2.SDRelativeTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SDZV_ACTION_STATE:
+            tgc = new ui.sd2.SDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SDZV_GUARD:
+            tgc = new ui.sd2.SDGuard(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SDZV_TIME_INTERVAL:
+            tgc = new ui.sd2.SDTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SDZV_TIMER_SETTING:
+            tgc = new ui.sd2.SDTimerSetting(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SDZV_TIMER_EXPIRATION:
+            tgc = new ui.sd2.SDTimerExpiration(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SDZV_TIMER_CANCELLATION:
+            tgc = new ui.sd2.SDTimerCancellation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case SDZV_COREGION:
+            tgc = new ui.sd2.SDCoregion(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+	    
         case UCD_ACTOR:
             tgc = new UCDActor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
@@ -1094,10 +1147,10 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
         case TMLARCHI_BUSNODE:
             tgc = new TMLArchiBUSNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
- case TMLARCHI_VGMNNODE:
+        case TMLARCHI_VGMNNODE:
             tgc = new TMLArchiVGMNNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
- case TMLARCHI_CROSSBARNODE:
+        case TMLARCHI_CROSSBARNODE:
             tgc = new TMLArchiCrossbarNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case TMLARCHI_CPNODE:
@@ -1336,9 +1389,9 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             return ADD_CHANNELARTIFACT;
         } else if (tgc instanceof ADDBusNode) {
             return ADD_BUSNODE;
-	} else if (tgc instanceof ADDVgmnNode) {
+        } else if (tgc instanceof ADDVgmnNode) {
             return ADD_VGMNNODE;
-	} else if (tgc instanceof ADDCrossbarNode) {
+        } else if (tgc instanceof ADDCrossbarNode) {
             return ADD_CROSSBARNODE;
         } else if (tgc instanceof ADDTTYNode) {
             return ADD_TTYNODE;
@@ -1571,7 +1624,7 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             return      CONNECTOR_INTERACTION;
         } else if (tgc instanceof TGCNote) {
             return      UML_NOTE;
-	} else if (tgc instanceof TGCPanelInfo) {
+        } else if (tgc instanceof TGCPanelInfo) {
             return      INFO_PANEL;
         } else if (tgc instanceof IODChoice) {
             return IOD_CHOICE;
@@ -1591,32 +1644,62 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             return IOD_PREEMPTION;
         } else if (tgc instanceof IODSequence) {
             return IOD_SEQUENCE;
-        } else if (tgc instanceof TGConnectorMessageAsyncSD) {
+        } else if (tgc instanceof ui.sd.TGConnectorMessageAsyncSD) {
             return CONNECTOR_MESSAGE_ASYNC_SD;
-        } else if (tgc instanceof TGConnectorMessageSyncSD) {
+        } else if (tgc instanceof ui.sd.TGConnectorMessageSyncSD) {
             return CONNECTOR_MESSAGE_SYNC_SD;
-        } else if (tgc instanceof TGConnectorRelativeTimeSD) {
+        } else if (tgc instanceof ui.sd.TGConnectorRelativeTimeSD) {
             return CONNECTOR_RELATIVE_TIME_SD;
-        } else if (tgc instanceof SDInstance) {
+        } else if (tgc instanceof ui.sd.SDInstance) {
             return SD_INSTANCE;
-        } else if (tgc instanceof SDAbsoluteTimeConstraint) {
+        } else if (tgc instanceof ui.sd.SDAbsoluteTimeConstraint) {
             return SD_ABSOLUTE_TIME_CONSTRAINT;
-        } else if (tgc instanceof SDRelativeTimeConstraint) {
+        } else if (tgc instanceof ui.sd.SDRelativeTimeConstraint) {
             return SD_RELATIVE_TIME_CONSTRAINT;
-        } else if (tgc instanceof SDActionState) {
+        } else if (tgc instanceof ui.sd.SDActionState) {
             return SD_ACTION_STATE;
-        } else if (tgc instanceof SDGuard) {
+        } else if (tgc instanceof ui.sd.SDGuard) {
             return SD_GUARD;
-        } else if (tgc instanceof SDTimeInterval) {
+        } else if (tgc instanceof ui.sd.SDTimeInterval) {
             return SD_TIME_INTERVAL;
-        } else if (tgc instanceof SDTimerSetting) {
+        } else if (tgc instanceof ui.sd.SDTimerSetting) {
             return SD_TIMER_SETTING;
-        } else if (tgc instanceof SDTimerExpiration) {
+        } else if (tgc instanceof ui.sd.SDTimerExpiration) {
             return SD_TIMER_EXPIRATION;
-        } else if (tgc instanceof SDTimerCancellation) {
+        } else if (tgc instanceof ui.sd.SDTimerCancellation) {
             return SD_TIMER_CANCELLATION;
-        } else if (tgc instanceof SDCoregion) {
+        } else if (tgc instanceof ui.sd.SDCoregion) {
             return SD_COREGION;
+
+	} else if (tgc instanceof ui.sd2.TGConnectorMessageAsyncSD) {
+            return CONNECTOR_MESSAGE_ASYNC_SDZV;
+        } else if (tgc instanceof ui.sd2.TGConnectorMessageSyncSD) {
+            return CONNECTOR_MESSAGE_SYNC_SDZV;
+        } else if (tgc instanceof ui.sd2.TGConnectorRelativeTimeSD) {
+            return CONNECTOR_RELATIVE_TIME_SDZV;
+        } else if (tgc instanceof ui.sd2.SDInstance) {
+            return SDZV_INSTANCE;
+        } else if (tgc instanceof ui.sd2.SDPortForMessage) {
+            return SDZV_PORT_MESSAGE;
+        } else if (tgc instanceof ui.sd2.SDAbsoluteTimeConstraint) {
+            return SDZV_ABSOLUTE_TIME_CONSTRAINT;
+        } else if (tgc instanceof ui.sd2.SDRelativeTimeConstraint) {
+            return SDZV_RELATIVE_TIME_CONSTRAINT;
+        } else if (tgc instanceof ui.sd2.SDActionState) {
+            return SDZV_ACTION_STATE;
+        } else if (tgc instanceof ui.sd2.SDGuard) {
+            return SDZV_GUARD;
+        } else if (tgc instanceof ui.sd2.SDTimeInterval) {
+            return SDZV_TIME_INTERVAL;
+        } else if (tgc instanceof ui.sd2.SDTimerSetting) {
+            return SDZV_TIMER_SETTING;
+        } else if (tgc instanceof ui.sd2.SDTimerExpiration) {
+            return SDZV_TIMER_EXPIRATION;
+        } else if (tgc instanceof ui.sd2.SDTimerCancellation) {
+            return SDZV_TIMER_CANCELLATION;
+        } else if (tgc instanceof ui.sd2.SDCoregion) {
+            return SDZV_COREGION;
+	    
         } else if (tgc instanceof UCDActor) {
             return UCD_ACTOR;
         } else if (tgc instanceof UCDActorBox) {
@@ -1776,11 +1859,11 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             return CONNECTOR_NODE_TMLARCHI;
         } else if (tgc instanceof TMLArchiCPUNode) {
             return TMLARCHI_CPUNODE;
-	} else if (tgc instanceof TMLArchiBUSNode) {
+        } else if (tgc instanceof TMLArchiBUSNode) {
             return TMLARCHI_BUSNODE;
-	} else if (tgc instanceof TMLArchiVGMNNode) {
+        } else if (tgc instanceof TMLArchiVGMNNode) {
             return TMLARCHI_VGMNNODE;
-	} else if (tgc instanceof TMLArchiCrossbarNode) {
+        } else if (tgc instanceof TMLArchiCrossbarNode) {
             return TMLARCHI_CROSSBARNODE;
         } else if (tgc instanceof TMLArchiCPNode) {
             return TMLARCHI_CPNODE;
@@ -1788,8 +1871,8 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             return TMLARCHI_BRIDGENODE;
         } else if (tgc instanceof TMLArchiFirewallNode) {
             return TMLARCHI_FIREWALL;
-//        } else if (tgc instanceof AvatarBDFirewall) {
-//            return AVATAR_FIREWALL;
+            //        } else if (tgc instanceof AvatarBDFirewall) {
+            //            return AVATAR_FIREWALL;
         } else if (tgc instanceof TMLArchiHWANode) {
             return TMLARCHI_HWANODE;
         } else if (tgc instanceof TMLArchiMemoryNode) {
@@ -1943,7 +2026,7 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
 
     public final static TGConnector addConnector(int x, int y, int id, TDiagramPanel tdp, TGConnectingPoint p1, TGConnectingPoint p2, Vector listPoint) {
         TGConnector tgc = null;
-	
+
         switch(id) {
             // AVATAR
             // AVATAR BD
@@ -1990,7 +2073,7 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             // AVATAR RD
         case AVATARRD_DERIVE_CONNECTOR:
             tgc = new AvatarRDDeriveConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-	    break;
+            break;
         case AVATARRD_SATISFY_CONNECTOR:
             tgc = new AvatarRDSatisfyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
@@ -2023,9 +2106,9 @@ public static LinkedList<ADDConnector> getAllADDConnectors(){
             // AVATAR DD
         case ADD_CONNECTOR:
             tgc = new ADDConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-	    //DG 21.02.
-	    
-addconnectors.add((ADDConnector)tgc);//DG 21.02.
+            //DG 21.02.
+
+            addconnectors.add((ADDConnector)tgc);//DG 21.02.
             break;
 
             // AVATAR PD
@@ -2060,17 +2143,30 @@ addconnectors.add((ADDConnector)tgc);//DG 21.02.
             //System.out.println("Connector interaction");
             break;
         case CONNECTOR_MESSAGE_ASYNC_SD:
-            tgc = new TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            tgc = new ui.sd.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             //System.out.println("Connector interaction");
             break;
         case CONNECTOR_MESSAGE_SYNC_SD:
-            tgc = new TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            tgc = new ui.sd.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             //System.out.println("Connector interaction");
             break;
         case CONNECTOR_RELATIVE_TIME_SD:
-            tgc = new TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            tgc = new ui.sd.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             //System.out.println("Connector interaction");
             break;
+	case CONNECTOR_MESSAGE_ASYNC_SDZV:
+            tgc = new ui.sd2.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            //System.out.println("Connector interaction");
+            break;
+        case CONNECTOR_MESSAGE_SYNC_SDZV:
+            tgc = new ui.sd2.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            //System.out.println("Connector interaction");
+            break;
+        case CONNECTOR_RELATIVE_TIME_SDZV:
+            tgc = new ui.sd2.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            //System.out.println("Connector interaction");
+            break;
+	    
         case CONNECTOR_ACTOR_UCD:
             tgc = new TGConnectorUseCase(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;

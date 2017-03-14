@@ -158,7 +158,7 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
     
     public void recalculateSize() {
         //System.out.println("Recalculate size of " + this);
-        int i, j;
+        int i;//, j;
         
         for(i=0; i<nbInternalTGComponent; i++) {
             tgcomponent[i].calculateMyDesiredSize();
@@ -212,7 +212,7 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
             graphics = g;
         }
         Font f = g.getFont();
-        int size = f.getSize();
+      //  int size = f.getSize();
         g.drawRect(x, y, width, height);
         g.setColor(Color.yellow);
         g.fillRect(x+1, y+1, width-1, height-1);
@@ -236,9 +236,9 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
         TCDTClass oldMasterTClass = masterTClass;
         
         JDialogTObjectName jd = new JDialogTObjectName(this, frame, "Setting the name and class");
-        jd.setSize(325, 275);
-        GraphicLib.centerOnParent(jd);
-        jd.show(); // blocked until dialog has been closed
+        //jd.setSize(325, 275);
+        GraphicLib.centerOnParent(jd, 325, 275);
+        jd.setVisible( true ); // blocked until dialog has been closed
         
         // check for any change
         
@@ -304,8 +304,8 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
         return true;
     }
     
-    public void resetAttributes(LinkedList<TAttribute> v) {
-        LinkedList<TAttribute> setV = new LinkedList<TAttribute> ();
+    public void resetAttributes(java.util.List<TAttribute> v) {
+    	java.util.List<TAttribute> setV = new LinkedList<TAttribute> ();
         for (TAttribute ta: v)
             setV.add (ta.makeClone());
 
@@ -313,8 +313,8 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
         ((TCDReducedAttributeBox)tgcomponent[0]).checkMySize();
     }
     
-    public void resetGates(LinkedList<TAttribute> v) {
-        LinkedList<TAttribute> setV = new LinkedList<TAttribute> ();
+    public void resetGates(java.util.List<TAttribute> v) {
+    	java.util.List<TAttribute> setV = new LinkedList<TAttribute> ();
         for (TAttribute ta: v)
             setV.add (ta.makeClone());
 
@@ -322,8 +322,8 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
         ((TCDReducedAttributeGateBox)tgcomponent[1]).checkMySize();
     }
     
-    public void updateAttributes(LinkedList<TAttribute> v) {
-        LinkedList<TAttribute> setV = ((TCDReducedAttributeBox)tgcomponent[0]).getAttributes();
+    public void updateAttributes( java.util.List<TAttribute> v) {
+    	java.util.List<TAttribute> setV = ((TCDReducedAttributeBox)tgcomponent[0]).getAttributes();
         int size = setV.size();
         
         // adapt old vector to the new attributes
@@ -350,8 +350,8 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
         ((TCDReducedAttributeBox)tgcomponent[0]).checkMySize();
     }
     
-    public void updateGates(LinkedList<TAttribute> v) {
-        LinkedList<TAttribute> setV = ((TCDReducedAttributeGateBox)tgcomponent[1]).getAttributes();
+    public void updateGates( java.util.List<TAttribute> v) {
+    	java.util.List<TAttribute> setV = ((TCDReducedAttributeGateBox)tgcomponent[1]).getAttributes();
         int size = setV.size();
         
         // adapt old vector to the new attributes
@@ -419,23 +419,23 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
         return TGComponentManager.TCD_TOBJECT;
     }
     
-    public LinkedList<TAttribute> getAttributes(){
+    public java.util.List<TAttribute> getAttributes(){
         return ((TGCReducedAttributeBox)(tgcomponent[0])).getAttributes();
     }
     
-    public LinkedList<TAttribute> getGates() {
+    public java.util.List<TAttribute> getGates() {
         return ((TGCReducedAttributeBox)(tgcomponent[1])).getAttributes();
     }
     
     // builds a new LinkedList
-    public LinkedList<TAttribute> gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl) {
-        LinkedList<TAttribute> v = (LinkedList<TAttribute>)(getGates().clone());
+    public java.util.List<TAttribute> gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl) {
+    	java.util.List<TAttribute> v = new LinkedList<TAttribute>( getGates() );//.clone());
         tdp.removeSynchronizedGates(v, this, tcdsgl);
         return v;
     }
     
     public TAttribute getGateById(String name) {
-        LinkedList<TAttribute> list = ((TGCReducedAttributeBox)(tgcomponent[1])).getAttributes();
+    	java.util.List<TAttribute> list = ((TGCReducedAttributeBox)(tgcomponent[1])).getAttributes();
         for (TAttribute ta: list)
             if (ta.getId().equals(name))
                 return ta;

@@ -54,12 +54,11 @@ import java.util.*;
 
 import ui.*;
 
-
 public class JDialogModelChecking extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    public static LinkedList<TClassInterface> validated, ignored;
+    public static java.util.List<TClassInterface> validated, ignored;
     private static boolean overideSyntaxChecking = false;
 
-    private LinkedList<TClassInterface> val, ign, back;
+    private java.util.List<TClassInterface> val, ign, back;
 
     //subpanels
     private JPanel panel1, panel2, panel3, panel4, panel5, panel6;
@@ -76,7 +75,7 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
     private JButton cancelButton;
 
     /** Creates new form  */
-    public JDialogModelChecking(Frame f, LinkedList<TClassInterface> _back, LinkedList<TGComponent> componentList, String title) {
+    public JDialogModelChecking(Frame f, LinkedList<TClassInterface> _back, java.util.List<TGComponent> componentList, String title) {
         super(f, title, true);
 
         back = _back;
@@ -98,8 +97,8 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         pack();
     }
 
-    private LinkedList<TClassInterface> makeNewVal(LinkedList<TGComponent> list) {
-        LinkedList<TClassInterface> v = new LinkedList<TClassInterface> ();
+    private java.util.List<TClassInterface> makeNewVal(java.util.List<TGComponent> list) {
+    	java.util.List<TClassInterface> v = new LinkedList<TClassInterface> ();
 
         for (TGComponent tgc: list)
             if (tgc instanceof TClassInterface)
@@ -108,7 +107,7 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         return v;
     }
 
-    private void checkTClasses(LinkedList<TClassInterface> tobeChecked, LinkedList<TGComponent> source) {
+    private void checkTClasses(java.util.List<TClassInterface> tobeChecked, java.util.List<TGComponent> source) {
         Iterator<TClassInterface> iter = tobeChecked.iterator ();
         while (iter.hasNext ()) {
             TClassInterface t = iter.next ();
@@ -117,7 +116,7 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         }
     }
 
-    public void addNewTclasses(LinkedList<TClassInterface> added, LinkedList<TGComponent> source, LinkedList<TClassInterface> notSource) {
+    public void addNewTclasses(java.util.List<TClassInterface> added, java.util.List<TGComponent> source, java.util.List<TClassInterface> notSource) {
         for (TGComponent tgc: source)
             if ((tgc instanceof TClassInterface) && (!added.contains(tgc)) && (!notSource.contains(tgc)))
                 added.add ((TClassInterface) tgc);

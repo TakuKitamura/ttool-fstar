@@ -266,9 +266,9 @@ public class TMLADWaitEvent extends TGCWithoutInternalComponent implements Check
 	help.add(allInEvents);
 
         JDialogMultiString jdms = new JDialogMultiString(frame, "Setting event's properties", nParam+1, labels, values, help);
-        jdms.setSize(450, 300);
-        GraphicLib.centerOnParent(jdms);
-        jdms.show(); // blocked until dialog has been closed
+      //  jdms.setSize(450, 300);
+        GraphicLib.centerOnParent(jdms, 450, 300);
+        jdms.setVisible( true ); // blocked until dialog has been closed
 
         if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
             eventName = jdms.getString(0);
@@ -322,8 +322,8 @@ public class TMLADWaitEvent extends TGCWithoutInternalComponent implements Check
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

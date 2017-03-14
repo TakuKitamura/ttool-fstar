@@ -75,7 +75,7 @@ public class GraphTree implements GenericTree {
     }
     
     public Object getChild(int index) {
-    	ArrayList<RG> rgs = mgui.getRGs();
+    	List<RG> rgs = mgui.getRGs();
     	if (rgs.size() == 0) {
     		return "No graph";
     	}

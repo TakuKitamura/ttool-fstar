@@ -139,11 +139,11 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
         gatesIgnored = new LinkedList<TClassAndGateDS> ();
         gatesProjected = new LinkedList<TClassAndGateDS> ();
         
-        LinkedList<TGComponent> list = tcd.getComponentList();
+        java.util.List<TGComponent> list = tcd.getComponentList();
         for (TGComponent tgc: list)
             if (tgc instanceof TClassInterface) {
                 TClassInterface tci = (TClassInterface)tgc;
-                LinkedList<TAttribute> gates = tci.getGates();
+                java.util.List<TAttribute> gates = tci.getGates();
                 for (TAttribute ta: gates) {
                     TClassAndGateDS tcg = new TClassAndGateDS(tci, ta);
                     gatesIgnored.add (tcg);
@@ -160,9 +160,9 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
         
         for(int i=0; i<tm.classNb(); i++) {
             TClass t = tm.getTClassAtIndex(i);
-            Vector gateList = t.getGateList();
+            Vector<Gate> gateList = t.getGateList();
             for(int j=0; j<gateList.size(); j++) {
-                Gate g = (Gate)(gateList.elementAt(j));
+                Gate g = gateList.elementAt(j);
                 TClassAndGateDS tcg = new TClassAndGateDS(t, g);
                 gatesIgnored.add (tcg);
             }
@@ -605,7 +605,7 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
         String cmd1 = "";
         String autproj;
         String autprojdot;
-        String data;
+     //   String data;
         int id = 0;
         String filenamebcg;
         Point p;
@@ -705,7 +705,7 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
                     // Converting to bcg format
                     jta.append("Converting data to bcg format\n");
                     cmd1 = bcgioPath + " -aldebaran " + fileName + " -bcg " + filenamebcg;
-                    data = processCmd(cmd1);
+                    /*data =*/ processCmd(cmd1);
 
                     cmd1 = bcgminPath;
                     if (isStrongSelected) {
@@ -715,12 +715,12 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
                     }
                     cmd1 += filenamebcg+ " " + filenamebcg;
                     jta.append("Performing minimization\n");
-                    data = processCmd(cmd1);
+                    /*data =*/ processCmd(cmd1);
                     jta.append("Minimization done\n");
 
                     jta.append("Converting data to aut format\n");
                     cmd1 = bcgioPath + " -bcg " + filenamebcg+ " -aldebaran " + fileName;
-                    data = processCmd(cmd1);
+                    /*data = */processCmd(cmd1);
 
                     jta.append("Getting aut data\n");
                     autproj = rshc.getFileData(fileName);
@@ -737,7 +737,7 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
                     jta.append("\nConverting to dotty format\n");
                     rshc.sendFileData(fileName, autproj);
                     cmd1 = bcgioPath + " -bcg " + filenamebcg + " -graphviz " + fileName + ".dot";
-                    data = processCmd(cmd1);
+                    /*data =*/ processCmd(cmd1);
                     jta.append("Getting dot data\n");
                     autprojdot = rshc.getFileData(fileName + ".dot");
                     mgui.gtm.setRGAUTPROJDOT(autprojdot);

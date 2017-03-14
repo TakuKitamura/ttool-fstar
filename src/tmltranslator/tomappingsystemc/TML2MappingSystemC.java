@@ -58,9 +58,9 @@ public class TML2MappingSystemC {
 	private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 	private final static String SCCR = ";\n";
-	private final static String EFCR = "}\n";
+//	private final static String EFCR = "}\n";
 	private final static String EFCR2 = "}\n\n";
-	private final static String EF = "}";
+//	private final static String EF = "}";
 	
 	private final static int MAX_EVENT = 1024;
 
@@ -88,10 +88,10 @@ public class TML2MappingSystemC {
 		
 		tmlmapping = new TMLMapping(tmlmodeling, tmla, false);
 		
-		ListIterator iterator = _tmlm.getTasks().listIterator();
+		Iterator<TMLTask> iterator = _tmlm.getTasks().listIterator();
         TMLTask t;
 		while(iterator.hasNext()) {
-			t = (TMLTask)(iterator.next());
+			t = iterator.next();
 			tmlmapping.addTaskToHwExecutionNode(t, cpu);
 		}
     }
@@ -180,7 +180,7 @@ public class TML2MappingSystemC {
 		declaration += CR;
 		
 		// Channels, events, requests
-		ListIterator iterator;
+		Iterator<TMLChannel> chanIterator;
 		TMLChannel channel;
 		TMLEvent evt;
 		TMLRequest req;
@@ -188,9 +188,9 @@ public class TML2MappingSystemC {
 		String tmp;
 		
 		declaration += "//Declaration of channels" + CR;
-		iterator = tmlmodeling.getListIteratorChannels();
-		while(iterator.hasNext()) {
-			channel = (TMLChannel)(iterator.next());
+		chanIterator = tmlmodeling.getListIteratorChannels();
+		while( chanIterator.hasNext()) {
+			channel = chanIterator.next();
 			type = channel.getType();
 			switch(type) {
 			case TMLChannel.BRBW:
@@ -208,9 +208,9 @@ public class TML2MappingSystemC {
 		declaration += CR;
 		
 		declaration += "//Declaration of events" + CR;
-		iterator = tmlmodeling.getListIteratorEvents();
-		while(iterator.hasNext()) {
-			evt = (TMLEvent)(iterator.next());
+		Iterator<TMLEvent> evtIterato = tmlmodeling.getListIteratorEvents();
+		while(evtIterato.hasNext()) {
+			evt = (TMLEvent)(evtIterato.next());
 			if (evt.isInfinite()) {
 				tmp = "InfiniteFIFO_Event ";
 			} else {
@@ -225,9 +225,9 @@ public class TML2MappingSystemC {
 		declaration += CR;
 		
 		declaration += "//Declaration of requests" + CR;
-		iterator = tmlmodeling.getListIteratorRequests();
-		while(iterator.hasNext()) {
-			req = (TMLRequest)(iterator.next());
+		Iterator<TMLRequest> reqIterator = tmlmodeling.getListIteratorRequests();
+		while( reqIterator.hasNext()) {
+			req = reqIterator.next();
 			declaration += "InfiniteFIFO_Event " + req.getExtendedName() + SCCR;
 		}
 		declaration += CR;
@@ -256,7 +256,7 @@ public class TML2MappingSystemC {
   }
   
   public void makeThreadCode(HwExecutionNode node) {
-	  ListIterator iterator;
+	  Iterator<TMLChannel> chanIterator;
 	  TMLChannel channel;
 	  TMLEvent event;
 	  TMLRequest request;
@@ -271,9 +271,9 @@ public class TML2MappingSystemC {
 		  
       // Setting internal channels
 	  thread += CR + "// Setting channels" + CR;
-	  iterator = tmlmodeling.getListIteratorChannels();
-		while(iterator.hasNext()) {
-			channel = (TMLChannel)(iterator.next());
+	  chanIterator = tmlmodeling.getListIteratorChannels();
+	  while( chanIterator.hasNext()) {
+			channel = chanIterator.next();
 			if ((tmlmapping.isTaskMappedOn(channel.getOriginTask(), node)) && (tmlmapping.isTaskMappedOn(channel.getDestinationTask(), node))) {
 				thread += channel.getExtendedName() + ".initialize()" + SCCR;
 				thread += channel.getExtendedName() + ".setNode(&" + node.getName() + ")" + SCCR;
@@ -288,9 +288,9 @@ public class TML2MappingSystemC {
 		
 		 // Setting internal events
 		thread += "// Setting events" + CR;
-		iterator = tmlmodeling.getListIteratorEvents();
-		while(iterator.hasNext()) {
-			event = (TMLEvent)(iterator.next());
+		Iterator<TMLEvent> evtIterator = tmlmodeling.getListIteratorEvents();
+		while( evtIterator.hasNext()) {
+			event = evtIterator.next();
 			if ((tmlmapping.isTaskMappedOn(event.getOriginTask(), node)) && (tmlmapping.isTaskMappedOn(event.getDestinationTask(), node))) {
 				thread += event.getExtendedName() + ".initialize()" + SCCR;
 				thread += event.getExtendedName() + ".setNode(&" + node.getName() + ")" + SCCR;
@@ -305,9 +305,9 @@ public class TML2MappingSystemC {
 		
 		// Setting internal requests
 		thread += "// Setting requests" + CR;
-		iterator = tmlmodeling.getListIteratorRequests();
-		while(iterator.hasNext()) {
-			request = (TMLRequest)(iterator.next());
+		Iterator<TMLRequest> reqIterator = tmlmodeling.getListIteratorRequests();
+		while( reqIterator.hasNext()) {
+			request = reqIterator.next();
 			if (tmlmapping.oneTaskMappedOn(request, node)) {
 				thread += request.getExtendedName() + ".initialize()" + SCCR;
 				thread += request.getExtendedName() + ".setNode(&" + node.getName() + ")" + SCCR;
@@ -317,9 +317,9 @@ public class TML2MappingSystemC {
 		thread += CR;
 		
 		// Setting tasks
-		iterator = tmlmodeling.getListIteratorTasks();
-		while(iterator.hasNext()) {
-			task = (TMLTask)(iterator.next());
+		Iterator<TMLTask> taskIterator = tmlmodeling.getListIteratorTasks();
+		while( taskIterator.hasNext()) {
+			task = taskIterator.next();
 			if (tmlmapping.getHwNodeOf(task) == node) {
 				thread += "task__" + task.getName() + ".initialize()" + SCCR;
 				thread += "task__" + task.getName() + ".setNode(&" + node.getName() + ")" + SCCR;
@@ -387,9 +387,9 @@ public class TML2MappingSystemC {
 		}
 		thread += node.getName() + ".initialize()" + SCCR;
 		
-		iterator = tmlmodeling.getListIteratorTasks();
-		while(iterator.hasNext()){
-			task = (TMLTask)(iterator.next());
+		taskIterator = tmlmodeling.getListIteratorTasks();
+		while( taskIterator.hasNext()){
+			task = taskIterator.next();
 			if (tmlmapping.isTaskMappedOn(task, node)) {
 				thread += node.getName() + ".addTask(&task__" + task.getName() + ")" + SCCR;
 			}
@@ -445,9 +445,10 @@ public class TML2MappingSystemC {
 	  
 	  simulation += "// Tracing tasks" + CR;
 	  TMLTask task;
-	  ListIterator iterator = tmlmodeling.getListIteratorTasks();
-		while(iterator.hasNext()) {
-			task = (TMLTask)(iterator.next());
+	  Iterator<TMLTask> taskIterator = tmlmodeling.getListIteratorTasks();
+		while( taskIterator.hasNext()) {
+			task = taskIterator.next();
+			
 			if (tmlmapping.isTaskMapped(task)) {
 				traceTask(task);
 			}
@@ -514,15 +515,15 @@ public class TML2MappingSystemC {
      // *************** Internal structure manipulation ******************************* /
     
     public void generateSystemCTasks() {
-        ListIterator iterator = tmlmodeling.getTasks().listIterator();
+        Iterator<TMLTask> iterator = tmlmodeling.getTasks().listIterator();
         TMLTask t;
         MappedSystemCTask mst;
-		ArrayList<TMLChannel> channels;
-		ArrayList<TMLEvent> events;
-		ArrayList<TMLRequest> requests;
+		List<TMLChannel> channels;
+		List<TMLEvent> events;
+		List<TMLRequest> requests;
         
         while(iterator.hasNext()) {
-            t = (TMLTask)(iterator.next());
+            t = iterator.next();
 			if (tmlmapping.isTaskMapped(t)) {
 				channels = tmlmodeling.getChannels(t);
 				events = tmlmodeling.getEvents(t);

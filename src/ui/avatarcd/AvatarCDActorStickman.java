@@ -51,7 +51,7 @@ import java.awt.*;
 import myutil.*;
 import ui.*;
 
-public class AvatarCDActorStickman extends TGCOneLineText {
+public class AvatarCDActorStickman extends TGCScalableOneLineText {
     /*protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -60,11 +60,12 @@ public class AvatarCDActorStickman extends TGCOneLineText {
     
     public AvatarCDActorStickman(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 30;
-        height = 70;
-        //minWidth = 30;
-        
+
+	width = (int)(30 * tdp.getZoom());
+        height = (int)(70 * tdp.getZoom());
+	oldScaleFactor = tdp.getZoom();
+	
+               
         nbConnectingPoint = 24;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         int i;

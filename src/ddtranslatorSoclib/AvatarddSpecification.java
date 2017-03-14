@@ -49,9 +49,9 @@ import java.util.*;
 
 public class AvatarddSpecification{
 	
-    private LinkedList<AvatarComponent> components;
-    private LinkedList<AvatarConnector> connectors;
-    private LinkedList<AvatarMappedObject> mappedObjects;
+    private List<AvatarComponent> components;
+    private List<AvatarConnector> connectors;
+    private List<AvatarMappedObject> mappedObjects;
 		
     private int nb_init = 0;
 
@@ -75,34 +75,36 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
     int nb_target = 6; 
     int nb_mwmr_segments = 0;
 	
-    public AvatarddSpecification(LinkedList<AvatarComponent> _components, LinkedList<AvatarConnector> _connectors, LinkedList<AvatarMappedObject> _mappedObjects, int _nb_target, int _nb_init){
-	components = _components ;
-	connectors = _connectors ;
-	mappedObjects = _mappedObjects ;
+    public AvatarddSpecification( List<AvatarComponent> _components, List<AvatarConnector> _connectors, List<AvatarMappedObject> _mappedObjects, int _nb_target, int _nb_init){
+		components = _components ;
+		connectors = _connectors ;
+		mappedObjects = _mappedObjects ;
         nb_target = _nb_target;
         nb_init = _nb_init;
 	}
     
-    public LinkedList<AvatarComponent> getComponents(){
+    public List<AvatarComponent> getComponents(){
       return components;
     }
 
-    public LinkedList<AvatarConnector> getConnectors(){
+    public List<AvatarConnector> getConnectors(){
       return connectors;
     }
 
-    public LinkedList<AvatarMappedObject> getMappedObjects(){
+    public List<AvatarMappedObject> getMappedObjects(){
       return mappedObjects;
     }
 
-    public LinkedList<AvatarTask> getAllMappedTask(){
-      LinkedList<AvatarTask> tasks = new LinkedList<AvatarTask>();
-      for (AvatarMappedObject task : mappedObjects )
-        {
-          if (task instanceof AvatarTask)
-            tasks.add((AvatarTask)task);
+    public List<AvatarTask> getAllMappedTask(){
+    	List<AvatarTask> tasks = new LinkedList<AvatarTask>();
+      
+    	for (AvatarMappedObject task : mappedObjects ) {
+    		if (task instanceof AvatarTask) {
+    			tasks.add((AvatarTask)task);
+    		}
         }
-      return tasks;
+      
+    	return tasks;
     }
     
    public LinkedList<AvatarChannel> getAllMappedChannels(){
@@ -116,7 +118,7 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
     }
       
     public LinkedList<AvatarTTY> getAllTTY(){
-	int i=0;
+	//int i=0;
       LinkedList<AvatarTTY> ttys = new LinkedList<AvatarTTY>();
       for (AvatarComponent tty : components )
         {
@@ -138,21 +140,20 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       return cpus;
     }
    
-    public LinkedList<AvatarRAM> getAllRAM(){
-	int i=0;
-      LinkedList<AvatarRAM> rams = new LinkedList<AvatarRAM>();
-      for (AvatarComponent ram : components )
-        {
-	    if (ram instanceof AvatarRAM){  
-	
-		rams.add((AvatarRAM)ram);	
-		
-	    }
-        }    
-      return rams;
+    public List<AvatarRAM> getAllRAM(){
+	//int i=0;
+    	List<AvatarRAM> rams = new LinkedList<AvatarRAM>();
+      
+    	for (AvatarComponent ram : components ) {
+    		if (ram instanceof AvatarRAM){  
+    			rams.add((AvatarRAM)ram);	
+    		}
+    	}    
+      
+    	return rams;
     }
 
-    public LinkedList<AvatarBus> getAllBus(){
+    public List<AvatarBus> getAllBus(){
       LinkedList<AvatarBus> buss = new LinkedList<AvatarBus>();
       for (AvatarComponent bus : components )
         {
@@ -208,8 +209,8 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
        return getAllCrossbar().size();
     }
 
-    public LinkedList<AvatarCoproMWMR> getAllCoproMWMR(){
-      LinkedList<AvatarCoproMWMR> copros = new LinkedList<AvatarCoproMWMR>();
+    public List<AvatarCoproMWMR> getAllCoproMWMR(){
+      List<AvatarCoproMWMR> copros = new LinkedList<AvatarCoproMWMR>();
       for (AvatarComponent copro : components )
         {
           if (copro instanceof AvatarCoproMWMR)

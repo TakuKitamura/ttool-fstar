@@ -48,6 +48,7 @@ package ui;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -111,11 +112,11 @@ public class AvatarDeploymentPanelTranslator {
 	private int no_tty = 0;
 
 	private int nb_clusters = 0;
-	private LinkedList<TGComponent> tgcComponents;
+	private List<TGComponent> tgcComponents;
 
-	private LinkedList<AvatarComponent> avatarComponents;
-	private LinkedList<AvatarConnector> avatarConnectors;
-	private LinkedList<AvatarMappedObject> avatarMappedObject;
+	private List<AvatarComponent> avatarComponents;
+	private List<AvatarConnector> avatarConnectors;
+	private List<AvatarMappedObject> avatarMappedObject;
 
 	public AvatarDeploymentPanelTranslator(ADDDiagramPanel _avatarddDiagramPanel) {
 		tgcComponents = _avatarddDiagramPanel.getComponentList();
@@ -151,9 +152,10 @@ System.out.println("ADD CPU  monitored "+ monitored);
 				nb_init++;
 				no_proc++;
 
-				Vector tasks = addCPUNode.getArtifactList();
+				Vector<ADDBlockArtifact> tasks = addCPUNode.getArtifactList();
+				
 				for (int i = 0; i < tasks.size(); i++) {
-					ADDBlockArtifact task = (ADDBlockArtifact) tasks.get(i);
+					ADDBlockArtifact task = tasks.get(i);
 
 					String taskName = task.getTaskName();
 					String referenceTaskName = task.getReferenceTaskName();
@@ -294,9 +296,9 @@ System.out.println("ADD CPU  monitored "+ monitored);
 					no_ram++;
 					nb_target++;
 
-					Vector channels = addRamNode.getArtifactList();
+					Vector<ADDChannelArtifact> channels = addRamNode.getArtifactList();
 					for (int i = 0; i < channels.size(); i++) {
-						ADDChannelArtifact c = (ADDChannelArtifact) channels.get(i);
+						ADDChannelArtifact c = channels.get(i);
 
 						String referenceDiagram = c.getReferenceDiagram();
 						String channelName = c.getChannelName();

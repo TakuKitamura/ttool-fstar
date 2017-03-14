@@ -58,15 +58,14 @@ public class AvatarADPartition extends AvatarADBasicComponent implements Embedde
     public AvatarADPartition(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 10;
-        height = 500;
-        //textX = 0;
-        //textY = 2;
-        minWidth = 10;
-        maxWidth = 10;
-        minHeight = 250;
-        maxHeight = 1500;
-        
+	initScaling(10, 500);
+	oldScaleFactor = tdp.getZoom();
+	
+	minWidth = (int)(10* tdp.getZoom());
+	maxWidth = (int)(30* tdp.getZoom());
+	minHeight = (int)(250* tdp.getZoom());
+	maxHeight = (int)(1500* tdp.getZoom());
+	
         nbConnectingPoint = 0;
 
         nbInternalTGComponent = 0;

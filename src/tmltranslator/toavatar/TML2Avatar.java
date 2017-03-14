@@ -49,22 +49,13 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.HashSet;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.io.*;
-import javax.swing.*;
 import java.util.ArrayList;
 
-import javax.xml.parsers.*;
-import ui.ConfigurationTTool;
-import ui.CheckingError;
-import ui.AvatarDesignPanel;
 import ui.tmlcompd.*;
 import ui.tmlad.*;
 import ui.TGComponent;
-import proverifspec.*;
 import myutil.*;
 import avatartranslator.*;
 
@@ -110,231 +101,236 @@ public class TML2Avatar {
 	}
 	
 	public void checkConnections(){
-	List<HwLink> links = tmlmap.getTMLArchitecture().getHwLinks();
-	for (TMLTask t1:tmlmodel.getTasks()){
-		ArrayList<SecurityPattern> keys = new ArrayList<SecurityPattern>();
-		accessKeys.put(t1, keys);
-		HwExecutionNode node1 = (HwExecutionNode) tmlmap.getHwNodeOf(t1);
-		//Try to find memory using only private buses
-		List<HwNode> toVisit = new ArrayList<HwNode>();
-		List<HwNode> toMemory = new ArrayList<HwNode>();
-		List<HwNode> complete = new ArrayList<HwNode>();
-		for (HwLink link:links){
-		if (link.hwnode==node1){
-			if (link.bus.privacy==1){
-				toVisit.add(link.bus);
+		List<HwLink> links = tmlmap.getTMLArchitecture().getHwLinks();
+		for (TMLTask t1:tmlmodel.getTasks()){
+			ArrayList<SecurityPattern> keys = new ArrayList<SecurityPattern>();
+			accessKeys.put(t1, keys);
+			HwExecutionNode node1 = (HwExecutionNode) tmlmap.getHwNodeOf(t1);
+			//Try to find memory using only private buses
+			List<HwNode> toVisit = new ArrayList<HwNode>();
+			//List<HwNode> toMemory = new ArrayList<HwNode>();
+			List<HwNode> complete = new ArrayList<HwNode>();
+			for (HwLink link:links){
+				if (link.hwnode==node1){
+					if (link.bus.privacy==1){
+						toVisit.add(link.bus);
+					}
+				}
 			}
-		}
-		}
-		boolean memory=false;
-		memloop:
-		while (toVisit.size()>0){
-		HwNode curr = toVisit.remove(0);
-		for (HwLink link: links){
-			if (curr == link.bus){
-		 			if (link.hwnode instanceof HwMemory){
-				memory=true;
-				ArrayList<SecurityPattern> patterns = tmlmap.getMappedPatterns((HwMemory) link.hwnode);
-				accessKeys.get(t1).addAll(patterns);
-			  //  break memloop;
+			boolean memory=false;
+			//memloop:
+			while (toVisit.size()>0){
+				HwNode curr = toVisit.remove(0);
+				for (HwLink link: links){
+					if (curr == link.bus){
+						if (link.hwnode instanceof HwMemory){
+							memory=true;
+							ArrayList<SecurityPattern> patterns = tmlmap.getMappedPatterns((HwMemory) link.hwnode);
+							accessKeys.get(t1).addAll(patterns);
+							//  break memloop;
+						}
+						if (!complete.contains(link.hwnode) && !toVisit.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+							toVisit.add(link.hwnode);
+						}
+					}
+					else if (curr == link.hwnode){
+						if (!complete.contains(link.bus) && !toVisit.contains(link.bus)){
+							toVisit.add(link.bus);
+						}
+					}
+				}
+				complete.add(curr);
 			}
-			if (!complete.contains(link.hwnode) && !toVisit.contains(link.hwnode) && link.hwnode instanceof HwBridge){
-				toVisit.add(link.hwnode);
-			}
-			}
-			else if (curr == link.hwnode){
-			if (!complete.contains(link.bus) && !toVisit.contains(link.bus)){
-				toVisit.add(link.bus);
-			}
-	  		}
-			}
-		complete.add(curr);
-		}
-//		System.out.println("Memory found ?"+ memory);
-		for (TMLTask t2:tmlmodel.getTasks()){
-		HwExecutionNode node2 = (HwExecutionNode) tmlmap.getHwNodeOf(t2);
-		if (!memory){
-			//There is no path to a private memory
-			originDestMap.put(t1.getName()+"__"+t2.getName(), channelPublic);
-		}
-		else if (node1==node2){
-			originDestMap.put(t1.getName()+"__"+t2.getName(), channelPrivate);
-		}
-		else {
-			//Navigate architecture for node
+			//		System.out.println("Memory found ?"+ memory);
+			for (TMLTask t2:tmlmodel.getTasks()){
+				HwExecutionNode node2 = (HwExecutionNode) tmlmap.getHwNodeOf(t2);
+				if (!memory){
+					//There is no path to a private memory
+					originDestMap.put(t1.getName()+"__"+t2.getName(), channelPublic);
+				}
+				else if (node1==node2){
+					originDestMap.put(t1.getName()+"__"+t2.getName(), channelPrivate);
+				}
+				else {
+					//Navigate architecture for node
 
-			HwNode last = node1;
-			List<HwNode> found = new ArrayList<HwNode>();	
-			List<HwNode> done = new ArrayList<HwNode>();
-			List<HwNode> path = new ArrayList<HwNode>();
-			Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
-			for (HwLink link: links){
-			if (link.hwnode == node1){
-				found.add(link.bus);
-				List<HwNode> tmp = new ArrayList<HwNode>();
-				tmp.add(link.bus);
-				pathMap.put(link.bus, tmp);
-			}
-			}
-			outerloop:
-				while (found.size()>0){
-				HwNode curr = found.remove(0);
-				for (HwLink link: links){
-					if (curr == link.bus){
-						if (link.hwnode == node2){
-				  		path = pathMap.get(curr);
-				  		break outerloop;
+					//HwNode last = node1;
+					List<HwNode> found = new ArrayList<HwNode>();	
+					List<HwNode> done = new ArrayList<HwNode>();
+					List<HwNode> path = new ArrayList<HwNode>();
+					Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
+					for (HwLink link: links){
+						if (link.hwnode == node1){
+							found.add(link.bus);
+							List<HwNode> tmp = new ArrayList<HwNode>();
+							tmp.add(link.bus);
+							pathMap.put(link.bus, tmp);
 						}
-						if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
-				  		found.add(link.hwnode);
-				  		List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
-				  		tmp.add(link.hwnode);
-				  		pathMap.put(link.hwnode, tmp);
+					}
+					outerloop:
+						while (found.size()>0){
+							HwNode curr = found.remove(0);
+							for (HwLink link: links){
+								if (curr == link.bus){
+									if (link.hwnode == node2){
+										path = pathMap.get(curr);
+										break outerloop;
+									}
+									if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+										found.add(link.hwnode);
+										List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+										tmp.add(link.hwnode);
+										pathMap.put(link.hwnode, tmp);
+									}
+								}
+								else if (curr == link.hwnode){
+									if (!done.contains(link.bus) && !found.contains(link.bus)){
+										found.add(link.bus);
+										List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+										tmp.add(link.bus);
+										pathMap.put(link.bus, tmp);
+									}
+								}
+							}
+							done.add(curr);
 						}
-			  	}
-					else if (curr == link.hwnode){
-				  		if (!done.contains(link.bus) && !found.contains(link.bus)){
-						found.add(link.bus);
-						List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
-						tmp.add(link.bus);
-						pathMap.put(link.bus, tmp);
-				  		}
-			  	}
+					if (path.size() ==0){
+						originDestMap.put(t1.getName()+"__"+t2.getName(), channelUnreachable);
+					}
+					else {
+						int priv=1;
+						HwBus bus;
+						//Check if all buses and bridges are private
+						for (HwNode n: path){
+							if (n instanceof HwBus){
+								bus = (HwBus) n;
+								if (bus.privacy ==0){
+									priv=0;
+									break;
+								}
+							}
+						}
+						originDestMap.put(t1.getName()+"__"+t2.getName(), priv);
+					}
 				}
-				done.add(curr);
-			  }
-			  if (path.size() ==0){
-			  originDestMap.put(t1.getName()+"__"+t2.getName(), channelUnreachable);
-			  }
-			  else {
-			  int priv=1;
-			  HwBus bus;
-			  //Check if all buses and bridges are private
-			  for (HwNode n: path){
-				  if (n instanceof HwBus){
-					  bus = (HwBus) n;
-					  if (bus.privacy ==0){
-				  		  priv=0;
-					break;
-					  }
-				  }
-			  }
-			  originDestMap.put(t1.getName()+"__"+t2.getName(), priv);
-			 }
-		}
+			}
 		}
 	}
-	}
+	
 	public void checkChannels(){
-	ArrayList<TMLChannel> channels = tmlmodel.getChannels();
-	List<TMLTask> destinations = new ArrayList<TMLTask>();
-	TMLTask a; 
-	for (TMLChannel channel: channels){	
-		destinations.clear();
-		if (channel.isBasicChannel()){
-			a = channel.getOriginTask();
-		destinations.add(channel.getDestinationTask());
-		}
-		else {
-		a=channel.getOriginTasks().get(0);
-		destinations.addAll(channel.getDestinationTasks());
-		}  
-		HwExecutionNode node1 = (HwExecutionNode) tmlmap.getHwNodeOf(a);
-		for (TMLTask t: destinations){
-			List<HwBus> buses = new ArrayList<HwBus>();
-		HwNode node2 = tmlmap.getHwNodeOf(t);
-		if (node1==node2){
-			channelMap.put(channel, channelPrivate);
-		}
-		if (node1!=node2){
-			//Navigate architecture for node
-			List<HwLink> links = tmlmap.getTMLArchitecture().getHwLinks();
-			HwNode last = node1;
-			List<HwNode> found = new ArrayList<HwNode>();	
-			List<HwNode> done = new ArrayList<HwNode>();
-			List<HwNode> path = new ArrayList<HwNode>();
-			Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
-			for (HwLink link: links){
-			if (link.hwnode == node1){
-				found.add(link.bus);
-				List<HwNode> tmp = new ArrayList<HwNode>();
-				tmp.add(link.bus);
-				pathMap.put(link.bus, tmp);
+		List<TMLChannel> channels = tmlmodel.getChannels();
+		List<TMLTask> destinations = new ArrayList<TMLTask>();
+		TMLTask a; 
+		for (TMLChannel channel: channels){	
+			destinations.clear();
+			if (channel.isBasicChannel()){
+				a = channel.getOriginTask();
+				destinations.add(channel.getDestinationTask());
 			}
-			}
-			outerloop:
-				while (found.size()>0){
-				HwNode curr = found.remove(0);
-				for (HwLink link: links){
-					if (curr == link.bus){
-						if (link.hwnode == node2){
-				  		path = pathMap.get(curr);
-				  		break outerloop;
-						}
-						if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
-				  		found.add(link.hwnode);
-				  		List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
-				  		tmp.add(link.hwnode);
-				  		pathMap.put(link.hwnode, tmp);
-						}
-			  	}
-					else if (curr == link.hwnode){
-				  		if (!done.contains(link.bus) && !found.contains(link.bus)){
-						found.add(link.bus);
-						List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
-						tmp.add(link.bus);
-						pathMap.put(link.bus, tmp);
-				  		}
-			  	}
+			else {
+				a=channel.getOriginTasks().get(0);
+				destinations.addAll(channel.getDestinationTasks());
+			}  
+			HwExecutionNode node1 = (HwExecutionNode) tmlmap.getHwNodeOf(a);
+			for (TMLTask t: destinations){
+				//List<HwBus> buses = new ArrayList<HwBus>();
+				HwNode node2 = tmlmap.getHwNodeOf(t);
+				
+				if (node1==node2){
+					channelMap.put(channel, channelPrivate);
 				}
-				done.add(curr);
-			  }
-			  if (path.size() ==0){
-			//  System.out.println("Path does not exist for channel " + channel.getName() + " between Task " + a.getTaskName() + " and Task " + t.getTaskName());
-			  channelMap.put(channel, channelUnreachable);
-			  }
-			  else {
-			  int priv=1;
-			  HwBus bus;
-			  //Check if all buses and bridges are private
-			  for (HwNode n: path){
-				  if (n instanceof HwBus){
-					  bus = (HwBus) n;
-					  if (bus.privacy ==0){
-				  		  priv=0;
-					break;
-					  }
-				  }
-			  }
-			  channelMap.put(channel, priv);
-			  //System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is " + (priv==1 ? "confidential" : "not confidential"));
-			  }
-		}
-		}
-	}  
+			
+				if (node1!=node2){
+				//Navigate architecture for node
+					List<HwLink> links = tmlmap.getTMLArchitecture().getHwLinks();
+					//HwNode last = node1;
+					List<HwNode> found = new ArrayList<HwNode>();	
+					List<HwNode> done = new ArrayList<HwNode>();
+					List<HwNode> path = new ArrayList<HwNode>();
+					Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
+	
+					for (HwLink link: links){
+						if (link.hwnode == node1){
+							found.add(link.bus);
+							List<HwNode> tmp = new ArrayList<HwNode>();
+							tmp.add(link.bus);
+							pathMap.put(link.bus, tmp);
+						}
+					}
+				outerloop:
+					while (found.size()>0){
+						HwNode curr = found.remove(0);
+						for (HwLink link: links){
+							if (curr == link.bus){
+								if (link.hwnode == node2){
+									path = pathMap.get(curr);
+									break outerloop;
+								}
+								if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+									found.add(link.hwnode);
+									List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+									tmp.add(link.hwnode);
+									pathMap.put(link.hwnode, tmp);
+								}
+							}
+							else if (curr == link.hwnode){
+								if (!done.contains(link.bus) && !found.contains(link.bus)){
+									found.add(link.bus);
+									List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+									tmp.add(link.bus);
+									pathMap.put(link.bus, tmp);
+								}
+							}
+						}
+						done.add(curr);
+					}
+					
+					if (path.size() ==0){
+				//  System.out.println("Path does not exist for channel " + channel.getName() + " between Task " + a.getTaskName() + " and Task " + t.getTaskName());
+						channelMap.put(channel, channelUnreachable);
+					}
+					else {
+						int priv=1;
+						HwBus bus;
+						//Check if all buses and bridges are private
+						for (HwNode n: path){
+							if (n instanceof HwBus){
+								bus = (HwBus) n;
+								if (bus.privacy ==0){
+									priv=0;
+									break;
+								}
+							}
+						}
+						
+						channelMap.put(channel, priv);
+				  //System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is " + (priv==1 ? "confidential" : "not confidential"));
+					}
+				}
+			}
+		}  
 	}
-   
 
 	public List<AvatarStateMachineElement> translateState(TMLActivityElement ae, AvatarBlock block){
 
-		TMLActionState tmlaction;
-		TMLChoice tmlchoice;
-		TMLExecI tmlexeci;
-		TMLExecIInterval tmlexecii;
-		TMLExecC tmlexecc;
-		TMLExecCInterval tmlexecci;
-		TMLForLoop tmlforloop;
-		TMLReadChannel tmlreadchannel;
-		TMLSendEvent tmlsendevent;
-		TMLSendRequest tmlsendrequest;
-		TMLStopState tmlstopstate;
-		TMLWaitEvent tmlwaitevent;
-		TMLNotifiedEvent tmlnotifiedevent;
-		TMLWriteChannel tmlwritechannel;
-		TMLSequence tmlsequence;
-		TMLRandomSequence tmlrsequence;
-		TMLSelectEvt tmlselectevt;
-		TMLDelay tmldelay;
+//		TMLActionState tmlaction;
+//		TMLChoice tmlchoice;
+//		TMLExecI tmlexeci;
+//		TMLExecIInterval tmlexecii;
+	//	TMLExecC tmlexecc;
+	//	TMLExecCInterval tmlexecci;
+//		TMLForLoop tmlforloop;
+//		TMLReadChannel tmlreadchannel;
+//		TMLSendEvent tmlsendevent;
+//		TMLSendRequest tmlsendrequest;
+//		TMLStopState tmlstopstate;
+//		TMLWaitEvent tmlwaitevent;
+//		TMLNotifiedEvent tmlnotifiedevent;
+//		TMLWriteChannel tmlwritechannel;
+//		TMLSequence tmlsequence;
+//		TMLRandomSequence tmlrsequence;
+//		TMLSelectEvt tmlselectevt;
+//		TMLDelay tmldelay;
 
 	AvatarTransition tran= new AvatarTransition(block, "", null);
 	List<AvatarStateMachineElement> elementList = new ArrayList<AvatarStateMachineElement>();
@@ -455,7 +451,7 @@ public class TML2Avatar {
 		elementList.add(tran);
 	}
 	else if (ae instanceof TMLRandomSequence){
-		HashMap<Integer, List<AvatarStateMachineElement>> seqs = new HashMap<Integer, List<AvatarStateMachineElement>>();
+		//HashMap<Integer, List<AvatarStateMachineElement>> seqs = new HashMap<Integer, List<AvatarStateMachineElement>>();
 		AvatarState choiceState = new AvatarState("seqchoice__"+ae.getName(), ae.getReferenceObject());
 		elementList.add(choiceState);
 		if (ae.getNbNext()==2){
@@ -1098,7 +1094,7 @@ public class TML2Avatar {
 		if (loop.isInfinite()){
 		//Make initializaton, then choice state with transitions
 		List<AvatarStateMachineElement> elements=translateState(ae.getNextElement(0), block);
-		List<AvatarStateMachineElement> afterloop = translateState(ae.getNextElement(1), block);
+		/*List<AvatarStateMachineElement> afterloop =*/ translateState(ae.getNextElement(1), block);
 		AvatarState initState = new AvatarState(ae.getName()+"__init", ae.getReferenceObject());
 		elementList.add(initState);
 		//Build transition to choice
@@ -1169,7 +1165,7 @@ public class TML2Avatar {
 		tran = new AvatarTransition(block, "loop_increment__"+ae.getName(), ae.getReferenceObject());
 		//Set default loop limit guard
 		tran.setGuard(AvatarGuard.createFromString(block, "loop_index != "+loopLimit));
-		AvatarGuard guard = AvatarGuard.createFromString (block, loop.getCondition().replaceAll("<", "!="));
+		/*AvatarGuard guard = */AvatarGuard.createFromString (block, loop.getCondition().replaceAll("<", "!="));
 				int error = AvatarSyntaxChecker.isAValidGuard(avspec, block, loop.getCondition().replaceAll("<","!="));
 				if (error != 0) {
 					tran.addGuard(loop.getCondition().replaceAll("<", "!="));
@@ -1234,7 +1230,7 @@ public class TML2Avatar {
 		AvatarState as = new AvatarState(ae.getName(), ae.getReferenceObject());
 		elementList.add(as);
 		//Make many choices
-		TMLSelectEvt c = (TMLSelectEvt) ae;
+		//TMLSelectEvt c = (TMLSelectEvt) ae;
 		for (int i=0; i < ae.getNbNext(); i++){
 		tran = new AvatarTransition(block, "__after_"+ae.getName()+"_"+i, ae.getReferenceObject());
 		as.addNext(tran);
@@ -1322,7 +1318,9 @@ public class TML2Avatar {
 	topasm.setStartState(topss);
 	topasm.addElement(topss);
 	}
-	ArrayList<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
+	
+	List<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
+	
 	for (TMLTask task:tasks){
 		AvatarBlock block = new AvatarBlock(task.getName().split("__")[task.getName().split("__").length-1], avspec, task.getReferenceObject());
 		if (mc){
@@ -1393,7 +1391,7 @@ public class TML2Avatar {
 		AvatarAttribute avattr = new AvatarAttribute(attr.getName(), type, block, null);
 		block.addAttribute(avattr);
 		}		
-		AvatarTransition last;
+		//AvatarTransition last;
 		AvatarStateMachine asm = block.getStateMachine();
 		
 		//TODO: Create a fork with many requests. This looks terrible
@@ -1446,8 +1444,8 @@ public class TML2Avatar {
 		}
 
 		//Create exit after # of loop iterations is maxed out
-		AvatarStopState stop = new AvatarStopState("stop", task.getActivityDiagram().get(0).getReferenceObject());	
-		AvatarTransition exitTran = new AvatarTransition(block, "to_stop", task.getActivityDiagram().get(0).getReferenceObject());
+		/*AvatarStopState stop =*/ new AvatarStopState("stop", task.getActivityDiagram().get(0).getReferenceObject());	
+		/*AvatarTransition exitTran = */new AvatarTransition(block, "to_stop", task.getActivityDiagram().get(0).getReferenceObject());
 		
 	
 		//Add Requests, direct transition to start of state machine
@@ -1573,12 +1571,13 @@ public class TML2Avatar {
 			else {
 				//Create new block, hope for best
 		   		if (mc){
-		   			fifo = createFifo();
+		   			fifo = createFifo(channel.getName());
 		   			ar.setAsynchronous(false);
 		   		}
 			}
 			//Find in signal
 			List<AvatarSignal> sig1 = new ArrayList<AvatarSignal>();
+			//Sig1 contains IN Signals, Sig2 contains OUT signals
 			List<AvatarSignal> sig2 = new ArrayList<AvatarSignal>();
 			for (AvatarSignal sig: signals){
 				if (sig.getInOut()==AvatarSignal.IN){
@@ -1606,11 +1605,15 @@ public class TML2Avatar {
 			if (sig1.size()==1 && sig2.size()==1){
 				if (channel.getType()==TMLChannel.NBRNBW && mc){
 					AvatarSignal read = fifo.getSignalByName("readSignal");
+			
 					ar.block2= fifo;
-					ar.addSignals(sig2.get(0), read);
+					//Set IN signal with read
+					ar.addSignals(sig1.get(0), read);
 					AvatarRelation ar2= new AvatarRelation(channel.getName()+"2", fifo, taskBlockMap.get(channel.getDestinationTask()), channel.getReferenceObject());
 					AvatarSignal write = fifo.getSignalByName("writeSignal");
-					ar2.addSignals(write, sig1.get(0));
+					//set OUT signal with write
+					ar2.addSignals(write, sig2.get(0));
+					System.out.println("Set " + sig2.get(0) + " and write");
 					ar2.setAsynchronous(false);
 					avspec.addRelation(ar2);
 				}
@@ -1774,7 +1777,7 @@ public class TML2Avatar {
 	}
 	tmlmap.getTMLModeling().secChannelMap = secChannelMap;
 	
-		TraceManager.addDev("avatar spec\n" +avspec);
+	//	TraceManager.addDev("avatar spec\n" +avspec);
 		return avspec;
 	}
 
@@ -1838,7 +1841,7 @@ public class TML2Avatar {
 	}
 	}
 	public void distributeKeys(){
-		ArrayList<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
+		List<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
 		for (TMLTask t:accessKeys.keySet()){
 			AvatarBlock b = taskBlockMap.get(t);
 			for (SecurityPattern sp: accessKeys.get(t)){
@@ -1878,11 +1881,15 @@ public class TML2Avatar {
 			}
 		}
 	}
-	public AvatarBlock createFifo(){
-	AvatarBlock fifo = new AvatarBlock("FIFO__FIFO", avspec, null);
+	public AvatarBlock createFifo(String name){
+	AvatarBlock fifo = new AvatarBlock("FIFO__FIFO"+name, avspec, null);
 	AvatarState root = new AvatarState("root",null, false);
-		AvatarSignal read = new AvatarSignal("readSignal", AvatarSignal.OUT, null);
-	AvatarSignal write = new AvatarSignal("writeSignal", AvatarSignal.IN, null);
+		AvatarSignal read = new AvatarSignal("readSignal", AvatarSignal.IN, null);
+	AvatarAttribute data = new AvatarAttribute("data", AvatarType.INTEGER, fifo, null);
+	fifo.addAttribute(data); 
+	read.addParameter(data);
+	AvatarSignal write = new AvatarSignal("writeSignal", AvatarSignal.OUT, null);
+	write.addParameter(data);
 	AvatarStartState start = new AvatarStartState("start", null);
 	AvatarTransition afterStart = new AvatarTransition(fifo, "afterStart", null);
 	fifo.addSignal(read);

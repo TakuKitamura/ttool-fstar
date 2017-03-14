@@ -47,7 +47,6 @@
 package ui.tmldd;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 
 import org.w3c.dom.*;
@@ -175,9 +174,9 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
         boolean error = false;
 
         JDialogCommunicationArtifact dialog = new JDialogCommunicationArtifact(frame, "Setting channel artifact attributes", this);
-        dialog.setSize(700, 600);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+   //     dialog.setSize(700, 600);
+        GraphicLib.centerOnParent(dialog, 700, 600);
+        dialog.setVisible( true ); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -259,7 +258,7 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+     //       int t1id;
             String svalue = null, sname = null, sreferenceCommunication = null, stype = null;
             String prio = null;
 
@@ -268,8 +267,8 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

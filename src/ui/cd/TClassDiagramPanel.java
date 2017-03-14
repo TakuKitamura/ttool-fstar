@@ -53,7 +53,6 @@ import org.w3c.dom.*;
 
 
 import ui.*;
-import translator.*;
 
 public class TClassDiagramPanel extends TDiagramPanel implements ClassDiagramPanelInterface {
     
@@ -139,10 +138,11 @@ public class TClassDiagramPanel extends TDiagramPanel implements ClassDiagramPan
     
     public void makePostLoadingProcessing() throws MalformedModelingException {
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TCDTObject) {
                 ((TCDTObject)tgc).postLoadingProcessing();
             }
@@ -151,10 +151,11 @@ public class TClassDiagramPanel extends TDiagramPanel implements ClassDiagramPan
     
     public TCDTData findTData(String name) {
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TCDTData) {
                 if (tgc.getValue().equals(name)) {
                     return (TCDTData)tgc;
@@ -167,10 +168,11 @@ public class TClassDiagramPanel extends TDiagramPanel implements ClassDiagramPan
     
     public TCDTClass getTCDTClass(String name) {
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TCDTClass) {
                 if (((TCDTClass)tgc).getClassName().equals(name)) {
                     return (TCDTClass)tgc;
@@ -265,7 +267,7 @@ public class TClassDiagramPanel extends TDiagramPanel implements ClassDiagramPan
 		
 		DesignPanel dp = (DesignPanel)(mgui.getCurrentTURTLEPanel());
 		DesignPanelTranslator dpt = new DesignPanelTranslator(dp);
-		TURTLEModeling tm = dpt.generateTURTLEModeling(tclasses, "");
+		/*TURTLEModeling tm =*/ dpt.generateTURTLEModeling(tclasses, "");
 		
 		/*String name = tgc.getClassName();
 		tdp = (TDiagramPanel)(tgc.getBehaviourDiagramPanel());

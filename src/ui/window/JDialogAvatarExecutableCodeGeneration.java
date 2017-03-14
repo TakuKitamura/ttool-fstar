@@ -74,8 +74,6 @@ import javax.swing.JTextField;
 
 import avatartranslator.AvatarSpecification;
 import avatartranslator.toexecutable.AVATAR2CPOSIX;
-import ddtranslatorSoclib.AvatarddSpecification;
-import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.FileUtils;
@@ -83,11 +81,9 @@ import myutil.GraphicLib;
 import myutil.MasterProcessInterface;
 import myutil.ScrolledJTextArea;
 import myutil.TraceManager;
-import ui.AvatarDeploymentPanelTranslator;
 import ui.IconManager;
 import ui.JTextAreaWriter;
 import ui.MainGUI;
-import ui.avatardd.ADDDiagramPanel;
 import ui.interactivesimulation.JFrameSimulationSDPanel;
 
 public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
@@ -936,8 +932,8 @@ list = FileUtils.deleteFiles(code1.getText() +  TasksAndMainGenerator.getGenerat
     public void showSimulationTrace() {
         JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(f, mgui, "Simulation trace of " + simulationTraceFile.getText());
         jfssdp.setIconImage(IconManager.img8);
-        jfssdp.setSize(600, 600);
-        GraphicLib.centerOnParent(jfssdp);
+       // jfssdp.setSize(600, 600);
+        GraphicLib.centerOnParent(jfssdp, 600, 600);
         if (selectedViewTrace == 0) {
             jfssdp.setFileReference(simulationTraceFile.getText());
         } else {

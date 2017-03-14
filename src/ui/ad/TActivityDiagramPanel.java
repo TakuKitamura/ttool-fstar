@@ -46,12 +46,9 @@
 
 package ui.ad;
 
-//import java.awt.*;
 import java.util.*;
 
 import org.w3c.dom.*;
-//import org.xml.sax.*;
-//import javax.xml.parsers.*;
 
 import ui.*;
 
@@ -148,9 +145,9 @@ public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiag
     
     public void enhance() {
         //System.out.println("enhance");
-        Vector v = new Vector();
-        Object o;
-        Iterator iterator = componentList.listIterator();
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        TGComponent o;
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
             o = iterator.next();
@@ -163,7 +160,7 @@ public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiag
         repaint();
     }
     
-    public void enhance(Vector v, TGComponent tgc) {
+    public void enhance(Vector<TGComponent> v, TGComponent tgc) {
         TGComponent tgc1;
         TGConnector tgcon;
         int i;

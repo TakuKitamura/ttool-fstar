@@ -53,23 +53,17 @@ import java.awt.event.*;
 import java.awt.geom.*;
 
 import java.util.*;
-import java.util.concurrent.*;
 import org.w3c.dom.*;
 
 import myutil.*;
 import ui.procsd.ProCSDPort;
-//Added by Solange
 import ui.procsd.ProCSDComponent;
 
 import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmlcompd.*;
 import ui.tmldd.*;
-import ui.tree.*;
 import ui.interactivesimulation.*;
-import ui.avatarbd.AvatarBDPragma;
-
-import tmltranslator.*;
 
 public abstract class TGComponent implements CDElement, GenericTree {
 
@@ -113,12 +107,12 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
     // DIPLODOCUS ID
     private int DIPLOID = -1;
-    private boolean DIPLO_running = false;
+//    private boolean DIPLO_running = false;
     private int DIPLO_met = 0;
 
     // AVATAR ID
     private int AVATARID = -1;
-    private boolean AVATAR_running = false;
+//    private boolean AVATAR_running = false;
     private int AVATAR_met = 0;
 
     // TEPE ID
@@ -201,7 +195,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     protected boolean breakpoint;
 
     // Zoom
-    public double dx=0, dy=0, dwidth, dheight, dMaxWidth, dMaxHeight;
+    public double dx=0, dy=0, dwidth, dheight, dMaxWidth, dMaxHeight, dMinWidth, dMinHeight;
 
 
     //Constructor
@@ -353,13 +347,14 @@ public abstract class TGComponent implements CDElement, GenericTree {
         return false;
     }
 
-    public LinkedList getAllCheckableAccessibility() {
-        LinkedList list = new LinkedList();
+    public LinkedList<TGComponent> getAllCheckableAccessibility() {
+        LinkedList<TGComponent> list = new LinkedList<TGComponent>();
         getAllCheckableAccessibility(list);
+        
         return list;
     }
 
-    public void getAllCheckableAccessibility(LinkedList _list) {
+    public void getAllCheckableAccessibility(LinkedList<TGComponent> _list) {
         if (accessibility) {
             _list.add(this);
         }
@@ -413,13 +408,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		latencyCheck=b;
 	}
 
-    public LinkedList getAllCheckableInvariant() {
-        LinkedList list = new LinkedList();
+    public LinkedList<TGComponent> getAllCheckableInvariant() {
+        LinkedList<TGComponent> list = new LinkedList<TGComponent>();
         getAllCheckableInvariant(list);
         return list;
     }
 
-    public void getAllCheckableInvariant(LinkedList _list) {
+    public void getAllCheckableInvariant(LinkedList<TGComponent> _list) {
         if (invariant) {
             _list.add(this);
         }
@@ -881,7 +876,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         //TraceManager.addDev("Drawing diplo ID id=" + li.id);
         int sizeRect = 6;
         int sizeOval = 8;
-        Color c = g.getColor();
+     //   Color c = g.getColor();
         Color myCol = new Color(135, Math.min(255, Math.max(0, (int)(255-(li.load*255)))), 0);
         g.setColor(myCol);
         g.fillRect(x, y, width, sizeRect);
@@ -940,7 +935,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
     
 	public void drawLatencyCheck(Graphics g, int _x, int _y){
-		Color c= g.getColor();
+	//	Color c= g.getColor();
 		g.setColor(Color.BLUE);
 		int[] xs = new int[]{_x-12,_x-4, _x-12};
 		int[] ys= new int[]{_y, _y+5, _y+10};
@@ -1024,7 +1019,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         }
 
 
-        if (tdp.DIPLO_ANIMATE_ON) {
+        if ( TDiagramPanel.DIPLO_ANIMATE_ON ) {
             if (breakpoint) {
                 //System.out.println("breakpoint");
                 g.setColor(ColorManager.BREAKPOINT);
@@ -1036,7 +1031,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
             if (! ((this instanceof TGConnector) || (this instanceof TGCNote) || (this instanceof TMLArchiFirewallNode))) {
                 if (tdp instanceof TMLActivityDiagramPanel) {
                     if (getFather() == null) {
-                        if (tdp.DIPLO_ID_ON) {
+                        if ( TDiagramPanel.DIPLO_ID_ON ) {
                             drawDiploID(g);
                         }
 
@@ -1051,13 +1046,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
                     }
                 } else if (tdp instanceof TMLComponentTaskDiagramPanel) {
                     if (this instanceof TMLCPrimitiveComponent) {
-                        if (tdp.DIPLO_ID_ON) {
+                        if ( TDiagramPanel.DIPLO_ID_ON ) {
                             drawDiploID(g);
                         }
                     }
                 } else if (tdp instanceof TMLTaskDiagramPanel) {
                     if (getDIPLOID() != -1) {
-                        if (tdp.DIPLO_ID_ON) {
+                        if ( TDiagramPanel.DIPLO_ID_ON ) {
                             drawDiploID(g);
                         }
                     }
@@ -1075,7 +1070,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
                       }*/
                 } else if (tdp instanceof TMLArchiDiagramPanel) {
 		     if (getDIPLOID() != -1) {
-                        if (tdp.DIPLO_ID_ON) {
+                        if ( TDiagramPanel.DIPLO_ID_ON ) {
                             drawDiploID(g);
                         }
                         li = tdp.getMGUI().isLoadID(getDIPLOID());
@@ -1149,12 +1144,12 @@ public abstract class TGComponent implements CDElement, GenericTree {
                       }*/
                 }
             }
-        } else if (tdp.DIPLO_ID_ON) {
+        } else if ( TDiagramPanel.DIPLO_ID_ON ) {
             drawDiploID(g);
-        } else if (tdp.AVATAR_ID_ON) {
+        } else if ( TDiagramPanel.AVATAR_ID_ON ) {
 
             drawAVATARID(g);
-        } else if (tdp.TEPE_ID_ON) {
+        } else if ( TDiagramPanel.TEPE_ID_ON ) {
             drawTEPEID(g);
         } else {
 	    runningStatus="";
@@ -1162,7 +1157,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
 	}
 
-        if (tdp.AVATAR_ANIMATE_ON) {
+        if ( TDiagramPanel.AVATAR_ANIMATE_ON) {
             //TraceManager.addDev("Avatar animate?");
             if (breakpoint) {
                 //System.out.println("breakpoint");
@@ -1378,7 +1373,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     // operations on internal components
 
     public boolean areAllInRectangle(int x1, int y1, int width, int height) {
-        TGComponent tgc;
+       // TGComponent tgc;
 
         if (!isInRectangle(x1, y1, width, height)) {
             return false;
@@ -1555,8 +1550,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
         return tgcomponent[index];
     }
 
-    public LinkedList getRecursiveAllInternalComponent() {
-        LinkedList ll = new LinkedList();
+    public LinkedList<TGComponent> getRecursiveAllInternalComponent() {
+        LinkedList<TGComponent> ll = new LinkedList<TGComponent>();
+        
         for(int i=0; i<nbInternalTGComponent; i++) {
             ll.add(tgcomponent[i]);
             ll.addAll(tgcomponent[i].getRecursiveAllInternalComponent());
@@ -2036,7 +2032,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
 
-
     public TGConnectingPoint getFreeTGConnectingPoint(int x, int y) {
         for (int i=0; i<nbConnectingPoint; i++) {
             if (connectingPoint[i].isCloseTo(x, y)) {
@@ -2218,14 +2213,34 @@ public abstract class TGComponent implements CDElement, GenericTree {
         minY = y1;
         maxX = x2;
         maxY = y2;
+
+	/*x = Math.max(minX, x);
+	x = Math.min(maxX, x);
+	
+	y = Math.max(minY, y);
+	y = Math.min(maxY, y);*/
     }
 
-    public final int getX() {
+    public int getX() {
         return x;
     }
 
-    public final int getY() {
+    public int getY() {
         return y;
+    }
+
+    public int getXZoom() {
+	if (tdp == null) {
+	    return x;
+	}
+	return (int)(x*tdp.getZoom());
+    }
+
+    public int getYZoom() {
+	if (tdp == null) {
+	    return y;
+	}
+	return (int)(y*tdp.getZoom());
     }
 
     public final int getWidth() {
@@ -2716,7 +2731,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public boolean belongsToMe(TGComponent t) {
-        TGComponent tgc;
+      //  TGComponent tgc;
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] == t) {
                 return true;
@@ -2772,7 +2787,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         nbInternalTGComponent ++;
         TGComponent [] tgcomponentbis = new TGComponent[nbInternalTGComponent];
 
-        TGComponent tgc;
+       // TGComponent tgc;
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (i < index) {
                 tgcomponentbis[i] = tgcomponent[i];
@@ -3070,7 +3085,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
         for(int i=0; i<nbInternalTGComponent; i++) {
             //Added by Solange
-            TGComponent ruteo=tgcomponent[i];
+        //    TGComponent ruteo=tgcomponent[i];
             if ((tgcomponent[i].getType()==TGComponentManager.PROCSD_OUT_PORT)||(tgcomponent[i].getType()==TGComponentManager.PROCSD_IN_PORT))
                 {
                     //I need to save the interface of the port too

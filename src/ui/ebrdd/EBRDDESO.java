@@ -58,7 +58,7 @@ import org.w3c.dom.*;
 
 public class EBRDDESO extends TGCWithoutInternalComponent implements SwallowedTGComponent {
     private int lineLength = 0;
-	private int textX, textY;
+	//private int textX, textY;
 	
 	// Type
 	public final static String [] ESOS = {"Conjunction", "Disjunction", "Sequence", "Strict sequence", "Simultaneous", "At least/At most"};
@@ -76,8 +76,8 @@ public class EBRDDESO extends TGCWithoutInternalComponent implements SwallowedTG
 		width = 150;
 		height = 5;
 		
-		textX = width - 6;
-		textY = height + 2;
+//		textX = width - 6;
+//		textY = height + 2;
 		
 		nbConnectingPoint = 10;
 		connectingPoint = new TGConnectingPoint[10];
@@ -108,7 +108,7 @@ public class EBRDDESO extends TGCWithoutInternalComponent implements SwallowedTG
     public void internalDrawing(Graphics g) {
 		g.drawRect(x, y, width, height);
 		g.fillRect(x, y, width, height);
-		Font f = g.getFont();
+		//Font f = g.getFont();
 		int w = g.getFontMetrics().stringWidth(ESOS[id]);
 		g.drawString(ESOS[id], x+width-w, y-2);
 	}
@@ -122,13 +122,13 @@ public class EBRDDESO extends TGCWithoutInternalComponent implements SwallowedTG
 	public boolean editOndoubleClick(JFrame frame) {
 		boolean error = false;
 		String errors = "";
-		int tmp;
-		String tmpName;
+//		int tmp;
+//		String tmpName;
         
 		JDialogESO dialog = new JDialogESO(frame, this);
-		dialog.setSize(500, 450);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+		//dialog.setSize(500, 450);
+        GraphicLib.centerOnParent(dialog, 500, 450);
+        dialog.setVisible( true ); // blocked until dialog has been closed
         
 		if (!dialog.isRegularClose()) {
 			return false;
@@ -216,16 +216,16 @@ public class EBRDDESO extends TGCWithoutInternalComponent implements SwallowedTG
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
-            String sstereotype = null, snodeName = null;
+//            int t1id;
+//            String sstereotype = null, snodeName = null;
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

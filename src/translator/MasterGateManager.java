@@ -50,16 +50,16 @@ import java.util.*;
 
 public class MasterGateManager {
     
-    private Vector groups; // GroupsOfGates
-    private Vector master;
-    private Vector forbiddenNames;
-    private static LinkedList topMaster = new LinkedList();
+    private Vector<GroupOfGates> groups; // GroupsOfGates
+    private Vector<Gate> master;
+    private Vector<Gate> forbiddenNames;
+    private static List<MasterGateManager> topMaster = new LinkedList<MasterGateManager>();
     
     public MasterGateManager(TURTLEModeling tm) {
         topMaster.add(this);
-        groups = new Vector();
-        master = new Vector();
-        forbiddenNames = new Vector();
+        groups = new Vector<GroupOfGates>();
+        master = new Vector<Gate>();
+        forbiddenNames = new Vector<Gate>();
         initGates(tm, false);
         generateGates();
     }
@@ -69,31 +69,33 @@ public class MasterGateManager {
 			reinitNameRestriction();
 		}
         topMaster.add(this);
-        groups = new Vector();
-        master = new Vector();
-        forbiddenNames = new Vector();
+        groups = new Vector<GroupOfGates>();
+        master = new Vector<Gate>();
+        forbiddenNames = new Vector<Gate>();
         initGates(tm, false);
         generateGates();
     }
     
     // Observer
     public MasterGateManager() {
-        groups = new Vector();
-        master = new Vector();
-        forbiddenNames = new Vector();
+        groups = new Vector<GroupOfGates>();
+        master = new Vector<Gate>();
+        forbiddenNames = new Vector<Gate>();
     }
     
     public static void reinitNameRestriction() {
-        topMaster = new LinkedList();
+        topMaster = new LinkedList<MasterGateManager>();
     }
     
     public int getTotalGateNumber() {
         MasterGateManager mgm;
         int cpt = 0;
+        
         for(int k=0; k<topMaster.size(); k++) {
-            mgm = (MasterGateManager)(topMaster.get(k));
+            mgm = topMaster.get(k);
             cpt += mgm.nbMasterGate();
         }
+        
         return cpt;
     }
     
@@ -123,10 +125,11 @@ public class MasterGateManager {
         
         name = name.toLowerCase();
         
-        ListIterator ite = topMaster.listIterator();
+        Iterator<MasterGateManager> ite = topMaster.listIterator();
         
         while(ite.hasNext()) {
-            mgm = (MasterGateManager)(ite.next());
+            mgm = ite.next();
+            
             for(i=0; i<mgm.nbMasterGate(); i++) {
                 //System.out.println("i:" + i + "k:" + k);
                 g = mgm.getMasterGateAtIndex(i);
@@ -138,13 +141,13 @@ public class MasterGateManager {
         return cpt;
     }
     
-    public Hashtable getGatesUpperCaseHashTable() {
-      Hashtable ht = new Hashtable();
+    public Map<String, Gate> getGatesUpperCaseHashTable() {
+    	Map<String, Gate> ht = new Hashtable<String, Gate>();
       MasterGateManager mgm;
         int i;
         Gate g;
 
-        ListIterator ite = topMaster.listIterator();
+        Iterator<MasterGateManager> ite = topMaster.listIterator();
         while(ite.hasNext()) {
             mgm = (MasterGateManager)(ite.next());
             for(i=0; i<mgm.nbMasterGate(); i++) {
@@ -163,9 +166,11 @@ public class MasterGateManager {
         Gate g;
         
         name = name.toLowerCase();
-        ListIterator ite = topMaster.listIterator();
+        Iterator<MasterGateManager> ite = topMaster.listIterator();
+        
         while(ite.hasNext()) {
-            mgm = (MasterGateManager)(ite.next());
+            mgm = ite.next();
+            
             for(i=0; i<mgm.nbMasterGate(); i++) {
                 //System.out.println("i:" + i + "k:" + k);
                 g = mgm.getMasterGateAtIndex(i);
@@ -174,6 +179,7 @@ public class MasterGateManager {
                 }
             }
         }
+        
         return null;
     }
     
@@ -212,12 +218,12 @@ public class MasterGateManager {
     }
     
     public int getMasterIndexOf(GroupOfGates gog) {
-        MasterGateManager mgm;
+       // MasterGateManager mgm;
         GroupOfGates gog1;
         int cpt = 0;
         int i;
         for(int k=0; k<topMaster.size(); k++) {
-            mgm = (MasterGateManager)(topMaster.get(k));
+          //  mgm = (MasterGateManager)(topMaster.get(k));
             for(i=0; i<groups.size(); i++) {
                 gog1 = (GroupOfGates)(groups.elementAt(i));
                 if (gog1 == gog) {
@@ -235,17 +241,17 @@ public class MasterGateManager {
     
     public MasterGateManager(TURTLEModeling tm, boolean startTakenIntoAccount) {
         topMaster.add(this);
-        groups = new Vector();
-        master = new Vector();
-        forbiddenNames = new Vector();
+        groups = new Vector<GroupOfGates>();
+        master = new Vector<Gate>();
+        forbiddenNames = new Vector<Gate>();
         initGates(tm, startTakenIntoAccount);
         generateGates();
     }
     
-    public MasterGateManager(TURTLEModeling tm, Vector forbidden) {
+    public MasterGateManager(TURTLEModeling tm, Vector<Gate> forbidden) {
         topMaster.add(this);
-        groups = new Vector();
-        master = new Vector();
+        groups = new Vector<GroupOfGates>();
+        master = new Vector<Gate>();
         forbiddenNames = forbidden;
         initGates(tm, false);
         generateGates();
@@ -254,7 +260,7 @@ public class MasterGateManager {
     private void initGates(TURTLEModeling tm, boolean start) {
         TClass tc, tmp_tc;
         Gate g, tmp_g;
-        Vector list1, list2;
+        Vector<Gate> list1;//, list2;
         Relation r;
         GroupOfGates gog, gog1, gog2;
         
@@ -266,7 +272,7 @@ public class MasterGateManager {
                 // for each public gate, we add it a a group of gates if not connected a a gate already added
                 list1 = tc.getGateList();
                 for(int j=0; j<list1.size(); j++) {
-                    g = (Gate)(list1.elementAt(j));
+                    g = list1.elementAt(j);
                     //System.out.println("Tclass:" + tc.getLotosName() + " Gate:" + g.getLotosName());
                     
                     //if (!g.isInternal()) {
@@ -324,17 +330,17 @@ public class MasterGateManager {
             }
         }
     }
-    
-    private void addForbiddenNames(Vector gates) {
-        forbiddenNames.addElement(gates);
-    }
+//    
+//    private void addForbiddenNames(Vector gates) {
+//        forbiddenNames.addElement(gates);
+//    }
     
     
     private void generateGates() {
         GroupOfGates gog;
-        TClass tc;
+       // TClass tc;
         Gate g, master;
-        String s;
+      //  String s;
         int i;
         
         for(i=0; i<groups.size(); i++) {
@@ -351,7 +357,7 @@ public class MasterGateManager {
             s = generateGateName(s);
         }
         //Gate new_g = new Gate(s, g.GATE, false);
-        Gate new_g = new Gate(s, g.GATE, g.isInternal());
+        Gate new_g = new Gate(s, Gate.GATE, g.isInternal());
         new_g.setLotosName(s);
         master.add(new_g);
         return new_g;
@@ -400,7 +406,7 @@ public class MasterGateManager {
         }
         
         for(int j=0; j<forbiddenNames.size(); j++) {
-            g2 = (Gate)(forbiddenNames.elementAt(j));
+            g2 = forbiddenNames.elementAt(j);
             if ((g2.getLotosName() != null) && (s != null)){
                if (g2.getLotosName().equals(s)) {
                   return true;
@@ -432,7 +438,7 @@ public class MasterGateManager {
         return cpt;
     }
     
-    public Vector getAllMasterGates() {
+    public Vector<Gate> getAllMasterGates() {
         return master;
     }
     
@@ -574,5 +580,4 @@ public class MasterGateManager {
         Collections.sort(master);
         Collections.sort(groups);
     }
- 
 }

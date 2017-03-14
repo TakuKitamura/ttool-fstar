@@ -228,9 +228,9 @@ public class TCDSynchroGateList extends TGCWithoutInternalComponent {
         
         String oldValue = value;
         JDialogSynchro jda = new JDialogSynchro(frame, t1, t2, gates, this, "Setting synchronization gates");
-        jda.setSize(750, 400);
-        GraphicLib.centerOnParent(jda);
-        jda.show(); // blocked until dialog has been closed
+       // jda.setSize(750, 400);
+        GraphicLib.centerOnParent(jda, 750, 400);
+        jda.setVisible( true ); // blocked until dialog has been closed
         
         makeValue();
         
@@ -278,8 +278,8 @@ public class TCDSynchroGateList extends TGCWithoutInternalComponent {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

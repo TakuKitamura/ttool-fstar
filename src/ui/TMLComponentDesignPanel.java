@@ -51,18 +51,13 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
-//import ui.tmlcd.*;
 import ui.tmlcompd.*;
 import ui.tmlad.*;
 import ui.tmldd.*;
-import ui.tmlcd.*;
-import avatartranslator.*;
-import proverifspec.*;
-import myutil.*;
 
 public class TMLComponentDesignPanel extends TURTLEPanel {
     public TMLComponentTaskDiagramPanel tmlctdp;
-    public Vector validated, ignored;
+    public Vector<TGComponent> validated, ignored;
 
     public TMLComponentDesignPanel(MainGUI _mgui) {
         super(_mgui);
@@ -113,7 +108,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmladp);
         tmladp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         panels.add(tmladp);
@@ -140,7 +135,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmlctdp);
         tmlctdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         toolBarPanel.add(toolBarTML, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab("TML Component Task Diagram", IconManager.imgic1208, toolBarPanel, "Opens TML component task diagram");
@@ -164,7 +159,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         return mgui.getTitleAt(this) +  "(DIPLODOCUS Component Application diagram)";
     }
 
-    public ArrayList<String> getAllNonMappedTMLPrimitiveComponentNames(String _name, TMLArchiDiagramPanel _tadp, boolean ref, String name) {
+    public java.util.List<String> getAllNonMappedTMLPrimitiveComponentNames(String _name, TMLArchiDiagramPanel _tadp, boolean ref, String name) {
         return tmlctdp.getAllNonMappedTMLPrimitiveComponentNames(_name, _tadp, ref, name);
     }
 
@@ -172,51 +167,52 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         return tmlctdp.getPrimitiveComponentByName(_name);
     }
 
-    public ArrayList<String> getAllTMLCommunicationNames(String _name) {
+    public java.util.List<String> getAllTMLCommunicationNames(String _name) {
         return tmlctdp.getAllTMLCommunicationNames(_name);
     }
 
-    public ArrayList<String> getAllTMLInputPorts( String _name ) {
+    public java.util.List<String> getAllTMLInputPorts( String _name ) {
         return tmlctdp.getAllTMLInputPorts( _name );
     }
 
-    public ArrayList<String> getAllTMLEventNames( String _name ) {
+    public java.util.List<String> getAllTMLEventNames( String _name ) {
         return tmlctdp.getAllTMLEventNames( _name );
     }
 
-    public ArrayList<String> getAllCompositeComponent(String _name) {
+    public java.util.List<String> getAllCompositeComponent(String _name) {
         return tmlctdp.getAllCompositeComponent(_name);
     }
 		
-		public Vector getAllTMLTasksAttributes() {
+		public Vector<String> getAllTMLTasksAttributes() {
 			return tmlctdp.getAllTMLTasksAttributes();
 		}
-    public ArrayList<String> getAllTMLTaskNames(String _name) {
+    public java.util.List<String> getAllTMLTaskNames(String _name) {
 	return tmlctdp.getAllTMLTaskNames(_name);
     }
 
     public void getListOfBreakPoints(ArrayList<Point> points) {
-        TGComponent tgc;
-        ListIterator iterator = tmlctdp.getPrimitiveComponentList().listIterator();
+       // TGComponent tgc;
+        Iterator<TMLCPrimitiveComponent> iterator = tmlctdp.getPrimitiveComponentList().listIterator();
         TMLCPrimitiveComponent tmlcpc;
         TMLActivityDiagramPanel tmladp;
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TMLCPrimitiveComponent) {
-                tmlcpc = (TMLCPrimitiveComponent)tgc;
-                if (tmlcpc.getDIPLOID() != -1) {
-                    //System.out.println("Searching for ad of name: " + tmlcpc.getValue());
-                    tmladp = mgui.getReferencedTMLActivityDiagramPanel(tmlcpc.getTDiagramPanel(), tmlcpc.getValue());
-                    if (tmladp != null) {
-                        tmladp.getListOfBreakPoints(points, tmlcpc.getDIPLOID());
-                    } else {
-                        System.out.println("Unknown panel:" + tmlcpc.getValue());
-                    }
+           // tgc = (TGComponent)(iterator.next());
+            //if (tgc instanceof TMLCPrimitiveComponent) {
+            tmlcpc = iterator.next();
+            if (tmlcpc.getDIPLOID() != -1) {
+                //System.out.println("Searching for ad of name: " + tmlcpc.getValue());
+                tmladp = mgui.getReferencedTMLActivityDiagramPanel(tmlcpc.getTDiagramPanel(), tmlcpc.getValue());
+                if (tmladp != null) {
+                    tmladp.getListOfBreakPoints(points, tmlcpc.getDIPLOID());
+                } else {
+                    System.out.println("Unknown panel:" + tmlcpc.getValue());
                 }
             }
+//            }
         }
     }
+    
     public ArrayList<String> getAllCryptoConfig(){
 	ArrayList<String> cryptoConfigs=new ArrayList<String>();
 	TMLActivityDiagramPanel tmladp;

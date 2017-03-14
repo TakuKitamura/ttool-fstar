@@ -89,10 +89,10 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     protected JButton close;
     String simulator;
 
-    protected JCheckBox autoConf, autoAuth, autoMapKeys, custom, outputTXT, outputHTML;
+    protected JCheckBox autoConf, autoAuth, autoMapKeys, custom, outputTXT, outputHTML, addHSM;
 
-    protected JTextField encTime, decTime, secOverhead;
-
+    protected JTextField encTime, decTime, secOverhead, addToComp;
+	String compName="";
     protected JTextField tmlDirectory, mappingFile, modelFile, simulationThreads, resultsDirectory, simulationCycles, minCPU, maxCPU, simulationsPerMapping;
     protected JTextArea outputText;
     protected String output = "";
@@ -147,7 +147,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     }
 
     protected void myInitComponents() {
-        mode = NOT_SELECTED;
+        mode = NOT_STARTED;
         setButtons();
     }
 
@@ -175,10 +175,21 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         //genJava.addActionListener(this);
         autoConf= new JCheckBox("Add security (Confidentiality)");
         jp01.add(autoConf, c01);
+		autoConf.addActionListener(this);
         autoAuth= new JCheckBox("Add security (Authenticity)");
         jp01.add(autoAuth, c01);
+		autoAuth.addActionListener(this);
         autoMapKeys= new JCheckBox("Add Keys");
+		autoMapKeys.addActionListener(this);
         jp01.add(autoMapKeys, c01);
+
+        addHSM = new JCheckBox("Add HSM");
+        jp01.add(addHSM,c01);
+
+		jp01.add(new JLabel("Add HSM to component:"),c01);
+        addToComp = new JTextField(compName);
+        jp01.add(addToComp,c01);
+
 
         custom = new JCheckBox("Custom performance attributes");
         jp01.add(custom,c01);
@@ -591,6 +602,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	Nbsim = simulationsPerMapping.getText();
 	encCC = encTime2.getText();
 	decCC = decTime2.getText();
+	compName=addToComp.getText();
 	secAnalysisState = secAnalysis.isSelected();
 	secOv = secOverhead2.getText();
 	outputTXTState = outputTXT.isSelected();
@@ -602,6 +614,11 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     private void handleStartButton() {
 	if (mode != NOT_STARTED  && mode != NOT_SELECTED) {
 	    return;
+	}
+	if (jp1.getSelectedIndex() !=1){
+		mode = NOT_STARTED;
+		setButtons();
+		return;
 	}
 	boolean oneResult, oneAction;
 	oneResult = outputHTML.isSelected() || outputTXT.isSelected();
@@ -619,16 +636,15 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 
     public void actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
-	
         if (command.equals("Start"))  {
             startProcess();
         } else if (command.equals("Stop")) {
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
-        } else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == outputHTML) || (evt.getSource() == outputTXT)) {
+        } else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == outputHTML) || (evt.getSource() == outputTXT) || (evt.getSource() == autoAuth) || (evt.getSource() == autoConf) || (evt.getSource() == autoMapKeys)) {
 	    handleStartButton();
-	}
+		}
     }
 
     public void closeDialog() {
@@ -698,9 +714,13 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
                     map = mgui.gtm.autoSecure(mgui,autoConf.isSelected(), autoAuth.isSelected());
                 }
             }
+			else if (addHSM.isSelected()){
+				mgui.gtm.addHSM(mgui, addToComp.getText());
+			}
             if (autoMapKeys.isSelected()){
                 mgui.gtm.autoMapKeys();
             }
+			mode = NOT_STARTED;
         }
         else if (jp1.getSelectedIndex()==1){
             encCC=encTime2.getText();

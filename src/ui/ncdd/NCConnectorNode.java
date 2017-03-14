@@ -49,7 +49,6 @@ package ui.ncdd;
 
 
 import java.awt.*;
-import java.awt.geom.*;
 import javax.swing.*;
 import java.util.*;
 
@@ -128,9 +127,9 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 		String interfaceNameTmp;
         
         JDialogLinkNCNode jdlncn = new JDialogLinkNCNode(frame, "Setting link parameters", hasCapacity, capacity, capacityUnit, hasParameter, parameter, interfaceName);
-        jdlncn.setSize(650, 650);
-        GraphicLib.centerOnParent(jdlncn);
-        jdlncn.show(); // Blocked until dialog has been closed
+        //jdlncn.setSize(650, 650);
+        GraphicLib.centerOnParent(jdlncn, 650, 650);
+        jdlncn.setVisible( true ); // Blocked until dialog has been closed
 		
         interfaceNameTmp = jdlncn.getInterfaceName().trim();
 		tmp = jdlncn.getCapacity();
@@ -224,7 +223,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+            //int t1id;
 			String prio;
 			String unit;
 			String has;
@@ -234,8 +233,8 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

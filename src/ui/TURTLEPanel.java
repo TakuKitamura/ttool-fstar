@@ -47,18 +47,15 @@
 package ui;
 
 import java.awt.*;
-//import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
-//import ui.cd.*;
-//import ui.tree.*;
 import myutil.*;
 
 public abstract class TURTLEPanel implements GenericTree {
     public JTabbedPane tabbedPane;
     protected MainGUI mgui;
-    public Vector toolbars;
+    public Vector<TToolBar> toolbars;
     public JPanel toolBarPanel;
     public Vector<TDiagramPanel> panels;
     protected ChangeListener cl;
@@ -66,8 +63,8 @@ public abstract class TURTLEPanel implements GenericTree {
 
     public TURTLEPanel(MainGUI _mgui) {
         mgui = _mgui;
-        toolbars = new Vector();
-        panels = new Vector();
+        toolbars = new Vector<TToolBar>();
+        panels = new Vector<TDiagramPanel>();
     }
 
     public abstract void init();

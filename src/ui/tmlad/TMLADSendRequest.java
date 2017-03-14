@@ -214,10 +214,19 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
         return requestName;
     }
 
+
+	public void setRequestName(String name){
+		requestName=name;
+		makeValue();
+	}	
+
     public String getParamValue(int i) {
         return params[i];
     }
 
+	public void setParam(int i, String s){
+		params[i]=s;
+	}
     public int nbOfParams() {
         return nParam;
     }
@@ -264,9 +273,9 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
 	help.add(allOutRequests);
 
         JDialogMultiString jdms = new JDialogMultiString(frame, "Setting request's properties", nParam+1, labels, values, help);
-        jdms.setSize(350, 300);
-        GraphicLib.centerOnParent(jdms);
-        jdms.show(); // blocked until dialog has been closed
+    //    jdms.setSize(350, 300);
+        GraphicLib.centerOnParent(jdms, 350, 300);
+        jdms.setVisible( true ); // blocked until dialog has been closed
 
         if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
             requestName = jdms.getString(0);
@@ -320,8 +329,8 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

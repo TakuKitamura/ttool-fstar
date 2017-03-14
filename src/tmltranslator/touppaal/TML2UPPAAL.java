@@ -62,7 +62,7 @@ public class TML2UPPAAL {
     private UPPAALTemplate lossTemplate;
     private Vector<String> lossNames;
 	
-    private boolean debug;
+  //  private boolean debug;
     private int sizeInfiniteFIFO = DEFAULT_INFINITE_FIFO_SIZE;
     
     private int currentX, currentY;
@@ -126,7 +126,7 @@ public class TML2UPPAAL {
 		TraceManager.addDev("Generating UPPAAL Specification from TML");
 		tmlmodeling.removeAllRandomSequences();
 		
-        debug = _debug;
+      //  debug = _debug;
         spec = new UPPAALSpec();
 		rtu = new RelationTMLUPPAAL();
 		lossTemplate = null;
@@ -156,9 +156,10 @@ public class TML2UPPAAL {
     }
     
     public void makeChannels() {
-		ListIterator iterator = tmlmodeling.getListIteratorChannels();
+		Iterator<TMLChannel> iterator = tmlmodeling.getListIteratorChannels();
+		
 		while(iterator.hasNext()) {
-			makeChannel((TMLChannel)(iterator.next()));
+			makeChannel(iterator.next());
 		}
     }
     
@@ -193,9 +194,10 @@ public class TML2UPPAAL {
     }
 	
     public void makeRequests() {
-		ListIterator iterator = tmlmodeling.getListIteratorRequests();
+		Iterator<TMLRequest> iterator = tmlmodeling.getListIteratorRequests();
+		
 		while(iterator.hasNext()) {
-			makeRequest((TMLRequest)(iterator.next()));
+			makeRequest( iterator.next() );
 		}
     }
     
@@ -216,9 +218,10 @@ public class TML2UPPAAL {
     }
     
     public void makeEvents() {
-		ListIterator iterator = tmlmodeling.getListIteratorEvents();
+		Iterator<TMLEvent> iterator = tmlmodeling.getListIteratorEvents();
+		
 		while(iterator.hasNext()) {
-			makeEvent((TMLEvent)(iterator.next()));
+			makeEvent( iterator.next());
 		}
     }
     
@@ -238,9 +241,10 @@ public class TML2UPPAAL {
     }
     
     public void makeTasks() {
-		ListIterator iterator = tmlmodeling.getListIteratorTasks();
+		Iterator<TMLTask> iterator = tmlmodeling.getListIteratorTasks();
+		
 		while(iterator.hasNext()) {
-			makeTask((TMLTask)(iterator.next()));
+			makeTask( iterator.next() );
 		}
     }
     
@@ -262,11 +266,11 @@ public class TML2UPPAAL {
     }
     
     public void makeAttributes(TMLTask task, UPPAALTemplate template) {
-		ListIterator iterator = task.getAttributes().listIterator();
+		Iterator<TMLAttribute> iterator = task.getAttributes().listIterator();
 		TMLAttribute tmlatt;
 		
 		while(iterator.hasNext()) {
-			tmlatt = (TMLAttribute)(iterator.next());
+			tmlatt = iterator.next();
 			if (tmlatt.hasInitialValue()) {
 				template.addDeclaration(tmlatt.getType().toString() + " " + tmlatt.getName() + " = " + tmlatt.getInitialValue() +";\n");
 			} else {
@@ -326,7 +330,7 @@ public class TML2UPPAAL {
     }
 	
     public void makeElementBehavior(TMLTask task, UPPAALTemplate template, TMLActivityElement elt, UPPAALLocation previous, UPPAALLocation end) {
-		UPPAALLocation loc, loc1, loc2, loc3, loc4;
+		UPPAALLocation loc, loc1, loc2,/* loc3,*/ loc4;
 		UPPAALTransition tr, tr1, tr2, tr3;
 		TMLReadChannel rc;
 		TMLWriteChannel wc;
@@ -738,14 +742,14 @@ public class TML2UPPAAL {
     }
     
     public void makeSystem() {
-		ListIterator iterator = spec.getTemplates().listIterator();
+		Iterator<UPPAALTemplate> iterator = spec.getTemplates().listIterator();
 		UPPAALTemplate template;
 		String system = "system ";
 		String dec = "";
 		int id = 0;
 		
 		while(iterator.hasNext()) {
-			template = (UPPAALTemplate)(iterator.next());
+			template = iterator.next();
 			template.setIdInstanciation(id);
 			dec += template.getName() + "__" + id + " = " + template.getName() + "();\n";
 			system += template.getName() + "__" + id;

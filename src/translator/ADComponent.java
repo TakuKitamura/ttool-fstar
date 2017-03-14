@@ -51,12 +51,12 @@ public abstract class ADComponent implements Cloneable {
     protected boolean selected = false;
     protected int nbNext;
     protected int minNbNext;
-    protected Vector next;
+    protected Vector<ADComponent> next;
     public ADComponent substitute; // For modification of AD
     protected String pre, post;
     
     public ADComponent() {
-        next = new Vector();
+        next = new Vector<ADComponent>();
         minNbNext = 1;
     }
     
@@ -68,7 +68,7 @@ public abstract class ADComponent implements Cloneable {
     
     public ADComponent getNext(int index) {
         if (index < next.size()) {
-            return (ADComponent)(next.elementAt(index));
+            return next.elementAt(index);
         } else {
             return null;
         }
@@ -86,11 +86,11 @@ public abstract class ADComponent implements Cloneable {
         return next.size();
     }
     
-    public Vector getAllNext() {
+    public Vector<ADComponent> getAllNext() {
         return next;
     }
     
-    public void setNewNext(Vector newNext) {
+    public void setNewNext(Vector<ADComponent> newNext) {
         next = newNext;
     }
     
@@ -187,7 +187,7 @@ public abstract class ADComponent implements Cloneable {
         return post;
     }
     
-    public Vector getLastBeforeStop(Vector v, ADComponent previous) {
+    public Vector<ADComponent> getLastBeforeStop(Vector<ADComponent> v, ADComponent previous) {
         if (this instanceof ADStop) {
             v.add(previous);
             return v;

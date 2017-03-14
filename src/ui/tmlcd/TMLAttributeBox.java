@@ -239,8 +239,8 @@ public class TMLAttributeBox extends TGCWithoutInternalComponent {
         String oldValue = value;
         JDialogAttribute jda = new JDialogAttribute(myAttributes, forbiddenNames, frame, "Setting " + attributeText + "s of " + father.getValue(), attributeText);
         setJDialogOptions(jda);
-        jda.setSize(650, 375);
-        GraphicLib.centerOnParent(jda);
+  //      jda.setSize(650, 375);
+        GraphicLib.centerOnParent(jda, 650, 375);
         jda.setVisible(true); // blocked until dialog has been closed
         makeValue();
         if (oldValue.equals(value)) {

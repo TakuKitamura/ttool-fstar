@@ -53,6 +53,7 @@ import java.util.*;
 
 import ui.iod.*;
 import ui.sd.*;
+import ui.sd2.*;
 import ui.ucd.*;
 import ui.avatarcd.*;
 import ui.avatarad.*;
@@ -74,38 +75,16 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
 
     public void init() {
         mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
-        /*//  Class Diagram toolbar
-          InteractionOverviewDiagramToolBar toolBarIOD = new InteractionOverviewDiagramToolBar(mgui);
-          toolbars.add(toolBarIOD);
-
-          toolBarPanel = new JPanel();
-          toolBarPanel.setLayout(new BorderLayout());
-
-          //Class       diagram
-          iodp = new InteractionOverviewDiagramPanel(mgui, toolBarIOD);
-          iodp.setName("Interaction Overview Diagram");
-          iodp.tp = this;
-          tdp = iodp;
-          panels.add(iodp);
-          JScrollDiagramPanel jsp       = new JScrollDiagramPanel(iodp);
-          iodp.jsp = jsp;
-          jsp.setWheelScrollingEnabled(true);
-          jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
-          toolBarPanel.add(toolBarIOD, BorderLayout.NORTH);
-          toolBarPanel.add(jsp, BorderLayout.CENTER);
-          tabbedPane.addTab("Interaction Overview Diagram", IconManager.imgic17, toolBarPanel, "Opens interaction overview diagram");
-          tabbedPane.setSelectedIndex(0); */
-        //jsp.setVisible(true);
     }
 
     public boolean addSequenceDiagram(String s) {
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
 
-        SequenceDiagramToolBar toolBarSequence  = new SequenceDiagramToolBar(mgui);
+        ui.sd.SequenceDiagramToolBar toolBarSequence  = new ui.sd.SequenceDiagramToolBar(mgui);
         toolbars.add(toolBarSequence);
 
-        SequenceDiagramPanel sdp = new SequenceDiagramPanel(mgui, toolBarSequence);
+        ui.sd.SequenceDiagramPanel sdp = new ui.sd.SequenceDiagramPanel(mgui, toolBarSequence);
         sdp.setName(s);
         sdp.tp = this;
         panels.add(sdp);
@@ -125,29 +104,33 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
 
     }
 
-    /*public boolean addIODiagram(String s) {
-      InteractionOverviewDiagramToolBar toolBarIOD = new InteractionOverviewDiagramToolBar(mgui);
-      toolbars.add(toolBarIOD);
+    public boolean addSequenceDiagramZV(String s) {
+        JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
 
-      toolBarPanel = new JPanel();
-      toolBarPanel.setLayout(new BorderLayout());
+        ui.sd2.SequenceDiagramToolBar toolBarSequence  = new ui.sd2.SequenceDiagramToolBar(mgui);
+        toolbars.add(toolBarSequence);
 
-      iodp = new InteractionOverviewDiagramPanel(mgui, toolBarIOD);
-      iodp.setName(s);
-      iodp.tp = this;
-      tdp = iodp;
-      panels.add(iodp);
-      JScrollDiagramPanel jsp   = new JScrollDiagramPanel(iodp);
-      iodp.jsp = jsp;
-      jsp.setWheelScrollingEnabled(true);
-      jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
-      toolBarPanel.add(toolBarIOD, BorderLayout.NORTH);
-      toolBarPanel.add(jsp, BorderLayout.CENTER);
-      tabbedPane.addTab(s, IconManager.imgic17, toolBarPanel, "Opens interaction overview diagram");
+        ui.sd2.SequenceDiagramPanel sdp = new ui.sd2.SequenceDiagramPanel(mgui, toolBarSequence);
+        sdp.setName(s);
+        sdp.tp = this;
+        panels.add(sdp);
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(sdp);
+        sdp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        toolBarPanel.add(toolBarSequence, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab(s, IconManager.imgic18, toolBarPanel, "Open the sequence diagram of " + s);
+        //tabbedPane.setVisible(true);
+        //sdp.setVisible(true);
+        //jsp.setVisible(true);
+        //tabbedPane.setSelectedIndex(panels.size()-1);
 
-      return true;
+        return true;
 
-      }*/
+    }
+
 
     public boolean addUseCaseDiagram(String s) {
         JPanel toolBarPanel = new JPanel();
@@ -261,14 +244,14 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
     }
 
     public boolean canFirstDiagramBeMoved() {
-	return true;
+        return true;
     }
 
     public void addInstancesToLastSD(UseCaseDiagramPanel _ucdp) {
         TraceManager.addDev("Adding instances to last SD");
 
         TDiagramPanel panel = (TDiagramPanel)(panels.get(panels.size()-1));
-        if (!(panel instanceof SequenceDiagramPanel)) {
+        if (!(panel instanceof ui.sd2.SequenceDiagramPanel)) {
             return;
         }
 
@@ -321,12 +304,12 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         int initX = 100;
         int initY = 100;
         int stepX = 150;
-        SDInstance sdi;
+        ui.sd2.SDInstance sdi;
         boolean systemAdded = false;
         // Add actors (and the system)
         for(TGComponent elt: actors) {
             if (elt.getX() > middleX && !systemAdded) {
-                sdi = (SDInstance)(TGComponentManager.addComponent(initX, initY, TGComponentManager.SD_INSTANCE, panel));
+                sdi = (ui.sd2.SDInstance)(TGComponentManager.addComponent(initX, initY, TGComponentManager.SDZV_INSTANCE, panel));
                 sdi.setValue(systemName);
                 sdi.setName(systemName);
                 sdi.setActor(false);
@@ -334,7 +317,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
                 initX += stepX;
                 systemAdded = true;
             }
-            sdi = (SDInstance)(TGComponentManager.addComponent(initX, initY, TGComponentManager.SD_INSTANCE, panel));
+            sdi = (ui.sd2.SDInstance)(TGComponentManager.addComponent(initX, initY, TGComponentManager.SDZV_INSTANCE, panel));
             sdi.setValue(elt.getValue());
             sdi.setName(elt.getValue());
             sdi.setActor(true);
@@ -343,7 +326,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         }
 
         if (!systemAdded) {
-            sdi = (SDInstance)(TGComponentManager.addComponent(initX, initY, TGComponentManager.SD_INSTANCE, panel));
+            sdi = (ui.sd2.SDInstance)(TGComponentManager.addComponent(initX, initY, TGComponentManager.SDZV_INSTANCE, panel));
             sdi.setValue(systemName);
             sdi.setName(systemName);
             sdi.setActor(false);

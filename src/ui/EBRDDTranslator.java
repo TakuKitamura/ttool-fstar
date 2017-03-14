@@ -46,9 +46,6 @@ package ui;
 
 import java.util.*;
 
-
-
-import myutil.*;
 import ui.ebrdd.*;
 import req.ebrdd.*;
 import tmltranslator.*;
@@ -102,14 +99,14 @@ public class EBRDDTranslator {
 		ebrdd = new EBRDD(_name);
 		
 		// Search for start state
-		LinkedList list = ebrddp.getComponentList();
-		Iterator iterator = list.listIterator();
+		List<TGComponent> list = ebrddp.getComponentList();
+		Iterator<TGComponent> iterator = list.listIterator();
 		TGComponent tgc, tgc1, tgc2, tgc3, tgc1tmp, tgc2tmp;
 		TGComponent tss = null;
 		int cptStart = 0;
 		
 		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
+			tgc = iterator.next();
 			if (tgc instanceof EBRDDStartState){
 				tss = tgc;
 				cptStart ++;
@@ -217,7 +214,7 @@ public class EBRDDTranslator {
 			}
 		}
 		
-		Vector v = listE.getData();
+		Vector<Object> v = listE.getData();
 		Object o;
 		for(i=0; i<v.size(); i++) {
 			o = v.get(i);

@@ -156,9 +156,9 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
         oldUserCode = userCode;
         
         JDialogArtifact jda = new JDialogArtifact(frame, value, jarValue, userCode);
-        jda.setSize(350, 250);
-        GraphicLib.centerOnParent(jda);
-        jda.show(); // blocked until dialog has been closed
+    //    jda.setSize(350, 250);
+        GraphicLib.centerOnParent(jda, 350, 250);
+        jda.setVisible( true ); // blocked until dialog has been closed
         
         value = jda.getName();
         jarValue = jda.getJarName();
@@ -222,7 +222,7 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+      //      int t1id;
             String svalue = null, sjarValue = null, suserCode = null;
             
             for(int i=0; i<nl.getLength(); i++) {
@@ -230,8 +230,8 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
@@ -266,8 +266,8 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
         return tdp.getGUI().getDesignPanel(value);
     }
     
-    public Vector getListOfATG() {
-        Vector v = new Vector();
+    public Vector<ArtifactTClassGate> getListOfATG() {
+        Vector<ArtifactTClassGate> v = new Vector<ArtifactTClassGate>();
         DesignPanel dp = tdp.getGUI().getDesignPanel(value);
         
         if (dp == null) {
@@ -275,12 +275,12 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
         }
         
         //System.out.println("DesignPanel ok");
-        LinkedList<TGComponent> ll = dp.tcdp.getComponentList();
+        java.util.List<TGComponent> ll = dp.tcdp.getComponentList();
         TCDTClass tc;
         ArtifactTClassGate atg;
-        LinkedList<TAttribute> listGates;
+        java.util.List<TAttribute> listGates;
         
-        for (TGComponent tgc: ll)
+        for (TGComponent tgc: ll) {
             if (tgc instanceof TCDTClass) {
                 tc = (TCDTClass)tgc;
                 //System.out.println("Found class = " + tc.getClassName());
@@ -295,6 +295,7 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
                     }
                 }
             }
+        }
         
         return v;
     }

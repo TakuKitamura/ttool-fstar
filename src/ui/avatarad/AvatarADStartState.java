@@ -57,9 +57,9 @@ public class AvatarADStartState extends AvatarADBasicComponent implements Embedd
     
     public AvatarADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 15;
-        height = 15;
+
+	initScaling(15, 15);
+        oldScaleFactor = tdp.getZoom();
         
         nbConnectingPoint = 1;
         connectingPoint = new TGConnectingPoint[1];

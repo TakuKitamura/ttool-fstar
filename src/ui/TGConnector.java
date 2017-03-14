@@ -55,7 +55,7 @@ import java.util.*;
 
 import myutil.*;
 
-public abstract class TGConnector extends TGCWithInternalComponent      {
+public abstract class TGConnector extends TGCScalableWithInternalComponent      {
 
     protected final static String XML_CONNECTOR_HEAD = "<CONNECTOR type=\"";
     protected final static String XML_ID = "\" id=\"";
@@ -75,10 +75,12 @@ public abstract class TGConnector extends TGCWithInternalComponent      {
 
     // WARNING: point of connectors must be put first in the list of internal components ...
 
-    public TGConnector(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+    public TGConnector(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         p1 = _p1;
         p2 = _p2;
+	
+	initScaling(0, 0);
 
         nbInternalTGComponent = _listPoint.size();
         tgcomponent = new TGComponent[nbInternalTGComponent];
@@ -86,7 +88,7 @@ public abstract class TGConnector extends TGCWithInternalComponent      {
         Point p;
         //System.out.println("nbInternalTGComponent" + nbInternalTGComponent);
         for(int i=0; i<nbInternalTGComponent; i++) {
-            p = (Point)(_listPoint.elementAt(i));
+            p = _listPoint.elementAt(i);
             //System.out.println("p.x " + p.x + " p.y" + p.y + " minX" + _minX + " maxX" + _maxX);
             tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, _minX, _maxX, _minY, _maxY, false, this, _tdp);
         }
@@ -96,12 +98,14 @@ public abstract class TGConnector extends TGCWithInternalComponent      {
         removable = true;
     }
 
-    public Vector getListOfPoints() {
-	Vector v = new Vector();
-	for(int i=0; i<nbInternalTGComponent; i++) {
-	    v.add(new Point(tgcomponent[i].getX(), tgcomponent[i].getY()));
-	}
-	return v;
+    public Vector<Point> getListOfPoints() {
+        Vector<Point> v = new Vector<Point>();
+
+        for(int i=0; i<nbInternalTGComponent; i++) {
+            v.add(new Point(tgcomponent[i].getX(), tgcomponent[i].getY()));
+        }
+
+        return v;
     }
 
     public int getIndexOfLastTGCPointOfConnector() {
@@ -132,7 +136,6 @@ public abstract class TGConnector extends TGCWithInternalComponent      {
         return -1;
     }
 
-
     public void internalDrawing(Graphics g) {
 
         TGComponent p3, p4;
@@ -142,7 +145,8 @@ public abstract class TGConnector extends TGCWithInternalComponent      {
             p3 = tgcomponent[0];
             p4 = tgcomponent[0];
             //TraceManager.addDev("p3.x " + p3.getX() + " p3.y " + p3.getY());
-            drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY());
+            //drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getXZoom(), p3.getYZoom());
+	    drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY());
 
             for(int i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
                 p3 = tgcomponent[i];

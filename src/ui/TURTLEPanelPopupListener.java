@@ -59,7 +59,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     private JPopupMenu menu;
     protected MainGUI mgui;
 
-    private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newsd, newsdfromucd, newreq,
+    private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newsd, newsdzv, newsdfromucd, newreq,
         newebrdd, newprosmd, newavatarrd, newavatarpd, newavatarcd, newavatarad, newavatarmad;
     private JMenuItem newatd;
 
@@ -94,7 +94,8 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         moveRight = createMenuItem("Move to the right");
         sort = createMenuItem("Sort");
         newucd = createMenuItem("New Use Case Diagram");
-        newsd = createMenuItem("New Sequence Diagram");
+        newsd = createMenuItem("New Sequence Diagram (old version)");
+	newsdzv = createMenuItem("New Sequence Diagram");
         newsdfromucd = createMenuItem("New Sequence Diagram (from Use Case Diagram)");
         newreq = createMenuItem("New Requirement Diagram");
         newebrdd = createMenuItem("New Event-Based Requirement Description Diagram");
@@ -121,6 +122,8 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
             menu.add(newavatarad);
         }
         menu.add(newsd);
+	menu.add(newsdzv);
+	
         menu.add(newsdfromucd);
         menu.addSeparator();
         menu.add(newreq);
@@ -157,8 +160,8 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
             } else {
                 moveRight.setEnabled(false);
             }
-	} else {
-	    if (index < 2) {
+        } else {
+            if (index < 2) {
                 moveLeft.setEnabled(false);
             } else {
                 moveLeft.setEnabled(true);
@@ -184,6 +187,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 
         newucd.setEnabled(tp.isUCDEnabled());
         newsd.setEnabled(tp.isSDEnabled());
+	newsdzv.setEnabled(tp.isSDEnabled());
         newsdfromucd.setEnabled(tp.isSDEnabled() && (mgui.getCurrentTDiagramPanel() instanceof UseCaseDiagramPanel));
         newreq.setEnabled(tp.isReqEnabled());
         newebrdd.setEnabled(tp.isReqEnabled());
@@ -198,6 +202,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 
     private Action listener = new AbstractAction() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 JMenuItem item = (JMenuItem)e.getSource();
                 String ac = item.getActionCommand();
@@ -215,9 +220,12 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
                 } else if (ac.equals("New Use Case Diagram")) {
                     mgui.createUniqueUseCaseDiagram(tp, "Use Case Diagram");
                     mgui.changeMade(null, -1);
-                } else if (ac.equals("New Sequence Diagram")) {
+                } else if (item == newsd) {
                     mgui.createUniqueSequenceDiagram(tp, "MyScenario");
                     mgui.changeMade(null, -1);
+		} else if (item == newsdzv) {
+                    mgui.createUniqueSequenceDiagramZV(tp, "MyScenario");
+                    mgui.changeMade(null, -1); 
                 } else if (item == newsdfromucd) {
                     mgui.createSequenceDiagramFromUCD(tp, "ScenarioFromUCD", (UseCaseDiagramPanel)(mgui.getCurrentTDiagramPanel()));
                     mgui.changeMade(null, -1);

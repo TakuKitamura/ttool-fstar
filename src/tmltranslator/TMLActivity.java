@@ -416,6 +416,19 @@ public class TMLActivity extends TMLElement {
     public Vector<TMLActivityElement> getElements(){
 	return elements;
     }
+
+    public void replaceWaitEventWith(TMLEvent oldEvt, TMLEvent newEvt) {
+	TMLActivityElement ae;
+	
+	for(int i=0; i<elements.size(); i++) {
+            ae = (TMLActivityElement)(elements.elementAt(i));
+	    if (ae instanceof TMLWaitEvent) {
+		((TMLWaitEvent)ae).replaceEventWith(oldEvt, newEvt);
+	    }
+        }
+    }
+    
+    
     public void replaceReadChannelWith(TMLChannel oldChan, TMLChannel newChan) {
 	TMLActivityElement ae;
 

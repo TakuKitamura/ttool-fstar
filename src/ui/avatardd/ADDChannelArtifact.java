@@ -47,7 +47,6 @@
 package ui.avatardd;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 
 import org.w3c.dom.*;
@@ -150,9 +149,9 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
         boolean error = false;
 
         JDialogAvatarChannelArtifact dialog = new JDialogAvatarChannelArtifact(frame, "Setting artifact attributes", this);
-        dialog.setSize(650, 350);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+   //     dialog.setSize(650, 350);
+        GraphicLib.centerOnParent(dialog, 650, 350);
+        dialog.setVisible( true ); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -184,9 +183,9 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
         String newChannelName = channelName;
         int pos1=channelName.indexOf('(');
         if(pos1 != -1) {
-            int pos2=channelName.lastIndexOf(')');
-            int pos3=channelName.indexOf('(');
-            int pos4=channelName.lastIndexOf('(');
+//            int pos2=channelName.lastIndexOf(')');
+//            int pos3=channelName.indexOf('(');
+//            int pos4=channelName.lastIndexOf('(');
           
             newChannelName = channelName.substring(0,pos1);
             
@@ -228,38 +227,39 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+    //        int t1id;
             String svalue = null, sname = null, fname = null, sreferenceTask = null;
-            String prio;
+      //      String prio;
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {
                                 svalue = elt.getAttribute("value");
                                 sname = elt.getAttribute("channelName");
-				fname = elt.getAttribute("fullChannelName");
+                                fname = elt.getAttribute("fullChannelName");
                                 sreferenceTask = elt.getAttribute("referenceDiagram");
-
                             }
+
                             if (svalue != null) {
                                 value = svalue;
                             }
                             if (sname != null){
                                 channelName = sname;
                             }
-			    if (fname != null){
+                            
+                            if (fname != null){
                                 fullChannelName = fname;
                             } else {
-				fullChannelName = channelName;
-			    }
+                            	fullChannelName = channelName;
+						    }
                             if (sreferenceTask != null) {
                                 referenceDiagram = sreferenceTask;
                             }

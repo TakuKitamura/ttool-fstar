@@ -188,9 +188,9 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
     
     public boolean editOndoubleClick(JFrame frame) {
         JDialogObserver jdo = new JDialogObserver(frame, "Setting diagrams of Observer " + ((RequirementObserver)(getTopFather())).getRequirementObserverName(), text, violatedAction);
-        jdo.setSize(750, 400);
-        GraphicLib.centerOnParent(jdo);
-        jdo.show();
+        //jdo.setSize(750, 400);
+        GraphicLib.centerOnParent(jdo, 750, 400);
+        jdo.setVisible( true );
         
         if (!jdo.isRegularClose()) {
             return false;

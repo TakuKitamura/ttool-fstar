@@ -54,10 +54,10 @@ import java.util.*;
 import ui.tmlcd.*;
 import ui.tmlad.*;
 import ui.tmldd.*;
-import proverifspec.*;
+
 public class TMLDesignPanel extends TURTLEPanel {
     public TMLTaskDiagramPanel tmltdp; 
-    public Vector validated, ignored;
+    public Vector<TGComponent> validated, ignored;
     
     public TMLDesignPanel(MainGUI _mgui) {
         super(_mgui);
@@ -94,7 +94,7 @@ public class TMLDesignPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp	= new JScrollDiagramPanel(tmladp);
         tmladp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         panels.add(tmladp);
@@ -121,7 +121,7 @@ public class TMLDesignPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp	= new JScrollDiagramPanel(tmltdp);
         tmltdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         toolBarPanel.add(toolBarTML, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab("TML Task Diagram", IconManager.imgic62, toolBarPanel, "Opens TML task diagram");
@@ -157,7 +157,7 @@ public class TMLDesignPanel extends TURTLEPanel {
 		return tmltdp.getAllTMLEventNames( _name );
 	}
 
-	public ArrayList<String> getAllNonMappedTMLTaskNames(String _name, TMLArchiDiagramPanel _tadp, boolean ref, String name) {
+	public java.util.List<String> getAllNonMappedTMLTaskNames(String _name, TMLArchiDiagramPanel _tadp, boolean ref, String name) {
 		return tmltdp.getAllNonMappedTMLTaskNames(_name, _tadp, ref, name);
 	}
 	
@@ -167,15 +167,17 @@ public class TMLDesignPanel extends TURTLEPanel {
 	
 	public void getListOfBreakPoints(ArrayList<Point> points) {
 		TGComponent tgc;
-		ListIterator iterator = tmltdp.getComponentList().listIterator();
+		Iterator<TGComponent> iterator = tmltdp.getComponentList().listIterator();
 		TMLTaskOperator tmlto;
 		TMLActivityDiagramPanel tmladp;
 		
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TMLTaskOperator) {
                 tmlto = (TMLTaskOperator)tgc;
-				if (tmlto.getDIPLOID() != -1) {
+				
+                if (tmlto.getDIPLOID() != -1) {
 					tmladp = getTMLActivityDiagramPanel(tmlto.getValue());
 					tmladp.getListOfBreakPoints(points, tmlto.getDIPLOID());
 				}

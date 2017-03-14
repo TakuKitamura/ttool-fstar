@@ -47,13 +47,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.oscd;
 
-//import java.awt.*;
-//import javax.swing.*;
-import java.util.*;
-
-//import org.w3c.dom.*;
-
-//import myutil.*;
 import ui.*;
 import ui.window.*;
 
@@ -86,9 +79,9 @@ public class TOSCDAttributeBox extends TGCAttributeBox {
         jda.enableJavaKeyword(false);
         //jda.enableOtherTypes(true);
         
-        LinkedList ll = tdp.getComponentList();
-        Iterator iterator = ll.listIterator();
-        TGComponent tgc;
+//        List ll = tdp.getComponentList();
+//        Iterator iterator = ll.listIterator();
+//        TGComponent tgc;
         /*while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             if (tgc instanceof TCDTData) {

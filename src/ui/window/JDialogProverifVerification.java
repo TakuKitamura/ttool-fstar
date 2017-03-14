@@ -383,9 +383,27 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
 
                 if (pathCode.isEmpty()){
                     pathCode="pvspec";
-                }
+                } /*else {
+		    
+		    if (!FileUtils.checkPath(pathCode)) {
+			jta.append("Error: invalid directory: " + pathCode + "\n");
+			mode =      STOPPED;
+			setButtons();
+			return;
+		    }
+		    }*/
 
                 testFile = new File(pathCode);
+
+		File dir = testFile.getParentFile();
+		if (!dir.exists()) {
+		    jta.append("Error: invalid directory: " + pathCode + "\n");
+			mode =      STOPPED;
+			setButtons();
+			return;
+		}
+
+		
 
                 if (testFile.isDirectory()){
                     if (!pathCode.endsWith (File.separator)){

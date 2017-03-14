@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator;
 
-public class Gate implements Comparable {
+public class Gate implements Comparable<Gate> {
     private String name;
     private String lotosName;
     public String tmp = null;
@@ -101,12 +101,13 @@ public class Gate implements Comparable {
         return name;
     }
     
-    public int compareTo(Object o) {
-        if (!(o instanceof Gate)) {
-            return 0;
-        } else {
+    @Override
+    public int compareTo(Gate o) {
+     //   if (!(o instanceof Gate)) {
+//            return 0;
+  //      } else {
             return toString().compareTo(o.toString());
-        }
+    //    }
         
     }
     

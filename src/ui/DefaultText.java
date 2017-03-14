@@ -49,8 +49,8 @@ package ui;
 
 public class DefaultText  {
 
-    public static String BUILD = "12146";
-    public static String DATE = "2017/03/02 02:01:03 CET";
+    public static String BUILD = "12158";
+    public static String DATE = "2017/03/14 02:01:03 CET";
     
     
     public static StringBuffer sbAbout = makeAbout();
@@ -60,7 +60,7 @@ public class DefaultText  {
     }
     
     public static String getVersion() {
-        return "0.98-beta4"; /* Set new release Feb. 19th, 2016 */
+        return "0.99-beta1"; /* Set new release March. 6th, 2017 */
     }
     
     public static String getFullVersion() {
@@ -73,7 +73,7 @@ public class DefaultText  {
         sb.append("Programmers\n\tLudovic Apvrille, Daniel Knorreck, Andrea Enrici, Florian Lugou, Letitia Li - Telecom ParisTech\n");
 	sb.append("Daniela Genius - LIP6\n");
 	sb.append("Contact email: ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\tCopyright Institut Telecom - Telecom ParisTech / Ludovic Apvrille \n\n");
+        sb.append("\tCopyright IMT - Telecom ParisTech / Ludovic Apvrille \n\n");
         sb.append("Online documentation\n\tLudovic Apvrille - Telecom ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n\n");
         sb.append("For more information regarding TTool, and the UML/SysML profiles supportd by TTool:\n");
         sb.append("TTool's website: http://ttool.telecom-paristech.fr/\n\n");

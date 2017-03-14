@@ -252,12 +252,12 @@ public class TGConnectingPoint implements CDElement {
     }
 
     public void setFree(boolean b) {
-	/*TraceManager.addDev("Setting connecting point as free=" + b + " point=" + this);
-	
+        /*TraceManager.addDev("Setting connecting point as free=" + b + " point=" + this);
 
-	for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-	    TraceManager.addDev(ste.toString());
-	    }*/
+
+          for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+          TraceManager.addDev(ste.toString());
+          }*/
 
         free = b;
         if (cpg != null) {

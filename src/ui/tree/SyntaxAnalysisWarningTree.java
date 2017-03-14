@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tree;
 
-import java.util.LinkedList;
+import java.util.List;
 
 import ui.*;
 import myutil.*;
@@ -64,7 +64,7 @@ public class SyntaxAnalysisWarningTree implements GenericTree {
     }
     
     public int getChildCount() {
-        LinkedList<CheckingError> warnings = mgui.getCheckingWarnings();
+        List<CheckingError> warnings = mgui.getCheckingWarnings();
         if (warnings == null) {
             return 1;
         } else {
@@ -77,7 +77,7 @@ public class SyntaxAnalysisWarningTree implements GenericTree {
     }
     
     public Object getChild(int index) {
-        LinkedList<CheckingError> warnings = mgui.getCheckingWarnings();
+        List<CheckingError> warnings = mgui.getCheckingWarnings();
         if (warnings == null) {
             return "Not yet performed";
         } else {

@@ -47,7 +47,6 @@
 package ui.tmldd;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 
 import org.w3c.dom.*;
@@ -201,9 +200,9 @@ public class TMLArchiVGMNNode extends TMLArchiCommunicationNode implements Swall
         String tmpName;
 
         JDialogVGMNNode dialog = new JDialogVGMNNode(frame, "Setting VGMN attributes", this);
-        dialog.setSize(500, 450);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+        //dialog.setSize(500, 450);
+        GraphicLib.centerOnParent(dialog, 500, 450);
+        dialog.setVisible( true ); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -335,15 +334,15 @@ public class TMLArchiVGMNNode extends TMLArchiCommunicationNode implements Swall
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+         //   int t1id;
             String sstereotype = null, snodeName = null;
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

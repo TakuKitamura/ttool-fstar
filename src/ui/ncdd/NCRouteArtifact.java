@@ -149,9 +149,9 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 		ArrayList<String> outputInterfaces = (ArrayList<String>)(inputInterfaces.clone());
 		
 		JDialogNCRoute dialog = new JDialogNCRoute(frame, "Setting route attributes", value, vroutes, inputInterfaces, traffics, outputInterfaces);
-		dialog.setSize(900, 500);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+	//	dialog.setSize(900, 500);
+        GraphicLib.centerOnParent(dialog, 900, 500);
+        dialog.setVisible( true ); // blocked until dialog has been closed
         
 		if (dialog.hasBeenCancelled()) {
 			return false;
@@ -225,7 +225,7 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+         //   int t1id;
             String s0 = null, s1 = null, s2 = null;
 			NCRoute route;
             
@@ -234,8 +234,8 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

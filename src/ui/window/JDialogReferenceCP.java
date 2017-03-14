@@ -57,9 +57,6 @@ import java.util.Collections;
 import ui.*;
 import ui.tmldd.*;
 import ui.tmlsd.*;
-import ui.tmlcp.*;
-import ui.tmlcd.*;
-import ui.avatarbd.*;
 import tmltranslator.modelcompiler.*;
 import tmltranslator.tmlcp.*;
 import tmltranslator.*;
@@ -81,7 +78,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private TMLArchiCPNode cp;
 	protected JTextField nameOfCP;
 	private String name = "";
-	private LinkedList<TMLArchiNode> availableUnits;
+	//private LinkedList<TMLArchiNode> availableUnits;
 	private Vector<String> mappedUnitsSL = new Vector<String>();
 	
 	private ArrayList<TMLCommunicationPatternPanel> listCPs = new ArrayList<TMLCommunicationPatternPanel>();
@@ -97,7 +94,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private Vector<String> mappableArchUnitsSL;
 	private Vector<String> sdInstancesSL;
 	
-	private int indexListCPsNames = 0;
+	//private int indexListCPsNames = 0;
 	
 	private boolean emptyCPsList = false;
 	private boolean emptyListOfMappedUnits = true;	//true if there is no mapping info
@@ -106,14 +103,14 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	
 	// Panel1
 	private JPanel panel1;
-	private JComboBox sdInstancesCB, mappableArchUnitsCB, communicationPatternsCB;
+	private JComboBox<String> sdInstancesCB,/* mappableArchUnitsCB,*/ communicationPatternsCB;
 	private JButton mapButton;
-	private JList mappableArchUnitsJL;
+	private JList<String> mappableArchUnitsJL;
 	private JScrollPane mappableArchUnitsSP;
 	
 	//Panel2
 	private JPanel panel2;
-	private JList listMappedUnitsJL;
+	private JList<String> listMappedUnitsJL;
 	private JButton upButton;
 	private JButton downButton;
 	private JButton removeButton;
@@ -125,23 +122,23 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	//Panel3: assign a value to CP attributes
 	private JPanel panel3;
 	private JButton attributeButton, addressButton;
-	private JComboBox attributesList_CB, applicationAttributesList_CB, addressList_CB;
+	private JComboBox<String> attributesList_CB/*, applicationAttributesList_CB*/, addressList_CB;
 	private JTextField attributesValue_TF, addressValue_TF;
 	private Vector<String> attributesVector, applicationAttributesVector, addressVector;
 	
 	//Panel4: assign a value to CP attributes
 	private JPanel panel4;
 	private JScrollPane scrollPaneAttributes;
-	private JList scrollPaneAttributes_JL;
-	private Vector<String> assignedAttributes, assignedAddresses;
+	private JList<String> scrollPaneAttributes_JL;
+	private Vector<String> assignedAttributes/*, assignedAddresses*/;
 	private JButton removeAttributeButton;
 
 	private JTabbedPane tabbedPane;
 
 	//Panel5, code generation
 	private JPanel panel5;
-	private JComboBox cpMECsCB, transferTypeCB1, transferTypeCB2;
-	private JList cpMECsList;
+	private JComboBox<String> cpMECsCB, transferTypeCB1, transferTypeCB2;
+//	private JList<String> cpMECsList;
 	private String cpMEC;
 	private int transferType1, transferType2;
 	
@@ -175,26 +172,26 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	}
 	else	{
 		assignedAttributes = new Vector<String>();
-		assignedAddresses = new Vector<String>();
+		//assignedAddresses = new Vector<String>();
 	}
 	
 	initComponents();
 	valueChanged( null );
 	//myInitComponents();
 	pack();
-		}
+	}
 		
-		private void myInitComponents() {
-			removeButton.setEnabled( false );
-			upButton.setEnabled( false );
-			downButton.setEnabled( false );
-			if( mappableArchUnitsSL.size() > 0 )	{
-				mapButton.setEnabled( true );
-			}
-			else	{
-				mapButton.setEnabled( false );
-			}
-		}
+//		private void myInitComponents() {
+//			removeButton.setEnabled( false );
+//			upButton.setEnabled( false );
+//			downButton.setEnabled( false );
+//			if( mappableArchUnitsSL.size() > 0 )	{
+//				mapButton.setEnabled( true );
+//			}
+//			else	{
+//				mapButton.setEnabled( false );
+//			}
+//		}
 		
 		private void initComponents() {
 			
@@ -205,7 +202,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			GridBagLayout gridbag3 = new GridBagLayout();
 			GridBagLayout gridbag4 = new GridBagLayout();
 			GridBagLayout gridbag5 = new GridBagLayout();
-			GridBagLayout gridbag125 = new GridBagLayout();
+		//	GridBagLayout gridbag125 = new GridBagLayout();
 			GridBagConstraints c0 = new GridBagConstraints();
 			GridBagConstraints c1 = new GridBagConstraints();
 			GridBagConstraints c2 = new GridBagConstraints();
@@ -288,7 +285,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			
 			//fifth line panel1
 			panel1.add( new JLabel( "Available CPs:"), c1 );
-			communicationPatternsCB = new JComboBox( communicationPatternsSL );
+			communicationPatternsCB = new JComboBox<String>( communicationPatternsSL );
 			if( !emptyListOfMappedUnits )	{
 				communicationPatternsCB.setSelectedItem( cp.getReference() );
 			}
@@ -314,7 +311,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			
 			//seventh line panel1
 			panel1.add( new JLabel( "Available instances:" ), c1 );
-			sdInstancesCB = new JComboBox( sdInstancesSL );
+			sdInstancesCB = new JComboBox<String>( sdInstancesSL );
 			sdInstancesCB.setSelectedIndex( 0 );
 			sdInstancesCB.addActionListener( this );
 			sdInstancesCB.setPreferredSize( new Dimension(150, 30) );
@@ -333,7 +330,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			makeListOfMappableArchUnitsSL();
 			
 			//nineth line panel1
-			mappableArchUnitsJL = new JList( mappableArchUnitsSL );
+			mappableArchUnitsJL = new JList<String>( mappableArchUnitsSL );
 			mappableArchUnitsJL.setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
 			mappableArchUnitsJL.addListSelectionListener( this );
 			mappableArchUnitsSP = new JScrollPane( mappableArchUnitsJL );
@@ -361,7 +358,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			
 
 			// 1st line panel2
-			listMappedUnitsJL = new JList( mappedUnitsSL );
+			listMappedUnitsJL = new JList<String>( mappedUnitsSL );
 			listMappedUnitsJL.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			listMappedUnitsJL.addListSelectionListener(this);
 			scrollPane = new JScrollPane( listMappedUnitsJL );
@@ -419,7 +416,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 				filterOutAssignedAttributes( attributesVector );	//eliminate the attributes that have already been assigned a value
 			}
 			panel3.add( new JLabel("CP attribute:"), c3 );
-			attributesList_CB = new JComboBox( attributesVector );
+			attributesList_CB = new JComboBox<String>( attributesVector );
 			attributesList_CB.addActionListener(this);
 			panel3.add( attributesList_CB, c3 );
 
@@ -462,7 +459,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			}
 
 			panel3.add( new JLabel("CP address:"), c3 );
-			addressList_CB = new JComboBox( addressVector );
+			addressList_CB = new JComboBox<String>( addressVector );
 			addressList_CB.addActionListener(this);
 			panel3.add( addressList_CB, c3 );
 
@@ -486,7 +483,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel3.add( addressButton, c3 );
 
 			//panel4
-			scrollPaneAttributes_JL = new JList( assignedAttributes );
+			scrollPaneAttributes_JL = new JList<String>( assignedAttributes );
 			scrollPaneAttributes_JL.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			scrollPaneAttributes_JL.addListSelectionListener(this);
 			scrollPaneAttributes = new JScrollPane( scrollPaneAttributes_JL );
@@ -516,7 +513,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c5.fill = GridBagConstraints.HORIZONTAL;
 			c5.anchor = GridBagConstraints.LINE_START;
 			panel5.add( new JLabel( "CP Extension Construct:" ), c5 );
-			cpMECsCB = new JComboBox( new Vector<String>( Arrays.asList( CPMEC.cpTypes ) ) );
+			cpMECsCB = new JComboBox<String>( new Vector<String>( Arrays.asList( CPMEC.cpTypes ) ) );
 			if( cpMEC.equals( "VOID" ) || cpMEC.equals( "" ) )	{
 				cpMECsCB.setSelectedIndex( 0 );
 			}
@@ -536,7 +533,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c5.fill = GridBagConstraints.HORIZONTAL;
 			c5.anchor = GridBagConstraints.LINE_START;
 			panel5.add( new JLabel( "Type of DMA transfer n.1:" ), c5 );
-			transferTypeCB1 = new JComboBox( new Vector<String>( Arrays.asList( CPMEC.transferTypes ) ) );
+			transferTypeCB1 = new JComboBox<String>( new Vector<String>( Arrays.asList( CPMEC.transferTypes ) ) );
 			if( transferType1 == -1 )	{
 				transferTypeCB1.setSelectedIndex( 0 );
 			}
@@ -556,7 +553,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c5.fill = GridBagConstraints.HORIZONTAL;
 			c5.anchor = GridBagConstraints.LINE_START;
 			panel5.add( new JLabel( "Type of DMA transfer n.2:" ), c5 );
-			transferTypeCB2 = new JComboBox( new Vector<String>( Arrays.asList( CPMEC.transferTypes ) ) );
+			transferTypeCB2 = new JComboBox<String>( new Vector<String>( Arrays.asList( CPMEC.transferTypes ) ) );
 			if( transferType2 == -1 )	{
 				transferTypeCB2.setSelectedIndex( 0 );
 			}
@@ -930,7 +927,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		
 		private void removeMappedInstance()	{
 
-			String archUnitName, CPName, instanceName;
+			String /*archUnitName, */CPName, instanceName;
 
 			if( listMappedUnitsJL.getSelectedIndex() >= 0 )	{
 				ArrayList<String> info = splitMappingString( mappedUnitsSL.get( listMappedUnitsJL.getSelectedIndex() ) );
@@ -1354,9 +1351,9 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 						//TraceManager.addDev( "Into createListInstances, panel name: " + panel.getName() );
 						if( panel instanceof TMLSDPanel )	{
 							//TraceManager.addDev( "Found TMLSDPanel named: " + panel.getName() );
-							LinkedList componentsList = panel.getComponentList();
+							java.util.List<TGComponent> componentsList = panel.getComponentList();
 							for( int k = 0; k < componentsList.size(); k++ )	{
-								TGComponent elem = (TGComponent) componentsList.get(k);
+								TGComponent elem = componentsList.get(k);
 								if( elem instanceof ui.tmlsd.TMLSDInstance )	{
 									sdInstancesNames.add( elem.getName() );
 									if( elem instanceof TMLSDStorageInstance )	{
@@ -1416,7 +1413,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		private Vector<String> makeListOfMappableArchUnits( int instanceType )	{
 			
 			//0 = storage, 1 = transfer, 2 = controller
-			LinkedList componentList = cp.getTDiagramPanel().getComponentList();
+			java.util.List<TGComponent> componentList = cp.getTDiagramPanel().getComponentList();
 			Vector<String> list = new Vector<String>();
 			
 			for( int k = 0; k < componentList.size(); k++ )	{
@@ -1453,7 +1450,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 	private void filterOutAssignedAttributes( Vector<String> attributesVector )	{
 		
-		ArrayList<Integer> indexList = new ArrayList<Integer>();
+	//	ArrayList<Integer> indexList = new ArrayList<Integer>();
 		for( String s: assignedAttributes )	{
 			String token = s.split( " = " )[0];
 			for( Iterator<String> iterator = attributesVector.iterator(); iterator.hasNext(); ) {
@@ -1467,7 +1464,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 	private void filterOutAssignedAddresses( Vector<String> addressVector )	{
 		
-		ArrayList<Integer> indexList = new ArrayList<Integer>();
+//		ArrayList<Integer> indexList = new ArrayList<Integer>();
 		for( String s: assignedAttributes )	{
 			String token = s.split( " = " )[0];
 			for( Iterator<String> iterator = addressVector.iterator(); iterator.hasNext(); ) {
@@ -1485,7 +1482,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 	private void createAttributesAndAddressVector()	{
 
-		String selectedCPName = (String)communicationPatternsCB.getSelectedItem();
+		//String selectedCPName = (String)communicationPatternsCB.getSelectedItem();
 		int index = getIndexOfSelectedCP(); // returns -1 upon error
 
 		TraceManager.addDev( "The selected CP has index: " + index );
@@ -1529,9 +1526,9 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private void createApplicationAttributesVector()	{
 		applicationAttributesVector = new Vector<String>();
 		//I have to get all the attributes of all tasks in the application model AND their values
-		Vector listAttributes = cp.getTDiagramPanel().getMGUI().getAllApplicationTMLTasksAttributes();
-		for( Object o: listAttributes )	{
-			String s = o.toString();
+		Vector<String> listAttributes = cp.getTDiagramPanel().getMGUI().getAllApplicationTMLTasksAttributes();
+		for( String s: listAttributes )	{
+			//String s = o.toString();
 			TraceManager.addDev( "Attribute *" + s + "*" );
 			String attrName = s.split(" ")[0];
 			String attrType = s.split(" : ")[1];

@@ -48,7 +48,6 @@ package ui.avatarbd;
 
 
 import java.awt.*;
-import java.awt.geom.*;
 import javax.swing.*;
 import java.util.*;
 
@@ -57,7 +56,6 @@ import org.w3c.dom.*;
 import myutil.*;
 import ui.*;
 import ui.window.*;
-import myutil.*;
 
 public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
     //protected int arrowLength = 10;
@@ -297,13 +295,13 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         AvatarBDBlock block1 = getAvatarBDBlock1();
         AvatarBDBlock block2 = getAvatarBDBlock2();
 
-	Vector v = getAssociationSignals();
+        Vector v = getAssociationSignals();
 	
 
         JDialogSignalAssociation jdas = new JDialogSignalAssociation(frame, block1, block2, v, this, "Setting signal association");
-        jdas.setSize(800, 550);
-        GraphicLib.centerOnParent(jdas);
-        jdas.show(); // blocked until dialog has been closed
+        //jdas.setSize(800, 550);
+        GraphicLib.centerOnParent(jdas, 800, 550);
+        jdas.setVisible( true ); // blocked until dialog has been closed
 
         if (jdas.hasBeenCancelled()) {
             return false;
@@ -321,7 +319,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             assoc = (String)(v.get(i));
             as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
             as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
-
+			System.out.println(as1 + " " + as2 + " " + assoc);
             if ((as1 != null) && (as2 != null)) {
                 index = assoc.indexOf("->");
                 if (index > -1) {
@@ -659,11 +657,13 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 		outSignalsAtDestination.add(signal);
 	    }
 	}
+		
     }
 
     public void updateAllSignals() {
         try {
             Vector v = getAssociationSignals();
+		//	System.out.println(inSignalsAtOrigin + " " + inSignalsAtDestination + " " + outSignalsAtOrigin + " " + outSignalsAtDestination);
             inSignalsAtOrigin.clear();
             inSignalsAtDestination.clear();
             outSignalsAtOrigin.clear();
@@ -679,11 +679,11 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             AvatarSignal as1, as2;
             int index;
             for(int i=0; i<v.size(); i++) {
+
                 assoc = (String)(v.get(i));
                 //TraceManager.addDev("assoc=" + assoc);
                 as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
                 as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
-
                 if ((as1 != null) && (as2 != null)) {
                     index = assoc.indexOf("->");
                     if (index > -1) {

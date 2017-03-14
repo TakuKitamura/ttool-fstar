@@ -56,8 +56,6 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-import tmltranslator.*;
-
 public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttributes {
     private int textY1 = 15;
     private int textY2 = 30;
@@ -187,9 +185,9 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
         String tmpName;
 
         JDialogADDCPUNode dialog = new JDialogADDCPUNode(frame, "Setting CPU attributes", this);
-        dialog.setSize(500, 450);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+     //   dialog.setSize(500, 450);
+        GraphicLib.centerOnParent(dialog, 500, 450);
+        dialog.setVisible( true ); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -407,13 +405,15 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
     }
 
 
-    public Vector getArtifactList() {
-        Vector v = new Vector();
+    public Vector<ADDBlockArtifact> getArtifactList() {
+        Vector<ADDBlockArtifact> v = new Vector<ADDBlockArtifact>();
+        
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof ADDBlockArtifact) {
-                v.add(tgcomponent[i]);
+                v.add( (ADDBlockArtifact) tgcomponent[i] );
             }
         }
+        
         return v;
     }
 
@@ -450,7 +450,7 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+            //int t1id;
             String sstereotype = null, snodeName = null;
 
             for(int i=0; i<nl.getLength(); i++) {
@@ -458,8 +458,8 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

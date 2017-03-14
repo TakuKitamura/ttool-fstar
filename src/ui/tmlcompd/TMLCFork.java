@@ -84,8 +84,6 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
 
         nbInternalTGComponent = 0;
 
-
-
         value = "F";
         name = "Composite port";
 
@@ -130,9 +128,6 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
           g.drawString(value, x+radius-(w/2), y+radius+(currentFontSize/2));*/
 
     }
-
-
-
 
 
     public int getType() {

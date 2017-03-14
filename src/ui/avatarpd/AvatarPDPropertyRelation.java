@@ -47,10 +47,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.avatarpd;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
-
-import org.w3c.dom.*;
 
 import myutil.*;
 import ui.*;
@@ -123,7 +120,7 @@ public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent i
     public void internalDrawing(Graphics g) {
         
 		Font f = g.getFont();
-		Font fold = f;
+	//	Font fold = f;
 		
 		if ((rescaled) && (!tdp.isScaled())) {
 			
@@ -201,13 +198,13 @@ public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent i
     
     
      public boolean editOndoubleClick(JFrame frame) {
-		String tmp;
-		boolean error = false;
+//		String tmp;
+//		boolean error = false;
 		
 		JDialogConstraint dialog = new JDialogConstraint(frame, "Setting constraint attributes", (ConstraintListInterface)this);
-		dialog.setSize(450, 350);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+		//dialog.setSize(450, 350);
+        GraphicLib.centerOnParent(dialog, 450, 350);
+        dialog.setVisible( true ); // blocked until dialog has been closed
         
 		if (!dialog.isRegularClose()) {
 			return false;

@@ -50,16 +50,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
-
-
 import javax.swing.JMenuItem;
 
-
 import ui.*;
-import ui.cd.TCDTClass;
-import ui.prosmd.ProactiveSMDPanel;
-
-
 
 public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
     public static int NORMAL_FONT=1;
@@ -139,7 +132,7 @@ public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
       
         TGComponent tgc;
         SwallowTGComponent father=null;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
@@ -276,10 +269,10 @@ public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
      private ProCSDComponent getSelectedChild(ProCSDComponent tgc)
      {
     	    	 
-    	 Vector v=tgc.getComponentList();
+    	 Vector<ProCSDComponent> v=tgc.getComponentList();
     	 for (int k=0;k<v.size();k++)
     	 {
-    		 ProCSDComponent child=(ProCSDComponent)v.get(k);
+    		 ProCSDComponent child= v.get(k);
     		 if (child.isSelected()) return child;
     	
     		 ProCSDComponent childChild=getSelectedChild(child);
@@ -297,9 +290,9 @@ public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
          TGComponent tgc;
 
          //Added by Solange to see the components in the list
-         LinkedList ruteoList=componentList;
+        // LinkedList ruteoList=componentList;
          //
-         Iterator iterator = componentList.listIterator();
+         Iterator<TGComponent> iterator = componentList.listIterator();
                      
          while(iterator.hasNext()) {
              tgc = (TGComponent)(iterator.next());
@@ -378,13 +371,13 @@ public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
      //The methode should have been put here in the first place
      //we keep the method in TDiagramPanel for compatibility
      //but is this one which will be actually called
-     public Vector selectedProCSDComponent(ProCSDComponent root) {
-         TGComponent tgc, tgcomp;
-         ProCSDComponent tgchild;
-         TCDTClass t;
-         Vector v = new Vector();
-         Vector rootChildren=null;
-         Iterator iterator=null;
+     public Vector<ProCSDComponent> selectedProCSDComponent(ProCSDComponent root) {
+         TGComponent tgc;//, tgcomp;
+       //  ProCSDComponent tgchild;
+      //   TCDTClass t;
+         Vector<ProCSDComponent> v = new Vector<ProCSDComponent>();
+         Vector<ProCSDComponent> rootChildren=null;
+         Iterator<? extends TGComponent> iterator=null;
          
          if (root!=null)
          {
@@ -397,25 +390,26 @@ public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
            rootChildren=root.getComponentList();
            iterator=rootChildren.listIterator();
          }	 
-         else        	 
-         iterator = componentList.listIterator();
+         else {       	 
+        	 iterator = componentList.listIterator();
+         }
          
-         int ruteo=0;
+        // int ruteo=0;
 			
          while(iterator.hasNext()) {
-             tgc = (TGComponent)(iterator.next());
+             tgc = iterator.next();
              if (tgc instanceof ProCSDComponent)
              {
             	 if ((tgc.isSelected()) && ((ProCSDComponent)tgc).getMySMD()!=null)
          		{
-         			v.addElement(tgc);
+         			v.addElement((ProCSDComponent)tgc);
          		}
             	 else
             	 {
-            		Vector children=((ProCSDComponent)tgc).getComponentList();
+            		Vector<ProCSDComponent> children=((ProCSDComponent)tgc).getComponentList();
             		for (int q=0;q<children.size();q++)
             		{
-            			ProCSDComponent child=(ProCSDComponent)children.get(q);
+            			ProCSDComponent child= children.get(q);
             			v.addAll(selectedProCSDComponent(child));
             		}
             		 
@@ -423,6 +417,7 @@ public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
              
              }//if an smd found
          }//while iterator has next
+         
          return v;
      }
      

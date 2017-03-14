@@ -180,9 +180,9 @@ public class TMLADNotifiedEvent extends TGCWithoutInternalComponent implements E
         values[1] = result;
 
         JDialogMultiString jdms = new JDialogMultiString(frame, "Setting event's properties", 2, labels, values);
-        jdms.setSize(350, 300);
-        GraphicLib.centerOnParent(jdms);
-        jdms.show(); // blocked until dialog has been closed
+      //  jdms.setSize(350, 300);
+        GraphicLib.centerOnParent(jdms, 350, 300);
+        jdms.setVisible( true ); // blocked until dialog has been closed
 
         if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
            eventName = jdms.getString(0);
@@ -214,8 +214,8 @@ public class TMLADNotifiedEvent extends TGCWithoutInternalComponent implements E
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int k;
-            String s;
+//            int k;
+//            String s;
             
             //System.out.println("Loading Synchronization gates");
             //System.out.println(nl.toString());
@@ -225,8 +225,8 @@ public class TMLADNotifiedEvent extends TGCWithoutInternalComponent implements E
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

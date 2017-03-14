@@ -49,7 +49,6 @@ package ui.tmlad;
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.*;
-import java.util.*;
 
 import org.w3c.dom.*;
 
@@ -59,7 +58,7 @@ import myutil.*;
 
 public class TMLADEncrypt extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 5;
-    private int textX, textY;
+  //  private int textX, textY;
     private int ex=5;
     private int ilength = 12;
     private int lineLength1 = 3;
@@ -79,8 +78,8 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
         
         width = 15;
         height = 35;
-        textX = width + 5;
-        textY = height/2 + 5;
+    //    textX = width + 5;
+//        textY = height/2 + 5;
         
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
@@ -208,32 +207,32 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
         g.drawImage(IconManager.imgic7000.getImage(), x - 22, y + height/2, null);
     }
     
-public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOndoubleClick(JFrame frame) {
 
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);]
-	String[] values=new String[]{securityContext, type, message_overhead, encTime, size, nonce, formula, decTime, key};
-	String[] nonces=tdp.getMGUI().getAllNonce();
-	String[] keys = tdp.getMGUI().getAllKeys().toArray(new String[0]);
-	JDialogCryptographicConfiguration jdms = new JDialogCryptographicConfiguration(frame, "Setting Cryptographic Configuration properties", values, nonces, keys);
-        jdms.setSize(650, 300);
-        GraphicLib.centerOnParent(jdms);
-        jdms.show(); // blocked until dialog has been closed
+		String[] values=new String[]{securityContext, type, message_overhead, encTime, size, nonce, formula, decTime, key};
+		String[] nonces=tdp.getMGUI().getAllNonce();
+		String[] keys = tdp.getMGUI().getAllKeys().toArray(new String[0]);
+		JDialogCryptographicConfiguration jdms = new JDialogCryptographicConfiguration(frame, "Setting Cryptographic Configuration properties", values, nonces, keys);
+	     //   jdms.setSize(650, 300);
+	    GraphicLib.centerOnParent(jdms, 650, 300);
+	    jdms.setVisible( true ); // blocked until dialog has been closed
 
-        if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
-	    securityContext = jdms.getString(0);
-	    type=jdms.getString(1);
-	    message_overhead=jdms.getString(2);
-	    encTime=jdms.getString(3);
-	    size=jdms.getString(4);
-	    nonce=jdms.getString(5);
-	    formula = jdms.getString(6);
-	    decTime = jdms.getString(7);
-	    key = jdms.getString(8);
-            return true;
-        }
+	    if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
+		    securityContext = jdms.getString(0);
+		    type=jdms.getString(1);
+		    message_overhead=jdms.getString(2);
+		    encTime=jdms.getString(3);
+		    size=jdms.getString(4);
+		    nonce=jdms.getString(5);
+		    formula = jdms.getString(6);
+		    decTime = jdms.getString(7);
+		    key = jdms.getString(8);
+
+		    return true;
+	    }
 
         return false;
-
     }
 
     public TGComponent isOnMe(int _x, int _y) {
@@ -282,8 +281,8 @@ public boolean editOndoubleClick(JFrame frame) {
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int k;
-            String s;
+        //    int k;
+       //     String s;
             
             //System.out.println("Loading Synchronization gates");
             //System.out.println(nl.toString());
@@ -293,20 +292,20 @@ public boolean editOndoubleClick(JFrame frame) {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Data")) {
                                 securityContext = elt.getAttribute("secContext");
-				type= elt.getAttribute("type");
-				message_overhead= elt.getAttribute("overhead");
-				size= elt.getAttribute("size");
-				encTime = elt.getAttribute("encTime");
-				decTime = elt.getAttribute("decTime");
-				nonce = elt.getAttribute("nonce");
-				key = elt.getAttribute("key");
+								type= elt.getAttribute("type");
+								message_overhead= elt.getAttribute("overhead");
+								size= elt.getAttribute("size");
+								encTime = elt.getAttribute("encTime");
+								decTime = elt.getAttribute("decTime");
+								nonce = elt.getAttribute("nonce");
+								key = elt.getAttribute("key");
                                 //System.out.println("eventName=" +eventName + " variable=" + result);
                             }
                         }

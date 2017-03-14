@@ -90,9 +90,12 @@ TTOOL_TARGET = $(TTOOL_PATH)/TTool_install/TTool
 TTOOL_TARGET_RELEASE = $(TTOOL_PATH)/TTool_install
 TTOOL_PRIVATE = $(TTOOL_PATH)/../TTool-Private
 TTOOL_PREINSTALL = $(TTOOL_PRIVATE)/preinstallTTool
-TTOOL_PREINSTALL_LINUX = $(TTOOL_PREINSTALL)/TTool_Linux
-TTOOL_PREINSTALL_WINDOWS = $(TTOOL_PREINSTALL)/TTool_Windows
-TTOOL_PREINSTALL_MACOS = $(TTOOL_PREINSTALL)/TTool_MacOS
+TTOOL_WINDOWS = TTool_Windows
+TTOOL_LINUX = TTool_Linux
+TTOOL_MACOS = TTool_MacOS
+TTOOL_PREINSTALL_LINUX = $(TTOOL_PREINSTALL)/$(TTOOL_LINUX)
+TTOOL_PREINSTALL_WINDOWS = $(TTOOL_PREINSTALL)/$(TTOOL_WINDOWS)
+TTOOL_PREINSTALL_MACOS = $(TTOOL_PREINSTALL)/$(TTOOL_MACOS)
 PACKAGE = $(shell cd $(TTOOL_SRC); find . -type d)
 
 TTOOL_CONFIG_SRC = $(TTOOL_DOC)/config_linux.xml  $(TTOOL_DOC)/config_macosx.xml  $(TTOOL_DOC)/config_windows.xml
@@ -460,15 +463,14 @@ define functionCommonPreinstall
 	cp $(TTOOL_BIN)/configuration.gcf $(1)/TTool/bin
 	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(JSOUP_BINARY) $(TTOOL_BIN)/$(COMMON_CODEC_BINARY)  $(TTOOL_BIN)/$(GSCORE_BINARY) $(TTOOL_BIN)/$(GSUI_BINARY)  $(1)/TTool/bin
 
-
 endef
 
 
 preinstall_windows:
 	$(call functionCommonPreinstall,$(TTOOL_PREINSTALL_WINDOWS)/)
 #Proverif	
-	cp $(TTOOL_PRIVATE)/stocks/proverif_linux.tar.gz $(TTOOL_PREINSTALL_WINDOWS)/
-	cd $(TTOOL_PREINSTALL_WINDOWS)/ && gunzip -f proverif_linux.tar.gz && tar -xof proverif_linux.tar && rm proverif_linux.tar
+	cp $(TTOOL_PRIVATE)/stocks/proverif_windows.tar.gz $(TTOOL_PREINSTALL_WINDOWS)/
+	cd $(TTOOL_PREINSTALL_WINDOWS)/ && gunzip -f proverif_windows.tar.gz && tar -xof proverif_windows.tar && rm proverif_windows.tar
 #UPPAAL
 	cp $(TTOOL_PRIVATE)/stocks/uppaal.tar.gz $(TTOOL_PREINSTALL_WINDOWS)/
 	cd $(TTOOL_PREINSTALL_WINDOWS)/ && gunzip -f uppaal.tar.gz && tar -xof uppaal.tar && rm uppaal.tar
@@ -476,7 +478,10 @@ preinstall_windows:
 	cp $(TTOOL_DOC)/config_windows.xml $(TTOOL_PREINSTALL_WINDOWS)/TTool/bin/config.xml
 	cp $(TTOOL_DOC)/ttool_windows.bat $(TTOOL_PREINSTALL_WINDOWS)/ttool.bat
 # Make the tgz file
-	tar -czvf $(TTOOL_PREINSTALL_WINDOWS)/../ttoolwindows.tgz $(TTOOL_PREINSTALL_WINDOWS)/*
+	cd $(TTOOL_PREINSTALL_WINDOWS)/.. && tar -czvf ttoolwindows.tgz $(TTOOL_WINDOWS)/*
+#Publish it
+	scp $(TTOOL_PREINSTALL_LINUX)/../ttoolwindows.tgz apvrille@ssh.enst.fr:public_html/docs/
+
 
 preinstall_macos:
 	$(call functionCommonPreinstall,$(TTOOL_PREINSTALL_MACOS)/)
@@ -491,7 +496,7 @@ preinstall_macos:
 	cp $(TTOOL_DOC)/config_macosx.xml $(TTOOL_PREINSTALL_MACOS)/TTool/bin/config.xml
 	cp $(TTOOL_DOC)/ttool4preinstalllinux.exe $(TTOOL_PREINSTALL_MACOS)/ttool.exe
 # Make the tgz file
-	tar -czvf $(TTOOL_PREINSTALL_MACOS)/../ttoolmacos.tgz $(TTOOL_PREINSTALL_MACOS)/*
+	cd $(TTOOL_PREINSTALL_MACOS)/.. && tar -czvf ttoolmacos.tgz $(TTOOL_MACOS)/*
 
 preinstall_linux:
 # Common part
@@ -506,7 +511,7 @@ preinstall_linux:
 	cp $(TTOOL_DOC)/config_windows.xml $(TTOOL_PREINSTALL_LINUX)/TTool/bin/config.xml
 	cp $(TTOOL_DOC)/ttool4preinstalllinux.exe $(TTOOL_PREINSTALL_LINUX)/ttool.exe
 # Make the tgz file
-	tar -czvf $(TTOOL_PREINSTALL_LINUX)/../ttoollinux.tgz $(TTOOL_PREINSTALL_LINUX)/*
+	cd $(TTOOL_PREINSTALL_LINUX)/.. && tar -czvf ttoollinux.tgz $(TTOOL_LINUX)/*
 #Publish it
 	scp $(TTOOL_PREINSTALL_LINUX)/../ttoollinux.tgz apvrille@ssh.enst.fr:public_html/docs/
 
