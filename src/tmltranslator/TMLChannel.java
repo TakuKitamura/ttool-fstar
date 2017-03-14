@@ -64,6 +64,7 @@ public class TMLChannel extends TMLCommunicationElement {
     public TMLCPrimitivePort port;
     public TMLCPrimitivePort port2;
     public ArrayList<TMLCPrimitivePort> ports;
+    
     // Used on for 1 -> 1 channel
     protected TMLTask originTask, destinationTask;
     protected TMLPort originPort, destinationPort; // Not used by the simulator
@@ -212,12 +213,12 @@ public class TMLChannel extends TMLCommunicationElement {
         return (originTasks.size() == 0);
     }
 
-    public void removeComplexInformation() {
+    /*public void removeComplexInformation() {
         originTasks = new ArrayList<TMLTask>();
         destinationTasks = new ArrayList<TMLTask>();
         originPorts = new ArrayList<TMLPort>();
         destinationPorts = new ArrayList<TMLPort>();
-    }
+	}*/
 
     public boolean isBadComplexChannel() {
         if ((originTasks.size() == 1) && (destinationTasks.size() >= 1)) {

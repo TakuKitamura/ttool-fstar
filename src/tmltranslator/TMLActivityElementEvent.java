@@ -63,11 +63,11 @@ public abstract class TMLActivityElementEvent extends TMLActivityElement {
     }
 
     public boolean hasEvents() {
-	return events != null;
+        return events != null;
     }
 
     public ArrayList<TMLEvent> getEvents() {
-	return events;
+        return events;
     }
 
     public void setEvent(TMLEvent _event) {
@@ -119,6 +119,12 @@ public abstract class TMLActivityElementEvent extends TMLActivityElement {
             s += TMLTextSpecification.modifyString(getParam(i));
         }
         return s;
+    }
+
+    public void replaceEventWith(TMLEvent oldEvt, TMLEvent newEvt) {
+	if (event == oldEvt) {
+	    event = newEvt;
+	}
     }
 
 

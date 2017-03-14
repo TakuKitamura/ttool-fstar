@@ -45,7 +45,6 @@
  * @see
  */
 
-
 package tmltranslator;
 
 import myutil.*;

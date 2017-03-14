@@ -1992,6 +1992,17 @@ public class TMLModeling {
         for(TMLChannel chan: newChannels) {
             addChannel(chan);
         }
+
+	ArrayList<TMLEvent> newEvents = new ArrayList<TMLEvent>();
+        for(TMLEvent event: events) {
+            if (event.isAForkEvent()) {
+                removeForkEvent(event, newEvents);
+            }
+        }
+
+        for(TMLEvent evt: newEvents) {
+            addEvent(evt);
+        }
     }
 
     public void removeFork(TMLChannel _ch, ArrayList<TMLChannel> _newChannels) {
@@ -2064,6 +2075,90 @@ public class TMLModeling {
         writes[nb-1].addNext(stop);
 
 
+    }
+
+    public void removeForkEvent(TMLEvent _evt, ArrayList<TMLEvent> _newEvents) {
+        int i, j;
+
+        // Create the new task and its activity diagram
+        TMLTask forkTask = new TMLTask("FORKTASK__EVT__" + _evt.getName(), _evt.getReferenceObject(), null);
+        TMLActivity forkActivity = forkTask.getActivityDiagram();
+        addTask(forkTask);
+
+        // Create the new (basic) events. The first branch of the fork is reused, others are created
+        int nb = _evt.getDestinationTasks().size();
+        TMLEvent[] evts = new TMLEvent[nb];
+        for(i=0; i<nb; i++) {
+            evts[i] = new TMLEvent("FORKEVENT__" + i + "__" + _evt.getName(), _evt.getReferenceObject(), _evt.getMaxSize(), _evt.isBlocking());
+            evts[i].setTasks(forkTask, _evt.getDestinationTasks().get(i));
+            evts[i].setPorts(new TMLPort("FORKPORTORIGIN__" + i + "__" + _evt.getName(), _evt.getReferenceObject()), _evt.getDestinationPorts().get(i));
+            //evts[i].setType(_evt.getType());
+            //evts[i].setMax(_evt.getMax());
+            //evts[i].setSize(_evt.getSize());
+	    for(j=0; j<_evt.getNbOfParams(); j++) {
+		evts[i].addParam(_evt.getType(j));
+	    }
+            _newEvents.add(evts[i]);
+        }
+
+        // Modify the activity diagram of tasks making a wait in destination events
+        // Modify the event of wait operators to the new events
+        for(i=0; i<nb; i++) {
+            _evt.getDestinationTasks().get(i).replaceWaitEventWith(_evt, evts[i]);
+	}
+	
+
+        // Transform the original event into a basic event
+        _evt.setTasks(_evt.getOriginTasks().get(0), forkTask);
+        _evt.setPorts(_evt.getOriginPorts().get(0), new TMLPort("FORKPORTDESTINATION__" + _evt.getName(), _evt.getReferenceObject()));
+        _evt.removeComplexInformations();
+
+	// Adding attributes to the task
+       for(j=0; j<_evt.getNbOfParams(); j++) {
+	   TMLAttribute attr = new TMLAttribute("attr_" + j, _evt.getType(j));
+	   forkTask.addAttribute(attr);
+       }
+
+	// Creating the AD for the fork task
+        TMLStartState start = new TMLStartState("startOfFork", null);
+        forkActivity.setFirst(start);
+        TMLStopState stop = new TMLStopState("stopOfFork", null);
+        forkActivity.addElement(stop);
+        TMLStopState stop2 = new TMLStopState("stop2OfFork", null);
+        forkActivity.addElement(stop2);
+        TMLForLoop junction = new TMLForLoop("junctionOfFork", null);
+        junction.setInit("i=0");
+        junction.setCondition("i<1");
+        junction.setIncrement("i=i");
+        TMLAttribute attr = new TMLAttribute("i", "i", new TMLType(TMLType.NATURAL), "0");
+        forkTask.addAttribute(attr);
+        forkActivity.addElement(junction);
+        TMLWaitEvent read = new TMLWaitEvent("WaitOfFork", null);
+        forkActivity.addElement(read);
+        read.setEvent(_evt);
+	for(j=0; j<_evt.getNbOfParams(); j++) {
+	    read.addParam("attr_" + j);
+       }
+	
+
+        TMLSendEvent []writes = new TMLSendEvent[nb];
+        for(i=0; i<nb; i++) {
+            writes[i] = new TMLSendEvent("WriteEvtOfFork__" + i, null);
+            writes[i].setEvent(evts[i]);
+	    for(j=0; j<_evt.getNbOfParams(); j++) {
+		writes[i].addParam("attr_" + j);
+	    }
+            forkActivity.addElement(writes[i]);
+        }
+
+        start.addNext(junction);
+        junction.addNext(read);
+        junction.addNext(stop2);
+        read.addNext(writes[0]);
+        for(i=0; i<nb-1; i++) {
+            writes[i].addNext(writes[i+1]);
+        }
+        writes[nb-1].addNext(stop);
     }
 
     // Channels with severals origins and one destination
