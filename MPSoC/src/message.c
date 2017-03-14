@@ -17,10 +17,10 @@ void initMessages() {
 long getMessageID() {
  
   long tmp; 
-  printf("getMessageID adress mutex: %x\n",&__message_mutex);
+ 
   //pthread_mutex_lock(&__message_mutex);
   
-  tmp = __id_message; printf("****message ID %d \n",__id_message);
+  tmp = __id_message; 
   __id_message ++;
   //pthread_mutex_unlock(&__message_mutex);
  
