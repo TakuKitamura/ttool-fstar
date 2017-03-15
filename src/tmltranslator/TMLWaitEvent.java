@@ -58,6 +58,5 @@ public class TMLWaitEvent extends TMLActivityElementEvent {
 	return "Wait event: " + event.getName() + "(" + getAllParams() +")";
     }
 
-    
-    
+       
 }

@@ -2633,7 +2633,7 @@ public class GTMLModeling  {
                     bridge.clockRatio = 1;
                     listE.addCor(bridge, firewallnode);
                     archi.addHwNode(bridge);
-                    TraceManager.addDev("Bridge node added:" + bridge.getName());
+                    TraceManager.addDev("Firewall node added:" + bridge.getName());
                 }
             }
 
@@ -2674,7 +2674,7 @@ public class GTMLModeling  {
                     dma.clockRatio = dmanode.getClockRatio();
                     listE.addCor(dma, dmanode);
                     archi.addHwNode(dma);
-                    TraceManager.addDev("************************************ DMA node added:" + dma.getName());
+                    //TraceManager.addDev("************************************ DMA node added:" + dma.getName());
                 }
             }
         }

@@ -60,14 +60,14 @@ public class TMLActivity extends TMLElement {
         elements = new Vector();
     }
 
-	public TMLActivity copy(){
-		TMLActivity newAct = new TMLActivity(this.name, this.referenceObject);
-		newAct.setFirst(this.first);
-		for (TMLActivityElement act: elements){
-			newAct.addElement(act);
-		}
-		return newAct;
-	}
+    public TMLActivity copy(){
+        TMLActivity newAct = new TMLActivity(this.name, this.referenceObject);
+        newAct.setFirst(this.first);
+        for (TMLActivityElement act: elements){
+            newAct.addElement(act);
+        }
+        return newAct;
+    }
     public boolean contains(TMLActivityElement _elt) {
         return elements.contains(_elt);
     }
@@ -414,136 +414,147 @@ public class TMLActivity extends TMLElement {
 
     }
     public Vector<TMLActivityElement> getElements(){
-	return elements;
+        return elements;
     }
 
     public void replaceWaitEventWith(TMLEvent oldEvt, TMLEvent newEvt) {
-	TMLActivityElement ae;
-	
-	for(int i=0; i<elements.size(); i++) {
+        TMLActivityElement ae;
+
+        for(int i=0; i<elements.size(); i++) {
             ae = (TMLActivityElement)(elements.elementAt(i));
-	    if (ae instanceof TMLWaitEvent) {
-		((TMLWaitEvent)ae).replaceEventWith(oldEvt, newEvt);
-	    }
+            if (ae instanceof TMLWaitEvent) {
+                ((TMLWaitEvent)ae).replaceEventWith(oldEvt, newEvt);
+            }
         }
     }
-    
-    
-    public void replaceReadChannelWith(TMLChannel oldChan, TMLChannel newChan) {
-	TMLActivityElement ae;
 
-	for(int i=0; i<elements.size(); i++) {
+    public void replaceSendEventWith(TMLEvent oldEvt, TMLEvent newEvt) {
+        TMLActivityElement ae;
+
+        for(int i=0; i<elements.size(); i++) {
             ae = (TMLActivityElement)(elements.elementAt(i));
-	    if (ae instanceof TMLReadChannel) {
-		((TMLReadChannel)ae).replaceChannelWith(oldChan, newChan);
-	    }
+            if (ae instanceof TMLSendEvent) {
+                ((TMLSendEvent)ae).replaceEventWith(oldEvt, newEvt);
+            }
+        }
+    }
+
+
+    public void replaceReadChannelWith(TMLChannel oldChan, TMLChannel newChan) {
+        TMLActivityElement ae;
+
+        for(int i=0; i<elements.size(); i++) {
+            ae = (TMLActivityElement)(elements.elementAt(i));
+            if (ae instanceof TMLReadChannel) {
+                ((TMLReadChannel)ae).replaceChannelWith(oldChan, newChan);
+            }
         }
     }
 
     public void replaceWriteChannelWith(TMLChannel oldChan, TMLChannel newChan) {
-	TMLActivityElement ae;
+        TMLActivityElement ae;
 
-	for(int i=0; i<elements.size(); i++) {
+        for(int i=0; i<elements.size(); i++) {
             ae = (TMLActivityElement)(elements.elementAt(i));
-	    if (ae instanceof TMLWriteChannel) {
-		((TMLWriteChannel)ae).replaceChannelWith(oldChan, newChan);
-	    }
+            if (ae instanceof TMLWriteChannel) {
+                ((TMLWriteChannel)ae).replaceChannelWith(oldChan, newChan);
+            }
         }
     }
 
     public void addSendEventAfterWriteIn(TMLChannel chan, TMLEvent evt, String action) {
-	TMLActivityElement ae;
-	TMLWriteChannel twc;
-	int cpt = 0;
+        TMLActivityElement ae;
+        TMLWriteChannel twc;
+        int cpt = 0;
 
-	Vector<TMLSendEvent> newElements = new Vector<TMLSendEvent>();
+        Vector<TMLSendEvent> newElements = new Vector<TMLSendEvent>();
 
-	for(int i=0; i<elements.size(); i++) {
+        for(int i=0; i<elements.size(); i++) {
             ae = (TMLActivityElement)(elements.elementAt(i));
-	    if (ae instanceof TMLWriteChannel) {
-		twc = (TMLWriteChannel)ae;
-		for (int j = 0; j<twc.getNbOfChannels(); j++) {
-		    if (twc.getChannel(j) == chan) {
-			TMLSendEvent send = new TMLSendEvent("SendEvt" + cpt, ae.getReferenceObject());
-			send.setEvent(evt);
-			Vector nexts = ae.getNexts();
-			for (Object o: nexts) {
-			    send.addNext((TMLActivityElement)o);
-			}
-			newElements.add(send);
-			send.addParam(action);
-			ae.clearNexts();
-			ae.addNext(send);
-		    }
-		}
-	    }
-	}
+            if (ae instanceof TMLWriteChannel) {
+                twc = (TMLWriteChannel)ae;
+                for (int j = 0; j<twc.getNbOfChannels(); j++) {
+                    if (twc.getChannel(j) == chan) {
+                        TMLSendEvent send = new TMLSendEvent("SendEvt" + cpt, ae.getReferenceObject());
+                        send.setEvent(evt);
+                        Vector nexts = ae.getNexts();
+                        for (Object o: nexts) {
+                            send.addNext((TMLActivityElement)o);
+                        }
+                        newElements.add(send);
+                        send.addParam(action);
+                        ae.clearNexts();
+                        ae.addNext(send);
+                    }
+                }
+            }
+        }
 
-	for(TMLSendEvent s: newElements) {
-	    elements.add(s);
-	}
+        for(TMLSendEvent s: newElements) {
+            elements.add(s);
+        }
     }
 
     public void addSendAndReceiveEventAfterWriteIn(TMLChannel chan, TMLEvent evt1, TMLEvent evt2, String action1, String action2) {
-	TMLActivityElement ae;
-	TMLWriteChannel twc;
-	int cpt = 0;
+        TMLActivityElement ae;
+        TMLWriteChannel twc;
+        int cpt = 0;
 
-	Vector<TMLActivityElementEvent> newElements = new Vector<TMLActivityElementEvent>();
+        Vector<TMLActivityElementEvent> newElements = new Vector<TMLActivityElementEvent>();
 
-	for(int i=0; i<elements.size(); i++) {
+        for(int i=0; i<elements.size(); i++) {
             ae = (TMLActivityElement)(elements.elementAt(i));
-	    if (ae instanceof TMLWriteChannel) {
-		twc = (TMLWriteChannel)ae;
-		for (int j = 0; j<twc.getNbOfChannels(); j++) {
-		    if (twc.getChannel(j) == chan) {
-			TMLSendEvent send = new TMLSendEvent("SendEvt" + cpt, ae.getReferenceObject());
-			send.setEvent(evt1);
-			TMLWaitEvent receive = new TMLWaitEvent("RecvEvt" + cpt, ae.getReferenceObject());
-			receive.setEvent(evt2);
-			
-			Vector nexts = ae.getNexts();
-			for (Object o: nexts) {
-			    receive.addNext((TMLActivityElement)o);
-			}
-			send.addNext(receive);
-			newElements.add(send);
-			newElements.add(receive);
-			send.addParam(action1);
-			receive.addParam(action2);
-			ae.clearNexts();
-			ae.addNext(send);
-		    }
-		}
-	    }
-	}
+            if (ae instanceof TMLWriteChannel) {
+                twc = (TMLWriteChannel)ae;
+                for (int j = 0; j<twc.getNbOfChannels(); j++) {
+                    if (twc.getChannel(j) == chan) {
+                        TMLSendEvent send = new TMLSendEvent("SendEvt" + cpt, ae.getReferenceObject());
+                        send.setEvent(evt1);
+                        TMLWaitEvent receive = new TMLWaitEvent("RecvEvt" + cpt, ae.getReferenceObject());
+                        receive.setEvent(evt2);
 
-	for(TMLActivityElementEvent s: newElements) {
-	    elements.add(s);
-	}
+                        Vector nexts = ae.getNexts();
+                        for (Object o: nexts) {
+                            receive.addNext((TMLActivityElement)o);
+                        }
+                        send.addNext(receive);
+                        newElements.add(send);
+                        newElements.add(receive);
+                        send.addParam(action1);
+                        receive.addParam(action2);
+                        ae.clearNexts();
+                        ae.addNext(send);
+                    }
+                }
+            }
+        }
+
+        for(TMLActivityElementEvent s: newElements) {
+            elements.add(s);
+        }
     }
 
     public void removeEmptyInfiniteLoop() {
-	TMLForLoop loop = null;
-	for(TMLActivityElement elt: elements) {
-	    if (elt instanceof TMLForLoop) {
-		if (((TMLForLoop)elt).isInfinite()) {
-		    loop = (TMLForLoop)elt;
-		    break;
-		}
-	    }
-	}
-	if (loop != null) {
-	    TMLActivityElement next = (loop.getNexts()).get(0);
-	    if ((next == null) || (next instanceof TMLStopState)) {
-		//Replace the element pointing to the infinite loop to the element at getNext(0)
-		for(TMLActivityElement elt: elements) {
-		    elt.setNewNext(loop, next);
-		}
+        TMLForLoop loop = null;
+        for(TMLActivityElement elt: elements) {
+            if (elt instanceof TMLForLoop) {
+                if (((TMLForLoop)elt).isInfinite()) {
+                    loop = (TMLForLoop)elt;
+                    break;
+                }
+            }
+        }
+        if (loop != null) {
+            TMLActivityElement next = (loop.getNexts()).get(0);
+            if ((next == null) || (next instanceof TMLStopState)) {
+                //Replace the element pointing to the infinite loop to the element at getNext(0)
+                for(TMLActivityElement elt: elements) {
+                    elt.setNewNext(loop, next);
+                }
 
-	    }
-	    removeEmptyInfiniteLoop();
-	}
+            }
+            removeEmptyInfiniteLoop();
+        }
 
     }
 
