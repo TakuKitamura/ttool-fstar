@@ -82,7 +82,8 @@ public class TMLCPath  {
                                "Senders and receivers are not of the same kind",
                                "One of more element of the path is badly connected",
 			       "Events are not compatible with fork/join",
-			       "Requests are not compatible with fork/join"};
+			       "Requests are not compatible with fork/join",
+                               "Events/requests must all have the same parameters"};
 
     public TMLCPath() {
         cports = new ArrayList<TMLCCompositePort>();
@@ -251,9 +252,30 @@ public class TMLCPath  {
                     errorNumber = 7;
                     break;
                 }
-            }
-	    
+	    }
 	}
+
+	//rule8: all events/requests with the same parameters
+	TMLCPrimitivePort referencePort = producerPorts.get(0);
+	if ((referencePort.getPortType() == 1) ||(referencePort.getPortType() == 1)) {
+	    // Event or request found
+	    // We now check that they are all compatible with the reference
+	    for(TMLCPrimitivePort porto: producerPorts) {
+		if (!(porto.hasSameParametersThan(referencePort))) {
+		    errorNumber = 8;
+		    break;
+		}
+	    }
+
+	    for(TMLCPrimitivePort porti: consumerPorts) {
+		if (!(porti.hasSameParametersThan(referencePort))) {
+		    errorNumber = 8;
+		    break;
+		}
+	    }
+	}
+
+	
 	
     }
 
