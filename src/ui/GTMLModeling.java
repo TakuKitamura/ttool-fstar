@@ -152,6 +152,8 @@ public class GTMLModeling  {
             removedEvents = new LinkedList<String>();
 
             try {
+		
+
                 addTMLTasks();
                 addTMLChannels();
                 addTMLEvents();
@@ -211,6 +213,25 @@ public class GTMLModeling  {
             removedEvents = new LinkedList<String>();
 
             try {
+
+		// Checking paths
+		if (tmlcdp != null) {
+		    if (tmlcdp.tmlctdp != null) {
+			ArrayList<TMLCPath> faultyPaths = tmlcdp.tmlctdp.updatePorts();
+			for(TMLCPath fp: faultyPaths) {
+			    if (fp != null) {
+				// There is a faulty path
+				// Create an error
+				CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, fp.getErrorMessage());
+				ce.setTDiagramPanel(tmlcdp.tmlctdp);
+				ce.setTGComponent(fp.getFaultyComponent());
+				checkingErrors.add(ce);
+				//throw new MalformedTMLDesignException("Bad path:" + path.getErrorMessage());
+			    }
+			}
+		    }
+		}
+		
                 addTMLComponents();
                 TraceManager.addDev("Adding channels");
                 addTMLCChannels();

@@ -74,6 +74,8 @@ public class TMLCPath  {
     private boolean errorOfConnection = false;
 
     private int errorNumber;
+    private TGComponent faultyComponent;
+    
 
     private String[] errors = {"Fork and Join operators in the same path",
                                "Must have at least one sender",
@@ -174,28 +176,36 @@ public class TMLCPath  {
         return "";
     }
 
+    public TGComponent getFaultyComponent() {
+	return faultyComponent;
+    }
+
 
     public void checkRules() {
         errorNumber = -1;
 
         //rule0: fork or join, but not both
         if ((forks.size() > 0) && (joins.size() >0)) {
+	    faultyComponent = forks.get(0);
             errorNumber = 0;
         }
 
         //rule1: Must have at least one producer
         if (producerPorts.size() == 0) {
             errorNumber = 1;
+	    faultyComponent = consumerPorts.get(0);
         }
 
         //rule2: Must have at least one receiver
         if (consumerPorts.size() == 0) {
             errorNumber = 2;
+	    faultyComponent = producerPorts.get(0);
         }
 
         //rule3: If fork: must have only one producer
         if ((forks.size() > 0) && (producerPorts.size() >1)) {
             errorNumber = 3;
+	    faultyComponent = forks.get(0);
         }
 
         //rule4: producers and consumers must be of the same type
@@ -204,12 +214,14 @@ public class TMLCPath  {
             for(TMLCPrimitivePort porto: producerPorts) {
                 if (porto.getPortType() != type) {
                     errorNumber = 4;
+		    faultyComponent = porto;
                     break;
                 }
             }
             for(TMLCPrimitivePort porti: consumerPorts) {
                 if (porti.getPortType() != type) {
                     errorNumber = 4;
+		    faultyComponent = porti;
                     break;
                 }
             }
@@ -244,12 +256,14 @@ public class TMLCPath  {
 	    for(TMLCPrimitivePort porto: producerPorts) {
                 if (porto.getPortType() == 2) {
                     errorNumber = 7;
+		    faultyComponent = porto;
                     break;
                 }
             }
 	    for(TMLCPrimitivePort porti: consumerPorts) {
                 if (porti.getPortType() == 2) {
                     errorNumber = 7;
+		    faultyComponent = porti;
                     break;
                 }
 	    }
@@ -263,6 +277,7 @@ public class TMLCPath  {
 	    for(TMLCPrimitivePort porto: producerPorts) {
 		if (!(porto.hasSameParametersThan(referencePort))) {
 		    errorNumber = 8;
+		    faultyComponent = porto;
 		    break;
 		}
 	    }
@@ -270,6 +285,7 @@ public class TMLCPath  {
 	    for(TMLCPrimitivePort porti: consumerPorts) {
 		if (!(porti.hasSameParametersThan(referencePort))) {
 		    errorNumber = 8;
+		    faultyComponent = porti;
 		    break;
 		}
 	    }

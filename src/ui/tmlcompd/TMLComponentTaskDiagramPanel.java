@@ -915,19 +915,26 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         }
     }
 
-    public void updatePorts() {
+    // Returns the faulty paths
+    public ArrayList<TMLCPath> updatePorts() {
         TraceManager.addDev("Making paths");
         List<TMLCPath> paths = makePaths();
+	ArrayList<TMLCPath> faultyPaths = new ArrayList<TMLCPath>();
+	//String error = "";
 
         // Checking rules of paths, and setting colors accordingly
         for(TMLCPath path: paths) {
             path.checkRules();
             if (path.hasError()) {
                 TraceManager.addDev("Path error:" + path.getErrorMessage());
+		faultyPaths.add(path);
+		//error = path.getErrorMessage();
             }
             path.setColor();
         }
 
+	return faultyPaths;
+	
     }
 
     public void updatePorts_oldVersion() {
