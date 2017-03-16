@@ -94,7 +94,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     public static int TOCHECK = 1;
     public static int CHECKED_CONF = 2;
     public static int CHECKED_UNCONF = 3;
-  
+
     public String mappingName="???";
     protected int decPoint = 3;
 
@@ -306,9 +306,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         if (checkConf && isOrigin){
             drawConfVerification(g);
         }
-	if (checkAuth && !isOrigin){
-	    drawAuthVerification(g);
-	}
+        if (checkAuth && !isOrigin){
+            drawAuthVerification(g);
+        }
         g.setFont(fold);
 
         drawParticularity(g);
@@ -318,74 +318,76 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
 
     public void drawAuthVerification(Graphics g){
-		int lockwidth=(int) (16*tdp.getZoom());
-		int lockheight=(int) (16*tdp.getZoom());
+        int lockwidth=(int) (16*tdp.getZoom());
+        int lockheight=(int) (16*tdp.getZoom());
 
-		int xc=(int) (18*tdp.getZoom());
-		int yc= (int) (12*tdp.getZoom());
+        int xc=(int) (18*tdp.getZoom());
+        int yc= (int) (12*tdp.getZoom());
 
-		int xoffset= (int) (20*tdp.getZoom());
-		int yoffset= (int) (18*tdp.getZoom());
+        int xoffset= (int) (20*tdp.getZoom());
+        int yoffset= (int) (18*tdp.getZoom());
 
-		int ovalwidth=(int) (10*tdp.getZoom());
-		int ovalheight=(int) (15*tdp.getZoom());
+        int ovalwidth=(int) (10*tdp.getZoom());
+        int ovalheight=(int) (15*tdp.getZoom());
         g.drawString(secName, x-xc*2/3, y+yc*2/3);
-		Color c = g.getColor();
+        Color c = g.getColor();
         Color c1;
-		Color c2;
-		switch(checkStrongAuthStatus) {
- 		    case 2:
-                c1 = Color.green;
-        	break;
-            case 3:
-                c1 = Color.red;
-                break;
-            default:
-                c1 = Color.gray;
-		}
-		switch(checkWeakAuthStatus) {
- 	    	case 2:
-                c2 = Color.green;
-                break;
-            case 3:
-                c2 = Color.red;
-                break;
-            default:
-                c2= c1;
-		}
-	
+        Color c2;
+        switch(checkStrongAuthStatus) {
+        case 2:
+            c1 = Color.green;
+            break;
+        case 3:
+            c1 = Color.red;
+            break;
+        default:
+            c1 = Color.gray;
+        }
+        switch(checkWeakAuthStatus) {
+        case 2:
+            c2 = Color.green;
+            break;
+        case 3:
+            c2 = Color.red;
+            break;
+        default:
+            c2= c1;
+        }
+
         g.drawOval(x-xc, y+yc, ovalwidth, ovalheight);
         g.setColor(c1);
-		int[] xps = new int[]{x-xoffset, x-xoffset, x-xoffset+lockwidth};
-		int[] yps = new int[]{y+yoffset, y+yoffset+lockheight, y+yoffset+lockheight};
-		int[] xpw = new int[]{x-xoffset+lockwidth, x-xoffset+lockwidth, x-xoffset};
-		int[] ypw = new int[]{y+yoffset+lockheight, y+yoffset, y+yoffset};
-		g.fillPolygon(xps, yps,3);	
-	
-		g.setColor(c2);	
-		g.fillPolygon(xpw, ypw, 3);
+        int[] xps = new int[]{x-xoffset, x-xoffset, x-xoffset+lockwidth};
+        int[] yps = new int[]{y+yoffset, y+yoffset+lockheight, y+yoffset+lockheight};
+        int[] xpw = new int[]{x-xoffset+lockwidth, x-xoffset+lockwidth, x-xoffset};
+        int[] ypw = new int[]{y+yoffset+lockheight, y+yoffset, y+yoffset};
+        g.fillPolygon(xps, yps,3);
+
+        g.setColor(c2);
+        g.fillPolygon(xpw, ypw, 3);
         g.setColor(c);
-		g.drawPolygon(xps, yps,3);
-		g.drawPolygon(xpw, ypw, 3);
-		g.drawString("S", x-xoffset+1, y+yc+yoffset);
-		g.drawString("W", x-xoffset+lockwidth/2, y+yc+ovalheight);
-		if (checkStrongAuthStatus ==3){
-		    g.drawLine(x-xoffset, y+yoffset*3/2, x-xoffset/2, y+yoffset+yc);
-		    g.drawLine(x-xoffset, y+yoffset+yc, x-xoffset/2, y+yoffset*3/2);
-		}
-		if (checkWeakAuthStatus==3 || checkStrongAuthStatus==3 && checkWeakAuthStatus <2){
-		    g.drawLine(x-xc*2/3, y+yoffset, x-xc/3, y+yc+lockheight);
-		    g.drawLine(x-xc*2/3, y+yc+lockheight, x-xc/3, y+yoffset);
-		}
+        g.drawPolygon(xps, yps,3);
+        g.drawPolygon(xpw, ypw, 3);
+        g.drawString("S", x-xoffset+1, y+yc+yoffset);
+        g.drawString("W", x-xoffset+lockwidth/2, y+yc+ovalheight);
+        if (checkStrongAuthStatus ==3){
+            g.drawLine(x-xoffset, y+yoffset*3/2, x-xoffset/2, y+yoffset+yc);
+            g.drawLine(x-xoffset, y+yoffset+yc, x-xoffset/2, y+yoffset*3/2);
+        }
+        if (checkWeakAuthStatus==3 || checkStrongAuthStatus==3 && checkWeakAuthStatus <2){
+            g.drawLine(x-xc*2/3, y+yoffset, x-xc/3, y+yc+lockheight);
+            g.drawLine(x-xc*2/3, y+yc+lockheight, x-xc/3, y+yoffset);
+        }
     }
+
+    
     public void drawConfVerification(Graphics g){
 
-		int lockwidth=(int) (9*tdp.getZoom());
-		int lockheight=(int) (7*tdp.getZoom());
-		int yoffset = (int) (3*lockheight);
+        int lockwidth=(int) (9*tdp.getZoom());
+        int lockheight=(int) (7*tdp.getZoom());
+        int yoffset = (int) (3*lockheight);
 
-		int ovalwidth=(int) (6*tdp.getZoom());
-		int ovalheight=(int) (9*tdp.getZoom());
+        int ovalwidth=(int) (6*tdp.getZoom());
+        int ovalheight=(int) (9*tdp.getZoom());
 
         Color c = g.getColor();
         Color c1;
@@ -408,33 +410,33 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         g.fillRect(x-lockwidth*3/2, y+lockheight/2, lockwidth, lockheight);
         g.setColor(c);
         g.drawRect(x-lockwidth*3/2, y+lockheight/2, lockwidth, lockheight);
-	if (checkConfStatus==3){
-	    g.drawLine(x-lockwidth*2, y, x, y+lockheight*2);
-	    g.drawLine(x-lockwidth*2, y+lockheight*2, x, y);
-	}
-
-
-	if (!secName.equals("")){
-      switch(checkSecConfStatus) {
-        case 1:
-            c1 = Color.gray;
-            break;
-        case 2:
-            c1 = Color.green;
-            break;
-        case 3:
-            c1 = Color.red;
-            break;
-        default:
-            return;
+        if (checkConfStatus==3){
+            g.drawLine(x-lockwidth*2, y, x, y+lockheight*2);
+            g.drawLine(x-lockwidth*2, y+lockheight*2, x, y);
         }
-        g.drawString(secName, x-lockwidth*2, y+lockheight*3);
-        g.drawOval(x-ovalwidth*2, y+yoffset, ovalwidth, ovalheight);
-        g.setColor(c1);
-        g.fillRect(x-lockwidth*3/2, y+lockheight/2+yoffset, lockwidth, lockheight);
-        g.setColor(c);
-        g.drawRect(x-lockwidth*3/2, y+lockheight/2+yoffset, lockwidth, lockheight);
-	}
+
+
+        if (!secName.equals("")){
+            switch(checkSecConfStatus) {
+            case 1:
+                c1 = Color.gray;
+                break;
+            case 2:
+                c1 = Color.green;
+                break;
+            case 3:
+                c1 = Color.red;
+                break;
+            default:
+                return;
+            }
+            g.drawString(secName, x-lockwidth*2, y+lockheight*3);
+            g.drawOval(x-ovalwidth*2, y+yoffset, ovalwidth, ovalheight);
+            g.setColor(c1);
+            g.fillRect(x-lockwidth*3/2, y+lockheight/2+yoffset, lockwidth, lockheight);
+            g.setColor(c);
+            g.drawRect(x-lockwidth*3/2, y+lockheight/2+yoffset, lockwidth, lockheight);
+        }
     }
 
     public void manageMove() {
@@ -524,7 +526,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         //System.out.println("Double click!");
         //String oldValue = valueOCL;
         int oldSample = maxSamples;
-     //   int oldWidthSample = widthSamples;
+        //   int oldWidthSample = widthSamples;
 
 
         Vector<String> otherTypes;
@@ -536,9 +538,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             otherTypes = tgc.getAllRecords();
         }
         JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf, checkAuth);
-       // jda.setSize(350, 700);
+        // jda.setSize(350, 700);
         GraphicLib.centerOnParent(jda, 350, 700 );
-       // jda.show(); // blocked until dialog has been closed
+        // jda.show(); // blocked until dialog has been closed
         jda.setVisible( true );
         dataFlowType = jda.getDataFlowType();
         associatedEvent = jda.getAssociatedEvent();
@@ -576,7 +578,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                         checkConfStatus=NOCHECK;
                     }
                 }
-		checkAuth=jda.checkAuth;
+                checkAuth=jda.checkAuth;
                 for(int i=0; i<nbMaxAttribute; i++) {
                     //TraceManager.addDev("Getting string type: " + jda.getStringType(i));
                     list[i].setType(jda.getStringType(i));
@@ -711,10 +713,10 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                                     dataFlowType = elt.getAttribute("dataFlowType");
                                     associatedEvent = elt.getAttribute("associatedEvent");
                                     checkConf = (elt.getAttribute("checkConf").compareTo("true")==0);
-									if (checkConf){
-										checkConfStatus=TOCHECK;
-									}
-				    checkAuth = (elt.getAttribute("checkAuth").compareTo("true")==0);
+                                    if (checkConf){
+                                        checkConfStatus=TOCHECK;
+                                    }
+                                    checkAuth = (elt.getAttribute("checkAuth").compareTo("true")==0);
                                     isLossy = (elt.getAttribute("isLossy").compareTo("true") ==0);
                                     isPrex = (elt.getAttribute("isPrex").compareTo("true") ==0);
                                     isPostex = (elt.getAttribute("isPostex").compareTo("true") ==0);
@@ -795,9 +797,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     public TType getParamAt(int index) {
         return list[index];
     }
-	public void setParam(int index, TType t){
-		list[index] = t;
-	}
+    public void setParam(int index, TType t){
+        list[index] = t;
+    }
 
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_PORT_TMLC;
@@ -839,7 +841,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             // Event and Request
         } else {
             attr += "(";
-          //  TType type1;
+            //  TType type1;
             for(int i=0; i<nbMaxAttribute; i++) {
                 if (i!=0) {
                     attr += ",";
@@ -921,6 +923,15 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
     public String getAssociatedEvent()  {
         return associatedEvent;
+    }
+
+    public boolean hasSameParametersThan(TMLCPrimitivePort _p) {
+	for(int i=0; i<5; i++) {
+	    if (!(getParamAt(i).equals(_p.getParamAt(i)))) {
+		return false;
+	    }
+	}
+	return true;
     }
 
 }
