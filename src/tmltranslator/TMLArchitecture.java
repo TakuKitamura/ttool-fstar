@@ -176,6 +176,15 @@ public class TMLArchitecture {
         return cpt;
     }
 
+	public ArrayList<HwNode> getCPUs(){
+		ArrayList<HwNode> cpus = new ArrayList<HwNode>();
+		for (HwNode node: hwnodes){
+			if (node instanceof HwCPU){
+				cpus.add(node);
+			}
+		}
+		return cpus;
+	}
     public String[] getCPUIDs() {
         String [] list = new String[getNbOfCPU()];
         int cpt = 0;

@@ -576,6 +576,18 @@ public List<String> securityPatterns = new ArrayList<String>();
         }
     }
 
+	public HashSet<String> getMappedTasks(HwNode node){
+		HashSet<String> tasks = new HashSet<String>();
+		int i=0;
+		for(HwExecutionNode ex: onnodes) {
+			if (ex == node) {
+               	tasks.add(mappedtasks.get(i).getName().split("__")[mappedtasks.get(i).getName().split("__").length-1]);
+			}
+			i++;
+		}
+		return tasks;
+	}
+
     public ArrayList<String> getSummaryTaskMapping() {
         StringBuffer sb = new StringBuffer("");
         ArrayList<String> list = new ArrayList<String>();

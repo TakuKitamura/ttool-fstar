@@ -78,10 +78,9 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     protected final static int STARTED = 2;
     protected final static int STOPPED = 3;
     int mode;
-
     JRadioButton dseButton;
     JRadioButton simButton;
-    ButtonGroup group;
+    ButtonGroup group, secGroup;
     //components
 
     protected JButton start;
@@ -91,14 +90,14 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 
     protected JCheckBox autoConf, autoAuth, autoMapKeys, custom, outputTXT, outputHTML, addHSM;
 
-    protected JTextField encTime, decTime, secOverhead, addToComp;
-	String compName="";
+    protected JTextField encTime, decTime, secOverhead;
+	protected JComboBox addtoCPU;
     protected JTextField tmlDirectory, mappingFile, modelFile, simulationThreads, resultsDirectory, simulationCycles, minCPU, maxCPU, simulationsPerMapping;
     protected JTextArea outputText;
     protected String output = "";
     protected JCheckBox secAnalysis;
     protected JTextField encTime2, decTime2, secOverhead2;
-
+	HashMap<JCheckBox, ArrayList<JCheckBox>> cpuTaskObjs = new HashMap<JCheckBox, ArrayList<JCheckBox>>();
     protected JSlider JSMinSimulationDuration, JSAverageSimulationDuration, JSMaxSimulationDuration, JSArchitectureComplexity, JSMinCPUUsage, JSAverageCPUUsage, JSMaxCPUUsage, JSMinBusUsage, JSAverageBusUsage, JSMaxBusUsage, JSMinBusContention, JSAverageBusContention, JSMaxBusContention;
     DSEConfiguration config;
 
@@ -117,7 +116,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     protected static boolean secAnalysisState = false;
     protected static boolean outputTXTState = false;
     protected static boolean outputHTMLState = false;
-    
+    HashMap<String, HashSet<String>> cpuTaskMap = new HashMap<String, HashSet<String>>();
     
 
     protected JTabbedPane jp1;
@@ -132,16 +131,19 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 
 
     /** Creates new form  */
-    public JDialogDSE(Frame f, MainGUI _mgui, String title, String _simulator, String dir) {
+    public JDialogDSE(Frame f, MainGUI _mgui, String title, String _simulator, String dir, HashMap<String, HashSet<String>> cpuTasks) {
         super(f, title, true);
 
         mgui = _mgui;
         simulator=_simulator;
+		cpuTaskMap = cpuTasks;
         tmlDir = dir+"/";
         resDirect = _simulator + "results/";
         initComponents();
         myInitComponents();
+
         pack();
+
         //getGlassPane().addMouseListener( new MouseAdapter() {});
         getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
@@ -152,7 +154,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     }
 
     protected void initComponents() {
-
+		System.out.println("refreshing");
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
@@ -173,7 +175,9 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         c01.gridheight = 1;
 
         //genJava.addActionListener(this);
+		secGroup=new ButtonGroup(); 
         autoConf= new JCheckBox("Add security (Confidentiality)");
+		secGroup.add(autoConf);
         jp01.add(autoConf, c01);
 		autoConf.addActionListener(this);
         autoAuth= new JCheckBox("Add security (Authenticity)");
@@ -182,13 +186,31 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         autoMapKeys= new JCheckBox("Add Keys");
 		autoMapKeys.addActionListener(this);
         jp01.add(autoMapKeys, c01);
-
+		secGroup.add(autoMapKeys);
         addHSM = new JCheckBox("Add HSM");
         jp01.add(addHSM,c01);
-
+		addHSM.addActionListener(this);
+		secGroup.add(addHSM);
 		jp01.add(new JLabel("Add HSM to component:"),c01);
-        addToComp = new JTextField(compName);
-        jp01.add(addToComp,c01);
+		System.out.println(cpuTaskMap);
+		for (String cpuName: cpuTaskMap.keySet()){
+			JCheckBox cpu = new JCheckBox(cpuName);
+			jp01.add(cpu,c01);		
+			cpu.setEnabled(false);
+			cpu.addActionListener(this);
+			ArrayList<JCheckBox> tasks = new ArrayList<JCheckBox>();
+			for (String s: cpuTaskMap.get(cpuName)){
+
+				JCheckBox task = new JCheckBox(s);
+				jp01.add(task,c01);
+				task.setEnabled(false);
+				tasks.add(task);
+			}
+			cpuTaskObjs.put(cpu, tasks);
+
+		}
+   //     addToComp = new JTextField(compName);
+        //jp01.add(addToComp,c01);
 
 
         custom = new JCheckBox("Custom performance attributes");
@@ -602,7 +624,6 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	Nbsim = simulationsPerMapping.getText();
 	encCC = encTime2.getText();
 	decCC = decTime2.getText();
-	compName=addToComp.getText();
 	secAnalysisState = secAnalysis.isSelected();
 	secOv = secOverhead2.getText();
 	outputTXTState = outputTXT.isSelected();
@@ -644,6 +665,20 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
             closeDialog();
         } else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == outputHTML) || (evt.getSource() == outputTXT) || (evt.getSource() == autoAuth) || (evt.getSource() == autoConf) || (evt.getSource() == autoMapKeys)) {
 	    handleStartButton();
+		}
+		else if (evt.getSource() instanceof JCheckBox){
+			//Disable and enable tasks
+			JCheckBox src = (JCheckBox) evt.getSource();
+			if (cpuTaskObjs.containsKey(src)){
+				for (JCheckBox taskBox: cpuTaskObjs.get(src)){
+					taskBox.setEnabled(src.isSelected());
+				}
+			}
+		}
+		if (evt.getSource() == addHSM){
+			for (JCheckBox cpuBox:cpuTaskObjs.keySet()){
+				cpuBox.setEnabled(addHSM.isSelected());
+			}
 		}
     }
 
@@ -715,7 +750,22 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
                 }
             }
 			else if (addHSM.isSelected()){
-				mgui.gtm.addHSM(mgui, addToComp.getText());
+			
+			//	ArrayList<String> comps = new ArrayList<String>();
+			//	comps.add(addToComp.getText());
+				HashMap<String, ArrayList<String>> selectedCpuTasks = new HashMap<String, ArrayList<String>>();
+				for (JCheckBox cpu: cpuTaskObjs.keySet()){
+					ArrayList<String> tasks = new ArrayList<String>();	
+					for (JCheckBox task: cpuTaskObjs.get(cpu)){
+						if (task.isSelected()){
+							tasks.add(task.getText());
+						}
+					}
+					if (tasks.size()>0){
+						selectedCpuTasks.put(cpu.getText(), tasks);
+					}
+				}
+				mgui.gtm.addHSM(mgui, selectedCpuTasks);
 			}
             if (autoMapKeys.isSelected()){
                 mgui.gtm.autoMapKeys();

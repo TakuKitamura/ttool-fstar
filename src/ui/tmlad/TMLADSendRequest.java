@@ -226,6 +226,7 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
 
 	public void setParam(int i, String s){
 		params[i]=s;
+		nParam=Math.max(i,nParam);
 	}
     public int nbOfParams() {
         return nParam;
