@@ -2127,10 +2127,10 @@ public class TMLModeling {
         TMLStopState stop2 = new TMLStopState("stop2OfFork", null);
         forkActivity.addElement(stop2);
         TMLForLoop junction = new TMLForLoop("junctionOfFork", null);
-        junction.setInit("i=0");
-        junction.setCondition("i<1");
-        junction.setIncrement("i=i");
-        TMLAttribute attr = new TMLAttribute("i", "i", new TMLType(TMLType.NATURAL), "0");
+        junction.setInit("fork__i=0");
+        junction.setCondition("fork__i<1");
+        junction.setIncrement("fork__i=fork__i");
+        TMLAttribute attr = new TMLAttribute("fork__i", "fork__i", new TMLType(TMLType.NATURAL), "0");
         forkTask.addAttribute(attr);
         forkActivity.addElement(junction);
         TMLWaitEvent read = new TMLWaitEvent("WaitOfFork", null);
@@ -2181,7 +2181,9 @@ public class TMLModeling {
         // Create new basic events and tasks
         ArrayList<TMLEvent> newEvents = new ArrayList<TMLEvent>();
         for(TMLEvent evt: events) {
+	    TraceManager.addDev("Event:" + evt);
             if (evt.isAJoinEvent()) {
+		TraceManager.addDev("Removing join of this event");
                 removeJoinEvent(evt, newEvents);
             }
         }
@@ -2281,6 +2283,7 @@ public class TMLModeling {
 	    for(j=0; j<_evt.getNbOfParams(); j++) {
 		evts[i].addParam(_evt.getType(j));
 	    }
+	    _newEvents.add(evts[i]);
         }
 
         // Modify the activity diagram of tasks making a write in origin channels
