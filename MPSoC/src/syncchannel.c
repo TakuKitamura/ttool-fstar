@@ -16,20 +16,24 @@ void mwmr_sync_flush(struct mwmr_s *fifo){
   }
 }
 
-int sync_read( struct mwmr_s *fifo, void *_ptr, int lensw ){  
- 
+void sync_read( struct mwmr_s *fifo, void *_ptr, int lensw ){  
+  int i;
   debugInt("debug fifo \n",fifo);
   debugInt("debug ptr \n",_ptr);
   debugInt("debug  lensw \n", lensw);
   debugInt("debug  fifo status address \n", &(fifo->status));
   debugInt("debug  fifo status \n", (fifo->status));
   debugInt("debug  fifo lock address\n", &(fifo->status->lock));
+  debugInt("debug  fifo rptr address\n", &(fifo->status->rptr));
+  debugInt("debug  fifo wptr address\n", &(fifo->status->rptr));
   debugInt("debug  fifo lock \n", fifo->status->lock);
-  mwmr_read(fifo,_ptr,lensw);
- 
+  i=mwmr_try_read(fifo,_ptr,lensw); 
+  if(i>0)
+  mwmr_read(fifo,_ptr,lensw); 
+  return;
 }
 
-int sync_write( struct mwmr_s *fifo, void *_ptr, int lensw ){
+void sync_write( struct mwmr_s *fifo, void *_ptr, int lensw ){
  
   debugInt("debug fifo \n",fifo);
   debugInt("debug ptr \n",_ptr);
@@ -37,9 +41,11 @@ int sync_write( struct mwmr_s *fifo, void *_ptr, int lensw ){
   debugInt("debug  fifo status address \n", &(fifo->status));
   debugInt("debug  fifo status \n", (fifo->status));
   debugInt("debug  fifo lock address\n", &(fifo->status->lock));
+  debugInt("debug  fifo rptr address\n", &(fifo->status->rptr));
+  debugInt("debug  fifo wptr address\n", &(fifo->status->rptr));
   debugInt("debug  fifo lock \n", fifo->status->lock);
   mwmr_write(fifo,_ptr,lensw);
-  
+  return;
 }
 
 syncchannel *getNewSyncchannel(char *outname, char *inname, struct mwmr_s *fifo) {

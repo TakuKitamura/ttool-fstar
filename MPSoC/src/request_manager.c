@@ -52,15 +52,6 @@ void executeSendSyncTransaction(request *req) {
   // Handle parameters
   copyParameters(req, selectedReq);
 
-  debugInt("syncchannel address \n", req->syncChannel->mwmr_fifo);
-  debugInt("syncchannel nbOfParams \n", req->nbOfParams);
-  debugInt("syncchannel burst \n", req->nbOfParams*sizeof(req->params));
-   debugInt("syncchannel params \n", req->params[0]);
-  sync_write(req->syncChannel->mwmr_fifo, &(req->params),  req->nbOfParams*sizeof(req->params));
-
-  sync_read(req->syncChannel->mwmr_fifo, &(req->params),  req->nbOfParams*sizeof(req->params));
-
-  //DG 8.2. a-t-on besoin de ID?
   debugInt("req->params", req->params);
   debugMsg("\n");
  
@@ -68,6 +59,17 @@ void executeSendSyncTransaction(request *req) {
   
   pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
 
+
+  debugInt("syncchannel address \n", req->syncChannel->mwmr_fifo);
+  debugInt("syncchannel nbOfParams \n", req->nbOfParams);
+  debugInt("syncchannel burst \n", req->nbOfParams*sizeof(req->params));
+   debugInt("syncchannel params \n", req->params[0]);
+   sync_write(req->syncChannel->mwmr_fifo, &(req->params),  req->nbOfParams*sizeof(req->params)||1);//DG 14.03.+1
+
+  // sync_read(req->syncChannel->mwmr_fifo, &(req->params),  req->nbOfParams*sizeof(req->params));
+
+  //DG 8.2. a-t-on besoin de ID?
+  
   traceSynchroRequest(req, selectedReq);
 }
 
@@ -111,10 +113,12 @@ void executeReceiveSyncTransaction(request *req) {
   debugInt("syncchannel burst \n", req->nbOfParams*sizeof(req->params));
   debugInt("syncchannel params \n", req->params[0]);
   
-  sync_write(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params) );
-
-  sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params) );
+  //sync_write(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params) );  
+  // sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params)||1 );////DG 14.03. +1
  
+ sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params)||1 );////DG 14.03. +1
+ 
+
   debugMsg("after syncchannel read");
   debugInt("req->params \n", req->params);
   traceSynchroRequest(selectedReq, req);
@@ -295,6 +299,7 @@ int executable(setOfRequests *list, int nb) {
 
       if (req->type == RECEIVE_SYNC_REQUEST) {
 	debugMsg("receive sync");
+	//if ((req->syncChannel->outWaitQueue != NULL)&&(req->syncChannel->inWaitQueue != NULL)) {
 	if (req->syncChannel->outWaitQueue != NULL) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
         //if (req->syncChannel->inWaitQueue != NULL) {//DG 8.2.??
 	  req->executable = 1;
@@ -302,7 +307,7 @@ int executable(setOfRequests *list, int nb) {
 	  cpt ++;
 	}
  else {
-	  debugMsg("Receive sync not executable");
+   debugMsg("Receive sync not executable");
 	  }
 	//index ++;
       }
