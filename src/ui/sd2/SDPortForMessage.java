@@ -109,7 +109,6 @@ public class SDPortForMessage extends TGCScalableWithoutInternalComponent implem
             return this;
         }
         return null;
-
     }
 
 
@@ -122,5 +121,4 @@ public class SDPortForMessage extends TGCScalableWithoutInternalComponent implem
         connectingPoint = new TGConnectingPoint[1];
 	connectingPoint[0] = new TGConnectingPointMessageSD(this, 0, 0, true, true, 0, 0.5);
     }
-
 }

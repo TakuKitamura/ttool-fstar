@@ -470,7 +470,6 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 
     }
 
-
     public void stopAddingConnector() {
         //TraceManager.addDev("Stop Adding connector in tdmm");
         tdp.mode = TDiagramPanel.NORMAL;
@@ -641,8 +640,6 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
             break;
         default:
         }
-
-
     }
 
     //Author: huytruong

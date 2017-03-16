@@ -49,27 +49,41 @@ import java.util.*;
 import ui.tmlcompd.TMLCPrimitivePort;
 
 public class TMLEvent extends TMLCommunicationElement {
+    // Options
     protected Vector params; // List of various types of parameters
     protected int maxEvt = -1; // maxEvt = -1 -> infinite nb of evts: default behaviour
     protected boolean isBlocking = false; // By default, latest events is removed when the FIFO is full
     protected boolean canBeNotified = false;
+    public ArrayList<TMLCPrimitivePort> ports;
+    
+    // Used for 1 -> 1
     protected TMLTask origin, destination;
+    protected TMLPort originPort, destinationPort; // Not used by the simulator
+    public TMLCPrimitivePort port;
+    public TMLCPrimitivePort port2;
+
+    // Used for 1 -> many channel, or for many -> 1 channel
+    protected ArrayList<TMLTask> originTasks, destinationTasks;
+    protected ArrayList<TMLPort> originPorts, destinationPorts;
+    
+    // For security
     public int confStatus;
     public boolean checkAuth;
     public boolean checkConf;
-    public TMLCPrimitivePort port;
-    public TMLCPrimitivePort port2;
-    /*public TMLEvent(String name, Object reference) {
-      super(name, reference);
-      params = new Vector();
-      }*/
 
+
+    
     public TMLEvent(String name, Object reference, int _maxEvt, boolean _isBlocking) {
         super(name, reference);
         params = new Vector();
         maxEvt = _maxEvt;
         isBlocking = _isBlocking;
         checkMaxEvt();
+	originTasks = new ArrayList<TMLTask>();
+        destinationTasks = new ArrayList<TMLTask>();
+        originPorts = new ArrayList<TMLPort>();
+        destinationPorts = new ArrayList<TMLPort>();
+	ports = new ArrayList<TMLCPrimitivePort>();
 	checkConf=false;
         //System.out.println("New event: " + name + " max=" + _maxEvt + " blocking=" + isBlocking);
     }
@@ -93,10 +107,24 @@ public class TMLEvent extends TMLCommunicationElement {
     }
 
     public TMLTask getOriginTask() {
+	if (origin == null) {
+	    if (destinationTasks.size() == 0) {
+		return null;
+	    } else {
+		return destinationTasks.get(0);
+	    }
+	} 
         return origin;
     }
 
     public TMLTask getDestinationTask() {
+	if (destination == null) {
+	    if (destinationTasks.size() == 0) {
+		return null;
+	    } else {
+		return destinationTasks.get(0);
+	    }
+	} 
         return destination;
     }
 
@@ -188,6 +216,7 @@ public class TMLEvent extends TMLCommunicationElement {
         return true;
     }
 
+
     public void addParam(String _list) {
         String []split = _list.split(",");
         TMLType type;
@@ -198,5 +227,59 @@ public class TMLEvent extends TMLCommunicationElement {
             }
         }
     }
+
+    public boolean isAForkEvent() {
+        return ((originTasks.size() == 1) && (destinationTasks.size() >= 1));
+    }
+
+    public boolean isAJoinEvent() {
+        return ((destinationTasks.size() == 1) && (originTasks.size() >= 1));
+    }
+
+    public ArrayList<TMLTask> getOriginTasks() {
+        return originTasks;
+    }
+
+    public ArrayList<TMLTask> getDestinationTasks() {
+        return destinationTasks;
+    }
+
+    public ArrayList<TMLPort> getOriginPorts() {
+        return originPorts;
+    }
+
+    public ArrayList<TMLPort> getDestinationPorts() {
+        return destinationPorts;
+    }
+
+    public void setPorts(TMLPort _origin, TMLPort _destination) {
+        originPort = _origin;
+        destinationPort = _destination;
+    }
+
+    public void removeComplexInformations() {
+        originTasks = new ArrayList<TMLTask>();
+        destinationTasks = new ArrayList<TMLTask>();
+        originPorts = new ArrayList<TMLPort>();
+        destinationPorts = new ArrayList<TMLPort>();
+    }
+
+    public void addTaskPort(TMLTask _task, TMLPort _port, boolean isOrigin) {
+        if (isOrigin) {
+            originTasks.add(_task);
+            originPorts.add(_port);
+        } else {
+            destinationTasks.add(_task);
+            destinationPorts.add(_port);
+        }
+    }
+
+    public boolean isBasicEvent() {
+        return (originTasks.size() == 0);
+    }
+
+    
+
+    
 
 }

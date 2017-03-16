@@ -351,9 +351,13 @@ System.out.println("ADD CPU  monitored "+ monitored);
 					//if (((AvatarRAM)avowner_p1).getMonitored() == 2)
 					{   
 					    monitored = 2;
+					    //monitored = 1;
 					}
+				  
 				    (((AvatarRAM) avowner_p1)).setMonitored(monitored); 
+				   
 				}
+
 				if (avowner_p1 instanceof AvatarCPU) {
 				    (((AvatarCPU) avowner_p1)).setMonitored(monitored);
 				}

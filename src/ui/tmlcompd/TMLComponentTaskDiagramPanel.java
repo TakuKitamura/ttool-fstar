@@ -1481,7 +1481,6 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
             }
         }
 
-
         // Use connectors to merge paths with one another
 
         for (TDiagramPanel panel: panels) {

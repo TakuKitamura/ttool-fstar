@@ -1245,7 +1245,7 @@ public List<String> securityPatterns = new ArrayList<String>();
 
         // Remove olf channel from TMLModeling
         //tmlm.removeChannel(chan);
-        chan.removeComplexInformation();
+        chan.removeComplexInformations();
     }
 
     private void handleCPMemoryCopyArtifact(TMLCPLib _cp, TMLCPLibArtifact _arti) {

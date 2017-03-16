@@ -308,6 +308,14 @@ public class TMLTask extends TMLElement {
 
     }
 
+    public void replaceWaitEventWith(TMLEvent oldEvt, TMLEvent newEvt) {
+        activity.replaceWaitEventWith(oldEvt, newEvt);
+    }
+
+    public void replaceSendEventWith(TMLEvent oldEvt, TMLEvent newEvt) {
+        activity.replaceSendEventWith(oldEvt, newEvt);
+    }
+
     public void replaceReadChannelWith(TMLChannel oldChan, TMLChannel newChan) {
         activity.replaceReadChannelWith(oldChan, newChan);
     }

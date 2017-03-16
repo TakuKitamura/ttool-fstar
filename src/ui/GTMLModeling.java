@@ -84,8 +84,8 @@ public class GTMLModeling  {
     //Attributes specific to Communication Patterns
     private TMLCP tmlcp;
     private TMLCommunicationPatternPanel tmlcpp;
- //   private Vector<TDiagramPanel> diagramPanelsToTakeIntoAccount;
-//    private Vector<TDiagramPanel> panels;
+    //   private Vector<TDiagramPanel> diagramPanelsToTakeIntoAccount;
+    //    private Vector<TDiagramPanel> panels;
 
     private Map<String, SecurityPattern> securityPatterns = new HashMap<String, SecurityPattern>();
 
@@ -109,10 +109,10 @@ public class GTMLModeling  {
 
     public GTMLModeling(TMLArchiPanel _tmlap, boolean resetList) {
         tmlap = _tmlap;
-	//System.out.println(tmlap.getMainGUI());
-	//TURTLEPanel tup = (TURTLEPanel)(tmlap.getMainGUI().getTURTLEPanel(namePanel));
-	//if (tup instanceof TMLDesignPanel) {
-	//tmldp = tmlap.getMainGUI().
+        //System.out.println(tmlap.getMainGUI());
+        //TURTLEPanel tup = (TURTLEPanel)(tmlap.getMainGUI().getTURTLEPanel(namePanel));
+        //if (tup instanceof TMLDesignPanel) {
+        //tmldp = tmlap.getMainGUI().
         table = new Hashtable<String, String>();
         if (resetList) {
             listE = new CorrespondanceTGElement();
@@ -156,7 +156,7 @@ public class GTMLModeling  {
                 addTMLChannels();
                 addTMLEvents();
                 addTMLRequests();
-		//addTMLPragmas();
+                //addTMLPragmas();
                 TraceManager.addDev("At line 151");
                 generateTasksActivityDiagrams();
                 removeActionsWithDollars();
@@ -218,7 +218,7 @@ public class GTMLModeling  {
                 addTMLCEvents();
                 TraceManager.addDev("Adding requests");
                 addTMLCRequests();
-		//addTMLPragmas();
+                //addTMLPragmas();
                 TraceManager.addDev("At line 211");
                 generateTasksActivityDiagrams();
                 removeActionsWithDollars();
@@ -226,7 +226,7 @@ public class GTMLModeling  {
             } catch (MalformedTMLDesignException mtmlde) {
                 TraceManager.addDev("Modeling error:" + mtmlde.getMessage());
             }
-	    
+
             TMLSyntaxChecking syntax = new TMLSyntaxChecking(tmlm);
             syntax.checkSyntax();
 
@@ -278,9 +278,9 @@ public class GTMLModeling  {
         nodesToTakeIntoAccount = new LinkedList<TGComponent>(nodes);
     }
 
-//    public void setDiagramPanels( Vector<TDiagramPanel> panels ) {
-//        diagramPanelsToTakeIntoAccount = new Vector<TDiagramPanel>( panels );
-//    }
+    //    public void setDiagramPanels( Vector<TDiagramPanel> panels ) {
+    //        diagramPanelsToTakeIntoAccount = new Vector<TDiagramPanel>( panels );
+    //    }
 
     public List<CheckingError> getCheckingErrors() {
         return checkingErrors;
@@ -289,25 +289,25 @@ public class GTMLModeling  {
     public List<CheckingError> getCheckingWarnings() {
         return warnings;
     }
-//    
-//    private void addTMLPragmas(){
-//	TGComponent tgc;
-//	components = tmlap.tmlap.getComponentList();
-//	ListIterator iterator = components.listIterator();
-//	while(iterator.hasNext()) {
-//	    tgc = (TGComponent)(iterator.next());
-//	    if (tgc instanceof TGCNote){
-//	        TGCNote note = (TGCNote) tgc;
-//	        String[] vals = note.getValues();
-//	        for (String s: vals){
-//		    TraceManager.addDev("Val " + s);
-//		    if (s.contains("#") && s.contains(" ")){
-//  		        map.addPragma(s.split(" "));
-//	    	    }
-//	        }
-//	    }
-//        }
-//    }
+    //
+    //    private void addTMLPragmas(){
+    //  TGComponent tgc;
+    //  components = tmlap.tmlap.getComponentList();
+    //  ListIterator iterator = components.listIterator();
+    //  while(iterator.hasNext()) {
+    //      tgc = (TGComponent)(iterator.next());
+    //      if (tgc instanceof TGCNote){
+    //          TGCNote note = (TGCNote) tgc;
+    //          String[] vals = note.getValues();
+    //          for (String s: vals){
+    //              TraceManager.addDev("Val " + s);
+    //              if (s.contains("#") && s.contains(" ")){
+    //                          map.addPragma(s.split(" "));
+    //              }
+    //          }
+    //      }
+    //        }
+    //    }
     private void addTMLTasks() throws MalformedTMLDesignException {
         TGComponent tgc;
         TMLTask tmlt;
@@ -642,8 +642,6 @@ public class GTMLModeling  {
 
     private void addTMLCChannels() throws MalformedTMLDesignException {
 
-
-
         TGComponent tgc;
         TMLCPrimitiveComponent tmlc;
         Iterator<? extends TGComponent> iterator = components.listIterator();
@@ -722,8 +720,8 @@ public class GTMLModeling  {
                                 channel = new TMLChannel(name, port1);
                                 channel.setSize(port1.getSize());
                                 channel.setMax(port1.getMax());
-				channel.ports.add(port1);
-				channel.ports.add(port2);
+                                channel.ports.add(port1);
+                                channel.ports.add(port2);
                                 if (port1.isBlocking() && port2.isBlocking()) {
                                     channel.setType(TMLChannel.BRBW);
                                 } else if (!port1.isBlocking() && port2.isBlocking()) {
@@ -817,11 +815,11 @@ public class GTMLModeling  {
                             // Channel attributes
                             port = (TMLCPrimitivePort)(portstome.get(0));
                             channel = new TMLChannel(name, port1);
-			    channel.ports.add(port1);
-			    for(j=0; j<portstome.size(); j++) {
+                            channel.ports.add(port1);
+                            for(j=0; j<portstome.size(); j++) {
                                 TMLCPrimitivePort p = (TMLCPrimitivePort)(portstome.get(j));
-				channel.ports.add(p);
-			    }
+                                channel.ports.add(p);
+                            }
                             channel.setSize(port1.getSize());
                             channel.setMax(port1.getMax());
                             if (port1.isBlocking() && port.isBlocking()) {
@@ -898,6 +896,8 @@ public class GTMLModeling  {
         TMLCRecordComponent record;
         TAttribute ta;
 
+	List<TGComponent> alreadyConsidered = new ArrayList<TGComponent>();
+
         TraceManager.addDev("*** Adding Events ***");
 
         while(iterator.hasNext()) {
@@ -927,109 +927,238 @@ public class GTMLModeling  {
                         throw new MalformedTMLDesignException(msg);
                     }
 
-                    for (int kk=0; kk<portstome.size(); kk++) {
-                        port2 = (TMLCPrimitivePort)(portstome.get(kk));
+                    if (portstome.size() == 1) {
 
-                        String []text1 = port1.getPortName().split(",");
-                        String []text2 = port2.getPortName().split(",");
+                        for (int kk=0; kk<portstome.size(); kk++) {
+                            port2 = (TMLCPrimitivePort)(portstome.get(kk));
 
-                        /*for (i=0; i<text1.length; i++) {
-                          TraceManager.addDev("text1[" + i + "] = " + text1[i]);
-                          }
+                            String []text1 = port1.getPortName().split(",");
+                            String []text2 = port2.getPortName().split(",");
 
-                          for (i=0; i<text2.length; i++) {
-                          TraceManager.addDev("text2[" + i + "] = " + text2[i]);
-                          }*/
+                            /*for (i=0; i<text1.length; i++) {
+                              TraceManager.addDev("text1[" + i + "] = " + text1[i]);
+                              }
 
-                        for (j=0; j<Math.min(text1.length, text2.length); j++) {
-                            name1 = text1[j].trim();
-                            name2 = text2[j].trim();
-                            //TraceManager.addDev("name1=" + name1 + " name2=" + name2);
-                            if (kk == 0) {
-                                name = makeName(port1, name1) + "__" + makeName(port2, name2);
-                            } else {
-                                name = makeName(port1, name1) + "__" + makeName(port2, name2) + "__FORK" + kk;
-                            }
+                              for (i=0; i<text2.length; i++) {
+                              TraceManager.addDev("text2[" + i + "] = " + text2[i]);
+                              }*/
 
-                            TraceManager.addDev("Adding to table : " + makeName(port1, port1.getFather().getValue()) + "/" + name1);
-                            addToTable(makeName(port1, port1.getFather().getValue()) + "/" + name1, name);
-                            TraceManager.addDev("Adding to table : " + makeName(port2, port2.getFather().getValue()) + "/" + name2);
-                            addToTable(makeName(port2, port2.getFather().getValue()) + "/" + name2, name);
-
-                            if (port1.isFinite()) {
-                                event = new TMLEvent(name, port1, port1.getMax(), port1.isBlocking());
-                            } else {
-                                event = new TMLEvent(name, port1, -1, port1.isBlocking());
-                            }
-			    event.port=port1;
-			    event.port2= port2;
-                            for(i=0; i<port1.getNbMaxAttribute(); i++) {
-                                tt = port1.getParamAt(i);
-                                if ((tt != null) && (tt.getType() != TType.NONE)) {
-                                    if (tt.getType() == TType.OTHER) {
-                                        // Record
-                                        // Search for the record
-                                        record = tmlc.getRecordNamed(tt.getTypeOther());
-                                        if (record == null) {
-                                            String msg = " event " + name + " is declared as using an unknown type: " + tt.getTypeOther();
-                                            CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
-                                            ce.setTDiagramPanel(tmlcdp.tmlctdp);
-                                            ce.setTGComponent(tgc);
-                                            checkingErrors.add(ce);
-                                            throw new MalformedTMLDesignException(msg);
-                                        } else {
-                                            for(int k=0; k<record.getAttributes().size(); k++) {
-                                                ta = (TAttribute)(record.getAttributes().get(k));
-                                                if (ta.getType() == TAttribute.NATURAL) {
-                                                    tmlt = new TMLType(TMLType.NATURAL);
-                                                } else if (ta.getType() == TAttribute.BOOLEAN) {
-                                                    tmlt = new TMLType(TMLType.BOOLEAN);
-                                                } else {
-                                                    tmlt = new TMLType(TMLType.OTHER);
-                                                }
-                                                event.addParam(tmlt);
-                                            }
-                                        }
-                                    } else {
-                                        tmlt = new TMLType(tt.getType());
-                                        event.addParam(tmlt);
-                                    }
-                                    //TraceManager.addDev("Event " + event.getName() + " add param");
-                                }
-                            }
-
-                            if (tmlm.hasSameEventName(event)) {
-                                if (tmlm.hasAlmostSimilarEvent(event)) {
-                                    String msg = " event " + name + " is declared several times differently";
-                                    CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
-                                    ce.setTDiagramPanel(tmlcdp.tmlctdp);
-                                    ce.setTGComponent(tgc);
-                                    checkingErrors.add(ce);
-                                    throw new MalformedTMLDesignException(msg);
+                            for (j=0; j<Math.min(text1.length, text2.length); j++) {
+                                name1 = text1[j].trim();
+                                name2 = text2[j].trim();
+                                //TraceManager.addDev("name1=" + name1 + " name2=" + name2);
+                                if (kk == 0) {
+                                    name = makeName(port1, name1) + "__" + makeName(port2, name2);
                                 } else {
-                                    TraceManager.addDev("Same evt : not added");
+                                    name = makeName(port1, name1) + "__" + makeName(port2, name2) + "__FORK" + kk;
                                 }
-                            } else {
-                                tt1 = tmlm.getTMLTaskByName(makeName(port1, port1.getFather().getValue()));
-                                tt2 = tmlm.getTMLTaskByName(makeName(port2, port2.getFather().getValue()));
-                                TraceManager.addDev("Tasks of event: t1=" + tt1.getName() + " t2=" + tt2.getName());
-                                event.setTasks(tt1, tt2);
 
-                                if (port1.isLossy()) {
-                                    event.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
+                                TraceManager.addDev("Adding to table : " + makeName(port1, port1.getFather().getValue()) + "/" + name1);
+                                addToTable(makeName(port1, port1.getFather().getValue()) + "/" + name1, name);
+                                TraceManager.addDev("Adding to table : " + makeName(port2, port2.getFather().getValue()) + "/" + name2);
+                                addToTable(makeName(port2, port2.getFather().getValue()) + "/" + name2, name);
+
+                                if (port1.isFinite()) {
+                                    event = new TMLEvent(name, port1, port1.getMax(), port1.isBlocking());
+                                } else {
+                                    event = new TMLEvent(name, port1, -1, port1.isBlocking());
                                 }
-                                tmlm.addEvent(event);
-                                listE.addCor(event, tgc);
-                                TraceManager.addDev("Adding event " + event.getName());
+                                event.port=port1;
+                                event.port2= port2;
+                                for(i=0; i<port1.getNbMaxAttribute(); i++) {
+                                    tt = port1.getParamAt(i);
+                                    if ((tt != null) && (tt.getType() != TType.NONE)) {
+                                        if (tt.getType() == TType.OTHER) {
+                                            // Record
+                                            // Search for the record
+                                            record = tmlc.getRecordNamed(tt.getTypeOther());
+                                            if (record == null) {
+                                                String msg = " event " + name + " is declared as using an unknown type: " + tt.getTypeOther();
+                                                CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                                                ce.setTDiagramPanel(tmlcdp.tmlctdp);
+                                                ce.setTGComponent(tgc);
+                                                checkingErrors.add(ce);
+                                                throw new MalformedTMLDesignException(msg);
+                                            } else {
+                                                for(int k=0; k<record.getAttributes().size(); k++) {
+                                                    ta = (TAttribute)(record.getAttributes().get(k));
+                                                    if (ta.getType() == TAttribute.NATURAL) {
+                                                        tmlt = new TMLType(TMLType.NATURAL);
+                                                    } else if (ta.getType() == TAttribute.BOOLEAN) {
+                                                        tmlt = new TMLType(TMLType.BOOLEAN);
+                                                    } else {
+                                                        tmlt = new TMLType(TMLType.OTHER);
+                                                    }
+                                                    event.addParam(tmlt);
+                                                }
+                                            }
+                                        } else {
+                                            tmlt = new TMLType(tt.getType());
+                                            event.addParam(tmlt);
+                                        }
+                                        //TraceManager.addDev("Event " + event.getName() + " add param");
+                                    }
+                                }
+
+                                if (tmlm.hasSameEventName(event)) {
+                                    if (tmlm.hasAlmostSimilarEvent(event)) {
+                                        String msg = " event " + name + " is declared several times differently";
+                                        CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                                        ce.setTDiagramPanel(tmlcdp.tmlctdp);
+                                        ce.setTGComponent(tgc);
+                                        checkingErrors.add(ce);
+                                        throw new MalformedTMLDesignException(msg);
+                                    } else {
+                                        TraceManager.addDev("Same evt : not added");
+                                    }
+                                } else {
+                                    tt1 = tmlm.getTMLTaskByName(makeName(port1, port1.getFather().getValue()));
+                                    tt2 = tmlm.getTMLTaskByName(makeName(port2, port2.getFather().getValue()));
+                                    TraceManager.addDev("Tasks of event: t1=" + tt1.getName() + " t2=" + tt2.getName());
+                                    event.setTasks(tt1, tt2);
+
+                                    if (port1.isLossy()) {
+                                        event.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
+                                    }
+                                    tmlm.addEvent(event);
+                                    listE.addCor(event, tgc);
+                                    TraceManager.addDev("Adding event " + event.getName());
+                                }
                             }
                         }
-                    }
-                }
-            }
-        }
+                        // 1 -> many
+                        // Complex event
+                    } else {
+                        TraceManager.addDev("One to many event");
+                        TMLCPrimitivePort port;
+
+                        // Only one channel per port
+                        if (port1.getPortName().indexOf(",") != -1) {
+                            String msg = "Multiple definition of events with more than one output port is not allowed: " + port1.getPortName();
+                            CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                            ce.setTDiagramPanel(tmlcdp.tmlctdp);
+                            ce.setTGComponent(port1);
+                            checkingErrors.add(ce);
+                            throw new MalformedTMLDesignException(msg);
+                        }
+                        for(j=0; j<portstome.size(); j++) {
+                            port = (TMLCPrimitivePort)(portstome.get(j));
+                            if (port.getPortName().indexOf(",") != -1) {
+                                String msg = "Multiple definition of events with more than one output port is not allowed: " + port.getPortName();
+                                CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                                ce.setTDiagramPanel(tmlcdp.tmlctdp);
+                                ce.setTGComponent(port);
+                                checkingErrors.add(ce);
+                                throw new MalformedTMLDesignException(msg);
+                            }
+                        }
+			// Name of port
+			name = makeName(port1, port1.getPortName());
+			for(j=0; j<portstome.size(); j++) {
+			    name += "__" + ((TMLCPrimitivePort)(portstome.get(j))).getPortName();
+			}
+
+			// Correspondance table
+			alreadyConsidered.add(port1);
+			addToTable(makeName(port1, port1.getFather().getValue()) + "/" + port1.getPortName(), name);
+			for(j=0; j<portstome.size(); j++) {
+			    port = (TMLCPrimitivePort)(portstome.get(j));
+			    alreadyConsidered.add(port);
+			    addToTable(makeName(port, port.getFather().getValue()) + "/" + port.getPortName(), name);
+			}
+			
+			// Channel attributes
+			port = (TMLCPrimitivePort)(portstome.get(0));
+			if (port.isFinite()) {
+			    event = new TMLEvent(name, port1, port1.getMax(), port1.isBlocking());
+			} else {
+			    event = new TMLEvent(name, port1, -1, port1.isBlocking());
+			}
+			event.ports.add(port1);
+			for(j=0; j<portstome.size(); j++) {
+			    TMLCPrimitivePort p = (TMLCPrimitivePort)(portstome.get(j));
+			    event.ports.add(p);
+			}
+			for(i=0; i<port1.getNbMaxAttribute(); i++) {
+			    tt = port1.getParamAt(i);
+			    if ((tt != null) && (tt.getType() != TType.NONE)) {
+				if (tt.getType() == TType.OTHER) {
+				    // Record
+				    // Search for the record
+				    record = tmlc.getRecordNamed(tt.getTypeOther());
+				    if (record == null) {
+					String msg = " event " + name + " is declared as using an unknown type: " + tt.getTypeOther();
+					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+					ce.setTDiagramPanel(tmlcdp.tmlctdp);
+					ce.setTGComponent(tgc);
+					checkingErrors.add(ce);
+					throw new MalformedTMLDesignException(msg);
+				    } else {
+					for(int k=0; k<record.getAttributes().size(); k++) {
+					    ta = (TAttribute)(record.getAttributes().get(k));
+					    if (ta.getType() == TAttribute.NATURAL) {
+						tmlt = new TMLType(TMLType.NATURAL);
+					    } else if (ta.getType() == TAttribute.BOOLEAN) {
+						tmlt = new TMLType(TMLType.BOOLEAN);
+					    } else {
+						tmlt = new TMLType(TMLType.OTHER);
+					    }
+					    event.addParam(tmlt);
+					}
+				    }
+				} else {
+				    tmlt = new TMLType(tt.getType());
+				    event.addParam(tmlt);
+				}
+				//TraceManager.addDev("Event " + event.getName() + " add param");
+			    }
+			} // For
+			if (tmlm.hasSameEventName(event)) {
+			    if (tmlm.hasAlmostSimilarEvent(event)) {
+				String msg = " event " + name + " is declared several times differently";
+				CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+				ce.setTDiagramPanel(tmlcdp.tmlctdp);
+				ce.setTGComponent(tgc);
+				checkingErrors.add(ce);
+				throw new MalformedTMLDesignException(msg);
+			    } else {
+				TraceManager.addDev("Same evt : not added");
+			    }
+			} else {
+			    TMLPort tmlport;
+                                tt1 = tmlm.getTMLTaskByName(makeName(port1, port1.getFather().getValue()));
+                                tmlport = new TMLPort(port1.getPortName(), port1);
+                                tmlport.setAssociatedEvent( port1.getAssociatedEvent() );
+                                event.addTaskPort(tt1, tmlport, true);
+                                for(j=0; j<portstome.size(); j++) {
+                                    port = (TMLCPrimitivePort)(portstome.get(j));
+                                    tmlport = new TMLPort(port.getPortName(), port);
+                                    tmlport.setPrex( port.isPrex() );
+                                    tmlport.setPostex( port.isPostex() );
+                                    tmlport.setAssociatedEvent( port.getAssociatedEvent() );
+                                    tt2 = tmlm.getTMLTaskByName(makeName(port, port.getFather().getValue()));
+                                    event.addTaskPort(tt2, tmlport, port.isOrigin());
+                                }
+			    
+				/*tt1 = tmlm.getTMLTaskByName(makeName(port1, port1.getFather().getValue()));
+			    tt2 = tmlm.getTMLTaskByName(makeName(port2, port2.getFather().getValue()));
+			    TraceManager.addDev("Tasks of event: t1=" + tt1.getName() + " t2=" + tt2.getName());
+			    event.setTasks(tt1, tt2);*/
+			    
+			    if (port1.isLossy()) {
+				event.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
+			    }
+			    tmlm.addEvent(event);
+			    listE.addCor(event, tgc);
+			    TraceManager.addDev("Adding event " + event.getName());
+			}
+		    }
+		}
+	    }
+	}
     }
-
-
+    
+    
     private void addTMLCRequests() throws MalformedTMLDesignException {
         TGComponent tgc;
         TMLCPrimitiveComponent tmlc;
@@ -1067,7 +1196,7 @@ public class GTMLModeling  {
                     portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
                     //TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 
- //                   ListIterator ite = portstome.listIterator();
+                    //                   ListIterator ite = portstome.listIterator();
                     //while(ite.hasNext()) {
                     //TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
                     //}
@@ -1097,16 +1226,16 @@ public class GTMLModeling  {
                     name = makeName(port1, name1);
                     addToTable(makeName(port1, port1.getFather().getValue()) + "/" + name1, name);
 
-		    request = new TMLRequest(name, port1);
-		    request.ports.add(port1);
+                    request = new TMLRequest(name, port1);
+                    request.ports.add(port1);
                     for(i=0; i<portstome.size(); i++) {
                         port2 = (TMLCPrimitivePort)(portstome.get(i));
-			request.ports.add(port2);
+                        request.ports.add(port2);
                         TraceManager.addDev("Add add add to table request : " + makeName(port2, port2.getFather().getValue()) + "/" + port2.getName() + " name =" + name);
                         addToTable(makeName(port2, port2.getFather().getValue()) + "/" + port2.getPortName(), name);
                     }
 
-                    
+
                     for(i=0; i<port1.getNbMaxAttribute(); i++) {
                         tt = port1.getParamAt(i);
                         if ((tt != null) && (tt.getType() != TType.NONE)) {
@@ -1225,9 +1354,9 @@ public class GTMLModeling  {
 
     private void addAttributesTo(TGComponent tgc, TMLTask tmltask, List<TAttribute> attributes) {
         TMLType tt;
-      //  String name;
+        //  String name;
         TMLAttribute tmlt;
-      //  TMLRequest req;
+        //  TMLRequest req;
         TMLCRecordComponent rc;
 
         for (TAttribute ta: attributes) {
@@ -1288,30 +1417,30 @@ public class GTMLModeling  {
             }
         }
     }
-    
+
     private void createSecurityPatterns(TMLTask tmltask){
-		TMLActivity activity = tmltask.getActivityDiagram();
+        TMLActivity activity = tmltask.getActivityDiagram();
         TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel)(activity.getReferenceObject());
-		TGComponent tgc;
+        TGComponent tgc;
         TraceManager.addDev("Generating activity diagram of:" + tmltask.getName());
 
         // search for start state
         List<TGComponent> list = tadp.getComponentList();
         Iterator<TGComponent> iterator = list.listIterator();
-		while(iterator.hasNext()){
-	    	tgc = iterator.next();
+        while(iterator.hasNext()){
+            tgc = iterator.next();
 
-	    	if (tgc instanceof TMLADEncrypt) {
-				if (!((TMLADEncrypt)tgc).securityContext.isEmpty()){
-					SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).encTime, ((TMLADEncrypt)tgc).decTime, ((TMLADEncrypt)tgc).nonce, ((TMLADEncrypt)tgc).formula, ((TMLADEncrypt)tgc).key);
-					securityPatterns.put(securityPattern.name, securityPattern);
-					tmlm.addSec(securityPattern);
-					ArrayList<TMLTask> l = new ArrayList<TMLTask>();
-					tmlm.securityTaskMap.put(securityPattern, l);
-					TraceManager.addDev("Adding Security Pattern " + securityPattern.name);
-		   		}
-			}
-		}
+            if (tgc instanceof TMLADEncrypt) {
+                if (!((TMLADEncrypt)tgc).securityContext.isEmpty()){
+                    SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).encTime, ((TMLADEncrypt)tgc).decTime, ((TMLADEncrypt)tgc).nonce, ((TMLADEncrypt)tgc).formula, ((TMLADEncrypt)tgc).key);
+                    securityPatterns.put(securityPattern.name, securityPattern);
+                    tmlm.addSec(securityPattern);
+                    ArrayList<TMLTask> l = new ArrayList<TMLTask>();
+                    tmlm.securityTaskMap.put(securityPattern, l);
+                    TraceManager.addDev("Adding Security Pattern " + securityPattern.name);
+                }
+            }
+        }
     }
 
     private void generateTasksActivityDiagrams() throws MalformedTMLDesignException {
@@ -1323,7 +1452,7 @@ public class GTMLModeling  {
         while(iterator.hasNext()) {
             tmltask = iterator.next();
             createSecurityPatterns(tmltask);
-        }	
+        }
 
         iterator = tmlm.getTasks().listIterator();
 
@@ -1384,11 +1513,11 @@ public class GTMLModeling  {
         TGComponent tgc;
         TMLADStartState tss = null;
         int cptStart = 0;
-    //    boolean rndAdded = false;
+        //    boolean rndAdded = false;
 
         while(iterator.hasNext()) {
             tgc = iterator.next();
-            
+
             if (tgc instanceof TMLADStartState) {
                 tss = (TMLADStartState) tgc;
                 cptStart ++;
@@ -1450,13 +1579,13 @@ public class GTMLModeling  {
         iterator = list.listIterator();
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
-			if (tgc.getCheckLatency()){
-				String name = tmltask.getName() + ":" +  tgc.getName();
-				name = name.replaceAll(" ","");
-				TraceManager.addDev("To check " + name);
-				
-				tmlm.addCheckedActivity(tgc, name+":" + tgc.getValue().split("\\(")[0]);
-			}
+            if (tgc.getCheckLatency()){
+                String name = tmltask.getName() + ":" +  tgc.getName();
+                name = name.replaceAll(" ","");
+                TraceManager.addDev("To check " + name);
+
+                tmlm.addCheckedActivity(tgc, name+":" + tgc.getValue().split("\\(")[0]);
+            }
             if (tgc instanceof TMLADActionState) {
                 tmlaction = new TMLActionState("action", tgc);
                 tmp = ((TMLADActionState)(tgc)).getAction();
@@ -1499,14 +1628,14 @@ public class GTMLModeling  {
             } else if (tgc instanceof TMLADExecI) {
                 tmlexeci = new TMLExecI("execi", tgc);
                 tmlexeci.setAction(modifyString(((TMLADExecI)tgc).getDelayValue()));
-		tmlexeci.setValue(((TMLADExecI)tgc).getDelayValue());
+                tmlexeci.setValue(((TMLADExecI)tgc).getDelayValue());
                 activity.addElement(tmlexeci);
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlexeci, tgc);
 
             } else if (tgc instanceof TMLADExecIInterval) {
                 tmlexecii = new TMLExecIInterval("execi", tgc);
-		tmlexecii.setValue(tgc.getValue());
+                tmlexecii.setValue(tgc.getValue());
                 tmlexecii.setMinDelay(modifyString(((TMLADExecIInterval)tgc).getMinDelayValue()));
                 tmlexecii.setMaxDelay(modifyString(((TMLADExecIInterval)tgc).getMaxDelayValue()));
                 activity.addElement(tmlexecii);
@@ -1516,43 +1645,43 @@ public class GTMLModeling  {
             } else if (tgc instanceof TMLADEncrypt) {
                 tmlexecc = new TMLExecC("encrypt", tgc);
                 activity.addElement(tmlexecc);
-				SecurityPattern sp = securityPatterns.get(((TMLADEncrypt)tgc).securityContext);
-				if (sp ==null){
-		    		//Throw error for missing security pattern
+                SecurityPattern sp = securityPatterns.get(((TMLADEncrypt)tgc).securityContext);
+                if (sp ==null){
+                    //Throw error for missing security pattern
                     CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADEncrypt)tgc).securityContext + " not found");
                     ce.setTDiagramPanel(tadp);
                     ce.setTGComponent(tgc);
                     checkingErrors.add(ce);
-				}
-				else {
-					tmlexecc.securityPattern = sp;
-                	tmlexecc.setAction(Integer.toString(sp.encTime));
-                	((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
-					tmlm.securityTaskMap.get(sp).add(tmltask);
-                	listE.addCor(tmlexecc, tgc);
-				}
+                }
+                else {
+                    tmlexecc.securityPattern = sp;
+                    tmlexecc.setAction(Integer.toString(sp.encTime));
+                    ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                    tmlm.securityTaskMap.get(sp).add(tmltask);
+                    listE.addCor(tmlexecc, tgc);
+                }
             } else if (tgc instanceof TMLADDecrypt) {
                 tmlexecc = new TMLExecC("decrypt_"+((TMLADDecrypt)tgc).securityContext, tgc);
                 activity.addElement(tmlexecc);
-				SecurityPattern sp = securityPatterns.get(((TMLADDecrypt)tgc).securityContext);
-				if (sp ==null){
-		    		//Throw error for missing security pattern
+                SecurityPattern sp = securityPatterns.get(((TMLADDecrypt)tgc).securityContext);
+                if (sp ==null){
+                    //Throw error for missing security pattern
                     CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADDecrypt)tgc).securityContext + " not found");
                     ce.setTDiagramPanel(tadp);
                     ce.setTGComponent(tgc);
                     checkingErrors.add(ce);
-				}
-				else {
-					tmlexecc.securityPattern = sp;
-                	tmlexecc.setAction(Integer.toString(sp.decTime));
-                	((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
-                	listE.addCor(tmlexecc, tgc);
-					tmlm.securityTaskMap.get(sp).add(tmltask);
-				}
+                }
+                else {
+                    tmlexecc.securityPattern = sp;
+                    tmlexecc.setAction(Integer.toString(sp.decTime));
+                    ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                    listE.addCor(tmlexecc, tgc);
+                    tmlm.securityTaskMap.get(sp).add(tmltask);
+                }
 
             } else if (tgc instanceof TMLADExecC) {
                 tmlexecc = new TMLExecC("execc", tgc);
-		tmlexecc.setValue(((TMLADExecC)tgc).getDelayValue());
+                tmlexecc.setValue(((TMLADExecC)tgc).getDelayValue());
                 tmlexecc.setAction(modifyString(((TMLADExecC)tgc).getDelayValue()));
                 activity.addElement(tmlexecc);
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
@@ -1623,7 +1752,7 @@ public class GTMLModeling  {
                 tmlforloop.setInit("");
                 tmlforloop.setCondition("");
                 tmlforloop.setIncrement("");
-		tmlforloop.setInfinite(true);
+                tmlforloop.setInfinite(true);
                 activity.addElement(tmlforloop);
                 ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlforloop, tgc);
@@ -1667,37 +1796,37 @@ public class GTMLModeling  {
                     tmlreadchannel = new TMLReadChannel("read channel", tgc);
                     tmlreadchannel.setNbOfSamples(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
                     tmlreadchannel.addChannel(channel);
-					//security pattern
-		    		if (securityPatterns.get(((TMLADReadChannel)tgc).securityContext)!=null){
-						tmlreadchannel.securityPattern= securityPatterns.get(((TMLADReadChannel)tgc).securityContext);
-		    			//NbOfSamples will increase due to extra overhead from MAC
-						int cur=1;
-						try {
-			    			cur = Integer.valueOf(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
-						} catch(NumberFormatException e) { 
-   						} catch(NullPointerException e) {
-    					}
-		    			int add = Integer.valueOf(tmlreadchannel.securityPattern.overhead);
-						if (!tmlreadchannel.securityPattern.nonce.equals("")){
-						    SecurityPattern nonce = securityPatterns.get(tmlreadchannel.securityPattern.nonce);
-						    if (nonce!=null){
-						        add = Integer.valueOf(nonce.overhead);
-					    	}
-						}
-						cur = cur+ add;
-		    			tmlreadchannel.setNbOfSamples(Integer.toString(cur));
-		    		}
-		   			else if (!((TMLADReadChannel)tgc).securityContext.isEmpty()){
-						//Throw error for missing security pattern
-						CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADReadChannel)tgc).securityContext + " not found");
-        	    	   	ce.setTDiagramPanel(tadp);
-        	    	  	ce.setTGComponent(tgc);
-        	    	    checkingErrors.add(ce);
-			    	}
-        	        activity.addElement(tmlreadchannel);
-        	        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
-        	        listE.addCor(tmlreadchannel, tgc);
-        	    }
+                    //security pattern
+                    if (securityPatterns.get(((TMLADReadChannel)tgc).securityContext)!=null){
+                        tmlreadchannel.securityPattern= securityPatterns.get(((TMLADReadChannel)tgc).securityContext);
+                        //NbOfSamples will increase due to extra overhead from MAC
+                        int cur=1;
+                        try {
+                            cur = Integer.valueOf(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
+                        } catch(NumberFormatException e) {
+                        } catch(NullPointerException e) {
+                        }
+                        int add = Integer.valueOf(tmlreadchannel.securityPattern.overhead);
+                        if (!tmlreadchannel.securityPattern.nonce.equals("")){
+                            SecurityPattern nonce = securityPatterns.get(tmlreadchannel.securityPattern.nonce);
+                            if (nonce!=null){
+                                add = Integer.valueOf(nonce.overhead);
+                            }
+                        }
+                        cur = cur+ add;
+                        tmlreadchannel.setNbOfSamples(Integer.toString(cur));
+                    }
+                    else if (!((TMLADReadChannel)tgc).securityContext.isEmpty()){
+                        //Throw error for missing security pattern
+                        CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADReadChannel)tgc).securityContext + " not found");
+                        ce.setTDiagramPanel(tadp);
+                        ce.setTGComponent(tgc);
+                        checkingErrors.add(ce);
+                    }
+                    activity.addElement(tmlreadchannel);
+                    ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                    listE.addCor(tmlreadchannel, tgc);
+                }
             } else if (tgc instanceof TMLADSendEvent) {
                 event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADSendEvent)tgc).getEventName()));
                 if (event == null) {
@@ -1778,12 +1907,12 @@ public class GTMLModeling  {
                             for(int k=0; k<allVariables.size(); k++) {
                                 //TraceManager.addDev("Adding record: " + allVariables.get(k));
                                 tmlsendrequest.addParam(allVariables.get(k));
-				request.addParamName(allVariables.get(k));
+                                request.addParamName(allVariables.get(k));
                             }
                         } else {
                             //TraceManager.addDev("Adding param: " + tmp);
                             tmlsendrequest.addParam(tmp);
-			    request.addParamName(tmp);
+                            request.addParamName(tmp);
                         }
                     }
                     if (request.getNbOfParams() != tmlsendrequest.getNbOfParams()) {
@@ -1993,27 +2122,27 @@ public class GTMLModeling  {
                         channel = tmlm.getChannelByName(getFromTable(tmltask, channels[i]));
                         tmlwritechannel.addChannel(channel);
                     }
-		    //add sec pattern
-		    if (securityPatterns.get(((TMLADWriteChannel)tgc).securityContext)!=null){
-			tmlwritechannel.securityPattern= securityPatterns.get(((TMLADWriteChannel)tgc).securityContext);
-		 	int cur = Integer.valueOf(modifyString(((TMLADWriteChannel)tgc).getSamplesValue()));
-		    	int add = Integer.valueOf(tmlwritechannel.securityPattern.overhead);
-			if (!tmlwritechannel.securityPattern.nonce.equals("")){
-			    SecurityPattern nonce = securityPatterns.get(tmlwritechannel.securityPattern.nonce);
-			    if (nonce!=null){
-			        add = Integer.valueOf(nonce.overhead);
-			    }
-			}
-			cur = cur+ add;
-		    	tmlwritechannel.setNbOfSamples(Integer.toString(cur));
-		    }
-		    else if (!((TMLADWriteChannel)tgc).securityContext.isEmpty()){
-			//Throw error for missing security pattern
-			CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADWriteChannel)tgc).securityContext + " not found");
-                	ce.setTDiagramPanel(tadp);
-                	ce.setTGComponent(tgc);
-               		checkingErrors.add(ce);
-		    }
+                    //add sec pattern
+                    if (securityPatterns.get(((TMLADWriteChannel)tgc).securityContext)!=null){
+                        tmlwritechannel.securityPattern= securityPatterns.get(((TMLADWriteChannel)tgc).securityContext);
+                        int cur = Integer.valueOf(modifyString(((TMLADWriteChannel)tgc).getSamplesValue()));
+                        int add = Integer.valueOf(tmlwritechannel.securityPattern.overhead);
+                        if (!tmlwritechannel.securityPattern.nonce.equals("")){
+                            SecurityPattern nonce = securityPatterns.get(tmlwritechannel.securityPattern.nonce);
+                            if (nonce!=null){
+                                add = Integer.valueOf(nonce.overhead);
+                            }
+                        }
+                        cur = cur+ add;
+                        tmlwritechannel.setNbOfSamples(Integer.toString(cur));
+                    }
+                    else if (!((TMLADWriteChannel)tgc).securityContext.isEmpty()){
+                        //Throw error for missing security pattern
+                        CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADWriteChannel)tgc).securityContext + " not found");
+                        ce.setTDiagramPanel(tadp);
+                        ce.setTGComponent(tgc);
+                        checkingErrors.add(ce);
+                    }
                     activity.addElement(tmlwritechannel);
                     ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlwritechannel, tgc);
@@ -2092,7 +2221,7 @@ public class GTMLModeling  {
             }
         }
 
-	
+
 
         // Check that each "for" has two nexts
         // Check that TMLChoice have compatible guards
@@ -2101,18 +2230,18 @@ public class GTMLModeling  {
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
 
-	    if ((tgc instanceof TMLADForLoop) || (tgc instanceof TMLADForStaticLoop)) {
-		ae1 = activity.findReferenceElement(tgc);
-		if (ae1 != null) {
-		    if (ae1.getNbNext() != 2) {
-			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted for loop: a loop must have an internal behavior, and an exit behavior ");
-			ce.setTMLTask(tmltask);
-			ce.setTDiagramPanel(tadp);
-			ce.setTGComponent(tgc);
-			checkingErrors.add(ce);
-		    }
-		}
-	    } else if (tgc instanceof TMLADChoice) {
+            if ((tgc instanceof TMLADForLoop) || (tgc instanceof TMLADForStaticLoop)) {
+                ae1 = activity.findReferenceElement(tgc);
+                if (ae1 != null) {
+                    if (ae1.getNbNext() != 2) {
+                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted for loop: a loop must have an internal behavior, and an exit behavior ");
+                        ce.setTMLTask(tmltask);
+                        ce.setTDiagramPanel(tadp);
+                        ce.setTGComponent(tgc);
+                        checkingErrors.add(ce);
+                    }
+                }
+            } else if (tgc instanceof TMLADChoice) {
                 tmlchoice = (TMLChoice)(activity.findReferenceElement(tgc));
                 tmlchoice.orderGuards();
 
@@ -2199,7 +2328,7 @@ public class GTMLModeling  {
         tmlm = new TMLModeling(true);
         archi = new TMLArchitecture();  //filled by makeArchitecture
         map = new TMLMapping(tmlm, archi, false);
-	map.tmlap = tmlap;
+        map.tmlap = tmlap;
         checkingErrors = new LinkedList<CheckingError> ();
         warnings = new LinkedList<CheckingError> ();
         //listE = new CorrespondanceTGElement();
@@ -2212,23 +2341,23 @@ public class GTMLModeling  {
         }
         TraceManager.addDev("Making mapping");
         makeMapping();  //fills map
-		map.listE = listE;
-//	map.securityPatterns.addAll(securityPatterns.keySet());
+        map.listE = listE;
+        //  map.securityPatterns.addAll(securityPatterns.keySet());
         TraceManager.addDev("Making TMLCPLib");
         makeTMLCPLib();
 
         //TraceManager.addDev("<--- TML modeling:");
         //TraceManager.addDev("TML: " + tmlm.toString());
         //TraceManager.addDev("End of TML modeling --->");
-	/*if (!tmlcdp.getMainGUI().getTitleAt(tmlap).contains("_enc")){
-	    autoSecure();
-	}
-	autoMapKeys();*/
+        /*if (!tmlcdp.getMainGUI().getTitleAt(tmlap).contains("_enc")){
+          autoSecure();
+          }
+          autoMapKeys();*/
         removeActionsWithRecords();
-	map.setTMLDesignPanel(this.tmlcdp);
-		if (map.firewall){
-		tmlap.getMainGUI().gtm.drawFirewall(map);
-		}
+        map.setTMLDesignPanel(this.tmlcdp);
+        if (map.firewall){
+            tmlap.getMainGUI().gtm.drawFirewall(map);
+        }
         return map;     // the data structure map is returned to CheckSyntaxTMLMapping in GTURTLEModeling
     }
 
@@ -2316,7 +2445,7 @@ public class GTMLModeling  {
         if (nodesToTakeIntoAccount == null) {
             components = tmlap.tmlap.getComponentList();
         } else {
-        	// DB: TODO this is a bug. Stuff in nodesToTakeIntoAccount are not components
+            // DB: TODO this is a bug. Stuff in nodesToTakeIntoAccount are not components
             components = nodesToTakeIntoAccount;
         }
         Iterator<? extends TGComponent> iterator = components.listIterator();
@@ -2325,17 +2454,17 @@ public class GTMLModeling  {
         TMLArchiCPUNode node;
         TMLArchiHWANode hwanode;
         TMLArchiBUSNode busnode;
-		TMLArchiVGMNNode vgmnnode;
-		TMLArchiCrossbarNode crossbarnode;
+        TMLArchiVGMNNode vgmnnode;
+        TMLArchiCrossbarNode crossbarnode;
         TMLArchiBridgeNode bridgenode;
         TMLArchiMemoryNode memorynode;
         TMLArchiDMANode dmanode;
-		TMLArchiFirewallNode firewallnode;
+        TMLArchiFirewallNode firewallnode;
         HwCPU cpu;
-        HwA hwa;	
-		HwBus bus;
+        HwA hwa;
+        HwBus bus;
         HwVGMN vgmn;
-		HwCrossbar crossbar;
+        HwCrossbar crossbar;
         HwBridge bridge;
         HwMemory memory;
         HwDMA dma;
@@ -2344,7 +2473,7 @@ public class GTMLModeling  {
 
         while(iterator.hasNext()) {
             tgc = iterator.next();
-            
+
             if (tgc instanceof TMLArchiCPUNode) {
                 node = (TMLArchiCPUNode)tgc;
                 if (nameInUse(names, node.getName())) {
@@ -2370,7 +2499,7 @@ public class GTMLModeling  {
                     cpu.execcTime = node.getExeccTime();
                     cpu.clockRatio = node.getClockRatio();
                     cpu.MEC = node.getMECType();
-		    cpu.encryption = node.getEncryption();
+                    cpu.encryption = node.getEncryption();
                     listE.addCor(cpu, node);
                     archi.addHwNode(cpu);
                     TraceManager.addDev("CPU node added: " + cpu.getName());
@@ -2413,14 +2542,14 @@ public class GTMLModeling  {
                     bus.arbitration = busnode.getArbitrationPolicy();
                     bus.clockRatio = busnode.getClockRatio();
                     bus.sliceTime = busnode.getSliceTime();
-		    bus.privacy = busnode.getPrivacy();
+                    bus.privacy = busnode.getPrivacy();
                     listE.addCor(bus, busnode);
                     archi.addHwNode(bus);
                     TraceManager.addDev("BUS node added:" + bus.getName());
                 }
             }
 
-	    if (tgc instanceof TMLArchiVGMNNode) {
+            if (tgc instanceof TMLArchiVGMNNode) {
                 vgmnnode = (TMLArchiVGMNNode)tgc;
                 if (nameInUse(names, vgmnnode.getName())) {
                     // Node with the same name
@@ -2432,18 +2561,18 @@ public class GTMLModeling  {
                     names.add(vgmnnode.getName());
                     vgmn = new HwVGMN(vgmnnode.getName());
                     vgmn.byteDataSize = vgmnnode.getByteDataSize();
-		    /*   vgmn.pipelineSize = vgmnnode.getPipelineSize();
-                    vgmn.arbitration = vgmnnode.getArbitrationPolicy();
-                    vgmn.clockRatio = vgmnnode.getClockRatio();
-                    vgmn.sliceTime = vgmnnode.getSliceTime();
-		    vgmn.privacy = vgmnnode.getPrivacy();*/
+                    /*   vgmn.pipelineSize = vgmnnode.getPipelineSize();
+                         vgmn.arbitration = vgmnnode.getArbitrationPolicy();
+                         vgmn.clockRatio = vgmnnode.getClockRatio();
+                         vgmn.sliceTime = vgmnnode.getSliceTime();
+                         vgmn.privacy = vgmnnode.getPrivacy();*/
                     listE.addCor(vgmn, vgmnnode);
                     archi.addHwNode(vgmn);
                     TraceManager.addDev("VGMN node added:" + vgmn.getName());
                 }
             }
 
-if (tgc instanceof TMLArchiCrossbarNode) {
+            if (tgc instanceof TMLArchiCrossbarNode) {
                 crossbarnode = (TMLArchiCrossbarNode)tgc;
                 if (nameInUse(names, crossbarnode.getName())) {
                     // Node with the same name
@@ -2456,10 +2585,10 @@ if (tgc instanceof TMLArchiCrossbarNode) {
                     crossbar = new HwCrossbar(crossbarnode.getName());
                     crossbar.byteDataSize = crossbarnode.getByteDataSize();
                     /*crossbar.pipelineSize = crossbarnode.getPipelineSize();
-                    crossbar.arbitration = crossbarnode.getArbitrationPolicy();
-                    crossbar.clockRatio = crossbarnode.getClockRatio();
-                    crossbar.sliceTime = crossbarnode.getSliceTime();
-		    crossbar.privacy = crossbarnode.getPrivacy();*/
+                      crossbar.arbitration = crossbarnode.getArbitrationPolicy();
+                      crossbar.clockRatio = crossbarnode.getClockRatio();
+                      crossbar.sliceTime = crossbarnode.getSliceTime();
+                      crossbar.privacy = crossbarnode.getPrivacy();*/
                     listE.addCor(crossbar, crossbarnode);
                     archi.addHwNode(crossbar);
                     TraceManager.addDev("Crossbar node added:" + crossbar.getName());
@@ -2497,14 +2626,14 @@ if (tgc instanceof TMLArchiCrossbarNode) {
                 } else {
                     names.add("CPU__"+firewallnode.getName());
                     bridge = new HwBridge("CPU__"+firewallnode.getName());
-		    		bridge.isFirewall=true;
-		    		bridge.firewallRules = ((TMLArchiFirewallNode) tgc).getRules();
-					bridge.latency = ((TMLArchiFirewallNode) tgc).getLatency();
+                    bridge.isFirewall=true;
+                    bridge.firewallRules = ((TMLArchiFirewallNode) tgc).getRules();
+                    bridge.latency = ((TMLArchiFirewallNode) tgc).getLatency();
                     bridge.bufferByteSize = 1;
                     bridge.clockRatio = 1;
                     listE.addCor(bridge, firewallnode);
                     archi.addHwNode(bridge);
-                    TraceManager.addDev("Bridge node added:" + bridge.getName());
+                    TraceManager.addDev("Firewall node added:" + bridge.getName());
                 }
             }
 
@@ -2545,7 +2674,7 @@ if (tgc instanceof TMLArchiCrossbarNode) {
                     dma.clockRatio = dmanode.getClockRatio();
                     listE.addCor(dma, dmanode);
                     archi.addHwNode(dma);
-                    TraceManager.addDev("************************************ DMA node added:" + dma.getName());
+                    //TraceManager.addDev("************************************ DMA node added:" + dma.getName());
                 }
             }
         }
@@ -2572,7 +2701,7 @@ if (tgc instanceof TMLArchiCrossbarNode) {
                     if (components.contains(tgc1) && components.contains(tgc2)) {
                         //TraceManager.addDev("Getting closer");
 
-			  if (tgc2 instanceof TMLArchiBUSNode) {
+                        if (tgc2 instanceof TMLArchiBUSNode) {
                             originNode = listE.getHwNode(tgc1);
                             bus  = (HwBus)(listE.getHwNode(tgc2));
                             if ((originNode != null) && (bus != null)) {
@@ -2584,9 +2713,9 @@ if (tgc instanceof TMLArchiCrossbarNode) {
                                 archi.addHwLink(hwlink);
                                 //TraceManager.addDev("Link added");
                             }
-			    }
+                        }
 
-			// DG added VGMN and crossbar
+                        // DG added VGMN and crossbar
                         if (tgc2 instanceof TMLArchiVGMNNode) {
                             originNode = listE.getHwNode(tgc1);
                             vgmn  = (HwVGMN)(listE.getHwNode(tgc2));
@@ -2624,12 +2753,12 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 
     private void makeCPDataStructure() throws MalformedTMLDesignException {
 
-       // TGComponent tgc;
-      //  ui.tmlsd.TMLSDPanel SDpanel;
-     //   ui.tmlcp.TMLCPPanel ADpanel;
+        // TGComponent tgc;
+        //  ui.tmlsd.TMLSDPanel SDpanel;
+        //   ui.tmlcp.TMLCPPanel ADpanel;
         List<String> names = new ArrayList<String>();
-     //   TMLCPSequenceDiagram SD;
-      //  TMLCPActivityDiagram AD;
+        //   TMLCPSequenceDiagram SD;
+        //  TMLCPActivityDiagram AD;
 
         Vector<TDiagramPanel> panelList = tmlcpp.getPanels();
 
@@ -2663,14 +2792,14 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 
     private tmltranslator.tmlcp.TMLCPActivityDiagram createActivityDiagramDataStructure( ui.tmlcp.TMLCPPanel panel,
                                                                                          List<String> names )
-    throws MalformedTMLDesignException {
+        throws MalformedTMLDesignException {
         tmltranslator.tmlcp.TMLCPStart start;
         tmltranslator.tmlcp.TMLCPStop stop;
         tmltranslator.tmlcp.TMLCPJunction junction;
         tmltranslator.tmlcp.TMLCPJoin join;
         tmltranslator.tmlcp.TMLCPFork fork;
         tmltranslator.tmlcp.TMLCPChoice choice;
-       // tmltranslator.tmlcp.TMLCPConnector TMLCPconnector;
+        // tmltranslator.tmlcp.TMLCPConnector TMLCPconnector;
         tmltranslator.tmlcp.TMLCPRefAD refAD;
         tmltranslator.tmlcp.TMLCPRefSD refSD;
         tmltranslator.tmlcp.TMLCPForLoop loop;
@@ -2685,7 +2814,7 @@ if (tgc instanceof TMLArchiCrossbarNode) {
           }*/
 
         List<TGComponent> components = panel.getComponentList();
-        
+
         if( nameInUse( names, panel.getName() ) ) {
             String msg = panel.getName() + " already exists";
             CheckingError ce = new CheckingError( CheckingError.STRUCTURE_ERROR, "Two diagrams have the same name: " + panel.getName() );
@@ -2769,7 +2898,7 @@ if (tgc instanceof TMLArchiCrossbarNode) {
                 }*/
             }   //End of for loop over components
 
-            // Handling connectors
+                // Handling connectors
             for( k = 0; k < components.size(); k++ )        {
                 component = (TGComponent) components.get(k);
                 //compID = component.getName() + "__" + elements.size();
@@ -2815,13 +2944,13 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         int index2;
         TGComponent[] components;
         TMLType type;
-      //  String toParse;
+        //  String toParse;
         TAttribute attribute;
         TGConnectorMessageTMLSD connector;
         TMLSDMessage message;
         tmltranslator.tmlcp.TMLSDInstance instance;
-    //    String[] tokens;                                                        //used to get the tokens of the string for a SD attribute
-  //      String delims = "[ +=:;]+";             //the delimiter chars used to parse attributes of SD instance
+        //    String[] tokens;                                                        //used to get the tokens of the string for a SD attribute
+        //      String delims = "[ +=:;]+";             //the delimiter chars used to parse attributes of SD instance
 
         //TraceManager.addDev( "ADDING TO DATA STRUCTURE THE DIAGRAM " + panel.getName() );
         if( nameInUse( names, panel.getName() ) ) {
@@ -2969,11 +3098,11 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         } else {
             components = nodesToTakeIntoAccount;
         }
-        
+
         Iterator<? extends TGComponent> iterator = components.listIterator();
 
         TGComponent tgc;//, tgctask;
-      //  TMLArchiNode node;
+        //  TMLArchiNode node;
         List<TMLArchiArtifact> artifacts;
         String namePanel;
         TMLDesignPanel tmldp;
@@ -2984,14 +3113,14 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 
         while(iterator.hasNext()) {
             tgc = iterator.next();
-            
+
             if (tgc instanceof TMLArchiNode) {
                 Vector<TGComponent> tmp;
 
                 artifacts = ((TMLArchiNode)(tgc)).getAllTMLArchiArtifacts();
                 for( TMLArchiArtifact artifact:artifacts) {
                     namePanel = artifact.getReferenceTaskName();
-                    
+
                     try {
                         tup = (TURTLEPanel)(tmlap.getMainGUI().getTURTLEPanel(namePanel));
 
@@ -3010,10 +3139,10 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 
                             // Search for the corresponding TMLTask
                             task = tmldp.getTaskByName(artifact.getTaskName());
-                            
+
                             if (task != null) {
                                 tmp.add(task);
-                            } 
+                            }
                             else {
                                 CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Task " + artifact.getTaskName() + " referenced by artifact " + artifact.getValue() + " is unknown");
                                 //ce.setTMLTask(tmltask);
@@ -3056,7 +3185,7 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         }
 
         TraceManager.addDev("Nb of panels regular:" + panels.size() + " components" + cpanels.size());
-	
+
         // For each panel, construct a TMLModeling
         TMLModeling tmpm;
         GTMLModeling gtml;
@@ -3082,7 +3211,7 @@ if (tgc instanceof TMLArchiCrossbarNode) {
 
         if (cpanels.size() > 0) {
             for(TMLComponentDesignPanel panel: cpanels) {
-            	this.tmlcdp = panel;
+                this.tmlcdp = panel;
                 gtml =  new GTMLModeling(panel, false);
                 gtml.setComponents(allcomp);
                 gtml.putPrefixName(true);
@@ -3161,64 +3290,64 @@ if (tgc instanceof TMLArchiCrossbarNode) {
     }
 
     //Inspect the architecture diagrams and retrieve mapping of channels onto CPs
-//    private void makeCPMapping()        {
-//
-//        //Why this code?
-//        //if( nodesToTakeIntoAccount == null ) {
-//
-//        //take the architecture panel if it exists, otherwise return
-//        Vector<TDiagramPanel> panelList = tmlap.getPanels();
-//        for( TDiagramPanel panel: panelList )   {
-//            TraceManager.addDev( "Name of Panel: " + panel.getName() );
-//        }
-//        //}
-//        //else  {
-//        //      components = nodesToTakeIntoAccount;
-//        //}
-//        ListIterator iterator = components.listIterator();
-//
-//        TGComponent tgc;
-//        ArrayList<TMLArchiArtifact> artifacts;
-//        ArrayList<TMLArchiCommunicationArtifact> artifactscomm;
-//        ArrayList<TMLArchiEventArtifact> artifactsEvt;
-//        HwNode node;
-//        TMLTask task;
-//        TMLElement elt;
-//        String s;
-//
-//        while( iterator.hasNext() ) {
-//            TraceManager.addDev( "makeCPMapping 1" );
-//            tgc = (TGComponent)( iterator.next() );
-//            if( tgc instanceof TMLArchiCPNode ) {
-//                TraceManager.addDev( "makeCPMapping 2" );
-//                node = archi.getHwNodeByName( tgc.getName() );
-//                if ( ( node != null ) && ( node instanceof HwCommunicationNode ) ) {
-//                    TraceManager.addDev( "makeCPMapping 3" );
-//                    artifactscomm = ( (TMLArchiCommunicationNode)(tgc) ).getChannelArtifactList();
-//                    for( TMLArchiCommunicationArtifact artifact: artifactscomm )        {
-//                        TraceManager.addDev("Exploring artifact " + artifact.getValue());
-//                        s = artifact.getReferenceCommunicationName();
-//                        s = s.replaceAll("\\s", "");
-//                        s = s + "__" + artifact.getCommunicationName();
-//                        TraceManager.addDev("Searching for:" + s);
-//                        elt = tmlm.getCommunicationElementByName(s);
-//                        TraceManager.addDev("comm elts:" + tmlm.getStringListCommunicationElements());
-//                        if( elt instanceof TMLChannel ) {
-//                            //TraceManager.addDev("Setting priority");
-//                            ( (TMLChannel)(elt) ).setPriority( artifact.getPriority() );
-//                        }
-//                        if (elt != null) {
-//                            map.addCommToHwCommNode( elt, (HwCommunicationNode)node );
-//                        } else {
-//                            TraceManager.addDev("Null mapping: no element named: " + artifact.getCommunicationName());
-//                        }
-//                    }
-//
-//		    
-//                }
-//            }
-//        }
-//    }   //End of method
+    //    private void makeCPMapping()        {
+    //
+    //        //Why this code?
+    //        //if( nodesToTakeIntoAccount == null ) {
+    //
+    //        //take the architecture panel if it exists, otherwise return
+    //        Vector<TDiagramPanel> panelList = tmlap.getPanels();
+    //        for( TDiagramPanel panel: panelList )   {
+    //            TraceManager.addDev( "Name of Panel: " + panel.getName() );
+    //        }
+    //        //}
+    //        //else  {
+    //        //      components = nodesToTakeIntoAccount;
+    //        //}
+    //        ListIterator iterator = components.listIterator();
+    //
+    //        TGComponent tgc;
+    //        ArrayList<TMLArchiArtifact> artifacts;
+    //        ArrayList<TMLArchiCommunicationArtifact> artifactscomm;
+    //        ArrayList<TMLArchiEventArtifact> artifactsEvt;
+    //        HwNode node;
+    //        TMLTask task;
+    //        TMLElement elt;
+    //        String s;
+    //
+    //        while( iterator.hasNext() ) {
+    //            TraceManager.addDev( "makeCPMapping 1" );
+    //            tgc = (TGComponent)( iterator.next() );
+    //            if( tgc instanceof TMLArchiCPNode ) {
+    //                TraceManager.addDev( "makeCPMapping 2" );
+    //                node = archi.getHwNodeByName( tgc.getName() );
+    //                if ( ( node != null ) && ( node instanceof HwCommunicationNode ) ) {
+    //                    TraceManager.addDev( "makeCPMapping 3" );
+    //                    artifactscomm = ( (TMLArchiCommunicationNode)(tgc) ).getChannelArtifactList();
+    //                    for( TMLArchiCommunicationArtifact artifact: artifactscomm )        {
+    //                        TraceManager.addDev("Exploring artifact " + artifact.getValue());
+    //                        s = artifact.getReferenceCommunicationName();
+    //                        s = s.replaceAll("\\s", "");
+    //                        s = s + "__" + artifact.getCommunicationName();
+    //                        TraceManager.addDev("Searching for:" + s);
+    //                        elt = tmlm.getCommunicationElementByName(s);
+    //                        TraceManager.addDev("comm elts:" + tmlm.getStringListCommunicationElements());
+    //                        if( elt instanceof TMLChannel ) {
+    //                            //TraceManager.addDev("Setting priority");
+    //                            ( (TMLChannel)(elt) ).setPriority( artifact.getPriority() );
+    //                        }
+    //                        if (elt != null) {
+    //                            map.addCommToHwCommNode( elt, (HwCommunicationNode)node );
+    //                        } else {
+    //                            TraceManager.addDev("Null mapping: no element named: " + artifact.getCommunicationName());
+    //                        }
+    //                    }
+    //
+    //
+    //                }
+    //            }
+    //        }
+    //    }   //End of method
 
     private void makeTMLCPLib() {
         if (nodesToTakeIntoAccount == null) {
@@ -3229,13 +3358,13 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         Iterator<? extends TGComponent> iterator = components.listIterator();
 
         TGComponent tgc;
-//        ArrayList<TMLArchiArtifact> artifacts;
-//        ArrayList<TMLArchiCommunicationArtifact> artifactscomm;
-//        ArrayList<TMLArchiEventArtifact> artifactsEvt;
-   //     HwNode node;
-    //    TMLTask task;
-    //    TMLElement elt;
-   //     String s;
+        //        ArrayList<TMLArchiArtifact> artifacts;
+        //        ArrayList<TMLArchiCommunicationArtifact> artifactscomm;
+        //        ArrayList<TMLArchiEventArtifact> artifactsEvt;
+        //     HwNode node;
+        //    TMLTask task;
+        //    TMLElement elt;
+        //     String s;
         TMLArchiCPNode cp;
 
         while(iterator.hasNext()) {
@@ -3266,7 +3395,7 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         } else {
             components = nodesToTakeIntoAccount;
         }
-        
+
         Iterator<? extends TGComponent> iterator = components.listIterator();
 
         TGComponent tgc;
@@ -3281,7 +3410,7 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             //if( tgc instanceof TMLArchiCPNode )       {
-			
+
             node = archi.getHwNodeByName( tgc.getName() );
             if( ( node != null ) && ( node instanceof HwExecutionNode ) ) {     //why checking this instanceof?
                 artifacts = ( (TMLArchiNode)(tgc) ).getAllTMLArchiArtifacts();
@@ -3313,9 +3442,9 @@ if (tgc instanceof TMLArchiCrossbarNode) {
             if ((tgc instanceof TMLArchiBUSNode) ||(tgc instanceof TMLArchiVGMNNode) || (tgc instanceof TMLArchiCrossbarNode) ||(tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode)|| (tgc instanceof TMLArchiDMANode) || (tgc instanceof TMLArchiFirewallNode)) {
                 node = archi.getHwNodeByName(tgc.getName());
                 if ((node != null) && (node instanceof HwCommunicationNode)) {
-		    if (tgc instanceof TMLArchiFirewallNode){
-			map.firewall=true;
-		    }
+                    if (tgc instanceof TMLArchiFirewallNode){
+                        map.firewall=true;
+                    }
                     artifactscomm = ((TMLArchiCommunicationNode)(tgc)).getChannelArtifactList();
                     for( TMLArchiCommunicationArtifact artifact:artifactscomm ) {
                         TraceManager.addDev("Exploring artifact " + artifact.getValue());
@@ -3366,26 +3495,26 @@ if (tgc instanceof TMLArchiCrossbarNode) {
                             TraceManager.addDev( "Null mapping: no element named: " + artifact.getEventArtifactName() );
                         }
                     }
-		 //Map keys
-		    ArrayList<TMLArchiKey> keys = ( (TMLArchiCommunicationNode)(tgc) ).getKeyList();
-		    for (TMLArchiKey key:keys){
-			TraceManager.addDev("Exploring key " + key.getValue());
-			SecurityPattern sp = tmlm.getSecurityPattern(key.getValue());
-			if (sp!=null && node instanceof HwMemory){
-			    if (map.mappedSecurity.containsKey(sp)){
-			    	map.mappedSecurity.get(sp).add((HwMemory)node);
-			    }
-			    else{
-				ArrayList<HwMemory> mems = new ArrayList<HwMemory>();
-				mems.add((HwMemory) node);
-			    	map.mappedSecurity.put(sp, mems);
-			    	TraceManager.addDev("Added key of " + key.getValue());
-			    }
-			}
-			else {
-			    System.out.println("Can't map key " + key.getValue());
-			}			
-		    }
+                    //Map keys
+                    ArrayList<TMLArchiKey> keys = ( (TMLArchiCommunicationNode)(tgc) ).getKeyList();
+                    for (TMLArchiKey key:keys){
+                        TraceManager.addDev("Exploring key " + key.getValue());
+                        SecurityPattern sp = tmlm.getSecurityPattern(key.getValue());
+                        if (sp!=null && node instanceof HwMemory){
+                            if (map.mappedSecurity.containsKey(sp)){
+                                map.mappedSecurity.get(sp).add((HwMemory)node);
+                            }
+                            else{
+                                ArrayList<HwMemory> mems = new ArrayList<HwMemory>();
+                                mems.add((HwMemory) node);
+                                map.mappedSecurity.put(sp, mems);
+                                TraceManager.addDev("Added key of " + key.getValue());
+                            }
+                        }
+                        else {
+                            System.out.println("Can't map key " + key.getValue());
+                        }
+                    }
                 }
             }
 
@@ -3393,7 +3522,7 @@ if (tgc instanceof TMLArchiCrossbarNode) {
     }
 
 
-    
+
     public void addToTable(String s1, String s2) {
         //TraceManager.addDev("Adding to Table s1= "+ s1 + " s2=" + s2);
         table.put(s1, s2);
@@ -3437,6 +3566,6 @@ if (tgc instanceof TMLArchiCrossbarNode) {
         //TraceManager.addDev("Making name=" + s);
         return s;
     }
-  
-	    
+
+
 }
