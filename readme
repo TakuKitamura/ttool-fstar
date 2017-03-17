@@ -1,7 +1,7 @@
 For users of TTool: (e.g., for users having a read-only access to the git)
 ------------------- 
 
-You can clone the repository, and compile TTool as explained in the devleopper section below.
+You can clone the repository, and compile TTool as explained in the developer section below.
 For more information: http://ttool.telecom-paristech.fr
 
 Beware, if you want to use other options of TTool, please, start it with the needed command line, 
