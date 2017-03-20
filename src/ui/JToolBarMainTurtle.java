@@ -216,7 +216,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         addSeparator();
 
         oneClickrtlotos = add(mgui.actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG]);
-        oneClickrtlotos.addMouseListener(mgui.mouseHandler);
+	oneClickrtlotos.addMouseListener(mgui.mouseHandler);
         if (MainGUI.lotosOn) {
             onclicklotos = add(mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG]);
             onclicklotos.addMouseListener(mgui.mouseHandler);
@@ -408,8 +408,8 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         }
 
         if (genlotos != null) {
-            genlotos.setVisible(b);
-        }
+            genlotos.setVisible(!b);
+	}
 
         if (genuppaal != null) {
             genuppaal.setVisible(b);
@@ -432,8 +432,8 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         }
 
         if (onclicklotos != null) {
-            onclicklotos.setVisible(b);
-        }
+            onclicklotos.setVisible(!b);
+	}
 
         if (gensystemc != null) {
             gensystemc.setVisible(b);
@@ -460,7 +460,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         }
 
         if (gendesign != null) {
-            gendesign.setVisible(b);
+            gendesign.setVisible(!b);
         }
 
     }
