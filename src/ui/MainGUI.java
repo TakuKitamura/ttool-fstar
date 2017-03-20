@@ -3980,7 +3980,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TraceManager.addDev("Generate UPPAAL! showwindow=" + showWindow);
         //gtm.mergeChoices(true);
         if (gtm.getTURTLEModelingState() > 0) {
-            TraceManager.addDev("4173");
+            //TraceManager.addDev("4173");
             if (gtm.getTURTLEModelingState() == 3) {
                 //AVATAR
                 boolean result = gtm.generateUPPAALFromAVATAR(ConfigurationTTool.UPPAALCodeDirectory);
