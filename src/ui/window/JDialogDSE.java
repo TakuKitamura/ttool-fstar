@@ -181,6 +181,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
         jp01.add(autoConf, c01);
 		autoConf.addActionListener(this);
         autoAuth= new JCheckBox("Add security (Authenticity)");
+		autoAuth.setEnabled(false);
         jp01.add(autoAuth, c01);
 		autoAuth.addActionListener(this);
         autoMapKeys= new JCheckBox("Add Keys");
@@ -192,7 +193,6 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 		addHSM.addActionListener(this);
 		secGroup.add(addHSM);
 		jp01.add(new JLabel("Add HSM to component:"),c01);
-		System.out.println(cpuTaskMap);
 		for (String cpuName: cpuTaskMap.keySet()){
 			JCheckBox cpu = new JCheckBox(cpuName);
 			jp01.add(cpu,c01);		
@@ -209,23 +209,30 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 			cpuTaskObjs.put(cpu, tasks);
 
 		}
+		if (cpuTaskMap.keySet().size()==0){
+			addHSM.setEnabled(false);
+		}
    //     addToComp = new JTextField(compName);
         //jp01.add(addToComp,c01);
 
 
         custom = new JCheckBox("Custom performance attributes");
         jp01.add(custom,c01);
+		custom.addActionListener(this);
 
         jp01.add(new JLabel("Encryption Computational Complexity"),c01);
         encTime = new JTextField(encCC);
+		encTime.setEnabled(false);
         jp01.add(encTime,c01);
 
         jp01.add(new JLabel("Decryption Computational Complexity"),c01);
         decTime = new JTextField(decCC);
+		decTime.setEnabled(false);
         jp01.add(decTime,c01);
 
         jp01.add(new JLabel("Data Overhead (bits)"),c01);
         secOverhead = new JTextField(secOv);
+		secOverhead.setEnabled(false);
         jp01.add(secOverhead,c01);
 
         jp1.add("Automated Security", jp01);
@@ -679,6 +686,14 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 			for (JCheckBox cpuBox:cpuTaskObjs.keySet()){
 				cpuBox.setEnabled(addHSM.isSelected());
 			}
+		}
+		if (evt.getSource() == autoConf || evt.getSource() == autoMapKeys || evt.getSource() == addHSM){	
+			autoAuth.setEnabled(autoConf.isSelected());
+		}
+		if (evt.getSource() == custom){
+			encTime.setEnabled(custom.isSelected());
+			decTime.setEnabled(custom.isSelected());
+			secOverhead.setEnabled(custom.isSelected());
 		}
     }
 
