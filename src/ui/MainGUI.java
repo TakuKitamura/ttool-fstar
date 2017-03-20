@@ -3280,7 +3280,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     ret = true;
                     if (!automatic) {
                         JOptionPane.showMessageDialog(frame,
-                                                      "0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate a formal (LOTOS, RT-LOTOS) specification or executable code (systemC)",
+                                                      "0 error, " + getCheckingWarnings().size() + " warning(s). You can now perform verifications (safety, security, performance) or generate executable code",
                                                       "Syntax analysis successful on TML mapping",
                                                       JOptionPane.INFORMATION_MESSAGE);
                     }
@@ -3322,7 +3322,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     ret = true;
                     if( !automatic ) {
                         JOptionPane.showMessageDialog( frame, "0 error, " + getCheckingWarnings().size() +
-                                                       " warning(s). You can now generate a formal (LOTOS, RT-LOTOS) specification or executable code (systemC)",
+                                                       " warning(s). You can now perform verifications (safety, security, performance) or generate executable code",
                                                        "Syntax analysis successful on TML mapping",
                                                        JOptionPane.INFORMATION_MESSAGE );
                     }

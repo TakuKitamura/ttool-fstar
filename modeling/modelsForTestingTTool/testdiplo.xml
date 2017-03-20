@@ -8,8 +8,8 @@
 <cdparam x="202" y="135" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="202" y="135" id="95" />
-<P2  x="716" y="122" id="78" />
+<P1  x="202" y="135" id="89" />
+<P2  x="716" y="122" id="74" />
 <Point x="494" y="61" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1" >
@@ -26,14 +26,14 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="1041" y="214" id="11" />
-<P2  x="279" y="167" id="89" />
+<P2  x="279" y="167" id="95" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="4" >
 <cdparam x="662" y="349" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="875" y="362" id="59" />
+<P1  x="875" y="362" id="63" />
 <P2  x="1019" y="214" id="12" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -41,7 +41,7 @@
 <cdparam x="665" y="154" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="878" y="145" id="74" />
+<P1  x="878" y="145" id="78" />
 <P2  x="1024" y="205" id="14" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -57,7 +57,7 @@
 <cdparam x="236" y="311" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="236" y="285" id="91" />
+<P1  x="236" y="285" id="93" />
 <P2  x="411" y="460" id="27" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -66,7 +66,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="424" y="229" id="48" />
-<P2  x="675" y="395" id="63" />
+<P2  x="675" y="395" id="59" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="9" >
@@ -81,7 +81,7 @@
 <cdparam x="292" y="207" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="279" y="218" id="93" />
+<P1  x="279" y="218" id="91" />
 <P2  x="408" y="221" id="43" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -174,14 +174,14 @@
 </COMPONENT>
 <SUBCOMPONENT type="1203" id="60" >
 <father id="73" num="0" />
-<cdparam x="862" y="362" />
+<cdparam x="662" y="395" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event jevt2" />
+<infoparam name="Primitive port" value="Event evt2" />
 <TGConnectingPoint num="0" id="59" />
 <extraparam>
-<Prop commName="jevt2" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
+<Prop commName="evt2" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -208,14 +208,14 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="64" >
 <father id="73" num="2" />
-<cdparam x="662" y="395" />
+<cdparam x="862" y="362" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event evt2" />
+<infoparam name="Primitive port" value="Event jevt2" />
 <TGConnectingPoint num="0" id="63" />
 <extraparam>
-<Prop commName="evt2" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
+<Prop commName="jevt2" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -244,15 +244,15 @@
 </COMPONENT>
 <SUBCOMPONENT type="1203" id="75" >
 <father id="88" num="0" />
-<cdparam x="865" y="145" />
+<cdparam x="703" y="122" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event jevt1" />
+<infoparam name="Primitive port" value="Event comm" />
 <TGConnectingPoint num="0" id="74" />
 <extraparam>
-<Prop commName="jevt1" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
-<Type type="0" typeOther="" />
+<Prop commName="comm" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
+<Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -278,15 +278,15 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="79" >
 <father id="88" num="2" />
-<cdparam x="703" y="122" />
+<cdparam x="865" y="145" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event comm" />
+<infoparam name="Primitive port" value="Event jevt1" />
 <TGConnectingPoint num="0" id="78" />
 <extraparam>
-<Prop commName="comm" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
-<Type type="1" typeOther="" />
+<Prop commName="jevt1" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
+<Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -314,15 +314,15 @@
 </COMPONENT>
 <SUBCOMPONENT type="1203" id="90" >
 <father id="105" num="0" />
-<cdparam x="266" y="167" />
+<cdparam x="189" y="135" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event jevt" />
+<infoparam name="Primitive port" value="Event testEvt" />
 <TGConnectingPoint num="0" id="89" />
 <extraparam>
-<Prop commName="jevt" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
-<Type type="0" typeOther="" />
+<Prop commName="testEvt" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
+<Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -331,29 +331,12 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="92" >
 <father id="105" num="1" />
-<cdparam x="223" y="285" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Channel ch1" />
-<TGConnectingPoint num="0" id="91" />
-<extraparam>
-<Prop commName="ch1" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
-<Type type="0" typeOther="" />
-<Type type="0" typeOther="" />
-<Type type="0" typeOther="" />
-<Type type="0" typeOther="" />
-<Type type="0" typeOther="" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1203" id="94" >
-<father id="105" num="2" />
 <cdparam x="266" y="218" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
 <infoparam name="Primitive port" value="Event evsrc" />
-<TGConnectingPoint num="0" id="93" />
+<TGConnectingPoint num="0" id="91" />
 <extraparam>
 <Prop commName="evsrc" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
@@ -363,17 +346,34 @@
 <Type type="0" typeOther="" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="1203" id="96" >
-<father id="105" num="3" />
-<cdparam x="189" y="135" />
+<SUBCOMPONENT type="1203" id="94" >
+<father id="105" num="2" />
+<cdparam x="223" y="285" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event testEvt" />
+<infoparam name="Primitive port" value="Channel ch1" />
+<TGConnectingPoint num="0" id="93" />
+<extraparam>
+<Prop commName="ch1" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1203" id="96" >
+<father id="105" num="3" />
+<cdparam x="266" y="167" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
+<infoparam name="Primitive port" value="Event jevt" />
 <TGConnectingPoint num="0" id="95" />
 <extraparam>
-<Prop commName="testEvt" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
-<Type type="1" typeOther="" />
+<Prop commName="jevt" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
+<Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1602,6 +1602,109 @@
 </CONNECTOR>
 
 </TMLActivityDiagramPanel>
+
+</Modeling>
+
+
+
+
+<Modeling type="TML Architecture" nameTab="Architecture" >
+<TMLArchiDiagramPanel name="DIPLODOCUS architecture and mapping Diagram" minX="10" maxX="2500" minY="10" maxY="1500" attributes="0" masterClockFrequency="200" >
+<COMPONENT type="1100" id="391" >
+<cdparam x="344" y="131" />
+<sizeparam width="250" height="200" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="CPU0" value="name" />
+<TGConnectingPoint num="0" id="392" />
+<TGConnectingPoint num="1" id="393" />
+<TGConnectingPoint num="2" id="394" />
+<TGConnectingPoint num="3" id="395" />
+<TGConnectingPoint num="4" id="396" />
+<TGConnectingPoint num="5" id="397" />
+<TGConnectingPoint num="6" id="398" />
+<TGConnectingPoint num="7" id="399" />
+<TGConnectingPoint num="8" id="400" />
+<TGConnectingPoint num="9" id="401" />
+<TGConnectingPoint num="10" id="402" />
+<TGConnectingPoint num="11" id="403" />
+<TGConnectingPoint num="12" id="404" />
+<TGConnectingPoint num="13" id="405" />
+<TGConnectingPoint num="14" id="406" />
+<TGConnectingPoint num="15" id="407" />
+<TGConnectingPoint num="16" id="408" />
+<TGConnectingPoint num="17" id="409" />
+<TGConnectingPoint num="18" id="410" />
+<TGConnectingPoint num="19" id="411" />
+<TGConnectingPoint num="20" id="412" />
+<TGConnectingPoint num="21" id="413" />
+<TGConnectingPoint num="22" id="414" />
+<TGConnectingPoint num="23" id="415" />
+<extraparam>
+<info stereotype="CPU" nodeName="CPU0" />
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="1101" id="434" >
+<father id="391" num="0" />
+<cdparam x="445" y="269" />
+<sizeparam width="109" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="141" minY="0" maxY="160" />
+<infoparam name="TGComponent" value="Design3::T2" />
+<TGConnectingPoint num="0" id="435" />
+<TGConnectingPoint num="1" id="436" />
+<TGConnectingPoint num="2" id="437" />
+<TGConnectingPoint num="3" id="438" />
+<TGConnectingPoint num="4" id="439" />
+<TGConnectingPoint num="5" id="440" />
+<TGConnectingPoint num="6" id="441" />
+<TGConnectingPoint num="7" id="442" />
+<extraparam>
+<info value="Design3::T2" taskName="T2" referenceTaskName="Design3" priority="0" operation="TMLComp_2" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="425" >
+<father id="391" num="1" />
+<cdparam x="405" y="170" />
+<sizeparam width="109" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="141" minY="0" maxY="160" />
+<infoparam name="TGComponent" value="Design3::T0" />
+<TGConnectingPoint num="0" id="426" />
+<TGConnectingPoint num="1" id="427" />
+<TGConnectingPoint num="2" id="428" />
+<TGConnectingPoint num="3" id="429" />
+<TGConnectingPoint num="4" id="430" />
+<TGConnectingPoint num="5" id="431" />
+<TGConnectingPoint num="6" id="432" />
+<TGConnectingPoint num="7" id="433" />
+<extraparam>
+<info value="Design3::T0" taskName="T0" referenceTaskName="Design3" priority="0" operation="TMLComp_2" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="416" >
+<father id="391" num="2" />
+<cdparam x="413" y="213" />
+<sizeparam width="109" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="141" minY="0" maxY="160" />
+<infoparam name="TGComponent" value="Design3::T1" />
+<TGConnectingPoint num="0" id="417" />
+<TGConnectingPoint num="1" id="418" />
+<TGConnectingPoint num="2" id="419" />
+<TGConnectingPoint num="3" id="420" />
+<TGConnectingPoint num="4" id="421" />
+<TGConnectingPoint num="5" id="422" />
+<TGConnectingPoint num="6" id="423" />
+<TGConnectingPoint num="7" id="424" />
+<extraparam>
+<info value="Design3::T1" taskName="T1" referenceTaskName="Design3" priority="0" operation="TMLComp_2" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
+
+
+</TMLArchiDiagramPanel>
 
 </Modeling>
 
