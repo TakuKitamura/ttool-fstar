@@ -29,7 +29,7 @@ void sync_read( struct mwmr_s *fifo, void *_ptr, int lensw ){
   debugInt("debug  fifo lock \n", fifo->status->lock);
   i=mwmr_try_read(fifo,_ptr,lensw); 
   if(i>0)
-  mwmr_read(fifo,_ptr,lensw); 
+    mwmr_read(fifo,_ptr,(lensw-i)); 
   return;
 }
 
