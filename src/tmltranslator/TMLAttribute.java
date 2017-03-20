@@ -68,14 +68,14 @@ public class TMLAttribute extends DIPLOElement {
         this.name = _name;
         this.instanceName = _instanceName;
         this.type = _type;
-        this.initialValue = "NULL";
+        this.initialValue = "";
     }
 
     public TMLAttribute( String _name, TMLType _type ) {
         this.name = _name;
         this.instanceName = "NO_NAME";
         this.type = _type;
-        this.initialValue = "NULL";
+        this.initialValue = "";
     }
 
     public TMLAttribute( String _name, TMLType _type, String _initialValue ) {
@@ -89,7 +89,7 @@ public class TMLAttribute extends DIPLOElement {
         this.name = _name;
         this.instanceName = "NO_NAME";
         this.type = new TMLType( TMLType.OTHER );
-        this.initialValue = "NULL";
+        this.initialValue = "";
     }
 
     public String getInstanceName()     {

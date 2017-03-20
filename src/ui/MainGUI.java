@@ -3205,7 +3205,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     ret = true;
                     if (!automatic) {
                         JOptionPane.showMessageDialog(frame,
-                                                      "0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate a formal (LOTOS, UPPAAL) specification or executable code (C++ / SystemC)",
+                                                      "0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate make proofs (safety, security and performance) or generate executable code",
                                                       "Syntax analysis successful on TML designs",
                                                       JOptionPane.INFORMATION_MESSAGE);
                     }
@@ -3241,7 +3241,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     ret = true;
                     if (!automatic) {
                         JOptionPane.showMessageDialog(frame,
-                                                      "0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate a formal (LOTOS, UPPAAL) specification or executable code (C++ / SystemC)",
+                                                      "0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate make proofs (safety, security and performance) or generate executable code",
                                                       "Syntax analysis successful on TML designs",
                                                       JOptionPane.INFORMATION_MESSAGE);
                     }
