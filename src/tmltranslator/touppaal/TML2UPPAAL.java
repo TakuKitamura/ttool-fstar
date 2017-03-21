@@ -79,7 +79,7 @@ public class TML2UPPAAL {
     public final static int GUARD_X = 0;
     public final static int GUARD_Y = -20;
 
-    public static final int DEFAULT_INFINITE_FIFO_SIZE = 1024;
+    public static final int DEFAULT_INFINITE_FIFO_SIZE = 8;
 
 
     public TML2UPPAAL(TMLModeling _tmlmodeling) {

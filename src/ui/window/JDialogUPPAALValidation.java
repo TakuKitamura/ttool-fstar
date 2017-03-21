@@ -356,13 +356,22 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
     public void startProcess() {
 	// hack spec if necessary.
+	
 	if (hasFiniteSize) {
-	    int index = spec.indexOf("DEFAULT_INFINITE_SIZE");
-	    String specEnd = spec.substring(index+24, spec.length());
-	    String specbeg = spec.substring(0, index+24);
-	    specbeg += sizeOfInfiniteFIFO.getText();
-	    specEnd = specEnd.substring(specEnd.indexOf(";"), specEnd.length());
-	    spec = specbeg + specEnd;
+	    try {
+                int sizeDef = Integer.decode(sizeOfInfiniteFIFO.getText()).intValue();
+		int index = spec.indexOf("DEFAULT_INFINITE_SIZE");
+		String specEnd = spec.substring(index+24, spec.length());
+		String specbeg = spec.substring(0, index+24);
+		specbeg += sizeDef;
+		specEnd = specEnd.substring(specEnd.indexOf(";"), specEnd.length());
+		spec = specbeg + specEnd;
+            } catch (Exception e) {
+                jta.append("Non valid size for infinite FIFO");
+                jta.append("Using default size");
+                
+            }
+
 	    //TraceManager.addDev("spec=" + spec);
 	}
 	
