@@ -558,7 +558,11 @@ public class TML2Avatar {
 	else if (ae instanceof TMLActivityElementEvent){
 		TMLActivityElementEvent aee = (TMLActivityElementEvent) ae;
 		TMLEvent evt = aee.getEvent();
-		AvatarState signalState = new AvatarState("signalstate_"+ae.getName()+"_"+evt.getName(),ae.getReferenceObject(), ((TGComponent) ae.getReferenceObject()).getCheckableAccessibility());
+		boolean checkAcc = false;
+		if (ae.getReferenceObject()!=null){
+			checkAcc =((TGComponent) ae.getReferenceObject()).getCheckableAccessibility();
+		}
+		AvatarState signalState = new AvatarState("signalstate_"+ae.getName()+"_"+evt.getName(),ae.getReferenceObject(), checkAcc);
 		AvatarTransition signalTran = new AvatarTransition(block, "__after_signalstate_"+ae.getName()+"_"+evt.getName(), ae.getReferenceObject());
 		if (ae instanceof TMLSendEvent){
 		AvatarSignal sig;
@@ -1285,7 +1289,7 @@ public class TML2Avatar {
 		return avspec;
 	}
 	attrsToCheck.clear();
-	
+	tmlmodel.removeForksAndJoins();
 	//Only set the loop limit if it's a number
 	String pattern = "^[0-9]{1,2}$";
 	Pattern r = Pattern.compile(pattern);
@@ -1300,8 +1304,10 @@ public class TML2Avatar {
 		}
 	}
 	for (TMLEvent event: tmlmodel.getEvents()){
+		if (event.port !=null && event.port2 ==null){
 		event.checkConf = event.port.checkConf || event.port2.checkConf;
 		event.checkAuth = event.port.checkAuth || event.port2.checkAuth;
+		}
 	}
 	for (TMLRequest request: tmlmodel.getRequests()){
 		for (TMLCPrimitivePort p: request.ports){
