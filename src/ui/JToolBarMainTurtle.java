@@ -164,6 +164,10 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 	    //}
         avatarFVUPPAAL = add(mgui.actions[TGUIAction.ACT_AVATAR_FV_UPPAAL]);
         avatarFVUPPAAL.addMouseListener(mgui.mouseHandler);
+	if (MainGUI.uppaalOn) {
+            genuppaal = add(mgui.actions[TGUIAction.ACT_GEN_UPPAAL]);
+            genuppaal.addMouseListener(mgui.mouseHandler);
+        }
         if (MainGUI.proverifOn) {
             avatarFVProVerif = add(mgui.actions[TGUIAction.ACT_AVATAR_FV_PROVERIF]);
             avatarFVProVerif.addMouseListener(mgui.mouseHandler);
@@ -192,11 +196,6 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         } else if (MainGUI.lotosOn) {
             genlotos = add(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
             genlotos.addMouseListener(mgui.mouseHandler);
-        }
-
-        if (MainGUI.uppaalOn) {
-            genuppaal = add(mgui.actions[TGUIAction.ACT_GEN_UPPAAL]);
-            genuppaal.addMouseListener(mgui.mouseHandler);
         }
 
         /*if (MainGUI.proverifOn) {
@@ -425,7 +424,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         }
 
         if (validation != null) {
-            validation.setVisible(b);
+            validation.setVisible(!b);
         }
 
         if (oneClickrtlotos != null) {

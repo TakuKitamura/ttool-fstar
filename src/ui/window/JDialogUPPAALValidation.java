@@ -88,11 +88,16 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     protected JTextField translatedText;
     protected TURTLEPanel tp;
     protected java.util.List<JCheckBox> customChecks;
+    protected boolean hasFiniteSize;
+    protected static String sizeInfiniteFIFO = "8";
+    protected JTextField sizeOfInfiniteFIFO;
+    
+    
 
     protected java.util.List<String> customQueries;
     public Map<String, Integer> verifMap;
     protected int status = -1;
-    
+
     /** Creates new form  */
     public JDialogUPPAALValidation(Frame f, MainGUI _mgui, String title, String _cmdVerifyta, String _pathTrace, String _fileName, String _spec, String _host, TURTLEPanel _tp) {
         super(f, title, true);
@@ -128,6 +133,20 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     }
 
     protected void initComponents() {
+	int index = spec.indexOf("DEFAULT_INFINITE_SIZE");
+	String size = "1024";
+	hasFiniteSize = (index > -1);
+	if (hasFiniteSize) {
+	    String subspec = spec.substring(index+24, spec.length());
+	    int indexEnd = subspec.indexOf(";");
+	    //TraceManager.addDev("indexEnd = " + indexEnd + " subspec=" + subspec);
+	    if (indexEnd == -1) {
+		hasFiniteSize = false;
+	    } else {
+		size = subspec.substring(0, indexEnd);
+		TraceManager.addDev("size=" + size);
+	    }
+	}
 
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
@@ -143,7 +162,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
         // first line panel1
         //c1.gridwidth = 3;
-        c1.gridheight = 1;
+        c1.gridheight = 3;
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -154,6 +173,34 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
           deadlockE.addActionListener(this);
           jp1.add(deadlockE, c1);
           deadlockE.setSelected(deadlockEChecked);*/
+
+	JPanel jp01 = new JPanel();
+        GridBagLayout gridbag01 = new GridBagLayout();
+        GridBagConstraints c01 = new GridBagConstraints();
+        jp01.setLayout(gridbag01);
+        jp01.setBorder(new javax.swing.border.TitledBorder("Options of UPPAAL Specification"));
+
+
+        // first line panel01
+        //c1.gridwidth = 3;
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c01.fill = GridBagConstraints.BOTH;
+        c01.gridheight = 1;
+
+
+        sizeOfInfiniteFIFO = new JTextField(size, 10);
+	c01.gridwidth = 1;
+	jp01.add(new JLabel("Size of infinite FIFO = "), c01);
+	c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+	jp01.add(sizeOfInfiniteFIFO, c01);
+	jp1.add(jp01, c1);
+
+	c1.gridheight = 1;
+	
 
         deadlockA = new JCheckBox("Search for absence of deadock situations");
         deadlockA.addActionListener(this);
@@ -308,6 +355,17 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     }
 
     public void startProcess() {
+	// hack spec if necessary.
+	if (hasFiniteSize) {
+	    int index = spec.indexOf("DEFAULT_INFINITE_SIZE");
+	    String specEnd = spec.substring(index+24, spec.length());
+	    String specbeg = spec.substring(0, index+24);
+	    specbeg += sizeOfInfiniteFIFO.getText();
+	    specEnd = specEnd.substring(specEnd.indexOf(";"), specEnd.length());
+	    spec = specbeg + specEnd;
+	    //TraceManager.addDev("spec=" + spec);
+	}
+	
         t = new Thread(this);
         mode = STARTED;
         setButtons();
