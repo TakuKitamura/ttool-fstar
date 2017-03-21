@@ -4018,7 +4018,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     //  jgen.setSize(450, 500);
                     GraphicLib.centerOnParent(jgen, 450, 500);
                     jgen.setVisible(true);
-
+		    
                 }
                 return;
             }
