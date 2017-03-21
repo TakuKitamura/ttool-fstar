@@ -408,7 +408,11 @@ public class TML2Avatar {
 		TMLSendRequest sr= (TMLSendRequest) ae;
 		TMLRequest req = sr.getRequest();
 		AvatarSignal sig;
-		AvatarState signalState = new AvatarState("signalstate_"+ae.getName()+"_"+req.getName(),ae.getReferenceObject(), ((TGComponent)ae.getReferenceObject()).getCheckableAccessibility());
+		boolean checkAcc=false;
+		if (ae.getReferenceObject()!=null){
+			checkAcc=((TGComponent)ae.getReferenceObject()).getCheckableAccessibility();
+		}
+		AvatarState signalState = new AvatarState("signalstate_"+ae.getName()+"_"+req.getName(),ae.getReferenceObject(), checkAcc);
 		AvatarTransition signalTran = new AvatarTransition(block, "__after_signalstate_"+ae.getName()+"_"+req.getName(), ae.getReferenceObject());
 		if (!signalOutMap.containsKey(req.getName())){
 			sig = new AvatarSignal(req.getName().split("__")[req.getName().split("__").length-1], AvatarSignal.OUT, req.getReferenceObject());
@@ -962,7 +966,11 @@ public class TML2Avatar {
 		TMLActivityElementChannel aec = (TMLActivityElementChannel) ae;
 		TMLChannel ch = aec.getChannel(0);
 		AvatarSignal sig;
-		AvatarState signalState = new AvatarState("signalstate_"+ae.getName()+"_"+ch.getName(),ae.getReferenceObject(), ((TGComponent)ae.getReferenceObject()).getCheckableAccessibility());
+		boolean checkAcc=false;
+		if (ae.getReferenceObject()!=null){
+			checkAcc=((TGComponent)ae.getReferenceObject()).getCheckableAccessibility();
+		}
+		AvatarState signalState = new AvatarState("signalstate_"+ae.getName()+"_"+ch.getName(),ae.getReferenceObject(), checkAcc);
 		AvatarTransition signalTran = new AvatarTransition(block, "__after_signalstate_"+ae.getName()+"_"+ch.getName(), ae.getReferenceObject());
 		if (ae instanceof TMLReadChannel){
 			if (!signalInMap.containsKey(ch.getName())){
