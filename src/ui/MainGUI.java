@@ -4014,12 +4014,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                   }*/
                 TraceManager.addDev( "About to open the window at line 4198" );
                 if (showWindow) {
-                    JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.DIPLODOCUS_MODE);
+		    TURTLEPanel tp = getCurrentTURTLEPanel();
+		    boolean result = false;
+		    if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
+			result = gtm.generateUPPAALFromTML(ConfigurationTTool.UPPAALCodeDirectory, false, 1024, true);
+		    }
+		    if (result != false) {
+			formalValidation();
+		    }
+                    /*JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.DIPLODOCUS_MODE);
                     //  jgen.setSize(450, 500);
                     GraphicLib.centerOnParent(jgen, 450, 500);
-                    jgen.setVisible(true);
+                    jgen.setVisible(true);*/
 		    
-                }
+		    }
                 return;
             }
         }
