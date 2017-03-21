@@ -2556,6 +2556,9 @@ public class GTURTLEModeling {
 
     public void generateAvatarFromTML(boolean mc, boolean security){
         TraceManager.addDev("Generating Avatar from TML");
+		if (tmlm!=null && tmap==null){
+			tmap = tmlm.getDefaultMapping();
+		}
         if (avatarspec!=null){
             return;
         }
@@ -2568,6 +2571,7 @@ public class GTURTLEModeling {
     }
 
     public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed, String loopLimit) {
+		System.out.println(avatarspec);
         if (avatarspec !=null){
             //use avspec
         }

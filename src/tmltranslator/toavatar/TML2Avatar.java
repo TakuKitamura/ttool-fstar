@@ -65,6 +65,7 @@ public class TML2Avatar {
 
 	HashMap<SecurityPattern, LinkedList<AvatarAttribute>> symKeys = new HashMap<SecurityPattern, LinkedList<AvatarAttribute>>();
 	HashMap<SecurityPattern, LinkedList<AvatarAttribute>> pubKeys = new HashMap<SecurityPattern, LinkedList<AvatarAttribute>>();
+	HashMap<String, String> nameMap = new HashMap<String, String>();
 	AvatarAttribute pKey;
 	public HashMap<TMLChannel, Integer> channelMap = new HashMap<TMLChannel,Integer>();
 	public HashMap<TMLTask, AvatarBlock> taskBlockMap = new HashMap<TMLTask, AvatarBlock>();  
@@ -415,7 +416,7 @@ public class TML2Avatar {
 		AvatarState signalState = new AvatarState("signalstate_"+ae.getName()+"_"+req.getName(),ae.getReferenceObject(), checkAcc);
 		AvatarTransition signalTran = new AvatarTransition(block, "__after_signalstate_"+ae.getName()+"_"+req.getName(), ae.getReferenceObject());
 		if (!signalOutMap.containsKey(req.getName())){
-			sig = new AvatarSignal(req.getName().split("__")[req.getName().split("__").length-1], AvatarSignal.OUT, req.getReferenceObject());
+			sig = new AvatarSignal(getName(req.getName()), AvatarSignal.OUT, req.getReferenceObject());
 			signals.add(sig);
 			signalOutMap.put(req.getName(), sig);
 			block.addSignal(sig);
@@ -571,7 +572,7 @@ public class TML2Avatar {
 		if (ae instanceof TMLSendEvent){
 		AvatarSignal sig;
 			if (!signalOutMap.containsKey(evt.getName())){
-				sig = new AvatarSignal(evt.getName().split("__")[evt.getName().split("__").length-1], AvatarSignal.OUT, evt.getReferenceObject());
+				sig = new AvatarSignal(getName(evt.getName()), AvatarSignal.OUT, evt.getReferenceObject());
 				signals.add(sig);
 				block.addSignal(sig);
 				signalOutMap.put(evt.getName(), sig);
@@ -610,7 +611,7 @@ public class TML2Avatar {
 		else if (ae instanceof TMLWaitEvent){
 			AvatarSignal sig; 
 			if (!signalInMap.containsKey(evt.getName())){
-				sig = new AvatarSignal(evt.getName().split("__")[evt.getName().split("__").length-1], AvatarSignal.IN, evt.getReferenceObject());
+				sig = new AvatarSignal(getName(evt.getName()), AvatarSignal.IN, evt.getReferenceObject());
 				signals.add(sig);
 				block.addSignal(sig);
 				signalInMap.put(evt.getName(), sig);
@@ -974,12 +975,12 @@ public class TML2Avatar {
 		AvatarTransition signalTran = new AvatarTransition(block, "__after_signalstate_"+ae.getName()+"_"+ch.getName(), ae.getReferenceObject());
 		if (ae instanceof TMLReadChannel){
 			if (!signalInMap.containsKey(ch.getName())){
-				sig = new AvatarSignal(ch.getName().split("__")[ch.getName().split("__").length-1], AvatarSignal.IN, ch.getReferenceObject());
+				sig = new AvatarSignal(getName(ch.getName()), AvatarSignal.IN, ch.getReferenceObject());
 				signals.add(sig);
 				signalInMap.put(ch.getName(), sig);
 				block.addSignal(sig);
-				AvatarAttribute channelData= new AvatarAttribute(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData", AvatarType.INTEGER, block, null);
-				if (block.getAvatarAttributeWithName(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData")==null){
+				AvatarAttribute channelData= new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null);
+				if (block.getAvatarAttributeWithName(getName(ch.getName())+"_chData")==null){
 					block.addAttribute(channelData);
 				}
 				sig.addParameter(channelData);
@@ -1007,7 +1008,7 @@ public class TML2Avatar {
 			}
 		}
 		else {
-			as.addValue(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData");
+			as.addValue(getName(ch.getName())+"_chData");
 		}
 
 			tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
@@ -1026,11 +1027,11 @@ public class TML2Avatar {
 			afterSignalState.addNext(tran);
 			elementList.add(afterSignalState);
 			elementList.add(tran);
-			if (block.getAvatarAttributeWithName(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData")==null){
-				AvatarAttribute channelData= new AvatarAttribute(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData", AvatarType.INTEGER, block, null);
+			if (block.getAvatarAttributeWithName(getName(ch.getName())+"_chData")==null){
+				AvatarAttribute channelData= new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null);
 					block.addAttribute(channelData);
 			}
-			AvatarAttributeState authDest = new AvatarAttributeState(ch.getName()+"__destination",ae.getReferenceObject(),block.getAvatarAttributeWithName(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData"), afterSignalState);
+			AvatarAttributeState authDest = new AvatarAttributeState(ch.getName()+"__destination",ae.getReferenceObject(),block.getAvatarAttributeWithName(getName(ch.getName())+"_chData"), afterSignalState);
 			signalAuthDestMap.put(ch.getName(), authDest);
 			}
 		}
@@ -1038,12 +1039,12 @@ public class TML2Avatar {
 		//WriteChannel
 
 			if (!signalOutMap.containsKey(ch.getName())){
-				sig = new AvatarSignal(ch.getName().split("__")[ch.getName().split("__").length-1], AvatarSignal.OUT, ch.getReferenceObject());
+				sig = new AvatarSignal(getName(ch.getName()), AvatarSignal.OUT, ch.getReferenceObject());
 				signals.add(sig);
 				block.addSignal(sig);
 				signalOutMap.put(ch.getName(), sig);
-				AvatarAttribute channelData= new AvatarAttribute(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData", AvatarType.INTEGER, block, null);
-				if (block.getAvatarAttributeWithName(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData")==null){
+				AvatarAttribute channelData= new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null);
+				if (block.getAvatarAttributeWithName(getName(ch.getName())+"_chData")==null){
 					block.addAttribute(channelData);
 				}
 				sig.addParameter(channelData);
@@ -1053,18 +1054,18 @@ public class TML2Avatar {
 			}
 			if (ch.checkConf){
 			LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
-			if (!attrsToCheck.contains(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData")){
-				attrs.add(new AvatarAttribute(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData", AvatarType.INTEGER, block, null));
-				attrsToCheck.add(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData");
+			if (!attrsToCheck.contains(getName(ch.getName())+"_chData")){
+				attrs.add(new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null));
+				attrsToCheck.add(getName(ch.getName())+"_chData");
 				avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ch.getName()+"_chData", ch.getReferenceObject(), attrs));
 				}
 			}
 			if (ch.checkAuth){
-			if (block.getAvatarAttributeWithName(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData")==null){
-				AvatarAttribute channelData= new AvatarAttribute(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData", AvatarType.INTEGER, block, null);
+			if (block.getAvatarAttributeWithName(getName(ch.getName())+"_chData")==null){
+				AvatarAttribute channelData= new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null);
 					block.addAttribute(channelData);
 			}
-			AvatarAttributeState authOrigin = new AvatarAttributeState(ch.getName()+"__destination",ae.getReferenceObject(),block.getAvatarAttributeWithName(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData"), signalState);
+			AvatarAttributeState authOrigin = new AvatarAttributeState(ch.getName()+"__destination",ae.getReferenceObject(),block.getAvatarAttributeWithName(getName(ch.getName())+"_chData"), signalState);
 			signalAuthOriginMap.put(ch.getName(), authOrigin);
 			}  
 			AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
@@ -1088,7 +1089,7 @@ public class TML2Avatar {
 			else {
 	  	   //No security pattern
 				System.out.println("no security pattern for " + ch.getName());
-				as.addValue(ch.getName().split("__")[ch.getName().split("__").length-1]+"_chData");
+				as.addValue(getName(ch.getName())+"_chData");
 			}
 
 			tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
@@ -1281,6 +1282,34 @@ public class TML2Avatar {
 	
 	}*/
 
+	public String getName(String s){
+		if (nameMap.containsKey(s)){
+			return nameMap.get(s);
+		}
+		else {
+			if (!s.contains("__")){
+				nameMap.put(s,s);
+				return s;
+			}
+			else if (s.split("__").length==1){
+				nameMap.put(s,s.split("__")[s.split("__").length-1]);
+				return s.split("__")[s.split("__").length-1];
+			}
+			else if (s.contains("JOIN")){
+				String t="";
+				for (int i=1; i< s.split("__").length; i++){
+					t+=s.split("__")[i];
+				}
+				nameMap.put(s,t);
+				return t;
+			}
+			else {
+				nameMap.put(s,s.split("__")[s.split("__").length-1]);
+				return s.split("__")[s.split("__").length-1];
+			}
+		}
+	}
+
 	public AvatarSpecification generateAvatarSpec(String _loopLimit){
 
 		TraceManager.addDev("security patterns " + tmlmodel.secPatterns);
@@ -1293,11 +1322,11 @@ public class TML2Avatar {
 
 	this.avspec = new AvatarSpecification("spec", tmlmap.getTMLCDesignPanel());
 	if (tmlmap.getTMLCDesignPanel()==null){
-		System.out.println("Failed to generate specification");
-		return avspec;
+		//System.out.println("Failed to generate specification");
+	//	return avspec;
 	}
 	attrsToCheck.clear();
-	tmlmodel.removeForksAndJoins();
+	//tmlmodel.removeForksAndJoins();
 	//Only set the loop limit if it's a number
 	String pattern = "^[0-9]{1,2}$";
 	Pattern r = Pattern.compile(pattern);
@@ -1359,24 +1388,24 @@ public class TML2Avatar {
 		//Add all signals
 		for (TMLChannel chan: tmlmodel.getChannels(task)){
 			if (chan.hasOriginTask(task)){
-				AvatarSignal sig = new AvatarSignal(chan.getName().split("__")[chan.getName().split("__").length-1], AvatarSignal.OUT, chan.getReferenceObject());
+				AvatarSignal sig = new AvatarSignal(getName(chan.getName()), AvatarSignal.OUT, chan.getReferenceObject());
 
 				block.addSignal(sig);
 				signals.add(sig);
-				AvatarAttribute channelData= new AvatarAttribute(chan.getName().split("__")[chan.getName().split("__").length-1]+"_chData", AvatarType.INTEGER, block, null);
-				if (block.getAvatarAttributeWithName(chan.getName().split("__")[chan.getName().split("__").length-1]+"_chData")==null){
+				AvatarAttribute channelData= new AvatarAttribute(getName(chan.getName())+"_chData", AvatarType.INTEGER, block, null);
+				if (block.getAvatarAttributeWithName(getName(chan.getName())+"_chData")==null){
 					block.addAttribute(channelData);
 				}
 				sig.addParameter(channelData);
 				signalOutMap.put(chan.getName(),sig);
 			}
 			else if (chan.hasDestinationTask(task)){
-				AvatarSignal sig = new AvatarSignal(chan.getName().split("__")[chan.getName().split("__").length-1], AvatarSignal.IN, chan.getReferenceObject());
+				AvatarSignal sig = new AvatarSignal(getName(chan.getName()), AvatarSignal.IN, chan.getReferenceObject());
 				block.addSignal(sig);
 				signals.add(sig);
 				signalInMap.put(chan.getName(),sig);
-				AvatarAttribute channelData= new AvatarAttribute(chan.getName().split("__")[chan.getName().split("__").length-1]+"_chData", AvatarType.INTEGER, block, null);
-				if (block.getAvatarAttributeWithName(chan.getName().split("__")[chan.getName().split("__").length-1]+"_chData")==null){
+				AvatarAttribute channelData= new AvatarAttribute(getName(chan.getName())+"_chData", AvatarType.INTEGER, block, null);
+				if (block.getAvatarAttributeWithName(getName(chan.getName())+"_chData")==null){
 					block.addAttribute(channelData);
 				}
 				sig.addParameter(channelData);
@@ -1472,7 +1501,7 @@ public class TML2Avatar {
 			loopstart.addNext(incrTran);	
 			AvatarSignal sig; 
 			if (!signalInMap.containsKey(req.getName())){
-				sig = new AvatarSignal(req.getName().split("__")[req.getName().split("__").length-1], AvatarSignal.IN, req.getReferenceObject());
+				sig = new AvatarSignal(getName(req.getName()), AvatarSignal.IN, req.getReferenceObject());
 				block.addSignal(sig);
 				signals.add(sig);
 				signalInMap.put(req.getName(),sig);
@@ -1557,6 +1586,7 @@ public class TML2Avatar {
 	AvatarBlock fifo = new AvatarBlock("FIFO", avspec,null);
 	for (TMLChannel channel:tmlmodel.getChannels()){
 		if (channel.isBasicChannel()){
+			//System.out.println("checking channel " + channel.getName());
 			AvatarRelation ar= new AvatarRelation(channel.getName(), taskBlockMap.get(channel.getOriginTask()), taskBlockMap.get(channel.getDestinationTask()), channel.getReferenceObject());
 			LinkedList<HwCommunicationNode> path =tmlmap.findNodesForElement(channel);
 			if (path.size()!=0){
@@ -1596,7 +1626,7 @@ public class TML2Avatar {
 			for (AvatarSignal sig: signals){
 				if (sig.getInOut()==AvatarSignal.IN){
 					String name = sig.getName();
-					if (name.equals(channel.getName().split("__")[channel.getName().split("__").length-1])){
+					if (name.equals(getName(channel.getName()))){
 						sig1.add(sig);
 					}
 				}
@@ -1605,16 +1635,16 @@ public class TML2Avatar {
 			for (AvatarSignal sig: signals){
 				if (sig.getInOut()==AvatarSignal.OUT){
 					String name = sig.getName();
-					if (name.equals(channel.getName().split("__")[channel.getName().split("__").length-1])){
+					if (name.equals(getName(channel.getName()))){
 						sig2.add(sig);
 					}
 				}
 			}
 			if (sig1.size()==0){
-			sig1.add(new AvatarSignal(channel.getName().split("__")[channel.getName().split("__").length-1], AvatarSignal.IN, null));
+			sig1.add(new AvatarSignal(getName(channel.getName()), AvatarSignal.IN, null));
 			}
 			if (sig2.size()==0){
-			sig2.add(new AvatarSignal(channel.getName().split("__")[channel.getName().split("__").length-1], AvatarSignal.OUT, null));
+			sig2.add(new AvatarSignal(getName(channel.getName()), AvatarSignal.OUT, null));
 			}
 			if (sig1.size()==1 && sig2.size()==1){
 				if (channel.getType()==TMLChannel.NBRNBW && mc){
@@ -1636,11 +1666,30 @@ public class TML2Avatar {
 				}
 			}
 			else {
-			System.out.println("Failure to match signals for TMLChannel "+ channel.getName());
+			//Create relation if it does not exist
+				if (top.getSignalByName(getName(channel.getName())+"in")==null){
+				AvatarRelation relation= new AvatarRelation(channel.getName(), top, top, channel.getReferenceObject());
+				AvatarSignal s1 = new AvatarSignal(getName(channel.getName())+"in", AvatarSignal.IN, null);
+				AvatarSignal s2 = new AvatarSignal(getName(channel.getName())+"out", AvatarSignal.OUT, null);
+				top.addSignal(s1);
+				top.addSignal(s2);
+				relation.addSignals(s2,s1);
+				avspec.addRelation(relation);
+				System.out.println("Failure to match signals for TMLChannel "+ channel.getName());
+				}
 			}
 			avspec.addRelation(ar);
 		}
 		else {
+		System.out.println("Found non-basic channel");
+		//If not a basic channel, create a relation between TOP block and itself
+		AvatarRelation relation= new AvatarRelation(channel.getName(), top, top, channel.getReferenceObject());
+		AvatarSignal s1 = new AvatarSignal(getName(channel.getName())+"in", AvatarSignal.IN, null);
+		AvatarSignal s2 = new AvatarSignal(getName(channel.getName())+"out", AvatarSignal.OUT, null);
+		top.addSignal(s1);
+		top.addSignal(s2);
+		relation.addSignals(s2,s1);
+		avspec.addRelation(relation);
 		for (TMLTask t1: channel.getOriginTasks()){
 			for (TMLTask t2: channel.getDestinationTasks()){
 			AvatarRelation ar= new AvatarRelation(channel.getName(), taskBlockMap.get(t1), taskBlockMap.get(t2), channel.getReferenceObject());
@@ -1651,7 +1700,7 @@ public class TML2Avatar {
 				for (AvatarSignal sig: signals){
 					if (sig.getInOut()==AvatarSignal.IN){
 						String name = sig.getName();
-						if (name.equals(channel.getName().split("__")[channel.getName().split("__").length-1])){
+						if (name.equals(getName(channel.getName()))){
 							sig1.add(sig);
 						}
 					}
@@ -1660,16 +1709,16 @@ public class TML2Avatar {
 				for (AvatarSignal sig: signals){
 					if (sig.getInOut()==AvatarSignal.OUT){
 						String name = sig.getName();
-						if (name.equals(channel.getName().split("__")[channel.getName().split("__").length-1])){
+						if (name.equals(getName(channel.getName()))){
 							sig2.add(sig);
 						}
 					}
 				}
 				if (sig1.size()==0){
-					sig1.add(new AvatarSignal(channel.getName().split("__")[channel.getName().split("__").length-1], AvatarSignal.IN, null));
+					sig1.add(new AvatarSignal(getName(channel.getName()), AvatarSignal.IN, null));
 				}
 				if (sig2.size()==0){
-					sig2.add(new AvatarSignal(channel.getName().split("__")[channel.getName().split("__").length-1], AvatarSignal.OUT, null));
+					sig2.add(new AvatarSignal(getName(channel.getName()), AvatarSignal.OUT, null));
 				}
 				if (sig1.size()==1 && sig2.size()==1){
 					ar.addSignals(sig2.get(0), sig1.get(0));
@@ -1691,7 +1740,7 @@ public class TML2Avatar {
 			for (AvatarSignal sig: signals){
 			if (sig.getInOut()==AvatarSignal.IN){
 				String name = sig.getName();
-				if (name.equals(request.getName().split("__")[request.getName().split("__").length-1])){
+				if (name.equals(getName(request.getName()))){
 				sig1.add(sig);
 				}
 			}
@@ -1700,16 +1749,16 @@ public class TML2Avatar {
 			for (AvatarSignal sig: signals){
 			if (sig.getInOut()==AvatarSignal.OUT){
 				String name = sig.getName();
-				if (name.equals(request.getName().split("__")[request.getName().split("__").length-1])){
+				if (name.equals(getName(request.getName()))){
 				sig2.add(sig);
 				}
 			}
 			}
 			if (sig1.size()==0){
-			sig1.add(new AvatarSignal(request.getName().split("__")[request.getName().split("__").length-1], AvatarSignal.IN, null));
+			sig1.add(new AvatarSignal(getName(request.getName()), AvatarSignal.IN, null));
 			}
 			if (sig2.size()==0){
-			sig2.add(new AvatarSignal(request.getName().split("__")[request.getName().split("__").length-1], AvatarSignal.OUT, null));
+			sig2.add(new AvatarSignal(getName(request.getName()), AvatarSignal.OUT, null));
 			}
 			if (sig1.size()==1 && sig2.size()==1){
 			ar.addSignals(sig2.get(0), sig1.get(0));
@@ -1731,7 +1780,7 @@ public class TML2Avatar {
 		for (AvatarSignal sig: signals){
 		if (sig.getInOut()==AvatarSignal.IN){
 			String name = sig.getName();
-			if (name.equals(event.getName().split("__")[event.getName().split("__").length-1])){
+			if (name.equals(getName(event.getName()))){
 			sig1.add(sig);
 			}
 		}
@@ -1740,16 +1789,16 @@ public class TML2Avatar {
 		for (AvatarSignal sig: signals){
 		if (sig.getInOut()==AvatarSignal.OUT){
 			String name = sig.getName();
-			if (name.equals(event.getName().split("__")[event.getName().split("__").length-1])){
+			if (name.equals(getName(event.getName()))){
 			sig2.add(sig);
 			}
 		}
 		}
 		if (sig1.size()==0){
-		sig1.add(new AvatarSignal(event.getName().split("__")[event.getName().split("__").length-1], AvatarSignal.IN, null));
+		sig1.add(new AvatarSignal(getName(event.getName()), AvatarSignal.IN, null));
 		}
 		if (sig2.size()==0){
-		sig2.add(new AvatarSignal(event.getName().split("__")[event.getName().split("__").length-1], AvatarSignal.OUT, null));
+		sig2.add(new AvatarSignal(getName(event.getName()), AvatarSignal.OUT, null));
 		}
 		if (sig1.size()==1 && sig2.size()==1){
 		ar.addSignals(sig2.get(0), sig1.get(0));
@@ -1791,7 +1840,7 @@ public class TML2Avatar {
 	}
 	tmlmap.getTMLModeling().secChannelMap = secChannelMap;
 	
-	//	TraceManager.addDev("avatar spec\n" +avspec);
+		TraceManager.addDev("avatar spec\n" +avspec);
 		return avspec;
 	}
 
