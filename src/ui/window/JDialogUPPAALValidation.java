@@ -92,6 +92,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     protected java.util.List<String> customQueries;
     public Map<String, Integer> verifMap;
     protected int status = -1;
+    
     /** Creates new form  */
     public JDialogUPPAALValidation(Frame f, MainGUI _mgui, String title, String _cmdVerifyta, String _pathTrace, String _fileName, String _spec, String _host, TURTLEPanel _tp) {
         super(f, title, true);
@@ -113,7 +114,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         customChecks = new LinkedList<JCheckBox>();
         initComponents();
         myInitComponents();
-	verifMap = new HashMap<String, Integer>();
+        verifMap = new HashMap<String, Integer>();
         pack();
 
         //getGlassPane().addMouseListener( new MouseAdapter() {});
@@ -316,15 +317,15 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
     public void run() {
 
-      //  String cmd1 = "";
-       // String data1;
+        //  String cmd1 = "";
+        // String data1;
         int id = 0;
         String query;
         String name;
         int trace_id = 0;
         int index;
         String fn;
-	int result;
+        int result;
 
         rshc = new RshClient(host);
         RshClient rshctmp = rshc;
@@ -355,11 +356,11 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 ArrayList<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp);
                 if ((list != null) && (list.size() > 0)){
                     for(TGComponentAndUPPAALQuery cq: list) {
-			String s = cq.uppaalQuery;
+                        String s = cq.uppaalQuery;
                         index = s.indexOf('$');
-			if (cq.tgc != null) {
-			    cq.tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);
-			}
+                        if (cq.tgc != null) {
+                            cq.tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);
+                        }
                         if ((index != -1) && (mode != NOT_STARTED)) {
                             name = s.substring(index+1, s.length());
                             //TraceManager.addDev("****\n name=" + name + " list=" + list + "\n****\n");
@@ -367,14 +368,14 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                             //jta.append("\n\n--------------------------------------------\n");
                             jta.append("\nReachability of: " + name + "\n");
                             result = workQuery("E<> " + query, fn, trace_id, rshc);
-			    if (cq.tgc != null) {
-				if (result == 0) {
-				    cq.tgc.setReachability(TGComponent.ACCESSIBILITY_KO);
-				    cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
-				} else if (result == 1) {
-				    cq.tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
-				}
-			    }
+                            if (cq.tgc != null) {
+                                if (result == 0) {
+                                    cq.tgc.setReachability(TGComponent.ACCESSIBILITY_KO);
+                                    cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
+                                } else if (result == 1) {
+                                    cq.tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
+                                }
+                            }
                             trace_id++;
                         } else {
                             jta.append("A component could not be studied (internal error)\n");
@@ -388,11 +389,11 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             if (stateA.isSelected() && (mode != NOT_STARTED)) {
                 ArrayList<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp);
                 if ((list != null) && (list.size() > 0)){
-		    for(TGComponentAndUPPAALQuery cq: list) {
-			if (cq.tgc != null) {
-			    cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
-			}
-			String s = cq.uppaalQuery;
+                    for(TGComponentAndUPPAALQuery cq: list) {
+                        if (cq.tgc != null) {
+                            cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
+                        }
+                        String s = cq.uppaalQuery;
                         index = s.indexOf('$');
                         if ((index != -1) && (mode != NOT_STARTED)) {
                             name = s.substring(index+1, s.length());
@@ -400,13 +401,13 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                             //jta.append("\n--------------------------------------------\n");
                             jta.append("\nLiveness of: " + name + "\n");
                             result = workQuery("A<> " + query, fn, trace_id, rshc);
-			    if (cq.tgc != null) {
-				if (result == 0) {
-				    cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
-				} else if (result == 1) {
-				    cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_OK);
-				}
-			    }
+                            if (cq.tgc != null) {
+                                if (result == 0) {
+                                    cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
+                                } else if (result == 1) {
+                                    cq.tgc.setLiveness(TGComponent.ACCESSIBILITY_OK);
+                                }
+                            }
                             trace_id++;
                         } else {
                             jta.append("A component could not be studied (internal error)\n");
@@ -472,14 +473,14 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                     if (j.isSelected()){
                         jta.append(j.getText()+"\n");
                         String translation = translateCustomQuery(j.getText());
-			jta.append(translation);
-			status = -1;
+                        jta.append(translation);
+                        status = -1;
                         workQuery(translation, fn, trace_id, rshc);
-			verifMap.put(j.getText(), status);
+                        verifMap.put(j.getText(), status);
                         trace_id++;
                     }
                 }
-                
+
                 mgui.modelBacktracingUPPAAL(verifMap);
             }
 
@@ -513,7 +514,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             } catch (LauncherException le1) {}
             return;
         }
-   	
+
         mode = NOT_STARTED;
         setButtons();
     }
@@ -568,7 +569,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     // return: 1: property is satisfied
     private int workQuery(String query, String fn, int trace_id, RshClient rshc) throws LauncherException {
 
-	int ret = -1;
+        int ret = -1;
         TraceManager.addDev("Working on query: " + query);
 
 
@@ -584,7 +585,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         }
         cmd1 += fn + ".xml " + fn + ".q";
         //jta.append("--------------------------------------------\n");
-	//TraceManager.addDev("Query:>" + cmd1 + "<");
+        //TraceManager.addDev("Query:>" + cmd1 + "<");
         data = processCmd(cmd1);
         //TraceManager.addDev("Results:>" + data + "<");
         if(showDetails.isSelected()) {
@@ -598,19 +599,19 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             }
             else if (data.indexOf("Property is satisfied") >-1){
                 jta.append("-> property is satisfied\n");
-		status=1;
-		ret = 1;
+                status=1;
+                ret = 1;
             }
             else if (data.indexOf("Property is NOT satisfied") > -1) {
                 jta.append("-> property is NOT satisfied\n");
-		status = 0;
-		ret = 0;
+                status = 0;
+                ret = 0;
             }
             else {
                 jta.append("ERROR -> property could not be studied\n");
-				status=2;
-				
-				
+                status=2;
+
+
             }
         } else {
             jta.append("** verification stopped **\n");
@@ -622,8 +623,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             generateTraceFile(fn, trace_id, rshc);
         }
 
-	return ret;
-	
+        return ret;
+
     }
 
     private void generateTraceFile(String fn, int trace_id, RshClient rshc) throws LauncherException{
