@@ -2224,8 +2224,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 frame.setTitle("TTool: " + file.getAbsolutePath());
                 makeLotosFile();
 
+		if (gtm.getCheckingErrors().size() > 0) {
+		    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+		}
+		
             } catch (MalformedModelingException mme) {
-                JOptionPane.showMessageDialog(frame, "Modeling could not be merged (unsupported selected file) ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
             }
             dtree.forceUpdate();
         }
@@ -2292,9 +2296,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 //gtm.saveOperation(tcdp);
                 frame.setTitle("TTool: " + file.getAbsolutePath());
                 makeLotosFile();
-
+		
+		if (gtm.getCheckingErrors().size() > 0) {
+		    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+		
+		}
             } catch (MalformedModelingException mme) {
-                JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported file) ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
                 frame.setTitle("TToolt: unamed project");
             }
             gtm.enableUndo(true);
@@ -2347,9 +2355,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 //gtm.saveOperation(tcdp);
                 frame.setTitle("TTool: " + file.getAbsolutePath());
                 makeLotosFile();
+		
+		if (gtm.getCheckingErrors().size() > 0) {
+		    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+		}
+		
 
             } catch (MalformedModelingException mme) {
-                JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported file) ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
                 frame.setTitle("TTool: unamed project");
             }
             dtree.forceUpdate();
