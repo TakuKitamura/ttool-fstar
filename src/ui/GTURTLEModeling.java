@@ -7638,8 +7638,14 @@ public class GTURTLEModeling {
                         //TraceManager.addDev("Component not added to diagram");
                     }
                 } catch (MalformedModelingException mme) {
-                    TraceManager.addDev ("Could not create component " + n);
-		    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A component could not be correctly loaded");
+		    int type = getTypeOfComponentNode(n);
+		    String t = "unknown";
+		    if (type > 0) {
+			t = "" + type;
+		    }
+		    TraceManager.addDev ("a badly formed component Could not be created in the diagram");
+			
+		    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A component could not be correctly loaded - type=" + t);
 		    ce.setTDiagramPanel(tdp);
 		    checkingErrors.add(ce);
                     error = true;
@@ -7650,6 +7656,16 @@ public class GTURTLEModeling {
         /*if (error) {
             throw new MalformedModelingException();
 	    }*/
+    }
+
+    public int getTypeOfComponentNode(Node n) {
+	try {
+	    NodeList nl = n.getChildNodes();
+            Element elt = (Element)n;
+	    return Integer.decode(elt.getAttribute("type")).intValue();
+	} catch (Exception e){
+	}
+	return -1;
     }
 
 
