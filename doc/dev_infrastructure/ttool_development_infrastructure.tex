@@ -459,9 +459,16 @@ will automatically stop at the first instruction of the program. This behavior
 can be changed by editing the debug launch configuration.
 
 
-
 \section{Coding Instructions}
 Here are gather all tricks on how TTool source codes are organized, and what function is coded where, and also how to extend TTool, e.g. adding a new diagram.
+
+\subsection{General rules}
+
+\begin{itemize}
+\item Indentations should use 4 spaces for each indentation level.
+\item Do ensure your file is correctly indented before committing/pushing it
+\end{itemize}
+
 
 \subsection{How to output debug information}
 Do as follows:
@@ -499,6 +506,13 @@ Actions of the main user interface are defined in "TGUIActions.java". The corres
 
 \subsection{Structure of a diagram}
 
+
+\subsection{Error management}
+The tree on the left contains a part dedicated to errors and warnings. The list of errors/warnings that is displayed by the tree is handled in GTURTLEModeling.java with:
+\begin{lstlisting}
+private List<CheckingError> checkingErrors;
+private List<CheckingError> warnings;
+\end{lstlisting}
 
 \section{Testing}
 

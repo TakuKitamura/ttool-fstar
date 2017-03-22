@@ -2469,6 +2469,7 @@ public class GTURTLEModeling {
         }
         return secure;
     }
+    
     public void autoMapKeys(){
         TraceManager.addDev("auto map keys");
         if (tmap==null){
@@ -3557,110 +3558,7 @@ public class GTURTLEModeling {
         return new String(result);
     }
 
-    /*public String convertCADP_AUT_to_RTL_AUT(String inputData, int max) {
-      StringBuffer result = new StringBuffer("");
-      StringReader sr = new StringReader(inputData);
-      BufferedReader br = new BufferedReader(sr);
-      String s;
-      String actionName, actionName1;
-      int index, index1, index2, index3, index4, index5;
-      Gate g;
-      String g0, g1, g2;
-      int cpt, transi=0;
-      MasterGateManager mgm = new MasterGateManager(tm);
-      warnings = new Vector();
-
-      //TraceManager.addDev("input data=" + inputData);
-
-      int cpt1 = 0;
-
-      try {
-      while((s = br.readLine()) != null) {
-      cpt1 ++;
-      if (cpt1 % 100000 == 0) {
-      TraceManager.addDev("=" + cpt1 + " / " + transi);
-      }
-      if (s.charAt(0) == '(') {
-      index1 = s.indexOf(",");
-      if ((index1 > -1) && ((index1+1) < s.length())) {
-      g1 = s.substring(0, index1 + 1);
-      s = s.substring(index1+1, s.length());
-
-      //TraceManager.addDev("g1=" + g1 + " s=" + s);
-
-      index2 = s.indexOf(",");
-      if ((index2 > -1) && ((index2+1) < s.length())) {
-      g2 = s.substring(index2, s.length());
-      s = s.substring(0, index2);
-      s = s.trim();
-
-      //TraceManager.addDev("g2=" + g2 + " s=" + s);
-
-      // Get action id
-      // Most common case: no data
-      index3 = s.indexOf('"');
-      if (index3 == -1) { // no data
-      actionName = s;
-      g0 = "";
-      } else {
-      // Extract action name
-      actionName = s.substring(index3+1, s.indexOf('!')).trim();
-
-      // Format data
-      g0 = "<";
-      cpt = 0;
-      while((index4 = s.indexOf('!')) > -1) {
-      s = s.substring(index4+1, s.length());
-      if (cpt > 0) {
-      g0 += ",";
-      }
-      cpt ++;
-      index4 = s.indexOf('!');
-      if (index4 > -1) {
-      g0 += s.substring(0, index4);
-      } else {
-      g0 += s.substring(0, s.indexOf('"')).trim();
-      }
-      }
-      g0 += ">";
-      }
-
-      // Working on action name!
-      g = mgm.getGateLowerCase(actionName);
-
-      if (g != null) {
-      actionName1 = actionName;
-      actionName = g.getName();
-      if (mgm.nbOfPossibleGatesLowerCase(actionName1) > 1) {
-      CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action " + actionName1 + " has several possible candidates ; " + actionName + " has been chosen");
-      warnings.add(ce);
-      }
-      }
-
-      // Store result
-      result.append(g1 + "\"i(" + actionName + g0 + ")\"" + g2 + "\n");
-      }
-      }
-      } else if (s.startsWith("des")) {
-      index1 = s.indexOf(",");
-      s = s.substring(index1+1, s.length());
-      index1 = s.indexOf(",");
-      s = s.substring(0, index1).trim();
-      //TraceManager.addDev("nb of transitions=" + s);
-      transi = Integer.decode(s).intValue();
-      if (transi > max) {
-      return null;
-      }
-      result.append(s + "\n");
-      }
-      }
-      } catch (Exception e) {
-      TraceManager.addError("Exception09545 " + e.getMessage());
-      return null;
-      }
-      return new String(result);
-      }*/
-
+    
     public boolean belongTo(GroupOfGates gog, Vector<TClassAndGateDS> gates) {
         int i, j;
         TClassAndGateDS tcg;
@@ -4447,6 +4345,12 @@ public class GTURTLEModeling {
         }
     }
 
+
+    private void prepareErrors() {
+	checkingErrors = new ArrayList<CheckingError>();
+	warnings = new ArrayList<CheckingError>();
+    }
+    
     public void copyModelingFromXML(TDiagramPanel tdp, String s, int X, int Y) throws MalformedModelingException {
         //TraceManager.addDev("copyModelingFromXML: " + s);
         //TraceManager.addDev("tdp: " + tdp);
@@ -4454,6 +4358,10 @@ public class GTURTLEModeling {
         //TraceManager.addDev(s);
         //TraceManager.addDev("copyModelingFromXML:");
         //LinkedList ComponentsList=tdp.getComponentList();
+
+	prepareErrors();
+
+	
         int beginIndex = tdp.getComponentList().size();
 
         //Added by Solange
@@ -5916,12 +5824,7 @@ public class GTURTLEModeling {
                             throw new MalformedModelingException();
                         }
 
-                        //int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
-                        //int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
-                        //int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
-                        //int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
-
-                        decX = _decX;
+			decX = _decX;
                         decY = _decY;
 
                         makeXMLComponents(elt.getElementsByTagName("COMPONENT"), aadp);
@@ -5941,6 +5844,7 @@ public class GTURTLEModeling {
             TraceManager.addError("Loading 501 " + saxe.getMessage());
             throw new MalformedModelingException();
         }
+
     }
 
     // Returns null if s is not a saved TURTLE modeling of an older format
@@ -5997,6 +5901,8 @@ public class GTURTLEModeling {
         if ((dbf == null) || (db == null)) {
             throw new MalformedModelingException();
         }
+
+	prepareErrors();
 
         try {
             // building nodes from xml String
@@ -7733,21 +7639,23 @@ public class GTURTLEModeling {
                     }
                 } catch (MalformedModelingException mme) {
                     TraceManager.addDev ("Could not create component " + n);
+		    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A component could not be correctly loaded");
+		    ce.setTDiagramPanel(tdp);
+		    checkingErrors.add(ce);
                     error = true;
                 }
             }
         }
 
-        if (error) {
+        /*if (error) {
             throw new MalformedModelingException();
-        }
+	    }*/
     }
 
 
     public TGComponent makeXMLComponent(Node n, TDiagramPanel tdp) throws SAXException, MalformedModelingException {
         Element elt;
         Element elt1;
-        //TraceManager.addDev(n.toString());
         TGComponent tgc = null;
         TGComponent father;
 
