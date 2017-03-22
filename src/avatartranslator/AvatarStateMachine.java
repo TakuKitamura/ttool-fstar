@@ -194,13 +194,37 @@ public class AvatarStateMachine extends AvatarElement {
 
     // Add missing implicit states.
     public void makeFullStates(AvatarBlock _block) {
+	addStatesToEmptyNonTerminalEmptyNext(_block);
         addStatesToTransitionsBetweenTwoNonStates(_block);
         addStatesToActionTransitions(_block);
-        addStateToNonEmptyTransitionsBetweenNonStateToState(_block);
+        addStatesToNonEmptyTransitionsBetweenNonStateToState(_block);
     }
 
 
-    private void addStateToNonEmptyTransitionsBetweenNonStateToState(AvatarBlock _block) {
+    private void addStatesToEmptyNonTerminalEmptyNext(AvatarBlock _b) {
+	ArrayList<AvatarStateMachineElement> toConsider = new ArrayList<AvatarStateMachineElement>();
+	for(AvatarStateMachineElement elt: elements) {
+            if (!(elt instanceof AvatarStopState)) {
+		if (elt.getNext(0) == null) {
+		    // Missing state
+		    toConsider.add(elt);
+		}
+	    }
+	}
+	
+	for(AvatarStateMachineElement elt: toConsider) {
+	    AvatarStopState stopMe = new AvatarStopState("stopCreated", elt.getReferenceObject());
+	    addElement(stopMe);
+	    AvatarTransition tr = new AvatarTransition(_b, "trForStopCreated", elt.getReferenceObject());
+	    addElement(tr);
+	    elt.addNext(tr);
+	    tr.addNext(stopMe);
+	}
+	
+    }
+    
+
+    private void addStatesToNonEmptyTransitionsBetweenNonStateToState(AvatarBlock _block) {
         AvatarStateMachineElement next;
         AvatarStateMachineElement previous;
         ArrayList<AvatarStateMachineElement> toAdd = new ArrayList<AvatarStateMachineElement>();
