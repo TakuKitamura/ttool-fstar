@@ -4016,6 +4016,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 if (showWindow) {
 		    TURTLEPanel tp = getCurrentTURTLEPanel();
 		    boolean result = false;
+		    
 		    if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
 			result = gtm.generateUPPAALFromTML(ConfigurationTTool.UPPAALCodeDirectory, false, 1024, true);
 		    }
