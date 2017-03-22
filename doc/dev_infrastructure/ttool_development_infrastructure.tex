@@ -18,6 +18,8 @@
 \usepackage[T1]{fontenc}
 \usepackage[a4paper,bindingoffset=0.2in,headsep=0.5cm,left=1in,right=1in,bottom=3cm,top=2cm,headheight=2cm]{geometry}
 \usepackage{hyperref}
+\usepackage{listings}
+
 \everymath{\displaystyle}
 \pagestyle{fancy}
 \fancyhf{}
@@ -455,6 +457,48 @@ it only the \textit{c++2 Debug} launch configuration should be used and
 triggered from the \textit{Debug As} button. By default, the program execution
 will automatically stop at the first instruction of the program. This behavior
 can be changed by editing the debug launch configuration.
+
+
+
+\section{Coding Instructions}
+Here are gather all tricks on how TTool source codes are organized, and what function is coded where, and also how to extend TTool, e.g. adding a new diagram.
+
+\subsection{How to output debug information}
+Do as follows:
+\begin{lstlisting}
+TraceManager.addDev("blah blah blah");
+\end{lstlisting}
+Then, start TTool with the 
+\begin{verbatim}
+ -debug
+\end{verbatim}
+option.
+Thus, to print information, never use:
+\begin{lstlisting}
+System.out.println("blah blah blah");
+\end{lstlisting}
+or similar ways of doing.
+
+\subsection{Code organization}
+Sources of "TTool" are located in "src/"\\
+Basically, all graphical-related elements are put in "ui". All other subdirectories of "src" are used to code generic functions ("myutil") or non graphical languages and model transformation. for example, in "avatartranslator/" you find all classes related to the internal avatar language, and all transformations from the internal avatar to other languages (e.g. to UPPAAL) are in subdirectories of "avatartranslator/touppaal"
+\subsubsection{User Interface directories}
+Main classes are located directly in "src/ui". Subdirectories of "ui/" are mostly used for diagrams (one diagram per subdirectory, e.g. avatarbd for the Avatar Block Diagram). Other subdirectories are explained in the following table.
+\begin{tabular}{l|c}
+subdirectory&Explanation\\
+\hline
+file&Contains the definition of file extensions used by TTool\\
+graph&AUT graph definition, and how to display an AUT graph\\
+interactivesimulation&Graphical part of Diplodocus model simulation\\
+tree&Ttree located in the upper left part of the main TTool Window.\\
+window&Sub-windows: dialogs, frames, etc.
+\end{tabular}
+
+\subsection{Structure of the User Interface}
+Actions of the main user interface are defined in "TGUIActions.java". The corresponding method which is called when an action occurs is defined in "ActionPerformer.java".
+
+\subsection{Structure of a diagram}
+
 
 \section{Testing}
 
