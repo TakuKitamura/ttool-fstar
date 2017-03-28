@@ -14,12 +14,8 @@ PATH+=/opt/mutekh/bin
 export PATH
 
 updateruntime:
-	cp src/*.c mutekh/libavatar/
-	cp src/*.h mutekh/libavatar/include/  
 	cp mutekh/libmwmr/*.c mutekh/examples/avatar
-	cp mutekh/libmwmr/*.c mutekh/libavatar
 	cp mutekh/libmwmr/include/mwmr/mwmr.h mutekh/examples/avatar
-	cp mutekh/libmwmr/include/mwmr/mwmr.h mutekh/libavatar
 	
 updategeneratedcode:
 	cp src/defs.h mutekh/examples/avatar
@@ -44,5 +40,4 @@ runsoclib:
 	echo "running soclib"
 	cd soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ../../../../../mutekh/avatar-soclib-$(MUTEKH_CPU).out
 	
-allsoclib: updateruntime updategeneratedcode updateruntimesoclib updategeneratedcodesoclib  compilesoclib runsoclib
-
+allsoclib: updateruntime updategeneratedcode compilesoclib runsoclib
