@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<TURTLEGMODELING version="0.98-beta4">
+<TURTLEGMODELING version="0.99-beta1">
 
 <Modeling type="AVATAR Design" nameTab="Design" >
 <AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="2500" minY="10" maxY="1500" >
@@ -70,8 +70,8 @@
 <TGConnectingPoint num="23" id="28" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="in b1()" />
-<Signal value="in b2()" />
+<Signal value="in b1()" attached="false" />
+<Signal value="in b2()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -108,7 +108,7 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="y" value="" type="8" typeOther="" />
-<Signal value="out b2()" />
+<Signal value="out b2()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -144,7 +144,7 @@
 <TGConnectingPoint num="23" id="78" />
 <extraparam>
 <CryptoBlock value="false" />
-<Signal value="out b1()" />
+<Signal value="out b1()" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -1075,7 +1075,7 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="x" value="" type="8" typeOther="" />
-<Signal value="in receive(int x)" />
+<Signal value="in receive(int x)" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -1112,7 +1112,7 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="x" value="0" type="8" typeOther="" />
-<Signal value="out send(int x)" />
+<Signal value="out send(int x)" attached="false" />
 </extraparam>
 </COMPONENT>
 
@@ -1648,7 +1648,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
+<Validated value="Block1;Block0;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="736" >
@@ -1698,7 +1698,7 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="x" value="" type="8" typeOther="" />
-<Signal value="in receive(int x)" />
+<Signal value="in receive(int x)" attached="true" />
 </extraparam>
 </COMPONENT>
 
@@ -1735,7 +1735,7 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="x" value="0" type="8" typeOther="" />
-<Signal value="out send(int x)" />
+<Signal value="out send(int x)" attached="true" />
 </extraparam>
 </COMPONENT>
 

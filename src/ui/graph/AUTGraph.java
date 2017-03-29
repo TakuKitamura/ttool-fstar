@@ -544,20 +544,6 @@ public class AUTGraph implements myutil.Graph {
             return;
         }
 
-
-        /*while(modif) {
-          modif = removeOnlyOneTauTr();
-          if (! modif) {
-          modif = removeMultipleTauOutputTr();
-          if (! modif) {
-          modif = removeTauWithOneFollower();
-          if (! modif) {
-          modif = removeSimilarTransitions();
-          }
-          }
-          }
-          }*/
-
         partitionGraph();
 
     }
@@ -875,7 +861,7 @@ public class AUTGraph implements myutil.Graph {
                 for(AUTState st1: states) {
                     if (st1.met) {
                         if (st1.outTransitions.size() > 0) {
-			    TraceManager.addDev("Adding an end tau to state " + st1.id);
+			    //TraceManager.addDev("Adding an end tau to state " + st1.id);
                             AUTTransition tr = new AUTTransition(st1.id, "tau", endSt.id);
                             tr.isTau = true;
                             transitions.add(tr);
@@ -1003,7 +989,7 @@ public class AUTGraph implements myutil.Graph {
             statesToConsider.addAll(nextStatesToConsider);
         }
 
-        TraceManager.addDev("Found " + cpt + " reachable states");
+        //TraceManager.addDev("Found " + cpt + " reachable states");
         ArrayList<AUTState> toRemoveStates = new ArrayList<AUTState>();
         for(AUTState st2: states) {
             if (!(st2.met)) {
@@ -1053,7 +1039,7 @@ public class AUTGraph implements myutil.Graph {
         List<AUTElement> sortedAlphabet = new ArrayList<AUTElement>(alphabet.values());
         Collections.sort(sortedAlphabet);
 
-        TraceManager.addDev("Alphabet size:" + alphabet.size());
+        //TraceManager.addDev("Alphabet size:" + alphabet.size());
 
 
         Map<Integer, AUTBlock> allBlocks = Collections.synchronizedMap(new HashMap<Integer, AUTBlock>());
@@ -1075,9 +1061,9 @@ public class AUTGraph implements myutil.Graph {
 
         AUTBlock B0Ret = allBlocks.get(new Integer(b0Test.hashValue));
         if (B0Ret == null) {
-            TraceManager.addDev("ERROR: hash not working for blocks");
+            //TraceManager.addDev("ERROR: hash not working for blocks");
         } else {
-            TraceManager.addDev("Hash working for blocks");
+            //TraceManager.addDev("Hash working for blocks");
         }
 
 
@@ -1093,7 +1079,7 @@ public class AUTGraph implements myutil.Graph {
         AUTSplitter w = new AUTSplitter();
         w.addPartition(partitionForSplitter);
 
-        printConfiguration(partition, w);
+        //printConfiguration(partition, w);
 
         int maxIte = 1000;
 
@@ -1105,36 +1091,36 @@ public class AUTGraph implements myutil.Graph {
 
             // Simple splitter?
             if (currentP.blocks.size() == 1) {
-                TraceManager.addDev("Simple splitter = " + currentP);
+                //TraceManager.addDev("Simple splitter = " + currentP);
                 AUTBlock currentBlock = currentP.blocks.get(0);
                 //List<AUTElement> sortedAlphabet = new ArrayList<AUTElement>(alphabet.values());
                 //Collections.sort(sortedAlphabet);
                 for(AUTElement elt: sortedAlphabet) {
-                    TraceManager.addDev("\n*** Considering alphabet element = " + elt.value);
-                    printConfiguration(partition, w);
+                    //TraceManager.addDev("\n*** Considering alphabet element = " + elt.value);
+                    //printConfiguration(partition, w);
                     // Look for states of the leading to another state by a = T
                     // Construct I = all blocks of P that have at least an element in T
                     AUTBlock T_minus1_elt_B = currentBlock.getMinus1(elt, states);
 
-                    TraceManager.addDev("T_minus1_elt_B=" + T_minus1_elt_B);
+                    //TraceManager.addDev("T_minus1_elt_B=" + T_minus1_elt_B);
 
                     LinkedList<AUTBlock> I = partition.getI(elt, T_minus1_elt_B);
-                    printI(I);
+                    //printI(I);
                     for(AUTBlock blockX: I) {
                         AUTBlock blockX1 = blockX.getStateIntersectWith(T_minus1_elt_B);
                         blockX1.computeHash();
                         AUTBlock blockX2 = blockX.getStateDifferenceWith(T_minus1_elt_B);
                         blockX2.computeHash();
-                        TraceManager.addDev("X1=" + blockX1);
-                        TraceManager.addDev("X2=" + blockX2);
+                        //TraceManager.addDev("X1=" + blockX1);
+                        //TraceManager.addDev("X2=" + blockX2);
 
                         if (blockX1.isEmpty() || blockX2.isEmpty()) {
-                            TraceManager.addDev("Nothing to do");
+                            //TraceManager.addDev("Nothing to do");
                             // Nothing to do!
                         } else {
                             boolean b = partition.removeBlock(blockX);
                             if (!b) {
-                                TraceManager.addDev("Block " + blockX + " could not be removed from partition");
+                                //TraceManager.addDev("Block " + blockX + " could not be removed from partition");
                             }
                             partition.addBlock(blockX1);
                             partition.addBlock(blockX2);
@@ -1142,15 +1128,15 @@ public class AUTGraph implements myutil.Graph {
                             X_X1_X2.addBlock(blockX);
                             X_X1_X2.addBlock(blockX1);
                             X_X1_X2.addBlock(blockX2);
-                            TraceManager.addDev("Test concat X1+X2=" + AUTBlock.concat(blockX1, blockX2));
+                            //TraceManager.addDev("Test concat X1+X2=" + AUTBlock.concat(blockX1, blockX2));
                             w.addPartition( X_X1_X2);
-                            TraceManager.addDev("Modifying P and W:");
-                            printConfiguration(partition, w);
-                            TraceManager.addDev("-----------------\n");
+                            //TraceManager.addDev("Modifying P and W:");
+                            //printConfiguration(partition, w);
+                            //TraceManager.addDev("-----------------\n");
                         }
 
                     }
-                    TraceManager.addDev("-----------------\n");
+                    //TraceManager.addDev("-----------------\n");
 
                 }
 
@@ -1158,7 +1144,7 @@ public class AUTGraph implements myutil.Graph {
 
             // Compound splitter
             else if (currentP.blocks.size() == 3){
-                TraceManager.addDev("Complexe splitter (b, bi, bii) =" + currentP);
+                //TraceManager.addDev("Complexe splitter (b, bi, bii) =" + currentP);
                 AUTBlock b = currentP.blocks.get(0);
                 AUTBlock bi = currentP.blocks.get(1);
                 AUTBlock bii = currentP.blocks.get(2);
@@ -1168,15 +1154,15 @@ public class AUTGraph implements myutil.Graph {
                     bii = currentP.blocks.get(1);
                 }
 
-                TraceManager.addDev("B= " + b +  " bi=" + bi + " bii=" + bii);
+                //TraceManager.addDev("B= " + b +  " bi=" + bi + " bii=" + bii);
 
                 for(AUTElement elt: sortedAlphabet) {
-                    TraceManager.addDev("\n*** Considering alphabet element = " + elt.value);
-                    printConfiguration(partition, w);
+                    //TraceManager.addDev("\n*** Considering alphabet element = " + elt.value);
+                    //printConfiguration(partition, w);
                     AUTBlock T_minus1_elt_B = b.getMinus1(elt, states);
-                    TraceManager.addDev("T_minus1_elt_B=" + T_minus1_elt_B);
+                    //TraceManager.addDev("T_minus1_elt_B=" + T_minus1_elt_B);
                     LinkedList<AUTBlock> I = partition.getI(elt, T_minus1_elt_B);
-                    printI(I);
+                    //printI(I);
                     for(AUTBlock blockX: I) {
                         // Compute block X1 = set of states in blockX that goes to Bi, but not to Bii
                         // with current action
@@ -1201,13 +1187,13 @@ public class AUTGraph implements myutil.Graph {
                                 blockX3.addState(st);
                             }
                         }
-                        TraceManager.addDev("Block X = " + blockX + " Block1,2,3 computed\n\tX1 = " + blockX1 + "\n\tX2 = " + blockX2 + "\n\tX3 = " + blockX3);
+                        //TraceManager.addDev("Block X = " + blockX + " Block1,2,3 computed\n\tX1 = " + blockX1 + "\n\tX2 = " + blockX2 + "\n\tX3 = " + blockX3);
 
                         if ((blockX.compareTo(blockX1) == 0) || (blockX.compareTo(blockX2) == 0) || (blockX.compareTo(blockX2) == 0)) {
                             // do nothing
-                            TraceManager.addDev("Identical blocks! X");
+                            //TraceManager.addDev("Identical blocks! X");
                         }  else  {
-                            TraceManager.addDev("Non Identical blocks! X");
+                            //TraceManager.addDev("Non Identical blocks! X");
                             // Modifying partition
                             partition.removeBlock(blockX);
                             partition.addIfNonEmpty(blockX1);
@@ -1258,9 +1244,9 @@ public class AUTGraph implements myutil.Graph {
             }
         }
 
-        TraceManager.addDev("\nAll done:\n---------");
-        printConfiguration(partition, w);
-        TraceManager.addDev("------------------");
+        //TraceManager.addDev("\nAll done:\n---------");
+        //printConfiguration(partition, w);
+        //TraceManager.addDev("------------------");
 
         // Generating new graph
         generateGraph(partition, alphabet);

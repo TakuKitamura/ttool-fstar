@@ -54,7 +54,7 @@ public class Test  {
    
 	
     public static void main(String[] args) {
-    	testAUTGraph();
+    	//testAUTGraph();
     	testBoolExpr();
     	
     }
@@ -92,10 +92,25 @@ public class Test  {
     	
     	nbOfPb += evalBool("(3>5)or (4<6) or (1>2)", true, false);*/
     	
-    	nbOfPb += evalBool("(0==0)", true, false);    
+    	/*nbOfPb += evalBool("(0==0)", true, false);    
     	nbOfPb += evalBool("t==t", true, false);
     	
+    	System.out.println("Nb of problems found:" + nbOfPb);*/
+	nbOfPb += evalBoolInt("1", false, true); 
+	nbOfPb += evalBoolInt("1==0", false, false);    
+    	nbOfPb += evalBoolInt("t==t", true, false);
+	nbOfPb += evalBoolInt("t==", false, true);
+	nbOfPb += evalBoolInt("t==t==f", false, false);
+	nbOfPb += evalBoolInt("t==t==t", true, false);
+	nbOfPb += evalBoolInt("(3==3) == (4==4)", true, false);
+	nbOfPb += evalBoolInt("(3==3) == (3==4)", false, false);
+	nbOfPb += evalBoolInt("(1+2)==4", false, false);
+	nbOfPb += evalBoolInt("(1+2)==3", true, false);
+	nbOfPb += evalBoolInt("3==1+2", true, false);
+    	nbOfPb += evalBoolInt("1+2==3", true, false);
+    	
     	System.out.println("Nb of problems found:" + nbOfPb);
+	
     	
     	System.exit(-1);
     }
@@ -107,9 +122,29 @@ public class Test  {
     	
     	if ((val != expectedValue) || (err != expectedError)) {
     	
-    	System.out.println("\n-------------------->Result of " + s + " =" + bee.getResultOf(s));
+    	System.out.println("\nUnexpected result or error-------------------->Result of " + s + " =" + val);
     	if (bee.hasError()) {
     		System.out.println("Error = " + bee.getFullError());
+    	}
+    	System.out.println("\n\n");
+    	return 1;
+    	}
+    	
+    	return 0;
+    	
+    	
+    }
+
+    public static int evalBoolInt(String s, boolean expectedValue, boolean expectedError) {
+    	BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
+    	boolean val = bee.getResultOfWithIntExpr(s);
+    	boolean err = bee.hasError();
+    	
+    	if ((val != expectedValue) || (err != expectedError)) {
+    	
+	    System.out.println("\nUnexpected result or error --------------------> Result of " + s + " : " + val + " / ExpectedValue:" + expectedValue);
+    	if (bee.hasError()) {
+    		System.out.println("--------------> Error = " + bee.getFullError());
     	}
     	System.out.println("\n\n");
     	return 1;
