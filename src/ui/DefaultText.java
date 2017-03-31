@@ -49,8 +49,8 @@ package ui;
 
 public class DefaultText  {
 
-    public static String BUILD = "12175";
-    public static String DATE = "2017/03/30 02:01:02 CET";
+    public static String BUILD = "12176";
+    public static String DATE = "2017/03/31 02:01:03 CET";
     
     
     public static StringBuffer sbAbout = makeAbout();
@@ -60,7 +60,7 @@ public class DefaultText  {
     }
     
     public static String getVersion() {
-        return "0.99-beta1"; /* Set new release March. 6th, 2017 */
+        return "0.99-beta2"; /* Set new release March. 30th, 2017 */
     }
     
     public static String getFullVersion() {
