@@ -300,7 +300,7 @@ stdrelease:
 	cp $(TTOOL_DOC)/README_proverif $(TTOOL_TARGET)/proverif
 # Graphs
 	mkdir -p $(TTOOL_TARGET)/graphs
-	cp $(TTOOL_DOC)/README_graph $(TTOOL_TARGET)/graph
+	cp $(TTOOL_DOC)/README_graph $(TTOOL_TARGET)/graphs/
 # Figure
 	mkdir -p $(TTOOL_TARGET)/figures
 	cp $(TTOOL_DOC)/README_figure $(TTOOL_TARGET)/figures
@@ -426,8 +426,8 @@ define functionCommonPreinstall
 	mkdir -p $(1)/TTool/graphs
 	cp $(TTOOL_DOC)/README_graph $(1)/TTool/graphs
 # Figure
-	mkdir -p $(1)/TTool/figure
-	cp $(TTOOL_DOC)/README_figure $(1)/TTool/figure
+	mkdir -p $(1)/TTool/figures
+	cp $(TTOOL_DOC)/README_figure $(1)/TTool/figures
 # VCD
 	mkdir -p $(1)/TTool/vcd
 	cp $(TTOOL_DOC)/README_vcd $(1)/TTool/vcd

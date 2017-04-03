@@ -5,7 +5,7 @@
 <DOTTYHost data="localhost" />
 <FILEPath data="../modeling/" />
 <LIBPath data="../lib" />
-<IMGPath data="../figure" />
+<IMGPath data="../figures" />
 <LOTOSPath data="../lotos/" />
 <GGraphPath data="../graphs" />
 <TGraphPath data="../graphs" />

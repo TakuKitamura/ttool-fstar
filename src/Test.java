@@ -108,6 +108,7 @@ public class Test  {
 	nbOfPb += evalBoolInt("(1+2)==3", true, false);
 	nbOfPb += evalBoolInt("3==1+2", true, false);
     	nbOfPb += evalBoolInt("1+2==3", true, false);
+	//nbOfPb += evalBoolInt("1+2==3", true, false);
     	
     	System.out.println("Nb of problems found:" + nbOfPb);
 	

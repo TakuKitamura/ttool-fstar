@@ -200,7 +200,7 @@ public class BoolExpressionEvaluator {
 		     this.right = newE;
 		     return newE;
 		} else {
-		    // We must find the father where to ad the operator
+		    // We must find the father where to add the operator
 		    // We thus look for the first father with no binary operator
 		    // or with a binary operator that has a higher priority
 		    IntBoolRes targetF = this.father;
@@ -209,11 +209,12 @@ public class BoolExpressionEvaluator {
 		    while(go == true) {
 			if (targetF == null) {
 			    go = false;
-			}
-			if (!(targetF.isABinaryOperator())) {
-			    go = false;
-			} else if (targetF.hasAHigherPriorityThan(newE)) {
-			    targetF = targetF.father;
+			} else {
+			    if (!(targetF.isABinaryOperator())) {
+				go = false;
+			    } else if (targetF.hasAHigherPriorityThan(newE)) {
+				targetF = targetF.father;
+			    }
 			}
 		    }
 
@@ -221,11 +222,19 @@ public class BoolExpressionEvaluator {
 			newE.left = top;
 			top = newE;
 			return top;
+		    } else {
+			if (targetF.isABinaryOperator()) {
+			    newE.right = targetF.left;
+			    targetF.left = newE;
+			    return newE;
+			} else {
+			    newE.right = targetF.right;
+			    targetF.right = newE;
+			    return newE;
+			}
+			
 		    }
 
-		    
-		    
-		    
 		    
 		}
 		
@@ -234,7 +243,7 @@ public class BoolExpressionEvaluator {
 
 
             // Element added at the root of the current
-            // If the current has not type ..
+            // If the current has no type ..
             if (!isAvailable()) {
                 return null;
             }
