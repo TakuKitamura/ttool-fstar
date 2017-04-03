@@ -165,6 +165,7 @@ public class BoolExpressionEvaluator {
                 // Must change the tree structure according to the operator priority
                 IntBoolRes newE = new IntBoolRes(INT_BINARY_OP, _op, this);
                 newE.left = right;
+		newE.father = right.father;
                 right.father = newE;
 		this.right = newE;
                 return newE;
@@ -220,16 +221,20 @@ public class BoolExpressionEvaluator {
 
 		    if (targetF == null) {
 			newE.left = top;
+			top.father = newE;
 			top = newE;
 			return top;
 		    } else {
 			if (targetF.isABinaryOperator()) {
 			    newE.right = targetF.left;
 			    targetF.left = newE;
+			    newE.father = targetF.father;
+			    targetF.father = newE;
 			    return newE;
 			} else {
 			    newE.right = targetF.right;
 			    targetF.right = newE;
+			    newE.father = targetF;
 			    return newE;
 			}
 			
@@ -426,10 +431,10 @@ public class BoolExpressionEvaluator {
 	public String toString(int dec) {
 	    String s = "\n" + newLine(dec);
 	    if (isRight()) {
-		s += "R->";
+		s = s + "R->";
 	    }
 	    if (isLeft()) {
-		s += "L->";
+		s = s + "L->";
 	    }
 	    s += id;
 	    if (father == null) {
@@ -437,7 +442,7 @@ public class BoolExpressionEvaluator {
 	    } else {
 		s += " father=" + id;
 	    }
-	    s += " type=" + res + " op=" + op + " int=" + i + " bool=" + b;
+	    s += " type:" + res + " op:" + toStringAction(op) + " int:" + i + " bool:" + b;
 	    
 	    if (left != null) {
 		s += left.toString(dec+1);
@@ -466,6 +471,8 @@ public class BoolExpressionEvaluator {
     public static final int TRUE_VALUE = 1;
     public static final int FALSE_VALUE = 0;
 
+
+    
     public static final int NUMBER_TOKEN = -1;
     public static final int BOOL_TOKEN = -2;
     public static final int EQUAL_TOKEN = -3;
@@ -485,6 +492,17 @@ public class BoolExpressionEvaluator {
     public static final int MINUS_TOKEN = -16;
     public static final int DIV_TOKEN = -17;
     public static final int MULT_TOKEN = -18;
+
+    public static final String [] VAL_S = {"true", "false", "nb", "bool", "==", "<", ">", "not", "or", "and", "=<", ">=", "eol", "(", ")", " ", "!=", "-", "/", "*", "+"};
+
+    public static String toStringAction(int val) {
+	if (val >= 0) {
+	    return VAL_S[val];
+	}
+
+	return VAL_S[Math.abs(val) + 1];
+    }
+    
 
     public static int ID = 0;
 
@@ -1624,6 +1642,7 @@ public class BoolExpressionEvaluator {
 		if (father.op == OPEN_PAR_TOKEN) {
 		    break;
 		}
+		father = father.father;
 	    }
 	    if (father == null) {
 		return null;
