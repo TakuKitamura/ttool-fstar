@@ -202,9 +202,12 @@ public class AvatarDesignPanel extends TURTLEPanel {
     public LinkedList<String> getAllTimers(String _name) {
         return abdp.getAllTimersOfBlock(_name);
     }
-
-    public String saveHeaderInXml() {
-        return "<Modeling type=\"AVATAR Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+    
+    public String saveHeaderInXml(String extensionToName) {
+	if (extensionToName == null) {
+	    return "<Modeling type=\"AVATAR Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+	}
+	return "<Modeling type=\"AVATAR Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
     }
 
     public String saveTailInXml() {

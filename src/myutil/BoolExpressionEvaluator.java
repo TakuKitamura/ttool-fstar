@@ -219,6 +219,8 @@ public class BoolExpressionEvaluator {
 			}
 		    }
 
+		    TraceManager.addDev("**************** Considering targetF=" + targetF);
+		    
 		    if (targetF == null) {
 			newE.left = top;
 			top.father = newE;
@@ -232,8 +234,9 @@ public class BoolExpressionEvaluator {
 			    targetF.father = newE;
 			    return newE;
 			} else {
-			    newE.right = targetF.right;
-			    targetF.right = newE;
+			    TraceManager.addDev("Unaryoperator");
+			    newE.left = targetF.left;
+			    targetF.left = newE;
 			    newE.father = targetF;
 			    return newE;
 			}
@@ -1566,7 +1569,7 @@ public class BoolExpressionEvaluator {
 	ID = 0;
         IntBoolRes newElt;
 
-	TraceManager.addDev("Dealing with token=" + token + " with current=" + current);
+	TraceManager.addDev("<><><><><><> Dealing with token:" + token);
 	
 
         char c1 = token.charAt(0);
