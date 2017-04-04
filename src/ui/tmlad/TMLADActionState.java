@@ -52,7 +52,7 @@ import java.awt.geom.*;
 import myutil.*;
 import ui.*;
 
-public class TMLADActionState extends TGCOneLineText implements PreJavaCode, PostJavaCode, CheckableAccessibility, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADActionState extends TGCOneLineText implements PreJavaCode, PostJavaCode, CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;

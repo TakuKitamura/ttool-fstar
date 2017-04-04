@@ -1618,7 +1618,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
         }
 		if (e.getSource() == checkLatency) {
-			if (componentPopup instanceof CheckableAccessibility){
+			if (componentPopup instanceof CheckableLatency){
 				componentPopup.setCheckLatency(!componentPopup.getCheckLatency());
 			}
 		}
@@ -1853,7 +1853,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         }
 
-        if (componentPointed instanceof CheckableAccessibility){
+        if (componentPointed instanceof CheckableLatency){
             checkLatency.setEnabled(true);
         } else {
             checkLatency.setEnabled(false);
