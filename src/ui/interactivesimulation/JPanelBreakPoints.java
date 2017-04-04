@@ -45,49 +45,31 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.interactivesimulation;
 
-//import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.util.*;
-
-
-import myutil.*;
-import ui.*;
-import ui.file.*;
-
-import tmltranslator.*; 
-
-import launcher.*;
-import remotesimulation.*;
-
-import org.w3c.dom.*;
-import org.xml.sax.*;
-import javax.xml.parsers.*;
-
 
 public	class JPanelBreakPoints extends JPanel implements ActionListener, ListSelectionListener  {
 	
 	
 	private JFrameInteractiveSimulation jfis;
-	private ArrayList<Point> points;
-	private Vector breakpoints;
+	private java.util.List<Point> points;
+	private Vector<String> breakpoints;
 	
 	
-	private JList listBreakpoints;
+	private JList<String> listBreakpoints;
     private JButton removeButton;
 	private JButton addButton;
-	private JComboBox tasks;
-	private JComboBox commands;
+	private JComboBox<String> tasks;
+	private JComboBox<String> commands;
 	private JCheckBox activate;
 	
 	private String[] taskIDs, commandIDs;
 	
 	
-	public JPanelBreakPoints(JFrameInteractiveSimulation _jfis, ArrayList<Point> _points) {
+	public JPanelBreakPoints(JFrameInteractiveSimulation _jfis, java.util.List<Point> _points) {
 		super();
 		
 		jfis = _jfis;
@@ -96,7 +78,7 @@ public	class JPanelBreakPoints extends JPanel implements ActionListener, ListSel
 		
 		//setBackground(new Color(50, 40, 40, 200));
 		
-		breakpoints = new Vector();
+		breakpoints = new Vector<String>();
         
         for(int i=0; i<points.size(); i++) {
             breakpoints.addElement("Task=" + points.get(i).x +  " Command=" + points.get(i).y);
@@ -114,7 +96,7 @@ public	class JPanelBreakPoints extends JPanel implements ActionListener, ListSel
 		setLayout(gridbag2);
 		setBorder(new javax.swing.border.TitledBorder("Managing breakpoints"));
 		
-		listBreakpoints = new JList(breakpoints);
+		listBreakpoints = new JList<String>(breakpoints);
         //listAttribute.setFixedCellWidth(150);
         //listAttribute.setFixedCellHeight(20);
         listBreakpoints.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -146,18 +128,18 @@ public	class JPanelBreakPoints extends JPanel implements ActionListener, ListSel
 		add(new JLabel(" "), c2);
 		
 		if (taskIDs == null) {
-			tasks = new JComboBox();
+			tasks = new JComboBox<String>();
 		} else {
-			tasks = new JComboBox(taskIDs);
+			tasks = new JComboBox<String>(taskIDs);
 			tasks.addActionListener(this);
 		}
 		add(tasks, c2);
 		
 		if ((taskIDs == null) || (taskIDs.length == 0)) {
-			commands = new JComboBox();
+			commands = new JComboBox<String>();
 		} else {
 			commandIDs = jfis.makeCommandIDs(0);
-			commands = new JComboBox(commandIDs);
+			commands = new JComboBox<String>(commandIDs);
 		}
 		add(commands, c2);
         
@@ -278,7 +260,7 @@ public	class JPanelBreakPoints extends JPanel implements ActionListener, ListSel
 	}
 	
 	public void unsetElements() {
-		Vector v = new Vector();
+		Vector<String> v = new Vector<String>();
 		listBreakpoints.setListData(v);
 		removeButton.setEnabled(false);
 		addButton.setEnabled(false);

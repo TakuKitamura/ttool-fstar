@@ -69,6 +69,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.Collections;
@@ -81,6 +83,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
@@ -102,7 +105,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import java.text.*;
 
 import launcher.LauncherException;
@@ -127,9 +129,6 @@ import ui.ConfigurationTTool;
 import ui.IconManager;
 import ui.MainGUI;
 import ui.TGComponent;
-import ui.graph.*;
-
-
 
 public  class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener, ChangeListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 
@@ -224,7 +223,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     JSlider minimalCommandCoverage, minimalBranchCoverage;
     JLabel labelMinimalCommandCoverage, labelMinimalBranchCoverage;
     private String lastGraphName;
-    private RG lastRG;
+   // private RG lastRG;
     
     // Tasks
     JPanel taskPanel;
@@ -253,12 +252,12 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
     //Latency
     JPanel latencyPanel;
-    JComboBox transaction1;
-    JComboBox transaction2;
+    JComboBox<String> transaction1;
+    JComboBox<String> transaction2;
     JButton addLatencyCheckButton;
     JButton updateLatencyButton;
     LatencyTableModel latm;
-    public Vector checkedTransactions = new Vector();
+    public Vector<String> checkedTransactions = new Vector<String>();
     private JScrollPane jspLatency;
 
     private int mode = 0;
@@ -268,9 +267,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     private boolean gotTimeAnswerFromServer = false;
 
     // For managing actions
-    public      InteractiveSimulationActions [] actions;
-    public      MouseHandler mouseHandler;
-    public  KeyListener keyHandler;
+    public InteractiveSimulationActions [] actions;
+    public MouseHandler mouseHandler;
+    public KeyListener keyHandler;
 
     private TMLMapping tmap;
     private int hashCode;
@@ -282,11 +281,12 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     private Hashtable <Integer, Integer> runningTable;
     private Hashtable <String, String> diagramTable;
 
-    private ArrayList<Point> points;
-    private HashMap<String, String> checkTable=new HashMap<String, String>();
-    private HashMap<String, ArrayList<String>> transTimes = new HashMap<String, ArrayList<String>>();
-    private Vector latencies=new Vector();
-    public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap, ArrayList<Point> _points) {
+    private List<Point> points;
+    private Map<String, String> checkTable = new HashMap<String, String>();
+    private Map<String, List<String>> transTimes = new HashMap<String, List<String>>();
+    private Vector<SimulationLatency> latencies = new Vector<SimulationLatency>();
+    
+    public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap, List<Point> _points) {
         super(_title);
 
         // f = _f;
@@ -983,13 +983,13 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         c0.gridheight=1;
         latencyPanel.add(new JLabel("Checkpoint 1:"),c0);
         c0.gridwidth = GridBagConstraints.REMAINDER;
-        transaction1 = new JComboBox(checkedTransactions);
+        transaction1 = new JComboBox<String>(checkedTransactions);
         latencyPanel.add(transaction1, c0);
 
         c0.gridwidth=1;
         latencyPanel.add(new JLabel("Checkpoint 2:"),c0);
         c0.gridwidth= GridBagConstraints.REMAINDER;
-        transaction2 = new JComboBox(checkedTransactions);
+        transaction2 = new JComboBox<String>(checkedTransactions);
         latencyPanel.add(transaction2, c0);
 
 
@@ -2218,13 +2218,25 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
     public void sendSaveTraceCommand(String format) {
         String param = saveFileName.getText().trim();
-        if (saveDirName.getText().length() > 0) {
-            param = saveDirName.getText() + File.separator + param;
+        
+        if ( param.isEmpty() ) {
+        	final String message = "Please enter a file name for the trace.";
+        	JOptionPane.showMessageDialog( this, message, "Output File Name not Specified", JOptionPane.ERROR_MESSAGE );
+        	error( message );
         }
-        if (param.length() >0) {
-            sendCommand("save-trace-in-file" + " " + format + " " + param);
-        } else {
-            error("Wrong parameter: must be a file name");
+        else {
+        	final String directory = saveDirName.getText().trim();
+        	
+	        if ( !directory.isEmpty() ) {
+	            param = directory + File.separator + param;
+	        }
+
+	        // DB: now useless check
+//	        if (param.length() >0) {
+	        sendCommand( "save-trace-in-file" + " " + format + " " + param );
+//	        } else {
+//	            error("Wrong parameter: must be a file name");
+//	        }
         }
     }
 
@@ -2268,7 +2280,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
     private void addGraph() {
 	TraceManager.addDev("Adding graph");
-	lastRG = mgui.setLastRGDiplodocus(lastGraphName);
+	/*lastRG =*/ mgui.setLastRGDiplodocus(lastGraphName);
     }
 
     private String getCurrentRGName() {
@@ -2905,7 +2917,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             mgui.resetTransactions();
             mgui.resetStatus();
             sendCommand("reset");
-            transTimes=new HashMap<String, ArrayList<String>>();
+            transTimes=new HashMap<String, List<String>>();
             processLatency();
             askForUpdate();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
