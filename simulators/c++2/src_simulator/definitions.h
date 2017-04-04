@@ -225,6 +225,71 @@ using std::max;
 #define TAG_ENERGYo "<energy>"
 #define TAG_ENERGYc "</energy>"
 
+// Issue #4 HTML Trace Constants
+#define SCHED_CSS_FILE_NAME "schedstyle.css"
+#define SCHED_HTML_DOC "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
+#define SCHED_HTML_BEG_HTML "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n"
+#define SCHED_HTML_END_HTML "</html>\n"
+#define SCHED_HTML_BEG_HEAD "<head>\n"
+#define SCHED_HTML_END_HEAD "</head>\n"
+#define SCHED_HTML_META "<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />\n"
+#define SCHED_HTML_BEG_TITLE "<title>"
+#define SCHED_HTML_END_TITLE "</title>\n"
+#define SCHED_HTML_BEG_BODY "<body>\n"
+#define SCHED_HTML_END_BODY "</body>\n"
+#define SCHED_HTML_BEG_STYLE "<style>\n"
+#define SCHED_HTML_END_STYLE "</style>\n"
+#define SCHED_HTML_CSS_LINK "<link rel=\"stylesheet\" type=\"text/css\" href=\""
+
+#define SCHED_HTML_CSS_CONTENT "table{ \
+	border-collapse: collapse; \
+	empty-cells: show; \
+	margin: 0.4cm; \
+} \
+td{ \
+	padding: 10px 5px; \
+	border: 1px solid black; \
+} \
+th{ \
+	padding: 5px; \
+	border-left: 1px dotted black; \
+	border-right: 1px dotted black; \
+} \
+.sc{ \
+	border-style: none; \
+	padding: 0px; \
+} \
+h2 { \
+	border-bottom: 1px solid #666; \
+} \
+h2 span { \
+	position: relative;  \
+	left: -0.3em;  \
+	bottom: -0.6em;  \
+	padding: 1px 0.5em;  \
+	border-style: solid;  \
+	border-width: 1px 1px 1px 0.8em; \
+	border-color: #666 #666 #666 #008; \
+	background-color: #ddd; \
+} \
+.space{border-style: none;} \
+.not{background-color: white;} \
+.t1{background-color: yellow;} \
+.t2{background-color: purple;} \
+.t3{background-color: red;} \
+.t4{background-color: silver;} \
+.t5{background-color: teal;} \
+.t6{background-color: aqua;} \
+.t7{background-color: olive;} \
+.t8{background-color: navy;} \
+.t9{background-color: maroon;} \
+.t10{background-color: lime;} \
+.t11{background-color: green;} \
+.t12{background-color: gray;} \
+.t13{background-color: fuchsia;} \
+.t14{background-color: blue;} \
+.t15{background-color: black;} \
+.t16{background-color: white;}"
 
 class TMLTask;
 class TMLTransaction;

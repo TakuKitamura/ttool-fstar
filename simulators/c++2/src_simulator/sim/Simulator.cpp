@@ -282,14 +282,26 @@ void Simulator::latencies2XML(std::ostringstream& glob, int id1, int id2) {
   }
 }
 
-
 void Simulator::schedule2HTML(std::string& iTraceFileName) const{
   struct timeval aBegin,aEnd;
   gettimeofday(&aBegin,NULL);
   std::ofstream myfile (iTraceFileName.c_str());
-  if (myfile.is_open()){
-    myfile << "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
-    myfile << "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"schedstyle.css\" />\n<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />\n<title>Scheduling</title>\n</head>\n<body>\n";
+
+  if (myfile.is_open()) {
+  	// DB: Issue #4
+    myfile << SCHED_HTML_DOC; // <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n
+    myfile << SCHED_HTML_BEG_HTML; // <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n
+    myfile << SCHED_HTML_BEG_HEAD; // <head>\n
+    myfile << SCHED_HTML_BEG_STYLE; // <style>\n";
+    myfile << SCHED_HTML_CSS_CONTENT;
+    myfile << SCHED_HTML_END_STYLE; // <style>\n";
+    myfile << SCHED_HTML_META; // <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />\n
+    myfile << SCHED_HTML_BEG_TITLE; // <title>
+    myfile << "Scheduling";
+    myfile << SCHED_HTML_END_TITLE; // </title>\n
+    myfile << SCHED_HTML_END_HEAD; // </head>\n
+    myfile << SCHED_HTML_BEG_BODY; // <body>\n
+
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       (*i)->schedule2HTML(myfile);
@@ -299,11 +311,16 @@ void Simulator::schedule2HTML(std::string& iTraceFileName) const{
       (*j)->schedule2HTML(myfile);
     }
     //for_each(iCPUlist.begin(), iCPUlist.end(),std::bind2nd(std::mem_fun(&CPU::schedule2HTML),myfile));
-    myfile << "</body>\n</html>\n";
+
+    myfile << SCHED_HTML_END_BODY; // </body>\n
+    myfile << SCHED_HTML_END_HTML; // </html>\n
+
     myfile.close();
   }
-  else
+  else {
     std::cout << "Unable to open HTML output file." << std::endl;
+  }
+
   gettimeofday(&aEnd,NULL);
   std::cout << "The HTML output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
