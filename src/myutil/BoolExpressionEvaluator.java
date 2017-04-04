@@ -57,9 +57,9 @@ public class BoolExpressionEvaluator {
         public static final int INT_BINARY_OP = 3;
         public static final int BOOL_BINARY_OP = 4;
         public static final int BOOL_UNARY_OP = 5;
-	public static final int OPEN_PARENTHESIS = 6;
+        public static final int OPEN_PARENTHESIS = 6;
 
-	public int id = (int)(Math.ceil(Math.random() * 10000000));
+        public int id = (int)(Math.ceil(Math.random() * 10000000));
         public int i = -18;
         public boolean b;
         public int res; //-1: available, 0:int, 2:bool, 3:ko, others : OPs
@@ -126,34 +126,34 @@ public class BoolExpressionEvaluator {
             return news;
         }
 
-	public IntBoolRes addOpenParenthesis() {
-	    if ((left != null) && (right != null)) {
-		return null;
-	    }
+        public IntBoolRes addOpenParenthesis() {
+            if ((left != null) && (right != null)) {
+                return null;
+            }
 
-	    if ((left != null) && (op == 0)) {
-		return null;
-	    }
+            if ((left != null) && (op == 0)) {
+                return null;
+            }
 
-	    IntBoolRes newE = new IntBoolRes(OPEN_PARENTHESIS, OPEN_PAR_TOKEN, this);
+            IntBoolRes newE = new IntBoolRes(OPEN_PARENTHESIS, OPEN_PAR_TOKEN, this);
 
-	    if (left == null) {
-		left = newE;
-	    } else {
-		right = newE;
-	    }
-
-	    
-	    IntBoolRes topPar = new IntBoolRes();
-	    topPar.father = newE;
-	    newE.left = topPar;
-	    
-	    return topPar;
-	    
-	}
+            if (left == null) {
+                left = newE;
+            } else {
+                right = newE;
+            }
 
 
-	public IntBoolRes addIntOperator(int _op) {
+            IntBoolRes topPar = new IntBoolRes();
+            topPar.father = newE;
+            newE.left = topPar;
+
+            return topPar;
+
+        }
+
+
+        public IntBoolRes addIntOperator(int _op) {
             // Must have at least one right operator
             TraceManager.addDev("Add int op");
             if (left == null) {
@@ -164,11 +164,12 @@ public class BoolExpressionEvaluator {
             if (right != null) {
                 // Must change the tree structure according to the operator priority
                 IntBoolRes newE = new IntBoolRes(INT_BINARY_OP, _op, this);
-                newE.left = right;
-		newE.father = right.father;
+		return addBinaryChangeTreeStruct(newE);
+                /*newE.left = right;
+                newE.father = right.father;
                 right.father = newE;
-		this.right = newE;
-                return newE;
+                this.right = newE;
+                return newE;*/
             }
 
 
@@ -177,6 +178,7 @@ public class BoolExpressionEvaluator {
             if (!isAvailable()) {
                 return null;
             }
+	    
             res = INT_BINARY_OP;
             op = _op;
             return this;
@@ -193,71 +195,80 @@ public class BoolExpressionEvaluator {
             if (right != null) {
                 // Must change the tree structure accoding to the operator priority
                 IntBoolRes newE = new IntBoolRes(BOOL_BINARY_OP, _op, this);
+                return addBinaryChangeTreeStruct(newE);
 
-		// Look for the father
-		if (isABinaryOperator() && (newE.getPriority()>=getPriority())) {
-		     newE.left = right;
-		     right.father = newE;
-		     this.right = newE;
-		     return newE;
-		} else {
-		    // We must find the father where to add the operator
-		    // We thus look for the first father with no binary operator
-		    // or with a binary operator that has a higher priority
-		    IntBoolRes targetF = this.father;
-
-		    boolean go = true;
-		    while(go == true) {
-			if (targetF == null) {
-			    go = false;
-			} else {
-			    if (!(targetF.isABinaryOperator())) {
-				go = false;
-			    } else if (targetF.hasAHigherPriorityThan(newE)) {
-				targetF = targetF.father;
-			    }
-			}
-		    }
-
-		    TraceManager.addDev("**************** Considering targetF=" + targetF);
-		    
-		    if (targetF == null) {
-			newE.left = top;
-			top.father = newE;
-			top = newE;
-			return top;
-		    } else {
-			if (targetF.isABinaryOperator()) {
-			    newE.right = targetF.left;
-			    targetF.left = newE;
-			    newE.father = targetF.father;
-			    targetF.father = newE;
-			    return newE;
-			} else {
-			    TraceManager.addDev("Unaryoperator");
-			    newE.left = targetF.left;
-			    targetF.left = newE;
-			    newE.father = targetF;
-			    return newE;
-			}
-			
-		    }
-
-		    
-		}
-		
-                
             }
-
 
             // Element added at the root of the current
             // If the current has no type ..
             if (!isAvailable()) {
                 return null;
             }
+	    
             res = BOOL_BINARY_OP;
             op = _op;
             return this;
+        }
+
+        public IntBoolRes addBinaryChangeTreeStruct(IntBoolRes newE) {
+
+            // Look for the father
+            if (isABinaryOperator() && (newE.getPriority()>=getPriority())) {
+                newE.left = right;
+                right.father = newE;
+                this.right = newE;
+                return newE;
+            } else {
+                // We must find the father where to add the operator
+                // We thus look for the first father with no binary operator
+                // or with a binary operator that has a higher priority
+                TraceManager.addDev("----- Must find a target");
+                IntBoolRes targetF = this.father;
+
+                boolean go = true;
+                while(go == true) {
+		    TraceManager.addDev("in loop targetF=" + targetF);
+                    if (targetF == null) {
+                        go = false;
+                    } else {
+                        if (!(targetF.isABinaryOperator())) {
+                            go = false;
+                        } else if (targetF.hasAHigherPriorityThan(newE)) {
+			    IntBoolRes nexT = targetF.father;
+			    if (nexT == targetF) {
+				go = false;
+			    }
+			    targetF = nexT;
+                        } else {
+			    go = false;
+			}
+                    }
+                }
+
+                TraceManager.addDev("**************** Considering targetF=" + targetF);
+
+                if (targetF == null) {
+                    newE.left = top;
+                    top.father = newE;
+		    newE.father = null;
+                    top = newE;
+                    return top;
+                } else {
+                    if (targetF.isABinaryOperator()) {
+                        newE.right = targetF.left;
+                        targetF.left = newE;
+                        newE.father = targetF.father;
+                        targetF.father = newE;
+                        return newE;
+                    } else {
+                        TraceManager.addDev("Unaryoperator");
+                        newE.left = targetF.left;
+                        targetF.left = newE;
+                        newE.father = targetF;
+                        return newE;
+                    }
+                }
+            }
         }
 
 
@@ -277,44 +288,45 @@ public class BoolExpressionEvaluator {
             return (res == INT_TERM) || (res == BOOL_TERM);
         }
 
-	public boolean isRight() {
-	    if (father != null) {
-		return father.right == this;
-	    }
-	    return false;
-	}
+        public boolean isRight() {
+            if (father != null) {
+                return father.right == this;
+            }
+            return false;
+        }
 
-	public boolean isLeft() {
-	    if (father != null) {
-		return father.left == this;
-	    }
-	    return false;
-	}
+        public boolean isLeft() {
+            if (father != null) {
+                return father.left == this;
+            }
+            return false;
+        }
 
-	public boolean isABinaryOperator(){
-	    return (res == INT_BINARY_OP) || (res == BOOL_BINARY_OP);
-	}
+        public boolean isABinaryOperator(){
+            return (res == INT_BINARY_OP) || (res == BOOL_BINARY_OP);
+        }
 
-	public boolean hasAHigherPriorityThan(IntBoolRes _other) {
-	    return (getPriority() > _other.getPriority());
-	}
+        public boolean hasAHigherPriorityThan(IntBoolRes _other) {
+            return (getPriority() > _other.getPriority());
+        }
 
-	public int getPriority() {
-	    if (res == BOOL_BINARY_OP) {
-		return 1;
-	    }
+        public int getPriority() {
+            if (res == BOOL_BINARY_OP) {
+                return 1;
+            }
 
-	    if (res == INT_BINARY_OP) {
-		if ((op == PLUS_TOKEN) || (op == MINUS_TOKEN))
-		    return 2;
-		else {
-		    return 3;
-		}
-	    }
+            if (res == INT_BINARY_OP) {
+                if ((op == PLUS_TOKEN) || (op == MINUS_TOKEN))
+                    return 2;
+                else {
+                    TraceManager.addDev("HAVE PRIORITY 3");
+                    return 3;
+                }
+            }
 
-	    return 0;
-	}
-	
+            return 0;
+        }
+
 
         public String getValueString() {
             if (res == 0) {
@@ -354,9 +366,21 @@ public class BoolExpressionEvaluator {
             return null;
         }
 
-	private Integer makeIntegerOp(int op, int elt1, int elt2) {
+        private Integer makeIntegerOp(int op, int elt1, int elt2) {
             if (op == PLUS_TOKEN) {
                 return new Integer(elt1 + elt2);
+            }
+
+            if (op == MINUS_TOKEN) {
+                return new Integer(elt1 - elt2);
+            }
+
+            if (op == MULT_TOKEN) {
+                return new Integer(elt1 * elt2);
+            }
+
+            if (op == DIV_TOKEN) {
+                return new Integer(elt1 / elt2);
             }
 
             return null;
@@ -387,19 +411,19 @@ public class BoolExpressionEvaluator {
                 }
             }
 
-	    if (res == INT_BINARY_OP) {
-		TraceManager.addDev("Found binary int expr");
+            if (res == INT_BINARY_OP) {
+                TraceManager.addDev("Found binary int expr");
                 if ((right == null) || (left == null)) {
                     errorMessage = "Badly formatted binary int operator";
-		    TraceManager.addDev("Found binary int expr in null");
+                    TraceManager.addDev("Found binary int expr in null");
                     return null;
                 }
                 Object ob1 = right.computeValue();
                 Object ob2 = left.computeValue();
                 if ((ob1 == null) || (ob2 == null)) {
-		    TraceManager.addDev("Found binary int expr in null elt");
+                    TraceManager.addDev("Found binary int expr in null elt");
                     return null;
-		}
+                }
                 if ((ob1 instanceof Integer) && (ob2 instanceof Integer)) {
                     int elt1 = analysisArg(ob1);
                     int elt2 = analysisArg(ob2);
@@ -408,62 +432,62 @@ public class BoolExpressionEvaluator {
                     TraceManager.addDev("Result int=" + result);
                     return result;
                 } else {
-		    errorMessage = "Invalid operands in integer operations";
-		    return null;
-		}
+                    errorMessage = "Invalid operands in integer operations";
+                    return null;
+                }
             }
 
-            
-	    if (res == OPEN_PARENTHESIS) {
-		if (left == null) {
-		    return null;
-		}
-		return left.computeValue();
-	    }
 
-	    errorMessage = "Badly formatted expression from:" + this;
-	    
+            if (res == OPEN_PARENTHESIS) {
+                if (left == null) {
+                    return null;
+                }
+                return left.computeValue();
+            }
+
+            errorMessage = "Badly formatted expression from:" + this;
+
             return null;
         }
 
 
-	public String toString() {
-	    return toString(0);
-	}
+        public String toString() {
+            return toString(0);
+        }
 
-	public String toString(int dec) {
-	    String s = "\n" + newLine(dec);
-	    if (isRight()) {
-		s = s + "R->";
-	    }
-	    if (isLeft()) {
-		s = s + "L->";
-	    }
-	    s += id;
-	    if (father == null) {
-		s += " father= no";
-	    } else {
-		s += " father=" + id;
-	    }
-	    s += " type:" + res + " op:" + toStringAction(op) + " int:" + i + " bool:" + b;
-	    
-	    if (left != null) {
-		s += left.toString(dec+1);
-	    }
-	    if (right != null) {
-		s += right.toString(dec+1);
-	    }
-	    return s;
-	}
+        public String toString(int dec) {
+            String s = "\n" + newLine(dec);
+            if (isRight()) {
+                s = s + "R->";
+            }
+            if (isLeft()) {
+                s = s + "L->";
+            }
+            s += id;
+            if (father == null) {
+                s += " father= no";
+            } else {
+                s += " father=" + id;
+            }
+            s += " type:" + res + " op:" + toStringAction(op) + " int:" + i + " bool:" + b;
 
-	private String newLine(int dec) {
-	    String s = "";
-	    for (int i=0; i<dec; i++) {
-		s += "\t";
-	    }
-	    return s;
-	}
-	
+            if (left != null) {
+                s += left.toString(dec+1);
+            }
+            if (right != null) {
+                s += right.toString(dec+1);
+            }
+            return s;
+        }
+
+        private String newLine(int dec) {
+            String s = "";
+            for (int i=0; i<dec; i++) {
+                s += "\t";
+            }
+            return s;
+        }
+
     }
 
     //  ----------------------------------------
@@ -475,7 +499,7 @@ public class BoolExpressionEvaluator {
     public static final int FALSE_VALUE = 0;
 
 
-    
+
     public static final int NUMBER_TOKEN = -1;
     public static final int BOOL_TOKEN = -2;
     public static final int EQUAL_TOKEN = -3;
@@ -499,13 +523,13 @@ public class BoolExpressionEvaluator {
     public static final String [] VAL_S = {"true", "false", "nb", "bool", "==", "<", ">", "not", "or", "and", "=<", ">=", "eol", "(", ")", " ", "!=", "-", "/", "*", "+"};
 
     public static String toStringAction(int val) {
-	if (val >= 0) {
-	    return VAL_S[val];
-	}
+        if (val >= 0) {
+            return VAL_S[val];
+        }
 
-	return VAL_S[Math.abs(val) + 1];
+        return VAL_S[Math.abs(val) + 1];
     }
-    
+
 
     public static int ID = 0;
 
@@ -1500,18 +1524,18 @@ public class BoolExpressionEvaluator {
             return false;
         }
 
-	
-	TraceManager.addDev("Tree of " + _expr + ": " + resIBR.toString() + "\nEnd of tree");
+
+        TraceManager.addDev("Tree of " + _expr + ": " + resIBR.toString() + "\nEnd of tree");
 
 
         Object res = resIBR.computeValue();
 
-	if (res == null) {
+        if (res == null) {
             return false;
         }
 
-	TraceManager.addDev("Tree of " + _expr + ": " + resIBR.toString() + "\nEnd of tree");
-	
+        TraceManager.addDev("Tree of " + _expr + ": " + resIBR.toString() + "\nEnd of tree");
+
         if(res instanceof Integer) {
             errorMessage = "Integer expression. Was expecting a boolean expression";
         }
@@ -1520,13 +1544,13 @@ public class BoolExpressionEvaluator {
             TraceManager.addDev("Error: " + getError());
         }
 
-	if (res instanceof Boolean) {
-	    boolean result = ((Boolean)(res)).booleanValue();
-	    return result;
-	}
+        if (res instanceof Boolean) {
+            boolean result = ((Boolean)(res)).booleanValue();
+            return result;
+        }
 
-	errorMessage = "Invalid boolean expression";
- 
+        errorMessage = "Invalid boolean expression";
+
         return false;
     }
 
@@ -1566,11 +1590,11 @@ public class BoolExpressionEvaluator {
     }
 
     public IntBoolRes parseAndMakeTree(IntBoolRes current, String token) {
-	ID = 0;
+        ID = 0;
         IntBoolRes newElt;
 
-	TraceManager.addDev("<><><><><><> Dealing with token:" + token);
-	
+        TraceManager.addDev("<><><><><><> Dealing with token:" + token);
+
 
         char c1 = token.charAt(0);
 
@@ -1605,15 +1629,43 @@ public class BoolExpressionEvaluator {
 
         }
 
-	// INT BINARY OP
-	if (c1 == '+') {
+        // INT BINARY OP
+        if (c1 == '+') {
             newElt = current.addIntOperator(PLUS_TOKEN);
             if (newElt == null) {
-                errorMessage = "Badly placed bool operator:" + token;
+                errorMessage = "Badly placed int operator:" + token;
                 return null;
             }
             return newElt;
         }
+
+        if (c1 == '-') {
+            newElt = current.addIntOperator(MINUS_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed int operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+        if (c1 == '*') {
+            newElt = current.addIntOperator(MULT_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed int operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+        if (c1 == '/') {
+            newElt = current.addIntOperator(DIV_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed int operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
 
         // BOOL BINARY OP
         if (c1 == '=') {
@@ -1625,83 +1677,40 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-	// PARENTHESIS
-	if (c1 == '(') {
-	    
-	    newElt = current.addOpenParenthesis();
+        // PARENTHESIS
+        if (c1 == '(') {
+
+            newElt = current.addOpenParenthesis();
             if (newElt == null) {
                 errorMessage = "Badly placed parenthesis:";
                 return null;
             }
             return newElt;
-	}
+        }
 
 
-	if (c1 == ')') {
-	    // Must find corresponding parenthesis
-	    // Looking for father of the correspoing parenthesis;
-	    IntBoolRes father = current.father;
-	    while(father != null) {
-		if (father.op == OPEN_PAR_TOKEN) {
-		    break;
-		}
-		father = father.father;
-	    }
-	    if (father == null) {
-		return null;
-	    }
-	    return father.father;
-	    
-	}
+        if (c1 == ')') {
+            // Must find corresponding parenthesis
+            // Looking for father of the correspoing parenthesis;
+            IntBoolRes father = current.father;
+            while(father != null) {
+                if (father.op == OPEN_PAR_TOKEN) {
+                    break;
+                }
+                father = father.father;
+            }
+            if (father == null) {
+                return null;
+            }
+            return father.father;
+
+        }
 
 
         return null;
 
 
     }
-
-    /*public IntBoolRes findValueFromExpr() {
-      String s = getNextToken();
-      if (s == null) {
-      return null;
-      }
-
-      // Space symbol
-      if (c1 == ' ') {
-      return findValueFromExpr();
-      }
-
-      // Terminal symbol
-      if (Character.isDigit(c1)) {
-      try {
-      return new IntBoolRes(Integer.valueOf(s).intValue());
-      } catch (NumberFormatException x) {
-      errorMessage = "Illegal format for a number.";
-      return null;
-      }
-      }
-
-      if (c1 == 't') {
-
-      return IntBoolRes(true);
-      }
-
-      if (c1 == 'f') {
-      return IntBoolRes(false);
-      }
-
-      // int operator
-      if (c1 == '+') {
-      return IntBoolRes(IntBoolRes.INT_OP, PLUS, c1);
-      }
-
-
-
-
-      return null;
-      }*/
-
-
 
 
 }
