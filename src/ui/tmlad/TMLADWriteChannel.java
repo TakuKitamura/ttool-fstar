@@ -57,7 +57,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TMLADWriteChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADWriteChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;

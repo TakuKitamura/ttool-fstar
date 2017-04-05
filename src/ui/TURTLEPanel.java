@@ -68,7 +68,7 @@ public abstract class TURTLEPanel implements GenericTree {
     }
 
     public abstract void init();
-    public abstract String saveHeaderInXml();
+    public abstract String saveHeaderInXml(String extensionToName);
     public abstract String saveTailInXml();
 
     public TDiagramPanel panelAt(int index) {
@@ -97,16 +97,20 @@ public abstract class TURTLEPanel implements GenericTree {
     }
 
     public StringBuffer saveInXML() {
+	return saveInXML(null);
+    }
+
+    public StringBuffer saveInXML(String extensionToName) {
 
         TDiagramPanel tdp;
         StringBuffer sb = new StringBuffer();
-        sb.append(saveHeaderInXml());
+        sb.append(saveHeaderInXml(extensionToName));
         StringBuffer s;
         for(int i=0; i<panels.size(); i++) {
             tdp = (TDiagramPanel)(panels.elementAt(i));
             s = tdp.saveInXML();
             if (s == null) {
-                System.out.println("Null diagram");
+                //System.out.println("Null diagram");
                 return null;
             }
             sb.append(s);
@@ -120,13 +124,13 @@ public abstract class TURTLEPanel implements GenericTree {
 
         TDiagramPanel tdp;
         StringBuffer sb = new StringBuffer();
-        sb.append(saveHeaderInXml());
+        sb.append(saveHeaderInXml(null));
         StringBuffer s;
 
         tdp = (TDiagramPanel)(panels.elementAt(indexOfDiagram));
         s = tdp.saveInXML();
         if (s == null) {
-            System.out.println("Null diagram");
+            //System.out.println("Null diagram");
             return null;
         }
         sb.append(s);
@@ -327,7 +331,7 @@ public abstract class TURTLEPanel implements GenericTree {
 
     public void searchForText(String text, Vector<Object> elements) {
         if (panelAt(0) != null) {
-            String s = saveHeaderInXml().toLowerCase();
+            String s = saveHeaderInXml(null).toLowerCase();
             if (s.indexOf(text) >= 0) {
                 elements.add(this);
                 /*CheckingError ce = new CheckingError(CheckingError.INFO, "Diagram");

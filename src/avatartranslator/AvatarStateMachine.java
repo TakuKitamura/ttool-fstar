@@ -91,8 +91,14 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
     public void addElement(AvatarStateMachineElement _element) {
+		if (_element!=null){
         elements.add(_element);
+		//TraceManager.addDev("Adding element " + _element);
         states = null;
+		}
+		else {
+		TraceManager.addDev("NULL element found " + _element);
+		}
     }
 
     public void removeElement(AvatarStateMachineElement _element) {

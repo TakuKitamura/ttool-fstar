@@ -978,6 +978,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         GridBagConstraints c0 = new GridBagConstraints();
         latencyPanel.setLayout(gridbag0);
         infoTab.addTab("Latency", null, latencyPanel, "Latency Measurements");
+        c0.gridwidth = GridBagConstraints.REMAINDER;
+		latencyPanel.add(new JLabel("Latencies shown in number of cycles relative to the main clock"), c0);
 
         c0.gridwidth=1;
         c0.gridheight=1;

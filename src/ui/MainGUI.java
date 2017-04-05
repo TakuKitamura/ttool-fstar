@@ -7128,7 +7128,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void cloneTab(int index) {
-        String s = gtm.makeXMLFromTurtleModeling(index);
+        String s = gtm.makeXMLFromTurtleModeling(index, "_cloned");
         try {
             gtm.loadModelingFromXML(s);
             changeMade(null, -1);

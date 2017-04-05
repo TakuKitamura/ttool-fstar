@@ -135,8 +135,11 @@ public class TURTLEOSDesignPanel extends TURTLEPanel implements TURTLEDesignPane
           tabbedPane.setSelectedIndex(0);
     }
 
-    public String saveHeaderInXml() {
-        return "<Modeling type=\"TURTLE-OS Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+    public String saveHeaderInXml(String extensionToName) {
+	if (extensionToName == null) {
+	    return "<Modeling type=\"TURTLE-OS Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+	}
+	return "<Modeling type=\"TURTLE-OS Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
     }
 
     public String saveTailInXml() {

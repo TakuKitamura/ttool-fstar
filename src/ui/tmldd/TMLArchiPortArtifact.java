@@ -157,9 +157,9 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
             TGComponent tgc;
             if (tdp != null) {
                 if (mappedMemory.length() > 0) {
-                    ListIterator<TGComponent> iterator = tdp.getComponentList().listIterator();
+                    ListIterator iterator = tdp.getComponentList().listIterator();
                     while(iterator.hasNext()) {
-                        tgc = iterator.next();
+                        tgc = (TGComponent)(iterator.next());
                         if (tgc instanceof TMLArchiMemoryNode) {
                             if (tgc.getName().compareTo(mappedMemory) == 0) {
                                 GraphicLib.dashedLine(g, getX() + getWidth()/2, getY() + getHeight()/2, tgc.getX() + tgc.getWidth()/2, tgc.getY() + tgc.getHeight()/2);
@@ -200,14 +200,17 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         String tmp;
         boolean error = false;
 
-        TraceManager.addDev( "bufferParameters before opening the window: " + bufferParameters.toString() );
-        JDialogPortArtifact dialog = new JDialogPortArtifact(frame, "Setting port artifact attributes", this, mappedMemory, bufferParameters, value );
-        //dialog.setSize(700, 600);
-        GraphicLib.centerOnParent(dialog, 700, 600);
-        dialog.setVisible( true ); // blocked until dialog has been closed
+        // Get the list of all other TMLArchiPortArtifact.java and retrieve the mapped ports
+		Vector<String> portsList = this.getTDiagramPanel().getMGUI().getAllTMLInputPorts();
+
+        //TraceManager.addDev( "bufferParameters before opening the window: " + bufferParameters.toString() );
+        JDialogPortArtifact dialog = new JDialogPortArtifact( frame, "Setting port artifact attributes", this, mappedMemory, portsList, value );
+        dialog.setSize(700, 600);
+        GraphicLib.centerOnParent(dialog);
+        dialog.show(); // blocked until dialog has been closed
         mappedMemory = dialog.getMappedMemory();
         bufferParameters = dialog.getBufferParameters();        //becomes empty if closing the window without pushing Save
-        TraceManager.addDev( "bufferParameters after closing the window: " + bufferParameters.toString() );
+        //TraceManager.addDev( "bufferParameters after closing the window: " + bufferParameters.toString() );
         bufferType = bufferParameters.get( Buffer.BUFFER_TYPE_INDEX );
 
         TraceManager.addDev( "mapped Port: " + dialog.getMappedPort() );
@@ -313,7 +316,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
             NodeList nli;
             Node n1, n2;
             Element elt;
-   //         int t1id;
+            int t1id;
             String svalue = null, sname = null, sreferenceCommunication = null, stype = null;
             //String prio = null;
 
@@ -322,8 +325,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
+                    for(int j=0; i<nli.getLength(); i++) {
+                        n2 = nli.item(i);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

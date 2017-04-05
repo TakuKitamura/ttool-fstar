@@ -2032,8 +2032,8 @@ public class TML2Avatar {
 	AvatarActionOnSignal writeAction= new AvatarActionOnSignal("write", write, null);	
 	
 	AvatarStateMachine asm = fifo.getStateMachine();
-	asm.setStartState(start);
 	asm.addElement(start);
+	asm.setStartState(start);
 	asm.addElement(afterStart);
 	asm.addElement(root);
 	asm.addElement(toRead);

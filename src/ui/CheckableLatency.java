@@ -36,48 +36,17 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class DefaultText
- * Text of some windows
- * Creation: 01/12/2003
- * @version 1.1 29/01/2004
+ * Class CheckableLatency
+ * Components which can be set as a latency checkpoint
+ * Creation: 4/04/2017
+ * @version 1.0 4/04/2017
  * @author Ludovic APVRILLE
  * @see
  */
 
+
 package ui;
 
+public interface CheckableLatency  {
 
-public class DefaultText  {
-
-    public static String BUILD = "12181";
-    public static String DATE = "2017/04/05 02:01:03 CET";
-    
-    
-    public static StringBuffer sbAbout = makeAbout();
-    
-    public static String getAboutText() {
-        return new String(sbAbout);
-    }
-    
-    public static String getVersion() {
-        return "0.99-beta2"; /* Set new release March. 30th, 2017 */
-    }
-    
-    public static String getFullVersion() {
-	return getVersion() + " -- build: " + DefaultText.BUILD + " date: " + DefaultText.DATE;
-    }
-    
-    private static StringBuffer makeAbout() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("TTool version " + getFullVersion() + "\n\n");
-        sb.append("Programmers\n\tLudovic Apvrille, Daniel Knorreck, Andrea Enrici, Florian Lugou, Letitia Li - Telecom ParisTech\n");
-	sb.append("Daniela Genius - LIP6\n");
-	sb.append("Contact email: ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\tCopyright IMT - Telecom ParisTech / Ludovic Apvrille \n\n");
-        sb.append("Online documentation\n\tLudovic Apvrille - Telecom ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n\n");
-        sb.append("For more information regarding TTool, and the UML/SysML profiles supportd by TTool:\n");
-        sb.append("TTool's website: http://ttool.telecom-paristech.fr/\n\n");
-        return sb;
-    }
-		
 }

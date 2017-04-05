@@ -108,6 +108,12 @@ public class Test  {
 	nbOfPb += evalBoolInt("(1+2)==3", true, false);
 	nbOfPb += evalBoolInt("3==1+2", true, false);
     	nbOfPb += evalBoolInt("1+2==3", true, false);
+	nbOfPb += evalBoolInt("1+2+3+4+5==3+7", false, false);
+	nbOfPb += evalBoolInt("(1+2==3)==(8==4+5)", false, false);
+	nbOfPb += evalBoolInt("2*3==6", true, false);
+	nbOfPb += evalBoolInt("1*4+2==6", true, false);
+	nbOfPb += evalBoolInt("2+1*4==6", true, false);
+	//nbOfPb += evalBoolInt("1+2==3", true, false);
     	
     	System.out.println("Nb of problems found:" + nbOfPb);
 	
@@ -122,13 +128,15 @@ public class Test  {
     	
     	if ((val != expectedValue) || (err != expectedError)) {
     	
-    	System.out.println("\nUnexpected result or error-------------------->Result of " + s + " =" + val);
-    	if (bee.hasError()) {
+	    System.out.println("\nUnexpected result or error-------------------->Result of " + s + " =" + val);
+	    if (bee.hasError()) {
     		System.out.println("Error = " + bee.getFullError());
-    	}
-    	System.out.println("\n\n");
-    	return 1;
-    	}
+	    }
+	    System.out.println("\n\n");
+	    return 1;
+    	} else {
+	    System.out.println("all ok\n\n");
+	}
     	
     	return 0;
     	

@@ -101,8 +101,11 @@ public class TMLArchiPanel extends TURTLEPanel {
  
     }
     
-    public String saveHeaderInXml() {
-        return "<Modeling type=\"TML Architecture\" nameTab=\"" + mgui.getTabName(this) + "\" >\n"; 
+    public String saveHeaderInXml(String extensionToName) {
+	if (extensionToName == null) {
+	    return "<Modeling type=\"TML Architecture\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+	}
+	return "<Modeling type=\"TML Architecture\" nameTab=\"" + mgui.getTabName(this) + extensionToName +"\" >\n";
     }
     
     public String saveTailInXml() {
