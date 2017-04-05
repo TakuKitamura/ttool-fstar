@@ -73,8 +73,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
     protected String typeName = "port";
     protected String startAddress = "";
     protected String endAddress = "";
-    protected ArrayList<String> bufferParameters = new ArrayList<String>();
-    protected String bufferType = "noBuffer";
+    //protected ArrayList<String> bufferParameters = new ArrayList<String>();
+    //protected String bufferType = "noBuffer";
     protected int priority = 5; // Between 0 and 10
 
     public TMLArchiPortArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -157,9 +157,9 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
             TGComponent tgc;
             if (tdp != null) {
                 if (mappedMemory.length() > 0) {
-                    ListIterator<TGComponent> iterator = tdp.getComponentList().listIterator();
+                    ListIterator iterator = tdp.getComponentList().listIterator();
                     while(iterator.hasNext()) {
-                        tgc = iterator.next();
+                        tgc = (TGComponent)(iterator.next());
                         if (tgc instanceof TMLArchiMemoryNode) {
                             if (tgc.getName().compareTo(mappedMemory) == 0) {
                                 GraphicLib.dashedLine(g, getX() + getWidth()/2, getY() + getHeight()/2, tgc.getX() + tgc.getWidth()/2, tgc.getY() + tgc.getHeight()/2);
@@ -200,15 +200,18 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         String tmp;
         boolean error = false;
 
-        TraceManager.addDev( "bufferParameters before opening the window: " + bufferParameters.toString() );
-        JDialogPortArtifact dialog = new JDialogPortArtifact(frame, "Setting port artifact attributes", this, mappedMemory, bufferParameters, value );
-        //dialog.setSize(700, 600);
-        GraphicLib.centerOnParent(dialog, 700, 600);
-        dialog.setVisible( true ); // blocked until dialog has been closed
+        // Get the list of all other TMLArchiPortArtifact.java and retrieve the mapped ports
+		Vector<String> portsList = this.getTDiagramPanel().getMGUI().getAllTMLInputPorts();
+
+        //TraceManager.addDev( "bufferParameters before opening the window: " + bufferParameters.toString() );
+        JDialogPortArtifact dialog = new JDialogPortArtifact( frame, "Setting port artifact attributes", this, mappedMemory, portsList, value );
+        dialog.setSize(700, 600);
+        GraphicLib.centerOnParent(dialog);
+        dialog.show(); // blocked until dialog has been closed
         mappedMemory = dialog.getMappedMemory();
-        bufferParameters = dialog.getBufferParameters();        //becomes empty if closing the window without pushing Save
-        TraceManager.addDev( "bufferParameters after closing the window: " + bufferParameters.toString() );
-        bufferType = bufferParameters.get( Buffer.BUFFER_TYPE_INDEX );
+        //bufferParameters = dialog.getBufferParameters();        //becomes empty if closing the window without pushing Save
+        //TraceManager.addDev( "bufferParameters after closing the window: " + bufferParameters.toString() );
+        //bufferType = bufferParameters.get( Buffer.BUFFER_TYPE_INDEX );
 
         TraceManager.addDev( "mapped Port: " + dialog.getMappedPort() );
 
@@ -279,7 +282,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         sb.append(referenceCommunicationName);
         sb.append("\" typeName=\"" + typeName);
         sb.append("\" mappedMemory=\"" + mappedMemory );
-        if( !bufferType.equals( "" ) && !bufferType.equals( "noBuffer" ) )      {
+        /*if( !bufferType.equals( "" ) && !bufferType.equals( "noBuffer" ) )      {
             switch( Integer.parseInt( bufferType ) )    {
             case Buffer.FEP_BUFFER:
                 sb.append( FepBuffer.appendBufferParameters( bufferParameters ) );
@@ -300,7 +303,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                 sb.append( FepBuffer.appendBufferParameters( bufferParameters ) );
                 break;
             }
-        }
+        }*/
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -313,7 +316,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
             NodeList nli;
             Node n1, n2;
             Element elt;
-   //         int t1id;
+            int t1id;
             String svalue = null, sname = null, sreferenceCommunication = null, stype = null;
             //String prio = null;
 
@@ -322,8 +325,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
+                    for(int j=0; i<nli.getLength(); i++) {
+                        n2 = nli.item(i);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
@@ -338,7 +341,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                                 TraceManager.addDev( typeName );
                                 mappedMemory = elt.getAttribute("mappedMemory");
                                 TraceManager.addDev( mappedMemory );
-                                TraceManager.addDev( "bufferType = " + elt.getAttribute("bufferType") );
+                                /*TraceManager.addDev( "bufferType = " + elt.getAttribute("bufferType") );
                                 if( (elt.getAttribute("bufferType") != null) &&  (elt.getAttribute("bufferType").length() > 0) )        {
                                     bufferType = elt.getAttribute("bufferType");
                                     TraceManager.addDev( bufferType );
@@ -364,7 +367,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                                         break;
                                     }
                                 }
-                                TraceManager.addDev( "Buffer parameters of " + sname + ":\n" + bufferParameters.toString() );
+                                TraceManager.addDev( "Buffer parameters of " + sname + ":\n" + bufferParameters.toString() );*/
                                 //prio = elt.getAttribute("priority");
                             }
                             if (svalue != null) {
@@ -439,8 +442,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         return startAddress;
     }
 
-    public ArrayList<String> getBufferParameters()      {
+    /*public ArrayList<String> getBufferParameters()      {
         return bufferParameters;
-    }
+    }*/
 
 }
