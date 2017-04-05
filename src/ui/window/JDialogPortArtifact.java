@@ -52,6 +52,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
+import java.util.List;
 
 import ui.*;
 import ui.tmldd.*;
@@ -108,7 +109,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 	//Code generation
 	private JPanel panel3, panel4, panel5;
 	private JTabbedPane tabbedPane;
-	//private String HALUnitName = "";
+	private String HALUnitName = "";
 	private Vector<String> portsList;
 	private String appName = "";
     
@@ -176,7 +177,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		panel2.add( mappedPortCB, c1 );
 		
 		//Make the list of memories that are available for being mapped
-		LinkedList componentList = artifact.getTDiagramPanel().getComponentList();
+		List componentList = artifact.getTDiagramPanel().getComponentList();
 		Vector<String> memoryList = new Vector<String>();
 		for( int k = 0; k < componentList.size(); k++ )	{
 			if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
@@ -221,14 +222,14 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 
 	private String getBufferTypeFromSelectedMemory( String mappedMemory )	{
 		
-		LinkedList componentList = artifact.getTDiagramPanel().getComponentList();
+		List componentList = artifact.getTDiagramPanel().getComponentList();
 		Vector<String> list = new Vector<String>();
 		
 		for( int k = 0; k < componentList.size(); k++ )	{
 			if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
 				TMLArchiMemoryNode memoryNode = (TMLArchiMemoryNode)componentList.get(k);
 				if( memoryNode.getName().equals( mappedMemory ) )	{
-					return memoryNode.getHALUnitName();
+					return memoryNode.getName();
 				}
 			}
 		}
@@ -249,7 +250,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
       }
 	}
 
-	/*private void updateBufferPanel()	{
+	private void updateBufferPanel()	{
 
 		GridBagConstraints c1 = new GridBagConstraints();
 		GridBagConstraints c2 = new GridBagConstraints();
@@ -307,14 +308,14 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				tabbedPane.addTab( "Data", panel3 );
 				break;
 		}
-	}*/
+	}
 
     public void closeDialog() {
 
         regularClose = true;
         mappedMemory = (String) memoryCB.getItemAt( memoryCB.getSelectedIndex() );
-        //HALUnitName = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
-        /*switch ( HALUnitName )	{
+        HALUnitName = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
+        switch ( HALUnitName )	{
 					case "FEP_BUFFER":
 						if( !FepBuffer.closePanel( frame ) )	{
 							return;
@@ -345,7 +346,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 							return;
 						}
 						break;
-				}*/
+				}
         dispose();
     }
 
@@ -422,7 +423,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		return 0;
 	}
 	
-	/*public ArrayList<String> getBufferParameters()	{
+	public ArrayList<String> getBufferParameters()	{
 
 		ArrayList<String> params = new ArrayList<String>();
 		params.add( String.valueOf( HALUnitName ) );
@@ -447,7 +448,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 				break;
 		}
 		return params;
-	}*/
+	}
 
 	private void cleanPanels()	{
 		panel3.removeAll();

@@ -73,8 +73,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
     protected String typeName = "port";
     protected String startAddress = "";
     protected String endAddress = "";
-    //protected ArrayList<String> bufferParameters = new ArrayList<String>();
-    //protected String bufferType = "noBuffer";
+    protected ArrayList<String> bufferParameters = new ArrayList<String>();
+    protected String bufferType = "noBuffer";
     protected int priority = 5; // Between 0 and 10
 
     public TMLArchiPortArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -209,9 +209,9 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
         mappedMemory = dialog.getMappedMemory();
-        //bufferParameters = dialog.getBufferParameters();        //becomes empty if closing the window without pushing Save
+        bufferParameters = dialog.getBufferParameters();        //becomes empty if closing the window without pushing Save
         //TraceManager.addDev( "bufferParameters after closing the window: " + bufferParameters.toString() );
-        //bufferType = bufferParameters.get( Buffer.BUFFER_TYPE_INDEX );
+        bufferType = bufferParameters.get( Buffer.BUFFER_TYPE_INDEX );
 
         TraceManager.addDev( "mapped Port: " + dialog.getMappedPort() );
 
@@ -282,7 +282,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         sb.append(referenceCommunicationName);
         sb.append("\" typeName=\"" + typeName);
         sb.append("\" mappedMemory=\"" + mappedMemory );
-        /*if( !bufferType.equals( "" ) && !bufferType.equals( "noBuffer" ) )      {
+        if( !bufferType.equals( "" ) && !bufferType.equals( "noBuffer" ) )      {
             switch( Integer.parseInt( bufferType ) )    {
             case Buffer.FEP_BUFFER:
                 sb.append( FepBuffer.appendBufferParameters( bufferParameters ) );
@@ -303,7 +303,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                 sb.append( FepBuffer.appendBufferParameters( bufferParameters ) );
                 break;
             }
-        }*/
+        }
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -341,7 +341,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                                 TraceManager.addDev( typeName );
                                 mappedMemory = elt.getAttribute("mappedMemory");
                                 TraceManager.addDev( mappedMemory );
-                                /*TraceManager.addDev( "bufferType = " + elt.getAttribute("bufferType") );
+                                TraceManager.addDev( "bufferType = " + elt.getAttribute("bufferType") );
                                 if( (elt.getAttribute("bufferType") != null) &&  (elt.getAttribute("bufferType").length() > 0) )        {
                                     bufferType = elt.getAttribute("bufferType");
                                     TraceManager.addDev( bufferType );
@@ -367,7 +367,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                                         break;
                                     }
                                 }
-                                TraceManager.addDev( "Buffer parameters of " + sname + ":\n" + bufferParameters.toString() );*/
+                                TraceManager.addDev( "Buffer parameters of " + sname + ":\n" + bufferParameters.toString() );
                                 //prio = elt.getAttribute("priority");
                             }
                             if (svalue != null) {
@@ -442,8 +442,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         return startAddress;
     }
 
-    /*public ArrayList<String> getBufferParameters()      {
+    public ArrayList<String> getBufferParameters()      {
         return bufferParameters;
-    }*/
+    }
 
 }
