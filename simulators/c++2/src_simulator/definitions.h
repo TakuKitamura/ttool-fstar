@@ -226,6 +226,8 @@ using std::max;
 #define TAG_ENERGYc "</energy>"
 
 // Issue #4 HTML Trace Constants
+#define EXT_SEP "."
+#define CSS "css"
 #define SCHED_CSS_FILE_NAME "schedstyle.css"
 #define SCHED_HTML_DOC "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
 #define SCHED_HTML_BEG_HTML "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n"
@@ -239,56 +241,57 @@ using std::max;
 #define SCHED_HTML_END_BODY "</body>\n"
 #define SCHED_HTML_BEG_STYLE "<style>\n"
 #define SCHED_HTML_END_STYLE "</style>\n"
-#define SCHED_HTML_CSS_LINK "<link rel=\"stylesheet\" type=\"text/css\" href=\""
+#define SCHED_HTML_CSS_BEG_LINK "<link rel=\"stylesheet\" type=\"text/css\" href=\""
+#define SCHED_HTML_CSS_END_LINK "\" />\n"
 
-#define SCHED_HTML_CSS_CONTENT "table{ \
-	border-collapse: collapse; \
-	empty-cells: show; \
-	margin: 0.4cm; \
-} \
-td{ \
-	padding: 10px 5px; \
-	border: 1px solid black; \
-} \
-th{ \
-	padding: 5px; \
-	border-left: 1px dotted black; \
-	border-right: 1px dotted black; \
-} \
-.sc{ \
-	border-style: none; \
-	padding: 0px; \
-} \
-h2 { \
-	border-bottom: 1px solid #666; \
-} \
-h2 span { \
-	position: relative;  \
-	left: -0.3em;  \
-	bottom: -0.6em;  \
-	padding: 1px 0.5em;  \
-	border-style: solid;  \
-	border-width: 1px 1px 1px 0.8em; \
-	border-color: #666 #666 #666 #008; \
-	background-color: #ddd; \
-} \
-.space{border-style: none;} \
-.not{background-color: white;} \
-.t1{background-color: yellow;} \
-.t2{background-color: purple;} \
-.t3{background-color: red;} \
-.t4{background-color: silver;} \
-.t5{background-color: teal;} \
-.t6{background-color: aqua;} \
-.t7{background-color: olive;} \
-.t8{background-color: navy;} \
-.t9{background-color: maroon;} \
-.t10{background-color: lime;} \
-.t11{background-color: green;} \
-.t12{background-color: gray;} \
-.t13{background-color: fuchsia;} \
-.t14{background-color: blue;} \
-.t15{background-color: black;} \
+#define SCHED_HTML_CSS_CONTENT "table{\n \
+	border-collapse: collapse;\n \
+	empty-cells: show;\n \
+	margin: 0.4cm;\n \
+}\n \
+td{\n \
+	padding: 10px 5px;\n \
+	border: 1px solid black;\n \
+}\n \
+th{\n \
+	padding: 5px;\n \
+	border-left: 1px dotted black;\n \
+	border-right: 1px dotted black;\n \
+}\n \
+.sc{\n \
+	border-style: none;\n \
+	padding: 0px;\n \
+}\n \
+h2 {\n \
+	border-bottom: 1px solid #666;\n \
+}\n \
+h2 span {\n \
+	position: relative;\n \
+	left: -0.3em;\n \
+	bottom: -0.6em;\n \
+	padding: 1px 0.5em;\n \
+	border-style: solid;\n \
+	border-width: 1px 1px 1px 0.8em;\n \
+	border-color: #666 #666 #666 #008;\n \
+	background-color: #ddd;\n \
+}\n \
+.space{border-style: none;}\n \
+.not{background-color: white;}\n \
+.t1{background-color: yellow;}\n \
+.t2{background-color: purple;}\n \
+.t3{background-color: red;}\n \
+.t4{background-color: silver;}\n \
+.t5{background-color: teal;}\n \
+.t6{background-color: aqua;}\n \
+.t7{background-color: olive;}\n \
+.t8{background-color: navy;}\n \
+.t9{background-color: maroon;}\n \
+.t10{background-color: lime;}\n \
+.t11{background-color: green;}\n \
+.t12{background-color: gray;}\n \
+.t13{background-color: fuchsia;}\n \
+.t14{background-color: blue;}\n \
+.t15{background-color: black;}\n \
 .t16{background-color: white;}"
 
 class TMLTask;

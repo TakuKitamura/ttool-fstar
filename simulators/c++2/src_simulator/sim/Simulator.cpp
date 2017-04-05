@@ -191,7 +191,6 @@ ID Simulator::schedule2GraphDOT(std::ostream& iDOTFile, std::ostream& iAUTFile, 
   return aStartState;
 }
 
-
 void Simulator::schedule2Graph(std::string& iTraceFileName) const{
   struct timeval aBegin,aEnd;
   gettimeofday(&aBegin,NULL);
@@ -282,7 +281,7 @@ void Simulator::latencies2XML(std::ostringstream& glob, int id1, int id2) {
   }
 }
 
-void Simulator::schedule2HTML(std::string& iTraceFileName) const{
+void Simulator::schedule2HTML(std::string& iTraceFileName) const {
   struct timeval aBegin,aEnd;
   gettimeofday(&aBegin,NULL);
   std::ofstream myfile (iTraceFileName.c_str());
@@ -292,9 +291,35 @@ void Simulator::schedule2HTML(std::string& iTraceFileName) const{
     myfile << SCHED_HTML_DOC; // <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n
     myfile << SCHED_HTML_BEG_HTML; // <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n
     myfile << SCHED_HTML_BEG_HEAD; // <head>\n
-    myfile << SCHED_HTML_BEG_STYLE; // <style>\n";
-    myfile << SCHED_HTML_CSS_CONTENT;
-    myfile << SCHED_HTML_END_STYLE; // <style>\n";
+
+    const int indexSlash = iTraceFileName.find_last_of( "/" );
+    const int indexExt = iTraceFileName.find_last_of( EXT_SEP );
+    std::string cssFileName;
+
+    if ( indexExt >= 0 ) {
+    	cssFileName = iTraceFileName.substr( indexSlash + 1, indexExt - indexSlash ) + CSS;
+    }
+    else {
+    	cssFileName = iTraceFileName.substr( indexSlash + 1 ).append( EXT_SEP ).append( CSS );
+    }
+
+    const std::string cssFullFileName = iTraceFileName.substr( 0, indexSlash + 1 ) + cssFileName;
+    std::ofstream cssfile( cssFullFileName.c_str() );
+
+    if ( cssfile.is_open() ) {
+    	cssfile << SCHED_HTML_CSS_CONTENT;
+        cssfile.close();
+
+        myfile << SCHED_HTML_CSS_BEG_LINK;
+        myfile << cssFileName;
+        myfile << SCHED_HTML_CSS_END_LINK;
+    }
+    else {
+        myfile << SCHED_HTML_BEG_STYLE; // <style>\n";
+        myfile << SCHED_HTML_CSS_CONTENT;
+        myfile << SCHED_HTML_END_STYLE; // <style>\n";
+    }
+
     myfile << SCHED_HTML_META; // <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />\n
     myfile << SCHED_HTML_BEG_TITLE; // <title>
     myfile << "Scheduling";
