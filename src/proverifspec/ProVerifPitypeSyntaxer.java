@@ -117,6 +117,24 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
         this.fullSpec += ".";
     }
 
+    protected void translateEquation (ProVerifEquation _node, int _alinea) {
+        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "equation ";
+        if (_node.vars.length > 0) {
+            this.fullSpec += "forall ";
+            boolean first = true;
+            for (ProVerifVar var: _node.vars) {
+                if (first)
+                    first = false;
+                else
+                    this.fullSpec += ", ";
+                this.fullSpec += var.name + ": " + var.type;
+            }
+            this.fullSpec += "; ";
+        }
+        this.fullSpec += _node.formula + ".";
+    }
+
     protected void translateVar (ProVerifVar _node, int _alinea) {
         this.fullSpec += "\n" + this.printAlinea (_alinea);
         this.fullSpec += "free " + _node.name + ": " + _node.type;

@@ -66,6 +66,7 @@ public class AvatarMethod {
         "Key getpk(Message cert)",
         "Message sencrypt(Message msg, Key k)",
         "Message sdecrypt(Message msg, Key k)",
+        "Key DH(Key pubK, Key privK)",
         "Message hash(Message msg)",
         "Message MAC(Message msg, Key k)",
         "bool verifyMAC(Message msg, Key k, Message macmsg)",

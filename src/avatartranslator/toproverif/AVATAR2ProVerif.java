@@ -83,6 +83,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     private final static String SK_ENCRYPT = "sencrypt";
     private final static String SK_DECRYPT = "sdecrypt";
 
+    private final static String DH_DH = "DH";
+
     private final static String MAC_MAC = "MAC";
     private final static String MAC_VERIFYMAC = "verifyMAC";
 
@@ -446,6 +448,10 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         this.spec.addDeclaration (new ProVerifComment    ("Symmetric key cryptography"));
         this.spec.addDeclaration (new ProVerifFunc       (SK_ENCRYPT, new String[] {"bitstring", "bitstring"}, "bitstring"));
         this.spec.addDeclaration (new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("x", "bitstring"), new ProVerifVar ("k", "bitstring")}, SK_DECRYPT + " (" + SK_ENCRYPT + " (x, k), k) = x"));
+
+        this.spec.addDeclaration (new ProVerifComment    ("Diffie-Hellman"));
+        this.spec.addDeclaration (new ProVerifFunc       (DH_DH, new String[] {"bitstring", "bitstring"}, "bitstring"));
+        this.spec.addDeclaration (new ProVerifEquation   (new ProVerifVar[] {new ProVerifVar ("x", "bitstring"), new ProVerifVar ("y", "bitstring")}, DH_DH + " (" + PK_PK + " (x), y) = " + DH_DH + " (" + PK_PK + " (y), x)"));
 
         this.spec.addDeclaration (new ProVerifComment    ("MAC"));
         this.spec.addDeclaration (new ProVerifFunc       (MAC_MAC, new String[] {"bitstring", "bitstring"}, "bitstring"));

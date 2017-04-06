@@ -83,6 +83,11 @@ public class ProVerifPiSyntaxer extends ProVerifSyntaxer {
         this.fullSpec += ".";
     }
 
+    protected void translateEquation (ProVerifEquation _node, int _alinea) {
+        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "equation " + _node.formula + ".";
+    }
+
     protected void translateVar (ProVerifVar _node, int _alinea) {
         this.fullSpec += "\n" + this.printAlinea (_alinea);
         if (_node.priv)
