@@ -748,11 +748,11 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         //TraceManager.addDev("addMethod");
         String s = methodText.getText();
         AvatarMethod am = AvatarMethod.isAValidMethod(s);
-        
+
         AvatarMethod amtmp;
 
         if (am != null) {
-	    am.setImplementationProvided(implementationProvided.isSelected());
+            am.setImplementationProvided(implementationProvided.isSelected());
 
             // Checks whether the same method already belongs to the list
             int index = -1;
@@ -984,7 +984,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         } else {
             AvatarMethod am = methods.get (i);
             methodText.setText(am.toString());
-            TraceManager.addDev("Implementation of " + am + " is: " +  am.isImplementationProvided());
+            //TraceManager.addDev("Implementation of " + am + " is: " +  am.isImplementationProvided());
             implementationProvided.setSelected(am.isImplementationProvided());
             removeMethodButton.setEnabled(true);
             if (i > 0) {
