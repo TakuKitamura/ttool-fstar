@@ -801,6 +801,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             boolean implementation = false;
             String crypt;
 	    String attached;
+	    boolean mustAddCryptoFunctions = false;
 
 
             //System.out.println("Loading attributes");
@@ -861,14 +862,18 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                     implementation = false;
                                 }
 
-                                if (method.startsWith("aencrypt(")) {
+				//TraceManager.addDev("Method = " + method + ". Starting with aencrypt?");
+                                if (method.startsWith("bool verifyMAC(")) {
                                     isCryptoBlock = true;
+				    //TraceManager.addDev("Add crypto methods");
+				    //addCryptoElements();
                                 }
 
                                 am = AvatarMethod.isAValidMethod(method);
                                 if (am != null) {
                                     //TraceManager.addDev("Setting to " + implementation + " the implementation of " + am);
                                     am.setImplementationProvided(implementation);
+				    //addMethodIfApplicable(am);
                                     this.myMethods.add(am);
                                 }
                             }
@@ -906,6 +911,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         } catch (Exception e) {
             throw new MalformedModelingException();
         }
+
+	if (isCryptoBlock()) {
+	    addCryptoElements();
+	}
 
         if (tmpGlobalCode.trim().length() == 0) {
             globalCode = null;

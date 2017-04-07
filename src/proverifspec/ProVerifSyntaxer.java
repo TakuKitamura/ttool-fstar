@@ -185,6 +185,7 @@ public abstract class ProVerifSyntaxer {
     protected abstract void translateConst (ProVerifConst _node, int _alinea);
     protected abstract void translateFunc (ProVerifFunc _node, int _alinea);
     protected abstract void translateReduc (ProVerifReduc _node, int _alinea);
+    protected abstract void translateEquation (ProVerifEquation _node, int _alinea);
     protected abstract void translateVar (ProVerifVar _node, int _alinea);
     protected abstract void translateQueryAtt (ProVerifQueryAtt _node, int _alinea);
     protected abstract void translateQueryEv (ProVerifQueryEv _node, int _alinea);

@@ -264,7 +264,7 @@ stdrelease:
 	cp  $(TTOOL_SIMULATORS)/c++2/lib/README $(TTOOL_TARGET)/simulators/c++2/lib/
 	cp  $(TTOOL_SIMULATORS)/c++2/Makefile $(TTOOL_TARGET)/simulators/c++2
 	cp  $(TTOOL_SIMULATORS)/c++2/Makefile.defs $(TTOOL_TARGET)/simulators/c++2
-	cp  $(TTOOL_SIMULATORS)/c++2/schedstyle.css $(TTOOL_TARGET)/simulators/c++2
+#	cp  $(TTOOL_SIMULATORS)/c++2/schedstyle.css $(TTOOL_TARGET)/simulators/c++2
 	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator
 	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator
 	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/app/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator/app
@@ -393,7 +393,7 @@ define functionCommonPreinstall
 	cp  $(TTOOL_SIMULATORS)/c++2/lib/README $(1)/TTool/simulators/c++2/lib/
 	cp  $(TTOOL_SIMULATORS)/c++2/Makefile $(1)/TTool/simulators/c++2
 	cp  $(TTOOL_SIMULATORS)/c++2/Makefile.defs $(1)/TTool/simulators/c++2
-	cp  $(TTOOL_SIMULATORS)/c++2/schedstyle.css $(1)/TTool/simulators/c++2
+#	cp  $(TTOOL_SIMULATORS)/c++2/schedstyle.css $(1)/TTool/simulators/c++2
 	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.cpp $(1)/TTool/simulators/c++2/src_simulator
 	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.h $(1)/TTool/simulators/c++2/src_simulator
 	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/app/*.cpp $(1)/TTool/simulators/c++2/src_simulator/app
