@@ -88,7 +88,6 @@ import ui.cd.TCDTClass;
 import ui.cd.TCDTData;
 import ui.cd.TCDTObject;
 import ui.cd.TGConnectorAssociation;
-import ui.ncdd.NCConnectorNode;
 import ui.ncdd.NCEqNode;
 import ui.ncdd.NCRouteArtifact;
 import ui.ncdd.NCSwitchNode;
@@ -2559,9 +2558,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             public boolean checkTCDTObject (TCDTObject o, String name) {
                 return o.getObjectName ().equals (name);
             }
-            public boolean checkTCDTClass (TCDTClass o, String name) {
-                return o.getClassName ().startsWith (name);
-            }
+//            public boolean checkTCDTClass (TCDTClass o, String name) {
+//                return o.getClassName ().startsWith (name);
+//            }
         });
     }
 
@@ -2601,9 +2600,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                         return true;
                 return false;
             }
-            public boolean checkNCConnectorNode (NCConnectorNode o, String name) {
-                return o.getInterfaceName ().equals (name);
-            }
+//            public boolean checkNCConnectorNode (NCConnectorNode o, String name) {
+//                return o.getInterfaceName ().equals (name);
+//            }
         });
     }
 
@@ -2722,9 +2721,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                         return true;
                 return false;
             }
-            public boolean checkNCConnectorNode (NCConnectorNode o, String name) {
-                return o.getInterfaceName ().equals (name);
-            }
+//            public boolean checkNCConnectorNode (NCConnectorNode o, String name) {
+//                return o.getInterfaceName ().equals (name);
+//            }
         });
     }
 

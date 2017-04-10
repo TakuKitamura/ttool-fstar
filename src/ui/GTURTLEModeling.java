@@ -4308,6 +4308,10 @@ public class GTURTLEModeling {
     }
 
     public String makeXMLFromTurtleModeling(int index) {
+	return makeXMLFromTurtleModeling(index, null);
+    }
+
+    public String makeXMLFromTurtleModeling(int index, String extensionToName) {
         StringBuffer sb = new StringBuffer();
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
         sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
@@ -4321,7 +4325,7 @@ public class GTURTLEModeling {
         for(i=0; i<panels.size(); i++) {
             if ((index == -1) || (i == index)) {
                 tp = (TURTLEPanel)(panels.elementAt(i));
-                s = tp.saveInXML();
+                s = tp.saveInXML(extensionToName);
                 if (s == null) {
                     return null;
                 }

@@ -163,9 +163,11 @@ public class DiplodocusMethodologyPanel extends TURTLEPanel {
 
 
 
-
-    public String saveHeaderInXml() {
-        return "<Modeling type=\"Diplodocus Methodology\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+    public String saveHeaderInXml(String extensionToName) {
+	if (extensionToName == null) {
+	    return "<Modeling type=\"Diplodocus Methodology\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+	}
+	return "<Modeling type=\"Diplodocus Methodology\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
     }
 
     public String saveTailInXml() {

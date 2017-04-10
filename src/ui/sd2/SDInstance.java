@@ -71,15 +71,15 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     public SDInstance(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-	width = (int)(10 * tdp.getZoom());
-        height = (int)(500 * tdp.getZoom());
-	minWidth = (int)(10 * tdp.getZoom());
-	maxWidth = (int)(10 * tdp.getZoom());
-	minHeight = (int)(250 * tdp.getZoom());
-	maxHeight = (int)(1500 * tdp.getZoom());
-	//TraceManager.addDev("Init tgc= " + this + " minHeight=" + minHeight);
-	//TraceManager.addDev("Init tgc= " + this + " maxHeight=" + maxHeight);
-	oldScaleFactor = tdp.getZoom();
+		width = (int)(10 * tdp.getZoom());
+	    height = (int)(500 * tdp.getZoom());
+	    minWidth = (int)(10 * tdp.getZoom());
+		maxWidth = (int)(10 * tdp.getZoom());
+		minHeight = (int)(250 * tdp.getZoom());
+		maxHeight = (int)(1500 * tdp.getZoom());
+		//TraceManager.addDev("Init tgc= " + this + " minHeight=" + minHeight);
+		//TraceManager.addDev("Init tgc= " + this + " maxHeight=" + maxHeight);
+		oldScaleFactor = tdp.getZoom();
 
 	
         //makeTGConnectingPoints();
@@ -95,13 +95,12 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
         userResizable = true;
 
         value = "Instance name";
-	name = "instance";
+        name = "instance";
         isActor = false;
 
         myImageIcon = IconManager.imgic500;
     }
 
-    
     public void internalDrawing(Graphics g) {
 
         if( !tdp.isScaled() ) {
@@ -168,58 +167,57 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     }
 
     public int spacePt() {
-	return (int)(Math.floor(spacePt*tdp.getZoom()));
+    	return (int)(Math.floor(spacePt*tdp.getZoom()));
     }
 
     public double spacePtDouble() {
-	return spacePt*tdp.getZoom();
+    	return spacePt*tdp.getZoom();
     }
 
     public void rescale(double scaleFactor){
 	//TraceManager.addDev("my rescale");
 	
-	super.rescale(scaleFactor);
+    	super.rescale(scaleFactor);
 
 	// update TG Connecting Points
-	int yh = spacePt();
+	//int yh = spacePt();
 	/*for(int i=0; i<nbConnectingPoint; i++, yh+=spacePt()) {
 	    connectingPoint[i].setCdX(width/2);
 	    connectingPoint[i].setCdY(yh);
 	    }*/
 
-	//height = Math.max(getMinHeightSize(), height);
-	hasBeenResized();
+		//height = Math.max(getMinHeightSize(), height);
+		hasBeenResized();
     }
 
     public void computeMinHeight() {
-	height = Math.max(getMinHeightSize(), height);
+    	height = Math.max(getMinHeightSize(), height);
     }
 
     public int getNbOfConnectingPoints() {
-	return 100;
+    	return 100;
 	//return (int)(((height - (2 * spacePt())) / spacePt()));
     }
 
 
     public void makePortMessage() {
-	int nbOfInternal = 30;
-	for(int i=0; i<nbOfInternal; i ++) {
-	    double ratio = ((i)/(double)(nbOfInternal));//+(spacePt*tdp.getZoom()/height);
-	    SDPortForMessage port = new SDPortForMessage(100, 200+ (int)(y + ratio*height), tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-	    
-	    //tdp.addComponent(port, x+width/2, y+100, true, true);
-	    
-	    //TraceManager.addDev("Adding internal components");
-	    if (!addSwallowedTGComponent(port, x+width/2, (int)(5*spacePt*tdp.getZoom()) + (int)(y + ratio*height))) {
-		TraceManager.addDev("Adding PortForMessage failed");
-	    } else {
-		port.wasSwallowed();
-	    }
-	    port.setMoveCd(0, (int)(10*spacePt*tdp.getZoom()) + (int)(ratio*height), false);
-	    //TraceManager.addDev("Nb of internal components:" + nbInternalTGComponent);
+    	int nbOfInternal = 30;
+    	
+    	for(int i=0; i<nbOfInternal; i ++) {
+    		double ratio = ((i)/(double)(nbOfInternal));//+(spacePt*tdp.getZoom()/height);
+    		SDPortForMessage port = new SDPortForMessage(100, 200+ (int)(y + ratio*height), tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
 
-	}
+    		//tdp.addComponent(port, x+width/2, y+100, true, true);
 
+    		//TraceManager.addDev("Adding internal components");
+    		if (!addSwallowedTGComponent(port, x+width/2, (int)(5*spacePt*tdp.getZoom()) + (int)(y + ratio*height))) {
+    			TraceManager.addDev("Adding PortForMessage failed");
+    		} else {
+    			port.wasSwallowed();
+    		}
+    		port.setMoveCd(0, (int)(10*spacePt*tdp.getZoom()) + (int)(ratio*height), false);
+    		//TraceManager.addDev("Nb of internal components:" + nbInternalTGComponent);
+    	}
     }
 
     /*private void makeTGConnectingPoints() {

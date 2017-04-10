@@ -145,9 +145,11 @@ public class AvatarRequirementPanel extends TURTLEPanel {
         return true;
     }
 
-
-    public String saveHeaderInXml() {
-        return "<Modeling type=\"Avatar Requirement\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+    public String saveHeaderInXml(String extensionToName) {
+        if (extensionToName == null) {
+            return "<Modeling type=\"Avatar Requirement\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        }
+        return "<Modeling type=\"Avatar Requirement\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
     }
 
     public String saveTailInXml() {

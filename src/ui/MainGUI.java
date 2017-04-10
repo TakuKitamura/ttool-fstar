@@ -151,8 +151,6 @@ import ui.osad.TURTLEOSActivityDiagramPanel;
 import ui.prosmd.ProactiveSMDPanel;
 import ui.req.Requirement;
 import ui.req.RequirementDiagramPanel;
-import ui.sd.*;
-import ui.sd2.*;
 import ui.tmlad.TMLActivityDiagramPanel;
 import ui.tmlcd.TMLTaskDiagramPanel;
 import ui.tmlcompd.TMLCCompositeComponent;
@@ -7130,7 +7128,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void cloneTab(int index) {
-        String s = gtm.makeXMLFromTurtleModeling(index);
+        String s = gtm.makeXMLFromTurtleModeling(index, "_cloned");
         try {
             gtm.loadModelingFromXML(s);
             changeMade(null, -1);

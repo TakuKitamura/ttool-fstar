@@ -38,7 +38,7 @@
    /**
    * Class SysmlsecMethodologyPanel
    * Managenemt of the sysmlsec methodology panels
-   * Creation: 26/0&/2016
+   * Creation: 26/01/2016
    * @version 1.1 26/01/2016
    * @author Ludovic APVRILLE
    * @see MainGUI
@@ -280,9 +280,11 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
 
 
 
-
-    public String saveHeaderInXml() {
-        return "<Modeling type=\"Sysmlsec Methodology\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+    public String saveHeaderInXml(String extensionToName) {
+	if (extensionToName == null) {
+	    return "<Modeling type=\"Sysmlsec Methodology\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+	}
+	return "<Modeling type=\"Sysmlsec Methodology\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
     }
 
     public String saveTailInXml() {

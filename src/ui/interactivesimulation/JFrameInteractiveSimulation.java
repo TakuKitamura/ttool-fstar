@@ -69,6 +69,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.Collections;
@@ -81,6 +83,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
@@ -102,7 +105,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import java.text.*;
 
 import launcher.LauncherException;
@@ -127,11 +129,8 @@ import ui.ConfigurationTTool;
 import ui.IconManager;
 import ui.MainGUI;
 import ui.TGComponent;
-import ui.graph.*;
 
-
-
-public  class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener, ChangeListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
+public class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener, ChangeListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 
     protected static final int NB_OF_TRANSACTIONS = 10;
 
@@ -224,7 +223,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     JSlider minimalCommandCoverage, minimalBranchCoverage;
     JLabel labelMinimalCommandCoverage, labelMinimalBranchCoverage;
     private String lastGraphName;
-    private RG lastRG;
+   // private RG lastRG;
     
     // Tasks
     JPanel taskPanel;
@@ -253,12 +252,12 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
     //Latency
     JPanel latencyPanel;
-    JComboBox transaction1;
-    JComboBox transaction2;
+    JComboBox<String> transaction1;
+    JComboBox<String> transaction2;
     JButton addLatencyCheckButton;
     JButton updateLatencyButton;
     LatencyTableModel latm;
-    public Vector checkedTransactions = new Vector();
+    public Vector<String> checkedTransactions = new Vector<String>();
     private JScrollPane jspLatency;
 
     private int mode = 0;
@@ -268,9 +267,9 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     private boolean gotTimeAnswerFromServer = false;
 
     // For managing actions
-    public      InteractiveSimulationActions [] actions;
-    public      MouseHandler mouseHandler;
-    public  KeyListener keyHandler;
+    public InteractiveSimulationActions [] actions;
+    public MouseHandler mouseHandler;
+    public KeyListener keyHandler;
 
     private TMLMapping tmap;
     private int hashCode;
@@ -282,11 +281,12 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     private Hashtable <Integer, Integer> runningTable;
     private Hashtable <String, String> diagramTable;
 
-    private ArrayList<Point> points;
-    private HashMap<String, String> checkTable=new HashMap<String, String>();
-    private HashMap<String, ArrayList<String>> transTimes = new HashMap<String, ArrayList<String>>();
-    private Vector latencies=new Vector();
-    public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap, ArrayList<Point> _points) {
+    private List<Point> points;
+    private Map<String, String> checkTable = new HashMap<String, String>();
+    private Map<String, List<String>> transTimes = new HashMap<String, List<String>>();
+    private Vector<SimulationLatency> latencies = new Vector<SimulationLatency>();
+    
+    public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap, List<Point> _points) {
         super(_title);
 
         // f = _f;
@@ -985,13 +985,13 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
         c0.gridheight=1;
         latencyPanel.add(new JLabel("Checkpoint 1:"),c0);
         c0.gridwidth = GridBagConstraints.REMAINDER;
-        transaction1 = new JComboBox(checkedTransactions);
+        transaction1 = new JComboBox<String>(checkedTransactions);
         latencyPanel.add(transaction1, c0);
 
         c0.gridwidth=1;
         latencyPanel.add(new JLabel("Checkpoint 2:"),c0);
         c0.gridwidth= GridBagConstraints.REMAINDER;
-        transaction2 = new JComboBox(checkedTransactions);
+        transaction2 = new JComboBox<String>(checkedTransactions);
         latencyPanel.add(transaction2, c0);
 
 
@@ -1473,11 +1473,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
         int k;
 
-        //System.out.println("toto0");
-
         try {
             for(int j=0; j<diagramNl.getLength(); j++) {
-                //System.out.println("Ndes: " + j);
                 node = diagramNl.item(j);
 
                 if (node == null) {
@@ -1650,7 +1647,6 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                             nl = elt.getElementsByTagName("extime");
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 node0 = nl.item(0);
-                                //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
                                 extime =  node0.getTextContent();
                             }
 
@@ -1658,7 +1654,6 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                             nl = elt.getElementsByTagName("tskstate");
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 node0 = nl.item(0);
-                                //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
                                 state =  node0.getTextContent();
                                 //TraceManager.addDev("TASK STATE: " + state);
                             }
@@ -1670,12 +1665,13 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
 
                             if ((id != null) && (command != null)) {
-                                if (nextCommand ==null) {
+                                
+                            	if (nextCommand ==null) {
                                     nextCommand = "-1";
                                 }
                                 updateRunningCommand(id, command, progression, startTime, finishTime, nextCommand, transStartTime, transFinishTime, state);
+
                                 if (checkTable.containsKey(command)){
-                                    //System.out.println("added trans " + command + " " +finishTime);
                                     if (!transTimes.containsKey(command)){
                                         ArrayList<String> timeList = new ArrayList<String>();
                                         transTimes.put(command, timeList);
@@ -1683,8 +1679,6 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                                     if (!transTimes.get(command).contains(finishTime)){
                                         transTimes.get(command).add(finishTime);
                                     }
-                                    //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-
                                 }
                             }
 
@@ -1692,10 +1686,8 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                                 updateOpenDiagram(name, command, progression, startTime, finishTime, transStartTime, transFinishTime);
                             }
 
-
-
-
                             nl = elt.getElementsByTagName("var");
+
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 idvar = null;
                                 value = null;
@@ -1714,59 +1706,6 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
                             }
                         }
 
-                        //System.out.println("toto1");
-
-
-                        /*nl = elt.getElementsByTagName(SIMULATION_TRANS);
-                          if (nl.getLength() == 0) {
-                          //updateTableOfTransactions(0);
-                          //ttm.fireTableStructureChanged();
-                          } else {
-                          System.out.println("toto1.1");
-                          for(int kk=0; kk<nl.getLength(); kk++) {
-                          node0 = nl.item(kk);
-                          elt0 = (Element)node0;
-
-
-                          if (elt0 != null) {
-                          TraceManager.addDev("transinfo found: " + elt0);
-                          SimulationTransaction st = new SimulationTransaction();
-                          st.nodeType = elt0.getAttribute("deviceid");
-
-                          st.deviceName = elt0.getAttribute("devicename");
-                          String commandT = elt0.getAttribute("command");
-                          //TraceManager.addDev("command found: " + commandT);
-                          if (commandT != null) {
-                          int index = commandT.indexOf(": ");
-                          if (index == -1){
-                          st.taskName = "Unknown";
-                          st.command = commandT;
-                          } else {
-                          st.taskName = commandT.substring(0, index).trim();
-                          st.command = commandT.substring(index+1, commandT.length()).trim();
-                          }
-                          }
-                          //TraceManager.addDev("Command handled");
-                          st.startTime = elt0.getAttribute("starttime");
-                          st.length = elt0.getAttribute("length");
-                          st.virtualLength = elt0.getAttribute("virtuallength");
-                          st.channelName = elt0.getAttribute("ch");
-
-                          if (trans == null) {
-                          trans = new Vector<SimulationTransaction>();
-                          }
-
-                          trans.add(st);
-                          //updateTableOfTransactions(trans.size()-1);
-                          //TraceManager.addDev("Nb of trans:" + trans.size());
-                          }
-                          //ttm.fireTableStructureChanged();
-                          //updateTableOfTransactions(trans.size()-1);
-                          }
-                          TraceManager.addDev("Transactions updated");
-                          //ttm.setData(trans);
-
-                          }*/
                         if (elt.getTagName().compareTo(SIMULATION_TRANS) == 0) {
 
                             SimulationTransaction st = new SimulationTransaction();
@@ -2220,13 +2159,25 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
     public void sendSaveTraceCommand(String format) {
         String param = saveFileName.getText().trim();
-        if (saveDirName.getText().length() > 0) {
-            param = saveDirName.getText() + File.separator + param;
+        
+        if ( param.isEmpty() ) {
+        	final String message = "Please enter a file name for the trace.";
+        	JOptionPane.showMessageDialog( this, message, "Output File Name not Specified", JOptionPane.ERROR_MESSAGE );
+        	error( message );
         }
-        if (param.length() >0) {
-            sendCommand("save-trace-in-file" + " " + format + " " + param);
-        } else {
-            error("Wrong parameter: must be a file name");
+        else {
+        	final String directory = saveDirName.getText().trim();
+        	
+	        if ( !directory.isEmpty() ) {
+	            param = directory + File.separator + param;
+	        }
+
+	        // DB: now useless check
+//	        if (param.length() >0) {
+	        sendCommand( "save-trace-in-file" + " " + format + " " + param );
+//	        } else {
+//	            error("Wrong parameter: must be a file name");
+//	        }
         }
     }
 
@@ -2270,7 +2221,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
     private void addGraph() {
 	TraceManager.addDev("Adding graph");
-	lastRG = mgui.setLastRGDiplodocus(lastGraphName);
+	/*lastRG =*/ mgui.setLastRGDiplodocus(lastGraphName);
     }
 
     private String getCurrentRGName() {
@@ -2907,7 +2858,7 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
             mgui.resetTransactions();
             mgui.resetStatus();
             sendCommand("reset");
-            transTimes=new HashMap<String, ArrayList<String>>();
+            transTimes=new HashMap<String, List<String>>();
             processLatency();
             askForUpdate();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
@@ -3154,23 +3105,17 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
 
         return tmap.makeVariableIDs(index);
     }
+
     public void fillCheckedTrans(){
         if (tmap==null){
             return;
         }
 
-        //System.out.println(tmap.getTMLModeling().getCheckedComps());
-       
         for (TGComponent tgc: tmap.getTMLModeling().getCheckedComps().keySet()){
-            //System.out.println(tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID() + " "+s);
             TraceManager.addDev(tmap.getTMLModeling().getCheckedComps().get(tgc)+" (ID: " + tgc.getDIPLOID() + ")");
 			checkedTransactions.add(tmap.getTMLModeling().getCheckedComps().get(tgc)+" (ID: " + tgc.getDIPLOID() + ")");
             checkTable.put(Integer.toString(tgc.getDIPLOID()),tmap.getTMLModeling().getCheckedComps().get(tgc)+" (ID: " + tgc.getDIPLOID() + ")");
-        //    checkedTransactions.add(s+"(ID: " + tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()+")");
-          //  checkTable.put(Integer.toString(tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()),s+"(ID: " + tmap.getTMLModeling().getCheckedComps().get(s).getDIPLOID()+")");
         }
-        //System.out.println(checkedTransactions);
-        //System.out.println(checkTable);
     }
     public void activeBreakPoint(boolean active) {
         if (mode == STARTED_AND_CONNECTED) {
@@ -3190,6 +3135,4 @@ public  class JFrameInteractiveSimulation extends JFrame implements ActionListen
     public Vector<SimulationTransaction> getListOfRecentTransactions() {
         return trans;
     }
-
-
 } // Class

@@ -199,8 +199,12 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
     }
 
 
-    public String saveHeaderInXml() {
-        return "<Modeling type=\"Avatar Analysis\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+    public String saveHeaderInXml(String extensionToName) {
+	if (extensionToName == null) {
+	    return "<Modeling type=\"Avatar Analysis\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+	}
+	return "<Modeling type=\"Avatar Analysis\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+	
     }
 
     public String saveTailInXml() {

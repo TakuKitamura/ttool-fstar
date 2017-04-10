@@ -81,7 +81,7 @@ public class SDActionState extends TGCScalableOneLineText implements SwallowedTG
     
     public void internalDrawing(Graphics g) {
         w  = g.getFontMetrics().stringWidth(value);
-	int h = g.getFontMetrics().getHeight();
+//	int h = g.getFontMetrics().getHeight();
         int w1 = Math.max(minWidth, w + 2 * textX);
         if ((w1 != width) && (!tdp.isScaled())) {
             width = w1;
