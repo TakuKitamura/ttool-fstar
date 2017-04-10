@@ -1863,18 +1863,20 @@ public class GTURTLEModeling {
         HashMap<TMLTask, java.util.List<String>> nonceInChannels = new HashMap<TMLTask, java.util.List<String>>();
         HashMap<TMLTask, java.util.List<String>> macOutChannels = new HashMap<TMLTask, java.util.List<String>>();
         HashMap<TMLTask, java.util.List<String>> macInChannels = new HashMap<TMLTask, java.util.List<String>>();
-
+		System.out.println("mapping " + map.getSummaryTaskMapping());
         ArrayList<String> nonAuthChans = new ArrayList<String>();
         ArrayList<String> nonSecChans = new ArrayList<String>();
 
         if (map==null){
+			TraceManager.addDev("No mapping");
             return null;
         }
         //Perform ProVerif Analysis
-        TML2Avatar t2a = new TML2Avatar(tmap,false,true);
+        TML2Avatar t2a = new TML2Avatar(map,false,true);
         AvatarSpecification avatarspec = t2a.generateAvatarSpec("1");
-
+		drawPanel(avatarspec, mgui.getFirstAvatarDesignPanelFound());
         if (avatarspec == null){
+			TraceManager.addDev("No avatar spec");
             return null;
         }
 
@@ -1908,7 +1910,7 @@ public class GTURTLEModeling {
 
         }
         catch (Exception e){
-            TraceManager.addDev("ProVerif Analysis Failed");
+            System.out.println("ProVerif Analysis Failed " + e);
         }
         TMLModeling tmlmodel = map.getTMLModeling();
         java.util.List<TMLChannel> channels = tmlmodel.getChannels();
@@ -1923,6 +1925,10 @@ public class GTURTLEModeling {
 
         TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
         int ind = gui.tabs.indexOf(tmlcdp);
+		if (ind==-1){
+			TraceManager.addDev("No Component Design Panel");
+			return null;
+		}
         String tabName = gui.getTitleAt(tmlcdp);
         gui.cloneRenameTab(ind, name);
         TMLComponentDesignPanel t = (TMLComponentDesignPanel) gui.tabs.get(gui.tabs.size()-1);
@@ -1987,6 +1993,7 @@ public class GTURTLEModeling {
                 }
             }
         }
+		System.out.println("need to secure " + secInChannels + " " +secOutChannels);
         TraceManager.addDev("macoutchans "+ macOutChannels);
         TraceManager.addDev("macinchans " +macInChannels);
         TraceManager.addDev("nonsecin " +secInChannels);
@@ -2256,7 +2263,7 @@ public class GTURTLEModeling {
 
                             }
                         }
-                        if (tg.getY() >= ypos && tg!=dec){
+                        if (tg.getY() > ypos && tg!=dec){
 
                             tg.setCd(tg.getX(), tg.getY()+yShift);
                         }

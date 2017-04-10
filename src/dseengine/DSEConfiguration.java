@@ -975,7 +975,7 @@ public class DSEConfiguration implements Runnable  {
 	
 	public int printAllResults(String _arguments, boolean _debug, boolean _optimize) {
 		TraceManager.addDev("Printing all results");
-		String sres;
+		String sres="";
 		DSESimulationResult res;
 		
 		if (dsemapresults != null) {
@@ -986,6 +986,7 @@ public class DSEConfiguration implements Runnable  {
 					sres =  DSESimulationResult.getAllExplanationHeader() + "\n";
 					sres += "#Mapping description: " + dsemapresults.getMapping(i).getSummaryTaskMapping() + "\n";
 					sres += res.getAllComments() + "\n" + res.getAllResults();
+					System.out.println("saving file " + pathToResults + "alldseresults_mapping" + cpt + ".txt");
 					FileUtils.saveFile(pathToResults + "alldseresults_mapping" + cpt + ".txt", sres);
 				} catch (Exception e){
 					TraceManager.addDev("Error when saving results file" + e.getMessage());
@@ -1167,7 +1168,7 @@ public class DSEConfiguration implements Runnable  {
 			results.computeResults();
 			
 			TraceManager.addDev("Results: #" + resultsID + "\n" +  results.getWholeResults());
-			
+			overallResults=results.getWholeResults();
 			// Saving to file
 			try {
 				FileUtils.saveFile(pathToResults + "summary" + resultsID + ".txt", DSESimulationResult.getExplanationHeader() + "\n" + results.getAllComments() + "\n" + results.getWholeResults());
@@ -1367,11 +1368,14 @@ public class DSEConfiguration implements Runnable  {
 
 		 if (addSecurity){
 		     System.out.println("ADDING SECURITY TO MAPPING " +(cpt-1));
-		     tmla.tmlap = tmlap;
-		     tmla.setTMLDesignPanel(tmlcdp);
+
 		     TMLArchiPanel newArch = drawMapping(tmla, "securedMapping"+(cpt-1));
 		     GTMLModeling gtml =new GTMLModeling(newArch, true);
 		     tmla = gtml.translateToTMLMapping();
+		     tmla.tmlap = tmlap;
+			tmlcdp = (TMLComponentDesignPanel) mainGUI.tabs.get(0);
+		     tmla.setTMLDesignPanel(tmlcdp);
+			 System.out.println("tmlcdp " + tmlcdp);
 		     //
 		     //Repeat for secured mapping
 		     TMLMapping secMapping = mainGUI.gtm.autoSecure(mainGUI, "mapping" +(cpt-1),tmla, newArch, encComp, overhead, decComp,true,false);
@@ -1608,12 +1612,32 @@ public class DSEConfiguration implements Runnable  {
 		}
 		
 		computeCoresOfMappings(maps);
-		
+		addMemories(maps);
 		TraceManager.addDev("Mapping generated: " + maps.size());
 		
 		return maps;
 	}
-	
+	private void addMemories(Vector<TMLMapping> maps){
+		for (TMLMapping map: maps){
+			TMLArchitecture arch = map.getArch();
+			ArrayList<HwExecutionNode> nodes =  map.getNodes();
+			for (HwExecutionNode node:nodes){
+				HwBus bus = new HwMemory("bus " +node.getName());
+				HwMemory mem = new HwMemory("memory " +node.getName());
+				HwLink hwlink = new HwLink("link_memory" +node.getName() + "_to_memorybus);
+				hwlink.bus=bus;	
+				hwlink.hwnode=node;
+				HwLink hwlink2 = new HwLink("link_" +node.getName() + "_to_memorybus);
+				hwlink2.bus=bus;
+				hwlink2.hwnode=mem;
+				arch.addHwNode(mem);
+				arch.addHwNode(bus);
+				arch.addHwLink(hwlink);
+				arch.addHwLink(hwlink2);
+		
+			}
+		}
+	}
 	private void generateMappings(TMLModeling _tmlm, Vector<TMLMapping> maps, int nbOfCPUs) {
 		List<TMLTask> tasks = _tmlm.getTasks();
 		CPUWithTasks cpus_tasks[] = new CPUWithTasks[nbOfCPUs];
