@@ -1450,7 +1450,9 @@ public class DSEConfiguration implements Runnable  {
 	x=10;
 	for (HwNode node:hwnodes){
 	   if (node instanceof HwBus){
+		HwBus hwbus = (HwBus) node;
 		TMLArchiBUSNode bus = new TMLArchiBUSNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap);
+		bus.setPrivacy(hwbus.privacy);
 		x+=300;
 		bus.setName(node.getName());
 		ap.addComponent(bus,x,y,false,true);
@@ -1620,14 +1622,15 @@ public class DSEConfiguration implements Runnable  {
 	private void addMemories(Vector<TMLMapping> maps){
 		for (TMLMapping map: maps){
 			TMLArchitecture arch = map.getArch();
-			ArrayList<HwExecutionNode> nodes =  map.getNodes();
-			for (HwExecutionNode node:nodes){
-				HwBus bus = new HwMemory("bus " +node.getName());
+			ArrayList<HwNode> nodes =  arch.getCPUs();
+			for (HwNode node:nodes){
+				HwBus bus = new HwBus("bus " +node.getName());
+				bus.privacy=1;
 				HwMemory mem = new HwMemory("memory " +node.getName());
-				HwLink hwlink = new HwLink("link_memory" +node.getName() + "_to_memorybus);
+				HwLink hwlink = new HwLink("link_memory" +node.getName() + "_to_memorybus");
 				hwlink.bus=bus;	
 				hwlink.hwnode=node;
-				HwLink hwlink2 = new HwLink("link_" +node.getName() + "_to_memorybus);
+				HwLink hwlink2 = new HwLink("link_" +node.getName() + "_to_memorybus");
 				hwlink2.bus=bus;
 				hwlink2.hwnode=mem;
 				arch.addHwNode(mem);
