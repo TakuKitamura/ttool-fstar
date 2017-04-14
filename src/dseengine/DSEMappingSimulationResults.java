@@ -154,6 +154,8 @@ public class DSEMappingSimulationResults  {
 		
 		return index;
 	}
+
+
 	
 	public int getMappingWithHighestAverageCPUUsage() {
 		if (results.size() == 0) {
@@ -589,7 +591,6 @@ public class DSEMappingSimulationResults  {
 
 		for(DSESimulationResult dserr: results) {
 			valuetmp = dserr.getAverageCycleDuration();
-			System.out.println(currentIndex + " "+ valuetmp);
 			if (valuetmp > value) {
 				value = valuetmp;
 				index = currentIndex;
@@ -759,6 +760,31 @@ public class DSEMappingSimulationResults  {
 		return index;
 	}
 	
+	public long getMaxCycleDuration(){
+		long value = 0;
+		long valuetmp;
+		for (DSESimulationResult dserr: results){
+			valuetmp = dserr.getMaxCycleDuration();
+			if (valuetmp > value){
+				value = valuetmp;
+			}
+		}
+		return value;
+	}
+	
+	public long getMinCycleDuration(){
+		long value = Long.MAX_VALUE;
+		long valuetmp;
+		for (DSESimulationResult dserr: results){
+			valuetmp = dserr.getMinCycleDuration();
+			if (valuetmp< value){
+				value = valuetmp;
+			}
+		}
+		return value;
+	}
+
+
 	// For ranking
 	public long getMinSimulationDuration(int index) {
 		return results.get(index).getMinSimulationDuration();

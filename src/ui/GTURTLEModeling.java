@@ -1124,6 +1124,7 @@ public class GTURTLEModeling {
 		public static final int DEC=3;
 		public static final int AENC=4;
 		public String task;
+		public String securityContext="";
 		public int secType;
 		public HSMChannel (String n, String t, int type){
 			name=n;	
@@ -1243,6 +1244,7 @@ public class GTURTLEModeling {
 								type=HSMChannel.MAC;
 							}
 							HSMChannel ch=new HSMChannel(writeChannel.getChannelName(), compName, type);
+							ch.securityContext="hsmSec_"+writeChannel.getChannelName();
 							fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
 							if (fromStart!=null){
 								if (type!=-1){
@@ -1267,6 +1269,7 @@ public class GTURTLEModeling {
 									type=HSMChannel.MAC;
 								}
 								HSMChannel ch = new HSMChannel(writeChannel.getChannelName(), compName, type);
+								ch.securityContext=writeChannel.securityContext;
 								compChannels.put(writeChannel.getChannelName(),ch);
 								//chanNames.add(writeChannel.getChannelName()+compName);
 							}
@@ -1280,6 +1283,7 @@ public class GTURTLEModeling {
 								if(nonSecChans.contains(compName+"__"+readChannel.getChannelName()+"_chData")){
 									channelInstances.add(tg);
 									HSMChannel ch = new HSMChannel(readChannel.getChannelName(), compName, HSMChannel.DEC);
+									ch.securityContext="hsmSec_"+readChannel.getChannelName();
 									compChannels.put(readChannel.getChannelName(),ch);
 								}
 							}
@@ -1289,33 +1293,32 @@ public class GTURTLEModeling {
 							if (fromStart!=null){
 								channelInstances.add(tg);
 								HSMChannel ch = new HSMChannel(readChannel.getChannelName(), compName, HSMChannel.DEC);
+								ch.securityContext=readChannel.securityContext;
 								compChannels.put(readChannel.getChannelName(),ch);
 							}
 						}
 					}
 					if (tg instanceof TMLADEncrypt){
 						TMLADEncrypt enc = (TMLADEncrypt) tg;
-						//	  if (!enc.securityContext.contains("hsm")){
 						secOperators.add(tg);
 						//}
 					}
 					if (tg instanceof TMLADDecrypt){
 						TMLADDecrypt dec = (TMLADDecrypt) tg;
-						//	  if (!dec.securityContext.contains("hsm")){
 						secOperators.add(tg);
 						//}
 					}
 				}
 			//	System.out.println("compchannels " +compChannels);
 				List<ChannelData> hsmChans = new ArrayList<ChannelData>();
-				ChannelData ch = new ChannelData("startHSM_"+cpuName,false,false);
-				hsmChans.add(ch);
+				ChannelData chd = new ChannelData("startHSM_"+cpuName,false,false);
+				hsmChans.add(chd);
 				for (String s: compChannels.keySet()){
 					hsmChannels.put(s,compChannels.get(s));
-					ch = new ChannelData("data_"+s+compChannels.get(s).task,false,true);
-					hsmChans.add(ch);
-					ch = new ChannelData("retData_"+s+compChannels.get(s).task,true,true);
-					hsmChans.add(ch);
+					chd = new ChannelData("data_"+s+compChannels.get(s).task,false,true);
+					hsmChans.add(chd);
+					chd = new ChannelData("retData_"+s+compChannels.get(s).task,true,true);
+					hsmChans.add(chd);
 				}
 				for (ChannelData hsmChan: hsmChans){
 					TMLCChannelOutPort originPort =new TMLCChannelOutPort(comp.getX(), comp.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, hsm, tcdp);
@@ -1356,14 +1359,13 @@ public class GTURTLEModeling {
 				//Add actions before Write Channel
 				for (TGComponent chan: channelInstances){
 					String chanName="";
-					if (chan instanceof TMLADWriteChannel){
-						TMLADWriteChannel writeChannel = (TMLADWriteChannel) chan;
-						chanName=writeChannel.getChannelName();
-						writeChannel.securityContext = "hsmSec_"+chanName;
-					}
-					else {
+					if (!(chan instanceof TMLADWriteChannel)){
 						continue;
 					}
+					TMLADWriteChannel writeChannel = (TMLADWriteChannel) chan;
+					chanName=writeChannel.getChannelName();
+					HSMChannel ch = hsmChannels.get(chanName);
+					writeChannel.securityContext = ch.securityContext;
 					xpos = chan.getX();
 					ypos = chan.getY();
 					fromStart = tad.findTGConnectorEndingAt(chan.getTGConnectingPointAtIndex(0));
@@ -1396,7 +1398,7 @@ public class GTURTLEModeling {
 					//Add write channel operator
 					TMLADWriteChannel wr = new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					wr.setChannelName("data_"+chanName+compName);
-					wr.securityContext = "hsmSec_"+chanName;
+					wr.securityContext = ch.securityContext;
 					tad.addComponent(wr, xpos, ypos+yShift, false,true);
 
 
@@ -1411,7 +1413,7 @@ public class GTURTLEModeling {
 					yShift+=60;
 					TMLADReadChannel rd = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					rd.setChannelName("retData_"+chanName+compName);
-					rd.securityContext = "hsmSec_"+chanName;
+					rd.securityContext = ch.securityContext;
 					tad.addComponent(rd, xpos, ypos+yShift, false,true);
 
 					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
@@ -1443,14 +1445,13 @@ public class GTURTLEModeling {
 				//Add actions after Read Channel
 				for (TGComponent chan: channelInstances){
 					String chanName="";
-					if (chan instanceof TMLADReadChannel) {
-						TMLADReadChannel readChannel = (TMLADReadChannel) chan;
-						chanName=readChannel.getChannelName();
-						readChannel.securityContext = "hsmSec_"+chanName;
-					}
-					else {
+					if (!(chan instanceof TMLADReadChannel)) {
 						continue;
 					}
+					TMLADReadChannel readChannel = (TMLADReadChannel) chan;
+					chanName=readChannel.getChannelName();
+					HSMChannel ch= hsmChannels.get(chanName);
+					readChannel.securityContext = ch.securityContext;;
 					xpos = chan.getX()+10;
 					ypos = chan.getY();
 					fromStart = tad.findTGConnectorStartingAt(chan.getTGConnectingPointAtIndex(1));
@@ -1492,7 +1493,7 @@ public class GTURTLEModeling {
 					//Add write channel operator
 					TMLADWriteChannel wr = new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					wr.setChannelName("data_"+chanName+compName);
-					wr.securityContext = "hsmSec_"+chanName;
+					wr.securityContext = ch.securityContext;;
 					tad.addComponent(wr, xpos, ypos+yShift, false,true);
 
 
@@ -1507,7 +1508,7 @@ public class GTURTLEModeling {
 					yShift+=60;
 					TMLADReadChannel rd = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					rd.setChannelName("retData_"+chanName+compName);
-					rd.securityContext = "hsmSec_"+chanName;
+					rd.securityContext = ch.securityContext;;
 					tad.addComponent(rd, xpos, ypos+yShift, false,true);
 
 					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
@@ -1584,6 +1585,7 @@ public class GTURTLEModeling {
 			if (hsmChannels.keySet().size()>3){
 				int i=0;
 				for (String chan: hsmChannels.keySet()){
+					HSMChannel ch = hsmChannels.get(chan);
 					if (i%3==0){
 					//Add a new choice every third channel
 						choice2= new TMLADChoice(xc, 250, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
@@ -1596,7 +1598,7 @@ public class GTURTLEModeling {
 					}
 					TMLADReadChannel rd = new TMLADReadChannel(xc, 300, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					rd.setChannelName("data_"+chan+hsmChannels.get(chan).task);
-					rd.securityContext = "hsmSec_"+chan;
+					rd.securityContext = ch.securityContext;;
 					tad.addComponent(rd, xc,300,false,true);
 					//Connect choice and readchannel						
 					fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
@@ -1607,12 +1609,12 @@ public class GTURTLEModeling {
 					TMLADWriteChannel wr = new TMLADWriteChannel(xc, 600, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					wr.setChannelName("retData_"+chan+hsmChannels.get(chan).task);
 					tad.addComponent(wr, xc, 600,false,true);
-					wr.securityContext = "hsmSec_"+chan;
+					wr.securityContext = ch.securityContext;
 
 
 					if (hsmChannels.get(chan).secType==HSMChannel.DEC){
 						TMLADDecrypt dec = new TMLADDecrypt(xc, 500, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-						dec.securityContext = "hsmSec_"+chan;
+						dec.securityContext =  ch.securityContext;
 		   			 	tad.addComponent(dec, xc, 500,false,true);
 						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
 						fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
@@ -1632,7 +1634,7 @@ public class GTURTLEModeling {
 					}
 					else {
 						TMLADEncrypt enc = new TMLADEncrypt(xc, 500, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-						enc.securityContext = "hsmSec_"+chan;
+						enc.securityContext = ch.securityContext;
 						if (hsmChannels.get(chan).secType==HSMChannel.SENC){
 							enc.type = "Symmetric Encryption";
 						}
@@ -1670,9 +1672,10 @@ public class GTURTLEModeling {
 				int i=1;
 
 				for (String chan: hsmChannels.keySet()){
+					HSMChannel ch = hsmChannels.get(chan);
 					TMLADReadChannel rd = new TMLADReadChannel(xc, 300, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					rd.setChannelName("data_"+chan+hsmChannels.get(chan).task);
-					rd.securityContext = "hsmSec_"+chan;
+					rd.securityContext = ch.securityContext;
 					tad.addComponent(rd, xc,300,false,true);
 					//Connect choice and readchannel
 				
@@ -1685,12 +1688,12 @@ public class GTURTLEModeling {
 					TMLADWriteChannel wr = new TMLADWriteChannel(xc, 600, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					wr.setChannelName("retData_"+chan+hsmChannels.get(chan).task);
 					tad.addComponent(wr, xc, 600,false,true);
-					wr.securityContext = "hsmSec_"+chan;
+					wr.securityContext = ch.securityContext;
 
 
 					if (hsmChannels.get(chan).secType==HSMChannel.DEC){
 						TMLADDecrypt dec = new TMLADDecrypt(xc, 500, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-						dec.securityContext = "hsmSec_"+chan;
+						dec.securityContext = ch.securityContext;
 			   		 	tad.addComponent(dec, xc, 500,false,true);
 
 						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
@@ -1706,7 +1709,7 @@ public class GTURTLEModeling {
 					}
 					else {
 						TMLADEncrypt enc = new TMLADEncrypt(xc, 500, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-						enc.securityContext = "hsmSec_"+chan;
+						enc.securityContext = ch.securityContext;
 						if (hsmChannels.get(chan).secType==HSMChannel.SENC){
 							enc.type = "Symmetric Encryption";
 						}
@@ -1810,6 +1813,7 @@ public class GTURTLEModeling {
 				tad = t.getTMLActivityDiagramPanel(task.getName());
 				HashSet<TGComponent> channelInstances = new HashSet<TGComponent>();
 				for (String chan: hsmChannels.keySet()){
+					HSMChannel ch = hsmChannels.get(chan);
 					channelInstances.clear();
 					for (TGComponent tg: tad.getComponentList()){
 						if (tg instanceof TMLADReadChannel){
@@ -1824,7 +1828,7 @@ public class GTURTLEModeling {
 					}
 					for (TGComponent chI: channelInstances){
 						TMLADReadChannel readChannel = (TMLADReadChannel) chI;
-						readChannel.securityContext="hsmSec_"+chan;
+						readChannel.securityContext=ch.securityContext;
 						xpos = chI.getX();
 						ypos = chI.getY()+10;
 						fromStart = tad.findTGConnectorStartingAt(chI.getTGConnectingPointAtIndex(1));
@@ -1837,7 +1841,7 @@ public class GTURTLEModeling {
 						//Add decryption operator
 						int yShift=100;
 						TMLADDecrypt dec = new TMLADDecrypt(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-						dec.securityContext = "hsmSec_"+chan;
+						dec.securityContext = ch.securityContext;
 						tad.addComponent(dec, xpos,ypos+yShift, false, true);
 
 
@@ -1865,6 +1869,7 @@ public class GTURTLEModeling {
 				//Next find channels that send encrypted data, and add the encryption operator
 				for (String chan: hsmChannels.keySet()){
 					channelInstances.clear();
+					HSMChannel ch = hsmChannels.get(chan);
 					for (TGComponent tg: tad.getComponentList()){
 						if (tg instanceof TMLADWriteChannel){
 							TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
@@ -1878,7 +1883,7 @@ public class GTURTLEModeling {
 					}
 					for (TGComponent chI: channelInstances){
 						TMLADWriteChannel writeChannel = (TMLADWriteChannel) chI;
-						writeChannel.securityContext="hsmSec_"+chan;
+						writeChannel.securityContext=ch.securityContext;
 						xpos = chI.getX();
 						ypos = chI.getY()-10;
 						fromStart = tad.findTGConnectorEndingAt(chI.getTGConnectingPointAtIndex(0));
@@ -1888,7 +1893,7 @@ public class GTURTLEModeling {
 
 						TMLADEncrypt enc = new TMLADEncrypt(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 						tad.addComponent(enc,xpos, ypos, false,true);
-						enc.securityContext = "hsmSec_"+chan;
+						enc.securityContext = ch.securityContext;
 						enc.type = "Symmetric Encryption";
 						enc.message_overhead = overhead;
 						enc.encTime= encComp;

@@ -1056,7 +1056,11 @@ public class DSEConfiguration implements Runnable  {
 			sb.append("\nNumber of cycles:\n");
 			sb.append("Mapping with Highest Average Cycle duration: " + dsemapresults.getMappingWithHighestAverageCycleDuration() + "\n");
 			sb.append("Mapping with Lowest Average Cycle duration: " + dsemapresults.getMappingWithLowestAverageCycleDuration() + "\n");
-	
+
+			sb.append("Min Cycle duration: " + dsemapresults.getMinCycleDuration() + "\n");
+			sb.append("Max Cycle duration: " + dsemapresults.getMaxCycleDuration() + "\n");
+		
+
 			sb.append("\nSimulation duration:\n");
 			sb.append("Mapping with Highest min simulation duration: " + dsemapresults.getMappingWithHighestMinSimulationDuration() + "\n");
 			sb.append("Mapping with Lowest min simulation duration: " + dsemapresults.getMappingWithLowestMinSimulationDuration() + "\n");
