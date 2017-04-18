@@ -975,7 +975,7 @@ public class DSEConfiguration implements Runnable  {
 	
 	public int printAllResults(String _arguments, boolean _debug, boolean _optimize) {
 		TraceManager.addDev("Printing all results");
-		String sres;
+		String sres="";
 		DSESimulationResult res;
 		
 		if (dsemapresults != null) {
@@ -986,6 +986,7 @@ public class DSEConfiguration implements Runnable  {
 					sres =  DSESimulationResult.getAllExplanationHeader() + "\n";
 					sres += "#Mapping description: " + dsemapresults.getMapping(i).getSummaryTaskMapping() + "\n";
 					sres += res.getAllComments() + "\n" + res.getAllResults();
+					System.out.println("saving file " + pathToResults + "alldseresults_mapping" + cpt + ".txt");
 					FileUtils.saveFile(pathToResults + "alldseresults_mapping" + cpt + ".txt", sres);
 				} catch (Exception e){
 					TraceManager.addDev("Error when saving results file" + e.getMessage());
@@ -1055,7 +1056,11 @@ public class DSEConfiguration implements Runnable  {
 			sb.append("\nNumber of cycles:\n");
 			sb.append("Mapping with Highest Average Cycle duration: " + dsemapresults.getMappingWithHighestAverageCycleDuration() + "\n");
 			sb.append("Mapping with Lowest Average Cycle duration: " + dsemapresults.getMappingWithLowestAverageCycleDuration() + "\n");
-	
+
+			sb.append("Min Cycle duration: " + dsemapresults.getMinCycleDuration() + "\n");
+			sb.append("Max Cycle duration: " + dsemapresults.getMaxCycleDuration() + "\n");
+		
+
 			sb.append("\nSimulation duration:\n");
 			sb.append("Mapping with Highest min simulation duration: " + dsemapresults.getMappingWithHighestMinSimulationDuration() + "\n");
 			sb.append("Mapping with Lowest min simulation duration: " + dsemapresults.getMappingWithLowestMinSimulationDuration() + "\n");
@@ -1167,7 +1172,7 @@ public class DSEConfiguration implements Runnable  {
 			results.computeResults();
 			
 			TraceManager.addDev("Results: #" + resultsID + "\n" +  results.getWholeResults());
-			
+			overallResults=results.getWholeResults();
 			// Saving to file
 			try {
 				FileUtils.saveFile(pathToResults + "summary" + resultsID + ".txt", DSESimulationResult.getExplanationHeader() + "\n" + results.getAllComments() + "\n" + results.getWholeResults());
@@ -1367,11 +1372,14 @@ public class DSEConfiguration implements Runnable  {
 
 		 if (addSecurity){
 		     System.out.println("ADDING SECURITY TO MAPPING " +(cpt-1));
-		     tmla.tmlap = tmlap;
-		     tmla.setTMLDesignPanel(tmlcdp);
+
 		     TMLArchiPanel newArch = drawMapping(tmla, "securedMapping"+(cpt-1));
 		     GTMLModeling gtml =new GTMLModeling(newArch, true);
 		     tmla = gtml.translateToTMLMapping();
+		     tmla.tmlap = tmlap;
+			tmlcdp = (TMLComponentDesignPanel) mainGUI.tabs.get(0);
+		     tmla.setTMLDesignPanel(tmlcdp);
+			 System.out.println("tmlcdp " + tmlcdp);
 		     //
 		     //Repeat for secured mapping
 		     TMLMapping secMapping = mainGUI.gtm.autoSecure(mainGUI, "mapping" +(cpt-1),tmla, newArch, encComp, overhead, decComp,true,false);
@@ -1446,7 +1454,9 @@ public class DSEConfiguration implements Runnable  {
 	x=10;
 	for (HwNode node:hwnodes){
 	   if (node instanceof HwBus){
+		HwBus hwbus = (HwBus) node;
 		TMLArchiBUSNode bus = new TMLArchiBUSNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap);
+		bus.setPrivacy(hwbus.privacy);
 		x+=300;
 		bus.setName(node.getName());
 		ap.addComponent(bus,x,y,false,true);
@@ -1608,12 +1618,33 @@ public class DSEConfiguration implements Runnable  {
 		}
 		
 		computeCoresOfMappings(maps);
-		
+		addMemories(maps);
 		TraceManager.addDev("Mapping generated: " + maps.size());
 		
 		return maps;
 	}
-	
+	private void addMemories(Vector<TMLMapping> maps){
+		for (TMLMapping map: maps){
+			TMLArchitecture arch = map.getArch();
+			ArrayList<HwNode> nodes =  arch.getCPUs();
+			for (HwNode node:nodes){
+				HwBus bus = new HwBus("bus " +node.getName());
+				bus.privacy=1;
+				HwMemory mem = new HwMemory("memory " +node.getName());
+				HwLink hwlink = new HwLink("link_memory" +node.getName() + "_to_memorybus");
+				hwlink.bus=bus;	
+				hwlink.hwnode=node;
+				HwLink hwlink2 = new HwLink("link_" +node.getName() + "_to_memorybus");
+				hwlink2.bus=bus;
+				hwlink2.hwnode=mem;
+				arch.addHwNode(mem);
+				arch.addHwNode(bus);
+				arch.addHwLink(hwlink);
+				arch.addHwLink(hwlink2);
+		
+			}
+		}
+	}
 	private void generateMappings(TMLModeling _tmlm, Vector<TMLMapping> maps, int nbOfCPUs) {
 		List<TMLTask> tasks = _tmlm.getTasks();
 		CPUWithTasks cpus_tasks[] = new CPUWithTasks[nbOfCPUs];

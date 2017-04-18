@@ -149,7 +149,10 @@ void SimComponents::streamBenchmarks(std::ostream& s) const{
 		(*i)->streamBenchmarks(s);
 		s << std::endl;
 	}
+	std::ostringstream msg;
+	 _simulator->latencies2XML(msg, 71, 57);
 	s << TAG_SIMDURo << _simulator->getSimDuration() << TAG_SIMDURc << std::endl;
+	s << "<LatencyInfos>" << msg.str() << "</LatencyInfos>" << std::endl;
 	s << "<EndTime>" << _simulator->getEnd() << "</EndTime>"  << TAG_GLOBALc << TAG_STARTc <<std::endl;
 }
 

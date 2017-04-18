@@ -56,8 +56,6 @@ public class TMLMapping {
     private TMLModeling tmlm;
     private TMLArchitecture tmla;
     private TMLCP tmlcp;
-public List<String> securityPatterns = new ArrayList<String>();
-
     private ArrayList<HwExecutionNode> onnodes;
     private ArrayList<TMLTask> mappedtasks;
     private ArrayList<HwCommunicationNode> oncommnodes;
@@ -111,14 +109,23 @@ public List<String> securityPatterns = new ArrayList<String>();
     }
 
     public ArrayList<SecurityPattern> getMappedPatterns(HwMemory mem){
-	ArrayList<SecurityPattern> l = new ArrayList<SecurityPattern>();
-	for (SecurityPattern sp: mappedSecurity.keySet()){
-	    if (mappedSecurity.get(sp).contains(mem)){
-		l.add(sp);
-	    }
-	}
-	return l;
+		ArrayList<SecurityPattern> l = new ArrayList<SecurityPattern>();
+		for (SecurityPattern sp: mappedSecurity.keySet()){
+		    if (mappedSecurity.get(sp).contains(mem)){
+				l.add(sp);
+	    	}
+		}
+		return l;
     }
+		
+	public SecurityPattern getSecurityPatternByName(String name){
+		for (SecurityPattern sp: tmlm.secPatterns){
+			if (sp.name.equals(name)){
+				return sp;
+			}
+		}
+		return null;
+	}
     public void makeMinimumMapping() {
         HwCPU cpu;
         HwMemory mem;
