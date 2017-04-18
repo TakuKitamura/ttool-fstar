@@ -1257,7 +1257,7 @@ public class GTMLModeling  {
                     request = new TMLRequest(name, port1);
                     request.ports.add(port1);
                     for(i=0; i<portstome.size(); i++) {
-                        port2 = (TMLCPrimitivePort)(portstome.get(i));
+                        port2 = portstome.get(i);
                         request.ports.add(port2);
                         TraceManager.addDev("Add add add to table request : " + makeName(port2, port2.getFather().getValue()) + "/" + port2.getName() + " name =" + name);
                         addToTable(makeName(port2, port2.getFather().getValue()) + "/" + port2.getPortName(), name);
@@ -1319,7 +1319,7 @@ public class GTMLModeling  {
                     }
 
                     for(i=0; i<portstome.size(); i++) {
-                        port2 = (TMLCPrimitivePort)(portstome.get(i));
+                        port2 = portstome.get(i);
                         tt2 = tmlm.getTMLTaskByName(makeName(port2, port2.getFather().getValue()));
                         if (tt2 == null) {
                             TraceManager.addDev(" NO NO NO NO Destination taskin request!");
