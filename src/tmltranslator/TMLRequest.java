@@ -49,21 +49,32 @@ import java.util.*;
 import ui.tmlcompd.TMLCPrimitivePort;
 
 public class TMLRequest extends TMLCommunicationElement {
-    protected Vector params; // List of various types of parameters
-    protected ArrayList<TMLTask> originTasks; // list of tasks from which request starts
-    protected TMLTask destinationTask;
-    protected ArrayList<String> paramNames;
-    public int confStatus;
-    public boolean checkConf;
-    public boolean checkAuth;
-    public ArrayList<TMLCPrimitivePort> ports;
-    public TMLRequest(String name, Object reference) {
-        super(name, reference);
-        params = new Vector();
+    
+	protected Vector<TMLType> params; // List of various types of parameters
+    
+	private List<TMLTask> originTasks; // list of tasks from which request starts
+    
+	protected TMLTask destinationTask;
+    
+	protected List<String> paramNames;
+    
+	public int confStatus;
+    
+	public boolean checkConf;
+    
+	public boolean checkAuth;
+    
+	public List<TMLCPrimitivePort> ports;
+    
+	public TMLRequest(	final String name,
+						final Object reference ) {
+        super( name, reference );
+        
+        params = new Vector<TMLType>();
         originTasks = new ArrayList<TMLTask>();
-	paramNames = new ArrayList<String>();
-	ports = new ArrayList<TMLCPrimitivePort>();
-	checkConf=false;
+        paramNames = new ArrayList<String>();
+        ports = new ArrayList<TMLCPrimitivePort>();
+        checkConf = false;
     }
     
     public int getNbOfParams() {
@@ -73,24 +84,27 @@ public class TMLRequest extends TMLCommunicationElement {
     public void addParam(TMLType _type) {
         params.add(_type);
     }
+    
     public void addParamName(String name){
-	paramNames.add(name);
+    	paramNames.add(name);
     }
 
     public TMLType getType(int i) {
         if (i<getNbOfParams()) {
             return (TMLType)(params.elementAt(i));
-        } else {
-            return null;
         }
+        
+        return null;
     }
+
     public String getParam(int i){
-	if (i<paramNames.size()) {
+    	if (i<paramNames.size()) {
             return paramNames.get(i);
-        } else {
-            return "";
         }
+    	
+        return "";
     }
+
     public void setDestinationTask(TMLTask _task) {
         destinationTask = _task;
     }
@@ -108,7 +122,7 @@ public class TMLRequest extends TMLCommunicationElement {
 		return (originTasks.contains(_task));
 	}
     
-    public ArrayList<TMLTask> getOriginTasks() {
+    public List<TMLTask> getOriginTasks() {
         return originTasks;
     }
 	
@@ -119,6 +133,7 @@ public class TMLRequest extends TMLCommunicationElement {
 	public void addParam(String _list) {
 		String []split = _list.split(",");
 		TMLType type;
+		
 		for(int i=0; i<split.length; i++) {
 			if (TMLType.isAValidType(split[i])) {
 				type = new TMLType(TMLType.getType(split[i]));
@@ -134,5 +149,4 @@ public class TMLRequest extends TMLCommunicationElement {
 	public boolean isBlockingAtDestination() {
 		return true;
 	}
-
 }

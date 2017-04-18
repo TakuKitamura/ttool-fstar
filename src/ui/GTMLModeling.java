@@ -536,7 +536,8 @@ public class GTMLModeling  {
         String name;
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TMLRequestOperator) {
                 tmlro = (TMLRequestOperator)tgc;
                 //TraceManager.addDev("Found request: " + tmlro.getRequestName());
@@ -1210,7 +1211,8 @@ public class GTMLModeling  {
         TraceManager.addDev("*** Adding requests ***");
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TMLCPrimitiveComponent) {
                 tmlc = (TMLCPrimitiveComponent)tgc;
                 //TraceManager.addDev("Component:" + tmlc.getValue());
@@ -1218,7 +1220,7 @@ public class GTMLModeling  {
                 //TraceManager.addDev("Ports size:" + ports.size());
                 li = ports.listIterator();
                 while(li.hasNext()) {
-                    port1 = (TMLCPrimitivePort)(li.next());
+                    port1 = li.next();
                     portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
                     //TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 
