@@ -776,7 +776,10 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_TURTLE_WEBSITE] = new TAction("turtle-website-command", "TTool's website", IconManager.imgic30, IconManager.imgic31, "TTool's website", "Various information (e.g., documentation) on TTool", 0);
         actions[ACT_TURTLE_DOCUMENTATION] = new TAction("turtle-docu-command", "AVATAR online help", IconManager.imgic30, IconManager.imgic31, "AVATAR online help", "AVATAR online help", 0);
         actions[ACT_DIPLODOCUS_DOCUMENTATION] = new TAction("diplo-docu-command", "DIPLODOCUS online help", IconManager.imgic30, IconManager.imgic31, "DIPLODOCUS online help", "DIPLODOCUS online help", 0);
-	actions[ACT_SYSMLSEC_DOCUMENTATION] = new TAction("diplo-docu-command", "SysML-Sec online help", IconManager.imgic30, IconManager.imgic31, "SysML-Sec online help", "SysML-Sec online help", 0);
+        
+        // Issue # 34: SysMLSec help was using the command of DIPLODOCUS resulting in SysMLSec help being displayed instead
+        actions[ACT_SYSMLSEC_DOCUMENTATION] = new TAction("sysmlsec-docu-command", "SysML-Sec online help", IconManager.imgic30, IconManager.imgic31, "SysML-Sec online help", "SysML-Sec online help", 0);
+//    	actions[ACT_SYSMLSEC_DOCUMENTATION] = new TAction("diplo-docu-command", "SysML-Sec online help", IconManager.imgic30, IconManager.imgic31, "SysML-Sec online help", "SysML-Sec online help", 0);
         actions[ACT_TTOOL_CONFIGURATION] = new TAction("configuration-command", "Configuration", IconManager.imgic76, IconManager.imgic77, "Configuration", "Configuration loaded at startup", 0);
 
         actions[ACT_ENHANCE] = new TAction("enhance-command", "Enhance", IconManager.imgic28, IconManager.imgic29, "Enhance", "Automatically enhance diagram", 0);
