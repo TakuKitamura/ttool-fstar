@@ -83,7 +83,7 @@ TTOOL_DOC_SOCLIB = $(TTOOL_PATH)/doc/document_soclib
 TTOOL_DOC_HTML = $(TTOOL_PATH)/doc/html
 TTOOL_VCD = $(TTOOL_PATH)/vcd
 TTOOL_WORD = $(TTOOL_PATH)/doc/word
-TTOOL_STD_RELEASE = $(TTOOL_PATH)/release/
+TTOOL_STD_RELEASE = $(TTOOL_PATH)/release
 JTTOOL = $(TTOOL_PATH)/javacode
 JTTOOL_DIR = jttool
 TTOOL_TARGET = $(TTOOL_PATH)/TTool_install/TTool
@@ -346,7 +346,7 @@ stdrelease:
 	cp $(TTOOL_TARGET)/bin/config_linux.xml $(TTOOL_TARGET)/bin/config.xml
 # Basic release
 	echo "Basic release"
-	cd $(TTOOL_TARGET_RELEASE)&&$(TAR) cvzf $(TTOOL_STD_RELEASE)/release.tgz * 
+	cd $(TTOOL_TARGET_RELEASE) && mkdir $(TTOOL_STD_RELEASE) && $(TAR) cvzf $(TTOOL_STD_RELEASE)/release.tgz * 
 # Advanced release
 	echo "Advanced release"
 	$(JAVADOC) -J-Xmx256m $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_TARGET)/doc/srcdoc $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
