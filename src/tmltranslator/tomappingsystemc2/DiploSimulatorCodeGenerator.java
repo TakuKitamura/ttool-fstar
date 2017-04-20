@@ -742,22 +742,31 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         return hopNum + ",array(" + hopNum + masters.str + "),array(" + hopNum + slaves.str + ")";
     }
 
-    private boolean exploreBuses(int depth, List<HwCommunicationNode> commNodes, List<HwCommunicationNode> path, HwNode startNode, HwNode destNode, TMLElement commElemToRoute){
+    private boolean exploreBuses(	final int depth,
+    								final List<HwCommunicationNode> commNodes,
+    								final List<HwCommunicationNode> path,
+    								final HwNode startNode,
+    								final HwNode destNode,
+    								final TMLElement commElemToRoute ) {
+    	assert startNode != null : "Parameter 'startNode' should not be null.";
+    	
         //first called with Maping:getCommunicationNodes
         List<HwCommunicationNode> nodesToExplore;
         TraceManager.addDev("No of comm nodes " + commNodes.size());
-	 TraceManager.addDev("startNode=" + startNode);
+        TraceManager.addDev("startNode=" + startNode);
         boolean busExploreMode = ((depth & 1) == 0);
-        //if (depth % 2 == 0){
-        if(busExploreMode){
+
+        if ( busExploreMode ) {
             TraceManager.addDev("search for buses connected to " + startNode.getName());
             nodesToExplore=getBusesConnectedToNode(commNodes, startNode);
-        }else{
+        }
+        else {
             TraceManager.addDev("search for bridges connected to: " + startNode.getName());
             nodesToExplore=getBridgesConnectedToBus(commNodes, (HwBus)startNode);
         }
-        //HwMemory memory = null;
+        
         TraceManager.addDev("no of elements found: " + nodesToExplore.size());
+
         for(HwCommunicationNode currNode:nodesToExplore){
             //memory = null;
             if (busExploreMode){

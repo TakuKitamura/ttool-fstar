@@ -56,13 +56,13 @@ public class Mapping2TIF {
 
     //private static int gateId;
 
-    private static String nameChannelNBRNBW = "ChannelNBRNBW__";
-    private static String nameChannelBRNBW = "ChannelBRNBW__";
-    private static String nameChannelBRBW = "ChannelBRBW__";
+//    private static String nameChannelNBRNBW = "ChannelNBRNBW__";
+//    private static String nameChannelBRNBW = "ChannelBRNBW__";
+//    private static String nameChannelBRBW = "ChannelBRBW__";
 
-    private static String nameEvent = "Event__";
-
-    private static String nameRequest = "Request__";
+//    private static String nameEvent = "Event__";
+//
+//    private static String nameRequest = "Request__";
 
 
     private TMLMapping tmlmapping;
@@ -93,7 +93,7 @@ public class Mapping2TIF {
     private String maxCountTickValue;
     private boolean randomTasks = false;
 
-    private TClass clock;
+ //   private TClass clock;
     private TClass system;
     private ActivityDiagram systemad;
     private ArrayList<TMLCommunicationElement> allcommunications;
@@ -298,7 +298,7 @@ public class Mapping2TIF {
 
         ADComponent previous = beforeCommManager;
 
-        LinkedList met = new LinkedList();
+        List<HwBus> met = new LinkedList<HwBus>();
         HwBus bus0;
         ADChoice adch;
         ADJunction adj;
@@ -847,7 +847,7 @@ public class Mapping2TIF {
 
         guard = "";
         int cpt = 0;
-        ArrayList<HwNode> executions = tmlarchitecture.getHwNodes();
+        List<HwNode> executions = tmlarchitecture.getHwNodes();
         for(HwNode node : executions) {
             if (node instanceof HwCPU) {
                 if (cpt == 0) {
@@ -967,7 +967,7 @@ public class Mapping2TIF {
     }
 
     private void makeCPUs(ArrayList<TMLChannel> localChannels, ArrayList<TMLEvent> localEvents, ArrayList<TMLRequest> localRequests) {
-        ArrayList<HwNode> executions = tmlarchitecture.getHwNodes();
+        List<HwNode> executions = tmlarchitecture.getHwNodes();
 
         int cpt =0;
 
@@ -1196,7 +1196,7 @@ public class Mapping2TIF {
     }
 
     private void makeTaskAttributes(TClass tcpu, ArrayList<TMLTask> tasks) {
-        int i;
+      //  int i;
         String init;
 
         for(TMLTask task: tasks) {
@@ -1437,7 +1437,7 @@ public class Mapping2TIF {
     }
 
     private void makeCPUADSelection(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADJunction mainJunction, ADJunction endjunc, ADChoice selectedChoice, ArrayList<TMLTask> tasks) {
-        int cpt = 0;
+      //  int cpt = 0;
         ADComponent previous = mainJunction;
         String guard0, guard1;
         ADActionStateWithParam adap1, adap2;
@@ -1565,7 +1565,7 @@ public class Mapping2TIF {
             String selected = "!" + cpu.getName() + "__selected";
             TraceManager.addDev("First value= cpu selected or not");
             TraceManager.addDev("Runnable=0, running=1, blocked=2, terminated=3");
-            cpt ++;
+      //      cpt ++;
             for(TMLTask task: tasks) {
                 TraceManager.addDev("task #i = " + task.getName());
                 selected += "!" + task.getName() + "__state";
@@ -1866,8 +1866,8 @@ public class Mapping2TIF {
         tick.addNext(adj);
         tick.addGuard("[" + cpu.getName() + "__nTick == 0]");
 
-        Gate g0 = tcpu.getGateByName(cpu.getName() + "__endTick");
-        Gate g1 = tcpu.getGateByName(cpu.getName() + "__tick");
+//        Gate g0 = tcpu.getGateByName(cpu.getName() + "__endTick");
+//        Gate g1 = tcpu.getGateByName(cpu.getName() + "__tick");
         Param p = tcpu.getParamByName(cpu.getName() + "__nTick");
         /*ADActionStateWithGate action0 = new ADActionStateWithGate(g0);
           action0.setActionValue("");
@@ -1989,11 +1989,11 @@ public class Mapping2TIF {
     }
 
     private void makeCPUADTaskBehavior(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice stateChoice, ADJunction endJunction, TMLTask task, int cpt, ArrayList<TMLTask> tasks) {
-        ADStart start = ad.getStartState();
+       // ADStart start = ad.getStartState();
 
         int stateId = 0;
-        String gateName;
-        ADActionStateWithGate actiong1;
+//        String gateName;
+//        ADActionStateWithGate actiong1;
 
 
         // Manage requested
@@ -2068,8 +2068,8 @@ public class Mapping2TIF {
 
         ADActionStateWithParam actionp0, actionp1, actionp2, actionp3, actionp4, actionp5, actionp6, actionp7, actionp8, actionp9;
         ADActionStateWithParam actionpspe = null;
-        ADActionStateWithGate actiong0, actiong1, actiong2, actiongd;
-        Gate g0, g1, g2;
+        ADActionStateWithGate actiong0, /*actiong1, actiong2,*/ actiongd;
+     //   Gate g0, g1, g2;
         TMLSendRequest sendreq;
         ADComponent previous;
         TMLRequest req;
@@ -2088,7 +2088,7 @@ public class Mapping2TIF {
 
         String guard0, guard1, guard2;
         int index, i;
-        String gateName, gateName0, paramName, cpts, action0, action1, action2, action3;
+        String gateName, gateName0, paramName, cpts, /* action0, */action1, action2, action3;
         String name, nameTot;
 
         //TraceManager.addDev("task=" + task.getName() + " stateid=" + stateId + " elt=" + element);

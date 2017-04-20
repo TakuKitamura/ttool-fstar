@@ -50,8 +50,8 @@ import java.util.*;
 import myutil.*;
 
 public class TMLArchitecture {
-    private ArrayList<HwNode> hwnodes;
-    private ArrayList<HwLink> hwlinks; // Between buses and other component
+    private List<HwNode> hwnodes;
+    private List<HwLink> hwlinks; // Between buses and other component
 
     private int masterClockFrequency = 200; // in MHz
 
@@ -69,7 +69,7 @@ public class TMLArchitecture {
     }
 
     private void computeHashCode() {
-        TMLArchiTextSpecification architxt = new TMLArchiTextSpecification("spec.tarchi");
+        TMLArchiTextSpecification architxt = new TMLArchiTextSpecification(/*"spec.tarchi"*/);
         String s = architxt.toTextFormat(this);
         hashCode = s.hashCode();
         //System.out.println("TARCHI hashcode = " + hashCode);
@@ -80,6 +80,7 @@ public class TMLArchitecture {
             computeHashCode();
             hashCodeComputed = true;
         }
+        
         return hashCode;
     }
 
@@ -96,7 +97,7 @@ public class TMLArchitecture {
         hwnodes.add(_node);
     }
 
-    public ArrayList<HwNode> getHwNodes() {
+    public List<HwNode> getHwNodes() {
         return hwnodes;
     }
 
@@ -176,13 +177,15 @@ public class TMLArchitecture {
         return cpt;
     }
 
-	public ArrayList<HwNode> getCPUs(){
-		ArrayList<HwNode> cpus = new ArrayList<HwNode>();
+	public List<HwNode> getCPUs(){
+		List<HwNode> cpus = new ArrayList<HwNode>();
+		
 		for (HwNode node: hwnodes){
 			if (node instanceof HwCPU){
 				cpus.add(node);
 			}
 		}
+		
 		return cpus;
 	}
     public String[] getCPUIDs() {
@@ -283,7 +286,7 @@ public class TMLArchitecture {
         hwlinks.add(_link);
     }
 
-    public ArrayList<HwLink> getHwLinks() {
+    public List<HwLink> getHwLinks() {
         return hwlinks;
     }
 
@@ -295,17 +298,21 @@ public class TMLArchitecture {
         }
         return null;
     }
+    
     public List<HwBridge> getFirewalls(){
-	List<HwBridge> firewalls= new ArrayList<HwBridge>();
-	for (HwNode node:hwnodes){
-	    if (node instanceof HwBridge){
-		HwBridge bridge= (HwBridge)node;
-		if (bridge.isFirewall){
-		    firewalls.add(bridge);
+		List<HwBridge> firewalls= new ArrayList<HwBridge>();
+		
+		for (HwNode node:hwnodes){
+		    if (node instanceof HwBridge){
+		    	HwBridge bridge= (HwBridge)node;
+				
+		    	if (bridge.isFirewall){
+				    firewalls.add(bridge);
+				}
+		    }
 		}
-	    }
-	}
-	return firewalls;
+
+		return firewalls;
     }
     public HwCPU getHwCPUByName(String _name) {
         for(HwNode node: hwnodes) {
@@ -349,11 +356,13 @@ public class TMLArchitecture {
         return null;
     }
 
-    public ArrayList<HwLink> getLinkByHwNode(HwNode node){
-        ArrayList<HwLink> tempList=new ArrayList<HwLink>();
+    public List<HwLink> getLinkByHwNode(HwNode node){
+        List<HwLink> tempList = new ArrayList<HwLink>();
+        
         for(HwLink link: hwlinks) {
             if (link.hwnode==node) tempList.add(link);
         }
+        
         return tempList;
     }
 
@@ -373,11 +382,13 @@ public class TMLArchitecture {
         return false;
     }
 
-    public ArrayList<HwLink> getLinkByBus(HwBus bus){
-        ArrayList<HwLink> tempList=new ArrayList<HwLink>();
+    public List<HwLink> getLinkByBus(HwBus bus){
+        List<HwLink> tempList = new ArrayList<HwLink>();
+        
         for(HwLink link: hwlinks) {
             if (link.bus==bus) tempList.add(link);
         }
+        
         return tempList;
     }
 

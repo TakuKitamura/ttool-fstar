@@ -140,7 +140,7 @@ public class TMLMappingTextSpecification {
 
     private int nbOf(String _tmp, String[] array) {
         String tmp;
-        int size;
+        //int size;
 
         for(int i=0; i<array.length; i++) {
             if (_tmp.startsWith(array[i])) {
@@ -175,7 +175,7 @@ public class TMLMappingTextSpecification {
     }
 
     public void makeArchi(TMLMapping tmlmap) {
-        tmlatxt = new TMLArchiTextSpecification(title);
+        tmlatxt = new TMLArchiTextSpecification(/*title*/);
         tmlatxt.toTextFormat(tmlmap.getTMLArchitecture());
     }
 
@@ -433,7 +433,7 @@ public class TMLMappingTextSpecification {
     }
 
     public TMLArchitecture makeArchitectureModeling() {
-        TMLArchiTextSpecification t = new TMLArchiTextSpecification("from file");
+        TMLArchiTextSpecification t = new TMLArchiTextSpecification(/*"from file"*/);
 
         // Import errors and warnings
 
@@ -514,7 +514,7 @@ public class TMLMappingTextSpecification {
         String [] split;
         int lineNb = 0;
 
-        String instruction;
+    //    String instruction;
 
         String specarchi;
         int index0 = spec.indexOf("TMLMAPPING");
@@ -568,9 +568,9 @@ public class TMLMappingTextSpecification {
 
     public int analyseInstruction(String _line, int _lineNb, String[] _split) {
         String error;
-        String params;
-        String id;
-        int tmp, tmp0, tmp1, i;
+      //  String params;
+       // String id;
+        //int tmp, tmp0, tmp1, i;
 
         HwExecutionNode hwnode;
         TMLTask task;
@@ -797,8 +797,8 @@ public class TMLMappingTextSpecification {
     }
 
     public String removeUndesiredWhiteSpaces(String _input, int _lineNb) {
-        String error, tmp;
-        int index0, index1, index2;
+//        String error, tmp;
+//        int index0, index1, index2;
 
         return _input;
     }
