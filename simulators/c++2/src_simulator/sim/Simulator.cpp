@@ -1371,6 +1371,12 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     latencies2XML(anEntityMsg, aParam1, aParam2);
     std::cout << "latencies " << &anEntityMsg << std::endl;
     break;
+  case 24:
+	aInpStream >> aParam1;
+    aInpStream >> aParam2;
+ 	std::cout <<"Calculate latencies between " << aParam1 << " and " << aParam2 << std::endl;
+    addLatencyIds(aParam1, aParam2);
+    std::cout << "latencies " << &anEntityMsg << std::endl;
   default:
     anEntityMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
     anErrorCode=3;
