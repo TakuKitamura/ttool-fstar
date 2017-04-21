@@ -189,8 +189,8 @@ public class TMLMappingTextSpecification {
 
     public String makeMappingNodes(TMLMapping tmlmap) {
         String tmp = "";
-        ArrayList<HwExecutionNode> nodes = tmlmap.getNodes();
-        ArrayList<TMLTask> tasks = tmlmap.getMappedTasks();
+        List<HwExecutionNode> nodes = tmlmap.getNodes();
+        List<TMLTask> tasks = tmlmap.getMappedTasks();
         HwNode node;
         TMLTask task;
 
@@ -209,8 +209,8 @@ public class TMLMappingTextSpecification {
 
     public String makeMappingCommunicationNodes(TMLMapping tmlmap) {
         String tmp = "";
-        ArrayList<HwCommunicationNode> nodes = tmlmap.getCommunicationNodes();
-        ArrayList<TMLElement> elts = tmlmap.getMappedCommunicationElement();
+        List<HwCommunicationNode> nodes = tmlmap.getCommunicationNodes();
+        List<TMLElement> elts = tmlmap.getMappedCommunicationElement();
         HwNode node;
         TMLElement elt;
 

@@ -55,21 +55,21 @@ import myutil.*;
 
 public class TMLModelCompilerParser {
     
-		public TMLActivityElement element;
-		private ArrayList<TMLModelCompilerError> errors;
+	public TMLActivityElement element;
+	private List<TMLModelCompilerError> errors;
 	//	private ArrayList<TMLTask> mappedTasks;
-		private TMLMapping tmap;
-		private TMLModeling tmlm;
+	private TMLMapping tmap;
+	private TMLModeling tmlm;
 		//private TMLArchitecture tmla;
-		private ArrayList<TMLCPLib> mappedCPLibs;
+	private List<TMLCPLib> mappedCPLibs;
 
     public final static int ERROR_STRUCTURE = 0;
     public final static int WARNING_STRUCTURE = 1;   
-		public final static int ERROR_BEHAVIOR = 2;
+	public final static int ERROR_BEHAVIOR = 2;
     public final static int WARNING_BEHAVIOR = 3;
     public int type; // ERROR, WARNING
     public String message;
-		public TMLTask task;
+	public TMLTask task;
     
     public TMLModelCompilerParser( TMLMapping _tmap, TMLModeling _tmlm, TMLArchitecture _tmla ) {
 			//mappedTasks = _mappedTasks;
@@ -80,29 +80,29 @@ public class TMLModelCompilerParser {
 			mappedCPLibs = _tmap.getMappedTMLCPLibs();
     }
 
-	  public void addError( String message, int type )	{
-			TMLModelCompilerError error = new TMLModelCompilerError( type );
-			error.message = message;
-			errors.add( error );
-		}
+	public void addError( String message, int type )	{
+		TMLModelCompilerError error = new TMLModelCompilerError( type );
+		error.message = message;
+		errors.add( error );
+	}
 
-  	public ArrayList<TMLModelCompilerError> getErrors() {
-			return errors;
-		}
+  	public List<TMLModelCompilerError> getErrors() {
+		return errors;
+	}
 
-		public boolean hasErrors()	{
-			if( errors.size() > 0 )	{
-				return true;
-			}
-			return false;
+	public boolean hasErrors()	{
+		if( errors.size() > 0 )	{
+			return true;
 		}
+		return false;
+	}
 
-		public void check()	{
-			checkForPrexAndPostexChannels();
-			checkForCPsAssociatedToForkChannels();	//so far we do not handle CPs associated to ports that are part of a fork channel
-			checkForXFTasks();	//check that the Operations have been correctly modeled with X and F tasks
-			checkMappingOfTasks();	//check that all tasks in the application model are mapped.
-		}
+	public void check()	{
+		checkForPrexAndPostexChannels();
+		checkForCPsAssociatedToForkChannels();	//so far we do not handle CPs associated to ports that are part of a fork channel
+		checkForXFTasks();	//check that the Operations have been correctly modeled with X and F tasks
+		checkMappingOfTasks();	//check that all tasks in the application model are mapped.
+	}
 
 		//valid prex ports are:
 		//	origin port of a basic channel
@@ -111,92 +111,92 @@ public class TMLModelCompilerParser {
 		//	destination port of a basic channel
 		//	destination port of a join channel
 		//anything else raises an error
-		private void checkForPrexAndPostexChannels()	{
+	private void checkForPrexAndPostexChannels()	{
 
-			boolean foundPrex = false, foundPostex = false;
-			TMLPort originPort = new TMLPort( "noName", null );
-			TMLPort destinationPort = new TMLPort( "noName", null );
+		boolean foundPrex = false, foundPostex = false;
+		TMLPort originPort = new TMLPort( "noName", null );
+		TMLPort destinationPort = new TMLPort( "noName", null );
 
-			//Fill the the prex and postex lists
-			for( TMLChannel ch: tmlm.getChannels() )	{
-				if( ch.isBasicChannel() )	{
-					originPort = ch.getOriginPort();
-					destinationPort = ch.getDestinationPort();
-					if( originPort.isPrex() )	{
-						if( ch.getOriginTask().getReadChannels().size() > 0 )	{
-							addError( "Port " + originPort.getName() + " cannot be marked as prex. Task " + ch.getOriginTask().getName() + " has input channels", TMLModelCompilerError.ERROR_STRUCTURE );
-						}
-						foundPrex = true;
+		//Fill the the prex and postex lists
+		for( TMLChannel ch: tmlm.getChannels() )	{
+			if( ch.isBasicChannel() )	{
+				originPort = ch.getOriginPort();
+				destinationPort = ch.getDestinationPort();
+				if( originPort.isPrex() )	{
+					if( ch.getOriginTask().getReadChannels().size() > 0 )	{
+						addError( "Port " + originPort.getName() + " cannot be marked as prex. Task " + ch.getOriginTask().getName() + " has input channels", TMLModelCompilerError.ERROR_STRUCTURE );
 					}
-					if( destinationPort.isPostex() )	{
-						if( ch.getDestinationTask().getWriteChannels().size() > 0 )	{
-							addError( "Port " + destinationPort.getName() + " cannot be marked as postex. Task " + ch.getDestinationTask().getName() + " has output channels", TMLModelCompilerError.ERROR_STRUCTURE );
-						}
-						foundPostex = true;
-					}
+					foundPrex = true;
 				}
-				if( ch.isAForkChannel() )	{
-					originPort = ch.getOriginPorts().get(0);
-					if( originPort.isPrex() )	{
-						if( ch.getOriginTasks().get(0).getReadChannels().size() > 0 )	{
-							addError( "Port " + originPort.getName() + " cannot be marked as prex. Task " + ch.getOriginTask().getName() + " has input channels", TMLModelCompilerError.ERROR_STRUCTURE );
-						}
-						foundPrex = true;
+				if( destinationPort.isPostex() )	{
+					if( ch.getDestinationTask().getWriteChannels().size() > 0 )	{
+						addError( "Port " + destinationPort.getName() + " cannot be marked as postex. Task " + ch.getDestinationTask().getName() + " has output channels", TMLModelCompilerError.ERROR_STRUCTURE );
 					}
-					for( TMLPort port: ch.getDestinationPorts() )	{	//check all destination ports: they cannot be marked as postex
-						if( port.isPostex() )	{
-							addError( "Port " + port.getName() + " belongs to a fork channel: it cannot be marked as postex", TMLModelCompilerError.ERROR_STRUCTURE );
-						}
-					}
-				}
-				if( ch.isAJoinChannel() )	{
-					originPort = ch.getOriginPorts().get(0);
-					destinationPort = ch.getDestinationPorts().get(0);
-					if( destinationPort.isPostex() )	{
-						if( ch.getDestinationTasks().get(0).getWriteChannels().size() > 0 )	{
-							addError( "Port " + destinationPort.getName() + " cannot be marked as postex. Task " + ch.getDestinationTask().getName() + " has output channels", TMLModelCompilerError.ERROR_STRUCTURE );
-						}
-						foundPostex = true;
-					}
-					for( TMLPort port: ch.getOriginPorts() )	{	//check all origin ports: they cannot be marked as prex
-						if( port.isPrex() )	{
-							addError( "Port " + port.getName() + " belongs to a join channel: it cannot be marked as prex", TMLModelCompilerError.ERROR_STRUCTURE );
-						}
-					}
-				}
-				if( originPort.isPostex() )	{
-						addError( "Port " + originPort.getName() + " cannot be marked as postex", TMLModelCompilerError.ERROR_STRUCTURE );
-				}
-				if( destinationPort.isPrex() )	{
-						addError( "Port " + destinationPort.getName() + " cannot be marked as postex", TMLModelCompilerError.ERROR_STRUCTURE );
+					foundPostex = true;
 				}
 			}
-			if( !foundPrex )	{
-				addError( "No suitable channel in the application diagram has been marked as prex", TMLModelCompilerError.ERROR_STRUCTURE );
+			if( ch.isAForkChannel() )	{
+				originPort = ch.getOriginPorts().get(0);
+				if( originPort.isPrex() )	{
+					if( ch.getOriginTasks().get(0).getReadChannels().size() > 0 )	{
+						addError( "Port " + originPort.getName() + " cannot be marked as prex. Task " + ch.getOriginTask().getName() + " has input channels", TMLModelCompilerError.ERROR_STRUCTURE );
+					}
+					foundPrex = true;
+				}
+				for( TMLPort port: ch.getDestinationPorts() )	{	//check all destination ports: they cannot be marked as postex
+					if( port.isPostex() )	{
+						addError( "Port " + port.getName() + " belongs to a fork channel: it cannot be marked as postex", TMLModelCompilerError.ERROR_STRUCTURE );
+					}
+				}
 			}
-			if( !foundPostex )	{
-				addError( "No suitable channel in the application diagram has been marked as postex", TMLModelCompilerError.ERROR_STRUCTURE );
+			if( ch.isAJoinChannel() )	{
+				originPort = ch.getOriginPorts().get(0);
+				destinationPort = ch.getDestinationPorts().get(0);
+				if( destinationPort.isPostex() )	{
+					if( ch.getDestinationTasks().get(0).getWriteChannels().size() > 0 )	{
+						addError( "Port " + destinationPort.getName() + " cannot be marked as postex. Task " + ch.getDestinationTask().getName() + " has output channels", TMLModelCompilerError.ERROR_STRUCTURE );
+					}
+					foundPostex = true;
+				}
+				for( TMLPort port: ch.getOriginPorts() )	{	//check all origin ports: they cannot be marked as prex
+					if( port.isPrex() )	{
+						addError( "Port " + port.getName() + " belongs to a join channel: it cannot be marked as prex", TMLModelCompilerError.ERROR_STRUCTURE );
+					}
+				}
+			}
+			if( originPort.isPostex() )	{
+					addError( "Port " + originPort.getName() + " cannot be marked as postex", TMLModelCompilerError.ERROR_STRUCTURE );
+			}
+			if( destinationPort.isPrex() )	{
+					addError( "Port " + destinationPort.getName() + " cannot be marked as postex", TMLModelCompilerError.ERROR_STRUCTURE );
 			}
 		}
+		if( !foundPrex )	{
+			addError( "No suitable channel in the application diagram has been marked as prex", TMLModelCompilerError.ERROR_STRUCTURE );
+		}
+		if( !foundPostex )	{
+			addError( "No suitable channel in the application diagram has been marked as postex", TMLModelCompilerError.ERROR_STRUCTURE );
+		}
+	}
 
-		private void checkForCPsAssociatedToForkChannels()	{
-			
-			for( TMLCPLib cplib: mappedCPLibs )	{
-				if( cplib.getArtifacts().size() == 1 )	{
-					String portName = cplib.getArtifacts().get(0).getPortName();
-					for( TMLChannel channel: tmlm.getChannels() )	{
-						if( channel.isAForkChannel() )	{
-							for( TMLPort port: channel.getDestinationPorts() )	{
-								if( port.getName().equals( portName ) )	{
-										addError( "Port " + portName + " is part of a fork channel. It cannot be mapped to a CP",
-															TMLModelCompilerError.ERROR_STRUCTURE );
-								}
+	private void checkForCPsAssociatedToForkChannels()	{
+		
+		for( TMLCPLib cplib: mappedCPLibs )	{
+			if( cplib.getArtifacts().size() == 1 )	{
+				String portName = cplib.getArtifacts().get(0).getPortName();
+				for( TMLChannel channel: tmlm.getChannels() )	{
+					if( channel.isAForkChannel() )	{
+						for( TMLPort port: channel.getDestinationPorts() )	{
+							if( port.getName().equals( portName ) )	{
+									addError( "Port " + portName + " is part of a fork channel. It cannot be mapped to a CP",
+														TMLModelCompilerError.ERROR_STRUCTURE );
 							}
 						}
 					}
 				}
 			}
 		}
+	}
     
 	// Check that a Composite component contains only one data-processing Primitive component...TO DO
     private void checkForXFTasks()	{
@@ -232,18 +232,18 @@ public class TMLModelCompilerParser {
         }
     }
 
-		private void checkMappingOfTasks()	{	//check that all tasks in the application have been mapped
+	private void checkMappingOfTasks()	{	//check that all tasks in the application have been mapped
 
-			HashSet<String> mappedTasksList = new HashSet<String>();
+		Set<String> mappedTasksList = new HashSet<String>();
 
-			for( TMLTask task: tmap.getMappedTasks() )	{
-				mappedTasksList.add( task.getTaskName() );
-			}
-			for( TMLTask task: tmlm.getTasks() )	{
-				if( !mappedTasksList.contains( task.getTaskName() ) )	{
-					addError( "Task " + task.getTaskName() + " has not been mapped", TMLModelCompilerError.ERROR_STRUCTURE );
-				}
+		for( TMLTask task: tmap.getMappedTasks() )	{
+			mappedTasksList.add( task.getTaskName() );
+		}
+		for( TMLTask task: tmlm.getTasks() )	{
+			if( !mappedTasksList.contains( task.getTaskName() ) )	{
+				addError( "Task " + task.getTaskName() + " has not been mapped", TMLModelCompilerError.ERROR_STRUCTURE );
 			}
 		}
+	}
 
 }	//End of class

@@ -999,10 +999,10 @@ public class Mapping2TIF {
         behaviorJuncs.add(junc);
         systemad.add(junc);
 
-        ArrayList<TMLTask> tasks = new ArrayList<TMLTask>();
+        List<TMLTask> tasks = new ArrayList<TMLTask>();
 
-        ArrayList<HwExecutionNode> executions = tmlmapping.getNodes();
-        ArrayList<TMLTask> mappedtasks  = tmlmapping.getMappedTasks();
+        List<HwExecutionNode> executions = tmlmapping.getNodes();
+        List<TMLTask> mappedtasks  = tmlmapping.getMappedTasks();
 
         for(int i=0; i<executions.size(); i++) {
             if (executions.get(i) == cpu) {
@@ -1015,12 +1015,12 @@ public class Mapping2TIF {
         }
     }
 
-    private void makeCPU(HwCPU cpu, int index, ArrayList<TMLChannel> localChannels, ArrayList<TMLEvent> localEvents, ArrayList<TMLRequest> localRequests) {
+    private void makeCPU(HwCPU cpu, int index, List<TMLChannel> localChannels, List<TMLEvent> localEvents, List<TMLRequest> localRequests) {
         TraceManager.addDev("Making cpu: " + cpu.getName());
-        ArrayList<TMLTask> tasks = new ArrayList<TMLTask>();
+        List<TMLTask> tasks = new ArrayList<TMLTask>();
 
-        ArrayList<HwExecutionNode> executions = tmlmapping.getNodes();
-        ArrayList<TMLTask> mappedtasks  = tmlmapping.getMappedTasks();
+        List<HwExecutionNode> executions = tmlmapping.getNodes();
+        List<TMLTask> mappedtasks  = tmlmapping.getMappedTasks();
 
         for(int i=0; i<executions.size(); i++) {
             if (executions.get(i) == cpu) {
@@ -1051,9 +1051,9 @@ public class Mapping2TIF {
 
     }
 
-    private void fillCommunicationArrays(TClass tcpu, ArrayList<TMLChannel> localChannels, ArrayList<TMLEvent> localEvents, ArrayList<TMLRequest> localRequests) {
+    private void fillCommunicationArrays(TClass tcpu, List<TMLChannel> localChannels, List<TMLEvent> localEvents, List<TMLRequest> localRequests) {
         HwBus bus;
-        ArrayList<TMLTask> tasks  = tmlmapping.getMappedTasks();
+        List<TMLTask> tasks  = tmlmapping.getMappedTasks();
 
         for(TMLChannel ch: tmlmodeling.getChannels()) {
             if (tasks.contains(ch.getOriginTask()) && tasks.contains(ch.getDestinationTask())) {
@@ -1195,7 +1195,7 @@ public class Mapping2TIF {
 
     }
 
-    private void makeTaskAttributes(TClass tcpu, ArrayList<TMLTask> tasks) {
+    private void makeTaskAttributes(TClass tcpu, List<TMLTask> tasks) {
       //  int i;
         String init;
 
@@ -1298,7 +1298,7 @@ public class Mapping2TIF {
         }
     }
 
-    private void makeCPUDefaultGates(TClass tcpu, HwCPU cpu, ArrayList<TMLTask> tasks, ArrayList<TMLChannel> localChannels, ArrayList<TMLEvent> localEvents, ArrayList<TMLRequest> localRequests) {
+    private void makeCPUDefaultGates(TClass tcpu, HwCPU cpu, List<TMLTask> tasks, List<TMLChannel> localChannels, List<TMLEvent> localEvents, List<TMLRequest> localRequests) {
         if (showBlockedCPU) {
             tcpu.addNewGateIfApplicable(cpu.getName() + "__allBlocked");
         }
@@ -1370,7 +1370,7 @@ public class Mapping2TIF {
         }
     }
 
-    private void makeCPUActivityDiagram(TClass tcpu, HwCPU cpu, int index, ArrayList<TMLTask> tasks, ArrayList<TMLChannel> localChannels, ArrayList<TMLEvent> localEvents, ArrayList<TMLRequest> localRequests) {
+    private void makeCPUActivityDiagram(TClass tcpu, HwCPU cpu, int index, List<TMLTask> tasks, List<TMLChannel> localChannels, List<TMLEvent> localEvents, List<TMLRequest> localRequests) {
         ActivityDiagram ad = tcpu.getActivityDiagram();
 
         ADJunction mainInitJunction = initJuncs.get(index);
@@ -1398,7 +1398,7 @@ public class Mapping2TIF {
         makeCPUADTasks(tcpu, cpu, ad, selectedChoice, maincpujunc, endjunc, tasks);
     }
 
-    private void makeCPUADInit(TClass tcpu, HwCPU cpu, int index, ActivityDiagram ad, ADJunction mainJunction, ArrayList<TMLTask> tasks) {
+    private void makeCPUADInit(TClass tcpu, HwCPU cpu, int index, ActivityDiagram ad, ADJunction mainJunction, List<TMLTask> tasks) {
 
         ADComponent start;
         if (index == 0) {
@@ -1436,7 +1436,7 @@ public class Mapping2TIF {
         }
     }
 
-    private void makeCPUADSelection(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADJunction mainJunction, ADJunction endjunc, ADChoice selectedChoice, ArrayList<TMLTask> tasks) {
+    private void makeCPUADSelection(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADJunction mainJunction, ADJunction endjunc, ADChoice selectedChoice, List<TMLTask> tasks) {
       //  int cpt = 0;
         ADComponent previous = mainJunction;
         String guard0, guard1;
@@ -1579,7 +1579,7 @@ public class Mapping2TIF {
         }
     }
 
-    private void makeCPUADTermination(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice selectedChoice, ADJunction endjunc, ArrayList<TMLTask> tasks) {
+    private void makeCPUADTermination(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice selectedChoice, ADJunction endjunc, List<TMLTask> tasks) {
         ADStop stop = new ADStop();
         ad.add(stop);
         selectedChoice.addGuard("[" + cpu.getName() + "__selected == 2]");
@@ -1599,7 +1599,7 @@ public class Mapping2TIF {
         }
     }
 
-    private void makeCPUADScheduling(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice selectedChoice, ADJunction mainJunction, ArrayList<TMLTask> tasks) {
+    private void makeCPUADScheduling(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice selectedChoice, ADJunction mainJunction, List<TMLTask> tasks) {
         // If state is equal to 1, state is set to zero
         String guard0, guard1, action;
         ADChoice test;
@@ -1843,7 +1843,7 @@ public class Mapping2TIF {
         }
     }
 
-    private void makeCPUADTasks(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice selectedChoice, ADJunction mainJunction, ADJunction endjunc, ArrayList<TMLTask> tasks) {
+    private void makeCPUADTasks(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice selectedChoice, ADJunction mainJunction, ADJunction endjunc, List<TMLTask> tasks) {
         ADChoice taskChoice = new ADChoice();
         ad.add(taskChoice);
         selectedChoice.addNext(taskChoice);
@@ -1926,7 +1926,7 @@ public class Mapping2TIF {
         }
     }
 
-    private void makeCPUADTask(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice taskChoice, ADJunction nextJunction, TMLTask task, int cpt, ArrayList<TMLTask> tasks) {
+    private void makeCPUADTask(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice taskChoice, ADJunction nextJunction, TMLTask task, int cpt, List<TMLTask> tasks) {
         ADChoice stateChoice = new ADChoice();
         ad.add(stateChoice);
         taskChoice.addGuard("[" + task.getName() + "__state == 1]");
@@ -1988,7 +1988,7 @@ public class Mapping2TIF {
         makeCPUADTaskBehavior(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks);
     }
 
-    private void makeCPUADTaskBehavior(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice stateChoice, ADJunction endJunction, TMLTask task, int cpt, ArrayList<TMLTask> tasks) {
+    private void makeCPUADTaskBehavior(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice stateChoice, ADJunction endJunction, TMLTask task, int cpt, List<TMLTask> tasks) {
        // ADStart start = ad.getStartState();
 
         int stateId = 0;
@@ -2064,7 +2064,7 @@ public class Mapping2TIF {
         //stateChoice.addGuard("[nTick > 2]");
     }
 
-    private int makeCPUADTaskBehaviorComponent(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice stateChoice, ADJunction endJunction, TMLTask task, int cpt, ArrayList<TMLTask> tasks, int stateId, int branchStateId, TMLActivityElement element) {
+    private int makeCPUADTaskBehaviorComponent(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice stateChoice, ADJunction endJunction, TMLTask task, int cpt, List<TMLTask> tasks, int stateId, int branchStateId, TMLActivityElement element) {
 
         ADActionStateWithParam actionp0, actionp1, actionp2, actionp3, actionp4, actionp5, actionp6, actionp7, actionp8, actionp9;
         ADActionStateWithParam actionpspe = null;
