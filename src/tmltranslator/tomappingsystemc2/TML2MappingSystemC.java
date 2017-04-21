@@ -260,7 +260,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         declaration += "//Declaration of Bus masters" + CR;
         for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
             if (node instanceof HwExecutionNode || node instanceof HwBridge){
-                ArrayList<HwLink> nodeLinks= tmlmapping.getTMLArchitecture().getLinkByHwNode(node);
+                List<HwLink> nodeLinks= tmlmapping.getTMLArchitecture().getLinkByHwNode(node);
                 if (!nodeLinks.isEmpty()){
                     //declaration+= "BusMaster* " + node.getName() + "2defaultBus = new BusMaster(\"" + node.getName() + "2defaultBus\", 0, defaultBus)" + SCCR;
                     //else{
@@ -374,7 +374,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         declaration += "//Set bus schedulers" + CR;
         for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
             if (node instanceof HwBus) {
-                ArrayList<HwLink> busLinks= tmlmapping.getTMLArchitecture().getLinkByBus((HwBus)node);
+                List<HwLink> busLinks= tmlmapping.getTMLArchitecture().getLinkByBus((HwBus)node);
                 String devices="";
                 int numDevices=0;
                 if (!busLinks.isEmpty()){
@@ -611,7 +611,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         //first called with Maping:getCommunicationNodes
         LinkedList<HwCommunicationNode> nodesToExplore;
         TraceManager.addDev("No of comm nodes " + commNodes.size());
-	 TraceManager.addDev("startNode=" + startNode);
+        TraceManager.addDev("startNode=" + startNode);
         boolean busExploreMode = ((depth & 1) == 0);
         //if (depth % 2 == 0){
         if(busExploreMode){

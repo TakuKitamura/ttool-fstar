@@ -60,20 +60,20 @@ import myutil.*;
 import avatartranslator.*;
 
 public class TML2Avatar {
-	TMLMapping tmlmap;
-	TMLModeling tmlmodel;
+	private TMLMapping tmlmap;
+	private TMLModeling tmlmodel;
 
-	HashMap<SecurityPattern, LinkedList<AvatarAttribute>> symKeys = new HashMap<SecurityPattern, LinkedList<AvatarAttribute>>();
-	HashMap<SecurityPattern, LinkedList<AvatarAttribute>> pubKeys = new HashMap<SecurityPattern, LinkedList<AvatarAttribute>>();
-	HashMap<String, String> nameMap = new HashMap<String, String>();
-	AvatarAttribute pKey;
-	public HashMap<TMLChannel, Integer> channelMap = new HashMap<TMLChannel,Integer>();
-	public HashMap<TMLTask, AvatarBlock> taskBlockMap = new HashMap<TMLTask, AvatarBlock>();  
-	public HashMap<String, Integer> originDestMap = new HashMap<String, Integer>();
-	HashMap<String, AvatarSignal> signalInMap = new HashMap<String, AvatarSignal>();
-	HashMap<String, AvatarSignal> signalOutMap = new HashMap<String, AvatarSignal>();
-	public HashMap<String, Object> stateObjectMap = new HashMap<String, Object>();
-	public HashMap<TMLTask, ArrayList<SecurityPattern>> accessKeys = new HashMap<TMLTask, ArrayList<SecurityPattern>>();
+	private Map<SecurityPattern, List<AvatarAttribute>> symKeys = new HashMap<SecurityPattern, List<AvatarAttribute>>();
+	private Map<SecurityPattern, List<AvatarAttribute>> pubKeys = new HashMap<SecurityPattern, List<AvatarAttribute>>();
+	private Map<String, String> nameMap = new HashMap<String, String>();
+	//private AvatarAttribute pKey;
+	public Map<TMLChannel, Integer> channelMap = new HashMap<TMLChannel,Integer>();
+	public Map<TMLTask, AvatarBlock> taskBlockMap = new HashMap<TMLTask, AvatarBlock>();  
+	public Map<String, Integer> originDestMap = new HashMap<String, Integer>();
+	private Map<String, AvatarSignal> signalInMap = new HashMap<String, AvatarSignal>();
+	private Map<String, AvatarSignal> signalOutMap = new HashMap<String, AvatarSignal>();
+	public Map<String, Object> stateObjectMap = new HashMap<String, Object>();
+	public Map<TMLTask, List<SecurityPattern>> accessKeys = new HashMap<TMLTask, List<SecurityPattern>>();
 
 	HashMap<String, String> secChannelMap = new HashMap<String, String>();
 
@@ -104,7 +104,7 @@ public class TML2Avatar {
 	public void checkConnections(){
 		List<HwLink> links = tmlmap.getTMLArchitecture().getHwLinks();
 		for (TMLTask t1:tmlmodel.getTasks()){
-			ArrayList<SecurityPattern> keys = new ArrayList<SecurityPattern>();
+			List<SecurityPattern> keys = new ArrayList<SecurityPattern>();
 			accessKeys.put(t1, keys);
 			HwExecutionNode node1 = (HwExecutionNode) tmlmap.getHwNodeOf(t1);
 			//Try to find memory using only private buses
@@ -126,7 +126,7 @@ public class TML2Avatar {
 					if (curr == link.bus){
 						if (link.hwnode instanceof HwMemory){
 							memory=true;
-							ArrayList<SecurityPattern> patterns = tmlmap.getMappedPatterns((HwMemory) link.hwnode);
+							List<SecurityPattern> patterns = tmlmap.getMappedPatterns((HwMemory) link.hwnode);
 							accessKeys.get(t1).addAll(patterns);
 							//  break memloop;
 						}
@@ -1805,36 +1805,39 @@ public class TML2Avatar {
 			List<AvatarSignal> sig1 = new ArrayList<AvatarSignal>();
 			List<AvatarSignal> sig2 = new ArrayList<AvatarSignal>();
 			for (AvatarSignal sig: signals){
-			if (sig.getInOut()==AvatarSignal.IN){
-				String name = sig.getName();
-				if (name.equals(getName(request.getName()))){
-				sig1.add(sig);
+				if (sig.getInOut()==AvatarSignal.IN){
+					String name = sig.getName();
+					
+					if (name.equals(getName(request.getName()))){
+						sig1.add(sig);
+					}
 				}
-			}
 			}
 			//Find out signal
 			for (AvatarSignal sig: signals){
-			if (sig.getInOut()==AvatarSignal.OUT){
-				String name = sig.getName();
-				if (name.equals(getName(request.getName()))){
-				sig2.add(sig);
+				if (sig.getInOut()==AvatarSignal.OUT){
+					String name = sig.getName();
+					
+					if (name.equals(getName(request.getName()))){
+						sig2.add(sig);
+					}
 				}
 			}
-			}
 			if (sig1.size()==0){
-			sig1.add(new AvatarSignal(getName(request.getName()), AvatarSignal.IN, null));
+				sig1.add(new AvatarSignal(getName(request.getName()), AvatarSignal.IN, null));
 			}
 			if (sig2.size()==0){
-			sig2.add(new AvatarSignal(getName(request.getName()), AvatarSignal.OUT, null));
+				sig2.add(new AvatarSignal(getName(request.getName()), AvatarSignal.OUT, null));
 			}
 			if (sig1.size()==1 && sig2.size()==1){
-			ar.addSignals(sig2.get(0), sig1.get(0));
+				ar.addSignals(sig2.get(0), sig1.get(0));
 			}
 			else {
-			//Throw error
-			System.out.println("Could not match for " + request.getName());
+				//Throw error
+				System.out.println("Could not match for " + request.getName());
 			}
-		ar.setAsynchronous(false);
+			
+			ar.setAsynchronous(false);
 			avspec.addRelation(ar);
 		}
 	}

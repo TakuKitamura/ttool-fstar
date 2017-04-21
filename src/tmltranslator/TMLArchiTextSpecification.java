@@ -58,7 +58,7 @@ public class TMLArchiTextSpecification {
     public final static String SC = ";";
 
     private String spec;
-    private String title;
+  //  private String title;
 
     private TMLArchitecture tmla;
     private ArrayList<TMLTXTError> errors;
@@ -72,7 +72,7 @@ public class TMLArchiTextSpecification {
     private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration"};
     private String bridgeparameters[] = {"bufferByteSize"};
     private String memoryparameters[] = {"byteDataSize"};
-    private String dmaparameters[] = {"byteDataSize", "nbOfChannels"};
+  //  private String dmaparameters[] = {"byteDataSize", "nbOfChannels"};
 
 
 
@@ -87,9 +87,9 @@ public class TMLArchiTextSpecification {
       private String endArray[] = {"ENDTASK", "ENDFOR", "ENDIF", "ELSE", "ELSEIF", "ENDSELECTEVT", "ENDCASE", "ENDRAND", "ENDCASERAND"};
     */
 
-    public TMLArchiTextSpecification(String _title) {
-        title = _title;
-    }
+//    public TMLArchiTextSpecification(String _title) {
+//        title = _title;
+//    }
 
     public void saveFile(String path, String filename) throws FileException {
         System.out.println("Saving architecture spec file in " + path + filename);
@@ -133,7 +133,7 @@ public class TMLArchiTextSpecification {
         String code = "";
         String name;
         String set;
-        ArrayList<HwNode> hwnodes = tmla.getHwNodes();
+        List<HwNode> hwnodes = tmla.getHwNodes();
         HwCPU cpu;
         HwA hwa;
         HwBus bus;
@@ -224,7 +224,7 @@ public class TMLArchiTextSpecification {
         String code = "";
         String name;
         String set;
-        ArrayList<HwLink> hwlinks = tmla.getHwLinks();
+        List<HwLink> hwlinks = tmla.getHwLinks();
 
         //System.out.println("Making links");
         for(HwLink link: hwlinks) {
@@ -312,7 +312,7 @@ public class TMLArchiTextSpecification {
         String [] split;
         int lineNb = 0;
 
-        String instruction;
+     //   String instruction;
 
         try {
             while((s = br.readLine()) != null) {
@@ -351,8 +351,8 @@ public class TMLArchiTextSpecification {
 
     public int analyseInstruction(String _line, int _lineNb, String[] _split) {
         String error;
-        String params;
-        String id;
+//        String params;
+//        String id;
         int value;
 
 
@@ -815,8 +815,8 @@ public class TMLArchiTextSpecification {
     }
 
     public String removeUndesiredWhiteSpaces(String _input, int _lineNb) {
-        String error, tmp;
-        int index0, index1, index2;
+//        String error, tmp;
+//        int index0, index1, index2;
 
         return _input;
     }

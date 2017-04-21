@@ -1432,8 +1432,8 @@ public class DSEConfiguration implements Runnable  {
 	TMLArchiPanel archPanel = (TMLArchiPanel) mainGUI.tabs.get(mainGUI.tabs.size()-1);
 	TMLArchiDiagramPanel ap = archPanel.tmlap;
 	TMLArchitecture arch = map.getArch();
-	ArrayList<HwNode> hwnodes = arch.getHwNodes();
-	ArrayList<HwLink> hwlinks = arch.getHwLinks();
+	List<HwNode> hwnodes = arch.getHwNodes();
+	List<HwLink> hwlinks = arch.getHwLinks();
 	int x=10;
 	int y=10;
 	for (HwNode node: hwnodes){
@@ -1515,7 +1515,7 @@ public class DSEConfiguration implements Runnable  {
 		
 	}
 	
-	public List<String> constructCommandList(String _cmd) {
+	public Vector<String> constructCommandList(String _cmd) {
 		Vector<String> list = new Vector<String>();
 		_cmd = _cmd.trim();
 		char c;
@@ -1549,7 +1549,7 @@ public class DSEConfiguration implements Runnable  {
 		
 		//TraceManager.addDev("List done\n");
 		
-		return (List)list;
+		return list;
 		
 	}
 	
@@ -1629,7 +1629,7 @@ public class DSEConfiguration implements Runnable  {
 	private void addMemories(Vector<TMLMapping> maps){
 		for (TMLMapping map: maps){
 			TMLArchitecture arch = map.getArch();
-			ArrayList<HwNode> nodes =  arch.getCPUs();
+			List<HwNode> nodes =  arch.getCPUs();
 			for (HwNode node:nodes){
 				HwBus bus = new HwBus("bus " +node.getName());
 				bus.privacy=1;

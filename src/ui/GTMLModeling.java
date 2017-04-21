@@ -536,7 +536,8 @@ public class GTMLModeling  {
         String name;
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TMLRequestOperator) {
                 tmlro = (TMLRequestOperator)tgc;
                 //TraceManager.addDev("Found request: " + tmlro.getRequestName());
@@ -1210,7 +1211,8 @@ public class GTMLModeling  {
         TraceManager.addDev("*** Adding requests ***");
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TMLCPrimitiveComponent) {
                 tmlc = (TMLCPrimitiveComponent)tgc;
                 //TraceManager.addDev("Component:" + tmlc.getValue());
@@ -1218,7 +1220,7 @@ public class GTMLModeling  {
                 //TraceManager.addDev("Ports size:" + ports.size());
                 li = ports.listIterator();
                 while(li.hasNext()) {
-                    port1 = (TMLCPrimitivePort)(li.next());
+                    port1 = li.next();
                     portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
                     //TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 
@@ -1255,7 +1257,7 @@ public class GTMLModeling  {
                     request = new TMLRequest(name, port1);
                     request.ports.add(port1);
                     for(i=0; i<portstome.size(); i++) {
-                        port2 = (TMLCPrimitivePort)(portstome.get(i));
+                        port2 = portstome.get(i);
                         request.ports.add(port2);
                         TraceManager.addDev("Add add add to table request : " + makeName(port2, port2.getFather().getValue()) + "/" + port2.getName() + " name =" + name);
                         addToTable(makeName(port2, port2.getFather().getValue()) + "/" + port2.getPortName(), name);
@@ -1317,7 +1319,7 @@ public class GTMLModeling  {
                     }
 
                     for(i=0; i<portstome.size(); i++) {
-                        port2 = (TMLCPrimitivePort)(portstome.get(i));
+                        port2 = portstome.get(i);
                         tt2 = tmlm.getTMLTaskByName(makeName(port2, port2.getFather().getValue()));
                         if (tt2 == null) {
                             TraceManager.addDev(" NO NO NO NO Destination taskin request!");
@@ -1342,7 +1344,6 @@ public class GTMLModeling  {
                             throw new MalformedTMLDesignException(msg);
                         }
                     }
-
 
                     if (tmlm.hasSameRequestName(request)) {
                         TMLRequest otherReq = tmlm.hasSimilarRequest(request);

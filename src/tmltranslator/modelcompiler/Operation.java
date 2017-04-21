@@ -47,6 +47,7 @@
 package tmltranslator.modelcompiler;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import tmltranslator.HwNode;
 import tmltranslator.TMLTask;
@@ -63,7 +64,7 @@ public class Operation	{
 	private TMLTask xTask;
 //	private boolean prex;
 //	private boolean postex;
-	private ArrayList<Signal> inSignals = new ArrayList<Signal>();
+	private List<Signal> inSignals = new ArrayList<Signal>();
 	private Signal outSignal;
 	private Buffer inBuffer;
 	private Buffer outBuffer;
@@ -73,7 +74,7 @@ public class Operation	{
 	private boolean isPostex;
 
 	//Constructor for SDR operations with input (READ channels and events) and output (WRITE channels and events) signals
-	public Operation( TMLTask _xTask, TMLTask _fTask, HwNode _xHwNode, HwNode _fHwNode, ArrayList<Signal> _inSignals, Signal _outSignal, Buffer _inBuffer, Buffer _outBuffer, boolean _isPrex, boolean _isPostex )	{	//First pass the F task
+	public Operation( TMLTask _xTask, TMLTask _fTask, HwNode _xHwNode, HwNode _fHwNode, List<Signal> _inSignals, Signal _outSignal, Buffer _inBuffer, Buffer _outBuffer, boolean _isPrex, boolean _isPostex )	{	//First pass the F task
 		name = _xTask.getName().split( "__" )[1].split( "F_" )[1];
 		fTask = _xTask;
 		xTask = _fTask;
@@ -100,10 +101,11 @@ public class Operation	{
 		return fTask;
 	}
 
-	public ArrayList<TMLTask> getSDRTasks()	{
-		ArrayList<TMLTask> tasks = new ArrayList<TMLTask>();
+	public List<TMLTask> getSDRTasks()	{
+		List<TMLTask> tasks = new ArrayList<TMLTask>();
 		tasks.add( fTask );
 		tasks.add( xTask );
+		
 		return tasks;
 	}
 
@@ -123,11 +125,11 @@ public class Operation	{
 		return type;
 	}
 
-	public ArrayList<Signal> getInSignals()	{
+	public List<Signal> getInSignals()	{
 		return inSignals;
 	}
 
-	public void setInSignals( ArrayList<Signal> _list )	{
+	public void setInSignals( List<Signal> _list )	{
 		inSignals = _list;
 	}
 

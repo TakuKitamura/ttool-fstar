@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.HashSet;
 import java.io.*;
 import javax.swing.*;
@@ -224,7 +225,9 @@ public class TML2ProVerif {
     				String fileHash = Integer.toString(s.hashCode());
     				if (!hash.equals(fileHash)){
     					if(JOptionPane.showConfirmDialog(null, "File " + path + " already exists. Do you want to overwrite?", "Overwrite File?", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
-    						return false;
+    	    				br.close();
+
+    	    				return false;
     					}
     				}
     				br.close();
@@ -260,9 +263,10 @@ public class TML2ProVerif {
             this.spec = new ProVerifSpec (new ProVerifPitypeSyntaxer ());
         else
             this.spec = new ProVerifSpec (new ProVerifPiSyntaxer ());
-	checkChannels();
+        
+        checkChannels();
 
-        LinkedList<TMLAttribute> allKnowledge = this.makeStartingProcess();
+        List<TMLAttribute> allKnowledge = this.makeStartingProcess();
 
         this.makeHeader();
 
@@ -377,29 +381,28 @@ public class TML2ProVerif {
         this.spec.addDeclaration (new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("x", "bitstring")}, CHCTRL_DECRYPT + " (" + CHCTRL_ENCRYPT + " (x)) = x", true));
 
         /* Declare all the call__*** variables */
-        ArrayList<TMLTask> tasks = this.tmlmap.getMappedTasks();
-	for (TMLTask task:tasks){
-	     this.spec.addDeclaration (new ProVerifVar        ("call__" + task.getName() + "__0", "bitstring", true));
+        List<TMLTask> tasks = this.tmlmap.getMappedTasks();
+
+        for (TMLTask task:tasks){
+        	this.spec.addDeclaration (new ProVerifVar        ("call__" + task.getName() + "__0", "bitstring", true));
   
-	}
+        }
        // String action = "(";
 
 
         this.spec.addDeclaration (new ProVerifComment    ("Data"));
         TraceManager.addDev("Constants");
-
-    
     }
 
-    private LinkedList<TMLAttribute> makeStartingProcess() {
+    private List<TMLAttribute> makeStartingProcess() {
         TraceManager.addDev("\n\n=+=+=+ Making Starting Process +=+=+=");
-	LinkedList<TMLAttribute> systemKnowledge = new LinkedList<TMLAttribute>();
+        List<TMLAttribute> systemKnowledge = new LinkedList<TMLAttribute>();
         // Create starting process
         ProVerifProcess p = new ProVerifProcess("starting__", new ProVerifVar[] {});
         ProVerifProcInstr lastInstr = p;
 
         // Get all the tasks
-        ArrayList<TMLTask> tasks = tmlmap.getMappedTasks();
+        List<TMLTask> tasks = tmlmap.getMappedTasks();
 
 
  	// Call all the processes corresponding to crossroads in the state machine
@@ -442,10 +445,11 @@ public class TML2ProVerif {
     /**
      * Generate ProVerif code for each process for each TMLTask
      */
-    private void makeTasks(LinkedList<TMLAttribute> allKnowledge) {
+    private void makeTasks( List<TMLAttribute> allKnowledge ) {
         TraceManager.addDev("\n\n=+=+=+ Making Tasks +=+=+=");
 
-        ArrayList<TMLTask> tasks = tmlmap.getMappedTasks();
+        List<TMLTask> tasks = tmlmap.getMappedTasks();
+        
         for(TMLTask task: tasks)
             makeTask(task, allKnowledge);
     }
@@ -459,119 +463,126 @@ public class TML2ProVerif {
     /**
      * Generate ProVerif code for one TMLTask
      */
-    private void makeTask(TMLTask task, LinkedList<TMLAttribute> allKnowledge) {
+    private void makeTask(TMLTask task, List<TMLAttribute> allKnowledge) {
         TraceManager.addDev("\nTMLTask: " + task.getName ());
 
-        LinkedList<ProVerifVar> processArgs = new LinkedList<ProVerifVar>();
+        List<ProVerifVar> processArgs = new LinkedList<ProVerifVar>();
         processArgs.add (new ProVerifVar ("sessionID", "bitstring"));
 
         ProVerifProcInstr lastInstr = new ProVerifProcess(task.getName() + "__start", processArgs.toArray (new ProVerifVar[processArgs.size ()]));
         spec.addDeclaration (lastInstr);
-	ArrayList<String> variables = new ArrayList<String>();
-	HashSet<String> channelOutNames = new HashSet<String>();
-	for (TMLAttribute arg: task.getAttributes ()) {
-	    variables.add(arg.getName());
+        List<String> variables = new ArrayList<String>();
+		Set<String> channelOutNames = new HashSet<String>();
+	
+		for (TMLAttribute arg: task.getAttributes ()) {
+			variables.add(arg.getName());
         }
 
-	for (TMLWriteChannel ch:task.getWriteChannels()){
-	    String chName = ch.getChannel(0).getName();
-	    channelOutNames.add("data__"+chName);
-	}
+		for (TMLWriteChannel ch:task.getWriteChannels()){
+		    String chName = ch.getChannel(0).getName();
+		    channelOutNames.add("data__"+chName);
+		}
 
         // Create a ProVerif Variable corresponding to each attribute block
         for (String arg: variables) {
             ProVerifProcInstr tmpInstr;
-	    tmpInstr = new ProVerifProcNew (arg, "bitstring");
+            tmpInstr = new ProVerifProcNew (arg, "bitstring");
             TraceManager.addDev("|    TMLAttribute: " + arg);
             lastInstr = lastInstr.setNextInstr (tmpInstr);
         }
-	for (String chName: channelOutNames){
-	    ProVerifProcInstr tmpInstr;
-	    tmpInstr = new ProVerifProcNew (chName, "bitstring");
+	
+        for (String chName: channelOutNames){
+		    ProVerifProcInstr tmpInstr;
+		    tmpInstr = new ProVerifProcNew (chName, "bitstring");
             TraceManager.addDev("|    TMLAttribute: " + chName);
             lastInstr = lastInstr.setNextInstr (tmpInstr);
-	}
+		}
 
         // Call the first "real" process
         String tmp = "out (" + CHCTRL_CH + ", " + CHCTRL_ENCRYPT + " ((sessionID, call__" + task.getName () + "__0";
-	for (String arg:variables){
-	    tmp+=", " + arg;
-	}
-	for (String chName: channelOutNames){
-	    tmp+=", " + chName;
-	}
-        lastInstr = lastInstr.setNextInstr(new ProVerifProcRaw (tmp + ")))"));
+		
+        for (String arg:variables){
+		    tmp+=", " + arg;
+		}
+
+		for (String chName: channelOutNames){
+		    tmp+=", " + chName;
+		}
+        
+		lastInstr = lastInstr.setNextInstr(new ProVerifProcRaw (tmp + ")))"));
 
         // Generate a new process for every simplified element of the block's state machine
         ProVerifProcInstr p = new ProVerifProcess(task.getName()+"__0", new ProVerifVar[] {new ProVerifVar ("sessionID", "bitstring")});
-	LinkedList<ProVerifVar> attributes = new LinkedList<ProVerifVar> ();
+        List<ProVerifVar> attributes = new LinkedList<ProVerifVar> ();
 
 
         attributes.add (new ProVerifVar ("sessionID", "bitstring", false, true));
         attributes.add (new ProVerifVar ("call__" + task.getName () + "__0", "bitstring", false, true));
-	for (String arg:variables) {
+	
+        for (String arg:variables) {
             attributes.add (new ProVerifVar (arg, "bitstring"));
         }
-	for (String chName: channelOutNames){
-	    attributes.add(new ProVerifVar(chName, "bitstring"));
-	}
-	spec.addDeclaration(p);
-	p = p.setNextInstr (new ProVerifProcIn (CHCTRL_CH, new ProVerifVar[] {new ProVerifVar ("chControlData", "bitstring")}));
-	p = p.setNextInstr (new ProVerifProcLet (attributes.toArray (new ProVerifVar[attributes.size()]), CHCTRL_DECRYPT + " (chControlData)"));
-TMLActivity act= task.getActivityDiagram();
-	TMLActivityElement ae = act.getFirst();
-	int stateNum=0;
-	while (ae!=null){
-	    //declare entering
-	    p = p.setNextInstr (new ProVerifProcRaw ("event enteringState__" + task.getName() + "__" + stateNum + "()", true));
-	    stateNum++;
-	    if (ae instanceof TMLChoice){
-		//TMLChoice aechoice = (TMLChoice) ae;
-//			for (int i=0; i< ae.getNbNext(); i++){
-//			    
-//			}
-	    }
-	    else {
-	        if (ae instanceof TMLActivityElementChannel){
-	            TMLActivityElementChannel aec = (TMLActivityElementChannel) ae;
-		    int channelStatus = channelMap.get(aec.getChannel(0).getName());
-	            if (aec instanceof TMLWriteChannel){
-		        tmp = "out (" + CH_MAINCH + ", ";
-		        //Look up privacy
-		        if (channelStatus!=channelUnreachable){
-		            if (channelStatus==channelPrivate)
-                                tmp += CH_ENCRYPT + " (";
-            	    	    tmp += "data__"+aec.getChannel(0).getName()+")";
-		            if (channelStatus==channelPrivate)
-                                tmp += ")";
-		            p = p.setNextInstr(new ProVerifProcRaw (tmp, true));
-		        }
-	            }
-	            else {
-		        if (channelStatus==channelPrivate) {
-			    LinkedList<ProVerifVar> vars = new LinkedList<ProVerifVar> ();
-                	    TraceManager.addDev("|    |    in (chPriv, ...)");
-			    vars.add (new ProVerifVar ("data__"+ aec.getChannel(0).getName(), "bitstring"));
-                	    p = p.setNextInstr (new ProVerifProcIn (CH_MAINCH, new ProVerifVar[] {new ProVerifVar ("privChData", "bitstring")}));
-                	    p = p.setNextInstr (new ProVerifProcLet (vars.toArray (new ProVerifVar[vars.size()]), CH_DECRYPT + " (privChData)"));
-            	        }
-		        else {
-	                    LinkedList<ProVerifVar> vars = new LinkedList<ProVerifVar> ();
-		            vars.add (new ProVerifVar ("data__"+ aec.getChannel(0).getName(), "bitstring"));
-		            p=p.setNextInstr(new ProVerifProcIn (CH_MAINCH, vars.toArray (new ProVerifVar[vars.size()])));
-		        }
-	            }
-	        }
-	        ae = ae.getNextElement(0);
-	    }
-	}
 
+        for (String chName: channelOutNames){
+		    attributes.add(new ProVerifVar(chName, "bitstring"));
+		}
 
+        spec.addDeclaration(p);
+		p = p.setNextInstr (new ProVerifProcIn (CHCTRL_CH, new ProVerifVar[] {new ProVerifVar ("chControlData", "bitstring")}));
+		p = p.setNextInstr (new ProVerifProcLet (attributes.toArray (new ProVerifVar[attributes.size()]), CHCTRL_DECRYPT + " (chControlData)"));
+		TMLActivity act= task.getActivityDiagram();
+		TMLActivityElement ae = act.getFirst();
+		int stateNum=0;
+		
+		while (ae!=null){
+		    //declare entering
+		    p = p.setNextInstr (new ProVerifProcRaw ("event enteringState__" + task.getName() + "__" + stateNum + "()", true));
+		    stateNum++;
+		    if (ae instanceof TMLChoice){
+			//TMLChoice aechoice = (TMLChoice) ae;
+	//			for (int i=0; i< ae.getNbNext(); i++){
+	//			    
+	//			}
+		    }
+		    else {
+		        if (ae instanceof TMLActivityElementChannel){
+		            TMLActivityElementChannel aec = (TMLActivityElementChannel) ae;
+		            int channelStatus = channelMap.get(aec.getChannel(0).getName());
+		            
+		            if (aec instanceof TMLWriteChannel){
+				        tmp = "out (" + CH_MAINCH + ", ";
+				        //Look up privacy
+				        if (channelStatus!=channelUnreachable){
+				            if (channelStatus==channelPrivate)
+		                                tmp += CH_ENCRYPT + " (";
+		            	    	    tmp += "data__"+aec.getChannel(0).getName()+")";
+				            if (channelStatus==channelPrivate)
+		                                tmp += ")";
+				            p = p.setNextInstr(new ProVerifProcRaw (tmp, true));
+				        }
+		            }
+		            else {
+				        if (channelStatus==channelPrivate) {
+					    	List<ProVerifVar> vars = new LinkedList<ProVerifVar> ();
+	                	    TraceManager.addDev("|    |    in (chPriv, ...)");
+	                	    vars.add (new ProVerifVar ("data__"+ aec.getChannel(0).getName(), "bitstring"));
+	                	    p = p.setNextInstr (new ProVerifProcIn (CH_MAINCH, new ProVerifVar[] {new ProVerifVar ("privChData", "bitstring")}));
+	                	    p = p.setNextInstr (new ProVerifProcLet (vars.toArray (new ProVerifVar[vars.size()]), CH_DECRYPT + " (privChData)"));
+		            	}
+				        else {
+			                List<ProVerifVar> vars = new LinkedList<ProVerifVar> ();
+				            vars.add (new ProVerifVar ("data__"+ aec.getChannel(0).getName(), "bitstring"));
+				            p=p.setNextInstr(new ProVerifProcIn (CH_MAINCH, vars.toArray (new ProVerifVar[vars.size()])));
+				        }
+		            }
+		        }
+
+		        ae = ae.getNextElement(0);
+		    }
+		}	
     }
 
     public ProVerifOutputAnalyzer getOutputAnalyzer () {
         return new ProVerifOutputAnalyzer (null);
     }
-
-    
 }

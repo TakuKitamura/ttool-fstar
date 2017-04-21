@@ -47,6 +47,7 @@
 package tmltranslator.modelcompiler;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import tmltranslator.TMLCP;
 import tmltranslator.TMLCPLib;
@@ -61,14 +62,14 @@ public class DataTransfer	{
 
 	private int type;
 	private String name = "";
-	private ArrayList<Buffer> inBuffers;
+	private List<Buffer> inBuffers;
 	private Buffer outBuffer;
 	private TMLCPLib tmlcplib;
 	private TMLCP tmlcp;
-	private ArrayList<Signal> outSignals;
-	private ArrayList<Signal> inSignals;
+	private List<Signal> outSignals;
+	private List<Signal> inSignals;
 
-	public DataTransfer( TMLCPLib _tmlcplib, TMLCP _tmlcp, ArrayList<Signal> _inSignals, ArrayList<Signal> _outSignals )	{
+	public DataTransfer( TMLCPLib _tmlcplib, TMLCP _tmlcp, List<Signal> _inSignals, List<Signal> _outSignals )	{
 		name = _tmlcplib.getName();
 		tmlcplib = _tmlcplib;
 		tmlcp = _tmlcp;
@@ -98,11 +99,11 @@ public class DataTransfer	{
 		return type;
 	}
 
-	public ArrayList<Signal> getInSignals()	{
+	public List<Signal> getInSignals()	{
 		return inSignals;
 	}
 
-	public ArrayList<Signal> getOutSignals()	{
+	public List<Signal> getOutSignals()	{
 		return outSignals;
 	}
 
@@ -126,7 +127,7 @@ public class DataTransfer	{
 		inBuffers.add( _inBuffer );
 	}
 
-	public ArrayList<Buffer> getInBuffers()	{
+	public List<Buffer> getInBuffers()	{
 		return inBuffers;
 	}
 
@@ -172,7 +173,8 @@ public class DataTransfer	{
 		if( tmlcp != null )	{
 			s.append( "TMLCP: " + tmlcp.toString() );
 		}
-	return s.toString();
+	
+		return s.toString();
 	}
 
 }	//End of class

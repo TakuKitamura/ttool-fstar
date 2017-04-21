@@ -203,9 +203,9 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         String errors = "";
         String tmpName;
 
-        JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Communication Pattern mapping", this, mappedUnits, name, cpMEC, assignedAttributes, transferType1, transferType2 );
+        JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Communication Pattern Mapping", this, mappedUnits, name, cpMEC, assignedAttributes, transferType1, transferType2 );
         //dialog.setSize( 700, 550 );
-        GraphicLib.centerOnParent( dialog, 700, 550 );
+        GraphicLib.centerOnParent( dialog, 750, 500 );
         dialog.setVisible( true ); // blocked until dialog has been closed
         //setJDialogOptions(jdab);
         name = dialog.getNodeName();

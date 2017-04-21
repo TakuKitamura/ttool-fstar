@@ -53,6 +53,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -65,13 +66,10 @@ import tmltranslator.TMLArchitecture;
 import tmltranslator.TMLCP;
 import tmltranslator.TMLCPLib;
 import tmltranslator.TMLChannel;
-import tmltranslator.TMLElement;
 import tmltranslator.TMLMapping;
 import tmltranslator.TMLModeling;
 import tmltranslator.TMLPort;
-import tmltranslator.TMLReadChannel;
 import tmltranslator.TMLTask;
-import tmltranslator.TMLWriteChannel;
 import ui.ConfigurationTTool;
 import ui.GTMLModeling;
 import ui.TMLCommunicationPatternPanel;
@@ -101,17 +99,17 @@ public class TMLModelCompiler	{
 	private StringBuffer initFileString;
 //	private ArrayList<TMLTask> mappedTasks;
 //	private ArrayList<TMLElement> commElts;
-	private ArrayList<Operation> operationsList;
+	private List<Operation> operationsList;
 //	private int SDRoperationsCounter;
 //	private int signalsCounter;
-	private ArrayList<Signal> signalsList;
-	private ArrayList<TMLCPLib> mappedCPLibs;
-	private ArrayList<TMLPort> postexList;
-	private ArrayList<TMLPort> prexList;
-	private ArrayList<Buffer> buffersList;
-	private ArrayList<DataTransfer> dataTransfersList;
-	private ArrayList<TMLCommunicationPatternPanel> tmlcpps;
-	private ArrayList<TMLCP> tmlcpsList;
+	private List<Signal> signalsList;
+	private List<TMLCPLib> mappedCPLibs;
+	private List<TMLPort> postexList;
+	private List<TMLPort> prexList;
+	private List<Buffer> buffersList;
+	private List<DataTransfer> dataTransfersList;
+	private List<TMLCommunicationPatternPanel> tmlcpps;
+	private List<TMLCP> tmlcpsList;
 
 //	private ArrayList<TMLModelCompilerError> errors;
 //	private ArrayList<TMLModelCompilerError> warnings;
@@ -121,7 +119,7 @@ public class TMLModelCompiler	{
 
 	public JFrame frame; //Main Frame
 
-	public TMLModelCompiler( String _title, String _applicationName, JFrame _frame, ArrayList<TMLCommunicationPatternPanel> _tmlcpps, TMLMapping _tmap )	{
+	public TMLModelCompiler( String _title, String _applicationName, JFrame _frame, List<TMLCommunicationPatternPanel> _tmlcpps, TMLMapping _tmap )	{
 		title = _title;
 		applicationName = _applicationName;
 		frame = _frame;
@@ -157,8 +155,8 @@ public class TMLModelCompiler	{
 
 	public void toTextFormat()	{
 
-		ArrayList<TMLTask> mappedTasks = tmap.getMappedTasks();
-		ArrayList<TMLElement> commElts = tmap.getMappedCommunicationElement();
+		List<TMLTask> mappedTasks = tmap.getMappedTasks();
+		//List<TMLElement> commElts = tmap.getMappedCommunicationElement();
 
 		//Create the data structures for signals, buffers, operations and data transfers
 		openDebugFile();
@@ -198,13 +196,13 @@ public class TMLModelCompiler	{
  * 																CREATION OF DATA STRUCTURE PART
  *********************************************************************************/
 	//From the list of mapped tasks, built the list of operations. For SDR operations, only F_ tasks are considered.
-	private void makeOperationsList( ArrayList<TMLTask> mappedTasks )	{
+	private void makeOperationsList( List<TMLTask> mappedTasks )	{
 
-		ArrayList<TMLTask> SDRXtasks = new ArrayList<TMLTask>();
-		ArrayList<TMLTask> SDRFtasks = new ArrayList<TMLTask>();
+		List<TMLTask> SDRXtasks = new ArrayList<TMLTask>();
+		List<TMLTask> SDRFtasks = new ArrayList<TMLTask>();
 		Buffer inBuffer, outBuffer;
 		Signal outSignal;
-		ArrayList<Signal> inSignals;
+		List<Signal> inSignals;
 		String[] s;
 		boolean[] prexPostexList = new boolean[2];
 
@@ -507,14 +505,13 @@ public class TMLModelCompiler	{
 	}
 
 	private void makeDataTransfersList()	{
-
-		ArrayList<Signal> inSignals;
+		List<Signal> inSignals;
 		//Signal outSignal;
 
 		for( TMLCPLib cplib: mappedCPLibs )	{
 			if( cplib.getArtifacts().size() == 1 )	{
 				String portName = cplib.getArtifacts().get(0).getPortName();	//only one mapped port per CP
-				Object o = cplib.getArtifacts().get(0).getReferenceObject();
+				//Object o = cplib.getArtifacts().get(0).getReferenceObject();
 				inSignals = getDTInSignals( portName );
 				String cpName = cplib.getName().split("::")[1];
 				for( TMLCP tmlcp: tmlcpsList )	{
@@ -527,7 +524,7 @@ public class TMLModelCompiler	{
 		}
 
 		Signal newSig;
-		ArrayList<Signal> newInSignalsList = new ArrayList<Signal>();
+		List<Signal> newInSignalsList = new ArrayList<Signal>();
 
 		for( DataTransfer dt: dataTransfersList )	{
 			Operation op = getOperationWithSameInputSignals( dt.getInSignals() );	//IMPORTANT: create a DT output signal and modifies operations input signals
@@ -562,7 +559,7 @@ public class TMLModelCompiler	{
 		}
 	}
 
-	private Operation getOperationWithSameInputSignals( ArrayList<Signal> inSignals )	{
+	private Operation getOperationWithSameInputSignals( List<Signal> inSignals )	{
 		
 		int counter = 0;
 		for( Operation op: operationsList )	{
@@ -578,30 +575,30 @@ public class TMLModelCompiler	{
 		}
 		return null;
 	}
-
-	private Operation getOperationWithSameOutputSignals( ArrayList<Signal> outSignals )	{
-		
-		int counter = 0;
-		for( Operation op: operationsList )	{
-			Signal sig = op.getOutSignal();	//operations have one and only one outSignal
-			if( sig != null)	{
-				if( outSignals.contains( sig ) )	{
-					counter++;
-				}
-				if( counter == outSignals.size() )	{
-					return op;
-				}
-				counter = 0;
-			}
-		}
-		return null;
-	}
+//
+//	private Operation getOperationWithSameOutputSignals( ArrayList<Signal> outSignals )	{
+//		
+//		int counter = 0;
+//		for( Operation op: operationsList )	{
+//			Signal sig = op.getOutSignal();	//operations have one and only one outSignal
+//			if( sig != null)	{
+//				if( outSignals.contains( sig ) )	{
+//					counter++;
+//				}
+//				if( counter == outSignals.size() )	{
+//					return op;
+//				}
+//				counter = 0;
+//			}
+//		}
+//		return null;
+//	}
 
 	//retrieve the signal whose channel has a destintation port equal to portName
-	private ArrayList<Signal> getDTInSignals( String portName )	{
+	private List<Signal> getDTInSignals( String portName )	{
 		
 		TMLChannel channel;
-		ArrayList<Signal> sigsList = new ArrayList<Signal>();
+		List<Signal> sigsList = new ArrayList<Signal>();
 
 		for( Signal sig: signalsList )	{
 			channel = sig.getTMLChannel();
@@ -659,7 +656,7 @@ public class TMLModelCompiler	{
 														CR + TAB + "int status = " + applicationName + "_exec();" + CR + "}" );
 	}
 
-	private void generateHeaderFile( ArrayList<TMLTask> mappedTasks )	{
+	private void generateHeaderFile( List<TMLTask> mappedTasks )	{
 
 		getPrexAndPostexChannels();
 		headerString.append( generateCodeForLibraries() );
@@ -671,7 +668,7 @@ public class TMLModelCompiler	{
 
 	private void getPrexAndPostexChannels()	{
 
-		boolean foundPrex = false, foundPostex = false;
+	//	boolean foundPrex = false, foundPostex = false;
 		TMLPort originPort, destinationPort;
 
 		//Fill the the prex and postex lists
@@ -736,9 +733,9 @@ public class TMLModelCompiler	{
 
 	private String buffersAndInstructionsDeclaration( boolean declaration )	{
 
-		TMLTask xTask, fTask;
+		TMLTask xTask;//, fTask;
 		String ctxName;
-		ArchUnitMEC taskMEC;
+		//ArchUnitMEC taskMEC;
 		Buffer inBuff, outBuff;
 		StringBuffer buffersString = new StringBuffer( "/**** Buffers *****/" + CR );
 		StringBuffer instructionsString = new StringBuffer( "/**** Operations Data Structures *****/" + CR );
@@ -746,7 +743,7 @@ public class TMLModelCompiler	{
 		for( Operation op: operationsList )	{
 			if( op.getType() == Operation.SDR )	{
 				xTask = op.getSDRTasks().get( Operation.X_TASK );
-				fTask = op.getSDRTasks().get( Operation.F_TASK );
+				//fTask = op.getSDRTasks().get( Operation.F_TASK );
 				inBuff = op.getInBuffer();
 				outBuff = op.getOutBuffer();
 				ctxName = op.getContextName();
@@ -836,7 +833,7 @@ public class TMLModelCompiler	{
 			if( cpMECType == CPMEC.DoubleDmaMEC )	{
 				int suffix = 0;
 				for( String s: tmlcplib.getMappedUnits() )	{
-					ArrayList<Integer> transferTypes = tmlcplib.getTransferTypes();
+					//ArrayList<Integer> transferTypes = tmlcplib.getTransferTypes();
 					if( s.contains( CPMEC.dmaController ) )	{
 						int transferType = tmlcplib.getTransferTypes().get(suffix);
 						String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
@@ -949,17 +946,17 @@ public class TMLModelCompiler	{
 		return s.toString();
 	}
 
-	private String generateCodeForSinkOperation()	{
-
-		StringBuffer s = new StringBuffer();
-		for( Operation op: operationsList )	{
-			if( op.isPostex() )	{
-				s.append( "op_" + op.getName() + "()" + SC );
-				break;
-			}
-		}
-		return s.toString();
-	}
+//	private String generateCodeForSinkOperation()	{
+//
+//		StringBuffer s = new StringBuffer();
+//		for( Operation op: operationsList )	{
+//			if( op.isPostex() )	{
+//				s.append( "op_" + op.getName() + "()" + SC );
+//				break;
+//			}
+//		}
+//		return s.toString();
+//	}
 
 	private void generateCodeForOperations()	{ //generate the code for the execution operations
 		
@@ -981,7 +978,7 @@ public class TMLModelCompiler	{
 		StringBuffer code = new StringBuffer();
 		String ctxName = op.getContextName();
 		TMLTask xTask = op.getSDRTasks().get( Operation.X_TASK );	
-		TMLTask fTask =	op.getSDRTasks().get( Operation.F_TASK );
+		//TMLTask fTask =	op.getSDRTasks().get( Operation.F_TASK );
 
 		int xTaskOperationType = xTask.getOperationType();
 
@@ -1054,71 +1051,71 @@ public class TMLModelCompiler	{
 
 		return code.toString();
 	}
+//
+//	private String getTaskAttributes( TMLTask task )	{
+//
+//		StringBuffer attributesList = new StringBuffer();
+//		String type, value;
+//
+//		String[] attributes = task.getAttributeString().split("/");
+//		for( int i = 0; i < attributes.length; i++ )	{
+//			if( attributes[i].length() > 1 )	{
+//				String s = attributes[i].split("\\.")[1];
+//				String name = s.split(":")[0];
+//				if( !name.contains( "__req" ) )	{	//filter out request parameters
+//					type = s.split(":")[1].split("=")[0];
+//					value = s.split(":")[1].split("=")[1];
+//					if( value.equals(" " ) )	{
+//						attributesList.append( TAB + type + " " + name + ";" + CR );
+//					}
+//					else	{
+//						attributesList.append( TAB + type + " " + name + " = " + value.substring( 0, value.length() - 1 ) + ";" + CR );
+//					}
+//				}
+//			}
+//		}
+//		return attributesList.toString().substring( 0, attributesList.length() - 1 );	//remove last CR
+//	}
 
-	private String getTaskAttributes( TMLTask task )	{
+//	private String getOutSignalName( TMLTask task )	{
+//		
+//		String s = "";
+//		if( task.getWriteChannels().size() > 0 )	{
+//			TMLWriteChannel ch = task.getWriteChannels().get(0);
+//			String signalName = ch.toString().split("__")[1];
+//			if( signalsList.contains( signalName + "_CPin" ) )	{
+//				s = signalName;
+//			}
+//			else	{
+//				s = signalName;
+//			}
+//			return s;
+//		}
+//		return "";
+//	}
 
-		StringBuffer attributesList = new StringBuffer();
-		String type, value;
-
-		String[] attributes = task.getAttributeString().split("/");
-		for( int i = 0; i < attributes.length; i++ )	{
-			if( attributes[i].length() > 1 )	{
-				String s = attributes[i].split("\\.")[1];
-				String name = s.split(":")[0];
-				if( !name.contains( "__req" ) )	{	//filter out request parameters
-					type = s.split(":")[1].split("=")[0];
-					value = s.split(":")[1].split("=")[1];
-					if( value.equals(" " ) )	{
-						attributesList.append( TAB + type + " " + name + ";" + CR );
-					}
-					else	{
-						attributesList.append( TAB + type + " " + name + " = " + value.substring( 0, value.length() - 1 ) + ";" + CR );
-					}
-				}
-			}
-		}
-		return attributesList.toString().substring( 0, attributesList.length() - 1 );	//remove last CR
-	}
-
-	private String getOutSignalName( TMLTask task )	{
-		
-		String s = "";
-		if( task.getWriteChannels().size() > 0 )	{
-			TMLWriteChannel ch = task.getWriteChannels().get(0);
-			String signalName = ch.toString().split("__")[1];
-			if( signalsList.contains( signalName + "_CPin" ) )	{
-				s = signalName;
-			}
-			else	{
-				s = signalName;
-			}
-			return s;
-		}
-		return "";
-	}
-
-	private String getInSignalName( TMLTask task )	{
-		
-		String s = "";
-		if( task.getReadChannels().size() > 0 )	{
-			TMLReadChannel ch = task.getReadChannels().get(0);
-			String signalName = ch.toString().split("__")[1];
-			if( signalsList.contains( signalName + "_CPin" ) )	{
-				s = signalName;
-			}
-			else	{
-				s = signalName;
-			}
-			return s;
-		}
-		return "";
-	}
+//	private String getInSignalName( TMLTask task )	{
+//		
+//		String s = "";
+//		if( task.getReadChannels().size() > 0 )	{
+//			TMLReadChannel ch = task.getReadChannels().get(0);
+//			String signalName = ch.toString().split("__")[1];
+//			if( signalsList.contains( signalName + "_CPin" ) )	{
+//				s = signalName;
+//			}
+//			else	{
+//				s = signalName;
+//			}
+//			return s;
+//		}
+//		return "";
+//	}
 
 	private void generateCodeForCommunicationPatterns()	{
 		
 		int srcMemoryType = 0, dstMemoryType = 0;
 		TMLCPLib tmlcplib;
-		String s, ctxName, counter;
+		String /*s, */ctxName;//, counter;
 		Vector<String> attributes;
 		ArchUnitMEC dmaArchMEC = new CpuMEC();
 
@@ -1297,7 +1294,7 @@ public class TMLModelCompiler	{
 		}
 	}
 
-	private void generateInitFile( ArrayList<TMLTask> mappedTasks )	{
+	private void generateInitFile( List<TMLTask> mappedTasks )	{
 		
 		String init_code = "";
 		String ctxName;
@@ -1317,9 +1314,9 @@ public class TMLModelCompiler	{
 		for( Operation op: operationsList )	{
 			if( op.getType() == Operation.SDR )	{
 				TMLTask xTask = op.getSDRTasks().get( Operation.X_TASK );
-				TMLTask fTask = op.getSDRTasks().get( Operation.X_TASK );
+				//TMLTask fTask = op.getSDRTasks().get( Operation.X_TASK );
 				int xTaskOperationType = xTask.getOperationType();
-				int fTaskOperationType = fTask.getOperationType();
+				//int fTaskOperationType = fTask.getOperationType();
 				ctxName = op.getContextName();
 				if( op.getInSignals().size() > 0 )	{
 					inSignalName = op.getInSignals().get(0).getName();
@@ -1492,7 +1489,7 @@ public class TMLModelCompiler	{
 	private void generateInitRoutinesForCPs()	{
 
 		//ArchUnitMEC dmaArchMEC = new CpuMEC();
-		ArrayList<ArchUnitMEC> dmaArchMECList = new ArrayList<ArchUnitMEC>();
+	//	ArrayList<ArchUnitMEC> dmaArchMECList = new ArrayList<ArchUnitMEC>();
 		int transferType, cpMECType;
 		Vector<String> mappedUnits = new Vector<String>();
 
@@ -1534,7 +1531,7 @@ public class TMLModelCompiler	{
 					for( String s: tmlcplib.getMappedUnits() )	{	//there are two DMA_controllers
 						if( s.contains( CPMEC.dmaController ) )	{
 							transferType = tmlcplib.getTransferTypes().get(suffix);
-							String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
+							//String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
 							//dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC ;
 							if( transferType == CPMEC.IP2IP )	{
 								//initFileString.append( TAB + dmaArchMEC.getCtxInitCode() + "(&" + ctxName + "_" + String.valueOf(suffix) + "_0, (uintptr_t) " + dmaArchMEC.getLocalMemoryPointer() + " );" + CR );
@@ -1680,19 +1677,19 @@ public class TMLModelCompiler	{
 	public String toString()	{
 		return headerString.toString() + programString.toString();
 	}
-
-	private ArchUnitMEC getArchMEC( TMLCPLib tmlcplib, String sdInstanceName )	{
-
-		ArchUnitMEC dmaArchMEC = new CpuMEC();
-		for( String s: tmlcplib.getMappedUnits() )	{
-			if( s.contains( sdInstanceName ) )	{
-				String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
-				dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
-				break;
-			}
-		}
-		return dmaArchMEC;
-	}
+//
+//	private ArchUnitMEC getArchMEC( TMLCPLib tmlcplib, String sdInstanceName )	{
+//
+//		ArchUnitMEC dmaArchMEC = new CpuMEC();
+//		for( String s: tmlcplib.getMappedUnits() )	{
+//			if( s.contains( sdInstanceName ) )	{
+//				String dmaUnit = s.split(":")[1].replaceAll("\\s+","");
+//				dmaArchMEC = tmla.getHwCPUByName( dmaUnit ).MEC;
+//				break;
+//			}
+//		}
+//		return dmaArchMEC;
+//	}
 
 	public void saveFile( String path, String filename ) throws FileException {
 		
