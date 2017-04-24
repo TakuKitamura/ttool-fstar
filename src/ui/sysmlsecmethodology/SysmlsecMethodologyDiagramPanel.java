@@ -46,21 +46,19 @@
 
 package ui.sysmlsecmethodology;
 
-import org.w3c.dom.*;
-
-//import java.awt.*;
-import java.util.*;
-
 import ui.*;
-import myutil.*;
 
+import org.w3c.dom.Element;
+
+import myutil.*;
 
 public class SysmlsecMethodologyDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
     //public Vector validated, ignored;
 
     public  SysmlsecMethodologyDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
-	TraceManager.addDev("Sysmlsec metho diagram created");
+        
+        TraceManager.addDev("Sysmlsec metho diagram created");
         /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
           addMouseListener(tdmm);
           addMouseMotionListener(tdmm);*/

@@ -47,15 +47,12 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.prosmd;
 
 import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
 import javax.swing.*;
 
 import org.w3c.dom.*;
 
 import myutil.*;
 import ui.*;
-import ui.window.*;
 
 public class ProSMDSendMsg extends TGCOneLineText {
     protected int lineLength = 5;
@@ -187,6 +184,7 @@ public class ProSMDSendMsg extends TGCOneLineText {
 
     
     
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro ***");
         try {
@@ -199,8 +197,10 @@ public class ProSMDSendMsg extends TGCOneLineText {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+
+                    // Issue #17 copy-paste error on j index
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

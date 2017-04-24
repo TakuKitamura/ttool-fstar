@@ -51,8 +51,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-import org.w3c.dom.*;
-
 import myutil.*;
 import ui.*;
 
@@ -396,10 +394,7 @@ public class ProCSDOutPort extends ProCSDPort implements SwallowedTGComponent, A
         return super.translateExtraParam();
     }
     
-
-    
-    
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+//    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
 //        //System.out.println("*** load extra synchro ***");
 //        try {
 //            NodeList nli;
@@ -429,12 +424,10 @@ public class ProCSDOutPort extends ProCSDPort implements SwallowedTGComponent, A
 //            throw new MalformedModelingException();
 //        }
 //     
+//    	  super.loadExtraParam(nl,decX,decY,decId);
+//    }
     
-    	  super.loadExtraParam(nl,decX,decY,decId);
-    
-    }
-    
-    
+    @Override
     public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
     	
     	//Added by Solange

@@ -46,10 +46,7 @@
 
 package ui.diplodocusmethodology;
 
-import org.w3c.dom.*;
-
-//import java.awt.*;
-import java.util.*;
+import org.w3c.dom.Element;
 
 import ui.*;
 

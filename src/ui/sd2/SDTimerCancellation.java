@@ -178,6 +178,7 @@ public class SDTimerCancellation extends TGCScalableWithoutInternalComponent imp
         return new String(sb);
     }
     
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra timer name ***");
 		boolean timerSet = false;
@@ -192,7 +193,9 @@ public class SDTimerCancellation extends TGCScalableWithoutInternalComponent imp
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); j++) {
+
+                    // Issue #17 copy-paste error on j index
+                    for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {

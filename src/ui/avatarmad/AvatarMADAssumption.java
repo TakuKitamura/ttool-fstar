@@ -457,6 +457,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
     }
 
 
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         try {
             NodeList nli;

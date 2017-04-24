@@ -797,6 +797,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
      *
      * @throws MalformedModelingExpresion When the provided XML is corrupted.
      */
+    @Override
     public void loadExtraParam (NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         try {
             for(int i=0; i<nl.getLength(); i++) {

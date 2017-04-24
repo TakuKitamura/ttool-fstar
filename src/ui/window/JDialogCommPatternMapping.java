@@ -63,8 +63,7 @@ import tmltranslator.tmlcp.*;
 import tmltranslator.*;
 import myutil.*;
 
-
-public class JDialogReferenceCP extends JDialog /* implements ActionListener, ListSelectionListener*/  {
+public class JDialogCommPatternMapping extends JDialog /* implements ActionListener, ListSelectionListener*/  {
 	
 	private final static int STORAGE = 0;
 	private final static int TRANSFER = 1;
@@ -149,15 +148,15 @@ public class JDialogReferenceCP extends JDialog /* implements ActionListener, Li
 	private JButton cancelButton;
 	
 	/** Creates new form  */
-	public JDialogReferenceCP(	JFrame _frame, 
-								String _title,
-								TMLArchiCPNode _cp,
-								Vector<String> _mappedUnits,
-								String _name,
-								String _cpMEC,
-								Vector<String> _assignedAttributes,
-								int _transferType1,
-								int _transferType2 ) {
+	public JDialogCommPatternMapping(	JFrame _frame, 
+										String _title,
+										TMLArchiCPNode _cp,
+										Vector<String> _mappedUnits,
+										String _name,
+										String _cpMEC,
+										Vector<String> _assignedAttributes,
+										int _transferType1,
+										int _transferType2 ) {
 		super( _frame, _title, true );
 		
 		frame = _frame;
@@ -166,15 +165,16 @@ public class JDialogReferenceCP extends JDialog /* implements ActionListener, Li
 		cpMEC = _cpMEC;
 		transferType1 = _transferType1;
 		transferType2 = _transferType2;
+
+		mappedUnitsSL = new Vector<String>();	//take into account the elements already mapped
 		
 		if( _mappedUnits.size() > 0 ) {	//the validity of _mappedUnits is checked when initializing components
-			mappedUnitsSL = new Vector<String>();	//take into account the elements already mapped
-			mappedUnitsSL.addAll( 0, _mappedUnits );
+			mappedUnitsSL.addAll( _mappedUnits );
 			emptyListOfMappedUnits = false;
 		}
-		else {
-			mappedUnitsSL = new Vector<String>();
-		}
+//		else {
+//			mappedUnitsSL = new Vector<String>();
+//		}
 	
 		if( _assignedAttributes.size() > 0 ) {	//the validity of _assignedAttributes is checked when initializing components
 			assignedAttributes = new Vector<String>();
@@ -1466,11 +1466,13 @@ public class JDialogReferenceCP extends JDialog /* implements ActionListener, Li
 		cpMEC = (String)cpMECsCB.getSelectedItem();
 		transferType1 = Arrays.asList( CPMEC.transferTypes ).indexOf( (String)transferTypeCB1.getSelectedItem() );
 		transferType2 = Arrays.asList( CPMEC.transferTypes ).indexOf( (String)transferTypeCB2.getSelectedItem() );
+		
 		dispose();
 	}
 	
 	public void cancelDialog() {
 		cancelled = true;
+		
 		dispose();
 	}
 	

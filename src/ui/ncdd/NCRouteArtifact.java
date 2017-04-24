@@ -57,154 +57,153 @@ import ui.*;
 import ui.window.*;
 
 public class NCRouteArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int textY2 =  40;
-    protected int space = 5;
-    protected int fileX = 15;
-    protected int fileY = 20;
-    protected int cran = 5;
-	
-    protected String oldValue = "";
-	
+	protected int lineLength = 5;
+	protected int textX =  5;
+	protected int textY =  15;
+	protected int textY2 =  40;
+	protected int space = 5;
+	protected int fileX = 15;
+	protected int fileY = 20;
+	protected int cran = 5;
+
+	protected String oldValue = "";
+
 	protected ArrayList<NCRoute> routes;
-    
-    public NCRouteArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 60;
-        height = 38;
-        minWidth = 60;
-        
-        nbConnectingPoint = 0;
-        addTGConnectingPointsComment();
-        
-        moveable = true;
-        editable = true;
-        removable = true;
-        
-        value = tdp.findNodeName("R");
+
+	public NCRouteArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+		width = 60;
+		height = 38;
+		minWidth = 60;
+
+		nbConnectingPoint = 0;
+		addTGConnectingPointsComment();
+
+		moveable = true;
+		editable = true;
+		removable = true;
+
+		value = tdp.findNodeName("R");
 		routes = new ArrayList<NCRoute>();
-        
-        myImageIcon = IconManager.imgic702;
-    }
-    
-    public void internalDrawing(Graphics g) {
-        
-        if (oldValue.compareTo(value) != 0) {
-            setValue(value, g);
-        }
-        
-        g.drawRect(x, y, width, height);
+
+		myImageIcon = IconManager.imgic702;
+	}
+
+	public void internalDrawing(Graphics g) {
+
+		if (oldValue.compareTo(value) != 0) {
+			setValue(value, g);
+		}
+
+		g.drawRect(x, y, width, height);
 		Color c = g.getColor();
 		g.setColor(ColorManager.CPU_BOX_2);
 		g.fillRect(x+1, y+1, width-1, height-1);
-        g.setColor(c);
-		
-        //g.drawRoundRect(x, y, width, height, arc, arc);
-        g.drawLine(x+width-space-fileX, y + space, x+width-space-fileX, y+space+fileY);
-        g.drawLine(x+width-space-fileX, y + space, x+width-space-cran, y+space);
-        g.drawLine(x+width-space-cran, y+space, x+width-space, y+space + cran);
-        g.drawLine(x+width-space, y+space + cran, x+width-space, y+space+fileY);
-        g.drawLine(x+width-space, y+space+fileY, x+width-space-fileX, y+space+fileY);
-        g.drawLine(x+width-space-cran, y+space, x+width-space-cran, y+space+cran);
-        g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
-        
-        g.drawString(value, x + textX , y + textY);
-        
-    }
-    
-    public void setValue(String val, Graphics g) {
-        oldValue = value;
-        int w  = g.getFontMetrics().stringWidth(value);
+		g.setColor(c);
+
+		//g.drawRoundRect(x, y, width, height, arc, arc);
+		g.drawLine(x+width-space-fileX, y + space, x+width-space-fileX, y+space+fileY);
+		g.drawLine(x+width-space-fileX, y + space, x+width-space-cran, y+space);
+		g.drawLine(x+width-space-cran, y+space, x+width-space, y+space + cran);
+		g.drawLine(x+width-space, y+space + cran, x+width-space, y+space+fileY);
+		g.drawLine(x+width-space, y+space+fileY, x+width-space-fileX, y+space+fileY);
+		g.drawLine(x+width-space-cran, y+space, x+width-space-cran, y+space+cran);
+		g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
+
+		g.drawString(value, x + textX , y + textY);
+
+	}
+
+	public void setValue(String val, Graphics g) {
+		oldValue = value;
+		int w  = g.getFontMetrics().stringWidth(value);
 		int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
-		
-        //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
-        if (w1 != width) { 
-            width = w1;
-            resizeWithFather();
-        }
-        //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
-    }
-    
-    public void resizeWithFather() {
-        if ((father != null) && ((father instanceof NCEqNode) || (father instanceof NCSwitchNode))) {
-            //System.out.println("cdRect comp");
-            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
-            //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
-            setMoveCd(x, y);
-        }
-    }
-    
-    
-     public boolean editOndoubleClick(JFrame frame) {
+
+		//System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
+		if (w1 != width) { 
+			width = w1;
+			resizeWithFather();
+		}
+		//System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
+	}
+
+	public void resizeWithFather() {
+		if ((father != null) && ((father instanceof NCEqNode) || (father instanceof NCSwitchNode))) {
+			//System.out.println("cdRect comp");
+			setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+			//setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
+			setMoveCd(x, y);
+		}
+	}
+
+	public boolean editOndoubleClick(JFrame frame) {
 		String tmp;
 		boolean error = false;
-		
+
 		Vector<NCRoute> vroutes = new Vector<NCRoute>(routes);
-		
+
 		ArrayList<String> inputInterfaces = ((NCDiagramPanel)tdp).getInterfaces((NCSwitchNode)(getFather()));
 		ArrayList<String> traffics = ((NCDiagramPanel)tdp).getTraffics();
 		ArrayList<String> outputInterfaces = (ArrayList<String>)(inputInterfaces.clone());
-		
+
 		JDialogNCRoute dialog = new JDialogNCRoute(frame, "Setting route attributes", value, vroutes, inputInterfaces, traffics, outputInterfaces);
-	//	dialog.setSize(900, 500);
-        GraphicLib.centerOnParent(dialog, 900, 500);
-        dialog.setVisible( true ); // blocked until dialog has been closed
-        
+		//	dialog.setSize(900, 500);
+		GraphicLib.centerOnParent(dialog, 900, 500);
+		dialog.setVisible( true ); // blocked until dialog has been closed
+
 		if (dialog.hasBeenCancelled()) {
 			return false;
 		}
-		
+
 		tmp = dialog.getValue().trim();
-		
+
 		if (tmp == null) {
 			return false;
 		}
-		
+
 		if ((tmp != null) && (tmp.length() > 0) && (!tmp.equals(oldValue))) {
 			if (!TAttribute.isAValidId(tmp, false, false)) {
-                JOptionPane.showMessageDialog(frame,
-					"Could not change the name of the Route: the new name is not a valid name",
-					"Error",
-					JOptionPane.INFORMATION_MESSAGE);
-                error = true;
-            }
-            
-            if (!tdp.isNCNameUnique(tmp)) {
-                JOptionPane.showMessageDialog(frame,
-					"Could not change the name of the Route: the new name is already in use",
-					"Error",
-					JOptionPane.INFORMATION_MESSAGE);
-                error = true;
-            }
+				JOptionPane.showMessageDialog(frame,
+						"Could not change the name of the Route: the new name is not a valid name",
+						"Error",
+						JOptionPane.INFORMATION_MESSAGE);
+				error = true;
+			}
+
+			if (!tdp.isNCNameUnique(tmp)) {
+				JOptionPane.showMessageDialog(frame,
+						"Could not change the name of the Route: the new name is already in use",
+						"Error",
+						JOptionPane.INFORMATION_MESSAGE);
+				error = true;
+			}
 		}
-		
+
 		if (!error) {
 			value = tmp;
 		}
-		
+
 		routes = new ArrayList<NCRoute>();
 		routes.addAll(vroutes);
-			
+
 		return true;
-      
-    }
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-    
-    public int getType() {
-        return TGComponentManager.NCDD_ROUTE_ARTIFACT;
-    }
-    
-   protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
+
+	}
+
+	public TGComponent isOnMe(int _x, int _y) {
+		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+			return this;
+		}
+		return null;
+	}
+
+	public int getType() {
+		return TGComponentManager.NCDD_ROUTE_ARTIFACT;
+	}
+
+	protected String translateExtraParam() {
+		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		for(NCRoute route: routes) {
 			sb.append("<route inputInterface=\"");
 			sb.append(route.inputInterface);
@@ -214,68 +213,64 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 			sb.append(route.outputInterface);
 			sb.append("\" />\n");
 		}
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-    
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
-        try {
-            
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-         //   int t1id;
-            String s0 = null, s1 = null, s2 = null;
+		sb.append("</extraparam>\n");
+		return new String(sb);
+	}
+
+	@Override
+	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+		//System.out.println("*** load extra synchro ***");
+		try {
+			NodeList nli;
+			Node n1, n2;
+			Element elt;
+			//   int t1id;
+			String s0 = null, s1 = null, s2 = null;
 			NCRoute route;
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //System.out.println(n1);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //System.out.println(n2);
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("route")) {
-                                s0 = elt.getAttribute("inputInterface");
-                                s1 = elt.getAttribute("traffic");
+
+			for(int i=0; i<nl.getLength(); i++) {
+				n1 = nl.item(i);
+				//System.out.println(n1);
+				if (n1.getNodeType() == Node.ELEMENT_NODE) {
+					nli = n1.getChildNodes();
+					for(int j=0; j<nli.getLength(); j++) {
+						n2 = nli.item(j);
+						//System.out.println(n2);
+						if (n2.getNodeType() == Node.ELEMENT_NODE) {
+							elt = (Element) n2;
+							if (elt.getTagName().equals("route")) {
+								s0 = elt.getAttribute("inputInterface");
+								s1 = elt.getAttribute("traffic");
 								s2 = elt.getAttribute("outputInterface");
 								route = new NCRoute();
 								route.inputInterface = s0;
 								route.traffic = s1;
 								route.outputInterface = s2;
 								routes.add(route);
-                            }
-                        }
-                    }
-                }
-            }
-            
-        } catch (Exception e) {
+							}
+						}
+					}
+				}
+			}
+
+		} catch (Exception e) {
 			System.out.println("Decoding route: failed");
-            throw new MalformedModelingException();
-        }
-        //makeFullValue();
-    }
-    
-    
-    public ArrayList<NCRoute> getRoutes() {
-        return routes;
-    }
-	
-	
+			throw new MalformedModelingException();
+		}
+		//makeFullValue();
+	}
+
+	public java.util.List<NCRoute> getRoutes() {
+		return routes;
+	}
+
 	public String getAttributes() {
 		String ret = "";
-		
+
 		for(NCRoute route: routes) {
 			ret += "route: " + route.toString() + "\n";
 		}
-		
+
 		return ret;
 	}
-
-    
 }

@@ -1157,7 +1157,7 @@ public class TMLModelCompiler	{
 				programString.append( mec.getExecCode() );
 			}
 			if( cpMECType == CPMEC.DoubleDmaMEC )	{
-				ArrayList<Integer> transferTypes = tmlcplib.getTransferTypes();
+				List<Integer> transferTypes = tmlcplib.getTransferTypes();
 				//first I must get the mapped DMA controllers and the memories
 				Vector<Integer> srcMemoryTypes = new Vector<Integer>();
 				Vector<Integer> dstMemoryTypes = new Vector<Integer>();

@@ -47,21 +47,20 @@
 package tmltranslator;
 
 import java.util.*;
-import myutil.*;
-import tmltranslator.modelcompiler.*;
 
 public class TMLCPLib extends TMLElement {
 
-    private ArrayList<TMLCPLibArtifact> artifacts;
+    private List<TMLCPLibArtifact> artifacts;
     private Vector<String> mappedUnits = new Vector<String>();
     private int cpMECType;
     private String typeName;
     private Vector<String> assignedAttributes;
-    private ArrayList<Integer> transferTypes;
+    private List<Integer> transferTypes;
 
 
     public TMLCPLib(String _name, String _typeName, Object _referenceObject, int _cpMECType ) {
         super( _name, _referenceObject );
+        
         typeName = _typeName;
         cpMECType = _cpMECType;
         init();
@@ -69,6 +68,7 @@ public class TMLCPLib extends TMLElement {
 
     public TMLCPLib() {
         super( "DefaultCP", null );     //no reference to any object in the default constructor
+        
         init();
     }
 
@@ -84,7 +84,7 @@ public class TMLCPLib extends TMLElement {
         artifacts.add(_arti);
     }
 
-    public ArrayList<TMLCPLibArtifact> getArtifacts() {
+    public List<TMLCPLibArtifact> getArtifacts() {
         return artifacts;
     }
 
@@ -130,11 +130,11 @@ public class TMLCPLib extends TMLElement {
         return assignedAttributes;
     }
 
-    public void setTransferTypes( ArrayList<Integer> _transferTypes )   {
+    public void setTransferTypes( List<Integer> _transferTypes )   {
         transferTypes = _transferTypes;
     }
 
-    public ArrayList<Integer> getTransferTypes()        {
+    public List<Integer> getTransferTypes()        {
         return transferTypes;
     }
 }       //End of the class

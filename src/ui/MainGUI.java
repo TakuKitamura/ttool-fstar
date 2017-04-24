@@ -2318,7 +2318,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             }
         }
 
-
         file = new File(ConfigurationTTool.LastOpenFile);
 
         String s = null;
@@ -2339,8 +2338,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             // close current modeling
             closeTurtleModeling();
 
-
-
             // open the new TURTLE modeling
             newTurtleModeling();
 
@@ -2353,20 +2350,19 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 //gtm.saveOperation(tcdp);
                 frame.setTitle("TTool: " + file.getAbsolutePath());
                 makeLotosFile();
-		
-		if (gtm.getCheckingErrors().size() > 0) {
-		    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
-
-            } catch (MalformedModelingException mme) {
+				
+				if (gtm.getCheckingErrors().size() > 0) {
+				    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+				}
+            }
+            catch (MalformedModelingException mme) {
                 JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
                 frame.setTitle("TTool: unamed project");
             }
+            
             dtree.forceUpdate();
             gtm.enableUndo(true);
             gtm.saveOperation(getCurrentSelectedPoint());
-
         }
 
         //Added by Solange
@@ -2516,7 +2512,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     }
 
-    public boolean saveProject() {
+    protected boolean saveProject() {
         if (file == null) {
             //jfc.setApproveButtonText("Save");
             int returnVal = jfc.showSaveDialog(frame);
@@ -2526,8 +2522,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             }
         }
 
-        if(checkFileForSave(file)) {
+        if( checkFileForSave(file)) {
             String s = gtm.makeXMLFromTurtleModeling(-1);
+            
             try {
                 if (gtm == null) {
                     throw new Exception("Internal model Error 1");

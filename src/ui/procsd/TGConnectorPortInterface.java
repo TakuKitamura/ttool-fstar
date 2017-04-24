@@ -1,15 +1,13 @@
 package ui.procsd;
 
-import java.awt.Graphics;
+import java.awt.Point;
 import java.util.Vector;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ui.IconManager;
 import ui.MalformedModelingException;
-import ui.TAttribute;
 import ui.TDiagramPanel;
 import ui.TGComponent;
 import ui.TGComponentManager;
@@ -18,7 +16,7 @@ import ui.TGConnectorAttribute;
 
 public class TGConnectorPortInterface extends TGConnectorAttribute{
 
-	public TGConnectorPortInterface(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+	public TGConnectorPortInterface(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
        // myImageIcon = IconManager.imgic108;
         actionOnAdd();
@@ -105,14 +103,15 @@ public class TGConnectorPortInterface extends TGConnectorAttribute{
 	        return new String(sb);
 	    }
 	
+	 @Override
 	 public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
 	        try {
 	            NodeList nli;
 	            Node n1, n2;
 	            Element elt;
-	            int access, type;
-	            String typeOther;
-	            String id, valueAtt;
+	 //           int access, type;
+	   //         String typeOther;
+	     //       String id, valueAtt;
 	            
 	            for(int i=0; i<nl.getLength(); i++) {
 	                n1 = nl.item(i);

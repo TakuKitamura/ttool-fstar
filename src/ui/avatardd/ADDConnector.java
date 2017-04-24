@@ -49,7 +49,6 @@ package ui.avatardd;
 
 
 import java.awt.*;
-import java.awt.geom.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
@@ -58,8 +57,6 @@ import org.w3c.dom.*;
 
 import myutil.*;
 import ui.*;
-import ui.cd.*;
-import ui.window.*;
 
 public  class ADDConnector extends TGConnector  {
     public static final String NO_SPY = "Remove spy";
@@ -71,22 +68,22 @@ public  class ADDConnector extends TGConnector  {
     protected boolean hasASpy;
 	
     
-    public ADDConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+    public ADDConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
         value = "{info}";
         editable = true;
-	p1 = _p1;	
-	p2 = _p2;
+        p1 = _p1;	
+        p2 = _p2;
     }
     
 
-        public TGConnectingPoint get_p1(){
-	return p1;
+    public TGConnectingPoint get_p1(){
+    	return p1;
 	}
 
-        public TGConnectingPoint get_p2(){
-	return p2;
+    public TGConnectingPoint get_p2(){
+    	return p2;
 	}
 
     public boolean editOndoubleClick(JFrame frame) {
@@ -166,6 +163,7 @@ public  class ADDConnector extends TGConnector  {
     }
 
     
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro ***");
         try {
@@ -173,8 +171,8 @@ public  class ADDConnector extends TGConnector  {
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
-	    hasASpy = false;
+            //int t1id;
+            hasASpy = false;
             String tmp = null;
 
             for(int i=0; i<nl.getLength(); i++) {
@@ -182,17 +180,19 @@ public  class ADDConnector extends TGConnector  {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+
+                    // Issue #17 copy-paste error on j index
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("spy")) {
                                 tmp = elt.getAttribute("value").trim();
-				//TraceManager.addDev("[DD] value=" + tmp);
-				if (tmp.compareTo("true") == 0) {
-				    hasASpy = true;
-				}
+								//TraceManager.addDev("[DD] value=" + tmp);
+								if (tmp.compareTo("true") == 0) {
+								    hasASpy = true;
+								}
                             }
                         }
                     }

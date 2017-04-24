@@ -98,8 +98,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         myImageIcon = IconManager.imgic700;
     }
 
-    
-
+    @Override
     public void internalDrawing(Graphics g) {
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
@@ -169,6 +168,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         }
     }
 
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
 
         Polygon pol = new Polygon();
@@ -178,6 +178,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         pol.addPoint(x + derivationx + width, y + height - derivationy);
         pol.addPoint(x + width, y + height);
         pol.addPoint(x, y + height);
+
         if (pol.contains(x1, y1)) {
             return this;
         }
@@ -187,7 +188,6 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 
     public String getStereotype() {
         return stereotype;
-
     }
 
     public String getNodeName() {
@@ -198,12 +198,13 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         return reference;
     }
 
+    @Override
     public boolean editOndoubleClick( JFrame frame ) {
         boolean error = false;
         String errors = "";
         String tmpName;
 
-        JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Communication Pattern Mapping", this, mappedUnits, name, cpMEC, assignedAttributes, transferType1, transferType2 );
+        JDialogCommPatternMapping dialog = new JDialogCommPatternMapping( frame, "Communication Pattern Mapping", this, mappedUnits, name, cpMEC, assignedAttributes, transferType1, transferType2 );
         //dialog.setSize( 700, 550 );
         GraphicLib.centerOnParent( dialog, 750, 500 );
         dialog.setVisible( true ); // blocked until dialog has been closed
@@ -228,6 +229,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         if( dialog.getNodeName().length() != 0 )        {
             tmpName = dialog.getNodeName();
             tmpName = tmpName.trim();
+      
             if( !TAttribute.isAValidId(tmpName, false, false) ) {
                 error = true;
                 errors += "Name of the node  ";
@@ -239,7 +241,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 
         reference = dialog.getCPReference();
 
-        if( error )     {
+        if( error ) {
             JOptionPane.showMessageDialog( frame, "Invalid value for the following attributes: " + errors,
                                            "Error", JOptionPane.INFORMATION_MESSAGE);
             return false;
@@ -248,37 +250,40 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         return true;
     }   //End of method editOnDoubleClick
 
-
-
-
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_CPNODE;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name + "\" cpMEC=\"" + cpMEC + "\" transferType1=\"" + String.valueOf(transferType1) + "\" transferType2=\"" + String.valueOf(transferType2) );
         sb.append("\" />\n");
         sb.append("<attributes reference=\"" + reference + "\" ");
         sb.append("/>\n");
+        
         for( String s: mappedUnits )    {
             String[] firstPart = s.split( " : " );
             String[] secondPart = firstPart[0].split("\\.");
             sb.append( "<mappingInfo " + "CPname=\"" + secondPart[0] + "\" instanceName=\"" + secondPart[1] +
                        "\" architectureUnit=\"" + firstPart[1] + "\" />\n" );
         }
+        
         for( String s: assignedAttributes )    {
             String[] tokens = s.split( " " );
             sb.append( "<mappedAttributes " + "type=\"" + tokens[0] + "\" name=\"" + tokens[1] + "\" value=\"" + tokens[3].substring(0,tokens[3].length()-1) + "\" />\n" );
         }
+        
         sb.append("</extraparam>\n");
-        return new String(sb);
+        
+        return sb.toString();
     }
 
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId)
+    throws MalformedModelingException {
         try {
-
             NodeList nli;
             Node n1, n2;
             Element elt;
@@ -292,9 +297,12 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
+
+                    // Issue #17 copy-paste error on j index
                     for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(i);
-                        //System.out.println(n2);
+                        n2 = nli.item(j);
+                        //n2 = nli.item(i);
+
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {
@@ -332,16 +340,18 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
                 }
             }
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new MalformedModelingException();
         }
     }
 
+    @Override
     public int getComponentType()       {
         return OTHER;
     }
 
-
+    @Override
     public boolean addSwallowedTGComponent( TGComponent tgc, int x, int y )     {
 
         if( tgc instanceof TMLArchiCommunicationArtifact )      {
@@ -372,8 +382,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         }
     }
 
+    @Override
     public void hasBeenResized() {
-
         for( int i = 0; i < nbInternalTGComponent; i++ )        {
             if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact ) {
                 ( (TMLArchiCommunicationArtifact)tgcomponent[i] ).resizeWithFather();
@@ -386,15 +396,16 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         }
     }
 
-    public ArrayList<TMLArchiPortArtifact> getPortArtifactList() {
-
-        ArrayList<TMLArchiPortArtifact> v = new ArrayList<TMLArchiPortArtifact>();
-        for( int i = 0; i < nbInternalTGComponent; i++ )        {
+    public java.util.List<TMLArchiPortArtifact> getPortArtifactList() {
+    	java.util.List<TMLArchiPortArtifact> v = new ArrayList<TMLArchiPortArtifact>();
+        
+    	for( int i = 0; i < nbInternalTGComponent; i++ )        {
             if( tgcomponent[i] instanceof TMLArchiPortArtifact )        {
                 v.add( (TMLArchiPortArtifact)(tgcomponent[i]) );
             }
         }
-        return v;
+        
+    	return v;
     }
 
     public Vector<String> getMappedUnits()      {
@@ -440,16 +451,18 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         return vectorToReturn;
     }
 
-    public ArrayList<Integer> getTransferTypes()        {
-        ArrayList<Integer> transferTypes = new ArrayList<Integer>();
+    public java.util.List<Integer> getTransferTypes()        {
+    	java.util.List<Integer> transferTypes = new ArrayList<Integer>();
         transferTypes.add( transferType1 );
         transferTypes.add( transferType2 );
+        
         return transferTypes;
     }
 
     // Display the mapping of instances onto platform units
     public String getAttributes()   {
         String attr = "";
+        
         for( String s: mappedUnits )    {
             if( s.split("\\.").length > 0 ) {   // Remove the trailing name of the CP
                 attr += s.split("\\.")[1] + "\n";
@@ -458,7 +471,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
                 attr += s + "\n";
             }
         }
+        
         return attr;
     }
-
 }

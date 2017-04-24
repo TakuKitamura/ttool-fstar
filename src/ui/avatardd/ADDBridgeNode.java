@@ -48,16 +48,11 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.avatardd;
 
 import java.awt.*;
-import java.util.*;
 import javax.swing.*;
 
 import org.w3c.dom.*;
 
-import myutil.*;
 import ui.*;
-import ui.window.*;
-
-import tmltranslator.*;
 
 public class ADDBridgeNode extends ADDCommunicationNode implements WithAttributes {
     private int textY1 = 15;
@@ -168,10 +163,10 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
     }
     
     public boolean editOndoubleClick(JFrame frame) {
-		boolean error = false;
-		String errors = "";
-		int tmp;
-		String tmpName;
+	//	boolean error = false;
+		//String errors = "";
+//		int tmp;
+//		String tmpName;
         
 		/*JDialogBridgeNode dialog = new JDialogBridgeNode(frame, "Setting bridge attributes", this);
 		dialog.setSize(350, 350);
@@ -251,6 +246,7 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
         return new String(sb);
     }
     
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro ***");
         try {
@@ -258,7 +254,7 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+           // int t1id;
             String sstereotype = null, snodeName = null;
             
             for(int i=0; i<nl.getLength(); i++) {
@@ -266,8 +262,10 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+
+                    // Issue #17 copy-paste error on j index
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
