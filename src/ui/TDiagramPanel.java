@@ -612,14 +612,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     private StringBuffer componentsInXML(boolean selected) {
-        StringBuffer sb = new StringBuffer("");
+        StringBuffer sb = new StringBuffer();
         StringBuffer s;
 
         //Added by Solange to see the components in the list
     //    LinkedList<TGComponent> ruteoList = this.componentList;
         //
-
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc: this.componentList) {
             if ((selected == false) || (tgc.isSelected())) {
                 s = tgc.saveInXML();
                 if (s == null) {
@@ -628,7 +627,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 sb.append(s);
                 sb.append("\n");
             }
-
+        }
+        
         return sb;
     }
 

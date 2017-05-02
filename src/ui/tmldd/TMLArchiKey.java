@@ -254,10 +254,10 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         return new String(sb);
     }
 
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro ***");
         try {
-
             NodeList nli;
             Node n1, n2;
             Element elt;

@@ -46,17 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
-
-//import java.net.URL;
-
-//import javax.swing.AbstractAction;
-//import javax.swing.Action;
 import javax.swing.ImageIcon;
-
-//import javax.swing.event.EventListenerList;
-
 
 public class TAction  {
 	
@@ -98,10 +88,7 @@ public class TAction  {
      		hasControl = _hasControl;
 	}
         
-        public void setName(String name) {
-            NAME = name;
-        }
-	
-   
-  
+    public void setName(String name) {
+        NAME = name;
+    }
 }

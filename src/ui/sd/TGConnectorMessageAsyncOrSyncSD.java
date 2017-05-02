@@ -118,8 +118,8 @@ public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
     }
 
 
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-
         String s;
         String tmpGlobalCode = "";
 
@@ -128,10 +128,6 @@ public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
             Node n1, n2;
             Element elt;
             isAsync = false;
-
-
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);

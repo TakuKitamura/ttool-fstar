@@ -252,6 +252,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         return new String(sb);
     }
 
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro ***");
         try {
@@ -261,7 +262,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
             Element elt;
           //  int t1id;
             String sstereotype = null, snodeName = null;
-	    monitored = 0;
+            monitored = 0;
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);

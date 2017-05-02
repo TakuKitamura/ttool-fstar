@@ -309,6 +309,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
         return new String(sb);
     }
 
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro ***");
         try {
@@ -325,7 +326,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     
-                    // DB: Looks like i was used instead of j!
+                	// Issue #36 and #17 copy-paste error on j index
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
 //                    for(int j=0; i<nli.getLength(); i++) {

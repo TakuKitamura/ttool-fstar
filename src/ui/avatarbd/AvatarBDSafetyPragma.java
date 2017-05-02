@@ -337,6 +337,8 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 	}
 	g.setColor(c);
     }
+
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         value = "";
         values = null;

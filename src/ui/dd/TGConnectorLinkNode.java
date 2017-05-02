@@ -250,6 +250,7 @@ public  class TGConnectorLinkNode extends TGConnector {
         return new String(sb);
     }
     
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro ***");
         try {
@@ -445,7 +446,7 @@ public  class TGConnectorLinkNode extends TGConnector {
             NodeList nli;
             Node n1, n2;
             Element elt;
-            int t1id;
+//            int t1id;
             String latg_art = null, latg_tcl = null, latg_gat = null;
             String ratg_art = null, ratg_tcl = null, ratg_gat = null;
             ArtifactTClassGate atg1, atg2;
@@ -455,8 +456,10 @@ public  class TGConnectorLinkNode extends TGConnector {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+
+                    // Issue #17 copy-paste error on j index
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

@@ -240,6 +240,7 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
         return new String(sb);
     }
     
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         try {
             NodeList nli;

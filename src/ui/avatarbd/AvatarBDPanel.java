@@ -270,9 +270,6 @@ public class AvatarBDPanel extends TDiagramPanel {
         return s;
     }
 
-
-
-
     public void loadExtraParameters(Element elt) {
         String s;
 

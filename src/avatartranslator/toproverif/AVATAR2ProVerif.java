@@ -1313,7 +1313,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("event " + sp, true));
                     }
                 }
-                if (attrB.getState ().getName ().equals (_asme.getName ())) {
+                if (attrB.getAttribute ().getBlock () ==  arg.block && attrB.getState ().getName ().equals (_asme.getName ())) {
                     String sp = "authenticity__" + AVATAR2ProVerif.makeAttrName (attrB.getAttribute ().getBlock ().getName (), attrB.getAttribute ().getName (), _asme.getName ()) + " (" + AVATAR2ProVerif.makeAttrName (attrB.getAttribute ().getBlock ().getName (), attrB.getAttribute ().getName (), arg.attributeCmp.get (attrB.getAttribute ()).toString ()) + ")";
                     if (!authenticityEvents.contains (sp)) {
                         authenticityEvents.add (sp);

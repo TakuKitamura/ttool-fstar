@@ -249,9 +249,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         else {
             // try to draw with "..." instead
             if (!this.isCryptoBlock)
-                ster = this.stereotype;
+                ster = stereotype;
             else
-                ster = this.stereotypeCrypto;
+                ster = stereotypeCrypto;
 
             for (int stringLength = ster.length ()-1; stringLength >= 0; stringLength--) {
                 String abbrev = "<<" + ster.substring (0, stringLength) + "...>>";
@@ -782,6 +782,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return new String(sb);
     }
 
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
 
         String s;
@@ -800,8 +801,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             AvatarSignal as;
             boolean implementation = false;
             String crypt;
-	    String attached;
-	    boolean mustAddCryptoFunctions = false;
+            String attached;
+	    //boolean mustAddCryptoFunctions = false;
 
 
             //System.out.println("Loading attributes");

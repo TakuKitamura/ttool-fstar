@@ -51,8 +51,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-import org.w3c.dom.*;
-
 import myutil.*;
 import ui.*;
 
@@ -404,9 +402,7 @@ public class ProCSDInPort extends ProCSDPort implements SwallowedTGComponent, Ac
     	    	
     }
 
-
-
-    protected String translateExtraParam() {
+//    protected String translateExtraParam() {
   
 //    	StringBuffer sb = new StringBuffer("<extraparam>\n");
 //        sb.append("<Rotate position=\"");
@@ -415,13 +411,13 @@ public class ProCSDInPort extends ProCSDPort implements SwallowedTGComponent, Ac
 //        sb.append("</extraparam>\n");
 //        return new String(sb);
     
-    return super.translateExtraParam();
-    }
+//    	return super.translateExtraParam();
+//    }
     
 
     
     
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+//    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
 //        try {
 //            NodeList nli;
 //            Node n1, n2;
@@ -449,13 +445,9 @@ public class ProCSDInPort extends ProCSDPort implements SwallowedTGComponent, Ac
 //            throw new MalformedModelingException();
 //        }
 //     
-    
-    super.loadExtraParam(nl,decX,decY,decId);
-    
-    }
-    
-    
-    
+//    
+//    	super.loadExtraParam(nl,decX,decY,decId);
+//    }   
 }
     
 

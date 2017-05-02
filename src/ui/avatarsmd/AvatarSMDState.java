@@ -354,7 +354,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         JDialogAvatarState jdas = new JDialogAvatarState(frame, "Setting state parameters", value, entryCode);
        // jdas.setSize(600, 550);
         GraphicLib.centerOnParent(jdas, 600, 550 );
-        jdas.show(); // blocked until dialog has been closed
+        jdas.setVisible( true ); // blocked until dialog has been closed
 
 
         if (jdas.hasBeenCancelled()) {
@@ -632,6 +632,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         return new String(sb);
     }
 
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro *** " + getId());
         //String tmpGlobalCode = "";
@@ -648,8 +649,10 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+
+                    // Issue #17 copy-paste error on j index
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element)n2;

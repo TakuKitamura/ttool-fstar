@@ -331,16 +331,15 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
         return new String(sb);
     }
 	
-	
+    @Override
 	public void loadExtraParam(NodeList _nl, int decX, int decY, int decId) throws MalformedModelingException{
 		nl = _nl;
 		//delayedLoad();
 	}
 	
 	public void delayedLoad() throws MalformedModelingException {
-		
-		
         TraceManager.addDev("*** load extra synchro ***");
+
         try {
             
             NodeList nli;

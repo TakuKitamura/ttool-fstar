@@ -46,7 +46,7 @@
 
 package tmltranslator.modelcompiler;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class DoubleDmaMEC extends CPMEC	{
@@ -78,8 +78,7 @@ public class DoubleDmaMEC extends CPMEC	{
 	private String ctxName1 = USER_TO_DO;
 	private String ctxName2 = USER_TO_DO;
 
-	public DoubleDmaMEC( String ctxName, Vector<ArchUnitMEC> archMECs, Vector<Integer> srcMemoryTypes, Vector<Integer> dstMemoryTypes, ArrayList<Integer> transferTypes, Vector<String> attributes )	{
-
+	public DoubleDmaMEC( String ctxName, Vector<ArchUnitMEC> archMECs, Vector<Integer> srcMemoryTypes, Vector<Integer> dstMemoryTypes, List<Integer> transferTypes, Vector<String> attributes )	{
 		int numSrcMemories = srcMemoryTypes.size();
 
 		for( int i = 0; i < numSrcMemories; i++ )	{
@@ -183,5 +182,4 @@ public class DoubleDmaMEC extends CPMEC	{
 		}
 		return newVector;
 	}
-
 }	//End of class
