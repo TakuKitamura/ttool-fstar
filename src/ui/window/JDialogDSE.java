@@ -80,6 +80,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
     int mode;
     JRadioButton dseButton;
     JRadioButton simButton;
+	JButton addConstraint;
     ButtonGroup group, secGroup;
     //components
 
@@ -122,12 +123,15 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
 	Vector<String> ignoredTasks =new Vector<String>();   
 	JList<String> listSelected;
 	JList<String> listIgnored;
+	JList<String> constraints;
+	JTextField constraintTextField;
     protected JTabbedPane jp1;
+	JPanel listPanel;
     private Thread t;
     private boolean go = false;
     private boolean hasError = false;
     //protected boolean startProcess = false;
-
+	JList<String> contraints;
     private String hostProVerif;
 
     protected RshClient rshc;
@@ -206,7 +210,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
 		listIgnored = new JList<String>(ignoredTasks);
 
 
-		JPanel listPanel = new JPanel();
+		listPanel = new JPanel();
 		GridBagConstraints c02 = new GridBagConstraints();
 		c02.gridwidth=1;
 		c02.gridheight=1;
@@ -386,6 +390,21 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
 	outputHTML.addActionListener(this);
 	outputHTML.setSelected(outputHTMLState);
         jp03.add(outputHTML, c03);
+
+		constraints = new JList<String>();
+		jp03.add(constraints, c03);
+
+
+		constraintTextField=new JTextField();
+
+        addConstraint = new JButton("Add Constraint");
+        addConstraint.addActionListener(this);
+        addConstraint.setPreferredSize(new Dimension(50, 25));
+        addConstraint.setActionCommand("addConstraint");
+		jp03.add(addConstraint, c03);
+		
+		
+		
 
         group = new ButtonGroup();
         dseButton = new JRadioButton("Run Design Space Exploration");

@@ -168,7 +168,7 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 		    c.removeAll();
 		    panel1= new advPanel(this);
 		}
-		else if ((helps[1].getSelectedIndex() >1) && !(panel1 instanceof funcPanel)){
+		else if ((helps[1].getSelectedIndex() >2) && !(panel1 instanceof funcPanel)){
 		    values[1]=helps[1].getSelectedItem().toString();
 		    values[0]=texts[0].getText();
 		    values[3]=texts[3].getText();
@@ -179,7 +179,7 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 		    c.removeAll();
 		    panel1= new funcPanel(this);
 		}
-		else if ((helps[1].getSelectedIndex() <2) && !(panel1 instanceof EncryptPanel)){
+		else if ((helps[1].getSelectedIndex() <3) && !(panel1 instanceof EncryptPanel)){
 		    values[1]=helps[1].getSelectedItem().toString();
 		    values[0]=texts[0].getText();
 		    values[3]=texts[3].getText();

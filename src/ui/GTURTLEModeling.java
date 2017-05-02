@@ -1218,8 +1218,8 @@ public class GTURTLEModeling {
 				//System.out.println("No Components found");
 				continue;
 			}
-			//System.out.println("nonAuthChans " + nonAuthChans);
-		//	System.out.println("nonSecChans "+ nonSecChans);
+			System.out.println("nonAuthChans " + nonAuthChans);
+			System.out.println("nonSecChans "+ nonSecChans);
 			for (TMLCPrimitiveComponent comp: comps){
 
 				HashMap<String, HSMChannel> compChannels = new HashMap<String, HSMChannel>();
@@ -1280,7 +1280,7 @@ public class GTURTLEModeling {
 						if (readChannel.securityContext.equals("")){
 							fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
 							if (fromStart!=null){
-								if(nonSecChans.contains(compName+"__"+readChannel.getChannelName()+"_chData")){
+								if(nonSecChans.contains(compName+"__"+readChannel.getChannelName()+"_chData") || nonAuthChans.contains(compName+"__"+readChannel.getChannelName())){
 									channelInstances.add(tg);
 									HSMChannel ch = new HSMChannel(readChannel.getChannelName(), compName, HSMChannel.DEC);
 									ch.securityContext="hsmSec_"+readChannel.getChannelName();
@@ -1309,7 +1309,7 @@ public class GTURTLEModeling {
 						//}
 					}
 				}
-			//	System.out.println("compchannels " +compChannels);
+				System.out.println("compchannels " +compChannels);
 				List<ChannelData> hsmChans = new ArrayList<ChannelData>();
 				ChannelData chd = new ChannelData("startHSM_"+cpuName,false,false);
 				hsmChans.add(chd);

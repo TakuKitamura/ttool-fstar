@@ -1185,9 +1185,11 @@ public class TML2Avatar {
 				}
 		tran.addAction(AvatarTerm.createActionFromString(block, loop.getIncrement()));
 		tran.addAction(AvatarTerm.createActionFromString(block, "loop_index = loop_index + 1"));
-		tran.addNext(elements.get(0));
-		as.addNext(tran);
-		elementList.add(tran);
+		if (elements.size()>0){
+			tran.addNext(elements.get(0));
+			as.addNext(tran);
+			elementList.add(tran);
+		}
 		//Process elements in loop to remove stop states and empty transitions, and loop back to choice
 		for (AvatarStateMachineElement e: elements){
 			if (e instanceof AvatarStopState){
