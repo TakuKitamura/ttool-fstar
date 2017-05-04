@@ -118,7 +118,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     protected JScrollPane jsp;
     protected JCheckBox removeCFiles, removeXFiles, debugmode, tracemode, optimizemode, putUserCode;
     protected JComboBox versionCodeGenerator, units;
-    protected JButton showSimulationTrace;
+    protected JButton showSimulationTrace,showOverflowStatus;
 
     private static int selectedUnit = 2;
     private static boolean removeCFilesValue = true;
@@ -132,6 +132,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     private boolean hasError = false;
     protected boolean startProcess = false;
 
+    private AvatarRelation FIFO;
 
     private String hostExecute;
 
@@ -361,6 +362,14 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
         showSimulationTrace.addActionListener(this);
         jp04.add(showSimulationTrace, c04);
 
+	//-------------Ajout C.Demarigny---------------
+
+	showOverflowStatus = new JButton("Show overflow status");
+        showOverflowStatus.addActionListener(this);
+        jp04.add(showOverflowStatus, c04);
+
+	//----------------Fin ajout--------------------
+
         viewtrace.setSelected(selectedViewTrace == 0);
         viewtracesoclib.setSelected(selectedViewTrace == 1);
 
@@ -426,8 +435,10 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
             makeSelectionCompile();
         } else if ((evt.getSource() == viewtrace) || (evt.getSource() == viewtracesoclib)) {
             makeSelectionViewTrace();
-        }
-    }
+        } else if ((evt.getSource() == showOverflowStatus) ){ //ajout CD
+	    showOverflowStatus();
+	}//fin ajout CD
+     }
 
     public void closeDialog() {
         if (mode == STARTED) {
@@ -468,7 +479,6 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
         } else {
             selectedViewTrace = 1;
         }
-
         simulationTraceFile.setEnabled(selectedViewTrace == 0);
 	// simulationsoclibTraceFile.setEnabled(selectedViewTrace == 1);
     }
@@ -690,7 +700,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 	    }
 	    //}
 
-            //fin ajoute DG
+            //fin ajout DG
 
 
 	} catch (InterruptedException ie) {
@@ -771,5 +781,35 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
         TraceManager.addDev("Ok JFrame");
     }
 
+    //----------Ajout CD------------    
+    public void showOverflowStatus() {
+	try{
+	    //String chemin = "~/TTool/MPSoC/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/"; //ajouter le chemin relatif
+	    String path = ConfigurationTTool.AVATARMPSoCPerformanceEvaluationDirectory;
+	    //tentative d'instanciation de AvatarRelation afin d'utiliser getSizeOfFIFO()
+	    // AvatarRelation ar = new AvatarRelation();
+	   
+	    //int fifo = ar.getSizeOfFIFO(); //ajouter dynamiquement la taille du FIFO
+	    //String taille = ""+fifo;
+	    String taille = "0";
+
+	    String log = "mwmr0.log"; //ajouter dynamiquement le nom du log généré
+	    
+	    String[] commande = {"sh", path+"callingOverflow.sh", taille, path, log};
+
+/*idealement il faudrait inclure un moyen de detecter l'OS sur lequel l'application est lancé car le script utilise la commande "acroread" qui ne fonctionne que sur linux.
+Ainsi ajouter un paramètre avec l'OS permetterais de générer la commande appropriée sur windows ou mac*/
+	    
+	    ProcessBuilder pb = new ProcessBuilder(commande);//Letitia Runtime.runtimexec()
+	    pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+	    Process p = pb.start();
+	    int exitStatus = p.waitFor();
+	} catch (InterruptedException e) {
+	    e.printStackTrace();
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+    }
+    //-------------fin ajout CD-----------
 
 }
