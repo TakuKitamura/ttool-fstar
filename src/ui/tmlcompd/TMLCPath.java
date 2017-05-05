@@ -270,23 +270,25 @@ public class TMLCPath  {
 	}
 
 	//rule8: all events/requests with the same parameters
-	TMLCPrimitivePort referencePort = producerPorts.get(0);
-	if ((referencePort.getPortType() == 1) ||(referencePort.getPortType() == 1)) {
-	    // Event or request found
-	    // We now check that they are all compatible with the reference
-	    for(TMLCPrimitivePort porto: producerPorts) {
-		if (!(porto.hasSameParametersThan(referencePort))) {
-		    errorNumber = 8;
-		    faultyComponent = porto;
-		    break;
+	if ((forks.size() > 0) || (joins.size() >0)) {
+	    TMLCPrimitivePort referencePort = producerPorts.get(0);
+	    if ((referencePort.getPortType() == 1) ||(referencePort.getPortType() == 1)) {
+		// Event or request found
+		// We now check that they are all compatible with the reference
+		for(TMLCPrimitivePort porto: producerPorts) {
+		    if (!(porto.hasSameParametersThan(referencePort))) {
+			errorNumber = 8;
+			faultyComponent = porto;
+			break;
+		    }
 		}
-	    }
-
-	    for(TMLCPrimitivePort porti: consumerPorts) {
-		if (!(porti.hasSameParametersThan(referencePort))) {
-		    errorNumber = 8;
-		    faultyComponent = porti;
-		    break;
+		
+		for(TMLCPrimitivePort porti: consumerPorts) {
+		    if (!(porti.hasSameParametersThan(referencePort))) {
+			errorNumber = 8;
+			faultyComponent = porti;
+			break;
+		    }
 		}
 	    }
 	}
