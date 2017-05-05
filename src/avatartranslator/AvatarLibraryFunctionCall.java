@@ -74,6 +74,11 @@ public class AvatarLibraryFunctionCall extends AvatarStateMachineElement {
     private AvatarLibraryFunction libraryFunction;
 
     /**
+     * Counter for library function call.
+     */
+    private int counter;
+
+    /**
      * Basic constructor of the function function.
      *
      * @param name
@@ -85,9 +90,18 @@ public class AvatarLibraryFunctionCall extends AvatarStateMachineElement {
         super(_name, _referenceObject);
 
         this.libraryFunction = libraryFunction;
+        this.counter = this.libraryFunction.getCounter();
         this.parameters = new LinkedList<AvatarAttribute> ();
         this.signals = new LinkedList<AvatarSignal> ();
         this.returnAttributes = new LinkedList <AvatarAttribute> ();
+    }
+
+    /**
+     * @return The counter for this library function call
+     */
+    public int getCounter()
+    {
+        return this.counter;
     }
 
     /**
@@ -196,7 +210,7 @@ public class AvatarLibraryFunctionCall extends AvatarStateMachineElement {
         this.libraryFunction.addSignalsToMapping (signalsMapping, this.signals);
 
         /* Translate the state machine */
-        return this.libraryFunction.translateASMWithMapping (placeholdersMapping, signalsMapping, firstElement, block, this.referenceObject);
+        return this.libraryFunction.translateASMWithMapping (placeholdersMapping, signalsMapping, firstElement, block, this.referenceObject, this.counter);
     }
 
     @Override

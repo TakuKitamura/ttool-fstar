@@ -88,7 +88,21 @@ public class AvatarSimpleGuardDuo extends AvatarSimpleGuard {
 
     @Override
     public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
-        this.termA.replaceAttributes (attributesMapping);
-        this.termB.replaceAttributes (attributesMapping);
+        if (this.termA instanceof AvatarAttribute)
+        {
+            this.termA = attributesMapping.get((AvatarAttribute) this.termA);
+        }
+        else
+        {
+            this.termA.replaceAttributes (attributesMapping);
+        }
+        if (this.termB instanceof AvatarAttribute)
+        {
+            this.termB = attributesMapping.get((AvatarAttribute) this.termB);
+        }
+        else
+        {
+            this.termB.replaceAttributes (attributesMapping);
+        }
     }
 }

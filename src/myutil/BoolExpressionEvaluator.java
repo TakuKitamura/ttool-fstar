@@ -363,6 +363,36 @@ public class BoolExpressionEvaluator {
                 return new Boolean(elt1 == elt2);
             }
 
+	    if (op == NOT_EQUAL_TOKEN) {
+                return new Boolean(elt1 != elt2);
+            }
+
+	    if (op == OR_TOKEN) {
+                return new Boolean((elt1 != 0) || (elt2 != 0));
+            }
+
+	    if (op == AND_TOKEN) {
+                return new Boolean((elt1 != 0) && (elt2 != 0));
+            }
+
+	    if (op == LT_TOKEN) {
+		return new Boolean(elt1 < elt2);
+	    }
+
+	     if (op == GT_TOKEN) {
+		return new Boolean(elt1 > elt2);
+	    }
+
+	     if (op == LTEQ_TOKEN) {
+		return new Boolean(elt1 <= elt2);
+	    }
+
+	     if (op == GTEQ_TOKEN) {
+		return new Boolean(elt1 >= elt2);
+	    }
+
+	    
+
             return null;
         }
 

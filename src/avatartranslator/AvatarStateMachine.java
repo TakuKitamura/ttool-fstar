@@ -1535,14 +1535,15 @@ public class AvatarStateMachine extends AvatarElement {
                 continue;
 
             if (curAsme instanceof AvatarLibraryFunctionCall) {
+                AvatarLibraryFunctionCall alfc = (AvatarLibraryFunctionCall) curAsme;
                 /* Create a state that will be used as an entry point for the sub-state machine */
-                AvatarState firstState = new AvatarState ("entry_" + curAsme.getName (), curAsme.getReferenceObject ());
+                AvatarState firstState = new AvatarState ("entry_" + alfc.getLibraryFunction().getName () + "_" + alfc.getCounter(), curAsme.getReferenceObject ());
 
                 /* Add this state to the mapping so that future state can use it to replace their next element */
-                callsTranslated.put ((AvatarLibraryFunctionCall) curAsme, firstState);
+                callsTranslated.put (alfc, firstState);
 
                 /* inline the function call */
-                AvatarStateMachineElement lastState = ((AvatarLibraryFunctionCall) curAsme).inlineFunctionCall (block, firstState);
+                AvatarStateMachineElement lastState = alfc.inlineFunctionCall (block, firstState);
 
                 /* Add the next elements to the newly created last state */
                 for (AvatarStateMachineElement asme: curAsme.getNexts ())

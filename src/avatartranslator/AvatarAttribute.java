@@ -192,6 +192,7 @@ public class AvatarAttribute extends AvatarLeftHand {
 
     @Override
     public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        TraceManager.addDev("!!! ERROR !!! (replaceAttributes in AvatarAttribute)");
         /* !!! We should never arrive here !!! */
     }
 
