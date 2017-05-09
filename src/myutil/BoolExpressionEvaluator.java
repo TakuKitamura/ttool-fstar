@@ -410,6 +410,7 @@ public class BoolExpressionEvaluator {
             }
 
             if (op == DIV_TOKEN) {
+		//TraceManager.addDev("Div token .. elt1 = " + elt1 + " elt2 = " + elt2 + " res=" +  new Integer(elt1 / elt2).intValue());		
                 return new Integer(elt1 / elt2);
             }
 
@@ -448,8 +449,8 @@ public class BoolExpressionEvaluator {
                     TraceManager.addDev("Found binary int expr in null");
                     return null;
                 }
-                Object ob1 = right.computeValue();
-                Object ob2 = left.computeValue();
+                Object ob1 = left.computeValue();
+                Object ob2 = right.computeValue();
                 if ((ob1 == null) || (ob2 == null)) {
                     TraceManager.addDev("Found binary int expr in null elt");
                     return null;
@@ -1526,6 +1527,7 @@ public class BoolExpressionEvaluator {
             errorMessage = "Not a boolean expression because it contains \"=\" operators";
             return false;
         }
+	_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
         _expr = Conversion.replaceAllString(_expr, "true", "t").trim();
         _expr = Conversion.replaceAllString(_expr, "false", "f").trim();
         _expr = Conversion.replaceAllString(_expr, "||", "|").trim();
@@ -1696,7 +1698,6 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-
         // BOOL BINARY OP
         if (c1 == '=') {
             newElt = current.addBinaryOperator(EQUAL_TOKEN);
@@ -1718,7 +1719,6 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-
         if (c1 == ')') {
             // Must find corresponding parenthesis
             // Looking for father of the correspoing parenthesis;
@@ -1733,7 +1733,6 @@ public class BoolExpressionEvaluator {
                 return null;
             }
             return father.father;
-
         }
 
 
