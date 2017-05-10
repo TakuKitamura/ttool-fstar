@@ -113,6 +113,11 @@ public class Test  {
 	nbOfPb += evalBoolInt("2*3==6", true, false);
 	nbOfPb += evalBoolInt("1*4+2==6", true, false);
 	nbOfPb += evalBoolInt("2+1*4==6", true, false);
+	
+	nbOfPb += evalBoolInt("2+4/1==6", true, false);
+	nbOfPb += evalBoolInt("8-4/2==6", true, false);
+	nbOfPb += evalBoolInt("not(1==1)", false, false);
+	
 	//nbOfPb += evalBoolInt("1+2==3", true, false);
     	
     	System.out.println("Nb of problems found:" + nbOfPb);
