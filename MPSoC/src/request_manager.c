@@ -63,12 +63,16 @@ void executeSendSyncTransaction(request *req) {
   debugInt("syncchannel address \n", req->syncChannel->mwmr_fifo);
   debugInt("syncchannel nbOfParams \n", req->nbOfParams);
   debugInt("syncchannel burst \n", req->nbOfParams*sizeof(req->params));
-   debugInt("syncchannel params \n", req->params[0]);
-   sync_write(req->syncChannel->mwmr_fifo, &(req->params),  req->nbOfParams*sizeof(req->params)||1);//DG 14.03.+1
+  debugInt("syncchannel paramsize \n", sizeof(req->params));
+  debugInt("syncchannel params \n", req->params[0]);
+   //sync_write(req->syncChannel->mwmr_fifo, &(req->params),  req->nbOfParams*sizeof(req->params)||1);//DG 14.03.+1
+   if( req->nbOfParams==0){
+ debugMsg("pas de params");
+     sync_write(req->syncChannel->mwmr_fifo, &(req->params), 4);//DG 10.5. 4 not 1
+}
+else
+  sync_write(req->syncChannel->mwmr_fifo, &(req->params), req->nbOfParams*sizeof(req->params));//DG 30.03.
 
-  // sync_read(req->syncChannel->mwmr_fifo, &(req->params),  req->nbOfParams*sizeof(req->params));
-
-  //DG 8.2. a-t-on besoin de ID?
   
   traceSynchroRequest(req, selectedReq);
 }
@@ -112,12 +116,15 @@ void executeReceiveSyncTransaction(request *req) {
   debugInt("syncchannel read: nbOfParams \n",selectedReq->nbOfParams);  
   debugInt("syncchannel burst \n", req->nbOfParams*sizeof(req->params));
   debugInt("syncchannel params \n", req->params[0]);
-  
-  //sync_write(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params) );  
-  // sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params)||1 );////DG 14.03. +1
- 
- sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params)||1 );////DG 14.03. +1
- 
+  debugInt("syncchannel paramsize \n", sizeof(req->params));
+
+  if(req->nbOfParams==0){ 
+    debugMsg("pas de params");
+    sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params), 4 ); //DG 10.05. 4 not 1
+  }
+  else
+  sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params));
+  //DG 30.03.
 
   debugMsg("after syncchannel read");
   debugInt("req->params \n", req->params);
@@ -286,6 +293,7 @@ int executable(setOfRequests *list, int nb) {
 	//DG 8.2. ici le probleme! wait queue empty pour B0 :(
 	debugMsg("Send sync");
 	debugInt("req->syncChannel->inWaitQueue ",req->syncChannel->inWaitQueue);
+	debugInt("req->syncChannel address", &(req->syncChannel));
 	if (req->syncChannel->inWaitQueue != NULL) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
         //if (req->syncChannel->outWaitQueue != NULL) {//DG 8.2.??
 	  debugMsg("Send sync executable");
@@ -299,6 +307,8 @@ int executable(setOfRequests *list, int nb) {
 
       if (req->type == RECEIVE_SYNC_REQUEST) {
 	debugMsg("receive sync");
+	debugInt("req->syncChannel->outWaitQueue ",req->syncChannel->outWaitQueue);
+        debugInt("req->syncChannel address", &(req->syncChannel));
 	//if ((req->syncChannel->outWaitQueue != NULL)&&(req->syncChannel->inWaitQueue != NULL)) {
 	if (req->syncChannel->outWaitQueue != NULL) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
         //if (req->syncChannel->inWaitQueue != NULL) {//DG 8.2.??

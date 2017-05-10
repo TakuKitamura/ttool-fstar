@@ -246,10 +246,10 @@ public class TasksAndMainGenerator {
 	//DG 9.5.
 	
 	if (nbParams>0)
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ nbParams+";" + CR);
+	    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);
 	else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 1 +";" + CR);
 
-mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 1;" + CR);
+         mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 100;" + CR);
 	//mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+((nbParams*4)+4)+";" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = " +getChannelName(ar, i)+".depth;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
@@ -303,8 +303,8 @@ mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 1;" + CR);
 			AvatarSignal sig = ar.getSignal1(0);
 			int nbParams= sig.getNbParams();
 			if (nbParams>0)
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ nbParams+";" + CR);
-			else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 1 +";" + CR);
+			    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);
+			else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
 	//	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+"1;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+";" + CR);//DG 27.03.
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = "+getChannelName(ar, i)+".depth;" + CR); 
