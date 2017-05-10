@@ -1698,9 +1698,38 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
+	if (c1 == '<') {
+            newElt = current.addIntOperator(LT_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed int operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+	
+
         // BOOL BINARY OP
         if (c1 == '=') {
             newElt = current.addBinaryOperator(EQUAL_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed bool operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+	if (c1 == '&') {
+            newElt = current.addBinaryOperator(AND_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed bool operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+	if (c1 == '|') {
+            newElt = current.addBinaryOperator(OR_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed bool operator:" + token;
                 return null;
