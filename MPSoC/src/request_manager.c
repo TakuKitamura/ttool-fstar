@@ -60,7 +60,7 @@ void executeSendSyncTransaction(request *req) {
   pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
 
 
-  debugInt("syncchannel address \n", req->syncChannel->mwmr_fifo);
+  debugInt("syncchannel write : address \n", req->syncChannel->mwmr_fifo);
   debugInt("syncchannel nbOfParams \n", req->nbOfParams);
   debugInt("syncchannel burst \n", req->nbOfParams*sizeof(req->params));
   debugInt("syncchannel paramsize \n", sizeof(req->params));
@@ -152,16 +152,16 @@ void executeReceiveSyncTransaction(request *req) {
  if(req->nbOfParams==0){ 
     debugMsg("pas de params");
     if(sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params), 4 )!=4){ debugMsg("****syncchannel read echec");//req->executable==0;
-      selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2==0;
+      selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2=0;
     } else { debugMsg("****syncchannel read success");//req->executable==1;
-      selectedReq->syncChannel->ok==1;selectedReq->syncChannel->ok2==0;
+      selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2=0;
 }}
  else{
    if(sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params))!= selectedReq->nbOfParams*sizeof(selectedReq->params)){debugMsg("****syncchannel read echec");//req->executable==0;
-     selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2==0;
+     selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2=0;
 }else{ 
      debugMsg("****syncchannel read success");//req->executable==1;
-     selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2==0;
+     selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2=0;
 }}
 
   debugMsg("after syncchannel read");
@@ -356,7 +356,7 @@ int executable(setOfRequests *list, int nb) {
         //if (req->syncChannel->inWaitQueue != NULL) {//DG 8.2.??
 	//if ((req->syncChannel->ok2==1)&&(req->syncChannel->inWaitQueue != NULL)) {
 	//if (req->syncChannel->ok2==1){
-	if ((req->syncChannel->outWaitQueue != NULL)){
+	if ((req->syncChannel->outWaitQueue != NULL)&&req->syncChannel->ok2==1){
 	  req->executable = 1;
 	  debugMsg("Receive sync executable");
 	  //req->syncChannel->ok2==0;
