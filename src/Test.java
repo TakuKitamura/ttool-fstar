@@ -36,8 +36,8 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class Main
- * starts the main Windows and a project manager
+ * Class Test
+ * Runs a set of tests, and returns a summary in case of failure
  * Creation: 01/12/2003
  * @version 1.0 21/08/2004
  * @author Ludovic APVRILLE
@@ -103,7 +103,6 @@ public class Test  {
 	nbOfPb += evalBoolInt("t==t==f", false, false);
 	nbOfPb += evalBoolInt("t==t==t", true, false);
 	nbOfPb += evalBoolInt("(3==3) == (4==4)", true, false);
-	nbOfPb += evalBoolInt("(3==3) == (3==4)", false, false);
 	nbOfPb += evalBoolInt("(1+2)==4", false, false);
 	nbOfPb += evalBoolInt("(1+2)==3", true, false);
 	nbOfPb += evalBoolInt("3==1+2", true, false);
@@ -113,6 +112,18 @@ public class Test  {
 	nbOfPb += evalBoolInt("2*3==6", true, false);
 	nbOfPb += evalBoolInt("1*4+2==6", true, false);
 	nbOfPb += evalBoolInt("2+1*4==6", true, false);
+	
+	nbOfPb += evalBoolInt("2+4/1==6", true, false);
+	nbOfPb += evalBoolInt("8-4/2==6", true, false);
+
+	nbOfPb += evalBoolInt("(3==3) and (3==4)", false, false);
+
+	nbOfPb += evalBoolInt("(3==3) or (3==4)", true, false);
+
+	nbOfPb += evalBoolInt("1<3", true, false);
+	
+	//nbOfPb += evalBoolInt("not(1==1)", false, false);
+	
 	//nbOfPb += evalBoolInt("1+2==3", true, false);
     	
     	System.out.println("Nb of problems found:" + nbOfPb);
