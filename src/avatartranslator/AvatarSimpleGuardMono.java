@@ -47,6 +47,7 @@
 package avatartranslator;
 
 import java.util.HashMap;
+import myutil.TraceManager;
 
 import myutil.Conversion;
 
@@ -76,6 +77,16 @@ public class AvatarSimpleGuardMono extends AvatarSimpleGuard {
 
     @Override
     public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
-        this.term.replaceAttributes (attributesMapping);
+        for (AvatarAttribute attr: attributesMapping.keySet())
+        {
+        }
+        if (this.term instanceof AvatarAttribute)
+        {
+            this.term = attributesMapping.get(((AvatarAttribute) this.term));    
+        }
+        else
+        {
+            this.term.replaceAttributes (attributesMapping);
+        }
     }
 }

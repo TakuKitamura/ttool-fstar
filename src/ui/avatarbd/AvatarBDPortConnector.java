@@ -80,7 +80,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     protected boolean isLossy = false;
 
 
-    public AvatarBDPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+    public AvatarBDPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
         value = "";
@@ -264,7 +264,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
           }*/
 
         // Animation?
-        if ((tdp.AVATAR_ANIMATE_ON) && (isAsynchronous())){
+        if ((TDiagramPanel.AVATAR_ANIMATE_ON) && (isAsynchronous())){
             //TraceManager.addDev("anim port connector: " + this);
             String messageInformation[] = tdp.getMGUI().hasMessageInformationForAvatarConnector(this);
             if (messageInformation != null) {
@@ -295,7 +295,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         AvatarBDBlock block1 = getAvatarBDBlock1();
         AvatarBDBlock block2 = getAvatarBDBlock2();
 
-        Vector v = getAssociationSignals();
+        Vector<String> v = getAssociationSignals();
 	
 
         JDialogSignalAssociation jdas = new JDialogSignalAssociation(frame, block1, block2, v, this, "Setting signal association");
@@ -390,6 +390,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         return new String(sb);
     }
 
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         try {
             NodeList nli;
@@ -399,7 +400,6 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             sizeOfFIFO = 4;
             blockingFIFO = false;
             asynchronous = false;
-
 
             //System.out.println("Loading attributes");
             //System.out.println(nl.toString());
@@ -562,12 +562,12 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         return list;
     }
 
-    public Vector getAssociationSignals() {
+    public Vector<String> getAssociationSignals() {
         AvatarBDBlock block1 = getAvatarBDBlock1();
         AvatarBDBlock block2 = getAvatarBDBlock2();
 
         int i;
-        Vector v = new Vector();
+        Vector<String> v = new Vector<String>();
         String s;
 
         for(i=0; i<outSignalsAtOrigin.size(); i++) {
@@ -662,7 +662,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 
     public void updateAllSignals() {
         try {
-            Vector v = getAssociationSignals();
+            Vector<String> v = getAssociationSignals();
 		//	System.out.println(inSignalsAtOrigin + " " + inSignalsAtDestination + " " + outSignalsAtOrigin + " " + outSignalsAtDestination);
             inSignalsAtOrigin.clear();
             inSignalsAtDestination.clear();

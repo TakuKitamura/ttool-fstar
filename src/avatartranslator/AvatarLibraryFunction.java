@@ -107,6 +107,11 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      */
     private AvatarSpecification avspec;
 
+    /**
+     * Counter of invocations of this library function.
+     */
+    private int counter;
+
 
     /**
      * Basic constructor of the function function.
@@ -130,6 +135,23 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         this.methods = new LinkedList<AvatarMethod> ();
 
         this.asm = new AvatarStateMachine (this, "statemachineoffunction__" + name, referenceObject);
+        this.counter = 0;
+    }
+
+    /**
+     * Return a unique counter for library function call.
+     */
+    public int getCounter()
+    {
+        return this.counter++;
+    }
+
+    /**
+     * Set counter for this library function.
+     */
+    public void setCounter(int counter)
+    {
+        this.counter = counter;
     }
 
     @Override
@@ -288,6 +310,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      */
     public void addAttributesToBlock (AvatarBlock block, HashMap<AvatarAttribute, AvatarAttribute> mapping) {
         for (AvatarAttribute attribute: this.attributes) {
+            // TODO: We should use different attributes for different library function call
             String name = this.name + "__" + attribute.getName ();
             AvatarAttribute attr = block.getAvatarAttributeWithName (name);
             if (attr == null) {
@@ -374,6 +397,11 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         public Object referenceObject;
 
         /**
+         * The counter for the library function call.
+         */
+        public int counter;
+
+        /**
          * Basic constructor.
          *
          * @param placeholdersMapping
@@ -390,8 +418,10 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
          *      The block the function call belongs to.
          * @param referenceObject
          *      The reference object associated to the function call being translated.
+         * @param counter
+         *      The counter for the library function call.
          */
-        public TranslatorArgument (HashMap<AvatarAttribute, AvatarAttribute> placeholdersMapping, HashMap<AvatarSignal, AvatarSignal> signalsMapping, AvatarStateMachineElement previousElement, AvatarStateMachineElement lastElement, HashMap<AvatarStateMachineElement, AvatarStateMachineElement> elementsMapping, AvatarBlock block, Object referenceObject) {
+        public TranslatorArgument (HashMap<AvatarAttribute, AvatarAttribute> placeholdersMapping, HashMap<AvatarSignal, AvatarSignal> signalsMapping, AvatarStateMachineElement previousElement, AvatarStateMachineElement lastElement, HashMap<AvatarStateMachineElement, AvatarStateMachineElement> elementsMapping, AvatarBlock block, Object referenceObject, int counter) {
             this.placeholdersMapping = placeholdersMapping;
             this.signalsMapping = signalsMapping;
             this.previousElement = previousElement;
@@ -399,6 +429,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
             this.elementsMapping = elementsMapping;
             this.block = block;
             this.referenceObject = referenceObject;
+            this.counter = counter;
         }
     }
 
@@ -418,9 +449,9 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      *
      * @return The last element of the state machine created.
      */
-    public AvatarState translateASMWithMapping (HashMap<AvatarAttribute, AvatarAttribute> placeholdersMapping, HashMap<AvatarSignal, AvatarSignal> signalsMapping, AvatarStateMachineElement firstElement, AvatarBlock block, Object referenceObject) {
+    public AvatarState translateASMWithMapping (HashMap<AvatarAttribute, AvatarAttribute> placeholdersMapping, HashMap<AvatarSignal, AvatarSignal> signalsMapping, AvatarStateMachineElement firstElement, AvatarBlock block, Object referenceObject, int counter) {
         /* Create the last state */
-        AvatarState lastState = new AvatarState ("exit_" + this.name, referenceObject);
+        AvatarState lastState = new AvatarState ("exit_" + this.name + "_" + counter, referenceObject);
 
         /* Create the argument object that will be passed to translation functions */
         Object arg = new TranslatorArgument (
@@ -430,7 +461,8 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
                 lastState,
                 new HashMap<AvatarStateMachineElement, AvatarStateMachineElement> (),
                 block,
-                referenceObject);
+                referenceObject,
+                counter);
 
         /* Translate the state machine, starting from the first state */
         this.asm.getStartState ().translate (this, arg);
@@ -479,14 +511,14 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
 
         if (_asme instanceof AvatarSetTimer) {
             // TODO: isn't the name used for the timer ?
-            asme = new AvatarSetTimer (this.name + "__" + _asme.getName (), arg.referenceObject);
+            asme = new AvatarSetTimer (this.name + "_" + arg.counter + "__" + _asme.getName (), arg.referenceObject);
 
             // TODO: should probably replace attributes too, right ?
             ((AvatarSetTimer) asme).setTimerValue (((AvatarSetTimer) _asme).getTimerValue ());
         } else if (_asme instanceof AvatarResetTimer)
-            asme = new AvatarResetTimer (this.name + "__" + _asme.getName (), arg.referenceObject);
+            asme = new AvatarResetTimer (this.name + "_" + arg.counter + "__" + _asme.getName (), arg.referenceObject);
         else if (_asme instanceof AvatarExpireTimer) 
-            asme = new AvatarExpireTimer (this.name + "__" + _asme.getName (), arg.referenceObject);
+            asme = new AvatarExpireTimer (this.name + "_" + arg.counter + "__" + _asme.getName (), arg.referenceObject);
         else
             /* !!! should not happen */
             return;
@@ -500,7 +532,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
     public void translateActionOnSignal (AvatarActionOnSignal _asme, Object _arg) {
         TranslatorArgument arg = (TranslatorArgument) _arg;
 
-        AvatarActionOnSignal asme = new AvatarActionOnSignal (this.name + "__" + _asme.getName (), arg.signalsMapping.get (_asme.getSignal ()), arg.referenceObject);
+        AvatarActionOnSignal asme = new AvatarActionOnSignal (this.name + "_" + arg.counter + "__" + _asme.getName (), arg.signalsMapping.get (_asme.getSignal ()), arg.referenceObject);
         for (String s: _asme.getValues ()) {
             AvatarAttribute attr = this.getAvatarAttributeWithName (s);
             if (attr == null)
@@ -516,7 +548,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
     public void translateTransition (AvatarTransition _asme, Object _arg) {
         TranslatorArgument arg = (TranslatorArgument) _arg;
 
-        AvatarTransition asme = new AvatarTransition (arg.block, this.name + "__" + _asme.getName (), arg.referenceObject);
+        AvatarTransition asme = new AvatarTransition (arg.block, this.name + "_" + arg.counter + "__" + _asme.getName (), arg.referenceObject);
 
         AvatarGuard guard = _asme.getGuard ().clone ();
         guard.replaceAttributes (arg.placeholdersMapping);
@@ -549,7 +581,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
          * reachability of state in a function for a particular invocation of this
          * function.
          */
-        AvatarState asme = new AvatarState (this.name + "__" + _asme.getName (), arg.referenceObject, false);
+        AvatarState asme = new AvatarState (this.name + "_" + arg.counter + "__" + _asme.getName (), arg.referenceObject, false);
         asme.setHidden (true);
         asme.addEntryCode (_asme.getEntryCode ());
 
@@ -560,7 +592,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
     public void translateRandom (AvatarRandom _asme, Object _arg) {
         TranslatorArgument arg = (TranslatorArgument) _arg;
 
-        AvatarRandom asme = new AvatarRandom (this.name + "__" + _asme.getName (), arg.referenceObject);
+        AvatarRandom asme = new AvatarRandom (this.name + "_" + arg.counter + "__" + _asme.getName (), arg.referenceObject);
         asme.setValues (_asme.getMinValue (), _asme.getMaxValue ());
         asme.setFunctionId (_asme.getFunctionId ());
         asme.setVariable (arg.placeholdersMapping.get (this.getAvatarAttributeWithName (_asme.getVariable ())).getName ());
@@ -579,7 +611,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
     public void translateLibraryFunctionCall (AvatarLibraryFunctionCall _asme, Object _arg) {
         TranslatorArgument arg = (TranslatorArgument) _arg;
 
-        AvatarLibraryFunctionCall asme = new AvatarLibraryFunctionCall (this.name + "__" + _asme.getName (), _asme.getLibraryFunction (), arg.referenceObject);
+        AvatarLibraryFunctionCall asme = new AvatarLibraryFunctionCall (this.name + "_" + arg.counter + "__" + _asme.getName (), _asme.getLibraryFunction (), arg.referenceObject);
         for (AvatarAttribute attr: _asme.getParameters ())
             asme.addParameter (arg.placeholdersMapping.get (attr));
         for (AvatarSignal signal: _asme.getSignals ())
@@ -595,6 +627,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         AvatarLibraryFunction result = new AvatarLibraryFunction(this.name, avspec, this.referenceObject);
         this.cloneLinkToReferenceObjects (result);
 
+        result.setCounter(this.counter);
         for (AvatarAttribute aa: this.parameters)
             result.addParameter(aa.advancedClone(result));
         for (AvatarSignal sig: this.signals)

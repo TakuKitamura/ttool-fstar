@@ -64,7 +64,7 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
     int oldVersion = 1;
     int newVersion = 2;
     
-    public AvatarMADVersioningConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+    public AvatarMADVersioningConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         value = "<<versioning>>";
 		
@@ -146,6 +146,7 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
         return new String(sb);
     }
     
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         try {
             NodeList nli;

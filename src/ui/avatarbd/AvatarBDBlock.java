@@ -249,9 +249,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         else {
             // try to draw with "..." instead
             if (!this.isCryptoBlock)
-                ster = this.stereotype;
+                ster = stereotype;
             else
-                ster = this.stereotypeCrypto;
+                ster = stereotypeCrypto;
 
             for (int stringLength = ster.length ()-1; stringLength >= 0; stringLength--) {
                 String abbrev = "<<" + ster.substring (0, stringLength) + "...>>";
@@ -523,6 +523,18 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return name;
     }
 
+    public String getFullyQualifiedName()
+    {
+        String result = "";
+        if (this.father != null && (this.father instanceof AvatarBDBlock))
+        {
+            result = ((AvatarBDBlock) this.father).getFullyQualifiedName() + ".";
+        }
+        result += this.value;
+
+        return result;
+    }
+
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         int textX = (int) (this.textX * this.tdp.getZoom ());
         if (iconIsDrawn) {
@@ -782,6 +794,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return new String(sb);
     }
 
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
 
         String s;
@@ -800,8 +813,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             AvatarSignal as;
             boolean implementation = false;
             String crypt;
-	    String attached;
-	    boolean mustAddCryptoFunctions = false;
+            String attached;
+	    //boolean mustAddCryptoFunctions = false;
 
 
             //System.out.println("Loading attributes");
@@ -967,6 +980,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             if (tgcomponent[i] instanceof AvatarBDBlock) {
                 ((AvatarBDBlock)tgcomponent[i]).resizeWithFather();
             }
+            else if (tgcomponent[i] instanceof AvatarBDLibraryFunction) {
+                ((AvatarBDLibraryFunction)tgcomponent[i]).resizeWithFather();
+            }
         }
 
         if (getFather() != null) {
@@ -1009,8 +1025,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     public LinkedList<AvatarBDLibraryFunction> getFullLibraryFunctionList () {
         LinkedList<AvatarBDLibraryFunction> list = new LinkedList<AvatarBDLibraryFunction> ();
         for (int i=0; i<nbInternalTGComponent; i++)
+        {
             if (this.tgcomponent[i] instanceof AvatarBDLibraryFunction)
                 list.add ((AvatarBDLibraryFunction) this.tgcomponent[i]);
+            else if (this.tgcomponent[i] instanceof AvatarBDBlock)
+                list.addAll(((AvatarBDBlock) this.tgcomponent[i]).getFullLibraryFunctionList());
+        }
 
         return list;
     }
@@ -1022,6 +1042,13 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                 return true;
             }
         }
+        LinkedList<AvatarBDLibraryFunction> llist = getFullLibraryFunctionList ();
+        for(AvatarBDLibraryFunction b: llist) {
+            if (b.getFunctionName().compareTo(name) ==0) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -1078,18 +1105,6 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         v.addAll(this.myMethods);
         v.addAll(((AvatarBDBlock) getFather()).getAllMethodList());
         return v;
-    }
-
-    public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctionList() {
-        LinkedList<AvatarBDLibraryFunction> list = this.getFullLibraryFunctionList ();
-
-        if (this.getFather() == null) {
-            list.addAll (((AvatarBDPanel) this.tdp).getFullLibraryFunctionList ());
-            return list;
-        }
-
-        list.addAll(((AvatarBDBlock) this.getFather()).getAllLibraryFunctionList());
-        return list;
     }
 
     public LinkedList<AvatarSignal> getAllSignalList() {

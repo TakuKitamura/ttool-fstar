@@ -256,7 +256,7 @@ public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComp
             builder.append (" = ");
         }
 
-        builder.append (this.libraryFunction.getFunctionName ());
+        builder.append (this.libraryFunction.getFullyQualifiedName ());
         builder.append (" (");
 
         first = true;
@@ -290,7 +290,7 @@ public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComp
         StringBuffer sb = new StringBuffer ("<extraparam>\n");
         if (this.libraryFunction != null) {
             sb.append ("<LibraryFunction name=\"");
-            sb.append (this.libraryFunction.getName ());
+            sb.append (this.libraryFunction.getFullyQualifiedName ());
             sb.append ("\" />\n");
         }
 
@@ -360,7 +360,7 @@ public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComp
                                 break;
 
                             for (AvatarBDLibraryFunction func: mgui.getAllLibraryFunctions (tp, tdpName))
-                                if (func.getFunctionName ().equals (name)) {
+                                if (func.getFullyQualifiedName ().equals (name)) {
                                     this.libraryFunction = func;
                                     break;
                                 }

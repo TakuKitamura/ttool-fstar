@@ -254,6 +254,18 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         return this.name;
     }
 
+    public String getFullyQualifiedName()
+    {
+        String result = "";
+        if (this.father != null && (this.father instanceof AvatarBDBlock))
+        {
+            result = ((AvatarBDBlock) this.father).getFullyQualifiedName() + ".";
+        }
+        result += this.name;
+
+        return result;
+    }
+
     public LinkedList<TAttribute> getParameters () {
         return this.parameters;
     }
@@ -797,6 +809,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
      *
      * @throws MalformedModelingExpresion When the provided XML is corrupted.
      */
+    @Override
     public void loadExtraParam (NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         try {
             for(int i=0; i<nl.getLength(); i++) {
@@ -1051,13 +1064,6 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     @Override
     public LinkedList<AvatarSignal> getSignalList () {
         return new LinkedList<AvatarSignal> (this.signals);
-    }
-
-    @Override
-    public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctionList () {
-        if (this.getFather() == null)
-            return ((AvatarBDPanel) this.tdp).getFullLibraryFunctionList ();
-        return ((AvatarBDBlock) this.getFather()).getAllLibraryFunctionList();
     }
 
     @Override

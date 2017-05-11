@@ -59,7 +59,7 @@ import ui.*;
 public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
     protected TClassInterface t1;
     protected TClassInterface oldt1;
-    protected Vector gates, gatesTmp; // Vector of TOneAttribute
+    protected Vector<TOneAttribute> gates, gatesTmp; // Vector of TOneAttribute
     
     protected int minWidth = 10;
     protected int minHeight = 15;
@@ -74,14 +74,14 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
         editable = true;
         removable = false;
         
-        gates = new Vector();
+        gates = new Vector<TOneAttribute>();
         
         oldt1 = null; t1 = null;
         
         myImageIcon = IconManager.imgic302;
     }
     
-    public Vector getGates() {
+    public Vector<TOneAttribute> getGates() {
         return gates;
     }
     
@@ -142,7 +142,7 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
     public void setTClass(TClassInterface _t1) {
         t1 = _t1;
         if (t1 != oldt1)  {
-            gates = new Vector();
+            gates = new Vector<TOneAttribute>();
             //System.out.println("New gates");
             makeValue();
         }
@@ -195,10 +195,11 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
         return new String(sb);
     }
     
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro ***");
         try {
-            gatesTmp = new Vector();
+            gatesTmp = new Vector<TOneAttribute>();
             
             NodeList nli;
             Node n1, n2;
@@ -215,8 +216,10 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+
+                    // Issue #17 copy-paste error on j index
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

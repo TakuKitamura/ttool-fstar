@@ -283,13 +283,14 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
     }
 
 
-    public Vector getArtifactList() {
-        Vector v = new Vector();
+    public Vector<TMLArchiArtifact> getArtifactList() {
+        Vector<TMLArchiArtifact> v = new Vector<TMLArchiArtifact>();
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLArchiArtifact) {
-                v.add(tgcomponent[i]);
+                v.add( (TMLArchiArtifact) tgcomponent[i]);
             }
         }
+        
         return v;
     }
 
@@ -314,6 +315,7 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         return new String(sb);
     }
 
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro ***");
         try {

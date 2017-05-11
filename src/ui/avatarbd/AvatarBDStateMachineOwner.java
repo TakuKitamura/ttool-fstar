@@ -63,7 +63,6 @@ public interface AvatarBDStateMachineOwner {
     public AvatarSignal getSignalNameBySignalDef (String _id);
     public LinkedList<AvatarMethod> getMethodList ();
     public LinkedList<AvatarMethod> getAllMethodList ();
-    public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctionList ();
 
     public String getOwnerName ();
     public AvatarSMDPanel getAvatarSMDPanel ();

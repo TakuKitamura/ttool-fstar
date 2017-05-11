@@ -239,6 +239,7 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
         return new String(sb);
     }
 
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         value = "";
         values = null;

@@ -244,26 +244,20 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
         //value = "";
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<TextColor value=\"" + textColor.getRGB() + "\" />\n");
-	sb.append("<FillColor value=\"" + textColor.getRGB() + "\" />\n");
+        sb.append("<FillColor value=\"" + textColor.getRGB() + "\" />\n");
         sb.append("</extraparam>\n");
+        
         return new String(sb);
     }
     
-
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-
         String s;
-        
 
         try {
             NodeList nli;
             Node n1, n2;
             Element elt;
-            
-
-
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);

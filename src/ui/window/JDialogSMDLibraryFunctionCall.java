@@ -94,7 +94,7 @@ public class JDialogSMDLibraryFunctionCall extends javax.swing.JDialog implement
         public String toString () {
             if (this.inner == null)
                 return "";
-            return this.inner.getFunctionName ();
+            return this.inner.getFullyQualifiedName ();
         }
     }
     JComboBox<FunctionWrapper> functionNameBox;

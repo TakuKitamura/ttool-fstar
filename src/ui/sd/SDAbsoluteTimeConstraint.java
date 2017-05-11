@@ -135,7 +135,7 @@ public class SDAbsoluteTimeConstraint extends TGCWithoutInternalComponent implem
         JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting absolute time constraints");
         jdti.setSize(350, 250);
         GraphicLib.centerOnParent(jdti);
-        jdti.show(); // blocked until dialog has been closed
+        jdti.setVisible( true ); // blocked until dialog has been closed
         
         minConstraint = array[0]; maxConstraint = array[1];
         
@@ -159,6 +159,7 @@ public class SDAbsoluteTimeConstraint extends TGCWithoutInternalComponent implem
         return new String(sb);
     }
     
+    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro ***");
         try {
@@ -171,8 +172,10 @@ public class SDAbsoluteTimeConstraint extends TGCWithoutInternalComponent implem
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
+
+                    // Issue #17 copy-paste error on j index
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;

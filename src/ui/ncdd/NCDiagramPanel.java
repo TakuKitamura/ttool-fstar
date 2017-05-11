@@ -138,7 +138,6 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		s += "\"";
         return s;
     }
-	
     
     public void loadExtraParameters(Element elt) {
         String s;
@@ -153,8 +152,6 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
             //System.out.println("older format");
 			setAttributes(0);
         }
-		
-
     }
     
     /*public boolean isFree(ArtifactTClassGate atg) {

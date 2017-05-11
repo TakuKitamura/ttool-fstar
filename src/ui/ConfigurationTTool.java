@@ -126,7 +126,8 @@ public class ConfigurationTTool {
     // AVATAR Code generation
     public static String AVATARExecutableCodeDirectory = "";
     public static String AVATARMPSoCCodeDirectory = "";
-     public static String AVATARMPSoCCompileCommand = "";
+    public static String AVATARMPSoCCompileCommand = "";
+    public static String AVATARMPSoCPerformanceEvaluationDirectory = "";
     public static String AVATARExecutableCodeHost = "";
     public static String AVATARExecutableCodeCompileCommand = "";
     public static String AVATARExecutableCodeExecuteCommand = "";

@@ -236,15 +236,21 @@ public class TasksAndMainGenerator {
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.wptr = 0;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
-	//DG 10.0.2 width=1??
-	//mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 1;" + CR);
+	
+	//mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 4;" + CR);
 
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 4;" + CR);
-	//DG 16.02.
-	AvatarSignal sig = ar.getSignal1(0);//DG boucle?
+
+	//DG 27.03.
+	AvatarSignal sig = ar.getSignal1(0);
         int nbParams= sig.getNbParams();	
-	//DG 23.02. if getNbParams=0 transmit 1 word
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+((nbParams*4)+4)+";" + CR);
+	//DG 9.5.
+	
+	if (nbParams>0)
+	    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);
+	else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
+
+         mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 100;" + CR);
+	//mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+((nbParams*4)+4)+";" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = " +getChannelName(ar, i)+".depth;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR2);
@@ -252,7 +258,7 @@ public class TasksAndMainGenerator {
 	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
 	mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);		
 	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
-
+	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok = 1;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok2 = 0;" + CR);
 	/* init because mutekh initializer does not work for this */		
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".status =&"+ getChannelName(ar, i)+"_status;" + CR);
 
@@ -292,10 +298,16 @@ public class TasksAndMainGenerator {
 			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
 
-			//DG 10.2. width=1??
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 1;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+"1;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = "+getChannelName(ar, i)+".depth;" + CR); //gdepth = depth for sync fifo
+			//DG 27.03. width = nbParams
+			//	mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 1;" + CR);
+			AvatarSignal sig = ar.getSignal1(0);
+			int nbParams= sig.getNbParams();
+			if (nbParams>0)
+			    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);
+			else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
+	//	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+"1;" + CR);
+	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+";" + CR);//DG 27.03.
+			mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = "+getChannelName(ar, i)+".depth;" + CR); 
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR);
 
