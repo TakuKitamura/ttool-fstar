@@ -211,7 +211,12 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         mappedMemory = dialog.getMappedMemory();
         bufferParameters = dialog.getBufferParameters();        //becomes empty if closing the window without pushing Save
         //TraceManager.addDev( "bufferParameters after closing the window: " + bufferParameters.toString() );
-        bufferType = bufferParameters.get( Buffer.BUFFER_TYPE_INDEX );
+        if( bufferParameters.size() > 0 )   {
+            bufferType = bufferParameters.get( Buffer.BUFFER_TYPE_INDEX );
+        }
+        /*else    {
+            bufferType = Buffer.FEP_BUFFER;
+        }*/
 
         TraceManager.addDev( "mapped Port: " + dialog.getMappedPort() );
 
