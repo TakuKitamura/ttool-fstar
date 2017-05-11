@@ -66,13 +66,32 @@ void executeSendSyncTransaction(request *req) {
   debugInt("syncchannel paramsize \n", sizeof(req->params));
   debugInt("syncchannel params \n", req->params[0]);
    //sync_write(req->syncChannel->mwmr_fifo, &(req->params),  req->nbOfParams*sizeof(req->params)||1);//DG 14.03.+1
-   if( req->nbOfParams==0){
- debugMsg("pas de params");
-     sync_write(req->syncChannel->mwmr_fifo, &(req->params), 4);//DG 10.5. 4 not 1
+  /* while(1){
+   if(req->nbOfParams==0){
+     debugMsg("pas de params");
+     if(sync_write(req->syncChannel->mwmr_fifo, &(req->params), 4)!=4)continue;
+     break;
+   }
+   else{
+     if(sync_write(req->syncChannel->mwmr_fifo, &(req->params), req->nbOfParams*sizeof(req->params))!=req->nbOfParams*sizeof(req->params))continue;
+     break;
+     }*/
+  selectedReq->syncChannel->ok=1;
+  if(req->nbOfParams==0){
+     debugMsg("no params");
+     if(sync_write(req->syncChannel->mwmr_fifo, &(req->params), 4)!=4){ debugMsg("****syncchannel write echec");//req->executable==0;
+       selectedReq->syncChannel->ok=0;selectedReq->syncChannel->ok2=1;
+     }else{ debugMsg("****syncchannel write success");//req->executable==1;
+       selectedReq->syncChannel->ok=0;selectedReq->syncChannel->ok2=1;
 }
-else
-  sync_write(req->syncChannel->mwmr_fifo, &(req->params), req->nbOfParams*sizeof(req->params));//DG 30.03.
-
+  }
+     else{
+       if(sync_write(req->syncChannel->mwmr_fifo, &(req->params), req->nbOfParams*sizeof(req->params))!=req->nbOfParams*sizeof(req->params)){ debugMsg("****syncchannel write echec");//req->executable==0;
+selectedReq->syncChannel->ok=0;selectedReq->syncChannel->ok2=1;
+       }else{debugMsg("****syncchannel write success");//req->executable==1;
+	 selectedReq->syncChannel->ok=0;selectedReq->syncChannel->ok2=1;
+}
+     }
   
   traceSynchroRequest(req, selectedReq);
 }
@@ -117,14 +136,33 @@ void executeReceiveSyncTransaction(request *req) {
   debugInt("syncchannel burst \n", req->nbOfParams*sizeof(req->params));
   debugInt("syncchannel params \n", req->params[0]);
   debugInt("syncchannel paramsize \n", sizeof(req->params));
-
+  /* while(1){
   if(req->nbOfParams==0){ 
     debugMsg("pas de params");
-    sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params), 4 ); //DG 10.05. 4 not 1
+    if(sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params), 4 )!=4) continue
+      ; //DG 10.05. there is at least one item transferred even if no parameters break;
   }
   else
-  sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params));
-  //DG 30.03.
+    if(sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params))!= selectedReq->nbOfParams*sizeof(selectedReq->params))
+      continue;
+  break;
+  }*/
+  //DG 11.05.
+ selectedReq->syncChannel->ok=1;
+ if(req->nbOfParams==0){ 
+    debugMsg("pas de params");
+    if(sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params), 4 )!=4){ debugMsg("****syncchannel read echec");//req->executable==0;
+      selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2==0;
+    } else { debugMsg("****syncchannel read success");//req->executable==1;
+      selectedReq->syncChannel->ok==1;selectedReq->syncChannel->ok2==0;
+}}
+ else{
+   if(sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params))!= selectedReq->nbOfParams*sizeof(selectedReq->params)){debugMsg("****syncchannel read echec");//req->executable==0;
+     selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2==0;
+}else{ 
+     debugMsg("****syncchannel read success");//req->executable==1;
+     selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2==0;
+}}
 
   debugMsg("after syncchannel read");
   debugInt("req->params \n", req->params);
@@ -294,9 +332,13 @@ int executable(setOfRequests *list, int nb) {
 	debugMsg("Send sync");
 	debugInt("req->syncChannel->inWaitQueue ",req->syncChannel->inWaitQueue);
 	debugInt("req->syncChannel address", &(req->syncChannel));
-	if (req->syncChannel->inWaitQueue != NULL) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
+
+	//if ((req->syncChannel->inWaitQueue != NULL)&&(req->syncChannel->ok==1)) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
         //if (req->syncChannel->outWaitQueue != NULL) {//DG 8.2.??
+	if ((req->syncChannel->inWaitQueue != NULL)){
 	  debugMsg("Send sync executable");
+	  //req->syncChannel->ok==0;
+	  req->syncChannel->ok2==0;
 	  req->executable = 1;
 	  cpt ++;
 	  }  else {
@@ -310,10 +352,15 @@ int executable(setOfRequests *list, int nb) {
 	debugInt("req->syncChannel->outWaitQueue ",req->syncChannel->outWaitQueue);
         debugInt("req->syncChannel address", &(req->syncChannel));
 	//if ((req->syncChannel->outWaitQueue != NULL)&&(req->syncChannel->inWaitQueue != NULL)) {
-	if (req->syncChannel->outWaitQueue != NULL) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
+	//	if ((req->syncChannel->outWaitQueue != NULL)&&(req->syncChannel->ok==1)) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
         //if (req->syncChannel->inWaitQueue != NULL) {//DG 8.2.??
+	//if ((req->syncChannel->ok2==1)&&(req->syncChannel->inWaitQueue != NULL)) {
+	//if (req->syncChannel->ok2==1){
+	if ((req->syncChannel->outWaitQueue != NULL)){
 	  req->executable = 1;
 	  debugMsg("Receive sync executable");
+	  //req->syncChannel->ok2==0;
+	  req->syncChannel->ok==0;
 	  cpt ++;
 	}
  else {
@@ -603,9 +650,9 @@ request *executeListOfRequests(setOfRequests *list) {
   debug2Msg(list->owner, "Request selected!");
 
   my_clock_gettime(&list->completionTime);
- debug2Msg(list->owner, "Request selected0!");
+  // debug2Msg(list->owner, "Request selected0!");
   pthread_mutex_unlock(list->mutex); 
-debug2Msg(list->owner, "Request selected1!");
+  //debug2Msg(list->owner, "Request selected1!");
   debug2Msg(list->owner, "Mutex unlocked");
   return req;
 }
