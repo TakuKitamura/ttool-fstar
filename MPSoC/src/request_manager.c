@@ -335,7 +335,7 @@ int executable(setOfRequests *list, int nb) {
 
 	//if ((req->syncChannel->inWaitQueue != NULL)&&(req->syncChannel->ok==1)) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
         //if (req->syncChannel->outWaitQueue != NULL) {//DG 8.2.??
-	if ((req->syncChannel->inWaitQueue != NULL)||req->syncChannel->ok){
+	if ((req->syncChannel->inWaitQueue != NULL)){
 	  debugMsg("Send sync executable");
 	  debugInt("ok=",req->syncChannel->ok);
 	  //req->syncChannel->ok==0;
