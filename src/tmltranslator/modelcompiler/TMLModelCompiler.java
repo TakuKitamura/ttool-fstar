@@ -493,7 +493,7 @@ public class TMLModelCompiler	{
 	private void setMappingParametersToBuffers()	{
 		
 		for( TMLCPLib tmlcplib: mappedCPLibs )	{
-			ArrayList<String> bufferParameters = tmlcplib.getArtifacts().get(0).getBufferParameters();
+			List<String> bufferParameters = tmlcplib.getArtifacts().get(0).getBufferParameters();
 			String portName = tmlcplib.getArtifacts().get(0).getPortName();
 			for( Buffer buff: buffersList )	{
 				if( buff.getName().equals( "buff_" + portName ) )	{

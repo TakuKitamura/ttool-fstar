@@ -45,27 +45,23 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tmlcp;
 
-import java.util.*;
-
 import java.util.ArrayList;
-
-import myutil.*;
+import java.util.List;
 
 public class TMLCPJoin extends TMLCPElement  {
 		
 		//they can be either CPSections (AD) or SDSections (SD)
-		private ArrayList<String> listElements = new ArrayList<String>();
+	private List<String> listElements = new ArrayList<String>();
 
     public TMLCPJoin(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
 
-		public void addElementName( String elementName )	{
-			listElements.add( elementName );
-		}
+	public void addElementName( String elementName )	{
+		listElements.add( elementName );
+	}
 
-		public ArrayList<String> getElementsName()	{
-			return listElements;
-		}
-	
+	public List<String> getElementsName()	{
+		return listElements;
+	}
 }

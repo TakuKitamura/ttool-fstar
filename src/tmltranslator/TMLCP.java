@@ -48,7 +48,6 @@ package tmltranslator;
 
 import java.util.*;
 import tmltranslator.tmlcp.*;
-import myutil.*;
 
 public class TMLCP extends TMLElement {
 
@@ -56,8 +55,8 @@ public class TMLCP extends TMLElement {
     private ArrayList<TMLCPActivityDiagram> otherCPs; //Ref to other CPs
     private ArrayList<TMLCPSequenceDiagram> sds; //Ref to SDs
 
-    private int hashCode;
-    private boolean hashCodeComputed = false;
+//    private int hashCode;
+//    private boolean hashCodeComputed = false;
 
     public TMLCP( String _name, Object _referenceObject ) {
         super( _name, _referenceObject );
@@ -73,85 +72,85 @@ public class TMLCP extends TMLElement {
         otherCPs = new ArrayList<TMLCPActivityDiagram>();
         sds = new ArrayList<TMLCPSequenceDiagram>();
     }
+//
+//    private void computeHashCode() {
+//        /*TMLArchiTextSpecification architxt = new TMLArchiTextSpecification("spec.tarchi");
+//          String s = architxt.toTextFormat(this);
+//          hashCode = s.hashCode();*/
+//        //System.out.println("TARCHI hashcode = " + hashCode);
+//    }
 
-    private void computeHashCode() {
-        /*TMLArchiTextSpecification architxt = new TMLArchiTextSpecification("spec.tarchi");
-          String s = architxt.toTextFormat(this);
-          hashCode = s.hashCode();*/
-        //System.out.println("TARCHI hashcode = " + hashCode);
-    }
+//    private boolean checkDiagramDeclaration( TMLCPSequenceDiagram _tmlsdSection )       {
+//
+//        int i;
+//        TMLCPActivityDiagram CPsection;
+//
+//        //first check the main CP
+//        if( mainCP.containsSDDiagram( _tmlsdSection.getName() ) )       {
+//            return true;
+//        }
+//        else    {
+//            // then check on the other CPs
+//            for( i = 0; i < otherCPs.size(); i++ )      {
+//                CPsection = otherCPs.get(i);
+//                if( CPsection.containsSDDiagram( _tmlsdSection.getName() ) )    {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
+//    }
 
-    private boolean checkDiagramDeclaration( TMLCPSequenceDiagram _tmlsdSection )       {
+//    private boolean checkDiagramDeclaration( TMLCPActivityDiagram _tmlcpSection )       {
+//
+//        int i;
+//        TMLCPActivityDiagram CPsection;
+//
+//        if( mainCP.containsADDiagram( _tmlcpSection.getName() ) )       { //first check in the main CP's list
+//            return true;
+//        }
+//        else    {
+//            for( i = 0; i < otherCPs.size(); i++ )      { // then check in the other CPs' lists
+//                CPsection = otherCPs.get(i);
+//                if( CPsection.containsADDiagram( _tmlcpSection.getName() ) )    {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
+//    }
 
-        int i;
-        TMLCPActivityDiagram CPsection;
-
-        //first check the main CP
-        if( mainCP.containsSDDiagram( _tmlsdSection.getName() ) )       {
-            return true;
-        }
-        else    {
-            // then check on the other CPs
-            for( i = 0; i < otherCPs.size(); i++ )      {
-                CPsection = otherCPs.get(i);
-                if( CPsection.containsSDDiagram( _tmlsdSection.getName() ) )    {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    private boolean checkDiagramDeclaration( TMLCPActivityDiagram _tmlcpSection )       {
-
-        int i;
-        TMLCPActivityDiagram CPsection;
-
-        if( mainCP.containsADDiagram( _tmlcpSection.getName() ) )       { //first check in the main CP's list
-            return true;
-        }
-        else    {
-            for( i = 0; i < otherCPs.size(); i++ )      { // then check in the other CPs' lists
-                CPsection = otherCPs.get(i);
-                if( CPsection.containsADDiagram( _tmlcpSection.getName() ) )    {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    private boolean checkMultipleDiagramDeclaration( TMLCPSequenceDiagram _tmlsdSection )       {
-
-        int i, counterSD = 0;
-        String tempString;
-        TMLCPSequenceDiagram tempSD;
-
-        for( i = 0; i < sds.size(); i++ )       {
-            tempSD = sds.get(i);
-            tempString = tempSD.getName();
-            if( tempString.equals( _tmlsdSection.getName() ) )  {
-                counterSD++;
-            }
-        }
-        return ( counterSD > 0 );
-    }
-
-    private boolean checkMultipleDiagramDeclaration( TMLCPActivityDiagram _tmlcpSection )       {
-
-        int i, counterAD = 0;
-        String tempString;
-        TMLCPActivityDiagram tempAD;
-
-        for( i = 0; i < otherCPs.size(); i++ )  {
-            tempAD = otherCPs.get(i);
-            tempString = tempAD.getName();
-            if( tempString.equals( _tmlcpSection.getName() ) )  {
-                counterAD++;
-            }
-        }
-        return ( counterAD > 0 );
-    }
+//    private boolean checkMultipleDiagramDeclaration( TMLCPSequenceDiagram _tmlsdSection )       {
+//
+//        int i, counterSD = 0;
+//        String tempString;
+//        TMLCPSequenceDiagram tempSD;
+//
+//        for( i = 0; i < sds.size(); i++ )       {
+//            tempSD = sds.get(i);
+//            tempString = tempSD.getName();
+//            if( tempString.equals( _tmlsdSection.getName() ) )  {
+//                counterSD++;
+//            }
+//        }
+//        return ( counterSD > 0 );
+//    }
+//
+//    private boolean checkMultipleDiagramDeclaration( TMLCPActivityDiagram _tmlcpSection )       {
+//
+//        int i, counterAD = 0;
+//        String tempString;
+//        TMLCPActivityDiagram tempAD;
+//
+//        for( i = 0; i < otherCPs.size(); i++ )  {
+//            tempAD = otherCPs.get(i);
+//            tempString = tempAD.getName();
+//            if( tempString.equals( _tmlcpSection.getName() ) )  {
+//                counterAD++;
+//            }
+//        }
+//        return ( counterAD > 0 );
+//    }
 
     public int getHashCode() {
         return 0;
@@ -161,7 +160,6 @@ public class TMLCP extends TMLElement {
           }
           return hashCode;*/
     }
-
 
     public void setMainCP(TMLCPActivityDiagram _tmlcpSection) {
         mainCP = _tmlcpSection;
@@ -184,11 +182,11 @@ public class TMLCP extends TMLElement {
         return sds.size();
     }
 
-    public ArrayList<TMLCPActivityDiagram> getCPActivityDiagrams()      {
+    public List<TMLCPActivityDiagram> getCPActivityDiagrams()      {
         return otherCPs;
     }
 
-    public ArrayList<TMLCPSequenceDiagram> getCPSequenceDiagrams()      {
+    public List<TMLCPSequenceDiagram> getCPSequenceDiagrams()      {
         return sds;
     }
 
@@ -196,10 +194,10 @@ public class TMLCP extends TMLElement {
         return mainCP;
     }
 
-    public ArrayList<String> checkSDsDefinition()       {
+    public List<String> checkSDsDefinition()       {
 
-        ArrayList<String> undefinedSDs = new ArrayList<String>();
-        ArrayList<String> SDlist;
+        List<String> undefinedSDs = new ArrayList<String>();
+        List<String> SDlist;
         String declaredSD;
         TMLCPSequenceDiagram definedSD;
         boolean isSDdefined = false;
@@ -248,10 +246,10 @@ public class TMLCP extends TMLElement {
         return undefinedSDs;
     }
 
-    public ArrayList<String> checkADsDefinition()       {
+    public List<String> checkADsDefinition()       {
 
-        ArrayList<String> undefinedADs = new ArrayList<String>();
-        ArrayList<String> ADlist;
+        List<String> undefinedADs = new ArrayList<String>();
+        List<String> ADlist;
         String declaredAD;
         TMLCPActivityDiagram definedAD;
         boolean isADdefined = false;
@@ -351,9 +349,9 @@ public class TMLCP extends TMLElement {
         return null;
     }
 
-    public LinkedList<TMLCPElement> getAllNonConnectedElements() {
-        LinkedList<TMLCPElement> list = new LinkedList<TMLCPElement>();
-        TMLCPElement elt;
+    public List<TMLCPElement> getAllNonConnectedElements() {
+        List<TMLCPElement> list = new LinkedList<TMLCPElement>();
+        //TMLCPElement elt;
         list.addAll(mainCP.getAllNonConnectedElements());
         for(TMLCPActivityDiagram diag: otherCPs) {
             list.addAll(diag.getAllNonConnectedElements());
@@ -361,9 +359,9 @@ public class TMLCP extends TMLElement {
         return list;
     }
 
-    public LinkedList<TMLCPElement> removeAllNonConnectedElements() {
-        LinkedList<TMLCPElement> list = new LinkedList<TMLCPElement>();
-        TMLCPElement elt;
+    public List<TMLCPElement> removeAllNonConnectedElements() {
+        List<TMLCPElement> list = new LinkedList<TMLCPElement>();
+        //TMLCPElement elt;
         list.addAll(mainCP.removeAllNonConnectedElements());
         for(TMLCPActivityDiagram diag: otherCPs) {
             list.addAll(diag.removeAllNonConnectedElements());
@@ -373,9 +371,9 @@ public class TMLCP extends TMLElement {
     
     public void printDataStructure()    {
 
-        ArrayList<TMLCPActivityDiagram> CPlist = new ArrayList<TMLCPActivityDiagram>();
-        ArrayList<TMLCPSequenceDiagram> SDlist = new ArrayList<TMLCPSequenceDiagram>();
-        ArrayList<TMLAttribute> listAttributes = new ArrayList<TMLAttribute>();
+        List<TMLCPActivityDiagram> CPlist = new ArrayList<TMLCPActivityDiagram>();
+        List<TMLCPSequenceDiagram> SDlist = new ArrayList<TMLCPSequenceDiagram>();
+        List<TMLAttribute> listAttributes = new ArrayList<TMLAttribute>();
         TMLCPActivityDiagram tempCP;
         TMLCPSequenceDiagram tempSD;
         TMLAttribute attr;
@@ -401,7 +399,7 @@ public class TMLCP extends TMLElement {
             }*/
 
             //Print list of AD sections
-            ArrayList<String> ADList;
+            List<String> ADList;
             ADList = tempCP.getADlist();
             System.out.println( "\tDeclared AD: " );
             for( j = 0; j < ADList.size(); j++ )        {
@@ -409,7 +407,7 @@ public class TMLCP extends TMLElement {
             }
 
             //Print list of SD sections
-            ArrayList<String> SDList;
+            List<String> SDList;
             SDList = tempCP.getSDlist();
             System.out.println( "\tDeclared SD: " );
             for( j = 0; j < SDList.size(); j++ )        {
@@ -417,8 +415,8 @@ public class TMLCP extends TMLElement {
             }
 
             //Print list of Elements
-            ArrayList<TMLCPElement> ElementsList;
-            TMLCPElement tempElem;
+            List<TMLCPElement> ElementsList;
+            //TMLCPElement tempElem;
             ElementsList = tempCP.getElements();
             System.out.println( "\tDeclared elements:" );
             for( j = 0; j < ElementsList.size(); j++ )  {
@@ -455,7 +453,7 @@ public class TMLCP extends TMLElement {
             }
 
             //Print Instances
-            ArrayList<TMLSDInstance> listInstances;
+            List<TMLSDInstance> listInstances;
             TMLSDInstance inst;
             listInstances = tempSD.getInstances();
             System.out.println( "\tInstances:" );
@@ -465,8 +463,8 @@ public class TMLCP extends TMLElement {
             }
 
             //Print Messages
-            ArrayList<TMLSDMessage> listMessages;
-            ArrayList<TMLAttribute> msgAttributes;
+            List<TMLSDMessage> listMessages;
+            List<TMLAttribute> msgAttributes;
             TMLSDMessage msg;
             listMessages = tempSD.getMessages();
             System.out.println( "\tMessages:" );
@@ -481,6 +479,7 @@ public class TMLCP extends TMLElement {
         }
     }
 
+    @Override
     public String toString()    {
 
         String s = "\n*** Communication Pattern: " + getName() + "***\n";
@@ -491,8 +490,10 @@ public class TMLCP extends TMLElement {
         }
 
         for( tmltranslator.tmlcp.TMLCPSequenceDiagram diag: sds )       {
-            s += sds.toString();
+            s += diag.toString();
+//            s += sds.toString();
         }
+        
         return s;
     }
 }       //End of the class

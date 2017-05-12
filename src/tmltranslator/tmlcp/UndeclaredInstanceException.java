@@ -45,14 +45,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tmlcp;;
 
-public class UndeclaredInstanceException extends Exception
-{
+public class UndeclaredInstanceException extends Exception {
 	
 	public UndeclaredInstanceException()	{
 		super( "TMLCP COMPILER ERROR: undeclared instance" );
 	}
 
 	public UndeclaredInstanceException( String message )	{
-			super( message );	
+		super( message );	
 	}
 }

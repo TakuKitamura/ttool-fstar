@@ -50,22 +50,24 @@ import java.util.Vector;
 
 public class SingleDmaMEC extends CPMEC	{
 
-	public static final int MaxParameters = 3;
-	public static final int destinationAddressIndex = 0;
-	public static final int sourceAddressIndex = 1;
-	public static final int counterIndex = 2;
+	//private static final int MaxParameters = 3;
+//	private static final int destinationAddressIndex = 0;
+//	private static final int sourceAddressIndex = 1;
+//	private static final int counterIndex = 2;
 
-	public static final String destinationAddress = "destinationAddress";
-	public static final String sourceAddress = "sourceAddress";
-	public static final String counter = "counter";
+//	private static final String destinationAddress = "destinationAddress";
+//	private static final String sourceAddress = "sourceAddress";
+//	private static final String counter = "counter";
 
-	private String memoryBaseAddress = "0";
-	private String dataToTransfer = USER_TO_DO;
-	private static String dstAddress = USER_TO_DO;
-	private static String srcAddress = USER_TO_DO;
+	// Issue #38: default handled in super class
+	private final String memoryBaseAddress;// = "0";
+	private final String dataToTransfer;// = USER_TO_DO;
+	private final String dstAddress;// = USER_TO_DO;
+	private final String srcAddress;// = USER_TO_DO;
 
 	public SingleDmaMEC( String ctxName, ArchUnitMEC archMEC, int srcMemoryType, int dstMemoryType, int transferType, Vector<String> attributes )	{
-
+		super( attributes );
+		
 		switch( srcMemoryType )	{
 			case Buffer.FEP_BUFFER:
 				memoryBaseAddress = "fep_mss";
@@ -87,11 +89,11 @@ public class SingleDmaMEC extends CPMEC	{
 			break;
 		}
 
-		if( attributes.size() > 0 )	{
-			dataToTransfer = attributes.get( counterIndex );
-			srcAddress = attributes.get( sourceAddressIndex );
-			dstAddress = attributes.get( destinationAddressIndex );
-		}
+		//if( attributes.size() > 0 )	{
+		dataToTransfer = getAttributeValue( SAMPLES_LOAD_ATTRIBUTE_NAME );//attributes.get( counterIndex );
+		srcAddress = getAttributeValue( SOURCE_ADDRESS_ATTRIBUTE_NAME );//attributes.get( sourceAddressIndex );
+		dstAddress = getAttributeValue( DEST_ADDRESS_ATTRIBUTE_NAME );//attributes.get( destinationAddressIndex );
+		//}
 
 		switch( transferType )	{
 			case CPMEC.mem2IP:
@@ -116,22 +118,29 @@ public class SingleDmaMEC extends CPMEC	{
 			break;
 		}
 	}
-
-	public static Vector<String> sortAttributes( Vector<String> assignedAttributes )	{
-		
-		Vector<String> newVector = new Vector<String>( assignedAttributes );
-		for( String s: assignedAttributes )	{
-			if( s.contains( destinationAddress ) )	{
-				newVector.set( destinationAddressIndex, getAttributeValue(s) );
-			}
-			if( s.contains( sourceAddress ) )	{
-				newVector.set( sourceAddressIndex, getAttributeValue(s) );
-			}
-			if( s.contains( counter ) )	{
-				newVector.set( counterIndex, getAttributeValue(s) );
-			}
-		}
-		return newVector;
-	}
-
+//
+//	public static Vector<String> sortAttributes( Vector<String> assignedAttributes ) {
+//		Vector<String> newVector = new Vector<String>( assignedAttributes );
+//		
+//		for( String s: assignedAttributes )	{
+//			if( s.contains( destinationAddress ) )	{
+//				newVector.set( destinationAddressIndex, getAttributeValue(s) );
+//			}
+//			
+//			if( s.contains( sourceAddress ) )	{
+//				newVector.set( sourceAddressIndex, getAttributeValue(s) );
+//			}
+//			
+//			if( s.contains( counter ) )	{
+//	//			try {
+//					newVector.set( counterIndex, getAttributeValue(s) );
+////				}
+////				catch (IndexOutOfBoundsException ex) {
+////					ex.printStackTrace();
+////				}
+//			}
+//		}
+//		
+//		return newVector;
+//	}
 }	//End of class

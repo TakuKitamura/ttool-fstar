@@ -80,11 +80,11 @@ public class TMLSDAttribute extends DIPLOElement {
     }
 	
 		public boolean isNat() {
-			return ( type.getType( "NATURAL" ) == TMLSDType.NATURAL );
+			return ( TMLSDType.getType( "NATURAL" ) == TMLSDType.NATURAL );
 		}
 	
 		public boolean isArch() {
-			return ( type.getType( "ARCHITECTURE" ) == TMLSDType.ARCHITECTURE );
+			return ( TMLSDType.getType( "ARCHITECTURE" ) == TMLSDType.ARCHITECTURE );
 		}
 
     public String getInitialValue() {

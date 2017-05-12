@@ -46,10 +46,6 @@
 
 package tmltranslator.tmlcp;
 
-import java.util.*;
-
-import myutil.*;
-
 public class TMLCPConnector extends TMLCPElement implements Comparable<TMLCPConnector>  {
 
     private String startName;

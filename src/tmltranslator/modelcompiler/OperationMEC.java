@@ -47,8 +47,6 @@
 package tmltranslator.modelcompiler;
 
 import java.util.*;
-import java.nio.*;
-import myutil.*;
 
 public abstract class OperationMEC	{
 
@@ -65,7 +63,7 @@ public abstract class OperationMEC	{
 	public static final int FftMEC = FepOperationMEC + 6;
 
 	private static final String[] contextArray = { "MAPPER_CONTEXT", "INTL_CONTEXT", "ADAIF_CONTEXT", "EMBB_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT" };
-	public static final ArrayList<String> ContextList = new ArrayList( Arrays.asList( contextArray ) );
+	public static final List<String> ContextList = new ArrayList<String>( Arrays.asList( contextArray ) );
 
 	protected String CR = "\n";
 	protected String TAB = "\t";

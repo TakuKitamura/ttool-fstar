@@ -46,10 +46,6 @@
 
 package tmltranslator.tmlcp;
 
-import java.util.*;
-
-import myutil.*;
-
 public class TMLCPRefAD extends TMLCPElement  {
 
     private TMLCPActivityDiagram reference;

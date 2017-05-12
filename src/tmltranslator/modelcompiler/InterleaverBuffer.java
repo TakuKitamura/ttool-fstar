@@ -133,11 +133,11 @@ public class InterleaverBuffer extends Buffer	{
 	//Intl Data In
 	private static JTextField width_TF, bitInOffset_TF, inputOffset_TF;
 	private static String width = "", bitInOffset = "", inputOffset = "", packedBinaryIn = "";
-	private static JComboBox packedBinaryIn_CB;
+	private static JComboBox<String> packedBinaryIn_CB;
 
 	// Data Out
 	private static JTextField bitOutOffset_TF, outputOffset_TF;
-	private static JComboBox packedBinaryOut_CB;
+	private static JComboBox<String> packedBinaryOut_CB;
 	private static String packedBinaryOut = "", bitOutOffset = "", outputOffset = "";
 
 	// Perm
@@ -299,7 +299,7 @@ public class InterleaverBuffer extends Buffer	{
 
 		//Data In panel
 		c2.anchor = GridBagConstraints.LINE_START;
-		packedBinaryIn_CB = new JComboBox( Buffer.onOffVector );
+		packedBinaryIn_CB = new JComboBox<String>( Buffer.onOffVector );
 		panel3.add( new JLabel( "Packed binary input mode = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel3.add( packedBinaryIn_CB, c1 );
@@ -322,7 +322,7 @@ public class InterleaverBuffer extends Buffer	{
 
 		//Data Out panel
 		c2.anchor = GridBagConstraints.LINE_START;
-		packedBinaryOut_CB = new JComboBox( Buffer.onOffVector );
+		packedBinaryOut_CB = new JComboBox<String>( Buffer.onOffVector );
 		panel4.add( new JLabel( "Packed binary output mode = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel4.add( packedBinaryOut_CB, c1 );

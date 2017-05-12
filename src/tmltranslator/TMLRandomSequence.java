@@ -49,53 +49,50 @@ import java.util.*;
 
 
 public class TMLRandomSequence extends TMLActivityElement{
-    private Vector indexes;
+    private Vector<Integer> indexes;
     
     public TMLRandomSequence(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-        indexes = new Vector();
+        indexes = new Vector<Integer>();
     }
     
     public void addIndex(int index) {
-      indexes.add(new Integer(index));
+    	indexes.add(new Integer(index));
     }
     
     public void sortNexts() {
-    if (indexes.size() == 0) {
-      return;
-    }
+    	if (indexes.size() == 0) {
+    		return;
+    	}
     
     //System.out.println("Nb of indexes" + indexes.size());
     //System.out.println("Nb of nexts" + nexts.size());
-      Vector nextsbis = new Vector();
+    	Vector<TMLActivityElement> nextsbis = new Vector<TMLActivityElement>();
       
       // Sort according to index stored in indexes
       // The smaller is removed at each step
-      Integer i0;
-      int index;
-      int i;
-      
-      while(indexes.size() > 0) {
-        i0 = new Integer(1000);
-        index = -1;
-        for(i=0; i<indexes.size(); i++) {
-          if ((((Integer)indexes.elementAt(i)).compareTo(i0))<0) {
-            index = i;
-            i0 = ((Integer)indexes.elementAt(i));
-          }
-        }
-        nextsbis.addElement(nexts.elementAt(index));
-        nexts.removeElementAt(index);
-        indexes.removeElementAt(index);
-      }
-      
-      nexts = nextsbis;
+    	Integer i0;
+    	int index;
+    	int i;
+
+    	while(indexes.size() > 0) {
+    		i0 = new Integer(1000);
+    		index = -1;
+    		for(i=0; i<indexes.size(); i++) {
+    			if ( indexes.elementAt(i).compareTo(i0) < 0 ) {
+    				index = i;
+    				i0 = indexes.elementAt(i);
+    			}
+    		}
+    		nextsbis.addElement(nexts.elementAt(index));
+    		nexts.removeElementAt(index);
+    		indexes.removeElementAt(index);
+    	}
+
+    	nexts = nextsbis;
 	  
 	  //for(i=0; i<nexts.size(); i++){
 		 // System.out.println("sequence #" + i + " = " + nexts.elementAt(i));
-	  //}
-      
+	  //} 
     }
-    
-
 }

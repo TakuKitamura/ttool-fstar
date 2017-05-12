@@ -46,8 +46,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ncdd;
 
-
-
 import java.awt.*;
 import javax.swing.*;
 import java.util.*;
@@ -72,7 +70,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 	protected String interfaceName;
 	
     
-    public NCConnectorNode(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+    public NCConnectorNode(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
 		

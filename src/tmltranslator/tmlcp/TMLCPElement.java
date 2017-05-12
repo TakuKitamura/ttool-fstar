@@ -49,11 +49,8 @@ package tmltranslator.tmlcp;
 import tmltranslator.*;
 import java.util.*;
 
-
-import myutil.*;
-
 public abstract class TMLCPElement extends TMLElement  {
-    protected ArrayList<TMLCPElement> nexts;
+    protected List<TMLCPElement> nexts;
 
     public TMLCPElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -87,11 +84,11 @@ public abstract class TMLCPElement extends TMLElement  {
 	nexts.clear();
     }
 
-    public ArrayList<TMLCPElement> getNextElements() {
+    public List<TMLCPElement> getNextElements() {
         return nexts;
     }
 
-    public void setNexts(ArrayList<TMLCPElement> _nexts) {
+    public void setNexts( List<TMLCPElement> _nexts) {
 	nexts = _nexts;
     }
 

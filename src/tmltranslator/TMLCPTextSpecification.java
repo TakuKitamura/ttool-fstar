@@ -49,7 +49,6 @@
 package tmltranslator;
 
 import java.util.*;
-import java.io.*;
 import myutil.*;
 import tmltranslator.tmlcp.*;
 
@@ -72,25 +71,25 @@ public class TMLCPTextSpecification {
     public final static String PARALLELISM_OP = "*";
     public final static String SELECTION_OP = "+";
 
-    private int loopCounter = 0;
-    private int nbLoops = 10;
-    private String loopDataStructure[] = new String[nbLoops];
+  //  private int loopCounter = 0;
+  //  private int nbLoops = 10;
+    //private String loopDataStructure[] = new String[nbLoops];
 
     private String spec;
     private String title;
 
-    private TMLModeling tmlm;
-    private ArrayList<TMLTXTError> errors;
-    private ArrayList<TMLTXTError> warnings;
+  //  private TMLModeling tmlm;
+    private List<TMLTXTError> errors;
+    private List<TMLTXTError> warnings;
 
     // For reading TMLTXT specifications
-    private boolean inDec = true;
-    private boolean inTask = false;
-    private boolean inTaskDec = false;
-    private boolean inTaskBehavior = false;
-    private TMLTask task;
-    private TMLActivityElement tmlae;
-    private ArrayList<TMLParserSaveElt> parses;
+//    private boolean inDec = true;
+//    private boolean inTask = false;
+//    private boolean inTaskDec = false;
+//    private boolean inTaskBehavior = false;
+//    private TMLTask task;
+//    private TMLActivityElement tmlae;
+//    private ArrayList<TMLParserSaveElt> parses;
 
     /*private static String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "LOSSYCHANNEL", "LOSSYEVENT", "LOSSYREQUEST", "BRBW", "NBRNBW",
       "BRNBW", "INF", "NIB", "NINB", "TASK", "ENDTASK", "IF", "ELSE", "ORIF", "ENDIF", "FOR", "ENDFOR",
@@ -105,18 +104,18 @@ public class TMLCPTextSpecification {
 
     private static String SEQUENCE_DIAGRAM = "SEQUENCE";
 
-    private String nextElem;    //used to produce the TML text
-    private String currentElem; //used to produce the TML text
-    private String currentJunc = "junction";    //used to produce the TML text
-    private ArrayList<String> junctionList = new ArrayList<String>();
-    private ArrayList<Integer> indexOfConnToRemove;
-    private ArrayList<TMLCPConnector> listTMLCPConnectors;
+//    private String nextElem;    //used to produce the TML text
+   // private String currentElem; //used to produce the TML text
+  //  private String currentJunc = "junction";    //used to produce the TML text
+    //private ArrayList<String> junctionList = new ArrayList<String>();
+    //private ArrayList<Integer> indexOfConnToRemove;
+   // private ArrayList<TMLCPConnector> listTMLCPConnectors;
     private StringBuffer sbFork;
-    private StringBuffer sbJunction;
+    //private StringBuffer sbJunction;
 
     public TMLCPTextSpecification(String _title) {
         title = _title;
-        init();
+  //      init();
     }
 
     public TMLCPTextSpecification(String _title, boolean reset) {
@@ -124,13 +123,13 @@ public class TMLCPTextSpecification {
         if (reset) {
             DIPLOElement.resetID();
         }
-        init();
+//        init();
     }
 
-    private void init() {
-        indexOfConnToRemove = new ArrayList<Integer>();
-        listTMLCPConnectors = new ArrayList<TMLCPConnector>();
-    }
+//    private void init() {
+//        //indexOfConnToRemove = new ArrayList<Integer>();
+//        //listTMLCPConnectors = new ArrayList<TMLCPConnector>();
+//    }
 
     public void saveFile(String path, String filename) throws FileException {
         TraceManager.addUser("Saving TMLCP spec file in " + path + filename);
@@ -243,10 +242,11 @@ public class TMLCPTextSpecification {
         StringBuffer sbAttributes = new StringBuffer("");
 
         //Generating code for Sequence Diagrams
-        ArrayList<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
+        List<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
         for( TMLCPSequenceDiagram seqDiag: listSDs )    {
             sb.append( SEQUENCE_DIAGRAM + SP + seqDiag.getName() + CR2 );
-            ArrayList<tmltranslator.tmlcp.TMLSDInstance> listInstances = seqDiag.getInstances();
+            List<tmltranslator.tmlcp.TMLSDInstance> listInstances = seqDiag.getInstances();
+            
             if( seqDiag.getAttributes().size() > 0 )    {
                 for( TMLAttribute attribute: seqDiag.getAttributes() )  {
                     if( !sbAttributes.toString().contains( attribute.toString() ) )     { //if attribute not already contained, then add it
@@ -282,10 +282,10 @@ public class TMLCPTextSpecification {
     private String makeTMLTextActivityDiagrams( TMLCP tmlcp )   {
 
         StringBuffer sb = new StringBuffer();
-        StringBuffer sb2 = new StringBuffer();
-        ArrayList<TMLCPActivityDiagram> activityDiagList = tmlcp.getCPActivityDiagrams();
-        ArrayList<TMLCPActivityDiagram> junctionDiagList = new ArrayList<TMLCPActivityDiagram>();
-        ArrayList<String> diagsToRemove = new ArrayList<String>();
+       // StringBuffer sb2 = new StringBuffer();
+        List<TMLCPActivityDiagram> activityDiagList = tmlcp.getCPActivityDiagrams();
+        List<TMLCPActivityDiagram> junctionDiagList = new ArrayList<TMLCPActivityDiagram>();
+        List<String> diagsToRemove = new ArrayList<String>();
 
         for( TMLCPActivityDiagram ad: activityDiagList )        {
             String s = ad.getName();
@@ -384,155 +384,149 @@ public class TMLCPTextSpecification {
     private String makeSingleActivityDiagram2(TMLCPActivityDiagram ad) {
 
         StringBuffer sb = new StringBuffer( TAB + CR + TAB + "<>; " );
-        TMLCPElement currentElement, nextElement;
-        ArrayList<TMLCPElement> nextElements;
+        TMLCPElement currentElement;//, nextElement;
+//        ArrayList<TMLCPElement> nextElements;
 
         currentElement = getStartState( ad ).getNextElements().get(0);  //get the first element after the start state
 
-	ArrayList<TMLCPElement> met = new ArrayList<TMLCPElement>();
+        List<TMLCPElement> met = new ArrayList<TMLCPElement>();
 
         sb.append(parseElement2(currentElement, met));
 
         return sb.toString() + CR + TAB + "><";
     }
 
-    private String parseElement2(TMLCPElement currentElement, ArrayList<TMLCPElement> met) {
-
-	if (currentElement == null) {
-	    return "";
-	}
-
-	if (met.contains(currentElement)) {
-	    return "";
-	}
-
-	if (currentElement instanceof TMLCPJoin) {
-	    return "";
-	}
+    private String parseElement2(TMLCPElement currentElement, List<TMLCPElement> met) {
 	
-	met.add(currentElement);
-
-	if (currentElement instanceof TMLCPStop) {
-	    //return "";
-	    return( TAB + "><" );
-	}
-
-	if (currentElement instanceof TMLCPFork) {
-	    return parseFork2((TMLCPFork)(currentElement), met);
-	}
+		if (currentElement == null) {
+		    return "";
+		}
 	
-	if (currentElement instanceof TMLCPForLoop) {
-	    //TraceManager.addDev("Handling ForLoop: " + currentElement);
-	    return parseForLoop((TMLCPForLoop)(currentElement), met);
-	}
-
-	if (currentElement instanceof TMLCPChoice) {
-	    return parseChoice2((TMLCPChoice)(currentElement), met);
-	}
-
+		if (met.contains(currentElement)) {
+		    return "";
+		}
+	
+		if (currentElement instanceof TMLCPJoin) {
+		    return "";
+		}
 		
-	String ret = parseSequence(currentElement);
-	//ret += SEQUENCE_OP;
-	ret += parseElement2(currentElement.getNextElements().get(0), met);
-	return ret;
+		met.add(currentElement);
 	
+		if (currentElement instanceof TMLCPStop) {
+		    //return "";
+		    return( TAB + "><" );
+		}
+	
+		if (currentElement instanceof TMLCPFork) {
+		    return parseFork2((TMLCPFork)(currentElement), met);
+		}
+		
+		if (currentElement instanceof TMLCPForLoop) {
+		    //TraceManager.addDev("Handling ForLoop: " + currentElement);
+		    return parseForLoop((TMLCPForLoop)(currentElement), met);
+		}
+	
+		if (currentElement instanceof TMLCPChoice) {
+		    return parseChoice2((TMLCPChoice)(currentElement), met);
+		}
+	
+			
+		String ret = parseSequence(currentElement);
+		//ret += SEQUENCE_OP;
+		ret += parseElement2(currentElement.getNextElements().get(0), met);
+		return ret;
     }
 
-    private String parseChoice2(TMLCPChoice choice, ArrayList<TMLCPElement> met)  {
-	StringBuffer sb = new StringBuffer();
-	ArrayList<TMLCPElement> branches = choice.getNextElements();
-        ArrayList<String> guards = choice.getGuards();
+    private String parseChoice2(TMLCPChoice choice, List<TMLCPElement> met)  {
+    	StringBuffer sb = new StringBuffer();
+    	List<TMLCPElement> branches = choice.getNextElements();
+        List<String> guards = choice.getGuards();
 
-	int index = 0;
-
-	for( TMLCPElement element: branches )   {
-	    sb.append( CR + TAB2 + guards.get(index) + SP);
-	    sb.append(parseElement2(element, met));
-	    index ++;
-	}
-
-	return sb.toString();
-		  
+		int index = 0;
+	
+		for( TMLCPElement element: branches )   {
+		    sb.append( CR + TAB2 + guards.get(index) + SP);
+		    sb.append(parseElement2(element, met));
+		    index ++;
+		}
+	
+		return sb.toString();
     }
 
-
-    private String parseForLoop(TMLCPForLoop loop, ArrayList<TMLCPElement> met)  {
-	StringBuffer sb = new StringBuffer();
-	ArrayList<TMLCPElement> nextElements = loop.getNextElements();
-	sb.append( SP + "{" );
+    private String parseForLoop(TMLCPForLoop loop, List<TMLCPElement> met)  {
+		StringBuffer sb = new StringBuffer();
+		List<TMLCPElement> nextElements = loop.getNextElements();
+		sb.append( SP + "{" );
+		
+		//TMLCPElement inLoop = nextElements.get(0);
+		sb.append("(" + loop.getInit().replaceAll("\\s+","") + ";" + loop.getCondition().replaceAll("\\s+","") + ";" + loop.getIncrement().replaceAll("\\s+","") + ") ");
+		sb.append(parseElement2(nextElements.get(0), met));	//first the for-loop body
+		sb.append( "}" + SEQUENCE_OP );
+		sb.append(parseElement2(nextElements.get(1), met));	//then the diagrams that follow the for-loop termination
 	
-	TMLCPElement inLoop = nextElements.get(0);
-	sb.append("(" + loop.getInit().replaceAll("\\s+","") + ";" + loop.getCondition().replaceAll("\\s+","") + ";" + loop.getIncrement().replaceAll("\\s+","") + ") ");
-	sb.append(parseElement2(nextElements.get(0), met));	//first the for-loop body
-	sb.append( "}" + SEQUENCE_OP );
-	sb.append(parseElement2(nextElements.get(1), met));	//then the diagrams that follow the for-loop termination
-
-	return sb.toString();
-		  
+		return sb.toString();
     }
 
-    private String parseFork2(TMLCPFork fork,  ArrayList<TMLCPElement> met)  {
-	StringBuffer sb = new StringBuffer();
-	ArrayList<TMLCPElement> nextElements = fork.getNextElements();
+    private String parseFork2(TMLCPFork fork,  List<TMLCPElement> met)  {
+		StringBuffer sb = new StringBuffer();
+		List<TMLCPElement> nextElements = fork.getNextElements();
 	
 
-        TMLCPElement nextElement = null;
+    //    TMLCPElement nextElement = null;
 
         sb.append( SP + "{" );
         for(TMLCPElement elt: nextElements)    {
-	    sb.append( SP + "{" );
-	    sb.append(parseElement2(elt, met));
-	    sb = removeTrailingSymbols(sb, 2);
-	    sb.append("}" + SP + PARALLELISM_OP);
-	    
-	}
+		    sb.append( SP + "{" );
+		    sb.append(parseElement2(elt, met));
+		    sb = removeTrailingSymbols(sb, 2);
+		    sb.append("}" + SP + PARALLELISM_OP);
+		    
+		}
+        
         sb = removeTrailingSymbol( sb );
         sb.append( "}" + SEQUENCE_OP );
 
-	// Search for the join
-	TMLCPElement myElt = nextElements.get(0);
-	while (!(myElt instanceof TMLCPJoin)) {
-	    myElt = myElt.getNextElements().get(0);
-	}
-	// Start parsing after the join
-	myElt = myElt.getNextElements().get(0);
+		// Search for the join
+		TMLCPElement myElt = nextElements.get(0);
+		while (!(myElt instanceof TMLCPJoin)) {
+		    myElt = myElt.getNextElements().get(0);
+		}
+		// Start parsing after the join
+		myElt = myElt.getNextElements().get(0);
         sb.append(parseElement2(myElt, met));
 	
-	return sb.toString();
+        return sb.toString();
     }
 
-
-
-
-    private String makeSingleActivityDiagram( TMLCPActivityDiagram ad ) {
-
-        StringBuffer sb = new StringBuffer( TAB + CR + TAB + "<>; " );
-        TMLCPElement currentElement, nextElement;
-        ArrayList<TMLCPElement> nextElements;
-
-        currentElement = getStartState( ad ).getNextElements().get(0);  //get the first element after the start state
-        while( !(currentElement instanceof TMLCPStop) ) {
-            nextElements = currentElement.getNextElements();
-            if( nextElements.size() > 1 )       {       // currentElement is a fork node
-                sbFork = new StringBuffer();
-                currentElement = parseFork( nextElements );     // currentElement is the closing join, use attribute sbFork
-                sb.append( sbFork.toString() );
-                sbFork.setLength(0);
-            }
-            else        {       // currentElement is either a refToDiag or a junction
-                if( isAJunction( currentElement ) )     {
-                    String s = ( (TMLCPRefAD) currentElement ).getName();
-                    sb.append( s + ";" + CR );
-                }
-                else    {
-                    sb.append( parseSequence( currentElement ) );
-                }
-            }
-            currentElement = currentElement.getNextElements().get(0);
-        }
-
-        return sb.toString() + TAB + "><";
-    }
+//    private String makeSingleActivityDiagram( TMLCPActivityDiagram ad ) {
+//
+//        StringBuffer sb = new StringBuffer( TAB + CR + TAB + "<>; " );
+//        TMLCPElement currentElement, nextElement;
+//        ArrayList<TMLCPElement> nextElements;
+//
+//        currentElement = getStartState( ad ).getNextElements().get(0);  //get the first element after the start state
+//        while( !(currentElement instanceof TMLCPStop) ) {
+//            nextElements = currentElement.getNextElements();
+//            if( nextElements.size() > 1 )       {       // currentElement is a fork node
+//                sbFork = new StringBuffer();
+//                currentElement = parseFork( nextElements );     // currentElement is the closing join, use attribute sbFork
+//                sb.append( sbFork.toString() );
+//                sbFork.setLength(0);
+//            }
+//            else        {       // currentElement is either a refToDiag or a junction
+//                if( isAJunction( currentElement ) )     {
+//                    String s = ( (TMLCPRefAD) currentElement ).getName();
+//                    sb.append( s + ";" + CR );
+//                }
+//                else    {
+//                    sb.append( parseSequence( currentElement ) );
+//                }
+//            }
+//            currentElement = currentElement.getNextElements().get(0);
+//        }
+//
+//        return sb.toString() + TAB + "><";
+//    }
 
     private String parseSequence( TMLCPElement element )        {
 
@@ -547,7 +541,7 @@ public class TMLCPTextSpecification {
         return "";
     }
 
-    private TMLCPElement parseFork( ArrayList<TMLCPElement> elements )  {
+    private TMLCPElement parseFork( List<TMLCPElement> elements )  {
 
         TMLCPElement nextElement = null;
 
@@ -576,7 +570,7 @@ public class TMLCPTextSpecification {
 
         StringBuffer sb = new StringBuffer( "<>;" + SP );
         TMLCPElement currentElement, nextElement;
-        ArrayList<TMLCPElement> nextElements;
+        List<TMLCPElement> nextElements;
 
         //First parse the part from the junctionto the choice: either a fork or a sequence
         currentElement = getStartState( ad );
@@ -604,10 +598,10 @@ public class TMLCPTextSpecification {
 
         StringBuffer sb = new StringBuffer( /*CR + TAB + "LOOP" + SP + ad.getName()*/ );
         //this LOOP is the keywork that is used to look for the junction diagram name, removing it, causing the generation not to work
-        ArrayList<TMLCPElement> nextElements;
+        List<TMLCPElement> nextElements;
         int index = 0;
-        ArrayList<TMLCPElement> branches = currentElement.getNextElements();
-        ArrayList<String> guards = ( (TMLCPChoice)currentElement ).getGuards();
+        List<TMLCPElement> branches = currentElement.getNextElements();
+        List<String> guards = ( (TMLCPChoice)currentElement ).getGuards();
 
         for( TMLCPElement element: branches )   {       //for each of the branches go until a stop or a junction, only possible to find seq/fork
             sb.append( CR + TAB2 + guards.get(index) + SP );
@@ -659,17 +653,17 @@ public class TMLCPTextSpecification {
         }
         return false;
     }
-
-    // Retrieves the AD corresponding to a junction from the list of junction diagrams
-    private TMLCPActivityDiagram getJunctionDiagram( String name, ArrayList<TMLCPActivityDiagram> junctionDiagList )    {
-
-        for( TMLCPActivityDiagram diag: junctionDiagList )      {
-            if( diag.getName().equals( name ) ) {
-                return diag;
-            }
-        }
-        return junctionDiagList.get(0);
-    }
+//
+//    // Retrieves the AD corresponding to a junction from the list of junction diagrams
+//    private TMLCPActivityDiagram getJunctionDiagram( String name, ArrayList<TMLCPActivityDiagram> junctionDiagList )    {
+//
+//        for( TMLCPActivityDiagram diag: junctionDiagList )      {
+//            if( diag.getName().equals( name ) ) {
+//                return diag;
+//            }
+//        }
+//        return junctionDiagList.get(0);
+//    }
 
     private StringBuffer removeTrailingSymbol( StringBuffer sb )        {
 
@@ -691,7 +685,7 @@ public class TMLCPTextSpecification {
 
     private TMLCPElement getStartState( TMLCPActivityDiagram ad )       {
 
-        ArrayList<TMLCPElement> elementsList = ad.getElements();
+        List<TMLCPElement> elementsList = ad.getElements();
         for( TMLCPElement elem: elementsList )  {
             if( elem instanceof TMLCPStart )    {
                 return elem;
@@ -1196,20 +1190,20 @@ public class TMLCPTextSpecification {
     //  }
 
     //Look for a connector that starts from currentElem and get the endName
-    private String getNextElem()        {
-
-        TMLCPConnector conn;
-        String endName = "";
-        int i;
-        for( i = 0; i < listTMLCPConnectors.size(); i++ )       {
-            conn = listTMLCPConnectors.get(i);
-            if( conn.getStartName().equals( currentElem ) )     {
-                endName = conn.getEndName();
-                break;
-            }
-        }
-        return endName;
-    }
+//    private String getNextElem()        {
+//
+//        TMLCPConnector conn;
+//        String endName = "";
+//        int i;
+//        for( i = 0; i < listTMLCPConnectors.size(); i++ )       {
+//            conn = listTMLCPConnectors.get(i);
+//            if( conn.getStartName().equals( currentElem ) )     {
+//                endName = conn.getEndName();
+//                break;
+//            }
+//        }
+//        return endName;
+//    }
 
     /*  public String makeTasks(TMLModeling tmlm) {
         String sb = "";

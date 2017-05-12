@@ -46,7 +46,7 @@
 
 package tmltranslator.modelcompiler;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import tmltranslator.TMLCPLibArtifact;
 import tmltranslator.TMLPort;
@@ -82,7 +82,7 @@ public class Buffer	{
 	protected TMLCPLibArtifact artifact;
 	protected String baseAddress = "/* USER TODO: VALUE */";
 	protected String endAddress = "/* USER TODO: VALUE */";
-	protected ArrayList<String> bufferParameters;
+	protected List<String> bufferParameters;
 	
 	private String Context = "";
 
@@ -143,7 +143,7 @@ public class Buffer	{
 		return Context;
 	}
 
-	public void setMappingParameters( ArrayList<String> params )	{
+	public void setMappingParameters( List<String> params )	{
 		bufferParameters = params;
 	}
 

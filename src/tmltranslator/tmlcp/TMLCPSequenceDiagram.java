@@ -50,14 +50,13 @@ package tmltranslator.tmlcp;
 import java.util.*;
 
 import tmltranslator.*;
-import myutil.*;
 
 public class TMLCPSequenceDiagram  extends TMLElement {
 
-    private ArrayList<TMLSDInstance> instancesList;
+    private List<TMLSDInstance> instancesList;
 
-    private int hashCode;
-    private boolean hashCodeComputed = false;
+//    private int hashCode;
+//    private boolean hashCodeComputed = false;
 
 
     public TMLCPSequenceDiagram( String _name, Object _referenceObject )        {
@@ -83,7 +82,7 @@ public class TMLCPSequenceDiagram  extends TMLElement {
         instancesList.add( _inst );
     }
 
-    public ArrayList<TMLSDInstance> getInstances()      {
+    public List<TMLSDInstance> getInstances()      {
         return instancesList;
     }
 

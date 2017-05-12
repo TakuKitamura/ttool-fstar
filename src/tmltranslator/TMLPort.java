@@ -45,8 +45,6 @@
 
 package tmltranslator;
 
-import ui.tmlcompd.*;
-
 public class TMLPort extends TMLElement {
 
     private boolean prex;

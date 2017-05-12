@@ -45,14 +45,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tmlcp;;
 
-public class UndeclaredDiagramException extends Exception
-{
+public class UndeclaredDiagramException extends Exception {
 	
 	public UndeclaredDiagramException()	{
 		super( "TMLCP COMPILER ERROR: undeclared diagram" );
 	}
 
 	public UndeclaredDiagramException( String message )	{
-			super( message );	
+		super( message );	
 	}
 }

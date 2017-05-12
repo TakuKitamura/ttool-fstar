@@ -57,17 +57,20 @@ public class TMLActivity extends TMLElement {
 
     public TMLActivity(String name, Object reference) {
         super(name, reference);
-        elements = new Vector();
+        elements = new Vector<TMLActivityElement>();
     }
 
     public TMLActivity copy(){
         TMLActivity newAct = new TMLActivity(this.name, this.referenceObject);
         newAct.setFirst(this.first);
+        
         for (TMLActivityElement act: elements){
             newAct.addElement(act);
         }
+        
         return newAct;
     }
+    
     public boolean contains(TMLActivityElement _elt) {
         return elements.contains(_elt);
     }
@@ -322,7 +325,6 @@ public class TMLActivity extends TMLElement {
         }
 
         previous.addNext(tmlae);
-
     }
 
     public void splitActionStatesWithDollars(TMLTask _task) {
@@ -340,7 +342,6 @@ public class TMLActivity extends TMLElement {
         for(TMLActionState as: states) {
             splitActionStatesWithDollars(as, _task);
         }
-
     }
 
     private void splitActionStatesWithDollars(TMLActionState _ae, TMLTask _task) {
@@ -439,12 +440,11 @@ public class TMLActivity extends TMLElement {
         }
     }
 
-
     public void replaceReadChannelWith(TMLChannel oldChan, TMLChannel newChan) {
         TMLActivityElement ae;
 
         for(int i=0; i<elements.size(); i++) {
-            ae = (TMLActivityElement)(elements.elementAt(i));
+            ae = elements.elementAt(i);
             if (ae instanceof TMLReadChannel) {
                 ((TMLReadChannel)ae).replaceChannelWith(oldChan, newChan);
             }
@@ -477,10 +477,11 @@ public class TMLActivity extends TMLElement {
                     if (twc.getChannel(j) == chan) {
                         TMLSendEvent send = new TMLSendEvent("SendEvt" + cpt, ae.getReferenceObject());
                         send.setEvent(evt);
-                        Vector nexts = ae.getNexts();
-                        for (Object o: nexts) {
-                            send.addNext((TMLActivityElement)o);
+                        //Vector nexts = ae.getNexts();
+                        for (TMLActivityElement o: ae.getNexts() ) {
+                            send.addNext( o );
                         }
+                        
                         newElements.add(send);
                         send.addParam(action);
                         ae.clearNexts();
@@ -513,10 +514,11 @@ public class TMLActivity extends TMLElement {
                         TMLWaitEvent receive = new TMLWaitEvent("RecvEvt" + cpt, ae.getReferenceObject());
                         receive.setEvent(evt2);
 
-                        Vector nexts = ae.getNexts();
-                        for (Object o: nexts) {
-                            receive.addNext((TMLActivityElement)o);
+                       // Vector nexts = ae.getNexts();
+                        for (TMLActivityElement o: ae.getNexts() ) {
+                            receive.addNext( o );
                         }
+                        
                         send.addNext(receive);
                         newElements.add(send);
                         newElements.add(receive);
@@ -544,6 +546,7 @@ public class TMLActivity extends TMLElement {
                 }
             }
         }
+
         if (loop != null) {
             TMLActivityElement next = (loop.getNexts()).get(0);
             if ((next == null) || (next instanceof TMLStopState)) {
@@ -551,12 +554,9 @@ public class TMLActivity extends TMLElement {
                 for(TMLActivityElement elt: elements) {
                     elt.setNewNext(loop, next);
                 }
-
             }
+
             removeEmptyInfiniteLoop();
         }
-
     }
-
-
 }

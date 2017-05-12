@@ -53,8 +53,6 @@ import java.util.*;
 
 import ui.tmlsd.*;
 
-import myutil.*;
-
 public class TMLSDInstance extends TMLElement  {
 
     private String type;
