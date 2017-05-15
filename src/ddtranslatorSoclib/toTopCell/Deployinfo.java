@@ -73,11 +73,15 @@
 package ddtranslatorSoclib.toTopCell;
 import ddtranslatorSoclib.*;
 import java.util.*;
+import avatartranslator.AvatarRelation;
+import avatartranslator.AvatarSpecification;
 
 public class Deployinfo {
 
     private final static String CR = "\n";
     private final static String CR2 = "\n\n";
+
+    public static AvatarSpecification avspec;//DG 15.05.2017
 
     /* for the moment, this is specific to PowerPC */
 
@@ -173,8 +177,12 @@ deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" +
 
 	deployinfo_map += "#define MAP_A\\" + CR;		
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
-	    if (!(ram.getChannels().isEmpty())){	
-		for (AvatarChannel channel : ram.getChannels()) {
+	    //if (!(ram.getChannels().isEmpty())){	
+	    //	for (AvatarChannel channel : ram.getChannels()) {
+	    //DG 15.05.2017
+	   	
+	    	for (AvatarRelation relation : avspec.getRelations()) {
+		    //if (!(ram.getRelations().isEmpty())){
 		    deployinfo_map = deployinfo_map +"\n .channel"+i+" : { \\" + CR;
 		    deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")\\"+ CR;
 		   
@@ -183,7 +191,9 @@ deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" +
 		}
 		
 		i=0;
-	for (AvatarChannel channel : ram.getChannels()) {
+//	for (AvatarChannel channel : ram.getChannels()) {
+	for (AvatarRelation relation : avspec.getRelations()) {
+//DG 15.05.2017
 		    deployinfo_map = deployinfo_map +"\n .lock"+i+" : { \\" + CR;
 		    deployinfo_map = deployinfo_map + "*(section_lock"+i+ ")\\"+ CR;		   
 		    //  if(use_vcilocks) deployinfo_map=deployinfo_map+ "} > vci_locks\\"+ CR;
@@ -191,8 +201,7 @@ deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" +
 		    i++;
 		}
 
-	    }	    
-	}
+	}	    
 	return deployinfo_map;	
     }
 

@@ -199,12 +199,13 @@ public class TasksAndMainGenerator {
     	//for(AvatarRelation ar: avspec.getRelations()) {
     	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
     		//for(AvatarChannel ar: avspec.getChannels()) {
-    		for(AvatarChannel channel: ram.getChannels()){ 
+    		//for(AvatarChannel channel: ram.getChannels()){ 
+		    for(AvatarRelation ar: avspec.getRelations()) {//DG 15.05.2017
     			mainFile.appendToBeforeMainCode("#define CHANNEL"+d+" __attribute__((section(\"section_channel"+d+"\")))" + CR ); 	
     			mainFile.appendToBeforeMainCode("#define LOCK"+d+" __attribute__((section(\"section_lock"+d+"\")))" + CR );//one lock per channel
     			d++;
-    		}
-    	}
+		      
+			
 
 
     	mainFile.appendToBeforeMainCode("#define base(arg) arg" + CR2 );
@@ -215,6 +216,9 @@ public class TasksAndMainGenerator {
     	mainFile.appendToMainCode("pthread_attr_t *attr_t = malloc(sizeof(pthread_attr_t));" +CR);
     	mainFile.appendToMainCode("pthread_attr_init(attr_t);" + CR );
     	mainFile.appendToMainCode("pthread_mutex_init(&__mainMutex, NULL);" +CR2);       
+	 }	    
+
+	}
     }
   
     public void makeSynchronousChannels() {
@@ -226,7 +230,9 @@ public class TasksAndMainGenerator {
         for(AvatarRelation ar: avspec.getRelations()) {
 	    
 	if (!ar.isAsynchronous()) {
-	ar.setId(j); j++;
+	    //ar.setId(j); 
+	    ar.setId(i);//DG 15.05.2017 
+	    j++;
 		    for(i=0; i<ar.nbOfSignals() ; i++) {
 			mainFile.appendToHCode("extern syncchannel __" + getChannelName(ar, i) + ";" + CR);
 
@@ -273,9 +279,10 @@ public class TasksAndMainGenerator {
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
 		
 	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);					
+		    
 		    }
 	}
-      }	
+	}
     }
 
     public void makeAsynchronousChannels() {
