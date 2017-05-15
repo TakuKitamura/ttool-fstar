@@ -146,7 +146,7 @@ public class TMLSyntaxChecking {
                             if (ch.getOriginTask() != t) {
                                 //System.out.println("Origin task=" + ch.getOriginTask().getName() + " / task = " + t.getName() + "tch=" + ch.getOriginTask() + " t=" + t);
                                 //System.out.println("tml:" + tmlm.toString());
-                                TMLTextSpecification  tmlt = new TMLTextSpecification("toto");
+                              //  TMLTextSpecification  tmlt = new TMLTextSpecification("toto");
                                 //System.out.println("tml:" + tmlt.toTextFormat(tmlm));
                                 addError(t, elt, ch.getName() + ": " + WRONG_ORIGIN_CHANNEL, TMLError.ERROR_BEHAVIOR);
                             }
@@ -227,7 +227,7 @@ public class TMLSyntaxChecking {
         int elseg, afterg;
         TMLAttribute attr;
 
-        StringReader toParse;
+      //  StringReader toParse;
         String action;
 
 

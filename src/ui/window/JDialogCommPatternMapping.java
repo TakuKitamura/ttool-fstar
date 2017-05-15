@@ -72,7 +72,8 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 	private final static String EMPTY_CPS_LIST = "No CPs to reference";
 	private final static String EMPTY_INSTANCES_LIST = "No instances to map";
 	
-	private boolean regularClose;
+    // Issue #36 only the cancel boolean is needed
+	//private boolean regularClose;
 	
 	private Frame frame;
 	private TMLArchiCPNode cp;
@@ -689,13 +690,13 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 		c5.anchor = GridBagConstraints.LINE_START;
 		c5.insets = lblInsets;
 		pnlCodeGen.add( new JLabel( "Extension Construct:" ), c5 );
-		cpMECsCB = new JComboBox<String>( new Vector<String>( Arrays.asList( CPMEC.cpTypes ) ) );
+		cpMECsCB = new JComboBox<String>( new Vector<String>( Arrays.asList( CPMEC.CP_TYPES ) ) );
 		
 		if( cpMEC.equals( "VOID" ) || cpMEC.equals( "" ) )	{
 			cpMECsCB.setSelectedIndex( 0 );
 		}
 		else	{
-			cpMECsCB.setSelectedIndex( new Vector<String>( Arrays.asList( CPMEC.cpTypes ) ).indexOf( cpMEC ) );
+			cpMECsCB.setSelectedIndex( new Vector<String>( Arrays.asList( CPMEC.CP_TYPES ) ).indexOf( cpMEC ) );
 		}
 		
 		cpMECsCB.addActionListener( new ActionListener() {
@@ -717,7 +718,7 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 //		c5.weightx = 1.0;
 //		c5.fill = GridBagConstraints.HORIZONTAL;
 		pnlCodeGen.add( new JLabel( "Type of DMA Transfer n.1:" ), c5 );
-		transferTypeCB1 = new JComboBox<String>( new Vector<String>( Arrays.asList( CPMEC.transferTypes ) ) );
+		transferTypeCB1 = new JComboBox<String>( new Vector<String>( Arrays.asList( CPMEC.TRANSFER_TYPES ) ) );
 		
 		if( transferType1 == -1 ) {
 			transferTypeCB1.setSelectedIndex( 0 );
@@ -749,7 +750,7 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 //		c5.anchor = GridBagConstraints.LINE_START;
 		c5.gridwidth = 1;
 		pnlCodeGen.add( new JLabel( "Type of DMA Transfer n.2:" ), c5 );
-		transferTypeCB2 = new JComboBox<String>( new Vector<String>( Arrays.asList( CPMEC.transferTypes ) ) );
+		transferTypeCB2 = new JComboBox<String>( new Vector<String>( Arrays.asList( CPMEC.TRANSFER_TYPES ) ) );
 		
 		if( transferType2 == -1 ) {
 			transferTypeCB2.setSelectedIndex( 0 );
@@ -1460,12 +1461,12 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 	}
 	
 	public void closeDialog() {
-		regularClose = true;
+		//regularClose = true;
 		cancelled = false;
 		name = nameOfCP.getText();
 		cpMEC = (String)cpMECsCB.getSelectedItem();
-		transferType1 = Arrays.asList( CPMEC.transferTypes ).indexOf( (String)transferTypeCB1.getSelectedItem() );
-		transferType2 = Arrays.asList( CPMEC.transferTypes ).indexOf( (String)transferTypeCB2.getSelectedItem() );
+		transferType1 = Arrays.asList( CPMEC.TRANSFER_TYPES ).indexOf( (String)transferTypeCB1.getSelectedItem() );
+		transferType2 = Arrays.asList( CPMEC.TRANSFER_TYPES ).indexOf( (String)transferTypeCB2.getSelectedItem() );
 		
 		dispose();
 	}
@@ -1551,10 +1552,10 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 		}
 		return (String)( communicationPatternsCB.getSelectedItem() );
 	}
-	
-	public boolean isRegularClose() {
-		return regularClose;
-	}
+//	
+//	public boolean isRegularClose() {
+//		return regularClose;
+//	}
 	
 	public Vector<String> getMappedUnits()	{
 		return mappedUnitsSL;

@@ -45,11 +45,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tmlcp;
 
-import java.util.*;
-
-
-import myutil.*;
-
 public class TMLCPStart extends TMLCPElement  {
 	
     public TMLCPStart(String _name, Object _referenceObject) {

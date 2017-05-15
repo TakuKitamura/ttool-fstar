@@ -45,14 +45,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tmlcp;;
 
-public class UndefinedVariableException extends Exception
-{
+public class UndefinedVariableException extends Exception {
 	
 	public UndefinedVariableException()	{
 		super( "TMLCP COMPILER ERROR: undefined variable" );
 	}
 
 	public UndefinedVariableException( String message )	{
-			super( message );	
+		super( message );	
 	}
 }

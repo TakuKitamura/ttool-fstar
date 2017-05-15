@@ -153,7 +153,6 @@ public  class ADDConnector extends TGConnector  {
             
         return true;
     }
-
     
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
@@ -161,7 +160,6 @@ public  class ADDConnector extends TGConnector  {
         sb.append("</extraparam>\n");
         return new String(sb);
     }
-
     
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{

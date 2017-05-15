@@ -50,12 +50,12 @@ import java.util.*;
 
 public class TMLSendRequest extends TMLActivityElement  {
     protected TMLRequest request;
-    protected Vector datas;
+    protected Vector<String> datas;
     
     
     public TMLSendRequest(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-        datas = new Vector();
+        datas = new Vector<String>();
     }
     
     public void setRequest(TMLRequest _request) {

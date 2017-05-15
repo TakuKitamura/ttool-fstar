@@ -50,11 +50,11 @@ import ui.tmlcompd.TMLCPrimitivePort;
 
 public class TMLEvent extends TMLCommunicationElement {
     // Options
-    protected Vector params; // List of various types of parameters
+    protected Vector<TMLType> params; // List of various types of parameters
     protected int maxEvt = -1; // maxEvt = -1 -> infinite nb of evts: default behaviour
     protected boolean isBlocking = false; // By default, latest events is removed when the FIFO is full
     protected boolean canBeNotified = false;
-    public ArrayList<TMLCPrimitivePort> ports;
+    public List<TMLCPrimitivePort> ports;
     
     // Used for 1 -> 1
     protected TMLTask origin, destination;
@@ -63,8 +63,8 @@ public class TMLEvent extends TMLCommunicationElement {
     public TMLCPrimitivePort port2;
 
     // Used for 1 -> many channel, or for many -> 1 channel
-    protected ArrayList<TMLTask> originTasks, destinationTasks;
-    protected ArrayList<TMLPort> originPorts, destinationPorts;
+    protected List<TMLTask> originTasks, destinationTasks;
+    protected List<TMLPort> originPorts, destinationPorts;
     
     // For security
     public int confStatus;
@@ -75,16 +75,16 @@ public class TMLEvent extends TMLCommunicationElement {
     
     public TMLEvent(String name, Object reference, int _maxEvt, boolean _isBlocking) {
         super(name, reference);
-        params = new Vector();
+        params = new Vector<TMLType>();
         maxEvt = _maxEvt;
         isBlocking = _isBlocking;
         checkMaxEvt();
-	originTasks = new ArrayList<TMLTask>();
+        originTasks = new ArrayList<TMLTask>();
         destinationTasks = new ArrayList<TMLTask>();
         originPorts = new ArrayList<TMLPort>();
         destinationPorts = new ArrayList<TMLPort>();
-	ports = new ArrayList<TMLCPrimitivePort>();
-	checkConf=false;
+        ports = new ArrayList<TMLCPrimitivePort>();
+        checkConf=false;
         //System.out.println("New event: " + name + " max=" + _maxEvt + " blocking=" + isBlocking);
     }
 
@@ -236,19 +236,19 @@ public class TMLEvent extends TMLCommunicationElement {
         return ((destinationTasks.size() == 1) && (originTasks.size() >= 1));
     }
 
-    public ArrayList<TMLTask> getOriginTasks() {
+    public List<TMLTask> getOriginTasks() {
         return originTasks;
     }
 
-    public ArrayList<TMLTask> getDestinationTasks() {
+    public List<TMLTask> getDestinationTasks() {
         return destinationTasks;
     }
 
-    public ArrayList<TMLPort> getOriginPorts() {
+    public List<TMLPort> getOriginPorts() {
         return originPorts;
     }
 
-    public ArrayList<TMLPort> getDestinationPorts() {
+    public List<TMLPort> getDestinationPorts() {
         return destinationPorts;
     }
 

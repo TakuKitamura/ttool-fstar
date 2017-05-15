@@ -49,7 +49,6 @@ package tmltranslator.tmlcp;
 import java.util.*;
 
 import tmltranslator.*;
-import myutil.*;
 
 public class TMLSDMessage extends TMLElement  {
 

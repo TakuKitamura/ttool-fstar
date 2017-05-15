@@ -47,8 +47,6 @@
 package tmltranslator;
 
 import java.util.*;
-import tmltranslator.tmlcp.*;
-import myutil.*;
 
 public class TMLCPLibArtifact extends TMLElement {
 
@@ -56,16 +54,16 @@ public class TMLCPLibArtifact extends TMLElement {
     public String portName;
     public String memoryName;
     public int priority;
-		private ArrayList<String> bufferParameters;
+	private List<String> bufferParameters;
 
 
-    public TMLCPLibArtifact(String _name, Object _referenceObject, String _taskName, String _portName, String _memoryName, int _priority, ArrayList<String> _bufferParameters ) {
+    public TMLCPLibArtifact(String _name, Object _referenceObject, String _taskName, String _portName, String _memoryName, int _priority, List<String> _bufferParameters ) {
         super( _name, _referenceObject );
         taskName = _taskName;
         portName = _portName;
         memoryName = _memoryName;
         priority = _priority;
-				bufferParameters = _bufferParameters;
+        bufferParameters = _bufferParameters;
     }
 
     public TMLCPLibArtifact() {
@@ -88,7 +86,7 @@ public class TMLCPLibArtifact extends TMLElement {
         return priority;
     }
 
-		public ArrayList<String> getBufferParameters()	{
-			return bufferParameters;
-		}
+	public List<String> getBufferParameters()	{
+		return bufferParameters;
+	}
 }       //End of the class

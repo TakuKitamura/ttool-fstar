@@ -50,23 +50,24 @@ import java.util.*;
 
 public abstract class TMLActivityElementEvent extends TMLActivityElement {
     protected TMLEvent event;
-    protected Vector datas;
+    protected Vector<String> datas;
     protected String variable; // Used for notified -> variable in which the result is stored:
                                // 0: no event
                                // >0: nb of event in the list
 
-    protected ArrayList<TMLEvent> events;
+    protected List<TMLEvent> events;
 
     public TMLActivityElementEvent(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-        datas = new Vector();
+        
+        datas = new Vector<String>();
     }
 
     public boolean hasEvents() {
         return events != null;
     }
 
-    public ArrayList<TMLEvent> getEvents() {
+    public List<TMLEvent> getEvents() {
         return events;
     }
 

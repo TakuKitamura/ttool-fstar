@@ -209,22 +209,29 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         GraphicLib.centerOnParent( dialog, 750, 500 );
         dialog.setVisible( true ); // blocked until dialog has been closed
         //setJDialogOptions(jdab);
+
+        // Issue #36
+        if( dialog.hasBeenCancelled() )  {
+            return false;
+        }
+
         name = dialog.getNodeName();
         mappedUnits = dialog.getMappedUnits();
         cpMEC = dialog.getCPMEC();
         transferType1 = dialog.getTransferTypes().get(0);
         transferType2 = dialog.getTransferTypes().get(1);
         assignedAttributes = dialog.getAssignedAttributes();
-        TraceManager.addDev( "name " + name );
-        TraceManager.addDev( "mappedUnits " + mappedUnits );
-        TraceManager.addDev( "cpMEC " + cpMEC );
-        TraceManager.addDev( "transferType1 " + transferType1 );
-        TraceManager.addDev( "transferType2 " + transferType2 );
-        TraceManager.addDev( "assignedAttributes " + assignedAttributes.toString() );
+//        TraceManager.addDev( "name " + name );
+//        TraceManager.addDev( "mappedUnits " + mappedUnits );
+//        TraceManager.addDev( "cpMEC " + cpMEC );
+//        TraceManager.addDev( "transferType1 " + transferType1 );
+//        TraceManager.addDev( "transferType2 " + transferType2 );
+//        TraceManager.addDev( "assignedAttributes " + assignedAttributes.toString() );
 
-        if( !dialog.isRegularClose() )  {
-            return false;
-        }
+        // Issue #36
+//        if( !dialog.isRegularClose() )  {
+//            return false;
+//        }
 
         if( dialog.getNodeName().length() != 0 )        {
             tmpName = dialog.getNodeName();
@@ -429,25 +436,32 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         return completeName;
     }
 
-    public Vector<String> getAssignedAttributes()       {
-
+    public Vector<String> getAssignedAttributes() {
         Vector<String> vectorToReturn;
         switch( cpMEC ) {
         case CPMEC.MemoryCopy:
-            TraceManager.addDev( "**** ASSIGNED ATTRIBUTES ****\\" + assignedAttributes );
-            vectorToReturn = CpuMemoryCopyMEC.sortAttributes( assignedAttributes );
+            //TraceManager.addDev( "**** ASSIGNED ATTRIBUTES ****\\" + assignedAttributes );
+            vectorToReturn = CPMEC.getSortedAttributeValues( assignedAttributes, CpuMemoryCopyMEC.ORDERED_ATTRIBUTE_NAMES );
+
             break;
         case CPMEC.SingleDMA:
-            vectorToReturn = SingleDmaMEC.sortAttributes( assignedAttributes );
+            vectorToReturn = CPMEC.getSortedAttributeValues( assignedAttributes, SingleDmaMEC.ORDERED_ATTRIBUTE_NAMES );
+            //vectorToReturn = SingleDmaMEC.sortAttributes( assignedAttributes );
+
             break;
         case CPMEC.DoubleDMA:
-            vectorToReturn = DoubleDmaMEC.sortAttributes( assignedAttributes );
+            vectorToReturn = CPMEC.getSortedAttributeValues( assignedAttributes, DoubleDmaMEC.ORDERED_ATTRIBUTE_NAMES );
+            //vectorToReturn = DoubleDmaMEC.sortAttributes( assignedAttributes );
+
             break;
         default:
-            TraceManager.addDev( "ERROR in returning assignedAttributes" );
-            vectorToReturn = assignedAttributes;
-            break;
+        	throw new IllegalArgumentException( "Unknown communication pattern " + cpMEC + "." );
+            //TraceManager.addDev( "ERROR in returning assignedAttributes" );
+            //vectorToReturn = assignedAttributes;
+            
+            //break;
         }
+        
         return vectorToReturn;
     }
 

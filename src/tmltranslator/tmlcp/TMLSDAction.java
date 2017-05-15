@@ -46,35 +46,32 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tmlcp;
 
-import java.util.*;
-
-
-import myutil.*;
-
 public class TMLSDAction extends TMLSDElement  {
 
 	private String action;
 	private String instanceName;
 	private int yCoord;
-	
-   public TMLSDAction( String _action, String _instanceName, Object _referenceObject, int _yCoord ) {
+
+	public TMLSDAction( String _action, String _instanceName, Object _referenceObject, int _yCoord ) {
 		super( "action", _referenceObject);
-    action = _action;
+
+		action = _action;
 		instanceName = _instanceName;
 		this.yCoord = _yCoord;
-  }
+	}
 
 	// Constructor used for the TMLCPparser where in the TMLCP code there is no notion of yCoord and no notion of referenceObject
-   public TMLSDAction( String _action, String _instanceName ) {
+	public TMLSDAction( String _action, String _instanceName ) {
 		super( "action", null );
-    action = _action;
+
+		action = _action;
 		instanceName = _instanceName;
 		this.yCoord = -1;
-  }
-    
-  public int getYCoord() {
-  	return this.yCoord;
-  }
+	}
+
+	public int getYCoord() {
+		return this.yCoord;
+	}
 
 	public String getInstanceName()	{
 		return instanceName;
@@ -83,5 +80,5 @@ public class TMLSDAction extends TMLSDElement  {
 	public String toString()	{
 		return action;
 	}
-	
+
 }

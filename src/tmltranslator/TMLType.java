@@ -47,8 +47,6 @@
 
 package tmltranslator;
 
-import myutil.*;
-
 public class TMLType {
 
     // type

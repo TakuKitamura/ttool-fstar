@@ -48,8 +48,6 @@
 
 package tmltranslator;
 
-import myutil.*;
-
 public class TMLAttribute extends DIPLOElement {
 
     public TMLType type;

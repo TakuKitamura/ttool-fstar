@@ -51,20 +51,22 @@ import java.util.Vector;
 
 public class DoubleDmaMEC extends CPMEC	{
 
-	public static final int MaxParameters = 6;
-	public static final int destinationAddress1Index = 0;
-	public static final int sourceAddress1Index = 1;
-	public static final int counter1Index = 2;
-	public static final int destinationAddress2Index = 3;
-	public static final int sourceAddress2Index = 4;
-	public static final int counter2Index = 5;
+//	public static final int MaxParameters = 6;
+//	public static final int destinationAddress1Index = 0;
+//	public static final int sourceAddress1Index = 1;
+//	public static final int counter1Index = 2;
+//	public static final int destinationAddress2Index = 3;
+//	public static final int sourceAddress2Index = 4;
+//	public static final int counter2Index = 5;
 
-	public static final String destinationAddress1 = "destinationAddress1";
-	public static final String sourceAddress1 = "sourceAddress1";
-	public static final String counter1 = "counter1";
-	public static final String destinationAddress2 = "destinationAddress2";
-	public static final String sourceAddress2 = "sourceAddress2";
-	public static final String counter2 = "counter2";
+	private static final String destinationAddress1 = "destinationAddress1";
+	private static final String sourceAddress1 = "sourceAddress1";
+	private static final String counter1 = "counter1";
+	private static final String destinationAddress2 = "destinationAddress2";
+	private static final String sourceAddress2 = "sourceAddress2";
+	private static final String counter2 = "counter2";
+	
+	public static final String[] ORDERED_ATTRIBUTE_NAMES =  new String[]{ destinationAddress1, sourceAddress1, counter1, destinationAddress2, sourceAddress2, counter2 };
 
 	private Vector<String> memoryBaseAddress = new Vector<String>();
 	private String dataToTransfer1 = USER_TO_DO;
@@ -79,6 +81,8 @@ public class DoubleDmaMEC extends CPMEC	{
 	private String ctxName2 = USER_TO_DO;
 
 	public DoubleDmaMEC( String ctxName, Vector<ArchUnitMEC> archMECs, Vector<Integer> srcMemoryTypes, Vector<Integer> dstMemoryTypes, List<Integer> transferTypes, Vector<String> attributes )	{
+		super( attributes );
+		
 		int numSrcMemories = srcMemoryTypes.size();
 
 		for( int i = 0; i < numSrcMemories; i++ )	{
@@ -108,12 +112,12 @@ public class DoubleDmaMEC extends CPMEC	{
 		ArchUnitMEC archMEC = archMECs.get(0);
 
 		if( attributes.size() > 0 )	{
-			dataToTransfer1 = attributes.get( counter1Index );
-			dataToTransfer2 = attributes.get( counter2Index );
-			dstAddress1 = attributes.get( destinationAddress1Index );
-			srcAddress1 = attributes.get( sourceAddress1Index );
-			dstAddress2 = attributes.get( destinationAddress2Index );
-			srcAddress2 = attributes.get( sourceAddress2Index );
+			dataToTransfer1 = getAttributeValue( counter1 );//attributes.get( counter1Index );
+			dataToTransfer2 = getAttributeValue( counter2 );//attributes.get( counter2Index );
+			dstAddress1 = getAttributeValue( destinationAddress1 );//attributes.get( destinationAddress1Index );
+			srcAddress1 = getAttributeValue( sourceAddress1 );//attributes.get( sourceAddress1Index );
+			dstAddress2 = getAttributeValue( destinationAddress2 );//attributes.get( destinationAddress2Index );
+			srcAddress2 = getAttributeValue( sourceAddress2 );//attributes.get( sourceAddress2Index );
 			ctxName1 = ctxName + "_1";
 			ctxName2 = ctxName + "_2";
 		}
@@ -156,30 +160,30 @@ public class DoubleDmaMEC extends CPMEC	{
 			break;
 		}
 	}
-
-	public static Vector<String> sortAttributes( Vector<String> assignedAttributes )	{
-		
-		Vector<String> newVector = new Vector<String>( assignedAttributes );
-		for( String s: assignedAttributes )	{
-			if( s.contains( destinationAddress1 ) )	{
-				newVector.set( destinationAddress1Index, getAttributeValue(s) );
-			}
-			if( s.contains( sourceAddress1 ) )	{
-				newVector.set( sourceAddress1Index, getAttributeValue(s) );
-			}
-			if( s.contains( counter1 ) )	{
-				newVector.set( counter1Index, getAttributeValue(s) );
-			}
-			if( s.contains( destinationAddress2 ) )	{
-				newVector.set( destinationAddress2Index, getAttributeValue(s) );
-			}
-			if( s.contains( sourceAddress2 ) )	{
-				newVector.set( sourceAddress2Index, getAttributeValue(s) );
-			}
-			if( s.contains( counter2 ) )	{
-				newVector.set( counter2Index, getAttributeValue(s) );
-			}
-		}
-		return newVector;
-	}
+//
+//	public static Vector<String> sortAttributes( Vector<String> assignedAttributes )	{
+//		
+//		Vector<String> newVector = new Vector<String>( assignedAttributes );
+//		for( String s: assignedAttributes )	{
+//			if( s.contains( destinationAddress1 ) )	{
+//				newVector.set( destinationAddress1Index, getAttributeValue(s) );
+//			}
+//			if( s.contains( sourceAddress1 ) )	{
+//				newVector.set( sourceAddress1Index, getAttributeValue(s) );
+//			}
+//			if( s.contains( counter1 ) )	{
+//				newVector.set( counter1Index, getAttributeValue(s) );
+//			}
+//			if( s.contains( destinationAddress2 ) )	{
+//				newVector.set( destinationAddress2Index, getAttributeValue(s) );
+//			}
+//			if( s.contains( sourceAddress2 ) )	{
+//				newVector.set( sourceAddress2Index, getAttributeValue(s) );
+//			}
+//			if( s.contains( counter2 ) )	{
+//				newVector.set( counter2Index, getAttributeValue(s) );
+//			}
+//		}
+//		return newVector;
+//	}
 }	//End of class

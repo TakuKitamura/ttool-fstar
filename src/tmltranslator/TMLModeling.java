@@ -55,8 +55,6 @@ import proverifspec.*;
 
 
 public class TMLModeling {
-
-
     public final String SEP1 = "_S_";
 
     private List<TMLTask> tasks;
@@ -1982,7 +1980,7 @@ public class TMLModeling {
 
     // Channels with one origin and several destinations
     // Add a task at sending side
-    // Channel is tranformed into something else ...
+    // Channel is transformed into something else ...
     public void removeForks() {
         // Create new basic channels and tasks
         ArrayList<TMLChannel> newChannels = new ArrayList<TMLChannel>();
@@ -1996,7 +1994,7 @@ public class TMLModeling {
             addChannel(chan);
         }
 
-	ArrayList<TMLEvent> newEvents = new ArrayList<TMLEvent>();
+        List<TMLEvent> newEvents = new ArrayList<TMLEvent>();
         for(TMLEvent event: events) {
             if (event.isAForkEvent()) {
                 removeForkEvent(event, newEvents);
@@ -2061,6 +2059,7 @@ public class TMLModeling {
         read.setNbOfSamples("1");
 
         TMLWriteChannel []writes = new TMLWriteChannel[nb];
+        
         for(i=0; i<nb; i++) {
             writes[i] = new TMLWriteChannel("WriteOfFork" + SEP1 + i, null);
             writes[i].addChannel(chans[i]);
@@ -2072,15 +2071,15 @@ public class TMLModeling {
         junction.addNext(read);
         junction.addNext(stop2);
         read.addNext(writes[0]);
+        
         for(i=0; i<nb-1; i++) {
             writes[i].addNext(writes[i+1]);
         }
+
         writes[nb-1].addNext(stop);
-
-
     }
 
-    public void removeForkEvent(TMLEvent _evt, ArrayList<TMLEvent> _newEvents) {
+    public void removeForkEvent(TMLEvent _evt, List<TMLEvent> _newEvents) {
         int i, j;
 
         // Create the new task and its activity diagram
@@ -2091,6 +2090,7 @@ public class TMLModeling {
         // Create the new (basic) events. The first branch of the fork is reused, others are created
         int nb = _evt.getDestinationTasks().size();
         TMLEvent[] evts = new TMLEvent[nb];
+        
         for(i=0; i<nb; i++) {
             evts[i] = new TMLEvent("FORKEVENT" + SEP1 + i + SEP1 + _evt.getName(), _evt.getReferenceObject(), _evt.getMaxSize(), _evt.isBlocking());
             evts[i].setTasks(forkTask, _evt.getDestinationTasks().get(i));
@@ -2098,17 +2098,18 @@ public class TMLModeling {
             //evts[i].setType(_evt.getType());
             //evts[i].setMax(_evt.getMax());
             //evts[i].setSize(_evt.getSize());
-	    for(j=0; j<_evt.getNbOfParams(); j++) {
-		evts[i].addParam(_evt.getType(j));
-	    }
-            _newEvents.add(evts[i]);
+		    for(j=0; j<_evt.getNbOfParams(); j++) {
+		    	evts[i].addParam(_evt.getType(j));
+		    }
+
+		    _newEvents.add(evts[i]);
         }
 
         // Modify the activity diagram of tasks making a wait in destination events
         // Modify the event of wait operators to the new events
         for(i=0; i<nb; i++) {
             _evt.getDestinationTasks().get(i).replaceWaitEventWith(_evt, evts[i]);
-	}
+        }
 	
 
         // Transform the original event into a basic event
@@ -2116,13 +2117,13 @@ public class TMLModeling {
         _evt.setPorts(_evt.getOriginPorts().get(0), new TMLPort("FORKPORTDESTINATION" + SEP1 + _evt.getName(), _evt.getReferenceObject()));
         _evt.removeComplexInformations();
 
-	// Adding attributes to the task
-       for(j=0; j<_evt.getNbOfParams(); j++) {
-	   TMLAttribute attr = new TMLAttribute("attr_" + j, _evt.getType(j));
-	   forkTask.addAttribute(attr);
-       }
+        // Adding attributes to the task
+        for(j=0; j<_evt.getNbOfParams(); j++) {
+        	TMLAttribute attr = new TMLAttribute("attr_" + j, _evt.getType(j));
+        	forkTask.addAttribute(attr);
+        }
 
-	// Creating the AD for the fork task
+        // Creating the AD for the fork task
         TMLStartState start = new TMLStartState("startOfFork", null);
         forkActivity.setFirst(start);
         TMLStopState stop = new TMLStopState("stopOfFork", null);
@@ -2139,12 +2140,13 @@ public class TMLModeling {
         TMLWaitEvent read = new TMLWaitEvent("WaitOfFork", null);
         forkActivity.addElement(read);
         read.setEvent(_evt);
-	for(j=0; j<_evt.getNbOfParams(); j++) {
-	    read.addParam("attr_" + j);
-       }
 	
-
+        for(j=0; j<_evt.getNbOfParams(); j++) {
+        	read.addParam("attr_" + j);
+        }
+	
         TMLSendEvent []writes = new TMLSendEvent[nb];
+    
         for(i=0; i<nb; i++) {
             writes[i] = new TMLSendEvent("WriteEvtOfFork" + SEP1 + i, null);
             writes[i].setEvent(evts[i]);
@@ -2158,9 +2160,11 @@ public class TMLModeling {
         junction.addNext(read);
         junction.addNext(stop2);
         read.addNext(writes[0]);
+        
         for(i=0; i<nb-1; i++) {
             writes[i].addNext(writes[i+1]);
         }
+        
         writes[nb-1].addNext(stop);
     }
 
@@ -2170,7 +2174,7 @@ public class TMLModeling {
     // Same for events.
     public void removeJoins() {
         // Create new basic channels and tasks
-        ArrayList<TMLChannel> newChannels = new ArrayList<TMLChannel>();
+        List<TMLChannel> newChannels = new ArrayList<TMLChannel>();
         for(TMLChannel channel: channels) {
             if (channel.isAJoinChannel()) {
                 removeJoin(channel, newChannels);
@@ -2197,7 +2201,7 @@ public class TMLModeling {
     }
     
 
-    public void removeJoin(TMLChannel _ch, ArrayList<TMLChannel> _newChannels) {
+    public void removeJoin(TMLChannel _ch, List<TMLChannel> _newChannels) {
         int i;
 
         // Create the new task and its activity diagram
@@ -2268,7 +2272,7 @@ public class TMLModeling {
         reads[nb-1].addNext(write);
     }
 
-    public void removeJoinEvent(TMLEvent _evt, ArrayList<TMLEvent> _newEvents) {
+    public void removeJoinEvent(TMLEvent _evt, List<TMLEvent> _newEvents) {
         int i, j;
 
         // Create the new task and its activity diagram
@@ -2283,10 +2287,13 @@ public class TMLModeling {
             evts[i] = new TMLEvent("JOINEVENT" + SEP1 + i + SEP1 + _evt.getName(), _evt.getReferenceObject(), _evt.getMaxSize(), _evt.isBlocking());
             evts[i].setTasks(_evt.getOriginTasks().get(i), joinTask);
             evts[i].setPorts(_evt.getOriginPorts().get(i), new TMLPort("JOINPORTDESTINATION" + SEP1 + i + SEP1 + _evt.getName(), _evt.getReferenceObject()));
-	    for(j=0; j<_evt.getNbOfParams(); j++) {
-		evts[i].addParam(_evt.getType(j));
-	    }
-	    _newEvents.add(evts[i]);
+	    
+            for(j=0; j<_evt.getNbOfParams(); j++) {
+            	evts[i].addParam(_evt.getType(j));
+	    
+            }
+	    
+            _newEvents.add(evts[i]);
         }
 
         // Modify the activity diagram of tasks making a write in origin channels
@@ -2300,12 +2307,12 @@ public class TMLModeling {
         _evt.setTasks(joinTask, _evt.getDestinationTasks().get(0));
         _evt.setPorts(new TMLPort("JOINPORTORIGIN" + SEP1 + _evt.getName(), _evt.getReferenceObject()), _evt.getDestinationPorts().get(0));
         _evt.removeComplexInformations();
-
-	// Adding attributes to the task
-	for(j=0; j<_evt.getNbOfParams(); j++) {
-	    TMLAttribute attr = new TMLAttribute("attr_" + j, _evt.getType(j));
-	    joinTask.addAttribute(attr);
-	}
+	
+		// Adding attributes to the task
+		for(j=0; j<_evt.getNbOfParams(); j++) {
+		    TMLAttribute attr = new TMLAttribute("attr_" + j, _evt.getType(j));
+		    joinTask.addAttribute(attr);
+		}
 
         // Make the activity diagram of the fork task
         TMLStartState start = new TMLStartState("startOfJoin", null);
@@ -2322,19 +2329,24 @@ public class TMLModeling {
         joinTask.addAttribute(attr);
         joinActivity.addElement(junction);
         TMLSendEvent notify = new TMLSendEvent("NotifyOfJoin", null);
-	for(j=0; j<_evt.getNbOfParams(); j++) {
-	    notify.addParam("attr_" + j);
-	}
+
+        for(j=0; j<_evt.getNbOfParams(); j++) {
+        	notify.addParam("attr_" + j);
+        }
+        
         joinActivity.addElement(notify);
         notify.setEvent(_evt);
 
         TMLWaitEvent []waits = new TMLWaitEvent[nb];
+        
         for(i=0; i<nb; i++) {
             waits[i] = new TMLWaitEvent("WaitOfJoin" + SEP1 + i, null);
             waits[i].setEvent(evts[i]);
-	    for(j=0; j<_evt.getNbOfParams(); j++) {
-		waits[i].addParam("attr_" + j);
-	    }
+	    
+            for(j=0; j<_evt.getNbOfParams(); j++) {
+            	waits[i].addParam("attr_" + j);
+            }
+            
             joinActivity.addElement(waits[i]);
         }
 
@@ -2343,9 +2355,11 @@ public class TMLModeling {
         junction.addNext(waits[0]);
         junction.addNext(stop2);
         notify.addNext(stop);
+        
         for(i=0; i<nb-1; i++) {
             waits[i].addNext(waits[i+1]);
         }
+        
         waits[nb-1].addNext(notify);
     }
 
