@@ -140,7 +140,7 @@ public class TMLChoice extends TMLActivityElement{
 			}
 		}
 		
-		String guard;
+		//String guard;
 		for(int i=0; i<index; i++) {
 			if (isNonDeterministicGuard(i)) {
 				nb ++;
@@ -176,7 +176,7 @@ public class TMLChoice extends TMLActivityElement{
 			}
 		}
 		
-		String guard;
+		//String guard;
 		for(int i=0; i<index; i++) {
 			if (isStochasticGuard(i)) {
 				nb ++;

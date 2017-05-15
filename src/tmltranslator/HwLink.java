@@ -45,9 +45,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator;
 
-import java.util.*;
-
-
 public class HwLink implements Comparable<HwLink> {
     public HwBus bus;
     public HwVGMN vgmn;//DG 10.08.

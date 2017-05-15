@@ -99,8 +99,8 @@ public class FepBuffer extends Buffer	{
 	
 	private static JTextField numSamplesTF = new JTextField( "", 5 );
 	private static JTextField baseAddressTF = new JTextField( "", 5 );
-	private static JComboBox bankCB = new JComboBox( new Vector<String>( Arrays.asList( banksList ) ) );
-	private static JComboBox dataTypeCB = new JComboBox( new Vector<String>( Arrays.asList( dataTypeList ) ) );
+	private static JComboBox<String> bankCB = new JComboBox<String>( new Vector<String>( Arrays.asList( banksList ) ) );
+	private static JComboBox<String> dataTypeCB = new JComboBox<String>( new Vector<String>( Arrays.asList( dataTypeList ) ) );
 
 	public FepBuffer( String _name, TMLTask _task )	{
 		type = "FEP_BUFFER_TYPE";
@@ -185,7 +185,7 @@ public class FepBuffer extends Buffer	{
 	
 	public static ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2 )	{
 
-		String baseAddress = "", numSamples = "", bank = "", dataType = "";
+		String baseAddress = "", numSamples = "";//, bank = "", dataType = "";
 		GridBagLayout gridbag2 = new GridBagLayout();
 
 

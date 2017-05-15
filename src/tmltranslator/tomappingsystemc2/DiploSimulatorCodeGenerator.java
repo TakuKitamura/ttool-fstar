@@ -108,9 +108,11 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
     DiploSimulatorCodeGenerator(TMLMapping _tmlmapping, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
         tmlmapping = _tmlmapping;
-	if (tmlmapping == null) {
-	    TraceManager.addDev("null mapping");
-	}
+
+        if ( tmlmapping == null ) {
+		    throw new IllegalArgumentException( "TML Mapping is NULL." );
+		}
+        
         tmlmapping.handleCPs();
         tmlmapping.removeForksAndJoins();
         tmlmapping.makeMinimumMapping();

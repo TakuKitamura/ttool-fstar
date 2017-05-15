@@ -3520,6 +3520,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return this.getAllLibraryFunctions (tp, name);
     }
 
+    /* Note that this is here for historical purpose : Now, any block can access library functions of any
+     * other block.
+     */
     public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctions (TURTLEPanel tp, String name) {
         if (tp == null) {
             return null;

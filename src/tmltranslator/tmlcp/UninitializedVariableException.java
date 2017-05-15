@@ -45,14 +45,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tmlcp;;
 
-public class UninitializedVariableException extends Exception
-{
+public class UninitializedVariableException extends Exception {
 	
 	public UninitializedVariableException()	{
 		super( "TMLCP COMPILER ERROR: uninitialized variable" );
 	}
 
 	public UninitializedVariableException( String message )	{
-			super( message );	
+		super( message );	
 	}
 }

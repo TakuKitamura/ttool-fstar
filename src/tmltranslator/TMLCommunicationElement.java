@@ -47,10 +47,8 @@ package tmltranslator;
 
 import myutil.*;
 
-
-
 public abstract class TMLCommunicationElement extends TMLElement {
-   private boolean infected;
+   //private boolean infected;
    
    private boolean isLossy;
    private int lossPercentage;

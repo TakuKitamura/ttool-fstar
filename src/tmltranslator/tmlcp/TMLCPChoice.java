@@ -48,9 +48,6 @@ package tmltranslator.tmlcp;
 
 import java.util.*;
 
-
-import myutil.*;
-
 //The method is not very suited for the language, I should come back later...
 public class TMLCPChoice extends TMLCPElement  {
     private ArrayList<String> guards;

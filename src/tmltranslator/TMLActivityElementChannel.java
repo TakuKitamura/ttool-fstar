@@ -78,9 +78,9 @@ public class TMLActivityElementChannel extends TMLActivityElement {
     }
 
     public void replaceChannelWith(TMLChannel oldChan, TMLChannel newChan) {
-	if (channels.contains(oldChan)) {
-	    channels.remove(oldChan);
-	    channels.add(newChan);
-	}
+		if (channels.contains(oldChan)) {
+		    channels.remove(oldChan);
+		    channels.add(newChan);
+		}
     }
 }

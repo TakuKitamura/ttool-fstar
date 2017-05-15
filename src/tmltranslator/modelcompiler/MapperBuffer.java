@@ -103,7 +103,7 @@ public class MapperBuffer extends Buffer	{
 	//Mapper Data In
 	private static JTextField baseAddressDataIn_TF, numSamplesDataIn_TF, bitsPerSymbolDataIn_TF;
 	private static String baseAddressDataIn = "", numSamplesDataIn = "", bitsPerSymbolDataIn = "", symmetricalValueDataIn = "";
-	private static JComboBox symmetricalValueDataIn_CB;
+	private static JComboBox<String> symmetricalValueDataIn_CB;
 	//Mapper Data Out
 	private static JTextField baseAddressDataOut_TF;
 	private static String baseAddressDataOut = "";
@@ -262,7 +262,7 @@ public class MapperBuffer extends Buffer	{
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel3.add( bitsPerSymbolDataIn_TF, c1 );
 		//
-		symmetricalValueDataIn_CB = new JComboBox( new Vector<String>( Arrays.asList( symmetricalValues ) ) );
+		symmetricalValueDataIn_CB = new JComboBox<String>( new Vector<String>( Arrays.asList( symmetricalValues ) ) );
 		panel3.add( new JLabel( "Symmetrical value = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
 		panel3.add( symmetricalValueDataIn_CB, c1 );

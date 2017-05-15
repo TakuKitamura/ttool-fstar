@@ -67,6 +67,12 @@ tmpl()::VciMwmrStats(
     for ( typename std::vector<std::string>::const_iterator i = fifo_name.begin();
           i != fifo_name.end();
           ++i ) {
+
+const std::string name2 = (*i);
+loader.get_symbol_by_name(name2);
+const soclib::common::BinaryFileSymbol *sym2 = loader.get_symbol_by_name(name2);
+std::cout << " mwmr fifo with address " << sym2->address() << std::endl;
+
         const std::string name = (*i)+"_status";
         const soclib::common::BinaryFileSymbol *sym = loader.get_symbol_by_name(name);
         if ( ! sym || sym->name() != name ) {
@@ -74,6 +80,7 @@ tmpl()::VciMwmrStats(
             continue;
         }
         typename vci_param::fast_addr_t addr = sym->address();
+        std::cout << " mwmr fifo with status address " << addr << std::endl;
         m_mwmr_info.push_back( mwmr_info_t(addr, *i) );
     }
 }
@@ -98,61 +105,73 @@ tmpl(void)::handle_txn(const VciLoggerElem<vci_param> &elem)
     for ( typename std::vector<mwmr_info_t>::const_iterator i = m_mwmr_info.begin();
           i != m_mwmr_info.end();
           ++i ) {
-        const mwmr_info_t &mwmr = *i;
 
+        const mwmr_info_t &mwmr = *i;
+       
+        //detect if we are in the address range of the mwmr fifo number i
         if ( (elem.address() < mwmr.first) ||
-             ((elem.address() + elem.plen()) >= (mwmr.first + sizeof(soclib_mwmr_status_s))) )
-            continue;
+         ((elem.address() + elem.plen()) >= (mwmr.first + sizeof(soclib_mwmr_status_s))) )
+            continue; 
+
+        //std::cout <<elem.address()<< " " <<  mwmr.first<< " " <<  mwmr.second << " " << (elem.address() + elem.plen()) << " "<< (mwmr.first + sizeof(soclib_mwmr_status_s)) << " "<< sizeof(soclib_mwmr_status_s)<< " " << elem.plen() << std::endl;
+        //std::cout <<m_cycle++<< std::endl;
+
+/*  std::cout << "cmd "  << elem.command() << std::endl;
+    std::cout << "address "  << elem.address() << std::endl;
+    std::cout << "rdata "  << elem.rdata()[0] << std::endl;
+    std::cout << "wdata " << elem.wdata()[0] << std::endl;*/
+
 
         handle_txn(elem, mwmr);
     }
 }
 
 tmpl(void)::handle_txn(const VciLoggerElem<vci_param> &elem, const mwmr_info_t &mwmr)
-{
-    std::cout << "cmd "  << elem.command() << std::endl;
-    std::cout << "address "  << elem.address() << std::endl;
-    //std::cout << "rdata "  << rdata << std::endl;
-    // std::cout << "wdata " << wdata << std::endl;
+{      
+    //prefix(elem, mwmr) << std::hex<< elem.address ()<< " , " << elem.command() << std::endl;
 
     switch ( elem.command() ) {
         case vci_param::CMD_LOCKED_READ:
-        prefix(elem, mwmr)
+            {prefix(elem, mwmr)
             << "read_lock"
-            << std::endl;
+            << std::endl; }
+           
         break;
         case vci_param::CMD_STORE_COND:
-            { prefix(elem, mwmr) << "STORE COND" << std::endl;
-                //  std::cout<<"***CMD_STORE_COND***"<< std::endl;
+            { 
         typename vci_param::fast_data_t rdata = elem.rdata()[0];
         typename vci_param::fast_data_t wdata = elem.wdata()[0];
-        //std::cout << "cmd "  << elem.command() << std::endl;
-        //std::cout << "address "  << elem.address() << std::endl;
-        //std::cout << "rdata "  << rdata << std::endl;
-        //std::cout << "wdata " << wdata << std::endl;
-        prefix(elem, mwmr) << "WDATA" << wdata<<std::endl;
-        if ( wdata >= 1 ) {       
+        
+        //prefix(elem, mwmr) << "WDATA" << std::hex<< wdata<<std::endl;
+       
+        //if ( wdata == 0x1) {  
+        if ( wdata >= 1 ) {  
             if ( rdata == vci_param::STORE_COND_ATOMIC ){ 
-                // if ( rdata == vci_param::CMD_STORE_COND){ 
+               
                 prefix(elem, mwmr) << "lock_take" << std::endl;
+                //std::cout << elem.address() << "lock_take " << std::endl;
             }
             else
                 prefix(elem, mwmr) << "lock_miss" << std::endl;
         } else {
             if ( rdata == vci_param::STORE_COND_ATOMIC )
-                //if ( rdata == vci_param::CMD_STORE_COND)
-                prefix(elem, mwmr) << "lock_release" << std::endl;
+                
+                {
+                    prefix(elem, mwmr) << "lock_release" << std::endl;
+                    //std::cout << "lock_release" << std::endl;
+                }
             else
                 prefix(elem, mwmr) << "lock_release_miss" << std::endl;
         }
         break;
-    }
-    case vci_param::CMD_READ:
+            }
+    case vci_param::CMD_READ:     
         break;
+  
     case vci_param::CMD_WRITE:
     {
         typename vci_param::fast_addr_t base = elem.address() - mwmr.first;
-
+       
         std::vector<typename vci_param::fast_data_t> wdata = elem.wdata();
         typename std::vector<typename vci_param::fast_data_t>::const_iterator v = wdata.begin();
        
@@ -162,19 +181,31 @@ tmpl(void)::handle_txn(const VciLoggerElem<vci_param> &elem, const mwmr_info_t &
 
             switch ( base+offset ) {
             case 0:
-                prefix(elem, mwmr) << "write_rptr" << field_sep << *v << std::endl;
+                {
+                    prefix(elem, mwmr) << "write_rptr" << field_sep << *v << std::endl;
+                    //std::cout  << elem.address() << "write_rptr " << std::endl;
+                }
                 break;
             case 4:
-                prefix(elem, mwmr) << "write_wptr" << field_sep << *v << std::endl;
+                {
+                    prefix(elem, mwmr) << "write_wptr" << field_sep << *v << std::endl;
+                    //std::cout  << elem.address() << "write_wptr " << std::endl;
+}
                 break;
             case 8:
-                prefix(elem, mwmr) << "write_usage" << field_sep << *v << std::endl;
+                {
+                    prefix(elem, mwmr) << "write_usage" << field_sep << *v << std::endl;
+                    std::cout  << elem.address()<< "write_usage " << std::endl;
+                }
                 break;
             case 12:
                 if ( *v )
-                    prefix(elem, mwmr) << "lock_force" << std::endl;
+                    prefix(elem, mwmr)  << "lock_force" << std::endl;
                 else                    
-                    prefix(elem, mwmr) << "lock_release" << std::endl;
+                    {
+                        prefix(elem, mwmr) << "lock_release" << std::endl;
+                        std::cout  << elem.address() << "lock_release " << std::endl;
+                    }
                 break;
             }
             ++v;
@@ -182,7 +213,7 @@ tmpl(void)::handle_txn(const VciLoggerElem<vci_param> &elem, const mwmr_info_t &
         break;
     }
     }
-}
+    }
 
 tmpl(void)::transition()
 {

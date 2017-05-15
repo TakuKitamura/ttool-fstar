@@ -46,10 +46,6 @@
 
 package tmltranslator.modelcompiler;
 
-import java.util.*;
-import java.nio.*;
-import myutil.*;
-
 public abstract class FepOperationMEC extends OperationMEC	{
 
 	public FepOperationMEC()	{

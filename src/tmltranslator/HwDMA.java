@@ -45,9 +45,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator;
 
-import java.util.*;
-
-
 public class HwDMA extends HwCommunicationNode  {
 	
 	public static final int DEFAULT_BYTE_DATA_SIZE = 4;
@@ -59,6 +56,4 @@ public class HwDMA extends HwCommunicationNode  {
     public HwDMA(String _name) {
 		super(_name);
     }
-	
- 
 }

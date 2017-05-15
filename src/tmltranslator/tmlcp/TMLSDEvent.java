@@ -47,11 +47,6 @@
 
 package tmltranslator.tmlcp;
 
-import java.util.*;
-
-import tmltranslator.*;
-import myutil.*;
-
 public class TMLSDEvent implements Comparable<TMLSDEvent>  {
 
     public final static int SEND_MESSAGE_EVENT = 0;

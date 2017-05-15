@@ -51,31 +51,29 @@ package tmltranslator;
 import java.io.*;
 import java.util.*;
 import compiler.tmlparser.*;
-import myutil.*;
-import tmltranslator.*;
 import tmltranslator.tmlcp.*;
 
 
 public class TMLCPSyntaxChecking {
 
-    private final String WRONG_ORIGIN_CHANNEL = "is not declared as an origin channel of the task";
-    private final String WRONG_DESTINATION_CHANNEL = "is not declared as a destination channel of the task";
-    private final String WRONG_ORIGIN_EVENT = "is not declared as an origin event of the task";
-    private final String WRONG_DESTINATION_EVENT = "is not declared as a destination event of the task";
-    private final String WRONG_ORIGIN_REQUEST = "is not declared as an origin request of the task";
+//    private final String WRONG_ORIGIN_CHANNEL = "is not declared as an origin channel of the task";
+//    private final String WRONG_DESTINATION_CHANNEL = "is not declared as a destination channel of the task";
+//    private final String WRONG_ORIGIN_EVENT = "is not declared as an origin event of the task";
+//    private final String WRONG_DESTINATION_EVENT = "is not declared as a destination event of the task";
+//    private final String WRONG_ORIGIN_REQUEST = "is not declared as an origin request of the task";
     private final String SYNTAX_ERROR = "syntax error";
-    private final String WRONG_VARIABLE_IDENTIFIER = "forbidden variable's name";
+//    private final String WRONG_VARIABLE_IDENTIFIER = "forbidden variable's name";
     private final String VARIABLE_ERROR = "variable is not used according to its type";
     private final String UNDECLARED_VARIABLE = "unknown variable";
     private final String WRONG_VARIABLE_TYPE = "incorrect variable type";
-    private final String SYNTAX_ERROR_VARIABLE_EXPECTED = "syntax error (variable expected)";
-    private final String TIME_UNIT_ERROR = "unknown time unit";
+//    private final String SYNTAX_ERROR_VARIABLE_EXPECTED = "syntax error (variable expected)";
+//    private final String TIME_UNIT_ERROR = "unknown time unit";
 
 
-    private ArrayList<TMLCPError> errors;
-    private ArrayList<TMLCPError> warnings;
+    private List<TMLCPError> errors;
+    private List<TMLCPError> warnings;
     private TMLCP tmlcp;
-    private TMLMapping mapping;
+    //private TMLMapping mapping;
 
 
     public TMLCPSyntaxChecking( TMLCP _tmlcp )  {
@@ -103,18 +101,18 @@ public class TMLCPSyntaxChecking {
     //First check the mainCP then check the other Activity Diagrams
     private void checkActivityDiagrams()        {
 
-        ArrayList<TMLCPActivityDiagram> junctionsList = new ArrayList<TMLCPActivityDiagram>();
+        //List<TMLCPActivityDiagram> junctionsList = new ArrayList<TMLCPActivityDiagram>();
 
         TMLCPActivityDiagram mainCP = tmlcp.getMainCP();
 
         //Checking mainCP
-        ArrayList<TMLCPElement> currentListOfElements = mainCP.getElements();
+        List<TMLCPElement> currentListOfElements = mainCP.getElements();
         checkStartState( currentListOfElements, mainCP );
         checkDisconnectedSubParts( currentListOfElements, mainCP );
         checkDiagramsBetweenForkAndJoin( currentListOfElements, mainCP );
 
         //Checking the other ActivityDiagrams
-        ArrayList<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
+        List<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
         for( TMLCPActivityDiagram diag: listADs )       {
             currentListOfElements = diag.getElements();
             checkStartState( currentListOfElements, diag );
@@ -154,7 +152,7 @@ public class TMLCPSyntaxChecking {
     }
 
     //Check that there is one and only one TMLCPStartState, if no start state or multiple start states, an error is raised
-    private void checkStartState( ArrayList<TMLCPElement> listElements, TMLCPActivityDiagram diag )     {
+    private void checkStartState( List<TMLCPElement> listElements, TMLCPActivityDiagram diag )     {
 
         int startCounter = 0;
         for( TMLCPElement elem: diag.getElements() )    {
@@ -172,15 +170,15 @@ public class TMLCPSyntaxChecking {
 
     //Look for disconnected sub-graphs by detecting elements which do not appear in the field next of any other element in the list
     //of elements
-    private void checkDisconnectedSubParts( ArrayList<TMLCPElement> currentListOfElements, TMLCPActivityDiagram diag )  {
+    private void checkDisconnectedSubParts( List<TMLCPElement> currentListOfElements, TMLCPActivityDiagram diag )  {
 
-        ArrayList<TMLCPElement> listOfElementsToCheck = currentListOfElements;
+        List<TMLCPElement> listOfElementsToCheck = currentListOfElements;
         int counter = 0;
 
         for( TMLCPElement currentElement: currentListOfElements )       {
             if( !(currentElement instanceof TMLCPStart) )       {
                 for( TMLCPElement element: listOfElementsToCheck )      {
-                    ArrayList<TMLCPElement> nextElements = element.getNextElements();
+                    List<TMLCPElement> nextElements = element.getNextElements();
                     if( !nextElements.contains( currentElement ) )      {       //counting how many times currentElement is NOT present as a next element
                         counter++;
                     }
@@ -194,10 +192,10 @@ public class TMLCPSyntaxChecking {
         }
     }
 
-    private void checkDiagramsBetweenForkAndJoin( ArrayList<TMLCPElement> currentListOfElements, TMLCPActivityDiagram diag )    {
+    private void checkDiagramsBetweenForkAndJoin( List<TMLCPElement> currentListOfElements, TMLCPActivityDiagram diag )    {
 
-        ArrayList<TMLCPFork> listOfForks = new ArrayList<TMLCPFork>();
-        ArrayList<TMLCPJoin> listOfJoins = new ArrayList<TMLCPJoin>();
+        List<TMLCPFork> listOfForks = new ArrayList<TMLCPFork>();
+        List<TMLCPJoin> listOfJoins = new ArrayList<TMLCPJoin>();
 
         for( TMLCPElement element: currentListOfElements )      {
             if( element instanceof TMLCPFork )  {
@@ -241,85 +239,85 @@ public class TMLCPSyntaxChecking {
     //Check that all diagrams are connected by retrieving the list of diagrams and checking if they appear as start or end name in
     //the list of connectors of the AD diagram under examination
     //At the same time, get the list of guards of choice elements
-    private void checkActivityDiagramsOLD()     {
+//    private void checkActivityDiagramsOLD()     {
+//
+//        List<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
+//        List<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
+//        List<String> listConnectorsStartEndNames = new ArrayList<String>();
+//        List<String> listDiagramNames = new ArrayList<String>();
+//        List<String> localListOfSDDiagrams = new ArrayList<String>();
+//        //check that all diagrams are connected
+//
+//        for( TMLCPActivityDiagram diag: listADs )       {
+//            List<TMLCPElement> listElements = diag.getElements();
+//            for( TMLCPElement elem : listElements )     {
+//                if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )    {
+//                    listDiagramNames.add(((tmltranslator.tmlcp.TMLCPRefAD)elem).getName() );
+//                }
+//                if( elem instanceof tmltranslator.tmlcp.TMLCPRefSD )    {
+//                    listDiagramNames.add(((tmltranslator.tmlcp.TMLCPRefSD)elem).getName() );
+//                    localListOfSDDiagrams.add( ( (tmltranslator.tmlcp.TMLCPRefSD)elem ).getName() );
+//                }
+//                if( elem instanceof TMLCPConnector )    {
+//                    listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getEndName() );
+//                    listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getStartName() );
+//                }
+//                if( elem instanceof tmltranslator.tmlcp.TMLCPChoice )   {
+//                    List<String> guards = ( (tmltranslator.tmlcp.TMLCPChoice)elem ).getGuards();
+//                    Set<String> variableList = new HashSet<String>();
+//                    for( String guard: guards ) {
+//                        guard = guard.replaceAll("\\s+","");
+//                        if( guard.length() > 0 )        {
+//                            String[] token = guard.split( "\\[" );
+//                            if( token[1].equals("]") )  {
+//                                break;
+//                            }
+//                            String[] token1 = token[1].split("=");
+//                            if( token1.length > 1 )     {
+//                                variableList.add( token1[0] );
+//                            }
+//                            else        {
+//                                String[] token2 = token1[0].split("<");
+//                                if( token2.length > 1 ) {
+//                                    variableList.add( token2[0] );
+//                                }
+//                                else    {
+//                                    String[] token3 = token2[0].split(">");
+//                                    variableList.add( token3[0] );
+//                                }
+//                            }
+//                        }
+//                    }
+//                    checkChoiceGuards( listSDs, variableList, localListOfSDDiagrams, diag.getName() );
+//                    //check if they have been declared in the instances of a SD diagram
+//                    localListOfSDDiagrams = new ArrayList<String>();
+//                    variableList = new HashSet<String>();
+//                    /*for( TMLCPSequenceDiagram diagram: listSDDiagrams )       {
+//                      ArrayList<TMLAttribute> listAttributes = diagram.getAttributes();
+//                      for( TMLAttribute attr: listAttributes )  {
+//                      if( !variableList.contains( attr.getName() ) )    {
+//                      addError( "Variable <<" + attr.getName() + ">> is not declared in any diagram of <<" + diag.getName() + ">>",
+//                      TMLCPError.ERROR_STRUCTURE );
+//                      }
+//                      }
+//                      }*/
+//                }       //endOfLoop over elements
+//
+//            }
+//            for( String s: listDiagramNames )   {
+//                if( !listConnectorsStartEndNames.contains(s) )  {
+//                    addError( "Diagram <<" + s + ">> in diagram <<" + diag.getName() + ">> is not connected", TMLCPError.ERROR_STRUCTURE );
+//                }
+//            }
+//            listConnectorsStartEndNames = new ArrayList<String>();
+//            listDiagramNames = new ArrayList<String>();
+//        }
+//    }
 
-        ArrayList<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
-        ArrayList<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
-        ArrayList<String> listConnectorsStartEndNames = new ArrayList<String>();
-        ArrayList<String> listDiagramNames = new ArrayList<String>();
-        ArrayList<String> localListOfSDDiagrams = new ArrayList<String>();
-        //check that all diagrams are connected
+    public void checkChoiceGuards( List<TMLCPSequenceDiagram> listSDs, Set<String> variableList,
+                                   List<String> localListOfSDDiagrams, String diagName )   {
 
-        for( TMLCPActivityDiagram diag: listADs )       {
-            ArrayList<TMLCPElement> listElements = diag.getElements();
-            for( TMLCPElement elem : listElements )     {
-                if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )    {
-                    listDiagramNames.add(((tmltranslator.tmlcp.TMLCPRefAD)elem).getName() );
-                }
-                if( elem instanceof tmltranslator.tmlcp.TMLCPRefSD )    {
-                    listDiagramNames.add(((tmltranslator.tmlcp.TMLCPRefSD)elem).getName() );
-                    localListOfSDDiagrams.add( ( (tmltranslator.tmlcp.TMLCPRefSD)elem ).getName() );
-                }
-                if( elem instanceof TMLCPConnector )    {
-                    listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getEndName() );
-                    listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getStartName() );
-                }
-                if( elem instanceof tmltranslator.tmlcp.TMLCPChoice )   {
-                    ArrayList<String> guards = ( (tmltranslator.tmlcp.TMLCPChoice)elem ).getGuards();
-                    HashSet<String> variableList = new HashSet<String>();
-                    for( String guard: guards ) {
-                        guard = guard.replaceAll("\\s+","");
-                        if( guard.length() > 0 )        {
-                            String[] token = guard.split( "\\[" );
-                            if( token[1].equals("]") )  {
-                                break;
-                            }
-                            String[] token1 = token[1].split("=");
-                            if( token1.length > 1 )     {
-                                variableList.add( token1[0] );
-                            }
-                            else        {
-                                String[] token2 = token1[0].split("<");
-                                if( token2.length > 1 ) {
-                                    variableList.add( token2[0] );
-                                }
-                                else    {
-                                    String[] token3 = token2[0].split(">");
-                                    variableList.add( token3[0] );
-                                }
-                            }
-                        }
-                    }
-                    checkChoiceGuards( listSDs, variableList, localListOfSDDiagrams, diag.getName() );
-                    //check if they have been declared in the instances of a SD diagram
-                    localListOfSDDiagrams = new ArrayList<String>();
-                    variableList = new HashSet();
-                    /*for( TMLCPSequenceDiagram diagram: listSDDiagrams )       {
-                      ArrayList<TMLAttribute> listAttributes = diagram.getAttributes();
-                      for( TMLAttribute attr: listAttributes )  {
-                      if( !variableList.contains( attr.getName() ) )    {
-                      addError( "Variable <<" + attr.getName() + ">> is not declared in any diagram of <<" + diag.getName() + ">>",
-                      TMLCPError.ERROR_STRUCTURE );
-                      }
-                      }
-                      }*/
-                }       //endOfLoop over elements
-
-            }
-            for( String s: listDiagramNames )   {
-                if( !listConnectorsStartEndNames.contains(s) )  {
-                    addError( "Diagram <<" + s + ">> in diagram <<" + diag.getName() + ">> is not connected", TMLCPError.ERROR_STRUCTURE );
-                }
-            }
-            listConnectorsStartEndNames = new ArrayList<String>();
-            listDiagramNames = new ArrayList<String>();
-        }
-    }
-
-    public void checkChoiceGuards( ArrayList<TMLCPSequenceDiagram> listSDs, HashSet<String> variableList,
-                                   ArrayList<String> localListOfSDDiagrams, String diagName )   {
-
-        ArrayList<TMLAttribute> attributeList = new ArrayList<TMLAttribute>();
+        List<TMLAttribute> attributeList = new ArrayList<TMLAttribute>();
         for( String s: localListOfSDDiagrams )  {
             for( TMLCPSequenceDiagram sdDiagram: listSDs )      {
                 if( sdDiagram.getName().equals( s ) )   {
@@ -339,10 +337,10 @@ public class TMLCPSyntaxChecking {
     // - that actions are syntactically correct (no arit operations on boolean, etc.)
     // - that no 2 or more instances have the same name
     private void checkSequenceDiagrams()        {
-        ArrayList<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
+        List<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
 
         for( TMLCPSequenceDiagram diag: listSDs )       {
-            ArrayList<TMLAttribute> attributes = diag.getAttributes();
+            List<TMLAttribute> attributes = diag.getAttributes();
             //checkUniquenessOfAttributesNames( diag ); // already done in the GUI when declaring attributes
             checkActions( diag, attributes );                                           // actions must be done on variables that have
             checkMessages( diag );                                                                                      // check that attributes have been declared been declared and coherently boolean = boolean + 6 is not allowed
@@ -350,8 +348,8 @@ public class TMLCPSyntaxChecking {
         }
     }
 
-    private void checkActions( TMLCPSequenceDiagram diag, ArrayList<TMLAttribute> attributes )  {
-        ArrayList<TMLSDAction> actions = diag.getActions();
+    private void checkActions( TMLCPSequenceDiagram diag, List<TMLAttribute> attributes )  {
+        List<TMLSDAction> actions = diag.getActions();
         //boolean exists = false;
         for( TMLSDAction action: actions )      {
             String[] array = action.toString().split("=");
@@ -377,7 +375,7 @@ public class TMLCPSyntaxChecking {
     // and the receiver instances with the same name
     private void checkMessages( TMLCPSequenceDiagram diag )     {
 
-        ArrayList<TMLSDMessage> messagesList = diag.getMessages();
+        List<TMLSDMessage> messagesList = diag.getMessages();
 
         for( TMLSDMessage message: messagesList )       {
             String senderInstance = message.getSenderName();
@@ -443,8 +441,8 @@ public class TMLCPSyntaxChecking {
     }
 
     private void checkInstances( TMLCPSequenceDiagram diag )    {
-        ArrayList<TMLSDInstance> instances = diag.getInstances();
-        HashSet hash = new HashSet();
+        List<TMLSDInstance> instances = diag.getInstances();
+        Set<String> hash = new HashSet<String>();
         for( TMLSDInstance instance: instances )        {
             if( !hash.contains( instance.getName() ) )  {
                 hash.add( instance.getName() );
@@ -470,11 +468,11 @@ public class TMLCPSyntaxChecking {
         return warnings.size();
     }
 
-    public ArrayList<TMLCPError> getErrors() {
+    public List<TMLCPError> getErrors() {
         return errors;
     }
 
-    public ArrayList<TMLCPError> getWarnings() {
+    public List<TMLCPError> getWarnings() {
         return warnings;
     }
 
@@ -523,7 +521,7 @@ public class TMLCPSyntaxChecking {
         return ret;
     }
 
-    public void parsing( String parseCmd, String action, ArrayList<TMLAttribute> attributes ) {
+    public void parsing( String parseCmd, String action, List<TMLAttribute> attributes ) {
         TMLExprParser parser;
         SimpleNode root;
 

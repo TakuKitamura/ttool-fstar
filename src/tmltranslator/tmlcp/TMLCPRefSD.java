@@ -46,10 +46,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tmlcp;
 
-import java.util.*;
-
-import myutil.*;
-
 public class TMLCPRefSD extends TMLCPElement  {
 
 	private TMLCPSequenceDiagram reference;

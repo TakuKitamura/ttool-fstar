@@ -199,13 +199,16 @@ public class TasksAndMainGenerator {
     	//for(AvatarRelation ar: avspec.getRelations()) {
     	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
     		//for(AvatarChannel ar: avspec.getChannels()) {
-    		for(AvatarChannel channel: ram.getChannels()){ 
+    		//for(AvatarChannel channel: ram.getChannels()){ 
+		    for(AvatarRelation ar: avspec.getRelations()) {//DG 15.05.2017
+
+			for(int i=0; i<ar.nbOfSignals() ; i++) {//DG 15.05.2017
+
     			mainFile.appendToBeforeMainCode("#define CHANNEL"+d+" __attribute__((section(\"section_channel"+d+"\")))" + CR ); 	
     			mainFile.appendToBeforeMainCode("#define LOCK"+d+" __attribute__((section(\"section_lock"+d+"\")))" + CR );//one lock per channel
-    			d++;
-    		}
-    	}
-
+    			d++;		      			
+		    }
+		    }
 
     	mainFile.appendToBeforeMainCode("#define base(arg) arg" + CR2 );
     	mainFile.appendToBeforeMainCode("typedef struct mwmr_s mwmr_t;" + CR2);
@@ -215,6 +218,9 @@ public class TasksAndMainGenerator {
     	mainFile.appendToMainCode("pthread_attr_t *attr_t = malloc(sizeof(pthread_attr_t));" +CR);
     	mainFile.appendToMainCode("pthread_attr_init(attr_t);" + CR );
     	mainFile.appendToMainCode("pthread_mutex_init(&__mainMutex, NULL);" +CR2);       
+	 	    
+
+	}
     }
   
     public void makeSynchronousChannels() {
@@ -223,11 +229,19 @@ public class TasksAndMainGenerator {
         mainFile.appendToHCode("/* Synchronous channels */" + CR);
         mainFile.appendToBeforeMainCode("/* Synchronous channels */" + CR);
         mainFile.appendToMainCode("/* Synchronous channels */" + CR);
+
         for(AvatarRelation ar: avspec.getRelations()) {
 	    
 	if (!ar.isAsynchronous()) {
-	ar.setId(j); j++;
-		    for(i=0; i<ar.nbOfSignals() ; i++) {
+	    //ar.setId(j); 
+	    // ar.setId(i);//DG 15.05.2017 
+	    //j++;
+	    //i++; 		    
+	    for(i=0; i<ar.nbOfSignals() ; i++) {
+ar.setId(i);//DG 15.05.2017 
+//i++; 
+            ar.setId(i);//DG 15.05.2017 
+
 			mainFile.appendToHCode("extern syncchannel __" + getChannelName(ar, i) + ";" + CR);
 
 			mainFile.appendToBeforeMainCode("syncchannel __" +getChannelName(ar, i) + ";" + CR);
@@ -236,15 +250,21 @@ public class TasksAndMainGenerator {
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.wptr = 0;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
-	//DG 10.0.2 width=1??
-	//mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 1;" + CR);
+	
+	//mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 4;" + CR);
 
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 4;" + CR);
-	//DG 16.02.
-	AvatarSignal sig = ar.getSignal1(0);//DG boucle?
+
+	//DG 27.03.
+	AvatarSignal sig = ar.getSignal1(0);
         int nbParams= sig.getNbParams();	
-	//DG 23.02. if getNbParams=0 transmit 1 word
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+((nbParams*4)+4)+";" + CR);
+	//DG 9.5.
+	
+	if (nbParams>0)
+	    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);
+	else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
+
+         mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 100;" + CR);
+	//mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+((nbParams*4)+4)+";" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = " +getChannelName(ar, i)+".depth;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR2);
@@ -252,7 +272,7 @@ public class TasksAndMainGenerator {
 	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
 	mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);		
 	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
-
+	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok = 1;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok2 = 0;" + CR);
 	/* init because mutekh initializer does not work for this */		
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".status =&"+ getChannelName(ar, i)+"_status;" + CR);
 
@@ -267,22 +287,24 @@ public class TasksAndMainGenerator {
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
 		
 	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);					
-		    }
+		    
+	    }
 	}
-      }	
+	}
     }
 
     public void makeAsynchronousChannels() {
 	if (avspec.ASynchronousExist()){
-	    // Create a synchronous channel per relation/signal
+	    // Create an asynchronous channel per relation/signal
 	    mainFile.appendToHCode("/* Asynchronous channels */" + CR);
 	    mainFile.appendToBeforeMainCode("/* Asynchronous channels */" + CR);
 	    mainFile.appendToMainCode("/* Asynchronous channels */" + CR);
             int j=0;
 	    for(AvatarRelation ar: avspec.getRelations()) {
-		ar.setId(j); j++;//DG
+		//ar.setId(j); j++;//DG
 		if (ar.isAsynchronous()) {
 		    for(int i=0; i<ar.nbOfSignals() ; i++) {
+ar.setId(i); i++;//DG 15.05.2017
 			mainFile.appendToHCode("extern asyncchannel __" + getChannelName(ar, i) + ";" + CR);
 
 			mainFile.appendToBeforeMainCode("asyncchannel __" +getChannelName(ar, i) + ";" + CR);
@@ -292,10 +314,16 @@ public class TasksAndMainGenerator {
 			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
 
-			//DG 10.2. width=1??
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 1;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+"1;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = "+getChannelName(ar, i)+".depth;" + CR); //gdepth = depth for sync fifo
+			//DG 27.03. width = nbParams
+			//	mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 1;" + CR);
+			AvatarSignal sig = ar.getSignal1(0);
+			int nbParams= sig.getNbParams();
+			if (nbParams>0)
+			    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);
+			else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
+	//	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+"1;" + CR);
+	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+";" + CR);//DG 27.03.
+			mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = "+getChannelName(ar, i)+".depth;" + CR); 
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR);
 

@@ -481,8 +481,10 @@ public class AvatarBDPanel extends TDiagramPanel {
         for (TGComponent tgc: this.componentList)
             if (tgc instanceof AvatarBDStateMachineOwner) {
                 list.add ((AvatarBDStateMachineOwner) tgc);
-                if (tgc instanceof AvatarBDBlock)
+                if (tgc instanceof AvatarBDBlock) {
                     list.addAll (((AvatarBDBlock) tgc).getFullBlockList());
+                    list.addAll (((AvatarBDBlock) tgc).getFullLibraryFunctionList());
+                }
             }
 
         return list;
@@ -511,11 +513,15 @@ public class AvatarBDPanel extends TDiagramPanel {
     }
 
     public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctionsForBlock (String _name) {
-        for(AvatarBDStateMachineOwner block: getFullStateMachineOwnerList())
-            if (block.getOwnerName().equals (_name))
-                return block.getAllLibraryFunctionList ();
+        LinkedList<AvatarBDLibraryFunction> list = new LinkedList<AvatarBDLibraryFunction> ();
 
-        return null;
+        for(AvatarBDStateMachineOwner block: getFullStateMachineOwnerList())
+        {
+            if (block instanceof AvatarBDLibraryFunction)
+                list.add((AvatarBDLibraryFunction) block);
+        }
+
+        return list;
     }
 
     public TAttribute getAttributeByBlockName(String _blockName, String attributeName) {

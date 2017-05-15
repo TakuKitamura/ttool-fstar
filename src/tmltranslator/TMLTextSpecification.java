@@ -69,7 +69,7 @@ public class TMLTextSpecification {
     private boolean inDec = true;
     private boolean inTask = false;
     private boolean inTaskDec = false;
-    private boolean inTaskBehavior = false;
+  //  private boolean inTaskBehavior = false;
     private TMLTask task;
     private TMLActivityElement tmlae;
     private ArrayList<TMLParserSaveElt> parses;
@@ -155,7 +155,7 @@ public class TMLTextSpecification {
 
     private int nbOf(String _tmp, String[] array) {
         String tmp;
-        int size;
+     //   int size;
 
         for(int i=0; i<array.length; i++) {
             if (_tmp.startsWith(array[i])) {
@@ -307,12 +307,12 @@ public class TMLTextSpecification {
     }
 
     public String makeBehavior(TMLTask task, TMLActivityElement elt) {
-        String code, code1, code2;
+        String code,/* code1,*/ code2;
         TMLForLoop tmlfl;
         TMLActivityElementChannel tmlch;
         TMLActivityElementEvent tmlevt;
         TMLSendRequest tmlreq;
-        TMLEvent evt;
+       // TMLEvent evt;
         TMLRandom random;
         int i;
         String tmp1, tmp2;
@@ -415,7 +415,7 @@ public class TMLTextSpecification {
             TMLChoice choice = (TMLChoice)elt;
             code = "";
             if (choice.getNbGuard() !=0 ) {
-                code1 = "";
+               // code1 = "";
                 int index1 = choice.getElseGuard(), index2 = choice.getAfterGuard();
                 int nb = Math.max(choice.nbOfNonDeterministicGuard(), choice.nbOfStochasticGuard());
                 if (nb > 0) {
@@ -576,10 +576,10 @@ public class TMLTextSpecification {
         inDec = true;
         inTask = false;
         inTaskDec = false;
-        inTaskBehavior = false;
+       // inTaskBehavior = false;
 
 
-        String instruction;
+        //String instruction;
 
         parses = new ArrayList<TMLParserSaveElt>();
 
@@ -627,7 +627,7 @@ public class TMLTextSpecification {
         TMLRequest request;
         TMLTask t1, t2;
         TMLAttribute attribute;
-        TMLType type;
+     //   TMLType type;
         TMLStopState stop;
         TMLRandom random;
         int tmp, tmp0, tmp1, i;
@@ -1049,7 +1049,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = true;
-            inTaskBehavior = false;
+       //     inTaskBehavior = false;
 
             if (_split.length != 2) {
                 error = "A request must be declared with exactly 2 parameters, and not " + (_split.length - 1) ;
@@ -1095,7 +1095,7 @@ public class TMLTextSpecification {
             inDec = true;
             inTask = false;
             inTaskDec = false;
-            inTaskBehavior = false;
+           // inTaskBehavior = false;
 
             stop = new TMLStopState("stop", null);
             task.getActivityDiagram().addElement(stop);
@@ -1157,7 +1157,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+        //    inTaskBehavior = true;
 
             if (_split.length != 5) {
                 error = "A RANDOM operation must be declared with exactly 4 parameters, and not " + (_split.length - 1) ;
@@ -1203,7 +1203,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+         //   inTaskBehavior = true;
 
             if (_split.length != 3) {
                 error = "A READ operation must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
@@ -1253,7 +1253,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+         //   inTaskBehavior = true;
 
             if (_split.length < 3) {
                 error = "A WRITE operation must be declared with at most 3 parameters, and not " + (_split.length - 1) ;
@@ -1306,7 +1306,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+           // inTaskBehavior = true;
 
             if (_split.length < 2) {
                 error = "A NOTIFY operation must be declared with at least 2 parameters, and not " + (_split.length - 1) ;
@@ -1352,7 +1352,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+       //     inTaskBehavior = true;
 
             if (_split.length < 2) {
                 error = "A WAIT operation must be declared with at least 2 parameters, and not " + (_split.length - 1) ;
@@ -1414,7 +1414,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+          //  inTaskBehavior = true;
 
             if (_split.length != 3) {
                 error = "A NOTIFIED operation must be declared with exactly 2 parameters, and not " + (_split.length - 1) ;
@@ -1456,7 +1456,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+         //   inTaskBehavior = true;
 
             if (_split.length < 2) {
                 error = "A REQUEST operation must be declared with at least 1 parameter (request name), and not " + (_split.length - 1) ;
@@ -1502,11 +1502,11 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+         //   inTaskBehavior = true;
 
             // Extract the three elements of FOR
             String forp = _split[1];
-            String forps[];
+         //   String forps[];
             tmp0 = forp.indexOf('(');
             tmp1 = forp.lastIndexOf(')');
             if ((tmp0 == -1) || (tmp1 == -1)) {
@@ -1566,7 +1566,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+      //      inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -1606,7 +1606,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+         //   inTaskBehavior = true;
 
             parseElt = new TMLParserSaveElt();
             parseElt.type = TMLParserSaveElt.SELECTEVT;
@@ -1633,7 +1633,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+        //    inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -1676,7 +1676,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+         //   inTaskBehavior = true;
 
             if(_split.length < 2) {
                 error = "A CASE must have at least two parameters";
@@ -1729,7 +1729,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+    //        inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -1767,7 +1767,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+        //    inTaskBehavior = true;
 
             parseElt = new TMLParserSaveElt();
             parseElt.type = TMLParserSaveElt.RANDOMSEQ;
@@ -1794,7 +1794,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+         //   inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -1838,7 +1838,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+         //   inTaskBehavior = true;
 
             if(_split.length >1 ) {
                 error = "A SEQ has no parameter";
@@ -1878,7 +1878,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+          //  inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -1916,7 +1916,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+       //     inTaskBehavior = true;
 
             parseElt = new TMLParserSaveElt();
             parseElt.type = TMLParserSaveElt.RAND;
@@ -1943,7 +1943,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+       //     inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -1986,7 +1986,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+     //       inTaskBehavior = true;
 
             if(_split.length != 2) {
                 error = "A CASERAND should have one parameter";
@@ -2029,7 +2029,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+       //     inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -2067,7 +2067,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+       //     inTaskBehavior = true;
 
             String cond = _split[1].trim();
             tmp0 = cond.indexOf('(');
@@ -2116,7 +2116,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+       //     inTaskBehavior = true;
 
 
             String cond = _split[1].trim();
@@ -2180,7 +2180,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+       //     inTaskBehavior = true;
 
             if (parses.size() == 0) {
                 error = "ELSE: badly placed instruction.";
@@ -2221,7 +2221,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+        //    inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -2256,7 +2256,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+       //     inTaskBehavior = true;
 
             if ((_split.length < 2) ||(_split.length > 4)) {
                 error = "An EXECI operation must be declared with 1 or 2 parameters, and not " + (_split.length - 1) ;
@@ -2292,7 +2292,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+      //     inTaskBehavior = true;
 
             if ((_split.length < 2) ||(_split.length > 4)) {
                 error = "An EXECC operation must be declared with 1 or 2 parameters, and not " + (_split.length - 1) ;
@@ -2328,7 +2328,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+     //       inTaskBehavior = true;
 
             if ((_split.length < 3) ||(_split.length > 5)) {
                 error = "A DELAY operation must be declared with 2 or 3 parameters, and not " + (_split.length - 1) ;
@@ -2380,7 +2380,7 @@ public class TMLTextSpecification {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-            inTaskBehavior = true;
+       //     inTaskBehavior = true;
 
             TMLActionState action = new TMLActionState(_split[0], null);
             action.setAction(_line);
@@ -2555,7 +2555,7 @@ public class TMLTextSpecification {
 
     public String removeUndesiredWhiteSpaces(String _input, int _lineNb) {
         String error, tmp;
-        int index0, index1, index2;
+        int index0, index1;//, index2;
 
         if (_input.startsWith("EVENT ")) {
             index0 = _input.indexOf('(');

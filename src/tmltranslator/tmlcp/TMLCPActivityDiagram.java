@@ -48,20 +48,18 @@ package tmltranslator.tmlcp;
 
 import java.util.*;
 import tmltranslator.*;
-import myutil.*;
-//import compiler.tmlCPparser.myexceptions.*;
 
 public class TMLCPActivityDiagram  extends TMLElement {
 
     private TMLCPStart start;
-    private ArrayList<TMLCPElement> elements; // Including the start element
+    private List<TMLCPElement> elements; // Including the start element
     //private ArrayList<TMLAttribute> globalVariables;
 
-    private ArrayList<String> ads;      //a list of the activity diagrams declared in a section (for parsing of text)
-    private ArrayList<String> sds;      //a list of the sequence diagrams declated in a section (for parsing of text)
+    private List<String> ads;      //a list of the activity diagrams declared in a section (for parsing of text)
+    private List<String> sds;      //a list of the sequence diagrams declated in a section (for parsing of text)
 
-    private int hashCode;
-    private boolean hashCodeComputed = false;
+//    private int hashCode;
+//    private boolean hashCodeComputed = false;
 
 
     /*private boolean definedVariable( TMLAttribute _var )        {
@@ -179,13 +177,13 @@ public class TMLCPActivityDiagram  extends TMLElement {
       //The variable trying to be initialized was not declared
       }*/
 
-    public ArrayList<TMLCPElement> getElements() {
+    public List<TMLCPElement> getElements() {
         return elements;
     }
 
-		public void addElements( ArrayList<TMLCPElement> _nexts )	{
-			elements = new ArrayList<TMLCPElement>( _nexts );
-		}
+	public void addElements( List<TMLCPElement> _nexts )	{
+		elements = new ArrayList<TMLCPElement>( _nexts );
+	}
 
 		/*public void addElement( TMLCPElement _elem )	{
 			elements.add( _elem );
@@ -208,11 +206,11 @@ public class TMLCPActivityDiagram  extends TMLElement {
       return globalVariables;
       }*/
 
-    public ArrayList<String> getADlist()        {
+    public List<String> getADlist()        {
         return ads;
     }
 
-    public ArrayList<String> getSDlist()        {
+    public List<String> getSDlist()        {
         return sds;
     }
 
@@ -248,8 +246,8 @@ public class TMLCPActivityDiagram  extends TMLElement {
 
         String tempString;
 
-        ArrayList<TMLCPActivityDiagram> activityList = _refTopCP.getCPActivityDiagrams();
-        ArrayList<TMLCPSequenceDiagram> sequenceList = _refTopCP.getCPSequenceDiagrams();
+        List<TMLCPActivityDiagram> activityList = _refTopCP.getCPActivityDiagrams();
+        List<TMLCPSequenceDiagram> sequenceList = _refTopCP.getCPSequenceDiagrams();
 
         for(TMLCPElement tempElem: elements)  {
 
@@ -348,7 +346,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
 
             // Replacing next to junction by new refs
             int index;
-            int ID = 0;
+           // int ID = 0;
             for(TMLCPElement elt: elements) {
                 while(((index = elt.getNextElements().indexOf(junction)) != -1)) {
                     //TMLCPRefAD ref = new TMLCPRefAD(toAD, toAD.getName() + "_" + ID, junction.getReferenceObject());
@@ -376,7 +374,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
          }
 
         // Moving elements from old AD to split ADs
-        int cpt = 0;
+        //int cpt = 0;
         for(TMLCPJunction junction: junctions) {
             diag = refs.get(junction);
             //TMLCPRefAD refAD = refsAD.get(cpt);
@@ -398,7 +396,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
         return refs.values();
     }
 
-    private void addElementsFromJunction(TMLCPElement originInOld, TMLCPElement originInNew, TMLCPActivityDiagram newDiag, HashMap<TMLCPJunction, TMLCPActivityDiagram> refs, ArrayList<TMLCPElement> toBeRemoved) {
+    private void addElementsFromJunction(TMLCPElement originInOld, TMLCPElement originInNew, TMLCPActivityDiagram newDiag, Map<TMLCPJunction, TMLCPActivityDiagram> refs, List<TMLCPElement> toBeRemoved) {
         if (originInOld.getNextElements() == null) {
             return;
         }
@@ -427,82 +425,84 @@ public class TMLCPActivityDiagram  extends TMLElement {
 
 
     public TMLCPElement getNonConnectedElement() {
-	// Starting from Start state ... reaching all elements
-	// Then, see elements which are not in the reachable ones
-	if (start == null) {
-	    return null;
-	}
-
-	ArrayList<TMLCPElement> reached = new ArrayList<TMLCPElement>();
+		// Starting from Start state ... reaching all elements
+		// Then, see elements which are not in the reachable ones
+		if (start == null) {
+		    return null;
+		}
 	
-	computeReachableElements(start, reached);
-
-	// Find elements which were not reached
-	for(TMLCPElement elt: elements) {
-	    if (!(reached.contains(elt))) {
-		return elt;
-	    }
-	}
-	return null;
+		List<TMLCPElement> reached = new ArrayList<TMLCPElement>();
+		
+		computeReachableElements(start, reached);
+	
+		// Find elements which were not reached
+		for(TMLCPElement elt: elements) {
+		    if (!(reached.contains(elt))) {
+			return elt;
+		    }
+		}
+		return null;
     }
 
-    public LinkedList<TMLCPElement> getAllNonConnectedElements() {
-	// Starting from Start state ... reaching all elements
-	// Then, see elements which are not in the reachable ones
-	if (start == null) {
-	    return null;
-	}
-
-	LinkedList<TMLCPElement> list = new LinkedList<TMLCPElement>();
-	ArrayList<TMLCPElement> reached = new ArrayList<TMLCPElement>();
+    public List<TMLCPElement> getAllNonConnectedElements() {
+		// Starting from Start state ... reaching all elements
+		// Then, see elements which are not in the reachable ones
+		if (start == null) {
+		    return null;
+		}
 	
-	computeReachableElements(start, reached);
-
-	// Find elements which were not reached
-	for(TMLCPElement elt: elements) {
-	    if (!(reached.contains(elt))) {
-		list.add(elt);
-	    }
-	}
-	return list;
+		LinkedList<TMLCPElement> list = new LinkedList<TMLCPElement>();
+		ArrayList<TMLCPElement> reached = new ArrayList<TMLCPElement>();
+		
+		computeReachableElements(start, reached);
+	
+		// Find elements which were not reached
+		for(TMLCPElement elt: elements) {
+		    if (!(reached.contains(elt))) {
+			list.add(elt);
+		    }
+		}
+		return list;
     }
 
-    public LinkedList<TMLCPElement> removeAllNonConnectedElements() {
-	// Starting from Start state ... reaching all elements
-	// Then, see elements which are not in the reachable ones
-	if (start == null) {
-	    return null;
-	}
-
-	LinkedList<TMLCPElement> list = new LinkedList<TMLCPElement>();
-	ArrayList<TMLCPElement> reached = new ArrayList<TMLCPElement>();
+    public List<TMLCPElement> removeAllNonConnectedElements() {
+		// Starting from Start state ... reaching all elements
+		// Then, see elements which are not in the reachable ones
+		if (start == null) {
+		    return null;
+		}
 	
-	computeReachableElements(start, reached);
-
-	// Find elements which were not reached
-	for(TMLCPElement elt: elements) {
-	    if (!(reached.contains(elt))) {
-		list.add(elt);
-	    }
-	}
-
-	for(TMLCPElement elt: list) {
-	    elements.remove(elt);
-	}
+		List<TMLCPElement> list = new LinkedList<TMLCPElement>();
+		List<TMLCPElement> reached = new ArrayList<TMLCPElement>();
+		
+		computeReachableElements(start, reached);
 	
-	return list;
+		// Find elements which were not reached
+		for(TMLCPElement elt: elements) {
+		    if (!(reached.contains(elt))) {
+			list.add(elt);
+		    }
+		}
+	
+		for(TMLCPElement elt: list) {
+		    elements.remove(elt);
+		}
+		
+		return list;
     }
 
-    private void computeReachableElements(TMLCPElement _elt, ArrayList<TMLCPElement> _reached) {
-	if (_reached.contains(_elt)) {
-	    return;
-	}
-
-	_reached.add(_elt);
-
-	for(TMLCPElement elt: _elt.getNextElements()) {
-	    computeReachableElements(_elt, _reached);
-	}
+    private void computeReachableElements(TMLCPElement _elt, List<TMLCPElement> _reached) {
+		if (_reached.contains(_elt)) {
+		    return;
+		}
+	
+		_reached.add(_elt);
+	
+		// Issue #38 found while cleaning code
+		for(TMLCPElement elt : _elt.getNextElements()) {
+		    computeReachableElements( elt, _reached );
+//		    computeReachableElements(_elt, _reached);
+		}
     }
 
     public String toString() {

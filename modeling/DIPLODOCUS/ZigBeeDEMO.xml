@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<TURTLEGMODELING version="0.98-beta4">
+<TURTLEGMODELING version="0.99-beta2">
 
 <Modeling type="Diplodocus Methodology" nameTab="DIPLODOCUS_Methodology" >
 <DiplodocusMethodologyDiagramPanel name="DIPLODOCUS_Methodology" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
@@ -488,7 +488,7 @@
 <cdparam x="53" y="97" />
 <sizeparam width="345" height="43" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="10" minY="0" maxY="7" />
+<cdrectangleparam minX="0" maxX="9" minY="0" maxY="6" />
 <infoparam name="UML Note" value="In this model THE PARAMETER SIZE
 IS NOT MODIFIED according to the
 operations performed by the
@@ -522,7 +522,7 @@ processing tasks
 <cdparam x="1736" y="272" />
 <sizeparam width="17" height="17" minWidth="10" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="10" minY="0" maxY="7" />
+<cdrectangleparam minX="0" maxX="9" minY="0" maxY="6" />
 <infoparam name="Composite port" value="J" />
 <TGConnectingPoint num="0" id="97" />
 <TGConnectingPoint num="1" id="98" />
@@ -545,7 +545,7 @@ processing tasks
 <cdparam x="1279" y="292" />
 <sizeparam width="17" height="17" minWidth="10" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="10" minY="0" maxY="7" />
+<cdrectangleparam minX="0" maxX="9" minY="0" maxY="6" />
 <infoparam name="Composite port" value="F" />
 <TGConnectingPoint num="0" id="113" />
 <TGConnectingPoint num="1" id="114" />
@@ -568,7 +568,7 @@ processing tasks
 <cdparam x="25" y="216" />
 <sizeparam width="232" height="256" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="10" minY="0" maxY="7" />
+<cdrectangleparam minX="0" maxX="9" minY="0" maxY="6" />
 <infoparam name="Composite component" value="Source" />
 <TGConnectingPoint num="0" id="155" />
 <TGConnectingPoint num="1" id="156" />
@@ -610,7 +610,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request source_req" />
 <TGConnectingPoint num="0" id="129" />
 <extraparam>
-<Prop commName="source_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="source_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -627,7 +627,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event Source_evt_out" />
 <TGConnectingPoint num="0" id="131" />
 <extraparam>
-<Prop commName="Source_evt_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="Source_evt_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -663,7 +663,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request source_req" />
 <TGConnectingPoint num="0" id="142" />
 <extraparam>
-<Prop commName="source_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="source_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -680,7 +680,7 @@ processing tasks
 <infoparam name="Primitive port" value="Channel Source_ch_out" />
 <TGConnectingPoint num="0" id="144" />
 <extraparam>
-<Prop commName="Source_ch_out" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="true" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="Source_evt_out" />
+<Prop commName="Source_ch_out" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="true" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="Source_evt_out" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -693,7 +693,7 @@ processing tasks
 <cdparam x="336" y="218" />
 <sizeparam width="232" height="256" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="10" minY="0" maxY="7" />
+<cdrectangleparam minX="0" maxX="9" minY="0" maxY="6" />
 <infoparam name="Composite component" value="Symbol2ChipSeq" />
 <TGConnectingPoint num="0" id="194" />
 <TGConnectingPoint num="1" id="195" />
@@ -735,7 +735,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request bit2chip_req" />
 <TGConnectingPoint num="0" id="164" />
 <extraparam>
-<Prop commName="bit2chip_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="bit2chip_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -752,7 +752,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event bit2symbol_evt_in" />
 <TGConnectingPoint num="0" id="166" />
 <extraparam>
-<Prop commName="bit2symbol_evt_in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" />
+<Prop commName="bit2symbol_evt_in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -769,7 +769,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event bit2symbol_evt_out" />
 <TGConnectingPoint num="0" id="168" />
 <extraparam>
-<Prop commName="bit2symbol_evt_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" />
+<Prop commName="bit2symbol_evt_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -805,7 +805,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request bit2chip_req" />
 <TGConnectingPoint num="0" id="179" />
 <extraparam>
-<Prop commName="bit2chip_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="bit2chip_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -822,7 +822,7 @@ processing tasks
 <infoparam name="Primitive port" value="Channel symbol2ChipSeq_ch_in" />
 <TGConnectingPoint num="0" id="181" />
 <extraparam>
-<Prop commName="symbol2ChipSeq_ch_in" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="bit2chip_evt_in" />
+<Prop commName="symbol2ChipSeq_ch_in" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="bit2chip_evt_in" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -839,7 +839,7 @@ processing tasks
 <infoparam name="Primitive port" value="Channel symbol2ChipSeq_ch_out" />
 <TGConnectingPoint num="0" id="183" />
 <extraparam>
-<Prop commName="symbol2ChipSeq_ch_out" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="bit2chip_evt_out" />
+<Prop commName="symbol2ChipSeq_ch_out" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="bit2chip_evt_out" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -852,7 +852,7 @@ processing tasks
 <cdparam x="672" y="222" />
 <sizeparam width="232" height="256" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="10" minY="0" maxY="7" />
+<cdrectangleparam minX="0" maxX="9" minY="0" maxY="6" />
 <infoparam name="Composite component" value="Chip_to_Octet" />
 <TGConnectingPoint num="0" id="233" />
 <TGConnectingPoint num="1" id="234" />
@@ -894,7 +894,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request chip2octet_req" />
 <TGConnectingPoint num="0" id="203" />
 <extraparam>
-<Prop commName="chip2octet_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="chip2octet_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -911,7 +911,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event chip2octet_evt_in" />
 <TGConnectingPoint num="0" id="205" />
 <extraparam>
-<Prop commName="chip2octet_evt_in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="chip2octet_evt_in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -928,7 +928,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event chip2octet_evt_out" />
 <TGConnectingPoint num="0" id="207" />
 <extraparam>
-<Prop commName="chip2octet_evt_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" />
+<Prop commName="chip2octet_evt_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -964,7 +964,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request chip2octet_req" />
 <TGConnectingPoint num="0" id="218" />
 <extraparam>
-<Prop commName="chip2octet_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="chip2octet_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -981,7 +981,7 @@ processing tasks
 <infoparam name="Primitive port" value="Channel chip2octet_ch_in" />
 <TGConnectingPoint num="0" id="220" />
 <extraparam>
-<Prop commName="chip2octet_ch_in" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="chip2octet_evt_in" />
+<Prop commName="chip2octet_ch_in" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="chip2octet_evt_in" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -998,7 +998,7 @@ processing tasks
 <infoparam name="Primitive port" value="Channel chip2octet_ch_out" />
 <TGConnectingPoint num="0" id="222" />
 <extraparam>
-<Prop commName="chip2octet_ch_out" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="chip2octet_evt_out" />
+<Prop commName="chip2octet_ch_out" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="chip2octet_evt_out" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1011,7 +1011,7 @@ processing tasks
 <cdparam x="1003" y="223" />
 <sizeparam width="232" height="256" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="10" minY="0" maxY="7" />
+<cdrectangleparam minX="0" maxX="9" minY="0" maxY="6" />
 <infoparam name="Composite component" value="CWL" />
 <TGConnectingPoint num="0" id="274" />
 <TGConnectingPoint num="1" id="275" />
@@ -1053,7 +1053,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event cwl_evt_out_1" />
 <TGConnectingPoint num="0" id="242" />
 <extraparam>
-<Prop commName="cwl_evt_out_1" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" />
+<Prop commName="cwl_evt_out_1" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1070,7 +1070,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request cwl_req" />
 <TGConnectingPoint num="0" id="244" />
 <extraparam>
-<Prop commName="cwl_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwl_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1087,7 +1087,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event cwl_evt_out" />
 <TGConnectingPoint num="0" id="246" />
 <extraparam>
-<Prop commName="cwl_evt_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" />
+<Prop commName="cwl_evt_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1104,7 +1104,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event cwl_evt_in" />
 <TGConnectingPoint num="0" id="248" />
 <extraparam>
-<Prop commName="cwl_evt_in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwl_evt_in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1140,7 +1140,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request cwl_req" />
 <TGConnectingPoint num="0" id="259" />
 <extraparam>
-<Prop commName="cwl_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwl_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1157,7 +1157,7 @@ processing tasks
 <infoparam name="Primitive port" value="Channel cwl_ch_out" />
 <TGConnectingPoint num="0" id="261" />
 <extraparam>
-<Prop commName="cwl_ch_out" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="cwl_evt_out" />
+<Prop commName="cwl_ch_out" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="cwl_evt_out" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1174,7 +1174,7 @@ processing tasks
 <infoparam name="Primitive port" value="Channel cwl_ch_in" />
 <TGConnectingPoint num="0" id="263" />
 <extraparam>
-<Prop commName="cwl_ch_in" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="cwl_evt_in" />
+<Prop commName="cwl_ch_in" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="cwl_evt_in" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1187,7 +1187,7 @@ processing tasks
 <cdparam x="1827" y="201" />
 <sizeparam width="232" height="261" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="10" minY="0" maxY="7" />
+<cdrectangleparam minX="0" maxX="9" minY="0" maxY="6" />
 <infoparam name="Composite component" value="Sink" />
 <TGConnectingPoint num="0" id="311" />
 <TGConnectingPoint num="1" id="312" />
@@ -1230,7 +1230,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event sink_evt_in_1" />
 <TGConnectingPoint num="0" id="283" />
 <extraparam>
-<Prop commName="sink_evt_in_1" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" />
+<Prop commName="sink_evt_in_1" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1247,7 +1247,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request sink_req" />
 <TGConnectingPoint num="0" id="285" />
 <extraparam>
-<Prop commName="sink_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="sink_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1264,7 +1264,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event sink_evt_in" />
 <TGConnectingPoint num="0" id="287" />
 <extraparam>
-<Prop commName="sink_evt_in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" />
+<Prop commName="sink_evt_in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1300,7 +1300,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request sink_req" />
 <TGConnectingPoint num="0" id="298" />
 <extraparam>
-<Prop commName="sink_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="sink_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1317,7 +1317,7 @@ processing tasks
 <infoparam name="Primitive port" value="Channel sink_ch_in" />
 <TGConnectingPoint num="0" id="300" />
 <extraparam>
-<Prop commName="sink_ch_in" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="true" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="sink_evt_in" />
+<Prop commName="sink_ch_in" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="true" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="sink_evt_in" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1330,7 +1330,7 @@ processing tasks
 <cdparam x="1374" y="347" />
 <sizeparam width="232" height="256" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="10" minY="0" maxY="7" />
+<cdrectangleparam minX="0" maxX="9" minY="0" maxY="6" />
 <infoparam name="Composite component" value="CWP_Q" />
 <TGConnectingPoint num="0" id="350" />
 <TGConnectingPoint num="1" id="351" />
@@ -1372,7 +1372,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request cwpQ_req" />
 <TGConnectingPoint num="0" id="320" />
 <extraparam>
-<Prop commName="cwpQ_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwpQ_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1389,7 +1389,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event cwpQ_evt_in" />
 <TGConnectingPoint num="0" id="322" />
 <extraparam>
-<Prop commName="cwpQ_evt_in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwpQ_evt_in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1406,7 +1406,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event cwpQ_evt_out" />
 <TGConnectingPoint num="0" id="324" />
 <extraparam>
-<Prop commName="cwpQ_evt_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwpQ_evt_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1442,7 +1442,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request cwpQ_req" />
 <TGConnectingPoint num="0" id="335" />
 <extraparam>
-<Prop commName="cwpQ_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwpQ_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1459,7 +1459,7 @@ processing tasks
 <infoparam name="Primitive port" value="Channel cwpQ_ch_in" />
 <TGConnectingPoint num="0" id="337" />
 <extraparam>
-<Prop commName="cwpQ_ch_in" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" />
+<Prop commName="cwpQ_ch_in" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1476,7 +1476,7 @@ processing tasks
 <infoparam name="Primitive port" value="Channel cwpQ_ch_out" />
 <TGConnectingPoint num="0" id="339" />
 <extraparam>
-<Prop commName="cwpQ_ch_out" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" />
+<Prop commName="cwpQ_ch_out" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1489,7 +1489,7 @@ processing tasks
 <cdparam x="1372" y="19" />
 <sizeparam width="232" height="256" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="10" minY="0" maxY="7" />
+<cdrectangleparam minX="0" maxX="9" minY="0" maxY="6" />
 <infoparam name="Composite component" value="CWP_I" />
 <TGConnectingPoint num="0" id="427" />
 <TGConnectingPoint num="1" id="428" />
@@ -1531,7 +1531,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request cwpI_req" />
 <TGConnectingPoint num="0" id="359" />
 <extraparam>
-<Prop commName="cwpI_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwpI_req" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1548,7 +1548,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event cwpI_evt_in" />
 <TGConnectingPoint num="0" id="361" />
 <extraparam>
-<Prop commName="cwpI_evt_in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwpI_evt_in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1565,7 +1565,7 @@ processing tasks
 <infoparam name="Primitive port" value="Event cwpI_evt_out" />
 <TGConnectingPoint num="0" id="363" />
 <extraparam>
-<Prop commName="cwpI_evt_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwpI_evt_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1601,7 +1601,7 @@ processing tasks
 <infoparam name="Primitive port" value="Request cwpI_req" />
 <TGConnectingPoint num="0" id="374" />
 <extraparam>
-<Prop commName="cwpI_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwpI_req" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1618,7 +1618,7 @@ processing tasks
 <infoparam name="Primitive port" value="Channel cwpI_ch_in" />
 <TGConnectingPoint num="0" id="376" />
 <extraparam>
-<Prop commName="cwpI_ch_in" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" />
+<Prop commName="cwpI_ch_in" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1635,7 +1635,7 @@ processing tasks
 <infoparam name="Primitive port" value="Channel cwpI_ch_out" />
 <TGConnectingPoint num="0" id="378" />
 <extraparam>
-<Prop commName="cwpI_ch_out" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" />
+<Prop commName="cwpI_ch_out" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1736,7 +1736,7 @@ processing tasks
 <TGConnectingPoint num="0" id="442" />
 <TGConnectingPoint num="1" id="443" />
 <extraparam>
-<Data channelName="Source_ch_out" nbOfSamples="size" />
+<Data channelName="Source_ch_out" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -1918,7 +1918,7 @@ processing tasks
 <TGConnectingPoint num="0" id="475" />
 <TGConnectingPoint num="1" id="476" />
 <extraparam>
-<Data channelName="symbol2ChipSeq_ch_in" nbOfSamples="size" />
+<Data channelName="symbol2ChipSeq_ch_in" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -1940,7 +1940,7 @@ processing tasks
 <TGConnectingPoint num="0" id="480" />
 <TGConnectingPoint num="1" id="481" />
 <extraparam>
-<Data channelName="symbol2ChipSeq_ch_out" nbOfSamples="size" />
+<Data channelName="symbol2ChipSeq_ch_out" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -2135,7 +2135,7 @@ processing tasks
 <TGConnectingPoint num="0" id="514" />
 <TGConnectingPoint num="1" id="515" />
 <extraparam>
-<Data channelName="chip2octet_ch_in" nbOfSamples="size" />
+<Data channelName="chip2octet_ch_in" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -2157,7 +2157,7 @@ processing tasks
 <TGConnectingPoint num="0" id="519" />
 <TGConnectingPoint num="1" id="520" />
 <extraparam>
-<Data channelName="chip2octet_ch_out" nbOfSamples="size" />
+<Data channelName="chip2octet_ch_out" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -2351,7 +2351,7 @@ processing tasks
 <TGConnectingPoint num="0" id="553" />
 <TGConnectingPoint num="1" id="554" />
 <extraparam>
-<Data channelName="cwl_ch_in" nbOfSamples="size" />
+<Data channelName="cwl_ch_in" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -2373,7 +2373,7 @@ processing tasks
 <TGConnectingPoint num="0" id="558" />
 <TGConnectingPoint num="1" id="559" />
 <extraparam>
-<Data channelName="cwl_ch_out" nbOfSamples="size" />
+<Data channelName="cwl_ch_out" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -2589,7 +2589,7 @@ processing tasks
 <TGConnectingPoint num="0" id="596" />
 <TGConnectingPoint num="1" id="597" />
 <extraparam>
-<Data channelName="sink_ch_in" nbOfSamples="size" />
+<Data channelName="sink_ch_in" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -2784,7 +2784,7 @@ processing tasks
 <TGConnectingPoint num="0" id="631" />
 <TGConnectingPoint num="1" id="632" />
 <extraparam>
-<Data channelName="cwpQ_ch_in" nbOfSamples="size" />
+<Data channelName="cwpQ_ch_in" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -2806,7 +2806,7 @@ processing tasks
 <TGConnectingPoint num="0" id="636" />
 <TGConnectingPoint num="1" id="637" />
 <extraparam>
-<Data channelName="cwpQ_ch_out" nbOfSamples="size" />
+<Data channelName="cwpQ_ch_out" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -3000,7 +3000,7 @@ processing tasks
 <TGConnectingPoint num="0" id="670" />
 <TGConnectingPoint num="1" id="671" />
 <extraparam>
-<Data channelName="cwpI_ch_in" nbOfSamples="size" />
+<Data channelName="cwpI_ch_in" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -3022,7 +3022,7 @@ processing tasks
 <TGConnectingPoint num="0" id="675" />
 <TGConnectingPoint num="1" id="676" />
 <extraparam>
-<Data channelName="cwpI_ch_out" nbOfSamples="size" />
+<Data channelName="cwpI_ch_out" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -7024,7 +7024,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3052" />
 <extraparam>
 <info stereotype="CPURR" nodeName="INTL_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -7060,7 +7060,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3077" />
 <extraparam>
 <info stereotype="CPURR" nodeName="ADAIF_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -7132,7 +7132,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3127" />
 <extraparam>
 <info stereotype="CPURR" nodeName="ADAIF_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="4"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="4" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -7240,7 +7240,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3202" />
 <extraparam>
 <info stereotype="CPURR" nodeName="MainCPU" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -7456,7 +7456,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3352" />
 <extraparam>
 <info stereotype="CPURR" nodeName="INTL_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="2"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="2" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -7564,7 +7564,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3427" />
 <extraparam>
 <info stereotype="CPURR" nodeName="FEP_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -7636,7 +7636,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3477" />
 <extraparam>
 <info stereotype="CPURR" nodeName="FEP_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="2" execcTime="1" clockRatio="1" MECType="1"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="2" execcTime="1" clockRatio="1" MECType="1" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -7744,7 +7744,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3552" />
 <extraparam>
 <info stereotype="CPURR" nodeName="MAPPER_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -7852,7 +7852,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3627" />
 <extraparam>
 <info stereotype="CPURR" nodeName="MAPPER_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="3"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="3" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -7901,6 +7901,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3655" >
@@ -7912,6 +7913,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3656" >
@@ -7923,6 +7925,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3657" >
@@ -7934,6 +7937,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3658" >
@@ -7945,6 +7949,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3659" >
@@ -7956,6 +7961,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3660" >
@@ -7967,6 +7973,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3661" >
@@ -7978,6 +7985,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3662" >
@@ -7989,6 +7997,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3663" >
@@ -8000,6 +8009,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3664" >
@@ -8011,6 +8021,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3665" >
@@ -8022,6 +8033,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3666" >
@@ -8033,6 +8045,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3667" >
@@ -8044,6 +8057,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3668" >
@@ -8055,6 +8069,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3669" >
@@ -8066,6 +8081,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3670" >
@@ -8077,6 +8093,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3671" >
@@ -8088,6 +8105,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3672" >
@@ -8099,6 +8117,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3673" >
@@ -8110,6 +8129,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3674" >
@@ -8121,6 +8141,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3675" >
@@ -8132,6 +8153,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3676" >
@@ -8143,6 +8165,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3677" >
@@ -8154,6 +8177,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3678" >
@@ -8165,6 +8189,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3679" >
@@ -8176,6 +8201,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3680" >
@@ -8187,6 +8213,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="3681" >
@@ -8198,6 +8225,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 
@@ -8242,7 +8270,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3705" />
 <extraparam>
 <info stereotype="CPURR" nodeName="INTL_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -8278,7 +8306,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3730" />
 <extraparam>
 <info stereotype="CPURR" nodeName="ADAIF_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -8350,7 +8378,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3789" />
 <extraparam>
 <info stereotype="CPURR" nodeName="ADAIF_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="4"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="4" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="3765" >
@@ -8477,7 +8505,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="3936" />
 <extraparam>
 <info stereotype="CPURR" nodeName="MainCPU" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="3849" >
@@ -8845,7 +8873,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="4095" />
 <extraparam>
 <info stereotype="CPURR" nodeName="INTL_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="2"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="2" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="4071" >
@@ -8972,7 +9000,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="4170" />
 <extraparam>
 <info stereotype="CPURR" nodeName="FEP_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -9044,7 +9072,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="4247" />
 <extraparam>
 <info stereotype="CPURR" nodeName="FEP_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="2" execcTime="1" clockRatio="1" MECType="1"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="2" execcTime="1" clockRatio="1" MECType="1" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="4205" >
@@ -9209,7 +9237,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="4322" />
 <extraparam>
 <info stereotype="CPURR" nodeName="MAPPER_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -9317,7 +9345,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="4406" />
 <extraparam>
 <info stereotype="CPURR" nodeName="MAPPER_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="3"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="3" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="4382" >
@@ -9391,19 +9419,8 @@ sequence diagram.
 <TGConnectingPoint num="6" id="4448" />
 <TGConnectingPoint num="7" id="4449" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_Symbol2ChipSeq_Chips2Octet" cpMEC="Single DMA" transferType1="0" transferType2="0" />
-<attributes reference="DMA_transfer" />
-<mappingInfo CPname="DMA_transfer" instanceName="Src_Storage_Instance_1" architectureUnit="MAPPER_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="Dst_Storage_Instance_1" architectureUnit="INTL_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="CPU_Controller_1" architectureUnit="MainCPU" />
-<mappingInfo CPname="DMA_transfer" instanceName="DMA_Controller_1" architectureUnit="MAPPER_DMA" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="MainBus, MainBridge, Crossbar" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="MainBus, MainBridge, Crossbar, MAPPER_Bridge, MAPPER_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="MAPPER_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="Crossbar, INTL_Bridge, INTL_Bus, MAPPER_Bridge, MAPPER_Bus" />
-<mappedAttributes type="int" name="destinationAddress" value="123" />
-<mappedAttributes type="int" name="sourceAddress" value="123" />
-<mappedAttributes type="int" name="counter" value="123" />
+<info stereotype="CP" nodeName="CP_Symbol2ChipSeq_Chips2Octet" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="4441" >
@@ -9441,16 +9458,8 @@ sequence diagram.
 <TGConnectingPoint num="6" id="4466" />
 <TGConnectingPoint num="7" id="4467" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_Chip2Octet_CWL" cpMEC="Single DMA" transferType1="0" transferType2="0" />
-<attributes reference="DMA_transfer" />
-<mappingInfo CPname="DMA_transfer" instanceName="DMA_Controller_1" architectureUnit="INTL_DMA" />
-<mappingInfo CPname="DMA_transfer" instanceName="Src_Storage_Instance_1" architectureUnit="INTL_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="Dst_Storage_Instance_1" architectureUnit="FEP_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="CPU_Controller_1" architectureUnit="MainCPU" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="INTL_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="Crossbar, INTL_Bridge, INTL_Bus, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="MainBus, MainBridge, Crossbar, INTL_Bridge, INTL_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="MainBus, MainBridge, Crossbar, INTL_Bridge, INTL_Bus" />
+<info stereotype="CP" nodeName="CP_Chip2Octet_CWL" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="4459" >
@@ -9488,24 +9497,8 @@ sequence diagram.
 <TGConnectingPoint num="6" id="4484" />
 <TGConnectingPoint num="7" id="4485" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_sink" cpMEC="Double DMA" transferType1="0" transferType2="0" />
-<attributes reference="Double_DMA_transfer" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Src_Storage_Instance_1" architectureUnit="FEP_MSS" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Src_Storage_Instance_2" architectureUnit="FEP_MSS" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="DMA_Controller_1" architectureUnit="FEP_DMA" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="DMA_Controller_2" architectureUnit="FEP_DMA" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Dst_Storage_Instance_2" architectureUnit="ADAIF_MSS" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Dst_Storage_Instance_1" architectureUnit="ADAIF_MSS" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="CPU_Controller_1" architectureUnit="MainCPU" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="CPU_Controller_2" architectureUnit="MainCPU" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_6" architectureUnit="FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="MainBus, MainBridge, Crossbar, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="MainBus, MainBridge, Crossbar, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_5" architectureUnit="MainBus, MainBridge, Crossbar, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_8" architectureUnit="MainBus, MainBridge, Crossbar, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="ADAIF_Bridge, Crossbar, ADAIF_Bus, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_7" architectureUnit="ADAIF_Bridge, Crossbar, ADAIF_Bus, FEP_Bridge, FEP_Bus" />
+<info stereotype="CP" nodeName="CP_sink" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="4477" >
@@ -9543,15 +9536,8 @@ sequence diagram.
 <TGConnectingPoint num="6" id="4502" />
 <TGConnectingPoint num="7" id="4503" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_Source_to_Bits2Symbol" cpMEC="Memory Copy" transferType1="0" transferType2="0" />
-<attributes reference="CP_Memory_Copy" />
-<mappingInfo CPname="CP_Memory_Copy" instanceName="Dst_Storage_Instance" architectureUnit="MAPPER_MSS" />
-<mappingInfo CPname="CP_Memory_Copy" instanceName="Src_Storage_Instance" architectureUnit="DDR" />
-<mappingInfo CPname="CP_Memory_Copy" instanceName="CPU_Controller" architectureUnit="MainCPU" />
-<mappingInfo CPname="CP_Memory_Copy" instanceName="Transfer_Instance_1" architectureUnit="MainBus" />
-<mappingInfo CPname="CP_Memory_Copy" instanceName="Transfer_Instance2" architectureUnit="MainBus, MainBridge, Crossbar, MAPPER_Bridge, MAPPER_Bus" />
-<mappedAttributes type="addr" name="sourceAddress" value="0x123" />
-<mappedAttributes type="addr" name="destinationAddress" value="0x456" />
+<info stereotype="CP" nodeName="CP_Source_to_Bits2Symbol" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="4495" >
@@ -9583,6 +9569,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4506" >
@@ -9594,6 +9581,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4507" >
@@ -9605,6 +9593,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4508" >
@@ -9616,6 +9605,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4509" >
@@ -9627,6 +9617,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4510" >
@@ -9638,6 +9629,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4511" >
@@ -9649,6 +9641,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4512" >
@@ -9660,6 +9653,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4513" >
@@ -9671,6 +9665,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4514" >
@@ -9682,6 +9677,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4515" >
@@ -9693,6 +9689,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4516" >
@@ -9704,6 +9701,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4517" >
@@ -9715,6 +9713,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4518" >
@@ -9726,6 +9725,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4519" >
@@ -9737,6 +9737,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4520" >
@@ -9748,6 +9749,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4521" >
@@ -9759,6 +9761,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4522" >
@@ -9770,6 +9773,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4523" >
@@ -9781,6 +9785,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4524" >
@@ -9792,6 +9797,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4525" >
@@ -9803,6 +9809,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4526" >
@@ -9814,6 +9821,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4527" >
@@ -9825,6 +9833,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4528" >
@@ -9836,6 +9845,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4529" >
@@ -9847,6 +9857,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4530" >
@@ -9858,6 +9869,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4531" >
@@ -9869,6 +9881,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="4532" >
@@ -9880,6 +9893,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 
@@ -9924,7 +9938,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="4556" />
 <extraparam>
 <info stereotype="CPURR" nodeName="INTL_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -9960,7 +9974,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="4581" />
 <extraparam>
 <info stereotype="CPURR" nodeName="ADAIF_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -10032,7 +10046,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="4640" />
 <extraparam>
 <info stereotype="CPURR" nodeName="ADAIF_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="4"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="4" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="4616" >
@@ -10159,7 +10173,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="4787" />
 <extraparam>
 <info stereotype="CPURR" nodeName="MainCPU" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="4700" >
@@ -10527,7 +10541,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="4946" />
 <extraparam>
 <info stereotype="CPURR" nodeName="INTL_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="2"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="2" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="4922" >
@@ -10654,7 +10668,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="5021" />
 <extraparam>
 <info stereotype="CPURR" nodeName="FEP_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -10726,7 +10740,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="5098" />
 <extraparam>
 <info stereotype="CPURR" nodeName="FEP_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="2" execcTime="1" clockRatio="1" MECType="1"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="2" execcTime="1" clockRatio="1" MECType="1" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="5056" >
@@ -10891,7 +10905,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="5173" />
 <extraparam>
 <info stereotype="CPURR" nodeName="MAPPER_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -10999,7 +11013,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="5257" />
 <extraparam>
 <info stereotype="CPURR" nodeName="MAPPER_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="3"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="3" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="5233" >
@@ -11073,19 +11087,8 @@ sequence diagram.
 <TGConnectingPoint num="6" id="5299" />
 <TGConnectingPoint num="7" id="5300" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_Symbol2ChipSeq_Chips2Octet" cpMEC="Single DMA" transferType1="0" transferType2="0" />
-<attributes reference="DMA_transfer" />
-<mappingInfo CPname="DMA_transfer" instanceName="Src_Storage_Instance_1" architectureUnit="MAPPER_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="Dst_Storage_Instance_1" architectureUnit="INTL_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="CPU_Controller_1" architectureUnit="MainCPU" />
-<mappingInfo CPname="DMA_transfer" instanceName="DMA_Controller_1" architectureUnit="ADAIF_DMA" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="ADAIF_Bridge, MainBus, MainBridge, Crossbar, ADAIF_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="ADAIF_Bridge, MainBus, MainBridge, Crossbar, ADAIF_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="ADAIF_Bridge, Crossbar, ADAIF_Bus, MAPPER_Bridge, MAPPER_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="ADAIF_Bridge, Crossbar, INTL_Bridge, INTL_Bus, ADAIF_Bus" />
-<mappedAttributes type="int" name="destinationAddress" value="123" />
-<mappedAttributes type="int" name="sourceAddress" value="123" />
-<mappedAttributes type="int" name="counter" value="123" />
+<info stereotype="CP" nodeName="CP_Symbol2ChipSeq_Chips2Octet" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="5292" >
@@ -11123,16 +11126,8 @@ sequence diagram.
 <TGConnectingPoint num="6" id="5317" />
 <TGConnectingPoint num="7" id="5318" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_Chip2Octet_CWL" cpMEC="Single DMA" transferType1="0" transferType2="0" />
-<attributes reference="DMA_transfer" />
-<mappingInfo CPname="DMA_transfer" instanceName="DMA_Controller_1" architectureUnit="INTL_DMA" />
-<mappingInfo CPname="DMA_transfer" instanceName="Src_Storage_Instance_1" architectureUnit="INTL_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="Dst_Storage_Instance_1" architectureUnit="FEP_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="CPU_Controller_1" architectureUnit="MainCPU" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="INTL_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="Crossbar, INTL_Bridge, INTL_Bus, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="MainBus, MainBridge, Crossbar, INTL_Bridge, INTL_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="MainBus, MainBridge, Crossbar, INTL_Bridge, INTL_Bus" />
+<info stereotype="CP" nodeName="CP_Chip2Octet_CWL" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="5310" >
@@ -11170,24 +11165,8 @@ sequence diagram.
 <TGConnectingPoint num="6" id="5335" />
 <TGConnectingPoint num="7" id="5336" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_sink" cpMEC="Double DMA" transferType1="0" transferType2="0" />
-<attributes reference="Double_DMA_transfer" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Src_Storage_Instance_1" architectureUnit="FEP_MSS" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Src_Storage_Instance_2" architectureUnit="FEP_MSS" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="DMA_Controller_1" architectureUnit="FEP_DMA" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="DMA_Controller_2" architectureUnit="FEP_DMA" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Dst_Storage_Instance_2" architectureUnit="ADAIF_MSS" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Dst_Storage_Instance_1" architectureUnit="ADAIF_MSS" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="CPU_Controller_1" architectureUnit="MainCPU" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="CPU_Controller_2" architectureUnit="MainCPU" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_6" architectureUnit="FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="MainBus, MainBridge, Crossbar, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="MainBus, MainBridge, Crossbar, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_5" architectureUnit="MainBus, MainBridge, Crossbar, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_8" architectureUnit="MainBus, MainBridge, Crossbar, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="ADAIF_Bridge, Crossbar, ADAIF_Bus, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_7" architectureUnit="ADAIF_Bridge, Crossbar, ADAIF_Bus, FEP_Bridge, FEP_Bus" />
+<info stereotype="CP" nodeName="CP_sink" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="5328" >
@@ -11225,14 +11204,8 @@ sequence diagram.
 <TGConnectingPoint num="6" id="5353" />
 <TGConnectingPoint num="7" id="5354" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_Source_to_Bits2Symbol" cpMEC="Memory Copy" transferType1="0" transferType2="0" />
-<attributes reference="CP_Memory_Copy" />
-<mappingInfo CPname="CP_Memory_Copy" instanceName="Dst_Storage_Instance" architectureUnit="MAPPER_MSS" />
-<mappingInfo CPname="CP_Memory_Copy" instanceName="Src_Storage_Instance" architectureUnit="DDR" />
-<mappingInfo CPname="CP_Memory_Copy" instanceName="CPU_Controller" architectureUnit="MainCPU" />
-<mappingInfo CPname="CP_Memory_Copy" instanceName="Transfer_Instance_1" architectureUnit="MainBus" />
-<mappingInfo CPname="CP_Memory_Copy" instanceName="Transfer_Instance2" architectureUnit="MainBus, MainBridge, Crossbar, MAPPER_Bridge, MAPPER_Bus" />
-<mappedAttributes type="addr" name="sourceAddress" value="0x123" />
+<info stereotype="CP" nodeName="CP_Source_to_Bits2Symbol" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="5346" >
@@ -11264,6 +11237,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5357" >
@@ -11275,6 +11249,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5358" >
@@ -11286,6 +11261,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5359" >
@@ -11297,6 +11273,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5360" >
@@ -11308,6 +11285,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5361" >
@@ -11319,6 +11297,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5362" >
@@ -11330,6 +11309,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5363" >
@@ -11341,6 +11321,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5364" >
@@ -11352,6 +11333,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5365" >
@@ -11363,6 +11345,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5366" >
@@ -11374,6 +11357,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5367" >
@@ -11385,6 +11369,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5368" >
@@ -11396,6 +11381,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5369" >
@@ -11407,6 +11393,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5370" >
@@ -11418,6 +11405,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5371" >
@@ -11429,6 +11417,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5372" >
@@ -11440,6 +11429,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5373" >
@@ -11451,6 +11441,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5374" >
@@ -11462,6 +11453,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5375" >
@@ -11473,6 +11465,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5376" >
@@ -11484,6 +11477,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5377" >
@@ -11495,6 +11489,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5378" >
@@ -11506,6 +11501,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5379" >
@@ -11517,6 +11513,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5380" >
@@ -11528,6 +11525,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5381" >
@@ -11539,6 +11537,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5382" >
@@ -11550,6 +11549,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="5383" >
@@ -11561,6 +11561,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 
@@ -11605,7 +11606,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="5407" />
 <extraparam>
 <info stereotype="CPURR" nodeName="INTL_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -11641,7 +11642,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="5432" />
 <extraparam>
 <info stereotype="CPURR" nodeName="ADAIF_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -11713,7 +11714,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="5491" />
 <extraparam>
 <info stereotype="CPURR" nodeName="ADAIF_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="4"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="4" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="5467" >
@@ -11840,7 +11841,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="5638" />
 <extraparam>
 <info stereotype="CPURR" nodeName="MainCPU" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="5551" >
@@ -12208,7 +12209,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="5797" />
 <extraparam>
 <info stereotype="CPURR" nodeName="INTL_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="2"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="2" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="5773" >
@@ -12335,7 +12336,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="5872" />
 <extraparam>
 <info stereotype="CPURR" nodeName="FEP_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -12407,7 +12408,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="5949" />
 <extraparam>
 <info stereotype="CPURR" nodeName="FEP_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="2" execcTime="1" clockRatio="1" MECType="1"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="2" execcTime="1" clockRatio="1" MECType="1" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="5907" >
@@ -12572,7 +12573,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="6024" />
 <extraparam>
 <info stereotype="CPURR" nodeName="MAPPER_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
@@ -12680,7 +12681,7 @@ sequence diagram.
 <TGConnectingPoint num="23" id="6108" />
 <extraparam>
 <info stereotype="CPURR" nodeName="MAPPER_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="3"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="3" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="6084" >
@@ -12754,19 +12755,8 @@ sequence diagram.
 <TGConnectingPoint num="6" id="6150" />
 <TGConnectingPoint num="7" id="6151" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_Symbol2ChipSeq_Chips2Octet" cpMEC="Single DMA" transferType1="0" transferType2="0" />
-<attributes reference="DMA_transfer" />
-<mappingInfo CPname="DMA_transfer" instanceName="Src_Storage_Instance_1" architectureUnit="MAPPER_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="Dst_Storage_Instance_1" architectureUnit="INTL_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="CPU_Controller_1" architectureUnit="MainCPU" />
-<mappingInfo CPname="DMA_transfer" instanceName="DMA_Controller_1" architectureUnit="MAPPER_DMA" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="MAPPER_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="MainBus, MainBridge, Crossbar" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="MainBus, MainBridge, Crossbar, MAPPER_Bridge, MAPPER_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="Crossbar, INTL_Bridge, INTL_Bus, MAPPER_Bridge, MAPPER_Bus" />
-<mappedAttributes type="int" name="destinationAddress" value="123" />
-<mappedAttributes type="int" name="sourceAddress" value="123" />
-<mappedAttributes type="int" name="counter" value="123" />
+<info stereotype="CP" nodeName="CP_Symbol2ChipSeq_Chips2Octet" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="6143" >
@@ -12804,16 +12794,8 @@ sequence diagram.
 <TGConnectingPoint num="6" id="6168" />
 <TGConnectingPoint num="7" id="6169" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_Chip2Octet_CWL" cpMEC="Single DMA" transferType1="0" transferType2="0" />
-<attributes reference="DMA_transfer" />
-<mappingInfo CPname="DMA_transfer" instanceName="DMA_Controller_1" architectureUnit="INTL_DMA" />
-<mappingInfo CPname="DMA_transfer" instanceName="Src_Storage_Instance_1" architectureUnit="INTL_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="Dst_Storage_Instance_1" architectureUnit="FEP_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="CPU_Controller_1" architectureUnit="MainCPU" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="INTL_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="Crossbar, INTL_Bridge, INTL_Bus, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="MainBus, MainBridge, Crossbar, INTL_Bridge, INTL_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="MainBus, MainBridge, Crossbar, INTL_Bridge, INTL_Bus" />
+<info stereotype="CP" nodeName="CP_Chip2Octet_CWL" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="6161" >
@@ -12851,24 +12833,8 @@ sequence diagram.
 <TGConnectingPoint num="6" id="6186" />
 <TGConnectingPoint num="7" id="6187" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_sink" cpMEC="Double DMA" transferType1="0" transferType2="0" />
-<attributes reference="Double_DMA_transfer" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Src_Storage_Instance_1" architectureUnit="FEP_MSS" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Src_Storage_Instance_2" architectureUnit="FEP_MSS" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="DMA_Controller_1" architectureUnit="FEP_DMA" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="DMA_Controller_2" architectureUnit="FEP_DMA" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Dst_Storage_Instance_2" architectureUnit="ADAIF_MSS" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Dst_Storage_Instance_1" architectureUnit="ADAIF_MSS" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="CPU_Controller_1" architectureUnit="MainCPU" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="CPU_Controller_2" architectureUnit="MainCPU" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_6" architectureUnit="FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="MainBus, MainBridge, Crossbar, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="MainBus, MainBridge, Crossbar, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_5" architectureUnit="MainBus, MainBridge, Crossbar, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_8" architectureUnit="MainBus, MainBridge, Crossbar, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="ADAIF_Bridge, Crossbar, ADAIF_Bus, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_7" architectureUnit="ADAIF_Bridge, Crossbar, ADAIF_Bus, FEP_Bridge, FEP_Bus" />
+<info stereotype="CP" nodeName="CP_sink" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="6179" >
@@ -12906,17 +12872,8 @@ sequence diagram.
 <TGConnectingPoint num="6" id="6204" />
 <TGConnectingPoint num="7" id="6205" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_Source_to_Bits2Symbol" cpMEC="Memory Copy" transferType1="0" transferType2="0" />
-<attributes reference="DMA_transfer" />
-<mappingInfo CPname="DMA_transfer" instanceName="Src_Storage_Instance_1" architectureUnit="DDR" />
-<mappingInfo CPname="DMA_transfer" instanceName="Dst_Storage_Instance_1" architectureUnit="MAPPER_MSS" />
-<mappingInfo CPname="DMA_transfer" instanceName="DMA_Controller_1" architectureUnit="MAPPER_DMA" />
-<mappingInfo CPname="DMA_transfer" instanceName="CPU_Controller_1" architectureUnit="MainCPU" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="MainBus, MainBridge, Crossbar, MAPPER_Bridge, MAPPER_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="MainBus, MainBridge, Crossbar, MAPPER_Bridge, MAPPER_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="MAPPER_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="MainBus, MainBridge, Crossbar, MAPPER_Bridge, MAPPER_Bus" />
-<mappedAttributes type="addr" name="sourceAddress" value="0x123" />
+<info stereotype="CP" nodeName="CP_Source_to_Bits2Symbol" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="6197" >
@@ -12948,6 +12905,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6208" >
@@ -12959,6 +12917,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6209" >
@@ -12970,6 +12929,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6210" >
@@ -12981,6 +12941,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6211" >
@@ -12992,6 +12953,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6212" >
@@ -13003,6 +12965,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6213" >
@@ -13014,6 +12977,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6214" >
@@ -13025,6 +12989,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6215" >
@@ -13036,6 +13001,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6216" >
@@ -13047,6 +13013,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6217" >
@@ -13058,6 +13025,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6218" >
@@ -13069,6 +13037,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6219" >
@@ -13080,6 +13049,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6220" >
@@ -13091,6 +13061,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6221" >
@@ -13102,6 +13073,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6222" >
@@ -13113,6 +13085,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6223" >
@@ -13124,6 +13097,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6224" >
@@ -13135,6 +13109,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6225" >
@@ -13146,6 +13121,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6226" >
@@ -13157,6 +13133,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6227" >
@@ -13168,6 +13145,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6228" >
@@ -13179,6 +13157,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6229" >
@@ -13190,6 +13169,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6230" >
@@ -13201,6 +13181,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6231" >
@@ -13212,6 +13193,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6232" >
@@ -13223,6 +13205,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6233" >
@@ -13234,6 +13217,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="6234" >
@@ -13245,6 +13229,7 @@ sequence diagram.
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
+<spy value="false" />
 </extraparam>
 </CONNECTOR>
 
@@ -13989,7 +13974,7 @@ sequence diagram.
 <cdparam x="102" y="176" />
 <sizeparam width="82" height="55" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Primitive component" value="SRC" />
 <TGConnectingPoint num="0" id="6327" />
 <TGConnectingPoint num="1" id="6328" />
@@ -14013,7 +13998,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event src_out" />
 <TGConnectingPoint num="0" id="6323" />
 <extraparam>
-<Prop commName="src_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="src_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14030,7 +14015,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel src_out" />
 <TGConnectingPoint num="0" id="6325" />
 <extraparam>
-<Prop commName="src_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="src_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14043,7 +14028,7 @@ sequence diagram.
 <cdparam x="544" y="177" />
 <sizeparam width="80" height="55" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Primitive component" value="OVLP" />
 <TGConnectingPoint num="0" id="6344" />
 <TGConnectingPoint num="1" id="6345" />
@@ -14071,7 +14056,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in" />
 <TGConnectingPoint num="0" id="6336" />
 <extraparam>
-<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14088,7 +14073,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel ovlp_out" />
 <TGConnectingPoint num="0" id="6338" />
 <extraparam>
-<Prop commName="ovlp_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="ovlp_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14105,7 +14090,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event ovlp_out" />
 <TGConnectingPoint num="0" id="6340" />
 <extraparam>
-<Prop commName="ovlp_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="ovlp_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14122,7 +14107,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in" />
 <TGConnectingPoint num="0" id="6342" />
 <extraparam>
-<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14135,7 +14120,7 @@ sequence diagram.
 <cdparam x="933" y="151" />
 <sizeparam width="50" height="107" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Primitive component" value="DMX" />
 <TGConnectingPoint num="0" id="6365" />
 <TGConnectingPoint num="1" id="6366" />
@@ -14159,7 +14144,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in" />
 <TGConnectingPoint num="0" id="6353" />
 <extraparam>
-<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14176,7 +14161,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel dmx_out2" />
 <TGConnectingPoint num="0" id="6355" />
 <extraparam>
-<Prop commName="dmx_out2" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dmx_out2" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14193,7 +14178,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event dmx_out2" />
 <TGConnectingPoint num="0" id="6357" />
 <extraparam>
-<Prop commName="dmx_out2" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dmx_out2" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14210,7 +14195,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel dmx_out1" />
 <TGConnectingPoint num="0" id="6359" />
 <extraparam>
-<Prop commName="dmx_out1" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dmx_out1" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14227,7 +14212,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event dmx_out1" />
 <TGConnectingPoint num="0" id="6361" />
 <extraparam>
-<Prop commName="dmx_out1" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dmx_out1" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14244,7 +14229,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in" />
 <TGConnectingPoint num="0" id="6363" />
 <extraparam>
-<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14257,7 +14242,7 @@ sequence diagram.
 <cdparam x="251" y="432" />
 <sizeparam width="50" height="107" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Primitive component" value="MX" />
 <TGConnectingPoint num="0" id="6386" />
 <TGConnectingPoint num="1" id="6387" />
@@ -14281,7 +14266,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in1" />
 <TGConnectingPoint num="0" id="6374" />
 <extraparam>
-<Prop commName="in1" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in1" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14298,7 +14283,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in2" />
 <TGConnectingPoint num="0" id="6376" />
 <extraparam>
-<Prop commName="in2" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in2" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14315,7 +14300,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in2" />
 <TGConnectingPoint num="0" id="6378" />
 <extraparam>
-<Prop commName="in2" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in2" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14332,7 +14317,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel mx_out" />
 <TGConnectingPoint num="0" id="6380" />
 <extraparam>
-<Prop commName="mx_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="mx_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14349,7 +14334,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event mx_out" />
 <TGConnectingPoint num="0" id="6382" />
 <extraparam>
-<Prop commName="mx_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="mx_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14366,7 +14351,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel dmx_out2" />
 <TGConnectingPoint num="0" id="6384" />
 <extraparam>
-<Prop commName="dmx_out2" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dmx_out2" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14379,7 +14364,7 @@ sequence diagram.
 <cdparam x="480" y="405" />
 <sizeparam width="50" height="107" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Primitive component" value="DMX1" />
 <TGConnectingPoint num="0" id="6407" />
 <TGConnectingPoint num="1" id="6408" />
@@ -14404,7 +14389,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in" />
 <TGConnectingPoint num="0" id="6395" />
 <extraparam>
-<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14421,7 +14406,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel dmx1_out2" />
 <TGConnectingPoint num="0" id="6397" />
 <extraparam>
-<Prop commName="dmx1_out2" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dmx1_out2" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14438,7 +14423,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event dmx1_out2" />
 <TGConnectingPoint num="0" id="6399" />
 <extraparam>
-<Prop commName="dmx1_out2" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dmx1_out2" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14455,7 +14440,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel dmx1_out1" />
 <TGConnectingPoint num="0" id="6401" />
 <extraparam>
-<Prop commName="dmx1_out1" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dmx1_out1" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14472,7 +14457,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event dmx1_out1" />
 <TGConnectingPoint num="0" id="6403" />
 <extraparam>
-<Prop commName="dmx1_out1" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dmx1_out1" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14489,7 +14474,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in" />
 <TGConnectingPoint num="0" id="6405" />
 <extraparam>
-<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14502,7 +14487,7 @@ sequence diagram.
 <cdparam x="577" y="401" />
 <sizeparam width="70" height="56" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Primitive component" value="REP" />
 <TGConnectingPoint num="0" id="6424" />
 <TGConnectingPoint num="1" id="6425" />
@@ -14528,7 +14513,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in" />
 <TGConnectingPoint num="0" id="6416" />
 <extraparam>
-<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14545,7 +14530,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel rep_out" />
 <TGConnectingPoint num="0" id="6418" />
 <extraparam>
-<Prop commName="rep_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="rep_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14562,7 +14547,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event rep_out" />
 <TGConnectingPoint num="0" id="6420" />
 <extraparam>
-<Prop commName="rep_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="rep_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14579,7 +14564,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in" />
 <TGConnectingPoint num="0" id="6422" />
 <extraparam>
-<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14592,7 +14577,7 @@ sequence diagram.
 <cdparam x="231" y="175" />
 <sizeparam width="80" height="56" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Primitive component" value="FEED" />
 <TGConnectingPoint num="0" id="6441" />
 <TGConnectingPoint num="1" id="6442" />
@@ -14617,7 +14602,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in" />
 <TGConnectingPoint num="0" id="6433" />
 <extraparam>
-<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14634,7 +14619,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel feed_out" />
 <TGConnectingPoint num="0" id="6435" />
 <extraparam>
-<Prop commName="feed_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="feed_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14651,7 +14636,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event feed_out" />
 <TGConnectingPoint num="0" id="6437" />
 <extraparam>
-<Prop commName="feed_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="feed_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14668,7 +14653,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in" />
 <TGConnectingPoint num="0" id="6439" />
 <extraparam>
-<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14681,7 +14666,7 @@ sequence diagram.
 <cdparam x="653" y="117" />
 <sizeparam width="90" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Composite component" value="FFT" />
 <TGConnectingPoint num="0" id="6556" />
 <TGConnectingPoint num="1" id="6557" />
@@ -14723,7 +14708,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel fft_out" />
 <TGConnectingPoint num="0" id="6450" />
 <extraparam>
-<Prop commName="fft_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="fft_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14740,7 +14725,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in" />
 <TGConnectingPoint num="0" id="6452" />
 <extraparam>
-<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14757,7 +14742,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Request r_fft" />
 <TGConnectingPoint num="0" id="6454" />
 <extraparam>
-<Prop commName="r_fft" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="r_fft" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14897,7 +14882,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event fft_out" />
 <TGConnectingPoint num="0" id="6541" />
 <extraparam>
-<Prop commName="fft_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="fft_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14914,7 +14899,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in" />
 <TGConnectingPoint num="0" id="6543" />
 <extraparam>
-<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14931,7 +14916,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Request r_fft" />
 <TGConnectingPoint num="0" id="6545" />
 <extraparam>
-<Prop commName="r_fft" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="r_fft" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -14944,7 +14929,7 @@ sequence diagram.
 <cdparam x="358" y="109" />
 <sizeparam width="145" height="153" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Composite component" value="DMA" />
 <TGConnectingPoint num="0" id="6671" />
 <TGConnectingPoint num="1" id="6672" />
@@ -14986,7 +14971,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Request r_dma" />
 <TGConnectingPoint num="0" id="6565" />
 <extraparam>
-<Prop commName="r_dma" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="r_dma" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15003,7 +14988,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in" />
 <TGConnectingPoint num="0" id="6567" />
 <extraparam>
-<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15020,7 +15005,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel dma_out" />
 <TGConnectingPoint num="0" id="6569" />
 <extraparam>
-<Prop commName="dma_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dma_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15160,7 +15145,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Request r_dma" />
 <TGConnectingPoint num="0" id="6656" />
 <extraparam>
-<Prop commName="r_dma" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="r_dma" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15177,7 +15162,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in" />
 <TGConnectingPoint num="0" id="6658" />
 <extraparam>
-<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15194,7 +15179,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event dma_out" />
 <TGConnectingPoint num="0" id="6660" />
 <extraparam>
-<Prop commName="dma_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dma_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15207,7 +15192,7 @@ sequence diagram.
 <cdparam x="790" y="120" />
 <sizeparam width="90" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Composite component" value="CWM" />
 <TGConnectingPoint num="0" id="6786" />
 <TGConnectingPoint num="1" id="6787" />
@@ -15249,7 +15234,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Request r_cwm" />
 <TGConnectingPoint num="0" id="6680" />
 <extraparam>
-<Prop commName="r_cwm" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="r_cwm" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15266,7 +15251,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in" />
 <TGConnectingPoint num="0" id="6682" />
 <extraparam>
-<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15283,7 +15268,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel cwm_out" />
 <TGConnectingPoint num="0" id="6684" />
 <extraparam>
-<Prop commName="cwm_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwm_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15423,7 +15408,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Request r_cwm" />
 <TGConnectingPoint num="0" id="6771" />
 <extraparam>
-<Prop commName="r_cwm" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="r_cwm" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15440,7 +15425,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in" />
 <TGConnectingPoint num="0" id="6773" />
 <extraparam>
-<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15457,7 +15442,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event cwm_out" />
 <TGConnectingPoint num="0" id="6775" />
 <extraparam>
-<Prop commName="cwm_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwm_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15470,7 +15455,7 @@ sequence diagram.
 <cdparam x="343" y="372" />
 <sizeparam width="88" height="146" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Composite component" value="CWA" />
 <TGConnectingPoint num="0" id="6943" />
 <TGConnectingPoint num="1" id="6944" />
@@ -15642,7 +15627,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event cwa_out" />
 <TGConnectingPoint num="0" id="6890" />
 <extraparam>
-<Prop commName="cwa_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwa_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15659,7 +15644,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Request r_cwa" />
 <TGConnectingPoint num="0" id="6892" />
 <extraparam>
-<Prop commName="r_cwa" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="r_cwa" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15676,7 +15661,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in1" />
 <TGConnectingPoint num="0" id="6894" />
 <extraparam>
-<Prop commName="in1" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in1" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15693,7 +15678,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in2" />
 <TGConnectingPoint num="0" id="6896" />
 <extraparam>
-<Prop commName="in2" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in2" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15729,7 +15714,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel cwa_out" />
 <TGConnectingPoint num="0" id="6907" />
 <extraparam>
-<Prop commName="cwa_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="cwa_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15746,7 +15731,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Request r_cwa" />
 <TGConnectingPoint num="0" id="6909" />
 <extraparam>
-<Prop commName="r_cwa" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="r_cwa" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15763,7 +15748,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in1" />
 <TGConnectingPoint num="0" id="6911" />
 <extraparam>
-<Prop commName="in1" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in1" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15780,7 +15765,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in2" />
 <TGConnectingPoint num="0" id="6913" />
 <extraparam>
-<Prop commName="in2" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in2" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15819,7 +15804,7 @@ sequence diagram.
 <cdparam x="693" y="337" />
 <sizeparam width="90" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Composite component" value="SUM" />
 <TGConnectingPoint num="0" id="7058" />
 <TGConnectingPoint num="1" id="7059" />
@@ -15861,7 +15846,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Request r_sum" />
 <TGConnectingPoint num="0" id="6952" />
 <extraparam>
-<Prop commName="r_sum" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="r_sum" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15878,7 +15863,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in" />
 <TGConnectingPoint num="0" id="6954" />
 <extraparam>
-<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15895,7 +15880,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel sum_out" />
 <TGConnectingPoint num="0" id="6956" />
 <extraparam>
-<Prop commName="sum_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="sum_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16035,7 +16020,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Request r_sum" />
 <TGConnectingPoint num="0" id="7043" />
 <extraparam>
-<Prop commName="r_sum" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="r_sum" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16052,7 +16037,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in" />
 <TGConnectingPoint num="0" id="7045" />
 <extraparam>
-<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16069,7 +16054,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event sum_out" />
 <TGConnectingPoint num="0" id="7047" />
 <extraparam>
-<Prop commName="sum_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="sum_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16082,7 +16067,7 @@ sequence diagram.
 <cdparam x="831" y="400" />
 <sizeparam width="70" height="56" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Primitive component" value="RES" />
 <TGConnectingPoint num="0" id="7075" />
 <TGConnectingPoint num="1" id="7076" />
@@ -16108,7 +16093,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in" />
 <TGConnectingPoint num="0" id="7067" />
 <extraparam>
-<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16125,7 +16110,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel res_out" />
 <TGConnectingPoint num="0" id="7069" />
 <extraparam>
-<Prop commName="res_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="res_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16142,7 +16127,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event res_out" />
 <TGConnectingPoint num="0" id="7071" />
 <extraparam>
-<Prop commName="res_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="res_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16159,7 +16144,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in" />
 <TGConnectingPoint num="0" id="7073" />
 <extraparam>
-<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16172,7 +16157,7 @@ sequence diagram.
 <cdparam x="946" y="342" />
 <sizeparam width="108" height="166" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Composite component" value="DMA1" />
 <TGConnectingPoint num="0" id="7190" />
 <TGConnectingPoint num="1" id="7191" />
@@ -16214,7 +16199,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Request r_dma1" />
 <TGConnectingPoint num="0" id="7084" />
 <extraparam>
-<Prop commName="r_dma1" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="r_dma1" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16231,7 +16216,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in" />
 <TGConnectingPoint num="0" id="7086" />
 <extraparam>
-<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16248,7 +16233,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel dma1_out" />
 <TGConnectingPoint num="0" id="7088" />
 <extraparam>
-<Prop commName="dma1_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dma1_out" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16388,7 +16373,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Request r_dma1" />
 <TGConnectingPoint num="0" id="7175" />
 <extraparam>
-<Prop commName="r_dma1" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="r_dma1" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16405,7 +16390,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in" />
 <TGConnectingPoint num="0" id="7177" />
 <extraparam>
-<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16422,7 +16407,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event dma1_out" />
 <TGConnectingPoint num="0" id="7179" />
 <extraparam>
-<Prop commName="dma1_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="dma1_out" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16435,7 +16420,7 @@ sequence diagram.
 <cdparam x="899" y="60" />
 <sizeparam width="133" height="58" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Primitive component" value="XPAT_cwm_out" />
 <TGConnectingPoint num="0" id="7199" />
 <TGConnectingPoint num="1" id="7200" />
@@ -16457,7 +16442,7 @@ sequence diagram.
 <cdparam x="1123" y="409" />
 <sizeparam width="70" height="56" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="3928" minY="10" maxY="1428" />
+<cdrectangleparam minX="10" maxX="3929" minY="10" maxY="1429" />
 <infoparam name="Primitive component" value="SINK" />
 <TGConnectingPoint num="0" id="7212" />
 <TGConnectingPoint num="1" id="7213" />
@@ -16481,7 +16466,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Event in" />
 <TGConnectingPoint num="0" id="7208" />
 <extraparam>
-<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -16498,7 +16483,7 @@ sequence diagram.
 <infoparam name="Primitive port" value="Channel in" />
 <TGConnectingPoint num="0" id="7210" />
 <extraparam>
-<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" />
+<Prop commName="in" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -18100,7 +18085,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="7544" />
 <TGConnectingPoint num="1" id="7545" />
 <extraparam>
-<Data channelName="fft_out" nbOfSamples="size" />
+<Data channelName="fft_out" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -18113,7 +18098,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="7547" />
 <TGConnectingPoint num="1" id="7548" />
 <extraparam>
-<Data channelName="in" nbOfSamples="size" />
+<Data channelName="in" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -18299,7 +18284,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="7579" />
 <TGConnectingPoint num="1" id="7580" />
 <extraparam>
-<Data channelName="dma_out" nbOfSamples="size" />
+<Data channelName="dma_out" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -18330,7 +18315,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="7586" />
 <TGConnectingPoint num="1" id="7587" />
 <extraparam>
-<Data channelName="in" nbOfSamples="size" />
+<Data channelName="in" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -18533,7 +18518,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="7622" />
 <TGConnectingPoint num="1" id="7623" />
 <extraparam>
-<Data channelName="cwm_out" nbOfSamples="size" />
+<Data channelName="cwm_out" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -18547,7 +18532,7 @@ sequence diagram.
 <TGConnectingPoint num="1" id="7626" />
 <accessibility />
 <extraparam>
-<Data channelName="in" nbOfSamples="size" />
+<Data channelName="in" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -18627,7 +18612,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="7638" />
 <TGConnectingPoint num="1" id="7639" />
 <extraparam>
-<Data channelName="in2" nbOfSamples="size" />
+<Data channelName="in2" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -18667,7 +18652,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="7647" />
 <TGConnectingPoint num="1" id="7648" />
 <extraparam>
-<Data channelName="cwa_out" nbOfSamples="size" />
+<Data channelName="cwa_out" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -18680,7 +18665,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="7650" />
 <TGConnectingPoint num="1" id="7651" />
 <extraparam>
-<Data channelName="in1" nbOfSamples="size" />
+<Data channelName="in1" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -19103,7 +19088,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="7732" />
 <TGConnectingPoint num="1" id="7733" />
 <extraparam>
-<Data channelName="sum_out" nbOfSamples="size" />
+<Data channelName="sum_out" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -19116,7 +19101,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="7735" />
 <TGConnectingPoint num="1" id="7736" />
 <extraparam>
-<Data channelName="in" nbOfSamples="size" />
+<Data channelName="in" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -19319,7 +19304,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="7771" />
 <TGConnectingPoint num="1" id="7772" />
 <extraparam>
-<Data channelName="dma1_out" nbOfSamples="size" />
+<Data channelName="dma1_out" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
@@ -19332,7 +19317,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="7774" />
 <TGConnectingPoint num="1" id="7775" />
 <extraparam>
-<Data channelName="in" nbOfSamples="size" />
+<Data channelName="in" nbOfSamples="size" secPattern="" />
 </extraparam>
 </COMPONENT>
 
