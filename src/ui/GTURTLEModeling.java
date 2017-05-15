@@ -1149,6 +1149,7 @@ public class GTURTLEModeling {
 	}
 
 	public void addHSM(MainGUI gui, HashMap<String, ArrayList<String>> selectedCpuTasks){
+		System.out.println("Adding HSM");
 		String encComp="100";
 		String decComp="100";
 		String overhead ="0";
@@ -1179,7 +1180,7 @@ public class GTURTLEModeling {
 		proverifAnalysis(tmap, nonAuthChans, nonSecChans);
 
 		TGConnector fromStart;
-
+		HashMap<String, HSMChannel> secChannels = new HashMap<String, HSMChannel>();
 		//Add a HSM for each selected CPU on the component diagram
 		for (String cpuName: selectedCpuTasks.keySet()){
 			HashMap<String, HSMChannel> hsmChannels = new HashMap<String, HSMChannel>();
@@ -1254,6 +1255,7 @@ public class GTURTLEModeling {
 							}
 						}
 						else {
+							System.out.println("security context:"+writeChannel.securityContext);
 							fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
 							if (fromStart!=null){
 								channelInstances.add(tg);
@@ -1804,16 +1806,19 @@ public class GTURTLEModeling {
 				xc+=300;
 				i++;
 			}
+		
 		}
 
-
-
-			//For all the tasks that receive encrypted data, decrypt it
+	secChannels.putAll(hsmChannels);
+}
+			//For all the tasks that receive encrypted data, decrypt it, assuming it has no associated HSM
 			for (TMLTask task: tmap.getTMLModeling().getTasks()){
-				tad = t.getTMLActivityDiagramPanel(task.getName());
+				int xpos, ypos;
+				System.out.println("loop 2");
+				TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel(task.getName());
 				HashSet<TGComponent> channelInstances = new HashSet<TGComponent>();
-				for (String chan: hsmChannels.keySet()){
-					HSMChannel ch = hsmChannels.get(chan);
+				for (String chan: secChannels.keySet()){
+					HSMChannel ch = secChannels.get(chan);
 					channelInstances.clear();
 					for (TGComponent tg: tad.getComponentList()){
 						if (tg instanceof TMLADReadChannel){
@@ -1867,9 +1872,9 @@ public class GTURTLEModeling {
 					}
 				}
 				//Next find channels that send encrypted data, and add the encryption operator
-				for (String chan: hsmChannels.keySet()){
+				for (String chan: secChannels.keySet()){
 					channelInstances.clear();
-					HSMChannel ch = hsmChannels.get(chan);
+					HSMChannel ch = secChannels.get(chan);
 					for (TGComponent tg: tad.getComponentList()){
 						if (tg instanceof TMLADWriteChannel){
 							TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
@@ -1921,9 +1926,8 @@ public class GTURTLEModeling {
 					}
 				}
 
-
-			}
-
+			}			
+		for (String cpuName: selectedCpuTasks.keySet()){
 			//Add a private bus to Hardware Accelerator with the task for hsm
 
 			//Find the CPU the task is mapped to
@@ -2004,6 +2008,7 @@ public class GTURTLEModeling {
 			connect.setP1(p2);
 			archPanel.addComponent(connect, cpu.getX()+100, cpu.getY()+100, false, true);
 		}
+	
 	}
 
 	public TMLMapping autoSecure(MainGUI gui, boolean autoConf, boolean autoAuth){
@@ -2080,6 +2085,12 @@ public class GTURTLEModeling {
 			for (String nonConf: pvoa.getNonSecretStrings()){
 				nonSecChans.add(nonConf);
 				TraceManager.addDev(nonConf + " is not secret");
+				//Find all tasks that receive this data
+				
+				TMLChannel chan = map.getTMLModeling().getChannelByShortName(nonConf.split("__")[1].replaceAll("_chData",""));
+				for (String block:chan.getTaskNames()){
+					nonSecChans.add(block+"__"+nonConf.split("__")[1]);
+				}
 			}
 			for (String nonAuth: pvoa.getNonSatisfiedAuthenticity()) {
 				String chanName= nonAuth.split("_chData")[0];

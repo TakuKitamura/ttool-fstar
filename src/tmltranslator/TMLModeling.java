@@ -543,7 +543,6 @@ public class TMLModeling {
 
         while(iterator.hasNext()) {
             ch = iterator.next();
-
             if (ch.getName().compareTo(_name) == 0) {
                 return ch;
             }
@@ -558,7 +557,6 @@ public class TMLModeling {
 
         while(iterator.hasNext()) {
             ch = iterator.next();
-
             if (ch.getName().endsWith(_name)) {
                 return ch;
             }
