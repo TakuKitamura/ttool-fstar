@@ -179,21 +179,25 @@ deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" +
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
 	    //if (!(ram.getChannels().isEmpty())){	
 	    //	for (AvatarChannel channel : ram.getChannels()) {
-	    //DG 15.05.2017
-	   	
+	   
+ //DG 15.05.2017	   	
 	    	for (AvatarRelation relation : avspec.getRelations()) {
 		    //if (!(ram.getRelations().isEmpty())){
+		    //
+		    for(int i=0; i<ar.nbOfSignals() ; i++) {//DG 15.05.2017
 		    deployinfo_map = deployinfo_map +"\n .channel"+i+" : { \\" + CR;
 		    deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")\\"+ CR;
 		   
 		    deployinfo_map=deployinfo_map+ "} > uram"+ram.getNo_ram()+"\\"+ CR;	
 		    i++;
 		}
+		}
 		
 		i=0;
 //	for (AvatarChannel channel : ram.getChannels()) {
 	for (AvatarRelation relation : avspec.getRelations()) {
 //DG 15.05.2017
+  for(int i=0; i<ar.nbOfSignals() ; i++) {//DG 15.05.2017
 		    deployinfo_map = deployinfo_map +"\n .lock"+i+" : { \\" + CR;
 		    deployinfo_map = deployinfo_map + "*(section_lock"+i+ ")\\"+ CR;		   
 		    //  if(use_vcilocks) deployinfo_map=deployinfo_map+ "} > vci_locks\\"+ CR;
@@ -201,9 +205,10 @@ deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" +
 		    i++;
 		}
 
-	}	    
+	}	
+	}    
 	return deployinfo_map;	
-    }
+ }
 
 
 public static String getProcInfo() {
