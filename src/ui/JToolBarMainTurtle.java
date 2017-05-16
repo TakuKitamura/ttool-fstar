@@ -198,11 +198,6 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
             genlotos.addMouseListener(mgui.mouseHandler);
         }
 
-        /*if (MainGUI.proverifOn) {
-          button = add(mgui.actions[TGUIAction.ACT_GEN_PROVERIF]);
-          button.addMouseListener(mgui.mouseHandler);
-          }*/
-
         addSeparator();
 
         checkcode = add(mgui.actions[TGUIAction.ACT_CHECKCODE]);

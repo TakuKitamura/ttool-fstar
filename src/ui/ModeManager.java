@@ -152,10 +152,6 @@ public class ModeManager {
             //actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
             //actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
             break;
-        case MainGUI.MODEL_PROVERIF_OK:
-            actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(true);
-
-            break;
         case MainGUI.EDIT_PROVERIF_OK:
             actions[TGUIAction.ACT_VIEW_RTLOTOS].setEnabled(true);
             break;
@@ -218,7 +214,6 @@ public class ModeManager {
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
-            actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
             actions[TGUIAction.ACT_SIMULATION].setEnabled(false);
@@ -244,7 +239,6 @@ public class ModeManager {
             actions[TGUIAction.ACT_GEN_TMLTXT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_CCODE].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
-            actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
             //actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
@@ -264,7 +258,6 @@ public class ModeManager {
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
-            actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
             actions[TGUIAction.ACT_SIMULATION].setEnabled(false);

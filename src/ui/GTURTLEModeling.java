@@ -2920,7 +2920,6 @@ public class GTURTLEModeling {
 		warnings = avatar2proverif.getWarnings();
 		languageID = PROVERIF;
 		mgui.setMode(MainGUI.EDIT_PROVERIF_OK);
-		//mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
 		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
 		try {
 			if (avatar2proverif.saveInFile(_path)){
@@ -2951,8 +2950,6 @@ public class GTURTLEModeling {
 
 
 	  languageID = TPN;
-	  mgui.setMode(MainGUI.EDIT_PROVERIF_OK);
-	  //mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
 	  //uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
 	  return true;
 	  /*try {

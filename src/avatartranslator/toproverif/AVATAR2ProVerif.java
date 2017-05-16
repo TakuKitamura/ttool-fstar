@@ -55,7 +55,7 @@ import javax.swing.*;
 import ui.ConfigurationTTool;
 import ui.CheckingError;
 import ui.AvatarDesignPanel;
-import ui.window.JDialogProVerifGeneration;
+import ui.window.JDialogProverifVerification;
 import ui.TGComponent;
 import proverifspec.*;
 import myutil.*;
@@ -551,8 +551,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 }
 
         // Queries for states
-        TraceManager.addDev ("Queries Event (" + (this.stateReachability == JDialogProVerifGeneration.REACHABILITY_ALL ? "ALL" : this.stateReachability == JDialogProVerifGeneration.REACHABILITY_SELECTED ? "SELECTED" : "NONE") + ")"); 
-        if (this.stateReachability != JDialogProVerifGeneration.REACHABILITY_NONE) {
+        TraceManager.addDev ("Queries Event (" + (this.stateReachability == JDialogProverifVerification.REACHABILITY_ALL ? "ALL" : this.stateReachability == JDialogProverifVerification.REACHABILITY_SELECTED ? "SELECTED" : "NONE") + ")"); 
+        if (this.stateReachability != JDialogProverifVerification.REACHABILITY_NONE) {
             this.spec.addDeclaration (new ProVerifComment    ("Queries Event"));
             for (AvatarBlock block: this.avspec.getListOfBlocks ()) {
                 HashSet<AvatarStateMachineElement> visited = new HashSet<AvatarStateMachineElement> ();
@@ -564,7 +564,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         continue;
                     visited.add (asme);
 
-                    if (asme instanceof AvatarState && (this.stateReachability == JDialogProVerifGeneration.REACHABILITY_ALL || ((AvatarState) asme).isCheckable ())) {
+                    if (asme instanceof AvatarState && (this.stateReachability == JDialogProverifVerification.REACHABILITY_ALL || ((AvatarState) asme).isCheckable ())) {
                         this.spec.addDeclaration (new ProVerifQueryEv    (new ProVerifVar[] {}, "enteringState__" + block.getName() + "__" + asme.getName()));
                         this.spec.addDeclaration (new ProVerifEvDecl     ("enteringState__" + block.getName() + "__" + asme.getName(), new String[] {}));
                         TraceManager.addDev("|    event (enteringState__" + block.getName() + "__" + asme.getName() + ")"); 
@@ -1293,8 +1293,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         ProVerifTranslatorParameter arg = (ProVerifTranslatorParameter) _arg;
         ProVerifProcInstr _lastInstr = arg.lastInstr;
 
-        if (this.stateReachability == JDialogProVerifGeneration.REACHABILITY_ALL ||
-           (this.stateReachability == JDialogProVerifGeneration.REACHABILITY_SELECTED && _asme.isCheckable ()))
+        if (this.stateReachability == JDialogProverifVerification.REACHABILITY_ALL ||
+           (this.stateReachability == JDialogProverifVerification.REACHABILITY_SELECTED && _asme.isCheckable ()))
             // Adding an event for reachability of the state
             _lastInstr = _lastInstr.setNextInstr (new ProVerifProcRaw ("event enteringState__" + arg.block.getName() + "__" + _asme.getName() + "()", true));
 

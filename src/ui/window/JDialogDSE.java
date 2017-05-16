@@ -36,7 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class JDialogProVerifGeneration
+ * Class JDialogDSE
  * Dialog for managing the generation of ProVerif code and execution of
  * ProVerif
  * Creation: 10/09/2010

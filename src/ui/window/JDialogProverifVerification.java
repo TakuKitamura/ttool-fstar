@@ -381,43 +381,44 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
                 testGo();
                 pathCode = code1.getText().trim ();
 
-                if (pathCode.isEmpty()){
-                    pathCode="pvspec";
-                } /*else {
-		    
-		    if (!FileUtils.checkPath(pathCode)) {
-			jta.append("Error: invalid directory: " + pathCode + "\n");
-			mode =      STOPPED;
-			setButtons();
-			return;
-		    }
-		    }*/
+                if (pathCode.isEmpty() || pathCode.endsWith(File.separator)) {
+                    pathCode += "pvspec";
+                }
 
                 testFile = new File(pathCode);
 
-		File dir = testFile.getParentFile();
-		if (!dir.exists()) {
-		    jta.append("Error: invalid directory: " + pathCode + "\n");
-			mode =      STOPPED;
-			setButtons();
-			return;
-		}
-
-		
-
-                if (testFile.isDirectory()){
-                    if (!pathCode.endsWith (File.separator)){
-                        pathCode += File.separator;
-                    }
+                if (testFile != null && testFile.isDirectory()){
+                    pathCode += File.separator;
                     pathCode += "pvspec";
                     testFile = new File(pathCode);
                 }
+
+                File dir = null;
+                if (testFile != null)
+                {
+                    dir = testFile.getParentFile();
+                }
+
+                if (testFile == null || dir == null || !dir.exists()) {
+                    jta.append("Error: invalid file: " + pathCode + "\n");
+                        mode = STOPPED;
+                        setButtons();
+                        return;
+                }
+
                 
                 if (testFile.exists()){
                     // FIXME Raise error
                     System.out.println("FILE EXISTS!!!");
                 }
-                if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachabilityAll.isSelected () ? REACHABILITY_ALL : stateReachabilitySelected.isSelected () ? REACHABILITY_SELECTED : REACHABILITY_NONE, typedLanguage.isSelected(), loopLimit.getText())) {
+
+                if (
+                        mgui.gtm.generateProVerifFromAVATAR(
+                            pathCode,
+                            stateReachabilityAll.isSelected () ? REACHABILITY_ALL : stateReachabilitySelected.isSelected () ? REACHABILITY_SELECTED : REACHABILITY_NONE,
+                            typedLanguage.isSelected(),
+                            loopLimit.getText())
+                        ) {
                     jta.append("ProVerif code generation done\n");
                 } else {
 		    setError();
@@ -430,6 +431,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
                 else {
                     exe2.setText(pathExecute +  " -in pi ");	
                 }
+
                 exe2.setText(exe2.getText()+pathCode);
                 //if (mgui.gtm.getCheckingWarnings().size() > 0) {
                 jta.append("" +  mgui.gtm.getCheckingWarnings().size() + " warning(s)\n");
