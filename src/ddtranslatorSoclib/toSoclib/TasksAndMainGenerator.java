@@ -108,7 +108,6 @@ public class TasksAndMainGenerator {
     private boolean includeUserCode = true;
  
     int channel_counter=0;
-    int nb_syncchannels=0;
 
     public TasksAndMainGenerator(AvatarddSpecification _avddspec,AvatarSpecification _avspec) {
         avspec = _avspec;
@@ -200,16 +199,13 @@ public class TasksAndMainGenerator {
     	//for(AvatarRelation ar: avspec.getRelations()) {
     	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
     		//for(AvatarChannel ar: avspec.getChannels()) {
-    		//for(AvatarChannel channel: ram.getChannels()){ 
-		    for(AvatarRelation ar: avspec.getRelations()) {//DG 15.05.2017
-
-			for(int i=0; i<ar.nbOfSignals() ; i++) {//DG 15.05.2017
-
+    		for(AvatarChannel channel: ram.getChannels()){ 
     			mainFile.appendToBeforeMainCode("#define CHANNEL"+d+" __attribute__((section(\"section_channel"+d+"\")))" + CR ); 	
     			mainFile.appendToBeforeMainCode("#define LOCK"+d+" __attribute__((section(\"section_lock"+d+"\")))" + CR );//one lock per channel
-    			d++;		      			
-		    }
-		    }
+    			d++;
+    		}
+    	}
+
 
     	mainFile.appendToBeforeMainCode("#define base(arg) arg" + CR2 );
     	mainFile.appendToBeforeMainCode("typedef struct mwmr_s mwmr_t;" + CR2);
@@ -219,31 +215,19 @@ public class TasksAndMainGenerator {
     	mainFile.appendToMainCode("pthread_attr_t *attr_t = malloc(sizeof(pthread_attr_t));" +CR);
     	mainFile.appendToMainCode("pthread_attr_init(attr_t);" + CR );
     	mainFile.appendToMainCode("pthread_mutex_init(&__mainMutex, NULL);" +CR2);       
-	 	    
-
-	}
     }
   
     public void makeSynchronousChannels() {
-	int i=0;   int j=0;    
+	int i=0;   int j=0;     
         // Create synchronous channel signals
         mainFile.appendToHCode("/* Synchronous channels */" + CR);
         mainFile.appendToBeforeMainCode("/* Synchronous channels */" + CR);
         mainFile.appendToMainCode("/* Synchronous channels */" + CR);
-
         for(AvatarRelation ar: avspec.getRelations()) {
 	    
 	if (!ar.isAsynchronous()) {
-	    //ar.setId(j); 
-	    // ar.setId(i);//DG 15.05.2017 
-	    //j++;
-	    //i++; 		    
-	    for(i=0; i<ar.nbOfSignals() ; i++) {
-	
-ar.setId(i);//DG 15.05.2017 
-//i++; 
-            ar.setId(i);//DG 15.05.2017 
-
+	ar.setId(j); j++;
+		    for(i=0; i<ar.nbOfSignals() ; i++) {
 			mainFile.appendToHCode("extern syncchannel __" + getChannelName(ar, i) + ";" + CR);
 
 			mainFile.appendToBeforeMainCode("syncchannel __" +getChannelName(ar, i) + ";" + CR);
@@ -283,37 +267,28 @@ ar.setId(i);//DG 15.05.2017
 			mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".status->wptr =0;" + CR);
 				     
-			//mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
-			//mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
+			mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
+	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
 	       
-			//mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
+	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
 		
-			//mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);					
-
-mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+nb_syncchannels+";" + CR); 
-			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+nb_syncchannels+";" + CR); 		
-	       
-			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+nb_syncchannels+";" + CR);
-		
-			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+nb_syncchannels+";" + CR2);
-		nb_syncchannels++;//DG 16.05.2017 	    
-	    }
+	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);					
+		    }
 	}
-	}
+      }	
     }
 
     public void makeAsynchronousChannels() {
 	if (avspec.ASynchronousExist()){
-	    // Create an asynchronous channel per relation/signal
+	    // Create a synchronous channel per relation/signal
 	    mainFile.appendToHCode("/* Asynchronous channels */" + CR);
 	    mainFile.appendToBeforeMainCode("/* Asynchronous channels */" + CR);
 	    mainFile.appendToMainCode("/* Asynchronous channels */" + CR);
             int j=0;
 	    for(AvatarRelation ar: avspec.getRelations()) {
 		ar.setId(j); j++;//DG
-		if (ar.isAsynchronous()) {//DG 16.0.5 il faut i2=i??
+		if (ar.isAsynchronous()) {
 		    for(int i=0; i<ar.nbOfSignals() ; i++) {
-			//ar.setId(i); i++;//DG 15.05.2017
 			mainFile.appendToHCode("extern asyncchannel __" + getChannelName(ar, i) + ";" + CR);
 
 			mainFile.appendToBeforeMainCode("asyncchannel __" +getChannelName(ar, i) + ";" + CR);
@@ -357,21 +332,13 @@ mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock 
 	    
 	    
 	//int seg_no=0;
-        /*mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
+        mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
 	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
 	       
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
 		
-	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);*/
-
-	//DG 16.05. problem: asyncchannels mapped on same segments
-	mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+(i+nb_syncchannels)+";" + CR); 
-	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+(i+nb_syncchannels)+";" + CR); 		
-	       
-	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+(i+nb_syncchannels)+";" + CR);
+	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);		
 		
-	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+(i+nb_syncchannels)+";" + CR2);		
-	nb_syncchannels++;	
 		    }
 		}
 	    }
