@@ -108,6 +108,7 @@ public class TasksAndMainGenerator {
     private boolean includeUserCode = true;
  
     int channel_counter=0;
+    int nb_syncchannels=0;
 
     public TasksAndMainGenerator(AvatarddSpecification _avddspec,AvatarSpecification _avspec) {
         avspec = _avspec;
@@ -224,7 +225,7 @@ public class TasksAndMainGenerator {
     }
   
     public void makeSynchronousChannels() {
-	int i=0;   int j=0;     
+	int i=0;   int j=0;    
         // Create synchronous channel signals
         mainFile.appendToHCode("/* Synchronous channels */" + CR);
         mainFile.appendToBeforeMainCode("/* Synchronous channels */" + CR);
@@ -238,6 +239,7 @@ public class TasksAndMainGenerator {
 	    //j++;
 	    //i++; 		    
 	    for(i=0; i<ar.nbOfSignals() ; i++) {
+	
 ar.setId(i);//DG 15.05.2017 
 //i++; 
             ar.setId(i);//DG 15.05.2017 
@@ -281,13 +283,20 @@ ar.setId(i);//DG 15.05.2017
 			mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".status->wptr =0;" + CR);
 				     
-			mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
-	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
+			//mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
+			//mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
 	       
-	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
+			//mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
 		
-	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);					
-		    
+			//mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);					
+
+mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+nb_syncchannels+";" + CR); 
+			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+nb_syncchannels+";" + CR); 		
+	       
+			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+nb_syncchannels+";" + CR);
+		
+			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+nb_syncchannels+";" + CR2);
+		nb_syncchannels++;//DG 16.05.2017 	    
 	    }
 	}
 	}
@@ -301,10 +310,10 @@ ar.setId(i);//DG 15.05.2017
 	    mainFile.appendToMainCode("/* Asynchronous channels */" + CR);
             int j=0;
 	    for(AvatarRelation ar: avspec.getRelations()) {
-		//ar.setId(j); j++;//DG
-		if (ar.isAsynchronous()) {
+		ar.setId(j); j++;//DG
+		if (ar.isAsynchronous()) {//DG 16.0.5 il faut i2=i??
 		    for(int i=0; i<ar.nbOfSignals() ; i++) {
-ar.setId(i); i++;//DG 15.05.2017
+			//ar.setId(i); i++;//DG 15.05.2017
 			mainFile.appendToHCode("extern asyncchannel __" + getChannelName(ar, i) + ";" + CR);
 
 			mainFile.appendToBeforeMainCode("asyncchannel __" +getChannelName(ar, i) + ";" + CR);
@@ -348,13 +357,21 @@ ar.setId(i); i++;//DG 15.05.2017
 	    
 	    
 	//int seg_no=0;
-        mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
+        /*mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
 	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
 	       
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
 		
-	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);		
+	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);*/
+
+	//DG 16.05. problem: asyncchannels mapped on same segments
+	mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+(i+nb_syncchannels)+";" + CR); 
+	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+(i+nb_syncchannels)+";" + CR); 		
+	       
+	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+(i+nb_syncchannels)+";" + CR);
 		
+	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+(i+nb_syncchannels)+";" + CR2);		
+	nb_syncchannels++;	
 		    }
 		}
 	    }

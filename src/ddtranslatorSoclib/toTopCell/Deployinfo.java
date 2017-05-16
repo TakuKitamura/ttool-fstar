@@ -171,44 +171,83 @@ deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" +
 	return deployinfo;	
     }
 
- public static String getDeployInfoMap() {
+    /*   public static String getDeployInfoMap() {
 	int i=0;       
         String deployinfo_map = CR;
-
+	int nb_signals=0;
 	deployinfo_map += "#define MAP_A\\" + CR;		
+
+System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
 	    //if (!(ram.getChannels().isEmpty())){	
 	    //	for (AvatarChannel channel : ram.getChannels()) {
-	   
+System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");	   
  //DG 15.05.2017	   	
 	    	for (AvatarRelation relation : avspec.getRelations()) {
 		    //if (!(ram.getRelations().isEmpty())){
 		    //
-		    for(int i=0; i<ar.nbOfSignals() ; i++) {//DG 15.05.2017
-		    deployinfo_map = deployinfo_map +"\n .channel"+i+" : { \\" + CR;
-		    deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")\\"+ CR;
+		    for(i=0; i<relation.nbOfSignals() ; i++) {//DG 15.05.2017
+		    deployinfo_map = deployinfo_map +"\n .channel"+nb_signals+" : { \\" + CR;
+		    deployinfo_map = deployinfo_map + "*(section_channel"+nb_signals+ ")\\"+ CR;
 		   
 		    deployinfo_map=deployinfo_map+ "} > uram"+ram.getNo_ram()+"\\"+ CR;	
-		    i++;
+		    i++;nb_signals++;
 		}
 		}
 		
-		i=0;
+		i=0;nb_signals=0;
+System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
 //	for (AvatarChannel channel : ram.getChannels()) {
 	for (AvatarRelation relation : avspec.getRelations()) {
 //DG 15.05.2017
-  for(int i=0; i<ar.nbOfSignals() ; i++) {//DG 15.05.2017
-		    deployinfo_map = deployinfo_map +"\n .lock"+i+" : { \\" + CR;
-		    deployinfo_map = deployinfo_map + "*(section_lock"+i+ ")\\"+ CR;		   
+System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
+  for(i=0; i<relation.nbOfSignals() ; i++) {//DG 15.05.2017
+      System.out.println("@@@@@@@@ 2  @@@@@@@@@@@@@@@@@");
+
+		    deployinfo_map = deployinfo_map +"\n .lock"+nb_signals+" : { \\" + CR;
+		    deployinfo_map = deployinfo_map + "*(section_lock"+nb_signals+ ")\\"+ CR;		   
 		    //  if(use_vcilocks) deployinfo_map=deployinfo_map+ "} > vci_locks\\"+ CR;
 		    deployinfo_map=deployinfo_map+ "} > uram0\\"+ CR;//DG 27.06. no ramlocks
-		    i++;
+		    i++; nb_signals++;
 		}
 
 	}	
 	}    
 	return deployinfo_map;	
- }
+	}*/
+
+    public static String getDeployInfoMap() {
+	int i=0;       
+        String deployinfo_map = CR;
+
+	deployinfo_map += "#define MAP_A\\" + CR;		
+	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
+	    if (!(ram.getChannels().isEmpty())){	
+		//for (AvatarChannel channel : ram.getChannels()) {
+		for (i=0;i<30;i++) {
+		    deployinfo_map = deployinfo_map +"\n .channel"+i+" : { \\" + CR;
+		    deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")\\"+ CR;
+		   
+		    deployinfo_map=deployinfo_map+ "} > uram"+ram.getNo_ram()+"\\"+ CR;	
+		    //i++;
+		}
+		
+		i=0;
+		//for (AvatarChannel channel : ram.getChannels()) {
+		for (i=0;i<30;i++) {
+		    deployinfo_map = deployinfo_map +"\n .lock"+i+" : { \\" + CR;
+		    deployinfo_map = deployinfo_map + "*(section_lock"+i+ ")\\"+ CR;		   
+		    //  if(use_vcilocks) deployinfo_map=deployinfo_map+ "} > vci_locks\\"+ CR;
+		    deployinfo_map=deployinfo_map+ "} > uram0\\"+ CR;//DG 27.06. no ramlocks
+		    //i++;
+		}
+
+	    }	    
+	}
+	return deployinfo_map;	
+	}
+
+
 
 
 public static String getProcInfo() {
