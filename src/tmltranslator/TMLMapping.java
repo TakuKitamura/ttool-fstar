@@ -681,16 +681,19 @@ public class TMLMapping {
 
 
     public void removeForksAndJoins() {
-	TraceManager.addDev("\n\nRemove fork and join in MAPPING");
+	TraceManager.addDev("\n\nRemove fork and join in MAPPING. Current nb of tasks:" + tmlm.getTasks().size());
         if (tmlm != null) {
             tmlm.removeForksAndJoins();
         }
 
         TMLChannel chan;
 
+	TraceManager.addDev("Number of tasks after remove fork/join: " + tmlm.getTasks().size());
+	
+	
         // We map the forked tasks to their origin node, and the join ones to their destination node
         for(TMLTask task: tmlm.getTasks()) {
-            if (task.getName().startsWith("FORKTASK__")) {
+            if (task.getName().startsWith("FORKTASK_")) {
                 if (!isTaskMapped(task)) {
 		    TraceManager.addDev("\n\nFORKTASK is NOT mapped: " + task.getName());
                     // We need to map this fork task to the origin node
@@ -711,7 +714,7 @@ public class TMLMapping {
             } else {
 		TraceManager.addDev("Non fork task found: " + task.getName());
 	    }
-            if (task.getName().startsWith("JOINTASK__")) {
+            if (task.getName().startsWith("JOINTASK_")) {
                 if (!isTaskMapped(task)) {
                     // We need to map this join task to the destination node
                     chan = tmlm.getChannelFromMe(task);
