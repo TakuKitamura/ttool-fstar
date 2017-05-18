@@ -108,6 +108,7 @@ public class TasksAndMainGenerator {
     private boolean includeUserCode = true;
  
     int channel_counter=0;
+    int k=0;   
 
     public TasksAndMainGenerator(AvatarddSpecification _avddspec,AvatarSpecification _avspec) {
         avspec = _avspec;
@@ -224,7 +225,7 @@ public class TasksAndMainGenerator {
     }
   
     public void makeSynchronousChannels() {
-	int i=0;   int j=0;     
+	int i=0;   int j=0;  
         // Create synchronous channel signals
         mainFile.appendToHCode("/* Synchronous channels */" + CR);
         mainFile.appendToBeforeMainCode("/* Synchronous channels */" + CR);
@@ -240,6 +241,7 @@ public class TasksAndMainGenerator {
 	    for(i=0; i<ar.nbOfSignals() ; i++) {
 ar.setId(i);//DG 15.05.2017 
 //i++; 
+
             ar.setId(i);//DG 15.05.2017 
 
 			mainFile.appendToHCode("extern syncchannel __" + getChannelName(ar, i) + ";" + CR);
@@ -272,7 +274,16 @@ ar.setId(i);//DG 15.05.2017
 	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
 	mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);		
 	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
-	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok = 1;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok2 = 0;" + CR);
+
+	//DG 18.05 ToDo: attention il y a des canaux dans un sens et dans un autre; il faut adapter les initialisations de ok et ok 2 en fonction!!!
+
+	//	if(signal_dans_un_sens){
+	    mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok = 1;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok2 = 0;" + CR);
+	    //}
+	    //else{   
+	    //	    mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok = 0;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok2 = 1;" + CR);
+	    //}
+
 	/* init because mutekh initializer does not work for this */		
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".status =&"+ getChannelName(ar, i)+"_status;" + CR);
 
@@ -281,13 +292,21 @@ ar.setId(i);//DG 15.05.2017
 			mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".status->wptr =0;" + CR);
 				     
-			mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
+			/*	mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
 	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
 	       
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
 		
-	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);					
-		    
+	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);*/
+
+		mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+k+";" + CR); 
+	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+k+";" + CR); 		
+	       
+	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);
+		
+	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);
+				
+	k++;	    
 	    }
 	}
 	}
@@ -349,13 +368,19 @@ ar.setId(i);//DG 15.05.2017
 	    
 	    
 	//int seg_no=0;
-        mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
+	/*      mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+ar.getId()+";" + CR); 
 	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+ar.getId()+";" + CR); 		
 	       
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+ar.getId()+";" + CR);
 		
-	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);		
+	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+ar.getId()+";" + CR2);*/		
+		   mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+k+";" + CR); 
+	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+k+";" + CR); 		
+	       
+	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);
 		
+	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);
+		k++;		    
 		    }
 		}
 	    }
@@ -964,6 +989,9 @@ ar.setId(i);//DG 15.05.2017
 			ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 
 		    } else {
+
+			ret += "debug2Msg(__myname, \"-> (=====) test "+getChannelName(ar, as) + "\");" + CR;//DG 18.05.
+
 			ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 			ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 
@@ -985,6 +1013,8 @@ ar.setId(i);//DG 15.05.2017
                         ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_BROADCAST_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 			ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                     } else {
+
+			ret += "debug2Msg(__myname, \"-> (=====) test "+getChannelName(ar, as)+ "\");" + CR;//DG 18.05.
 			ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 			ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                     }
