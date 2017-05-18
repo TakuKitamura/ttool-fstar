@@ -38,8 +38,8 @@
    /**
    * Class TML2MappingSystemC
    * Creation: 03/09/2007
-   * @version 1.0 03/09/2007
-   * @author Daniel Knorreck
+   * @version 1.1 03/09/2007
+   * @author Daniel Knorreck, Dominique Blouin, Ludovic Apvrille
    * @see
    */
 
