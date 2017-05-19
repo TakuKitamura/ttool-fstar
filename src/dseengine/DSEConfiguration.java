@@ -1385,7 +1385,7 @@ public class DSEConfiguration implements Runnable  {
 			 System.out.println("tmlcdp " + tmlcdp);
 		     //
 		     //Repeat for secured mapping
-		     TMLMapping secMapping = mainGUI.gtm.autoSecure(mainGUI, "mapping" +(cpt-1),tmla, newArch, encComp, overhead, decComp,true,false);
+		     TMLMapping secMapping = mainGUI.gtm.autoSecure(mainGUI, "mapping" +(cpt-1),tmla, newArch, encComp, overhead, decComp,true,false,false);
 
 		     //Run simulations on this mapping
 		     if (generateAndCompileMappingCode(secMapping, _debug, _optimize)  >= 0) {

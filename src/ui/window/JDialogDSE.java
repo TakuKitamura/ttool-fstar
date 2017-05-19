@@ -89,7 +89,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
     protected JButton close;
     String simulator;
 
-    protected JCheckBox autoConf, autoAuth, autoMapKeys, custom, outputTXT, outputHTML, addHSM;
+    protected JCheckBox autoConf, autoWeakAuth, autoStrongAuth, autoMapKeys, custom, outputTXT, outputHTML, addHSM;
 
     protected JTextField encTime, decTime, secOverhead;
 	protected JComboBox addtoCPU;
@@ -194,10 +194,15 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
 		secGroup.add(autoConf);
         jp01.add(autoConf, c01);
 		autoConf.addActionListener(this);
-        autoAuth= new JCheckBox("Add security (Authenticity)");
-		autoAuth.setEnabled(false);
-        jp01.add(autoAuth, c01);
-		autoAuth.addActionListener(this);
+        autoWeakAuth= new JCheckBox("Add security (Weak Authenticity)");
+		autoWeakAuth.setEnabled(false);
+        jp01.add(autoWeakAuth, c01);
+		autoWeakAuth.addActionListener(this);
+
+        autoStrongAuth= new JCheckBox("Add security (Strong Authenticity)");
+		autoStrongAuth.setEnabled(false);
+        jp01.add(autoStrongAuth, c01);
+		autoStrongAuth.addActionListener(this);
         autoMapKeys= new JCheckBox("Add Keys");
 		autoMapKeys.addActionListener(this);
         jp01.add(autoMapKeys, c01);
@@ -814,7 +819,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
-        } else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == outputHTML) || (evt.getSource() == outputTXT) || (evt.getSource() == autoAuth) || (evt.getSource() == autoConf) || (evt.getSource() == autoMapKeys)) {
+        } else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == outputHTML) || (evt.getSource() == outputTXT) || (evt.getSource() == autoWeakAuth) ||(evt.getSource() == autoStrongAuth) ||(evt.getSource() == autoConf) || (evt.getSource() == autoMapKeys)) {
 	    handleStartButton();
 		}
 		else if (evt.getSource() instanceof JCheckBox){
@@ -838,8 +843,9 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
 		if (evt.getSource() == addHSM){
 			listPanel.setEnabled(addHSM.isSelected());
 		}
-		if (evt.getSource() == autoConf || evt.getSource() == autoMapKeys || evt.getSource() == addHSM){	
-			autoAuth.setEnabled(autoConf.isSelected());
+		if (evt.getSource() == autoConf || evt.getSource() == autoMapKeys || evt.getSource() == addHSM || evt.getSource()==autoWeakAuth){	
+			autoWeakAuth.setEnabled(autoConf.isSelected());
+			autoStrongAuth.setEnabled(autoWeakAuth.isSelected());
 		}
 		if (evt.getSource() == custom){
 			encTime.setEnabled(custom.isSelected());
@@ -908,12 +914,12 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
             decCC=decTime.getText();
             secOv = secOverhead.getText();
             TMLMapping map;
-            if (autoConf.isSelected() || autoAuth.isSelected()){
+            if (autoConf.isSelected() || autoWeakAuth.isSelected() || autoStrongAuth.isSelected()){
                 if (custom.isSelected()){
-                    map = mgui.gtm.autoSecure(mgui, encCC,secOv,decCC,autoConf.isSelected(), autoAuth.isSelected());
+                    map = mgui.gtm.autoSecure(mgui, encCC,secOv,decCC,autoConf.isSelected(), autoWeakAuth.isSelected(),autoStrongAuth.isSelected());
                 }
                 else {
-                    map = mgui.gtm.autoSecure(mgui,autoConf.isSelected(), autoAuth.isSelected());
+                    map = mgui.gtm.autoSecure(mgui,autoConf.isSelected(), autoWeakAuth.isSelected(),autoStrongAuth.isSelected());
                 }
             }
 			else if (addHSM.isSelected()){

@@ -1062,8 +1062,8 @@ public class TML2Avatar {
 				}
 			}
 			if (ch.checkAuth){
-			if (block.getAvatarAttributeWithName(getName(ch.getName())+"_chData")==null){
-				AvatarAttribute channelData= new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null);
+				if (block.getAvatarAttributeWithName(getName(ch.getName())+"_chData")==null){
+					AvatarAttribute channelData= new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null);
 					block.addAttribute(channelData);
 			}
 			AvatarAttributeState authOrigin = new AvatarAttributeState(ch.getName()+"__destination",ae.getReferenceObject(),block.getAvatarAttributeWithName(getName(ch.getName())+"_chData"), signalState);

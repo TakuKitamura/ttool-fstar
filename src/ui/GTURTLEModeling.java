@@ -1123,9 +1123,11 @@ public class GTURTLEModeling {
 		public static final int MAC=2;
 		public static final int DEC=3;
 		public static final int AENC=4;
+		public static final int NONCE=5;
 		public String task;
 		public String securityContext="";
 		public int secType;
+		public String nonceName="";
 		public HSMChannel (String n, String t, int type){
 			name=n;	
 			task=t;
@@ -1237,15 +1239,20 @@ public class GTURTLEModeling {
 					if (tg instanceof TMLADWriteChannel){
 						TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
 						if (writeChannel.securityContext.equals("")){
+							String nonceName="";
 							int type=-1;
 							if (nonSecChans.contains(compName+"__"+writeChannel.getChannelName()+"_chData")){
 								type=HSMChannel.SENC;
+								if (nonAuthChans.contains(compName+"__"+writeChannel.getChannelName())){
+									nonceName="nonce_"+writeChannel.getChannelName();
+								}
 							}
 							else if (nonAuthChans.contains(compName+"__"+writeChannel.getChannelName())){
 								type=HSMChannel.MAC;
 							}
 							HSMChannel ch=new HSMChannel(writeChannel.getChannelName(), compName, type);
 							ch.securityContext="hsmSec_"+writeChannel.getChannelName();
+							ch.nonceName=nonceName;
 							fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
 							if (fromStart!=null){
 								if (type!=-1){
@@ -1270,6 +1277,9 @@ public class GTURTLEModeling {
 								else if (sp.type.equals("MAC")){
 									type=HSMChannel.MAC;
 								}
+								else if (sp.type.equals("Nonce")){
+									type=HSMChannel.NONCE;
+								}
 								HSMChannel ch = new HSMChannel(writeChannel.getChannelName(), compName, type);
 								ch.securityContext=writeChannel.securityContext;
 								compChannels.put(writeChannel.getChannelName(),ch);
@@ -1287,6 +1297,9 @@ public class GTURTLEModeling {
 									HSMChannel ch = new HSMChannel(readChannel.getChannelName(), compName, HSMChannel.DEC);
 									ch.securityContext="hsmSec_"+readChannel.getChannelName();
 									compChannels.put(readChannel.getChannelName(),ch);
+									if (nonSecChans.contains(compName+"__"+readChannel.getChannelName()+"_chData") && nonAuthChans.contains(compName+"__"+readChannel.getChannelName())){
+										ch.nonceName="nonce_"+readChannel.getChannelName();
+									}
 								}
 							}
 						}
@@ -1317,9 +1330,9 @@ public class GTURTLEModeling {
 				hsmChans.add(chd);
 				for (String s: compChannels.keySet()){
 					hsmChannels.put(s,compChannels.get(s));
-					chd = new ChannelData("data_"+s+compChannels.get(s).task,false,true);
+					chd = new ChannelData("data_"+s+"_"+compChannels.get(s).task,false,true);
 					hsmChans.add(chd);
-					chd = new ChannelData("retData_"+s+compChannels.get(s).task,true,true);
+					chd = new ChannelData("retData_"+s+"_"+compChannels.get(s).task,true,true);
 					hsmChans.add(chd);
 				}
 				for (ChannelData hsmChan: hsmChans){
@@ -1375,56 +1388,53 @@ public class GTURTLEModeling {
 
 					//set isEnc to true
 					int yShift=50;
-					TMLADActionState act = new TMLADActionState(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-					act.setValue("isEnc=true");
-					tad.addComponent(act, xpos, ypos+yShift, false,true);
-					fromStart.setP2(act.getTGConnectingPointAtIndex(0));
-
-					//Add send request operator
-					yShift+=50;
-
+					
 					TMLADSendRequest req = new TMLADSendRequest(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					req.setRequestName("startHSM_"+cpuName);
 					req.setParam(0,"isEnc");
 					tad.addComponent(req, xpos, ypos+yShift, false,true);
 
-					//Add connection
-					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
-					fromStart.setP1(act.getTGConnectingPointAtIndex(1));
 					fromStart.setP2(req.getTGConnectingPointAtIndex(0));
 					tad.addComponent(fromStart, xpos, ypos, false, true);
-
-
-
-					yShift+=50;
-					//Add write channel operator
-					TMLADWriteChannel wr = new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-					wr.setChannelName("data_"+chanName+compName);
-					wr.securityContext = ch.securityContext;
-					tad.addComponent(wr, xpos, ypos+yShift, false,true);
-
 
 					//Add connection
 					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
 					fromStart.setP1(req.getTGConnectingPointAtIndex(1));
+					TMLADWriteChannel wr =new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+					
+					yShift+=50;
+					//Add write channel operator
+					wr = new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+					wr.setChannelName("data_"+chanName+"_"+compName);
+					wr.securityContext = ch.securityContext;
+					tad.addComponent(wr, xpos, ypos+yShift, false,true);
+
+
 					fromStart.setP2(wr.getTGConnectingPointAtIndex(0));
 					tad.addComponent(fromStart, xpos, ypos, false, true);
+
+					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+					tad.addComponent(fromStart, xpos, ypos, false, true);
+					fromStart.setP1(wr.getTGConnectingPointAtIndex(1));
+					
+
+
+					
+
+					
 
 					//Add read channel operator
 
 					yShift+=60;
 					TMLADReadChannel rd = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-					rd.setChannelName("retData_"+chanName+compName);
+					rd.setChannelName("retData_"+chanName+"_"+compName);
 					rd.securityContext = ch.securityContext;
 					tad.addComponent(rd, xpos, ypos+yShift, false,true);
 
-					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
-					tad.addComponent(fromStart, xpos, ypos, false, true);
-					fromStart.setP1(wr.getTGConnectingPointAtIndex(1));
 					fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
 					yShift+=50;
 
-
+					//Add connector
 					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
 					tad.addComponent(fromStart, xpos, ypos, false, true);
 					fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
@@ -1436,7 +1446,7 @@ public class GTURTLEModeling {
 					fromStart.setP2(point);
 					//Shift components down to make room for the added ones, and add security contexts to write channels
 					for (TGComponent tg:tad.getComponentList()){
-						if (tg.getY() >= ypos && tg !=wr && tg!=req && tg!=rd && tg!=act){
+						if (tg.getY() >= ypos && tg !=wr && tg!=req && tg!=rd){
 							tg.setCd(tg.getX(), tg.getY()+yShift);
 						}
 					}
@@ -1494,7 +1504,7 @@ public class GTURTLEModeling {
 					yShift+=50;
 					//Add write channel operator
 					TMLADWriteChannel wr = new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-					wr.setChannelName("data_"+chanName+compName);
+					wr.setChannelName("data_"+chanName+"_"+compName);
 					wr.securityContext = ch.securityContext;;
 					tad.addComponent(wr, xpos, ypos+yShift, false,true);
 
@@ -1509,7 +1519,7 @@ public class GTURTLEModeling {
 
 					yShift+=60;
 					TMLADReadChannel rd = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-					rd.setChannelName("retData_"+chanName+compName);
+					rd.setChannelName("retData_"+chanName+"_"+compName);
 					rd.securityContext = ch.securityContext;;
 					tad.addComponent(rd, xpos, ypos+yShift, false,true);
 
@@ -1599,7 +1609,7 @@ public class GTURTLEModeling {
 						tad.addComponent(fromStart, 300,200,false,true);
 					}
 					TMLADReadChannel rd = new TMLADReadChannel(xc, 300, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-					rd.setChannelName("data_"+chan+hsmChannels.get(chan).task);
+					rd.setChannelName("data_"+chan+"_"+hsmChannels.get(chan).task);
 					rd.securityContext = ch.securityContext;;
 					tad.addComponent(rd, xc,300,false,true);
 					//Connect choice and readchannel						
@@ -1609,7 +1619,7 @@ public class GTURTLEModeling {
 			
 					tad.addComponent(fromStart, 300,200,false,true);
 					TMLADWriteChannel wr = new TMLADWriteChannel(xc, 600, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-					wr.setChannelName("retData_"+chan+hsmChannels.get(chan).task);
+					wr.setChannelName("retData_"+chan+"_"+hsmChannels.get(chan).task);
 					tad.addComponent(wr, xc, 600,false,true);
 					wr.securityContext = ch.securityContext;
 
@@ -1646,10 +1656,14 @@ public class GTURTLEModeling {
 						else if (hsmChannels.get(chan).secType==HSMChannel.MAC){	
 							enc.type="MAC";
 						}
+						else if (hsmChannels.get(chan).secType==HSMChannel.NONCE){
+							enc.type="Nonce";
+						}
 
 						enc.message_overhead = overhead;
 						enc.encTime= encComp;
 						enc.decTime=decComp;
+						enc.nonce=hsmChannels.get(chan).nonceName;
 						tad.addComponent(enc, xc, 500,false,true);
 					
 						//Connect encrypt and readchannel
@@ -1676,7 +1690,7 @@ public class GTURTLEModeling {
 				for (String chan: hsmChannels.keySet()){
 					HSMChannel ch = hsmChannels.get(chan);
 					TMLADReadChannel rd = new TMLADReadChannel(xc, 300, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-					rd.setChannelName("data_"+chan+hsmChannels.get(chan).task);
+					rd.setChannelName("data_"+chan+"_"+hsmChannels.get(chan).task);
 					rd.securityContext = ch.securityContext;
 					tad.addComponent(rd, xc,300,false,true);
 					//Connect choice and readchannel
@@ -1688,7 +1702,7 @@ public class GTURTLEModeling {
 					tad.addComponent(fromStart, 300,200,false,true);
 
 					TMLADWriteChannel wr = new TMLADWriteChannel(xc, 600, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-					wr.setChannelName("retData_"+chan+hsmChannels.get(chan).task);
+					wr.setChannelName("retData_"+chan+"_"+hsmChannels.get(chan).task);
 					tad.addComponent(wr, xc, 600,false,true);
 					wr.securityContext = ch.securityContext;
 
@@ -1720,6 +1734,9 @@ public class GTURTLEModeling {
 						}
 						else if (hsmChannels.get(chan).secType==HSMChannel.MAC){	
 							enc.type="MAC";
+						}
+						else if (hsmChannels.get(chan).secType==HSMChannel.NONCE){	
+							enc.type="Nonce";
 						}
 
 						enc.message_overhead = overhead;
@@ -2011,7 +2028,7 @@ public class GTURTLEModeling {
 	
 	}
 
-	public TMLMapping autoSecure(MainGUI gui, boolean autoConf, boolean autoAuth){
+	public TMLMapping autoSecure(MainGUI gui, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
 		//TODO add more options
 		//
 		if (tmap==null){
@@ -2020,13 +2037,13 @@ public class GTURTLEModeling {
 		int arch = gui.tabs.indexOf(tmap.tmlap);
 		gui.cloneRenameTab(arch,"enc");
 		TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
-		return autoSecure(gui, "enc", tmap,newarch,autoConf,autoAuth);
+		return autoSecure(gui, "enc", tmap,newarch,autoConf,autoWeakAuth, autoStrongAuth);
 	}
 	public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch){
-		return autoSecure(gui,name,map,newarch,"100","0","100",true,false);
+		return autoSecure(gui,name,map,newarch,"100","0","100",true,false,false);
 	}
-	public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, boolean autoConf, boolean autoAuth){
-		return autoSecure(gui,name,map,newarch,"100","0","100",autoConf,autoAuth);
+	public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
+		return autoSecure(gui,name,map,newarch,"100","0","100",autoConf,autoWeakAuth, autoStrongAuth);
 	}
 
 	public TMLMapping autoSecure(MainGUI gui, String encComp, String overhead, String decComp){
@@ -2036,20 +2053,20 @@ public class GTURTLEModeling {
 		int arch = gui.tabs.indexOf(tmap.tmlap);
 		gui.cloneRenameTab(arch,"enc");
 		TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
-		return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,true,false);
+		return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,true,false,false);
 	}
 
-	public TMLMapping autoSecure(MainGUI gui, String encComp, String overhead, String decComp, boolean autoConf, boolean autoAuth){
+	public TMLMapping autoSecure(MainGUI gui, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
 		if (tmap==null){
 			return null;
 		}
 		int arch = gui.tabs.indexOf(tmap.tmlap);
 		gui.cloneRenameTab(arch,"enc");
 		TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
-		return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,autoConf,autoAuth);
+		return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,autoConf,autoWeakAuth, autoStrongAuth);
 	}
 	public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp){
-		return autoSecure(gui,name, tmap,newarch,encComp, overhead,decComp,true,false);
+		return autoSecure(gui,name, tmap,newarch,encComp, overhead,decComp,true,false, false);
 	}
 
 	public void proverifAnalysis(TMLMapping map,  ArrayList<String> nonAuthChans, ArrayList<String> nonSecChans){
@@ -2108,7 +2125,7 @@ public class GTURTLEModeling {
 		}
 	}
 
-	public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoAuth){
+	public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
 		HashMap<TMLTask, java.util.List<TMLTask>> toSecure = new HashMap<TMLTask, java.util.List<TMLTask>>();
 		HashMap<TMLTask, java.util.List<TMLTask>> toSecureRev = new HashMap<TMLTask, java.util.List<TMLTask>>();
 		HashMap<TMLTask, java.util.List<String>> secOutChannels = new HashMap<TMLTask, java.util.List<String>>();
@@ -2117,6 +2134,8 @@ public class GTURTLEModeling {
 		HashMap<TMLTask, java.util.List<String>> nonceInChannels = new HashMap<TMLTask, java.util.List<String>>();
 		HashMap<TMLTask, java.util.List<String>> macOutChannels = new HashMap<TMLTask, java.util.List<String>>();
 		HashMap<TMLTask, java.util.List<String>> macInChannels = new HashMap<TMLTask, java.util.List<String>>();
+		HashMap<TMLTask, java.util.List<String>> macNonceOutChannels = new HashMap<TMLTask, java.util.List<String>>();
+		HashMap<TMLTask, java.util.List<String>> macNonceInChannels = new HashMap<TMLTask, java.util.List<String>>();
 		TraceManager.addDev("mapping " + map.getSummaryTaskMapping());
 		ArrayList<String> nonAuthChans = new ArrayList<String>();
 		ArrayList<String> nonSecChans = new ArrayList<String>();
@@ -2157,6 +2176,8 @@ public class GTURTLEModeling {
 			java.util.List<String> tmp6 = new ArrayList<String>();
 			java.util.List<String> tmp7 = new ArrayList<String>();
 			java.util.List<String> tmp8 = new ArrayList<String>();
+			java.util.List<String> tmp9 = new ArrayList<String>();
+			java.util.List<String> tmp10 = new ArrayList<String>();
 			secInChannels.put(task, tmp);
 			secOutChannels.put(task, tmp2);
 			toSecure.put(task,tmp3);
@@ -2165,6 +2186,8 @@ public class GTURTLEModeling {
 			nonceOutChannels.put(task,tmp6);
 			macInChannels.put(task,tmp7);
 			macOutChannels.put(task,tmp8);
+			macNonceOutChannels.put(task,tmp9);
+			macNonceInChannels.put(task,tmp10);
 		}
 		//With the proverif results, check which channels need to be secured
 		for (TMLTask task: map.getTMLModeling().getTasks()){
@@ -2185,19 +2208,25 @@ public class GTURTLEModeling {
 									secOutChannels.get(chan.getOriginTask()).add(writeChannel.getChannelName());
 									secInChannels.get(chan.getDestinationTask()).add(writeChannel.getChannelName());
 									toSecure.get(chan.getOriginTask()).add(chan.getDestinationTask());
-									if (chan.checkAuth && autoAuth){
+									if (chan.checkAuth && autoStrongAuth){
 										toSecureRev.get(chan.getDestinationTask()).add(chan.getOriginTask());
 										nonceOutChannels.get(chan.getOriginTask()).add(writeChannel.getChannelName());
 										nonceInChannels.get(chan.getDestinationTask()).add(writeChannel.getChannelName());
 									}
 								}
 							}
-							else if (chan.checkAuth && autoAuth){
+							else if (chan.checkAuth && autoWeakAuth){
 								if (nonAuthChans.contains(chan.getDestinationTask().getName().split("__")[1]+"__"+writeChannel.getChannelName())){
 									toSecure.get(chan.getOriginTask()).add(chan.getDestinationTask());
 									macOutChannels.get(chan.getOriginTask()).add(writeChannel.getChannelName());
 									macInChannels.get(chan.getDestinationTask()).add(writeChannel.getChannelName());
+									if (autoStrongAuth){
+										toSecureRev.get(chan.getDestinationTask()).add(chan.getOriginTask());
+										macNonceInChannels.get(chan.getDestinationTask()).add(writeChannel.getChannelName());
+										macNonceOutChannels.get(chan.getOriginTask()).add(writeChannel.getChannelName());
+									}
 								}
+	
 							}
 						}
 					}
@@ -2215,7 +2244,7 @@ public class GTURTLEModeling {
 		//	  int num=0;
 		//int nonceNum=0;
 		//Create reverse channels on component diagram to send nonces if they don't already exist
-		//  if (autoAuth){
+
 		for (TMLTask task: toSecureRev.keySet()){
 			TraceManager.addDev("Adding nonces to " + task.getName());
 			List<TMLChannel> chans = tmlmodel.getChannelsFromMe(task);
@@ -2356,7 +2385,7 @@ public class GTURTLEModeling {
 			for (String channel: macOutChannels.get(task)){
 				//Add MAC before writechannel
 				int yShift=50;
-				//TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
+				TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
 				//First, find the connector that points to it. We will add the encryption, nonce operators directly before the write channel operator
 				HashSet<TGComponent> channelInstances = new HashSet<TGComponent>();
 				for (TGComponent tg: tad.getComponentList()){
@@ -2378,8 +2407,38 @@ public class GTURTLEModeling {
 					ypos = comp.getY();
 					fromStart = tad.findTGConnectorEndingAt(comp.getTGConnectingPointAtIndex(0));
 					point = fromStart.getTGConnectingPointP2();
-					//Add encryption operator
+	
 					TMLADEncrypt enc = new TMLADEncrypt(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+
+					//If we need to receive a nonce
+					TMLADReadChannel rd=new TMLADReadChannel(0, 0, 0, 0, 0, 0, false, null, tad);
+					if (macNonceOutChannels.get(task).contains(channel)){
+						//Receive any nonces if ensuring authenticity
+						rd = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+						List<TMLChannel> matches = tmlmodel.getChannels(tmlc.getDestinationTask(), tmlc.getOriginTask());
+
+						if (matches.size()>0){
+							rd.setChannelName(matches.get(0).getName().replaceAll(title+"__",""));
+						}
+						else {
+							rd.setChannelName("nonceCh"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1]);
+						}
+						rd.securityContext = "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
+						tad.addComponent(rd, xpos, ypos+yShift, false,true);
+						fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
+						fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
+						tad.addComponent(fromStart, xpos, ypos, false, true);
+						fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
+						yShift+=60;
+						//Move encryption operator after receive nonce component
+						enc.setCd(xpos, ypos+yShift);
+						if (tmlc!=null){
+							enc.nonce= "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
+						}
+					}
+
+					//Add encryption operator
+
 					enc.securityContext = "autoEncrypt_"+channel;
 					enc.type = "MAC";
 					enc.message_overhead = overhead;
@@ -2407,7 +2466,7 @@ public class GTURTLEModeling {
 								tad.repaint();
 							}
 						}
-						if (tg.getY() >= ypos && tg !=enc){
+						if (tg.getY() >= ypos && tg !=enc && tg!=rd){
 							tg.setCd(tg.getX(), tg.getY()+yShift);
 						}
 					}
@@ -2449,6 +2508,51 @@ public class GTURTLEModeling {
 					TraceManager.addDev("Securing read channel " + readChannel.getChannelName());
 					readChannel.securityContext = "autoEncrypt_"+readChannel.getChannelName();
 					tad.repaint();
+
+					TMLADWriteChannel wr = new TMLADWriteChannel(0, 0, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+					//Create nonce and send it
+					TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
+					if (macNonceInChannels.get(task).contains(channel)){
+						//Create a nonce operator and a write channel operator
+						TMLADEncrypt nonce = new TMLADEncrypt(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+						nonce.securityContext = "nonce_"+ tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
+						nonce.type = "Nonce";
+						nonce.message_overhead = overhead;
+						nonce.encTime= encComp;
+						nonce.decTime=decComp;
+						tad.addComponent(nonce, xpos ,ypos+yShift, false, true);
+						fromStart.setP2(nonce.getTGConnectingPointAtIndex(0));
+						yShift+=50;
+						wr = new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+						//Send nonce along channel, the newly created nonce channel or an existing channel with the matching sender and receiver
+						//Find matching channels
+						List<TMLChannel> matches = tmlmodel.getChannels(tmlc.getDestinationTask(), tmlc.getOriginTask());
+
+						if (matches.size()>0){
+							wr.setChannelName(matches.get(0).getName().replaceAll(title+"__",""));
+						}
+						else {
+							wr.setChannelName("nonceCh"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1]);
+						}
+						//send the nonce along the channel
+						wr.securityContext = "nonce_"+tmlc.getDestinationTask().getName().split("__")[1] + "_"+tmlc.getOriginTask().getName().split("__")[1];
+						tad.addComponent(wr,xpos,ypos+yShift,false,true);
+						wr.makeValue();
+						TGConnector tmp =new TGConnectorTMLAD(wr.getX(), wr.getY()+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null,tad,nonce.getTGConnectingPointAtIndex(1), wr.getTGConnectingPointAtIndex(0), new Vector<Point>());
+						tad.addComponent(tmp, xpos,ypos,false,true);
+						fromStart=new TGConnectorTMLAD(wr.getX(), wr.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, wr.getTGConnectingPointAtIndex(1), null, new Vector<Point>());
+						tad.addComponent(fromStart, xpos, ypos, false, true);
+						//Connect created write channel operator to start of read channel operator
+						fromStart.setP1(wr.getTGConnectingPointAtIndex(1));
+						fromStart.setP2(point);
+						//Shift everything from the read channel on down
+						for (TGComponent tg:tad.getComponentList()){
+							if (tg.getY() >= ypos && tg!=nonce && tg!=wr){
+								tg.setCd(tg.getX(), tg.getY()+yShift);
+							}
+						}
+					}
+
 					//Add decryption operator if it does not already exist
 					xpos = conn.getX();
 					ypos = conn.getY();
