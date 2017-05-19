@@ -276,13 +276,13 @@ ar.setId(i);//DG 15.05.2017
 	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
 
 	//DG 18.05 ToDo: attention il y a des canaux dans un sens et dans un autre; il faut adapter les initialisations de ok et ok 2 en fonction!!!
-
-	//	if(signal_dans_un_sens){
+	//	AvatarSignal sig;
+	if(sig.isOut()){//DG 19.05. sig est deja declare (sig1 du block :-)
 	    mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok = 1;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok2 = 0;" + CR);
-	    //}
-	    //else{   
-	    //	    mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok = 0;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok2 = 1;" + CR);
-	    //}
+	    }
+	    else{   
+	    	    mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok = 0;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok2 = 1;" + CR);
+	    }
 
 	/* init because mutekh initializer does not work for this */		
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".status =&"+ getChannelName(ar, i)+"_status;" + CR);
