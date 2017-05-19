@@ -66,6 +66,7 @@ public class TMLSyntaxChecking {
     private final String UNDECLARED_VARIABLE = "unknown variable";
     private final String SYNTAX_ERROR_VARIABLE_EXPECTED = "syntax error (variable expected)";
     private final String TIME_UNIT_ERROR = "unknown time unit";
+    private final String NO_NEXT_OPERATOR_ERROR = "No next operator";
 
 
     private ArrayList<TMLError> errors;
@@ -93,6 +94,8 @@ public class TMLSyntaxChecking {
         checkReadAndWriteInChannelsEventsAndRequests();
 
         checkActionSyntax();
+
+	checkNextActions();
     }
 
     public int hasErrors() {
@@ -123,6 +126,22 @@ public class TMLSyntaxChecking {
         error.task = t;
         error.element = elt;
         errors.add(error);
+    }
+
+
+    public void checkNextActions() {
+	for(TMLTask t: tmlm.getTasks()) {
+            TMLActivity tactivity = t.getActivityDiagram();
+	    int n = tactivity.nElements();
+	     for(int i=0; i<n; i++) {
+                TMLActivityElement elt = tactivity.get(i);
+		if (!(elt instanceof TMLStopState)) {
+		    if(elt.getNbNext() == 0) {
+			addError(t, elt, elt.getName() + ": " + NO_NEXT_OPERATOR_ERROR, TMLError.ERROR_BEHAVIOR);
+		    }
+		}
+	     }
+	}
     }
 
     public void checkReadAndWriteInChannelsEventsAndRequests() {
