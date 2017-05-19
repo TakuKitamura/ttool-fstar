@@ -121,6 +121,7 @@ public class Test  {
 	nbOfPb += evalBoolInt("(3==3) or (3==4)", true, false);
 
 	nbOfPb += evalBoolInt("1<3", true, false);
+	nbOfPb += evalBoolInt("not(((1)==(3)))", true, false);
 	
 	//nbOfPb += evalBoolInt("not(1==1)", false, false);
 	
