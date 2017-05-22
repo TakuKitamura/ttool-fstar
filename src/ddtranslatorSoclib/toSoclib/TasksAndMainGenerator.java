@@ -210,7 +210,7 @@ public class TasksAndMainGenerator {
     			d++;		      			
 		    }
 		    }
-
+	}
     	mainFile.appendToBeforeMainCode("#define base(arg) arg" + CR2 );
     	mainFile.appendToBeforeMainCode("typedef struct mwmr_s mwmr_t;" + CR2);
 
@@ -220,8 +220,6 @@ public class TasksAndMainGenerator {
     	mainFile.appendToMainCode("pthread_attr_init(attr_t);" + CR );
     	mainFile.appendToMainCode("pthread_mutex_init(&__mainMutex, NULL);" +CR2);       
 	 	    
-
-	}
     }
   
     public void makeSynchronousChannels() {
