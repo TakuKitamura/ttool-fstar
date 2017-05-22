@@ -692,15 +692,22 @@ public class TMLModeling {
     }
 
     public void backtrace(ProVerifOutputAnalyzer pvoa, String mappingName){
-        System.out.println("Backtracing Confidentiality");
-        LinkedList<AvatarAttribute> secretAttributes = pvoa.getSecretTerms ();
-        LinkedList<AvatarAttribute> nonSecretAttributes = pvoa.getNonSecretTerms ();
-        for (AvatarAttribute attr: secretAttributes){
+        //System.out.println("Backtracing Confidentiality");
+        HashMap<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
+
+        for (AvatarPragmaSecret pragma: confResults.keySet()) {
+            ProVerifQueryResult result = confResults.get(pragma);
+            if (!result.isProved())
+                continue;
+            int r = result.isSatisfied() ? 2 : 3;
+
+            AvatarAttribute attr = pragma.getArg();
+
             TMLChannel channel = getChannelByShortName(attr.getName().replaceAll("_chData",""));
             if (channel!=null){
                 for (TMLCPrimitivePort port:channel.ports){
                     if (port.checkConf){
-                        port.checkConfStatus = 2;
+                        port.checkConfStatus = r;
                         port.mappingName= mappingName;
                     }
                 }
@@ -709,7 +716,7 @@ public class TMLModeling {
             if (req !=null){
                 for (TMLCPrimitivePort port: req.ports){
                     if (port.checkConf){
-                        port.checkConfStatus = 2;
+                        port.checkConfStatus = r;
                         port.mappingName= mappingName;
                     }
                 }
@@ -717,29 +724,28 @@ public class TMLModeling {
             TMLEvent ev = getEventByName(attr.getName().replaceAll("_eventData",""));
             if (ev !=null){
                 if (ev.port.checkConf){
-                    ev.port.checkConfStatus=2;
+                    ev.port.checkConfStatus=r;
                     ev.port.mappingName= mappingName;
                 }
                 if (ev.port2.checkConf){
-                    ev.port2.checkConfStatus=2;
+                    ev.port2.checkConfStatus=r;
                     ev.port2.mappingName=mappingName;
                 }
             }
             List<String> channels=secChannelMap.get(attr.getName());
-			if (channels!=null){
-				for (String channelName: channels){
-    	  //      if (channelName!=null){
-					channel = getChannelByShortName(channelName);
-	                if (channel!=null){
-	                    for (TMLCPrimitivePort port:channel.ports){
-	                        if (port.checkConf){
-	                            port.checkSecConfStatus = 2;
-	                            port.secName= attr.getName();
-	                        }
-	                    }
-	                }
-	            }
-			}
+            if (channels != null) {
+                for (String channelName: channels) {
+                    channel = getChannelByShortName(channelName);
+                    if (channel!=null){
+                        for (TMLCPrimitivePort port:channel.ports){
+                            if (port.checkConf){
+                                port.checkSecConfStatus = r;
+                                port.secName= attr.getName();
+                            }
+                        }
+                    }
+                }
+            }
             for (TMLTask t:getTasks()){
                 if (t.getReferenceObject()==null){
                     continue;
@@ -749,381 +755,322 @@ public class TMLModeling {
                     comp.mappingName=mappingName;
                     for (TAttribute a: comp.getAttributes ())
                         if (a.getId().equals(attr.getName()))
-                            a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
+                            a.setConfidentialityVerification(result.isSatisfied() ? TAttribute.CONFIDENTIALITY_OK : TAttribute.CONFIDENTIALITY_KO);
                 }
             }
         }
-        for (AvatarAttribute attr: nonSecretAttributes){
-            TMLChannel channel = getChannelByShortName(attr.getName().replaceAll("_chData",""));
-            if (channel!=null){
-                for (TMLCPrimitivePort port:channel.ports){
-                    if (port.checkConf){
-                        port.checkConfStatus = 3;
-                        port.mappingName= mappingName;
-                    }
-                }
-            }
-            TMLRequest req = getRequestByName(attr.getName().replaceAll("_reqData",""));
-            if (req !=null){
-                for (TMLCPrimitivePort port: req.ports){
-                    if (port.checkConf){
-                        port.checkConfStatus = 3;
-                        port.mappingName= mappingName;
-                    }
-                }
-            }
-            TMLEvent ev = getEventByName(attr.getName().replaceAll("_eventData",""));
-            if (ev !=null){
-                if (ev.port.checkConf){
-                    ev.port.checkConfStatus=3;
-                    ev.port.mappingName= mappingName;
-                }
-                if (ev.port2.checkConf){
-                    ev.port2.checkConfStatus=3;
-                    ev.port2.mappingName= mappingName;
-                }
-            }
-            List<String> channels=secChannelMap.get(attr.getName());
-			if (channels!=null){
-				for (String channelName: channels){
-//  	          if (channelName!=null){
-    	            channel = getChannelByShortName(channelName);
-    	            if (channel!=null){
-    	                for (TMLCPrimitivePort port:channel.ports){
-    	                    if (port.checkConf){
-    	                        port.checkSecConfStatus = 3;
-    	                        port.secName= attr.getName();
-    	                    }
-    	                }
-    	            }
-    	        }
-			}
-            for (TMLTask t:getTasks()){
-                if (t.getReferenceObject() instanceof TMLCPrimitiveComponent){
-                    TMLCPrimitiveComponent comp = (TMLCPrimitiveComponent) t.getReferenceObject();
-                    comp.mappingName=mappingName;
-                    for (TAttribute a: comp.getAttributes ())
-                        if (a.getId().equals(attr.getName()) &&t.getName().equals(attr.getBlock().getName()))
-                            a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
-                }
-            }
-        }
-		System.out.println("Finished backtracing");
-        return;
     }
-    public void backtraceAuthenticity(LinkedList<String> satisfiedAuthenticity, LinkedList<String> satisfiedWeakAuthenticity,LinkedList<String> nonSatisfiedAuthenticity, String mappingName){
-		System.out.println("secchannelmap " + secChannelMap);
+
+    public void backtraceAuthenticity(HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authenticityResults, String mappingName) {
         //      System.out.println("Backtracing Authenticity");
-        for (String s: satisfiedAuthenticity){
-            String signalName = s.split("_chData")[0];
-            /*for (TMLTask t: getTasks()){
-              if (signalName.contains(t.getName())){
-              signalName = signalName.replace(t.getName()+"__","");
-              }
-              }*/
-            signalName = signalName.split("__")[1];
-            TMLChannel channel = getChannelByShortName(signalName);
-            if (channel!=null){
-                for (TMLCPrimitivePort port:channel.ports){
-                    if (port.checkAuth){
-                        port.checkStrongAuthStatus = 2;
-                        port.mappingName= mappingName;
-                    }
-                }
-            }
-            signalName = s.split("_reqData")[0];
-            for (TMLTask t: getTasks()){
-                if (signalName.contains(t.getName())){
-                    signalName = signalName.replace(t.getName()+"__","");
-                }
-            }
-            TMLRequest req = getRequestByName(signalName);
-            if (req !=null){
-                for (TMLCPrimitivePort port: req.ports){
-                    if (port.checkAuth){
-                        port.checkStrongAuthStatus = 2;
-                        port.mappingName= mappingName;
-                    }
-                }
-            }
-            signalName = s.split("_eventData")[0];
-            for (TMLTask t: getTasks()){
-                if (signalName.contains(t.getName())){
-                    signalName = signalName.replace(t.getName()+"__","");
-                }
-            }
-            TMLEvent ev = getEventByName(signalName);
-            if (ev !=null){
-                if (ev.port.checkAuth){
-                    ev.port.checkStrongAuthStatus=2;
-                    ev.port2.mappingName= mappingName;
-                }
-                if (ev.port2.checkAuth){
-                    ev.port2.checkStrongAuthStatus=2;
-                    ev.port2.mappingName= mappingName;
-                }
-            }
+        for (AvatarPragmaAuthenticity pragma: authenticityResults.keySet()) {
+            ProVerifQueryAuthResult result = authenticityResults.get(pragma);
+            // TODO: deal directly with pragma instead of s
+            String s = pragma.getAttrB().getAttribute().getBlock().getName()
+                + "__" + pragma.getAttrB().getAttribute().getName()
+                + "__" + pragma.getAttrB().getState().getName()
+                + " ==> "
+                + pragma.getAttrA().getAttribute().getBlock().getName()
+                + "__" + pragma.getAttrA().getAttribute().getName()
+                + "__" + pragma.getAttrA().getState().getName();
 
-            signalName = s.split("__decrypt")[0];
-            /*for (TMLTask t: getTasks()){
-              if (signalName.contains(t.getName())){
-              signalName = signalName.replace(t.getName()+"__","");
-              }
-              }*/
-            signalName=signalName.split("__")[1];
-            List<String> channels=secChannelMap.get(signalName);
-			if (channels!=null){
-				for (String channelName: channels){
-			//  if (channelName!=null){
-    	            channel = getChannelByShortName(channelName);
-    	            if (channel!=null){
-    	                for (TMLCPrimitivePort port:channel.ports){
-    	                    if (port.checkAuth){
-    	                        port.checkStrongAuthStatus = 2;
-    	                        port.secName= signalName;
-    	                    }
-    	                }
-    	            }
-    	        }
-    	    }
-		}
-        for (String s: satisfiedWeakAuthenticity){
-            String signalName = s.split("_chData")[0];
-            signalName = signalName.split("__")[1];
-            TMLChannel channel = getChannelByShortName(signalName);
-            if (channel!=null){
-                for (TMLCPrimitivePort port:channel.ports){
-                    if (port.checkAuth){
-                        port.checkWeakAuthStatus = 2;
-                        port.mappingName= mappingName;
+            if (result.isProved() && result.isSatisfied())
+            {
+                String signalName = s.split("_chData")[0];
+                /*for (TMLTask t: getTasks()){
+                  if (signalName.contains(t.getName())){
+                  signalName = signalName.replace(t.getName()+"__","");
+                  }
+                  }*/
+                signalName = signalName.split("__")[1];
+                TMLChannel channel = getChannelByShortName(signalName);
+                if (channel!=null){
+                    for (TMLCPrimitivePort port:channel.ports){
+                        if (port.checkAuth){
+                            port.checkStrongAuthStatus = 2;
+                            port.mappingName= mappingName;
+                        }
                     }
                 }
-            }
-            signalName = s.split("_reqData")[0];
-            for (TMLTask t: getTasks()){
-                if (signalName.contains(t.getName())){
-                    signalName = signalName.replace(t.getName()+"__","");
-                }
-            }
-            TMLRequest req = getRequestByName(signalName);
-            if (req !=null){
-                for (TMLCPrimitivePort port: req.ports){
-                    if (port.checkAuth){
-                        port.checkWeakAuthStatus = 2;
-                        port.mappingName= mappingName;
+                signalName = s.split("_reqData")[0];
+                for (TMLTask t: getTasks()){
+                    if (signalName.contains(t.getName())){
+                        signalName = signalName.replace(t.getName()+"__","");
+                    }
+                }     
+                TMLRequest req = getRequestByName(signalName);
+                if (req !=null){
+                    for (TMLCPrimitivePort port: req.ports){
+                        if (port.checkAuth){
+                            port.checkStrongAuthStatus = 2;
+                            port.mappingName= mappingName;
+                        }
                     }
                 }
-            }
-            signalName = s.split("__eventData")[0];
-            for (TMLTask t: getTasks()){
-                if (signalName.contains(t.getName())){
-                    signalName = signalName.replace(t.getName()+"__","");
+                signalName = s.split("_eventData")[0];
+                for (TMLTask t: getTasks()){
+                    if (signalName.contains(t.getName())){
+                        signalName = signalName.replace(t.getName()+"__","");
+                    }
                 }
-            }
-            TMLEvent ev = getEventByName(signalName);
-            if (ev !=null){
-                if (ev.port.checkAuth){
-                    ev.port.checkWeakAuthStatus=2;
-                    ev.port2.mappingName= mappingName;
+                TMLEvent ev = getEventByName(signalName);
+                if (ev !=null){
+                    if (ev.port.checkAuth){
+                        ev.port.checkStrongAuthStatus=2;
+                        ev.port2.mappingName= mappingName;
+                    }
+                    if (ev.port2.checkAuth){
+                        ev.port2.checkStrongAuthStatus=2;
+                        ev.port2.mappingName= mappingName;
+                    }
                 }
-                if (ev.port2.checkAuth){
-                    ev.port2.checkWeakAuthStatus=2;
-                    ev.port2.mappingName= mappingName;
-                }
-            }
-            signalName = s.split("__decrypt")[0];
-            /*for (TMLTask t: getTasks()){
-              if (signalName.contains(t.getName())){
-              signalName = signalName.replace(t.getName()+"__","");
-              }
-              }*/
-            signalName = signalName.split("__")[1];
-            List<String> channels=secChannelMap.get(signalName);
-			if (channels!=null){
-				for (String channelName:channels){
-//  	          if (channelName!=null){
-					System.out.println("original channel " + channelName);
-    	            channel = getChannelByShortName(channelName);
-    	            if (channel!=null){
-    	                for (TMLCPrimitivePort port:channel.ports){
-    	                    if (port.checkAuth){
-    	                        port.checkWeakAuthStatus = 2;
-    	                        port.secName= signalName;
-    	                    }
-    	                }
-    	            }
-    	        }
-    	    }
-		}
-        for (String s: nonSatisfiedAuthenticity){
-            System.out.println(s);
-            String signalName = s.split("_chData")[0];
-            /*for (TMLTask t: getTasks()){
-              System.out.println(t.getName());
-              if (signalName.contains(t.getName().split("__")[1])){
-              signalName = signalName.split(t.getName().split("__")[1]+"__")[0];
-              }
-              }*/
-            signalName = signalName.split("__")[1];
-      //      System.out.println("channels " + channels.get(0).getName());
-       //     System.out.println("signalName " + signalName);
-            TMLChannel channel = getChannelByShortName(signalName);
-            if (channel!=null){
-                System.out.println("adding auth results to channel " + channel.getName());
-                for (TMLCPrimitivePort port:channel.ports){
-                    if (port.checkAuth){
 
-                        port.checkStrongAuthStatus = 3;
-                        port.mappingName= mappingName;
+                signalName = s.split("__decrypt")[0];
+                /*for (TMLTask t: getTasks()){
+                  if (signalName.contains(t.getName())){
+                  signalName = signalName.replace(t.getName()+"__","");
+                  }
+                  }*/
+                signalName=signalName.split("__")[1];
+                List<String> channels=secChannelMap.get(signalName);
+                if (channels!=null) {
+                    for (String channelName: channels) {
+                        channel = getChannelByShortName(channelName);
+                        if (channel!=null){
+                            for (TMLCPrimitivePort port:channel.ports){
+                                if (port.checkAuth){
+                                    port.checkStrongAuthStatus = 2;
+                                    port.secName= signalName;
+                                }
+                            }
+                        }
                     }
                 }
-            }
-            signalName = s.split("_reqData")[0];
-            for (TMLTask t: getTasks()){
-                if (signalName.contains(t.getName())){
-                    signalName = signalName.replace(t.getName()+"__","");
-                }
-            }
-            TMLRequest req = getRequestByName(signalName);
-            if (req !=null){
-                for (TMLCPrimitivePort port: req.ports){
-                    if (port.checkAuth){
-                        port.checkStrongAuthStatus = 3;
-                        port.mappingName= mappingName;
-                    }
-                }
-            }
-            signalName = s.split("_eventData")[0];
-            for (TMLTask t: getTasks()){
-                if (signalName.contains(t.getName())){
-                    signalName = signalName.replace(t.getName()+"__","");
-                }
-            }
-            TMLEvent ev = getEventByName(signalName);
-            if (ev !=null){
-                if (ev.port.checkAuth){
-                    ev.port.checkStrongAuthStatus=3;
-                    ev.port2.mappingName= mappingName;
-                }
-                if (ev.port2.checkAuth){
-                    ev.port2.checkStrongAuthStatus=3;
-                    ev.port2.mappingName= mappingName;
-                }
-            }
-			//Backtrace for security patterns
-            signalName = s.split("__decrypt")[0];
-            /*for (TMLTask t: getTasks()){
-              if (signalName.contains(t.getName())){
-              signalName = signalName.replace(t.getName()+"__","");
-              }
-              }*/
-            List<String> channels=secChannelMap.get(signalName);
-			if (channels!=null){
-				for (String channelName:channels){
-//  	          if (channelName!=null){
-    	            channel = getChannelByShortName(channelName);
-    	            if (channel!=null){
-    	                for (TMLCPrimitivePort port:channel.ports){
-    	                    if (port.checkAuth){
-    	                        port.checkStrongAuthStatus = 3;
-    	                        port.secName= signalName;
-							}
-						}
-					}
-				}
-			}
-		}
+
 		//In case of HSM 
-
-		for (String s: nonSatisfiedAuthenticity){
-			String signalName = s.split("__decrypt")[0];
-            signalName = signalName.split("__")[1];
- 			List<String> channels=secChannelMap.get(signalName);
-			if (channels!=null){
-				for (String channelName: channels){
-    	        //if (channelName!=null){
-					if (channelName.contains("retData_") || channelName.contains("data_")){
-						channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
-						//channelName=channelName.split("__retData_")[1];
-						String header= channelName.split("__retData_")[0];
-						for (TMLTask t: getTasks()){
+                signalName = s.split("__decrypt")[0];
+                signalName = signalName.split("__")[1];
+                channels=secChannelMap.get(signalName);
+                if (channels!=null){
+                    for (String channelName: channels){
+                        if (channelName.contains("retData_") || channelName.contains("data_")){
+                            channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
+                            String header= channelName.split("__retData_")[0];
+                            for (TMLTask t: getTasks()){
     	            		if (channelName.contains(t.getName().split("__")[1])){
-    	                		channelName = channelName.replace("_"+t.getName().split("__")[1],"");
+                                    channelName = channelName.replace("_"+t.getName().split("__")[1],"");
     	            		}
-    	        		}
-    	            	TMLChannel channel = getChannelByShortName(channelName);
-    	            	if (channel!=null){
-
-		                    for (TMLCPrimitivePort port:channel.ports){
-    		                    if (port.checkAuth){
-    		                        port.checkWeakAuthStatus = 3;
-    		                        port.secName= signalName;
-    		                    }
-    		                }
-    		            }
-					}
-    	        }
-			}
-		}
-		for (String s: satisfiedWeakAuthenticity){
-			String signalName = s.split("__decrypt")[0];
-            signalName = signalName.split("__")[1];
- 			List<String> channels=secChannelMap.get(signalName);
-			if (channels!=null){
-				for (String channelName: channels){
-//            if (channelName!=null){
-					if (channelName.contains("retData_") || channelName.contains("data_")){
-						channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
-						//channelName=channelName.split("__retData_")[1];
-						String header= channelName.split("__retData_")[0];
-						for (TMLTask t: getTasks()){
-    	            		if (channelName.contains(t.getName().split("__")[1])){
-    	                		channelName = channelName.replace("_"+t.getName().split("__")[1],"");
-    	            		}
-    	        		}
-    	            	TMLChannel channel = getChannelByShortName(channelName);
-    	            	if (channel!=null){
-		                    for (TMLCPrimitivePort port:channel.ports){
-    		                    if (port.checkAuth){
-    		                        port.checkWeakAuthStatus = 2;
-    		                        port.secName= signalName;
-    		                    }
-    		                }
-    		            }
-					}
-    	        }
-			}
-		}
-		for (String s: satisfiedAuthenticity){
-			String signalName = s.split("__decrypt")[0];
-            signalName = signalName.split("__")[1];
- 			List<String> channels=secChannelMap.get(signalName);
-			if (channels!=null){
-				for (String channelName: channels){
-//  	          if (channelName!=null){
-					if (channelName.contains("retData_") || channelName.contains("data_")){
-						channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
-						//channelName=channelName.split("__retData_")[1];
-						String header= channelName.split("__retData_")[0];
-						for (TMLTask t: getTasks()){
-    	            		if (channelName.contains(t.getName().split("__")[1])){
-    	                		channelName = channelName.replace("_"+t.getName().split("__")[1],"");
-    	            		}
-    	        		}
-    	            	TMLChannel channel = getChannelByShortName(channelName);
-    	            	if (channel!=null){
-		                    for (TMLCPrimitivePort port:channel.ports){
+                            }
+                            channel = getChannelByShortName(channelName);
+                            if (channel!=null){
+                                for (TMLCPrimitivePort port:channel.ports){
     		                    if (port.checkAuth){
     		                        port.checkStrongAuthStatus = 2;
     		                        port.secName= signalName;
     		                    }
     		                }
     		            }
-					}
-    	        }
 			}
+                    }
 		}
+            }
+
+            if (result.isWeakProved() && result.isWeakSatisfied())
+            {
+                String signalName = s.split("_chData")[0];
+                signalName = signalName.split("__")[1];
+                TMLChannel channel = getChannelByShortName(signalName);
+                if (channel!=null){
+                    for (TMLCPrimitivePort port:channel.ports){
+                        if (port.checkAuth){
+                            port.checkWeakAuthStatus = 2;
+                            port.mappingName= mappingName;
+                        }
+                    }
+                }
+                signalName = s.split("_reqData")[0];
+                for (TMLTask t: getTasks()){
+                    if (signalName.contains(t.getName())){
+                        signalName = signalName.replace(t.getName()+"__","");
+                    }
+                }
+                TMLRequest req = getRequestByName(signalName);
+                if (req !=null){
+                    for (TMLCPrimitivePort port: req.ports){
+                        if (port.checkAuth){
+                            port.checkWeakAuthStatus = 2;
+                            port.mappingName= mappingName;
+                        }
+                    }
+                }
+                signalName = s.split("__eventData")[0];
+                for (TMLTask t: getTasks()){
+                    if (signalName.contains(t.getName())){
+                        signalName = signalName.replace(t.getName()+"__","");
+                    }
+                }
+                TMLEvent ev = getEventByName(signalName);
+                if (ev !=null){
+                    if (ev.port.checkAuth){
+                        ev.port.checkWeakAuthStatus=2;
+                        ev.port2.mappingName= mappingName;
+                    }
+                    if (ev.port2.checkAuth){
+                        ev.port2.checkWeakAuthStatus=2;
+                        ev.port2.mappingName= mappingName;
+                    }
+                }
+                signalName = s.toString().split("__decrypt")[0];
+                /*for (TMLTask t: getTasks()){
+                  if (signalName.contains(t.getName())){
+                  signalName = signalName.replace(t.getName()+"__","");
+                  }
+                  }*/
+                signalName = signalName.split("__")[1];
+                List<String> channels=secChannelMap.get(signalName);
+                if (channels!=null){
+                    for (String channelName:channels){
+                        channel = getChannelByShortName(channelName);
+                        if (channel!=null){
+                            for (TMLCPrimitivePort port:channel.ports){
+                                if (port.checkAuth){
+                                    port.checkWeakAuthStatus = 2;
+                                    port.secName= signalName;
+                                }
+                            }
+                        }
+                    }
+                }
+
+		//In case of HSM 
+                signalName = s.split("__decrypt")[0];
+                signalName = signalName.split("__")[1];
+                channels=secChannelMap.get(signalName);
+                if (channels!=null){
+                    for (String channelName: channels){
+                        if (channelName.contains("retData_") || channelName.contains("data_")){
+                            channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
+                            String header= channelName.split("__retData_")[0];
+                            for (TMLTask t: getTasks()){
+    	            		if (channelName.contains(t.getName().split("__")[1])){
+                                    channelName = channelName.replace("_"+t.getName().split("__")[1],"");
+    	            		}
+                            }
+                            channel = getChannelByShortName(channelName);
+                            if (channel!=null){
+                                for (TMLCPrimitivePort port:channel.ports){
+    		                    if (port.checkAuth){
+    		                        port.checkWeakAuthStatus = 2;
+    		                        port.secName= signalName;
+    		                    }
+    		                }
+    		            }
+			}
+                    }
+		}
+            }
+
+            if (result.isProved() && !result.isSatisfied())
+            {
+                System.out.println(s.toString());
+                String signalName = s.toString().split("_chData")[0];
+                /*for (TMLTask t: getTasks()){
+                  System.out.println(t.getName());
+                  if (signalName.contains(t.getName().split("__")[1])){
+                  signalName = signalName.split(t.getName().split("__")[1]+"__")[0];
+                  }
+                  }*/
+                signalName = signalName.split("__")[1];
+                TMLChannel channel = getChannelByShortName(signalName);
+                if (channel!=null){
+                    System.out.println("adding auth results to channel " + channel.getName());
+                    for (TMLCPrimitivePort port:channel.ports){
+                        if (port.checkAuth){
+
+                            port.checkStrongAuthStatus = 3;
+                            port.mappingName= mappingName;
+                        }
+                    }
+                }
+                signalName = s.toString().split("_reqData")[0];
+                for (TMLTask t: getTasks()){
+                    if (signalName.contains(t.getName())){
+                        signalName = signalName.replace(t.getName()+"__","");
+                    }
+                }
+                TMLRequest req = getRequestByName(signalName);
+                if (req !=null){
+                    for (TMLCPrimitivePort port: req.ports){
+                        if (port.checkAuth){
+                            port.checkStrongAuthStatus = 3;
+                            port.mappingName= mappingName;
+                        }
+                    }
+                }
+                signalName = s.toString().split("_eventData")[0];
+                for (TMLTask t: getTasks()){
+                    if (signalName.contains(t.getName())){
+                        signalName = signalName.replace(t.getName()+"__","");
+                    }
+                }
+                TMLEvent ev = getEventByName(signalName);
+                if (ev !=null){
+                    if (ev.port.checkAuth){
+                        ev.port.checkStrongAuthStatus=3;
+                        ev.port2.mappingName= mappingName;
+                    }
+                    if (ev.port2.checkAuth){
+                        ev.port2.checkStrongAuthStatus=3;
+                        ev.port2.mappingName= mappingName;
+                    }
+                }
+
+                signalName = s.split("__decrypt")[0];
+                List<String> channels=secChannelMap.get(signalName);
+                if (channels!=null){
+                    for (String channelName:channels){
+                        channel = getChannelByShortName(channelName);
+                        if (channel!=null){
+                            for (TMLCPrimitivePort port:channel.ports){
+                                if (port.checkAuth){
+                                    port.checkStrongAuthStatus = 3;
+                                    port.secName= signalName;
+                                }
+                            }
+                        }
+                    }
+		}
+
+		//In case of HSM 
+                signalName = s.split("__decrypt")[0];
+                signalName = signalName.split("__")[1];
+                channels=secChannelMap.get(signalName);
+                if (channels!=null){
+                    for (String channelName: channels){
+                        if (channelName.contains("retData_") || channelName.contains("data_")){
+                            channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
+                            String header= channelName.split("__retData_")[0];
+                            for (TMLTask t: getTasks()){
+    	            		if (channelName.contains(t.getName().split("__")[1])){
+                                    channelName = channelName.replace("_"+t.getName().split("__")[1],"");
+    	            		}
+                            }
+                            channel = getChannelByShortName(channelName);
+                            if (channel!=null){
+                                for (TMLCPrimitivePort port:channel.ports){
+    		                    if (port.checkAuth){
+    		                        port.checkWeakAuthStatus = 3;
+    		                        port.secName= signalName;
+    		                    }
+    		                }
+    		            }
+                        }
+                    }
+                }
+            }
+        }
     }
+
     public void clearBacktracing(){
         for (TMLChannel channel: getChannels()){
             for (TMLCPrimitivePort port:channel.ports){

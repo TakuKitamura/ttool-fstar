@@ -36,41 +36,45 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarPragma
- * Creation: 20/05/2010
- * @version 1.1 01/07/2014
- * @author Ludovic APVRILLE, Letitia LI
+ * Class AvatarPragmaReachability
+ * Creation: 19/05/2017
+ * @version 1.0 19/05/2017
+ * @author Florian LUGOU
  * @see
  */
 
 package avatartranslator;
 
-import java.util.*;
+public class AvatarPragmaReachability extends AvatarPragma {
+    private AvatarState state;
+    private AvatarBlock block;
 
-import myutil.*;
-
-
-public class AvatarPragmaSecret extends AvatarPragma {
-
-    private AvatarAttribute argument;
-
-    public AvatarPragmaSecret(String _name, Object _referenceObject, AvatarAttribute arg) {
+    public AvatarPragmaReachability(String _name, Object _referenceObject, AvatarBlock block, AvatarState state)
+    {
         super(_name, _referenceObject);
-        this.argument = arg;
+        this.block = block;
+        this.state = state;
     }
-    public AvatarAttribute getArg(){
-	return this.argument;
+
+    public AvatarState getState()
+    {
+        return this.state;
+    }
+
+    public AvatarBlock getBlock()
+    {
+        return this.block;
     }
 
     public String toString()
     {
-        return this.argument.getBlock().getName().replaceAll("__", ".") + "." + this.argument.getName();
+        return this.block.getName().replaceAll("__", ".") + "." + this.state.getName();
     }
 
     @Override
-    public AvatarPragmaSecret advancedClone (AvatarSpecification avspec) {
-        AvatarPragmaSecret result = new AvatarPragmaSecret (this.name, this.referenceObject, avspec.getMatchingAttribute(this.argument));
-        this.cloneLinkToReferenceObjects (result);
-        return result;
+    public AvatarPragmaReachability advancedClone(AvatarSpecification avspec)
+    {
+        // !!! Should never be called !!!
+        return null;
     }
 }

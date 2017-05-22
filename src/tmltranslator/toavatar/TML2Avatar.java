@@ -59,6 +59,8 @@ import ui.TGComponent;
 import myutil.*;
 import avatartranslator.*;
 
+import proverifspec.ProVerifQueryResult;
+
 public class TML2Avatar {
 	private TMLMapping tmlmap;
 	private TMLModeling tmlmodel;
@@ -1079,11 +1081,10 @@ public class TML2Avatar {
 				sig=signalOutMap.get(ch.getName());
 			}
 			if (ch.checkConf){
-			LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
 			if (!attrsToCheck.contains(getName(ch.getName())+"_chData")){
-				attrs.add(new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null));
+				AvatarAttribute attr = new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null);
 				attrsToCheck.add(getName(ch.getName())+"_chData");
-				avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ch.getName()+"_chData", ch.getReferenceObject(), attrs));
+				avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ch.getName()+"_chData", ch.getReferenceObject(), attr));
 				}
 			}
 			if (ch.checkAuth){
@@ -1594,11 +1595,9 @@ public class TML2Avatar {
 		for (SecurityPattern secPattern: secPatterns){
 		AvatarAttribute sec = new AvatarAttribute(secPattern.name, AvatarType.INTEGER, block, null);
 		AvatarAttribute enc = new AvatarAttribute(secPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
-			LinkedList<AvatarAttribute> attrs = new LinkedList<AvatarAttribute>();
 		block.addAttribute(sec);
 		block.addAttribute(enc);
-			attrs.add(sec);
-			avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ secPattern.name, null, attrs));
+                avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ secPattern.name, null, sec));
 		}
 		
 	}
@@ -1955,65 +1954,45 @@ public class TML2Avatar {
 		return avspec;
 	}
 
- //   public void backtracePatterns(List<Stri
-   
-	public void backtraceReachability(List<String> reachableStates, List<String> nonReachableStates){
-	//	System.out.println(stateObjectMap);
-	for (String s: reachableStates){
-		if (stateObjectMap.containsKey(s.replace("enteringState__",""))){
-		Object obj = stateObjectMap.get(s.replace("enteringState__",""));
-		if (obj instanceof TMLADWriteChannel){
-			TMLADWriteChannel wc =(TMLADWriteChannel) obj;
-			wc.reachabilityInformation=1;
-		}
-		if (obj instanceof TMLADReadChannel){
-			TMLADReadChannel wc =(TMLADReadChannel) obj;
-			wc.reachabilityInformation=1;
-		}
-		
-		if (obj instanceof TMLADSendEvent){
-			TMLADSendEvent wc =(TMLADSendEvent) obj;
-			wc.reachabilityInformation=1;
-		}
-		
-		if (obj instanceof TMLADSendRequest){
-			TMLADSendRequest wc =(TMLADSendRequest) obj;
-			wc.reachabilityInformation=1;
-		}
-		if (obj instanceof TMLADWaitEvent){
-			TMLADWaitEvent wc =(TMLADWaitEvent) obj;
-			wc.reachabilityInformation=1;
-		}		
-		}
+	public void backtraceReachability(HashMap<AvatarPragmaReachability, ProVerifQueryResult> reachabilityResults) {
+            for (AvatarPragmaReachability pragma: reachabilityResults.keySet())
+            {
+                ProVerifQueryResult result = reachabilityResults.get(pragma);
+                if (!result.isProved())
+                    continue;
+
+                int r = result.isSatisfied() ? 1 : 2;
+
+                String s = pragma.getBlock().getName() + "__" + pragma.getState().getName();
+
+                if (stateObjectMap.containsKey(s)) {
+                    Object obj = stateObjectMap.get(s);
+                    if (obj instanceof TMLADWriteChannel){
+                            TMLADWriteChannel wc =(TMLADWriteChannel) obj;
+                            wc.reachabilityInformation=r;
+                    }
+                    if (obj instanceof TMLADReadChannel){
+                            TMLADReadChannel wc =(TMLADReadChannel) obj;
+                            wc.reachabilityInformation=r;
+                    }
+                    
+                    if (obj instanceof TMLADSendEvent){
+                            TMLADSendEvent wc =(TMLADSendEvent) obj;
+                            wc.reachabilityInformation=r;
+                    }
+                    
+                    if (obj instanceof TMLADSendRequest){
+                            TMLADSendRequest wc =(TMLADSendRequest) obj;
+                            wc.reachabilityInformation=r;
+                    }
+                    if (obj instanceof TMLADWaitEvent){
+                            TMLADWaitEvent wc =(TMLADWaitEvent) obj;
+                            wc.reachabilityInformation=r;
+                    }		
+                }
+            }
 	}
-	for (String s:nonReachableStates){
-		if (stateObjectMap.containsKey(s.replace("enteringState__",""))){
-		Object obj = stateObjectMap.get(s.replace("enteringState__",""));
-		if (obj instanceof TMLADWriteChannel){
-			TMLADWriteChannel wc =(TMLADWriteChannel) obj;
-			wc.reachabilityInformation=2;
-		}
-		if (obj instanceof TMLADReadChannel){
-			TMLADReadChannel wc =(TMLADReadChannel) obj;
-			wc.reachabilityInformation=2;
-		}
-		
-		if (obj instanceof TMLADSendEvent){
-			TMLADSendEvent wc =(TMLADSendEvent) obj;
-			wc.reachabilityInformation=2;
-		}
-		
-		if (obj instanceof TMLADSendRequest){
-			TMLADSendRequest wc =(TMLADSendRequest) obj;
-			wc.reachabilityInformation=2;
-		}
-		if (obj instanceof TMLADWaitEvent){
-			TMLADWaitEvent wc =(TMLADWaitEvent) obj;
-			wc.reachabilityInformation=2;
-		}		
-		}
-	}
-	}
+
 	public void distributeKeys(){
 		List<TMLTask> tasks = tmlmap.getTMLModeling().getTasks();
 		for (TMLTask t:accessKeys.keySet()){

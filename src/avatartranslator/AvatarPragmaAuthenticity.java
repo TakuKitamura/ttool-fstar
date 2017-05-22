@@ -75,6 +75,15 @@ public class AvatarPragmaAuthenticity extends AvatarPragma {
     }
 
     @Override
+    public String toString()
+    {
+        if (this.attrA == null || this.attrB == null)
+            return "<undefined>";
+
+        return this.attrA.toString() + " ==> " + this.attrB.toString();
+    }
+
+    @Override
     public AvatarPragmaAuthenticity advancedClone (AvatarSpecification avspec) {
         AvatarPragmaAuthenticity result = new AvatarPragmaAuthenticity (this.name, this.referenceObject, this.attrA.advancedClone(avspec), this.attrB.advancedClone(avspec));
         this.cloneLinkToReferenceObjects (result);

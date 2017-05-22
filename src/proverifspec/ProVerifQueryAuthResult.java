@@ -36,41 +36,38 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarPragma
- * Creation: 20/05/2010
- * @version 1.1 01/07/2014
- * @author Ludovic APVRILLE, Letitia LI
+ * Class ProVerifQueryAuthResult
+ * Creation: 19/05/2017
+ * @version 1.0 19/05/2017
+ * @author Florian LUGOU
  * @see
  */
 
-package avatartranslator;
+package proverifspec;
 
-import java.util.*;
+public class ProVerifQueryAuthResult extends ProVerifQueryResult {
+    protected boolean weakSatisfied, weakProved;
 
-import myutil.*;
-
-
-public class AvatarPragmaSecret extends AvatarPragma {
-
-    private AvatarAttribute argument;
-
-    public AvatarPragmaSecret(String _name, Object _referenceObject, AvatarAttribute arg) {
-        super(_name, _referenceObject);
-        this.argument = arg;
-    }
-    public AvatarAttribute getArg(){
-	return this.argument;
-    }
-
-    public String toString()
+    public ProVerifQueryAuthResult(boolean proved, boolean satisfied)
     {
-        return this.argument.getBlock().getName().replaceAll("__", ".") + "." + this.argument.getName();
+        super(proved, satisfied);
+        this.weakSatisfied = true;
+        this.weakProved = (proved && satisfied);
     }
 
-    @Override
-    public AvatarPragmaSecret advancedClone (AvatarSpecification avspec) {
-        AvatarPragmaSecret result = new AvatarPragmaSecret (this.name, this.referenceObject, avspec.getMatchingAttribute(this.argument));
-        this.cloneLinkToReferenceObjects (result);
-        return result;
+    public boolean isWeakProved()
+    {
+        return this.weakProved;
+    }
+
+    public boolean isWeakSatisfied()
+    {
+        return this.weakSatisfied;
+    }
+
+    public void setWeakSatisfied(boolean satisfied)
+    {
+        this.weakProved = true;
+        this.weakSatisfied = satisfied;
     }
 }
