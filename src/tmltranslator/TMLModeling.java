@@ -66,7 +66,7 @@ public class TMLModeling {
     private TMLElement correspondance[];
     public List<SecurityPattern> secPatterns = new ArrayList<SecurityPattern>();
     private boolean optimized = false;
-    public Map<String, String> secChannelMap = new HashMap<String, String>();
+    public Map<String, List<String>> secChannelMap = new HashMap<String, List<String>>();
     public Map<SecurityPattern, List<TMLTask>> securityTaskMap = new HashMap<SecurityPattern, List<TMLTask>>();
     private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ","};
     private Map<TGComponent, String> checkedActivities = new HashMap<TGComponent, String>();
@@ -725,8 +725,9 @@ public class TMLModeling {
                     ev.port2.mappingName=mappingName;
                 }
             }
-            String channelName=secChannelMap.get(attr.getName());
-            if (channelName!=null){
+            List<String> channels=secChannelMap.get(attr.getName());
+			for (String channelName: channels){
+      //      if (channelName!=null){
                 channel = getChannelByShortName(channelName);
                 if (channel!=null){
                     for (TMLCPrimitivePort port:channel.ports){
@@ -780,8 +781,9 @@ public class TMLModeling {
                     ev.port2.mappingName= mappingName;
                 }
             }
-            String channelName=secChannelMap.get(attr.getName());
-            if (channelName!=null){
+            List<String> channels=secChannelMap.get(attr.getName());
+			for (String channelName: channels){
+//            if (channelName!=null){
                 channel = getChannelByShortName(channelName);
                 if (channel!=null){
                     for (TMLCPrimitivePort port:channel.ports){
@@ -864,8 +866,9 @@ public class TMLModeling {
               }
               }*/
             signalName=signalName.split("__")[1];
-            String channelName=secChannelMap.get(signalName);
-            if (channelName!=null){
+            List<String> channels=secChannelMap.get(signalName);
+			for (String channelName: channels){
+		//  if (channelName!=null){
                 channel = getChannelByShortName(channelName);
                 if (channel!=null){
                     for (TMLCPrimitivePort port:channel.ports){
@@ -928,8 +931,9 @@ public class TMLModeling {
               }
               }*/
             signalName = signalName.split("__")[1];
-            String channelName=secChannelMap.get(signalName);
-            if (channelName!=null){
+            List<String> channels=secChannelMap.get(signalName);
+			for (String channelName:channels){
+//            if (channelName!=null){
 				System.out.println("original channel " + channelName);
                 channel = getChannelByShortName(channelName);
                 if (channel!=null){
@@ -1004,8 +1008,9 @@ public class TMLModeling {
               signalName = signalName.replace(t.getName()+"__","");
               }
               }*/
-            String channelName=secChannelMap.get(signalName);
-            if (channelName!=null){
+            List<String> channels=secChannelMap.get(signalName);
+			for (String channelName:channels){
+//            if (channelName!=null){
                 channel = getChannelByShortName(channelName);
                 if (channel!=null){
                     for (TMLCPrimitivePort port:channel.ports){
@@ -1022,8 +1027,9 @@ public class TMLModeling {
 		for (String s: satisfiedWeakAuthenticity){
 			String signalName = s.split("__decrypt")[0];
             signalName = signalName.split("__")[1];
- 			String channelName=secChannelMap.get(signalName);
-            if (channelName!=null){
+ 			List<String> channels=secChannelMap.get(signalName);
+			for (String channelName: channels){
+//            if (channelName!=null){
 				if (channelName.contains("retData_") || channelName.contains("data_")){
 					channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
 					//channelName=channelName.split("__retData_")[1];
@@ -1048,8 +1054,9 @@ public class TMLModeling {
 		for (String s: nonSatisfiedAuthenticity){
 			String signalName = s.split("__decrypt")[0];
             signalName = signalName.split("__")[1];
- 			String channelName=secChannelMap.get(signalName);
-            if (channelName!=null){
+ 			List<String> channels=secChannelMap.get(signalName);
+			for (String channelName: channels){
+            //if (channelName!=null){
 				if (channelName.contains("retData_") || channelName.contains("data_")){
 					channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
 					//channelName=channelName.split("__retData_")[1];
@@ -1074,8 +1081,9 @@ public class TMLModeling {
 		for (String s: satisfiedAuthenticity){
 			String signalName = s.split("__decrypt")[0];
             signalName = signalName.split("__")[1];
- 			String channelName=secChannelMap.get(signalName);
-            if (channelName!=null){
+ 			List<String> channels=secChannelMap.get(signalName);
+			for (String channelName: channels){
+//            if (channelName!=null){
 				if (channelName.contains("retData_") || channelName.contains("data_")){
 					channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
 					//channelName=channelName.split("__retData_")[1];

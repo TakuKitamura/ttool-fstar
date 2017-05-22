@@ -75,7 +75,7 @@ public class TML2Avatar {
 	public Map<String, Object> stateObjectMap = new HashMap<String, Object>();
 	public Map<TMLTask, List<SecurityPattern>> accessKeys = new HashMap<TMLTask, List<SecurityPattern>>();
 
-	HashMap<String, String> secChannelMap = new HashMap<String, String>();
+	HashMap<String, List<String>> secChannelMap = new HashMap<String, List<String>>();
 
 	HashMap<String, AvatarAttributeState> signalAuthOriginMap = new HashMap<String, AvatarAttributeState>();
 	HashMap<String, AvatarAttributeState> signalAuthDestMap = new HashMap<String, AvatarAttributeState>();
@@ -1001,7 +1001,11 @@ public class TML2Avatar {
 					block.addAttribute(data);
 				}
 				else {
-		  			secChannelMap.put(ae.securityPattern.name,ch.getName());
+					if (!secChannelMap.containsKey(ae.securityPattern.name)){
+						List<String> tmp=new ArrayList<String>();
+						secChannelMap.put(ae.securityPattern.name,tmp);
+					}
+		  			secChannelMap.get(ae.securityPattern.name).add(ch.getName());
 		 			as.addValue(ae.securityPattern.name+"_encrypted");
 					AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
 					block.addAttribute(data);
@@ -1084,7 +1088,11 @@ public class TML2Avatar {
 					as.addValue(ae.securityPattern.name+"_encrypted");
 					AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
 					block.addAttribute(data);
-					secChannelMap.put(ae.securityPattern.name,ch.getName());
+					if (!secChannelMap.containsKey(ae.securityPattern.name)){
+						List<String> tmp=new ArrayList<String>();
+						secChannelMap.put(ae.securityPattern.name,tmp);
+					}
+					secChannelMap.get(ae.securityPattern.name).add(ch.getName());
 				}
 			}
 			else {

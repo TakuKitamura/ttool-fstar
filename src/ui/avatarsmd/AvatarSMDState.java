@@ -57,7 +57,7 @@ import ui.*;
 import ui.window.*;
 
 
-public class AvatarSMDState extends TGCScalableWithInternalComponent implements AllowedBreakpoint, CheckableAccessibility, CheckableInvariant, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant, WithAttributes {
+public class AvatarSMDState extends TGCScalableWithInternalComponent implements AllowedBreakpoint, CheckableAccessibility, CheckableLatency, CheckableInvariant, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant, WithAttributes {
     //private static String GLOBAL_CODE_INFO = "(global code)";
     private static String ENTRY_CODE_INFO = "(entry code)";
 
