@@ -412,21 +412,7 @@ public class BoolExpressionEvaluator {
                 return new Boolean((elt1 != 0) && (elt2 != 0));
             }
 
-	    if (op == LT_TOKEN) {
-		return new Boolean(elt1 < elt2);
-	    }
 
-	     if (op == GT_TOKEN) {
-		return new Boolean(elt1 > elt2);
-	    }
-
-	     if (op == LTEQ_TOKEN) {
-		return new Boolean(elt1 <= elt2);
-	    }
-
-	     if (op == GTEQ_TOKEN) {
-		return new Boolean(elt1 >= elt2);
-	    }
 
             return null;
         }
@@ -449,6 +435,26 @@ public class BoolExpressionEvaluator {
                 return new Integer(elt1 / elt2);
             }
 
+	    return null;
+	}
+
+	private Boolean makeIntegerToBooleanOp(int op, int elt1, int elt2) {
+
+	    if (op == LT_TOKEN) {
+		return new Boolean(elt1 < elt2);
+	    }
+
+	     if (op == GT_TOKEN) {
+		return new Boolean(elt1 > elt2);
+	    }
+
+	     if (op == LTEQ_TOKEN) {
+		return new Boolean(elt1 <= elt2);
+	    }
+
+	     if (op == GTEQ_TOKEN) {
+		return new Boolean(elt1 >= elt2);
+	    }
 
             return null;
         }
@@ -510,6 +516,11 @@ public class BoolExpressionEvaluator {
                 if ((ob1 instanceof Integer) && (ob2 instanceof Integer)) {
                     int elt1 = analysisArg(ob1);
                     int elt2 = analysisArg(ob2);
+
+		    if (isIntToBooleanOperator(op)) {
+			Boolean resB = makeIntegerToBooleanOp(op, elt1, elt2);
+			return resB;
+		    }
 
                     Integer result = makeIntegerOp(op, elt1, elt2);
                     TraceManager.addDev("Result int=" + result);
@@ -611,6 +622,10 @@ public class BoolExpressionEvaluator {
     public static final int MULT_TOKEN = -18;
 
     public static final String [] VAL_S = {"true", "false", "nb", "bool", "==", "<", ">", "not", "or", "and", "=<", ">=", "eol", "(", ")", " ", "!=", "-", "/", "*", "+"};
+
+    public static final boolean isIntToBooleanOperator(int op) {
+	return ((op == LT_TOKEN) || (op == GT_TOKEN) || (op == LTEQ_TOKEN) || (op == GTEQ_TOKEN));
+    }
 
     public static String toStringAction(int val) {
         if (val >= 0) {
