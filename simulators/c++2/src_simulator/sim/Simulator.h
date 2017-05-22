@@ -279,6 +279,9 @@ public:
 	inline long getSimDuration(){ return _simDuration;}
 
 	inline std::string getEnd(){return _end;}
+	std::list<std::pair<int,int> > latencyIds;
+	void addLatencyIds(int id1, int id2){latencyIds.push_back(std::make_pair(id1, id2));};
+
 protected:
 	///Runs the simulation
 	/**

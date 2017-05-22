@@ -141,6 +141,17 @@ public class TMLChannel extends TMLCommunicationElement {
     public TMLTask getOriginTask(int index) {
         return originTasks.get(index);
     }
+	public List<String> getTaskNames(){
+		List<String> taskNames = new ArrayList<String>();
+		if (isBasicChannel()){
+			taskNames.add(destinationTask.getTaskName());
+			return taskNames;
+		}
+		for (TMLTask destTask: destinationTasks){
+			taskNames.add(destTask.getTaskName());
+		}
+		return taskNames;
+	}
 
     public TMLTask getDestinationTask(int index) {
         return destinationTasks.get(index);

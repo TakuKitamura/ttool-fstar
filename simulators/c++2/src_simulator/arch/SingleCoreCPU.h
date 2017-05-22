@@ -118,6 +118,7 @@ public:
 	int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
 
 	void latencies2XML(std::ostringstream& glob, int id1, int id2);
+
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();
 	inline void streamStateXML(std::ostream& s) const {streamBenchmarks(s);}

@@ -138,7 +138,7 @@ public class DSEConfiguration implements Runnable  {
 //	private TMLModeling secModel = null;
 	private Vector<TMLMapping> mappings;
 	private DSEMappingSimulationResults dsemapresults;
-
+	List<Integer[]> latencyIds =new ArrayList<Integer[]>();
 	public MainGUI mainGUI;
 	// Taps
 	private static String[] taps = {"MinSimulationDuration",  "AverageSimulationDuration", 
@@ -753,6 +753,9 @@ public class DSEConfiguration implements Runnable  {
 		if (recordResults) {
 			v.add("10 1 " + pathToResults + "benchmark$.xml");
 		}
+		for (Integer[] latencyId: latencyIds){
+			v.add("24 "+latencyId[0] + " " + latencyId[1]);
+		}
 		
 		if (v.size() > 0) {
 			int cpt = 0;
@@ -771,7 +774,7 @@ public class DSEConfiguration implements Runnable  {
 		if (outputXML) {
 			cmd += " -oxml " + pathToResults + "output$.xml";
 		}
-		
+
 		return cmd;
 	}
 	
@@ -1382,7 +1385,7 @@ public class DSEConfiguration implements Runnable  {
 			 System.out.println("tmlcdp " + tmlcdp);
 		     //
 		     //Repeat for secured mapping
-		     TMLMapping secMapping = mainGUI.gtm.autoSecure(mainGUI, "mapping" +(cpt-1),tmla, newArch, encComp, overhead, decComp,true,false);
+		     TMLMapping secMapping = mainGUI.gtm.autoSecure(mainGUI, "mapping" +(cpt-1),tmla, newArch, encComp, overhead, decComp,true,false,false);
 
 		     //Run simulations on this mapping
 		     if (generateAndCompileMappingCode(secMapping, _debug, _optimize)  >= 0) {

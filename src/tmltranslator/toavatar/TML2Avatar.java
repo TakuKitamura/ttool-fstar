@@ -75,7 +75,7 @@ public class TML2Avatar {
 	public Map<String, Object> stateObjectMap = new HashMap<String, Object>();
 	public Map<TMLTask, List<SecurityPattern>> accessKeys = new HashMap<TMLTask, List<SecurityPattern>>();
 
-	HashMap<String, String> secChannelMap = new HashMap<String, String>();
+	HashMap<String, List<String>> secChannelMap = new HashMap<String, List<String>>();
 
 	HashMap<String, AvatarAttributeState> signalAuthOriginMap = new HashMap<String, AvatarAttributeState>();
 	HashMap<String, AvatarAttributeState> signalAuthDestMap = new HashMap<String, AvatarAttributeState>();
@@ -987,29 +987,33 @@ public class TML2Avatar {
 			}
 			else {
 				sig=signalInMap.get(ch.getName());
-		}
-		AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
-		
-		if (ae.securityPattern!=null){
-			if (ae.securityPattern.type.equals("Nonce")){
-			block.addAttribute(new AvatarAttribute("nonce_"+ae.securityPattern.name, AvatarType.INTEGER, block,null));
-			as.addValue("nonce_"+ae.securityPattern.name);
 			}
-			else if (!ae.securityPattern.key.isEmpty()){
-			as.addValue("encryptedKey_"+ae.securityPattern.key);
-			AvatarAttribute data= new AvatarAttribute("encryptedKey_"+ae.securityPattern.key, AvatarType.INTEGER, block, null);
-			block.addAttribute(data);
+			AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
+		
+			if (ae.securityPattern!=null){
+				if (ae.securityPattern.type.equals("Nonce")){
+					block.addAttribute(new AvatarAttribute("nonce_"+ae.securityPattern.name, AvatarType.INTEGER, block,null));
+					as.addValue("nonce_"+ae.securityPattern.name);
+				}
+				else if (!ae.securityPattern.key.isEmpty()){
+					as.addValue("encryptedKey_"+ae.securityPattern.key);
+					AvatarAttribute data= new AvatarAttribute("encryptedKey_"+ae.securityPattern.key, AvatarType.INTEGER, block, null);
+					block.addAttribute(data);
+				}
+				else {
+					if (!secChannelMap.containsKey(ae.securityPattern.name)){
+						List<String> tmp=new ArrayList<String>();
+						secChannelMap.put(ae.securityPattern.name,tmp);
+					}
+		  			secChannelMap.get(ae.securityPattern.name).add(ch.getName());
+		 			as.addValue(ae.securityPattern.name+"_encrypted");
+					AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
+					block.addAttribute(data);
+				}
 			}
 			else {
-		  	secChannelMap.put(ae.securityPattern.name,ch.getName());
-		 	as.addValue(ae.securityPattern.name+"_encrypted");
-			AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
-			block.addAttribute(data);
+				as.addValue(getName(ch.getName())+"_chData");
 			}
-		}
-		else {
-			as.addValue(getName(ch.getName())+"_chData");
-		}
 
 			tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 			elementList.add(signalState);
@@ -1034,6 +1038,7 @@ public class TML2Avatar {
 			AvatarAttributeState authDest = new AvatarAttributeState(ch.getName()+"__destination",ae.getReferenceObject(),block.getAvatarAttributeWithName(getName(ch.getName())+"_chData"), afterSignalState);
 			signalAuthDestMap.put(ch.getName(), authDest);
 			}
+
 		}
 		else {
 		//WriteChannel
@@ -1061,8 +1066,8 @@ public class TML2Avatar {
 				}
 			}
 			if (ch.checkAuth){
-			if (block.getAvatarAttributeWithName(getName(ch.getName())+"_chData")==null){
-				AvatarAttribute channelData= new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null);
+				if (block.getAvatarAttributeWithName(getName(ch.getName())+"_chData")==null){
+					AvatarAttribute channelData= new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null);
 					block.addAttribute(channelData);
 			}
 			AvatarAttributeState authOrigin = new AvatarAttributeState(ch.getName()+"__destination",ae.getReferenceObject(),block.getAvatarAttributeWithName(getName(ch.getName())+"_chData"), signalState);
@@ -1083,7 +1088,11 @@ public class TML2Avatar {
 					as.addValue(ae.securityPattern.name+"_encrypted");
 					AvatarAttribute data= new AvatarAttribute(ae.securityPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
 					block.addAttribute(data);
-					secChannelMap.put(ae.securityPattern.name,ch.getName());
+					if (!secChannelMap.containsKey(ae.securityPattern.name)){
+						List<String> tmp=new ArrayList<String>();
+						secChannelMap.put(ae.securityPattern.name,tmp);
+					}
+					secChannelMap.get(ae.securityPattern.name).add(ch.getName());
 				}
 			}
 			else {
@@ -1185,9 +1194,11 @@ public class TML2Avatar {
 				}
 		tran.addAction(AvatarTerm.createActionFromString(block, loop.getIncrement()));
 		tran.addAction(AvatarTerm.createActionFromString(block, "loop_index = loop_index + 1"));
-		tran.addNext(elements.get(0));
-		as.addNext(tran);
-		elementList.add(tran);
+		if (elements.size()>0){
+			tran.addNext(elements.get(0));
+			as.addNext(tran);
+			elementList.add(tran);
+		}
 		//Process elements in loop to remove stop states and empty transitions, and loop back to choice
 		for (AvatarStateMachineElement e: elements){
 			if (e instanceof AvatarStopState){

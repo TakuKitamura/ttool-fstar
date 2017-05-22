@@ -65,7 +65,7 @@ import dseengine.*;
 import launcher.*;
 
 
-public class JDialogDSE extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogDSE extends javax.swing.JDialog implements ActionListener, ListSelectionListener, Runnable  {
 
     protected MainGUI mgui;
 
@@ -80,6 +80,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     int mode;
     JRadioButton dseButton;
     JRadioButton simButton;
+	JButton addConstraint;
     ButtonGroup group, secGroup;
     //components
 
@@ -88,7 +89,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     protected JButton close;
     String simulator;
 
-    protected JCheckBox autoConf, autoAuth, autoMapKeys, custom, outputTXT, outputHTML, addHSM;
+    protected JCheckBox autoConf, autoWeakAuth, autoStrongAuth, autoMapKeys, custom, outputTXT, outputHTML, addHSM;
 
     protected JTextField encTime, decTime, secOverhead;
 	protected JComboBox addtoCPU;
@@ -117,14 +118,20 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     protected static boolean outputTXTState = false;
     protected static boolean outputHTMLState = false;
     HashMap<String, HashSet<String>> cpuTaskMap = new HashMap<String, HashSet<String>>();
-    
-
+	HashMap<String, String> taskCpuMap = new HashMap<String, String>();
+	Vector<String> selectedTasks =new Vector<String>();     
+	Vector<String> ignoredTasks =new Vector<String>();   
+	JList<String> listSelected;
+	JList<String> listIgnored;
+	JList<String> constraints;
+	JTextField constraintTextField;
     protected JTabbedPane jp1;
+	JPanel listPanel;
     private Thread t;
     private boolean go = false;
     private boolean hasError = false;
     //protected boolean startProcess = false;
-
+	JList<String> contraints;
     private String hostProVerif;
 
     protected RshClient rshc;
@@ -139,10 +146,17 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 		cpuTaskMap = cpuTasks;
         tmlDir = dir+"/";
         resDirect = _simulator + "results/";
+		for (String cpu: cpuTasks.keySet()){
+			for (String task: cpuTasks.get(cpu)){
+				ignoredTasks.add(task);
+				taskCpuMap.put(task,cpu);
+			}
+		}
         initComponents();
         myInitComponents();
 
         pack();
+
 
         //getGlassPane().addMouseListener( new MouseAdapter() {});
         getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -180,10 +194,15 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 		secGroup.add(autoConf);
         jp01.add(autoConf, c01);
 		autoConf.addActionListener(this);
-        autoAuth= new JCheckBox("Add security (Authenticity)");
-		autoAuth.setEnabled(false);
-        jp01.add(autoAuth, c01);
-		autoAuth.addActionListener(this);
+        autoWeakAuth= new JCheckBox("Add security (Weak Authenticity)");
+		autoWeakAuth.setEnabled(false);
+        jp01.add(autoWeakAuth, c01);
+		autoWeakAuth.addActionListener(this);
+
+        autoStrongAuth= new JCheckBox("Add security (Strong Authenticity)");
+		autoStrongAuth.setEnabled(false);
+        jp01.add(autoStrongAuth, c01);
+		autoStrongAuth.addActionListener(this);
         autoMapKeys= new JCheckBox("Add Keys");
 		autoMapKeys.addActionListener(this);
         jp01.add(autoMapKeys, c01);
@@ -193,6 +212,66 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 		addHSM.addActionListener(this);
 		secGroup.add(addHSM);
 		jp01.add(new JLabel("Add HSM to component:"),c01);
+		listIgnored = new JList<String>(ignoredTasks);
+
+
+		listPanel = new JPanel();
+		GridBagConstraints c02 = new GridBagConstraints();
+		c02.gridwidth=1;
+		c02.gridheight=1;
+		c02.fill= GridBagConstraints.BOTH;
+     	listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+        listIgnored.addListSelectionListener(this);
+        JScrollPane scrollPane1 = new JScrollPane(listIgnored);
+		scrollPane1.setPreferredSize(new Dimension(250,200));
+        listPanel.add(scrollPane1, BorderLayout.WEST);
+
+		JPanel buttonPanel = new JPanel();
+		GridBagConstraints c13 = new GridBagConstraints();
+		c13.gridwidth=GridBagConstraints.REMAINDER;
+		c13.gridheight=1;
+        JButton allValidated = new JButton(IconManager.imgic50);
+        allValidated.setPreferredSize(new Dimension(50, 25));
+        allValidated.addActionListener(this);
+        allValidated.setActionCommand("allValidated");
+        buttonPanel.add(allValidated, c13);
+
+        JButton addOneValidated = new JButton(IconManager.imgic48);
+        addOneValidated.setPreferredSize(new Dimension(50, 25));
+        addOneValidated.addActionListener(this);
+        addOneValidated.setActionCommand("addOneValidated");
+        buttonPanel.add(addOneValidated, c13);
+
+        buttonPanel.add(new JLabel(" "), c13);
+
+        JButton addOneIgnored = new JButton(IconManager.imgic46);
+        addOneIgnored.addActionListener(this);
+        addOneIgnored.setPreferredSize(new Dimension(50, 25));
+        addOneIgnored.setActionCommand("addOneIgnored");
+        buttonPanel.add(addOneIgnored, c13);	
+
+        JButton allIgnored = new JButton(IconManager.imgic44);
+        allIgnored.addActionListener(this);
+        allIgnored.setPreferredSize(new Dimension(50, 25));
+        allIgnored.setActionCommand("allIgnored");
+        buttonPanel.add(allIgnored, c13);
+		listPanel.add(buttonPanel, c02);
+		buttonPanel.setPreferredSize(new Dimension(50,200));
+
+		listSelected=new JList<String>(selectedTasks);
+
+        //listValidated.setPreferredSize(new Dimension(200, 250));
+        listSelected.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+        listSelected.addListSelectionListener(this);
+        JScrollPane scrollPane2 = new JScrollPane(listSelected);
+		scrollPane2.setPreferredSize(new Dimension(250,200));
+        listPanel.add(scrollPane2, BorderLayout.CENTER);
+		listPanel.setPreferredSize(new Dimension(600,250));
+		listPanel.setMinimumSize(new Dimension(600,250));
+		c01.gridheight=10;
+		jp01.add(listPanel,c01);
+		c02.gridheight=1;
+/*
 		for (String cpuName: cpuTaskMap.keySet()){
 			JCheckBox cpu = new JCheckBox(cpuName);
 			jp01.add(cpu,c01);		
@@ -212,6 +291,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 		if (cpuTaskMap.keySet().size()==0){
 			addHSM.setEnabled(false);
 		}
+*/
    //     addToComp = new JTextField(compName);
         //jp01.add(addToComp,c01);
 
@@ -315,6 +395,21 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	outputHTML.addActionListener(this);
 	outputHTML.setSelected(outputHTMLState);
         jp03.add(outputHTML, c03);
+
+		constraints = new JList<String>();
+		jp03.add(constraints, c03);
+
+
+		constraintTextField=new JTextField();
+
+        addConstraint = new JButton("Add Constraint");
+        addConstraint.addActionListener(this);
+        addConstraint.setPreferredSize(new Dimension(50, 25));
+        addConstraint.setActionCommand("addConstraint");
+		jp03.add(addConstraint, c03);
+		
+		
+		
 
         group = new ButtonGroup();
         dseButton = new JRadioButton("Run Design Space Exploration");
@@ -639,6 +734,57 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
     }
 
 
+    private void addOneIgnored() {
+        int [] list = listSelected.getSelectedIndices();
+        Vector<String> v = new Vector<String>();
+        String o;
+        for (int i=0; i<list.length; i++){
+            o = selectedTasks.elementAt(list[i]);
+            ignoredTasks.addElement(o);
+            v.addElement(o);
+        }
+
+        selectedTasks.removeAll(v);
+        listIgnored.setListData(ignoredTasks);
+        listSelected.setListData(selectedTasks);
+        setButtons();
+    }
+
+    private void addOneValidated() {
+        int [] list = listIgnored.getSelectedIndices();
+        Vector<String> v = new Vector<String>();
+        String o;
+        
+        for (int i=0; i<list.length; i++){
+            o = ignoredTasks.elementAt(list[i]);
+            selectedTasks.addElement(o);
+            v.addElement(o);
+        }
+
+        ignoredTasks.removeAll(v);
+        listIgnored.setListData(ignoredTasks);
+        listSelected.setListData(selectedTasks);
+        setButtons();
+    }
+
+    private void allValidated() {
+        selectedTasks.addAll(ignoredTasks);
+        ignoredTasks.removeAllElements();
+        listIgnored.setListData(ignoredTasks);
+        listSelected.setListData(selectedTasks);
+        setButtons();
+    }
+
+    private void allIgnored() {
+        ignoredTasks.addAll(selectedTasks);
+        selectedTasks.removeAllElements();
+        listIgnored.setListData(ignoredTasks);
+        listSelected.setListData(selectedTasks);
+        setButtons();
+    }
+
+
+
     private void handleStartButton() {
 	if (mode != NOT_STARTED  && mode != NOT_SELECTED) {
 	    return;
@@ -660,6 +806,9 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 	setButtons();
 	
     }
+
+	public void valueChanged(ListSelectionEvent e) {
+	}
     
 
     public void actionPerformed(ActionEvent evt)  {
@@ -670,7 +819,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
-        } else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == outputHTML) || (evt.getSource() == outputTXT) || (evt.getSource() == autoAuth) || (evt.getSource() == autoConf) || (evt.getSource() == autoMapKeys)) {
+        } else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == outputHTML) || (evt.getSource() == outputTXT) || (evt.getSource() == autoWeakAuth) ||(evt.getSource() == autoStrongAuth) ||(evt.getSource() == autoConf) || (evt.getSource() == autoMapKeys)) {
 	    handleStartButton();
 		}
 		else if (evt.getSource() instanceof JCheckBox){
@@ -682,19 +831,28 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 				}
 			}
 		}
+		else if (command.equals("addOneIgnored")) {
+            addOneIgnored();
+        } else if (command.equals("addOneValidated")) {
+            addOneValidated();
+        } else if (command.equals("allValidated")) {
+            allValidated();
+        } else if (command.equals("allIgnored")) {
+            allIgnored();
+        }
 		if (evt.getSource() == addHSM){
-			for (JCheckBox cpuBox:cpuTaskObjs.keySet()){
-				cpuBox.setEnabled(addHSM.isSelected());
-			}
+			listPanel.setEnabled(addHSM.isSelected());
 		}
-		if (evt.getSource() == autoConf || evt.getSource() == autoMapKeys || evt.getSource() == addHSM){	
-			autoAuth.setEnabled(autoConf.isSelected());
+		if (evt.getSource() == autoConf || evt.getSource() == autoMapKeys || evt.getSource() == addHSM || evt.getSource()==autoWeakAuth){	
+			autoWeakAuth.setEnabled(autoConf.isSelected());
+			autoStrongAuth.setEnabled(autoWeakAuth.isSelected());
 		}
 		if (evt.getSource() == custom){
 			encTime.setEnabled(custom.isSelected());
 			decTime.setEnabled(custom.isSelected());
 			secOverhead.setEnabled(custom.isSelected());
 		}
+
     }
 
     public void closeDialog() {
@@ -756,12 +914,12 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
             decCC=decTime.getText();
             secOv = secOverhead.getText();
             TMLMapping map;
-            if (autoConf.isSelected() || autoAuth.isSelected()){
+            if (autoConf.isSelected() || autoWeakAuth.isSelected() || autoStrongAuth.isSelected()){
                 if (custom.isSelected()){
-                    map = mgui.gtm.autoSecure(mgui, encCC,secOv,decCC,autoConf.isSelected(), autoAuth.isSelected());
+                    map = mgui.gtm.autoSecure(mgui, encCC,secOv,decCC,autoConf.isSelected(), autoWeakAuth.isSelected(),autoStrongAuth.isSelected());
                 }
                 else {
-                    map = mgui.gtm.autoSecure(mgui,autoConf.isSelected(), autoAuth.isSelected());
+                    map = mgui.gtm.autoSecure(mgui,autoConf.isSelected(), autoWeakAuth.isSelected(),autoStrongAuth.isSelected());
                 }
             }
 			else if (addHSM.isSelected()){
@@ -769,7 +927,18 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 			//	ArrayList<String> comps = new ArrayList<String>();
 			//	comps.add(addToComp.getText());
 				HashMap<String, ArrayList<String>> selectedCpuTasks = new HashMap<String, ArrayList<String>>();
-				for (JCheckBox cpu: cpuTaskObjs.keySet()){
+				for (String task: selectedTasks){
+					String cpu = taskCpuMap.get(task);
+					if (selectedCpuTasks.containsKey(cpu)){
+						selectedCpuTasks.get(cpu).add(task);
+					}
+					else {
+						ArrayList<String> tasks = new ArrayList<String>();
+						tasks.add(task);	
+						selectedCpuTasks.put(cpu,tasks);
+					}
+				}
+				/*for (JCheckBox cpu: cpuTaskObjs.keySet()){
 					ArrayList<String> tasks = new ArrayList<String>();	
 					for (JCheckBox task: cpuTaskObjs.get(cpu)){
 						if (task.isSelected()){
@@ -780,6 +949,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, R
 						selectedCpuTasks.put(cpu.getText(), tasks);
 					}
 				}
+				mgui.gtm.addHSM(mgui, selectedCpuTasks);*/
 				mgui.gtm.addHSM(mgui, selectedCpuTasks);
 			}
             if (autoMapKeys.isSelected()){

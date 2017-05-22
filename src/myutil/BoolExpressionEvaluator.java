@@ -184,6 +184,31 @@ public class BoolExpressionEvaluator {
             return this;
         }
 
+	public IntBoolRes addUnaryOperator(int _op) {
+	    if ((left != null) && (right != null)) {
+                return null;
+            }
+
+            if ((left != null) && (op == 0)) {
+                return null;
+            }
+
+            IntBoolRes newE = new IntBoolRes(BOOL_UNARY_OP, _op, this);
+
+            if (left == null) {
+                left = newE;
+            } else {
+                right = newE;
+            }
+
+
+            IntBoolRes topPar = new IntBoolRes();
+            topPar.father = newE;
+            newE.left = topPar;
+
+            return topPar;
+	}
+
         public IntBoolRes addBinaryOperator(int _op) {
             // Must have at least one right operator
             TraceManager.addDev("Add binary op");
@@ -358,6 +383,18 @@ public class BoolExpressionEvaluator {
             }
         }
 
+	private Boolean makeUnaryOp(int op, int elt1) {
+	    if (op == NOT_TOKEN) {
+		if (elt1 == 0) {
+		    return new Boolean(true);
+		}
+		else
+		    return new Boolean(false);
+	    }
+	    return null;
+	}
+	
+
         private Boolean makeBinaryOp(int op, int elt1, int elt2) {
             if (op == EQUAL_TOKEN) {
                 return new Boolean(elt1 == elt2);
@@ -391,8 +428,6 @@ public class BoolExpressionEvaluator {
 		return new Boolean(elt1 >= elt2);
 	    }
 
-	    
-
             return null;
         }
 
@@ -414,6 +449,7 @@ public class BoolExpressionEvaluator {
                 return new Integer(elt1 / elt2);
             }
 
+
             return null;
         }
 
@@ -422,6 +458,22 @@ public class BoolExpressionEvaluator {
             if (isTerminal()) {
                 return getObjectValue();
             }
+
+	    if (res == BOOL_UNARY_OP) {
+		if (left == null) {
+		    errorMessage = "Badly formatted unary boolean operator";
+                    return null;
+		}
+		Object ob1 = left.computeValue();
+		if (!(ob1 instanceof Boolean)) {
+		    errorMessage = "Bad operand for  unary boolean operator";
+                    return null;
+		}
+		int elt1 = analysisArg(ob1);
+		Boolean result = makeUnaryOp(op, elt1);
+		TraceManager.addDev("Result unary=" + result);
+		return result;
+	    }
 
             if (res == BOOL_BINARY_OP) {
                 if ((right == null) || (left == null)) {
@@ -437,7 +489,7 @@ public class BoolExpressionEvaluator {
                     int elt2 = analysisArg(ob2);
 
                     Boolean result = makeBinaryOp(op, elt1, elt2);
-                    TraceManager.addDev("Result bin=" + result);
+                    TraceManager.addDev("Result binary=" + result);
                     return result;
                 }
             }
@@ -470,6 +522,13 @@ public class BoolExpressionEvaluator {
 
 
             if (res == OPEN_PARENTHESIS) {
+                if (left == null) {
+                    return null;
+                }
+                return left.computeValue();
+            }
+
+	    if (res == AVAILABLE) {
                 if (left == null) {
                     return null;
                 }
@@ -1732,6 +1791,16 @@ public class BoolExpressionEvaluator {
             newElt = current.addBinaryOperator(OR_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed bool operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+	// Bool unary op
+	if (c1 == '!') {
+            newElt = current.addUnaryOperator(NOT_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed bool unary operator:" + token;
                 return null;
             }
             return newElt;
