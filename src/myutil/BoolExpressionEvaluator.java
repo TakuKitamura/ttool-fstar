@@ -95,6 +95,13 @@ public class BoolExpressionEvaluator {
             father = _father;
         }
 
+	public  IntBoolRes getTop() {
+	    if (father == null) {
+		return this;
+	    }
+	    else return father.getTop();
+	}
+
         public IntBoolRes addTerminalInt(int _value) {
             if (isFull()) {
                 return null;
@@ -704,8 +711,8 @@ public class BoolExpressionEvaluator {
         _expr = Conversion.replaceAllString(_expr, "and", "&").trim();
         _expr = Conversion.replaceAllString(_expr, "==", "=").trim();
         _expr = Conversion.replaceAllString(_expr, "!=", "$").trim();
-        _expr = Conversion.replaceAllString(_expr, ">=", ":").trim();
-        _expr = Conversion.replaceAllString(_expr, "<=", ";").trim();
+        //_expr = Conversion.replaceAllString(_expr, ">=", ":").trim();
+        //_expr = Conversion.replaceAllString(_expr, "<=", ";").trim();
 
         // For not() -> must find the closing bracket
 
@@ -1699,7 +1706,9 @@ public class BoolExpressionEvaluator {
         ID = 0;
         IntBoolRes newElt;
 
-        TraceManager.addDev("<><><><><><> Dealing with token:" + token);
+	
+	//TraceManager.addDev(current.getTop().toString());
+        //TraceManager.addDev("<><><><><><> Dealing with token:" + token + " current=" + current);
 
 
         char c1 = token.charAt(0);
@@ -1774,6 +1783,42 @@ public class BoolExpressionEvaluator {
 
 	if (c1 == '<') {
             newElt = current.addIntOperator(LT_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed int operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+	if (c1 == '>') {
+            newElt = current.addIntOperator(GT_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed int operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+	if (c1 == '>') {
+            newElt = current.addIntOperator(GT_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed int operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+	if (c1 == ';') {
+            newElt = current.addIntOperator(LTEQ_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed int operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+	if (c1 == ':') {
+            newElt = current.addIntOperator(GTEQ_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed int operator:" + token;
                 return null;
