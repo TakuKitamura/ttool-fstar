@@ -1,0 +1,4 @@
+1) Create your plugin and put it in this directory (preferably)
+2) Add the plugin reference in config.xml
+3) Load the configuration information in ConfigurationTTool
+4) Use the plugin facility as shown in src/avatartranslator/toexecutable/MainFile.java
