@@ -79,9 +79,12 @@ public class AVATAR2CPOSIX {
     private boolean tracing;
     private boolean includeUserCode = true;
 
+    private String plugin = "";
 
-    public AVATAR2CPOSIX(AvatarSpecification _avspec) {
+
+    public AVATAR2CPOSIX(AvatarSpecification _avspec, String _plugin) {
         avspec = _avspec;
+	plugin = _plugin;
     }
 
     public void setTimeUnit(int _timeUnit) {
@@ -132,7 +135,7 @@ public class AVATAR2CPOSIX {
         debug = _debug;
         tracing = _tracing;
 
-        mainFile = new MainFile("main");
+        mainFile = new MainFile("main", plugin);
         taskFiles = new Vector<TaskFile>();
 
         avspec.removeCompositeStates();

@@ -84,6 +84,7 @@ import myutil.TraceManager;
 import ui.IconManager;
 import ui.JTextAreaWriter;
 import ui.MainGUI;
+import ui.ConfigurationTTool;
 import ui.interactivesimulation.JFrameSimulationSDPanel;
 
 public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
@@ -624,7 +625,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
                     if (avspec == null) {
                         jta.append("Error: No AVATAR specification\n");
                     } else {
-                        AVATAR2CPOSIX avatartocposix = new AVATAR2CPOSIX(avspec);
+                        AVATAR2CPOSIX avatartocposix = new AVATAR2CPOSIX(avspec, ConfigurationTTool.PLUGIN_JAVA_CODE_GENERATOR );
                         avatartocposix.includeUserCode(putUserCode.isSelected());
                         avatartocposix.setTimeUnit(selectedUnit);
                         avatartocposix.generateCPOSIX(debugmode.isSelected(), tracemode.isSelected());

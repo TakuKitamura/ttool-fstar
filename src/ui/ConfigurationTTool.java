@@ -141,6 +141,9 @@ public class ConfigurationTTool {
     public static String RequirementOntologyWebsite = "";
     public static String AttackOntologyWebsite = "";
 
+    // PLUGINS
+    public static String PLUGIN_JAVA_CODE_GENERATOR = "";
+
     public static String LastOpenFile = "";
     public static boolean LastOpenFileDefined = false;
 
@@ -274,8 +277,8 @@ public class ConfigurationTTool {
                 write = true;
             }
         }
-	index0 = data.indexOf("ProVerifHash");
-	if (index0 > -1) {
+        index0 = data.indexOf("ProVerifHash");
+        if (index0 > -1) {
             index1 = data.indexOf('"', index0);
             if (index1 > -1) {
                 index2 = data.indexOf('"', index1 + 1);
@@ -286,14 +289,14 @@ public class ConfigurationTTool {
                 }
             }
         }
-	else {
-	    index1= data.indexOf("</TURTLECONFIGURATION>");
+        else {
+            index1= data.indexOf("</TURTLECONFIGURATION>");
             if (index1 > -1) {
                 location = "<ProVerifHash data=\"" + ConfigurationTTool.ProVerifHash + "\"/>\n\n";
                 data = data.substring(0, index1) + location + data.substring(index1, data.length());
                 write = true;
             }
-	}
+        }
         if (write) {
             //sb.append("Writing data=" + data);
             try {
@@ -374,14 +377,14 @@ public class ConfigurationTTool {
         // AVATAR: executable code
         sb.append("\nAVATAR (executable code):\n");
         sb.append("AVATARExecutableCodeDirectory: " + AVATARExecutableCodeDirectory + "\n");
- sb.append("AVATARMPSoCCodeDirectory: " + AVATARMPSoCCodeDirectory + "\n");
-sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
+        sb.append("AVATARMPSoCCodeDirectory: " + AVATARMPSoCCodeDirectory + "\n");
+        sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
         sb.append("AVATARExecutableCodeHost: " + AVATARExecutableCodeHost + "\n");
         sb.append("AVATARExecutableCodeCompileCommand: " + AVATARExecutableCodeCompileCommand + "\n");
         sb.append("AVATARExecutableCodeExecuteCommand: " + AVATARExecutableCodeExecuteCommand + "\n");
         sb.append("AVATARExecutableSocLibCodeCompileCommand: " + AVATARExecutableSoclibCodeCompileCommand + "\n");
         sb.append("AVATARExecutableSocLibCodeExecuteCommand: " + AVATARExecutableSoclibCodeExecuteCommand + "\n");
-	sb.append("AVATARExecutableSocLibCodeTraceCommand: " + AVATARExecutableSoclibCodeTraceCommand + "\n");
+        sb.append("AVATARExecutableSocLibCodeTraceCommand: " + AVATARExecutableSoclibCodeTraceCommand + "\n");
         sb.append("AVATARExecutableSocLibCodeTraceFile: " + AVATARExecutableSoclibTraceFile + "\n");
 
         sb.append("\nProVerif:\n");
@@ -418,14 +421,14 @@ sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
             sb.append("SystemCCodeExecuteCommand: " + SystemCCodeExecuteCommand + "\n");
             sb.append("SystemCCodeInteractiveExecuteCommand: " + SystemCCodeInteractiveExecuteCommand + "\n");
             sb.append("GTKWavePath: " + GTKWavePath + "\n");
-	    // TML
-	    sb.append("TMLCodeDirectory: " + TMLCodeDirectory + "\n");
+            // TML
+            sb.append("TMLCodeDirectory: " + TMLCodeDirectory + "\n");
 
-	     //Application C code
-	     sb.append("CCodeDirectory: " + CCodeDirectory + "\n");
+            //Application C code
+            sb.append("CCodeDirectory: " + CCodeDirectory + "\n");
         }
 
-       
+
 
         // VCD
         sb.append("VCDPath: " + VCDPath + "\n");
@@ -439,6 +442,10 @@ sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
         sb.append("\nOntologies:\n");
         sb.append("Requirement ontology website: " + RequirementOntologyWebsite + "\n");
         sb.append("Attack ontology website: " + AttackOntologyWebsite + "\n");
+
+	// Plugins
+	sb.append("Plugins:\n");
+	sb.append("Plugin for java code generation: " + PLUGIN_JAVA_CODE_GENERATOR + "\n");
 
 
         sb.append("\nCustom external commands:\n");
@@ -600,10 +607,10 @@ sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
             nl = doc.getElementsByTagName("AVATARExecutableCodeDirectory");
             if (nl.getLength() > 0)
                 AVATARExecutableCodeDirectory(nl);
-	    nl = doc.getElementsByTagName("AVATARMPSoCCodeDirectory");
+            nl = doc.getElementsByTagName("AVATARMPSoCCodeDirectory");
             if (nl.getLength() > 0)
                 AVATARMPSoCCodeDirectory(nl);
-	    nl = doc.getElementsByTagName("AVATARMPSoCCompileCommand");
+            nl = doc.getElementsByTagName("AVATARMPSoCCompileCommand");
             if (nl.getLength() > 0)
                 AVATARMPSoCCompileCommand(nl);
             nl = doc.getElementsByTagName("AVATARExecutableCodeHost");
@@ -621,7 +628,7 @@ sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
             nl = doc.getElementsByTagName("AVATARExecutableSoclibCodeExecuteCommand");
             if (nl.getLength() > 0)
                 AVATARExecutableSoclibCodeExecuteCommand(nl);
-	    nl = doc.getElementsByTagName("AVATARExecutableSoclibCodeTraceCommand");
+            nl = doc.getElementsByTagName("AVATARExecutableSoclibCodeTraceCommand");
             if (nl.getLength() > 0)
                 AVATARExecutableSoclibCodeTraceCommand(nl);
             nl = doc.getElementsByTagName("AVATARExecutableSoclibTraceFile");
@@ -649,7 +656,7 @@ sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
             nl = doc.getElementsByTagName("TMLCodeDirectory");
             if (nl.getLength() > 0)
                 TMLCodeDirectory(nl);
-                
+
             nl = doc.getElementsByTagName("CCodeDirectory");
             if (nl.getLength() > 0)
                 CCodeDirectory(nl);
@@ -711,6 +718,10 @@ sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
             nl = doc.getElementsByTagName("ExternalCommand2");
             if (nl.getLength() > 0)
                 ExternalCommand2(nl);
+
+	    nl = doc.getElementsByTagName("PLUGIN_JAVA_CODE_GENERATOR");
+            if (nl.getLength() > 0)
+                PluginJavaCodeGenerator(nl);
 
             nl = doc.getElementsByTagName("LastOpenFile");
             if (nl.getLength() > 0)
@@ -1204,7 +1215,7 @@ sb.append("AVATARMPSoCCompileCommand: " + AVATARMPSoCCompileCommand + "\n");
         }
     }
 
-private static void AVATARMPSoCCodeDirectory(NodeList nl) throws MalformedConfigurationException {
+    private static void AVATARMPSoCCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
             AVATARMPSoCCodeDirectory = elt.getAttribute("data");
@@ -1212,10 +1223,10 @@ private static void AVATARMPSoCCodeDirectory(NodeList nl) throws MalformedConfig
             throw new MalformedConfigurationException(e.getMessage());
         }
     }
-private static void AVATARMPSoCCompileCommand(NodeList nl) throws MalformedConfigurationException {
+    private static void AVATARMPSoCCompileCommand(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
-             AVATARMPSoCCompileCommand= elt.getAttribute("data");
+            AVATARMPSoCCompileCommand= elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
@@ -1266,7 +1277,7 @@ private static void AVATARMPSoCCompileCommand(NodeList nl) throws MalformedConfi
             throw new MalformedConfigurationException(e.getMessage());
         }
     }
-    
+
     private static void AVATARExecutableSoclibCodeTraceCommand(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
@@ -1370,6 +1381,15 @@ private static void AVATARMPSoCCompileCommand(NodeList nl) throws MalformedConfi
         try {
             Element elt = (Element)(nl.item(0));
             ExternalCommand2 = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void PluginJavaCodeGenerator(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            PLUGIN_JAVA_CODE_GENERATOR = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
