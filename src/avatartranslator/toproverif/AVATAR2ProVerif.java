@@ -471,7 +471,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 int nbOfSignals = ar.nbOfSignals ();
                 int i;
                 for (i=0; i<nbOfSignals; i++) {
-                    String name = ar.getSignal1 (i).getName () + ar.getSignal2 (i).getName ();
+                    String name = ar.getBlock1().getName() + ar.getSignal1 (i).getName () + ar.getBlock2().getName() + ar.getSignal2 (i).getName ();
                     this.spec.addDeclaration (new ProVerifFunc       (CH_ENCRYPT + name, new String[] {"bitstring"}, "bitstring", true));
                     this.spec.addDeclaration (new ProVerifReduc      (new ProVerifVar[] {new ProVerifVar ("x", "bitstring")}, CH_DECRYPT + name + " (" + CH_ENCRYPT + name + " (x)) = x", true));
                 }
@@ -1026,7 +1026,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         boolean isPrivate = false;
         AvatarRelation ar = this.avspec.getAvatarRelationWithSignal(as);
         int index = ar.getIndexOfSignal (as);
-        String name = ar.getSignal1 (index).getName () + ar.getSignal2 (index).getName ();
+        String name = ar.getBlock1().getName() + ar.getSignal1 (index).getName () + ar.getBlock2().getName() + ar.getSignal2 (index).getName ();
 
         if (ar != null)
             isPrivate = ar.isPrivate();

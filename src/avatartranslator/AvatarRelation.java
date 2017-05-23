@@ -151,6 +151,14 @@ public class AvatarRelation extends AvatarElement {
         return signals2.get(_index);
     }
 
+    public AvatarBlock getBlock1() {
+        return this.block1;
+    }
+
+    public AvatarBlock getBlock2() {
+        return this.block2;
+    }
+
     public AvatarSignal getInSignal(int _index) {
         AvatarSignal sig1 = signals1.get(_index);
         if (sig1.isIn()) {
