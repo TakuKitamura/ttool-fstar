@@ -1705,11 +1705,9 @@ public class BoolExpressionEvaluator {
     public IntBoolRes parseAndMakeTree(IntBoolRes current, String token) {
         ID = 0;
         IntBoolRes newElt;
-
 	
 	//TraceManager.addDev(current.getTop().toString());
         //TraceManager.addDev("<><><><><><> Dealing with token:" + token + " current=" + current);
-
 
         char c1 = token.charAt(0);
 
