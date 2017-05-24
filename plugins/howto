@@ -6,7 +6,7 @@ $make
 Then, edit the configuration file of TTool (default: TTool/bin/config.xml) and add:
 <PLUGIN_JAVA_CODE_GENERATOR data="../plugins/CustomizerAvatarCodeGeneration.jar" />
 
-Then, start TTool, and generated Java code from an avatar model.
+Then, start TTool, and generate Java code from an avatar design model.
 
 
 # To create a new plugin
@@ -18,4 +18,4 @@ For example:
 
 3) Load the configuration information in ConfigurationTTool.java
 
-4) Use the plugin facility as shown in src/avatartranslator/toexecutable/MainFile.java
+4) Use the plugin facility located in myutil/Plugin and myutil/PluginManager. An example on how to use the PluginManager is shown in src/avatartranslator/toexecutable/MainFile.java
