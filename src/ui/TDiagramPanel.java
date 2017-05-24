@@ -3117,7 +3117,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             tgc.setDIPLOID(-1);
     }
 
-    public void getListOfBreakPoints(ArrayList<Point> points, int taskID) {
+    public void getListOfBreakPoints( java.util.List<Point> points, int taskID) {
         for (TGComponent tgc: this.componentList)
             if (tgc.getBreakpoint() && (tgc.getDIPLOID() != -1)) {
                 boolean found = false;
@@ -3135,9 +3135,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public String svgCapture() {
-	int w = this.getWidth();
-        int h = this.getHeight();
-	int x = getRealMinX();
+    	int w = this.getWidth();
+    	int h = this.getHeight();
+    	int x = getRealMinX();
         int y = getRealMinY();
         w = getRealMaxX() - x;
         h = getRealMaxY() - y;
@@ -3158,9 +3158,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         sb.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");	
 	//sb.append(" width=\"" + (w+x) + "\" height=\"" + (h+y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
         sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"");
-	sb.append(" width=\"" + (w+x) + "\" height=\"" + (h+y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
-
-
+        sb.append(" width=\"" + (w+x) + "\" height=\"" + (h+y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
 
         SVGGraphics svgg = new SVGGraphics((Graphics2D)lastGraphics);
 
@@ -3173,7 +3171,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         RepaintManager.currentManager(this).setDoubleBufferingEnabled(true);
 	
         sb.append("</svg>");
-
 
         return sb.toString();
     }

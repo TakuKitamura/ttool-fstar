@@ -112,11 +112,11 @@ public class TMLActivityDiagramPanel extends TDiagramPanel {
         // Position correctly guards of choice
     }
     
-        public void enhance() {
+    public void enhance() {
         //System.out.println("enhance");
-        Vector v = new Vector();
-        Object o;
-        Iterator iterator = componentList.listIterator();
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        TGComponent o;
+        Iterator<TGComponent> iterator = componentList.iterator();
         
         while(iterator.hasNext()) {
             o = iterator.next();
@@ -129,7 +129,7 @@ public class TMLActivityDiagramPanel extends TDiagramPanel {
         repaint();
     }
     
-    public void enhance(Vector v, TGComponent tgc) {
+    public void enhance(Vector<TGComponent> v, TGComponent tgc) {
         TGComponent tgc1;
         TGConnector tgcon;
         int i;
@@ -169,46 +169,54 @@ public class TMLActivityDiagramPanel extends TDiagramPanel {
 	public boolean hasAutoConnect() {
 		return true;
 	}
-    public ArrayList<String> getAllCryptoConfig(){
-	ArrayList<String> cc=new ArrayList<String>();
-	LinkedList<TGComponent> comps= getAllComponentList();
-	for (TGComponent c: comps){
-	    if (c instanceof TMLADEncrypt){
-		TMLADEncrypt en= (TMLADEncrypt) c;
-		if (!en.securityContext.isEmpty()){
-		    cc.add(en.securityContext);
+	
+    public List<String> getAllCryptoConfig(){
+		List<String> cc = new ArrayList<String>();
+		List<TGComponent> comps = getAllComponentList();
+		
+		for (TGComponent c: comps){
+		    if (c instanceof TMLADEncrypt){
+		    	TMLADEncrypt en= (TMLADEncrypt) c;
+		    	
+		    	if (!en.securityContext.isEmpty()){
+		    		cc.add(en.securityContext);
+		    	}
+		    }
 		}
-	    }
-	}
-	return cc;
+		
+		return cc;
     }
 
-    public ArrayList<String> getAllNonce(){
-	ArrayList<String> ns=new ArrayList<String>();
-	LinkedList<TGComponent> comps= getAllComponentList();
-	for (TGComponent c: comps){
-	    if (c instanceof TMLADEncrypt){
-		TMLADEncrypt en= (TMLADEncrypt) c;
-		if (!en.securityContext.isEmpty() && en.type.equals("Nonce")){
-		     ns.add(en.securityContext);
-		}
-	    }
-	}
-	return ns;
+    public List<String> getAllNonce(){
+    	List<String> ns=new ArrayList<String>();
+    	List<TGComponent> comps= getAllComponentList();
+    	
+    	for (TGComponent c: comps){
+    		if (c instanceof TMLADEncrypt){
+    			TMLADEncrypt en= (TMLADEncrypt) c;
+    			if (!en.securityContext.isEmpty() && en.type.equals("Nonce")){
+    				ns.add(en.securityContext);
+    			}
+    		}
+    	}
+    	
+    	return ns;
     }
 
-    public ArrayList<String> getAllKeys(){
-	ArrayList<String> ns=new ArrayList<String>();
-	LinkedList<TGComponent> comps= getAllComponentList();
-	for (TGComponent c: comps){
-	    if (c instanceof TMLADEncrypt){
-		TMLADEncrypt en= (TMLADEncrypt) c;
-		if (!en.securityContext.isEmpty() && (en.type.equals("Symmetric Encryption") || en.type.equals("Asymmetric Encryption") ||  en.type.equals("MAC"))){
-		    ns.add(en.securityContext);
-		}
-	    }
-	}
-	return ns;
+    public List<String> getAllKeys(){
+    	List<String> ns=new ArrayList<String>();
+    	List<TGComponent> comps= getAllComponentList();
+    	
+    	for (TGComponent c: comps){
+    		if (c instanceof TMLADEncrypt){
+    			TMLADEncrypt en= (TMLADEncrypt) c;
+    			if (!en.securityContext.isEmpty() && (en.type.equals("Symmetric Encryption") || en.type.equals("Asymmetric Encryption") ||  en.type.equals("MAC"))){
+    				ns.add(en.securityContext);
+    			}
+    		}
+    	}
+    	
+    	return ns;
     }
 
 }

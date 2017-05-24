@@ -202,8 +202,6 @@ import ui.procsd.ProactiveCSDPanel;
 import ui.prosmd.ProactiveSMDPanel;
 import ui.req.Requirement;
 import ui.req.RequirementDiagramPanel;
-import ui.sd.*;
-import ui.sd2.*;
 import ui.sysmlsecmethodology.SysmlsecMethodologyDiagramPanel;
 import ui.tmlad.TGConnectorTMLAD;
 import ui.tmlad.TMLADDecrypt;
@@ -215,8 +213,6 @@ import ui.tmlad.TMLADExecI;
 import ui.tmlad.TMLADChoice;
 import ui.tmlad.TMLADStartState;
 import ui.tmlad.TMLADActionState;
-import ui.tmlad.TMLADEncrypt;
-import ui.tmlad.TMLADDecrypt;
 import ui.tmlad.TMLADForEverLoop;
 import ui.tmlad.TMLADWriteChannel;
 import ui.tmlad.TMLActivityDiagramPanel;
@@ -1314,12 +1310,12 @@ public class GTURTLEModeling {
 						}
 					}
 					if (tg instanceof TMLADEncrypt){
-						TMLADEncrypt enc = (TMLADEncrypt) tg;
+					//	TMLADEncrypt enc = (TMLADEncrypt) tg;
 						secOperators.add(tg);
 						//}
 					}
 					if (tg instanceof TMLADDecrypt){
-						TMLADDecrypt dec = (TMLADDecrypt) tg;
+					//	TMLADDecrypt dec = (TMLADDecrypt) tg;
 						secOperators.add(tg);
 						//}
 					}
@@ -1360,7 +1356,7 @@ public class GTURTLEModeling {
 				//Remove existing security elements
 				for (TGComponent op: secOperators){
 					TGConnector prev = tad.findTGConnectorEndingAt(op.getTGConnectingPointAtIndex(0));
-					TGConnectingPoint point = prev.getTGConnectingPointP1();
+					//TGConnectingPoint point = prev.getTGConnectingPointP1();
 					TGConnector end = tad.findTGConnectorStartingAt(op.getTGConnectingPointAtIndex(1));
 					TGConnectingPoint point2 = end.getTGConnectingPointP2();
 					tad.removeComponent(op);
@@ -1398,7 +1394,7 @@ public class GTURTLEModeling {
 					tad.addComponent(fromStart, xpos, ypos, false, true);
 
 					//Add connection
-					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 					fromStart.setP1(req.getTGConnectingPointAtIndex(1));
 					TMLADWriteChannel wr =new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 					
@@ -1413,7 +1409,7 @@ public class GTURTLEModeling {
 					fromStart.setP2(wr.getTGConnectingPointAtIndex(0));
 					tad.addComponent(fromStart, xpos, ypos, false, true);
 
-					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 					tad.addComponent(fromStart, xpos, ypos, false, true);
 					fromStart.setP1(wr.getTGConnectingPointAtIndex(1));
 					
@@ -1435,7 +1431,7 @@ public class GTURTLEModeling {
 					yShift+=50;
 
 					//Add connector
-					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 					tad.addComponent(fromStart, xpos, ypos, false, true);
 					fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
 					yShift+=50;
@@ -1468,7 +1464,7 @@ public class GTURTLEModeling {
 					ypos = chan.getY();
 					fromStart = tad.findTGConnectorStartingAt(chan.getTGConnectingPointAtIndex(1));
 					if (fromStart==null){
-						fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						fromStart.setP1(chan.getTGConnectingPointAtIndex(1));
 						tad.addComponent(fromStart, xpos,ypos,false,true);
 					}
@@ -1493,7 +1489,7 @@ public class GTURTLEModeling {
 
 
 					//Add connection
-					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 					fromStart.setP1(act.getTGConnectingPointAtIndex(1));
 					fromStart.setP2(req.getTGConnectingPointAtIndex(0));
 					tad.addComponent(fromStart, xpos, ypos, false, true);
@@ -1510,7 +1506,7 @@ public class GTURTLEModeling {
 
 
 					//Add connection
-					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 					fromStart.setP1(req.getTGConnectingPointAtIndex(1));
 					fromStart.setP2(wr.getTGConnectingPointAtIndex(0));
 					tad.addComponent(fromStart, xpos, ypos, false, true);
@@ -1523,14 +1519,14 @@ public class GTURTLEModeling {
 					rd.securityContext = ch.securityContext;;
 					tad.addComponent(rd, xpos, ypos+yShift, false,true);
 
-					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+					fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 					tad.addComponent(fromStart, xpos, ypos, false, true);
 					fromStart.setP1(wr.getTGConnectingPointAtIndex(1));
 					fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
 					yShift+=50;
 
 					if (point!=null){
-						fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						tad.addComponent(fromStart, xpos, ypos, false, true);
 						fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
 						//Direct the last TGConnector back to the start of the write channel operator
@@ -1563,7 +1559,7 @@ public class GTURTLEModeling {
 			TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel("HSM_"+cpuName);
 
 			TMLADStartState start = (TMLADStartState) tad.getComponentList().get(0);
-			fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+			fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 
 
 			TMLADReadRequestArg req = new TMLADReadRequestArg(300, 100, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
@@ -1583,7 +1579,7 @@ public class GTURTLEModeling {
 
 
 			//Connect readrequest and choice
-			fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+			fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 			fromStart.setP1(req.getTGConnectingPointAtIndex(1));
 			fromStart.setP2(choice.getTGConnectingPointAtIndex(0));
 			tad.addComponent(fromStart, 300,200,false,true);
@@ -1603,7 +1599,7 @@ public class GTURTLEModeling {
 						choice2= new TMLADChoice(xc, 250, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 						tad.addComponent(choice2, xc, 400,false,true);
 						//Connect new choice operator to top choice
-						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						fromStart.setP1(choice.getTGConnectingPointAtIndex(i/3+1));
 						fromStart.setP2(choice2.getTGConnectingPointAtIndex(0));
 						tad.addComponent(fromStart, 300,200,false,true);
@@ -1613,7 +1609,7 @@ public class GTURTLEModeling {
 					rd.securityContext = ch.securityContext;;
 					tad.addComponent(rd, xc,300,false,true);
 					//Connect choice and readchannel						
-					fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+					fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 					fromStart.setP1(choice2.getTGConnectingPointAtIndex(i%3+1));
 					fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
 			
@@ -1628,18 +1624,18 @@ public class GTURTLEModeling {
 						TMLADDecrypt dec = new TMLADDecrypt(xc, 500, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
 						dec.securityContext =  ch.securityContext;
 		   			 	tad.addComponent(dec, xc, 500,false,true);
-						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
 						fromStart.setP2(dec.getTGConnectingPointAtIndex(0));
 						tad.addComponent(fromStart, 300,200,false,true);
 						
-						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
 						fromStart.setP2(dec.getTGConnectingPointAtIndex(0));
 						tad.addComponent(fromStart, 300,200,false,true);
 						
 						//Connect encrypt and writechannel
-						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						fromStart.setP1(dec.getTGConnectingPointAtIndex(1));
 						fromStart.setP2(wr.getTGConnectingPointAtIndex(0));
 						tad.addComponent(fromStart, 300,200,false,true);
@@ -1667,13 +1663,13 @@ public class GTURTLEModeling {
 						tad.addComponent(enc, xc, 500,false,true);
 					
 						//Connect encrypt and readchannel
-						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
 						fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
 						tad.addComponent(fromStart, 300,200,false,true);
 							
 						//Connect encrypt and writechannel
-						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
 						fromStart.setP2(wr.getTGConnectingPointAtIndex(0));
 						tad.addComponent(fromStart, 300,200,false,true);
@@ -1695,7 +1691,7 @@ public class GTURTLEModeling {
 					tad.addComponent(rd, xc,300,false,true);
 					//Connect choice and readchannel
 				
-					fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+					fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 					fromStart.setP1(choice.getTGConnectingPointAtIndex(i));
 					fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
 			
@@ -1712,13 +1708,13 @@ public class GTURTLEModeling {
 						dec.securityContext = ch.securityContext;
 			   		 	tad.addComponent(dec, xc, 500,false,true);
 
-						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
 						fromStart.setP2(dec.getTGConnectingPointAtIndex(0));
 						tad.addComponent(fromStart, 300,200,false,true);
 						
 						//Connect encrypt and writechannel
-						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						fromStart.setP1(dec.getTGConnectingPointAtIndex(1));
 						fromStart.setP2(wr.getTGConnectingPointAtIndex(0));
 						tad.addComponent(fromStart, 300,200,false,true);
@@ -1745,13 +1741,13 @@ public class GTURTLEModeling {
 						tad.addComponent(enc, xc, 500,false,true);
 						
 						//Connect encrypt and readchannel
-						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
 						fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
 						tad.addComponent(fromStart, 300,200,false,true);
 						
 						//Connect encrypt and writechannel
-						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
 						fromStart.setP2(wr.getTGConnectingPointAtIndex(0));
 						tad.addComponent(fromStart, 300,200,false,true);
@@ -1855,7 +1851,7 @@ public class GTURTLEModeling {
 						ypos = chI.getY()+10;
 						fromStart = tad.findTGConnectorStartingAt(chI.getTGConnectingPointAtIndex(1));
 						if (fromStart==null){
-							fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+							fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 							fromStart.setP1(chI.getTGConnectingPointAtIndex(1));
 							tad.addComponent(fromStart, xpos,ypos,false,true);
 						}
@@ -1869,7 +1865,7 @@ public class GTURTLEModeling {
 
 						fromStart.setP2(dec.getTGConnectingPointAtIndex(0));
 						if (point!=null){
-							fromStart=new TGConnectorTMLAD(dec.getX(), dec.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+							fromStart=new TGConnectorTMLAD(dec.getX(), dec.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 							tad.addComponent(fromStart, xpos, ypos, false, true);
 							fromStart.setP1(dec.getTGConnectingPointAtIndex(1));
 
@@ -1924,7 +1920,7 @@ public class GTURTLEModeling {
 
 
 						fromStart.setP2(enc.getTGConnectingPointAtIndex(0));
-						fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector());
+						fromStart=new TGConnectorTMLAD(enc.getX(), enc.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 						tad.addComponent(fromStart, xpos, ypos, false, true);
 						fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
 
@@ -1990,7 +1986,7 @@ public class GTURTLEModeling {
 			archPanel.addComponent(bus, cpu.getX()+200, cpu.getY()+200, false, true);
 
 			//Connect Bus and CPU
-			TMLArchiConnectorNode connect =new  TMLArchiConnectorNode(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, null, archPanel, null, null, new Vector());
+			TMLArchiConnectorNode connect =new  TMLArchiConnectorNode(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, null, archPanel, null, null, new Vector<Point>());
 			TGConnectingPoint p1 = bus.findFirstFreeTGConnectingPoint(true,true);
 			p1.setFree(false);
 			connect.setP2(p1);
@@ -2003,7 +1999,7 @@ public class GTURTLEModeling {
 			archPanel.addComponent(connect, cpu.getX()+100, cpu.getY()+100, false, true);
 			//Connect Bus and HWA
 
-			connect = new TMLArchiConnectorNode(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, null, archPanel, null, null, new Vector());
+			connect = new TMLArchiConnectorNode(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, null, archPanel, null, null, new Vector<Point>());
 			p1 = bus.findFirstFreeTGConnectingPoint(true,true);
 			p1.setFree(false);
 			connect.setP2(p1);
@@ -2015,7 +2011,7 @@ public class GTURTLEModeling {
 			archPanel.addComponent(connect, cpu.getX()+100, cpu.getY()+100, false, true);
 			//Connect Bus and Memory
 
-			connect = new TMLArchiConnectorNode(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, null, archPanel, null, null, new Vector());
+			connect = new TMLArchiConnectorNode(cpu.getX()+100, cpu.getY()+100, archPanel.getMinX(), archPanel.getMaxX(), archPanel.getMinY(), archPanel.getMaxY(), true, null, archPanel, null, null, new Vector<Point>());
 			p1 = bus.findFirstFreeTGConnectingPoint(true,true);
 			p1.setFree(false);
 			connect.setP2(p1);
@@ -3984,6 +3980,10 @@ public class GTURTLEModeling {
 
 		removeAllComponents();
 		mgui.reinitMainTabbedPane();
+
+		// Issue #42: the selected tabs should be memorized before decrementing the pointer
+		final Point prevSelectedTabs = savedPanels.elementAt( pointerOperation );
+		
 		try {
 			pointerOperation --;
 			TraceManager.addDev("Decrementing pointer =" + pointerOperation);
@@ -3994,11 +3994,13 @@ public class GTURTLEModeling {
 		}
 
 		TraceManager.addDev("Selecting tab");
-
-		Point p = (Point)(savedPanels.elementAt(pointerOperation));
-		if (p != null) {
-			TraceManager.addDev("Selecting tab panel=" + p.getX() + " diagram=" + p.getY());
-			TDiagramPanel tdp = mgui.selectTab(p);
+		
+		// Issue #42:
+		//Point p = savedPanels.elementAt(pointerOperation);
+		
+		if ( prevSelectedTabs != null ) {
+			TraceManager.addDev("Selecting tab panel=" + prevSelectedTabs.getX() + " diagram=" + prevSelectedTabs.getY());
+			TDiagramPanel tdp = mgui.selectTab( prevSelectedTabs );
 			tdp.mode = TDiagramPanel.NORMAL;
 			tdp.setDraw(true);
 			tdp.repaint();
@@ -7948,7 +7950,7 @@ public class GTURTLEModeling {
 		if (tdp == null) {
 			throw new MalformedModelingException();
 		}
-		boolean error = false;
+		//boolean error = false;
 
 		for(int i=0; i<nl.getLength(); i++) {
 			n = nl.item(i);
@@ -7973,7 +7975,7 @@ public class GTURTLEModeling {
 			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A component could not be correctly loaded - type=" + t);
 			ce.setTDiagramPanel(tdp);
 			checkingErrors.add(ce);
-					error = true;
+					//error = true;
 				}
 			}
 		}
@@ -7985,7 +7987,7 @@ public class GTURTLEModeling {
 
 	public int getTypeOfComponentNode(Node n) {
 	try {
-		NodeList nl = n.getChildNodes();
+		//NodeList nl = n.getChildNodes();
 			Element elt = (Element)n;
 		return Integer.decode(elt.getAttribute("type")).intValue();
 	} catch (Exception e){
