@@ -362,7 +362,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     private TMLArchiPanel tmlap;    // USed to retrieve the currently opened architecture panel
 
     // Plugin management
-    public static PluginManager pluginManager;
+    //public static PluginManager pluginManager;
     
 
     public MainGUI(boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
@@ -384,7 +384,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         pbt = new PeriodicBehaviorThread(this, 120000); // save every two minutes
 
-	pluginManager = new PluginManager();
+	PluginManager.pluginManager = new PluginManager();
 
     }
 

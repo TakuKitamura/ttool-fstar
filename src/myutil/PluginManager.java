@@ -50,6 +50,7 @@ import java.lang.reflect.*;
 
 public class PluginManager  {
     public ArrayList<Plugin> plugins;
+    public static PluginManager pluginManager;
 
     public PluginManager() {
 	plugins = new ArrayList<Plugin>();
