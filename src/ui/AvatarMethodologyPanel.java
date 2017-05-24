@@ -55,22 +55,26 @@ import ui.avatarmethodology.*;
 import java.util.*;
 
 public class AvatarMethodologyPanel extends TURTLEPanel {
-    public AvatarMethodologyDiagramPanel dmd;
+    
+	public AvatarMethodologyDiagramPanel dmd;
 
     public AvatarMethodologyPanel(MainGUI _mgui) {
         super(_mgui);
 
         tabbedPane = new JTabbedPane();
-        UIManager.put("TabbedPane.tabAreaBackground", _mgui.BACK_COLOR);
-        UIManager.put("TabbedPane.selected", _mgui.BACK_COLOR);
+        UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
+        UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
         SwingUtilities.updateComponentTreeUI(tabbedPane);
         //tabbedPane.setOpaque(true);
 
         cl = new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    mgui.paneDiplodocusMethodologyAction(e);
-                }
-            };
+
+        	@Override
+        	public void stateChanged(ChangeEvent e){
+        		mgui.paneDiplodocusMethodologyAction(e);
+        	}
+        };
+        
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
 
@@ -92,7 +96,7 @@ public class AvatarMethodologyPanel extends TURTLEPanel {
         TGConnectingPoint p1, p2;
         p1 = tgc1.getTGConnectingPointAtIndex(0);
         p2 = tgc2.getTGConnectingPointAtIndex(0);
-        Vector listPoint = new Vector();
+        Vector<Point> listPoint = new Vector<Point>();
         Point p = new Point(210, 235);
         listPoint.add(p);
         TGConnector tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
@@ -103,7 +107,7 @@ public class AvatarMethodologyPanel extends TURTLEPanel {
         // Reqs -> Analysis
         p1 = tgc2.getTGConnectingPointAtIndex(1);
         p2 = tgc3.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         p = new Point(310, 335);
         listPoint.add(p);
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
@@ -114,7 +118,7 @@ public class AvatarMethodologyPanel extends TURTLEPanel {
         // Analysis -> Design
         p1 = tgc3.getTGConnectingPointAtIndex(1);
         p2 = tgc4.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         p = new Point(410, 435);
         listPoint.add(p);
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
@@ -125,7 +129,7 @@ public class AvatarMethodologyPanel extends TURTLEPanel {
         // Design -> Prototyping
         p1 = tgc4.getTGConnectingPointAtIndex(1);
         p2 = tgc5.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         p = new Point(510, 535);
         listPoint.add(p);
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
@@ -136,13 +140,11 @@ public class AvatarMethodologyPanel extends TURTLEPanel {
         // Reqs -> Prop
         p1 = tgc2.getTGConnectingPointAtIndex(2);
         p2 = tgc6.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
         p1.setFree(false);
         p2.setFree(false);
         dmd.getComponentList().add(0, tgco);
-
-
     }
 
     public void init() {
@@ -159,7 +161,7 @@ public class AvatarMethodologyPanel extends TURTLEPanel {
     }
 
     public boolean addAvatarMethodologyDiagram(String s) {
-        AvatarMethodologyDiagramToolbar dmdt = new AvatarMethodologyDiagramToolbar(mgui);
+        AvatarMethodologyDiagramToolbar dmdt = new AvatarMethodologyDiagramToolbar( mgui );
         toolbars.add(dmdt);
 
         toolBarPanel = new JPanel();
@@ -176,7 +178,7 @@ public class AvatarMethodologyPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(dmd);
         dmd.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         toolBarPanel.add(dmdt, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic99, toolBarPanel, "Opens avatar methodology");
