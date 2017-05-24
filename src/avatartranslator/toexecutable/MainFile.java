@@ -109,8 +109,10 @@ public class MainFile {
 
         String mainDec = MAIN_DEC;
 
-        try {
+	
 
+        try {
+	    //mainDec = MainGUI.pluginManager.execute(plugin, CustomizerAvatarJavaCodeGeneration, getMainDeclaration)
             File file = new File(plugin);
             TraceManager.addDev("Loading plugin=" + plugin);
             URL[] urls = new URL[] { file.toURI().toURL() };

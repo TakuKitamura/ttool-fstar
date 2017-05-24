@@ -105,13 +105,7 @@ import ddtranslatorSoclib.AvatarddSpecification;
 import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
 import launcher.RemoteExecutionThread;
 import launcher.RshClient;
-import myutil.BrowserControl;
-import myutil.FileException;
-import myutil.FileUtils;
-import myutil.GraphicLib;
-import myutil.PeriodicBehavior;
-import myutil.PeriodicBehaviorThread;
-import myutil.TraceManager;
+import myutil.*;
 import proverifspec.ProVerifOutputAnalyzer;
 import translator.MasterGateManager;
 import ui.ad.TActivityDiagramPanel;
@@ -362,10 +356,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // Invariants
     Invariant currentInvariant;
 
-    // Thread fof autosave
+    // Thread for autosave
     PeriodicBehaviorThread pbt;
 
     private TMLArchiPanel tmlap;    // USed to retrieve the currently opened architecture panel
+
+    // Plugin management
+    public static PluginManager pluginManager;
+    
 
     public MainGUI(boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
                    _avatarOnly, boolean _experimental) {
@@ -385,6 +383,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         currentInvariant = null;
 
         pbt = new PeriodicBehaviorThread(this, 120000); // save every two minutes
+
+	pluginManager = new PluginManager();
 
     }
 
