@@ -422,6 +422,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
     public void makeHeader() {
         TraceManager.addDev("\n\n=+=+=+ Making Headers +=+=+=");
+        this.spec.addDeclaration (new ProVerifProperty   ("abbreviateDerivation = false"));
         this.spec.addDeclaration (new ProVerifComment    ("Boolean return types"));
         this.spec.addDeclaration (new ProVerifConst      (TRUE, "bitstring"));
         this.spec.addDeclaration (new ProVerifConst      (FALSE, "bitstring"));

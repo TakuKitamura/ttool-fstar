@@ -69,6 +69,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     private static final Insets EAST_INSETS = new Insets(0, 0, 0, 0);
 
     protected MainGUI mgui;
+    private AvatarDesignPanel adp;
 
     private String textC1 = "Generate ProVerif code in: ";
     private String textC2 = "Execute ProVerif as: ";
@@ -92,6 +93,18 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     protected JButton start;
     protected JButton stop;
     protected JButton close;
+    protected JPopupMenu popup;
+
+    private class MyMenuItem extends JMenuItem {
+        AvatarPragma pragma;
+        ProVerifQueryResult result;
+
+        public MyMenuItem(String text)
+        {
+            super(text);
+        }
+    };
+    protected MyMenuItem menuItem;
 
 
     //protected JRadioButton exe, exeint;
@@ -113,6 +126,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     private JList<AvatarPragma> satisfiedWeakAuthList;
     private JList<AvatarPragma> nonSatisfiedAuthList;
     private JList<AvatarPragma> nonProvedList;
+    private HashMap<AvatarPragma, ProVerifQueryResult> results;
 
     private Thread t;
     private boolean go = false;
@@ -138,10 +152,11 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     };
 
     /** Creates new form  */
-    public JDialogProverifVerification(Frame f, MainGUI _mgui, String title, String _hostProVerif, String _pathCode, String _pathExecute) {
+    public JDialogProverifVerification(Frame f, MainGUI _mgui, String title, String _hostProVerif, String _pathCode, String _pathExecute, AvatarDesignPanel adp) {
         super(f, title, true);
 
         mgui = _mgui;
+        this.adp = adp;
 
         if (pathCode == null) {
             pathCode = _pathCode;
@@ -273,6 +288,11 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
         jp2.add(close);
 
         c.add(jp2, BorderLayout.SOUTH);
+
+        this.popup = new JPopupMenu();
+        this.menuItem = new MyMenuItem("Show trace");
+        this.menuItem.addActionListener(this);
+        popup.add(this.menuItem);
     }
 
     public void actionPerformed(ActionEvent evt)  {
@@ -284,6 +304,15 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
+        } else if (command.equals("Show trace")) {
+            if (evt.getSource() == this.menuItem)
+            {
+                TraceManager.addDev("\n--- Trace ---");
+                for (ProVerifResultTraceStep step: this.menuItem.result.getTrace().getTrace())
+                    TraceManager.addDev(step.describeAsString(this.adp));
+                TraceManager.addDev("");
+                // TODO
+            }
         }
     }
 
@@ -438,12 +467,12 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
                 LinkedList<AvatarPragma> nonSatisfiedAuth = new LinkedList<AvatarPragma> ();
                 LinkedList<AvatarPragma> nonProved = new LinkedList<AvatarPragma> ();
 
-                HashMap<AvatarPragma, ProVerifQueryResult> results = pvoa.getResults();
-                for (AvatarPragma pragma: results.keySet())
+                this.results = pvoa.getResults();
+                for (AvatarPragma pragma: this.results.keySet())
                 {
                     if (pragma instanceof AvatarPragmaReachability)
                     {
-                        ProVerifQueryResult r = results.get(pragma);
+                        ProVerifQueryResult r = this.results.get(pragma);
                         if (r.isProved())
                         {
                             if (r.isSatisfied())
@@ -457,7 +486,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
 
                     else if (pragma instanceof AvatarPragmaSecret)
                     {
-                        ProVerifQueryResult r = results.get(pragma);
+                        ProVerifQueryResult r = this.results.get(pragma);
                         if (r.isProved())
                         {
                             if (r.isSatisfied())
@@ -471,7 +500,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
 
                     else if (pragma instanceof AvatarPragmaAuthenticity)
                     {
-                        ProVerifQueryAuthResult r = (ProVerifQueryAuthResult) results.get(pragma);
+                        ProVerifQueryAuthResult r = (ProVerifQueryAuthResult) this.results.get(pragma);
                         if (!r.isWeakProved())
                         {
                             nonProved.add(pragma);
@@ -604,12 +633,28 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     @Override
     public void mousePressed(MouseEvent e)
     {
+        this.maybeShowPopup(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e)
     {
-        // TODO: add contextual menu
+        this.maybeShowPopup(e);
+    }
+
+    private void maybeShowPopup(MouseEvent e)
+    {
+        if (e.isPopupTrigger() && e.getComponent() instanceof JList)
+        {
+            JList<AvatarPragma> curList = (JList<AvatarPragma>) e.getComponent();
+            int row = curList.locationToIndex(e.getPoint());
+            curList.clearSelection();
+            curList.setSelectedIndex(row);
+            this.menuItem.pragma = curList.getModel().getElementAt(row);
+            this.menuItem.result = this.results.get(this.menuItem.pragma);
+            this.menuItem.setEnabled(this.menuItem.result.getTrace() != null);
+            popup.show(e.getComponent(), e.getX(), e.getY());
+        }
     }
 
     @Override

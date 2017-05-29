@@ -320,6 +320,28 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
     }
 
+    public LinkedList<String> getPropertyPragmas() {
+        LinkedList<String> result = new LinkedList<String> ();
+        for (Object tgc: abdp.getComponentList()) {
+            if (tgc instanceof AvatarBDPragma) {
+                result.addAll(((AvatarBDPragma) tgc).getProperties());
+            }
+        }
+
+        return result;
+    }
+
+    public LinkedList<String> getModelPragmas() {
+        LinkedList<String> result = new LinkedList<String> ();
+        for (Object tgc: abdp.getComponentList()) {
+            if (tgc instanceof AvatarBDPragma) {
+                result.addAll(((AvatarBDPragma) tgc).getModels());
+            }
+        }
+
+        return result;
+    }
+
 
     public void resetModelBacktracingProVerif() {
         if (abdp == null) {

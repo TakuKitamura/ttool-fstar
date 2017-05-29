@@ -3948,7 +3948,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void avatarProVerifVerification() {
         TraceManager.addDev("Avatar proverif fv");
-        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
+        TURTLEPanel tp = this.getCurrentTURTLEPanel();
+        AvatarDesignPanel adp = null;
+        if (tp instanceof AvatarDesignPanel)
+            adp = (AvatarDesignPanel) tp;
+        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath, adp);
         // jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);

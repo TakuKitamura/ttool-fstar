@@ -52,6 +52,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import myutil.TraceManager;
 
@@ -104,30 +105,59 @@ public class ProVerifOutputAnalyzer {
         String previous = null;
         String str;
         ProVerifQueryAuthResult previousAuthPragma = null;
+        LinkedList<String> proverifProcess = new LinkedList<String> ();
+        ProVerifResultTrace resultTrace = new ProVerifResultTrace(proverifProcess);
+        boolean isInTrace = false;
 
         this.results = new HashMap<AvatarPragma, ProVerifQueryResult> ();
         this.errors = new LinkedList<String>();
+
+        Pattern procPattern = Pattern.compile(" *\\{\\d+\\}(.*)");
 
         try {
 
             // Loop through every line in the output
             while ((str = reader.readLine()) != null)
             {
+                if (str.isEmpty())
+                    continue;
+                
+                Matcher m = procPattern.matcher(str);
+
+                if (isInTrace && (str.startsWith("A more detailed") || str.startsWith("Could not find")))
+                {
+                    isInTrace = false;
+                    resultTrace.finalize();
+                    continue;
+                }
+                else if (!isInTrace && str.startsWith("1. "))
+                {
+                    isInTrace = true;
+                }
+
+                // Found a trace step
+                if (isInTrace)
+                {
+                    resultTrace.addTraceStep(str);
+                }
+
+                else if (m.matches())
+                {
+                    proverifProcess.add(m.group(1));
+                }
+
                 // Found a line with a RESULT
-                if (str.startsWith("RESULT "))
+                else if (str.startsWith("RESULT "))
                 {
                     // Remove 'RESULT ' at the begining
                     str = str.substring(7);
-                    TraceManager.addDev("[DEBUG] Found Result : " + str);
+                    ProVerifQueryResult result = new ProVerifQueryResult(true, true);
 
                     // This concerns an enteringState event
                     if (str.startsWith(isTyped ? typedEvent : untypedEvent))
                     {
-                        TraceManager.addDev("[DEBUG]     Reachability");
                         str = str.substring((isTyped ? typedEvent : untypedEvent).length());
                         String stateName = null;
-                        boolean proved = true;
-                        boolean satisfied = true;
 
                         previousAuthPragma = null;
 
@@ -135,18 +165,18 @@ public class ProVerifOutputAnalyzer {
                         {
                             if (str.contains(typedTrue))
                             {
-                                satisfied = false;
+                                result.setSatisfied(false);
                                 stateName = str.split(Pattern.quote(typedTrue))[0];
                             }
                             else if (str.contains(typedFalse))
                             {
-                                // TODO: Add trace
+                                result.setTrace(resultTrace);
                                 stateName = str.split(Pattern.quote(typedFalse))[0];
                             }
                             else if (str.contains(typedCannotBeProved))
                             {
-                                // TODO: Add trace
-                                proved = false;
+                                result.setProved(false);
+                                result.setTrace(resultTrace);
                                 stateName = str.split(Pattern.quote(typedCannotBeProved))[0];
                             }
                         }
@@ -155,24 +185,23 @@ public class ProVerifOutputAnalyzer {
                             stateName = str.split("\\(")[0];
                             if (str.contains(untypedTrue))
                             {
-                                satisfied = false;
+                                result.setSatisfied(false);
                             }
                             else if (str.contains(untypedFalse))
                             {
-                                // TODO: Add trace
+                                result.setTrace(resultTrace);
                             }
                             else if (str.contains(untypedCannotBeProved))
                             {
-                                // TODO: Add trace
-                                proved = false;
+                                result.setTrace(resultTrace);
+                                result.setProved(false);
                             }
                         }
 
                         AvatarPragmaReachability reachabilityPragma = this.getAvatarPragmaReachabilityFromString(stateName);
                         if (reachabilityPragma != null)
                         {
-                            TraceManager.addDev("[DEBUG]     " + reachabilityPragma.toString());
-                            this.results.put(reachabilityPragma, new ProVerifQueryResult(proved, satisfied));
+                            this.results.put(reachabilityPragma, result);
                         }
                     }
 
@@ -180,22 +209,18 @@ public class ProVerifOutputAnalyzer {
                     else if (str.contains(isTyped ? typedSecret : untypedSecret))
                     {
                         String attributeName = str.substring((isTyped ? typedSecret : untypedSecret).length()).split("\\[")[0];
-                        TraceManager.addDev("[DEBUG]     Confidentiality");
-
-                        boolean proved = true;
-                        boolean satisfied = true;
 
                         previousAuthPragma = null;
 
                         if (str.contains(isTyped ? typedFalse : untypedFalse))
                         {
-                            // TODO: Add trace
-                            satisfied = false;
+                            result.setTrace(resultTrace);
+                            result.setSatisfied(false);
                         }
                         else if (str.contains(isTyped ? typedCannotBeProved : untypedCannotBeProved))
                         {
-                            // TODO: Add trace
-                            proved = false;
+                            result.setTrace(resultTrace);
+                            result.setProved(false);
                         }
 
                         AvatarAttribute attribute = this.getAvatarAttributeFromString(attributeName);
@@ -203,12 +228,10 @@ public class ProVerifOutputAnalyzer {
                         {
                             for (AvatarPragma pragma: pragmas)
                             {
-                                ProVerifQueryResult res = new ProVerifQueryResult(proved, satisfied);
                                 if (pragma instanceof AvatarPragmaSecret
                                         && this.avatar2proverif.getTrueName(((AvatarPragmaSecret) pragma).getArg()).equals(attributeName))
                                 {
-                                    TraceManager.addDev("[DEBUG]     " + pragma.toString());
-                                    this.results.put(pragma, res);
+                                    this.results.put(pragma, result);
                                 }
                             }
                         }
@@ -218,14 +241,12 @@ public class ProVerifOutputAnalyzer {
                     else if (str.contains(isTyped ? typedStrongAuth : untypedStrongAuth))
                     {
                         str = str.substring((isTyped ? typedStrongAuth : untypedStrongAuth).length());
-                        TraceManager.addDev("[DEBUG]     Authenticity");
 
                         String attributeStateName1 = null;
                         String attributeStateName2 = null;
-                        boolean proved = true;
-                        boolean satisfied = true;
 
-                        previousAuthPragma = null;
+                        previousAuthPragma = new ProVerifQueryAuthResult(true, true);
+                        result = previousAuthPragma;
 
                         if (isTyped)
                         {
@@ -233,13 +254,13 @@ public class ProVerifOutputAnalyzer {
                             attributeStateName2 = str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0];
                             if (str.contains(typedFalse))
                             {
-                                // TODO: Add trace
-                                satisfied = false;
+                                result.setTrace(resultTrace);
+                                result.setSatisfied(false);
                             }
                             else if (str.contains(typedCannotBeProved))
                             {
-                                // TODO: Add trace
-                                proved = false;
+                                result.setTrace(resultTrace);
+                                result.setProved(false);
                             }
                         }
                         else
@@ -248,13 +269,13 @@ public class ProVerifOutputAnalyzer {
                             attributeStateName2 = str.split(untypedAuthSplit)[1].split("\\(")[0];
                             if (str.contains(untypedFalse))
                             {
-                                // TODO: Add trace
-                                satisfied = false;
+                                result.setTrace(resultTrace);
+                                result.setSatisfied(false);
                             }
                             else if (str.contains(untypedCannotBeProved))
                             {
-                                // TODO: Add trace
-                                proved = false;
+                                result.setTrace(resultTrace);
+                                result.setProved(false);
                             }
                         }
 
@@ -289,9 +310,7 @@ public class ProVerifOutputAnalyzer {
                                             && pragmaAuth.getAttrB().getState() == state1
                                             && pragmaAuth.getAttrB().getAttribute() == attribute1)
                                     {
-                                        previousAuthPragma = new ProVerifQueryAuthResult(proved, satisfied);
-                                        TraceManager.addDev("[DEBUG]     " + pragma);
-                                        this.results.put(pragma, previousAuthPragma);
+                                        this.results.put(pragma, result);
                                         break;
                                     }
                                 }
@@ -311,7 +330,7 @@ public class ProVerifOutputAnalyzer {
                     }
 
                     // This concerns a failed weak authenticity check
-                    else if (str.contains(isTyped ? typedWeakAuth : untypedWeakAuth))
+                    else if (str.contains(isTyped ? typedWeakNonAuth : untypedWeakNonAuth))
                     {
 
                         if (previousAuthPragma != null)
@@ -320,6 +339,8 @@ public class ProVerifOutputAnalyzer {
                         }
                         previousAuthPragma = null;
                     }
+
+                    resultTrace = new ProVerifResultTrace(proverifProcess);
                 }
 
                 // Found an error
@@ -331,7 +352,6 @@ public class ProVerifOutputAnalyzer {
                 previous = str;
             }
 
-            TraceManager.addDev("[DEBUG] --- END ---");
 
         } catch(IOException e) {
             e.printStackTrace();
