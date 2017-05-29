@@ -2577,7 +2577,7 @@ public class GTURTLEModeling {
 
 							}
 						}
-						if (tg.getY() > ypos && tg!=dec){
+						if (tg.getY() > ypos && tg!=dec && tg!=comp){
 
 							tg.setCd(tg.getX(), tg.getY()+yShift);
 						}
@@ -9197,7 +9197,8 @@ public class GTURTLEModeling {
 				AvatarSMDReceiveSignal smdrs = new AvatarSMDReceiveSignal(x, y, x, x*2, y, y*2, false, null, smp);
 				tgcomp=smdrs;
 				smp.addComponent(smdrs, x, y, false, true);
-				String name=sig.minString();
+//				String name=sig.minString();
+				String name=sig.getName()+"("+((AvatarActionOnSignal)asme).getValues().get(0)+")";
 				smdrs.setValue(name);
 				// sig.setName(name);
 				smdrs.recalculateSize();
@@ -9214,7 +9215,8 @@ public class GTURTLEModeling {
 				AvatarSMDSendSignal smdss = new AvatarSMDSendSignal(x, y, x, x*2, y, y*2, false, null, smp);
 				tgcomp=smdss;
 				smp.addComponent(smdss, x, y, false, true);
-				String name=sig.minString();
+				String name=sig.getName()+"("+((AvatarActionOnSignal)asme).getValues().get(0)+")";
+				//String name=sig.minString();
 				smdss.setValue(name);
 				smdss.recalculateSize();
 				SMDMap.put(asme, smdss);
@@ -9516,6 +9518,7 @@ public class GTURTLEModeling {
 				}
 			}
 			else if (p.getName().contains("Authenticity")){
+				t=p.getName();
 			}
 			s=s.concat(t+"\n");
 			//  i++;

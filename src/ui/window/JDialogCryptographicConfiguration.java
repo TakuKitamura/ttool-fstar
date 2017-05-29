@@ -115,7 +115,7 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  	if (values[1].contains("Encryption") || values[1].isEmpty()){
+  	if (values[1].contains("Encryption") || values[1].equals("MAC") || values[1].isEmpty()){
 	    panel1= new EncryptPanel(this);
 	}
 	else {

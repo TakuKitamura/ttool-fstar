@@ -1250,7 +1250,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         if (! (args.get(i) instanceof AvatarAttribute)) {
                             CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "'" + args.get(i).getName () + "' should be an attribute (ignored)");
                             ce.setAvatarBlock(arg.block);
-                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+							if (this.avspec.getReferenceObject() instanceof AvatarDesignPanel){
+	                            ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+							}
                             ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                             this.warnings.add(ce);
                             ok = false;
