@@ -80,10 +80,10 @@ public class TMLArchiPanel extends TURTLEPanel {
         //Class	diagram
         tmlap = new TMLArchiDiagramPanel(mgui, toolBarTML);
         tmlap.setName("DIPLODOCUS architecture and mapping Diagram");
-	toolBarTML.setPanel(tmlap);
-	// Diagram toolbar
-   
-        
+
+        toolBarTML.setPanel(tmlap);
+		// Diagram toolbar
+           
         tmlap.tp = this;
         tdp = tmlap;
         panels.add(tmlap); // Always first in list

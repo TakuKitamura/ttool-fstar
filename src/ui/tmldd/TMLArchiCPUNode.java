@@ -457,12 +457,12 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         removeInternalComponent(tgc);
     }
 
-
-    public Vector getArtifactList() {
-        Vector v = new Vector();
+    public Vector<TMLArchiArtifact> getArtifactList() {
+        Vector<TMLArchiArtifact> v = new Vector<TMLArchiArtifact>();
+        
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLArchiArtifact) {
-                v.add(tgcomponent[i]);
+                v.add( (TMLArchiArtifact) tgcomponent[i] );
             }
         }
         return v;

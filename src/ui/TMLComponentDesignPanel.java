@@ -56,19 +56,27 @@ import ui.tmlad.*;
 import ui.tmldd.*;
 
 public class TMLComponentDesignPanel extends TURTLEPanel {
-    public TMLComponentTaskDiagramPanel tmlctdp;
-    public Vector<TGComponent> validated, ignored;
+    
+	public TMLComponentTaskDiagramPanel tmlctdp;
+    
+	public Vector<TGComponent> validated, ignored;
 
     public TMLComponentDesignPanel(MainGUI _mgui) {
         super(_mgui);
+        
         tabbedPane = new JTabbedPane();
+        
         cl = new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    mgui.paneDesignAction(e);
-                }
-            };
+        	
+        	@Override
+        	public void stateChanged(ChangeEvent e){
+        		mgui.paneDesignAction(e);
+        	}
+        };
+        
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+        //tabbedPane.setTabLayoutPolicy( JTabbedPane.SCROLL_TAB_LAYOUT );
     }
 
     public TMLActivityDiagramPanel getTMLActivityDiagramPanel(String _name) {
@@ -144,7 +152,6 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         mgui.changeMade(tmlctdp, TDiagramPanel.NEW_COMPONENT);
 
         //jsp.setVisible(true);
-
     }
 
      public String saveHeaderInXml(String extensionToName) {
@@ -194,7 +201,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
 	return tmlctdp.getAllTMLTaskNames(_name);
     }
 
-    public void getListOfBreakPoints(ArrayList<Point> points) {
+    public void getListOfBreakPoints( java.util.List<Point> points ) {
        // TGComponent tgc;
         Iterator<TMLCPrimitiveComponent> iterator = tmlctdp.getPrimitiveComponentList().listIterator();
         TMLCPrimitiveComponent tmlcpc;
@@ -217,19 +224,23 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         }
     }
     
-    public ArrayList<String> getAllCryptoConfig(){
-	ArrayList<String> cryptoConfigs=new ArrayList<String>();
-	TMLActivityDiagramPanel tmladp;
-        for(int i=1; i<panels.size(); i++) {
+    public java.util.List<String> getAllCryptoConfig(){
+    	java.util.List<String> cryptoConfigs=new ArrayList<String>();
+    	TMLActivityDiagramPanel tmladp;
+        
+    	for(int i=1; i<panels.size(); i++) {
             tmladp = (TMLActivityDiagramPanel)(panels.elementAt(i));
             cryptoConfigs.addAll(tmladp.getAllCryptoConfig());
         }
-	return cryptoConfigs;
+	
+    	return cryptoConfigs;
     }
-    public ArrayList<String> getAllNonce(){
-	ArrayList<String> ns=new ArrayList<String>();
-	TMLActivityDiagramPanel tmladp;
-        for(int i=1; i<panels.size(); i++) {
+    
+    public java.util.List<String> getAllNonce(){
+    	java.util.List<String> ns=new ArrayList<String>();
+    	TMLActivityDiagramPanel tmladp;
+        
+    	for(int i=1; i<panels.size(); i++) {
             tmladp = (TMLActivityDiagramPanel)(panels.elementAt(i));
             ns.addAll(tmladp.getAllNonce());
         }

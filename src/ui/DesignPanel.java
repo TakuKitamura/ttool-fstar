@@ -53,9 +53,10 @@ import ui.cd.*;
 import ui.ad.*;
 
 public class DesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterface {
-    public TClassDiagramPanel tcdp; 
-    public java.util.List<TClassInterface> validated, ignored;
 
+	public TClassDiagramPanel tcdp; 
+    
+	public java.util.List<TClassInterface> validated, ignored;
 
     public DesignPanel(MainGUI _mgui) {
         super(_mgui);

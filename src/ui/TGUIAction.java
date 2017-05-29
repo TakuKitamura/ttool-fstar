@@ -56,7 +56,13 @@ import javax.swing.event.EventListenerList;
 
 
 public class TGUIAction extends AbstractAction {
-    // Actions
+    
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4942930048930203001L;
+	
+	// Actions
     public static final int ACT_NEW = 0;
     public static final int ACT_NEW_DESIGN = 100;
     public static final int ACT_NEW_ANALYSIS = 101;

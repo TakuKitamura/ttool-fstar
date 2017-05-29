@@ -109,9 +109,11 @@ public class MainFile {
 
         String mainDec = MAIN_DEC;
 
-        try {
+	
 
-            File file = new File(plugin);
+        try {
+	    mainDec = PluginManager.pluginManager.executeString(plugin, "CustomizerAvatarJavaCodeGeneration", "getMainDeclaration");
+            /*File file = new File(plugin);
             TraceManager.addDev("Loading plugin=" + plugin);
             URL[] urls = new URL[] { file.toURI().toURL() };
             ClassLoader loader = new URLClassLoader(urls);
@@ -123,7 +125,7 @@ public class MainFile {
 	    TraceManager.addDev("Method cinvoked");
             mainDec = (String)ret;
 	    TraceManager.addDev("Conversion to String");
-            TraceManager.addDev("Customized main dec:" + mainDec);
+            TraceManager.addDev("Customized main dec:" + mainDec);*/
         } catch (Exception e) {
             TraceManager.addDev("plugin exception: " + e.getMessage());
         }

@@ -212,36 +212,38 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
       return true;
       }*/
 
-    public LinkedList getListOfNodes() {
-        LinkedList ll = new LinkedList();
+    public List<TMLArchiNode> getListOfNodes() {
+        List<TMLArchiNode> ll = new LinkedList<TMLArchiNode>();
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TMLArchiCPUNode) {
-                ll.add(tgc);
+                ll.add( (TMLArchiCPUNode) tgc );
             }
 
             if (tgc instanceof TMLArchiHWANode) {
-                ll.add(tgc);
+                ll.add( (TMLArchiHWANode) tgc );
             }
 
             if (tgc instanceof TMLArchiCommunicationNode) {
-                ll.add(tgc);
+                ll.add( (TMLArchiCommunicationNode) tgc );
             }
         }
 
         return ll;
     }
 
-    public LinkedList getListOfLinks() {
-        LinkedList ll = new LinkedList();
+    public List<TGComponent> getListOfLinks() {
+        List<TGComponent> ll = new LinkedList<TGComponent> ();
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
+            
             if (tgc instanceof TMLArchiConnectorNode) {
                 ll.add(tgc);
             }
@@ -251,19 +253,22 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     }
 
     public boolean isMapped(String _ref, String _name) {
-        ListIterator iterator = getListOfNodes().listIterator();
+        Iterator<TMLArchiNode> iterator = getListOfNodes().listIterator();
         TMLArchiNode node;
-        Vector v;
+        Vector<TMLArchiArtifact> v;
         TMLArchiArtifact artifact;
         int i;
         String name = _ref + "::" + _name;
 
         while(iterator.hasNext()) {
-            node = (TMLArchiNode)(iterator.next());
+            node = iterator.next();
+            
             if (node instanceof TMLArchiCPUNode) {
-                v =  ((TMLArchiCPUNode)(node)).getArtifactList();
+                v =  ((TMLArchiCPUNode) node ).getArtifactList();
+                
                 for(i=0; i<v.size(); i++) {
-                    artifact = (TMLArchiArtifact)(v.get(i));
+                    artifact = v.get(i);
+                    
                     if (artifact.getValue().equals(name)) {
                         return true;
                     }
@@ -275,19 +280,18 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     }
 
     public void renameMapping(String oldName, String newName) {
-        ListIterator iterator = getListOfNodes().listIterator();
+        Iterator<TMLArchiNode> iterator = getListOfNodes().listIterator();
         TMLArchiNode node;
-        Vector v;
+        Vector<TMLArchiArtifact> v;
         TMLArchiArtifact artifact;
-        ArrayList<TMLArchiCommunicationArtifact> ChannelList;
-        ArrayList<TMLArchiEventArtifact> EventList;
+        List<TMLArchiCommunicationArtifact> ChannelList;
+        List<TMLArchiEventArtifact> EventList;
         int i;
 
         while(iterator.hasNext()) {
-            node = (TMLArchiNode)(iterator.next());
+            node = iterator.next();
 
             // Task mapping
-
             if ((node instanceof TMLArchiCPUNode) || (node instanceof TMLArchiHWANode)) {
                 if (node instanceof TMLArchiCPUNode) {
                     v =  ((TMLArchiCPUNode)(node)).getArtifactList();
@@ -298,7 +302,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
                 }
 
                 for(i=0; i<v.size(); i++) {
-                    artifact = (TMLArchiArtifact)(v.get(i));
+                    artifact = v.get(i);
                     if (artifact.getReferenceTaskName().compareTo(oldName) == 0) {
                         artifact.setReferenceTaskName(newName);
                     }
@@ -325,14 +329,13 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     }
 
     public void setPriority( String _name, int _priority ) {
-
-        ListIterator iterator = getListOfNodes().listIterator();
+        Iterator<TMLArchiNode> iterator = getListOfNodes().iterator();
         TMLArchiNode node;
-        Vector v;
-        TMLArchiArtifact artifact;
-        ArrayList<TMLArchiCommunicationArtifact> ChannelList;
-        ArrayList<TMLArchiEventArtifact> EventList;
-        int i;
+        //Vector v;
+       // TMLArchiArtifact artifact;
+        List<TMLArchiCommunicationArtifact> ChannelList;
+        List<TMLArchiEventArtifact> EventList;
+       // int i;
 
         while(iterator.hasNext()) {
             node = (TMLArchiNode)(iterator.next());
@@ -359,13 +362,13 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 
     public int getMaxPriority( String _name ) {
 
-        ListIterator iterator = getListOfNodes().listIterator();
+        Iterator<TMLArchiNode> iterator = getListOfNodes().iterator();
         TMLArchiNode node;
-        Vector v;
-        TMLArchiArtifact artifact;
-        ArrayList<TMLArchiCommunicationArtifact> ChannelList;
-        ArrayList<TMLArchiEventArtifact> EventList;
-        int i;
+       // Vector v;
+        //TMLArchiArtifact artifact;
+        List<TMLArchiCommunicationArtifact> ChannelList;
+        List<TMLArchiEventArtifact> EventList;
+        //int i;
         int prio = 0;
 
         while(iterator.hasNext()) {
@@ -387,34 +390,34 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
                 }
             }
         }
+        
         return prio;
     }
 
     public void setCurrentView(int _index) {
-	TraceManager.addDev("SelectedView=" + _index);
-	view = _index;
-	repaint();
+		TraceManager.addDev("SelectedView=" + _index);
+		view = _index;
+		repaint();
     }
 
     public boolean inCurrentView(TGComponent tgc) {
-	switch(view) {
-	case VIEW_ALL:
-	    return true;
-	case VIEW_ARCHITECTURE_ONLY:
-	    return (tgc instanceof TMLArchiElementInterface);
-	case VIEW_TASK_MAPPING:
-	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiTaskInterface);
-	case VIEW_CHANNEL_MAPPING:
-	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiChannelInterface);
-	case VIEW_COMM_PATTERN:
-	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiCPInterface);
-	case VIEW_COMM_PATTERN_MAPPING:
-	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiCPInterface) ||  (tgc instanceof TMLArchiPortInterface);
-	case VIEW_SECURITY_MAPPING:
-	    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiSecurityInterface) || (tgc instanceof TMLArchiTaskInterface);
-	default:
-	    return true;
-	}
+		switch(view) {
+		case VIEW_ALL:
+		    return true;
+		case VIEW_ARCHITECTURE_ONLY:
+		    return (tgc instanceof TMLArchiElementInterface);
+		case VIEW_TASK_MAPPING:
+		    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiTaskInterface);
+		case VIEW_CHANNEL_MAPPING:
+		    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiChannelInterface);
+		case VIEW_COMM_PATTERN:
+		    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiCPInterface);
+		case VIEW_COMM_PATTERN_MAPPING:
+		    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiCPInterface) ||  (tgc instanceof TMLArchiPortInterface);
+		case VIEW_SECURITY_MAPPING:
+		    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiSecurityInterface) || (tgc instanceof TMLArchiTaskInterface);
+		default:
+		    return true;
+		}
     }
-
 }//End of class
