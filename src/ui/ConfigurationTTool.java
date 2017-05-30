@@ -144,6 +144,10 @@ public class ConfigurationTTool {
     // PLUGINS
     public static String PLUGIN_JAVA_CODE_GENERATOR = "";
 
+    // URL for models
+    public static String URL_MODEL = "http://ttool.telecom-paristech.fr/networkmodels/models.txt";
+
+    // Others
     public static String LastOpenFile = "";
     public static boolean LastOpenFileDefined = false;
 
@@ -447,6 +451,9 @@ public class ConfigurationTTool {
 	sb.append("Plugins:\n");
 	sb.append("Plugin for java code generation: " + PLUGIN_JAVA_CODE_GENERATOR + "\n");
 
+	// URL
+	sb.append("URLs:\n");
+	sb.append("URL for loading models from network: " + URL_MODEL + "\n");
 
         sb.append("\nCustom external commands:\n");
         sb.append("ExternalCommand1Host: " + ExternalCommand1Host + "\n");
@@ -722,6 +729,10 @@ public class ConfigurationTTool {
 	    nl = doc.getElementsByTagName("PLUGIN_JAVA_CODE_GENERATOR");
             if (nl.getLength() > 0)
                 PluginJavaCodeGenerator(nl);
+
+	    nl = doc.getElementsByTagName("URL_MODEL");
+            if (nl.getLength() > 0)
+                URLModel(nl);
 
             nl = doc.getElementsByTagName("LastOpenFile");
             if (nl.getLength() > 0)
@@ -1394,6 +1405,16 @@ public class ConfigurationTTool {
             throw new MalformedConfigurationException(e.getMessage());
         }
     }
+
+    private static void URLModel(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            URL_MODEL = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
 
     private static void LastOpenFile(NodeList nl) throws MalformedConfigurationException {
         try {
