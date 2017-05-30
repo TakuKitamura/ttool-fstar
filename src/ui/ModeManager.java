@@ -60,6 +60,7 @@ public class ModeManager {
             mgui.activeActions(false);
             actions[TGUIAction.ACT_NEW].setEnabled(true);
             actions[TGUIAction.ACT_OPEN].setEnabled(true);
+	    actions[TGUIAction.ACT_OPEN_FROM_NETWORK].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_TIF].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_SD].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_LAST].setEnabled(true);
