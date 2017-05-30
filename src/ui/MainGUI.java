@@ -556,7 +556,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 	}
 
-	private     void initActions() {
+	private void initActions() {
 		actions = new TGUIAction[TGUIAction.NB_ACTION];
 		for(int i=0; i<TGUIAction.NB_ACTION; i++) {
 			actions[i] = new TGUIAction(i);
@@ -1473,8 +1473,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 	private void addTURTLEPanel() {
 
 		//TraceManager.addDev("New TURTLE Panels");
-		// tabbed pane
-		mainTabbedPane = new JTabbedPane();
+
+    	// Issue #41 Ordering of tabbed panes 
+		mainTabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
 		mainTabbedPane.setBackground(ColorManager.MainTabbedPane);
 		mainTabbedPane.setForeground(Color.black);
 
@@ -3909,7 +3910,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 	public void avatarSimulation() {
 		TraceManager.addDev("Avatar simulation");
-		jfais = new JFrameAvatarInteractiveSimulation(frame, this, "Interactive simulation", gtm.getAvatarSpecification());
+		jfais = new JFrameAvatarInteractiveSimulation(/*frame, */this, "Interactive simulation", gtm.getAvatarSpecification());
 		jfais.setIconImage(IconManager.img9);
 		// jfais.setSize(900, 600);
 		GraphicLib.centerOnParent(jfais, 900, 600);
@@ -8115,8 +8116,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 			}
 
 		}
-
-
 
 		private JMenuItem createMenuItem(String s) {
 			JMenuItem item = new JMenuItem(s);

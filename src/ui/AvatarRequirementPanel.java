@@ -49,6 +49,8 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import myutil.GraphicLib;
 import ui.avatarrd.*;
 import ui.avatarpd.*;
 
@@ -61,17 +63,21 @@ public class AvatarRequirementPanel extends TURTLEPanel {
     public AvatarRequirementPanel(MainGUI _mgui) {
         super(_mgui);
 
-        tabbedPane = new JTabbedPane();
-        UIManager.put("TabbedPane.tabAreaBackground", _mgui.BACK_COLOR);
-        UIManager.put("TabbedPane.selected", _mgui.BACK_COLOR);
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
+        UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
         SwingUtilities.updateComponentTreeUI(tabbedPane);
         //tabbedPane.setOpaque(true);
 
         cl = new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    mgui.paneRequirementAction(e);
-                }
-            };
+        	
+        	@Override
+            public void stateChanged(ChangeEvent e){
+                mgui.paneRequirementAction(e);
+            }
+        };
+
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
 
@@ -104,14 +110,13 @@ public class AvatarRequirementPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(ardp);
         ardp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(ardtb, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic84, toolBarPanel, "Opens requirement diagram");
         tabbedPane.setSelectedIndex(0);
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
-
 
         return true;
     }
@@ -134,7 +139,7 @@ public class AvatarRequirementPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(apdp);
         apdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(apdtb, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic82, toolBarPanel, "Opens Parametric Diagram");

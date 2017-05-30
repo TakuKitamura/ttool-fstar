@@ -45,38 +45,31 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-//import java.io.*;
 import javax.swing.*;
-//import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.util.*;
 
 
 import myutil.*;
 import ui.*;
-import ui.file.*;
 import ui.req.*;
 import ui.avatarrd.*;
 
-import nc.*;
-
-
 public	class JFrameRequirementTable extends JFrame implements ActionListener /*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 	
-	private Vector tabs;
+	private Vector<TURTLEPanel> tabs;
 	
-	private ArrayList<AbstractTableModel> atms;
-	private ArrayList<TableSorter> tss;
-	private ArrayList<String> titles;
+	private java.util.List<AbstractTableModel> atms;
+	private java.util.List<TableSorter> tss;
+	private java.util.List<String> titles;
 	
 	//private StatisticsTableModel tm;
 	
 	//private JStatisticsPanel jstat;
 	
-	private LinkedList<JScrollPane> panes;
+	//private java.util.List<JScrollPane> panes;
 	private JButton buttonGenerate;
 	
 	//private JTextField eq, sw, tr, li, pa;
@@ -97,7 +90,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	//JButton goPath, goPathL, savePath, savePathL;
 	
 	
-	public JFrameRequirementTable(String title, Vector _tabs, JTabbedPane _main, Point [] _pts) {
+	public JFrameRequirementTable(String title, Vector<TURTLEPanel> _tabs, JTabbedPane _main, Point [] _pts) {
 		super(title);
 		tabs = _tabs;
 		pts = _pts;
@@ -127,40 +120,14 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		
 		framePanel.add(jp, BorderLayout.SOUTH);
 		
-		// upper information
-		//Point p = FormatManager.nbStateTransitionRGAldebaran(data);
-		//Container c = getContentPane();
-		//GridBagLayout gridbag0 = new GridBagLayout();
-		//GridBagConstraints c0 = new GridBagConstraints();
 		
-		//jp = new JPanel();
-		//jp.setLayout(gridbag0);
-		
-		/*c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-		jp.add(new JLabel("Equipments:"), c0);
-		c0.gridwidth = GridBagConstraints.REMAINDER;
-		eq = new JTextField(5);
-		eq.setEditable(false);
-		eq.setText(""+nc.equipments.size());
-		jp.add(eq, c0);
-		
-		c0.gridwidth = 1;
-		jp.add(new JLabel("Switches:"), c0);
-		c0.gridwidth = GridBagConstraints.REMAINDER;
-		sw = new JTextField(5);
-		sw.setEditable(false);
-		sw.setText(""+nc.switches.size());
-		jp.add(sw, c0);*/
-		
-		mainTabbedPane = new JTabbedPane();
+    	// Issue #41 Ordering of tabbed panes 
+		mainTabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
 		
 		// Information
 		TURTLEPanel tp;
 		int i, j;
-		TDiagramPanel tdp;
+//		TDiagramPanel tdp;
 		RequirementDiagramPanel rdp;
 		AvatarRDPanel ardp;
 		LinkedList<TGComponent> all, list;
@@ -169,7 +136,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		String maintitle;
 		
 		for(i=0; i<tabs.size(); i++) {
-			tp = (TURTLEPanel)(tabs.elementAt(i));
+			tp = tabs.elementAt(i);
 			maintitle = main.getTitleAt(i);
 			if (tp instanceof RequirementPanel) {
 				for(j=0; j<tp.panels.size(); j++) {
@@ -272,23 +239,21 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	
 	
 	
-	
-	private int maxLengthColumn(Component c, AbstractTableModel tm, int index) {
-		int w = 0, wtmp;
-		FontMetrics fm = c.getFontMetrics(c.getFont());
-		if (fm == null) {
-			return 0;
-		}
-		
-		String s;
-		
-		for(int i=0; i<tm.getRowCount(); i++) {
-			s = tm.getValueAt(i, index).toString();
-			wtmp = fm.stringWidth(s);
-			w = Math.max(w, wtmp);
-		}
-		return w;
-	}
-	
-	
+//	
+//	private int maxLengthColumn(Component c, AbstractTableModel tm, int index) {
+//		int w = 0, wtmp;
+//		FontMetrics fm = c.getFontMetrics(c.getFont());
+//		if (fm == null) {
+//			return 0;
+//		}
+//		
+//		String s;
+//		
+//		for(int i=0; i<tm.getRowCount(); i++) {
+//			s = tm.getValueAt(i, index).toString();
+//			wtmp = fm.stringWidth(s);
+//			w = Math.max(w, wtmp);
+//		}
+//		return w;
+//	}	
 } // Class

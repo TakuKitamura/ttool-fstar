@@ -261,9 +261,9 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        tabbedPane = new JTabbedPane();
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();

@@ -49,6 +49,8 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import myutil.GraphicLib;
 import ui.cd.*;
 import ui.ad.*;
 
@@ -60,12 +62,18 @@ public class DesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterfa
 
     public DesignPanel(MainGUI _mgui) {
         super(_mgui);
-        tabbedPane = new JTabbedPane();
+        
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        
         cl = new ChangeListener() {
+        	
+        	@Override
             public void stateChanged(ChangeEvent e){
                 mgui.paneDesignAction(e);
             }
         };
+        
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }

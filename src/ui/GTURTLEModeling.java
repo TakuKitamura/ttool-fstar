@@ -1146,7 +1146,7 @@ public class GTURTLEModeling {
 		return cpuTaskMap;
 	}
 
-	public void addHSM(MainGUI gui, HashMap<String, ArrayList<String>> selectedCpuTasks){
+	public void addHSM(MainGUI gui, Map<String, List<String>> selectedCpuTasks){
 		System.out.println("Adding HSM");
 		String encComp="100";
 		String decComp="100";

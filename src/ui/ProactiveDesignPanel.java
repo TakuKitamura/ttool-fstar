@@ -49,6 +49,8 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import myutil.GraphicLib;
 import ui.procsd.*;
 import ui.prosmd.*;
 
@@ -65,12 +67,18 @@ public class ProactiveDesignPanel extends TURTLEPanel {
 
 	public ProactiveDesignPanel(MainGUI _mgui) {
         super(_mgui);
-        tabbedPane = new JTabbedPane();
+        
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        
         cl = new ChangeListener() {
+        	
+        	@Override
             public void stateChanged(ChangeEvent e){
                 mgui.paneAnalysisAction(e);
             }
         };
+        
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
@@ -109,7 +117,7 @@ public class ProactiveDesignPanel extends TURTLEPanel {
          JScrollDiagramPanel jsp	= new JScrollDiagramPanel(newCSDPanel);
          newCSDPanel.jsp = jsp;
          jsp.setWheelScrollingEnabled(true);
-         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+         jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
          toolBarPanel.add(toolBarCSD, BorderLayout.NORTH);
          toolBarPanel.add(jsp, BorderLayout.CENTER);
          tabbedPane.addTab(name, IconManager.imgic17, toolBarPanel, "Opens composite structure diagram");
@@ -140,7 +148,7 @@ public class ProactiveDesignPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp	= new JScrollDiagramPanel(newCSDPanel);
         newCSDPanel.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(toolBarCSD, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(name, IconManager.imgic17, toolBarPanel, "Opens composite structure diagram");
@@ -149,11 +157,11 @@ public class ProactiveDesignPanel extends TURTLEPanel {
     
     public String addSMD(String s) {
     	
-    	for (int k=0;k<panels.size();k++)
-    	{
-    		TDiagramPanel tg=(TDiagramPanel)panels.get(k);
-    		//System.out.println(tg.toString()+"\n");
-    	}
+//    	for (int k=0;k<panels.size();k++)
+//    	{
+//    		TDiagramPanel tg=(TDiagramPanel)panels.get(k);
+//    		//System.out.println(tg.toString()+"\n");
+//    	}
     	
         // Ensure that s is unique
         // Otherwise -> add an index
@@ -176,26 +184,18 @@ public class ProactiveDesignPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp	= new JScrollDiagramPanel(psmdp);
         psmdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(toolBar, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic18, toolBarPanel, "Open the state machine diagram diagram of " + s);
-        //tabbedPane.setVisible(true);
-        //sdp.setVisible(true);
-        //jsp.setVisible(true);
-        //tabbedPane.setSelectedIndex(panels.size()-1);
-        
-        //Commented by Solange
-        //return true;
-        
     } 
 
     public String saveHeaderInXml(String extensionToName) {
-	if (extensionToName == null) {
-	    return "<Modeling type=\"ProActive Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
-	}
-	return "<Modeling type=\"ProActive Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-	
+		if (extensionToName == null) {
+		    return "<Modeling type=\"ProActive Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+		}
+
+		return "<Modeling type=\"ProActive Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
     }
     
     public String saveTailInXml() {

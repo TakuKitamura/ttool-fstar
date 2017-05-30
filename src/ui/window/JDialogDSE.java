@@ -52,23 +52,17 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
-import java.io.*;
 
 import ui.*;
-import ui.tmldd.*;
 
 import myutil.*;
-import avatartranslator.*;
 import tmltranslator.*;
-import ui.*;
 import dseengine.*;
 import launcher.*;
-
 
 public class JDialogDSE extends javax.swing.JDialog implements ActionListener, ListSelectionListener, Runnable  {
 
     protected MainGUI mgui;
-
 
     protected static String pathCode;
     protected static String pathExecute;
@@ -92,13 +86,13 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
     protected JCheckBox autoConf, autoWeakAuth, autoStrongAuth, autoMapKeys, custom, outputTXT, outputHTML, addHSM;
 
     protected JTextField encTime, decTime, secOverhead;
-	protected JComboBox addtoCPU;
+	protected JComboBox<String> addtoCPU;
     protected JTextField tmlDirectory, mappingFile, modelFile, simulationThreads, resultsDirectory, simulationCycles, minCPU, maxCPU, simulationsPerMapping;
     protected JTextArea outputText;
     protected String output = "";
     protected JCheckBox secAnalysis;
     protected JTextField encTime2, decTime2, secOverhead2;
-	HashMap<JCheckBox, ArrayList<JCheckBox>> cpuTaskObjs = new HashMap<JCheckBox, ArrayList<JCheckBox>>();
+	Map<JCheckBox, ArrayList<JCheckBox>> cpuTaskObjs = new HashMap<JCheckBox, ArrayList<JCheckBox>>();
     protected JSlider JSMinSimulationDuration, JSAverageSimulationDuration, JSMaxSimulationDuration, JSArchitectureComplexity, JSMinCPUUsage, JSAverageCPUUsage, JSMaxCPUUsage, JSMinBusUsage, JSAverageBusUsage, JSMaxBusUsage, JSMinBusContention, JSAverageBusContention, JSMaxBusContention;
     DSEConfiguration config;
 
@@ -129,10 +123,10 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
 	JPanel listPanel;
     private Thread t;
     private boolean go = false;
-    private boolean hasError = false;
+ //   private boolean hasError = false;
     //protected boolean startProcess = false;
 	JList<String> contraints;
-    private String hostProVerif;
+   // private String hostProVerif;
 
     protected RshClient rshc;
 
@@ -172,8 +166,9 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        jp1 = new JTabbedPane();
+
+        // Issue #41 Ordering of tabbed panes 
+        jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
@@ -469,7 +464,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         JSMinSimulationDuration = new JSlider(-10,10);
         JSMinSimulationDuration.setMinorTickSpacing(5);
         JSMinSimulationDuration.setMajorTickSpacing(1);
-        Hashtable labelTable = new Hashtable();
+        Dictionary<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put(new Integer(-10), new JLabel("-1.0"));
         labelTable.put(new Integer(-5), new JLabel("-0.5"));
         labelTable.put(new Integer(0), new JLabel("0.0"));
@@ -488,7 +483,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         JSAverageSimulationDuration = new JSlider(-10,10);
         JSAverageSimulationDuration.setMinorTickSpacing(5);
         JSAverageSimulationDuration.setMajorTickSpacing(1);
-        labelTable = new Hashtable();
+        labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put(new Integer(-10), new JLabel("-1.0"));
         labelTable.put(new Integer(-5), new JLabel("-0.5"));
         labelTable.put(new Integer(0), new JLabel("0.0"));
@@ -506,7 +501,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         JSMaxSimulationDuration = new JSlider(-10,10);
         JSMaxSimulationDuration.setMinorTickSpacing(5);
         JSMaxSimulationDuration.setMajorTickSpacing(1);
-        labelTable = new Hashtable();
+        labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put(new Integer(-10), new JLabel("-1.0"));
         labelTable.put(new Integer(-5), new JLabel("-0.5"));
         labelTable.put(new Integer(0), new JLabel("0.0"));
@@ -524,7 +519,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         JSArchitectureComplexity = new JSlider(-10,10);
         JSArchitectureComplexity.setMinorTickSpacing(5);
         JSArchitectureComplexity.setMajorTickSpacing(1);
-        labelTable = new Hashtable();
+        labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put(new Integer(-10), new JLabel("-1.0"));
         labelTable.put(new Integer(-5), new JLabel("-0.5"));
         labelTable.put(new Integer(0), new JLabel("0.0"));
@@ -542,7 +537,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         JSMinCPUUsage = new JSlider(-10,10);
         JSMinCPUUsage.setMinorTickSpacing(5);
         JSMinCPUUsage.setMajorTickSpacing(1);
-        labelTable = new Hashtable();
+        labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put(new Integer(-10), new JLabel("-1.0"));
         labelTable.put(new Integer(-5), new JLabel("-0.5"));
         labelTable.put(new Integer(0), new JLabel("0.0"));
@@ -560,7 +555,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         JSAverageCPUUsage = new JSlider(-10,10);
         JSAverageCPUUsage.setMinorTickSpacing(5);
         JSAverageCPUUsage.setMajorTickSpacing(1);
-        labelTable = new Hashtable();
+        labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put(new Integer(-10), new JLabel("-1.0"));
         labelTable.put(new Integer(-5), new JLabel("-0.5"));
         labelTable.put(new Integer(0), new JLabel("0.0"));
@@ -578,7 +573,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         JSMaxCPUUsage = new JSlider(-10,10);
         JSMaxCPUUsage.setMinorTickSpacing(5);
         JSMaxCPUUsage.setMajorTickSpacing(1);
-        labelTable = new Hashtable();
+        labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put(new Integer(-10), new JLabel("-1.0"));
         labelTable.put(new Integer(-5), new JLabel("-0.5"));
         labelTable.put(new Integer(0), new JLabel("0.0"));
@@ -595,7 +590,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         JSMinBusUsage = new JSlider(-10,10);
         JSMinBusUsage.setMinorTickSpacing(5);
         JSMinBusUsage.setMajorTickSpacing(1);
-        labelTable = new Hashtable();
+        labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put(new Integer(-10), new JLabel("-1.0"));
         labelTable.put(new Integer(-5), new JLabel("-0.5"));
         labelTable.put(new Integer(0), new JLabel("0.0"));
@@ -613,7 +608,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         JSAverageBusUsage = new JSlider(-10,10);
         JSAverageBusUsage.setMinorTickSpacing(5);
         JSAverageBusUsage.setMajorTickSpacing(1);
-        labelTable = new Hashtable();
+        labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put(new Integer(-10), new JLabel("-1.0"));
         labelTable.put(new Integer(-5), new JLabel("-0.5"));
         labelTable.put(new Integer(0), new JLabel("0.0"));
@@ -631,7 +626,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         JSMaxBusUsage = new JSlider(-10,10);
         JSMaxBusUsage.setMinorTickSpacing(5);
         JSMaxBusUsage.setMajorTickSpacing(1);
-        labelTable = new Hashtable();
+        labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put(new Integer(-10), new JLabel("-1.0"));
         labelTable.put(new Integer(-5), new JLabel("-0.5"));
         labelTable.put(new Integer(0), new JLabel("0.0"));
@@ -648,7 +643,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         JSMinBusContention = new JSlider(-10,10);
         JSMinBusContention.setMinorTickSpacing(5);
         JSMinBusContention.setMajorTickSpacing(1);
-        labelTable = new Hashtable();
+        labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put(new Integer(-10), new JLabel("-1.0"));
         labelTable.put(new Integer(-5), new JLabel("-0.5"));
         labelTable.put(new Integer(0), new JLabel("0.0"));
@@ -665,7 +660,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         JSAverageBusContention = new JSlider(-10,10);
         JSAverageBusContention.setMinorTickSpacing(5);
         JSAverageBusContention.setMajorTickSpacing(1);
-        labelTable = new Hashtable();
+        labelTable = new Hashtable<Integer, JLabel>();
         labelTable.put(new Integer(-10), new JLabel("-1.0"));
         labelTable.put(new Integer(-5), new JLabel("-0.5"));
         labelTable.put(new Integer(0), new JLabel("0.0"));
@@ -883,20 +878,20 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         go = true;
         t.start();
     }
-
-    private void testGo() throws InterruptedException {
-        if (go == false) {
-            throw new InterruptedException("Stopped by user");
-        }
-    }
+//
+//    private void testGo() throws InterruptedException {
+//        if (go == false) {
+//            throw new InterruptedException("Stopped by user");
+//        }
+//    }
 
     public void run() {
-        String cmd;
-        String list, data;
-        int cycle = 0;
+  //      String cmd;
+    //    String list, data;
+      //  int cycle = 0;
         output="";
 
-        hasError = false;
+      //  hasError = false;
         //try {
         mapFile = mappingFile.getText();
         modFile = modelFile.getText();
@@ -908,7 +903,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
         NbMaxCPU = maxCPU.getText();
         Nbsim = simulationsPerMapping.getText();
         TraceManager.addDev("Thread started");
-        File testFile;
+     //   File testFile;
         if (jp1.getSelectedIndex() == 0){
             encCC=encTime.getText();
             decCC=decTime.getText();
@@ -926,7 +921,8 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
 			
 			//	ArrayList<String> comps = new ArrayList<String>();
 			//	comps.add(addToComp.getText());
-				HashMap<String, ArrayList<String>> selectedCpuTasks = new HashMap<String, ArrayList<String>>();
+				Map<String, java.util.List<String>> selectedCpuTasks = new HashMap<String, java.util.List<String>>();
+				
 				for (String task: selectedTasks){
 					String cpu = taskCpuMap.get(task);
 					if (selectedCpuTasks.containsKey(cpu)){
@@ -969,7 +965,7 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
             config.decComp = decCC;
 
             config.mainGUI = mgui;
-            TMLMapping map = mgui.gtm.getTMLMapping();
+           // TMLMapping map = mgui.gtm.getTMLMapping();
 
             if (config.setModelPath(tmlDir) != 0) {
                 TraceManager.addDev("TML Directory file at " + tmlDir + " error");
@@ -1157,10 +1153,9 @@ public class JDialogDSE extends javax.swing.JDialog implements ActionListener, L
     public boolean hasToContinue() {
         return (go == true);
     }
-
-
-    public void setError() {
-        hasError = true;
-    }
-
+//
+//    public void setError() {
+//        hasError = true;
+//    }
+//
 }

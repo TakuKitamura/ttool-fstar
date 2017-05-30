@@ -51,7 +51,6 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import myutil.*;
-import translator.tojava.*;
 import ui.*;
 
 
@@ -59,7 +58,7 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
 
     protected MainGUI mgui;
 
-    private String textJava1 = "Generate UPPAAL code in";
+   // private String textJava1 = "Generate UPPAAL code in";
 
     public final static int TURTLE_MODE = 0;
     public final static int DIPLODOCUS_MODE = 1;
@@ -97,7 +96,7 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
     private Thread t;
     private boolean go = false;
     private ProcessThread pt;
-    private boolean hasError = false;
+ //   private boolean hasError = false;
 
 
     /** Creates new form  */
@@ -138,9 +137,9 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        jp1 = new JTabbedPane();
+    	// Issue #41 Ordering of tabbed panes 
+        jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
@@ -275,16 +274,16 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
         go = true;
         t.start();
     }
-
-    private void testGo() throws InterruptedException {
-        if (go == false) {
-            throw new InterruptedException("Stopped by user");
-        }
-    }
+//
+//    private void testGo() throws InterruptedException {
+//        if (go == false) {
+//            throw new InterruptedException("Stopped by user");
+//        }
+//    }
 
     public void run() {
-        String cmd;
-        String list;
+      //  String cmd;
+    //    String list;
 
         boolean debug, choices, variables;
         int nb = 0;
@@ -394,14 +393,15 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
     }
 
     public boolean hasToContinue() {
-        return (go == true);
+        return go;
     }
 
     public void appendOut(String s) {
         jta.append(s);
     }
 
+    @Override
     public void setError() {
-        hasError = true;
+//        hasError = true;
     }
 }

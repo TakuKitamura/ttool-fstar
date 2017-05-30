@@ -223,7 +223,8 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        jp1 = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
@@ -293,7 +294,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
         jp01.add(new JLabel("1 time unit ="), c01);
 
-        units = new JComboBox(unitTab);
+        units = new JComboBox<String>(unitTab);
         units.setSelectedIndex(selectedUnit);
         units.addActionListener(this);
         jp01.add(units, c01);

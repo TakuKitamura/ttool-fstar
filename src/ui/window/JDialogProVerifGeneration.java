@@ -50,12 +50,9 @@ package ui.window;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
 import java.io.*;
 
 import myutil.*;
-import avatartranslator.toproverif.*;
 import avatartranslator.*;
 import proverifspec.*;
 import ui.*;
@@ -99,7 +96,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
     protected JCheckBox outputOfProVerif, typedLanguage;
     protected JRadioButton stateReachabilityAll, stateReachabilitySelected, stateReachabilityNone;
     protected ButtonGroup stateReachabilityGroup;
-    protected JComboBox versionSimulator;
+    protected JComboBox<String> versionSimulator;
 
     private Thread t;
     private boolean go = false;
@@ -147,7 +144,8 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        jp1 = new JTabbedPane();
+    	// Issue #41 Ordering of tabbed panes 
+        jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
@@ -344,8 +342,8 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
 
     public void run() {
         String cmd;
-        String list, data;
-        int cycle = 0;
+        String /*list,*/ data;
+      //  int cycle = 0;
 
         hasError = false;
 
@@ -380,7 +378,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                 if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachabilityAll.isSelected () ? REACHABILITY_ALL : stateReachabilitySelected.isSelected () ? REACHABILITY_SELECTED : REACHABILITY_NONE, typedLanguage.isSelected(), loopLimit.getText())) {
                     jta.append("ProVerif code generation done\n");
                 } else {
-		    setError();
+                	setError();
                     jta.append("Could not generate proverif code\n");
                 }
 

@@ -154,9 +154,9 @@ public class JDialogJavaGeneration extends javax.swing.JDialog implements Action
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
-        jp1 = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
         
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
@@ -470,10 +470,10 @@ public class JDialogJavaGeneration extends javax.swing.JDialog implements Action
                 pt = new ProcessThread(cmd, this);
                 pt.start();
                 
-                Thread.currentThread().sleep(250);
+                Thread.sleep(250);
                 
                 while(pt.isStarted() == true) {
-                    Thread.currentThread().sleep(250);
+                    Thread.sleep(250);
                 }
                 jta.append("Compilation done\n");
                 
@@ -489,10 +489,10 @@ public class JDialogJavaGeneration extends javax.swing.JDialog implements Action
                 pt = new ProcessThread(cmd, this);
                 pt.start();
                 
-                Thread.currentThread().sleep(250);
+                Thread.sleep(250);
                 
                 while(pt.isStarted() == true) {
-                    Thread.currentThread().sleep(250);
+                    Thread.sleep(250);
                 }
                 
                 jta.append("Execution done\n");

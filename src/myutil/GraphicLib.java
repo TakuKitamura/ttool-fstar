@@ -535,7 +535,7 @@ public final class GraphicLib {
     // Trivial sorting algorithm as there are only a few tabs
     // maxIndex is a non valid index
     // Vector v contains elements that should be sorted the same way 
-    public static void sortJTabbedPane(JTabbedPane jtp, Vector v, int beginIndex, int maxIndex) {
+    public static void sortJTabbedPane(JTabbedPane jtp, Vector<?> v, int beginIndex, int maxIndex) {
         //System.out.println("Sorting from " + beginIndex + " to " + maxIndex);
         if (beginIndex >= maxIndex) {
             return;
@@ -626,14 +626,10 @@ public final class GraphicLib {
             }
         }
     }
+	
+	public static JTabbedPane createTabbedPane() {
+		final JTabbedPane pane = new JTabbedPane( JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT );
+		
+		return pane;
+	}
 }
-
-
-
-
-
-
-
-
-
-

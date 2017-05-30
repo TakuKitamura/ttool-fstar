@@ -49,6 +49,8 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import myutil.GraphicLib;
 import ui.req.*;
 import ui.ebrdd.*;
 
@@ -61,17 +63,21 @@ public class RequirementPanel extends TURTLEPanel {
     public RequirementPanel(MainGUI _mgui) {
         super(_mgui);
 
-        tabbedPane = new JTabbedPane();
-        UIManager.put("TabbedPane.tabAreaBackground", _mgui.BACK_COLOR);
-        UIManager.put("TabbedPane.selected", _mgui.BACK_COLOR);
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
+        UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
         SwingUtilities.updateComponentTreeUI(tabbedPane);
         //tabbedPane.setOpaque(true);
 
         cl = new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    mgui.paneRequirementAction(e);
-                }
-            };
+        	
+        	@Override
+            public void stateChanged(ChangeEvent e){
+                mgui.paneRequirementAction(e);
+            }
+        };
+        
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
 
@@ -103,7 +109,7 @@ public class RequirementPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(rdp);
         rdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(toolBarReq, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic1000, toolBarPanel, "Opens requirement diagram");
@@ -132,7 +138,7 @@ public class RequirementPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(ebrdd);
         ebrdd.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(toolBarEBRDD, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic1058, toolBarPanel, "Opens EBRDD");

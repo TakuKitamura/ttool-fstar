@@ -80,7 +80,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     private String attrib; // "Attributes", "Gates", etc.
 
     // Panel1
-    private JComboBox accessBox, typeBox;
+    private JComboBox<String> accessBox, typeBox;
     private JTextField identifierText;
     private JTextField initialValue;
     private JButton addButton;
@@ -105,7 +105,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     // Signals
     private boolean hasSignals = true;
     private JPanel panel5, panel6;
-    private JComboBox signalInOutBox;
+    private JComboBox<String> signalInOutBox;
     private JTextField signalText;
     private JButton addSignalButton;
     private JList<AvatarSignal> listSignal;
@@ -175,7 +175,9 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     }
 
     private void initComponents() {
-        JTabbedPane tabbedPane = new JTabbedPane();
+
+    	// Issue #41 Ordering of tabbed panes 
+        JTabbedPane tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
         Container c = getContentPane();
 
         JPanel panelAttr = new JPanel(new BorderLayout());
@@ -186,7 +188,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagLayout gridbag3 = new GridBagLayout();
-        GridBagLayout gridbag4 = new GridBagLayout();
+       // GridBagLayout gridbag4 = new GridBagLayout();
         GridBagLayout gridbag5 = new GridBagLayout();
         GridBagLayout gridbag6 = new GridBagLayout();
         GridBagLayout gridbag7 = new GridBagLayout();
@@ -243,7 +245,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         c1.gridwidth = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
-        accessBox = new JComboBox();
+        accessBox = new JComboBox<String>();
         panel1.add(accessBox, c1);
         identifierText = new JTextField();
         identifierText.setColumns(15);
@@ -261,7 +263,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 
         panel1.add(new JLabel(" : "), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeBox = new JComboBox();
+        typeBox = new JComboBox<String>();
         typeBox.addActionListener(this);
         panel1.add(typeBox, c1);
 
@@ -443,7 +445,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         String[] v = new String[2];
         v[0] = "in";
         v[1] = "out";
-        signalInOutBox = new JComboBox(v);
+        signalInOutBox = new JComboBox<String>(v);
         panel5.add(signalInOutBox, c5);
         signalText = new JTextField();
         signalText.setColumns(50);
@@ -955,11 +957,11 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
             TAttribute a = attributes.get (i);
             identifierText.setText(a.getId());
             initialValue.setText(a.getInitialValue());
-            select(accessBox, a.getStringAccess(a.getAccess()));
+            select(accessBox, TAttribute.getStringAccess(a.getAccess()));
             if (a.getType() == TAttribute.OTHER) {
                 select(typeBox, a.getTypeOther());
             } else {
-                select(typeBox, a.getStringAvatarType(a.getType()));
+                select(typeBox, TAttribute.getStringAvatarType(a.getType()));
             }
             removeButton.setEnabled(true);
             if (i > 0) {
@@ -1024,7 +1026,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         }
     }
 
-    public void select(JComboBox jcb, String text) {
+    public void select(JComboBox<String> jcb, String text) {
         String s;
         for(int i=0; i<jcb.getItemCount(); i++) {
             s = (String)(jcb.getItemAt(i));

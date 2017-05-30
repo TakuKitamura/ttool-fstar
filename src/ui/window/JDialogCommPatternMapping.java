@@ -253,17 +253,9 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 		pnlManageAttributes = new JPanel();
 		pnlManageAttributes.setLayout( new GridBagLayout() );
 		pnlManageAttributes.setBorder(new TitledBorder("Managing Attributes"));
-		//pnlManageAttributes.setPreferredSize(new Dimension(325, 250));
 
-		tabbedPane = new JTabbedPane();
-		
-		// first line panel1
-//		c1.weighty = 1.0;
-//		c1.weightx = 1.0;
-//		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-//		c1.fill = GridBagConstraints.BOTH;
-//		c1.gridheight = 3;
-		//pnlComPatternStruct.add(new JLabel(" "), c1);
+        // Issue #41 Ordering of tabbed panes 
+		tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
 		
 		// second line panel1
 		final int defaultMargin = 3;
@@ -272,7 +264,6 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 
 		final GridBagConstraints c1 = new GridBagConstraints();
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		//c1.gridheight = 1;
 		c1.weighty = 0.0;
 		c1.weightx = 1.0;
 		c1.anchor = GridBagConstraints.CENTER;
@@ -611,14 +602,8 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 		c3.insets = lblInsets;
 		pnlAttributeValues.add( new JLabel("Address Value"), c3 );
 		addressValue_TF = new JTextField( "", 5 );
-//		addressValue_TF.setPreferredSize( new Dimension(150, 30) );
 		c3.insets = tfdInsets;
 		pnlAttributeValues.add( addressValue_TF, c3 );
-
-		//c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-		//c3.fill = GridBagConstraints.BOTH;
-	//	c3.gridheight = 3;
-		//pnlComPatternValues.add( new JLabel(" "), c3 );	//adds some vertical space in between two JLabels
 
 		addressButton = new JButton("Assign Address Value");
 		addressButton.addActionListener( new ActionListener() {

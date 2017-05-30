@@ -49,25 +49,31 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import java.util.*;
+
+import myutil.GraphicLib;
 import ui.dd.*;
 
 public class DeploymentPanel extends TURTLEPanel {
     public TDeploymentDiagramPanel tddp; 
-    public Vector validated, ignored;
+    //public Vector validated, ignored;
     
     public DeploymentPanel(MainGUI _mgui) {
         super(_mgui);
-        tabbedPane = new JTabbedPane();
+
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+       
         cl = new ChangeListener() {
+        	
+        	@Override
             public void stateChanged(ChangeEvent e){
                 mgui.paneDesignAction(e);
             }
         };
+        
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
-    
     
     public void init() {
          
@@ -87,7 +93,7 @@ public class DeploymentPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp	= new JScrollDiagramPanel(tddp);
         tddp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(toolBarDep, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab("Deployment Diagram", IconManager.imgic60, toolBarPanel, "Opens deployment diagram");

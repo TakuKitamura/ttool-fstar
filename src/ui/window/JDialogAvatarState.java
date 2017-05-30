@@ -197,10 +197,9 @@ public class JDialogAvatarState extends javax.swing.JDialog implements ActionLis
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         
-		
-        
-		JTabbedPane jtp = new JTabbedPane();
-		jtp.setPreferredSize(new Dimension(400, 450));
+        // Issue #41 Ordering of tabbed panes 
+		JTabbedPane jtp = GraphicLib.createTabbedPane();//new JTabbedPane();
+		jtp.setPreferredSize( new Dimension( 400, 450 ) );
 		jtp.add("General", panel11);
 		jtp.add("Prototyping", panel2);
         c.add(jtp, c0);

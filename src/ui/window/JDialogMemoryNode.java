@@ -49,6 +49,9 @@ package ui.window;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import myutil.GraphicLib;
+
 //import javax.swing.event.*;
 import java.util.*;
 
@@ -64,10 +67,10 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
     private boolean regularClose;
 
     private JPanel panel2, panel3;
-    private Frame frame;
+ //   private Frame frame;
     private TMLArchiMemoryNode node;
 
-    protected JComboBox tracemode;
+    protected JComboBox<String> tracemode;
     private static int selectedTracemode = 0;
 
     // Panel1
@@ -78,7 +81,7 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
 
     //Panel3: code generation
     protected int bufferType = 0;       //it is the index in the ArrayList of String
-    protected JComboBox bufferTypesCB;
+    protected JComboBox<String> bufferTypesCB;
 
     private JTabbedPane tabbedPane;
 
@@ -89,7 +92,7 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
     /** Creates new form  */
     public JDialogMemoryNode( Frame _frame, String _title, TMLArchiMemoryNode _node, int _bufferType ) {
         super(_frame, _title, true);
-        frame = _frame;
+      //  frame = _frame;
         node = _node;
         bufferType = _bufferType;
 
@@ -104,7 +107,7 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
     private void initComponents() {
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
+       // GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagLayout gridbag3 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
@@ -117,7 +120,8 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        tabbedPane = new JTabbedPane();
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
@@ -154,9 +158,7 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Monitored:"), c2);
-        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        //monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
-	tracemode = new JComboBox(tracemodeTab);
+        tracemode = new JComboBox<String>(tracemodeTab);
         tracemode.setSelectedIndex(selectedTracemode);
         tracemode.addActionListener(this);
         panel2.add(tracemode, c2);
@@ -177,7 +179,7 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         c3.weightx = 1.0;
         panel3.add(new JLabel("<html>Memory Extension<br>Construct:</html>"), c3);
         c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-        bufferTypesCB = new JComboBox( new Vector<String>( Arrays.asList( Buffer.memoryTypesList ) ) );
+        bufferTypesCB = new JComboBox<String>( new Vector<String>( Arrays.asList( Buffer.memoryTypesList ) ) );
         bufferTypesCB.setSelectedIndex( bufferType  );
         panel3.add( bufferTypesCB, c3 );
 

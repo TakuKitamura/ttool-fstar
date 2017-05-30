@@ -50,6 +50,9 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import myutil.GraphicLib;
+
 import java.util.*;
 import ui.tmlcompd.*;
 import ui.tmlad.*;
@@ -64,7 +67,8 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
     public TMLComponentDesignPanel(MainGUI _mgui) {
         super(_mgui);
         
-        tabbedPane = new JTabbedPane();
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
         
         cl = new ChangeListener() {
         	
@@ -76,7 +80,9 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
-        //tabbedPane.setTabLayoutPolicy( JTabbedPane.SCROLL_TAB_LAYOUT );
+        
+        // Issue #41: Ordering of tabbed panes
+        tabbedPane.setTabLayoutPolicy( JTabbedPane.SCROLL_TAB_LAYOUT );
     }
 
     public TMLActivityDiagramPanel getTMLActivityDiagramPanel(String _name) {

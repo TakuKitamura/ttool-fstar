@@ -49,6 +49,8 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import myutil.GraphicLib;
 import ui.avatarmethodology.*;
 
 
@@ -61,7 +63,8 @@ public class AvatarMethodologyPanel extends TURTLEPanel {
     public AvatarMethodologyPanel(MainGUI _mgui) {
         super(_mgui);
 
-        tabbedPane = new JTabbedPane();
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
         UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
         UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
         SwingUtilities.updateComponentTreeUI(tabbedPane);

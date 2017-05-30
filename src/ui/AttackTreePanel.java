@@ -49,6 +49,8 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import myutil.GraphicLib;
 import ui.atd.*;
 
 import java.util.*;
@@ -59,9 +61,10 @@ public class AttackTreePanel extends TURTLEPanel {
     public AttackTreePanel(MainGUI _mgui) {
         super(_mgui);
 
-        tabbedPane = new JTabbedPane();
-        UIManager.put("TabbedPane.tabAreaBackground", _mgui.BACK_COLOR);
-        UIManager.put("TabbedPane.selected", _mgui.BACK_COLOR);
+        // Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
+        UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
         SwingUtilities.updateComponentTreeUI(tabbedPane);
         //tabbedPane.setOpaque(true);
 
@@ -101,7 +104,7 @@ public class AttackTreePanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(atdp);
         atdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
         toolBarPanel.add(toolBarAt, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic1074, toolBarPanel, "Opens Attack Tree Diagram");
@@ -158,9 +161,10 @@ public class AttackTreePanel extends TURTLEPanel {
         TGComponent tgc;
 
         for(int i=0; i<panels.size(); i++) {
-            ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+            Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+           
             while(iterator.hasNext()) {
-                tgc = (TGComponent)(iterator.next());
+                tgc = iterator.next();
                 tgc.setAVATARMet(0);
                 tgc.setInternalAvatarMet(0);
 

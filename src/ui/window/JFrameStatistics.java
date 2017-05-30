@@ -45,9 +45,7 @@
 
 package ui.window;
 
-//import java.io.*;
 import javax.swing.*;
-//import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -531,18 +529,13 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
             return;
         }
 
-        //System.out.println("Making last elements");
-        mainTabbedPane = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        mainTabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
         mainTabbedPane.addTab("General info.", IconManager.imgic13, jp, "# states, #transitions");
         mainTabbedPane.addTab("Statistics", IconManager.imgic13, jsp, "Statistics on states & transitions");
-        //if (graph.getNbTransition() < MAX_TRANSITIONS) {
         mainTabbedPane.addTab("Deadlocks", IconManager.imgic13, jspDeadlock, "Potential deadlocks");
         mainTabbedPane.addTab("Shortest Paths", IconManager.imgic13, jp2, "Shortest paths");
         mainTabbedPane.addTab("Longest Paths", IconManager.imgic13, jp4, "Longest paths");
-        //}
-        //}
-
-
 
         if (shouldIStop()) {
             return;

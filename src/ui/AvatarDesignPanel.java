@@ -67,12 +67,18 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
     public AvatarDesignPanel(MainGUI _mgui) {
         super(_mgui);
-        tabbedPane = new JTabbedPane();
+
+        // Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        
         cl = new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    mgui.paneDesignAction(e);
-                }
-            };
+        	
+        	@Override
+            public void stateChanged(ChangeEvent e){
+                mgui.paneDesignAction(e);
+            }
+        };
+
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }

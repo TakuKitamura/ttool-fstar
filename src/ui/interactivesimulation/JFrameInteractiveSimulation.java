@@ -110,6 +110,7 @@ import java.text.*;
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.Conversion;
+import myutil.GraphicLib;
 import myutil.ScrolledJTextArea;
 import myutil.TableSorter;
 import myutil.TraceManager;
@@ -422,18 +423,13 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         mainTop.add(commands, c02);
 
-        commandTab = new JTabbedPane();
-        //commandTab.setBackground(ColorManager.InteractiveSimulationBackground);
+        // Issue #41 Ordering of tabbed panes 
+        commandTab = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         // Control commands
         jp01 = new JPanel(new BorderLayout());
-        //jp01.setMinimumSize(new Dimension(375, 400));
-        //gridbag01 = new GridBagLayout();
-        //c01 = new GridBagConstraints();
-        //jp01.setLayout(gridbag01);
 
         commandTab.addTab("Control", null, jp01, "Main control commands");
-
 
         mctb = new MainCommandsToolBar(this);
         jp01.add(mctb, BorderLayout.NORTH);
@@ -754,7 +750,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         c02.gridwidth = GridBagConstraints.REMAINDER; //end row
         mainTop.add(infos, c02);
 
-        infoTab = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        infoTab = GraphicLib.createTabbedPane();//new JTabbedPane();
         infoTab.setMinimumSize(new Dimension(300, 250));
         infos.add(infoTab, BorderLayout.NORTH);
 

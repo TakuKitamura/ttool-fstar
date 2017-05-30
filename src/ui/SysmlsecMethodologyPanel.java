@@ -49,6 +49,8 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import myutil.GraphicLib;
 import ui.sysmlsecmethodology.*;
 
 
@@ -60,17 +62,21 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
     public SysmlsecMethodologyPanel(MainGUI _mgui) {
         super(_mgui);
 
-        tabbedPane = new JTabbedPane();
-        UIManager.put("TabbedPane.tabAreaBackground", _mgui.BACK_COLOR);
-        UIManager.put("TabbedPane.selected", _mgui.BACK_COLOR);
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
+        UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
         SwingUtilities.updateComponentTreeUI(tabbedPane);
         //tabbedPane.setOpaque(true);
 
         cl = new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    mgui.paneDiplodocusMethodologyAction(e);
-                }
-            };
+        	
+        	@Override
+            public void stateChanged(ChangeEvent e){
+                mgui.paneDiplodocusMethodologyAction(e);
+            }
+        };
+
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
 
@@ -129,7 +135,7 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
         TGConnectingPoint p1, p2;
         p1 = tgc1.getTGConnectingPointAtIndex(0);
         p2 = tgc2.getTGConnectingPointAtIndex(0);
-        Vector listPoint = new Vector();
+        Vector<Point> listPoint = new Vector<Point>();
         Point p = new Point(210, 235);
         listPoint.add(p);
         TGConnector tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
@@ -140,7 +146,7 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
         // Reqs -> Attacks
         p1 = tgc2.getTGConnectingPointAtIndex(1);
         p2 = tgc10.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         //p = new Point(375, 370);
         //listPoint.add(p);
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
@@ -148,10 +154,10 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
         p2.setFree(false);
         dmd.getComponentList().add(0, tgco);
 
-	// Attacks -> Reqs
+        // Attacks -> Reqs
         p1 = tgc10.getTGConnectingPointAtIndex(1);
         p2 = tgc2.getTGConnectingPointAtIndex(2);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         //p = new Point(375, 370);
         //listPoint.add(p);
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
@@ -162,7 +168,7 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
         // Analysis -> Design
         p1 = tgc3.getTGConnectingPointAtIndex(1);
         p2 = tgc4.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         p = new Point(xa+60, ya+125);
         listPoint.add(p);
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
@@ -173,7 +179,7 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
         // Design -> Prototyping
         p1 = tgc4.getTGConnectingPointAtIndex(1);
         p2 = tgc5.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         p = new Point(xa+160, ya+225);
         listPoint.add(p);
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
@@ -184,7 +190,7 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
         // Reqs -> Prop
         p1 = tgc2.getTGConnectingPointAtIndex(0);
         p2 = tgc6.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
 	p = new Point(xa-305, 235);
 	listPoint.add(p);
 	p = new Point(xa-305, ya+50);
@@ -198,7 +204,7 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
 	// App -> mapping
         p1 = tgc7.getTGConnectingPointAtIndex(0);
         p2 = tgc9.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
         p1.setFree(false);
         p2.setFree(false);
@@ -207,7 +213,7 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
 	// cp -> mapping
         p1 = tgc11.getTGConnectingPointAtIndex(0);
         p2 = tgc9.getTGConnectingPointAtIndex(2);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
         p1.setFree(false);
         p2.setFree(false);
@@ -216,18 +222,15 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
         // Archi -> mapping
         p1 = tgc8.getTGConnectingPointAtIndex(0);
         p2 = tgc9.getTGConnectingPointAtIndex(1);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
         p1.setFree(false);
         p2.setFree(false);
         dmd.getComponentList().add(0, tgco);
-
-
-	dmd.bringToBack(infoParti);
-	dmd.bringToBack(infoSw);
-	dmd.bringToBack(infoReq);
-
-
+	
+		dmd.bringToBack(infoParti);
+		dmd.bringToBack(infoSw);
+		dmd.bringToBack(infoReq);
     }
 
     public void init() {
@@ -261,7 +264,7 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(dmd);
         dmd.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(dmdt, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic99, toolBarPanel, "Opens SysMLSec methodology");
@@ -269,10 +272,6 @@ public class SysmlsecMethodologyPanel extends TURTLEPanel {
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
 
-
-	
-
-        //TGComponent tgc = TGComponentManager.addComponent(100, 100, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_APPLICATION, dmd);
         mgui.changeMade(dmd, TDiagramPanel.NEW_COMPONENT);
 
         return true;

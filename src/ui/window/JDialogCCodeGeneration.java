@@ -207,7 +207,8 @@ public class JDialogCCodeGeneration extends javax.swing.JDialog implements Actio
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
 
-        jp1 = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();

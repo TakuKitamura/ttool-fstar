@@ -50,6 +50,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import myutil.GraphicLib;
+
 import java.util.*;
 
 import ui.*;
@@ -58,7 +61,8 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
     
     private String delay, lossRate;
     private int implementation, oport, dport;
-    private Vector lothers, rothers, associations;
+    private Vector<ArtifactTClassGate> lothers, rothers;
+    private Vector<LRArtifactTClassGate> associations;
     private boolean cancel = false;
     
     private JPanel panel1, panel2, panel3, panel4, panel5;
@@ -68,13 +72,13 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
     
     // Panels2
     String[] impStrings = { "None", "UDP", "TCP", "RMI" };
-    JComboBox jimp;
+    JComboBox<String> jimp;
     JTextField joport, jdport;
     
     // Panels 3, 4 and 5
-    JComboBox gatesBox1, gatesBox2;
+    JComboBox<ArtifactTClassGate> gatesBox1, gatesBox2;
     JButton addButton, upButton, downButton, removeButton;
-    JList listGates;
+    JList<LRArtifactTClassGate> listGates;
     
     
     // Main Panel
@@ -84,7 +88,7 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
     //private String id1, id2;
     
     /** Creates new form  */
-    public JDialogLinkNode(Frame f, String _delay, String _lossRate, int _implementation, int _oport, int _dport, Vector _lothers, Vector _rothers, Vector _associations) {
+    public JDialogLinkNode(Frame f, String _delay, String _lossRate, int _implementation, int _oport, int _dport, Vector<ArtifactTClassGate> _lothers, Vector<ArtifactTClassGate> _rothers, Vector<LRArtifactTClassGate> _associations) {
         
         super(f, "Setting link's properties", true);
        
@@ -95,9 +99,9 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
         dport = _dport;
         
         // Danger -> vectors should be duplicated
-        lothers = new Vector(_lothers);
-        rothers = new Vector(_rothers);
-        associations = new Vector(_associations);
+        lothers = new Vector<ArtifactTClassGate>(_lothers);
+        rothers = new Vector<ArtifactTClassGate>(_rothers);
+        associations = new Vector<LRArtifactTClassGate>(_associations);
         
         initComponents();
         myInitComponents();
@@ -111,8 +115,9 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
     }
     
     private void initComponents() {
-        JTabbedPane tabbedPane = new JTabbedPane();
-        //tabbedPane.setPreferredSize(new Dimension(550, 400));
+        
+    	// Issue #41 Ordering of tabbed panes 
+    	JTabbedPane tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
         
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
@@ -120,13 +125,11 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagLayout gridbag3 = new GridBagLayout();
         GridBagLayout gridbag4 = new GridBagLayout();
-        //GridBagLayout gridbag5 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
         GridBagConstraints c3 = new GridBagConstraints();
         GridBagConstraints c4 = new GridBagConstraints();
-        //GridBagConstraints c5 = new GridBagConstraints();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -197,7 +200,7 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
         c2.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Implementation = "), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        jimp = new JComboBox(impStrings);
+        jimp = new JComboBox<String>(impStrings);
         jimp.setSelectedIndex(implementation);
         jimp.addActionListener(this);
         panel2.add(jimp, c1);
@@ -256,13 +259,13 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
         c3.fill = GridBagConstraints.HORIZONTAL;
         c3.anchor = GridBagConstraints.CENTER;
         
-        gatesBox1 = new JComboBox();
+        gatesBox1 = new JComboBox<ArtifactTClassGate>();
         panel3.add(gatesBox1, c3);
         c3.gridwidth = 1;
         panel3.add(new JLabel(" = "), c3);
         
         c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-        gatesBox2 = new JComboBox();
+        gatesBox2 = new JComboBox<ArtifactTClassGate>();
         panel3.add(gatesBox2, c3);
         
         // third line panel3
@@ -279,7 +282,7 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
         panel3.add(addButton, c3);
         
         // 1st line panel4
-        listGates = new JList(associations);
+        listGates = new JList<LRArtifactTClassGate>(associations);
         listGates.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listGates.addListSelectionListener(this);
         JScrollPane scrollPane = new JScrollPane(listGates);
@@ -426,7 +429,7 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
     public void downSynchro() {
         int i = listGates.getSelectedIndex();
         if ((i!= -1) && (i != associations.size() - 1)) {
-            Object o = associations.elementAt(i);
+            LRArtifactTClassGate o = associations.elementAt(i);
             associations.removeElementAt(i);
             associations.insertElementAt(o, i+1);
             listGates.setListData(associations);
@@ -437,7 +440,7 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
     public void upSynchro() {
         int i = listGates.getSelectedIndex();
         if (i > 0) {
-            Object o = associations.elementAt(i);
+        	LRArtifactTClassGate o = associations.elementAt(i);
             associations.removeElementAt(i);
             associations.insertElementAt(o, i-1);
             listGates.setListData(associations);
@@ -492,7 +495,7 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
         return dport;
     }
     
-    public Vector getAssociations() {
+    public Vector<LRArtifactTClassGate> getAssociations() {
         return associations;
     }
     

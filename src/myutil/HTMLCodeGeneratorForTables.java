@@ -114,7 +114,7 @@ public class HTMLCodeGeneratorForTables  {
 
 	}
 	
-	public StringBuffer getHTMLCodeFromSorters(ArrayList<TableSorter> tss, ArrayList<String> titles, String mainTitle) {
+	public StringBuffer getHTMLCodeFromSorters( List<TableSorter> tss, List<String> titles, String mainTitle) {
 		StringBuffer sb = new StringBuffer();
 		int max = Math.min(tss.size(), titles.size());
 		

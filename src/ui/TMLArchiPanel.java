@@ -49,6 +49,9 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import myutil.GraphicLib;
+
 import java.util.*;
 import ui.tmldd.*;
 
@@ -58,16 +61,23 @@ public class TMLArchiPanel extends TURTLEPanel {
     
     public TMLArchiPanel(MainGUI _mgui) {
         super(_mgui);
-        tabbedPane = new JTabbedPane();
+        
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        
         cl = new ChangeListener() {
+        	
+        	@Override
             public void stateChanged(ChangeEvent e){
                 mgui.paneDesignAction(e);
             }
         };
+        
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
     
+    @Override
     public void init() {
          
         //  Class Diagram toolbar

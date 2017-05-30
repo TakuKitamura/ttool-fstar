@@ -53,6 +53,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionListener;
+
+import myutil.GraphicLib;
+
 import javax.swing.event.ListSelectionEvent;
 
 import java.awt.BorderLayout;
@@ -554,7 +557,8 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
         this.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
 
         // Add the tabs panel
-        this.tabbedPane = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        this.tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         tabbedPane.addTab ("Parameters", this.initParametersTab ());            // Parameters Tab
         tabbedPane.addTab ("Signals", this.initSignalsTab ());                  // Signals Tab
