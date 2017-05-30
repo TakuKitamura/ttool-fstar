@@ -58,10 +58,17 @@ import java.util.*;
 
 public class NetworkModelPanel extends JPanel  {
 
+    private static int buttonSizeX = 250;
+    private static int buttonSizeY = 150;
+    private static int spaceBetweenButtons = 50;
+    private static int nbOfButtonsPerColumn = 3;
+
     private ArrayList<NetworkModel> listOfModels;
+    private ActionListener listener;
     
-    public NetworkModelPanel(ArrayList<NetworkModel> _listOfModels) {
+    public NetworkModelPanel(ArrayList<NetworkModel> _listOfModels, ActionListener _listener) {
 	listOfModels = _listOfModels;
+	listener = _listener;
 	
 	Dimension pSize = new Dimension(500, 400);
         Dimension mSize = new Dimension(200, 100);
@@ -72,13 +79,33 @@ public class NetworkModelPanel extends JPanel  {
 	setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
     }
 
+    public void addPanelWithButtons() {
+	int cptColumn = 0;
+	int cptRow = 0;
+	for(NetworkModel  button: listOfModels) {
+	    button.setBounds(cptColumn * (buttonSizeX + spaceBetweenButtons), cptRow * (buttonSizeY + spaceBetweenButtons), buttonSizeX, buttonSizeY);
+	    Dimension d = new Dimension(buttonSizeX, buttonSizeY);
+	    button.setPreferredSize(d);
+	    add(button);
+	    cptColumn ++;
+	    if (cptColumn == nbOfButtonsPerColumn) {
+		cptRow ++;
+		cptColumn = 0;
+	    }
+	}
+    }
+
+    
+
 
     @Override
     public void paintComponent(Graphics g) {
 	super.paintComponent(g);
+
 	
-	g.drawString(listOfModels.size() + " model(s) available", 20, 20);
-	g.drawRect(200, 200, 200, 200);
+	
+	//g.drawString(listOfModels.size() + " model(s) available", 20, 20);
+	//g.drawRect(200, 200, 200, 200);
     }
     
 

@@ -47,19 +47,24 @@
 
 package ui.networkmodelloader;
 
+import javax.swing.*;
 import java.io.File;
 
 
-public class NetworkModel   {
+public class NetworkModel extends JButton  {
 
     public String fileName;
     public NetworkModelType type;
     public String description;
     public String image;
-    public int x, y, width, height;
 
     public NetworkModel(String _fileName) {
-	    fileName = _fileName;
+	super(_fileName);
+	fileName = _fileName;
+    }
+
+    public void update() {
+	
     }
 
     public static NetworkModelType stringToNetworkModelType(String type) {

@@ -124,7 +124,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        panel = new NetworkModelPanel(listOfModels);
+        panel = new NetworkModelPanel(listOfModels, this);
         jsp = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         c.add(jsp, BorderLayout.NORTH);
@@ -232,6 +232,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 		jta.append("\n" + listOfModels.size() + " loaded, you can now select a model to be loaded\n");
 	    mode = LISTED;
 	    panel.repaint();
+	    panel.addPanelWithButtons();
             in.close();
         } catch (Exception e) {
             jta.append("Error: " + e.getMessage() + " when retreiving file " + url );
