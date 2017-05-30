@@ -50,12 +50,36 @@ package ui.networkmodelloader;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.*;
+
+import java.util.*;
+
 
 
 public class NetworkModelPanel extends JPanel  {
 
+    private ArrayList<NetworkModel> listOfModels;
+    
+    public NetworkModelPanel(ArrayList<NetworkModel> _listOfModels) {
+	listOfModels = _listOfModels;
+	
+	Dimension pSize = new Dimension(500, 400);
+        Dimension mSize = new Dimension(200, 100);
 
-    public NetworkModelPanel() {
+        setPreferredSize(pSize);
+	setMinimumSize(mSize);
+	setBackground(new java.awt.Color(250, 250, 250));
+	setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
     }
+
+
+    @Override
+    public void paintComponent(Graphics g) {
+	super.paintComponent(g);
+	
+	g.drawString(listOfModels.size() + " model(s) available", 20, 20);
+	g.drawRect(200, 200, 200, 200);
+    }
+    
 
 }

@@ -54,11 +54,33 @@ public class NetworkModel   {
 
     public String fileName;
     public NetworkModelType type;
-    public String decription;
+    public String description;
     public String image;
+    public int x, y, width, height;
 
     public NetworkModel(String _fileName) {
 	    fileName = _fileName;
+    }
+
+    public static NetworkModelType stringToNetworkModelType(String type) {
+	type = type.toLowerCase();
+	if (type.compareTo("software design") == 0) {
+	    return NetworkModelType.SOFTWARE_DESIGN;
+	}
+
+	if (type.compareTo("partitioning") == 0) {
+	    return NetworkModelType.PARTITIONING;
+	}
+
+	if (type.compareTo("attack tree") == 0) {
+	    return NetworkModelType.ATTACK_TREE;
+	}
+
+	if (type.compareTo("security protocol") == 0) {
+	    return NetworkModelType.SECURITY_PROTOCOL;
+	}
+
+	return NetworkModelType.SOFTWARE_DESIGN;
     }
 
 }
