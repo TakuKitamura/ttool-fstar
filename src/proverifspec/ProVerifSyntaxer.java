@@ -106,6 +106,12 @@ public abstract class ProVerifSyntaxer {
         this.fullSpec +=  " *)";
     }
 
+    protected void translateProperty (ProVerifProperty _node, int _alinea) {
+        this.fullSpec += "\n";
+        this.fullSpec += this.printAlinea (_alinea);
+        this.fullSpec += "set " + _node.prop + ".";
+    }
+
     protected void translateSecrecyAssum (ProVerifSecrecyAssum _node, int _alinea) {
         this.fullSpec += "\n" + this.printAlinea (_alinea);
         this.fullSpec += "not " + _node.name + ".";

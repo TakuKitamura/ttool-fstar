@@ -74,4 +74,9 @@ public class AvatarAttributeState extends AvatarElement {
         this.cloneLinkToReferenceObjects (result);
         return result;
     }
+
+    public String toString()
+    {
+        return this.attribute.getBlock().getName().replaceAll("__", ".") + "." + this.state.getName() + "." + this.attribute.getName();
+    }
 }

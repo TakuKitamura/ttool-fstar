@@ -7,8 +7,7 @@
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
- * from INRIA Rhone-Alpes.
- *
+ * from INRIA Rhone-Alpes.  *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
@@ -60,14 +59,19 @@ import avatartranslator.*;
 import proverifspec.*;
 import ui.*;
 
+import ui.interactivesimulation.JFrameSimulationSDPanel;
+
 import launcher.*;
 
 
-public class JDialogProverifVerification extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {
+public class JDialogProverifVerification extends javax.swing.JDialog implements ActionListener, ListSelectionListener, MouseListener, Runnable, MasterProcessInterface  {
 
     private static final Insets insets = new Insets(0, 0, 0, 0);
-    
+    private static final Insets WEST_INSETS = new Insets(0, 0, 0, 0);
+    private static final Insets EAST_INSETS = new Insets(0, 0, 0, 0);
+
     protected MainGUI mgui;
+    private AvatarDesignPanel adp;
 
     private String textC1 = "Generate ProVerif code in: ";
     private String textC2 = "Execute ProVerif as: ";
@@ -87,22 +91,44 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     int mode;
 
     //components
-    protected JTextArea jta;
+    protected JPanel jta;
     protected JButton start;
     protected JButton stop;
     protected JButton close;
+    protected JPopupMenu popup;
 
-    
+    private class MyMenuItem extends JMenuItem {
+        AvatarPragma pragma;
+        ProVerifQueryResult result;
+
+        public MyMenuItem(String text)
+        {
+            super(text);
+        }
+    };
+    protected MyMenuItem menuItem;
+
+
     //protected JRadioButton exe, exeint;
     //protected ButtonGroup exegroup;
     protected JLabel gen, comp, exe;
     protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int, loopLimit;
     //protected JTabbedPane jp1;
     protected JScrollPane jsp;
-    protected JCheckBox outputOfProVerif, typedLanguage;
+    protected JCheckBox typedLanguage;
     protected JRadioButton stateReachabilityAll, stateReachabilitySelected, stateReachabilityNone;
     protected ButtonGroup stateReachabilityGroup;
     protected JComboBox versionSimulator;
+
+    private JList<AvatarPragma> reachableEventsList;
+    private JList<AvatarPragma> nonReachableEventsList;
+    private JList<AvatarPragma> secretTermsList;
+    private JList<AvatarPragma> nonSecretTermsList;
+    private JList<AvatarPragma> satisfiedStrongAuthList;
+    private JList<AvatarPragma> satisfiedWeakAuthList;
+    private JList<AvatarPragma> nonSatisfiedAuthList;
+    private JList<AvatarPragma> nonProvedList;
+    private HashMap<AvatarPragma, ProVerifQueryResult> results;
 
     private Thread t;
     private boolean go = false;
@@ -113,12 +139,26 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
 
     protected RshClient rshc;
 
+    private class ProVerifVerificationException extends Exception {
+        private String message;
+
+        public ProVerifVerificationException(String message)
+        {
+            this.message = message;
+        }
+
+        public String getMessage()
+        {
+            return this.message;
+        }
+    };
 
     /** Creates new form  */
-    public JDialogProverifVerification(Frame f, MainGUI _mgui, String title, String _hostProVerif, String _pathCode, String _pathExecute) {
-        super(f, title, true);
+    public JDialogProverifVerification(Frame f, MainGUI _mgui, String title, String _hostProVerif, String _pathCode, String _pathExecute, AvatarDesignPanel adp) {
+        super(f, title, Dialog.ModalityType.DOCUMENT_MODAL);
 
         mgui = _mgui;
+        this.adp = adp;
 
         if (pathCode == null) {
             pathCode = _pathCode;
@@ -134,8 +174,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
         myInitComponents();
         pack();
 
-        //getGlassPane().addMouseListener( new MouseAdapter() {});
-        getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        // getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
 
     protected void myInitComponents() {
@@ -144,10 +183,27 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     }
 
     private void addComponent(Container container, Component component, int gridx, int gridy,
-			      int gridwidth, int gridheight, int anchor, int fill) {
-	GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 1.0,
-							anchor, fill, insets, 0, 0);
-	container.add(component, gbc);
+            int gridwidth, int gridheight, int anchor, int fill) {
+        GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 1.0,
+                anchor, fill, insets, 0, 0);
+        container.add(component, gbc);
+    }
+
+    private GridBagConstraints createGbc(int x, int y) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = x;
+        gbc.gridy = y;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+
+        gbc.anchor = (x == 0) ? GridBagConstraints.WEST : GridBagConstraints.EAST;
+        gbc.fill = (x == 0) ? GridBagConstraints.BOTH
+            : GridBagConstraints.HORIZONTAL;
+
+        gbc.insets = (x == 0) ? WEST_INSETS : EAST_INSETS;
+        gbc.weightx = (x == 0) ? 0.1 : 1.0;
+        gbc.weighty = 1.0;
+        return gbc;
     }
 
     protected void initComponents() {
@@ -155,146 +211,65 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        //jp1 = new JTabbedPane();
 
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
-        //GridBagConstraints c01 = new GridBagConstraints();
         jp01.setLayout(gridbag01);
         jp01.setBorder(new javax.swing.border.TitledBorder("Verification options"));
 
-        
+
         gen = new JLabel(textC1);
-	addComponent(jp01, gen, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        //genJava.addActionListener(this);
-        //jp01.add(gen, c01);
+        addComponent(jp01, gen, 0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-	//c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         code1 = new JTextField(pathCode, 100);
-	addComponent(jp01, code1, 1, 0, 3, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH);
-        //jp01.add(code1, c01);
+        addComponent(jp01, code1, 1, 0, 3, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH);
 
-	
-        //jp01.add(new JLabel(" "), c01);
-        //c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        exe = new JLabel(textC2);
+        addComponent(jp01, exe, 0, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH);
 
-	exe = new JLabel(textC2);
-	//jp01.add(exe, c01);
-	addComponent(jp01, exe, 0, 1, 1, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH);
+        exe2 = new JTextField(pathExecute, 100);
+        addComponent(jp01, exe2, 1, 1, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        exe2 = new JTextField(pathExecute +  " -in pi ", 100);
-	addComponent(jp01, exe2, 1, 1, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
- 
-
-        //jp01.add(new JLabel(" "), c01);
-
-	    //c01.gridx = 0;
-	//        //c01.gridy = 3;
-        //c01.gridwidth = 1;
-	//c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        addComponent(jp01, new JLabel("Compute state reachability: "), 0, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
 
-        //jp01.add(new JLabel("Compute state reachability: "), c01);
-	  addComponent(jp01, new JLabel("Compute state reachability: "), 0, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-	  //c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 
-	//jp01.add(new JLabel("hi there: "), c01);
-	//jp01.add(new JLabel("hi hi there: "), c01);
-
-	
-	
         stateReachabilityGroup = new ButtonGroup ();
 
-	//c01.gridy = 5;
-        //c01.gridx = 1;
 
-	/*JPanel bl1 = new JPanel();
-	
-	//c01.gridwidth = 1;*/
         stateReachabilityAll = new JRadioButton("all");
-        //bl1.add(stateReachabilityAll);
-	addComponent(jp01, stateReachabilityAll, 1, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-	
+        addComponent(jp01, stateReachabilityAll, 1, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        //c01.gridx = 2;
+
         stateReachabilitySelected = new JRadioButton("selected");
-        //bl1.add(stateReachabilitySelected);
-	addComponent(jp01, stateReachabilitySelected, 2, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(jp01, stateReachabilitySelected, 2, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        //c01.gridx = 3;
-        //c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-	stateReachabilityNone = new JRadioButton("none");
-	addComponent(jp01, stateReachabilityNone, 3, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        //bl1.add(stateReachabilityNone);
-	//jp01.add(bl1, c01);
+        stateReachabilityNone = new JRadioButton("none");
+        addComponent(jp01, stateReachabilityNone, 3, 3, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         stateReachabilityGroup.add (stateReachabilityAll);
         stateReachabilityGroup.add (stateReachabilitySelected);
         stateReachabilityGroup.add (stateReachabilityNone);
         stateReachabilityAll.setSelected(true);
 
-        //c01.gridx = GridBagConstraints.RELATIVE;
-        //c01.gridy = GridBagConstraints.RELATIVE;
         typedLanguage = new JCheckBox("Generate typed Pi calculus");
         typedLanguage.setSelected(true);
-        //jp01.add(typedLanguage, c01);
-	addComponent(jp01, typedLanguage, 0, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(jp01, typedLanguage, 0, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-	/*c01.gridwidth= 1;
-	//c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-	//JPanel pan1 = new JPanel();*/
-	addComponent(jp01, new JLabel("Limit on loop iterations:"), 0, 5, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-	//jp01.add(new JLabel("Limit on loop iterations:"), c01);
-	//c01.gridwidth= GridBagConstraints.REMAINDER;
+        addComponent(jp01, new JLabel("Limit on loop iterations:"), 0, 5, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         loopLimit = new JTextField("1", 3);
-	addComponent(jp01, loopLimit, 1, 5, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-	//jp01.add(loopLimit, c01);
-	//jp01.add(pan1, c01);*/
-        /*optimizemode = new JCheckBox("Optimize code");
-          optimizemode.setSelected(optimizeModeSelected);
-          jp01.add(optimizemode, c01);
-
-          jp01.add(new JLabel("Simulator used:"), c01);
-
-          versionSimulator = new JComboBox(simus);
-          versionSimulator.setSelectedIndex(selectedItem);
-          versionSimulator.addActionListener(this);
-          jp01.add(versionSimulator, c01);
-        //System.out.println("selectedItem=" + selectedItem);
-
-        //devmode = new JCheckBox("Development version of the simulator");
-        //devmode.setSelected(true);
-        //jp01.add(devmode, c01);
-
-        //jp01.add(new JLabel(" "), c01);
-
-        //jp1.add("Generate code", jp01);*/
-
-
-        	
-
-        outputOfProVerif = new JCheckBox("Show output of ProVerif");
-        outputOfProVerif.setSelected(false);
-        //jp01.add(outputOfProVerif, c01);*/
-	addComponent(jp01, outputOfProVerif, 0, 6, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-
-
-        //jp1.add("Execute", jp03);
+        addComponent(jp01, loopLimit, 1, 5, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         c.add(jp01, BorderLayout.NORTH);
 
 
-        jta = new ScrolledJTextArea();
-        jta.setEditable(false);
-        jta.setMargin(new Insets(10, 10, 10, 10));
-        jta.setTabSize(3);
-        jta.append("Select options and then, click on 'start' to launch ProVerif code generation / compilation\n");
+        jta = new JPanel();
+        jta.setLayout(new GridBagLayout());
+        jta.setBorder(new javax.swing.border.TitledBorder("Verification results"));
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
-        jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-	jsp.setPreferredSize(new Dimension(300,300));
+        jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        jsp.setPreferredSize(new Dimension(300,300));
         c.add(jsp, BorderLayout.CENTER);
 
         start = new JButton("Start", IconManager.imgic53);
@@ -316,6 +291,10 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
 
         c.add(jp2, BorderLayout.SOUTH);
 
+        this.popup = new JPopupMenu();
+        this.menuItem = new MyMenuItem("Show trace");
+        this.menuItem.addActionListener(this);
+        popup.add(this.menuItem);
     }
 
     public void actionPerformed(ActionEvent evt)  {
@@ -327,6 +306,39 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
+        } else if (command.equals("Show trace")) {
+            if (evt.getSource() == this.menuItem)
+            {
+                PipedOutputStream pos = new PipedOutputStream();
+                try {
+                    PipedInputStream pis = new PipedInputStream(pos, 4096);
+                    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(pos));
+
+                    JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(null, this.mgui, this.menuItem.pragma.toString());
+                    jfssdp.setIconImage(IconManager.img8);
+                    GraphicLib.centerOnParent(jfssdp, 600, 600);
+                    jfssdp.setFileReference(new BufferedReader(new InputStreamReader(pis)));
+                    jfssdp.setVisible(true);
+                    jfssdp.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+                    jfssdp.toFront();
+
+                    // TraceManager.addDev("\n--- Trace ---");
+                    int i=0;
+                    for (ProVerifResultTraceStep step: this.menuItem.result.getTrace().getTrace()) {
+                        step.describeAsSDTransaction(this.adp, bw, i);
+                        i++;
+                        // TraceManager.addDev(step.describeAsString(this.adp));
+                    }
+                    bw.close();
+                } catch(IOException e) {
+                    TraceManager.addDev("Error when writing trace step SD transaction");
+                } finally {
+                    try {
+                        pos.close();
+                    } catch(IOException e) {}
+                }
+                // TraceManager.addDev("");
+            }
         }
     }
 
@@ -364,190 +376,228 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
         }
     }
 
+    class ProVerifResultSection {
+        String title;
+        LinkedList<AvatarPragma> results;
+        JList<AvatarPragma> jlist;
+
+        ProVerifResultSection(String title, LinkedList<AvatarPragma> results, JList<AvatarPragma> jlist)
+        {
+            this.title = title;
+            this.results = results;
+            this.jlist = jlist;
+        }
+    };
+
     public void run() {
-        String cmd;
-        String list, data;
+        String list;
         int cycle = 0;
 
         hasError = false;
 
         TraceManager.addDev("Thread started");
+        this.jta.removeAll();
         File testFile;
         try {
-            // Code generation
-            //if (jp1.getSelectedIndex() == 0) {
-                jta.append("Generating ProVerif code\n");
 
-                testGo();
-                pathCode = code1.getText().trim ();
-
-                if (pathCode.isEmpty()){
-                    pathCode="pvspec";
-                } /*else {
-		    
-		    if (!FileUtils.checkPath(pathCode)) {
-			jta.append("Error: invalid directory: " + pathCode + "\n");
-			mode =      STOPPED;
-			setButtons();
-			return;
-		    }
-		    }*/
-
-                testFile = new File(pathCode);
-
-		File dir = testFile.getParentFile();
-		if (!dir.exists()) {
-		    jta.append("Error: invalid directory: " + pathCode + "\n");
-			mode =      STOPPED;
-			setButtons();
-			return;
-		}
-
-		
-
-                if (testFile.isDirectory()){
-                    if (!pathCode.endsWith (File.separator)){
-                        pathCode += File.separator;
-                    }
-                    pathCode += "pvspec";
-                    testFile = new File(pathCode);
-                }
-                
-                if (testFile.exists()){
-                    // FIXME Raise error
-                    System.out.println("FILE EXISTS!!!");
-                }
-                if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachabilityAll.isSelected () ? REACHABILITY_ALL : stateReachabilitySelected.isSelected () ? REACHABILITY_SELECTED : REACHABILITY_NONE, typedLanguage.isSelected(), loopLimit.getText())) {
-                    jta.append("ProVerif code generation done\n");
-                } else {
-		    setError();
-                    jta.append("Could not generate proverif code\n");
-                }
-
-                if (typedLanguage.isSelected()){
-                    exe2.setText(pathExecute +  " -in pitype ");		
-                }
-                else {
-                    exe2.setText(pathExecute +  " -in pi ");	
-                }
-                exe2.setText(exe2.getText()+pathCode);
-                //if (mgui.gtm.getCheckingWarnings().size() > 0) {
-                jta.append("" +  mgui.gtm.getCheckingWarnings().size() + " warning(s)\n");
-                //}
-		//}
             testGo();
-            // Execute
-            //if (jp1.getSelectedIndex() == 1) {
-                try {
+            pathCode = code1.getText().trim ();
 
-                    cmd = exe2.getText();
+            if (pathCode.isEmpty() || pathCode.endsWith(File.separator)) {
+                pathCode += "pvspec";
+            }
 
-                    jta.append("Executing ProVerif code with command: \n" + cmd + "\n");
+            testFile = new File(pathCode);
 
-                    rshc = new RshClient(hostProVerif);
-                    // Assuma data are on the remote host
-                    // Command
+            if (testFile != null && testFile.isDirectory()){
+                pathCode += File.separator;
+                pathCode += "pvspec";
+                testFile = new File(pathCode);
+            }
 
-                    data = processCmd(cmd);
+            File dir = null;
+            if (testFile != null)
+            {
+                dir = testFile.getParentFile();
+            }
+
+            if (testFile == null || dir == null || !dir.exists()) {
+                mode = STOPPED;
+                setButtons();
+                throw new ProVerifVerificationException("Error: invalid file: " + pathCode);
+            }
 
 
-                    if (outputOfProVerif.isSelected()) {
-                        jta.append(data);
-                    }
+            if (testFile.exists()){
+                // FIXME Raise error if modified since last
+                System.out.println("FILE EXISTS!!!");
+            }
 
-                    ProVerifOutputAnalyzer pvoa = mgui.gtm.getProVerifOutputAnalyzer ();
-                    pvoa.analyzeOutput(data, typedLanguage.isSelected());
+            if (
+                    mgui.gtm.generateProVerifFromAVATAR(
+                        pathCode,
+                        stateReachabilityAll.isSelected () ? REACHABILITY_ALL : stateReachabilitySelected.isSelected () ? REACHABILITY_SELECTED : REACHABILITY_NONE,
+                        typedLanguage.isSelected(),
+                        loopLimit.getText())
+               ) {
+            } else {
+                this.hasError = true;
+                throw new ProVerifVerificationException("Could not generate proverif code");
+            }
 
-                    if (pvoa.getErrors().size() != 0) {
-                        jta.append("\nErrors found in the generated code:\n----------------\n");
-                        for(String error: pvoa.getErrors()) {
-                            jta.append(error+"\n");
-                        }
+            String cmd = exe2.getText().trim();
 
-                    } else {
+            if (this.typedLanguage.isSelected())
+            {
+                cmd += " -in pitype ";
+            }
+            else
+            {
+                cmd += " -in pi ";
+            }
 
-                        jta.append("\nReachable states:\n----------------\n");
-                        for(String re: pvoa.getReachableEvents()) {
-                            jta.append(re+"\n");
-                        }
+            cmd += pathCode;
+            //jta.append("" +  mgui.gtm.getCheckingWarnings().size() + " warning(s)\n");
+            testGo();
 
-                        jta.append("\nNon reachable states:\n----------------\n");
-                        for(String re: pvoa.getNonReachableEvents()) {
-                            jta.append(re+"\n");
-                        }
+            rshc = new RshClient(hostProVerif);
+            rshc.setCmd(cmd);
+            rshc.sendExecuteCommandRequest();
+            String data = rshc.getDataFromProcess();
 
-                        jta.append("\nConfidential Data:\n----------------\n");
-                        for(AvatarAttribute attr: pvoa.getSecretTerms()) {
-                            jta.append(attr.getBlock ().getName () + "." + attr.getName () + "\n");
-                        }
+            ProVerifOutputAnalyzer pvoa = mgui.gtm.getProVerifOutputAnalyzer ();
+            pvoa.analyzeOutput(data, typedLanguage.isSelected());
 
-                        jta.append("\nNon Confidential Data:\n----------------\n");
-                        for(AvatarAttribute attr: pvoa.getNonSecretTerms()) {
-                            jta.append(attr.getBlock ().getName () + "." + attr.getName () + "\n");
-                        }
+            if (pvoa.getErrors().size() != 0) {
+                int y = 0;
 
-                        jta.append("\nSatisfied Strong Authenticity:\n----------------\n");
-                        for(String re: pvoa.getSatisfiedAuthenticity()) {
-                            jta.append(re+"\n");
-                        }
-
-                        jta.append("\nSatisfied Weak Authenticity:\n----------------\n");
-                        for(String re: pvoa.getSatisfiedWeakAuthenticity()) {
-                            jta.append(re+"\n");
-                        }
-
-                        jta.append("\nNon Satisfied Strong Authenticity:\n----------------\n");
-                        for(String re: pvoa.getNonSatisfiedAuthenticity()) {
-                            jta.append(re+"\n");
-                        }
-
-                        jta.append("\nNon proved queries:\n----------------\n");
-                        for(String re: pvoa.getNotProved()) {
-                            jta.append(re+"\n");
-                        }
-                    }
-
-                    mgui.modelBacktracingProVerif(pvoa);
-
-                    jta.append("\nAll done\n");
-                } catch (LauncherException le) {
-                    jta.append("Error: " + le.getMessage() + "\n");
-                    mode =      STOPPED;
-                    setButtons();
-                    return;
-                } catch (Exception e) {
-                    mode =      STOPPED;
-                    setButtons();
-                    return;
+                JLabel label = new JLabel("Errors found in the generated code:");
+                label.setAlignmentX(Component.LEFT_ALIGNMENT);
+                this.jta.add(label, this.createGbc(0, y++));
+                label = new JLabel("----------------");
+                label.setAlignmentX(Component.LEFT_ALIGNMENT);
+                this.jta.add(label, this.createGbc(0, y++));
+                this.jta.add(Box.createRigidArea(new Dimension(0,5)), this.createGbc(0, y++));
+                for(String error: pvoa.getErrors()) {
+                    label = new JLabel(error);
+                    label.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    this.jta.add(label,this.createGbc(0, y++));
                 }
-		//}
+            } else {
+                LinkedList<AvatarPragma> reachableEvents = new LinkedList<AvatarPragma> ();
+                LinkedList<AvatarPragma> nonReachableEvents = new LinkedList<AvatarPragma> ();
+                LinkedList<AvatarPragma> secretTerms = new LinkedList<AvatarPragma> ();
+                LinkedList<AvatarPragma> nonSecretTerms = new LinkedList<AvatarPragma> ();
+                LinkedList<AvatarPragma> satisfiedStrongAuth = new LinkedList<AvatarPragma> ();
+                LinkedList<AvatarPragma> satisfiedWeakAuth = new LinkedList<AvatarPragma> ();
+                LinkedList<AvatarPragma> nonSatisfiedAuth = new LinkedList<AvatarPragma> ();
+                LinkedList<AvatarPragma> nonProved = new LinkedList<AvatarPragma> ();
 
-		/*if ((hasError == false) && (jp1.getSelectedIndex() < 1)) {
-                jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
-		}*/
+                this.results = pvoa.getResults();
+                for (AvatarPragma pragma: this.results.keySet())
+                {
+                    if (pragma instanceof AvatarPragmaReachability)
+                    {
+                        ProVerifQueryResult r = this.results.get(pragma);
+                        if (r.isProved())
+                        {
+                            if (r.isSatisfied())
+                                reachableEvents.add(pragma);
+                            else
+                                nonReachableEvents.add(pragma);
+                        }
+                        else
+                            nonProved.add(pragma);
+                    }
 
+                    else if (pragma instanceof AvatarPragmaSecret)
+                    {
+                        ProVerifQueryResult r = this.results.get(pragma);
+                        if (r.isProved())
+                        {
+                            if (r.isSatisfied())
+                                secretTerms.add(pragma);
+                            else
+                                nonSecretTerms.add(pragma);
+                        }
+                        else
+                            nonProved.add(pragma);
+                    }
+
+                    else if (pragma instanceof AvatarPragmaAuthenticity)
+                    {
+                        ProVerifQueryAuthResult r = (ProVerifQueryAuthResult) this.results.get(pragma);
+                        if (!r.isWeakProved())
+                        {
+                            nonProved.add(pragma);
+                        }
+                        else
+                        {
+                            if (!r.isProved())
+                                nonProved.add(pragma);
+                            if (r.isProved() && r.isSatisfied())
+                                satisfiedStrongAuth.add(pragma);
+                            else if (r.isWeakSatisfied())
+                                satisfiedWeakAuth.add(pragma);
+                            else
+                                nonSatisfiedAuth.add(pragma);
+                        }
+                    }
+                }
+
+                LinkedList<ProVerifResultSection> sectionsList = new LinkedList<ProVerifResultSection> ();
+                sectionsList.add(new ProVerifResultSection("Reachable states:", reachableEvents, this.reachableEventsList));
+                sectionsList.add(new ProVerifResultSection("Non reachable states:", nonReachableEvents, this.nonReachableEventsList));
+                sectionsList.add(new ProVerifResultSection("Confidential Data:", secretTerms, this.secretTermsList));
+                sectionsList.add(new ProVerifResultSection("Non confidential Data:", nonSecretTerms, this.nonSecretTermsList));
+                sectionsList.add(new ProVerifResultSection("Satisfied Strong Authenticity:", satisfiedStrongAuth, this.satisfiedStrongAuthList));
+                sectionsList.add(new ProVerifResultSection("Satisfied Weak Authenticity:", satisfiedWeakAuth, this.satisfiedWeakAuthList));
+                sectionsList.add(new ProVerifResultSection("Non Satisfied Authenticity:", nonSatisfiedAuth, this.nonSatisfiedAuthList));
+                sectionsList.add(new ProVerifResultSection("Not Proved Queries:", nonProved, this.nonProvedList));
+
+                int y = 0;
+
+                for (ProVerifResultSection section: sectionsList)
+                {
+                    if (!section.results.isEmpty())
+                    {
+                        JLabel label = new JLabel(section.title);
+                        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+                        this.jta.add(label, this.createGbc(0, y++));
+                        this.jta.add(Box.createRigidArea(new Dimension(0,5)), this.createGbc(0, y++));
+                        section.jlist = new JList<AvatarPragma> (section.results.toArray (new AvatarPragma[0]));
+                        section.jlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                        section.jlist.addMouseListener(this);
+                        section.jlist.setAlignmentX(Component.LEFT_ALIGNMENT);
+                        this.jta.add(section.jlist, this.createGbc(0, y++));
+                        this.jta.add(Box.createRigidArea(new Dimension(0,10)), this.createGbc(0, y++));
+                    }
+                }
+            }
+
+            mgui.modelBacktracingProVerif(pvoa);
+
+            mode = NOT_STARTED;
+
+        } catch (LauncherException le) {
+            JLabel label = new JLabel("Error: " + le.getMessage());
+            label.setAlignmentX(Component.LEFT_ALIGNMENT);
+            this.jta.add(label, this.createGbc(0, 0));
+            mode = STOPPED;
         } catch (InterruptedException ie) {
-            jta.append("Interrupted\n");
+            mode = NOT_STARTED;
+        } catch (ProVerifVerificationException pve) {
+            JLabel label = new JLabel("Error: " + pve.getMessage());
+            label.setAlignmentX(Component.LEFT_ALIGNMENT);
+            this.jta.add(label, this.createGbc(0, 0));
+            mode = STOPPED;
+        } catch (Exception e) {
+            mode = STOPPED;
         }
 
-        jta.append("\n\nReady to process next command\n");
 
-        checkMode();
         setButtons();
 
-        //System.out.println("Selected item=" + selectedItem);
-    }
-
-    protected String processCmd(String cmd) throws LauncherException {
-        rshc.setCmd(cmd);
-        String s = null;
-        rshc.sendExecuteCommandRequest();
-        s = rshc.getDataFromProcess();
-        return s;
-    }
-
-    protected void checkMode() {
-        mode = NOT_STARTED;
     }
 
     protected void setButtons() {
@@ -556,7 +606,6 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
                 start.setEnabled(true);
                 stop.setEnabled(false);
                 close.setEnabled(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 getGlassPane().setVisible(false);
                 break;
             case STARTED:
@@ -564,7 +613,6 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
                 stop.setEnabled(true);
                 close.setEnabled(false);
                 getGlassPane().setVisible(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 break;
             case STOPPED:
             default:
@@ -576,15 +624,68 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
         }
     }
 
-    public boolean hasToContinue() {
-        return (go == true);
+    @Override
+    public void setError()
+    {
+        this.hasError = true;
     }
 
-    public void appendOut(String s) {
-        jta.append(s);
+    @Override
+    public void appendOut(String s)
+    {
     }
 
-    public void setError() {
-        hasError = true;
+    @Override
+    public boolean hasToContinue()
+    {
+        return this.go;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e)
+    {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e)
+    {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e)
+    {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e)
+    {
+        this.maybeShowPopup(e);
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e)
+    {
+        this.maybeShowPopup(e);
+    }
+
+    private void maybeShowPopup(MouseEvent e)
+    {
+        if (e.isPopupTrigger() && e.getComponent() instanceof JList)
+        {
+            JList<AvatarPragma> curList = (JList<AvatarPragma>) e.getComponent();
+            int row = curList.locationToIndex(e.getPoint());
+            curList.clearSelection();
+            curList.setSelectedIndex(row);
+            this.menuItem.pragma = curList.getModel().getElementAt(row);
+            this.menuItem.result = this.results.get(this.menuItem.pragma);
+            this.menuItem.setEnabled(this.menuItem.result.getTrace() != null);
+            popup.show(e.getComponent(), e.getX(), e.getY());
+        }
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e)
+    {
+        // TODO: unselect the other lists
     }
 }

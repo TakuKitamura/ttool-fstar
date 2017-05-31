@@ -77,6 +77,8 @@ import avatartranslator.AvatarActionOnSignal;
 import avatartranslator.AvatarAttribute;
 import avatartranslator.AvatarBlock;
 import avatartranslator.AvatarPragma;
+import avatartranslator.AvatarPragmaSecret;
+import avatartranslator.AvatarPragmaAuthenticity;
 import avatartranslator.AvatarRelation;
 import avatartranslator.AvatarSpecification;
 import avatartranslator.AvatarStartState;
@@ -90,6 +92,8 @@ import avatartranslator.toproverif.AVATAR2ProVerif;
 import avatartranslator.totpn.AVATAR2TPN;
 import avatartranslator.toturtle.AVATAR2TURTLE;
 import avatartranslator.touppaal.AVATAR2UPPAAL;
+import proverifspec.ProVerifQueryResult;
+import proverifspec.ProVerifQueryAuthResult;
 import ddtranslator.DDSyntaxException;
 import ddtranslator.DDTranslator;
 import launcher.LauncherException;
@@ -2095,23 +2099,24 @@ public class GTURTLEModeling {
 
 			ProVerifOutputAnalyzer pvoa = getProVerifOutputAnalyzer ();
 			pvoa.analyzeOutput(data, true);
-			for (String nonConf: pvoa.getNonSecretStrings()){
-				nonSecChans.add(nonConf);
-				TraceManager.addDev(nonConf + " is not secret");
-				//Find all tasks that receive this data
-				
-				TMLChannel chan = map.getTMLModeling().getChannelByShortName(nonConf.split("__")[1].replaceAll("_chData",""));
+                        HashMap<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
+			for (AvatarPragmaSecret pragma: confResults.keySet()) {
+                            if (confResults.get(pragma).isProved() && !confResults.get(pragma).isSatisfied())
+                            {
+				nonSecChans.add(pragma.getArg().getBlock().getName() + "__" + pragma.getArg().getName());
+				TraceManager.addDev(pragma.getArg().getBlock().getName() + "." + pragma.getArg().getName()+ " is not secret");
+				TMLChannel chan = map.getTMLModeling().getChannelByShortName(pragma.getArg().getName().replaceAll("_chData",""));
 				for (String block:chan.getTaskNames()){
-					nonSecChans.add(block+"__"+nonConf.split("__")[1]);
+					nonSecChans.add(block+"__"+pragma.getArg().getName());
 				}
+                            }
 			}
-			for (String nonAuth: pvoa.getNonSatisfiedAuthenticity()) {
-				String chanName= nonAuth.split("_chData")[0];
-				nonAuthChans.add(chanName);
-				String ch2=nonAuth.split(" ==> ")[1];
-				ch2=ch2.split("_chData")[0];
-				nonAuthChans.add(ch2);
-				TraceManager.addDev(nonAuth);
+                        HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
+			for (AvatarPragmaAuthenticity pragma: authResults.keySet()) {
+                            if (authResults.get(pragma).isProved() && !authResults.get(pragma).isSatisfied()) {
+				nonAuthChans.add(pragma.getAttrA().getAttribute().getBlock().getName() + "__" + pragma.getAttrA().getState().getName().replaceAll("_chData", ""));
+				nonAuthChans.add(pragma.getAttrB().getAttribute().getBlock().getName() + "__" + pragma.getAttrB().getState().getName().replaceAll("_chData", ""));
+                            }
 			}
 			TraceManager.addDev("all results displayed");
 
@@ -2920,7 +2925,6 @@ public class GTURTLEModeling {
 		warnings = avatar2proverif.getWarnings();
 		languageID = PROVERIF;
 		mgui.setMode(MainGUI.EDIT_PROVERIF_OK);
-		//mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
 		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
 		try {
 			if (avatar2proverif.saveInFile(_path)){
@@ -2951,8 +2955,6 @@ public class GTURTLEModeling {
 
 
 	  languageID = TPN;
-	  mgui.setMode(MainGUI.EDIT_PROVERIF_OK);
-	  //mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
 	  //uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
 	  return true;
 	  /*try {

@@ -36,41 +36,60 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarPragma
- * Creation: 20/05/2010
- * @version 1.1 01/07/2014
- * @author Ludovic APVRILLE, Letitia LI
+ * Class ProVerifQueryResult
+ * Creation: 17/05/2017
+ * @version 1.0 17/05/2017
+ * @author Florian LUGOU
  * @see
  */
 
-package avatartranslator;
+package proverifspec;
 
-import java.util.*;
+public class ProVerifQueryResult {
+    protected boolean satisfied, proved;
+    protected ProVerifResultTrace trace;
 
-import myutil.*;
-
-
-public class AvatarPragmaSecret extends AvatarPragma {
-
-    private AvatarAttribute argument;
-
-    public AvatarPragmaSecret(String _name, Object _referenceObject, AvatarAttribute arg) {
-        super(_name, _referenceObject);
-        this.argument = arg;
-    }
-    public AvatarAttribute getArg(){
-	return this.argument;
-    }
-
-    public String toString()
+    public ProVerifQueryResult(boolean proved, boolean satisfied)
     {
-        return this.argument.getBlock().getName().replaceAll("__", ".") + "." + this.argument.getName();
+        this.satisfied = satisfied;
+        this.proved = proved;
+        this.trace = null;
     }
 
-    @Override
-    public AvatarPragmaSecret advancedClone (AvatarSpecification avspec) {
-        AvatarPragmaSecret result = new AvatarPragmaSecret (this.name, this.referenceObject, avspec.getMatchingAttribute(this.argument));
-        this.cloneLinkToReferenceObjects (result);
-        return result;
+    public ProVerifQueryResult()
+    {
+        this.proved = true;
+        this.satisfied = true;
+        this.trace = null;
+    }
+
+    public boolean isProved()
+    {
+        return this.proved;
+    }
+
+    public boolean isSatisfied()
+    {
+        return this.satisfied;
+    }
+
+    public void setSatisfied(boolean satisfied)
+    {
+        this.satisfied = satisfied;
+    }
+
+    public void setProved(boolean proved)
+    {
+        this.proved = proved;
+    }
+
+    public void setTrace(ProVerifResultTrace trace)
+    {
+        this.trace = trace;
+    }
+
+    public ProVerifResultTrace getTrace()
+    {
+        return this.trace;
     }
 }

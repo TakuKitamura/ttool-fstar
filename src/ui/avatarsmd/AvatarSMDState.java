@@ -783,6 +783,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
             //TraceManager.addDev("Setting state " + _name + " as info=" + _info);
             securityInformation = _info;
         }
+        // FIXME: does it really work? Name comes in the form "s1__s2__s3" and we compare only to "s1", "s2" and "s3"
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarSMDState) {
                 ((AvatarSMDState)tgcomponent[i]).setSecurityInfo(_info, _name);

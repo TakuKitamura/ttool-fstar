@@ -55,6 +55,9 @@ import ui.avatardd.*;
 import ui.avatarsmd.*;
 
 import avatartranslator.AvatarAttribute;
+import avatartranslator.AvatarPragmaSecret;
+import avatartranslator.AvatarPragmaReachability;
+import avatartranslator.AvatarPragmaAuthenticity;
 
 
 import proverifspec.*;
@@ -317,6 +320,28 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
     }
 
+    public LinkedList<String> getPropertyPragmas() {
+        LinkedList<String> result = new LinkedList<String> ();
+        for (Object tgc: abdp.getComponentList()) {
+            if (tgc instanceof AvatarBDPragma) {
+                result.addAll(((AvatarBDPragma) tgc).getProperties());
+            }
+        }
+
+        return result;
+    }
+
+    public LinkedList<String> getModelPragmas() {
+        LinkedList<String> result = new LinkedList<String> ();
+        for (Object tgc: abdp.getComponentList()) {
+            if (tgc instanceof AvatarBDPragma) {
+                result.addAll(((AvatarBDPragma) tgc).getModels());
+            }
+        }
+
+        return result;
+    }
+
 
     public void resetModelBacktracingProVerif() {
         if (abdp == null) {
@@ -364,8 +389,21 @@ public class AvatarDesignPanel extends TURTLEPanel {
         resetModelBacktracingProVerif();
 
         // Confidential attributes
-        LinkedList<AvatarAttribute> secretAttributes = pvoa.getSecretTerms ();
-        LinkedList<AvatarAttribute> nonSecretAttributes = pvoa.getNonSecretTerms ();
+        HashMap<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
+        LinkedList<AvatarAttribute> secretAttributes = new LinkedList<AvatarAttribute> ();
+        LinkedList<AvatarAttribute> nonSecretAttributes = new LinkedList<AvatarAttribute> ();
+        for (AvatarPragmaSecret pragma: confResults.keySet())
+        {
+            ProVerifQueryResult result = confResults.get(pragma);
+            if (result.isProved())
+            {
+                if (result.isSatisfied())
+                    secretAttributes.add(pragma.getArg());
+                else
+                    nonSecretAttributes.add(pragma.getArg());
+            }
+        }
+
         for (AvatarBDBlock bdBlock: abdp.getFullBlockList ())
             for (TAttribute tattr: bdBlock.getAttributeList ()) {
                 if (tattr.getType () == TAttribute.OTHER) {
@@ -403,69 +441,34 @@ public class AvatarDesignPanel extends TURTLEPanel {
                 }
             }
 
-        String block, state;
-        int index;
-        int i;
-        Iterator<TGComponent> iterator;
-        TGComponent tgc;
 
         // Reachable states
-        for(String s: pvoa.getReachableEvents()) {
-            index = s.indexOf("__");
-            if (index != -1) {
-                block = s.substring(index+2, s.length());
-                index = block.indexOf("__");
-                if (index != -1) {
-                    state = block.substring(index+2, block.length());
-                    block = block.substring(0, index);
-                    TraceManager.addDev("Block=" + block + " state=" + state);
-                    for(i=0; i<panels.size(); i++) {
-                        tdp = (TDiagramPanel)(panels.get(i));
-                        if ((tdp instanceof AvatarSMDPanel) && (tdp.getName().compareTo(block) == 0)){
-                            iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
-                            while(iterator.hasNext()) {
-                                tgc = iterator.next();
-                                if (tgc instanceof AvatarSMDState) {
-                                    ((AvatarSMDState)tgc).setSecurityInfo(AvatarSMDState.REACHABLE, state);
-                                }
+        HashMap<AvatarPragmaReachability, ProVerifQueryResult> reachResults = pvoa.getReachabilityResults();
+        for (AvatarPragmaReachability pragma: reachResults.keySet())
+        {
+            ProVerifQueryResult result = reachResults.get(pragma);
+            if (result.isProved())
+            {
+                for(int i=0; i<panels.size(); i++) {
+                    tdp = (TDiagramPanel)(panels.get(i));
+                    if ((tdp instanceof AvatarSMDPanel) && (tdp.getName().compareTo(pragma.getBlock().getName()) == 0)) {
+                        Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+                        while(iterator.hasNext()) {
+                            TGComponent tgc = iterator.next();
+                            if (tgc instanceof AvatarSMDState) {
+                                ((AvatarSMDState)tgc).setSecurityInfo(
+                                    result.isSatisfied() ? AvatarSMDState.REACHABLE : AvatarSMDState.NOT_REACHABLE,
+                                    pragma.getState().getName());
                             }
-
                         }
+
+                        break;
                     }
                 }
             }
         }
 
-        for(String s: pvoa.getNonReachableEvents()) {
-            index = s.indexOf("__");
-            if (index != -1) {
-                block = s.substring(index+2, s.length());
-                index = block.indexOf("__");
-                if (index != -1) {
-                    state = block.substring(index+2, block.length());
-                    block = block.substring(0, index);
-                    TraceManager.addDev("Block=" + block + " state=" + state);
-                    for(i=0; i<panels.size(); i++) {
-                        tdp = (TDiagramPanel)(panels.get(i));
-                        if ((tdp instanceof AvatarSMDPanel) && (tdp.getName().compareTo(block) == 0)){
-                            iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
-                            while(iterator.hasNext()) {
-                                tgc = (TGComponent)(iterator.next());
-                                if (tgc instanceof AvatarSMDState) {
-                                    ((AvatarSMDState)tgc).setSecurityInfo(AvatarSMDState.NOT_REACHABLE, state);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        LinkedList<String> notProved = pvoa.getNotProved ();
-        LinkedList<String> satisfied = pvoa.getSatisfiedAuthenticity ();
-        LinkedList<String> satisfiedWeak = pvoa.getSatisfiedWeakAuthenticity ();
-        LinkedList<String> nonSatisfied = pvoa.getNonSatisfiedAuthenticity ();
-
+        HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
         for (Object ob: abdp.getComponentList())
             if (ob instanceof AvatarBDPragma) {
                 AvatarBDPragma pragma = (AvatarBDPragma) ob;
@@ -495,29 +498,53 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
                             LinkedList<TAttribute> types = abdp.getAttributesOfDataType (tattrA.getTypeOther ());
                             int toBeFound = types.size ();
-                            int weakLeft = types.size();
                             boolean ko = false;
+                            boolean weakKo = false;
                             boolean isNotProved = false;
+                            boolean weakIsNotProved = false;
 
                             for (TAttribute type: types) {
-                                String evA = argA[0] + "__" + argA[2] + "__"+ type.getId () + "__" + argA[1];
-                                String evB = argB[0] + "__" + argB[2] + "__"+ type.getId () + "__" + argB[1];
-                                String ev = evB + " ==> " + evA;
-                                if (satisfiedWeak.contains (ev)) {
-                                    weakLeft--;
-                                }
-                                if (nonSatisfied.contains (ev)) {
-                                    ko = true;
-                                } else if (notProved.contains (ev)) {
+                                for (AvatarPragmaAuthenticity pragmaAuth: authResults.keySet())
+                                {
+                                    if (!pragmaAuth.getAttrA().getAttribute().getBlock().getName().equals(argA[0].replaceAll("\\.", "__"))
+                                            || !pragmaAuth.getAttrB().getAttribute().getBlock().getName().equals(argB[0].replaceAll("\\.", "__"))
+                                            || !pragmaAuth.getAttrA().getAttribute().getName().equals(argA[2] + "__" + type.getId())
+                                            || !pragmaAuth.getAttrB().getAttribute().getName().equals(argB[2] + "__" + type.getId())
+                                            || !pragmaAuth.getAttrA().getState().getName().equals(argA[1].replaceAll("\\.", "__"))
+                                            || !pragmaAuth.getAttrB().getState().getName().equals(argB[1].replaceAll("\\.", "__")))
+                                        continue;
+
+                                    ProVerifQueryAuthResult result = authResults.get(pragmaAuth);
                                     toBeFound --;
-                                    isNotProved = true;
-                                } else if (satisfied.contains (ev)) {
-                                    toBeFound --;
+
+                                    if (result.isProved())
+                                    {
+                                        if (!result.isSatisfied())
+                                        {
+                                            ko = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        isNotProved = true;
+                                    }
+
+                                    if (result.isWeakProved())
+                                    {
+                                        if (!result.isWeakSatisfied())
+                                        {
+                                            weakKo = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        weakIsNotProved = true;
+                                    }
+
+                                    break;
                                 }
                             }
-                            if (weakLeft==0){
-                                pragma.authWeakMap.put(prop, 1);
-                            }
+
                             if (ko)
                                 pragma.authStrongMap.put(prop, 2);
                             else if (toBeFound == 0) {
@@ -526,18 +553,63 @@ public class AvatarDesignPanel extends TURTLEPanel {
                                 else
                                     pragma.authStrongMap.put(prop, 1);
                             }
+
+                            if (weakKo)
+                                pragma.authWeakMap.put(prop, 2);
+                            else if (toBeFound == 0) {
+                                if (weakIsNotProved)
+                                    pragma.authWeakMap.put(prop, 3);
+                                else
+                                    pragma.authWeakMap.put(prop, 1);
+                            }
+
                         } else {
-                            String evA = argA[0] + "__" + argA[2] + "__" + argA[1];
-                            String evB = argB[0] + "__" + argB[2] + "__" + argB[1];
-                            String ev = evB + " ==> " + evA;
-                            if (satisfiedWeak.contains (ev))
-                                pragma.authWeakMap.put(prop, 1);
-                            if (nonSatisfied.contains (ev))
-                                pragma.authStrongMap.put(prop, 2);
-                            else if (notProved.contains (ev))
-                                pragma.authStrongMap.put(prop, 3);
-                            else if (satisfied.contains (ev))
-                                pragma.authStrongMap.put(prop, 1);
+                            for (AvatarPragmaAuthenticity pragmaAuth: authResults.keySet())
+                            {
+                                if (!pragmaAuth.getAttrA().getAttribute().getBlock().getName().equals(argA[0].replaceAll("\\.", "__"))
+                                        || !pragmaAuth.getAttrB().getAttribute().getBlock().getName().equals(argB[0].replaceAll("\\.", "__"))
+                                        || !pragmaAuth.getAttrA().getAttribute().getName().equals(argA[2])
+                                        || !pragmaAuth.getAttrB().getAttribute().getName().equals(argB[2])
+                                        || !pragmaAuth.getAttrA().getState().getName().equals(argA[1].replaceAll("\\.", "__"))
+                                        || !pragmaAuth.getAttrB().getState().getName().equals(argB[1].replaceAll("\\.", "__")))
+                                    continue;
+
+                                ProVerifQueryAuthResult result = authResults.get(pragmaAuth);
+
+                                if (result.isProved())
+                                {
+                                    if (result.isSatisfied())
+                                    {
+                                        pragma.authStrongMap.put(prop, 1);
+                                    }
+                                    else
+                                    {
+                                        pragma.authStrongMap.put(prop, 2);
+                                    }
+                                }
+                                else
+                                {
+                                    pragma.authStrongMap.put(prop, 3);
+                                }
+
+                                if (result.isWeakProved())
+                                {
+                                    if (result.isWeakSatisfied())
+                                    {
+                                        pragma.authWeakMap.put(prop, 1);
+                                    }
+                                    else
+                                    {
+                                        pragma.authWeakMap.put(prop, 2);
+                                    }
+                                }
+                                else
+                                {
+                                    pragma.authWeakMap.put(prop, 3);
+                                }
+
+                                break;
+                            }
                         }
                     }
                 }

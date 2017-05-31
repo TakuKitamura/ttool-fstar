@@ -270,7 +270,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public final static byte UPPAAL_OK = 42;
     public final static byte NC_OK = 43;
     public final static byte MODEL_UPPAAL_OK = 44;
-    public final static byte MODEL_PROVERIF_OK = 45;
     public final static byte EDIT_PROVERIF_OK = 46;
     public final static byte AVATAR_SYNTAXCHECKING_OK = 47;
     public final static byte PANEL_CHANGED = 48;
@@ -3102,7 +3101,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 if (b) {
                     ret = true;
                     setMode(MainGUI.AVATAR_SYNTAXCHECKING_OK);
-                    //setMode(MainGUI.MODEL_PROVERIF_OK);
                     //setMode(MainGUI.GEN_DESIGN_OK);
                     /*
                       if (!automatic) {
@@ -3161,7 +3159,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 if (b) {
                     ret = true;
                     setMode(MainGUI.AVATAR_SYNTAXCHECKING_OK);
-                    //setMode(MainGUI.MODEL_PROVERIF_OK);
                     //setMode(MainGUI.GEN_DESIGN_OK);
                     /*
                       if (!automatic) {
@@ -3701,14 +3698,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 }*/
             gtm.getTMLMapping().getTMLModeling().clearBacktracing();
             gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, getTabName(tp));
-            gtm.getTML2Avatar().backtraceReachability(pvoa.getReachableEvents(), pvoa.getNonReachableEvents());
-            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getSatisfiedAuthenticity(), pvoa.getSatisfiedWeakAuthenticity(), pvoa.getNonSatisfiedAuthenticity(), getTabName(tp));
+            gtm.getTML2Avatar().backtraceReachability(pvoa.getReachabilityResults());
+            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getAuthenticityResults(), getTabName(tp));
         }
         else if (tp instanceof TMLComponentDesignPanel){
             gtm.getTMLMapping().getTMLModeling().clearBacktracing();
             gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, "Default Mapping");
-            gtm.getTML2Avatar().backtraceReachability(pvoa.getReachableEvents(), pvoa.getNonReachableEvents());
-            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getSatisfiedAuthenticity(), pvoa.getSatisfiedWeakAuthenticity(), pvoa.getNonSatisfiedAuthenticity(), "Default Mapping");
+            gtm.getTML2Avatar().backtraceReachability(pvoa.getReachabilityResults());
+            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getAuthenticityResults(), "Default Mapping");
         }
         return;
     }
@@ -3951,8 +3948,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void avatarProVerifVerification() {
         TraceManager.addDev("Avatar proverif fv");
-        //JDialogProVerifGeneration jgen = new JDialogProVerifGeneration(frame, this, "ProVerif: code generation and verification", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
-        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
+        TURTLEPanel tp = this.getCurrentTURTLEPanel();
+        AvatarDesignPanel adp = null;
+        if (tp instanceof AvatarDesignPanel)
+            adp = (AvatarDesignPanel) tp;
+        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath, adp);
         // jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);
@@ -4085,33 +4085,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         // jmc.setSize(550, 600);
         GraphicLib.centerOnParent(jmc, 550, 600);
         jmc.setVisible(true);
-    }
-
-
-    public void generateProVerif() {
-        TraceManager.addDev("Generate ProVerif!");
-
-        JDialogProVerifGeneration jgen = new JDialogProVerifGeneration(frame, this, "ProVerif: code generation and verification", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
-        //jgen.setSize(500, 450);
-        GraphicLib.centerOnParent(jgen, 500, 450);
-        jgen.setVisible(true);
-        dtree.toBeUpdated();
-
-        // Generate from AVATAR
-        /*if (gtm.getTURTLEModelingState() == 3) {
-          boolean result = gtm.generateProVerifFromAVATAR(ConfigurationTTool.ProVerifCodeDirectory);
-          if (result) {
-          JOptionPane.showMessageDialog(frame,
-          "0 error, " + getCheckingWarnings().size() + " warning(s). ProVerif specification generated",
-          "Successful translation from the Avatar to a ProVerif specification",
-          JOptionPane.INFORMATION_MESSAGE);
-          } else {
-          JOptionPane.showMessageDialog(frame,
-          "" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). ProVerif specification could NOT be generated",
-          "ERROR during translation from AVATAR to UPPAAL",
-          JOptionPane.INFORMATION_MESSAGE);
-          }
-          }*/
     }
 
 

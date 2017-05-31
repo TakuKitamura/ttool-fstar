@@ -502,6 +502,36 @@ public class AvatarBDPanel extends TDiagramPanel {
         return list;
     }
 
+    public AvatarBDBlock getBlockFromFQN (String name) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc instanceof AvatarBDBlock) {
+                if (((AvatarBDBlock) tgc).getFullyQualifiedName().equals(name))
+                    return (AvatarBDBlock) tgc;
+
+                for (AvatarBDBlock subBlock: ((AvatarBDBlock) tgc).getFullBlockList()) {
+                    if (subBlock.getFullyQualifiedName().equals(name))
+                        return subBlock;
+                }
+            }
+
+        return null;
+    }
+
+    public AvatarBDBlock getBlockFromOwnerName (String name) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc instanceof AvatarBDBlock) {
+                if (((AvatarBDBlock) tgc).getOwnerName().equals(name))
+                    return (AvatarBDBlock) tgc;
+
+                for (AvatarBDBlock subBlock: ((AvatarBDBlock) tgc).getFullBlockList()) {
+                    if (subBlock.getOwnerName().equals(name))
+                        return subBlock;
+                }
+            }
+
+        return null;
+    }
+
     public LinkedList<AvatarBDLibraryFunction> getFullLibraryFunctionList () {
         LinkedList<AvatarBDLibraryFunction> list = new LinkedList<AvatarBDLibraryFunction> ();
 

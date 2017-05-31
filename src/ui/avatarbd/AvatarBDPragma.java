@@ -139,6 +139,10 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 		return properties;
     }
 
+    public LinkedList<String> getModels() {
+        return this.models;
+    }
+
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
         Font fold = f;
