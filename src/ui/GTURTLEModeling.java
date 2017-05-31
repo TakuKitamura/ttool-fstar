@@ -9522,6 +9522,12 @@ public class GTURTLEModeling {
 			else if (p.getName().contains("Authenticity")){
 				t=p.getName();
 			}
+			else if (p.getName().contains("Initial")){
+				t=p.getName();
+			}
+			else {
+				t=p.getName();
+			}
 			s=s.concat(t+"\n");
 			//  i++;
 		}

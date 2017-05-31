@@ -912,6 +912,7 @@ public class TML2Avatar {
 
 				tran.addAction("get2("+ae.securityPattern.name+"_encrypted,"+ae.securityPattern.name+","+ae.securityPattern.name+"_mac)");
 				if (!ae.securityPattern.nonce.isEmpty()){
+					block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
 					tran.addAction("get2("+ae.securityPattern.name + ","+ae.securityPattern.name+",testnonce_"+ae.securityPattern.nonce+")");
 				}
 				AvatarMethod verifymac = new AvatarMethod("verifyMAC", ae);
@@ -942,7 +943,7 @@ public class TML2Avatar {
 				elementList.add(tran);
 				guardState.addNext(tran);
 				if (!ae.securityPattern.nonce.isEmpty()){
-					block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
+					
 					//Add extra state and transition
 					tran.setGuard("testnonce_"+ae.securityPattern.nonce+"==" + ae.securityPattern.nonce);
 					AvatarState guardState2 = new AvatarState(ae.getName().replaceAll(" ","")+"_guarded2", ae.getReferenceObject());					
@@ -1932,12 +1933,20 @@ public class TML2Avatar {
 	//Check if we matched up all signals
 	for (SecurityPattern sp:symKeys.keySet()){
 		if (symKeys.get(sp).size()>1){	
-			avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSystemKnowledge "+sp.name, null, symKeys.get(sp), true));
+			String keys = "";
+			for (AvatarAttribute key: symKeys.get(sp)){
+				keys= keys+" "+key.getBlock().getName() + "."+key.getName();
+			}
+			avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSessionKnowledge"+ keys, null, symKeys.get(sp), true));
 		}
 	}
 	for (SecurityPattern sp:pubKeys.keySet()){
 		if (pubKeys.get(sp).size()!=0){
-			avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSystemKnowledge "+sp.name, null, pubKeys.get(sp),true));
+			String keys = "";
+			for (AvatarAttribute key: symKeys.get(sp)){
+				keys= keys+" "+key.getBlock().getName() + "."+key.getName();
+			}
+			avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSessionKnowledge "+sp.name, null, pubKeys.get(sp),true));
 		}
 	}
 	tmlmap.getTMLModeling().secChannelMap = secChannelMap;
