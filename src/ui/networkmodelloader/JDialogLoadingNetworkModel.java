@@ -125,10 +125,11 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         panel = new NetworkModelPanel(listOfModels, this);
-        jsp = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        c.add(jsp, BorderLayout.NORTH);
+        c.add(jsp, BorderLayout.CENTER);
 
+	JPanel lowPart = new JPanel(new BorderLayout());
 
         jta = new ScrolledJTextArea();
         jta.setEditable(false);
@@ -141,7 +142,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-        c.add(jsp, BorderLayout.CENTER);
+        lowPart.add(jsp, BorderLayout.CENTER);
 
         start = new JButton("Load", IconManager.imgic23);
         stop = new JButton("Cancel", IconManager.imgic55);
@@ -156,8 +157,9 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         jp2.add(stop);
         jp2.add(start);
 
-        c.add(jp2, BorderLayout.SOUTH);
+        lowPart.add(jp2, BorderLayout.SOUTH);
 
+	c.add(lowPart, BorderLayout.SOUTH);
     }
 
     public void actionPerformed(ActionEvent evt)  {
@@ -185,7 +187,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         // Loading main file describing models, giving information on this, and filling the array of models
         // Accsing the main file
         try {
-	    HttpURLConnection connection;
+	    /*HttpURLConnection connection;
 	    TraceManager.addDev("URL: going to create it to: " + url);
             URL mainFile = new URL(url);
 	    TraceManager.addDev("URL creation");
@@ -198,8 +200,8 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 	    }
 	    //connection.setRequestMethod("GET");
 	    //connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
-	    TraceManager.addDev("Connection setup 1");
-	    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	    TraceManager.addDev("Connection setup 1");*/
+	    BufferedReader in = URLManager.getBufferedReader(url);
             jta.append("Connection established...\n");
             String inputLine;
 	    NetworkModel nm = null;
@@ -223,17 +225,24 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 		if (inputLine.startsWith("-IMG")) {
 		    if (nm != null) {
 			nm.image = inputLine.substring(4, inputLine.length()).trim();
+			TraceManager.addDev("Dealing with image:" + nm.image);
+			nm.bi = URLManager.getBufferedImageFromURL(URLManager.getBaseURL(url) + nm.image);
 		    }
 		}
 		
                 //System.out.println(inputLine);
 		
 	    }
-		jta.append("\n" + listOfModels.size() + " loaded, you can now select a model to be loaded\n");
+		jta.append("\n" + listOfModels.size() + " remote models have been detected.\nSelect one to download it locally and open it.\n");
 	    mode = LISTED;
-	    panel.repaint();
 	    panel.addPanelWithButtons();
+	    panel.repaint();
             in.close();
+
+	    // Wait 5seconds before refreshing panel
+	    Thread.sleep(5000);
+	    panel.repaint();
+	    
         } catch (Exception e) {
             jta.append("Error: " + e.getMessage() + " when retreiving file " + url );
         }
