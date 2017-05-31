@@ -763,6 +763,14 @@ public class TML2Avatar {
 				if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName("key_"+ae.securityPattern.name)!=null){
 					block.addMethod(mac);
 				}
+				if (!ae.securityPattern.nonce.isEmpty()){
+					AvatarMethod concat = new AvatarMethod("concat2", ae);
+					concat.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+					concat.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.nonce));
+					concat.addReturnParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+					block.addMethod(concat);
+					tran.addAction(ae.securityPattern.name+"=concat2("+ae.securityPattern.name+","+ae.securityPattern.nonce+")");
+				}
 				tran.addAction(ae.securityPattern.name+"_mac = MAC("+ae.securityPattern.name+",key_"+ae.securityPattern.name+")");
 
 				AvatarMethod concat = new AvatarMethod("concat2", ae);
@@ -774,7 +782,7 @@ public class TML2Avatar {
 					block.addMethod(concat);
 				}
 	
-				tran.addAction(ae.securityPattern.name+"_encrypted = concat2("+ae.securityPattern.name+"_mac,"+ae.securityPattern.name+")");
+				tran.addAction(ae.securityPattern.name+"_encrypted = concat2("+ae.securityPattern.name +","+ae.securityPattern.name+"_mac)");
 			}
 				AvatarAttributeState authOrigin = new AvatarAttributeState(block.getName()+"."+as.getName()+"."+ae.securityPattern.name,ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), as);
 				signalAuthOriginMap.put(ae.securityPattern.name, authOrigin);
@@ -913,10 +921,7 @@ public class TML2Avatar {
 				block.addMethod(get2);
 
 				tran.addAction("get2("+ae.securityPattern.name+"_encrypted,"+ae.securityPattern.name+","+ae.securityPattern.name+"_mac)");
-				if (!ae.securityPattern.nonce.isEmpty()){
-					block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
-					tran.addAction("get2("+ae.securityPattern.name + ","+ae.securityPattern.name+",testnonce_"+ae.securityPattern.nonce+")");
-				}
+
 				AvatarMethod verifymac = new AvatarMethod("verifyMAC", ae);
 				block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.name, AvatarType.BOOLEAN, block, null));
 				verifymac.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
@@ -930,6 +935,10 @@ public class TML2Avatar {
 				}
 
 				tran.addAction("testnonce_"+ae.securityPattern.name+"=verifyMAC("+ae.securityPattern.name+", key_"+ae.securityPattern.name+","+ae.securityPattern.name+"_mac)"); 
+				if (!ae.securityPattern.nonce.isEmpty()){
+					block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
+					tran.addAction("get2("+ae.securityPattern.name + ","+ae.securityPattern.name+",testnonce_"+ae.securityPattern.nonce+")");
+				}
 				elementList.add(as);
 				elementList.add(tran);
 
@@ -1081,11 +1090,14 @@ public class TML2Avatar {
 				sig=signalOutMap.get(ch.getName());
 			}
 			if (ch.checkConf){
-			if (!attrsToCheck.contains(getName(ch.getName())+"_chData")){
-				AvatarAttribute attr = new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null);
-				attrsToCheck.add(getName(ch.getName())+"_chData");
-				avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ch.getName()+"_chData", ch.getReferenceObject(), attr));
-				}
+                            if (!attrsToCheck.contains(getName(ch.getName())+"_chData")){
+				AvatarAttribute attr = block.getAvatarAttributeWithName(getName(ch.getName())+"_chData");
+                                if (attr != null)
+                                {
+                                    attrsToCheck.add(getName(ch.getName())+"_chData");
+                                    avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ch.getName()+"_chData", ch.getReferenceObject(), attr));
+                                }
+                            }
 			}
 			if (ch.checkAuth){
 				if (block.getAvatarAttributeWithName(getName(ch.getName())+"_chData")==null){
