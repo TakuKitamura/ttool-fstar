@@ -47,18 +47,45 @@
 
 package ui.networkmodelloader;
 
+import javax.swing.*;
 import java.io.File;
 
 
-public class NetworkModel   {
+public class NetworkModel extends JButton  {
 
     public String fileName;
     public NetworkModelType type;
-    public String decription;
+    public String description;
     public String image;
 
     public NetworkModel(String _fileName) {
-	    fileName = _fileName;
+	super(_fileName);
+	fileName = _fileName;
+    }
+
+    public void update() {
+	
+    }
+
+    public static NetworkModelType stringToNetworkModelType(String type) {
+	type = type.toLowerCase();
+	if (type.compareTo("software design") == 0) {
+	    return NetworkModelType.SOFTWARE_DESIGN;
+	}
+
+	if (type.compareTo("partitioning") == 0) {
+	    return NetworkModelType.PARTITIONING;
+	}
+
+	if (type.compareTo("attack tree") == 0) {
+	    return NetworkModelType.ATTACK_TREE;
+	}
+
+	if (type.compareTo("security protocol") == 0) {
+	    return NetworkModelType.SECURITY_PROTOCOL;
+	}
+
+	return NetworkModelType.SOFTWARE_DESIGN;
     }
 
 }

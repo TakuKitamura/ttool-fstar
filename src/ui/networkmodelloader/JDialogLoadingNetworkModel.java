@@ -52,18 +52,20 @@ import java.awt.event.*;
 import java.io.File;
 import java.util.*;
 import javax.swing.*;
+import java.net.*;
+import java.io.*;
 
 import ui.*;
 import myutil.*;
 
 public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements ActionListener, Runnable  {
 
-    private static ArrayList<NetworkModel> listOfModels;
+    private ArrayList<NetworkModel> listOfModels;
 
     protected Frame f;
     protected MainGUI mgui;
 
-     protected final static int NOT_LISTED = 1;
+    protected final static int NOT_LISTED = 1;
     protected final static int LISTED = 2;
     protected final static int SELECTED = 3;
 
@@ -84,7 +86,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
     private String url;
     private NetworkModelPanel panel;
-    
+
 
     /** Creates new form  */
     public JDialogLoadingNetworkModel(Frame _f, MainGUI _mgui, String title, String _url) {
@@ -93,12 +95,17 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         f = _f;
         mgui = _mgui;
 
-	url = _url;
+        url = _url;
+
+        listOfModels = new ArrayList<NetworkModel>();
 
 
         initComponents();
         myInitComponents();
         pack();
+        Thread t = new Thread(this);
+        t.start();
+
 
         //getGlassPane().addMouseListener( new MouseAdapter() {});
         getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -108,7 +115,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     protected void myInitComponents() {
         mode = NOT_LISTED;
         setButtons();
-      }
+    }
 
     protected void initComponents() {
 
@@ -117,8 +124,8 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-	panel = new NetworkModelPanel();
-	jsp = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        panel = new NetworkModelPanel(listOfModels, this);
+        jsp = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         c.add(jsp, BorderLayout.NORTH);
 
@@ -127,7 +134,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         jta.setEditable(false);
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
-        jta.append("Select options and then, click on 'start' to launch code generation / compilation / execution\n");
+        jta.append("Connecting to " + url + ".\n Please wait ...\n\n");
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
         textAreaWriter = new JTextAreaWriter( jta );
@@ -136,18 +143,18 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
         c.add(jsp, BorderLayout.CENTER);
 
-        start = new JButton("Load", IconManager.imgic53);
+        start = new JButton("Load", IconManager.imgic23);
         stop = new JButton("Cancel", IconManager.imgic55);
 
-        start.setPreferredSize(new Dimension(100, 30));
-        stop.setPreferredSize(new Dimension(100, 30));
+        start.setPreferredSize(new Dimension(200, 30));
+        stop.setPreferredSize(new Dimension(200, 30));
 
         start.addActionListener(this);
         stop.addActionListener(this);
 
         JPanel jp2 = new JPanel();
-        jp2.add(start);
         jp2.add(stop);
+        jp2.add(start);
 
         c.add(jp2, BorderLayout.SOUTH);
 
@@ -161,21 +168,75 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
             loadFile();
         } else if (evt.getSource() == stop) {
             cancel();
-        } 
+        }
     }
 
 
     public void loadFile() {
-	// Run the retreiver + analyzer
+        // Run the retreiver + analyzer
     }
 
     public void cancel() {
-	dispose();
+        dispose();
     }
- 
-   
+
+
     public void run() {
-        
+        // Loading main file describing models, giving information on this, and filling the array of models
+        // Accsing the main file
+        try {
+	    HttpURLConnection connection;
+	    TraceManager.addDev("URL: going to create it to: " + url);
+            URL mainFile = new URL(url);
+	    TraceManager.addDev("URL creation");
+	    connection = (HttpURLConnection)(mainFile.openConnection());
+	    TraceManager.addDev("Connection setup 0");
+	    String redirect = connection.getHeaderField("Location");
+	    if (redirect != null){
+		TraceManager.addDev("Redirection found");
+		connection = (HttpURLConnection)(new URL(redirect).openConnection());
+	    }
+	    //connection.setRequestMethod("GET");
+	    //connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
+	    TraceManager.addDev("Connection setup 1");
+	    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            jta.append("Connection established...\n");
+            String inputLine;
+	    NetworkModel nm = null;
+            while ((inputLine = in.readLine()) != null) {
+		if (inputLine.startsWith("#FILE")) {
+		    nm = new NetworkModel(inputLine.substring(5, inputLine.length()).trim());
+		    listOfModels.add(nm);
+		}
+		if (inputLine.startsWith("-TYPE")) {
+		    if (nm != null) {
+			nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
+		    }
+		}
+
+		if (inputLine.startsWith("-DESCRIPTION")) {
+		    if (nm != null) {
+			nm.description = inputLine.substring(12, inputLine.length()).trim();
+		    }
+		}
+
+		if (inputLine.startsWith("-IMG")) {
+		    if (nm != null) {
+			nm.image = inputLine.substring(4, inputLine.length()).trim();
+		    }
+		}
+		
+                //System.out.println(inputLine);
+		
+	    }
+		jta.append("\n" + listOfModels.size() + " loaded, you can now select a model to be loaded\n");
+	    mode = LISTED;
+	    panel.repaint();
+	    panel.addPanelWithButtons();
+            in.close();
+        } catch (Exception e) {
+            jta.append("Error: " + e.getMessage() + " when retreiving file " + url );
+        }
     }
 
     protected void checkMode() {
@@ -185,8 +246,8 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     protected void setButtons() {
         switch(mode) {
         case NOT_LISTED:
-            start.setEnabled(true);
-            stop.setEnabled(false);
+            start.setEnabled(false);
+            stop.setEnabled(true);
             //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             getGlassPane().setVisible(false);
             break;
@@ -198,8 +259,8 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
             break;
         case SELECTED:
         default:
-            start.setEnabled(false);
-            stop.setEnabled(false);
+            start.setEnabled(true);
+            stop.setEnabled(true);
             getGlassPane().setVisible(false);
             break;
         }
