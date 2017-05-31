@@ -764,7 +764,12 @@ public class TML2Avatar {
 					block.addMethod(mac);
 				}
 				if (!ae.securityPattern.nonce.isEmpty()){
-					tran.addAction(ae.securityPattern.name+"="+ae.securityPattern.name+","+ae.securityPattern.nonce);
+					AvatarMethod concat = new AvatarMethod("concat2", ae);
+					concat.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+					concat.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.nonce));
+					concat.addReturnParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
+					block.addMethod(concat);
+					tran.addAction(ae.securityPattern.name+"=concat2("+ae.securityPattern.name+","+ae.securityPattern.nonce+")");
 				}
 				tran.addAction(ae.securityPattern.name+"_mac = MAC("+ae.securityPattern.name+",key_"+ae.securityPattern.name+")");
 
@@ -916,10 +921,7 @@ public class TML2Avatar {
 				block.addMethod(get2);
 
 				tran.addAction("get2("+ae.securityPattern.name+"_encrypted,"+ae.securityPattern.name+","+ae.securityPattern.name+"_mac)");
-				if (!ae.securityPattern.nonce.isEmpty()){
-					block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
-					tran.addAction("get2("+ae.securityPattern.name + ","+ae.securityPattern.name+",testnonce_"+ae.securityPattern.nonce+")");
-				}
+
 				AvatarMethod verifymac = new AvatarMethod("verifyMAC", ae);
 				block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.name, AvatarType.BOOLEAN, block, null));
 				verifymac.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
@@ -933,6 +935,10 @@ public class TML2Avatar {
 				}
 
 				tran.addAction("testnonce_"+ae.securityPattern.name+"=verifyMAC("+ae.securityPattern.name+", key_"+ae.securityPattern.name+","+ae.securityPattern.name+"_mac)"); 
+				if (!ae.securityPattern.nonce.isEmpty()){
+					block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
+					tran.addAction("get2("+ae.securityPattern.name + ","+ae.securityPattern.name+",testnonce_"+ae.securityPattern.nonce+")");
+				}
 				elementList.add(as);
 				elementList.add(tran);
 
