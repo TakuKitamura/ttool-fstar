@@ -761,6 +761,9 @@ public class TML2Avatar {
 				if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName("key_"+ae.securityPattern.name)!=null){
 					block.addMethod(mac);
 				}
+				if (!ae.securityPattern.nonce.isEmpty()){
+					tran.addAction(ae.securityPattern.name+"="+ae.securityPattern.name+","+ae.securityPattern.nonce);
+				}
 				tran.addAction(ae.securityPattern.name+"_mac = MAC("+ae.securityPattern.name+",key_"+ae.securityPattern.name+")");
 
 				AvatarMethod concat = new AvatarMethod("concat2", ae);
@@ -772,7 +775,7 @@ public class TML2Avatar {
 					block.addMethod(concat);
 				}
 	
-				tran.addAction(ae.securityPattern.name+"_encrypted = concat2("+ae.securityPattern.name+"_mac,"+ae.securityPattern.name+")");
+				tran.addAction(ae.securityPattern.name+"_encrypted = concat2("+ae.securityPattern.name +","+ae.securityPattern.name+"_mac)");
 			}
 				AvatarAttributeState authOrigin = new AvatarAttributeState(block.getName()+"."+as.getName()+"."+ae.securityPattern.name,ae.getReferenceObject(),block.getAvatarAttributeWithName(ae.securityPattern.name), as);
 				signalAuthOriginMap.put(ae.securityPattern.name, authOrigin);
