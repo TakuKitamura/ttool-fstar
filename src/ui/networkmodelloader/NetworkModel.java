@@ -49,6 +49,7 @@ package ui.networkmodelloader;
 
 import javax.swing.*;
 import java.io.File;
+import java.awt.image.*;
 
 
 public class NetworkModel extends JButton  {
@@ -57,6 +58,7 @@ public class NetworkModel extends JButton  {
     public NetworkModelType type;
     public String description;
     public String image;
+    public BufferedImage bi;
 
     public NetworkModel(String _fileName) {
 	super(_fileName);

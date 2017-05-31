@@ -49,19 +49,24 @@ package ui.networkmodelloader;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.*;
 import javax.swing.*;
 import javax.swing.border.*;
-
 import java.util.*;
+
+import myutil.*;
 
 
 
 public class NetworkModelPanel extends JPanel  {
 
+    private static int ImgSizeX = 220;
+    private static int ImgSizeY = 120;
+    
     private static int buttonSizeX = 250;
     private static int buttonSizeY = 150;
     private static int spaceBetweenButtons = 50;
-    private static int nbOfButtonsPerColumn = 3;
+    private static int nbOfButtonsPerColumn = 2;
 
     private ArrayList<NetworkModel> listOfModels;
     private ActionListener listener;
@@ -70,10 +75,10 @@ public class NetworkModelPanel extends JPanel  {
 	listOfModels = _listOfModels;
 	listener = _listener;
 	
-	Dimension pSize = new Dimension(500, 400);
-        Dimension mSize = new Dimension(200, 100);
+	//Dimension pSize = new Dimension(500, 400);
+        Dimension mSize = new Dimension(400, 300);
 
-        setPreferredSize(pSize);
+        //setPreferredSize(pSize);
 	setMinimumSize(mSize);
 	setBackground(new java.awt.Color(250, 250, 250));
 	setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -82,10 +87,29 @@ public class NetworkModelPanel extends JPanel  {
     public void addPanelWithButtons() {
 	int cptColumn = 0;
 	int cptRow = 0;
-	for(NetworkModel  button: listOfModels) {
-	    button.setBounds(cptColumn * (buttonSizeX + spaceBetweenButtons), cptRow * (buttonSizeY + spaceBetweenButtons), buttonSizeX, buttonSizeY);
+	for(NetworkModel button: listOfModels) {
+	    int tmpX = cptColumn * (buttonSizeX + spaceBetweenButtons);
+	    int tmpY = cptRow * (buttonSizeY + spaceBetweenButtons);
+	    TraceManager.addDev("Adding button at x=" + tmpX + "& y=" + tmpY);
+	    button.setBounds(tmpX, tmpY, buttonSizeX, buttonSizeY);
+	    if (button.description != null) {
+		button.setToolTipText(button.description);
+	    }
+
+	    if (button.bi != null) {
+		TraceManager.addDev("Adding image");
+		
+		/*BufferedImage newImage = new BufferedImage(ImgSizeX, ImgSizeY, button.bi.getType());
+		Graphics g = newImage.createGraphics();
+		g.drawImage(button.bi, 0, 0, ImgSizeX, ImgSizeY, null);
+		g.dispose();*/
+		button.setIcon(new ImageIcon(ImageManager.getScaledImage(button.bi, ImgSizeX, ImgSizeY)));
+	    }
+	    
 	    Dimension d = new Dimension(buttonSizeX, buttonSizeY);
 	    button.setPreferredSize(d);
+	    //button.setBorder(BorderFactory.createEmptyBorder());
+	    //button.setContentAreaFilled(false);
 	    add(button);
 	    cptColumn ++;
 	    if (cptColumn == nbOfButtonsPerColumn) {
