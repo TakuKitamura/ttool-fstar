@@ -50,6 +50,9 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 import myutil.TraceManager;
 
 import ui.AvatarDesignPanel;
@@ -80,11 +83,13 @@ public class ProVerifResultTrace {
         private String from;
         private String to;
         private String message;
+        private String channel;
 
-        public OutStep(String from, String to, String message) {
+        public OutStep(String from, String to, String message, String channel) {
             this.from = from;
             this.to = to;
             this.message = message;
+            this.channel = channel;
         }
 
         public boolean messageEquals(String message)
@@ -99,14 +104,21 @@ public class ProVerifResultTrace {
 
         public boolean isToAttacker()
         {
-            return this.to.equals("ATTACKER");
+            return this.to.equals("Attacker");
         }
 
         @Override
         public String describeAsString(AvatarDesignPanel adp)
         {
-            // TraceManager.addDev("[DEBUG] !!! " + this.message);
-            return "MSG " + this.from + " -> " + this.to + " : " + ProVerifResultTrace.this.replaceAllAttributeNames(adp, this.message).replaceAll(",", ", ");
+            return "MSG " + this.from + " -- " + this.channel + " --> " + this.to + " : " + ProVerifResultTrace.this.replaceAllAttributeNames(adp, this.message).replaceAll(",", ", ");
+        }
+
+        @Override
+        public void describeAsSDTransaction(AvatarDesignPanel adp, BufferedWriter writer, int step) throws IOException
+        {
+            writer.write("#" + step + " time=0.000000000 block=" + this.from + " blockdestination=" + this.to + " type=synchro channel=" + this.channel + " params=\"" + ProVerifResultTrace.this.replaceAllAttributeNames(adp, this.message).replaceAll(",", ", ") + "\"");
+            writer.newLine();
+            writer.flush();
         }
     }
 
@@ -125,6 +137,14 @@ public class ProVerifResultTrace {
         {
             return "EV  " + this.block + "." + this.name;
         }
+
+        @Override
+        public void describeAsSDTransaction(AvatarDesignPanel adp, BufferedWriter writer, int step) throws IOException
+        {
+            writer.write("#" + step + " time=0.000000000 block=" + this.block + " type=state_entering state="+ this.name);
+            writer.newLine();
+            writer.flush();
+        }
     }
 
     private class NewStep implements ProVerifResultTraceStep {
@@ -139,6 +159,14 @@ public class ProVerifResultTrace {
         public String describeAsString(AvatarDesignPanel adp)
         {
             return "NEW " + ProVerifResultTrace.this.replaceAttributeName(adp, this.name);
+        }
+
+        @Override
+        public void describeAsSDTransaction(AvatarDesignPanel adp, BufferedWriter writer, int step) throws IOException
+        {
+            writer.write("#" + step + " time=0.000000000 block=Attacker type=function_call func=new parameters=" + ProVerifResultTrace.this.replaceAttributeName(adp, this.name));
+            writer.newLine();
+            writer.flush();
         }
     }
 
@@ -314,6 +342,14 @@ public class ProVerifResultTrace {
                         || msgName.startsWith("choice" + AVATAR2ProVerif.ATTR_DELIM))
                     return m.group(4);
 
+                String channelName = "";
+                Matcher m2 = Pattern.compile(AVATAR2ProVerif.CH_ENCRYPT + ".+?__(.+?)\\((.*)\\)").matcher(msgName);
+                if (m2.matches())
+                {
+                    channelName = m2.group(1);
+                    msgName = m2.group(2);
+                }
+
                 boolean foundAStep = false;
                 for (ProVerifResultTraceStep step: this.trace)
                 {
@@ -334,7 +370,7 @@ public class ProVerifResultTrace {
 
                 if (!foundAStep)
                 {
-                    this.trace.add(new OutStep("ATTACKER", this.getBlockNameFromLine(Integer.parseInt(m.group(3))), msgName));
+                    this.trace.add(new OutStep("Attacker", this.getBlockNameFromLine(Integer.parseInt(m.group(3))), msgName, channelName));
                 }
 
                 return m.group(4);
@@ -376,7 +412,6 @@ public class ProVerifResultTrace {
 
         if (str.startsWith("By "))
         {
-            // TraceManager.addDev("[DEBUG] BY: " + str);
 
             return;
         }
@@ -393,10 +428,18 @@ public class ProVerifResultTrace {
                         || msgName.startsWith("chControlEnc"))
                     return;
 
-                // TraceManager.addDev("[DEBUG] OUT: " + str);
                 String blockName = this.getBlockNameFromLine(Integer.parseInt(m.group(4)));
+
+                String channelName = "";
+                m = Pattern.compile(AVATAR2ProVerif.CH_ENCRYPT + ".+?__(.+?)\\((.*)\\)").matcher(msgName);
+                if (m.matches())
+                {
+                    channelName = m.group(1);
+                    msgName = m.group(2);
+                }
+
                 if (blockName != null)
-                    this.trace.add(new OutStep(blockName, "ATTACKER", msgName));
+                    this.trace.add(new OutStep(blockName, "Attacker", msgName, channelName));
 
                 return;
             }
@@ -406,7 +449,6 @@ public class ProVerifResultTrace {
             if (m.matches())
             {
                 String line = m.group(2);
-                // TraceManager.addDev("[DEBUG] EVENT: " + str);
                 p = Pattern.compile("enteringState" + AVATAR2ProVerif.ATTR_DELIM + "[a-zA-Z0-9_]+" + AVATAR2ProVerif.ATTR_DELIM + "([a-zA-Z0-9_]+)");
                 m = p.matcher(m.group(1));
 

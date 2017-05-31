@@ -59,6 +59,8 @@ import avatartranslator.*;
 import proverifspec.*;
 import ui.*;
 
+import ui.interactivesimulation.JFrameSimulationSDPanel;
+
 import launcher.*;
 
 
@@ -153,7 +155,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
 
     /** Creates new form  */
     public JDialogProverifVerification(Frame f, MainGUI _mgui, String title, String _hostProVerif, String _pathCode, String _pathExecute, AvatarDesignPanel adp) {
-        super(f, title, true);
+        super(f, title, Dialog.ModalityType.DOCUMENT_MODAL);
 
         mgui = _mgui;
         this.adp = adp;
@@ -307,11 +309,35 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
         } else if (command.equals("Show trace")) {
             if (evt.getSource() == this.menuItem)
             {
-                TraceManager.addDev("\n--- Trace ---");
-                for (ProVerifResultTraceStep step: this.menuItem.result.getTrace().getTrace())
-                    TraceManager.addDev(step.describeAsString(this.adp));
-                TraceManager.addDev("");
-                // TODO
+                PipedOutputStream pos = new PipedOutputStream();
+                try {
+                    PipedInputStream pis = new PipedInputStream(pos, 4096);
+                    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(pos));
+
+                    JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(null, this.mgui, this.menuItem.pragma.toString());
+                    jfssdp.setIconImage(IconManager.img8);
+                    GraphicLib.centerOnParent(jfssdp, 600, 600);
+                    jfssdp.setFileReference(new BufferedReader(new InputStreamReader(pis)));
+                    jfssdp.setVisible(true);
+                    jfssdp.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+                    jfssdp.toFront();
+
+                    // TraceManager.addDev("\n--- Trace ---");
+                    int i=0;
+                    for (ProVerifResultTraceStep step: this.menuItem.result.getTrace().getTrace()) {
+                        step.describeAsSDTransaction(this.adp, bw, i);
+                        i++;
+                        // TraceManager.addDev(step.describeAsString(this.adp));
+                    }
+                    bw.close();
+                } catch(IOException e) {
+                    TraceManager.addDev("Error when writing trace step SD transaction");
+                } finally {
+                    try {
+                        pos.close();
+                    } catch(IOException e) {}
+                }
+                // TraceManager.addDev("");
             }
         }
     }

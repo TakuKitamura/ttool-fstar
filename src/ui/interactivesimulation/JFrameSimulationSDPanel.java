@@ -89,7 +89,6 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
     
     public InteractiveSimulationActions [] actions;
 	
-	private Frame f;
 	private MainGUI mgui;
 	private String title;
 	//private String hostSystemC;
@@ -109,7 +108,6 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
 	public JFrameSimulationSDPanel(Frame _f, MainGUI _mgui, String _title) {
 		super(_title);
 		
-		f = _f;
 		mgui = _mgui;
 		title = _title;
         
@@ -222,6 +220,12 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
         if (sdpanel != null) {
             TraceManager.addDev("Resetting file");
             sdpanel.setFileReference(_fileReference);
+        }
+    }
+
+    public void setFileReference(BufferedReader inputStream) {
+        if (sdpanel != null) {
+            sdpanel.setFileReference(inputStream);
         }
     }
 	

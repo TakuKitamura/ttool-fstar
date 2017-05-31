@@ -45,8 +45,12 @@
 
 package proverifspec;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 import ui.AvatarDesignPanel;
 
 public interface ProVerifResultTraceStep {
     public String describeAsString(AvatarDesignPanel adp);
+    public void describeAsSDTransaction(AvatarDesignPanel adp, BufferedWriter writer, int step) throws IOException;
 }
