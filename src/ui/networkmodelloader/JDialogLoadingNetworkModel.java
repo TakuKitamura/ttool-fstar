@@ -58,7 +58,7 @@ import java.io.*;
 import ui.*;
 import myutil.*;
 
-public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements ActionListener, Runnable  {
+public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements ActionListener, Runnable, LoaderFacilityInterface, CallbackLoaderInterface  {
 
     private ArrayList<NetworkModel> listOfModels;
 
@@ -89,7 +89,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
 
     /** Creates new form  */
-    public JDialogLoadingNetworkModel(Frame _f, MainGUI _mgui, String title, String _url) {
+    public JDialogLoadingNetworkModel(Frame _f, MainGUI _mgui, String title, String _url)  {
         super(title);
 
         f = _f;
@@ -124,7 +124,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        panel = new NetworkModelPanel(listOfModels, this);
+        panel = new NetworkModelPanel(this, listOfModels, this);
         jsp = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         c.add(jsp, BorderLayout.CENTER);
@@ -155,7 +155,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
         JPanel jp2 = new JPanel();
         jp2.add(stop);
-        jp2.add(start);
+        //jp2.add(start);
 
         lowPart.add(jp2, BorderLayout.SOUTH);
 
@@ -233,9 +233,9 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
                 //System.out.println(inputLine);
 		
 	    }
-		jta.append("\n" + listOfModels.size() + " remote models have been detected.\nSelect one to download it locally and open it.\n");
+		jta.append("\n" + listOfModels.size() + " remote models found.\nSelect a model to download it locally and open it.\n\n");
 	    mode = LISTED;
-	    panel.addPanelWithButtons();
+	    panel.preparePanel();
 	    panel.repaint();
             in.close();
 
@@ -273,6 +273,19 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
             getGlassPane().setVisible(false);
             break;
         }
+    }
+
+    public void load(int index) {
+	jta.append("Loading model: " + listOfModels.get(index).fileName);
+    }
+
+    public void loadDone() {
+	jta.append("Model transfered, opening it in TTool\n");
+    }
+
+    public void loadFailed() {
+	jta.append("Model transfer failed\nPlease, select another model, or retry\n");
+	panel.reactivateSelection();
     }
 
 

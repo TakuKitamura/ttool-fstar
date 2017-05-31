@@ -52,16 +52,19 @@ import java.io.File;
 import java.awt.image.*;
 
 
-public class NetworkModel extends JButton  {
+public class NetworkModel  {
 
     public String fileName;
     public NetworkModelType type;
     public String description;
     public String image;
     public BufferedImage bi;
+    public BufferedImage scaledImg;
+
+    public int x, y, width, height;
 
     public NetworkModel(String _fileName) {
-	super(_fileName);
+	//super(_fileName);
 	fileName = _fileName;
     }
 

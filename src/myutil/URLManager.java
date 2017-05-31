@@ -50,8 +50,48 @@ import java.io.*;
 import java.awt.image.*;
 import javax.imageio.*;
 
+import org.apache.commons.io.FileUtils;
 
-public final class URLManager {
+public final class URLManager implements Runnable {
+
+    private String url;
+    private boolean busy;
+    private String path;
+    private CallbackLoaderInterface callback;
+    
+    public URLManager() {
+    }
+
+    public synchronized boolean downloadFile(String _path, String _url, CallbackLoaderInterface _callback) {
+	if (busy) {
+	    return false;
+	}
+	busy = true;
+
+	path = _path;
+	url = _url;
+	callback = _callback;
+
+	Thread t = new Thread(this);
+        t.start();
+	return true;
+
+    }
+
+    public void run() {
+	try {
+	    String urlF = getRealURL(url);
+	    File f = new File(path);
+	    org.apache.commons.io.FileUtils.copyURLToFile(new URL(urlF), f);
+	    if (callback != null) {
+		callback.loadDone();
+	    }
+	} catch (Exception e) {
+	    if (callback != null) {
+		callback.loadFailed();
+	    }
+	}
+    }
 
     public static String getRealURL(String url) {
 	try {

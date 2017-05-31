@@ -55,10 +55,11 @@ import javax.swing.border.*;
 import java.util.*;
 
 import myutil.*;
+import ui.*;
 
 
 
-public class NetworkModelPanel extends JPanel  {
+public class NetworkModelPanel extends JPanel implements MouseListener, MouseMotionListener {
 
     private static int ImgSizeX = 220;
     private static int ImgSizeY = 120;
@@ -68,10 +69,19 @@ public class NetworkModelPanel extends JPanel  {
     private static int spaceBetweenButtons = 50;
     private static int nbOfButtonsPerColumn = 2;
 
+    private static int marginX = 20;
+    private static int marginY = 20;
+
+    private int indexOfSelected = -1;
+    private boolean selectedModel = false;
+
     private ArrayList<NetworkModel> listOfModels;
     private ActionListener listener;
+
+    private LoaderFacilityInterface loader;
     
-    public NetworkModelPanel(ArrayList<NetworkModel> _listOfModels, ActionListener _listener) {
+    public NetworkModelPanel(LoaderFacilityInterface _loader, ArrayList<NetworkModel> _listOfModels, ActionListener _listener) {
+	loader = _loader;
 	listOfModels = _listOfModels;
 	listener = _listener;
 	
@@ -82,19 +92,24 @@ public class NetworkModelPanel extends JPanel  {
 	setMinimumSize(mSize);
 	setBackground(new java.awt.Color(250, 250, 250));
 	setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+
+	addMouseMotionListener(this);
+	addMouseListener(this);
     }
 
-    public void addPanelWithButtons() {
-	int cptColumn = 0;
-	int cptRow = 0;
+    public void preparePanel() {
+	//int cptColumn = 0;
+	//int cptRow = 0;
 	for(NetworkModel button: listOfModels) {
-	    int tmpX = cptColumn * (buttonSizeX + spaceBetweenButtons);
-	    int tmpY = cptRow * (buttonSizeY + spaceBetweenButtons);
-	    TraceManager.addDev("Adding button at x=" + tmpX + "& y=" + tmpY);
-	    button.setBounds(tmpX, tmpY, buttonSizeX, buttonSizeY);
-	    if (button.description != null) {
+	    //Dimension d = new Dimension(buttonSizeX, buttonSizeY);
+	    //button.setPreferredSize(d);
+	    //int tmpX = cptColumn * (buttonSizeX + spaceBetweenButtons);
+	    //int tmpY = cptRow * (buttonSizeY + spaceBetweenButtons);
+	    //TraceManager.addDev("Adding button at x=" + tmpX + "& y=" + tmpY);
+	    //button.setBounds(tmpX, tmpY, buttonSizeX, buttonSizeY);
+	    /*if (button.description != null) {
 		button.setToolTipText(button.description);
-	    }
+		}*/
 
 	    if (button.bi != null) {
 		TraceManager.addDev("Adding image");
@@ -103,19 +118,17 @@ public class NetworkModelPanel extends JPanel  {
 		Graphics g = newImage.createGraphics();
 		g.drawImage(button.bi, 0, 0, ImgSizeX, ImgSizeY, null);
 		g.dispose();*/
-		button.setIcon(new ImageIcon(ImageManager.getScaledImage(button.bi, ImgSizeX, ImgSizeY)));
+		button.scaledImg = ImageManager.getScaledImage(button.bi, ImgSizeX, ImgSizeY);
 	    }
 	    
-	    Dimension d = new Dimension(buttonSizeX, buttonSizeY);
-	    button.setPreferredSize(d);
 	    //button.setBorder(BorderFactory.createEmptyBorder());
 	    //button.setContentAreaFilled(false);
-	    add(button);
-	    cptColumn ++;
+	    //add(button);
+	    /*cptColumn ++;
 	    if (cptColumn == nbOfButtonsPerColumn) {
 		cptRow ++;
 		cptColumn = 0;
-	    }
+		}*/
 	}
     }
 
@@ -125,12 +138,115 @@ public class NetworkModelPanel extends JPanel  {
     @Override
     public void paintComponent(Graphics g) {
 	super.paintComponent(g);
+	int cptColumn = 0;
+	int cptRow = 0;	
 
-	
-	
+	int index = 0;
+	for(NetworkModel button: listOfModels) {
+	    Color c = g.getColor();
+	    int tmpX = cptColumn * (buttonSizeX + spaceBetweenButtons) + marginX;
+	    int tmpY = cptRow * (buttonSizeY + spaceBetweenButtons) + marginY;
+	    if (button.scaledImg != null) {
+		g.drawImage(button.scaledImg, tmpX, tmpY, buttonSizeX, buttonSizeY, null);
+	    } else {
+		g.setColor(ColorManager.AVATAR_BLOCK);
+		g.fillRect(tmpX, tmpY, buttonSizeX, buttonSizeY);
+		g.setColor(c);
+		GraphicLib.centerString(g, "No picture", tmpX, tmpY + buttonSizeY/2, buttonSizeX); 
+	    }
+
+	    GraphicLib.centerString(g, button.fileName, tmpX, tmpY + buttonSizeY + 15, buttonSizeX); 
+	    
+	   
+	    
+	    cptColumn ++;
+	    if (cptColumn == nbOfButtonsPerColumn) {
+		cptRow ++;
+		cptColumn = 0;
+	    }
+
+	    button.x = tmpX;
+	    button.y = tmpY;
+	    button.width = buttonSizeX;
+	    button.height = buttonSizeY + 15;
+
+	    // Must draw the rectangle around
+	    if (index == indexOfSelected) {
+		if (selectedModel) {
+		    g.setColor(ColorManager.SELECTED_ELEMENT);	
+		} else {
+		    g.setColor(ColorManager.POINTER_ON_ME_0);		    
+		}
+		Graphics2D g2 = (Graphics2D)g;
+		Stroke oldStroke = g2.getStroke();
+		g2.setStroke(new BasicStroke(5));
+		g2.drawRect(button.x-10, button.y-10, button.width+20, button.height+20);
+		g2.setStroke(oldStroke);
+		g.setColor(c);
+	    }
+	    
+	    index ++;
+	}
+
 	//g.drawString(listOfModels.size() + " model(s) available", 20, 20);
 	//g.drawRect(200, 200, 200, 200);
     }
+
+    
+    public void mouseDragged(MouseEvent e) {
+        
+    }
+
+    public void mouseMoved(MouseEvent e) {
+	if (!selectedModel)  {
+	    int previousIndex = indexOfSelected;
+	    boolean found = false;;
+	    int index = 0;
+	    for(NetworkModel button: listOfModels) {
+		if ((e.getX() > button.x) && (e.getX() < button.x + button.width) &&  (e.getY() > button.y) && (e.getY() < button.y + button.height)) {
+		    indexOfSelected = index;
+		    found = true;
+		    break;
+		}
+		index ++;
+	    }
+	    if (!found) {
+		indexOfSelected = -1;
+	    }
+	    if (indexOfSelected != previousIndex) {
+		repaint();
+	    }
+	}
+    }
+
+    public void mousePressed(MouseEvent e) {
+    }
+
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    public void mouseExited(MouseEvent e) {
+    }
+
+    public void mouseClicked(MouseEvent e) {
+	if ((indexOfSelected > -1) && (!selectedModel)) {
+	    selectedModel = true;
+	    repaint();
+	    if (loader != null) {
+		loader.load(indexOfSelected);
+	    }
+	}
+    }
+
+    public void reactivateSelection() {
+	indexOfSelected = -1;
+	selectedModel = false;
+	repaint();
+    }
+    
     
 
 }
