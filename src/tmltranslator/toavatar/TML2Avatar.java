@@ -1081,11 +1081,14 @@ public class TML2Avatar {
 				sig=signalOutMap.get(ch.getName());
 			}
 			if (ch.checkConf){
-			if (!attrsToCheck.contains(getName(ch.getName())+"_chData")){
-				AvatarAttribute attr = new AvatarAttribute(getName(ch.getName())+"_chData", AvatarType.INTEGER, block, null);
-				attrsToCheck.add(getName(ch.getName())+"_chData");
-				avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ch.getName()+"_chData", ch.getReferenceObject(), attr));
-				}
+                            if (!attrsToCheck.contains(getName(ch.getName())+"_chData")){
+				AvatarAttribute attr = block.getAvatarAttributeWithName(getName(ch.getName())+"_chData");
+                                if (attr != null)
+                                {
+                                    attrsToCheck.add(getName(ch.getName())+"_chData");
+                                    avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ch.getName()+"_chData", ch.getReferenceObject(), attr));
+                                }
+                            }
 			}
 			if (ch.checkAuth){
 				if (block.getAvatarAttributeWithName(getName(ch.getName())+"_chData")==null){

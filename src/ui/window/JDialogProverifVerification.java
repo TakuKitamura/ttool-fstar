@@ -593,6 +593,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
             mode = STOPPED;
         } catch (Exception e) {
             mode = STOPPED;
+            throw e;
         }
 
 
@@ -678,7 +679,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
             curList.setSelectedIndex(row);
             this.menuItem.pragma = curList.getModel().getElementAt(row);
             this.menuItem.result = this.results.get(this.menuItem.pragma);
-            this.menuItem.setEnabled(this.menuItem.result.getTrace() != null);
+            this.menuItem.setEnabled(this.adp != null && this.menuItem.result.getTrace() != null);
             popup.show(e.getComponent(), e.getX(), e.getY());
         }
     }

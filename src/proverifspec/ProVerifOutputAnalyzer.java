@@ -228,10 +228,13 @@ public class ProVerifOutputAnalyzer {
                         {
                             for (AvatarPragma pragma: pragmas)
                             {
-                                if (pragma instanceof AvatarPragmaSecret
-                                        && this.avatar2proverif.getTrueName(((AvatarPragmaSecret) pragma).getArg()).equals(attributeName))
+                                if (pragma instanceof AvatarPragmaSecret)
                                 {
-                                    this.results.put(pragma, result);
+                                    String trueName = this.avatar2proverif.getTrueName(((AvatarPragmaSecret) pragma).getArg());
+                                    if (trueName != null && trueName.equals(attributeName))
+                                    {
+                                        this.results.put(pragma, result);
+                                    }
                                 }
                             }
                         }
