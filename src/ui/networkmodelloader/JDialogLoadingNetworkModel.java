@@ -60,6 +60,10 @@ import myutil.*;
 
 public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements ActionListener, Runnable, LoaderFacilityInterface, CallbackLoaderInterface  {
 
+    public final static String [] FEATURES = {"All",  "Requirements", "Attacktrees", "Properties", "Partitioning", "Analysis", "Design", "Prototyping", "Security protocol"};
+
+    public final static String [] PROPS = {"All", "Safety", "Security", "Performance"};
+    
     private ArrayList<NetworkModel> listOfModels;
 
     protected Frame f;
@@ -86,6 +90,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
     private String url;
     private NetworkModelPanel panel;
+    private String filePath;
 
 
     /** Creates new form  */
@@ -124,10 +129,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        panel = new NetworkModelPanel(this, listOfModels, this);
-        jsp = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        c.add(jsp, BorderLayout.CENTER);
+        
 
 	JPanel lowPart = new JPanel(new BorderLayout());
 
@@ -141,6 +143,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         textAreaWriter = new JTextAreaWriter( jta );
 
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	jsp.setPreferredSize(new Dimension(400, 200));
 
         lowPart.add(jsp, BorderLayout.CENTER);
 
@@ -160,6 +163,12 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         lowPart.add(jp2, BorderLayout.SOUTH);
 
 	c.add(lowPart, BorderLayout.SOUTH);
+
+	panel = new NetworkModelPanel(this, listOfModels, this, jta);
+        jsp = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	panel.setJSP(jsp);
+
+        c.add(jsp, BorderLayout.CENTER);
     }
 
     public void actionPerformed(ActionEvent evt)  {
@@ -210,11 +219,27 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 		    nm = new NetworkModel(inputLine.substring(5, inputLine.length()).trim());
 		    listOfModels.add(nm);
 		}
-		if (inputLine.startsWith("-TYPE")) {
+		
+		if (inputLine.startsWith("-FEATURES")) {
 		    if (nm != null) {
-			nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
+			String tmp = inputLine.substring(9, inputLine.length()).trim();
+			for (int i=1; i<FEATURES.length; i++) {
+			    nm.features[i] = tmp.indexOf(FEATURES[i]) != -1;
+			}
+			//nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
 		    }
 		}
+
+		if (inputLine.startsWith("-PROPS")) {
+		    if (nm != null) {
+			String tmp = inputLine.substring(6, inputLine.length()).trim();
+			for (int i=1; i<PROPS.length; i++) {
+			    nm.props[i] = tmp.indexOf(PROPS[i]) != -1;
+			}
+			//nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
+		    }
+		}
+	    
 
 		if (inputLine.startsWith("-DESCRIPTION")) {
 		    if (nm != null) {
@@ -276,11 +301,22 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     }
 
     public void load(int index) {
-	jta.append("Loading model: " + listOfModels.get(index).fileName);
+	String fileName = listOfModels.get(index).fileName;
+	jta.append("Loading model: " + fileName);
+	String urlToLoad = URLManager.getBaseURL(url) + fileName;
+	URLManager urlm = new URLManager();
+	filePath = ConfigurationTTool.FILEPath + "/" + fileName;
+	boolean ok = urlm.downloadFile(ConfigurationTTool.FILEPath + "/" + fileName, urlToLoad,this);
+	if (!ok) {
+	    jta.append("Model transfer failed\nPlease, select another model, or retry\n");
+	    panel.reactivateSelection();
+	}
     }
 
     public void loadDone() {
 	jta.append("Model transfered, opening it in TTool\n");
+	this.dispose();
+	mgui.openProjectFromFile(new File(filePath));
     }
 
     public void loadFailed() {

@@ -2275,12 +2275,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfc.getSelectedFile();
+	    openProjectFromFile(file);
         }
 
+    }
+
+    public void openProjectFromFile(File _f) {
+
         String s = null;
-        if(checkFileForOpen(file)) {
+        if(checkFileForOpen(_f)) {
             try {
-                FileInputStream fis = new FileInputStream(file);
+                FileInputStream fis = new FileInputStream(_f);
                 int nb = fis.available();
 
                 byte [] ba = new byte[nb];
@@ -2303,7 +2308,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             gtm.enableUndo(false);
 
             // Update configuration
-            updateLastOpenFile(file);
+            updateLastOpenFile(_f);
 
             //TraceManager.addDev("Loading");
             // load the new TURTLE modeling

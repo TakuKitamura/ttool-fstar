@@ -55,7 +55,8 @@ import java.awt.image.*;
 public class NetworkModel  {
 
     public String fileName;
-    public NetworkModelType type;
+    public boolean [] features;
+    public boolean [] props;
     public String description;
     public String image;
     public BufferedImage bi;
@@ -66,6 +67,9 @@ public class NetworkModel  {
     public NetworkModel(String _fileName) {
 	//super(_fileName);
 	fileName = _fileName;
+	features = new boolean[JDialogLoadingNetworkModel.FEATURES.length];
+	props = new boolean[JDialogLoadingNetworkModel.PROPS.length];
+	
     }
 
     public void update() {

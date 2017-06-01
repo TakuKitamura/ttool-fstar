@@ -79,11 +79,15 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
     private ActionListener listener;
 
     private LoaderFacilityInterface loader;
+
+    private JTextArea jta;
+    private JScrollPane jsp;
     
-    public NetworkModelPanel(LoaderFacilityInterface _loader, ArrayList<NetworkModel> _listOfModels, ActionListener _listener) {
+    public NetworkModelPanel(LoaderFacilityInterface _loader, ArrayList<NetworkModel> _listOfModels, ActionListener _listener, JTextArea _jta) {
 	loader = _loader;
 	listOfModels = _listOfModels;
 	listener = _listener;
+	jta = _jta;
 	
 	//Dimension pSize = new Dimension(500, 400);
         Dimension mSize = new Dimension(400, 300);
@@ -95,6 +99,11 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
 
 	addMouseMotionListener(this);
 	addMouseListener(this);
+    }
+
+    public void setJSP(JScrollPane _jsp) {
+	jsp = _jsp;
+	jsp.setViewportView(this);  
     }
 
     public void preparePanel() {
@@ -188,6 +197,20 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
 	    index ++;
 	}
 
+	Dimension currentPSize = getPreferredSize();
+	Dimension pSize = new Dimension(400, Math.max(300, (cptRow+1)*(buttonSizeY +spaceBetweenButtons) + 2* marginY));
+	setPreferredSize(pSize);
+
+	if (!((currentPSize.getWidth() == pSize.getWidth()) && (currentPSize.getHeight() == pSize.getHeight()))) {
+	    if (jsp != null) {
+		TraceManager.addDev("repainting jsp");
+		jsp.setViewportView(this);  
+		//jsp.revalidate();
+		//jsp.repaint();
+	    }
+	}
+	
+
 	//g.drawString(listOfModels.size() + " model(s) available", 20, 20);
 	//g.drawRect(200, 200, 200, 200);
     }
@@ -214,6 +237,10 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
 		indexOfSelected = -1;
 	    }
 	    if (indexOfSelected != previousIndex) {
+		if (indexOfSelected != -1) {
+		    NetworkModel nm = listOfModels.get(indexOfSelected);
+		    jta.append("\n--- " + nm.fileName + "---\n" + nm.description + "\n-------------\n\n");
+		}
 		repaint();
 	    }
 	}
