@@ -1221,8 +1221,8 @@ public class GTURTLEModeling {
 				//System.out.println("No Components found");
 				continue;
 			}
-			System.out.println("nonAuthChans " + nonAuthChans);
-			System.out.println("nonSecChans "+ nonSecChans);
+		//	System.out.println("nonAuthChans " + nonAuthChans);
+			//System.out.println("nonSecChans "+ nonSecChans);
 			for (TMLCPrimitiveComponent comp: comps){
 
 				HashMap<String, HSMChannel> compChannels = new HashMap<String, HSMChannel>();
@@ -1262,7 +1262,7 @@ public class GTURTLEModeling {
 							}
 						}
 						else {
-							System.out.println("security context:"+writeChannel.securityContext);
+							//System.out.println("security context:"+writeChannel.securityContext);
 							fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
 							if (fromStart!=null){
 								channelInstances.add(tg);
@@ -1324,7 +1324,7 @@ public class GTURTLEModeling {
 						//}
 					}
 				}
-				System.out.println("compchannels " +compChannels);
+				//System.out.println("compchannels " +compChannels);
 				List<ChannelData> hsmChans = new ArrayList<ChannelData>();
 				ChannelData chd = new ChannelData("startHSM_"+cpuName,false,false);
 				hsmChans.add(chd);
@@ -1831,7 +1831,7 @@ public class GTURTLEModeling {
 			//For all the tasks that receive encrypted data, decrypt it, assuming it has no associated HSM
 			for (TMLTask task: tmap.getTMLModeling().getTasks()){
 				int xpos, ypos;
-				System.out.println("loop 2");
+				//System.out.println("loop 2");
 				TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel(task.getName());
 				HashSet<TGComponent> channelInstances = new HashSet<TGComponent>();
 				for (String chan: secChannels.keySet()){
@@ -9202,7 +9202,15 @@ public class GTURTLEModeling {
 				tgcomp=smdrs;
 				smp.addComponent(smdrs, x, y, false, true);
 //				String name=sig.minString();
-				String name=sig.getName()+"("+((AvatarActionOnSignal)asme).getValues().get(0)+")";
+				//System.out.println("signal values" +((AvatarActionOnSignal)asme).getValues());
+				String parameters="";
+				if (((AvatarActionOnSignal)asme).getValues().size()>0){
+					parameters+=((AvatarActionOnSignal)asme).getValues().get(0);
+					for (int i=1; i < ((AvatarActionOnSignal)asme).getValues().size(); i++){
+						parameters=parameters+","+((AvatarActionOnSignal)asme).getValues().get(i);
+					}
+				}
+				String name=sig.getName()+"("+parameters+")";
 				smdrs.setValue(name);
 				// sig.setName(name);
 				smdrs.recalculateSize();
@@ -9218,8 +9226,15 @@ public class GTURTLEModeling {
 			else {
 				AvatarSMDSendSignal smdss = new AvatarSMDSendSignal(x, y, x, x*2, y, y*2, false, null, smp);
 				tgcomp=smdss;
-				smp.addComponent(smdss, x, y, false, true);
-				String name=sig.getName()+"("+((AvatarActionOnSignal)asme).getValues().get(0)+")";
+				smp.addComponent(smdss, x, y, false, true);				
+				String parameters="";
+				if (((AvatarActionOnSignal)asme).getValues().size()>0){
+					parameters+=((AvatarActionOnSignal)asme).getValues().get(0);
+					for (int i=1; i < ((AvatarActionOnSignal)asme).getValues().size(); i++){
+						parameters=parameters+","+((AvatarActionOnSignal)asme).getValues().get(i);
+					}
+				}
+				String name=sig.getName()+"("+parameters+")";
 				//String name=sig.minString();
 				smdss.setValue(name);
 				smdss.recalculateSize();
@@ -9402,9 +9417,9 @@ public class GTURTLEModeling {
 					else {
 
 						AvatarBDBlock father= blockMap.get(ab.getFather().getName().split("__")[ab.getFather().getName().split("__").length-1]);
-						System.out.println("blockmap " + blockMap);
+						//System.out.println("blockmap " + blockMap);
 						if (father==null){
-							System.out.println("Missing father block " + ab.getFather().getName());
+							//System.out.println("Missing father block " + ab.getFather().getName());
 							continue;
 						}
 						AvatarBDBlock bl = new AvatarBDBlock(father.getX()+blockIncMap.get(ab.getFather()), father.getY()+10, abd.getMinX(), abd.getMaxX(), abd.getMinY(), abd.getMaxY(), false, father, abd);
@@ -9443,7 +9458,7 @@ public class GTURTLEModeling {
 		for (String bl1: originDestMap.keySet()){
 			for (String bl2:originDestMap.get(bl1)){
 				Vector<Point> points=new Vector<Point>();
-				System.out.println("Finding " + bl1 + " and bl2 "+ bl2);
+			//	System.out.println("Finding " + bl1 + " and bl2 "+ bl2);
 				if (blockMap.get(bl1)==null || blockMap.get(bl2)==null){
 					continue;
 				}

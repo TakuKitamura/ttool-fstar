@@ -1670,7 +1670,7 @@ public class GTMLModeling  {
                 listE.addCor(tmlexecii, tgc);
 
             } else if (tgc instanceof TMLADEncrypt) {
-                tmlexecc = new TMLExecC("encrypt", tgc);
+                tmlexecc = new TMLExecC("encrypt_"+((TMLADEncrypt)tgc).securityContext, tgc);
                 activity.addElement(tmlexecc);
                 SecurityPattern sp = securityPatterns.get(((TMLADEncrypt)tgc).securityContext);
                 if (sp ==null){

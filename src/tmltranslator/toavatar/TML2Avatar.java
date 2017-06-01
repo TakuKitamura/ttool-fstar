@@ -594,17 +594,12 @@ public class TML2Avatar {
 			}
 		}
 			
- 		AvatarAttribute eventData= new AvatarAttribute(evt.getName()+"__eventData", AvatarType.INTEGER, block, null);
-			as.addValue(evt.getName()+"__eventData");
-		if (block.getAvatarAttributeWithName(evt.getName()+"__eventData")==null){
-				block.addAttribute(eventData);
-		}
-			tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
-		elementList.add(signalState);
-		signalState.addNext(signalTran);
-		elementList.add(signalTran);	
-		signalTran.addNext(as);		
-		elementList.add(as);
+ 			tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
+			elementList.add(signalState);
+			signalState.addNext(signalTran);
+			elementList.add(signalTran);	
+			signalTran.addNext(as);		
+			elementList.add(as);
 			as.addNext(tran);
 			elementList.add(tran);
 		
@@ -623,21 +618,18 @@ public class TML2Avatar {
 			}
 			AvatarActionOnSignal as= new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
 		for (int i=0; i< aee.getNbOfParams(); i++){
+			
 			if (block.getAvatarAttributeWithName(aee.getParam(i))==null){
 				//Throw Error
-			as.addValue("tmp");
+				as.addValue("tmp");
 				System.out.println("Missing Attribute " + aee.getParam(i));
 			}
 			else {
 			as.addValue(aee.getParam(i));
 			}
 		}
- 		AvatarAttribute eventData= new AvatarAttribute(evt.getName()+"__eventData", AvatarType.INTEGER, block, null);
-			as.addValue(evt.getName()+"__eventData");
-		if (block.getAvatarAttributeWithName(evt.getName()+"__eventData")==null){
-				block.addAttribute(eventData);
-		}
-			tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
+ 		
+		tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 		elementList.add(signalState);
 		signalState.addNext(signalTran);
 		elementList.add(signalTran);	
