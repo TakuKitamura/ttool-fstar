@@ -68,7 +68,9 @@ public class NetworkModel  {
 	//super(_fileName);
 	fileName = _fileName;
 	features = new boolean[JDialogLoadingNetworkModel.FEATURES.length];
+	features[0] = true;
 	props = new boolean[JDialogLoadingNetworkModel.PROPS.length];
+	props[0] = true;
 	
     }
 

@@ -80,6 +80,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     private JTextAreaWriter textAreaWriter;
     protected JButton start;
     protected JButton stop;
+    protected JList<String> featureList;
 
     protected JScrollPane jsp;
 
@@ -144,6 +145,12 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	jsp.setPreferredSize(new Dimension(400, 200));
+
+	JPanel options = new JPanel();
+	featureList = new JList<String>(FEATURES);
+	options.add(featureList);
+	lowPart.add(options, BorderLayout.NORTH);
+	
 
         lowPart.add(jsp, BorderLayout.CENTER);
 
