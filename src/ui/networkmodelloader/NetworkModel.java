@@ -47,7 +47,9 @@
 
 package ui.networkmodelloader;
 
-import java.awt.image.BufferedImage;
+import javax.swing.*;
+import java.io.File;
+import java.awt.image.*;
 
 
 public class NetworkModel  {
@@ -55,7 +57,8 @@ public class NetworkModel  {
     public String fileName;
     public boolean [] features;
     public boolean [] props;
-    public String description;
+    public String author = "";
+    public String description = "";
     public String image;
     public BufferedImage bi;
     public BufferedImage scaledImg;

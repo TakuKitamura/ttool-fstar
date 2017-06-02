@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<TURTLEGMODELING version="0.98-beta4">
+<TURTLEGMODELING version="0.99-beta4">
 
 <Modeling type="Avatar Analysis" nameTab="Analysis" >
 <SequenceDiagramPanel name="MyScenario0" minX="10" maxX="2500" minY="10" maxY="1500" >
 <COMPONENT type="301" id="17" >
 <cdparam x="668" y="566" />
-<sizeparam width="260" height="51" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="286" height="51" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="UML Note" value="We create an overall statement based
@@ -40,7 +40,7 @@ This &quot;creation&quot; is a a dynamic webpage
 
 <COMPONENT type="301" id="34" >
 <cdparam x="904" y="315" />
-<sizeparam width="192" height="27" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="209" height="27" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="UML Note" value="Creation of a token specific to
@@ -130,7 +130,7 @@ the Banque Courtois
 <SUBCOMPONENT type="602" id="43" >
 <father id="93" num="0" />
 <cdparam x="807" y="319" />
-<sizeparam width="131" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="141" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="5" maxX="5" minY="10" maxY="470" />
 <infoparam name="action state" value="m = {Id_BC}_BCpubK" />
@@ -206,7 +206,7 @@ the Banque Courtois
 <SUBCOMPONENT type="602" id="102" >
 <father id="152" num="0" />
 <cdparam x="476" y="555" />
-<sizeparam width="226" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="245" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="5" maxX="5" minY="10" maxY="470" />
 <infoparam name="action state" value="m1 = s1 + statementBanqueCourtois" />
@@ -382,7 +382,7 @@ the Banque Courtois
 <SequenceDiagramPanel name="MyScenario1" minX="10" maxX="2500" minY="10" maxY="1500" >
 <COMPONENT type="301" id="231" >
 <cdparam x="186" y="591" />
-<sizeparam width="300" height="51" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="335" height="51" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="UML Note" value="The statement of the other bank is unciphered
@@ -416,7 +416,7 @@ Banque courtois has no access to this statement.
 
 <COMPONENT type="301" id="248" >
 <cdparam x="889" y="478" />
-<sizeparam width="198" height="27" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="214" height="27" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="UML Note" value="The statement is ciphered with
@@ -446,7 +446,7 @@ the public key of the client
 
 <COMPONENT type="301" id="265" >
 <cdparam x="966" y="281" />
-<sizeparam width="192" height="27" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="209" height="27" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="UML Note" value="Creation of a token specific to
@@ -536,7 +536,7 @@ the Banque Courtois
 <SUBCOMPONENT type="602" id="274" >
 <father id="324" num="0" />
 <cdparam x="869" y="285" />
-<sizeparam width="131" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="141" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="5" maxX="5" minY="10" maxY="470" />
 <infoparam name="action state" value="m = {Id_BC}_BCpubK" />
@@ -612,7 +612,7 @@ the Banque Courtois
 <SUBCOMPONENT type="602" id="333" >
 <father id="383" num="0" />
 <cdparam x="538" y="521" />
-<sizeparam width="216" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="235" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="5" maxX="5" minY="10" maxY="470" />
 <infoparam name="action state" value="m1 = s1, statementBanqueCourtois" />

@@ -47,23 +47,20 @@
 
 package ui.networkmodelloader;
 
-import myutil.*;
-import ui.ConfigurationTTool;
-import ui.IconManager;
-import ui.JTextAreaWriter;
-import ui.MainGUI;
-
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
+import java.awt.event.*;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.*;
+import javax.swing.*;
+import java.net.*;
+import java.io.*;
+
+import ui.*;
+import myutil.*;
 
 public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements ActionListener, Runnable, LoaderFacilityInterface, CallbackLoaderInterface  {
 
-    public final static String [] FEATURES = {"all",  "requirements", "attacktrees", "properties", "partitioning", "analysis", "design", "prototyping", "security protocol"};
+    public final static String [] FEATURES = {"all",  "diplodocus", "avatar", "sysml-sec", "assumptions", "requirements", "attacktrees", "properties", "partitioning", "analysis", "design", "prototyping", "security protocol"};
 
     public final static String [] PROPS = {"safety", "security", "performance"};
     
@@ -140,6 +137,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
         jta = new ScrolledJTextArea();
         jta.setEditable(false);
+	jta.setLineWrap(true);
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
         jta.append("Connecting to " + url + ".\n Please wait ...\n\n");
@@ -266,6 +264,12 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 			    nm.props[i] = tmp.indexOf(PROPS[i]) != -1;
 			}
 			//nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
+		    }
+		}
+
+		if (inputLine.startsWith("-AUTHOR")) {
+		    if (nm != null) {
+			nm.author = inputLine.substring(7, inputLine.length()).trim();
 		    }
 		}
 	    

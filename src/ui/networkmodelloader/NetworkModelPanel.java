@@ -47,20 +47,15 @@
 
 package ui.networkmodelloader;
 
-import myutil.GraphicLib;
-import myutil.ImageManager;
-import myutil.LoaderFacilityInterface;
-import myutil.TraceManager;
-import ui.ColorManager;
-
-import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
+import java.awt.event.*;
+import java.awt.image.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import java.util.*;
+
+import myutil.*;
+import ui.*;
 
 
 
@@ -288,7 +283,7 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
             if (indexOfSelected != previousIndex) {
                 if (indexOfSelected != -1) {
                     NetworkModel nm = listOfModels.get(indexOfSelected);
-                    jta.append("\n--- " + nm.fileName + "---\n" + nm.description + "\n-------------\n\n");
+                    jta.append("\n--- " + nm.fileName + "---\n" + "by: " + nm.author + "\n" + nm.description + "\n-------------\n\n");
                 }
                 repaint();
             }

@@ -2199,7 +2199,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
 
 	JDialogLoadingNetworkModel jdlnm = new JDialogLoadingNetworkModel(frame, this, "Opening a network model", ConfigurationTTool.URL_MODEL);
-	GraphicLib.centerOnParent(jdlnm, 600, 800);
+	GraphicLib.centerOnParent(jdlnm, 700, 800);
 	jdlnm.setVisible(true); // blocked until dialog has been closed
     }
 
